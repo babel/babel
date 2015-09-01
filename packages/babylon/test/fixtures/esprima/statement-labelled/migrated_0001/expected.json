@@ -57,7 +57,7 @@
             }
           },
           "test": {
-            "type": "Literal",
+            "type": "BooleanLiteral",
             "start": 14,
             "end": 18,
             "loc": {

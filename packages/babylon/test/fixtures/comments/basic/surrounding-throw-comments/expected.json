@@ -91,7 +91,7 @@
                 }
               },
               "argument": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 42,
                 "end": 44,
                 "loc": {

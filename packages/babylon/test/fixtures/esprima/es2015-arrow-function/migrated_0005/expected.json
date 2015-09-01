@@ -126,7 +126,7 @@
                   "name": "property"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 18,
                   "end": 20,
                   "loc": {

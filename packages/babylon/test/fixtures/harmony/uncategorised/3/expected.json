@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "NumberLiteral",
           "start": 0,
           "end": 2,
           "loc": {
@@ -62,6 +62,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

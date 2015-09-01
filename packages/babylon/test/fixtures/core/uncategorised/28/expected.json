@@ -122,7 +122,7 @@
                   "name": "x"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 9,
                   "end": 10,
                   "loc": {
@@ -175,7 +175,7 @@
                   "name": "x"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 15,
                   "end": 16,
                   "loc": {

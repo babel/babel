@@ -543,7 +543,7 @@
             ]
           },
           "right": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 82,
             "end": 83,
             "loc": {

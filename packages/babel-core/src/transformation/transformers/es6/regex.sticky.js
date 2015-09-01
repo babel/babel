@@ -11,11 +11,11 @@ export var visitor = {
    * [Please add a description.]
    */
 
-  Literal(node) {
+  RegexLiteral(node) {
     if (!regex.is(node, "y")) return;
     return t.newExpression(t.identifier("RegExp"), [
-      t.literal(node.regex.pattern),
-      t.literal(node.regex.flags)
+      t.stringLiteral(node.pattern),
+      t.stringLiteral(node.flags)
     ]);
   }
 };

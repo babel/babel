@@ -92,7 +92,7 @@
               ]
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 10,
               "end": 11,
               "loc": {

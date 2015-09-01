@@ -124,7 +124,7 @@
         ],
         "importKind": "value",
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 24,
           "end": 29,
           "loc": {
@@ -143,6 +143,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

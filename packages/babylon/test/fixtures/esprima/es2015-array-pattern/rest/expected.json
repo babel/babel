@@ -106,7 +106,7 @@
               ]
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 13,
               "end": 14,
               "loc": {

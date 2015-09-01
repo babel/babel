@@ -34,7 +34,7 @@ export var visitor = {
       if (t.isExpressionStatement(first) && isUseStrict(first.expression)) {
         directive = first;
       } else {
-        directive = t.expressionStatement(t.literal("use strict"));
+        directive = t.expressionStatement(t.stringLiteral("use strict"));
         this.unshiftContainer("body", directive);
         if (first) {
           directive.leadingComments = first.leadingComments;

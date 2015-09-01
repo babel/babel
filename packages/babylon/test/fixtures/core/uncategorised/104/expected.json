@@ -74,7 +74,7 @@
               "name": "x"
             },
             "init": {
-              "type": "Literal",
+              "type": "RegexLiteral",
               "start": 8,
               "end": 16,
               "loc": {
@@ -88,10 +88,8 @@
                 }
               },
               "raw": "/[a-c]/i",
-              "regex": {
-                "pattern": "[a-c]",
-                "flags": "i"
-              }
+              "pattern": "[a-c]",
+              "flags": "i"
             }
           }
         ],

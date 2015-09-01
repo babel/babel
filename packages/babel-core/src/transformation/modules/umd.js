@@ -24,7 +24,7 @@ export default class UMDFormatter extends AMDFormatter {
 
     var names = [];
     for (let name in this.ids) {
-      names.push(t.literal(name));
+      names.push(t.stringLiteral(name));
     }
 
     // factory
@@ -38,8 +38,8 @@ export default class UMDFormatter extends AMDFormatter {
 
     // amd
 
-    var defineArgs = [t.literal("exports")];
-    if (this.passModuleArg) defineArgs.push(t.literal("module"));
+    var defineArgs = [t.stringLiteral("exports")];
+    if (this.passModuleArg) defineArgs.push(t.stringLiteral("module"));
     defineArgs = defineArgs.concat(names);
     defineArgs = [t.arrayExpression(defineArgs)];
 
@@ -68,7 +68,7 @@ export default class UMDFormatter extends AMDFormatter {
     //
 
     var moduleName = this.getModuleName();
-    if (moduleName) defineArgs.unshift(t.literal(moduleName));
+    if (moduleName) defineArgs.unshift(t.stringLiteral(moduleName));
 
     //
     var globalArg = this.file.opts.basename;

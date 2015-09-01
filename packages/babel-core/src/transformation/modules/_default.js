@@ -311,7 +311,7 @@ export default class DefaultFormatter {
     this.checkExportIdentifier(id);
     return util.template("exports-from-assign", {
       INIT: init,
-      ID:   t.literal(id.name)
+      ID:   t.stringLiteral(id.name)
     }, true);
   }
 

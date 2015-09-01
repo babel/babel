@@ -26,7 +26,7 @@ export default class AMDFormatter extends DefaultFormatter {
   buildDependencyLiterals() {
     var names = [];
     for (var name in this.ids) {
-      names.push(t.literal(name));
+      names.push(t.stringLiteral(name));
     }
     return names;
   }
@@ -42,8 +42,8 @@ export default class AMDFormatter extends DefaultFormatter {
 
     // build an array of module names
 
-    var names = [t.literal("exports")];
-    if (this.passModuleArg) names.push(t.literal("module"));
+    var names = [t.stringLiteral("exports")];
+    if (this.passModuleArg) names.push(t.stringLiteral("module"));
     names = names.concat(this.buildDependencyLiterals());
     names = t.arrayExpression(names);
 
@@ -57,7 +57,7 @@ export default class AMDFormatter extends DefaultFormatter {
 
     var defineArgs = [names, container];
     var moduleName = this.getModuleName();
-    if (moduleName) defineArgs.unshift(t.literal(moduleName));
+    if (moduleName) defineArgs.unshift(t.stringLiteral(moduleName));
 
     var call = t.callExpression(t.identifier("define"), defineArgs);
 

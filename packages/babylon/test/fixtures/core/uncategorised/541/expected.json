@@ -93,7 +93,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "RegexLiteral",
           "start": 16,
           "end": 21,
           "loc": {
@@ -107,10 +107,8 @@
             }
           },
           "raw": "/ 1 /",
-          "regex": {
-            "pattern": " 1 ",
-            "flags": ""
-          }
+          "pattern": " 1 ",
+          "flags": ""
         }
       }
     ]

@@ -356,7 +356,7 @@ var loopVisitor = {
 
       state.hasBreakContinue = true;
       state.map[loopText] = node;
-      replace = t.literal(loopText);
+      replace = t.stringLiteral(loopText);
     }
 
     if (this.isReturnStatement()) {
@@ -733,7 +733,7 @@ class BlockScoping {
 
     if (has.hasBreakContinue) {
       for (var key in has.map) {
-        cases.push(t.switchCase(t.literal(key), [has.map[key]]));
+        cases.push(t.switchCase(t.stringLiteral(key), [has.map[key]]));
       }
 
       if (has.hasReturn) {

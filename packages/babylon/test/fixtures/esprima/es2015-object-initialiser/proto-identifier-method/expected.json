@@ -91,7 +91,7 @@
                 "name": "__proto__"
               },
               "value": {
-                "type": "Literal",
+                "type": "NullLiteral",
                 "start": 14,
                 "end": 18,
                 "loc": {
@@ -103,10 +103,7 @@
                     "line": 1,
                     "column": 18
                   }
-                },
-                "value": null,
-                "rawValue": null,
-                "raw": "null"
+                }
               },
               "kind": "init"
             },

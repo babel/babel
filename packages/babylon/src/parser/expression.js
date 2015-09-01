@@ -32,9 +32,17 @@ pp.checkPropClash = function (prop, propHash) {
 
   let key = prop.key, name;
   switch (key.type) {
-    case "Identifier": name = key.name; break;
-    case "Literal": name = String(key.value); break;
-    default: return;
+    case "Identifier":
+      name = key.name;
+      break;
+
+    case "StringLiteral":
+    case "NumberLiteral":
+      name = String(key.value);
+      break;
+
+    default:
+      return;
   }
 
   let kind = prop.kind;
@@ -377,19 +385,28 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
 
     case tt.regexp:
       let value = this.state.value;
-      node = this.parseLiteral(value.value);
-      node.regex = {pattern: value.pattern, flags: value.flags};
+      node = this.parseLiteral(value.value, "RegexLiteral");
+      node.pattern = value.pattern;
+      node.flags = value.flags;
       return node;
 
-    case tt.num: case tt.string:
-      return this.parseLiteral(this.state.value);
+    case tt.num:
+      return this.parseLiteral(this.state.value, "NumberLiteral");
 
-    case tt._null: case tt._true: case tt._false:
+    case tt.string:
+      return this.parseLiteral(this.state.value, "StringLiteral");
+
+    case tt._null:
       node = this.startNode();
-      node.rawValue = node.value = this.match(tt._null) ? null : this.match(tt._true);
+      this.next();
+      return this.finishNode(node, "NullLiteral");
+
+    case tt._true: case tt._false:
+      node = this.startNode();
+      node.rawValue = node.value = this.match(tt._true);
       node.raw = this.state.type.keyword;
       this.next();
-      return this.finishNode(node, "Literal");
+      return this.finishNode(node, "BooleanLiteral");
 
     case tt.parenL:
       return this.parseParenAndDistinguishExpression(null, null, canBeArrow);
@@ -443,12 +460,12 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
   }
 };
 
-pp.parseLiteral = function (value) {
+pp.parseLiteral = function (value, type) {
   let node = this.startNode();
   node.rawValue = node.value = value;
   node.raw = this.input.slice(this.state.start, this.state.end);
   this.next();
-  return this.finishNode(node, "Literal");
+  return this.finishNode(node, type);
 };
 
 pp.parseParenExpression = function () {

@@ -43,7 +43,7 @@
           }
         },
         "id": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 15,
           "end": 25,
           "loc": {
@@ -78,6 +78,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

@@ -26,7 +26,7 @@ export default function (opts) {
     } else if (esutils.keyword.isIdentifierNameES6(node.name)) {
       node.type = "Identifier";
     } else {
-      return t.literal(node.name);
+      return t.stringLiteral(node.name);
     }
   };
 
@@ -70,7 +70,7 @@ export default function (opts) {
     },
 
     exit(node) {
-      var value = node.value || t.literal(true);
+      var value = node.value || t.booleanLiteral(true);
       return t.inherits(t.property("init", node.name, value), node);
     }
   };
@@ -107,7 +107,7 @@ export default function (opts) {
       if (attribs.length) {
         attribs = buildJSXOpeningElementAttributes(attribs, file);
       } else {
-        attribs = t.literal(null);
+        attribs = t.nullLiteral();
       }
 
       args.push(attribs);

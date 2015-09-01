@@ -29,7 +29,7 @@ var remapVisitor = {
     if (!scope.hasBinding(node.name) ||
         scope.bindingIdentifierEquals(node.name, formatter.localImports[node.name])) {
       if (!formatter.isLoose() && this.key === "callee" && this.parentPath.isCallExpression()) {
-        return t.sequenceExpression([t.literal(0), remap]);
+        return t.sequenceExpression([t.numberLiteral(0), remap]);
       } else {
         return remap;
       }
@@ -62,7 +62,7 @@ var remapVisitor = {
     this.skip();
 
     // expand to long file assignment expression
-    var assign = t.assignmentExpression(node.operator[0] + "=", node.argument, t.literal(1));
+    var assign = t.assignmentExpression(node.operator[0] + "=", node.argument, t.numberLiteral(1));
 
     // remap this assignment expression
     var remapped = formatter.remapExportAssignment(assign, exported);
@@ -81,7 +81,7 @@ var remapVisitor = {
     } else { // "++"
       operator = "-";
     }
-    nodes.push(t.binaryExpression(operator, node.argument, t.literal(1)));
+    nodes.push(t.binaryExpression(operator, node.argument, t.numberLiteral(1)));
 
     return t.sequenceExpression(nodes);
   }

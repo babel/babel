@@ -89,7 +89,7 @@
             },
             "elements": [
               {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 6,
                 "end": 7,
                 "loc": {
@@ -107,7 +107,7 @@
                 "raw": "1"
               },
               {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 9,
                 "end": 10,
                 "loc": {
@@ -125,7 +125,7 @@
                 "raw": "2"
               },
               {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 12,
                 "end": 13,
                 "loc": {

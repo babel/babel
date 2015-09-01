@@ -71,7 +71,7 @@
               }
             },
             "object": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 0,
               "end": 4,
               "loc": {
@@ -108,7 +108,7 @@
           },
           "arguments": [
             {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 14,
               "end": 16,
               "loc": {

@@ -3,14 +3,16 @@ export var metadata = {
 };
 
 export var visitor = {
-  Literal(node) {
+  NumberLiteral(node) {
     // number octal like 0b10 or 0o70
-    if (typeof node.value === "number" && /^0[ob]/i.test(node.raw)) {
+    if (/^0[ob]/i.test(node.raw)) {
       node.raw = undefined;
     }
+  },
 
+  StringLiteral(node) {
     // unicode escape
-    if (typeof node.value === "string" && /\\[u]/gi.test(node.raw)) {
+    if (/\\[u]/gi.test(node.raw)) {
       node.raw = undefined;
     }
   }

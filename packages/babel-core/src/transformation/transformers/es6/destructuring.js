@@ -414,7 +414,7 @@ class DestructuringTransformer {
       if (t.isSpreadProperty(prop)) continue;
 
       var key = prop.key;
-      if (t.isIdentifier(key) && !prop.computed) key = t.literal(prop.key.name);
+      if (t.isIdentifier(key) && !prop.computed) key = t.stringLiteral(prop.key.name);
       keys.push(key);
     }
 
@@ -579,14 +579,14 @@ class DestructuringTransformer {
         elemRef = this.toArray(arrayRef);
 
         if (i > 0) {
-          elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.literal(i)]);
+          elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.numberLiteral(i)]);
         }
 
         // set the element to the rest element argument since we've dealt with it
         // being a rest already
         elem = elem.argument;
       } else {
-        elemRef = t.memberExpression(arrayRef, t.literal(i), true);
+        elemRef = t.memberExpression(arrayRef, t.numberLiteral(i), true);
       }
 
       this.push(elem, elemRef);

@@ -157,7 +157,7 @@
               },
               "arguments": [
                 {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 24,
                   "end": 38,
                   "loc": {

@@ -25,7 +25,7 @@ export var visitor = require("../../helpers/build-react-transformer")({
     var tagName = state.tagName;
     var args    = state.args;
     if (react.isCompatTag(tagName)) {
-      args.push(t.literal(tagName));
+      args.push(t.stringLiteral(tagName));
     } else {
       args.push(state.tagExpr);
     }

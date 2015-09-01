@@ -133,7 +133,7 @@
                   "name": "post"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 21,
                   "end": 32,
                   "loc": {

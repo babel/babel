@@ -255,7 +255,7 @@
                               "name": "x"
                             },
                             "value": {
-                              "type": "Literal",
+                              "type": "NumberLiteral",
                               "start": 20,
                               "end": 22,
                               "loc": {
@@ -302,6 +302,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

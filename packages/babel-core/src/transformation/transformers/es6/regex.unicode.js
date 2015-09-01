@@ -11,9 +11,9 @@ export var visitor = {
    * [Please add a description.]
    */
 
-  Literal(node) {
+  RegexLiteral(node) {
     if (!regex.is(node, "u")) return;
-    node.regex.pattern = rewritePattern(node.regex.pattern, node.regex.flags);
+    node.regex.pattern = rewritePattern(node.pattern, node.flags);
     regex.pullFlag(node, "u");
   }
 };

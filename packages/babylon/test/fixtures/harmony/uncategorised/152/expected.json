@@ -124,7 +124,7 @@
               },
               "elements": [
                 {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 18,
                   "end": 19,
                   "loc": {
@@ -163,6 +163,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

@@ -133,7 +133,7 @@
                   }
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 9,
                   "end": 14,
                   "loc": {
@@ -203,7 +203,7 @@
           },
           "children": [
             {
-              "type": "Literal",
+              "type": "JSXText",
               "start": 15,
               "end": 16,
               "loc": {
@@ -252,7 +252,7 @@
               }
             },
             {
-              "type": "Literal",
+              "type": "JSXText",
               "start": 23,
               "end": 24,
               "loc": {

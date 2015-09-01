@@ -136,7 +136,7 @@
               },
               "elements": [
                 {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 21,
                   "end": 24,
                   "loc": {
@@ -160,6 +160,5 @@
         "kind": "var"
       }
     ]
-  },
-  "comments": []
+  }
 }

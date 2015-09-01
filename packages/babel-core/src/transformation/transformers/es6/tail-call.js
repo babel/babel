@@ -262,7 +262,7 @@ class TailCallTransformer {
     }
 
     body.unshift(t.expressionStatement(
-      t.assignmentExpression("=", this.getAgainId(), t.literal(false)))
+      t.assignmentExpression("=", this.getAgainId(), t.booleanLiteral(false)))
     );
 
     node.body = util.template("tail-call-body", {
@@ -482,14 +482,14 @@ class TailCallTransformer {
           body.push(t.expressionStatement(t.assignmentExpression(
             "=",
             param,
-            t.memberExpression(argumentsId, t.literal(i), true)
+            t.memberExpression(argumentsId, t.numberLiteral(i), true)
           )));
         }
       }
     }
 
     body.push(t.expressionStatement(
-      t.assignmentExpression("=", this.getAgainId(), t.literal(true))
+      t.assignmentExpression("=", this.getAgainId(), t.booleanLiteral(true))
     ));
 
     body.push(t.continueStatement(this.getFunctionId()));

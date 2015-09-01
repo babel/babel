@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "RegexLiteral",
           "start": 0,
           "end": 8,
           "loc": {
@@ -57,10 +57,8 @@
             }
           },
           "raw": "/[a-z]/g",
-          "regex": {
-            "pattern": "[a-z]",
-            "flags": "g"
-          }
+          "pattern": "[a-z]",
+          "flags": "g"
         }
       }
     ]

@@ -44,11 +44,11 @@ export var visitor = {
     var isComponent = true;
     var props       = t.objectExpression([]);
     var obj         = t.objectExpression([]);
-    var key         = t.literal(null);
+    var key         = t.nullLiteral();
     var type        = open.name;
 
     if (t.isJSXIdentifier(type) && react.isCompatTag(type.name)) {
-      type = t.literal(type.name);
+      type = t.stringLiteral(type.name);
       isComponent = false;
     }
 
@@ -62,7 +62,7 @@ export var visitor = {
 
     // metadata
     pushElemProp("type", type);
-    pushElemProp("ref", t.literal(null));
+    pushElemProp("ref", t.nullLiteral());
 
     if (node.children.length) {
       var children = react.buildChildren(node);

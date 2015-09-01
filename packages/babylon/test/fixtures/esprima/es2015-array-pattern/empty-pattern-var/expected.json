@@ -74,7 +74,7 @@
               "elements": []
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 9,
               "end": 10,
               "loc": {

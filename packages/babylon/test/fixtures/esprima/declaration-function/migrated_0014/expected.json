@@ -105,7 +105,7 @@
                   }
                 },
                 "left": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 18,
                   "end": 30,
                   "loc": {
@@ -124,7 +124,7 @@
                 },
                 "operator": "+",
                 "right": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 33,
                   "end": 35,
                   "loc": {

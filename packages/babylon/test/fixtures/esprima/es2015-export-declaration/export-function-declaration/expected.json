@@ -110,7 +110,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "BooleanLiteral",
           "start": 26,
           "end": 31,
           "loc": {

@@ -12,7 +12,7 @@ import * as t from "./index";
 
 export function toComputedKey(node: Object, key: Object = node.key || node.property): Object {
   if (!node.computed) {
-    if (t.isIdentifier(key)) key = t.literal(key.name);
+    if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
   }
   return key;
 }
@@ -112,7 +112,7 @@ export function toKeyAlias(node: Object, key: Object = node.key) {
     return toKeyAlias.uid++;
   } else if (t.isIdentifier(key)) {
     alias = key.name;
-  } else if (t.isLiteral(key)) {
+  } else if (t.isStringLiteral(key)) {
     alias = JSON.stringify(key.value);
   } else {
     alias = JSON.stringify(traverse.removeProperties(t.cloneDeep(key)));
@@ -264,9 +264,31 @@ export function valueToNode(value: any): Object {
     return t.identifier("undefined");
   }
 
-  // null, booleans, strings, numbers, regexs
-  if (value === true || value === false || value === null || isString(value) || isNumber(value) || isRegExp(value)) {
-    return t.literal(value);
+  // boolean
+  if (value === true || value === false) {
+    return t.booleanLiteral(value);
+  }
+
+  // null
+  if (value === null) {
+    return t.nullLiteral();
+  }
+
+  // strings
+  if (isString(value)) {
+    return t.stringLiteral(value);
+  }
+
+  // numbers
+  if (isNumber(value)) {
+    return t.numberLiteral(value);
+  }
+
+  // regexes
+  if (isRegExp(value)) {
+    var pattern = value.source;
+    var flags = value.toString().match(/\/([a-z]+|)$/)[1];
+    return t.regexLiteral(pattern, flags);
   }
 
   // array

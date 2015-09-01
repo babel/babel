@@ -107,7 +107,7 @@ export default class ReplaceSupers {
             this.isStatic ? this.getObjectRef() : t.memberExpression(this.getObjectRef(), t.identifier("prototype"))
           ]
         ),
-        isComputed ? property : t.literal(property.name),
+        isComputed ? property : t.stringLiteral(property.name),
         value,
         thisExpression
       ]
@@ -133,7 +133,7 @@ export default class ReplaceSupers {
             this.isStatic ? this.getObjectRef() : t.memberExpression(this.getObjectRef(), t.identifier("prototype"))
           ]
         ),
-        isComputed ? property : t.literal(property.name),
+        isComputed ? property : t.stringLiteral(property.name),
         thisExpression
       ]
     );
@@ -301,7 +301,7 @@ export default class ReplaceSupers {
       property = node.property;
       computed = node.computed;
     } else if (t.isUpdateExpression(node) && isMemberExpressionSuper(node.argument)) {
-      var binary = t.binaryExpression(node.operator[0], node.argument, t.literal(1));
+      var binary = t.binaryExpression(node.operator[0], node.argument, t.numberLiteral(1));
       if (node.prefix) {
         // ++super.foo; -> super.foo += 1;
         return this.specHandleAssignmentExpression(null, path, binary, getThisReference);

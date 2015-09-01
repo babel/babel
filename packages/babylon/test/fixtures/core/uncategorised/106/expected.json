@@ -74,7 +74,7 @@
               "name": "x"
             },
             "init": {
-              "type": "Literal",
+              "type": "RegexLiteral",
               "start": 8,
               "end": 18,
               "loc": {
@@ -88,10 +88,8 @@
                 }
               },
               "raw": "/foo\\/bar/",
-              "regex": {
-                "pattern": "foo\\/bar",
-                "flags": ""
-              }
+              "pattern": "foo\\/bar",
+              "flags": ""
             }
           }
         ],

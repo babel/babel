@@ -6,7 +6,7 @@ import * as t from "babel-types";
  */
 
 export function is(node, flag) {
-  return t.isLiteral(node) && node.regex && node.regex.flags.indexOf(flag) >= 0;
+  return t.isRegexLiteral(node) && node.flags.indexOf(flag) >= 0;
 }
 
 /**
@@ -14,8 +14,8 @@ export function is(node, flag) {
  */
 
 export function pullFlag(node, flag) {
-  var flags = node.regex.flags.split("");
-  if (node.regex.flags.indexOf(flag) < 0) return;
+  var flags = node.flags.split("");
+  if (node.flags.indexOf(flag) < 0) return;
   pull(flags, flag);
-  node.regex.flags = flags.join("");
+  node.flags = flags.join("");
 }

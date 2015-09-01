@@ -33,7 +33,7 @@ function spec(node, body, objId, initProps, file) {
 
     let key = prop.key;
     if (t.isIdentifier(key) && !prop.computed) {
-      key = t.literal(key.name);
+      key = t.stringLiteral(key.name);
     }
 
     var bodyNode = t.callExpression(file.addHelper("define-property"), [objId, key, prop.value]);

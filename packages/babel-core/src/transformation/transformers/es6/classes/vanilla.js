@@ -248,7 +248,7 @@ export default class ClassTransformer {
     var map = defineMap.push(mutatorMap, node, kind, this.file);
 
     if (enumerable) {
-      map.enumerable = t.literal(true);
+      map.enumerable = t.booleanLiteral(true);
     }
 
     if (map.decorators) {
@@ -383,7 +383,7 @@ export default class ClassTransformer {
       if (instanceProps) instanceProps = defineMap.toComputedObjectFromClass(instanceProps);
       if (staticProps) staticProps = defineMap.toComputedObjectFromClass(staticProps);
 
-      var nullNode = t.literal(null);
+      var nullNode = t.nullLiteral();
 
       // (Constructor, instanceDescriptors, staticDescriptors, instanceInitializers, staticInitializers)
       var args = [this.classRef, nullNode, nullNode, nullNode, nullNode];
@@ -545,7 +545,7 @@ export default class ClassTransformer {
         body.push(t.returnStatement(node.value));
         node.value = t.functionExpression(null, [], t.blockStatement(body));
       } else {
-        node.value = t.literal(null);
+        node.value = t.nullLiteral();
       }
       this.pushToMap(node, true, "initializer");
 

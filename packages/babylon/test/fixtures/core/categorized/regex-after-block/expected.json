@@ -43,7 +43,7 @@
           }
         },
         "test": {
-          "type": "Literal",
+          "type": "BooleanLiteral",
           "start": 4,
           "end": 8,
           "loc": {
@@ -93,7 +93,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "RegexLiteral",
           "start": 15,
           "end": 20,
           "loc": {
@@ -107,10 +107,8 @@
             }
           },
           "raw": "/foo/",
-          "regex": {
-            "pattern": "foo",
-            "flags": ""
-          }
+          "pattern": "foo",
+          "flags": ""
         }
       }
     ]

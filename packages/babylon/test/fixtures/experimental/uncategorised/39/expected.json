@@ -170,7 +170,7 @@
                         "name": "foo"
                       },
                       "value": {
-                        "type": "Literal",
+                        "type": "StringLiteral",
                         "start": 17,
                         "end": 22,
                         "loc": {

@@ -69,7 +69,7 @@ export var visitor = {
         defNode = util.template("default-parameter", {
           VARIABLE_NAME: left,
           DEFAULT_VALUE: right,
-          ARGUMENT_KEY:  t.literal(i),
+          ARGUMENT_KEY:  t.numberLiteral(i),
           ARGUMENTS:     argsIdentifier
         }, true);
       } else {

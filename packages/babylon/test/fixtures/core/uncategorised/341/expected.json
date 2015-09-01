@@ -59,7 +59,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "RegexLiteral",
           "start": 2,
           "end": 5,
           "loc": {
@@ -73,10 +73,8 @@
             }
           },
           "raw": "/=/",
-          "regex": {
-            "pattern": "=",
-            "flags": ""
-          }
+          "pattern": "=",
+          "flags": ""
         }
       }
     ]

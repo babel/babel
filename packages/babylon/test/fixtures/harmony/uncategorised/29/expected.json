@@ -78,7 +78,7 @@
             }
           ],
           "body": {
-            "type": "Literal",
+            "type": "StringLiteral",
             "start": 5,
             "end": 11,
             "loc": {
@@ -98,6 +98,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

@@ -138,7 +138,7 @@ export var visitor = {
 
     var nodes = build(args, scope);
 
-    var context = t.arrayExpression([t.literal(null)]);
+    var context = t.arrayExpression([t.nullLiteral()]);
 
     args = t.callExpression(t.memberExpression(context, t.identifier("concat")), nodes);
 

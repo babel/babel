@@ -155,7 +155,7 @@
                     "name": "bar"
                   },
                   "value": {
-                    "type": "Literal",
+                    "type": "StringLiteral",
                     "start": 22,
                     "end": 27,
                     "loc": {

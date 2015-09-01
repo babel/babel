@@ -565,7 +565,7 @@ pp.parseClass = function (node, isStatement, optionalId) {
         key = this.parsePropertyName(method);
       }
       if (!method.static && (key.type === "Identifier" && key.name === "constructor" ||
-          key.type === "Literal" && key.value === "constructor")) {
+          key.type === "StringLiteral" && key.value === "constructor")) {
         if (hadConstructor) this.raise(key.start, "Duplicate constructor in the same class");
         if (isGetSet) this.raise(key.start, "Constructor can't have get/set modifier");
         if (isGenerator) this.raise(key.start, "Constructor can't be a generator");

@@ -91,7 +91,7 @@
                 "name": "x"
               },
               "value": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 7,
                 "end": 9,
                 "loc": {
@@ -144,7 +144,7 @@
                 "name": "y"
               },
               "value": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 14,
                 "end": 16,
                 "loc": {
@@ -168,6 +168,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

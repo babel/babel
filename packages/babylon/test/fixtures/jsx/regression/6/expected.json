@@ -102,7 +102,7 @@
                   "name": "pre"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 9,
                   "end": 18,
                   "loc": {

@@ -114,9 +114,9 @@ export function toClassObject(mutatorMap) {
 
 export function toDefineObject(mutatorMap) {
   each(mutatorMap, function (map) {
-    if (map.value) map.writable = t.literal(true);
-    map.configurable = t.literal(true);
-    map.enumerable = t.literal(true);
+    if (map.value) map.writable = t.booleanLiteral(true);
+    map.configurable = t.booleanLiteral(true);
+    map.enumerable = t.booleanLiteral(true);
   });
 
   return toClassObject(mutatorMap);

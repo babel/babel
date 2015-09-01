@@ -23,7 +23,7 @@ function getTDZStatus(refPath, bindingPath) {
 function buildTDZAssert(node, file) {
   return t.callExpression(
     file.addHelper("temporal-assert-defined"),
-    [node, t.literal(node.name), file.addHelper("temporal-undefined")]
+    [node, t.stringLiteral(node.name), file.addHelper("temporal-undefined")]
   );
 }
 
@@ -69,9 +69,12 @@ export var visitor = {
         return t.logicalExpression("&&", assert, node);
       }
     } else if (status === "outside") {
-      return t.throwStatement(t.newExpression(t.identifier("ReferenceError"), [
-        t.literal(`${node.name} is not defined - temporal dead zone`)
-      ]));
+      return t.throwStatement(t.inherits(
+        t.newExpression(t.identifier("ReferenceError"), [
+          t.stringLiteral(`${node.name} is not defined - temporal dead zone`)
+        ]),
+        node
+      ));
     }
   },
 

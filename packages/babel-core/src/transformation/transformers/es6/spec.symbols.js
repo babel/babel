@@ -26,7 +26,7 @@ export var visitor = {
     if (node.operator === "typeof") {
       var call = t.callExpression(file.addHelper("typeof"), [node.argument]);
       if (this.get("argument").isIdentifier()) {
-        var undefLiteral = t.literal("undefined");
+        var undefLiteral = t.stringLiteral("undefined");
         var unary = t.unaryExpression("typeof", node.argument);
         unary._ignoreSpecSymbols = true;
         return t.conditionalExpression(

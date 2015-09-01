@@ -125,50 +125,25 @@ export function ArrayExpression(node, print) {
 
 export { ArrayExpression as ArrayPattern };
 
-/**
- * Prints Literal, prints value, regex, raw, handles val type.
- */
-
-export function Literal(node) {
-  this.push(""); // hack: catch up indentation
-  this._push(this._Literal(node));
+export function RegexLiteral(node) {
+  this.push(`/${node.pattern}/${node.flags}`);
 }
 
-export function _Literal(node) {
-  var val = node.value;
-
-  if (node.regex) {
-    return `/${node.regex.pattern}/${node.regex.flags}`;
-  }
-
-  // just use the raw property if our current value is equivalent to the one we got
-  // when we populated raw
-  if (node.raw != null && node.rawValue != null && val === node.rawValue) {
-    return node.raw;
-  }
-
-  switch (typeof val) {
-    case "string":
-      return this._stringLiteral(val);
-
-    case "number":
-      return val + "";
-
-    case "boolean":
-      return val ? "true" : "false";
-
-    default:
-      if (val === null) {
-        return "null";
-      } else {
-        throw new Error("Invalid Literal type");
-      }
-  }
+export function BooleanLiteral(node) {
+  this.push(node.value ? "true" : "false");
 }
 
-/**
- * Prints string literals, handles format.
- */
+export function NullLiteral() {
+  this.push("null");
+}
+
+export function NumberLiteral(node) {
+  this.push(node.value + "");
+}
+
+export function StringLiteral(node) {
+  this.push(this._stringLiteral(node.value));
+}
 
 export function _stringLiteral(val) {
   val = JSON.stringify(val);

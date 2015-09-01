@@ -149,7 +149,7 @@ export default class SystemFormatter extends AMDFormatter {
 
     var block = t.blockStatement([
       t.ifStatement(
-        t.binaryExpression("!==", leftIdentifier, t.literal("default")),
+        t.binaryExpression("!==", leftIdentifier, t.stringLiteral("default")),
         t.expressionStatement(this._buildExportCall(leftIdentifier, valIdentifier))
       )
     ]);
@@ -162,7 +162,7 @@ export default class SystemFormatter extends AMDFormatter {
    */
 
   buildExportsAssignment(id, init, node) {
-    var call = this._buildExportCall(t.literal(id.name), init, true);
+    var call = this._buildExportCall(t.stringLiteral(id.name), init, true);
     return this._addImportSource(call, node);
   }
 
@@ -182,7 +182,7 @@ export default class SystemFormatter extends AMDFormatter {
     var assign = node;
 
     for (var i = 0; i < exported.length; i++) {
-      assign = this._buildExportCall(t.literal(exported[i].name), assign);
+      assign = this._buildExportCall(t.stringLiteral(exported[i].name), assign);
     }
 
     return assign;
@@ -256,7 +256,7 @@ export default class SystemFormatter extends AMDFormatter {
 
     var hoistDeclarators = [];
     var moduleName = this.getModuleName();
-    var moduleNameLiteral = t.literal(moduleName);
+    var moduleNameLiteral = t.stringLiteral(moduleName);
 
     var block = t.blockStatement(program.body);
 

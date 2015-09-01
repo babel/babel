@@ -116,7 +116,7 @@
                     }
                   },
                   "expression": {
-                    "type": "Literal",
+                    "type": "StringLiteral",
                     "start": 6,
                     "end": 9,
                     "loc": {
@@ -166,7 +166,7 @@
                   "name": "c"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 13,
                   "end": 16,
                   "loc": {
@@ -215,7 +215,7 @@
                   "name": "d"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 19,
                   "end": 26,
                   "loc": {
@@ -264,7 +264,7 @@
                   "name": "e"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 29,
                   "end": 37,
                   "loc": {
