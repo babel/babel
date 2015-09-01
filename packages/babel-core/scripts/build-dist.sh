@@ -9,9 +9,6 @@ mkdir -p dist
 
 node scripts/cache-templates
 
-#node $BROWSERIFY_CMD -e lib/polyfill.js >dist/polyfill.js
-#node $UGLIFY_CMD dist/polyfill.js >dist/polyfill.min.js
-
 # Add a Unicode BOM so browsers will interpret the file as UTF-8
 node -p '"\uFEFF"' > dist/browser.js
 node $BROWSERIFY_CMD lib/api/browser.js -s babel $BROWSERIFY_IGNORE >>dist/browser.js

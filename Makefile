@@ -10,6 +10,8 @@ build: clean
 build-dist: build
 	cd packages/babel-core; \
 	scripts/build-dist.sh
+	cd packages/babel-polyfill; \
+	scripts/build-dist.sh
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
 
