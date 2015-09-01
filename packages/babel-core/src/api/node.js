@@ -4,16 +4,14 @@ import * as babylon from "babylon";
 import * as util from "../util";
 import fs from "fs";
 
-export { util, babylon as acorn, transform };
+export { util, transform };
 export { pipeline, lint } from "../transformation";
 export { canCompile } from "../util";
 
 export { default as File } from "../transformation/file";
 export { default as options } from "../transformation/file/options/config";
 export { default as Plugin } from "../transformation/plugin";
-export { default as Transformer } from "../transformation/transformer";
 export { default as Pipeline } from "../transformation/pipeline";
-export { default as traverse } from "babel-traverse";
 export { default as buildExternalHelpers } from "../tools/build-external-helpers";
 export { version } from "../../package";
 

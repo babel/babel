@@ -1,4 +1,3 @@
-import Transformer from "../transformer";
 import Plugin from "../plugin";
 import * as types from "babel-types";
 import * as messages from "babel-messages";
@@ -8,7 +7,6 @@ import parse from "../../helpers/parse";
 
 var context = {
   messages,
-  Transformer,
   Plugin,
   types,
   parse,

@@ -186,12 +186,6 @@
     "shorthand": "k"
   },
 
-  "auxiliaryComment": {
-    "deprecated": "renamed to auxiliaryCommentBefore",
-    "shorthand": "a",
-    "alias": "auxiliaryCommentBefore"
-  },
-
   "auxiliaryCommentBefore": {
     "type": "string",
     "default": "",
@@ -211,13 +205,6 @@
     "description": "uses a reference to `babelHelpers` instead of placing helpers at the top of your code."
   },
 
-  "metadataUsedHelpers": {
-    "deprecated": "Not required anymore as this is enabled by default",
-    "type": "boolean",
-    "default": false,
-    "hidden": true
-  },
-
   "sourceMap": {
     "alias": "sourceMaps",
     "hidden": true
@@ -228,11 +215,6 @@
     "description": "[true|false|inline]",
     "default": false,
     "shorthand": "s"
-  },
-
-  "sourceMapName": {
-    "alias": "sourceMapTarget",
-    "description": "DEPRECATED - Please use sourceMapTarget"
   },
 
   "sourceMapTarget": {

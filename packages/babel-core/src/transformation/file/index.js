@@ -8,6 +8,7 @@ import isFunction from "lodash/lang/isFunction";
 import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
+import shuffle from "lodash/collection/shuffle";
 import defaults from "lodash/object/defaults";
 import includes from "lodash/collection/includes";
 import traverse from "babel-traverse";
@@ -18,10 +19,6 @@ import parse from "../../helpers/parse";
 import * as util from  "../../util";
 import path from "path";
 import * as t from "babel-types";
-
-/**
- * [Please add a description.]
- */
 
 export default class File {
   constructor(opts = {}, pipeline) {
@@ -56,10 +53,6 @@ export default class File {
   };
 
   hub = new Hub(this);
-
-  /**
-   * [Please add a description.]
-   */
 
   static helpers = [
     "inherits",
@@ -100,16 +93,8 @@ export default class File {
     "interop-require"
   ];
 
-  /**
-   * [Please add a description.]
-   */
-
   static soloHelpers = [];
 
-
-  /**
-   * [Please add a description.]
-   */
 
   initOptions(opts) {
     opts = new OptionManager(this.log, this.pipeline).init(opts);
@@ -154,17 +139,9 @@ export default class File {
     return opts;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   isLoose(key: string) {
     return includes(this.opts.loose, key);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   buildTransformers() {
     var file = this;
@@ -220,10 +197,6 @@ export default class File {
     this.transformerStack = this.collapseStack(stack);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   collapseStack(_stack) {
     var stack  = [];
     var ignore = [];
@@ -245,8 +218,12 @@ export default class File {
         if (pass.plugin.metadata.group === group) {
           mergeStack.push(pass);
           ignore.push(pass);
+        } else {
+          //break;
         }
       }
+      shuffle;
+      //mergeStack = shuffle(mergeStack);
 
       var visitors = [];
       for (let pass of (mergeStack: Array)) {
@@ -260,25 +237,13 @@ export default class File {
     return stack;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   set(key: string, val): any {
     return this.data[key] = val;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   setDynamic(key: string, fn: Function) {
     this.dynamicData[key] = fn;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   get(key: string): any {
     var data = this.data[key];
@@ -292,19 +257,11 @@ export default class File {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   resolveModuleSource(source: string): string {
     var resolveModuleSource = this.opts.resolveModuleSource;
     if (resolveModuleSource) source = resolveModuleSource(source, this.opts.filename);
     return source;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   addImport(source: string, name?: string, type?: string): Object {
     name = name || source;
@@ -315,7 +272,7 @@ export default class File {
       id = this.dynamicImportIds[name] = this.scope.generateUidIdentifier(name);
 
       var specifiers = [t.importDefaultSpecifier(id)];
-      var declar = t.importDeclaration(specifiers, t.literal(source));
+      var declar = t.importDeclaration(specifiers, t.stringLiteral(source));
       declar._blockHoist = 3;
 
       if (type) {
@@ -333,10 +290,6 @@ export default class File {
 
     return id;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   attachAuxiliaryComment(node: Object): Object {
     var beforeComment = this.opts.auxiliaryCommentBefore;
@@ -359,10 +312,6 @@ export default class File {
 
     return node;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   addHelper(name: string): Object {
     var isSolo = includes(File.soloHelpers, name);
@@ -434,10 +383,6 @@ export default class File {
     return uid;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   errorWithNode(node, msg, Error = SyntaxError) {
     var err;
     var loc = node && (node.loc || node._loc);
@@ -450,10 +395,6 @@ export default class File {
     }
     return err;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   mergeSourceMap(map: Object) {
     var opts = this.opts;
@@ -477,10 +418,6 @@ export default class File {
     return map;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   getModuleFormatter(type: string) {
     if (isFunction(type) || !moduleFormatters[type]) {
       this.log.deprecate("Custom module formatters are deprecated and will be removed in the next major. Please use Babel plugins instead.");
@@ -499,10 +436,6 @@ export default class File {
 
     return new ModuleFormatter(this);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   parse(code: string) {
     var opts = this.opts;
@@ -532,10 +465,6 @@ export default class File {
     return ast;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   _addAst(ast) {
     this.path = NodePath.get({
       hub: this.hub,
@@ -547,10 +476,6 @@ export default class File {
     this.scope = this.path.scope;
     this.ast   = ast;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   addAst(ast) {
     this.log.debug("Start set AST");
@@ -565,10 +490,6 @@ export default class File {
     this.log.debug("End module formatter init");
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   transform() {
     this.call("pre");
     for (var pass of (this.transformerStack: Array)) {
@@ -578,10 +499,6 @@ export default class File {
 
     return this.generate();
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   wrap(code, callback) {
     code = code + "";
@@ -626,19 +543,11 @@ export default class File {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   addCode(code: string) {
     code = (code || "") + "";
     code = this.parseInputSourceMap(code);
     this.code = code;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   parseCode() {
     this.parseShebang();
@@ -646,18 +555,10 @@ export default class File {
     this.addAst(ast);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   shouldIgnore() {
     var opts = this.opts;
     return util.shouldIgnore(opts.filename, opts.ignore, opts.only);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   call(key: string) {
     for (var pass of (this.uncollapsedTransformerStack: Array)) {
@@ -665,10 +566,6 @@ export default class File {
       if (fn) fn.call(pass, this);
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   parseInputSourceMap(code: string) {
     var opts = this.opts;
@@ -684,10 +581,6 @@ export default class File {
     return code;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   parseShebang() {
     var shebangMatch = shebangRegex.exec(this.code);
     if (shebangMatch) {
@@ -695,10 +588,6 @@ export default class File {
       this.code = this.code.replace(shebangRegex, "");
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   makeResult({ code, map = null, ast, ignored }) {
     var result = {
@@ -724,10 +613,6 @@ export default class File {
 
     return result;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   generate() {
     var opts = this.opts;
