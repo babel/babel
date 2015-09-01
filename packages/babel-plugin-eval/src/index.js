@@ -1,5 +1,5 @@
-export default function ({ Plugin, parse, traverse }) {
-  return new Plugin("eval", {
+export default function ({ parse, traverse }) {
+  return {
     metadata: {
       group: "builtin-pre",
     },
@@ -19,5 +19,5 @@ export default function ({ Plugin, parse, traverse }) {
         }
       }
     }
-  });
+  };
 }

@@ -14,7 +14,7 @@ export default function ({ Plugin, types: t }) {
     return t.expressionStatement(t.callExpression(file.addHelper("defaults"), [ref, expr.right]));
   }
 
-  return new Plugin("proto-to-assign", {
+  return {
     metadata: {
       secondPass: true
     },
@@ -62,5 +62,5 @@ export default function ({ Plugin, types: t }) {
         }
       }
     }
-  });
+  };
 }

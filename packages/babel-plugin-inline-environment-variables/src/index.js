@@ -1,18 +1,18 @@
 export default function ({ Plugin, types: t }) {
-  return new Plugin("inline-environment-variables", {
+  return {
     metadata: {
       group: "builtin-pre"
     },
-    
+
     visitor: {
-      MemberExpression(node) {
+      MemberExpression() {
         if (this.get("object").matchesPattern("process.env")) {
           var key = this.toComputedKey();
-          if (t.isLiteral(key)) {
+          if (t.isStringLiteral(key)) {
             return t.valueToNode(process.env[key.value]);
           }
         }
       }
     }
-  });
+  };
 }

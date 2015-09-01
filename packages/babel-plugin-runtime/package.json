@@ -2,7 +2,7 @@
   "name": "babel-plugin-runtime",
   "version": "1.0.7",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
-  "repository": "babel-plugins/babel-plugin-runtime",
+  "repository": "babel/babelbabel-plugin-runtime",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

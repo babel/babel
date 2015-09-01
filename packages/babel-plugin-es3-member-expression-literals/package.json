@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-es3-member-expression-literals",
+  "version": "1.0.0",
+  "description": "Ensure that reserved words are quoted in property accesses",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

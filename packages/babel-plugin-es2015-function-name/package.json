@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-es2015-function-name",
+  "version": "1.0.0",
+  "description": "Apply ES2015 function.name semantics to all functions",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

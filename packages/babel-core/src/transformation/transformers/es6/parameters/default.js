@@ -78,9 +78,9 @@ export var visitor = {
           param.traverse(iifeVisitor, state);
         }
 
-        if (file.transformers["es6.spec.blockScoping"].canTransform() && param.isIdentifier()) {
-          pushDefNode(param.node, t.identifier("undefined"), i);
-        }
+        //if (file.transformers["es6.spec.blockScoping"].canTransform() && param.isIdentifier()) {
+        //  pushDefNode(param.node, t.identifier("undefined"), i);
+        //}
 
         continue;
       }

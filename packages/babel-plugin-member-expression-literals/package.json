@@ -2,7 +2,7 @@
   "name": "babel-plugin-member-expression-literals",
   "version": "1.0.1",
   "description": "Turn valid member expression property literals into plain identifiers",
-  "repository": "babel-plugins/babel-plugin-member-expression-literals",
+  "repository": "babel/babelbabel-plugin-member-expression-literals",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

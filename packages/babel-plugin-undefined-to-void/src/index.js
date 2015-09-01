@@ -1,15 +1,15 @@
-export default function ({ Plugin, types: t }) {
-  return new Plugin("undefined-to-void", {
+export default function ({ types: t }) {
+  return {
     metadata: {
       group: "builtin-basic"
     },
 
     visitor: {
-      ReferencedIdentifier(node, parent) {
+      ReferencedIdentifier(node) {
         if (node.name === "undefined") {
-          return t.unaryExpression("void", t.literal(0), true);
+          return t.unaryExpression("void", t.numberLiteral(0), true);
         }
       }
     }
-  });
+  };
 }

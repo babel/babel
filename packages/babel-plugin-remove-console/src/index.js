@@ -1,5 +1,5 @@
-export default function ({ Plugin, types: t }) {
-  return new Plugin("remove-console", {
+export default function () {
+  return {
     metadata: {
       group: "builtin-pre"
     },
@@ -11,5 +11,5 @@ export default function ({ Plugin, types: t }) {
         }
       }
     }
-  });
+  };
 }

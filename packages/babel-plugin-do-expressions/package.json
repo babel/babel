@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-do-expressions",
+  "version": "1.0.0",
+  "description": "Compile do expressions to ES5",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

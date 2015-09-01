@@ -146,12 +146,12 @@ export default function ({ Plugin, types: t }) {
     }
   };
 
-  return new Plugin("dead-code-elimination", {
+  return {
     metadata: {
       group: "builtin-pre",
       experimental: true
     },
 
     visitor
-  });
+  };
 }

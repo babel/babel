@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-react-compat-jsx",
+  "version": "1.0.0",
+  "description": "Turn JSX into React Pre-0.12 function calls",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

@@ -1,10 +1,10 @@
 export default function ({ Plugin, types: t }) {
-  return new Plugin("constant-folding", {
+  return {
     metadata: {
       group: "builtin-prepass",
       experimental: true
     },
-    
+
     visitor: {
       AssignmentExpression() {
         var left = this.get("left");
@@ -70,5 +70,5 @@ export default function ({ Plugin, types: t }) {
         }
       }
     }
-  });
+  };
 }

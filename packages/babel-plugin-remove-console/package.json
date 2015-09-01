@@ -2,7 +2,7 @@
   "name": "babel-plugin-remove-console",
   "version": "1.0.1",
   "description": "Remove console.* calls",
-  "repository": "babel-plugins/babel-plugin-remove-console",
+  "repository": "babel/babelbabel-plugin-remove-console",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

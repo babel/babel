@@ -1,11 +1,11 @@
 import levenshtein from "leven";
 
-export default function ({ Plugin, types: t, messages }) {
-  return new Plugin("undeclared-variables-check", {
+export default function ({ messages }) {
+  return {
     metadata: {
       group: "builtin-pre"
     },
-    
+
     visitor: {
       ReferencedIdentifier(node, parent, scope) {
         var binding = scope.getBinding(node.name);
@@ -44,5 +44,5 @@ export default function ({ Plugin, types: t, messages }) {
         throw this.errorWithNode(msg, ReferenceError);
       }
     }
-  });
+  };
 }

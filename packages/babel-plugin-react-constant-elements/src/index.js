@@ -1,4 +1,4 @@
-export default function ({ Plugin }) {
+export default function () {
   var immutabilityVisitor = {
     enter(node, parent, scope, state) {
       var stop = () => {
@@ -23,7 +23,7 @@ export default function ({ Plugin }) {
     }
   };
 
-  return new Plugin("react-constant-elements", {
+  return {
     metadata: {
       group: "builtin-basic"
     },
@@ -42,5 +42,5 @@ export default function ({ Plugin }) {
         }
       }
     }
-  });
+  };
 }

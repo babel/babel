@@ -2,12 +2,9 @@
   "name": "babel-plugin-eval",
   "version": "1.0.1",
   "description": "Compile eval calls with string literals",
-  "repository": "babel-plugins/babel-plugin-eval",
+  "repository": "babel/babelbabel-plugin-eval",
   "license": "MIT",
   "main": "lib/index.js",
-  "devDependencies": {
-    "babel": "^5.6.0"
-  },
   "keywords": [
     "babel-plugin"
   ]

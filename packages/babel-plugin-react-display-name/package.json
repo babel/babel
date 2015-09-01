@@ -2,7 +2,7 @@
   "name": "babel-plugin-react-display-name",
   "version": "2.0.0",
   "description": "Add displayName to React.createClass calls",
-  "repository": "babel-plugins/babel-plugin-react-display-name",
+  "repository": "babel/babelbabel-plugin-react-display-name",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

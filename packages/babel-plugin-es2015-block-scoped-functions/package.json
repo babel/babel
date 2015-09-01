@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-es2015-block-scoped-functions",
+  "version": "1.0.4",
+  "description": "Babel plugin to ensure function declarations at the block level are block scoped",
+  "repository": "babel/babelbabel-plugin-jscript",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

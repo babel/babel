@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-react-inline-elements",
+  "version": "1.0.0",
+  "description": "Turn JSX elements into exploded React objects",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

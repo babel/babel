@@ -1,6 +1,6 @@
 import path from "path";
 
-export default function ({ Plugin, types: t }) {
+export default function ({ types: t }) {
   function addDisplayName(id, call) {
     var props = call.arguments[0].properties;
     var safe = true;
@@ -15,7 +15,7 @@ export default function ({ Plugin, types: t }) {
     }
 
     if (safe) {
-      props.unshift(t.property("init", t.identifier("displayName"), t.literal(id)));
+      props.unshift(t.property("init", t.identifier("displayName"), t.stringLiteral(id)));
     }
   }
 
@@ -38,7 +38,7 @@ export default function ({ Plugin, types: t }) {
     return true;
   }
 
-  return new Plugin("react-display-name", {
+  return {
     metadata: {
       group: "builtin-pre"
     },
@@ -80,5 +80,5 @@ export default function ({ Plugin, types: t }) {
         }
       }
     }
-  });
+  };
 }

@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-flow-strip-types",
+  "version": "1.0.4",
+  "description": "Strip flow type annotations from your output code.",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-export-extensions",
+  "version": "1.0.0",
+  "description": "Compile export extensions to ES2015",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

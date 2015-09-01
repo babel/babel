@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-async-to-bluebird-coroutines",
+  "version": "1.0.0",
+  "description": "Turn async functions into a Bluebird coroutine",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

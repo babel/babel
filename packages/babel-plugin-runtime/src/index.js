@@ -1,13 +1,13 @@
 import definitions from "./definitions";
 
-export default function ({ Plugin, types: t }) {
+export default function ({ types: t }) {
   const RUNTIME_MODULE_NAME = "babel-runtime";
 
   function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
-  return new Plugin("runtime", {
+  return {
     metadata: {
       group: "builtin-post-modules"
     },
@@ -110,5 +110,5 @@ export default function ({ Plugin, types: t }) {
         }
       }
     }
-  });
+  };
 }

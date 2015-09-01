@@ -1,9 +1,9 @@
-export default function ({ Plugin, types: t }) {
-  return new Plugin("member-expression-literals", {
+export default function ({ types: t }) {
+  return {
     metadata: {
       group: "builtin-trailing"
     },
-    
+
     visitor: {
       MemberExpression: {
         exit(node) {
@@ -16,5 +16,5 @@ export default function ({ Plugin, types: t }) {
         }
       }
     }
-  });
+  };
 }

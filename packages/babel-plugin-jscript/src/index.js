@@ -1,9 +1,9 @@
 export default function ({ Plugin, types: t }) {
-  return new Plugin("jscript", {
+  return {
     metadata: {
       group: "builtin-trailing"
     },
-    
+
     visitor: {
       FunctionExpression: {
         exit(node) {
@@ -20,5 +20,5 @@ export default function ({ Plugin, types: t }) {
         }
       }
     }
-  });
+  };
 }

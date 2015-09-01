@@ -1,9 +1,9 @@
-export default function ({ Plugin, types: t }) {
-  return new Plugin("property-literals", {
+export default function ({ types: t }) {
+  return {
     metadata: {
       group: "builtin-trailing"
     },
-    
+
     visitor: {
       Property: {
         exit(node) {
@@ -16,5 +16,5 @@ export default function ({ Plugin, types: t }) {
         }
       }
     }
-  });
+  };
 }

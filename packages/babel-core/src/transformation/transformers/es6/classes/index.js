@@ -5,11 +5,10 @@ import { bare } from "../../../helpers/name-method";
 
 export var visitor = {
   ClassDeclaration(node) {
-    return t.variableDeclaration("let", [
+    return t.variableDeclaration("var", [
       t.variableDeclarator(node.id, t.toExpression(node))
     ]);
   },
-
 
   ClassExpression(node, parent, scope, file) {
     var inferred = bare(node, parent, scope);
