@@ -19,8 +19,6 @@
   <a href="http://issuestats.com/github/babel/babel"><img alt="Issue Stats" src="http://issuestats.com/github/babel/babel/badge/issue?style=flat"></a>
 </p>
 
-----
-
 ## Looking for support?
 
 <p align="center">For questions and support please visit the <a href="https://babel-slack.herokuapp.com">Slack community</a> or <a href="http://stackoverflow.com/questions/tagged/babeljs">StackOverflow</a>.</p>
