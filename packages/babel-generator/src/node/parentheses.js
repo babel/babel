@@ -121,7 +121,15 @@ export function YieldExpression(node, parent) {
 }
 
 export function ClassExpression(node, parent) {
-  return t.isExpressionStatement(parent);
+  // (class {});
+  if (t.isExpressionStatement(parent)) {
+    return true;
+  }
+
+  // export default (class () {});
+  if (t.isExportDeclaration(parent)) {
+    return true;
+  }
 }
 
 export function UnaryLike(node, parent) {
@@ -129,8 +137,13 @@ export function UnaryLike(node, parent) {
 }
 
 export function FunctionExpression(node, parent) {
-  // function () {};
+  // (function () {});
   if (t.isExpressionStatement(parent)) {
+    return true;
+  }
+
+  // export default (function () {});
+  if (t.isExportDeclaration(parent)) {
     return true;
   }
 
