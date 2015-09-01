@@ -48,7 +48,8 @@ export function isBlacklisted(): boolean {
 }
 
 /**
- * [Please add a description.]
+ * Visits a node and calls appropriate enter and exit callbacks
+ * as required.
  */
 
 export function visit(): boolean {
@@ -81,7 +82,7 @@ export function visit(): boolean {
 }
 
 /**
- * [Please add a description.]
+ * Sets shouldSkip flag true so that this node will be skipped while visiting.
  */
 
 export function skip() {
@@ -89,7 +90,7 @@ export function skip() {
 }
 
 /**
- * [Please add a description.]
+ * Adds given key to the list of keys to be skipped.
  */
 
 export function skipKey(key) {
