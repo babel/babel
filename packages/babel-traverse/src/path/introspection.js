@@ -77,6 +77,14 @@ export function has(key): boolean {
 }
 
 /**
+ * Description
+ */
+
+export function isStatic() {
+  return this.scope.isStatic(this.node);
+}
+
+/**
  * Alias of `has`.
  */
 
