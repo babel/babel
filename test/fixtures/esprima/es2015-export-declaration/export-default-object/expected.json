@@ -91,7 +91,7 @@
                 "name": "foo"
               },
               "value": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 22,
                 "end": 23,
                 "loc": {

@@ -74,7 +74,7 @@
               "name": "x"
             },
             "init": {
-              "type": "Literal",
+              "type": "RegexLiteral",
               "start": 8,
               "end": 17,
               "loc": {
@@ -88,10 +88,8 @@
                 }
               },
               "raw": "/[P QR]/i",
-              "regex": {
-                "pattern": "[P QR]",
-                "flags": "i"
-              }
+              "pattern": "[P QR]",
+              "flags": "i"
             }
           }
         ],

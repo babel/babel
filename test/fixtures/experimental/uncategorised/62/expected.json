@@ -124,7 +124,7 @@
                     }
                   ],
                   "body": {
-                    "type": "Literal",
+                    "type": "NullLiteral",
                     "start": 19,
                     "end": 23,
                     "loc": {
@@ -136,10 +136,7 @@
                         "line": 1,
                         "column": 23
                       }
-                    },
-                    "value": null,
-                    "rawValue": null,
-                    "raw": "null"
+                    }
                   }
                 }
               ]

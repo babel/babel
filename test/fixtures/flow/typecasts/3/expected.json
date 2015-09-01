@@ -124,7 +124,7 @@
               },
               "operator": "+",
               "right": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 16,
                 "end": 17,
                 "loc": {
@@ -243,6 +243,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

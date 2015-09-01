@@ -93,7 +93,7 @@
         ],
         "importKind": "typeof",
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 32,
           "end": 37,
           "loc": {
@@ -112,6 +112,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

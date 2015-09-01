@@ -106,7 +106,7 @@
                 "shorthand": false,
                 "computed": false,
                 "key": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 6,
                   "end": 14,
                   "loc": {
@@ -165,6 +165,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

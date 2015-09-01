@@ -43,7 +43,7 @@
           }
         },
         "declaration": {
-          "type": "Literal",
+          "type": "NumberLiteral",
           "start": 15,
           "end": 17,
           "loc": {

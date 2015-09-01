@@ -74,7 +74,7 @@
             "name": "x"
           },
           "right": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 4,
             "end": 6,
             "loc": {

@@ -154,7 +154,7 @@
                           "name": "y"
                         },
                         "value": {
-                          "type": "Literal",
+                          "type": "NumberLiteral",
                           "start": 16,
                           "end": 18,
                           "loc": {
@@ -242,7 +242,7 @@
                           }
                         },
                         "argument": {
-                          "type": "Literal",
+                          "type": "NumberLiteral",
                           "start": 53,
                           "end": 54,
                           "loc": {

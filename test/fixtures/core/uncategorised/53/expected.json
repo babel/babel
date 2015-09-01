@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "NumberLiteral",
           "start": 8,
           "end": 10,
           "loc": {
@@ -85,5 +85,27 @@
         ]
       }
     ]
-  }
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "a\nc",
+      "start": 0,
+      "end": 7,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 3
+        }
+      },
+      "range": [
+        0,
+        7
+      ]
+    }
+  ]
 }

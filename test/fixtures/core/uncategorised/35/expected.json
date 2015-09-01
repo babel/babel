@@ -106,7 +106,7 @@
                 "shorthand": false,
                 "computed": false,
                 "key": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 10,
                   "end": 17,
                   "loc": {

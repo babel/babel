@@ -106,7 +106,7 @@
                 "shorthand": false,
                 "computed": false,
                 "key": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 3,
                   "end": 6,
                   "loc": {
@@ -310,6 +310,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

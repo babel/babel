@@ -140,7 +140,7 @@
               },
               "static": true,
               "value": {
-                "type": "Literal",
+                "type": "StringLiteral",
                 "start": 30,
                 "end": 35,
                 "loc": {

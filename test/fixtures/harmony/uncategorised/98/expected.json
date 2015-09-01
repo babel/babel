@@ -76,7 +76,7 @@
           }
         ],
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 24,
           "end": 32,
           "loc": {
@@ -95,6 +95,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

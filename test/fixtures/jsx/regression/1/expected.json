@@ -122,7 +122,7 @@
           },
           "children": [
             {
-              "type": "Literal",
+              "type": "JSXText",
               "start": 3,
               "end": 7,
               "loc": {
@@ -199,7 +199,7 @@
                       "name": "href"
                     },
                     "value": {
-                      "type": "Literal",
+                      "type": "StringLiteral",
                       "start": 15,
                       "end": 21,
                       "loc": {
@@ -269,7 +269,7 @@
               },
               "children": [
                 {
-                  "type": "Literal",
+                  "type": "JSXText",
                   "start": 22,
                   "end": 26,
                   "loc": {
@@ -289,7 +289,7 @@
               ]
             },
             {
-              "type": "Literal",
+              "type": "JSXText",
               "start": 30,
               "end": 34,
               "loc": {

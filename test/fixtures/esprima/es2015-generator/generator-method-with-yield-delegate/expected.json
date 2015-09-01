@@ -154,7 +154,7 @@
                         },
                         "delegate": true,
                         "argument": {
-                          "type": "Literal",
+                          "type": "NumberLiteral",
                           "start": 19,
                           "end": 20,
                           "loc": {

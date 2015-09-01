@@ -184,7 +184,7 @@
               },
               "elements": [
                 {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 27,
                   "end": 34,
                   "loc": {
@@ -208,6 +208,5 @@
         "kind": "var"
       }
     ]
-  },
-  "comments": []
+  }
 }

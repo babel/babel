@@ -74,7 +74,7 @@
               "name": "yield"
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 12,
               "end": 14,
               "loc": {
@@ -93,7 +93,7 @@
             }
           }
         ],
-        "kind": "var"
+        "kind": "let"
       }
     ]
   }

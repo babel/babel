@@ -138,7 +138,7 @@
             ]
           },
           "property": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 15,
             "end": 16,
             "loc": {

@@ -102,7 +102,7 @@
                   "name": "d"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 8,
                   "end": 60,
                   "loc": {

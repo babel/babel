@@ -78,7 +78,7 @@
             }
           ],
           "body": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 8,
             "end": 10,
             "loc": {
@@ -98,6 +98,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

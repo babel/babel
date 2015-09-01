@@ -44,7 +44,7 @@
         },
         "specifiers": [],
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 15,
           "end": 20,
           "loc": {

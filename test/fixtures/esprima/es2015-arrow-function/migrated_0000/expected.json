@@ -61,7 +61,7 @@
           "expression": true,
           "params": [],
           "body": {
-            "type": "Literal",
+            "type": "StringLiteral",
             "start": 6,
             "end": 12,
             "loc": {

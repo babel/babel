@@ -43,7 +43,7 @@
           }
         },
         "test": {
-          "type": "Literal",
+          "type": "BooleanLiteral",
           "start": 7,
           "end": 11,
           "loc": {
@@ -172,5 +172,27 @@
         }
       }
     ]
-  }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Comment",
+      "start": 24,
+      "end": 34,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 24
+        },
+        "end": {
+          "line": 1,
+          "column": 34
+        }
+      },
+      "range": [
+        24,
+        34
+      ]
+    }
+  ]
 }

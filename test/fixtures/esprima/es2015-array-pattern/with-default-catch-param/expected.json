@@ -118,7 +118,7 @@
                   "name": "a"
                 },
                 "right": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 20,
                   "end": 21,
                   "loc": {

@@ -76,7 +76,7 @@
           }
         ],
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 16,
           "end": 21,
           "loc": {

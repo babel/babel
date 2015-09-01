@@ -125,7 +125,7 @@
             }
           ],
           "body": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 14,
             "end": 15,
             "loc": {

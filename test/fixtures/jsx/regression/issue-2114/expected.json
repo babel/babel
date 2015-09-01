@@ -102,7 +102,7 @@
                   "name": "pattern"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 13,
                   "end": 43,
                   "loc": {

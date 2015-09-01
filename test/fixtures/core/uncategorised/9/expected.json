@@ -89,7 +89,7 @@
             },
             "elements": [
               {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 6,
                 "end": 8,
                 "loc": {

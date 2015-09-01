@@ -255,7 +255,7 @@
                     "name": "x"
                   },
                   "value": {
-                    "type": "Literal",
+                    "type": "StringLiteral",
                     "start": 30,
                     "end": 37,
                     "loc": {
@@ -281,6 +281,5 @@
         "kind": "var"
       }
     ]
-  },
-  "comments": []
+  }
 }

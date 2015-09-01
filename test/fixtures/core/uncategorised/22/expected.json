@@ -122,7 +122,7 @@
                   "name": "answer"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 14,
                   "end": 16,
                   "loc": {

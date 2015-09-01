@@ -100,7 +100,7 @@
                     }
                   },
                   "object": {
-                    "type": "Literal",
+                    "type": "RegexLiteral",
                     "start": 3,
                     "end": 7,
                     "loc": {
@@ -114,10 +114,8 @@
                       }
                     },
                     "raw": "/\\d/",
-                    "regex": {
-                      "pattern": "\\d",
-                      "flags": ""
-                    }
+                    "pattern": "\\d",
+                    "flags": ""
                   },
                   "property": {
                     "type": "Identifier",
@@ -139,7 +137,7 @@
                 },
                 "arguments": [
                   {
-                    "type": "Literal",
+                    "type": "StringLiteral",
                     "start": 13,
                     "end": 16,
                     "loc": {
@@ -159,7 +157,7 @@
                 ]
               },
               "property": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 18,
                 "end": 19,
                 "loc": {

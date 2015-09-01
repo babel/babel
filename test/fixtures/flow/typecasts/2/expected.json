@@ -105,7 +105,7 @@
                   "name": "xxx"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 7,
                   "end": 8,
                   "loc": {
@@ -158,7 +158,7 @@
                   "name": "yyy"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 15,
                   "end": 20,
                   "loc": {
@@ -311,6 +311,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

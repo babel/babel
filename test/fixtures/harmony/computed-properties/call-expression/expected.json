@@ -138,7 +138,7 @@
                     "arguments": []
                   },
                   "value": {
-                    "type": "Literal",
+                    "type": "StringLiteral",
                     "start": 23,
                     "end": 25,
                     "loc": {
@@ -164,6 +164,5 @@
         "kind": "var"
       }
     ]
-  },
-  "comments": []
+  }
 }

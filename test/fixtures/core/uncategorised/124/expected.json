@@ -87,7 +87,7 @@
               "name": "universe"
             },
             "property": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 9,
               "end": 11,
               "loc": {

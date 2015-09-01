@@ -90,7 +90,7 @@
               "name": "n"
             },
             {
-              "type": "Literal",
+              "type": "StringLiteral",
               "start": 7,
               "end": 10,
               "loc": {
@@ -108,7 +108,7 @@
               "raw": "'='"
             },
             {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 12,
               "end": 13,
               "loc": {

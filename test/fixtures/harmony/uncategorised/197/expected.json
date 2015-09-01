@@ -59,7 +59,7 @@
           "body": []
         },
         "test": {
-          "type": "Literal",
+          "type": "BooleanLiteral",
           "start": 13,
           "end": 18,
           "loc": {

@@ -75,7 +75,7 @@
               "shorthand": false,
               "computed": false,
               "key": {
-                "type": "Literal",
+                "type": "StringLiteral",
                 "start": 3,
                 "end": 14,
                 "loc": {
@@ -93,7 +93,7 @@
                 "raw": "\"__proto__\""
               },
               "value": {
-                "type": "Literal",
+                "type": "NullLiteral",
                 "start": 16,
                 "end": 20,
                 "loc": {
@@ -105,10 +105,7 @@
                     "line": 1,
                     "column": 20
                   }
-                },
-                "value": null,
-                "rawValue": null,
-                "raw": "null"
+                }
               },
               "kind": "init"
             },

@@ -90,7 +90,7 @@
               },
               "computed": false,
               "key": {
-                "type": "Literal",
+                "type": "StringLiteral",
                 "start": 9,
                 "end": 22,
                 "loc": {

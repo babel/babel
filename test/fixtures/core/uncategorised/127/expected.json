@@ -170,7 +170,7 @@
           },
           "arguments": [
             {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 40,
               "end": 44,
               "loc": {

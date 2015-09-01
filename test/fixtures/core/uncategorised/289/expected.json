@@ -139,7 +139,7 @@
                       }
                     },
                     "expression": {
-                      "type": "Literal",
+                      "type": "StringLiteral",
                       "start": 37,
                       "end": 49,
                       "loc": {

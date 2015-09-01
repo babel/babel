@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "NullLiteral",
           "start": 0,
           "end": 4,
           "loc": {
@@ -55,10 +55,7 @@
               "line": 1,
               "column": 4
             }
-          },
-          "value": null,
-          "rawValue": null,
-          "raw": "null"
+          }
         }
       }
     ]

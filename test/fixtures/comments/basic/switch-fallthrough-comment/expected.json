@@ -75,7 +75,7 @@
             },
             "consequent": [],
             "test": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 34,
               "end": 35,
               "loc": {
@@ -202,7 +202,7 @@
               }
             ],
             "test": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 71,
               "end": 72,
               "loc": {

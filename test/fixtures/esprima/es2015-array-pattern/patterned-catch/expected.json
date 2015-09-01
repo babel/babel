@@ -249,7 +249,7 @@
                         "name": "e"
                       },
                       "right": {
-                        "type": "Literal",
+                        "type": "NumberLiteral",
                         "start": 28,
                         "end": 29,
                         "loc": {
@@ -333,7 +333,7 @@
                         "name": "g"
                       },
                       "right": {
-                        "type": "Literal",
+                        "type": "NumberLiteral",
                         "start": 37,
                         "end": 38,
                         "loc": {

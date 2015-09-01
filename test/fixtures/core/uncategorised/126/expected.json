@@ -116,7 +116,7 @@
                 },
                 "arguments": [
                   {
-                    "type": "Literal",
+                    "type": "NumberLiteral",
                     "start": 9,
                     "end": 11,
                     "loc": {
@@ -155,7 +155,7 @@
             },
             "arguments": [
               {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 22,
                 "end": 24,
                 "loc": {
@@ -173,7 +173,7 @@
                 "raw": "14"
               },
               {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 26,
                 "end": 27,
                 "loc": {
@@ -191,7 +191,7 @@
                 "raw": "3"
               },
               {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 29,
                 "end": 31,
                 "loc": {

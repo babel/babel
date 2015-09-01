@@ -122,7 +122,7 @@
           },
           "children": [
             {
-              "type": "Literal",
+              "type": "JSXText",
               "start": 5,
               "end": 10,
               "loc": {

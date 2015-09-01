@@ -107,7 +107,7 @@
               },
               "static": false,
               "value": {
-                "type": "Literal",
+                "type": "StringLiteral",
                 "start": 18,
                 "end": 23,
                 "loc": {

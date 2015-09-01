@@ -167,7 +167,7 @@
               },
               "elements": [
                 {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 23,
                   "end": 24,
                   "loc": {
@@ -185,7 +185,7 @@
                   "raw": "1"
                 },
                 {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 26,
                   "end": 27,
                   "loc": {
@@ -203,7 +203,7 @@
                   "raw": "2"
                 },
                 {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 29,
                   "end": 30,
                   "loc": {
@@ -227,6 +227,5 @@
         "kind": "var"
       }
     ]
-  },
-  "comments": []
+  }
 }

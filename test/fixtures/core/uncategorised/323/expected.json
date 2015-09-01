@@ -57,7 +57,7 @@
             }
           },
           "expression": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 5,
             "end": 7,
             "loc": {
@@ -121,7 +121,7 @@
             }
           },
           "expression": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 14,
             "end": 16,
             "loc": {

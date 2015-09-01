@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "NumberLiteral",
           "start": 0,
           "end": 2,
           "loc": {
@@ -106,5 +106,47 @@
         ]
       }
     ]
-  }
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "The",
+      "start": 3,
+      "end": 10,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 3
+        },
+        "end": {
+          "line": 1,
+          "column": 10
+        }
+      },
+      "range": [
+        3,
+        10
+      ]
+    },
+    {
+      "type": "CommentBlock",
+      "value": "Answer",
+      "start": 11,
+      "end": 21,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 11
+        },
+        "end": {
+          "line": 1,
+          "column": 21
+        }
+      },
+      "range": [
+        11,
+        21
+      ]
+    }
+  ]
 }

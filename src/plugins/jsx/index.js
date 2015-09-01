@@ -382,7 +382,7 @@ export default function(instance) {
   instance.extend("parseExprAtom", function(inner) {
     return function(refShortHandDefaultPos) {
       if (this.match(tt.jsxText)) {
-        var node = this.parseLiteral(this.state.value);
+        var node = this.parseLiteral(this.state.value, "JSXText");
         // https://github.com/babel/babel/issues/2078
         node.rawValue = null;
         return node;

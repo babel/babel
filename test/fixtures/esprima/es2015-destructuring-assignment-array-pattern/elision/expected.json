@@ -77,7 +77,7 @@
             ]
           },
           "right": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 5,
             "end": 6,
             "loc": {

@@ -137,7 +137,7 @@
                     "name": "x"
                   },
                   "right": {
-                    "type": "Literal",
+                    "type": "NumberLiteral",
                     "start": 6,
                     "end": 7,
                     "loc": {
@@ -178,6 +178,5 @@
         }
       }
     ]
-  },
-  "comments": []
+  }
 }

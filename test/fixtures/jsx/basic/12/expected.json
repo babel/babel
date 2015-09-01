@@ -172,7 +172,7 @@
               "children": []
             },
             {
-              "type": "Literal",
+              "type": "JSXText",
               "start": 11,
               "end": 35,
               "loc": {
