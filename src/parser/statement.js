@@ -673,10 +673,8 @@ pp.parseExport = function (node) {
     let needsSemi = false;
     if (this.eat(tt._function)) {
       expr = this.parseFunction(expr, true, false, false, true);
-      if (!expr.id) expr.type = "FunctionExpression";
     } else if (this.match(tt._class)) {
       expr = this.parseClass(expr, true, true);
-      if (!expr.id) expr.type = "ClassExpression";
     } else {
       needsSemi = true;
       expr = this.parseMaybeAssign();
