@@ -278,11 +278,11 @@ export function buildMatchMemberExpression(match:string, allowPartial?: boolean)
       if (t.isIdentifier(node)) {
         // this part doesn't match
         if (parts[i] !== node.name) return false;
-      } else if (t.isLiteral(node)) {
+      } else if (t.isStringLiteral(node)) {
         // this part doesn't match
         if (parts[i] !== node.value) return false;
       } else if (t.isMemberExpression(node)) {
-        if (node.computed && !t.isLiteral(node.property)) {
+        if (node.computed && !t.isStringLiteral(node.property)) {
           // we can't deal with this
           return false;
         } else {

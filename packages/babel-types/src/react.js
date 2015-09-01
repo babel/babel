@@ -56,7 +56,7 @@ function cleanJSXElementLiteralChild(child, args) {
     }
   }
 
-  if (str) args.push(t.literal(str));
+  if (str) args.push(t.stringLiteral(str));
 }
 
 /**
@@ -69,7 +69,7 @@ export function buildChildren(node) {
   for (var i = 0; i < node.children.length; i++) {
     var child = node.children[i];
 
-    if (t.isLiteral(child) && typeof child.value === "string") {
+    if (t.isStringLiteral(child)) {
       cleanJSXElementLiteralChild(child, elems);
       continue;
     }
