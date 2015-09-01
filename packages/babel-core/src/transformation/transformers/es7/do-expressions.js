@@ -5,16 +5,7 @@ export var metadata = {
   stage: 0
 };
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   DoExpression(node) {
     var body = node.body.body;
     if (body.length) {

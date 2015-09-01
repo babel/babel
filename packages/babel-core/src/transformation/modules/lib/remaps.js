@@ -1,24 +1,11 @@
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 var remapVisitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   enter(node) {
     if (node._skipModulesRemap) {
       return this.skip();
     }
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   ReferencedIdentifier(node, parent, scope, remaps) {
     var { formatter } = remaps;
@@ -36,10 +23,6 @@ var remapVisitor = {
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   AssignmentExpression: {
     exit(node, parent, scope, { formatter }) {
       if (!node._ignoreModulesRemap) {
@@ -50,10 +33,6 @@ var remapVisitor = {
       }
     }
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   UpdateExpression(node, parent, scope, { formatter }) {
     var exported = formatter.getExport(node.argument, scope);
@@ -87,43 +66,23 @@ var remapVisitor = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export default class Remaps {
   constructor(file, formatter) {
     this.formatter = formatter;
     this.file      = file;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   run() {
     this.file.path.traverse(remapVisitor, this);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   _getKey(name) {
     return `${name}:moduleRemap`;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   get(scope, name) {
     return scope.getData(this._getKey(name));
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   add(scope, name, val) {
     if (this.all) {
@@ -136,10 +95,6 @@ export default class Remaps {
 
     return scope.setData(this._getKey(name), val);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   remove(scope, name) {
     return scope.removeData(this._getKey(name));
@@ -154,10 +109,6 @@ export default class Remaps {
   getAll() {
     return this.all;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   clearAll() {
     if (this.all) {

@@ -1,9 +1,5 @@
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 var getObjRef = function (node, nodes, file, scope) {
   var ref;
   if (t.isIdentifier(node)) {
@@ -37,10 +33,6 @@ var getObjRef = function (node, nodes, file, scope) {
   return temp;
 };
 
-/**
- * [Please add a description.]
- */
-
 var getPropRef = function (node, nodes, file, scope) {
   var prop = node.property;
   var key = t.toComputedKey(node, prop);
@@ -52,10 +44,6 @@ var getPropRef = function (node, nodes, file, scope) {
   ]));
   return temp;
 };
-
-/**
- * [Please add a description.]
- */
 
 export default function (node, nodes, file, scope, allowedSingleIdent) {
   var obj;

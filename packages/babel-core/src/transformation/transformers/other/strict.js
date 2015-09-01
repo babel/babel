@@ -16,16 +16,7 @@ function isUseStrict(node) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   Program: {
     enter(program) {
       var first = program.body[0];
@@ -44,10 +35,6 @@ export var visitor = {
       directive._blockHoist = Infinity;
     }
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   ThisExpression() {
     if (!this.findParent((path) => !path.is("shadow") && THIS_BREAK_KEYS.indexOf(path.type) >= 0)) {

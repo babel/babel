@@ -6,10 +6,6 @@ import resolve from "try-resolve";
 import traverse from "babel-traverse";
 import parse from "../../helpers/parse";
 
-/**
- * [Please add a description.]
- */
-
 var context = {
   messages,
   Transformer,
@@ -19,21 +15,8 @@ var context = {
   traverse
 };
 
-/**
- * [Please add a description.]
- */
-
 export default class PluginManager {
-
-  /**
-   * [Please add a description.]
-   */
-
   static memoisedPlugins = [];
-
-  /**
-   * [Please add a description.]
-   */
 
   static memoisePluginContainer(fn) {
     for (var i = 0; i < PluginManager.memoisedPlugins.length; i++) {
@@ -49,15 +32,7 @@ export default class PluginManager {
     return transformer;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   static positions = ["before", "after"];
-
-  /**
-   * [Please add a description.]
-   */
 
   constructor({ file, transformers, before, after } = { transformers: {}, before: [], after: [] }) {
     this.transformers = transformers;
@@ -65,10 +40,6 @@ export default class PluginManager {
     this.before       = before;
     this.after        = after;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   subnormaliseString(name, position) {
     // this is a plugin in the form of "foobar" or "foobar:after"
@@ -89,10 +60,6 @@ export default class PluginManager {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   validate(name, plugin) {
     // validate transformer key
     var key = plugin.key;
@@ -108,10 +75,6 @@ export default class PluginManager {
     // register as a plugin
     plugin.metadata.plugin = true;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   add(name) {
     var position;

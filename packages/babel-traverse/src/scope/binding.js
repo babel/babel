@@ -15,6 +15,7 @@ export default class Binding {
     this.constant           = true;
 
     this.identifier = identifier;
+    this.referencePaths = [];
     this.references = 0;
     this.referenced = false;
 
@@ -37,28 +38,16 @@ export default class Binding {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   deoptValue() {
     this.clearValue();
     this.hasDeoptedValue = true;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   setValue(value: any) {
     if (this.hasDeoptedValue) return;
     this.hasValue = true;
     this.value    = value;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   clearValue() {
     this.hasDeoptedValue = false;
@@ -79,9 +68,10 @@ export default class Binding {
    * Increment the amount of references to this binding.
    */
 
-  reference() {
+  reference(path) {
     this.referenced = true;
     this.references++;
+    this.referencePaths.push(path)
   }
 
   /**

@@ -1,10 +1,6 @@
 import extend from "lodash/object/extend";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export var ModuleDeclaration = {
   enter(node, parent, scope, formatter) {
     if (node.source) {
@@ -13,10 +9,6 @@ export var ModuleDeclaration = {
     }
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 export var ImportDeclaration = {
   exit(node, parent, scope, formatter) {
@@ -65,10 +57,6 @@ export var ImportDeclaration = {
     }
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 export function ExportDeclaration(node, parent, scope, formatter) {
   formatter.hasLocalExports = true;
@@ -162,10 +150,6 @@ export function ExportDeclaration(node, parent, scope, formatter) {
     }
   }
 }
-
-/**
- * [Please add a description.]
- */
 
 export function Scope(node, parent, scope, formatter) {
   if (!formatter.isLoose()) {

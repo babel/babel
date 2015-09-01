@@ -1,8 +1,6 @@
-import * as t from "babel-types";
+// This file contains methods that convert the path node into another node or some other type of data.
 
-/**
- * [Please add a description.]
- */
+import * as t from "babel-types";
 
 export function toComputedKey(): Object {
   var node = this.node;
@@ -22,10 +20,6 @@ export function toComputedKey(): Object {
 
   return key;
 }
-
-/**
- * [Please add a description.]
- */
 
 export function ensureBlock() {
   return t.ensureBlock(this.node);

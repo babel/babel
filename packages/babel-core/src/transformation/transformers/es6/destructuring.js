@@ -5,16 +5,7 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   ForXStatement(node, parent, scope, file) {
     var left = node.left;
 
@@ -63,10 +54,6 @@ export var visitor = {
     block.body = nodes.concat(block.body);
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   Function(node, parent, scope, file) {
     var hasDestructuring = false;
     for (let pattern of (node.params: Array)) {
@@ -111,10 +98,6 @@ export var visitor = {
     block.body = nodes.concat(block.body);
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   CatchClause(node, parent, scope, file) {
     var pattern = node.param;
     if (!t.isPattern(pattern)) return;
@@ -134,10 +117,6 @@ export var visitor = {
 
     node.body.body = nodes.concat(node.body.body);
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   AssignmentExpression(node, parent, scope, file) {
     if (!t.isPattern(node.left)) return;
@@ -172,10 +151,6 @@ export var visitor = {
 
     return nodes;
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   VariableDeclaration(node, parent, scope, file) {
     if (t.isForXStatement(parent)) return;
@@ -260,16 +235,7 @@ function hasRest(pattern) {
   return false;
 }
 
-/**
- * [Please add a description.]
- */
-
 var arrayUnpackVisitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   ReferencedIdentifier(node, parent, scope, state) {
     if (state.bindings[node.name]) {
       state.deopt = true;
@@ -277,10 +243,6 @@ var arrayUnpackVisitor = {
     }
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 class DestructuringTransformer {
   constructor(opts) {
@@ -292,10 +254,6 @@ class DestructuringTransformer {
     this.file       = opts.file;
     this.kind       = opts.kind;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   buildVariableAssignment(id, init) {
     var op = this.operator;
@@ -316,10 +274,6 @@ class DestructuringTransformer {
     return node;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   buildVariableDeclaration(id, init) {
     var declar = t.variableDeclaration("var", [
       t.variableDeclarator(id, init)
@@ -327,10 +281,6 @@ class DestructuringTransformer {
     declar._blockHoist = this.blockHoist;
     return declar;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   push(id, init) {
     if (t.isObjectPattern(id)) {
@@ -344,10 +294,6 @@ class DestructuringTransformer {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   toArray(node, count) {
     if (this.file.isLoose("es6.destructuring") || (t.isIdentifier(node) && this.arrays[node.name])) {
       return node;
@@ -355,10 +301,6 @@ class DestructuringTransformer {
       return this.scope.toArray(node, count);
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   pushAssignmentPattern(pattern, valueRef) {
     // we need to assign the current value of the assignment to avoid evaluating
@@ -394,10 +336,6 @@ class DestructuringTransformer {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   pushObjectSpread(pattern, objRef, spreadProp, spreadPropIndex) {
     // get all the keys that appear in this object before the current spread
 
@@ -426,10 +364,6 @@ class DestructuringTransformer {
     this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   pushObjectProperty(prop, propRef) {
     if (t.isLiteral(prop.key)) prop.computed = true;
 
@@ -442,10 +376,6 @@ class DestructuringTransformer {
       this.nodes.push(this.buildVariableAssignment(pattern, objRef));
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   pushObjectPattern(pattern, objRef) {
     // https://github.com/babel/babel/issues/681
@@ -478,10 +408,6 @@ class DestructuringTransformer {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   canUnpackArrayPattern(pattern, arr) {
     // not an array so there's no way we can deal with this
     if (!t.isArrayExpression(arr)) return false;
@@ -511,10 +437,6 @@ class DestructuringTransformer {
     return !state.deopt;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   pushUnpackedArrayPattern(pattern, arr) {
     for (var i = 0; i < pattern.elements.length; i++) {
       var elem = pattern.elements[i];
@@ -525,10 +447,6 @@ class DestructuringTransformer {
       }
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   pushArrayPattern(pattern, arrayRef) {
     if (!pattern.elements) return;
@@ -592,10 +510,6 @@ class DestructuringTransformer {
       this.push(elem, elemRef);
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   init(pattern, ref) {
     // trying to destructure a value that we can't evaluate more than once so we

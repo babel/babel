@@ -3,7 +3,8 @@
  */
 
 export default class Hub {
-  constructor(file) {
+  constructor(file, options) {
     this.file = file;
+    this.options = options;
   }
 }

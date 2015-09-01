@@ -10,15 +10,7 @@ import flatten from "lodash/array/flatten";
 import extend from "lodash/object/extend";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 var collectorVisitor = {
-
-  /**
-   * [Please add a description.]
-   */
 
   For(node, parent, scope) {
     for (var key of (t.FOR_INIT_KEYS: Array)) {
@@ -26,10 +18,6 @@ var collectorVisitor = {
       if (declar.isVar()) scope.getFunctionParent().registerBinding("var", declar);
     }
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   Declaration(node, parent, scope) {
     // delegate block scope handling to the `blockVariableVisitor`
@@ -42,10 +30,6 @@ var collectorVisitor = {
     scope.getFunctionParent().registerDeclaration(this);
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   ReferencedIdentifier(node) {
     var binding = this.scope.getBinding(node.name);
     if (binding) {
@@ -55,20 +39,12 @@ var collectorVisitor = {
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   ForXStatement() {
     var left = this.get("left");
     if (left.isPattern() || left.isIdentifier()) {
       this.scope.registerConstantViolation(left, left);
     }
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   ExportDeclaration: {
     exit(node) {
@@ -86,18 +62,10 @@ var collectorVisitor = {
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   LabeledStatement(node) {
     this.scope.getProgramParent().addGlobal(node);
     this.scope.getBlockParent().registerDeclaration(this);
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   AssignmentExpression() {
     // register undeclared bindings as globals
@@ -114,43 +82,23 @@ var collectorVisitor = {
     this.scope.registerConstantViolation(this, this.get("left"), this.get("right"));
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   UpdateExpression(node, parent, scope) {
     scope.registerConstantViolation(this, this.get("argument"), null);
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   UnaryExpression(node, parent, scope) {
     if (node.operator === "delete") scope.registerConstantViolation(this, this.get("left"), null);
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   BlockScoped(node, parent, scope) {
     if (scope.path === this) scope = scope.parent;
     scope.getBlockParent().registerDeclaration(this);
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   ClassDeclaration(node, parent, scope) {
     var name = node.id.name;
     scope.bindings[name] = scope.getBinding(name);
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   Block(node, parent, scope) {
     var paths = this.get("body");
@@ -162,25 +110,13 @@ var collectorVisitor = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 var renameVisitor = {
-
-  /**
-   * [Please add a description.]
-   */
 
   ReferencedIdentifier(node, parent, scope, state) {
     if (node.name === state.oldName) {
       node.name = state.newName;
     }
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   Scope(node, parent, scope, state) {
     if (!scope.bindingIdentifierEquals(state.oldName, state.binding)) {
@@ -196,10 +132,6 @@ var renameVisitor = {
     }
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 export default class Scope {
 
@@ -398,10 +330,6 @@ export default class Scope {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   checkBlockScopedCollisions(local, kind: string, name: string, id: Object) {
     // ignore parameters
     if (kind === "param") return;
@@ -421,10 +349,6 @@ export default class Scope {
       throw this.hub.file.errorWithNode(id, messages.get("scopeDuplicateDeclaration", name), TypeError);
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   rename(oldName: string, newName: string, block?) {
     newName = newName || this.generateUidIdentifier(oldName).name;
@@ -455,20 +379,12 @@ export default class Scope {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   _renameFromMap(map, oldName, newName, value) {
     if (map[oldName]) {
       map[newName] = value;
       map[oldName] = null;
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   dump() {
     var sep = repeating("-", 60);
@@ -487,10 +403,6 @@ export default class Scope {
     } while(scope = scope.parent);
     console.log(sep);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   toArray(node: Object, i?: number) {
     var file = this.hub.file;
@@ -520,10 +432,6 @@ export default class Scope {
     return t.callExpression(file.addHelper(helperName), args);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   registerDeclaration(path: NodePath) {
     if (path.isLabeledStatement()) {
       this.registerBinding("label", path);
@@ -551,10 +459,6 @@ export default class Scope {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   registerConstantViolation(root: NodePath, left: NodePath, right: NodePath) {
     var ids = left.getBindingIdentifiers();
     for (var name in ids) {
@@ -562,10 +466,6 @@ export default class Scope {
       if (binding) binding.reassign(root, left, right);
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   registerBinding(kind: string, path: NodePath) {
     if (!kind) throw new ReferenceError("no `kind`");
@@ -605,17 +505,9 @@ export default class Scope {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   addGlobal(node: Object) {
     this.globals[node.name] = node;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   hasUid(name): boolean {
     var scope = this;
@@ -627,10 +519,6 @@ export default class Scope {
     return false;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   hasGlobal(name: string): boolean {
     var scope = this;
 
@@ -641,10 +529,6 @@ export default class Scope {
     return false;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   hasReference(name: string): boolean {
     var scope = this;
 
@@ -654,10 +538,6 @@ export default class Scope {
 
     return false;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   isPure(node, constantsOnly?: boolean) {
     if (t.isIdentifier(node)) {
@@ -720,17 +600,9 @@ export default class Scope {
     } while(scope = scope.parent);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   init() {
     if (!this.references) this.crawl();
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   crawl() {
     var path = this.path;
@@ -803,10 +675,6 @@ export default class Scope {
     path.traverse(collectorVisitor);
     this.crawling = false;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   push(opts: Object) {
     var path = this.path;
@@ -928,17 +796,9 @@ export default class Scope {
     return ids;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   bindingIdentifierEquals(name: string, node: Object): boolean {
     return this.getBindingIdentifier(name) === node;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getBinding(name: string) {
     var scope = this;
@@ -949,43 +809,23 @@ export default class Scope {
     } while (scope = scope.parent);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   getOwnBinding(name: string) {
     return this.bindings[name];
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getBindingIdentifier(name: string) {
     var info = this.getBinding(name);
     return info && info.identifier;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   getOwnBindingIdentifier(name: string) {
     var binding = this.bindings[name];
     return binding && binding.identifier;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   hasOwnBinding(name: string) {
     return !!this.getOwnBinding(name);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   hasBinding(name: string, noGlobals?) {
     if (!name) return false;
@@ -996,10 +836,6 @@ export default class Scope {
     if (!noGlobals && includes(Scope.contextVariables, name)) return true;
     return false;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   parentHasBinding(name: string, noGlobals?) {
     return this.parent && this.parent.hasBinding(name, noGlobals);
@@ -1018,17 +854,9 @@ export default class Scope {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   removeOwnBinding(name: string) {
     delete this.bindings[name];
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   removeBinding(name: string) {
     // clear literal binding

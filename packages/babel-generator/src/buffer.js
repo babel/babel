@@ -160,7 +160,7 @@ export default class Buffer {
    */
 
   newline(i, removeLast) {
-    if (this.format.compact || this.format.retainLines) return;
+    if (this.format.retainLines || this.format.compact) return;
 
     if (this.format.concise) {
       this.space();

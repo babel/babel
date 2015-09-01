@@ -60,7 +60,6 @@ export default {
   "es6.parameters":                        require("./es6/parameters"),
   "es6.destructuring":                     require("./es6/destructuring"),
   "es6.blockScoping":                      require("./es6/block-scoping"),
-  "es6.spec.blockScoping":                 require("./es6/spec.block-scoping"),
   reactCompat:                             require("./other/react-compat"),
   react:                                   require("./other/react"),
   regenerator:                             require("./other/regenerator"),

@@ -1,9 +1,5 @@
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 function getTDZStatus(refPath, bindingPath) {
   var executionStatus = bindingPath._guessExecutionStatusRelativeTo(refPath);
 
@@ -16,20 +12,12 @@ function getTDZStatus(refPath, bindingPath) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 function buildTDZAssert(node, file) {
   return t.callExpression(
     file.addHelper("temporal-assert-defined"),
     [node, t.stringLiteral(node.name), file.addHelper("temporal-undefined")]
   );
 }
-
-/**
- * [Please add a description.]
- */
 
 function isReference(node, scope, state) {
   var declared = state.letReferences[node.name];
@@ -40,11 +28,6 @@ function isReference(node, scope, state) {
 }
 
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   ReferencedIdentifier(node, parent, scope, state) {
     if (t.isFor(parent, { left: node })) return;
     if (!isReference(node, scope, state)) return;
@@ -77,10 +60,6 @@ export var visitor = {
       ));
     }
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   AssignmentExpression: {
     exit(node, parent, scope, state) {

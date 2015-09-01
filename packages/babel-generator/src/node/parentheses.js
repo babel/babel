@@ -1,12 +1,6 @@
 import each from "lodash/collection/each";
 import * as t from "babel-types";
 
-/**
- * Create a mapping of operators to precendence.
- *
- * @example
- * { "==": 6, "+": 9 }
- */
 const PRECEDENCE = {};
 
 each([
@@ -27,23 +21,11 @@ each([
   });
 });
 
-/**
- * Test if NullableTypeAnnotation needs parentheses.
- */
-
 export function NullableTypeAnnotation(node, parent) {
   return t.isArrayTypeAnnotation(parent);
 }
 
-/**
- * Alias NullableTypeAnnotation test as FunctionTypeAnnotation.
- */
-
 export { NullableTypeAnnotation as FunctionTypeAnnotation };
-
-/**
- * Test if UpdateExpression needs parentheses.
- */
 
 export function UpdateExpression(node, parent) {
   if (t.isMemberExpression(parent) && parent.object === node) {
@@ -51,10 +33,6 @@ export function UpdateExpression(node, parent) {
     return true;
   }
 }
-
-/**
- * Test if ObjectExpression needs parentheses.
- */
 
 export function ObjectExpression(node, parent) {
   if (t.isExpressionStatement(parent)) {
@@ -69,10 +47,6 @@ export function ObjectExpression(node, parent) {
 
   return false;
 }
-
-/**
- * Test if Binary needs parentheses.
- */
 
 export function Binary(node, parent) {
   if ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) {
@@ -104,10 +78,6 @@ export function Binary(node, parent) {
   }
 }
 
-/**
- * Test if BinaryExpression needs parentheses.
- */
-
 export function BinaryExpression(node, parent) {
   if (node.operator === "in") {
     // var i = (1 in []);
@@ -121,10 +91,6 @@ export function BinaryExpression(node, parent) {
     }
   }
 }
-
-/**
- * Test if SequenceExpression needs parentheses.
- */
 
 export function SequenceExpression(node, parent) {
   if (t.isForStatement(parent)) {
@@ -144,10 +110,6 @@ export function SequenceExpression(node, parent) {
   return true;
 }
 
-/**
- * Test if YieldExpression needs parentheses.
- */
-
 export function YieldExpression(node, parent) {
   return t.isBinary(parent) ||
          t.isUnaryLike(parent) ||
@@ -158,25 +120,13 @@ export function YieldExpression(node, parent) {
          t.isYieldExpression(parent);
 }
 
-/**
- * Test if ClassExpression needs parentheses.
- */
-
 export function ClassExpression(node, parent) {
   return t.isExpressionStatement(parent);
 }
 
-/**
- * Test if UnaryLike needs parentheses.
- */
-
 export function UnaryLike(node, parent) {
   return t.isMemberExpression(parent) && parent.object === node;
 }
-
-/**
- * Test if FunctionExpression needs parentheses.
- */
 
 export function FunctionExpression(node, parent) {
   // function () {};
@@ -194,10 +144,6 @@ export function FunctionExpression(node, parent) {
     return true;
   }
 }
-
-/**
- * Test if ConditionalExpression needs parentheses.
- */
 
 export function ConditionalExpression(node, parent) {
   if (t.isUnaryLike(parent)) {
@@ -224,10 +170,6 @@ export function ConditionalExpression(node, parent) {
 
   return false;
 }
-
-/**
- * Test if AssignmentExpression needs parentheses.
- */
 
 export function AssignmentExpression(node) {
   if (t.isObjectPattern(node.left)) {

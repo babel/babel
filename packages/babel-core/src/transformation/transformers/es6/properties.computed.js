@@ -1,9 +1,5 @@
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 function loose(node, body, objId) {
   for (var prop of (node.properties: Array)) {
     body.push(t.expressionStatement(
@@ -15,10 +11,6 @@ function loose(node, body, objId) {
     ));
   }
 }
-
-/**
- * [Please add a description.]
- */
 
 function spec(node, body, objId, initProps, file) {
   // add a simple assignment for all Symbol member expressions due to symbol polyfill limitations
@@ -53,16 +45,7 @@ function spec(node, body, objId, initProps, file) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   ObjectExpression: {
     exit(node, parent, scope, file) {
       var hasComputed = false;

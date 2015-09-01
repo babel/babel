@@ -35,10 +35,6 @@ export function number(val) {
 
 export var filename = slash;
 
-/**
- * [Please add a description.]
- */
-
 export function boolean(val) {
   return !!val;
 }

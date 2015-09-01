@@ -2,10 +2,6 @@ import type NodePath from "../../traversal/path";
 import * as messages from "babel-messages";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 function isIllegalBareSuper(node, parent) {
   if (!t.isSuper(node)) return false;
   if (t.isMemberExpression(parent, { computed: false })) return false;
@@ -13,24 +9,11 @@ function isIllegalBareSuper(node, parent) {
   return true;
 }
 
-/**
- * [Please add a description.]
- */
-
 function isMemberExpressionSuper(node) {
   return t.isMemberExpression(node) && t.isSuper(node.object);
 }
 
-/**
- * [Please add a description.]
- */
-
 var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   enter(node, parent, scope, state) {
     var topLevel = state.topLevel;
     var self = state.self;
@@ -61,10 +44,6 @@ var visitor = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export default class ReplaceSupers {
   constructor(opts: Object, inClass?: boolean = false) {
     this.topLevelThisReference = opts.topLevelThisReference;
@@ -79,10 +58,6 @@ export default class ReplaceSupers {
     this.file                  = opts.file;
     this.opts                  = opts;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getObjectRef() {
     return this.opts.objectRef || this.opts.getObjectRef();
@@ -139,26 +114,14 @@ export default class ReplaceSupers {
     );
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   replace() {
     this.traverseLevel(this.methodPath.get("value"), true);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   traverseLevel(path: NodePath, topLevel: boolean) {
     var state = { self: this, topLevel: topLevel };
     path.traverse(visitor, state);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getThisReference() {
     if (this.topLevelThisReference) {
@@ -171,10 +134,6 @@ export default class ReplaceSupers {
       return ref;
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getLooseSuperProperty(id: Object, parent: Object) {
     var methodNode = this.methodNode;
@@ -215,10 +174,6 @@ export default class ReplaceSupers {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   looseHandle(path: NodePath, getThisReference: Function) {
     var node = path.node;
     if (path.isSuper()) {
@@ -234,10 +189,6 @@ export default class ReplaceSupers {
       return true;
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   specHandleAssignmentExpression(ref, path, node, getThisReference) {
     if (node.operator === "=") {
@@ -256,10 +207,6 @@ export default class ReplaceSupers {
       ];
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   specHandle(path: NodePath, getThisReference: Function) {
     var methodNode = this.methodNode;

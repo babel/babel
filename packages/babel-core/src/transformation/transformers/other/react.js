@@ -1,26 +1,13 @@
 import { react } from "babel-types";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 var JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
 
 export var metadata = {
   group: "builtin-advanced"
 };
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = require("../../helpers/build-react-transformer")({
-
-  /**
-   * [Please add a description.]
-   */
-
   pre(state) {
     var tagName = state.tagName;
     var args    = state.args;
@@ -31,18 +18,10 @@ export var visitor = require("../../helpers/build-react-transformer")({
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   post(state, file) {
     state.callee = file.get("jsxIdentifier");
   }
 });
-
-/**
- * [Please add a description.]
- */
 
 visitor.Program = function (node, parent, scope, file) {
   var id = file.opts.jsxPragma;

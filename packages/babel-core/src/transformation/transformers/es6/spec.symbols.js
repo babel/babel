@@ -4,16 +4,7 @@ export var metadata = {
   optional: true
 };
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   UnaryExpression(node, parent, scope, file) {
     if (node._ignoreSpecSymbols) return;
 
@@ -40,19 +31,11 @@ export var visitor = {
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   BinaryExpression(node, parent, scope, file) {
     if (node.operator === "instanceof") {
       return t.callExpression(file.addHelper("instanceof"), [node.left, node.right]);
     }
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   "VariableDeclaration|FunctionDeclaration"(node) {
     if (node._generated) this.skip();

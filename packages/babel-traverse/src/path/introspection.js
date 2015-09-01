@@ -1,3 +1,5 @@
+// This file contains methods responsible for introspecting the current path for certain values.
+
 import type NodePath from "./index";
 import includes from "lodash/collection/includes";
 import * as t from "babel-types";
@@ -209,10 +211,6 @@ export function getSource() {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function willIMaybeExecuteBefore(target) {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
@@ -278,10 +276,6 @@ export function _guessExecutionStatusRelativeTo(target) {
 export function resolve(dangerous, resolved) {
   return this._resolve(dangerous, resolved) || this;
 }
-
-/**
- * [Please add a description.]
- */
 
 export function _resolve(dangerous?, resolved?): ?NodePath {
   // detect infinite recursion

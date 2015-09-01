@@ -1,10 +1,6 @@
 import remapAsyncToGenerator from "../../helpers/remap-async-to-generator";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export function manipulateOptions(opts) {
   opts.blacklist.push("regenerator");
 }
@@ -14,16 +10,7 @@ export var metadata = {
   dependencies: ["es7.asyncFunctions", "es6.classes"]
 };
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   Function(node, parent, scope, file) {
     if (!node.async || node.generator) return;
 

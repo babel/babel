@@ -2,33 +2,16 @@
 
 import * as t from "babel-types";
 
-/**
- * Prints Identifier, prints name.
- */
-
 export function Identifier(node) {
   this.push(node.name);
 }
-
-/**
- * Prints RestElement, prints argument.
- */
 
 export function RestElement(node, print) {
   this.push("...");
   print.plain(node.argument);
 }
 
-/**
- * Alias RestElement printer as SpreadElement,
- * and RestElement printer as SpreadProperty.
- */
-
 export { RestElement as SpreadElement, RestElement as SpreadProperty };
-
-/**
- * Prints ObjectExpression, prints properties.
- */
 
 export function ObjectExpression(node, print) {
   var props = node.properties;
@@ -45,15 +28,7 @@ export function ObjectExpression(node, print) {
   this.push("}");
 }
 
-/**
- * Alias ObjectExpression printer as ObjectPattern.
- */
-
 export { ObjectExpression as ObjectPattern };
-
-/**
- * Prints Property, prints decorators, key, and value, handles kind, computed, and shorthand.
- */
 
 export function Property(node, print) {
   print.list(node.decorators, { separator: "" });
@@ -89,10 +64,6 @@ export function Property(node, print) {
   }
 }
 
-/**
- * Prints ArrayExpression, prints elements.
- */
-
 export function ArrayExpression(node, print) {
   var elems = node.elements;
   var len   = elems.length;
@@ -118,10 +89,6 @@ export function ArrayExpression(node, print) {
 
   this.push("]");
 }
-
-/**
- * Alias ArrayExpression printer as ArrayPattern.
- */
 
 export { ArrayExpression as ArrayPattern };
 

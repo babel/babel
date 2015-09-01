@@ -3,25 +3,13 @@ import VanillaTransformer from "./vanilla";
 import * as t from "babel-types";
 import { bare } from "../../../helpers/name-method";
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   ClassDeclaration(node) {
     return t.variableDeclaration("let", [
       t.variableDeclarator(node.id, t.toExpression(node))
     ]);
   },
 
-  /**
-   * [Please add a description.]
-   */
 
   ClassExpression(node, parent, scope, file) {
     var inferred = bare(node, parent, scope);

@@ -6,10 +6,6 @@ import traverse from "babel-traverse";
 import type { Scope } from "babel-traverse";
 import * as t from "./index";
 
-/**
- * [Please add a description.]
- */
-
 export function toComputedKey(node: Object, key: Object = node.key || node.property): Object {
   if (!node.computed) {
     if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
@@ -27,6 +23,8 @@ export function toComputedKey(node: Object, key: Object = node.key || node.prope
  */
 
 export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object {
+  if (!nodes || !nodes.length) return;
+
   var declars = [];
   var bailed  = false;
 
@@ -101,10 +99,6 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function toKeyAlias(node: Object, key: Object = node.key) {
   var alias;
 
@@ -126,10 +120,6 @@ export function toKeyAlias(node: Object, key: Object = node.key) {
 }
 
 toKeyAlias.uid = 0;
-
-/**
- * [Please add a description.]
- */
 
 export function toIdentifier(name: string): string {
   if (t.isIdentifier(name)) return name.name;
@@ -153,10 +143,6 @@ export function toIdentifier(name: string): string {
 
   return name || "_";
 }
-
-/**
- * [Please add a description.]
- */
 
 export function toBindingIdentifierName(name) {
   name = toIdentifier(name);
@@ -204,10 +190,6 @@ export function toStatement(node: Object, ignore?: boolean) {
   return node;
 }
 
-/**
- * [Please add a description.]
- */
-
 export function toExpression(node: Object): Object {
   if (t.isExpressionStatement(node)) {
     node = node.expression;
@@ -225,10 +207,6 @@ export function toExpression(node: Object): Object {
     throw new Error(`cannot turn ${node.type} to an expression`);
   }
 }
-
-/**
- * [Please add a description.]
- */
 
 export function toBlock(node: Object, parent: Object): Object {
   if (t.isBlockStatement(node)) {
@@ -253,10 +231,6 @@ export function toBlock(node: Object, parent: Object): Object {
 
   return t.blockStatement(node);
 }
-
-/**
- * [Please add a description.]
- */
 
 export function valueToNode(value: any): Object {
   // undefined

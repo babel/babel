@@ -9,16 +9,7 @@ export var metadata = {
   group: "builtin-trailing"
 };
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   Function(node, parent, scope, file) {
     if (node.generator || node.async) return;
     var tailCall = new TailCallTransformer(this, scope, file);
@@ -26,24 +17,11 @@ export var visitor = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 function returnBlock(expr) {
   return t.blockStatement([t.returnStatement(expr)]);
 }
 
-/**
- * [Please add a description.]
- */
-
 var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   enter(node, parent) {
     if (t.isTryStatement(parent)) {
       if (node === parent.block) {
@@ -54,33 +32,17 @@ var visitor = {
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   ReturnStatement(node, parent, scope, state) {
     return state.subTransform(node.argument);
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   Function() {
     this.skip();
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   VariableDeclaration(node, parent, scope, state) {
     state.vars.push(node);
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   ThisExpression(node, parent, scope, state) {
     if (!state.isShadowed) {
@@ -89,10 +51,6 @@ var visitor = {
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   ReferencedIdentifier(node, parent, scope, state) {
     if (node.name === "arguments" && (!state.isShadowed || node._shadowedFunctionLiteral)) {
       state.needsArguments = true;
@@ -100,10 +58,6 @@ var visitor = {
     }
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 class TailCallTransformer {
   constructor(path, scope, file) {
@@ -126,49 +80,25 @@ class TailCallTransformer {
     this.node  = path.node;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   getArgumentsId() {
     return this.argumentsId = this.argumentsId || this.scope.generateUidIdentifier("arguments");
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getThisId() {
     return this.thisId = this.thisId || this.scope.generateUidIdentifier("this");
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   getLeftId() {
     return this.leftId = this.leftId || this.scope.generateUidIdentifier("left");
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getFunctionId() {
     return this.functionId = this.functionId || this.scope.generateUidIdentifier("function");
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   getAgainId() {
     return this.againId = this.againId || this.scope.generateUidIdentifier("again");
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getParams() {
     var params = this.params;
@@ -191,20 +121,12 @@ class TailCallTransformer {
     return this.params = params;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   hasDeopt() {
     // check if the ownerId has been reassigned, if it has then it's not safe to
     // perform optimisations
     var ownerIdInfo = this.scope.getBinding(this.ownerId.name);
     return ownerIdInfo && !ownerIdInfo.constant;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   run() {
     var node  = this.node;
@@ -304,20 +226,12 @@ class TailCallTransformer {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   subTransform(node) {
     if (!node) return;
 
     var handler = this[`subTransform${node.type}`];
     if (handler) return handler.call(this, node);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   subTransformConditionalExpression(node) {
     var callConsequent = this.subTransform(node.consequent);
@@ -339,10 +253,6 @@ class TailCallTransformer {
     return [node];
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   subTransformLogicalExpression(node) {
     // only call in right-value of can be optimized
     var callRight = this.subTransform(node.right);
@@ -363,10 +273,6 @@ class TailCallTransformer {
     return [t.ifStatement(testExpr, returnBlock(leftId))].concat(callRight);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   subTransformSequenceExpression(node) {
     var seq = node.expressions;
 
@@ -384,10 +290,6 @@ class TailCallTransformer {
 
     return [t.expressionStatement(node)].concat(lastCall);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   subTransformCallExpression(node) {
     var callee = node.callee;

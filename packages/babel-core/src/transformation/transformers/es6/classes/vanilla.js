@@ -10,16 +10,7 @@ import * as t from "babel-types";
 
 const PROPERTY_COLLISION_METHOD_NAME = "__initializeProperties";
 
-/**
- * [Please add a description.]
- */
-
 var collectPropertyReferencesVisitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   Identifier: {
     enter(node, parent, scope, state) {
       if (this.parentPath.isClassProperty({ key: node })) {
@@ -33,31 +24,14 @@ var collectPropertyReferencesVisitor = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 var verifyConstructorVisitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   MethodDefinition() {
     this.skip();
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   Property(node) {
     if (node.method) this.skip();
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   CallExpression: {
     exit(node, parent, scope, state) {
@@ -72,17 +46,9 @@ var verifyConstructorVisitor = {
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   "FunctionDeclaration|FunctionExpression"() {
     this.skip();
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   ThisExpression(node, parent, scope, state) {
     if (state.isDerived && !state.hasBareSuper) {
@@ -104,20 +70,12 @@ var verifyConstructorVisitor = {
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   Super(node, parent, scope, state) {
     if (state.isDerived && !state.hasBareSuper && !this.parentPath.isCallExpression({ callee: node })) {
       throw this.errorWithNode("'super.*' is not allowed before super()");
     }
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 export default class ClassTransformer {
   constructor(path: NodePath, file: File) {
@@ -152,18 +110,10 @@ export default class ClassTransformer {
     this.isDerived = !!this.node.superClass;
   }
 
-  /**
-   * [Please add a description.]
-   * @returns {Array}
-   */
-
   run() {
     var superName = this.superName;
     var file      = this.file;
-
-    //
-
-    var body = this.body;
+    var body      = this.body;
 
     //
 
@@ -221,19 +171,11 @@ export default class ClassTransformer {
     return t.callExpression(container, closureArgs);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   buildConstructor() {
     var func = t.functionDeclaration(this.classRef, [], this.constructorBody);
     t.inherits(func, this.node);
     return func;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   pushToMap(node, enumerable, kind = "value") {
     var mutatorMap;
@@ -284,10 +226,6 @@ export default class ClassTransformer {
     ));
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   buildBody() {
     this.constructorMeMaybe();
     this.pushBody();
@@ -302,10 +240,6 @@ export default class ClassTransformer {
 
     this.pushDescriptors();
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   pushBody() {
     var classBodyPaths = this.path.get("body.body");
@@ -345,10 +279,6 @@ export default class ClassTransformer {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   clearDescriptors() {
     this.hasInstanceDescriptors = false;
     this.hasStaticDescriptors   = false;
@@ -356,10 +286,6 @@ export default class ClassTransformer {
     this.instanceMutatorMap = {};
     this.staticMutatorMap   = {};
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   pushDescriptors() {
     this.pushInherits();
@@ -416,19 +342,11 @@ export default class ClassTransformer {
     this.clearDescriptors();
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   buildObjectAssignment(id) {
     return t.variableDeclaration("var", [
       t.variableDeclarator(id, t.objectExpression([]))
     ]);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   placePropertyInitializers() {
     var body = this.instancePropBody;
@@ -459,10 +377,6 @@ export default class ClassTransformer {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
    hasPropertyCollision(): boolean {
     if (this.userConstructorPath) {
       for (var name in this.instancePropRefs) {
@@ -474,10 +388,6 @@ export default class ClassTransformer {
 
     return false;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
    verifyConstructor(path: NodePath) {
     var state = {
@@ -521,17 +431,9 @@ export default class ClassTransformer {
     this.pushToMap(node);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   _processMethod() {
     return false;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   pushProperty(node: { type: "ClassProperty" }, path: NodePath) {
     path.traverse(collectPropertyReferencesVisitor, {
@@ -612,10 +514,6 @@ export default class ClassTransformer {
     // push constructor to body
     this._pushConstructor();
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   _pushConstructor() {
     if (this.pushedConstructor) return;

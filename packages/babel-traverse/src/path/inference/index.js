@@ -58,17 +58,9 @@ export function _getTypeAnnotation(): ?Object {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function isBaseType(baseName: string, soft?): boolean {
   return _isBaseType(baseName, this.getTypeAnnotation(), soft);
 }
-
-/**
- * [Please add a description.]
- */
 
 function _isBaseType(baseName: string, type?, soft?): boolean {
   if (baseName === "string") {
@@ -92,10 +84,6 @@ function _isBaseType(baseName: string, type?, soft?): boolean {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function couldBeBaseType(name: string): boolean {
   var type = this.getTypeAnnotation();
   if (t.isAnyTypeAnnotation(type)) return true;
@@ -112,22 +100,14 @@ export function couldBeBaseType(name: string): boolean {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function baseTypeStrictlyMatches(right: NodePath) {
   var left = this.getTypeAnnotation();
   right = right.getTypeAnnotation();
 
-  if (!t.isAnyTypeAnnotation() && t.isFlowBaseAnnotation(left)) {
+  if (!t.isAnyTypeAnnotation(left) && t.isFlowBaseAnnotation(left)) {
     return right.type === left.type;
   }
 }
-
-/**
- * [Please add a description.]
- */
 
 export function isGenericType(genericName: string): boolean {
   var type = this.getTypeAnnotation();

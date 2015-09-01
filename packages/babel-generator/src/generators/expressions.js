@@ -2,15 +2,7 @@ import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";
 import * as t from "babel-types";
 
-/**
- * RegExp for testing scientific notation in literals.
- */
-
 const SCIENTIFIC_NOTATION = /e/i;
-
-/**
- * Prints UnaryExpression, prints operator and argument.
- */
 
 export function UnaryExpression(node, print) {
   var needsSpace = /[a-z]$/.test(node.operator);
@@ -29,29 +21,17 @@ export function UnaryExpression(node, print) {
   print.plain(node.argument);
 }
 
-/**
- * Prints DoExpression, prints body.
- */
-
 export function DoExpression(node, print) {
   this.push("do");
   this.space();
   print.plain(node.body);
 }
 
-/**
- * Prints ParenthesizedExpression, prints expression.
- */
-
 export function ParenthesizedExpression(node, print) {
   this.push("(");
   print.plain(node.expression);
   this.push(")");
 }
-
-/**
- * Prints UpdateExpression, prints operator and argument.
- */
 
 export function UpdateExpression(node, print) {
   if (node.prefix) {
@@ -62,10 +42,6 @@ export function UpdateExpression(node, print) {
     this.push(node.operator);
   }
 }
-
-/**
- * Prints ConditionalExpression, prints test, consequent, and alternate.
- */
 
 export function ConditionalExpression(node, print) {
   print.plain(node.test);
@@ -79,10 +55,6 @@ export function ConditionalExpression(node, print) {
   print.plain(node.alternate);
 }
 
-/**
- * Prints NewExpression, prints callee and arguments.
- */
-
 export function NewExpression(node, print) {
   this.push("new ");
   print.plain(node.callee);
@@ -91,43 +63,23 @@ export function NewExpression(node, print) {
   this.push(")");
 }
 
-/**
- * Prints SequenceExpression.expressions.
- */
-
 export function SequenceExpression(node, print) {
   print.list(node.expressions);
 }
-
-/**
- * Prints ThisExpression.
- */
 
 export function ThisExpression() {
   this.push("this");
 }
 
-/**
- * Prints Super.
- */
-
 export function Super() {
   this.push("super");
 }
-
-/**
- * Prints Decorator, prints expression.
- */
 
 export function Decorator(node, print) {
   this.push("@");
   print.plain(node.expression);
   this.newline();
 }
-
-/**
- * Prints CallExpression, prints callee and arguments.
- */
 
 export function CallExpression(node, print) {
   print.plain(node.callee);
@@ -153,12 +105,7 @@ export function CallExpression(node, print) {
   this.push(")");
 }
 
-/**
- * Builds yield or await expression printer.
- * Prints delegate, all, and argument.
- */
-
-var buildYieldAwait = function (keyword) {
+function buildYieldAwait(keyword) {
   return function (node, print) {
     this.push(keyword);
 
@@ -173,45 +120,25 @@ var buildYieldAwait = function (keyword) {
       this.endTerminatorless(terminatorState);
     }
   };
-};
-
-/**
- * Create YieldExpression and AwaitExpression printers.
- */
+}
 
 export var YieldExpression = buildYieldAwait("yield");
 export var AwaitExpression = buildYieldAwait("await");
 
-/**
- * Prints EmptyStatement.
- */
-
 export function EmptyStatement() {
   this.semicolon();
 }
-
-/**
- * Prints ExpressionStatement, prints expression.
- */
 
 export function ExpressionStatement(node, print) {
   print.plain(node.expression);
   this.semicolon();
 }
 
-/**
- * Prints AssignmentPattern, prints left and right.
- */
-
 export function AssignmentPattern(node, print) {
   print.plain(node.left);
   this.push(" = ");
   print.plain(node.right);
 }
-
-/**
- * Prints AssignmentExpression, prints left, operator, and right.
- */
 
 export function AssignmentExpression(node, print) {
   // todo: add cases where the spaces can be dropped when in compact mode
@@ -236,29 +163,16 @@ export function AssignmentExpression(node, print) {
   print.plain(node.right);
 }
 
-/**
- * Prints BindExpression, prints object and callee.
- */
-
 export function BindExpression(node, print) {
   print.plain(node.object);
   this.push("::");
   print.plain(node.callee);
 }
 
-/**
- * Alias ClassDeclaration printer as ClassExpression,
- * and AssignmentExpression printer as LogicalExpression.
- */
-
 export {
   AssignmentExpression as BinaryExpression,
   AssignmentExpression as LogicalExpression
 };
-
-/**
- * Print MemberExpression, prints object, property, and value. Handles computed.
- */
 
 export function MemberExpression(node, print) {
   var obj = node.object;
@@ -289,10 +203,6 @@ export function MemberExpression(node, print) {
     print.plain(node.property);
   }
 }
-
-/**
- * Print MetaProperty, prints meta and property.
- */
 
 export function MetaProperty(node, print) {
   print.plain(node.meta);

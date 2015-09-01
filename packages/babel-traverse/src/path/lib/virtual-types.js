@@ -1,10 +1,6 @@
 import { react } from "babel-types";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export var ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
   checkPath({ node, parent }, opts) {
@@ -22,20 +18,12 @@ export var ReferencedIdentifier = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export var BindingIdentifier = {
   types: ["Identifier"],
   checkPath({ node, parent }) {
     return t.isBinding(node, parent);
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 export var Statement = {
   types: ["Statement"],
@@ -53,10 +41,6 @@ export var Statement = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export var Expression = {
   types: ["Expression"],
   checkPath(path) {
@@ -68,10 +52,6 @@ export var Expression = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export var Scope = {
   types: ["Scopable"],
   checkPath(path) {
@@ -79,29 +59,17 @@ export var Scope = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export var Referenced = {
   checkPath(path) {
     return t.isReferenced(path.node, path.parent);
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export var BlockScoped = {
   checkPath(path) {
     return t.isBlockScoped(path.node);
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 export var Var = {
   types: ["VariableDeclaration"],
@@ -110,20 +78,12 @@ export var Var = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export var DirectiveLiteral = {
   types: ["Literal"],
   checkPath(path) {
     return path.parentPath.isDirective();
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 export var Directive = {
   types: ["ExpressionStatement"],
@@ -146,29 +106,17 @@ export var Directive = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export var User = {
   checkPath(path) {
     return path.node && !!path.node.loc;
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export var Generated = {
   checkPath(path) {
     return !path.isUser();
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 export var Flow = {
   types: ["Flow", "ImportDeclaration", "ExportDeclaration"],

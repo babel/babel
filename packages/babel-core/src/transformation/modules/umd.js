@@ -5,16 +5,7 @@ import path from "path";
 import * as util from  "../../util";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export default class UMDFormatter extends AMDFormatter {
-
-  /**
-   * [Please add a description.]
-   */
-
   transform(program) {
     DefaultFormatter.prototype.transform.apply(this, arguments);
 

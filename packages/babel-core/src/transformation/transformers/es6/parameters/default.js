@@ -3,10 +3,6 @@ import getFunctionArity from "../../../helpers/get-function-arity";
 import * as util from  "../../../../util";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 var hasDefaults = function (node) {
   for (var i = 0; i < node.params.length; i++) {
     if (!t.isIdentifier(node.params[i])) return true;
@@ -14,16 +10,7 @@ var hasDefaults = function (node) {
   return false;
 };
 
-/**
- * [Please add a description.]
- */
-
 var iifeVisitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   ReferencedIdentifier(node, parent, scope, state) {
     if (node.name !== "eval") {
       if (!state.scope.hasOwnBinding(node.name)) return;
@@ -35,16 +22,7 @@ var iifeVisitor = {
   }
 };
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   Function(node, parent, scope, file) {
     if (!hasDefaults(node)) return;
 

@@ -1,32 +1,16 @@
 import explode from "./explode-assignable-expression";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export default function (opts) {
   var exports = {};
-
-  /**
-   * [Please add a description.]
-   */
 
   var isAssignment = function (node) {
     return node.operator === opts.operator + "=";
   };
 
-  /**
-   * [Please add a description.]
-   */
-
   var buildAssignment = function (left, right) {
     return t.assignmentExpression("=", left, right);
   };
-
-  /**
-   * [Please add a description.]
-   */
 
   exports.ExpressionStatement = function (node, parent, scope, file) {
     // hit the `AssignmentExpression` one below
@@ -45,10 +29,6 @@ export default function (opts) {
     return nodes;
   };
 
-  /**
-   * [Please add a description.]
-   */
-
   exports.AssignmentExpression = function (node, parent, scope, file) {
     if (!isAssignment(node)) return;
 
@@ -57,10 +37,6 @@ export default function (opts) {
     nodes.push(buildAssignment(exploded.ref, opts.build(exploded.uid, node.right)));
     return nodes;
   };
-
-  /**
-   * [Please add a description.]
-   */
 
   exports.BinaryExpression = function (node) {
     if (node.operator !== opts.operator) return;

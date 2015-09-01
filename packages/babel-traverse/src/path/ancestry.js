@@ -1,3 +1,5 @@
+// This file contains that retrieve or validate anything related to the current paths ancestry.
+
 import * as t from "babel-types";
 import NodePath from "./index";
 
@@ -160,10 +162,6 @@ export function getAncestry() {
   } while(path = path.parentPath);
   return paths;
 }
-
-/**
- * [Please add a description.]
- */
 
 export function inType() {
   var path = this;

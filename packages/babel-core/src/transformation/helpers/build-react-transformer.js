@@ -9,16 +9,8 @@ import esutils from "esutils";
 import { react } from "babel-types";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export default function (opts) {
   var visitor = {};
-
-  /**
-   * [Please add a description.]
-   */
 
   visitor.JSXIdentifier = function (node) {
     if (node.name === "this" && this.isReferenced()) {
@@ -30,17 +22,9 @@ export default function (opts) {
     }
   };
 
-  /**
-   * [Please add a description.]
-   */
-
   visitor.JSXNamespacedName = function () {
     throw this.errorWithNode(messages.get("JSXNamespacedTags"));
   };
-
-  /**
-   * [Please add a description.]
-   */
 
   visitor.JSXMemberExpression = {
     exit(node) {
@@ -49,17 +33,9 @@ export default function (opts) {
     }
   };
 
-  /**
-   * [Please add a description.]
-   */
-
   visitor.JSXExpressionContainer = function (node) {
     return node.expression;
   };
-
-  /**
-   * [Please add a description.]
-   */
 
   visitor.JSXAttribute = {
     enter(node) {
@@ -74,10 +50,6 @@ export default function (opts) {
       return t.inherits(t.property("init", node.name, value), node);
     }
   };
-
-  /**
-   * [Please add a description.]
-   */
 
   visitor.JSXOpeningElement = {
     exit(node, parent, scope, file) {
@@ -168,10 +140,6 @@ export default function (opts) {
 
     return attribs;
   };
-
-  /**
-   * [Please add a description.]
-   */
 
   visitor.JSXElement = {
     exit(node) {

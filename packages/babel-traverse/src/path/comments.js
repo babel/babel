@@ -1,3 +1,5 @@
+// This file contains methods responsible for dealing with comments.
+
 /**
  * Share comments amongst siblings.
  */
@@ -19,10 +21,6 @@ export function shareCommentsWithSiblings() {
   prev.addComments("trailing", leading);
   next.addComments("leading", trailing);
 }
-
-/**
- * [Please add a description.]
- */
 
 export function addComment(type, content, line?) {
   this.addComments(type, [{

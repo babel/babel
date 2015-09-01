@@ -16,11 +16,6 @@ export var metadata = {
  */
 
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   Block: {
     exit(node) {
       var hasChange = false;

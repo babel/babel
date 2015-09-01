@@ -1,23 +1,10 @@
 import explode from "./explode-assignable-expression";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export default function (exports, opts) {
-
-  /**
-   * [Please add a description.]
-   */
-
   var buildAssignment = function (left, right) {
     return t.assignmentExpression("=", left, right);
   };
-
-  /**
-   * [Please add a description.]
-   */
 
   exports.ExpressionStatement = function (node, parent, scope, file) {
     // hit the `AssignmentExpression` one below
@@ -37,10 +24,6 @@ export default function (exports, opts) {
 
     return nodes;
   };
-
-  /**
-   * [Please add a description.]
-   */
 
   exports.AssignmentExpression = function (node, parent, scope, file) {
     if (!opts.is(node, file)) return;

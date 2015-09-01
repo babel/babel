@@ -1,9 +1,5 @@
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 function statementList(key, path) {
   var paths = path.get(key);
 
@@ -27,16 +23,7 @@ function statementList(key, path) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   BlockStatement(node, parent) {
     if ((t.isFunction(parent) && parent.body === node) || t.isExportDeclaration(parent)) {
       return;
@@ -44,10 +31,6 @@ export var visitor = {
 
     statementList("body", this);
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   SwitchCase() {
     statementList("consequent", this);

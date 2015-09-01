@@ -48,10 +48,6 @@ function isHelper(node) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 function isType(node) {
   return t.isLiteral(node) || t.isObjectExpression(node) || t.isArrayExpression(node) ||
          t.isIdentifier(node) || t.isMemberExpression(node);

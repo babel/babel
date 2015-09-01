@@ -1,18 +1,11 @@
 import * as virtualTypes from "./lib/virtual-types";
+import invariant from "invariant";
 import traverse from "../index";
 import assign from "lodash/object/assign";
 import Scope from "../scope";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export default class NodePath {
-
-  /**
-   * [Please add a description.]
-   */
 
   constructor(hub, parent) {
     this.contexts = [];
@@ -39,14 +32,12 @@ export default class NodePath {
     this.typeAnnotation     = null;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   static get({ hub, parentPath, parent, container, listKey, key }) {
     if (!hub && parentPath) {
       hub = parentPath.hub;
     }
+
+    invariant(parent, "To get a node path the parent needs to exist");
 
     var targetNode = container[key];
     var paths = parent._paths = parent._paths || [];
@@ -70,10 +61,6 @@ export default class NodePath {
     return path;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   getScope(scope: Scope) {
     var ourScope = scope;
 
@@ -85,17 +72,9 @@ export default class NodePath {
     return ourScope;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   setData(key, val) {
     return this.data[key] = val;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getData(key, def) {
     var val = this.data[key];
@@ -103,25 +82,13 @@ export default class NodePath {
     return val;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   errorWithNode(msg, Error = SyntaxError) {
     return this.hub.file.errorWithNode(this.node, msg, Error);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   traverse(visitor, state) {
     traverse(this.node, visitor, this.scope, state, this);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   mark(type, message) {
     this.hub.file.metadata.marked.push({
@@ -130,11 +97,16 @@ export default class NodePath {
       loc: this.node.loc
     });
   }
-}
 
-/**
- * [Please add a description.]
- */
+  /**
+   * Description
+   */
+
+  set(key, node) {
+    t.validate(key, this.node, node);
+    this.node[key] = node;
+  }
+}
 
 assign(NodePath.prototype, require("./ancestry"));
 assign(NodePath.prototype, require("./inference"));

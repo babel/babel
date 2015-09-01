@@ -25,7 +25,6 @@ export var metadata = {
  */
 
 export var visitor = {
-
   /**
    * Look for non-computed keys with names that are not valid identifiers.
    * Turn them into literals.
@@ -36,7 +35,7 @@ export var visitor = {
       var key = node.key;
       if (!node.computed && t.isIdentifier(key) && !t.isValidIdentifier(key.name)) {
         // default: "bar" -> "default": "bar"
-        node.key = t.literal(key.name);
+        node.key = t.stringLiteral(key.name);
       }
     }
   }

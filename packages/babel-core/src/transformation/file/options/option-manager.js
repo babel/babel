@@ -32,10 +32,6 @@ export default class OptionManager {
     this.log             = log;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   static createBareOptions() {
     var opts = {};
 
@@ -46,10 +42,6 @@ export default class OptionManager {
 
     return opts;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   addConfig(loc, key?, json=json5) {
     if (this.resolvedConfigs.indexOf(loc) >= 0) return;
@@ -69,10 +61,6 @@ export default class OptionManager {
     this.resolvedConfigs.push(loc);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   mergeOptions(opts, alias = "foreign") {
     if (!opts) return;
 
@@ -91,10 +79,6 @@ export default class OptionManager {
     // merge them into this current files options
     merge(this.options, opts);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   addIgnoreConfig(loc) {
     var file  = fs.readFileSync(loc, "utf8");
@@ -132,10 +116,6 @@ export default class OptionManager {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   normaliseOptions() {
     var opts = this.options;
 
@@ -164,10 +144,6 @@ export default class OptionManager {
       }
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   init(opts) {
     this.mergeOptions(opts, "direct");

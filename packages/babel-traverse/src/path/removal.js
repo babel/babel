@@ -1,3 +1,5 @@
+// This file contains methods responsible for removing a node.
+
 import * as removalHooks from "./lib/removal-hooks";
 
 /**
@@ -32,19 +34,12 @@ export function dangerouslyRemove() {
   this._callRemovalHooks("post");
 }
 
-/**
- * [Please add a description.]
- */
-
 export function _callRemovalHooks(position) {
   for (var fn of (removalHooks[position]: Array)) {
     if (fn(this, this.parentPath)) return true;
   }
 }
 
-/**
- * [Please add a description.]
- */
 
 export function _remove() {
   if (Array.isArray(this.container)) {
@@ -55,19 +50,11 @@ export function _remove() {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function _markRemoved() {
   this.shouldSkip = true;
   this.removed    = true;
   this.node       = null;
 }
-
-/**
- * [Please add a description.]
- */
 
 export function _assertUnremoved() {
   if (this.removed) {

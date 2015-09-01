@@ -6,27 +6,15 @@ export var metadata = {
   group: "builtin-pre"
 };
 
-/**
- * [Please add a description.]
- */
-
 function isString(node) {
   return t.isLiteral(node) && typeof node.value === "string";
 }
-
-/**
- * [Please add a description.]
- */
 
 function buildBinaryExpression(left, right) {
   var node = t.binaryExpression("+", left, right);
   node._templateLiteralProduced = true;
   return node;
 }
-
-/**
- * [Please add a description.]
- */
 
 function crawl(path) {
   if (path.is("_templateLiteralProduced")) {
@@ -37,16 +25,7 @@ function crawl(path) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   TaggedTemplateExpression(node, parent, scope, file) {
     var quasi = node.quasi;
     var args  = [];
@@ -55,8 +34,8 @@ export var visitor = {
     var raw     = [];
 
     for (var elem of (quasi.quasis: Array)) {
-      strings.push(t.literal(elem.value.cooked));
-      raw.push(t.literal(elem.value.raw));
+      strings.push(t.stringLiteral(elem.value.cooked));
+      raw.push(t.stringLiteral(elem.value.raw));
     }
 
     strings = t.arrayExpression(strings);
@@ -73,15 +52,11 @@ export var visitor = {
     return t.callExpression(node.tag, args);
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   TemplateLiteral(node, parent, scope, file) {
     var nodes = [];
 
     for (let elem of (node.quasis: Array)) {
-      nodes.push(t.literal(elem.value.cooked));
+      nodes.push(t.stringLiteral(elem.value.cooked));
 
       var expr = node.expressions.shift();
       if (expr) nodes.push(expr);
@@ -93,7 +68,7 @@ export var visitor = {
     // since `+` is left-to-right associative
     // ensure the first node is a string if first/second isn't
     if (!isString(nodes[0]) && !isString(nodes[1])) {
-      nodes.unshift(t.literal(""));
+      nodes.unshift(t.stringLiteral(""));
     }
 
     if (nodes.length > 1) {

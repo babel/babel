@@ -157,10 +157,6 @@ class CodeGenerator {
     return new NodePrinter(this, parent);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   catchUp(node) {
     // catch up to this nodes newline if we're behind
     if (node.loc && this.format.retainLines && this.buffer.buf) {
@@ -169,10 +165,6 @@ class CodeGenerator {
       }
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   _printNewline(leading, node, parent, opts) {
     if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
@@ -203,10 +195,6 @@ class CodeGenerator {
 
     this.newline(lines);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   print(node, parent, opts = {}) {
     if (!node) return;
@@ -250,10 +238,6 @@ class CodeGenerator {
     this.printTrailingComments(node, parent);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   printJoin(print, nodes, opts = {}) {
     if (!nodes || !nodes.length) return;
 
@@ -283,20 +267,12 @@ class CodeGenerator {
     if (opts.indent) this.dedent();
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   printAndIndentOnComments(print, node) {
     var indent = !!node.leadingComments;
     if (indent) this.indent();
     print.plain(node);
     if (indent) this.dedent();
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   printBlock(print, node) {
     if (t.isEmptyStatement(node)) {
@@ -306,10 +282,6 @@ class CodeGenerator {
       print.plain(node);
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   generateComment(comment) {
     var val = comment.value;
@@ -321,25 +293,13 @@ class CodeGenerator {
     return val;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   printTrailingComments(node, parent) {
     this._printComments(this.getComments("trailingComments", node, parent));
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   printLeadingComments(node, parent) {
     this._printComments(this.getComments("leadingComments", node, parent));
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getComments(key, node, parent) {
     if (t.isExpressionStatement(parent)) {
@@ -360,17 +320,9 @@ class CodeGenerator {
     return comments;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   _getComments(key, node) {
     return (node && node[key]) || [];
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   shouldPrintComment(comment) {
     if (this.format.shouldPrintComment) {
@@ -383,10 +335,6 @@ class CodeGenerator {
       }
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   _printComments(comments) {
     if (!comments || !comments.length) return;
@@ -440,27 +388,15 @@ class CodeGenerator {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 each(Buffer.prototype, function (fn, key) {
   CodeGenerator.prototype[key] = function () {
     return fn.apply(this.buffer, arguments);
   };
 });
 
-/**
- * [Please add a description.]
- */
-
 each(CodeGenerator.generators, function (generator) {
   extend(CodeGenerator.prototype, generator);
 });
-
-/**
- * [Please add a description.]
- */
 
 module.exports = function (ast, opts, code) {
   var gen = new CodeGenerator(ast, opts, code);

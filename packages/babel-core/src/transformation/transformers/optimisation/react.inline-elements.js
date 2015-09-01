@@ -5,10 +5,6 @@ export var metadata = {
   optional: true
 };
 
-/**
- * [Please add a description.]
- */
-
 function hasRefOrSpread(attrs) {
   for (var i = 0; i < attrs.length; i++) {
     var attr = attrs[i];
@@ -18,23 +14,10 @@ function hasRefOrSpread(attrs) {
   return false;
 }
 
-/**
- * [Please add a description.]
- */
-
 function isJSXAttributeOfName(attr, name) {
   return t.isJSXAttribute(attr) && t.isJSXIdentifier(attr.name, { name: name });
 }
-
-/**
- * [Please add a description.]
- */
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   JSXElement(node, parent, scope, file) {
     // filter
     var open = node.openingElement;

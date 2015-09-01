@@ -12,10 +12,6 @@ function shouldShadow(path, shadowPath) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 function remap(path, key, create) {
   // ensure that we're shadowed
   var shadowPath = path.inShadow(key);
@@ -58,23 +54,10 @@ function remap(path, key, create) {
   return id;
 }
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   ThisExpression() {
     return remap(this, "this", () => t.thisExpression());
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   ReferencedIdentifier(node) {
     if (node.name === "arguments") {

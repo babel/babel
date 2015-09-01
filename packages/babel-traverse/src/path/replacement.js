@@ -1,26 +1,16 @@
+// This file contains methods responsible for replacing a node with another.
+
 import codeFrame from "babel-code-frame";
 import traverse from "../index";
 import NodePath from "./index";
 import { parse } from "babylon";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 var hoistVariablesVisitor = {
-
-  /**
-   * [Please add a description.]
-   */
 
   Function() {
     this.skip();
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   VariableDeclaration(node, parent, scope) {
     if (node.kind !== "var") return;
@@ -198,10 +188,6 @@ export function replaceExpressionWithStatements(nodes: Array) {
     return this.node;
   }
 }
-
-/**
- * [Please add a description.]
- */
 
 export function replaceInline(nodes) {
   this.resync();

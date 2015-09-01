@@ -143,7 +143,6 @@ function _shouldIgnore(pattern, filename) {
  */
 
 var templateVisitor = {
-
   /**
    * 360 NoScope PWNd
    */

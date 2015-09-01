@@ -1,14 +1,9 @@
 /**
  * Returns `i`th number from `base`, continuing from 0 when `max` is reached.
  * Useful for shifting `for` loop by a fixed number but going over all items.
- *
- * @param {Number} i Current index in the loop
- * @param {Number} base Start index for which to return 0
- * @param {Number} max Array length
- * @returns {Number} shiftedIndex
  */
 
-function getLookupIndex(i, base, max) {
+function getLookupIndex(i: number, base: number, max: number): number {
   i += base;
 
   if (i >= max) {

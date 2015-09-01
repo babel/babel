@@ -20,7 +20,6 @@ import * as messages from "babel-messages";
  */
 
 export var visitor = {
-
   /**
    * Look for any constants (or modules) in scope.
    * If they have any `constantViolations` throw an error.

@@ -23,7 +23,6 @@ export var metadata = {
  */
 
 export var visitor = {
-
   /**
    * Look for non-computed properties with names that are not valid identifiers.
    * Turn them into computed properties with literal names.

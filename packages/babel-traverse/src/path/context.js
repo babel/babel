@@ -1,8 +1,6 @@
-import traverse from "../index";
+// This file contains methods responsible for maintaining a TraversalContext.
 
-/**
- * [Please add a description.]
- */
+import traverse from "../index";
 
 export function call(key) {
   var node = this.node;
@@ -38,18 +36,10 @@ export function call(key) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function isBlacklisted(): boolean {
   var blacklist = this.opts.blacklist;
   return blacklist && blacklist.indexOf(this.node.type) > -1;
 }
-
-/**
- * [Please add a description.]
- */
 
 export function visit(): boolean {
   if (this.isBlacklisted()) return false;
@@ -80,34 +70,18 @@ export function visit(): boolean {
   return this.shouldStop;
 }
 
-/**
- * [Please add a description.]
- */
-
 export function skip() {
   this.shouldSkip = true;
 }
-
-/**
- * [Please add a description.]
- */
 
 export function skipKey(key) {
   this.skipKeys[key] = true;
 }
 
-/**
- * [Please add a description.]
- */
-
 export function stop() {
   this.shouldStop = true;
   this.shouldSkip = true;
 }
-
-/**
- * [Please add a description.]
- */
 
 export function setScope() {
   if (this.opts && this.opts.noScope) return;
@@ -116,10 +90,6 @@ export function setScope() {
   this.scope = this.getScope(target && target.scope);
   if (this.scope) this.scope.init();
 }
-
-/**
- * [Please add a description.]
- */
 
 export function setContext(context) {
   this.shouldSkip = false;
@@ -153,19 +123,11 @@ export function resync() {
   //this._resyncRemoved();
 }
 
-/**
- * [Please add a description.]
- */
-
 export function _resyncParent() {
   if (this.parentPath) {
     this.parent = this.parentPath.node;
   }
 }
-
-/**
- * [Please add a description.]
- */
 
 export function _resyncKey() {
   if (!this.container) return;
@@ -192,14 +154,10 @@ export function _resyncKey() {
   this.key = null;
 }
 
-/**
- * [Please add a description.]
- */
-
 export function _resyncList() {
   var listKey    = this.listKey;
   var parentPath = this.parentPath;
-  if (!listKey || !parentPath) return;
+  if (!listKey || !parentPath || !parentPath.node) return;
 
   var newContainer = parentPath.node[listKey];
   if (this.container === newContainer) return;
@@ -213,37 +171,21 @@ export function _resyncList() {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function _resyncRemoved() {
   if (this.key == null || !this.container || this.container[this.key] !== this.node) {
     this._markRemoved();
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function shiftContext() {
   this.contexts.shift();
   this.setContext(this.contexts[0]);
 }
 
-/**
- * [Please add a description.]
- */
-
 export function unshiftContext(context) {
   this.contexts.unshift(context);
   this.setContext(context);
 }
-
-/**
- * [Please add a description.]
- */
 
 export function setup(parentPath, container, listKey, key) {
   this.inList    = !!listKey;
@@ -255,19 +197,11 @@ export function setup(parentPath, container, listKey, key) {
   this.setKey(key);
 }
 
-/**
- * [Please add a description.]
- */
-
 export function setKey(key) {
   this.key  = key;
   this.node = this.container[this.key];
   this.type = this.node && this.node.type;
 }
-
-/**
- * [Please add a description.]
- */
 
 export function queueNode(path) {
   for (var context of (this.contexts: Array)) {

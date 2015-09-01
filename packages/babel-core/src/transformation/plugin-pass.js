@@ -20,10 +20,6 @@ export default class PluginPass {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   canTransform(): boolean {
     if (this.plugin.metadata.mode !== this.file.opts.mode) {
       return false;
@@ -32,18 +28,10 @@ export default class PluginPass {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   canRun() {
     return this.file.transformerDependencies[this.key] ||
            this.file.pipeline.canRun(this.plugin, this.file.opts);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   transform() {
     var file = this.file;

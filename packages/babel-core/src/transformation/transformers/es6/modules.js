@@ -12,16 +12,7 @@ export var metadata = {
   group: "builtin-modules"
 };
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   ImportDeclaration(node, parent, scope, file) {
     // flow type
     if (node.importKind === "type" || node.importKind === "typeof") return;
@@ -44,10 +35,6 @@ export var visitor = {
     return nodes;
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   ExportAllDeclaration(node, parent, scope, file) {
     var nodes = [];
     file.moduleFormatter.exportAllDeclaration(node, nodes, scope);
@@ -55,20 +42,12 @@ export var visitor = {
     return nodes;
   },
 
-  /**
-   * [Please add a description.]
-   */
-
   ExportDefaultDeclaration(node, parent, scope, file) {
     var nodes = [];
     file.moduleFormatter.exportDeclaration(node, nodes, scope);
     keepBlockHoist(node, nodes);
     return nodes;
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   ExportNamedDeclaration(node, parent, scope, file) {
     // flow type

@@ -1,3 +1,5 @@
+// This file contains Babels metainterpreter that can evaluate static code.
+
 /* eslint eqeqeq: 0 */
 
 const VALID_CALLEES = ["String", "Number", "Math"];

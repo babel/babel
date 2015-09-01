@@ -31,7 +31,6 @@ import * as t from "babel-types";
  */
 
 export var visitor = {
-
   /**
    * Look for getters and setters on an object.
    * Filter them out and wrap the object with an `Object.defineProperties` that

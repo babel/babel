@@ -1,3 +1,5 @@
+// This file contains methods that modify the path/node in some ways.
+
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
 import * as t from "babel-types";
@@ -31,10 +33,6 @@ export function insertBefore(nodes) {
   return [this];
 }
 
-/**
- * [Please add a description.]
- */
-
 export function _containerInsert(from, nodes) {
   this.updateSiblingKeys(from, nodes.length);
 
@@ -63,25 +61,13 @@ export function _containerInsert(from, nodes) {
   return paths;
 }
 
-/**
- * [Please add a description.]
- */
-
 export function _containerInsertBefore(nodes) {
   return this._containerInsert(this.key, nodes);
 }
 
-/**
- * [Please add a description.]
- */
-
 export function _containerInsertAfter(nodes) {
   return this._containerInsert(this.key + 1, nodes);
 }
-
-/**
- * [Please add a description.]
- */
 
 export function _maybePopFromStatements(nodes) {
   var last = nodes[nodes.length - 1];
@@ -138,10 +124,6 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function _verifyNodeList(nodes) {
   if (nodes.constructor !== Array) {
     nodes = [nodes];
@@ -163,10 +145,6 @@ export function _verifyNodeList(nodes) {
   return nodes;
 }
 
-/**
- * [Please add a description.]
- */
-
 export function unshiftContainer(listKey, nodes) {
   this._assertUnremoved();
 
@@ -186,10 +164,6 @@ export function unshiftContainer(listKey, nodes) {
 
   return path.insertBefore(nodes);
 }
-
-/**
- * [Please add a description.]
- */
 
 export function pushContainer(listKey, nodes) {
   this._assertUnremoved();

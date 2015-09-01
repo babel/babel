@@ -5,23 +5,10 @@ import values from "lodash/object/values";
 import * as util from  "../../util";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export default class AMDFormatter extends DefaultFormatter {
-
-  /**
-   * [Please add a description.]
-   */
-
   setup() {
     CommonFormatter.prototype._setup.call(this, this.hasNonDefaultExports);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   buildDependencyLiterals() {
     var names = [];
@@ -77,25 +64,13 @@ export default class AMDFormatter extends DefaultFormatter {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   _getExternalReference(node) {
     return this.scope.generateUidIdentifier(node.source.value);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   importDeclaration(node) {
     this.getExternalReference(node);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   importSpecifier(specifier, node, nodes, scope) {
     var key = node.source.value;
@@ -130,10 +105,6 @@ export default class AMDFormatter extends DefaultFormatter {
     this.remaps.add(scope, specifier.local.name, ref);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   exportSpecifier(specifier, node, nodes) {
     if (this.doDefaultExportInterop(specifier)) {
       this.passModuleArg = true;
@@ -148,10 +119,6 @@ export default class AMDFormatter extends DefaultFormatter {
 
     CommonFormatter.prototype.exportSpecifier.apply(this, arguments);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   exportDeclaration(node, nodes) {
     if (this.doDefaultExportInterop(node)) {

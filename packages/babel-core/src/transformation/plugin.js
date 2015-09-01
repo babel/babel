@@ -22,10 +22,6 @@ const VALID_METADATA_PROPERTES = [
   "mode"
 ];
 
-/**
- * [Please add a description.]
- */
-
 export default class Plugin {
   constructor(key: string, plugin: Object) {
     Plugin.validate(key, plugin);
@@ -56,10 +52,6 @@ export default class Plugin {
     this.key     = key;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   static validate(name, plugin) {
     for (let key in plugin) {
       if (key[0] === "_") continue;
@@ -77,18 +69,10 @@ export default class Plugin {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   normalize(visitor: Object): Object {
     traverse.explode(visitor);
     return visitor;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   buildPass(file: File): PluginPass {
     // validate Transformer instance

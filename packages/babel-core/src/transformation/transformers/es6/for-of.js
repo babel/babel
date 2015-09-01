@@ -2,16 +2,7 @@ import * as messages from "babel-messages";
 import * as util from  "../../../util";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   ForOfStatement(node, parent, scope, file) {
     if (this.get("right").isArrayExpression()) {
       return _ForOfStatementArray.call(this, node, scope, file);
@@ -47,10 +38,6 @@ export var visitor = {
     }
   }
 };
-
-/**
- * [Please add a description.]
- */
 
 export function _ForOfStatementArray(node, scope) {
   var nodes = [];
@@ -94,10 +81,6 @@ export function _ForOfStatementArray(node, scope) {
   return nodes;
 }
 
-/**
- * [Please add a description.]
- */
-
 var loose = function (node, parent, scope, file) {
   var left = node.left;
   var declar, id;
@@ -140,10 +123,6 @@ var loose = function (node, parent, scope, file) {
     loop:   loop
   };
 };
-
-/**
- * [Please add a description.]
- */
 
 var spec = function (node, parent, scope, file) {
   var left = node.left;

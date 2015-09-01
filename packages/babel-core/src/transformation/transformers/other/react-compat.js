@@ -1,10 +1,6 @@
 import { react } from "babel-types";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export function manipulateOptions(opts) {
   opts.blacklist.push("react");
 }
@@ -14,23 +10,10 @@ export var metadata = {
   group: "builtin-advanced"
 };
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = require("../../helpers/build-react-transformer")({
-
-  /**
-   * [Please add a description.]
-   */
-
   pre(state) {
     state.callee = state.tagExpr;
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   post(state) {
     if (react.isCompatTag(state.tagName)) {

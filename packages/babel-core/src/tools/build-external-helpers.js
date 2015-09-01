@@ -5,10 +5,6 @@ import File from "../transformation/file";
 import each from "lodash/collection/each";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 function buildGlobal(namespace, builder) {
   var body      = [];
   var container = t.functionExpression(null, [t.identifier("global")], t.blockStatement(body));
@@ -26,10 +22,6 @@ function buildGlobal(namespace, builder) {
   return tree;
 }
 
-/**
- * [Please add a description.]
- */
-
 function buildUmd(namespace, builder) {
   var body = [];
   body.push(t.variableDeclaration("var", [
@@ -42,16 +34,12 @@ function buildUmd(namespace, builder) {
     FACTORY_PARAMETERS: t.identifier("global"),
     BROWSER_ARGUMENTS:  t.assignmentExpression("=", t.memberExpression(t.identifier("root"), namespace), t.objectExpression({})),
     COMMON_ARGUMENTS:   t.identifier("exports"),
-    AMD_ARGUMENTS:      t.arrayExpression([t.literal("exports")]),
+    AMD_ARGUMENTS:      t.arrayExpression([t.stringLiteral("exports")]),
     FACTORY_BODY:       body,
     UMD_ROOT:           t.identifier("this")
   });
   return t.program([container]);
 }
-
-/**
- * [Please add a description.]
- */
 
 function buildVar(namespace, builder) {
   var body = [];
@@ -61,10 +49,6 @@ function buildVar(namespace, builder) {
   builder(body);
   return t.program(body);
 }
-
-/**
- * [Please add a description.]
- */
 
 function buildHelpers(body, namespace, whitelist) {
   each(File.helpers, function (name) {
@@ -76,10 +60,6 @@ function buildHelpers(body, namespace, whitelist) {
     ));
   });
 }
-
-/**
- * [Please add a description.]
- */
 
 export default function (whitelist, outputType = "global") {
   var namespace = t.identifier("babelHelpers");

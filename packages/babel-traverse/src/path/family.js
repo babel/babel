@@ -1,10 +1,8 @@
+// This file contains methods responsible for dealing with/retrieving children or siblings.
+
 import type TraversalContext from "../index";
 import NodePath from "./index";
 import * as t from "babel-types";
-
-/**
- * [Please add a description.]
- */
 
 export function getStatementParent(): ?NodePath {
   var path = this;
@@ -24,10 +22,6 @@ export function getStatementParent(): ?NodePath {
   return path;
 }
 
-/**
- * [Please add a description.]
- */
-
 export function getOpposite() {
   if (this.key === "left") {
     return this.getSibling("right");
@@ -35,10 +29,6 @@ export function getOpposite() {
     return this.getSibling("left");
   }
 }
-
-/**
- * [Please add a description.]
- */
 
 export function getCompletionRecords(): Array {
   var paths = [];
@@ -67,10 +57,6 @@ export function getCompletionRecords(): Array {
   return paths;
 }
 
-/**
- * [Please add a description.]
- */
-
 export function getSibling(key) {
   return NodePath.get({
     parentPath: this.parentPath,
@@ -81,10 +67,6 @@ export function getSibling(key) {
   });
 }
 
-/**
- * [Please add a description.]
- */
-
 export function get(key: string, context?: boolean | TraversalContext): NodePath {
   if (context === true) context = this.context;
   var parts = key.split(".");
@@ -94,10 +76,6 @@ export function get(key: string, context?: boolean | TraversalContext): NodePath
     return this._getPattern(parts, context);
   }
 }
-
-/**
- * [Please add a description.]
- */
 
 export function _getKey(key, context?) {
   var node      = this.node;
@@ -124,10 +102,6 @@ export function _getKey(key, context?) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 export function _getPattern(parts, context) {
   var path = this;
   for (var part of (parts: Array)) {
@@ -143,10 +117,6 @@ export function _getPattern(parts, context) {
   }
   return path;
 }
-
-/**
- * [Please add a description.]
- */
 
 export function getBindingIdentifiers(duplicates?) {
   return t.getBindingIdentifiers(this.node, duplicates);

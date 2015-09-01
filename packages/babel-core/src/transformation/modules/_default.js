@@ -4,10 +4,6 @@ import Remaps from "./lib/remaps";
 import * as util from  "../../util";
 import * as t from "babel-types";
 
-/**
- * [Please add a description.]
- */
-
 export default class DefaultFormatter {
   constructor(file) {
     // object containg all module sources with the scope that they're contained in
@@ -35,10 +31,6 @@ export default class DefaultFormatter {
     this.getMetadata();
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   addScope(path) {
     var source = path.node.source && path.node.source.value;
     if (!source) return;
@@ -51,34 +43,18 @@ export default class DefaultFormatter {
     this.sourceScopes[source] = path.scope;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   isModuleType(node, type) {
     var modules = this.file.dynamicImportTypes[type];
     return modules && modules.indexOf(node) >= 0;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   transform() {
     this.remapAssignments();
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   doDefaultExportInterop(node) {
     return (t.isExportDefaultDeclaration(node) || t.isSpecifierDefault(node)) && !this.noInteropRequireExport && !this.hasNonDefaultExports;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getMetadata() {
     var has = false;
@@ -93,19 +69,11 @@ export default class DefaultFormatter {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   remapAssignments() {
     if (this.hasLocalExports || this.hasLocalImports) {
       this.remaps.run();
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   remapExportAssignment(node, exported) {
     var assign = node;
@@ -121,10 +89,6 @@ export default class DefaultFormatter {
     return assign;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   _addExport(name, exported) {
     var info = this.localExports[name] = this.localExports[name] || {
       binding: this.scope.getBindingIdentifier(name),
@@ -132,10 +96,6 @@ export default class DefaultFormatter {
     };
     info.exported.push(exported);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getExport(node, scope) {
     if (!t.isIdentifier(node)) return;
@@ -145,10 +105,6 @@ export default class DefaultFormatter {
       return local.exported;
     }
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getModuleName() {
     var opts = this.file.opts;
@@ -192,10 +148,6 @@ export default class DefaultFormatter {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   _pushStatement(ref, nodes) {
     if (t.isClass(ref) || t.isFunction(ref)) {
       if (ref.id) {
@@ -207,10 +159,6 @@ export default class DefaultFormatter {
     return ref;
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   _hoistExport(declar, assign, priority) {
     if (t.isFunctionDeclaration(declar)) {
       assign._blockHoist = priority || 2;
@@ -218,10 +166,6 @@ export default class DefaultFormatter {
 
     return assign;
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   getExternalReference(node, nodes) {
     var ids = this.ids;
@@ -234,36 +178,20 @@ export default class DefaultFormatter {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   checkExportIdentifier(node) {
     if (t.isIdentifier(node, { name: "__esModule" })) {
       throw this.file.errorWithNode(node, messages.get("modulesIllegalExportName", node.name));
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   exportAllDeclaration(node, nodes) {
     var ref = this.getExternalReference(node, nodes);
     nodes.push(this.buildExportsWildcard(ref, node));
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   isLoose() {
     return this.file.isLoose("es6.modules");
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   exportSpecifier(specifier, node, nodes) {
     if (node.source) {
@@ -289,10 +217,6 @@ export default class DefaultFormatter {
     }
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   buildExportsWildcard(objectIdentifier) {
     return t.expressionStatement(t.callExpression(this.file.addHelper("defaults"), [
       t.identifier("exports"),
@@ -303,10 +227,6 @@ export default class DefaultFormatter {
     ]));
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   buildExportsFromAssignment(id, init) {
     this.checkExportIdentifier(id);
     return util.template("exports-from-assign", {
@@ -315,10 +235,6 @@ export default class DefaultFormatter {
     }, true);
   }
 
-  /**
-   * [Please add a description.]
-   */
-
   buildExportsAssignment(id, init) {
     this.checkExportIdentifier(id);
     return util.template("exports-assign", {
@@ -326,10 +242,6 @@ export default class DefaultFormatter {
       KEY:   id
     }, true);
   }
-
-  /**
-   * [Please add a description.]
-   */
 
   exportDeclaration(node, nodes) {
     var declar = node.declaration;

@@ -1,9 +1,5 @@
 import * as t from "babel-types";
 
-/**
- * Prints ImportSpecifier, prints imported and local.
- */
-
 export function ImportSpecifier(node, print) {
   print.plain(node.imported);
   if (node.local && node.local.name !== node.imported.name) {
@@ -12,25 +8,13 @@ export function ImportSpecifier(node, print) {
   }
 }
 
-/**
- * Prints ImportDefaultSpecifier, prints local.
- */
-
 export function ImportDefaultSpecifier(node, print) {
   print.plain(node.local);
 }
 
-/**
- * Prints ExportDefaultSpecifier, prints exported.
- */
-
 export function ExportDefaultSpecifier(node, print) {
   print.plain(node.exported);
 }
-
-/**
- * Prints ExportSpecifier, prints local and exported.
- */
 
 export function ExportSpecifier(node, print) {
   print.plain(node.local);
@@ -40,18 +24,10 @@ export function ExportSpecifier(node, print) {
   }
 }
 
-/**
- * Prints ExportNamespaceSpecifier, prints exported.
- */
-
 export function ExportNamespaceSpecifier(node, print) {
   this.push("* as ");
   print.plain(node.exported);
 }
-
-/**
- * Prints ExportAllDeclaration, prints exported and source.
- */
 
 export function ExportAllDeclaration(node, print) {
   this.push("export *");
@@ -64,27 +40,15 @@ export function ExportAllDeclaration(node, print) {
   this.semicolon();
 }
 
-/**
- * Prints ExportNamedDeclaration, delegates to ExportDeclaration.
- */
-
 export function ExportNamedDeclaration(node, print) {
   this.push("export ");
   ExportDeclaration.call(this, node, print);
 }
 
-/**
- * Prints ExportDefaultDeclaration, delegates to ExportDeclaration.
- */
-
 export function ExportDefaultDeclaration(node, print) {
   this.push("export default ");
   ExportDeclaration.call(this, node, print);
 }
-
-/**
- * Prints ExportDeclaration, prints specifiers, declration, and source.
- */
 
 function ExportDeclaration(node, print) {
   var specifiers = node.specifiers;
@@ -127,10 +91,6 @@ function ExportDeclaration(node, print) {
   this.ensureSemicolon();
 }
 
-/**
- * Prints ImportDeclaration, prints specifiers and source, handles isType.
- */
-
 export function ImportDeclaration(node, print) {
   this.push("import ");
 
@@ -162,10 +122,6 @@ export function ImportDeclaration(node, print) {
   print.plain(node.source);
   this.semicolon();
 }
-
-/**
- * Prints ImportNamespaceSpecifier, prints local.
- */
 
 export function ImportNamespaceSpecifier(node, print) {
   this.push("* as ");

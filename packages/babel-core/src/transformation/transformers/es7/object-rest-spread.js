@@ -7,10 +7,6 @@ export var metadata = {
   dependencies: ["es6.destructuring"]
 };
 
-/**
- * [Please add a description.]
- */
-
 var hasSpread = function (node) {
   for (var i = 0; i < node.properties.length; i++) {
     if (t.isSpreadProperty(node.properties[i])) {
@@ -20,16 +16,7 @@ var hasSpread = function (node) {
   return false;
 };
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   ObjectExpression(node, parent, scope, file) {
     if (!hasSpread(node)) return;
 

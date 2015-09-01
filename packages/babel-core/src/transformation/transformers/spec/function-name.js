@@ -6,16 +6,7 @@ export var metadata = {
 
 // visit Property functions first - https://github.com/babel/babel/issues/1860
 
-/**
- * [Please add a description.]
- */
-
 export var visitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
   "ArrowFunctionExpression|FunctionExpression": {
     exit() {
       if (!this.parentPath.isProperty()) {
@@ -23,10 +14,6 @@ export var visitor = {
       }
     }
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   ObjectExpression() {
     var props = this.get("properties");

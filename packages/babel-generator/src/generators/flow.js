@@ -1,16 +1,8 @@
 import * as t from "babel-types";
 
-/**
- * Prints AnyTypeAnnotation.
- */
-
 export function AnyTypeAnnotation() {
   this.push("any");
 }
-
-/**
- * Prints ArrayTypeAnnotation, prints elementType.
- */
 
 export function ArrayTypeAnnotation(node, print) {
   print.plain(node.elementType);
@@ -18,34 +10,18 @@ export function ArrayTypeAnnotation(node, print) {
   this.push("]");
 }
 
-/**
- * Prints BooleanTypeAnnotation.
- */
-
 export function BooleanTypeAnnotation() {
   this.push("bool");
 }
-
-/**
- * Prints BooleanLiteralTypeAnnotation.
- */
 
 export function BooleanLiteralTypeAnnotation(node) {
   this.push(node.value ? "true" : "false");
 }
 
-/**
- * Prints DeclareClass, prints node.
- */
-
 export function DeclareClass(node, print) {
   this.push("declare class ");
   this._interfaceish(node, print);
 }
-
-/**
- * Prints DeclareFunction, prints id and id.typeAnnotation.
- */
 
 export function DeclareFunction(node, print) {
   this.push("declare function ");
@@ -54,10 +30,6 @@ export function DeclareFunction(node, print) {
   this.semicolon();
 }
 
-/**
- * Prints DeclareModule, prints id and body.
- */
-
 export function DeclareModule(node, print) {
   this.push("declare module ");
   print.plain(node.id);
@@ -65,20 +37,12 @@ export function DeclareModule(node, print) {
   print.plain(node.body);
 }
 
-/**
- * Prints DeclareVariable, prints id and id.typeAnnotation.
- */
-
 export function DeclareVariable(node, print) {
   this.push("declare var ");
   print.plain(node.id);
   print.plain(node.id.typeAnnotation);
   this.semicolon();
 }
-
-/**
- * Prints FunctionTypeAnnotation, prints typeParameters, params, and rest.
- */
 
 export function FunctionTypeAnnotation(node, print, parent) {
   print.plain(node.typeParameters);
@@ -108,10 +72,6 @@ export function FunctionTypeAnnotation(node, print, parent) {
   print.plain(node.returnType);
 }
 
-/**
- * Prints FunctionTypeParam, prints name and typeAnnotation, handles optional.
- */
-
 export function FunctionTypeParam(node, print) {
   print.plain(node.name);
   if (node.optional) this.push("?");
@@ -120,25 +80,12 @@ export function FunctionTypeParam(node, print) {
   print.plain(node.typeAnnotation);
 }
 
-/**
- * Prints InterfaceExtends, prints id and typeParameters.
- */
-
 export function InterfaceExtends(node, print) {
   print.plain(node.id);
   print.plain(node.typeParameters);
 }
 
-/**
- * Alias InterfaceExtends printer as ClassImplements,
- * and InterfaceExtends printer as GenericTypeAnnotation.
- */
-
 export { InterfaceExtends as ClassImplements, InterfaceExtends as GenericTypeAnnotation };
-
-/**
- * Prints interface-like node, prints id, typeParameters, extends, and body.
- */
 
 export function _interfaceish(node, print) {
   print.plain(node.id);
@@ -151,73 +98,37 @@ export function _interfaceish(node, print) {
   print.plain(node.body);
 }
 
-/**
- * Prints InterfaceDeclaration, prints node.
- */
-
 export function InterfaceDeclaration(node, print) {
   this.push("interface ");
   this._interfaceish(node, print);
 }
 
-/**
- * Prints IntersectionTypeAnnotation, prints types.
- */
-
 export function IntersectionTypeAnnotation(node, print) {
   print.join(node.types, { separator: " & " });
 }
 
-/**
- * Prints MixedTypeAnnotation.
- */
-
 export function MixedTypeAnnotation() {
   this.push("mixed");
 }
-
-/**
- * Prints NullableTypeAnnotation, prints typeAnnotation.
- */
 
 export function NullableTypeAnnotation(node, print) {
   this.push("?");
   print.plain(node.typeAnnotation);
 }
 
-/**
- * Prints NumberLiteralTypeAnnotation, prints value.
- */
-
 export { Literal as NumberLiteralTypeAnnotation } from "./types";
-
-/**
- * Prints NumberTypeAnnotation.
- */
 
 export function NumberTypeAnnotation() {
   this.push("number");
 }
 
-/**
- * Prints StringLiteralTypeAnnotation, prints value.
- */
-
 export function StringLiteralTypeAnnotation(node) {
   this.push(this._stringLiteral(node.value));
 }
 
-/**
- * Prints StringTypeAnnotation.
- */
-
 export function StringTypeAnnotation() {
   this.push("string");
 }
-
-/**
- * Prints TupleTypeAnnotation, prints types.
- */
 
 export function TupleTypeAnnotation(node, print) {
   this.push("[");
@@ -225,18 +136,10 @@ export function TupleTypeAnnotation(node, print) {
   this.push("]");
 }
 
-/**
- * Prints TypeofTypeAnnotation, prints argument.
- */
-
 export function TypeofTypeAnnotation(node, print) {
   this.push("typeof ");
   print.plain(node.argument);
 }
-
-/**
- * Prints TypeAlias, prints id, typeParameters, and right.
- */
 
 export function TypeAlias(node, print) {
   this.push("type ");
@@ -249,20 +152,12 @@ export function TypeAlias(node, print) {
   this.semicolon();
 }
 
-/**
- * Prints TypeAnnotation, prints typeAnnotation, handles optional.
- */
-
 export function TypeAnnotation(node, print) {
   this.push(":");
   this.space();
   if (node.optional) this.push("?");
   print.plain(node.typeAnnotation);
 }
-
-/**
- * Prints TypeParameterInstantiation, prints params.
- */
 
 export function TypeParameterInstantiation(node, print) {
   this.push("<");
@@ -275,15 +170,7 @@ export function TypeParameterInstantiation(node, print) {
   this.push(">");
 }
 
-/**
- * Alias TypeParameterInstantiation printer as TypeParameterDeclaration
- */
-
 export { TypeParameterInstantiation as TypeParameterDeclaration };
-
-/**
- * Prints ObjectTypeAnnotation, prints properties, callProperties, and indexers.
- */
 
 export function ObjectTypeAnnotation(node, print) {
   this.push("{");
@@ -309,18 +196,10 @@ export function ObjectTypeAnnotation(node, print) {
   this.push("}");
 }
 
-/**
- * Prints ObjectTypeCallProperty, prints value, handles static.
- */
-
 export function ObjectTypeCallProperty(node, print) {
   if (node.static) this.push("static ");
   print.plain(node.value);
 }
-
-/**
- * Prints ObjectTypeIndexer, prints id, key, and value, handles static.
- */
 
 export function ObjectTypeIndexer(node, print) {
   if (node.static) this.push("static ");
@@ -335,10 +214,6 @@ export function ObjectTypeIndexer(node, print) {
   print.plain(node.value);
 }
 
-/**
- * Prints ObjectTypeProperty, prints static, key, and value.
- */
-
 export function ObjectTypeProperty(node, print) {
   if (node.static) this.push("static ");
   print.plain(node.key);
@@ -350,27 +225,15 @@ export function ObjectTypeProperty(node, print) {
   print.plain(node.value);
 }
 
-/**
- * Prints QualifiedTypeIdentifier, prints qualification and id.
- */
-
 export function QualifiedTypeIdentifier(node, print) {
   print.plain(node.qualification);
   this.push(".");
   print.plain(node.id);
 }
 
-/**
- * Prints UnionTypeAnnotation, prints types.
- */
-
 export function UnionTypeAnnotation(node, print) {
   print.join(node.types, { separator: " | " });
 }
-
-/**
- * Prints TypeCastExpression, prints expression and typeAnnotation.
- */
 
 export function TypeCastExpression(node, print) {
   this.push("(");
@@ -378,10 +241,6 @@ export function TypeCastExpression(node, print) {
   print.plain(node.typeAnnotation);
   this.push(")");
 }
-
-/**
- * Prints VoidTypeAnnotation.
- */
 
 export function VoidTypeAnnotation() {
   this.push("void");
