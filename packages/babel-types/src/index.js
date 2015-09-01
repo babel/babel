@@ -49,8 +49,8 @@ export const NUMBER_UNARY_OPERATORS  = ["+", "-", "++", "--", "~"];
 export const STRING_UNARY_OPERATORS  = ["typeof"];
 
 import "./definitions/init";
-import { VISITOR_KEYS, BUILDER_KEYS, ALIAS_KEYS } from "./definitions";
-export { VISITOR_KEYS, BUILDER_KEYS, ALIAS_KEYS };
+import { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS } from "./definitions";
+export { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS };
 export * as react from "./react";
 
 /**
@@ -127,43 +127,43 @@ export function isType(nodeType: string, targetType: string): boolean {
   return false;
 }
 
-/**
- * [Please add a description.]
- */
-
-each(t.VISITOR_KEYS, function (keys, type) {
-  if (t.BUILDER_KEYS[type]) return;
-
-  var defs = {};
-  each(keys, function (key) {
-    defs[key] = null;
-  });
-  t.BUILDER_KEYS[type] = defs;
-});
-
-/**
- * [Please add a description.]
- */
-
 each(t.BUILDER_KEYS, function (keys, type) {
-  var builder = function () {
+  function builder() {
     var node = {};
     node.type = type;
 
     var i = 0;
 
-    for (var key in keys) {
+    for (var key of (keys: Array)) {
+      var field = t.NODE_FIELDS[type][key];
+
       var arg = arguments[i++];
-      if (arg === undefined) arg = keys[key];
+      if (arg === undefined) arg = field.default;
+      if (field.validate) field.validate(arg, key);
+
       node[key] = arg;
     }
 
     return node;
-  };
+  }
 
   t[type] = builder;
   t[type[0].toLowerCase() + type.slice(1)] = builder;
 });
+
+/**
+ * Description
+ */
+
+export function validate(key, parent, node) {
+  var fields = t.NODE_FIELDS[parent.type];
+  if (!fields) return;
+
+  var field = fields[key];
+  if (!field || !field.validate) return;
+
+  field.validate(node, key);
+}
 
 /**
  * Test if an object is shallowly equal.

@@ -24,7 +24,7 @@ export function insertBefore(nodes) {
       return this._containerInsertBefore(nodes);
     } else if (this.isStatementOrBlock()) {
       if (this.node) nodes.push(this.node);
-      this.node = this.container[this.key] = t.blockStatement(nodes);
+      this._replaceWith(t.blockStatement(nodes));
     } else {
       throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
     }
@@ -101,7 +101,7 @@ export function insertAfter(nodes) {
       return this._containerInsertAfter(nodes);
     } else if (this.isStatementOrBlock()) {
       if (this.node) nodes.unshift(this.node);
-      this.node = this.container[this.key] = t.blockStatement(nodes);
+      this._replaceWith(t.blockStatement(nodes));
     } else {
       throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
     }
@@ -115,6 +115,8 @@ export function insertAfter(nodes) {
  */
 
 export function updateSiblingKeys(fromIndex, incrementBy) {
+  if (!this.parent) return;
+
   var paths = this.parent._paths;
   for (var i = 0; i < paths.length; i++) {
     let path = paths[i];

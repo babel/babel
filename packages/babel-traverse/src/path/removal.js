@@ -40,13 +40,12 @@ export function _callRemovalHooks(position) {
   }
 }
 
-
 export function _remove() {
   if (Array.isArray(this.container)) {
     this.container.splice(this.key, 1);
     this.updateSiblingKeys(this.key, -1);
   } else {
-    this.container[this.key] = null;
+    this._replaceWith(null);
   }
 }
 

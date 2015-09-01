@@ -1,11 +1,21 @@
-import define from "./index";
+import define, { assertValueType, assertNodeType } from "./index";
 
 define("ArrayExpression", {
+  fields: {
+    elements: { validate: assertValueType("array") }
+  },
   visitor: ["elements"],
   aliases: ["Expression"]
 });
 
 define("AssignmentExpression", {
+  fields: {
+    elements: {
+      operator: { validate: assertValueType("string") },
+      left: { validate: assertNodeType("LVal") },
+      right: { validate: assertNodeType("Expression") }
+    }
+  },
   builder: ["operator", "left", "right"],
   visitor: ["left", "right"],
   aliases: ["Expression"]
@@ -13,12 +23,20 @@ define("AssignmentExpression", {
 
 define("BinaryExpression", {
   builder: ["operator", "left", "right"],
+  fields: {
+    operator: { validate: assertValueType("string") },
+    left: { validate: assertNodeType("Expression") },
+    right: { validate: assertNodeType("Expression") }
+  },
   visitor: ["left", "right"],
   aliases: ["Binary", "Expression"]
 });
 
 define("BlockStatement", {
   visitor: ["body"],
+  fields: {
+    body: { validate: assertValueType("array") }
+  },
   aliases: ["Scopable", "BlockParent", "Block", "Statement"]
 });
 
@@ -29,6 +47,10 @@ define("BreakStatement", {
 
 define("CallExpression", {
   visitor: ["callee", "arguments"],
+  fields: {
+    callee: { validate: assertNodeType("Expression") },
+    arguments: { validate: assertValueType("array") }
+  },
   aliases: ["Expression"]
 });
 
@@ -39,6 +61,11 @@ define("CatchClause", {
 
 define("ConditionalExpression", {
   visitor: ["test", "consequent", "alternate"],
+  fields: {
+    test: { validate: assertNodeType("Expression") },
+    consequent: { validate: assertNodeType("Expression") },
+    alternate: { validate: assertNodeType("Expression") }
+  },
   aliases: ["Expression"]
 });
 
@@ -62,12 +89,18 @@ define("EmptyStatement", {
 
 define("ExpressionStatement", {
   visitor: ["expression"],
+  fields: {
+    expression: { validate: assertNodeType("Expression") }
+  },
   aliases: ["Statement"]
 });
 
 define("File", {
   builder: ["program", "comments", "tokens"],
-  visitor: ["program"]
+  visitor: ["program"],
+  fields: {
+    program: { validate: assertNodeType("Program") }
+  }
 });
 
 define("ForInStatement", {
@@ -81,24 +114,37 @@ define("ForStatement", {
 });
 
 define("FunctionDeclaration", {
-  builder: {
-    id: null,
-    params: null,
-    body: null,
-    generator: false,
-    async: false
-  },
+  builder: ["id", "params", "body", "generator", "async"],
   visitor: ["id", "params", "body", "returnType", "typeParameters"],
+  fields: {
+    id: { validate: assertNodeType("Identifier") },
+    params: { validate: assertValueType("array") },
+    body: { validate: assertNodeType("BlockStatement") },
+    generator: {
+      default: false,
+      validate: assertValueType("boolean")
+    },
+    async: {
+      default: false,
+      validate: assertValueType("boolean")
+    }
+  },
   aliases: ["Scopable", "Function", "Func", "BlockParent", "FunctionParent", "Statement", "Pure", "Declaration"]
 });
 
 define("FunctionExpression", {
-  builder: {
-    id: null,
-    params: null,
-    body: null,
-    generator: false,
-    async: false
+  builder: ["id", "params", "body", "generator", "async"],
+  fields: {
+    params: { validate: assertValueType("array") },
+    body: { validate: assertNodeType("BlockStatement") },
+    generator: {
+      default: false,
+      validate: assertValueType("boolean")
+    },
+    async: {
+      default: false,
+      validate: assertValueType("boolean")
+    }
   },
   visitor: ["id", "params", "body", "returnType", "typeParameters"],
   aliases: ["Scopable", "Function", "Func", "BlockParent", "FunctionParent", "Expression", "Pure"]
@@ -107,7 +153,7 @@ define("FunctionExpression", {
 define("Identifier", {
   builder: ["name"],
   visitor: ["typeAnnotation"],
-  aliases: ["Expression"]
+  aliases: ["Expression", "LVal"]
 });
 
 define("IfStatement", {
@@ -120,9 +166,44 @@ define("LabeledStatement", {
   aliases: ["Statement"]
 });
 
-define("Literal", {
+define("StringLiteral", {
   builder: ["value"],
-  aliases: ["Expression", "Pure"]
+  fields: {
+    value: { validate: assertValueType("string") }
+  },
+  aliases: ["Expression", "Pure", "Literal", "Immutable"]
+});
+
+define("NumberLiteral", {
+  builder: ["value"],
+  fields: {
+    value: { validate: assertValueType("number") }
+  },
+  aliases: ["Expression", "Pure", "Literal", "Immutable"]
+});
+
+define("NullLiteral", {
+  aliases: ["Expression", "Pure", "Literal", "Immutable"]
+});
+
+define("BooleanLiteral", {
+  builder: ["value"],
+  fields: {
+    value: { validate: assertValueType("boolean") }
+  },
+  aliases: ["Expression", "Pure", "Literal", "Immutable"]
+});
+
+define("RegexLiteral", {
+  builder: ["pattern", "flags"],
+  fields: {
+    pattern: { validate: assertValueType("string") },
+    flags: {
+      validate: assertValueType("string"),
+      default: ""
+    }
+  },
+  aliases: ["Expression", "Literal"]
 });
 
 define("LogicalExpression", {
@@ -132,13 +213,12 @@ define("LogicalExpression", {
 });
 
 define("MemberExpression", {
-  builder: {
-    object: null,
-    property: null,
-    computed: false
+  builder: ["object", "property", "computed"],
+  fields: {
+    computed: { default: false }
   },
   visitor: ["object", "property"],
-  aliases: ["Expression"]
+  aliases: ["Expression", "LVal"]
 });
 
 define("NewExpression", {
@@ -153,15 +233,17 @@ define("ObjectExpression", {
 
 define("Program", {
   visitor: ["body"],
+  fields: {
+    body: { validate: assertValueType("array") }
+  },
   aliases: ["Scopable", "BlockParent", "Block", "FunctionParent"]
 });
 
 define("Property", {
-  builder: {
-    kind: "init",
-    key: null,
-    value: null,
-    computed: false
+  builder: ["kind", "key", "value", "computed"],
+  fields: {
+    kind: { default: "init" },
+    computed: { default: false }
   },
   visitor: ["key", "value", "decorators"],
   aliases: ["UserWhitespacable"]
@@ -178,6 +260,9 @@ define("ReturnStatement", {
 
 define("SequenceExpression", {
   visitor: ["expressions"],
+  fields: {
+    expressions: { validate: assertValueType("array") }
+  },
   aliases: ["Expression"]
 });
 
@@ -206,20 +291,18 @@ define("TryStatement", {
 });
 
 define("UnaryExpression", {
-  builder: {
-    operator: null,
-    argument: null,
-    prefix: false
+  builder: ["operator", "argument", "prefix"],
+  fields: {
+    prefix: { default: false }
   },
   visitor: ["argument"],
   aliases: ["UnaryLike", "Expression"]
 });
 
 define("UpdateExpression", {
-  builder: {
-    operator: null,
-    argument: null,
-    prefix: false
+  builder: ["operator", "argument", "prefix"],
+  fields: {
+    prefix: { default: false }
   },
   visitor: ["argument"],
   aliases: ["Expression"]

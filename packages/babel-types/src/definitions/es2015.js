@@ -2,12 +2,12 @@ import define from "./index";
 
 define("AssignmentPattern", {
   visitor: ["left", "right"],
-  aliases: ["Pattern"]
+  aliases: ["Pattern", "LVal"]
 });
 
 define("ArrayPattern", {
   visitor: ["elements", "typeAnnotation"],
-  aliases: ["Pattern"]
+  aliases: ["Pattern", "LVal"]
 });
 
 define("ArrowFunctionExpression", {
@@ -91,19 +91,18 @@ define("MetaProperty", {
 });
 
 define("MethodDefinition", {
-  builder: {
-    key: null,
-    value: null,
-    kind: "method",
-    computed: false,
-    static: false
+  builder: ["key", "value", "kind", "computed", "static"],
+  fields: {
+    kind: { default: "method" },
+    computed: { default: false },
+    static: { default: false }
   },
   visitor: ["key", "value", "decorators"]
 });
 
 define("ObjectPattern", {
   visitor: ["properties", "typeAnnotation"],
-  aliases: ["Pattern"]
+  aliases: ["Pattern", "LVal"]
 });
 
 define("SpreadElement", {
@@ -124,7 +123,7 @@ define("TemplateElement");
 
 define("TemplateLiteral", {
   visitor: ["quasis", "expressions"],
-  aliases: ["Expression"]
+  aliases: ["Expression", "Literal"]
 });
 
 define("YieldExpression", {

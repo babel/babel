@@ -141,11 +141,25 @@ export function replaceWith(replacement, whateverAllowed) {
   if (oldNode) t.inheritsComments(replacement, oldNode);
 
   // replace the node
-  this.node = this.container[this.key] = replacement;
+  this._replaceWith(replacement);
   this.type = replacement.type;
 
   // potentially create new scope
   this.setScope();
+}
+
+/**
+ * Description
+ */
+
+export function _replaceWith(node) {
+  if (this.inList) {
+    t.validate(this.key, this.parent, [node]);
+  } else {
+    t.validate(this.key, this.parent, node);
+  }
+
+  this.node = this.container[this.key] = node;
 }
 
 /**
