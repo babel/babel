@@ -18,6 +18,7 @@ This is quite taboo but let's look at the pros and cons:
 
  * Codebase looks more intimidating.
  * Repo is bigger in size.
+ * stable internal concepts not externalized hinder innovation/experimentation.
  * ???
 
 ## This is dumb! Nobody in open source does this!
