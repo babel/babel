@@ -2,17 +2,9 @@ import * as t from "./index";
 
 export var isReactComponent = t.buildMatchMemberExpression("React.Component");
 
-/**
- * [Please add a description.]
- */
-
 export function isCompatTag(tagName) {
   return tagName && /^[a-z]|\-/.test(tagName);
 }
-
-/**
- * [Please add a description.]
- */
 
 function cleanJSXElementLiteralChild(child, args) {
   var lines = child.value.split(/\r\n|\n|\r/);
@@ -58,10 +50,6 @@ function cleanJSXElementLiteralChild(child, args) {
 
   if (str) args.push(t.stringLiteral(str));
 }
-
-/**
- * [Please add a description.]
- */
 
 export function buildChildren(node) {
   var elems = [];
