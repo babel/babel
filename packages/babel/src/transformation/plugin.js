@@ -12,7 +12,7 @@ const VALID_PLUGIN_PROPERTIES = [
   "post", "pre"
 ];
 
-const VALID_METADATA_PROPERTES = [
+const VALID_METADATA_PROPERTIES = [
   "dependencies",
   "optional",
   "stage",
@@ -70,7 +70,7 @@ export default class Plugin {
     }
 
     for (let key in plugin.metadata) {
-      if (VALID_METADATA_PROPERTES.indexOf(key) >= 0) continue;
+      if (VALID_METADATA_PROPERTIES.indexOf(key) >= 0) continue;
 
       throw new Error(messages.get("pluginInvalidProperty", name, `metadata.${key}`));
     }
