@@ -134,12 +134,28 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isLogicalExpression()) {
+      // If we are confident that one side of an && is false, or one side of
+      // an || is true, we can be confident about the entire expression
+      let wasConfident = confident;
       let left = evaluate(path.get("left"));
+      let leftConfident = confident;
+      confident = wasConfident;
       let right = evaluate(path.get("right"));
+      let rightConfident = confident;
+      let uncertain = leftConfident !== rightConfident;
+      confident = leftConfident && rightConfident;
 
       switch (node.operator) {
-        case "||": return left || right;
-        case "&&": return left && right;
+        case "||":
+          if ((left || right) && uncertain) {
+            confident = true;
+          }
+          return left || right;
+        case "&&":
+          if ((!left && leftConfident) || (!right && rightConfident)) {
+            confident = true;
+          }
+          return left && right;
       }
     }
 
