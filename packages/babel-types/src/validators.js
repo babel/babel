@@ -7,12 +7,20 @@ import * as t from "./index";
  */
 
 export function isBinding(node: Object, parent: Object): boolean {
-  var bindingKey = getBindingIdentifiers.keys[parent.type];
-  if (bindingKey) {
-    return parent[bindingKey] === node;
-  } else {
-    return false;
+  var keys = getBindingIdentifiers.keys[parent.type];
+  if (keys) {
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      var val = parent[key];
+      if (Array.isArray(val)) {
+        if (val.indexOf(node) >= 0) return true;
+      } else {
+        if (val === node) return true;
+      }
+    }
   }
+
+  return false;
 }
 
 /**
@@ -198,15 +206,7 @@ export function isScope(node: Object, parent: Object): boolean {
 export function isImmutable(node: Object): boolean {
   if (t.isType(node.type, "Immutable")) return true;
 
-  if (t.isLiteral(node)) {
-    if (node.regex) {
-      // regexs are mutable
-      return false;
-    } else {
-      // immutable!
-      return true;
-    }
-  } else if (t.isIdentifier(node)) {
+  if (t.isIdentifier(node)) {
     if (node.name === "undefined") {
       // immutable!
       return true;

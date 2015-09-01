@@ -12,7 +12,7 @@ export function getBindingIdentifiers(node: Object, duplicates?): Object {
     var id = search.shift();
     if (!id) continue;
 
-    var key = t.getBindingIdentifiers.keys[id.type];
+    var keys = t.getBindingIdentifiers.keys[id.type];
 
     if (t.isIdentifier(id)) {
       if (duplicates) {
@@ -25,8 +25,13 @@ export function getBindingIdentifiers(node: Object, duplicates?): Object {
       if (t.isDeclaration(node.declaration)) {
         search.push(node.declaration);
       }
-    } else if (key && id[key]) {
-      search = search.concat(id[key]);
+    } else if (keys) {
+      for (var i = 0; i < keys.length; i++) {
+        var key = keys[i];
+        if (id[key]) {
+          search = search.concat(id[key]);
+        }
+      }
     }
   }
 
@@ -38,42 +43,42 @@ export function getBindingIdentifiers(node: Object, duplicates?): Object {
  */
 
 getBindingIdentifiers.keys = {
-  DeclareClass: "id",
-  DeclareFunction: "id",
-  DeclareModule: "id",
-  DeclareVariable: "id",
-  InterfaceDeclaration: "id",
-  TypeAlias: "id",
+  DeclareClass: ["id"],
+  DeclareFunction: ["id"],
+  DeclareModule: ["id"],
+  DeclareVariable: ["id"],
+  InterfaceDeclaration: ["id"],
+  TypeAlias: ["id"],
 
-  ComprehensionExpression: "blocks",
-  ComprehensionBlock: "left",
+  ComprehensionExpression: ["blocks"],
+  ComprehensionBlock: ["left"],
 
-  CatchClause: "param",
-  LabeledStatement: "label",
-  UnaryExpression: "argument",
-  AssignmentExpression: "left",
+  CatchClause: ["param"],
+  LabeledStatement: ["label"],
+  UnaryExpression: ["argument"],
+  AssignmentExpression: ["left"],
 
-  ImportSpecifier: "local",
-  ImportNamespaceSpecifier: "local",
-  ImportDefaultSpecifier: "local",
-  ImportDeclaration: "specifiers",
+  ImportSpecifier: ["local"],
+  ImportNamespaceSpecifier: ["local"],
+  ImportDefaultSpecifier: ["local"],
+  ImportDeclaration: ["specifiers"],
 
-  FunctionDeclaration: "id",
-  FunctionExpression: "id",
+  FunctionDeclaration: ["id", "params"],
+  FunctionExpression: ["id", "params"],
 
-  ClassDeclaration: "id",
-  ClassExpression: "id",
+  ClassDeclaration: ["id"],
+  ClassExpression: ["id"],
 
-  RestElement: "argument",
-  UpdateExpression: "argument",
+  RestElement: ["argument"],
+  UpdateExpression: ["argument"],
 
-  SpreadProperty: "argument",
-  Property: "value",
+  SpreadProperty: ["argument"],
+  Property: ["value"],
 
-  AssignmentPattern: "left",
-  ArrayPattern: "elements",
-  ObjectPattern: "properties",
+  AssignmentPattern: ["left"],
+  ArrayPattern: ["elements"],
+  ObjectPattern: ["properties"],
 
-  VariableDeclaration: "declarations",
-  VariableDeclarator: "id"
+  VariableDeclaration: ["declarations"],
+  VariableDeclarator: ["id"]
 };
