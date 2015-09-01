@@ -21,8 +21,7 @@ This is quite taboo but let's look at the pros and cons:
 
 ## This is dumb! Nobody in open source does this!
 
-[React](https://github.com/facebook/react/tree/master/packages),
-[Ember](https://github.com/emberjs/ember.js/tree/master/packages) among others do this.
+[React](https://github.com/facebook/react/tree/master/packages) and [Ember](https://github.com/emberjs/ember.js/tree/master/packages), among others, do this.
 
 ## Previous discussion
 
