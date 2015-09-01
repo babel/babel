@@ -234,12 +234,46 @@ export function _guessExecutionStatusRelativeTo(target) {
   // check if the two paths are in different functions, we can't track execution of these
   var targetFuncParent = target.scope.getFunctionParent();
   var selfFuncParent = this.scope.getFunctionParent();
+
   if (targetFuncParent !== selfFuncParent) {
-    return "function";
+    var targetFuncPath = targetFuncParent.path;
+    if (!targetFuncPath.isFunctionDeclaration()) return "function";
+
+    // so we're in a completely different function, if this is a function declaration
+    // then we can be a bit smarter and handle cases where the function is either
+    // a. not called at all (part of an export)
+    // b. called directly
+    var binding = targetFuncPath.scope.getBinding(targetFuncPath.node.id.name);
+
+    // no references!
+    if (!binding.references) return "before";
+
+    var referencePaths: Array = binding.referencePaths;
+
+    // verify that all of the references are calls
+    for (let path of referencePaths) {
+      if (path.key !== "callee" || !path.parentPath.isCallExpression()) {
+        return "function";
+      }
+    }
+
+    var allStatus;
+
+    // verify that all the calls have the same execution status
+    for (let path of referencePaths) {
+      var status = this._guessExecutionStatusRelativeTo(path);
+      if (allStatus) {
+        if (allStatus !== status) return "function";
+      } else {
+        allStatus = status;
+      }
+    }
+
+    return allStatus || "function";
   }
 
   var targetPaths = target.getAncestry();
-  //if (targetPaths.indexOf(this) >= 0) return "after";
+  if (targetPaths.indexOf(this) >= 0) return "after";
 
   var selfPaths   = this.getAncestry();
 
