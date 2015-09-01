@@ -3,10 +3,6 @@ import * as messages from "babel-messages";
 import * as t from "babel-types";
 import clone from "lodash/lang/clone";
 
-/**
- * [Please add a description.]
- */
-
 export function explode(visitor) {
   if (visitor._exploded) return visitor;
   visitor._exploded = true;
@@ -24,6 +20,22 @@ export function explode(visitor) {
     for (let part of (parts: Array)) {
       visitor[part] = fns;
     }
+  }
+
+  // normalise colons
+  for (let nodeType in visitor) {
+    if (shouldIgnoreKey(nodeType)) continue;
+
+    let parts = nodeType.split(":");
+    if (parts.length === 1) continue;
+
+    let fns = visitor[nodeType];
+    delete visitor[nodeType];
+
+    nodeType = parts[0];
+
+    visitor[nodeType] = visitor[nodeType] || {};
+    visitor[nodeType][parts[1]] = fns;
   }
 
   // verify data structure
@@ -100,10 +112,6 @@ export function explode(visitor) {
   return visitor;
 }
 
-/**
- * [Please add a description.]
- */
-
 export function verify(visitor) {
   if (visitor._verified) return;
 
@@ -130,10 +138,6 @@ export function verify(visitor) {
   visitor._verified = true;
 }
 
-/**
- * [Please add a description.]
- */
-
 export function merge(visitors) {
   var rootVisitor = {};
 
@@ -149,10 +153,6 @@ export function merge(visitors) {
   return rootVisitor;
 }
 
-/**
- * [Please add a description.]
- */
-
 function ensureEntranceObjects(obj) {
   for (let key in obj) {
     if (shouldIgnoreKey(key)) continue;
@@ -164,18 +164,10 @@ function ensureEntranceObjects(obj) {
   }
 }
 
-/**
- * [Please add a description.]
- */
-
 function ensureCallbackArrays(obj){
   if (obj.enter && !Array.isArray(obj.enter)) obj.enter = [obj.enter];
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }
-
-/**
- * [Please add a description.]
- */
 
 function wrapCheck(wrapper, fn) {
   return function () {
@@ -184,10 +176,6 @@ function wrapCheck(wrapper, fn) {
     }
   };
 }
-
-/**
- * [Please add a description.]
- */
 
 function shouldIgnoreKey(key) {
   // internal/hidden key
@@ -201,10 +189,6 @@ function shouldIgnoreKey(key) {
 
   return false;
 }
-
-/**
- * [Please add a description.]
- */
 
 function mergePair(dest, src) {
   for (var key in src) {
