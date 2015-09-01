@@ -1,0 +1,19 @@
+{
+  "name": "babel-plugin-constant-folding",
+  "version": "1.0.1",
+  "description": "Compile static constants (ie. code that we can statically determine to be constant at runtime)",
+  "repository": "babel-plugins/babel-plugin-constant-folding",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "devDependencies": {
+    "babel": "^5.6.0"
+  },
+  "scripts": {
+    "build": "babel-plugin build",
+    "push": "babel-plugin publish",
+    "test": "babel-plugin test"
+  },
+  "keywords": [
+    "babel-plugin"
+  ]
+}
