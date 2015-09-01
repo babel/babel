@@ -23,8 +23,12 @@
 
 ## Looking for support?
 
-For questions and support please visit the [Slack community](https://babel-slack.herokuapp.com) or [StackOverflow](http://stackoverflow.com/questions/tagged/babeljs). The Babel issue tracker is **exclusively** for bug reports and feature requests.
+<p align="center">For questions and support please visit the <a href="https://babel-slack.herokuapp.com">Slack community</a> or <a href="http://stackoverflow.com/questions/tagged/babeljs">StackOverflow</a>.</p>
+
+<p align="center">The Babel issue tracker is <strong>exclusively</strong> for bug reports and feature requests.</p>
 
 ## Want to report an issue with [babeljs.io](https://babeljs.io)?
 
-For documentation and website issues please visit the <a href="https://github.com/babel/babel.github.io">babel.github.io</a> repo.
+<p align="center">
+  For documentation and website issues please visit the <a href="https://github.com/babel/babel.github.io">babel.github.io</a> repo.
+</p>
