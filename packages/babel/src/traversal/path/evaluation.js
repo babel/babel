@@ -119,13 +119,20 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isUnaryExpression({ prefix: true })) {
-      var arg = evaluate(path.get("argument"));
+      var argument = path.get("argument");
+      var arg = evaluate(argument);
       switch (node.operator) {
         case "void": return undefined;
         case "!": return !arg;
         case "+": return +arg;
         case "-": return -arg;
         case "~": return ~arg;
+        case "typeof":
+          if (argument.isFunction()) {
+            return "function";
+          } else {
+            return typeof arg;
+          }
       }
     }
 
