@@ -34,6 +34,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
     // no: parent.NODE
     case "MemberExpression":
     case "JSXMemberExpression":
+    case "BindExpression":
       if (parent.property === node && parent.computed) {
         return true;
       } else if (parent.object === node) {
