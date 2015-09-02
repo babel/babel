@@ -286,7 +286,7 @@ export default class Scope {
     var id = parts.join("$");
     id = id.replace(/^_/, "") || defaultName || "ref";
 
-    return this.generateUidIdentifier(id);
+    return this.generateUidIdentifier(id.slice(0, 20));
   }
 
   /**
