@@ -38,7 +38,7 @@ export var visitor = {
 
   ThisExpression() {
     if (!this.findParent((path) => !path.is("shadow") && THIS_BREAK_KEYS.indexOf(path.type) >= 0)) {
-      return t.identifier("undefined");
+      return this.scope.buildUndefinedNode();
     }
   }
 };

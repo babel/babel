@@ -60,7 +60,7 @@ export var visitor = {
       // this is done here to avoid duplicating it in the module formatters
       if (t.isVariableDeclaration(node.declaration)) {
         var declar = node.declaration.declarations[0];
-        declar.init = declar.init || t.identifier("undefined");
+        declar.init = declar.init || scope.buildUndefinedNode();
       }
 
       file.moduleFormatter.exportDeclaration(node, nodes, scope);

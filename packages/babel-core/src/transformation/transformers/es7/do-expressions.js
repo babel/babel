@@ -11,7 +11,7 @@ export var visitor = {
     if (body.length) {
       return body;
     } else {
-      return t.identifier("undefined");
+      return this.scope.buildUndefinedNode();
     }
   }
 };

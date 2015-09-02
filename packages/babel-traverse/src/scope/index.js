@@ -459,6 +459,14 @@ export default class Scope {
     }
   }
 
+  buildUndefinedNode() {
+    if (this.hasBinding("undefined")) {
+      return t.unaryExpression("void", t.numberLiteral(0), true);
+    } else {
+      return t.identifier("undefined");
+    }
+  }
+
   registerConstantViolation(root: NodePath, left: NodePath, right: NodePath) {
     var ids = left.getBindingIdentifiers();
     for (var name in ids) {

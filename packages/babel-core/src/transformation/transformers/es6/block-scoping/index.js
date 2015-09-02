@@ -17,7 +17,7 @@ function isLet(node, parent) {
   if (isLetInitable(node, parent)) {
     for (var i = 0; i < node.declarations.length; i++) {
       var declar = node.declarations[i];
-      declar.init = declar.init || t.identifier("undefined");
+      declar.init = declar.init || scope.buildUndefinedNode();
     }
   }
 
@@ -30,8 +30,8 @@ function isLetInitable(node, parent) {
   return !t.isFor(parent) || !t.isFor(parent, { left: node });
 }
 
-function isVar(node, parent) {
-  return t.isVariableDeclaration(node, { kind: "var" }) && !isLet(node, parent);
+function isVar(node, parent, scope) {
+  return t.isVariableDeclaration(node, { kind: "var" }) && !isLet(node, parent, scope);
 }
 
 function standardizeLets(declars) {
@@ -46,7 +46,7 @@ export var metadata = {
 
 export var visitor = {
   VariableDeclaration(node, parent, scope, file) {
-    if (!isLet(node, parent)) return;
+    if (!isLet(node, parent, scope)) return;
 
     if (isLetInitable(node) && node._tdzThis) {
       var nodes = [node];
@@ -66,7 +66,7 @@ export var visitor = {
       if (this.isCompletionRecord()) {
         // ensure we don't break completion record semantics by returning
         // the initialiser of the last declarator
-        nodes.push(t.expressionStatement(t.identifier("undefined")));
+        nodes.push(t.expressionStatement(scope.buildUndefinedNode()));
       }
 
       return nodes;
@@ -75,7 +75,7 @@ export var visitor = {
 
   Loop(node, parent, scope, file) {
     var init = node.left || node.init;
-    if (isLet(init, node)) {
+    if (isLet(init, node, scope)) {
       t.ensureBlock(node);
       node.body._letDeclarators = [init];
     }
@@ -158,7 +158,7 @@ var letReferenceFunctionVisitor = traverse.visitors.merge([{
 var hoistVarDeclarationsVisitor = {
   enter(node, parent, scope, self) {
     if (this.isForStatement()) {
-      if (isVar(node.init, node)) {
+      if (isVar(node.init, node, scope)) {
         var nodes = self.pushDeclar(node.init);
         if (nodes.length === 1) {
           node.init = nodes[0];
@@ -167,11 +167,11 @@ var hoistVarDeclarationsVisitor = {
         }
       }
     } else if (this.isFor()) {
-      if (isVar(node.left, node)) {
+      if (isVar(node.left, node, scope)) {
         self.pushDeclar(node.left);
         node.left = node.left.declarations[0].id;
       }
-    } else if (isVar(node, parent)) {
+    } else if (isVar(node, parent, scope)) {
       return self.pushDeclar(node).map(t.expressionStatement);
     } else if (this.isFunction()) {
       return this.skip();
@@ -258,7 +258,7 @@ var loopVisitor = {
     if (this.isReturnStatement()) {
       state.hasReturn = true;
       replace = t.objectExpression([
-        t.property("init", t.identifier("v"), node.argument || t.identifier("undefined"))
+        t.property("init", t.identifier("v"), node.argument || scope.buildUndefinedNode())
       ]);
     }
 
@@ -494,7 +494,7 @@ class BlockScoping {
     if (block.body) {
       for (let i = 0; i < block.body.length; i++) {
         let declar = block.body[i];
-        if (isLet(declar, block)) {
+        if (isLet(declar, block, this.scope)) {
           declarators = declarators.concat(declar.declarations);
         }
       }

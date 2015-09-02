@@ -79,7 +79,7 @@ export var visitor = {
         }
 
         //if (file.transformers["es6.spec.blockScoping"].canTransform() && param.isIdentifier()) {
-        //  pushDefNode(param.node, t.identifier("undefined"), i);
+        //  pushDefNode(param.node, scope.buildUndefinedNode(), i);
         //}
 
         continue;

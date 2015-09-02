@@ -169,7 +169,7 @@ class TailCallTransformer {
 
       var assignment = reduceRight(declarations, function (expr, decl) {
         return t.assignmentExpression("=", decl.id, expr);
-      }, t.identifier("undefined"));
+      }, this.scope.buildUndefinedNode());
 
       var statement = t.expressionStatement(assignment);
       statement._blockHoist = Infinity;
@@ -302,7 +302,7 @@ class TailCallTransformer {
           break;
 
         case "apply":
-          args = node.arguments[1] || t.identifier("undefined");
+          args = node.arguments[1] || this.scope.buildUndefinedNode();
           this.needsArguments = true;
           break;
 
@@ -329,7 +329,7 @@ class TailCallTransformer {
       body.push(t.expressionStatement(t.assignmentExpression(
         "=",
         this.getThisId(),
-        thisBinding || t.identifier("undefined")
+        thisBinding || this.scope.buildUndefinedNode()
       )));
     }
 
@@ -353,7 +353,7 @@ class TailCallTransformer {
 
       // pad out the args so all the function args are reset - https://github.com/babel/babel/issues/1938
       while (elems.length < params.length) {
-        elems.push(t.identifier("undefined"));
+        elems.push(this.scope.buildUndefinedNode());
       }
 
       for (let i = 0; i < elems.length; i++) {
