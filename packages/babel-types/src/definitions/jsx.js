@@ -1,4 +1,4 @@
-import define from "./index";
+import define, { assertValueType } from "./index";
 
 define("JSXAttribute", {
   visitor: ["name", "value"],
@@ -46,4 +46,12 @@ define("JSXOpeningElement", {
 define("JSXSpreadAttribute", {
   visitor: ["argument"],
   aliases: ["JSX"]
+});
+
+define("JSXText", {
+  aliases: ["JSX"],
+  builder: ["value"],
+  fields: {
+    value: { validate: assertValueType("string") }
+  }
 });

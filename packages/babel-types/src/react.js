@@ -57,7 +57,7 @@ export function buildChildren(node) {
   for (var i = 0; i < node.children.length; i++) {
     var child = node.children[i];
 
-    if (t.isStringLiteral(child)) {
+    if (t.isJSXText(child)) {
       cleanJSXElementLiteralChild(child, elems);
       continue;
     }
