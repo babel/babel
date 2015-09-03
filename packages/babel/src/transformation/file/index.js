@@ -19,6 +19,7 @@ import Hub from "../../traversal/hub";
 import * as util from  "../../util";
 import path from "path";
 import * as t from "../../types";
+import { EOL } from "os";
 
 /**
  * [Please add a description.]
@@ -753,7 +754,7 @@ export default class File {
     }
 
     if (opts.sourceMaps === "inline" || opts.sourceMaps === "both") {
-      result.code += "\n" + convertSourceMap.fromObject(result.map).toComment();
+      result.code += EOL + convertSourceMap.fromObject(result.map).toComment();
     }
 
     if (opts.sourceMaps === "inline") {

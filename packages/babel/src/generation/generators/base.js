@@ -1,3 +1,5 @@
+import { EOL } from "os";
+
 /**
  * Print File.program
  */
@@ -23,7 +25,7 @@ export function BlockStatement(node, print) {
   if (node.body.length) {
     this.newline();
     print.sequence(node.body, { indent: true });
-    if (!this.format.retainLines) this.removeLast("\n");
+    if (!this.format.retainLines) this.removeLast(EOL);
     this.rightBrace();
   } else {
     print.printInnerComments();
