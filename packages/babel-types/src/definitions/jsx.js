@@ -11,8 +11,21 @@ define("JSXClosingElement", {
 });
 
 define("JSXElement", {
-  aliases: ["JSX", "Immutable", "Expression"]
+  builder: ["openingElement", "closingElement", "children", "selfClosing"],
   visitor: ["openingElement", "children", "closingElement"],
+  aliases: ["JSX", "Immutable", "Expression"],
+  fields: {
+    openingElement: {
+      validate: assertNodeType("JSXOpeningElement")
+    },
+    closingElement: {
+      optional: true,
+      validate: assertNodeType("JSXClosingElement")
+    },
+    children: {
+      // todo
+    }
+  }
 });
 
 define("JSXEmptyExpression", {
