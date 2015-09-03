@@ -11,8 +11,8 @@ define("JSXClosingElement", {
 });
 
 define("JSXElement", {
-  visitor: ["openingElement", "closingElement", "children"],
   aliases: ["JSX", "Immutable", "Expression"]
+  visitor: ["openingElement", "children", "closingElement"],
 });
 
 define("JSXEmptyExpression", {
