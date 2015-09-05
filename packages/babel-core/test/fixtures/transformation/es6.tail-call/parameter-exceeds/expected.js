@@ -1,5 +1,3 @@
-"use strict";
-
 function foo(a, b) {
   if (b) {
     return foo(b);

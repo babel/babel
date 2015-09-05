@@ -1,5 +1,3 @@
-"use strict";
-
 var _this = this;
 
 var fn = function fn() {

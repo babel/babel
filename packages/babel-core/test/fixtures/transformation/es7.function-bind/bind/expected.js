@@ -1,5 +1,3 @@
-"use strict";
-
 var _context;
 
 var f = (_context = ctx, ns.obj.func).bind(_context);

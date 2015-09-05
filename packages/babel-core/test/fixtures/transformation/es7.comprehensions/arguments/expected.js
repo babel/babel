@@ -1,5 +1,3 @@
-"use strict";
-
 function add() {
   var _arguments = arguments;
 

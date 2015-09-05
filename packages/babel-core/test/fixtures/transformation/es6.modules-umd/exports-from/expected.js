@@ -11,9 +11,7 @@
     global.actual = mod.exports;
   }
 })(this, function (exports, _foo) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
+    Object.defineProperty(exports, "__esModule", {
     value: true
   });
   babelHelpers.defaults(exports, babelHelpers.interopExportWildcard(_foo, babelHelpers.defaults));

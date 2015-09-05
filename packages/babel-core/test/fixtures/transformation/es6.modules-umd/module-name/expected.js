@@ -11,7 +11,5 @@
     global.es6ModulesUmdModuleNameExpected = mod.exports;
   }
 })(this, function (exports) {
-  "use strict";
-
-  foobar();
+    foobar();
 });

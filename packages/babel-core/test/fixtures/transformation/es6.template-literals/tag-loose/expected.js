@@ -1,5 +1,3 @@
-"use strict";
-
 var _templateObject = _taggedTemplateLiteralLoose(["wow\na", "b ", ""], ["wow\\na", "b ", ""]),
     _templateObject2 = _taggedTemplateLiteralLoose(["wow\nab", " ", ""], ["wow\\nab", " ", ""]),
     _templateObject3 = _taggedTemplateLiteralLoose(["wow\naB", " ", ""], ["wow\\naB", " ", ""]);

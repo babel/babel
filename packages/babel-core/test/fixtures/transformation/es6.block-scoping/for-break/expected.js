@@ -1,5 +1,3 @@
-"use strict";
-
 var _loop = function (i) {
   fns.push(function () {
     return i;

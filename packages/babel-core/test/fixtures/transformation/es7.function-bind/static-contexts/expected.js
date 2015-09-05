@@ -1,5 +1,3 @@
-"use strict";
-
 var bar = function bar() {};
 bar.bind(foo);
 

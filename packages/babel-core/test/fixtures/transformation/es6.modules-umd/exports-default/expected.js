@@ -11,9 +11,7 @@
     global.actual = mod.exports;
   }
 })(this, function (exports, module) {
-  "use strict";
-
-  module.exports = foo;
+    module.exports = foo;
   module.exports = 42;
   module.exports = {};
   module.exports = [];

@@ -1,5 +1,3 @@
-"use strict";
-
 var BaseController = (function (_Chaplin$Controller) {
   babelHelpers.inherits(BaseController, _Chaplin$Controller);
 

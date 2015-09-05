@@ -11,9 +11,7 @@
     global.actual = mod.exports;
   }
 })(this, function (exports, _evens) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
+    Object.defineProperty(exports, "__esModule", {
     value: true
   });
   exports.nextOdd = nextOdd;

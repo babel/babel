@@ -1,5 +1,3 @@
-"use strict";
-
 var test = {
   setInterval: (function (_setInterval) {
     function setInterval(_x, _x2) {

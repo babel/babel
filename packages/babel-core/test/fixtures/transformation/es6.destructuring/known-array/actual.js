@@ -1,2 +1,2 @@
 var z = [];
-let [x, ...y] = z;
+var [x, ...y] = z;

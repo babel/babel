@@ -1,6 +1,3 @@
 {
-  "experimental": true,
-  "externalHelpers": true,
-  "blacklist": ["regenerator"],
-  "optional": ["minification.deadCodeElimination"]
+  "plugins": ["external-helpers", "transform-dead-code-elimination"]
 }

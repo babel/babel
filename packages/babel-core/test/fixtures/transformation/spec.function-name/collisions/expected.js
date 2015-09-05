@@ -1,5 +1,3 @@
-"use strict";
-
 var obj = {
   search: function search(_ref) {
     var _search = _ref.search;

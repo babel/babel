@@ -1,5 +1,3 @@
-"use strict";
-
 var Utils = {
   get: function get() {}
 };

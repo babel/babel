@@ -1,5 +1,3 @@
-"use strict";
-
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
 var _Symbol = require("babel-runtime/core-js/symbol")["default"];

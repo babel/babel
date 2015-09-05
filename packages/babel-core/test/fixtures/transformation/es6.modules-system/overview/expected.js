@@ -1,7 +1,5 @@
 System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
-  "use strict";
-
-  var foo, foo2, bar, bar2, test2;
+    var foo, foo2, bar, bar2, test2;
   return {
     setters: [function (_foo) {
       foo = _foo["default"];

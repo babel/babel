@@ -1,4 +1,3 @@
 {
-  "externalHelpers": true,
-  "optional": ["optimisation.react.inlineElements"]
+  "plugins": ["external-helpers", "syntax-jsx", "transform-react-inline-elements", "transform-react-jsx"]
 }

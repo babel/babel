@@ -11,7 +11,5 @@
     global.actual = mod.exports;
   }
 })(this, function (exports, _foo) {
-  "use strict";
-
-  _foo;
+    _foo;
 });

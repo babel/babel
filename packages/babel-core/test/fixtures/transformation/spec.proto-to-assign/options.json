@@ -1,4 +1,3 @@
 {
-  "externalHelpers": true,
-  "optional": ["spec.protoToAssign"]
+  "plugins": ["external-helpers", "transform-proto-to-assign"]
 }

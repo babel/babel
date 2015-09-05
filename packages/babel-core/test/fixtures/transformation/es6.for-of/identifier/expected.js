@@ -1,5 +1,3 @@
-"use strict";
-
 var _iteratorNormalCompletion = true;
 var _didIteratorError = false;
 var _iteratorError = undefined;

@@ -1,5 +1,3 @@
-"use strict";
-
 var IdenticalName = (function () {
   function IdenticalName(x) {
     return x;

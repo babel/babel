@@ -1,5 +1,3 @@
-"use strict";
-
 var _obj;
 
 var obj = (_obj = {

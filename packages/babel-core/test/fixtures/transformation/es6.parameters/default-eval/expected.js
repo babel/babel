@@ -1,5 +1,3 @@
-"use strict";
-
 var x = "outside";
 function outer() {
   var a = arguments.length <= 0 || arguments[0] === undefined ? function () {

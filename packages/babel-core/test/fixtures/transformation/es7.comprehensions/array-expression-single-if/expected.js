@@ -1,5 +1,3 @@
-"use strict";
-
 var arr = (function () {
   var _arr = [];
   var _arr2 = [1, 2, 3];

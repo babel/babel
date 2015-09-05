@@ -1,5 +1,3 @@
 {
-  "externalHelpers": true,
-  "loose": ["es6.classes"],
-  "blacklist": ["es6.tailCall"]
+  "plugins": ["external-helpers", ["transform-es2015-classes", { "loose": true }]]
 }

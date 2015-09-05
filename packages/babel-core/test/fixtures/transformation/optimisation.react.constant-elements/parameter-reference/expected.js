@@ -1,5 +1,3 @@
-"use strict";
-
 function render(text) {
   var _ref = <div>{text}</div>;
 

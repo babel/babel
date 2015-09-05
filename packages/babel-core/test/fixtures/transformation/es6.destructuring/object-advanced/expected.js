@@ -1,5 +1,3 @@
-"use strict";
-
 var rect = {};
 var _rect$topLeft = rect.topLeft;
 var x1 = _rect$topLeft.x;

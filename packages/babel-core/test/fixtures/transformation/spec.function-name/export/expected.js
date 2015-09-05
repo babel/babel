@@ -1,5 +1,3 @@
-"use strict";
-
 var _foo = "yes";
 
 export { _foo as foo };

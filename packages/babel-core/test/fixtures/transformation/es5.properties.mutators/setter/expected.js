@@ -1,5 +1,3 @@
-"use strict";
-
 var obj = Object.defineProperties({}, {
   foo: {
     set: function set(value) {

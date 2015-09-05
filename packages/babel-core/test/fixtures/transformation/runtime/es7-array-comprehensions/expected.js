@@ -1,5 +1,3 @@
-"use strict";
-
 var _getIterator = require("babel-runtime/core-js/get-iterator")["default"];
 
 var arr = (function () {

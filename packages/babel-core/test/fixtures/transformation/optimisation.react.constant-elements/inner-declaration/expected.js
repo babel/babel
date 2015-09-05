@@ -1,5 +1,3 @@
-"use strict";
-
 function render() {
   var text = getText();
 

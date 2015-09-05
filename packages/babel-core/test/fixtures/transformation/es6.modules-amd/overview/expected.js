@@ -1,7 +1,5 @@
 define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, _foo, _fooBar, _directoryFooBar) {
-  "use strict";
-
-  Object.defineProperty(exports, "__esModule", {
+    Object.defineProperty(exports, "__esModule", {
     value: true
   });
 

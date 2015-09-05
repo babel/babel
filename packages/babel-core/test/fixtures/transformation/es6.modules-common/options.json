@@ -1,4 +1,4 @@
 {
-  "externalHelpers": true,
+  "plugins": ["external-helpers"],
   "modules": "common"
 }

@@ -1,5 +1,3 @@
-"use strict";
-
 function nextOdd(n) {
   return isEven(n) ? n + 1 : n + 2;
 }

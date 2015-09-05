@@ -1,5 +1,3 @@
-"use strict";
-
 function foo() {
   var _this = this;
 

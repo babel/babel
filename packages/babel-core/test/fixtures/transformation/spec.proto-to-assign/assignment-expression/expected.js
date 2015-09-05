@@ -1,5 +1,3 @@
-"use strict";
-
 var _foo, _foo$bar, _foo$bar2;
 
 console.log((_foo = foo, babelHelpers.defaults(_foo, bar), _foo));

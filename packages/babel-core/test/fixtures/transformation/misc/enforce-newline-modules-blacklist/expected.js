@@ -1,5 +1,3 @@
-"use strict";
-
 export { foo };
 export { bar };
 

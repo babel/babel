@@ -1,5 +1,3 @@
-"use strict";
-
 var f = function f() {
   var f = 2;
 };

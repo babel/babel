@@ -72,8 +72,7 @@ require("./_transformation-helper").run("traceur", {
     "Syntax/StrictKeywordsInPattern",
   ]
 }, {
-  optional: ["es6.spec.symbols", "es6.spec.templateLiterals"],
-  stage: 0
+
 }, function (opts, task) {
   if (!_.contains(task.exec.loc, "module.js")) {
     opts.blacklist = ["strict"];

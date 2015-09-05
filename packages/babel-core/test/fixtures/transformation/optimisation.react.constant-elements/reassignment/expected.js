@@ -1,5 +1,3 @@
-"use strict";
-
 function render(text) {
   text += "yes";
 

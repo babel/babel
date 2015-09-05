@@ -1,5 +1,3 @@
-"use strict";
-
 var foo = "bar";
 
 var Foo = (function () {

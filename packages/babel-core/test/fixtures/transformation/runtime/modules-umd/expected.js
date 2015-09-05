@@ -11,7 +11,5 @@
     global.actual = mod.exports;
   }
 })(this, function (exports, _foo, _babelRuntimeHelpersInteropRequireDefault) {
-  "use strict";
-
-  var _foo2 = (0, _babelRuntimeHelpersInteropRequireDefault["default"])(_foo);
+    var _foo2 = (0, _babelRuntimeHelpersInteropRequireDefault["default"])(_foo);
 });

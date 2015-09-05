@@ -1,5 +1,3 @@
-"use strict";
-
 var BaseView = function BaseView() {
   babelHelpers.classCallCheck(this, BaseView);
 

@@ -16,7 +16,7 @@ suite("traverse", function () {
               "name": "foo",
             },
             "init": {
-              "type": "Literal",
+              "type": "StringLiteral",
               "value": "bar",
               "raw": "\'bar\'"
             }
@@ -41,7 +41,7 @@ suite("traverse", function () {
             }
           },
           "right": {
-            "type": "Literal",
+            "type": "StringLiteral",
             "value": "wow",
             "raw": "\'wow\'"
           }
@@ -54,14 +54,14 @@ suite("traverse", function () {
 
   test("traverse replace", function () {
     var replacement = {
-      type: "Literal",
+      type: "StringLiteral",
       value: "foo"
     };
     var ast2 = _.cloneDeep(ast);
 
     traverse(ast2, {
-      enter: function (node) {
-        if (node.type === "ThisExpression") return replacement;
+      enter: function (path) {
+        if (path.node.type === "ThisExpression") return replacement;
       }
     });
 
@@ -77,8 +77,8 @@ suite("traverse", function () {
     var actual = [];
 
     traverse(ast, {
-      enter: function (node) {
-        actual.push(node);
+      enter: function (path) {
+        actual.push(path.node);
       }
     });
 
@@ -103,8 +103,8 @@ suite("traverse", function () {
 
     traverse(ast, {
       blacklist: ["MemberExpression"],
-      enter: function (node) {
-        actual.push(node);
+      enter: function (path) {
+        actual.push(path.node);
       }
     });
 

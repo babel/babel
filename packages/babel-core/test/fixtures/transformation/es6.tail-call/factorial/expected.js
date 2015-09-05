@@ -1,5 +1,3 @@
-"use strict";
-
 function fact(_x2) {
   var _arguments = arguments;
   var _again = true;

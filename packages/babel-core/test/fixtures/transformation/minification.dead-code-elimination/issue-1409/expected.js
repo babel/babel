@@ -1,5 +1,3 @@
-"use strict";
-
 var a = new ((function () {
   function A() {
     babelHelpers.classCallCheck(this, A);

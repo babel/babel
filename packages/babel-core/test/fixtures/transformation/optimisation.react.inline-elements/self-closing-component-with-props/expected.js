@@ -1,5 +1,3 @@
-"use strict";
-
 ({
   type: Baz,
   ref: null,

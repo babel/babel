@@ -1,5 +1,3 @@
-"use strict";
-
 var obj = {
   f: function f() {
     (function f() {

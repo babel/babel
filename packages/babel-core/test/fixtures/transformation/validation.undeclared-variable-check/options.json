@@ -1,3 +1,3 @@
 {
-  "optional": ["validation.undeclaredVariableCheck"]
+  "plugins": ["transform-undeclared-variables-check"]
 }

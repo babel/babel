@@ -1,4 +1,3 @@
 {
-  "externalHelpers": true,
-  "optional": ["es7.decorators", "es7.classProperties"]
+  "plugins": ["external-helpers", "transform-decorators", "transform-class-properties"]
 }

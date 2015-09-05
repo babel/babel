@@ -1,5 +1,3 @@
-"use strict";
-
 var concat = function concat() {
   var x = arguments[0];
   var y = arguments[1];

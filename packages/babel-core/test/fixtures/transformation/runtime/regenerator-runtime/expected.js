@@ -1,5 +1,3 @@
-"use strict";
-
 var _regeneratorRuntime = require("babel-runtime/regenerator")["default"];
 
 void _regeneratorRuntime.mark(function callee$0$0() {

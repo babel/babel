@@ -1,8 +1,6 @@
 require("../lib/api/node");
 
 var buildExternalHelpers = require("../lib/tools/build-external-helpers");
-var PluginManager        = require("../lib/transformation/file/plugin-manager");
-var Transformer          = require("../lib/transformation/transformer");
 var transform            = require("../lib/transformation");
 var Pipeline             = require("../lib/transformation/pipeline");
 var assert               = require("assert");
@@ -446,41 +444,5 @@ suite("api", function () {
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") === -1);
     });
-  });
-
-  suite("plugins", function () {
-    test("unknown plugin", function () {
-      assert.throws(function () {
-        new PluginManager().subnormaliseString("foo bar");
-      }, /Unknown plugin/);
-    });
-
-    test("key collision", function () {
-      assert.throws(function () {
-        new PluginManager({
-          transformers: { "es6.arrowFunctions": true }
-        }).validate("foobar", { key: "es6.arrowFunctions" });
-      }, /collides with another/);
-    });
-
-    test("not transformer", function () {
-      assert.throws(function () {
-        new PluginManager().validate("foobar", {});
-      }, /didn't export a Plugin instance/);
-
-      assert.throws(function () {
-        new PluginManager().validate("foobar", "");
-      }, /didn't export a Plugin instance/);
-
-      assert.throws(function () {
-        new PluginManager().validate("foobar", []);
-      }, /didn't export a Plugin instance/);
-    });
-
-    test("object request");
-
-    test("string request");
-
-    test("transformer request");
   });
 });

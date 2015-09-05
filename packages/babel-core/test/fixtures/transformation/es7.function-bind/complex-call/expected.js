@@ -1,5 +1,3 @@
-"use strict";
-
 var _context;
 
 var _iterlib = require("iterlib");

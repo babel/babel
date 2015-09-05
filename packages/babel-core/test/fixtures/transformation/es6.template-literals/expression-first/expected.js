@@ -1,5 +1,3 @@
-"use strict";
-
 var foo = 5;
 var bar = 10;
 var baz = 15;

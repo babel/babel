@@ -1,6 +1,4 @@
 // single referenes
-"use strict";
-
 function r() {
   if (noNeedToWork) return 0;
 

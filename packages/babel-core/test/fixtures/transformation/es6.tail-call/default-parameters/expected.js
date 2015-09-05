@@ -1,5 +1,3 @@
-"use strict";
-
 function sum() {
   var _arguments = arguments;
   var _again = true;

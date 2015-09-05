@@ -1,5 +1,3 @@
-"use strict";
-
 while (value) {
   var foo = undefined;
 

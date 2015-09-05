@@ -1,5 +1,3 @@
-"use strict";
-
 var rect = {};
 
 var _rect$topLeft = babelHelpers.slicedToArray(rect.topLeft, 2);

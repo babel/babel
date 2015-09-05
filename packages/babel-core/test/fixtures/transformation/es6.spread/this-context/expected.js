@@ -1,5 +1,3 @@
-"use strict";
-
 var obj = {
   foo: function foo() {
     this.bar.apply(this, arguments);

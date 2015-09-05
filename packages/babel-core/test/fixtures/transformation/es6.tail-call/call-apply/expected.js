@@ -1,5 +1,3 @@
-"use strict";
-
 (function f(_x) {
   var _this = this,
       _arguments = arguments;

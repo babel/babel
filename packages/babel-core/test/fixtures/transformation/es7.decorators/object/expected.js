@@ -1,5 +1,3 @@
-"use strict";
-
 var obj = babelHelpers.createDecoratedObject([{
   key: "bar",
   decorators: [foo],

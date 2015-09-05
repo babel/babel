@@ -16,6 +16,13 @@ exports.fixtures = getFixtures(__dirname + "/fixtures", function () {
 
 require("babel-polyfill");
 
+require("../register")({
+  ignore: [
+    path.resolve(__dirname + "/../.."),
+    "node_modules"
+  ]
+});
+
 eval(buildExernalHelpers());
 
 global.assertNoOwnProperties = function (obj) {
@@ -56,11 +63,17 @@ var run = function (task, done) {
   var opts   = task.options;
 
   var getOpts = function (self) {
-    return _.merge({
+    var newOpts = _.merge({
       suppressDeprecationMessages: true,
       filename: self.loc,
       sourceMap: !!(task.sourceMappings || task.sourceMap)
     }, opts);
+
+    newOpts.plugins = (newOpts.plugins || []).map(function (str) {
+      return __dirname + "/../../babel-plugin-" + str;
+    });
+
+    return newOpts;
   };
 
   var execCode = exec.code;

@@ -1,5 +1,3 @@
-"use strict";
-
 function somethingAdvanced(_ref, p2, p3) {
   var _ref$topLeft = _ref.topLeft;
   _ref$topLeft = _ref$topLeft === undefined ? {} : _ref$topLeft;
@@ -20,7 +18,7 @@ function unpackObject(_ref2) {
 
 console.log(unpackObject({ title: "title", author: "author" }));
 
-var unpackArray = function unpackArray(_ref3, _ref4) {
+var unpackArray = function (_ref3, _ref4) {
   var _ref32 = babelHelpers.slicedToArray(_ref3, 3);
 
   var a = _ref32[0];

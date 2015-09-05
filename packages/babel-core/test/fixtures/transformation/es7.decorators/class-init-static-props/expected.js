@@ -1,5 +1,3 @@
-"use strict";
-
 var Foo = (function () {
   var _staticInitializers = {};
 

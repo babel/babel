@@ -1,5 +1,3 @@
-"use strict";
-
 var TestEmpty = (function (_ref) {
   babelHelpers.inherits(TestEmpty, _ref);
 

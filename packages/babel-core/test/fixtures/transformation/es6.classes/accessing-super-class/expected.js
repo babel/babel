@@ -1,5 +1,3 @@
-"use strict";
-
 var Test = (function (_Foo) {
   babelHelpers.inherits(Test, _Foo);
 

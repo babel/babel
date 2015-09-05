@@ -1,5 +1,3 @@
-"use strict";
-
 function f() {
   var _again = true;
 

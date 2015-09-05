@@ -1,7 +1,5 @@
-"use strict";
-
 module.exports = {
-  init: function init() {
+  init: function () {
     var _this = this;
 
     return new Promise(function (resolve, reject) {

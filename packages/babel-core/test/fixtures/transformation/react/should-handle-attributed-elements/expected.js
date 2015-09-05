@@ -1,7 +1,7 @@
 var HelloMessage = React.createClass({
   displayName: "HelloMessage",
 
-  render: function render() {
+  render: function () {
     return React.createElement(
       "div",
       null,

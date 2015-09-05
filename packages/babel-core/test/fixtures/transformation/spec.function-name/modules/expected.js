@@ -1,5 +1,3 @@
-"use strict";
-
 var _events2 = require("events");
 
 var _events3 = babelHelpers.interopRequireDefault(_events2);

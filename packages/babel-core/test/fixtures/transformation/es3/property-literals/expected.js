@@ -1,5 +1,3 @@
-"use strict";
-
 var obj = {
   "test": "foob",
   "!@#$": "foob",

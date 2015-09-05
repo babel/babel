@@ -1,5 +1,3 @@
-"use strict";
-
 var _bluebird = require("bluebird");
 
 var _bar;

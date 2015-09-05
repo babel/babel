@@ -1,5 +1,3 @@
-"use strict";
-
 var x = "y";
 var valueSet;
 var obj = Object.defineProperties({}, babelHelpers.defineProperty({}, x, {

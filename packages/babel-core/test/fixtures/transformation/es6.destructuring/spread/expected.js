@@ -1,5 +1,3 @@
-"use strict";
-
 function isSorted(_ref) {
   var _ref2 = babelHelpers.toArray(_ref);
 

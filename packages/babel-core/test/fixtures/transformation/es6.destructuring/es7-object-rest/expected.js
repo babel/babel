@@ -1,5 +1,3 @@
-"use strict";
-
 var z = {};
 var x = babelHelpers.objectWithoutProperties(z, []);
 var x = z.x;

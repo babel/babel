@@ -1,5 +1,3 @@
-"use strict";
-
 for (var _iterator = foo, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
   var _ref;
 

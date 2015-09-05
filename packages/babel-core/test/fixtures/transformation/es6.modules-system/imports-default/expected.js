@@ -1,7 +1,5 @@
 System.register(["foo"], function (_export) {
-  "use strict";
-
-  var foo, foo2;
+    var foo, foo2;
   return {
     setters: [function (_foo) {
       foo = _foo["default"];

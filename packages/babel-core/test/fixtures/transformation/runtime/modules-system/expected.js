@@ -22,9 +22,7 @@ System.register(["babel-runtime/helpers/to-consumable-array", "babel-runtime/reg
       _regeneratorRuntime = _babelRuntimeRegenerator["default"];
     }],
     execute: function () {
-      "use strict";
-
-      _export("generator", generator);
+            _export("generator", generator);
 
       marked0$0 = [generator].map(_regeneratorRuntime.mark);
       foo.apply(undefined, _toConsumableArray(bar));

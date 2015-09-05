@@ -1,5 +1,3 @@
-"use strict";
-
 function foo() {
   return bar([].concat(babelHelpers.slice.call(arguments)));
 }

@@ -1,5 +1,3 @@
-"use strict";
-
 function A() {
   var a = undefined;
 }

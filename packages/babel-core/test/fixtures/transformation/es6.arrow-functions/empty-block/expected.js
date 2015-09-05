@@ -1,3 +1,1 @@
-"use strict";
-
-var t = function t() {};
+var t = function () {};

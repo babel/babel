@@ -1,7 +1,5 @@
 // optimisation
 
-"use strict";
-
 function foo() {
   foo.apply(undefined, arguments);
 }

@@ -1,7 +1,5 @@
 System.register("my custom module name", [], function (_export) {
-  "use strict";
-
-  return {
+    return {
     setters: [],
     execute: function () {}
   };

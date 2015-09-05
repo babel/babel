@@ -1,5 +1,3 @@
-"use strict";
-
 var count = function count() {
   var _arguments = arguments;
   var _again = true;

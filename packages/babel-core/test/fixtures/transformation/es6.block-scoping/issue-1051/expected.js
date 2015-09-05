@@ -1,5 +1,3 @@
-"use strict";
-
 foo.func1 = function () {
   if (cond1) {
     for (;;) {

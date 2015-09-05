@@ -1,5 +1,3 @@
-"use strict";
-
 var x = (function () {
   x.prototype.f = function f() {
     1;

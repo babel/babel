@@ -1,5 +1,3 @@
-"use strict";
-
 var _null = null;
 export { _null as __proto__ };
 var foo = "";

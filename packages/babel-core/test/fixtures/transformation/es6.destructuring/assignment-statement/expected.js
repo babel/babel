@@ -1,5 +1,3 @@
-"use strict";
-
 var _f = f();
 
 var _f2 = babelHelpers.slicedToArray(_f, 2);

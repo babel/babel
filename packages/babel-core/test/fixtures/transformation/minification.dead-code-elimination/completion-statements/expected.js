@@ -1,5 +1,3 @@
-"use strict";
-
 for (var key in foo) {
   break;
 }

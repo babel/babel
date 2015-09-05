@@ -1,5 +1,3 @@
-"use strict";
-
 if (true) {
   var x;
 

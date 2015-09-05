@@ -1,5 +1,3 @@
-"use strict";
-
 var _Promise = require("babel-runtime/core-js/promise")["default"];
 
 var _Symbol = require("babel-runtime/core-js/symbol")["default"];

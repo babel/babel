@@ -1,5 +1,3 @@
-"use strict";
-
 var a = 1;
 
 var _loop = function (_a) {

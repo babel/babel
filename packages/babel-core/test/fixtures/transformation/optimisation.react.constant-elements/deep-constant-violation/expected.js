@@ -1,5 +1,3 @@
-"use strict";
-
 var _ref = <b></b>;
 
 var _ref2 = <span></span>;

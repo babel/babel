@@ -1,5 +1,3 @@
-"use strict";
-
 var foo = babelHelpers._extends({}, bar);
 
 var foo = babelHelpers._extends({}, bar, {

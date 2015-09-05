@@ -1,5 +1,3 @@
-"use strict";
-
 var s = Symbol("s");
 assert.ok((typeof s === "undefined" ? "undefined" : babelHelpers._typeof(s)) === "symbol");
 assert.equal(typeof s === "undefined" ? "undefined" : babelHelpers._typeof(s), "symbol");

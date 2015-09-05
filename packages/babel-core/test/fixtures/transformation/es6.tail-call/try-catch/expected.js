@@ -1,5 +1,3 @@
-"use strict";
-
 (function f(n) {
   if (n <= 0) {
     return "foo";

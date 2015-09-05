@@ -11,7 +11,5 @@
     global.MyLib = mod.exports;
   }
 })(this, function (exports) {
-  "use strict";
-
-  foobar();
+    foobar();
 });

@@ -1,5 +1,3 @@
-"use strict";
-
 ({
   type: "foo",
   ref: null,

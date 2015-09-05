@@ -1,5 +1,3 @@
-"use strict";
-
 var arr = (function () {
   var _arr = [];
   var _iteratorNormalCompletion = true;

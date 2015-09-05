@@ -1,5 +1,3 @@
-"use strict";
-
 var seattlers = (function () {
   var _seattlers = [];
   var _iteratorNormalCompletion = true;

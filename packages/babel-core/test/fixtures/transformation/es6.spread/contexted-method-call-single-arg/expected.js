@@ -1,5 +1,3 @@
-"use strict";
-
 var _foob, _foob$test;
 
 (_foob = foob).add.apply(_foob, babelHelpers.toConsumableArray(numbers));

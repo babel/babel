@@ -1,4 +1,3 @@
 {
-  "externalHelpers": true,
-  "optional": "es7.exportExtensions"
+  "plugins": ["external-helpers", "export-extensions"]
 }
