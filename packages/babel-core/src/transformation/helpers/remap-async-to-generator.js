@@ -45,6 +45,8 @@ export default function (path, callId) {
     declar._blockHoist = true;
     return declar;
   } else {
+    node.type = "FunctionExpression";
+
     if (id) {
       var state = { id };
       path.traverse(referenceVisitor, state);
