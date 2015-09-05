@@ -82,6 +82,12 @@ export function isReferenced(node: Object, parent: Object): boolean {
         return parent.local === node;
       }
 
+    // no: export NODE from "foo";
+    // no: export * as NODE from "foo";
+    case "ExportNamespaceSpecifier":
+    case "ExportDefaultSpecifier":
+      return false;
+
     // no: <div NODE="foo" />
     case "JSXAttribute":
       return parent.name !== node;
