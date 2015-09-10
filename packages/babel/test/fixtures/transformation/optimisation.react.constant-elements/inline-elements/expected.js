@@ -1,6 +1,9 @@
 "use strict";
 
+var _typeofReactElement = typeof Symbol === "function" && Symbol["for"] && Symbol["for"]("react.element") || 60103;
+
 var _ref = {
+  $$typeof: _typeofReactElement,
   type: "foo",
   ref: null,
   props: {},
@@ -13,6 +16,7 @@ function render() {
 function render() {
   var text = getText();
   var _ref2 = {
+    $$typeof: _typeofReactElement,
     type: "foo",
     ref: null,
     props: {

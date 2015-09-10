@@ -61,6 +61,7 @@ export var visitor = {
     }
 
     // metadata
+    pushElemProp("$$typeof", file.addHelper("typeof-react-element"));
     pushElemProp("type", type);
     pushElemProp("ref", t.literal(null));
 

@@ -92,6 +92,7 @@ export default class File {
     "temporal-undefined",
     "temporal-assert-defined",
     "self-global",
+    "typeof-react-element",
     "default-props",
     "instanceof",
 
