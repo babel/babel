@@ -60,11 +60,6 @@ export var visitor = {
       objProps.push(t.property("init", key, value));
     }
 
-    // metadata
-    pushElemProp("$$typeof", file.addHelper("typeof-react-element"));
-    pushElemProp("type", type);
-    pushElemProp("ref", t.literal(null));
-
     if (node.children.length) {
       var children = react.buildChildren(node);
       children = children.length === 1 ? children[0] : t.arrayExpression(children);
@@ -85,10 +80,14 @@ export var visitor = {
       props = t.callExpression(file.addHelper("default-props"), [t.memberExpression(type, t.identifier("defaultProps")), props]);
     }
 
-    pushElemProp("props", props);
-
-    // key
+    // metadata
+    pushElemProp("$$typeof", file.addHelper("typeof-react-element"));
+    pushElemProp("type", type);
     pushElemProp("key", key);
+    pushElemProp("ref", t.literal(null));
+
+    pushElemProp("props", props);
+    pushElemProp("_owner", t.literal(null));
 
     return obj;
   }
