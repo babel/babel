@@ -177,7 +177,8 @@ export var visitor = {
     if (!state.deopted && !state.references.length) {
       // we only have shorthands and there are no other references
       if (state.candidates.length) {
-        if (!file.transformers["es6.arrowFunctions"].canTransform()) {
+        if (t.isArrowFunctionExpression(node) &&
+            !file.transformers["es6.arrowFunctions"].canTransform()) {
           throw file.errorWithNode(restParam, messages.get("noRestArrowParam"));
         }
         for (var candidate of (state.candidates: Array)) {
