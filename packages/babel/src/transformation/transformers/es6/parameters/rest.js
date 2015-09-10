@@ -1,5 +1,6 @@
 import * as util from  "../../../../util";
 import * as t from "../../../../types";
+import * as messages from "../../../../messages";
 
 /**
  * [Please add a description.]
@@ -130,7 +131,7 @@ export var visitor = {
    * [Please add a description.]
    */
 
-  Function(node, parent, scope) {
+  Function(node, parent, scope, file) {
     if (!hasRest(node)) return;
 
     var restParam = node.params.pop();
@@ -176,6 +177,9 @@ export var visitor = {
     if (!state.deopted && !state.references.length) {
       // we only have shorthands and there are no other references
       if (state.candidates.length) {
+        if (!file.transformers["es6.arrowFunctions"].canTransform()) {
+          throw file.errorWithNode(restParam, messages.get("noRestArrowParam"));
+        }
         for (var candidate of (state.candidates: Array)) {
           candidate.replaceWith(argsId);
           if (candidate.parentPath.isMemberExpression()) {
