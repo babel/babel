@@ -222,7 +222,7 @@ function loadTemplates(): Object {
   }
 
   for (var name of (fs.readdirSync(templatesLoc): Array)) {
-    if (name[0] === ".") return;
+    if (name[0] === ".") continue;
 
     var key  = path.basename(name, path.extname(name));
     var loc  = path.join(templatesLoc, name);
