@@ -84,7 +84,7 @@ function monkeypatch() {
   }
   var Definition = require(definitionLoc).Definition;
 
-  // if there are decotators, then visit each
+  // if there are decorators, then visit each
   function visitDecorators(node) {
     if (!node.decorators) {
       return;
