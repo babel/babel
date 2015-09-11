@@ -175,8 +175,6 @@ export function evaluate(): { confident: boolean; value: any } {
         case "<<": return left << right;
         case ">>": return left >> right;
         case ">>>": return left >>> right;
-        case "in": return left in right;
-        case "instanceof": return left instanceof right;
       }
     }
 
