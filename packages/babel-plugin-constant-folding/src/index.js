@@ -66,7 +66,11 @@ export default function ({ Plugin, types: t }) {
       Expression: {
         exit() {
           var res = this.evaluate();
-          if (res.confident) return t.valueToNode(res.value);
+          // check if evaluated code is less bytes than original code
+          // 1/3 vs 0.3333333
+          if (res.confident && this.getSource().length >= String(res.value).length) {
+            return t.valueToNode(res.value);
+          }
         }
       }
     }
