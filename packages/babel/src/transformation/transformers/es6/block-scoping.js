@@ -116,6 +116,18 @@ export var visitor = {
       var blockScoping = new BlockScoping(null, this, parent, scope, file);
       blockScoping.run();
     }
+  },
+
+  Function: {
+    exit(node, parent, scope, file) {
+      if (file.transformers["es6.spec.blockScoping"].canTransform()) {
+        var blockScoping = new BlockScoping(null, this, parent, scope, file);
+        blockScoping.run();
+        if (blockScoping.hasLetReferences) {
+          node.params = [];
+        }
+      }
+    }
   }
 };
 
