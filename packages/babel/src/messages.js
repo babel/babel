@@ -23,7 +23,6 @@ export const MESSAGES = {
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
   lostTrackNodePath: "We lost track of this node's position, likely because the AST was directly manipulated",
-  noRestArrowParam: "Arrow functions aren't allowed to have a rest when es6.arrowFunctions is disabled",
 
   modulesIllegalExportName: "Illegal export $1",
   modulesDuplicateDeclarations: "Duplicate module declarations with the same source but in different scopes",

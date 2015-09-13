@@ -1,6 +1,5 @@
 import * as util from  "../../../../util";
 import * as t from "../../../../types";
-import * as messages from "../../../../messages";
 
 /**
  * [Please add a description.]
@@ -128,10 +127,23 @@ function hasRest(node) {
 export var visitor = {
 
   /**
+   * Arrow functions with rest params are desugared to expose `arguments`.
+   */
+
+  ArrowFunctionExpression(node) {
+    if (!hasRest(node)) return;
+
+    this.ensureBlock();
+    node.expression = false;
+    node.type = "FunctionExpression";
+    node.shadow = node.shadow || true;
+  },
+
+  /**
    * [Please add a description.]
    */
 
-  Function(node, parent, scope, file) {
+  Function(node, parent, scope) {
     if (!hasRest(node)) return;
 
     var restParam = node.params.pop();
@@ -177,10 +189,6 @@ export var visitor = {
     if (!state.deopted && !state.references.length) {
       // we only have shorthands and there are no other references
       if (state.candidates.length) {
-        if (t.isArrowFunctionExpression(node) &&
-            !file.transformers["es6.arrowFunctions"].canTransform()) {
-          throw file.errorWithNode(restParam, messages.get("noRestArrowParam"));
-        }
         for (var candidate of (state.candidates: Array)) {
           candidate.replaceWith(argsId);
           if (candidate.parentPath.isMemberExpression()) {
