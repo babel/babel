@@ -119,9 +119,9 @@ export function isReferenced(node: Object, parent: Object): boolean {
       return parent.right === node;
 
     // no: [NODE = foo] = [];
-    // no: [foo = NODE] = [];
+    // yes: [foo = NODE] = [];
     case "AssignmentPattern":
-      return false;
+      return parent.right === node;
 
     // no: [NODE] = [];
     // no: ({ NODE }) = [];
