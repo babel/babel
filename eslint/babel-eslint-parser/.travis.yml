@@ -5,3 +5,4 @@ language: node_js
 node_js:
   - '0.12'
   - 'io.js'
+  - '4'
