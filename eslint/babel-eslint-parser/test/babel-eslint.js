@@ -63,7 +63,7 @@ function parseAndAssertSame(code) {
     loc: true,
     range: true,
     comment: true,
-    attachComments: true
+    attachComment: true
   });
   var acornAST = babelEslint.parse(code);
   try {
@@ -302,4 +302,29 @@ describe("acorn-to-esprima", function () {
   it("empty", function () {
     parseAndAssertSame("");
   });
+
+  it("jsdoc", function () {
+    parseAndAssertSame([
+      "/**",
+       "* @param {object} options",
+       "* @return {number}",
+       "*/",
+      "const test = function({ a, b, c }) {",
+        "return a + b + c;",
+      "};",
+      "module.exports = test;"
+    ].join("\n"));
+  })
+
+  it("empty block with comment", function () {
+    parseAndAssertSame([
+      "function a () {",
+        "try {",
+          "b();",
+        "} catch (e) {",
+          "// asdf",
+        "}",
+      "}"
+    ].join("\n"));
+  })
 });
