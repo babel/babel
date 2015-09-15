@@ -15,10 +15,8 @@ program.option("-e, --eval [script]", "Evaluate script");
 program.option("-p, --print [code]", "Evaluate script and print result");
 program.option("-i, --ignore [regex]", "Ignore all files that match this regex when using the require hook");
 program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]");
-program.option("-r, --stage [stage]", "Enable support for specific ECMAScript stages");
-program.option("-w, --whitelist [whitelist]", "Whitelist of transformers separated by comma to ONLY use", util.list);
-program.option("-b, --blacklist [blacklist]", "Blacklist of transformers separated by comma to NOT use", util.list);
-program.option("-o, --optional [optional]", "List of optional transformers separated by comma to enable", util.list);
+program.option("-w, --plugins [string]", "TODO", util.list);
+program.option("-b, --presets [string]", "TODO", util.list);
 
 var pkg = require("../package.json");
 program.version(pkg.version);
@@ -29,11 +27,10 @@ program.parse(process.argv);
 
 babel.register({
   extensions:   program.extensions,
-  blacklist:    program.blacklist,
-  whitelist:    program.whitelist,
   optional:     program.optional,
   ignore:       program.ignore,
-  stage:        program.stage,
+  plugins:      program.plugins,
+  presets:      program.presets,
 });
 
 //
