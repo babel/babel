@@ -92,22 +92,17 @@ pp.parseSpread = function (refShorthandDefaultPos) {
 pp.parseRest = function () {
   let node = this.startNode();
   this.next();
-  if (this.match(tt.name) || this.match(tt.bracketL)) {
-    node.argument = this.parseBindingAtom();
-  } else {
-    this.unexpected();
-  }
+  node.argument = this.parseIdentifier();
   return this.finishNode(node, "RestElement");
 };
 
 // Parses lvalue (assignable) atom.
 
 pp.parseBindingAtom = function () {
-  if (this.match(tt.name)) {
-    return this.parseIdentifier(true);
-  }
-
   switch (this.state.type) {
+    case tt.name:
+      return this.parseIdentifier(true);
+
     case tt.bracketL:
       let node = this.startNode();
       this.next();
