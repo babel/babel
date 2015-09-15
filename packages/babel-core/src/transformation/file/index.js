@@ -14,6 +14,7 @@ import includes from "lodash/collection/includes";
 import traverse from "babel-traverse";
 import resolve from "try-resolve";
 import Logger from "./logger";
+import Store from "../../store";
 import Plugin from "../plugin";
 import parse from "../../helpers/parse";
 import * as util from  "../../util";
@@ -29,7 +30,8 @@ var errorVisitor = {
     }
   }
 };
-export default class File {
+
+export default class File extends Store {
   constructor(opts = {}, pipeline) {
     this.pipeline = pipeline;
 
