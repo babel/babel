@@ -120,8 +120,11 @@ pp.parseBindingAtom = function () {
 pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
   var elts = [], first = true;
   while (!this.eat(close)) {
-    if (first) first = false;
-    else this.expect(tt.comma);
+    if (first) {
+      first = false;
+    } else {
+      this.expect(tt.comma);
+    }
     if (allowEmpty && this.match(tt.comma)) {
       elts.push(null);
     } else if (allowTrailingComma && this.eat(close)) {
