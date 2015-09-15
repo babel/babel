@@ -202,7 +202,7 @@ pp.checkLVal = function (expr, isBinding, checkClashes) {
       this.checkLVal(expr.left, isBinding, checkClashes);
       break;
 
-    case "SpreadProperty":
+    case "RestProperty":
     case "RestElement":
       this.checkLVal(expr.argument, isBinding, checkClashes);
       break;
