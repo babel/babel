@@ -23,6 +23,7 @@ export default function ({ types: t }) {
       var binding = scope.getBinding(node.name);
       if (!binding || binding.references > 1 || !binding.constant) return;
       if (binding.kind === "param" || binding.kind === "module") return;
+      if (t.isExportDeclaration(binding.path.parent)) return;
 
       var replacement = binding.path.node;
       if (t.isVariableDeclarator(replacement)) {
