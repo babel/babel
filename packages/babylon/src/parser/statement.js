@@ -13,18 +13,8 @@ const pp = Parser.prototype;
 
 pp.parseTopLevel = function (file, program) {
   program.sourceType = this.options.sourceType;
-  program.body = [];
 
-  let first = true;
-  while (!this.match(tt.eof)) {
-    let stmt = this.parseStatement(true, true);
-    program.body.push(stmt);
-    if (first) {
-      if (this.isUseStrict(stmt)) this.setStrict(true);
-      first = false;
-    }
-  }
-  this.next();
+  this.parseBlockBody(program, true, tt.eof);
 
   file.program  = this.finishNode(program, "Program");
   file.comments = this.state.comments;
@@ -34,6 +24,16 @@ pp.parseTopLevel = function (file, program) {
 };
 
 const loopLabel = {kind: "loop"}, switchLabel = {kind: "switch"};
+
+// TODO
+
+pp.parseDirective = function () {
+  let node = this.startNode();
+  node.raw = this.input.slice(this.state.start, this.state.end);
+  node.value = node.raw.slice(1, -1); // remove quotes
+  this.next();
+  return this.finishNode(node, "Directive");
+};
 
 // Parse a single statement.
 //
@@ -415,20 +415,39 @@ pp.parseExpressionStatement = function (node, expr) {
 // function bodies).
 
 pp.parseBlock = function (allowStrict) {
-  let node = this.startNode(), first = true, oldStrict;
-  node.body = [];
+  let node = this.startNode();
   this.expect(tt.braceL);
-  while (!this.eat(tt.braceR)) {
-    let stmt = this.parseStatement(true);
-    node.body.push(stmt);
-    if (first && allowStrict && this.isUseStrict(stmt)) {
-      oldStrict = this.state.strict;
-      this.setStrict(this.state.strict = true);
-    }
-    first = false;
-  }
-  if (oldStrict === false) this.setStrict(false);
+  this.parseBlockBody(node, allowStrict, tt.braceR);
   return this.finishNode(node, "BlockStatement");
+};
+
+// TODO
+
+pp.parseBlockBody = function (node, allowStrict, end) {
+  node.body = [];
+  node.directives = [];
+
+  let parsedNonDirective = false;
+  let oldStrict;
+
+  while (!this.eat(end)) {
+    if (!parsedNonDirective && this.match(tt.string)) {
+      let stmt = this.parseDirective();
+      node.directives.push(stmt);
+
+      if (allowStrict && stmt.value === "use strict") {
+        oldStrict = this.state.strict;
+        this.setStrict(this.state.strict = true);
+      }
+    } else {
+      parsedNonDirective = true;
+      node.body.push(this.parseStatement(true));
+    }
+  }
+
+  if (oldStrict === false) {
+    this.setStrict(false);
+  }
 };
 
 // Parse a regular `for` loop. The disambiguation code in
