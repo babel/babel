@@ -8,6 +8,15 @@ const pp = Parser.prototype;
 
 // TODO
 
+pp.addExtra = function (node, key, val) {
+  if (!node) return;
+
+  var extra = node.extra = node.extra || {};
+  extra[key] = val;
+};
+
+// TODO
+
 pp.isRelational = function (op) {
   return this.match(tt.relational) && this.state.value === op;
 };
