@@ -6,7 +6,11 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "babel/babel",
-  "main": "lib/index.js"
-}  "bin": {
+  "main": "lib/index.js",
+  "dependencies": {
+    "babel-runtime": "^5.8.20"
+  },
+  "bin": {
     "babylon": "./bin/babylon.js"
   }
+}
