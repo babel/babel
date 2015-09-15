@@ -1,5 +1,5 @@
 {
   "features": {
-    "es7.decorators": true
+    "decorators": true
   }
 }

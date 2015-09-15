@@ -1,6 +1,6 @@
 {
   "features": {
-    "es7.comprehensions": true
+    "comprehensions": true
   },
   "throws": "Unexpected token (1:14)"
 }
