@@ -635,7 +635,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
     }
     if (this.hasFeature("objectRestSpread") && this.match(tt.ellipsis)) {
       prop = this.parseSpread();
-      prop.type = "SpreadProperty";
+      prop.type = isPattern ? "RestProperty" : "SpreadProperty";
       node.properties.push(prop);
       continue;
     }
