@@ -6,12 +6,6 @@ const pp = Parser.prototype;
 
 // ## Parser utilities
 
-// Test whether a statement node is the string literal `"use strict"`.
-
-pp.isUseStrict = function (stmt) {
-  return stmt.type === "ExpressionStatement" && stmt.expression.type === "StringLiteral" && stmt.expression.raw.slice(1, -1) === "use strict";
-};
-
 // TODO
 
 pp.isRelational = function (op) {
