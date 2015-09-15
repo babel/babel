@@ -253,7 +253,7 @@ pp.parseSubscripts = function(base, startPos, startLoc, noCalls) {
 
       let node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
-      node.arguments = this.parseCallExpressionArguments(tt.parenR, this.options.features["es7.trailingFunctionCommas"], possibleAsync);
+      node.arguments = this.parseCallExpressionArguments(tt.parenR, this.hasFeature("trailingFunctionCommas"), possibleAsync);
       base = this.finishNode(node, "CallExpression");
 
       if (possibleAsync && this.shouldParseAsyncArrow()) {
@@ -305,7 +305,7 @@ pp.shouldParseAsyncArrow = function () {
 };
 
 pp.parseAsyncArrowFromCallExpression = function (node, call) {
-  if (!this.options.features["es7.asyncFunctions"]) this.unexpected();
+  if (!this.hasFeature("asyncFunctions")) this.unexpected();
   this.expect(tt.arrow);
   return this.parseArrowExpression(node, call.arguments, true);
 };
@@ -349,7 +349,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       node = this.startNode();
       let id = this.parseIdentifier(true);
 
-      if (this.options.features["es7.asyncFunctions"]) {
+      if (this.hasFeature("asyncFunctions")) {
         if (id.name === "await") {
           if (this.inAsync) return this.parseAwait(node);
         } else if (id.name === "async" && this.match(tt._function) && !this.canInsertSemicolon()) {
@@ -370,7 +370,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       return id;
 
     case tt._do:
-      if (this.options.features["es7.doExpressions"]) {
+      if (this.hasFeature("doExpressions")) {
         let node = this.startNode();
         this.next();
         var oldInFunction = this.state.inFunction;
@@ -415,7 +415,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       node = this.startNode();
       this.next();
       // check whether this is array comprehension or regular array
-      if (this.options.features["es7.comprehensions"] && this.match(tt._for)) {
+      if (this.hasFeature("comprehensions") && this.match(tt._for)) {
         return this.parseComprehension(node, false);
       }
       node.elements = this.parseExprList(tt.bracketR, true, true, refShorthandDefaultPos);
@@ -481,7 +481,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   let val;
   this.next();
 
-  if (this.options.features["es7.comprehensions"] && this.match(tt._for)) {
+  if (this.hasFeature("comprehensions") && this.match(tt._for)) {
     return this.parseComprehension(this.startNodeAt(startPos, startLoc), true);
   }
 
@@ -493,7 +493,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
       first = false;
     } else {
       this.expect(tt.comma);
-      if (this.match(tt.parenR) && this.options.features["es7.trailingFunctionCommas"]) {
+      if (this.match(tt.parenR) && this.hasFeature("trailingFunctionCommas")) {
         optionalCommaStart = this.state.start;
         break;
       }
@@ -571,7 +571,7 @@ pp.parseNew = function () {
   node.callee = this.parseNoCallExpr();
 
   if (this.eat(tt.parenL)) {
-    node.arguments = this.parseExprList(tt.parenR, this.options.features["es7.trailingFunctionCommas"]);
+    node.arguments = this.parseExprList(tt.parenR, this.hasFeature("trailingFunctionCommas"));
     this.toReferencedList(node.arguments);
   } else {
     node.arguments = [];
@@ -633,7 +633,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
       prop.decorators = decorators;
       decorators = [];
     }
-    if (this.options.features["es7.objectRestSpread"] && this.match(tt.ellipsis)) {
+    if (this.hasFeature("objectRestSpread") && this.match(tt.ellipsis)) {
       prop = this.parseSpread();
       prop.type = "SpreadProperty";
       node.properties.push(prop);
@@ -648,7 +648,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
     if (!isPattern) {
       isGenerator = this.eat(tt.star);
     }
-    if (!isPattern && this.options.features["es7.asyncFunctions"] && this.isContextual("async")) {
+    if (!isPattern && this.hasFeature("asyncFunctions") && this.isContextual("async")) {
       if (isGenerator) this.unexpected();
       var asyncId = this.parseIdentifier();
       if (this.match(tt.colon) || this.match(tt.parenL) || this.match(tt.braceR)) {
@@ -736,7 +736,7 @@ pp.initFunction = function (node, isAsync) {
   node.id = null;
   node.generator = false;
   node.expression = false;
-  if (this.options.features["es7.asyncFunctions"]) {
+  if (this.hasFeature("asyncFunctions")) {
     node.async = !!isAsync;
   }
 };
@@ -747,7 +747,7 @@ pp.parseMethod = function (isGenerator, isAsync) {
   let node = this.startNode();
   this.initFunction(node, isAsync);
   this.expect(tt.parenL);
-  node.params = this.parseBindingList(tt.parenR, false, this.options.features["es7.trailingFunctionCommas"]);
+  node.params = this.parseBindingList(tt.parenR, false, this.hasFeature("trailingFunctionCommas"));
   node.generator = isGenerator;
   this.parseFunctionBody(node);
   return this.finishNode(node, "FunctionExpression");
