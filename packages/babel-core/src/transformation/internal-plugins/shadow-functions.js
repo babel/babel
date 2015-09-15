@@ -1,8 +1,19 @@
+import Plugin from "../plugin";
 import * as t from "babel-types";
 
-export var metadata = {
-  group: "builtin-trailing"
-};
+export default new Plugin({
+  visitor: {
+    ThisExpression(path) {
+      return remap(path, "this", () => t.thisExpression());
+    },
+
+    ReferencedIdentifier(path) {
+      if (path.node.name === "arguments") {
+        return remap(path, "arguments", () => t.identifier("arguments"));
+      }
+    }
+  }
+});
 
 function shouldShadow(path, shadowPath) {
   if (path.is("_forceShadow")) {
@@ -53,15 +64,3 @@ function remap(path, key, create) {
 
   return id;
 }
-
-export var visitor = {
-  ThisExpression() {
-    return remap(this, "this", () => t.thisExpression());
-  },
-
-  ReferencedIdentifier(node) {
-    if (node.name === "arguments") {
-      return remap(this, "arguments", () => t.identifier("arguments"));
-    }
-  }
-};
