@@ -62,10 +62,6 @@ export function parse(code, opts = {}) {
   };
   opts.features = {};
 
-  for (var key in transform.pipeline.transformers) {
-    opts.features[key] = true;
-  }
-
   var ast = babylon.parse(code, opts);
 
   if (opts.onToken) {
