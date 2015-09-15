@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-transform-merge-sibling-variables",
+  "version": "1.0.2",
+  "description": "Merge sibling variables into one.",
+  "repository": "babel-plugin-transform-merge-sibling-variables",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

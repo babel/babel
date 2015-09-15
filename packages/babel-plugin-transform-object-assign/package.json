@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-transform-object-assign",
+  "version": "5.0.0",
+  "description": "Replace Object.assign with an inline helper",
+  "author": "Jed Watson",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

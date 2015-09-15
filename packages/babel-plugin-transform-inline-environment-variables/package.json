@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-transform-inline-environment-variables",
+  "version": "1.0.1",
+  "description": "Inline environment variables",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

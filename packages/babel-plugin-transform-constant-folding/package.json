@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-transform-constant-folding",
+  "version": "1.0.1",
+  "description": "Compile static constants (ie. code that we can statically determine to be constant at runtime)",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

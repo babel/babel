@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-transform-async-functions",
+  "version": "1.0.0",
+  "description": "Compile async functions to ES5",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

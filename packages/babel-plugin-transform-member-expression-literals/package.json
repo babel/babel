@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-transform-member-expression-literals",
+  "version": "1.0.1",
+  "description": "Turn valid member expression property literals into plain identifiers",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

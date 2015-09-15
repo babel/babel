@@ -1,0 +1,14 @@
+{
+  "name": "babel-plugin-transform-runtime",
+  "version": "1.0.7",
+  "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "babel-runtime": "^5.8.20"
+  }
+}

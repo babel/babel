@@ -1,0 +1,13 @@
+{
+  "name": "babel-plugin-builder-react-jsx",
+  "version": "1.0.0",
+  "description": "",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "dependencies": {
+    "babel-runtime": "^5.8.20",
+    "esutils": "^2.0.0",
+    "lodash": "^3.10.0"
+  }
+}

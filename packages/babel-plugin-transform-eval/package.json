@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-transform-eval",
+  "version": "1.0.1",
+  "description": "Compile eval calls with string literals",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

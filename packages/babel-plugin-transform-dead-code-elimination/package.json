@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-transform-dead-code-elimination",
+  "version": "1.0.2",
+  "description": "Eliminate dead code",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

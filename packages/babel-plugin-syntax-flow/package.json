@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-syntax-flow",
+  "version": "1.0.0",
+  "description": "",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}
