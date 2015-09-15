@@ -28,7 +28,7 @@ export function push(mutatorMap, node, kind, file) {
   }
 
   if (map.value || map.initializer) {
-    throw file.errorWithNode(node, "Key conflict with sibling node");
+    throw file.buildCodeFrameError(node, "Key conflict with sibling node");
   }
 
   if (node.value) {

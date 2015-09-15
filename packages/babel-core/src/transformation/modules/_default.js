@@ -37,7 +37,7 @@ export default class DefaultFormatter {
 
     var existingScope = this.sourceScopes[source];
     if (existingScope && existingScope !== path.scope) {
-      throw path.errorWithNode(messages.get("modulesDuplicateDeclarations"));
+      throw path.buildCodeFrameError(messages.get("modulesDuplicateDeclarations"));
     }
 
     this.sourceScopes[source] = path.scope;
@@ -180,7 +180,7 @@ export default class DefaultFormatter {
 
   checkExportIdentifier(node) {
     if (t.isIdentifier(node, { name: "__esModule" })) {
-      throw this.file.errorWithNode(node, messages.get("modulesIllegalExportName", node.name));
+      throw this.file.buildCodeFrameError(node, messages.get("modulesIllegalExportName", node.name));
     }
   }
 

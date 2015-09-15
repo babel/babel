@@ -20,6 +20,15 @@ import * as util from  "../../util";
 import path from "path";
 import * as t from "babel-types";
 
+var errorVisitor = {
+  enter(path, state) {
+    var loc = path.node.loc;
+    if (loc) {
+      state.loc = loc;
+      path.stop();
+    }
+  }
+};
 export default class File {
   constructor(opts = {}, pipeline) {
     this.pipeline = pipeline;
@@ -383,17 +392,26 @@ export default class File {
     return uid;
   }
 
-  errorWithNode(node, msg, Error = SyntaxError) {
-    var err;
+  buildCodeFrameError(node, msg, Error = SyntaxError) {
     var loc = node && (node.loc || node._loc);
+
+    var err = new Error(msg);
+
     if (loc) {
-      err = new Error(`Line ${loc.start.line}: ${msg}`);
       err.loc = loc.start;
     } else {
-      // todo: find errors with nodes inside to at least point to something
-      err = new Error("There's been an error on a dynamic node. This is almost certainly an internal error. Please report it.");
+      traverse(node, errorVisitor, err);
+
+      err.message += " (This is an error on an internal node. Probably an internal error";
+
+      if (err.loc) {
+        err.message += ". Location has been estimated.";
+      }
+
+      err.message += ")";
     }
-    return err;
+
+    return err
   }
 
   mergeSourceMap(map: Object) {
