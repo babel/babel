@@ -2197,8 +2197,16 @@ describe("for loop with var decl and no update expression", function() {
 });
 
 describe("generator function prototype", function() {
+  function getProto(obj) {
+    return Object.getPrototypeOf
+      ? Object.getPrototypeOf(obj)
+      : obj.__proto__;
+  }
+
   it("should follow the expected object model", function() {
-    var GeneratorFunctionPrototype = f.__proto__;
+
+
+    var GeneratorFunctionPrototype = getProto(f);
     var GeneratorFunction = GeneratorFunctionPrototype.constructor;
 
     assert.strictEqual(GeneratorFunction.name, 'GeneratorFunction');
@@ -2207,8 +2215,8 @@ describe("generator function prototype", function() {
     assert.strictEqual(GeneratorFunctionPrototype.prototype.constructor,
                        GeneratorFunctionPrototype);
     assert.strictEqual(GeneratorFunctionPrototype.prototype,
-                       f.prototype.__proto__);
-    assert.strictEqual(GeneratorFunctionPrototype.__proto__,
+                       getProto(f.prototype));
+    assert.strictEqual(getProto(GeneratorFunctionPrototype),
                        Function.prototype);
     assert.strictEqual(GeneratorFunctionPrototype.name,
                        "GeneratorFunctionPrototype");
@@ -2220,7 +2228,7 @@ describe("generator function prototype", function() {
 
     var g = f();
     assert.ok(g instanceof f);
-    assert.strictEqual(g.__proto__, f.prototype);
+    assert.strictEqual(getProto(g), f.prototype);
 
     assert.deepEqual([], Object.getOwnPropertyNames(f.prototype));
     // assert.deepEqual([], Object.getOwnPropertyNames(g));
@@ -2237,9 +2245,9 @@ describe("generator function prototype", function() {
       yield 1;
     }
 
-    assert.strictEqual(f.__proto__, f2.__proto__);
+    assert.strictEqual(getProto(f), getProto(f2));
     assert.strictEqual(f.hasOwnProperty('constructor'), false);
-    assert.strictEqual(f.__proto__.constructor.name, 'GeneratorFunction');
+    assert.strictEqual(getProto(f).constructor.name, 'GeneratorFunction');
 
     // Intentionally at the end to test hoisting.
     function* f() {
