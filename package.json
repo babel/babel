@@ -60,7 +60,8 @@
       "no-labels": 0,
       "no-process-exit": 0,
       "camelcase": 0,
-      "no-console": 0
+      "no-console": 0,
+      "no-constant-condition": 0
     },
     "env": {
       "node": true
