@@ -2,30 +2,22 @@ import getFunctionArity from "./get-function-arity";
 import * as util from  "../../util";
 import * as t from "babel-types";
 
-function visitIdentifier(context, node, scope, state) {
-  // check if this node matches our function id
-  if (node.name !== state.name) return;
-
-  // check that we don't have a local variable declared as that removes the need
-  // for the wrapper
-  var localDeclar = scope.getBindingIdentifier(state.name);
-  if (localDeclar !== state.outerDeclar) return;
-
-  state.selfReference = true;
-  context.stop();
-}
-
 var visitor = {
-  ReferencedIdentifier(node, parent, scope, state) {
-    visitIdentifier(this, node, scope, state);
-  },
+  "ReferencedIdentifier|BindingIdentifier"(path, state) {
+    // check if this node matches our function id
+    if (path.node.name !== state.name) return;
 
-  BindingIdentifier(node, parent, scope, state) {
-    visitIdentifier(this, node, scope, state);
+    // check that we don't have a local variable declared as that removes the need
+    // for the wrapper
+    var localDeclar = path.scope.getBindingIdentifier(state.name);
+    if (localDeclar !== state.outerDeclar) return;
+
+    state.selfReference = true;
+    path.stop();
   }
 };
 
-var wrap = function (state, method, id, scope) {
+function wrap(state, method, id, scope) {
   if (state.selfReference) {
     if (scope.hasBinding(id.name) && !scope.hasGlobal(id.name)) {
       // we can just munge the local binding
@@ -54,9 +46,9 @@ var wrap = function (state, method, id, scope) {
 
   method.id = id;
   scope.getProgramParent().references[id.name] = true;
-};
+}
 
-var visit = function (node, name, scope) {
+function visit(node, name, scope) {
   var state = {
     selfAssignment: false,
     selfReference:  false,
@@ -100,7 +92,7 @@ var visit = function (node, name, scope) {
   }
 
   return state;
-};
+}
 
 export function custom(node, id, scope) {
   var state = visit(node, id.name, scope);

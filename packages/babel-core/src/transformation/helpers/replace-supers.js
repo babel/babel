@@ -14,19 +14,19 @@ function isMemberExpressionSuper(node) {
 }
 
 var visitor = {
-  enter(node, parent, scope, state) {
+  enter(path, state) {
     var topLevel = state.topLevel;
     var self = state.self;
 
-    if (t.isFunction(node) && !t.isArrowFunctionExpression(node)) {
+    if (path.isFunction() && !path.isArrowFunctionExpression()) {
       // we need to call traverseLevel again so we're context aware
-      self.traverseLevel(this, false);
-      return this.skip();
+      self.traverseLevel(path, false);
+      return path.skip();
     }
 
-    if (t.isProperty(node, { method: true }) || t.isMethodDefinition(node)) {
+    if (path.isProperty({ method: true }) || path.isMethodDefinition()) {
       // break on object methods
-      return this.skip();
+      return path.skip();
     }
 
     var getThisReference = topLevel ?
@@ -37,8 +37,8 @@ var visitor = {
 
     var callback = self.specHandle;
     if (self.isLoose) callback = self.looseHandle;
-    var result = callback.call(self, this, getThisReference);
-    if (result) this.hasSuper = true;
+    var result = callback.call(self, path, getThisReference);
+    if (result) path.hasSuper = true;
     if (result === true) return;
     return result;
   }
@@ -219,7 +219,7 @@ export default class ReplaceSupers {
     var node = path.node;
 
     if (isIllegalBareSuper(node, parent)) {
-      throw path.errorWithNode(messages.get("classesIllegalBareSuper"));
+      throw path.buildCodeFrameError(messages.get("classesIllegalBareSuper"));
     }
 
     if (t.isCallExpression(node)) {
@@ -235,7 +235,7 @@ export default class ReplaceSupers {
         //  - https://twitter.com/wycats/status/544553184396836864
         if (methodNode.key.name !== "constructor" || !this.inClass) {
           var methodName = methodNode.key.name || "METHOD_NAME";
-          throw this.file.errorWithNode(node, messages.get("classesIllegalSuperCall", methodName));
+          throw this.file.buildCodeFrameError(node, messages.get("classesIllegalSuperCall", methodName));
         }
       } else if (isMemberExpressionSuper(callee)) {
         // super.test(); -> _get(Object.getPrototypeOf(objectRef.prototype), "test", this).call(this);

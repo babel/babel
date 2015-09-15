@@ -12,15 +12,15 @@ export default function (opts) {
     return t.assignmentExpression("=", left, right);
   };
 
-  exports.ExpressionStatement = function (node, parent, scope, file) {
+  exports.ExpressionStatement = function (path, file) {
     // hit the `AssignmentExpression` one below
-    if (this.isCompletionRecord()) return;
+    if (path.isCompletionRecord()) return;
 
-    var expr = node.expression;
+    var expr = path.node.expression;
     if (!isAssignment(expr)) return;
 
     var nodes    = [];
-    var exploded = explode(expr.left, nodes, file, scope, true);
+    var exploded = explode(expr.left, nodes, file, path.scope, true);
 
     nodes.push(t.expressionStatement(
       buildAssignment(exploded.ref, opts.build(exploded.uid, expr.right))
@@ -29,7 +29,7 @@ export default function (opts) {
     return nodes;
   };
 
-  exports.AssignmentExpression = function (node, parent, scope, file) {
+  exports.AssignmentExpression = function ({ node, scope }, file) {
     if (!isAssignment(node)) return;
 
     var nodes    = [];
@@ -38,7 +38,7 @@ export default function (opts) {
     return nodes;
   };
 
-  exports.BinaryExpression = function (node) {
+  exports.BinaryExpression = function ({ node }) {
     if (node.operator !== opts.operator) return;
     return opts.build(node.left, node.right);
   };

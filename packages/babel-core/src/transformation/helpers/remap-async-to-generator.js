@@ -1,11 +1,11 @@
 import * as t from "babel-types";
 
 var awaitVisitor = {
-  Function() {
-    this.skip();
+  Function(path) {
+    path.skip();
   },
 
-  AwaitExpression(node) {
+  AwaitExpression({ node }) {
     node.type = "YieldExpression";
 
     if (node.all) {
@@ -17,7 +17,7 @@ var awaitVisitor = {
 };
 
 var referenceVisitor = {
-  ReferencedIdentifier(node, parent, scope, state) {
+  ReferencedIdentifier({ node, scope }, state) {
     var name = state.id.name;
     if (node.name === name && scope.bindingIdentifierEquals(name, state.id)) {
       return state.ref = state.ref || scope.generateUidIdentifier(name);

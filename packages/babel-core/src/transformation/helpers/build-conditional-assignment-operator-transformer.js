@@ -6,16 +6,16 @@ export default function (exports, opts) {
     return t.assignmentExpression("=", left, right);
   };
 
-  exports.ExpressionStatement = function (node, parent, scope, file) {
+  exports.ExpressionStatement = function (path, file) {
     // hit the `AssignmentExpression` one below
-    if (this.isCompletionRecord()) return;
+    if (path.isCompletionRecord()) return;
 
-    var expr = node.expression;
+    var expr = path.node.expression;
     if (!opts.is(expr, file)) return;
 
     var nodes = [];
 
-    var exploded = explode(expr.left, nodes, file, scope);
+    var exploded = explode(expr.left, nodes, file, path.scope);
 
     nodes.push(t.ifStatement(
       opts.build(exploded.uid, file),
@@ -25,11 +25,12 @@ export default function (exports, opts) {
     return nodes;
   };
 
-  exports.AssignmentExpression = function (node, parent, scope, file) {
+  exports.AssignmentExpression = function (path, file) {
+    var node = path.node;
     if (!opts.is(node, file)) return;
 
     var nodes    = [];
-    var exploded = explode(node.left, nodes, file, scope);
+    var exploded = explode(node.left, nodes, file, path.scope);
 
     nodes.push(t.logicalExpression(
       "&&",

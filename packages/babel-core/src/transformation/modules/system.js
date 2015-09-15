@@ -6,12 +6,12 @@ import map from "lodash/collection/map";
 import * as t from "babel-types";
 
 var hoistVariablesVisitor = {
-  Function() {
+  Function(path) {
     // nothing inside is accessible
-    this.skip();
+    path.skip();
   },
 
-  VariableDeclaration(node, parent, scope, state) {
+  VariableDeclaration({ node, parent }, state) {
     if (node.kind !== "var" && !t.isProgram(parent)) { // let, const
       // can't be accessed
       return;
@@ -42,20 +42,22 @@ var hoistVariablesVisitor = {
 };
 
 var hoistFunctionsVisitor = {
-  Function() {
-    this.skip();
+  Function(path) {
+    path.skip();
   },
 
-  enter(node, parent, scope, state) {
-    if (t.isFunctionDeclaration(node) || state.formatter._canHoist(node)) {
-      state.handlerBody.push(node);
-      this.dangerouslyRemove();
+  enter(path, state) {
+    if (path.isFunctionDeclaration() || state.formatter._canHoist(path.node)) {
+      state.handlerBody.push(path.node);
+      path.remove();
     }
   }
 };
 
 var runnerSettersVisitor = {
-  enter(node, parent, scope, state) {
+  enter(path, state) {
+    var { node } = path;
+
     if (node._importSource === state.source) {
       if (t.isVariableDeclaration(node)) {
         for (var declar of (node.declarations: Array)) {
@@ -68,7 +70,7 @@ var runnerSettersVisitor = {
         state.nodes.push(node);
       }
 
-      this.dangerouslyRemove();
+      path.remove();
     }
   }
 };

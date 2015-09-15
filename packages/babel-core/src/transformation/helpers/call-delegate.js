@@ -1,15 +1,15 @@
 import * as t from "babel-types";
 
 var visitor = {
-  enter(node, parent, scope, state) {
-    if (this.isThisExpression() || this.isReferencedIdentifier({ name: "arguments" })) {
+  enter(path, state) {
+    if (path.isThisExpression() || path.isReferencedIdentifier({ name: "arguments" })) {
       state.found = true;
-      this.stop();
+      path.stop();
     }
   },
 
-  Function() {
-    this.skip();
+  Function(path) {
+    path.skip();
   }
 };
 
