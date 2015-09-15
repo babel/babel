@@ -109,7 +109,7 @@ pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse) {
     node.left = this.match(tt.eq) ? this.toAssignable(left) : left;
     refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
     this.checkLVal(left);
-    if (left.parenthesizedExpression) {
+    if (left.extra && left.extra.parenthesized) {
       let errorMsg;
       if (left.type === "ObjectPattern") {
         errorMsg = "`({a}) = 0` use `({a} = 0)`";
@@ -540,8 +540,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   } else {
     val = exprList[0];
   }
-
-  val.parenthesizedExpression = true;
+  this.addExtra(val, "parenthesized", true);
   return val;
 };
 
