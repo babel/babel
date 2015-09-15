@@ -20,7 +20,7 @@ export function call(key) {
       var previousType = this.type;
 
       // call the function with the params (node, parent, scope, state)
-      var replacement = fn.call(this, node, this.parent, this.scope, this.state);
+      var replacement = fn.call(this, this, this.state);
 
       if (replacement) {
         this.replaceWith(replacement, true);
