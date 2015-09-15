@@ -1,6 +1,7 @@
 import toFastProperties from "to-fast-properties";
 import compact from "lodash/array/compact";
 import assign from "lodash/object/assign";
+import loClone from "lodash/lang/clone";
 import each from "lodash/collection/each";
 import uniq from "lodash/array/uniq";
 
@@ -129,19 +130,26 @@ export function isType(nodeType: string, targetType: string): boolean {
 
 each(t.BUILDER_KEYS, function (keys, type) {
   function builder() {
+    if (arguments.length > keys.length) {
+      // todo: error
+    }
+
     var node = {};
     node.type = type;
 
     var i = 0;
 
-    for (var key of (keys: Array)) {
+    for (let key of (keys: Array)) {
       var field = t.NODE_FIELDS[type][key];
 
       var arg = arguments[i++];
-      if (arg === undefined) arg = field.default;
-      if (field.validate) field.validate(arg, key);
+      if (arg === undefined) arg = loClone(field.default);
 
       node[key] = arg;
+    }
+
+    for (let key in node) {
+      validate(node, key, node[key]);
     }
 
     return node;
@@ -155,14 +163,17 @@ each(t.BUILDER_KEYS, function (keys, type) {
  * Description
  */
 
-export function validate(key, parent, node) {
-  var fields = t.NODE_FIELDS[parent.type];
+export function validate(node, key, val) {
+  if (!node) return;
+
+  var fields = t.NODE_FIELDS[node.type];
   if (!fields) return;
 
   var field = fields[key];
   if (!field || !field.validate) return;
+  if (field.optional && val == null) return;
 
-  field.validate(node, key);
+  field.validate(node, key, val);
 }
 
 /**

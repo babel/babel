@@ -1,4 +1,4 @@
-import define from "./index";
+import define, { assertNodeType } from "./index";
 
 define("Noop", {
   visitor: []
@@ -6,5 +6,10 @@ define("Noop", {
 
 define("ParenthesizedExpression", {
   visitor: ["expression"],
-  aliases: ["Expression"]
+  aliases: ["Expression"],
+  fields: {
+    expression: {
+      validate: assertNodeType("expression")
+    }
+  }
 });
