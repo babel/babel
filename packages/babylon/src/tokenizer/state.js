@@ -60,7 +60,6 @@ export default class State {
     // Used to signal to callers of `readWord1` whether the word
     // contained any escape sequences. This is needed because words with
     // escape sequences must not be interpreted as keywords.
-
     this.containsEsc = false;
 
     return this;

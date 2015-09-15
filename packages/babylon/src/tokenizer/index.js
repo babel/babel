@@ -308,7 +308,7 @@ export default class Tokenizer {
     var width = 1;
     var next = this.input.charCodeAt(this.state.pos + 1);
 
-    if (next === 42 && this.options.features["es7.exponentiationOperator"]) { // '*'
+    if (next === 42 && this.hasFeature("exponentiationOperator")) { // '*'
       width++;
       next = this.input.charCodeAt(this.state.pos + 2);
       type = tt.exponent;
@@ -411,7 +411,7 @@ export default class Tokenizer {
       case 125: ++this.state.pos; return this.finishToken(tt.braceR);
 
       case 58:
-        if (this.options.features["es7.functionBind"] && this.input.charCodeAt(this.state.pos + 1) === 58) {
+        if (this.hasFeature("functionBind") && this.input.charCodeAt(this.state.pos + 1) === 58) {
           return this.finishOp(tt.doubleColon, 2);
         } else {
           ++this.state.pos;
