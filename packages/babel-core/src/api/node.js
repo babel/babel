@@ -13,6 +13,7 @@ export { default as options } from "../transformation/file/options/config";
 export { default as Plugin } from "../transformation/plugin";
 export { default as Pipeline } from "../transformation/pipeline";
 export { default as buildExternalHelpers } from "../tools/build-external-helpers";
+export { default as template } from "babel-template";
 export { version } from "../../package";
 
 import * as t from "babel-types";
