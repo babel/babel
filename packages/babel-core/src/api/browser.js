@@ -1,44 +1,18 @@
 /* eslint no-new-func: 0 */
 
-require("./node");
-var transform = module.exports = require("../transformation");
+import { transform } from "./node";
+export * from "./node";
 
-/**
- * Add `options` and `version` to `babel` global.
- */
-
-transform.options = require("../transformation/file/options");
-transform.version = require("../../package").version;
-
-/**
- * Add `transform` api to `babel` global.
- */
-
-transform.transform = transform;
-
-/**
- * Tranform and execute script, adding in inline sourcemaps.
- */
-
-transform.run = function (code, opts = {}) {
-  opts.sourceMaps = "inline";
+export function run(code, opts = {}) {
   return new Function(transform(code, opts).code)();
-};
+}
 
-/**
- * Load scripts via xhr, and `transform` when complete (optional).
- */
-
-transform.load = function (url, callback, opts = {}, hold) {
+export function load(url, callback, opts = {}, hold) {
   opts.filename = opts.filename || url;
 
   var xhr = global.ActiveXObject ? new global.ActiveXObject("Microsoft.XMLHTTP") : new global.XMLHttpRequest();
   xhr.open("GET", url, true);
   if ("overrideMimeType" in xhr) xhr.overrideMimeType("text/plain");
-
-  /**
-   * When successfully loaded, transform (optional), and call `callback`.
-   */
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState !== 4) return;
@@ -46,7 +20,7 @@ transform.load = function (url, callback, opts = {}, hold) {
     var status = xhr.status;
     if (status === 0 || status === 200) {
       var param = [xhr.responseText, opts];
-      if (!hold) transform.run.apply(transform, param);
+      if (!hold) run(param);
       if (callback) callback(param);
     } else {
       throw new Error(`Could not load ${url}`);
@@ -54,16 +28,9 @@ transform.load = function (url, callback, opts = {}, hold) {
   };
 
   xhr.send(null);
-};
+}
 
-/**
- * Load and transform all scripts of `types`.
- *
- * @example
- * <script type="module"></script>
- */
-
-var runScripts = function () {
+function runScripts() {
   var scripts = [];
   var types   = ["text/ecmascript-6", "text/6to5", "text/babel", "module"];
   var index   = 0;
@@ -72,24 +39,24 @@ var runScripts = function () {
    * Transform and execute script. Ensures correct load order.
    */
 
-  var exec = function () {
+  function exec() {
     var param = scripts[index];
     if (param instanceof Array) {
-      transform.run.apply(transform, param);
+      run(param);
       index++;
       exec();
     }
-  };
+  }
 
   /**
    * Load, transform, and execute all scripts.
    */
 
-  var run = function (script, i) {
+  function run(script, i) {
     var opts = {};
 
     if (script.src) {
-      transform.load(script.src, function (param) {
+      load(script.src, function (param) {
         scripts[i] = param;
         exec();
       }, opts, true);
@@ -97,7 +64,7 @@ var runScripts = function () {
       opts.filename = "embedded";
       scripts[i] = [script.innerHTML, opts];
     }
-  };
+  }
 
   // Collect scripts with Babel `types`.
 
@@ -113,7 +80,7 @@ var runScripts = function () {
   }
 
   exec();
-};
+}
 
 /**
  * Register load event to transform and execute scripts.
