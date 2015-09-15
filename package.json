@@ -7,4 +7,6 @@
   "license": "MIT",
   "repository": "babel/babel",
   "main": "lib/index.js"
-}
+}  "bin": {
+    "babylon": "./bin/babylon.js"
+  }
