@@ -18,19 +18,11 @@ export { version } from "../../package";
 import * as t from "babel-types";
 export { t as types };
 
-/**
- * Register Babel and polyfill globally.
- */
-
 export function register(opts?: Object) {
   var callback = require("./register/node-polyfill");
   if (opts != null) callback(opts);
   return callback;
 }
-
-/**
- * Asynchronously transform `filename` with optional `opts`, calls `callback` when complete.
- */
 
 export function transformFile(filename: string, opts?: Object, callback: Function) {
   if (isFunction(opts)) {
@@ -55,18 +47,10 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
   });
 }
 
-/**
- * Synchronous form of `transformFile`.
- */
-
 export function transformFileSync(filename: string, opts?: Object = {}) {
   opts.filename = filename;
   return transform(fs.readFileSync(filename, "utf8"), opts);
 }
-
-/**
- * Parse script with Babel's parser.
- */
 
 export function parse(code, opts = {}) {
   opts.allowHashBang = true;
