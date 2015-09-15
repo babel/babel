@@ -96,7 +96,7 @@ pp.parseStatement = function (declaration, topLevel) {
       return starttype === tt._import ? this.parseImport(node) : this.parseExport(node);
 
     case tt.name:
-      if (this.options.features["es7.asyncFunctions"] && this.state.value === "async") {
+      if (this.hasFeature("asyncFunctions") && this.state.value === "async") {
         // peek ahead and see if next token is a function
         let state = this.state.clone();
         this.next();
@@ -145,7 +145,7 @@ pp.parseDecorators = function (allowExport) {
 };
 
 pp.parseDecorator = function () {
-  if (!this.options.features["es7.decorators"]) {
+  if (!this.hasFeature("decorators")) {
     this.unexpected();
   }
   let node = this.startNode();
@@ -511,7 +511,7 @@ pp.parseFunction = function (node, isStatement, allowExpressionBody, isAsync, op
 
 pp.parseFunctionParams = function (node) {
   this.expect(tt.parenL);
-  node.params = this.parseBindingList(tt.parenR, false, this.options.features["es7.trailingFunctionCommas"]);
+  node.params = this.parseBindingList(tt.parenR, false, this.hasFeature("trailingFunctionCommas"));
 };
 
 // Parse a class declaration or literal (depending on the
@@ -550,7 +550,7 @@ pp.parseClass = function (node, isStatement, optionalId) {
       classBody.body.push(this.parseClassProperty(method));
       continue;
     }
-    if (this.options.features["es7.asyncFunctions"] && !this.match(tt.parenL) &&
+    if (this.hasFeature("asyncFunctions") && !this.match(tt.parenL) &&
         !method.computed && method.key.type === "Identifier" && method.key.name === "async") {
       isAsync = true;
       this.parsePropertyName(method);
@@ -605,7 +605,7 @@ pp.isClassProperty = function () {
 
 pp.parseClassProperty = function (node) {
   if (this.match(tt.eq)) {
-    if (!this.options.features["es7.classProperties"]) this.unexpected();
+    if (!this.hasFeature("classProperties")) this.unexpected();
     this.next();
     node.value = this.parseMaybeAssign();
   } else {
@@ -644,7 +644,7 @@ pp.parseExport = function (node) {
   if (this.match(tt.star)) {
     let specifier = this.startNode();
     this.next();
-    if (this.options.features["es7.exportExtensions"] && this.eatContextual("as")) {
+    if (this.hasFeature("exportExtensions") && this.eatContextual("as")) {
       specifier.exported = this.parseIdentifier();
       node.specifiers = [this.finishNode(specifier, "ExportNamespaceSpecifier")];
       this.parseExportSpecifiersMaybe(node);
@@ -653,7 +653,7 @@ pp.parseExport = function (node) {
       this.parseExportFrom(node, true);
       return this.finishNode(node, "ExportAllDeclaration");
     }
-  } else if (this.options.features["es7.exportExtensions"] && this.isExportDefaultSpecifier()) {
+  } else if (this.hasFeature("exportExtensions") && this.isExportDefaultSpecifier()) {
     let specifier = this.startNode();
     specifier.exported = this.parseIdentifier(true);
     node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
@@ -735,7 +735,7 @@ pp.parseExportFrom = function (node, expect?) {
 };
 
 pp.shouldParseExportDeclaration = function () {
-  return this.options.features["es7.asyncFunctions"] && this.isContextual("async");
+  return this.hasFeature("asyncFunctions") && this.isContextual("async");
 };
 
 pp.checkExport = function (node) {
