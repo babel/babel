@@ -34,47 +34,50 @@ traverse.NodePath = require("./path");
 traverse.Scope    = require("./scope");
 traverse.Hub      = require("./hub");
 
-traverse.node = function (node: Object, opts: Object, scope: Object, state: Object, parentPath: Object, skipKeys?) {
+traverse.cheap = function (node, enter) {
   var keys = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
+  enter(node);
+
+  for (var key of keys) {
+    traverse.cheap(node[key], enter);
+  }
+};
+
+traverse.node = function (node: Object, opts: Object, scope: Object, state: Object, parentPath: Object, skipKeys?) {
+  var keys: Array = t.VISITOR_KEYS[node.type];
+  if (!keys) return;
+
   var context = new TraversalContext(scope, opts, state, parentPath);
-  for (var key of (keys: Array)) {
+  for (var key of keys) {
     if (skipKeys && skipKeys[key]) continue;
     if (context.visit(node, key)) return;
   }
 };
 
-const CLEAR_KEYS = t.COMMENT_KEYS.concat([
+const CLEAR_KEYS: Array = t.COMMENT_KEYS.concat([
   "_scopeInfo", "_paths",
   "tokens", "comments",
   "start", "end", "loc",
   "raw", "rawValue"
 ]);
 
-traverse.clearNode = function (node: Object) {
-  for (var i = 0; i < CLEAR_KEYS.length; i++) {
-    let key = CLEAR_KEYS[i];
+traverse.clearNode = function (node) {
+  for (var key of CLEAR_KEYS) {
     if (node[key] != null) node[key] = undefined;
   }
 };
 
-var clearVisitor = {
-  noScope: true,
-  exit: traverse.clearNode
-};
-
-traverse.removeProperties = function (tree: Object): Object {
-  traverse(tree, clearVisitor);
-  traverse.clearNode(tree);
-
+traverse.removeProperties = function (tree) {
+  traverse.cheap(tree, traverse.clearNode);
   return tree;
 };
 
-function hasBlacklistedType(node: Object, parent: Object, scope: Object, state: Object) {
-  if (node.type === state.type) {
+function hasBlacklistedType(path, state) {
+  if (path.node.type === state.type) {
     state.has = true;
-    this.skip();
+    path.skip();
   }
 }
 
