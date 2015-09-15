@@ -8,13 +8,10 @@ export default function (code, opts = {}) {
   var parseOpts = {
     allowImportExportEverywhere: opts.looseModules,
     allowReturnOutsideFunction:  opts.looseModules,
-    allowHashBang:               true,
-    ecmaVersion:                 6,
-    strictMode:                  opts.strictMode,
-    sourceType:                  opts.sourceType,
-    locations:                   true,
-    features:                    opts.features || {},
-    plugins:                     opts.plugins || {}
+    strictMode:    opts.strictMode,
+    sourceType:    opts.sourceType,
+    features:      opts.features || {},
+    plugins:       opts.plugins || {}
   };
 
   if (opts.nonStandard) {
