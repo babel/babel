@@ -25,6 +25,10 @@ export default class Parser extends Tokenizer {
     }
   }
 
+  hasFeature(name) {
+    return !!this.options.features[name];
+  }
+
   extend(name, f) {
     this[name] = f(this[name]);
   }
