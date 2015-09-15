@@ -1,6 +1,6 @@
 {
   "features": {
-    "es7.asyncFunctions": true
+    "asyncFunctions": true
   },
   "throws": "Unexpected token (2:4)"
 }

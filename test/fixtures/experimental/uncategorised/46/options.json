@@ -1,5 +1,5 @@
 {
   "features": {
-    "es7.classProperties": true
+    "classProperties": true
   }
 }
