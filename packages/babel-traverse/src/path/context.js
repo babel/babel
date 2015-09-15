@@ -23,7 +23,7 @@ export function call(key) {
       var replacement = fn.call(this, this, this.state);
 
       if (replacement) {
-        this.replaceWith(replacement, true);
+        throw new Error("Unexpected return value from visitor method");
       }
 
       if (this.shouldStop || this.shouldSkip || this.removed) return;
