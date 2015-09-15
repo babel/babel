@@ -2,17 +2,14 @@
 
 require("babel-core");
 
-var moduleFormatters = require("babel-core/lib/transformation/modules");
-var pathExists       = require("path-exists");
-var commander        = require("commander");
-var transform        = require("babel-core").transform;
-var kebabCase        = require("lodash/string/kebabCase");
-var options          = require("babel-core").options;
-var util             = require("babel-core").util;
-var uniq             = require("lodash/array/uniq");
-var each             = require("lodash/collection/each");
-var keys             = require("lodash/object/keys");
-var glob             = require("glob");
+var pathExists = require("path-exists");
+var commander  = require("commander");
+var kebabCase  = require("lodash/string/kebabCase");
+var options    = require("babel-core").options;
+var util       = require("babel-core").util;
+var uniq       = require("lodash/array/uniq");
+var each       = require("lodash/collection/each");
+var glob       = require("glob");
 
 each(options, function (option, key) {
   if (option.hidden) return;
@@ -46,26 +43,6 @@ commander.option("-o, --out-file [out]", "Compile all input files into a single 
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
 commander.option("-q, --quiet", "Don't log anything");
-
-commander.on("--help", function () {
-  var outKeys = function (title, obj) {
-    console.log("  " + title + ":");
-    console.log();
-
-    each(keys(obj).sort(), function (key) {
-      if (key[0] === "_") return;
-
-      if (obj[key].metadata && obj[key].metadata.optional) key = "[" + key + "]";
-
-      console.log("    - " + key);
-    });
-
-    console.log();
-  };
-
-  outKeys("Transformers", transform.pipeline.transformers);
-  outKeys("Module formatters", moduleFormatters);
-});
 
 var pkg = require("../../package.json");
 commander.version(pkg.version + " (babel-core " + require("babel-core").version + ")");
