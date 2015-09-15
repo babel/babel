@@ -1,5 +1,6 @@
 import NodePath from "./path";
 import * as t from "babel-types";
+
 export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {
     this.parentPath = parentPath;
@@ -9,6 +10,7 @@ export default class TraversalContext {
   }
 
   queue = null;
+
   shouldVisit(node) {
     var opts = this.opts;
     if (opts.enter || opts.exit) return true;
@@ -24,6 +26,7 @@ export default class TraversalContext {
 
     return false;
   }
+
   create(node, obj, key, listKey) {
     var path = NodePath.get({
       parentPath: this.parentPath,
@@ -35,6 +38,7 @@ export default class TraversalContext {
     path.unshiftContext(this);
     return path;
   }
+
   visitMultiple(container, parent, listKey) {
     // nothing to traverse!
     if (container.length === 0) return false;
@@ -73,6 +77,7 @@ export default class TraversalContext {
 
     return stop;
   }
+
   visitSingle(node, key) {
     if (this.shouldVisit(node[key])) {
       var path = this.create(node, node, key);
@@ -80,6 +85,7 @@ export default class TraversalContext {
       path.shiftContext();
     }
   }
+
   visit(node, key) {
     var nodes = node[key];
     if (!nodes) return;
