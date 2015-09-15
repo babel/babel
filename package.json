@@ -28,7 +28,7 @@
     "stage": 0,
     "loose": ["all"],
     "blacklist": ["es6.tailCall"],
-    "optional": ["optimisation.flow.forOf", "bluebirdCoroutines"],
+    "optional": ["optimisation.flow.forOf", "bluebirdCoroutines", "runtime"],
     "env": {
       "test": {
         "auxiliaryCommentBefore": "istanbul ignore next"
