@@ -793,9 +793,14 @@ pp.parseFunctionBody = function (node, allowExpression) {
   if (allowExpression) checkLVal = true;
 
   // normal function
-  if (!isExpression && node.body.body.length && this.isUseStrict(node.body.body[0])) {
-    checkLVal = true;
-    checkLValStrict = true;
+  if (!isExpression && node.body.directives.length) {
+    for (var directive of (node.body.directives: Array)) {
+      if (directive.value === "use strict") {
+        checkLVal = true;
+        checkLValStrict = true;
+        break;
+      }
+    }
   }
 
   if (checkLVal) {
