@@ -15,11 +15,6 @@
     "hidden": true
   },
 
-  "extra": {
-    "hidden": true,
-    "default": {}
-  },
-
   "env": {
     "hidden": true,
     "default": {}
@@ -30,31 +25,10 @@
     "hidden": true
   },
 
-  "moduleId": {
-    "description": "specify a custom name for module ids",
-    "type": "string"
-  },
-
-  "getModuleId": {
-    "hidden": true
-  },
-
   "retainLines": {
     "type": "boolean",
     "default": false,
     "description": "retain line numbers - will result in really ugly code"
-  },
-
-  "nonStandard": {
-    "type": "boolean",
-    "default": true,
-    "description": "enable/disable support for JSX and Flow (on by default)"
-  },
-
-  "experimental": {
-    "type": "boolean",
-    "description": "allow use of experimental transformers",
-    "default": false
   },
 
   "highlightCode": {
@@ -69,62 +43,10 @@
     "hidden": true
   },
 
-  "resolveModuleSource": {
-    "hidden": true
-  },
-
-  "stage": {
-    "description": "ECMAScript proposal stage version to allow [0-4]",
-    "shorthand": "e",
-    "type": "number",
-    "default": 2
-  },
-
-  "blacklist": {
-    "type": "transformerList",
-    "description": "blacklist of transformers to NOT use",
-    "shorthand": "b",
+  "presets": {
+    "type": "list",
+    "description": "",
     "default": []
-  },
-
-  "whitelist": {
-    "type": "transformerList",
-    "optional": true,
-    "description": "whitelist of transformers to ONLY use",
-    "shorthand": "l"
-  },
-
-  "optional": {
-    "type": "transformerList",
-    "description": "list of optional transformers to enable",
-    "default": []
-  },
-
-  "modules": {
-    "type": "string",
-    "description": "module formatter type to use [common]",
-    "default": "common",
-    "shorthand": "m"
-  },
-
-  "moduleIds": {
-    "type": "boolean",
-    "default": false,
-    "shorthand": "M",
-    "description": "insert an explicit id for modules"
-  },
-
-  "loose": {
-    "type": "transformerList",
-    "description": "list of transformers to enable loose mode ON",
-    "shorthand": "L"
-  },
-
-  "jsxPragma": {
-    "type": "string",
-    "description": "custom pragma to use with JSX (same functionality as @jsx comments)",
-    "default": "React.createElement",
-    "shorthand": "P"
   },
 
   "plugins": {
@@ -179,32 +101,6 @@
     "description": "do not include superfluous whitespace characters and line terminators [true|false|auto]"
   },
 
-  "keepModuleIdExtensions": {
-    "type": "boolean",
-    "description": "keep extensions when generating module ids",
-    "default": false,
-    "shorthand": "k"
-  },
-
-  "auxiliaryCommentBefore": {
-    "type": "string",
-    "default": "",
-    "description": "attach a comment before all helper declarations and auxiliary code"
-  },
-
-  "auxiliaryCommentAfter": {
-    "type": "string",
-    "default": "",
-    "description": "attach a comment after all helper declarations and auxiliary code"
-  },
-
-  "externalHelpers": {
-    "type": "boolean",
-    "default": false,
-    "shorthand": "r",
-    "description": "uses a reference to `babelHelpers` instead of placing helpers at the top of your code."
-  },
-
   "sourceMap": {
     "alias": "sourceMaps",
     "hidden": true
@@ -232,21 +128,10 @@
     "description": "the root from which all sources are relative"
   },
 
-  "moduleRoot": {
-    "type": "filename",
-    "description": "optional prefix for the AMD module formatter that will be prepend to the filename on module definitions"
-  },
-
-  "breakConfig": {
-    "type": "boolean",
-    "default": false,
-    "hidden": true,
-    "description": "stop trying to load .babelrc files"
-  },
-
   "babelrc": {
-    "description": "Specify a custom list of babelrc files to use",
-    "type": "list"
+    "description": "Whether or not to look up .babelrc and .babelignore files",
+    "type": "boolean",
+    "default": true
   },
 
   "sourceType": {
