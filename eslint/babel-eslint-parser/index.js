@@ -244,8 +244,13 @@ function monkeypatch() {
     // only visit if function parameters have types
     if (node.params) {
       for (var i = 0; i < node.params.length; i++) {
-        if (node.params[i].typeAnnotation) {
-          checkIdentifierOrVisit.call(this, node.params[i]);
+        var param = node.params[i];
+        if (param.typeAnnotation) {
+          checkIdentifierOrVisit.call(this, param);
+        } else if (t.isAssignmentPattern(param)) {
+          if (param.left.typeAnnotation) {
+            checkIdentifierOrVisit.call(this, param.left);
+          }
         }
       }
     }

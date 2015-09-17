@@ -1309,4 +1309,23 @@ describe("verify", function () {
       [ ]
     )
   });
+
+  it("default param flow type no-unused-vars #184", function () {
+    verifyAndAssertMessages(
+      [
+        "type ResolveOptionType = {",
+          "depth?: number,",
+          "identifier?: string",
+        "};",
+        "",
+        "export default function resolve(",
+          "options: ResolveOptionType = {}",
+        "): Object {",
+          "options;",
+        "}",
+      ].join("\n"),
+      { "no-unused-vars": 1, "no-undef": 1 },
+      [ ]
+    )
+  });
 });
