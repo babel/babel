@@ -1,86 +1,86 @@
-import define from "./index";
+import defineType from "./index";
 
-define("ArrayExpression", {
+defineType("ArrayExpression", {
   visitor: ["elements"],
   aliases: ["Expression"]
 });
 
-define("AssignmentExpression", {
+  defineType("AssignmentExpression", {
   builder: ["operator", "left", "right"],
   visitor: ["left", "right"],
   aliases: ["Expression"]
 });
 
-define("BinaryExpression", {
+defineType("BinaryExpression", {
   builder: ["operator", "left", "right"],
   visitor: ["left", "right"],
   aliases: ["Binary", "Expression"]
 });
 
-define("BlockStatement", {
+defineType("BlockStatement", {
   visitor: ["body"],
   aliases: ["Scopable", "BlockParent", "Block", "Statement"]
 });
 
-define("BreakStatement", {
+defineType("BreakStatement", {
   visitor: ["label"],
   aliases: ["Statement", "Terminatorless", "CompletionStatement"]
 });
 
-define("CallExpression", {
+defineType("CallExpression", {
   visitor: ["callee", "arguments"],
   aliases: ["Expression"]
 });
 
-define("CatchClause", {
+defineType("CatchClause", {
   visitor: ["param", "body"],
   aliases: ["Scopable"]
 });
 
-define("ConditionalExpression", {
+defineType("ConditionalExpression", {
   visitor: ["test", "consequent", "alternate"],
   aliases: ["Expression"]
 });
 
-define("ContinueStatement", {
+defineType("ContinueStatement", {
   visitor: ["label"],
   aliases: ["Statement", "Terminatorless", "CompletionStatement"]
 });
 
-define("DebuggerStatement", {
+defineType("DebuggerStatement", {
   aliases: ["Statement"]
 });
 
-define("DoWhileStatement", {
+defineType("DoWhileStatement", {
   visitor: ["body", "test"],
   aliases: ["Statement", "BlockParent", "Loop", "While", "Scopable"]
 });
 
-define("EmptyStatement", {
+defineType("EmptyStatement", {
   aliases: ["Statement"]
 });
 
-define("ExpressionStatement", {
+defineType("ExpressionStatement", {
   visitor: ["expression"],
   aliases: ["Statement"]
 });
 
-define("File", {
+defineType("File", {
   builder: ["program", "comments", "tokens"],
   visitor: ["program"]
 });
 
-define("ForInStatement", {
+defineType("ForInStatement", {
   visitor: ["left", "right", "body"],
   aliases: ["Scopable", "Statement", "For", "BlockParent", "Loop", "ForXStatement"]
 });
 
-define("ForStatement", {
+defineType("ForStatement", {
   visitor: ["init", "test", "update", "body"],
   aliases: ["Scopable", "Statement", "For", "BlockParent", "Loop"]
 });
 
-define("FunctionDeclaration", {
+defineType("FunctionDeclaration", {
   builder: {
     id: null,
     params: null,
@@ -92,7 +92,7 @@ define("FunctionDeclaration", {
   aliases: ["Scopable", "Function", "Func", "BlockParent", "FunctionParent", "Statement", "Pure", "Declaration"]
 });
 
-define("FunctionExpression", {
+defineType("FunctionExpression", {
   builder: {
     id: null,
     params: null,
@@ -104,34 +104,34 @@ define("FunctionExpression", {
   aliases: ["Scopable", "Function", "Func", "BlockParent", "FunctionParent", "Expression", "Pure"]
 });
 
-define("Identifier", {
+defineType("Identifier", {
   builder: ["name"],
   visitor: ["typeAnnotation"],
   aliases: ["Expression"]
 });
 
-define("IfStatement", {
+defineType("IfStatement", {
   visitor: ["test", "consequent", "alternate"],
   aliases: ["Statement"]
 });
 
-define("LabeledStatement", {
+defineType("LabeledStatement", {
   visitor: ["label", "body"],
   aliases: ["Statement"]
 });
 
-define("Literal", {
+defineType("Literal", {
   builder: ["value"],
   aliases: ["Expression", "Pure"]
 });
 
-define("LogicalExpression", {
+defineType("LogicalExpression", {
   builder: ["operator", "left", "right"],
   visitor: ["left", "right"],
   aliases: ["Binary", "Expression"]
 });
 
-define("MemberExpression", {
+defineType("MemberExpression", {
   builder: {
     object: null,
     property: null,
@@ -141,22 +141,22 @@ define("MemberExpression", {
   aliases: ["Expression"]
 });
 
-define("NewExpression", {
+defineType("NewExpression", {
   visitor: ["callee", "arguments"],
   aliases: ["Expression"]
 });
 
-define("ObjectExpression", {
+defineType("ObjectExpression", {
   visitor: ["properties"],
   aliases: ["Expression"]
 });
 
-define("Program", {
+defineType("Program", {
   visitor: ["body"],
   aliases: ["Scopable", "BlockParent", "Block", "FunctionParent"]
 });
 
-define("Property", {
+defineType("Property", {
   builder: {
     kind: "init",
     key: null,
@@ -167,45 +167,45 @@ define("Property", {
   aliases: ["UserWhitespacable"]
 });
 
-define("RestElement", {
+defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"]
 });
 
-define("ReturnStatement", {
+defineType("ReturnStatement", {
   visitor: ["argument"],
   aliases: ["Statement", "Terminatorless", "CompletionStatement"]
 });
 
-define("SequenceExpression", {
+defineType("SequenceExpression", {
   visitor: ["expressions"],
   aliases: ["Expression"]
 });
 
-define("SwitchCase", {
+defineType("SwitchCase", {
   visitor: ["test", "consequent"]
 });
 
-define("SwitchStatement", {
+defineType("SwitchStatement", {
   visitor: ["discriminant", "cases"],
   aliases: ["Statement", "BlockParent", "Scopable"]
 });
 
-define("ThisExpression", {
+defineType("ThisExpression", {
   aliases: ["Expression"]
 });
 
-define("ThrowStatement", {
+defineType("ThrowStatement", {
   visitor: ["argument"],
   aliases: ["Statement", "Terminatorless", "CompletionStatement"]
 });
 
-define("TryStatement", {
+defineType("TryStatement", {
   builder: ["block", "handler", "finalizer"],
   visitor: ["block", "handlers", "handler", "guardedHandlers", "finalizer"],
   aliases: ["Statement"]
 });
 
-define("UnaryExpression", {
+defineType("UnaryExpression", {
   builder: {
     operator: null,
     argument: null,
@@ -215,7 +215,7 @@ define("UnaryExpression", {
   aliases: ["UnaryLike", "Expression"]
 });
 
-define("UpdateExpression", {
+defineType("UpdateExpression", {
   builder: {
     operator: null,
     argument: null,
@@ -225,22 +225,22 @@ define("UpdateExpression", {
   aliases: ["Expression"]
 });
 
-define("VariableDeclaration", {
+defineType("VariableDeclaration", {
   builder: ["kind", "declarations"],
   visitor: ["declarations"],
   aliases: ["Statement", "Declaration"]
 });
 
-define("VariableDeclarator", {
+defineType("VariableDeclarator", {
   visitor: ["id", "init"]
 });
 
-define("WhileStatement", {
+defineType("WhileStatement", {
   visitor: ["test", "body"],
   aliases: ["Statement", "BlockParent", "Loop", "While", "Scopable"]
 });
 
-define("WithStatement", {
+defineType("WithStatement", {
   visitor: ["object", "body"],
   aliases: ["Statement"]
 });

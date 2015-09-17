@@ -1,172 +1,172 @@
-import define from "./index";
+import defineType from "./index";
 
-define("AnyTypeAnnotation", {
+defineType("AnyTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"]
 });
 
-define("ArrayTypeAnnotation", {
+defineType("ArrayTypeAnnotation", {
   visitor: ["elementType"],
   aliases: ["Flow"]
 });
 
-define("BooleanTypeAnnotation", {
+defineType("BooleanTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"]
 });
 
-define("BooleanLiteralTypeAnnotation", {
+defineType("BooleanLiteralTypeAnnotation", {
   aliases: ["Flow"]
 });
 
-define("ClassImplements", {
+defineType("ClassImplements", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"]
 });
 
-define("ClassProperty", {
+defineType("ClassProperty", {
   visitor: ["key", "value", "typeAnnotation", "decorators"],
   aliases: ["Flow"]
 });
 
-define("DeclareClass", {
+defineType("DeclareClass", {
   visitor: ["id", "typeParameters", "extends", "body"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"]
 });
 
-define("DeclareFunction", {
+defineType("DeclareFunction", {
   visitor: ["id"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"]
 });
 
-define("DeclareModule", {
+defineType("DeclareModule", {
   visitor: ["id", "body"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"]
 });
 
-define("DeclareVariable", {
+defineType("DeclareVariable", {
   visitor: ["id"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"]
 });
 
-define("FunctionTypeAnnotation", {
+defineType("FunctionTypeAnnotation", {
   visitor: ["typeParameters", "params", "rest", "returnType"],
   aliases: ["Flow"]
 });
 
-define("FunctionTypeParam", {
+defineType("FunctionTypeParam", {
   visitor: ["name", "typeAnnotation"],
   aliases: ["Flow"]
 });
 
-define("GenericTypeAnnotation", {
+defineType("GenericTypeAnnotation", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"]
 });
 
-define("InterfaceExtends", {
+defineType("InterfaceExtends", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"]
 });
 
-define("InterfaceDeclaration", {
+defineType("InterfaceDeclaration", {
   visitor: ["id", "typeParameters", "extends", "body"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"]
 });
 
-define("IntersectionTypeAnnotation", {
+defineType("IntersectionTypeAnnotation", {
   visitor: ["types"],
   aliases: ["Flow"]
 });
 
-define("MixedTypeAnnotation", {
+defineType("MixedTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"]
 });
 
-define("NullableTypeAnnotation", {
+defineType("NullableTypeAnnotation", {
   visitor: ["typeAnnotation"],
   aliases: ["Flow"]
 });
 
-define("NumberLiteralTypeAnnotation", {
+defineType("NumberLiteralTypeAnnotation", {
   aliases: ["Flow"]
 });
 
-define("NumberTypeAnnotation", {
+defineType("NumberTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"]
 });
 
-define("StringLiteralTypeAnnotation", {
+defineType("StringLiteralTypeAnnotation", {
   aliases: ["Flow"]
 });
 
-define("StringTypeAnnotation", {
+defineType("StringTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"]
 });
 
-define("TupleTypeAnnotation", {
+defineType("TupleTypeAnnotation", {
   visitor: ["types"],
   aliases: ["Flow"]
 });
 
-define("TypeofTypeAnnotation", {
+defineType("TypeofTypeAnnotation", {
   visitor: ["argument"],
   aliases: ["Flow"]
 });
 
-define("TypeAlias", {
+defineType("TypeAlias", {
   visitor: ["id", "typeParameters", "right"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"]
 });
 
-define("TypeAnnotation", {
+defineType("TypeAnnotation", {
   visitor: ["typeAnnotation"],
   aliases: ["Flow"]
 });
 
-define("TypeCastExpression", {
+defineType("TypeCastExpression", {
   visitor: ["expression", "typeAnnotation"],
   aliases: ["Flow"]
 });
 
-define("TypeParameterDeclaration", {
+defineType("TypeParameterDeclaration", {
   visitor: ["params"],
   aliases: ["Flow"]
 });
 
-define("TypeParameterInstantiation", {
+defineType("TypeParameterInstantiation", {
   visitor: ["params"],
   aliases: ["Flow"]
 });
 
-define("ObjectTypeAnnotation", {
+defineType("ObjectTypeAnnotation", {
   visitor: ["properties", "indexers", "callProperties"],
   aliases: ["Flow"]
 });
 
-define("ObjectTypeCallProperty", {
+defineType("ObjectTypeCallProperty", {
   visitor: ["value"],
   aliases: ["Flow", "UserWhitespacable"]
 });
 
-define("ObjectTypeIndexer", {
+defineType("ObjectTypeIndexer", {
   visitor: ["id", "key", "value"],
   aliases: ["Flow", "UserWhitespacable"]
 });
 
-define("ObjectTypeProperty", {
+defineType("ObjectTypeProperty", {
   visitor: ["key", "value"],
   aliases: ["Flow", "UserWhitespacable"]
 });
 
-define("QualifiedTypeIdentifier", {
+defineType("QualifiedTypeIdentifier", {
   visitor: ["id", "qualification"],
   aliases: ["Flow"]
 });
 
-define("UnionTypeAnnotation", {
+defineType("UnionTypeAnnotation", {
   visitor: ["types"],
   aliases: ["Flow"]
 });
 
-define("VoidTypeAnnotation", {
+defineType("VoidTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"]
 });

@@ -1,10 +1,10 @@
-import define from "./index";
+import defineType from "./index";
 
-define("Noop", {
+defineType("Noop", {
   visitor: []
 });
 
-define("ParenthesizedExpression", {
+defineType("ParenthesizedExpression", {
   visitor: ["expression"],
   aliases: ["Expression"]
 });

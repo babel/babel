@@ -1,96 +1,96 @@
-import define from "./index";
+import defineType from "./index";
 
-define("AssignmentPattern", {
+defineType("AssignmentPattern", {
   visitor: ["left", "right"],
   aliases: ["Pattern"]
 });
 
-define("ArrayPattern", {
+defineType("ArrayPattern", {
   visitor: ["elements", "typeAnnotation"],
   aliases: ["Pattern"]
 });
 
-define("ArrowFunctionExpression", {
+defineType("ArrowFunctionExpression", {
   builder: ["params", "body", "async"],
   visitor: ["params", "body", "returnType"],
   aliases: ["Scopable", "Function", "Func", "BlockParent", "FunctionParent", "Expression", "Pure"]
 });
 
-define("ClassBody", {
+defineType("ClassBody", {
   visitor: ["body"]
 });
 
-define("ClassDeclaration", {
+defineType("ClassDeclaration", {
   visitor: ["id", "body", "superClass", "typeParameters", "superTypeParameters", "implements", "decorators"],
   aliases: ["Scopable", "Class", "Statement", "Declaration"]
 });
 
-define("ClassExpression", {
+defineType("ClassExpression", {
   visitor: ["id", "body", "superClass", "typeParameters", "superTypeParameters", "implements", "decorators"],
   aliases: ["Scopable", "Class", "Expression"]
 });
 
-define("ExportAllDeclaration", {
+defineType("ExportAllDeclaration", {
   visitor: ["source", "exported"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"]
 });
 
-define("ExportDefaultDeclaration", {
+defineType("ExportDefaultDeclaration", {
   visitor: ["declaration"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"]
 });
 
-define("ExportNamedDeclaration", {
+defineType("ExportNamedDeclaration", {
   visitor: ["declaration", "specifiers", "source"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"]
 });
 
-define("ExportDefaultSpecifier", {
+defineType("ExportDefaultSpecifier", {
   visitor: ["exported"],
   aliases: ["ModuleSpecifier"]
 });
 
-define("ExportNamespaceSpecifier", {
+defineType("ExportNamespaceSpecifier", {
   visitor: ["exported"],
   aliases: ["ModuleSpecifier"]
 });
 
-define("ExportSpecifier", {
+defineType("ExportSpecifier", {
   visitor: ["local", "exported"],
   aliases: ["ModuleSpecifier"]
 });
 
-define("ForOfStatement", {
+defineType("ForOfStatement", {
   visitor: ["left", "right", "body"],
   aliases: ["Scopable", "Statement", "For", "BlockParent", "Loop", "ForXStatement"]
 });
 
-define("ImportDeclaration", {
+defineType("ImportDeclaration", {
   visitor: ["specifiers", "source"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration"]
 });
 
-define("ImportDefaultSpecifier", {
+defineType("ImportDefaultSpecifier", {
   visitor: ["local"],
   aliases: ["ModuleSpecifier"]
 });
 
-define("ImportNamespaceSpecifier", {
+defineType("ImportNamespaceSpecifier", {
   visitor: ["local"],
   aliases: ["ModuleSpecifier"]
 });
 
-define("ImportSpecifier", {
+defineType("ImportSpecifier", {
   visitor: ["local", "imported"],
   aliases: ["ModuleSpecifier"]
 });
 
-define("MetaProperty", {
+defineType("MetaProperty", {
   visitor: ["meta", "property"],
   aliases: ["Expression"]
 });
 
-define("MethodDefinition", {
+defineType("MethodDefinition", {
   builder: {
     key: null,
     value: null,
@@ -101,33 +101,33 @@ define("MethodDefinition", {
   visitor: ["key", "value", "decorators"]
 });
 
-define("ObjectPattern", {
+defineType("ObjectPattern", {
   visitor: ["properties", "typeAnnotation"],
   aliases: ["Pattern"]
 });
 
-define("SpreadElement", {
+defineType("SpreadElement", {
   visitor: ["argument"],
   aliases: ["UnaryLike"]
 });
 
-define("Super", {
+defineType("Super", {
   aliases: ["Expression"]
 });
 
-define("TaggedTemplateExpression", {
+defineType("TaggedTemplateExpression", {
   visitor: ["tag", "quasi"],
   aliases: ["Expression"]
 });
 
-define("TemplateElement");
+defineType("TemplateElement");
 
-define("TemplateLiteral", {
+defineType("TemplateLiteral", {
   visitor: ["quasis", "expressions"],
   aliases: ["Expression"]
 });
 
-define("YieldExpression", {
+defineType("YieldExpression", {
   builder: ["argument", "delegate"],
   visitor: ["argument"],
   aliases: ["Expression", "Terminatorless"]
