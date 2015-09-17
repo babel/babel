@@ -1,49 +1,49 @@
-import define from "./index";
+import defineType from "./index";
 
-define("JSXAttribute", {
+defineType("JSXAttribute", {
   visitor: ["name", "value"],
   aliases: ["JSX", "Immutable"]
 });
 
-define("JSXClosingElement", {
+defineType("JSXClosingElement", {
   visitor: ["name"],
   aliases: ["JSX", "Immutable"]
 });
 
-define("JSXElement", {
+defineType("JSXElement", {
   visitor: ["openingElement", "closingElement", "children"],
   aliases: ["JSX", "Immutable", "Expression"]
 });
 
-define("JSXEmptyExpression", {
+defineType("JSXEmptyExpression", {
   aliases: ["JSX", "Expression"]
 });
 
-define("JSXExpressionContainer", {
+defineType("JSXExpressionContainer", {
   visitor: ["expression"],
   aliases: ["JSX", "Immutable"]
 });
 
-define("JSXIdentifier", {
+defineType("JSXIdentifier", {
   aliases: ["JSX", "Expression"]
 });
 
-define("JSXMemberExpression", {
+defineType("JSXMemberExpression", {
   visitor: ["object", "property"],
   aliases: ["JSX", "Expression"]
 });
 
-define("JSXNamespacedName", {
+defineType("JSXNamespacedName", {
   visitor: ["namespace", "name"],
   aliases: ["JSX"]
 });
 
-define("JSXOpeningElement", {
+defineType("JSXOpeningElement", {
   visitor: ["name", "attributes"],
   aliases: ["JSX", "Immutable"]
 });
 
-define("JSXSpreadAttribute", {
+defineType("JSXSpreadAttribute", {
   visitor: ["argument"],
   aliases: ["JSX"]
 });

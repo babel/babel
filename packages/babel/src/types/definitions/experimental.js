@@ -1,34 +1,34 @@
-import define from "./index";
+import defineType from "./index";
 
-define("AwaitExpression", {
+defineType("AwaitExpression", {
   builder: ["argument", "all"],
   visitor: ["argument"],
   aliases: ["Expression", "Terminatorless"]
 });
 
-define("BindExpression", {
+defineType("BindExpression", {
   visitor: ["object", "callee"]
 });
 
-define("ComprehensionBlock", {
+defineType("ComprehensionBlock", {
   visitor: ["left", "right"]
 });
 
-define("ComprehensionExpression", {
+defineType("ComprehensionExpression", {
   visitor: ["filter", "blocks", "body"],
   aliases: ["Expression", "Scopable"]
 });
 
-define("Decorator", {
+defineType("Decorator", {
   visitor: ["expression"]
 });
 
-define("DoExpression", {
+defineType("DoExpression", {
   visitor: ["body"],
   aliases: ["Expression"]
 });
 
-define("SpreadProperty", {
+defineType("SpreadProperty", {
   visitor: ["argument"],
   aliases: ["UnaryLike"]
 });

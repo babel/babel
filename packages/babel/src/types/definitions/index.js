@@ -8,7 +8,7 @@ function builderFromArray(arr) {
   return builder;
 }
 
-export default function define(type, opts = {}) {
+export default function defineType(type, opts = {}) {
   opts.visitor = opts.visitor || [];
   opts.aliases = opts.aliases || [];
 
