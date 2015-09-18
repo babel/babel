@@ -3,21 +3,17 @@
 import * as removalHooks from "./lib/removal-hooks";
 
 /**
- * Deprecated in favor of `dangerouslyRemove` as it's far more scary and more accurately portrays
- * the risk.
+ * This is now safe.
  */
 
-export function remove() {
-  console.trace("Path#remove has been renamed to Path#dangerouslyRemove, removing a node is extremely dangerous so please refrain using it.");
-  return this.dangerouslyRemove();
-}
+export var dangerouslyRemove = remove;
 
 /**
  * Dangerously remove the current node. This may sometimes result in a tainted
  * invalid AST so use with caution.
  */
 
-export function dangerouslyRemove() {
+export function remove() {
   this._assertUnremoved();
 
   this.resync();
