@@ -18,8 +18,9 @@
     "output-file-sync": "^1.1.0",
     "path-exists": "^1.0.0",
     "path-is-absolute": "^1.0.0",
+    "slash": "^1.0.0",
     "source-map": "^0.4.0",
-    "slash": "^1.0.0"
+    "v8flags": "^2.0.10"
   },
   "bin": {
     "babel": "./bin/babel.js",
