@@ -38,14 +38,14 @@ export default class Whitespace {
    */
 
   getNewlinesBefore(node) {
-    var startToken;
-    var endToken;
-    var tokens = this.tokens;
+    let startToken;
+    let endToken;
+    let tokens = this.tokens;
 
-    for (var j = 0; j < tokens.length; j++) {
+    for (let j = 0; j < tokens.length; j++) {
       // optimize for forward traversal by shifting for loop index
-      var i = getLookupIndex(j, this._lastFoundIndex, this.tokens.length);
-      var token = tokens[i];
+      let i = getLookupIndex(j, this._lastFoundIndex, this.tokens.length);
+      let token = tokens[i];
 
       // this is the token this node starts with
       if (node.start === token.start) {
@@ -65,14 +65,14 @@ export default class Whitespace {
    */
 
   getNewlinesAfter(node) {
-    var startToken;
-    var endToken;
-    var tokens = this.tokens;
+    let startToken;
+    let endToken;
+    let tokens = this.tokens;
 
-    for (var j = 0; j < tokens.length; j++) {
+    for (let j = 0; j < tokens.length; j++) {
       // optimize for forward traversal by shifting for loop index
-      var i = getLookupIndex(j, this._lastFoundIndex, this.tokens.length);
-      var token = tokens[i];
+      let i = getLookupIndex(j, this._lastFoundIndex, this.tokens.length);
+      let token = tokens[i];
 
       // this is the token this node ends with
       if (node.end === token.end) {
@@ -88,7 +88,7 @@ export default class Whitespace {
     if (endToken && endToken.type.label === "eof") {
       return 1;
     } else {
-      var lines = this.getNewlinesBetween(startToken, endToken);
+      let lines = this.getNewlinesBetween(startToken, endToken);
       if (node.type === "CommentLine" && !lines) {
         // line comment
         return 1;
@@ -105,11 +105,11 @@ export default class Whitespace {
   getNewlinesBetween(startToken, endToken) {
     if (!endToken || !endToken.loc) return 0;
 
-    var start = startToken ? startToken.loc.end.line : 1;
-    var end   = endToken.loc.start.line;
-    var lines = 0;
+    let start = startToken ? startToken.loc.end.line : 1;
+    let end   = endToken.loc.start.line;
+    let lines = 0;
 
-    for (var line = start; line < end; line++) {
+    for (let line = start; line < end; line++) {
       if (typeof this.used[line] === "undefined") {
         this.used[line] = true;
         lines++;

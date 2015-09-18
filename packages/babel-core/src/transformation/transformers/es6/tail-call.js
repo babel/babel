@@ -5,14 +5,14 @@ import * as util from  "../../../util";
 import map from "lodash/collection/map";
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   group: "builtin-trailing"
 };
 
-export var visitor = {
+export let visitor = {
   Function(node, parent, scope, file) {
     if (node.generator || node.async) return;
-    var tailCall = new TailCallTransformer(this, scope, file);
+    let tailCall = new TailCallTransformer(this, scope, file);
     tailCall.run();
   }
 };
@@ -21,7 +21,7 @@ function returnBlock(expr) {
   return t.blockStatement([t.returnStatement(expr)]);
 }
 
-var visitor = {
+let visitor = {
   enter(node, parent) {
     if (t.isTryStatement(parent)) {
       if (node === parent.block) {
@@ -101,14 +101,14 @@ class TailCallTransformer {
   }
 
   getParams() {
-    var params = this.params;
+    let params = this.params;
 
     if (!params) {
       params = this.node.params;
       this.paramDecls = [];
 
-      for (var i = 0; i < params.length; i++) {
-        var param = params[i];
+      for (let i = 0; i < params.length; i++) {
+        let param = params[i];
         if (!param._isDefaultPlaceholder) {
           this.paramDecls.push(t.variableDeclarator(
             param,
@@ -124,16 +124,16 @@ class TailCallTransformer {
   hasDeopt() {
     // check if the ownerId has been reassigned, if it has then it's not safe to
     // perform optimisations
-    var ownerIdInfo = this.scope.getBinding(this.ownerId.name);
+    let ownerIdInfo = this.scope.getBinding(this.ownerId.name);
     return ownerIdInfo && !ownerIdInfo.constant;
   }
 
   run() {
-    var node  = this.node;
+    let node  = this.node;
 
     // only tail recursion can be optimized as for now, so we can skip anonymous
     // functions entirely
-    var ownerId = this.ownerId;
+    let ownerId = this.ownerId;
     if (!ownerId) return;
 
     // traverse the function and look for tail recursion
@@ -150,10 +150,10 @@ class TailCallTransformer {
 
     //
 
-    var body = this.path.ensureBlock().body;
+    let body = this.path.ensureBlock().body;
 
-    for (var i = 0; i < body.length; i++) {
-      var bodyNode = body[i];
+    for (let i = 0; i < body.length; i++) {
+      let bodyNode = body[i];
       if (!t.isFunctionDeclaration(bodyNode)) continue;
 
       bodyNode = body[i] = t.variableDeclaration("var", [
@@ -163,22 +163,22 @@ class TailCallTransformer {
     }
 
     if (this.vars.length > 0) {
-      var declarations = flatten(map(this.vars, function (decl) {
+      let declarations = flatten(map(this.vars, function (decl) {
         return decl.declarations;
       }));
 
-      var assignment = reduceRight(declarations, function (expr, decl) {
+      let assignment = reduceRight(declarations, function (expr, decl) {
         return t.assignmentExpression("=", decl.id, expr);
       }, this.scope.buildUndefinedNode());
 
-      var statement = t.expressionStatement(assignment);
+      let statement = t.expressionStatement(assignment);
       statement._blockHoist = Infinity;
       body.unshift(statement);
     }
 
-    var paramDecls = this.paramDecls;
+    let paramDecls = this.paramDecls;
     if (paramDecls.length > 0) {
-      var paramDecl = t.variableDeclaration("var", paramDecls);
+      let paramDecl = t.variableDeclaration("var", paramDecls);
       paramDecl._blockHoist = Infinity;
       body.unshift(paramDecl);
     }
@@ -193,10 +193,10 @@ class TailCallTransformer {
       BLOCK:       node.body
     });
 
-    var topVars = [];
+    let topVars = [];
 
     if (this.needsThis) {
-      for (var path of (this.thisPaths: Array)) {
+      for (let path of (this.thisPaths: Array)) {
         path.replaceWith(this.getThisId());
       }
 
@@ -208,7 +208,7 @@ class TailCallTransformer {
         path.replaceWith(this.argumentsId);
       }
 
-      var decl = t.variableDeclarator(this.argumentsId);
+      let decl = t.variableDeclarator(this.argumentsId);
       if (this.argumentsId) {
         decl.init = t.identifier("arguments");
         decl.init._shadowedFunctionLiteral = this.path;
@@ -216,7 +216,7 @@ class TailCallTransformer {
       topVars.push(decl);
     }
 
-    var leftId = this.leftId;
+    let leftId = this.leftId;
     if (leftId) {
       topVars.push(t.variableDeclarator(leftId));
     }
@@ -229,13 +229,13 @@ class TailCallTransformer {
   subTransform(node) {
     if (!node) return;
 
-    var handler = this[`subTransform${node.type}`];
+    let handler = this[`subTransform${node.type}`];
     if (handler) return handler.call(this, node);
   }
 
   subTransformConditionalExpression(node) {
-    var callConsequent = this.subTransform(node.consequent);
-    var callAlternate = this.subTransform(node.alternate);
+    let callConsequent = this.subTransform(node.consequent);
+    let callAlternate = this.subTransform(node.alternate);
     if (!callConsequent && !callAlternate) {
       return;
     }
@@ -255,12 +255,12 @@ class TailCallTransformer {
 
   subTransformLogicalExpression(node) {
     // only call in right-value of can be optimized
-    var callRight = this.subTransform(node.right);
+    let callRight = this.subTransform(node.right);
     if (!callRight) return;
 
     // cache left value as it might have side-effects
-    var leftId = this.getLeftId();
-    var testExpr = t.assignmentExpression(
+    let leftId = this.getLeftId();
+    let testExpr = t.assignmentExpression(
       "=",
       leftId,
       node.left
@@ -274,10 +274,10 @@ class TailCallTransformer {
   }
 
   subTransformSequenceExpression(node) {
-    var seq = node.expressions;
+    let seq = node.expressions;
 
     // only last element can be optimized
-    var lastCall = this.subTransform(seq[seq.length - 1]);
+    let lastCall = this.subTransform(seq[seq.length - 1]);
     if (!lastCall) {
       return;
     }
@@ -292,8 +292,8 @@ class TailCallTransformer {
   }
 
   subTransformCallExpression(node) {
-    var callee = node.callee;
-    var thisBinding, args;
+    let callee = node.callee;
+    let thisBinding, args;
 
     if (t.isMemberExpression(callee, { computed: false }) && t.isIdentifier(callee.property)) {
       switch (callee.property.name) {
@@ -323,7 +323,7 @@ class TailCallTransformer {
 
     if (this.hasDeopt()) return;
 
-    var body = [];
+    let body = [];
 
     if (this.needsThis && !t.isThisExpression(thisBinding)) {
       body.push(t.expressionStatement(t.assignmentExpression(
@@ -337,8 +337,8 @@ class TailCallTransformer {
       args = t.arrayExpression(node.arguments);
     }
 
-    var argumentsId = this.getArgumentsId();
-    var params      = this.getParams();
+    let argumentsId = this.getArgumentsId();
+    let params      = this.getParams();
 
     if (this.needsArguments) {
       body.push(t.expressionStatement(t.assignmentExpression(
@@ -349,7 +349,7 @@ class TailCallTransformer {
     }
 
     if (t.isArrayExpression(args)) {
-      var elems = args.elements;
+      let elems = args.elements;
 
       // pad out the args so all the function args are reset - https://github.com/babel/babel/issues/1938
       while (elems.length < params.length) {

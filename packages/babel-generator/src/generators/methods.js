@@ -17,9 +17,9 @@ export function _params(node, print) {
 }
 
 export function _method(node, print) {
-  var value = node.value;
-  var kind  = node.kind;
-  var key   = node.key;
+  let value = node.value;
+  let kind  = node.kind;
+  let key   = node.key;
 
   if (kind === "method" || kind === "init") {
     if (value.generator) {

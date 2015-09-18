@@ -14,16 +14,16 @@ import * as t from "babel-types";
  * }, node, parent);
  */
 
-var find = function (obj, node, parent) {
+let find = function (obj, node, parent) {
   if (!obj) return;
-  var result;
+  let result;
 
-  var types = Object.keys(obj);
-  for (var i = 0; i < types.length; i++) {
-    var type = types[i];
+  let types = Object.keys(obj);
+  for (let i = 0; i < types.length; i++) {
+    let type = types[i];
 
     if (t.is(type, node)) {
-      var fn = obj[type];
+      let fn = obj[type];
       result = fn(node, parent);
       if (result != null) break;
     }
@@ -61,12 +61,12 @@ export default class Node {
       node = node.expression;
     }
 
-    var linesInfo = find(whitespace.nodes, node, parent);
+    let linesInfo = find(whitespace.nodes, node, parent);
 
     if (!linesInfo) {
-      var items = find(whitespace.list, node, parent);
+      let items = find(whitespace.list, node, parent);
       if (items) {
-        for (var i = 0; i < items.length; i++) {
+        for (let i = 0; i < items.length; i++) {
           linesInfo = Node.needsWhitespace(items[i], node, type);
           if (linesInfo) break;
         }
@@ -102,7 +102,7 @@ export default class Node {
     if (t.isNewExpression(parent) && parent.callee === node) {
       if (t.isCallExpression(node)) return true;
 
-      var hasCall = some(node, function (val) {
+      let hasCall = some(node, function (val) {
         return t.isCallExpression(val);
       });
       if (hasCall) return true;
@@ -119,12 +119,12 @@ export default class Node {
 each(Node, function (fn, key) {
   Node.prototype[key] = function () {
     // Avoid leaking arguments to prevent deoptimization
-    var args = new Array(arguments.length + 2);
+    let args = new Array(arguments.length + 2);
 
     args[0] = this.node;
     args[1] = this.parent;
 
-    for (var i = 0; i < args.length; i++) {
+    for (let i = 0; i < args.length; i++) {
       args[i + 2] = arguments[i];
     }
 

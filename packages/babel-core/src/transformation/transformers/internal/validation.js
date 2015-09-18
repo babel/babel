@@ -1,22 +1,22 @@
 import * as messages from "babel-messages";
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   group: "builtin-pre"
 };
 
-export var visitor = {
+export let visitor = {
   ForXStatement(node, parent, scope, file) {
-    var left = node.left;
+    let left = node.left;
     if (t.isVariableDeclaration(left)) {
-      var declar = left.declarations[0];
+      let declar = left.declarations[0];
       if (declar.init) throw file.errorWithNode(declar, messages.get("noAssignmentsInForHead"));
     }
   },
 
   Property(node, parent, scope, file) {
     if (node.kind === "set") {
-      var first = node.value.params[0];
+      let first = node.value.params[0];
       if (t.isRestElement(first)) {
         throw file.errorWithNode(first, messages.get("settersNoRest"));
       }

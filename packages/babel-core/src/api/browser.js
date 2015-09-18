@@ -10,16 +10,16 @@ export function run(code, opts = {}) {
 export function load(url, callback, opts = {}, hold) {
   opts.filename = opts.filename || url;
 
-  var xhr = global.ActiveXObject ? new global.ActiveXObject("Microsoft.XMLHTTP") : new global.XMLHttpRequest();
+  let xhr = global.ActiveXObject ? new global.ActiveXObject("Microsoft.XMLHTTP") : new global.XMLHttpRequest();
   xhr.open("GET", url, true);
   if ("overrideMimeType" in xhr) xhr.overrideMimeType("text/plain");
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState !== 4) return;
 
-    var status = xhr.status;
+    let status = xhr.status;
     if (status === 0 || status === 200) {
-      var param = [xhr.responseText, opts];
+      let param = [xhr.responseText, opts];
       if (!hold) run(param);
       if (callback) callback(param);
     } else {
@@ -31,16 +31,16 @@ export function load(url, callback, opts = {}, hold) {
 }
 
 function runScripts() {
-  var scripts = [];
-  var types   = ["text/ecmascript-6", "text/6to5", "text/babel", "module"];
-  var index   = 0;
+  let scripts = [];
+  let types   = ["text/ecmascript-6", "text/6to5", "text/babel", "module"];
+  let index   = 0;
 
   /**
    * Transform and execute script. Ensures correct load order.
    */
 
   function exec() {
-    var param = scripts[index];
+    let param = scripts[index];
     if (param instanceof Array) {
       run(param);
       index++;
@@ -53,7 +53,7 @@ function runScripts() {
    */
 
   function run(script, i) {
-    var opts = {};
+    let opts = {};
 
     if (script.src) {
       load(script.src, function (param) {
@@ -68,10 +68,10 @@ function runScripts() {
 
   // Collect scripts with Babel `types`.
 
-  var _scripts = global.document.getElementsByTagName("script");
+  let _scripts = global.document.getElementsByTagName("script");
 
-  for (var i = 0; i < _scripts.length; ++i) {
-    var _script = _scripts[i];
+  for (let i = 0; i < _scripts.length; ++i) {
+    let _script = _scripts[i];
     if (types.indexOf(_script.type) >= 0) scripts.push(_script);
   }
 

@@ -12,15 +12,15 @@ import config from "./config";
 import path from "path";
 import fs from "fs";
 
-var existsCache = {};
-var jsonCache   = {};
+let existsCache = {};
+let jsonCache   = {};
 
 const BABELIGNORE_FILENAME = ".babelignore";
 const BABELRC_FILENAME     = ".babelrc";
 const PACKAGE_FILENAME     = "package.json";
 
 function exists(filename) {
-  var cached = existsCache[filename];
+  let cached = existsCache[filename];
   if (cached != null) {
     return cached;
   } else {
@@ -39,14 +39,14 @@ export default class OptionManager {
   static memoisedPlugins = [];
 
   static memoisePluginContainer(fn, loc, i) {
-    for (var cache of (OptionManager.memoisedPlugins: Array)) {
+    for (let cache of (OptionManager.memoisedPlugins: Array)) {
       if (cache.container === fn) return cache.plugin;
     }
 
-    var obj = fn(context);
+    let obj = fn(context);
 
     if (typeof obj === "object") {
-      var plugin = new Plugin(obj);
+      let plugin = new Plugin(obj);
       OptionManager.memoisedPlugins.push({
         container: fn,
         plugin: plugin
@@ -58,10 +58,10 @@ export default class OptionManager {
   }
 
   static createBareOptions() {
-    var opts = {};
+    let opts = {};
 
-    for (var key in config) {
-      var opt = config[key];
+    for (let key in config) {
+      let opt = config[key];
       opts[key] = clone(opt.default);
     }
 
@@ -70,7 +70,7 @@ export default class OptionManager {
 
   static normalisePlugins(loc, dirname, plugins) {
     return plugins.map(function (val, i) {
-      var plugin, options;
+      let plugin, options;
 
       // destructure plugins
       if (Array.isArray(val)) {
@@ -81,7 +81,7 @@ export default class OptionManager {
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        var pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
+        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
@@ -106,8 +106,8 @@ export default class OptionManager {
   addConfig(loc, key?, json=json5) {
     if (this.resolvedConfigs.indexOf(loc) >= 0) return;
 
-    var content = fs.readFileSync(loc, "utf8");
-    var opts;
+    let content = fs.readFileSync(loc, "utf8");
+    let opts;
 
     try {
       opts = jsonCache[content] = jsonCache[content] || json.parse(content);
@@ -163,8 +163,8 @@ export default class OptionManager {
       delete opts.presets;
     }
 
-    var envOpts;
-    var envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
+    let envOpts;
+    let envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
     if (opts.env) {
       envOpts = opts.env[envKey];
       delete opts.env;
@@ -178,11 +178,11 @@ export default class OptionManager {
   }
 
   mergePresets(presets: Array, dirname) {
-    for (var val of presets) {
+    for (let val of presets) {
       if (typeof val === "string") {
-        var presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+        let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
         if (presetLoc) {
-          var presetOpts = require(presetLoc);
+          let presetOpts = require(presetLoc);
           this.mergeOptions(presetOpts, presetLoc, presetLoc, path.dirname(presetLoc));
         } else {
           throw new Error("todo");
@@ -196,8 +196,8 @@ export default class OptionManager {
   }
 
   addIgnoreConfig(loc) {
-    var file  = fs.readFileSync(loc, "utf8");
-    var lines = file.split("\n");
+    let file  = fs.readFileSync(loc, "utf8");
+    let lines = file.split("\n");
 
     lines = lines.map(function (line) {
       return line.replace(/#(.*?)$/, "").trim();
@@ -213,18 +213,18 @@ export default class OptionManager {
       loc = path.join(process.cwd(), loc);
     }
 
-    var foundConfig = false;
-    var foundIgnore = false;
+    let foundConfig = false;
+    let foundIgnore = false;
 
     while (loc !== (loc = path.dirname(loc))) {
       if (!foundConfig) {
-        var configLoc = path.join(loc, BABELRC_FILENAME);
+        let configLoc = path.join(loc, BABELRC_FILENAME);
         if (exists(configLoc)) {
           this.addConfig(configLoc);
           foundConfig = true;
         }
 
-        var pkgLoc = path.join(loc, PACKAGE_FILENAME);
+        let pkgLoc = path.join(loc, PACKAGE_FILENAME);
         if (exists(pkgLoc)) {
           this.addConfig(pkgLoc, "babel", JSON);
           foundConfig = true;
@@ -232,7 +232,7 @@ export default class OptionManager {
       }
 
       if (!foundIgnore) {
-        var ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
+        let ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
         if (exists(ignoreLoc)) {
           this.addIgnoreConfig(ignoreLoc);
           foundIgnore = true;
@@ -244,11 +244,11 @@ export default class OptionManager {
   }
 
   normaliseOptions() {
-    var opts = this.options;
+    let opts = this.options;
 
     for (let key in config) {
-      var option = config[key];
-      var val    = opts[key];
+      let option = config[key];
+      let val    = opts[key];
 
       // optional
       if (!val && option.optional) continue;

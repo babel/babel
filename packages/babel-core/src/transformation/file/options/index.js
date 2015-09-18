@@ -8,8 +8,8 @@ export { config };
  */
 
 export function validateOption(key, val, pipeline) {
-  var opt = config[key];
-  var parser = opt && parsers[opt.type];
+  let opt = config[key];
+  let parser = opt && parsers[opt.type];
   if (parser && parser.validate) {
     return parser.validate(key, val, pipeline);
   } else {
@@ -22,14 +22,14 @@ export function validateOption(key, val, pipeline) {
  */
 
 export function normaliseOptions(options = {}) {
-  for (var key in options) {
-    var val = options[key];
+  for (let key in options) {
+    let val = options[key];
     if (val == null) continue;
 
-    var opt = config[key];
+    let opt = config[key];
     if (!opt) continue;
 
-    var parser = parsers[opt.type];
+    let parser = parsers[opt.type];
     if (parser) val = parser(val);
 
     options[key] = val;

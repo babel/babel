@@ -5,12 +5,12 @@ export function manipulateOptions(opts) {
   opts.blacklist.push("regenerator");
 }
 
-export var metadata = {
+export let metadata = {
   optional: true,
   dependencies: ["es7.asyncFunctions", "es6.classes"]
 };
 
-export var visitor = {
+export let visitor = {
   Function(node, parent, scope, file) {
     if (!node.async || node.generator) return;
 

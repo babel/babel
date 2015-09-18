@@ -1,16 +1,16 @@
 import { react } from "babel-types";
 import * as t from "babel-types";
 
-var JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
+let JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
 
-export var metadata = {
+export let metadata = {
   group: "builtin-advanced"
 };
 
-export var visitor = require("../../helpers/build-react-transformer")({
+export let visitor = require("../../helpers/build-react-transformer")({
   pre(state) {
-    var tagName = state.tagName;
-    var args    = state.args;
+    let tagName = state.tagName;
+    let args    = state.args;
     if (react.isCompatTag(tagName)) {
       args.push(t.stringLiteral(tagName));
     } else {
@@ -24,11 +24,11 @@ export var visitor = require("../../helpers/build-react-transformer")({
 });
 
 visitor.Program = function (node, parent, scope, file) {
-  var id = file.opts.jsxPragma;
+  let id = file.opts.jsxPragma;
 
-  for (var i = 0; i < file.ast.comments.length; i++) {
-    var comment = file.ast.comments[i];
-    var matches = JSX_ANNOTATION_REGEX.exec(comment.value);
+  for (let i = 0; i < file.ast.comments.length; i++) {
+    let comment = file.ast.comments[i];
+    let matches = JSX_ANNOTATION_REGEX.exec(comment.value);
     if (matches) {
       id = matches[1];
       if (id === "React.DOM") {

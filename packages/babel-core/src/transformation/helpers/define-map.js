@@ -3,11 +3,11 @@ import has from "lodash/object/has";
 import * as t from "babel-types";
 
 export function push(mutatorMap, node, kind, file) {
-  var alias = t.toKeyAlias(node);
+  let alias = t.toKeyAlias(node);
 
   //
 
-  var map = {};
+  let map = {};
   if (has(mutatorMap, alias)) map = mutatorMap[alias];
   mutatorMap[alias] = map;
 
@@ -23,7 +23,7 @@ export function push(mutatorMap, node, kind, file) {
   }
 
   if (node.decorators) {
-    var decorators = map.decorators = map.decorators || t.arrayExpression([]);
+    let decorators = map.decorators = map.decorators || t.arrayExpression([]);
     decorators.elements = decorators.elements.concat(node.decorators.map(dec => dec.expression).reverse());
   }
 
@@ -44,7 +44,7 @@ export function push(mutatorMap, node, kind, file) {
 }
 
 export function hasComputed(mutatorMap) {
-  for (var key in mutatorMap) {
+  for (let key in mutatorMap) {
     if (mutatorMap[key]._computed) {
       return true;
     }
@@ -53,11 +53,11 @@ export function hasComputed(mutatorMap) {
 }
 
 export function toComputedObjectFromClass(obj) {
-  var objExpr = t.arrayExpression([]);
+  let objExpr = t.arrayExpression([]);
 
-  for (var i = 0; i < obj.properties.length; i++) {
-    var prop = obj.properties[i];
-    var val = prop.value;
+  for (let i = 0; i < obj.properties.length; i++) {
+    let prop = obj.properties[i];
+    let val = prop.value;
     val.properties.unshift(t.property("init", t.identifier("key"), t.toComputedKey(prop)));
     objExpr.elements.push(val);
   }
@@ -66,20 +66,20 @@ export function toComputedObjectFromClass(obj) {
 }
 
 export function toClassObject(mutatorMap) {
-  var objExpr = t.objectExpression([]);
+  let objExpr = t.objectExpression([]);
 
   each(mutatorMap, function (map) {
-    var mapNode = t.objectExpression([]);
+    let mapNode = t.objectExpression([]);
 
-    var propNode = t.property("init", map._key, mapNode, map._computed);
+    let propNode = t.property("init", map._key, mapNode, map._computed);
 
     each(map, function (node, key) {
       if (key[0] === "_") return;
 
-      var inheritNode = node;
+      let inheritNode = node;
       if (t.isMethodDefinition(node) || t.isClassProperty(node)) node = node.value;
 
-      var prop = t.property("init", t.identifier(key), node);
+      let prop = t.property("init", t.identifier(key), node);
       t.inheritsComments(prop, inheritNode);
       t.removeComments(inheritNode);
 

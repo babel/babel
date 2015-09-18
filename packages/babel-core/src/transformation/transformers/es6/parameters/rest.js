@@ -1,7 +1,7 @@
 import * as util from  "../../../../util";
 import * as t from "babel-types";
 
-var memberExpressionOptimisationVisitor = {
+let memberExpressionOptimisationVisitor = {
   Scope(node, parent, scope, state) {
     // check if this scope has a local binding that will shadow the rest parameter
     if (!scope.bindingIdentifierEquals(state.name, state.outerBinding)) {
@@ -17,7 +17,7 @@ var memberExpressionOptimisationVisitor = {
   Function(node, parent, scope, state) {
     // skip over functions as whatever `arguments` we reference inside will refer
     // to the wrong function
-    var oldNoOptimise = state.noOptimise;
+    let oldNoOptimise = state.noOptimise;
     state.noOptimise = true;
     this.traverse(memberExpressionOptimisationVisitor, state);
     state.noOptimise = oldNoOptimise;
@@ -39,7 +39,7 @@ var memberExpressionOptimisationVisitor = {
       if (this.parentPath.isMemberExpression({ computed: true, object: node })) {
         // if we know that this member expression is referencing a number then we can safely
         // optimise it
-        var prop = this.parentPath.get("property");
+        let prop = this.parentPath.get("property");
         if (prop.isBaseType("number")) {
           state.candidates.push(this);
           return;
@@ -48,7 +48,7 @@ var memberExpressionOptimisationVisitor = {
 
       // optimise single spread args in calls
       if (this.parentPath.isSpreadElement() && state.offset === 0) {
-        var call = this.parentPath.parentPath;
+        let call = this.parentPath.parentPath;
         if (call.isCallExpression() && call.node.arguments.length === 1) {
           state.candidates.push(this);
           return;
@@ -75,8 +75,8 @@ var memberExpressionOptimisationVisitor = {
 function optimiseMemberExpression(parent, offset) {
   if (offset === 0) return;
 
-  var newExpr;
-  var prop = parent.property;
+  let newExpr;
+  let prop = parent.property;
 
   if (t.isLiteral(prop)) {
     prop.value += offset;
@@ -91,32 +91,32 @@ function hasRest(node) {
   return t.isRestElement(node.params[node.params.length - 1]);
 }
 
-export var visitor = {
+export let visitor = {
   Function(node, parent, scope) {
     if (!hasRest(node)) return;
 
-    var restParam = node.params.pop();
-    var rest = restParam.argument;
+    let restParam = node.params.pop();
+    let rest = restParam.argument;
 
-    var argsId = t.identifier("arguments");
+    let argsId = t.identifier("arguments");
 
     // otherwise `arguments` will be remapped in arrow functions
     argsId._shadowedFunctionLiteral = this;
 
     // support patterns
     if (t.isPattern(rest)) {
-      var pattern = rest;
+      let pattern = rest;
       rest = scope.generateUidIdentifier("ref");
 
-      var declar = t.variableDeclaration("let", pattern.elements.map(function (elem, index) {
-        var accessExpr = t.memberExpression(rest, t.numberLiteral(index), true);
+      let declar = t.variableDeclaration("let", pattern.elements.map(function (elem, index) {
+        let accessExpr = t.memberExpression(rest, t.numberLiteral(index), true);
         return t.variableDeclarator(elem, accessExpr);
       }));
       node.body.body.unshift(declar);
     }
 
     // check and optimise for extremely common cases
-    var state = {
+    let state = {
       references: [],
       offset:     node.params.length,
 
@@ -138,7 +138,7 @@ export var visitor = {
     if (!state.deopted && !state.references.length) {
       // we only have shorthands and there are no other references
       if (state.candidates.length) {
-        for (var candidate of (state.candidates: Array)) {
+        for (let candidate of (state.candidates: Array)) {
           candidate.replaceWith(argsId);
           if (candidate.parentPath.isMemberExpression()) {
             optimiseMemberExpression(candidate.parent, state.offset);
@@ -155,12 +155,12 @@ export var visitor = {
 
     //
 
-    var start = t.numberLiteral(node.params.length);
-    var key = scope.generateUidIdentifier("key");
-    var len = scope.generateUidIdentifier("len");
+    let start = t.numberLiteral(node.params.length);
+    let key = scope.generateUidIdentifier("key");
+    let len = scope.generateUidIdentifier("len");
 
-    var arrKey = key;
-    var arrLen = len;
+    let arrKey = key;
+    let arrLen = len;
     if (node.params.length) {
       // this method has additional params, so we need to subtract
       // the index of the current argument position from the
@@ -180,7 +180,7 @@ export var visitor = {
       );
     }
 
-    var loop = util.template("rest", {
+    let loop = util.template("rest", {
       ARRAY_TYPE: restParam.typeAnnotation,
       ARGUMENTS:  argsId,
       ARRAY_KEY:  arrKey,
@@ -198,10 +198,10 @@ export var visitor = {
       // perform allocation at the lowest common ancestor of all references
       loop._blockHoist = 1;
 
-      var target = this.getEarliestCommonAncestorFrom(state.references).getStatementParent();
+      let target = this.getEarliestCommonAncestorFrom(state.references).getStatementParent();
 
       // don't perform the allocation inside a loop
-      var highestLoop;
+      let highestLoop;
       target.findParent(function (path) {
         if (path.isLoop()) {
           highestLoop = path;

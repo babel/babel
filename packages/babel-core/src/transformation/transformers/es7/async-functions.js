@@ -1,3 +1,3 @@
-export var metadata = {
+export let metadata = {
   stage: 2
 };

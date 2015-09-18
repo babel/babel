@@ -25,13 +25,13 @@ function shouldShadow(path, shadowPath) {
 
 function remap(path, key, create) {
   // ensure that we're shadowed
-  var shadowPath = path.inShadow(key);
+  let shadowPath = path.inShadow(key);
   if (!shouldShadow(path, shadowPath)) return;
 
-  var shadowFunction = path.node._shadowedFunctionLiteral;
-  var currentFunction;
+  let shadowFunction = path.node._shadowedFunctionLiteral;
+  let currentFunction;
 
-  var fnPath = path.findParent(function (path) {
+  let fnPath = path.findParent(function (path) {
     if (path.isProgram() || path.isFunction()) {
       // catch current function in case this is the shadowed one and we can ignore it
       currentFunction = currentFunction || path;
@@ -53,11 +53,11 @@ function remap(path, key, create) {
   // no point in realiasing if we're in this function
   if (fnPath === currentFunction) return;
 
-  var cached = fnPath.getData(key);
+  let cached = fnPath.getData(key);
   if (cached) return cached;
 
-  var init = create();
-  var id   = path.scope.generateUidIdentifier(key);
+  let init = create();
+  let id   = path.scope.generateUidIdentifier(key);
 
   fnPath.setData(key, id);
   fnPath.scope.push({ id, init });

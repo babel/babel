@@ -11,11 +11,11 @@ export default class Store {
   }
 
   get(key: string): any {
-    var data = this.data[key];
+    let data = this.data[key];
     if (data) {
       return data;
     } else {
-      var dynamic = this.dynamicData[key];
+      let dynamic = this.dynamicData[key];
       if (dynamic) {
         return this.set(key, dynamic());
       }

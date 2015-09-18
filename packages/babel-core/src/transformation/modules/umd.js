@@ -9,38 +9,38 @@ export default class UMDFormatter extends AMDFormatter {
   transform(program) {
     DefaultFormatter.prototype.transform.apply(this, arguments);
 
-    var body = program.body;
+    let body = program.body;
 
     // build an array of module names
 
-    var names = [];
+    let names = [];
     for (let name in this.ids) {
       names.push(t.stringLiteral(name));
     }
 
     // factory
 
-    var ids  = values(this.ids);
-    var args = [t.identifier("exports")];
+    let ids  = values(this.ids);
+    let args = [t.identifier("exports")];
     if (this.passModuleArg) args.push(t.identifier("module"));
     args = args.concat(ids);
 
-    var factory = t.functionExpression(null, args, t.blockStatement(body));
+    let factory = t.functionExpression(null, args, t.blockStatement(body));
 
     // amd
 
-    var defineArgs = [t.stringLiteral("exports")];
+    let defineArgs = [t.stringLiteral("exports")];
     if (this.passModuleArg) defineArgs.push(t.stringLiteral("module"));
     defineArgs = defineArgs.concat(names);
     defineArgs = [t.arrayExpression(defineArgs)];
 
     // common
 
-    var testExports = util.template("test-exports");
-    var testModule  = util.template("test-module");
-    var commonTests = this.passModuleArg ? t.logicalExpression("&&", testExports, testModule) : testExports;
+    let testExports = util.template("test-exports");
+    let testModule  = util.template("test-module");
+    let commonTests = this.passModuleArg ? t.logicalExpression("&&", testExports, testModule) : testExports;
 
-    var commonArgs = [t.identifier("exports")];
+    let commonArgs = [t.identifier("exports")];
     if (this.passModuleArg) commonArgs.push(t.identifier("module"));
     commonArgs = commonArgs.concat(names.map(function (name) {
       return t.callExpression(t.identifier("require"), [name]);
@@ -48,25 +48,25 @@ export default class UMDFormatter extends AMDFormatter {
 
     // globals
 
-    var browserArgs = [];
+    let browserArgs = [];
     if (this.passModuleArg) browserArgs.push(t.identifier("mod"));
 
     for (let name in this.ids) {
-      var id = this.defaultIds[name] || t.identifier(t.toIdentifier(path.basename(name, path.extname(name))));
+      let id = this.defaultIds[name] || t.identifier(t.toIdentifier(path.basename(name, path.extname(name))));
       browserArgs.push(t.memberExpression(t.identifier("global"), id));
     }
 
     //
 
-    var moduleName = this.getModuleName();
+    let moduleName = this.getModuleName();
     if (moduleName) defineArgs.unshift(t.stringLiteral(moduleName));
 
     //
-    var globalArg = this.file.opts.basename;
+    let globalArg = this.file.opts.basename;
     if (moduleName) globalArg = moduleName;
     globalArg = t.identifier(t.toIdentifier(globalArg));
 
-    var runner = util.template("umd-runner-body", {
+    let runner = util.template("umd-runner-body", {
       AMD_ARGUMENTS: defineArgs,
       COMMON_TEST: commonTests,
       COMMON_ARGUMENTS: commonArgs,

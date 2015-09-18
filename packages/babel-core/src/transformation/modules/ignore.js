@@ -3,7 +3,7 @@ import * as t from "babel-types";
 
 export default class IgnoreFormatter extends DefaultFormatter {
   exportDeclaration(node, nodes) {
-    var declar = t.toStatement(node.declaration, true);
+    let declar = t.toStatement(node.declaration, true);
     if (declar) nodes.push(t.inherits(declar, node));
   }
 

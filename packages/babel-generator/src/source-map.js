@@ -27,7 +27,7 @@ export default class SourceMap {
    */
 
   get() {
-    var map = this.map;
+    let map = this.map;
     if (map) {
       return map.toJSON();
     } else {
@@ -40,22 +40,22 @@ export default class SourceMap {
    */
 
   mark(node, type) {
-    var loc = node.loc;
+    let loc = node.loc;
     if (!loc) return; // no location info
 
-    var map = this.map;
+    let map = this.map;
     if (!map) return; // no source map
 
     if (t.isProgram(node) || t.isFile(node)) return; // illegal mapping nodes
 
-    var position = this.position;
+    let position = this.position;
 
-    var generated = {
+    let generated = {
       line: position.line,
       column: position.column
     };
 
-    var original = loc[type];
+    let original = loc[type];
 
     map.addMapping({
       source: this.opts.sourceFileName,

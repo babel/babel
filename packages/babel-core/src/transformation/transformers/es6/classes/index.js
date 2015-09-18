@@ -3,7 +3,7 @@ import VanillaTransformer from "./vanilla";
 import * as t from "babel-types";
 import { bare } from "../../../helpers/name-method";
 
-export var visitor = {
+export let visitor = {
   ClassDeclaration(node) {
     return t.variableDeclaration("var", [
       t.variableDeclarator(node.id, t.toExpression(node))
@@ -11,7 +11,7 @@ export var visitor = {
   },
 
   ClassExpression(node, parent, scope, file) {
-    var inferred = bare(node, parent, scope);
+    let inferred = bare(node, parent, scope);
     if (inferred) return inferred;
 
     if (file.isLoose("es6.classes")) {

@@ -21,9 +21,9 @@ import * as util from  "../../util";
 import path from "path";
 import * as t from "babel-types";
 
-var errorVisitor = {
+let errorVisitor = {
   enter(path, state) {
-    var loc = path.node.loc;
+    let loc = path.node.loc;
     if (loc) {
       state.loc = loc;
       path.stop();
@@ -155,16 +155,16 @@ export default class File extends Store {
   }
 
   buildTransformers() {
-    var file = this;
+    let file = this;
 
-    var transformers = this.transformers = {};
+    let transformers = this.transformers = {};
 
-    var secondaryStack = [];
-    var stack = [];
+    let secondaryStack = [];
+    let stack = [];
 
     // build internal transformers
-    for (var key in this.pipeline.transformers) {
-      var transformer = this.pipeline.transformers[key];
+    for (let key in this.pipeline.transformers) {
+      let transformer = this.pipeline.transformers[key];
       let pass = transformers[key] = transformer.buildPass(file);
 
       if (pass.canTransform()) {
@@ -181,15 +181,15 @@ export default class File extends Store {
     }
 
     // init plugins!
-    var beforePlugins = [];
-    var afterPlugins = [];
-    var pluginManager = new PluginManager({
+    let beforePlugins = [];
+    let afterPlugins = [];
+    let pluginManager = new PluginManager({
       file: this,
       transformers: this.transformers,
       before: beforePlugins,
       after: afterPlugins
     });
-    for (var i = 0; i < file.opts.plugins.length; i++) {
+    for (let i = 0; i < file.opts.plugins.length; i++) {
       pluginManager.add(file.opts.plugins[i]);
     }
     stack = beforePlugins.concat(stack, afterPlugins);
@@ -199,7 +199,7 @@ export default class File extends Store {
 
     // build dependency graph
     for (let pass of (stack: Array)) {
-      for (var dep of (pass.plugin.dependencies: Array)) {
+      for (let dep of (pass.plugin.dependencies: Array)) {
         this.transformerDependencies[dep] = pass.key;
       }
     }
@@ -209,14 +209,14 @@ export default class File extends Store {
   }
 
   collapseStack(_stack) {
-    var stack  = [];
-    var ignore = [];
+    let stack  = [];
+    let ignore = [];
 
     for (let pass of (_stack: Array)) {
       // been merged
       if (ignore.indexOf(pass) >= 0) continue;
 
-      var group = pass.plugin.metadata.group;
+      let group = pass.plugin.metadata.group;
 
       // can't merge
       if (!pass.canTransform() || !group) {
@@ -224,7 +224,7 @@ export default class File extends Store {
         continue;
       }
 
-      var mergeStack = [];
+      let mergeStack = [];
       for (let pass of (_stack: Array)) {
         if (pass.plugin.metadata.group === group) {
           mergeStack.push(pass);
@@ -236,12 +236,12 @@ export default class File extends Store {
       shuffle;
       //mergeStack = shuffle(mergeStack);
 
-      var visitors = [];
+      let visitors = [];
       for (let pass of (mergeStack: Array)) {
         visitors.push(pass.plugin.visitor);
       }
-      var visitor = traverse.visitors.merge(visitors);
-      var mergePlugin = new Plugin(group, { visitor });
+      let visitor = traverse.visitors.merge(visitors);
+      let mergePlugin = new Plugin(group, { visitor });
       stack.push(mergePlugin.buildPass(this));
     }
 
@@ -257,11 +257,11 @@ export default class File extends Store {
   }
 
   get(key: string): any {
-    var data = this.data[key];
+    let data = this.data[key];
     if (data) {
       return data;
     } else {
-      var dynamic = this.dynamicData[key];
+      let dynamic = this.dynamicData[key];
       if (dynamic) {
         return this.set(key, dynamic());
       }
@@ -269,25 +269,25 @@ export default class File extends Store {
   }
 
   resolveModuleSource(source: string): string {
-    var resolveModuleSource = this.opts.resolveModuleSource;
+    let resolveModuleSource = this.opts.resolveModuleSource;
     if (resolveModuleSource) source = resolveModuleSource(source, this.opts.filename);
     return source;
   }
 
   addImport(source: string, name?: string, type?: string): Object {
     name = name || source;
-    var id = this.dynamicImportIds[name];
+    let id = this.dynamicImportIds[name];
 
     if (!id) {
       source = this.resolveModuleSource(source);
       id = this.dynamicImportIds[name] = this.scope.generateUidIdentifier(name);
 
-      var specifiers = [t.importDefaultSpecifier(id)];
-      var declar = t.importDeclaration(specifiers, t.stringLiteral(source));
+      let specifiers = [t.importDefaultSpecifier(id)];
+      let declar = t.importDeclaration(specifiers, t.stringLiteral(source));
       declar._blockHoist = 3;
 
       if (type) {
-        var modules = this.dynamicImportTypes[type] = this.dynamicImportTypes[type] || [];
+        let modules = this.dynamicImportTypes[type] = this.dynamicImportTypes[type] || [];
         modules.push(declar);
       }
 
@@ -303,7 +303,7 @@ export default class File extends Store {
   }
 
   attachAuxiliaryComment(node: Object): Object {
-    var beforeComment = this.opts.auxiliaryCommentBefore;
+    let beforeComment = this.opts.auxiliaryCommentBefore;
     if (beforeComment) {
       node.leadingComments = node.leadingComments || [];
       node.leadingComments.push({
@@ -312,7 +312,7 @@ export default class File extends Store {
       });
     }
 
-    var afterComment = this.opts.auxiliaryCommentAfter;
+    let afterComment = this.opts.auxiliaryCommentAfter;
     if (afterComment) {
       node.trailingComments = node.trailingComments || [];
       node.trailingComments.push({
@@ -325,31 +325,31 @@ export default class File extends Store {
   }
 
   addHelper(name: string): Object {
-    var isSolo = includes(File.soloHelpers, name);
+    let isSolo = includes(File.soloHelpers, name);
 
     if (!isSolo && !includes(File.helpers, name)) {
       throw new ReferenceError(`Unknown helper ${name}`);
     }
 
-    var declar = this.declarations[name];
+    let declar = this.declarations[name];
     if (declar) return declar;
 
     this.usedHelpers[name] = true;
 
     if (!isSolo) {
-      var generator = this.get("helperGenerator");
-      var runtime   = this.get("helpersNamespace");
+      let generator = this.get("helperGenerator");
+      let runtime   = this.get("helpersNamespace");
       if (generator) {
         return generator(name);
       } else if (runtime) {
-        var id = t.identifier(t.toIdentifier(name));
+        let id = t.identifier(t.toIdentifier(name));
         return t.memberExpression(runtime, id);
       }
     }
 
-    var ref = util.template("helper-" + name);
+    let ref = util.template("helper-" + name);
 
-    var uid = this.declarations[name] = this.scope.generateUidIdentifier(name);
+    let uid = this.declarations[name] = this.scope.generateUidIdentifier(name);
 
     if (t.isFunctionExpression(ref) && !ref.id) {
       ref.body._compact = true;
@@ -373,18 +373,18 @@ export default class File extends Store {
   addTemplateObject(helperName: string, strings: Array, raw: Array): Object {
     // Generate a unique name based on the string literals so we dedupe
     // identical strings used in the program.
-    var stringIds = raw.elements.map(function(string) {
+    let stringIds = raw.elements.map(function(string) {
       return string.value;
     });
-    var name = `${helperName}_${raw.elements.length}_${stringIds.join(",")}`;
+    let name = `${helperName}_${raw.elements.length}_${stringIds.join(",")}`;
 
-    var declar = this.declarations[name];
+    let declar = this.declarations[name];
     if (declar) return declar;
 
-    var uid = this.declarations[name] = this.scope.generateUidIdentifier("templateObject");
+    let uid = this.declarations[name] = this.scope.generateUidIdentifier("templateObject");
 
-    var helperId = this.addHelper(helperName);
-    var init = t.callExpression(helperId, [strings, raw]);
+    let helperId = this.addHelper(helperName);
+    let init = t.callExpression(helperId, [strings, raw]);
     init._compact = true;
     this.scope.push({
       id: uid,
@@ -395,9 +395,9 @@ export default class File extends Store {
   }
 
   buildCodeFrameError(node, msg, Error = SyntaxError) {
-    var loc = node && (node.loc || node._loc);
+    let loc = node && (node.loc || node._loc);
 
-    var err = new Error(msg);
+    let err = new Error(msg);
 
     if (loc) {
       err.loc = loc.start;
@@ -417,19 +417,19 @@ export default class File extends Store {
   }
 
   mergeSourceMap(map: Object) {
-    var opts = this.opts;
+    let opts = this.opts;
 
-    var inputMap = opts.inputSourceMap;
+    let inputMap = opts.inputSourceMap;
 
     if (inputMap) {
       map.sources[0] = inputMap.file;
 
-      var inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
-      var outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
-      var outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
+      let inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
+      let outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
+      let outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
       outputMapGenerator.applySourceMap(inputMapConsumer);
 
-      var mergedMap = outputMapGenerator.toJSON();
+      let mergedMap = outputMapGenerator.toJSON();
       mergedMap.sources = inputMap.sources;
       mergedMap.file    = inputMap.file;
       return mergedMap;
@@ -443,10 +443,10 @@ export default class File extends Store {
       this.log.deprecate("Custom module formatters are deprecated and will be removed in the next major. Please use Babel plugins instead.");
     }
 
-    var ModuleFormatter = isFunction(type) ? type : moduleFormatters[type];
+    let ModuleFormatter = isFunction(type) ? type : moduleFormatters[type];
 
     if (!ModuleFormatter) {
-      var loc = resolve.relative(type);
+      let loc = resolve.relative(type);
       if (loc) ModuleFormatter = require(loc);
     }
 
@@ -458,11 +458,11 @@ export default class File extends Store {
   }
 
   parse(code: string) {
-    var opts = this.opts;
+    let opts = this.opts;
 
     //
 
-    var parseOpts = {
+    let parseOpts = {
       highlightCode: opts.highlightCode,
       nonStandard:   opts.nonStandard,
       sourceType:    opts.sourceType,
@@ -470,9 +470,9 @@ export default class File extends Store {
       plugins:       {}
     };
 
-    var features = parseOpts.features = {};
-    for (var key in this.transformers) {
-      var transformer = this.transformers[key];
+    let features = parseOpts.features = {};
+    for (let key in this.transformers) {
+      let transformer = this.transformers[key];
       features[key] = transformer.canRun();
     }
 
@@ -480,7 +480,7 @@ export default class File extends Store {
     parseOpts.strictMode = features.strict;
 
     this.log.debug("Parse start");
-    var ast = parse(code, parseOpts);
+    let ast = parse(code, parseOpts);
     this.log.debug("Parse stop");
     return ast;
   }
@@ -503,7 +503,7 @@ export default class File extends Store {
     this.log.debug("End set AST");
 
     this.log.debug("Start module formatter init");
-    var modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
+    let modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
     if (modFormatter.init && this.transformers["es6.modules"].canTransform()) {
       modFormatter.init();
     }
@@ -512,7 +512,7 @@ export default class File extends Store {
 
   transform() {
     this.call("pre");
-    for (var pass of (this.transformerStack: Array)) {
+    for (let pass of (this.transformerStack: Array)) {
       pass.transform();
     }
     this.call("post");
@@ -536,9 +536,9 @@ export default class File extends Store {
         err._babel = true;
       }
 
-      var message = err.message = `${this.opts.filename}: ${err.message}`;
+      let message = err.message = `${this.opts.filename}: ${err.message}`;
 
-      var loc = err.loc;
+      let loc = err.loc;
       if (loc) {
         err.codeFrame = codeFrame(code, loc.line, loc.column + 1, this.opts);
         message += "\n" + err.codeFrame;
@@ -551,7 +551,7 @@ export default class File extends Store {
       }
 
       if (err.stack) {
-        var newStack = err.stack.replace(err.message, message);
+        let newStack = err.stack.replace(err.message, message);
         try {
           err.stack = newStack;
         } catch (e) {
@@ -571,27 +571,27 @@ export default class File extends Store {
 
   parseCode() {
     this.parseShebang();
-    var ast = this.parse(this.code);
+    let ast = this.parse(this.code);
     this.addAst(ast);
   }
 
   shouldIgnore() {
-    var opts = this.opts;
+    let opts = this.opts;
     return util.shouldIgnore(opts.filename, opts.ignore, opts.only);
   }
 
   call(key: string) {
-    for (var pass of (this.uncollapsedTransformerStack: Array)) {
-      var fn = pass.plugin[key];
+    for (let pass of (this.uncollapsedTransformerStack: Array)) {
+      let fn = pass.plugin[key];
       if (fn) fn.call(pass, this);
     }
   }
 
   parseInputSourceMap(code: string) {
-    var opts = this.opts;
+    let opts = this.opts;
 
     if (opts.inputSourceMap !== false) {
-      var inputMap = convertSourceMap.fromSource(code);
+      let inputMap = convertSourceMap.fromSource(code);
       if (inputMap) {
         opts.inputSourceMap = inputMap.toObject();
         code = convertSourceMap.removeComments(code);
@@ -602,7 +602,7 @@ export default class File extends Store {
   }
 
   parseShebang() {
-    var shebangMatch = shebangRegex.exec(this.code);
+    let shebangMatch = shebangRegex.exec(this.code);
     if (shebangMatch) {
       this.shebang = shebangMatch[0];
       this.code = this.code.replace(shebangRegex, "");
@@ -610,7 +610,7 @@ export default class File extends Store {
   }
 
   makeResult({ code, map = null, ast, ignored }) {
-    var result = {
+    let result = {
       metadata: null,
       ignored:  !!ignored,
       code:     null,
@@ -635,15 +635,15 @@ export default class File extends Store {
   }
 
   generate() {
-    var opts = this.opts;
-    var ast  = this.ast;
+    let opts = this.opts;
+    let ast  = this.ast;
 
-    var result = { ast };
+    let result = { ast };
     if (!opts.code) return this.makeResult(result);
 
     this.log.debug("Generation start");
 
-    var _result = generate(ast, opts, this.code);
+    let _result = generate(ast, opts, this.code);
     result.code = _result.code;
     result.map  = _result.map;
 

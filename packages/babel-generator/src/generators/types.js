@@ -14,7 +14,7 @@ export function RestElement(node, print) {
 export { RestElement as SpreadElement, RestElement as SpreadProperty };
 
 export function ObjectExpression(node, print) {
-  var props = node.properties;
+  let props = node.properties;
 
   this.push("{");
   print.printInnerComments();
@@ -65,14 +65,14 @@ export function Property(node, print) {
 }
 
 export function ArrayExpression(node, print) {
-  var elems = node.elements;
-  var len   = elems.length;
+  let elems = node.elements;
+  let len   = elems.length;
 
   this.push("[");
   print.printInnerComments();
 
-  for (var i = 0; i < elems.length; i++) {
-    var elem = elems[i];
+  for (let i = 0; i < elems.length; i++) {
+    let elem = elems[i];
     if (elem) {
       if (i > 0) this.space();
       print.plain(elem);

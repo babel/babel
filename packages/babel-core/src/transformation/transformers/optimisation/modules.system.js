@@ -1,11 +1,11 @@
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   optional: true,
   group: "builtin-trailing"
 };
 
-export var visitor = {
+export let visitor = {
   Program(node, parent, scope, file){
     if (file.moduleFormatter._setters){
       scope.traverse(file.moduleFormatter._setters, optimizeSettersVisitor, {
@@ -24,7 +24,7 @@ export var visitor = {
  * TODO: Ideally this would be optimized during construction of the setters, but the current
  * architecture of the module formatters make that difficult.
  */
-var optimizeSettersVisitor = {
+let optimizeSettersVisitor = {
   FunctionExpression: {
     enter: (node, parent, scope, state) => {
       state.hasExports = false;
@@ -44,7 +44,7 @@ var optimizeSettersVisitor = {
     if (!t.isIdentifier(node.callee, {name: state.exportFunctionIdentifier.name})) return;
 
     state.hasExports = true;
-    var memberNode = t.memberExpression(t.cloneDeep(state.exportObjectIdentifier), node.arguments[0], true);
+    let memberNode = t.memberExpression(t.cloneDeep(state.exportObjectIdentifier), node.arguments[0], true);
     return t.assignmentExpression("=", memberNode, node.arguments[1]);
   }
 };

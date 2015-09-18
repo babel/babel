@@ -55,7 +55,7 @@ export function WhileStatement(node, print) {
   print.block(node.body);
 }
 
-var buildForXStatement = function (op) {
+let buildForXStatement = function (op) {
   return function (node, print) {
     this.keyword("for");
     this.push("(");
@@ -67,8 +67,8 @@ var buildForXStatement = function (op) {
   };
 };
 
-export var ForInStatement = buildForXStatement("in");
-export var ForOfStatement = buildForXStatement("of");
+export let ForInStatement = buildForXStatement("in");
+export let ForOfStatement = buildForXStatement("of");
 
 export function DoWhileStatement(node, print) {
   this.push("do ");
@@ -84,10 +84,10 @@ function buildLabelStatement(prefix, key = "label") {
   return function (node, print) {
     this.push(prefix);
 
-    var label = node[key];
+    let label = node[key];
     if (label) {
       this.push(" ");
-      var terminatorState = this.startTerminatorless();
+      let terminatorState = this.startTerminatorless();
       print.plain(label);
       this.endTerminatorless(terminatorState);
     }
@@ -96,10 +96,10 @@ function buildLabelStatement(prefix, key = "label") {
   };
 }
 
-export var ContinueStatement = buildLabelStatement("continue");
-export var ReturnStatement   = buildLabelStatement("return", "argument");
-export var BreakStatement    = buildLabelStatement("break");
-export var ThrowStatement    = buildLabelStatement("throw", "argument");
+export let ContinueStatement = buildLabelStatement("continue");
+export let ReturnStatement   = buildLabelStatement("return", "argument");
+export let BreakStatement    = buildLabelStatement("break");
+export let ThrowStatement    = buildLabelStatement("throw", "argument");
 
 export function LabeledStatement(node, print) {
   print.plain(node.label);
@@ -176,10 +176,10 @@ export function DebuggerStatement() {
 export function VariableDeclaration(node, print, parent) {
   this.push(node.kind + " ");
 
-  var hasInits = false;
+  let hasInits = false;
   // don't add whitespace to loop heads
   if (!t.isFor(parent)) {
-    for (var declar of (node.declarations: Array)) {
+    for (let declar of (node.declarations: Array)) {
       if (declar.init) {
         // has an init so let's split it up over multiple lines
         hasInits = true;
@@ -191,15 +191,15 @@ export function VariableDeclaration(node, print, parent) {
   // use a pretty separator when we aren't in compact mode, have initializers and don't have retainLines on
   // this will format declarations like:
   //
-  //   var foo = "bar", bar = "foo";
+  //   let foo = "bar", bar = "foo";
   //
   // into
   //
-  //   var foo = "bar",
+  //   let foo = "bar",
   //       bar = "foo";
   //
 
-  var sep;
+  let sep;
   if (!this.format.compact && !this.format.concise && hasInits && !this.format.retainLines) {
     sep = `,\n${repeating(" ", node.kind.length + 1)}`;
   }

@@ -10,10 +10,10 @@ export function TemplateElement(node) {
 export function TemplateLiteral(node, print) {
   this.push("`");
 
-  var quasis = node.quasis;
-  var len    = quasis.length;
+  let quasis = node.quasis;
+  let len    = quasis.length;
 
-  for (var i = 0; i < len; i++) {
+  for (let i = 0; i < len; i++) {
     print.plain(quasis[i]);
 
     if (i + 1 < len) {

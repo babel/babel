@@ -1,12 +1,12 @@
-export var metadata = {
+export let metadata = {
   group: "builtin-modules"
 };
 
-export var visitor = {
+export let visitor = {
   Program: {
     exit(program, parent, scope, file) {
       // ensure that these are at the top, just like normal imports
-      for (var node of (file.dynamicImports: Array)) {
+      for (let node of (file.dynamicImports: Array)) {
         node._blockHoist = 3;
       }
 

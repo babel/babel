@@ -9,7 +9,7 @@ export default class Pipeline {
   }
 
   pretransform(code: string, opts?: Object) {
-    var file = new File(opts, this);
+    let file = new File(opts, this);
     return file.wrap(code, function () {
       file.addCode(code);
       file.parseCode(code);
@@ -18,7 +18,7 @@ export default class Pipeline {
   }
 
   transform(code: string, opts?: Object) {
-    var file = new File(opts, this);
+    let file = new File(opts, this);
     return file.wrap(code, function () {
       file.addCode(code);
       file.parseCode(code);
@@ -29,7 +29,7 @@ export default class Pipeline {
   transformFromAst(ast, code, opts) {
     ast = normalizeAst(ast);
 
-    var file = new File(opts, this);
+    let file = new File(opts, this);
     return file.wrap(code, function () {
       file.addCode(code);
       file.addAst(ast);

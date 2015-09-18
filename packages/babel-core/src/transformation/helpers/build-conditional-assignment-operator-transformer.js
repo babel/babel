@@ -2,7 +2,7 @@ import explode from "./explode-assignable-expression";
 import * as t from "babel-types";
 
 export default function (exports, opts) {
-  var buildAssignment = function (left, right) {
+  let buildAssignment = function (left, right) {
     return t.assignmentExpression("=", left, right);
   };
 
@@ -10,12 +10,12 @@ export default function (exports, opts) {
     // hit the `AssignmentExpression` one below
     if (path.isCompletionRecord()) return;
 
-    var expr = path.node.expression;
+    let expr = path.node.expression;
     if (!opts.is(expr, file)) return;
 
-    var nodes = [];
+    let nodes = [];
 
-    var exploded = explode(expr.left, nodes, file, path.scope);
+    let exploded = explode(expr.left, nodes, file, path.scope);
 
     nodes.push(t.ifStatement(
       opts.build(exploded.uid, file),
@@ -26,11 +26,11 @@ export default function (exports, opts) {
   };
 
   exports.AssignmentExpression = function (path, file) {
-    var node = path.node;
+    let node = path.node;
     if (!opts.is(node, file)) return;
 
-    var nodes    = [];
-    var exploded = explode(node.left, nodes, file, path.scope);
+    let nodes    = [];
+    let exploded = explode(node.left, nodes, file, path.scope);
 
     nodes.push(t.logicalExpression(
       "&&",

@@ -11,11 +11,11 @@ export default class LooseClassTransformer extends VanillaTransformer {
     if (!node.decorators) {
       // use assignments instead of define properties for loose classes
 
-      var classRef = this.classRef;
+      let classRef = this.classRef;
       if (!node.static) classRef = t.memberExpression(classRef, t.identifier("prototype"));
-      var methodName = t.memberExpression(classRef, node.key, node.computed || t.isLiteral(node.key));
+      let methodName = t.memberExpression(classRef, node.key, node.computed || t.isLiteral(node.key));
 
-      var expr = t.expressionStatement(t.assignmentExpression("=", methodName, node.value));
+      let expr = t.expressionStatement(t.assignmentExpression("=", methodName, node.value));
       t.inheritsComments(expr, node);
       this.body.push(expr);
       return true;

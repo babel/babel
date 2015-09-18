@@ -5,7 +5,7 @@ export function number(val) {
   return +val;
 }
 
-export var filename = slash;
+export let filename = slash;
 
 export function boolean(val) {
   return !!val;

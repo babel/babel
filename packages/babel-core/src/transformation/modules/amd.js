@@ -11,8 +11,8 @@ export default class AMDFormatter extends DefaultFormatter {
   }
 
   buildDependencyLiterals() {
-    var names = [];
-    for (var name in this.ids) {
+    let names = [];
+    for (let name in this.ids) {
       names.push(t.stringLiteral(name));
     }
     return names;
@@ -25,28 +25,28 @@ export default class AMDFormatter extends DefaultFormatter {
   transform(program) {
     CommonFormatter.prototype.transform.apply(this, arguments);
 
-    var body = program.body;
+    let body = program.body;
 
     // build an array of module names
 
-    var names = [t.stringLiteral("exports")];
+    let names = [t.stringLiteral("exports")];
     if (this.passModuleArg) names.push(t.stringLiteral("module"));
     names = names.concat(this.buildDependencyLiterals());
     names = t.arrayExpression(names);
 
     // build up define container
 
-    var params = values(this.ids);
+    let params = values(this.ids);
     if (this.passModuleArg) params.unshift(t.identifier("module"));
     params.unshift(t.identifier("exports"));
 
-    var container = t.functionExpression(null, params, t.blockStatement(body));
+    let container = t.functionExpression(null, params, t.blockStatement(body));
 
-    var defineArgs = [names, container];
-    var moduleName = this.getModuleName();
+    let defineArgs = [names, container];
+    let moduleName = this.getModuleName();
     if (moduleName) defineArgs.unshift(t.stringLiteral(moduleName));
 
-    var call = t.callExpression(t.identifier("define"), defineArgs);
+    let call = t.callExpression(t.identifier("define"), defineArgs);
 
     program.body = [t.expressionStatement(call)];
   }
@@ -73,8 +73,8 @@ export default class AMDFormatter extends DefaultFormatter {
   }
 
   importSpecifier(specifier, node, nodes, scope) {
-    var key = node.source.value;
-    var ref = this.getExternalReference(node);
+    let key = node.source.value;
+    let ref = this.getExternalReference(node);
 
     if (t.isImportNamespaceSpecifier(specifier) || t.isImportDefaultSpecifier(specifier)) {
       this.defaultIds[key] = specifier.local;
@@ -90,14 +90,14 @@ export default class AMDFormatter extends DefaultFormatter {
       // import * as bar from "foo";
     } else if (!includes(this.file.dynamicImported, node) && t.isSpecifierDefault(specifier) && !this.noInteropRequireImport) {
       // import foo from "foo";
-      var uid = scope.generateUidIdentifier(specifier.local.name);
+      let uid = scope.generateUidIdentifier(specifier.local.name);
       nodes.push(t.variableDeclaration("var", [
         t.variableDeclarator(uid, t.callExpression(this.file.addHelper("interop-require-default"), [ref]))
       ]));
       ref = t.memberExpression(uid, t.identifier("default"));
     } else {
       // import { foo } from "foo";
-      var imported = specifier.imported;
+      let imported = specifier.imported;
       if (t.isSpecifierDefault(specifier)) imported = t.identifier("default");
       ref = t.memberExpression(ref, imported);
     }
@@ -124,8 +124,8 @@ export default class AMDFormatter extends DefaultFormatter {
     if (this.doDefaultExportInterop(node)) {
       this.passModuleArg = true;
 
-      var declar = node.declaration;
-      var assign = util.template("exports-default-assign", {
+      let declar = node.declaration;
+      let assign = util.template("exports-default-assign", {
         VALUE: this._pushStatement(declar, nodes)
       }, true);
 

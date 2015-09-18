@@ -1,11 +1,11 @@
-var commander = require("commander");
-var readdir   = require("fs-readdir-recursive");
-var index     = require("./index");
-var babel     = require("babel-core");
-var util      = require("babel-core").util;
-var path      = require("path");
-var fs        = require("fs");
-var _         = require("lodash");
+let commander = require("commander");
+let readdir   = require("fs-readdir-recursive");
+let index     = require("./index");
+let babel     = require("babel-core");
+let util      = require("babel-core").util;
+let path      = require("path");
+let fs        = require("fs");
+let _         = require("lodash");
 
 exports.readdirFilter = function (filename) {
   return readdir(filename).filter(function (filename) {
@@ -35,7 +35,7 @@ exports.transform = function (filename, code, opts) {
   opts.ignore = null;
   opts.only = null;
 
-  var result = babel.transform(code, opts);
+  let result = babel.transform(code, opts);
   result.filename = filename;
   result.actual = code;
   return result;
@@ -43,7 +43,7 @@ exports.transform = function (filename, code, opts) {
 
 exports.compile = function (filename, opts) {
   try {
-    var code = fs.readFileSync(filename, "utf8");
+    let code = fs.readFileSync(filename, "utf8");
     return exports.transform(filename, code, opts);
   } catch (err) {
     if (commander.watch) {

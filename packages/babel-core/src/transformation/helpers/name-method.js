@@ -2,14 +2,14 @@ import getFunctionArity from "./get-function-arity";
 import * as util from  "../../util";
 import * as t from "babel-types";
 
-var visitor = {
+let visitor = {
   "ReferencedIdentifier|BindingIdentifier"(path, state) {
     // check if this node matches our function id
     if (path.node.name !== state.name) return;
 
     // check that we don't have a local variable declared as that removes the need
     // for the wrapper
-    var localDeclar = path.scope.getBindingIdentifier(state.name);
+    let localDeclar = path.scope.getBindingIdentifier(state.name);
     if (localDeclar !== state.outerDeclar) return;
 
     state.selfReference = true;
@@ -24,9 +24,9 @@ function wrap(state, method, id, scope) {
       scope.rename(id.name);
     } else {
       // need to add a wrapper since we can't change the references
-      var templateName = "property-method-assignment-wrapper";
+      let templateName = "property-method-assignment-wrapper";
       if (method.generator) templateName += "-generator";
-      var template = util.template(templateName, {
+      let template = util.template(templateName, {
         FUNCTION: method,
         FUNCTION_ID: id,
         FUNCTION_KEY: scope.generateUidIdentifier(id.name)
@@ -35,8 +35,8 @@ function wrap(state, method, id, scope) {
 
       // shim in dummy params to retain function arity, if you try to read the
       // source then you'll get the original since it's proxied so it's all good
-      var params = template.callee.body.body[0].params;
-      for (var i = 0, len = getFunctionArity(method); i < len; i++) {
+      let params = template.callee.body.body[0].params;
+      for (let i = 0, len = getFunctionArity(method); i < len; i++) {
         params.push(scope.generateUidIdentifier("x"));
       }
 
@@ -49,7 +49,7 @@ function wrap(state, method, id, scope) {
 }
 
 function visit(node, name, scope) {
-  var state = {
+  let state = {
     selfAssignment: false,
     selfReference:  false,
     outerDeclar:    scope.getBindingIdentifier(name),
@@ -60,13 +60,13 @@ function visit(node, name, scope) {
   // check to see if we have a local binding of the id we're setting inside of
   // the function, this is important as there are caveats associated
 
-  var binding = scope.getOwnBinding(name);
+  let binding = scope.getOwnBinding(name);
 
   if (binding) {
     if (binding.kind === "param") {
       // safari will blow up in strict mode with code like:
       //
-      //   var t = function t(t) {};
+      //   let t = function t(t) {};
       //
       // with the error:
       //
@@ -80,8 +80,8 @@ function visit(node, name, scope) {
     } else {
       // otherwise it's defined somewhere in scope like:
       //
-      //   var t = function () {
-      //     var t = 2;
+      //   let t = function () {
+      //     let t = 2;
       //   };
       //
       // so we can safely just set the id and move along as it shadows the
@@ -95,19 +95,19 @@ function visit(node, name, scope) {
 }
 
 export function custom(node, id, scope) {
-  var state = visit(node, id.name, scope);
+  let state = visit(node, id.name, scope);
   return wrap(state, node, id, scope);
 }
 
 export function property(node, file, scope) {
-  var key = t.toComputedKey(node, node.key);
+  let key = t.toComputedKey(node, node.key);
   if (!t.isLiteral(key)) return; // we can't set a function id with this
 
-  var name = t.toBindingIdentifierName(key.value);
-  var id = t.identifier(name);
+  let name = t.toBindingIdentifierName(key.value);
+  let id = t.identifier(name);
 
-  var method = node.value;
-  var state  = visit(method, name, scope);
+  let method = node.value;
+  let state  = visit(method, name, scope);
   node.value = wrap(state, method, id, scope) || method;
 }
 
@@ -115,16 +115,16 @@ export function bare(node, parent, scope) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
-  var id;
+  let id;
   if (t.isProperty(parent) && parent.kind === "init" && (!parent.computed || t.isLiteral(parent.key))) {
     // { foo() {} };
     id = parent.key;
   } else if (t.isVariableDeclarator(parent)) {
-    // var foo = function () {};
+    // let foo = function () {};
     id = parent.id;
 
     if (t.isIdentifier(id)) {
-      var binding = scope.parent.getBinding(id.name);
+      let binding = scope.parent.getBinding(id.name);
       if (binding && binding.constant && scope.getBinding(id.name) === binding) {
         // always going to reference this method
         node.id = id;
@@ -135,7 +135,7 @@ export function bare(node, parent, scope) {
     return;
   }
 
-  var name;
+  let name;
   if (t.isLiteral(id)) {
     name = id.value;
   } else if (t.isIdentifier(id)) {
@@ -147,6 +147,6 @@ export function bare(node, parent, scope) {
   name = t.toBindingIdentifierName(name);
   id = t.identifier(name);
 
-  var state = visit(node, name, scope);
+  let state = visit(node, name, scope);
   return wrap(state, node, id, scope);
 }

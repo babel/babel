@@ -14,7 +14,7 @@ export default class NodePrinter {
 
   printInnerComments() {
     if (!this.parent.innerComments) return;
-    var gen = this.generator;
+    let gen = this.generator;
     gen.indent();
     gen._printComments(this.parent.innerComments);
     gen.dedent();

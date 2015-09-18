@@ -9,8 +9,8 @@ export default function (dest, src) {
 
   return merge(dest, src, function (a, b) {
     if (b && Array.isArray(a)) {
-      var c = a.slice(0);
-      for (var v of b) {
+      let c = a.slice(0);
+      for (let v of b) {
         if (a.indexOf(v) < 0) {
           c.push(v);
         }

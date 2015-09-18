@@ -64,7 +64,7 @@ exports.nodes = {
    */
 
   AssignmentExpression(node) {
-    var state = crawl(node.right);
+    let state = crawl(node.right);
     if ((state.hasCall && state.hasHelper) || state.hasFunction) {
       return {
         before: state.hasFunction,
@@ -125,12 +125,12 @@ exports.nodes = {
    */
 
   VariableDeclaration(node) {
-    for (var i = 0; i < node.declarations.length; i++) {
-      var declar = node.declarations[i];
+    for (let i = 0; i < node.declarations.length; i++) {
+      let declar = node.declarations[i];
 
-      var enabled = isHelper(declar.id) && !isType(declar.init);
+      let enabled = isHelper(declar.id) && !isType(declar.init);
       if (!enabled) {
-        var state = crawl(declar.init);
+        let state = crawl(declar.init);
         enabled = (isHelper(declar.init) && state.hasCall) || state.hasFunction;
       }
 

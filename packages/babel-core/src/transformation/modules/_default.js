@@ -32,10 +32,10 @@ export default class DefaultFormatter {
   }
 
   addScope(path) {
-    var source = path.node.source && path.node.source.value;
+    let source = path.node.source && path.node.source.value;
     if (!source) return;
 
-    var existingScope = this.sourceScopes[source];
+    let existingScope = this.sourceScopes[source];
     if (existingScope && existingScope !== path.scope) {
       throw path.buildCodeFrameError(messages.get("modulesDuplicateDeclarations"));
     }
@@ -44,7 +44,7 @@ export default class DefaultFormatter {
   }
 
   isModuleType(node, type) {
-    var modules = this.file.dynamicImportTypes[type];
+    let modules = this.file.dynamicImportTypes[type];
     return modules && modules.indexOf(node) >= 0;
   }
 
@@ -57,8 +57,8 @@ export default class DefaultFormatter {
   }
 
   getMetadata() {
-    var has = false;
-    for (var node of (this.file.ast.program.body: Array)) {
+    let has = false;
+    for (let node of (this.file.ast.program.body: Array)) {
       if (t.isModuleDeclaration(node)) {
         has = true;
         break;
@@ -76,9 +76,9 @@ export default class DefaultFormatter {
   }
 
   remapExportAssignment(node, exported) {
-    var assign = node;
+    let assign = node;
 
-    for (var i = 0; i < exported.length; i++) {
+    for (let i = 0; i < exported.length; i++) {
       assign = t.assignmentExpression(
         "=",
         t.memberExpression(t.identifier("exports"), exported[i]),
@@ -90,7 +90,7 @@ export default class DefaultFormatter {
   }
 
   _addExport(name, exported) {
-    var info = this.localExports[name] = this.localExports[name] || {
+    let info = this.localExports[name] = this.localExports[name] || {
       binding: this.scope.getBindingIdentifier(name),
       exported: []
     };
@@ -100,21 +100,21 @@ export default class DefaultFormatter {
   getExport(node, scope) {
     if (!t.isIdentifier(node)) return;
 
-    var local = this.localExports[node.name];
+    let local = this.localExports[node.name];
     if (local && local.binding === scope.getBindingIdentifier(node.name)) {
       return local.exported;
     }
   }
 
   getModuleName() {
-    var opts = this.file.opts;
+    let opts = this.file.opts;
     // moduleId is n/a if a `getModuleId()` is provided
     if (opts.moduleId != null && !opts.getModuleId) {
       return opts.moduleId;
     }
 
-    var filenameRelative = opts.filenameRelative;
-    var moduleName = "";
+    let filenameRelative = opts.filenameRelative;
+    let moduleName = "";
 
     if (opts.moduleRoot != null) {
       moduleName = opts.moduleRoot + "/";
@@ -126,7 +126,7 @@ export default class DefaultFormatter {
 
     if (opts.sourceRoot != null) {
       // remove sourceRoot from filename
-      var sourceRootRegEx = new RegExp("^" + opts.sourceRoot + "\/?");
+      let sourceRootRegEx = new RegExp("^" + opts.sourceRoot + "\/?");
       filenameRelative = filenameRelative.replace(sourceRootRegEx, "");
     }
 
@@ -168,8 +168,8 @@ export default class DefaultFormatter {
   }
 
   getExternalReference(node, nodes) {
-    var ids = this.ids;
-    var id = node.source.value;
+    let ids = this.ids;
+    let id = node.source.value;
 
     if (ids[id]) {
       return ids[id];
@@ -185,7 +185,7 @@ export default class DefaultFormatter {
   }
 
   exportAllDeclaration(node, nodes) {
-    var ref = this.getExternalReference(node, nodes);
+    let ref = this.getExternalReference(node, nodes);
     nodes.push(this.buildExportsWildcard(ref, node));
   }
 
@@ -195,7 +195,7 @@ export default class DefaultFormatter {
 
   exportSpecifier(specifier, node, nodes) {
     if (node.source) {
-      var ref = this.getExternalReference(node, nodes);
+      let ref = this.getExternalReference(node, nodes);
 
       if (specifier.local.name === "default" && !this.noInteropRequireExport) {
         // importing a default so we need to normalize it
@@ -244,28 +244,28 @@ export default class DefaultFormatter {
   }
 
   exportDeclaration(node, nodes) {
-    var declar = node.declaration;
+    let declar = node.declaration;
 
-    var id = declar.id;
+    let id = declar.id;
 
     if (t.isExportDefaultDeclaration(node)) {
       id = t.identifier("default");
     }
 
-    var assign;
+    let assign;
 
     if (t.isVariableDeclaration(declar)) {
-      for (var i = 0; i < declar.declarations.length; i++) {
-        var decl = declar.declarations[i];
+      for (let i = 0; i < declar.declarations.length; i++) {
+        let decl = declar.declarations[i];
 
         decl.init = this.buildExportsAssignment(decl.id, decl.init, node).expression;
 
-        var newDeclar = t.variableDeclaration(declar.kind, [decl]);
+        let newDeclar = t.variableDeclaration(declar.kind, [decl]);
         if (i === 0) t.inherits(newDeclar, declar);
         nodes.push(newDeclar);
       }
     } else {
-      var ref = declar;
+      let ref = declar;
 
       if (t.isFunctionDeclaration(declar) || t.isClassDeclaration(declar)) {
         ref = declar.id;

@@ -7,11 +7,11 @@ import * as t from "babel-types";
 // the version that Regenerator depends on. See for example #1958.
 const NodePath = regenerator.types.NodePath;
 
-export var metadata = {
+export let metadata = {
   group: "builtin-advanced"
 };
 
-export var visitor = {
+export let visitor = {
   Function: {
     exit(node) {
       if (node.async || node.generator) {
@@ -33,17 +33,17 @@ export var visitor = {
 // complicated by having to include intermediate objects like blockStatement.body
 // arrays, in addition to Node objects.
 function convertNodePath(path) {
-  var programNode;
-  var keysAlongPath = [];
+  let programNode;
+  let keysAlongPath = [];
 
   while (path) {
-    var pp = path.parentPath;
-    var parentNode = pp && pp.node;
+    let pp = path.parentPath;
+    let parentNode = pp && pp.node;
     if (parentNode) {
       keysAlongPath.push(path.key);
 
       if (parentNode !== path.container) {
-        var found = Object.keys(parentNode).some(listKey => {
+        let found = Object.keys(parentNode).some(listKey => {
           if (parentNode[listKey] === path.container) {
             keysAlongPath.push(listKey);
             return true;
@@ -68,7 +68,7 @@ function convertNodePath(path) {
     throw new Error("Failed to find root Program node");
   }
 
-  var nodePath = new NodePath(programNode);
+  let nodePath = new NodePath(programNode);
 
   while (keysAlongPath.length > 0) {
     nodePath = nodePath.get(keysAlongPath.pop());

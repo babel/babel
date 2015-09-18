@@ -8,7 +8,7 @@ export default class Plugin {
     plugin = this.raw = assign({}, plugin);
 
     function take(key) {
-      var val = plugin[key];
+      let val = plugin[key];
       delete plugin[key];
       return val;
     }

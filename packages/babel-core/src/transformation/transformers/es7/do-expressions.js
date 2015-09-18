@@ -1,13 +1,13 @@
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   optional: true,
   stage: 0
 };
 
-export var visitor = {
+export let visitor = {
   DoExpression(node) {
-    var body = node.body.body;
+    let body = node.body.body;
     if (body.length) {
       return body;
     } else {

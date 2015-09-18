@@ -62,11 +62,11 @@ export function Binary(node, parent) {
   }
 
   if (t.isBinary(parent)) {
-    var parentOp  = parent.operator;
-    var parentPos = PRECEDENCE[parentOp];
+    let parentOp  = parent.operator;
+    let parentPos = PRECEDENCE[parentOp];
 
-    var nodeOp = node.operator;
-    var nodePos = PRECEDENCE[nodeOp];
+    let nodeOp = node.operator;
+    let nodePos = PRECEDENCE[nodeOp];
 
     if (parentPos > nodePos) {
       return true;
@@ -80,7 +80,7 @@ export function Binary(node, parent) {
 
 export function BinaryExpression(node, parent) {
   if (node.operator === "in") {
-    // var i = (1 in []);
+    // let i = (1 in []);
     if (t.isVariableDeclarator(parent)) {
       return true;
     }

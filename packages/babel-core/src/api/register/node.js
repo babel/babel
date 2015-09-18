@@ -15,7 +15,7 @@ import path from "path";
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
   retrieveSourceMap(source) {
-    var map = maps && maps[source];
+    let map = maps && maps[source];
     if (map) {
       return {
         url: null,
@@ -32,27 +32,27 @@ sourceMapSupport.install({
  */
 
 registerCache.load();
-var cache = registerCache.get();
+let cache = registerCache.get();
 
 /**
  * Store options.
  */
 
-var transformOpts = {};
+let transformOpts = {};
 
-var ignore;
-var only;
+let ignore;
+let only;
 
-var oldHandlers   = {};
-var maps          = {};
+let oldHandlers   = {};
+let maps          = {};
 
-var cwd = process.cwd();
+let cwd = process.cwd();
 
 /**
  * Get path from `filename` relative to the current working directory.
  */
 
-var getRelativePath = function (filename){
+let getRelativePath = function (filename){
   return path.relative(cwd, filename);
 };
 
@@ -60,7 +60,7 @@ var getRelativePath = function (filename){
  * Get last modified time for a `filename`.
  */
 
-var mtime = function (filename) {
+let mtime = function (filename) {
   return +fs.statSync(filename).mtime;
 };
 
@@ -68,22 +68,22 @@ var mtime = function (filename) {
  * Compile a `filename` with optional `opts`.
  */
 
-var compile = function (filename, opts = {}) {
-  var result;
+let compile = function (filename, opts = {}) {
+  let result;
 
   opts.filename = filename;
 
-  var optsManager = new OptionManager;
+  let optsManager = new OptionManager;
   optsManager.mergeOptions(transformOpts);
   opts = optsManager.init(opts);
 
-  var cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
+  let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
-  var env = process.env.BABEL_ENV || process.env.NODE_ENV;
+  let env = process.env.BABEL_ENV || process.env.NODE_ENV;
   if (env) cacheKey += `:${env}`;
 
   if (cache) {
-    var cached = cache[cacheKey];
+    let cached = cache[cacheKey];
     if (cached && cached.mtime === mtime(filename)) {
       result = cached;
     }
@@ -110,7 +110,7 @@ var compile = function (filename, opts = {}) {
  * Test if a `filename` should be ignored by Babel.
  */
 
-var shouldIgnore = function (filename) {
+let shouldIgnore = function (filename) {
   if (!ignore && !only) {
     return getRelativePath(filename).split(path.sep).indexOf("node_modules") >= 0;
   } else {
@@ -122,17 +122,17 @@ var shouldIgnore = function (filename) {
  * Monkey patch istanbul if it is running so that it works properly.
  */
 
-var istanbulMonkey = {};
+let istanbulMonkey = {};
 
 if (process.env.running_under_istanbul) {
   // we need to monkey patch fs.readFileSync so we can hook into
   // what istanbul gets, it's extremely dirty but it's the only way
-  var _readFileSync = fs.readFileSync;
+  let _readFileSync = fs.readFileSync;
 
   fs.readFileSync = function (filename) {
     if (istanbulMonkey[filename]) {
       delete istanbulMonkey[filename];
-      var code = compile(filename, {
+      let code = compile(filename, {
         auxiliaryCommentBefore: "istanbul ignore next"
       });
       istanbulMonkey[filename] = true;
@@ -147,7 +147,7 @@ if (process.env.running_under_istanbul) {
  * Replacement for the loader for istanbul.
  */
 
-var istanbulLoader = function (m, filename, old) {
+let istanbulLoader = function (m, filename, old) {
   istanbulMonkey[filename] = true;
   old(m, filename);
 };
@@ -156,7 +156,7 @@ var istanbulLoader = function (m, filename, old) {
  * Default loader.
  */
 
-var normalLoader = function (m, filename) {
+let normalLoader = function (m, filename) {
   m._compile(compile(filename), filename);
 };
 
@@ -164,10 +164,10 @@ var normalLoader = function (m, filename) {
  * Register a loader for an extension.
  */
 
-var registerExtension = function (ext) {
-  var old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
+let registerExtension = function (ext) {
+  let old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
 
-  var loader = normalLoader;
+  let loader = normalLoader;
   if (process.env.running_under_istanbul) loader = istanbulLoader;
 
   require.extensions[ext] = function (m, filename) {
@@ -183,7 +183,7 @@ var registerExtension = function (ext) {
  * Register loader for given extensions.
  */
 
-var hookExtensions = function (_exts) {
+let hookExtensions = function (_exts) {
   each(oldHandlers, function (old, ext) {
     if (old === undefined) {
       delete require.extensions[ext];

@@ -9,7 +9,7 @@ import * as babel from "babel-core";
 import vm from "vm";
 import _ from "lodash";
 
-var program = new commander.Command("babel-node");
+let program = new commander.Command("babel-node");
 
 program.option("-e, --eval [script]", "Evaluate script");
 program.option("-p, --print [code]", "Evaluate script and print result");
@@ -18,7 +18,7 @@ program.option("-x, --extensions [extensions]", "List of extensions to hook into
 program.option("-w, --plugins [string]", "TODO", util.list);
 program.option("-b, --presets [string]", "TODO", util.list);
 
-var pkg = require("../package.json");
+let pkg = require("../package.json");
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
@@ -35,7 +35,7 @@ babel.register({
 
 //
 
-var replPlugin = new babel.Plugin("repl", {
+let replPlugin = new babel.Plugin("repl", {
   visitor: {
     ModuleDeclaration() {
       throw this.errorWithNode("Modules aren't supported in the REPL");
@@ -51,7 +51,7 @@ var replPlugin = new babel.Plugin("repl", {
 
 //
 
-var _eval = function (code, filename) {
+let _eval = function (code, filename) {
   code = code.trim();
   if (!code) return undefined;
 
@@ -70,13 +70,13 @@ var _eval = function (code, filename) {
 };
 
 if (program.eval || program.print) {
-  var code = program.eval;
+  let code = program.eval;
   if (!code || code === true) code = program.print;
 
   global.__filename = "[eval]";
   global.__dirname = process.cwd();
 
-  var module = new Module(global.__filename);
+  let module = new Module(global.__filename);
   module.filename = global.__filename;
   module.paths    = Module._nodeModulePaths(global.__dirname);
 
@@ -84,18 +84,18 @@ if (program.eval || program.print) {
   global.module  = module;
   global.require = module.require.bind(module);
 
-  var result = _eval(code, global.__filename);
+  let result = _eval(code, global.__filename);
   if (program.print) {
-    var output = _.isString(result) ? result : inspect(result);
+    let output = _.isString(result) ? result : inspect(result);
     process.stdout.write(output + "\n");
   }
 } else {
   if (program.args.length) {
     // slice all arguments up to the first filename since they're babel args that we handle
-    var args = process.argv.slice(2);
+    let args = process.argv.slice(2);
 
-    var i = 0;
-    var ignoreNext = false;
+    let i = 0;
+    let ignoreNext = false;
     _.each(args, function (arg, i2) {
       if (ignoreNext) {
         ignoreNext = false;
@@ -103,7 +103,7 @@ if (program.eval || program.print) {
       }
 
       if (arg[0] === "-") {
-        var parsedArg = program[arg.slice(2)];
+        let parsedArg = program[arg.slice(2)];
         if (parsedArg && parsedArg !== true) {
           ignoreNext = true;
         }
@@ -115,7 +115,7 @@ if (program.eval || program.print) {
     args = args.slice(i);
 
     // make the filename absolute
-    var filename = args[0];
+    let filename = args[0];
     if (!pathIsAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
 
     // add back on node and concat the sliced args
@@ -139,8 +139,8 @@ function replStart() {
 }
 
 function replEval(code, context, filename, callback) {
-  var err;
-  var result;
+  let err;
+  let result;
 
   try {
     if (code[0] === "(" && code[code.length - 1] === ")") {

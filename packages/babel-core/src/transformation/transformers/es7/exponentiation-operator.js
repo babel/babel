@@ -3,11 +3,11 @@
 import build from "../../helpers/build-binary-assignment-operator-transformer";
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   stage: 2
 };
 
-export var visitor = build({
+export let visitor = build({
   operator: "**",
 
   build(left, right) {

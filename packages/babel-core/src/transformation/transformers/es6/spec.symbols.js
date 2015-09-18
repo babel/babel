@@ -1,24 +1,24 @@
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   optional: true
 };
 
-export var visitor = {
+export let visitor = {
   UnaryExpression(node, parent, scope, file) {
     if (node._ignoreSpecSymbols) return;
 
     if (this.parentPath.isBinaryExpression() && t.EQUALITY_BINARY_OPERATORS.indexOf(parent.operator) >= 0) {
       // optimise `typeof foo === "string"` since we can determine that they'll never need to handle symbols
-      var opposite = this.getOpposite();
+      let opposite = this.getOpposite();
       if (opposite.isLiteral() && opposite.node.value !== "symbol" && opposite.node.value !== "object") return;
     }
 
     if (node.operator === "typeof") {
-      var call = t.callExpression(file.addHelper("typeof"), [node.argument]);
+      let call = t.callExpression(file.addHelper("typeof"), [node.argument]);
       if (this.get("argument").isIdentifier()) {
-        var undefLiteral = t.stringLiteral("undefined");
-        var unary = t.unaryExpression("typeof", node.argument);
+        let undefLiteral = t.stringLiteral("undefined");
+        let unary = t.unaryExpression("typeof", node.argument);
         unary._ignoreSpecSymbols = true;
         return t.conditionalExpression(
           t.binaryExpression("===", unary, undefLiteral),

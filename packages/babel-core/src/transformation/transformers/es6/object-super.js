@@ -5,7 +5,7 @@ function Property(path, node, scope, getObjectRef, file) {
   if (!node.method && node.kind === "init") return;
   if (!t.isFunction(node.value)) return;
 
-  var replaceSupers = new ReplaceSupers({
+  let replaceSupers = new ReplaceSupers({
     getObjectRef: getObjectRef,
     methodNode:   node,
     methodPath:   path,
@@ -17,13 +17,13 @@ function Property(path, node, scope, getObjectRef, file) {
   replaceSupers.replace();
 }
 
-export var visitor = {
+export let visitor = {
   ObjectExpression(node, parent, scope, file) {
-    var objectRef;
-    var getObjectRef = () => objectRef = objectRef || scope.generateUidIdentifier("obj");
+    let objectRef;
+    let getObjectRef = () => objectRef = objectRef || scope.generateUidIdentifier("obj");
 
-    var propPaths = this.get("properties");
-    for (var i = 0; i < node.properties.length; i++) {
+    let propPaths = this.get("properties");
+    for (let i = 0; i < node.properties.length; i++) {
       Property(propPaths[i], node.properties[i], scope, getObjectRef, file);
     }
 

@@ -1,16 +1,16 @@
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   group: "builtin-pre",
   optional: true
 };
 
-export var visitor = {
+export let visitor = {
   ArrowFunctionExpression(node, parent, scope, file) {
     if (node.shadow) return;
     node.shadow = { this: false };
 
-    var boundThis = t.thisExpression();
+    let boundThis = t.thisExpression();
     boundThis._forceShadow = this;
 
     // make sure that arrow function won't be instantiated

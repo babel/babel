@@ -6,7 +6,7 @@ export function is(node, flag) {
 }
 
 export function pullFlag(node, flag) {
-  var flags = node.flags.split("");
+  let flags = node.flags.split("");
   if (node.flags.indexOf(flag) < 0) return;
   pull(flags, flag);
   node.flags = flags.join("");

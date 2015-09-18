@@ -1,7 +1,7 @@
 import * as util from "../../util";
 
 export default function (Parent) {
-  var Constructor = function () {
+  let Constructor = function () {
     this.noInteropRequireImport = true;
     this.noInteropRequireExport = true;
     Parent.apply(this, arguments);

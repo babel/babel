@@ -5,7 +5,7 @@ import last from "lodash/array/last";
 import map from "lodash/collection/map";
 import * as t from "babel-types";
 
-var hoistVariablesVisitor = {
+let hoistVariablesVisitor = {
   Function(path) {
     // nothing inside is accessible
     path.skip();
@@ -20,19 +20,19 @@ var hoistVariablesVisitor = {
     // ignore block hoisted nodes as these can be left in
     if (state.formatter._canHoist(node)) return;
 
-    var nodes = [];
+    let nodes = [];
 
-    for (var i = 0; i < node.declarations.length; i++) {
-      var declar = node.declarations[i];
+    for (let i = 0; i < node.declarations.length; i++) {
+      let declar = node.declarations[i];
       state.hoistDeclarators.push(t.variableDeclarator(declar.id));
       if (declar.init) {
         // no initializer so we can just hoist it as-is
-        var assign = t.expressionStatement(t.assignmentExpression("=", declar.id, declar.init));
+        let assign = t.expressionStatement(t.assignmentExpression("=", declar.id, declar.init));
         nodes.push(assign);
       }
     }
 
-    // for (var i in test)
+    // for (let i in test)
     if (t.isFor(parent) && parent.left === node) {
       return node.declarations[0].id;
     }
@@ -41,7 +41,7 @@ var hoistVariablesVisitor = {
   }
 };
 
-var hoistFunctionsVisitor = {
+let hoistFunctionsVisitor = {
   Function(path) {
     path.skip();
   },
@@ -54,13 +54,13 @@ var hoistFunctionsVisitor = {
   }
 };
 
-var runnerSettersVisitor = {
+let runnerSettersVisitor = {
   enter(path, state) {
-    var { node } = path;
+    let { node } = path;
 
     if (node._importSource === state.source) {
       if (t.isVariableDeclaration(node)) {
-        for (var declar of (node.declarations: Array)) {
+        for (let declar of (node.declarations: Array)) {
           state.hoistDeclarators.push(t.variableDeclarator(declar.id));
           state.nodes.push(t.expressionStatement(
             t.assignmentExpression("=", declar.id, declar.init)
@@ -93,16 +93,16 @@ export default class SystemFormatter extends AMDFormatter {
   }
 
   buildExportsWildcard(objectIdentifier, node) {
-    var leftIdentifier = this.scope.generateUidIdentifier("key");
-    var valIdentifier  = t.memberExpression(objectIdentifier, leftIdentifier, true);
+    let leftIdentifier = this.scope.generateUidIdentifier("key");
+    let valIdentifier  = t.memberExpression(objectIdentifier, leftIdentifier, true);
 
-    var left = t.variableDeclaration("var", [
+    let left = t.variableDeclaration("var", [
       t.variableDeclarator(leftIdentifier)
     ]);
 
-    var right = objectIdentifier;
+    let right = objectIdentifier;
 
-    var block = t.blockStatement([
+    let block = t.blockStatement([
       t.ifStatement(
         t.binaryExpression("!==", leftIdentifier, t.stringLiteral("default")),
         t.expressionStatement(this._buildExportCall(leftIdentifier, valIdentifier))
@@ -113,7 +113,7 @@ export default class SystemFormatter extends AMDFormatter {
   }
 
   buildExportsAssignment(id, init, node) {
-    var call = this._buildExportCall(t.stringLiteral(id.name), init, true);
+    let call = this._buildExportCall(t.stringLiteral(id.name), init, true);
     return this._addImportSource(call, node);
   }
 
@@ -122,9 +122,9 @@ export default class SystemFormatter extends AMDFormatter {
   }
 
   remapExportAssignment(node, exported) {
-    var assign = node;
+    let assign = node;
 
-    for (var i = 0; i < exported.length; i++) {
+    for (let i = 0; i < exported.length; i++) {
       assign = this._buildExportCall(t.stringLiteral(exported[i].name), assign);
     }
 
@@ -132,7 +132,7 @@ export default class SystemFormatter extends AMDFormatter {
   }
 
   _buildExportCall(id, init, isStatement) {
-    var call = t.callExpression(this.exportIdentifier, [id, init]);
+    let call = t.callExpression(this.exportIdentifier, [id, init]);
     if (isStatement) {
       return t.expressionStatement(call);
     } else {
@@ -143,7 +143,7 @@ export default class SystemFormatter extends AMDFormatter {
   importSpecifier(specifier, node, nodes) {
     AMDFormatter.prototype.importSpecifier.apply(this, arguments);
 
-    for (var remap of (this.remaps.getAll(): Array)) {
+    for (let remap of (this.remaps.getAll(): Array)) {
       nodes.push(t.variableDeclaration("var", [
         t.variableDeclarator(t.identifier(remap.name), remap.node)
       ]));
@@ -155,10 +155,10 @@ export default class SystemFormatter extends AMDFormatter {
   }
 
   _buildRunnerSetters(block, hoistDeclarators) {
-    var scope = this.file.scope;
+    let scope = this.file.scope;
 
     return t.arrayExpression(map(this.ids, function (uid, source) {
-      var state = {
+      let state = {
         hoistDeclarators: hoistDeclarators,
         source:           source,
         nodes:            []
@@ -177,16 +177,16 @@ export default class SystemFormatter extends AMDFormatter {
   transform(program) {
     DefaultFormatter.prototype.transform.apply(this, arguments);
 
-    var hoistDeclarators = [];
-    var moduleName = this.getModuleName();
-    var moduleNameLiteral = t.stringLiteral(moduleName);
+    let hoistDeclarators = [];
+    let moduleName = this.getModuleName();
+    let moduleNameLiteral = t.stringLiteral(moduleName);
 
-    var block = t.blockStatement(program.body);
+    let block = t.blockStatement(program.body);
 
-    var setterListNode = this._buildRunnerSetters(block, hoistDeclarators);
+    let setterListNode = this._buildRunnerSetters(block, hoistDeclarators);
     this._setters = setterListNode;
 
-    var runner = util.template("system", {
+    let runner = util.template("system", {
       MODULE_DEPENDENCIES: t.arrayExpression(this.buildDependencyLiterals()),
       EXPORT_IDENTIFIER:   this.exportIdentifier,
       MODULE_NAME:         moduleNameLiteral,
@@ -194,10 +194,10 @@ export default class SystemFormatter extends AMDFormatter {
       EXECUTE:             t.functionExpression(null, [], block)
     }, true);
 
-    var handlerBody = runner.expression.arguments[2].body.body;
+    let handlerBody = runner.expression.arguments[2].body.body;
     if (!moduleName) runner.expression.arguments.shift();
 
-    var returnStatement = handlerBody.pop();
+    let returnStatement = handlerBody.pop();
 
     // hoist up all variable declarations
     this.file.scope.traverse(block, hoistVariablesVisitor, {
@@ -206,7 +206,7 @@ export default class SystemFormatter extends AMDFormatter {
     });
 
     if (hoistDeclarators.length) {
-      var hoistDeclar = t.variableDeclaration("var", hoistDeclarators);
+      let hoistDeclar = t.variableDeclaration("var", hoistDeclarators);
       hoistDeclar._blockHoist = true;
       handlerBody.unshift(hoistDeclar);
     }

@@ -7,7 +7,7 @@
 import * as t from "babel-types";
 
 function getDeclar(node) {
-  var declar = node.declaration;
+  let declar = node.declaration;
   t.inheritsComments(declar, node);
   t.removeComments(node);
   declar._ignoreUserWhitespace = true;
@@ -19,18 +19,18 @@ function buildExportSpecifier(id) {
 }
 
 function cloneIdentifier({ name, loc }) {
-  var id = t.identifier(name);
+  let id = t.identifier(name);
   id._loc = loc;
   return id;
 }
 
-export var metadata = {
+export let metadata = {
   group: "builtin-pre"
 };
 
-export var visitor = {
+export let visitor = {
   ExportDefaultDeclaration(node, parent, scope) {
-    var declar = node.declaration;
+    let declar = node.declaration;
 
     if (t.isClassDeclaration(declar)) {
       // export default class Foo {};
@@ -39,7 +39,7 @@ export var visitor = {
       return nodes;
     } else if (t.isClassExpression(declar)) {
       // export default class {};
-      var temp = scope.generateUidIdentifier("default");
+      let temp = scope.generateUidIdentifier("default");
       node.declaration = t.variableDeclaration("var", [
         t.variableDeclarator(temp, declar)
       ]);
@@ -58,7 +58,7 @@ export var visitor = {
   },
 
   ExportNamedDeclaration(node) {
-    var declar = node.declaration;
+    let declar = node.declaration;
 
     if (t.isClassDeclaration(declar)) {
       // export class Foo {}
@@ -69,14 +69,14 @@ export var visitor = {
       return nodes;
     } else if (t.isFunctionDeclaration(declar)) {
       // export function Foo() {}
-      var newExport = t.exportNamedDeclaration(null, [buildExportSpecifier(declar.id)]);
+      let newExport = t.exportNamedDeclaration(null, [buildExportSpecifier(declar.id)]);
       newExport._blockHoist = 2;
       return [getDeclar(node), newExport];
     } else if (t.isVariableDeclaration(declar)) {
-      // export var foo = "bar";
-      var specifiers = [];
-      var bindings = this.get("declaration").getBindingIdentifiers();
-      for (var key in bindings) {
+      // export let foo = "bar";
+      let specifiers = [];
+      let bindings = this.get("declaration").getBindingIdentifiers();
+      for (let key in bindings) {
         specifiers.push(buildExportSpecifier(bindings[key]));
       }
       return [declar, t.exportNamedDeclaration(null, specifiers)];
@@ -85,11 +85,11 @@ export var visitor = {
 
   Program: {
     enter(node) {
-      var imports = [];
-      var rest    = [];
+      let imports = [];
+      let rest    = [];
 
-      for (var i = 0; i < node.body.length; i++) {
-        var bodyNode = node.body[i];
+      for (let i = 0; i < node.body.length; i++) {
+        let bodyNode = node.body[i];
         if (t.isImportDeclaration(bodyNode)) {
           imports.push(bodyNode);
         } else {

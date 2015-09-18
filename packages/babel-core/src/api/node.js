@@ -20,7 +20,7 @@ import * as t from "babel-types";
 export { t as types };
 
 export function register(opts?: Object) {
-  var callback = require("./register/node-polyfill");
+  let callback = require("./register/node-polyfill");
   if (opts != null) callback(opts);
   return callback;
 }
@@ -36,7 +36,7 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
   fs.readFile(filename, function (err, code) {
     if (err) return callback(err);
 
-    var result;
+    let result;
 
     try {
       result = transform(code, opts);
@@ -63,7 +63,7 @@ export function parse(code, opts = {}) {
   };
   opts.features = {};
 
-  var ast = babylon.parse(code, opts);
+  let ast = babylon.parse(code, opts);
 
   if (opts.onToken) {
     opts.onToken.push(...ast.tokens);

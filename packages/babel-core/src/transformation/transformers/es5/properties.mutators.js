@@ -8,7 +8,7 @@ import * as t from "babel-types";
  * **In**
  *
  * ```javascript
- * var foo = {
+ * let foo = {
  *   get bar() {
  *     return "bar";
  *   }
@@ -18,7 +18,7 @@ import * as t from "babel-types";
  * **Out**
  *
  * ```javascript
- * var foo = Object.defineProperties({}, {
+ * let foo = Object.defineProperties({}, {
  *   bar: {
  *     get: function () {
  *       return "bar";
@@ -30,7 +30,7 @@ import * as t from "babel-types";
  * ```
  */
 
-export var visitor = {
+export let visitor = {
   /**
    * Look for getters and setters on an object.
    * Filter them out and wrap the object with an `Object.defineProperties` that
@@ -38,8 +38,8 @@ export var visitor = {
    */
 
   ObjectExpression(node, parent, scope, file) {
-    var hasAny = false;
-    for (var prop of (node.properties: Array)) {
+    let hasAny = false;
+    for (let prop of (node.properties: Array)) {
       if (prop.kind === "get" || prop.kind === "set") {
         hasAny = true;
         break;
@@ -47,7 +47,7 @@ export var visitor = {
     }
     if (!hasAny) return;
 
-    var mutatorMap = {};
+    let mutatorMap = {};
 
     node.properties = node.properties.filter(function (prop) {
       if (prop.kind === "get" || prop.kind === "set") {

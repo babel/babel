@@ -13,7 +13,7 @@ export default class Position {
    */
 
   push(str) {
-    for (var i = 0; i < str.length; i++) {
+    for (let i = 0; i < str.length; i++) {
       if (str[i] === "\n") {
         this.line++;
         this.column = 0;
@@ -28,7 +28,7 @@ export default class Position {
    */
 
   unshift(str) {
-    for (var i = 0; i < str.length; i++) {
+    for (let i = 0; i < str.length; i++) {
       if (str[i] === "\n") {
         this.line--;
       } else {

@@ -2,13 +2,13 @@
 
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   stage: 2,
   dependencies: ["es6.destructuring"]
 };
 
-var hasSpread = function (node) {
-  for (var i = 0; i < node.properties.length; i++) {
+let hasSpread = function (node) {
+  for (let i = 0; i < node.properties.length; i++) {
     if (t.isSpreadProperty(node.properties[i])) {
       return true;
     }
@@ -16,21 +16,21 @@ var hasSpread = function (node) {
   return false;
 };
 
-export var visitor = {
+export let visitor = {
   ObjectExpression(node, parent, scope, file) {
     if (!hasSpread(node)) return;
 
-    var args = [];
-    var props = [];
+    let args = [];
+    let props = [];
 
-    var push = function () {
+    let push = function () {
       if (!props.length) return;
       args.push(t.objectExpression(props));
       props = [];
     };
 
-    for (var i = 0; i < node.properties.length; i++) {
-      var prop = node.properties[i];
+    for (let i = 0; i < node.properties.length; i++) {
+      let prop = node.properties[i];
       if (t.isSpreadProperty(prop)) {
         push();
         args.push(prop.argument);

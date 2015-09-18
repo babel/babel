@@ -2,18 +2,18 @@
 
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   stage: 1
 };
 
 function build(node, nodes, scope) {
-  var first = node.specifiers[0];
+  let first = node.specifiers[0];
   if (!t.isExportNamespaceSpecifier(first) && !t.isExportDefaultSpecifier(first)) return;
 
-  var specifier = node.specifiers.shift();
-  var uid = scope.generateUidIdentifier(specifier.exported.name);
+  let specifier = node.specifiers.shift();
+  let uid = scope.generateUidIdentifier(specifier.exported.name);
 
-  var newSpecifier;
+  let newSpecifier;
   if (t.isExportNamespaceSpecifier(specifier)) {
     newSpecifier = t.importNamespaceSpecifier(uid);
   } else {
@@ -26,9 +26,9 @@ function build(node, nodes, scope) {
   build(node, nodes, scope);
 }
 
-export var visitor = {
+export let visitor = {
   ExportNamedDeclaration(node, parent, scope) {
-    var nodes = [];
+    let nodes = [];
     build(node, nodes, scope);
     if (!nodes.length) return;
 

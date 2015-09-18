@@ -1,6 +1,6 @@
 import * as t from "babel-types";
 
-var awaitVisitor = {
+let awaitVisitor = {
   Function(path) {
     path.skip();
   },
@@ -16,9 +16,9 @@ var awaitVisitor = {
   }
 };
 
-var referenceVisitor = {
+let referenceVisitor = {
   ReferencedIdentifier({ node, scope }, state) {
-    var name = state.id.name;
+    let name = state.id.name;
     if (node.name === name && scope.bindingIdentifierEquals(name, state.id)) {
       return state.ref = state.ref || scope.generateUidIdentifier(name);
     }
@@ -26,20 +26,20 @@ var referenceVisitor = {
 };
 
 export default function (path, callId) {
-  var node = path.node;
+  let node = path.node;
 
   node.async = false;
   node.generator = true;
 
   path.traverse(awaitVisitor, state);
 
-  var call = t.callExpression(callId, [node]);
+  let call = t.callExpression(callId, [node]);
 
-  var id = node.id;
+  let id = node.id;
   node.id = null;
 
   if (t.isFunctionDeclaration(node)) {
-    var declar = t.variableDeclaration("let", [
+    let declar = t.variableDeclaration("let", [
       t.variableDeclarator(id, call)
     ]);
     declar._blockHoist = true;
@@ -48,7 +48,7 @@ export default function (path, callId) {
     node.type = "FunctionExpression";
 
     if (id) {
-      var state = { id };
+      let state = { id };
       path.traverse(referenceVisitor, state);
 
       if (state.ref) {

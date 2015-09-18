@@ -10,7 +10,7 @@ import * as t from "babel-types";
 
 const PROPERTY_COLLISION_METHOD_NAME = "__initializeProperties";
 
-var collectPropertyReferencesVisitor = {
+let collectPropertyReferencesVisitor = {
   Identifier: {
     enter(node, parent, scope, state) {
       if (this.parentPath.isClassProperty({ key: node })) {
@@ -24,7 +24,7 @@ var collectPropertyReferencesVisitor = {
   }
 };
 
-var verifyConstructorVisitor = {
+let verifyConstructorVisitor = {
   MethodDefinition() {
     this.skip();
   },
@@ -54,7 +54,7 @@ var verifyConstructorVisitor = {
     if (state.isDerived && !state.hasBareSuper) {
       if (this.inShadow()) {
         // https://github.com/babel/babel/issues/1920
-        var thisAlias = state.constructorPath.getData("this");
+        let thisAlias = state.constructorPath.getData("this");
 
         if (!thisAlias) {
           thisAlias = state.constructorPath.setData(
@@ -111,19 +111,19 @@ export default class ClassTransformer {
   }
 
   run() {
-    var superName = this.superName;
-    var file      = this.file;
-    var body      = this.body;
+    let superName = this.superName;
+    let file      = this.file;
+    let body      = this.body;
 
     //
 
-    var constructorBody = this.constructorBody = t.blockStatement([]);
+    let constructorBody = this.constructorBody = t.blockStatement([]);
     this.constructor    = this.buildConstructor();
 
     //
 
-    var closureParams = [];
-    var closureArgs = [];
+    let closureParams = [];
+    let closureArgs = [];
 
     //
     if (this.isDerived) {
@@ -136,7 +136,7 @@ export default class ClassTransformer {
     }
 
     //
-    var decorators = this.node.decorators;
+    let decorators = this.node.decorators;
     if (decorators) {
       // this is so super calls and the decorators have access to the raw function
       this.directRef = this.scope.generateUidIdentifier(this.classRef);
@@ -166,19 +166,19 @@ export default class ClassTransformer {
     //
     body.push(t.returnStatement(this.classRef));
 
-    var container = t.functionExpression(null, closureParams, t.blockStatement(body));
+    let container = t.functionExpression(null, closureParams, t.blockStatement(body));
     container.shadow = true;
     return t.callExpression(container, closureArgs);
   }
 
   buildConstructor() {
-    var func = t.functionDeclaration(this.classRef, [], this.constructorBody);
+    let func = t.functionDeclaration(this.classRef, [], this.constructorBody);
     t.inherits(func, this.node);
     return func;
   }
 
   pushToMap(node, enumerable, kind = "value") {
-    var mutatorMap;
+    let mutatorMap;
     if (node.static) {
       this.hasStaticDescriptors = true;
       mutatorMap = this.staticMutatorMap;
@@ -187,7 +187,7 @@ export default class ClassTransformer {
       mutatorMap = this.instanceMutatorMap;
     }
 
-    var map = defineMap.push(mutatorMap, node, kind, this.file);
+    let map = defineMap.push(mutatorMap, node, kind, this.file);
 
     if (enumerable) {
       map.enumerable = t.booleanLiteral(true);
@@ -204,15 +204,15 @@ export default class ClassTransformer {
    */
 
   constructorMeMaybe() {
-    var hasConstructor = false;
-    var paths = this.path.get("body.body");
-    for (var path of (paths: Array)) {
+    let hasConstructor = false;
+    let paths = this.path.get("body.body");
+    for (let path of (paths: Array)) {
       hasConstructor = path.equals("kind", "constructor");
       if (hasConstructor) break;
     }
     if (hasConstructor) return;
 
-    var constructor;
+    let constructor;
     if (this.isDerived) {
       constructor = util.template("class-derived-default-constructor");
     } else {
@@ -232,7 +232,7 @@ export default class ClassTransformer {
     this.placePropertyInitializers();
 
     if (this.userConstructor) {
-      var constructorBody = this.constructorBody;
+      let constructorBody = this.constructorBody;
       constructorBody.body = constructorBody.body.concat(this.userConstructor.body.body);
       t.inherits(this.constructor, this.userConstructor);
       t.inherits(constructorBody, this.userConstructor.body);
@@ -242,20 +242,20 @@ export default class ClassTransformer {
   }
 
   pushBody() {
-    var classBodyPaths = this.path.get("body.body");
+    let classBodyPaths = this.path.get("body.body");
 
-    for (var path of (classBodyPaths: Array)) {
-      var node = path.node;
+    for (let path of (classBodyPaths: Array)) {
+      let node = path.node;
 
       if (node.decorators) {
         memoiseDecorators(node.decorators, this.scope);
       }
 
       if (t.isMethodDefinition(node)) {
-        var isConstructor = node.kind === "constructor";
+        let isConstructor = node.kind === "constructor";
         if (isConstructor) this.verifyConstructor(path);
 
-        var replaceSupers = new ReplaceSupers({
+        let replaceSupers = new ReplaceSupers({
           methodPath: path,
           methodNode: node,
           objectRef:  this.directRef,
@@ -290,11 +290,11 @@ export default class ClassTransformer {
   pushDescriptors() {
     this.pushInherits();
 
-    var body = this.body;
+    let body = this.body;
 
-    var instanceProps;
-    var staticProps;
-    var classHelper = "create-class";
+    let instanceProps;
+    let staticProps;
+    let classHelper = "create-class";
     if (this.hasDecorators) classHelper = "create-decorated-class";
 
     if (this.hasInstanceDescriptors) {
@@ -309,10 +309,10 @@ export default class ClassTransformer {
       if (instanceProps) instanceProps = defineMap.toComputedObjectFromClass(instanceProps);
       if (staticProps) staticProps = defineMap.toComputedObjectFromClass(staticProps);
 
-      var nullNode = t.nullLiteral();
+      let nullNode = t.nullLiteral();
 
       // (Constructor, instanceDescriptors, staticDescriptors, instanceInitializers, staticInitializers)
-      var args = [this.classRef, nullNode, nullNode, nullNode, nullNode];
+      let args = [this.classRef, nullNode, nullNode, nullNode, nullNode];
 
       if (instanceProps) args[1] = instanceProps;
       if (staticProps) args[2] = staticProps;
@@ -327,7 +327,7 @@ export default class ClassTransformer {
         body.unshift(this.buildObjectAssignment(this.staticInitializersId));
       }
 
-      var lastNonNullIndex = 0;
+      let lastNonNullIndex = 0;
       for (let i = 0; i < args.length; i++) {
         if (args[i] !== nullNode) lastNonNullIndex = i;
       }
@@ -349,11 +349,11 @@ export default class ClassTransformer {
   }
 
   placePropertyInitializers() {
-    var body = this.instancePropBody;
+    let body = this.instancePropBody;
     if (!body.length) return;
 
     if (this.hasPropertyCollision()) {
-      var call = t.expressionStatement(t.callExpression(
+      let call = t.expressionStatement(t.callExpression(
         t.memberExpression(t.thisExpression(), t.identifier(PROPERTY_COLLISION_METHOD_NAME)),
         []
       ));
@@ -379,7 +379,7 @@ export default class ClassTransformer {
 
    hasPropertyCollision(): boolean {
     if (this.userConstructorPath) {
-      for (var name in this.instancePropRefs) {
+      for (let name in this.instancePropRefs) {
         if (this.userConstructorPath.scope.hasOwnBinding(name)) {
           return true;
         }
@@ -390,7 +390,7 @@ export default class ClassTransformer {
   }
 
    verifyConstructor(path: NodePath) {
-    var state = {
+    let state = {
       constructorPath: path.get("value"),
       hasBareSuper:    false,
       bareSuper:       null,
@@ -400,7 +400,7 @@ export default class ClassTransformer {
 
     state.constructorPath.traverse(verifyConstructorVisitor, state);
 
-    var thisAlias = state.constructorPath.getData("this");
+    let thisAlias = state.constructorPath.getData("this");
     if (thisAlias && state.bareSuper) {
       state.bareSuper.insertAfter(t.variableDeclaration("var", [
         t.variableDeclarator(thisAlias, t.thisExpression())
@@ -442,7 +442,7 @@ export default class ClassTransformer {
     });
 
     if (node.decorators) {
-      var body = [];
+      let body = [];
       if (node.value) {
         body.push(t.returnStatement(node.value));
         node.value = t.functionExpression(null, [], t.blockStatement(body));
@@ -451,8 +451,8 @@ export default class ClassTransformer {
       }
       this.pushToMap(node, true, "initializer");
 
-      var initializers;
-      var target;
+      let initializers;
+      let target;
       if (node.static) {
         initializers = this.staticInitializersId = this.staticInitializersId || this.scope.generateUidIdentifier("staticInitializers");
         body = this.staticPropBody;
@@ -492,13 +492,13 @@ export default class ClassTransformer {
 
   pushConstructor(method: { type: "MethodDefinition" }, path: NodePath) {
     // https://github.com/babel/babel/issues/1077
-    var fnPath = path.get("value");
+    let fnPath = path.get("value");
     if (fnPath.scope.hasOwnBinding(this.classRef.name)) {
       fnPath.scope.rename(this.classRef.name);
     }
 
-    var construct = this.constructor;
-    var fn        = method.value;
+    let construct = this.constructor;
+    let fn        = method.value;
 
     this.userConstructorPath = fnPath;
     this.userConstructor     = fn;
@@ -550,7 +550,7 @@ export default class ClassTransformer {
    */
 
   pushDecorators() {
-    var decorators = this.node.decorators;
+    let decorators = this.node.decorators;
     if (!decorators) return;
 
     this.body.push(t.variableDeclaration("var", [
@@ -560,8 +560,8 @@ export default class ClassTransformer {
     // reverse the decorators so we execute them in the right order
     decorators = decorators.reverse();
 
-    for (var decorator of (decorators: Array)) {
-      var decoratorNode = util.template("class-decorator", {
+    for (let decorator of (decorators: Array)) {
+      let decoratorNode = util.template("class-decorator", {
         DECORATOR: decorator.expression,
         CLASS_REF: this.classRef
       }, true);

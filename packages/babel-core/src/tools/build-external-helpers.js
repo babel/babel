@@ -6,9 +6,9 @@ import each from "lodash/collection/each";
 import * as t from "babel-types";
 
 function buildGlobal(namespace, builder) {
-  var body      = [];
-  var container = t.functionExpression(null, [t.identifier("global")], t.blockStatement(body));
-  var tree      = t.program([t.expressionStatement(t.callExpression(container, [util.template("helper-self-global")]))]);
+  let body      = [];
+  let container = t.functionExpression(null, [t.identifier("global")], t.blockStatement(body));
+  let tree      = t.program([t.expressionStatement(t.callExpression(container, [util.template("helper-self-global")]))]);
 
   body.push(t.variableDeclaration("var", [
     t.variableDeclarator(
@@ -23,14 +23,14 @@ function buildGlobal(namespace, builder) {
 }
 
 function buildUmd(namespace, builder) {
-  var body = [];
+  let body = [];
   body.push(t.variableDeclaration("var", [
     t.variableDeclarator(namespace, t.identifier("global"))
   ]));
 
   builder(body);
 
-  var container = util.template("umd-commonjs-strict", {
+  let container = util.template("umd-commonjs-strict", {
     FACTORY_PARAMETERS: t.identifier("global"),
     BROWSER_ARGUMENTS:  t.assignmentExpression("=", t.memberExpression(t.identifier("root"), namespace), t.objectExpression({})),
     COMMON_ARGUMENTS:   t.identifier("exports"),
@@ -42,7 +42,7 @@ function buildUmd(namespace, builder) {
 }
 
 function buildVar(namespace, builder) {
-  var body = [];
+  let body = [];
   body.push(t.variableDeclaration("var", [
     t.variableDeclarator(namespace, t.objectExpression({}))
   ]));
@@ -54,7 +54,7 @@ function buildHelpers(body, namespace, whitelist) {
   each(File.helpers, function (name) {
     if (whitelist && whitelist.indexOf(name) === -1) return;
 
-    var key = t.identifier(t.toIdentifier(name));
+    let key = t.identifier(t.toIdentifier(name));
     body.push(t.expressionStatement(
       t.assignmentExpression("=", t.memberExpression(namespace, key), util.template("helper-" + name))
     ));
@@ -62,15 +62,15 @@ function buildHelpers(body, namespace, whitelist) {
 }
 
 export default function (whitelist, outputType = "global") {
-  var namespace = t.identifier("babelHelpers");
+  let namespace = t.identifier("babelHelpers");
 
-  var builder = function (body) {
+  let builder = function (body) {
     return buildHelpers(body, namespace, whitelist);
   };
 
-  var tree;
+  let tree;
 
-  var build = {
+  let build = {
     global: buildGlobal,
     umd:    buildUmd,
     var:    buildVar

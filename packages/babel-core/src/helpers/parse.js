@@ -5,7 +5,7 @@ import * as babylon from "babylon";
  */
 
 export default function (code, opts = {}) {
-  var parseOpts = {
+  let parseOpts = {
     allowImportExportEverywhere: opts.looseModules,
     allowReturnOutsideFunction:  opts.looseModules,
     strictMode:    opts.strictMode,

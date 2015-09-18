@@ -2,13 +2,13 @@
 
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   optional: true,
   stage: 0
 };
 
 function getTempId(scope) {
-  var id = scope.path.getData("functionBind");
+  let id = scope.path.getData("functionBind");
   if (id) return id;
 
   id = scope.generateDeclaredUidIdentifier("context");
@@ -16,15 +16,15 @@ function getTempId(scope) {
 }
 
 function getStaticContext(bind, scope) {
-  var object = bind.object || bind.callee.object;
+  let object = bind.object || bind.callee.object;
   return scope.isStatic(object) && object;
 }
 
 function inferBindContext(bind, scope) {
-  var staticContext = getStaticContext(bind, scope);
+  let staticContext = getStaticContext(bind, scope);
   if (staticContext) return staticContext;
 
-  var tempId = getTempId(scope);
+  let tempId = getTempId(scope);
   if (bind.object) {
     bind.callee = t.sequenceExpression([
       t.assignmentExpression("=", tempId, bind.object),
@@ -36,18 +36,18 @@ function inferBindContext(bind, scope) {
   return tempId;
 }
 
-export var visitor = {
+export let visitor = {
   CallExpression(node, parent, scope) {
-    var bind = node.callee;
+    let bind = node.callee;
     if (!t.isBindExpression(bind)) return;
 
-    var context = inferBindContext(bind, scope);
+    let context = inferBindContext(bind, scope);
     node.callee = t.memberExpression(bind.callee, t.identifier("call"));
     node.arguments.unshift(context);
   },
 
   BindExpression(node, parent, scope) {
-    var context = inferBindContext(node, scope);
+    let context = inferBindContext(node, scope);
     return t.callExpression(t.memberExpression(node.callee, t.identifier("bind")), [context]);
   }
 };

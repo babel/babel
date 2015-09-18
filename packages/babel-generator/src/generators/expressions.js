@@ -5,8 +5,8 @@ import * as t from "babel-types";
 const SCIENTIFIC_NOTATION = /e/i;
 
 export function UnaryExpression(node, print) {
-  var needsSpace = /[a-z]$/.test(node.operator);
-  var arg = node.argument;
+  let needsSpace = /[a-z]$/.test(node.operator);
+  let arg = node.argument;
 
   if (t.isUpdateExpression(arg) || t.isUnaryExpression(arg)) {
     needsSpace = true;
@@ -86,9 +86,9 @@ export function CallExpression(node, print) {
 
   this.push("(");
 
-  var isPrettyCall = node._prettyCall && !this.format.retainLines && !this.format.compact;
+  let isPrettyCall = node._prettyCall && !this.format.retainLines && !this.format.compact;
 
-  var separator;
+  let separator;
   if (isPrettyCall) {
     separator = ",\n";
     this.newline();
@@ -115,15 +115,15 @@ function buildYieldAwait(keyword) {
 
     if (node.argument) {
       this.push(" ");
-      var terminatorState = this.startTerminatorless();
+      let terminatorState = this.startTerminatorless();
       print.plain(node.argument);
       this.endTerminatorless(terminatorState);
     }
   };
 }
 
-export var YieldExpression = buildYieldAwait("yield");
-export var AwaitExpression = buildYieldAwait("await");
+export let YieldExpression = buildYieldAwait("yield");
+export let AwaitExpression = buildYieldAwait("await");
 
 export function EmptyStatement() {
   this.semicolon();
@@ -144,7 +144,7 @@ export function AssignmentExpression(node, print) {
   // todo: add cases where the spaces can be dropped when in compact mode
   print.plain(node.left);
 
-  var spaces = node.operator === "in" || node.operator === "instanceof";
+  let spaces = node.operator === "in" || node.operator === "instanceof";
   spaces = true; // todo: https://github.com/babel/babel/issues/1835
   this.space(spaces);
 
@@ -175,14 +175,14 @@ export {
 };
 
 export function MemberExpression(node, print) {
-  var obj = node.object;
+  let obj = node.object;
   print.plain(obj);
 
   if (!node.computed && t.isMemberExpression(node.property)) {
     throw new TypeError("Got a MemberExpression for MemberExpression property");
   }
 
-  var computed = node.computed;
+  let computed = node.computed;
   if (t.isLiteral(node.property) && isNumber(node.property.value)) {
     computed = true;
   }
@@ -193,7 +193,7 @@ export function MemberExpression(node, print) {
     this.push("]");
   } else {
     if (t.isLiteral(node.object)) {
-      var val = this._Literal(node.object);
+      let val = this._Literal(node.object);
       if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")) {
         this.push(".");
       }

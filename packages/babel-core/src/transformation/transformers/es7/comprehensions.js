@@ -3,21 +3,21 @@ import traverse from "babel-traverse";
 import * as util from  "../../../util";
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   stage: 0
 };
 
-export var visitor = {
+export let visitor = {
   ComprehensionExpression(node, parent, scope) {
-    var callback = array;
+    let callback = array;
     if (node.generator) callback = generator;
     return callback(node, parent, scope);
   }
 };
 
 function generator(node) {
-  var body = [];
-  var container = t.functionExpression(null, [], t.blockStatement(body), true);
+  let body = [];
+  let container = t.functionExpression(null, [], t.blockStatement(body), true);
   container.shadow = true;
 
   body.push(buildComprehension(node, function () {
@@ -28,22 +28,22 @@ function generator(node) {
 }
 
 function array(node, parent, scope) {
-  var uid = scope.generateUidIdentifierBasedOnNode(parent);
+  let uid = scope.generateUidIdentifierBasedOnNode(parent);
 
-  var container = util.template("array-comprehension-container", {
+  let container = util.template("array-comprehension-container", {
     KEY: uid
   });
   container.callee.shadow = true;
 
-  var block = container.callee.body;
-  var body  = block.body;
+  let block = container.callee.body;
+  let body  = block.body;
 
   if (traverse.hasType(node, scope, "YieldExpression", t.FUNCTION_TYPES)) {
     container.callee.generator = true;
     container = t.yieldExpression(container, true);
   }
 
-  var returnStatement = body.pop();
+  let returnStatement = body.pop();
 
   body.push(buildComprehension(node, function () {
     return util.template("array-push", {

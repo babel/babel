@@ -1,4 +1,4 @@
-// Based upon the excellent jsx-transpiler by Ingvar Stepanyan (RReverser)
+// Based upon the excellent jsx-transpiler by Inglet Stepanyan (RReverser)
 // https://github.com/RReverser/jsx-transpiler
 
 // jsx
@@ -10,7 +10,7 @@ import { react } from "babel-types";
 import * as t from "babel-types";
 
 export default function (opts) {
-  var visitor = {};
+  let visitor = {};
 
   visitor.JSXIdentifier = function (node) {
     if (node.name === "this" && this.isReferenced()) {
@@ -39,14 +39,14 @@ export default function (opts) {
 
   visitor.JSXAttribute = {
     enter(node) {
-      var value = node.value;
+      let value = node.value;
       if (t.isLiteral(value) && isString(value.value)) {
         value.value = value.value.replace(/\n\s+/g, " ");
       }
     },
 
     exit(node) {
-      var value = node.value || t.booleanLiteral(true);
+      let value = node.value || t.booleanLiteral(true);
       return t.inherits(t.property("init", node.name, value), node);
     }
   };
@@ -55,17 +55,17 @@ export default function (opts) {
     exit(node, parent, scope, file) {
       parent.children = react.buildChildren(parent);
 
-      var tagExpr = node.name;
-      var args = [];
+      let tagExpr = node.name;
+      let args = [];
 
-      var tagName;
+      let tagName;
       if (t.isIdentifier(tagExpr)) {
         tagName = tagExpr.name;
       } else if (t.isLiteral(tagExpr)) {
         tagName = tagExpr.value;
       }
 
-      var state = {
+      let state = {
         tagExpr: tagExpr,
         tagName: tagName,
         args:    args
@@ -75,7 +75,7 @@ export default function (opts) {
         opts.pre(state, file);
       }
 
-      var attribs = node.attributes;
+      let attribs = node.attributes;
       if (attribs.length) {
         attribs = buildJSXOpeningElementAttributes(attribs, file);
       } else {
@@ -99,11 +99,11 @@ export default function (opts) {
    * all prior attributes to an array for later processing.
    */
 
-  var buildJSXOpeningElementAttributes = function (attribs, file) {
-    var _props = [];
-    var objs = [];
+  let buildJSXOpeningElementAttributes = function (attribs, file) {
+    let _props = [];
+    let objs = [];
 
-    var pushProps = function () {
+    let pushProps = function () {
       if (!_props.length) return;
 
       objs.push(t.objectExpression(_props));
@@ -111,7 +111,7 @@ export default function (opts) {
     };
 
     while (attribs.length) {
-      var prop = attribs.shift();
+      let prop = attribs.shift();
       if (t.isJSXSpreadAttribute(prop)) {
         pushProps();
         objs.push(prop.argument);
@@ -143,7 +143,7 @@ export default function (opts) {
 
   visitor.JSXElement = {
     exit(node) {
-      var callExpr = node.openingElement;
+      let callExpr = node.openingElement;
 
       callExpr.arguments = callExpr.arguments.concat(node.children);
 

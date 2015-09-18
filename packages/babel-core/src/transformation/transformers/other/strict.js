@@ -1,6 +1,6 @@
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   group: "builtin-pre"
 };
 
@@ -16,12 +16,12 @@ function isUseStrict(node) {
   }
 }
 
-export var visitor = {
+export let visitor = {
   Program: {
     enter(program) {
-      var first = program.body[0];
+      let first = program.body[0];
 
-      var directive;
+      let directive;
       if (t.isExpressionStatement(first) && isUseStrict(first.expression)) {
         directive = first;
       } else {

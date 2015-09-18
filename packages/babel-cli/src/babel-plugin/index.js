@@ -7,7 +7,7 @@ import fs from "fs";
 function spawn(cmd, args, callback) {
   console.log(">", cmd, args);
 
-  var spawn = child.spawn(cmd, args, { stdio: "inherit" });
+  let spawn = child.spawn(cmd, args, { stdio: "inherit" });
 
   spawn.on("exit", function (code) {
     if (code === 0) {
@@ -21,7 +21,7 @@ function spawn(cmd, args, callback) {
 
 function spawnMultiple(cmds) {
   function next() {
-    var cmd = cmds.shift();
+    let cmd = cmds.shift();
     if (cmd) {
       spawn(cmd.command, cmd.args, next);
     } else {
@@ -33,7 +33,7 @@ function spawnMultiple(cmds) {
 }
 
 function template(name, data = {}) {
-  var source = fs.readFileSync(path.join(__dirname, "templates", name), "utf8");
+  let source = fs.readFileSync(path.join(__dirname, "templates", name), "utf8");
   source = source.replace(/[A-Z_]+/g, function (key) {
     return data[key] === undefined ? key : data[key];
   });
@@ -53,23 +53,23 @@ function execMaybe(cmd) {
   }
 }
 
-var rl = readline.createInterface({
+let rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
 
-var BABEL_PLUGIN_PREFIX = "babel-plugin-";
+let BABEL_PLUGIN_PREFIX = "babel-plugin-";
 
-var cmds = {
+let cmds = {
   init: function () {
-    var name = path.basename(process.cwd());
+    let name = path.basename(process.cwd());
 
     if (name.indexOf(BABEL_PLUGIN_PREFIX) === 0) {
       name = name.slice(BABEL_PLUGIN_PREFIX.length);
     }
 
     rl.question("Description (optional): ", function (description) {
-      var remote = execMaybe("git config --get remote.origin.url").trim().match(/git@github.com:(.*?).git/);
+      let remote = execMaybe("git config --get remote.origin.url").trim().match(/git@github.com:(.*?).git/);
       if (remote) {
         build(description, remote[1]);
       } else {
@@ -82,7 +82,7 @@ var cmds = {
     function build(description, repo) {
       rl.close();
 
-      var templateData = {
+      let templateData = {
         DESCRIPTION: description,
         FULL_NAME: BABEL_PLUGIN_PREFIX + name,
         NAME: name
@@ -133,7 +133,7 @@ var cmds = {
   },
 
   publish: function () {
-    var pkg = require(process.cwd() + "/package.json");
+    let pkg = require(process.cwd() + "/package.json");
     console.log("Current version:", pkg.version);
 
     rl.question("New version (enter nothing for patch): ", function (newVersion) {
@@ -153,7 +153,7 @@ var cmds = {
   }
 };
 
-var cmd = cmds[process.argv[2]];
+let cmd = cmds[process.argv[2]];
 if (cmd) {
   cmd();
 } else {

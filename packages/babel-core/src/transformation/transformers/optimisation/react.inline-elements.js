@@ -1,13 +1,13 @@
 import { react } from "babel-types";
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   optional: true
 };
 
 function hasRefOrSpread(attrs) {
-  for (var i = 0; i < attrs.length; i++) {
-    var attr = attrs[i];
+  for (let i = 0; i < attrs.length; i++) {
+    let attr = attrs[i];
     if (t.isJSXSpreadAttribute(attr)) return true;
     if (isJSXAttributeOfName(attr, "ref")) return true;
   }
@@ -17,18 +17,18 @@ function hasRefOrSpread(attrs) {
 function isJSXAttributeOfName(attr, name) {
   return t.isJSXAttribute(attr) && t.isJSXIdentifier(attr.name, { name: name });
 }
-export var visitor = {
+export let visitor = {
   JSXElement(node, parent, scope, file) {
     // filter
-    var open = node.openingElement;
+    let open = node.openingElement;
     if (hasRefOrSpread(open.attributes)) return;
 
     // init
-    var isComponent = true;
-    var props       = t.objectExpression([]);
-    var obj         = t.objectExpression([]);
-    var key         = t.nullLiteral();
-    var type        = open.name;
+    let isComponent = true;
+    let props       = t.objectExpression([]);
+    let obj         = t.objectExpression([]);
+    let key         = t.nullLiteral();
+    let type        = open.name;
 
     if (t.isJSXIdentifier(type) && react.isCompatTag(type.name)) {
       type = t.stringLiteral(type.name);
@@ -48,14 +48,14 @@ export var visitor = {
     pushElemProp("ref", t.nullLiteral());
 
     if (node.children.length) {
-      var children = react.buildChildren(node);
+      let children = react.buildChildren(node);
       children = children.length === 1 ? children[0] : t.arrayExpression(children);
       pushProp(props.properties, t.identifier("children"), children);
     }
 
     // props
-    for (var i = 0; i < open.attributes.length; i++) {
-      var attr = open.attributes[i];
+    for (let i = 0; i < open.attributes.length; i++) {
+      let attr = open.attributes[i];
       if (isJSXAttributeOfName(attr, "key")) {
         key = attr.value;
       } else {

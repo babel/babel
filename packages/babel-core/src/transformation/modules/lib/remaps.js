@@ -1,6 +1,6 @@
 import * as t from "babel-types";
 
-var remapVisitor = {
+let remapVisitor = {
   enter(node) {
     if (node._skipModulesRemap) {
       return this.skip();
@@ -8,9 +8,9 @@ var remapVisitor = {
   },
 
   ReferencedIdentifier(node, parent, scope, remaps) {
-    var { formatter } = remaps;
+    let { formatter } = remaps;
 
-    var remap = remaps.get(scope, node.name);
+    let remap = remaps.get(scope, node.name);
     if (!remap || node === remap) return;
 
     if (!scope.hasBinding(node.name) ||
@@ -26,7 +26,7 @@ var remapVisitor = {
   AssignmentExpression: {
     exit(node, parent, scope, { formatter }) {
       if (!node._ignoreModulesRemap) {
-        var exported = formatter.getExport(node.left, scope);
+        let exported = formatter.getExport(node.left, scope);
         if (exported) {
           return formatter.remapExportAssignment(node, exported);
         }
@@ -35,26 +35,26 @@ var remapVisitor = {
   },
 
   UpdateExpression(node, parent, scope, { formatter }) {
-    var exported = formatter.getExport(node.argument, scope);
+    let exported = formatter.getExport(node.argument, scope);
     if (!exported) return;
 
     this.skip();
 
     // expand to long file assignment expression
-    var assign = t.assignmentExpression(node.operator[0] + "=", node.argument, t.numberLiteral(1));
+    let assign = t.assignmentExpression(node.operator[0] + "=", node.argument, t.numberLiteral(1));
 
     // remap this assignment expression
-    var remapped = formatter.remapExportAssignment(assign, exported);
+    let remapped = formatter.remapExportAssignment(assign, exported);
 
     // we don't need to change the result
     if (t.isExpressionStatement(parent) || node.prefix) {
       return remapped;
     }
 
-    var nodes = [];
+    let nodes = [];
     nodes.push(remapped);
 
-    var operator;
+    let operator;
     if (node.operator === "--") {
       operator = "+";
     } else { // "++"
@@ -112,7 +112,7 @@ export default class Remaps {
 
   clearAll() {
     if (this.all) {
-      for (var remap of (this.all: Array)) {
+      for (let remap of (this.all: Array)) {
         remap.scope.removeData(this._getKey(remap.name));
       }
     }

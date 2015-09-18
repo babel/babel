@@ -15,8 +15,8 @@ function isLet(node, parent) {
 
   // https://github.com/babel/babel/issues/255
   if (isLetInitable(node, parent)) {
-    for (var i = 0; i < node.declarations.length; i++) {
-      var declar = node.declarations[i];
+    for (let i = 0; i < node.declarations.length; i++) {
+      let declar = node.declarations[i];
       declar.init = declar.init || scope.buildUndefinedNode();
     }
   }
@@ -35,26 +35,26 @@ function isVar(node, parent, scope) {
 }
 
 function standardizeLets(declars) {
-  for (var declar of (declars: Array)) {
+  for (let declar of (declars: Array)) {
     delete declar._let;
   }
 }
 
-export var metadata = {
+export let metadata = {
   group: "builtin-advanced"
 };
 
-export var visitor = {
+export let visitor = {
   VariableDeclaration(node, parent, scope, file) {
     if (!isLet(node, parent, scope)) return;
 
     if (isLetInitable(node) && node._tdzThis) {
-      var nodes = [node];
+      let nodes = [node];
 
-      for (var i = 0; i < node.declarations.length; i++) {
-        var decl = node.declarations[i];
+      for (let i = 0; i < node.declarations.length; i++) {
+        let decl = node.declarations[i];
         if (decl.init) {
-          var assign = t.assignmentExpression("=", decl.id, decl.init);
+          let assign = t.assignmentExpression("=", decl.id, decl.init);
           assign._ignoreBlockScopingTDZ = true;
           nodes.push(t.expressionStatement(assign));
         }
@@ -74,29 +74,29 @@ export var visitor = {
   },
 
   Loop(node, parent, scope, file) {
-    var init = node.left || node.init;
+    let init = node.left || node.init;
     if (isLet(init, node, scope)) {
       t.ensureBlock(node);
       node.body._letDeclarators = [init];
     }
 
-    var blockScoping = new BlockScoping(this, this.get("body"), parent, scope, file);
+    let blockScoping = new BlockScoping(this, this.get("body"), parent, scope, file);
     return blockScoping.run();
   },
 
   "BlockStatement|Program"(block, parent, scope, file) {
     if (!t.isLoop(parent)) {
-      var blockScoping = new BlockScoping(null, this, parent, scope, file);
+      let blockScoping = new BlockScoping(null, this, parent, scope, file);
       blockScoping.run();
     }
   }
 };
 
 function replace(node, parent, scope, remaps) {
-  var remap = remaps[node.name];
+  let remap = remaps[node.name];
   if (!remap) return;
 
-  var ownBinding = scope.getBindingIdentifier(node.name);
+  let ownBinding = scope.getBindingIdentifier(node.name);
   if (ownBinding === remap.binding) {
     node.name = remap.uid;
   } else {
@@ -106,12 +106,12 @@ function replace(node, parent, scope, remaps) {
   }
 }
 
-var replaceVisitor = {
+let replaceVisitor = {
   ReferencedIdentifier: replace,
 
   AssignmentExpression(node, parent, scope, remaps) {
-    var ids = this.getBindingIdentifiers();
-    for (var name in ids) {
+    let ids = this.getBindingIdentifiers();
+    for (let name in ids) {
       replace(ids[name], node, scope, remaps);
     }
   },
@@ -123,8 +123,8 @@ function traverseReplace(node, parent, scope, remaps) {
   }
 
   if (t.isAssignmentExpression(node)) {
-    var ids = t.getBindingIdentifiers(node);
-    for (var name in ids) {
+    let ids = t.getBindingIdentifiers(node);
+    for (let name in ids) {
       replace(ids[name], parent, scope, remaps);
     }
   }
@@ -132,34 +132,34 @@ function traverseReplace(node, parent, scope, remaps) {
   scope.traverse(node, replaceVisitor, remaps);
 }
 
-var letReferenceBlockVisitor = traverse.visitors.merge([{
+let letReferenceBlockVisitor = traverse.visitors.merge([{
   Function(node, parent, scope, state) {
     this.traverse(letReferenceFunctionVisitor, state);
     return this.skip();
   }
 }, tdzVisitor]);
 
-var letReferenceFunctionVisitor = traverse.visitors.merge([{
+let letReferenceFunctionVisitor = traverse.visitors.merge([{
   ReferencedIdentifier(node, parent, scope, state) {
-    var ref = state.letReferences[node.name];
+    let ref = state.letReferences[node.name];
 
     // not a part of our scope
     if (!ref) return;
 
     // this scope has a variable with the same name so it couldn't belong
     // to our let scope
-    var localBinding = scope.getBindingIdentifier(node.name);
+    let localBinding = scope.getBindingIdentifier(node.name);
     if (localBinding && localBinding !== ref) return;
 
     state.closurify = true;
   }
 }, tdzVisitor]);
 
-var hoistVarDeclarationsVisitor = {
+let hoistVarDeclarationsVisitor = {
   enter(node, parent, scope, self) {
     if (this.isForStatement()) {
       if (isVar(node.init, node, scope)) {
-        var nodes = self.pushDeclar(node.init);
+        let nodes = self.pushDeclar(node.init);
         if (nodes.length === 1) {
           node.init = nodes[0];
         } else {
@@ -179,17 +179,17 @@ var hoistVarDeclarationsVisitor = {
   }
 };
 
-var loopLabelVisitor = {
+let loopLabelVisitor = {
   LabeledStatement(node, parent, scope, state) {
     state.innerLabels.push(node.label.name);
   }
 };
 
-var continuationVisitor = {
+let continuationVisitor = {
   enter(node, parent, scope, state) {
     if (this.isAssignmentExpression() || this.isUpdateExpression()) {
-      var bindings = this.getBindingIdentifiers();
-      for (var name in bindings) {
+      let bindings = this.getBindingIdentifiers();
+      for (let name in bindings) {
         if (state.outsideReferences[name] !== scope.getBindingIdentifier(name)) continue;
         state.reassignments[name] = true;
       }
@@ -205,9 +205,9 @@ function loopNodeTo(node) {
   }
 }
 
-var loopVisitor = {
+let loopVisitor = {
   Loop(node, parent, scope, state) {
-    var oldIgnoreLabeless = state.ignoreLabeless;
+    let oldIgnoreLabeless = state.ignoreLabeless;
     state.ignoreLabeless = true;
     this.traverse(loopVisitor, state);
     state.ignoreLabeless = oldIgnoreLabeless;
@@ -219,7 +219,7 @@ var loopVisitor = {
   },
 
   SwitchCase(node, parent, scope, state) {
-    var oldInSwitchCase = state.inSwitchCase;
+    let oldInSwitchCase = state.inSwitchCase;
     state.inSwitchCase = true;
     this.traverse(loopVisitor, state);
     state.inSwitchCase = oldInSwitchCase;
@@ -227,8 +227,8 @@ var loopVisitor = {
   },
 
   "BreakStatement|ContinueStatement|ReturnStatement"(node, parent, scope, state) {
-    var replace;
-    var loopText = loopNodeTo(node);
+    let replace;
+    let loopText = loopNodeTo(node);
 
     if (loopText) {
       if (node.label) {
@@ -297,11 +297,11 @@ class BlockScoping {
    */
 
   run() {
-    var block = this.block;
+    let block = this.block;
     if (block._letDone) return;
     block._letDone = true;
 
-    var needsClosure = this.getLetReferences();
+    let needsClosure = this.getLetReferences();
 
     // this is a block within a `Function/Program` so we can safely leave it be
     if (t.isFunction(this.parent) || t.isProgram(this.block)) return;
@@ -321,24 +321,24 @@ class BlockScoping {
   }
 
   remap() {
-    var hasRemaps = false;
-    var letRefs   = this.letReferences;
-    var scope     = this.scope;
+    let hasRemaps = false;
+    let letRefs   = this.letReferences;
+    let scope     = this.scope;
 
     // alright, so since we aren't wrapping this block in a closure
     // we have to check if any of our let variables collide with
     // those in upper scopes and then if they do, generate a uid
     // for them and replace all references with it
-    var remaps = Object.create(null);
+    let remaps = Object.create(null);
 
-    for (var key in letRefs) {
+    for (let key in letRefs) {
       // just an Identifier node we collected in `getLetReferences`
       // this is the defining identifier of a declaration
-      var ref = letRefs[key];
+      let ref = letRefs[key];
 
       // todo: could skip this if the colliding binding is in another function
       if (scope.parentHasBinding(key) || scope.hasGlobal(key)) {
-        var uid = scope.generateUidIdentifier(ref.name).name;
+        let uid = scope.generateUidIdentifier(ref.name).name;
         ref.name = uid;
 
         hasRemaps = true;
@@ -353,7 +353,7 @@ class BlockScoping {
 
     //
 
-    var loop = this.loop;
+    let loop = this.loop;
     if (loop) {
       traverseReplace(loop.right, loop, scope, remaps);
       traverseReplace(loop.test, loop, scope, remaps);
@@ -364,14 +364,14 @@ class BlockScoping {
   }
 
   wrapClosure() {
-    var block = this.block;
+    let block = this.block;
 
-    var outsideRefs = this.outsideLetReferences;
+    let outsideRefs = this.outsideLetReferences;
 
     // remap loop heads with colliding variables
     if (this.loop) {
-      for (var name in outsideRefs) {
-        var id = outsideRefs[name];
+      for (let name in outsideRefs) {
+        let id = outsideRefs[name];
 
         if (this.scope.hasGlobal(id.name) || this.scope.parentHasBinding(id.name)) {
           delete outsideRefs[id.name];
@@ -389,15 +389,15 @@ class BlockScoping {
     // `break`s, `continue`s, `return`s etc
     this.has = this.checkLoop();
 
-    // hoist var references to retain scope
+    // hoist let references to retain scope
     this.hoistVarDeclarations();
 
     // turn outsideLetReferences into an array
-    var params = values(outsideRefs);
-    var args   = values(outsideRefs);
+    let params = values(outsideRefs);
+    let args   = values(outsideRefs);
 
     // build the closure that we're going to wrap the block with
-    var fn = t.functionExpression(null, params, t.blockStatement(block.body));
+    let fn = t.functionExpression(null, params, t.blockStatement(block.body));
     fn.shadow = true;
 
     // continuation
@@ -406,7 +406,7 @@ class BlockScoping {
     // replace the current block body with the one we're going to build
     block.body = this.body;
 
-    var ref = fn;
+    let ref = fn;
 
     if (this.loop) {
       ref = this.scope.generateUidIdentifier("loop");
@@ -416,18 +416,18 @@ class BlockScoping {
     }
 
     // build a call and a unique id that we can assign the return value to
-    var call = t.callExpression(ref, args);
-    var ret  = this.scope.generateUidIdentifier("ret");
+    let call = t.callExpression(ref, args);
+    let ret  = this.scope.generateUidIdentifier("ret");
 
     // handle generators
-    var hasYield = traverse.hasType(fn.body, this.scope, "YieldExpression", t.FUNCTION_TYPES);
+    let hasYield = traverse.hasType(fn.body, this.scope, "YieldExpression", t.FUNCTION_TYPES);
     if (hasYield) {
       fn.generator = true;
       call = t.yieldExpression(call, true);
     }
 
     // handlers async functions
-    var hasAsync = traverse.hasType(fn.body, this.scope, "AwaitExpression", t.FUNCTION_TYPES);
+    let hasAsync = traverse.hasType(fn.body, this.scope, "AwaitExpression", t.FUNCTION_TYPES);
     if (hasAsync) {
       fn.async = true;
       call = t.awaitExpression(call);
@@ -441,7 +441,7 @@ class BlockScoping {
    */
 
   buildClosure(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {
-    var has = this.has;
+    let has = this.has;
     if (has.hasReturn || has.hasBreakContinue) {
       this.buildHas(ret, call);
     } else {
@@ -458,18 +458,18 @@ class BlockScoping {
    */
 
   addContinuations(fn) {
-    var state = {
+    let state = {
       reassignments: {},
       outsideReferences: this.outsideLetReferences
     };
 
     this.scope.traverse(fn, continuationVisitor, state);
 
-    for (var i = 0; i < fn.params.length; i++) {
-      var param = fn.params[i];
+    for (let i = 0; i < fn.params.length; i++) {
+      let param = fn.params[i];
       if (!state.reassignments[param.name]) continue;
 
-      var newParam = this.scope.generateUidIdentifier(param.name);
+      let newParam = this.scope.generateUidIdentifier(param.name);
       fn.params[i] = newParam;
 
       this.scope.rename(param.name, newParam.name, fn);
@@ -480,9 +480,9 @@ class BlockScoping {
   }
 
   getLetReferences() {
-    var block = this.block;
+    let block = this.block;
 
-    var declarators = block._letDeclarators || [];
+    let declarators = block._letDeclarators || [];
 
     //
     for (let i = 0; i < declarators.length; i++) {
@@ -503,7 +503,7 @@ class BlockScoping {
     //
     for (let i = 0; i < declarators.length; i++) {
       let declar = declarators[i];
-      var keys = t.getBindingIdentifiers(declar);
+      let keys = t.getBindingIdentifiers(declar);
       extend(this.letReferences, keys);
       this.hasLetReferences = true;
     }
@@ -511,10 +511,10 @@ class BlockScoping {
     // no let references so we can just quit
     if (!this.hasLetReferences) return;
 
-    // set let references to plain var references
+    // set let references to plain let references
     standardizeLets(declarators);
 
-    var state = {
+    let state = {
       letReferences: this.letReferences,
       closurify:     false,
       file:          this.file
@@ -535,7 +535,7 @@ class BlockScoping {
    */
 
   checkLoop(): Object {
-    var state = {
+    let state = {
       hasBreakContinue: false,
       ignoreLabeless:   false,
       inSwitchCase:     false,
@@ -552,7 +552,7 @@ class BlockScoping {
   }
 
   /**
-   * Hoist all var declarations in this block to before it so they retain scope
+   * Hoist all let declarations in this block to before it so they retain scope
    * once we wrap everything in a closure.
    */
 
@@ -566,21 +566,21 @@ class BlockScoping {
    */
 
   pushDeclar(node: { type: "VariableDeclaration" }): Array<Object> {
-    var declars = [];
-    var names = t.getBindingIdentifiers(node);
-    for (var name in names) {
+    let declars = [];
+    let names = t.getBindingIdentifiers(node);
+    for (let name in names) {
       declars.push(t.variableDeclarator(names[name]));
     }
 
     this.body.push(t.variableDeclaration(node.kind, declars));
 
-    var replace = [];
+    let replace = [];
 
-    for (var i = 0; i < node.declarations.length; i++) {
-      var declar = node.declarations[i];
+    for (let i = 0; i < node.declarations.length; i++) {
+      let declar = node.declarations[i];
       if (!declar.init) continue;
 
-      var expr = t.assignmentExpression("=", declar.id, declar.init);
+      let expr = t.assignmentExpression("=", declar.id, declar.init);
       replace.push(t.inherits(expr, declar));
     }
 
@@ -588,15 +588,15 @@ class BlockScoping {
   }
 
   buildHas(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {
-    var body = this.body;
+    let body = this.body;
 
     body.push(t.variableDeclaration("var", [
       t.variableDeclarator(ret, call)
     ]));
 
-    var retCheck;
-    var has = this.has;
-    var cases = [];
+    let retCheck;
+    let has = this.has;
+    let cases = [];
 
     if (has.hasReturn) {
       // typeof ret === "object"
@@ -606,7 +606,7 @@ class BlockScoping {
     }
 
     if (has.hasBreakContinue) {
-      for (var key in has.map) {
+      for (let key in has.map) {
         cases.push(t.switchCase(t.stringLiteral(key), [has.map[key]]));
       }
 
@@ -615,15 +615,15 @@ class BlockScoping {
       }
 
       if (cases.length === 1) {
-        var single = cases[0];
+        let single = cases[0];
         body.push(this.file.attachAuxiliaryComment(t.ifStatement(
           t.binaryExpression("===", ret, single.test),
           single.consequent[0]
         )));
       } else {
         // https://github.com/babel/babel/issues/998
-        for (var i = 0; i < cases.length; i++) {
-          var caseConsequent = cases[i].consequent[0];
+        for (let i = 0; i < cases.length; i++) {
+          let caseConsequent = cases[i].consequent[0];
           if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {
             caseConsequent.label = this.loopLabel = this.loopLabel || this.file.scope.generateUidIdentifier("loop");
           }

@@ -1,13 +1,13 @@
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   group: "builtin-pre",
   optional: true
 };
 
-export var visitor = {
+export let visitor = {
   Program() {
-    var id = this.scope.generateUidIdentifier("null");
+    let id = this.scope.generateUidIdentifier("null");
     this.unshiftContainer("body", [
       t.variableDeclaration("var", [
         t.variableDeclarator(id, t.nullLiteral())

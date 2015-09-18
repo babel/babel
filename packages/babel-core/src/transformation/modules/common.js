@@ -8,16 +8,16 @@ export default class CommonJSFormatter extends DefaultFormatter {
   }
 
   _setup(conditional) {
-    var file  = this.file;
-    var scope = file.scope;
+    let file  = this.file;
+    let scope = file.scope;
 
     scope.rename("module");
     scope.rename("exports");
 
     if (!this.noInteropRequireImport && conditional) {
-      var templateName = "exports-module-declaration";
+      let templateName = "exports-module-declaration";
       if (this.file.isLoose("es6.modules")) templateName += "-loose";
-      var declar = util.template(templateName, true);
+      let declar = util.template(templateName, true);
       declar._blockHoist = 3;
       file.path.unshiftContainer("body", [declar]);
     }
@@ -38,9 +38,9 @@ export default class CommonJSFormatter extends DefaultFormatter {
   }
 
   importSpecifier(specifier, node, nodes, scope) {
-    var variableName = specifier.local;
+    let variableName = specifier.local;
 
-    var ref = this.getExternalReference(node, nodes);
+    let ref = this.getExternalReference(node, nodes);
 
     // import foo from "foo";
     if (t.isSpecifierDefault(specifier)) {
@@ -51,7 +51,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
       } else if (this.noInteropRequireImport) {
         this.remaps.add(scope, variableName.name, t.memberExpression(ref, t.identifier("default")));
       } else {
-        var uid = this.scope.generateUidIdentifierBasedOnNode(node, "import");
+        let uid = this.scope.generateUidIdentifierBasedOnNode(node, "import");
 
         nodes.push(t.variableDeclaration("var", [
           t.variableDeclarator(uid, t.callExpression(this.file.addHelper("interop-require-default"), [ref]))
@@ -101,8 +101,8 @@ export default class CommonJSFormatter extends DefaultFormatter {
   }
 
   _getExternalReference(node, nodes) {
-    var call = t.callExpression(t.identifier("require"), [node.source]);
-    var uid;
+    let call = t.callExpression(t.identifier("require"), [node.source]);
+    let uid;
 
     if (this.isModuleType(node, "absolute")) {
       // absolute module reference
@@ -114,7 +114,7 @@ export default class CommonJSFormatter extends DefaultFormatter {
 
     uid = uid || node.specifiers[0].local;
 
-    var declar = t.variableDeclaration("var", [
+    let declar = t.variableDeclaration("var", [
       t.variableDeclarator(uid, call)
     ]);
     nodes.push(declar);

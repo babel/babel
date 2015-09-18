@@ -10,7 +10,7 @@ export default class PluginPass {
   }
 
   transform() {
-    var file = this.file;
+    let file = this.file;
     file.log.debug(`Start transformer ${this.key}`);
     traverse(file.ast, this.plugin.visitor, file.scope, file);
     file.log.debug(`Finish transformer ${this.key}`);

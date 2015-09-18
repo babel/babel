@@ -39,12 +39,12 @@ export function JSXText(node) {
 }
 
 export function JSXElement(node, print) {
-  var open = node.openingElement;
+  let open = node.openingElement;
   print.plain(open);
   if (open.selfClosing) return;
 
   this.indent();
-  for (var child of (node.children: Array)) {
+  for (let child of (node.children: Array)) {
     print.plain(child);
   }
   this.dedent();

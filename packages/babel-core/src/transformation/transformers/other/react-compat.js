@@ -5,12 +5,12 @@ export function manipulateOptions(opts) {
   opts.blacklist.push("react");
 }
 
-export var metadata = {
+export let metadata = {
   optional: true,
   group: "builtin-advanced"
 };
 
-export var visitor = require("../../helpers/build-react-transformer")({
+export let visitor = require("../../helpers/build-react-transformer")({
   pre(state) {
     state.callee = state.tagExpr;
   },

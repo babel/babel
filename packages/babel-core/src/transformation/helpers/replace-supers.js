@@ -13,10 +13,10 @@ function isMemberExpressionSuper(node) {
   return t.isMemberExpression(node) && t.isSuper(node.object);
 }
 
-var visitor = {
+let visitor = {
   enter(path, state) {
-    var topLevel = state.topLevel;
-    var self = state.self;
+    let topLevel = state.topLevel;
+    let self = state.self;
 
     if (path.isFunction() && !path.isArrowFunctionExpression()) {
       // we need to call traverseLevel again so we're context aware
@@ -29,15 +29,15 @@ var visitor = {
       return path.skip();
     }
 
-    var getThisReference = topLevel ?
+    let getThisReference = topLevel ?
       // top level so `this` is the instance
       t.thisExpression :
       // not in the top level so we need to create a reference
       self.getThisReference.bind(self);
 
-    var callback = self.specHandle;
+    let callback = self.specHandle;
     if (self.isLoose) callback = self.looseHandle;
-    var result = callback.call(self, path, getThisReference);
+    let result = callback.call(self, path, getThisReference);
     if (result) path.hasSuper = true;
     if (result === true) return;
     return result;
@@ -119,7 +119,7 @@ export default class ReplaceSupers {
   }
 
   traverseLevel(path: NodePath, topLevel: boolean) {
-    var state = { self: this, topLevel: topLevel };
+    let state = { self: this, topLevel: topLevel };
     path.traverse(visitor, state);
   }
 
@@ -127,7 +127,7 @@ export default class ReplaceSupers {
     if (this.topLevelThisReference) {
       return this.topLevelThisReference;
     } else {
-      var ref = this.topLevelThisReference = this.scope.generateUidIdentifier("this");
+      let ref = this.topLevelThisReference = this.scope.generateUidIdentifier("this");
       this.methodNode.value.body.body.unshift(t.variableDeclaration("var", [
         t.variableDeclarator(this.topLevelThisReference, t.thisExpression())
       ]));
@@ -136,9 +136,9 @@ export default class ReplaceSupers {
   }
 
   getLooseSuperProperty(id: Object, parent: Object) {
-    var methodNode = this.methodNode;
-    var methodName = methodNode.key;
-    var superRef   = this.superRef || t.identifier("Function");
+    let methodNode = this.methodNode;
+    let methodName = methodNode.key;
+    let superRef   = this.superRef || t.identifier("Function");
 
     if (parent.property === id) {
       return;
@@ -175,11 +175,11 @@ export default class ReplaceSupers {
   }
 
   looseHandle(path: NodePath, getThisReference: Function) {
-    var node = path.node;
+    let node = path.node;
     if (path.isSuper()) {
       return this.getLooseSuperProperty(node, path.parent);
     } else if (path.isCallExpression()) {
-      var callee = node.callee;
+      let callee = node.callee;
       if (!t.isMemberExpression(callee)) return;
       if (!t.isSuper(callee.object)) return;
 
@@ -195,7 +195,7 @@ export default class ReplaceSupers {
       // super.name = "val"; -> _set(Object.getPrototypeOf(objectRef.prototype), "name", this);
       return this.setSuperProperty(node.left.property, node.right, node.left.computed, getThisReference());
     } else {
-      // super.age += 2; -> var _ref = super.age; super.age = _ref + 2;
+      // super.age += 2; -> let _ref = super.age; super.age = _ref + 2;
       ref = ref || path.scope.generateUidIdentifier("ref");
       return [
         t.variableDeclaration("var", [
@@ -209,21 +209,21 @@ export default class ReplaceSupers {
   }
 
   specHandle(path: NodePath, getThisReference: Function) {
-    var methodNode = this.methodNode;
-    var property;
-    var computed;
-    var args;
-    var thisReference;
+    let methodNode = this.methodNode;
+    let property;
+    let computed;
+    let args;
+    let thisReference;
 
-    var parent = path.parent;
-    var node = path.node;
+    let parent = path.parent;
+    let node = path.node;
 
     if (isIllegalBareSuper(node, parent)) {
       throw path.buildCodeFrameError(messages.get("classesIllegalBareSuper"));
     }
 
     if (t.isCallExpression(node)) {
-      var callee = node.callee;
+      let callee = node.callee;
       if (t.isSuper(callee)) {
         // super(); -> _get(Object.getPrototypeOf(objectRef), "MethodName", this).call(this);
         property = methodNode.key;
@@ -234,7 +234,7 @@ export default class ReplaceSupers {
         //  - https://esdiscuss.org/topic/super-call-in-methods
         //  - https://twitter.com/wycats/status/544553184396836864
         if (methodNode.key.name !== "constructor" || !this.inClass) {
-          var methodName = methodNode.key.name || "METHOD_NAME";
+          let methodName = methodNode.key.name || "METHOD_NAME";
           throw this.file.buildCodeFrameError(node, messages.get("classesIllegalSuperCall", methodName));
         }
       } else if (isMemberExpressionSuper(callee)) {
@@ -248,13 +248,13 @@ export default class ReplaceSupers {
       property = node.property;
       computed = node.computed;
     } else if (t.isUpdateExpression(node) && isMemberExpressionSuper(node.argument)) {
-      var binary = t.binaryExpression(node.operator[0], node.argument, t.numberLiteral(1));
+      let binary = t.binaryExpression(node.operator[0], node.argument, t.numberLiteral(1));
       if (node.prefix) {
         // ++super.foo; -> super.foo += 1;
         return this.specHandleAssignmentExpression(null, path, binary, getThisReference);
       } else {
-        // super.foo++; -> var _ref = super.foo; super.foo = _ref + 1;
-        var ref = path.scope.generateUidIdentifier("ref");
+        // super.foo++; -> let _ref = super.foo; super.foo = _ref + 1;
+        let ref = path.scope.generateUidIdentifier("ref");
         return this.specHandleAssignmentExpression(ref, path, binary, getThisReference).concat(t.expressionStatement(ref));
       }
     } else if (t.isAssignmentExpression(node) && isMemberExpressionSuper(node.left)) {
@@ -264,7 +264,7 @@ export default class ReplaceSupers {
     if (!property) return;
 
     thisReference = getThisReference();
-    var superProperty = this.getSuperProperty(property, computed, thisReference);
+    let superProperty = this.getSuperProperty(property, computed, thisReference);
     if (args) {
       if (args.length === 1 && t.isSpreadElement(args[0])) {
         // super(...arguments);

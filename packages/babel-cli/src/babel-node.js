@@ -3,16 +3,16 @@
  * when found, before invoking the "real" _babel-node(1) executable.
  */
 
-var getV8Flags = require("v8flags");
-var path = require("path");
+let getV8Flags = require("v8flags");
+let path = require("path");
 
-var args = [path.join(__dirname, "_babel-node")];
+let args = [path.join(__dirname, "_babel-node")];
 
-var babelArgs = process.argv.slice(2);
-var userArgs;
+let babelArgs = process.argv.slice(2);
+let userArgs;
 
 // separate node arguments from script arguments
-var argSeparator = babelArgs.indexOf("--");
+let argSeparator = babelArgs.indexOf("--");
 if (argSeparator > -1) {
   userArgs  = babelArgs.slice(argSeparator); // including the  --
   babelArgs = babelArgs.slice(0, argSeparator);
@@ -20,7 +20,7 @@ if (argSeparator > -1) {
 
 getV8Flags(function (v8Flags) {
   babelArgs.forEach(function(arg){
-    var flag = arg.split("=")[0];
+    let flag = arg.split("=")[0];
 
     switch (flag) {
       case "-d":
@@ -54,13 +54,13 @@ getV8Flags(function (v8Flags) {
   }
 
   try {
-    var kexec = require("kexec");
+    let kexec = require("kexec");
     kexec(process.argv[0], args);
   } catch (err) {
     if (err.code !== "MODULE_NOT_FOUND") throw err;
 
-    var child_process = require("child_process");
-    var proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
+    let child_process = require("child_process");
+    let proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
     proc.on("exit", function (code, signal) {
       process.on("exit", function () {
         if (signal) {

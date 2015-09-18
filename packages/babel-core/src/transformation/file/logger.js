@@ -1,10 +1,10 @@
 import type File from "./index";
 import buildDebug from "debug/node";
 
-var verboseDebug = buildDebug("babel:verbose");
-var generalDebug = buildDebug("babel");
+let verboseDebug = buildDebug("babel:verbose");
+let generalDebug = buildDebug("babel");
 
-var seenDeprecatedMessages = [];
+let seenDeprecatedMessages = [];
 
 export default class Logger {
   constructor(file: File, filename: string) {
@@ -13,7 +13,7 @@ export default class Logger {
   }
 
   _buildMessage(msg: string): string {
-    var parts = `[BABEL] ${this.filename}`;
+    let parts = `[BABEL] ${this.filename}`;
     if (msg) parts += `: ${msg}`;
     return parts;
   }

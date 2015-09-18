@@ -3,14 +3,14 @@ import getFunctionArity from "../../../helpers/get-function-arity";
 import * as util from  "../../../../util";
 import * as t from "babel-types";
 
-var hasDefaults = function (node) {
-  for (var i = 0; i < node.params.length; i++) {
+let hasDefaults = function (node) {
+  for (let i = 0; i < node.params.length; i++) {
     if (!t.isIdentifier(node.params[i])) return true;
   }
   return false;
 };
 
-var iifeVisitor = {
+let iifeVisitor = {
   ReferencedIdentifier(node, parent, scope, state) {
     if (node.name !== "eval") {
       if (!state.scope.hasOwnBinding(node.name)) return;
@@ -22,27 +22,27 @@ var iifeVisitor = {
   }
 };
 
-export var visitor = {
+export let visitor = {
   Function(node, parent, scope, file) {
     if (!hasDefaults(node)) return;
 
     // ensure it's a block, useful for arrow functions
     this.ensureBlock();
 
-    var state = {
+    let state = {
       iife: false,
       scope: scope
     };
 
-    var body = [];
+    let body = [];
 
     //
-    var argsIdentifier = t.identifier("arguments");
+    let argsIdentifier = t.identifier("arguments");
     argsIdentifier._shadowedFunctionLiteral = this;
 
     // push a default parameter definition
     function pushDefNode(left, right, i) {
-      var defNode;
+      let defNode;
       if (exceedsLastNonDefault(i) || t.isPattern(left) || file.transformers["es6.spec.blockScoping"].canTransform()) {
         defNode = util.template("default-parameter", {
           VARIABLE_NAME: left,
@@ -66,12 +66,12 @@ export var visitor = {
     }
 
     //
-    var lastNonDefaultParam = getFunctionArity(node);
+    let lastNonDefaultParam = getFunctionArity(node);
 
     //
-    var params = this.get("params");
-    for (var i = 0; i < params.length; i++) {
-      var param = params[i];
+    let params = this.get("params");
+    for (let i = 0; i < params.length; i++) {
+      let param = params[i];
 
       if (!param.isAssignmentPattern()) {
         if (!param.isIdentifier()) {
@@ -85,11 +85,11 @@ export var visitor = {
         continue;
       }
 
-      var left  = param.get("left");
-      var right = param.get("right");
+      let left  = param.get("left");
+      let right = param.get("right");
 
       if (exceedsLastNonDefault(i) || left.isPattern()) {
-        var placeholder = scope.generateUidIdentifier("x");
+        let placeholder = scope.generateUidIdentifier("x");
         placeholder._isDefaultPlaceholder = true;
         node.params[i] = placeholder;
       } else {

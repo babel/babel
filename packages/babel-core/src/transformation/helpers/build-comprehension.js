@@ -1,10 +1,10 @@
 import * as t from "babel-types";
 
 export default function build(node, buildBody) {
-  var self = node.blocks.shift();
+  let self = node.blocks.shift();
   if (!self) return;
 
-  var child = build(node, buildBody);
+  let child = build(node, buildBody);
   if (!child) {
     // last item
     child = buildBody();

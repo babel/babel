@@ -5,17 +5,17 @@ export function internal(transformer) {
 }
 
 export function blacklist(transformer, opts) {
-  var blacklist = opts.blacklist;
+  let blacklist = opts.blacklist;
   if (blacklist.length && includes(blacklist, transformer.key)) return false;
 }
 
 export function whitelist(transformer, opts) {
-  var whitelist = opts.whitelist;
+  let whitelist = opts.whitelist;
   if (whitelist) return includes(whitelist, transformer.key);
 }
 
 export function stage(transformer, opts) {
-  var stage = transformer.metadata.stage;
+  let stage = transformer.metadata.stage;
   if (stage != null && stage >= opts.stage) return true;
 }
 

@@ -51,10 +51,10 @@ export function ExportDefaultDeclaration(node, print) {
 }
 
 function ExportDeclaration(node, print) {
-  var specifiers = node.specifiers;
+  let specifiers = node.specifiers;
 
   if (node.declaration) {
-    var declar = node.declaration;
+    let declar = node.declaration;
     print.plain(declar);
     if (t.isStatement(declar) || t.isFunction(declar) || t.isClass(declar)) return;
   } else {
@@ -62,8 +62,8 @@ function ExportDeclaration(node, print) {
       this.push("type ");
     }
 
-    var first = specifiers[0];
-    var hasSpecial = false;
+    let first = specifiers[0];
+    let hasSpecial = false;
     if (t.isExportDefaultSpecifier(first) || t.isExportNamespaceSpecifier(first)) {
       hasSpecial = true;
       print.plain(specifiers.shift());
@@ -98,9 +98,9 @@ export function ImportDeclaration(node, print) {
     this.push(node.importKind + " ");
   }
 
-  var specfiers = node.specifiers;
+  let specfiers = node.specifiers;
   if (specfiers && specfiers.length) {
-    var first = node.specifiers[0];
+    let first = node.specifiers[0];
     if (t.isImportDefaultSpecifier(first) || t.isImportNamespaceSpecifier(first)) {
       print.plain(node.specifiers.shift());
       if (node.specifiers.length) {

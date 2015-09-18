@@ -24,8 +24,8 @@ export { inherits, inspect } from "util";
  */
 
 export function canCompile(filename: string, altExts?: Array<string>) {
-  var exts = altExts || canCompile.EXTENSIONS;
-  var ext = path.extname(filename);
+  let exts = altExts || canCompile.EXTENSIONS;
+  let ext = path.extname(filename);
   return contains(exts, ext);
 }
 
@@ -68,7 +68,7 @@ export function regexify(val: any): RegExp {
     if (startsWith(val, "./") || startsWith(val, "*/")) val = val.slice(2);
     if (startsWith(val, "**/")) val = val.slice(3);
 
-    var regex = minimatch.makeRe(val, { nocase: true });
+    let regex = minimatch.makeRe(val, { nocase: true });
     return new RegExp(regex.source.slice(1, -1), "i");
   }
 
@@ -142,7 +142,7 @@ function _shouldIgnore(pattern, filename) {
  * A visitor for Babel templates, replaces placeholder references.
  */
 
-var templateVisitor = {
+let templateVisitor = {
   /**
    * 360 NoScope PWNd
    */
@@ -169,7 +169,7 @@ var templateVisitor = {
  */
 
 export function template(name: string, nodes?: Array<Object>, keepExpression?: boolean): Object {
-  var ast = exports.templates[name];
+  let ast = exports.templates[name];
   if (!ast) throw new ReferenceError(`unknown template ${name}`);
 
   if (nodes === true) {
@@ -185,7 +185,7 @@ export function template(name: string, nodes?: Array<Object>, keepExpression?: b
 
   if (ast.body.length > 1) return ast.body;
 
-  var node = ast.body[0];
+  let node = ast.body[0];
 
   if (!keepExpression && t.isExpressionStatement(node)) {
     return node.expression;
@@ -200,7 +200,7 @@ export function template(name: string, nodes?: Array<Object>, keepExpression?: b
 
 export function parseTemplate(loc: string, code: string): Object {
   try {
-    var ast = parse(code, { filename: loc, looseModules: true }).program;
+    let ast = parse(code, { filename: loc, looseModules: true }).program;
     ast = traverse.removeProperties(ast);
     return ast;
   } catch (err) {
@@ -214,19 +214,19 @@ export function parseTemplate(loc: string, code: string): Object {
  */
 
 function loadTemplates(): Object {
-  var templates = {};
+  let templates = {};
 
-  var templatesLoc = path.join(__dirname, "transformation/templates");
+  let templatesLoc = path.join(__dirname, "transformation/templates");
   if (!pathExists.sync(templatesLoc)) {
     throw new ReferenceError(messages.get("missingTemplatesDirectory"));
   }
 
-  for (var name of (fs.readdirSync(templatesLoc): Array)) {
+  for (let name of (fs.readdirSync(templatesLoc): Array)) {
     if (name[0] === ".") continue;
 
-    var key  = path.basename(name, path.extname(name));
-    var loc  = path.join(templatesLoc, name);
-    var code = fs.readFileSync(loc, "utf8");
+    let key  = path.basename(name, path.extname(name));
+    let loc  = path.join(templatesLoc, name);
+    let code = fs.readFileSync(loc, "utf8");
 
     templates[key] = parseTemplate(loc, code);
   }

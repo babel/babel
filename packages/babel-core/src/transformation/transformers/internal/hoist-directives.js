@@ -1,14 +1,14 @@
 import * as t from "babel-types";
 
-export var metadata = {
+export let metadata = {
   group: "builtin-pre"
 };
 
-export var visitor = {
+export let visitor = {
   Block: {
     exit(node) {
-      for (var i = 0; i < node.body.length; i++) {
-        var bodyNode = node.body[i];
+      for (let i = 0; i < node.body.length; i++) {
+        let bodyNode = node.body[i];
         if (t.isExpressionStatement(bodyNode) && t.isLiteral(bodyNode.expression)) {
           bodyNode._blockHoist = Infinity;
         } else {

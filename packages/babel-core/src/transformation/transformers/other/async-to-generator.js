@@ -2,12 +2,12 @@ import remapAsyncToGenerator from "../../helpers/remap-async-to-generator";
 
 export { manipulateOptions } from "./bluebird-coroutines";
 
-export var metadata = {
+export let metadata = {
   optional: true,
   dependencies: ["es7.asyncFunctions", "es6.classes"]
 };
 
-export var visitor = {
+export let visitor = {
   Function(node, parent, scope, file) {
     if (!node.async || node.generator) return;
 

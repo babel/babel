@@ -38,7 +38,7 @@ export function DeclareModule(node, print) {
 }
 
 export function DeclareVariable(node, print) {
-  this.push("declare var ");
+  this.push("declare let ");
   print.plain(node.id);
   print.plain(node.id.typeAnnotation);
   this.semicolon();
@@ -174,7 +174,7 @@ export { TypeParameterInstantiation as TypeParameterDeclaration };
 
 export function ObjectTypeAnnotation(node, print) {
   this.push("{");
-  var props = node.properties.concat(node.callProperties, node.indexers);
+  let props = node.properties.concat(node.callProperties, node.indexers);
 
   if (props.length) {
     this.space();

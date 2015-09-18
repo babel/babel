@@ -8,19 +8,19 @@ function keepBlockHoist(node, nodes) {
   }
 }
 
-export var metadata = {
+export let metadata = {
   group: "builtin-modules"
 };
 
-export var visitor = {
+export let visitor = {
   ImportDeclaration(node, parent, scope, file) {
     // flow type
     if (node.importKind === "type" || node.importKind === "typeof") return;
 
-    var nodes = [];
+    let nodes = [];
 
     if (node.specifiers.length) {
-      for (var specifier of (node.specifiers: Array)) {
+      for (let specifier of (node.specifiers: Array)) {
         file.moduleFormatter.importSpecifier(specifier, node, nodes, scope);
       }
     } else {
@@ -36,14 +36,14 @@ export var visitor = {
   },
 
   ExportAllDeclaration(node, parent, scope, file) {
-    var nodes = [];
+    let nodes = [];
     file.moduleFormatter.exportAllDeclaration(node, nodes, scope);
     keepBlockHoist(node, nodes);
     return nodes;
   },
 
   ExportDefaultDeclaration(node, parent, scope, file) {
-    var nodes = [];
+    let nodes = [];
     file.moduleFormatter.exportDeclaration(node, nodes, scope);
     keepBlockHoist(node, nodes);
     return nodes;
@@ -53,13 +53,13 @@ export var visitor = {
     // flow type
     if (this.get("declaration").isTypeAlias()) return;
 
-    var nodes = [];
+    let nodes = [];
 
     if (node.declaration) {
       // make sure variable exports have an initializer
       // this is done here to avoid duplicating it in the module formatters
       if (t.isVariableDeclaration(node.declaration)) {
-        var declar = node.declaration.declarations[0];
+        let declar = node.declaration.declarations[0];
         declar.init = declar.init || scope.buildUndefinedNode();
       }
 
