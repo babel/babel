@@ -1,1 +1,0 @@
-KEY.push(STATEMENT);
