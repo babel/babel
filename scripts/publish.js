@@ -77,7 +77,7 @@ function publish() {
     }
   });
 
-  if (!changedPackages.length) {
+  if (!changedPackages.length && !FORCE_VERSION.length) {
     throw new Error("No packages changed.");
   }
 
