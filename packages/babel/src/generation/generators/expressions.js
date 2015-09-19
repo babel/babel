@@ -9,6 +9,13 @@ import * as t from "../../types";
 const SCIENTIFIC_NOTATION = /e/i;
 
 /**
+ * RegExp for testing if a numeric literal is
+ * a BinaryIntegerLiteral, OctalIntegerLiteral or HexIntegerLiteral.
+ */
+
+const NON_DECIMAL_NUMERIC_LITERAL = /^0(b|o|x)/i;
+
+/**
  * Prints UnaryExpression, prints operator and argument.
  */
 
@@ -280,7 +287,8 @@ export function MemberExpression(node, print) {
   } else {
     if (t.isLiteral(node.object)) {
       var val = this._Literal(node.object);
-      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")) {
+      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")
+        && !NON_DECIMAL_NUMERIC_LITERAL.test(val)) {
         this.push(".");
       }
     }
