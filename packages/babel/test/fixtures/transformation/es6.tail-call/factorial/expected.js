@@ -6,12 +6,12 @@ function fact(_x2) {
 
   _function: while (_again) {
     var n = _x2;
-    acc = undefined;
     _again = false;
     var acc = _arguments.length <= 1 || _arguments[1] === undefined ? 1 : _arguments[1];
     if (n > 1) {
       _arguments = [_x2 = n - 1, acc * n];
       _again = true;
+      acc = undefined;
       continue _function;
     } else {
       return acc;
