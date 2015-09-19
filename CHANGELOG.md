@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.8.25
+
+ * **Internal**
+  * Rename `define` method to avoid webpack assuming those files are AMD.
+
 ## 5.8.24
 
  * **Spec Compliancy**
