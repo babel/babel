@@ -104,6 +104,14 @@ export function evaluate(): { confident: boolean; value: any } {
       }
     }
 
+    if (path.isUpdateExpression()) {
+      var argument = evaluate(path.get("argument"));
+      switch (node.operator) {
+        case "++": return argument + 1;
+        case "--": return argument - 1;
+      }
+    }
+
     if (path.isReferencedIdentifier()) {
       var binding = path.scope.getBinding(node.name);
       if (binding && binding.hasValue) {
