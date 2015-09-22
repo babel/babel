@@ -168,7 +168,11 @@
     var previousPromise;
 
     function enqueue(method, arg) {
-      var enqueueResult =
+      function callInvokeWithMethodAndArg() {
+        return invoke(method, arg);
+      }
+
+      return previousPromise =
         // If enqueue has been called before, then we want to wait until
         // all previous Promises have been resolved before calling invoke,
         // so that results are always delivered in the correct order. If
@@ -181,17 +185,14 @@
         // execute code before the first await. Since we implement simple
         // async functions in terms of async generators, it is especially
         // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(function() {
-          return invoke(method, arg);
-        }) : new Promise(function(resolve) {
-          resolve(invoke(method, arg));
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : new Promise(function (resolve) {
+          resolve(callInvokeWithMethodAndArg());
         });
-
-      // Avoid propagating enqueueResult failures to Promises returned by
-      // later invocations of the iterator.
-      previousPromise = enqueueResult["catch"](function(ignored){});
-
-      return enqueueResult;
     }
 
     // Define the unified helper method that is used to implement .next,
