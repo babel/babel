@@ -1,3 +1,5 @@
+/* @flow */
+
 import Parser from "./index";
 import { SourceLocation } from "../util/location";
 
@@ -5,15 +7,20 @@ import { SourceLocation } from "../util/location";
 
 const pp = Parser.prototype;
 
-export class Node {
-  constructor(parser, pos, loc) {
+class Node {
+  constructor(pos?: number, loc?: SourceLocation) {
     this.type = "";
     this.start = pos;
     this.end = 0;
     this.loc = new SourceLocation(loc);
   }
 
-  __clone() {
+  type: string;
+  start: ?number;
+  end: number;
+  loc: SourceLocation;
+
+  __clone(): Node {
     var node2 = new Node;
     for (var key in this) node2[key] = this[key];
     return node2;
@@ -21,11 +28,11 @@ export class Node {
 }
 
 pp.startNode = function () {
-  return new Node(this, this.state.start, this.state.startLoc);
+  return new Node(this.state.start, this.state.startLoc);
 };
 
 pp.startNodeAt = function (pos, loc) {
-  return new Node(this, pos, loc);
+  return new Node(pos, loc);
 };
 
 function finishNodeAt(node, type, pos, loc) {

@@ -1,3 +1,5 @@
+/* @flow */
+
 // ## Token types
 
 // The assignment of fine-grained, information-carrying type objects

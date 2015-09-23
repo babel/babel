@@ -1,3 +1,5 @@
+/* @flow */
+
 /**
  * Based on the comment attachment algorithm used in espree and estraverse.
  *

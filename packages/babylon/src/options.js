@@ -1,3 +1,5 @@
+/* @flow */
+
 // A second optional argument can be given to further configure
 // the parser process. These options are recognized:
 
@@ -18,7 +20,7 @@ export const defaultOptions = {
 
 // Interpret and default an options object
 
-export function getOptions(opts) {
+export function getOptions(opts?: Object): Object {
   let options = {};
   for (let key in defaultOptions) {
     options[key] = opts && key in opts ? opts[key] : defaultOptions[key];

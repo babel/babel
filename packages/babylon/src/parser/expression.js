@@ -1,3 +1,5 @@
+/* @flow */
+
 // A recursive descent parser operates by defining functions for all
 // syntactic elements, and recursively calling those, each function
 // advancing the input stream and returning an AST node. Precedence
@@ -793,7 +795,7 @@ pp.parseFunctionBody = function (node, allowExpression) {
 
   // normal function
   if (!isExpression && node.body.directives.length) {
-    for (var directive of (node.body.directives: Array)) {
+    for (var directive of (node.body.directives: Array<Object>)) {
       if (directive.value === "use strict") {
         checkLVal = true;
         checkLValStrict = true;
@@ -809,7 +811,7 @@ pp.parseFunctionBody = function (node, allowExpression) {
     if (node.id) {
       this.checkLVal(node.id, true);
     }
-    for (let param of (node.params: Array)) {
+    for (let param of (node.params: Array<Object>)) {
       this.checkLVal(param, true, nameHash);
     }
     this.state.strict = oldStrict;
