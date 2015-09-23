@@ -1,3 +1,5 @@
+/* @flow */
+
 import { reservedWords } from "../util/identifier";
 import { getOptions } from "../options";
 import Tokenizer from "../tokenizer";
@@ -7,7 +9,7 @@ import Tokenizer from "../tokenizer";
 export const plugins = {};
 
 export default class Parser extends Tokenizer {
-  constructor(options, input) {
+  constructor(options, input: string) {
     options = getOptions(options);
     super(options, input);
 
@@ -25,11 +27,11 @@ export default class Parser extends Tokenizer {
     }
   }
 
-  hasFeature(name) {
+  hasFeature(name: string): boolean {
     return !!this.options.features[name];
   }
 
-  extend(name, f) {
+  extend(name: string, f: Function) {
     this[name] = f(this[name]);
   }
 
@@ -41,7 +43,13 @@ export default class Parser extends Tokenizer {
     }
   }
 
-  parse() {
+  parse(): {
+    type: "File",
+    program: {
+      type: "Program",
+      body: Array<Object>
+    }
+  } {
     let file = this.startNode();
     let program = this.startNode();
     this.nextToken();

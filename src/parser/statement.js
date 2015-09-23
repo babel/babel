@@ -1,3 +1,5 @@
+/* @flow */
+
 import { types as tt } from "../tokenizer/types";
 import Parser from "./index";
 import { lineBreak } from "../util/whitespace";
@@ -380,7 +382,7 @@ pp.parseEmptyStatement = function (node) {
 };
 
 pp.parseLabeledStatement = function (node, maybeName, expr) {
-  for (let label of (this.state.labels: Array)){
+  for (let label of (this.state.labels: Array<Object>)){
     if (label.name === maybeName) {
       this.raise(expr.start, `Label '${maybeName}' is already declared`);
     }

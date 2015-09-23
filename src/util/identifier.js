@@ -1,3 +1,5 @@
+/* @flow */
+
 // This is a trick taken from Esprima. It turns out that, on
 // non-Chrome browsers, to check whether a string is in a set, a
 // predicate containing a big ugly `switch` statement is faster than

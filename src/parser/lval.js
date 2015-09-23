@@ -1,3 +1,5 @@
+/* @flow */
+
 import { types as tt } from "../tokenizer/types";
 import Parser from "./index";
 import { reservedWords } from "../util/identifier";
@@ -18,7 +20,7 @@ pp.toAssignable = function (node, isBinding) {
 
       case "ObjectExpression":
         node.type = "ObjectPattern";
-        for (let prop of (node.properties: Array)) {
+        for (let prop of (node.properties: Array<Object>)) {
           if (prop.type === "SpreadProperty") continue;
           if (prop.kind !== "init") this.raise(prop.key.start, "Object pattern can't contain getter or setter");
           this.toAssignable(prop.value, isBinding);
@@ -184,14 +186,14 @@ pp.checkLVal = function (expr, isBinding, checkClashes) {
       break;
 
     case "ObjectPattern":
-      for (let prop of (expr.properties: Array)) {
+      for (let prop of (expr.properties: Array<Object>)) {
         if (prop.type === "Property") prop = prop.value;
         this.checkLVal(prop, isBinding, checkClashes);
       }
       break;
 
     case "ArrayPattern":
-      for (let elem of (expr.elements: Array)) {
+      for (let elem of (expr.elements: Array<Object>)) {
         if (elem) this.checkLVal(elem, isBinding, checkClashes);
       }
       break;
