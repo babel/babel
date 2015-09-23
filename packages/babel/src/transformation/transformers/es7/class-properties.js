@@ -1,4 +1,4 @@
 export var metadata = {
-  stage: 0,
+  stage: 1,
   dependencies: ["es6.classes"]
 };
