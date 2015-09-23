@@ -1,10 +1,12 @@
+/* @flow */
+
 import * as babylon from "babylon";
 
 /**
  * Parse `code` with normalized options, collecting tokens and comments.
  */
 
-export default function (code, opts = {}) {
+export default function (code: string, opts: BabelParserOptions = {}) {
   let parseOpts = {
     allowImportExportEverywhere: opts.looseModules,
     allowReturnOutsideFunction:  opts.looseModules,

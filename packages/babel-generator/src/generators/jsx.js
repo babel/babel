@@ -1,4 +1,8 @@
-export function JSXAttribute(node, print) {
+/* @flow */
+
+import type NodePrinter from "../node/printer";
+
+export function JSXAttribute(node: Object, print: NodePrinter) {
   print.plain(node.name);
   if (node.value) {
     this.push("=");
@@ -6,45 +10,45 @@ export function JSXAttribute(node, print) {
   }
 }
 
-export function JSXIdentifier(node) {
+export function JSXIdentifier(node: Object) {
   this.push(node.name);
 }
 
-export function JSXNamespacedName(node, print) {
+export function JSXNamespacedName(node: Object, print: NodePrinter) {
   print.plain(node.namespace);
   this.push(":");
   print.plain(node.name);
 }
 
-export function JSXMemberExpression(node, print) {
+export function JSXMemberExpression(node: Object, print: NodePrinter) {
   print.plain(node.object);
   this.push(".");
   print.plain(node.property);
 }
 
-export function JSXSpreadAttribute(node, print) {
+export function JSXSpreadAttribute(node: Object, print: NodePrinter) {
   this.push("{...");
   print.plain(node.argument);
   this.push("}");
 }
 
-export function JSXExpressionContainer(node, print) {
+export function JSXExpressionContainer(node: Object, print: NodePrinter) {
   this.push("{");
   print.plain(node.expression);
   this.push("}");
 }
 
-export function JSXText(node) {
+export function JSXText(node: Object) {
   this.push(node.value, true);
 }
 
-export function JSXElement(node, print) {
+export function JSXElement(node: Object, print: NodePrinter) {
   let open = node.openingElement;
   print.plain(open);
   if (open.selfClosing) return;
 
   this.indent();
-  for (let child of (node.children: Array)) {
+  for (let child of (node.children: Array<Object>)) {
     print.plain(child);
   }
   this.dedent();
@@ -52,7 +56,7 @@ export function JSXElement(node, print) {
   print.plain(node.closingElement);
 }
 
-export function JSXOpeningElement(node, print) {
+export function JSXOpeningElement(node: Object, print: NodePrinter) {
   this.push("<");
   print.plain(node.name);
   if (node.attributes.length > 0) {
@@ -62,7 +66,7 @@ export function JSXOpeningElement(node, print) {
   this.push(node.selfClosing ? " />" : ">");
 }
 
-export function JSXClosingElement(node, print) {
+export function JSXClosingElement(node: Object, print: NodePrinter) {
   this.push("</");
   print.plain(node.name);
   this.push(">");

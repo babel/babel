@@ -1,3 +1,5 @@
+/* @flow */
+
 import Plugin from "../plugin";
 import * as t from "babel-types";
 

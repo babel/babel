@@ -1,10 +1,13 @@
+/* @flow */
+
+import type NodePrinter from "../node/printer";
 import * as t from "babel-types";
 
 export function AnyTypeAnnotation() {
   this.push("any");
 }
 
-export function ArrayTypeAnnotation(node, print) {
+export function ArrayTypeAnnotation(node: Object, print: NodePrinter) {
   print.plain(node.elementType);
   this.push("[");
   this.push("]");
@@ -14,37 +17,37 @@ export function BooleanTypeAnnotation() {
   this.push("bool");
 }
 
-export function BooleanLiteralTypeAnnotation(node) {
+export function BooleanLiteralTypeAnnotation(node: Object) {
   this.push(node.value ? "true" : "false");
 }
 
-export function DeclareClass(node, print) {
+export function DeclareClass(node: Object, print: NodePrinter) {
   this.push("declare class ");
   this._interfaceish(node, print);
 }
 
-export function DeclareFunction(node, print) {
+export function DeclareFunction(node: Object, print: NodePrinter) {
   this.push("declare function ");
   print.plain(node.id);
   print.plain(node.id.typeAnnotation.typeAnnotation);
   this.semicolon();
 }
 
-export function DeclareModule(node, print) {
+export function DeclareModule(node: Object, print: NodePrinter) {
   this.push("declare module ");
   print.plain(node.id);
   this.space();
   print.plain(node.body);
 }
 
-export function DeclareVariable(node, print) {
+export function DeclareVariable(node: Object, print: NodePrinter) {
   this.push("declare let ");
   print.plain(node.id);
   print.plain(node.id.typeAnnotation);
   this.semicolon();
 }
 
-export function FunctionTypeAnnotation(node, print, parent) {
+export function FunctionTypeAnnotation(node: Object, print: NodePrinter, parent: Object) {
   print.plain(node.typeParameters);
   this.push("(");
   print.list(node.params);
@@ -72,7 +75,7 @@ export function FunctionTypeAnnotation(node, print, parent) {
   print.plain(node.returnType);
 }
 
-export function FunctionTypeParam(node, print) {
+export function FunctionTypeParam(node: Object, print: NodePrinter) {
   print.plain(node.name);
   if (node.optional) this.push("?");
   this.push(":");
@@ -80,14 +83,14 @@ export function FunctionTypeParam(node, print) {
   print.plain(node.typeAnnotation);
 }
 
-export function InterfaceExtends(node, print) {
+export function InterfaceExtends(node: Object, print: NodePrinter) {
   print.plain(node.id);
   print.plain(node.typeParameters);
 }
 
 export { InterfaceExtends as ClassImplements, InterfaceExtends as GenericTypeAnnotation };
 
-export function _interfaceish(node, print) {
+export function _interfaceish(node: Object, print: NodePrinter) {
   print.plain(node.id);
   print.plain(node.typeParameters);
   if (node.extends.length) {
@@ -98,12 +101,12 @@ export function _interfaceish(node, print) {
   print.plain(node.body);
 }
 
-export function InterfaceDeclaration(node, print) {
+export function InterfaceDeclaration(node: Object, print: NodePrinter) {
   this.push("interface ");
   this._interfaceish(node, print);
 }
 
-export function IntersectionTypeAnnotation(node, print) {
+export function IntersectionTypeAnnotation(node: Object, print: NodePrinter) {
   print.join(node.types, { separator: " & " });
 }
 
@@ -111,18 +114,18 @@ export function MixedTypeAnnotation() {
   this.push("mixed");
 }
 
-export function NullableTypeAnnotation(node, print) {
+export function NullableTypeAnnotation(node: Object, print: NodePrinter) {
   this.push("?");
   print.plain(node.typeAnnotation);
 }
 
-export { Literal as NumberLiteralTypeAnnotation } from "./types";
+export { NumberLiteral as NumberLiteralTypeAnnotation } from "./types";
 
 export function NumberTypeAnnotation() {
   this.push("number");
 }
 
-export function StringLiteralTypeAnnotation(node) {
+export function StringLiteralTypeAnnotation(node: Object) {
   this.push(this._stringLiteral(node.value));
 }
 
@@ -130,18 +133,18 @@ export function StringTypeAnnotation() {
   this.push("string");
 }
 
-export function TupleTypeAnnotation(node, print) {
+export function TupleTypeAnnotation(node: Object, print: NodePrinter) {
   this.push("[");
   print.join(node.types, { separator: ", " });
   this.push("]");
 }
 
-export function TypeofTypeAnnotation(node, print) {
+export function TypeofTypeAnnotation(node: Object, print: NodePrinter) {
   this.push("typeof ");
   print.plain(node.argument);
 }
 
-export function TypeAlias(node, print) {
+export function TypeAlias(node: Object, print: NodePrinter) {
   this.push("type ");
   print.plain(node.id);
   print.plain(node.typeParameters);
@@ -152,18 +155,18 @@ export function TypeAlias(node, print) {
   this.semicolon();
 }
 
-export function TypeAnnotation(node, print) {
+export function TypeAnnotation(node: Object, print: NodePrinter) {
   this.push(":");
   this.space();
   if (node.optional) this.push("?");
   print.plain(node.typeAnnotation);
 }
 
-export function TypeParameterInstantiation(node, print) {
+export function TypeParameterInstantiation(node: Object, print: NodePrinter) {
   this.push("<");
   print.join(node.params, {
     separator: ", ",
-    iterator(node) {
+    iterator(node: Object) {
       print.plain(node.typeAnnotation);
     }
   });
@@ -172,7 +175,7 @@ export function TypeParameterInstantiation(node, print) {
 
 export { TypeParameterInstantiation as TypeParameterDeclaration };
 
-export function ObjectTypeAnnotation(node, print) {
+export function ObjectTypeAnnotation(node: Object, print: NodePrinter) {
   this.push("{");
   let props = node.properties.concat(node.callProperties, node.indexers);
 
@@ -196,12 +199,12 @@ export function ObjectTypeAnnotation(node, print) {
   this.push("}");
 }
 
-export function ObjectTypeCallProperty(node, print) {
+export function ObjectTypeCallProperty(node: Object, print: NodePrinter) {
   if (node.static) this.push("static ");
   print.plain(node.value);
 }
 
-export function ObjectTypeIndexer(node, print) {
+export function ObjectTypeIndexer(node: Object, print: NodePrinter) {
   if (node.static) this.push("static ");
   this.push("[");
   print.plain(node.id);
@@ -214,7 +217,7 @@ export function ObjectTypeIndexer(node, print) {
   print.plain(node.value);
 }
 
-export function ObjectTypeProperty(node, print) {
+export function ObjectTypeProperty(node: Object, print: NodePrinter) {
   if (node.static) this.push("static ");
   print.plain(node.key);
   if (node.optional) this.push("?");
@@ -225,17 +228,17 @@ export function ObjectTypeProperty(node, print) {
   print.plain(node.value);
 }
 
-export function QualifiedTypeIdentifier(node, print) {
+export function QualifiedTypeIdentifier(node: Object, print: NodePrinter) {
   print.plain(node.qualification);
   this.push(".");
   print.plain(node.id);
 }
 
-export function UnionTypeAnnotation(node, print) {
+export function UnionTypeAnnotation(node: Object, print: NodePrinter) {
   print.join(node.types, { separator: " | " });
 }
 
-export function TypeCastExpression(node, print) {
+export function TypeCastExpression(node: Object, print: NodePrinter) {
   this.push("(");
   print.plain(node.expression);
   print.plain(node.typeAnnotation);

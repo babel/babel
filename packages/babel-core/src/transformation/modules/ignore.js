@@ -1,3 +1,5 @@
+/* @flow */
+
 import DefaultFormatter from "./_default";
 import * as t from "babel-types";
 

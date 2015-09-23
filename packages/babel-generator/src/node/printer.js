@@ -1,3 +1,5 @@
+/* @flow */
+
 /**
  * Printer for nodes, needs a `generator` and a `parent`.
  */

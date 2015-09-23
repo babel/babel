@@ -1,3 +1,5 @@
+/* @flow */
+
 import isFunction from "lodash/lang/isFunction";
 import transform from "../transformation";
 import * as babylon from "babylon";
@@ -15,6 +17,9 @@ export { default as Pipeline } from "../transformation/pipeline";
 export { default as buildExternalHelpers } from "../tools/build-external-helpers";
 export { default as template } from "babel-template";
 export { version } from "../../package";
+
+import * as messages from "babel-messages";
+export { messages };
 
 import * as t from "babel-types";
 export { t as types };
@@ -48,7 +53,7 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
   });
 }
 
-export function transformFileSync(filename: string, opts?: Object = {}) {
+export function transformFileSync(filename: string, opts?: Object = {}): string {
   opts.filename = filename;
   return transform(fs.readFileSync(filename, "utf8"), opts);
 }

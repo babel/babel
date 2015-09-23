@@ -1,3 +1,5 @@
+/* @flow */
+
 import * as messages from "babel-messages";
 import traverse from "babel-traverse";
 import assign from "lodash/object/assign";
@@ -16,11 +18,16 @@ export default class Plugin {
     this.manipulateOptions = take("manipulateOptions");
     this.post              = take("post");
     this.pre               = take("pre");
-
-    this.visitor    = this.normalize(clone(take("visitor")) || {});
+    this.visitor           = this.normalize(clone(take("visitor")) || {});
   }
 
-  validate(loc, i) {
+  raw: Object;
+  manipulateOptions: ?Function;
+  post: ?Function;
+  pre: ?Function;
+  visitor: Object;
+
+  validate(loc: string, i: number) {
     for (let key in this.raw) {
       throw new Error(messages.get("pluginInvalidProperty", loc, i, key));
     }

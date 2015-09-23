@@ -1,3 +1,5 @@
+/* @flow */
+
 import extend from "lodash/object/extend";
 import * as t from "babel-types";
 

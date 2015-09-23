@@ -1,45 +1,10 @@
 import * as defineMap from "../../helpers/define-map";
 import * as t from "babel-types";
 
-/**
- * Turn [object initializer mutators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#Method_definitions)
- * into `Object.defineProperties`.
- *
- * **In**
- *
- * ```javascript
- * let foo = {
- *   get bar() {
- *     return "bar";
- *   }
- * };
- * ```
- *
- * **Out**
- *
- * ```javascript
- * let foo = Object.defineProperties({}, {
- *   bar: {
- *     get: function () {
- *       return "bar";
- *     },
- *     enumerable: true,
- *     configurable: true
- *   }
- * });
- * ```
- */
-
 export let visitor = {
-  /**
-   * Look for getters and setters on an object.
-   * Filter them out and wrap the object with an `Object.defineProperties` that
-   * defines the getters and setters.
-   */
-
-  ObjectExpression(node, parent, scope, file) {
-    let hasAny = false;
-    for (let prop of (node.properties: Array)) {
+  ObjectExpression({ node }, file) {
+    var hasAny = false;
+    for (var prop of (node.properties: Array)) {
       if (prop.kind === "get" || prop.kind === "set") {
         hasAny = true;
         break;

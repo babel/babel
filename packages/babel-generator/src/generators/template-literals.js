@@ -1,13 +1,17 @@
-export function TaggedTemplateExpression(node, print) {
+/* @flow */
+
+import type NodePrinter from "../node/printer";
+
+export function TaggedTemplateExpression(node: Object, print: NodePrinter) {
   print.plain(node.tag);
   print.plain(node.quasi);
 }
 
-export function TemplateElement(node) {
+export function TemplateElement(node: Object) {
   this._push(node.value.raw);
 }
 
-export function TemplateLiteral(node, print) {
+export function TemplateLiteral(node: Object, print: NodePrinter) {
   this.push("`");
 
   let quasis = node.quasis;

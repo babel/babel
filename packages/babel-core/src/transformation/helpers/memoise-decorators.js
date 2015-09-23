@@ -1,8 +1,10 @@
+/* @flow */
+
+import type { Scope } from "babel-traverse";
 import * as t from "babel-types";
 
-export default function (decorators, scope) {
-  for (let i = 0; i < decorators.length; i++) {
-    let decorator = decorators[i];
+export default function (decorators: Array<Object>, scope: Scope): Array<Object> {
+  for (let decorator of decorators) {
     let expression = decorator.expression;
     if (!t.isMemberExpression(expression)) continue;
 

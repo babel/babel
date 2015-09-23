@@ -1,3 +1,5 @@
+/* @flow */
+
 /**
  * Track current position in code generation.
  */

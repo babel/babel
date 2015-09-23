@@ -1,6 +1,8 @@
+/* @flow */
+
 import * as t from "babel-types";
 
-export default function build(node, buildBody) {
+export default function build(node: Object, buildBody: Function): ?Object {
   let self = node.blocks.shift();
   if (!self) return;
 

@@ -1,10 +1,13 @@
+/* @flow */
+
+import type NodePrinter from "../node/printer";
 import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";
 import * as t from "babel-types";
 
 const SCIENTIFIC_NOTATION = /e/i;
 
-export function UnaryExpression(node, print) {
+export function UnaryExpression(node: Object, print: NodePrinter) {
   let needsSpace = /[a-z]$/.test(node.operator);
   let arg = node.argument;
 
@@ -21,19 +24,19 @@ export function UnaryExpression(node, print) {
   print.plain(node.argument);
 }
 
-export function DoExpression(node, print) {
+export function DoExpression(node: Object, print: NodePrinter) {
   this.push("do");
   this.space();
   print.plain(node.body);
 }
 
-export function ParenthesizedExpression(node, print) {
+export function ParenthesizedExpression(node: Object, print: NodePrinter) {
   this.push("(");
   print.plain(node.expression);
   this.push(")");
 }
 
-export function UpdateExpression(node, print) {
+export function UpdateExpression(node: Object, print: NodePrinter) {
   if (node.prefix) {
     this.push(node.operator);
     print.plain(node.argument);
@@ -43,7 +46,7 @@ export function UpdateExpression(node, print) {
   }
 }
 
-export function ConditionalExpression(node, print) {
+export function ConditionalExpression(node: Object, print: NodePrinter) {
   print.plain(node.test);
   this.space();
   this.push("?");
@@ -55,7 +58,7 @@ export function ConditionalExpression(node, print) {
   print.plain(node.alternate);
 }
 
-export function NewExpression(node, print) {
+export function NewExpression(node: Object, print: NodePrinter) {
   this.push("new ");
   print.plain(node.callee);
   this.push("(");
@@ -63,7 +66,7 @@ export function NewExpression(node, print) {
   this.push(")");
 }
 
-export function SequenceExpression(node, print) {
+export function SequenceExpression(node: Object, print: NodePrinter) {
   print.list(node.expressions);
 }
 
@@ -75,13 +78,13 @@ export function Super() {
   this.push("super");
 }
 
-export function Decorator(node, print) {
+export function Decorator(node: Object, print: NodePrinter) {
   this.push("@");
   print.plain(node.expression);
   this.newline();
 }
 
-export function CallExpression(node, print) {
+export function CallExpression(node: Object, print: NodePrinter) {
   print.plain(node.callee);
 
   this.push("(");
@@ -106,7 +109,7 @@ export function CallExpression(node, print) {
 }
 
 function buildYieldAwait(keyword) {
-  return function (node, print) {
+  return function (node: Object, print: NodePrinter) {
     this.push(keyword);
 
     if (node.delegate || node.all) {
@@ -129,24 +132,23 @@ export function EmptyStatement() {
   this.semicolon();
 }
 
-export function ExpressionStatement(node, print) {
+export function ExpressionStatement(node: Object, print: NodePrinter) {
   print.plain(node.expression);
   this.semicolon();
 }
 
-export function AssignmentPattern(node, print) {
+export function AssignmentPattern(node: Object, print: NodePrinter) {
   print.plain(node.left);
   this.push(" = ");
   print.plain(node.right);
 }
 
-export function AssignmentExpression(node, print) {
-  // todo: add cases where the spaces can be dropped when in compact mode
+export function AssignmentExpression(node: Object, print: NodePrinter) {
   print.plain(node.left);
 
-  let spaces = node.operator === "in" || node.operator === "instanceof";
+  let spaces = !this.format.compact || node.operator === "in" || node.operator === "instanceof";
   spaces = true; // todo: https://github.com/babel/babel/issues/1835
-  this.space(spaces);
+  if (spaces) this.push(" ");
 
   this.push(node.operator);
 
@@ -158,12 +160,12 @@ export function AssignmentExpression(node, print) {
              t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" });
   }
 
-  this.space(spaces);
+  if (spaces) this.push(" ");
 
   print.plain(node.right);
 }
 
-export function BindExpression(node, print) {
+export function BindExpression(node: Object, print: NodePrinter) {
   print.plain(node.object);
   this.push("::");
   print.plain(node.callee);
@@ -174,7 +176,7 @@ export {
   AssignmentExpression as LogicalExpression
 };
 
-export function MemberExpression(node, print) {
+export function MemberExpression(node: Object, print: NodePrinter) {
   let obj = node.object;
   print.plain(obj);
 
@@ -193,7 +195,7 @@ export function MemberExpression(node, print) {
     this.push("]");
   } else {
     if (t.isLiteral(node.object)) {
-      let val = this._Literal(node.object);
+      let val = this._stringLiteral(node.object);
       if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")) {
         this.push(".");
       }
@@ -204,7 +206,7 @@ export function MemberExpression(node, print) {
   }
 }
 
-export function MetaProperty(node, print) {
+export function MetaProperty(node: Object, print: NodePrinter) {
   print.plain(node.meta);
   this.push(".");
   print.plain(node.property);

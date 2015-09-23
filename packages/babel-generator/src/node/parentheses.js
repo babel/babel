@@ -1,40 +1,50 @@
-import each from "lodash/collection/each";
+/* @flow */
+
 import * as t from "babel-types";
 
-const PRECEDENCE = {};
+const PRECEDENCE = {
+  "||": 0,
+  "&&": 1,
+  "|": 2,
+  "^": 3,
+  "&": 4,
+  "==": 5,
+  "===": 5,
+  "!=": 5,
+  "!==": 5,
+  "<": 6,
+  ">": 6,
+  "<=": 6,
+  ">=": 6,
+  in: 6,
+  instanceof: 6,
+  ">>": 7,
+  "<<": 7,
+  ">>>": 7,
+  "+": 8,
+  "-": 8,
+  "*": 9,
+  "/": 9,
+  "%": 9,
+  "**": 10
+};
 
-each([
-  ["||"],
-  ["&&"],
-  ["|"],
-  ["^"],
-  ["&"],
-  ["==", "===", "!=", "!=="],
-  ["<", ">", "<=", ">=", "in", "instanceof"],
-  [">>", "<<", ">>>"],
-  ["+", "-"],
-  ["*", "/", "%"],
-  ["**"]
-], function (tier, i) {
-  each(tier, function (op) {
-    PRECEDENCE[op] = i;
-  });
-});
-
-export function NullableTypeAnnotation(node, parent) {
+export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
   return t.isArrayTypeAnnotation(parent);
 }
 
 export { NullableTypeAnnotation as FunctionTypeAnnotation };
 
-export function UpdateExpression(node, parent) {
+export function UpdateExpression(node: Object, parent: Object): boolean {
   if (t.isMemberExpression(parent) && parent.object === node) {
     // (foo++).test()
     return true;
   }
+
+  return false;
 }
 
-export function ObjectExpression(node, parent) {
+export function ObjectExpression(node: Object, parent: Object): boolean {
   if (t.isExpressionStatement(parent)) {
     // ({ foo: "bar" });
     return true;
@@ -48,7 +58,7 @@ export function ObjectExpression(node, parent) {
   return false;
 }
 
-export function Binary(node, parent) {
+export function Binary(node: Object, parent: Object): boolean {
   if ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) {
     return true;
   }
@@ -76,9 +86,11 @@ export function Binary(node, parent) {
       return true;
     }
   }
+
+  return false;
 }
 
-export function BinaryExpression(node, parent) {
+export function BinaryExpression(node: Object, parent: Object): boolean {
   if (node.operator === "in") {
     // let i = (1 in []);
     if (t.isVariableDeclarator(parent)) {
@@ -90,11 +102,13 @@ export function BinaryExpression(node, parent) {
       return true;
     }
   }
+
+  return false;
 }
 
-export function SequenceExpression(node, parent) {
+export function SequenceExpression(node: Object, parent: Object): boolean {
   if (t.isForStatement(parent)) {
-    // Although parentheses wouldn't hurt around sequence
+    // Although parentheses wouldn"t hurt around sequence
     // expressions in the head of for loops, traditional style
     // dictates that e.g. i++, j++ should not be wrapped with
     // parentheses.
@@ -110,7 +124,7 @@ export function SequenceExpression(node, parent) {
   return true;
 }
 
-export function YieldExpression(node, parent) {
+export function YieldExpression(node: Object, parent: Object): boolean {
   return t.isBinary(parent) ||
          t.isUnaryLike(parent) ||
          t.isCallExpression(parent) ||
@@ -120,7 +134,7 @@ export function YieldExpression(node, parent) {
          t.isYieldExpression(parent);
 }
 
-export function ClassExpression(node, parent) {
+export function ClassExpression(node: Object, parent: Object): boolean {
   // (class {});
   if (t.isExpressionStatement(parent)) {
     return true;
@@ -130,13 +144,15 @@ export function ClassExpression(node, parent) {
   if (t.isExportDeclaration(parent)) {
     return true;
   }
+
+  return false;
 }
 
-export function UnaryLike(node, parent) {
+export function UnaryLike(node: Object, parent: Object): boolean {
   return t.isMemberExpression(parent) && parent.object === node;
 }
 
-export function FunctionExpression(node, parent) {
+export function FunctionExpression(node: Object, parent: Object): boolean {
   // (function () {});
   if (t.isExpressionStatement(parent)) {
     return true;
@@ -156,9 +172,11 @@ export function FunctionExpression(node, parent) {
   if (t.isCallExpression(parent) && parent.callee === node) {
     return true;
   }
+
+  return false;
 }
 
-export function ConditionalExpression(node, parent) {
+export function ConditionalExpression(node: Object, parent: Object): boolean {
   if (t.isUnaryLike(parent)) {
     return true;
   }
@@ -184,7 +202,7 @@ export function ConditionalExpression(node, parent) {
   return false;
 }
 
-export function AssignmentExpression(node) {
+export function AssignmentExpression(node: Object): boolean {
   if (t.isObjectPattern(node.left)) {
     return true;
   } else {

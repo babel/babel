@@ -1,4 +1,8 @@
-export function ClassDeclaration(node, print) {
+/* @flow */
+
+import type NodePrinter from "../node/printer";
+
+export function ClassDeclaration(node: Object, print: NodePrinter) {
   print.list(node.decorators, { separator: "" });
   this.push("class");
 
@@ -26,7 +30,7 @@ export function ClassDeclaration(node, print) {
 
 export { ClassDeclaration as ClassExpression };
 
-export function ClassBody(node, print) {
+export function ClassBody(node: Object, print: NodePrinter) {
   this.push("{");
   if (node.body.length === 0) {
     print.printInnerComments();
@@ -42,7 +46,7 @@ export function ClassBody(node, print) {
   }
 }
 
-export function ClassProperty(node, print) {
+export function ClassProperty(node: Object, print: NodePrinter) {
   print.list(node.decorators, { separator: "" });
 
   if (node.static) this.push("static ");
@@ -57,7 +61,7 @@ export function ClassProperty(node, print) {
   this.semicolon();
 }
 
-export function MethodDefinition(node, print) {
+export function MethodDefinition(node: Object, print: NodePrinter) {
   print.list(node.decorators, { separator: "" });
 
   if (node.static) {

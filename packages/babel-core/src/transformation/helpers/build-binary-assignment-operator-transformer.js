@@ -1,7 +1,12 @@
+/* @flow */
+
 import explode from "./explode-assignable-expression";
 import * as t from "babel-types";
 
-export default function (opts) {
+export default function (opts: {
+  build: Function;
+  operator: string;
+}): Object {
   let exports = {};
 
   let isAssignment = function (node) {

@@ -1,12 +1,16 @@
-export function File(node, print) {
+/* @flow */
+
+import type NodePrinter from "../node/printer";
+
+export function File(node: Object, print: NodePrinter) {
   print.plain(node.program);
 }
 
-export function Program(node, print) {
+export function Program(node: Object, print: NodePrinter) {
   print.sequence(node.body);
 }
 
-export function BlockStatement(node, print) {
+export function BlockStatement(node: Object, print: NodePrinter) {
   this.push("{");
   if (node.body.length) {
     this.newline();

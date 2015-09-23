@@ -1,3 +1,5 @@
+/* @flow */
+
 import isBoolean from "lodash/lang/isBoolean";
 import each from "lodash/collection/each";
 import map from "lodash/collection/map";

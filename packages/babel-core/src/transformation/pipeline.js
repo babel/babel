@@ -1,3 +1,5 @@
+/* @flow */
+
 import normalizeAst from "../helpers/normalize-ast";
 import File from "./file";
 
@@ -26,7 +28,7 @@ export default class Pipeline {
     });
   }
 
-  transformFromAst(ast, code, opts) {
+  transformFromAst(ast, code: string, opts: Object) {
     ast = normalizeAst(ast);
 
     let file = new File(opts, this);

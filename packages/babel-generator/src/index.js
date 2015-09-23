@@ -1,3 +1,5 @@
+/* @flow */
+
 import detectIndent from "detect-indent";
 import Whitespace from "./whitespace";
 import NodePrinter from "./node/printer";
@@ -32,6 +34,29 @@ class CodeGenerator {
     this.buffer     = new Buffer(this.position, this.format);
   }
 
+  format: {
+    shouldPrintComment: boolean;
+    retainLines: boolean;
+    comments: boolean;
+    compact: boolean | "auto";
+    quotes: "single" | "double";
+    concise: boolean;
+    indent: {
+      adjustMultilineComment: boolean;
+      style: string;
+      base: number;
+    }
+  };
+
+  whitespace: Whitespace;
+  position: Position;
+  map: SourceMap;
+  buffer: Buffer;
+  comments: Array<Object>;
+  tokens: Array<Object>;
+  opts: Object;
+  ast: Object;
+
   /**
    * Normalize generator options, setting defaults.
    *
@@ -51,6 +76,7 @@ class CodeGenerator {
       retainLines: opts.retainLines,
       comments: opts.comments == null || opts.comments,
       compact: opts.compact,
+      concise: opts.concise,
       quotes: CodeGenerator.findCommonStringDelimiter(code, tokens),
       indent: {
         adjustMultilineComment: true,
@@ -107,41 +133,13 @@ class CodeGenerator {
   }
 
   /**
-   * All node generators.
-   */
-
-  static generators = {
-    templateLiterals: require("./generators/template-literals"),
-    comprehensions:   require("./generators/comprehensions"),
-    expressions:      require("./generators/expressions"),
-    statements:       require("./generators/statements"),
-    classes:          require("./generators/classes"),
-    methods:          require("./generators/methods"),
-    modules:          require("./generators/modules"),
-    types:            require("./generators/types"),
-    flow:             require("./generators/flow"),
-    base:             require("./generators/base"),
-    jsx:              require("./generators/jsx")
-  };
-
-  /**
    * Generate code and sourcemap from ast.
    *
    * Appends comments that weren't attached to any node to the end of the generated output.
    */
 
   generate() {
-    let ast = this.ast;
-
-    this.print(ast);
-
-    if (ast.comments) {
-      let comments = [];
-      for (let comment of (ast.comments: Array)) {
-        if (!comment._displayed) comments.push(comment);
-      }
-      this._printComments(comments);
-    }
+    this.print(this.ast);
 
     return {
       map:  this.map.get(),
@@ -238,10 +236,11 @@ class CodeGenerator {
     this.printTrailingComments(node, parent);
   }
 
-  printJoin(print, nodes, opts = {}) {
+  printJoin(print, nodes: ?Array, opts = {}) {
     if (!nodes || !nodes.length) return;
 
     let len = nodes.length;
+    let node, i;
 
     if (opts.indent) this.indent();
 
@@ -259,8 +258,8 @@ class CodeGenerator {
       }
     };
 
-    for (let i = 0; i < nodes.length; i++) {
-      let node = nodes[i];
+    for (i = 0; i < nodes.length; i++) {
+      node = nodes[i];
       print.plain(node, printOpts);
     }
 
@@ -307,13 +306,13 @@ class CodeGenerator {
     }
 
     let comments = [];
-    let nodes    = [node];
+    let nodes: Array<Object> = [node];
 
     if (t.isExpressionStatement(node)) {
       nodes.push(node.argument);
     }
 
-    for (let node of (nodes: Array)) {
+    for (let node of nodes) {
       comments = comments.concat(this._getComments(key, node));
     }
 
@@ -394,13 +393,23 @@ each(Buffer.prototype, function (fn, key) {
   };
 });
 
-each(CodeGenerator.generators, function (generator) {
+each([
+  require("./generators/template-literals"),
+  require("./generators/comprehensions"),
+  require("./generators/expressions"),
+  require("./generators/statements"),
+  require("./generators/classes"),
+  require("./generators/methods"),
+  require("./generators/modules"),
+  require("./generators/types"),
+  require("./generators/flow"),
+  require("./generators/base"),
+  require("./generators/jsx")
+], function (generator) {
   extend(CodeGenerator.prototype, generator);
 });
 
-module.exports = function (ast, opts, code) {
+export default function (ast: Object, opts: Object, code: string): Object {
   let gen = new CodeGenerator(ast, opts, code);
   return gen.generate();
-};
-
-module.exports.CodeGenerator = CodeGenerator;
+}

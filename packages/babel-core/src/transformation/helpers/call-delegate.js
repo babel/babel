@@ -1,3 +1,6 @@
+/* @flow */
+
+import type { Scope } from "babel-traverse";
 import * as t from "babel-types";
 
 let visitor = {
@@ -13,7 +16,7 @@ let visitor = {
   }
 };
 
-export default function (node, scope) {
+export default function (node: Object, scope: Scope) {
   let container = t.functionExpression(null, [], node.body, node.generator, node.async);
 
   let callee = container;

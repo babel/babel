@@ -1,3 +1,5 @@
+/* @flow */
+
 import type File from "./index";
 import buildDebug from "debug/node";
 
@@ -12,21 +14,24 @@ export default class Logger {
     this.file     = file;
   }
 
+  filename: string;
+  file: File;
+
   _buildMessage(msg: string): string {
     let parts = `[BABEL] ${this.filename}`;
     if (msg) parts += `: ${msg}`;
     return parts;
   }
 
-  warn(msg) {
+  warn(msg: string) {
     console.warn(this._buildMessage(msg));
   }
 
-  error(msg: string, Constructor = Error) {
+  error(msg: string, Constructor: typeof Error = Error): Error {
     throw new Constructor(this._buildMessage(msg));
   }
 
-  deprecate(msg) {
+  deprecate(msg: string) {
     if (this.file.opts && this.file.opts.suppressDeprecationMessages) return;
 
     msg = this._buildMessage(msg);

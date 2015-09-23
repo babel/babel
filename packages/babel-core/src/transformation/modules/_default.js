@@ -1,3 +1,7 @@
+/* @flow */
+
+import type { File, FileModulesMetadata } from "../file";
+import type { Scope, NodePath } from "babel-traverse";
 import * as metadataVisitor from "./lib/metadata";
 import * as messages from "babel-messages";
 import Remaps from "./lib/remaps";
@@ -5,7 +9,7 @@ import * as util from  "../../util";
 import * as t from "babel-types";
 
 export default class DefaultFormatter {
-  constructor(file) {
+  constructor(file: File) {
     // object containg all module sources with the scope that they're contained in
     this.sourceScopes = Object.create(null);
 
@@ -31,7 +35,20 @@ export default class DefaultFormatter {
     this.getMetadata();
   }
 
-  addScope(path) {
+  sourceScopes: Object;
+  defaultIds: Object;
+  ids: Object;
+  remaps: Remaps;
+  scope: Scope;
+  file: File;
+  hasNonDefaultExports: boolean;
+  hasLocalExports: boolean;
+  hasLocalImports: boolean;
+  localExports: Object;
+  localImports: Object;
+  metadata: FileModulesMetadata;
+
+  addScope(path: NodePath) {
     let source = path.node.source && path.node.source.value;
     if (!source) return;
 
@@ -43,7 +60,7 @@ export default class DefaultFormatter {
     this.sourceScopes[source] = path.scope;
   }
 
-  isModuleType(node, type) {
+  isModuleType(node: Object, type: string): boolean {
     let modules = this.file.dynamicImportTypes[type];
     return modules && modules.indexOf(node) >= 0;
   }
@@ -52,19 +69,19 @@ export default class DefaultFormatter {
     this.remapAssignments();
   }
 
-  doDefaultExportInterop(node) {
+  doDefaultExportInterop(node: Object): Object {
     return (t.isExportDefaultDeclaration(node) || t.isSpecifierDefault(node)) && !this.noInteropRequireExport && !this.hasNonDefaultExports;
   }
 
   getMetadata() {
     let has = false;
-    for (let node of (this.file.ast.program.body: Array)) {
+    for (let node of (this.file.ast.program.body: Array<Object>)) {
       if (t.isModuleDeclaration(node)) {
         has = true;
         break;
       }
     }
-    if (has || this.isLoose()) {
+    if (has) {
       this.file.path.traverse(metadataVisitor, this);
     }
   }
@@ -75,13 +92,13 @@ export default class DefaultFormatter {
     }
   }
 
-  remapExportAssignment(node, exported) {
+  remapExportAssignment(node: Object, exported: Array<Object>) {
     let assign = node;
 
-    for (let i = 0; i < exported.length; i++) {
+    for (let prop of exported) {
       assign = t.assignmentExpression(
         "=",
-        t.memberExpression(t.identifier("exports"), exported[i]),
+        t.memberExpression(t.identifier("exports"), prop),
         assign
       );
     }
@@ -89,7 +106,7 @@ export default class DefaultFormatter {
     return assign;
   }
 
-  _addExport(name, exported) {
+  _addExport(name: string, exported: Array<Object>) {
     let info = this.localExports[name] = this.localExports[name] || {
       binding: this.scope.getBindingIdentifier(name),
       exported: []
@@ -97,7 +114,7 @@ export default class DefaultFormatter {
     info.exported.push(exported);
   }
 
-  getExport(node, scope) {
+  getExport(node: Object, scope: Scope) {
     if (!t.isIdentifier(node)) return;
 
     let local = this.localExports[node.name];
@@ -106,8 +123,9 @@ export default class DefaultFormatter {
     }
   }
 
-  getModuleName() {
+  getModuleName(): string {
     let opts = this.file.opts;
+
     // moduleId is n/a if a `getModuleId()` is provided
     if (opts.moduleId != null && !opts.getModuleId) {
       return opts.moduleId;
@@ -148,7 +166,7 @@ export default class DefaultFormatter {
     }
   }
 
-  _pushStatement(ref, nodes) {
+  _pushStatement(ref: Object, nodes: Array<Object>): Object {
     if (t.isClass(ref) || t.isFunction(ref)) {
       if (ref.id) {
         nodes.push(t.toStatement(ref));
@@ -159,7 +177,7 @@ export default class DefaultFormatter {
     return ref;
   }
 
-  _hoistExport(declar, assign, priority) {
+  _hoistExport(declar: Object, assign: Object, priority?: number): Object {
     if (t.isFunctionDeclaration(declar)) {
       assign._blockHoist = priority || 2;
     }
@@ -167,7 +185,7 @@ export default class DefaultFormatter {
     return assign;
   }
 
-  getExternalReference(node, nodes) {
+  getExternalReference(node: Object, nodes: Array<Object>): Object {
     let ids = this.ids;
     let id = node.source.value;
 
@@ -178,22 +196,22 @@ export default class DefaultFormatter {
     }
   }
 
+  _getExternalReference() {
+    throw new Error("Should be implemented");
+  }
+
   checkExportIdentifier(node) {
     if (t.isIdentifier(node, { name: "__esModule" })) {
       throw this.file.buildCodeFrameError(node, messages.get("modulesIllegalExportName", node.name));
     }
   }
 
-  exportAllDeclaration(node, nodes) {
+  exportAllDeclaration(node: Object, nodes: Array<Object>) {
     let ref = this.getExternalReference(node, nodes);
     nodes.push(this.buildExportsWildcard(ref, node));
   }
 
-  isLoose() {
-    return this.file.isLoose("es6.modules");
-  }
-
-  exportSpecifier(specifier, node, nodes) {
+  exportSpecifier(specifier: Object, node: Object, nodes: Array<Object>) {
     if (node.source) {
       let ref = this.getExternalReference(node, nodes);
 
@@ -203,10 +221,8 @@ export default class DefaultFormatter {
       } else {
         ref = t.memberExpression(ref, specifier.local);
 
-        if (!this.isLoose()) {
-          nodes.push(this.buildExportsFromAssignment(specifier.exported, ref, node));
-          return;
-        }
+        nodes.push(this.buildExportsFromAssignment(specifier.exported, ref, node));
+        return;
       }
 
       // export { foo } from "test";
@@ -217,7 +233,7 @@ export default class DefaultFormatter {
     }
   }
 
-  buildExportsWildcard(objectIdentifier) {
+  buildExportsWildcard(objectIdentifier: Object) {
     return t.expressionStatement(t.callExpression(this.file.addHelper("defaults"), [
       t.identifier("exports"),
       t.callExpression(this.file.addHelper("interop-export-wildcard"), [
@@ -227,7 +243,7 @@ export default class DefaultFormatter {
     ]));
   }
 
-  buildExportsFromAssignment(id, init) {
+  buildExportsFromAssignment(id: Object, init: Object) {
     this.checkExportIdentifier(id);
     return util.template("exports-from-assign", {
       INIT: init,
@@ -243,7 +259,7 @@ export default class DefaultFormatter {
     }, true);
   }
 
-  exportDeclaration(node, nodes) {
+  exportDeclaration(node: Object, nodes: Array<Object>) {
     let declar = node.declaration;
 
     let id = declar.id;

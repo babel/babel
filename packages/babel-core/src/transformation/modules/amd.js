@@ -1,3 +1,5 @@
+/* @flow */
+
 import DefaultFormatter from "./_default";
 import CommonFormatter from "./common";
 import includes from "lodash/collection/includes";

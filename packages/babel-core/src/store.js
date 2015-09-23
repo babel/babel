@@ -1,8 +1,15 @@
-export default class Store {
-  dynamicData        = {};
-  data               = {};
+/* @flow */
 
-  set(key: string, val): any {
+export default class Store {
+  constructor() {
+    this.dynamicData = {};
+    this.data = {};
+  }
+
+  dynamicData: Object;
+  data: Object;
+
+  set(key: string, val: any): any {
     return this.data[key] = val;
   }
 

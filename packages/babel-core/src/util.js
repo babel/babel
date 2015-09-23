@@ -81,7 +81,7 @@ export function regexify(val: any): RegExp {
  * Create an array from a boolean, string, or array, mapped by and optional function.
  */
 
-export function arrayify(val: any, mapFn?: Function): Array {
+export function arrayify(val: any, mapFn?: Function): Array<any> {
   if (!val) return [];
   if (isBoolean(val)) return arrayify([val], mapFn);
   if (isString(val)) return arrayify(list(val), mapFn);
@@ -98,7 +98,7 @@ export function arrayify(val: any, mapFn?: Function): Array {
  * Makes boolean-like strings into booleans.
  */
 
-export function booleanify(val: any): boolean {
+export function booleanify(val: any): boolean | any {
   if (val === "true") return true;
   if (val === "false") return false;
   return val;
@@ -108,16 +108,20 @@ export function booleanify(val: any): boolean {
  * Tests if a filename should be ignored based on "ignore" and "only" options.
  */
 
-export function shouldIgnore(filename: string, ignore: Array, only): boolean {
+export function shouldIgnore(
+  filename: string,
+  ignore: Array<RegExp | Function> = [],
+  only?: Array<RegExp | Function>,
+): boolean {
   filename = slash(filename);
 
   if (only) {
-    for (let pattern of (only: Array)) {
+    for (let pattern of only) {
       if (_shouldIgnore(pattern, filename)) return false;
     }
     return true;
   } else if (ignore.length) {
-    for (let pattern of (ignore: Array)) {
+    for (let pattern of ignore) {
       if (_shouldIgnore(pattern, filename)) return true;
     }
   }
@@ -130,7 +134,7 @@ export function shouldIgnore(filename: string, ignore: Array, only): boolean {
  * Otherwise returns result of matching pattern Regex with filename.
  */
 
-function _shouldIgnore(pattern, filename) {
+function _shouldIgnore(pattern: Function | RegExp, filename: string) {
   if (typeof pattern === "function") {
     return pattern(filename);
   } else {

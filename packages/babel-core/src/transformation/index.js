@@ -1,3 +1,5 @@
+/* @flow */
+
 import Pipeline from "./pipeline";
 
 let pipeline = new Pipeline;

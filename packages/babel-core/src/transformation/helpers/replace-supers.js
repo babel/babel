@@ -1,4 +1,7 @@
-import type NodePath from "../../traversal/path";
+/* @flow */
+
+import type File from "../file";
+import type { NodePath, Scope } from "babel-traverse";
 import * as messages from "babel-messages";
 import * as t from "babel-types";
 
@@ -58,6 +61,28 @@ export default class ReplaceSupers {
     this.file                  = opts.file;
     this.opts                  = opts;
   }
+
+  topLevelThisReference: ?Object;
+  methodPath: NodePath;
+  methodNode: Object;
+  superRef: Object;
+  isStatic: boolean;
+  hasSuper: boolean;
+  inClass: boolean;
+  isLoose: boolean;
+  scope: Scope;
+  file: File;
+  opts: {
+    getObjetRef: Function;
+    topLevelThisReference: Object;
+    methodPath: NodePath;
+    methodNode: Object;
+    superRef: Object;
+    isStatic: boolean;
+    isLoose: boolean;
+    scope: Scope;
+    file: File;
+  };
 
   getObjectRef() {
     return this.opts.objectRef || this.opts.getObjectRef();

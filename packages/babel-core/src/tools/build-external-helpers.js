@@ -1,3 +1,5 @@
+/* @flow */
+
 import generator from "babel-generator";
 import * as messages from "babel-messages";
 import * as util from  "../util";
@@ -61,7 +63,10 @@ function buildHelpers(body, namespace, whitelist) {
   });
 }
 
-export default function (whitelist, outputType = "global") {
+export default function (
+  whitelist?: Array<string>,
+  outputType: "global" | "umd" | "var" = "global",
+) {
   let namespace = t.identifier("babelHelpers");
 
   let builder = function (body) {

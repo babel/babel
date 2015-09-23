@@ -1,22 +1,27 @@
+/* @flow */
+
+import type Position from "./position";
 import repeating from "repeating";
 import trimRight from "trim-right";
-import isBoolean from "lodash/lang/isBoolean";
-import includes from "lodash/collection/includes";
-import isNumber from "lodash/lang/isNumber";
 
 /**
  * Buffer for collecting generated output.
  */
 
 export default class Buffer {
-  constructor(position, format) {
+  constructor(position: Position, format: Object) {
     this.parenPushNewlineState = null;
-
     this.position = position;
-    this._indent  = format.indent.base;
-    this.format   = format;
-    this.buf      = "";
+    this._indent = format.indent.base;
+    this.format = format;
+    this.buf = "";
   }
+
+  parenPushNewlineState: ?Object;
+  buf: string;
+  position: Position;
+  _indent: number;
+  format: Object;
 
   /**
    * Get the current trimmed buffer.
@@ -91,7 +96,7 @@ export default class Buffer {
    * Add a keyword to the buffer.
    */
 
-  keyword(name) {
+  keyword(name: string) {
     this.push(name);
     this.space();
   }
@@ -100,7 +105,7 @@ export default class Buffer {
    * Add a space to the buffer unless it is compact (override with force).
    */
 
-  space(force?) {
+  space(force?: boolean) {
     if (!force && this.format.compact) return;
 
     if (force || this.buf && !this.isLast(" ") && !this.isLast("\n")) {
@@ -112,7 +117,7 @@ export default class Buffer {
    * Remove the last character.
    */
 
-  removeLast(cha) {
+  removeLast(cha: string) {
     if (this.format.compact) return;
     if (!this.isLast(cha)) return;
 
@@ -136,7 +141,7 @@ export default class Buffer {
    *  `undefined` will be returned and not `foo` due to the terminator.
    */
 
-  startTerminatorless() {
+  startTerminatorless(): Object {
     return this.parenPushNewlineState = {
       printed: false
     };
@@ -146,7 +151,7 @@ export default class Buffer {
    * Print an ending parentheses if a starting one has been printed.
    */
 
-  endTerminatorless(state) {
+  endTerminatorless(state: Object) {
     if (state.printed) {
       this.dedent();
       this.newline();
@@ -159,7 +164,7 @@ export default class Buffer {
    * Strips multiple newlines if removeLast is true.
    */
 
-  newline(i, removeLast) {
+  newline(i?: boolean | number, removeLast?: boolean) {
     if (this.format.retainLines || this.format.compact) return;
 
     if (this.format.concise) {
@@ -169,7 +174,7 @@ export default class Buffer {
 
     removeLast = removeLast || false;
 
-    if (isNumber(i)) {
+    if (typeof i === "number") {
       i = Math.min(2, i);
 
       if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
@@ -182,7 +187,7 @@ export default class Buffer {
       return;
     }
 
-    if (isBoolean(i)) {
+    if (typeof i === "boolean") {
       removeLast = i;
     }
 
@@ -193,7 +198,7 @@ export default class Buffer {
    * Adds a newline unless there is already two previous newlines.
    */
 
-  _newline(removeLast) {
+  _newline(removeLast?: boolean) {
     // never allow more than two lines
     if (this.endsWith("\n\n")) return;
 
@@ -233,7 +238,7 @@ export default class Buffer {
    * Push a string to the buffer, maintaining indentation and newlines.
    */
 
-  push(str, noIndent) {
+  push(str: string, noIndent?: boolean) {
     if (!this.format.compact && this._indent && !noIndent && str !== "\n") {
       // we have an indent level and we aren't pushing a newline
       let indent = this.getIndent();
@@ -284,7 +289,7 @@ export default class Buffer {
    * Test if the buffer ends with a string.
    */
 
-  endsWith(str, buf = this.buf) {
+  endsWith(str: string, buf: string = this.buf): boolean {
     if (str.length === 1) {
       return buf[buf.length - 1] === str;
     } else {
@@ -296,14 +301,14 @@ export default class Buffer {
    * Test if a character is last in the buffer.
    */
 
-  isLast(cha) {
+  isLast(cha: string) {
     if (this.format.compact) return false;
 
     let buf = this.buf;
     let last = buf[buf.length - 1];
 
     if (Array.isArray(cha)) {
-      return includes(cha, last);
+      return cha.indexOf(last) >= 0;
     } else {
       return cha === last;
     }

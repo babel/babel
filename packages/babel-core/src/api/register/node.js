@@ -1,3 +1,5 @@
+/* @flow */
+
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import OptionManager from "../../transformation/file/options/option-manager";
@@ -52,23 +54,23 @@ let cwd = process.cwd();
  * Get path from `filename` relative to the current working directory.
  */
 
-let getRelativePath = function (filename){
+function getRelativePath(filename){
   return path.relative(cwd, filename);
-};
+}
 
 /**
  * Get last modified time for a `filename`.
  */
 
-let mtime = function (filename) {
+function mtime(filename) {
   return +fs.statSync(filename).mtime;
-};
+}
 
 /**
  * Compile a `filename` with optional `opts`.
  */
 
-let compile = function (filename, opts = {}) {
+function compile(filename, opts = {}) {
   let result;
 
   opts.filename = filename;
@@ -97,26 +99,26 @@ let compile = function (filename, opts = {}) {
   }
 
   if (cache) {
-    result.mtime = mtime(filename);
     cache[cacheKey] = result;
+    result.mtime = mtime(filename);
   }
 
   maps[filename] = result.map;
 
   return result.code;
-};
+}
 
 /**
  * Test if a `filename` should be ignored by Babel.
  */
 
-let shouldIgnore = function (filename) {
+function shouldIgnore(filename) {
   if (!ignore && !only) {
     return getRelativePath(filename).split(path.sep).indexOf("node_modules") >= 0;
   } else {
     return util.shouldIgnore(filename, ignore || [], only);
   }
-};
+}
 
 /**
  * Monkey patch istanbul if it is running so that it works properly.
@@ -147,24 +149,24 @@ if (process.env.running_under_istanbul) {
  * Replacement for the loader for istanbul.
  */
 
-let istanbulLoader = function (m, filename, old) {
+function istanbulLoader(m, filename, old) {
   istanbulMonkey[filename] = true;
   old(m, filename);
-};
+}
 
 /**
  * Default loader.
  */
 
-let normalLoader = function (m, filename) {
+function normalLoader(m, filename) {
   m._compile(compile(filename), filename);
-};
+}
 
 /**
  * Register a loader for an extension.
  */
 
-let registerExtension = function (ext) {
+function registerExtension(ext) {
   let old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
 
   let loader = normalLoader;
@@ -177,13 +179,13 @@ let registerExtension = function (ext) {
       loader(m, filename, old);
     }
   };
-};
+}
 
 /**
  * Register loader for given extensions.
  */
 
-let hookExtensions = function (_exts) {
+function hookExtensions(_exts) {
   each(oldHandlers, function (old, ext) {
     if (old === undefined) {
       delete require.extensions[ext];
@@ -198,7 +200,7 @@ let hookExtensions = function (_exts) {
     oldHandlers[ext] = require.extensions[ext];
     registerExtension(ext);
   });
-};
+}
 
 /**
  * Register loader for default extensions.
@@ -210,7 +212,7 @@ hookExtensions(util.canCompile.EXTENSIONS);
  * Update options at runtime.
  */
 
-export default function (opts = {}) {
+export default function (opts?: Object = {}) {
   if (opts.only != null) only = util.arrayify(opts.only, util.regexify);
   if (opts.ignore != null) ignore = util.arrayify(opts.ignore, util.regexify);
 

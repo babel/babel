@@ -1,4 +1,8 @@
-export function ComprehensionBlock(node, print) {
+/* @flow */
+
+import type NodePrinter from "../node/printer";
+
+export function ComprehensionBlock(node: Object, print: NodePrinter) {
   this.keyword("for");
   this.push("(");
   print.plain(node.left);
@@ -7,7 +11,7 @@ export function ComprehensionBlock(node, print) {
   this.push(")");
 }
 
-export function ComprehensionExpression(node, print) {
+export function ComprehensionExpression(node: Object, print: NodePrinter) {
   this.push(node.generator ? "(" : "[");
 
   print.join(node.blocks, { separator: " " });

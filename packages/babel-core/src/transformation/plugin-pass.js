@@ -1,13 +1,19 @@
-import type Transformer from "./transformer";
+/* @flow */
+
+import type Plugin from "./plugin";
 import traverse from "babel-traverse";
 import File from "./file";
 
 export default class PluginPass {
-  constructor(file: File, plugin: Transformer, options: Object = {}) {
+  constructor(file: File, plugin: Plugin, options: Object = {}) {
     this.plugin = plugin;
     this.file   = file;
     this.opts   = options;
   }
+
+  plugin: Plugin;
+  file: File;
+  opts: Object;
 
   transform() {
     let file = this.file;

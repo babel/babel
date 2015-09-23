@@ -1,3 +1,6 @@
+/* @flow */
+
+import type { NodePath } from "babel-traverse";
 import * as t from "babel-types";
 
 let awaitVisitor = {
@@ -25,13 +28,13 @@ let referenceVisitor = {
   }
 };
 
-export default function (path, callId) {
+export default function (path: NodePath, callId: Object) {
   let node = path.node;
 
   node.async = false;
   node.generator = true;
 
-  path.traverse(awaitVisitor, state);
+  path.traverse(awaitVisitor);
 
   let call = t.callExpression(callId, [node]);
 
@@ -48,7 +51,8 @@ export default function (path, callId) {
     node.type = "FunctionExpression";
 
     if (id) {
-      let state = { id };
+      let state = { id, ref: null };
+
       path.traverse(referenceVisitor, state);
 
       if (state.ref) {

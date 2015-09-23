@@ -1,27 +1,11 @@
+/* @flow */
+
 import * as parsers from "./parsers";
 import config from "./config";
 
 export { config };
 
-/**
- * Validate an option.
- */
-
-export function validateOption(key, val, pipeline) {
-  let opt = config[key];
-  let parser = opt && parsers[opt.type];
-  if (parser && parser.validate) {
-    return parser.validate(key, val, pipeline);
-  } else {
-    return val;
-  }
-}
-
-/**
- * Normalize all options.
- */
-
-export function normaliseOptions(options = {}) {
+export function normaliseOptions(options: Object = {}): Object {
   for (let key in options) {
     let val = options[key];
     if (val == null) continue;

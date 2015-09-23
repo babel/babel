@@ -1,19 +1,22 @@
+/* @flow */
+
 /* eslint quotes: 0 */
 
+import type NodePrinter from "../node/printer";
 import * as t from "babel-types";
 
-export function Identifier(node) {
+export function Identifier(node: Object) {
   this.push(node.name);
 }
 
-export function RestElement(node, print) {
+export function RestElement(node: Object, print: NodePrinter) {
   this.push("...");
   print.plain(node.argument);
 }
 
 export { RestElement as SpreadElement, RestElement as SpreadProperty };
 
-export function ObjectExpression(node, print) {
+export function ObjectExpression(node: Object, print: NodePrinter) {
   let props = node.properties;
 
   this.push("{");
@@ -30,7 +33,7 @@ export function ObjectExpression(node, print) {
 
 export { ObjectExpression as ObjectPattern };
 
-export function Property(node, print) {
+export function Property(node: Object, print: NodePrinter) {
   print.list(node.decorators, { separator: "" });
 
   if (node.method || node.kind === "get" || node.kind === "set") {
@@ -64,7 +67,7 @@ export function Property(node, print) {
   }
 }
 
-export function ArrayExpression(node, print) {
+export function ArrayExpression(node: Object, print: NodePrinter) {
   let elems = node.elements;
   let len   = elems.length;
 
@@ -92,11 +95,11 @@ export function ArrayExpression(node, print) {
 
 export { ArrayExpression as ArrayPattern };
 
-export function RegexLiteral(node) {
+export function RegexLiteral(node: Object) {
   this.push(`/${node.pattern}/${node.flags}`);
 }
 
-export function BooleanLiteral(node) {
+export function BooleanLiteral(node: Object) {
   this.push(node.value ? "true" : "false");
 }
 
@@ -104,15 +107,15 @@ export function NullLiteral() {
   this.push("null");
 }
 
-export function NumberLiteral(node) {
+export function NumberLiteral(node: Object) {
   this.push(node.value + "");
 }
 
-export function StringLiteral(node) {
+export function StringLiteral(node: Object) {
   this.push(this._stringLiteral(node.value));
 }
 
-export function _stringLiteral(val) {
+export function _stringLiteral(val: string): string {
   val = JSON.stringify(val);
 
   // escape illegal js but valid json unicode characters

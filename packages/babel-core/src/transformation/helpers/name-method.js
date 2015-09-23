@@ -1,3 +1,7 @@
+/* @flow */
+
+import type { Scope } from "babel-traverse";
+import type File from "../file";
 import getFunctionArity from "./get-function-arity";
 import * as util from  "../../util";
 import * as t from "babel-types";
@@ -94,12 +98,12 @@ function visit(node, name, scope) {
   return state;
 }
 
-export function custom(node, id, scope) {
+export function custom(node: Object, id: Object, scope: Scope) {
   let state = visit(node, id.name, scope);
   return wrap(state, node, id, scope);
 }
 
-export function property(node, file, scope) {
+export function property(node: Object, file: File, scope: Scope) {
   let key = t.toComputedKey(node, node.key);
   if (!t.isLiteral(key)) return; // we can't set a function id with this
 
@@ -111,7 +115,7 @@ export function property(node, file, scope) {
   node.value = wrap(state, method, id, scope) || method;
 }
 
-export function bare(node, parent, scope) {
+export function bare(node: Object, parent: Object, scope: Scope) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
@@ -136,9 +140,9 @@ export function bare(node, parent, scope) {
   }
 
   let name;
-  if (t.isLiteral(id)) {
+  if (id && t.isLiteral(id)) {
     name = id.value;
-  } else if (t.isIdentifier(id)) {
+  } else if (id && t.isIdentifier(id)) {
     name = id.name;
   } else {
     return;

@@ -1,3 +1,5 @@
+/* @flow */
+
 /**
  * [Please add a description.]
  */

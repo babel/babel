@@ -1,7 +1,10 @@
+/* @flow */
+
+import type NodePrinter from "../node/printer";
 import repeating from "repeating";
 import * as t from "babel-types";
 
-export function WithStatement(node, print) {
+export function WithStatement(node: Object, print: NodePrinter) {
   this.keyword("with");
   this.push("(");
   print.plain(node.object);
@@ -9,7 +12,7 @@ export function WithStatement(node, print) {
   print.block(node.body);
 }
 
-export function IfStatement(node, print) {
+export function IfStatement(node: Object, print: NodePrinter) {
   this.keyword("if");
   this.push("(");
   print.plain(node.test);
@@ -25,7 +28,7 @@ export function IfStatement(node, print) {
   }
 }
 
-export function ForStatement(node, print) {
+export function ForStatement(node: Object, print: NodePrinter) {
   this.keyword("for");
   this.push("(");
 
@@ -47,7 +50,7 @@ export function ForStatement(node, print) {
   print.block(node.body);
 }
 
-export function WhileStatement(node, print) {
+export function WhileStatement(node: Object, print: NodePrinter) {
   this.keyword("while");
   this.push("(");
   print.plain(node.test);
@@ -56,7 +59,7 @@ export function WhileStatement(node, print) {
 }
 
 let buildForXStatement = function (op) {
-  return function (node, print) {
+  return function (node: Object, print: NodePrinter) {
     this.keyword("for");
     this.push("(");
     print.plain(node.left);
@@ -70,7 +73,7 @@ let buildForXStatement = function (op) {
 export let ForInStatement = buildForXStatement("in");
 export let ForOfStatement = buildForXStatement("of");
 
-export function DoWhileStatement(node, print) {
+export function DoWhileStatement(node: Object, print: NodePrinter) {
   this.push("do ");
   print.plain(node.body);
   this.space();
@@ -81,7 +84,7 @@ export function DoWhileStatement(node, print) {
 }
 
 function buildLabelStatement(prefix, key = "label") {
-  return function (node, print) {
+  return function (node: Object, print: NodePrinter) {
     this.push(prefix);
 
     let label = node[key];
@@ -101,13 +104,13 @@ export let ReturnStatement   = buildLabelStatement("return", "argument");
 export let BreakStatement    = buildLabelStatement("break");
 export let ThrowStatement    = buildLabelStatement("throw", "argument");
 
-export function LabeledStatement(node, print) {
+export function LabeledStatement(node: Object, print: NodePrinter) {
   print.plain(node.label);
   this.push(": ");
   print.plain(node.body);
 }
 
-export function TryStatement(node, print) {
+export function TryStatement(node: Object, print: NodePrinter) {
   this.keyword("try");
   print.plain(node.block);
   this.space();
@@ -128,7 +131,7 @@ export function TryStatement(node, print) {
   }
 }
 
-export function CatchClause(node, print) {
+export function CatchClause(node: Object, print: NodePrinter) {
   this.keyword("catch");
   this.push("(");
   print.plain(node.param);
@@ -136,7 +139,7 @@ export function CatchClause(node, print) {
   print.plain(node.body);
 }
 
-export function SwitchStatement(node, print) {
+export function SwitchStatement(node: Object, print: NodePrinter) {
   this.keyword("switch");
   this.push("(");
   print.plain(node.discriminant);
@@ -154,7 +157,7 @@ export function SwitchStatement(node, print) {
   this.push("}");
 }
 
-export function SwitchCase(node, print) {
+export function SwitchCase(node: Object, print: NodePrinter) {
   if (node.test) {
     this.push("case ");
     print.plain(node.test);
@@ -173,13 +176,13 @@ export function DebuggerStatement() {
   this.push("debugger;");
 }
 
-export function VariableDeclaration(node, print, parent) {
+export function VariableDeclaration(node: Object, print: NodePrinter, parent: Object) {
   this.push(node.kind + " ");
 
   let hasInits = false;
   // don't add whitespace to loop heads
   if (!t.isFor(parent)) {
-    for (let declar of (node.declarations: Array)) {
+    for (let declar of (node.declarations: Array<Object>)) {
       if (declar.init) {
         // has an init so let's split it up over multiple lines
         hasInits = true;
@@ -216,7 +219,7 @@ export function VariableDeclaration(node, print, parent) {
   this.semicolon();
 }
 
-export function VariableDeclarator(node, print) {
+export function VariableDeclarator(node: Object, print: NodePrinter) {
   print.plain(node.id);
   print.plain(node.id.typeAnnotation);
   if (node.init) {

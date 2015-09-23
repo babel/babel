@@ -1,3 +1,6 @@
+/* @flow */
+
+import type Logger from "../logger";
 import Plugin from "../../plugin";
 import * as messages from "babel-messages";
 import * as context from "../../../api/node";
@@ -29,17 +32,23 @@ function exists(filename) {
 }
 
 export default class OptionManager {
-  constructor(log, pipeline) {
+  constructor(log?: Logger) {
     this.resolvedConfigs = [];
-    this.options         = OptionManager.createBareOptions();
-    this.pipeline        = pipeline;
-    this.log             = log;
+    this.options = OptionManager.createBareOptions();
+    this.log = log;
   }
 
-  static memoisedPlugins = [];
+  resolvedConfigs: Array<string>;
+  options: Object;
+  log: ?Logger;
+
+  static memoisedPlugins: Array<{
+    container: Function;
+    plugin: Plugin;
+  }>;
 
   static memoisePluginContainer(fn, loc, i) {
-    for (let cache of (OptionManager.memoisedPlugins: Array)) {
+    for (let cache of (OptionManager.memoisedPlugins: Array<Object>)) {
       if (cache.container === fn) return cache.plugin;
     }
 
@@ -103,7 +112,7 @@ export default class OptionManager {
     });
   }
 
-  addConfig(loc, key?, json=json5) {
+  addConfig(loc: string, key?: string, json = json5) {
     if (this.resolvedConfigs.indexOf(loc) >= 0) return;
 
     let content = fs.readFileSync(loc, "utf8");
@@ -130,7 +139,7 @@ export default class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(opts, alias = "foreign", loc, dirname) {
+  mergeOptions(opts?: Object, alias: string = "foreign", loc?: string, dirname?: string) {
     if (!opts) return;
 
     dirname = dirname || process.cwd();
@@ -177,7 +186,7 @@ export default class OptionManager {
     this.mergeOptions(envOpts, `${alias}.env.${envKey}`);
   }
 
-  mergePresets(presets: Array, dirname) {
+  mergePresets(presets: Array<string | Object>, dirname: string) {
     for (let val of presets) {
       if (typeof val === "string") {
         let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
@@ -262,7 +271,7 @@ export default class OptionManager {
     }
   }
 
-  init(opts) {
+  init(opts: Object): Object {
     // resolve all .babelrc files
     if (opts.babelrc !== false) {
       this.findConfigs(opts.filename);
@@ -277,3 +286,5 @@ export default class OptionManager {
     return this.options;
   }
 }
+
+OptionManager.memoisedPlugins = [];

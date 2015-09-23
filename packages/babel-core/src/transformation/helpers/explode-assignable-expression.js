@@ -1,6 +1,10 @@
+/* @flow */
+
+import type { Scope } from "babel-traverse";
+import type File from "../file";
 import * as t from "babel-types";
 
-let getObjRef = function (node, nodes, file, scope) {
+function getObjRef(node, nodes, file, scope) {
   let ref;
   if (t.isIdentifier(node)) {
     if (scope.hasBinding(node.name)) {
@@ -31,9 +35,9 @@ let getObjRef = function (node, nodes, file, scope) {
     t.variableDeclarator(temp, ref)
   ]));
   return temp;
-};
+}
 
-let getPropRef = function (node, nodes, file, scope) {
+function getPropRef(node, nodes, file, scope) {
   let prop = node.property;
   let key = t.toComputedKey(node, prop);
   if (t.isLiteral(key)) return key;
@@ -43,9 +47,18 @@ let getPropRef = function (node, nodes, file, scope) {
     t.variableDeclarator(temp, prop)
   ]));
   return temp;
-};
+}
 
-export default function (node, nodes, file, scope, allowedSingleIdent) {
+export default function (
+  node: Object,
+  nodes: Array<Object>,
+  file: File,
+  scope: Scope,
+  allowedSingleIdent?: boolean,
+): {
+  uid: Object;
+  ref: Object;
+} {
   let obj;
   if (t.isIdentifier(node) && allowedSingleIdent) {
     obj = node;

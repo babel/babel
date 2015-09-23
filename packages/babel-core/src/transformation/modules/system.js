@@ -1,3 +1,5 @@
+/* @flow */
+
 import DefaultFormatter from "./_default";
 import AMDFormatter from "./amd";
 import * as util from  "../../util";

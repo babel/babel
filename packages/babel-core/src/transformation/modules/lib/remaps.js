@@ -1,3 +1,5 @@
+/* @flow */
+
 import * as t from "babel-types";
 
 let remapVisitor = {
