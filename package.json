@@ -4,6 +4,7 @@
   "devDependencies": {
     "babel": "5.8.21",
     "babel-eslint": "^4.0.6",
+    "babel-plugin-flow-comments": "^1.0.9",
     "browserify": "^11.0.0",
     "chai": "^2.2.0",
     "chalk": "^1.1.0",
@@ -24,11 +25,25 @@
     "uglify-js": "^2.4.16"
   },
   "babel": {
-    "ignore": ["packages/babel-cli/src/babel-plugin/templates"],
+    "ignore": [
+      "packages/babel-cli/src/babel-plugin/templates"
+    ],
     "stage": 0,
-    "loose": ["all"],
-    "blacklist": ["es6.tailCall"],
-    "optional": ["optimisation.flow.forOf", "bluebirdCoroutines", "runtime"],
+    "loose": [
+      "all"
+    ],
+    "plugins": [
+      "flow-comments"
+    ],
+    "blacklist": [
+      "flow",
+      "es6.tailCall"
+    ],
+    "optional": [
+      "optimisation.flow.forOf",
+      "bluebirdCoroutines",
+      "runtime"
+    ],
     "env": {
       "test": {
         "auxiliaryCommentBefore": "istanbul ignore next"
