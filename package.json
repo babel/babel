@@ -39,7 +39,12 @@
     "parser": "babel-eslint",
     "extends": "eslint:recommended",
     "rules": {
-      "quotes": [2, "double", "avoid-escape"],
+      "quotes": [
+        2,
+        "double",
+        "avoid-escape"
+      ],
+      "no-var": 2,
       "strict": 0,
       "no-underscore-dangle": 0,
       "curly": 0,
