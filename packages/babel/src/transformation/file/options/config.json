@@ -11,10 +11,6 @@
     "type": "string"
   },
 
-  "inputSourceMap": {
-    "hidden": true
-  },
-
   "extra": {
     "hidden": true,
     "default": {}
@@ -238,6 +234,12 @@
   "sourceFileName": {
     "type": "string",
     "description": "set `sources[0]` on returned source map"
+  },
+
+  "inputSourceMap": {
+    "type": "boolean",
+    "description": "use existing source map for source map generation - only works with inline source maps",
+    "default": false
   },
 
   "sourceRoot": {
