@@ -351,31 +351,10 @@ export default class Scope {
   }
 
   rename(oldName: string, newName: string, block?) {
-    newName = newName || this.generateUidIdentifier(oldName).name;
-
-    var info = this.getBinding(oldName);
-    if (!info) return;
-
-    var state = {
-      newName: newName,
-      oldName: oldName,
-      binding: info.identifier,
-      info:    info
-    };
-
-    var scope = info.scope;
-    scope.traverse(block || scope.block, renameVisitor, state);
-
-    if (!block) {
-      scope.removeOwnBinding(oldName);
-      scope.bindings[newName] = info;
-      state.binding.name = newName;
-    }
-
-    var file = this.hub.file;
-    if (file) {
-      this._renameFromMap(file.moduleFormatter.localImports, oldName, newName, state.binding);
-      //this._renameFromMap(file.moduleFormatter.localExports, oldName, newName);
+    let binding = this.getBinding(oldName);
+    if (binding) {
+      newName = newName || this.generateUidIdentifier(oldName).name;
+      return new Renamer(binding, oldName, newName).rename(block);
     }
   }
 
