@@ -1,3 +1,3 @@
 export var metadata = {
-  stage: 2
+  stage: 3
 };
