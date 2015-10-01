@@ -130,11 +130,12 @@
   }
 
   function AsyncIterator(generator) {
-    // This invoke function is written in a style that assumes some
-    // calling function (or Promise) will handle exceptions.
     function invoke(method, arg, resolve, reject) {
-      try {
-        var result = generator[method](arg);
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
         var value = result.value;
         if (value instanceof AwaitArgument) {
           return Promise.resolve(value.arg).then(function(value) {
@@ -163,8 +164,6 @@
           result.value = unwrapped;
           resolve(result);
         }, reject);
-      } catch (err) {
-        reject(err);
       }
     }
 
