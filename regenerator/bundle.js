@@ -361,135 +361,9 @@ var objectKeys = Object.keys || function (obj) {
   return keys;
 };
 
-},{"util/":30}],3:[function(require,module,exports){
-var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-
-;(function (exports) {
-	'use strict';
-
-  var Arr = (typeof Uint8Array !== 'undefined')
-    ? Uint8Array
-    : Array
-
-	var PLUS   = '+'.charCodeAt(0)
-	var SLASH  = '/'.charCodeAt(0)
-	var NUMBER = '0'.charCodeAt(0)
-	var LOWER  = 'a'.charCodeAt(0)
-	var UPPER  = 'A'.charCodeAt(0)
-	var PLUS_URL_SAFE = '-'.charCodeAt(0)
-	var SLASH_URL_SAFE = '_'.charCodeAt(0)
-
-	function decode (elt) {
-		var code = elt.charCodeAt(0)
-		if (code === PLUS ||
-		    code === PLUS_URL_SAFE)
-			return 62 // '+'
-		if (code === SLASH ||
-		    code === SLASH_URL_SAFE)
-			return 63 // '/'
-		if (code < NUMBER)
-			return -1 //no match
-		if (code < NUMBER + 10)
-			return code - NUMBER + 26 + 26
-		if (code < UPPER + 26)
-			return code - UPPER
-		if (code < LOWER + 26)
-			return code - LOWER + 26
-	}
-
-	function b64ToByteArray (b64) {
-		var i, j, l, tmp, placeHolders, arr
-
-		if (b64.length % 4 > 0) {
-			throw new Error('Invalid string. Length must be a multiple of 4')
-		}
-
-		// the number of equal signs (place holders)
-		// if there are two placeholders, than the two characters before it
-		// represent one byte
-		// if there is only one, then the three characters before it represent 2 bytes
-		// this is just a cheap hack to not do indexOf twice
-		var len = b64.length
-		placeHolders = '=' === b64.charAt(len - 2) ? 2 : '=' === b64.charAt(len - 1) ? 1 : 0
-
-		// base64 is 4/3 + up to two characters of the original data
-		arr = new Arr(b64.length * 3 / 4 - placeHolders)
-
-		// if there are placeholders, only get up to the last complete 4 chars
-		l = placeHolders > 0 ? b64.length - 4 : b64.length
-
-		var L = 0
-
-		function push (v) {
-			arr[L++] = v
-		}
-
-		for (i = 0, j = 0; i < l; i += 4, j += 3) {
-			tmp = (decode(b64.charAt(i)) << 18) | (decode(b64.charAt(i + 1)) << 12) | (decode(b64.charAt(i + 2)) << 6) | decode(b64.charAt(i + 3))
-			push((tmp & 0xFF0000) >> 16)
-			push((tmp & 0xFF00) >> 8)
-			push(tmp & 0xFF)
-		}
-
-		if (placeHolders === 2) {
-			tmp = (decode(b64.charAt(i)) << 2) | (decode(b64.charAt(i + 1)) >> 4)
-			push(tmp & 0xFF)
-		} else if (placeHolders === 1) {
-			tmp = (decode(b64.charAt(i)) << 10) | (decode(b64.charAt(i + 1)) << 4) | (decode(b64.charAt(i + 2)) >> 2)
-			push((tmp >> 8) & 0xFF)
-			push(tmp & 0xFF)
-		}
-
-		return arr
-	}
-
-	function uint8ToBase64 (uint8) {
-		var i,
-			extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
-			output = "",
-			temp, length
-
-		function encode (num) {
-			return lookup.charAt(num)
-		}
-
-		function tripletToBase64 (num) {
-			return encode(num >> 18 & 0x3F) + encode(num >> 12 & 0x3F) + encode(num >> 6 & 0x3F) + encode(num & 0x3F)
-		}
-
-		// go through the array every three bytes, we'll deal with trailing stuff later
-		for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
-			temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2])
-			output += tripletToBase64(temp)
-		}
-
-		// pad the end with zeros, but make sure to not forget the extra bytes
-		switch (extraBytes) {
-			case 1:
-				temp = uint8[uint8.length - 1]
-				output += encode(temp >> 2)
-				output += encode((temp << 4) & 0x3F)
-				output += '=='
-				break
-			case 2:
-				temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1])
-				output += encode(temp >> 10)
-				output += encode((temp >> 4) & 0x3F)
-				output += encode((temp << 2) & 0x3F)
-				output += '='
-				break
-		}
-
-		return output
-	}
-
-	exports.toByteArray = b64ToByteArray
-	exports.fromByteArray = uint8ToBase64
-}(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
-
-},{}],4:[function(require,module,exports){
+},{"util/":31}],3:[function(require,module,exports){
 arguments[4][1][0].apply(exports,arguments)
-},{"dup":1}],5:[function(require,module,exports){
+},{"dup":1}],4:[function(require,module,exports){
 (function (global){
 /*!
  * The buffer module from node.js, for the browser.
@@ -2035,117 +1909,254 @@ function blitBuffer (src, dst, offset, length) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"base64-js":3,"ieee754":8,"is-array":10}],6:[function(require,module,exports){
-(function (Buffer){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+},{"base64-js":5,"ieee754":6,"is-array":7}],5:[function(require,module,exports){
+var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
-// NOTE: These type checking functions intentionally don't use `instanceof`
-// because it is fragile and can be easily faked with `Object.create()`.
-function isArray(ar) {
-  return Array.isArray(ar);
-}
-exports.isArray = isArray;
+;(function (exports) {
+	'use strict';
 
-function isBoolean(arg) {
-  return typeof arg === 'boolean';
-}
-exports.isBoolean = isBoolean;
+  var Arr = (typeof Uint8Array !== 'undefined')
+    ? Uint8Array
+    : Array
 
-function isNull(arg) {
-  return arg === null;
-}
-exports.isNull = isNull;
+	var PLUS   = '+'.charCodeAt(0)
+	var SLASH  = '/'.charCodeAt(0)
+	var NUMBER = '0'.charCodeAt(0)
+	var LOWER  = 'a'.charCodeAt(0)
+	var UPPER  = 'A'.charCodeAt(0)
+	var PLUS_URL_SAFE = '-'.charCodeAt(0)
+	var SLASH_URL_SAFE = '_'.charCodeAt(0)
 
-function isNullOrUndefined(arg) {
-  return arg == null;
-}
-exports.isNullOrUndefined = isNullOrUndefined;
+	function decode (elt) {
+		var code = elt.charCodeAt(0)
+		if (code === PLUS ||
+		    code === PLUS_URL_SAFE)
+			return 62 // '+'
+		if (code === SLASH ||
+		    code === SLASH_URL_SAFE)
+			return 63 // '/'
+		if (code < NUMBER)
+			return -1 //no match
+		if (code < NUMBER + 10)
+			return code - NUMBER + 26 + 26
+		if (code < UPPER + 26)
+			return code - UPPER
+		if (code < LOWER + 26)
+			return code - LOWER + 26
+	}
 
-function isNumber(arg) {
-  return typeof arg === 'number';
-}
-exports.isNumber = isNumber;
+	function b64ToByteArray (b64) {
+		var i, j, l, tmp, placeHolders, arr
 
-function isString(arg) {
-  return typeof arg === 'string';
-}
-exports.isString = isString;
+		if (b64.length % 4 > 0) {
+			throw new Error('Invalid string. Length must be a multiple of 4')
+		}
 
-function isSymbol(arg) {
-  return typeof arg === 'symbol';
-}
-exports.isSymbol = isSymbol;
+		// the number of equal signs (place holders)
+		// if there are two placeholders, than the two characters before it
+		// represent one byte
+		// if there is only one, then the three characters before it represent 2 bytes
+		// this is just a cheap hack to not do indexOf twice
+		var len = b64.length
+		placeHolders = '=' === b64.charAt(len - 2) ? 2 : '=' === b64.charAt(len - 1) ? 1 : 0
 
-function isUndefined(arg) {
-  return arg === void 0;
-}
-exports.isUndefined = isUndefined;
+		// base64 is 4/3 + up to two characters of the original data
+		arr = new Arr(b64.length * 3 / 4 - placeHolders)
 
-function isRegExp(re) {
-  return isObject(re) && objectToString(re) === '[object RegExp]';
-}
-exports.isRegExp = isRegExp;
+		// if there are placeholders, only get up to the last complete 4 chars
+		l = placeHolders > 0 ? b64.length - 4 : b64.length
 
-function isObject(arg) {
-  return typeof arg === 'object' && arg !== null;
-}
-exports.isObject = isObject;
+		var L = 0
 
-function isDate(d) {
-  return isObject(d) && objectToString(d) === '[object Date]';
-}
-exports.isDate = isDate;
+		function push (v) {
+			arr[L++] = v
+		}
 
-function isError(e) {
-  return isObject(e) &&
-      (objectToString(e) === '[object Error]' || e instanceof Error);
-}
-exports.isError = isError;
+		for (i = 0, j = 0; i < l; i += 4, j += 3) {
+			tmp = (decode(b64.charAt(i)) << 18) | (decode(b64.charAt(i + 1)) << 12) | (decode(b64.charAt(i + 2)) << 6) | decode(b64.charAt(i + 3))
+			push((tmp & 0xFF0000) >> 16)
+			push((tmp & 0xFF00) >> 8)
+			push(tmp & 0xFF)
+		}
 
-function isFunction(arg) {
-  return typeof arg === 'function';
-}
-exports.isFunction = isFunction;
+		if (placeHolders === 2) {
+			tmp = (decode(b64.charAt(i)) << 2) | (decode(b64.charAt(i + 1)) >> 4)
+			push(tmp & 0xFF)
+		} else if (placeHolders === 1) {
+			tmp = (decode(b64.charAt(i)) << 10) | (decode(b64.charAt(i + 1)) << 4) | (decode(b64.charAt(i + 2)) >> 2)
+			push((tmp >> 8) & 0xFF)
+			push(tmp & 0xFF)
+		}
 
-function isPrimitive(arg) {
-  return arg === null ||
-         typeof arg === 'boolean' ||
-         typeof arg === 'number' ||
-         typeof arg === 'string' ||
-         typeof arg === 'symbol' ||  // ES6 symbol
-         typeof arg === 'undefined';
-}
-exports.isPrimitive = isPrimitive;
+		return arr
+	}
 
-function isBuffer(arg) {
-  return Buffer.isBuffer(arg);
-}
-exports.isBuffer = isBuffer;
+	function uint8ToBase64 (uint8) {
+		var i,
+			extraBytes = uint8.length % 3, // if we have 1 byte left, pad 2 bytes
+			output = "",
+			temp, length
 
-function objectToString(o) {
-  return Object.prototype.toString.call(o);
+		function encode (num) {
+			return lookup.charAt(num)
+		}
+
+		function tripletToBase64 (num) {
+			return encode(num >> 18 & 0x3F) + encode(num >> 12 & 0x3F) + encode(num >> 6 & 0x3F) + encode(num & 0x3F)
+		}
+
+		// go through the array every three bytes, we'll deal with trailing stuff later
+		for (i = 0, length = uint8.length - extraBytes; i < length; i += 3) {
+			temp = (uint8[i] << 16) + (uint8[i + 1] << 8) + (uint8[i + 2])
+			output += tripletToBase64(temp)
+		}
+
+		// pad the end with zeros, but make sure to not forget the extra bytes
+		switch (extraBytes) {
+			case 1:
+				temp = uint8[uint8.length - 1]
+				output += encode(temp >> 2)
+				output += encode((temp << 4) & 0x3F)
+				output += '=='
+				break
+			case 2:
+				temp = (uint8[uint8.length - 2] << 8) + (uint8[uint8.length - 1])
+				output += encode(temp >> 10)
+				output += encode((temp >> 4) & 0x3F)
+				output += encode((temp << 2) & 0x3F)
+				output += '='
+				break
+		}
+
+		return output
+	}
+
+	exports.toByteArray = b64ToByteArray
+	exports.fromByteArray = uint8ToBase64
+}(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
+
+},{}],6:[function(require,module,exports){
+exports.read = function (buffer, offset, isLE, mLen, nBytes) {
+  var e, m
+  var eLen = nBytes * 8 - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var nBits = -7
+  var i = isLE ? (nBytes - 1) : 0
+  var d = isLE ? -1 : 1
+  var s = buffer[offset + i]
+
+  i += d
+
+  e = s & ((1 << (-nBits)) - 1)
+  s >>= (-nBits)
+  nBits += eLen
+  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+  m = e & ((1 << (-nBits)) - 1)
+  e >>= (-nBits)
+  nBits += mLen
+  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {}
+
+  if (e === 0) {
+    e = 1 - eBias
+  } else if (e === eMax) {
+    return m ? NaN : ((s ? -1 : 1) * Infinity)
+  } else {
+    m = m + Math.pow(2, mLen)
+    e = e - eBias
+  }
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
 }
-}).call(this,{"isBuffer":require("/Users/ben/node_modules/browserify/node_modules/is-buffer/index.js")})
-},{"/Users/ben/node_modules/browserify/node_modules/is-buffer/index.js":11}],7:[function(require,module,exports){
+
+exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
+  var e, m, c
+  var eLen = nBytes * 8 - mLen - 1
+  var eMax = (1 << eLen) - 1
+  var eBias = eMax >> 1
+  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
+  var i = isLE ? 0 : (nBytes - 1)
+  var d = isLE ? 1 : -1
+  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
+
+  value = Math.abs(value)
+
+  if (isNaN(value) || value === Infinity) {
+    m = isNaN(value) ? 1 : 0
+    e = eMax
+  } else {
+    e = Math.floor(Math.log(value) / Math.LN2)
+    if (value * (c = Math.pow(2, -e)) < 1) {
+      e--
+      c *= 2
+    }
+    if (e + eBias >= 1) {
+      value += rt / c
+    } else {
+      value += rt * Math.pow(2, 1 - eBias)
+    }
+    if (value * c >= 2) {
+      e++
+      c /= 2
+    }
+
+    if (e + eBias >= eMax) {
+      m = 0
+      e = eMax
+    } else if (e + eBias >= 1) {
+      m = (value * c - 1) * Math.pow(2, mLen)
+      e = e + eBias
+    } else {
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
+      e = 0
+    }
+  }
+
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+
+  e = (e << mLen) | m
+  eLen += mLen
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+
+  buffer[offset + i - d] |= s * 128
+}
+
+},{}],7:[function(require,module,exports){
+
+/**
+ * isArray
+ */
+
+var isArray = Array.isArray;
+
+/**
+ * toString
+ */
+
+var str = Object.prototype.toString;
+
+/**
+ * Whether or not the given `val`
+ * is an array.
+ *
+ * example:
+ *
+ *        isArray([]);
+ *        // > true
+ *        isArray(arguments);
+ *        // > false
+ *        isArray('');
+ *        // > false
+ *
+ * @param {mixed} val
+ * @return {bool}
+ */
+
+module.exports = isArray || function (val) {
+  return !! val && '[object Array]' == str.call(val);
+};
+
+},{}],8:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2448,92 +2459,6 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],8:[function(require,module,exports){
-exports.read = function (buffer, offset, isLE, mLen, nBytes) {
-  var e, m
-  var eLen = nBytes * 8 - mLen - 1
-  var eMax = (1 << eLen) - 1
-  var eBias = eMax >> 1
-  var nBits = -7
-  var i = isLE ? (nBytes - 1) : 0
-  var d = isLE ? -1 : 1
-  var s = buffer[offset + i]
-
-  i += d
-
-  e = s & ((1 << (-nBits)) - 1)
-  s >>= (-nBits)
-  nBits += eLen
-  for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {}
-
-  m = e & ((1 << (-nBits)) - 1)
-  e >>= (-nBits)
-  nBits += mLen
-  for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {}
-
-  if (e === 0) {
-    e = 1 - eBias
-  } else if (e === eMax) {
-    return m ? NaN : ((s ? -1 : 1) * Infinity)
-  } else {
-    m = m + Math.pow(2, mLen)
-    e = e - eBias
-  }
-  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
-}
-
-exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
-  var e, m, c
-  var eLen = nBytes * 8 - mLen - 1
-  var eMax = (1 << eLen) - 1
-  var eBias = eMax >> 1
-  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0)
-  var i = isLE ? 0 : (nBytes - 1)
-  var d = isLE ? 1 : -1
-  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0
-
-  value = Math.abs(value)
-
-  if (isNaN(value) || value === Infinity) {
-    m = isNaN(value) ? 1 : 0
-    e = eMax
-  } else {
-    e = Math.floor(Math.log(value) / Math.LN2)
-    if (value * (c = Math.pow(2, -e)) < 1) {
-      e--
-      c *= 2
-    }
-    if (e + eBias >= 1) {
-      value += rt / c
-    } else {
-      value += rt * Math.pow(2, 1 - eBias)
-    }
-    if (value * c >= 2) {
-      e++
-      c /= 2
-    }
-
-    if (e + eBias >= eMax) {
-      m = 0
-      e = eMax
-    } else if (e + eBias >= 1) {
-      m = (value * c - 1) * Math.pow(2, mLen)
-      e = e + eBias
-    } else {
-      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen)
-      e = 0
-    }
-  }
-
-  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
-
-  e = (e << mLen) | m
-  eLen += mLen
-  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
-
-  buffer[offset + i - d] |= s * 128
-}
-
 },{}],9:[function(require,module,exports){
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
@@ -2560,41 +2485,6 @@ if (typeof Object.create === 'function') {
 }
 
 },{}],10:[function(require,module,exports){
-
-/**
- * isArray
- */
-
-var isArray = Array.isArray;
-
-/**
- * toString
- */
-
-var str = Object.prototype.toString;
-
-/**
- * Whether or not the given `val`
- * is an array.
- *
- * example:
- *
- *        isArray([]);
- *        // > true
- *        isArray(arguments);
- *        // > false
- *        isArray('');
- *        // > false
- *
- * @param {mixed} val
- * @return {bool}
- */
-
-module.exports = isArray || function (val) {
-  return !! val && '[object Array]' == str.call(val);
-};
-
-},{}],11:[function(require,module,exports){
 /**
  * Determine if an object is Buffer
  *
@@ -2613,10 +2503,57 @@ module.exports = function (obj) {
     ))
 }
 
-},{}],12:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
+
+},{}],12:[function(require,module,exports){
+exports.endianness = function () { return 'LE' };
+
+exports.hostname = function () {
+    if (typeof location !== 'undefined') {
+        return location.hostname
+    }
+    else return '';
+};
+
+exports.loadavg = function () { return [] };
+
+exports.uptime = function () { return 0 };
+
+exports.freemem = function () {
+    return Number.MAX_VALUE;
+};
+
+exports.totalmem = function () {
+    return Number.MAX_VALUE;
+};
+
+exports.cpus = function () { return [] };
+
+exports.type = function () { return 'Browser' };
+
+exports.release = function () {
+    if (typeof navigator !== 'undefined') {
+        return navigator.appVersion;
+    }
+    return '';
+};
+
+exports.networkInterfaces
+= exports.getNetworkInterfaces
+= function () { return {} };
+
+exports.arch = function () { return 'javascript' };
+
+exports.platform = function () { return 'browser' };
+
+exports.tmpdir = exports.tmpDir = function () {
+    return '/tmp';
+};
+
+exports.EOL = '\n';
 
 },{}],13:[function(require,module,exports){
 (function (process){
@@ -2846,24 +2783,7 @@ var substr = 'ab'.substr(-1) === 'b'
 ;
 
 }).call(this,require('_process'))
-},{"_process":15}],14:[function(require,module,exports){
-(function (process){
-'use strict';
-module.exports = nextTick;
-
-function nextTick(fn) {
-  var args = new Array(arguments.length - 1);
-  var i = 0;
-  while (i < args.length) {
-    args[i++] = arguments[i];
-  }
-  process.nextTick(function afterTick() {
-    fn.apply(null, args);
-  });
-}
-
-}).call(this,require('_process'))
-},{"_process":15}],15:[function(require,module,exports){
+},{"_process":14}],14:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2956,10 +2876,10 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 module.exports = require("./lib/_stream_duplex.js")
 
-},{"./lib/_stream_duplex.js":17}],17:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":16}],16:[function(require,module,exports){
 // a duplex stream is just a stream that is both readable and writable.
 // Since JS doesn't have multiple prototypal inheritance, this class
 // prototypally inherits from Readable, and then parasitically from
@@ -3043,7 +2963,7 @@ function forEach (xs, f) {
   }
 }
 
-},{"./_stream_readable":19,"./_stream_writable":21,"core-util-is":6,"inherits":9,"process-nextick-args":14}],18:[function(require,module,exports){
+},{"./_stream_readable":18,"./_stream_writable":20,"core-util-is":21,"inherits":9,"process-nextick-args":22}],17:[function(require,module,exports){
 // a passthrough stream.
 // basically just the most minimal sort of Transform stream.
 // Every written chunk gets output as-is.
@@ -3072,7 +2992,7 @@ PassThrough.prototype._transform = function(chunk, encoding, cb) {
   cb(null, chunk);
 };
 
-},{"./_stream_transform":20,"core-util-is":6,"inherits":9}],19:[function(require,module,exports){
+},{"./_stream_transform":19,"core-util-is":21,"inherits":9}],18:[function(require,module,exports){
 (function (process){
 'use strict';
 
@@ -4035,7 +3955,7 @@ function indexOf (xs, x) {
 }
 
 }).call(this,require('_process'))
-},{"./_stream_duplex":17,"_process":15,"buffer":5,"core-util-is":6,"events":7,"inherits":9,"isarray":12,"process-nextick-args":14,"string_decoder/":27,"util":4}],20:[function(require,module,exports){
+},{"./_stream_duplex":16,"_process":14,"buffer":4,"core-util-is":21,"events":8,"inherits":9,"isarray":11,"process-nextick-args":22,"string_decoder/":29,"util":3}],19:[function(require,module,exports){
 // a transform stream is a readable/writable stream where you do
 // something with the data.  Sometimes it's called a "filter",
 // but that's not a great name for it, since that implies a thing where
@@ -4234,7 +4154,7 @@ function done(stream, er) {
   return stream.push(null);
 }
 
-},{"./_stream_duplex":17,"core-util-is":6,"inherits":9}],21:[function(require,module,exports){
+},{"./_stream_duplex":16,"core-util-is":21,"inherits":9}],20:[function(require,module,exports){
 // A bit simpler than readable streams.
 // Implement an async ._write(chunk, cb), and it'll handle all
 // the drain event emission and buffering.
@@ -4756,10 +4676,203 @@ function endWritable(stream, state, cb) {
   state.ended = true;
 }
 
-},{"./_stream_duplex":17,"buffer":5,"core-util-is":6,"events":7,"inherits":9,"process-nextick-args":14,"util-deprecate":28}],22:[function(require,module,exports){
+},{"./_stream_duplex":16,"buffer":4,"core-util-is":21,"events":8,"inherits":9,"process-nextick-args":22,"util-deprecate":23}],21:[function(require,module,exports){
+(function (Buffer){
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+// NOTE: These type checking functions intentionally don't use `instanceof`
+// because it is fragile and can be easily faked with `Object.create()`.
+function isArray(ar) {
+  return Array.isArray(ar);
+}
+exports.isArray = isArray;
+
+function isBoolean(arg) {
+  return typeof arg === 'boolean';
+}
+exports.isBoolean = isBoolean;
+
+function isNull(arg) {
+  return arg === null;
+}
+exports.isNull = isNull;
+
+function isNullOrUndefined(arg) {
+  return arg == null;
+}
+exports.isNullOrUndefined = isNullOrUndefined;
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+exports.isNumber = isNumber;
+
+function isString(arg) {
+  return typeof arg === 'string';
+}
+exports.isString = isString;
+
+function isSymbol(arg) {
+  return typeof arg === 'symbol';
+}
+exports.isSymbol = isSymbol;
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+exports.isUndefined = isUndefined;
+
+function isRegExp(re) {
+  return isObject(re) && objectToString(re) === '[object RegExp]';
+}
+exports.isRegExp = isRegExp;
+
+function isObject(arg) {
+  return typeof arg === 'object' && arg !== null;
+}
+exports.isObject = isObject;
+
+function isDate(d) {
+  return isObject(d) && objectToString(d) === '[object Date]';
+}
+exports.isDate = isDate;
+
+function isError(e) {
+  return isObject(e) &&
+      (objectToString(e) === '[object Error]' || e instanceof Error);
+}
+exports.isError = isError;
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+exports.isFunction = isFunction;
+
+function isPrimitive(arg) {
+  return arg === null ||
+         typeof arg === 'boolean' ||
+         typeof arg === 'number' ||
+         typeof arg === 'string' ||
+         typeof arg === 'symbol' ||  // ES6 symbol
+         typeof arg === 'undefined';
+}
+exports.isPrimitive = isPrimitive;
+
+function isBuffer(arg) {
+  return Buffer.isBuffer(arg);
+}
+exports.isBuffer = isBuffer;
+
+function objectToString(o) {
+  return Object.prototype.toString.call(o);
+}
+}).call(this,{"isBuffer":require("/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/is-buffer/index.js")})
+},{"/Users/ben/node_modules/browserify/node_modules/insert-module-globals/node_modules/is-buffer/index.js":10}],22:[function(require,module,exports){
+(function (process){
+'use strict';
+module.exports = nextTick;
+
+function nextTick(fn) {
+  var args = new Array(arguments.length - 1);
+  var i = 0;
+  while (i < args.length) {
+    args[i++] = arguments[i];
+  }
+  process.nextTick(function afterTick() {
+    fn.apply(null, args);
+  });
+}
+
+}).call(this,require('_process'))
+},{"_process":14}],23:[function(require,module,exports){
+(function (global){
+
+/**
+ * Module exports.
+ */
+
+module.exports = deprecate;
+
+/**
+ * Mark that a method should not be used.
+ * Returns a modified function which warns once by default.
+ *
+ * If `localStorage.noDeprecation = true` is set, then it is a no-op.
+ *
+ * If `localStorage.throwDeprecation = true` is set, then deprecated functions
+ * will throw an Error when invoked.
+ *
+ * If `localStorage.traceDeprecation = true` is set, then deprecated functions
+ * will invoke `console.trace()` instead of `console.error()`.
+ *
+ * @param {Function} fn - the function to deprecate
+ * @param {String} msg - the string to print to the console when `fn` is invoked
+ * @returns {Function} a new "deprecated" version of `fn`
+ * @api public
+ */
+
+function deprecate (fn, msg) {
+  if (config('noDeprecation')) {
+    return fn;
+  }
+
+  var warned = false;
+  function deprecated() {
+    if (!warned) {
+      if (config('throwDeprecation')) {
+        throw new Error(msg);
+      } else if (config('traceDeprecation')) {
+        console.trace(msg);
+      } else {
+        console.warn(msg);
+      }
+      warned = true;
+    }
+    return fn.apply(this, arguments);
+  }
+
+  return deprecated;
+}
+
+/**
+ * Checks `localStorage` for boolean values for the given `name`.
+ *
+ * @param {String} name
+ * @returns {Boolean}
+ * @api private
+ */
+
+function config (name) {
+  if (!global.localStorage) return false;
+  var val = global.localStorage[name];
+  if (null == val) return false;
+  return String(val).toLowerCase() === 'true';
+}
+
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],24:[function(require,module,exports){
 module.exports = require("./lib/_stream_passthrough.js")
 
-},{"./lib/_stream_passthrough.js":18}],23:[function(require,module,exports){
+},{"./lib/_stream_passthrough.js":17}],25:[function(require,module,exports){
 var Stream = (function (){
   try {
     return require('st' + 'ream'); // hack to fix a circular dependency issue when used with browserify
@@ -4773,13 +4886,13 @@ exports.Duplex = require('./lib/_stream_duplex.js');
 exports.Transform = require('./lib/_stream_transform.js');
 exports.PassThrough = require('./lib/_stream_passthrough.js');
 
-},{"./lib/_stream_duplex.js":17,"./lib/_stream_passthrough.js":18,"./lib/_stream_readable.js":19,"./lib/_stream_transform.js":20,"./lib/_stream_writable.js":21}],24:[function(require,module,exports){
+},{"./lib/_stream_duplex.js":16,"./lib/_stream_passthrough.js":17,"./lib/_stream_readable.js":18,"./lib/_stream_transform.js":19,"./lib/_stream_writable.js":20}],26:[function(require,module,exports){
 module.exports = require("./lib/_stream_transform.js")
 
-},{"./lib/_stream_transform.js":20}],25:[function(require,module,exports){
+},{"./lib/_stream_transform.js":19}],27:[function(require,module,exports){
 module.exports = require("./lib/_stream_writable.js")
 
-},{"./lib/_stream_writable.js":21}],26:[function(require,module,exports){
+},{"./lib/_stream_writable.js":20}],28:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4908,7 +5021,7 @@ Stream.prototype.pipe = function(dest, options) {
   return dest;
 };
 
-},{"events":7,"inherits":9,"readable-stream/duplex.js":16,"readable-stream/passthrough.js":22,"readable-stream/readable.js":23,"readable-stream/transform.js":24,"readable-stream/writable.js":25}],27:[function(require,module,exports){
+},{"events":8,"inherits":9,"readable-stream/duplex.js":15,"readable-stream/passthrough.js":24,"readable-stream/readable.js":25,"readable-stream/transform.js":26,"readable-stream/writable.js":27}],29:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -5131,80 +5244,14 @@ function base64DetectIncompleteChar(buffer) {
   this.charLength = this.charReceived ? 3 : 0;
 }
 
-},{"buffer":5}],28:[function(require,module,exports){
-(function (global){
-
-/**
- * Module exports.
- */
-
-module.exports = deprecate;
-
-/**
- * Mark that a method should not be used.
- * Returns a modified function which warns once by default.
- *
- * If `localStorage.noDeprecation = true` is set, then it is a no-op.
- *
- * If `localStorage.throwDeprecation = true` is set, then deprecated functions
- * will throw an Error when invoked.
- *
- * If `localStorage.traceDeprecation = true` is set, then deprecated functions
- * will invoke `console.trace()` instead of `console.error()`.
- *
- * @param {Function} fn - the function to deprecate
- * @param {String} msg - the string to print to the console when `fn` is invoked
- * @returns {Function} a new "deprecated" version of `fn`
- * @api public
- */
-
-function deprecate (fn, msg) {
-  if (config('noDeprecation')) {
-    return fn;
-  }
-
-  var warned = false;
-  function deprecated() {
-    if (!warned) {
-      if (config('throwDeprecation')) {
-        throw new Error(msg);
-      } else if (config('traceDeprecation')) {
-        console.trace(msg);
-      } else {
-        console.warn(msg);
-      }
-      warned = true;
-    }
-    return fn.apply(this, arguments);
-  }
-
-  return deprecated;
-}
-
-/**
- * Checks `localStorage` for boolean values for the given `name`.
- *
- * @param {String} name
- * @returns {Boolean}
- * @api private
- */
-
-function config (name) {
-  if (!global.localStorage) return false;
-  var val = global.localStorage[name];
-  if (null == val) return false;
-  return String(val).toLowerCase() === 'true';
-}
-
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],29:[function(require,module,exports){
+},{"buffer":4}],30:[function(require,module,exports){
 module.exports = function isBuffer(arg) {
   return arg && typeof arg === 'object'
     && typeof arg.copy === 'function'
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 (function (process,global){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -5794,7 +5841,7 @@ function hasOwnProperty(obj, prop) {
 }
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./support/isBuffer":29,"_process":15,"inherits":9}],31:[function(require,module,exports){
+},{"./support/isBuffer":30,"_process":14,"inherits":9}],32:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -7009,7 +7056,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
   }
 };
 
-},{"./leap":33,"./meta":34,"./util":35,"assert":2,"recast":77}],32:[function(require,module,exports){
+},{"./leap":34,"./meta":35,"./util":36,"assert":2,"recast":77}],33:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -7164,7 +7211,7 @@ exports.hoist = function(funPath) {
   return b.variableDeclaration("var", declarations);
 };
 
-},{"assert":2,"recast":77}],33:[function(require,module,exports){
+},{"assert":2,"recast":77}],34:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -7343,7 +7390,7 @@ LMp.getContinueLoc = function(label) {
   return this._findLeapLocation("continueLoc", label);
 };
 
-},{"./emit":31,"assert":2,"recast":77,"util":30}],34:[function(require,module,exports){
+},{"./emit":32,"assert":2,"recast":77,"util":31}],35:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -7445,7 +7492,7 @@ for (var type in leapTypes) {
 exports.hasSideEffects = makePredicate("hasSideEffects", sideEffectTypes);
 exports.containsLeap = makePredicate("containsLeap", leapTypes);
 
-},{"assert":2,"private":66,"recast":77}],35:[function(require,module,exports){
+},{"assert":2,"private":66,"recast":77}],36:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -7548,7 +7595,7 @@ exports.isReference = function(path, name) {
   }
 };
 
-},{"assert":2,"recast":77}],36:[function(require,module,exports){
+},{"assert":2,"recast":77}],37:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -7953,7 +8000,7 @@ var awaitVisitor = types.PathVisitor.fromMethodsObject({
   }
 });
 
-},{"..":37,"./emit":31,"./hoist":32,"./util":35,"assert":2,"fs":1,"private":66,"recast":77}],37:[function(require,module,exports){
+},{"..":38,"./emit":32,"./hoist":33,"./util":36,"assert":2,"fs":1,"private":66,"recast":77}],38:[function(require,module,exports){
 (function (__dirname){
 /**
  * Copyright (c) 2014, Facebook, Inc.
@@ -8118,7 +8165,7 @@ exports.compile = compile;
 exports.transform = transform;
 
 }).call(this,"/")
-},{"./lib/util":35,"./lib/visit":36,"./runtime":95,"assert":2,"defs":58,"esprima-fb":65,"fs":1,"path":13,"recast":77,"through":94}],38:[function(require,module,exports){
+},{"./lib/util":36,"./lib/visit":37,"./runtime":95,"assert":2,"defs":58,"esprima-fb":65,"fs":1,"path":13,"recast":77,"through":94}],39:[function(require,module,exports){
 // alter.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -8165,312 +8212,7 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
     module.exports = alter;
 }
 
-},{"assert":2,"stable":91}],39:[function(require,module,exports){
-(function (process,__filename){
-/** vim: et:ts=4:sw=4:sts=4
- * @license amdefine 1.0.0 Copyright (c) 2011-2015, The Dojo Foundation All Rights Reserved.
- * Available via the MIT or new BSD license.
- * see: http://github.com/jrburke/amdefine for details
- */
-
-/*jslint node: true */
-/*global module, process */
-'use strict';
-
-/**
- * Creates a define for node.
- * @param {Object} module the "module" object that is defined by Node for the
- * current module.
- * @param {Function} [requireFn]. Node's require function for the current module.
- * It only needs to be passed in Node versions before 0.5, when module.require
- * did not exist.
- * @returns {Function} a define function that is usable for the current node
- * module.
- */
-function amdefine(module, requireFn) {
-    'use strict';
-    var defineCache = {},
-        loaderCache = {},
-        alreadyCalled = false,
-        path = require('path'),
-        makeRequire, stringRequire;
-
-    /**
-     * Trims the . and .. from an array of path segments.
-     * It will keep a leading path segment if a .. will become
-     * the first path segment, to help with module name lookups,
-     * which act like paths, but can be remapped. But the end result,
-     * all paths that use this function should look normalized.
-     * NOTE: this method MODIFIES the input array.
-     * @param {Array} ary the array of path segments.
-     */
-    function trimDots(ary) {
-        var i, part;
-        for (i = 0; ary[i]; i+= 1) {
-            part = ary[i];
-            if (part === '.') {
-                ary.splice(i, 1);
-                i -= 1;
-            } else if (part === '..') {
-                if (i === 1 && (ary[2] === '..' || ary[0] === '..')) {
-                    //End of the line. Keep at least one non-dot
-                    //path segment at the front so it can be mapped
-                    //correctly to disk. Otherwise, there is likely
-                    //no path mapping for a path starting with '..'.
-                    //This can still fail, but catches the most reasonable
-                    //uses of ..
-                    break;
-                } else if (i > 0) {
-                    ary.splice(i - 1, 2);
-                    i -= 2;
-                }
-            }
-        }
-    }
-
-    function normalize(name, baseName) {
-        var baseParts;
-
-        //Adjust any relative paths.
-        if (name && name.charAt(0) === '.') {
-            //If have a base name, try to normalize against it,
-            //otherwise, assume it is a top-level require that will
-            //be relative to baseUrl in the end.
-            if (baseName) {
-                baseParts = baseName.split('/');
-                baseParts = baseParts.slice(0, baseParts.length - 1);
-                baseParts = baseParts.concat(name.split('/'));
-                trimDots(baseParts);
-                name = baseParts.join('/');
-            }
-        }
-
-        return name;
-    }
-
-    /**
-     * Create the normalize() function passed to a loader plugin's
-     * normalize method.
-     */
-    function makeNormalize(relName) {
-        return function (name) {
-            return normalize(name, relName);
-        };
-    }
-
-    function makeLoad(id) {
-        function load(value) {
-            loaderCache[id] = value;
-        }
-
-        load.fromText = function (id, text) {
-            //This one is difficult because the text can/probably uses
-            //define, and any relative paths and requires should be relative
-            //to that id was it would be found on disk. But this would require
-            //bootstrapping a module/require fairly deeply from node core.
-            //Not sure how best to go about that yet.
-            throw new Error('amdefine does not implement load.fromText');
-        };
-
-        return load;
-    }
-
-    makeRequire = function (systemRequire, exports, module, relId) {
-        function amdRequire(deps, callback) {
-            if (typeof deps === 'string') {
-                //Synchronous, single module require('')
-                return stringRequire(systemRequire, exports, module, deps, relId);
-            } else {
-                //Array of dependencies with a callback.
-
-                //Convert the dependencies to modules.
-                deps = deps.map(function (depName) {
-                    return stringRequire(systemRequire, exports, module, depName, relId);
-                });
-
-                //Wait for next tick to call back the require call.
-                if (callback) {
-                    process.nextTick(function () {
-                        callback.apply(null, deps);
-                    });
-                }
-            }
-        }
-
-        amdRequire.toUrl = function (filePath) {
-            if (filePath.indexOf('.') === 0) {
-                return normalize(filePath, path.dirname(module.filename));
-            } else {
-                return filePath;
-            }
-        };
-
-        return amdRequire;
-    };
-
-    //Favor explicit value, passed in if the module wants to support Node 0.4.
-    requireFn = requireFn || function req() {
-        return module.require.apply(module, arguments);
-    };
-
-    function runFactory(id, deps, factory) {
-        var r, e, m, result;
-
-        if (id) {
-            e = loaderCache[id] = {};
-            m = {
-                id: id,
-                uri: __filename,
-                exports: e
-            };
-            r = makeRequire(requireFn, e, m, id);
-        } else {
-            //Only support one define call per file
-            if (alreadyCalled) {
-                throw new Error('amdefine with no module ID cannot be called more than once per file.');
-            }
-            alreadyCalled = true;
-
-            //Use the real variables from node
-            //Use module.exports for exports, since
-            //the exports in here is amdefine exports.
-            e = module.exports;
-            m = module;
-            r = makeRequire(requireFn, e, m, module.id);
-        }
-
-        //If there are dependencies, they are strings, so need
-        //to convert them to dependency values.
-        if (deps) {
-            deps = deps.map(function (depName) {
-                return r(depName);
-            });
-        }
-
-        //Call the factory with the right dependencies.
-        if (typeof factory === 'function') {
-            result = factory.apply(m.exports, deps);
-        } else {
-            result = factory;
-        }
-
-        if (result !== undefined) {
-            m.exports = result;
-            if (id) {
-                loaderCache[id] = m.exports;
-            }
-        }
-    }
-
-    stringRequire = function (systemRequire, exports, module, id, relId) {
-        //Split the ID by a ! so that
-        var index = id.indexOf('!'),
-            originalId = id,
-            prefix, plugin;
-
-        if (index === -1) {
-            id = normalize(id, relId);
-
-            //Straight module lookup. If it is one of the special dependencies,
-            //deal with it, otherwise, delegate to node.
-            if (id === 'require') {
-                return makeRequire(systemRequire, exports, module, relId);
-            } else if (id === 'exports') {
-                return exports;
-            } else if (id === 'module') {
-                return module;
-            } else if (loaderCache.hasOwnProperty(id)) {
-                return loaderCache[id];
-            } else if (defineCache[id]) {
-                runFactory.apply(null, defineCache[id]);
-                return loaderCache[id];
-            } else {
-                if(systemRequire) {
-                    return systemRequire(originalId);
-                } else {
-                    throw new Error('No module with ID: ' + id);
-                }
-            }
-        } else {
-            //There is a plugin in play.
-            prefix = id.substring(0, index);
-            id = id.substring(index + 1, id.length);
-
-            plugin = stringRequire(systemRequire, exports, module, prefix, relId);
-
-            if (plugin.normalize) {
-                id = plugin.normalize(id, makeNormalize(relId));
-            } else {
-                //Normalize the ID normally.
-                id = normalize(id, relId);
-            }
-
-            if (loaderCache[id]) {
-                return loaderCache[id];
-            } else {
-                plugin.load(id, makeRequire(systemRequire, exports, module, relId), makeLoad(id), {});
-
-                return loaderCache[id];
-            }
-        }
-    };
-
-    //Create a define function specific to the module asking for amdefine.
-    function define(id, deps, factory) {
-        if (Array.isArray(id)) {
-            factory = deps;
-            deps = id;
-            id = undefined;
-        } else if (typeof id !== 'string') {
-            factory = id;
-            id = deps = undefined;
-        }
-
-        if (deps && !Array.isArray(deps)) {
-            factory = deps;
-            deps = undefined;
-        }
-
-        if (!deps) {
-            deps = ['require', 'exports', 'module'];
-        }
-
-        //Set up properties for this module. If an ID, then use
-        //internal cache. If no ID, then use the external variables
-        //for this node module.
-        if (id) {
-            //Put the module in deep freeze until there is a
-            //require call for it.
-            defineCache[id] = [id, deps, factory];
-        } else {
-            runFactory(id, deps, factory);
-        }
-    }
-
-    //define.require, which has access to all the values in the
-    //cache. Useful for AMD modules that all have IDs in the file,
-    //but need to finally export a value to node based on one of those
-    //IDs.
-    define.require = function (id) {
-        if (loaderCache[id]) {
-            return loaderCache[id];
-        }
-
-        if (defineCache[id]) {
-            runFactory.apply(null, defineCache[id]);
-            return loaderCache[id];
-        }
-    };
-
-    define.amd = {};
-
-    return define;
-}
-
-module.exports = amdefine;
-
-}).call(this,require('_process'),"/node_modules/amdefine/amdefine.js")
-},{"_process":15,"path":13}],40:[function(require,module,exports){
+},{"assert":2,"stable":91}],40:[function(require,module,exports){
 function traverse(root, options) {
     "use strict";
 
@@ -8572,10 +8314,6 @@ def("ParenthesizedExpression")
   .build("expression")
   .field("expression", def("Expression"));
 
-def("ModuleSpecifier")
-  .bases("Specifier")
-  .field("local", def("Identifier"));
-
 def("ImportSpecifier")
   .bases("ModuleSpecifier")
   .build("imported", "local")
@@ -8621,6 +8359,14 @@ def("ExportAllDeclaration")
   .build("exported", "source")
   .field("exported", or(def("Identifier"), null))
   .field("source", def("Literal"));
+
+def("CommentBlock")
+    .bases("Comment")
+    .build("value", /*optional:*/ "leading", "trailing");
+
+def("CommentLine")
+    .bases("Comment")
+    .build("value", /*optional:*/ "leading", "trailing");
 
 },{"../lib/shared":54,"../lib/types":55,"./es7":45}],42:[function(require,module,exports){
 var types = require("../lib/types");
@@ -8983,18 +8729,6 @@ def("Comment")
     .field("leading", Boolean, defaults["true"])
     .field("trailing", Boolean, defaults["false"]);
 
-// Block comment. The .type really should be BlockComment rather than
-// Block, but that's what we're stuck with for now.
-def("Block")
-    .bases("Comment")
-    .build("value", /*optional:*/ "leading", "trailing");
-
-// Single line comment. The .type really should be LineComment rather than
-// Line, but that's what we're stuck with for now.
-def("Line")
-    .bases("Comment")
-    .build("value", /*optional:*/ "leading", "trailing");
-
 },{"../lib/shared":54,"../lib/types":55}],43:[function(require,module,exports){
 require("./core");
 var types = require("../lib/types");
@@ -9262,9 +8996,25 @@ def("ClassImplements")
     .field("id", def("Identifier"))
     .field("superClass", or(def("Expression"), null), defaults["null"]);
 
-// Specifier and NamedSpecifier are abstract non-standard types that I
+// Specifier and ModuleSpecifier are abstract non-standard types
 // introduced for definitional convenience.
 def("Specifier").bases("Node");
+
+// This supertype is shared/abused by both def/babel.js and
+// def/esprima.js. In the future, it will be possible to load only one set
+// of definitions appropriate for a given parser, but until then we must
+// rely on default functions to reconcile the conflicting AST formats.
+def("ModuleSpecifier")
+    .bases("Specifier")
+    // This local field is used by Babel/Acorn. It should not technically
+    // be optional in the Babel/Acorn AST format, but it must be optional
+    // in the Esprima AST format.
+    .field("local", or(def("Identifier"), null), defaults["null"])
+    // The id and name fields are used by Esprima. The id field should not
+    // technically be optional in the Esprima AST format, but it must be
+    // optional in the Babel/Acorn AST format.
+    .field("id", or(def("Identifier"), null), defaults["null"])
+    .field("name", or(def("Identifier"), null), defaults["null"]);
 
 def("TaggedTemplateExpression")
     .bases("Expression")
@@ -9357,16 +9107,10 @@ def("ObjectPattern")
         def("SpreadProperty") // Used by Esprima.
     )]);
 
-def("NamedSpecifier")
-    .bases("Specifier")
-    // Note: this abstract type is intentionally not buildable.
-    .field("id", def("Identifier"))
-    .field("name", or(def("Identifier"), null), defaults["null"]);
-
-// Like NamedSpecifier, except type:"ExportSpecifier" and buildable.
+// Like ModuleSpecifier, except type:"ExportSpecifier" and buildable.
 // export {<id [as name]>} [from ...];
 def("ExportSpecifier")
-    .bases("NamedSpecifier")
+    .bases("ModuleSpecifier")
     .build("id", "name");
 
 // export <*> from ...;
@@ -9374,23 +9118,21 @@ def("ExportBatchSpecifier")
     .bases("Specifier")
     .build();
 
-// Like NamedSpecifier, except type:"ImportSpecifier" and buildable.
+// Like ModuleSpecifier, except type:"ImportSpecifier" and buildable.
 // import {<id [as name]>} from ...;
 def("ImportSpecifier")
-    .bases("NamedSpecifier")
+    .bases("ModuleSpecifier")
     .build("id", "name");
 
 // import <* as id> from ...;
 def("ImportNamespaceSpecifier")
-    .bases("Specifier")
-    .build("id")
-    .field("id", def("Identifier"));
+    .bases("ModuleSpecifier")
+    .build("id");
 
 // import <id> from ...;
 def("ImportDefaultSpecifier")
-    .bases("Specifier")
-    .build("id")
-    .field("id", def("Identifier"));
+    .bases("ModuleSpecifier")
+    .build("id");
 
 def("ExportDeclaration")
     .bases("Declaration")
@@ -9419,6 +9161,14 @@ def("ImportDeclaration")
         def("ImportDefaultSpecifier")
     )], defaults.emptyArray)
     .field("source", def("Literal"));
+
+def("Block")
+    .bases("Comment")
+    .build("value", /*optional:*/ "leading", "trailing");
+
+def("Line")
+    .bases("Comment")
+    .build("value", /*optional:*/ "leading", "trailing");
 
 },{"../lib/shared":54,"../lib/types":55,"./es7":45}],47:[function(require,module,exports){
 require("./es7");
@@ -9495,13 +9245,13 @@ def("JSXElement")
         // (like openingElement, closingElement, and children) are
         // guaranteed to be available.
         return this.openingElement.name;
-    })
+    }, true) // hidden from traversal
     .field("selfClosing", Boolean, function() {
         return this.openingElement.selfClosing;
-    })
+    }, true) // hidden from traversal
     .field("attributes", JSXAttributes, function() {
         return this.openingElement.attributes;
-    });
+    }, true); // hidden from traversal
 
 def("JSXOpeningElement")
     .bases("Node") // TODO Does this make sense? Can't really be an JSXElement.
@@ -9801,7 +9551,6 @@ def("GraphIndexExpression")
     .field("index", geq(0));
 
 },{"../lib/shared":54,"../lib/types":55,"./core":42}],49:[function(require,module,exports){
-var assert = require("assert");
 var types = require("../main");
 var getFieldNames = types.getFieldNames;
 var getFieldValue = types.getFieldValue;
@@ -9825,10 +9574,11 @@ astNodesAreEquivalent.assert = function(a, b) {
     var problemPath = [];
     if (!astNodesAreEquivalent(a, b, problemPath)) {
         if (problemPath.length === 0) {
-            assert.strictEqual(a, b);
+            if (a !== b) {
+                throw new Error("Nodes must be equal");
+            }
         } else {
-            assert.ok(
-                false,
+            throw new Error(
                 "Nodes differ in the following path: " +
                     problemPath.map(subscriptForProperty).join("")
             );
@@ -9897,7 +9647,10 @@ function arraysAreEquivalent(a, b, problemPath) {
         }
 
         if (problemPath) {
-            assert.strictEqual(problemPath.pop(), i);
+            var problemPathTail = problemPath.pop();
+            if (problemPathTail !== i) {
+                throw new Error("" + problemPathTail);
+            }
         }
     }
 
@@ -9939,7 +9692,10 @@ function objectsAreEquivalent(a, b, problemPath) {
             }
 
             if (problemPath) {
-                assert.strictEqual(problemPath.pop(), name);
+                var problemPathTail = problemPath.pop();
+                if (problemPathTail !== name) {
+                    throw new Error("" + problemPathTail);
+                }
             }
         }
 
@@ -9980,8 +9736,7 @@ function objectsAreEquivalent(a, b, problemPath) {
 
 module.exports = astNodesAreEquivalent;
 
-},{"../main":56,"assert":2}],50:[function(require,module,exports){
-var assert = require("assert");
+},{"../main":56}],50:[function(require,module,exports){
 var types = require("./types");
 var n = types.namedTypes;
 var b = types.builders;
@@ -9991,12 +9746,20 @@ var Path = require("./path");
 var Scope = require("./scope");
 
 function NodePath(value, parentPath, name) {
-    assert.ok(this instanceof NodePath);
+    if (!(this instanceof NodePath)) {
+        throw new Error("NodePath constructor cannot be invoked without 'new'");
+    }
     Path.call(this, value, parentPath, name);
 }
 
-require("util").inherits(NodePath, Path);
-var NPp = NodePath.prototype;
+var NPp = NodePath.prototype = Object.create(Path.prototype, {
+    constructor: {
+        value: NodePath,
+        enumerable: false,
+        writable: true,
+        configurable: true
+    }
+});
 
 Object.defineProperties(NPp, {
     node: {
@@ -10175,7 +9938,9 @@ NPp.needsParens = function(assumeExpressionContext) {
             }
 
             if (pp === np && this.name === "right") {
-                assert.strictEqual(parent.right, node);
+                if (parent.right !== node) {
+                    throw new Error("Nodes must be equal");
+                }
                 return true;
             }
 
@@ -10333,51 +10098,67 @@ function firstInStatement(path) {
         if (n.BlockStatement.check(parent) &&
             path.parent.name === "body" &&
             path.name === 0) {
-            assert.strictEqual(parent.body[0], node);
+            if (parent.body[0] !== node) {
+                throw new Error("Nodes must be equal");
+            }
             return true;
         }
 
         if (n.ExpressionStatement.check(parent) &&
             path.name === "expression") {
-            assert.strictEqual(parent.expression, node);
+            if (parent.expression !== node) {
+                throw new Error("Nodes must be equal");
+            }
             return true;
         }
 
         if (n.SequenceExpression.check(parent) &&
             path.parent.name === "expressions" &&
             path.name === 0) {
-            assert.strictEqual(parent.expressions[0], node);
+            if (parent.expressions[0] !== node) {
+                throw new Error("Nodes must be equal");
+            }
             continue;
         }
 
         if (n.CallExpression.check(parent) &&
             path.name === "callee") {
-            assert.strictEqual(parent.callee, node);
+            if (parent.callee !== node) {
+                throw new Error("Nodes must be equal");
+            }
             continue;
         }
 
         if (n.MemberExpression.check(parent) &&
             path.name === "object") {
-            assert.strictEqual(parent.object, node);
+            if (parent.object !== node) {
+                throw new Error("Nodes must be equal");
+            }
             continue;
         }
 
         if (n.ConditionalExpression.check(parent) &&
             path.name === "test") {
-            assert.strictEqual(parent.test, node);
+            if (parent.test !== node) {
+                throw new Error("Nodes must be equal");
+            }
             continue;
         }
 
         if (isBinary(parent) &&
             path.name === "left") {
-            assert.strictEqual(parent.left, node);
+            if (parent.left !== node) {
+                throw new Error("Nodes must be equal");
+            }
             continue;
         }
 
         if (n.UnaryExpression.check(parent) &&
             !parent.prefix &&
             path.name === "argument") {
-            assert.strictEqual(parent.argument, node);
+            if (parent.argument !== node) {
+                throw new Error("Nodes must be equal");
+            }
             continue;
         }
 
@@ -10431,8 +10212,7 @@ function cleanUpIfStatementAfterPrune(ifStatement) {
 
 module.exports = NodePath;
 
-},{"./path":52,"./scope":53,"./types":55,"assert":2,"util":30}],51:[function(require,module,exports){
-var assert = require("assert");
+},{"./path":52,"./scope":53,"./types":55}],51:[function(require,module,exports){
 var types = require("./types");
 var NodePath = require("./node-path");
 var Printable = types.namedTypes.Printable;
@@ -10443,7 +10223,11 @@ var hasOwn = Object.prototype.hasOwnProperty;
 var undefined;
 
 function PathVisitor() {
-    assert.ok(this instanceof PathVisitor);
+    if (!(this instanceof PathVisitor)) {
+        throw new Error(
+            "PathVisitor constructor cannot be invoked without 'new'"
+        );
+    }
 
     // Permanent state.
     this._reusableContextStack = [];
@@ -10496,7 +10280,11 @@ PathVisitor.fromMethodsObject = function fromMethodsObject(methods) {
     }
 
     function Visitor() {
-        assert.ok(this instanceof Visitor);
+        if (!(this instanceof Visitor)) {
+            throw new Error(
+                "Visitor constructor cannot be invoked without 'new'"
+            );
+        }
         PathVisitor.call(this);
     }
 
@@ -10528,13 +10316,13 @@ PathVisitor.visit = function visit(node, methods) {
 
 var PVp = PathVisitor.prototype;
 
-var recursiveVisitWarning = [
-    "Recursively calling visitor.visit(path) resets visitor state.",
-    "Try this.visit(path) or this.traverse(path) instead."
-].join(" ");
-
 PVp.visit = function() {
-    assert.ok(!this._visiting, recursiveVisitWarning);
+    if (this._visiting) {
+        throw new Error(
+            "Recursively calling visitor.visit(path) resets visitor state. " +
+                "Try this.visit(path) or this.traverse(path) instead."
+        );
+    }
 
     // Private state that needs to be reset before every traversal.
     this._visiting = true;
@@ -10604,10 +10392,17 @@ PVp.visitWithoutReset = function(path) {
         return this.visitor.visitWithoutReset(path);
     }
 
-    assert.ok(path instanceof NodePath);
+    if (!(path instanceof NodePath)) {
+        throw new Error("");
+    }
+
     var value = path.value;
 
-    var methodName = Printable.check(value) && this._methodNameTable[value.type];
+    var methodName = value &&
+        typeof value === "object" &&
+        typeof value.type === "string" &&
+        this._methodNameTable[value.type];
+
     if (methodName) {
         var context = this.acquireContext(path);
         try {
@@ -10624,8 +10419,12 @@ PVp.visitWithoutReset = function(path) {
 };
 
 function visitChildren(path, visitor) {
-    assert.ok(path instanceof NodePath);
-    assert.ok(visitor instanceof PathVisitor);
+    if (!(path instanceof NodePath)) {
+        throw new Error("");
+    }
+    if (!(visitor instanceof PathVisitor)) {
+        throw new Error("");
+    }
 
     var value = path.value;
 
@@ -10672,7 +10471,9 @@ PVp.acquireContext = function(path) {
 };
 
 PVp.releaseContext = function(context) {
-    assert.ok(context instanceof this.Context);
+    if (!(context instanceof this.Context)) {
+        throw new Error("");
+    }
     this._reusableContextStack.push(context);
     context.currentPath = null;
 };
@@ -10687,9 +10488,15 @@ PVp.wasChangeReported = function() {
 
 function makeContextConstructor(visitor) {
     function Context(path) {
-        assert.ok(this instanceof Context);
-        assert.ok(this instanceof PathVisitor);
-        assert.ok(path instanceof NodePath);
+        if (!(this instanceof Context)) {
+            throw new Error("");
+        }
+        if (!(this instanceof PathVisitor)) {
+            throw new Error("");
+        }
+        if (!(path instanceof NodePath)) {
+            throw new Error("");
+        }
 
         Object.defineProperty(this, "visitor", {
             value: visitor,
@@ -10704,7 +10511,9 @@ function makeContextConstructor(visitor) {
         Object.seal(this);
     }
 
-    assert.ok(visitor instanceof PathVisitor);
+    if (!(visitor instanceof PathVisitor)) {
+        throw new Error("");
+    }
 
     // Note that the visitor object is the prototype of Context.prototype,
     // so all visitor methods are inherited by context objects.
@@ -10723,8 +10532,12 @@ var sharedContextProtoMethods = Object.create(null);
 
 sharedContextProtoMethods.reset =
 function reset(path) {
-    assert.ok(this instanceof this.Context);
-    assert.ok(path instanceof NodePath);
+    if (!(this instanceof this.Context)) {
+        throw new Error("");
+    }
+    if (!(path instanceof NodePath)) {
+        throw new Error("");
+    }
 
     this.currentPath = path;
     this.needToCallTraverse = true;
@@ -10734,8 +10547,12 @@ function reset(path) {
 
 sharedContextProtoMethods.invokeVisitorMethod =
 function invokeVisitorMethod(methodName) {
-    assert.ok(this instanceof this.Context);
-    assert.ok(this.currentPath instanceof NodePath);
+    if (!(this instanceof this.Context)) {
+        throw new Error("");
+    }
+    if (!(this.currentPath instanceof NodePath)) {
+        throw new Error("");
+    }
 
     var result = this.visitor[methodName].call(this, this.currentPath);
 
@@ -10757,10 +10574,11 @@ function invokeVisitorMethod(methodName) {
         }
     }
 
-    assert.strictEqual(
-        this.needToCallTraverse, false,
-        "Must either call this.traverse or return false in " + methodName
-    );
+    if (this.needToCallTraverse !== false) {
+        throw new Error(
+            "Must either call this.traverse or return false in " + methodName
+        );
+    }
 
     var path = this.currentPath;
     return path && path.value;
@@ -10768,9 +10586,15 @@ function invokeVisitorMethod(methodName) {
 
 sharedContextProtoMethods.traverse =
 function traverse(path, newVisitor) {
-    assert.ok(this instanceof this.Context);
-    assert.ok(path instanceof NodePath);
-    assert.ok(this.currentPath instanceof NodePath);
+    if (!(this instanceof this.Context)) {
+        throw new Error("");
+    }
+    if (!(path instanceof NodePath)) {
+        throw new Error("");
+    }
+    if (!(this.currentPath instanceof NodePath)) {
+        throw new Error("");
+    }
 
     this.needToCallTraverse = false;
 
@@ -10781,9 +10605,15 @@ function traverse(path, newVisitor) {
 
 sharedContextProtoMethods.visit =
 function visit(path, newVisitor) {
-    assert.ok(this instanceof this.Context);
-    assert.ok(path instanceof NodePath);
-    assert.ok(this.currentPath instanceof NodePath);
+    if (!(this instanceof this.Context)) {
+        throw new Error("");
+    }
+    if (!(path instanceof NodePath)) {
+        throw new Error("");
+    }
+    if (!(this.currentPath instanceof NodePath)) {
+        throw new Error("");
+    }
 
     this.needToCallTraverse = false;
 
@@ -10803,8 +10633,7 @@ sharedContextProtoMethods.abort = function abort() {
 
 module.exports = PathVisitor;
 
-},{"./node-path":50,"./types":55,"assert":2}],52:[function(require,module,exports){
-var assert = require("assert");
+},{"./node-path":50,"./types":55}],52:[function(require,module,exports){
 var Op = Object.prototype;
 var hasOwn = Op.hasOwnProperty;
 var types = require("./types");
@@ -10815,10 +10644,14 @@ var slice = Ap.slice;
 var map = Ap.map;
 
 function Path(value, parentPath, name) {
-    assert.ok(this instanceof Path);
+    if (!(this instanceof Path)) {
+        throw new Error("Path constructor cannot be invoked without 'new'");
+    }
 
     if (parentPath) {
-        assert.ok(parentPath instanceof Path);
+        if (!(parentPath instanceof Path)) {
+            throw new Error("");
+        }
     } else {
         parentPath = null;
         name = null;
@@ -10960,7 +10793,9 @@ function getMoves(path, offset, start, end) {
     for (var i = start; i < end; ++i) {
         if (hasOwn.call(path.value, i)) {
             var childPath = path.get(i);
-            assert.strictEqual(childPath.name, i);
+            if (childPath.name !== i) {
+                throw new Error("");
+            }
             var newIndex = i + offset;
             childPath.name = newIndex;
             moves[newIndex] = childPath;
@@ -10973,7 +10808,9 @@ function getMoves(path, offset, start, end) {
     return function() {
         for (var newIndex in moves) {
             var childPath = moves[newIndex];
-            assert.strictEqual(childPath.name, +newIndex);
+            if (childPath.name !== +newIndex) {
+                throw new Error("");
+            }
             cache[newIndex] = childPath;
             path.value[newIndex] = childPath.value;
         }
@@ -11047,7 +10884,9 @@ Pp.insertAfter = function insertAfter(node) {
 };
 
 function repairRelationshipWithParent(path) {
-    assert.ok(path instanceof Path);
+    if (!(path instanceof Path)) {
+        throw new Error("");
+    }
 
     var pp = path.parentPath;
     if (!pp) {
@@ -11076,8 +10915,12 @@ function repairRelationshipWithParent(path) {
         parentCache[path.name] = path;
     }
 
-    assert.strictEqual(parentValue[path.name], path.value);
-    assert.strictEqual(path.parentPath.get(path.name), path);
+    if (parentValue[path.name] !== path.value) {
+        throw new Error("");
+    }
+    if (path.parentPath.get(path.name) !== path) {
+        throw new Error("");
+    }
 
     return path;
 }
@@ -11101,11 +10944,12 @@ Pp.replace = function replace(replacement) {
 
         var splicedOut = parentValue.splice.apply(parentValue, spliceArgs);
 
-        assert.strictEqual(splicedOut[0], this.value);
-        assert.strictEqual(
-            parentValue.length,
-            originalLength - 1 + count
-        );
+        if (splicedOut[0] !== this.value) {
+            throw new Error("");
+        }
+        if (parentValue.length !== (originalLength - 1 + count)) {
+            throw new Error("");
+        }
 
         move();
 
@@ -11115,7 +10959,9 @@ Pp.replace = function replace(replacement) {
             this.__childCache = null;
 
         } else {
-            assert.strictEqual(parentValue[this.name], replacement);
+            if (parentValue[this.name] !== replacement) {
+                throw new Error("");
+            }
 
             if (this.value !== replacement) {
                 this.value = replacement;
@@ -11126,7 +10972,9 @@ Pp.replace = function replace(replacement) {
                 results.push(this.parentPath.get(this.name + i));
             }
 
-            assert.strictEqual(results[0], this);
+            if (results[0] !== this) {
+                throw new Error("");
+            }
         }
 
     } else if (count === 1) {
@@ -11145,7 +10993,7 @@ Pp.replace = function replace(replacement) {
         // it no longer has a value defined.
 
     } else {
-        assert.ok(false, "Could not replace path");
+        throw new Error("Could not replace path");
     }
 
     return results;
@@ -11153,8 +11001,7 @@ Pp.replace = function replace(replacement) {
 
 module.exports = Path;
 
-},{"./types":55,"assert":2}],53:[function(require,module,exports){
-var assert = require("assert");
+},{"./types":55}],53:[function(require,module,exports){
 var types = require("./types");
 var Type = types.Type;
 var namedTypes = types.namedTypes;
@@ -11165,14 +11012,20 @@ var hasOwn = Object.prototype.hasOwnProperty;
 var b = types.builders;
 
 function Scope(path, parentScope) {
-    assert.ok(this instanceof Scope);
-    assert.ok(path instanceof require("./node-path"));
+    if (!(this instanceof Scope)) {
+        throw new Error("Scope constructor cannot be invoked without 'new'");
+    }
+    if (!(path instanceof require("./node-path"))) {
+        throw new Error("");
+    }
     ScopeType.assert(path.value);
 
     var depth;
 
     if (parentScope) {
-        assert.ok(parentScope instanceof Scope);
+        if (!(parentScope instanceof Scope)) {
+            throw new Error("");
+        }
         depth = parentScope.depth + 1;
     } else {
         parentScope = null;
@@ -11220,7 +11073,9 @@ Sp.declares = function(name) {
 
 Sp.declareTemporary = function(prefix) {
     if (prefix) {
-        assert.ok(/^[a-z$_]/i.test(prefix), prefix);
+        if (!/^[a-z$_]/i.test(prefix)) {
+            throw new Error("");
+        }
     } else {
         prefix = "t$";
     }
@@ -11333,7 +11188,9 @@ function recursiveScanScope(path, bindings) {
     } else if (Node.check(node) && !Expression.check(node)) {
         types.eachField(node, function(name, child) {
             var childPath = path.get(name);
-            assert.strictEqual(childPath.value, child);
+            if (childPath.value !== child) {
+                throw new Error("");
+            }
             recursiveScanChild(childPath, bindings);
         });
     }
@@ -11441,7 +11298,7 @@ Sp.getGlobalScope = function() {
 
 module.exports = Scope;
 
-},{"./node-path":50,"./types":55,"assert":2}],54:[function(require,module,exports){
+},{"./node-path":50,"./types":55}],54:[function(require,module,exports){
 var types = require("../lib/types");
 var Type = types.Type;
 var builtin = types.builtInTypes;
@@ -11485,7 +11342,6 @@ exports.isPrimitive = new Type(function(value) {
 }, naiveIsPrimitive.toString());
 
 },{"../lib/types":55}],55:[function(require,module,exports){
-var assert = require("assert");
 var Ap = Array.prototype;
 var slice = Ap.slice;
 var map = Ap.map;
@@ -11501,18 +11357,22 @@ var hasOwn = Op.hasOwnProperty;
 
 function Type(check, name) {
     var self = this;
-    assert.ok(self instanceof Type, self);
+    if (!(self instanceof Type)) {
+        throw new Error("Type constructor cannot be invoked without 'new'");
+    }
 
     // Unfortunately we can't elegantly reuse isFunction and isString,
     // here, because this code is executed while defining those types.
-    assert.strictEqual(objToStr.call(check), funObjStr,
-                       check + " is not a function");
+    if (objToStr.call(check) !== funObjStr) {
+        throw new Error(check + " is not a function");
+    }
 
     // The `name` parameter can be either a function or a string.
     var nameObjStr = objToStr.call(name);
-    assert.ok(nameObjStr === funObjStr ||
-              nameObjStr === strObjStr,
-              name + " is neither a function nor a string");
+    if (!(nameObjStr === funObjStr ||
+          nameObjStr === strObjStr)) {
+        throw new Error(name + " is neither a function nor a string");
+    }
 
     Object.defineProperties(self, {
         name: { value: name },
@@ -11537,8 +11397,7 @@ exports.Type = Type;
 Tp.assert = function(value, deep) {
     if (!this.check(value, deep)) {
         var str = shallowStringify(value);
-        assert.ok(false, str + " does not match type " + this);
-        return false;
+        throw new Error(str + " does not match type " + this);
     }
     return true;
 };
@@ -11667,10 +11526,12 @@ Type.or = function(/* type1, type2, ... */) {
 };
 
 Type.fromArray = function(arr) {
-    assert.ok(isArray.check(arr));
-    assert.strictEqual(
-        arr.length, 1,
-        "only one element type is permitted for typed arrays");
+    if (!isArray.check(arr)) {
+        throw new Error("");
+    }
+    if (arr.length !== 1) {
+        throw new Error("only one element type is permitted for typed arrays");
+    }
     return toType(arr[0]).arrayOf();
 };
 
@@ -11702,7 +11563,9 @@ Type.fromObject = function(obj) {
 function Field(name, type, defaultFn, hidden) {
     var self = this;
 
-    assert.ok(self instanceof Field);
+    if (!(self instanceof Field)) {
+        throw new Error("Field constructor cannot be invoked without 'new'");
+    }
     isString.assert(name);
 
     type = toType(type);
@@ -11756,7 +11619,9 @@ var defCache = Object.create(null);
 
 function Def(typeName) {
     var self = this;
-    assert.ok(self instanceof Def);
+    if (!(self instanceof Def)) {
+        throw new Error("Def constructor cannot be invoked without 'new'");
+    }
 
     Object.defineProperties(self, {
         typeName: { value: typeName },
@@ -11796,20 +11661,26 @@ var Dp = Def.prototype;
 
 Dp.isSupertypeOf = function(that) {
     if (that instanceof Def) {
-        assert.strictEqual(this.finalized, true);
-        assert.strictEqual(that.finalized, true);
+        if (this.finalized !== true ||
+            that.finalized !== true) {
+            throw new Error("");
+        }
         return hasOwn.call(that.allSupertypes, this.typeName);
     } else {
-        assert.ok(false, that + " is not a Def");
+        throw new Error(that + " is not a Def");
     }
 };
 
 // Note that the list returned by this function is a copy of the internal
 // supertypeList, *without* the typeName itself as the first element.
 exports.getSupertypeNames = function(typeName) {
-    assert.ok(hasOwn.call(defCache, typeName));
+    if (!hasOwn.call(defCache, typeName)) {
+        throw new Error("");
+    }
     var d = defCache[typeName];
-    assert.strictEqual(d.finalized, true);
+    if (d.finalized !== true) {
+        throw new Error("");
+    }
     return d.supertypeList.slice(1);
 };
 
@@ -11824,7 +11695,9 @@ exports.computeSupertypeLookupTable = function(candidates) {
     for (var i = 0; i < typeNameCount; ++i) {
         var typeName = typeNames[i];
         var d = defCache[typeName];
-        assert.strictEqual(d.finalized, true, typeName);
+        if (d.finalized !== true) {
+            throw new Error("" + typeName);
+        }
         for (var j = 0; j < d.supertypeList.length; ++j) {
             var superTypeName = d.supertypeList[j];
             if (hasOwn.call(candidates, superTypeName)) {
@@ -11839,7 +11712,9 @@ exports.computeSupertypeLookupTable = function(candidates) {
 
 Dp.checkAllFields = function(value, deep) {
     var allFields = this.allFields;
-    assert.strictEqual(this.finalized, true, this.typeName);
+    if (this.finalized !== true) {
+        throw new Error("" + this.typeName);
+    }
 
     function checkFieldByName(name) {
         var field = allFields[name];
@@ -11853,9 +11728,11 @@ Dp.checkAllFields = function(value, deep) {
 };
 
 Dp.check = function(value, deep) {
-    assert.strictEqual(
-        this.finalized, true,
-        "prematurely checking unfinalized type " + this.typeName);
+    if (this.finalized !== true) {
+        throw new Error(
+            "prematurely checking unfinalized type " + this.typeName
+        );
+    }
 
     // A Def type can only match an object value.
     if (!isObject.check(value))
@@ -11907,7 +11784,14 @@ Dp.bases = function() {
     var bases = this.baseNames;
 
     if (this.finalized) {
-        assert.deepEqual(args, bases);
+        if (args.length !== bases.length) {
+            throw new Error("");
+        }
+        for (var i = 0; i < args.length; i++) {
+            if (args[i] !== bases[i]) {
+                throw new Error("");
+            }
+        }
         return this;
     }
 
@@ -11997,16 +11881,21 @@ Dp.build = function(/* param1, param2, ... */) {
             var argc = args.length;
             var built = Object.create(nodePrototype);
 
-            assert.ok(
-                self.finalized,
-                "attempting to instantiate unfinalized type " + self.typeName);
+            if (!self.finalized) {
+                throw new Error(
+                    "attempting to instantiate unfinalized type " +
+                        self.typeName
+                );
+            }
 
             function add(param, i) {
                 if (hasOwn.call(built, param))
                     return;
 
                 var all = self.allFields;
-                assert.ok(hasOwn.call(all, param), param);
+                if (!hasOwn.call(all, param)) {
+                    throw new Error("" + param);
+                }
 
                 var field = all[param];
                 var type = field.type;
@@ -12024,12 +11913,11 @@ Dp.build = function(/* param1, param2, ... */) {
                             self.buildParams.map(function(name) {
                                 return all[name];
                             }).join(", ") + ")";
-                    assert.ok(false, message);
+                    throw new Error(message);
                 }
 
                 if (!type.check(value)) {
-                    assert.ok(
-                        false,
+                    throw new Error(
                         shallowStringify(value) +
                             " does not match field " + field +
                             " of type " + self.typeName
@@ -12050,7 +11938,9 @@ Dp.build = function(/* param1, param2, ... */) {
             });
 
             // Make sure that the "type" field was filled automatically.
-            assert.strictEqual(built.type, self.typeName);
+            if (built.type !== self.typeName) {
+                throw new Error("");
+            }
 
             return built;
         }
@@ -12110,8 +12000,7 @@ function getFieldNames(object) {
     }
 
     if ("type" in object) {
-        assert.ok(
-            false,
+        throw new Error(
             "did not recognize object of type " +
                 JSON.stringify(object.type)
         );
@@ -12180,7 +12069,7 @@ Dp.finalize = function() {
                     JSON.stringify(name) +
                     " for subtype " +
                     JSON.stringify(self.typeName);
-                assert.ok(false, message);
+                throw new Error(message);
             }
         });
 
@@ -12241,7 +12130,9 @@ function populateSupertypeList(typeName, list) {
     for (var pos = 0; pos < list.length; ++pos) {
         typeName = list[pos];
         var d = defCache[typeName];
-        assert.strictEqual(d.finalized, true);
+        if (d.finalized !== true) {
+            throw new Error("");
+        }
 
         // If we saw typeName earlier in the breadth-first traversal,
         // delete the last-seen occurrence.
@@ -12280,7 +12171,7 @@ exports.finalize = function() {
     });
 };
 
-},{"assert":2}],56:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 var types = require("./lib/types");
 
 // This core module of AST types captures ES5 as it is parsed today by
@@ -13035,7 +12926,7 @@ function run(src, config) {
 
 module.exports = run;
 
-},{"./error":59,"./jshint_globals/vars.js":60,"./options":61,"./scope":62,"./stats":63,"alter":38,"assert":2,"ast-traverse":40,"breakable":57,"simple-fmt":78,"simple-is":79,"stringmap":92,"stringset":93}],59:[function(require,module,exports){
+},{"./error":59,"./jshint_globals/vars.js":60,"./options":61,"./scope":62,"./stats":63,"alter":39,"assert":2,"ast-traverse":40,"breakable":57,"simple-fmt":78,"simple-is":79,"stringmap":92,"stringset":93}],59:[function(require,module,exports){
 "use strict";
 
 var fmt = require("simple-fmt");
@@ -24102,13 +23993,14 @@ parseYieldExpression: true, parseAwaitExpression: true
             };
         },
 
-        createExportDeclaration: function (isDefault, declaration, specifiers, src) {
+        createExportDeclaration: function (isDefault, declaration, specifiers, src, exportKind) {
             return {
                 type: Syntax.ExportDeclaration,
                 'default': !!isDefault,
                 declaration: declaration,
                 specifiers: specifiers,
-                source: src
+                source: src,
+                exportKind: exportKind
             };
         },
 
@@ -26301,7 +26193,9 @@ parseYieldExpression: true, parseAwaitExpression: true
             possibleIdentifierToken, sourceElement,
             isExportFromIdentifier,
             src = null, specifiers = [],
-            marker = markerCreate();
+            marker = markerCreate(),
+            token2,
+            exportKind = 'value';
 
         expectKeyword('export');
 
@@ -26316,16 +26210,16 @@ parseYieldExpression: true, parseAwaitExpression: true
                     // export default function foo () {}
                     // export default class foo {}
                     sourceElement = parseSourceElement();
-                    return markerApply(marker, delegate.createExportDeclaration(true, sourceElement, [sourceElement.id], null));
+                    return markerApply(marker, delegate.createExportDeclaration(true, sourceElement, [sourceElement.id], null, exportKind));
                 }
                 // covers:
                 // export default function () {}
                 // export default class {}
                 switch (lookahead.value) {
                 case 'class':
-                    return markerApply(marker, delegate.createExportDeclaration(true, parseClassExpression(), [], null));
+                    return markerApply(marker, delegate.createExportDeclaration(true, parseClassExpression(), [], null, exportKind));
                 case 'function':
-                    return markerApply(marker, delegate.createExportDeclaration(true, parseFunctionExpression(), [], null));
+                    return markerApply(marker, delegate.createExportDeclaration(true, parseFunctionExpression(), [], null, exportKind));
                 }
             }
 
@@ -26344,7 +26238,7 @@ parseYieldExpression: true, parseAwaitExpression: true
                 declaration = parseAssignmentExpression();
             }
             consumeSemicolon();
-            return markerApply(marker, delegate.createExportDeclaration(true, declaration, [], null));
+            return markerApply(marker, delegate.createExportDeclaration(true, declaration, [], null, exportKind));
         }
 
         // non-default export
@@ -26353,12 +26247,20 @@ parseYieldExpression: true, parseAwaitExpression: true
             // export var f = 1;
             switch (lookahead.value) {
             case 'type':
+                exportKind = 'type';
+
+                token2 = lookahead2();
+                if (token2.type === Token.Punctuator && token2.value === '{') {
+                    lex();
+                    break;
+                }
+                // falls through
             case 'let':
             case 'const':
             case 'var':
             case 'class':
             case 'function':
-                return markerApply(marker, delegate.createExportDeclaration(false, parseSourceElement(), specifiers, null));
+                return markerApply(marker, delegate.createExportDeclaration(false, parseSourceElement(), specifiers, null, exportKind));
             }
         }
 
@@ -26375,7 +26277,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             src = parseModuleSpecifier();
             consumeSemicolon();
 
-            return markerApply(marker, delegate.createExportDeclaration(false, null, specifiers, src));
+            return markerApply(marker, delegate.createExportDeclaration(false, null, specifiers, src, exportKind));
         }
 
         expect('{');
@@ -26404,7 +26306,7 @@ parseYieldExpression: true, parseAwaitExpression: true
             // export {foo};
             consumeSemicolon();
         }
-        return markerApply(marker, delegate.createExportDeclaration(false, declaration, specifiers, src));
+        return markerApply(marker, delegate.createExportDeclaration(false, declaration, specifiers, src, exportKind));
     }
 
 
@@ -29103,7 +29005,7 @@ parseYieldExpression: true, parseAwaitExpression: true
     }
 
     // Sync with *.json manifests.
-    exports.version = '15001.1.0-dev-harmony-fb';
+    exports.version = '15001.1001.0-dev-harmony-fb';
 
     exports.tokenize = tokenize;
 
@@ -30213,6 +30115,10 @@ exports.countSpaces = countSpaces;
 
 var leadingSpaceExp = /^\s*/;
 
+// As specified here: http://www.ecma-international.org/ecma-262/6.0/#sec-line-terminators
+var lineTerminatorSeqExp =
+    /\u000D\u000A|\u000D(?!\u000A)|\u000A|\u2028|\u2029/;
+
 /**
  * @param {Object} options - Options object that configures printing.
  */
@@ -30231,7 +30137,7 @@ function fromString(string, options) {
     if (cacheable && hasOwn.call(fromStringCache, string))
         return fromStringCache[string];
 
-    var lines = new Lines(string.split("\n").map(function(line) {
+    var lines = new Lines(string.split(lineTerminatorSeqExp).map(function(line) {
         var spaces = leadingSpaceExp.exec(line)[0];
         return {
             line: line,
@@ -30342,7 +30248,7 @@ Lp.bootstrapCharAt = function(pos) {
 
     var line = pos.line,
         column = pos.column,
-        strings = this.toString().split("\n"),
+        strings = this.toString().split(lineTerminatorSeqExp),
         string = strings[line - 1];
 
     if (typeof string === "undefined")
@@ -30680,8 +30586,12 @@ Lp.eachPos = function(callback, startPos, skipSpaces) {
 };
 
 Lp.bootstrapSlice = function(start, end) {
-    var strings = this.toString().split("\n").slice(
-            start.line - 1, end.line);
+    var strings = this.toString().split(
+        lineTerminatorSeqExp
+    ).slice(
+        start.line - 1,
+        end.line
+    );
 
     strings.push(strings.pop().slice(0, end.column));
     strings[0] = strings[0].slice(start.column);
@@ -30849,7 +30759,7 @@ Lp.sliceString = function(start, end, options) {
         parts.push(result);
     }
 
-    return parts.join("\n");
+    return parts.join(options.lineTerminator);
 };
 
 Lp.isEmpty = function() {
@@ -30939,7 +30849,7 @@ Lp.concat = function(other) {
 // Lines.prototype will be fully populated.
 var emptyLines = fromString("");
 
-},{"./mapping":70,"./options":71,"./types":75,"./util":76,"assert":2,"private":66,"source-map":80}],70:[function(require,module,exports){
+},{"./mapping":70,"./options":71,"./types":75,"./util":76,"assert":2,"private":66,"source-map":90}],70:[function(require,module,exports){
 var assert = require("assert");
 var types = require("./types");
 var isString = types.builtInTypes.string;
@@ -31238,6 +31148,9 @@ var defaults = {
     // has to reindent a line, or you pass false for this option.
     reuseWhitespace: true,
 
+    // Override this option to use a different line terminator, e.g. \r\n.
+    lineTerminator: require("os").EOL,
+
     // Some of the pretty-printer code (such as that for printing function
     // parameter lists) makes a valiant attempt to prevent really long
     // lines. You can adjust the limit by changing this option; however,
@@ -31298,6 +31211,7 @@ exports.normalize = function(options) {
         tabWidth: +get("tabWidth"),
         useTabs: !!get("useTabs"),
         reuseWhitespace: !!get("reuseWhitespace"),
+        lineTerminator: get("lineTerminator"),
         wrapColumn: Math.max(get("wrapColumn"), 0),
         sourceFileName: get("sourceFileName"),
         sourceMapName: get("sourceMapName"),
@@ -31311,7 +31225,7 @@ exports.normalize = function(options) {
     };
 };
 
-},{"esprima-fb":65}],72:[function(require,module,exports){
+},{"esprima-fb":65,"os":12}],72:[function(require,module,exports){
 var assert = require("assert");
 var types = require("./types");
 var n = types.namedTypes;
@@ -32323,9 +32237,18 @@ function genericPrintNoParens(path, options, print) {
         return fromString("*");
 
     case "ImportNamespaceSpecifier":
-        return concat(["* as ", path.call(print, "id")]);
+        var parts = ["* as "];
+        if (n.local) {
+            parts.push(path.call(print, "local"));
+        } else if (n.id) {
+            parts.push(path.call(print, "id"));
+        }
+        return concat(parts);
 
     case "ImportDefaultSpecifier":
+        if (n.local) {
+            return path.call(print, "local");
+        }
         return path.call(print, "id");
 
     case "ExportDeclaration":
@@ -33101,7 +33024,8 @@ function genericPrintNoParens(path, options, print) {
 
     case "TemplateLiteral":
         var expressions = path.map(print, "expressions");
-        var parts = [];
+        var parts = ["`"];
+
         path.each(function(childPath) {
             var i = childPath.getName();
             parts.push(print(childPath));
@@ -33110,13 +33034,14 @@ function genericPrintNoParens(path, options, print) {
             }
         }, "quasis");
 
+        parts.push("`");
+
         return concat(parts);
+
     case "TaggedTemplateExpression":
         return concat([
             path.call(print, "tag"),
-            "`",
-            path.call(print, "quasi"),
-            "`",
+            path.call(print, "quasi")
         ]);
 
     // These types are unprintable because they serve as abstract
@@ -33138,10 +33063,12 @@ function genericPrintNoParens(path, options, print) {
     case "Type": // Flow
         throw new Error("unprintable type: " + JSON.stringify(n.type));
 
-    case "Block": // Block comment.
+    case "CommentBlock": // Babel block comment.
+    case "Block": // Esprima block comment.
         return concat(["/*", fromString(n.value, options), "*/"]);
 
-    case "Line": // Line comment.
+    case "CommentLine": // Babel line comment.
+    case "Line": // Esprima line comment.
         return concat(["//", fromString(n.value, options)]);
 
     // Type Annotations for Facebook Flow, typically stripped out or
@@ -33559,7 +33486,7 @@ function printMethod(path, options, print) {
         parts.push("async ");
     }
 
-    if (!kind || kind === "init" || kind === "method") {
+    if (!kind || kind === "init" || kind === "method" || kind === "constructor") {
         if (node.value.generator) {
             parts.push("*");
         }
@@ -33689,7 +33616,7 @@ function maybeAddSemicolon(lines) {
     return lines;
 }
 
-},{"./comments":67,"./fast-path":68,"./lines":69,"./options":71,"./patcher":73,"./types":75,"./util":76,"assert":2,"source-map":80}],75:[function(require,module,exports){
+},{"./comments":67,"./fast-path":68,"./lines":69,"./options":71,"./patcher":73,"./types":75,"./util":76,"assert":2,"source-map":90}],75:[function(require,module,exports){
 // This module was originally created so that Recast could add its own
 // custom types to the AST type system (in particular, the File type), but
 // those types are now incorporated into ast-types, so this module doesn't
@@ -33848,7 +33775,7 @@ exports.fixFaultyLocations = function(node) {
     }
 };
 
-},{"./types":75,"assert":2,"source-map":80}],77:[function(require,module,exports){
+},{"./types":75,"assert":2,"source-map":90}],77:[function(require,module,exports){
 (function (process){
 var types = require("./lib/types");
 var parse = require("./lib/parser").parse;
@@ -33951,7 +33878,7 @@ Object.defineProperties(exports, {
 });
 
 }).call(this,require('_process'))
-},{"./lib/parser":72,"./lib/printer":74,"./lib/types":75,"_process":15,"fs":1}],78:[function(require,module,exports){
+},{"./lib/parser":72,"./lib/printer":74,"./lib/types":75,"_process":14,"fs":1}],78:[function(require,module,exports){
 // simple-fmt.js
 // MIT licensed, see LICENSE file
 // Copyright (c) 2013 Olov Lassus <olov.lassus@gmail.com>
@@ -34045,27 +33972,13 @@ if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
 }
 
 },{}],80:[function(require,module,exports){
-/*
- * Copyright 2009-2011 Mozilla Foundation and contributors
- * Licensed under the New BSD license. See LICENSE.txt or:
- * http://opensource.org/licenses/BSD-3-Clause
- */
-exports.SourceMapGenerator = require('./source-map/source-map-generator').SourceMapGenerator;
-exports.SourceMapConsumer = require('./source-map/source-map-consumer').SourceMapConsumer;
-exports.SourceNode = require('./source-map/source-node').SourceNode;
-
-},{"./source-map/source-map-consumer":87,"./source-map/source-map-generator":88,"./source-map/source-node":89}],81:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
-}
-define(function (require, exports, module) {
-
+{
   var util = require('./util');
 
   /**
@@ -34106,13 +34019,14 @@ define(function (require, exports, module) {
    * @param String aStr
    */
   ArraySet.prototype.add = function ArraySet_add(aStr, aAllowDuplicates) {
-    var isDuplicate = this.has(aStr);
+    var sStr = util.toSetString(aStr);
+    var isDuplicate = this._set.hasOwnProperty(sStr);
     var idx = this._array.length;
     if (!isDuplicate || aAllowDuplicates) {
       this._array.push(aStr);
     }
     if (!isDuplicate) {
-      this._set[util.toSetString(aStr)] = idx;
+      this._set[sStr] = idx;
     }
   };
 
@@ -34122,8 +34036,8 @@ define(function (require, exports, module) {
    * @param String aStr
    */
   ArraySet.prototype.has = function ArraySet_has(aStr) {
-    return Object.prototype.hasOwnProperty.call(this._set,
-                                                util.toSetString(aStr));
+    var sStr = util.toSetString(aStr);
+    return this._set.hasOwnProperty(sStr);
   };
 
   /**
@@ -34132,8 +34046,9 @@ define(function (require, exports, module) {
    * @param String aStr
    */
   ArraySet.prototype.indexOf = function ArraySet_indexOf(aStr) {
-    if (this.has(aStr)) {
-      return this._set[util.toSetString(aStr)];
+    var sStr = util.toSetString(aStr);
+    if (this._set.hasOwnProperty(sStr)) {
+      return this._set[sStr];
     }
     throw new Error('"' + aStr + '" is not in the set.');
   };
@@ -34160,10 +34075,9 @@ define(function (require, exports, module) {
   };
 
   exports.ArraySet = ArraySet;
+}
 
-});
-
-},{"./util":90,"amdefine":39}],82:[function(require,module,exports){
+},{"./util":89}],81:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
@@ -34200,11 +34114,7 @@ define(function (require, exports, module) {
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
-}
-define(function (require, exports, module) {
-
+{
   var base64 = require('./base64');
 
   // A single base 64 digit can contain 6 bits of data. For the base 64 variable
@@ -34308,21 +34218,16 @@ define(function (require, exports, module) {
     aOutParam.value = fromVLQSigned(result);
     aOutParam.rest = aIndex;
   };
+}
 
-});
-
-},{"./base64":83,"amdefine":39}],83:[function(require,module,exports){
+},{"./base64":82}],82:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
-}
-define(function (require, exports, module) {
-
+{
   var intToCharMap = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'.split('');
 
   /**
@@ -34332,7 +34237,7 @@ define(function (require, exports, module) {
     if (0 <= number && number < intToCharMap.length) {
       return intToCharMap[number];
     }
-    throw new TypeError("Must be between 0 and 63: " + aNumber);
+    throw new TypeError("Must be between 0 and 63: " + number);
   };
 
   /**
@@ -34383,21 +34288,16 @@ define(function (require, exports, module) {
     // Invalid base64 digit.
     return -1;
   };
+}
 
-});
-
-},{"amdefine":39}],84:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
-}
-define(function (require, exports, module) {
-
+{
   exports.GREATEST_LOWER_BOUND = 1;
   exports.LEAST_UPPER_BOUND = 2;
 
@@ -34502,21 +34402,16 @@ define(function (require, exports, module) {
 
     return index;
   };
+}
 
-});
-
-},{"amdefine":39}],85:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2014 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
-}
-define(function (require, exports, module) {
-
+{
   var util = require('./util');
 
   /**
@@ -34562,7 +34457,6 @@ define(function (require, exports, module) {
    * @param Object aMapping
    */
   MappingList.prototype.add = function MappingList_add(aMapping) {
-    var mapping;
     if (generatedPositionAfter(this._last, aMapping)) {
       this._last = aMapping;
       this._array.push(aMapping);
@@ -34590,21 +34484,16 @@ define(function (require, exports, module) {
   };
 
   exports.MappingList = MappingList;
+}
 
-});
-
-},{"./util":90,"amdefine":39}],86:[function(require,module,exports){
+},{"./util":89}],85:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
-}
-define(function (require, exports, module) {
-
+{
   // It turns out that some (most?) JavaScript engines don't self-host
   // `Array.prototype.sort`. This makes sense because C++ will likely remain
   // faster than JS when doing raw CPU-intensive sorting. However, when using a
@@ -34712,21 +34601,16 @@ define(function (require, exports, module) {
   exports.quickSort = function (ary, comparator) {
     doQuickSort(ary, comparator, 0, ary.length - 1);
   };
+}
 
-});
-
-},{"amdefine":39}],87:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
-}
-define(function (require, exports, module) {
-
+{
   var util = require('./util');
   var binarySearch = require('./binary-search');
   var ArraySet = require('./array-set').ArraySet;
@@ -35023,10 +34907,20 @@ define(function (require, exports, module) {
       throw new Error('Unsupported version: ' + version);
     }
 
-    // Some source maps produce relative source paths like "./foo.js" instead of
-    // "foo.js".  Normalize these first so that future comparisons will succeed.
-    // See bugzil.la/1090768.
-    sources = sources.map(util.normalize);
+    sources = sources
+      // Some source maps produce relative source paths like "./foo.js" instead of
+      // "foo.js".  Normalize these first so that future comparisons will succeed.
+      // See bugzil.la/1090768.
+      .map(util.normalize)
+      // Always ensure that absolute sources are internally stored relative to
+      // the source root, if the source root is absolute. Not doing this would
+      // be particularly problematic when the source root is a prefix of the
+      // source (valid, but why??). See github issue #199 and bugzil.la/1188982.
+      .map(function (source) {
+        return sourceRoot && util.isAbsolute(sourceRoot) && util.isAbsolute(source)
+          ? util.relative(sourceRoot, source)
+          : source;
+      });
 
     // Pass `true` below to allow duplicate names and sources. While source maps
     // are intended to be compressed and deduplicated, the TypeScript compiler
@@ -35369,7 +35263,7 @@ define(function (require, exports, module) {
   /**
    * Returns the original source content. The only argument is the url of the
    * original source file. Returns null if no original source content is
-   * availible.
+   * available.
    */
   BasicSourceMapConsumer.prototype.sourceContentFor =
     function SourceMapConsumer_sourceContentFor(aSource, nullOnMissing) {
@@ -35597,7 +35491,7 @@ define(function (require, exports, module) {
         for (var j = 0; j < this._sections[i].consumer.sources.length; j++) {
           sources.push(this._sections[i].consumer.sources[j]);
         }
-      };
+      }
       return sources;
     }
   });
@@ -35749,7 +35643,7 @@ define(function (require, exports, module) {
         var section = this._sections[i];
         var sectionMappings = section.consumer._generatedMappings;
         for (var j = 0; j < sectionMappings.length; j++) {
-          var mapping = sectionMappings[i];
+          var mapping = sectionMappings[j];
 
           var source = section.consumer._sources.at(mapping.source);
           if (section.consumer.sourceRoot !== null) {
@@ -35770,10 +35664,10 @@ define(function (require, exports, module) {
             source: source,
             generatedLine: mapping.generatedLine +
               (section.generatedOffset.generatedLine - 1),
-            generatedColumn: mapping.column +
-              (section.generatedOffset.generatedLine === mapping.generatedLine)
+            generatedColumn: mapping.generatedColumn +
+              (section.generatedOffset.generatedLine === mapping.generatedLine
               ? section.generatedOffset.generatedColumn - 1
-              : 0,
+              : 0),
             originalLine: mapping.originalLine,
             originalColumn: mapping.originalColumn,
             name: name
@@ -35783,29 +35677,24 @@ define(function (require, exports, module) {
           if (typeof adjustedMapping.originalLine === 'number') {
             this.__originalMappings.push(adjustedMapping);
           }
-        };
-      };
+        }
+      }
 
       quickSort(this.__generatedMappings, util.compareByGeneratedPositionsDeflated);
       quickSort(this.__originalMappings, util.compareByOriginalPositions);
     };
 
   exports.IndexedSourceMapConsumer = IndexedSourceMapConsumer;
+}
 
-});
-
-},{"./array-set":81,"./base64-vlq":82,"./binary-search":84,"./quick-sort":86,"./util":90,"amdefine":39}],88:[function(require,module,exports){
+},{"./array-set":80,"./base64-vlq":81,"./binary-search":83,"./quick-sort":85,"./util":89}],87:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
-}
-define(function (require, exports, module) {
-
+{
   var base64VLQ = require('./base64-vlq');
   var util = require('./util');
   var ArraySet = require('./array-set').ArraySet;
@@ -36092,6 +35981,8 @@ define(function (require, exports, module) {
       var previousSource = 0;
       var result = '';
       var mapping;
+      var nameIdx;
+      var sourceIdx;
 
       var mappings = this._mappings.toArray();
       for (var i = 0, len = mappings.length; i < len; i++) {
@@ -36118,9 +36009,9 @@ define(function (require, exports, module) {
         previousGeneratedColumn = mapping.generatedColumn;
 
         if (mapping.source != null) {
-          result += base64VLQ.encode(this._sources.indexOf(mapping.source)
-                                     - previousSource);
-          previousSource = this._sources.indexOf(mapping.source);
+          sourceIdx = this._sources.indexOf(mapping.source);
+          result += base64VLQ.encode(sourceIdx - previousSource);
+          previousSource = sourceIdx;
 
           // lines are stored 0-based in SourceMap spec version 3
           result += base64VLQ.encode(mapping.originalLine - 1
@@ -36132,9 +36023,9 @@ define(function (require, exports, module) {
           previousOriginalColumn = mapping.originalColumn;
 
           if (mapping.name != null) {
-            result += base64VLQ.encode(this._names.indexOf(mapping.name)
-                                       - previousName);
-            previousName = this._names.indexOf(mapping.name);
+            nameIdx = this._names.indexOf(mapping.name);
+            result += base64VLQ.encode(nameIdx - previousName);
+            previousName = nameIdx;
           }
         }
       }
@@ -36192,21 +36083,16 @@ define(function (require, exports, module) {
     };
 
   exports.SourceMapGenerator = SourceMapGenerator;
+}
 
-});
-
-},{"./array-set":81,"./base64-vlq":82,"./mapping-list":85,"./util":90,"amdefine":39}],89:[function(require,module,exports){
+},{"./array-set":80,"./base64-vlq":81,"./mapping-list":84,"./util":89}],88:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
-}
-define(function (require, exports, module) {
-
+{
   var SourceMapGenerator = require('./source-map-generator').SourceMapGenerator;
   var util = require('./util');
 
@@ -36284,7 +36170,6 @@ define(function (require, exports, module) {
           // We add the code from "lastMapping" to "mapping":
           // First check if there is a new line in between.
           if (lastGeneratedLine < mapping.generatedLine) {
-            var code = "";
             // Associate first line with "lastMapping"
             addMappingWithCode(lastMapping, shiftNextLine());
             lastGeneratedLine++;
@@ -36608,21 +36493,16 @@ define(function (require, exports, module) {
   };
 
   exports.SourceNode = SourceNode;
+}
 
-});
-
-},{"./source-map-generator":88,"./util":90,"amdefine":39}],90:[function(require,module,exports){
+},{"./source-map-generator":87,"./util":89}],89:[function(require,module,exports){
 /* -*- Mode: js; js-indent-level: 2; -*- */
 /*
  * Copyright 2011 Mozilla Foundation and contributors
  * Licensed under the New BSD license. See LICENSE or:
  * http://opensource.org/licenses/BSD-3-Clause
  */
-if (typeof define !== 'function') {
-    var define = require('amdefine')(module, require);
-}
-define(function (require, exports, module) {
-
+{
   /**
    * This is a helper function for getting values from parameter/options
    * objects.
@@ -36704,7 +36584,7 @@ define(function (require, exports, module) {
       }
       path = url.path;
     }
-    var isAbsolute = (path.charAt(0) === '/');
+    var isAbsolute = exports.isAbsolute(path);
 
     var parts = path.split(/\/+/);
     for (var part, up = 0, i = parts.length - 1; i >= 0; i--) {
@@ -36798,6 +36678,10 @@ define(function (require, exports, module) {
     return joined;
   }
   exports.join = join;
+
+  exports.isAbsolute = function (aPath) {
+    return aPath.charAt(0) === '/' || !!aPath.match(urlRegexp);
+  };
 
   /**
    * Make a path relative to a URL or another path.
@@ -36893,7 +36777,7 @@ define(function (require, exports, module) {
     }
 
     return mappingA.name - mappingB.name;
-  };
+  }
   exports.compareByOriginalPositions = compareByOriginalPositions;
 
   /**
@@ -36932,7 +36816,7 @@ define(function (require, exports, module) {
     }
 
     return mappingA.name - mappingB.name;
-  };
+  }
   exports.compareByGeneratedPositionsDeflated = compareByGeneratedPositionsDeflated;
 
   function strcmp(aStr1, aStr2) {
@@ -36978,12 +36862,21 @@ define(function (require, exports, module) {
     }
 
     return strcmp(mappingA.name, mappingB.name);
-  };
+  }
   exports.compareByGeneratedPositionsInflated = compareByGeneratedPositionsInflated;
+}
 
-});
+},{}],90:[function(require,module,exports){
+/*
+ * Copyright 2009-2011 Mozilla Foundation and contributors
+ * Licensed under the New BSD license. See LICENSE.txt or:
+ * http://opensource.org/licenses/BSD-3-Clause
+ */
+exports.SourceMapGenerator = require('./lib/source-map-generator').SourceMapGenerator;
+exports.SourceMapConsumer = require('./lib/source-map-consumer').SourceMapConsumer;
+exports.SourceNode = require('./lib/source-node').SourceNode;
 
-},{"amdefine":39}],91:[function(require,module,exports){
+},{"./lib/source-map-consumer":86,"./lib/source-map-generator":87,"./lib/source-node":88}],91:[function(require,module,exports){
 //! stable.js 0.1.5, https://github.com/Two-Screen/stable
 //! © 2014 Angry Bytes and contributors. MIT licensed.
 
@@ -37637,7 +37530,7 @@ function through (write, end, opts) {
 
 
 }).call(this,require('_process'))
-},{"_process":15,"stream":26}],95:[function(require,module,exports){
+},{"_process":14,"stream":28}],95:[function(require,module,exports){
 (function (process,global){
 /**
  * Copyright (c) 2014, Facebook, Inc.
@@ -37771,46 +37664,54 @@ function through (write, end, opts) {
   }
 
   function AsyncIterator(generator) {
-    // This invoke function is written in a style that assumes some
-    // calling function (or Promise) will handle exceptions.
-    function invoke(method, arg) {
-      var result = generator[method](arg);
-      var value = result.value;
-      return value instanceof AwaitArgument
-        ? Promise.resolve(value.arg).then(invokeNext, invokeThrow)
-        : Promise.resolve(value).then(function(unwrapped) {
-            // When a yielded Promise is resolved, its final value becomes
-            // the .value of the Promise<{value,done}> result for the
-            // current iteration. If the Promise is rejected, however, the
-            // result for this iteration will be rejected with the same
-            // reason. Note that rejections of yielded Promises are not
-            // thrown back into the generator function, as is the case
-            // when an awaited Promise is rejected. This difference in
-            // behavior between yield and await is important, because it
-            // allows the consumer to decide what to do with the yielded
-            // rejection (swallow it and continue, manually .throw it back
-            // into the generator, abandon iteration, whatever). With
-            // await, by contrast, there is no opportunity to examine the
-            // rejection reason outside the generator function, so the
-            // only option is to throw it from the await expression, and
-            // let the generator function handle the exception.
-            result.value = unwrapped;
-            return result;
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value instanceof AwaitArgument) {
+          return Promise.resolve(value.arg).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
           });
+        }
+
+        return Promise.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration. If the Promise is rejected, however, the
+          // result for this iteration will be rejected with the same
+          // reason. Note that rejections of yielded Promises are not
+          // thrown back into the generator function, as is the case
+          // when an awaited Promise is rejected. This difference in
+          // behavior between yield and await is important, because it
+          // allows the consumer to decide what to do with the yielded
+          // rejection (swallow it and continue, manually .throw it back
+          // into the generator, abandon iteration, whatever). With
+          // await, by contrast, there is no opportunity to examine the
+          // rejection reason outside the generator function, so the
+          // only option is to throw it from the await expression, and
+          // let the generator function handle the exception.
+          result.value = unwrapped;
+          resolve(result);
+        }, reject);
+      }
     }
 
     if (typeof process === "object" && process.domain) {
       invoke = process.domain.bind(invoke);
     }
 
-    var invokeNext = invoke.bind(generator, "next");
-    var invokeThrow = invoke.bind(generator, "throw");
-    var invokeReturn = invoke.bind(generator, "return");
     var previousPromise;
 
     function enqueue(method, arg) {
       function callInvokeWithMethodAndArg() {
-        return invoke(method, arg);
+        return new Promise(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
       }
 
       return previousPromise =
@@ -37831,9 +37732,7 @@ function through (write, end, opts) {
           // Avoid propagating failures to Promises returned by later
           // invocations of the iterator.
           callInvokeWithMethodAndArg
-        ) : new Promise(function (resolve) {
-          resolve(callInvokeWithMethodAndArg());
-        });
+        ) : callInvokeWithMethodAndArg();
     }
 
     // Define the unified helper method that is used to implement .next,
@@ -38297,5 +38196,5 @@ function through (write, end, opts) {
 );
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":15}]},{},[37])(37)
+},{"_process":14}]},{},[38])(38)
 });
