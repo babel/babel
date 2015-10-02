@@ -461,17 +461,19 @@ export default class File {
     var inputMap = opts.inputSourceMap;
 
     if (inputMap) {
-      map.sources[0] = inputMap.file;
+      if(inputMap.hasOwnProperty("file")){
+        map.sources[0] = inputMap.file;
 
-      var inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
-      var outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
-      var outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
-      outputMapGenerator.applySourceMap(inputMapConsumer);
+        var inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
+        var outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
+        var outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
+        outputMapGenerator.applySourceMap(inputMapConsumer);
 
-      var mergedMap = outputMapGenerator.toJSON();
-      mergedMap.sources = inputMap.sources;
-      mergedMap.file    = inputMap.file;
-      return mergedMap;
+        var mergedMap = outputMapGenerator.toJSON();
+        mergedMap.sources = inputMap.sources;
+        mergedMap.file    = inputMap.file;
+        return mergedMap;
+      }
     }
 
     return map;
