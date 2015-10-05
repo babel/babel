@@ -34,17 +34,21 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
   opts.filename = filename;
 
   fs.readFile(filename, function (err, code) {
-    if (err) return callback(err);
-
     let result;
 
-    try {
-      result = transform(code, opts);
-    } catch (err) {
-      return callback(err);
+    if (!err) {
+      try {
+        result = transform(code, opts);
+      } catch (_err) {
+        err = _err;
+      }
     }
 
-    callback(null, result);
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result);
+    }
   });
 }
 
