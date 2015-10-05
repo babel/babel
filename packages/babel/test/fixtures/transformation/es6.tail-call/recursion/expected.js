@@ -6,7 +6,6 @@
 
   _function: while (_again) {
     var n = _x2;
-    m = local1 = local2 = local3 = undefined;
 
     var g = function g() {};
 
@@ -25,6 +24,7 @@
     g = 123;
     _arguments = [_x2 = n - 1];
     _again = true;
+    m = local1 = local2 = local3 = undefined;
     continue _function;
   }
 })(1e6, true) === "foo";
