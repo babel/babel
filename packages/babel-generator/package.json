@@ -9,6 +9,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-messages": "^5.8.22",
+    "babel-runtime": "^5.8.20",
     "babel-types": "^5.8.22",
     "detect-indent": "^3.0.1",
     "is-integer": "^1.0.4",
@@ -16,5 +17,8 @@
     "repeating": "^1.1.3",
     "source-map": "^0.4.4",
     "trim-right": "^1.0.1"
+  },
+  "devDependencies": {
+    "babel-helper-fixtures": "^1.0.0"
   }
 }

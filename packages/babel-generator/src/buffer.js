@@ -24,6 +24,19 @@ export default class Buffer {
   format: Object;
 
   /**
+   * Description
+   */
+
+  catchUp(node) {
+    // catch up to this nodes newline if we're behind
+    if (node.loc && this.format.retainLines && this.buf) {
+      while (this.position.line < node.loc.start.line) {
+        this._push("\n");
+      }
+    }
+  }
+
+  /**
    * Get the current trimmed buffer.
    */
 

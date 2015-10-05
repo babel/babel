@@ -1,97 +1,96 @@
 /* @flow */
 
-import type NodePrinter from "../node/printer";
 import repeating from "repeating";
 import * as t from "babel-types";
 
-export function WithStatement(node: Object, print: NodePrinter) {
+export function WithStatement(node: Object) {
   this.keyword("with");
   this.push("(");
-  print.plain(node.object);
+  this.print(node.object, node);
   this.push(")");
-  print.block(node.body);
+  this.printBlock(node);
 }
 
-export function IfStatement(node: Object, print: NodePrinter) {
+export function IfStatement(node: Object) {
   this.keyword("if");
   this.push("(");
-  print.plain(node.test);
+  this.print(node.test, node);
   this.push(")");
   this.space();
 
-  print.indentOnComments(node.consequent);
+  this.printAndIndentOnComments(node.consequent, node);
 
   if (node.alternate) {
     if (this.isLast("}")) this.space();
     this.push("else ");
-    print.indentOnComments(node.alternate);
+    this.printAndIndentOnComments(node.alternate, node);
   }
 }
 
-export function ForStatement(node: Object, print: NodePrinter) {
+export function ForStatement(node: Object) {
   this.keyword("for");
   this.push("(");
 
-  print.plain(node.init);
+  this.print(node.init, node);
   this.push(";");
 
   if (node.test) {
     this.space();
-    print.plain(node.test);
+    this.print(node.test, node);
   }
   this.push(";");
 
   if (node.update) {
     this.space();
-    print.plain(node.update);
+    this.print(node.update, node);
   }
 
   this.push(")");
-  print.block(node.body);
+  this.printBlock(node);
 }
 
-export function WhileStatement(node: Object, print: NodePrinter) {
+export function WhileStatement(node: Object) {
   this.keyword("while");
   this.push("(");
-  print.plain(node.test);
+  this.print(node.test, node);
   this.push(")");
-  print.block(node.body);
+  this.printBlock(node);
 }
 
 let buildForXStatement = function (op) {
-  return function (node: Object, print: NodePrinter) {
+  return function (node: Object) {
     this.keyword("for");
     this.push("(");
-    print.plain(node.left);
+    this.print(node.left, node);
     this.push(` ${op} `);
-    print.plain(node.right);
+    this.print(node.right, node);
     this.push(")");
-    print.block(node.body);
+    this.printBlock(node);
   };
 };
 
 export let ForInStatement = buildForXStatement("in");
 export let ForOfStatement = buildForXStatement("of");
 
-export function DoWhileStatement(node: Object, print: NodePrinter) {
+export function DoWhileStatement(node: Object) {
   this.push("do ");
-  print.plain(node.body);
+  this.print(node.body, node);
   this.space();
   this.keyword("while");
   this.push("(");
-  print.plain(node.test);
+  this.print(node.test, node);
   this.push(");");
 }
 
 function buildLabelStatement(prefix, key = "label") {
-  return function (node: Object, print: NodePrinter) {
+  return function (node: Object) {
     this.push(prefix);
 
     let label = node[key];
     if (label) {
       this.push(" ");
       let terminatorState = this.startTerminatorless();
-      print.plain(label);
+      this.print(label, node);
       this.endTerminatorless(terminatorState);
     }
 
@@ -104,50 +103,50 @@ export let ReturnStatement   = buildLabelStatement("return", "argument");
 export let BreakStatement    = buildLabelStatement("break");
 export let ThrowStatement    = buildLabelStatement("throw", "argument");
 
-export function LabeledStatement(node: Object, print: NodePrinter) {
-  print.plain(node.label);
+export function LabeledStatement(node: Object) {
+  this.print(node.label, node);
   this.push(": ");
-  print.plain(node.body);
+  this.print(node.body, node);
 }
 
-export function TryStatement(node: Object, print: NodePrinter) {
+export function TryStatement(node: Object) {
   this.keyword("try");
-  print.plain(node.block);
+  this.print(node.block, node);
   this.space();
 
   // Esprima bug puts the catch clause in a `handlers` array.
   // see https://code.google.com/p/esprima/issues/detail?id=433
   // We run into this from regenerator generated ast.
   if (node.handlers) {
-    print.plain(node.handlers[0]);
+    this.print(node.handlers[0], node);
   } else {
-    print.plain(node.handler);
+    this.print(node.handler, node);
   }
 
   if (node.finalizer) {
     this.space();
     this.push("finally ");
-    print.plain(node.finalizer);
+    this.print(node.finalizer, node);
   }
 }
 
-export function CatchClause(node: Object, print: NodePrinter) {
+export function CatchClause(node: Object) {
   this.keyword("catch");
   this.push("(");
-  print.plain(node.param);
+  this.print(node.param, node);
   this.push(") ");
-  print.plain(node.body);
+  this.print(node.body, node);
 }
 
-export function SwitchStatement(node: Object, print: NodePrinter) {
+export function SwitchStatement(node: Object) {
   this.keyword("switch");
   this.push("(");
-  print.plain(node.discriminant);
+  this.print(node.discriminant, node);
   this.push(")");
   this.space();
   this.push("{");
 
-  print.sequence(node.cases, {
+  this.printSequence(node.cases, node, {
     indent: true,
     addNewlines(leading, cas) {
       if (!leading && node.cases[node.cases.length - 1] === cas) return -1;
@@ -157,10 +156,10 @@ export function SwitchStatement(node: Object, print: NodePrinter) {
   this.push("}");
 }
 
-export function SwitchCase(node: Object, print: NodePrinter) {
+export function SwitchCase(node: Object) {
   if (node.test) {
     this.push("case ");
-    print.plain(node.test);
+    this.print(node.test, node);
     this.push(":");
   } else {
     this.push("default:");
@@ -168,7 +167,7 @@ export function SwitchCase(node: Object, print: NodePrinter) {
 
   if (node.consequent.length) {
     this.newline();
-    print.sequence(node.consequent, { indent: true });
+    this.printSequence(node.consequent, node, { indent: true });
   }
 }
 
@@ -176,7 +175,7 @@ export function DebuggerStatement() {
   this.push("debugger;");
 }
 
-export function VariableDeclaration(node: Object, print: NodePrinter, parent: Object) {
+export function VariableDeclaration(node: Object, parent: Object) {
   this.push(node.kind + " ");
 
   let hasInits = false;
@@ -209,7 +208,7 @@ export function VariableDeclaration(node: Object, print: NodePrinter, parent: Ob
 
   //
 
-  print.list(node.declarations, { separator: sep });
+  this.printList(node.declarations, node, { separator: sep });
 
   if (t.isFor(parent)) {
     // don't give semicolons to these nodes since they'll be inserted in the parent generator
@@ -219,13 +218,13 @@ export function VariableDeclaration(node: Object, print: NodePrinter, parent: Ob
   this.semicolon();
 }
 
-export function VariableDeclarator(node: Object, print: NodePrinter) {
-  print.plain(node.id);
-  print.plain(node.id.typeAnnotation);
+export function VariableDeclarator(node: Object) {
+  this.print(node.id, node);
+  this.print(node.id.typeAnnotation, node);
   if (node.init) {
     this.space();
     this.push("=");
     this.space();
-    print.plain(node.init);
+    this.print(node.init, node);
   }
 }

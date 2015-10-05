@@ -1,28 +1,25 @@
 /* @flow */
 
-import type NodePrinter from "../node/printer";
-
-export function TaggedTemplateExpression(node: Object, print: NodePrinter) {
-  print.plain(node.tag);
-  print.plain(node.quasi);
+export function TaggedTemplateExpression(node: Object) {
+  this.print(node.tag, node);
+  this.print(node.quasi, node);
 }
 
 export function TemplateElement(node: Object) {
   this._push(node.value.raw);
 }
 
-export function TemplateLiteral(node: Object, print: NodePrinter) {
+export function TemplateLiteral(node: Object) {
   this.push("`");
 
   let quasis = node.quasis;
-  let len    = quasis.length;
 
-  for (let i = 0; i < len; i++) {
-    print.plain(quasis[i]);
+  for (let i = 0; i < quasis.length; i++) {
+    this.print(quasis[i], node);
 
-    if (i + 1 < len) {
+    if (i + 1 < quasis.length) {
       this.push("${ ");
-      print.plain(node.expressions[i]);
+      this.print(node.expressions[i], node);
       this.push(" }");
     }
   }

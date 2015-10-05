@@ -2,29 +2,32 @@
 
 /* eslint quotes: 0 */
 
-import type NodePrinter from "../node/printer";
 import * as t from "babel-types";
 
 export function Identifier(node: Object) {
   this.push(node.name);
 }
 
-export function RestElement(node: Object, print: NodePrinter) {
+export function RestElement(node: Object) {
   this.push("...");
-  print.plain(node.argument);
+  this.print(node.argument, node);
 }
 
-export { RestElement as SpreadElement, RestElement as SpreadProperty };
+export {
+  RestElement as SpreadElement,
+  RestElement as SpreadProperty,
+  RestElement as RestProperty,
+};
 
-export function ObjectExpression(node: Object, print: NodePrinter) {
+export function ObjectExpression(node: Object) {
   let props = node.properties;
 
   this.push("{");
-  print.printInnerComments();
+  this.printInnerComments(node);
 
   if (props.length) {
     this.space();
-    print.list(props, { indent: true });
+    this.printList(props, node, { indent: true });
     this.space();
   }
 
@@ -33,24 +36,24 @@ export function ObjectExpression(node: Object, print: NodePrinter) {
 
 export { ObjectExpression as ObjectPattern };
 
-export function Property(node: Object, print: NodePrinter) {
-  print.list(node.decorators, { separator: "" });
+export function Property(node: Object) {
+  this.printJoin(node.decorators, node, { separator: "" });
 
   if (node.method || node.kind === "get" || node.kind === "set") {
-    this._method(node, print);
+    this._method(node);
   } else {
     if (node.computed) {
       this.push("[");
-      print.plain(node.key);
+      this.print(node.key, node);
       this.push("]");
     } else {
       // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
       if (t.isAssignmentPattern(node.value) && t.isIdentifier(node.key) && node.key.name === node.value.left.name) {
-        print.plain(node.value);
+        this.print(node.value, node);
         return;
       }
 
-      print.plain(node.key);
+      this.print(node.key, node);
 
       // shorthand!
       if (node.shorthand &&
@@ -63,22 +66,22 @@ export function Property(node: Object, print: NodePrinter) {
 
     this.push(":");
     this.space();
-    print.plain(node.value);
+    this.print(node.value, node);
   }
 }
 
-export function ArrayExpression(node: Object, print: NodePrinter) {
+export function ArrayExpression(node: Object) {
   let elems = node.elements;
   let len   = elems.length;
 
   this.push("[");
-  print.printInnerComments();
+  this.printInnerComments(node);
 
   for (let i = 0; i < elems.length; i++) {
     let elem = elems[i];
     if (elem) {
       if (i > 0) this.space();
-      print.plain(elem);
+      this.print(elem, node);
       if (i < len - 1) this.push(",");
     } else {
       // If the array expression ends with a hole, that hole

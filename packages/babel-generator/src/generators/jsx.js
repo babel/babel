@@ -1,12 +1,10 @@
 /* @flow */
 
-import type NodePrinter from "../node/printer";
-
-export function JSXAttribute(node: Object, print: NodePrinter) {
-  print.plain(node.name);
+export function JSXAttribute(node: Object) {
+  this.print(node.name, node);
   if (node.value) {
     this.push("=");
-    print.plain(node.value);
+    this.print(node.value, node);
   }
 }
 
@@ -14,27 +12,27 @@ export function JSXIdentifier(node: Object) {
   this.push(node.name);
 }
 
-export function JSXNamespacedName(node: Object, print: NodePrinter) {
-  print.plain(node.namespace);
+export function JSXNamespacedName(node: Object) {
+  this.print(node.namespace, node);
   this.push(":");
-  print.plain(node.name);
+  this.print(node.name, node);
 }
 
-export function JSXMemberExpression(node: Object, print: NodePrinter) {
-  print.plain(node.object);
+export function JSXMemberExpression(node: Object) {
+  this.print(node.object, node);
   this.push(".");
-  print.plain(node.property);
+  this.print(node.property, node);
 }
 
-export function JSXSpreadAttribute(node: Object, print: NodePrinter) {
+export function JSXSpreadAttribute(node: Object) {
   this.push("{...");
-  print.plain(node.argument);
+  this.print(node.argument, node);
   this.push("}");
 }
 
-export function JSXExpressionContainer(node: Object, print: NodePrinter) {
+export function JSXExpressionContainer(node: Object) {
   this.push("{");
-  print.plain(node.expression);
+  this.print(node.expression, node);
   this.push("}");
 }
 
@@ -42,33 +40,33 @@ export function JSXText(node: Object) {
   this.push(node.value, true);
 }
 
-export function JSXElement(node: Object, print: NodePrinter) {
+export function JSXElement(node: Object) {
   let open = node.openingElement;
-  print.plain(open);
+  this.print(open, node);
   if (open.selfClosing) return;
 
   this.indent();
   for (let child of (node.children: Array<Object>)) {
-    print.plain(child);
+    this.print(child, node);
   }
   this.dedent();
 
-  print.plain(node.closingElement);
+  this.print(node.closingElement, node);
 }
 
-export function JSXOpeningElement(node: Object, print: NodePrinter) {
+export function JSXOpeningElement(node: Object) {
   this.push("<");
-  print.plain(node.name);
+  this.print(node.name, node);
   if (node.attributes.length > 0) {
     this.push(" ");
-    print.join(node.attributes, { separator: " " });
+    this.printJoin(node.attributes, node, { separator: " " });
   }
   this.push(node.selfClosing ? " />" : ">");
 }
 
-export function JSXClosingElement(node: Object, print: NodePrinter) {
+export function JSXClosingElement(node: Object) {
   this.push("</");
-  print.plain(node.name);
+  this.print(node.name, node);
   this.push(">");
 }
 

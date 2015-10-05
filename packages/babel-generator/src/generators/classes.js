@@ -1,72 +1,70 @@
 /* @flow */
 
-import type NodePrinter from "../node/printer";
-
-export function ClassDeclaration(node: Object, print: NodePrinter) {
-  print.list(node.decorators, { separator: "" });
+export function ClassDeclaration(node: Object) {
+  this.printJoin(node.decorators, node, { separator: "" });
   this.push("class");
 
   if (node.id) {
     this.push(" ");
-    print.plain(node.id);
+    this.print(node.id, node);
   }
 
-  print.plain(node.typeParameters);
+  this.print(node.typeParameters, node);
 
   if (node.superClass) {
     this.push(" extends ");
-    print.plain(node.superClass);
-    print.plain(node.superTypeParameters);
+    this.print(node.superClass, node);
+    this.print(node.superTypeParameters, node);
   }
 
   if (node.implements) {
     this.push(" implements ");
-    print.join(node.implements, { separator: ", " });
+    this.printJoin(node.implements, node, { separator: ", " });
   }
 
   this.space();
-  print.plain(node.body);
+  this.print(node.body, node);
 }
 
 export { ClassDeclaration as ClassExpression };
 
-export function ClassBody(node: Object, print: NodePrinter) {
+export function ClassBody(node: Object) {
   this.push("{");
+  this.printInnerComments(node);
   if (node.body.length === 0) {
-    print.printInnerComments();
     this.push("}");
   } else {
     this.newline();
 
     this.indent();
-    print.sequence(node.body);
+    this.printSequence(node.body, node);
     this.dedent();
 
     this.rightBrace();
   }
 }
 
-export function ClassProperty(node: Object, print: NodePrinter) {
-  print.list(node.decorators, { separator: "" });
+export function ClassProperty(node: Object) {
+  this.printJoin(node.decorators, node, { separator: "" });
 
   if (node.static) this.push("static ");
-  print.plain(node.key);
-  print.plain(node.typeAnnotation);
+  this.print(node.key, node);
+  this.print(node.typeAnnotation, node);
   if (node.value) {
     this.space();
     this.push("=");
     this.space();
-    print.plain(node.value);
+    this.print(node.value, node);
   }
   this.semicolon();
 }
 
-export function MethodDefinition(node: Object, print: NodePrinter) {
-  print.list(node.decorators, { separator: "" });
+export function MethodDefinition(node: Object) {
+  this.printJoin(node.decorators, node, { separator: "" });
 
   if (node.static) {
     this.push("static ");
   }
 
-  this._method(node, print);
+  this._method(node);
 }
