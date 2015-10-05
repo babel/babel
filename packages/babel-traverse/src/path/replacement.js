@@ -137,8 +137,11 @@ export function replaceWith(replacement, whateverAllowed) {
     return this.replaceExpressionWithStatements([replacement]);
   }
 
-  var oldNode = this.node;
-  if (oldNode) t.inheritsComments(replacement, oldNode);
+  let oldNode = this.node;
+  if (oldNode) {
+    t.inheritsComments(replacement, oldNode);
+    t.removeComments(oldNode);
+  }
 
   // replace the node
   this._replaceWith(replacement);
