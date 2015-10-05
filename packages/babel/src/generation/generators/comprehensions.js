@@ -2,12 +2,12 @@
  * Prints ComprehensionBlock, prints left and right.
  */
 
-export function ComprehensionBlock(node, print) {
+export function ComprehensionBlock(node, parent) {
   this.keyword("for");
   this.push("(");
-  print.plain(node.left);
+  this.print(node.left, node);
   this.push(" of ");
-  print.plain(node.right);
+  this.print(node.right, node);
   this.push(")");
 }
 
@@ -15,21 +15,21 @@ export function ComprehensionBlock(node, print) {
  * Prints ComprehensionExpression, prints blocks, filter, and body. Handles generators.
  */
 
-export function ComprehensionExpression(node, print) {
+export function ComprehensionExpression(node, parent) {
   this.push(node.generator ? "(" : "[");
 
-  print.join(node.blocks, { separator: " " });
+  this.printJoin(node.blocks, node, { separator: " " });
   this.space();
 
   if (node.filter) {
     this.keyword("if");
     this.push("(");
-    print.plain(node.filter);
+    this.print(node.filter, node);
     this.push(")");
     this.space();
   }
 
-  print.plain(node.body);
+  this.print(node.body, node);
 
   this.push(node.generator ? ")" : "]");
 }

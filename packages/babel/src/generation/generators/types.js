@@ -14,9 +14,9 @@ export function Identifier(node) {
  * Prints RestElement, prints argument.
  */
 
-export function RestElement(node, print) {
+export function RestElement(node) {
   this.push("...");
-  print.plain(node.argument);
+  this.print(node.argument, node);
 }
 
 /**
@@ -30,15 +30,15 @@ export { RestElement as SpreadElement, RestElement as SpreadProperty };
  * Prints ObjectExpression, prints properties.
  */
 
-export function ObjectExpression(node, print) {
+export function ObjectExpression(node) {
   var props = node.properties;
 
   this.push("{");
-  print.printInnerComments();
+  this.printInnerComments(node);
 
   if (props.length) {
     this.space();
-    print.list(props, { indent: true });
+    this.printList(props, node, { indent: true });
     this.space();
   }
 
@@ -55,24 +55,24 @@ export { ObjectExpression as ObjectPattern };
  * Prints Property, prints decorators, key, and value, handles kind, computed, and shorthand.
  */
 
-export function Property(node, print) {
-  print.list(node.decorators, { separator: "" });
+export function Property(node) {
+  this.printList(node.decorators, node, { separator: "" });
 
   if (node.method || node.kind === "get" || node.kind === "set") {
-    this._method(node, print);
+    this._method(node);
   } else {
     if (node.computed) {
       this.push("[");
-      print.plain(node.key);
+      this.print(node.key, node);
       this.push("]");
     } else {
       // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
       if (t.isAssignmentPattern(node.value) && t.isIdentifier(node.key) && node.key.name === node.value.left.name) {
-        print.plain(node.value);
+        this.print(node.value, node);
         return;
       }
 
-      print.plain(node.key);
+      this.print(node.key, node);
 
       // shorthand!
       if (node.shorthand &&
@@ -85,7 +85,7 @@ export function Property(node, print) {
 
     this.push(":");
     this.space();
-    print.plain(node.value);
+    this.print(node.value, node);
   }
 }
 
@@ -93,18 +93,18 @@ export function Property(node, print) {
  * Prints ArrayExpression, prints elements.
  */
 
-export function ArrayExpression(node, print) {
+export function ArrayExpression(node) {
   var elems = node.elements;
   var len   = elems.length;
 
   this.push("[");
-  print.printInnerComments();
+  this.printInnerComments(node);
 
   for (var i = 0; i < elems.length; i++) {
     var elem = elems[i];
     if (elem) {
       if (i > 0) this.space();
-      print.plain(elem);
+      this.print(elem, node);
       if (i < len - 1) this.push(",");
     } else {
       // If the array expression ends with a hole, that hole

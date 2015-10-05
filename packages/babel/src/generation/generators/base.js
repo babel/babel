@@ -2,31 +2,31 @@
  * Print File.program
  */
 
-export function File(node, print) {
-  print.plain(node.program);
+export function File(node, parent) {
+  this.print(node.program, node);
 }
 
 /**
  * Print all nodes in a Program.body.
  */
 
-export function Program(node, print) {
-  print.sequence(node.body);
+export function Program(node, parent) {
+  this.printSequence(node.body, node);
 }
 
 /**
  * Print BlockStatement, collapses empty blocks, prints body.
  */
 
-export function BlockStatement(node, print) {
+export function BlockStatement(node, parent) {
   this.push("{");
   if (node.body.length) {
     this.newline();
-    print.sequence(node.body, { indent: true });
+    this.printSequence(node.body, node, { indent: true });
     if (!this.format.retainLines) this.removeLast("\n");
     this.rightBrace();
   } else {
-    print.printInnerComments();
+    this.printInnerComments(node);
     this.push("}");
   }
 }

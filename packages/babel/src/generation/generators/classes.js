@@ -2,30 +2,30 @@
  * Print ClassDeclaration, prints decorators, typeParameters, extends, implements, and body.
  */
 
-export function ClassDeclaration(node, print) {
-  print.list(node.decorators, { separator: "" });
+export function ClassDeclaration(node, parent) {
+  this.printList(node.decorators, node, { separator: "" });
   this.push("class");
 
   if (node.id) {
     this.push(" ");
-    print.plain(node.id);
+    this.print(node.id, node);
   }
 
-  print.plain(node.typeParameters);
+  this.print(node.typeParameters, node);
 
   if (node.superClass) {
     this.push(" extends ");
-    print.plain(node.superClass);
-    print.plain(node.superTypeParameters);
+    this.print(node.superClass, node);
+    this.print(node.superTypeParameters, node);
   }
 
   if (node.implements) {
     this.push(" implements ");
-    print.join(node.implements, { separator: ", " });
+    this.printJoin(node.implements, node, { separator: ", " });
   }
 
   this.space();
-  print.plain(node.body);
+  this.print(node.body, node);
 }
 
 /**
@@ -38,16 +38,16 @@ export { ClassDeclaration as ClassExpression };
  * Print ClassBody, collapses empty blocks, prints body.
  */
 
-export function ClassBody(node, print) {
+export function ClassBody(node, parent) {
   this.push("{");
   if (node.body.length === 0) {
-    print.printInnerComments();
+    this.printInnerComments(node);
     this.push("}");
   } else {
     this.newline();
 
     this.indent();
-    print.sequence(node.body);
+    this.printSequence(node.body, node);
     this.dedent();
 
     this.rightBrace();
@@ -59,17 +59,17 @@ export function ClassBody(node, print) {
  * Also: semicolons, deal with it.
  */
 
-export function ClassProperty(node, print) {
-  print.list(node.decorators, { separator: "" });
+export function ClassProperty(node, parent) {
+  this.printList(node.decorators, node, { separator: "" });
 
   if (node.static) this.push("static ");
-  print.plain(node.key);
-  print.plain(node.typeAnnotation);
+  this.print(node.key, node);
+  this.print(node.typeAnnotation, node);
   if (node.value) {
     this.space();
     this.push("=");
     this.space();
-    print.plain(node.value);
+    this.print(node.value, node);
   }
   this.semicolon();
 }
@@ -78,12 +78,12 @@ export function ClassProperty(node, print) {
  * Print MethodDefinition, prints decorations, static, and method.
  */
 
-export function MethodDefinition(node, print) {
-  print.list(node.decorators, { separator: "" });
+export function MethodDefinition(node, parent) {
+  this.printList(node.decorators, node, { separator: "" });
 
   if (node.static) {
     this.push("static ");
   }
 
-  this._method(node, print);
+  this._method(node);
 }

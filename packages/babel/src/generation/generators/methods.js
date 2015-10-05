@@ -4,19 +4,19 @@ import * as t from "../../types";
  * Prints nodes with params, prints typeParameters, params, and returnType, handles optional params.
  */
 
-export function _params(node, print) {
-  print.plain(node.typeParameters);
+export function _params(node) {
+  this.print(node.typeParameters, node);
   this.push("(");
-  print.list(node.params, {
+  this.printList(node.params, node, {
     iterator: (node) =>{
       if (node.optional) this.push("?");
-      print.plain(node.typeAnnotation);
+      this.print(node.typeAnnotation, node);
     }
   });
   this.push(")");
 
   if (node.returnType) {
-    print.plain(node.returnType);
+    this.print(node.returnType, node);
   }
 }
 
@@ -24,7 +24,7 @@ export function _params(node, print) {
  * Prints method-like nodes, prints key, value, and body, handles async, generator, computed, and get or set.
  */
 
-export function _method(node, print) {
+export function _method(node) {
   var value = node.value;
   var kind  = node.kind;
   var key   = node.key;
@@ -43,36 +43,36 @@ export function _method(node, print) {
 
   if (node.computed) {
     this.push("[");
-    print.plain(key);
+    this.print(key, node);
     this.push("]");
   } else {
-    print.plain(key);
+    this.print(key, node);
   }
 
-  this._params(value, print);
+  this._params(value);
   this.space();
-  print.plain(value.body);
+  this.print(value.body, node);
 }
 
 /**
  * Prints FunctionExpression, prints id and body, handles async and generator.
  */
 
-export function FunctionExpression(node, print) {
+export function FunctionExpression(node, parent) {
   if (node.async) this.push("async ");
   this.push("function");
   if (node.generator) this.push("*");
 
   if (node.id) {
     this.push(" ");
-    print.plain(node.id);
+    this.print(node.id, node);
   } else {
     this.space();
   }
 
-  this._params(node, print);
+  this._params(node);
   this.space();
-  print.plain(node.body);
+  this.print(node.body, node);
 }
 
 /**
@@ -86,13 +86,13 @@ export { FunctionExpression as FunctionDeclaration };
  * Leaves out parentheses when single param.
  */
 
-export function ArrowFunctionExpression(node, print) {
+export function ArrowFunctionExpression(node, parent) {
   if (node.async) this.push("async ");
 
   if (node.params.length === 1 && t.isIdentifier(node.params[0])) {
-    print.plain(node.params[0]);
+    this.print(node.params[0], node);
   } else {
-    this._params(node, print);
+    this._params(node);
   }
 
   this.push(" => ");
@@ -103,7 +103,7 @@ export function ArrowFunctionExpression(node, print) {
     this.push("(");
   }
 
-  print.plain(node.body);
+  this.print(node.body, node);
 
   if (bodyNeedsParens) {
     this.push(")");
