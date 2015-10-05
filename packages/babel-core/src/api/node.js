@@ -24,11 +24,6 @@ export { messages };
 import * as t from "babel-types";
 export { t as types };
 
-export function register(opts?: Object) {
-  let callback = require("./register/node-polyfill");
-  if (opts != null) callback(opts);
-  return callback;
-}
 
 export function transformFile(filename: string, opts?: Object, callback: Function) {
   if (isFunction(opts)) {
