@@ -69,6 +69,10 @@ export default function (path, callId) {
       t.variableDeclarator(id, call)
     ]);
     declar._blockHoist = true;
+
+    declar.trailingComments = node.trailingCOmments;
+    delete node.trailingComments;
+
     return declar;
   } else {
     if (id) {
