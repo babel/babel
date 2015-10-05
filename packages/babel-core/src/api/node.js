@@ -57,26 +57,3 @@ export function transformFileSync(filename: string, opts?: Object = {}): string 
   opts.filename = filename;
   return transform(fs.readFileSync(filename, "utf8"), opts);
 }
-
-export function parse(code, opts = {}) {
-  opts.allowHashBang = true;
-  opts.sourceType = "module";
-  opts.ecmaVersion = Infinity;
-  opts.plugins = {
-    jsx:  true,
-    flow: true
-  };
-  opts.features = {};
-
-  let ast = babylon.parse(code, opts);
-
-  if (opts.onToken) {
-    opts.onToken.push(...ast.tokens);
-  }
-
-  if (opts.onComment) {
-    opts.onComment.push(...ast.comments);
-  }
-
-  return ast.program;
-}
