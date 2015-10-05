@@ -91,17 +91,32 @@
                     "line": 1,
                     "column": 19
                   }
-                },
-                "range": [
-                  6,
-                  19
-                ]
+                }
               }
             ]
           }
         ],
         "kind": "var"
       }
-    ]
-  }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " comment ",
+      "start": 6,
+      "end": 19,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 6
+        },
+        "end": {
+          "line": 1,
+          "column": 19
+        }
+      }
+    }
+  ]
 }

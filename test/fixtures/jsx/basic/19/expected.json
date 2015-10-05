@@ -115,9 +115,8 @@
                       "column": 18
                     }
                   },
-                  "value": "leading",
-                  "rawValue": null,
-                  "raw": "\"leading\""
+                  "extra": null,
+                  "value": "leading"
                 }
               },
               {
@@ -164,9 +163,8 @@
                       "column": 35
                     }
                   },
-                  "value": "attribute",
-                  "rawValue": null,
-                  "raw": "\"attribute\""
+                  "extra": null,
+                  "value": "attribute"
                 }
               },
               {
@@ -253,6 +251,7 @@
           "children": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

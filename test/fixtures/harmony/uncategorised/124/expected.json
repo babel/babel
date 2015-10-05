@@ -103,9 +103,11 @@
                     "column": 22
                   }
                 },
-                "value": "constructor",
-                "rawValue": "constructor",
-                "raw": "'constructor'"
+                "extra": {
+                  "rawValue": "constructor",
+                  "raw": "'constructor'"
+                },
+                "value": "constructor"
               },
               "static": false,
               "kind": "constructor",
@@ -141,13 +143,15 @@
                       "column": 27
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
               }
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

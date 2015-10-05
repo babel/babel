@@ -153,11 +153,14 @@
               "column": 33
             }
           },
-          "value": "baz",
-          "rawValue": "baz",
-          "raw": "\"baz\""
+          "extra": {
+            "rawValue": "baz",
+            "raw": "\"baz\""
+          },
+          "value": "baz"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

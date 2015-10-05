@@ -84,9 +84,11 @@
                   "column": 1
                 }
               },
-              "value": 2,
-              "rawValue": 2,
-              "raw": "2"
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
             },
             "operator": "**",
             "right": {
@@ -119,9 +121,11 @@
                     "column": 7
                   }
                 },
-                "value": 1,
-                "rawValue": 1,
-                "raw": "1"
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
               }
             }
           },
@@ -140,12 +144,15 @@
                 "column": 11
               }
             },
-            "value": 2,
-            "rawValue": 2,
-            "raw": "2"
+            "extra": {
+              "rawValue": 2,
+              "raw": "2"
+            },
+            "value": 2
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

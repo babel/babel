@@ -60,7 +60,6 @@
         },
         "generator": false,
         "expression": false,
-        "async": false,
         "params": [
           {
             "type": "Identifier",
@@ -283,10 +282,11 @@
               "column": 67
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -87,14 +87,17 @@
                   "column": 22
                 }
               },
-              "value": "\\u0061",
-              "rawValue": "\\u0061",
-              "raw": "'\\\\u0061'"
+              "extra": {
+                "rawValue": "\\u0061",
+                "raw": "'\\\\u0061'"
+              },
+              "value": "\\u0061"
             }
           }
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

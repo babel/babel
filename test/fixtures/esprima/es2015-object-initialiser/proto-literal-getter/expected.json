@@ -88,9 +88,11 @@
                     "column": 14
                   }
                 },
-                "value": "__proto__",
-                "rawValue": "__proto__",
-                "raw": "\"__proto__\""
+                "extra": {
+                  "rawValue": "__proto__",
+                  "raw": "\"__proto__\""
+                },
+                "value": "__proto__"
               },
               "value": {
                 "type": "NullLiteral",
@@ -175,14 +177,18 @@
                       "column": 39
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
               }
             }
           ],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

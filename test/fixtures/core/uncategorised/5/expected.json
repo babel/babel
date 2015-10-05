@@ -56,11 +56,14 @@
               "column": 8
             }
           },
-          "raw": "/[a-z]/g",
+          "extra": {
+            "raw": "/[a-z]/g"
+          },
           "pattern": "[a-z]",
           "flags": "g"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

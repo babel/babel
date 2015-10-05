@@ -60,7 +60,6 @@
         },
         "generator": false,
         "expression": false,
-        "async": false,
         "params": [],
         "returnType": {
           "type": "TypeAnnotation",
@@ -109,10 +108,11 @@
               "column": 21
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

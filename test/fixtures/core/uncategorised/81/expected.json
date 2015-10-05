@@ -56,11 +56,14 @@
               "column": 4
             }
           },
-          "value": 4,
-          "rawValue": 4,
-          "raw": "0X04"
+          "extra": {
+            "rawValue": 4,
+            "raw": "0X04"
+          },
+          "value": 4
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

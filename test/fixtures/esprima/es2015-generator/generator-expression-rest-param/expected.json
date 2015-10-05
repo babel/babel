@@ -106,11 +106,15 @@
                 "column": 19
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

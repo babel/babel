@@ -103,11 +103,10 @@
               "column": 21
             }
           },
-          "value": true,
-          "rawValue": true,
-          "raw": "true"
+          "value": true
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

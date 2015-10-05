@@ -1,6 +1,6 @@
 {
-  "features": {
-    "classProperties": true,
-    "decorators": true
-  }
+  "plugins": [
+    "classProperties",
+    "decorators"
+  ]
 }

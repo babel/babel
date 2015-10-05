@@ -173,15 +173,18 @@
                       "column": 16
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
               }
             }
           ],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

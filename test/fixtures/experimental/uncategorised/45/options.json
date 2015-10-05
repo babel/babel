@@ -1,5 +1,3 @@
 {
-  "features": {
-    "classProperties": true
-  }
+  "plugins": ["classProperties"]
 }

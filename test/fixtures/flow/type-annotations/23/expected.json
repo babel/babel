@@ -139,7 +139,6 @@
                   "id": null,
                   "generator": false,
                   "expression": false,
-                  "async": false,
                   "params": [
                     {
                       "type": "Identifier",
@@ -266,7 +265,8 @@
                         "column": 20
                       }
                     },
-                    "body": []
+                    "body": [],
+                    "directives": []
                   },
                   "typeParameters": {
                     "type": "TypeParameterDeclaration",
@@ -307,7 +307,7 @@
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

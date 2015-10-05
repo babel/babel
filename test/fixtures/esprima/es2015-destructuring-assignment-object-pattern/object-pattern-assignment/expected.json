@@ -556,13 +556,18 @@
                 "column": 5
               }
             },
-            "value": 0,
-            "rawValue": 0,
-            "raw": "0"
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

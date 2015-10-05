@@ -124,7 +124,6 @@
                 "id": null,
                 "generator": false,
                 "expression": false,
-                "async": false,
                 "params": [],
                 "returnType": {
                   "type": "TypeAnnotation",
@@ -170,14 +169,15 @@
                       "column": 33
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
               }
             }
           ]
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

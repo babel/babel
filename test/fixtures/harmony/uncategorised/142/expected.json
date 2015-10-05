@@ -102,9 +102,11 @@
                       "column": 6
                     }
                   },
-                  "value": "x",
-                  "rawValue": "x",
-                  "raw": "\"x\""
+                  "extra": {
+                    "rawValue": "x",
+                    "raw": "\"x\""
+                  },
+                  "value": "x"
                 },
                 "operator": "+",
                 "right": {
@@ -121,9 +123,11 @@
                       "column": 12
                     }
                   },
-                  "value": "y",
-                  "rawValue": "y",
-                  "raw": "\"y\""
+                  "extra": {
+                    "rawValue": "y",
+                    "raw": "\"y\""
+                  },
+                  "value": "y"
                 }
               },
               "value": {
@@ -140,16 +144,21 @@
                     "column": 17
                   }
                 },
-                "value": 10,
-                "rawValue": 10,
-                "raw": "10"
+                "extra": {
+                  "rawValue": 10,
+                  "raw": "10"
+                },
+                "value": 10
               },
               "kind": "init"
             }
           ],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

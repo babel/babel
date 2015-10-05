@@ -268,9 +268,11 @@
                         "column": 37
                       }
                     },
-                    "value": "hello",
-                    "rawValue": "hello",
-                    "raw": "\"hello\""
+                    "extra": {
+                      "rawValue": "hello",
+                      "raw": "\"hello\""
+                    },
+                    "value": "hello"
                   },
                   "kind": "init"
                 }
@@ -280,6 +282,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

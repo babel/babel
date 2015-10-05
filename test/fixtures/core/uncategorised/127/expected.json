@@ -183,13 +183,16 @@
                   "column": 44
                 }
               },
-              "value": 2014,
-              "rawValue": 2014,
-              "raw": "2014"
+              "extra": {
+                "rawValue": 2014,
+                "raw": "2014"
+              },
+              "value": 2014
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

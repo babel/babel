@@ -118,9 +118,11 @@
                       "column": 30
                     }
                   },
-                  "value": "use strict",
-                  "rawValue": "use strict",
-                  "raw": "\"use strict\""
+                  "extra": {
+                    "rawValue": "use strict",
+                    "raw": "\"use strict\""
+                  },
+                  "value": "use strict"
                 },
                 "operator": "+",
                 "right": {
@@ -137,15 +139,19 @@
                       "column": 35
                     }
                   },
-                  "value": 42,
-                  "rawValue": 42,
-                  "raw": "42"
+                  "extra": {
+                    "rawValue": 42,
+                    "raw": "42"
+                  },
+                  "value": 42
                 }
               }
             }
-          ]
+          ],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

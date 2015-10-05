@@ -70,9 +70,7 @@
                 "column": 22
               }
             },
-            "value": true,
-            "rawValue": true,
-            "raw": "true"
+            "value": true
           },
           "body": {
             "type": "BlockStatement",
@@ -120,7 +118,8 @@
                   "name": "__proto__"
                 }
               }
-            ]
+            ],
+            "directives": []
           }
         },
         "label": {
@@ -140,6 +139,7 @@
           "name": "__proto__"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

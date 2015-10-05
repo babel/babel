@@ -205,9 +205,11 @@
                         "column": 23
                       }
                     },
-                    "value": 10,
-                    "rawValue": 10,
-                    "raw": "10"
+                    "extra": {
+                      "rawValue": 10,
+                      "raw": "10"
+                    },
+                    "value": 10
                   },
                   "kind": "init"
                 }
@@ -229,9 +231,11 @@
               "column": 28
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

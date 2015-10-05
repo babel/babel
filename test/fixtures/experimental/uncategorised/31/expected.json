@@ -154,7 +154,8 @@
                           "column": 22
                         }
                       },
-                      "body": []
+                      "body": [],
+                      "directives": []
                     }
                   }
                 }
@@ -164,6 +165,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

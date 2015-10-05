@@ -136,18 +136,34 @@
                       "line": 1,
                       "column": 24
                     }
-                  },
-                  "range": [
-                    9,
-                    24
-                  ]
+                  }
                 }
               ]
             }
-          ]
+          ],
+          "directives": []
         },
         "alternate": null
       }
-    ]
-  }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Some comment",
+      "start": 9,
+      "end": 24,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 9
+        },
+        "end": {
+          "line": 1,
+          "column": 24
+        }
+      }
+    }
+  ]
 }

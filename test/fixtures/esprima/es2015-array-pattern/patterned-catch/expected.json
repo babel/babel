@@ -56,7 +56,8 @@
               "column": 6
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         },
         "handler": {
           "type": "CatchClause",
@@ -262,9 +263,11 @@
                             "column": 29
                           }
                         },
-                        "value": 0,
-                        "rawValue": 0,
-                        "raw": "0"
+                        "extra": {
+                          "rawValue": 0,
+                          "raw": "0"
+                        },
+                        "value": 0
                       }
                     },
                     "kind": "init"
@@ -346,9 +349,11 @@
                             "column": 38
                           }
                         },
-                        "value": 0,
-                        "rawValue": 0,
-                        "raw": "0"
+                        "extra": {
+                          "rawValue": 0,
+                          "raw": "0"
+                        },
+                        "value": 0
                       }
                     },
                     "kind": "init"
@@ -453,12 +458,14 @@
                 "column": 49
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           }
         },
         "guardedHandlers": [],
         "finalizer": null
       }
-    ]
+    ],
+    "directives": []
   }
 }

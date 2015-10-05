@@ -91,18 +91,15 @@
                     "line": 1,
                     "column": 19
                   }
-                },
-                "range": [
-                  6,
-                  19
-                ]
+                }
               }
             ]
           }
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -119,11 +116,7 @@
           "line": 1,
           "column": 19
         }
-      },
-      "range": [
-        6,
-        19
-      ]
+      }
     }
   ]
 }

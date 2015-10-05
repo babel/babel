@@ -86,9 +86,11 @@
                 "column": 18
               }
             },
-            "value": 0,
-            "rawValue": 0,
-            "raw": "0"
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
           },
           "body": {
             "type": "ClassBody",
@@ -106,9 +108,12 @@
             },
             "body": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

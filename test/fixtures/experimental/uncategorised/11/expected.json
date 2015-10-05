@@ -127,7 +127,7 @@
                   }
                 },
                 {
-                  "type": "SpreadProperty",
+                  "type": "RestProperty",
                   "start": 14,
                   "end": 18,
                   "loc": {
@@ -174,11 +174,15 @@
                 "column": 24
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

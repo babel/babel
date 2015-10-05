@@ -87,14 +87,17 @@
                   "column": 45
                 }
               },
-              "value": "\"\\u{20BB7}\\u{91CE}\\u{5BB6}\"",
-              "rawValue": "\"\\u{20BB7}\\u{91CE}\\u{5BB6}\"",
-              "raw": "'\"\\\\u{20BB7}\\\\u{91CE}\\\\u{5BB6}\"'"
+              "extra": {
+                "rawValue": "\"\\u{20BB7}\\u{91CE}\\u{5BB6}\"",
+                "raw": "'\"\\\\u{20BB7}\\\\u{91CE}\\\\u{5BB6}\"'"
+              },
+              "value": "\"\\u{20BB7}\\u{91CE}\\u{5BB6}\""
             }
           }
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

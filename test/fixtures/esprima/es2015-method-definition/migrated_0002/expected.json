@@ -119,9 +119,11 @@
                       "column": 14
                     }
                   },
-                  "value": "method",
-                  "rawValue": "method",
-                  "raw": "'method'"
+                  "extra": {
+                    "rawValue": "method",
+                    "raw": "'method'"
+                  },
+                  "value": "method"
                 },
                 "kind": "init",
                 "value": {
@@ -156,7 +158,8 @@
                         "column": 20
                       }
                     },
-                    "body": []
+                    "body": [],
+                    "directives": []
                   }
                 }
               }
@@ -164,6 +167,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

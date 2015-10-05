@@ -103,9 +103,11 @@
                     "column": 22
                   }
                 },
-                "value": "constructor",
-                "rawValue": "constructor",
-                "raw": "\"constructor\""
+                "extra": {
+                  "rawValue": "constructor",
+                  "raw": "\"constructor\""
+                },
+                "value": "constructor"
               },
               "static": false,
               "kind": "constructor",
@@ -141,7 +143,8 @@
                       "column": 26
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
               }
             },
@@ -174,9 +177,11 @@
                     "column": 41
                   }
                 },
-                "value": "constructor",
-                "rawValue": "constructor",
-                "raw": "\"constructor\""
+                "extra": {
+                  "rawValue": "constructor",
+                  "raw": "\"constructor\""
+                },
+                "value": "constructor"
               },
               "static": false,
               "kind": "method",
@@ -212,13 +217,15 @@
                       "column": 46
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
               }
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

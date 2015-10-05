@@ -87,7 +87,9 @@
                   "column": 22
                 }
               },
-              "raw": "/[P QR]/\\u0067",
+              "extra": {
+                "raw": "/[P QR]/\\u0067"
+              },
               "pattern": "[P QR]",
               "flags": "g"
             }
@@ -95,6 +97,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

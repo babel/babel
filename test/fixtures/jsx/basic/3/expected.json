@@ -146,9 +146,8 @@
                       "column": 14
                     }
                   },
-                  "value": "bar",
-                  "rawValue": null,
-                  "raw": "\"bar\""
+                  "extra": null,
+                  "value": "bar"
                 }
               }
             ],
@@ -216,9 +215,8 @@
                   "column": 16
                 }
               },
-              "value": " ",
-              "rawValue": null,
-              "raw": " "
+              "extra": null,
+              "value": " "
             },
             {
               "type": "JSXExpressionContainer",
@@ -265,9 +263,8 @@
                   "column": 24
                 }
               },
-              "value": " ",
-              "rawValue": null,
-              "raw": " "
+              "extra": null,
+              "value": " "
             },
             {
               "type": "JSXElement",
@@ -403,6 +400,7 @@
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

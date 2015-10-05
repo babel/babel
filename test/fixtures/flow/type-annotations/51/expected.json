@@ -103,9 +103,11 @@
                     "column": 17
                   }
                 },
-                "value": "bar",
-                "rawValue": "bar",
-                "raw": "\"bar\""
+                "extra": {
+                  "rawValue": "bar",
+                  "raw": "\"bar\""
+                },
+                "value": "bar"
               },
               "static": false,
               "kind": "method",
@@ -126,7 +128,6 @@
                 "id": null,
                 "generator": false,
                 "expression": false,
-                "async": false,
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
@@ -142,7 +143,8 @@
                       "column": 26
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 },
                 "typeParameters": {
                   "type": "TypeParameterDeclaration",
@@ -182,6 +184,7 @@
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

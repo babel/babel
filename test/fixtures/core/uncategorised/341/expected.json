@@ -42,7 +42,8 @@
             "column": 2
           }
         },
-        "body": []
+        "body": [],
+        "directives": []
       },
       {
         "type": "ExpressionStatement",
@@ -72,11 +73,14 @@
               "column": 5
             }
           },
-          "raw": "/=/",
+          "extra": {
+            "raw": "/=/"
+          },
           "pattern": "=",
           "flags": ""
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

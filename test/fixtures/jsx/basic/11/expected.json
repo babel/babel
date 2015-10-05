@@ -135,13 +135,13 @@
                   "column": 18
                 }
               },
-              "value": "@test content",
-              "rawValue": null,
-              "raw": "@test content"
+              "extra": null,
+              "value": "@test content"
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

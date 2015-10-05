@@ -87,7 +87,9 @@
                   "column": 16
                 }
               },
-              "raw": "/[x-z]/i",
+              "extra": {
+                "raw": "/[x-z]/i"
+              },
               "pattern": "[x-z]",
               "flags": "i"
             }
@@ -95,6 +97,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

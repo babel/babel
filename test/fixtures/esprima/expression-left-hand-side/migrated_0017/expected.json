@@ -129,9 +129,11 @@
                         "column": 11
                       }
                     },
-                    "value": 42,
-                    "rawValue": 42,
-                    "raw": "42"
+                    "extra": {
+                      "rawValue": 42,
+                      "raw": "42"
+                    },
+                    "value": 42
                   }
                 ]
               },
@@ -168,9 +170,11 @@
                     "column": 24
                   }
                 },
-                "value": 14,
-                "rawValue": 14,
-                "raw": "14"
+                "extra": {
+                  "rawValue": 14,
+                  "raw": "14"
+                },
+                "value": 14
               },
               {
                 "type": "NumberLiteral",
@@ -186,9 +190,11 @@
                     "column": 27
                   }
                 },
-                "value": 3,
-                "rawValue": 3,
-                "raw": "3"
+                "extra": {
+                  "rawValue": 3,
+                  "raw": "3"
+                },
+                "value": 3
               },
               {
                 "type": "NumberLiteral",
@@ -204,9 +210,11 @@
                     "column": 31
                   }
                 },
-                "value": 77,
-                "rawValue": 77,
-                "raw": "77"
+                "extra": {
+                  "rawValue": 77,
+                  "raw": "77"
+                },
+                "value": 77
               }
             ]
           },
@@ -229,6 +237,7 @@
           "computed": false
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

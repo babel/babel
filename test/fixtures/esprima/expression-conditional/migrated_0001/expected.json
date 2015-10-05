@@ -118,9 +118,11 @@
                 "column": 10
               }
             },
-            "value": 1,
-            "rawValue": 1,
-            "raw": "1"
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
           },
           "alternate": {
             "type": "NumberLiteral",
@@ -136,12 +138,15 @@
                 "column": 14
               }
             },
-            "value": 2,
-            "rawValue": 2,
-            "raw": "2"
+            "extra": {
+              "rawValue": 2,
+              "raw": "2"
+            },
+            "value": 2
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

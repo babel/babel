@@ -75,7 +75,8 @@
               "column": 15
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       },
       {
@@ -106,11 +107,14 @@
               "column": 21
             }
           },
-          "raw": "/ 1 /",
+          "extra": {
+            "raw": "/ 1 /"
+          },
           "pattern": " 1 ",
           "flags": ""
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

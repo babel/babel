@@ -1,6 +1,4 @@
 {
   "sourceType": "module",
-  "features": {
-    "exportExtensions": true
-  }
+  "plugins": ["exportExtensions"]
 }

@@ -185,13 +185,13 @@
                   "column": 35
                 }
               },
-              "value": "7x invalid-js-identifier",
-              "rawValue": null,
-              "raw": "7x invalid-js-identifier"
+              "extra": null,
+              "value": "7x invalid-js-identifier"
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
-    "body": [
+    "body": [],
+    "directives": [
       {
-        "type": "ExpressionStatement",
+        "type": "Directive",
         "start": 0,
         "end": 6,
         "loc": {
@@ -42,8 +43,8 @@
             "column": 6
           }
         },
-        "expression": {
-          "type": "StringLiteral",
+        "value": {
+          "type": "DirectiveLiteral",
           "start": 0,
           "end": 6,
           "loc": {
@@ -56,9 +57,11 @@
               "column": 6
             }
           },
-          "value": "a",
-          "rawValue": "a",
-          "raw": "\"\\x61\""
+          "value": "\\x61",
+          "extra": {
+            "raw": "\"\\x61\"",
+            "rawValue": "\\x61"
+          }
         }
       }
     ]

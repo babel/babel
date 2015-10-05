@@ -135,9 +135,11 @@
                   "column": 10
                 }
               },
-              "value": 10,
-              "rawValue": 10,
-              "raw": "10"
+              "extra": {
+                "rawValue": 10,
+                "raw": "10"
+              },
+              "value": 10
             }
           }
         },
@@ -156,15 +158,12 @@
                 "line": 2,
                 "column": 12
               }
-            },
-            "range": [
-              13,
-              24
-            ]
+            }
           }
         ]
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -181,11 +180,7 @@
           "line": 2,
           "column": 12
         }
-      },
-      "range": [
-        13,
-        24
-      ]
+      }
     }
   ]
 }

@@ -70,9 +70,7 @@
                 "column": 18
               }
             },
-            "value": true,
-            "rawValue": true,
-            "raw": "true"
+            "value": true
           },
           "body": {
             "type": "BreakStatement",
@@ -123,6 +121,7 @@
           "name": "start"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

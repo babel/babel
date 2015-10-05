@@ -105,8 +105,6 @@
                   }
                 },
                 "value": true,
-                "rawValue": true,
-                "raw": "true",
                 "leadingComments": null
               },
               "body": {
@@ -124,6 +122,7 @@
                   }
                 },
                 "body": [],
+                "directives": [],
                 "leadingComments": null,
                 "trailingComments": null
               },
@@ -142,11 +141,7 @@
                       "line": 1,
                       "column": 29
                     }
-                  },
-                  "range": [
-                    15,
-                    29
-                  ]
+                  }
                 }
               ],
               "trailingComments": [
@@ -164,11 +159,7 @@
                       "line": 1,
                       "column": 56
                     }
-                  },
-                  "range": [
-                    47,
-                    56
-                  ]
+                  }
                 }
               ]
             },
@@ -238,18 +229,16 @@
                       "line": 1,
                       "column": 56
                     }
-                  },
-                  "range": [
-                    47,
-                    56
-                  ]
+                  }
                 }
               ]
             }
-          ]
+          ],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -266,11 +255,7 @@
           "line": 1,
           "column": 29
         }
-      },
-      "range": [
-        15,
-        29
-      ]
+      }
     },
     {
       "type": "CommentBlock",
@@ -286,11 +271,7 @@
           "line": 1,
           "column": 56
         }
-      },
-      "range": [
-        47,
-        56
-      ]
+      }
     }
   ]
 }

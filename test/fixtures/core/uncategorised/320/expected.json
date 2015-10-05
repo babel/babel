@@ -70,9 +70,11 @@
                 "column": 4
               }
             },
-            "value": 123,
-            "rawValue": 123,
-            "raw": "123."
+            "extra": {
+              "rawValue": 123,
+              "raw": "123."
+            },
+            "value": 123
           },
           "operator": "+",
           "right": {
@@ -89,12 +91,15 @@
                 "column": 6
               }
             },
-            "value": 2,
-            "rawValue": 2,
-            "raw": "2"
+            "extra": {
+              "rawValue": 2,
+              "raw": "2"
+            },
+            "value": 2
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

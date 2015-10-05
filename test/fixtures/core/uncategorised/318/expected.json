@@ -88,9 +88,10 @@
                   "column": 1
                 }
               },
-              "body": [
+              "body": [],
+              "directives": [
                 {
-                  "type": "ExpressionStatement",
+                  "type": "Directive",
                   "start": 16,
                   "end": 29,
                   "loc": {
@@ -103,8 +104,8 @@
                       "column": 14
                     }
                   },
-                  "expression": {
-                    "type": "StringLiteral",
+                  "value": {
+                    "type": "DirectiveLiteral",
                     "start": 16,
                     "end": 28,
                     "loc": {
@@ -118,12 +119,14 @@
                       }
                     },
                     "value": "use strict",
-                    "rawValue": "use strict",
-                    "raw": "'use strict'"
+                    "extra": {
+                      "raw": "'use strict'",
+                      "rawValue": "use strict"
+                    }
                   }
                 },
                 {
-                  "type": "ExpressionStatement",
+                  "type": "Directive",
                   "start": 31,
                   "end": 35,
                   "loc": {
@@ -136,8 +139,8 @@
                       "column": 5
                     }
                   },
-                  "expression": {
-                    "type": "StringLiteral",
+                  "value": {
+                    "type": "DirectiveLiteral",
                     "start": 31,
                     "end": 34,
                     "loc": {
@@ -151,17 +154,22 @@
                       }
                     },
                     "value": "\u0000",
-                    "rawValue": "\u0000",
-                    "raw": "'\u0000'"
+                    "extra": {
+                      "raw": "'\u0000'",
+                      "rawValue": "\u0000"
+                    }
                   }
                 }
               ]
             }
           },
           "arguments": [],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

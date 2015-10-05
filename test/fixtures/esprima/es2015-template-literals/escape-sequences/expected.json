@@ -87,14 +87,17 @@
                   "column": 45
                 }
               },
-              "value": "`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`",
-              "rawValue": "`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`",
-              "raw": "'`\\\\n\\\\r\\\\b\\\\v\\\\t\\\\f\\\\\\n\\\\\\r\\n`'"
+              "extra": {
+                "rawValue": "`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`",
+                "raw": "'`\\\\n\\\\r\\\\b\\\\v\\\\t\\\\f\\\\\\n\\\\\\r\\n`'"
+              },
+              "value": "`\\n\\r\\b\\v\\t\\f\\\n\\\r\n`"
             }
           }
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

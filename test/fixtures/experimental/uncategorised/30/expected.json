@@ -134,9 +134,11 @@
                         "column": 25
                       }
                     },
-                    "value": "test",
-                    "rawValue": "test",
-                    "raw": "\"test\""
+                    "extra": {
+                      "rawValue": "test",
+                      "raw": "\"test\""
+                    },
+                    "value": "test"
                   },
                   "kind": "init"
                 }
@@ -146,6 +148,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

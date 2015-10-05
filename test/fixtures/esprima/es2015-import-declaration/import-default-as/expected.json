@@ -105,11 +105,14 @@
               "column": 34
             }
           },
-          "value": "foo",
-          "rawValue": "foo",
-          "raw": "\"foo\""
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -105,7 +105,9 @@
             },
             "closingElement": null,
             "children": [],
-            "parenthesizedExpression": true
+            "extra": {
+              "parenthesized": true
+            }
           },
           "operator": "<",
           "right": {
@@ -126,7 +128,7 @@
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

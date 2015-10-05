@@ -60,7 +60,6 @@
         },
         "generator": false,
         "expression": false,
-        "async": false,
         "params": [
           {
             "type": "ArrayPattern",
@@ -188,10 +187,11 @@
               "column": 35
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

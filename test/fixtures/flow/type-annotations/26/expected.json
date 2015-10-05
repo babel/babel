@@ -119,9 +119,11 @@
                       "column": 6
                     }
                   },
-                  "value": 123,
-                  "rawValue": 123,
-                  "raw": "123"
+                  "extra": {
+                    "rawValue": 123,
+                    "raw": "123"
+                  },
+                  "value": 123
                 },
                 "kind": "init",
                 "value": {
@@ -141,7 +143,6 @@
                   "id": null,
                   "generator": false,
                   "expression": false,
-                  "async": false,
                   "params": [
                     {
                       "type": "Identifier",
@@ -268,7 +269,8 @@
                         "column": 21
                       }
                     },
-                    "body": []
+                    "body": [],
+                    "directives": []
                   },
                   "typeParameters": {
                     "type": "TypeParameterDeclaration",
@@ -309,6 +311,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -514,9 +514,11 @@
                                               "column": 78
                                             }
                                           },
-                                          "value": 1,
-                                          "rawValue": 1,
-                                          "raw": "1"
+                                          "extra": {
+                                            "rawValue": 1,
+                                            "raw": "1"
+                                          },
+                                          "value": 1
                                         }
                                       },
                                       "computed": true
@@ -540,9 +542,11 @@
                                   "column": 37
                                 }
                               },
-                              "value": "SequenceExpression",
-                              "rawValue": "SequenceExpression",
-                              "raw": "\"SequenceExpression\""
+                              "extra": {
+                                "rawValue": "SequenceExpression",
+                                "raw": "\"SequenceExpression\""
+                              },
+                              "value": "SequenceExpression"
                             },
                             "trailingComments": [
                               {
@@ -559,11 +563,7 @@
                                     "line": 7,
                                     "column": 25
                                   }
-                                },
-                                "range": [
-                                  232,
-                                  245
-                                ]
+                                }
                               }
                             ]
                           }
@@ -598,8 +598,6 @@
                             }
                           },
                           "value": false,
-                          "rawValue": false,
-                          "raw": "false",
                           "leadingComments": null
                         },
                         "leadingComments": [
@@ -617,23 +615,22 @@
                                 "line": 7,
                                 "column": 25
                               }
-                            },
-                            "range": [
-                              232,
-                              245
-                            ]
+                            }
                           }
                         ]
                       }
-                    ]
+                    ],
+                    "directives": []
                   }
                 }
-              ]
+              ],
+              "directives": []
             }
           }
         }
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -650,11 +647,7 @@
           "line": 7,
           "column": 25
         }
-      },
-      "range": [
-        232,
-        245
-      ]
+      }
     }
   ]
 }

@@ -106,11 +106,7 @@
                         "line": 2,
                         "column": 10
                       }
-                    },
-                    "range": [
-                      19,
-                      42
-                    ]
+                    }
                   }
                 ]
               },
@@ -160,20 +156,20 @@
                         "line": 2,
                         "column": 10
                       }
-                    },
-                    "range": [
-                      19,
-                      42
-                    ]
+                    }
                   }
                 ]
               }
-            ]
+            ],
+            "directives": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -190,11 +186,7 @@
           "line": 2,
           "column": 10
         }
-      },
-      "range": [
-        19,
-        42
-      ]
+      }
     }
   ]
 }

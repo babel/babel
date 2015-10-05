@@ -59,7 +59,6 @@
           "id": null,
           "generator": false,
           "expression": true,
-          "async": false,
           "params": [
             {
               "type": "RestElement",
@@ -187,10 +186,12 @@
             },
             "name": "rest"
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

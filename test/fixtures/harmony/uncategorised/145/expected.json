@@ -123,7 +123,8 @@
                       "column": 14
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
               }
             },
@@ -210,15 +211,18 @@
                       "column": 29
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
               }
             }
           ],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

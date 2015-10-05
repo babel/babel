@@ -103,9 +103,11 @@
                     "column": 28
                   }
                 },
-                "value": "prototype",
-                "rawValue": "prototype",
-                "raw": "\"prototype\""
+                "extra": {
+                  "rawValue": "prototype",
+                  "raw": "\"prototype\""
+                },
+                "value": "prototype"
               },
               "static": true,
               "kind": "method",
@@ -141,13 +143,15 @@
                       "column": 33
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
               }
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

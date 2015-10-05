@@ -56,9 +56,11 @@
               "column": 13
             }
           },
+          "extra": {
+            "rawValue": 42,
+            "raw": "42"
+          },
           "value": 42,
-          "rawValue": 42,
-          "raw": "42",
           "leadingComments": null
         },
         "leadingComments": [
@@ -76,15 +78,12 @@
                 "line": 5,
                 "column": 10
               }
-            },
-            "range": [
-              0,
-              41
-            ]
+            }
           }
         ]
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -101,11 +100,7 @@
           "line": 5,
           "column": 10
         }
-      },
-      "range": [
-        0,
-        41
-      ]
+      }
     }
   ]
 }

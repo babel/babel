@@ -43,7 +43,7 @@
           }
         },
         "declaration": {
-          "type": "ClassExpression",
+          "type": "ClassDeclaration",
           "start": 15,
           "end": 23,
           "loc": {
@@ -76,7 +76,7 @@
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

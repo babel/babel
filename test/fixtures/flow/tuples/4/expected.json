@@ -164,9 +164,11 @@
                       "column": 31
                     }
                   },
-                  "value": 123,
-                  "rawValue": 123,
-                  "raw": "123"
+                  "extra": {
+                    "rawValue": 123,
+                    "raw": "123"
+                  },
+                  "value": 123
                 },
                 {
                   "type": "StringLiteral",
@@ -182,9 +184,11 @@
                       "column": 39
                     }
                   },
-                  "value": "duck",
-                  "rawValue": "duck",
-                  "raw": "\"duck\""
+                  "extra": {
+                    "rawValue": "duck",
+                    "raw": "\"duck\""
+                  },
+                  "value": "duck"
                 }
               ]
             }
@@ -192,6 +196,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

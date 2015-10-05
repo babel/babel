@@ -101,14 +101,17 @@
                     "column": 11
                   }
                 },
-                "value": 0.5,
-                "rawValue": 0.5,
-                "raw": ".5"
+                "extra": {
+                  "rawValue": 0.5,
+                  "raw": ".5"
+                },
+                "value": 0.5
               }
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

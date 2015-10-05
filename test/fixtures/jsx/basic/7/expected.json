@@ -115,9 +115,8 @@
                       "column": 22
                     }
                   },
-                  "value": "&&",
-                  "rawValue": null,
-                  "raw": "\"&#x0026;&#38;\""
+                  "extra": null,
+                  "value": "&&"
                 }
               }
             ],
@@ -185,13 +184,13 @@
                   "column": 0
                 }
               },
-              "value": "\nbar\nbaz\n",
-              "rawValue": null,
-              "raw": "\nbar\nbaz\n"
+              "extra": null,
+              "value": "\nbar\nbaz\n"
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

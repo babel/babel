@@ -124,7 +124,6 @@
                 "id": null,
                 "generator": false,
                 "expression": false,
-                "async": false,
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
@@ -169,9 +168,11 @@
                             "column": 13
                           }
                         },
-                        "value": 1,
-                        "rawValue": 1,
-                        "raw": "1"
+                        "extra": {
+                          "rawValue": 1,
+                          "raw": "1"
+                        },
+                        "value": 1
                       },
                       "cases": [
                         {
@@ -300,12 +301,15 @@
                               },
                               "computed": false
                             },
-                            "parenthesizedExpression": true
+                            "extra": {
+                              "parenthesized": true
+                            }
                           }
                         }
                       ]
                     }
-                  ]
+                  ],
+                  "directives": []
                 }
               }
             },
@@ -359,7 +363,6 @@
                 "id": null,
                 "generator": false,
                 "expression": false,
-                "async": false,
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
@@ -449,11 +452,15 @@
                                 "column": 23
                               }
                             },
-                            "value": 4,
-                            "rawValue": 4,
-                            "raw": "4"
+                            "extra": {
+                              "rawValue": 4,
+                              "raw": "4"
+                            },
+                            "value": 4
                           },
-                          "parenthesizedExpression": true
+                          "extra": {
+                            "parenthesized": true
+                          }
                         },
                         "operator": "|",
                         "right": {
@@ -475,13 +482,15 @@
                       },
                       "cases": []
                     }
-                  ]
+                  ],
+                  "directives": []
                 }
               }
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }
