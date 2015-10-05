@@ -9,6 +9,7 @@ import resolve from "../../../helpers/resolve";
 import json5 from "json5";
 import isAbsolute from "path-is-absolute";
 import pathExists from "path-exists";
+import cloneDeep from "lodash/lang/cloneDeep";
 import clone from "lodash/lang/clone";
 import merge from "../../../helpers/merge";
 import config from "./config";
@@ -24,10 +25,10 @@ const PACKAGE_FILENAME     = "package.json";
 
 function exists(filename) {
   let cached = existsCache[filename];
-  if (cached != null) {
-    return cached;
-  } else {
+  if (cached == null) {
     return existsCache[filename] = pathExists.sync(filename);
+  } else {
+    return cached;
   }
 }
 
@@ -141,9 +142,18 @@ export default class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(opts?: Object, alias: string = "foreign", loc?: string, dirname?: string) {
-    if (!opts) return;
+  mergeOptions(rawOpts?: Object, alias: string = "foreign", loc?: string, dirname?: string) {
+    if (!rawOpts) return;
 
+    //
+    if (typeof rawOpts !== "object" || Array.isArray(rawOpts)) {
+      this.log.error(`Invalid options type for ${alias}`, TypeError);
+    }
+
+    //
+    let opts = cloneDeep(rawOpts, val => val);
+
+    //
     dirname = dirname || process.cwd();
     loc = loc || alias;
 
@@ -151,7 +161,9 @@ export default class OptionManager {
       let option = config[key];
 
       // check for an unknown option
-      if (!option && this.log) this.log.error(`Unknown option: ${alias}.${key}`, ReferenceError);
+      if (!option && this.log) {
+        this.log.error(`Unknown option: ${alias}.${key}`, ReferenceError);
+      }
     }
 
     // normalise options
@@ -164,7 +176,12 @@ export default class OptionManager {
 
     // add extends clause
     if (opts.extends) {
-      this.addConfig(resolve(opts.extends, dirname));
+      let extendsLoc = resolve(opts.extends, dirname);
+      if (extendsLoc) {
+        this.addConfig(extendsLoc);
+      } else {
+        if (this.log) this.log.error(`Couldn't resolve extends clause of ${opts.extends} in ${alias}`);
+      }
       delete opts.extends;
     }
 
@@ -174,6 +191,7 @@ export default class OptionManager {
       delete opts.presets;
     }
 
+    // env
     let envOpts;
     let envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
     if (opts.env) {
@@ -196,7 +214,7 @@ export default class OptionManager {
           let presetOpts = require(presetLoc);
           this.mergeOptions(presetOpts, presetLoc, presetLoc, path.dirname(presetLoc));
         } else {
-          throw new Error("todo");
+          throw new Error("Couldn't find preset");
         }
       } else if (typeof val === "object") {
         this.mergeOptions(val);
@@ -210,9 +228,9 @@ export default class OptionManager {
     let file  = fs.readFileSync(loc, "utf8");
     let lines = file.split("\n");
 
-    lines = lines.map(function (line) {
-      return line.replace(/#(.*?)$/, "").trim();
-    }).filter((line) => !!line);
+    lines = lines
+      .map((line) => line.replace(/#(.*?)$/, "").trim())
+      .filter((line) => !!line);
 
     this.mergeOptions({ ignore: lines }, loc);
   }
