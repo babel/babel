@@ -136,9 +136,11 @@ export default class File extends Store {
       filenameRelative: opts.filename
     });
 
+    let basenameRelative = path.basename(opts.filenameRelative);
+
     defaults(opts, {
-      sourceFileName: opts.filenameRelative,
-      sourceMapTarget:  opts.filenameRelative
+      sourceFileName:   basenameRelative,
+      sourceMapTarget:  basenameRelative
     });
 
     //
