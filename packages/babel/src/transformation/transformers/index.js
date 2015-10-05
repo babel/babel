@@ -55,6 +55,9 @@ export default {
   "es7.functionBind":                      require("./es7/function-bind"),
   "spec.undefinedToVoid":                  require("babel-plugin-undefined-to-void"),
 
+  //- Strip flow annotations before running transformers that don't expect flow nodes in the AST
+  flow:                                    require("./other/flow"),
+
   //- builtin-advanced
   "es6.spread":                            require("./es6/spread"),
   "es6.parameters":                        require("./es6/parameters"),
@@ -85,6 +88,5 @@ export default {
   "minification.propertyLiterals":         require("babel-plugin-property-literals"),
   _blockHoist:                             require("./internal/block-hoist"),
   jscript:                                 require("babel-plugin-jscript"),
-  flow:                                    require("./other/flow"),
   "optimisation.modules.system":           require("./optimisation/modules.system"),
 };
