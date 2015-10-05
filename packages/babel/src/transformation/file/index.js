@@ -21,7 +21,8 @@ import path from "path";
 import * as t from "../../types";
 
 /**
- * [Please add a description.]
+ * Represents a Program node (a logical file).
+ * May include pathname data.
  */
 
 export default class File {
@@ -108,7 +109,9 @@ export default class File {
 
 
   /**
-   * [Please add a description.]
+   * Initialize this.opts (construct, normalize, set defaults).
+   * @param object opts Plain options hash passed in.
+   * @return OptionManager
    */
 
   initOptions(opts) {
@@ -155,7 +158,9 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Loose mode is enabled for the given transformer?
+   * @param string key Specifies transformer.
+   * @return bool Loose mode enabled.
    */
 
   isLoose(key: string) {
@@ -163,7 +168,7 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Populate array of transforms to execute on the input.
    */
 
   buildTransformers() {
@@ -261,7 +266,9 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Setter for data hash.
+   * @param mixed val New value.
+   * @return mixed `val`.
    */
 
   set(key: string, val): any {
@@ -269,7 +276,7 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Set function that'll be called when `get(key)` would be falsy.
    */
 
   setDynamic(key: string, fn: Function) {
@@ -277,7 +284,8 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Getter for data hash.
+   * @return mixed Truthy this.data[key], or else this.dynamicData[key]().
    */
 
   get(key: string): any {
@@ -293,7 +301,10 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Intercepts the ModuleSpecifier value from an ImportDeclaration.
+   * Allows modification of the value in the output.
+   * @param string source The input value (sans quotes).
+   * @return string Output value (sans quotes).
    */
 
   resolveModuleSource(source: string): string {
@@ -303,7 +314,9 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Inserts an ImportDeclaration into the AST.
+   * @param string source ModuleSpecifier value (sans quotes).
+   * @param string name Value to use in the ImportClause.
    */
 
   addImport(source: string, name?: string, type?: string): Object {
@@ -501,13 +514,12 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Parse code to AST.
+   * @return object AST.
    */
 
   parse(code: string) {
     var opts = this.opts;
-
-    //
 
     var parseOpts = {
       highlightCode: opts.highlightCode,
@@ -566,7 +578,8 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Process input into output.
+   * @return object Transformation output.
    */
 
   transform() {
@@ -580,7 +593,7 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * If this should be ignored, pass it through, otherwise run callback.
    */
 
   wrap(code, callback) {
@@ -647,7 +660,8 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Input should be passed through (vs. transformed)?
+   * @return bool Pass through (true) or transform (false).
    */
 
   shouldIgnore() {
@@ -697,7 +711,7 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Produce an output object.
    */
 
   makeResult({ code, map = null, ast, ignored }) {
@@ -726,7 +740,8 @@ export default class File {
   }
 
   /**
-   * [Please add a description.]
+   * Populate output data. Invoke code generation phase if applicable.
+   * @return object Output data.
    */
 
   generate() {
