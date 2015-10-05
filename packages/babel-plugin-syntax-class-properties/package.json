@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-syntax-class-properties",
+  "version": "1.0.0",
+  "description": "Allow parsing of class properties",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}

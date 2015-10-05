@@ -1,0 +1,11 @@
+{
+  "name": "babel-plugin-syntax-object-rest-spread",
+  "version": "1.0.0",
+  "description": "Allow parsing of object rest/spread",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ]
+}
