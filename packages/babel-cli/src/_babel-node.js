@@ -4,10 +4,12 @@ import Module from "module";
 import { inspect } from "util";
 import path from "path";
 import repl from "repl";
+import register from "babel-core/register";
 import { util } from "babel-core";
 import * as babel from "babel-core";
 import vm from "vm";
 import _ from "lodash";
+import "babel-polyfill";
 
 let program = new commander.Command("babel-node");
 
@@ -25,7 +27,7 @@ program.parse(process.argv);
 
 //
 
-babel.register({
+register({
   extensions:   program.extensions,
   optional:     program.optional,
   ignore:       program.ignore,
