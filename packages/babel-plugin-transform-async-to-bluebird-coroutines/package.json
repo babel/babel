@@ -7,5 +7,9 @@
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-helper-remap-async-to-generator": "^5.0.0",
+    "babel-types": "^5.0.0"
+  }
 }
