@@ -84,9 +84,11 @@
                   "column": 4
                 }
               },
-              "value": 123,
-              "rawValue": 123,
-              "raw": "123."
+              "extra": {
+                "rawValue": 123,
+                "raw": "123."
+              },
+              "value": 123
             },
             "property": {
               "type": "Identifier",
@@ -121,13 +123,16 @@
                   "column": 16
                 }
               },
-              "value": 10,
-              "rawValue": 10,
-              "raw": "10"
+              "extra": {
+                "rawValue": 10,
+                "raw": "10"
+              },
+              "value": 10
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

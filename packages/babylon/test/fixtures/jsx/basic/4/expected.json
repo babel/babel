@@ -129,9 +129,11 @@
                         "column": 9
                       }
                     },
-                    "value": " ",
-                    "rawValue": " ",
-                    "raw": "\" \""
+                    "extra": {
+                      "rawValue": " ",
+                      "raw": "\" \""
+                    },
+                    "value": " "
                   }
                 }
               },
@@ -179,9 +181,8 @@
                       "column": 16
                     }
                   },
-                  "value": " ",
-                  "rawValue": null,
-                  "raw": "\" \""
+                  "extra": null,
+                  "value": " "
                 }
               },
               {
@@ -228,9 +229,8 @@
                       "column": 26
                     }
                   },
-                  "value": "&",
-                  "rawValue": null,
-                  "raw": "\"&amp;\""
+                  "extra": null,
+                  "value": "&"
                 }
               },
               {
@@ -277,9 +277,8 @@
                       "column": 37
                     }
                   },
-                  "value": "&ampr;",
-                  "rawValue": null,
-                  "raw": "\"&ampr;\""
+                  "extra": null,
+                  "value": "&ampr;"
                 }
               }
             ],
@@ -305,6 +304,7 @@
           "children": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -134,17 +134,23 @@
                         "column": 24
                       }
                     },
-                    "value": 10,
-                    "rawValue": 10,
-                    "raw": "10"
+                    "extra": {
+                      "rawValue": 10,
+                      "raw": "10"
+                    },
+                    "value": 10
                   }
                 }
               }
-            ]
+            ],
+            "directives": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -91,11 +91,15 @@
                 },
                 "argument": null
               }
-            ]
+            ],
+            "directives": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

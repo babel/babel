@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
-    "body": [
+    "body": [],
+    "directives": [
       {
-        "type": "ExpressionStatement",
+        "type": "Directive",
         "start": 0,
         "end": 18,
         "loc": {
@@ -42,8 +43,8 @@
             "column": 18
           }
         },
-        "expression": {
-          "type": "StringLiteral",
+        "value": {
+          "type": "DirectiveLiteral",
           "start": 0,
           "end": 18,
           "loc": {
@@ -56,9 +57,11 @@
               "column": 18
             }
           },
-          "value": "煎茶",
-          "rawValue": "煎茶",
-          "raw": "\"\\u{714E}\\u{8336}\""
+          "value": "\\u{714E}\\u{8336}",
+          "extra": {
+            "raw": "\"\\u{714E}\\u{8336}\"",
+            "rawValue": "\\u{714E}\\u{8336}"
+          }
         }
       }
     ]

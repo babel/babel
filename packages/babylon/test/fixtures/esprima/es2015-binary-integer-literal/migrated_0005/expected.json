@@ -56,11 +56,14 @@
               "column": 4
             }
           },
-          "value": 2,
-          "rawValue": 2,
-          "raw": "0B10"
+          "extra": {
+            "rawValue": 2,
+            "raw": "0B10"
+          },
+          "value": 2
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

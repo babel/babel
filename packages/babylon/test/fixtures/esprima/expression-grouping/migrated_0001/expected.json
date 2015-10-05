@@ -84,9 +84,11 @@
                   "column": 1
                 }
               },
-              "value": 4,
-              "rawValue": 4,
-              "raw": "4"
+              "extra": {
+                "rawValue": 4,
+                "raw": "4"
+              },
+              "value": 4
             },
             "operator": "+",
             "right": {
@@ -103,9 +105,11 @@
                   "column": 5
                 }
               },
-              "value": 5,
-              "rawValue": 5,
-              "raw": "5"
+              "extra": {
+                "rawValue": 5,
+                "raw": "5"
+              },
+              "value": 5
             }
           },
           "operator": "<<",
@@ -123,13 +127,16 @@
                 "column": 11
               }
             },
-            "value": 6,
-            "rawValue": 6,
-            "raw": "6",
-            "parenthesizedExpression": true
+            "extra": {
+              "rawValue": 6,
+              "raw": "6",
+              "parenthesized": true
+            },
+            "value": 6
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

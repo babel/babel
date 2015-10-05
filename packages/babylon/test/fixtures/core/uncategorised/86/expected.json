@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
-    "body": [
+    "body": [],
+    "directives": [
       {
-        "type": "ExpressionStatement",
+        "type": "Directive",
         "start": 0,
         "end": 22,
         "loc": {
@@ -42,8 +43,8 @@
             "column": 22
           }
         },
-        "expression": {
-          "type": "StringLiteral",
+        "value": {
+          "type": "DirectiveLiteral",
           "start": 0,
           "end": 22,
           "loc": {
@@ -56,9 +57,11 @@
               "column": 22
             }
           },
-          "value": "\n\r\t\u000b\b\f\\'\"\u0000",
-          "rawValue": "\n\r\t\u000b\b\f\\'\"\u0000",
-          "raw": "\"\\n\\r\\t\\v\\b\\f\\\\\\'\\\"\\0\""
+          "value": "\\n\\r\\t\\v\\b\\f\\\\\\'\\\"\\0",
+          "extra": {
+            "raw": "\"\\n\\r\\t\\v\\b\\f\\\\\\'\\\"\\0\"",
+            "rawValue": "\\n\\r\\t\\v\\b\\f\\\\\\'\\\"\\0"
+          }
         }
       }
     ]

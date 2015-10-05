@@ -90,39 +90,6 @@
               },
               "body": [
                 {
-                  "type": "ExpressionStatement",
-                  "start": 15,
-                  "end": 31,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 15
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 31
-                    }
-                  },
-                  "expression": {
-                    "type": "StringLiteral",
-                    "start": 15,
-                    "end": 30,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 15
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 30
-                      }
-                    },
-                    "value": "use strict",
-                    "rawValue": "use strict",
-                    "raw": "'use\\x20strict'"
-                  }
-                },
-                {
                   "type": "WithStatement",
                   "start": 32,
                   "end": 41,
@@ -168,13 +135,53 @@
                     }
                   }
                 }
+              ],
+              "directives": [
+                {
+                  "type": "Directive",
+                  "start": 15,
+                  "end": 31,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 31
+                    }
+                  },
+                  "value": {
+                    "type": "DirectiveLiteral",
+                    "start": 15,
+                    "end": 30,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 30
+                      }
+                    },
+                    "value": "use\\x20strict",
+                    "extra": {
+                      "raw": "'use\\x20strict'",
+                      "rawValue": "use\\x20strict"
+                    }
+                  }
+                }
               ]
             }
           },
           "arguments": [],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -90,11 +90,7 @@
                     "line": 1,
                     "column": 23
                   }
-                },
-                "range": [
-                  13,
-                  23
-                ]
+                }
               }
             ]
           },
@@ -144,16 +140,32 @@
                     "line": 1,
                     "column": 23
                   }
-                },
-                "range": [
-                  13,
-                  23
-                ]
+                }
               }
             ]
           }
-        ]
+        ],
+        "directives": []
       }
-    ]
-  }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Comment",
+      "start": 13,
+      "end": 23,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 13
+        },
+        "end": {
+          "line": 1,
+          "column": 23
+        }
+      }
+    }
+  ]
 }

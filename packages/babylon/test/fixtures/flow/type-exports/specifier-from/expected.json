@@ -105,13 +105,16 @@
               "column": 33
             }
           },
-          "value": "foobar",
-          "rawValue": "foobar",
-          "raw": "\"foobar\""
+          "extra": {
+            "rawValue": "foobar",
+            "raw": "\"foobar\""
+          },
+          "value": "foobar"
         },
         "exportKind": "type",
         "declaration": null
       }
-    ]
+    ],
+    "directives": []
   }
 }

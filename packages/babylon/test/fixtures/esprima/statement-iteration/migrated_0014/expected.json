@@ -87,9 +87,11 @@
                 "column": 9
               }
             },
-            "value": 0,
-            "rawValue": 0,
-            "raw": "0"
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
           }
         },
         "test": {
@@ -137,9 +139,11 @@
                 "column": 17
               }
             },
-            "value": 42,
-            "rawValue": 42,
-            "raw": "42"
+            "extra": {
+              "rawValue": 42,
+              "raw": "42"
+            },
+            "value": 42
           }
         },
         "update": null,
@@ -159,6 +163,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

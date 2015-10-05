@@ -151,9 +151,11 @@
                         "column": 13
                       }
                     },
-                    "value": "",
-                    "rawValue": "",
-                    "raw": "\"\""
+                    "extra": {
+                      "rawValue": "",
+                      "raw": "\"\""
+                    },
+                    "value": ""
                   },
                   "kind": "init"
                 }
@@ -163,6 +165,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

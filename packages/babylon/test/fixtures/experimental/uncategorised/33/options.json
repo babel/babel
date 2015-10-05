@@ -1,5 +1,3 @@
 {
-  "features": {
-    "decorators": true
-  }
+  "plugins": ["decorators"]
 }

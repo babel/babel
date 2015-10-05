@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
-    "body": [
+    "body": [],
+    "directives": [
       {
-        "type": "ExpressionStatement",
+        "type": "Directive",
         "start": 0,
         "end": 27,
         "loc": {
@@ -42,8 +43,8 @@
             "column": 27
           }
         },
-        "expression": {
-          "type": "StringLiteral",
+        "value": {
+          "type": "DirectiveLiteral",
           "start": 0,
           "end": 27,
           "loc": {
@@ -56,9 +57,11 @@
               "column": 27
             }
           },
-          "value": "𠮷野家",
-          "rawValue": "𠮷野家",
-          "raw": "\"\\u{20BB7}\\u{91CE}\\u{5BB6}\""
+          "value": "\\u{20BB7}\\u{91CE}\\u{5BB6}",
+          "extra": {
+            "raw": "\"\\u{20BB7}\\u{91CE}\\u{5BB6}\"",
+            "rawValue": "\\u{20BB7}\\u{91CE}\\u{5BB6}"
+          }
         }
       }
     ]

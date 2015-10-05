@@ -137,11 +137,7 @@
                         "line": 1,
                         "column": 40
                       }
-                    },
-                    "range": [
-                      27,
-                      40
-                    ]
+                    }
                   }
                 ]
               }
@@ -160,14 +156,17 @@
                   "column": 25
                 }
               },
-              "value": 42,
-              "rawValue": 42,
-              "raw": "42"
+              "extra": {
+                "rawValue": 42,
+                "raw": "42"
+              },
+              "value": 42
             }
           }
         ]
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -184,11 +183,7 @@
           "line": 1,
           "column": 40
         }
-      },
-      "range": [
-        27,
-        40
-      ]
+      }
     }
   ]
 }

@@ -70,9 +70,7 @@
                 "column": 17
               }
             },
-            "value": true,
-            "rawValue": true,
-            "raw": "true"
+            "value": true
           },
           "body": {
             "type": "BlockStatement",
@@ -120,7 +118,8 @@
                   "name": "done"
                 }
               }
-            ]
+            ],
+            "directives": []
           }
         },
         "label": {
@@ -140,6 +139,7 @@
           "name": "done"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

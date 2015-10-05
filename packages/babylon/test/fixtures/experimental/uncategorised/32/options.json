@@ -1,6 +1,4 @@
 {
   "sourceType": "module",
-  "features": {
-    "asyncFunctions": true
-  }
+  "plugins": ["asyncFunctions"]
 }

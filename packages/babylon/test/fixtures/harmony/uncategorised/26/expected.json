@@ -167,9 +167,11 @@
                               "column": 18
                             }
                           },
-                          "value": 10,
-                          "rawValue": 10,
-                          "raw": "10"
+                          "extra": {
+                            "rawValue": 10,
+                            "raw": "10"
+                          },
+                          "value": 10
                         },
                         "kind": "init"
                       }
@@ -255,12 +257,15 @@
                               "column": 54
                             }
                           },
-                          "value": 1,
-                          "rawValue": 1,
-                          "raw": "1"
+                          "extra": {
+                            "rawValue": 1,
+                            "raw": "1"
+                          },
+                          "value": 1
                         }
                       }
-                    ]
+                    ],
+                    "directives": []
                   }
                 }
               ],
@@ -372,6 +377,7 @@
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

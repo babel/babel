@@ -157,7 +157,6 @@
                 "id": null,
                 "generator": false,
                 "expression": false,
-                "async": false,
                 "params": [],
                 "returnType": {
                   "type": "TypeAnnotation",
@@ -232,12 +231,15 @@
                             "column": 42
                           }
                         },
-                        "value": 42,
-                        "rawValue": 42,
-                        "raw": "42"
+                        "extra": {
+                          "rawValue": 42,
+                          "raw": "42"
+                        },
+                        "value": 42
                       }
                     }
-                  ]
+                  ],
+                  "directives": []
                 },
                 "typeParameters": {
                   "type": "TypeParameterDeclaration",
@@ -277,6 +279,7 @@
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

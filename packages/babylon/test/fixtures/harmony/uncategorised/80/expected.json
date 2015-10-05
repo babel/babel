@@ -43,7 +43,7 @@
           }
         },
         "declaration": {
-          "type": "FunctionExpression",
+          "type": "FunctionDeclaration",
           "start": 15,
           "end": 29,
           "loc": {
@@ -74,11 +74,12 @@
                 "column": 29
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

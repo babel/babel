@@ -89,11 +89,14 @@
               "column": 32
             }
           },
-          "value": "crypto",
-          "rawValue": "crypto",
-          "raw": "\"crypto\""
+          "extra": {
+            "rawValue": "crypto",
+            "raw": "\"crypto\""
+          },
+          "value": "crypto"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

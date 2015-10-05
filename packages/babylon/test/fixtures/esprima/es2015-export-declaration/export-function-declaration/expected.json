@@ -91,7 +91,8 @@
                 "column": 25
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           }
         }
       },
@@ -123,11 +124,10 @@
               "column": 31
             }
           },
-          "value": false,
-          "rawValue": false,
-          "raw": "false"
+          "value": false
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

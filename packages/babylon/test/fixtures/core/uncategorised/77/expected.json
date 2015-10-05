@@ -56,11 +56,14 @@
               "column": 5
             }
           },
-          "value": 3567,
-          "rawValue": 3567,
-          "raw": "0xdef"
+          "extra": {
+            "rawValue": 3567,
+            "raw": "0xdef"
+          },
+          "value": 3567
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

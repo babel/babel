@@ -120,7 +120,6 @@
                 "id": null,
                 "generator": false,
                 "expression": false,
-                "async": false,
                 "params": [
                   {
                     "type": "Identifier",
@@ -137,7 +136,9 @@
                       }
                     },
                     "name": "foo",
-                    "parenthesizedExpression": true
+                    "extra": {
+                      "parenthesized": true
+                    }
                   }
                 ],
                 "body": {
@@ -154,7 +155,8 @@
                       "column": 36
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 },
                 "returnType": {
                   "type": "TypeAnnotation",
@@ -208,7 +210,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

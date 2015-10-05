@@ -192,12 +192,17 @@
                   "name": "z"
                 }
               ],
-              "parenthesizedExpression": true
+              "extra": {
+                "parenthesized": true
+              }
             },
-            "parenthesizedExpression": true
+            "extra": {
+              "parenthesized": true
+            }
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -57,11 +57,14 @@
               "column": 15
             }
           },
-          "value": "jquery",
-          "rawValue": "jquery",
-          "raw": "\"jquery\""
+          "extra": {
+            "rawValue": "jquery",
+            "raw": "\"jquery\""
+          },
+          "value": "jquery"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

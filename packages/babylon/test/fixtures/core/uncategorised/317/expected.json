@@ -70,9 +70,7 @@
                 "column": 13
               }
             },
-            "value": true,
-            "rawValue": true,
-            "raw": "true"
+            "value": true
           },
           "consequent": {
             "type": "BreakStatement",
@@ -124,6 +122,7 @@
           "name": "foo"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

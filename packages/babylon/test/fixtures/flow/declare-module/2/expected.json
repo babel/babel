@@ -56,9 +56,11 @@
               "column": 25
             }
           },
-          "value": "./a/b.js",
-          "rawValue": "./a/b.js",
-          "raw": "\"./a/b.js\""
+          "extra": {
+            "rawValue": "./a/b.js",
+            "raw": "\"./a/b.js\""
+          },
+          "value": "./a/b.js"
         },
         "body": {
           "type": "BlockStatement",
@@ -77,6 +79,7 @@
           "body": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

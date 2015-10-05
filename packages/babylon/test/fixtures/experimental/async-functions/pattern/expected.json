@@ -170,9 +170,11 @@
                       "column": 38
                     }
                   },
-                  "value": "../lang/task",
-                  "rawValue": "../lang/task",
-                  "raw": "'../lang/task'"
+                  "extra": {
+                    "rawValue": "../lang/task",
+                    "raw": "'../lang/task'"
+                  },
+                  "value": "../lang/task"
                 }
               ]
             }
@@ -180,6 +182,7 @@
         ],
         "kind": "const"
       }
-    ]
+    ],
+    "directives": []
   }
 }

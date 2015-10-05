@@ -104,13 +104,17 @@
                   "column": 26
                 }
               },
-              "body": []
+              "body": [],
+              "directives": []
             },
-            "parenthesizedExpression": true
+            "extra": {
+              "parenthesized": true
+            }
           }
         },
         "alternate": null
       }
-    ]
+    ],
+    "directives": []
   }
 }

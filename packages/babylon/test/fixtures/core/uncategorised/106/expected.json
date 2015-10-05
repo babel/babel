@@ -87,7 +87,9 @@
                   "column": 18
                 }
               },
-              "raw": "/foo\\/bar/",
+              "extra": {
+                "raw": "/foo\\/bar/"
+              },
               "pattern": "foo\\/bar",
               "flags": ""
             }
@@ -95,6 +97,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

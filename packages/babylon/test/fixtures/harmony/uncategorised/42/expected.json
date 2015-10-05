@@ -91,12 +91,15 @@
                 "column": 9
               }
             },
-            "value": 0,
-            "rawValue": 0,
-            "raw": "00"
+            "extra": {
+              "rawValue": 0,
+              "raw": "00"
+            },
+            "value": 0
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

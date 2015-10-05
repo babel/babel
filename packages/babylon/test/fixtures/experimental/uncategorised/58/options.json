@@ -1,5 +1,3 @@
 {
-  "features": {
-    "trailingFunctionCommas": true
-  }
+  "plugins": ["trailingFunctionCommas"]
 }

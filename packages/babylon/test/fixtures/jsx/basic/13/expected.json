@@ -150,7 +150,7 @@
                   },
                   "closingElement": null,
                   "children": [],
-                  "rawValue": null
+                  "extra": null
                 }
               },
               {
@@ -276,12 +276,11 @@
                           "column": 50
                         }
                       },
-                      "value": "monkeys /> gorillas",
-                      "rawValue": null,
-                      "raw": "monkeys /> gorillas"
+                      "extra": null,
+                      "value": "monkeys /> gorillas"
                     }
                   ],
-                  "rawValue": null
+                  "extra": null
                 }
               }
             ],
@@ -307,6 +306,7 @@
           "children": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

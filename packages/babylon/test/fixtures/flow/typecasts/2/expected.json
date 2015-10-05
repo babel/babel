@@ -118,9 +118,11 @@
                       "column": 8
                     }
                   },
-                  "value": 0,
-                  "rawValue": 0,
-                  "raw": "0"
+                  "extra": {
+                    "rawValue": 0,
+                    "raw": "0"
+                  },
+                  "value": 0
                 },
                 "kind": "init"
               },
@@ -171,9 +173,11 @@
                       "column": 20
                     }
                   },
-                  "value": "hey",
-                  "rawValue": "hey",
-                  "raw": "\"hey\""
+                  "extra": {
+                    "rawValue": "hey",
+                    "raw": "\"hey\""
+                  },
+                  "value": "hey"
                 },
                 "kind": "init"
               }
@@ -307,9 +311,12 @@
               "indexers": []
             }
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

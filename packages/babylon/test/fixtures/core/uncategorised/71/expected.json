@@ -56,11 +56,14 @@
               "column": 7
             }
           },
-          "value": 3.14159,
-          "rawValue": 3.14159,
-          "raw": "3.14159"
+          "extra": {
+            "rawValue": 3.14159,
+            "raw": "3.14159"
+          },
+          "value": 3.14159
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

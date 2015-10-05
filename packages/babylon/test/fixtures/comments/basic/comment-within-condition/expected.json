@@ -72,11 +72,7 @@
                   "line": 2,
                   "column": 13
                 }
-              },
-              "range": [
-                14,
-                23
-              ]
+              }
             }
           ]
         },
@@ -94,7 +90,8 @@
               "column": 20
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         },
         "alternate": null,
         "leadingComments": [
@@ -112,15 +109,12 @@
                 "line": 1,
                 "column": 9
               }
-            },
-            "range": [
-              0,
-              9
-            ]
+            }
           }
         ]
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -137,11 +131,7 @@
           "line": 1,
           "column": 9
         }
-      },
-      "range": [
-        0,
-        9
-      ]
+      }
     },
     {
       "type": "CommentBlock",
@@ -157,11 +147,7 @@
           "line": 2,
           "column": 13
         }
-      },
-      "range": [
-        14,
-        23
-      ]
+      }
     }
   ]
 }

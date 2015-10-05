@@ -139,7 +139,6 @@
                   "id": null,
                   "generator": false,
                   "expression": false,
-                  "async": false,
                   "params": [
                     {
                       "type": "Identifier",
@@ -202,7 +201,8 @@
                         "column": 30
                       }
                     },
-                    "body": []
+                    "body": [],
+                    "directives": []
                   }
                 }
               }
@@ -210,7 +210,7 @@
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -121,9 +121,11 @@
                   "column": 25
                 }
               },
-              "value": 10,
-              "rawValue": 10,
-              "raw": "10"
+              "extra": {
+                "rawValue": 10,
+                "raw": "10"
+              },
+              "value": 10
             }
           }
         ],
@@ -141,9 +143,11 @@
               "column": 29
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -56,11 +56,14 @@
               "column": 8
             }
           },
-          "raw": "/foobar/",
+          "extra": {
+            "raw": "/foobar/"
+          },
           "pattern": "foobar",
           "flags": ""
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

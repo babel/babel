@@ -146,9 +146,8 @@
                       "column": 32
                     }
                   },
-                  "value": "attribute",
-                  "rawValue": null,
-                  "raw": "\"attribute\""
+                  "extra": null,
+                  "value": "attribute"
                 }
               }
             ],
@@ -174,6 +173,7 @@
           "children": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

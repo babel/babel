@@ -153,9 +153,11 @@
                         "column": 14
                       }
                     },
+                    "extra": {
+                      "rawValue": 1,
+                      "raw": "1"
+                    },
                     "value": 1,
-                    "rawValue": 1,
-                    "raw": "1",
                     "leadingComments": null
                   },
                   "leadingComments": [
@@ -173,11 +175,7 @@
                           "line": 3,
                           "column": 14
                         }
-                      },
-                      "range": [
-                        46,
-                        52
-                      ]
+                      }
                     }
                   ],
                   "trailingComments": [
@@ -195,11 +193,7 @@
                           "line": 5,
                           "column": 28
                         }
-                      },
-                      "range": [
-                        81,
-                        97
-                      ]
+                      }
                     }
                   ]
                 },
@@ -280,9 +274,11 @@
                         "column": 14
                       }
                     },
+                    "extra": {
+                      "rawValue": 2,
+                      "raw": "2"
+                    },
                     "value": 2,
-                    "rawValue": 2,
-                    "raw": "2",
                     "leadingComments": null
                   },
                   "leadingComments": [
@@ -300,20 +296,18 @@
                           "line": 5,
                           "column": 28
                         }
-                      },
-                      "range": [
-                        81,
-                        97
-                      ]
+                      }
                     }
                   ]
                 }
               ]
             }
-          ]
+          ],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -330,11 +324,7 @@
           "line": 3,
           "column": 14
         }
-      },
-      "range": [
-        46,
-        52
-      ]
+      }
     },
     {
       "type": "CommentLine",
@@ -350,11 +340,7 @@
           "line": 5,
           "column": 28
         }
-      },
-      "range": [
-        81,
-        97
-      ]
+      }
     }
   ]
 }

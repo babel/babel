@@ -103,9 +103,11 @@
                   "column": 10
                 }
               },
-              "value": "=",
-              "rawValue": "=",
-              "raw": "'='"
+              "extra": {
+                "rawValue": "=",
+                "raw": "'='"
+              },
+              "value": "="
             },
             {
               "type": "NumberLiteral",
@@ -121,13 +123,16 @@
                   "column": 13
                 }
               },
-              "value": 2,
-              "rawValue": 2,
-              "raw": "2"
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

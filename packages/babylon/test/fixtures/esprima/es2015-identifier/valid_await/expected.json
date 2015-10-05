@@ -107,9 +107,12 @@
             }
           },
           "name": "await",
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

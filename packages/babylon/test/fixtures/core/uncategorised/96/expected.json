@@ -27,9 +27,10 @@
       }
     },
     "sourceType": "script",
-    "body": [
+    "body": [],
+    "directives": [
       {
-        "type": "ExpressionStatement",
+        "type": "Directive",
         "start": 0,
         "end": 16,
         "loc": {
@@ -42,8 +43,8 @@
             "column": 16
           }
         },
-        "expression": {
-          "type": "StringLiteral",
+        "value": {
+          "type": "DirectiveLiteral",
           "start": 0,
           "end": 16,
           "loc": {
@@ -56,9 +57,11 @@
               "column": 16
             }
           },
-          "value": "Hello!2World",
-          "rawValue": "Hello!2World",
-          "raw": "\"Hello\\412World\""
+          "value": "Hello\\412World",
+          "extra": {
+            "raw": "\"Hello\\412World\"",
+            "rawValue": "Hello\\412World"
+          }
         }
       }
     ]

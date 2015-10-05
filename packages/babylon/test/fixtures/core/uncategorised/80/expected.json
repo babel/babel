@@ -56,11 +56,14 @@
               "column": 5
             }
           },
-          "value": 256,
-          "rawValue": 256,
-          "raw": "0x100"
+          "extra": {
+            "rawValue": 256,
+            "raw": "0x100"
+          },
+          "value": 256
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

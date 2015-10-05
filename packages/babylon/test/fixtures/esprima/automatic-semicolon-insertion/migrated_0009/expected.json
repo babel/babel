@@ -56,9 +56,7 @@
               "column": 11
             }
           },
-          "value": true,
-          "rawValue": true,
-          "raw": "true"
+          "value": true
         },
         "body": {
           "type": "BlockStatement",
@@ -106,11 +104,7 @@
                       "line": 2,
                       "column": 10
                     }
-                  },
-                  "range": [
-                    21,
-                    44
-                  ]
+                  }
                 }
               ]
             },
@@ -160,18 +154,16 @@
                       "line": 2,
                       "column": 10
                     }
-                  },
-                  "range": [
-                    21,
-                    44
-                  ]
+                  }
                 }
               ]
             }
-          ]
+          ],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -188,11 +180,7 @@
           "line": 2,
           "column": 10
         }
-      },
-      "range": [
-        21,
-        44
-      ]
+      }
     }
   ]
 }

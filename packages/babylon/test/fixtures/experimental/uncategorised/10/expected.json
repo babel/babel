@@ -124,7 +124,7 @@
                   }
                 },
                 {
-                  "type": "SpreadProperty",
+                  "type": "RestProperty",
                   "start": 8,
                   "end": 12,
                   "loc": {
@@ -176,6 +176,7 @@
         ],
         "kind": "let"
       }
-    ]
+    ],
+    "directives": []
   }
 }

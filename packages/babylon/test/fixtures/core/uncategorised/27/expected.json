@@ -119,9 +119,11 @@
                       "column": 14
                     }
                   },
-                  "value": "answer",
-                  "rawValue": "answer",
-                  "raw": "\"answer\""
+                  "extra": {
+                    "rawValue": "answer",
+                    "raw": "\"answer\""
+                  },
+                  "value": "answer"
                 },
                 "value": {
                   "type": "NumberLiteral",
@@ -137,9 +139,11 @@
                       "column": 18
                     }
                   },
-                  "value": 42,
-                  "rawValue": 42,
-                  "raw": "42"
+                  "extra": {
+                    "rawValue": 42,
+                    "raw": "42"
+                  },
+                  "value": 42
                 },
                 "kind": "init"
               }
@@ -147,6 +151,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

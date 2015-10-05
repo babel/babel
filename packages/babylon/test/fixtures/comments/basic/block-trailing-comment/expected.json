@@ -104,17 +104,15 @@
                     "line": 3,
                     "column": 13
                   }
-                },
-                "range": [
-                  15,
-                  24
-                ]
+                }
               }
             ]
           }
-        ]
+        ],
+        "directives": []
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -131,11 +129,7 @@
           "line": 3,
           "column": 13
         }
-      },
-      "range": [
-        15,
-        24
-      ]
+      }
     }
   ]
 }

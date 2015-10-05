@@ -90,11 +90,7 @@
                     "line": 2,
                     "column": 10
                   }
-                },
-                "range": [
-                  13,
-                  36
-                ]
+                }
               }
             ]
           },
@@ -144,16 +140,32 @@
                     "line": 2,
                     "column": 10
                   }
-                },
-                "range": [
-                  13,
-                  36
-                ]
+                }
               }
             ]
           }
-        ]
+        ],
+        "directives": []
       }
-    ]
-  }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " Multiline\nComment ",
+      "start": 13,
+      "end": 36,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 13
+        },
+        "end": {
+          "line": 2,
+          "column": 10
+        }
+      }
+    }
+  ]
 }

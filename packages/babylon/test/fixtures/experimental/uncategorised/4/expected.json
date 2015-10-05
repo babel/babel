@@ -101,9 +101,11 @@
                     "column": 15
                   }
                 },
-                "value": 2,
-                "rawValue": 2,
-                "raw": "2"
+                "extra": {
+                  "rawValue": 2,
+                  "raw": "2"
+                },
+                "value": 2
               },
               "operator": "**",
               "right": {
@@ -120,15 +122,18 @@
                     "column": 20
                   }
                 },
-                "value": 2,
-                "rawValue": 2,
-                "raw": "2"
+                "extra": {
+                  "rawValue": 2,
+                  "raw": "2"
+                },
+                "value": 2
               }
             }
           }
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

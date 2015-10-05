@@ -71,11 +71,14 @@
               }
             },
             "name": "foo",
-            "parenthesizedExpression": true
+            "extra": {
+              "parenthesized": true
+            }
           },
           "arguments": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

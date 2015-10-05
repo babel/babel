@@ -168,9 +168,11 @@
                         "column": 27
                       }
                     },
-                    "value": "wow",
-                    "rawValue": "wow",
-                    "raw": "'wow'"
+                    "extra": {
+                      "rawValue": "wow",
+                      "raw": "'wow'"
+                    },
+                    "value": "wow"
                   },
                   "kind": "init"
                 }
@@ -180,6 +182,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

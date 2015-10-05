@@ -88,7 +88,8 @@
                   "column": 15
                 }
               },
-              "body": []
+              "body": [],
+              "directives": []
             }
           },
           "operator": "/",
@@ -106,13 +107,18 @@
                 "column": 19
               }
             },
-            "value": 1,
-            "rawValue": 1,
-            "raw": "1"
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

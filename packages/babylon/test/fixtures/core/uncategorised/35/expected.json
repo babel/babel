@@ -119,9 +119,11 @@
                       "column": 17
                     }
                   },
-                  "value": "undef",
-                  "rawValue": "undef",
-                  "raw": "\"undef\""
+                  "extra": {
+                    "rawValue": "undef",
+                    "raw": "\"undef\""
+                  },
+                  "value": "undef"
                 },
                 "kind": "get",
                 "value": {
@@ -156,7 +158,8 @@
                         "column": 22
                       }
                     },
-                    "body": []
+                    "body": [],
+                    "directives": []
                   }
                 }
               }
@@ -164,6 +167,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

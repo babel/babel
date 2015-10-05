@@ -1,5 +1,3 @@
 {
-  "features": {
-    "asyncFunctions": true
-  }
+  "plugins": ["asyncFunctions"]
 }
