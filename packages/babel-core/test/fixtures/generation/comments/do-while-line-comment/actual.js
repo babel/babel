@@ -1,3 +1,0 @@
-do {
-}  // LINE
-while (true);
