@@ -62,6 +62,14 @@ function getPackageConfig(name) {
 
 //
 
+function updateDepsObject(changedPackages, deps) {
+  for (var depName in deps) {
+    if (changedPackages.indexOf(depName) >= 0) {
+      deps[depName] = "^" + NEW_VERSION;
+    }
+  }
+}
+
 function publish() {
   var packageNames = fs.readdirSync(PACKAGE_LOC).filter(function (name) {
     return name[0] !== ".";
@@ -85,7 +93,7 @@ function publish() {
     }
   });
 
-  if (!changedPackages.length) {
+  if (!changedPackages.length && !FORCE_VERSION.length) {
     throw new Error(chalk.red("No packages changed."));
   }
 
@@ -99,11 +107,8 @@ function publish() {
     pkg.version = NEW_VERSION;
 
     // updated dependencies
-    for (var depName in pkg.dependencies) {
-      if (changedPackages.indexOf(depName) >= 0) {
-        pkg.dependencies[depName] = "^" + NEW_VERSION;
-      }
-    }
+    updateDepsObject(changedPackages, pkg.dependencies);
+    updateDepsObject(changedPackages, pkg.devDependencies);
 
     // write new package
     fs.writeFileSync(pkgLoc, JSON.stringify(pkg, null, "  "));
