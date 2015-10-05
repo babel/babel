@@ -33,10 +33,6 @@ test: lint
 	./scripts/test.sh
 	make test-clean
 
-test-browser:
-	./scripts/test-browser.sh
-	make test-clean
-
 test-cov: clean
 	BABEL_ENV=test; \
 	make build
