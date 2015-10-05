@@ -13,6 +13,28 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 5.8.26
+
+ * **Internal**
+  * Republish to get fix for runtime `typeof-react-element` helper.
+
+## 5.8.25
+
+ * **Internal**
+  * Rename `define` method to avoid webpack assuming those files are AMD.
+
+## 5.8.24
+
+ * **Spec Compliancy**
+  * Updated `optimisation.react.inlineElements` transformer to React 0.14 output. Thanks [@spicyj](https://github.com/spicyj)!
+ * **Polish**
+  * Add support for evaluating more static nodes. Thanks [@hzoo](https://github.com/hzoo)!
+
+## 5.8.23
+
+ * **Bug Fix**
+  * Fix a bug where pushed scope bindings weren't properly being registered.
+
 ## 5.8.22
 
  * **Bug Fix**
