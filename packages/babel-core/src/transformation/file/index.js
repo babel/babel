@@ -417,13 +417,9 @@ export default class File extends Store {
   }
 
   mergeSourceMap(map: Object) {
-    let opts = this.opts;
-
-    let inputMap = opts.inputSourceMap;
+    let inputMap = this.opts.inputSourceMap;
 
     if (inputMap) {
-      map.sources[0] = inputMap.file;
-
       let inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
       let outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
       let outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
@@ -433,9 +429,9 @@ export default class File extends Store {
       mergedMap.sources = inputMap.sources;
       mergedMap.file    = inputMap.file;
       return mergedMap;
+    } else {
+      return map;
     }
-
-    return map;
   }
 
   getModuleFormatter(type: string) {
