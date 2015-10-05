@@ -11,7 +11,12 @@ _.each(fixtures, function (suites, name) {
     suite(name + "/" + testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
         test(task.title, !task.disabled && function () {
-          return runTest(task);
+          try {
+            return runTest(task);
+          } catch (err) {
+            err.message = task.actual.loc + ": " + err.message;
+            throw err;
+          }
         });
       });
     });
