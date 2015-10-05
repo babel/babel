@@ -98,11 +98,13 @@ export default class OptionManager {
         }
       }
 
-      // allow plugin containers to be specified so they don't have to manually require
-      if (typeof plugin === "function") {
-        plugin = OptionManager.memoisePluginContainer(plugin, loc, i);
-      } else {
-        throw new TypeError(messages.get("pluginNotFunction", loc, i));
+      if (!(plugin instanceof Plugin)) {
+        // allow plugin containers to be specified so they don't have to manually require
+        if (typeof plugin === "function") {
+          plugin = OptionManager.memoisePluginContainer(plugin, loc, i);
+        } else {
+          throw new TypeError(messages.get("pluginNotFunction", loc, i));
+        }
       }
 
       // validate
