@@ -137,14 +137,18 @@ export function replaceWith(replacement, whateverAllowed) {
     return this.replaceWithSourceString();
   }
 
-  // replacing a statement with an expression so wrap it in an expression statement
-  if (this.isNodeType("Statement") && t.isExpression(replacement) && !this.canHaveVariableDeclarationOrExpression()) {
-    replacement = t.expressionStatement(replacement);
+  if (this.isNodeType("Statement") && t.isExpression(replacement)) {
+    if (!this.canHaveVariableDeclarationOrExpression() && !this.canSwapBetweenExpressionAndStatement(replacement)) {
+      // replacing a statement with an expression so wrap it in an expression statement
+      replacement = t.expressionStatement(replacement);
+    }
   }
 
-  // replacing an expression with a statement so let's explode it
   if (this.isNodeType("Expression") && t.isStatement(replacement)) {
-    return this.replaceExpressionWithStatements([replacement]);
+    if (!this.canSwapBetweenExpressionAndStatement(replacement)) {
+      // replacing an expression with a statement so let's explode it
+      return this.replaceExpressionWithStatements([replacement]);
+    }
   }
 
   var oldNode = this.node;
