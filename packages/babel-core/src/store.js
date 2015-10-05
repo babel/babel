@@ -1,26 +1,20 @@
 /* @flow */
 
-export default class Store {
+export default class Store extends Map {
   constructor() {
+    super();
     this.dynamicData = {};
-    this.data = {};
   }
 
   dynamicData: Object;
-  data: Object;
 
-  set(key: string, val: any): any {
-    return this.data[key] = val;
-  }
-
-  setDynamic(key: string, fn: Function) {
+  setDynamic(key, fn) {
     this.dynamicData[key] = fn;
   }
 
   get(key: string): any {
-    let data = this.data[key];
-    if (data) {
-      return data;
+    if (this.has(key)) {
+      return super.get(key);
     } else {
       let dynamic = this.dynamicData[key];
       if (dynamic) {
