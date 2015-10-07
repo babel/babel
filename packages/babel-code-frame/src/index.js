@@ -74,7 +74,7 @@ function highlight(text) {
  * Create a code frame, adding line numbers, code highlighting, and pointing to a given position.
  */
 
-export default function (lines: number, lineNumber: number, colNumber: number, opts = {}): string {
+export default function (lines: string, lineNumber: number, colNumber: number, opts = {}): string {
   colNumber = Math.max(colNumber, 0);
 
   var highlighted = opts.highlightCode && chalk.supportsColor;
