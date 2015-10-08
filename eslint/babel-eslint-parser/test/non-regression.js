@@ -47,7 +47,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "{ , res }",
       {},
-      [ "1:3 Unexpected token" ]
+      [ "1:3 Parsing error: Unexpected token" ]
     );
   });
 
