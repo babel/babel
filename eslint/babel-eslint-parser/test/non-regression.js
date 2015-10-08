@@ -2,7 +2,34 @@
 "use strict";
 var eslint = require("eslint");
 
-function verifyAndAssertMessages(code, rules, expectedMessages) {
+function verifyAndAssertMessages(code, rules, expectedMessages, features) {
+  var defaultEcmaFeatures = {
+    arrowFunctions: true,
+    binaryLiterals: true,
+    blockBindings: true,
+    classes: true,
+    defaultParams: true,
+    destructuring: true,
+    forOf: true,
+    generators: true,
+    modules: true,
+    objectLiteralComputedProperties: true,
+    objectLiteralDuplicateProperties: true,
+    objectLiteralShorthandMethods: true,
+    objectLiteralShorthandProperties: true,
+    octalLiterals: true,
+    regexUFlag: true,
+    regexYFlag: true,
+    restParams: true,
+    spread: true,
+    superInFunctions: true,
+    templateStrings: true,
+    unicodeCodePointEscapes: true,
+    globalReturn: true,
+    jsx: true,
+    experimentalObjectRestSpread: true
+  };
+
   var messages = eslint.linter.verify(
     code,
     {
@@ -10,7 +37,8 @@ function verifyAndAssertMessages(code, rules, expectedMessages) {
       rules: rules,
       env: {
         node: true
-      }
+      },
+      ecmaFeatures: features || defaultEcmaFeatures
     }
   );
 
@@ -111,11 +139,12 @@ describe("verify", function () {
   });
 
   // fix after updating to ESLint 1.0.0
-  it("Arrow function with non-block bodies (issue #20)", function () {
+  it.skip("Arrow function with non-block bodies (issue #20)", function () {
     verifyAndAssertMessages(
       "\"use strict\"; () => 1",
       { "strict": [1, "global"] },
-      []
+      [],
+      { modules: false }
     );
   });
 
@@ -1326,6 +1355,17 @@ describe("verify", function () {
       ].join("\n"),
       { "no-unused-vars": 1, "no-undef": 1 },
       [ ]
+    )
+  });
+
+  it("no-use-before-define #192", function () {
+    verifyAndAssertMessages(
+      [
+        "console.log(x);",
+        "var x = 1;"
+      ].join("\n"),
+      { "no-use-before-define": 1 },
+      [ "1:13 x was used before it was defined no-use-before-define" ]
     )
   });
 });
