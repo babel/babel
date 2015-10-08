@@ -1,3 +1,5 @@
+/* @flow */
+
 import lineNumbers from "line-numbers";
 import repeating from "repeating";
 import jsTokens from "js-tokens";
@@ -8,7 +10,7 @@ import chalk from "chalk";
  * Chalk styles for token types.
  */
 
-var defs = {
+let defs = {
   string:     chalk.red,
   punctuator: chalk.bold,
   curly:      chalk.green,
@@ -32,7 +34,7 @@ const NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
  */
 
 function getTokenType(match) {
-  var token = jsTokens.matchToToken(match);
+  let token = jsTokens.matchToToken(match);
   if (token.type === "name" && esutils.keyword.isReservedWordES6(token.value)) {
     return "keyword";
   }
@@ -58,10 +60,10 @@ function getTokenType(match) {
  * Highlight `text`.
  */
 
-function highlight(text) {
+function highlight(text: string) {
   return text.replace(jsTokens, function (...args) {
-    var type = getTokenType(args);
-    var colorize = defs[type];
+    let type = getTokenType(args);
+    let colorize = defs[type];
     if (colorize) {
       return args[0].split(NEWLINE).map(str => colorize(str)).join("\n");
     } else {
@@ -74,23 +76,27 @@ function highlight(text) {
  * Create a code frame, adding line numbers, code highlighting, and pointing to a given position.
  */
 
-export default function (lines: number, lineNumber: number, colNumber: number, opts = {}): string {
+export default function (
+  rawLines: string,
+  lineNumber: number,
+  colNumber: number,
+  opts: Object = {},
+): string {
   colNumber = Math.max(colNumber, 0);
 
-  var highlighted = opts.highlightCode && chalk.supportsColor;
-  if (highlighted) lines = highlight(lines);
+  let highlighted = opts.highlightCode && chalk.supportsColor;
+  if (highlighted) rawLines = highlight(rawLines);
 
-  lines = lines.split(NEWLINE);
-
-  var start = Math.max(lineNumber - 3, 0);
-  var end   = Math.min(lines.length, lineNumber + 3);
+  let lines = rawLines.split(NEWLINE);
+  let start = Math.max(lineNumber - 3, 0);
+  let end   = Math.min(lines.length, lineNumber + 3);
 
   if (!lineNumber && !colNumber) {
     start = 0;
     end = lines.length;
   }
 
-  var frame = lineNumbers(lines.slice(start, end), {
+  let frame = lineNumbers(lines.slice(start, end), {
     start: start + 1,
     before: "  ",
     after: " | ",
