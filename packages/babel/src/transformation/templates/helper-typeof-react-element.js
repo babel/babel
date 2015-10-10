@@ -1,1 +1,1 @@
-(typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7
+require('react').createElement('div').$$typeof
