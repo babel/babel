@@ -461,6 +461,8 @@ export default class File {
     var inputMap = opts.inputSourceMap;
 
     if (inputMap) {
+	    map.sources[0] = inputMap.file;
+
       var inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
       var outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
       var outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(inputMapConsumer);
