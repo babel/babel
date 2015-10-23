@@ -6,13 +6,21 @@ import * as t from "./index";
  * Check if the input `node` is a binding identifier.
  */
 
-export function isBinding(node: Object, parent: Object): boolean {
-  var bindingKey = getBindingIdentifiers.keys[parent.type];
-  if (bindingKey) {
-    return parent[bindingKey] === node;
-  } else {
-    return false;
-  }
+ export function isBinding(node: Object, parent: Object): boolean {
+   let keys = getBindingIdentifiers.keys[parent.type];
+   if (keys) {
+     for (let i = 0; i < keys.length; i++) {
+       let key = keys[i];
+       let val = parent[key];
+       if (Array.isArray(val)) {
+         if (val.indexOf(node) >= 0) return true;
+       } else {
+         if (val === node) return true;
+       }
+     }
+   }
+
+   return false;
 }
 
 /**

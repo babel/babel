@@ -11,28 +11,15 @@ import extend from "lodash/object/extend";
 import object from "../../helpers/object";
 import * as t from "../../types";
 
-/**
- * [Please add a description.]
- */
-
 var collectorVisitor = {
-
-  /**
-   * [Please add a description.]
-   */
-
-  For(node, parent, scope) {
-    for (var key of (t.FOR_INIT_KEYS: Array)) {
-      var declar = this.get(key);
-      if (declar.isVar()) scope.getFunctionParent().registerBinding("var", declar);
+  For() {
+    for (let key of (t.FOR_INIT_KEYS: Array)) {
+      let declar = this.get(key);
+      if (declar.isVar()) this.scope.getFunctionParent().registerBinding("var", declar);
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
-  Declaration(node, parent, scope) {
+  Declaration() {
     // delegate block scope handling to the `blockVariableVisitor`
     if (this.isBlockScoped()) return;
 
@@ -40,124 +27,73 @@ var collectorVisitor = {
     if (this.isExportDeclaration() && this.get("declaration").isDeclaration()) return;
 
     // we've ran into a declaration!
-    scope.getFunctionParent().registerDeclaration(this);
+    this.scope.getFunctionParent().registerDeclaration(this);
   },
 
-  /**
-   * [Please add a description.]
-   */
-
-  ReferencedIdentifier(node) {
-    var binding = this.scope.getBinding(node.name);
-    if (binding) {
-      binding.reference(this);
-    } else {
-      this.scope.getProgramParent().addGlobal(node);
-    }
+  ReferencedIdentifier(node, parent, scope, state) {
+    state.references.push(this);
   },
 
-  /**
-   * [Please add a description.]
-   */
-
-  ForXStatement() {
-    var left = this.get("left");
+  ForXStatement(node, parent, scope, state) {
+    let left = this.get("left");
     if (left.isPattern() || left.isIdentifier()) {
-      this.scope.registerConstantViolation(left, left);
+      state.constantViolations.push(left);
     }
   },
-
-  /**
-   * [Please add a description.]
-   */
 
   ExportDeclaration: {
-    exit(node) {
-      var declar = node.declaration;
+    exit(node, parent, scope) {
+      let declar = node.declaration;
       if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
-        this.scope.getBinding(declar.id.name).reference();
+        let binding = scope.getBinding(declar.id.name);
+        if (binding) binding.reference();
       } else if (t.isVariableDeclaration(declar)) {
-        for (var decl of (declar.declarations: Array)) {
-          var ids = t.getBindingIdentifiers(decl);
-          for (var name in ids) {
-            this.scope.getBinding(name).reference();
+        for (let decl of (declar.declarations: Array<Object>)) {
+          let ids = t.getBindingIdentifiers(decl);
+          for (let name in ids) {
+            let binding = scope.getBinding(name);
+            if (binding) binding.reference();
           }
         }
       }
     }
   },
 
-  /**
-   * [Please add a description.]
-   */
-
-  LabeledStatement(node) {
-    this.scope.getProgramParent().addGlobal(node);
+  LabeledStatement() {
+    this.scope.getProgramParent().addGlobal(this.node);
     this.scope.getBlockParent().registerDeclaration(this);
   },
 
-  /**
-   * [Please add a description.]
-   */
+  AssignmentExpression(node, parent, scope, state) {
+    state.assignments.push(this);
+  },
 
-  AssignmentExpression() {
-    // register undeclared bindings as globals
-    var ids = this.getBindingIdentifiers();
-    var programParent;
-    for (var name in ids) {
-      if (this.scope.getBinding(name)) continue;
+  UpdateExpression(node, parent, scope, state) {
+    state.constantViolations.push(this.get("argument"));
+  },
 
-      programParent = programParent ||  this.scope.getProgramParent();
-      programParent.addGlobal(ids[name]);
+  UnaryExpression(node, parent, scope, state) {
+    if (this.node.operator === "delete") {
+      state.constantViolations.push(this.get("argument"));
     }
-
-    // register as constant violation
-    this.scope.registerConstantViolation(this, this.get("left"), this.get("right"));
   },
 
-  /**
-   * [Please add a description.]
-   */
-
-  UpdateExpression(node, parent, scope) {
-    scope.registerConstantViolation(this, this.get("argument"), null);
-  },
-
-  /**
-   * [Please add a description.]
-   */
-
-  UnaryExpression(node, parent, scope) {
-    if (node.operator === "delete") scope.registerConstantViolation(this, this.get("left"), null);
-  },
-
-  /**
-   * [Please add a description.]
-   */
-
-  BlockScoped(node, parent, scope) {
+  BlockScoped() {
+    let scope = this.scope;
     if (scope.path === this) scope = scope.parent;
     scope.getBlockParent().registerDeclaration(this);
   },
 
-  /**
-   * [Please add a description.]
-   */
-
-  ClassDeclaration(node, parent, scope) {
-    var name = node.id.name;
-    scope.bindings[name] = scope.getBinding(name);
+  ClassDeclaration() {
+    let name = this.node.id.name;
+    this.scope.bindings[name] = this.scope.getBinding(name);
   },
 
-  /**
-   * [Please add a description.]
-   */
-
-  Block(node, parent, scope) {
-    var paths = this.get("body");
-    for (var path of (paths: Array)) {
-      if (path.isFunctionDeclaration()) {
-        scope.getBlockParent().registerDeclaration(path);
+  Block() {
+    let paths = this.get("body");
+    for (let bodyPath of (paths: Array)) {
+      if (bodyPath.isFunctionDeclaration()) {
+        this.scope.getBlockParent().registerDeclaration(bodyPath);
       }
     }
   }
@@ -529,7 +465,7 @@ export default class Scope {
     if (path.isLabeledStatement()) {
       this.registerBinding("label", path);
     } else if (path.isFunctionDeclaration()) {
-      this.registerBinding("hoisted", path);
+      this.registerBinding("hoisted", path.get("id"));
     } else if (path.isVariableDeclaration()) {
       var declarations = path.get("declarations");
       for (let declar of (declarations: Array)) {
@@ -556,11 +492,11 @@ export default class Scope {
    * [Please add a description.]
    */
 
-  registerConstantViolation(root: NodePath, left: NodePath, right: NodePath) {
-    var ids = left.getBindingIdentifiers();
-    for (var name in ids) {
-      var binding = this.getBinding(name);
-      if (binding) binding.reassign(root, left, right);
+  registerConstantViolation(path) {
+    let ids = path.getBindingIdentifiers();
+    for (let name in ids) {
+      let binding = this.getBinding(name);
+      if (binding) binding.reassign(path);
     }
   }
 
@@ -754,8 +690,8 @@ export default class Scope {
     // ForStatement - left, init
 
     if (path.isLoop()) {
-      for (let key of (t.FOR_INIT_KEYS: Array)) {
-        var node = path.get(key);
+      for (let key of (t.FOR_INIT_KEYS: Array<string>)) {
+        let node = path.get(key);
         if (node.isBlockScoped()) this.registerBinding(node.node.kind, node);
       }
     }
@@ -763,21 +699,19 @@ export default class Scope {
     // FunctionExpression - id
 
     if (path.isFunctionExpression() && path.has("id")) {
-      if (!t.isProperty(path.parent, { method: true })) {
-        this.registerBinding("var", path);
-      }
+      this.registerBinding("local", path);
     }
 
     // Class
 
     if (path.isClassExpression() && path.has("id")) {
-      this.registerBinding("var", path);
+      this.registerBinding("local", path);
     }
 
     // Function - params, rest
 
     if (path.isFunction()) {
-      var params = path.get("params");
+      let params = path.get("params");
       for (let param of (params: Array)) {
         this.registerBinding("param", param);
       }
@@ -800,9 +734,47 @@ export default class Scope {
     var parent = this.getProgramParent();
     if (parent.crawling) return;
 
+
+    let state = {
+      references: [],
+      constantViolations: [],
+      assignments: [],
+    };
+
     this.crawling = true;
-    path.traverse(collectorVisitor);
+    path.traverse(collectorVisitor, state);
     this.crawling = false;
+
+    // register assignments
+    for (let path of state.assignments) {
+      // register undeclared bindings as globals
+      let ids = path.getBindingIdentifiers();
+      let programParent;
+      for (let name in ids) {
+        if (path.scope.getBinding(name)) continue;
+
+        programParent = programParent ||  path.scope.getProgramParent();
+        programParent.addGlobal(ids[name]);
+      }
+
+      // register as constant violation
+      path.scope.registerConstantViolation(path);
+    }
+
+    // register references
+    for (let ref of state.references) {
+      let binding = ref.scope.getBinding(ref.node.name);
+      if (binding) {
+        binding.reference(ref);
+      } else {
+        ref.scope.getProgramParent().addGlobal(ref.node);
+      }
+    }
+
+    // register constant violations
+    for (let path of state.constantViolations) {
+      path.scope.registerConstantViolation(path);
+    }
   }
 
   /**
