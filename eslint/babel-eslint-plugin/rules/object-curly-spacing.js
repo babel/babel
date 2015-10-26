@@ -173,6 +173,12 @@ module.exports = function(context) {
                     penultimate = context.getLastToken(lastSpecifier),
                     last = context.getTokenAfter(lastSpecifier);
 
+                // support trailing commas
+                if (last.value === ",") {
+                    penultimate = last;
+                    last = context.getTokenAfter(last);
+                }
+
                 validateBraceSpacing(node, first, second, penultimate, last);
             }
 
@@ -193,6 +199,12 @@ module.exports = function(context) {
 
             if (first.value === "export") {
                 return;
+            }
+
+            // support trailing commas
+            if (last.value === ",") {
+                penultimate = last;
+                last = context.getTokenAfter(last);
             }
 
             validateBraceSpacing(node, first, second, penultimate, last);

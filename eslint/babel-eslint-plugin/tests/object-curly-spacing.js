@@ -37,7 +37,11 @@ ruleTester.run('babel/object-curly-spacing', rule, {
         { code: "import {\ndoor } from 'room'", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "export { door } from 'room'", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "import { house, mouse } from 'caravan'", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "import {\nhouse,\nmouse\n} from 'caravan'", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "import {\nhouse,\nmouse,\n} from 'caravan'", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "export { door }", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "export {\ndoor,\nhouse\n}", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "export {\ndoor,\nhouse,\n}", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "import 'room'", options: ["always"], ecmaFeatures: { modules: true } },
 
         // always - empty object
@@ -85,7 +89,11 @@ ruleTester.run('babel/object-curly-spacing', rule, {
         { code: "export {\ndoor\n} from 'room'", options: ["never"], ecmaFeatures: { modules: true } },
         { code: "import {house,mouse} from 'caravan'", options: ["never"], ecmaFeatures: { modules: true } },
         { code: "import {house, mouse} from 'caravan'", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "import {\nhouse,\nmouse} from 'caravan'", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "import {\nhouse,\nmouse,\n} from 'caravan'", options: ["never"], ecmaFeatures: { modules: true } },
         { code: "export {door}", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "export {\ndoor,\nmouse\n}", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "export {\ndoor,\nmouse,\n}", options: ["never"], ecmaFeatures: { modules: true } },
         { code: "import 'room'", options: ["never"], ecmaFeatures: { modules: true } },
 
         // never - empty object
