@@ -41,7 +41,9 @@ export function ForStatement(node, print) {
   this.keyword("for");
   this.push("(");
 
+  this._inForStatementInit = true;
   print.plain(node.init);
+  this._inForStatementInit = false;
   this.push(";");
 
   if (node.test) {
