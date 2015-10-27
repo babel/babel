@@ -1,5 +1,6 @@
 import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";
+import n from "../node"
 import * as t from "../../types";
 
 /**
@@ -220,9 +221,19 @@ export function AssignmentPattern(node, print) {
  * Prints AssignmentExpression, prints left, operator, and right.
  */
 
-export function AssignmentExpression(node, print) {
+export function AssignmentExpression(node, print, parent) {
+  // Somewhere inside a for statement `init` node but doesn't usually
+  // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
+  var parens = this._inForStatementInit && node.operator === "in" &&
+               !n.needsParens(node, parent);
+
+  if (parens) {
+    this.push("(");
+  }
+
   // todo: add cases where the spaces can be dropped when in compact mode
   print.plain(node.left);
+
 
   var spaces = node.operator === "in" || node.operator === "instanceof";
   spaces = true; // todo: https://github.com/babel/babel/issues/1835
@@ -241,6 +252,10 @@ export function AssignmentExpression(node, print) {
   this.space(spaces);
 
   print.plain(node.right);
+
+  if (parens) {
+    this.push(")");
+  }
 }
 
 /**
