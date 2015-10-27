@@ -139,6 +139,10 @@ export function SequenceExpression(node, parent) {
     return false;
   }
 
+  if (t.isReturnStatement(parent)) {
+    return false;
+  }
+
   // Otherwise err on the side of overparenthesization, adding
   // explicit exceptions above if this proves overzealous.
   return true;
