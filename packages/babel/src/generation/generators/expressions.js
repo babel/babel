@@ -234,7 +234,6 @@ export function AssignmentExpression(node, print, parent) {
   // todo: add cases where the spaces can be dropped when in compact mode
   print.plain(node.left);
 
-
   var spaces = node.operator === "in" || node.operator === "instanceof";
   spaces = true; // todo: https://github.com/babel/babel/issues/1835
   this.space(spaces);
