@@ -97,10 +97,6 @@ export function Binary(node, parent) {
     if (parentPos > nodePos) {
       return true;
     }
-
-    if (parentPos === nodePos && parent.right === node) {
-      return true;
-    }
   }
 }
 
