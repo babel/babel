@@ -713,7 +713,7 @@ export default class Scope {
     if (path.isFunction()) {
       let params = path.get("params");
       for (let param of (params: Array)) {
-        this.registerBinding("param", param, path);
+        this.registerBinding("param", param);
       }
     }
 
