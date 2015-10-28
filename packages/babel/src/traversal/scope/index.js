@@ -699,7 +699,7 @@ export default class Scope {
     // FunctionExpression - id
 
     if (path.isFunctionExpression() && path.has("id")) {
-      this.registerBinding("local", path);
+      this.registerBinding("local", path.get("id"));
     }
 
     // Class
