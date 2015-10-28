@@ -504,7 +504,7 @@ export default class Scope {
    * [Please add a description.]
    */
 
-  registerBinding(kind: string, path: NodePath) {
+  registerBinding(kind: string, path: NodePath, bindingPath = path) {
     if (!kind) throw new ReferenceError("no `kind`");
 
     if (path.isVariableDeclaration()) {
@@ -535,7 +535,7 @@ export default class Scope {
           identifier: id,
           existing:   local,
           scope:      this,
-          path:       path,
+          path:       bindingPath,
           kind:       kind
         });
       }
@@ -699,7 +699,7 @@ export default class Scope {
     // FunctionExpression - id
 
     if (path.isFunctionExpression() && path.has("id")) {
-      this.registerBinding("local", path.get("id"));
+      this.registerBinding("local", path.get("id"), path);
     }
 
     // Class
@@ -713,7 +713,7 @@ export default class Scope {
     if (path.isFunction()) {
       let params = path.get("params");
       for (let param of (params: Array)) {
-        this.registerBinding("param", param);
+        this.registerBinding("param", param, path);
       }
     }
 
