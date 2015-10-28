@@ -84,6 +84,7 @@ export default class Buffer {
 
   rightBrace() {
     this.newline(true);
+    if (this.format.compact) this._removeLast(";");
     this.push("}");
   }
 
@@ -114,8 +115,11 @@ export default class Buffer {
 
   removeLast(cha) {
     if (this.format.compact) return;
-    if (!this.isLast(cha)) return;
+    return this._removeLast(cha);
+  }
 
+  _removeLast(cha) {
+    if (!this._isLast(cha)) return;
     this.buf = this.buf.substr(0, this.buf.length - 1);
     this.position.unshift(cha);
   }
@@ -298,7 +302,10 @@ export default class Buffer {
 
   isLast(cha) {
     if (this.format.compact) return false;
+    return this._isLast(cha);
+  }
 
+  _isLast(cha) {
     var buf = this.buf;
     var last = buf[buf.length - 1];
 
