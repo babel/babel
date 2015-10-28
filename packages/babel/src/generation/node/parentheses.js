@@ -136,7 +136,8 @@ export function SequenceExpression(node, parent) {
     return false;
   }
 
-  if (t.isExpressionStatement(parent) && parent.expression === node) {
+  if ((t.isExpressionStatement(parent) && parent.expression === node) ||
+      (t.isReturnStatement(parent) && parent.argument === node))  {
     return false;
   }
 
