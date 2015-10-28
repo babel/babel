@@ -97,6 +97,11 @@ export function Binary(node, parent) {
     if (parentPos > nodePos) {
       return true;
     }
+
+    // Logical expressions with the same precedence don't need parens.
+    if (parentPos === nodePos && parent.right === node && !t.isLogicalExpression(parent)) {
+      return true;
+    }
   }
 }
 
