@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es2015-sticky-regex",
-  "version": "5.10.32",
+  "version": "6.0.0",
   "description": "Compile ES2015 sticky regex to an ES5 RegExp constructor",
   "repository": "babel/babel",
   "license": "MIT",
@@ -10,7 +10,7 @@
   ],
   "dependencies": {
     "babel-helper-regex": "^6.0.0",
-    "babel-types": "^5.10.32",
-    "babel-runtime": "^5.10.32"
+    "babel-types": "^6.0.0",
+    "babel-runtime": "^6.0.0"
   }
 }

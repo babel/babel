@@ -1,9 +1,9 @@
-# babel-plugin-external-helpers
+# babel-plugin-external-helpers-2
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-external-helpers
+$ npm install babel-plugin-external-helpers-2
 ```
 
 ## Usage
