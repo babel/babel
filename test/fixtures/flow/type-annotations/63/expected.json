@@ -60,6 +60,7 @@
         },
         "generator": false,
         "expression": false,
+        "async": false,
         "params": [
           {
             "type": "ObjectPattern",
@@ -77,7 +78,7 @@
             },
             "properties": [
               {
-                "type": "Property",
+                "type": "ObjectProperty",
                 "start": 14,
                 "end": 15,
                 "loc": {
@@ -109,7 +110,6 @@
                   },
                   "name": "x"
                 },
-                "kind": "init",
                 "value": {
                   "type": "Identifier",
                   "start": 14,

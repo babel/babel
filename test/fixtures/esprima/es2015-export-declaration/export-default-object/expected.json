@@ -58,7 +58,7 @@
           },
           "properties": [
             {
-              "type": "Property",
+              "type": "ObjectProperty",
               "start": 17,
               "end": 23,
               "loc": {
@@ -109,8 +109,7 @@
                   "raw": "1"
                 },
                 "value": 1
-              },
-              "kind": "init"
+              }
             }
           ]
         }

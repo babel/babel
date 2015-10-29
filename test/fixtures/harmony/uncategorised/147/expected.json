@@ -73,7 +73,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 5,
                   "end": 11,
                   "loc": {
@@ -120,8 +120,7 @@
                       }
                     },
                     "name": "y"
-                  },
-                  "kind": "init"
+                  }
                 }
               ]
             },
@@ -141,7 +140,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 16,
                   "end": 17,
                   "loc": {
@@ -173,7 +172,6 @@
                     },
                     "name": "y"
                   },
-                  "kind": "init",
                   "value": {
                     "type": "Identifier",
                     "start": 16,
@@ -197,7 +195,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

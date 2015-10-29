@@ -91,7 +91,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 14,
                   "end": 15,
                   "loc": {
@@ -123,7 +123,6 @@
                     },
                     "name": "a"
                   },
-                  "kind": "init",
                   "value": {
                     "type": "Identifier",
                     "start": 14,
@@ -142,7 +141,7 @@
                   }
                 },
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 17,
                   "end": 18,
                   "loc": {
@@ -174,7 +173,6 @@
                     },
                     "name": "b"
                   },
-                  "kind": "init",
                   "value": {
                     "type": "Identifier",
                     "start": 17,

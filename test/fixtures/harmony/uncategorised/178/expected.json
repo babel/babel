@@ -76,7 +76,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 3,
                   "end": 4,
                   "loc": {
@@ -108,7 +108,6 @@
                     },
                     "name": "a"
                   },
-                  "kind": "init",
                   "value": {
                     "type": "Identifier",
                     "start": 3,
@@ -143,11 +142,12 @@
                 "column": 13
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

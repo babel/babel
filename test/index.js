@@ -59,7 +59,7 @@ function runTest(test) {
   } else {
     var mis = misMatch(JSON.parse(test.expect.code), ast);
     if (mis) {
-      // save(test, ast);
+      //save(test, ast);
       throw new Error(mis);
     }
   }

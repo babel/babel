@@ -79,30 +79,20 @@ export default class Tokenizer {
   // TODO
 
   isKeyword(word) {
-    if (!this.state.strict) {
-      if (word === "yield" && !this.state.inGenerator) {
-        return false;
-      }
-
-      if (word === "let") {
-        // check if next token is a name, braceL or bracketL, if so, it's a keyword!
-      }
-    }
-
     return isKeyword(word);
   }
 
   // TODO
 
   lookahead() {
-    var old = this.state;
+    let old = this.state;
     this.state = old.clone(true);
 
     this.isLookahead = true;
     this.next();
     this.isLookahead = false;
 
-    var curr = this.state.clone(true);
+    let curr = this.state.clone(true);
     this.state = old;
     return curr;
   }
@@ -132,6 +122,8 @@ export default class Tokenizer {
     let curContext = this.curContext();
     if (!curContext || !curContext.preserveSpace) this.skipSpace();
 
+    this.state.containsOctal = false;
+    this.state.octalPosition = null;
     this.state.start = this.state.pos;
     this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.input.length) return this.finishToken(tt.eof);
@@ -162,7 +154,7 @@ export default class Tokenizer {
   }
 
   pushComment(block, text, start, end, startLoc, endLoc) {
-    var comment = {
+    let comment = {
       type: block ? "CommentBlock" : "CommentLine",
       value: text,
       start: start,
@@ -308,11 +300,11 @@ export default class Tokenizer {
   }
 
   readToken_mult_modulo(code) { // '%*'
-    var type = code === 42 ? tt.star : tt.modulo;
-    var width = 1;
-    var next = this.input.charCodeAt(this.state.pos + 1);
+    let type = code === 42 ? tt.star : tt.modulo;
+    let width = 1;
+    let next = this.input.charCodeAt(this.state.pos + 1);
 
-    if (next === 42 && this.hasFeature("exponentiationOperator")) { // '*'
+    if (next === 42 && this.hasPlugin("exponentiationOperator")) { // '*'
       width++;
       next = this.input.charCodeAt(this.state.pos + 2);
       type = tt.exponent;
@@ -415,7 +407,7 @@ export default class Tokenizer {
       case 125: ++this.state.pos; return this.finishToken(tt.braceR);
 
       case 58:
-        if (this.hasFeature("functionBind") && this.input.charCodeAt(this.state.pos + 1) === 58) {
+        if (this.hasPlugin("functionBind") && this.input.charCodeAt(this.state.pos + 1) === 58) {
           return this.finishOp(tt.doubleColon, 2);
         } else {
           ++this.state.pos;
@@ -694,8 +686,14 @@ export default class Tokenizer {
             octalStr = octalStr.slice(0, -1);
             octal = parseInt(octalStr, 8);
           }
-          if (octal > 0 && (this.state.strict || inTemplate)) {
-            this.raise(this.state.pos - 2, "Octal literal in strict mode");
+          if (octal > 0) {
+            if (!this.state.containsOctal) {
+              this.state.containsOctal = true;
+              this.state.octalPosition = this.state.pos - 2;
+            }
+            if (this.state.strict || inTemplate) {
+              this.raise(this.state.pos - 2, "Octal literal in strict mode");
+            }
           }
           this.state.pos += octalStr.length - 1;
           return String.fromCharCode(octal);

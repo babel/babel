@@ -75,7 +75,7 @@
           },
           "body": [
             {
-              "type": "MethodDefinition",
+              "type": "ClassMethod",
               "start": 9,
               "end": 31,
               "loc": {
@@ -107,44 +107,30 @@
               },
               "static": true,
               "kind": "method",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 27,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 29,
                 "end": 31,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 27
+                    "column": 29
                   },
                   "end": {
                     "line": 1,
                     "column": 31
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 29,
-                  "end": 31,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 29
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 31
-                    }
-                  },
-                  "body": []
-                }
+                "body": [],
+                "directives": []
               }
             },
             {
-              "type": "MethodDefinition",
+              "type": "ClassMethod",
               "start": 32,
               "end": 54,
               "loc": {
@@ -176,45 +162,32 @@
               },
               "static": true,
               "kind": "method",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 50,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 52,
                 "end": 54,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 50
+                    "column": 52
                   },
                   "end": {
                     "line": 1,
                     "column": 54
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 52,
-                  "end": 54,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 52
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 54
-                    }
-                  },
-                  "body": []
-                }
+                "body": [],
+                "directives": []
               }
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

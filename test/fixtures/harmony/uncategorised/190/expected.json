@@ -88,7 +88,7 @@
                   },
                   "properties": [
                     {
-                      "type": "Property",
+                      "type": "ObjectProperty",
                       "start": 7,
                       "end": 8,
                       "loc": {
@@ -120,7 +120,6 @@
                         },
                         "name": "a"
                       },
-                      "kind": "init",
                       "value": {
                         "type": "Identifier",
                         "start": 7,
@@ -139,7 +138,7 @@
                       }
                     },
                     {
-                      "type": "Property",
+                      "type": "ObjectProperty",
                       "start": 10,
                       "end": 11,
                       "loc": {
@@ -171,7 +170,6 @@
                         },
                         "name": "b"
                       },
-                      "kind": "init",
                       "value": {
                         "type": "Identifier",
                         "start": 10,
@@ -244,7 +242,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

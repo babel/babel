@@ -89,7 +89,7 @@
             },
             "properties": [
               {
-                "type": "Property",
+                "type": "ObjectMethod",
                 "start": 3,
                 "end": 25,
                 "loc": {
@@ -122,71 +122,57 @@
                   "name": "fooProp"
                 },
                 "kind": "get",
-                "value": {
-                  "type": "FunctionExpression",
-                  "start": 14,
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "returnType": {
+                  "type": "TypeAnnotation",
+                  "start": 16,
+                  "end": 23,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 23
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "NumberTypeAnnotation",
+                    "start": 17,
+                    "end": 23,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 17
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 23
+                      }
+                    }
+                  }
+                },
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 23,
                   "end": 25,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 14
+                      "column": 23
                     },
                     "end": {
                       "line": 1,
                       "column": 25
                     }
                   },
-                  "id": null,
-                  "generator": false,
-                  "expression": false,
-                  "params": [],
-                  "returnType": {
-                    "type": "TypeAnnotation",
-                    "start": 16,
-                    "end": 23,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 16
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 23
-                      }
-                    },
-                    "typeAnnotation": {
-                      "type": "NumberTypeAnnotation",
-                      "start": 17,
-                      "end": 23,
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 17
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 23
-                        }
-                      }
-                    }
-                  },
-                  "body": {
-                    "type": "BlockStatement",
-                    "start": 23,
-                    "end": 25,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 23
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 25
-                      }
-                    },
-                    "body": [],
-                    "directives": []
-                  }
+                  "body": [],
+                  "directives": []
                 }
               }
             ]

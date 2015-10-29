@@ -22,8 +22,18 @@ pp.toAssignable = function (node, isBinding) {
         node.type = "ObjectPattern";
         for (let prop of (node.properties: Array<Object>)) {
           if (prop.type === "SpreadProperty") continue;
-          if (prop.kind !== "init") this.raise(prop.key.start, "Object pattern can't contain getter or setter");
-          this.toAssignable(prop.value, isBinding);
+
+          if (prop.type === "ObjectMethod") {
+            if (prop.kind === "get" || prop.kind === "set") {
+              this.raise(prop.key.start, "Object pattern can't contain getter or setter");
+            } else {
+              this.raise(prop.key.start, "Object pattern can't contain methods");
+            }
+          }
+
+          if (prop.type === "ObjectProperty") {
+            this.toAssignable(prop.value, isBinding);
+          }
         }
         break;
 
@@ -94,14 +104,25 @@ pp.parseSpread = function (refShorthandDefaultPos) {
 pp.parseRest = function () {
   let node = this.startNode();
   this.next();
-  node.argument = this.parseIdentifier();
+  node.argument = this.parseBindingIdentifier();
   return this.finishNode(node, "RestElement");
+};
+
+pp.shouldAllowYieldIdentifier = function () {
+  return this.match(tt._yield) && !this.state.strict && !this.state.inGenerator;
+};
+
+pp.parseBindingIdentifier = function () {
+  return this.parseIdentifier(this.shouldAllowYieldIdentifier());
 };
 
 // Parses lvalue (assignable) atom.
 
 pp.parseBindingAtom = function () {
   switch (this.state.type) {
+    case tt._yield:
+      if (this.state.strict || this.state.inGenerator) this.unexpected();
+
     case tt.name:
       return this.parseIdentifier(true);
 
@@ -120,7 +141,8 @@ pp.parseBindingAtom = function () {
 };
 
 pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
-  var elts = [], first = true;
+  let elts = [];
+  let first = true;
   while (!this.eat(close)) {
     if (first) {
       first = false;
@@ -136,7 +158,7 @@ pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
       this.expect(close);
       break;
     } else {
-      var left = this.parseMaybeDefault();
+      let left = this.parseMaybeDefault();
       this.parseAssignableListItemTypes(left);
       elts.push(this.parseMaybeDefault(null, null, left));
     }
@@ -187,7 +209,7 @@ pp.checkLVal = function (expr, isBinding, checkClashes) {
 
     case "ObjectPattern":
       for (let prop of (expr.properties: Array<Object>)) {
-        if (prop.type === "Property") prop = prop.value;
+        if (prop.type === "ObjectProperty") prop = prop.value;
         this.checkLVal(prop, isBinding, checkClashes);
       }
       break;

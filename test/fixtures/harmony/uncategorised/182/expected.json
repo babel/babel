@@ -76,7 +76,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 3,
                   "end": 12,
                   "loc": {
@@ -156,8 +156,7 @@
                         "name": "b"
                       }
                     ]
-                  },
-                  "kind": "init"
+                  }
                 }
               ]
             },
@@ -207,11 +206,12 @@
                 "column": 27
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

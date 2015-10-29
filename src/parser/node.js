@@ -21,8 +21,8 @@ class Node {
   loc: SourceLocation;
 
   __clone(): Node {
-    var node2 = new Node;
-    for (var key in this) node2[key] = this[key];
+    let node2 = new Node;
+    for (let key in this) node2[key] = this[key];
     return node2;
   }
 }

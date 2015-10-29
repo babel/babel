@@ -89,7 +89,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 17,
                   "end": 27,
                   "loc": {
@@ -173,8 +173,7 @@
                       "raw": "'wow'"
                     },
                     "value": "wow"
-                  },
-                  "kind": "init"
+                  }
                 }
               ]
             }

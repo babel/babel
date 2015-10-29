@@ -58,7 +58,7 @@
           },
           "properties": [
             {
-              "type": "Property",
+              "type": "ObjectMethod",
               "start": 3,
               "end": 20,
               "loc": {
@@ -90,44 +90,44 @@
                 },
                 "name": "foo"
               },
-              "kind": "init",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 7,
+              "kind": "method",
+              "id": null,
+              "generator": true,
+              "expression": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 10,
                 "end": 20,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 7
+                    "column": 10
                   },
                   "end": {
                     "line": 1,
                     "column": 20
                   }
                 },
-                "id": null,
-                "generator": true,
-                "expression": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 10,
-                  "end": 20,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 10
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 12,
+                    "end": 18,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 18
+                      }
                     },
-                    "end": {
-                      "line": 1,
-                      "column": 20
-                    }
-                  },
-                  "body": [
-                    {
-                      "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "YieldExpression",
                       "start": 12,
-                      "end": 18,
+                      "end": 17,
                       "loc": {
                         "start": {
                           "line": 1,
@@ -135,30 +135,15 @@
                         },
                         "end": {
                           "line": 1,
-                          "column": 18
+                          "column": 17
                         }
                       },
-                      "expression": {
-                        "type": "YieldExpression",
-                        "start": 12,
-                        "end": 17,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 12
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 17
-                          }
-                        },
-                        "delegate": false,
-                        "argument": null
-                      }
+                      "delegate": false,
+                      "argument": null
                     }
-                  ],
-                  "directives": []
-                }
+                  }
+                ],
+                "directives": []
               }
             }
           ],

@@ -32,13 +32,12 @@ Significant diversions are expected to occur in the future such as streaming, EB
   the top level raises an error. Set this to `true` to accept such
   code.
 
+- **allowSuperOutsideMethod** TODO
+
 - **sourceType**: Indicate the mode the code should be parsed in. Can be
   either `"script"` or `"module"`.
 
-- **features**: Object containing names of all the proposed syntax you want
-  to support.
-
-- **plugins**: Object containg the plugins that you want to enable.
+- **plugins**: Array containing the plugins that you want to enable.
 
 ### Example
 
@@ -47,29 +46,28 @@ require("babylon").parse("code", {
   // parse in strict mode and allow module declarations
   sourceType: "module",
 
-  features: {
+  features: [
     // enable experimental async functions
-    asyncFunctions: true
-  }
+    "asyncFunctions",
 
-  plugins: {
     // enable jsx and flow syntax
-    jsx: true,
-    flow: true
-  }
+    "jsx",
+    "flow"
+  ]
 });
 ```
-
-### Features
-
- - `asyncFunctions`
- - `doExpressions`
- - `comprehensions`
- - `trailingFunctionCommas`
- - `objectRestSpread`
- - `decorators`
 
 ### Plugins
 
  - `jsx`
  - `flow`
+ - `asyncFunctions`
+ - `classConstructorCall`
+ - `doExpressions`
+ - `trailingFunctionCommas`
+ - `objectRestSpread`
+ - `decorators`
+ - `classProperties`
+ - `exportExtensions`
+ - `exponentiationOperator`
+ - `asyncGenerators`

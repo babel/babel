@@ -89,7 +89,7 @@
             },
             "properties": [
               {
-                "type": "Property",
+                "type": "ObjectMethod",
                 "start": 3,
                 "end": 20,
                 "loc": {
@@ -121,56 +121,58 @@
                   },
                   "name": "id"
                 },
-                "kind": "init",
-                "value": {
-                  "type": "FunctionExpression",
-                  "start": 8,
-                  "end": 20,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 8
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 9,
+                    "end": 13,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 13
+                      }
                     },
-                    "end": {
-                      "line": 1,
-                      "column": 20
-                    }
-                  },
-                  "id": null,
-                  "generator": false,
-                  "expression": false,
-                  "params": [
-                    {
-                      "type": "Identifier",
-                      "start": 9,
+                    "name": "x",
+                    "typeAnnotation": {
+                      "type": "TypeAnnotation",
+                      "start": 10,
                       "end": 13,
                       "loc": {
                         "start": {
                           "line": 1,
-                          "column": 9
+                          "column": 10
                         },
                         "end": {
                           "line": 1,
                           "column": 13
                         }
                       },
-                      "name": "x",
                       "typeAnnotation": {
-                        "type": "TypeAnnotation",
-                        "start": 10,
+                        "type": "GenericTypeAnnotation",
+                        "start": 12,
                         "end": 13,
                         "loc": {
                           "start": {
                             "line": 1,
-                            "column": 10
+                            "column": 12
                           },
                           "end": {
                             "line": 1,
                             "column": 13
                           }
                         },
-                        "typeAnnotation": {
-                          "type": "GenericTypeAnnotation",
+                        "typeParameters": null,
+                        "id": {
+                          "type": "Identifier",
                           "start": 12,
                           "end": 13,
                           "loc": {
@@ -183,43 +185,43 @@
                               "column": 13
                             }
                           },
-                          "typeParameters": null,
-                          "id": {
-                            "type": "Identifier",
-                            "start": 12,
-                            "end": 13,
-                            "loc": {
-                              "start": {
-                                "line": 1,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 1,
-                                "column": 13
-                              }
-                            },
-                            "name": "T"
-                          }
+                          "name": "T"
                         }
                       }
                     }
-                  ],
-                  "returnType": {
-                    "type": "TypeAnnotation",
-                    "start": 14,
+                  }
+                ],
+                "returnType": {
+                  "type": "TypeAnnotation",
+                  "start": 14,
+                  "end": 17,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 17
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "start": 16,
                     "end": 17,
                     "loc": {
                       "start": {
                         "line": 1,
-                        "column": 14
+                        "column": 16
                       },
                       "end": {
                         "line": 1,
                         "column": 17
                       }
                     },
-                    "typeAnnotation": {
-                      "type": "GenericTypeAnnotation",
+                    "typeParameters": null,
+                    "id": {
+                      "type": "Identifier",
                       "start": 16,
                       "end": 17,
                       "loc": {
@@ -232,75 +234,59 @@
                           "column": 17
                         }
                       },
-                      "typeParameters": null,
-                      "id": {
-                        "type": "Identifier",
-                        "start": 16,
-                        "end": 17,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 16
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 17
-                          }
-                        },
-                        "name": "T"
-                      }
+                      "name": "T"
+                    }
+                  }
+                },
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 18,
+                  "end": 20,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 20
                     }
                   },
-                  "body": {
-                    "type": "BlockStatement",
-                    "start": 18,
-                    "end": 20,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 18
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 20
-                      }
+                  "body": [],
+                  "directives": []
+                },
+                "typeParameters": {
+                  "type": "TypeParameterDeclaration",
+                  "start": 5,
+                  "end": 8,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 5
                     },
-                    "body": [],
-                    "directives": []
+                    "end": {
+                      "line": 1,
+                      "column": 8
+                    }
                   },
-                  "typeParameters": {
-                    "type": "TypeParameterDeclaration",
-                    "start": 5,
-                    "end": 8,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 5
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 8
-                      }
-                    },
-                    "params": [
-                      {
-                        "type": "Identifier",
-                        "start": 6,
-                        "end": 7,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 6
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 7
-                          }
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "start": 6,
+                      "end": 7,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 6
                         },
-                        "name": "T"
-                      }
-                    ]
-                  }
+                        "end": {
+                          "line": 1,
+                          "column": 7
+                        }
+                      },
+                      "name": "T"
+                    }
+                  ]
                 }
               }
             ]

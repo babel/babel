@@ -13,7 +13,7 @@ const pp = Parser.prototype;
 pp.addExtra = function (node, key, val) {
   if (!node) return;
 
-  var extra = node.extra = node.extra || {};
+  let extra = node.extra = node.extra || {};
   extra[key] = val;
 };
 

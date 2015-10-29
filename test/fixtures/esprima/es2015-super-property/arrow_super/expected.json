@@ -90,7 +90,7 @@
           },
           "body": [
             {
-              "type": "MethodDefinition",
+              "type": "ClassMethod",
               "start": 24,
               "end": 67,
               "loc": {
@@ -122,41 +122,41 @@
               },
               "static": false,
               "kind": "constructor",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 35,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 38,
                 "end": 67,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 15
+                    "column": 18
                   },
                   "end": {
                     "line": 4,
                     "column": 5
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 38,
-                  "end": 67,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 18
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 48,
+                    "end": 61,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 21
+                      }
                     },
-                    "end": {
-                      "line": 4,
-                      "column": 5
-                    }
-                  },
-                  "body": [
-                    {
-                      "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "ArrowFunctionExpression",
                       "start": 48,
                       "end": 61,
                       "loc": {
@@ -169,28 +169,28 @@
                           "column": 21
                         }
                       },
-                      "expression": {
-                        "type": "ArrowFunctionExpression",
-                        "start": 48,
+                      "id": null,
+                      "generator": false,
+                      "expression": true,
+                      "params": [],
+                      "body": {
+                        "type": "CallExpression",
+                        "start": 54,
                         "end": 61,
                         "loc": {
                           "start": {
                             "line": 3,
-                            "column": 8
+                            "column": 14
                           },
                           "end": {
                             "line": 3,
                             "column": 21
                           }
                         },
-                        "id": null,
-                        "generator": false,
-                        "expression": true,
-                        "params": [],
-                        "body": {
-                          "type": "CallExpression",
+                        "callee": {
+                          "type": "Super",
                           "start": 54,
-                          "end": 61,
+                          "end": 59,
                           "loc": {
                             "start": {
                               "line": 3,
@@ -198,35 +198,22 @@
                             },
                             "end": {
                               "line": 3,
-                              "column": 21
+                              "column": 19
                             }
-                          },
-                          "callee": {
-                            "type": "Super",
-                            "start": 54,
-                            "end": 59,
-                            "loc": {
-                              "start": {
-                                "line": 3,
-                                "column": 14
-                              },
-                              "end": {
-                                "line": 3,
-                                "column": 19
-                              }
-                            }
-                          },
-                          "arguments": []
-                        }
+                          }
+                        },
+                        "arguments": []
                       }
                     }
-                  ]
-                }
+                  }
+                ],
+                "directives": []
               }
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }
