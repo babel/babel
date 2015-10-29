@@ -9,3 +9,6 @@ Stores a representation of a node's position in the tree and relationship to oth
 
 ## `shadow`
 A truthy value on a function node triggers the [shadow-functions transformer](/src/babel/transformation/transformers/internal/shadow-functions.js), which transforms the node so that it references (or inherits) `arguments` and the `this` context from the parent scope. It is invoked for arrow functions, for example.
+
+## `existentialOperator`
+A truthy value on an `MemberExpression` node indicating the non-standard [existential operator](https://esdiscuss.org/topic/existential-operator-null-propagation-operator) is used to access its property.
