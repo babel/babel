@@ -42,7 +42,7 @@ var transformOpts = {
   presets: [
     require("../../babel-preset-es2015")
   ],
-  
+
   plugins: [
     require("../../babel-plugin-transform-runtime"),
     require("../../babel-plugin-transform-es2015-modules-commonjs")
@@ -71,7 +71,7 @@ writeFile("regenerator/index.js", readFile("regenerator/runtime-module", true));
 writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator/runtime")));
 
 
-var coreDefinitions = require("babel-plugin-runtime/lib/definitions");
+var coreDefinitions = require("babel-plugin-transform-runtime/lib/definitions");
 
 var paths = ["is-iterable", "get-iterator"];
 

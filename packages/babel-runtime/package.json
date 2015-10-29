@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "babel-helpers": "^6.0.2",
-    "babel-plugin-runtime": "^1.0.7",
+    "babel-plugin-transform-runtime": "^1.0.7",
     "babel-template": "^6.0.2",
     "regenerator": "^0.8.34"
   }
