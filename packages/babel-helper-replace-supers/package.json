@@ -1,16 +1,16 @@
 {
   "name": "babel-helper-replace-supers",
-  "version": "1.0.0",
+  "version": "6.0.0",
   "description": "",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-optimise-call-expression": "^5.8.20",
-    "babel-runtime": "^5.8.20",
-    "babel-traverse": "^5.8.20",
-    "babel-messages": "^5.8.20",
-    "babel-template": "^5.8.20",
-    "babel-types": "^5.8.20"
+    "babel-helper-optimise-call-expression": "^6.0.0",
+    "babel-runtime": "^6.0.0",
+    "babel-traverse": "^6.0.0",
+    "babel-messages": "^6.0.0",
+    "babel-template": "^6.0.0",
+    "babel-types": "^6.0.0"
   }
 }
