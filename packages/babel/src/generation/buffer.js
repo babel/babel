@@ -84,7 +84,7 @@ export default class Buffer {
 
   rightBrace() {
     this.newline(true);
-    if (this.format.compact) this._removeLast(";");
+    //if (this.format.compact) this._removeLast(";");
     this.push("}");
   }
 
