@@ -26,6 +26,7 @@
     "babel-plugin-transform-es2015-destructuring": "^6.0.2",
     "babel-plugin-transform-es2015-block-scoping": "^6.0.2",
     "babel-plugin-transform-es2015-typeof-symbol": "^6.0.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.0.2",
     "babel-plugin-transform-regenerator": "^6.0.8"
   }
 }
