@@ -226,6 +226,15 @@ pp.parseSubscripts = function(base, startPos, startLoc, noCalls) {
       node.object = base;
       node.callee = this.parseNoCallExpr();
       return this.parseSubscripts(this.finishNode(node, "BindExpression"), startPos, startLoc, noCalls);
+    } else if (this.options.features["existentialOperator"] && this.match(tt.question)) {
+      const { type } = this.lookahead();
+      // Existential operator `?.`
+      if (type === tt.dot) {
+        base.existentialOperator = true;
+        this.next();
+      } else {
+        return base;
+      }
     } else if (this.eat(tt.dot)) {
       let node = this.startNodeAt(startPos, startLoc);
       node.object = base;
