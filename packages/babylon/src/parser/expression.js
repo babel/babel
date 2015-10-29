@@ -228,8 +228,8 @@ pp.parseSubscripts = function(base, startPos, startLoc, noCalls) {
       return this.parseSubscripts(this.finishNode(node, "BindExpression"), startPos, startLoc, noCalls);
     } else if (this.options.features["existentialOperator"] && this.match(tt.question)) {
       const { type } = this.lookahead();
-      // Existential operator `?.` or `?[`
-      if (type === tt.dot || type === tt.bracketL) {
+      // Existential operator `?.` or `?[` or `?(`
+      if (type === tt.dot || type === tt.bracketL || type === tt.parenL) {
         base.existentialOperator = true;
         this.next();
       } else {
