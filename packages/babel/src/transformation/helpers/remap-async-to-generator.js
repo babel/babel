@@ -81,6 +81,14 @@ export default function (path, callId) {
       }
     }
 
-    return call;
+    var callee = t.memberExpression(call, t.identifier("apply"));
+    var applyCall = t.callExpression(callee, [t.thisExpression(), t.identifier("arguments")]);
+    var ret = t.returnStatement(applyCall);
+    var block = t.blockStatement([ret]);
+    var container = t.functionExpression(null, node.params, block);
+    var bind = t.memberExpression(container, t.identifier("bind"));
+    var bindCall = t.callExpression(bind, [t.thisExpression()]);
+
+    return bindCall;
   }
 }
