@@ -1,6 +1,6 @@
 {
   "name": "babel-runtime",
-  "version": "6.0.0",
+  "version": "6.0.2",
   "description": "babel selfContained runtime",
   "license": "MIT",
   "repository": "babel/babel",
@@ -9,9 +9,9 @@
     "core-js": "^1.0.0"
   },
   "devDependencies": {
-    "babel-helpers": "^6.0.0",
+    "babel-helpers": "^6.0.2",
     "babel-plugin-runtime": "^1.0.7",
-    "babel-template": "^6.0.0",
+    "babel-template": "^6.0.2",
     "regenerator": "^0.8.34"
   }
 }

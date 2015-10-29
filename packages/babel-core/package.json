@@ -1,6 +1,6 @@
 {
   "name": "babel-core",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "A compiler for writing next generation JavaScript",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -28,15 +28,15 @@
     "test": "make test"
   },
   "dependencies": {
-    "babel-code-frame": "^6.0.0",
-    "babel-generator": "^6.0.0",
-    "babel-helpers": "^6.0.0",
-    "babel-messages": "^6.0.0",
-    "babel-template": "^6.0.0",
-    "babel-runtime": "^6.0.0",
-    "babel-traverse": "^6.0.0",
-    "babel-types": "^6.0.0",
-    "babylon": "^6.0.0",
+    "babel-code-frame": "^6.0.2",
+    "babel-generator": "^6.0.2",
+    "babel-helpers": "^6.0.2",
+    "babel-messages": "^6.0.2",
+    "babel-template": "^6.0.2",
+    "babel-runtime": "^6.0.2",
+    "babel-traverse": "^6.0.2",
+    "babel-types": "^6.0.2",
+    "babylon": "^6.0.2",
     "convert-source-map": "^1.1.0",
     "debug": "^2.1.1",
     "esutils": "^2.0.0",
@@ -54,6 +54,6 @@
     "source-map-support": "^0.2.10"
   },
   "devDependencies": {
-    "babel-polyfill": "^6.0.0"
+    "babel-polyfill": "^6.0.2"
   }
 }

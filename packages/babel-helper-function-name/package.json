@@ -1,15 +1,15 @@
 {
   "name": "babel-helper-function-name",
-  "version": "6.0.0",
+  "version": "6.0.2",
   "description": "",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-runtime": "^6.0.0",
-    "babel-types": "^6.0.0",
-    "babel-traverse": "^6.0.0",
-    "babel-helper-get-function-arity": "^6.0.0",
-    "babel-template": "^6.0.0"
+    "babel-runtime": "^6.0.2",
+    "babel-types": "^6.0.2",
+    "babel-traverse": "^6.0.2",
+    "babel-helper-get-function-arity": "^6.0.2",
+    "babel-template": "^6.0.2"
   }
 }
