@@ -1,13 +1,7 @@
-var Foo = (function () {
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
+class Foo {
+  foo() {
+    return babelHelpers.asyncToGenerator(function* () {
+      var wat = await bar();
+    })();
   }
-
-  babelHelpers.createClass(Foo, [{
-    key: "foo",
-    value: babelHelpers.asyncToGenerator(function* () {
-      var wat = yield bar();
-    })
-  }]);
-  return Foo;
-})();
+}

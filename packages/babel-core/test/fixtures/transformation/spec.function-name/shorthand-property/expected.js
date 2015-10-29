@@ -2,7 +2,7 @@ var Utils = {
   get: function get() {}
 };
 
-var _get = Utils.get;
+var { get: _get } = Utils;
 
 var bar = {
   get: function get(arg) {
@@ -10,11 +10,7 @@ var bar = {
   }
 };
 
-var f = function f(_ref) {
-  var _ref$foo = _ref.foo;
-
-  var _foo = _ref$foo === undefined ? "bar" : _ref$foo;
-
+var f = function f({ foo: _foo = "bar" }) {
   var obj = {
     // same name as parameter
     foo: function foo() {

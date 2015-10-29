@@ -1,11 +1,15 @@
 {
   "name": "babel-plugin-transform-es2015-shorthand-properties",
-  "version": "1.0.0",
+  "version": "5.10.32",
   "description": "Compile ES2015 shorthand properties to ES5",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-types": "^5.10.32",
+    "babel-runtime": "^5.10.32"
+  }
 }

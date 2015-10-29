@@ -1,3 +1,7 @@
+/* @flow */
+
+import type NodePath from "../path";
+
 /**
  * This class is responsible for a binding inside of a scope.
  *
@@ -11,21 +15,17 @@
 
 export default class Binding {
   constructor({ existing, identifier, scope, path, kind }) {
-    this.constantViolations = [];
-    this.constant           = true;
-
     this.identifier = identifier;
+    this.scope      = scope;
+    this.path       = path;
+    this.kind       = kind;
+
+    this.constantViolations = [];
+    this.constant = true;
+
     this.referencePaths = [];
-    this.references = 0;
     this.referenced = false;
-
-    this.scope = scope;
-    this.path  = path;
-    this.kind  = kind;
-
-    this.hasValue        = false;
-    this.hasDeoptedValue = false;
-    this.value           = null;
+    this.references = 0;
 
     this.clearValue();
 
@@ -37,6 +37,18 @@ export default class Binding {
       );
     }
   }
+
+
+  constantViolations: Array<NodePath>;
+  constant: boolean;
+
+  referencePaths: Array<NodePath>;
+  referenced: boolean;
+  references: number;
+
+  hasDeoptedValue: boolean;
+  hasValue: boolean;
+  value: any;
 
   deoptValue() {
     this.clearValue();
@@ -68,7 +80,7 @@ export default class Binding {
    * Increment the amount of references to this binding.
    */
 
-  reference(path) {
+  reference(path: NodePath) {
     this.referenced = true;
     this.references++;
     this.referencePaths.push(path)

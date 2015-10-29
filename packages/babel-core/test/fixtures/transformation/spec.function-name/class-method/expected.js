@@ -1,4 +1,4 @@
-var Foo = (function () {
+let Foo = (function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }

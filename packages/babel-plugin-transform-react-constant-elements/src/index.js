@@ -1,7 +1,7 @@
 export default function () {
-  var immutabilityVisitor = {
+  let immutabilityVisitor = {
     enter(path, state) {
-      var stop = () => {
+      let stop = () => {
         state.isImmutable = false;
         path.stop();
       };
@@ -28,7 +28,7 @@ export default function () {
       JSXElement(path) {
         if (path.node._hoisted) return;
 
-        var state = { isImmutable: true };
+        let state = { isImmutable: true };
         path.traverse(immutabilityVisitor, state);
 
         if (state.isImmutable) {

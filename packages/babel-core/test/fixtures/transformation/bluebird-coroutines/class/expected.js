@@ -1,15 +1,8 @@
-var _bluebird = require("bluebird");
-
-var Foo = (function () {
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
+import { coroutine as _coroutine } from "bluebird";
+class Foo {
+  foo() {
+    return _coroutine(function* () {
+      var wat = await bar();
+    })();
   }
-
-  babelHelpers.createClass(Foo, [{
-    key: "foo",
-    value: _bluebird.coroutine(function* () {
-      var wat = yield bar();
-    })
-  }]);
-  return Foo;
-})();
+}

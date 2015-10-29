@@ -1,14 +1,15 @@
 System.register([], function (_export) {
-    var test, a, b, d;
+  var test, a, b, d;
   return {
     setters: [],
     execute: function () {
-      test = 2;
+      _export("test", test = 2);
 
       _export("test", test);
 
       _export("test", test = 5);
-      _export("test", test += 1);
+
+      _export("test", test++);
 
       (function () {
         var test = 2;
@@ -16,19 +17,19 @@ System.register([], function (_export) {
         test++;
       })();
 
-      a = 2;
+      _export("a", a = 2);
 
       _export("a", a);
 
       _export("a", a = 3);
 
-      b = 2;
+      _export("c", b = 2);
 
       _export("c", b);
 
       _export("c", b = 3);
 
-      d = 3;
+      _export("f", _export("e", d = 3));
 
       _export("e", d);
 

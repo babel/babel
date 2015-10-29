@@ -1,7 +1,14 @@
+import rewritePattern from "regexpu/rewrite-pattern";
+import * as regex from "babel-helper-regex";
+
 export default function () {
   return {
     visitor: {
-      // your visitor methods go here
+      RegexLiteral({ node }) {
+        if (!regex.is(node, "u")) return;
+        node.pattern = rewritePattern(node.pattern, node.flags);
+        regex.pullFlag(node, "u");
+      }
     }
   };
 }

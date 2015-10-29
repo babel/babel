@@ -1,15 +1,15 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define("es6.modules-umd/module-name/expected", ["exports"], factory);
+    define("es6.modules-umd/module-name/expected", [], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports);
+    factory();
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports);
+    factory();
     global.es6ModulesUmdModuleNameExpected = mod.exports;
   }
-})(this, function (exports) {
-    foobar();
+})(this, function () {
+  foobar();
 });

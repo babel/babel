@@ -4,5 +4,3 @@ function rmRelative(loc) {
 
 rmRelative("browser.js");
 rmRelative("browser.min.js");
-rmRelative("external-helpers.js");
-rmRelative("external-helpers.min.js");

@@ -1,71 +1,69 @@
+/* @flow */
+
 // This file contains methods responsible for maintaining a TraversalContext.
 
 import traverse from "../index";
 
-export function call(key) {
-  var node = this.node;
-  if (!node) return;
+export function call(key): boolean {
+  let opts = this.opts;
 
-  var opts = this.opts;
-
-  for (var fns of [opts[key], opts[node.type] && opts[node.type][key]]){
-    if (!fns) continue;
-
-    for (var fn of (fns: Array)) {
-      if (!fn) continue;
-
-      let node = this.node;
-      if (!node) return;
-
-      var previousType = this.type;
-
-      // call the function with the params (node, parent, scope, state)
-      var replacement = fn.call(this, this, this.state);
-
-      if (replacement) {
-        throw new Error("Unexpected return value from visitor method");
-      }
-
-      if (this.shouldStop || this.shouldSkip || this.removed) return;
-
-      if (previousType !== this.type) {
-        this.queueNode(this);
-        return;
-      }
-    }
+  if (this.node) {
+    if (this._call(opts[key])) return true;
   }
+
+  if (this.node) {
+    return this._call(opts[this.node.type] && opts[this.node.type][key]);
+  }
+
+  return false;
+}
+
+export function _call(fns?: Array<Function>): boolean {
+  if (!fns) return false;
+
+  for (let fn of fns) {
+    if (!fn) continue;
+
+    let node = this.node;
+    if (!node) return true;
+
+    let ret = fn.call(this.state, this, this.state);
+    if (ret) throw new Error("Unexpected return value from visitor method " + fn);
+
+    // node has been replaced, it will have been requeued
+    if (this.node !== node) return true;
+
+    if (this.shouldStop || this.shouldSkip || this.removed) return true;
+  }
+
+  return false;
 }
 
 export function isBlacklisted(): boolean {
-  var blacklist = this.opts.blacklist;
+  let blacklist = this.opts.blacklist;
   return blacklist && blacklist.indexOf(this.node.type) > -1;
 }
 
 export function visit(): boolean {
-  if (this.isBlacklisted()) return false;
-  if (this.opts.shouldSkip && this.opts.shouldSkip(this)) return false;
+  if (!this.node) {
+    return false;
+  }
 
-  this.call("enter");
+  if (this.isBlacklisted()) {
+    return false;
+  }
 
-  if (this.shouldSkip) {
+  if (this.opts.shouldSkip && this.opts.shouldSkip(this)) {
+    return false;
+  }
+
+  if (this.call("enter") || this.shouldSkip) {
     return this.shouldStop;
   }
 
-  var node = this.node;
-  var opts = this.opts;
+  traverse.node(this.node, this.opts, this.scope, this.state, this, this.skipKeys);
 
-  if (node) {
-    if (Array.isArray(node)) {
-      // traverse over these replacement nodes we purposely don't call exitNode
-      // as the original node has been destroyed
-      for (var i = 0; i < node.length; i++) {
-        traverse.node(node[i], opts, this.scope, this.state, this, this.skipKeys);
-      }
-    } else {
-      traverse.node(node, opts, this.scope, this.state, this, this.skipKeys);
-      this.call("exit");
-    }
-  }
+  this.call("exit");
 
   return this.shouldStop;
 }
@@ -86,8 +84,19 @@ export function stop() {
 export function setScope() {
   if (this.opts && this.opts.noScope) return;
 
-  var target = this.context || this.parentPath;
-  this.scope = this.getScope(target && target.scope);
+  let target = this.context && this.context.scope;
+
+  if (!target) {
+    let path = this.parentPath;
+    while (path && !target) {
+      if (path.opts && path.opts.noScope) return;
+      
+      target = path.scope;
+      path = path.parentPath;
+    }
+  }
+
+  this.scope = this.getScope(target);
   if (this.scope) this.scope.init();
 }
 
@@ -138,37 +147,31 @@ export function _resyncKey() {
   // not done through our path APIs
 
   if (Array.isArray(this.container)) {
-    for (var i = 0; i < this.container.length; i++) {
+    for (let i = 0; i < this.container.length; i++) {
       if (this.container[i] === this.node) {
         return this.setKey(i);
       }
     }
   } else {
-    for (var key in this.container) {
+    for (let key in this.container) {
       if (this.container[key] === this.node) {
         return this.setKey(key);
       }
     }
   }
 
+  // ¯\_(ツ)_/¯ who knows where it's gone lol
   this.key = null;
 }
 
 export function _resyncList() {
-  var listKey    = this.listKey;
-  var parentPath = this.parentPath;
-  if (!listKey || !parentPath || !parentPath.node) return;
+  if (!this.parent || !this.inList) return;
 
-  var newContainer = parentPath.node[listKey];
+  let newContainer = this.parent[this.listKey];
   if (this.container === newContainer) return;
 
   // container is out of sync. this is likely the result of it being reassigned
-
-  if (newContainer) {
-    this.container = newContainer;
-  } else {
-    this.container = null;
-  }
+  this.container = newContainer || null;
 }
 
 export function _resyncRemoved() {
@@ -177,13 +180,13 @@ export function _resyncRemoved() {
   }
 }
 
-export function shiftContext() {
-  this.contexts.shift();
-  this.setContext(this.contexts[0]);
+export function popContext() {
+  this.contexts.pop();
+  this.setContext(this.contexts[this.contexts.length - 1]);
 }
 
-export function unshiftContext(context) {
-  this.contexts.unshift(context);
+export function pushContext(context) {
+  this.contexts.push(context);
   this.setContext(context);
 }
 
@@ -203,10 +206,10 @@ export function setKey(key) {
   this.type = this.node && this.node.type;
 }
 
-export function queueNode(path) {
-  for (var context of (this.contexts: Array)) {
-    if (context.queue) {
-      context.queue.push(path);
-    }
+export function requeue(path = this) {
+  if (path.removed) return;
+
+  for (let context of this.contexts) {
+    context.maybeQueue(path);
   }
 }

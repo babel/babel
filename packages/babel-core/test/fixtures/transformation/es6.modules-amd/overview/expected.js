@@ -1,18 +1,14 @@
-define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, _foo, _fooBar, _directoryFooBar) {
-    Object.defineProperty(exports, "__esModule", {
+define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, _foo) {
+  Object.defineProperty(exports, "__esModule", {
     value: true
   });
-
-  var _foo2 = babelHelpers.interopRequireDefault(_foo);
-
+  exports.test2 = exports.test = undefined;
+  var foo2 = babelHelpers.interopRequireWildcard(_foo);
   exports.test = test;
-  var test2 = 5;
-
-  exports.test2 = test2;
-  exports["default"] = test;
-
-  _foo2["default"];
-  _foo;
+  var test2 = exports.test2 = 5;
+  exports.default = test;
+  foo2.default;
+  foo2;
   _foo.bar;
   _foo.foo;
 });

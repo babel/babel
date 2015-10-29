@@ -36,6 +36,7 @@ suites.forEach(function (testSuite) {
             "asyncFunctions",
             "exportExtensions",
             "functionBind",
+            "classConstructorCall",
           ],
           strictMode: false,
           sourceType: "module",

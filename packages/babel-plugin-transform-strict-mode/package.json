@@ -1,0 +1,15 @@
+{
+  "name": "babel-plugin-transform-strict-mode",
+  "version": "1.0.0",
+  "description": "TODO",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "babel-runtime": "^5.0.0",
+    "babel-types": "^6.0.0"
+  }
+}

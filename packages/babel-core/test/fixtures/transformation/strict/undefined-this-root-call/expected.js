@@ -1,1 +1,3 @@
+"use strict";
+
 undefined.foo();

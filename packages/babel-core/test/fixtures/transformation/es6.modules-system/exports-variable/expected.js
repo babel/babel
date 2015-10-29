@@ -1,40 +1,36 @@
 System.register([], function (_export) {
-    var foo, foo2, foo3, foo4, foo5, foo6, foo8;
-
-  _export("foo7", foo7);
-
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-  function foo7() {}
-
   return {
     setters: [],
     execute: function () {
-      foo = 1;
+      var foo = 1;
 
       _export("foo", foo);
 
-      foo2 = function foo2() {};
+      var foo2 = function () {};
 
       _export("foo2", foo2);
 
+      var foo3;
+
       _export("foo3", foo3);
 
-      foo4 = 2;
+      let foo4 = 2;
 
       _export("foo4", foo4);
 
-      foo5 = undefined;
+      let foo5;
 
       _export("foo5", foo5);
 
-      foo6 = 3;
+      const foo6 = 3;
 
       _export("foo6", foo6);
 
-      foo8 = function foo8() {
-        _classCallCheck(this, foo8);
-      };
+      function foo7() {}
+
+      _export("foo7", foo7);
+
+      class foo8 {}
 
       _export("foo8", foo8);
 

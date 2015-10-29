@@ -1,8 +1,11 @@
+require("../lib/api/node");
+
 var buildExernalHelpers = require("../lib/tools/build-external-helpers");
 var getFixtures         = require("mocha-fixtures");
 var transform           = require("../lib/transformation");
 var sourceMap           = require("source-map");
 var codeFrame           = require("babel-code-frame");
+var register            = require("../register");
 var Module              = require("module");
 var assert              = require("assert");
 var chai                = require("chai");
@@ -16,7 +19,7 @@ exports.fixtures = getFixtures(__dirname + "/fixtures", function () {
 
 require("babel-polyfill");
 
-require("../register")({
+register({
   ignore: [
     path.resolve(__dirname + "/../.."),
     "node_modules"
@@ -56,31 +59,41 @@ chai.assert.throw = function (fn, msg) {
   return chai.assert._throw(fn, msg);
 };
 
-var run = function (task, done) {
+function wrapPackagesArray(type, names) {
+  return (names || []).map(function (val) {
+    if (typeof val === "string") val = [val];
+    val[0] = __dirname + "/../../babel-" + type + "-" + val[0];
+    return val;
+  });
+}
+
+function run(task, done) {
   var actual = task.actual;
   var expect = task.expect;
   var exec   = task.exec;
   var opts   = task.options;
 
-  var getOpts = function (self) {
+  function getOpts(self) {
     var newOpts = _.merge({
       suppressDeprecationMessages: true,
       filename: self.loc,
       sourceMap: !!(task.sourceMappings || task.sourceMap)
     }, opts);
 
-    newOpts.plugins = (newOpts.plugins || []).map(function (str) {
-      return __dirname + "/../../babel-plugin-" + str;
+    newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins);
+    newOpts.presets = wrapPackagesArray("preset", newOpts.presets).map(function (val) {
+      return val[0];
     });
 
     return newOpts;
-  };
+  }
 
   var execCode = exec.code;
   var result;
 
   if (execCode) {
-    result = transform(execCode, getOpts(exec));
+    var execOpts = getOpts(exec);
+    result = transform(execCode, execOpts);
     execCode = result.code;
 
     try {
@@ -131,7 +144,7 @@ var run = function (task, done) {
       chai.expect({ line: expect.line, column: expect.column }).to.deep.equal(actual);
     });
   }
-};
+}
 
 exports.run = function (name, suiteOpts, taskOpts, dynamicOpts) {
   suiteOpts = suiteOpts || {};

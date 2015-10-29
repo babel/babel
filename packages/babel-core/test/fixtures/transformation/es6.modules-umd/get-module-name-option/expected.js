@@ -1,15 +1,13 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define("my custom module name", ["exports"], factory);
+    define("my custom module name", [], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports);
+    factory();
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports);
+    factory();
     global.myCustomModuleName = mod.exports;
   }
-})(this, function (exports) {
-  "use strict";
-});
+})(this, function () {});

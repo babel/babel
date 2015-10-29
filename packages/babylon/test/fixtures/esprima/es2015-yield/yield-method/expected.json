@@ -58,7 +58,7 @@
           },
           "properties": [
             {
-              "type": "Property",
+              "type": "ObjectMethod",
               "start": 3,
               "end": 13,
               "loc": {
@@ -90,42 +90,27 @@
                 },
                 "name": "yield"
               },
-              "kind": "init",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 8,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 11,
                 "end": 13,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 8
+                    "column": 11
                   },
                   "end": {
                     "line": 1,
                     "column": 13
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 11,
-                  "end": 13,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 11
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 13
-                    }
-                  },
-                  "body": [],
-                  "directives": []
-                }
+                "body": [],
+                "directives": []
               }
             }
           ],

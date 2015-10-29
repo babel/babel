@@ -1,9 +1,12 @@
+/* @flow */
+
+import type NodePath from "../index";
 import { react } from "babel-types";
 import * as t from "babel-types";
 
-export var ReferencedIdentifier = {
+export let ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
-  checkPath({ node, parent }, opts) {
+  checkPath({ node, parent }: NodePath, opts?: Object): boolean {
     if (!t.isIdentifier(node, opts)) {
       if (t.isJSXIdentifier(node, opts)) {
         if (react.isCompatTag(node.name)) return false;
@@ -18,16 +21,23 @@ export var ReferencedIdentifier = {
   }
 };
 
-export var BindingIdentifier = {
-  types: ["Identifier"],
+export let ReferencedMemberExpression = {
+  types: ["MemberExpression"],
   checkPath({ node, parent }) {
-    return t.isBinding(node, parent);
+    return t.isMemberExpression(node) && t.isReferenced(node, parent);
   }
 };
 
-export var Statement = {
+export let BindingIdentifier = {
+  types: ["Identifier"],
+  checkPath({ node, parent }: NodePath): boolean {
+    return t.isIdentifier(node) && t.isBinding(node, parent);
+  }
+};
+
+export let Statement = {
   types: ["Statement"],
-  checkPath({ node, parent }) {
+  checkPath({ node, parent }: NodePath): boolean {
     if (t.isStatement(node)) {
       if (t.isVariableDeclaration(node)) {
         if (t.isForXStatement(parent, { left: node })) return false;
@@ -41,9 +51,9 @@ export var Statement = {
   }
 };
 
-export var Expression = {
+export let Expression = {
   types: ["Expression"],
-  checkPath(path) {
+  checkPath(path: NodePath): boolean {
     if (path.isIdentifier()) {
       return path.isReferencedIdentifier();
     } else {
@@ -52,75 +62,53 @@ export var Expression = {
   }
 };
 
-export var Scope = {
+export let Scope = {
   types: ["Scopable"],
   checkPath(path) {
     return t.isScope(path.node, path.parent);
   }
 };
 
-export var Referenced = {
-  checkPath(path) {
+export let Referenced = {
+  checkPath(path: NodePath): boolean {
     return t.isReferenced(path.node, path.parent);
   }
 };
 
-export var BlockScoped = {
-  checkPath(path) {
+export let BlockScoped = {
+  checkPath(path: NodePath): boolean {
     return t.isBlockScoped(path.node);
   }
 };
 
-export var Var = {
+export let Var = {
   types: ["VariableDeclaration"],
-  checkPath(path) {
+  checkPath(path: NodePath): boolean {
     return t.isVar(path.node);
   }
 };
 
-export var DirectiveLiteral = {
-  types: ["Literal"],
-  checkPath(path) {
-    return path.parentPath.isDirective();
-  }
-};
-
-export var Directive = {
-  types: ["ExpressionStatement"],
-  checkPath({ inList, container, key }) {
-    // needs to be in a statement list
-    if (!inList) return false;
-
-    // get the last directive node in this list
-    var lastDirective = -1;
-    for (var i = 0; i < container.length; i++) {
-      var node = container[i];
-      if (t.isExpressionStatement(node) && t.isLiteral(node.expression)) {
-        lastDirective = i;
-      } else {
-        break;
-      }
-    }
-
-    return key <= lastDirective;
-  }
-};
-
-export var User = {
-  checkPath(path) {
+export let User = {
+  checkPath(path: NodePath): boolean {
     return path.node && !!path.node.loc;
   }
 };
 
-export var Generated = {
-  checkPath(path) {
+export let Generated = {
+  checkPath(path: NodePath): boolean {
     return !path.isUser();
   }
 };
 
-export var Flow = {
+export let Pure = {
+  checkPath(path: NodePath, opts?): boolean {
+    return path.scope.isPure(path.node, opts);
+  }
+};
+
+export let Flow = {
   types: ["Flow", "ImportDeclaration", "ExportDeclaration"],
-  checkPath({ node }) {
+  checkPath({ node }: NodePath): boolean {
     if (t.isFlow(node)) {
       return true;
     } else if (t.isImportDeclaration(node)) {

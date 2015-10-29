@@ -4,15 +4,15 @@ var _iteratorError = undefined;
 
 try {
   for (var _iterator = arr[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-    var i = _step.value;
+    let i = _step.value;
   }
 } catch (err) {
   _didIteratorError = true;
   _iteratorError = err;
 } finally {
   try {
-    if (!_iteratorNormalCompletion && _iterator["return"]) {
-      _iterator["return"]();
+    if (!_iteratorNormalCompletion && _iterator.return) {
+      _iterator.return();
     }
   } finally {
     if (_didIteratorError) {

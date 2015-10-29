@@ -1,11 +1,14 @@
 {
   "name": "babel-plugin-syntax-async-functions",
-  "version": "1.0.0",
+  "version": "5.10.32",
   "description": "Allow parsing of async functions",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-runtime": "^5.10.32"
+  }
 }

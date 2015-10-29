@@ -64,13 +64,18 @@ function ExportDeclaration(node: Object) {
 
     let specifiers = node.specifiers.slice(0);
 
-    let first = specifiers[0];
+    // print "special" specifiers first
     let hasSpecial = false;
-    if (t.isExportDefaultSpecifier(first) || t.isExportNamespaceSpecifier(first)) {
-      hasSpecial = true;
-      this.print(specifiers.shift(), node);
-      if (specifiers.length) {
-        this.push(", ");
+    while (true) {
+      let first = specifiers[0];
+      if (t.isExportDefaultSpecifier(first) || t.isExportNamespaceSpecifier(first)) {
+        hasSpecial = true;
+        this.print(specifiers.shift(), node);
+        if (specifiers.length) {
+          this.push(", ");
+        }
+      } else {
+        break;
       }
     }
 
@@ -102,11 +107,16 @@ export function ImportDeclaration(node: Object) {
 
   let specifiers = node.specifiers.slice(0);
   if (specifiers && specifiers.length) {
-    let first = specifiers[0];
-    if (t.isImportDefaultSpecifier(first) || t.isImportNamespaceSpecifier(first)) {
-      this.print(specifiers.shift(), node);
-      if (specifiers.length) {
-        this.push(", ");
+    // print "special" specifiers first
+    while (true) {
+      let first = specifiers[0];
+      if (t.isImportDefaultSpecifier(first) || t.isImportNamespaceSpecifier(first)) {
+        this.print(specifiers.shift(), node);
+        if (specifiers.length) {
+          this.push(", ");
+        }
+      } else {
+        break;
       }
     }
 

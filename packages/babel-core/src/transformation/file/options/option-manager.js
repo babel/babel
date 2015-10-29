@@ -1,9 +1,9 @@
 /* @flow */
 
+import * as context from "../../../api/node";
 import type Logger from "../logger";
 import Plugin from "../../plugin";
 import * as messages from "babel-messages";
-import * as context from "../../../api/node";
 import { normaliseOptions } from "./index";
 import resolve from "../../../helpers/resolve";
 import json5 from "json5";
@@ -53,7 +53,13 @@ export default class OptionManager {
       if (cache.container === fn) return cache.plugin;
     }
 
-    let obj = fn(context);
+    let obj;
+
+    if (typeof fn === "function") {
+      obj = fn(context);
+    } else {
+      obj = fn;
+    }
 
     if (typeof obj === "object") {
       let plugin = new Plugin(obj);
@@ -63,7 +69,7 @@ export default class OptionManager {
       });
       return plugin;
     } else {
-      throw new TypeError(messages.get("pluginNotObject", loc, i, typeof obj));
+      throw new TypeError(messages.get("pluginNotObject", loc, i, typeof obj) + loc + i);
     }
   }
 
@@ -76,6 +82,21 @@ export default class OptionManager {
     }
 
     return opts;
+  }
+
+  static normalisePlugin(plugin, loc, i) {
+    if (!(plugin instanceof Plugin)) {
+      // allow plugin containers to be specified so they don't have to manually require
+      if (typeof plugin === "function" || typeof plugin === "object") {
+        plugin = OptionManager.memoisePluginContainer(plugin, loc, i);
+      } else {
+        throw new TypeError(messages.get("pluginNotFunction", loc, i, typeof plugin));
+      }
+    }
+
+    plugin.init(loc, i);
+
+    return plugin;
   }
 
   static normalisePlugins(loc, dirname, plugins) {
@@ -99,17 +120,7 @@ export default class OptionManager {
         }
       }
 
-      if (!(plugin instanceof Plugin)) {
-        // allow plugin containers to be specified so they don't have to manually require
-        if (typeof plugin === "function") {
-          plugin = OptionManager.memoisePluginContainer(plugin, loc, i);
-        } else {
-          throw new TypeError(messages.get("pluginNotFunction", loc, i));
-        }
-      }
-
-      // validate
-      plugin.validate(loc, i);
+      plugin = OptionManager.normalisePlugin(plugin, loc, i);
 
       return [plugin, options];
     });

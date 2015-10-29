@@ -1,7 +1,15 @@
-import * as t from "../index";
-import define, { assertValueType, assertNodeType, assertEach, chain, assertOneOf } from "./index";
+/* @flow */
 
-define("ArrayExpression", {
+import * as t from "../index";
+import defineType, {
+  assertValueType,
+  assertNodeType,
+  assertEach,
+  chain,
+  assertOneOf,
+} from "./index";
+
+defineType("ArrayExpression", {
   fields: {
     elements: {
       validate: assertValueType("array")
@@ -11,18 +19,16 @@ define("ArrayExpression", {
   aliases: ["Expression"]
 });
 
-define("AssignmentExpression", {
+defineType("AssignmentExpression", {
   fields: {
-    elements: {
-      operator: {
-        validate: assertValueType("string")
-      },
-      left: {
-        validate: assertNodeType("LVal")
-      },
-      right: {
-        validate: assertNodeType("Expression")
-      }
+    operator: {
+      validate: assertValueType("string")
+    },
+    left: {
+      validate: assertNodeType("LVal")
+    },
+    right: {
+      validate: assertNodeType("Expression")
     }
   },
   builder: ["operator", "left", "right"],
@@ -30,7 +36,7 @@ define("AssignmentExpression", {
   aliases: ["Expression"]
 });
 
-define("BinaryExpression", {
+defineType("BinaryExpression", {
   builder: ["operator", "left", "right"],
   fields: {
     operator: {
@@ -47,7 +53,17 @@ define("BinaryExpression", {
   aliases: ["Binary", "Expression"]
 });
 
-define("Directive", {
+defineType("Directive", {
+  visitor: ["value"],
+  fields: {
+    value: {
+      validate: assertNodeType("DirectiveLiteral")
+    }
+  }
+});
+
+defineType("DirectiveLiteral", {
+  builder: ["value"],
   fields: {
     value: {
       validate: assertValueType("string")
@@ -55,7 +71,7 @@ define("Directive", {
   }
 });
 
-define("BlockStatement", {
+defineType("BlockStatement", {
   builder: ["body", "directives"],
   visitor: ["directives", "body"],
   fields: {
@@ -70,7 +86,7 @@ define("BlockStatement", {
   aliases: ["Scopable", "BlockParent", "Block", "Statement"]
 });
 
-define("BreakStatement", {
+defineType("BreakStatement", {
   visitor: ["label"],
   fields: {
     label: {
@@ -81,7 +97,7 @@ define("BreakStatement", {
   aliases: ["Statement", "Terminatorless", "CompletionStatement"]
 });
 
-define("CallExpression", {
+defineType("CallExpression", {
   visitor: ["callee", "arguments"],
   fields: {
     callee: {
@@ -94,7 +110,7 @@ define("CallExpression", {
   aliases: ["Expression"]
 });
 
-define("CatchClause", {
+defineType("CatchClause", {
   visitor: ["param", "body"],
   fields: {
     param: {
@@ -107,7 +123,7 @@ define("CatchClause", {
   aliases: ["Scopable"]
 });
 
-define("ConditionalExpression", {
+defineType("ConditionalExpression", {
   visitor: ["test", "consequent", "alternate"],
   fields: {
     test: {
@@ -120,10 +136,10 @@ define("ConditionalExpression", {
       validate: assertNodeType("Expression")
     }
   },
-  aliases: ["Expression"]
+  aliases: ["Expression", "Conditional"]
 });
 
-define("ContinueStatement", {
+defineType("ContinueStatement", {
   visitor: ["label"],
   fields: {
     label: {
@@ -134,11 +150,11 @@ define("ContinueStatement", {
   aliases: ["Statement", "Terminatorless", "CompletionStatement"]
 });
 
-define("DebuggerStatement", {
+defineType("DebuggerStatement", {
   aliases: ["Statement"]
 });
 
-define("DoWhileStatement", {
+defineType("DoWhileStatement", {
   visitor: ["test", "body"],
   fields: {
     test: {
@@ -151,21 +167,21 @@ define("DoWhileStatement", {
   aliases: ["Statement", "BlockParent", "Loop", "While", "Scopable"]
 });
 
-define("EmptyStatement", {
+defineType("EmptyStatement", {
   aliases: ["Statement"]
 });
 
-define("ExpressionStatement", {
+defineType("ExpressionStatement", {
   visitor: ["expression"],
   fields: {
     expression: {
       validate: assertNodeType("Expression")
     }
   },
-  aliases: ["Statement"]
+  aliases: ["Statement", "ExpressionWrapper"]
 });
 
-define("File", {
+defineType("File", {
   builder: ["program", "comments", "tokens"],
   visitor: ["program"],
   fields: {
@@ -175,7 +191,7 @@ define("File", {
   }
 });
 
-define("ForInStatement", {
+defineType("ForInStatement", {
   visitor: ["left", "right", "body"],
   aliases: ["Scopable", "Statement", "For", "BlockParent", "Loop", "ForXStatement"],
   fields: {
@@ -191,7 +207,7 @@ define("ForInStatement", {
   }
 });
 
-define("ForStatement", {
+defineType("ForStatement", {
   visitor: ["init", "test", "update", "body"],
   aliases: ["Scopable", "Statement", "For", "BlockParent", "Loop"],
   fields: {
@@ -210,7 +226,7 @@ define("ForStatement", {
   }
 });
 
-define("FunctionDeclaration", {
+defineType("FunctionDeclaration", {
   builder: ["id", "params", "body", "generator", "async"],
   visitor: ["id", "params", "body", "returnType", "typeParameters"],
   fields: {
@@ -232,11 +248,20 @@ define("FunctionDeclaration", {
       validate: assertValueType("boolean")
     }
   },
-  aliases: ["Scopable", "Function", "BlockParent", "FunctionParent", "Statement", "Pure", "Declaration"]
+  aliases: [
+    "Scopable",
+    "Function",
+    "BlockParent",
+    "FunctionParent",
+    "Statement",
+    "Pureish",
+    "Declaration"
+  ]
 });
 
-define("FunctionExpression", {
-  builder: ["id", "params", "body", "generator", "async"],
+defineType("FunctionExpression", {
+  inherits: "FunctionDeclaration",
+  aliases: ["Scopable", "Function", "BlockParent", "FunctionParent", "Expression", "Pureish"],
   fields: {
     id: {
       validate: assertNodeType("Identifier"),
@@ -256,12 +281,10 @@ define("FunctionExpression", {
       default: false,
       validate: assertValueType("boolean")
     }
-  },
-  visitor: ["id", "params", "body", "returnType", "typeParameters"],
-  aliases: ["Scopable", "Function", "BlockParent", "FunctionParent", "Expression", "Pure"]
+  }
 });
 
-define("Identifier", {
+defineType("Identifier", {
   builder: ["name"],
   visitor: ["typeAnnotation"],
   aliases: ["Expression", "LVal"],
@@ -276,9 +299,9 @@ define("Identifier", {
   }
 });
 
-define("IfStatement", {
+defineType("IfStatement", {
   visitor: ["test", "consequent", "alternate"],
-  aliases: ["Statement"],
+  aliases: ["Statement", "Conditional"],
   fields: {
     test: {
       validate: assertNodeType("Expression")
@@ -294,7 +317,7 @@ define("IfStatement", {
   }
 });
 
-define("LabeledStatement", {
+defineType("LabeledStatement", {
   visitor: ["label", "body"],
   aliases: ["Statement"],
   fields: {
@@ -307,41 +330,41 @@ define("LabeledStatement", {
   }
 });
 
-define("StringLiteral", {
+defineType("StringLiteral", {
   builder: ["value"],
   fields: {
     value: {
       validate: assertValueType("string")
     }
   },
-  aliases: ["Expression", "Pure", "Literal", "Immutable"]
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"]
 });
 
-define("NumberLiteral", {
+defineType("NumberLiteral", {
   builder: ["value"],
   fields: {
     value: {
       validate: assertValueType("number")
     }
   },
-  aliases: ["Expression", "Pure", "Literal", "Immutable"]
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"]
 });
 
-define("NullLiteral", {
-  aliases: ["Expression", "Pure", "Literal", "Immutable"]
+defineType("NullLiteral", {
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"]
 });
 
-define("BooleanLiteral", {
+defineType("BooleanLiteral", {
   builder: ["value"],
   fields: {
     value: {
       validate: assertValueType("boolean")
     }
   },
-  aliases: ["Expression", "Pure", "Literal", "Immutable"]
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"]
 });
 
-define("RegexLiteral", {
+defineType("RegexLiteral", {
   builder: ["pattern", "flags"],
   aliases: ["Expression", "Literal"],
   fields: {
@@ -355,7 +378,7 @@ define("RegexLiteral", {
   }
 });
 
-define("LogicalExpression", {
+defineType("LogicalExpression", {
   builder: ["operator", "left", "right"],
   visitor: ["left", "right"],
   aliases: ["Binary", "Expression"],
@@ -372,7 +395,7 @@ define("LogicalExpression", {
   }
 });
 
-define("MemberExpression", {
+defineType("MemberExpression", {
   builder: ["object", "property", "computed"],
   visitor: ["object", "property"],
   aliases: ["Expression", "LVal"],
@@ -382,7 +405,7 @@ define("MemberExpression", {
     },
     property: {
       validate(node, key, val) {
-        var expectedType = node.computed ? "Expression" : "Identifier";
+        let expectedType = node.computed ? "Expression" : "Identifier";
         assertNodeType(expectedType)(node, key, val);
       }
     },
@@ -392,7 +415,7 @@ define("MemberExpression", {
   }
 });
 
-define("NewExpression", {
+defineType("NewExpression", {
   visitor: ["callee", "arguments"],
   aliases: ["Expression"],
   fields: {
@@ -405,17 +428,7 @@ define("NewExpression", {
   }
 });
 
-define("ObjectExpression", {
-  visitor: ["properties"],
-  aliases: ["Expression"],
-  fields: {
-    properties: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Property", "SpreadProperty")))
-    }
-  }
-});
-
-define("Program", {
+defineType("Program", {
   visitor: ["directives", "body"],
   builder: ["body", "directives"],
   fields: {
@@ -430,12 +443,22 @@ define("Program", {
   aliases: ["Scopable", "BlockParent", "Block", "FunctionParent"]
 });
 
-define("Property", {
-  builder: ["kind", "key", "value", "computed", "method", "shorthand"],
+defineType("ObjectExpression", {
+  visitor: ["properties"],
+  aliases: ["Expression"],
+  fields: {
+    properties: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("ObjectMethod", "ObjectProperty", "SpreadProperty")))
+    }
+  }
+});
+
+defineType("ObjectMethod", {
+  builder: ["kind", "key", "params", "body", "computed"],
   fields: {
     kind: {
-      validate: chain(assertValueType("string"), assertOneOf("init", "get", "set")),
-      default: "init"
+      validate: chain(assertValueType("string"), assertOneOf("method", "get", "set")),
+      default: "method"
     },
     computed: {
       validate: assertValueType("boolean"),
@@ -443,37 +466,61 @@ define("Property", {
     },
     key: {
       validate(node, key, val) {
-        var expectedTypes = node.computed ? "Expression" : ["Identifier", "Literal"];
+        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "Literal"];
+        assertNodeType(...expectedTypes)(node, key, val);
+      }
+    },
+    decorators: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
+    },
+    body: {
+      validate: assertNodeType("BlockStatement")
+    },
+    generator: {
+      default: false,
+      validate: assertValueType("boolean")
+    },
+    async: {
+      default: false,
+      validate: assertValueType("boolean")
+    }
+  },
+  visitor: ["key", "params", "body", "decorators", "returnType", "typeParameters"],
+  aliases: ["UserWhitespacable", "Function", "Scopable", "BlockParent", "FunctionParent", "Method"]
+});
+
+defineType("ObjectProperty", {
+  builder: ["key", "value", "computed", "shorthand", "decorators"],
+  fields: {
+    computed: {
+      validate: assertValueType("boolean"),
+      default: false
+    },
+    key: {
+      validate(node, key, val) {
+        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "Literal"];
         assertNodeType(...expectedTypes)(node, key, val);
       }
     },
     value: {
-      validate(node, key, val) {
-        var expectedType = "Expression";
-        if (node.kind === "get" || node.kind === "set" || node.method) {
-          expectedType = "FunctionExpression";
-        }
-        assertNodeType(expectedType)(node, key, val);
-      }
-    },
-    method: {
-      validate: assertValueType("boolean"),
-      default: false
+      validate: assertNodeType("Expression")
     },
     shorthand: {
       validate: assertValueType("boolean"),
       default: false
     },
     decorators: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
+      optional: true
     }
   },
   visitor: ["key", "value", "decorators"],
-  aliases: ["UserWhitespacable"]
+  aliases: ["UserWhitespacable", "Property"]
 });
 
-define("RestElement", {
+defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"],
+  aliases: ["LVal"],
   fields: {
     argument: {
       validate: assertNodeType("LVal")
@@ -481,17 +528,18 @@ define("RestElement", {
   }
 });
 
-define("ReturnStatement", {
+defineType("ReturnStatement", {
   visitor: ["argument"],
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
   fields: {
     argument: {
-      validate: assertNodeType("Expression")
+      validate: assertNodeType("Expression"),
+      optional: true
     }
   }
 });
 
-define("SequenceExpression", {
+defineType("SequenceExpression", {
   visitor: ["expressions"],
   fields: {
     expressions: { validate: assertValueType("array") }
@@ -499,14 +547,14 @@ define("SequenceExpression", {
   aliases: ["Expression"]
 });
 
-define("SwitchCase", {
+defineType("SwitchCase", {
   visitor: ["test", "consequent"],
   fields: {
     // todo
   }
 });
 
-define("SwitchStatement", {
+defineType("SwitchStatement", {
   visitor: ["discriminant", "cases"],
   aliases: ["Statement", "BlockParent", "Scopable"],
   fields: {
@@ -514,11 +562,11 @@ define("SwitchStatement", {
   }
 });
 
-define("ThisExpression", {
+defineType("ThisExpression", {
   aliases: ["Expression"]
 });
 
-define("ThrowStatement", {
+defineType("ThrowStatement", {
   visitor: ["argument"],
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
   fields: {
@@ -529,7 +577,7 @@ define("ThrowStatement", {
 });
 
 // todo: at least handler or finalizer should be set to be valid
-define("TryStatement", {
+defineType("TryStatement", {
   visitor: ["block", "handler", "finalizer"],
   aliases: ["Statement"],
   fields: {
@@ -547,7 +595,7 @@ define("TryStatement", {
   }
 });
 
-define("UnaryExpression", {
+defineType("UnaryExpression", {
   builder: ["operator", "argument", "prefix"],
   fields: {
     prefix: {
@@ -564,7 +612,7 @@ define("UnaryExpression", {
   aliases: ["UnaryLike", "Expression"]
 });
 
-define("UpdateExpression", {
+defineType("UpdateExpression", {
   builder: ["operator", "argument", "prefix"],
   fields: {
     prefix: {
@@ -581,7 +629,7 @@ define("UpdateExpression", {
   aliases: ["Expression"]
 });
 
-define("VariableDeclaration", {
+defineType("VariableDeclaration", {
   builder: ["kind", "declarations"],
   visitor: ["declarations"],
   aliases: ["Statement", "Declaration"],
@@ -595,7 +643,7 @@ define("VariableDeclaration", {
   }
 });
 
-define("VariableDeclarator", {
+defineType("VariableDeclarator", {
   visitor: ["id", "init"],
   fields: {
     id: {
@@ -608,7 +656,7 @@ define("VariableDeclarator", {
   }
 });
 
-define("WhileStatement", {
+defineType("WhileStatement", {
   visitor: ["test", "body"],
   aliases: ["Statement", "BlockParent", "Loop", "While", "Scopable"],
   fields: {
@@ -621,7 +669,7 @@ define("WhileStatement", {
   }
 });
 
-define("WithStatement", {
+defineType("WithStatement", {
   visitor: ["object", "body"],
   aliases: ["Statement"],
   fields: {

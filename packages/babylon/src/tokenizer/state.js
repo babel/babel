@@ -14,7 +14,7 @@ export default class State {
 
     this.potentialArrowAt = -1;
 
-    this.inFunction = this.inGenerator = false;
+    this.inMethod = this.inFunction = this.inGenerator = this.inAsync = false;
 
     this.labels = [];
 
@@ -42,7 +42,8 @@ export default class State {
     this.context = [ct.b_stat];
     this.exprAllowed = true;
 
-    this.containsEsc = false;
+    this.containsEsc = this.containsOctal = false;
+    this.octalPosition = null;
 
     return this;
   }
@@ -59,6 +60,7 @@ export default class State {
   // Flags to track whether we are in a function, a generator.
   inFunction: boolean;
   inGenerator: boolean;
+  inMethod: boolean;
 
   // Labels in scope.
   labels: Array<Object>;
@@ -115,16 +117,20 @@ export default class State {
   // escape sequences must not be interpreted as keywords.
   containsEsc: boolean;
 
+  // TODO
+  containsOctal: boolean;
+  octalPosition: ?number;
+
   curPosition() {
     return new Position(this.curLine, this.pos - this.lineStart);
   }
 
   clone(skipArrays?) {
-    var state = new State;
-    for (var key in this) {
-      var val = this[key];
+    let state = new State;
+    for (let key in this) {
+      let val = this[key];
 
-      if (!skipArrays && Array.isArray(val)) {
+      if ((!skipArrays || key === "context") && Array.isArray(val)) {
         val = val.slice();
       }
 

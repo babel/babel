@@ -1,3 +1,5 @@
-var foo = babelHelpers.asyncToGenerator(function* () {
-  var wat = yield bar();
-});
+let foo = function foo() {
+  return babelHelpers.asyncToGenerator(function* foo() {
+    var wat = yield bar();
+  })();
+};

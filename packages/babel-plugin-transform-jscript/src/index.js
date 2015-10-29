@@ -2,17 +2,18 @@ export default function ({ types: t }) {
   return {
     visitor: {
       FunctionExpression: {
-        exit(node) {
+        exit(path) {
+          let { node } = path;
           if (!node.id) return;
           node._ignoreUserWhitespace = true;
 
-          return t.callExpression(
+          path.replaceWith(t.callExpression(
             t.functionExpression(null, [], t.blockStatement([
               t.toStatement(node),
               t.returnStatement(node.id)
             ])),
             []
-          );
+          ));
         }
       }
     }

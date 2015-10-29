@@ -1,10 +1,23 @@
+/* @flow */
+
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
 import * as messages from "babel-messages";
 import includes from "lodash/collection/includes";
 import * as t from "babel-types";
 
-export default function traverse(parent: Object, opts?: Object, scope?: Object, state: Object, parentPath: Object) {
+export { default as NodePath } from "./path";
+export { default as Scope } from "./scope";
+export { default as Hub } from "./hub";
+export { visitors };
+
+export default function traverse(
+  parent: Object | Array<Object>,
+  opts?: Object,
+  scope?: Object,
+  state: Object,
+  parentPath: Object,
+) {
   if (!parent) return;
   if (!opts) opts = {};
 
@@ -16,14 +29,7 @@ export default function traverse(parent: Object, opts?: Object, scope?: Object, 
 
   visitors.explode(opts);
 
-  // array of nodes
-  if (Array.isArray(parent)) {
-    for (var i = 0; i < parent.length; i++) {
-      traverse.node(parent[i], opts, scope, state, parentPath);
-    }
-  } else {
-    traverse.node(parent, opts, scope, state, parentPath);
-  }
+  traverse.node(parent, opts, scope, state, parentPath);
 }
 
 traverse.visitors = visitors;
@@ -35,22 +41,32 @@ traverse.Scope    = require("./scope");
 traverse.Hub      = require("./hub");
 
 traverse.cheap = function (node, enter) {
-  var keys = t.VISITOR_KEYS[node.type];
+  if (!node) return;
+
+  let keys = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
   enter(node);
 
-  for (var key of keys) {
-    traverse.cheap(node[key], enter);
+  for (let key of keys) {
+    let subNode = node[key];
+
+    if (Array.isArray(subNode)) {
+      for (let node of subNode) {
+        traverse.cheap(node, enter);
+      }
+    } else {
+      traverse.cheap(subNode, enter);
+    }
   }
 };
 
 traverse.node = function (node: Object, opts: Object, scope: Object, state: Object, parentPath: Object, skipKeys?) {
-  var keys: Array = t.VISITOR_KEYS[node.type];
+  let keys: Array = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
-  var context = new TraversalContext(scope, opts, state, parentPath);
-  for (var key of keys) {
+  let context = new TraversalContext(scope, opts, state, parentPath);
+  for (let key of keys) {
     if (skipKeys && skipKeys[key]) continue;
     if (context.visit(node, key)) return;
   }
@@ -64,7 +80,7 @@ const CLEAR_KEYS: Array = t.COMMENT_KEYS.concat([
 ]);
 
 traverse.clearNode = function (node) {
-  for (var key of CLEAR_KEYS) {
+  for (let key of CLEAR_KEYS) {
     if (node[key] != null) node[key] = undefined;
   }
 };
@@ -88,7 +104,7 @@ traverse.hasType = function (tree: Object, scope: Object, type: Object, blacklis
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;
 
-  var state = {
+  let state = {
     has:  false,
     type: type
   };

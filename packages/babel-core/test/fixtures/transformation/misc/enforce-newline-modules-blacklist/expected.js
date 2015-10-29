@@ -1,6 +1,3 @@
-export { foo };
-export { bar };
+export function foo() {}
 
-function foo() {}
-
-function bar() {}
+export function bar() {}

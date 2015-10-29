@@ -163,7 +163,8 @@ exports.nodes = {
  * Test if Property or SpreadProperty needs whitespace.
  */
 
-exports.nodes.Property =
+exports.nodes.ObjectProperty =
+exports.nodes.ObjectMethod =
 exports.nodes.SpreadProperty = function (node, parent) {
   if (parent.properties[0] === node) {
     return {

@@ -1,11 +1,11 @@
-export default function ({ types: t, messages }) {
+export default function ({ types: t }) {
 
   /**
    * Test if a VariableDeclaration's declarations contains any Patterns.
    */
 
   function variableDeclarationHasPattern(node) {
-    for (var declar of (node.declarations: Array)) {
+    for (let declar of (node.declarations: Array)) {
       if (t.isPattern(declar.id)) {
         return true;
       }
@@ -18,7 +18,7 @@ export default function ({ types: t, messages }) {
    */
 
   function hasRest(pattern) {
-    for (var elem of (pattern.elements: Array)) {
+    for (let elem of (pattern.elements: Array)) {
       if (t.isRestElement(elem)) {
         return true;
       }
@@ -26,7 +26,7 @@ export default function ({ types: t, messages }) {
     return false;
   }
 
-  var arrayUnpackVisitor = {
+  let arrayUnpackVisitor = {
     ReferencedIdentifier(path, state) {
       if (state.bindings[path.node.name]) {
         state.deopt = true;
@@ -47,10 +47,10 @@ export default function ({ types: t, messages }) {
     }
 
     buildVariableAssignment(id, init) {
-      var op = this.operator;
+      let op = this.operator;
       if (t.isMemberExpression(id)) op = "=";
 
-      var node;
+      let node;
 
       if (op) {
         node = t.expressionStatement(t.assignmentExpression(op, id, init));
@@ -66,7 +66,7 @@ export default function ({ types: t, messages }) {
     }
 
     buildVariableDeclaration(id, init) {
-      var declar = t.variableDeclaration("var", [
+      let declar = t.variableDeclaration("var", [
         t.variableDeclarator(id, init)
       ]);
       declar._blockHoist = this.blockHoist;
@@ -97,9 +97,9 @@ export default function ({ types: t, messages }) {
       // we need to assign the current value of the assignment to avoid evaluating
       // it more than once
 
-      var tempValueRef = this.scope.generateUidIdentifierBasedOnNode(valueRef);
+      let tempValueRef = this.scope.generateUidIdentifierBasedOnNode(valueRef);
 
-      var declar = t.variableDeclaration("var", [
+      let declar = t.variableDeclaration("var", [
         t.variableDeclarator(tempValueRef, valueRef)
       ]);
       declar._blockHoist = this.blockHoist;
@@ -107,15 +107,15 @@ export default function ({ types: t, messages }) {
 
       //
 
-      var tempConditional = t.conditionalExpression(
+      let tempConditional = t.conditionalExpression(
         t.binaryExpression("===", tempValueRef, t.identifier("undefined")),
         pattern.right,
         tempValueRef
       );
 
-      var left = pattern.left;
+      let left = pattern.left;
       if (t.isPattern(left)) {
-        var tempValueDefault = t.expressionStatement(
+        let tempValueDefault = t.expressionStatement(
           t.assignmentExpression("=", tempValueRef, tempConditional)
         );
         tempValueDefault._blockHoist = this.blockHoist;
@@ -130,10 +130,10 @@ export default function ({ types: t, messages }) {
     pushObjectRest(pattern, objRef, spreadProp, spreadPropIndex) {
       // get all the keys that appear in this object before the current spread
 
-      var keys = [];
+      let keys = [];
 
-      for (var i = 0; i < pattern.properties.length; i++) {
-        var prop = pattern.properties[i];
+      for (let i = 0; i < pattern.properties.length; i++) {
+        let prop = pattern.properties[i];
 
         // we've exceeded the index of the spread property to all properties to the
         // right need to be ignored
@@ -142,7 +142,7 @@ export default function ({ types: t, messages }) {
         // ignore other spread properties
         if (t.isRestProperty(prop)) continue;
 
-        var key = prop.key;
+        let key = prop.key;
         if (t.isIdentifier(key) && !prop.computed) key = t.stringLiteral(prop.key.name);
         keys.push(key);
       }
@@ -151,15 +151,15 @@ export default function ({ types: t, messages }) {
 
       //
 
-      var value = t.callExpression(this.file.addHelper("object-without-properties"), [objRef, keys]);
+      let value = t.callExpression(this.file.addHelper("objectWithoutProperties"), [objRef, keys]);
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
     }
 
     pushObjectProperty(prop, propRef) {
       if (t.isLiteral(prop.key)) prop.computed = true;
 
-      var pattern = prop.value;
-      var objRef  = t.memberExpression(propRef, prop.key, prop.computed);
+      let pattern = prop.value;
+      let objRef  = t.memberExpression(propRef, prop.key, prop.computed);
 
       if (t.isPattern(pattern)) {
         this.push(pattern, objRef);
@@ -173,7 +173,7 @@ export default function ({ types: t, messages }) {
 
       if (!pattern.properties.length) {
         this.nodes.push(t.expressionStatement(
-          t.callExpression(this.file.addHelper("object-destructuring-empty"), [objRef])
+          t.callExpression(this.file.addHelper("objectDestructuringEmpty"), [objRef])
         ));
       }
 
@@ -182,15 +182,15 @@ export default function ({ types: t, messages }) {
       // only evaluated once
 
       if (pattern.properties.length > 1 && !this.scope.isStatic(objRef)) {
-        var temp = this.scope.generateUidIdentifierBasedOnNode(objRef);
+        let temp = this.scope.generateUidIdentifierBasedOnNode(objRef);
         this.nodes.push(this.buildVariableDeclaration(temp, objRef));
         objRef = temp;
       }
 
       //
 
-      for (var i = 0; i < pattern.properties.length; i++) {
-        var prop = pattern.properties[i];
+      for (let i = 0; i < pattern.properties.length; i++) {
+        let prop = pattern.properties[i];
         if (t.isRestProperty(prop)) {
           this.pushObjectRest(pattern, objRef, prop, i);
         } else {
@@ -222,15 +222,15 @@ export default function ({ types: t, messages }) {
       }
 
       // deopt on reference to left side identifiers
-      var bindings = t.getBindingIdentifiers(pattern);
-      var state = { deopt: false, bindings };
+      let bindings = t.getBindingIdentifiers(pattern);
+      let state = { deopt: false, bindings };
       this.scope.traverse(arr, arrayUnpackVisitor, state);
       return !state.deopt;
     }
 
     pushUnpackedArrayPattern(pattern, arr) {
-      for (var i = 0; i < pattern.elements.length; i++) {
-        var elem = pattern.elements[i];
+      for (let i = 0; i < pattern.elements.length; i++) {
+        let elem = pattern.elements[i];
         if (t.isRestElement(elem)) {
           this.push(elem.argument, t.arrayExpression(arr.elements.slice(i)));
         } else {
@@ -247,7 +247,7 @@ export default function ({ types: t, messages }) {
       // we can't do this to a pattern of unequal size to it's right hand
       // array expression as then there will be values that wont be evaluated
       //
-      // eg: var [a, b] = [1, 2];
+      // eg: let [a, b] = [1, 2];
 
       if (this.canUnpackArrayPattern(pattern, arrayRef)) {
         return this.pushUnpackedArrayPattern(pattern, arrayRef);
@@ -256,13 +256,13 @@ export default function ({ types: t, messages }) {
       // if we have a rest then we need all the elements so don't tell
       // `scope.toArray` to only get a certain amount
 
-      var count = !hasRest(pattern) && pattern.elements.length;
+      let count = !hasRest(pattern) && pattern.elements.length;
 
       // so we need to ensure that the `arrayRef` is an array, `scope.toArray` will
       // return a locally bound identifier if it's been inferred to be an array,
       // otherwise it'll be a call to a helper that will ensure it's one
 
-      var toArray = this.toArray(arrayRef, count);
+      let toArray = this.toArray(arrayRef, count);
 
       if (t.isIdentifier(toArray)) {
         // we've been given an identifier so it must have been inferred to be an
@@ -276,13 +276,13 @@ export default function ({ types: t, messages }) {
 
       //
 
-      for (var i = 0; i < pattern.elements.length; i++) {
-        var elem = pattern.elements[i];
+      for (let i = 0; i < pattern.elements.length; i++) {
+        let elem = pattern.elements[i];
 
         // hole
         if (!elem) continue;
 
-        var elemRef;
+        let elemRef;
 
         if (t.isRestElement(elem)) {
           elemRef = this.toArray(arrayRef);
@@ -307,7 +307,7 @@ export default function ({ types: t, messages }) {
       // need to save it to a variable
 
       if (!t.isArrayExpression(ref) && !t.isMemberExpression(ref)) {
-        var memo = this.scope.maybeGenerateMemoised(ref, true);
+        let memo = this.scope.maybeGenerateMemoised(ref, true);
         if (memo) {
           this.nodes.push(this.buildVariableDeclaration(memo, ref));
           ref = memo;
@@ -326,13 +326,13 @@ export default function ({ types: t, messages }) {
   return {
     visitor: {
       ForXStatement(path, file) {
-        var { node, scope } = path;
-        var left = node.left;
+        let { node, scope } = path;
+        let left = node.left;
 
         if (t.isPattern(left)) {
           // for ({ length: k } in { abc: 3 });
 
-          var temp = scope.generateUidIdentifier("ref");
+          let temp = scope.generateUidIdentifier("ref");
 
           node.left = t.variableDeclaration("var", [
             t.variableDeclarator(temp)
@@ -349,17 +349,17 @@ export default function ({ types: t, messages }) {
 
         if (!t.isVariableDeclaration(left)) return;
 
-        var pattern = left.declarations[0].id;
+        let pattern = left.declarations[0].id;
         if (!t.isPattern(pattern)) return;
 
-        var key = scope.generateUidIdentifier("ref");
+        let key = scope.generateUidIdentifier("ref");
         node.left = t.variableDeclaration(left.kind, [
           t.variableDeclarator(key, null)
         ]);
 
-        var nodes = [];
+        let nodes = [];
 
-        var destructuring = new DestructuringTransformer({
+        let destructuring = new DestructuringTransformer({
           kind: left.kind,
           file: file,
           scope: scope,
@@ -370,20 +370,20 @@ export default function ({ types: t, messages }) {
 
         path.ensureBlock();
 
-        var block = node.body;
+        let block = node.body;
         block.body = nodes.concat(block.body);
       },
 
       CatchClause({ node, scope }, file) {
-        var pattern = node.param;
+        let pattern = node.param;
         if (!t.isPattern(pattern)) return;
 
-        var ref = scope.generateUidIdentifier("ref");
+        let ref = scope.generateUidIdentifier("ref");
         node.param = ref;
 
-        var nodes = [];
+        let nodes = [];
 
-        var destructuring = new DestructuringTransformer({
+        let destructuring = new DestructuringTransformer({
           kind: "let",
           file: file,
           scope: scope,
@@ -395,19 +395,19 @@ export default function ({ types: t, messages }) {
       },
 
       AssignmentExpression(path, file) {
-        var { node, scope } = path;
+        let { node, scope } = path;
         if (!t.isPattern(node.left)) return;
 
-        var nodes = [];
+        let nodes = [];
 
-        var destructuring = new DestructuringTransformer({
+        let destructuring = new DestructuringTransformer({
           operator: node.operator,
           file: file,
           scope: scope,
           nodes: nodes
         });
 
-        var ref;
+        let ref;
         if (path.isCompletionRecord() || !path.parentPath.isExpressionStatement()) {
           ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
 
@@ -426,27 +426,30 @@ export default function ({ types: t, messages }) {
           nodes.push(t.expressionStatement(ref));
         }
 
-        return nodes;
+        path.replaceWithMultiple(nodes);
       },
 
-      VariableDeclaration({ node, scope, parent }, file) {
+      VariableDeclaration(path, file) {
+        let { node, scope, parent } = path;
         if (t.isForXStatement(parent)) return;
+        if (!parent || !path.container) return; // i don't know why this is necessary - TODO
         if (!variableDeclarationHasPattern(node)) return;
 
-        var nodes = [];
-        var declar;
+        let nodes = [];
+        let declar;
 
-        for (var i = 0; i < node.declarations.length; i++) {
+        for (let i = 0; i < node.declarations.length; i++) {
           declar = node.declarations[i];
 
-          var patternId = declar.init;
-          var pattern   = declar.id;
+          let patternId = declar.init;
+          let pattern   = declar.id;
 
-          var destructuring = new DestructuringTransformer({
-            nodes: nodes,
-            scope: scope,
-            kind:  node.kind,
-            file:  file
+          let destructuring = new DestructuringTransformer({
+            blockHoist: node._blockHoist,
+            nodes:      nodes,
+            scope:      scope,
+            kind:       node.kind,
+            file:       file
           });
 
           if (t.isPattern(pattern)) {
@@ -462,27 +465,7 @@ export default function ({ types: t, messages }) {
           }
         }
 
-        if (!t.isProgram(parent) && !t.isBlockStatement(parent)) {
-          // https://github.com/babel/babel/issues/113
-          // for (let [x] = [0]; false;) {}
-
-          declar = null;
-
-          for (i = 0; i < nodes.length; i++) {
-            node = nodes[i];
-            declar = declar || t.variableDeclaration(node.kind, []);
-
-            if (!t.isVariableDeclaration(node) && declar.kind !== node.kind) {
-              throw file.buildCodeFrameError(node, messages.get("invalidParentForThisNode"));
-            }
-
-            declar.declarations = declar.declarations.concat(node.declarations);
-          }
-
-          return declar;
-        }
-
-        return nodes;
+        path.replaceWithMultiple(nodes);
       }
     }
   };

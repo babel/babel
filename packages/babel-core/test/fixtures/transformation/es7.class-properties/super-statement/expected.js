@@ -4,8 +4,10 @@ var Foo = (function (_Bar) {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
 
-    babelHelpers.get(Object.getPrototypeOf(Foo.prototype), "constructor", this).call(this);
-    this.bar = "foo";
+    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Foo).call(this));
+
+    _this.bar = "foo";
+    return _this;
   }
 
   return Foo;

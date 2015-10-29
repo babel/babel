@@ -115,7 +115,7 @@ kw("catch");
 kw("continue");
 kw("debugger");
 kw("default", beforeExpr);
-kw("do", {isLoop: true});
+kw("do", {isLoop: true, beforeExpr: true});
 kw("else", beforeExpr);
 kw("finally");
 kw("for", {isLoop: true});

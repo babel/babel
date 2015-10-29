@@ -1,28 +1,25 @@
-define(["exports", "module"], function (exports, module) {
-    module.exports = foo;
-  module.exports = 42;
-  module.exports = {};
-  module.exports = [];
-  module.exports = foo;
+define(["exports"], function (exports) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 
-  module.exports = function () {};
+  exports.default = function () {};
 
-  var _default = function _default() {
-    babelHelpers.classCallCheck(this, _default);
-  };
-
-  module.exports = _default;
+  exports.default = foo;
+  exports.default = 42;
+  exports.default = {};
+  exports.default = [];
+  exports.default = foo;
+  exports.default = class {};
 
   function foo() {}
 
-  var Foo = function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
-  };
+  class Foo {}
 
-  module.exports = Foo;
-  module.exports = foo;
+  exports.default = Foo;
+  exports.default = foo;
 
-  module.exports = (function () {
+  exports.default = (function () {
     return "foo";
   })();
 });

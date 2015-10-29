@@ -2,11 +2,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _lodashArrayLast = require("lodash/array/last");
+var _last2 = require("lodash/array/last");
 
-var _lodashArrayLast2 = babelHelpers.interopRequireDefault(_lodashArrayLast);
+var _last3 = babelHelpers.interopRequireDefault(_last2);
 
-var Container = (function () {
+let Container = (function () {
   function Container() {
     babelHelpers.classCallCheck(this, Container);
   }
@@ -18,11 +18,10 @@ var Container = (function () {
         return;
       }
 
-      return (0, _lodashArrayLast2["default"])(this.tokens.get(key));
+      return (0, _last3.default)(this.tokens.get(key));
     }
   }]);
   return Container;
 })();
 
-exports["default"] = Container;
-module.exports = exports["default"];
+exports.default = Container;

@@ -72,7 +72,7 @@ function updateDepsObject(changedPackages, deps) {
 
 function publish() {
   var packageNames = fs.readdirSync(PACKAGE_LOC).filter(function (name) {
-    return name[0] !== ".";
+    return name[0] !== "." && fs.statSync(PACKAGE_LOC + "/" + name).isDirectory();
   });
 
   var lastTagCommit = exec("git rev-list --tags --max-count=1");
@@ -152,6 +152,7 @@ try {
 } catch (err) {
   console.log(chalk.red("There was a problem publishing."));
   console.log(err.stack);
+  return;
 
   if (publishedPackages.length) {
     console.log(chalk.warning("Unpublishing published packages..."));
@@ -159,8 +160,8 @@ try {
     publishedPackages.forEach(function () {
       var verInfo = name + "@" + NEW_VERSION;
       try {
-        console.log(chalk.warning("Unpublishing " + verInfo  "..."));
-        exec("npm unpublish --force " + verInfo);
+        console.log(chalk.warning("Unpublishing " + verInfo + "..."));
+        //exec("npm unpublish --force " + verInfo);
       } catch (err) {
         console.log(chalk.red("Failed to unpublish " + verInfo));
         console.log(err.stack);
@@ -168,7 +169,7 @@ try {
     });
   } else {
     console.log(chalk.warning("Rolling back to commit", originalCommit, "..."));
-    exec("git checkout --hard " + originalCommit, true);
+    //exec("git checkout --hard " + originalCommit, true);
   }
 
   return;

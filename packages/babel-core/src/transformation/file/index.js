@@ -1,25 +1,36 @@
+/* @flow */
+/* global BabelParserOptions */
+/* global BabelFileMetadata */
+/* global BabelFileResult */
+
+import getHelper from "babel-helpers";
+import * as metadataVisitor from "./metadata";
 import convertSourceMap from "convert-source-map";
-import moduleFormatters from "../modules";
 import OptionManager from "./options/option-manager";
-import PluginManager from "./plugin-manager";
+import type Pipeline from "../pipeline";
+import type Plugin from "../plugin";
+import PluginPass from "../plugin-pass";
 import shebangRegex from "shebang-regex";
-import { NodePath, Hub } from "babel-traverse";
-import isFunction from "lodash/lang/isFunction";
+import { NodePath, Hub, Scope } from "babel-traverse";
 import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
-import shuffle from "lodash/collection/shuffle";
 import defaults from "lodash/object/defaults";
-import includes from "lodash/collection/includes";
 import traverse from "babel-traverse";
-import resolve from "try-resolve";
 import Logger from "./logger";
 import Store from "../../store";
-import Plugin from "../plugin";
-import parse from "../../helpers/parse";
+import { parse } from "babylon";
 import * as util from  "../../util";
 import path from "path";
 import * as t from "babel-types";
+
+import blockHoistPlugin from "../internal-plugins/block-hoist";
+import shadowFunctionsPlugin from "../internal-plugins/shadow-functions";
+
+const INTERNAL_PLUGINS = [
+  [blockHoistPlugin],
+  [shadowFunctionsPlugin]
+];
 
 let errorVisitor = {
   enter(path, state) {
@@ -32,80 +43,88 @@ let errorVisitor = {
 };
 
 export default class File extends Store {
-  constructor(opts = {}, pipeline) {
+  constructor(opts: Object = {}, pipeline: Pipeline) {
+    super();
+
     this.pipeline = pipeline;
 
     this.log  = new Logger(this, opts.filename || "unknown");
     this.opts = this.initOptions(opts);
 
-    this.buildTransformers();
+    this.parserOpts = {
+      highlightCode: this.opts.highlightCode,
+      nonStandard:   this.opts.nonStandard,
+      sourceType:    this.opts.sourceType,
+      filename:      this.opts.filename,
+      plugins:       []
+    };
+
+    this.pluginVisitors = [];
+    this.pluginPasses = [];
+    this.pluginStack = [];
+    this.buildPlugins();
+
+    this.metadata = {
+      usedHelpers: [],
+      marked: [],
+      modules: {
+        imports: [],
+        exports: {
+          exported: [],
+          specifiers: []
+        }
+      }
+    };
+
+    this.dynamicImportTypes = {};
+    this.dynamicImportIds   = {};
+    this.dynamicImports     = [];
+    this.declarations       = {};
+    this.usedHelpers        = {};
+
+    this.path = null;
+    this.ast  = {};
+
+    this.code    = "";
+    this.shebang = "";
+
+    this.hub = new Hub(this);
   }
 
-  transformerDependencies = {};
-  dynamicImportTypes      = {};
-  dynamicImportIds        = {};
-  dynamicImports          = [];
-  declarations            = {};
-  usedHelpers             = {};
-  dynamicData             = {};
-  data                    = {};
-  ast                     = {};
+  static helpers: Array<string>;
 
-  metadata = {
-    marked: [],
+  pluginVisitors: Array<Object>;
+  pluginPasses: Array<PluginPass>;
+  pluginStack: Array<Plugin>;
+  pipeline: Pipeline;
+  parserOpts: BabelParserOptions;
+  log: Logger;
+  opts: Object;
+  dynamicImportTypes: Object;
+  dynamicImportIds: Object;
+  dynamicImports: Array<Object>;
+  declarations: Object;
+  usedHelpers: Object;
+  path: NodePath;
+  ast: Object;
+  scope: Scope;
+  metadata: BabelFileMetadata;
+  hub: Hub;
+  code: string;
+  shebang: string;
 
-    modules: {
-      imports: [],
-      exports: {
-        exported: [],
-        specifiers: []
+  getMetadata() {
+    let has = false;
+    for (let node of (this.ast.program.body: Array<Object>)) {
+      if (t.isModuleDeclaration(node)) {
+        has = true;
+        break;
       }
     }
-  };
-
-  hub = new Hub(this);
-
-  static helpers = [
-    "inherits",
-    "defaults",
-    "create-class",
-    "create-decorated-class",
-    "create-decorated-object",
-    "define-decorated-property-descriptor",
-    "tagged-template-literal",
-    "tagged-template-literal-loose",
-    "to-array",
-    "to-consumable-array",
-    "sliced-to-array",
-    "sliced-to-array-loose",
-    "object-without-properties",
-    "has-own",
-    "slice",
-    "bind",
-    "define-property",
-    "async-to-generator",
-    "interop-export-wildcard",
-    "interop-require-wildcard",
-    "interop-require-default",
-    "typeof",
-    "extends",
-    "get",
-    "set",
-    "new-arrow-check",
-    "class-call-check",
-    "object-destructuring-empty",
-    "temporal-undefined",
-    "temporal-assert-defined",
-    "self-global",
-    "default-props",
-    "instanceof",
-
-    // legacy
-    "interop-require"
-  ];
-
-  static soloHelpers = [];
-
+    if (has) {
+      this.path.traverse(metadataVisitor, this);
+    }
+  }
 
   initOptions(opts) {
     opts = new OptionManager(this.log, this.pipeline).init(opts);
@@ -143,130 +162,67 @@ export default class File extends Store {
       sourceMapTarget:  basenameRelative
     });
 
-    //
-
-    if (opts.externalHelpers) {
-      this.set("helpersNamespace", t.identifier("babelHelpers"));
-    }
-
     return opts;
   }
 
-  isLoose(key: string) {
-    return includes(this.opts.loose, key);
-  }
-
-  buildTransformers() {
-    let file = this;
-
-    let transformers = this.transformers = {};
-
-    let secondaryStack = [];
-    let stack = [];
-
-    // build internal transformers
-    for (let key in this.pipeline.transformers) {
-      let transformer = this.pipeline.transformers[key];
-      let pass = transformers[key] = transformer.buildPass(file);
-
-      if (pass.canTransform()) {
-        stack.push(pass);
-
-        if (transformer.metadata.secondPass) {
-          secondaryStack.push(pass);
-        }
-
-        if (transformer.manipulateOptions) {
-          transformer.manipulateOptions(file.opts, file);
-        }
-      }
-    }
+  buildPlugins() {
+    let plugins: Array<[PluginPass, Object]> = this.opts.plugins.concat(INTERNAL_PLUGINS);
 
     // init plugins!
-    let beforePlugins = [];
-    let afterPlugins = [];
-    let pluginManager = new PluginManager({
-      file: this,
-      transformers: this.transformers,
-      before: beforePlugins,
-      after: afterPlugins
-    });
-    for (let i = 0; i < file.opts.plugins.length; i++) {
-      pluginManager.add(file.opts.plugins[i]);
-    }
-    stack = beforePlugins.concat(stack, afterPlugins);
+    for (let ref of plugins) {
+      let [plugin, pluginOpts] = ref; // todo: fix - can't embed in loop head because of flow bug
 
-    // build transformer stack
-    this.uncollapsedTransformerStack = stack = stack.concat(secondaryStack);
+      this.pluginStack.push(plugin);
+      this.pluginVisitors.push(plugin.visitor);
+      this.pluginPasses.push(new PluginPass(this, plugin, pluginOpts));
 
-    // build dependency graph
-    for (let pass of (stack: Array)) {
-      for (let dep of (pass.plugin.dependencies: Array)) {
-        this.transformerDependencies[dep] = pass.key;
+      if (plugin.manipulateOptions) {
+        plugin.manipulateOptions(this.opts, this.parserOpts, this);
       }
     }
-
-    // collapse stack categories
-    this.transformerStack = this.collapseStack(stack);
   }
 
-  collapseStack(_stack) {
-    let stack  = [];
-    let ignore = [];
-
-    for (let pass of (_stack: Array)) {
-      // been merged
-      if (ignore.indexOf(pass) >= 0) continue;
-
-      let group = pass.plugin.metadata.group;
-
-      // can't merge
-      if (!pass.canTransform() || !group) {
-        stack.push(pass);
-        continue;
-      }
-
-      let mergeStack = [];
-      for (let pass of (_stack: Array)) {
-        if (pass.plugin.metadata.group === group) {
-          mergeStack.push(pass);
-          ignore.push(pass);
-        } else {
-          //break;
-        }
-      }
-      shuffle;
-      //mergeStack = shuffle(mergeStack);
-
-      let visitors = [];
-      for (let pass of (mergeStack: Array)) {
-        visitors.push(pass.plugin.visitor);
-      }
-      let visitor = traverse.visitors.merge(visitors);
-      let mergePlugin = new Plugin(group, { visitor });
-      stack.push(mergePlugin.buildPass(this));
+  getModuleName(): ?string {
+    let opts = this.opts;
+    if (!opts.moduleIds) {
+      return null;
     }
 
-    return stack;
-  }
+    // moduleId is n/a if a `getModuleId()` is provided
+    if (opts.moduleId != null && !opts.getModuleId) {
+      return opts.moduleId;
+    }
 
-  set(key: string, val): any {
-    return this.data[key] = val;
-  }
+    let filenameRelative = opts.filenameRelative;
+    let moduleName = "";
 
-  setDynamic(key: string, fn: Function) {
-    this.dynamicData[key] = fn;
-  }
+    if (opts.moduleRoot != null) {
+      moduleName = opts.moduleRoot + "/";
+    }
 
-  get(key: string): any {
-    let data = this.data[key];
-    if (data) {
-      return data;
+    if (!opts.filenameRelative) {
+      return moduleName + opts.filename.replace(/^\//, "");
+    }
+
+    if (opts.sourceRoot != null) {
+      // remove sourceRoot from filename
+      let sourceRootRegEx = new RegExp("^" + opts.sourceRoot + "\/?");
+      filenameRelative = filenameRelative.replace(sourceRootRegEx, "");
+    }
+
+    // remove extension
+    filenameRelative = filenameRelative.replace(/\.(\w*?)$/, "");
+
+    moduleName += filenameRelative;
+
+    // normalize path separators
+    moduleName = moduleName.replace(/\\/g, "/");
+
+    if (opts.getModuleId) {
+      // If return is falsy, assume they want us to use our generated default name
+      return opts.getModuleId(moduleName) || moduleName;
     } else {
-      let dynamic = this.dynamicData[key];
-      if (dynamic) {
-        return this.set(key, dynamic());
-      }
+      return moduleName;
     }
   }
 
@@ -276,81 +232,52 @@ export default class File extends Store {
     return source;
   }
 
-  addImport(source: string, name?: string, type?: string): Object {
-    name = name || source;
-    let id = this.dynamicImportIds[name];
+  addImport(source: string, imported: string, name?: string = imported): Object {
+    let alias = `${source}:${imported}`;
+    let id = this.dynamicImportIds[alias];
 
     if (!id) {
       source = this.resolveModuleSource(source);
-      id = this.dynamicImportIds[name] = this.scope.generateUidIdentifier(name);
+      id = this.dynamicImportIds[alias] = this.scope.generateUidIdentifier(name);
 
-      let specifiers = [t.importDefaultSpecifier(id)];
+      let specifiers = [];
+
+      if (imported === "*") {
+        specifiers.push(t.importNamespaceSpecifier(id));
+      } else if (imported === "default") {
+        specifiers.push(t.importDefaultSpecifier(id));
+      } else {
+        specifiers.push(t.importSpecifier(id, t.identifier(imported)));
+      }
+
       let declar = t.importDeclaration(specifiers, t.stringLiteral(source));
       declar._blockHoist = 3;
 
-      if (type) {
-        let modules = this.dynamicImportTypes[type] = this.dynamicImportTypes[type] || [];
-        modules.push(declar);
-      }
-
-      if (this.transformers["es6.modules"].canTransform()) {
-        this.moduleFormatter.importSpecifier(specifiers[0], declar, this.dynamicImports, this.scope);
-        this.moduleFormatter.hasLocalImports = true;
-      } else {
-        this.dynamicImports.push(declar);
-      }
+      this.path.unshiftContainer("body", declar);
     }
 
     return id;
   }
 
-  attachAuxiliaryComment(node: Object): Object {
-    let beforeComment = this.opts.auxiliaryCommentBefore;
-    if (beforeComment) {
-      node.leadingComments = node.leadingComments || [];
-      node.leadingComments.push({
-        type: "CommentLine",
-        value: " " + beforeComment
-      });
-    }
-
-    let afterComment = this.opts.auxiliaryCommentAfter;
-    if (afterComment) {
-      node.trailingComments = node.trailingComments || [];
-      node.trailingComments.push({
-        type: "CommentLine",
-        value: " " + afterComment
-      });
-    }
-
-    return node;
-  }
-
   addHelper(name: string): Object {
-    let isSolo = includes(File.soloHelpers, name);
-
-    if (!isSolo && !includes(File.helpers, name)) {
-      throw new ReferenceError(`Unknown helper ${name}`);
-    }
-
     let declar = this.declarations[name];
     if (declar) return declar;
 
-    this.usedHelpers[name] = true;
-
-    if (!isSolo) {
-      let generator = this.get("helperGenerator");
-      let runtime   = this.get("helpersNamespace");
-      if (generator) {
-        return generator(name);
-      } else if (runtime) {
-        let id = t.identifier(t.toIdentifier(name));
-        return t.memberExpression(runtime, id);
-      }
+    if (!this.usedHelpers[name]) {
+      this.metadata.usedHelpers.push(name);
+      this.usedHelpers[name] = true;
     }
 
-    let ref = util.template("helper-" + name);
+    let generator = this.get("helperGenerator");
+    let runtime   = this.get("helpersNamespace");
+    if (generator) {
+      return generator(name);
+    } else if (runtime) {
+      let id = t.identifier(t.toIdentifier(name));
+      return t.memberExpression(runtime, id);
+    }
 
+    let ref = getHelper(name);
     let uid = this.declarations[name] = this.scope.generateUidIdentifier(name);
 
     if (t.isFunctionExpression(ref) && !ref.id) {
@@ -358,7 +285,6 @@ export default class File extends Store {
       ref._generated = true;
       ref.id = uid;
       ref.type = "FunctionDeclaration";
-      this.attachAuxiliaryComment(ref);
       this.path.unshiftContainer("body", ref);
     } else {
       ref._compact = true;
@@ -372,7 +298,11 @@ export default class File extends Store {
     return uid;
   }
 
-  addTemplateObject(helperName: string, strings: Array, raw: Array): Object {
+  addTemplateObject(
+    helperName: string,
+    strings: Array<Object>,
+    raw: Object,
+  ): Object {
     // Generate a unique name based on the string literals so we dedupe
     // identical strings used in the program.
     let stringIds = raw.elements.map(function(string) {
@@ -396,7 +326,7 @@ export default class File extends Store {
     return uid;
   }
 
-  buildCodeFrameError(node, msg, Error = SyntaxError) {
+  buildCodeFrameError(node: Object, msg: string, Error: typeof Error = SyntaxError): Error {
     let loc = node && (node.loc || node._loc);
 
     let err = new Error(msg);
@@ -404,7 +334,7 @@ export default class File extends Store {
     if (loc) {
       err.loc = loc.start;
     } else {
-      traverse(node, errorVisitor, err);
+      traverse(node, errorVisitor, this.scope, err);
 
       err.message += " (This is an error on an internal node. Probably an internal error";
 
@@ -436,49 +366,9 @@ export default class File extends Store {
     }
   }
 
-  getModuleFormatter(type: string) {
-    if (isFunction(type) || !moduleFormatters[type]) {
-      this.log.deprecate("Custom module formatters are deprecated and will be removed in the next major. Please use Babel plugins instead.");
-    }
-
-    let ModuleFormatter = isFunction(type) ? type : moduleFormatters[type];
-
-    if (!ModuleFormatter) {
-      let loc = resolve.relative(type);
-      if (loc) ModuleFormatter = require(loc);
-    }
-
-    if (!ModuleFormatter) {
-      throw new ReferenceError(`Unknown module formatter type ${JSON.stringify(type)}`);
-    }
-
-    return new ModuleFormatter(this);
-  }
-
   parse(code: string) {
-    let opts = this.opts;
-
-    //
-
-    let parseOpts = {
-      highlightCode: opts.highlightCode,
-      nonStandard:   opts.nonStandard,
-      sourceType:    opts.sourceType,
-      filename:      opts.filename,
-      plugins:       {}
-    };
-
-    let features = parseOpts.features = {};
-    for (let key in this.transformers) {
-      let transformer = this.transformers[key];
-      features[key] = transformer.canRun();
-    }
-
-    parseOpts.looseModules = this.isLoose("es6.modules");
-    parseOpts.strictMode = features.strict;
-
     this.log.debug("Parse start");
-    let ast = parse(code, parseOpts);
+    let ast = parse(code, this.parserOpts);
     this.log.debug("Parse stop");
     return ast;
   }
@@ -493,32 +383,25 @@ export default class File extends Store {
     }).setContext();
     this.scope = this.path.scope;
     this.ast   = ast;
+    this.getMetadata();
   }
 
   addAst(ast) {
     this.log.debug("Start set AST");
     this._addAst(ast);
     this.log.debug("End set AST");
-
-    this.log.debug("Start module formatter init");
-    let modFormatter = this.moduleFormatter = this.getModuleFormatter(this.opts.modules);
-    if (modFormatter.init && this.transformers["es6.modules"].canTransform()) {
-      modFormatter.init();
-    }
-    this.log.debug("End module formatter init");
   }
 
-  transform() {
+  transform(): BabelFileResult {
     this.call("pre");
-    for (let pass of (this.transformerStack: Array)) {
-      pass.transform();
-    }
+    this.log.debug(`Start transform traverse`);
+    traverse(this.ast, traverse.visitors.merge(this.pluginVisitors, this.pluginPasses), this.scope);
+    this.log.debug(`End transform traverse`);
     this.call("post");
-
     return this.generate();
   }
 
-  wrap(code, callback) {
+  wrap(code: string, callback: Function): BabelFileResult {
     code = code + "";
 
     try {
@@ -578,14 +461,15 @@ export default class File extends Store {
     return util.shouldIgnore(opts.filename, opts.ignore, opts.only);
   }
 
-  call(key: string) {
-    for (let pass of (this.uncollapsedTransformerStack: Array)) {
-      let fn = pass.plugin[key];
-      if (fn) fn.call(pass, this);
+  call(key: "pre" | "post") {
+    for (let pass of (this.pluginPasses: Array<PluginPass>)) {
+      let plugin = pass.plugin;
+      let fn = plugin[key];
+      if (fn) fn.call(pass, this, pass);
     }
   }
 
-  parseInputSourceMap(code: string) {
+  parseInputSourceMap(code: string): string {
     let opts = this.opts;
 
     if (opts.inputSourceMap !== false) {
@@ -607,13 +491,14 @@ export default class File extends Store {
     }
   }
 
-  makeResult({ code, map = null, ast, ignored }) {
+  makeResult({ code, map, ast, ignored }: BabelFileResult): BabelFileResult {
     let result = {
       metadata: null,
+      options:  this.opts,
       ignored:  !!ignored,
       code:     null,
       ast:      null,
-      map:      map
+      map:      map || null
     };
 
     if (this.opts.code) {
@@ -626,17 +511,16 @@ export default class File extends Store {
 
     if (this.opts.metadata) {
       result.metadata = this.metadata;
-      result.metadata.usedHelpers = Object.keys(this.usedHelpers);
     }
 
     return result;
   }
 
-  generate() {
+  generate(): BabelFileResult {
     let opts = this.opts;
     let ast  = this.ast;
 
-    let result = { ast };
+    let result: BabelFileResult = { ast };
     if (!opts.code) return this.makeResult(result);
 
     this.log.debug("Generation start");
@@ -649,7 +533,7 @@ export default class File extends Store {
 
     if (this.shebang) {
       // add back shebang
-      result.code = `${this.shebang}\n${result.code}`;
+      result.code = `${this.shebang}${result.code}`;
     }
 
     if (result.map) {
@@ -667,3 +551,5 @@ export default class File extends Store {
     return this.makeResult(result);
   }
 }
+
+export { File };

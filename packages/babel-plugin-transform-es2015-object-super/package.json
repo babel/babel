@@ -1,11 +1,15 @@
 {
   "name": "babel-plugin-transform-es2015-object-super",
-  "version": "1.0.0",
+  "version": "5.10.32",
   "description": "Compile ES2015 object super to ES5",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-helper-replace-supers": "^5.0.0",
+    "babel-runtime": "^5.10.32"
+  }
 }

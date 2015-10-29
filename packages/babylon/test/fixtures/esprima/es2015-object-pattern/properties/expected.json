@@ -73,7 +73,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 5,
                   "end": 6,
                   "loc": {
@@ -105,7 +105,6 @@
                     },
                     "name": "a"
                   },
-                  "kind": "init",
                   "value": {
                     "type": "Identifier",
                     "start": 5,
@@ -124,7 +123,7 @@
                   }
                 },
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 7,
                   "end": 10,
                   "loc": {
@@ -156,7 +155,6 @@
                     },
                     "name": "b"
                   },
-                  "kind": "init",
                   "value": {
                     "type": "AssignmentPattern",
                     "start": 7,
@@ -210,7 +208,7 @@
                   }
                 },
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 11,
                   "end": 14,
                   "loc": {
@@ -257,11 +255,10 @@
                       }
                     },
                     "name": "d"
-                  },
-                  "kind": "init"
+                  }
                 },
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 15,
                   "end": 20,
                   "loc": {
@@ -343,11 +340,10 @@
                       },
                       "value": 0
                     }
-                  },
-                  "kind": "init"
+                  }
                 },
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 21,
                   "end": 28,
                   "loc": {
@@ -411,8 +407,7 @@
                         "name": "h"
                       }
                     ]
-                  },
-                  "kind": "init"
+                  }
                 }
               ]
             },

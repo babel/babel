@@ -1,4 +1,3 @@
 {
-  "plugins": ["external-helpers"],
-  "modules": "common"
+  "plugins": ["external-helpers", "transform-es2015-modules-commonjs"]
 }

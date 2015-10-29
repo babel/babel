@@ -3,24 +3,27 @@ export default function ({ types: t }) {
     visitor: {
       ArrowFunctionExpression(path, state) {
         if (state.opts.spec) {
-          if (path.node.shadow) return;
-          path.node.shadow = { this: false };
+          let { node } = path;
+          if (node.shadow) return;
 
-          var boundThis = t.thisExpression();
+          node.shadow = { this: false };
+          node.type = "FunctionExpression";
+
+          let boundThis = t.thisExpression();
           boundThis._forceShadow = path;
 
           // make sure that arrow function won't be instantiated
           path.ensureBlock();
           path.get("body").unshiftContainer(
             "body",
-            t.expressionStatement(t.callExpression(state.addHelper("new-arrow-check"), [
+            t.expressionStatement(t.callExpression(state.addHelper("newArrowCheck"), [
               t.thisExpression(),
               boundThis
             ]))
           );
 
           path.replaceWith(t.callExpression(
-            t.memberExpression(path.node, t.identifier("bind")),
+            t.memberExpression(node, t.identifier("bind")),
             [t.thisExpression()]
           ));
         } else {

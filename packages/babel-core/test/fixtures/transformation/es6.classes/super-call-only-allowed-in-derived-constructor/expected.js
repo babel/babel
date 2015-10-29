@@ -1,9 +1,5 @@
-var Foo = (function () {
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
+var Foo = function Foo() {
+  babelHelpers.classCallCheck(this, Foo);
 
-    babelHelpers.get(Object.getPrototypeOf(Foo.prototype), "constructor", this).call(this);
-  }
-
-  return Foo;
-})();
+  Object.getPrototypeOf(Foo).call(this);
+};

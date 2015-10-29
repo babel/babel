@@ -1,11 +1,11 @@
 System.register([], function (_export) {
-    var _default, Foo;
+  _export("default", function () {});
 
-  _export("default", foo);
-
-  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+  _export("default", class {});
 
   function foo() {}
+
+  _export("default", foo);
 
   return {
     setters: [],
@@ -18,17 +18,7 @@ System.register([], function (_export) {
 
       _export("default", foo);
 
-      _export("default", function () {});
-
-      _default = function _default() {
-        _classCallCheck(this, _default);
-      };
-
-      _export("default", _default);
-
-      Foo = function Foo() {
-        _classCallCheck(this, Foo);
-      };
+      class Foo {}
 
       _export("default", Foo);
 

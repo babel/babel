@@ -4,9 +4,11 @@ var Test = (function (_Foo) {
   function Test() {
     babelHelpers.classCallCheck(this, Test);
 
-    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "constructor", this).call(this);
-    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", this);
-    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", this).whatever;
+    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Test).call(this));
+
+    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", _this);
+    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", _this).whatever;
+    return _this;
   }
 
   return Test;

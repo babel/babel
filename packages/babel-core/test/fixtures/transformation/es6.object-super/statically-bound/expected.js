@@ -1,7 +1,7 @@
 var _obj;
 
 var o = _obj = {
-  m: function m() {
+  m() {
     return babelHelpers.get(Object.getPrototypeOf(_obj), "x", this);
   }
 };

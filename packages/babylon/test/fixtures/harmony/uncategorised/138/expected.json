@@ -75,7 +75,7 @@
           },
           "body": [
             {
-              "type": "MethodDefinition",
+              "type": "ClassMethod",
               "start": 10,
               "end": 23,
               "loc": {
@@ -107,61 +107,47 @@
               },
               "static": false,
               "kind": "set",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 17,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 18,
+                  "end": 19,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 19
+                    }
+                  },
+                  "name": "v"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 21,
                 "end": 23,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 17
+                    "column": 21
                   },
                   "end": {
                     "line": 1,
                     "column": 23
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [
-                  {
-                    "type": "Identifier",
-                    "start": 18,
-                    "end": 19,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 18
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 19
-                      }
-                    },
-                    "name": "v"
-                  }
-                ],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 21,
-                  "end": 23,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 21
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 23
-                    }
-                  },
-                  "body": []
-                }
+                "body": [],
+                "directives": []
               }
             },
             {
-              "type": "MethodDefinition",
+              "type": "ClassMethod",
               "start": 24,
               "end": 36,
               "loc": {
@@ -193,46 +179,32 @@
               },
               "static": false,
               "kind": "get",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 31,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 34,
                 "end": 36,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 31
+                    "column": 34
                   },
                   "end": {
                     "line": 1,
                     "column": 36
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 34,
-                  "end": 36,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 34
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 36
-                    }
-                  },
-                  "body": []
-                }
+                "body": [],
+                "directives": []
               }
             }
           ]
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

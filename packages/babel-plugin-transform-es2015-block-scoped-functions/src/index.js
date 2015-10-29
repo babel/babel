@@ -1,13 +1,12 @@
 export default function ({ types: t }) {
   function statementList(key, path) {
-    var paths: Array = path.get(key);
+    let paths: Array = path.get(key);
 
     for (let path of paths) {
-      var func = path.node;
-
+      let func = path.node;
       if (!path.isFunctionDeclaration()) continue;
 
-      var declar = t.variableDeclaration("let", [
+      let declar = t.variableDeclaration("let", [
         t.variableDeclarator(func.id, t.toExpression(func))
       ]);
 
@@ -23,16 +22,17 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
-      BlockStatement(node, parent) {
-        if ((t.isFunction(parent) && parent.body === node) || t.isExportDeclaration(parent)) {
+      BlockStatement(path) {
+        let { node, parent } = path;
+        if (t.isFunction(parent, { body: node })  || t.isExportDeclaration(parent)) {
           return;
         }
 
-        statementList("body", this);
+        statementList("body", path);
       },
 
-      SwitchCase() {
-        statementList("consequent", this);
+      SwitchCase(path) {
+        statementList("consequent", path);
       }
     }
   };

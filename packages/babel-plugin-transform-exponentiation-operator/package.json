@@ -1,11 +1,16 @@
 {
   "name": "babel-plugin-transform-exponentiation-operator",
-  "version": "1.0.0",
+  "version": "5.10.32",
   "description": "Compile exponentiation operator to ES5",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-plugin-syntax-exponentiation-operator": "^5.10.32",
+    "babel-helper-builder-binary-assignment-operator-visitor": "^5.0.0",
+    "babel-runtime": "^5.10.32"
+  }
 }

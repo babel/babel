@@ -4,4 +4,4 @@ class Example {
   }
 }
 
-let t = new Example();
+var t = new Example();

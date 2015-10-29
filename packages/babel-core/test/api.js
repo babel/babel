@@ -4,7 +4,7 @@ var buildExternalHelpers = require("../lib/tools/build-external-helpers");
 var transform            = require("../lib/transformation");
 var Pipeline             = require("../lib/transformation/pipeline");
 var assert               = require("assert");
-var File                 = require("../lib/transformation/file");
+var File                 = require("../lib/transformation/file").default;
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
@@ -36,36 +36,23 @@ suite("api", function () {
     });
   });
 
-  test("auxiliaryCommentBefore option", function () {
-    return Promise.all([
-      transformAsync("class Foo {}", {
-        auxiliaryCommentBefore: "foobar"
-      }).then(function (result) {
-        assert.ok(result.code.indexOf("foobar") >= 0);
-      }),
-
-      transformAsync("for (let i in bar) { foo(function () { i; }); break; continue; }", {
-        auxiliaryCommentBefore: "foobar"
-      }).then(function (result) {
-        assert.ok(result.code.indexOf("foobar") >= 0);
-      })
-    ]);
-  });
-
-  test("auxiliaryCommentAfter option", function () {
-    return Promise.all([
-      transformAsync("class Foo {}", {
-        auxiliaryCommentAfter: "foobar"
-      }).then(function (result) {
-        assert.ok(result.code.indexOf("foobar") >= 0);
-      }),
-
-      transformAsync("for (let i in bar) { foo(function () { i; }); break; continue; }", {
-        auxiliaryCommentAfter: "foobar"
-      }).then(function (result) {
-        assert.ok(result.code.indexOf("foobar") >= 0);
-      })
-    ]);
+  test("auxiliaryComment option", function () {
+    return transformAsync("class Foo {}", {
+      auxiliaryComment: "yo bro",
+      plugins: [function (babel) {
+        var t = babel.types;
+        return {
+          visitor: {
+            Program: function (path) {
+              path.unshiftContainer("body", t.expressionStatement(t.identifier("start")));
+              path.pushContainer("body", t.expressionStatement(t.identifier("end")));
+            }
+          }
+        };
+      }]
+    }).then(function (result) {
+      assert.equal(result.code, "/*yo bro*/start;\nclass Foo {}\n/*yo bro*/end;");
+    });
   });
 
   test("modules metadata", function () {
@@ -126,7 +113,7 @@ suite("api", function () {
       }),
 
       transformAsync('export * as externalName1 from "external";', {
-        stage: 0
+        plugins: [require("../../babel-plugin-syntax-export-extensions")]
       }).then(function (result) {
          assert.deepEqual(result.metadata.modules.exports, {
           exported: ['externalName1'],
@@ -139,7 +126,7 @@ suite("api", function () {
       }),
 
       transformAsync('export externalName2 from "external";', {
-        stage: 0
+        plugins: [require("../../babel-plugin-syntax-export-extensions")]
       }).then(function (result) {
         assert.deepEqual(result.metadata.modules.exports, {
           exported: ["externalName2"],
@@ -273,77 +260,6 @@ suite("api", function () {
     ])
   });
 
-  suite("getModuleId option", function () {
-    // As of this commit, `getModuleId` is the only option that isn't JSON
-    // compatible which is why it's not inside /test/core/fixtures/transformation
-
-    function getModuleNameTest(moduleFormat, expected) {
-      return transformAsync("foo('bar');", {
-        filename: "/foo/bar/index",
-        modules: moduleFormat,
-        moduleIds: true,
-        getModuleId: function (name) {
-          return name.replace(/\/index$/, "");
-        }
-      }).then(function (result) {
-        assert.equal(result.code, expected);
-      });
-    }
-
-    test("amd", function () {
-      var expected = [
-        "define('/foo/bar', ['exports'], function (exports) {",
-        "  'use strict';",
-        "",
-        "  foo('bar');",
-        "});"
-      ].join("\n");
-
-      return getModuleNameTest("amd", expected);
-    });
-
-    test("umd", function () {
-      var expected = [
-        "(function (global, factory) {",
-        "  if (typeof define === 'function' && define.amd) {",
-        "    define('/foo/bar', ['exports'], factory);",
-        "  } else if (typeof exports !== 'undefined') {",
-        "    factory(exports);",
-        "  } else {",
-        "    var mod = {",
-        "      exports: {}",
-        "    };",
-        "    factory(mod.exports);",
-        "    global.fooBar = mod.exports;",
-        "  }",
-        "})(this, function (exports) {",
-        "  'use strict';",
-        "",
-        "  foo('bar');",
-        "});",
-      ].join("\n");
-
-      return getModuleNameTest("umd", expected);
-    });
-
-    test("system", function () {
-      var expected = [
-        "System.register('/foo/bar', [], function (_export) {",
-        "  'use strict';",
-        "",
-        "  return {",
-        "    setters: [],",
-        "    execute: function () {",
-        "      foo('bar');",
-        "    }",
-        "  };",
-        "});",
-      ].join("\n");
-
-      return getModuleNameTest("system", expected);
-    });
-  });
-
   suite("env option", function () {
     var oldBabelEnv = process.env.BABEL_ENV;
     var oldNodeEnv = process.env.NODE_ENV;
@@ -361,10 +277,10 @@ suite("api", function () {
     test("default", function () {
       return transformAsync("foo;", {
         env: {
-          development: { blacklist: "strict" }
+          development: { code: false }
         }
       }).then(function (result) {
-        assert.equal(result.code, "foo;");
+        assert.equal(result.code, undefined);
       });
     });
 
@@ -372,10 +288,10 @@ suite("api", function () {
       process.env.BABEL_ENV = "foo";
       return transformAsync("foo;", {
         env: {
-          foo: { blacklist: "strict" }
+          foo: { code: false }
         }
       }).then(function (result) {
-        assert.equal(result.code, "foo;");
+        assert.equal(result.code, undefined);
       });
     });
 
@@ -383,19 +299,12 @@ suite("api", function () {
       process.env.NODE_ENV = "foo";
       return transformAsync("foo;", {
         env: {
-          foo: { blacklist: "strict" }
+          foo: { code: false }
         }
       }).then(function (result) {
-        assert.equal(result.code, "foo;");
+        assert.equal(result.code, undefined);
       });
     });
-  });
-
-  test("addHelper unknown", function () {
-    var file = new File({}, transform.pipeline);
-    assert.throws(function () {
-      file.addHelper("foob");
-    }, /Unknown helper foob/);
   });
 
   test("resolveModuleSource option", function () {
@@ -403,27 +312,12 @@ suite("api", function () {
     var expected = 'import foo from "resolved/foo-import-default";\nimport "resolved/foo-import-bare";\nexport { foo } from "resolved/foo-export-named";';
 
     return transformAsync(actual, {
-      blacklist: ["es6.modules", "strict"],
       resolveModuleSource: function (originalSource) {
         return "resolved/" + originalSource;
       }
     }).then(function (result) {
       assert.equal(result.code.trim(), expected);
     });
-  });
-
-  test("extra options", function () {
-    var file1 = new File({ extra: { foo: "bar" } }, transform.pipeline);
-    assert.equal(file1.opts.extra.foo, "bar");
-
-    var file2 = new File({}, transform.pipeline);
-    var file3 = new File({}, transform.pipeline);
-    assert.ok(file2.opts.extra !== file3.opts.extra);
-  });
-
-  // For now just signal that it's not cruft and shouldn't be deleted.
-  test("pretransform exists", function () {
-    assert.ok(Pipeline.prototype.pretransform);
   });
 
   suite("buildExternalHelpers", function () {

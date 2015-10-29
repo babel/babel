@@ -11,8 +11,8 @@ try {
   _iteratorError = err;
 } finally {
   try {
-    if (!_iteratorNormalCompletion && _iterator["return"]) {
-      _iterator["return"]();
+    if (!_iteratorNormalCompletion && _iterator.return) {
+      _iterator.return();
     }
   } finally {
     if (_didIteratorError) {

@@ -5,6 +5,5 @@ export function* giveWord () {
   yield myWord;
 }
 
-
 foo;
 bar;

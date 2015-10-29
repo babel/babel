@@ -1,6 +1,8 @@
 ({
+  $$typeof: babelHelpers.typeofReactElement,
   type: "foo",
+  key: null,
   ref: null,
   props: {},
-  key: null
+  _owner: null
 });

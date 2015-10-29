@@ -1,11 +1,19 @@
 {
   "name": "babel-plugin-transform-decorators",
-  "version": "1.0.0",
+  "version": "5.10.32",
   "description": "Compile class and object decorators to ES5",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-types": "^5.10.32",
+    "babel-helper-define-map": "^5.0.0",
+    "babel-plugin-syntax-decorators": "^5.10.32",
+    "babel-helper-explode-class": "^5.0.0",
+    "babel-template": "^5.10.32",
+    "babel-runtime": "^5.10.32"
+  }
 }

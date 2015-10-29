@@ -1,9 +1,11 @@
+/* @flow */
+
 import * as t from "../index";
 
-export var VISITOR_KEYS = {};
-export var ALIAS_KEYS = {};
-export var NODE_FIELDS = {};
-export var BUILDER_KEYS = {};
+export let VISITOR_KEYS = {};
+export let ALIAS_KEYS = {};
+export let NODE_FIELDS = {};
+export let BUILDER_KEYS = {};
 
 function getType(val) {
   if (Array.isArray(val)) {
@@ -17,37 +19,33 @@ function getType(val) {
   }
 }
 
-export function assertContains(vals) {
-  return function (val, key) {
-    if (vals.indexOf(val) < 0) {
-      throw new TypeError(`Property ${key} with the value of ${JSON.stringify(val)} expected to be one of ${JSON.stringify(vals)}`);
-    }
-  };
-}
-
-export function assertEach(callback) {
+export function assertEach(callback: Function): Function {
   return function (node, key, val) {
     if (!Array.isArray(val)) return;
 
-    for (var i = 0; i < val.length; i++) {
+    for (let i = 0; i < val.length; i++) {
       callback(node, `${key}[${i}]`, val[i]);
     }
   };
 }
 
-export function assertOneOf(...vals) {
-  return function (node, key, val) {
+export function assertOneOf(...vals): Function {
+  function validate(node, key, val) {
     if (vals.indexOf(val) < 0) {
       throw new TypeError(`Property ${key} expected value to be one of ${JSON.stringify(vals)} but got ${JSON.stringify(val)}`);
     }
-  };
+  }
+
+  validate.oneOf = vals;
+
+  return validate;
 }
 
-export function assertNodeType(...types) {
-  return function (node, key, val) {
-    var valid = false;
+export function assertNodeType(...types: Array<string>): Function {
+  function validate(node, key, val) {
+    let valid = false;
 
-    for (var type of types) {
+    for (let type of types) {
       if (t.is(type, val)) {
         valid = true;
         break;
@@ -55,46 +53,66 @@ export function assertNodeType(...types) {
     }
 
     if (!valid) {
-      throw new TypeError(`Property ${key} expected node to be of a type ${JSON.stringify(types)} but instead got ${JSON.stringify(val && val.type)}`);
+      throw new TypeError(`Property ${key} of ${node.type} expected node to be of a type ${JSON.stringify(types)} but instead got ${JSON.stringify(val && val.type)}`);
     }
-  };
+  }
+
+  validate.oneOfNodeTypes = types;
+
+  return validate;
 }
 
-export function assertValueType(type) {
-  return function (node, key, val) {
-    var valid = getType(val) === type;
+export function assertValueType(type: string): Function {
+  function validate(node, key, val) {
+    let valid = getType(val) === type;
 
     if (!valid) {
-      console.log(type, key, val);
       throw new TypeError(`Property ${key} expected type of ${type} but got ${getType(val)}`);
     }
-  };
+  }
+
+  validate.type = type;
+
+  return validate;
 }
 
-export function chain(...fns) {
+export function chain(...fns: Array<Function>): Function {
   return function (...args) {
-    for (var fn of fns) {
+    for (let fn of fns) {
       fn(...args);
     }
   };
 }
 
-export default function define(type, opts = {}) {
-  opts.fields  = opts.fields || {};
-  opts.visitor = opts.visitor || [];
-  opts.aliases = opts.aliases || [];
-  opts.builder = opts.builder || opts.visitor || [];
+export default function defineType(
+  type: string,
+  opts: {
+    fields?: Object;
+    visitor?: Array<string>;
+    aliases?: Array<string>;
+    builder?: Array<string>;
+    inherits?: string;
+  } = {},
+) {
+  let inherits = (opts.inherits && store[opts.inherits]) || {};
+
+  opts.fields  = opts.fields || inherits.fields || {};
+  opts.visitor = opts.visitor || inherits.visitor || [];
+  opts.aliases = opts.aliases || inherits.aliases || [];
+  opts.builder = opts.builder || inherits.builder || opts.visitor || [];
 
   // ensure all field keys are represented in `fields`
-  for (let key of (opts.visitor.concat(opts.builder): Array)) {
+  for (let key of (opts.visitor.concat(opts.builder): Array<string>)) {
     opts.fields[key] = opts.fields[key] || {};
   }
 
   for (let key in opts.fields) {
-    var field = opts.fields[key];
+    let field = opts.fields[key];
 
     if (field.default === undefined) {
       field.default = null;
+    } else if (!field.validate) {
+      field.validate = assertValueType(getType(field.default));
     }
   }
 
@@ -102,4 +120,8 @@ export default function define(type, opts = {}) {
   BUILDER_KEYS[type] = opts.builder;
   NODE_FIELDS[type]  = opts.fields;
   ALIAS_KEYS[type]   = opts.aliases;
+
+  store[type] = opts;
 }
+
+let store = {};

@@ -1,3 +1,3 @@
-var foo = function foo() {
-  return undefined;
-};
+"use strict";
+
+var foo = () => undefined;

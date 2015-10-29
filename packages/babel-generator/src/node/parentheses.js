@@ -82,7 +82,8 @@ export function Binary(node: Object, parent: Object): boolean {
       return true;
     }
 
-    if (parentPos === nodePos && parent.right === node) {
+    // Logical expressions with the same precedence don't need parens.
+    if (parentPos === nodePos && parent.right === node && !t.isLogicalExpression(parent)) {
       return true;
     }
   }
@@ -116,6 +117,10 @@ export function SequenceExpression(node: Object, parent: Object): boolean {
   }
 
   if (t.isExpressionStatement(parent) && parent.expression === node) {
+    return false;
+  }
+
+  if (t.isReturnStatement(parent)) {
     return false;
   }
 

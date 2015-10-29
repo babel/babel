@@ -10,16 +10,4 @@ class Test extends Foo {
     super.test(...arguments);
     super.test("test", ...arguments);
   }
-
-  test() {
-    super();
-    super(...arguments);
-    super("test", ...arguments);
-  }
-
-  static foo() {
-    super();
-    super(...arguments);
-    super("test", ...arguments);
-  }
 }

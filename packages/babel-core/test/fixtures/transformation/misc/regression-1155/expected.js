@@ -8,7 +8,7 @@ var Foo = (function (_Bar) {
     parentOptions.init = function () {
       this;
     };
-    babelHelpers.get(Object.getPrototypeOf(Foo.prototype), "constructor", this).call(this, parentOptions);
+    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Foo).call(this, parentOptions));
   }
 
   return Foo;

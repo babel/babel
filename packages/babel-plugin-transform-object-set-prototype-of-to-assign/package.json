@@ -1,11 +1,14 @@
 {
   "name": "babel-plugin-transform-object-set-prototype-of-to-assign",
-  "version": "1.0.1",
+  "version": "5.10.32",
   "description": "Turn Object.setPrototypeOf to assignments",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-runtime": "^5.10.32"
+  }
 }

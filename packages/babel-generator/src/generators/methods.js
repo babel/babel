@@ -19,12 +19,11 @@ export function _params(node: Object) {
 }
 
 export function _method(node: Object) {
-  let value = node.value;
-  let kind  = node.kind;
-  let key   = node.key;
+  let kind = node.kind;
+  let key  = node.key;
 
   if (kind === "method" || kind === "init") {
-    if (value.generator) {
+    if (node.generator) {
       this.push("*");
     }
   }
@@ -33,7 +32,7 @@ export function _method(node: Object) {
     this.push(kind + " ");
   }
 
-  if (value.async) this.push("async ");
+  if (node.async) this.push("async ");
 
   if (node.computed) {
     this.push("[");
@@ -43,9 +42,9 @@ export function _method(node: Object) {
     this.print(key, node);
   }
 
-  this._params(value);
+  this._params(node);
   this.space();
-  this.print(value.body, value);
+  this.print(node.body, node);
 }
 
 export function FunctionExpression(node: Object) {

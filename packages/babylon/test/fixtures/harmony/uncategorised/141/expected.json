@@ -58,7 +58,7 @@
           },
           "properties": [
             {
-              "type": "Property",
+              "type": "ObjectProperty",
               "start": 2,
               "end": 9,
               "loc": {
@@ -109,8 +109,7 @@
                   "raw": "10"
                 },
                 "value": 10
-              },
-              "kind": "init"
+              }
             }
           ],
           "extra": {

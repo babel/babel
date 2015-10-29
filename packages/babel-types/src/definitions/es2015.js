@@ -1,6 +1,14 @@
-import define, { assertNodeType, assertValueType, chain, assertEach, assertOneOf } from "./index";
+/* @flow */
 
-define("AssignmentPattern", {
+import defineType, {
+  assertNodeType,
+  assertValueType,
+  chain,
+  assertEach,
+  assertOneOf,
+} from "./index";
+
+defineType("AssignmentPattern", {
   visitor: ["left", "right"],
   aliases: ["Pattern", "LVal"],
   fields: {
@@ -13,7 +21,7 @@ define("AssignmentPattern", {
   }
 });
 
-define("ArrayPattern", {
+defineType("ArrayPattern", {
   visitor: ["elements", "typeAnnotation"],
   aliases: ["Pattern", "LVal"],
   fields: {
@@ -23,10 +31,10 @@ define("ArrayPattern", {
   }
 });
 
-define("ArrowFunctionExpression", {
+defineType("ArrowFunctionExpression", {
   builder: ["params", "body", "async"],
   visitor: ["params", "body", "returnType"],
-  aliases: ["Scopable", "Function", "BlockParent", "FunctionParent", "Expression", "Pure"],
+  aliases: ["Scopable", "Function", "BlockParent", "FunctionParent", "Expression", "Pureish"],
   fields: {
     params: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("LVal")))
@@ -41,19 +49,27 @@ define("ArrowFunctionExpression", {
   }
 });
 
-define("ClassBody", {
+defineType("ClassBody", {
   visitor: ["body"],
   fields: {
     body: {
-      validate: chain(assertValueType("array"), assertEach(assertValueType("MethodDefinition", "ClassProperty")))
+      validate: chain(assertValueType("array"), assertEach(assertValueType("ClassMethod", "ClassProperty")))
     }
   }
 });
 
-define("ClassDeclaration", {
+defineType("ClassDeclaration", {
   builder: ["id", "superClass", "body", "decorators"],
-  visitor: ["id", "body", "superClass", "typeParameters", "superTypeParameters", "implements", "decorators"],
-  aliases: ["Scopable", "Class", "Statement", "Declaration"],
+  visitor: [
+    "id",
+    "body",
+    "superClass",
+    "typeParameters",
+    "superTypeParameters",
+    "implements",
+    "decorators"
+  ],
+  aliases: ["Scopable", "Class", "Statement", "Declaration", "Pureish"],
   fields: {
     id: {
       validate: assertNodeType("Identifier")
@@ -71,10 +87,9 @@ define("ClassDeclaration", {
   }
 });
 
-define("ClassExpression", {
-  builder: ["id", "superClass", "body", "decorators"],
-  visitor: ["id", "body", "superClass", "typeParameters", "superTypeParameters", "implements", "decorators"],
-  aliases: ["Scopable", "Class", "Expression"],
+defineType("ClassExpression", {
+  inherits: "ClassDeclaration",
+  aliases: ["Scopable", "Class", "Expression", "Pureish"],
   fields: {
     id: {
       optional: true,
@@ -93,15 +108,15 @@ define("ClassExpression", {
   }
 });
 
-define("ExportAllDeclaration", {
-  visitor: ["source", "exported"],
+defineType("ExportAllDeclaration", {
+  visitor: ["source"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   fields: {
     // todo
   }
 });
 
-define("ExportDefaultDeclaration", {
+defineType("ExportDefaultDeclaration", {
   visitor: ["declaration"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   fields: {
@@ -109,7 +124,7 @@ define("ExportDefaultDeclaration", {
   }
 });
 
-define("ExportNamedDeclaration", {
+defineType("ExportNamedDeclaration", {
   visitor: ["declaration", "specifiers", "source"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   fields: {
@@ -117,7 +132,7 @@ define("ExportNamedDeclaration", {
   }
 });
 
-define("ExportSpecifier", {
+defineType("ExportSpecifier", {
   visitor: ["local", "exported"],
   aliases: ["ModuleSpecifier"],
   fields: {
@@ -130,7 +145,7 @@ define("ExportSpecifier", {
   }
 });
 
-define("ForOfStatement", {
+defineType("ForOfStatement", {
   visitor: ["left", "right", "body"],
   aliases: ["Scopable", "Statement", "For", "BlockParent", "Loop", "ForXStatement"],
   fields: {
@@ -146,12 +161,12 @@ define("ForOfStatement", {
   }
 });
 
-define("ImportDeclaration", {
+defineType("ImportDeclaration", {
   visitor: ["specifiers", "source"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration"],
   fields: {
     specifiers: {
-      // todo
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("ImportSpecifier", "ImportDefaultSpecifier", "ImportNamespaceSpecifier")))
     },
     source: {
       validate: assertNodeType("StringLiteral")
@@ -159,7 +174,7 @@ define("ImportDeclaration", {
   }
 });
 
-define("ImportDefaultSpecifier", {
+defineType("ImportDefaultSpecifier", {
   visitor: ["local"],
   aliases: ["ModuleSpecifier"],
   fields: {
@@ -169,7 +184,7 @@ define("ImportDefaultSpecifier", {
   }
 });
 
-define("ImportNamespaceSpecifier", {
+defineType("ImportNamespaceSpecifier", {
   visitor: ["local"],
   aliases: ["ModuleSpecifier"],
   fields: {
@@ -179,7 +194,7 @@ define("ImportNamespaceSpecifier", {
   }
 });
 
-define("ImportSpecifier", {
+defineType("ImportSpecifier", {
   visitor: ["local", "imported"],
   aliases: ["ModuleSpecifier"],
   fields: {
@@ -192,7 +207,7 @@ define("ImportSpecifier", {
   }
 });
 
-define("MetaProperty", {
+defineType("MetaProperty", {
   visitor: ["meta", "property"],
   aliases: ["Expression"],
   fields: {
@@ -206,9 +221,10 @@ define("MetaProperty", {
   }
 });
 
-define("MethodDefinition", {
-  builder: ["key", "value", "kind", "computed", "static"],
-  visitor: ["key", "value", "decorators"],
+defineType("ClassMethod", {
+  aliases: ["Function", "Scopable", "BlockParent", "FunctionParent", "Method"],
+  builder: ["kind", "key", "params", "body", "computed", "static"],
+  visitor: ["key", "params", "body", "decorators", "returnType", "typeParameters"],
   fields: {
     kind: {
       validate: chain(assertValueType("string"), assertOneOf("get", "set", "method", "constructor")),
@@ -221,11 +237,31 @@ define("MethodDefinition", {
     static: {
       default: false,
       validate: assertValueType("boolean")
+    },
+    key: {
+      validate(node, key, val) {
+        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "Literal"];
+        assertNodeType(...expectedTypes)(node, key, val);
+      }
+    },
+    params: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("LVal")))
+    },
+    body: {
+      validate: assertNodeType("BlockStatement")
+    },
+    generator: {
+      default: false,
+      validate: assertValueType("boolean")
+    },
+    async: {
+      default: false,
+      validate: assertValueType("boolean")
     }
   }
 });
 
-define("ObjectPattern", {
+defineType("ObjectPattern", {
   visitor: ["properties", "typeAnnotation"],
   aliases: ["Pattern", "LVal"],
   fields: {
@@ -235,7 +271,7 @@ define("ObjectPattern", {
   }
 });
 
-define("SpreadElement", {
+defineType("SpreadElement", {
   visitor: ["argument"],
   aliases: ["UnaryLike"],
   fields: {
@@ -245,11 +281,11 @@ define("SpreadElement", {
   }
 });
 
-define("Super", {
+defineType("Super", {
   aliases: ["Expression"]
 });
 
-define("TaggedTemplateExpression", {
+defineType("TaggedTemplateExpression", {
   visitor: ["tag", "quasi"],
   aliases: ["Expression"],
   fields: {
@@ -262,7 +298,7 @@ define("TaggedTemplateExpression", {
   }
 });
 
-define("TemplateElement", {
+defineType("TemplateElement", {
   builder: ["value", "tail"],
   fields: {
     value: {
@@ -275,7 +311,7 @@ define("TemplateElement", {
   }
 });
 
-define("TemplateLiteral", {
+defineType("TemplateLiteral", {
   visitor: ["quasis", "expressions"],
   aliases: ["Expression", "Literal"],
   fields: {
@@ -283,7 +319,7 @@ define("TemplateLiteral", {
   }
 });
 
-define("YieldExpression", {
+defineType("YieldExpression", {
   builder: ["argument", "delegate"],
   visitor: ["argument"],
   aliases: ["Expression", "Terminatorless"],

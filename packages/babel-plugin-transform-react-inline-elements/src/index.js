@@ -1,7 +1,7 @@
 export default function ({ types: t }) {
   function hasRefOrSpread(attrs) {
-    for (var i = 0; i < attrs.length; i++) {
-      var attr = attrs[i];
+    for (let i = 0; i < attrs.length; i++) {
+      let attr = attrs[i];
       if (t.isJSXSpreadAttribute(attr)) return true;
       if (isJSXAttributeOfName(attr, "ref")) return true;
     }
@@ -14,17 +14,19 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
-      JSXElement({ node }, file) {
+      JSXElement(path, file) {
+        let { node } = path;
+
         // filter
-        var open = node.openingElement;
+        let open = node.openingElement;
         if (hasRefOrSpread(open.attributes)) return;
 
         // init
-        var isComponent = true;
-        var props       = t.objectExpression([]);
-        var obj         = t.objectExpression([]);
-        var key         = t.nullLiteral();
-        var type        = open.name;
+        let isComponent = true;
+        let props       = t.objectExpression([]);
+        let obj         = t.objectExpression([]);
+        let key         = t.nullLiteral();
+        let type        = open.name;
 
         if (t.isJSXIdentifier(type) && t.react.isCompatTag(type.name)) {
           type = t.stringLiteral(type.name);
@@ -36,21 +38,17 @@ export default function ({ types: t }) {
         }
 
         function pushProp(objProps, key, value) {
-          objProps.push(t.property("init", key, value));
+          objProps.push(t.objectProperty(key, value));
         }
 
-        // metadata
-        pushElemProp("type", type);
-        pushElemProp("ref", t.nullLiteral());
-
         if (node.children.length) {
-          var children = t.react.buildChildren(node);
+          let children = t.react.buildChildren(node);
           children = children.length === 1 ? children[0] : t.arrayExpression(children);
           pushProp(props.properties, t.identifier("children"), children);
         }
 
         // props
-        for (var attr of (open.attributes: Array)) {
+        for (let attr of (open.attributes: Array<Object>)) {
           if (isJSXAttributeOfName(attr, "key")) {
             key = attr.value;
           } else {
@@ -59,15 +57,19 @@ export default function ({ types: t }) {
         }
 
         if (isComponent) {
-          props = t.callExpression(file.addHelper("default-props"), [t.memberExpression(type, t.identifier("defaultProps")), props]);
+          props = t.callExpression(file.addHelper("defaultProps"), [t.memberExpression(type, t.identifier("defaultProps")), props]);
         }
 
-        pushElemProp("props", props);
-
-        // key
+        // metadata
+        pushElemProp("$$typeof", file.addHelper("typeofReactElement"));
+        pushElemProp("type", type);
         pushElemProp("key", key);
+        pushElemProp("ref", t.nullLiteral());
 
-        return obj;
+        pushElemProp("props", props);
+        pushElemProp("_owner", t.nullLiteral());
+
+        path.replaceWith(obj);
       }
     }
   };

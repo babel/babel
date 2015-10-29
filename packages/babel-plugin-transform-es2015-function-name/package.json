@@ -1,11 +1,16 @@
 {
   "name": "babel-plugin-transform-es2015-function-name",
-  "version": "1.0.0",
+  "version": "5.10.32",
   "description": "Apply ES2015 function.name semantics to all functions",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-helper-function-name": "^5.0.0",
+    "babel-types": "^5.10.32",
+    "babel-runtime": "^5.10.32"
+  }
 }

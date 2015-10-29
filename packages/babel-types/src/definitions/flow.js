@@ -1,13 +1,15 @@
-import define from "./index";
+/* @flow */
 
-define("AnyTypeAnnotation", {
+import defineType from "./index";
+
+defineType("AnyTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],
   fields: {
     // todo
   }
 });
 
-define("ArrayTypeAnnotation", {
+defineType("ArrayTypeAnnotation", {
   visitor: ["elementType"],
   aliases: ["Flow"],
   fields: {
@@ -15,21 +17,21 @@ define("ArrayTypeAnnotation", {
   }
 });
 
-define("BooleanTypeAnnotation", {
+defineType("BooleanTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],
   fields: {
     // todo
   }
 });
 
-define("BooleanLiteralTypeAnnotation", {
+defineType("BooleanLiteralTypeAnnotation", {
   aliases: ["Flow"],
   fields: {
     // todo
   }
 });
 
-define("ClassImplements", {
+defineType("ClassImplements", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"],
   fields: {
@@ -37,15 +39,15 @@ define("ClassImplements", {
   }
 });
 
-define("ClassProperty", {
+defineType("ClassProperty", {
   visitor: ["key", "value", "typeAnnotation", "decorators"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "Property"],
   fields: {
     // todo
   }
 });
 
-define("DeclareClass", {
+defineType("DeclareClass", {
   visitor: ["id", "typeParameters", "extends", "body"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
@@ -53,7 +55,7 @@ define("DeclareClass", {
   }
 });
 
-define("DeclareFunction", {
+defineType("DeclareFunction", {
   visitor: ["id"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
@@ -61,7 +63,7 @@ define("DeclareFunction", {
   }
 });
 
-define("DeclareModule", {
+defineType("DeclareModule", {
   visitor: ["id", "body"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
@@ -69,7 +71,7 @@ define("DeclareModule", {
   }
 });
 
-define("DeclareVariable", {
+defineType("DeclareVariable", {
   visitor: ["id"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
@@ -77,7 +79,7 @@ define("DeclareVariable", {
   }
 });
 
-define("FunctionTypeAnnotation", {
+defineType("FunctionTypeAnnotation", {
   visitor: ["typeParameters", "params", "rest", "returnType"],
   aliases: ["Flow"],
   fields: {
@@ -85,7 +87,7 @@ define("FunctionTypeAnnotation", {
   }
 });
 
-define("FunctionTypeParam", {
+defineType("FunctionTypeParam", {
   visitor: ["name", "typeAnnotation"],
   aliases: ["Flow"],
   fields: {
@@ -93,7 +95,7 @@ define("FunctionTypeParam", {
   }
 });
 
-define("GenericTypeAnnotation", {
+defineType("GenericTypeAnnotation", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"],
   fields: {
@@ -101,7 +103,7 @@ define("GenericTypeAnnotation", {
   }
 });
 
-define("InterfaceExtends", {
+defineType("InterfaceExtends", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"],
   fields: {
@@ -109,7 +111,7 @@ define("InterfaceExtends", {
   }
 });
 
-define("InterfaceDeclaration", {
+defineType("InterfaceDeclaration", {
   visitor: ["id", "typeParameters", "extends", "body"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
@@ -117,7 +119,7 @@ define("InterfaceDeclaration", {
   }
 });
 
-define("IntersectionTypeAnnotation", {
+defineType("IntersectionTypeAnnotation", {
   visitor: ["types"],
   aliases: ["Flow"],
   fields: {
@@ -125,11 +127,11 @@ define("IntersectionTypeAnnotation", {
   }
 });
 
-define("MixedTypeAnnotation", {
+defineType("MixedTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"]
 });
 
-define("NullableTypeAnnotation", {
+defineType("NullableTypeAnnotation", {
   visitor: ["typeAnnotation"],
   aliases: ["Flow"],
   fields: {
@@ -137,35 +139,35 @@ define("NullableTypeAnnotation", {
   }
 });
 
-define("NumberLiteralTypeAnnotation", {
+defineType("NumberLiteralTypeAnnotation", {
   aliases: ["Flow"],
   fields: {
     // todo
   }
 });
 
-define("NumberTypeAnnotation", {
+defineType("NumberTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],
   fields: {
     // todo
   }
 });
 
-define("StringLiteralTypeAnnotation", {
+defineType("StringLiteralTypeAnnotation", {
   aliases: ["Flow"],
   fields: {
     // todo
   }
 });
 
-define("StringTypeAnnotation", {
+defineType("StringTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],
   fields: {
     // todo
   }
 });
 
-define("TupleTypeAnnotation", {
+defineType("TupleTypeAnnotation", {
   visitor: ["types"],
   aliases: ["Flow"],
   fields: {
@@ -173,7 +175,7 @@ define("TupleTypeAnnotation", {
   }
 });
 
-define("TypeofTypeAnnotation", {
+defineType("TypeofTypeAnnotation", {
   visitor: ["argument"],
   aliases: ["Flow"],
   fields: {
@@ -181,7 +183,7 @@ define("TypeofTypeAnnotation", {
   }
 });
 
-define("TypeAlias", {
+defineType("TypeAlias", {
   visitor: ["id", "typeParameters", "right"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
@@ -189,7 +191,7 @@ define("TypeAlias", {
   }
 });
 
-define("TypeAnnotation", {
+defineType("TypeAnnotation", {
   visitor: ["typeAnnotation"],
   aliases: ["Flow"],
   fields: {
@@ -197,15 +199,15 @@ define("TypeAnnotation", {
   }
 });
 
-define("TypeCastExpression", {
+defineType("TypeCastExpression", {
   visitor: ["expression", "typeAnnotation"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "ExpressionWrapper"],
   fields: {
     // todo
   }
 });
 
-define("TypeParameterDeclaration", {
+defineType("TypeParameterDeclaration", {
   visitor: ["params"],
   aliases: ["Flow"],
   fields: {
@@ -213,7 +215,7 @@ define("TypeParameterDeclaration", {
   }
 });
 
-define("TypeParameterInstantiation", {
+defineType("TypeParameterInstantiation", {
   visitor: ["params"],
   aliases: ["Flow"],
   fields: {
@@ -221,7 +223,7 @@ define("TypeParameterInstantiation", {
   }
 });
 
-define("ObjectTypeAnnotation", {
+defineType("ObjectTypeAnnotation", {
   visitor: ["properties", "indexers", "callProperties"],
   aliases: ["Flow"],
   fields: {
@@ -229,7 +231,7 @@ define("ObjectTypeAnnotation", {
   }
 });
 
-define("ObjectTypeCallProperty", {
+defineType("ObjectTypeCallProperty", {
   visitor: ["value"],
   aliases: ["Flow", "UserWhitespacable"],
   fields: {
@@ -237,7 +239,7 @@ define("ObjectTypeCallProperty", {
   }
 });
 
-define("ObjectTypeIndexer", {
+defineType("ObjectTypeIndexer", {
   visitor: ["id", "key", "value"],
   aliases: ["Flow", "UserWhitespacable"],
   fields: {
@@ -245,7 +247,7 @@ define("ObjectTypeIndexer", {
   }
 });
 
-define("ObjectTypeProperty", {
+defineType("ObjectTypeProperty", {
   visitor: ["key", "value"],
   aliases: ["Flow", "UserWhitespacable"],
   fields: {
@@ -253,7 +255,7 @@ define("ObjectTypeProperty", {
   }
 });
 
-define("QualifiedTypeIdentifier", {
+defineType("QualifiedTypeIdentifier", {
   visitor: ["id", "qualification"],
   aliases: ["Flow"],
   fields: {
@@ -261,7 +263,7 @@ define("QualifiedTypeIdentifier", {
   }
 });
 
-define("UnionTypeAnnotation", {
+defineType("UnionTypeAnnotation", {
   visitor: ["types"],
   aliases: ["Flow"],
   fields: {
@@ -269,7 +271,7 @@ define("UnionTypeAnnotation", {
   }
 });
 
-define("VoidTypeAnnotation", {
+defineType("VoidTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],
   fields: {
     // todo

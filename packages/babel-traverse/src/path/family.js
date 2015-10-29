@@ -1,3 +1,5 @@
+/* @flow */
+
 // This file contains methods responsible for dealing with/retrieving children or siblings.
 
 import type TraversalContext from "../index";
@@ -5,7 +7,7 @@ import NodePath from "./index";
 import * as t from "babel-types";
 
 export function getStatementParent(): ?NodePath {
-  var path = this;
+  let path = this;
 
   do {
     if (!path.parentPath || (Array.isArray(path.container) && path.isStatement())) {
@@ -31,9 +33,9 @@ export function getOpposite() {
 }
 
 export function getCompletionRecords(): Array {
-  var paths = [];
+  let paths = [];
 
-  var add = function (path) {
+  let add = function (path) {
     if (path) paths = paths.concat(path.getCompletionRecords());
   };
 
@@ -69,7 +71,7 @@ export function getSibling(key) {
 
 export function get(key: string, context?: boolean | TraversalContext): NodePath {
   if (context === true) context = this.context;
-  var parts = key.split(".");
+  let parts = key.split(".");
   if (parts.length === 1) { // "foo"
     return this._getKey(key, context);
   } else { // "foo.bar"
@@ -78,8 +80,8 @@ export function get(key: string, context?: boolean | TraversalContext): NodePath
 }
 
 export function _getKey(key, context?) {
-  var node      = this.node;
-  var container = node[key];
+  let node      = this.node;
+  let container = node[key];
 
   if (Array.isArray(container)) {
     // requested a container so give them all the paths
@@ -103,8 +105,8 @@ export function _getKey(key, context?) {
 }
 
 export function _getPattern(parts, context) {
-  var path = this;
-  for (var part of (parts: Array)) {
+  let path = this;
+  for (let part of (parts: Array)) {
     if (part === ".") {
       path = path.parentPath;
     } else {

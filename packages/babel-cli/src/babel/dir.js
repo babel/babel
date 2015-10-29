@@ -20,6 +20,7 @@ module.exports = function (commander, filenames) {
     });
     if (!commander.copyFiles && data.ignored) return;
 
+    // we've requested explicit sourcemaps to be written to disk
     if (data.map && commander.sourceMaps && commander.sourceMaps !== "inline") {
       let mapLoc = dest + ".map";
       data.code = util.addSourceMappingUrl(data.code, mapLoc);
@@ -27,6 +28,7 @@ module.exports = function (commander, filenames) {
     }
 
     outputFileSync(dest, data.code);
+    util.chmod(src, dest);
 
     util.log(src + " -> " + dest);
   }
@@ -37,7 +39,9 @@ module.exports = function (commander, filenames) {
     if (util.canCompile(filename, commander.extensions)) {
       write(src, filename);
     } else if (commander.copyFiles) {
-      outputFileSync(path.join(commander.outDir, filename), fs.readFileSync(src));
+      let dest = path.join(commander.outDir, filename);
+      outputFileSync(dest, fs.readFileSync(src));
+      util.chmod(src, dest);
     }
   }
 

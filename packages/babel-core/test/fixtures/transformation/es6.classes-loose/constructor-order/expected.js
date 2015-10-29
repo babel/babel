@@ -6,10 +6,11 @@ var x = (function () {
   };
 
   function x() {
+    babelHelpers.classCallCheck(this, x);
+
     4;
     5;
     6;
-    babelHelpers.classCallCheck(this, x);
   }
 
   return x;

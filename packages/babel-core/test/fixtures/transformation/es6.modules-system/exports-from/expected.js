@@ -1,23 +1,21 @@
 System.register(["foo"], function (_export) {
-    return {
+  return {
     setters: [function (_foo) {
+      var _exportObj = {};
+
       for (var _key in _foo) {
-        if (_key !== "default") _export(_key, _foo[_key]);
+        if (_key !== "default") _exportObj[_key] = _foo[_key];
       }
 
-      _export("foo", _foo.foo);
+      _exportObj.foo = _foo.foo;
+      _exportObj.foo = _foo.foo;
+      _exportObj.bar = _foo.bar;
+      _exportObj.bar = _foo.foo;
+      _exportObj.default = _foo.foo;
+      _exportObj.default = _foo.foo;
+      _exportObj.bar = _foo.bar;
 
-      _export("foo", _foo.foo);
-
-      _export("bar", _foo.bar);
-
-      _export("bar", _foo.foo);
-
-      _export("default", _foo.foo);
-
-      _export("default", _foo.foo);
-
-      _export("bar", _foo.bar);
+      _export(_exportObj);
     }],
     execute: function () {}
   };

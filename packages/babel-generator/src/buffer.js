@@ -10,6 +10,7 @@ import trimRight from "trim-right";
 
 export default class Buffer {
   constructor(position: Position, format: Object) {
+    this.printedCommentStarts = {};
     this.parenPushNewlineState = null;
     this.position = position;
     this._indent = format.indent.base;
@@ -102,6 +103,7 @@ export default class Buffer {
 
   rightBrace() {
     this.newline(true);
+    //if (this.format.compact) this._removeLast(";");
     this.push("}");
   }
 
@@ -132,8 +134,11 @@ export default class Buffer {
 
   removeLast(cha: string) {
     if (this.format.compact) return;
-    if (!this.isLast(cha)) return;
+    return this._removeLast(cha);
+  }
 
+  _removeLast(cha: string) {
+    if (!this._isLast(cha)) return;
     this.buf = this.buf.substr(0, this.buf.length - 1);
     this.position.unshift(cha);
   }
@@ -316,7 +321,10 @@ export default class Buffer {
 
   isLast(cha: string) {
     if (this.format.compact) return false;
+    return this._isLast(cha);
+  }
 
+  _isLast(cha: string) {
     let buf = this.buf;
     let last = buf[buf.length - 1];
 

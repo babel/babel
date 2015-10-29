@@ -1,4 +1,7 @@
-define(["exports", "module"], function (exports, module) {
-    var a = 1;
-  module.exports = a;
+define(["exports"], function (exports) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  var a = 1;
+  exports.default = a;
 });

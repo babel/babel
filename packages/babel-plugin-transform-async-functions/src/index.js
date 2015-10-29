@@ -1,7 +1,5 @@
 export default function () {
   return {
-    visitor: {
-      // your visitor methods go here
-    }
+    inherits: require("babel-plugin-syntax-async-functions")
   };
 }

@@ -1,3 +1,3 @@
 {
-  "throws": "Derived constructor must call super()"
+  "throws": "missing super() call in constructor"
 }

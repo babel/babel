@@ -1,0 +1,12 @@
+{
+  "name": "babel-helper-hoist-variables",
+  "version": "1.0.0",
+  "description": "",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "dependencies": {
+    "babel-runtime": "^5.8.20",
+    "babel-types": "^5.8.20"
+  }
+}

@@ -77,7 +77,7 @@
             },
             "properties": [
               {
-                "type": "Property",
+                "type": "ObjectProperty",
                 "start": 12,
                 "end": 20,
                 "loc": {
@@ -124,8 +124,7 @@
                     }
                   },
                   "name": "y"
-                },
-                "kind": "init"
+                }
               }
             ]
           }
@@ -144,9 +143,11 @@
               "column": 24
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

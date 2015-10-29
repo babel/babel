@@ -1,9 +1,11 @@
+/* @flow */
+
 import * as t from "babel-types";
 
 export { default as Identifier } from "./inferer-reference";
 
 export function VariableDeclarator() {
-  var id = this.get("id");
+  let id = this.get("id");
 
   if (id.isIdentifier()) {
     return this.get("init").getTypeAnnotation();
@@ -51,8 +53,8 @@ export function BinaryExpression(node) {
   } else if (t.BOOLEAN_BINARY_OPERATORS.indexOf(operator) >= 0) {
     return t.booleanTypeAnnotation();
   } else if (operator === "+") {
-    var right = this.get("right");
-    var left  = this.get("left");
+    let right = this.get("right");
+    let left  = this.get("left");
 
     if (left.isBaseType("number") && right.isBaseType("number")) {
       // both numbers so this will be a number
@@ -99,13 +101,24 @@ export function UpdateExpression(node) {
   }
 }
 
-export function Literal(node) {
-  var value = node.value;
-  if (typeof value === "string") return t.stringTypeAnnotation();
-  if (typeof value === "number") return t.numberTypeAnnotation();
-  if (typeof value === "boolean") return t.booleanTypeAnnotation();
-  if (value === null) return t.voidTypeAnnotation();
-  if (node.regex) return t.genericTypeAnnotation(t.identifier("RegExp"));
+export function StringLiteral() {
+  return t.stringTypeAnnotation();
+}
+
+export function NumberLiteral() {
+  return t.numberTypeAnnotation();
+}
+
+export function BooleanLiteral() {
+  return t.booleanTypeAnnotation();
+}
+
+export function NullLiteral() {
+  return t.voidTypeAnnotation();
+}
+
+export function RegexLiteral() {
+  return t.genericTypeAnnotation(t.identifier("RegExp"));
 }
 
 export function ObjectExpression() {

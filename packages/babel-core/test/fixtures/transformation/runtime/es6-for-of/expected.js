@@ -1,5 +1,4 @@
-var _getIterator = require("babel-runtime/core-js/get-iterator")["default"];
-
+import _getIterator from "babel-runtime/core-js/get-iterator";
 var _iteratorNormalCompletion = true;
 var _didIteratorError = false;
 var _iteratorError = undefined;
@@ -13,8 +12,8 @@ try {
   _iteratorError = err;
 } finally {
   try {
-    if (!_iteratorNormalCompletion && _iterator["return"]) {
-      _iterator["return"]();
+    if (!_iteratorNormalCompletion && _iterator.return) {
+      _iterator.return();
     }
   } finally {
     if (_didIteratorError) {

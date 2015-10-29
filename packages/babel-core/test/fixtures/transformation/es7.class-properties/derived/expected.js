@@ -1,10 +1,11 @@
 var Foo = (function (_Bar) {
   babelHelpers.inherits(Foo, _Bar);
 
-  function Foo() {
+  function Foo(...args) {
+    var _temp, _this;
+
     babelHelpers.classCallCheck(this, Foo);
-    babelHelpers.get(Object.getPrototypeOf(Foo.prototype), "constructor", this).apply(this, arguments);
-    this.bar = "foo";
+    return babelHelpers.possibleConstructorReturn(_this, (_temp = (_this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Foo).call(this, ...args)), _this), _this.bar = "foo", _temp));
   }
 
   return Foo;

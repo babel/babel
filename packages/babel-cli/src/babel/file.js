@@ -54,6 +54,8 @@ module.exports = function (commander, filenames, opts) {
       }
     });
 
+    // add the inline sourcemap comment if we've either explicitly asked for inline source
+    // maps, or we've requested them without any output file
     if (commander.sourceMaps === "inline" || (!commander.outFile && commander.sourceMaps)) {
       code += "\n" + convertSourceMap.fromObject(map).toComment();
     }
@@ -68,6 +70,7 @@ module.exports = function (commander, filenames, opts) {
     let result = buildResult();
 
     if (commander.outFile) {
+      // we've requested for a sorucemap to be written to disk
       if (commander.sourceMaps && commander.sourceMaps !== "inline") {
         let mapLoc = commander.outFile + ".map";
         result.code = util.addSourceMappingUrl(result.code, mapLoc);

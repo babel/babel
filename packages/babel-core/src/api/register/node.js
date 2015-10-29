@@ -1,5 +1,6 @@
 /* @flow */
 
+import deepClone from "lodash/lang/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import OptionManager from "../../transformation/file/options/option-manager";
@@ -9,10 +10,6 @@ import each from "lodash/collection/each";
 import * as util from  "../../util";
 import fs from "fs";
 import path from "path";
-
-/**
- * Install sourcemaps into node.
- */
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
@@ -29,16 +26,8 @@ sourceMapSupport.install({
   }
 });
 
-/**
- * Load and setup cache.
- */
-
 registerCache.load();
 let cache = registerCache.get();
-
-/**
- * Store options.
- */
 
 let transformOpts = {};
 
@@ -50,25 +39,13 @@ let maps          = {};
 
 let cwd = process.cwd();
 
-/**
- * Get path from `filename` relative to the current working directory.
- */
-
 function getRelativePath(filename){
   return path.relative(cwd, filename);
 }
 
-/**
- * Get last modified time for a `filename`.
- */
-
 function mtime(filename) {
   return +fs.statSync(filename).mtime;
 }
-
-/**
- * Compile a `filename` with optional `opts`.
- */
 
 function compile(filename, opts = {}) {
   let result;
@@ -76,7 +53,7 @@ function compile(filename, opts = {}) {
   opts.filename = filename;
 
   let optsManager = new OptionManager;
-  optsManager.mergeOptions(transformOpts);
+  optsManager.mergeOptions(deepClone(transformOpts));
   opts = optsManager.init(opts);
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
@@ -108,10 +85,6 @@ function compile(filename, opts = {}) {
   return result.code;
 }
 
-/**
- * Test if a `filename` should be ignored by Babel.
- */
-
 function shouldIgnore(filename) {
   if (!ignore && !only) {
     return getRelativePath(filename).split(path.sep).indexOf("node_modules") >= 0;
@@ -120,57 +93,12 @@ function shouldIgnore(filename) {
   }
 }
 
-/**
- * Monkey patch istanbul if it is running so that it works properly.
- */
-
-let istanbulMonkey = {};
-
-if (process.env.running_under_istanbul) {
-  // we need to monkey patch fs.readFileSync so we can hook into
-  // what istanbul gets, it's extremely dirty but it's the only way
-  let _readFileSync = fs.readFileSync;
-
-  fs.readFileSync = function (filename) {
-    if (istanbulMonkey[filename]) {
-      delete istanbulMonkey[filename];
-      let code = compile(filename, {
-        auxiliaryCommentBefore: "istanbul ignore next"
-      });
-      istanbulMonkey[filename] = true;
-      return code;
-    } else {
-      return _readFileSync.apply(this, arguments);
-    }
-  };
-}
-
-/**
- * Replacement for the loader for istanbul.
- */
-
-function istanbulLoader(m, filename, old) {
-  istanbulMonkey[filename] = true;
-  old(m, filename);
-}
-
-/**
- * Default loader.
- */
-
-function normalLoader(m, filename) {
+function loader(m, filename) {
   m._compile(compile(filename), filename);
 }
 
-/**
- * Register a loader for an extension.
- */
-
 function registerExtension(ext) {
   let old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
-
-  let loader = normalLoader;
-  if (process.env.running_under_istanbul) loader = istanbulLoader;
 
   require.extensions[ext] = function (m, filename) {
     if (shouldIgnore(filename)) {
@@ -180,10 +108,6 @@ function registerExtension(ext) {
     }
   };
 }
-
-/**
- * Register loader for given extensions.
- */
 
 function hookExtensions(_exts) {
   each(oldHandlers, function (old, ext) {
@@ -202,15 +126,7 @@ function hookExtensions(_exts) {
   });
 }
 
-/**
- * Register loader for default extensions.
- */
-
 hookExtensions(util.canCompile.EXTENSIONS);
-
-/**
- * Update options at runtime.
- */
 
 export default function (opts?: Object = {}) {
   if (opts.only != null) only = util.arrayify(opts.only, util.regexify);

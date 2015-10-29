@@ -1,3 +1,5 @@
+/* @flow */
+
 import * as virtualTypes from "./path/lib/virtual-types";
 import * as messages from "babel-messages";
 import * as t from "babel-types";
@@ -22,22 +24,6 @@ export function explode(visitor) {
     }
   }
 
-  // normalise colons
-  for (let nodeType in visitor) {
-    if (shouldIgnoreKey(nodeType)) continue;
-
-    let parts = nodeType.split(":");
-    if (parts.length === 1) continue;
-
-    let fns = visitor[nodeType];
-    delete visitor[nodeType];
-
-    nodeType = parts[0];
-
-    visitor[nodeType] = visitor[nodeType] || {};
-    visitor[nodeType][parts[1]] = fns;
-  }
-
   // verify data structure
   verify(visitor);
 
@@ -55,7 +41,7 @@ export function explode(visitor) {
   for (let nodeType of (Object.keys(visitor): Array)) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    var wrapper = virtualTypes[nodeType];
+    let wrapper = virtualTypes[nodeType];
     if (!wrapper) continue;
 
     // wrap all the functions
@@ -87,14 +73,14 @@ export function explode(visitor) {
 
     let fns = visitor[nodeType];
 
-    var aliases = t.FLIPPED_ALIAS_KEYS[nodeType];
+    let aliases = t.FLIPPED_ALIAS_KEYS[nodeType];
     if (!aliases) continue;
 
     // clear it from the visitor
     delete visitor[nodeType];
 
-    for (var alias of (aliases: Array)) {
-      var existing = visitor[alias];
+    for (let alias of (aliases: Array)) {
+      let existing = visitor[alias];
       if (existing) {
         mergePair(existing, fns);
       } else {
@@ -119,16 +105,16 @@ export function verify(visitor) {
     throw new Error(messages.get("traverseVerifyRootFunction"));
   }
 
-  for (var nodeType in visitor) {
+  for (let nodeType in visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     if (t.TYPES.indexOf(nodeType) < 0) {
       throw new Error(messages.get("traverseVerifyNodeType", nodeType));
     }
 
-    var visitors = visitor[nodeType];
+    let visitors = visitor[nodeType];
     if (typeof visitors === "object") {
-      for (var visitorKey in visitors) {
+      for (let visitorKey in visitors) {
         if (visitorKey === "enter" || visitorKey === "exit") continue;
         throw new Error(messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey));
       }
@@ -138,15 +124,47 @@ export function verify(visitor) {
   visitor._verified = true;
 }
 
-export function merge(visitors) {
-  var rootVisitor = {};
+export function merge(visitors: Array, states: Array = []) {
+  let rootVisitor = {};
 
-  for (var visitor of (visitors: Array)) {
+  for (let i = 0; i < visitors.length; i++) {
+    let visitor = visitors[i];
+    let state = states[i];
+
     explode(visitor);
 
-    for (var type in visitor) {
-      var nodeVisitor = rootVisitor[type] = rootVisitor[type] || {};
-      mergePair(nodeVisitor, visitor[type]);
+    for (let type in visitor) {
+      let visitorType = visitor[type];
+
+      // if we have state then overload the callbacks to take it
+      if (state) {
+        let oldVisitorType = visitorType;
+        visitorType = {};
+
+        for (let key in oldVisitorType) {
+          let fns = oldVisitorType[key];
+
+          // not an enter/exit array of callbacks
+          if (!Array.isArray(fns)) continue;
+
+          fns = fns.map(function (fn) {
+            if (typeof fn === "function") {
+              let newFn = function (path) {
+                return fn.call(state, path, state);
+              };
+              newFn.toString = () => fn.toString();
+              return newFn;
+            } else {
+              return fn;
+            }
+          });
+
+          visitorType[key] = fns;
+        }
+      }
+
+      let nodeVisitor = rootVisitor[type] = rootVisitor[type] || {};
+      mergePair(nodeVisitor, visitorType);
     }
   }
 
@@ -157,7 +175,7 @@ function ensureEntranceObjects(obj) {
   for (let key in obj) {
     if (shouldIgnoreKey(key)) continue;
 
-    var fns = obj[key];
+    let fns = obj[key];
     if (typeof fns === "function") {
       obj[key] = { enter: fns };
     }
@@ -170,11 +188,13 @@ function ensureCallbackArrays(obj){
 }
 
 function wrapCheck(wrapper, fn) {
-  return function () {
-    if (wrapper.checkPath(this)) {
+  let newFn = function (path) {
+    if (wrapper.checkPath(path)) {
       return fn.apply(this, arguments);
     }
   };
+  newFn.toString = () => fn.toString();
+  return newFn;
 }
 
 function shouldIgnoreKey(key) {
@@ -191,7 +211,7 @@ function shouldIgnoreKey(key) {
 }
 
 function mergePair(dest, src) {
-  for (var key in src) {
+  for (let key in src) {
     dest[key] = [].concat(dest[key] || [], src[key]);
   }
 }

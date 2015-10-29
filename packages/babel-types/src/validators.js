@@ -1,3 +1,5 @@
+/* @flow */
+
 import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";
 import * as t from "./index";
@@ -7,11 +9,11 @@ import * as t from "./index";
  */
 
 export function isBinding(node: Object, parent: Object): boolean {
-  var keys = getBindingIdentifiers.keys[parent.type];
+  let keys = getBindingIdentifiers.keys[parent.type];
   if (keys) {
-    for (var i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      var val = parent[key];
+    for (let i = 0; i < keys.length; i++) {
+      let key = keys[i];
+      let val = parent[key];
       if (Array.isArray(val)) {
         if (val.indexOf(node) >= 0) return true;
       } else {
@@ -51,13 +53,13 @@ export function isReferenced(node: Object, parent: Object): boolean {
     // yes: { [NODE]: "" }
     // yes: { NODE }
     // no: { NODE: "" }
-    case "Property":
+    case "ObjectProperty":
       if (parent.key === node) {
         return parent.computed;
       }
 
-    // no: var NODE = init;
-    // yes: var id = NODE;
+    // no: let NODE = init;
+    // yes: let id = NODE;
     case "VariableDeclarator":
       return parent.id !== node;
 
@@ -66,7 +68,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
     case "ArrowFunctionExpression":
     case "FunctionDeclaration":
     case "FunctionExpression":
-      for (var param of (parent.params: Array)) {
+      for (let param of (parent.params: Array)) {
         if (param === node) return false;
       }
 
@@ -113,7 +115,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
       return parent.id !== node;
 
     // yes: class { [NODE](){} }
-    case "MethodDefinition":
+    case "ClassMethod":
       return parent.key === node && parent.computed;
 
     // no: NODE: for (;;) {}
@@ -134,9 +136,9 @@ export function isReferenced(node: Object, parent: Object): boolean {
       return parent.right === node;
 
     // no: [NODE = foo] = [];
-    // no: [foo = NODE] = [];
+    // yes: [foo = NODE] = [];
     case "AssignmentPattern":
-      return false;
+      return parent.right === node;
 
     // no: [NODE] = [];
     // no: ({ NODE }) = [];

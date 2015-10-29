@@ -2,15 +2,17 @@ var operations = [];
 
 var lib = {};
 
-for (let key of ['f', 'g', 'h']) {
-  let func = () => operations.push(`lib.${key}()`);
+['f', 'g', 'h'].forEach(function (key) {
+  var func = function () {
+    return operations.push("lib." + key + "()");
+  };
   Object.defineProperty(lib, key, {
-    get() {
-      operations.push(`get lib.${key}`);
+    get: function () {
+      operations.push("get lib." + key);
       return func;
     }
   });
-}
+});
 
 ({prop:'value'})
 ::lib.f()

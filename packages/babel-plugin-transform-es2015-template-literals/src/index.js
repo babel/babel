@@ -4,30 +4,20 @@ export default function ({ types: t }) {
   }
 
   function buildBinaryExpression(left, right) {
-    var node = t.binaryExpression("+", left, right);
-    node._templateLiteralProduced = true;
-    return node;
+    return t.binaryExpression("+", left, right);
   }
-
-  /*function crawl(path) {
-    if (path.is("_templateLiteralProduced")) {
-      crawl(path.get("left"));
-      crawl(path.get("right"));
-    } else if (!path.isBaseType("string") && !path.isBaseType("number")) {
-      path.replaceWith(t.callExpression(t.identifier("String"), [path.node]));
-    }
-  }*/
 
   return {
     visitor: {
-      TaggedTemplateExpression({ node }, file) {
-        var quasi = node.quasi;
-        var args  = [];
+      TaggedTemplateExpression(path, state) {
+        let { node } = path;
+        let quasi = node.quasi;
+        let args  = [];
 
-        var strings = [];
-        var raw     = [];
+        let strings = [];
+        let raw     = [];
 
-        for (var elem of (quasi.quasis: Array)) {
+        for (let elem of (quasi.quasis: Array)) {
           strings.push(t.stringLiteral(elem.value.cooked));
           raw.push(t.stringLiteral(elem.value.raw));
         }
@@ -35,25 +25,33 @@ export default function ({ types: t }) {
         strings = t.arrayExpression(strings);
         raw = t.arrayExpression(raw);
 
-        var templateName = "tagged-template-literal";
-        if (file.isLoose("es6.templateLiterals")) templateName += "-loose";
+        let templateName = "taggedTemplateLiteral";
+        if (state.opts.loose) templateName += "Loose";
 
-        var templateObject = file.addTemplateObject(templateName, strings, raw);
+        let templateObject = state.file.addTemplateObject(templateName, strings, raw);
         args.push(templateObject);
 
         args = args.concat(quasi.expressions);
 
-        return t.callExpression(node.tag, args);
+        path.replaceWith(t.callExpression(node.tag, args));
       },
 
-      TemplateLiteral(path) {
-        var nodes = [];
+      TemplateLiteral(path, state) {
+        let nodes: Array<Object> = [];
+
+        let expressions = path.get("expressions");
 
         for (let elem of (path.node.quasis: Array)) {
           nodes.push(t.stringLiteral(elem.value.cooked));
 
-          var expr = path.node.expressions.shift();
-          if (expr) nodes.push(expr);
+          let expr = expressions.shift();
+          if (expr) {
+            if (state.opts.spec && !expr.isBaseType("string") && !expr.isBaseType("number"))  {
+              nodes.push(t.callExpression(t.identifier("String"), [expr.node]));
+            } else {
+              nodes.push(expr.node);
+            }
+          }
         }
 
         // filter out empty string literals
@@ -66,16 +64,15 @@ export default function ({ types: t }) {
         }
 
         if (nodes.length > 1) {
-          var root = buildBinaryExpression(nodes.shift(), nodes.shift());
+          let root = buildBinaryExpression(nodes.shift(), nodes.shift());
 
-          for (let node of (nodes: Array)) {
+          for (let node of nodes) {
             root = buildBinaryExpression(root, node);
           }
 
           path.replaceWith(root);
-          //crawl(path);
         } else {
-          return nodes[0];
+          path.replaceWith(nodes[0]);
         }
       }
     }

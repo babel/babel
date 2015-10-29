@@ -7,22 +7,18 @@
     var mod = {
       exports: {}
     };
-    factory(mod.exports, global.foo2, global.fooBar, global.fooBar);
+    factory(mod.exports, global.foo, global.fooBar, global.fooBar);
     global.actual = mod.exports;
   }
-})(this, function (exports, _foo, _fooBar, _directoryFooBar) {
-    Object.defineProperty(exports, "__esModule", {
+})(this, function (exports, _foo) {
+  Object.defineProperty(exports, "__esModule", {
     value: true
   });
-
-  var _foo2 = babelHelpers.interopRequireDefault(_foo);
-
+  exports.test2 = exports.test = undefined;
+  var foo2 = babelHelpers.interopRequireWildcard(_foo);
   exports.test = test;
-  var test2 = 5;
-
-  exports.test2 = test2;
-  exports["default"] = test;
-
+  var test2 = exports.test2 = 5;
+  exports.default = test;
   _foo.bar;
   _foo.foo;
 });

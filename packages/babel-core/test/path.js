@@ -8,11 +8,10 @@ suite("traversal path", function () {
     var expectCode = "function foo() {}";
 
     var actualCode = transform(expectCode, {
-      blacklist: "strict",
-      plugins: [new Plugin("foobar", {
+      plugins: [new Plugin({
         visitor: {
-          FunctionDeclaration: function () {
-            this.replaceWithSourceString("console.whatever()");
+          FunctionDeclaration: function (path) {
+            path.replaceWithSourceString("console.whatever()");
           }
         }
       })]

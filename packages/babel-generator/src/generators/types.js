@@ -36,38 +36,39 @@ export function ObjectExpression(node: Object) {
 
 export { ObjectExpression as ObjectPattern };
 
-export function Property(node: Object) {
+export function ObjectMethod(node: Object) {
+  this.printJoin(node.decorators, node, { separator: "" });
+  this._method(node);
+}
+
+export function ObjectProperty(node: Object) {
   this.printJoin(node.decorators, node, { separator: "" });
 
-  if (node.method || node.kind === "get" || node.kind === "set") {
-    this._method(node);
+  if (node.computed) {
+    this.push("[");
+    this.print(node.key, node);
+    this.push("]");
   } else {
-    if (node.computed) {
-      this.push("[");
-      this.print(node.key, node);
-      this.push("]");
-    } else {
-      // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
-      if (t.isAssignmentPattern(node.value) && t.isIdentifier(node.key) && node.key.name === node.value.left.name) {
-        this.print(node.value, node);
-        return;
-      }
-
-      this.print(node.key, node);
-
-      // shorthand!
-      if (node.shorthand &&
-        (t.isIdentifier(node.key) &&
-         t.isIdentifier(node.value) &&
-         node.key.name === node.value.name)) {
-        return;
-      }
+    // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
+    if (t.isAssignmentPattern(node.value) && t.isIdentifier(node.key) && node.key.name === node.value.left.name) {
+      this.print(node.value, node);
+      return;
     }
 
-    this.push(":");
-    this.space();
-    this.print(node.value, node);
+    this.print(node.key, node);
+
+    // shorthand!
+    if (node.shorthand &&
+      (t.isIdentifier(node.key) &&
+       t.isIdentifier(node.value) &&
+       node.key.name === node.value.name)) {
+      return;
+    }
   }
+
+  this.push(":");
+  this.space();
+  this.print(node.value, node);
 }
 
 export function ArrayExpression(node: Object) {

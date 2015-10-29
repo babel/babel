@@ -1,0 +1,14 @@
+[ignore]
+
+[include]
+
+[libs]
+lib/file.js
+lib/parser.js
+lib/types.js
+
+[options]
+strip_root=true
+
+[version]
+0.16.0

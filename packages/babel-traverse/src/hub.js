@@ -1,6 +1,4 @@
-/**
- * [Please add a description.]
- */
+/* @flow */
 
 export default class Hub {
   constructor(file, options) {

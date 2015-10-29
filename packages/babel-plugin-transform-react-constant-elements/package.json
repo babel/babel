@@ -1,11 +1,14 @@
 {
   "name": "babel-plugin-transform-react-constant-elements",
-  "version": "1.0.3",
+  "version": "5.10.32",
   "description": "Treat React JSX elements as value types and hoist them to the highest scope",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-runtime": "^5.10.32"
+  }
 }

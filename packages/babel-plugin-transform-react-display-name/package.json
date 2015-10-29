@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-react-display-name",
-  "version": "2.0.0",
+  "version": "5.10.32",
   "description": "Add displayName to React.createClass calls",
   "repository": "babel/babel",
   "license": "MIT",
@@ -9,6 +9,6 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-runtime": "^5.8.20"
+    "babel-runtime": "^5.10.32"
   }
 }

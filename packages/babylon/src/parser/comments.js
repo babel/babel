@@ -40,9 +40,9 @@ pp.addComment = function (comment) {
 pp.processComment = function (node) {
   if (node.type === "Program" && node.body.length > 0) return;
 
-  var stack = this.state.commentStack;
+  let stack = this.state.commentStack;
 
-  var lastChild, trailingComments, i;
+  let lastChild, trailingComments, i;
 
   if (this.state.trailingComments.length > 0) {
     // If the first comment in trailingComments comes after the
@@ -62,7 +62,7 @@ pp.processComment = function (node) {
       this.state.trailingComments.length = 0;
     }
   } else {
-    var lastInStack = last(stack);
+    let lastInStack = last(stack);
     if (stack.length > 0 && lastInStack.trailingComments && lastInStack.trailingComments[0].start >= node.end) {
       trailingComments = lastInStack.trailingComments;
       lastInStack.trailingComments = null;
@@ -80,7 +80,7 @@ pp.processComment = function (node) {
         node.leadingComments = lastChild.leadingComments;
         lastChild.leadingComments = null;
       } else {
-        // A leading comment for an anonymous class had been stolen by its first MethodDefinition,
+        // A leading comment for an anonymous class had been stolen by its first ClassMethod,
         // so this takes back the leading comment.
         // See also: https://github.com/eslint/espree/issues/158
         for (i = lastChild.leadingComments.length - 2; i >= 0; --i) {

@@ -90,7 +90,7 @@
           },
           "body": [
             {
-              "type": "MethodDefinition",
+              "type": "ClassMethod",
               "start": 24,
               "end": 58,
               "loc": {
@@ -122,57 +122,57 @@
               },
               "static": false,
               "kind": "method",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 25,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 28,
                 "end": 58,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 5
+                    "column": 8
                   },
                   "end": {
                     "line": 4,
                     "column": 5
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 28,
-                  "end": 58,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 8
+                "body": [
+                  {
+                    "type": "ReturnStatement",
+                    "start": 38,
+                    "end": 52,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 22
+                      }
                     },
-                    "end": {
-                      "line": 4,
-                      "column": 5
-                    }
-                  },
-                  "body": [
-                    {
-                      "type": "ReturnStatement",
-                      "start": 38,
+                    "argument": {
+                      "type": "MemberExpression",
+                      "start": 45,
                       "end": 52,
                       "loc": {
                         "start": {
                           "line": 3,
-                          "column": 8
+                          "column": 15
                         },
                         "end": {
                           "line": 3,
                           "column": 22
                         }
                       },
-                      "argument": {
-                        "type": "MemberExpression",
+                      "object": {
+                        "type": "Super",
                         "start": 45,
-                        "end": 52,
+                        "end": 50,
                         "loc": {
                           "start": {
                             "line": 3,
@@ -180,50 +180,37 @@
                           },
                           "end": {
                             "line": 3,
+                            "column": 20
+                          }
+                        }
+                      },
+                      "property": {
+                        "type": "Identifier",
+                        "start": 51,
+                        "end": 52,
+                        "loc": {
+                          "start": {
+                            "line": 3,
+                            "column": 21
+                          },
+                          "end": {
+                            "line": 3,
                             "column": 22
                           }
                         },
-                        "object": {
-                          "type": "Super",
-                          "start": 45,
-                          "end": 50,
-                          "loc": {
-                            "start": {
-                              "line": 3,
-                              "column": 15
-                            },
-                            "end": {
-                              "line": 3,
-                              "column": 20
-                            }
-                          }
-                        },
-                        "property": {
-                          "type": "Identifier",
-                          "start": 51,
-                          "end": 52,
-                          "loc": {
-                            "start": {
-                              "line": 3,
-                              "column": 21
-                            },
-                            "end": {
-                              "line": 3,
-                              "column": 22
-                            }
-                          },
-                          "name": "y"
-                        },
-                        "computed": false
-                      }
+                        "name": "y"
+                      },
+                      "computed": false
                     }
-                  ]
-                }
+                  }
+                ],
+                "directives": []
               }
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

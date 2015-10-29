@@ -3,6 +3,7 @@
 import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";
 import * as t from "babel-types";
+import n from "../node";
 
 const SCIENTIFIC_NOTATION = /e/i;
 
@@ -107,7 +108,7 @@ export function CallExpression(node: Object) {
   this.push(")");
 }
 
-function buildYieldAwait(keyword) {
+function buildYieldAwait(keyword: string) {
   return function (node: Object) {
     this.push(keyword);
 
@@ -142,7 +143,16 @@ export function AssignmentPattern(node: Object) {
   this.print(node.right, node);
 }
 
-export function AssignmentExpression(node: Object) {
+export function AssignmentExpression(node: Object, parent: Object) {
+  // Somewhere inside a for statement `init` node but doesn't usually
+  // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
+  let parens = this._inForStatementInit && node.operator === "in" &&
+               !n.needsParens(node, parent);
+
+  if (parens) {
+    this.push("(");
+  }
+
   this.print(node.left, node);
 
   let spaces = !this.format.compact || node.operator === "in" || node.operator === "instanceof";
@@ -162,6 +172,10 @@ export function AssignmentExpression(node: Object) {
   if (spaces) this.push(" ");
 
   this.print(node.right, node);
+
+  if (parens) {
+    this.push(")");
+  }
 }
 
 export function BindExpression(node: Object) {
@@ -193,7 +207,7 @@ export function MemberExpression(node: Object) {
     this.push("]");
   } else {
     if (t.isLiteral(node.object)) {
-      let val = this._stringLiteral(node.object);
+      let val = this.getPossibleRaw(node.object) || this._stringLiteral(node.object);
       if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")) {
         this.push(".");
       }

@@ -59,11 +59,15 @@ export function ClassProperty(node: Object) {
   this.semicolon();
 }
 
-export function MethodDefinition(node: Object) {
+export function ClassMethod(node: Object) {
   this.printJoin(node.decorators, node, { separator: "" });
 
   if (node.static) {
     this.push("static ");
+  }
+
+  if (node.kind === "constructorCall") {
+    this.push("call ");
   }
 
   this._method(node);

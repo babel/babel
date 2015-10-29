@@ -1,6 +1,6 @@
 var obj = Object.defineProperties({}, {
   foo: {
-    set: function set(value) {
+    set: function (value) {
       this._foo = value;
     },
     configurable: true,

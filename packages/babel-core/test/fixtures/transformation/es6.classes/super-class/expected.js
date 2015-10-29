@@ -3,7 +3,7 @@ var Test = (function (_Foo) {
 
   function Test() {
     babelHelpers.classCallCheck(this, Test);
-    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "constructor", this).apply(this, arguments);
+    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Test).apply(this, arguments));
   }
 
   return Test;

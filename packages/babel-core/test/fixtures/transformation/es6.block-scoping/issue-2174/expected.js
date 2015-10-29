@@ -2,12 +2,10 @@ if (true) {
   var x;
 
   (function () {
-    var foo = function foo() {};
-
-    var bar = function bar() {
+    function foo() {}
+    function bar() {
       return foo;
-    };
-
+    }
     for (x in {}) {}
   })();
 }

@@ -51,8 +51,8 @@
 
   "plugins": {
     "type": "list",
-    "description": "",
-    "default": []
+    "default": [],
+    "description": ""
   },
 
   "ignore": {
@@ -137,5 +137,35 @@
   "sourceType": {
     "description": "",
     "default": "module"
+  },
+
+  "auxiliaryComment": {
+    "description": "",
+    "type": "string"
+  },
+
+  "resolveModuleSource": {
+    "hidden": true
+  },
+
+  "getModuleId": {
+    "hidden": true
+  },
+
+  "moduleRoot": {
+    "type": "filename",
+    "description": "optional prefix for the AMD module formatter that will be prepend to the filename on module definitions"
+  },
+
+  "moduleIds": {
+    "type": "boolean",
+    "default": false,
+    "shorthand": "M",
+    "description": "insert an explicit id for modules"
+  },
+
+  "moduleId": {
+    "description": "specify a custom name for module ids",
+    "type": "string"
   }
 }

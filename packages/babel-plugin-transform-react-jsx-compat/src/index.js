@@ -1,6 +1,10 @@
 export default function ({ types: t }) {
   return {
-    visitor: require("babel-plugin-builder-react-jsx")({
+    manipulateOptions(opts, parserOpts) {
+      parserOpts.plugins.push("jsx");
+    },
+
+    visitor: require("babel-helper-builder-react-jsx")({
       pre(state) {
         state.callee = state.tagExpr;
       },

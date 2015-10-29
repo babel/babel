@@ -1,11 +1,15 @@
 {
   "name": "babel-plugin-transform-object-rest-spread",
-  "version": "1.0.0",
+  "version": "5.10.32",
   "description": "Compile object rest and spread to ES5",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-plugin-syntax-object-rest-spread": "^5.10.32",
+    "babel-runtime": "^5.10.32"
+  }
 }

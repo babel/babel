@@ -1,11 +1,15 @@
 {
   "name": "babel-plugin-transform-class-properties",
-  "version": "1.0.0",
+  "version": "5.10.32",
   "description": "",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-plugin-syntax-class-properties": "^5.10.32",
+    "babel-runtime": "^5.10.32"
+  }
 }

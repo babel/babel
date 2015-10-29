@@ -1,5 +1,5 @@
 var a = {
-  eval(){
+  eval: function () {
     return eval;
   }
 };

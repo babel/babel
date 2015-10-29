@@ -3,6 +3,8 @@ require("shelljs/global");
 var path = require("path");
 var fs   = require("fs");
 
+var OFFLINE = !!process.env.OFFLINE;
+
 // uninstall global babel install
 try {
   exec("npm uninstall -g babel");
@@ -47,9 +49,22 @@ packages.forEach(function (root) {
   });
 
   cd("packages/" + root.folder);
-  exec("npm install");
-  exec("npm link");
+
+  // check whether or not we have any dependencies in our package.json that aren't in node_modules
+  var shouldRunInstall = false;
+  var pkg = require(process.cwd() + "/package.json");
+  var deps = Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.devDependencies || {}));
+  deps.forEach(function (depName) {
+    if (!fs.existsSync(process.cwd() + "/node_modules/" + depName)) {
+      console.log("Not installed", depName);
+      shouldRunInstall = true;
+    }
+  });
+  if (shouldRunInstall && !OFFLINE) exec("npm install");
+
+  if (!OFFLINE) exec("npm link");
+
   cd("../..");
 });
 
-exec("make build");
+if (!OFFLINE) exec("make build");

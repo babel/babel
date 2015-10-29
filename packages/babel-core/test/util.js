@@ -4,28 +4,6 @@ var parse  = require("../lib/helpers/parse");
 var t      = require("babel-types");
 
 suite("util", function () {
-  test("invalid template", function () {
-    assert.throws(function () {
-      util.template("invalid template");
-    }, /unknown template/);
-  });
-
-  test("templates do not recurse", function () {
-    var key   = __filename;
-    var KEY   = parse("replacedKey").program.body[0].expression;
-    var VALUE = parse("+KEY").program.body[0].expression;
-
-    util.templates[key] = util.parseTemplate(key, "KEY = VALUE;");
-    var result = util.template(key, { KEY: KEY, VALUE: VALUE });
-    delete util.templates[key];
-
-    assert.strictEqual(
-      result.right.argument.name,
-      "KEY",
-      "template should not recurse into replaced nodes, replacing KEY inside VALUE"
-    );
-  });
-
   test("canCompile", function () {
     assert.ok(util.canCompile("test.js"));
     assert.ok(util.canCompile("/test.js"));
@@ -103,7 +81,6 @@ suite("util", function () {
   });
 
   test("toIdentifier", function () {
-    assert.equal(t.toIdentifier(t.identifier("swag")), "swag");
     assert.equal(t.toIdentifier("swag-lord"), "swagLord");
   });
 

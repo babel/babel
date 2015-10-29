@@ -1,9 +1,9 @@
 export default function ({ messages, template, types: t }) {
-  var buildForOfArray = template(`
+  let buildForOfArray = template(`
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
   `);
 
-  var buildForOfLoose = template(`
+  let buildForOfLoose = template(`
     for (var LOOP_OBJECT = OBJECT,
              IS_ARRAY = Array.isArray(LOOP_OBJECT),
              INDEX = 0,
@@ -20,7 +20,7 @@ export default function ({ messages, template, types: t }) {
     }
   `);
 
-  var buildForOf = template(`
+  let buildForOf = template(`
     var ITERATOR_COMPLETION = true;
     var ITERATOR_HAD_ERROR_KEY = false;
     var ITERATOR_ERROR_KEY = undefined;
@@ -44,21 +44,21 @@ export default function ({ messages, template, types: t }) {
   `);
 
   function _ForOfStatementArray(path) {
-    var { node, scope } = path;
-    var nodes = [];
-    var right = node.right;
+    let { node, scope } = path;
+    let nodes = [];
+    let right = node.right;
 
     if (!t.isIdentifier(right) || !scope.hasBinding(right.name)) {
-      var uid = scope.generateUidIdentifier("arr");
+      let uid = scope.generateUidIdentifier("arr");
       nodes.push(t.variableDeclaration("var", [
         t.variableDeclarator(uid, right)
       ]));
       right = uid;
     }
 
-    var iterationKey = scope.generateUidIdentifier("i");
+    let iterationKey = scope.generateUidIdentifier("i");
 
-    var loop = buildForOfArray({
+    let loop = buildForOfArray({
       BODY: node.body,
       KEY:  iterationKey,
       ARR:  right
@@ -67,9 +67,9 @@ export default function ({ messages, template, types: t }) {
     t.inherits(loop, node);
     t.ensureBlock(loop);
 
-    var iterationValue = t.memberExpression(right, iterationKey, true);
+    let iterationValue = t.memberExpression(right, iterationKey, true);
 
-    var left = node.left;
+    let left = node.left;
     if (t.isVariableDeclaration(left)) {
       left.declarations[0].init = iterationValue;
       loop.body.body.unshift(left);
@@ -91,17 +91,17 @@ export default function ({ messages, template, types: t }) {
     visitor: {
       ForOfStatement(path, state) {
         if (path.get("right").isArrayExpression()) {
-          return _ForOfStatementArray.call(this, path, state);
+          return path.replaceWithMultiple(_ForOfStatementArray.call(this, path, state));
         }
 
-        var callback = spec;
+        let callback = spec;
         if (state.opts.loose) callback = loose;
 
-        var { node } = path;
-        var build  = callback(path, state);
-        var declar = build.declar;
-        var loop   = build.loop;
-        var block  = loop.body;
+        let { node } = path;
+        let build  = callback(path, state);
+        let declar = build.declar;
+        let loop   = build.loop;
+        let block  = loop.body;
 
         // ensure that it's a block so we can take all its statements
         path.ensureBlock();
@@ -128,16 +128,16 @@ export default function ({ messages, template, types: t }) {
   };
 
   function loose(path, file) {
-    var { node, scope } = path;
+    let { node, scope } = path;
 
-    var left = node.left;
-    var declar, id;
+    let left = node.left;
+    let declar, id;
 
     if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
       // for (i of test), for ({ i } of test)
       id = left;
     } else if (t.isVariableDeclaration(left)) {
-      // for (var i of test)
+      // for (let i of test)
       id = scope.generateUidIdentifier("ref");
       declar = t.variableDeclaration(left.kind, [
         t.variableDeclarator(left.declarations[0].id, id)
@@ -146,10 +146,10 @@ export default function ({ messages, template, types: t }) {
       throw file.buildCodeFrameError(left, messages.get("unknownForHead", left.type));
     }
 
-    var iteratorKey = scope.generateUidIdentifier("iterator");
-    var isArrayKey  = scope.generateUidIdentifier("isArray");
+    let iteratorKey = scope.generateUidIdentifier("iterator");
+    let isArrayKey  = scope.generateUidIdentifier("isArray");
 
-    var loop = buildForOfLoose({
+    let loop = buildForOfLoose({
       LOOP_OBJECT:  iteratorKey,
       IS_ARRAY:     isArrayKey,
       OBJECT:       node.right,
@@ -173,18 +173,18 @@ export default function ({ messages, template, types: t }) {
   }
 
   function spec(path, file) {
-    var { node, scope, parent } = path;
-    var left = node.left;
-    var declar;
+    let { node, scope, parent } = path;
+    let left = node.left;
+    let declar;
 
-    var stepKey   = scope.generateUidIdentifier("step");
-    var stepValue = t.memberExpression(stepKey, t.identifier("value"));
+    let stepKey   = scope.generateUidIdentifier("step");
+    let stepValue = t.memberExpression(stepKey, t.identifier("value"));
 
     if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
       // for (i of test), for ({ i } of test)
       declar = t.expressionStatement(t.assignmentExpression("=", left, stepValue));
     } else if (t.isVariableDeclaration(left)) {
-      // for (var i of test)
+      // for (let i of test)
       declar = t.variableDeclaration(left.kind, [
         t.variableDeclarator(left.declarations[0].id, stepValue)
       ]);
@@ -194,9 +194,9 @@ export default function ({ messages, template, types: t }) {
 
     //
 
-    var iteratorKey = scope.generateUidIdentifier("iterator");
+    let iteratorKey = scope.generateUidIdentifier("iterator");
 
-    var template = buildForOf({
+    let template = buildForOf({
       ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
       ITERATOR_COMPLETION:    scope.generateUidIdentifier("iteratorNormalCompletion"),
       ITERATOR_ERROR_KEY:     scope.generateUidIdentifier("iteratorError"),
@@ -206,10 +206,10 @@ export default function ({ messages, template, types: t }) {
       BODY:                   null
     });
 
-    var isLabeledParent = t.isLabeledStatement(parent);
+    let isLabeledParent = t.isLabeledStatement(parent);
 
-    var tryBody = template[3].block.body;
-    var loop = tryBody[0];
+    let tryBody = template[3].block.body;
+    let loop = tryBody[0];
 
     if (isLabeledParent) {
       tryBody[0] = t.labeledStatement(parent.label, loop);

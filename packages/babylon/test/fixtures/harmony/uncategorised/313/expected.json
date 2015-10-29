@@ -56,7 +56,8 @@
               "column": 6
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         },
         "handler": {
           "type": "CatchClause",
@@ -88,7 +89,7 @@
             },
             "properties": [
               {
-                "type": "Property",
+                "type": "ObjectProperty",
                 "start": 15,
                 "end": 22,
                 "loc": {
@@ -120,7 +121,6 @@
                   },
                   "name": "message"
                 },
-                "kind": "init",
                 "value": {
                   "type": "Identifier",
                   "start": 15,
@@ -154,13 +154,14 @@
                 "column": 27
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           }
         },
         "guardedHandlers": [],
         "finalizer": null
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -1,3 +1,5 @@
+/* @flow */
+
 import isPlainObject from "lodash/lang/isPlainObject";
 import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
@@ -22,13 +24,13 @@ export function toComputedKey(node: Object, key: Object = node.key || node.prope
  * Expression statements are just resolved to their expression.
  */
 
-export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object {
+export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Object {
   if (!nodes || !nodes.length) return;
 
-  var declars = [];
-  var bailed  = false;
+  let declars = [];
+  let bailed  = false;
 
-  var result = convert(nodes);
+  let result = convert(nodes);
   if (bailed) return;
 
   for (let i = 0; i < declars.length; i++) {
@@ -38,8 +40,8 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
   return result;
 
   function convert(nodes) {
-    var ensureLastUndefined = false;
-    var exprs   = [];
+    let ensureLastUndefined = false;
+    let exprs   = [];
 
     for (let node of (nodes: Array)) {
       if (t.isExpression(node)) {
@@ -49,9 +51,9 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
       } else if (t.isVariableDeclaration(node)) {
         if (node.kind !== "var") return bailed = true; // bailed
 
-        for (var declar of (node.declarations: Array)) {
-          var bindings = t.getBindingIdentifiers(declar);
-          for (var key in bindings) {
+        for (let declar of (node.declarations: Array)) {
+          let bindings = t.getBindingIdentifiers(declar);
+          for (let key in bindings) {
             declars.push({
               kind: node.kind,
               id: bindings[key]
@@ -66,8 +68,8 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
         ensureLastUndefined = true;
         continue;
       } else if (t.isIfStatement(node)) {
-        var consequent = node.consequent ? convert([node.consequent]) : t.identifier("undefined");
-        var alternate = node.alternate ? convert([node.alternate]) : t.identifier("undefined");
+        let consequent = node.consequent ? convert([node.consequent]) : scope.buildUndefinedNode();
+        let alternate = node.alternate ? convert([node.alternate]) : scope.buildUndefinedNode();
         if (!consequent || !alternate) return bailed = true;
 
         exprs.push(t.conditionalExpression(node.test, consequent, alternate));
@@ -85,8 +87,8 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
       ensureLastUndefined = false;
     }
 
-    if (ensureLastUndefined) {
-      exprs.push(t.identifier("undefined"));
+    if (ensureLastUndefined || exprs.length === 0) {
+      exprs.push(scope.buildUndefinedNode());
     }
 
     //
@@ -99,11 +101,11 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): Object
   }
 }
 
-export function toKeyAlias(node: Object, key: Object = node.key) {
-  var alias;
+export function toKeyAlias(node: Object, key: Object = node.key): string {
+  let alias;
 
   if (node.kind === "method") {
-    return toKeyAlias.uid++;
+    return toKeyAlias.increment() + "";
   } else if (t.isIdentifier(key)) {
     alias = key.name;
   } else if (t.isStringLiteral(key)) {
@@ -116,14 +118,24 @@ export function toKeyAlias(node: Object, key: Object = node.key) {
     alias = `[${alias}]`;
   }
 
+  if (node.static) {
+    alias = `static:${alias}`;
+  }
+
   return alias;
 }
 
 toKeyAlias.uid = 0;
 
-export function toIdentifier(name: string): string {
-  if (t.isIdentifier(name)) return name.name;
+toKeyAlias.increment = function () {
+  if (toKeyAlias.uid >= Number.MAX_SAFE_INTEGER) {
+    return toKeyAlias.uid = 0;
+  } else {
+    return toKeyAlias.uid++;
+  }
+};
 
+export function toIdentifier(name: string): string {
   name = name + "";
 
   // replace all non-valid identifiers with dashes
@@ -144,7 +156,7 @@ export function toIdentifier(name: string): string {
   return name || "_";
 }
 
-export function toBindingIdentifierName(name) {
+export function toBindingIdentifierName(name: string): string {
   name = toIdentifier(name);
   if (name === "eval" || name === "arguments") name = "_" + name;
   return name;
@@ -160,8 +172,8 @@ export function toStatement(node: Object, ignore?: boolean) {
     return node;
   }
 
-  var mustHaveId = false;
-  var newType;
+  let mustHaveId = false;
+  let newType;
 
   if (t.isClass(node)) {
     mustHaveId = true;
@@ -208,7 +220,7 @@ export function toExpression(node: Object): Object {
   }
 }
 
-export function toBlock(node: Object, parent: Object): Object {
+export function toBlock(node, parent: Object): Object {
   if (t.isBlockStatement(node)) {
     return node;
   }
@@ -260,8 +272,8 @@ export function valueToNode(value: any): Object {
 
   // regexes
   if (isRegExp(value)) {
-    var pattern = value.source;
-    var flags = value.toString().match(/\/([a-z]+|)$/)[1];
+    let pattern = value.source;
+    let flags = value.toString().match(/\/([a-z]+|)$/)[1];
     return t.regexLiteral(pattern, flags);
   }
 
@@ -272,15 +284,15 @@ export function valueToNode(value: any): Object {
 
   // object
   if (isPlainObject(value)) {
-    var props = [];
-    for (var key in value) {
-      var nodeKey;
+    let props = [];
+    for (let key in value) {
+      let nodeKey;
       if (t.isValidIdentifier(key)) {
         nodeKey = t.identifier(key);
       } else {
         nodeKey = t.literal(key);
       }
-      props.push(t.property("init", nodeKey, t.valueToNode(value[key])));
+      props.push(t.objectProperty(nodeKey, t.valueToNode(value[key])));
     }
     return t.objectExpression(props);
   }

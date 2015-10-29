@@ -6,12 +6,20 @@ import n from "./node";
 import * as t from "babel-types";
 
 export default class Printer extends Buffer {
+  constructor(...args) {
+    super(...args);
+    this.insideAux = false;
+  }
+
   print(node, parent, opts = {}) {
     if (!node) return;
 
     if (parent && parent._compact) {
       node._compact = true;
     }
+
+    let oldInAux = this.insideAux;
+    this.insideAux = !node.loc;
 
     let oldConcise = this.format.concise;
     if (node._compact) {
@@ -23,6 +31,8 @@ export default class Printer extends Buffer {
       throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
 
+    this.printAuxComment(oldInAux);
+
     let needsParens = n.needsParens(node, parent);
     if (needsParens) this.push("(");
 
@@ -33,28 +43,47 @@ export default class Printer extends Buffer {
     this._printNewline(true, node, parent, opts);
 
     if (opts.before) opts.before();
+
     this.map.mark(node, "start");
 
-    //
     this._print(node, parent);
+
+    this.printTrailingComments(node, parent);
 
     if (needsParens) this.push(")");
 
+    // end
     this.map.mark(node, "end");
     if (opts.after) opts.after();
 
     this.format.concise = oldConcise;
+    this.insideAux = oldInAux;
 
     this._printNewline(false, node, parent, opts);
+  }
 
-    this.printTrailingComments(node, parent);
+  printAuxComment(wasInAux) {
+    let comment = this.format.auxiliaryComment;
+    if (comment && !wasInAux && this.insideAux) {
+      this.printComment({
+        type: "CommentBlock",
+        value: comment
+      });
+    }
+  }
+
+  getPossibleRaw(node) {
+    let extra = node.extra;
+    if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
+      return extra.raw;
+    }
   }
 
   _print(node, parent) {
-    let extra = node.extra;
-    if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
+    let extra = this.getPossibleRaw(node);
+    if (extra) {
       this.push("");
-      this._push(extra.raw);
+      this._push(extra);
     } else {
       let printMethod = this[node.type];
       printMethod.call(this, node, parent);
@@ -119,17 +148,17 @@ export default class Printer extends Buffer {
   }
 
   printTrailingComments(node, parent) {
-    this._printComments(this.getComments("trailingComments", node, parent));
+    this.printComments(this.getComments("trailingComments", node, parent));
   }
 
   printLeadingComments(node, parent) {
-    this._printComments(this.getComments("leadingComments", node, parent));
+    this.printComments(this.getComments("leadingComments", node, parent));
   }
 
   printInnerComments(node, indent = true) {
     if (!node.innerComments) return;
     if (indent) this.indent();
-    this._printComments(node.innerComments);
+    this.printComments(node.innerComments);
     if (indent) this.dedent();
   }
 
@@ -177,26 +206,7 @@ export default class Printer extends Buffer {
     this.newline(lines);
   }
 
-  getComments(key, node, parent) {
-    if (t.isExpressionStatement(parent)) {
-      return [];
-    }
-
-    let comments = [];
-    let nodes: Array<Object> = [node];
-
-    if (t.isExpressionStatement(node)) {
-      nodes.push(node.argument);
-    }
-
-    for (let node of nodes) {
-      comments = comments.concat(this._getComments(key, node));
-    }
-
-    return comments;
-  }
-
-  _getComments(key, node) {
+  getComments(key, node) {
     return (node && node[key]) || [];
   }
 
@@ -212,54 +222,64 @@ export default class Printer extends Buffer {
     }
   }
 
-  _printComments(comments) {
+  printComment(comment) {
+    if (!this.shouldPrintComment(comment)) return;
+    
+    if (comment.ignore) return;
+    comment.ignore = true;
+
+    if (comment.start != null) {
+      if (this.printedCommentStarts[comment.start]) return;
+      this.printedCommentStarts[comment.start] = true;
+    }
+
+    this.catchUp(comment);
+
+    // whitespace before
+    this.newline(this.whitespace.getNewlinesBefore(comment));
+
+    let column = this.position.column;
+    let val    = this.generateComment(comment);
+
+    if (column && !this.isLast(["\n", " ", "[", "{"])) {
+      this._push(" ");
+      column++;
+    }
+
+    //
+    if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
+      let offset = comment.loc && comment.loc.start.column;
+      if (offset) {
+        let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
+        val = val.replace(newlineRegex, "\n");
+      }
+
+      let indent = Math.max(this.indentSize(), column);
+      val = val.replace(/\n/g, `\n${repeating(" ", indent)}`);
+    }
+
+    if (column === 0) {
+      val = this.getIndent() + val;
+    }
+
+    // force a newline for line comments when retainLines is set in case the next printed node
+    // doesn't catch up
+    if ((this.format.compact || this.format.retainLines) && comment.type === "CommentLine") {
+      val += "\n";
+    }
+
+    //
+    this._push(val);
+
+    // whitespace after
+    this.newline(this.whitespace.getNewlinesAfter(comment));
+  }
+
+  printComments(comments?: Array<Object>) {
     if (!comments || !comments.length) return;
 
-    for (let comment of (comments: Array)) {
-      if (!this.shouldPrintComment(comment)) continue;
-      if (comment._displayed) continue;
-      comment._displayed = true;
-
-      this.catchUp(comment);
-
-      // whitespace before
-      this.newline(this.whitespace.getNewlinesBefore(comment));
-
-      let column = this.position.column;
-      let val    = this.generateComment(comment);
-
-      if (column && !this.isLast(["\n", " ", "[", "{"])) {
-        this._push(" ");
-        column++;
-      }
-
-      //
-      if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
-        let offset = comment.loc && comment.loc.start.column;
-        if (offset) {
-          let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
-          val = val.replace(newlineRegex, "\n");
-        }
-
-        let indent = Math.max(this.indentSize(), column);
-        val = val.replace(/\n/g, `\n${repeating(" ", indent)}`);
-      }
-
-      if (column === 0) {
-        val = this.getIndent() + val;
-      }
-
-      // force a newline for line comments when retainLines is set in case the next printed node
-      // doesn't catch up
-      if ((this.format.compact || this.format.retainLines) && comment.type === "CommentLine") {
-        val += "\n";
-      }
-
-      //
-      this._push(val);
-
-      // whitespace after
-      this.newline(this.whitespace.getNewlinesAfter(comment));
+    for (let comment of comments) {
+      this.printComment(comment);
     }
   }
 }

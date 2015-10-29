@@ -2,15 +2,17 @@ export default function ({ types: t }) {
   const FLOW_DIRECTIVE = "@flow";
 
   return {
+    inherits: require("babel-plugin-syntax-flow"),
+
     visitor: {
-      Program(path, file) {
-        for (var comment of (file.ast.comments: Array)) {
+      Program(path, { file: { ast: { comments } } }) {
+        for (let comment of (comments: Array<Object>)) {
           if (comment.value.indexOf(FLOW_DIRECTIVE) >= 0) {
             // remove flow directive
             comment.value = comment.value.replace(FLOW_DIRECTIVE, "");
 
             // remove the comment completely if it only consists of whitespace and/or stars
-            if (!comment.value.replace(/\*/g, "").trim()) comment._displayed = true;
+            if (!comment.value.replace(/\*/g, "").trim()) comment.ignore = true;
           }
         }
       },
@@ -29,14 +31,14 @@ export default function ({ types: t }) {
       },
 
       Function({ node }) {
-        for (var i = 0; i < node.params.length; i++) {
-          var param = node.params[i];
+        for (let i = 0; i < node.params.length; i++) {
+          let param = node.params[i];
           param.optional = false;
         }
       },
 
       TypeCastExpression(path) {
-        var { node } = path;
+        let { node } = path;
         do {
           node = node.expression;
         } while(t.isTypeCastExpression(node));

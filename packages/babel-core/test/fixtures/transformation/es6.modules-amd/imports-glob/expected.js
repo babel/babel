@@ -1,3 +1,4 @@
-define(["exports", "foo"], function (exports, _foo) {
-    _foo;
+define(["foo"], function (_foo) {
+  var foo = babelHelpers.interopRequireWildcard(_foo);
+  foo;
 });

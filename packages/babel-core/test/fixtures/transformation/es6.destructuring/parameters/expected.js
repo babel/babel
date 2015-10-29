@@ -19,17 +19,17 @@ function unpackObject(_ref2) {
 console.log(unpackObject({ title: "title", author: "author" }));
 
 var unpackArray = function (_ref3, _ref4) {
-  var _ref32 = babelHelpers.slicedToArray(_ref3, 3);
+  var _ref6 = babelHelpers.slicedToArray(_ref3, 3);
 
-  var a = _ref32[0];
-  var b = _ref32[1];
-  var c = _ref32[2];
+  var a = _ref6[0];
+  var b = _ref6[1];
+  var c = _ref6[2];
 
-  var _ref42 = babelHelpers.slicedToArray(_ref4, 3);
+  var _ref5 = babelHelpers.slicedToArray(_ref4, 3);
 
-  var x = _ref42[0];
-  var y = _ref42[1];
-  var z = _ref42[2];
+  var x = _ref5[0];
+  var y = _ref5[1];
+  var z = _ref5[2];
 
   return a + b + c;
 };

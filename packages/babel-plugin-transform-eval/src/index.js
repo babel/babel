@@ -3,13 +3,13 @@ export default function ({ parse, traverse }) {
     visitor: {
       CallExpression(path) {
         if (path.get("callee").isIdentifier({ name: "eval" }) && path.node.arguments.length === 1) {
-          var evaluate = path.get("arguments")[0].evaluate();
+          let evaluate = path.get("arguments")[0].evaluate();
           if (!evaluate.confident) return;
 
-          var code = evaluate.value;
+          let code = evaluate.value;
           if (typeof code !== "string") return;
 
-          var ast = parse(code);
+          let ast = parse(code);
           traverse.removeProperties(ast);
           return ast.program;
         }

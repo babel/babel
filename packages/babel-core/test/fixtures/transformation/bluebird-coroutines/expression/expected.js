@@ -1,5 +1,6 @@
-var _bluebird = require("bluebird");
-
-var foo = _bluebird.coroutine(function* () {
-  var wat = yield bar();
-});
+import { coroutine as _coroutine } from "bluebird";
+var foo = function () {
+  return _coroutine(function* () {
+    var wat = yield bar();
+  })();
+};

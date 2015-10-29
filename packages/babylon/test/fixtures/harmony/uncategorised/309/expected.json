@@ -104,7 +104,7 @@
                 },
                 "properties": [
                   {
-                    "type": "Property",
+                    "type": "ObjectProperty",
                     "start": 5,
                     "end": 15,
                     "loc": {
@@ -152,7 +152,7 @@
                       },
                       "properties": [
                         {
-                          "type": "Property",
+                          "type": "ObjectProperty",
                           "start": 9,
                           "end": 14,
                           "loc": {
@@ -184,7 +184,6 @@
                             },
                             "name": "c"
                           },
-                          "kind": "init",
                           "value": {
                             "type": "AssignmentPattern",
                             "start": 9,
@@ -238,8 +237,7 @@
                           }
                         }
                       ]
-                    },
-                    "kind": "init"
+                    }
                   }
                 ]
               }

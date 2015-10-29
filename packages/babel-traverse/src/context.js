@@ -1,5 +1,9 @@
+/* @flow */
+
 import NodePath from "./path";
 import * as t from "babel-types";
+
+let testing = process.env.NODE_ENV === "test";
 
 export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {
@@ -9,57 +13,101 @@ export default class TraversalContext {
     this.opts       = opts;
   }
 
-  queue = null;
+  parentPath: NodePath;
+  scope;
+  state;
+  opts;
+  queue: ?Array<NodePath> = null;
 
-  shouldVisit(node) {
-    var opts = this.opts;
+  /**
+   * This method does a simple check to determine whether or not we really need to attempt
+   * visit a node. This will prevent us from constructing a NodePath.
+   */
+
+  shouldVisit(node): boolean {
+    let opts = this.opts;
     if (opts.enter || opts.exit) return true;
 
+    // check if we have a visitor for this node
     if (opts[node.type]) return true;
 
-    var keys = t.VISITOR_KEYS[node.type];
+    // check if we're going to traverse into this node
+    let keys: ?Array<string> = t.VISITOR_KEYS[node.type];
     if (!keys || !keys.length) return false;
 
-    for (var key of (keys: Array)) {
+    // we need to traverse into this node so ensure that it has children to traverse into!
+    for (let key of keys) {
       if (node[key]) return true;
     }
 
     return false;
   }
 
-  create(node, obj, key, listKey) {
-    var path = NodePath.get({
+  create(node, obj, key, listKey): NodePath {
+    return NodePath.get({
       parentPath: this.parentPath,
       parent: node,
       container: obj,
       key: key,
       listKey
     });
-    path.unshiftContext(this);
-    return path;
+  }
+
+  maybeQueue(path) {
+    if (this.trap) {
+      throw new Error("Infinite cycle detected");
+    }
+    
+    if (this.queue) {
+      this.priorityQueue.push(path);
+    }
   }
 
   visitMultiple(container, parent, listKey) {
     // nothing to traverse!
     if (container.length === 0) return false;
 
-    var visited = [];
-
-    var queue = this.queue = [];
-    var stop  = false;
+    let queue = [];
 
     // build up initial queue
     for (let key = 0; key < container.length; key++) {
-      var self = container[key];
-      if (self && this.shouldVisit(self)) {
+      let node = container[key];
+      if (node && this.shouldVisit(node)) {
         queue.push(this.create(parent, container, key, listKey));
       }
     }
 
-    // visit the queue
-    for (let path of (queue: Array)) {
-      path.resync();
+    return this.visitQueue(queue);
+  }
 
+  visitSingle(node, key): boolean {
+    if (this.shouldVisit(node[key])) {
+      return this.visitQueue([
+        this.create(node, node, key)
+      ]);
+    } else {
+      return false;
+    }
+  }
+
+  visitQueue(queue: Array<NodePath>) {
+    // set queue
+    this.queue = queue;
+    this.priorityQueue = [];
+
+    let visited = [];
+    let stop = false;
+
+    // visit the queue
+    for (let path of queue) {
+      path.resync();
+      path.pushContext(this);
+
+      if (testing && queue.length >= 1000) {
+        this.trap = true;
+      }
+
+      // ensure we don't visit the same node twice
       if (visited.indexOf(path.node) >= 0) continue;
       visited.push(path.node);
 
@@ -67,28 +115,29 @@ export default class TraversalContext {
         stop = true;
         break;
       }
+
+      if (this.priorityQueue.length) {
+        stop = this.visitQueue(this.priorityQueue);
+        this.priorityQueue = [];
+        this.queue = queue;
+        if (stop) break;
+      }
     }
 
-    for (let path of (queue: Array)) {
-      path.shiftContext();
+    // clear queue
+    for (let path of queue) {
+      path.popContext();
     }
 
+    // clear queue
     this.queue = null;
 
     return stop;
   }
 
-  visitSingle(node, key) {
-    if (this.shouldVisit(node[key])) {
-      var path = this.create(node, node, key);
-      path.visit();
-      path.shiftContext();
-    }
-  }
-
   visit(node, key) {
-    var nodes = node[key];
-    if (!nodes) return;
+    let nodes = node[key];
+    if (!nodes) return false;
 
     if (Array.isArray(nodes)) {
       return this.visitMultiple(nodes, node, key);

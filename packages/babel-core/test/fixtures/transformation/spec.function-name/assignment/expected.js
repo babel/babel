@@ -3,10 +3,7 @@ var _i = function i() {
 };
 
 var _j = function j() {
-  var _ = 5;
-  _j = _.j;
-  var _2 = 5;
-  _j = _2.y;
-
+  ({ j: _j } = 5);
+  ({ y: _j } = 5);
   ;
 };

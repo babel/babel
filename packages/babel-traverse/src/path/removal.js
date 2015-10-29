@@ -1,24 +1,15 @@
+/* @flow */
+
 // This file contains methods responsible for removing a node.
 
-import * as removalHooks from "./lib/removal-hooks";
-
-/**
- * This is now safe.
- */
-
-export var dangerouslyRemove = remove;
-
-/**
- * Dangerously remove the current node. This may sometimes result in a tainted
- * invalid AST so use with caution.
- */
+import { hooks } from "./lib/removal-hooks";
 
 export function remove() {
   this._assertUnremoved();
 
   this.resync();
 
-  if (this._callRemovalHooks("pre")) {
+  if (this._callRemovalHooks()) {
     this._markRemoved();
     return;
   }
@@ -26,12 +17,10 @@ export function remove() {
   this.shareCommentsWithSiblings();
   this._remove();
   this._markRemoved();
-
-  this._callRemovalHooks("post");
 }
 
-export function _callRemovalHooks(position) {
-  for (var fn of (removalHooks[position]: Array)) {
+export function _callRemovalHooks() {
+  for (let fn of (hooks: Array<Function>)) {
     if (fn(this, this.parentPath)) return true;
   }
 }
@@ -53,6 +42,6 @@ export function _markRemoved() {
 
 export function _assertUnremoved() {
   if (this.removed) {
-    throw this.errorWithNode("NodePath has been removed so is read-only.");
+    throw this.buildCodeFrameError("NodePath has been removed so is read-only.");
   }
 }

@@ -1,22 +1,27 @@
+/* @flow */
+
 import * as t from "./index";
 
 /**
  * Return a list of binding identifiers associated with the input `node`.
  */
 
-export function getBindingIdentifiers(node: Object, duplicates?): Object {
-  var search = [].concat(node);
-  var ids    = Object.create(null);
+export function getBindingIdentifiers(
+  node: Object,
+  duplicates?: boolean,
+): Object {
+  let search = [].concat(node);
+  let ids    = Object.create(null);
 
   while (search.length) {
-    var id = search.shift();
+    let id = search.shift();
     if (!id) continue;
 
-    var keys = t.getBindingIdentifiers.keys[id.type];
+    let keys = t.getBindingIdentifiers.keys[id.type];
 
     if (t.isIdentifier(id)) {
       if (duplicates) {
-        var _ids = ids[id.name] = ids[id.name] || [];
+        let _ids = ids[id.name] = ids[id.name] || [];
         _ids.push(id);
       } else {
         ids[id.name] = id;
@@ -26,8 +31,8 @@ export function getBindingIdentifiers(node: Object, duplicates?): Object {
         search.push(node.declaration);
       }
     } else if (keys) {
-      for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
+      for (let i = 0; i < keys.length; i++) {
+        let key = keys[i];
         if (id[key]) {
           search = search.concat(id[key]);
         }
@@ -63,6 +68,10 @@ getBindingIdentifiers.keys = {
   ImportDefaultSpecifier: ["local"],
   ImportDeclaration: ["specifiers"],
 
+  ExportSpecifier: ["exported"],
+  ExportNamespaceSpecifier: ["exported"],
+  ExportDefaultSpecifier: ["exported"],
+
   FunctionDeclaration: ["id", "params"],
   FunctionExpression: ["id", "params"],
 
@@ -73,7 +82,7 @@ getBindingIdentifiers.keys = {
   UpdateExpression: ["argument"],
 
   SpreadProperty: ["argument"],
-  Property: ["value"],
+  ObjectProperty: ["value"],
 
   AssignmentPattern: ["left"],
   ArrayPattern: ["elements"],

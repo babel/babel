@@ -1,4 +1,3 @@
 {
-  "plugins": ["external-helpers"],
-  "optional": ["es6.spec.symbols"]
+  "plugins": ["external-helpers", "transform-es2015-typeof-symbol"]
 }

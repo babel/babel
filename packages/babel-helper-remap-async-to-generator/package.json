@@ -1,15 +1,14 @@
 {
   "name": "babel-helper-remap-async-to-generator",
-  "version": "1.0.0",
+  "version": "5.10.32",
   "description": "",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-runtime": "^5.8.20",
-    "babel-types": "^5.8.20",
-    "babel-traverse": "^5.8.20",
-    "babel-helper-explode-class": "^5.0.0",
+    "babel-runtime": "^5.10.32",
+    "babel-types": "^5.10.32",
+    "babel-traverse": "^5.10.32",
     "babel-helper-function-name": "^5.0.0"
   }
 }

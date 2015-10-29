@@ -1,8 +1,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var test = 2;
-exports.test = test;
+var test = exports.test = 2;
 exports.test = test = 5;
 exports.test = test += 1;
 

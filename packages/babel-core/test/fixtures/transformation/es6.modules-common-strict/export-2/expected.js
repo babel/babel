@@ -1,1 +1,1 @@
-exports["default"] = foo;
+exports.default = foo;

@@ -1,11 +1,14 @@
+/* @flow */
+
+import type NodePath from "../index";
 import * as t from "babel-types";
 
-export default function (node) {
+export default function (node: Object) {
   if (!this.isReferenced()) return;
 
   // check if a binding exists of this value and if so then return a union type of all
   // possible types that the binding could be
-  var binding = this.scope.getBinding(node.name);
+  let binding = this.scope.getBinding(node.name);
   if (binding) {
     if (binding.identifier.typeAnnotation) {
       return binding.identifier.typeAnnotation;
@@ -25,17 +28,17 @@ export default function (node) {
 }
 
 function getTypeAnnotationBindingConstantViolations(path, name) {
-  var binding = path.scope.getBinding(name);
+  let binding = path.scope.getBinding(name);
 
-  var types = [];
+  let types = [];
   path.typeAnnotation = t.unionTypeAnnotation(types);
 
-  var functionConstantViolations = [];
-  var constantViolations = getConstantViolationsBefore(binding, path, functionConstantViolations);
+  let functionConstantViolations = [];
+  let constantViolations = getConstantViolationsBefore(binding, path, functionConstantViolations);
 
-  var testType = getConditionalAnnotation(path, name);
+  let testType = getConditionalAnnotation(path, name);
   if (testType) {
-    var testConstantViolations = getConstantViolationsBefore(binding, testType.ifStatement);
+    let testConstantViolations = getConstantViolationsBefore(binding, testType.ifStatement);
 
     // remove constant violations observed before the IfStatement
     constantViolations = constantViolations.filter((path) => testConstantViolations.indexOf(path) < 0);
@@ -47,11 +50,11 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
   if (constantViolations.length) {
     // pick one constant from each scope which will represent the last possible
     // control flow path that it could've taken/been
-    var rawConstantViolations = constantViolations.reverse();
-    var visitedScopes = [];
+    let rawConstantViolations = constantViolations.reverse();
+    let visitedScopes = [];
     constantViolations = [];
-    for (let violation of (rawConstantViolations: Array)) {
-      var violationScope = violation.scope;
+    for (let violation of (rawConstantViolations: Array<NodePath>)) {
+      let violationScope = violation.scope;
       if (visitedScopes.indexOf(violationScope) >= 0) continue;
 
       visitedScopes.push(violationScope);
@@ -67,7 +70,7 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
     constantViolations = constantViolations.concat(functionConstantViolations);
 
     // push on inferred types of violated paths
-    for (let violation of (constantViolations: Array)) {
+    for (let violation of (constantViolations: Array<NodePath>)) {
       types.push(violation.getTypeAnnotation());
     }
   }
@@ -78,23 +81,23 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
 }
 
 function getConstantViolationsBefore(binding, path, functions) {
-  var violations = binding.constantViolations.slice();
+  let violations = binding.constantViolations.slice();
   violations.unshift(binding.path);
   return violations.filter((violation) => {
     violation = violation.resolve();
-    var status = violation._guessExecutionStatusRelativeTo(path);
+    let status = violation._guessExecutionStatusRelativeTo(path);
     if (functions && status === "function") functions.push(violation);
     return status === "before";
   });
 }
 
 function inferAnnotationFromBinaryExpression(name, path) {
-  var operator = path.node.operator;
+  let operator = path.node.operator;
 
-  var right = path.get("right").resolve();
-  var left  = path.get("left").resolve();
+  let right = path.get("right").resolve();
+  let left  = path.get("left").resolve();
 
-  var target;
+  let target;
   if (left.isIdentifier({ name })) {
     target = right;
   } else if (right.isIdentifier({ name })) {
@@ -113,8 +116,8 @@ function inferAnnotationFromBinaryExpression(name, path) {
   }
 
   //
-  var typeofPath;
-  var typePath;
+  let typeofPath;
+  let typePath;
   if (left.isUnaryExpression({ operator: "typeof" })) {
     typeofPath = left;
     typePath = right;
@@ -129,7 +132,7 @@ function inferAnnotationFromBinaryExpression(name, path) {
   if (!typePath.isLiteral()) return;
 
   // and that it's a string so we can infer it
-  var typeValue = typePath.node.value;
+  let typeValue = typePath.node.value;
   if (typeof typeValue !== "string") return;
 
   // and that the argument of the typeof path references us!
@@ -140,7 +143,7 @@ function inferAnnotationFromBinaryExpression(name, path) {
 }
 
 function getParentConditionalPath(path) {
-  var parentPath;
+  let parentPath;
   while (parentPath = path.parentPath) {
     if (parentPath.isIfStatement() || parentPath.isConditionalExpression()) {
       if (path.key === "test") {
@@ -155,12 +158,12 @@ function getParentConditionalPath(path) {
 }
 
 function getConditionalAnnotation(path, name) {
-  var ifStatement = getParentConditionalPath(path);
+  let ifStatement = getParentConditionalPath(path);
   if (!ifStatement) return;
 
-  var test  = ifStatement.get("test");
-  var paths = [test];
-  var types = [];
+  let test  = ifStatement.get("test");
+  let paths = [test];
+  let types = [];
 
   do {
     let path = paths.shift().resolve();
@@ -171,7 +174,7 @@ function getConditionalAnnotation(path, name) {
     }
 
     if (path.isBinaryExpression()) {
-      var type = inferAnnotationFromBinaryExpression(name, path);
+      let type = inferAnnotationFromBinaryExpression(name, path);
       if (type) types.push(type);
     }
   } while(paths.length);

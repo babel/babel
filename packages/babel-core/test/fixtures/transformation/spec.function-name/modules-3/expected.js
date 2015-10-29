@@ -4,12 +4,12 @@ Object.defineProperty(exports, "__esModule", {
 
 var _store = require("./store");
 
-var Login = (function (_React$Component) {
+let Login = (function (_React$Component) {
   babelHelpers.inherits(Login, _React$Component);
 
   function Login() {
     babelHelpers.classCallCheck(this, Login);
-    babelHelpers.get(Object.getPrototypeOf(Login.prototype), "constructor", this).apply(this, arguments);
+    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Login).apply(this, arguments));
   }
 
   babelHelpers.createClass(Login, [{
@@ -21,5 +21,4 @@ var Login = (function (_React$Component) {
   return Login;
 })(React.Component);
 
-exports["default"] = Login;
-module.exports = exports["default"];
+exports.default = Login;

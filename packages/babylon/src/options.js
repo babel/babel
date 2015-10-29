@@ -12,10 +12,12 @@ export const defaultOptions = {
   // When enabled, import/export statements are not constrained to
   // appearing at the top of the program.
   allowImportExportEverywhere: false,
-  plugins: {},
-  // Babel-specific options
-  features: {},
-  strictMode: null
+  // TODO
+  allowSuperOutsideMethod: false,
+  // An array of plugins to enable
+  plugins: [],
+  // TODO
+  strictMode: null,
 };
 
 // Interpret and default an options object

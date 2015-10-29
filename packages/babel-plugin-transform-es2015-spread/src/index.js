@@ -1,6 +1,6 @@
 export default function ({ types: t }) {
-  function getSpreadLiteral(spread, scope) {
-    if (scope.hub.file.isLoose("es6.spread") && !t.isIdentifier(spread.argument, { name: "arguments" })) {
+  function getSpreadLiteral(spread, scope, state) {
+    if (state.opts.loose && !t.isIdentifier(spread.argument, { name: "arguments" })) {
       return spread.argument;
     } else {
       return scope.toArray(spread.argument, true);
@@ -8,7 +8,7 @@ export default function ({ types: t }) {
   }
 
   function hasSpread(nodes) {
-    for (var i = 0; i < nodes.length; i++) {
+    for (let i = 0; i < nodes.length; i++) {
       if (t.isSpreadElement(nodes[i])) {
         return true;
       }
@@ -16,10 +16,10 @@ export default function ({ types: t }) {
     return false;
   }
 
-  function build(props: Array, scope) {
-    var nodes = [];
+  function build(props: Array, scope, state) {
+    let nodes = [];
 
-    var _props = [];
+    let _props = [];
 
     function push() {
       if (!_props.length) return;
@@ -27,10 +27,10 @@ export default function ({ types: t }) {
       _props = [];
     }
 
-    for (var prop of props) {
+    for (let prop of props) {
       if (t.isSpreadElement(prop)) {
         push();
-        nodes.push(getSpreadLiteral(prop, scope));
+        nodes.push(getSpreadLiteral(prop, scope, state));
       } else {
         _props.push(prop);
       }
@@ -43,49 +43,50 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
-      ArrayExpression({ node, scope }) {
-        var elements = node.elements;
+      ArrayExpression(path, state) {
+        let { node, scope } = path;
+        let elements = node.elements;
         if (!hasSpread(elements)) return;
 
-        var nodes = build(elements, scope);
-        var first = nodes.shift();
+        let nodes = build(elements, scope, state);
+        let first = nodes.shift();
 
         if (!t.isArrayExpression(first)) {
           nodes.unshift(first);
           first = t.arrayExpression([]);
         }
 
-        return t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes);
+        path.replaceWith(t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes));
       },
 
-      CallExpression(path) {
-        var { node, scope } = path;
+      CallExpression(path, state) {
+        let { node, scope } = path;
 
-        var args = node.arguments;
+        let args = node.arguments;
         if (!hasSpread(args)) return;
 
-        var contextLiteral = t.identifier("undefined");
+        let contextLiteral = t.identifier("undefined");
 
         node.arguments = [];
 
-        var nodes;
+        let nodes;
         if (args.length === 1 && args[0].argument.name === "arguments") {
           nodes = [args[0].argument];
         } else {
-          nodes = build(args, scope);
+          nodes = build(args, scope, state);
         }
 
-        var first = nodes.shift();
+        let first = nodes.shift();
         if (nodes.length) {
           node.arguments.push(t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes));
         } else {
           node.arguments.push(first);
         }
 
-        var callee = node.callee;
+        let callee = node.callee;
 
         if (path.get("callee").isMemberExpression()) {
-          var temp = scope.maybeGenerateMemoised(callee.object);
+          let temp = scope.maybeGenerateMemoised(callee.object);
           if (temp) {
             callee.object = t.assignmentExpression("=", temp, callee.object);
             contextLiteral = temp;
@@ -100,23 +101,34 @@ export default function ({ types: t }) {
         node.arguments.unshift(contextLiteral);
       },
 
-      NewExpression({ node, scope }, file) {
-        var args = node.arguments;
+      NewExpression(path, state) {
+        let { node, scope } = path;
+        let args = node.arguments;
         if (!hasSpread(args)) return;
 
-        var nodes = build(args, scope);
+        let nodes = build(args, scope, state);
 
-        var context = t.arrayExpression([t.nullLiteral()]);
+        let context = t.arrayExpression([t.nullLiteral()]);
+
 
         args = t.callExpression(t.memberExpression(context, t.identifier("concat")), nodes);
 
-        return t.newExpression(
+        path.replaceWith(t.newExpression(
           t.callExpression(
-            t.memberExpression(file.addHelper("bind"), t.identifier("apply")),
+            t.memberExpression(
+              t.memberExpression(
+                t.memberExpression(
+                  t.identifier("Function"),
+                  t.identifier("prototype"),
+                ),
+                t.identifier("bind")
+              ),
+              t.identifier("apply")
+            ),
             [node.callee, args]
           ),
           []
-        );
+        ));
       }
     }
   };

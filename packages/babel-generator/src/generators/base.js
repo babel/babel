@@ -6,7 +6,10 @@ export function File(node: Object) {
 
 export function Program(node: Object) {
   this.printInnerComments(node, false);
+
   this.printSequence(node.directives, node);
+  if (node.directives && node.directives.length) this.newline();
+
   this.printSequence(node.body, node);
 }
 
@@ -15,7 +18,10 @@ export function BlockStatement(node: Object) {
   this.printInnerComments(node);
   if (node.body.length) {
     this.newline();
+
     this.printSequence(node.directives, node, { indent: true });
+    if (node.directives && node.directives.length) this.newline();
+
     this.printSequence(node.body, node, { indent: true });
     if (!this.format.retainLines) this.removeLast("\n");
     this.rightBrace();

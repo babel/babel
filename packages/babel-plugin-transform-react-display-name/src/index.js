@@ -2,12 +2,12 @@ import path from "path";
 
 export default function ({ types: t }) {
   function addDisplayName(id, call) {
-    var props = call.arguments[0].properties;
-    var safe = true;
+    let props = call.arguments[0].properties;
+    let safe = true;
 
-    for (var i = 0; i < props.length; i++) {
-      var prop = props[i];
-      var key = t.toComputedKey(prop);
+    for (let i = 0; i < props.length; i++) {
+      let prop = props[i];
+      let key = t.toComputedKey(prop);
       if (t.isLiteral(key, { value: "displayName" })) {
         safe = false;
         break;
@@ -15,11 +15,11 @@ export default function ({ types: t }) {
     }
 
     if (safe) {
-      props.unshift(t.property("init", t.identifier("displayName"), t.stringLiteral(id)));
+      props.unshift(t.objectProperty(t.identifier("displayName"), t.stringLiteral(id)));
     }
   }
 
-  var isCreateClassCallExpression = t.buildMatchMemberExpression("React.createClass");
+  let isCreateClassCallExpression = t.buildMatchMemberExpression("React.createClass");
 
   function isCreateClass(node) {
     if (!node || !t.isCallExpression(node)) return false;
@@ -28,11 +28,11 @@ export default function ({ types: t }) {
     if (!isCreateClassCallExpression(node.callee)) return false;
 
     // no call arguments
-    var args = node.arguments;
+    let args = node.arguments;
     if (args.length !== 1) return false;
 
     // first node arg is not an object
-    var first = args[0];
+    let first = args[0];
     if (!t.isObjectExpression(first)) return false;
 
     return true;
@@ -40,26 +40,26 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
-      ExportDefaultDeclaration({ node }, file) {
+      ExportDefaultDeclaration({ node }, state) {
         if (isCreateClass(node.declaration)) {
-          var displayName = file.opts.basename;
+          let displayName = state.file.opts.basename;
 
           // ./{module name}/index.js
           if (displayName === "index") {
-            displayName = path.basename(path.dirname(file.opts.filename));
+            displayName = path.basename(path.dirname(state.file.opts.filename));
           }
 
           addDisplayName(displayName, node.declaration);
         }
       },
 
-      "AssignmentExpression|Property|VariableDeclarator"({ node }) {
-        var left, right;
+      "AssignmentExpression|ObjectProperty|VariableDeclarator"({ node }) {
+        let left, right;
 
         if (t.isAssignmentExpression(node)) {
           left = node.left;
           right = node.right;
-        } else if (t.isProperty(node)) {
+        } else if (t.isObjectProperty(node)) {
           left = node.key;
           right = node.value;
         } else if (t.isVariableDeclarator(node)) {

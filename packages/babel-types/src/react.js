@@ -1,15 +1,20 @@
+/* @flow */
+
 import * as t from "./index";
 
-export var isReactComponent = t.buildMatchMemberExpression("React.Component");
+export let isReactComponent = t.buildMatchMemberExpression("React.Component");
 
-export function isCompatTag(tagName) {
-  return tagName && /^[a-z]|\-/.test(tagName);
+export function isCompatTag(tagName?: string): boolean {
+  return !!tagName && /^[a-z]|\-/.test(tagName);
 }
 
-function cleanJSXElementLiteralChild(child, args) {
-  var lines = child.value.split(/\r\n|\n|\r/);
+function cleanJSXElementLiteralChild(
+  child: { value: string },
+  args: Array<Object>,
+) {
+  let lines = child.value.split(/\r\n|\n|\r/);
 
-  var lastNonEmptyLine = 0;
+  let lastNonEmptyLine = 0;
 
   for (let i = 0; i < lines.length; i++) {
     if (lines[i].match(/[^ \t]/)) {
@@ -17,17 +22,17 @@ function cleanJSXElementLiteralChild(child, args) {
     }
   }
 
-  var str = "";
+  let str = "";
 
   for (let i = 0; i < lines.length; i++) {
-    var line = lines[i];
+    let line = lines[i];
 
-    var isFirstLine = i === 0;
-    var isLastLine = i === lines.length - 1;
-    var isLastNonEmptyLine = i === lastNonEmptyLine;
+    let isFirstLine = i === 0;
+    let isLastLine = i === lines.length - 1;
+    let isLastNonEmptyLine = i === lastNonEmptyLine;
 
     // replace rendered whitespace tabs with spaces
-    var trimmedLine = line.replace(/\t/g, " ");
+    let trimmedLine = line.replace(/\t/g, " ");
 
     // trim whitespace touching a newline
     if (!isFirstLine) {
@@ -51,11 +56,11 @@ function cleanJSXElementLiteralChild(child, args) {
   if (str) args.push(t.stringLiteral(str));
 }
 
-export function buildChildren(node) {
-  var elems = [];
+export function buildChildren(node: Object): Array<Object> {
+  let elems = [];
 
-  for (var i = 0; i < node.children.length; i++) {
-    var child = node.children[i];
+  for (let i = 0; i < node.children.length; i++) {
+    let child = node.children[i];
 
     if (t.isJSXText(child)) {
       cleanJSXElementLiteralChild(child, elems);

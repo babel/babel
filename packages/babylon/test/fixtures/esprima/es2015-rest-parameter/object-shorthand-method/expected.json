@@ -89,7 +89,7 @@
             },
             "properties": [
               {
-                "type": "Property",
+                "type": "ObjectMethod",
                 "start": 6,
                 "end": 25,
                 "loc": {
@@ -121,79 +121,66 @@
                   },
                   "name": "method"
                 },
-                "kind": "init",
-                "value": {
-                  "type": "FunctionExpression",
-                  "start": 12,
-                  "end": 25,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 12
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "params": [
+                  {
+                    "type": "RestElement",
+                    "start": 13,
+                    "end": 20,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 20
+                      }
                     },
-                    "end": {
-                      "line": 1,
-                      "column": 25
-                    }
-                  },
-                  "id": null,
-                  "generator": false,
-                  "expression": false,
-                  "params": [
-                    {
-                      "type": "RestElement",
-                      "start": 13,
+                    "argument": {
+                      "type": "Identifier",
+                      "start": 16,
                       "end": 20,
                       "loc": {
                         "start": {
                           "line": 1,
-                          "column": 13
+                          "column": 16
                         },
                         "end": {
                           "line": 1,
                           "column": 20
                         }
                       },
-                      "argument": {
-                        "type": "Identifier",
-                        "start": 16,
-                        "end": 20,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 16
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 20
-                          }
-                        },
-                        "name": "test"
-                      }
+                      "name": "test"
                     }
-                  ],
-                  "body": {
-                    "type": "BlockStatement",
-                    "start": 22,
-                    "end": 25,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 22
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 25
-                      }
-                    },
-                    "body": []
                   }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 22,
+                  "end": 25,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 25
+                    }
+                  },
+                  "body": [],
+                  "directives": []
                 }
               }
             ]
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

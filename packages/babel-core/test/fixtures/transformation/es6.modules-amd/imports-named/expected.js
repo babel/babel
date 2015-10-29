@@ -1,5 +1,5 @@
-define(["exports", "foo"], function (exports, _foo) {
-    _foo.bar;
+define(["foo"], function (_foo) {
+  _foo.bar;
   _foo.bar2;
   _foo.baz;
   _foo.bar;

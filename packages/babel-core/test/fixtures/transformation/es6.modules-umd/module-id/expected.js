@@ -1,15 +1,15 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define("MyLib", ["exports"], factory);
+    define("MyLib", [], factory);
   } else if (typeof exports !== "undefined") {
-    factory(exports);
+    factory();
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports);
+    factory();
     global.MyLib = mod.exports;
   }
-})(this, function (exports) {
-    foobar();
+})(this, function () {
+  foobar();
 });

@@ -16,7 +16,7 @@ const pp = Parser.prototype;
 pp.parseTopLevel = function (file, program) {
   program.sourceType = this.options.sourceType;
 
-  this.parseBlockBody(program, true, tt.eof);
+  this.parseBlockBody(program, true, true, tt.eof);
 
   file.program  = this.finishNode(program, "Program");
   file.comments = this.state.comments;
@@ -30,11 +30,21 @@ const loopLabel = {kind: "loop"}, switchLabel = {kind: "switch"};
 // TODO
 
 pp.parseDirective = function () {
-  let node = this.startNode();
-  node.raw = this.input.slice(this.state.start, this.state.end);
-  node.value = node.raw.slice(1, -1); // remove quotes
+  let directiveLiteral = this.startNode();
+  let directive        = this.startNode();
+
+  let raw = this.input.slice(this.state.start, this.state.end);
+  let val = directiveLiteral.value = raw.slice(1, -1); // remove quotes
+
+  this.addExtra(directiveLiteral, "raw", raw);
+  this.addExtra(directiveLiteral, "rawValue", val);
+
   this.next();
-  return this.finishNode(node, "Directive");
+
+  directive.value = this.finishNode(directiveLiteral, "DirectiveLiteral");
+
+  this.semicolon();
+  return this.finishNode(directive, "Directive");
 };
 
 // Parse a single statement.
@@ -89,16 +99,18 @@ pp.parseStatement = function (declaration, topLevel) {
     case tt._export:
     case tt._import:
       if (!this.options.allowImportExportEverywhere) {
-        if (!topLevel)
+        if (!topLevel) {
           this.raise(this.state.start, "'import' and 'export' may only appear at the top level");
+        }
 
-        if (!this.inModule)
+        if (!this.inModule) {
           this.raise(this.state.start, "'import' and 'export' may appear only with 'sourceType: module'");
+        }
       }
       return starttype === tt._import ? this.parseImport(node) : this.parseExport(node);
 
     case tt.name:
-      if (this.hasFeature("asyncFunctions") && this.state.value === "async") {
+      if (this.hasPlugin("asyncFunctions") && this.state.value === "async") {
         // peek ahead and see if next token is a function
         let state = this.state.clone();
         this.next();
@@ -147,7 +159,7 @@ pp.parseDecorators = function (allowExport) {
 };
 
 pp.parseDecorator = function () {
-  if (!this.hasFeature("decorators")) {
+  if (!this.hasPlugin("decorators")) {
     this.unexpected();
   }
   let node = this.startNode();
@@ -171,7 +183,8 @@ pp.parseBreakContinueStatement = function (node, keyword) {
 
   // Verify that there is an actual destination to break or
   // continue to.
-  for (var i = 0; i < this.state.labels.length; ++i) {
+  let i;
+  for (i = 0; i < this.state.labels.length; ++i) {
     let lab = this.state.labels[i];
     if (node.label == null || lab.name === node.label.name) {
       if (lab.kind != null && (isBreak || lab.kind === "loop")) break;
@@ -288,7 +301,8 @@ pp.parseSwitchStatement = function (node) {
   // nodes. `cur` is used to keep the node that we are currently
   // adding statements to.
 
-  for (var cur, sawDefault; !this.match(tt.braceR); ) {
+  let cur;
+  for (let sawDefault; !this.match(tt.braceR); ) {
     if (this.match(tt._case) || this.match(tt._default)) {
       let isCase = this.match(tt._case);
       if (cur) this.finishNode(cur, "SwitchCase");
@@ -304,8 +318,11 @@ pp.parseSwitchStatement = function (node) {
       }
       this.expect(tt.colon);
     } else {
-      if (!cur) this.unexpected();
-      cur.consequent.push(this.parseStatement(true));
+      if (cur) {
+        cur.consequent.push(this.parseStatement(true));
+      } else {
+        this.unexpected();
+      }
     }
   }
   if (cur) this.finishNode(cur, "SwitchCase");
@@ -325,19 +342,23 @@ pp.parseThrowStatement = function (node) {
 
 // Reused empty array added for node fields that are always empty.
 
-var empty = [];
+let empty = [];
 
 pp.parseTryStatement = function (node) {
   this.next();
+
   node.block = this.parseBlock();
   node.handler = null;
+
   if (this.match(tt._catch)) {
     let clause = this.startNode();
     this.next();
+
     this.expect(tt.parenL);
     clause.param = this.parseBindingAtom();
     this.checkLVal(clause.param, true, Object.create(null));
     this.expect(tt.parenR);
+
     clause.body = this.parseBlock();
     node.handler = this.finishNode(clause, "CatchClause");
   }
@@ -416,35 +437,55 @@ pp.parseExpressionStatement = function (node, expr) {
 // strict"` declarations when `allowStrict` is true (used for
 // function bodies).
 
-pp.parseBlock = function (allowStrict) {
+pp.parseBlock = function (allowDirectives?) {
   let node = this.startNode();
   this.expect(tt.braceL);
-  this.parseBlockBody(node, allowStrict, tt.braceR);
+  this.parseBlockBody(node, allowDirectives, false, tt.braceR);
   return this.finishNode(node, "BlockStatement");
 };
 
 // TODO
 
-pp.parseBlockBody = function (node, allowStrict, end) {
+pp.parseBlockBody = function (node, allowDirectives, topLevel, end) {
   node.body = [];
   node.directives = [];
 
   let parsedNonDirective = false;
   let oldStrict;
+  let octalPosition;
 
   while (!this.eat(end)) {
-    if (!parsedNonDirective && this.match(tt.string)) {
-      let stmt = this.parseDirective();
-      node.directives.push(stmt);
+    if (allowDirectives && !parsedNonDirective && this.match(tt.string)) {
+      let oldState = this.state;
+      let lookahead = this.lookahead();
+      this.state = lookahead;
+      let isDirective = this.isLineTerminator();
+      this.state = oldState;
 
-      if (allowStrict && stmt.value === "use strict") {
-        oldStrict = this.state.strict;
-        this.setStrict(this.state.strict = true);
+      if (isDirective) {
+        if (this.state.containsOctal && !octalPosition) {
+          octalPosition = this.state.octalPosition;
+        }
+
+        let stmt = this.parseDirective();
+        node.directives.push(stmt);
+
+        if (allowDirectives && stmt.value.value === "use strict") {
+          oldStrict = this.state.strict;
+          this.state.strict = true;
+          this.setStrict(true);
+
+          if (octalPosition) {
+            this.raise(octalPosition, "Octal literal in strict mode");
+          }
+        }
+
+        continue;
       }
-    } else {
-      parsedNonDirective = true;
-      node.body.push(this.parseStatement(true));
     }
+
+    parsedNonDirective = true;
+    node.body.push(this.parseStatement(true, topLevel));
   }
 
   if (oldStrict === false) {
@@ -514,25 +555,39 @@ pp.parseVarHead = function (decl) {
 // `isStatement` parameter).
 
 pp.parseFunction = function (node, isStatement, allowExpressionBody, isAsync, optionalId) {
-  this.initFunction(node, isAsync);
-  node.generator = this.eat(tt.star);
+  let oldInMethod = this.state.inMethod;
+  this.state.inMethod = false;
 
-  if (isStatement && !optionalId && !this.match(tt.name)) {
+  this.initFunction(node, isAsync);
+
+  if (this.match(tt.star)) {
+    if (node.async && !this.hasPlugin("asyncGenerators")) {
+      this.unexpected();
+    } else {
+      node.generator = true;
+      this.next();
+    }
+  }
+
+  if (isStatement && !optionalId && !this.match(tt.name) && !this.match(tt._yield)) {
     this.unexpected();
   }
 
-  if (this.match(tt.name)) {
-    node.id = this.parseIdentifier();
+  if (this.match(tt.name) || this.match(tt._yield)) {
+    node.id = this.parseBindingIdentifier();
   }
 
   this.parseFunctionParams(node);
   this.parseFunctionBody(node, allowExpressionBody);
+
+  this.state.inMethod = oldInMethod;
+
   return this.finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
 };
 
 pp.parseFunctionParams = function (node) {
   this.expect(tt.parenL);
-  node.params = this.parseBindingList(tt.parenR, false, this.hasFeature("trailingFunctionCommas"));
+  node.params = this.parseBindingList(tt.parenR, false, this.hasPlugin("trailingFunctionCommas"));
 };
 
 // Parse a class declaration or literal (depending on the
@@ -542,51 +597,99 @@ pp.parseClass = function (node, isStatement, optionalId) {
   this.next();
   this.parseClassId(node, isStatement, optionalId);
   this.parseClassSuper(node);
-  var classBody = this.startNode();
+  this.parseClassBody(node);
+  return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
+};
+
+pp.isClassProperty = function () {
+  return this.match(tt.eq) || this.isLineTerminator();
+};
+
+pp.parseClassBody = function (node) {
+  // class bodies are implicitly strict
+  let oldStrict = this.state.strict;
+  this.state.strict = true;
+
+  let hadConstructorCall = false;
   let hadConstructor = false;
-  classBody.body = [];
-  this.expect(tt.braceL);
   let decorators = [];
+  let classBody = this.startNode();
+
+  classBody.body = [];
+
+  this.expect(tt.braceL);
+
   while (!this.eat(tt.braceR)) {
-    if (this.eat(tt.semi)) continue;
+    if (this.eat(tt.semi)) {
+      continue;
+    }
+
     if (this.match(tt.at)) {
       decorators.push(this.parseDecorator());
       continue;
     }
-    var method = this.startNode();
+
+    let method = this.startNode();
+
+    // steal the decorators if there are any
     if (decorators.length) {
       method.decorators = decorators;
       decorators = [];
     }
+
+    let isConstructorCall = false;
     let isMaybeStatic = this.match(tt.name) && this.state.value === "static";
-    var isGenerator = this.eat(tt.star), isAsync = false;
+    let isGenerator = this.eat(tt.star);
+    let isGetSet = false;
+    let isAsync = false;
+
     this.parsePropertyName(method);
+
     method.static = isMaybeStatic && !this.match(tt.parenL);
     if (method.static) {
       if (isGenerator) this.unexpected();
       isGenerator = this.eat(tt.star);
       this.parsePropertyName(method);
     }
-    if (!isGenerator && method.key.type === "Identifier" && !method.computed && this.isClassProperty()) {
-      classBody.body.push(this.parseClassProperty(method));
-      continue;
+
+    if (!isGenerator && method.key.type === "Identifier" && !method.computed) {
+      if (this.isClassProperty()) {
+        classBody.body.push(this.parseClassProperty(method));
+        continue;
+      }
+
+      if (this.hasPlugin("classConstructorCall") && method.key.name === "call" && this.match(tt.name) && this.state.value === "constructor") {
+        isConstructorCall = true;
+        this.parsePropertyName(method);
+      }
     }
-    if (this.hasFeature("asyncFunctions") && !this.match(tt.parenL) &&
-        !method.computed && method.key.type === "Identifier" && method.key.name === "async") {
+
+    let isAsyncMethod = this.hasPlugin("asyncFunctions") && !this.match(tt.parenL) && !method.computed && method.key.type === "Identifier" && method.key.name === "async";
+    if (isAsyncMethod) {
+      if (this.hasPlugin("asyncGenerators") && this.eat(tt.star)) isGenerator = true;
       isAsync = true;
       this.parsePropertyName(method);
     }
-    let isGetSet = false;
+
     method.kind = "method";
+
     if (!method.computed) {
-      let {key} = method;
+      let { key } = method;
+
+      // handle get/set methods
+      // eg. class Foo { get bar() {} set bar() {} }
       if (!isAsync && !isGenerator && key.type === "Identifier" && !this.match(tt.parenL) && (key.name === "get" || key.name === "set")) {
         isGetSet = true;
         method.kind = key.name;
         key = this.parsePropertyName(method);
       }
-      if (!method.static && (key.type === "Identifier" && key.name === "constructor" ||
-          key.type === "StringLiteral" && key.value === "constructor")) {
+
+      // disallow invalid constructors
+      let isConstructor = !isConstructorCall && !method.static && (
+        (key.type === "Identifier" && key.name === "constructor") ||
+        (key.type === "StringLiteral" && key.value === "constructor")
+      );
+      if (isConstructor) {
         if (hadConstructor) this.raise(key.start, "Duplicate constructor in the same class");
         if (isGetSet) this.raise(key.start, "Constructor can't have get/set modifier");
         if (isGenerator) this.raise(key.start, "Constructor can't be a generator");
@@ -594,15 +697,37 @@ pp.parseClass = function (node, isStatement, optionalId) {
         method.kind = "constructor";
         hadConstructor = true;
       }
+
+      // disallow static prototype method
+      let isStaticPrototype = method.static && (
+        (key.type === "Identifier" && key.name === "prototype") ||
+        (key.type === "StringLiteral" && key.value === "prototype")
+      );
+      if (isStaticPrototype) {
+        this.raise(key.start, "Classes may not have static property named prototype");
+      }
     }
-    if (method.kind === "constructor" && method.decorators) {
+
+    // convert constructor to a constructor call
+    if (isConstructorCall) {
+      if (hadConstructorCall) this.raise(method.start, "Duplicate constructor call in the same class");
+      method.kind = "constructorCall";
+      hadConstructorCall = true;
+    }
+
+      // disallow decorators on class constructors
+    if ((method.kind === "constructor" || method.kind === "constructorCall") && method.decorators) {
       this.raise(method.start, "You can't attach decorators to a class constructor");
     }
+
     this.parseClassMethod(classBody, method, isGenerator, isAsync);
+
+    // get methods aren't allowed to have any parameters
+    // set methods must have exactly 1 parameter
     if (isGetSet) {
       let paramCount = method.kind === "get" ? 0 : 1;
-      if (method.value.params.length !== paramCount) {
-        let start = method.value.start;
+      if (method.params.length !== paramCount) {
+        let start = method.start;
         if (method.kind === "get") {
           this.raise(start, "getter should have no params");
         } else {
@@ -617,16 +742,13 @@ pp.parseClass = function (node, isStatement, optionalId) {
   }
 
   node.body = this.finishNode(classBody, "ClassBody");
-  return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
-};
 
-pp.isClassProperty = function () {
-  return this.match(tt.eq) || (this.match(tt.semi) || this.canInsertSemicolon());
+  this.state.strict = oldStrict;
 };
 
 pp.parseClassProperty = function (node) {
   if (this.match(tt.eq)) {
-    if (!this.hasFeature("classProperties")) this.unexpected();
+    if (!this.hasPlugin("classProperties")) this.unexpected();
     this.next();
     node.value = this.parseMaybeAssign();
   } else {
@@ -637,8 +759,8 @@ pp.parseClassProperty = function (node) {
 };
 
 pp.parseClassMethod = function (classBody, method, isGenerator, isAsync) {
-  method.value = this.parseMethod(isGenerator, isAsync);
-  classBody.body.push(this.finishNode(method, "MethodDefinition"));
+  this.parseMethod(method, isGenerator, isAsync);
+  classBody.body.push(this.finishNode(method, "ClassMethod"));
 };
 
 pp.parseClassId = function (node, isStatement, optionalId) {
@@ -665,7 +787,7 @@ pp.parseExport = function (node) {
   if (this.match(tt.star)) {
     let specifier = this.startNode();
     this.next();
-    if (this.hasFeature("exportExtensions") && this.eatContextual("as")) {
+    if (this.hasPlugin("exportExtensions") && this.eatContextual("as")) {
       specifier.exported = this.parseIdentifier();
       node.specifiers = [this.finishNode(specifier, "ExportNamespaceSpecifier")];
       this.parseExportSpecifiersMaybe(node);
@@ -674,7 +796,7 @@ pp.parseExport = function (node) {
       this.parseExportFrom(node, true);
       return this.finishNode(node, "ExportAllDeclaration");
     }
-  } else if (this.hasFeature("exportExtensions") && this.isExportDefaultSpecifier()) {
+  } else if (this.hasPlugin("exportExtensions") && this.isExportDefaultSpecifier()) {
     let specifier = this.startNode();
     specifier.exported = this.parseIdentifier(true);
     node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
@@ -730,7 +852,7 @@ pp.isExportDefaultSpecifier = function () {
     return false;
   }
 
-  var lookahead = this.lookahead();
+  let lookahead = this.lookahead();
   return lookahead.type === tt.comma || (lookahead.type === tt.name && lookahead.value === "from");
 };
 
@@ -756,12 +878,12 @@ pp.parseExportFrom = function (node, expect?) {
 };
 
 pp.shouldParseExportDeclaration = function () {
-  return this.hasFeature("asyncFunctions") && this.isContextual("async");
+  return this.hasPlugin("asyncFunctions") && this.isContextual("async");
 };
 
 pp.checkExport = function (node) {
   if (this.state.decorators.length) {
-    var isClass = node.declaration && (node.declaration.type === "ClassDeclaration" || node.declaration.type === "ClassExpression");
+    let isClass = node.declaration && (node.declaration.type === "ClassDeclaration" || node.declaration.type === "ClassExpression");
     if (!node.declaration || !isClass) {
       this.raise(node.start, "You can only use decorators on an export when exporting a class");
     }
@@ -826,10 +948,10 @@ pp.parseImport = function (node) {
 // Parses a comma-separated list of module imports.
 
 pp.parseImportSpecifiers = function (node) {
-  var first = true;
+  let first = true;
   if (this.match(tt.name)) {
     // import defaultObj, { x, y as z } from '...'
-    var startPos = this.state.start, startLoc = this.state.startLoc;
+    let startPos = this.state.start, startLoc = this.state.startLoc;
     node.specifiers.push(this.parseImportSpecifierDefault(this.parseIdentifier(), startPos, startLoc));
     if (!this.eat(tt.comma)) return;
   }
@@ -862,7 +984,7 @@ pp.parseImportSpecifiers = function (node) {
 };
 
 pp.parseImportSpecifierDefault = function (id, startPos, startLoc) {
-  var node = this.startNodeAt(startPos, startLoc);
+  let node = this.startNodeAt(startPos, startLoc);
   node.local = id;
   this.checkLVal(node.local, true);
   return this.finishNode(node, "ImportDefaultSpecifier");

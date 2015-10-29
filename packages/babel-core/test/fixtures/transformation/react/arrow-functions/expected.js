@@ -1,4 +1,4 @@
-var foo = function foo() {
+var foo = function () {
   var _this = this;
 
   return function () {
@@ -6,7 +6,7 @@ var foo = function foo() {
   };
 };
 
-var bar = function bar() {
+var bar = function () {
   var _this2 = this;
 
   return function () {

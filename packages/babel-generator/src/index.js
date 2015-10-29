@@ -39,6 +39,7 @@ export class CodeGenerator extends Printer {
     shouldPrintComment: boolean;
     retainLines: boolean;
     comments: boolean;
+    auxiliaryComment: string;
     compact: boolean | "auto";
     quotes: "single" | "double";
     concise: boolean;
@@ -49,6 +50,7 @@ export class CodeGenerator extends Printer {
     }
   };
 
+  auxiliaryComment: string;
   whitespace: Whitespace;
   position: Position;
   map: SourceMap;
@@ -72,6 +74,7 @@ export class CodeGenerator extends Printer {
     }
 
     let format = {
+      auxiliaryComment: opts.auxiliaryComment,
       shouldPrintComment: opts.shouldPrintComment,
       retainLines: opts.retainLines,
       comments: opts.comments == null || opts.comments,

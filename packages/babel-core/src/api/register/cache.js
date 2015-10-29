@@ -1,3 +1,5 @@
+/* @flow */
+
 import path from "path";
 import fs from "fs";
 import homeOrTmp from "home-or-tmp";

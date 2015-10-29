@@ -37,7 +37,7 @@ export default class Renamer {
   binding: Binding;
 
   maybeConvertFromExportDeclaration(parentDeclar) {
-    let exportDeclar = parentDeclar && parentDeclar.parentPath.isExportDeclaration() && parentDeclar.parentPath;
+    let exportDeclar = parentDeclar.parentPath.isExportDeclaration() && parentDeclar.parentPath;
     if (!exportDeclar) return;
 
     // build specifiers that point back to this export declaration
@@ -63,6 +63,8 @@ export default class Renamer {
   }
 
   maybeConvertFromClassFunctionDeclaration(path) {
+    return; // TODO
+
     // retain the `name` of a class/function declaration
 
     if (!path.isFunctionDeclaration() && !path.isClassDeclaration()) return;
@@ -77,6 +79,8 @@ export default class Renamer {
   }
 
   maybeConvertFromClassFunctionExpression(path) {
+    return; // TODO
+    
     // retain the `name` of a class/function expression
 
     if (!path.isFunctionExpression() && !path.isClassExpression()) return;
@@ -96,7 +100,9 @@ export default class Renamer {
     let { scope, path } = binding;
 
     let parentDeclar = path.find((path) => path.isDeclaration() || path.isFunctionExpression());
-    this.maybeConvertFromExportDeclaration(parentDeclar);
+    if (parentDeclar) {
+      this.maybeConvertFromExportDeclaration(parentDeclar);
+    }
 
     scope.traverse(block || scope.block, renameVisitor, this);
 
@@ -111,7 +117,9 @@ export default class Renamer {
       // todo: hoist and convert function to a let
     }
 
-    this.maybeConvertFromClassFunctionDeclaration(parentDeclar);
-    this.maybeConvertFromClassFunctionExpression(parentDeclar);
+    if (parentDeclar) {
+      this.maybeConvertFromClassFunctionDeclaration(parentDeclar);
+      this.maybeConvertFromClassFunctionExpression(parentDeclar);
+    }
   }
 }

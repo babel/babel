@@ -1,7 +1,7 @@
-var _bar;
-
-var foo = _bar = babelHelpers.asyncToGenerator(function* () {
-  console.log(_bar);
-});
+var foo = function () {
+  return babelHelpers.asyncToGenerator(function* bar() {
+    console.log(bar);
+  })();
+};
 
 foo();

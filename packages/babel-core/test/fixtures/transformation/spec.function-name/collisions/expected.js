@@ -1,13 +1,9 @@
 var obj = {
-  search: function search(_ref) {
-    var _search = _ref.search;
-
+  search: function search({ search: _search }) {
     console.log(_search);
   }
 };
 
-function search(_ref2) {
-  var search = _ref2.search;
-
+function search({ search }) {
   console.log(search);
 }

@@ -6,7 +6,7 @@ export default function ({ types: t }) {
           path.replaceWith(t.valueToNode(process.env.NODE_ENV));
 
           if (path.parentPath.isBinaryExpression()) {
-            var evaluated = path.parentPath.evaluate();
+            let evaluated = path.parentPath.evaluate();
             if (evaluated.confident) {
               path.parentPath.replaceWith(t.valueToNode(evaluated.value));
             }

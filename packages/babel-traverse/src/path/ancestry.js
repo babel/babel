@@ -1,3 +1,5 @@
+/* @flow */
+
 // This file contains that retrieve or validate anything related to the current paths ancestry.
 
 import * as t from "babel-types";
@@ -9,10 +11,22 @@ import NodePath from "./index";
  */
 
 export function findParent(callback) {
-  var path = this;
+  let path = this;
   while (path = path.parentPath) {
     if (callback(path)) return path;
   }
+  return null;
+}
+
+/**
+ * Description
+ */
+
+export function find(callback) {
+  let path = this;
+  do {
+    if (callback(path)) return path;
+  } while (path = path.parentPath);
   return null;
 }
 
@@ -29,7 +43,7 @@ export function getFunctionParent() {
  */
 
 export function getStatementParent() {
-  var path = this;
+  let path = this;
   do {
     if (Array.isArray(path.container)) {
       return path;
@@ -47,11 +61,11 @@ export function getStatementParent() {
 
 export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath {
   return this.getDeepestCommonAncestorFrom(paths, function (deepest, i, ancestries) {
-    var earliest;
-    var keys = t.VISITOR_KEYS[deepest.type];
+    let earliest;
+    let keys = t.VISITOR_KEYS[deepest.type];
 
-    for (var ancestry of (ancestries: Array)) {
-      var path = ancestry[i + 1];
+    for (let ancestry of (ancestries: Array)) {
+      let path = ancestry[i + 1];
 
       // first path
       if (!earliest) {
@@ -69,8 +83,8 @@ export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath 
       }
 
       // handle keys
-      var earliestKeyIndex = keys.indexOf(earliest.parentKey);
-      var currentKeyIndex = keys.indexOf(path.parentKey);
+      let earliestKeyIndex = keys.indexOf(earliest.parentKey);
+      let currentKeyIndex = keys.indexOf(path.parentKey);
       if (earliestKeyIndex > currentKeyIndex) {
         // key appears before so it's earlier
         earliest = path;
@@ -97,14 +111,14 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
   }
 
   // minimum depth of the tree so we know the highest node
-  var minDepth = Infinity;
+  let minDepth = Infinity;
 
   // last common ancestor
-  var lastCommonIndex, lastCommon;
+  let lastCommonIndex, lastCommon;
 
   // get the ancestors of the path, breaking when the parent exceeds ourselves
-  var ancestries = paths.map((path) => {
-    var ancestry = [];
+  let ancestries = paths.map((path) => {
+    let ancestry = [];
 
     do {
       ancestry.unshift(path);
@@ -119,13 +133,13 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
   });
 
   // get the first ancestry so we have a seed to assess all other ancestries with
-  var first = ancestries[0];
+  let first = ancestries[0];
 
   // check ancestor equality
-  depthLoop: for (var i = 0; i < minDepth; i++) {
-    var shouldMatch = first[i];
+  depthLoop: for (let i = 0; i < minDepth; i++) {
+    let shouldMatch = first[i];
 
-    for (var ancestry of (ancestries: Array)) {
+    for (let ancestry of (ancestries: Array)) {
       if (ancestry[i] !== shouldMatch) {
         // we've hit a snag
         break depthLoop;
@@ -155,8 +169,8 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
  */
 
 export function getAncestry() {
-  var path = this;
-  var paths = [];
+  let path = this;
+  let paths = [];
   do {
     paths.push(path);
   } while(path = path.parentPath);
@@ -164,9 +178,9 @@ export function getAncestry() {
 }
 
 export function inType() {
-  var path = this;
+  let path = this;
   while (path) {
-    for (var type of (arguments: Array)) {
+    for (let type of (arguments: Array)) {
       if (path.node.type === type) return true;
     }
     path = path.parentPath;
@@ -180,10 +194,10 @@ export function inType() {
  */
 
 export function inShadow(key?) {
-  var path = this;
+  let path = this;
   do {
     if (path.isFunction()) {
-      var shadow = path.node.shadow;
+      let shadow = path.node.shadow;
       if (shadow) {
         // this is because sometimes we may have a `shadow` value of:
         //

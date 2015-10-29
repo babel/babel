@@ -2,15 +2,13 @@ import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
 
 export default function () {
   return {
-    manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push("asyncFunctions");
-    },
+    inherits: require("babel-plugin-syntax-async-functions"),
 
     visitor: {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
 
-        remapAsyncToGenerator(path, state.addHelper("async-to-generator"));
+        remapAsyncToGenerator(path, state.addHelper("asyncToGenerator"));
       }
     }
   };

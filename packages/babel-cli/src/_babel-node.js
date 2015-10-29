@@ -15,10 +15,11 @@ let program = new commander.Command("babel-node");
 
 program.option("-e, --eval [script]", "Evaluate script");
 program.option("-p, --print [code]", "Evaluate script and print result");
-program.option("-i, --ignore [regex]", "Ignore all files that match this regex when using the require hook");
+program.option("-o, --only [globs]", "");
+program.option("-i, --ignore [globs]", "");
 program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]");
-program.option("-w, --plugins [string]", "TODO", util.list);
-program.option("-b, --presets [string]", "TODO", util.list);
+program.option("-w, --plugins [string]", "", util.list);
+program.option("-b, --presets [string]", "", util.list);
 
 let pkg = require("../package.json");
 program.version(pkg.version);
@@ -28,24 +29,24 @@ program.parse(process.argv);
 //
 
 register({
-  extensions:   program.extensions,
-  optional:     program.optional,
-  ignore:       program.ignore,
-  plugins:      program.plugins,
-  presets:      program.presets,
+  extensions: program.extensions,
+  ignore:     program.ignore,
+  only:       program.only,
+  plugins:    program.plugins,
+  presets:    program.presets,
 });
 
 //
 
-let replPlugin = new babel.Plugin("repl", {
+let replPlugin = () => ({
   visitor: {
-    ModuleDeclaration() {
-      throw this.errorWithNode("Modules aren't supported in the REPL");
+    ModuleDeclaration(path) {
+      throw path.buildCodeFrameError("Modules aren't supported in the REPL");
     },
 
-    VariableDeclaration(node) {
-      if (node.kind !== "var") {
-        throw this.errorWithNode("Only `var` variables are supported in the REPL");
+    VariableDeclaration(path) {
+      if (path.node.kind !== "var") {
+        throw path.buildCodeFrameError("Only `var` variables are supported in the REPL");
       }
     }
   }
@@ -59,11 +60,8 @@ let _eval = function (code, filename) {
 
   code = babel.transform(code, {
     filename: filename,
-    blacklist: program.blacklist,
-    whitelist: program.whitelist,
-    optional: program.optional,
-    stage: program.stage,
-    plugins: [replPlugin]
+    presets: program.presets,
+    plugins: (program.plugins || []).concat([replPlugin])
   }).code;
 
   return vm.runInThisContext(code, {

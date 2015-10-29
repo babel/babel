@@ -1,0 +1,16 @@
+{
+  "name": "babel-plugin-transform-es2015-modules-systemjs",
+  "version": "1.0.0",
+  "description": "",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "dependencies": {
+    "babel-template": "^5.0.0",
+    "babel-helper-hoist-variables": "^5.0.0",
+    "babel-runtime": "^5.8.20"
+  },
+  "keywords": [
+    "babel-plugin"
+  ]
+}

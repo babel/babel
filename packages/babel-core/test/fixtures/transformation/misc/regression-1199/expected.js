@@ -1,4 +1,4 @@
-var bug = 1;
+const bug = 1;
 
 function foo() {}
 

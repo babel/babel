@@ -1,0 +1,16 @@
+{
+  "name": "babel-helper-fixtures",
+  "version": "1.0.9",
+  "description": "",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "license": "MIT",
+  "repository": "babel/babel",
+  "main": "lib/index.js",
+  "dependencies": {
+    "babel-runtime": "^5.8.20",
+    "lodash": "^3.10.0",
+    "path-exists": "^1.0.0",
+    "trim-right": "^1.0.1",
+    "try-resolve": "^1.0.0"
+  }
+}

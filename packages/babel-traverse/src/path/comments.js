@@ -1,3 +1,5 @@
+/* @flow */
+
 // This file contains methods responsible for dealing with comments.
 
 /**
@@ -5,15 +7,15 @@
  */
 
 export function shareCommentsWithSiblings() {
-  var node = this.node;
+  let node = this.node;
   if (!node) return;
 
-  var trailing = node.trailingComments;
-  var leading  = node.leadingComments;
+  let trailing = node.trailingComments;
+  let leading  = node.leadingComments;
   if (!trailing && !leading) return;
 
-  var prev = this.getSibling(this.key - 1);
-  var next = this.getSibling(this.key + 1);
+  let prev = this.getSibling(this.key - 1);
+  let next = this.getSibling(this.key + 1);
 
   if (!prev.node) prev = next;
   if (!next.node) next = prev;
@@ -36,10 +38,10 @@ export function addComment(type, content, line?) {
 export function addComments(type: string, comments: Array) {
   if (!comments) return;
 
-  var node = this.node;
+  let node = this.node;
   if (!node) return;
 
-  var key = `${type}Comments`;
+  let key = `${type}Comments`;
 
   if (node[key]) {
     node[key] = node[key].concat(comments);

@@ -2,13 +2,12 @@ var Foo = (function (_Bar) {
   babelHelpers.inherits(Foo, _Bar);
 
   function Foo() {
+    var _this;
+
     babelHelpers.classCallCheck(this, Foo);
-
-    babelHelpers.get(Object.getPrototypeOf(Foo.prototype), "constructor", this).call(this, function () {
+    return _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Foo).call(this, () => {
       _this.test;
-    });
-
-    var _this = this;
+    }));
   }
 
   return Foo;

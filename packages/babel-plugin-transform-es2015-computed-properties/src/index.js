@@ -1,45 +1,50 @@
 export default function ({ types: t }) {
-  function loose(node, body, objId) {
-    for (var prop of (node.properties: Array)) {
-      body.push(t.expressionStatement(
-        t.assignmentExpression(
-          "=",
-          t.memberExpression(objId, prop.key, prop.computed || t.isLiteral(prop.key)),
-          prop.value
-        )
-      ));
+  function getValue(prop) {
+    if (t.isObjectProperty(prop)) {
+      return prop.value;
+    } else if (t.isObjectMethod(prop)) {
+      return t.functionExpression(null, prop.params, prop.body, prop.generator, prop.async);
     }
   }
 
-  function spec(node, body, objId, initProps, file) {
-    // add a simple assignment for all Symbol member expressions due to symbol polyfill limitations
-    // otherwise use Object.defineProperty
+  function pushAssign(objId, prop, body) {
+    body.push(t.expressionStatement(
+      t.assignmentExpression(
+        "=",
+        t.memberExpression(objId, prop.key, prop.computed || t.isLiteral(prop.key)),
+        getValue(prop)
+      )
+    ));
+  }
 
-    for (let prop of (node.properties: Array)) {
-      // this wont work with Object.defineProperty
-      if (t.isLiteral(t.toComputedKey(prop), { value: "__proto__" })) {
-        initProps.push(prop);
-        continue;
-      }
-
-      let key = prop.key;
-      if (t.isIdentifier(key) && !prop.computed) {
-        key = t.stringLiteral(key.name);
-      }
-
-      var bodyNode = t.callExpression(file.addHelper("define-property"), [objId, key, prop.value]);
-
-      body.push(t.expressionStatement(bodyNode));
+  function loose(objId, body, computedProps: Array<Object>) {
+    for (let prop of computedProps) {
+      pushAssign(objId, prop, body);
     }
+  }
 
-    // only one node and it's a Object.defineProperty that returns the object
+  function spec(objId, body, computedProps: Array<Object>, initPropExpression, state) {
+    for (let prop of computedProps) {
+      let key = t.toComputedKey(prop);
 
-    if (body.length === 1) {
-      var first = body[0].expression;
-
-      if (t.isCallExpression(first)) {
-        first.arguments[0] = t.objectExpression(initProps);
-        return first;
+      if (t.isStringLiteral(key, { value: "__proto__" })) {
+        pushAssign(objId, prop, body);
+      } else {
+        if (computedProps.length === 1) {
+          return t.callExpression(state.addHelper("defineProperty"), [
+            initPropExpression,
+            key,
+            getValue(prop)
+          ]);
+        } else {
+          body.push(t.expressionStatement(
+            t.callExpression(state.addHelper("defineProperty"), [
+              objId,
+              key,
+              getValue(prop)
+            ])
+          ));
+        }
       }
     }
   }
@@ -47,51 +52,52 @@ export default function ({ types: t }) {
   return {
     visitor: {
       ObjectExpression: {
-        exit({ node, scope, parent }, file) {
-          var hasComputed = false;
-
-          for (let prop of (node.properties: Array)) {
-            hasComputed = t.isProperty(prop, { computed: true, kind: "init" });
+        exit(path, state) {
+          let { node, parent } = path;
+          let hasComputed = false;
+          for (let prop of (node.properties: Array<Object>)) {
+            hasComputed = prop.kind !== "get" && prop.kind !== "set" && prop.computed === true;
             if (hasComputed) break;
           }
-
           if (!hasComputed) return;
 
           // put all getters/setters into the first object expression as well as all initialisers up
           // to the first computed property
 
-          var initProps = [];
-          var stopInits = false;
+          let initProps = [];
+          let computedProps = [];
+          let foundComputed = false;
 
-          node.properties = node.properties.filter(function (prop) {
+          for (let prop of node.properties) {
             if (prop.computed) {
-              stopInits = true;
+              foundComputed = true;
             }
 
-            if (prop.kind !== "init" || !stopInits) {
-              initProps.push(prop);
-              return false;
+            if (foundComputed && prop.kind !== "get" && prop.kind !== "set") {
+              computedProps.push(prop);
             } else {
-              return true;
+              initProps.push(prop);
             }
-          });
+          }
 
-          var objId = scope.generateUidIdentifierBasedOnNode(parent);
-          var body = [];
+          let objId = path.scope.generateUidIdentifierBasedOnNode(parent);
+          let initPropExpression = t.objectExpression(initProps);
+          let body = [];
 
-          var callback = spec;
-          if (file.isLoose("es6.properties.computed")) callback = loose;
-
-          var result = callback(node, body, objId, initProps, file);
-          if (result) return result;
-
-          body.unshift(t.variableDeclaration("var", [
-            t.variableDeclarator(objId, t.objectExpression(initProps))
+          body.push(t.variableDeclaration("var", [
+            t.variableDeclarator(objId, initPropExpression)
           ]));
 
-          body.push(t.expressionStatement(objId));
+          let callback = spec;
+          if (state.opts.loose) callback = loose;
 
-          return body;
+          let single = callback(objId, body, computedProps, initPropExpression, state);
+          if (single) {
+            path.replaceWith(single);
+          } else {
+            body.push(t.expressionStatement(objId));
+            path.replaceWithMultiple(body);
+          }
         }
       }
     }

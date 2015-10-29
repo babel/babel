@@ -8,20 +8,23 @@ export default function ({ types: t }) {
   }
 
   return {
-    pre(file) {
-      file.set("helperGenerator", function (name) {
-        return file.addImport(`${RUNTIME_MODULE_NAME}/helpers/${name}`, name, "absoluteDefault");
+    pre(file, state) {
+      state.set("helperGenerator", function (name) {
+        return state.addImport(`${RUNTIME_MODULE_NAME}/helpers/${name}`, "default", name);
       });
 
-      file.setDynamic("regeneratorIdentifier", function () {
-        return file.addImport(`${RUNTIME_MODULE_NAME}/regenerator`, "regeneratorRuntime", "absoluteDefault");
+      state.setDynamic("regeneratorIdentifier", function () {
+        return state.addImport(`${RUNTIME_MODULE_NAME}/regenerator`, "default", "regeneratorRuntime");
       });
     },
 
     visitor: {
-      ReferencedIdentifier({ node, parent, scope }, file) {
+      ReferencedIdentifier(path, state) {
+        let { node, parent, scope } = path;
+
         if (node.name === "regeneratorRuntime") {
-          return file.get("regeneratorIdentifier");
+          path.replaceWith(state.get("regeneratorIdentifier"));
+          return;
         }
 
         if (t.isMemberExpression(parent)) return;
@@ -29,56 +32,65 @@ export default function ({ types: t }) {
         if (scope.getBindingIdentifier(node.name)) return;
 
         // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
-        var modulePath = definitions.builtins[node.name];
-        return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, node.name, "absoluteDefault");
+        path.replaceWith(state.addImport(
+          `${RUNTIME_MODULE_NAME}/core-js/${definitions.builtins[node.name]}`,
+          "default",
+          node.name
+        ));
       },
 
-      CallExpression(path, file) {
+      CallExpression(path, state) {
         // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
 
         // we can't compile this
         if (path.node.arguments.length) return;
 
-        var callee = path.node.callee;
+        let callee = path.node.callee;
         if (!t.isMemberExpression(callee)) return;
         if (!callee.computed) return;
         if (!path.get("callee.property").matchesPattern("Symbol.iterator")) return;
 
-        return t.callExpression(
-          file.addImport(`${RUNTIME_MODULE_NAME}/core-js/get-iterator`, "getIterator", "absoluteDefault"),
+        path.replaceWith(t.callExpression(
+          state.addImport(
+            `${RUNTIME_MODULE_NAME}/core-js/get-iterator`,
+            "default",
+            "getIterator"
+          ),
           [callee.object]
-        );
+        ));
       },
 
-      BinaryExpression(path, file) {
+      BinaryExpression(path, state) {
         // Symbol.iterator in arr -> core.$for.isIterable(arr)
 
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
 
-        return t.callExpression(
-          file.addImport(`${RUNTIME_MODULE_NAME}/core-js/is-iterable`, "isIterable", "absoluteDefault"),
+        path.replaceWith(t.callExpression(
+          state.addImport(
+            `${RUNTIME_MODULE_NAME}/core-js/is-iterable`,
+            "default",
+            "isIterable"
+          ),
           [path.node.right]
-        );
+        ));
       },
 
       MemberExpression: {
-        enter(path, file) {
-          // Array.from -> _core.Array.from
-
+        enter(path, state) {
           if (!path.isReferenced()) return;
 
-          var { node } = path;
-          var obj = node.object;
-          var prop = node.property;
+          // Array.from -> _core.Array.from
+
+          let { node } = path;
+          let obj = node.object;
+          let prop = node.property;
 
           if (!t.isReferenced(obj, node)) return;
-
           if (node.computed) return;
-
           if (!has(definitions.methods, obj.name)) return;
 
-          var methods = definitions.methods[obj.name];
+          let methods = definitions.methods[obj.name];
           if (!has(methods, prop.name)) return;
 
           // doesn't reference the global
@@ -86,28 +98,35 @@ export default function ({ types: t }) {
 
           // special case Object.defineProperty to not use core-js when using string keys
           if (obj.name === "Object" && prop.name === "defineProperty" && path.parentPath.isCallExpression()) {
-            var call = path.parentPath.node;
+            let call = path.parentPath.node;
             if (call.arguments.length === 3 && t.isLiteral(call.arguments[1])) return;
           }
 
-          var modulePath = methods[prop.name];
-          return file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, `${obj.name}$${prop.name}`, "absoluteDefault");
+          path.replaceWith(state.addImport(
+            `${RUNTIME_MODULE_NAME}/core-js/${methods[prop.name]}`,
+            "default",
+            `${obj.name}$${prop.name}`
+          ));
         },
 
-        exit(path, file) {
+        exit(path, state) {
           if (!path.isReferenced()) return;
 
-          var prop = path.node.property;
-          var obj  = path.node.object;
+          let { node } = path;
+          let obj = node.object;
 
           if (!has(definitions.builtins, obj.name)) return;
           if (path.scope.getBindingIdentifier(obj.name)) return;
 
-          var modulePath = definitions.builtins[obj.name];
-          return t.memberExpression(
-            file.addImport(`${RUNTIME_MODULE_NAME}/core-js/${modulePath}`, `${obj.name}`, "absoluteDefault"),
-            prop
-          );
+          path.replaceWith(t.memberExpression(
+            state.addImport(
+              `${RUNTIME_MODULE_NAME}/core-js/${definitions.builtins[obj.name]}`,
+              "default",
+              obj.name
+            ),
+            node.property,
+            node.computed
+          ));
         }
       }
     }

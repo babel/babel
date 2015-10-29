@@ -1,0 +1,16 @@
+{
+  "name": "babel-plugin-transform-class-construtor-call",
+  "version": "1.0.0",
+  "description": "",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "babel-template": "^5.0.0",
+    "babel-plugin-syntax-class-constructor-call": "^5.0.0",
+    "babel-runtime": "^5.8.20"
+  }
+}

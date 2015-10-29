@@ -11,6 +11,7 @@ export function normaliseOptions(options: Object = {}): Object {
     if (val == null) continue;
 
     let opt = config[key];
+    if (opt && opt.alias) opt = config[opt.alias];
     if (!opt) continue;
 
     let parser = parsers[opt.type];

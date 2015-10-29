@@ -1,3 +1,5 @@
+/* @flow */
+
 import * as util from "util";
 
 /**
@@ -7,7 +9,6 @@ import * as util from "util";
 
 export const MESSAGES = {
   tailCallReassignmentDeopt: "Function reference has been reassigned, so it will probably be dereferenced, therefore we can't optimise this with confidence",
-  JSXNamespacedTags: "Namespace tags are not supported. ReactJSX is not XML.",
   classesIllegalBareSuper: "Illegal use of bare super",
   classesIllegalSuperCall: "Direct super call is illegal in non-constructor, use super.$1() instead",
   scopeDuplicateDeclaration: "Duplicate declaration $1",
@@ -36,23 +37,10 @@ export const MESSAGES = {
   traverseVerifyVisitorProperty: "You passed `traverse()` a visitor object with the property $1 that has the invalid property $2",
   traverseVerifyNodeType: "You gave us a visitor for the node type $1 but it's not a valid type",
 
-  pluginIllegalKind: "Illegal kind $1 for plugin $2",
-  pluginIllegalPosition: "Illegal position $1 for plugin $2",
-  pluginKeyCollision: "The plugin $1 collides with another of the same name",
-  pluginNotTransformer: "The plugin $1 didn't export a Plugin instance",
-  pluginUnknown: "Unknown plugin $1",
-
-  pluginNotFile: "Plugin $1 is resolving to a different Babel version than what is performing the transformation.",
-
-  pluginInvalidProperty: "Plugin $1 provided an invalid property of $2.",
-  pluginInvalidPropertyVisitor: `Define your visitor methods inside a \`visitor\` property like so:
-
-  new Plugin("foobar", {
-    visitor: {
-      // define your visitor methods here!
-    }
-  });
-`
+  pluginNotObject: "Plugin $2 specified in $1 was expected to return an object when invoked but returned $3",
+  pluginNotFunction: "Plugin $2 specified in $1 was expected to return a function but returned $3",
+  pluginUnknown: "Unknown plugin $1 specified in $2 at $3",
+  pluginInvalidProperty: "Plugin $2 specified in $1 provided an invalid property of $3"
 };
 
 /**
@@ -60,7 +48,7 @@ export const MESSAGES = {
  */
 
 export function get(key: string, ...args): string {
-  var msg = MESSAGES[key];
+  let msg = MESSAGES[key];
   if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 
   // stringify args

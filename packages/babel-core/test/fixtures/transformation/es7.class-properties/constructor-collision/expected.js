@@ -1,19 +1,13 @@
 var foo = "bar";
 
-var Foo = (function () {
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
+var Foo = function Foo() {
+  babelHelpers.classCallCheck(this, Foo);
 
-    this.__initializeProperties();
+  _initialiseProps.call(this);
 
-    var foo = "foo";
-  }
+  var foo = "foo";
+};
 
-  babelHelpers.createClass(Foo, [{
-    key: "__initializeProperties",
-    value: function __initializeProperties() {
-      this.bar = foo;
-    }
-  }]);
-  return Foo;
-})();
+var _initialiseProps = function () {
+  this.bar = foo;
+};

@@ -10,5 +10,5 @@ for (var _iterator = arr, _isArray = Array.isArray(_iterator), _i = 0, _iterator
     _ref = _i.value;
   }
 
-  var i = _ref;
+  let i = _ref;
 }

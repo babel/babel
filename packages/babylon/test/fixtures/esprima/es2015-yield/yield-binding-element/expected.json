@@ -73,7 +73,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 6,
                   "end": 14,
                   "loc": {
@@ -120,8 +120,7 @@
                       }
                     },
                     "name": "yield"
-                  },
-                  "kind": "init"
+                  }
                 }
               ]
             },
@@ -145,6 +144,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

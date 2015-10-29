@@ -1,4 +1,4 @@
-const A = "a";
-const o = {
+var A = "a";
+var o = {
   A // comment
 };

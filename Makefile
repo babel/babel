@@ -20,10 +20,10 @@ watch: clean
 
 lint:
 	node node_modules/.bin/eslint packages/*/src
+	#flow check
 
 clean: test-clean
 	rm -rf coverage
-	rm -rf packages/*/lib packages/babel-core/templates.json
 
 test-clean:
 	rm -rf packages/*/test/tmp
@@ -45,7 +45,7 @@ publish:
 	make test
 	node scripts/publish.js
 	make clean
-	./scripts/build-website.sh
+	#./scripts/build-website.sh
 
 bootstrap:
 	npm install

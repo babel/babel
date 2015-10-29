@@ -1,22 +1,31 @@
+/* @flow */
+
 import cloneDeep from "lodash/lang/cloneDeep";
-import isEmpty from "lodash/lang/isEmpty";
 import has from "lodash/object/has";
 import traverse from "babel-traverse";
 import * as babylon from "babylon";
 import * as t from "babel-types";
 
-export default function (code) {
-  var stack = new Error().stack.split("\n").slice(1).join("\n");
+let TEMPLATE_SKIP = Symbol();
 
-  var getAst = function () {
+export default function (code: string): Function {
+  // since we lazy parse the template, we get the current stack so we have the
+  // original stack to append if it errors when parsing
+  let stack = new Error().stack.split("\n").slice(1).join("\n");
+
+  let getAst = function () {
+    let ast;
+
     try {
-      var ast = babylon.parse(code, {
-        allowReturnOutsideFunction: true
-      }).program;
+      ast = babylon.parse(code, {
+        allowReturnOutsideFunction: true,
+        allowSuperOutsideMethod: true
+      });
 
       ast = traverse.removeProperties(ast);
     } catch (err) {
       err.stack = `${err.stack}from\n${stack}`;
+      throw err;
     }
 
     getAst = function () {
@@ -26,49 +35,56 @@ export default function (code) {
     return ast;
   };
 
-  return function (nodes, keepExpression) {
-    return useTemplate(getAst(), nodes, keepExpression);
+  return function (...args) {
+    return useTemplate(getAst(), args);
   };
 }
 
-function useTemplate(ast, nodes?: Array<Object>, keepExpression?: boolean) {
-  if (nodes === true) {
-    keepExpression = true;
-    nodes = null;
-  }
-
+function useTemplate(ast, nodes?: Array<Object>) {
   ast = cloneDeep(ast);
+  let { program } = ast;
 
-  if (!isEmpty(nodes)) {
+  if (nodes.length) {
     traverse(ast, templateVisitor, null, nodes);
   }
 
-  if (ast.body.length > 1) {
-    return ast.body;
-  }
-
-  var node = ast.body[0];
-  if (!keepExpression && t.isExpressionStatement(node)) {
-    return node.expression;
+  if (program.body.length > 1) {
+    return program.body;
   } else {
-    return node;
+    return program.body[0];
   }
 }
 
-var templateVisitor = {
+let templateVisitor = {
   // 360
   noScope: true,
 
-  enter(path, nodes) {
-    var { node } = path;
+  enter(path, args) {
+    let { node } = path;
+    if (node[TEMPLATE_SKIP]) return path.skip();
 
     if (t.isExpressionStatement(node)) {
       node = node.expression;
     }
 
-    if (t.isIdentifier(node) && has(nodes, node.name)) {
-      path.skip();
-      path.replaceInline(nodes[node.name]);
+    let replacement;
+
+    if (t.isIdentifier(node)) {
+      if (has(args[0], node.name)) {
+        replacement = args[0][node.name];
+      } else if (node.name[0] === "$") {
+        let i = +node.name.slice(1);
+        if (args[i]) replacement = args[i];
+      }
+    }
+
+    if (replacement === null) {
+      path.remove();
+    }
+
+    if (replacement) {
+      replacement[TEMPLATE_SKIP] = true;
+      path.replaceInline(replacement);
     }
   },
 

@@ -1,5 +1,8 @@
+/* @flow */
+
 // This file contains methods that modify the path/node in some ways.
 
+import { PATH_CACHE_KEY } from "./constants";
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
 import * as t from "babel-types";
@@ -36,17 +39,16 @@ export function insertBefore(nodes) {
 export function _containerInsert(from, nodes) {
   this.updateSiblingKeys(from, nodes.length);
 
-  var paths = [];
+  let paths = [];
 
-  for (var i = 0; i < nodes.length; i++) {
-    var to = from + i;
-    var node = nodes[i];
+  for (let i = 0; i < nodes.length; i++) {
+    let to = from + i;
+    let node = nodes[i];
     this.container.splice(to, 0, node);
 
     if (this.context) {
-      var path = this.context.create(this.parent, this.container, to, this.listKey);
+      let path = this.context.create(this.parent, this.container, to, this.listKey);
       paths.push(path);
-      this.queueNode(path);
     } else {
       paths.push(NodePath.get({
         parentPath: this,
@@ -55,6 +57,21 @@ export function _containerInsert(from, nodes) {
         listKey: this.listKey,
         key: to
       }));
+    }
+  }
+
+  let contexts = this.contexts;
+  let path = this;
+  while (!contexts.length) {
+    path = path.parentPath;
+    contexts = path.contexts;
+  }
+
+  for (let path of paths) {
+    path.setScope();
+    
+    for (let context of contexts) {
+      context.maybeQueue(path);
     }
   }
 
@@ -70,8 +87,10 @@ export function _containerInsertAfter(nodes) {
 }
 
 export function _maybePopFromStatements(nodes) {
-  var last = nodes[nodes.length - 1];
-  if (t.isExpressionStatement(last) && t.isIdentifier(last.expression) && !this.isCompletionRecord()) {
+  let last = nodes[nodes.length - 1];
+  let isIdentifier = t.isIdentifier(last) || (t.isExpressionStatement(last) && t.isIdentifier(last.expression));
+
+  if (isIdentifier && !this.isCompletionRecord()) {
     nodes.pop();
   }
 }
@@ -90,7 +109,7 @@ export function insertAfter(nodes) {
     return this.parentPath.insertAfter(nodes);
   } else if (this.isNodeType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
     if (this.node) {
-      var temp = this.scope.generateDeclaredUidIdentifier();
+      let temp = this.scope.generateDeclaredUidIdentifier();
       nodes.unshift(t.expressionStatement(t.assignmentExpression("=", temp, this.node)));
       nodes.push(t.expressionStatement(temp));
     }
@@ -117,8 +136,8 @@ export function insertAfter(nodes) {
 export function updateSiblingKeys(fromIndex, incrementBy) {
   if (!this.parent) return;
 
-  var paths = this.parent._paths;
-  for (var i = 0; i < paths.length; i++) {
+  let paths = this.parent[PATH_CACHE_KEY];
+  for (let i = 0; i < paths.length; i++) {
     let path = paths[i];
     if (path.key >= fromIndex) {
       path.key += incrementBy;
@@ -127,12 +146,16 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
 }
 
 export function _verifyNodeList(nodes) {
+  if (!nodes) {
+    return [];
+  }
+
   if (nodes.constructor !== Array) {
     nodes = [nodes];
   }
 
-  for (var i = 0; i < nodes.length; i++) {
-    var node = nodes[i];
+  for (let i = 0; i < nodes.length; i++) {
+    let node = nodes[i];
     if (!node) {
       throw new Error(`Node list has falsy node with the index of ${i}`);
     } else if (typeof node !== "object") {
@@ -154,12 +177,10 @@ export function unshiftContainer(listKey, nodes) {
 
   // get the first path and insert our nodes before it, if it doesn't exist then it
   // doesn't matter, our nodes will be inserted anyway
-
-  var container = this.node[listKey];
-  var path      = NodePath.get({
+  let path = NodePath.get({
     parentPath: this,
     parent: this.node,
-    container: container,
+    container: this.node[listKey],
     listKey,
     key: 0
   });
@@ -175,17 +196,16 @@ export function pushContainer(listKey, nodes) {
   // get an invisible path that represents the last node + 1 and replace it with our
   // nodes, effectively inlining it
 
-  var container = this.node[listKey];
-  var i         = container.length;
-  var path      = NodePath.get({
+  let container = this.node[listKey];
+  let path = NodePath.get({
     parentPath: this,
     parent: this.node,
     container: container,
     listKey,
-    key: i
+    key: container.length
   });
 
-  return path.replaceWith(nodes, true);
+  return path.replaceWithMultiple(nodes);
 }
 
 /**
@@ -194,6 +214,6 @@ export function pushContainer(listKey, nodes) {
  */
 
 export function hoist(scope = this.scope) {
-  var hoister = new PathHoister(this, scope);
+  let hoister = new PathHoister(this, scope);
   return hoister.run();
 }

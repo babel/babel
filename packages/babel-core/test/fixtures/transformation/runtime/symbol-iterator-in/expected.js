@@ -1,3 +1,2 @@
-var _isIterable = require("babel-runtime/core-js/is-iterable")["default"];
-
+import _isIterable from "babel-runtime/core-js/is-iterable";
 _isIterable(Object(arr));

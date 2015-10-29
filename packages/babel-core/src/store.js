@@ -16,9 +16,10 @@ export default class Store extends Map {
     if (this.has(key)) {
       return super.get(key);
     } else {
-      let dynamic = this.dynamicData[key];
-      if (dynamic) {
-        return this.set(key, dynamic());
+      if (Object.prototype.hasOwnProperty.call(this.dynamicData, key)) {
+        let val =  this.dynamicData[key]();
+        this.set(key, val);
+        return val;
       }
     }
   }

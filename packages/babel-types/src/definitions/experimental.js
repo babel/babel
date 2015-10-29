@@ -1,43 +1,26 @@
-import define, { assertNodeType, assertValueType } from "./index";
+/* @flow */
 
-define("AwaitExpression", {
-  builder: ["argument", "all"],
+import defineType, { assertNodeType } from "./index";
+
+defineType("AwaitExpression", {
+  builder: ["argument"],
   visitor: ["argument"],
   aliases: ["Expression", "Terminatorless"],
   fields: {
-    all: {
-      validate: assertValueType("boolean"),
-      default: false
-    },
     argument: {
       validate: assertNodeType("Expression"),
     }
   }
 });
 
-define("BindExpression", {
+defineType("BindExpression", {
   visitor: ["object", "callee"],
   fields: {
     // todo
   }
 });
 
-define("ComprehensionBlock", {
-  visitor: ["left", "right"],
-  fields: {
-    // todo
-  }
-});
-
-define("ComprehensionExpression", {
-  visitor: ["filter", "blocks", "body"],
-  aliases: ["Expression", "Scopable"],
-  fields: {
-    // todo
-  }
-});
-
-define("Decorator", {
+defineType("Decorator", {
   visitor: ["expression"],
   fields: {
     expression: {
@@ -46,7 +29,7 @@ define("Decorator", {
   }
 });
 
-define("DoExpression", {
+defineType("DoExpression", {
   visitor: ["body"],
   aliases: ["Expression"],
   fields: {
@@ -56,7 +39,7 @@ define("DoExpression", {
   }
 });
 
-define("ExportDefaultSpecifier", {
+defineType("ExportDefaultSpecifier", {
   visitor: ["exported"],
   aliases: ["ModuleSpecifier"],
   fields: {
@@ -66,7 +49,7 @@ define("ExportDefaultSpecifier", {
   }
 });
 
-define("ExportNamespaceSpecifier", {
+defineType("ExportNamespaceSpecifier", {
   visitor: ["exported"],
   aliases: ["ModuleSpecifier"],
   fields: {
@@ -76,7 +59,7 @@ define("ExportNamespaceSpecifier", {
   }
 });
 
-define("RestProperty", {
+defineType("RestProperty", {
   visitor: ["argument"],
   aliases: ["UnaryLike"],
   fields: {
@@ -86,7 +69,7 @@ define("RestProperty", {
   }
 });
 
-define("SpreadProperty", {
+defineType("SpreadProperty", {
   visitor: ["argument"],
   aliases: ["UnaryLike"],
   fields: {

@@ -15,6 +15,16 @@ var _              = require("lodash");
 var fixtureLoc = __dirname + "/fixtures";
 var tmpLoc = __dirname + "/tmp";
 
+var presetLocs = [
+  __dirname + "/../../babel-preset-es2015",
+  __dirname + "/../../babel-preset-react"
+].join(",");
+
+var pluginLocs = [
+  __dirname + "/../../babel-plugin-transform-strict-mode",
+  __dirname + "/../../babel-plugin-transform-es2015-modules-commonjs",
+].join(",");
+
 var readDir = function (loc) {
   var files = {};
   if (pathExists.sync(loc)) {
@@ -43,7 +53,7 @@ var assertTest = function (stdout, stderr, opts) {
       chai.expect(stderr).to.equal(expectStderr, "stderr didn't match");
     }
   } else if (stderr) {
-    throw new Error("stderr: " + JSON.stringify(stderr));
+    throw new Error("stderr:\n" + stderr);
   }
 
   var expectStdout = opts.stdout.trim();
@@ -57,7 +67,7 @@ var assertTest = function (stdout, stderr, opts) {
       chai.expect(stdout).to.equal(expectStdout, "stdout didn't match");
     }
   } else if (stdout) {
-    throw new Error("stdout: " + JSON.stringify(stdout));
+    throw new Error("stdout:\n" + stdout);
   }
 
   _.each(opts.outFiles, function (expect, filename) {
@@ -74,7 +84,18 @@ var buildTest = function (binName, testName, opts) {
     clear();
     saveInFiles(opts.inFiles);
 
-    var args  = [binLoc].concat(opts.args);
+    var args = [binLoc];
+
+    if (binName !== "babel-external-helpers") {
+      args.push("--presets", presetLocs, "--plugins", pluginLocs);
+    }
+
+    if (binName === "babel-node") {
+      args.push("--only", "packages/*/test");
+    }
+
+    args = args.concat(opts.args);
+
     var spawn = child.spawn(process.execPath, args);
 
     var stderr = "";

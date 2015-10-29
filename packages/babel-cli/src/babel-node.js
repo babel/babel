@@ -18,7 +18,7 @@ if (argSeparator > -1) {
   babelArgs = babelArgs.slice(0, argSeparator);
 }
 
-getV8Flags(function (v8Flags) {
+getV8Flags(function (err, v8Flags) {
   babelArgs.forEach(function(arg){
     let flag = arg.split("=")[0];
 

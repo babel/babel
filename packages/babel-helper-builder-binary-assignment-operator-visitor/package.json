@@ -1,0 +1,13 @@
+{
+  "name": "babel-helper-builder-binary-assignment-operator-visitor",
+  "version": "1.0.0",
+  "description": "",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "dependencies": {
+    "babel-helper-explode-assignable-expression": "^5.8.20",
+    "babel-runtime": "^5.8.20",
+    "babel-types": "^5.8.20"
+  }
+}

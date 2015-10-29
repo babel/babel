@@ -1,3 +1,5 @@
+/* @flow */
+
 import * as t from "./index";
 
 /**
@@ -5,8 +7,8 @@ import * as t from "./index";
  * returns a `UnionTypeAnnotation` node containg them.
  */
 
-export function createUnionTypeAnnotation(types) {
-  var flattened  = removeTypeDuplicates(types);
+export function createUnionTypeAnnotation(types: Array<Object>) {
+  let flattened  = removeTypeDuplicates(types);
 
   if (flattened.length === 1) {
     return flattened[0];
@@ -19,17 +21,17 @@ export function createUnionTypeAnnotation(types) {
  * Dedupe type annotations.
  */
 
-export function removeTypeDuplicates(nodes) {
-  var generics = {};
-  var bases = {};
+export function removeTypeDuplicates(nodes: Array<Object>) {
+  let generics = {};
+  let bases = {};
 
   // store union type groups to circular references
-  var typeGroups = [];
+  let typeGroups = [];
 
-  var types = [];
+  let types = [];
 
-  for (var i = 0; i < nodes.length; i++) {
-    var node = nodes[i];
+  for (let i = 0; i < nodes.length; i++) {
+    let node = nodes[i];
     if (!node) continue;
 
     // detect duplicates
@@ -62,7 +64,7 @@ export function removeTypeDuplicates(nodes) {
       let name = node.id.name;
 
       if (generics[name]) {
-        var existing = generics[name];
+        let existing = generics[name];
         if (existing.typeParameters) {
           if (node.typeParameters) {
             existing.typeParameters.params = removeTypeDuplicates(
@@ -83,7 +85,7 @@ export function removeTypeDuplicates(nodes) {
   }
 
   // add back in bases
-  for (var type in bases) {
+  for (let type in bases) {
     types.push(bases[type]);
   }
 
@@ -99,7 +101,7 @@ export function removeTypeDuplicates(nodes) {
  * Create a type anotation based on typeof expression.
  */
 
-export function createTypeAnnotationBasedOnTypeof(type) {
+export function createTypeAnnotationBasedOnTypeof(type: string) {
   if (type === "string") {
     return t.stringTypeAnnotation();
   } else if (type === "number") {

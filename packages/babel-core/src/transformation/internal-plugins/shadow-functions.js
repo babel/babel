@@ -6,12 +6,12 @@ import * as t from "babel-types";
 export default new Plugin({
   visitor: {
     ThisExpression(path) {
-      return remap(path, "this", () => t.thisExpression());
+      remap(path, "this", () => t.thisExpression());
     },
 
     ReferencedIdentifier(path) {
       if (path.node.name === "arguments") {
-        return remap(path, "arguments", () => t.identifier("arguments"));
+        remap(path, "arguments", () => t.identifier("arguments"));
       }
     }
   }
@@ -56,7 +56,7 @@ function remap(path, key, create) {
   if (fnPath === currentFunction) return;
 
   let cached = fnPath.getData(key);
-  if (cached) return cached;
+  if (cached) return path.replaceWith(cached);
 
   let init = create();
   let id   = path.scope.generateUidIdentifier(key);
@@ -64,5 +64,5 @@ function remap(path, key, create) {
   fnPath.setData(key, id);
   fnPath.scope.push({ id, init });
 
-  return id;
+  return path.replaceWith(id);
 }

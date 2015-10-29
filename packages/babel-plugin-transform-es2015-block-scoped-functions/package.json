@@ -1,11 +1,14 @@
 {
   "name": "babel-plugin-transform-es2015-block-scoped-functions",
-  "version": "1.0.4",
+  "version": "5.10.32",
   "description": "Babel plugin to ensure function declarations at the block level are block scoped",
   "repository": "babel/babel",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "dependencies": {
+    "babel-runtime": "^5.10.32"
+  }
 }

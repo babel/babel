@@ -22,6 +22,11 @@ require("./_transformation-helper").run("traceur", {
     "Yield/ObjectModel",
     "Yield/ReturnGenerator",
 
+    // yield as an identifier
+    "Yield/YieldIdentifier",
+    "Syntax/StrictKeywords",
+    "Syntax/IsValidSimpleAssignmentTarget",
+
     // TODO: core-js fails these
     "Collections/Map",
     "Collections/Set",
@@ -74,7 +79,9 @@ require("./_transformation-helper").run("traceur", {
 }, {
 
 }, function (opts, task) {
-  if (!_.contains(task.exec.loc, "module.js")) {
-    opts.blacklist = ["strict"];
+  if (_.contains(task.exec.loc, "module.js")) {
+    opts.plugins.push("transform-es2015-modules-commonjs");
+  } else {
+    opts.sourceType = "script";
   }
 });

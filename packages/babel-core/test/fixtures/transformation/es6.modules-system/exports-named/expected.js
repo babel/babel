@@ -1,5 +1,5 @@
 System.register([], function (_export) {
-    return {
+  return {
     setters: [],
     execute: function () {
       _export("foo", foo);

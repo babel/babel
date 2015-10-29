@@ -1,10 +1,10 @@
 export default function ({ types: t }) {
-  var JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
+  let JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
 
-  var visitor = require("babel-plugin-builder-react-jsx")(t, {
+  let visitor = require("babel-helper-builder-react-jsx")({
     pre(state) {
-      var tagName = state.tagName;
-      var args    = state.args;
+      let tagName = state.tagName;
+      let args    = state.args;
       if (t.react.isCompatTag(tagName)) {
         args.push(t.stringLiteral(tagName));
       } else {
@@ -12,17 +12,17 @@ export default function ({ types: t }) {
       }
     },
 
-    post(state, file) {
-      state.callee = file.get("jsxIdentifier");
+    post(state, pass) {
+      state.callee = pass.get("jsxIdentifier");
     }
   });
 
-  visitor.Program = function (path, file) {
-    var id = "React.createElement"; // todo: jsxPragma;
+  visitor.Program = function (path, state) {
+    let { file } = state;
+    let id = state.opts.pragma || "React.createElement";
 
-    for (var i = 0; i < file.ast.comments.length; i++) {
-      var comment = file.ast.comments[i];
-      var matches = JSX_ANNOTATION_REGEX.exec(comment.value);
+    for (let comment of (file.ast.comments: Array<Object>)) {
+      let matches = JSX_ANNOTATION_REGEX.exec(comment.value);
       if (matches) {
         id = matches[1];
         if (id === "React.DOM") {
@@ -33,10 +33,13 @@ export default function ({ types: t }) {
       }
     }
 
-    file.set("jsxIdentifier", id.split(".").map(t.identifier).reduce(function (object, property) {
+    state.set("jsxIdentifier", id.split(".").map(t.identifier).reduce(function (object, property) {
       return t.memberExpression(object, property);
     }));
   };
 
-  return { visitor };
+  return {
+    inherits: require("babel-plugin-syntax-jsx"),
+    visitor
+  };
 }

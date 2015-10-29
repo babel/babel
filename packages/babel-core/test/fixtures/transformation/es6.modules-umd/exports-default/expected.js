@@ -1,40 +1,37 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(["exports", "module"], factory);
-  } else if (typeof exports !== "undefined" && typeof module !== "undefined") {
-    factory(exports, module);
+    define(["exports"], factory);
+  } else if (typeof exports !== "undefined") {
+    factory(exports);
   } else {
     var mod = {
       exports: {}
     };
-    factory(mod.exports, mod);
+    factory(mod.exports);
     global.actual = mod.exports;
   }
-})(this, function (exports, module) {
-    module.exports = foo;
-  module.exports = 42;
-  module.exports = {};
-  module.exports = [];
-  module.exports = foo;
+})(this, function (exports) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
 
-  module.exports = function () {};
+  exports.default = function () {};
 
-  var _default = function _default() {
-    babelHelpers.classCallCheck(this, _default);
-  };
-
-  module.exports = _default;
+  exports.default = foo;
+  exports.default = 42;
+  exports.default = {};
+  exports.default = [];
+  exports.default = foo;
+  exports.default = class {};
 
   function foo() {}
 
-  var Foo = function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
-  };
+  class Foo {}
 
-  module.exports = Foo;
-  module.exports = foo;
+  exports.default = Foo;
+  exports.default = foo;
 
-  module.exports = (function () {
+  exports.default = (function () {
     return "foo";
   })();
 });
