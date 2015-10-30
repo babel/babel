@@ -2,7 +2,7 @@
   "name": "babel-helper-bindify-decorators",
   "version": "6.0.2",
   "description": "",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-bindify-decorators",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
