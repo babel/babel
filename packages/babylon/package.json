@@ -8,7 +8,7 @@
   "repository": "babel/babel",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-runtime": "^6.0.2"
+    "babel-runtime": "^5.0.0"
   },
   "bin": {
     "babylon": "./bin/babylon.js"

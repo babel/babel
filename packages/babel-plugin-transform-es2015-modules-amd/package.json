@@ -8,7 +8,7 @@
   "dependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.0.2",
     "babel-template": "^6.0.2",
-    "babel-runtime": "^6.0.2"
+    "babel-runtime": "^5.0.0"
   },
   "keywords": [
     "babel-plugin"

@@ -3,6 +3,7 @@ require("shelljs/global");
 var path = require("path");
 var fs   = require("fs");
 
+var CURRENT_VERSION = fs.readFileSync(__dirname + "/../VERSION", "utf8").trim();
 var OFFLINE = !!process.env.OFFLINE;
 
 // uninstall global babel install
@@ -35,10 +36,13 @@ packages.forEach(function (root) {
   mkdir("-p", nodeModulesLoc);
 
   packages.forEach(function (sub) {
-    var valid = false;
-    if (root.pkg.dependencies && root.pkg.dependencies[sub.name]) valid = true;
-    if (root.pkg.devDependencies && root.pkg.devDependencies[sub.name]) valid = true;
-    if (!valid) return;
+    var ver = false;
+    if (root.pkg.dependencies) ver = root.pkg.dependencies[sub.name];
+    if (root.pkg.devDependencies && !ver) ver = root.pkg.devDependencies[sub.name];
+    if (!ver) return;
+
+    // ensure that this is referring to a local package
+    if (ver[0] !== "^" || ver[1] !== CURRENT_VERSION[0]) return;
 
     var linkSrc = "packages/" + sub.folder;
     var linkDest = nodeModulesLoc + "/" + sub.name;

@@ -14,6 +14,6 @@
     "babel-plugin-syntax-decorators": "^6.0.2",
     "babel-helper-explode-class": "^6.0.2",
     "babel-template": "^6.0.2",
-    "babel-runtime": "^6.0.2"
+    "babel-runtime": "^5.0.0"
   }
 }

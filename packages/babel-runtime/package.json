@@ -12,6 +12,7 @@
     "babel-helpers": "^6.0.12",
     "babel-plugin-transform-runtime": "^6.0.7",
     "babel-template": "^6.0.12",
+    "babel-runtime": "^5.0.0",
     "regenerator": "^0.8.34"
   }
 }

@@ -10,6 +10,6 @@
   ],
   "dependencies": {
     "babel-plugin-syntax-class-properties": "^6.0.2",
-    "babel-runtime": "^6.0.2"
+    "babel-runtime": "^5.0.0"
   }
 }
