@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.0.12
+
+ * **Bug Fix**
+  * Rename misspelt `babel-plugin-transform-class-constructor-call` package.
+  * Add strict mode plugin to module transforms.
+  * Only ignore cloning of plugin instances when cloning babelrc configs.
+  * Add shebang to bin file in `babel` complain package.
+  * Remove asserts from `babel-transform-regenerator` as we may have multiple packages interacting.
+  * Add `babel-plugin-transform-es2015-modules-commonjs` to `babel-preset-es2015`.
+
 ## 6.0.0
 
 TODO SEBASTIAN YOU'RE BAD
