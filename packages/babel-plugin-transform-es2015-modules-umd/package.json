@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-es2015-modules-umd",
   "version": "6.0.2",
   "description": "",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-modules-umd",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
