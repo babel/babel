@@ -1,3 +1,22 @@
+var coreDefinitions = require("babel-plugin-transform-runtime/lib/definitions");
+
+var paths = ["is-iterable", "get-iterator"];
+
+each(coreDefinitions.builtins, function (path) {
+  paths.push(path);
+});
+
+each(coreDefinitions.methods, function (props) {
+  each(props, function (path) {
+    paths.push(path);
+  });
+});
+
+each(paths, function (path) {
+  writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
+});
+
+
 var outputFile = require("output-file-sync");
 var template   = require("babel-template");
 var helpers    = require("babel-helpers");
@@ -69,22 +88,3 @@ each(helpers.list, function (helperName) {
 
 writeFile("regenerator/index.js", readFile("regenerator/runtime-module", true));
 writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator/runtime")));
-
-
-var coreDefinitions = require("babel-plugin-transform-runtime/lib/definitions");
-
-var paths = ["is-iterable", "get-iterator"];
-
-each(coreDefinitions.builtins, function (path) {
-  paths.push(path);
-});
-
-each(coreDefinitions.methods, function (props) {
-  each(props, function (path) {
-    paths.push(path);
-  });
-});
-
-each(paths, function (path) {
-  writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
-});
