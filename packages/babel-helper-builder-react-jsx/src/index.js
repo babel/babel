@@ -1,6 +1,5 @@
 /* @flow */
 
-import isString from "lodash/lang/isString";
 import esutils from "esutils";
 import * as t from "babel-types";
 
@@ -66,11 +65,15 @@ export default function (opts) {
   function convertAttribute(node) {
     let value = convertAttributeValue(node.value || t.booleanLiteral(true));
 
-    if (t.isLiteral(value) && isString(value.value)) {
+    if (t.isStringLiteral(value)) {
       value.value = value.value.replace(/\n\s+/g, " ");
     }
 
-    node.name.type = "Identifier";
+    if (t.isValidIdentifier(node.name.name)) {
+      node.name.type = "Identifier";
+    } else {
+      node.name = t.stringLiteral(node.name.name);
+    }
 
     return t.inherits(t.objectProperty(node.name, value), node);
   }
