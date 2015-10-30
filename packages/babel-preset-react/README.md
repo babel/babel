@@ -1,6 +1,6 @@
 # babel-preset-react
 
-> Babel preset for all react plugins.
+> Babel preset for all React plugins.
 
 ## Install
 
