@@ -163,6 +163,10 @@ export function FunctionExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
+  return ArrowFunctionExpression(node, parent);
+}
+
+export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
   // export default (function () {});
   if (t.isExportDeclaration(parent)) {
     return true;
