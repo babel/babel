@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-es5-property-mutators",
   "version": "6.0.2",
   "description": "Compile ES5 property mutator shorthand syntax to Object.defineProperty",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es5-property-mutators",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
