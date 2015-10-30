@@ -3,6 +3,7 @@
 import isFunction from "lodash/lang/isFunction";
 import fs from "fs";
 
+//
 
 export { default as File } from "../transformation/file";
 export { default as options } from "../transformation/file/options/config";
@@ -20,6 +21,9 @@ export { messages };
 
 import * as t from "babel-types";
 export { t as types };
+
+import traverse from "babel-traverse";
+export { traverse };
 
 //
 

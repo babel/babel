@@ -1,3 +1,7 @@
+var outputFile = require("output-file-sync");
+var each       = require("lodash/collection/each");
+var fs         = require("fs");
+
 var coreDefinitions = require("babel-plugin-transform-runtime/lib/definitions");
 
 var paths = ["is-iterable", "get-iterator"];
@@ -17,13 +21,10 @@ each(paths, function (path) {
 });
 
 
-var outputFile = require("output-file-sync");
 var template   = require("babel-template");
 var helpers    = require("babel-helpers");
 var babel      = require("../../babel-core");
-var each       = require("lodash/collection/each");
 var util       = require("../../babel-core/lib/util");
-var fs         = require("fs");
 var t          = require("../../babel-types");
 
 function relative(filename) {
