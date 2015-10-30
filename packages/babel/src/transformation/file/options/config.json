@@ -109,6 +109,12 @@
     "description": "insert an explicit id for modules"
   },
 
+  "globalModuleRoot": {
+    "type": "boolean",
+    "deafault": "false",
+    "description": "if true, use the moduleRoot as the base global object and extend it."
+  },
+
   "loose": {
     "type": "transformerList",
     "description": "list of transformers to enable loose mode ON",
