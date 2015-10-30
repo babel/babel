@@ -18,7 +18,6 @@ var hasOwn = Object.prototype.hasOwnProperty;
 // returns a VariableDeclaration containing just the names of the removed
 // declarations.
 exports.hoist = function(funPath) {
-  assert.ok(funPath instanceof traverse.NodePath);
   t.assertFunction(funPath.node);
 
   var vars = {};

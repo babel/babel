@@ -321,8 +321,6 @@ Ep.getTryLocsList = function() {
 // No destructive modification of AST nodes.
 
 Ep.explode = function(path, ignoreResult) {
-  assert.ok(path instanceof traverse.NodePath);
-
   var node = path.node;
   var self = this;
 
@@ -370,8 +368,6 @@ function getDeclError(node) {
 }
 
 Ep.explodeStatement = function(path, labelId) {
-  assert.ok(path instanceof traverse.NodePath);
-
   var stmt = path.node;
   var self = this;
 
@@ -886,8 +882,6 @@ Ep.updateContextPrevLoc = function(loc) {
 };
 
 Ep.explodeExpression = function(path, ignoreResult) {
-  assert.ok(path instanceof traverse.NodePath);
-
   var expr = path.node;
   if (expr) {
     t.assertExpression(expr);

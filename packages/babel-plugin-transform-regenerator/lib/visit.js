@@ -177,7 +177,6 @@ function getOuterFnExpr(funPath) {
 }
 
 function getRuntimeMarkDecl(blockPath) {
-  assert.ok(blockPath instanceof traverse.NodePath);
   var block = blockPath.node;
   assert.ok(Array.isArray(block.body));
 
@@ -206,8 +205,6 @@ function getRuntimeMarkDecl(blockPath) {
 }
 
 function renameArguments(funcPath, argsId) {
-  assert.ok(funcPath instanceof traverse.NodePath);
-
   var state = {
     didRenameArguments: false,
     argsId: argsId
