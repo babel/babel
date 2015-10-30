@@ -1,11 +1,7 @@
 sudo: false
 language: node_js
-cache:
-  directories:
-  - node_modules
 
-before_script:
- - npm cache clean
+cache: false
 
 node_js:
  - "4.0"
