@@ -10,6 +10,11 @@ node_js:
 # - "0.10"
  - "0.12"
 
+before_script:
+  # Ensure headless Firefox works
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
 script: make test-travis
 after_success:
  - ./scripts/travis/setup-git.sh
