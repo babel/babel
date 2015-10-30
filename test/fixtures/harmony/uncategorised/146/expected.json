@@ -58,7 +58,7 @@
           },
           "properties": [
             {
-              "type": "Property",
+              "type": "ObjectMethod",
               "start": 2,
               "end": 10,
               "loc": {
@@ -90,48 +90,36 @@
                 },
                 "name": "x"
               },
-              "kind": "init",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 5,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 8,
                 "end": 10,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 5
+                    "column": 8
                   },
                   "end": {
                     "line": 1,
                     "column": 10
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 8,
-                  "end": 10,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 8
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 10
-                    }
-                  },
-                  "body": []
-                }
+                "body": [],
+                "directives": []
               }
             }
           ],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

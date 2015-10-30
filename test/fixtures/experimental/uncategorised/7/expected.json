@@ -71,7 +71,7 @@
               }
             },
             "left": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 1,
               "end": 2,
               "loc": {
@@ -84,9 +84,11 @@
                   "column": 2
                 }
               },
-              "value": 2,
-              "rawValue": 2,
-              "raw": "2"
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
             },
             "operator": "**",
             "right": {
@@ -106,7 +108,7 @@
               "operator": "-",
               "prefix": true,
               "argument": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 7,
                 "end": 8,
                 "loc": {
@@ -119,16 +121,20 @@
                     "column": 8
                   }
                 },
-                "value": 1,
-                "rawValue": 1,
-                "raw": "1"
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
               }
             },
-            "parenthesizedExpression": true
+            "extra": {
+              "parenthesized": true
+            }
           },
           "operator": "*",
           "right": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 12,
             "end": 13,
             "loc": {
@@ -141,12 +147,15 @@
                 "column": 13
               }
             },
-            "value": 2,
-            "rawValue": 2,
-            "raw": "2"
+            "extra": {
+              "rawValue": 2,
+              "raw": "2"
+            },
+            "value": 2
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

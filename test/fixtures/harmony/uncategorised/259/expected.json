@@ -121,7 +121,7 @@
                   },
                   "operator": "*",
                   "right": {
-                    "type": "Literal",
+                    "type": "NumberLiteral",
                     "start": 22,
                     "end": 24,
                     "loc": {
@@ -134,18 +134,23 @@
                         "column": 24
                       }
                     },
-                    "value": 10,
-                    "rawValue": 10,
-                    "raw": "10"
+                    "extra": {
+                      "rawValue": 10,
+                      "raw": "10"
+                    },
+                    "value": 10
                   }
                 }
               }
-            ]
+            ],
+            "directives": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

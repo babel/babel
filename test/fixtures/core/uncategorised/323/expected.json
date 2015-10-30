@@ -57,7 +57,7 @@
             }
           },
           "expression": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 5,
             "end": 7,
             "loc": {
@@ -70,9 +70,11 @@
                 "column": 7
               }
             },
-            "value": 10,
-            "rawValue": 10,
-            "raw": "10"
+            "extra": {
+              "rawValue": 10,
+              "raw": "10"
+            },
+            "value": 10
           }
         },
         "label": {
@@ -121,7 +123,7 @@
             }
           },
           "expression": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 14,
             "end": 16,
             "loc": {
@@ -134,9 +136,11 @@
                 "column": 16
               }
             },
-            "value": 20,
-            "rawValue": 20,
-            "raw": "20"
+            "extra": {
+              "rawValue": 20,
+              "raw": "20"
+            },
+            "value": 20
           }
         },
         "label": {
@@ -156,6 +160,7 @@
           "name": "foo"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

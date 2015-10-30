@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "NumberLiteral",
           "start": 0,
           "end": 4,
           "loc": {
@@ -56,12 +56,14 @@
               "column": 4
             }
           },
-          "value": 10,
-          "rawValue": 10,
-          "raw": "0O12"
+          "extra": {
+            "rawValue": 10,
+            "raw": "0O12"
+          },
+          "value": 10
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

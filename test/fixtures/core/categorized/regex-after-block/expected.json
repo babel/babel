@@ -43,7 +43,7 @@
           }
         },
         "test": {
-          "type": "Literal",
+          "type": "BooleanLiteral",
           "start": 4,
           "end": 8,
           "loc": {
@@ -56,9 +56,7 @@
               "column": 8
             }
           },
-          "value": true,
-          "rawValue": true,
-          "raw": "true"
+          "value": true
         },
         "consequent": {
           "type": "BlockStatement",
@@ -74,7 +72,8 @@
               "column": 1
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         },
         "alternate": null
       },
@@ -93,7 +92,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "RegexLiteral",
           "start": 15,
           "end": 20,
           "loc": {
@@ -106,13 +105,14 @@
               "column": 5
             }
           },
-          "raw": "/foo/",
-          "regex": {
-            "pattern": "foo",
-            "flags": ""
-          }
+          "extra": {
+            "raw": "/foo/"
+          },
+          "pattern": "foo",
+          "flags": ""
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -77,7 +77,7 @@
         ],
         "importKind": "typeof",
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 34,
           "end": 39,
           "loc": {
@@ -90,12 +90,14 @@
               "column": 39
             }
           },
-          "value": "bar",
-          "rawValue": "bar",
-          "raw": "\"bar\""
+          "extra": {
+            "rawValue": "bar",
+            "raw": "\"bar\""
+          },
+          "value": "bar"
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

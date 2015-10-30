@@ -89,7 +89,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 17,
                   "end": 27,
                   "loc": {
@@ -155,7 +155,7 @@
                     "name": "bar"
                   },
                   "value": {
-                    "type": "Literal",
+                    "type": "StringLiteral",
                     "start": 22,
                     "end": 27,
                     "loc": {
@@ -168,11 +168,12 @@
                         "column": 27
                       }
                     },
-                    "value": "wow",
-                    "rawValue": "wow",
-                    "raw": "'wow'"
-                  },
-                  "kind": "init"
+                    "extra": {
+                      "rawValue": "wow",
+                      "raw": "'wow'"
+                    },
+                    "value": "wow"
+                  }
                 }
               ]
             }
@@ -180,6 +181,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

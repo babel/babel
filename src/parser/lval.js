@@ -1,3 +1,5 @@
+/* @flow */
+
 import { types as tt } from "../tokenizer/types";
 import Parser from "./index";
 import { reservedWords } from "../util/identifier";
@@ -18,10 +20,20 @@ pp.toAssignable = function (node, isBinding) {
 
       case "ObjectExpression":
         node.type = "ObjectPattern";
-        for (let prop of (node.properties: Array)) {
+        for (let prop of (node.properties: Array<Object>)) {
           if (prop.type === "SpreadProperty") continue;
-          if (prop.kind !== "init") this.raise(prop.key.start, "Object pattern can't contain getter or setter");
-          this.toAssignable(prop.value, isBinding);
+
+          if (prop.type === "ObjectMethod") {
+            if (prop.kind === "get" || prop.kind === "set") {
+              this.raise(prop.key.start, "Object pattern can't contain getter or setter");
+            } else {
+              this.raise(prop.key.start, "Object pattern can't contain methods");
+            }
+          }
+
+          if (prop.type === "ObjectProperty") {
+            this.toAssignable(prop.value, isBinding);
+          }
         }
         break;
 
@@ -92,16 +104,27 @@ pp.parseSpread = function (refShorthandDefaultPos) {
 pp.parseRest = function () {
   let node = this.startNode();
   this.next();
-  node.argument = this.match(tt.name) || this.match(tt.bracketL) ? this.parseBindingAtom() : this.unexpected();
+  node.argument = this.parseBindingIdentifier();
   return this.finishNode(node, "RestElement");
+};
+
+pp.shouldAllowYieldIdentifier = function () {
+  return this.match(tt._yield) && !this.state.strict && !this.state.inGenerator;
+};
+
+pp.parseBindingIdentifier = function () {
+  return this.parseIdentifier(this.shouldAllowYieldIdentifier());
 };
 
 // Parses lvalue (assignable) atom.
 
 pp.parseBindingAtom = function () {
   switch (this.state.type) {
+    case tt._yield:
+      if (this.state.strict || this.state.inGenerator) this.unexpected();
+
     case tt.name:
-      return this.parseIdent();
+      return this.parseIdentifier(true);
 
     case tt.bracketL:
       let node = this.startNode();
@@ -118,10 +141,14 @@ pp.parseBindingAtom = function () {
 };
 
 pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
-  var elts = [], first = true;
+  let elts = [];
+  let first = true;
   while (!this.eat(close)) {
-    if (first) first = false;
-    else this.expect(tt.comma);
+    if (first) {
+      first = false;
+    } else {
+      this.expect(tt.comma);
+    }
     if (allowEmpty && this.match(tt.comma)) {
       elts.push(null);
     } else if (allowTrailingComma && this.eat(close)) {
@@ -131,7 +158,7 @@ pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
       this.expect(close);
       break;
     } else {
-      var left = this.parseMaybeDefault();
+      let left = this.parseMaybeDefault();
       this.parseAssignableListItemTypes(left);
       elts.push(this.parseMaybeDefault(null, null, left));
     }
@@ -163,8 +190,10 @@ pp.parseMaybeDefault = function (startPos, startLoc, left) {
 pp.checkLVal = function (expr, isBinding, checkClashes) {
   switch (expr.type) {
     case "Identifier":
-      if (this.strict && (reservedWords.strictBind(expr.name) || reservedWords.strict(expr.name)))
+      if (this.state.strict && (reservedWords.strictBind(expr.name) || reservedWords.strict(expr.name))) {
         this.raise(expr.start, (isBinding ? "Binding " : "Assigning to ") + expr.name + " in strict mode");
+      }
+
       if (checkClashes) {
         if (checkClashes[expr.name]) {
           this.raise(expr.start, "Argument name clash in strict mode");
@@ -179,14 +208,14 @@ pp.checkLVal = function (expr, isBinding, checkClashes) {
       break;
 
     case "ObjectPattern":
-         for (let prop of (expr.properties: Array)) {
-        if (prop.type === "Property") prop = prop.value;
+      for (let prop of (expr.properties: Array<Object>)) {
+        if (prop.type === "ObjectProperty") prop = prop.value;
         this.checkLVal(prop, isBinding, checkClashes);
       }
       break;
 
     case "ArrayPattern":
-      for (let elem of (expr.elements: Array)) {
+      for (let elem of (expr.elements: Array<Object>)) {
         if (elem) this.checkLVal(elem, isBinding, checkClashes);
       }
       break;
@@ -195,7 +224,7 @@ pp.checkLVal = function (expr, isBinding, checkClashes) {
       this.checkLVal(expr.left, isBinding, checkClashes);
       break;
 
-    case "SpreadProperty":
+    case "RestProperty":
     case "RestElement":
       this.checkLVal(expr.argument, isBinding, checkClashes);
       break;

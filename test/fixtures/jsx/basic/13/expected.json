@@ -149,7 +149,8 @@
                     "selfClosing": true
                   },
                   "closingElement": null,
-                  "children": []
+                  "children": [],
+                  "extra": null
                 }
               },
               {
@@ -262,7 +263,7 @@
                   },
                   "children": [
                     {
-                      "type": "Literal",
+                      "type": "JSXText",
                       "start": 31,
                       "end": 50,
                       "loc": {
@@ -275,11 +276,11 @@
                           "column": 50
                         }
                       },
-                      "value": "monkeys /> gorillas",
-                      "rawValue": null,
-                      "raw": "monkeys /> gorillas"
+                      "extra": null,
+                      "value": "monkeys /> gorillas"
                     }
-                  ]
+                  ],
+                  "extra": null
                 }
               }
             ],
@@ -305,6 +306,7 @@
           "children": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

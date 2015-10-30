@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "RegexLiteral",
           "start": 0,
           "end": 33,
           "loc": {
@@ -56,13 +56,14 @@
               "column": 33
             }
           },
-          "raw": "/[\\uD834\\uDF06-\\uD834\\uDF08a-z]/u",
-          "regex": {
-            "pattern": "[\\uD834\\uDF06-\\uD834\\uDF08a-z]",
-            "flags": "u"
-          }
+          "extra": {
+            "raw": "/[\\uD834\\uDF06-\\uD834\\uDF08a-z]/u"
+          },
+          "pattern": "[\\uD834\\uDF06-\\uD834\\uDF08a-z]",
+          "flags": "u"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

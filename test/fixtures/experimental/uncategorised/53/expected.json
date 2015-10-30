@@ -76,7 +76,7 @@
           }
         ],
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 20,
           "end": 25,
           "loc": {
@@ -89,11 +89,14 @@
               "column": 25
             }
           },
-          "value": "bar",
-          "rawValue": "bar",
-          "raw": "\"bar\""
+          "extra": {
+            "rawValue": "bar",
+            "raw": "\"bar\""
+          },
+          "value": "bar"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

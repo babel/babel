@@ -120,7 +120,6 @@
               "id": null,
               "generator": false,
               "expression": true,
-              "async": false,
               "params": [],
               "body": {
                 "type": "Identifier",
@@ -143,7 +142,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

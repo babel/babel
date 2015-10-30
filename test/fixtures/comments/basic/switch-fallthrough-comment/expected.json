@@ -75,7 +75,7 @@
             },
             "consequent": [],
             "test": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 34,
               "end": 35,
               "loc": {
@@ -88,9 +88,11 @@
                   "column": 10
                 }
               },
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
               "value": 1,
-              "rawValue": 1,
-              "raw": "1",
               "leadingComments": null
             },
             "leadingComments": [
@@ -108,11 +110,7 @@
                     "line": 2,
                     "column": 10
                   }
-                },
-                "range": [
-                  18,
-                  24
-                ]
+                }
               }
             ],
             "trailingComments": [
@@ -130,11 +128,7 @@
                     "line": 4,
                     "column": 24
                   }
-                },
-                "range": [
-                  45,
-                  61
-                ]
+                }
               }
             ]
           },
@@ -202,7 +196,7 @@
               }
             ],
             "test": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 71,
               "end": 72,
               "loc": {
@@ -215,9 +209,11 @@
                   "column": 10
                 }
               },
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
               "value": 2,
-              "rawValue": 2,
-              "raw": "2",
               "leadingComments": null
             },
             "leadingComments": [
@@ -235,17 +231,14 @@
                     "line": 4,
                     "column": 24
                   }
-                },
-                "range": [
-                  45,
-                  61
-                ]
+                }
               }
             ]
           }
         ]
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -262,11 +255,7 @@
           "line": 2,
           "column": 10
         }
-      },
-      "range": [
-        18,
-        24
-      ]
+      }
     },
     {
       "type": "CommentLine",
@@ -282,11 +271,7 @@
           "line": 4,
           "column": 24
         }
-      },
-      "range": [
-        45,
-        61
-      ]
+      }
     }
   ]
 }

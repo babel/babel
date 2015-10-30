@@ -1,5 +1,3 @@
 {
-  "features": {
-    "es7.decorators": true
-  }
+  "plugins": ["decorators"]
 }

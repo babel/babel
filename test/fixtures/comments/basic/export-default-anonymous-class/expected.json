@@ -43,7 +43,7 @@
           }
         },
         "declaration": {
-          "type": "ClassExpression",
+          "type": "ClassDeclaration",
           "start": 51,
           "end": 121,
           "loc": {
@@ -74,7 +74,7 @@
             },
             "body": [
               {
-                "type": "MethodDefinition",
+                "type": "ClassMethod",
                 "start": 103,
                 "end": 119,
                 "loc": {
@@ -107,40 +107,26 @@
                 },
                 "static": false,
                 "kind": "method",
-                "value": {
-                  "type": "FunctionExpression",
-                  "start": 110,
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 112,
                   "end": 119,
                   "loc": {
                     "start": {
                       "line": 8,
-                      "column": 11
+                      "column": 13
                     },
                     "end": {
                       "line": 9,
                       "column": 5
                     }
                   },
-                  "id": null,
-                  "generator": false,
-                  "expression": false,
-                  "params": [],
-                  "body": {
-                    "type": "BlockStatement",
-                    "start": 112,
-                    "end": 119,
-                    "loc": {
-                      "start": {
-                        "line": 8,
-                        "column": 13
-                      },
-                      "end": {
-                        "line": 9,
-                        "column": 5
-                      }
-                    },
-                    "body": []
-                  }
+                  "body": [],
+                  "directives": []
                 },
                 "leadingComments": [
                   {
@@ -157,11 +143,7 @@
                         "line": 7,
                         "column": 7
                       }
-                    },
-                    "range": [
-                      63,
-                      98
-                    ]
+                    }
                   }
                 ]
               }
@@ -185,15 +167,12 @@
                 "line": 3,
                 "column": 3
               }
-            },
-            "range": [
-              0,
-              35
-            ]
+            }
           }
         ]
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -210,11 +189,7 @@
           "line": 3,
           "column": 3
         }
-      },
-      "range": [
-        0,
-        35
-      ]
+      }
     },
     {
       "type": "CommentBlock",
@@ -230,11 +205,7 @@
           "line": 7,
           "column": 7
         }
-      },
-      "range": [
-        63,
-        98
-      ]
+      }
     }
   ]
 }

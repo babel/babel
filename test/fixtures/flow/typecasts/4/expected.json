@@ -117,7 +117,9 @@
                   }
                 }
               },
-              "parenthesizedExpression": true
+              "extra": {
+                "parenthesized": true
+              }
             },
             {
               "type": "TypeCastExpression",
@@ -179,13 +181,17 @@
                   }
                 }
               },
-              "parenthesizedExpression": true
+              "extra": {
+                "parenthesized": true
+              }
             }
           ],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

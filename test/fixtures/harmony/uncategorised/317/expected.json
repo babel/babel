@@ -100,7 +100,7 @@
                     }
                   },
                   "object": {
-                    "type": "Literal",
+                    "type": "RegexLiteral",
                     "start": 3,
                     "end": 7,
                     "loc": {
@@ -113,11 +113,11 @@
                         "column": 7
                       }
                     },
-                    "raw": "/\\d/",
-                    "regex": {
-                      "pattern": "\\d",
-                      "flags": ""
-                    }
+                    "extra": {
+                      "raw": "/\\d/"
+                    },
+                    "pattern": "\\d",
+                    "flags": ""
                   },
                   "property": {
                     "type": "Identifier",
@@ -139,7 +139,7 @@
                 },
                 "arguments": [
                   {
-                    "type": "Literal",
+                    "type": "StringLiteral",
                     "start": 13,
                     "end": 16,
                     "loc": {
@@ -152,14 +152,16 @@
                         "column": 16
                       }
                     },
-                    "value": "1",
-                    "rawValue": "1",
-                    "raw": "'1'"
+                    "extra": {
+                      "rawValue": "1",
+                      "raw": "'1'"
+                    },
+                    "value": "1"
                   }
                 ]
               },
               "property": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 18,
                 "end": 19,
                 "loc": {
@@ -172,9 +174,11 @@
                     "column": 19
                   }
                 },
-                "value": 0,
-                "rawValue": 0,
-                "raw": "0"
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
               },
               "computed": true
             }
@@ -223,6 +227,7 @@
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

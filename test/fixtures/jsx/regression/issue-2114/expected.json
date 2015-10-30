@@ -102,7 +102,7 @@
                   "name": "pattern"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 13,
                   "end": 43,
                   "loc": {
@@ -115,9 +115,8 @@
                       "column": 43
                     }
                   },
-                  "value": "^([\\w\\.\\-]+\\s)*[\\w\\.\\-]+\\s?$",
-                  "rawValue": null,
-                  "raw": "\"^([\\w\\.\\-]+\\s)*[\\w\\.\\-]+\\s?$\""
+                  "extra": null,
+                  "value": "^([\\w\\.\\-]+\\s)*[\\w\\.\\-]+\\s?$"
                 }
               }
             ],
@@ -173,6 +172,7 @@
           "children": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

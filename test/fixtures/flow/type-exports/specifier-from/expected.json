@@ -42,7 +42,6 @@
             "column": 34
           }
         },
-        "exportKind": "type",
         "specifiers": [
           {
             "type": "ExportSpecifier",
@@ -93,7 +92,7 @@
           }
         ],
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 25,
           "end": 33,
           "loc": {
@@ -106,12 +105,16 @@
               "column": 33
             }
           },
-          "value": "foobar",
-          "rawValue": "foobar",
-          "raw": "\"foobar\""
+          "extra": {
+            "rawValue": "foobar",
+            "raw": "\"foobar\""
+          },
+          "value": "foobar"
         },
+        "exportKind": "type",
         "declaration": null
       }
-    ]
+    ],
+    "directives": []
   }
 }

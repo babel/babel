@@ -74,7 +74,7 @@
               "name": "_𐒦"
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 10,
               "end": 12,
               "loc": {
@@ -87,14 +87,17 @@
                   "column": 12
                 }
               },
-              "value": 10,
-              "rawValue": 10,
-              "raw": "10"
+              "extra": {
+                "rawValue": 10,
+                "raw": "10"
+              },
+              "value": 10
             }
           }
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -58,7 +58,7 @@
           },
           "properties": [
             {
-              "type": "Property",
+              "type": "ObjectProperty",
               "start": 2,
               "end": 20,
               "loc": {
@@ -122,16 +122,18 @@
                       "column": 20
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
-              },
-              "kind": "init"
+              }
             }
           ],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

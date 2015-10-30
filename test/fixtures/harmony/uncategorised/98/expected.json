@@ -76,7 +76,7 @@
           }
         ],
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 24,
           "end": 32,
           "loc": {
@@ -89,12 +89,14 @@
               "column": 32
             }
           },
-          "value": "crypto",
-          "rawValue": "crypto",
-          "raw": "\"crypto\""
+          "extra": {
+            "rawValue": "crypto",
+            "raw": "\"crypto\""
+          },
+          "value": "crypto"
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

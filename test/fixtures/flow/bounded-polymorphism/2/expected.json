@@ -60,7 +60,6 @@
         },
         "generator": false,
         "expression": false,
-        "async": false,
         "typeParameters": {
           "type": "TypeParameterDeclaration",
           "start": 12,
@@ -154,10 +153,11 @@
               "column": 29
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

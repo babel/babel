@@ -101,8 +101,10 @@
                     }
                   },
                   "value": 123,
-                  "rawValue": 123,
-                  "raw": "0b1111011"
+                  "extra": {
+                    "rawValue": 123,
+                    "raw": "0b1111011"
+                  }
                 }
               }
             },
@@ -111,7 +113,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -104,7 +104,7 @@
                   },
                   "properties": [
                     {
-                      "type": "Property",
+                      "type": "ObjectProperty",
                       "start": 12,
                       "end": 22,
                       "loc": {
@@ -170,7 +170,7 @@
                         "name": "foo"
                       },
                       "value": {
-                        "type": "Literal",
+                        "type": "StringLiteral",
                         "start": 17,
                         "end": 22,
                         "loc": {
@@ -183,11 +183,12 @@
                             "column": 22
                           }
                         },
-                        "value": "bar",
-                        "rawValue": "bar",
-                        "raw": "\"bar\""
-                      },
-                      "kind": "init"
+                        "extra": {
+                          "rawValue": "bar",
+                          "raw": "\"bar\""
+                        },
+                        "value": "bar"
+                      }
                     }
                   ]
                 }
@@ -260,6 +261,7 @@
           "body": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

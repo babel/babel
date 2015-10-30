@@ -139,11 +139,7 @@
                       "line": 2,
                       "column": 16
                     }
-                  },
-                  "range": [
-                    19,
-                    31
-                  ]
+                  }
                 }
               ],
               "trailingComments": [
@@ -161,18 +157,16 @@
                       "line": 4,
                       "column": 15
                     }
-                  },
-                  "range": [
-                    47,
-                    58
-                  ]
+                  }
                 }
               ]
             }
-          ]
+          ],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -189,11 +183,7 @@
           "line": 2,
           "column": 16
         }
-      },
-      "range": [
-        19,
-        31
-      ]
+      }
     },
     {
       "type": "CommentBlock",
@@ -209,11 +199,7 @@
           "line": 4,
           "column": 15
         }
-      },
-      "range": [
-        47,
-        58
-      ]
+      }
     }
   ]
 }

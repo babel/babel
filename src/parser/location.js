@@ -1,3 +1,5 @@
+/* @flow */
+
 import { getLineInfo } from "../util/location";
 import Parser from "./index";
 

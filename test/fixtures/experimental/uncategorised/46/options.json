@@ -1,5 +1,3 @@
 {
-  "features": {
-    "es7.classProperties": true
-  }
+  "plugins": ["classProperties"]
 }

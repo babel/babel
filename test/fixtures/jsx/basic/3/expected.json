@@ -133,7 +133,7 @@
                   }
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 9,
                   "end": 14,
                   "loc": {
@@ -146,9 +146,8 @@
                       "column": 14
                     }
                   },
-                  "value": "bar",
-                  "rawValue": null,
-                  "raw": "\"bar\""
+                  "extra": null,
+                  "value": "bar"
                 }
               }
             ],
@@ -203,7 +202,7 @@
           },
           "children": [
             {
-              "type": "Literal",
+              "type": "JSXText",
               "start": 15,
               "end": 16,
               "loc": {
@@ -216,9 +215,8 @@
                   "column": 16
                 }
               },
-              "value": " ",
-              "rawValue": null,
-              "raw": " "
+              "extra": null,
+              "value": " "
             },
             {
               "type": "JSXExpressionContainer",
@@ -252,7 +250,7 @@
               }
             },
             {
-              "type": "Literal",
+              "type": "JSXText",
               "start": 23,
               "end": 24,
               "loc": {
@@ -265,9 +263,8 @@
                   "column": 24
                 }
               },
-              "value": " ",
-              "rawValue": null,
-              "raw": " "
+              "extra": null,
+              "value": " "
             },
             {
               "type": "JSXElement",
@@ -403,6 +400,7 @@
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

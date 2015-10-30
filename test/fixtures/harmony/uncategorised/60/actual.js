@@ -1,1 +1,0 @@
-[for ([,x] of array) for ({[start.x]: x, [start.y]: y} of array2) x]

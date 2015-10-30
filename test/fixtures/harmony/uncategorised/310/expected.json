@@ -58,7 +58,7 @@
           },
           "properties": [
             {
-              "type": "Property",
+              "type": "ObjectProperty",
               "start": 6,
               "end": 11,
               "loc": {
@@ -90,7 +90,6 @@
                 },
                 "name": "x"
               },
-              "kind": "init",
               "value": {
                 "type": "AssignmentPattern",
                 "start": 6,
@@ -122,7 +121,7 @@
                   "name": "x"
                 },
                 "right": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 10,
                   "end": 11,
                   "loc": {
@@ -135,9 +134,11 @@
                       "column": 11
                     }
                   },
-                  "value": 0,
-                  "rawValue": 0,
-                  "raw": "0"
+                  "extra": {
+                    "rawValue": 0,
+                    "raw": "0"
+                  },
+                  "value": 0
                 }
               }
             }
@@ -175,7 +176,7 @@
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

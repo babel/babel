@@ -74,7 +74,7 @@
               "name": "eval"
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 11,
               "end": 13,
               "loc": {
@@ -87,9 +87,11 @@
                   "column": 13
                 }
               },
-              "value": 42,
-              "rawValue": 42,
-              "raw": "42"
+              "extra": {
+                "rawValue": 42,
+                "raw": "42"
+              },
+              "value": 42
             }
           },
           {
@@ -123,7 +125,7 @@
               "name": "arguments"
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 27,
               "end": 29,
               "loc": {
@@ -136,14 +138,17 @@
                   "column": 29
                 }
               },
-              "value": 42,
-              "rawValue": 42,
-              "raw": "42"
+              "extra": {
+                "rawValue": 42,
+                "raw": "42"
+              },
+              "value": 42
             }
           }
         ],
         "kind": "let"
       }
-    ]
+    ],
+    "directives": []
   }
 }

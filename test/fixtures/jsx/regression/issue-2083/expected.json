@@ -57,7 +57,7 @@
             }
           },
           "test": {
-            "type": "Literal",
+            "type": "BooleanLiteral",
             "start": 0,
             "end": 4,
             "loc": {
@@ -70,9 +70,7 @@
                 "column": 4
               }
             },
-            "value": true,
-            "rawValue": true,
-            "raw": "true"
+            "value": true
           },
           "consequent": {
             "type": "JSXElement",
@@ -123,7 +121,9 @@
             },
             "closingElement": null,
             "children": [],
-            "parenthesizedExpression": true
+            "extra": {
+              "parenthesized": true
+            }
           },
           "alternate": {
             "type": "JSXElement",
@@ -177,6 +177,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -75,7 +75,7 @@
           },
           "body": [
             {
-              "type": "MethodDefinition",
+              "type": "ClassMethod",
               "start": 14,
               "end": 46,
               "loc": {
@@ -107,126 +107,112 @@
               },
               "static": false,
               "kind": "method",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 20,
-                "end": 46,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 20
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 21,
+                  "end": 42,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 42
+                    }
                   },
-                  "end": {
-                    "line": 1,
-                    "column": 46
-                  }
-                },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "async": false,
-                "params": [
-                  {
-                    "type": "Identifier",
-                    "start": 21,
+                  "name": "items",
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "start": 26,
                     "end": 42,
                     "loc": {
                       "start": {
                         "line": 1,
-                        "column": 21
+                        "column": 26
                       },
                       "end": {
                         "line": 1,
                         "column": 42
                       }
                     },
-                    "name": "items",
                     "typeAnnotation": {
-                      "type": "TypeAnnotation",
-                      "start": 26,
+                      "type": "UnionTypeAnnotation",
+                      "start": 27,
                       "end": 42,
                       "loc": {
                         "start": {
                           "line": 1,
-                          "column": 26
+                          "column": 27
                         },
                         "end": {
                           "line": 1,
                           "column": 42
                         }
                       },
-                      "typeAnnotation": {
-                        "type": "UnionTypeAnnotation",
-                        "start": 27,
-                        "end": 42,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 27
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 42
+                      "types": [
+                        {
+                          "type": "NumberTypeAnnotation",
+                          "start": 27,
+                          "end": 33,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 27
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 33
+                            }
                           }
                         },
-                        "types": [
-                          {
-                            "type": "NumberTypeAnnotation",
-                            "start": 27,
-                            "end": 33,
-                            "loc": {
-                              "start": {
-                                "line": 1,
-                                "column": 27
-                              },
-                              "end": {
-                                "line": 1,
-                                "column": 33
-                              }
-                            }
-                          },
-                          {
-                            "type": "StringTypeAnnotation",
-                            "start": 36,
-                            "end": 42,
-                            "loc": {
-                              "start": {
-                                "line": 1,
-                                "column": 36
-                              },
-                              "end": {
-                                "line": 1,
-                                "column": 42
-                              }
+                        {
+                          "type": "StringTypeAnnotation",
+                          "start": 36,
+                          "end": 42,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 36
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 42
                             }
                           }
-                        ]
-                      }
+                        }
+                      ]
                     }
                   }
-                ],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 44,
-                  "end": 46,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 44
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 46
-                    }
-                  },
-                  "body": []
                 }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 44,
+                "end": 46,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 44
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 46
+                  }
+                },
+                "body": [],
+                "directives": []
               }
             }
           ]
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

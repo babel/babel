@@ -89,7 +89,7 @@
             },
             "properties": [
               {
-                "type": "Property",
+                "type": "ObjectMethod",
                 "start": 3,
                 "end": 30,
                 "loc": {
@@ -122,95 +122,81 @@
                   "name": "fooProp"
                 },
                 "kind": "set",
-                "value": {
-                  "type": "FunctionExpression",
-                  "start": 14,
-                  "end": 30,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 14
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 15,
+                    "end": 27,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 27
+                      }
                     },
-                    "end": {
-                      "line": 1,
-                      "column": 30
-                    }
-                  },
-                  "id": null,
-                  "generator": false,
-                  "expression": false,
-                  "async": false,
-                  "params": [
-                    {
-                      "type": "Identifier",
-                      "start": 15,
+                    "name": "value",
+                    "typeAnnotation": {
+                      "type": "TypeAnnotation",
+                      "start": 20,
                       "end": 27,
                       "loc": {
                         "start": {
                           "line": 1,
-                          "column": 15
+                          "column": 20
                         },
                         "end": {
                           "line": 1,
                           "column": 27
                         }
                       },
-                      "name": "value",
                       "typeAnnotation": {
-                        "type": "TypeAnnotation",
-                        "start": 20,
+                        "type": "NumberTypeAnnotation",
+                        "start": 21,
                         "end": 27,
                         "loc": {
                           "start": {
                             "line": 1,
-                            "column": 20
+                            "column": 21
                           },
                           "end": {
                             "line": 1,
                             "column": 27
                           }
-                        },
-                        "typeAnnotation": {
-                          "type": "NumberTypeAnnotation",
-                          "start": 21,
-                          "end": 27,
-                          "loc": {
-                            "start": {
-                              "line": 1,
-                              "column": 21
-                            },
-                            "end": {
-                              "line": 1,
-                              "column": 27
-                            }
-                          }
                         }
                       }
                     }
-                  ],
-                  "body": {
-                    "type": "BlockStatement",
-                    "start": 28,
-                    "end": 30,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 28
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 30
-                      }
-                    },
-                    "body": []
                   }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 28,
+                  "end": 30,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 28
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 30
+                    }
+                  },
+                  "body": [],
+                  "directives": []
                 }
               }
             ]
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

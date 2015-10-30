@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "RegexLiteral",
           "start": 0,
           "end": 8,
           "loc": {
@@ -56,13 +56,14 @@
               "column": 8
             }
           },
-          "raw": "/[a-z]/u",
-          "regex": {
-            "pattern": "[a-z]",
-            "flags": "u"
-          }
+          "extra": {
+            "raw": "/[a-z]/u"
+          },
+          "pattern": "[a-z]",
+          "flags": "u"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -76,7 +76,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 11,
                   "end": 12,
                   "loc": {
@@ -108,7 +108,6 @@
                     },
                     "name": "x"
                   },
-                  "kind": "init",
                   "value": {
                     "type": "Identifier",
                     "start": 11,
@@ -127,7 +126,7 @@
                   }
                 },
                 {
-                  "type": "SpreadProperty",
+                  "type": "RestProperty",
                   "start": 14,
                   "end": 18,
                   "loc": {
@@ -174,11 +173,15 @@
                 "column": 24
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

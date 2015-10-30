@@ -122,7 +122,7 @@
           },
           "children": [
             {
-              "type": "Literal",
+              "type": "JSXText",
               "start": 3,
               "end": 7,
               "loc": {
@@ -135,9 +135,8 @@
                   "column": 7
                 }
               },
-              "value": "foo ",
-              "rawValue": null,
-              "raw": "foo "
+              "extra": null,
+              "value": "foo "
             },
             {
               "type": "JSXElement",
@@ -199,7 +198,7 @@
                       "name": "href"
                     },
                     "value": {
-                      "type": "Literal",
+                      "type": "StringLiteral",
                       "start": 15,
                       "end": 21,
                       "loc": {
@@ -212,9 +211,8 @@
                           "column": 21
                         }
                       },
-                      "value": "test",
-                      "rawValue": null,
-                      "raw": "\"test\""
+                      "extra": null,
+                      "value": "test"
                     }
                   }
                 ],
@@ -269,7 +267,7 @@
               },
               "children": [
                 {
-                  "type": "Literal",
+                  "type": "JSXText",
                   "start": 22,
                   "end": 26,
                   "loc": {
@@ -282,14 +280,13 @@
                       "column": 26
                     }
                   },
-                  "value": " bar",
-                  "rawValue": null,
-                  "raw": " bar"
+                  "extra": null,
+                  "value": " bar"
                 }
               ]
             },
             {
-              "type": "Literal",
+              "type": "JSXText",
               "start": 30,
               "end": 34,
               "loc": {
@@ -302,13 +299,13 @@
                   "column": 34
                 }
               },
-              "value": " baz",
-              "rawValue": null,
-              "raw": " baz"
+              "extra": null,
+              "value": " baz"
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

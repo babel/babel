@@ -74,7 +74,7 @@
               "name": "x"
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 8,
               "end": 10,
               "loc": {
@@ -87,9 +87,11 @@
                   "column": 10
                 }
               },
-              "value": 14,
-              "rawValue": 14,
-              "raw": "14"
+              "extra": {
+                "rawValue": 14,
+                "raw": "14"
+              },
+              "value": 14
             }
           },
           {
@@ -123,7 +125,7 @@
               "name": "y"
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 16,
               "end": 17,
               "loc": {
@@ -136,9 +138,11 @@
                   "column": 17
                 }
               },
-              "value": 3,
-              "rawValue": 3,
-              "raw": "3"
+              "extra": {
+                "rawValue": 3,
+                "raw": "3"
+              },
+              "value": 3
             }
           },
           {
@@ -172,7 +176,7 @@
               "name": "z"
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 23,
               "end": 27,
               "loc": {
@@ -185,14 +189,17 @@
                   "column": 27
                 }
               },
-              "value": 1977,
-              "rawValue": 1977,
-              "raw": "1977"
+              "extra": {
+                "rawValue": 1977,
+                "raw": "1977"
+              },
+              "value": 1977
             }
           }
         ],
         "kind": "let"
       }
-    ]
+    ],
+    "directives": []
   }
 }

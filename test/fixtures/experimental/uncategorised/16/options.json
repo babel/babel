@@ -1,6 +1,4 @@
 {
-  "features": {
-    "es7.asyncFunctions": true
-  },
+  "plugins": ["asyncFunctions"],
   "throws": "Unexpected token (2:4)"
 }

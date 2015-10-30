@@ -73,7 +73,6 @@
             "id": null,
             "generator": false,
             "expression": true,
-            "async": false,
             "params": [
               {
                 "type": "Identifier",
@@ -124,7 +123,7 @@
               },
               "operator": "+",
               "right": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 16,
                 "end": 17,
                 "loc": {
@@ -137,9 +136,11 @@
                     "column": 17
                   }
                 },
-                "value": 1,
-                "rawValue": 1,
-                "raw": "1"
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
               }
             }
           },
@@ -239,10 +240,12 @@
               "typeParameters": null
             }
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }
