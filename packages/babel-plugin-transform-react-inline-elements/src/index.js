@@ -43,8 +43,10 @@ export default function ({ types: t }) {
 
         if (node.children.length) {
           let children = t.react.buildChildren(node);
-          children = children.length === 1 ? children[0] : t.arrayExpression(children);
-          pushProp(props.properties, t.identifier("children"), children);
+          if (children.length) {
+            children = children.length === 1 ? children[0] : t.arrayExpression(children);
+            pushProp(props.properties, t.identifier("children"), children);
+          }
         }
 
         // props
