@@ -15,5 +15,6 @@ dist
 /packages/babel-runtime/helpers/*.js
 /packages/babel-runtime/regenerator/*.js
 /packages/*/lib
+!/packages/babel-plugin-transform-regenerator/lib
 _babel.github.io
 /tests/.browser-build.js
