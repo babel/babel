@@ -1,9 +1,9 @@
-# babel-plugin-transform-class-construtor-call
+# babel-plugin-transform-class-constructor-call
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-class-construtor-call
+$ npm install babel-plugin-transform-class-constructor-call
 ```
 
 ## Usage
@@ -14,20 +14,20 @@ $ npm install babel-plugin-transform-class-construtor-call
 
 ```json
 {
-  "plugins": ["transform-class-construtor-call"]
+  "plugins": ["transform-class-constructor-call"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-class-construtor-call script.js
+$ babel --plugins transform-class-constructor-call script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("babel-core").transform("code", {
-  plugins: ["transform-class-construtor-call"]
+  plugins: ["transform-class-constructor-call"]
 });
 ```
