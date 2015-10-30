@@ -2,7 +2,7 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "babel": "6.0.12",
+    "babel": "6.0.13",
     "babel-eslint": "^4.0.6",
     "babel-plugin-flow-comments": "^1.0.9",
     "browserify": "^11.2.0",
