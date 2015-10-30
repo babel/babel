@@ -64,6 +64,9 @@ function getPackageConfig(name) {
 
 function updateDepsObject(changedPackages, deps) {
   for (var depName in deps) {
+    // ensure this was generated and we're on the same major
+    if (deps[depName][0] !== "^" || deps[depName][1] !== NEW_VERSION[0]) continue;
+
     if (changedPackages.indexOf(depName) >= 0) {
       deps[depName] = "^" + NEW_VERSION;
     }
