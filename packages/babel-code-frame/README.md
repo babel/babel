@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install babel-core
+$ npm install babel-code-frame
 ```
 
 ### Usage
