@@ -13,8 +13,6 @@ System.register(["./evens"], function (_export) {
 
       _export("nextOdd", nextOdd);
 
-      _export("n", n);
-
       _export("p", p = 5);
 
       _export("p", p);

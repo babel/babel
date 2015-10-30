@@ -50,7 +50,7 @@ export default function ({ types: t }) {
 
   return {
     inherits: require("babel-plugin-transform-strict-mode"),
-    
+
     visitor: {
       Program: {
         exit(path) {
@@ -136,7 +136,13 @@ export default function ({ types: t }) {
                 path.replaceWith(declar);
 
                 let nodes = [];
-                for (let name in declar.getBindingIdentifiers()) {
+                let bindingIdentifiers;
+                if (path.isFunction()) {
+                  bindingIdentifiers = { [declar.node.id.name]: declar.node.id };
+                } else {
+                  bindingIdentifiers = declar.getBindingIdentifiers();
+                }
+                for (let name in bindingIdentifiers) {
                   addExportName(name, name);
                   nodes.push(buildExportCall(name, t.identifier(name)));
                 }
