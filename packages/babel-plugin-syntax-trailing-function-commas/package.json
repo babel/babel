@@ -2,7 +2,7 @@
   "name": "babel-plugin-syntax-trailing-function-commas",
   "version": "6.0.2",
   "description": "Compile trailing function commas to ES5",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-trailing-function-commas",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
