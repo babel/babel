@@ -173,10 +173,18 @@ pp.parseExprOp = function(left, leftStartPos, leftStartLoc, minPrec, noIn) {
       let node = this.startNodeAt(leftStartPos, leftStartLoc);
       node.left = left;
       node.operator = this.state.value;
+
+      if (node.operator === "**" && left.type === "UnaryExpression" && left.extra && !left.extra.parenthesizedArgument) {
+        this.raise(left.argument.start, "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.");
+      }
+
       let op = this.state.type;
       this.next();
-      let startPos = this.state.start, startLoc = this.state.startLoc;
+
+      let startPos = this.state.start;
+      let startLoc = this.state.startLoc;
       node.right = this.parseExprOp(this.parseMaybeUnary(), startPos, startLoc, op.rightAssociative ? prec - 1 : prec, noIn);
+
       this.finishNode(node, (op === tt.logicalOR || op === tt.logicalAND) ? "LogicalExpression" : "BinaryExpression");
       return this.parseExprOp(node, leftStartPos, leftStartLoc, minPrec, noIn);
     }
@@ -188,17 +196,26 @@ pp.parseExprOp = function(left, leftStartPos, leftStartLoc, minPrec, noIn) {
 
 pp.parseMaybeUnary = function (refShorthandDefaultPos) {
   if (this.state.type.prefix) {
-    let node = this.startNode(), update = this.match(tt.incDec);
+    let node = this.startNode();
+    let update = this.match(tt.incDec);
     node.operator = this.state.value;
     node.prefix = true;
     this.next();
+
+    let argType = this.state.type;
+    this.addExtra(node, "parenthesizedArgument", argType === tt.parenL);
     node.argument = this.parseMaybeUnary();
-    if (refShorthandDefaultPos && refShorthandDefaultPos.start) this.unexpected(refShorthandDefaultPos.start);
+
+    if (refShorthandDefaultPos && refShorthandDefaultPos.start) {
+      this.unexpected(refShorthandDefaultPos.start);
+    }
+
     if (update) {
       this.checkLVal(node.argument);
     } else if (this.state.strict && node.operator === "delete" && node.argument.type === "Identifier") {
       this.raise(node.start, "Deleting local variable in strict mode");
     }
+
     return this.finishNode(node, update ? "UpdateExpression" : "UnaryExpression");
   }
 
