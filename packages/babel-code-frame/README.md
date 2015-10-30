@@ -8,7 +8,7 @@
 $ npm install babel-code-frame
 ```
 
-### Usage
+## Usage
 
 ```js
 import codeFrame from 'babel-code-frame';
