@@ -1,3 +1,5 @@
+#!/bin/sh
+
 console.error("The CLI has been moved into the package `babel-cli`.");
 console.log();
 console.log("$ npm install -g babel-cli");
