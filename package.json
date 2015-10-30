@@ -8,6 +8,7 @@
     "browserify": "^11.2.0",
     "bundle-collapser": "^1.2.1",
     "chai": "^2.2.0",
+    "chalk": "1.1.1",
     "derequire": "^2.0.2",
     "es5-shim": "^4.1.7",
     "eslint": "^1.1.0",
