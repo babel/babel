@@ -1,7 +1,7 @@
 {
   "name": "babel-messages",
   "version": "6.0.2",
-  "description": "",
+  "description": "Collection of debug messages used by Babel.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
