@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-simplify-comparison-operators",
-  "version": "6.0.2",
+  "version": "6.0.14",
   "description": "Convert === and !== to == and != if their types are inferred to be the same.",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-simplify-comparison-operators",
   "license": "MIT",

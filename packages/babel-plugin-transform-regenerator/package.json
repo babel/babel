@@ -16,7 +16,7 @@
     "desugaring",
     "ES6"
   ],
-  "version": "6.0.12",
+  "version": "6.0.14",
   "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-regenerator",
   "repository": {
     "type": "git",
@@ -29,13 +29,13 @@
   },
   "dependencies": {
     "commoner": "~0.10.3",
-    "babel-plugin-transform-es2015-block-scoping": "^6.0.0",
-    "babel-plugin-syntax-async-functions": "^6.0.0",
-    "babel-plugin-transform-es2015-for-of": "^6.0.0",
-    "babel-core": "^6.0.12",
-    "babel-traverse": "^6.0.0",
-    "babel-types": "^6.0.12",
-    "babylon": "^6.0.0",
+    "babel-plugin-transform-es2015-block-scoping": "^6.0.14",
+    "babel-plugin-syntax-async-functions": "^6.0.14",
+    "babel-plugin-transform-es2015-for-of": "^6.0.14",
+    "babel-core": "^6.0.14",
+    "babel-traverse": "^6.0.14",
+    "babel-types": "^6.0.14",
+    "babylon": "^6.0.14",
     "private": "~0.1.5",
     "through": "~2.3.8"
   },
