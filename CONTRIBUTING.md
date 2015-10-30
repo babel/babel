@@ -1,4 +1,4 @@
-# NOTE: BEFORE OPENING AN ISSUE PLEASE SEE THE [README](https://github.com/babel/babel#readme).
+# NOTE: DO NOT OPEN ISSUES FOR QUESTIONS AND SUPPORT. SEE THE README FOR MORE INFO.
 
 ----
 
@@ -50,7 +50,7 @@ If you wish to build a copy of Babel for distribution then run:
 $ make build-dist
 ```
 
-and access the files from `packages/babel/dist`.
+and access the files from `packages/babel-core/dist`.
 
 #### Running tests
 

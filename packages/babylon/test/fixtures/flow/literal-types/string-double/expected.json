@@ -60,7 +60,6 @@
         },
         "generator": false,
         "expression": false,
-        "async": false,
         "params": [
           {
             "type": "Identifier",
@@ -106,8 +105,10 @@
                   }
                 },
                 "value": "div",
-                "rawValue": "div",
-                "raw": "\"div\""
+                "extra": {
+                  "rawValue": "div",
+                  "raw": "\"div\""
+                }
               }
             }
           }
@@ -173,10 +174,11 @@
               "column": 57
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

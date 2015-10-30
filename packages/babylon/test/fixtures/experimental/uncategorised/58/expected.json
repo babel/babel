@@ -94,7 +94,7 @@
             }
           ],
           "body": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 12,
             "end": 13,
             "loc": {
@@ -107,12 +107,15 @@
                 "column": 13
               }
             },
-            "value": 1,
-            "rawValue": 1,
-            "raw": "1"
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

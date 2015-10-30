@@ -90,7 +90,6 @@
               "id": null,
               "generator": false,
               "expression": true,
-              "async": false,
               "params": [
                 {
                   "type": "Identifier",
@@ -107,7 +106,9 @@
                     }
                   },
                   "name": "bar",
-                  "parenthesizedExpression": true
+                  "extra": {
+                    "parenthesized": true
+                  }
                 }
               ],
               "body": {
@@ -161,7 +162,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

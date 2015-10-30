@@ -58,7 +58,7 @@
           },
           "properties": [
             {
-              "type": "Property",
+              "type": "ObjectProperty",
               "start": 2,
               "end": 31,
               "loc": {
@@ -138,7 +138,7 @@
                       },
                       "properties": [
                         {
-                          "type": "Property",
+                          "type": "ObjectProperty",
                           "start": 15,
                           "end": 16,
                           "loc": {
@@ -170,7 +170,6 @@
                             },
                             "name": "x"
                           },
-                          "kind": "init",
                           "value": {
                             "type": "Identifier",
                             "start": 15,
@@ -206,7 +205,7 @@
                       },
                       "properties": [
                         {
-                          "type": "Property",
+                          "type": "ObjectProperty",
                           "start": 21,
                           "end": 26,
                           "loc": {
@@ -239,7 +238,7 @@
                             "name": "x"
                           },
                           "value": {
-                            "type": "Literal",
+                            "type": "NumberLiteral",
                             "start": 24,
                             "end": 26,
                             "loc": {
@@ -252,11 +251,12 @@
                                 "column": 26
                               }
                             },
-                            "value": 10,
-                            "rawValue": 10,
-                            "raw": "10"
-                          },
-                          "kind": "init"
+                            "extra": {
+                              "rawValue": 10,
+                              "raw": "10"
+                            },
+                            "value": 10
+                          }
                         }
                       ]
                     }
@@ -276,16 +276,18 @@
                       "column": 31
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
-              },
-              "kind": "init"
+              }
             }
           ],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

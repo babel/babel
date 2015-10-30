@@ -1,0 +1,2 @@
+foo["default"];
+foo["import"];

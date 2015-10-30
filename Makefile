@@ -8,7 +8,9 @@ build: clean
 	./scripts/build.sh
 
 build-dist: build
-	cd packages/babel; \
+	cd packages/babel-core; \
+	scripts/build-dist.sh
+	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
@@ -18,10 +20,10 @@ watch: clean
 
 lint:
 	node node_modules/.bin/eslint packages/*/src
+	#flow check
 
 clean: test-clean
 	rm -rf coverage
-	rm -rf packages/*/lib packages/babel/templates.json
 
 test-clean:
 	rm -rf packages/*/test/tmp
@@ -29,10 +31,6 @@ test-clean:
 
 test: lint
 	./scripts/test.sh
-	make test-clean
-
-test-browser:
-	./scripts/test-browser.sh
 	make test-clean
 
 test-cov: clean
@@ -47,7 +45,7 @@ publish:
 	make test
 	node scripts/publish.js
 	make clean
-	./scripts/build-website.sh
+	#./scripts/build-website.sh
 
 bootstrap:
 	npm install

@@ -94,7 +94,7 @@
               }
             ],
             "test": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 22,
               "end": 23,
               "loc": {
@@ -107,9 +107,11 @@
                   "column": 10
                 }
               },
-              "value": 1,
-              "rawValue": 1,
-              "raw": "1"
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
             },
             "trailingComments": [
               {
@@ -126,17 +128,14 @@
                     "line": 4,
                     "column": 16
                   }
-                },
-                "range": [
-                  44,
-                  56
-                ]
+                }
               }
             ]
           }
         ]
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -153,11 +152,7 @@
           "line": 4,
           "column": 16
         }
-      },
-      "range": [
-        44,
-        56
-      ]
+      }
     }
   ]
 }

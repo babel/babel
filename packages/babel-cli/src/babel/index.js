@@ -2,22 +2,19 @@
 
 require("babel-core");
 
-var moduleFormatters = require("babel-core/lib/transformation/modules");
-var pathExists       = require("path-exists");
-var commander        = require("commander");
-var transform        = require("babel-core").transform;
-var kebabCase        = require("lodash/string/kebabCase");
-var options          = require("babel-core").options;
-var util             = require("babel-core").util;
-var uniq             = require("lodash/array/uniq");
-var each             = require("lodash/collection/each");
-var keys             = require("lodash/object/keys");
-var glob             = require("glob");
+let pathExists = require("path-exists");
+let commander  = require("commander");
+let kebabCase  = require("lodash/string/kebabCase");
+let options    = require("babel-core").options;
+let util       = require("babel-core").util;
+let uniq       = require("lodash/array/uniq");
+let each       = require("lodash/collection/each");
+let glob       = require("glob");
 
 each(options, function (option, key) {
   if (option.hidden) return;
 
-  var arg = kebabCase(key);
+  let arg = kebabCase(key);
 
   if (option.type !== "boolean") {
     arg += " [" + (option.type || "string") + "]";
@@ -33,7 +30,7 @@ each(options, function (option, key) {
     arg = "-" + option.shorthand + ", " + arg;
   }
 
-  var desc = [];
+  let desc = [];
   if (option.deprecated) desc.push("[DEPRECATED] " + option.deprecated);
   if (option.description) desc.push(option.description);
 
@@ -47,27 +44,7 @@ commander.option("-d, --out-dir [out]", "Compile an input directory of modules i
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
 commander.option("-q, --quiet", "Don't log anything");
 
-commander.on("--help", function () {
-  var outKeys = function (title, obj) {
-    console.log("  " + title + ":");
-    console.log();
-
-    each(keys(obj).sort(), function (key) {
-      if (key[0] === "_") return;
-
-      if (obj[key].metadata && obj[key].metadata.optional) key = "[" + key + "]";
-
-      console.log("    - " + key);
-    });
-
-    console.log();
-  };
-
-  outKeys("Transformers", transform.pipeline.transformers);
-  outKeys("Module formatters", moduleFormatters);
-});
-
-var pkg = require("../../package.json");
+let pkg = require("../../package.json");
 commander.version(pkg.version + " (babel-core " + require("babel-core").version + ")");
 commander.usage("[options] <files ...>");
 commander.parse(process.argv);
@@ -80,10 +57,10 @@ if (commander.extensions) {
 
 //
 
-var errors = [];
+let errors = [];
 
-var filenames = commander.args.reduce(function (globbed, input) {
-  var files = glob.sync(input);
+let filenames = commander.args.reduce(function (globbed, input) {
+  let files = glob.sync(input);
   if (!files.length) files = [input];
   return globbed.concat(files);
 }, []);
@@ -121,7 +98,7 @@ if (errors.length) {
 
 //
 
-var opts = exports.opts = {};
+let opts = exports.opts = {};
 
 each(options, function (opt, key) {
   if (commander[key] !== undefined) {
@@ -135,7 +112,7 @@ if (opts.only) {
   opts.only = util.arrayify(opts.only, util.regexify);
 }
 
-var fn;
+let fn;
 
 if (commander.outDir) {
   fn = require("./dir");

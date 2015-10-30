@@ -121,7 +121,7 @@
                   },
                   "properties": [
                     {
-                      "type": "Property",
+                      "type": "ObjectProperty",
                       "start": 14,
                       "end": 15,
                       "loc": {
@@ -153,7 +153,6 @@
                         },
                         "name": "x"
                       },
-                      "kind": "init",
                       "value": {
                         "type": "Identifier",
                         "start": 14,
@@ -189,7 +188,7 @@
                   },
                   "properties": [
                     {
-                      "type": "Property",
+                      "type": "ObjectProperty",
                       "start": 20,
                       "end": 25,
                       "loc": {
@@ -222,7 +221,7 @@
                         "name": "x"
                       },
                       "value": {
-                        "type": "Literal",
+                        "type": "NumberLiteral",
                         "start": 23,
                         "end": 25,
                         "loc": {
@@ -235,11 +234,12 @@
                             "column": 25
                           }
                         },
-                        "value": 10,
-                        "rawValue": 10,
-                        "raw": "10"
-                      },
-                      "kind": "init"
+                        "extra": {
+                          "rawValue": 10,
+                          "raw": "10"
+                        },
+                        "value": 10
+                      }
                     }
                   ]
                 }
@@ -259,12 +259,13 @@
                   "column": 30
                 }
               },
-              "body": []
+              "body": [],
+              "directives": []
             }
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

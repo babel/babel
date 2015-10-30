@@ -1,0 +1,16 @@
+{
+  "name": "babel-preset-react",
+  "version": "6.0.2",
+  "description": "",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": "babel/babel",
+  "main": "index.js",
+  "dependencies": {
+    "babel-plugin-syntax-flow": "^6.0.2",
+    "babel-plugin-syntax-jsx": "^6.0.2",
+    "babel-plugin-transform-react-jsx": "^6.0.2",
+    "babel-plugin-transform-flow-strip-types": "^6.0.2"
+  }
+}

@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-class-constructor-call", "transform-es2015-classes", "transform-es2015-block-scoping", "transform-es2015-parameters"]
+}

@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "NumberLiteral",
           "start": 37,
           "end": 39,
           "loc": {
@@ -56,9 +56,11 @@
               "column": 2
             }
           },
+          "extra": {
+            "rawValue": 42,
+            "raw": "42"
+          },
           "value": 42,
-          "rawValue": 42,
-          "raw": "42",
           "leadingComments": null
         },
         "leadingComments": [
@@ -76,11 +78,7 @@
                 "line": 1,
                 "column": 16
               }
-            },
-            "range": [
-              0,
-              16
-            ]
+            }
           },
           {
             "type": "CommentLine",
@@ -96,14 +94,45 @@
                 "line": 3,
                 "column": 18
               }
-            },
-            "range": [
-              18,
-              36
-            ]
+            }
           }
         ]
       }
-    ]
-  }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Hello, world!",
+      "start": 0,
+      "end": 16,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": "   Another hello",
+      "start": 18,
+      "end": 36,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 18
+        }
+      }
+    }
+  ]
 }

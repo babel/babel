@@ -89,7 +89,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 14,
                   "end": 25,
                   "loc": {
@@ -138,7 +138,7 @@
                     "arguments": []
                   },
                   "value": {
-                    "type": "Literal",
+                    "type": "StringLiteral",
                     "start": 23,
                     "end": 25,
                     "loc": {
@@ -151,11 +151,12 @@
                         "column": 13
                       }
                     },
-                    "value": "",
-                    "rawValue": "",
-                    "raw": "\"\""
-                  },
-                  "kind": "init"
+                    "extra": {
+                      "rawValue": "",
+                      "raw": "\"\""
+                    },
+                    "value": ""
+                  }
                 }
               ]
             }
@@ -163,7 +164,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

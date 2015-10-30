@@ -104,7 +104,6 @@
                 "id": null,
                 "generator": false,
                 "expression": true,
-                "async": false,
                 "params": [
                   {
                     "type": "Identifier",
@@ -121,7 +120,9 @@
                       }
                     },
                     "name": "bar",
-                    "parenthesizedExpression": true
+                    "extra": {
+                      "parenthesized": true
+                    }
                   }
                 ],
                 "body": {
@@ -170,7 +171,9 @@
                     }
                   }
                 },
-                "parenthesizedExpression": true
+                "extra": {
+                  "parenthesized": true
+                }
               },
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -202,13 +205,15 @@
                   }
                 }
               },
-              "parenthesizedExpression": true
+              "extra": {
+                "parenthesized": true
+              }
             }
           }
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

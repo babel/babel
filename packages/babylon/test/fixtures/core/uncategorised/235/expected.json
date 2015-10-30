@@ -71,10 +71,11 @@
                   "column": 8
                 }
               },
-              "body": []
+              "body": [],
+              "directives": []
             },
             "test": {
-              "type": "Literal",
+              "type": "BooleanLiteral",
               "start": 16,
               "end": 21,
               "loc": {
@@ -87,9 +88,7 @@
                   "column": 21
                 }
               },
-              "value": false,
-              "rawValue": false,
-              "raw": "false"
+              "value": false
             }
           },
           {
@@ -107,7 +106,7 @@
               }
             },
             "expression": {
-              "type": "Literal",
+              "type": "BooleanLiteral",
               "start": 23,
               "end": 28,
               "loc": {
@@ -120,13 +119,13 @@
                   "column": 28
                 }
               },
-              "value": false,
-              "rawValue": false,
-              "raw": "false"
+              "value": false
             }
           }
-        ]
+        ],
+        "directives": []
       }
-    ]
+    ],
+    "directives": []
   }
 }

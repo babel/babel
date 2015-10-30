@@ -57,7 +57,7 @@
             }
           },
           "left": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 0,
             "end": 4,
             "loc": {
@@ -70,13 +70,15 @@
                 "column": 4
               }
             },
-            "value": 123,
-            "rawValue": 123,
-            "raw": "123."
+            "extra": {
+              "rawValue": 123,
+              "raw": "123."
+            },
+            "value": 123
           },
           "operator": "+",
           "right": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 5,
             "end": 6,
             "loc": {
@@ -89,12 +91,15 @@
                 "column": 6
               }
             },
-            "value": 2,
-            "rawValue": 2,
-            "raw": "2"
+            "extra": {
+              "rawValue": 2,
+              "raw": "2"
+            },
+            "value": 2
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

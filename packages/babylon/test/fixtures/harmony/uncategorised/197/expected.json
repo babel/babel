@@ -56,10 +56,11 @@
               "column": 5
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         },
         "test": {
-          "type": "Literal",
+          "type": "BooleanLiteral",
           "start": 13,
           "end": 18,
           "loc": {
@@ -72,9 +73,7 @@
               "column": 18
             }
           },
-          "value": false,
-          "rawValue": false,
-          "raw": "false"
+          "value": false
         }
       },
       {
@@ -124,6 +123,7 @@
           "arguments": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

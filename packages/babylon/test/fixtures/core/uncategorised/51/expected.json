@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "NumberLiteral",
           "start": 8,
           "end": 10,
           "loc": {
@@ -56,9 +56,11 @@
               "column": 6
             }
           },
+          "extra": {
+            "rawValue": 42,
+            "raw": "42"
+          },
           "value": 42,
-          "rawValue": 42,
-          "raw": "42",
           "leadingComments": null
         },
         "leadingComments": [
@@ -76,14 +78,29 @@
                 "line": 2,
                 "column": 3
               }
-            },
-            "range": [
-              0,
-              7
-            ]
+            }
           }
         ]
       }
-    ]
-  }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "a\rb",
+      "start": 0,
+      "end": 7,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 3
+        }
+      }
+    }
+  ]
 }

@@ -73,7 +73,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 5,
                   "end": 6,
                   "loc": {
@@ -105,7 +105,6 @@
                     },
                     "name": "x"
                   },
-                  "kind": "init",
                   "value": {
                     "type": "Identifier",
                     "start": 5,
@@ -222,7 +221,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 26,
                   "end": 36,
                   "loc": {
@@ -255,7 +254,7 @@
                     "name": "x"
                   },
                   "value": {
-                    "type": "Literal",
+                    "type": "StringLiteral",
                     "start": 29,
                     "end": 36,
                     "loc": {
@@ -268,11 +267,12 @@
                         "column": 36
                       }
                     },
-                    "value": "hello",
-                    "rawValue": "hello",
-                    "raw": "\"hello\""
-                  },
-                  "kind": "init"
+                    "extra": {
+                      "rawValue": "hello",
+                      "raw": "\"hello\""
+                    },
+                    "value": "hello"
+                  }
                 }
               ]
             }
@@ -280,7 +280,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

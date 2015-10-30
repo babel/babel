@@ -1,0 +1,3 @@
+{
+  "plugins": ["external-helpers-2", ["transform-async-to-module-method", { "module": "bluebird", "method": "coroutine" }]]
+}

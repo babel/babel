@@ -1,3 +1,0 @@
-[submodule "vendor/traceur"]
-	path = vendor/traceur
-	url = https://github.com/google/traceur-compiler

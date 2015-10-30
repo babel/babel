@@ -1,1 +1,1 @@
-module.exports = require("babel-core");
+throw new Error("Use the `babel-core` package not `babel`.");

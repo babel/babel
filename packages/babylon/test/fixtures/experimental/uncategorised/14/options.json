@@ -1,5 +1,3 @@
 {
-  "features": {
-    "es7.objectRestSpread": true
-  }
+  "plugins": ["objectRestSpread"]
 }

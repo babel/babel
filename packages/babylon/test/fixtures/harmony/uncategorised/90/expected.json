@@ -93,7 +93,7 @@
           }
         ],
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 24,
           "end": 31,
           "loc": {
@@ -106,12 +106,14 @@
               "column": 31
             }
           },
-          "value": "other",
-          "rawValue": "other",
-          "raw": "\"other\""
+          "extra": {
+            "rawValue": "other",
+            "raw": "\"other\""
+          },
+          "value": "other"
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

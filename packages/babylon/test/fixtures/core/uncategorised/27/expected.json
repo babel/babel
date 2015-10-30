@@ -89,7 +89,7 @@
             },
             "properties": [
               {
-                "type": "Property",
+                "type": "ObjectProperty",
                 "start": 6,
                 "end": 18,
                 "loc": {
@@ -106,7 +106,7 @@
                 "shorthand": false,
                 "computed": false,
                 "key": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 6,
                   "end": 14,
                   "loc": {
@@ -119,12 +119,14 @@
                       "column": 14
                     }
                   },
-                  "value": "answer",
-                  "rawValue": "answer",
-                  "raw": "\"answer\""
+                  "extra": {
+                    "rawValue": "answer",
+                    "raw": "\"answer\""
+                  },
+                  "value": "answer"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 16,
                   "end": 18,
                   "loc": {
@@ -137,16 +139,18 @@
                       "column": 18
                     }
                   },
-                  "value": 42,
-                  "rawValue": 42,
-                  "raw": "42"
-                },
-                "kind": "init"
+                  "extra": {
+                    "rawValue": 42,
+                    "raw": "42"
+                  },
+                  "value": 42
+                }
               }
             ]
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

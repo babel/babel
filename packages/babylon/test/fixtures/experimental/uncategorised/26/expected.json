@@ -121,7 +121,7 @@
               },
               "arguments": [
                 {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 11,
                   "end": 12,
                   "loc": {
@@ -134,12 +134,14 @@
                       "column": 12
                     }
                   },
-                  "value": 1,
-                  "rawValue": 1,
-                  "raw": "1"
+                  "extra": {
+                    "rawValue": 1,
+                    "raw": "1"
+                  },
+                  "value": 1
                 },
                 {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 14,
                   "end": 15,
                   "loc": {
@@ -152,9 +154,11 @@
                       "column": 15
                     }
                   },
-                  "value": 2,
-                  "rawValue": 2,
-                  "raw": "2"
+                  "extra": {
+                    "rawValue": 2,
+                    "raw": "2"
+                  },
+                  "value": 2
                 }
               ]
             },
@@ -177,7 +181,7 @@
           ]
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

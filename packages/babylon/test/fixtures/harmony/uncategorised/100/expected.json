@@ -138,12 +138,15 @@
                   "name": "v"
                 }
               }
-            ]
+            ],
+            "directives": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -77,7 +77,7 @@
         ],
         "importKind": "value",
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 17,
           "end": 22,
           "loc": {
@@ -90,12 +90,14 @@
               "column": 22
             }
           },
-          "value": "foo",
-          "rawValue": "foo",
-          "raw": "\"foo\""
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

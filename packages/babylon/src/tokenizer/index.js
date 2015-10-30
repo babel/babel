@@ -1,4 +1,7 @@
-import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
+/* @flow */
+
+import type { TokenType } from "./types";
+import { isIdentifierStart, isIdentifierChar, isKeyword } from "../util/identifier";
 import { types as tt, keywords as keywordTypes } from "./types";
 import { types as ct } from "./context";
 import { SourceLocation } from "../util/location";
@@ -17,46 +20,37 @@ export class Token {
     this.end = state.end;
     this.loc = new SourceLocation(state.startLoc, state.endLoc);
   }
+
+  type: TokenType;
+  value: any;
+  start: number;
+  end: number;
+  loc: SourceLocation;
 }
 
 // ## Tokenizer
 
-// Are we running under Rhino?
-/* global Packages */
-const isRhino = typeof Packages === "object" && Object.prototype.toString.call(Packages) === "[object JavaPackage]";
-
-// Parse a regular expression. Some context-awareness is necessary,
-// since a '/' inside a '[]' set does not end the expression.
-
-function tryCreateRegexp(src, flags, throwErrorStart) {
-  try {
-    return new RegExp(src, flags);
-  } catch (e) {
-    if (throwErrorStart !== undefined) {
-      if (e instanceof SyntaxError) this.raise(throwErrorStart, "Error parsing regular expression: " + e.message);
-      this.raise(e);
-    }
+function codePointToString(code) {
+  // UTF-16 Decoding
+  if (code <= 0xFFFF) {
+    return String.fromCharCode(code);
+  } else {
+    return String.fromCharCode(((code - 0x10000) >> 10) + 0xD800, ((code - 0x10000) & 1023) + 0xDC00);
   }
 }
 
-var regexpUnicodeSupport = !!tryCreateRegexp("\uffff", "u");
-
-function codePointToString(code) {
-  // UTF-16 Decoding
-  if (code <= 0xFFFF) return String.fromCharCode(code);
-  return String.fromCharCode(((code - 0x10000) >> 10) + 0xD800, ((code - 0x10000) & 1023) + 0xDC00);
-}
-
 export default class Tokenizer {
-  constructor(input) {
+  constructor(options, input) {
     this.state = new State;
-    this.state.init(input);
+    this.state.init(options, input);
   }
 
   // Move to the next token
 
   next() {
-    this.state.tokens.push(new Token(this.state));
+    if (!this.isLookahead) {
+      this.state.tokens.push(new Token(this.state));
+    }
 
     this.state.lastTokEnd = this.state.end;
     this.state.lastTokStart = this.state.start;
@@ -84,11 +78,21 @@ export default class Tokenizer {
 
   // TODO
 
+  isKeyword(word) {
+    return isKeyword(word);
+  }
+
+  // TODO
+
   lookahead() {
-    var old = this.state;
-    this.state = old.clone();
+    let old = this.state;
+    this.state = old.clone(true);
+
+    this.isLookahead = true;
     this.next();
-    var curr = this.state.clone();
+    this.isLookahead = false;
+
+    let curr = this.state.clone(true);
     this.state = old;
     return curr;
   }
@@ -97,7 +101,7 @@ export default class Tokenizer {
   // pedantic tests (`"use strict"; 010;` should fail).
 
   setStrict(strict) {
-    this.strict = strict;
+    this.state.strict = strict;
     if (!this.match(tt.num) && !this.match(tt.string)) return;
     this.state.pos = this.state.start;
     while (this.state.pos < this.state.lineStart) {
@@ -118,6 +122,8 @@ export default class Tokenizer {
     let curContext = this.curContext();
     if (!curContext || !curContext.preserveSpace) this.skipSpace();
 
+    this.state.containsOctal = false;
+    this.state.octalPosition = null;
     this.state.start = this.state.pos;
     this.state.startLoc = this.state.curPosition();
     if (this.state.pos >= this.input.length) return this.finishToken(tt.eof);
@@ -132,10 +138,11 @@ export default class Tokenizer {
   readToken(code) {
     // Identifier or keyword. '\uXXXX' sequences are allowed in
     // identifiers, so '\' also dispatches to that.
-    if (isIdentifierStart(code, true) || code === 92 /* '\' */)
+    if (isIdentifierStart(code, true) || code === 92 /* '\' */) {
       return this.readWord();
-
-    return this.getTokenFromCode(code);
+    } else {
+      return this.getTokenFromCode(code);
+    }
   }
 
   fullCharCodeAtPos() {
@@ -147,17 +154,19 @@ export default class Tokenizer {
   }
 
   pushComment(block, text, start, end, startLoc, endLoc) {
-    var comment = {
+    let comment = {
       type: block ? "CommentBlock" : "CommentLine",
       value: text,
       start: start,
       end: end,
-      loc: new SourceLocation(startLoc, endLoc),
-      range: [start, end]
+      loc: new SourceLocation(startLoc, endLoc)
     };
 
-    this.state.tokens.push(comment);
-    this.state.comments.push(comment);
+    if (!this.isLookahead) {
+      this.state.tokens.push(comment);
+      this.state.comments.push(comment);
+    }
+
     this.addComment(comment);
   }
 
@@ -291,11 +300,11 @@ export default class Tokenizer {
   }
 
   readToken_mult_modulo(code) { // '%*'
-    var type = code === 42 ? tt.star : tt.modulo;
-    var width = 1;
-    var next = this.input.charCodeAt(this.state.pos + 1);
+    let type = code === 42 ? tt.star : tt.modulo;
+    let width = 1;
+    let next = this.input.charCodeAt(this.state.pos + 1);
 
-    if (next === 42 && this.options.features["es7.exponentiationOperator"]) { // '*'
+    if (next === 42 && this.hasPlugin("exponentiationOperator")) { // '*'
       width++;
       next = this.input.charCodeAt(this.state.pos + 2);
       type = tt.exponent;
@@ -398,7 +407,7 @@ export default class Tokenizer {
       case 125: ++this.state.pos; return this.finishToken(tt.braceR);
 
       case 58:
-        if (this.options.features["es7.functionBind"] && this.input.charCodeAt(this.state.pos + 1) === 58) {
+        if (this.hasPlugin("functionBind") && this.input.charCodeAt(this.state.pos + 1) === 58) {
           return this.finishOp(tt.doubleColon, 2);
         } else {
           ++this.state.pos;
@@ -492,41 +501,13 @@ export default class Tokenizer {
     // Need to use `readWord1` because '\uXXXX' sequences are allowed
     // here (don't ask).
     let mods = this.readWord1();
-    let tmp = content;
     if (mods) {
       let validFlags = /^[gmsiyu]*$/;
       if (!validFlags.test(mods)) this.raise(start, "Invalid regular expression flag");
-      if (mods.indexOf("u") >= 0 && !regexpUnicodeSupport) {
-        // Replace each astral symbol and every Unicode escape sequence that
-        // possibly represents an astral symbol or a paired surrogate with a
-        // single ASCII symbol to avoid throwing on regular expressions that
-        // are only valid in combination with the `/u` flag.
-        // Note: replacing with the ASCII symbol `x` might cause false
-        // negatives in unlikely scenarios. For example, `[\u{61}-b]` is a
-        // perfectly valid pattern that is equivalent to `[a-b]`, but it would
-        // be replaced by `[x-b]` which throws an error.
-        tmp = tmp.replace(/\\u\{([0-9a-fA-F]+)\}/g, (match, code, offset) => {
-          code = Number("0x" + code);
-          if (code > 0x10FFFF) this.raise(start + offset + 3, "Code point out of bounds");
-          return "x";
-        });
-        tmp = tmp.replace(/\\u([a-fA-F0-9]{4})|[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x");
-      }
-    }
-    // Detect invalid regular expressions.
-    let value = null;
-    // Rhino's regular expression parser is flaky and throws uncatchable exceptions,
-    // so don't do detection if we are running under Rhino
-    if (!isRhino) {
-      tryCreateRegexp.call(this, tmp, undefined, start);
-      // Get a regular expression object for this pattern-flag pair, or `null` in
-      // case the current environment doesn't support the flags it uses.
-      value = tryCreateRegexp.call(this, content, mods);
     }
     return this.finishToken(tt.regexp, {
       pattern: content,
-      flags: mods,
-      value
+      flags: mods
     });
   }
 
@@ -589,7 +570,7 @@ export default class Tokenizer {
       val = parseFloat(str);
     } else if (!octal || str.length === 1) {
       val = parseInt(str, 10);
-    } else if (/[89]/.test(str) || this.strict) {
+    } else if (/[89]/.test(str) || this.state.strict) {
       this.raise(start, "Invalid number");
     } else {
       val = parseInt(str, 8);
@@ -705,8 +686,14 @@ export default class Tokenizer {
             octalStr = octalStr.slice(0, -1);
             octal = parseInt(octalStr, 8);
           }
-          if (octal > 0 && (this.strict || inTemplate)) {
-            this.raise(this.state.pos - 2, "Octal literal in strict mode");
+          if (octal > 0) {
+            if (!this.state.containsOctal) {
+              this.state.containsOctal = true;
+              this.state.octalPosition = this.state.pos - 2;
+            }
+            if (this.state.strict || inTemplate) {
+              this.raise(this.state.pos - 2, "Octal literal in strict mode");
+            }
           }
           this.state.pos += octalStr.length - 1;
           return String.fromCharCode(octal);
@@ -769,8 +756,9 @@ export default class Tokenizer {
   readWord() {
     let word = this.readWord1();
     let type = tt.name;
-    if (!this.state.containsEsc && this.isKeyword(word))
+    if (!this.state.containsEsc && this.isKeyword(word)) {
       type = keywordTypes[word];
+    }
     return this.finishToken(type, word);
   }
 

@@ -43,7 +43,7 @@
           }
         },
         "test": {
-          "type": "Literal",
+          "type": "NumberLiteral",
           "start": 3,
           "end": 4,
           "loc": {
@@ -56,9 +56,11 @@
               "column": 4
             }
           },
-          "value": 1,
-          "rawValue": 1,
-          "raw": "1"
+          "extra": {
+            "rawValue": 1,
+            "raw": "1"
+          },
+          "value": 1
         },
         "consequent": {
           "type": "ExpressionStatement",
@@ -75,7 +77,7 @@
             }
           },
           "expression": {
-            "type": "Literal",
+            "type": "RegexLiteral",
             "start": 5,
             "end": 12,
             "loc": {
@@ -88,15 +90,16 @@
                 "column": 12
               }
             },
-            "raw": "/  foo/",
-            "regex": {
-              "pattern": "  foo",
-              "flags": ""
-            }
+            "extra": {
+              "raw": "/  foo/"
+            },
+            "pattern": "  foo",
+            "flags": ""
           }
         },
         "alternate": null
       }
-    ]
+    ],
+    "directives": []
   }
 }

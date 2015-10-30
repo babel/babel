@@ -124,7 +124,7 @@
         ],
         "importKind": "value",
         "source": {
-          "type": "Literal",
+          "type": "StringLiteral",
           "start": 24,
           "end": 29,
           "loc": {
@@ -137,12 +137,14 @@
               "column": 29
             }
           },
-          "value": "bar",
-          "rawValue": "bar",
-          "raw": "\"bar\""
+          "extra": {
+            "rawValue": "bar",
+            "raw": "\"bar\""
+          },
+          "value": "bar"
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

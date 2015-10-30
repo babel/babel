@@ -102,7 +102,7 @@
                   "name": "d"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 8,
                   "end": 60,
                   "loc": {
@@ -115,9 +115,8 @@
                       "column": 15
                     }
                   },
-                  "value": "M230 80\n\t\tA 45 45, 0, 1, 0, 275 125\n    L 275 80 Z",
-                  "rawValue": null,
-                  "raw": "\"M230 80\n\t\tA 45 45, 0, 1, 0, 275 125\n    L 275 80 Z\""
+                  "extra": null,
+                  "value": "M230 80\n\t\tA 45 45, 0, 1, 0, 275 125\n    L 275 80 Z"
                 }
               }
             ],
@@ -143,6 +142,7 @@
           "children": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

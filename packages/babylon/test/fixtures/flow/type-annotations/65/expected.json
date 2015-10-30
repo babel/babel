@@ -60,7 +60,6 @@
         },
         "generator": false,
         "expression": false,
-        "async": false,
         "params": [
           {
             "type": "RestElement",
@@ -186,10 +185,11 @@
               "column": 39
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-es2015-classes", "external-helpers-2", "transform-es2015-block-scoping"]
+}

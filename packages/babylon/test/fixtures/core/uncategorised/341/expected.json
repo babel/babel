@@ -42,7 +42,8 @@
             "column": 2
           }
         },
-        "body": []
+        "body": [],
+        "directives": []
       },
       {
         "type": "ExpressionStatement",
@@ -59,7 +60,7 @@
           }
         },
         "expression": {
-          "type": "Literal",
+          "type": "RegexLiteral",
           "start": 2,
           "end": 5,
           "loc": {
@@ -72,13 +73,14 @@
               "column": 5
             }
           },
-          "raw": "/=/",
-          "regex": {
-            "pattern": "=",
-            "flags": ""
-          }
+          "extra": {
+            "raw": "/=/"
+          },
+          "pattern": "=",
+          "flags": ""
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

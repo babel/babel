@@ -58,7 +58,7 @@
           },
           "properties": [
             {
-              "type": "Property",
+              "type": "ObjectProperty",
               "start": 2,
               "end": 9,
               "loc": {
@@ -91,7 +91,7 @@
                 "name": "x"
               },
               "value": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 7,
                 "end": 9,
                 "loc": {
@@ -104,17 +104,20 @@
                     "column": 9
                   }
                 },
-                "value": 10,
-                "rawValue": 10,
-                "raw": "10"
-              },
-              "kind": "init"
+                "extra": {
+                  "rawValue": 10,
+                  "raw": "10"
+                },
+                "value": 10
+              }
             }
           ],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

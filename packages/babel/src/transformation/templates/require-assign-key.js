@@ -1,1 +1,0 @@
-var VARIABLE_NAME = require(MODULE_NAME).KEY;

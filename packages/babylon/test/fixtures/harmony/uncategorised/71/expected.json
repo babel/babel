@@ -73,7 +73,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 5,
                   "end": 8,
                   "loc": {
@@ -120,8 +120,7 @@
                       }
                     },
                     "name": "b"
-                  },
-                  "kind": "init"
+                  }
                 }
               ]
             },
@@ -145,7 +144,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

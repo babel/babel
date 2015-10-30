@@ -75,7 +75,7 @@
           },
           "body": [
             {
-              "type": "MethodDefinition",
+              "type": "ClassMethod",
               "start": 12,
               "end": 48,
               "loc": {
@@ -107,59 +107,59 @@
               },
               "static": false,
               "kind": "method",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 21,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": true,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 22,
+                  "end": 29,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 29
+                    }
+                  },
+                  "name": "promise"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 31,
                 "end": 48,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 21
+                    "column": 31
                   },
                   "end": {
                     "line": 1,
                     "column": 48
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "async": true,
-                "params": [
+                "body": [
                   {
-                    "type": "Identifier",
-                    "start": 22,
-                    "end": 29,
+                    "type": "ExpressionStatement",
+                    "start": 33,
+                    "end": 46,
                     "loc": {
                       "start": {
                         "line": 1,
-                        "column": 22
+                        "column": 33
                       },
                       "end": {
                         "line": 1,
-                        "column": 29
+                        "column": 46
                       }
                     },
-                    "name": "promise"
-                  }
-                ],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 31,
-                  "end": 48,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 31
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 48
-                    }
-                  },
-                  "body": [
-                    {
-                      "type": "ExpressionStatement",
+                    "expression": {
+                      "type": "AwaitExpression",
                       "start": 33,
                       "end": 46,
                       "loc": {
@@ -172,46 +172,33 @@
                           "column": 46
                         }
                       },
-                      "expression": {
-                        "type": "AwaitExpression",
-                        "start": 33,
+                      "all": false,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 39,
                         "end": 46,
                         "loc": {
                           "start": {
                             "line": 1,
-                            "column": 33
+                            "column": 39
                           },
                           "end": {
                             "line": 1,
                             "column": 46
                           }
                         },
-                        "all": false,
-                        "argument": {
-                          "type": "Identifier",
-                          "start": 39,
-                          "end": 46,
-                          "loc": {
-                            "start": {
-                              "line": 1,
-                              "column": 39
-                            },
-                            "end": {
-                              "line": 1,
-                              "column": 46
-                            }
-                          },
-                          "name": "promise"
-                        }
+                        "name": "promise"
                       }
                     }
-                  ]
-                }
+                  }
+                ],
+                "directives": []
               }
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

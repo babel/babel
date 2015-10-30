@@ -107,7 +107,7 @@
               },
               "static": true,
               "value": {
-                "type": "Literal",
+                "type": "StringLiteral",
                 "start": 25,
                 "end": 30,
                 "loc": {
@@ -120,14 +120,17 @@
                     "column": 30
                   }
                 },
-                "value": "bar",
-                "rawValue": "bar",
-                "raw": "\"bar\""
+                "extra": {
+                  "rawValue": "bar",
+                  "raw": "\"bar\""
+                },
+                "value": "bar"
               }
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

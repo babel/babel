@@ -89,7 +89,7 @@
             },
             "elements": [
               {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 6,
                 "end": 7,
                 "loc": {
@@ -102,12 +102,14 @@
                     "column": 7
                   }
                 },
-                "value": 1,
-                "rawValue": 1,
-                "raw": "1"
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
               },
               {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 9,
                 "end": 10,
                 "loc": {
@@ -120,12 +122,14 @@
                     "column": 10
                   }
                 },
-                "value": 2,
-                "rawValue": 2,
-                "raw": "2"
+                "extra": {
+                  "rawValue": 2,
+                  "raw": "2"
+                },
+                "value": 2
               },
               {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 12,
                 "end": 13,
                 "loc": {
@@ -138,14 +142,17 @@
                     "column": 13
                   }
                 },
-                "value": 3,
-                "rawValue": 3,
-                "raw": "3"
+                "extra": {
+                  "rawValue": 3,
+                  "raw": "3"
+                },
+                "value": 3
               }
             ]
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

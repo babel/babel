@@ -104,7 +104,7 @@
                 },
                 "properties": [
                   {
-                    "type": "Property",
+                    "type": "ObjectProperty",
                     "start": 5,
                     "end": 15,
                     "loc": {
@@ -152,7 +152,7 @@
                       },
                       "properties": [
                         {
-                          "type": "Property",
+                          "type": "ObjectProperty",
                           "start": 9,
                           "end": 14,
                           "loc": {
@@ -184,7 +184,6 @@
                             },
                             "name": "c"
                           },
-                          "kind": "init",
                           "value": {
                             "type": "AssignmentPattern",
                             "start": 9,
@@ -216,7 +215,7 @@
                               "name": "c"
                             },
                             "right": {
-                              "type": "Literal",
+                              "type": "NumberLiteral",
                               "start": 13,
                               "end": 14,
                               "loc": {
@@ -229,15 +228,16 @@
                                   "column": 14
                                 }
                               },
-                              "value": 1,
-                              "rawValue": 1,
-                              "raw": "1"
+                              "extra": {
+                                "rawValue": 1,
+                                "raw": "1"
+                              },
+                              "value": 1
                             }
                           }
                         }
                       ]
-                    },
-                    "kind": "init"
+                    }
                   }
                 ]
               }
@@ -261,7 +261,7 @@
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

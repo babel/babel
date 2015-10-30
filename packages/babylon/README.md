@@ -6,10 +6,68 @@
   Babylon is a JavaScript parser used in <a href="https://github.com/babel/babel">Babel</a>.
 </p>
 
+ - ES6 enabled by default.
+ - Comment attachment.
+ - Support for JSX and Flow.
+ - Support for experimental language proposals.
+
 ## Credits
 
 Heavily based on [acorn](https://github.com/marijnh/acorn) and [acorn-jsx](https://github.com/RReverser/acorn-jsx),
 thanks to the awesome work of [@RReverser](https://github.com/RReverser) and [@marijnh](https://github.com/marijnh).
 
-Significant diversions are expected to occur in the future such as streaming, EBNF definitions, sweet.js integration,
-interspacial parsing, comment attachment and more.
+Significant diversions are expected to occur in the future such as streaming, EBNF definitions, sweet.js integration, interspacial parsing and more.
+
+## API
+
+### `babylon.parse(code, [options])`
+
+## Options
+
+- **allowImportExportEverywhere**: By default, `import` and `export`
+  declarations can only appear at a program's top level. Setting this
+  option to `true` allows them anywhere where a statement is allowed.
+
+- **allowReturnOutsideFunction**: By default, a return statement at
+  the top level raises an error. Set this to `true` to accept such
+  code.
+
+- **allowSuperOutsideMethod** TODO
+
+- **sourceType**: Indicate the mode the code should be parsed in. Can be
+  either `"script"` or `"module"`.
+
+- **plugins**: Array containing the plugins that you want to enable.
+
+### Example
+
+```javascript
+require("babylon").parse("code", {
+  // parse in strict mode and allow module declarations
+  sourceType: "module",
+
+  features: [
+    // enable experimental async functions
+    "asyncFunctions",
+
+    // enable jsx and flow syntax
+    "jsx",
+    "flow"
+  ]
+});
+```
+
+### Plugins
+
+ - `jsx`
+ - `flow`
+ - `asyncFunctions`
+ - `classConstructorCall`
+ - `doExpressions`
+ - `trailingFunctionCommas`
+ - `objectRestSpread`
+ - `decorators`
+ - `classProperties`
+ - `exportExtensions`
+ - `exponentiationOperator`
+ - `asyncGenerators`

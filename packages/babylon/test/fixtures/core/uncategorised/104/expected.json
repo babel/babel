@@ -74,7 +74,7 @@
               "name": "x"
             },
             "init": {
-              "type": "Literal",
+              "type": "RegexLiteral",
               "start": 8,
               "end": 16,
               "loc": {
@@ -87,16 +87,17 @@
                   "column": 16
                 }
               },
-              "raw": "/[a-c]/i",
-              "regex": {
-                "pattern": "[a-c]",
-                "flags": "i"
-              }
+              "extra": {
+                "raw": "/[a-c]/i"
+              },
+              "pattern": "[a-c]",
+              "flags": "i"
             }
           }
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

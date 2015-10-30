@@ -1,3 +1,5 @@
+/* @flow */
+
 import { types as tt } from "../tokenizer/types";
 import Parser from "./index";
 import { lineBreak } from "../util/whitespace";
@@ -6,10 +8,13 @@ const pp = Parser.prototype;
 
 // ## Parser utilities
 
-// Test whether a statement node is the string literal `"use strict"`.
+// TODO
 
-pp.isUseStrict = function (stmt) {
-  return stmt.type === "ExpressionStatement" && stmt.expression.type === "Literal" && stmt.expression.raw.slice(1, -1) === "use strict";
+pp.addExtra = function (node, key, val) {
+  if (!node) return;
+
+  let extra = node.extra = node.extra || {};
+  extra[key] = val;
 };
 
 // TODO
@@ -52,6 +57,12 @@ pp.canInsertSemicolon = function () {
   return this.match(tt.eof) ||
     this.match(tt.braceR) ||
     lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start));
+};
+
+// TODO
+
+pp.isLineTerminator = function () {
+  return this.eat(tt.semi) || this.canInsertSemicolon();
 };
 
 // Consume a semicolon, or, failing that, see if we are allowed to

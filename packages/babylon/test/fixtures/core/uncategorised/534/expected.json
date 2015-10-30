@@ -74,7 +74,7 @@
               "name": "eval"
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 13,
               "end": 15,
               "loc": {
@@ -87,9 +87,11 @@
                   "column": 15
                 }
               },
-              "value": 42,
-              "rawValue": 42,
-              "raw": "42"
+              "extra": {
+                "rawValue": 42,
+                "raw": "42"
+              },
+              "value": 42
             }
           },
           {
@@ -123,7 +125,7 @@
               "name": "arguments"
             },
             "init": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 29,
               "end": 31,
               "loc": {
@@ -136,14 +138,17 @@
                   "column": 31
                 }
               },
-              "value": 42,
-              "rawValue": 42,
-              "raw": "42"
+              "extra": {
+                "rawValue": 42,
+                "raw": "42"
+              },
+              "value": 42
             }
           }
         ],
         "kind": "const"
       }
-    ]
+    ],
+    "directives": []
   }
 }

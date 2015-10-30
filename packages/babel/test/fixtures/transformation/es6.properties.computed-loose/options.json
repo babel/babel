@@ -1,4 +1,0 @@
-{
-  "blacklist": ["es5.properties.mutators"],
-  "loose": ["es6.properties.computed"]
-}

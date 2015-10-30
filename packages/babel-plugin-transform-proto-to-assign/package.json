@@ -1,0 +1,15 @@
+{
+  "name": "babel-plugin-transform-proto-to-assign",
+  "version": "6.0.2",
+  "description": "Babel plugin for turning __proto__ into a shallow property clone",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "babel-runtime": "^6.0.2",
+    "lodash": "^3.9.3"
+  }
+}

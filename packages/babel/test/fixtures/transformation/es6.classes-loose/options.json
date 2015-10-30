@@ -1,5 +1,0 @@
-{
-  "externalHelpers": true,
-  "loose": ["es6.classes"],
-  "blacklist": ["es6.tailCall"]
-}

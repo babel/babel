@@ -88,7 +88,7 @@
                 "name": "x"
               },
               "init": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 12,
                 "end": 13,
                 "loc": {
@@ -101,9 +101,11 @@
                     "column": 13
                   }
                 },
-                "value": 0,
-                "rawValue": 0,
-                "raw": "0"
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
               }
             },
             {
@@ -137,7 +139,7 @@
                 "name": "y"
               },
               "init": {
-                "type": "Literal",
+                "type": "NumberLiteral",
                 "start": 19,
                 "end": 20,
                 "loc": {
@@ -150,9 +152,11 @@
                     "column": 20
                   }
                 },
-                "value": 1,
-                "rawValue": 1,
-                "raw": "1"
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
               }
             }
           ],
@@ -176,6 +180,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

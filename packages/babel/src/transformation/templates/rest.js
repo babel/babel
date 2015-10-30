@@ -1,3 +1,0 @@
-for (var LEN = ARGUMENTS.length, ARRAY: ARRAY_TYPE = Array(ARRAY_LEN), KEY = START; KEY < LEN; KEY++) {
-  ARRAY[ARRAY_KEY] = ARGUMENTS[KEY];
-}

@@ -120,7 +120,7 @@
                     },
                     "delegate": false,
                     "argument": {
-                      "type": "Literal",
+                      "type": "NumberLiteral",
                       "start": 28,
                       "end": 30,
                       "loc": {
@@ -133,19 +133,24 @@
                           "column": 30
                         }
                       },
-                      "value": 10,
-                      "rawValue": 10,
-                      "raw": "10"
+                      "extra": {
+                        "rawValue": 10,
+                        "raw": "10"
+                      },
+                      "value": 10
                     }
                   }
                 }
               }
-            ]
+            ],
+            "directives": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

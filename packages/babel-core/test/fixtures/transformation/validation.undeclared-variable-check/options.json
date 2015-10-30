@@ -1,0 +1,3 @@
+{
+  "plugins": ["undeclared-variables-check"]
+}

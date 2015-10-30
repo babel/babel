@@ -2,6 +2,7 @@ require("shelljs/global");
 
 var readline = require("readline-sync");
 var semver   = require("semver");
+var chalk    = require("chalk");
 var child    = require("child_process");
 var fs       = require("fs");
 
@@ -55,11 +56,23 @@ function getPackageLocation(name) {
   return PACKAGE_LOC + "/" + name;
 }
 
+function getPackageConfig(name) {
+  return require(getPackageLocation(name) + "/package.json");
+}
+
 //
+
+function updateDepsObject(changedPackages, deps) {
+  for (var depName in deps) {
+    if (changedPackages.indexOf(depName) >= 0) {
+      deps[depName] = "^" + NEW_VERSION;
+    }
+  }
+}
 
 function publish() {
   var packageNames = fs.readdirSync(PACKAGE_LOC).filter(function (name) {
-    return name[0] !== ".";
+    return name[0] !== "." && fs.statSync(PACKAGE_LOC + "/" + name).isDirectory();
   });
 
   var lastTagCommit = exec("git rev-list --tags --max-count=1");
@@ -69,34 +82,33 @@ function publish() {
   var changedFiles = [VERSION_LOC];
 
   packageNames.forEach(function (name) {
+    var config = getPackageConfig(name);
+    if (config.private) return;
+
     // check if package has changed since last release
     var diff = exec("git diff " + lastTag + " -- " + getPackageLocation(name));
     if (diff || FORCE_VERSION.indexOf("*") >= 0 || FORCE_VERSION.indexOf(name) >= 0) {
-      console.log("Changes detected to package", name);
+      console.log(chalk.green("Changes detected to package", name));
       changedPackages.push(name);
     }
   });
 
   if (!changedPackages.length && !FORCE_VERSION.length) {
-    throw new Error("No packages changed.");
+    throw new Error(chalk.red("No packages changed."));
   }
 
   //
 
   changedPackages.forEach(function (name) {
-    var loc = getPackageLocation(name);
-    var pkgLoc = loc + "/package.json";
+    var pkgLoc = getPackageLocation(name) + "/package.json";
     var pkg = require(pkgLoc);
 
     // set new version
     pkg.version = NEW_VERSION;
 
     // updated dependencies
-    for (var depName in pkg.dependencies) {
-      if (changedPackages.indexOf(depName) >= 0) {
-        pkg.dependencies[depName] = "^" + NEW_VERSION;
-      }
-    }
+    updateDepsObject(changedPackages, pkg.dependencies);
+    updateDepsObject(changedPackages, pkg.devDependencies);
 
     // write new package
     fs.writeFileSync(pkgLoc, JSON.stringify(pkg, null, "  "));
@@ -128,18 +140,38 @@ function publish() {
     // postpublish script
     var postPub = loc + "/scripts/postpublish.js";
     if (fs.existsSync(postPub)) require(postPub);
+    publishedPackages.push(name);
   });
 }
 
-var originalCommit = exec("");
+var publishedPackages = [];
+var originalCommit = exec("git rev-list --all --max-count=1");;
 
 try {
   publish();
 } catch (err) {
-  // todo: unpublish npm packages already created
+  console.log(chalk.red("There was a problem publishing."));
   console.log(err.stack);
-  console.log("Rolling back to commit", originalCommit, "...");
-  exec("git checkout --hard " + originalCommit, true);
+  return;
+
+  if (publishedPackages.length) {
+    console.log(chalk.warning("Unpublishing published packages..."));
+
+    publishedPackages.forEach(function () {
+      var verInfo = name + "@" + NEW_VERSION;
+      try {
+        console.log(chalk.warning("Unpublishing " + verInfo + "..."));
+        //exec("npm unpublish --force " + verInfo);
+      } catch (err) {
+        console.log(chalk.red("Failed to unpublish " + verInfo));
+        console.log(err.stack);
+      }
+    });
+  } else {
+    console.log(chalk.warning("Rolling back to commit", originalCommit, "..."));
+    //exec("git checkout --hard " + originalCommit, true);
+  }
+
   return;
 }
 

@@ -151,7 +151,7 @@
               },
               "elements": [
                 {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 28,
                   "end": 31,
                   "loc": {
@@ -164,12 +164,14 @@
                       "column": 31
                     }
                   },
-                  "value": 123,
-                  "rawValue": 123,
-                  "raw": "123"
+                  "extra": {
+                    "rawValue": 123,
+                    "raw": "123"
+                  },
+                  "value": 123
                 },
                 {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 33,
                   "end": 39,
                   "loc": {
@@ -182,9 +184,11 @@
                       "column": 39
                     }
                   },
-                  "value": "duck",
-                  "rawValue": "duck",
-                  "raw": "\"duck\""
+                  "extra": {
+                    "rawValue": "duck",
+                    "raw": "\"duck\""
+                  },
+                  "value": "duck"
                 }
               ]
             }
@@ -192,7 +196,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

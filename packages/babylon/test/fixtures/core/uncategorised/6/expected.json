@@ -71,7 +71,7 @@
               }
             },
             "left": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 1,
               "end": 2,
               "loc": {
@@ -84,13 +84,15 @@
                   "column": 2
                 }
               },
-              "value": 1,
-              "rawValue": 1,
-              "raw": "1"
+              "extra": {
+                "rawValue": 1,
+                "raw": "1"
+              },
+              "value": 1
             },
             "operator": "+",
             "right": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 5,
               "end": 6,
               "loc": {
@@ -103,15 +105,19 @@
                   "column": 6
                 }
               },
-              "value": 2,
-              "rawValue": 2,
-              "raw": "2"
+              "extra": {
+                "rawValue": 2,
+                "raw": "2"
+              },
+              "value": 2
             },
-            "parenthesizedExpression": true
+            "extra": {
+              "parenthesized": true
+            }
           },
           "operator": "*",
           "right": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 11,
             "end": 12,
             "loc": {
@@ -124,12 +130,15 @@
                 "column": 12
               }
             },
-            "value": 3,
-            "rawValue": 3,
-            "raw": "3"
+            "extra": {
+              "rawValue": 3,
+              "raw": "3"
+            },
+            "value": 3
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -1,6 +1,6 @@
 {
-  "features": {
-    "es7.classProperties": true,
-    "es7.decorators": true
-  }
+  "plugins": [
+    "classProperties",
+    "decorators"
+  ]
 }

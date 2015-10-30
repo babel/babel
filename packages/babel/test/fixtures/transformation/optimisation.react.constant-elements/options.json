@@ -1,4 +1,0 @@
-{
-  "optional": ["optimisation.react.constantElements"],
-  "blacklist": ["react", "react.displayName"]
-}

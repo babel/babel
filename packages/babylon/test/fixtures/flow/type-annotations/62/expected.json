@@ -184,7 +184,7 @@
               },
               "elements": [
                 {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 27,
                   "end": 34,
                   "loc": {
@@ -197,9 +197,11 @@
                       "column": 34
                     }
                   },
-                  "value": "hello",
-                  "rawValue": "hello",
-                  "raw": "\"hello\""
+                  "extra": {
+                    "rawValue": "hello",
+                    "raw": "\"hello\""
+                  },
+                  "value": "hello"
                 }
               ]
             }
@@ -207,7 +209,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

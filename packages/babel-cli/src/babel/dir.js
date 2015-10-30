@@ -1,32 +1,34 @@
-var outputFileSync = require("output-file-sync");
-var pathExists     = require("path-exists");
-var chokidar       = require("chokidar");
-var slash          = require("slash");
-var path           = require("path");
-var util           = require("./util");
-var fs             = require("fs");
-var _              = require("lodash");
+let outputFileSync = require("output-file-sync");
+let pathExists     = require("path-exists");
+let chokidar       = require("chokidar");
+let slash          = require("slash");
+let path           = require("path");
+let util           = require("./util");
+let fs             = require("fs");
+let _              = require("lodash");
 
 module.exports = function (commander, filenames) {
   function write(src, relative) {
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
 
-    var dest = path.join(commander.outDir, relative);
+    let dest = path.join(commander.outDir, relative);
 
-    var data = util.compile(src, {
+    let data = util.compile(src, {
       sourceFileName: slash(path.relative(dest + "/..", src)),
       sourceMapTarget: path.basename(relative)
     });
     if (!commander.copyFiles && data.ignored) return;
 
+    // we've requested explicit sourcemaps to be written to disk
     if (data.map && commander.sourceMaps && commander.sourceMaps !== "inline") {
-      var mapLoc = dest + ".map";
+      let mapLoc = dest + ".map";
       data.code = util.addSourceMappingUrl(data.code, mapLoc);
       outputFileSync(mapLoc, JSON.stringify(data.map));
     }
 
     outputFileSync(dest, data.code);
+    util.chmod(src, dest);
 
     util.log(src + " -> " + dest);
   }
@@ -37,20 +39,22 @@ module.exports = function (commander, filenames) {
     if (util.canCompile(filename, commander.extensions)) {
       write(src, filename);
     } else if (commander.copyFiles) {
-      outputFileSync(path.join(commander.outDir, filename), fs.readFileSync(src));
+      let dest = path.join(commander.outDir, filename);
+      outputFileSync(dest, fs.readFileSync(src));
+      util.chmod(src, dest);
     }
   }
 
   function handle(filename) {
     if (!pathExists.sync(filename)) return;
 
-    var stat = fs.statSync(filename);
+    let stat = fs.statSync(filename);
 
     if (stat.isDirectory(filename)) {
-      var dirname = filename;
+      let dirname = filename;
 
       _.each(util.readdir(dirname), function (filename) {
-        var src = path.join(dirname, filename);
+        let src = path.join(dirname, filename);
         handleFile(src, filename);
       });
     } else {
@@ -62,14 +66,14 @@ module.exports = function (commander, filenames) {
 
   if (commander.watch) {
     _.each(filenames, function (dirname) {
-      var watcher = chokidar.watch(dirname, {
+      let watcher = chokidar.watch(dirname, {
         persistent: true,
         ignoreInitial: true
       });
 
       _.each(["add", "change"], function (type) {
         watcher.on(type, function (filename) {
-          var relative = path.relative(dirname, filename) || filename;
+          let relative = path.relative(dirname, filename) || filename;
           try {
             handleFile(filename, relative);
           } catch (err) {

@@ -74,7 +74,7 @@
             "name": "a"
           },
           "right": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 6,
             "end": 7,
             "loc": {
@@ -87,12 +87,15 @@
                 "column": 7
               }
             },
-            "value": 2,
-            "rawValue": 2,
-            "raw": "2"
+            "extra": {
+              "rawValue": 2,
+              "raw": "2"
+            },
+            "value": 2
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

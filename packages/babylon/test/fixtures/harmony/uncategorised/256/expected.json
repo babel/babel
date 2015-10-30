@@ -74,7 +74,7 @@
           },
           "operator": "*",
           "right": {
-            "type": "Literal",
+            "type": "NumberLiteral",
             "start": 7,
             "end": 9,
             "loc": {
@@ -87,13 +87,15 @@
                 "column": 9
               }
             },
-            "value": 10,
-            "rawValue": 10,
-            "raw": "10"
+            "extra": {
+              "rawValue": 10,
+              "raw": "10"
+            },
+            "value": 10
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

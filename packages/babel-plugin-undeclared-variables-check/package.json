@@ -1,0 +1,15 @@
+{
+  "name": "babel-plugin-undeclared-variables-check",
+  "version": "6.0.2",
+  "description": "Throw a compile-time error on references to undeclared variables",
+  "repository": "babel/babel",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "babel-runtime": "^6.0.2",
+    "leven": "^1.0.2"
+  }
+}

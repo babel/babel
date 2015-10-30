@@ -73,7 +73,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 7,
                   "end": 12,
                   "loc": {
@@ -105,7 +105,6 @@
                     },
                     "name": "async"
                   },
-                  "kind": "init",
                   "value": {
                     "type": "Identifier",
                     "start": 7,
@@ -157,7 +156,7 @@
               },
               "arguments": [
                 {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 24,
                   "end": 38,
                   "loc": {
@@ -170,9 +169,11 @@
                       "column": 38
                     }
                   },
-                  "value": "../lang/task",
-                  "rawValue": "../lang/task",
-                  "raw": "'../lang/task'"
+                  "extra": {
+                    "rawValue": "../lang/task",
+                    "raw": "'../lang/task'"
+                  },
+                  "value": "../lang/task"
                 }
               ]
             }
@@ -180,6 +181,7 @@
         ],
         "kind": "const"
       }
-    ]
+    ],
+    "directives": []
   }
 }

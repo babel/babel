@@ -1,10 +1,11 @@
 var outputFile = require("output-file-sync");
-var transform  = require("../../babel/lib/transformation");
+var template   = require("babel-template");
+var helpers    = require("babel-helpers");
+var babel      = require("../../babel-core");
 var each       = require("lodash/collection/each");
-var File       = require("../../babel/lib/transformation/file");
-var util       = require("../../babel/lib/util");
+var util       = require("../../babel-core/lib/util");
 var fs         = require("fs");
-var t          = require("../../babel/lib/types");
+var t          = require("../../babel-types");
 var _          = require("lodash");
 
 function relative(filename) {
@@ -31,30 +32,38 @@ function writeRootFile(filename, content) {
   outputFile(filename, content);
 }
 
+var buildHelperHead = template("exports.default = HELPER; exports.__esModule = true;");
 
 function writeFile(filename, content) {
   return writeRootFile(filename, content);
 }
 
+var transformOpts = {
+  presets: [
+    require("../../babel-preset-es2015")
+  ],
+
+  plugins: [
+    require("../../babel-plugin-transform-runtime"),
+    require("../../babel-plugin-transform-es2015-modules-commonjs")
+  ]
+};
+
 function selfContainify(code) {
-  return transform(code, {
-    optional: ["runtime"]
-  }).code;
+  return babel.transform(code, transformOpts).code;
 }
 
 function buildHelper(helperName) {
   var tree = t.program(
-    util.template("self-contained-helpers-head", {
-      HELPER: util.template("helper-" + helperName)
+    buildHelperHead({
+      HELPER: helpers.get(helperName)
     })
   );
 
-  return transform.fromAst(tree, null, {
-    optional: ["runtime"]
-  }).code;
+  return babel.transformFromAst(tree, null, transformOpts).code;
 }
 
-each(File.helpers, function (helperName) {
+each(helpers.list, function (helperName) {
   writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
 });
 
@@ -62,7 +71,7 @@ writeFile("regenerator/index.js", readFile("regenerator/runtime-module", true));
 writeFile("regenerator/runtime.js", selfContainify(readFile("regenerator/runtime")));
 
 
-var coreDefinitions = require("babel-plugin-runtime/lib/definitions");
+var coreDefinitions = require("babel-plugin-transform-runtime/lib/definitions");
 
 var paths = ["is-iterable", "get-iterator"];
 

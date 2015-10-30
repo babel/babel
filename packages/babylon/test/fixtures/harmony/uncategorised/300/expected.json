@@ -108,7 +108,7 @@
               "name": "y"
             },
             "right": {
-              "type": "Literal",
+              "type": "NumberLiteral",
               "start": 23,
               "end": 25,
               "loc": {
@@ -121,9 +121,11 @@
                   "column": 25
                 }
               },
-              "value": 10,
-              "rawValue": 10,
-              "raw": "10"
+              "extra": {
+                "rawValue": 10,
+                "raw": "10"
+              },
+              "value": 10
             }
           }
         ],
@@ -141,9 +143,11 @@
               "column": 29
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

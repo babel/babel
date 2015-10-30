@@ -157,7 +157,7 @@
                     }
                   ],
                   "test": {
-                    "type": "Literal",
+                    "type": "NumberLiteral",
                     "start": 48,
                     "end": 49,
                     "loc": {
@@ -170,9 +170,11 @@
                         "column": 14
                       }
                     },
-                    "value": 2,
-                    "rawValue": 2,
-                    "raw": "2"
+                    "extra": {
+                      "rawValue": 2,
+                      "raw": "2"
+                    },
+                    "value": 2
                   }
                 },
                 {
@@ -210,7 +212,7 @@
                     }
                   ],
                   "test": {
-                    "type": "Literal",
+                    "type": "NumberLiteral",
                     "start": 83,
                     "end": 84,
                     "loc": {
@@ -223,9 +225,11 @@
                         "column": 14
                       }
                     },
-                    "value": 1,
-                    "rawValue": 1,
-                    "raw": "1"
+                    "extra": {
+                      "rawValue": 1,
+                      "raw": "1"
+                    },
+                    "value": 1
                   },
                   "trailingComments": [
                     {
@@ -242,20 +246,18 @@
                           "line": 7,
                           "column": 20
                         }
-                      },
-                      "range": [
-                        113,
-                        125
-                      ]
+                      }
                     }
                   ]
                 }
               ]
             }
-          ]
+          ],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   },
   "comments": [
     {
@@ -272,11 +274,7 @@
           "line": 7,
           "column": 20
         }
-      },
-      "range": [
-        113,
-        125
-      ]
+      }
     }
   ]
 }

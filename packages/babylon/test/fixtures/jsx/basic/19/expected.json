@@ -102,7 +102,7 @@
                   "name": "pre"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 9,
                   "end": 18,
                   "loc": {
@@ -115,9 +115,8 @@
                       "column": 18
                     }
                   },
-                  "value": "leading",
-                  "rawValue": null,
-                  "raw": "\"leading\""
+                  "extra": null,
+                  "value": "leading"
                 }
               },
               {
@@ -151,7 +150,7 @@
                   "name": "pre2"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "StringLiteral",
                   "start": 24,
                   "end": 35,
                   "loc": {
@@ -164,9 +163,8 @@
                       "column": 35
                     }
                   },
-                  "value": "attribute",
-                  "rawValue": null,
-                  "raw": "\"attribute\""
+                  "extra": null,
+                  "value": "attribute"
                 }
               },
               {
@@ -253,6 +251,7 @@
           "children": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

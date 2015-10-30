@@ -90,7 +90,7 @@
                 },
                 "properties": [
                   {
-                    "type": "Property",
+                    "type": "ObjectProperty",
                     "start": 3,
                     "end": 4,
                     "loc": {
@@ -122,7 +122,6 @@
                       },
                       "name": "x"
                     },
-                    "kind": "init",
                     "value": {
                       "type": "Identifier",
                       "start": 3,
@@ -158,7 +157,7 @@
                 },
                 "properties": [
                   {
-                    "type": "Property",
+                    "type": "ObjectProperty",
                     "start": 9,
                     "end": 14,
                     "loc": {
@@ -191,7 +190,7 @@
                       "name": "x"
                     },
                     "value": {
-                      "type": "Literal",
+                      "type": "NumberLiteral",
                       "start": 12,
                       "end": 14,
                       "loc": {
@@ -204,11 +203,12 @@
                           "column": 14
                         }
                       },
-                      "value": 10,
-                      "rawValue": 10,
-                      "raw": "10"
-                    },
-                    "kind": "init"
+                      "extra": {
+                        "rawValue": 10,
+                        "raw": "10"
+                      },
+                      "value": 10
+                    }
                   }
                 ]
               }
@@ -228,12 +228,15 @@
                 "column": 22
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           },
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

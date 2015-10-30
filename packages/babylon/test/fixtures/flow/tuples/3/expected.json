@@ -136,7 +136,7 @@
               },
               "elements": [
                 {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 21,
                   "end": 24,
                   "loc": {
@@ -149,9 +149,11 @@
                       "column": 24
                     }
                   },
-                  "value": 123,
-                  "rawValue": 123,
-                  "raw": "123"
+                  "extra": {
+                    "rawValue": 123,
+                    "raw": "123"
+                  },
+                  "value": 123
                 }
               ]
             }
@@ -159,7 +161,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

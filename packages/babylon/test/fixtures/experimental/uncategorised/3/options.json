@@ -1,5 +1,3 @@
 {
-  "features": {
-    "es7.exponentiationOperator": true
-  }
+  "plugins": ["exponentiationOperator"]
 }

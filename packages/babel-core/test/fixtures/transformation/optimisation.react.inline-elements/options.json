@@ -1,0 +1,3 @@
+{
+  "plugins": ["external-helpers-2", "syntax-jsx", "transform-react-inline-elements", "transform-react-jsx"]
+}

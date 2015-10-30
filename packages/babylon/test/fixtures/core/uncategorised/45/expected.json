@@ -89,7 +89,7 @@
             },
             "properties": [
               {
-                "type": "Property",
+                "type": "ObjectProperty",
                 "start": 6,
                 "end": 13,
                 "loc": {
@@ -122,7 +122,7 @@
                   "name": "set"
                 },
                 "value": {
-                  "type": "Literal",
+                  "type": "NumberLiteral",
                   "start": 11,
                   "end": 13,
                   "loc": {
@@ -135,16 +135,18 @@
                       "column": 13
                     }
                   },
-                  "value": 43,
-                  "rawValue": 43,
-                  "raw": "43"
-                },
-                "kind": "init"
+                  "extra": {
+                    "rawValue": 43,
+                    "raw": "43"
+                  },
+                  "value": 43
+                }
               }
             ]
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

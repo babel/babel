@@ -89,7 +89,7 @@
             },
             "properties": [
               {
-                "type": "Property",
+                "type": "ObjectMethod",
                 "start": 6,
                 "end": 28,
                 "loc": {
@@ -122,58 +122,58 @@
                   "name": "if"
                 },
                 "kind": "set",
-                "value": {
-                  "type": "FunctionExpression",
-                  "start": 12,
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 13,
+                    "end": 14,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 14
+                      }
+                    },
+                    "name": "w"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 16,
                   "end": 28,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 12
+                      "column": 16
                     },
                     "end": {
                       "line": 1,
                       "column": 28
                     }
                   },
-                  "id": null,
-                  "generator": false,
-                  "expression": false,
-                  "params": [
+                  "body": [
                     {
-                      "type": "Identifier",
-                      "start": 13,
-                      "end": 14,
+                      "type": "ExpressionStatement",
+                      "start": 18,
+                      "end": 26,
                       "loc": {
                         "start": {
                           "line": 1,
-                          "column": 13
+                          "column": 18
                         },
                         "end": {
                           "line": 1,
-                          "column": 14
+                          "column": 26
                         }
                       },
-                      "name": "w"
-                    }
-                  ],
-                  "body": {
-                    "type": "BlockStatement",
-                    "start": 16,
-                    "end": 28,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 16
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 28
-                      }
-                    },
-                    "body": [
-                      {
-                        "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
                         "start": 18,
                         "end": 26,
                         "loc": {
@@ -186,10 +186,11 @@
                             "column": 26
                           }
                         },
-                        "expression": {
-                          "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "Identifier",
                           "start": 18,
-                          "end": 26,
+                          "end": 22,
                           "loc": {
                             "start": {
                               "line": 1,
@@ -197,52 +198,38 @@
                             },
                             "end": {
                               "line": 1,
+                              "column": 22
+                            }
+                          },
+                          "name": "m_if"
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "start": 25,
+                          "end": 26,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 25
+                            },
+                            "end": {
+                              "line": 1,
                               "column": 26
                             }
                           },
-                          "operator": "=",
-                          "left": {
-                            "type": "Identifier",
-                            "start": 18,
-                            "end": 22,
-                            "loc": {
-                              "start": {
-                                "line": 1,
-                                "column": 18
-                              },
-                              "end": {
-                                "line": 1,
-                                "column": 22
-                              }
-                            },
-                            "name": "m_if"
-                          },
-                          "right": {
-                            "type": "Identifier",
-                            "start": 25,
-                            "end": 26,
-                            "loc": {
-                              "start": {
-                                "line": 1,
-                                "column": 25
-                              },
-                              "end": {
-                                "line": 1,
-                                "column": 26
-                              }
-                            },
-                            "name": "w"
-                          }
+                          "name": "w"
                         }
                       }
-                    ]
-                  }
+                    }
+                  ],
+                  "directives": []
                 }
               }
             ]
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

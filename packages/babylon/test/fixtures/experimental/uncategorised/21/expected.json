@@ -89,7 +89,7 @@
               },
               "properties": [
                 {
-                  "type": "Property",
+                  "type": "ObjectProperty",
                   "start": 10,
                   "end": 14,
                   "loc": {
@@ -122,7 +122,7 @@
                     "name": "a"
                   },
                   "value": {
-                    "type": "Literal",
+                    "type": "NumberLiteral",
                     "start": 13,
                     "end": 14,
                     "loc": {
@@ -135,14 +135,15 @@
                         "column": 14
                       }
                     },
-                    "value": 1,
-                    "rawValue": 1,
-                    "raw": "1"
-                  },
-                  "kind": "init"
+                    "extra": {
+                      "rawValue": 1,
+                      "raw": "1"
+                    },
+                    "value": 1
+                  }
                 },
                 {
-                  "type": "Property",
+                  "type": "ObjectMethod",
                   "start": 16,
                   "end": 52,
                   "loc": {
@@ -174,60 +175,60 @@
                     },
                     "name": "foo"
                   },
-                  "kind": "init",
-                  "value": {
-                    "type": "FunctionExpression",
-                    "start": 25,
+                  "kind": "method",
+                  "id": null,
+                  "generator": false,
+                  "expression": false,
+                  "async": true,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "start": 26,
+                      "end": 33,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 26
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 33
+                        }
+                      },
+                      "name": "promise"
+                    }
+                  ],
+                  "body": {
+                    "type": "BlockStatement",
+                    "start": 35,
                     "end": 52,
                     "loc": {
                       "start": {
                         "line": 1,
-                        "column": 25
+                        "column": 35
                       },
                       "end": {
                         "line": 1,
                         "column": 52
                       }
                     },
-                    "id": null,
-                    "generator": false,
-                    "expression": false,
-                    "async": true,
-                    "params": [
+                    "body": [
                       {
-                        "type": "Identifier",
-                        "start": 26,
-                        "end": 33,
+                        "type": "ExpressionStatement",
+                        "start": 37,
+                        "end": 50,
                         "loc": {
                           "start": {
                             "line": 1,
-                            "column": 26
+                            "column": 37
                           },
                           "end": {
                             "line": 1,
-                            "column": 33
+                            "column": 50
                           }
                         },
-                        "name": "promise"
-                      }
-                    ],
-                    "body": {
-                      "type": "BlockStatement",
-                      "start": 35,
-                      "end": 52,
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 35
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 52
-                        }
-                      },
-                      "body": [
-                        {
-                          "type": "ExpressionStatement",
+                        "expression": {
+                          "type": "AwaitExpression",
                           "start": 37,
                           "end": 50,
                           "loc": {
@@ -240,41 +241,27 @@
                               "column": 50
                             }
                           },
-                          "expression": {
-                            "type": "AwaitExpression",
-                            "start": 37,
+                          "all": false,
+                          "argument": {
+                            "type": "Identifier",
+                            "start": 43,
                             "end": 50,
                             "loc": {
                               "start": {
                                 "line": 1,
-                                "column": 37
+                                "column": 43
                               },
                               "end": {
                                 "line": 1,
                                 "column": 50
                               }
                             },
-                            "all": false,
-                            "argument": {
-                              "type": "Identifier",
-                              "start": 43,
-                              "end": 50,
-                              "loc": {
-                                "start": {
-                                  "line": 1,
-                                  "column": 43
-                                },
-                                "end": {
-                                  "line": 1,
-                                  "column": 50
-                                }
-                              },
-                              "name": "promise"
-                            }
+                            "name": "promise"
                           }
                         }
-                      ]
-                    }
+                      }
+                    ],
+                    "directives": []
                   }
                 }
               ]
@@ -283,6 +270,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

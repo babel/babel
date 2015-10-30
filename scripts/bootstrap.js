@@ -3,8 +3,12 @@ require("shelljs/global");
 var path = require("path");
 var fs   = require("fs");
 
+var OFFLINE = !!process.env.OFFLINE;
+
 // uninstall global babel install
-exec("npm list --global --depth 1 babel >/dev/null 2>&1 && npm uninstall -g babel || true");
+try {
+  exec("npm uninstall -g babel");
+} catch (err) {}
 
 // get packages
 var packages = [];
@@ -31,19 +35,36 @@ packages.forEach(function (root) {
   mkdir("-p", nodeModulesLoc);
 
   packages.forEach(function (sub) {
-    if (!root.pkg.dependencies || !root.pkg.dependencies[sub.name]) return;
+    var valid = false;
+    if (root.pkg.dependencies && root.pkg.dependencies[sub.name]) valid = true;
+    if (root.pkg.devDependencies && root.pkg.devDependencies[sub.name]) valid = true;
+    if (!valid) return;
 
-    if (!fs.existsSync(nodeModulesLoc + "/" + sub.name)) {
-      console.log("Linking", "packages/" + sub.folder, "to", nodeModulesLoc + "/" + sub.name);
-      ln("-s", "packages/" + sub.folder, nodeModulesLoc + "/" + sub.name);
-    }
+    var linkSrc = "packages/" + sub.folder;
+    var linkDest = nodeModulesLoc + "/" + sub.name;
+
+    console.log("Linking", linkSrc, "to", linkDest);
+    if (fs.existsSync(linkDest)) fs.unlinkSync(linkDest);
+    ln("-s", linkSrc, linkDest);
   });
 
   cd("packages/" + root.folder);
-  exec("npm install");
-  exec("npm link");
+
+  // check whether or not we have any dependencies in our package.json that aren't in node_modules
+  var shouldRunInstall = false;
+  var pkg = require(process.cwd() + "/package.json");
+  var deps = Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.devDependencies || {}));
+  deps.forEach(function (depName) {
+    if (!fs.existsSync(process.cwd() + "/node_modules/" + depName)) {
+      console.log("Not installed", depName);
+      shouldRunInstall = true;
+    }
+  });
+  if (shouldRunInstall && !OFFLINE) exec("npm install");
+
+  if (!OFFLINE) exec("npm link");
+
   cd("../..");
 });
 
-exec("git submodule update --init");
-exec("make build");
+if (!OFFLINE) exec("make build");

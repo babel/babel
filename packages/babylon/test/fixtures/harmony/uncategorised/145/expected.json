@@ -58,7 +58,7 @@
           },
           "properties": [
             {
-              "type": "Property",
+              "type": "ObjectMethod",
               "start": 2,
               "end": 14,
               "loc": {
@@ -91,44 +91,30 @@
                 "name": "x"
               },
               "kind": "get",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 9,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 12,
                 "end": 14,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 9
+                    "column": 12
                   },
                   "end": {
                     "line": 1,
                     "column": 14
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 12,
-                  "end": 14,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 12
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 14
-                    }
-                  },
-                  "body": []
-                }
+                "body": [],
+                "directives": []
               }
             },
             {
-              "type": "Property",
+              "type": "ObjectMethod",
               "start": 16,
               "end": 29,
               "loc": {
@@ -161,64 +147,52 @@
                 "name": "x"
               },
               "kind": "set",
-              "value": {
-                "type": "FunctionExpression",
-                "start": 23,
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 24,
+                  "end": 25,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 24
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 25
+                    }
+                  },
+                  "name": "v"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 27,
                 "end": 29,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 23
+                    "column": 27
                   },
                   "end": {
                     "line": 1,
                     "column": 29
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [
-                  {
-                    "type": "Identifier",
-                    "start": 24,
-                    "end": 25,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 24
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 25
-                      }
-                    },
-                    "name": "v"
-                  }
-                ],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 27,
-                  "end": 29,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 27
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 29
-                    }
-                  },
-                  "body": []
-                }
+                "body": [],
+                "directives": []
               }
             }
           ],
-          "parenthesizedExpression": true
+          "extra": {
+            "parenthesized": true
+          }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }
