@@ -4,4 +4,10 @@ var some = function () {
   console.log("count", count);
 };
 
-some();
+
+var collect = function () {
+  let since = arguments.length <= 0 || arguments[0] === undefined ? 0 : arguments[0];
+  let userid = arguments[1];
+
+  console.log(userid);
+};

@@ -16,7 +16,7 @@ let buildDefaultParamAssign = template(`
 `);
 
 let buildCutOff = template(`
-  let $0 = arguments[$1];
+  let $0 = $1[$2];
 `);
 
 function hasDefaults(node) {
@@ -131,7 +131,7 @@ export let visitor = {
       let param = node.params[i];
       if (param._isDefaultPlaceholder) continue;
 
-      let declar = buildCutOff(param, t.numberLiteral(i));
+      let declar = buildCutOff(param, argsIdentifier, t.numberLiteral(i));
       declar._blockHoist = node.params.length - i;
       body.push(declar);
     }
