@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-export-extensions",
   "version": "6.0.2",
   "description": "Compile export extensions to ES2015",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-export-extensions",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
