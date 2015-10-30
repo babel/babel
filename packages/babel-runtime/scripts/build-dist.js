@@ -25,7 +25,6 @@ var each       = require("lodash/collection/each");
 var util       = require("../../babel-core/lib/util");
 var fs         = require("fs");
 var t          = require("../../babel-types");
-var _          = require("lodash");
 
 function relative(filename) {
   return __dirname + "/../" + filename;
