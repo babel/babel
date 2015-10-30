@@ -2,7 +2,7 @@
   "name": "babel-helper-builder-binary-assignment-operator-visitor",
   "version": "6.0.2",
   "description": "",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-builder-binary-assignment-operator-visitor",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
