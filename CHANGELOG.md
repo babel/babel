@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.0.14
+
+ * **Bug Fix**
+  * Fix SystemJS module formatter exporting function parameters.
+  * Ensure that invalid identifier JSX attribute keys are quoted when transforming to calls.
+  * Fix ES3 property literal plugin.
+  * Fix parameters after defaults in arrow functions refering to the wrong `arguments`.
+
 ## 6.0.13
 
  * **Bug Fix**
