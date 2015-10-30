@@ -162,7 +162,11 @@ export default class OptionManager {
     }
 
     //
-    let opts = cloneDeep(rawOpts, val => val);
+    let opts = cloneDeep(rawOpts, val => {
+      if (val instanceof Plugin) {
+        return val;
+      }
+    });
 
     //
     dirname = dirname || process.cwd();
