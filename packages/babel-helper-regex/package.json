@@ -2,7 +2,7 @@
   "name": "babel-helper-regex",
   "version": "6.0.2",
   "description": "",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-regex",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
