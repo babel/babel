@@ -16,7 +16,7 @@
     "lodash": "^3.10.0",
     "matcha": "^0.6.0",
     "mocha": "2.2.0",
-    "mocha-fixtures": "^1.0.9",
+    "mocha-fixtures": "^2.0.0",
     "output-file-sync": "^1.1.1",
     "path-exists": "^1.0.0",
     "readline-sync": "^1.2.19",
