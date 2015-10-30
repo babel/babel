@@ -653,6 +653,7 @@ export default function (instance) {
 
   instance.extend("parseParenItem", function () {
     return function (node, startLoc, startPos, forceArrow?) {
+      let canBeArrow = this.state.potentialArrowAt = startPos;
       if (this.match(tt.colon)) {
         let typeCastNode = this.startNodeAt(startLoc, startPos);
         typeCastNode.expression = node;
@@ -662,7 +663,7 @@ export default function (instance) {
           this.unexpected();
         }
 
-        if (this.eat(tt.arrow)) {
+        if (canBeArrow && this.eat(tt.arrow)) {
           // ((lol): number => {});
           let func = this.parseArrowExpression(this.startNodeAt(startLoc, startPos), [node]);
           func.returnType = typeCastNode.typeAnnotation;
@@ -952,7 +953,7 @@ export default function (instance) {
       startPos = startPos || this.state.start;
       startLoc = startLoc || this.state.startLoc;
 
-      if (this.lookahead().type === tt.parenR) {
+      if (canBeArrow && this.lookahead().type === tt.parenR) {
         // let foo = (): number => {};
         this.expect(tt.parenL);
         this.expect(tt.parenR);
