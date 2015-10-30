@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-object-set-prototype-of-to-assign",
   "version": "6.0.2",
   "description": "Turn Object.setPrototypeOf to assignments",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-set-prototype-of-to-assign",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
