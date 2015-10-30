@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-runtime",
   "version": "6.0.2",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-runtime",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
