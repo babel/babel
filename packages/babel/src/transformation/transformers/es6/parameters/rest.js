@@ -127,6 +127,19 @@ function hasRest(node) {
 export var visitor = {
 
   /**
+   * Arrow functions with rest params are desugared to expose `arguments`.
+   */
+
+  ArrowFunctionExpression(node) {
+    if (!hasRest(node)) return;
+
+    this.ensureBlock();
+    node.expression = false;
+    node.type = "FunctionExpression";
+    node.shadow = node.shadow || true;
+  },
+
+  /**
    * [Please add a description.]
    */
 
