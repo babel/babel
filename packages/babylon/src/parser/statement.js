@@ -128,7 +128,8 @@ pp.parseStatement = function (declaration, topLevel) {
   // simply start parsing an expression, and afterwards, if the
   // next token is a colon and the expression was a simple
   // Identifier node, we switch to interpreting it as a label.
-  let maybeName = this.state.value, expr = this.parseExpression();
+  let maybeName = this.state.value;
+  let expr = this.parseExpression();
 
   if (starttype === tt.name && expr.type === "Identifier" && this.eat(tt.colon)) {
     return this.parseLabeledStatement(node, maybeName, expr);

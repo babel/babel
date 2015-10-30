@@ -20,6 +20,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * Ensure that invalid identifier JSX attribute keys are quoted when transforming to calls.
   * Fix ES3 property literal plugin.
   * Fix parameters after defaults in arrow functions refering to the wrong `arguments`.
+  * Fix parser bug where arrow functions have a higher precedence than they should.
 
 ## 6.0.13
 

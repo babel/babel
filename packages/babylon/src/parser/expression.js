@@ -221,12 +221,18 @@ pp.parseMaybeUnary = function (refShorthandDefaultPos) {
 
 pp.parseExprSubscripts = function (refShorthandDefaultPos) {
   let startPos = this.state.start, startLoc = this.state.startLoc;
+  let potentialArrowAt = this.state.potentialArrowAt;
   let expr = this.parseExprAtom(refShorthandDefaultPos);
+
+  if (expr.type === "ArrowFunctionExpression" && expr.start === potentialArrowAt) {
+    return expr;
+  }
+
   if (refShorthandDefaultPos && refShorthandDefaultPos.start) {
     return expr;
-  } else {
-    return this.parseSubscripts(expr, startPos, startLoc);
   }
+
+  return this.parseSubscripts(expr, startPos, startLoc);
 };
 
 pp.parseSubscripts = function (base, startPos, startLoc, noCalls) {
@@ -250,7 +256,7 @@ pp.parseSubscripts = function (base, startPos, startLoc, noCalls) {
       this.expect(tt.bracketR);
       base = this.finishNode(node, "MemberExpression");
     } else if (!noCalls && this.match(tt.parenL)) {
-      let possibleAsync = base.type === "Identifier" && base.name === "async" && !this.canInsertSemicolon();
+      let possibleAsync = this.state.potentialArrowAt === base.start && base.type === "Identifier" && base.name === "async" && !this.canInsertSemicolon();
       this.next();
 
       let node = this.startNodeAt(startPos, startLoc);
@@ -677,7 +683,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
     if (prop.shorthand) {
       this.addExtra(prop, "shorthand", true);
     }
-    
+
     node.properties.push(prop);
   }
 
@@ -915,6 +921,9 @@ pp.parseIdentifier = function (liberal) {
 // Parses await expression inside async function.
 
 pp.parseAwait = function (node) {
+  if (!this.state.inAsync) {
+    this.unexpected();
+  }
   if (this.isLineTerminator()) {
     this.unexpected();
   }
