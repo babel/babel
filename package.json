@@ -1,92 +1,92 @@
 {
-  "private": true,
-  "license": "MIT",
-  "devDependencies": {
-    "babel": "5.8.21",
-    "babel-eslint": "^4.0.6",
-    "babel-plugin-flow-comments": "^1.0.9",
-    "browserify": "^11.2.0",
-    "bundle-collapser": "^1.2.1",
-    "chai": "^2.2.0",
-    "derequire": "^2.0.2",
-    "es5-shim": "^4.1.7",
-    "eslint": "^1.1.0",
-    "fs-readdir-recursive": "^0.1.2",
-    "istanbul": "^0.3.5",
-    "lodash": "^3.10.0",
-    "matcha": "^0.6.0",
-    "mocha": "2.2.0",
-    "mocha-fixtures": "^1.0.9",
-    "output-file-sync": "^1.1.1",
-    "path-exists": "^1.0.0",
-    "readline-sync": "^1.2.19",
-    "rimraf": "^2.4.1",
-    "semver": "^5.0.0",
-    "shelljs": "^0.5.1",
-    "uglify-js": "^2.4.16"
-  },
-  "babel": {
-    "ignore": [
-      "packages/babel-cli/src/babel-plugin/templates"
-    ],
-    "stage": 0,
-    "loose": [
-      "all"
-    ],
-    "plugins": [
-      "flow-comments"
-    ],
-    "blacklist": [
-      "flow",
-      "es6.tailCall"
-    ],
-    "optional": [
-      "optimisation.flow.forOf",
-      "bluebirdCoroutines",
-      "runtime"
-    ],
-    "env": {
-      "test": {
-        "auxiliaryCommentBefore": "istanbul ignore next"
-      }
+    "private": true, 
+    "license": "MIT", 
+    "devDependencies": {
+        "babel": "5.8.21", 
+        "babel-eslint": "^4.0.6", 
+        "babel-plugin-flow-comments": "^1.0.9", 
+        "browserify": "^11.2.0", 
+        "bundle-collapser": "^1.2.1", 
+        "chai": "^2.2.0", 
+        "derequire": "^2.0.2", 
+        "es5-shim": "^4.1.7", 
+        "eslint": "^1.1.0", 
+        "fs-readdir-recursive": "^0.1.2", 
+        "istanbul": "^0.3.5", 
+        "lodash": "^3.10.0", 
+        "matcha": "^0.6.0", 
+        "mocha": "2.2.0", 
+        "mocha-fixtures": "^1.0.9", 
+        "output-file-sync": "^1.1.1", 
+        "path-exists": "^1.0.0", 
+        "readline-sync": "^1.2.19", 
+        "rimraf": "^2.4.1", 
+        "semver": "^5.0.0", 
+        "shelljs": "^0.5.1", 
+        "uglify-js": "^2.4.16"
+    }, 
+    "babel": {
+        "ignore": [
+            "packages/babel-cli/src/babel-plugin/templates"
+        ], 
+        "stage": 0, 
+        "loose": [
+            "all"
+        ], 
+        "plugins": [
+            "flow-comments"
+        ], 
+        "blacklist": [
+            "flow", 
+            "es6.tailCall"
+        ], 
+        "optional": [
+            "optimisation.flow.forOf", 
+            "bluebirdCoroutines", 
+            "runtime"
+        ], 
+        "env": {
+            "test": {
+                "auxiliaryCommentBefore": "istanbul ignore next"
+            }
+        }
+    }, 
+    "eslintConfig": {
+        "parser": "babel-eslint", 
+        "extends": "eslint:recommended", 
+        "rules": {
+            "quotes": [
+                2, 
+                "double", 
+                "avoid-escape"
+            ], 
+            "no-var": 2, 
+            "strict": 0, 
+            "no-underscore-dangle": 0, 
+            "curly": 0, 
+            "no-multi-spaces": 0, 
+            "key-spacing": 0, 
+            "no-return-assign": 0, 
+            "consistent-return": 0, 
+            "no-shadow": 0, 
+            "comma-dangle": 0, 
+            "no-use-before-define": 0, 
+            "no-empty": 0, 
+            "new-parens": 0, 
+            "no-cond-assign": 0, 
+            "no-fallthrough": 0, 
+            "new-cap": 0, 
+            "no-loop-func": 0, 
+            "no-unreachable": 0, 
+            "no-labels": 0, 
+            "no-process-exit": 0, 
+            "camelcase": 0, 
+            "no-console": 0, 
+            "no-constant-condition": 0, 
+            "no-inner-declarations": 0
+        }, 
+        "env": {
+            "node": true
+        }
     }
-  },
-  "eslintConfig": {
-    "parser": "babel-eslint",
-    "extends": "eslint:recommended",
-    "rules": {
-      "quotes": [
-        2,
-        "double",
-        "avoid-escape"
-      ],
-      "no-var": 2,
-      "strict": 0,
-      "no-underscore-dangle": 0,
-      "curly": 0,
-      "no-multi-spaces": 0,
-      "key-spacing": 0,
-      "no-return-assign": 0,
-      "consistent-return": 0,
-      "no-shadow": 0,
-      "comma-dangle": 0,
-      "no-use-before-define": 0,
-      "no-empty": 0,
-      "new-parens": 0,
-      "no-cond-assign": 0,
-      "no-fallthrough": 0,
-      "new-cap": 0,
-      "no-loop-func": 0,
-      "no-unreachable": 0,
-      "no-labels": 0,
-      "no-process-exit": 0,
-      "camelcase": 0,
-      "no-console": 0,
-      "no-constant-condition": 0,
-      "no-inner-declarations": 0
-    },
-    "env": {
-      "node": true
-    }
-  }
 }
