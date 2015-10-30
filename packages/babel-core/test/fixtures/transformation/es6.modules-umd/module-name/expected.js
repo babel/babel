@@ -1,3 +1,5 @@
+"use strict";
+
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define("es6.modules-umd/module-name/expected", [], factory);

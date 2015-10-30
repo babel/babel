@@ -1,3 +1,5 @@
+"use strict";
+
 System.register(["./evens"], function (_export) {
   var isEven, p, a, i, j, isOdd;
   return {

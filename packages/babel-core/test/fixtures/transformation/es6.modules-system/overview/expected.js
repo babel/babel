@@ -1,3 +1,5 @@
+"use strict";
+
 System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
   var foo, foo2, bar, bar2, test2;
   return {

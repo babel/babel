@@ -1,3 +1,5 @@
+"use strict";
+
 System.register(["foo"], function (_export) {
   var foo;
   return {

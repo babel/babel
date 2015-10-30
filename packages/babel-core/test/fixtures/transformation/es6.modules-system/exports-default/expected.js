@@ -1,3 +1,5 @@
+"use strict";
+
 System.register([], function (_export) {
   _export("default", function () {});
 

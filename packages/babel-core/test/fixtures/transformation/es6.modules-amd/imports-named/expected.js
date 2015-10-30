@@ -1,3 +1,5 @@
+"use strict";
+
 define(["foo"], function (_foo) {
   _foo.bar;
   _foo.bar2;

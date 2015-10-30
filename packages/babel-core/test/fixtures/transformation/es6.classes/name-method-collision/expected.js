@@ -1,3 +1,5 @@
+"use strict";
+
 var _a2 = require("./a");
 
 var Foo = (function () {
