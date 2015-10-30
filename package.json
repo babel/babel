@@ -61,7 +61,7 @@
 				"avoid-escape"
 			], 
 			"no-var": 2,
-			"strict": 0, 
+			"strict": 0,
 			"no-underscore-dangle": 0,
 			"curly": 0,
 			"no-multi-spaces": 0,
