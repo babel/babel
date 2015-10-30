@@ -44,6 +44,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * Remove `loose` option in favor of plugin options.
   * Remove `optional`, `whitelist` and `blacklist` options since plugins are now explicitly defined.
   * Plugins now just return a plain object rather than construct a `Plugin` instance.
+  * Change the signature of visitor methods to `.call(state, path, state)` rather than `.call(path, node, parent, scope, state)`.
+  * All plugin traversals are now merged for performance.
   * The `MethodDefinition` node type has been renamed to `ClassMethod` and it's `FunctionExprsesion` `value` property has been coerced into the main method node.
   * The `Property` node type has been renamed to `ObjectProperty`.
   * The `Property` node type with the boolean flag `method` has been renamed to `ObjectMethod` and it's `FunctionExprsesion` `value` property has been coerced into the main method node.
