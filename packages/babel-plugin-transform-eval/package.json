@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-eval",
   "version": "6.0.2",
   "description": "Compile eval calls with string literals",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-eval",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
