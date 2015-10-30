@@ -37,7 +37,7 @@
 			"flow-comments"
 		],
 		"blacklist": [
-			"flow", 
+			"flow",
 			"es6.tailCall"
 		],
 		"optional": [
