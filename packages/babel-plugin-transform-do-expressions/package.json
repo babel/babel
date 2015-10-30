@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-do-expressions",
   "version": "6.0.2",
   "description": "Compile do expressions to ES5",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-do-expressions",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
