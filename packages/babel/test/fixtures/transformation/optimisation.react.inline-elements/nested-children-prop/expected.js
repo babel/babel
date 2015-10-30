@@ -6,8 +6,7 @@
   key: null,
   ref: null,
   props: {
-    className: "foo",
-    children: bar
+    children: "bar"
   },
   _owner: null
 });

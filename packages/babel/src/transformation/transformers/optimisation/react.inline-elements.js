@@ -60,12 +60,6 @@ export var visitor = {
       objProps.push(t.property("init", key, value));
     }
 
-    if (node.children.length) {
-      var children = react.buildChildren(node);
-      children = children.length === 1 ? children[0] : t.arrayExpression(children);
-      pushProp(props.properties, t.identifier("children"), children);
-    }
-
     // props
     for (var i = 0; i < open.attributes.length; i++) {
       var attr = open.attributes[i];
@@ -74,6 +68,20 @@ export var visitor = {
       } else {
         pushProp(props.properties, attr.name, attr.value || t.identifier("true"));
       }
+    }
+
+    if (node.children.length) {
+      /*
+        If children are present then we exclude an attribute named 'children'
+        from being included in the props.
+      */
+      props.properties = props.properties.filter(property => {
+        return property.key.name !== "children";
+      });
+
+      var children = react.buildChildren(node);
+      children = children.length === 1 ? children[0] : t.arrayExpression(children);
+      pushProp(props.properties, t.identifier("children"), children);
     }
 
     if (isComponent) {
