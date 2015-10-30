@@ -2,6 +2,7 @@
   "name": "babel-plugin-transform-object-assign",
   "version": "6.0.2",
   "description": "Replace Object.assign with an inline helper",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-assign",
   "author": "Jed Watson",
   "license": "MIT",
   "main": "lib/index.js",

@@ -5,7 +5,7 @@
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-traverse",
   "main": "lib/index.js",
   "dependencies": {
     "babel-code-frame": "^6.0.2",

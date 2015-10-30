@@ -17,7 +17,7 @@
     "ES6"
   ],
   "version": "6.0.12",
-  "homepage": "http://github.com/facebook/regenerator",
+  "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-regenerator",
   "repository": {
     "type": "git",
     "url": "git://github.com/facebook/regenerator.git"

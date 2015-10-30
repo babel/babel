@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-exponentiation-operator",
   "version": "6.0.2",
   "description": "Compile exponentiation operator to ES5",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

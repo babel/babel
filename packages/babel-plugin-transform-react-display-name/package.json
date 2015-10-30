@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-react-display-name",
   "version": "6.0.2",
   "description": "Add displayName to React.createClass calls",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-display-name",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

@@ -2,7 +2,7 @@
   "name": "babel-plugin-transform-class-constructor-call",
   "version": "6.0.12",
   "description": "",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-class-constructor-call",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

@@ -2,7 +2,7 @@
   "name": "babel-helper-get-function-arity",
   "version": "6.0.2",
   "description": "",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-get-function-arity",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {

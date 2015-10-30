@@ -2,7 +2,7 @@
   "name": "babel-plugin-syntax-export-extensions",
   "version": "6.0.2",
   "description": "Allow parsing of export extensions",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-export-extensions",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

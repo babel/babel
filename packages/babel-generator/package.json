@@ -5,7 +5,7 @@
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-generator",
   "main": "lib/index.js",
   "files": [
     "lib"

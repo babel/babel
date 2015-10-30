@@ -3,7 +3,7 @@
   "version": "6.0.12",
   "description": "babel selfContained runtime",
   "license": "MIT",
-  "repository": "babel/babel",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
     "core-js": "^1.0.0"
