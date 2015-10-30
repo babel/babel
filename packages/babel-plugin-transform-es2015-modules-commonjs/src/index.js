@@ -118,6 +118,8 @@ export default function () {
   };
 
   return {
+    inherits: require("babel-plugin-transform-strict-mode"),
+
     visitor: {
       ThisExpression(path) {
         if (!path.findParent((path) => !path.is("shadow") && THIS_BREAK_KEYS.indexOf(path.type) >= 0)) {

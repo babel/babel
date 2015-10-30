@@ -49,6 +49,8 @@ export default function ({ types: t }) {
   };
 
   return {
+    inherits: require("babel-plugin-transform-strict-mode"),
+    
     visitor: {
       Program: {
         exit(path) {
