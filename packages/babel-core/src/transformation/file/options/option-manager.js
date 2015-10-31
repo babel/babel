@@ -230,7 +230,7 @@ export default class OptionManager {
           let presetOpts = require(presetLoc);
           this.mergeOptions(presetOpts, presetLoc, presetLoc, path.dirname(presetLoc));
         } else {
-          throw new Error("Couldn't find preset");
+          throw new Error(`Couldn't find preset ${JSON.stringify(val)}`);
         }
       } else if (typeof val === "object") {
         this.mergeOptions(val);
