@@ -14,20 +14,20 @@ $ npm install babel-plugin-external-helpers-2
 
 ```json
 {
-  "plugins": ["external-helpers"]
+  "plugins": ["external-helpers-2"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-$ babel --plugins external-helpers script.js
+$ babel --plugins external-helpers-2 script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("babel-core").transform("code", {
-  plugins: ["external-helpers"]
+  plugins: ["external-helpers-2"]
 });
 ```
