@@ -22,6 +22,7 @@
     "trim-right": "^1.0.1"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "^6.0.14"
+    "babel-helper-fixtures": "^6.0.14",
+    "babel-generator": "^6.0.0"
   }
 }
