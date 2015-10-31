@@ -20,7 +20,7 @@ export default function ({ types: t }) {
 
       ClassExpression(path, state) {
         let inferred = nameFunction(path);
-        if (inferred) return inferred;
+        if (inferred) return path.replaceWith(inferred);
 
         let Constructor = VanillaTransformer;
         if (state.opts.loose) Constructor = LooseTransformer;
