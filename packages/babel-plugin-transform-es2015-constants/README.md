@@ -36,4 +36,4 @@ require("babel-core").transform("code", {
 
 ## Note
 
-This transform on its own will compile `const` to `let`. If you need it to compile down to `var` then you must also install and enable [`transform-es2015-block-scoping`](../babel-plugin-transform-es2015-block-scoped-functions).
+This transform on its own will compile `const` to `let`. If you need it to compile down to `var` then you must also install and enable [`transform-es2015-block-scoping`](../babel-plugin-transform-es2015-block-scoping).
