@@ -115,6 +115,7 @@ export default class OptionManager {
         let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
         if (pluginLoc) {
           plugin = require(pluginLoc);
+          plugin = plugin.__esModule ? plugin.default : plugin;
         } else {
           throw new ReferenceError(messages.get("pluginUnknown", plugin, loc, i));
         }
