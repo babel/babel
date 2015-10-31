@@ -114,7 +114,7 @@ function publish() {
     updateDepsObject(changedPackages, pkg.devDependencies);
 
     // write new package
-    fs.writeFileSync(pkgLoc, JSON.stringify(pkg, null, "  "));
+    fs.writeFileSync(pkgLoc, JSON.stringify(pkg, null, "  ") + "\n");
 
     // push to be git committed
     changedFiles.push(pkgLoc);
