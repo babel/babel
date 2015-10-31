@@ -1,4 +1,4 @@
-var transform = require("../lib/transformation");
+var transform = require("../lib/api/node").transform;
 var Plugin    = require("../lib/transformation/plugin");
 var babel     = require("../lib/api/node");
 var chai      = require("chai");

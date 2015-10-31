@@ -2,7 +2,7 @@ require("../lib/api/node");
 
 var buildExernalHelpers = require("../lib/tools/build-external-helpers");
 var getFixtures         = require("mocha-fixtures");
-var transform           = require("../lib/transformation");
+var transform           = require("../lib/api/node").transform;
 var sourceMap           = require("source-map");
 var codeFrame           = require("babel-code-frame");
 var register            = require("../register");

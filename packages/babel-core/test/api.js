@@ -1,7 +1,7 @@
 require("../lib/api/node");
 
 var buildExternalHelpers = require("../lib/tools/build-external-helpers");
-var transform            = require("../lib/transformation");
+var transform            = require("../lib/api/node").transform;
 var Pipeline             = require("../lib/transformation/pipeline");
 var assert               = require("assert");
 var File                 = require("../lib/transformation/file").default;
