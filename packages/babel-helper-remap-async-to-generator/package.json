@@ -7,6 +7,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-runtime": "^5.0.0",
+    "babel-template": "^6.0.14",
     "babel-types": "^6.0.14",
     "babel-traverse": "^6.0.14",
     "babel-helper-function-name": "^6.0.14"

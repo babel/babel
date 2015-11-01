@@ -1,7 +1,8 @@
-var foo = function () {
-  return babelHelpers.asyncToGenerator(function* bar() {
+var foo = (function () {
+  var ref = babelHelpers.asyncToGenerator(function* bar() {
     console.log(bar);
-  })();
-};
-
-foo();
+  });
+  return function foo() {
+    return ref.apply(this, arguments);
+  };
+})();

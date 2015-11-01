@@ -1,0 +1,1 @@
+foo(babelHelpers.asyncToGenerator(function* () {}));

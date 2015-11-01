@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.0.15
+
+ * **Bug Fix**
+  * Fix async function remap helper from outputing incorrect calls causing wrong scoping.
+
 ## 6.0.14
 
  * **Spec Compliancy**
