@@ -1,6 +1,6 @@
 var counters = 0;
 Object.defineProperty(global, "reader", {
-  get() {
+  get: function () {
     counters += 1;
     return { x: 2 };
   },

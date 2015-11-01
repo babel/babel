@@ -1,4 +1,6 @@
-var foo = { [Symbol.hasInstance]: function () { return true; } };
+var foo = {};
+foo[Symbol.hasInstance]= function () { return true; };
+
 var bar = {};
 
 assert.ok(bar instanceof foo);
