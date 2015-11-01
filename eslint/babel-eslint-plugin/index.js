@@ -7,6 +7,7 @@ module.exports = {
     'object-curly-spacing': require('./rules/object-curly-spacing'),
     'object-shorthand': require('./rules/object-shorthand'),
     'arrow-parens': require('./rules/arrow-parens'),
+    'no-await-in-loop': require('./rules/no-await-in-loop'),
   },
   rulesConfig: {
     'generator-star-spacing': 0,
@@ -14,5 +15,6 @@ module.exports = {
     'object-curly-spacing': 0,
     'object-shorthand': 0,
     'arrow-parens': 0,
+    'no-await-in-loop': 0,
   }
 };
