@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-class-constructor-call",
-  "version": "6.0.14",
+  "version": "6.0.15",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-class-constructor-call",
   "license": "MIT",
@@ -9,8 +9,8 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-template": "^6.0.14",
-    "babel-plugin-syntax-class-constructor-call": "^6.0.14",
+    "babel-template": "^6.0.15",
+    "babel-plugin-syntax-class-constructor-call": "^6.0.15",
     "babel-runtime": "^5.0.0"
   }
 }

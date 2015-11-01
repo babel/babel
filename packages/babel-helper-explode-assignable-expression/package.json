@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-explode-assignable-expression",
-  "version": "6.0.14",
+  "version": "6.0.15",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-explode-assignable-expression",
   "license": "MIT",
@@ -8,6 +8,6 @@
   "dependencies": {
     "babel-traverse": "^6.0.14",
     "babel-runtime": "^5.0.0",
-    "babel-types": "^6.0.14"
+    "babel-types": "^6.0.15"
   }
 }

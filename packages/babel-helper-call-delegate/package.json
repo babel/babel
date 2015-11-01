@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-call-delegate",
-  "version": "6.0.14",
+  "version": "6.0.15",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-call-delegate",
   "license": "MIT",
@@ -8,7 +8,7 @@
   "dependencies": {
     "babel-traverse": "^6.0.14",
     "babel-runtime": "^5.0.0",
-    "babel-types": "^6.0.14",
-    "babel-helper-hoist-variables": "^6.0.14"
+    "babel-types": "^6.0.15",
+    "babel-helper-hoist-variables": "^6.0.15"
   }
 }

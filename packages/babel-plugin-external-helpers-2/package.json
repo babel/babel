@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-external-helpers-2",
-  "version": "6.0.14",
+  "version": "6.0.15",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-external-helpers-2",
   "license": "MIT",
