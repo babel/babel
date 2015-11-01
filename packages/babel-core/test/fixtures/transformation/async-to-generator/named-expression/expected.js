@@ -1,7 +1,5 @@
-var foo = function () {
-  return babelHelpers.asyncToGenerator(function* bar() {
-    console.log(bar);
-  })();
-};
+var foo = babelHelpers.asyncToGenerator(function* bar() {
+  console.log(bar);
+});
 
 foo();

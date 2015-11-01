@@ -34,9 +34,7 @@ export default function (path: NodePath, callId: Object) {
 
   path.traverse(awaitVisitor);
 
-  let container = t.functionExpression(null, [], t.blockStatement([
-    t.returnStatement(t.callExpression(t.callExpression(callId, [node]), []))
-  ]));
+  let container = t.callExpression(callId, [node]);
   node.shadow = container;
 
   if (path.isFunctionDeclaration()) {
