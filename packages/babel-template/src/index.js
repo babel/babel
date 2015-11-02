@@ -6,6 +6,7 @@ import traverse from "babel-traverse";
 import * as babylon from "babylon";
 import * as t from "babel-types";
 
+let FROM_TEMPLATE = "_fromTemplate"; //Symbol(); // todo: probably wont get copied over
 let TEMPLATE_SKIP = Symbol();
 
 export default function (code: string): Function {
@@ -23,6 +24,10 @@ export default function (code: string): Function {
       });
 
       ast = traverse.removeProperties(ast);
+
+      traverse.cheap(ast, function (node) {
+        node[FROM_TEMPLATE] = true;
+      });
     } catch (err) {
       err.stack = `${err.stack}from\n${stack}`;
       throw err;
@@ -69,7 +74,7 @@ let templateVisitor = {
 
     let replacement;
 
-    if (t.isIdentifier(node)) {
+    if (t.isIdentifier(node) && node[FROM_TEMPLATE]) {
       if (has(args[0], node.name)) {
         replacement = args[0][node.name];
       } else if (node.name[0] === "$") {
