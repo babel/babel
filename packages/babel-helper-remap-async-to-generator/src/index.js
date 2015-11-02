@@ -46,8 +46,6 @@ function plainFunction(path: NodePath, callId: Object) {
   node.async = false;
   node.generator = true;
 
-  path.traverse(awaitVisitor);
-
   let built = t.callExpression(callId, [node]);
   let container = buildWrapper({
     FUNCTION: built,
@@ -92,6 +90,8 @@ function plainFunction(path: NodePath, callId: Object) {
 export default function (path: NodePath, callId: Object) {
   let node = path.node;
   if (node.generator) return;
+
+  path.traverse(awaitVisitor);
 
   if (path.isClassMethod()) {
     return classMethod(path, callId);
