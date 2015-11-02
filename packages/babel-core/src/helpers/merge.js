@@ -7,13 +7,15 @@ export default function (dest?: Object, src?: Object): ?Object {
 
   return merge(dest, src, function (a, b) {
     if (b && Array.isArray(a)) {
-      let c = a.slice(0);
-      for (let v of b) {
-        if (a.indexOf(v) < 0) {
-          c.push(v);
+      let newArray = b.slice(0);
+
+      for (let item of a) {
+        if (newArray.indexOf(item) < 0) {
+          newArray.push(item);
         }
       }
-      return c;
+
+      return newArray;
     }
   });
 }

@@ -24,6 +24,15 @@ function transformAsync(code, opts) {
 }
 
 suite("api", function () {
+  test("options merge backwards", function () {
+    return transformAsync("", {
+      presets: [__dirname + "/../../babel-preset-es2015"],
+      plugins: [__dirname + "/../../babel-plugin-syntax-jsx"]
+    }).then(function (result) {
+      assert.ok(result.options.plugins[0][0].manipulateOptions.toString().indexOf("jsx") >= 0);
+    });
+  });
+
   test("code option false", function () {
     return transformAsync("foo('bar');", { code: false }).then(function (result) {
       assert.ok(!result.code);
