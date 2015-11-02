@@ -12,6 +12,7 @@ node_js:
  - iojs
 # - "0.10"
  - "0.12"
+ - "stable"
 
 script: make test-travis
 after_success:
