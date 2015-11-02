@@ -1,5 +1,3 @@
-"use strict";
-
 ({
   $$typeof: babelHelpers.typeofReactElement,
   type: Baz,
