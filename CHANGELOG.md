@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.0.16
+
+ * **Internal**
+  * Instead of throwing on a foreign node path. Ignore it and create a new one.
+ * **Bug Fix**
+  * Ensure there's a newline after prepended original shebang.
+  * Ignore non-origin template nodes when replacing placeholders in `babel-template`.
+  * Fix `runtime` plugin helper generation.
+  * Fix bug where async class methods weren't having their `await`s converted to `yield`s in the async to generator helper.
+
 ## 6.0.15
 
  * **Bug Fix**
