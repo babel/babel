@@ -9,6 +9,6 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-runtime": "^5.0.0"
+    "babel-runtime": "^6.0.0"
   }
 }
