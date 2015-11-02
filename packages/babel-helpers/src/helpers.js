@@ -2,7 +2,7 @@ import template from "babel-template";
 
 export let _typeof = template(`
   (function (obj) {
-    return obj && obj.constructor === Symbol ? "symbol" : typeof obj;
+    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
   });
 `);
 
