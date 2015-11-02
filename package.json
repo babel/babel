@@ -1,6 +1,6 @@
 {
   "name": "babylon",
-  "version": "6.0.14",
+  "version": "6.0.17",
   "description": "A JavaScript parser",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
