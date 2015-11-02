@@ -7,14 +7,18 @@ export default function ({ types: t }) {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
+  let HELPER_BLACKLIST = ["interopRequireWildcard", "interopRequireDefault"];
+
   return {
-    pre(file, state) {
-      state.set("helperGenerator", function (name) {
-        return state.addImport(`${RUNTIME_MODULE_NAME}/helpers/${name}`, "default", name);
+    pre(file) {
+      file.set("helperGenerator", function (name) {
+        if (HELPER_BLACKLIST.indexOf(name) < 0) {
+          return file.addImport(`${RUNTIME_MODULE_NAME}/helpers/${name}`, "default", name);
+        }
       });
 
-      state.setDynamic("regeneratorIdentifier", function () {
-        return state.addImport(`${RUNTIME_MODULE_NAME}/regenerator`, "default", "regeneratorRuntime");
+      this.setDynamic("regeneratorIdentifier", function () {
+        return file.addImport(`${RUNTIME_MODULE_NAME}/regenerator`, "default", "regeneratorRuntime");
       });
     },
 

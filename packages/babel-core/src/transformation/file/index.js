@@ -271,7 +271,8 @@ export default class File extends Store {
     let generator = this.get("helperGenerator");
     let runtime   = this.get("helpersNamespace");
     if (generator) {
-      return generator(name);
+      let res = generator(name);
+      if (res) return res;
     } else if (runtime) {
       let id = t.identifier(t.toIdentifier(name));
       return t.memberExpression(runtime, id);
