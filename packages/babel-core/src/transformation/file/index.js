@@ -534,7 +534,7 @@ export default class File extends Store {
 
     if (this.shebang) {
       // add back shebang
-      result.code = `${this.shebang}\n${result.code.trimLeft()}`;
+      result.code = `${this.shebang}\n${result.code}`;
     }
 
     if (result.map) {
