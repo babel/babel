@@ -2,8 +2,9 @@ export default function () {
   return {
     visitor: {
       BinaryExpression(path) {
-        let { node, op } = path;
+        let { node } = path;
 
+        let op = node.operator;
         if (op !== "===" && op !== "!==") return;
 
         let left  = path.get("left");
