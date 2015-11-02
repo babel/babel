@@ -42,7 +42,7 @@ export default class Renamer {
 
     // build specifiers that point back to this export declaration
     let isDefault = exportDeclar.isExportDefaultDeclaration();
-    let bindingIdentifiers = parentDeclar.getBindingIdentifiers();
+    let bindingIdentifiers = parentDeclar.getOuterBindingIdentifiers();
     let specifiers = [];
 
     for (let name in bindingIdentifiers) {
@@ -80,7 +80,7 @@ export default class Renamer {
 
   maybeConvertFromClassFunctionExpression(path) {
     return; // TODO
-    
+
     // retain the `name` of a class/function expression
 
     if (!path.isFunctionExpression() && !path.isClassExpression()) return;

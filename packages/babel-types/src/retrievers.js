@@ -91,3 +91,21 @@ getBindingIdentifiers.keys = {
   VariableDeclaration: ["declarations"],
   VariableDeclarator: ["id"]
 };
+
+export function getOuterBindingIdentifiers(
+  node: Object,
+  duplicates?: boolean,
+): Object {
+  if (t.isFunction(node)) {
+    let id = node.id;
+    if (id) {
+      return {
+        [id.name]: duplicates ? [id] : id
+      };
+    } else {
+      return {};
+    }
+  } else {
+    return getBindingIdentifiers(node, duplicates);
+  }
+}

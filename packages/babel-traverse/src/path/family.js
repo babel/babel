@@ -123,3 +123,7 @@ export function _getPattern(parts, context) {
 export function getBindingIdentifiers(duplicates?) {
   return t.getBindingIdentifiers(this.node, duplicates);
 }
+
+export function getOuterBindingIdentifiers(duplicates?) {
+  return t.getOuterBindingIdentifiers(this.node, duplicates);
+}
