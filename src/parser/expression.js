@@ -712,17 +712,17 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
 };
 
 pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync, isPattern, refShorthandDefaultPos) {
-  if (this.eat(tt.colon)) {
-    prop.value = isPattern ? this.parseMaybeDefault(this.state.start, this.state.startLoc) : this.parseMaybeAssign(false, refShorthandDefaultPos);
-    return this.finishNode(prop, "ObjectProperty");
-  }
-
-  if (this.match(tt.parenL)) {
+  if (isAsync || isGenerator || this.match(tt.parenL)) {
     if (isPattern) this.unexpected();
     prop.kind = "method";
     prop.method = true;
     this.parseMethod(prop, isGenerator, isAsync);
     return this.finishNode(prop, "ObjectMethod");
+  }
+
+  if (this.eat(tt.colon)) {
+    prop.value = isPattern ? this.parseMaybeDefault(this.state.start, this.state.startLoc) : this.parseMaybeAssign(false, refShorthandDefaultPos);
+    return this.finishNode(prop, "ObjectProperty");
   }
 
   if (!prop.computed && prop.key.type === "Identifier" && (prop.key.name === "get" || prop.key.name === "set") && (!this.match(tt.comma) && !this.match(tt.braceR))) {
