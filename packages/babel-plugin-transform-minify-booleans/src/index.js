@@ -1,9 +1,9 @@
 export default function ({ types: t }) {
   return {
     visitor: {
-      Literal(node) {
-        if (typeof node.value === "boolean") {
-          return t.unaryExpression("!", t.literal(+!node.value), true);
+      Literal(path) {
+        if (typeof path.node.value === "boolean") {
+          path.replaceWith(t.unaryExpression("!", t.numberLiteral(+!path.node.value), true));
         }
       }
     }
