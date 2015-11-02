@@ -77,7 +77,7 @@ export default class NodePath {
       }
     }
 
-    if (!(path instanceof NodePath)) {
+    if (path && !(path instanceof NodePath)) {
       if (path.constructor.name === "NodePath") {
         // we're going to absolutley thrash the tree and allocate way too many node paths
         // than is necessary but there's no way around this as the node module resolution
