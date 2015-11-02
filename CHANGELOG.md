@@ -13,6 +13,17 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.0.17
+
+ * **Polish**
+  * Add `Symbol` existence check to `typeof` helper.
+ * **Bug Fix**
+  * When merging options, take precedence over the current array.
+  * Fix export of parameters when renaming the binding of exported functions.
+  * Fix minify booleans plugin.
+  * Fix simplify comparison operator plugin.
+  * Don't include children if it's empty in react inline elements plugin.
+
 ## 6.0.16
 
  * **Internal**
