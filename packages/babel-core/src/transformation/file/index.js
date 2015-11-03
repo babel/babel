@@ -355,13 +355,9 @@ export default class File extends Store {
     if (inputMap) {
       let inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
       let outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
-      let outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
+      var outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
       outputMapGenerator.applySourceMap(inputMapConsumer);
-
-      let mergedMap = outputMapGenerator.toJSON();
-      mergedMap.sources = inputMap.sources;
-      mergedMap.file    = inputMap.file;
-      return mergedMap;
+      return outputMapGenerator.toJSON();
     } else {
       return map;
     }
