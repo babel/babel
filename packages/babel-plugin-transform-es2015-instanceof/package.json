@@ -1,8 +1,8 @@
 {
-  "name": "babel-plugin-transform-es2015-typeof-symbol",
+  "name": "babel-plugin-transform-es2015-instanceof",
   "version": "6.0.15",
   "description": "",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-typeof-symbol",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-instanceof",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
