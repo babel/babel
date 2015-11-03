@@ -14,7 +14,7 @@ node $BROWSERIFY_CMD lib/api/browser.js \
   --plugin bundle-collapser/plugin \
   --plugin derequire/plugin \
   $BROWSERIFY_IGNORE \
-  >>dist/browser.j
+  >>dist/browser.js
 node -p '"\uFEFF"' > dist/browser.min.js
 node $UGLIFY_CMD dist/browser.js \
   --compress warnings=false \
