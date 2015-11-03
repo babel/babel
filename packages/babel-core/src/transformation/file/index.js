@@ -466,7 +466,7 @@ export default class File extends Store {
     for (let pass of (this.pluginPasses: Array<PluginPass>)) {
       let plugin = pass.plugin;
       let fn = plugin[key];
-      if (fn) fn.call(pass, this, pass);
+      if (fn) fn.call(pass, this);
     }
   }
 
