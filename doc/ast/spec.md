@@ -9,7 +9,7 @@ This document specifies the core ESTree AST node types that support the ES5 gram
   - [NullLiteral](#nullliteral)
   - [StringLiteral](#stringliteral)
   - [BooleanLiteral](#booleanliteral)
-  - [NumberLiteral](#numberliteral)
+  - [NumericLiteral](#NumericLiteral)
 - [Programs](#programs)
 - [Functions](#functions)
 - [Statements](#statements)
@@ -153,11 +153,11 @@ An identifier. Note that an identifier may be an expression or a destructuring p
 
 # Literals
 
-## RegexpLiteral
+## RegExpLiteral
 
 ```js
 interface RegExpLiteral <: Literal {
-  type: "RegexLiteral";
+  type: "RegExpLiteral";
   pattern: string;
   flags: string;
 }
@@ -189,11 +189,11 @@ interface BooleanLiteral <: Literal {
 }
 ```
 
-## NumberLiteral
+## NumericLiteral
 
 ```js
-interface NumberLiteral <: Literal {
-  type: "NumberLiteral";
+interface NumericLiteral <: Literal {
+  type: "NumericLiteral";
   value: number;
 }
 ```

@@ -13,6 +13,15 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.0.18
+
+ * **Polish**
+  * Add error when calling builder methods with too many arguments than it can take.
+  * Rename `RegexLiteral` node to `RegExpLiteral`.
+  * Rename `NumberLiteral` node to `NumericLiteral`.
+ * **Bug Fix**
+  * Make all fields of a `ForStatement` optional.
+
 ## 6.0.17
 
  * **Polish**
@@ -78,7 +87,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * The `MethodDefinition` node type has been renamed to `ClassMethod` and it's `FunctionExpression` `value` property has been coerced into the main method node.
   * The `Property` node type has been renamed to `ObjectProperty`.
   * The `Property` node type with the boolean flag `method` has been renamed to `ObjectMethod` and it's `FunctionExpression` `value` property has been coerced into the main method node.
-  * The `Literal` node type has been unoverloaded and split into `BooleanLiteral`, `RegexLiteral`, `NumberLiteral`, `StringLiteral` and `NullLiteral`.
+  * The `Literal` node type has been unoverloaded and split into `BooleanLiteral`, `RegExpLiteral`, `NumericLiteral`, `StringLiteral` and `NullLiteral`.
   * The `SpreadProperty` (from `object-rest-spread`) node type has been split into `RestProperty` (for `ObjectPattern`) and `SpreadProperty` (for `ObjectExpression`)
   * Remove `module.exports` export interop for CommonJS module formatter.
   * `externalHelpers` option has been moved into the plugin `babel-plugin-external-helper-2`.
