@@ -138,10 +138,15 @@
     "description": "",
     "default": "module"
   },
+  
+  "auxiliaryCommentBefore": {
+    "type": "string",
+    "description": "print a comment before any injected non-user code"
+  },
 
-  "auxiliaryComment": {
-    "description": "",
-    "type": "string"
+  "auxiliaryCommentAfter": {
+    "type": "string",
+    "description": "print a comment after any injected non-user code"
   },
 
   "resolveModuleSource": {

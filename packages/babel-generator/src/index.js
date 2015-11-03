@@ -39,7 +39,8 @@ export class CodeGenerator extends Printer {
     shouldPrintComment: boolean;
     retainLines: boolean;
     comments: boolean;
-    auxiliaryComment: string;
+    auxiliaryCommentBefore: string;
+    auxiliaryCommentAfter: string;
     compact: boolean | "auto";
     quotes: "single" | "double";
     concise: boolean;
@@ -50,7 +51,8 @@ export class CodeGenerator extends Printer {
     }
   };
 
-  auxiliaryComment: string;
+  auxiliaryCommentBefore: string;
+  auxiliaryCommentAfter: string;
   whitespace: Whitespace;
   position: Position;
   map: SourceMap;
@@ -64,6 +66,7 @@ export class CodeGenerator extends Printer {
    *
    * - Detects code indentation.
    * - If `opts.compact = "auto"` and the code is over 100KB, `compact` will be set to `true`.
+
    */
 
   static normalizeOptions(code, opts, tokens) {
@@ -74,7 +77,8 @@ export class CodeGenerator extends Printer {
     }
 
     let format = {
-      auxiliaryComment: opts.auxiliaryComment,
+      auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
+      auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
       shouldPrintComment: opts.shouldPrintComment,
       retainLines: opts.retainLines,
       comments: opts.comments == null || opts.comments,
@@ -143,6 +147,7 @@ export class CodeGenerator extends Printer {
 
   generate() {
     this.print(this.ast);
+    this.printAuxAfterComment();
 
     return {
       map:  this.map.get(),

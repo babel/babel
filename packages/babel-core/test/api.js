@@ -47,7 +47,8 @@ suite("api", function () {
 
   test("auxiliaryComment option", function () {
     return transformAsync("class Foo {}", {
-      auxiliaryComment: "yo bro",
+      auxiliaryCommentBefore: "before",
+      auxiliaryCommentAfter: "after",
       plugins: [function (babel) {
         var t = babel.types;
         return {
@@ -60,7 +61,7 @@ suite("api", function () {
         };
       }]
     }).then(function (result) {
-      assert.equal(result.code, "/*yo bro*/start;\nclass Foo {}\n/*yo bro*/end;");
+      assert.equal(result.code, "/*before*/start;\n/*after*/class Foo {}\n/*before*/end;\n/*after*/");
     });
   });
 

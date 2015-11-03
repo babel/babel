@@ -9,6 +9,7 @@ export default class Printer extends Buffer {
   constructor(...args) {
     super(...args);
     this.insideAux = false;
+    this.printAuxAfterOnNextUserNode = false;
   }
 
   print(node, parent, opts = {}) {
@@ -31,7 +32,8 @@ export default class Printer extends Buffer {
       throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
 
-    this.printAuxComment(oldInAux);
+    if (node.loc) this.printAuxAfterComment();
+    this.printAuxBeforeComment(oldInAux);
 
     let needsParens = n.needsParens(node, parent);
     if (needsParens) this.push("(");
@@ -62,10 +64,22 @@ export default class Printer extends Buffer {
     this._printNewline(false, node, parent, opts);
   }
 
-  printAuxComment(wasInAux) {
-    let comment = this.format.auxiliaryComment;
-    if (comment && !wasInAux && this.insideAux) {
-      this.printComment({
+  printAuxBeforeComment(wasInAux) {
+    let comment = this.format.auxiliaryCommentBefore;
+    if (!wasInAux && this.insideAux) {
+      this.printAuxAfterOnNextUserNode = true;
+      if (comment) this.printComment({
+        type: "CommentBlock",
+        value: comment
+      });
+    }
+  }
+
+  printAuxAfterComment() {
+    if (this.printAuxAfterOnNextUserNode) {
+      this.printAuxAfterOnNextUserNode = false;
+      let comment = this.format.auxiliaryCommentAfter;
+      if (comment) this.printComment({
         type: "CommentBlock",
         value: comment
       });
@@ -224,7 +238,7 @@ export default class Printer extends Buffer {
 
   printComment(comment) {
     if (!this.shouldPrintComment(comment)) return;
-    
+
     if (comment.ignore) return;
     comment.ignore = true;
 
