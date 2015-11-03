@@ -18,7 +18,7 @@ export function TemplateLiteral(node: Object) {
     this.print(quasis[i], node);
 
     if (i + 1 < quasis.length) {
-      this.push("${ ");
+      this._push("${ ");
       this.print(node.expressions[i], node);
       this.push(" }");
     }
