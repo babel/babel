@@ -46,6 +46,10 @@ export function DeclareVariable(node: Object) {
   this.semicolon();
 }
 
+export function ExistentialTypeParam() {
+  this.push("*");
+}
+
 export function FunctionTypeAnnotation(node: Object, parent: Object) {
   this.print(node.typeParameters, node);
   this.push("(");

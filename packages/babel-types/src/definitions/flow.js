@@ -79,6 +79,10 @@ defineType("DeclareVariable", {
   }
 });
 
+defineType("ExistentialTypeParam", {
+  aliases: ["Flow"]
+});
+
 defineType("FunctionTypeAnnotation", {
   visitor: ["typeParameters", "params", "rest", "returnType"],
   aliases: ["Flow"],
