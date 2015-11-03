@@ -10,21 +10,25 @@
   "dependencies": {
     "babel-core": "^6.0.15",
     "babel-polyfill": "^6.0.14",
+    "babel-runtime": "^5.0.0",
+    "chalk": "1.1.1",
     "chokidar": "^1.0.0",
     "commander": "^2.8.1",
     "convert-source-map": "^1.1.0",
     "fs-readdir-recursive": "^0.1.0",
     "glob": "^5.0.5",
     "lodash": "^3.2.0",
+    "log-symbols": "^1.0.2",
     "output-file-sync": "^1.1.0",
     "path-exists": "^1.0.0",
     "path-is-absolute": "^1.0.0",
+    "request": "^2.65.0",
     "slash": "^1.0.0",
     "source-map": "^0.5.0",
-    "v8flags": "^2.0.10",
-    "babel-runtime": "^5.0.0"
+    "v8flags": "^2.0.10"
   },
   "bin": {
+    "babel-doctor": "./bin/babel-doctor.js",
     "babel": "./bin/babel.js",
     "babel-node": "./bin/babel-node.js",
     "babel-external-helpers": "./bin/babel-external-helpers.js"
