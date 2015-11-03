@@ -9,6 +9,7 @@ import * as t from "./index";
 export function getBindingIdentifiers(
   node: Object,
   duplicates?: boolean,
+  outerOnly?: boolean
 ): Object {
   let search = [].concat(node);
   let ids    = Object.create(null);
@@ -29,6 +30,10 @@ export function getBindingIdentifiers(
     } else if (t.isExportDeclaration(id)) {
       if (t.isDeclaration(node.declaration)) {
         search.push(node.declaration);
+      }
+    } else if (outerOnly) {
+      if (t.isFunction(id)) {
+        search.push(id.id);
       }
     } else if (keys) {
       for (let i = 0; i < keys.length; i++) {
@@ -93,16 +98,5 @@ export function getOuterBindingIdentifiers(
   node: Object,
   duplicates?: boolean,
 ): Object {
-  if (t.isFunction(node)) {
-    let id = node.id;
-    if (id) {
-      return {
-        [id.name]: duplicates ? [id] : id
-      };
-    } else {
-      return {};
-    }
-  } else {
-    return getBindingIdentifiers(node, duplicates);
-  }
+  return getBindingIdentifiers(node, duplicates, true);
 }

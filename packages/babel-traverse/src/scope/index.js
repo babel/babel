@@ -402,7 +402,7 @@ export default class Scope {
     if (path.isLabeledStatement()) {
       this.registerBinding("label", path);
     } else if (path.isFunctionDeclaration()) {
-      this.registerBinding("hoisted", path);
+      this.registerBinding("hoisted", path.get("id"), true);
     } else if (path.isVariableDeclaration()) {
       let declarations = path.get("declarations");
       for (let declar of (declarations: Array)) {
@@ -441,7 +441,7 @@ export default class Scope {
     }
   }
 
-  registerBinding(kind: string, path: NodePath) {
+  registerBinding(kind: string, path: NodePath, bindingPath = path) {
     if (!kind) throw new ReferenceError("no `kind`");
 
     if (path.isVariableDeclaration()) {
@@ -453,7 +453,7 @@ export default class Scope {
     }
 
     let parent = this.getProgramParent();
-    let ids = path.getOuterBindingIdentifiers(true);
+    let ids = path.getBindingIdentifiers(true);
 
     for (let name in ids) {
       for (let id of (ids[name]: Array<Object>)) {
@@ -472,7 +472,7 @@ export default class Scope {
           identifier: id,
           existing:   local,
           scope:      this,
-          path:       path,
+          path:       bindingPath,
           kind:       kind
         });
       }
@@ -618,7 +618,7 @@ export default class Scope {
     // FunctionExpression - id
 
     if (path.isFunctionExpression() && path.has("id")) {
-      this.registerBinding("local", path);
+      this.registerBinding("local", path.get("id"), path);
     }
 
     // Class
