@@ -38,6 +38,7 @@ export default function ({ types: t }) {
         }
 
         function pushProp(objProps, key, value) {
+          if (t.isJSXExpressionContainer(value)) value = value.expression;
           objProps.push(t.objectProperty(key, value));
         }
 
