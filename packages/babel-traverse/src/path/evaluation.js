@@ -75,7 +75,7 @@ export function evaluate(): { confident: boolean; value: any } {
       return evaluate(exprs[exprs.length - 1]);
     }
 
-    if (path.isStringLiteral() || path.isNumberLiteral() || path.isBooleanLiteral()) {
+    if (path.isStringLiteral() || path.isNumericLiteral() || path.isBooleanLiteral()) {
       return node.value;
     }
 

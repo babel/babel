@@ -87,7 +87,7 @@
                   }
                 },
                 "typeAnnotation": {
-                  "type": "NumberLiteralTypeAnnotation",
+                  "type": "NumericLiteralTypeAnnotation",
                   "start": 7,
                   "end": 10,
                   "loc": {

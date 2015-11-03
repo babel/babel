@@ -13,9 +13,9 @@ let t = exports;
  * Pass `skipAliasCheck` to force it to directly compare `node.type` with `type`.
  */
 
-function registerType(type: string, skipAliasCheck?: boolean) {
+function registerType(type: string) {
   let is = t[`is${type}`] = function (node, opts) {
-    return t.is(type, node, opts, skipAliasCheck);
+    return t.is(type, node, opts);
   };
 
   t[`assert${type}`] = function (node, opts) {
@@ -47,8 +47,8 @@ export const NUMBER_UNARY_OPERATORS  = ["+", "-", "++", "--", "~"];
 export const STRING_UNARY_OPERATORS  = ["typeof"];
 
 import "./definitions/init";
-import { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS } from "./definitions";
-export { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS };
+import { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS } from "./definitions";
+export { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS };
 
 import * as _react from "./react";
 export { _react as react };
@@ -58,7 +58,7 @@ export { _react as react };
  */
 
 for (let type in t.VISITOR_KEYS) {
-  registerType(type, true);
+  registerType(type);
 }
 
 /**
@@ -80,10 +80,12 @@ each(t.ALIAS_KEYS, function (aliases, type) {
 
 each(t.FLIPPED_ALIAS_KEYS, function (types, type) {
   t[type.toUpperCase() + "_TYPES"] = types;
-  registerType(type, false);
+  registerType(type);
 });
 
-export const TYPES = Object.keys(t.VISITOR_KEYS).concat(Object.keys(t.FLIPPED_ALIAS_KEYS));
+export const TYPES = Object.keys(t.VISITOR_KEYS)
+  .concat(Object.keys(t.FLIPPED_ALIAS_KEYS))
+  .concat(Object.keys(t.DEPRECATED_KEYS));
 
 /**
  * Returns whether `node` is of given `type`.
@@ -112,17 +114,21 @@ export function is(type: string, node: Object, opts?: Object): boolean {
 export function isType(nodeType: string, targetType: string): boolean {
   if (nodeType === targetType) return true;
 
-  let aliases = t.FLIPPED_ALIAS_KEYS[targetType];
+  let aliases: ?Array<string> = t.FLIPPED_ALIAS_KEYS[targetType];
   if (aliases) {
     if (aliases[0] === nodeType) return true;
 
-    for (let alias of (aliases: Array<string>)) {
+    for (let alias of aliases) {
       if (nodeType === alias) return true;
     }
   }
 
   return false;
 }
+
+/**
+ * Description
+ */
 
 each(t.BUILDER_KEYS, function (keys, type) {
   function builder() {
@@ -154,6 +160,25 @@ each(t.BUILDER_KEYS, function (keys, type) {
   t[type] = builder;
   t[type[0].toLowerCase() + type.slice(1)] = builder;
 });
+
+/**
+ * Description
+ */
+
+ for (let type in t.DEPRECATED_KEYS) {
+   let newType = t.DEPRECATED_KEYS[type];
+
+   function proxy(fn) {
+     return function () {
+       console.trace(`The node type ${type} has been renamed to ${newType}`);
+       return fn.apply(this, arguments);
+     };
+   }
+
+   t[type] = t[type[0].toLowerCase() + type.slice(1)] = proxy(t[newType]);
+   t[`is${type}`] = proxy(t[`is${newType}`]);
+   t[`assert${type}`] = proxy(t[`assert${newType}`]);
+ }
 
 /**
  * Description

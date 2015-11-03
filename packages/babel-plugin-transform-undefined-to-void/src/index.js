@@ -3,7 +3,7 @@ export default function ({ types: t }) {
     visitor: {
       ReferencedIdentifier(path) {
         if (path.node.name === "undefined") {
-          path.replaceWith(t.unaryExpression("void", t.numberLiteral(0), true));
+          path.replaceWith(t.unaryExpression("void", t.numericLiteral(0), true));
         }
       }
     }

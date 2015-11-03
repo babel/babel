@@ -88,7 +88,7 @@
                 "name": "x"
               },
               "init": {
-                "type": "NumberLiteral",
+                "type": "NumericLiteral",
                 "start": 14,
                 "end": 15,
                 "loc": {

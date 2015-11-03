@@ -119,7 +119,7 @@
                   "name": "b"
                 },
                 "right": {
-                  "type": "NumberLiteral",
+                  "type": "NumericLiteral",
                   "start": 5,
                   "end": 6,
                   "loc": {
@@ -229,7 +229,7 @@
                           "name": "a"
                         },
                         "property": {
-                          "type": "NumberLiteral",
+                          "type": "NumericLiteral",
                           "start": 15,
                           "end": 16,
                           "loc": {
@@ -273,7 +273,7 @@
             ]
           },
           "right": {
-            "type": "NumberLiteral",
+            "type": "NumericLiteral",
             "start": 23,
             "end": 24,
             "loc": {

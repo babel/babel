@@ -238,7 +238,7 @@
                             "name": "x"
                           },
                           "value": {
-                            "type": "NumberLiteral",
+                            "type": "NumericLiteral",
                             "start": 24,
                             "end": 26,
                             "loc": {

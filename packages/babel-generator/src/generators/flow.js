@@ -118,7 +118,7 @@ export function NullableTypeAnnotation(node: Object) {
   this.print(node.typeAnnotation, node);
 }
 
-export { NumberLiteral as NumberLiteralTypeAnnotation } from "./types";
+export { NumericLiteral as NumericLiteralTypeAnnotation } from "./types";
 
 export function NumberTypeAnnotation() {
   this.push("number");

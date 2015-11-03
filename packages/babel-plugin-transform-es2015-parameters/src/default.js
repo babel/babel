@@ -67,7 +67,7 @@ export let visitor = {
         defNode = buildDefaultParam({
           VARIABLE_NAME: left,
           DEFAULT_VALUE: right,
-          ARGUMENT_KEY:  t.numberLiteral(i),
+          ARGUMENT_KEY:  t.numericLiteral(i),
           ARGUMENTS:     argsIdentifier
         });
       } else {
@@ -131,7 +131,7 @@ export let visitor = {
       let param = node.params[i];
       if (param._isDefaultPlaceholder) continue;
 
-      let declar = buildCutOff(param, argsIdentifier, t.numberLiteral(i));
+      let declar = buildCutOff(param, argsIdentifier, t.numericLiteral(i));
       declar._blockHoist = node.params.length - i;
       body.push(declar);
     }

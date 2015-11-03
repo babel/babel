@@ -94,7 +94,7 @@ function optimiseMemberExpression(parent, offset) {
     prop.value += offset;
     prop.raw = String(prop.value);
   } else { // // UnaryExpression, BinaryExpression
-    newExpr = t.binaryExpression("+", prop, t.numberLiteral(offset));
+    newExpr = t.binaryExpression("+", prop, t.numericLiteral(offset));
     parent.property = newExpr;
   }
 }
@@ -122,7 +122,7 @@ export let visitor = {
       rest = scope.generateUidIdentifier("ref");
 
       let declar = t.variableDeclaration("let", pattern.elements.map(function (elem, index) {
-        let accessExpr = t.memberExpression(rest, t.numberLiteral(index), true);
+        let accessExpr = t.memberExpression(rest, t.numericLiteral(index), true);
         return t.variableDeclarator(elem, accessExpr);
       }));
       node.body.body.unshift(declar);
@@ -168,7 +168,7 @@ export let visitor = {
 
     //
 
-    let start = t.numberLiteral(node.params.length);
+    let start = t.numericLiteral(node.params.length);
     let key = scope.generateUidIdentifier("key");
     let len = scope.generateUidIdentifier("len");
 
@@ -189,7 +189,7 @@ export let visitor = {
       arrLen = t.conditionalExpression(
         t.binaryExpression(">", len, start),
         t.binaryExpression("-", len, start),
-        t.numberLiteral(0)
+        t.numericLiteral(0)
       );
     }
 

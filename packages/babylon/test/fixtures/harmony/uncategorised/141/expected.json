@@ -91,7 +91,7 @@
                 "name": "x"
               },
               "value": {
-                "type": "NumberLiteral",
+                "type": "NumericLiteral",
                 "start": 7,
                 "end": 9,
                 "loc": {

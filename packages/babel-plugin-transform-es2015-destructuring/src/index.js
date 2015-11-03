@@ -288,14 +288,14 @@ export default function ({ types: t }) {
           elemRef = this.toArray(arrayRef);
 
           if (i > 0) {
-            elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.numberLiteral(i)]);
+            elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.numericLiteral(i)]);
           }
 
           // set the element to the rest element argument since we've dealt with it
           // being a rest already
           elem = elem.argument;
         } else {
-          elemRef = t.memberExpression(arrayRef, t.numberLiteral(i), true);
+          elemRef = t.memberExpression(arrayRef, t.numericLiteral(i), true);
         }
 
         this.push(elem, elemRef);

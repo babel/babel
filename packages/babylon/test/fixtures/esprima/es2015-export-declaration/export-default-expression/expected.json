@@ -57,7 +57,7 @@
             }
           },
           "left": {
-            "type": "NumberLiteral",
+            "type": "NumericLiteral",
             "start": 16,
             "end": 17,
             "loc": {
@@ -78,7 +78,7 @@
           },
           "operator": "+",
           "right": {
-            "type": "NumberLiteral",
+            "type": "NumericLiteral",
             "start": 20,
             "end": 21,
             "loc": {

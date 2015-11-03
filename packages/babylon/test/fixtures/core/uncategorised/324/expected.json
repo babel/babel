@@ -43,7 +43,7 @@
           }
         },
         "test": {
-          "type": "NumberLiteral",
+          "type": "NumericLiteral",
           "start": 3,
           "end": 4,
           "loc": {
@@ -77,7 +77,7 @@
             }
           },
           "expression": {
-            "type": "RegexLiteral",
+            "type": "RegExpLiteral",
             "start": 5,
             "end": 12,
             "loc": {

@@ -104,7 +104,7 @@ exports.visitor = {
         // Async functions that are not generators don't care about the
         // outer function because they don't need it to be marked and don't
         // inherit from its .prototype.
-        node.generator ? outerFnExpr : t.nullLiteral(null),
+        node.generator ? outerFnExpr : t.nullLiteral(),
         t.thisExpression()
       ];
 
@@ -166,7 +166,7 @@ function getOuterFnExpr(funPath) {
 
     return t.memberExpression(
       markedArray,
-      t.numberLiteral(index),
+      t.numericLiteral(index),
       true
     );
   }

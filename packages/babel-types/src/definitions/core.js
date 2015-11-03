@@ -212,13 +212,16 @@ defineType("ForStatement", {
   aliases: ["Scopable", "Statement", "For", "BlockParent", "Loop"],
   fields: {
     init: {
-      validate: assertNodeType("VariableDeclaration", "Expression")
+      validate: assertNodeType("VariableDeclaration", "Expression"),
+      optional: true
     },
     test: {
-      validate: assertNodeType("Expression")
+      validate: assertNodeType("Expression"),
+      optional: true
     },
     update: {
-      validate: assertNodeType("Expression")
+      validate: assertNodeType("Expression"),
+      optional: true
     },
     body: {
       validate: assertNodeType("Statement")
@@ -340,8 +343,9 @@ defineType("StringLiteral", {
   aliases: ["Expression", "Pureish", "Literal", "Immutable"]
 });
 
-defineType("NumberLiteral", {
+defineType("NumericLiteral", {
   builder: ["value"],
+  deprecatedAlias: "NumberLiteral",
   fields: {
     value: {
       validate: assertValueType("number")
@@ -364,8 +368,9 @@ defineType("BooleanLiteral", {
   aliases: ["Expression", "Pureish", "Literal", "Immutable"]
 });
 
-defineType("RegexLiteral", {
+defineType("RegExpLiteral", {
   builder: ["pattern", "flags"],
+  deprecatedAlias: "RegexLiteral",
   aliases: ["Expression", "Literal"],
   fields: {
     pattern: {

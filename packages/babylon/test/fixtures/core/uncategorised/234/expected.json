@@ -188,7 +188,7 @@
           },
           "operator": "<",
           "right": {
-            "type": "NumberLiteral",
+            "type": "NumericLiteral",
             "start": 28,
             "end": 30,
             "loc": {

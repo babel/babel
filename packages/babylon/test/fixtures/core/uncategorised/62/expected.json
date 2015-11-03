@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "NumberLiteral",
+          "type": "NumericLiteral",
           "start": 4,
           "end": 6,
           "loc": {

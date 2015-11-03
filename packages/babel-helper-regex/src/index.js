@@ -4,7 +4,7 @@ import pull from "lodash/array/pull";
 import * as t from "babel-types";
 
 export function is(node: Object, flag: string): boolean {
-  return t.isRegexLiteral(node) && node.flags.indexOf(flag) >= 0;
+  return t.isRegExpLiteral(node) && node.flags.indexOf(flag) >= 0;
 }
 
 export function pullFlag(node: Object, flag: string) {

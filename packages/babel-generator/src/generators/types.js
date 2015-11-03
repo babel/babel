@@ -99,7 +99,7 @@ export function ArrayExpression(node: Object) {
 
 export { ArrayExpression as ArrayPattern };
 
-export function RegexLiteral(node: Object) {
+export function RegExpLiteral(node: Object) {
   this.push(`/${node.pattern}/${node.flags}`);
 }
 
@@ -111,7 +111,7 @@ export function NullLiteral() {
   this.push("null");
 }
 
-export function NumberLiteral(node: Object) {
+export function NumericLiteral(node: Object) {
   this.push(node.value + "");
 }
 

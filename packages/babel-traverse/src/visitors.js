@@ -54,7 +54,7 @@ export function explode(visitor) {
     delete visitor[nodeType];
 
     if (wrapper.types) {
-      for (let type of (wrapper.types: Array)) {
+      for (let type of (wrapper.types: Array<string>)) {
         // merge the visitor if necessary or just put it back in
         if (visitor[type]) {
           mergePair(visitor[type], fns);
@@ -73,13 +73,20 @@ export function explode(visitor) {
 
     let fns = visitor[nodeType];
 
-    let aliases = t.FLIPPED_ALIAS_KEYS[nodeType];
+    let aliases: ?Array<string> = t.FLIPPED_ALIAS_KEYS[nodeType];
+
+    let deprecratedKey = t.DEPRECATED_KEYS[nodeType];
+    if (deprecratedKey) {
+      console.trace(`Visitor defined for ${nodeType} but it has been renamed to ${deprecratedKey}`);
+      aliases = [deprecratedKey];
+    }
+
     if (!aliases) continue;
 
     // clear it from the visitor
     delete visitor[nodeType];
 
-    for (let alias of (aliases: Array)) {
+    for (let alias of aliases) {
       let existing = visitor[alias];
       if (existing) {
         mergePair(existing, fns);
@@ -115,8 +122,18 @@ export function verify(visitor) {
     let visitors = visitor[nodeType];
     if (typeof visitors === "object") {
       for (let visitorKey in visitors) {
-        if (visitorKey === "enter" || visitorKey === "exit") continue;
-        throw new Error(messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey));
+        if (visitorKey === "enter" || visitorKey === "exit") {
+          // verify that it just contains functions
+          let val = visitors[visitorKey];
+          let fns = [].concat(val);
+          for (let fn of fns) {
+            if (typeof fn !== "function") {
+              throw new TypeError(`Non-function found defined in ${nodeType}.${visitorKey} with type ${typeof fn}`);
+            }
+          }
+        } else {
+          throw new Error(messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey));
+        }
       }
     }
   }
@@ -137,31 +154,7 @@ export function merge(visitors: Array, states: Array = []) {
       let visitorType = visitor[type];
 
       // if we have state then overload the callbacks to take it
-      if (state) {
-        let oldVisitorType = visitorType;
-        visitorType = {};
-
-        for (let key in oldVisitorType) {
-          let fns = oldVisitorType[key];
-
-          // not an enter/exit array of callbacks
-          if (!Array.isArray(fns)) continue;
-
-          fns = fns.map(function (fn) {
-            if (typeof fn === "function") {
-              let newFn = function (path) {
-                return fn.call(state, path, state);
-              };
-              newFn.toString = () => fn.toString();
-              return newFn;
-            } else {
-              return fn;
-            }
-          });
-
-          visitorType[key] = fns;
-        }
-      }
+      if (state) visitorType = wrapWithState(visitorType, state);
 
       let nodeVisitor = rootVisitor[type] = rootVisitor[type] || {};
       mergePair(nodeVisitor, visitorType);
@@ -169,6 +162,27 @@ export function merge(visitors: Array, states: Array = []) {
   }
 
   return rootVisitor;
+}
+
+function wrapWithState(oldVisitor, state) {
+  let newVisitor = {};
+
+  for (let key in oldVisitor) {
+    let fns = oldVisitor[key];
+
+    // not an enter/exit array of callbacks
+    if (!Array.isArray(fns)) continue;
+
+    fns = fns.map(function (fn) {
+      return function (path) {
+        return fn.call(state, path, state);
+      };
+    });
+
+    newVisitor[key] = fns;
+  }
+
+  return newVisitor;
 }
 
 function ensureEntranceObjects(obj) {

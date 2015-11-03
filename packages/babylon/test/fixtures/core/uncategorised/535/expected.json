@@ -74,7 +74,7 @@
               "name": "x"
             },
             "init": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 10,
               "end": 12,
               "loc": {
@@ -125,7 +125,7 @@
               "name": "y"
             },
             "init": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 18,
               "end": 19,
               "loc": {
@@ -176,7 +176,7 @@
               "name": "z"
             },
             "init": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 25,
               "end": 29,
               "loc": {

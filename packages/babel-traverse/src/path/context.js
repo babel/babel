@@ -90,7 +90,7 @@ export function setScope() {
     let path = this.parentPath;
     while (path && !target) {
       if (path.opts && path.opts.noScope) return;
-      
+
       target = path.scope;
       path = path.parentPath;
     }

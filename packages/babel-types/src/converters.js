@@ -267,14 +267,14 @@ export function valueToNode(value: any): Object {
 
   // numbers
   if (isNumber(value)) {
-    return t.numberLiteral(value);
+    return t.numericLiteral(value);
   }
 
   // regexes
   if (isRegExp(value)) {
     let pattern = value.source;
     let flags = value.toString().match(/\/([a-z]+|)$/)[1];
-    return t.regexLiteral(pattern, flags);
+    return t.regExpLiteral(pattern, flags);
   }
 
   // array

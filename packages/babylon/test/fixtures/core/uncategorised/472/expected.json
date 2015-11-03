@@ -122,7 +122,7 @@
                   "name": "eval"
                 },
                 "right": {
-                  "type": "NumberLiteral",
+                  "type": "NumericLiteral",
                   "start": 39,
                   "end": 41,
                   "loc": {

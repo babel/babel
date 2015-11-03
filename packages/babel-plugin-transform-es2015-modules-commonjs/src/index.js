@@ -57,7 +57,7 @@ export default function () {
       if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
       if (path.parentPath.isCallExpression({ callee: path.node })) {
-        path.replaceWith(t.sequenceExpression([t.numberLiteral(0), remap]));
+        path.replaceWith(t.sequenceExpression([t.numericLiteral(0), remap]));
       } else {
         path.replaceWith(remap);
       }
@@ -96,7 +96,7 @@ export default function () {
       // redeclared in this scope
       if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
-      let node = t.assignmentExpression(path.node.operator[0] + "=", arg.node, t.numberLiteral(1));
+      let node = t.assignmentExpression(path.node.operator[0] + "=", arg.node, t.numericLiteral(1));
 
       if ((path.parentPath.isExpressionStatement() && !path.isCompletionRecord()) || path.node.prefix) {
         return path.replaceWith(node);
@@ -111,7 +111,7 @@ export default function () {
       } else { // "++"
         operator = "-";
       }
-      nodes.push(t.binaryExpression(operator, arg.node, t.numberLiteral(1)));
+      nodes.push(t.binaryExpression(operator, arg.node, t.numericLiteral(1)));
 
       path.replaceWithMultiple(t.sequenceExpression(nodes));
     }

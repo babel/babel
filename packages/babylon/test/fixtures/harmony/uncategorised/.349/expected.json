@@ -93,7 +93,7 @@
                 "raw": "'__proto__'"
               },
               "value": {
-                "type": "NumberLiteral",
+                "type": "NumericLiteral",
                 "start": 16,
                 "end": 17,
                 "loc": {
@@ -146,7 +146,7 @@
                 "name": "__proto__"
               },
               "value": {
-                "type": "NumberLiteral",
+                "type": "NumericLiteral",
                 "start": 30,
                 "end": 31,
                 "loc": {

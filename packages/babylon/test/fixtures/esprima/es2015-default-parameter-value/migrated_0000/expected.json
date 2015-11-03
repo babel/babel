@@ -122,7 +122,7 @@
                   "name": "y"
                 },
                 "right": {
-                  "type": "NumberLiteral",
+                  "type": "NumericLiteral",
                   "start": 17,
                   "end": 18,
                   "loc": {

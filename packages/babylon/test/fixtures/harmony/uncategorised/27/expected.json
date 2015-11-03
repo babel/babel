@@ -120,7 +120,7 @@
                       "name": "t"
                     },
                     "init": {
-                      "type": "NumberLiteral",
+                      "type": "NumericLiteral",
                       "start": 35,
                       "end": 37,
                       "loc": {
@@ -161,7 +161,7 @@
               }
             ],
             "test": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 23,
               "end": 25,
               "loc": {

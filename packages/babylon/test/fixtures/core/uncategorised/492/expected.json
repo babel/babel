@@ -139,7 +139,7 @@
                       "name": "i"
                     },
                     "value": {
-                      "type": "NumberLiteral",
+                      "type": "NumericLiteral",
                       "start": 38,
                       "end": 40,
                       "loc": {

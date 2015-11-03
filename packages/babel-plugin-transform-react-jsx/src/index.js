@@ -33,7 +33,7 @@ export default function ({ types: t }) {
       }
     }
 
-    state.set("jsxIdentifier", id.split(".").map(t.identifier).reduce(function (object, property) {
+    state.set("jsxIdentifier", id.split(".").map((name) => t.identifier(name)).reduce(function (object, property) {
       return t.memberExpression(object, property);
     }));
   };

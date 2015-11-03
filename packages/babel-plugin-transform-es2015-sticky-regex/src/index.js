@@ -4,7 +4,7 @@ import * as t from "babel-types";
 export default function () {
   return {
     visitor: {
-      RegexLiteral(path) {
+      RegExpLiteral(path) {
         let { node } = path;
         if (!regex.is(node, "y")) return;
 

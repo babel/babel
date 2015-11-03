@@ -141,7 +141,7 @@
                       "raw": "\"\\1\""
                     },
                     "value": {
-                      "type": "NumberLiteral",
+                      "type": "NumericLiteral",
                       "start": 42,
                       "end": 44,
                       "loc": {

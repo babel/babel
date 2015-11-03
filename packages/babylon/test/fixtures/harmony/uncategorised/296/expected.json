@@ -78,7 +78,7 @@
             }
           ],
           "body": {
-            "type": "NumberLiteral",
+            "type": "NumericLiteral",
             "start": 24,
             "end": 26,
             "loc": {

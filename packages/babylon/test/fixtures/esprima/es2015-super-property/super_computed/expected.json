@@ -185,7 +185,7 @@
                         }
                       },
                       "property": {
-                        "type": "NumberLiteral",
+                        "type": "NumericLiteral",
                         "start": 51,
                         "end": 52,
                         "loc": {

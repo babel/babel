@@ -186,7 +186,7 @@
                       "name": "b"
                     },
                     "right": {
-                      "type": "NumberLiteral",
+                      "type": "NumericLiteral",
                       "start": 9,
                       "end": 10,
                       "loc": {
@@ -321,7 +321,7 @@
                       "name": "f"
                     },
                     "right": {
-                      "type": "NumberLiteral",
+                      "type": "NumericLiteral",
                       "start": 19,
                       "end": 20,
                       "loc": {
@@ -412,7 +412,7 @@
               ]
             },
             "init": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 30,
               "end": 31,
               "loc": {

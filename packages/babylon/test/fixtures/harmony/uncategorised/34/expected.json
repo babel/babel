@@ -121,7 +121,7 @@
                     }
                   },
                   "expression": {
-                    "type": "NumberLiteral",
+                    "type": "NumericLiteral",
                     "start": 14,
                     "end": 16,
                     "loc": {

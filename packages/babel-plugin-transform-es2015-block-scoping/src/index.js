@@ -184,7 +184,7 @@ let hoistVarDeclarationsVisitor = {
         node.left = node.left.declarations[0].id;
       }
     } else if (isVar(node, parent, scope)) {
-      path.replaceWithMultiple(self.pushDeclar(node).map(t.expressionStatement));
+      path.replaceWithMultiple(self.pushDeclar(node).map(expr => t.expressionStatement(expr)));
     } else if (path.isFunction()) {
       return path.skip();
     }

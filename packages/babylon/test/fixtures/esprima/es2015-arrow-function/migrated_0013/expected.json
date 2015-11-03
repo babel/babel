@@ -91,7 +91,7 @@
                 "name": "eval"
               },
               "right": {
-                "type": "NumberLiteral",
+                "type": "NumericLiteral",
                 "start": 8,
                 "end": 10,
                 "loc": {
@@ -113,7 +113,7 @@
             }
           ],
           "body": {
-            "type": "NumberLiteral",
+            "type": "NumericLiteral",
             "start": 15,
             "end": 17,
             "loc": {

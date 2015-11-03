@@ -6,6 +6,7 @@ export let VISITOR_KEYS = {};
 export let ALIAS_KEYS = {};
 export let NODE_FIELDS = {};
 export let BUILDER_KEYS = {};
+export let DEPRECATED_KEYS = {};
 
 function getType(val) {
   if (Array.isArray(val)) {
@@ -100,6 +101,10 @@ export default function defineType(
   opts.visitor = opts.visitor || inherits.visitor || [];
   opts.aliases = opts.aliases || inherits.aliases || [];
   opts.builder = opts.builder || inherits.builder || opts.visitor || [];
+
+  if (opts.deprecatedAlias) {
+    DEPRECATED_KEYS[opts.deprecatedAlias] = type;
+  }
 
   // ensure all field keys are represented in `fields`
   for (let key of (opts.visitor.concat(opts.builder): Array<string>)) {

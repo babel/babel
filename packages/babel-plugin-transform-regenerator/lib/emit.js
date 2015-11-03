@@ -67,7 +67,7 @@ exports.Emitter = Emitter;
 // location to be determined at any time, even after generating code that
 // refers to the location.
 function loc() {
-  return t.numberLiteral(-1);
+  return t.numericLiteral(-1);
 }
 
 // Sets the exact value of the given location to the offset of the next
@@ -235,7 +235,7 @@ Ep.getDispatchLoop = function() {
   self.listing.forEach(function(stmt, i) {
     if (self.marked.hasOwnProperty(i)) {
       cases.push(t.switchCase(
-        t.numberLiteral(i),
+        t.numericLiteral(i),
         current = []));
       alreadyEnded = false;
     }
@@ -267,7 +267,7 @@ Ep.getDispatchLoop = function() {
   );
 
   return t.whileStatement(
-    t.numberLiteral(1),
+    t.numericLiteral(1),
     t.switchStatement(
       t.assignmentExpression(
         "=",
@@ -845,7 +845,7 @@ function isValidCompletion(record) {
 // targets, but minimizing the number of switch cases keeps the generated
 // code shorter.
 Ep.getUnmarkedCurrentLoc = function() {
-  return t.numberLiteral(this.listing.length);
+  return t.numericLiteral(this.listing.length);
 };
 
 // The context.prev property takes the value of context.next whenever we
@@ -1030,7 +1030,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
         // will receive the object of the MemberExpression as its `this`
         // object.
         newCallee = t.sequenceExpression([
-          t.numberLiteral(0),
+          t.numericLiteral(0),
           newCallee
         ]);
       }

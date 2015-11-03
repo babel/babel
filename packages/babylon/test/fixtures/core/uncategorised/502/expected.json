@@ -123,7 +123,7 @@
                     "shorthand": false,
                     "computed": false,
                     "key": {
-                      "type": "NumberLiteral",
+                      "type": "NumericLiteral",
                       "start": 36,
                       "end": 39,
                       "loc": {
@@ -141,7 +141,7 @@
                       "raw": "021"
                     },
                     "value": {
-                      "type": "NumberLiteral",
+                      "type": "NumericLiteral",
                       "start": 41,
                       "end": 43,
                       "loc": {

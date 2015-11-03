@@ -122,7 +122,7 @@
                     "name": "arguments"
                   },
                   "init": {
-                    "type": "NumberLiteral",
+                    "type": "NumericLiteral",
                     "start": 48,
                     "end": 50,
                     "loc": {

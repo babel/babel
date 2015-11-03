@@ -59,7 +59,7 @@
           "name": "A"
         },
         "superClass": {
-          "type": "NumberLiteral",
+          "type": "NumericLiteral",
           "start": 16,
           "end": 17,
           "loc": {

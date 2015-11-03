@@ -249,7 +249,7 @@ export default class ReplaceSupers {
       property = node.property;
       computed = node.computed;
     } else if (t.isUpdateExpression(node) && isMemberExpressionSuper(node.argument)) {
-      let binary = t.binaryExpression(node.operator[0], node.argument, t.numberLiteral(1));
+      let binary = t.binaryExpression(node.operator[0], node.argument, t.numericLiteral(1));
       if (node.prefix) {
         // ++super.foo; -> super.foo += 1;
         return this.specHandleAssignmentExpression(null, path, binary);

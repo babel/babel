@@ -105,7 +105,7 @@ export function StringLiteral() {
   return t.stringTypeAnnotation();
 }
 
-export function NumberLiteral() {
+export function NumericLiteral() {
   return t.numberTypeAnnotation();
 }
 
@@ -117,7 +117,7 @@ export function NullLiteral() {
   return t.voidTypeAnnotation();
 }
 
-export function RegexLiteral() {
+export function RegExpLiteral() {
   return t.genericTypeAnnotation(t.identifier("RegExp"));
 }
 

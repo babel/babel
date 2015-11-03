@@ -126,7 +126,7 @@
                   "value": "answer"
                 },
                 "value": {
-                  "type": "NumberLiteral",
+                  "type": "NumericLiteral",
                   "start": 16,
                   "end": 18,
                   "loc": {

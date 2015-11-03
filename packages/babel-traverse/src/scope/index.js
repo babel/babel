@@ -391,7 +391,7 @@ export default class Scope {
     if (i === true) {
       helperName = "toConsumableArray";
     } else if (i) {
-      args.push(t.numberLiteral(i));
+      args.push(t.numericLiteral(i));
       helperName = "slicedToArray";
       // TODO if (this.hub.file.isLoose("es6.forOf")) helperName += "-loose";
     }
@@ -427,7 +427,7 @@ export default class Scope {
 
   buildUndefinedNode() {
     if (this.hasBinding("undefined")) {
-      return t.unaryExpression("void", t.numberLiteral(0), true);
+      return t.unaryExpression("void", t.numericLiteral(0), true);
     } else {
       return t.identifier("undefined");
     }

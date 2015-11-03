@@ -536,7 +536,7 @@
             ]
           },
           "right": {
-            "type": "NumberLiteral",
+            "type": "NumericLiteral",
             "start": 82,
             "end": 83,
             "loc": {
