@@ -56,6 +56,8 @@ tt.parenR.updateContext = tt.braceR.updateContext = function () {
 };
 
 tt.name.updateContext = function (prevType) {
+  this.state.exprAllowed = false;
+  
   if (prevType === tt._let || prevType === tt._const || prevType === tt._var) {
     if (lineBreak.test(this.input.slice(this.state.end))) {
       this.state.exprAllowed = true;
