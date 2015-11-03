@@ -13,7 +13,18 @@ let data = {};
  */
 
 export function save() {
-  fs.writeFileSync(FILENAME, JSON.stringify(data, null, "  "));
+  let serialised = {};
+  try {
+    serialised = JSON.stringify(data, null, "  ");
+  } catch (err) {
+    if (err.message === "Invalid string length") {
+      err.message = "Cache too large so it's been cleared.";
+      console.error(err.stack);
+    } else {
+      throw err;
+    }
+  }
+  fs.writeFileSync(FILENAME, serialised);
 }
 
 /**
