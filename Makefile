@@ -14,6 +14,8 @@ build-dist: build
 	scripts/build-dist.sh
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
+	cd packages/babel-cli; \
+	scripts/build-dist.sh
 
 watch: clean
 	scripts/build.sh --watch
