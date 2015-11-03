@@ -298,7 +298,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
   // no references!
   if (!binding.references) return "before";
 
-  let referencePaths: Array = binding.referencePaths;
+  let referencePaths: Array<NodePath> = binding.referencePaths;
 
   // verify that all of the references are calls
   for (let path of referencePaths) {
@@ -309,17 +309,23 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
 
   let allStatus;
 
-    // verify that all the calls have the same execution status
-    for (let path of referencePaths) {
-      let status = this._guessExecutionStatusRelativeTo(path);
-      if (allStatus) {
-        if (allStatus !== status) return;
-      } else {
-        allStatus = status;
-      }
-    }
+  // verify that all the calls have the same execution status
+  for (let path of referencePaths) {
+    // if a reference is a child of the function we're checking against then we can
+    // safelty ignore it
+    let childOfFunction = !!path.find(path => path === targetFuncPath);
+    if (childOfFunction) continue;
 
-    return allStatus;
+    let status = this._guessExecutionStatusRelativeTo(path);
+
+    if (allStatus) {
+      if (allStatus !== status) return;
+    } else {
+      allStatus = status;
+    }
+  }
+
+  return allStatus;
 }
 
 /**
