@@ -181,7 +181,7 @@ export let inherits = template(`
 
 export let _instanceof = template(`
   (function (left, right) {
-    if (right != null && right[Symbol.hasInstance]) {
+    if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
       return right[Symbol.hasInstance](left);
     } else {
       return left instanceof right;
