@@ -142,7 +142,7 @@
                       }
                     },
                     "discriminant": {
-                      "type": "NumberLiteral",
+                      "type": "NumericLiteral",
                       "start": 34,
                       "end": 35,
                       "loc": {
@@ -412,7 +412,7 @@
                         },
                         "operator": "<<",
                         "right": {
-                          "type": "NumberLiteral",
+                          "type": "NumericLiteral",
                           "start": 144,
                           "end": 145,
                           "loc": {

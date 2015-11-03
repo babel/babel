@@ -74,7 +74,7 @@
               "name": "eval"
             },
             "init": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 13,
               "end": 15,
               "loc": {
@@ -125,7 +125,7 @@
               "name": "arguments"
             },
             "init": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 29,
               "end": 31,
               "loc": {

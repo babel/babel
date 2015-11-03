@@ -40,7 +40,7 @@ pp.checkPropClash = function (prop, propHash) {
       break;
 
     case "StringLiteral":
-    case "NumberLiteral":
+    case "NumericLiteral":
       name = String(key.value);
       break;
 
@@ -417,13 +417,13 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
 
     case tt.regexp:
       let value = this.state.value;
-      node = this.parseLiteral(value.value, "RegexLiteral");
+      node = this.parseLiteral(value.value, "RegExpLiteral");
       node.pattern = value.pattern;
       node.flags = value.flags;
       return node;
 
     case tt.num:
-      return this.parseLiteral(this.state.value, "NumberLiteral");
+      return this.parseLiteral(this.state.value, "NumericLiteral");
 
     case tt.string:
       return this.parseLiteral(this.state.value, "StringLiteral");

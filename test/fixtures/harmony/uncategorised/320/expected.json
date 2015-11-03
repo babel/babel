@@ -106,7 +106,7 @@
               },
               "elements": [
                 {
-                  "type": "NumberLiteral",
+                  "type": "NumericLiteral",
                   "start": 12,
                   "end": 13,
                   "loc": {

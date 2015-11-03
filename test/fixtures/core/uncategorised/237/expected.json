@@ -74,7 +74,7 @@
           },
           "operator": "<",
           "right": {
-            "type": "NumberLiteral",
+            "type": "NumericLiteral",
             "start": 11,
             "end": 13,
             "loc": {

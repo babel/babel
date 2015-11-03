@@ -106,7 +106,7 @@
                 },
                 "delegate": true,
                 "argument": {
-                  "type": "NumberLiteral",
+                  "type": "NumericLiteral",
                   "start": 25,
                   "end": 26,
                   "loc": {

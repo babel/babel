@@ -206,7 +206,7 @@
                     "name": "v"
                   },
                   "init": {
-                    "type": "NumberLiteral",
+                    "type": "NumericLiteral",
                     "start": 65,
                     "end": 68,
                     "loc": {

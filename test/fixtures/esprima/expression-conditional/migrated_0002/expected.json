@@ -88,7 +88,7 @@
               }
             },
             "test": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 5,
               "end": 6,
               "loc": {
@@ -109,7 +109,7 @@
               "value": 0
             },
             "consequent": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 10,
               "end": 11,
               "loc": {
@@ -129,7 +129,7 @@
               "value": 1
             },
             "alternate": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 14,
               "end": 15,
               "loc": {

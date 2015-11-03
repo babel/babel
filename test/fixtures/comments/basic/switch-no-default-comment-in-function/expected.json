@@ -157,7 +157,7 @@
                     }
                   ],
                   "test": {
-                    "type": "NumberLiteral",
+                    "type": "NumericLiteral",
                     "start": 48,
                     "end": 49,
                     "loc": {
@@ -212,7 +212,7 @@
                     }
                   ],
                   "test": {
-                    "type": "NumberLiteral",
+                    "type": "NumericLiteral",
                     "start": 83,
                     "end": 84,
                     "loc": {

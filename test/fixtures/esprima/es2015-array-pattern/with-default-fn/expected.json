@@ -107,7 +107,7 @@
                   "name": "a"
                 },
                 "right": {
-                  "type": "NumberLiteral",
+                  "type": "NumericLiteral",
                   "start": 14,
                   "end": 15,
                   "loc": {

@@ -113,7 +113,7 @@
               }
             ],
             "body": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 10,
               "end": 12,
               "loc": {

@@ -121,7 +121,7 @@
               },
               "arguments": [
                 {
-                  "type": "NumberLiteral",
+                  "type": "NumericLiteral",
                   "start": 11,
                   "end": 12,
                   "loc": {
@@ -141,7 +141,7 @@
                   "value": 1
                 },
                 {
-                  "type": "NumberLiteral",
+                  "type": "NumericLiteral",
                   "start": 14,
                   "end": 15,
                   "loc": {

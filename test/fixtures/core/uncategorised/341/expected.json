@@ -60,7 +60,7 @@
           }
         },
         "expression": {
-          "type": "RegexLiteral",
+          "type": "RegExpLiteral",
           "start": 2,
           "end": 5,
           "loc": {

@@ -240,7 +240,7 @@
                             "name": "x"
                           },
                           "value": {
-                            "type": "NumberLiteral",
+                            "type": "NumericLiteral",
                             "start": 20,
                             "end": 22,
                             "loc": {

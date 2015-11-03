@@ -466,7 +466,7 @@
                                                                                                       "name": "b"
                                                                                                     },
                                                                                                     "property": {
-                                                                                                      "type": "NumberLiteral",
+                                                                                                      "type": "NumericLiteral",
                                                                                                       "start": 25,
                                                                                                       "end": 26,
                                                                                                       "loc": {
@@ -532,7 +532,7 @@
             ]
           },
           "right": {
-            "type": "NumberLiteral",
+            "type": "NumericLiteral",
             "start": 49,
             "end": 50,
             "loc": {

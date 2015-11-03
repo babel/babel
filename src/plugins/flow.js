@@ -506,7 +506,7 @@ pp.flowParsePrimaryType = function () {
       this.addExtra(node, "rawValue", node.value);
       this.addExtra(node, "raw", this.input.slice(this.state.start, this.state.end));
       this.next();
-      return this.finishNode(node, "NumberLiteralTypeAnnotation");
+      return this.finishNode(node, "NumericLiteralTypeAnnotation");
 
     default:
       if (this.state.type.keyword === "typeof") {

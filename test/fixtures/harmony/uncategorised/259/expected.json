@@ -121,7 +121,7 @@
                   },
                   "operator": "*",
                   "right": {
-                    "type": "NumberLiteral",
+                    "type": "NumericLiteral",
                     "start": 22,
                     "end": 24,
                     "loc": {

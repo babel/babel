@@ -106,7 +106,7 @@
                 "shorthand": false,
                 "computed": false,
                 "key": {
-                  "type": "NumberLiteral",
+                  "type": "NumericLiteral",
                   "start": 3,
                   "end": 6,
                   "loc": {

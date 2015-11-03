@@ -71,7 +71,7 @@
               }
             },
             "left": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 1,
               "end": 2,
               "loc": {
@@ -108,7 +108,7 @@
               "operator": "-",
               "prefix": true,
               "argument": {
-                "type": "NumberLiteral",
+                "type": "NumericLiteral",
                 "start": 7,
                 "end": 8,
                 "loc": {
@@ -134,7 +134,7 @@
           },
           "operator": "*",
           "right": {
-            "type": "NumberLiteral",
+            "type": "NumericLiteral",
             "start": 12,
             "end": 13,
             "loc": {

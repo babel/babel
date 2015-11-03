@@ -94,7 +94,7 @@
               }
             ],
             "test": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 22,
               "end": 23,
               "loc": {

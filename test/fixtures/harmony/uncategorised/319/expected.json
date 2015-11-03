@@ -74,7 +74,7 @@
               "name": "_𐒦"
             },
             "init": {
-              "type": "NumberLiteral",
+              "type": "NumericLiteral",
               "start": 17,
               "end": 19,
               "loc": {

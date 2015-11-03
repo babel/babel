@@ -92,7 +92,7 @@
           }
         },
         "expression": {
-          "type": "RegexLiteral",
+          "type": "RegExpLiteral",
           "start": 15,
           "end": 20,
           "loc": {
