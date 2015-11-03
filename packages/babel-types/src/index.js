@@ -133,7 +133,7 @@ export function isType(nodeType: string, targetType: string): boolean {
 each(t.BUILDER_KEYS, function (keys, type) {
   function builder() {
     if (arguments.length > keys.length) {
-      // todo: error
+      throw new Error(`t.${type}: Too many arguments passed. Received ${arguments.length} but can receive no more than ${keys.length}`);
     }
 
     let node = {};
