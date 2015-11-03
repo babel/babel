@@ -69,7 +69,7 @@ pp.isLineTerminator = function () {
 // pretend that there is a semicolon at this position.
 
 pp.semicolon = function () {
-  if (!this.eat(tt.semi) && !this.canInsertSemicolon()) this.unexpected();
+  if (!this.isLineTerminator()) this.unexpected();
 };
 
 // Expect a token of a given type. If found, consume it, otherwise,
