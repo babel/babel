@@ -21,20 +21,24 @@ pp.toAssignable = function (node, isBinding) {
       case "ObjectExpression":
         node.type = "ObjectPattern";
         for (let prop of (node.properties: Array<Object>)) {
-          if (prop.type === "SpreadProperty") continue;
-
           if (prop.type === "ObjectMethod") {
             if (prop.kind === "get" || prop.kind === "set") {
               this.raise(prop.key.start, "Object pattern can't contain getter or setter");
             } else {
               this.raise(prop.key.start, "Object pattern can't contain methods");
             }
-          }
-
-          if (prop.type === "ObjectProperty") {
-            this.toAssignable(prop.value, isBinding);
+          } else {
+            this.toAssignable(prop, isBinding);
           }
         }
+        break;
+
+      case "ObjectProperty":
+        this.toAssignable(node.value, isBinding);
+        break;
+
+      case "SpreadProperty":
+        node.type = "RestProperty";
         break;
 
       case "ArrayExpression":
