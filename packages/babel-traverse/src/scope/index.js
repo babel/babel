@@ -402,7 +402,7 @@ export default class Scope {
     if (path.isLabeledStatement()) {
       this.registerBinding("label", path);
     } else if (path.isFunctionDeclaration()) {
-      this.registerBinding("hoisted", path.get("id"), true);
+      this.registerBinding("hoisted", path.get("id"), path);
     } else if (path.isVariableDeclaration()) {
       let declarations = path.get("declarations");
       for (let declar of (declarations: Array)) {

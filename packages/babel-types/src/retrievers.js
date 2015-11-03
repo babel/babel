@@ -27,15 +27,28 @@ export function getBindingIdentifiers(
       } else {
         ids[id.name] = id;
       }
-    } else if (t.isExportDeclaration(id)) {
+      continue;
+    }
+
+    if (t.isExportDeclaration(id)) {
       if (t.isDeclaration(node.declaration)) {
         search.push(node.declaration);
       }
-    } else if (outerOnly) {
-      if (t.isFunction(id)) {
+      continue;
+    }
+
+    if (outerOnly) {
+      if (t.isFunctionDeclaration(id)) {
         search.push(id.id);
+        continue;
       }
-    } else if (keys) {
+
+      if (t.isFunctionExpression(id)) {
+        continue;
+      }
+    }
+
+    if (keys) {
       for (let i = 0; i < keys.length; i++) {
         let key = keys[i];
         if (id[key]) {
