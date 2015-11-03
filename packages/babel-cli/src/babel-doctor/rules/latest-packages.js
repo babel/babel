@@ -1,5 +1,4 @@
 import request from "request";
-import path from "path";
 
 let cache = {};
 

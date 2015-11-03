@@ -1,6 +1,3 @@
-import path from "path";
-import fs from "fs";
-
 export default async function (packages) {
   let foundDeps = {};
   let foundDuplicated = false;

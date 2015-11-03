@@ -5,8 +5,6 @@ export default async function () {
   let cwd = process.cwd();
   let parts = cwd.split(path.sep);
 
-  let found = false;
-
   do {
     let loc = parts.join(path.sep);
 
