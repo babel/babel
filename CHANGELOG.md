@@ -13,6 +13,13 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.0.20
+
+ * **Bug Fix**
+  * In the callable class constructor plugin, don't transform derived classes as the constructor call cannot be inherited.
+  * Fix JSX inline elements plugin from attempting to create properties out of JSX containers.
+  * Fix infinite recursion error when attempting to resolve the execution status of functions that contain references to themselves.
+
 ## 6.0.19
 
  * **Bug Fix**
