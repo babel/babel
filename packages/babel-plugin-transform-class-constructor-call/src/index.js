@@ -14,19 +14,6 @@ let buildWrapper = template(`
   WRAPPER_REF;
 `);
 
-let buildSuperWrapper = template(`
-  let CLASS_REF = CLASS;
-  var WRAPPER_REF = function (...args) {
-    if (this instanceof WRAPPER_REF) {
-      return Reflect.construct(CLASS_REF, args);
-    } else {
-      return SUPER_REF.apply(this, args);
-    }
-  };
-  WRAPPER_REF.__proto__ = CLASS_REF;
-  WRAPPER_REF;
-`);
-
 export default function ({ types: t }) {
   let ALREADY_VISITED = Symbol();
 
@@ -43,44 +30,23 @@ export default function ({ types: t }) {
   }
 
   function handleClassWithCall(constructorCall, classPath) {
-    let ref = classPath.node.id || classPath.scope.generateUidIdentifier("class");
+    let { node } = classPath;
+    let ref = node.id || classPath.scope.generateUidIdentifier("class");
+
+    if (classPath.parentPath.isExportDefaultDeclaration()) {
+      classPath = classPath.parentPath;
+      classPath.insertAfter(t.exportDefaultDeclaration(ref));
+    }
 
     classPath.replaceWithMultiple(buildWrapper({
       CLASS_REF: classPath.scope.generateUidIdentifier(ref.name),
       CALL_REF: classPath.scope.generateUidIdentifier(`${ref.name}Call`),
       CALL: t.functionExpression(null, constructorCall.node.params, constructorCall.node.body),
-      CLASS: t.toExpression(classPath.node),
+      CLASS: t.toExpression(node),
       WRAPPER_REF: ref
     }));
 
     constructorCall.remove();
-  }
-
-  function handleClassWithSuper(path) {
-    // we could be inheriting from a class that has a call handler
-    let ref = path.node.id || path.scope.generateUidIdentifier("class");
-
-    let nodes = [];
-    let superRef;
-
-    // we're going to be duplicating the reference to the super class so memoise it
-    // if necessary
-    if (path.get("superClass").isStatic()) {
-      superRef = path.node.superClass;
-    } else {
-      superRef = path.scope.generateUidIdentifier("super");
-      nodes.push(t.variableDeclaration("var", [
-        t.variableDeclarator(superRef, path.node.superClass)
-      ]));
-      path.node.superClass = superRef;
-    }
-
-    path.replaceWithMultiple(nodes.concat(buildSuperWrapper({
-      CLASS_REF: path.scope.generateUidIdentifier(ref.name),
-      SUPER_REF: superRef,
-      CLASS: t.toExpression(path.node),
-      WRAPPER_REF: ref
-    })));
   }
 
   return {
@@ -95,8 +61,6 @@ export default function ({ types: t }) {
 
         if (constructorCall) {
           handleClassWithCall(constructorCall, path);
-        } else if (path.has("superClass")) {
-          handleClassWithSuper(path);
         } else {
           return;
         }
