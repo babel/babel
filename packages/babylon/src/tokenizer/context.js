@@ -5,6 +5,7 @@
 // See https://github.com/mozilla/sweet.js/wiki/design
 
 import { types as tt } from "./types";
+import { lineBreak } from "../util/whitespace";
 
 export class TokContext {
   constructor(
@@ -51,6 +52,14 @@ tt.parenR.updateContext = tt.braceR.updateContext = function () {
     this.state.exprAllowed = true;
   } else {
     this.state.exprAllowed = !out.isExpr;
+  }
+};
+
+tt.name.updateContext = function (prevType) {
+  if (prevType === tt._let || prevType === tt._const || prevType === tt._var) {
+    if (lineBreak.test(this.input.slice(this.state.end))) {
+      this.state.exprAllowed = true;
+    }
   }
 };
 
