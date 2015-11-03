@@ -688,6 +688,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
         prop.key = asyncId;
       } else {
         isAsync = true;
+        if (this.hasPlugin("asyncGenerators")) isGenerator = this.eat(tt.star);
         this.parsePropertyName(prop);
       }
     } else {
