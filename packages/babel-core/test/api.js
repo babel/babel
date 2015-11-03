@@ -3,6 +3,7 @@ require("../lib/api/node");
 var buildExternalHelpers = require("../lib/tools/build-external-helpers");
 var transform            = require("../lib/api/node").transform;
 var Pipeline             = require("../lib/transformation/pipeline");
+var sourceMap            = require("source-map");
 var assert               = require("assert");
 var File                 = require("../lib/transformation/file").default;
 
@@ -30,6 +31,44 @@ suite("api", function () {
       plugins: [__dirname + "/../../babel-plugin-syntax-jsx"]
     }).then(function (result) {
       assert.ok(result.options.plugins[0][0].manipulateOptions.toString().indexOf("jsx") >= 0);
+    });
+  });
+
+  test("source map merging", function () {
+    var result = transform([
+      'function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }',
+      '',
+      'let Foo = function Foo() {',
+      '  _classCallCheck(this, Foo);',
+      '};',
+      '',
+      '//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0ZG91dCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztJQUFNLEdBQUcsWUFBSCxHQUFHO3dCQUFILEdBQUciLCJmaWxlIjoidW5kZWZpbmVkIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgRm9vIHt9XG4iXX0='
+    ].join("\n"), {
+      sourceMap: true
+    });
+
+    assert.deepEqual([
+      "function _classCallCheck(instance, Constructor) {",
+      "  if (!(instance instanceof Constructor)) {",
+      '    throw new TypeError("Cannot call a class as a function");',
+      "  }",
+      "}",
+      "",
+      "let Foo = function Foo() {",
+      "  _classCallCheck(this, Foo);",
+      "};"
+    ].join("\n"), result.code);
+
+    var consumer = new sourceMap.SourceMapConsumer(result.map);
+
+    assert.deepEqual(consumer.originalPositionFor({
+      line: 7,
+      column: 4
+    }), {
+      name: null,
+      source: "stdout",
+      line: 1,
+      column: 6
     });
   });
 

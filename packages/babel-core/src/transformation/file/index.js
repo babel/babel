@@ -355,13 +355,32 @@ export default class File extends Store {
     if (inputMap) {
       let inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
       let outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
-      let outputMapGenerator = sourceMap.SourceMapGenerator.fromSourceMap(outputMapConsumer);
-      outputMapGenerator.applySourceMap(inputMapConsumer);
 
-      let mergedMap = outputMapGenerator.toJSON();
-      mergedMap.sources = inputMap.sources;
-      mergedMap.file    = inputMap.file;
-      return mergedMap;
+      let mergedGenerator = new sourceMap.SourceMapGenerator({
+        file: inputMapConsumer.file,
+        sourceRoot: inputMapConsumer.sourceRoot
+      });
+
+      inputMapConsumer.eachMapping(function (mapping) {
+        mergedGenerator.addMapping({
+          source: inputMapConsumer.file,
+
+          original: {
+            line: mapping.originalLine,
+            column: mapping.originalColumn
+          },
+
+          generated: outputMapConsumer.generatedPositionFor({
+            line: mapping.generatedLine,
+            column: mapping.generatedColumn,
+            source: outputMapConsumer.file
+          })
+        });
+      });
+
+      let mergedMap = mergedGenerator.toJSON();
+      inputMap.mappings = mergedMap.mappings;
+      return inputMap;
     } else {
       return map;
     }

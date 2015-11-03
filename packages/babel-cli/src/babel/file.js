@@ -25,7 +25,7 @@ module.exports = function (commander, filenames, opts) {
     let offset = 0;
 
     _.each(results, function (result) {
-      let filename = result.filename;
+      let filename = result.filename || "stdout";
       code += result.code + "\n";
 
       if (result.map) {
