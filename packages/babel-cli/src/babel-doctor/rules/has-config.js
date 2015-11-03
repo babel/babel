@@ -7,6 +7,7 @@ export default async function () {
 
   do {
     let loc = parts.join(path.sep);
+    if (!loc) break;
 
     let babelrc = path.join(loc, ".babelrc");
     if (fs.existsSync(babelrc)) {
