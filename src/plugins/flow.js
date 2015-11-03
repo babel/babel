@@ -164,7 +164,7 @@ pp.flowParseTypeParameterDeclaration = function () {
 
   this.expectRelational("<");
   while (!this.isRelational(">")) {
-    node.params.push(this.parseFlowTypeParam());
+    node.params.push(this.flowParseExistentialTypeParam() || this.flowParseTypeAnnotatableIdentifier());
     if (!this.isRelational(">")) {
       this.expect(tt.comma);
     }
@@ -174,13 +174,11 @@ pp.flowParseTypeParameterDeclaration = function () {
   return this.finishNode(node, "TypeParameterDeclaration");
 };
 
-pp.parseFlowTypeParam = function () {
+pp.flowParseExistentialTypeParam = function () {
   if (this.match(tt.star)) {
     let node = this.startNode();
     this.next();
     return this.finishNode(node, "ExistentialTypeParam");
-  } else {
-    return this.flowParseTypeAnnotatableIdentifier();
   }
 };
 
@@ -192,7 +190,7 @@ pp.flowParseTypeParameterInstantiation = function () {
 
   this.expectRelational("<");
   while (!this.isRelational(">")) {
-    node.params.push(this.parseFlowTypeParam());
+    node.params.push(this.flowParseExistentialTypeParam() || this.flowParseType());
     if (!this.isRelational(">")) {
       this.expect(tt.comma);
     }
