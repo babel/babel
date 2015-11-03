@@ -154,7 +154,15 @@ export function ClassExpression(node: Object, parent: Object): boolean {
 }
 
 export function UnaryLike(node: Object, parent: Object): boolean {
-  return t.isMemberExpression(parent) && parent.object === node;
+  if (t.isMemberExpression(parent, { object: node })) {
+    return true;
+  }
+
+  if (t.isCallExpression(parent, { callee: node }) || t.isNewExpression(parent, { callee: node })) {
+    return true;
+  }
+
+  return false;
 }
 
 export function FunctionExpression(node: Object, parent: Object): boolean {
@@ -172,17 +180,7 @@ export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
-  // (function test() {}).name;
-  if (t.isMemberExpression(parent) && parent.object === node) {
-    return true;
-  }
-
-  // (function () {})();
-  if (t.isCallExpression(parent) && parent.callee === node) {
-    return true;
-  }
-
-  return false;
+  return UnaryLike(node, parent);
 }
 
 export function ConditionalExpression(node: Object, parent: Object): boolean {
@@ -194,21 +192,11 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
-  if (t.isCallExpression(parent) || t.isNewExpression(parent)) {
-    if (parent.callee === node) {
-      return true;
-    }
-  }
-
-  if (t.isConditionalExpression(parent) && parent.test === node) {
+  if (t.isConditionalExpression(parent, { test: node })) {
     return true;
   }
 
-  if (t.isMemberExpression(parent) && parent.object === node) {
-    return true;
-  }
-
-  return false;
+  return UnaryLike(node, parent);
 }
 
 export function AssignmentExpression(node: Object): boolean {
