@@ -11,6 +11,7 @@
     "babel-core": "^6.0.15",
     "babel-polyfill": "^6.0.14",
     "babel-runtime": "^5.0.0",
+    "bin-version-check": "^2.1.0",
     "chalk": "1.1.1",
     "chokidar": "^1.0.0",
     "commander": "^2.8.1",

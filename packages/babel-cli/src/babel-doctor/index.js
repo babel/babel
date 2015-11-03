@@ -42,11 +42,13 @@ while (nodeModulesDirectories.length) {
     if (packageName[0] === ".") continue;
 
     let packageLoc = path.join(loc, packageName);
+    let packageJsonLoc = path.join(packageLoc, "package.json");
+    if (!fs.existsSync(packageJsonLoc)) continue;
 
     packages.push({
       name: packageName,
       loc: packageLoc,
-      version: require(path.join(packageLoc, "package.json")).version
+      version: require(packageJsonLoc).version
     });
 
     nodeModulesDirectories.push(path.join(packageLoc, "node_modules"));
