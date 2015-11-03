@@ -55,9 +55,6 @@ getBindingIdentifiers.keys = {
   InterfaceDeclaration: ["id"],
   TypeAlias: ["id"],
 
-  ComprehensionExpression: ["blocks"],
-  ComprehensionBlock: ["left"],
-
   CatchClause: ["param"],
   LabeledStatement: ["label"],
   UnaryExpression: ["argument"],
