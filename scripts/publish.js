@@ -100,6 +100,10 @@ function publish() {
     throw new Error(chalk.red("No packages changed."));
   }
 
+  if (changedPackages.indexOf("babel-browser") < 0) {
+    changedPackages.push("babel-browser");
+  }
+
   //
 
   changedPackages.forEach(function (name) {

@@ -1,0 +1,9 @@
+{
+  "name": "babel-browser",
+  "version": "6.0.20",
+  "description": "Babel browser build",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-browser"
+}

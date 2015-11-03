@@ -8,7 +8,7 @@ build: clean
 	./scripts/build.sh
 
 build-dist: build
-	cd packages/babel-core; \
+	cd packages/babel-browser; \
 	scripts/build-dist.sh
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
