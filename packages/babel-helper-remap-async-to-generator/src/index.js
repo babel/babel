@@ -50,6 +50,9 @@ function plainFunction(path: NodePath, callId: Object) {
   node.async = false;
   node.generator = true;
 
+  let asyncFnId = node.id;
+  node.id = null;
+
   let built = t.callExpression(callId, [node]);
   let container = buildWrapper({
     FUNCTION: built,
@@ -61,25 +64,24 @@ function plainFunction(path: NodePath, callId: Object) {
   if (path.isFunctionDeclaration()) {
     let declar = t.variableDeclaration("let", [
       t.variableDeclarator(
-        t.identifier(node.id.name),
+        t.identifier(asyncFnId.name),
         t.callExpression(container, [])
       )
     ]);
     declar._blockHoist = true;
 
-    nameFunction({
-      node: retFunction,
-      parent: declar.declarations[0],
-      scope: path.scope
-    });
-
+    retFunction.id = asyncFnId;
     path.replaceWith(declar);
   } else {
-    nameFunction({
-      node: retFunction,
-      parent: path.parent,
-      scope: path.scope
-    });
+    if (asyncFnId && asyncFnId.name) {
+      retFunction.id = asyncFnId;
+    } else {
+      nameFunction({
+        node: retFunction,
+        parent: path.parent,
+        scope: path.scope
+      });
+    }
 
     if (retFunction.id || node.params.length) {
       // we have an inferred function id or params so we need this wrapper
