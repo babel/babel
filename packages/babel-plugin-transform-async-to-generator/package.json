@@ -9,7 +9,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-helper-remap-async-to-generator": "^6.0.14",
+    "babel-helper-remap-async-to-generator": "^6.0.16",
     "babel-plugin-syntax-async-functions": "^6.0.14",
     "babel-runtime": "^5.0.0"
   }
