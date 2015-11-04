@@ -11,6 +11,10 @@ let buildRest = template(`
   }
 `);
 
+let loadRest = template(`
+  ARGUMENTS.length <= KEY || ARGUMENTS[KEY] === undefined ? undefined : ARGUMENTS[KEY]
+`);
+
 let memberExpressionOptimisationVisitor = {
   Scope(path, state) {
     // check if this scope has a local binding that will shadow the rest parameter
@@ -116,7 +120,15 @@ export let visitor = {
     // otherwise `arguments` will be remapped in arrow functions
     argsId._shadowedFunctionLiteral = path;
 
-    // support patterns
+    function optimiseLoadStatement(parent, offset) {
+      let newExpr = loadRest({
+        ARGUMENTS: argsId,
+        KEY: t.numericLiteral(parent.property.value + offset)
+      });
+      return newExpr;
+    }
+
+    // support patterns // no test case?
     if (t.isPattern(rest)) {
       let pattern = rest;
       rest = scope.generateUidIdentifier("ref");
@@ -154,7 +166,13 @@ export let visitor = {
         for (let candidate of (state.candidates: Array)) {
           candidate.replaceWith(argsId);
           if (candidate.parentPath.isMemberExpression()) {
-            optimiseMemberExpression(candidate.parent, state.offset);
+            if (t.isReturnStatement(candidate.parentPath.parent)
+              || t.isIdentifier(candidate.parentPath.parent.id)) {
+              let optimized = optimiseLoadStatement(candidate.parent, state.offset, argsId);
+              candidate.parentPath.replaceWith(optimized);
+            } else {
+              optimiseMemberExpression(candidate.parent, state.offset);
+            }
           }
         }
       }
