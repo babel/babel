@@ -42,7 +42,7 @@ let buildExportAll = template(`
   }
 `);
 
-const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty", "ClassMethod", "ObjectMethod"];
+const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty", "ClassMethod", "ObjectMethod", "ThisExpression"];
 
 export default function () {
   let REASSIGN_REMAP_SKIP = Symbol();
