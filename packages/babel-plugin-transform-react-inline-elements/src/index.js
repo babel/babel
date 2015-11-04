@@ -55,7 +55,9 @@ export default function ({ types: t }) {
           if (isJSXAttributeOfName(attr, "key")) {
             key = attr.value;
           } else {
-            pushProp(props.properties, t.identifier(attr.name.name), attr.value || t.identifier("true"));
+            let name = attr.name.name;
+            let propertyKey = t.isValidIdentifier(name) ? t.identifier(name) : t.stringLiteral(name);
+            pushProp(props.properties, propertyKey, attr.value || t.identifier("true"));
           }
         }
 
