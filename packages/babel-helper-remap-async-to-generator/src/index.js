@@ -43,6 +43,10 @@ function classMethod(path: NodePath, callId: Object) {
 function plainFunction(path: NodePath, callId: Object) {
   let node = path.node;
 
+  if (path.isArrowFunctionExpression()) {
+    path.arrowFunctionToShadowed();
+  }
+
   node.async = false;
   node.generator = true;
 
