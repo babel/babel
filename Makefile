@@ -5,7 +5,7 @@ export NODE_ENV = test
 .PHONY: clean test test-cov test-clean test-travis test-browser publish build bootstrap publish-core publish-runtime build-website build-core watch-core build-core-test clean-core prepublish
 
 build: clean
-	./scripts/build.sh
+	gulp build
 
 build-dist: build
 	cd packages/babel-browser; \
@@ -16,7 +16,7 @@ build-dist: build
 	node scripts/build-dist.js
 
 watch: clean
-	scripts/build.sh --watch
+	gulp watch
 
 lint:
 	node node_modules/.bin/eslint packages/*/src
@@ -35,7 +35,7 @@ test: lint
 
 test-cov: clean
 	BABEL_ENV=test; \
-	make build
+	gulp build
 	./scripts/test-cov.sh
 
 test-travis: bootstrap lint build test
