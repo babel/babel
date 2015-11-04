@@ -70,7 +70,7 @@ export function matchesPattern(pattern: string, allowPartial?: boolean): boolean
  */
 
 export function has(key): boolean {
-  let val = this.node[key];
+  let val = this.node && this.node[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
   } else {
