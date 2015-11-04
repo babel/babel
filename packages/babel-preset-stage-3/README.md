@@ -23,7 +23,7 @@ $ npm install --save-dev babel-preset-stage-3
 ### Via CLI
 
 ```sh
-$ babel script.js --preset stage-3
+$ babel script.js --presets stage-3
 ```
 
 ### Via Node API
