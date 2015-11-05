@@ -90,6 +90,7 @@ async.parallelLimit(packages.map(function (root) {
     console.error(err);
     process.exit(1);
   } else {
+    exec("make build");
     process.exit();
   }
 });
