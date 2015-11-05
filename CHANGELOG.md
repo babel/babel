@@ -13,6 +13,29 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.1.2
+
+ * **Bug Fix**
+  * Fix bug where the parser wouldn't allow typed annotated default parametesr in arrow functions.
+  * Add existence check to `NodePath#has` to ensure safeness when making comparisons.
+  * Protect against replacing a class expression with a name inferred version that would
+    result in it never being transformed.
+  * When transforming JSX to an inline object, make sure invalid identifier keys are quoted.
+  * Fix recursion in async to generator transforms due to referring to the inner generator function.
+  * Convert arrow functions to normal functions when remapping to a generator.
+  * Fix source map merging.
+  * Add line break test to the `updateContext` of `name` tokens in the parser to fix parsing of JSX and regexs with ASI.
+  * Fix object rest/spread in arrow function parameters not being allowed in the parser.
+  * Ensure that unaries are parenthesised the same as function expressions.
+ * **Internal**
+  * Move `Symbol.hasInstance` transform out of `babel-plugin-es2015-symbols` to `babel-plugin-es2015-instanceof` as it has nothing to do with symbols.
+  * Add `babel-browser` package with the browser build.
+ * **Polish**
+  * Add npm 3 check to `babel-doctor`.
+  * Autoclear the `babel/register` cache when it gets too big to be serialised.
+ * **Spec Compliancy**
+  * Add support for flow existential type parameters.
+
 ## 6.1.1
 
  * **Bug Fix**
