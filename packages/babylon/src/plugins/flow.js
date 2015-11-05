@@ -762,6 +762,16 @@ export default function (instance) {
     return node.expression;
   }
 
+  instance.extend("toAssignable", function (inner) {
+    return function (node) {
+      if (node.type === "TypeCastExpression") {
+        return typeCastToParameter(node);
+      } else {
+        return inner.apply(this, arguments);
+      }
+    };
+  });
+
   // turn type casts that we found in function parameter head into type annotated params
   instance.extend("toAssignableList", function (inner) {
     return function (exprList, isBinding) {
@@ -803,6 +813,14 @@ export default function (instance) {
         return this.finishNode(container, "TypeCastExpression");
       } else {
         return node;
+      }
+    };
+  });
+
+  instance.extend("checkLVal", function (inner) {
+    return function (node) {
+      if (node.type !== "TypeCastExpression") {
+        return inner.apply(this, arguments);
       }
     };
   });
