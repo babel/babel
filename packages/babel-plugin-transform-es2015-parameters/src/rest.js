@@ -88,21 +88,6 @@ let memberExpressionOptimisationVisitor = {
   }
 };
 
-function optimiseMemberExpression(parent, offset) {
-  if (offset === 0) return;
-
-  let newExpr;
-  let prop = parent.property;
-
-  if (t.isLiteral(prop)) {
-    prop.value += offset;
-    prop.raw = String(prop.value);
-  } else { // // UnaryExpression, BinaryExpression
-    newExpr = t.binaryExpression("+", prop, t.numericLiteral(offset));
-    parent.property = newExpr;
-  }
-}
-
 function hasRest(node) {
   return t.isRestElement(node.params[node.params.length - 1]);
 }
@@ -120,12 +105,26 @@ export let visitor = {
     // otherwise `arguments` will be remapped in arrow functions
     argsId._shadowedFunctionLiteral = path;
 
-    function optimiseLoadStatement(parent, offset) {
-      let newExpr = loadRest({
-        ARGUMENTS: argsId,
-        KEY: t.numericLiteral(parent.property.value + offset)
-      });
-      return newExpr;
+
+    function optimiseCandidate(parent, parentPath, offset) {
+      if (t.isReturnStatement(parentPath.parent) || t.isIdentifier(parentPath.parent.id)) {
+        parentPath.replaceWith(loadRest({
+          ARGUMENTS: argsId,
+          KEY: t.numericLiteral(parent.property.value + offset)
+        }));
+      } else {
+        if (offset === 0) return;
+        let newExpr;
+        let prop = parent.property;
+
+        if (t.isLiteral(prop)) {
+          prop.value += offset;
+          prop.raw = String(prop.value);
+        } else { // UnaryExpression, BinaryExpression
+          newExpr = t.binaryExpression("+", prop, t.numericLiteral(offset));
+          parent.property = newExpr;
+        }
+      }
     }
 
     // support patterns // no test case?
@@ -165,15 +164,7 @@ export let visitor = {
       if (state.candidates.length) {
         for (let candidate of (state.candidates: Array)) {
           candidate.replaceWith(argsId);
-          if (candidate.parentPath.isMemberExpression()) {
-            if (t.isReturnStatement(candidate.parentPath.parent)
-              || t.isIdentifier(candidate.parentPath.parent.id)) {
-              let optimized = optimiseLoadStatement(candidate.parent, state.offset, argsId);
-              candidate.parentPath.replaceWith(optimized);
-            } else {
-              optimiseMemberExpression(candidate.parent, state.offset);
-            }
-          }
+          optimiseCandidate(candidate.parent, candidate.parentPath, state.offset);
         }
       }
       return;
