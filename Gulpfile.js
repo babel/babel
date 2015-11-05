@@ -1,26 +1,33 @@
-var cached = require("gulp-cached");
-var rename = require("gulp-rename");
-var babel  = require("gulp-babel");
-var watch  = require("gulp-watch");
-var gulp   = require("gulp");
-var path = require("path");
+var through = require("through2");
+var rename  = require("gulp-rename");
+var chalk   = require("chalk");
+var newer   = require("gulp-newer");
+var babel   = require("gulp-babel");
+var watch   = require("gulp-watch");
+var gutil   = require("gulp-util");
+var gulp    = require("gulp");
+var path    = require("path");
 
 var scripts = "./packages/*/src/**/*.js";
+var dest = "packages";
 
 gulp.task("default", ["build"]);
 
 gulp.task("build", function () {
   return gulp.src(scripts)
-    .pipe(cached("babel"))
-    .pipe(babel())
     .pipe(rename(function (file) {
-      console.log("Compiling " + path.join(
-        file.dirname,
-        file.basename + file.extname
-      ));
       file.dirname = file.dirname.replace(/^([^\\]+)\/src/, "$1/lib");
     }))
-    .pipe(gulp.dest("packages"));
+    .pipe(newer(dest))
+    .pipe(through.obj(function (file, enc, callback) {
+      gutil.log("Compiling", "'" + chalk.cyan(file.path) + "'...");
+      callback(null, file);
+    }))
+    .pipe(babel())
+    .on("error", function (err) {
+      console.error(err.stack);
+    })
+    .pipe(gulp.dest(dest));
 });
 
 gulp.task("watch", ["build"], function (callback) {
