@@ -8,13 +8,15 @@ export default function ({ types: t }) {
       ClassDeclaration(path) {
         let { node } = path;
 
+        let ref = node.id || path.scope.generateUidIdentifier("class");
+
         if (path.parentPath.isExportDefaultDeclaration()) {
           path = path.parentPath;
-          path.insertAfter(t.exportDefaultDeclaration(node.id));
+          path.insertAfter(t.exportDefaultDeclaration(ref));
         }
 
         path.replaceWith(t.variableDeclaration("let", [
-          t.variableDeclarator(node.id, t.toExpression(node))
+          t.variableDeclarator(ref, t.toExpression(node))
         ]));
       },
 
