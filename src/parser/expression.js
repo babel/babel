@@ -93,16 +93,20 @@ pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse) {
   }
 
   let failOnShorthandAssign;
-  if (!refShorthandDefaultPos) {
-    refShorthandDefaultPos = {start: 0};
-    failOnShorthandAssign = true;
-  } else {
+  if (refShorthandDefaultPos) {
     failOnShorthandAssign = false;
+  } else {
+    refShorthandDefaultPos = { start: 0 };
+    failOnShorthandAssign = true;
   }
-  let startPos = this.state.start, startLoc = this.state.startLoc;
+
+  let startPos = this.state.start;
+  let startLoc = this.state.startLoc;
+
   if (this.match(tt.parenL) || this.match(tt.name)) {
     this.state.potentialArrowAt = this.state.start;
   }
+
   let left = this.parseMaybeConditional(noIn, refShorthandDefaultPos);
   if (afterLeftParse) left = afterLeftParse.call(this, left, startPos, startLoc);
   if (this.state.type.isAssign) {
@@ -110,7 +114,9 @@ pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse) {
     node.operator = this.state.value;
     node.left = this.match(tt.eq) ? this.toAssignable(left) : left;
     refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
+
     this.checkLVal(left);
+
     if (left.extra && left.extra.parenthesized) {
       let errorMsg;
       if (left.type === "ObjectPattern") {
@@ -122,12 +128,14 @@ pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse) {
         this.raise(left.start, `You're trying to assign to a parenthesized expression, eg. instead of ${errorMsg}`);
       }
     }
+
     this.next();
     node.right = this.parseMaybeAssign(noIn);
     return this.finishNode(node, "AssignmentExpression");
   } else if (failOnShorthandAssign && refShorthandDefaultPos.start) {
     this.unexpected(refShorthandDefaultPos.start);
   }
+  
   return left;
 };
 
@@ -506,12 +514,13 @@ pp.parseParenExpression = function () {
 pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow, isAsync) {
   startPos = startPos || this.state.start;
   startLoc = startLoc || this.state.startLoc;
+
   let val;
   this.next();
 
   let innerStartPos = this.state.start, innerStartLoc = this.state.startLoc;
   let exprList = [], first = true;
-  let refShorthandDefaultPos = { start: 0 }, spreadStart, innerParenStart, optionalCommaStart;
+  let refShorthandDefaultPos = { start: 0 }, spreadStart, optionalCommaStart;
   while (!this.match(tt.parenR)) {
     if (first) {
       first = false;
@@ -529,9 +538,6 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
       exprList.push(this.parseParenItem(this.parseRest(), spreadNodeStartLoc, spreadNodeStartPos));
       break;
     } else {
-      if (this.match(tt.parenL) && !innerParenStart) {
-        innerParenStart = this.state.start;
-      }
       exprList.push(this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem));
     }
   }
@@ -541,7 +547,10 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   this.expect(tt.parenR);
 
   if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
-    if (innerParenStart) this.unexpected(innerParenStart);
+    for (let param of exprList) {
+      if (param.extra && param.extra.parenthesized) this.unexpected(param.extra.parenStart);
+    }
+
     return this.parseArrowExpression(this.startNodeAt(startPos, startLoc), exprList, isAsync);
   }
 
@@ -564,7 +573,11 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   } else {
     val = exprList[0];
   }
+
+
   this.addExtra(val, "parenthesized", true);
+  this.addExtra(val, "parenStart", startPos);
+
   return val;
 };
 
