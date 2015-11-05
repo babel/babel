@@ -1,10 +1,13 @@
 require("shelljs/global");
 
-var path = require("path");
-var fs   = require("fs");
+var mkdirp = require("mkdirp");
+var rimraf = require("rimraf");
+var child  = require("child_process");
+var async  = require("async");
+var path   = require("path");
+var fs     = require("fs");
 
 var CURRENT_VERSION = fs.readFileSync(__dirname + "/../VERSION", "utf8").trim();
-var OFFLINE = !!process.env.OFFLINE;
 
 // uninstall global babel install
 try {
@@ -28,47 +31,65 @@ ls("packages/*").forEach(function (loc) {
   });
 });
 
-// create links
-packages.forEach(function (root) {
-  console.log(root.name);
+async.parallelLimit(packages.map(function (root) {
+  return function (done) {
+    console.log(root.name);
 
-  var nodeModulesLoc = "packages/" + root.folder + "/node_modules";
-  mkdir("-p", nodeModulesLoc);
+    var tasks = [];
+    var nodeModulesLoc = process.cwd() + "/packages/" + root.folder + "/node_modules";
 
-  packages.forEach(function (sub) {
-    var ver = false;
-    if (root.pkg.dependencies) ver = root.pkg.dependencies[sub.name];
-    if (root.pkg.devDependencies && !ver) ver = root.pkg.devDependencies[sub.name];
-    if (!ver) return;
+    tasks.push(function (done) {
+      mkdirp(nodeModulesLoc, done);
+    });
 
-    // ensure that this is referring to a local package
-    if (ver[0] !== "^" || ver[1] !== CURRENT_VERSION[0]) return;
+    tasks.push(function (done) {
+      async.each(packages, function (sub, done) {
+        var ver = false;
+        if (root.pkg.dependencies) ver = root.pkg.dependencies[sub.name];
+        if (root.pkg.devDependencies && !ver) ver = root.pkg.devDependencies[sub.name];
+        if (!ver) return done();
 
-    var linkSrc = "packages/" + sub.folder;
-    var linkDest = nodeModulesLoc + "/" + sub.name;
+        // ensure that this is referring to a local package
+        if (ver[0] !== "^" || ver[1] !== CURRENT_VERSION[0]) return done();
 
-    console.log("Linking", linkSrc, "to", linkDest);
-    if (fs.existsSync(linkDest)) fs.unlinkSync(linkDest);
-    ln("-s", linkSrc, linkDest);
-  });
+        var linkSrc = process.cwd() + "/packages/" + sub.folder;
+        var linkDest = nodeModulesLoc + "/" + sub.name;
 
-  cd("packages/" + root.folder);
+        console.log("Linking", linkSrc, "to", linkDest);
 
-  // check whether or not we have any dependencies in our package.json that aren't in node_modules
-  var shouldRunInstall = false;
-  var pkg = require(process.cwd() + "/package.json");
-  var deps = Object.keys(pkg.dependencies || {}).concat(Object.keys(pkg.devDependencies || {}));
-  deps.forEach(function (depName) {
-    if (!fs.existsSync(process.cwd() + "/node_modules/" + depName)) {
-      console.log("Not installed", depName);
-      shouldRunInstall = true;
-    }
-  });
-  if (shouldRunInstall && !OFFLINE) exec("npm install");
+        rimraf(linkDest, function (err) {
+          if (err) return done(err);
 
-  if (!OFFLINE) exec("npm link");
+          fs.mkdir(linkDest, function (err) {
+            if (err) return done(err);
 
-  cd("../..");
+            fs.writeFile(linkDest + "/index.js", 'module.exports = require("' + linkSrc + '");', done);
+          });
+        });
+      }, done);
+    });
+
+    tasks.push(function (done) {
+      child.exec("npm install", {
+        cwd: process.cwd() + "/packages/" + root.folder
+      }, function (err, stdout, stderr) {
+        if (err != null) {
+          done(stderr);
+        } else {
+          stdout = stdout.trim();
+          if (stdout) console.log(stdout);
+          done();
+        }
+      });
+    });
+
+    async.series(tasks, done);
+  };
+}), 4, function (err) {
+  if (err) {
+    console.error(err);
+    process.exit(1);
+  } else {
+    process.exit();
+  }
 });
-
-if (!OFFLINE) exec("make build");
