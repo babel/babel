@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-es2015",
-  "version": "6.0.15",
+  "version": "6.1.2",
   "description": "Babel preset for all es2015 plugins.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -13,7 +13,7 @@
     "babel-plugin-transform-es2015-function-name": "^6.0.14",
     "babel-plugin-transform-es2015-arrow-functions": "^6.0.14",
     "babel-plugin-transform-es2015-block-scoped-functions": "^6.0.14",
-    "babel-plugin-transform-es2015-classes": "^6.0.15",
+    "babel-plugin-transform-es2015-classes": "^6.1.2",
     "babel-plugin-transform-es2015-object-super": "^6.0.14",
     "babel-plugin-transform-es2015-shorthand-properties": "^6.0.14",
     "babel-plugin-transform-es2015-computed-properties": "^6.0.14",
@@ -25,7 +25,7 @@
     "babel-plugin-transform-es2015-parameters": "^6.0.14",
     "babel-plugin-transform-es2015-destructuring": "^6.0.14",
     "babel-plugin-transform-es2015-block-scoping": "^6.0.14",
-    "babel-plugin-transform-es2015-typeof-symbol": "^6.0.15",
+    "babel-plugin-transform-es2015-typeof-symbol": "^6.1.2",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.0.15",
     "babel-plugin-transform-regenerator": "^6.0.14"
   }
