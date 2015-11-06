@@ -143,7 +143,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * The `Literal` node type has been unoverloaded and split into `BooleanLiteral`, `RegExpLiteral`, `NumericLiteral`, `StringLiteral` and `NullLiteral`.
   * The `SpreadProperty` (from `object-rest-spread`) node type has been split into `RestProperty` (for `ObjectPattern`) and `SpreadProperty` (for `ObjectExpression`)
   * Remove `module.exports` export interop for CommonJS module formatter.
-  * `externalHelpers` option has been moved into the plugin `babel-plugin-external-helper-2`.
+  * `externalHelpers` option has been moved into the plugin `babel-plugin-external-helpers-2`.
  * **New Feature**
   * Add plugin options.
   * Add callable class constructor.
