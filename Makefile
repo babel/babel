@@ -31,9 +31,11 @@ test-clean:
 	rm -rf packages/*/test/tmp
 	rm -rf packages/*/test-fixtures.json
 
-test: lint
+test-only:
 	./scripts/test.sh
 	make test-clean
+
+test: lint test-only
 
 test-cov: clean
 	BABEL_ENV=test; \
