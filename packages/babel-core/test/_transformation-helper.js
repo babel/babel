@@ -107,8 +107,8 @@ function run(task, done) {
         }
       };
 
-      var fn = new Function("require", "done", "exports", execCode);
-      fn.call(global, fakeRequire, chai.assert, {}, done);
+      var fn = new Function("require", "assert", "exports", "done", "transform", execCode);
+      fn.call(global, fakeRequire, chai.assert, {}, done, transform);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);
