@@ -12,7 +12,49 @@ import globals from "globals";
 import extend from "lodash/object/extend";
 import * as t from "babel-types";
 
-const SCOPE_INFO_CACHE_KEY = "_scopeInfo"; //Symbol();
+//
+
+const CACHE_SINGLE_KEY = "_scope";
+const CACHE_MULTIPLE_KEY = "_scopes"; //Symbol();
+
+// here we optimise for the case of there being only a single scope associated with a node
+
+function getCache(node, parentScope, self) {
+  let singleCache = node[CACHE_SINGLE_KEY];
+
+  if (singleCache) {
+    // we've only ever associated one scope with this node so let's check it
+    if (singleCache.parent === parentScope) {
+      return singleCache;
+    }
+  } else if (!node[CACHE_MULTIPLE_KEY]) {
+    // no scope has ever been associated with this node
+    return node[CACHE_SINGLE_KEY] = self;
+  }
+
+  // looks like we have either a single scope association that was never matched or
+  // multiple assocations, let's find the right one!
+  return getCacheMultiple(node, parentScope, self, singleCache);
+}
+
+function getCacheMultiple(node, parentScope, self, singleCache) {
+  let scopes: Array<Scope> = node[CACHE_MULTIPLE_KEY] = node[CACHE_MULTIPLE_KEY] || [];
+
+  if (singleCache) {
+    // we have a scope assocation miss so push it onto our scopes
+    scopes.push(singleCache);
+    node[CACHE_SINGLE_KEY] = null;
+  }
+
+  // loop through and check each scope to see if it matches our parent
+  for (let scope of scopes) {
+    if (scope.parent === parentScope) return scope;
+  }
+
+  scopes.push(self);
+}
+
+//
 
 let collectorVisitor = {
   For(path) {
@@ -120,12 +162,8 @@ export default class Scope {
       return parent;
     }
 
-    let cached = path.getData("scope");
-    if (cached && cached.parent === parent && cached.block === path.node) {
-      return cached;
-    } else {
-      path.setData("scope", this);
-    }
+    let cached = getCache(path.node, parent);
+    if (cached) return cached;
 
     this.parent = parent;
     this.hub    = path.hub;
@@ -593,18 +631,11 @@ export default class Scope {
 
     //
 
-    let info = this.block[SCOPE_INFO_CACHE_KEY];
-    if (info) return extend(this, info);
-
-    info = this.block[SCOPE_INFO_CACHE_KEY] = {
-      references: Object.create(null),
-      bindings:   Object.create(null),
-      globals:    Object.create(null),
-      uids:       Object.create(null),
-      data:       Object.create(null),
-    };
-
-    Object.assign(this, info);
+    this.references = Object.create(null),
+    this.bindings   = Object.create(null),
+    this.globals    = Object.create(null),
+    this.uids       = Object.create(null),
+    this.data       = Object.create(null),
 
     // ForStatement - left, init
 
