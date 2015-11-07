@@ -172,5 +172,11 @@ module.exports = {
   moduleId: {
     description: "specify a custom name for module ids",
     type: "string"
+  },
+
+  extends: {
+    description: "specify another .babelrc you wish to extend",
+    type: "string",
+    hidden: true
   }
 };
