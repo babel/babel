@@ -146,10 +146,6 @@ function getOuterFnExpr(funPath) {
   var node = funPath.node;
   t.assertFunction(node);
 
-  if (!node.id) {
-    node.id = funPath.scope.parent.generateUidIdentifier("callee");
-  }
-
   if (node.generator && // Non-generator functions don't need to be marked.
       t.isFunctionDeclaration(node)) {
     var pp = funPath.findParent(function (path) {
@@ -175,7 +171,9 @@ function getOuterFnExpr(funPath) {
     );
   }
 
-  return node.id;
+  return node.id || (
+    node.id = funPath.scope.parent.generateUidIdentifier("callee")
+  );
 }
 
 function getRuntimeMarkDecl(blockPath) {
