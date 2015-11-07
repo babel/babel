@@ -87,7 +87,7 @@ traverse.clearNode = function (node) {
     if (key[0] === "_" && node[key] != null) node[key] = undefined;
   }
 
-  let syms: Array<Symbol> = Object.getOwnPropertyNames(node);
+  let syms: Array<Symbol> = Object.getOwnPropertySymbols(node);
   for (let sym of syms) {
     node[sym] = null;
   }
