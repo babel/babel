@@ -56,7 +56,7 @@ export function get(key: string, ...args): string {
 
   // replace $0 placeholders with args
   return msg.replace(/\$(\d+)/g, function (str, i) {
-    return args[--i];
+    return args[i - 1];
   });
 }
 

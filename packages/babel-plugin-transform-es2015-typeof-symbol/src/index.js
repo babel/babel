@@ -6,7 +6,7 @@ export default function ({ types: t }) {
       UnaryExpression(path) {
         let { node, parent } = path;
         if (node[IGNORE]) return;
-        if (path.find(path => !!path.node._generated)) return;
+        if (path.find(path => path.node && !!path.node._generated)) return;
 
         if (path.parentPath.isBinaryExpression() && t.EQUALITY_BINARY_OPERATORS.indexOf(parent.operator) >= 0) {
           // optimise `typeof foo === "string"` since we can determine that they'll never need to handle symbols

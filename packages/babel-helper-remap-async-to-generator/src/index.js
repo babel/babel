@@ -24,7 +24,7 @@ let awaitVisitor = {
   }
 };
 
-function classMethod(path: NodePath, callId: Object) {
+function classOrObjectMethod(path: NodePath, callId: Object) {
   let node = path.node;
   let body = node.body;
 
@@ -99,8 +99,8 @@ export default function (path: NodePath, callId: Object) {
 
   path.traverse(awaitVisitor);
 
-  if (path.isClassMethod()) {
-    return classMethod(path, callId);
+  if (path.isClassMethod() || path.isObjectMethod()) {
+    return classOrObjectMethod(path, callId);
   } else {
     return plainFunction(path, callId);
   }

@@ -12,6 +12,6 @@ node $BROWSERIFY_CMD lib/index.js \
   --plugin derequire/plugin \
   >dist/polyfill.js
 node $UGLIFY_CMD dist/polyfill.js \
-  --compress warnings=false \
-  --mangle \
+  --compress keep_fnames,keep_fargs,warnings=false \
+  --mangle keep_fnames \
   >dist/polyfill.min.js
