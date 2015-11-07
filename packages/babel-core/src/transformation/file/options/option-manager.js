@@ -223,14 +223,21 @@ export default class OptionManager {
   }
 
   mergePresets(presets: Array<string | Object>, dirname: string) {
+    const presetsLoc = presets.map(val =>
+      (typeof val === "string")
+        ? resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname)
+        : val);
+
+    if (presetsLoc.length == 0) {
+      throw new Error("Couldn't find presets at all");
+    }
+
     for (let val of presets) {
       if (typeof val === "string") {
         let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
         if (presetLoc) {
           let presetOpts = require(presetLoc);
           this.mergeOptions(presetOpts, presetLoc, presetLoc, path.dirname(presetLoc));
-        } else {
-          throw new Error(`Couldn't find preset ${JSON.stringify(val)}`);
         }
       } else if (typeof val === "object") {
         this.mergeOptions(val);
