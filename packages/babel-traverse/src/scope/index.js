@@ -157,15 +157,15 @@ export default class Scope {
    * within.
    */
 
-  constructor(path: NodePath, parent?: Scope) {
-    if (parent && parent.block === path.node) {
-      return parent;
+  constructor(path: NodePath, parentScope?: Scope) {
+    if (parentScope && parent.block === path.node) {
+      return parentScope;
     }
 
-    let cached = getCache(path.node, parent);
+    let cached = getCache(path.node, parentScope, this);
     if (cached) return cached;
 
-    this.parent = parent;
+    this.parent = parentScope;
     this.hub    = path.hub;
 
     this.parentBlock = path.parent;
