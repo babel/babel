@@ -63,7 +63,14 @@ async.parallelLimit(packages.map(function (root) {
           fs.mkdir(linkDest, function (err) {
             if (err) return done(err);
 
-            fs.writeFile(linkDest + "/index.js", 'module.exports = require("' + linkSrc + '");', done);
+            fs.writeFile(linkDest + "/package.json", JSON.stringify({
+              name: sub.name,
+              version: require(linkSrc + "/package.json").version
+            }, null, "  "), function (err) {
+              if (err) return done(err);
+
+              fs.writeFile(linkDest + "/index.js", 'module.exports = require("' + linkSrc + '");', done);
+            });
           });
         });
       }, done);
