@@ -4,7 +4,7 @@ export NODE_ENV = test
 
 PATH := node_modules/.bin:$(PATH)
 
-.PHONY: clean test test-cov test-clean test-travis test-browser publish build bootstrap publish-core publish-runtime build-website build-core watch-core build-core-test clean-core prepublish
+.PHONY: clean test test-only test-cov test-clean test-travis test-browser publish build bootstrap publish-core publish-runtime build-website build-core watch-core build-core-test clean-core prepublish
 
 build: clean
 	gulp build
