@@ -62,6 +62,8 @@ function plainFunction(path: NodePath, callId: Object) {
   let retFunction = container.body.body[1].argument;
 
   if (path.isFunctionDeclaration()) {
+    node.type = "FunctionExpression";
+
     let declar = t.variableDeclaration("let", [
       t.variableDeclarator(
         t.identifier(asyncFnId.name),
