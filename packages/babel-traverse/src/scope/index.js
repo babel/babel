@@ -14,10 +14,15 @@ import * as t from "babel-types";
 
 //
 
-const CACHE_SINGLE_KEY = "_scope";
+const CACHE_SINGLE_KEY = "_scope"; //Symbol();
 const CACHE_MULTIPLE_KEY = "_scopes"; //Symbol();
 
-// here we optimise for the case of there being only a single scope associated with a node
+/**
+ * To avoid creating a new Scope instance for each traversal, we maintain a cache on the
+ * node itself containing all scopes it has been associated with.
+ *
+ * We also optimise for the case of there being only a single scope associated with a node.
+ */
 
 function getCache(node, parentScope, self) {
   let singleCache = node[CACHE_SINGLE_KEY];
