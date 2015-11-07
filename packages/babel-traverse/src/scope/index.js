@@ -33,7 +33,8 @@ function getCache(node, parentScope, self) {
     }
   } else if (!node[CACHE_MULTIPLE_KEY]) {
     // no scope has ever been associated with this node
-    return node[CACHE_SINGLE_KEY] = self;
+    node[CACHE_SINGLE_KEY] = self;
+    return;
   }
 
   // looks like we have either a single scope association that was never matched or
