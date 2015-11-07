@@ -73,7 +73,6 @@ traverse.node = function (node: Object, opts: Object, scope: Object, state: Obje
 };
 
 const CLEAR_KEYS: Array = t.COMMENT_KEYS.concat([
-  "_scopeInfo", "_paths",
   "tokens", "comments",
   "start", "end", "loc",
   "raw", "rawValue"
@@ -82,6 +81,15 @@ const CLEAR_KEYS: Array = t.COMMENT_KEYS.concat([
 traverse.clearNode = function (node) {
   for (let key of CLEAR_KEYS) {
     if (node[key] != null) node[key] = undefined;
+  }
+
+  for (let key in node) {
+    if (key[0] === "_" && node[key] != null) node[key] = undefined;
+  }
+
+  let syms: Array<Symbol> = Object.getOwnPropertyNames(node);
+  for (let sym of syms) {
+    node[sym] = null;
   }
 };
 

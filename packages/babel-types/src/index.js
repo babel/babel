@@ -33,7 +33,7 @@ export const COMMENT_KEYS            = ["leadingComments", "trailingComments", "
 
 export const INHERIT_KEYS = {
   optional: ["typeAnnotation", "typeParameters", "returnType"],
-  force: ["_scopeInfo", "_paths", "start", "loc", "end"]
+  force: ["start", "loc", "end"]
 };
 
 export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
@@ -384,12 +384,25 @@ function _inheritComments(key, child, parent) {
 export function inherits(child: Object, parent: Object): Object {
   if (!child || !parent) return child;
 
+  // optionally inherit specific properties if not null
   for (let key of (t.INHERIT_KEYS.optional: Array<string>)) {
     if (child[key] == null) {
       child[key] = parent[key];
     }
   }
 
+  // force inherit symbols
+  let parentSymbols: Array<Symbol> = Object.getOwnPropertyNames(parent);
+  for (let sym of parentSymbols) {
+    child[sym] = parent[sym];
+  }
+
+  // force inherit "private" properties
+  for (let key in parent) {
+    if (key[0] === "_") node[key] = parent[key];
+  }
+
+  // force inherit select properties
   for (let key of (t.INHERIT_KEYS.force: Array<string>)) {
     child[key] = parent[key];
   }
