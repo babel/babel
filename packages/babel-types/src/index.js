@@ -399,7 +399,7 @@ export function inherits(child: Object, parent: Object): Object {
 
   // force inherit "private" properties
   for (let key in parent) {
-    if (key[0] === "_") node[key] = parent[key];
+    if (key[0] === "_") child[key] = parent[key];
   }
 
   // force inherit select properties

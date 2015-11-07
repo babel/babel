@@ -9,7 +9,6 @@ import defaults from "lodash/object/defaults";
 import * as messages from "babel-messages";
 import Binding from "./binding";
 import globals from "globals";
-import extend from "lodash/object/extend";
 import * as t from "babel-types";
 
 //
@@ -163,7 +162,7 @@ export default class Scope {
    */
 
   constructor(path: NodePath, parentScope?: Scope) {
-    if (parentScope && parent.block === path.node) {
+    if (parentScope && parentScope.block === path.node) {
       return parentScope;
     }
 
@@ -636,11 +635,11 @@ export default class Scope {
 
     //
 
-    this.references = Object.create(null),
-    this.bindings   = Object.create(null),
-    this.globals    = Object.create(null),
-    this.uids       = Object.create(null),
-    this.data       = Object.create(null),
+    this.references = Object.create(null);
+    this.bindings   = Object.create(null);
+    this.globals    = Object.create(null);
+    this.uids       = Object.create(null);
+    this.data       = Object.create(null);
 
     // ForStatement - left, init
 
