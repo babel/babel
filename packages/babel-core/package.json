@@ -6,10 +6,6 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-core",
-  "browser": {
-    "./lib/api/register/node.js": "./lib/api/register/browser.js",
-    "esprima-fb": false
-  },
   "keywords": [
     "6to5",
     "babel",
@@ -34,6 +30,7 @@
     "babel-messages": "^6.0.15",
     "babel-template": "^6.0.16",
     "babel-runtime": "^5.0.0",
+    "babel-register": "^6.0.0",
     "babel-traverse": "^6.1.2",
     "babel-types": "^6.1.2",
     "babylon": "^6.1.2",

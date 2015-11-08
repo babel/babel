@@ -25,6 +25,9 @@ export { t as types };
 import traverse from "babel-traverse";
 export { traverse };
 
+import OptionManager from "../transformation/file/options/option-manager";
+export { OptionManager };
+
 //
 
 import Pipeline from "../transformation/pipeline";

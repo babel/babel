@@ -3,11 +3,10 @@
 import deepClone from "lodash/lang/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import OptionManager from "../../transformation/file/options/option-manager";
 import extend from "lodash/object/extend";
-import * as babel from "../node";
+import * as babel from "babel-core";
 import each from "lodash/collection/each";
-import * as util from  "../../util";
+import { util, OptionManager } from "babel-core";
 import fs from "fs";
 import path from "path";
 

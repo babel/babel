@@ -9,6 +9,7 @@
   "preferGlobal": true,
   "dependencies": {
     "babel-core": "^6.1.2",
+    "babel-register": "^6.0.0",
     "babel-polyfill": "^6.0.14",
     "babel-runtime": "^5.0.0",
     "bin-version-check": "^2.1.0",
