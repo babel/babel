@@ -84,6 +84,18 @@ export let defaultProps = template(`
 `);
 
 
+export let defineEnumerableProperties = template(`
+  (function (obj, descs) {
+    for (var key in descs) {
+      var desc = descs[key];
+      desc.configurable = desc.enumerable = true;
+      if ("value" in desc) desc.writable = true;
+      Object.defineProperty(obj, key, desc);
+    }
+    return obj;
+  })
+`);
+
 export let defaults = template(`
   (function (obj, defaults) {
     var keys = Object.getOwnPropertyNames(defaults);
