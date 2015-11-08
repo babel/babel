@@ -391,12 +391,6 @@ export function inherits(child: Object, parent: Object): Object {
     }
   }
 
-  // force inherit symbols
-  let parentSymbols: Array<Symbol> = Object.getOwnPropertyNames(parent);
-  for (let sym of parentSymbols) {
-    child[sym] = parent[sym];
-  }
-
   // force inherit "private" properties
   for (let key in parent) {
     if (key[0] === "_") child[key] = parent[key];
