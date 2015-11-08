@@ -11,9 +11,10 @@ require("./_transformation-helper").run("traceur", {
   ],
 
   ignoreTasks: [
-    // Node 0.10 doesn't like these
+    // Node 0.10 doesn't like these due to either V8 bugs or lack of core-js functionality
     "Symbol/Object",
     "Symbol/ObjectModel",
+    "Symbol/GetOwnPropertySymbols",
 
     // TODO
     "Yield/GeneratorSend",
