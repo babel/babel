@@ -39,6 +39,9 @@ export default async function (packages) {
     let info = infos[i];
     let pkg = filteredPackages[i];
 
+    // https://github.com/babel/babel/issues/2915
+    if (pkg.name === "babel-runtime") continue;
+
     if (info.version !== pkg.version) {
       messages.push(`${pkg.name} - Latest is ${info.version}. Local version is ${pkg.version}`);
     }
