@@ -15,7 +15,11 @@ gulp.task("default", ["build"]);
 
 gulp.task("build", function () {
   return gulp.src(scripts)
-    .pipe(plumber())
+    .pipe(plumber({
+      errorHandler: function (err) {
+        gutil.log(err.stack);
+      }
+    }))
     .pipe(through.obj(function (file, enc, callback) {
       file._path = file.path;
       file.path = file.path.replace(/^([^\\]+)\/src/, "$1/lib");
