@@ -7,6 +7,8 @@ import traverse from "babel-traverse";
 import assign from "lodash/object/assign";
 import clone from "lodash/lang/clone";
 
+const GLOBAL_VISITOR_PROPS = ["enter", "exit"];
+
 export default class Plugin extends Store {
   constructor(plugin: Object) {
     super();
@@ -17,7 +19,7 @@ export default class Plugin extends Store {
     this.manipulateOptions = this.take("manipulateOptions");
     this.post              = this.take("post");
     this.pre               = this.take("pre");
-    this.visitor           = this.normalize(clone(this.take("visitor")) || {});
+    this.visitor           = this.normaliseVisitor(clone(this.take("visitor")) || {});
   }
 
   initialized: boolean;
@@ -79,7 +81,13 @@ export default class Plugin extends Store {
     }
   }
 
-  normalize(visitor: Object): Object {
+  normaliseVisitor(visitor: Object): Object {
+    for (let key of visitor) {
+      if (visitor[key]) {
+        throw new Error(`Plugins aren't allowed to specify catch-all enter/exit handlers. Please target individual nodes.`);
+      }
+    }
+
     traverse.explode(visitor);
     return visitor;
   }
