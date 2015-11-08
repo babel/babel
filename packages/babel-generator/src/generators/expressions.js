@@ -206,7 +206,7 @@ export function MemberExpression(node: Object) {
     this.print(node.property, node);
     this.push("]");
   } else {
-    if (t.isLiteral(node.object)) {
+    if (t.isLiteral(node.object) && !t.isTemplateLiteral(node.object)) {
       let val = this.getPossibleRaw(node.object) || this._stringLiteral(node.object);
       if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")) {
         this.push(".");
