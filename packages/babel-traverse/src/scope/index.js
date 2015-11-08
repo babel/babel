@@ -13,8 +13,8 @@ import * as t from "babel-types";
 
 //
 
-const CACHE_SINGLE_KEY = "_scope"; //Symbol();
-const CACHE_MULTIPLE_KEY = "_scopes"; //Symbol();
+const CACHE_SINGLE_KEY = Symbol();
+const CACHE_MULTIPLE_KEY = Symbol();
 
 /**
  * To avoid creating a new Scope instance for each traversal, we maintain a cache on the
@@ -28,7 +28,7 @@ function getCache(node, parentScope, self) {
 
   if (singleCache) {
     // we've only ever associated one scope with this node so let's check it
-    if (singleCache.parent === parentScope) {
+    if (matchesParent(singleCache, parentScope)) {
       return singleCache;
     }
   } else if (!node[CACHE_MULTIPLE_KEY]) {
@@ -42,6 +42,12 @@ function getCache(node, parentScope, self) {
   return getCacheMultiple(node, parentScope, self, singleCache);
 }
 
+function matchesParent(scope, parentScope) {
+  if (scope.parent === parentScope) {
+    return true;
+  }
+}
+
 function getCacheMultiple(node, parentScope, self, singleCache) {
   let scopes: Array<Scope> = node[CACHE_MULTIPLE_KEY] = node[CACHE_MULTIPLE_KEY] || [];
 
@@ -53,7 +59,7 @@ function getCacheMultiple(node, parentScope, self, singleCache) {
 
   // loop through and check each scope to see if it matches our parent
   for (let scope of scopes) {
-    if (scope.parent === parentScope) return scope;
+    if (matchesParent(scope, parentScope)) return scope;
   }
 
   scopes.push(self);
@@ -155,6 +161,8 @@ let collectorVisitor = {
   }
 };
 
+let uid = 0;
+
 export default class Scope {
 
   /**
@@ -170,6 +178,7 @@ export default class Scope {
     let cached = getCache(path.node, parentScope, this);
     if (cached) return cached;
 
+    this.uid = uid++;
     this.parent = parentScope;
     this.hub    = path.hub;
 
