@@ -453,11 +453,7 @@ export default class File extends Store {
 
       if (err.stack) {
         let newStack = err.stack.replace(err.message, message);
-        try {
-          err.stack = newStack;
-        } catch (e) {
-          // `err.stack` may be a readonly property in some environments
-        }
+        err.stack = newStack;
       }
 
       throw err;
