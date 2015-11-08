@@ -2,7 +2,7 @@ var outputFile = require("output-file-sync");
 var each       = require("lodash/collection/each");
 var fs         = require("fs");
 
-var coreDefinitions = require("babel-plugin-transform-runtime/lib/definitions");
+var coreDefinitions = require("babel-plugin-transform-runtime").definitions;
 
 var paths = ["is-iterable", "get-iterator"];
 
