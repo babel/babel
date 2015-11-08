@@ -13,13 +13,13 @@ export function explode(visitor) {
   for (let nodeType in visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    let parts = nodeType.split("|");
+    let parts: Array<string> = nodeType.split("|");
     if (parts.length === 1) continue;
 
     let fns = visitor[nodeType];
     delete visitor[nodeType];
 
-    for (let part of (parts: Array)) {
+    for (let part of parts) {
       visitor[part] = fns;
     }
   }
@@ -113,6 +113,10 @@ export function verify(visitor) {
   }
 
   for (let nodeType in visitor) {
+    if (nodeType === "enter" || nodeType === "exit") {
+      validateVisitorMethods(nodeType, visitor[nodeType]);
+    }
+
     if (shouldIgnoreKey(nodeType)) continue;
 
     if (t.TYPES.indexOf(nodeType) < 0) {
@@ -124,13 +128,7 @@ export function verify(visitor) {
       for (let visitorKey in visitors) {
         if (visitorKey === "enter" || visitorKey === "exit") {
           // verify that it just contains functions
-          let val = visitors[visitorKey];
-          let fns = [].concat(val);
-          for (let fn of fns) {
-            if (typeof fn !== "function") {
-              throw new TypeError(`Non-function found defined in ${nodeType}.${visitorKey} with type ${typeof fn}`);
-            }
-          }
+          validateVisitorMethods(`${nodeType}.${visitorKey}`, visitors[visitorKey]);
         } else {
           throw new Error(messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey));
         }
@@ -139,6 +137,15 @@ export function verify(visitor) {
   }
 
   visitor._verified = true;
+}
+
+function validateVisitorMethods(path, val) {
+  let fns = [].concat(val);
+  for (let fn of fns) {
+    if (typeof fn !== "function") {
+      throw new TypeError(`Non-function found defined in ${path} with type ${typeof fn}`);
+    }
+  }
 }
 
 export function merge(visitors: Array, states: Array = []) {
