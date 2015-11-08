@@ -84,6 +84,11 @@ module.exports = {
     type: "boolean"
   },
 
+  extends: {
+    type: "string",
+    hidden: true
+  },
+
   comments: {
     type: "boolean",
     default: true,

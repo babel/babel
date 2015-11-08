@@ -128,8 +128,10 @@ export default class OptionManager {
     });
   }
 
-  addConfig(loc: string, key?: string, json = json5) {
-    if (this.resolvedConfigs.indexOf(loc) >= 0) return;
+  addConfig(loc: string, key?: string, json = json5): boolean {
+    if (this.resolvedConfigs.indexOf(loc) >= 0) {
+      return false;
+    }
 
     let content = fs.readFileSync(loc, "utf8");
     let opts;
@@ -144,6 +146,8 @@ export default class OptionManager {
 
     this.mergeOptions(opts, loc);
     this.resolvedConfigs.push(loc);
+
+    return !!opts;
   }
 
   /**
@@ -272,8 +276,7 @@ export default class OptionManager {
 
         let pkgLoc = path.join(loc, PACKAGE_FILENAME);
         if (exists(pkgLoc)) {
-          this.addConfig(pkgLoc, "babel", JSON);
-          foundConfig = true;
+          foundConfig = this.addConfig(pkgLoc, "babel", JSON);
         }
       }
 
