@@ -97,18 +97,7 @@ function run(task, done) {
     execCode = result.code;
 
     try {
-      var fakeRequire = function (loc) {
-        if (loc === "../../../src/runtime/polyfills/Number.js") {
-          return Number;
-        } else if (loc === "../../../src/runtime/polyfills/Math.js") {
-          return Math;
-        } else {
-          return require(path.resolve(exec.loc, "..", loc));
-        }
-      };
-
-      var fn = new Function("require", "assert", "exports", "done", "transform", execCode);
-      fn.call(global, fakeRequire, chai.assert, {}, done, transform);
+      runExec(exec.loc, execCode, done);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);
@@ -144,6 +133,25 @@ function run(task, done) {
       chai.expect({ line: expect.line, column: expect.column }).to.deep.equal(actual);
     });
   }
+}
+
+function multiline(arr) {
+  return arr.join("\n");
+}
+
+function runExec(filename, execCode, done) {
+  function fakeRequire(loc) {
+    if (loc === "../../../src/runtime/polyfills/Number.js") {
+      return Number;
+    } else if (loc === "../../../src/runtime/polyfills/Math.js") {
+      return Math;
+    } else {
+      return require(path.resolve(filename, "..", loc));
+    }
+  }
+
+  var fn = new Function("multiline", "require", "assert", "exports", "done", "transform", execCode);
+  return fn.call(global, multiline, fakeRequire, chai.assert, {}, done, transform);
 }
 
 exports.run = function (name, suiteOpts, taskOpts, dynamicOpts) {
