@@ -69,7 +69,7 @@ export function _containerInsert(from, nodes) {
 
   for (let path of paths) {
     path.setScope();
-    
+
     for (let context of contexts) {
       context.maybeQueue(path);
     }
@@ -156,14 +156,21 @@ export function _verifyNodeList(nodes) {
 
   for (let i = 0; i < nodes.length; i++) {
     let node = nodes[i];
+    let msg;
+
     if (!node) {
-      throw new Error(`Node list has falsy node with the index of ${i}`);
+      msg = "has falsy node";
     } else if (typeof node !== "object") {
-      throw new Error(`Node list contains a non-object node with the index of ${i}`);
+      msg = "contains a non-object node";
     } else if (!node.type) {
-      throw new Error(`Node list contains a node without a type with the index of ${i}`);
+      msg = "without a type";
     } else if (node instanceof NodePath) {
-      nodes[i] = node.node;
+      msg = "has a NodePath when it expected a raw object";
+    }
+
+    if (msg) {
+      let type = Array.isArray(node) ? "array" : typeof node;
+      throw new Error(`Node list ${msg} with the index of ${i} and type of ${type}`);
     }
   }
 
