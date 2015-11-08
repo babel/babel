@@ -199,10 +199,23 @@ pp.checkLVal = function (expr, isBinding, checkClashes) {
       }
 
       if (checkClashes) {
-        if (checkClashes[expr.name]) {
+        // we need to prefix this with an underscore for the cases where we have a key of
+        // `__proto__`. there's a bug in old V8 where the following wouldn't work:
+        //
+        //   > var obj = Object.create(null);
+        //   undefined
+        //   > obj.__proto__
+        //   null
+        //   > obj.__proto__ = true;
+        //   true
+        //   > obj.__proto__
+        //   null
+        let key = `_${expr.name}`;
+
+        if (checkClashes[key]) {
           this.raise(expr.start, "Argument name clash in strict mode");
         } else {
-          checkClashes[expr.name] = true;
+          checkClashes[key] = true;
         }
       }
       break;
