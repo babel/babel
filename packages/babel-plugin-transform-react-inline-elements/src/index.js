@@ -42,14 +42,6 @@ export default function ({ types: t }) {
           objProps.push(t.objectProperty(key, value));
         }
 
-        if (node.children.length) {
-          let children = t.react.buildChildren(node);
-          if (children.length) {
-            children = children.length === 1 ? children[0] : t.arrayExpression(children);
-            pushProp(props.properties, t.identifier("children"), children);
-          }
-        }
-
         // props
         for (let attr of (open.attributes: Array<Object>)) {
           if (isJSXAttributeOfName(attr, "key")) {
@@ -58,6 +50,14 @@ export default function ({ types: t }) {
             let name = attr.name.name;
             let propertyKey = t.isValidIdentifier(name) ? t.identifier(name) : t.stringLiteral(name);
             pushProp(props.properties, propertyKey, attr.value || t.identifier("true"));
+          }
+        }
+
+        if (node.children.length) {
+          let children = t.react.buildChildren(node);
+          if (children.length) {
+            children = children.length === 1 ? children[0] : t.arrayExpression(children);
+            pushProp(props.properties, t.identifier("children"), children);
           }
         }
 
