@@ -9,7 +9,7 @@ This document specifies the core ESTree AST node types that support the ES5 gram
   - [NullLiteral](#nullliteral)
   - [StringLiteral](#stringliteral)
   - [BooleanLiteral](#booleanliteral)
-  - [NumericLiteral](#NumericLiteral)
+  - [NumericLiteral](#numericliteral)
 - [Programs](#programs)
 - [Functions](#functions)
 - [Statements](#statements)
