@@ -205,7 +205,7 @@ defineType("TypeAnnotation", {
 
 defineType("TypeCastExpression", {
   visitor: ["expression", "typeAnnotation"],
-  aliases: ["Flow", "ExpressionWrapper"],
+  aliases: ["Flow", "ExpressionWrapper", "Expression"],
   fields: {
     // todo
   }
