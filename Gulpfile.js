@@ -1,5 +1,5 @@
+var plumber = require("gulp-plumber");
 var through = require("through2");
-var rename  = require("gulp-rename");
 var chalk   = require("chalk");
 var newer   = require("gulp-newer");
 var babel   = require("gulp-babel");
@@ -15,18 +15,18 @@ gulp.task("default", ["build"]);
 
 gulp.task("build", function () {
   return gulp.src(scripts)
-    .pipe(rename(function (file) {
-      file.dirname = file.dirname.replace(/^([^\\]+)\/src/, "$1/lib");
+    .pipe(plumber())
+    .pipe(through.obj(function (file, enc, callback) {
+      file._path = file.path;
+      file.path = file.path.replace(/^([^\\]+)\/src/, "$1/lib");
+      callback(null, file);
     }))
     .pipe(newer(dest))
     .pipe(through.obj(function (file, enc, callback) {
-      gutil.log("Compiling", "'" + chalk.cyan(file.path) + "'...");
+      gutil.log("Compiling", "'" + chalk.cyan(file._path) + "'...");
       callback(null, file);
     }))
     .pipe(babel())
-    .on("error", function (err) {
-      console.error(err.stack);
-    })
     .pipe(gulp.dest(dest));
 });
 
