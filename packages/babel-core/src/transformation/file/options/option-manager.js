@@ -144,6 +144,8 @@ export default class OptionManager {
 
     this.mergeOptions(opts, loc);
     this.resolvedConfigs.push(loc);
+
+    return typeof opts !== "undefined";
   }
 
   /**
@@ -271,9 +273,8 @@ export default class OptionManager {
         }
 
         let pkgLoc = path.join(loc, PACKAGE_FILENAME);
-        if (exists(pkgLoc)) {
-          this.addConfig(pkgLoc, "babel", JSON);
-          foundConfig = true;
+        if (!foundConfig && exists(pkgLoc)) {
+          foundConfig = this.addConfig(pkgLoc, "babel", JSON);
         }
       }
 
