@@ -85,6 +85,8 @@ export default class OptionManager {
   }
 
   static normalisePlugin(plugin, loc, i) {
+    plugin = plugin.__esModule ? plugin.default : plugin;
+
     if (!(plugin instanceof Plugin)) {
       // allow plugin containers to be specified so they don't have to manually require
       if (typeof plugin === "function" || typeof plugin === "object") {
@@ -115,7 +117,6 @@ export default class OptionManager {
         let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
         if (pluginLoc) {
           plugin = require(pluginLoc);
-          plugin = plugin.__esModule ? plugin.default : plugin;
         } else {
           throw new ReferenceError(messages.get("pluginUnknown", plugin, loc, i));
         }
