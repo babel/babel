@@ -4,8 +4,8 @@
   key: null,
   ref: null,
   props: {
-    children: bar,
-    className: "foo"
+    className: "foo",
+    children: bar
   },
   _owner: null
 });
