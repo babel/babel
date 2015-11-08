@@ -1,15 +1,21 @@
-require("../lib/api/node");
+var babel    = require("../lib/api/node");
+var register = require("../register");
+var path     = require("path");
+
+register({
+  ignore: [
+    path.resolve(__dirname + "/../.."),
+    "node_modules",
+  ]
+});
 
 var buildExernalHelpers = require("../lib/tools/build-external-helpers");
 var getFixtures         = require("mocha-fixtures");
-var transform           = require("../lib/api/node").transform;
 var sourceMap           = require("source-map");
 var codeFrame           = require("babel-code-frame");
-var register            = require("../register");
 var Module              = require("module");
 var assert              = require("assert");
 var chai                = require("chai");
-var path                = require("path");
 var util                = require("../lib/util");
 var _                   = require("lodash");
 
@@ -18,13 +24,6 @@ exports.fixtures = getFixtures(__dirname + "/fixtures", function () {
 });
 
 require("babel-polyfill");
-
-register({
-  ignore: [
-    path.resolve(__dirname + "/../.."),
-    "node_modules"
-  ]
-});
 
 eval(buildExernalHelpers());
 
@@ -93,7 +92,7 @@ function run(task, done) {
 
   if (execCode) {
     var execOpts = getOpts(exec);
-    result = transform(execCode, execOpts);
+    result = babel.transform(execCode, execOpts);
     execCode = result.code;
 
     try {
@@ -108,7 +107,7 @@ function run(task, done) {
   var actualCode = actual.code;
   var expectCode = expect.code;
   if (!execCode || actualCode) {
-    result     = transform(actualCode, getOpts(actual));
+    result     = babel.transform(actualCode, getOpts(actual));
     actualCode = result.code.trim();
 
     try {
@@ -151,7 +150,7 @@ function runExec(filename, execCode, done) {
   }
 
   var fn = new Function("multiline", "require", "assert", "exports", "done", "transform", execCode);
-  return fn.call(global, multiline, fakeRequire, chai.assert, {}, done, transform);
+  return fn.call(global, multiline, fakeRequire, chai.assert, {}, done, babel.transform);
 }
 
 exports.run = function (name, suiteOpts, taskOpts, dynamicOpts) {
