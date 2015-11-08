@@ -174,9 +174,11 @@ function wrapWithState(oldVisitor, state) {
     if (!Array.isArray(fns)) continue;
 
     fns = fns.map(function (fn) {
-      return function (path) {
+      let newFn = function (path) {
         return fn.call(state, path, state);
       };
+      newFn.toString = () => fn.toString();
+      return newFn;
     });
 
     newVisitor[key] = fns;
