@@ -82,7 +82,7 @@ export default class Plugin extends Store {
   }
 
   normaliseVisitor(visitor: Object): Object {
-    for (let key of visitor) {
+    for (let key of GLOBAL_VISITOR_PROPS) {
       if (visitor[key]) {
         throw new Error(`Plugins aren't allowed to specify catch-all enter/exit handlers. Please target individual nodes.`);
       }
