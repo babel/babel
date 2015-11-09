@@ -1,11 +1,7 @@
 machine:
   node:
     version:
-      0.12.0
-
-dependencies:
-  pre:
-    - make bootstrap
+      0.10.0
 
 test:
   override:

@@ -39,11 +39,15 @@ test-only:
 test: lint test-only
 
 test-cov: clean
-	BABEL_ENV=test; \
-	gulp build
+	# build with test
+	rm -rf packages/*/lib
+	BABEL_ENV=test; gulp build
+
 	./scripts/test-cov.sh
 
-test-ci: lint bootstrap build test-only
+	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
+
+test-ci: lint bootstrap test-cov
 
 publish:
 	git pull --rebase
