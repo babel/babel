@@ -11,5 +11,8 @@
   "dependencies": {
     "babel-runtime": "^5.0.0",
     "lodash": "^3.9.3"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.0.0"
   }
 }

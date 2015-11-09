@@ -12,5 +12,8 @@
     "babel-template": "^6.0.15",
     "babel-plugin-syntax-class-constructor-call": "^6.0.15",
     "babel-runtime": "^5.0.0"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.0.0"
   }
 }

@@ -12,5 +12,8 @@
     "babel-helper-define-map": "^6.0.14",
     "babel-template": "^6.0.14",
     "babel-runtime": "^5.0.0"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.0.0"
   }
 }

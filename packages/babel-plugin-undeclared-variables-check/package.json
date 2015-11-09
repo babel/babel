@@ -11,5 +11,8 @@
   "dependencies": {
     "babel-runtime": "^5.0.0",
     "leven": "^1.0.2"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.0.0"
   }
 }

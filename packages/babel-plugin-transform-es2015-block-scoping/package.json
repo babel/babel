@@ -14,5 +14,8 @@
   },
   "keywords": [
     "babel-plugin"
-  ]
+  ],
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.0.0"
+  }
 }

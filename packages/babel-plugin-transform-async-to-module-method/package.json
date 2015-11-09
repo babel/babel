@@ -13,5 +13,8 @@
     "babel-helper-remap-async-to-generator": "^6.0.14",
     "babel-types": "^6.0.14",
     "babel-runtime": "^5.0.0"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.0.0"
   }
 }

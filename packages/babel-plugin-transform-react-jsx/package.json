@@ -12,5 +12,8 @@
     "babel-runtime": "^5.0.0",
     "babel-helper-builder-react-jsx": "^6.0.14",
     "babel-plugin-syntax-jsx": "^6.0.14"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.0.0"
   }
 }

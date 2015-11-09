@@ -11,5 +11,8 @@
   "dependencies": {
     "babel-runtime": "^5.0.0",
     "babel-types": "^6.1.2"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.0.0"
   }
 }
