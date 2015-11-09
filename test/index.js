@@ -1,10 +1,8 @@
-var getFixtures = require("mocha-fixtures");
+var getFixtures = require("babel-helper-fixtures").multiple;
 var parse       = require("../lib").parse;
 var _           = require("lodash");
 
-var fixtures = getFixtures(__dirname + "/fixtures", function () {
-  return require("../test-fixtures.json");
-});
+var fixtures = getFixtures(__dirname + "/fixtures");
 
 _.each(fixtures, function (suites, name) {
   _.each(suites, function (testSuite) {
