@@ -555,7 +555,7 @@ defineType("SwitchCase", {
   visitor: ["test", "consequent"],
   fields: {
     test: {
-      validate: assertNodeType("Expression")
+      validate: assertNodeType("Expression"),
       optional: true
     },
     consequent: {
