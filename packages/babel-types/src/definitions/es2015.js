@@ -26,7 +26,7 @@ defineType("ArrayPattern", {
   aliases: ["Pattern", "LVal"],
   fields: {
     elements: {
-      validate: chain(assertValueType("array"), assertEach(assertValueType("Expression")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression")))
     }
   }
 });
@@ -53,7 +53,7 @@ defineType("ClassBody", {
   visitor: ["body"],
   fields: {
     body: {
-      validate: chain(assertValueType("array"), assertEach(assertValueType("ClassMethod", "ClassProperty")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("ClassMethod", "ClassProperty")))
     }
   }
 });
@@ -82,7 +82,7 @@ defineType("ClassDeclaration", {
       validate: assertNodeType("Expression")
     },
     decorators: {
-      validate: chain(assertValueType("array"), assertEach(assertValueType("Decorator")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
     }
   }
 });
@@ -103,7 +103,7 @@ defineType("ClassExpression", {
       validate: assertNodeType("Expression")
     },
     decorators: {
-      validate: chain(assertValueType("array"), assertEach(assertValueType("Decorator")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
     }
   }
 });
@@ -266,7 +266,7 @@ defineType("ObjectPattern", {
   aliases: ["Pattern", "LVal"],
   fields: {
     properties: {
-      validate: chain(assertValueType("array"), assertEach(assertValueType("RestProperty", "Property")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("RestProperty", "Property")))
     }
   }
 });
