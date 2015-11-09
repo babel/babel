@@ -1,0 +1,12 @@
+machine:
+  node:
+    version:
+      0.12.0
+
+dependencies:
+  pre:
+    - make bootstrap
+
+test:
+  override:
+    - make test-ci
