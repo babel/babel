@@ -10,7 +10,7 @@
       type: Baz,
       key: "baz",
       ref: null,
-      props: babelHelpers.defaultProps(Baz.defaultProps, {}),
+      props: Baz.defaultProps,
       _owner: null
     }]
   }),

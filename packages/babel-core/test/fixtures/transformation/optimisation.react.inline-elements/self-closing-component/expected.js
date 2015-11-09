@@ -3,6 +3,6 @@
   type: Baz,
   key: null,
   ref: null,
-  props: babelHelpers.defaultProps(Baz.defaultProps, {}),
+  props: Baz.defaultProps,
   _owner: null
 });

@@ -62,7 +62,12 @@ export default function ({ types: t }) {
         }
 
         if (isComponent) {
-          props = t.callExpression(file.addHelper("defaultProps"), [t.memberExpression(type, t.identifier("defaultProps")), props]);
+          let defProps = t.memberExpression(type, t.identifier("defaultProps"));
+          if (props.properties.length) {
+            props = t.callExpression(file.addHelper("defaultProps"), [defProps, props]);
+          } else {
+            props = defProps;
+          }
         }
 
         // metadata
