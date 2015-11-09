@@ -43,7 +43,7 @@ test-cov: clean
 	gulp build
 	./scripts/test-cov.sh
 
-test-travis: bootstrap lint build test
+test-travis: lint bootstrap build test-only
 
 publish:
 	git pull --rebase
