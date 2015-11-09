@@ -21,13 +21,15 @@ function getType(val) {
 }
 
 export function assertEach(callback: Function): Function {
-  return function (node, key, val) {
+  function validator(node, key, val) {
     if (!Array.isArray(val)) return;
 
     for (let i = 0; i < val.length; i++) {
       callback(node, `${key}[${i}]`, val[i]);
     }
-  };
+  }
+  validator.each = callback;
+  return validator;
 }
 
 export function assertOneOf(...vals): Function {
@@ -78,11 +80,13 @@ export function assertValueType(type: string): Function {
 }
 
 export function chain(...fns: Array<Function>): Function {
-  return function (...args) {
+  function validate(...args) {
     for (let fn of fns) {
       fn(...args);
     }
   };
+  validate.chainOf = fns;
+  return validate;
 }
 
 export default function defineType(
