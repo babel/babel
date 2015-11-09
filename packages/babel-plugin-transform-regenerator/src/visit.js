@@ -8,34 +8,18 @@
  * the same directory.
  */
 
-"use strict";
+import assert from "assert";
+import * as t from "babel-types";
+import { hoist } from "./hoist";
+import { Emitter } from "./emit";
+import * as util from "./util";
 
-var _interopRequireDefault = require("babel-runtime/helpers/interop-require-default")["default"];
-
-var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
-
-var _assert = require("assert");
-
-var _assert2 = _interopRequireDefault(_assert);
-
-var _babelTypes = require("babel-types");
-
-var t = _interopRequireWildcard(_babelTypes);
-
-var _hoist = require("./hoist");
-
-var _emit = require("./emit");
-
-var _util = require("./util");
-
-var util = _interopRequireWildcard(_util);
-
-var getMarkInfo = require("private").makeAccessor();
+let getMarkInfo = require("private").makeAccessor();
 
 exports.visitor = {
   Function: {
-    exit: function exit(path, state) {
-      var node = path.node;
+    exit: function(path, state) {
+      let node = path.node;
 
       if (node.generator) {
         if (node.async) {
@@ -56,19 +40,21 @@ exports.visitor = {
       if (node.expression) {
         // Transform expression lambdas into normal functions.
         node.expression = false;
-        node.body = t.blockStatement([t.returnStatement(node.body)]);
+        node.body = t.blockStatement([
+          t.returnStatement(node.body)
+        ]);
       }
 
       if (node.async) {
         path.get("body").traverse(awaitVisitor);
       }
 
-      var bodyBlockPath = path.get("body");
-      var outerBody = [];
-      var innerBody = [];
+      let bodyBlockPath = path.get("body");
+      let outerBody = [];
+      let innerBody = [];
 
-      bodyBlockPath.get("body").forEach(function (childPath) {
-        var node = childPath.node;
+      bodyBlockPath.get("body").forEach(function(childPath) {
+        let node = childPath.node;
         if (node && node._blockHoist != null) {
           outerBody.push(node);
         } else {
@@ -82,49 +68,57 @@ exports.visitor = {
         bodyBlockPath.node.body = innerBody;
       }
 
-      var outerFnExpr = getOuterFnExpr(path);
+      let outerFnExpr = getOuterFnExpr(path);
       // Note that getOuterFnExpr has the side-effect of ensuring that the
       // function has a name (so node.id will always be an Identifier), even
       // if a temporary name has to be synthesized.
       t.assertIdentifier(node.id);
-      var innerFnId = t.identifier(node.id.name + "$");
-      var contextId = path.scope.generateUidIdentifier("context");
-      var argsId = path.scope.generateUidIdentifier("args");
+      let innerFnId = t.identifier(node.id.name + "$");
+      let contextId = path.scope.generateUidIdentifier("context");
+      let argsId = path.scope.generateUidIdentifier("args");
 
       // Turn all declarations into vars, and replace the original
       // declarations with equivalent assignment expressions.
-      var vars = _hoist.hoist(path);
+      let vars = hoist(path);
 
-      var didRenameArguments = renameArguments(path, argsId);
+      let didRenameArguments = renameArguments(path, argsId);
       if (didRenameArguments) {
         vars = vars || t.variableDeclaration("var", []);
-        vars.declarations.push(t.variableDeclarator(argsId, t.identifier("arguments")));
+        vars.declarations.push(t.variableDeclarator(
+          argsId, t.identifier("arguments")
+        ));
       }
 
-      var emitter = new _emit.Emitter(contextId);
+      let emitter = new Emitter(contextId);
       emitter.explode(path.get("body"));
 
       if (vars && vars.declarations.length > 0) {
         outerBody.push(vars);
       }
 
-      var wrapArgs = [emitter.getContextFunction(innerFnId),
-      // Async functions that are not generators don't care about the
-      // outer function because they don't need it to be marked and don't
-      // inherit from its .prototype.
-      node.generator ? outerFnExpr : t.nullLiteral(), t.thisExpression()];
+      let wrapArgs = [
+        emitter.getContextFunction(innerFnId),
+        // Async functions that are not generators don't care about the
+        // outer function because they don't need it to be marked and don't
+        // inherit from its .prototype.
+        node.generator ? outerFnExpr : t.nullLiteral(),
+        t.thisExpression()
+      ];
 
-      var tryLocsList = emitter.getTryLocsList();
+      let tryLocsList = emitter.getTryLocsList();
       if (tryLocsList) {
         wrapArgs.push(tryLocsList);
       }
 
-      var wrapCall = t.callExpression(util.runtimeProperty(node.async ? "async" : "wrap"), wrapArgs);
+      let wrapCall = t.callExpression(
+        util.runtimeProperty(node.async ? "async" : "wrap"),
+        wrapArgs
+      );
 
       outerBody.push(t.returnStatement(wrapCall));
       node.body = t.blockStatement(outerBody);
 
-      var wasGeneratorFunction = node.generator;
+      let wasGeneratorFunction = node.generator;
       if (wasGeneratorFunction) {
         node.generator = false;
       }
@@ -133,7 +127,8 @@ exports.visitor = {
         node.async = false;
       }
 
-      if (wasGeneratorFunction && t.isExpression(node)) {
+      if (wasGeneratorFunction &&
+          t.isExpression(node)) {
         path.replaceWith(t.callExpression(util.runtimeProperty("mark"), [node]));
       }
     }
@@ -145,12 +140,12 @@ exports.visitor = {
 // This expression is essentially a replacement for arguments.callee, with
 // the key advantage that it works in strict mode.
 function getOuterFnExpr(funPath) {
-  var node = funPath.node;
+  let node = funPath.node;
   t.assertFunction(node);
 
   if (node.generator && // Non-generator functions don't need to be marked.
-  t.isFunctionDeclaration(node)) {
-    var pp = funPath.findParent(function (path) {
+      t.isFunctionDeclaration(node)) {
+    let pp = funPath.findParent(function (path) {
       return path.isProgram() || path.isBlockStatement();
     });
 
@@ -158,30 +153,48 @@ function getOuterFnExpr(funPath) {
       return node.id;
     }
 
-    var markDecl = getRuntimeMarkDecl(pp);
-    var markedArray = markDecl.declarations[0].id;
-    var funDeclIdArray = markDecl.declarations[0].init.callee.object;
+    let markDecl = getRuntimeMarkDecl(pp);
+    let markedArray = markDecl.declarations[0].id;
+    let funDeclIdArray = markDecl.declarations[0].init.callee.object;
     t.assertArrayExpression(funDeclIdArray);
 
-    var index = funDeclIdArray.elements.length;
+    let index = funDeclIdArray.elements.length;
     funDeclIdArray.elements.push(node.id);
 
-    return t.memberExpression(markedArray, t.numericLiteral(index), true);
+    return t.memberExpression(
+      markedArray,
+      t.numericLiteral(index),
+      true
+    );
   }
 
-  return node.id || (node.id = funPath.scope.parent.generateUidIdentifier("callee"));
+  return node.id || (
+    node.id = funPath.scope.parent.generateUidIdentifier("callee")
+  );
 }
 
 function getRuntimeMarkDecl(blockPath) {
-  var block = blockPath.node;
-  _assert2["default"].ok(Array.isArray(block.body));
+  let block = blockPath.node;
+  assert.ok(Array.isArray(block.body));
 
-  var info = getMarkInfo(block);
+  let info = getMarkInfo(block);
   if (info.decl) {
     return info.decl;
   }
 
-  info.decl = t.variableDeclaration("var", [t.variableDeclarator(blockPath.scope.generateUidIdentifier("marked"), t.callExpression(t.memberExpression(t.arrayExpression([]), t.identifier("map"), false), [util.runtimeProperty("mark")]))]);
+  info.decl = t.variableDeclaration("var", [
+    t.variableDeclarator(
+      blockPath.scope.generateUidIdentifier("marked"),
+      t.callExpression(
+        t.memberExpression(
+          t.arrayExpression([]),
+          t.identifier("map"),
+          false
+        ),
+        [util.runtimeProperty("mark")]
+      )
+    )
+  ]);
 
   blockPath.unshiftContainer("body", info.decl);
 
@@ -189,7 +202,7 @@ function getRuntimeMarkDecl(blockPath) {
 }
 
 function renameArguments(funcPath, argsId) {
-  var state = {
+  let state = {
     didRenameArguments: false,
     argsId: argsId
   };
@@ -203,12 +216,12 @@ function renameArguments(funcPath, argsId) {
   return state.didRenameArguments;
 }
 
-var argumentsVisitor = {
-  "FunctionExpression|FunctionDeclaration": function FunctionExpressionFunctionDeclaration(path) {
+let argumentsVisitor = {
+  "FunctionExpression|FunctionDeclaration": function(path) {
     path.skip();
   },
 
-  Identifier: function Identifier(path, state) {
+  Identifier: function(path, state) {
     if (path.node.name === "arguments" && util.isReference(path)) {
       path.replaceWith(state.argsId);
       state.didRenameArguments = true;
@@ -216,18 +229,24 @@ var argumentsVisitor = {
   }
 };
 
-var awaitVisitor = {
-  Function: function Function(path) {
+let awaitVisitor = {
+  Function: function(path) {
     path.skip(); // Don't descend into nested function scopes.
   },
 
-  AwaitExpression: function AwaitExpression(path) {
+  AwaitExpression: function(path) {
     // Convert await and await* expressions to yield expressions.
-    var argument = path.node.argument;
+    let argument = path.node.argument;
 
     // Transforming `await x` to `yield regeneratorRuntime.awrap(x)`
     // causes the argument to be wrapped in such a way that the runtime
     // can distinguish between awaited and merely yielded values.
-    path.replaceWith(t.yieldExpression(t.callExpression(util.runtimeProperty("awrap"), [argument]), false));
+    path.replaceWith(t.yieldExpression(
+      t.callExpression(
+        util.runtimeProperty("awrap"),
+        [argument]
+      ),
+      false
+    ));
   }
 };

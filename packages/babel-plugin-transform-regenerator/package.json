@@ -1,32 +1,10 @@
 {
-  "author": "Ben Newman <bn@cs.stanford.edu>",
   "name": "babel-plugin-transform-regenerator",
-  "description": "Source transformer enabling ECMAScript 6 generator functions (yield) in JavaScript-of-today (ES5)",
-  "keywords": [
-    "generator",
-    "yield",
-    "coroutine",
-    "rewriting",
-    "transformation",
-    "syntax",
-    "codegen",
-    "rewriting",
-    "refactoring",
-    "transpiler",
-    "desugaring",
-    "ES6"
-  ],
+  "author": "Ben Newman <bn@cs.stanford.edu>",
+  "description": "",
   "version": "6.0.18",
   "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-regenerator",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/facebook/regenerator.git"
-  },
-  "main": "main.js",
-  "bin": "bin/regenerator",
-  "scripts": {
-    "test": "node test/run.js"
-  },
+  "main": "lib/index.js",
   "dependencies": {
     "commoner": "~0.10.3",
     "babel-plugin-transform-es2015-block-scoping": "^6.0.18",
@@ -39,13 +17,5 @@
     "private": "~0.1.5",
     "through": "~2.3.8"
   },
-  "devDependencies": {
-    "mocha": "~2.3.3",
-    "promise": "~7.0.4",
-    "semver": "~5.0.3"
-  },
-  "license": "BSD",
-  "engines": {
-    "node": ">= 0.6"
-  }
+  "license": "BSD"
 }

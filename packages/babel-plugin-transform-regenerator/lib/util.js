@@ -8,16 +8,22 @@
  * the same directory.
  */
 
-var t = require("babel-types");
+"use strict";
 
-exports.runtimeProperty = function(name) {
-  return t.memberExpression(
-    t.identifier("regeneratorRuntime"),
-    t.identifier(name),
-    false
-  );
-};
+var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
 
-exports.isReference = function(path) {
+exports.__esModule = true;
+exports.runtimeProperty = runtimeProperty;
+exports.isReference = isReference;
+
+var _babelTypes = require("babel-types");
+
+var t = _interopRequireWildcard(_babelTypes);
+
+function runtimeProperty(name) {
+  return t.memberExpression(t.identifier("regeneratorRuntime"), t.identifier(name), false);
+}
+
+function isReference(path) {
   return path.isReferenced() || path.parentPath.isAssignmentExpression({ left: path.node });
-};
+}

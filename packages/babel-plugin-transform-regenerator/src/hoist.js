@@ -8,53 +8,48 @@
  * the same directory.
  */
 
-"use strict";
-
-var _Object$keys = require("babel-runtime/core-js/object/keys")["default"];
-
-var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
-
-var _babelTypes = require("babel-types");
-
-var t = _interopRequireWildcard(_babelTypes);
-
-var hasOwn = Object.prototype.hasOwnProperty;
+import * as t from "babel-types";
+let hasOwn = Object.prototype.hasOwnProperty;
 
 // The hoist function takes a FunctionExpression or FunctionDeclaration
 // and replaces any Declaration nodes in its body with assignments, then
 // returns a VariableDeclaration containing just the names of the removed
 // declarations.
-exports.hoist = function (funPath) {
+exports.hoist = function(funPath) {
   t.assertFunction(funPath.node);
 
-  var vars = {};
+  let vars = {};
 
   function varDeclToExpr(vdec, includeIdentifiers) {
     t.assertVariableDeclaration(vdec);
     // TODO assert.equal(vdec.kind, "var");
-    var exprs = [];
+    let exprs = [];
 
-    vdec.declarations.forEach(function (dec) {
+    vdec.declarations.forEach(function(dec) {
       vars[dec.id.name] = dec.id;
 
       if (dec.init) {
-        exprs.push(t.assignmentExpression("=", dec.id, dec.init));
+        exprs.push(t.assignmentExpression(
+          "=", dec.id, dec.init
+        ));
       } else if (includeIdentifiers) {
         exprs.push(dec.id);
       }
     });
 
-    if (exprs.length === 0) return null;
+    if (exprs.length === 0)
+      return null;
 
-    if (exprs.length === 1) return exprs[0];
+    if (exprs.length === 1)
+      return exprs[0];
 
     return t.sequenceExpression(exprs);
   }
 
   funPath.get("body").traverse({
     VariableDeclaration: {
-      exit: function exit(path) {
-        var expr = varDeclToExpr(path.node, false);
+      exit: function(path) {
+        let expr = varDeclToExpr(path.node, false);
         if (expr === null) {
           path.remove();
         } else {
@@ -69,25 +64,37 @@ exports.hoist = function (funPath) {
       }
     },
 
-    ForStatement: function ForStatement(path) {
-      var init = path.node.init;
+    ForStatement: function(path) {
+      let init = path.node.init;
       if (t.isVariableDeclaration(init)) {
         path.get("init").replaceWith(varDeclToExpr(init, false));
       }
     },
 
-    ForXStatement: function ForXStatement(path) {
-      var left = path.get("left");
+    ForXStatement: function(path) {
+      let left = path.get("left");
       if (left.isVariableDeclaration()) {
         left.replaceWith(varDeclToExpr(left.node, true));
       }
     },
 
-    FunctionDeclaration: function FunctionDeclaration(path) {
-      var node = path.node;
+    FunctionDeclaration: function(path) {
+      let node = path.node;
       vars[node.id.name] = node.id;
 
-      var assignment = t.expressionStatement(t.assignmentExpression("=", node.id, t.functionExpression(node.id, node.params, node.body, node.generator, node.expression)));
+      let assignment = t.expressionStatement(
+        t.assignmentExpression(
+          "=",
+          node.id,
+          t.functionExpression(
+            node.id,
+            node.params,
+            node.body,
+            node.generator,
+            node.expression
+          )
+        )
+      );
 
       if (path.parentPath.isBlockStatement()) {
         // Insert the assignment form before the first statement in the
@@ -108,15 +115,15 @@ exports.hoist = function (funPath) {
       path.skip();
     },
 
-    FunctionExpression: function FunctionExpression(path) {
+    FunctionExpression: function(path) {
       // Don't descend into nested function expressions.
       path.skip();
     }
   });
 
-  var paramNames = {};
-  funPath.get("params").forEach(function (paramPath) {
-    var param = paramPath.node;
+  let paramNames = {};
+  funPath.get("params").forEach(function(paramPath) {
+    let param = paramPath.node;
     if (t.isIdentifier(param)) {
       paramNames[param.name] = param;
     } else {
@@ -125,9 +132,9 @@ exports.hoist = function (funPath) {
     }
   });
 
-  var declarations = [];
+  let declarations = [];
 
-  _Object$keys(vars).forEach(function (name) {
+  Object.keys(vars).forEach(function(name) {
     if (!hasOwn.call(paramNames, name)) {
       declarations.push(t.variableDeclarator(vars[name], null));
     }

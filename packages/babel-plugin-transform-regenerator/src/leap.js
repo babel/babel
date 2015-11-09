@@ -8,24 +8,12 @@
  * the same directory.
  */
 
-"use strict";
-
-var _interopRequireDefault = require("babel-runtime/helpers/interop-require-default")["default"];
-
-var _interopRequireWildcard = require("babel-runtime/helpers/interop-require-wildcard")["default"];
-
-var _assert = require("assert");
-
-var _assert2 = _interopRequireDefault(_assert);
-
-var _babelTypes = require("babel-types");
-
-var t = _interopRequireWildcard(_babelTypes);
-
-var _util = require("util");
+import assert from "assert";
+import * as t from "babel-types";
+import { inherits } from "util";
 
 function Entry() {
-  _assert2["default"].ok(this instanceof Entry);
+  assert.ok(this instanceof Entry);
 }
 
 function FunctionEntry(returnLoc) {
@@ -34,7 +22,7 @@ function FunctionEntry(returnLoc) {
   this.returnLoc = returnLoc;
 }
 
-_util.inherits(FunctionEntry, Entry);
+inherits(FunctionEntry, Entry);
 exports.FunctionEntry = FunctionEntry;
 
 function LoopEntry(breakLoc, continueLoc, label) {
@@ -54,7 +42,7 @@ function LoopEntry(breakLoc, continueLoc, label) {
   this.label = label;
 }
 
-_util.inherits(LoopEntry, Entry);
+inherits(LoopEntry, Entry);
 exports.LoopEntry = LoopEntry;
 
 function SwitchEntry(breakLoc) {
@@ -63,7 +51,7 @@ function SwitchEntry(breakLoc) {
   this.breakLoc = breakLoc;
 }
 
-_util.inherits(SwitchEntry, Entry);
+inherits(SwitchEntry, Entry);
 exports.SwitchEntry = SwitchEntry;
 
 function TryEntry(firstLoc, catchEntry, finallyEntry) {
@@ -72,26 +60,26 @@ function TryEntry(firstLoc, catchEntry, finallyEntry) {
   t.assertLiteral(firstLoc);
 
   if (catchEntry) {
-    _assert2["default"].ok(catchEntry instanceof CatchEntry);
+    assert.ok(catchEntry instanceof CatchEntry);
   } else {
     catchEntry = null;
   }
 
   if (finallyEntry) {
-    _assert2["default"].ok(finallyEntry instanceof FinallyEntry);
+    assert.ok(finallyEntry instanceof FinallyEntry);
   } else {
     finallyEntry = null;
   }
 
   // Have to have one or the other (or both).
-  _assert2["default"].ok(catchEntry || finallyEntry);
+  assert.ok(catchEntry || finallyEntry);
 
   this.firstLoc = firstLoc;
   this.catchEntry = catchEntry;
   this.finallyEntry = finallyEntry;
 }
 
-_util.inherits(TryEntry, Entry);
+inherits(TryEntry, Entry);
 exports.TryEntry = TryEntry;
 
 function CatchEntry(firstLoc, paramId) {
@@ -104,7 +92,7 @@ function CatchEntry(firstLoc, paramId) {
   this.paramId = paramId;
 }
 
-_util.inherits(CatchEntry, Entry);
+inherits(CatchEntry, Entry);
 exports.CatchEntry = CatchEntry;
 
 function FinallyEntry(firstLoc, afterLoc) {
@@ -115,7 +103,7 @@ function FinallyEntry(firstLoc, afterLoc) {
   this.afterLoc = afterLoc;
 }
 
-_util.inherits(FinallyEntry, Entry);
+inherits(FinallyEntry, Entry);
 exports.FinallyEntry = FinallyEntry;
 
 function LabeledEntry(breakLoc, label) {
@@ -128,58 +116,59 @@ function LabeledEntry(breakLoc, label) {
   this.label = label;
 }
 
-_util.inherits(LabeledEntry, Entry);
+inherits(LabeledEntry, Entry);
 exports.LabeledEntry = LabeledEntry;
 
 function LeapManager(emitter) {
-  _assert2["default"].ok(this instanceof LeapManager);
+  assert.ok(this instanceof LeapManager);
 
-  var Emitter = require("./emit").Emitter;
-  _assert2["default"].ok(emitter instanceof Emitter);
+  let Emitter = require("./emit").Emitter;
+  assert.ok(emitter instanceof Emitter);
 
   this.emitter = emitter;
   this.entryStack = [new FunctionEntry(emitter.finalLoc)];
 }
 
-var LMp = LeapManager.prototype;
+let LMp = LeapManager.prototype;
 exports.LeapManager = LeapManager;
 
-LMp.withEntry = function (entry, callback) {
-  _assert2["default"].ok(entry instanceof Entry);
+LMp.withEntry = function(entry, callback) {
+  assert.ok(entry instanceof Entry);
   this.entryStack.push(entry);
   try {
     callback.call(this.emitter);
   } finally {
-    var popped = this.entryStack.pop();
-    _assert2["default"].strictEqual(popped, entry);
+    let popped = this.entryStack.pop();
+    assert.strictEqual(popped, entry);
   }
 };
 
-LMp._findLeapLocation = function (property, label) {
-  for (var i = this.entryStack.length - 1; i >= 0; --i) {
-    var entry = this.entryStack[i];
-    var loc = entry[property];
+LMp._findLeapLocation = function(property, label) {
+  for (let i = this.entryStack.length - 1; i >= 0; --i) {
+    let entry = this.entryStack[i];
+    let loc = entry[property];
     if (loc) {
       if (label) {
-        if (entry.label && entry.label.name === label.name) {
+        if (entry.label &&
+            entry.label.name === label.name) {
           return loc;
         }
       } else if (entry instanceof LabeledEntry) {
         // Ignore LabeledEntry entries unless we are actually breaking to
         // a label.
       } else {
-          return loc;
-        }
+        return loc;
+      }
     }
   }
 
   return null;
 };
 
-LMp.getBreakLoc = function (label) {
+LMp.getBreakLoc = function(label) {
   return this._findLeapLocation("breakLoc", label);
 };
 
-LMp.getContinueLoc = function (label) {
+LMp.getContinueLoc = function(label) {
   return this._findLeapLocation("continueLoc", label);
 };
