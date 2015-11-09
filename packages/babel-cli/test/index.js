@@ -1,7 +1,7 @@
 if (process.env.running_under_istanbul) return;
 
 var readdir        = require("fs-readdir-recursive");
-var helper         = require("mocha-fixtures");
+var helper         = require("babel-helper-fixtures");
 var assert         = require("assert");
 var rimraf         = require("rimraf");
 var outputFileSync = require("output-file-sync");

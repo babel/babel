@@ -68,6 +68,7 @@ function buildVar(namespace, builder) {
     t.variableDeclarator(namespace, t.objectExpression([]))
   ]));
   builder(body);
+  body.push(t.expressionStatement(namespace));
   return t.program(body);
 }
 
@@ -81,7 +82,6 @@ function buildHelpers(body, namespace, whitelist) {
     ));
   });
 }
-
 export default function (
   whitelist?: Array<string>,
   outputType: "global" | "umd" | "var" = "global",
@@ -97,7 +97,7 @@ export default function (
   let build = {
     global: buildGlobal,
     umd:    buildUmd,
-    var:    buildVar
+    var:    buildVar,
   }[outputType];
 
   if (build) {

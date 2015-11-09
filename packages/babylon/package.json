@@ -10,6 +10,9 @@
   "dependencies": {
     "babel-runtime": "^5.0.0"
   },
+  "devDependencies": {
+    "babel-helper-fixtures": "^6.0.0"
+  },
   "bin": {
     "babylon": "./bin/babylon.js"
   }

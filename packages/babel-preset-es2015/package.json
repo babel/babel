@@ -28,5 +28,8 @@
     "babel-plugin-transform-es2015-typeof-symbol": "^6.1.2",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.0.15",
     "babel-plugin-transform-regenerator": "^6.0.14"
+  },
+  "devDependencies": {
+    "babel-helper-transform-fixture-test-runner": "^6.0.0"
   }
 }

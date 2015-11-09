@@ -18,7 +18,7 @@ suite("generation", function () {
   });
 });
 
-var suites = require("babel-helper-fixtures")(__dirname + "/fixtures");
+var suites = require("babel-helper-fixtures").default(__dirname + "/fixtures");
 
 suites.forEach(function (testSuite) {
   suite("generation/" + testSuite.title, function () {

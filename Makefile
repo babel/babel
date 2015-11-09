@@ -26,6 +26,7 @@ lint:
 
 clean: test-clean
 	rm -rf coverage
+	rm -rf packages/*/npm-debug*
 
 test-clean:
 	rm -rf packages/*/test/tmp

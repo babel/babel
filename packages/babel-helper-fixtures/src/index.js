@@ -10,15 +10,54 @@ function humanize(val, noext) {
   return val.replace(/-/g, " ");
 }
 
-export default function get(entryLoc) {
+type TestFile = {
+  loc: string;
+  code: string;
+  filename: string;
+};
+
+type Test = {
+  title: string;
+  disabled: boolean;
+  options: Object;
+  exec: TestFile;
+  actual: TestFile;
+  expected: TestFile;
+};
+
+type Suite = {
+  options: Object;
+  tests: Array<Test>;
+  title: string;
+  filename: string;
+};
+
+function assertDirectory(loc) {
+  if (!fs.statSync(loc).isDirectory()) {
+    throw new Error(`Expected ${loc} to be a directory.`);
+  }
+}
+
+function shouldIgnore(name, blacklist?: Array<string>) {
+  if (blacklist && blacklist.indexOf(name) >= 0) {
+    return true;
+  }
+
+  let ext = path.extname(name);
+  let base = path.basename(name, ext);
+
+  return name[0] === "." || ext === ".md" || base === "LICENSE" || base === "options";
+}
+
+export default function get(entryLoc): Array<Suite> {
   let suites = [];
 
   let rootOpts = {};
   let rootOptsLoc = resolve(entryLoc + "/options");
   if (rootOptsLoc) rootOpts = require(rootOptsLoc);
 
-  _.each(fs.readdirSync(entryLoc), function (suiteName) {
-    if (suiteName[0] === ".") return;
+  for (let suiteName of fs.readdirSync(entryLoc)) {
+    if (shouldIgnore(suiteName)) continue;
 
     let suite = {
       options: _.clone(rootOpts),
@@ -26,24 +65,19 @@ export default function get(entryLoc) {
       title: humanize(suiteName),
       filename: entryLoc + "/" + suiteName
     };
+
+    assertDirectory(suite.filename);
     suites.push(suite);
 
     let suiteOptsLoc = resolve(suite.filename + "/options");
     if (suiteOptsLoc) suite.options = require(suiteOptsLoc);
 
-    if (fs.statSync(suite.filename).isFile()) {
-      push(suiteName, suite.filename);
-    } else {
-      _.each(fs.readdirSync(suite.filename), function (taskName) {
-        let taskDir = suite.filename + "/" + taskName;
-        push(taskName, taskDir);
-      });
+    for (let taskName of fs.readdirSync(suite.filename)) {
+      if (shouldIgnore(taskName)) continue;
+      push(taskName, suite.filename + "/" + taskName);
     }
 
     function push(taskName, taskDir) {
-      // tracuer error tests
-      if (taskName.indexOf("Error_") >= 0) return;
-
       let actualLocAlias = suiteName + "/" + taskName + "/actual.js";
       let expectLocAlias = suiteName + "/" + taskName + "/expected.js";
       let execLocAlias   = suiteName + "/" + taskName + "/exec.js";
@@ -52,11 +86,6 @@ export default function get(entryLoc) {
       let expectLoc = taskDir + "/expected.js";
       let execLoc   = taskDir + "/exec.js";
 
-      if (resolve.relative(expectLoc + "on")) {
-        expectLoc += "on";
-        expectLocAlias += "on";
-      }
-
       if (fs.statSync(taskDir).isFile()) {
         let ext = path.extname(taskDir);
         if (ext !== ".js" && ext !== ".module.js") return;
@@ -64,11 +93,12 @@ export default function get(entryLoc) {
         execLoc = taskDir;
       }
 
-      let taskOpts = _.merge({
-        filenameRelative: expectLocAlias,
-        sourceFileName:   actualLocAlias,
-        sourceMapName:    expectLocAlias
-      }, _.cloneDeep(suite.options));
+      if (resolve.relative(expectLoc + "on")) {
+        expectLoc += "on";
+        expectLocAlias += "on";
+      }
+
+      let taskOpts = _.cloneDeep(suite.options);
 
       let taskOptsLoc = resolve(taskDir + "/options");
       if (taskOptsLoc) _.merge(taskOpts, require(taskOptsLoc));
@@ -96,14 +126,7 @@ export default function get(entryLoc) {
 
       // traceur checks
 
-      let shouldSkip = function (code) {
-        return code.indexOf("// Error:") >= 0 || code.indexOf("// Skip.") >= 0;
-      };
-
-      if (shouldSkip(test.actual.code) || shouldSkip(test.exec.code)) {
-        return;
-      } else if (test.exec.code.indexOf("// Async.") >= 0) {
-        //test.options.asyncExec = true;
+      if (test.exec.code.indexOf("// Async.") >= 0) {
         return;
       }
 
@@ -119,12 +142,27 @@ export default function get(entryLoc) {
         test.sourceMap = JSON.parse(readFile(sourceMapLoc));
       }
     }
-  });
+  }
 
   return suites;
 }
 
-function readFile(filename) {
+export function multiple(entryLoc, ignore?: Array<string>) {
+  let categories = {};
+
+  for (let name of fs.readdirSync(entryLoc)) {
+    if (shouldIgnore(name, ignore)) continue;
+
+    let loc = path.join(entryLoc, name);
+    assertDirectory(loc);
+
+    categories[name] = get(loc);
+  }
+
+  return categories;
+}
+
+export function readFile(filename) {
   if (pathExists.sync(filename)) {
     let file = trimRight(fs.readFileSync(filename, "utf8"));
     file = file.replace(/\r\n/g, "\n");
