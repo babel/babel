@@ -47,7 +47,7 @@ function defaultify(name) {
 
 function writeRootFile(filename, content) {
   filename = relative(filename);
-  console.log(filename);
+  //console.log(filename);
   outputFile(filename, content);
 }
 

@@ -1,11 +1,13 @@
 require("shelljs/global");
 
-var mkdirp = require("mkdirp");
-var rimraf = require("rimraf");
-var child  = require("child_process");
-var async  = require("async");
-var path   = require("path");
-var fs     = require("fs");
+var ProgressBar = require("progress");
+var mkdirp      = require("mkdirp");
+var rimraf      = require("rimraf");
+var child       = require("child_process");
+var async       = require("async");
+var path        = require("path");
+var pad         = require("pad");
+var fs          = require("fs");
 
 var CURRENT_VERSION = fs.readFileSync(__dirname + "/../VERSION", "utf8").trim();
 
@@ -15,6 +17,7 @@ try {
 } catch (err) {}
 
 // get packages
+var longestNameLength = 0;
 var packages = [];
 ls("packages/*").forEach(function (loc) {
   var name = path.basename(loc);
@@ -23,6 +26,10 @@ ls("packages/*").forEach(function (loc) {
   var pkgLoc = __dirname + "/../packages/" + name + "/package.json";
   if (!fs.existsSync(pkgLoc)) return;
 
+  if (name.length > longestNameLength) {
+    longestNameLength = name.length;
+  }
+
   var pkg = require(pkgLoc);
   packages.push({
     folder: name,
@@ -30,10 +37,23 @@ ls("packages/*").forEach(function (loc) {
     name: pkg.name
   });
 });
+longestNameLength = Math.min(longestNameLength, 50);
+
+var completed = false;
+
+var bar = new ProgressBar(":packagename ╢:bar╟", {
+  total: packages.length,
+  complete: "█",
+  incomplete: "░",
+  clear: true,
+
+  // terminal columns - package name length - additional characters length
+  width: process.stdout.columns - longestNameLength - 3
+});
 
 async.parallelLimit(packages.map(function (root) {
   return function (done) {
-    console.log(root.name);
+    //console.log(root.name);
 
     var tasks = [];
     var nodeModulesLoc = process.cwd() + "/packages/" + root.folder + "/node_modules";
@@ -55,7 +75,7 @@ async.parallelLimit(packages.map(function (root) {
         var linkSrc = process.cwd() + "/packages/" + sub.folder;
         var linkDest = nodeModulesLoc + "/" + sub.name;
 
-        console.log("Linking", linkSrc, "to", linkDest);
+        //console.log("Linking", linkSrc, "to", linkDest);
 
         rimraf(linkDest, function (err) {
           if (err) return done(err);
@@ -83,21 +103,30 @@ async.parallelLimit(packages.map(function (root) {
         if (err != null) {
           done(stderr);
         } else {
-          stdout = stdout.trim();
-          if (stdout) console.log(stdout);
+          //stdout = stdout.trim();
+          //if (stdout) console.log(stdout);
           done();
         }
       });
     });
 
+    tasks.push(function (done) {
+      if (!completed) bar.tick({
+        packagename: pad(root.name.slice(0, longestNameLength), longestNameLength)
+      });
+      done();
+    });
+
     async.series(tasks, done);
   };
 }), 4, function (err) {
+  // don't display the ticker if we hit an error and we still have workers
+  completed = true;
+
   if (err) {
     console.error(err);
     process.exit(1);
   } else {
-    exec("make build");
     process.exit();
   }
 });
