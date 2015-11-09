@@ -123,7 +123,7 @@ defineType("ExportDefaultDeclaration", {
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   fields: {
     declaration: {
-      validate: assertNodeType("Declaration", "Expression")
+      validate: assertNodeType("FunctionDeclaration", "ClassDeclaration", "Expression")
     }
   }
 });
