@@ -12,7 +12,7 @@ install:
   - node --version
   - npm --version
   - npm install
-  - choco install make
+  - choco install mingw
 
 test_script:
   - make test-ci
