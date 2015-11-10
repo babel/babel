@@ -12,6 +12,7 @@
     "babel-plugin-syntax-jsx": "^6.0.14",
     "babel-plugin-transform-flow-strip-types": "^6.0.14",
     "babel-plugin-transform-react-display-name": "^6.0.14",
-    "babel-plugin-transform-react-jsx": "^6.0.14"
+    "babel-plugin-transform-react-jsx": "^6.0.14",
+    "babel-plugin-transform-react-jsx-source": "^6.0.14"
   }
 }
