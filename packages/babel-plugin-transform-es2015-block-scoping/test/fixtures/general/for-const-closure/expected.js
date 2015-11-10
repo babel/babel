@@ -1,4 +1,4 @@
-var _loop = function _loop(i) {
+var _loop = function (i) {
   var l = i;
   setTimeout(function () {
     console.log(l);
