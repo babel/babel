@@ -1,0 +1,4 @@
+{
+  "plugins": ["external-helpers-2"],
+  "presets": ["es2015"]
+}
