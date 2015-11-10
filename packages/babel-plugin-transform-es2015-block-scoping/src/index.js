@@ -13,9 +13,10 @@ export default function () {
     visitor: {
       VariableDeclaration(path, file) {
         let { node, parent, scope } = path;
-        if (!isLet(node, parent, scope)) return;
+        if (!isBlockScoped(node)) return;
+        convertBlockScopedToVar(node, parent, scope);
 
-        if (isLetInitable(node) && node._tdzThis) {
+        if (node._tdzThis) {
           let nodes = [node];
 
           for (let i = 0; i < node.declarations.length; i++) {
@@ -44,7 +45,7 @@ export default function () {
         let { node, parent, scope } = path;
 
         let init = node.left || node.init;
-        if (isLet(init, node, scope)) {
+        if (isBlockScoped(init)) {
           t.ensureBlock(node);
           node.body._letDeclarators = [init];
         }
@@ -68,13 +69,16 @@ let buildRetCheck = template(`
   if (typeof RETURN === "object") return RETURN.v;
 `);
 
-function isLet(node, parent, scope) {
+function isBlockScoped(node) {
   if (!t.isVariableDeclaration(node)) return false;
   if (node._let) return true;
-  if (node.kind !== "let") return false;
+  if (node.kind !== "let" && node.kind !== "const") return false;
+  return true;
+}
 
+function convertBlockScopedToVar(node, parent, scope) {
   // https://github.com/babel/babel/issues/255
-  if (isLetInitable(node, parent)) {
+  if (!t.isFor(parent)) {
     for (let i = 0; i < node.declarations.length; i++) {
       let declar = node.declarations[i];
       declar.init = declar.init || scope.buildUndefinedNode();
@@ -83,15 +87,10 @@ function isLet(node, parent, scope) {
 
   node._let = true;
   node.kind = "var";
-  return true;
 }
 
-function isLetInitable(node, parent) {
-  return !t.isFor(parent) || !t.isFor(parent, { left: node });
-}
-
-function isVar(node, parent, scope) {
-  return t.isVariableDeclaration(node, { kind: "var" }) && !isLet(node, parent, scope);
+function isVar(node, parent) {
+  return t.isVariableDeclaration(node, { kind: "var" }) && !isBlockScoped(node, parent);
 }
 
 function standardizeLets(declars) {
@@ -170,7 +169,7 @@ let hoistVarDeclarationsVisitor = {
     let { node, parent, scope } = path;
 
     if (path.isForStatement()) {
-      if (isVar(node.init, node, scope)) {
+      if (isVar(node.init, node)) {
         let nodes = self.pushDeclar(node.init);
         if (nodes.length === 1) {
           node.init = nodes[0];
@@ -179,11 +178,11 @@ let hoistVarDeclarationsVisitor = {
         }
       }
     } else if (path.isFor()) {
-      if (isVar(node.left, node, scope)) {
+      if (isVar(node.left, node)) {
         self.pushDeclar(node.left);
         node.left = node.left.declarations[0].id;
       }
-    } else if (isVar(node, parent, scope)) {
+    } else if (isVar(node, parent)) {
       path.replaceWithMultiple(self.pushDeclar(node).map(expr => t.expressionStatement(expr)));
     } else if (path.isFunction()) {
       return path.skip();
@@ -510,7 +509,8 @@ class BlockScoping {
     if (block.body) {
       for (let i = 0; i < block.body.length; i++) {
         let declar = block.body[i];
-        if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar) || isLet(declar, block, this.scope)) {
+        if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar) || isBlockScoped(declar)) {
+          if (isBlockScoped(declar)) convertBlockScopedToVar(declar, block, this.scope);
           declarators = declarators.concat(declar.declarations || declar);
         }
       }
