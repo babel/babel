@@ -12,6 +12,7 @@ install:
   - node --version
   - npm --version
   - npm install
+  - choco install make
 
 test_script:
   - make test-ci
