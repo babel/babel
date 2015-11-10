@@ -73,8 +73,26 @@ function buildVar(namespace, builder) {
 }
 
 function buildHelpers(body, namespace, whitelist) {
+  function shouldIgnore(name) {
+    if (!whitelist) {
+      return false;
+    }
+
+    // check for the raw name
+    if (whitelist.indexOf(name) >= 0) {
+      return false;
+    }
+
+    // typeof -> _typeof
+    if (name[0] === "_" && whitelist.indexOf(name.slice(1)) >= 0) {
+      return false;
+    }
+
+    return true;
+  }
+
   each(helpers.list, function (name) {
-    if (whitelist && whitelist.indexOf(name) === -1) return;
+    if (shouldIgnore(name)) return;
 
     let key = t.identifier(t.toIdentifier(name));
     body.push(t.expressionStatement(

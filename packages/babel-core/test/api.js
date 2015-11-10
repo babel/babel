@@ -387,5 +387,10 @@ suite("api", function () {
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") === -1);
     });
+
+    test("underscored", function () {
+      var script = buildExternalHelpers(["typeof"]);
+      assert.ok(script.indexOf("typeof") >= 0);
+    });
   });
 });
