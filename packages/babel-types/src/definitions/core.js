@@ -1,18 +1,20 @@
 /* @flow */
 
 import * as t from "../index";
+
 import {
   BINARY_OPERATORS,
   LOGICAL_OPERATORS,
   UNARY_OPERATORS,
-  UPDATE_OPERATORS
-} from "../index";
+  UPDATE_OPERATORS,
+} from "../constants";
+
 import defineType, {
   assertValueType,
   assertNodeType,
   assertEach,
   chain,
-  assertOneOf
+  assertOneOf,
 } from "./index";
 
 defineType("ArrayExpression", {
@@ -46,7 +48,7 @@ defineType("BinaryExpression", {
   builder: ["operator", "left", "right"],
   fields: {
     operator: {
-      validate: assertOneOf(BINARY_OPERATORS)
+      validate: assertOneOf(...BINARY_OPERATORS)
     },
     left: {
       validate: assertNodeType("Expression")
@@ -394,7 +396,7 @@ defineType("LogicalExpression", {
   aliases: ["Binary", "Expression"],
   fields: {
     operator: {
-      validate: assertOneOf(LOGICAL_OPERATORS)
+      validate: assertOneOf(...LOGICAL_OPERATORS)
     },
     left: {
       validate: assertNodeType("Expression")
@@ -626,7 +628,7 @@ defineType("UnaryExpression", {
       validate: assertNodeType("Expression")
     },
     operator: {
-      validate: assertOneOf(UNARY_OPERATORS)
+      validate: assertOneOf(...UNARY_OPERATORS)
     }
   },
   visitor: ["argument"],
@@ -643,7 +645,7 @@ defineType("UpdateExpression", {
       validate: assertNodeType("Expression")
     },
     operator: {
-      validate: assertOneOf(UPDATE_OPERATORS)
+      validate: assertOneOf(...UPDATE_OPERATORS)
     }
   },
   visitor: ["argument"],
