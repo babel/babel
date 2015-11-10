@@ -10,14 +10,14 @@ This module contains methods for building ASTs manually and for checking the typ
 
 See also `t.isAnyTypeAnnotation(node, opts)` and `t.assertAnyTypeAnnotation(node, opts)`.
 
-aliases `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowBaseAnnotation`
 
 
 ### t.arrayExpression(elements)
 
 See also `t.isArrayExpression(node, opts)` and `t.assertArrayExpression(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
  - `elements`: `array` (required)
 
@@ -25,7 +25,7 @@ aliases `Expression`
 
 See also `t.isArrayPattern(node, opts)` and `t.assertArrayPattern(node, opts)`.
 
-aliases `Pattern`, `LVal`
+Aliases: `Pattern`, `LVal`
 
  - `elements`: `Array<Expression>` (required)
  - `typeAnnotation` (required)
@@ -34,7 +34,7 @@ aliases `Pattern`, `LVal`
 
 See also `t.isArrayTypeAnnotation(node, opts)` and `t.assertArrayTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `elementType` (required)
 
@@ -42,7 +42,7 @@ aliases `Flow`
 
 See also `t.isArrowFunctionExpression(node, opts)` and `t.assertArrowFunctionExpression(node, opts)`.
 
-aliases `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, `Pureish`
+Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, `Pureish`
 
  - `params`: `Array<LVal>` (required)
  - `body`: `BlockStatement | Expression` (required)
@@ -52,7 +52,7 @@ aliases `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, `
 
 See also `t.isAssignmentExpression(node, opts)` and `t.assertAssignmentExpression(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
  - `operator`: `string` (required)
  - `left`: `LVal` (required)
@@ -62,7 +62,7 @@ aliases `Expression`
 
 See also `t.isAssignmentPattern(node, opts)` and `t.assertAssignmentPattern(node, opts)`.
 
-aliases `Pattern`, `LVal`
+Aliases: `Pattern`, `LVal`
 
  - `left`: `Identifier` (required)
  - `right`: `Expression` (required)
@@ -71,7 +71,7 @@ aliases `Pattern`, `LVal`
 
 See also `t.isAwaitExpression(node, opts)` and `t.assertAwaitExpression(node, opts)`.
 
-aliases `Expression`, `Terminatorless`
+Aliases: `Expression`, `Terminatorless`
 
  - `argument`: `Expression` (required)
 
@@ -79,7 +79,7 @@ aliases `Expression`, `Terminatorless`
 
 See also `t.isBinaryExpression(node, opts)` and `t.assertBinaryExpression(node, opts)`.
 
-aliases `Binary`, `Expression`
+Aliases: `Binary`, `Expression`
 
  - `operator`: `string` (required)
  - `left`: `Expression` (required)
@@ -96,7 +96,7 @@ See also `t.isBindExpression(node, opts)` and `t.assertBindExpression(node, opts
 
 See also `t.isBlockStatement(node, opts)` and `t.assertBlockStatement(node, opts)`.
 
-aliases `Scopable`, `BlockParent`, `Block`, `Statement`
+Aliases: `Scopable`, `BlockParent`, `Block`, `Statement`
 
  - `body`: `Array<Statement>` (required)
  - `directives`: `Array<Directive>` (default: `[]`)
@@ -105,7 +105,7 @@ aliases `Scopable`, `BlockParent`, `Block`, `Statement`
 
 See also `t.isBooleanLiteral(node, opts)` and `t.assertBooleanLiteral(node, opts)`.
 
-aliases `Expression`, `Pureish`, `Literal`, `Immutable`
+Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
  - `value`: `boolean` (required)
 
@@ -113,21 +113,21 @@ aliases `Expression`, `Pureish`, `Literal`, `Immutable`
 
 See also `t.isBooleanLiteralTypeAnnotation(node, opts)` and `t.assertBooleanLiteralTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
 
 ### t.booleanTypeAnnotation()
 
 See also `t.isBooleanTypeAnnotation(node, opts)` and `t.assertBooleanTypeAnnotation(node, opts)`.
 
-aliases `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowBaseAnnotation`
 
 
 ### t.breakStatement(label)
 
 See also `t.isBreakStatement(node, opts)` and `t.assertBreakStatement(node, opts)`.
 
-aliases `Statement`, `Terminatorless`, `CompletionStatement`
+Aliases: `Statement`, `Terminatorless`, `CompletionStatement`
 
  - `label`: `Identifier` (default: `null`)
 
@@ -135,7 +135,7 @@ aliases `Statement`, `Terminatorless`, `CompletionStatement`
 
 See also `t.isCallExpression(node, opts)` and `t.assertCallExpression(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
  - `callee`: `Expression` (required)
  - `arguments`: `array` (required)
@@ -144,7 +144,7 @@ aliases `Expression`
 
 See also `t.isCatchClause(node, opts)` and `t.assertCatchClause(node, opts)`.
 
-aliases `Scopable`
+Aliases: `Scopable`
 
  - `param`: `Identifier` (required)
  - `body`: `BlockStatement` (required)
@@ -159,7 +159,7 @@ See also `t.isClassBody(node, opts)` and `t.assertClassBody(node, opts)`.
 
 See also `t.isClassDeclaration(node, opts)` and `t.assertClassDeclaration(node, opts)`.
 
-aliases `Scopable`, `Class`, `Statement`, `Declaration`, `Pureish`
+Aliases: `Scopable`, `Class`, `Statement`, `Declaration`, `Pureish`
 
  - `id`: `Identifier` (required)
  - `superClass`: `Expression` (default: `null`)
@@ -170,7 +170,7 @@ aliases `Scopable`, `Class`, `Statement`, `Declaration`, `Pureish`
 
 See also `t.isClassExpression(node, opts)` and `t.assertClassExpression(node, opts)`.
 
-aliases `Scopable`, `Class`, `Expression`, `Pureish`
+Aliases: `Scopable`, `Class`, `Expression`, `Pureish`
 
  - `id`: `Identifier` (default: `null`)
  - `superClass`: `Expression` (default: `null`)
@@ -181,7 +181,7 @@ aliases `Scopable`, `Class`, `Expression`, `Pureish`
 
 See also `t.isClassImplements(node, opts)` and `t.assertClassImplements(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `id` (required)
  - `typeParameters` (required)
@@ -190,7 +190,7 @@ aliases `Flow`
 
 See also `t.isClassMethod(node, opts)` and `t.assertClassMethod(node, opts)`.
 
-aliases `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
+Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
 
  - `kind`: `"get" | "set" | "method" | "constructor"` (default: `'method'`)
  - `key`if computed then `Expression` else `Identifier | Literal` (required)
@@ -203,7 +203,7 @@ aliases `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
 
 See also `t.isClassProperty(node, opts)` and `t.assertClassProperty(node, opts)`.
 
-aliases `Flow`, `Property`
+Aliases: `Flow`, `Property`
 
  - `key` (required)
  - `value` (required)
@@ -214,7 +214,7 @@ aliases `Flow`, `Property`
 
 See also `t.isConditionalExpression(node, opts)` and `t.assertConditionalExpression(node, opts)`.
 
-aliases `Expression`, `Conditional`
+Aliases: `Expression`, `Conditional`
 
  - `test`: `Expression` (required)
  - `consequent`: `Expression` (required)
@@ -224,7 +224,7 @@ aliases `Expression`, `Conditional`
 
 See also `t.isContinueStatement(node, opts)` and `t.assertContinueStatement(node, opts)`.
 
-aliases `Statement`, `Terminatorless`, `CompletionStatement`
+Aliases: `Statement`, `Terminatorless`, `CompletionStatement`
 
  - `label`: `Identifier` (default: `null`)
 
@@ -232,14 +232,14 @@ aliases `Statement`, `Terminatorless`, `CompletionStatement`
 
 See also `t.isDebuggerStatement(node, opts)` and `t.assertDebuggerStatement(node, opts)`.
 
-aliases `Statement`
+Aliases: `Statement`
 
 
 ### t.declareClass(id, typeParameters, extends, body)
 
 See also `t.isDeclareClass(node, opts)` and `t.assertDeclareClass(node, opts)`.
 
-aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id` (required)
  - `typeParameters` (required)
@@ -250,7 +250,7 @@ aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 See also `t.isDeclareFunction(node, opts)` and `t.assertDeclareFunction(node, opts)`.
 
-aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id` (required)
 
@@ -258,7 +258,7 @@ aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 See also `t.isDeclareModule(node, opts)` and `t.assertDeclareModule(node, opts)`.
 
-aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id` (required)
  - `body` (required)
@@ -267,7 +267,7 @@ aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 See also `t.isDeclareVariable(node, opts)` and `t.assertDeclareVariable(node, opts)`.
 
-aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id` (required)
 
@@ -293,7 +293,7 @@ See also `t.isDirectiveLiteral(node, opts)` and `t.assertDirectiveLiteral(node, 
 
 See also `t.isDoExpression(node, opts)` and `t.assertDoExpression(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
  - `body`: `BlockStatement` (required)
 
@@ -301,7 +301,7 @@ aliases `Expression`
 
 See also `t.isDoWhileStatement(node, opts)` and `t.assertDoWhileStatement(node, opts)`.
 
-aliases `Statement`, `BlockParent`, `Loop`, `While`, `Scopable`
+Aliases: `Statement`, `BlockParent`, `Loop`, `While`, `Scopable`
 
  - `test`: `Expression` (required)
  - `body`: `BlockStatement` (required)
@@ -310,21 +310,21 @@ aliases `Statement`, `BlockParent`, `Loop`, `While`, `Scopable`
 
 See also `t.isEmptyStatement(node, opts)` and `t.assertEmptyStatement(node, opts)`.
 
-aliases `Statement`
+Aliases: `Statement`
 
 
 ### t.existentialTypeParam()
 
 See also `t.isExistentialTypeParam(node, opts)` and `t.assertExistentialTypeParam(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
 
 ### t.exportAllDeclaration(source)
 
 See also `t.isExportAllDeclaration(node, opts)` and `t.assertExportAllDeclaration(node, opts)`.
 
-aliases `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
+Aliases: `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
 
  - `source` (required)
 
@@ -332,7 +332,7 @@ aliases `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
 
 See also `t.isExportDefaultDeclaration(node, opts)` and `t.assertExportDefaultDeclaration(node, opts)`.
 
-aliases `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
+Aliases: `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
 
  - `declaration` (required)
 
@@ -340,7 +340,7 @@ aliases `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
 
 See also `t.isExportDefaultSpecifier(node, opts)` and `t.assertExportDefaultSpecifier(node, opts)`.
 
-aliases `ModuleSpecifier`
+Aliases: `ModuleSpecifier`
 
  - `exported`: `Identifier` (required)
 
@@ -348,7 +348,7 @@ aliases `ModuleSpecifier`
 
 See also `t.isExportNamedDeclaration(node, opts)` and `t.assertExportNamedDeclaration(node, opts)`.
 
-aliases `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
+Aliases: `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
 
  - `declaration` (required)
  - `specifiers` (required)
@@ -358,7 +358,7 @@ aliases `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
 
 See also `t.isExportNamespaceSpecifier(node, opts)` and `t.assertExportNamespaceSpecifier(node, opts)`.
 
-aliases `ModuleSpecifier`
+Aliases: `ModuleSpecifier`
 
  - `exported`: `Identifier` (required)
 
@@ -366,7 +366,7 @@ aliases `ModuleSpecifier`
 
 See also `t.isExportSpecifier(node, opts)` and `t.assertExportSpecifier(node, opts)`.
 
-aliases `ModuleSpecifier`
+Aliases: `ModuleSpecifier`
 
  - `local`: `Identifier` (required)
  - `exported` (required)
@@ -375,7 +375,7 @@ aliases `ModuleSpecifier`
 
 See also `t.isExpressionStatement(node, opts)` and `t.assertExpressionStatement(node, opts)`.
 
-aliases `Statement`, `ExpressionWrapper`
+Aliases: `Statement`, `ExpressionWrapper`
 
  - `expression`: `Expression` (required)
 
@@ -391,7 +391,7 @@ See also `t.isFile(node, opts)` and `t.assertFile(node, opts)`.
 
 See also `t.isForInStatement(node, opts)` and `t.assertForInStatement(node, opts)`.
 
-aliases `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
+Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
 
  - `left`: `VariableDeclaration | LVal` (required)
  - `right`: `Expression` (required)
@@ -401,7 +401,7 @@ aliases `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
 
 See also `t.isForOfStatement(node, opts)` and `t.assertForOfStatement(node, opts)`.
 
-aliases `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
+Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
 
  - `left`: `VariableDeclaration | LVal` (required)
  - `right`: `Expression` (required)
@@ -411,7 +411,7 @@ aliases `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
 
 See also `t.isForStatement(node, opts)` and `t.assertForStatement(node, opts)`.
 
-aliases `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`
+Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`
 
  - `init`: `VariableDeclaration | Expression` (default: `null`)
  - `test`: `Expression` (default: `null`)
@@ -422,7 +422,7 @@ aliases `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`
 
 See also `t.isFunctionDeclaration(node, opts)` and `t.assertFunctionDeclaration(node, opts)`.
 
-aliases `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Statement`, `Pureish`, `Declaration`
+Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Statement`, `Pureish`, `Declaration`
 
  - `id`: `Identifier` (required)
  - `params`: `Array<LVal>` (required)
@@ -434,7 +434,7 @@ aliases `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Statement`, `P
 
 See also `t.isFunctionExpression(node, opts)` and `t.assertFunctionExpression(node, opts)`.
 
-aliases `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, `Pureish`
+Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, `Pureish`
 
  - `id`: `Identifier` (default: `null`)
  - `params`: `Array<LVal>` (required)
@@ -446,7 +446,7 @@ aliases `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, `
 
 See also `t.isFunctionTypeAnnotation(node, opts)` and `t.assertFunctionTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `typeParameters` (required)
  - `params` (required)
@@ -457,7 +457,7 @@ aliases `Flow`
 
 See also `t.isFunctionTypeParam(node, opts)` and `t.assertFunctionTypeParam(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `name` (required)
  - `typeAnnotation` (required)
@@ -466,7 +466,7 @@ aliases `Flow`
 
 See also `t.isGenericTypeAnnotation(node, opts)` and `t.assertGenericTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `id` (required)
  - `typeParameters` (required)
@@ -475,7 +475,7 @@ aliases `Flow`
 
 See also `t.isIdentifier(node, opts)` and `t.assertIdentifier(node, opts)`.
 
-aliases `Expression`, `LVal`
+Aliases: `Expression`, `LVal`
 
  - `name``string` (required)
 
@@ -483,7 +483,7 @@ aliases `Expression`, `LVal`
 
 See also `t.isIfStatement(node, opts)` and `t.assertIfStatement(node, opts)`.
 
-aliases `Statement`, `Conditional`
+Aliases: `Statement`, `Conditional`
 
  - `test`: `Expression` (required)
  - `consequent`: `Statement` (default: `null`)
@@ -493,7 +493,7 @@ aliases `Statement`, `Conditional`
 
 See also `t.isImportDeclaration(node, opts)` and `t.assertImportDeclaration(node, opts)`.
 
-aliases `Statement`, `Declaration`, `ModuleDeclaration`
+Aliases: `Statement`, `Declaration`, `ModuleDeclaration`
 
  - `specifiers`: `Array<ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier>` (required)
  - `source`: `StringLiteral` (required)
@@ -502,7 +502,7 @@ aliases `Statement`, `Declaration`, `ModuleDeclaration`
 
 See also `t.isImportDefaultSpecifier(node, opts)` and `t.assertImportDefaultSpecifier(node, opts)`.
 
-aliases `ModuleSpecifier`
+Aliases: `ModuleSpecifier`
 
  - `local`: `Identifier` (required)
 
@@ -510,7 +510,7 @@ aliases `ModuleSpecifier`
 
 See also `t.isImportNamespaceSpecifier(node, opts)` and `t.assertImportNamespaceSpecifier(node, opts)`.
 
-aliases `ModuleSpecifier`
+Aliases: `ModuleSpecifier`
 
  - `local`: `Identifier` (required)
 
@@ -518,7 +518,7 @@ aliases `ModuleSpecifier`
 
 See also `t.isImportSpecifier(node, opts)` and `t.assertImportSpecifier(node, opts)`.
 
-aliases `ModuleSpecifier`
+Aliases: `ModuleSpecifier`
 
  - `local`: `Identifier` (required)
  - `imported`: `Identifier` (required)
@@ -527,7 +527,7 @@ aliases `ModuleSpecifier`
 
 See also `t.isInterfaceDeclaration(node, opts)` and `t.assertInterfaceDeclaration(node, opts)`.
 
-aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id` (required)
  - `typeParameters` (required)
@@ -538,7 +538,7 @@ aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 See also `t.isInterfaceExtends(node, opts)` and `t.assertInterfaceExtends(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `id` (required)
  - `typeParameters` (required)
@@ -547,7 +547,7 @@ aliases `Flow`
 
 See also `t.isIntersectionTypeAnnotation(node, opts)` and `t.assertIntersectionTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `types` (required)
 
@@ -555,7 +555,7 @@ aliases `Flow`
 
 See also `t.isJSXAttribute(node, opts)` and `t.assertJSXAttribute(node, opts)`.
 
-aliases `JSX`, `Immutable`
+Aliases: `JSX`, `Immutable`
 
  - `name`: `JSXIdentifier | JSXMemberExpression` (required)
  - `value`: `JSXElement | StringLiteral | JSXExpressionContainer` (default: `null`)
@@ -564,7 +564,7 @@ aliases `JSX`, `Immutable`
 
 See also `t.isJSXClosingElement(node, opts)` and `t.assertJSXClosingElement(node, opts)`.
 
-aliases `JSX`, `Immutable`
+Aliases: `JSX`, `Immutable`
 
  - `name`: `JSXIdentifier | JSXMemberExpression` (required)
 
@@ -572,7 +572,7 @@ aliases `JSX`, `Immutable`
 
 See also `t.isJSXElement(node, opts)` and `t.assertJSXElement(node, opts)`.
 
-aliases `JSX`, `Immutable`, `Expression`
+Aliases: `JSX`, `Immutable`, `Expression`
 
  - `openingElement`: `JSXOpeningElement` (required)
  - `closingElement`: `JSXClosingElement` (default: `null`)
@@ -583,14 +583,14 @@ aliases `JSX`, `Immutable`, `Expression`
 
 See also `t.isJSXEmptyExpression(node, opts)` and `t.assertJSXEmptyExpression(node, opts)`.
 
-aliases `JSX`, `Expression`
+Aliases: `JSX`, `Expression`
 
 
 ### t.jSXExpressionContainer(expression)
 
 See also `t.isJSXExpressionContainer(node, opts)` and `t.assertJSXExpressionContainer(node, opts)`.
 
-aliases `JSX`, `Immutable`
+Aliases: `JSX`, `Immutable`
 
  - `expression`: `Expression` (required)
 
@@ -598,7 +598,7 @@ aliases `JSX`, `Immutable`
 
 See also `t.isJSXIdentifier(node, opts)` and `t.assertJSXIdentifier(node, opts)`.
 
-aliases `JSX`, `Expression`
+Aliases: `JSX`, `Expression`
 
  - `name`: `string` (required)
 
@@ -606,7 +606,7 @@ aliases `JSX`, `Expression`
 
 See also `t.isJSXMemberExpression(node, opts)` and `t.assertJSXMemberExpression(node, opts)`.
 
-aliases `JSX`, `Expression`
+Aliases: `JSX`, `Expression`
 
  - `object`: `JSXIdentifier` (required)
  - `property`: `JSXIdentifier` (required)
@@ -615,7 +615,7 @@ aliases `JSX`, `Expression`
 
 See also `t.isJSXNamespacedName(node, opts)` and `t.assertJSXNamespacedName(node, opts)`.
 
-aliases `JSX`
+Aliases: `JSX`
 
  - `namespace`: `JSXIdentifier` (required)
  - `name`: `JSXIdentifier` (required)
@@ -624,7 +624,7 @@ aliases `JSX`
 
 See also `t.isJSXOpeningElement(node, opts)` and `t.assertJSXOpeningElement(node, opts)`.
 
-aliases `JSX`, `Immutable`
+Aliases: `JSX`, `Immutable`
 
  - `name`: `JSXIdentifier | JSXMemberExpression` (required)
  - `attributes`: `Array<JSXAttribute | JSXSpreadAttribute>` (required)
@@ -634,7 +634,7 @@ aliases `JSX`, `Immutable`
 
 See also `t.isJSXSpreadAttribute(node, opts)` and `t.assertJSXSpreadAttribute(node, opts)`.
 
-aliases `JSX`
+Aliases: `JSX`
 
  - `argument`: `Expression` (required)
 
@@ -642,7 +642,7 @@ aliases `JSX`
 
 See also `t.isJSXText(node, opts)` and `t.assertJSXText(node, opts)`.
 
-aliases `JSX`
+Aliases: `JSX`
 
  - `value`: `string` (required)
 
@@ -650,7 +650,7 @@ aliases `JSX`
 
 See also `t.isLabeledStatement(node, opts)` and `t.assertLabeledStatement(node, opts)`.
 
-aliases `Statement`
+Aliases: `Statement`
 
  - `label`: `Identifier` (required)
  - `body`: `Statement` (required)
@@ -659,7 +659,7 @@ aliases `Statement`
 
 See also `t.isLogicalExpression(node, opts)` and `t.assertLogicalExpression(node, opts)`.
 
-aliases `Binary`, `Expression`
+Aliases: `Binary`, `Expression`
 
  - `operator` (required)
  - `left`: `Expression` (required)
@@ -669,7 +669,7 @@ aliases `Binary`, `Expression`
 
 See also `t.isMemberExpression(node, opts)` and `t.assertMemberExpression(node, opts)`.
 
-aliases `Expression`, `LVal`
+Aliases: `Expression`, `LVal`
 
  - `object`: `Expression` (required)
  - `property`if computed then `Expression` else `Identifier` (required)
@@ -679,7 +679,7 @@ aliases `Expression`, `LVal`
 
 See also `t.isMetaProperty(node, opts)` and `t.assertMetaProperty(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
  - `meta`: `string` (required)
  - `property`: `string` (required)
@@ -688,14 +688,14 @@ aliases `Expression`
 
 See also `t.isMixedTypeAnnotation(node, opts)` and `t.assertMixedTypeAnnotation(node, opts)`.
 
-aliases `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowBaseAnnotation`
 
 
 ### t.newExpression(callee, arguments)
 
 See also `t.isNewExpression(node, opts)` and `t.assertNewExpression(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression>` (required)
@@ -709,14 +709,14 @@ See also `t.isNoop(node, opts)` and `t.assertNoop(node, opts)`.
 
 See also `t.isNullLiteral(node, opts)` and `t.assertNullLiteral(node, opts)`.
 
-aliases `Expression`, `Pureish`, `Literal`, `Immutable`
+Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
 
 ### t.nullableTypeAnnotation(typeAnnotation)
 
 See also `t.isNullableTypeAnnotation(node, opts)` and `t.assertNullableTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `typeAnnotation` (required)
 
@@ -724,14 +724,14 @@ aliases `Flow`
 
 See also `t.isNumberTypeAnnotation(node, opts)` and `t.assertNumberTypeAnnotation(node, opts)`.
 
-aliases `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowBaseAnnotation`
 
 
 ### t.numericLiteral(value)
 
 See also `t.isNumericLiteral(node, opts)` and `t.assertNumericLiteral(node, opts)`.
 
-aliases `Expression`, `Pureish`, `Literal`, `Immutable`
+Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
  - `value`: `number` (required)
 
@@ -739,14 +739,14 @@ aliases `Expression`, `Pureish`, `Literal`, `Immutable`
 
 See also `t.isNumericLiteralTypeAnnotation(node, opts)` and `t.assertNumericLiteralTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
 
 ### t.objectExpression(properties)
 
 See also `t.isObjectExpression(node, opts)` and `t.assertObjectExpression(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
  - `properties`: `Array<ObjectMethod | ObjectProperty | SpreadProperty>` (required)
 
@@ -754,7 +754,7 @@ aliases `Expression`
 
 See also `t.isObjectMethod(node, opts)` and `t.assertObjectMethod(node, opts)`.
 
-aliases `UserWhitespacable`, `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
+Aliases: `UserWhitespacable`, `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
 
  - `kind`: `"method" | "get" | "set"` (default: `'method'`)
  - `key`if computed then `Expression` else `Identifier | Literal` (required)
@@ -766,7 +766,7 @@ aliases `UserWhitespacable`, `Function`, `Scopable`, `BlockParent`, `FunctionPar
 
 See also `t.isObjectPattern(node, opts)` and `t.assertObjectPattern(node, opts)`.
 
-aliases `Pattern`, `LVal`
+Aliases: `Pattern`, `LVal`
 
  - `properties`: `Array<RestProperty>` (required)
  - `typeAnnotation` (required)
@@ -775,7 +775,7 @@ aliases `Pattern`, `LVal`
 
 See also `t.isObjectProperty(node, opts)` and `t.assertObjectProperty(node, opts)`.
 
-aliases `UserWhitespacable`, `Property`
+Aliases: `UserWhitespacable`, `Property`
 
  - `key`if computed then `Expression` else `Identifier | Literal` (required)
  - `value`: `Expression` (required)
@@ -787,7 +787,7 @@ aliases `UserWhitespacable`, `Property`
 
 See also `t.isObjectTypeAnnotation(node, opts)` and `t.assertObjectTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `properties` (required)
  - `indexers` (required)
@@ -797,7 +797,7 @@ aliases `Flow`
 
 See also `t.isObjectTypeCallProperty(node, opts)` and `t.assertObjectTypeCallProperty(node, opts)`.
 
-aliases `Flow`, `UserWhitespacable`
+Aliases: `Flow`, `UserWhitespacable`
 
  - `value` (required)
 
@@ -805,7 +805,7 @@ aliases `Flow`, `UserWhitespacable`
 
 See also `t.isObjectTypeIndexer(node, opts)` and `t.assertObjectTypeIndexer(node, opts)`.
 
-aliases `Flow`, `UserWhitespacable`
+Aliases: `Flow`, `UserWhitespacable`
 
  - `id` (required)
  - `key` (required)
@@ -815,7 +815,7 @@ aliases `Flow`, `UserWhitespacable`
 
 See also `t.isObjectTypeProperty(node, opts)` and `t.assertObjectTypeProperty(node, opts)`.
 
-aliases `Flow`, `UserWhitespacable`
+Aliases: `Flow`, `UserWhitespacable`
 
  - `key` (required)
  - `value` (required)
@@ -824,7 +824,7 @@ aliases `Flow`, `UserWhitespacable`
 
 See also `t.isParenthesizedExpression(node, opts)` and `t.assertParenthesizedExpression(node, opts)`.
 
-aliases `Expression`, `ExpressionWrapper`
+Aliases: `Expression`, `ExpressionWrapper`
 
  - `expression`: `Expression` (required)
 
@@ -832,7 +832,7 @@ aliases `Expression`, `ExpressionWrapper`
 
 See also `t.isProgram(node, opts)` and `t.assertProgram(node, opts)`.
 
-aliases `Scopable`, `BlockParent`, `Block`, `FunctionParent`
+Aliases: `Scopable`, `BlockParent`, `Block`, `FunctionParent`
 
  - `body`: `Array<Statement>` (required)
  - `directives`: `Array<Directive>` (default: `[]`)
@@ -841,7 +841,7 @@ aliases `Scopable`, `BlockParent`, `Block`, `FunctionParent`
 
 See also `t.isQualifiedTypeIdentifier(node, opts)` and `t.assertQualifiedTypeIdentifier(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `id` (required)
  - `qualification` (required)
@@ -850,7 +850,7 @@ aliases `Flow`
 
 See also `t.isRegExpLiteral(node, opts)` and `t.assertRegExpLiteral(node, opts)`.
 
-aliases `Expression`, `Literal`
+Aliases: `Expression`, `Literal`
 
  - `pattern`: `string` (required)
  - `flags`: `string` (default: `''`)
@@ -859,7 +859,7 @@ aliases `Expression`, `Literal`
 
 See also `t.isRestElement(node, opts)` and `t.assertRestElement(node, opts)`.
 
-aliases `LVal`
+Aliases: `LVal`
 
  - `argument`: `LVal` (required)
  - `typeAnnotation` (required)
@@ -868,7 +868,7 @@ aliases `LVal`
 
 See also `t.isRestProperty(node, opts)` and `t.assertRestProperty(node, opts)`.
 
-aliases `UnaryLike`
+Aliases: `UnaryLike`
 
  - `argument`: `LVal` (required)
 
@@ -876,7 +876,7 @@ aliases `UnaryLike`
 
 See also `t.isReturnStatement(node, opts)` and `t.assertReturnStatement(node, opts)`.
 
-aliases `Statement`, `Terminatorless`, `CompletionStatement`
+Aliases: `Statement`, `Terminatorless`, `CompletionStatement`
 
  - `argument`: `Expression` (default: `null`)
 
@@ -884,7 +884,7 @@ aliases `Statement`, `Terminatorless`, `CompletionStatement`
 
 See also `t.isSequenceExpression(node, opts)` and `t.assertSequenceExpression(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
  - `expressions`: `array` (required)
 
@@ -892,7 +892,7 @@ aliases `Expression`
 
 See also `t.isSpreadElement(node, opts)` and `t.assertSpreadElement(node, opts)`.
 
-aliases `UnaryLike`
+Aliases: `UnaryLike`
 
  - `argument`: `Expression` (required)
 
@@ -900,7 +900,7 @@ aliases `UnaryLike`
 
 See also `t.isSpreadProperty(node, opts)` and `t.assertSpreadProperty(node, opts)`.
 
-aliases `UnaryLike`
+Aliases: `UnaryLike`
 
  - `argument`: `Expression` (required)
 
@@ -908,7 +908,7 @@ aliases `UnaryLike`
 
 See also `t.isStringLiteral(node, opts)` and `t.assertStringLiteral(node, opts)`.
 
-aliases `Expression`, `Pureish`, `Literal`, `Immutable`
+Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
  - `value`: `string` (required)
 
@@ -916,21 +916,21 @@ aliases `Expression`, `Pureish`, `Literal`, `Immutable`
 
 See also `t.isStringLiteralTypeAnnotation(node, opts)` and `t.assertStringLiteralTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
 
 ### t.stringTypeAnnotation()
 
 See also `t.isStringTypeAnnotation(node, opts)` and `t.assertStringTypeAnnotation(node, opts)`.
 
-aliases `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowBaseAnnotation`
 
 
 ### t.super()
 
 See also `t.isSuper(node, opts)` and `t.assertSuper(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
 
 ### t.switchCase(test, consequent)
@@ -944,7 +944,7 @@ See also `t.isSwitchCase(node, opts)` and `t.assertSwitchCase(node, opts)`.
 
 See also `t.isSwitchStatement(node, opts)` and `t.assertSwitchStatement(node, opts)`.
 
-aliases `Statement`, `BlockParent`, `Scopable`
+Aliases: `Statement`, `BlockParent`, `Scopable`
 
  - `discriminant` (required)
  - `cases` (required)
@@ -953,7 +953,7 @@ aliases `Statement`, `BlockParent`, `Scopable`
 
 See also `t.isTaggedTemplateExpression(node, opts)` and `t.assertTaggedTemplateExpression(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
  - `tag`: `Expression` (required)
  - `quasi`: `TemplateLiteral` (required)
@@ -969,7 +969,7 @@ See also `t.isTemplateElement(node, opts)` and `t.assertTemplateElement(node, op
 
 See also `t.isTemplateLiteral(node, opts)` and `t.assertTemplateLiteral(node, opts)`.
 
-aliases `Expression`, `Literal`
+Aliases: `Expression`, `Literal`
 
  - `quasis` (required)
  - `expressions` (required)
@@ -978,14 +978,14 @@ aliases `Expression`, `Literal`
 
 See also `t.isThisExpression(node, opts)` and `t.assertThisExpression(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
 
 ### t.throwStatement(argument)
 
 See also `t.isThrowStatement(node, opts)` and `t.assertThrowStatement(node, opts)`.
 
-aliases `Statement`, `Terminatorless`, `CompletionStatement`
+Aliases: `Statement`, `Terminatorless`, `CompletionStatement`
 
  - `argument`: `Expression` (required)
 
@@ -993,7 +993,7 @@ aliases `Statement`, `Terminatorless`, `CompletionStatement`
 
 See also `t.isTryStatement(node, opts)` and `t.assertTryStatement(node, opts)`.
 
-aliases `Statement`
+Aliases: `Statement`
 
  - `block` (required)
  - `handler` (default: `null`)
@@ -1003,7 +1003,7 @@ aliases `Statement`
 
 See also `t.isTupleTypeAnnotation(node, opts)` and `t.assertTupleTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `types` (required)
 
@@ -1011,7 +1011,7 @@ aliases `Flow`
 
 See also `t.isTypeAlias(node, opts)` and `t.assertTypeAlias(node, opts)`.
 
-aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id` (required)
  - `typeParameters` (required)
@@ -1021,7 +1021,7 @@ aliases `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 See also `t.isTypeAnnotation(node, opts)` and `t.assertTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `typeAnnotation` (required)
 
@@ -1029,7 +1029,7 @@ aliases `Flow`
 
 See also `t.isTypeCastExpression(node, opts)` and `t.assertTypeCastExpression(node, opts)`.
 
-aliases `Flow`, `ExpressionWrapper`
+Aliases: `Flow`, `ExpressionWrapper`
 
  - `expression` (required)
  - `typeAnnotation` (required)
@@ -1038,7 +1038,7 @@ aliases `Flow`, `ExpressionWrapper`
 
 See also `t.isTypeParameterDeclaration(node, opts)` and `t.assertTypeParameterDeclaration(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `params` (required)
 
@@ -1046,7 +1046,7 @@ aliases `Flow`
 
 See also `t.isTypeParameterInstantiation(node, opts)` and `t.assertTypeParameterInstantiation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `params` (required)
 
@@ -1054,7 +1054,7 @@ aliases `Flow`
 
 See also `t.isTypeofTypeAnnotation(node, opts)` and `t.assertTypeofTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `argument` (required)
 
@@ -1062,7 +1062,7 @@ aliases `Flow`
 
 See also `t.isUnaryExpression(node, opts)` and `t.assertUnaryExpression(node, opts)`.
 
-aliases `UnaryLike`, `Expression`
+Aliases: `UnaryLike`, `Expression`
 
  - `operator` (required)
  - `argument`: `Expression` (required)
@@ -1072,7 +1072,7 @@ aliases `UnaryLike`, `Expression`
 
 See also `t.isUnionTypeAnnotation(node, opts)` and `t.assertUnionTypeAnnotation(node, opts)`.
 
-aliases `Flow`
+Aliases: `Flow`
 
  - `types` (required)
 
@@ -1080,7 +1080,7 @@ aliases `Flow`
 
 See also `t.isUpdateExpression(node, opts)` and `t.assertUpdateExpression(node, opts)`.
 
-aliases `Expression`
+Aliases: `Expression`
 
  - `operator` (required)
  - `argument`: `Expression` (required)
@@ -1090,7 +1090,7 @@ aliases `Expression`
 
 See also `t.isVariableDeclaration(node, opts)` and `t.assertVariableDeclaration(node, opts)`.
 
-aliases `Statement`, `Declaration`
+Aliases: `Statement`, `Declaration`
 
  - `kind`: `"var" | "let" | "const"` (required)
  - `declarations`: `Array<VariableDeclarator>` (required)
@@ -1106,14 +1106,14 @@ See also `t.isVariableDeclarator(node, opts)` and `t.assertVariableDeclarator(no
 
 See also `t.isVoidTypeAnnotation(node, opts)` and `t.assertVoidTypeAnnotation(node, opts)`.
 
-aliases `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowBaseAnnotation`
 
 
 ### t.whileStatement(test, body)
 
 See also `t.isWhileStatement(node, opts)` and `t.assertWhileStatement(node, opts)`.
 
-aliases `Statement`, `BlockParent`, `Loop`, `While`, `Scopable`
+Aliases: `Statement`, `BlockParent`, `Loop`, `While`, `Scopable`
 
  - `test`: `Expression` (required)
  - `body`: `BlockStatement | Statement` (required)
@@ -1122,7 +1122,7 @@ aliases `Statement`, `BlockParent`, `Loop`, `While`, `Scopable`
 
 See also `t.isWithStatement(node, opts)` and `t.assertWithStatement(node, opts)`.
 
-aliases `Statement`
+Aliases: `Statement`
 
  - `object` (required)
  - `body`: `BlockStatement` (required)
@@ -1131,7 +1131,7 @@ aliases `Statement`
 
 See also `t.isYieldExpression(node, opts)` and `t.assertYieldExpression(node, opts)`.
 
-aliases `Expression`, `Terminatorless`
+Aliases: `Expression`, `Terminatorless`
 
  - `argument`: `Expression` (default: `null`)
  - `delegate`: `boolean` (default: `false`)

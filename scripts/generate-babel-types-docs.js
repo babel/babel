@@ -65,7 +65,7 @@ Object.keys(types.BUILDER_KEYS).sort().forEach(function (key) {
   readme.push('See also `t.is' + key + '(node, opts)` and `t.assert' + key + '(node, opts)`.');
   readme.push('');
   if (types.ALIAS_KEYS[key] && types.ALIAS_KEYS[key].length) {
-    readme.push('aliases ' + types.ALIAS_KEYS[key].map(function (key) {
+    readme.push('Aliases: ' + types.ALIAS_KEYS[key].map(function (key) {
       return '`' + key + '`';
     }).join(', '));
     readme.push('');
