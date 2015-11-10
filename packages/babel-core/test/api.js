@@ -1,7 +1,5 @@
-require("../lib/api/node");
-
+var babel                = require("../lib/api/node");
 var buildExternalHelpers = require("../lib/tools/build-external-helpers");
-var transform            = require("../lib/api/node").transform;
 var Pipeline             = require("../lib/transformation/pipeline");
 var sourceMap            = require("source-map");
 var assert               = require("assert");
@@ -19,12 +17,24 @@ function assertNotIgnored(result) {
 function transformAsync(code, opts) {
   return {
     then: function (resolve) {
-      resolve(transform(code, opts));
+      resolve(babel.transform(code, opts));
     }
   };
 }
 
 suite("api", function () {
+  test("transformFile", function (done) {
+    babel.transformFile(__dirname + "/fixtures/api/file.js", {}, function (err, res) {
+      if (err) return done(err);
+      assert.equal(res.code, "foo();");
+      done();
+    });
+  });
+
+  test("transformFileSync", function () {
+    assert.equal(babel.transformFileSync(__dirname + "/fixtures/api/file.js", {}).code, "foo();");
+  });
+
   test("options merge backwards", function () {
     return transformAsync("", {
       presets: [__dirname + "/../../babel-preset-es2015"],
@@ -35,7 +45,7 @@ suite("api", function () {
   });
 
   test("source map merging", function () {
-    var result = transform([
+    var result = babel.transform([
       'function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }',
       '',
       'let Foo = function Foo() {',
@@ -386,6 +396,11 @@ suite("api", function () {
       var script = buildExternalHelpers([]);
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") === -1);
+    });
+
+    test("underscored", function () {
+      var script = buildExternalHelpers(["typeof"]);
+      assert.ok(script.indexOf("typeof") >= 0);
     });
   });
 });

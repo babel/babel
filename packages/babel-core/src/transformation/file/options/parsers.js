@@ -3,10 +3,6 @@
 import slash from "slash";
 import * as util from "../../../util";
 
-export function number(val: any): number {
-  return +val;
-}
-
 export let filename = slash;
 
 export function boolean(val: any): boolean {

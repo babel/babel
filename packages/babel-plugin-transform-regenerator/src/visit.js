@@ -37,13 +37,7 @@ exports.visitor = {
         return;
       }
 
-      if (node.expression) {
-        // Transform expression lambdas into normal functions.
-        node.expression = false;
-        node.body = t.blockStatement([
-          t.returnStatement(node.body)
-        ]);
-      }
+      path.ensureBlock();
 
       if (node.async) {
         path.get("body").traverse(awaitVisitor);
