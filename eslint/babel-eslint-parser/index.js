@@ -55,6 +55,12 @@ function monkeypatch() {
   var estraverseFb = eslintMod.require("estraverse-fb");
   assign(estraverseFb.VisitorKeys, t.VISITOR_KEYS);
 
+  // ESLint v1.9.0 uses estraverse directly to work around https://github.com/npm/npm/issues/9663
+  var estraverseOfEslint = eslintMod.require("estraverse");
+  if (estraverseOfEslint !== estraverseFb) {
+    assign(estraverseOfEslint.VisitorKeys, t.VISITOR_KEYS);
+  }
+
   // monkeypatch escope
   var escope  = require(escopeLoc);
   var analyze = escope.analyze;

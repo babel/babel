@@ -1365,7 +1365,7 @@ describe("verify", function () {
         "var x = 1;"
       ].join("\n"),
       { "no-use-before-define": 1 },
-      [ "1:13 x was used before it was defined no-use-before-define" ]
+      [ "1:13 \"x\" was used before it was defined no-use-before-define" ]
     )
   });
 });
