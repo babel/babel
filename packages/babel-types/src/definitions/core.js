@@ -1,12 +1,18 @@
 /* @flow */
 
 import * as t from "../index";
+import {
+  BINARY_OPERATORS,
+  LOGICAL_OPERATORS,
+  UNARY_OPERATORS,
+  UPDATE_OPERATORS
+} from "../index";
 import defineType, {
   assertValueType,
   assertNodeType,
   assertEach,
   chain,
-  assertOneOf,
+  assertOneOf
 } from "./index";
 
 defineType("ArrayExpression", {
@@ -40,7 +46,7 @@ defineType("BinaryExpression", {
   builder: ["operator", "left", "right"],
   fields: {
     operator: {
-      validate: assertValueType("string")
+      validate: assertOneOf(BINARY_OPERATORS)
     },
     left: {
       validate: assertNodeType("Expression")
@@ -310,7 +316,6 @@ defineType("IfStatement", {
       validate: assertNodeType("Expression")
     },
     consequent: {
-      optional: true,
       validate: assertNodeType("Statement")
     },
     alternate: {
@@ -389,7 +394,7 @@ defineType("LogicalExpression", {
   aliases: ["Binary", "Expression"],
   fields: {
     operator: {
-      // todo
+      validate: assertOneOf(LOGICAL_OPERATORS)
     },
     left: {
       validate: assertNodeType("Expression")
@@ -555,7 +560,13 @@ defineType("SequenceExpression", {
 defineType("SwitchCase", {
   visitor: ["test", "consequent"],
   fields: {
-    // todo
+    test: {
+      validate: assertNodeType("Expression"),
+      optional: true
+    },
+    consequent: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Statement")))
+    }
   }
 });
 
@@ -563,7 +574,12 @@ defineType("SwitchStatement", {
   visitor: ["discriminant", "cases"],
   aliases: ["Statement", "BlockParent", "Scopable"],
   fields: {
-    // todo
+    discriminant: {
+      validate: assertNodeType("Expression")
+    },
+    cases: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("SwitchCase")))
+    }
   }
 });
 
@@ -610,7 +626,7 @@ defineType("UnaryExpression", {
       validate: assertNodeType("Expression")
     },
     operator: {
-      // todo
+      validate: assertOneOf(UNARY_OPERATORS)
     }
   },
   visitor: ["argument"],
@@ -627,7 +643,7 @@ defineType("UpdateExpression", {
       validate: assertNodeType("Expression")
     },
     operator: {
-      // todo
+      validate: assertOneOf(UPDATE_OPERATORS)
     }
   },
   visitor: ["argument"],
