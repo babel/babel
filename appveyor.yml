@@ -1,0 +1,18 @@
+version: "{build}"
+
+environment:
+  nodejs_version: "0.10"
+
+matrix:
+  fast_finish: true
+
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - node --version
+  - npm --version
+  - npm install
+
+test_script:
+  - make test-ci
+
+build: off
