@@ -11,6 +11,7 @@
     "babel-plugin-syntax-async-functions": "^6.0.14",
     "babel-plugin-transform-es2015-for-of": "^6.0.14",
     "babel-core": "^6.0.18",
+    "babel-runtime": "^5.0.0",
     "babel-traverse": "^6.0.18",
     "babel-types": "^6.0.18",
     "babylon": "^6.0.18",
