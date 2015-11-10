@@ -84,7 +84,7 @@ export function chain(...fns: Array<Function>): Function {
     for (let fn of fns) {
       fn(...args);
     }
-  };
+  }
   validate.chainOf = fns;
   return validate;
 }
