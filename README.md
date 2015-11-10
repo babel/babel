@@ -11,6 +11,7 @@
 <p align="center">
   <a href="https://travis-ci.org/babel/babel"><img alt="Travis Status" src="https://img.shields.io/travis/babel/babel/master.svg?style=flat&label=travis"></a>
   <a href="https://travis-ci.org/babel/babel"><img alt="CircleCI Status" src="https://img.shields.io/circleci/project/babel/babel/master.svg?style=flat&label=circle"></a>
+  <a href="https://ci.appveyor.com/project/sebmck/babel"><img alt="AppVeyor Status" src="https://img.shields.io/appveyor/ci/babel/babel/master.svg"></a>
   <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/master.svg?style=flat"></a>
 </p>
 
