@@ -36,15 +36,20 @@ export const INHERIT_KEYS = {
   force: ["start", "loc", "end"]
 };
 
+export const UPDATE_OPERATORS = ["++", "--"];
+export const LOGICAL_OPERATORS = ["||", "&&"];
+
 export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
 export const EQUALITY_BINARY_OPERATORS       = ["==", "===", "!=", "!=="];
-export const COMPARISON_BINARY_OPERATORS     = EQUALITY_BINARY_OPERATORS.concat(["in", "instanceof"]);
-export const BOOLEAN_BINARY_OPERATORS        = [].concat(COMPARISON_BINARY_OPERATORS, BOOLEAN_NUMBER_BINARY_OPERATORS);
+export const COMPARISON_BINARY_OPERATORS     = [...EQUALITY_BINARY_OPERATORS, "in", "instanceof"];
+export const BOOLEAN_BINARY_OPERATORS        = [...COMPARISON_BINARY_OPERATORS, ...BOOLEAN_NUMBER_BINARY_OPERATORS];
 export const NUMBER_BINARY_OPERATORS         = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
+export const BINARY_OPERATORS                = ["+", ...NUMBER_BINARY_OPERATORS, ...BOOLEAN_BINARY_OPERATORS];
 
 export const BOOLEAN_UNARY_OPERATORS = ["delete", "!"];
 export const NUMBER_UNARY_OPERATORS  = ["+", "-", "++", "--", "~"];
 export const STRING_UNARY_OPERATORS  = ["typeof"];
+export const UNARY_OPERATORS = ["void", ...BOOLEAN_UNARY_OPERATORS, ...NUMBER_UNARY_OPERATORS, ...STRING_UNARY_OPERATORS];
 
 import "./definitions/init";
 import { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS } from "./definitions";

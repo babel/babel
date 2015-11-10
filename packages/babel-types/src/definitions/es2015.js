@@ -112,7 +112,9 @@ defineType("ExportAllDeclaration", {
   visitor: ["source"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   fields: {
-    // todo
+    source: {
+      validate: assertNodeType("StringLiteral")
+    }
   }
 });
 
@@ -120,7 +122,9 @@ defineType("ExportDefaultDeclaration", {
   visitor: ["declaration"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   fields: {
-    // todo
+    declaration: {
+      validate: assertNodeType("FunctionDeclaration", "ClassDeclaration", "Expression")
+    }
   }
 });
 
@@ -128,7 +132,17 @@ defineType("ExportNamedDeclaration", {
   visitor: ["declaration", "specifiers", "source"],
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   fields: {
-    // todo
+    declaration: {
+      validate: assertNodeType("Declaration"),
+      optional: true
+    },
+    specifiers: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("ExportSpecifier")))
+    },
+    source: {
+      validate: assertNodeType("StringLiteral"),
+      optional: true
+    }
   }
 });
 
