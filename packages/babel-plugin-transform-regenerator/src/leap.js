@@ -8,10 +8,9 @@
  * the same directory.
  */
 
-var assert = require("assert");
-var t = require("babel-types");
-var inherits = require("util").inherits;
-var hasOwn = Object.prototype.hasOwnProperty;
+import assert from "assert";
+import * as t from "babel-types";
+import { inherits } from "util";
 
 function Entry() {
   assert.ok(this instanceof Entry);
@@ -123,14 +122,14 @@ exports.LabeledEntry = LabeledEntry;
 function LeapManager(emitter) {
   assert.ok(this instanceof LeapManager);
 
-  var Emitter = require("./emit").Emitter;
+  let Emitter = require("./emit").Emitter;
   assert.ok(emitter instanceof Emitter);
 
   this.emitter = emitter;
   this.entryStack = [new FunctionEntry(emitter.finalLoc)];
 }
 
-var LMp = LeapManager.prototype;
+let LMp = LeapManager.prototype;
 exports.LeapManager = LeapManager;
 
 LMp.withEntry = function(entry, callback) {
@@ -139,15 +138,15 @@ LMp.withEntry = function(entry, callback) {
   try {
     callback.call(this.emitter);
   } finally {
-    var popped = this.entryStack.pop();
+    let popped = this.entryStack.pop();
     assert.strictEqual(popped, entry);
   }
 };
 
 LMp._findLeapLocation = function(property, label) {
-  for (var i = this.entryStack.length - 1; i >= 0; --i) {
-    var entry = this.entryStack[i];
-    var loc = entry[property];
+  for (let i = this.entryStack.length - 1; i >= 0; --i) {
+    let entry = this.entryStack[i];
+    let loc = entry[property];
     if (loc) {
       if (label) {
         if (entry.label &&

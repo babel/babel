@@ -8,10 +8,8 @@
  * the same directory.
  */
 
-var traverse = require("babel-traverse");
-var assert = require("assert");
-var t = require("babel-types");
-var hasOwn = Object.prototype.hasOwnProperty;
+import * as t from "babel-types";
+let hasOwn = Object.prototype.hasOwnProperty;
 
 // The hoist function takes a FunctionExpression or FunctionDeclaration
 // and replaces any Declaration nodes in its body with assignments, then
@@ -20,12 +18,12 @@ var hasOwn = Object.prototype.hasOwnProperty;
 exports.hoist = function(funPath) {
   t.assertFunction(funPath.node);
 
-  var vars = {};
+  let vars = {};
 
   function varDeclToExpr(vdec, includeIdentifiers) {
     t.assertVariableDeclaration(vdec);
     // TODO assert.equal(vdec.kind, "var");
-    var exprs = [];
+    let exprs = [];
 
     vdec.declarations.forEach(function(dec) {
       vars[dec.id.name] = dec.id;
@@ -51,7 +49,7 @@ exports.hoist = function(funPath) {
   funPath.get("body").traverse({
     VariableDeclaration: {
       exit: function(path) {
-        var expr = varDeclToExpr(path.node, false);
+        let expr = varDeclToExpr(path.node, false);
         if (expr === null) {
           path.remove();
         } else {
@@ -67,25 +65,24 @@ exports.hoist = function(funPath) {
     },
 
     ForStatement: function(path) {
-      var init = path.node.init;
+      let init = path.node.init;
       if (t.isVariableDeclaration(init)) {
         path.get("init").replaceWith(varDeclToExpr(init, false));
       }
     },
 
     ForXStatement: function(path) {
-      var left = path.get("left");
+      let left = path.get("left");
       if (left.isVariableDeclaration()) {
         left.replaceWith(varDeclToExpr(left.node, true));
       }
     },
 
     FunctionDeclaration: function(path) {
-      var node = path.node;
+      let node = path.node;
       vars[node.id.name] = node.id;
 
-      var parentNode = path.parent.node;
-      var assignment = t.expressionStatement(
+      let assignment = t.expressionStatement(
         t.assignmentExpression(
           "=",
           node.id,
@@ -124,9 +121,9 @@ exports.hoist = function(funPath) {
     }
   });
 
-  var paramNames = {};
+  let paramNames = {};
   funPath.get("params").forEach(function(paramPath) {
-    var param = paramPath.node;
+    let param = paramPath.node;
     if (t.isIdentifier(param)) {
       paramNames[param.name] = param;
     } else {
@@ -135,7 +132,7 @@ exports.hoist = function(funPath) {
     }
   });
 
-  var declarations = [];
+  let declarations = [];
 
   Object.keys(vars).forEach(function(name) {
     if (!hasOwn.call(paramNames, name)) {

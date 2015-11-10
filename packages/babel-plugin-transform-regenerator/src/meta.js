@@ -8,17 +8,17 @@
  * the same directory.
  */
 
-var assert = require("assert");
-var m = require("private").makeAccessor();
-var t = require("babel-types");
-var hasOwn = Object.prototype.hasOwnProperty;
+import assert from "assert";
+let m = require("private").makeAccessor();
+import * as t from "babel-types";
+let hasOwn = Object.prototype.hasOwnProperty;
 
 function makePredicate(propertyName, knownTypes) {
   function onlyChildren(node) {
     t.assertNode(node);
 
     // Assume no side effects until we find out otherwise.
-    var result = false;
+    let result = false;
 
     function check(child) {
       if (result) {
@@ -32,11 +32,11 @@ function makePredicate(propertyName, knownTypes) {
       return result;
     }
 
-    var keys = t.VISITOR_KEYS[node.type];
+    let keys = t.VISITOR_KEYS[node.type];
     if (keys) {
-      for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
-        var child = node[key];
+      for (let i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        let child = node[key];
         check(child);
       }
     }
@@ -47,7 +47,7 @@ function makePredicate(propertyName, knownTypes) {
   function predicate(node) {
     t.assertNode(node);
 
-    var meta = m(node);
+    let meta = m(node);
     if (hasOwn.call(meta, propertyName))
       return meta[propertyName];
 
@@ -67,13 +67,13 @@ function makePredicate(propertyName, knownTypes) {
   return predicate;
 }
 
-var opaqueTypes = {
+let opaqueTypes = {
   FunctionExpression: true
 };
 
 // These types potentially have side effects regardless of what side
 // effects their subexpressions have.
-var sideEffectTypes = {
+let sideEffectTypes = {
   CallExpression: true, // Anything could happen!
   ForInStatement: true, // Modifies the key variable.
   UnaryExpression: true, // Think delete.
@@ -84,7 +84,7 @@ var sideEffectTypes = {
 };
 
 // These types are the direct cause of all leaps in control flow.
-var leapTypes = {
+let leapTypes = {
   YieldExpression: true,
   BreakStatement: true,
   ContinueStatement: true,
@@ -93,7 +93,7 @@ var leapTypes = {
 };
 
 // All leap types are also side effect types.
-for (var type in leapTypes) {
+for (let type in leapTypes) {
   if (hasOwn.call(leapTypes, type)) {
     sideEffectTypes[type] = leapTypes[type];
   }

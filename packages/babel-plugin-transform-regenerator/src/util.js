@@ -8,16 +8,16 @@
  * the same directory.
  */
 
-var t = require("babel-types");
+import * as t from "babel-types";
 
-exports.runtimeProperty = function(name) {
+export function runtimeProperty(name) {
   return t.memberExpression(
     t.identifier("regeneratorRuntime"),
     t.identifier(name),
     false
   );
-};
+}
 
-exports.isReference = function(path) {
+export function isReference(path) {
   return path.isReferenced() || path.parentPath.isAssignmentExpression({ left: path.node });
-};
+}

@@ -124,7 +124,8 @@ export default function (
 
     suite(name + "/" + testSuite.title, function () {
       for (let task of testSuite.tests) {
-        if (_.contains(suiteOpts.ignoreTasks, task.title) || _.contains(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
+        if (_.contains(suiteOpts.ignoreTasks, task.title) ||
+            _.contains(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
 
         test(task.title, !task.disabled && function () {
           function runTask() {

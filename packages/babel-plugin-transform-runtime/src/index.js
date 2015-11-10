@@ -24,6 +24,8 @@ export default function ({ types: t }) {
 
     visitor: {
       ReferencedIdentifier(path, state) {
+        if (state.opts.regenerator === false) return;
+        
         let { node, parent, scope } = path;
 
         if (node.name === "regeneratorRuntime") {
@@ -43,8 +45,9 @@ export default function ({ types: t }) {
         ));
       },
 
+      // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
       CallExpression(path, state) {
-        // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
+        if (state.opts.polyfill === false) return;
 
         // we can't compile this
         if (path.node.arguments.length) return;
@@ -64,8 +67,9 @@ export default function ({ types: t }) {
         ));
       },
 
+      // Symbol.iterator in arr -> core.$for.isIterable(arr)
       BinaryExpression(path, state) {
-        // Symbol.iterator in arr -> core.$for.isIterable(arr)
+        if (state.opts.polyfill === false) return;
 
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
@@ -80,11 +84,11 @@ export default function ({ types: t }) {
         ));
       },
 
+      // Array.from -> _core.Array.from
       MemberExpression: {
         enter(path, state) {
+          if (state.opts.polyfill === false) return;
           if (!path.isReferenced()) return;
-
-          // Array.from -> _core.Array.from
 
           let { node } = path;
           let obj = node.object;
@@ -114,6 +118,7 @@ export default function ({ types: t }) {
         },
 
         exit(path, state) {
+          if (state.opts.polyfill === false) return;
           if (!path.isReferenced()) return;
 
           let { node } = path;
