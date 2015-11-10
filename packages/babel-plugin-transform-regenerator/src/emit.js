@@ -912,8 +912,6 @@ Ep.explodeExpression = function(path, ignoreResult) {
   // control the precise order in which the generated code realizes the
   // side effects of those subexpressions.
   function explodeViaTempVar(tempVar, childPath, ignoreChildResult) {
-    assert.ok(childPath instanceof traverse.NodePath);
-
     assert.ok(
       !ignoreChildResult || !tempVar,
       "Ignoring the result of a child expression but forcing it to " +
