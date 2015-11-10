@@ -79,8 +79,10 @@ Ep.mark = function(loc) {
 };
 
 Ep.emit = function(node) {
-  if (t.isExpression(node))
+  if (t.isExpression(node)) {
     node = t.expressionStatement(node);
+  }
+
   t.assertStatement(node);
   this.listing.push(node);
 };
@@ -877,6 +879,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
   let self = this;
   let result; // Used optionally by several cases below.
+  let after;
 
   function finish(expr) {
     t.assertExpression(expr);
@@ -909,6 +912,8 @@ Ep.explodeExpression = function(path, ignoreResult) {
   // control the precise order in which the generated code realizes the
   // side effects of those subexpressions.
   function explodeViaTempVar(tempVar, childPath, ignoreChildResult) {
+    assert.ok(childPath instanceof traverse.NodePath);
+
     assert.ok(
       !ignoreChildResult || !tempVar,
       "Ignoring the result of a child expression but forcing it to " +
@@ -1016,7 +1021,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
         // will receive the object of the MemberExpression as its `this`
         // object.
         newCallee = t.sequenceExpression([
-          t.numericLiteral(0),
+          t.numbericLiteral(0),
           newCallee
         ]);
       }
