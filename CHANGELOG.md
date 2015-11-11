@@ -13,6 +13,34 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.1.4
+
+ * **Bug Fix**
+  * Fix class transformation bug for export declarations with no `id`.
+  * Fix regenerator plugin being passed an invalid function `id`.
+  * Add support for async to generator helper on object and class methods.
+  * Fix looking up undefined nodes when walking back up the tree in typeof symbol plugin.
+  * Fix accidental serialisation of template literals in the code generator when the object of a member expression.
+  * Add missing `Expression` alias to `TypeCastExpression`.
+  * Move `children` prop pushing to after props to ensure correct order in the react inline elements plugin.
+  * Fix `buildExternalHelpers` script ignoring non-underscored helpers.
+  * Fix exported classes with static class properties.
+ * **Spec Compliancy**
+  * Add support for computed mutators in `babel-plugin-transform-es2015-computed-properties`.
+ * **Polish**
+  * Make interop for plugins with the `__esModule` work for all plugins no matter how they're imported/specified.
+  * Make it illegal for plugins to specify a catch-all `enter`/`exit` visitor method.
+  * Ignore `babel-runtime` version mismatch in `babel-doctor`.
+  * Omit `defaultProps` helper when there are no props in the react inline elements plugin.
+  * Add validators for ES2015 export nodes.
+  * Add missing core node validators.
+  * Update `runtime` plugin `core-js` definitions.
+ * **Internal**
+  * Add `babel-plugin-transform-react-display-name` to the `react` preset.
+  * Clean up scope cache.
+  * Move `babel/register` into a separate `babel-register` package.
+  * Add `react-jsx-source` plugin and add it to the `react` preset.
+
 ## 6.1.3
 
  * **Internal**
