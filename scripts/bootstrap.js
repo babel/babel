@@ -17,7 +17,6 @@ try {
 } catch (err) {}
 
 // get packages
-var longestNameLength = 0;
 var packages = [];
 ls("packages/*").forEach(function (loc) {
   var name = path.basename(loc);
@@ -26,10 +25,6 @@ ls("packages/*").forEach(function (loc) {
   var pkgLoc = __dirname + "/../packages/" + name + "/package.json";
   if (!fs.existsSync(pkgLoc)) return;
 
-  if (name.length > longestNameLength) {
-    longestNameLength = name.length;
-  }
-
   var pkg = require(pkgLoc);
   packages.push({
     folder: name,
@@ -37,7 +32,6 @@ ls("packages/*").forEach(function (loc) {
     name: pkg.name
   });
 });
-longestNameLength = Math.min(longestNameLength, 50);
 
 var completed = false;
 
@@ -48,7 +42,7 @@ var bar = new ProgressBar(":packagename ╢:bar╟", {
   clear: true,
 
   // terminal columns - package name length - additional characters length
-  width: process.stdout.columns - longestNameLength - 3
+  width: process.stdout.columns - 50 - 3
 });
 
 async.parallelLimit(packages.map(function (root) {
@@ -112,7 +106,7 @@ async.parallelLimit(packages.map(function (root) {
 
     tasks.push(function (done) {
       if (!completed) bar.tick({
-        packagename: pad(root.name.slice(0, longestNameLength), longestNameLength)
+        packagename: pad(root.name.slice(0, 50), 50)
       });
       done();
     });
