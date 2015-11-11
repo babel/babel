@@ -42,7 +42,8 @@ export default function () {
       },
 
       Loop(path, file) {
-        let { parent, scope } = path;
+        let { node, parent, scope } = path;
+        t.ensureBlock(node);
         let blockScoping = new BlockScoping(path, path.get("body"), parent, scope, file);
         let replace = blockScoping.run();
         if (replace) path.replaceWith(replace);
@@ -79,7 +80,6 @@ function convertBlockScopedToVar(node, parent, scope) {
   }
 
   node[t.BLOCK_SCOPED_SYMBOL] = true;
-  node._let = true;
   node.kind = "var";
 }
 
