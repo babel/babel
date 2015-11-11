@@ -1,7 +1,8 @@
 var code = multiline([
   "(function() {",
+  "  var bar = 'lol';",
   "  function foo(b){",
-  '    b === "lol";',
+  "    b === bar;",
   "    foo(b);",
   "  }",
   "})();",
