@@ -24,17 +24,12 @@ export default function ({ types: t }) {
         // init
         let isComponent = true;
         let props       = t.objectExpression([]);
-        let obj         = t.objectExpression([]);
         let key         = t.nullLiteral();
         let type        = open.name;
 
         if (t.isJSXIdentifier(type) && t.react.isCompatTag(type.name)) {
           type = t.stringLiteral(type.name);
           isComponent = false;
-        }
-
-        function pushElemProp(key, value) {
-          pushProp(obj.properties, t.identifier(key), value);
         }
 
         function pushProp(objProps, key, value) {
@@ -70,16 +65,8 @@ export default function ({ types: t }) {
           }
         }
 
-        // metadata
-        pushElemProp("$$typeof", file.addHelper("typeofReactElement"));
-        pushElemProp("type", type);
-        pushElemProp("key", key);
-        pushElemProp("ref", t.nullLiteral());
-
-        pushElemProp("props", props);
-        pushElemProp("_owner", t.nullLiteral());
-
-        path.replaceWith(obj);
+        let el = t.callExpression(file.addHelper("createRawReactElement"), [type, key, props]);
+        path.replaceWith(el);
       }
     }
   };
