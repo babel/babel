@@ -3,6 +3,7 @@
 import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";
 import * as t from "./index";
+import { BLOCK_SCOPED_SYMBOL } from "./constants";
 
 /**
  * Check if the input `node` is a binding identifier.
@@ -169,7 +170,7 @@ export function isValidIdentifier(name: string): boolean {
  */
 
 export function isLet(node: Object): boolean {
-  return t.isVariableDeclaration(node) && (node.kind !== "var" || node._let);
+  return t.isVariableDeclaration(node) && (node.kind !== "var" || node[BLOCK_SCOPED_SYMBOL]);
 }
 
 /**
@@ -185,7 +186,7 @@ export function isBlockScoped(node: Object): boolean {
  */
 
 export function isVar(node: Object): boolean {
-  return t.isVariableDeclaration(node, { kind: "var" }) && !node._let;
+  return t.isVariableDeclaration(node, { kind: "var" }) && !node[BLOCK_SCOPED_SYMBOL];
 }
 
 /**
