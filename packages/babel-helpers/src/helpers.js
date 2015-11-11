@@ -6,8 +6,22 @@ export let _typeof = template(`
   });
 `);
 
-export let typeofReactElement = template(`
-  (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
+export let createRawReactElement = template(`
+  (function () {
+    var REACT_ELEMENT_TYPE = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
+
+    return function createRawReactElement (type, key, props) {
+      return {
+        $$typeof: REACT_ELEMENT_TYPE,
+        type: type,
+        key: key,
+        ref: null,
+        props: props,
+        _owner: null,
+      };
+    };
+
+  })()
 `);
 
 export let asyncToGenerator = template(`
