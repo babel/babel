@@ -19,23 +19,12 @@ import path from "path";
 const TRACE_ID = "__source";
 
 export default function ({ types: t }) {
-  function objectToAst(object) {
-    const properties = Object.keys(object).map((attr) => {
-      let value;
-      switch(typeof object[attr]) {
-        case "number": value = t.numericLiteral(object[attr]); break;
-        default: value = t.stringLiteral(object[attr].toString());
-      }
-      return t.objectProperty(t.identifier(attr), value);
-    });
-    return t.objectExpression(properties);
-  }
-
   function makeTrace(fileName, lineNumber) {
-    return objectToAst({
-      fileName,
-      lineNumber,
-    });
+    const fileNameLiteral = fileName != null ? t.stringLiteral(fileName) : t.nullLiteral();
+    const fileLineLiteral = lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
+    const fileNameProperty = t.objectProperty(t.identifier("fileName"), fileNameLiteral);
+    const lineNumberProperty = t.objectProperty(t.identifier("lineNumber"), fileLineLiteral);
+    return t.objectExpression([fileNameProperty, lineNumberProperty]);
   }
 
   let visitor = {
