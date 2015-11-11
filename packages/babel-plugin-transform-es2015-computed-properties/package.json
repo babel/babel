@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es2015-computed-properties",
-  "version": "6.0.14",
+  "version": "6.1.4",
   "description": "Compile ES2015 computed properties to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-computed-properties",
   "license": "MIT",
@@ -14,6 +14,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.0.0"
+    "babel-helper-plugin-test-runner": "^6.1.4"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es5-property-mutators",
-  "version": "6.0.14",
+  "version": "6.1.4",
   "description": "Compile ES5 property mutator shorthand syntax to Object.defineProperty",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es5-property-mutators",
   "license": "MIT",
@@ -13,6 +13,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.0.0"
+    "babel-helper-plugin-test-runner": "^6.1.4"
   }
 }
