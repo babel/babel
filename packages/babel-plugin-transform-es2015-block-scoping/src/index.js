@@ -42,14 +42,7 @@ export default function () {
       },
 
       Loop(path, file) {
-        let { node, parent, scope } = path;
-
-        let init = node.left || node.init;
-        if (isBlockScoped(init)) {
-          t.ensureBlock(node);
-          node.body._letDeclarators = [init];
-        }
-
+        let { parent, scope } = path;
         let blockScoping = new BlockScoping(path, path.get("body"), parent, scope, file);
         let replace = blockScoping.run();
         if (replace) path.replaceWith(replace);
@@ -161,7 +154,7 @@ let letReferenceFunctionVisitor = traverse.visitors.merge([{
 
 let hoistVarDeclarationsVisitor = {
   enter(path, self) {
-    let { node, parent, scope } = path;
+    let { node, parent } = path;
 
     if (path.isForStatement()) {
       if (isVar(node.init, node)) {
@@ -492,12 +485,14 @@ class BlockScoping {
   getLetReferences() {
     let block = this.block;
 
-    let declarators = block._letDeclarators || [];
+    let declarators = [];
 
-    //
-    for (let i = 0; i < declarators.length; i++) {
-      let declar = declarators[i];
-      extend(this.outsideLetReferences, t.getBindingIdentifiers(declar));
+    if (this.loop) {
+      let init = this.loop.left || this.loop.init;
+      if (isBlockScoped(init)) {
+        declarators.push(init);
+        extend(this.outsideLetReferences, t.getBindingIdentifiers(init));
+      }
     }
 
     //
