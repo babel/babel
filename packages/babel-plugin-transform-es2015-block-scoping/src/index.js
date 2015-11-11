@@ -71,7 +71,7 @@ let buildRetCheck = template(`
 
 function isBlockScoped(node) {
   if (!t.isVariableDeclaration(node)) return false;
-  if (node._let) return true;
+  if (node[t.BLOCK_SCOPED_SYMBOL]) return true;
   if (node.kind !== "let" && node.kind !== "const") return false;
   return true;
 }
@@ -85,18 +85,13 @@ function convertBlockScopedToVar(node, parent, scope) {
     }
   }
 
+  node[t.BLOCK_SCOPED_SYMBOL] = true;
   node._let = true;
   node.kind = "var";
 }
 
-function isVar(node, parent) {
-  return t.isVariableDeclaration(node, { kind: "var" }) && !isBlockScoped(node, parent);
-}
-
-function standardizeLets(declars) {
-  for (let declar of (declars: Array)) {
-    delete declar._let;
-  }
+function isVar(node) {
+  return t.isVariableDeclaration(node, { kind: "var" }) && !isBlockScoped(node);
 }
 
 function replace(path, node, scope, remaps) {
@@ -526,9 +521,6 @@ class BlockScoping {
 
     // no let references so we can just quit
     if (!this.hasLetReferences) return;
-
-    // set let references to plain let references
-    standardizeLets(declarators);
 
     let state = {
       letReferences: this.letReferences,
