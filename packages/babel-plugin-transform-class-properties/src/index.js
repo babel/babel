@@ -134,6 +134,10 @@ export default function ({ types: t }) {
           nodes.push(t.expressionStatement(ref));
         }
 
+        if (path.isClassDeclaration() && path.parentPath.isExportDeclaration()) {
+          path = path.parentPath;
+        }
+
         path.insertAfter(nodes);
       }
     }
