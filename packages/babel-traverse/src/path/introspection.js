@@ -313,7 +313,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
   for (let path of referencePaths) {
     // if a reference is a child of the function we're checking against then we can
     // safelty ignore it
-    let childOfFunction = !!path.find(path => path === targetFuncPath);
+    let childOfFunction = !!path.find(path => path.node === targetFuncPath.node);
     if (childOfFunction) continue;
 
     let status = this._guessExecutionStatusRelativeTo(path);
