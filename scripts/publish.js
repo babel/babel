@@ -142,7 +142,7 @@ function publish() {
 
   changedPackages.forEach(function (name) {
     var loc = getPackageLocation(name);
-    exec("cd " + loc + " && npm publish", true);
+    exec("cd " + loc + " && npm publish --tag prerelease", true);
 
     // postpublish script
     var postPub = loc + "/scripts/postpublish.js";
@@ -152,7 +152,7 @@ function publish() {
 }
 
 var publishedPackages = [];
-var originalCommit = exec("git rev-list --all --max-count=1");;
+var originalCommit = exec("git rev-list --all --max-count=1");
 
 try {
   publish();
@@ -181,6 +181,12 @@ try {
 
   return;
 }
+
+changedPackages.forEach(function (name) {
+  var loc = getPackageLocation(name);
+  exec("npm dist-tag rm " + name + " prerelease", true);
+  exec("npm dist-tag add " + name + "@" + NEW_VERSION + " stable");
+});
 
 exec("git push", true);
 exec("git push --tags", true);
