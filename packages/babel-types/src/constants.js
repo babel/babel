@@ -23,4 +23,4 @@ export const INHERIT_KEYS = {
   force: ["start", "loc", "end"]
 };
 
-export const BLOCK_SCOPED_SYMBOL = Symbol("var used to be block scoped");
+export const BLOCK_SCOPED_SYMBOL = Symbol.for("var used to be block scoped");
