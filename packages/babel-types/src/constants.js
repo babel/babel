@@ -22,3 +22,5 @@ export const INHERIT_KEYS = {
   optional: ["typeAnnotation", "typeParameters", "returnType"],
   force: ["start", "loc", "end"]
 };
+
+export const BLOCK_SCOPED_SYMBOL = Symbol("var used to be block scoped");
