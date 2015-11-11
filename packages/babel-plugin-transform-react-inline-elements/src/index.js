@@ -67,7 +67,7 @@ export default function ({ types: t }) {
           if (props.properties.length) {
             props = t.callExpression(file.addHelper("defaultProps"), [defProps, props]);
           } else {
-            props = defProps;
+            props = t.logicalExpression("||", defProps, props);
           }
         }
 
