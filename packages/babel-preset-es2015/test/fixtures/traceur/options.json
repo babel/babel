@@ -14,7 +14,7 @@
     "transform-es2015-for-of",
     "transform-es2015-sticky-regex",
     "transform-es2015-unicode-regex",
-    "transform-es2015-constants",
+    "check-es2015-constants",
     "transform-es2015-spread",
     "transform-es2015-parameters",
     "transform-es2015-destructuring",

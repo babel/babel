@@ -1,8 +1,8 @@
 {
-  "name": "babel-plugin-transform-es2015-constants",
+  "name": "babel-plugin-check-es2015-constants",
   "version": "6.1.4",
   "description": "Compile ES2015 constants to ES5",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-constants",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-check-es2015-constants",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

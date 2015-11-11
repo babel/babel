@@ -20,7 +20,7 @@
     "babel-plugin-transform-es2015-for-of": "^6.1.4",
     "babel-plugin-transform-es2015-sticky-regex": "^6.1.4",
     "babel-plugin-transform-es2015-unicode-regex": "^6.1.4",
-    "babel-plugin-transform-es2015-constants": "^6.1.4",
+    "babel-plugin-check-es2015-constants": "^6.1.4",
     "babel-plugin-transform-es2015-spread": "^6.1.4",
     "babel-plugin-transform-es2015-parameters": "^6.1.4",
     "babel-plugin-transform-es2015-destructuring": "^6.1.4",
