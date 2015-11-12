@@ -70,12 +70,18 @@ export default function ({ types: t }) {
     return false;
   }
 
+  function doError(path) {
+    throw path.buildCodeFrameError("Decorators are not supported yet in 6.x pending proposal update.");
+  }
+
   return {
     inherits: require("babel-plugin-syntax-decorators"),
 
     visitor: {
       ClassExpression(path) {
         if (!hasDecorators(path)) return;
+        doError(path);
+
         explodeClass(path);
 
         let ref = path.scope.generateDeclaredUidIdentifier("ref");
@@ -92,6 +98,7 @@ export default function ({ types: t }) {
 
       ClassDeclaration(path) {
         if (!hasDecorators(path)) return;
+        doError(path);
         explodeClass(path);
 
         let ref = path.node.id;
@@ -105,6 +112,7 @@ export default function ({ types: t }) {
 
       ObjectExpression(path) {
         if (!hasDecorators(path)) return;
+        doError(path);
       }
     }
   };
