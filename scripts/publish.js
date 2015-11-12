@@ -184,7 +184,7 @@ function publish() {
         done();
       });
     };
-  }), 4, function (err) {
+  }), 1, function (err) {
     onError(err);
     ship();
   });
@@ -205,7 +205,7 @@ function ship() {
       execSync("npm dist-tag rm " + name + " prerelease", true);
       execSync("npm dist-tag add " + name + "@" + NEW_VERSION + " stable");
     };
-  }), 4, function (err) {
+  }), 1, function (err) {
     onError(err);
     execSync("git push", true);
     execSync("git push --tags", true);
