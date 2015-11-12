@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-remove-console",
-  "version": "6.1.14",
+  "version": "6.1.15",
   "description": "Remove console.* calls",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-remove-console",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.14"
+    "babel-helper-plugin-test-runner": "^6.1.15"
   }
 }
