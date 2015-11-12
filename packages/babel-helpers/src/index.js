@@ -2,7 +2,7 @@ import helpers from "./helpers";
 
 export function get(name) {
   let fn = helpers[name];
-  if (!fn) throw ReferenceError;
+  if (!fn) throw new ReferenceError(`Unknown helper ${name}`);
 
   return fn().expression;
 }
