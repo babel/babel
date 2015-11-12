@@ -2,6 +2,21 @@
 
 Inline environment variables
 
+## Example
+
+### In
+
+```js
+// assuming process.env.NODE_ENV is actually "development"
+process.env.NODE_ENV;
+```
+
+### Out
+
+```js
+"development";
+```
+
 ## Installation
 
 ```sh

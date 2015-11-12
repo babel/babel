@@ -5,7 +5,7 @@ export default function ({ types: t }) {
         if (path.get("object").matchesPattern("process.env")) {
           let key = path.toComputedKey();
           if (t.isStringLiteral(key)) {
-            return t.valueToNode(process.env[key.value]);
+            path.replace(t.valueToNode(process.env[key.value]));
           }
         }
       }
