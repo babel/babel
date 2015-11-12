@@ -275,7 +275,7 @@ export default class OptionManager {
         }
 
         let pkgLoc = path.join(loc, PACKAGE_FILENAME);
-        if (exists(pkgLoc)) {
+        if (!foundConfig && exists(pkgLoc)) {
           foundConfig = this.addConfig(pkgLoc, "babel", JSON);
         }
       }
