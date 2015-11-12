@@ -1,19 +1,19 @@
 {
   "name": "babel-plugin-transform-es2015-modules-umd",
-  "version": "6.1.5",
+  "version": "6.1.6",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-modules-umd",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-plugin-transform-es2015-modules-amd": "^6.1.5",
-    "babel-template": "^6.1.5",
+    "babel-plugin-transform-es2015-modules-amd": "^6.1.6",
+    "babel-template": "^6.1.6",
     "babel-runtime": "^5.0.0"
   },
   "keywords": [
     "babel-plugin"
   ],
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.5"
+    "babel-helper-plugin-test-runner": "^6.1.6"
   }
 }
