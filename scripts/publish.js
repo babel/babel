@@ -6,12 +6,14 @@ var chalk    = require("chalk");
 var child    = require("child_process");
 var fs       = require("fs");
 
-var NPM_OWNERS = fs.readFileSync(__dirname + "/../NPM_OWNERS", "utf8").trim().split("\n");
-
 //
 
 var PACKAGE_LOC = __dirname + "/../packages";
 var VERSION_LOC = __dirname + "/../VERSION";
+
+var NPM_OWNERS = fs.readFileSync(__dirname + "/../NPM_OWNERS", "utf8").trim().split("\n");
+var changedPackages = [];
+var changedFiles = [VERSION_LOC];
 
 var CURRENT_VERSION = fs.readFileSync(VERSION_LOC, "utf8").trim();
 console.log("Current version:", CURRENT_VERSION);
@@ -84,7 +86,7 @@ function getPackageConfig(name) {
   return require(getPackageLocation(name) + "/package.json");
 }
 
-function updateDepsObject(changedPackages, deps) {
+function updateDepsObject(deps) {
   for (var depName in deps) {
     // ensure this was generated and we're on the same major
     if (deps[depName][0] !== "^" || deps[depName][1] !== NEW_VERSION[0]) continue;
@@ -102,9 +104,6 @@ function checkUpdatedPackages() {
 
   var lastTagCommit = execSync("git rev-list --tags --max-count=1");
   var lastTag       = execSync("git describe " + lastTagCommit);
-
-  var changedPackages = [];
-  var changedFiles = [VERSION_LOC];
 
   packageNames.forEach(function (name) {
     var config = getPackageConfig(name);
@@ -136,8 +135,8 @@ function updateChangedPackages() {
     pkg.version = NEW_VERSION;
 
     // updated dependencies
-    updateDepsObject(changedPackages, pkg.dependencies);
-    updateDepsObject(changedPackages, pkg.devDependencies);
+    updateDepsObject(pkg.dependencies);
+    updateDepsObject(pkg.devDependencies);
 
     // write new package
     fs.writeFileSync(pkgLoc, JSON.stringify(pkg, null, "  ") + "\n");
