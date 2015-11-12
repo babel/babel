@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-property-literals",
-  "version": "6.1.9",
+  "version": "6.1.10",
   "description": "Turn valid property key literals to plain identifiers",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-property-literals",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.9"
+    "babel-helper-plugin-test-runner": "^6.1.10"
   }
 }
