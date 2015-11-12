@@ -1,6 +1,6 @@
 {
   "name": "babel-core",
-  "version": "6.1.18",
+  "version": "6.1.19",
   "description": "Babel compiler core.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -53,6 +53,6 @@
   "devDependencies": {
     "babel-helper-fixtures": "^6.1.18",
     "babel-helper-transform-fixture-test-runner": "^6.1.18",
-    "babel-polyfill": "^6.1.18"
+    "babel-polyfill": "^6.1.19"
   }
 }
