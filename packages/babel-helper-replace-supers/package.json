@@ -1,16 +1,16 @@
 {
   "name": "babel-helper-replace-supers",
-  "version": "6.1.6",
+  "version": "6.1.7",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-replace-supers",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-optimise-call-expression": "^6.1.6",
+    "babel-helper-optimise-call-expression": "^6.1.7",
     "babel-runtime": "^5.0.0",
-    "babel-traverse": "^6.1.6",
-    "babel-messages": "^6.1.6",
-    "babel-template": "^6.1.6",
-    "babel-types": "^6.1.6"
+    "babel-traverse": "^6.1.7",
+    "babel-messages": "^6.1.7",
+    "babel-template": "^6.1.7",
+    "babel-types": "^6.1.7"
   }
 }

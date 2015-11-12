@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-react",
-  "version": "6.1.6",
+  "version": "6.1.7",
   "description": "Babel preset for all React plugins.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,11 +8,11 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-react",
   "main": "index.js",
   "dependencies": {
-    "babel-plugin-syntax-flow": "^6.1.6",
-    "babel-plugin-syntax-jsx": "^6.1.6",
-    "babel-plugin-transform-flow-strip-types": "^6.1.6",
-    "babel-plugin-transform-react-display-name": "^6.1.6",
-    "babel-plugin-transform-react-jsx": "^6.1.6",
-    "babel-plugin-transform-react-jsx-source": "^6.1.6"
+    "babel-plugin-syntax-flow": "^6.1.7",
+    "babel-plugin-syntax-jsx": "^6.1.7",
+    "babel-plugin-transform-flow-strip-types": "^6.1.7",
+    "babel-plugin-transform-react-display-name": "^6.1.7",
+    "babel-plugin-transform-react-jsx": "^6.1.7",
+    "babel-plugin-transform-react-jsx-source": "^6.1.7"
   }
 }

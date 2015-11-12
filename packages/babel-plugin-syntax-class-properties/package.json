@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-syntax-class-properties",
-  "version": "6.1.6",
+  "version": "6.1.7",
   "description": "Allow parsing of class properties",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-class-properties",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.6"
+    "babel-helper-plugin-test-runner": "^6.1.7"
   }
 }
