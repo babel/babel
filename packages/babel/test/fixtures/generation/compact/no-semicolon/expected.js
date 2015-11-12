@@ -1,1 +1,1 @@
-function foo(){if(bar){baz()}return}
+function foo(){if(bar){baz()}return;}
