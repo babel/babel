@@ -8,6 +8,7 @@ import * as t from "../../types";
  */
 
 const SCIENTIFIC_NOTATION = /e/i;
+const ZERO_DECIMAL_INTEGER = /\.0+$/;
 
 /**
  * RegExp for testing if a numeric literal is
@@ -301,7 +302,7 @@ export function MemberExpression(node, print) {
   } else {
     if (t.isLiteral(node.object)) {
       var val = this._Literal(node.object);
-      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")
+      if (isInteger(+val) && !ZERO_DECIMAL_INTEGER.test(val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")
         && !NON_DECIMAL_NUMERIC_LITERAL.test(val)) {
         this.push(".");
       }
