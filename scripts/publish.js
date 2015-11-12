@@ -212,11 +212,13 @@ function ship() {
         try {
           execSync("npm dist-tag rm " + name + " prerelease", true);
           execSync("npm dist-tag add " + name + "@" + NEW_VERSION + " stable");
+          execSync("npm dist-tag add " + name + "@" + NEW_VERSION + " latest");
           break;
         } catch (err) {
           console.error(err.stack);
         }
       }
+      done();
     };
   }), 4, function (err) {
     onError(err);
