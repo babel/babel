@@ -4,6 +4,7 @@ var readline = require("readline-sync");
 var semver   = require("semver");
 var chalk    = require("chalk");
 var child    = require("child_process");
+var async    = require("async");
 var fs       = require("fs");
 
 //
