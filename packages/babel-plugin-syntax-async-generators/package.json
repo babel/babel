@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-syntax-async-generators",
-  "version": "6.1.12",
+  "version": "6.1.13",
   "description": "Allow parsing of async generator functions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-async-generators",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.12"
+    "babel-helper-plugin-test-runner": "^6.1.13"
   }
 }

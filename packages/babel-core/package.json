@@ -1,6 +1,6 @@
 {
   "name": "babel-core",
-  "version": "6.1.12",
+  "version": "6.1.13",
   "description": "Babel compiler core.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -24,16 +24,16 @@
     "test": "make test"
   },
   "dependencies": {
-    "babel-code-frame": "^6.1.12",
-    "babel-generator": "^6.1.12",
-    "babel-helpers": "^6.1.12",
-    "babel-messages": "^6.1.12",
-    "babel-template": "^6.1.12",
+    "babel-code-frame": "^6.1.13",
+    "babel-generator": "^6.1.13",
+    "babel-helpers": "^6.1.13",
+    "babel-messages": "^6.1.13",
+    "babel-template": "^6.1.13",
     "babel-runtime": "^5.0.0",
-    "babel-register": "^6.1.12",
-    "babel-traverse": "^6.1.12",
-    "babel-types": "^6.1.12",
-    "babylon": "^6.1.12",
+    "babel-register": "^6.1.13",
+    "babel-traverse": "^6.1.13",
+    "babel-types": "^6.1.13",
+    "babylon": "^6.1.13",
     "convert-source-map": "^1.1.0",
     "debug": "^2.1.1",
     "esutils": "^2.0.0",
@@ -51,8 +51,8 @@
     "source-map-support": "^0.2.10"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "^6.1.12",
-    "babel-helper-transform-fixture-test-runner": "^6.1.12",
-    "babel-polyfill": "^6.1.12"
+    "babel-helper-fixtures": "^6.1.13",
+    "babel-helper-transform-fixture-test-runner": "^6.1.13",
+    "babel-polyfill": "^6.1.13"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-strict-mode",
-  "version": "6.1.12",
+  "version": "6.1.13",
   "description": "TODO",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-strict-mode",
   "license": "MIT",
@@ -10,9 +10,9 @@
   ],
   "dependencies": {
     "babel-runtime": "^5.0.0",
-    "babel-types": "^6.1.12"
+    "babel-types": "^6.1.13"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.12"
+    "babel-helper-plugin-test-runner": "^6.1.13"
   }
 }
