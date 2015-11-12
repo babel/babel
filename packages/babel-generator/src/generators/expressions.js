@@ -6,6 +6,7 @@ import * as t from "babel-types";
 import n from "../node";
 
 const SCIENTIFIC_NOTATION = /e/i;
+const ZERO_DECIMAL_INTEGER = /\.0+$/;
 
 export function UnaryExpression(node: Object) {
   let needsSpace = /[a-z]$/.test(node.operator);
@@ -208,7 +209,7 @@ export function MemberExpression(node: Object) {
   } else {
     if (t.isLiteral(node.object) && !t.isTemplateLiteral(node.object)) {
       let val = this.getPossibleRaw(node.object) || this._stringLiteral(node.object);
-      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")) {
+      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !ZERO_DECIMAL_INTEGER.test(val) && !this.endsWith(".")) {
         this.push(".");
       }
     }

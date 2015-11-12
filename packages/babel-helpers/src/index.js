@@ -7,6 +7,8 @@ export function get(name) {
   return fn().expression;
 }
 
-export let list = Object.keys(helpers).filter(name => name !== "__esModule");
+export let list = Object.keys(helpers)
+  .map(name => name[0] === "_" ? name.slice(1) : name)
+  .filter(name => name !== "__esModule");
 
 export default get;
