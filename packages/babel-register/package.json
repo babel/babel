@@ -13,9 +13,7 @@
     "path-exists": "^1.0.0",
     "lodash": "^3.10.0",
     "source-map-support": "^0.2.10",
-    "babel-core": "^6.1.4"
-  },
-  "devDependencies": {
+    "babel-core": "^6.1.4",
     "babel-runtime": "^5.0.0"
   }
 }
