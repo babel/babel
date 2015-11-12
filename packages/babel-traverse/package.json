@@ -1,6 +1,6 @@
 {
   "name": "babel-traverse",
-  "version": "6.1.13",
+  "version": "6.1.14",
   "description": "",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,11 +8,11 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-traverse",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-code-frame": "^6.1.13",
-    "babel-messages": "^6.1.13",
+    "babel-code-frame": "^6.1.14",
+    "babel-messages": "^6.1.14",
     "babel-runtime": "^5.0.0",
-    "babel-types": "^6.1.13",
-    "babylon": "^6.1.13",
+    "babel-types": "^6.1.14",
+    "babylon": "^6.1.14",
     "globals": "^8.3.0",
     "invariant": "^2.1.0",
     "lodash": "^3.10.1",

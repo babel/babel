@@ -1,6 +1,6 @@
 {
   "name": "babel-cli",
-  "version": "6.1.13",
+  "version": "6.1.14",
   "description": "Babel command line.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,9 +8,9 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-cli",
   "preferGlobal": true,
   "dependencies": {
-    "babel-core": "^6.1.13",
-    "babel-register": "^6.1.13",
-    "babel-polyfill": "^6.1.13",
+    "babel-core": "^6.1.14",
+    "babel-register": "^6.1.14",
+    "babel-polyfill": "^6.1.14",
     "babel-runtime": "^5.0.0",
     "bin-version-check": "^2.1.0",
     "chalk": "1.1.1",
@@ -30,7 +30,7 @@
     "v8flags": "^2.0.10"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "^6.1.13"
+    "babel-helper-fixtures": "^6.1.14"
   },
   "bin": {
     "babel-doctor": "./bin/babel-doctor.js",
