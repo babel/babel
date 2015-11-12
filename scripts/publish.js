@@ -131,10 +131,6 @@ function checkUpdatedPackages() {
   if (!changedPackages.length && !FORCE_VERSION.length) {
     throw new Error(chalk.red("No packages changed."));
   }
-
-  if (changedPackages.indexOf("babel-browser") < 0) {
-    changedPackages.push("babel-browser");
-  }
 }
 
 function updateChangedPackages() {
