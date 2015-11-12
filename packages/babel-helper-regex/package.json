@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-regex",
-  "version": "6.1.9",
+  "version": "6.1.10",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-regex",
   "license": "MIT",
@@ -8,6 +8,6 @@
   "dependencies": {
     "babel-runtime": "^5.0.0",
     "lodash": "^3.10.0",
-    "babel-types": "^6.1.9"
+    "babel-types": "^6.1.10"
   }
 }
