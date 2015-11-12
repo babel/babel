@@ -1,4 +1,4 @@
 {
-  "plugins": ["external-helpers-2"],
+  "plugins": ["external-helpers-2", "transform-class-properties"],
   "presets": ["es2015", "react"]
 }
