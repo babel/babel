@@ -1,6 +1,6 @@
 {
   "name": "babel-types",
-  "version": "6.1.11",
+  "version": "6.1.12",
   "description": "",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -9,7 +9,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-runtime": "^5.0.0",
-    "babel-traverse": "^6.1.11",
+    "babel-traverse": "^6.1.12",
     "esutils": "^2.0.2",
     "lodash": "^3.10.1",
     "to-fast-properties": "^1.0.1"

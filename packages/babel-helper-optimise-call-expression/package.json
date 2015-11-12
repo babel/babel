@@ -1,12 +1,12 @@
 {
   "name": "babel-helper-optimise-call-expression",
-  "version": "6.1.11",
+  "version": "6.1.12",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-optimise-call-expression",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
     "babel-runtime": "^5.0.0",
-    "babel-types": "^6.1.11"
+    "babel-types": "^6.1.12"
   }
 }

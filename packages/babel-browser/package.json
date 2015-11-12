@@ -1,6 +1,6 @@
 {
   "name": "babel-browser",
-  "version": "6.1.11",
+  "version": "6.1.12",
   "description": "Babel browser build",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",

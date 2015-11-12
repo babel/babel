@@ -1,25 +1,25 @@
 {
   "name": "babel-plugin-transform-es2015-classes",
-  "version": "6.1.11",
+  "version": "6.1.12",
   "description": "Compile ES2015 classes to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-classes",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-optimise-call-expression": "^6.1.11",
-    "babel-helper-function-name": "^6.1.11",
-    "babel-helper-replace-supers": "^6.1.11",
-    "babel-template": "^6.1.11",
-    "babel-traverse": "^6.1.11",
-    "babel-helper-define-map": "^6.1.11",
-    "babel-messages": "^6.1.11",
+    "babel-helper-optimise-call-expression": "^6.1.12",
+    "babel-helper-function-name": "^6.1.12",
+    "babel-helper-replace-supers": "^6.1.12",
+    "babel-template": "^6.1.12",
+    "babel-traverse": "^6.1.12",
+    "babel-helper-define-map": "^6.1.12",
+    "babel-messages": "^6.1.12",
     "babel-runtime": "^5.0.0",
-    "babel-types": "^6.1.11"
+    "babel-types": "^6.1.12"
   },
   "keywords": [
     "babel-plugin"
   ],
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.11"
+    "babel-helper-plugin-test-runner": "^6.1.12"
   }
 }
