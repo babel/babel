@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-export-extensions",
-  "version": "6.1.4",
+  "version": "6.1.5",
   "description": "Compile export extensions to ES2015",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-export-extensions",
   "license": "MIT",
@@ -9,10 +9,10 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-plugin-syntax-export-extensions": "^6.1.4",
+    "babel-plugin-syntax-export-extensions": "^6.1.5",
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.4"
+    "babel-helper-plugin-test-runner": "^6.1.5"
   }
 }

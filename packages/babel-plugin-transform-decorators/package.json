@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-decorators",
-  "version": "6.1.4",
+  "version": "6.1.5",
   "description": "Compile class and object decorators to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-decorators",
   "license": "MIT",
@@ -9,14 +9,14 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-types": "^6.1.4",
-    "babel-helper-define-map": "^6.0.14",
-    "babel-plugin-syntax-decorators": "^6.1.4",
-    "babel-helper-explode-class": "^6.0.14",
-    "babel-template": "^6.0.14",
+    "babel-types": "^6.1.5",
+    "babel-helper-define-map": "^6.1.5",
+    "babel-plugin-syntax-decorators": "^6.1.5",
+    "babel-helper-explode-class": "^6.1.5",
+    "babel-template": "^6.1.5",
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.4"
+    "babel-helper-plugin-test-runner": "^6.1.5"
   }
 }
