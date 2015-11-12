@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es3-property-literals",
-  "version": "6.1.4",
+  "version": "6.1.5",
   "description": "Ensure that reserved words are quoted in object property keys",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es3-property-literals",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.4"
+    "babel-helper-plugin-test-runner": "^6.1.5"
   }
 }

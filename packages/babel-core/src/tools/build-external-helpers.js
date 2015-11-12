@@ -74,9 +74,9 @@ function buildVar(namespace, builder) {
 
 function buildHelpers(body, namespace, whitelist) {
   each(helpers.list, function (name) {
-    if (whitelist && whitelist.indexOf(name) >= 0) return;
+    if (whitelist && whitelist.indexOf(name) < 0) return;
 
-    let key = t.identifier(t.toIdentifier(name));
+    let key = t.identifier(name);
     body.push(t.expressionStatement(
       t.assignmentExpression("=", t.memberExpression(namespace, key), helpers.get(name))
     ));

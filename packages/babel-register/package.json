@@ -1,6 +1,6 @@
 {
   "name": "babel-register",
-  "version": "6.1.4",
+  "version": "6.1.5",
   "description": "babel require hook",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-register",
@@ -13,7 +13,7 @@
     "path-exists": "^1.0.0",
     "lodash": "^3.10.0",
     "source-map-support": "^0.2.10",
-    "babel-core": "^6.1.4",
+    "babel-core": "^6.1.5",
     "babel-runtime": "^5.0.0"
   }
 }

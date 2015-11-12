@@ -1,7 +1,7 @@
-import * as helpers from "./helpers";
+import helpers from "./helpers";
 
 export function get(name) {
-  let fn = helpers[name] || helpers[`_${name}`];
+  let fn = helpers[name];
   if (!fn) throw ReferenceError;
 
   return fn().expression;

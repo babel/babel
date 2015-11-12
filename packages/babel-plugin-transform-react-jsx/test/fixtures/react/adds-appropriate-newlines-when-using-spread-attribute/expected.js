@@ -1,2 +1,2 @@
-React.createElement(Component, babelHelpers._extends({}, props, {
+React.createElement(Component, babelHelpers.extends({}, props, {
   sound: "moo" }));

@@ -1,9 +1,9 @@
-var foo = babelHelpers._extends({}, bar);
+var foo = babelHelpers.extends({}, bar);
 
-var foo = babelHelpers._extends({}, bar, {
+var foo = babelHelpers.extends({}, bar, {
   bar: "foo"
 });
 
-var foo = babelHelpers._extends({}, bar, {
+var foo = babelHelpers.extends({}, bar, {
   bar: "foo"
 });

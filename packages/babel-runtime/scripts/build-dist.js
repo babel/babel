@@ -1,6 +1,7 @@
 var outputFile = require("output-file-sync");
 var each       = require("lodash/collection/each");
 var fs         = require("fs");
+var _          = require("lodash");
 
 var coreDefinitions = require("babel-plugin-transform-runtime").definitions;
 
@@ -84,6 +85,11 @@ function buildHelper(helperName) {
 
 each(helpers.list, function (helperName) {
   writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
+
+  // compat
+  var helperAlias = _.kebabCase(helperName);
+  writeFile("helpers/_" + helperAlias + ".js", buildHelper(helperName));
+  writeFile("helpers/" + helperAlias + ".js", buildHelper(helperName));
 });
 
 writeFile("regenerator/index.js", readFile("regenerator/runtime-module", true));
