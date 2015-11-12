@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-react-jsx",
-  "version": "6.1.16",
+  "version": "6.1.17",
   "description": "Turn JSX into React function calls",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-jsx",
   "license": "MIT",
@@ -10,10 +10,10 @@
   ],
   "dependencies": {
     "babel-runtime": "^5.0.0",
-    "babel-helper-builder-react-jsx": "^6.1.16",
-    "babel-plugin-syntax-jsx": "^6.1.16"
+    "babel-helper-builder-react-jsx": "^6.1.17",
+    "babel-plugin-syntax-jsx": "^6.1.17"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.16"
+    "babel-helper-plugin-test-runner": "^6.1.17"
   }
 }

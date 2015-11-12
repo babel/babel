@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-syntax-do-expressions",
-  "version": "6.1.16",
+  "version": "6.1.17",
   "description": "Allow parsing of do expressions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-do-expressions",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.16"
+    "babel-helper-plugin-test-runner": "^6.1.17"
   }
 }
