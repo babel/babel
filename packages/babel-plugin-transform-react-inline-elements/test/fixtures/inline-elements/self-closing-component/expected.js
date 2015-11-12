@@ -1,1 +1,1 @@
-babelHelpers.createRawReactElement(Baz, null, Baz.defaultProps);
+babelHelpers.createRawReactElement(Baz, null, Baz.defaultProps || {});

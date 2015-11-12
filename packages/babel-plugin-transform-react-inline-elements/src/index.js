@@ -12,6 +12,13 @@ export default function ({ types: t }) {
     return t.isJSXAttribute(attr) && t.isJSXIdentifier(attr.name, { name: name });
   }
 
+  function getAttributeValue(attr) {
+    let value = attr.value;
+    if (!value) return t.identifier("true");
+    if (t.isJSXExpressionContainer(value)) value = value.expression;
+    return value;
+  }
+
   return {
     visitor: {
       JSXElement(path, file) {
@@ -33,18 +40,17 @@ export default function ({ types: t }) {
         }
 
         function pushProp(objProps, key, value) {
-          if (t.isJSXExpressionContainer(value)) value = value.expression;
           objProps.push(t.objectProperty(key, value));
         }
 
         // props
         for (let attr of (open.attributes: Array<Object>)) {
           if (isJSXAttributeOfName(attr, "key")) {
-            key = attr.value;
+            key = getAttributeValue(attr);
           } else {
             let name = attr.name.name;
             let propertyKey = t.isValidIdentifier(name) ? t.identifier(name) : t.stringLiteral(name);
-            pushProp(props.properties, propertyKey, attr.value || t.identifier("true"));
+            pushProp(props.properties, propertyKey, getAttributeValue(attr));
           }
         }
 
@@ -61,7 +67,7 @@ export default function ({ types: t }) {
           if (props.properties.length) {
             props = t.callExpression(file.addHelper("defaultProps"), [defProps, props]);
           } else {
-            props = defProps;
+            props = t.logicalExpression("||", defProps, props);
           }
         }
 
