@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-check-es2015-constants",
-  "version": "6.1.17",
+  "version": "6.1.18",
   "description": "Compile ES2015 constants to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-check-es2015-constants",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.17"
+    "babel-helper-plugin-test-runner": "^6.1.18"
   }
 }
