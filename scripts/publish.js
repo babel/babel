@@ -39,10 +39,23 @@ try {
 
 //
 
+var createdTag = false;
+
 function updateTag() {
   var NEW_TAG_NAME = "v" + NEW_VERSION;
   execSync("git commit -m " + NEW_TAG_NAME, true);
   execSync("git tag " + NEW_TAG_NAME, true);
+  createdTag = true;
+}
+
+function removeTag() {
+  console.error(chalk.red("Rolling back version file."));
+  fs.writeFileSync(VERSION_LOC, NEW_VERSION, "utf8");
+
+  if (createdTag) {
+    console.error(chalk.red("Attempting to roll back tag creation."));
+    exec("git tag -d v" + NEW_VERSION, true);
+  }
 }
 
 function build() {
@@ -165,7 +178,7 @@ function publish() {
       child.exec("cd " + loc + " && npm publish --tag prerelease", function (err, stdout, stderr) {
         if (err || stderr) return done(err || stderr);
 
-        console.log(stdout);
+        console.log(stdout.trim());
 
         // postpublish script
         var postPub = loc + "/scripts/postpublish.js";
@@ -183,6 +196,7 @@ function publish() {
 function onError(err) {
   if (!err) return;
   console.log(chalk.red("There was a problem publishing."));
+  removeTag();
   console.log(err.stack || err);
   process.exit(1);
 }
