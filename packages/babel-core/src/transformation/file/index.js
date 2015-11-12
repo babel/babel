@@ -362,7 +362,7 @@ export default class File extends Store {
 
       inputMapConsumer.eachMapping(function (mapping) {
         mergedGenerator.addMapping({
-          source: inputMapConsumer.file,
+          source: mapping.source,
 
           original: {
             line: mapping.originalLine,
