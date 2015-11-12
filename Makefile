@@ -25,6 +25,8 @@ lint:
 	#flow check
 
 clean: test-clean
+	rm -rf packages/babel-browser/browser*
+	rm -rf packages/babel-polyfill/browser*
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 
