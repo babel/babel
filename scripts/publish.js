@@ -49,9 +49,6 @@ function updateTag() {
 }
 
 function removeTag() {
-  console.error(chalk.red("Rolling back version file."));
-  fs.writeFileSync(VERSION_LOC, NEW_VERSION, "utf8");
-
   if (createdTag) {
     console.error(chalk.red("Attempting to roll back tag creation."));
     exec("git tag -d v" + NEW_VERSION, true);
