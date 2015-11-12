@@ -174,8 +174,11 @@ function publish() {
 
       child.exec("cd " + loc + " && npm publish --tag prerelease", function (err, stdout, stderr) {
         if (err || stderr) {
-          console.error(err || stderr);
-          return run(done);
+          err = stderr || err.stack;
+          console.error(err);
+          if (err.indexOf("You cannot publish over the previously published version") < 0) {
+            return run(done);
+          }
         }
 
         console.log(stdout.trim());
