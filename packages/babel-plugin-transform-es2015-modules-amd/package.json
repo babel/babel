@@ -1,19 +1,19 @@
 {
   "name": "babel-plugin-transform-es2015-modules-amd",
-  "version": "6.1.5",
+  "version": "6.1.9",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-modules-amd",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.1.5",
-    "babel-template": "^6.1.5",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.1.9",
+    "babel-template": "^6.1.9",
     "babel-runtime": "^5.0.0"
   },
   "keywords": [
     "babel-plugin"
   ],
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.5"
+    "babel-helper-plugin-test-runner": "^6.1.9"
   }
 }
