@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-stage-1",
-  "version": "6.1.8",
+  "version": "6.1.9",
   "description": "Babel preset for stage 1 plugins",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,10 +8,10 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-1",
   "main": "index.js",
   "dependencies": {
-    "babel-plugin-transform-class-constructor-call": "^6.1.8",
-    "babel-plugin-transform-class-properties": "^6.1.8",
-    "babel-plugin-transform-decorators": "^6.1.8",
-    "babel-plugin-transform-export-extensions": "^6.1.8",
-    "babel-preset-stage-2": "^6.1.8"
+    "babel-plugin-transform-class-constructor-call": "^6.1.9",
+    "babel-plugin-transform-class-properties": "^6.1.9",
+    "babel-plugin-transform-decorators": "^6.1.9",
+    "babel-plugin-transform-export-extensions": "^6.1.9",
+    "babel-preset-stage-2": "^6.1.9"
   }
 }
