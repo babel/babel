@@ -169,11 +169,14 @@ function publish() {
   });
 
   async.parallelLimit(changedPackages.map(function (name) {
-    return function (done) {
+    return function run(done) {
       var loc = getPackageLocation(name);
 
       child.exec("cd " + loc + " && npm publish --tag prerelease", function (err, stdout, stderr) {
-        if (err || stderr) return done(err || stderr);
+        if (err || stderr) {
+          console.error(err || stderr);
+          return run(done);
+        }
 
         console.log(stdout.trim());
 
@@ -184,7 +187,7 @@ function publish() {
         done();
       });
     };
-  }), 1, function (err) {
+  }), 4, function (err) {
     onError(err);
     ship();
   });
@@ -202,10 +205,17 @@ function ship() {
   async.parallelLimit(changedPackages.map(function (name) {
     return function (done) {
       var loc = getPackageLocation(name);
-      execSync("npm dist-tag rm " + name + " prerelease", true);
-      execSync("npm dist-tag add " + name + "@" + NEW_VERSION + " stable");
+      while (true) {
+        try {
+          execSync("npm dist-tag rm " + name + " prerelease", true);
+          execSync("npm dist-tag add " + name + "@" + NEW_VERSION + " stable");
+          break;
+        } catch (err) {
+          console.error(err.stack);
+        }
+      }
     };
-  }), 1, function (err) {
+  }), 4, function (err) {
     onError(err);
     execSync("git push", true);
     execSync("git push --tags", true);
