@@ -1,13 +1,13 @@
 {
   "name": "babel-helper-explode-assignable-expression",
-  "version": "6.1.7",
+  "version": "6.1.8",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-explode-assignable-expression",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-traverse": "^6.1.7",
+    "babel-traverse": "^6.1.8",
     "babel-runtime": "^5.0.0",
-    "babel-types": "^6.1.7"
+    "babel-types": "^6.1.8"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-node-env-inline",
-  "version": "6.1.7",
+  "version": "6.1.8",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-node-env-inline",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.1.7"
+    "babel-helper-plugin-test-runner": "^6.1.8"
   }
 }
