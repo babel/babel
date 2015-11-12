@@ -274,8 +274,7 @@ export default class File extends Store {
       let res = generator(name);
       if (res) return res;
     } else if (runtime) {
-      let id = t.identifier(t.toIdentifier(name));
-      return t.memberExpression(runtime, id);
+      return t.memberExpression(runtime, t.identifier(name));
     }
 
     let ref = getHelper(name);
