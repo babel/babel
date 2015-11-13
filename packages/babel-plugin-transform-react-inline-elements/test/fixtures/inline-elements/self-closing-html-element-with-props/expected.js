@@ -1,3 +1,3 @@
-babelHelpers.createRawReactElement("foo", null, {
+babelHelpers.jsx("foo", {
   bar: "foo"
 });

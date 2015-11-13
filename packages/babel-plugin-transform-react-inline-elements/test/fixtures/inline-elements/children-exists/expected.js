@@ -1,4 +1,3 @@
-babelHelpers.createRawReactElement("div", null, {
-  children: "foo",
-  children: "bar"
-});
+babelHelpers.jsx("div", {
+  children: "foo"
+}, void 0, "bar");

@@ -9,15 +9,43 @@ helpers.typeof = template(`
   });
 `);
 
-helpers.createRawReactElement = template(`
+helpers.jsx = template(`
   (function () {
     var REACT_ELEMENT_TYPE = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
 
-    return function createRawReactElement (type, key, props) {
+    return function createRawReactElement (type, props, key, children) {
+      var defaultProps = type && type.defaultProps;
+      var childrenLength = arguments.length - 3;
+
+      if (!props && childrenLength !== 0) {
+        // If we're going to assign props.children, we create a new object now
+        // to avoid mutating defaultProps.
+        props = {};
+      }
+      if (props && defaultProps) {
+        for (var propName in defaultProps) {
+          if (props[propName] === void 0) {
+            props[propName] = defaultProps[propName];
+          }
+        }
+      } else if (!props) {
+        props = defaultProps || {};
+      }
+
+      if (childrenLength === 1) {
+        props.children = children;
+      } else if (childrenLength > 1) {
+        var childArray = Array(childrenLength);
+        for (var i = 0; i < childrenLength; i++) {
+          childArray[i] = arguments[i + 3];
+        }
+        props.children = childArray;
+      }
+
       return {
         $$typeof: REACT_ELEMENT_TYPE,
         type: type,
-        key: key,
+        key: key === undefined ? null : '' + key,
         ref: null,
         props: props,
         _owner: null,
@@ -86,20 +114,6 @@ helpers.createClass = template(`
     };
   })()
 `);
-
-helpers.defaultProps = template(`
-  (function (defaultProps, props) {
-    if (defaultProps) {
-      for (var propName in defaultProps) {
-        if (typeof props[propName] === "undefined") {
-          props[propName] = defaultProps[propName];
-        }
-      }
-    }
-    return props;
-  })
-`);
-
 
 helpers.defineEnumerableProperties = template(`
   (function (obj, descs) {
