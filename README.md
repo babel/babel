@@ -46,7 +46,7 @@ require("babylon").parse("code", {
   // parse in strict mode and allow module declarations
   sourceType: "module",
 
-  features: [
+  plugins: [
     // enable experimental async functions
     "asyncFunctions",
 
