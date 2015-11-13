@@ -82,6 +82,7 @@ export default function () {
       for (let reid of exports) {
         node = buildExportsAssignment(reid, node).expression;
       }
+
       path.replaceWith(node);
     },
 

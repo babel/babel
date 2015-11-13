@@ -1,10 +1,8 @@
-var _Object$getPrototypeO;
-
 var Test = (function (_Foo) {
   babelHelpers.inherits(Test, _Foo);
 
   function Test() {
-    var _babelHelpers$get;
+    var _Object$getPrototypeO, _babelHelpers$get;
 
     babelHelpers.classCallCheck(this, Test);
 

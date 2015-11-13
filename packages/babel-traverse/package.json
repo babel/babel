@@ -13,6 +13,7 @@
     "babel-runtime": "^5.0.0",
     "babel-types": "^6.1.18",
     "babylon": "^6.1.18",
+    "debug": "^2.2.0",
     "globals": "^8.3.0",
     "invariant": "^2.1.0",
     "lodash": "^3.10.1",

@@ -53,13 +53,17 @@ export default class TraversalContext {
     });
   }
 
-  maybeQueue(path) {
+  maybeQueue(path, notPriority?: boolean) {
     if (this.trap) {
       throw new Error("Infinite cycle detected");
     }
-    
+
     if (this.queue) {
-      this.priorityQueue.push(path);
+      if (notPriority) {
+        this.queue.push(path);
+      } else {
+        this.priorityQueue.push(path);
+      }
     }
   }
 
