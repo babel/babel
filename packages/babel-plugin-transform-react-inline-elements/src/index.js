@@ -29,14 +29,12 @@ export default function ({ types: t }) {
         if (hasRefOrSpread(open.attributes)) return;
 
         // init
-        let isComponent = true;
         let props       = t.objectExpression([]);
-        let key         = t.nullLiteral();
+        let key         = null;
         let type        = open.name;
 
         if (t.isJSXIdentifier(type) && t.react.isCompatTag(type.name)) {
           type = t.stringLiteral(type.name);
-          isComponent = false;
         }
 
         function pushProp(objProps, key, value) {
@@ -54,24 +52,16 @@ export default function ({ types: t }) {
           }
         }
 
-        if (node.children.length) {
+        let args = [type, props];
+        if (key || node.children.length) {
           let children = t.react.buildChildren(node);
-          if (children.length) {
-            children = children.length === 1 ? children[0] : t.arrayExpression(children);
-            pushProp(props.properties, t.identifier("children"), children);
-          }
+          args.push(
+            key || t.unaryExpression("void", t.numericLiteral(0), true),
+            ...children
+          );
         }
 
-        if (isComponent) {
-          let defProps = t.memberExpression(type, t.identifier("defaultProps"));
-          if (props.properties.length) {
-            props = t.callExpression(file.addHelper("defaultProps"), [defProps, props]);
-          } else {
-            props = t.logicalExpression("||", defProps, props);
-          }
-        }
-
-        let el = t.callExpression(file.addHelper("createRawReactElement"), [type, key, props]);
+        let el = t.callExpression(file.addHelper("jsx"), args);
         path.replaceWith(el);
       }
     }

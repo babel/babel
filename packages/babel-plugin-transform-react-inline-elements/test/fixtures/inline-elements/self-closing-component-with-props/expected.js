@@ -1,3 +1,3 @@
-babelHelpers.createRawReactElement(Baz, null, babelHelpers.defaultProps(Baz.defaultProps, {
+babelHelpers.jsx(Baz, {
   foo: "bar"
-}));
+});

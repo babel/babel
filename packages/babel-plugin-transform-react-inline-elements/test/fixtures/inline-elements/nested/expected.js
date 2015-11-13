@@ -1,4 +1,3 @@
-babelHelpers.createRawReactElement("div", null, {
-  className: "foo",
-  children: [bar, babelHelpers.createRawReactElement(Baz, "baz", Baz.defaultProps || {})]
-});
+babelHelpers.jsx("div", {
+  className: "foo"
+}, void 0, bar, babelHelpers.jsx(Baz, {}, "baz"));
