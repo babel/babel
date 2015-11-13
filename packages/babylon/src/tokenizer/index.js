@@ -138,7 +138,7 @@ export default class Tokenizer {
   readToken(code) {
     // Identifier or keyword. '\uXXXX' sequences are allowed in
     // identifiers, so '\' also dispatches to that.
-    if (isIdentifierStart(code, true) || code === 92 /* '\' */) {
+    if (isIdentifierStart(code) || code === 92 /* '\' */) {
       return this.readWord();
     } else {
       return this.getTokenFromCode(code);
@@ -722,7 +722,7 @@ export default class Tokenizer {
     let word = "", first = true, chunkStart = this.state.pos;
     while (this.state.pos < this.input.length) {
       let ch = this.fullCharCodeAtPos();
-      if (isIdentifierChar(ch, true)) {
+      if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
       } else if (ch === 92) { // "\"
         this.state.containsEsc = true;
