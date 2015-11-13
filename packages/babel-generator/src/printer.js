@@ -48,6 +48,9 @@ export default class Printer extends Buffer {
 
     this._print(node, parent);
 
+    // Check again if any of our children may have left an aux comment on the stack
+    if (node.loc) this.printAuxAfterComment();
+
     this.printTrailingComments(node, parent);
 
     if (needsParens) this.push(")");
