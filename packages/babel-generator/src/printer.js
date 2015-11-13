@@ -197,7 +197,7 @@ export default class Printer extends Buffer {
 
     let lines = 0;
 
-    if (node.start != null && !node._ignoreUserWhitespace) {
+    if (node.start != null && !node._ignoreUserWhitespace && this.tokens.length) {
       // user node
       if (leading) {
         lines = this.whitespace.getNewlinesBefore(node);
