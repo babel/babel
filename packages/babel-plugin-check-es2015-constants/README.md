@@ -36,4 +36,4 @@ require("babel-core").transform("code", {
 
 ## Note
 
-This check will only validate consts. If you need it to compile down to `var` then you must also install and enable [`check-es2015-block-scoping`](../babel-plugin-check-es2015-block-scoping).
+This check will only validate consts. If you need it to compile down to `var` then you must also install and enable [`transform-es2015-block-scoping`](../babel-plugin-transform-es2015-block-scoping).
