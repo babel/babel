@@ -3,6 +3,9 @@ import VanillaTransformer from "./vanilla";
 import nameFunction from "babel-helper-function-name";
 
 export default function ({ types: t }) {
+  // todo: investigate traversal requeueing
+  let VISITED = Symbol();
+
   return {
     visitor: {
       ClassDeclaration(path) {
@@ -21,8 +24,13 @@ export default function ({ types: t }) {
       },
 
       ClassExpression(path, state) {
+        let { node } = path;
+        if (node[VISITED]) return;
+
         let inferred = nameFunction(path);
-        if (inferred && inferred !== path.node) return path.replaceWith(inferred);
+        if (inferred && inferred !== node) return path.replaceWith(inferred);
+
+        node[VISITED] = true;
 
         let Constructor = VanillaTransformer;
         if (state.opts.loose) Constructor = LooseTransformer;
