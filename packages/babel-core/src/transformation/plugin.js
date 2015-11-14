@@ -10,11 +10,12 @@ import clone from "lodash/lang/clone";
 const GLOBAL_VISITOR_PROPS = ["enter", "exit"];
 
 export default class Plugin extends Store {
-  constructor(plugin: Object) {
+  constructor(plugin: Object, key?: string) {
     super();
 
     this.initialized = false;
     this.raw         = assign({}, plugin);
+    this.key         = key;
 
     this.manipulateOptions = this.take("manipulateOptions");
     this.post              = this.take("post");
