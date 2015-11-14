@@ -1,6 +1,6 @@
 {
   "name": "babel-core",
-  "version": "6.1.20",
+  "version": "6.1.21",
   "description": "Babel compiler core.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -33,7 +33,7 @@
     "babel-register": "^6.1.18",
     "babel-traverse": "^6.1.20",
     "babel-types": "^6.1.18",
-    "babylon": "^6.1.20",
+    "babylon": "^6.1.21",
     "convert-source-map": "^1.1.0",
     "debug": "^2.1.1",
     "esutils": "^2.0.0",
