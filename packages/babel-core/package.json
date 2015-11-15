@@ -36,19 +36,15 @@
     "babylon": "^6.1.21",
     "convert-source-map": "^1.1.0",
     "debug": "^2.1.1",
-    "esutils": "^2.0.0",
-    "home-or-tmp": "^1.0.0",
     "json5": "^0.4.0",
     "lodash": "^3.10.0",
     "minimatch": "^2.0.3",
     "path-exists": "^1.0.0",
     "path-is-absolute": "^1.0.0",
     "private": "^0.1.6",
-    "regenerator": "0.8.35",
     "shebang-regex": "^1.0.0",
     "slash": "^1.0.0",
-    "source-map": "^0.5.0",
-    "source-map-support": "^0.2.10"
+    "source-map": "^0.5.0"
   },
   "devDependencies": {
     "babel-helper-fixtures": "^6.1.18",
