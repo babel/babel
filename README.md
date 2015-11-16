@@ -18,7 +18,9 @@
 
 <p align="center">For questions and support please visit the <a href="https://babel-slack.herokuapp.com">Slack community</a> or <a href="http://stackoverflow.com/questions/tagged/babeljs">StackOverflow</a>.</p>
 
-<p align="center">The Babel issue tracker is <strong>exclusively</strong> for bug reports and feature requests.</p>
+## Want to report a bug or request a feature?
+
+<p align="center">Bugs and feature requests should be posted at <a href="https://phabricator.babeljs.io/">phabricator.babeljs.io</a>.</p>
 
 ## Want to report an issue with [babeljs.io](https://babeljs.io)?
 
