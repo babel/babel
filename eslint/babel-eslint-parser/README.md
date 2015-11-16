@@ -13,6 +13,7 @@ For questions and support please visit the [`#linting`](https://babeljs.slack.co
 
 ## Known Issues
 Flow:
+> Check out [eslint-plugin-flow-vars](https://github.com/zertosh/eslint-plugin-flow-vars): An `eslint` plugin that makes flow type annotations global variables and marks declarations as used. Solves the problem of false positives with `no-undef` and `no-unused-vars`.
 - `no-undef` for global flow types: `ReactElement`, `ReactClass` [#130](https://github.com/babel/babel-eslint/issues/130#issuecomment-111215076)
   - Workaround: define types as globals in `.eslintrc` or define types and import them `import type ReactElement from './types'`
 - `no-unused-vars/no-undef` with Flow declarations (`declare module A {}`) [#132](https://github.com/babel/babel-eslint/issues/132#issuecomment-112815926)
