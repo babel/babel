@@ -1,0 +1,5 @@
+{
+  "plugins": ["external-helpers-2", "transform-es2015-modules-commonjs"],
+  "auxiliaryCommentBefore": "before",
+  "auxiliaryCommentAfter": "after"
+}
