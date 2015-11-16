@@ -5,6 +5,9 @@
  */
 
 export default class Position {
+  column: number;
+  line: number;
+
   constructor() {
     this.line = 1;
     this.column = 0;
@@ -14,7 +17,7 @@ export default class Position {
    * Push a string to the current position, mantaining the current line and column.
    */
 
-  push(str) {
+  push(str: string): void {
     for (let i = 0; i < str.length; i++) {
       if (str[i] === "\n") {
         this.line++;
@@ -29,7 +32,7 @@ export default class Position {
    * Unshift a string from the current position, mantaining the current line and column.
    */
 
-  unshift(str) {
+  unshift(str: string): void {
     for (let i = 0; i < str.length; i++) {
       if (str[i] === "\n") {
         this.line--;

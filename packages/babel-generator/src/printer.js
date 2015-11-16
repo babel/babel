@@ -1,5 +1,3 @@
-/* @flow */
-
 import repeating from "repeating";
 import Buffer from "./buffer";
 import n from "./node";

@@ -1,5 +1,3 @@
-/* @flow */
-
 // This file contains methods responsible for removing a node.
 
 import { hooks } from "./lib/removal-hooks";

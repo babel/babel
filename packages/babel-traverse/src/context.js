@@ -1,5 +1,3 @@
-/* @flow */
-
 import NodePath from "./path";
 import * as t from "babel-types";
 

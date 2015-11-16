@@ -1,5 +1,3 @@
-/* @flow */
-
 // This file contains methods that convert the path node into another node or some other type of data.
 
 import * as t from "babel-types";

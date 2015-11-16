@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as t from "babel-types";
 
 export default function (node): number {

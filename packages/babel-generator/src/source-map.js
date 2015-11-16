@@ -1,5 +1,3 @@
-/* @flow */
-
 import sourceMap from "source-map";
 import * as t from "babel-types";
 

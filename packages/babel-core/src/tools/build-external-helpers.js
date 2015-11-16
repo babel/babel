@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as helpers from "babel-helpers";
 import generator from "babel-generator";
 import * as messages from "babel-messages";

@@ -1,5 +1,3 @@
-/* @flow */
-
 import Parser, { plugins } from "./parser";
 import "./parser/util";
 import "./parser/statement";

@@ -1,5 +1,3 @@
-/* @flow */
-
 import isFunction from "lodash/lang/isFunction";
 import fs from "fs";
 

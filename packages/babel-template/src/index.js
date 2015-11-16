@@ -1,5 +1,3 @@
-/* @flow */
-
 import cloneDeep from "lodash/lang/cloneDeep";
 import has from "lodash/object/has";
 import traverse from "babel-traverse";

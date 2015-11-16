@@ -1,5 +1,3 @@
-/* @flow */
-
 // This file contains methods responsible for maintaining a TraversalContext.
 
 import traverse from "../index";

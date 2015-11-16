@@ -96,7 +96,10 @@ for (var type in t.NODE_FIELDS) {
   ${struct.join("\n  ").trim()}
 }\n\n`;
 
-  lines.push(`declare function ${type[0].toLowerCase() + type.slice(1)}(${args.join(", ")}): ${NODE_PREFIX}${type};`);
+  // Flow chokes on super() :/
+  if (type !== 'Super') {
+    lines.push(`declare function ${type[0].toLowerCase() + type.slice(1)}(${args.join(", ")}): ${NODE_PREFIX}${type};`);
+  }
 }
 
 for (var i = 0; i < t.TYPES.length; i++) {

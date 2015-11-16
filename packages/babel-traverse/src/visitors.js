@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as virtualTypes from "./path/lib/virtual-types";
 import * as messages from "babel-messages";
 import * as t from "babel-types";

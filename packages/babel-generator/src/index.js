@@ -1,5 +1,3 @@
-/* @flow */
-
 import detectIndent from "detect-indent";
 import Whitespace from "./whitespace";
 import SourceMap from "./source-map";

@@ -1,4 +1,3 @@
-/* @flow */
 /* global BabelParserOptions */
 /* global BabelFileMetadata */
 /* global BabelFileResult */

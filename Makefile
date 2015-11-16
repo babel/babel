@@ -20,7 +20,7 @@ watch: clean
 
 lint:
 	node node_modules/.bin/eslint packages/*/src
-	#flow check
+	flow
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*

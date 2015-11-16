@@ -1,5 +1,3 @@
-/* @flow */
-
 import { react } from "babel-types";
 import * as t from "babel-types";
 

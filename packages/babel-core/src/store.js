@@ -1,5 +1,3 @@
-/* @flow */
-
 export default class Store extends Map {
   constructor() {
     super();

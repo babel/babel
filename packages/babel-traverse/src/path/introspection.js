@@ -1,5 +1,3 @@
-/* @flow */
-
 // This file contains methods responsible for introspecting the current path for certain values.
 
 import type NodePath from "./index";
