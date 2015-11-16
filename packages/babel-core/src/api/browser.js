@@ -1,5 +1,3 @@
-/* @flow */
-
 /* eslint no-new-func: 0 */
 
 import { transform } from "./node";

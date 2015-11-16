@@ -1,5 +1,3 @@
-/* @flow */
-
 import includes from "lodash/collection/includes";
 import repeating from "repeating";
 import Renamer from "./lib/renamer";

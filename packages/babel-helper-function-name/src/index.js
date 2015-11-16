@@ -1,5 +1,3 @@
-/* @flow */
-
 import getFunctionArity from "babel-helper-get-function-arity";
 import template from "babel-template";
 import * as t from "babel-types";
@@ -62,7 +60,7 @@ function wrap(state, method, id, scope) {
         FUNCTION_KEY: scope.generateUidIdentifier(id.name)
       }).expression;
       template.callee._skipModulesRemap = true;
-      
+
       // shim in dummy params to retain function arity, if you try to read the
       // source then you'll get the original since it's proxied so it's all good
       let params = template.callee.body.body[0].params;

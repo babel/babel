@@ -1,5 +1,3 @@
-/* @flow */
-
 import Module from "module";
 
 let relativeModules = {};

@@ -1,5 +1,3 @@
-/* @flow */
-
 // This file contains methods responsible for dealing with/retrieving children or siblings.
 
 import type TraversalContext from "../index";

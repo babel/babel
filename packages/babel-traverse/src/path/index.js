@@ -1,5 +1,3 @@
-/* @flow */
-
 import type Hub from "../hub";
 import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";

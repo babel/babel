@@ -9,6 +9,7 @@ lib/types.js
 
 [options]
 strip_root=true
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 
 [version]
-0.16.0
+0.18.1

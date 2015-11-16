@@ -1,5 +1,3 @@
-/* @flow */
-
 import type File from "./index";
 import buildDebug from "debug/node";
 

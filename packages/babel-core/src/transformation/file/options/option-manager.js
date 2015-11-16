@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as context from "../../../api/node";
 import type Logger from "../logger";
 import Plugin from "../../plugin";

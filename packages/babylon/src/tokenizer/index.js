@@ -1,5 +1,3 @@
-/* @flow */
-
 import type { TokenType } from "./types";
 import { isIdentifierStart, isIdentifierChar, isKeyword } from "../util/identifier";
 import { types as tt, keywords as keywordTypes } from "./types";

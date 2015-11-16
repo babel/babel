@@ -1,5 +1,3 @@
-/* @flow */
-
 import Binding from "../binding";
 import * as t from "babel-types";
 

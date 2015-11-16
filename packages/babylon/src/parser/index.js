@@ -1,5 +1,3 @@
-/* @flow */
-
 import { reservedWords } from "../util/identifier";
 import { getOptions } from "../options";
 import Tokenizer from "../tokenizer";

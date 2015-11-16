@@ -1,5 +1,3 @@
-/* @flow */
-
 import type Plugin from "./plugin";
 import Store from "../store";
 import traverse from "babel-traverse";

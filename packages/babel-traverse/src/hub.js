@@ -1,5 +1,3 @@
-/* @flow */
-
 export default class Hub {
   constructor(file, options) {
     this.file = file;

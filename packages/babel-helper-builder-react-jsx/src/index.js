@@ -1,5 +1,3 @@
-/* @flow */
-
 import esutils from "esutils";
 import * as t from "babel-types";
 

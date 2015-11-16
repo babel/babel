@@ -1,5 +1,3 @@
-/* @flow */
-
 import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";
 import * as t from "./index";

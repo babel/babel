@@ -1,5 +1,3 @@
-/* @flow */
-
 import hoistVariables from "babel-helper-hoist-variables";
 import type { NodePath } from "babel-traverse";
 import * as t from "babel-types";

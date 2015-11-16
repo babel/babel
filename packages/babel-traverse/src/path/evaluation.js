@@ -1,5 +1,3 @@
-/* @flow */
-
 import type NodePath from "./index";
 
 // This file contains Babels metainterpreter that can evaluate static code.

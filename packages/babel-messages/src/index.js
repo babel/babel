@@ -47,7 +47,7 @@ export const MESSAGES = {
  * Get a message with $0 placeholders replaced by arguments.
  */
 
-export function get(key: string, ...args): string {
+export function get(key: string, ...args: Array<any>): string {
   let msg = MESSAGES[key];
   if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 

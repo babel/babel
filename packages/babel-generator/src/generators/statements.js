@@ -1,5 +1,3 @@
-/* @flow */
-
 import repeating from "repeating";
 import * as t from "babel-types";
 
