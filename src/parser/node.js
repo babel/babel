@@ -1,5 +1,3 @@
-/* @flow */
-
 import Parser from "./index";
 import { SourceLocation } from "../util/location";
 
