@@ -10,7 +10,7 @@ export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
 export const EQUALITY_BINARY_OPERATORS       = ["==", "===", "!=", "!=="];
 export const COMPARISON_BINARY_OPERATORS     = [...EQUALITY_BINARY_OPERATORS, "in", "instanceof"];
 export const BOOLEAN_BINARY_OPERATORS        = [...COMPARISON_BINARY_OPERATORS, ...BOOLEAN_NUMBER_BINARY_OPERATORS];
-export const NUMBER_BINARY_OPERATORS         = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
+export const NUMBER_BINARY_OPERATORS         = ["-", "/", "%", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
 export const BINARY_OPERATORS                = ["+", ...NUMBER_BINARY_OPERATORS, ...BOOLEAN_BINARY_OPERATORS];
 
 export const BOOLEAN_UNARY_OPERATORS = ["delete", "!"];
