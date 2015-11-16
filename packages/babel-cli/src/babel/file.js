@@ -137,6 +137,8 @@ module.exports = function (commander, filenames, opts) {
         persistent: true,
         ignoreInitial: true
       }).on("all", function (type, filename) {
+        if (util.shouldIgnore(filename) || !util.canCompile(filename, commander.extensions)) return;
+
         if (type === "add" || type === "change") {
           util.log(type + " " + filename);
           try {
