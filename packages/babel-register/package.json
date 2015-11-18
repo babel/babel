@@ -14,6 +14,6 @@
     "lodash": "^3.10.0",
     "source-map-support": "^0.2.10",
     "babel-core": "^6.1.18",
-    "babel-runtime": "^5.0.0"
+    "babel-runtime": "^6.1.18"
   }
 }
