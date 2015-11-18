@@ -4,6 +4,7 @@ var Pipeline             = require("../lib/transformation/pipeline");
 var sourceMap            = require("source-map");
 var assert               = require("assert");
 var File                 = require("../lib/transformation/file").default;
+var path                 = require("path");
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
@@ -41,6 +42,16 @@ suite("api", function () {
       plugins: [__dirname + "/../../babel-plugin-syntax-jsx"]
     }).then(function (result) {
       assert.ok(result.options.plugins[0][0].manipulateOptions.toString().indexOf("jsx") >= 0);
+    });
+  });
+
+  test("OptionManager resolves presets relative to current file if not found", function () {
+    var filename = path.join(__dirname, 'fixtures', 'api', 'file.js');
+    var manager = new babel.OptionManager();
+
+    manager.mergePresets(['fixture'], process.cwd(), filename);
+    assert.throws(function () {
+      manager.mergePresets(['babel-preset-missing'], process.cwd(), filename);
     });
   });
 
