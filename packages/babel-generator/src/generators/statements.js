@@ -16,7 +16,20 @@ export function IfStatement(node: Object) {
   this.push(")");
   this.space();
 
+  let consequentIsIf = t.isIfStatement(node.consequent);
+  if (consequentIsIf) {
+    this.push("{");
+    this.newline();
+    this.indent();
+  }
+
   this.printAndIndentOnComments(node.consequent, node);
+
+  if (consequentIsIf) {
+    this.dedent();
+    this.newline();
+    this.push("}");
+  }
 
   if (node.alternate) {
     if (this.isLast("}")) this.space();
