@@ -15,7 +15,7 @@
     "babylon": "^6.1.20",
     "debug": "^2.2.0",
     "globals": "^8.3.0",
-    "invariant": "^2.1.0",
+    "invariant": "^2.2.0",
     "lodash": "^3.10.1",
     "repeating": "^1.1.3"
   }
