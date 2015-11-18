@@ -1,5 +1,5 @@
 export default function ({ types: t }) {
-  let JSX_ANNOTATION_REGEX = /^\*\s*@jsx\s+([^\s]+)/;
+  let JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
 
   let visitor = require("babel-helper-builder-react-jsx")({
     pre(state) {
