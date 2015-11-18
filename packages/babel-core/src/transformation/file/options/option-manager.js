@@ -157,7 +157,7 @@ export default class OptionManager {
       throw err;
     }
 
-    this.mergeOptions(opts, loc);
+    this.mergeOptions(opts, loc, null, path.dirname(loc));
     this.resolvedConfigs.push(loc);
 
     return !!opts;
@@ -237,7 +237,7 @@ export default class OptionManager {
     merge(this.options, opts);
 
     // merge in env options
-    this.mergeOptions(envOpts, `${alias}.env.${envKey}`);
+    this.mergeOptions(envOpts, `${alias}.env.${envKey}`, null, dirname);
   }
 
   mergePresets(presets: Array<string | Object>, dirname: string) {
