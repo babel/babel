@@ -13,6 +13,6 @@
     "babel-plugin-transform-runtime": "^6.1.18",
     "babel-template": "^6.1.18",
     "babel-runtime": "^5.0.0",
-    "regenerator": "^0.8.34"
+    "babel-regenerator-runtime": "^6.0.0"
   }
 }

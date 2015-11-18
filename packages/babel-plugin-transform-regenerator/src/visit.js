@@ -37,13 +37,20 @@ exports.visitor = {
         return;
       }
 
+      let contextId = path.scope.generateUidIdentifier("context");
+      let argsId = path.scope.generateUidIdentifier("args");
+
       path.ensureBlock();
+      let bodyBlockPath = path.get("body");
 
       if (node.async) {
-        path.get("body").traverse(awaitVisitor);
+        bodyBlockPath.traverse(awaitVisitor);
       }
 
-      let bodyBlockPath = path.get("body");
+      bodyBlockPath.traverse(functionSentVisitor, {
+        context: contextId
+      });
+
       let outerBody = [];
       let innerBody = [];
 
@@ -68,8 +75,6 @@ exports.visitor = {
       // if a temporary name has to be synthesized.
       t.assertIdentifier(node.id);
       let innerFnId = t.identifier(node.id.name + "$");
-      let contextId = path.scope.generateUidIdentifier("context");
-      let argsId = path.scope.generateUidIdentifier("args");
 
       // Turn all declarations into vars, and replace the original
       // declarations with equivalent assignment expressions.
@@ -121,8 +126,7 @@ exports.visitor = {
         node.async = false;
       }
 
-      if (wasGeneratorFunction &&
-          t.isExpression(node)) {
+      if (wasGeneratorFunction && t.isExpression(node)) {
         path.replaceWith(t.callExpression(util.runtimeProperty("mark"), [node]));
       }
     }
@@ -219,6 +223,16 @@ let argumentsVisitor = {
     if (path.node.name === "arguments" && util.isReference(path)) {
       path.replaceWith(state.argsId);
       state.didRenameArguments = true;
+    }
+  }
+};
+
+let functionSentVisitor = {
+  MetaProperty(path) {
+    let { node } = path;
+
+    if (node.meta.name === "function" && node.property.name === "sent") {
+      path.replaceWith(t.memberExpression(this.context, t.identifier("_sent")));
     }
   }
 };

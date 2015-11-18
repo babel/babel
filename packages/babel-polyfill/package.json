@@ -9,7 +9,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "core-js": "^1.0.1",
-    "regenerator": "^0.8.36",
+    "babel-regenerator-runtime": "^6.0.0",
     "babel-runtime": "^5.0.0"
   }
 }

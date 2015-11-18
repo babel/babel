@@ -300,12 +300,13 @@
         }
 
         if (method === "next") {
+          context._sent = arg;
+
           if (state === GenStateSuspendedYield) {
             context.sent = arg;
           } else {
             context.sent = undefined;
           }
-
         } else if (method === "throw") {
           if (state === GenStateSuspendedStart) {
             state = GenStateCompleted;
