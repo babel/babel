@@ -71,3 +71,4 @@ require("babylon").parse("code", {
  - `exportExtensions`
  - `exponentiationOperator`
  - `asyncGenerators`
+ - `functionSent`
