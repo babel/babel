@@ -221,7 +221,7 @@ export default class OptionManager {
 
     // resolve presets
     if (opts.presets) {
-      this.mergePresets(opts.presets, dirname);
+      this.mergePresets(opts.presets, dirname, opts.filename);
       delete opts.presets;
     }
 
@@ -240,10 +240,15 @@ export default class OptionManager {
     this.mergeOptions(envOpts, `${alias}.env.${envKey}`);
   }
 
-  mergePresets(presets: Array<string | Object>, dirname: string) {
+  mergePresets(presets: Array<string | Object>, dirname: string, filename: string) {
     for (let val of presets) {
       if (typeof val === "string") {
         let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+        if (filename && !presetLoc)  {
+          dirname = path.dirname(filename);
+          presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+        }
+
         if (presetLoc) {
           let presetOpts = require(presetLoc);
           this.mergeOptions(presetOpts, presetLoc, presetLoc, path.dirname(presetLoc));
