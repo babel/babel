@@ -16,7 +16,20 @@ export function IfStatement(node: Object) {
   this.push(")");
   this.space();
 
+  let needsBlock = node.alternate && t.isIfStatement(node.consequent);
+  if (needsBlock) {
+    this.push("{");
+    this.newline();
+    this.indent();
+  }
+
   this.printAndIndentOnComments(node.consequent, node);
+
+  if (needsBlock) {
+    this.dedent();
+    this.newline();
+    this.push("}");
+  }
 
   if (node.alternate) {
     if (this.isLast("}")) this.space();
