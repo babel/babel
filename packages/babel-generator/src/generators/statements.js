@@ -16,8 +16,8 @@ export function IfStatement(node: Object) {
   this.push(")");
   this.space();
 
-  let consequentIsIf = t.isIfStatement(node.consequent);
-  if (consequentIsIf) {
+  let needsBlock = node.alternate && t.isIfStatement(node.consequent);
+  if (needsBlock) {
     this.push("{");
     this.newline();
     this.indent();
@@ -25,7 +25,7 @@ export function IfStatement(node: Object) {
 
   this.printAndIndentOnComments(node.consequent, node);
 
-  if (consequentIsIf) {
+  if (needsBlock) {
     this.dedent();
     this.newline();
     this.push("}");
