@@ -13,6 +13,45 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.2.0
+
+ * **New Feature**
+  * Add support for `function.sent`.
+ * **Internal**
+  * Bump `invariant` depenency version.
+ * **Polish**
+  * Infer filename from the base directory when resolving plugins and presets.
+  * Allow JSX pragma to be specified in line comments.
+ * **Bug Fix**
+  * Print a block when encountering consequents that are if statements.
+  * Fix some issues related to printing of auxiliary comments.
+
+## 6.1.21
+
+ * **Bug Fix**
+  * Add check to avoid revisiting classes.
+ * **Internal**
+  * Add internal aliases for plugins for debugging.
+ * **Bug Fix**
+  * Avoid duplicate auxiliary starts if inside an aux section.
+
+## 6.1.20
+
+ * **Polish**
+  * Only infer whitespace when we've been passed tokens in the code generator.
+  * Refactor JSX inlining to reduce parsing cost.
+ * **Bug Fix**
+  * Fix queueing of nested paths being pushed onto the priority queue.
+
+## 6.1.19
+
+ * **Bug Fix**
+  * Add config check to `package.json` `babel` reading.
+  * Fix source maps merging.
+  * Ignore callee supers when doing spread compilation
+* **Polish**
+ * Add hard error when we see decorators.
+
 ## 6.1.4
 
  * **Bug Fix**
