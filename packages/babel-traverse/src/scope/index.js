@@ -732,13 +732,7 @@ export default class Scope {
     }
   }
 
-  push(opts: {
-    id: Object;
-    init: ?Object;
-    unique: ?boolean;
-    _blockHoist: ?number;
-    kind: "var" | "let";
-  }) {
+  getDeclarationsPath() {
     let path = this.path;
 
     if (path.isSwitchStatement()) {
@@ -754,11 +748,27 @@ export default class Scope {
       path = this.getBlockParent().path;
     }
 
+    return path;
+  }
+
+  getDeclarationsKey(kind, blockHoist) {
+    return `declaration:${kind}:${blockHoist}`;
+  }
+
+  push(opts: {
+    id: Object;
+    init: ?Object;
+    unique: ?boolean;
+    _blockHoist: ?number;
+    kind: "var" | "let";
+  }) {
+    let path = this.getDeclarationsPath();
+
     let unique = opts.unique;
     let kind   = opts.kind || "var";
     let blockHoist = opts._blockHoist == null ? 2 : opts._blockHoist;
 
-    let dataKey = `declaration:${kind}:${blockHoist}`;
+    let dataKey = this.getDeclarationsKey(kind, blockHoist);
     let declarPath  = !unique && path.getData(dataKey);
 
     if (!declarPath) {
@@ -773,6 +783,31 @@ export default class Scope {
     let declarator = t.variableDeclarator(opts.id, opts.init);
     declarPath.node.declarations.push(declarator);
     this.registerBinding(kind, declarPath.get("declarations").pop());
+  }
+
+  removeDeclaration(opts: {
+    id: Object;
+    _blockHoist: ?number;
+    kind: "var" | "let";
+  }) {
+    let path = this.getDeclarationsPath();
+
+    let kind   = opts.kind || "var";
+    let blockHoist = opts._blockHoist == null ? 2 : opts._blockHoist;
+
+    let dataKey = this.getDeclarationsKey(kind, blockHoist);
+
+    let declarPath  = path.getData(dataKey);
+    if (!declarPath) {
+      return;
+    }
+
+    for (let declaration of declarPath.get("declarations")) {
+      if (declaration.node.id === opts.id) {
+        declaration.remove();
+        break;
+      }
+    }
   }
 
   /**

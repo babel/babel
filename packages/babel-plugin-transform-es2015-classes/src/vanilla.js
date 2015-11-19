@@ -232,6 +232,14 @@ export default class ClassTransformer {
         let isConstructor = node.kind === "constructor";
 
         if (isConstructor) {
+          let shadowThisRef = path.getData("this");
+          if (shadowThisRef && this.isDerived) {
+            // The shadow-functions transform may run before the class transform, so it will insert a shadow "this" reference
+            // before the super call to the parent constructor.
+            // We will have to remove that declaration and reuse its value when we allocate the new one after the super call.
+            path.scope.removeDeclaration({ id: shadowThisRef });
+          }
+
           path.traverse(verifyConstructorVisitor, this);
 
           if (!this.hasBareSuper && this.isDerived) {
@@ -396,7 +404,11 @@ export default class ClassTransformer {
     let guaranteedSuperBeforeFinish = !!this.bareSupers.length;
 
     let superRef = this.superName || t.identifier("Function");
-    let thisRef = path.scope.generateUidIdentifier("this");
+
+    // Reuse the pre-allocated shadow this reference if we already had one.
+    // Note that we've removed the declaration for it in pushBody, so it's safe to reuse it here.
+    let shadowThisRef = path.getData("this");
+    let thisRef = shadowThisRef || path.scope.generateUidIdentifier("this");
 
     for (let bareSuper of this.bareSupers) {
       this.wrapSuperCall(bareSuper, superRef, thisRef, body);
