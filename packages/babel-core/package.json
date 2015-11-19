@@ -1,6 +1,6 @@
 {
   "name": "babel-core",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "description": "Babel compiler core.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -27,7 +27,7 @@
     "babel-code-frame": "^6.1.18",
     "babel-generator": "^6.2.0",
     "babel-helpers": "^6.1.20",
-    "babel-messages": "^6.2.0",
+    "babel-messages": "^6.2.1",
     "babel-template": "^6.2.0",
     "babel-runtime": "^5.0.0",
     "babel-register": "^6.2.0",
