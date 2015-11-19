@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-class-properties",
-  "version": "6.1.20",
+  "version": "6.2.2",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-class-properties",
   "license": "MIT",
