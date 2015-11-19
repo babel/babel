@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.2.2
+
+ * **Bug Fix**
+  * Fix ES2015 classes being revisited twice causing state issues when inside.
+
 ## 6.2.1
 
  * **Polish**
