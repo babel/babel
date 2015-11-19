@@ -324,14 +324,16 @@ export default class OptionManager {
     }
   }
 
-  init(opts: Object): Object {
+  init(opts: Object = {}): Object {
+    let filename = opts.filename;
+    
     // resolve all .babelrc files
     if (opts.babelrc !== false) {
-      this.findConfigs(opts.filename);
+      this.findConfigs(filename);
     }
 
     // merge in base options
-    this.mergeOptions(opts, "base");
+    this.mergeOptions(opts, "base", null, filename && path.dirname(filename));
 
     // normalise
     this.normaliseOptions(opts);
