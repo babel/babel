@@ -15,9 +15,6 @@ node_js:
  - "0.12"
 
 script: make test-ci
-after_success:
- - ./scripts/travis/setup-git.sh
- - ./scripts/travis/merge-development-with-master.sh
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK
