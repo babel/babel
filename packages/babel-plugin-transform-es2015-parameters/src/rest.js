@@ -105,7 +105,6 @@ export let visitor = {
     // otherwise `arguments` will be remapped in arrow functions
     argsId._shadowedFunctionLiteral = path;
 
-
     function optimiseCandidate(parent, parentPath, offset) {
       if (t.isReturnStatement(parentPath.parent) || t.isIdentifier(parentPath.parent.id)) {
         parentPath.replaceWith(loadRest({
@@ -125,18 +124,6 @@ export let visitor = {
           parent.property = newExpr;
         }
       }
-    }
-
-    // support patterns // no test case?
-    if (t.isPattern(rest)) {
-      let pattern = rest;
-      rest = scope.generateUidIdentifier("ref");
-
-      let declar = t.variableDeclaration("let", pattern.elements.map(function (elem, index) {
-        let accessExpr = t.memberExpression(rest, t.numericLiteral(index), true);
-        return t.variableDeclarator(elem, accessExpr);
-      }));
-      node.body.body.unshift(declar);
     }
 
     // check and optimise for extremely common cases
@@ -174,8 +161,6 @@ export let visitor = {
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
     state.deopted = state.deopted || !!node.shadow;
-
-    //
 
     let start = t.numericLiteral(node.params.length);
     let key = scope.generateUidIdentifier("key");
