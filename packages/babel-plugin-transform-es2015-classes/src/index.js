@@ -8,15 +8,22 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
+      ExportDefaultDeclaration(path){
+        if (!path.get("declaration").isClassDeclaration()) return;
+
+        let { node } = path;
+        let ref = node.declaration.id || path.scope.generateUidIdentifier("class");
+        node.declaration.id = ref;
+
+        // Split the class declaration and the export into two separate statements.
+        path.replaceWith(node.declaration);
+        path.insertAfter(t.exportDefaultDeclaration(ref));
+      },
+
       ClassDeclaration(path) {
         let { node } = path;
 
         let ref = node.id || path.scope.generateUidIdentifier("class");
-
-        if (path.parentPath.isExportDefaultDeclaration()) {
-          path = path.parentPath;
-          path.insertAfter(t.exportDefaultDeclaration(ref));
-        }
 
         path.replaceWith(t.variableDeclaration("let", [
           t.variableDeclarator(ref, t.toExpression(node))
