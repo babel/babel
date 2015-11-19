@@ -131,7 +131,7 @@ export default class OptionManager {
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
-          throw new ReferenceError(messages.get("pluginUnknown", plugin, loc, i));
+          throw new ReferenceError(messages.get("pluginUnknown", plugin, loc, i, dirname));
         }
       }
 
@@ -248,7 +248,7 @@ export default class OptionManager {
           let presetOpts = require(presetLoc);
           this.mergeOptions(presetOpts, presetLoc, presetLoc, path.dirname(presetLoc));
         } else {
-          throw new Error(`Couldn't find preset ${JSON.stringify(val)}`);
+          throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ${JSON.stringify(dirname)}`);
         }
       } else if (typeof val === "object") {
         this.mergeOptions(val);
@@ -326,7 +326,7 @@ export default class OptionManager {
 
   init(opts: Object = {}): Object {
     let filename = opts.filename;
-    
+
     // resolve all .babelrc files
     if (opts.babelrc !== false) {
       this.findConfigs(filename);

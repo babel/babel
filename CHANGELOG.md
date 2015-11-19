@@ -50,7 +50,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * Fix source maps merging.
   * Ignore callee supers when doing spread compilation
 * **Polish**
- * Add hard error when we see decorators.
+  * Add hard error when we see decorators.
 
 ## 6.1.4
 
