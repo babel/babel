@@ -254,7 +254,7 @@ defineType("ClassMethod", {
     },
     key: {
       validate(node, key, val) {
-        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "Literal"];
+        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral"];
         assertNodeType(...expectedTypes)(node, key, val);
       }
     },

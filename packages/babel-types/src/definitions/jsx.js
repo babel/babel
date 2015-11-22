@@ -41,7 +41,7 @@ defineType("JSXElement", {
     children: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("Literal", "JSXExpressionContainer", "JSXElement"))
+        assertEach(assertNodeType("StringLiteral", "JSXExpressionContainer", "JSXElement"))
       )
     }
   }
