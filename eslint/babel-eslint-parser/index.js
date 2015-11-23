@@ -81,6 +81,19 @@ function monkeypatch() {
   var referencerMod = createModule(referencerLoc);
   var referencer = require(referencerLoc);
 
+  // monkeypatch escope/pattern-visitor
+  var patternVisitorLoc;
+  var patternVisitorMod;
+  var patternVisitor;
+  try {
+    patternVisitorLoc = Module._resolveFilename("./pattern-visitor", escopeMod);
+    patternVisitorMod = createModule(patternVisitorLoc);
+    patternVisitor = require(patternVisitorLoc);
+  } catch (err) {
+    // When eslint uses old escope, we cannot find pattern visitor.
+    // Fallback to the old way.
+  }
+
   // reference Definition
   var definitionLoc;
   try {
@@ -266,6 +279,12 @@ function monkeypatch() {
     }
   };
 
+  if (patternVisitor) {
+    patternVisitor.prototype.SpreadProperty = function (node) {
+      this.visit(node.argument);
+    };
+  }
+
   // visit flow type in VariableDeclaration
   var variableDeclaration = referencer.prototype.VariableDeclaration;
   referencer.prototype.VariableDeclaration = function(node) {
@@ -276,15 +295,18 @@ function monkeypatch() {
         if (typeAnnotation) {
           checkIdentifierOrVisit.call(this, typeAnnotation);
         }
-        if (id.type === "ObjectPattern") {
-          // check if object destructuring has a spread
-          var hasSpread = id.properties.filter(function(p) {
-            return p._babelType === "SpreadProperty";
-          });
-          // visit properties if so
-          if (hasSpread.length > 0) {
-            for (var j = 0; j < id.properties.length; j++) {
-              this.visit(id.properties[j]);
+        if (!patternVisitor) {
+          // Old method. Once escope in eslint is updated, this code is not necessary.
+          if (id.type === "ObjectPattern") {
+            // check if object destructuring has a spread
+            var hasSpread = id.properties.filter(function(p) {
+              return p._babelType === "SpreadProperty";
+            });
+            // visit properties if so
+            if (hasSpread.length > 0) {
+              for (var j = 0; j < id.properties.length; j++) {
+                this.visit(id.properties[j]);
+              }
             }
           }
         }
