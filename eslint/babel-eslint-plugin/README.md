@@ -28,7 +28,8 @@ original ones as well!).
     "babel/new-cap": 1,
     "babel/object-curly-spacing": 1,
     "babel/object-shorthand": 1,
-    "babel/arrow-parens": 1
+    "babel/arrow-parens": 1,
+    "babel/no-await-in-loop": 1
   }
 }
 ```
@@ -41,3 +42,4 @@ Each rule corresponds to a core `eslint` rule, and has the same options.
 - `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";`
 - `babel/object-shorthand`: doesn't fail when using object spread (`...obj`)
 - `babel/arrow-parens`: Handles async functions correctly
+- `bael/no-await-in-loop`: guard against awaiting async functions inside of a loop
