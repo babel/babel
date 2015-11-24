@@ -791,7 +791,7 @@ describe("verify", function () {
       );
     });
 
-    it("32", function () {
+    it.skip("32", function () {
       verifyAndAssertMessages(
         [
           "import type Foo from 'foo';",
