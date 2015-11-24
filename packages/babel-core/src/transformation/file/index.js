@@ -360,20 +360,23 @@ export default class File extends Store {
       });
 
       inputMapConsumer.eachMapping(function (mapping) {
-        mergedGenerator.addMapping({
-          source: mapping.source,
-
-          original: {
-            line: mapping.originalLine,
-            column: mapping.originalColumn
-          },
-
-          generated: outputMapConsumer.generatedPositionFor({
-            line: mapping.generatedLine,
-            column: mapping.generatedColumn,
-            source: outputMapConsumer.file
-          })
+        const generatedPosition = outputMapConsumer.generatedPositionFor({
+          line: mapping.generatedLine,
+          column: mapping.generatedColumn,
+          source: outputMapConsumer.file
         });
+        if(generatedPosition.column != null) {
+          mergedGenerator.addMapping({
+            source: mapping.source,
+
+            original: {
+              line: mapping.originalLine,
+              column: mapping.originalColumn
+            },
+
+            generated: generatedPosition
+          });
+        }
       });
 
       let mergedMap = mergedGenerator.toJSON();
