@@ -288,7 +288,7 @@ export function valueToNode(value: any): Object {
       if (t.isValidIdentifier(key)) {
         nodeKey = t.identifier(key);
       } else {
-        nodeKey = t.literal(key);
+        nodeKey = t.stringLiteral(key);
       }
       props.push(t.objectProperty(nodeKey, t.valueToNode(value[key])));
     }

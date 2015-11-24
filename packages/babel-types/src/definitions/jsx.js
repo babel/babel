@@ -7,7 +7,7 @@ defineType("JSXAttribute", {
   aliases: ["JSX", "Immutable"],
   fields: {
     name: {
-      validate: assertNodeType("JSXIdentifier", "JSXMemberExpression")
+      validate: assertNodeType("JSXIdentifier", "JSXNamespacedName")
     },
     value: {
       optional: true,
@@ -39,7 +39,10 @@ defineType("JSXElement", {
       validate: assertNodeType("JSXClosingElement")
     },
     children: {
-      // todo
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("StringLiteral", "JSXExpressionContainer", "JSXElement"))
+      )
     }
   }
 });
@@ -73,7 +76,7 @@ defineType("JSXMemberExpression", {
   aliases: ["JSX", "Expression"],
   fields: {
     object: {
-      validate: assertNodeType("JSXIdentifier")
+      validate: assertNodeType("JSXMemberExpression", "JSXIdentifier")
     },
     property: {
       validate: assertNodeType("JSXIdentifier")
