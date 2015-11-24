@@ -13,6 +13,8 @@ export default class Printer extends Buffer {
   print(node, parent, opts = {}) {
     if (!node) return;
 
+    this._lastPrintedIsEmptyStatement = false;
+
     if (parent && parent._compact) {
       node._compact = true;
     }
@@ -144,12 +146,11 @@ export default class Printer extends Buffer {
 
   printBlock(parent) {
     let node = parent.body;
-    if (t.isEmptyStatement(node)) {
-      this.semicolon();
-    } else {
-      this.push(" ");
-      this.print(node, parent);
+    if (!t.isEmptyStatement(node)) {
+      this.space();
     }
+
+    this.print(node, parent);
   }
 
   generateComment(comment) {
