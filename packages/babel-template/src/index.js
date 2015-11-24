@@ -10,7 +10,13 @@ let TEMPLATE_SKIP = Symbol();
 export default function (code: string): Function {
   // since we lazy parse the template, we get the current stack so we have the
   // original stack to append if it errors when parsing
-  let stack = new Error().stack.split("\n").slice(1).join("\n");
+  let stack;
+  try {
+    // error stack gets populated in IE only on throw (https://msdn.microsoft.com/en-us/library/hh699850(v=vs.94).aspx)
+    throw new Error();
+  } catch (error) {
+    stack = error.stack.split("\n").slice(1).join("\n")
+  }
 
   let getAst = function () {
     let ast;
