@@ -295,18 +295,15 @@ function monkeypatch() {
         if (typeAnnotation) {
           checkIdentifierOrVisit.call(this, typeAnnotation);
         }
-        if (!patternVisitor) {
-          // Old method. Once escope in eslint is updated, this code is not necessary.
-          if (id.type === "ObjectPattern") {
-            // check if object destructuring has a spread
-            var hasSpread = id.properties.filter(function(p) {
-              return p._babelType === "SpreadProperty";
-            });
-            // visit properties if so
-            if (hasSpread.length > 0) {
-              for (var j = 0; j < id.properties.length; j++) {
-                this.visit(id.properties[j]);
-              }
+        if (id.type === "ObjectPattern") {
+          // check if object destructuring has a spread
+          var hasSpread = id.properties.filter(function(p) {
+            return p._babelType === "SpreadProperty";
+          });
+          // visit properties if so
+          if (hasSpread.length > 0) {
+            for (var j = 0; j < id.properties.length; j++) {
+              this.visit(id.properties[j]);
             }
           }
         }
