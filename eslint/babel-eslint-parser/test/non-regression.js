@@ -1230,7 +1230,15 @@ describe("verify", function () {
   it("visits excluded properties left of spread #95", function () {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
-      { "no-undef": 1, "no-unused-vars": 1 },
+      { "no-undef": 1, "no-unused-vars": 1, "no-redeclare": 1 },
+      []
+    );
+  });
+
+  it("visits excluded properties left of spread #210", function () {
+    verifyAndAssertMessages(
+      "const props = { yo: 'yo' }; const { ...otherProps } = props;",
+      { "no-undef": 1, "no-unused-vars": 1, "no-redeclare": 1 },
       []
     );
   });
