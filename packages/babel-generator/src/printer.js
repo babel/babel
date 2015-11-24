@@ -146,6 +146,7 @@ export default class Printer extends Buffer {
 
   printBlock(parent) {
     let node = parent.body;
+
     if (!t.isEmptyStatement(node)) {
       this.space();
     }
