@@ -127,7 +127,8 @@ export default class OptionManager {
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
+        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname)
+                     || resolve(`babel-plugin-${plugin}`, process.cwd()) || resolve(plugin, process.cwd());
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
@@ -243,7 +244,8 @@ export default class OptionManager {
   mergePresets(presets: Array<string | Object>, dirname: string) {
     for (let val of presets) {
       if (typeof val === "string") {
-        let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+        let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname)
+                     || resolve(`babel-preset-${val}`, process.cwd()) || resolve(val, process.cwd());
         if (presetLoc) {
           let presetOpts = require(presetLoc);
           this.mergeOptions(presetOpts, presetLoc, presetLoc, path.dirname(presetLoc));
