@@ -53,8 +53,9 @@ This document specifies the core ESTree AST node types that support the ES5 gram
   - [AwaitExpression](#awaitexpression)
   - [ArrayExpression](#arrayexpression)
   - [ObjectExpression](#objectexpression)
-    - [ObjectProperty](#objectproperty)
-    - [ObjectMethod](#objectmethod)
+    - [ObjectMember](#objectmember)
+      - [ObjectProperty](#objectproperty)
+      - [ObjectMethod](#objectmethod)
   - [RestProperty](#restproperty)
   - [SpreadProperty](#spreadproperty)
   - [FunctionExpression](#functionexpression)
@@ -631,29 +632,32 @@ interface ObjectExpression <: Expression {
 
 An object expression.
 
-### ObjectProperty
+### ObjectMember
 
 ```js
-interface ObjectProperty <: Node {
-  type: "ObjectProperty";
+interface ObjectMember <: Node {
   key: Expression;
   computed: boolean;
   value: Expression;
-  shorthand: boolean;
   decorators: [ Decorator ];
 }
 ```
 
-### ObjectMethod
+#### ObjectProperty
 
 ```js
-interface ObjectMethod <: Function {
+interface ObjectProperty <: ObjectMember {
+  type: "ObjectProperty";
+  shorthand: boolean;
+}
+```
+
+#### ObjectMethod
+
+```js
+interface ObjectMethod <: ObjectMember, Function {
   type: "ObjectMethod";
-  key: Expression;
-  computed: boolean;
-  value: Expression;
   kind: "get" | "set" | "method";
-  decorators: [ Decorator ];
 }
 ```
 

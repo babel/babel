@@ -498,7 +498,7 @@ defineType("ObjectMethod", {
     }
   },
   visitor: ["key", "params", "body", "decorators", "returnType", "typeParameters"],
-  aliases: ["UserWhitespacable", "Function", "Scopable", "BlockParent", "FunctionParent", "Method"]
+  aliases: ["UserWhitespacable", "Function", "Scopable", "BlockParent", "FunctionParent", "Method", "ObjectMember"]
 });
 
 defineType("ObjectProperty", {
@@ -527,7 +527,7 @@ defineType("ObjectProperty", {
     }
   },
   visitor: ["key", "value", "decorators"],
-  aliases: ["UserWhitespacable", "Property"]
+  aliases: ["UserWhitespacable", "Property", "ObjectMember"]
 });
 
 defineType("RestElement", {
