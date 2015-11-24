@@ -359,11 +359,15 @@ export default class File extends Store {
         sourceRoot: inputMapConsumer.sourceRoot
       });
 
+      // This assumes the output map always has a single source, since Babel always compiles a single source file to a
+      // single output file.
+      const source = outputMapConsumer.sources[0];
+
       inputMapConsumer.eachMapping(function (mapping) {
         const generatedPosition = outputMapConsumer.generatedPositionFor({
           line: mapping.generatedLine,
           column: mapping.generatedColumn,
-          source: outputMapConsumer.file
+          source: source
         });
         if(generatedPosition.column != null) {
           mergedGenerator.addMapping({
