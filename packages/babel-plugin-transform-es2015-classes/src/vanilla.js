@@ -433,7 +433,15 @@ export default class ClassTransformer {
     }
 
     for (let returnPath of this.superReturns) {
-      returnPath.get("argument").replaceWith(wrapReturn(returnPath.node.argument));
+      if (returnPath.node.argument) {
+        let ref = returnPath.scope.generateDeclaredUidIdentifier("ret");
+        returnPath.get("argument").replaceWithMultiple([
+          t.assignmentExpression("=", ref, returnPath.node.argument),
+          wrapReturn(ref)
+        ]);
+      } else {
+        returnPath.get("argument").replaceWith(wrapReturn())
+      }
     }
   }
 
