@@ -62,6 +62,8 @@ export function ConditionalExpression(node: Object) {
 export function NewExpression(node: Object) {
   this.push("new ");
   this.print(node.callee, node);
+  if (node.arguments.length === 0 && this.format.compact) return;
+
   this.push("(");
   this.printList(node.arguments, node);
   this.push(")");
