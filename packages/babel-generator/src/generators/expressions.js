@@ -130,6 +130,7 @@ export let YieldExpression = buildYieldAwait("yield");
 export let AwaitExpression = buildYieldAwait("await");
 
 export function EmptyStatement() {
+  this._lastPrintedIsEmptyStatement = true;
   this.semicolon();
 }
 
@@ -140,7 +141,9 @@ export function ExpressionStatement(node: Object) {
 
 export function AssignmentPattern(node: Object) {
   this.print(node.left, node);
-  this.push(" = ");
+  this.space();
+  this.push("=");
+  this.space();
   this.print(node.right, node);
 }
 
@@ -157,7 +160,6 @@ export function AssignmentExpression(node: Object, parent: Object) {
   this.print(node.left, node);
 
   let spaces = !this.format.compact || node.operator === "in" || node.operator === "instanceof";
-  spaces = true; // todo: https://github.com/babel/babel/issues/1835
   if (spaces) this.push(" ");
 
   this.push(node.operator);
@@ -167,7 +169,11 @@ export function AssignmentExpression(node: Object, parent: Object) {
     // http://javascript.spec.whatwg.org/#comment-syntax
     spaces = node.operator === "<" &&
              t.isUnaryExpression(node.right, { prefix: true, operator: "!" }) &&
-             t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" });
+             t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" }) ||
+             // Need spaces for operators of the same kind to avoid: `a+++b`
+             t.isUnaryExpression(node.right, { prefix: true, operator: node.operator }) ||
+             t.isUpdateExpression(node.right, { prefix: true, operator: node.operator + node.operator });
+
   }
 
   if (spaces) this.push(" ");
