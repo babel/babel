@@ -32,8 +32,5 @@
     "is-my-json-valid": "^2.12.0",
     "mocha": "^2.2.5",
     "phantomjs": "^1.9.17"
-  },
-  "dependencies": {
-    "babel-core": "^5.5.8"
   }
 }

@@ -69,8 +69,8 @@ function calculateCapIsNewExceptions(config) {
 module.exports = function(context) {
 
     var config = context.options[0] || {};
-    config.newIsCap = config.newIsCap !== false;
-    config.capIsNew = config.capIsNew !== false;
+    var NEW_IS_CAP = config.newIsCap !== false;
+    var CAP_IS_NEW = config.capIsNew !== false;
 
     var newIsCapExceptions = checkArray(config, "newIsCapExceptions", []).reduce(invert, {});
 
@@ -176,7 +176,7 @@ module.exports = function(context) {
     // Public
     //--------------------------------------------------------------------------
 
-    if (config.newIsCap) {
+    if (NEW_IS_CAP) {
         listeners.NewExpression = function(node) {
 
             var constructorName = extractNameFromExpression(node);
@@ -190,7 +190,7 @@ module.exports = function(context) {
         };
     }
 
-    if (config.capIsNew) {
+    if (CAP_IS_NEW) {
         listeners.CallExpression = function(node) {
 
             var calleeName = extractNameFromExpression(node);
