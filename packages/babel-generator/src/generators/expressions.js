@@ -172,7 +172,7 @@ export function AssignmentExpression(node: Object, parent: Object) {
              t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" }) ||
              // Need spaces for operators of the same kind to avoid: `a+++b`
              t.isUnaryExpression(node.right, { prefix: true, operator: node.operator }) ||
-             t.isUpdateExpression(node.right, { prefix: true, operator: `${node.operator}${node.operator}` });
+             t.isUpdateExpression(node.right, { prefix: true, operator: node.operator + node.operator });
 
   }
 
