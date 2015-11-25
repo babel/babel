@@ -1,1 +1,1 @@
-new X;
+new X;new Y()();

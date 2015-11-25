@@ -59,10 +59,10 @@ export function ConditionalExpression(node: Object) {
   this.print(node.alternate, node);
 }
 
-export function NewExpression(node: Object) {
+export function NewExpression(node: Object, parent: Object) {
   this.push("new ");
   this.print(node.callee, node);
-  if (node.arguments.length === 0 && this.format.compact) return;
+  if (node.arguments.length === 0 && this.format.compact && !t.isCallExpression(parent)) return;
 
   this.push("(");
   this.printList(node.arguments, node);
