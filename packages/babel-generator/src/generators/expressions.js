@@ -63,7 +63,7 @@ export function NewExpression(node: Object, parent: Object) {
   this.push("new ");
   this.print(node.callee, node);
   if (node.arguments.length === 0 && this.format.compact &&
-      !t.isCallExpression(parent) && !t.isMemberExpression(parent)) return;
+      !t.isCallExpression(parent, { callee: node }) && !t.isMemberExpression(parent)) return;
 
   this.push("(");
   this.printList(node.arguments, node);
