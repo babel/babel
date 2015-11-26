@@ -1,6 +1,6 @@
 {
   "name": "babel-eslint",
-  "version": "4.1.6",
+  "version": "5.0.0-beta1",
   "description": "",
   "main": "index.js",
   "repository": {
