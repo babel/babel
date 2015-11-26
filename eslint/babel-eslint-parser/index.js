@@ -3,10 +3,10 @@ var assign         = require("lodash.assign");
 var pick           = require("lodash.pick");
 var Module         = require("module");
 var path           = require("path");
-var parse          = require("babel-core").parse;
-var t              = require("babel-core").types;
-var tt             = require("babel-core").acorn.tokTypes;
-var traverse       = require("babel-core").traverse;
+var parse          = require("babylon").parse;
+var t              = require("babel-types");
+var tt             = require("babylon").tokTypes;
+var traverse       = require("babel-traverse").default;
 
 var estraverse;
 var hasPatched = false;
@@ -243,7 +243,7 @@ function monkeypatch() {
     // visit decorators that are in: Property / MethodDefinition
   var visitProperty = referencer.prototype.visitProperty;
   referencer.prototype.visitProperty = function(node) {
-    if (node.value.type === "TypeCastExpression") {
+    if (node.value && node.value.type === "TypeCastExpression") {
       visitTypeAnnotation.call(this, node.value);
     }
     visitDecorators.call(this, node);
@@ -298,7 +298,7 @@ function monkeypatch() {
         if (id.type === "ObjectPattern") {
           // check if object destructuring has a spread
           var hasSpread = id.properties.filter(function(p) {
-            return p._babelType === "SpreadProperty";
+            return p._babelType === "SpreadProperty" || p._babelType === "RestProperty";
           });
           // visit properties if so
           if (hasSpread.length > 0) {
@@ -339,43 +339,6 @@ function monkeypatch() {
     }
   };
 
-  referencer.prototype.ComprehensionExpression = function(node) {
-    for (var i = 0; i < node.blocks.length; i++) {
-      var block = node.blocks[i];
-      if (block.left) {
-        var scope = new escope.Scope(this.scopeManager, "comprehensions", this.currentScope(), node, false);
-        this.scopeManager.__nestScope(scope);
-
-        var left = block.left;
-        if (left.type === "Identifier") {
-          scope.__define(left, new Definition("ComprehensionElement", left, left));
-        } else if (left.type === "ArrayPattern") {
-          for (var i = 0; i < left.elements.length; i++) {
-            var name = left.elements[i];
-            if (name) {
-              scope.__define(name, new Definition("ComprehensionElement", name, name));
-            }
-          }
-        } else if (left.type === "ObjectPattern") {
-          for (var i = 0; i < left.properties.length; i++) {
-            var name = left.properties[i];
-            if (name && name.key && name.key.type === "Identifier") {
-              scope.__define(name.key, new Definition("ComprehensionElement", name.key, name.key));
-            }
-          }
-        }
-      }
-      if (block.right) {
-        this.visit(block.right);
-      }
-    }
-    if (node.filter) {
-      this.visit(node.filter);
-    }
-    this.visit(node.body);
-    this.close(node);
-  };
-
   referencer.prototype.DeclareModule =
   referencer.prototype.DeclareFunction =
   referencer.prototype.DeclareVariable =
@@ -408,11 +371,27 @@ exports.parse = function (code) {
 exports.parseNoPatch = function (code) {
   var opts = {
     locations: true,
-    ranges: true
-  };
-
-  var comments = opts.onComment = [];
-  var tokens = opts.onToken = [];
+    ranges: true,
+    sourceType: "module",
+    strictMode: true,
+    allowHashBang: true,
+    ecmaVersion: Infinity,
+    plugins: [
+        "flow",
+        "jsx",
+        "asyncFunctions",
+        "asyncGenerators",
+        "classConstructorCall",
+        "classProperties",
+        "decorators",
+        "doExpressions",
+        "exponentiationOperator",
+        "exportExtensions",
+        "functionBind",
+        "objectRestSpread",
+        "trailingFunctionCommas"
+    ]
+};
 
   var ast;
   try {
@@ -432,18 +411,30 @@ exports.parseNoPatch = function (code) {
   // remove EOF token, eslint doesn't use this for anything and it interferes with some rules
   // see https://github.com/babel/babel-eslint/issues/2 for more info
   // todo: find a more elegant way to do this
-  tokens.pop();
+  ast.tokens.pop();
 
   // convert tokens
-  ast.tokens = acornToEsprima.toTokens(tokens, tt);
+  ast.tokens = acornToEsprima.toTokens(ast.tokens, tt);
 
   // add comments
-  acornToEsprima.convertComments(comments);
-  ast.comments = comments;
-  acornToEsprima.attachComments(ast, comments, ast.tokens);
+  acornToEsprima.convertComments(ast.comments);
 
   // transform esprima and acorn divergent nodes
   acornToEsprima.toAST(ast, traverse);
+
+  // ast.program.tokens = ast.tokens;
+  // ast.program.comments = ast.comments;
+  // ast = ast.program;
+
+  // remove File
+  ast.type = 'Program';
+  ast.sourceType = ast.program.sourceType;
+  ast.directives = ast.program.directives;
+  ast.body = ast.program.body;
+  delete ast.program;
+  delete ast._paths;
+
+  acornToEsprima.attachComments(ast, ast.comments, ast.tokens);
 
   return ast;
 }
