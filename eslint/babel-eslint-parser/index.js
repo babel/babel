@@ -387,6 +387,7 @@ exports.parseNoPatch = function (code) {
         "exponentiationOperator",
         "exportExtensions",
         "functionBind",
+        "functionSent",
         "objectRestSpread",
         "trailingFunctionCommas"
     ]
