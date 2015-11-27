@@ -388,4 +388,18 @@ describe("acorn-to-esprima", function () {
       "}"
     ].join("\n"));
   });
+
+  it("do not allow import export everywhere", function() {
+    assert.throws(function () {
+      parseAndAssertSame("function F() { import a from \"a\"; }");
+    }, /Illegal import declaration/)
+  });
+
+  it("return outside function", function () {
+    parseAndAssertSame("return;");
+  });
+
+  it("super outside method", function () {
+    parseAndAssertSame("function F() { super(); }");
+  });
 });

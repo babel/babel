@@ -370,12 +370,11 @@ exports.parse = function (code) {
 
 exports.parseNoPatch = function (code) {
   var opts = {
-    locations: true,
-    ranges: true,
     sourceType: "module",
     strictMode: true,
-    allowHashBang: true,
-    ecmaVersion: Infinity,
+    allowImportExportEverywhere: false, // consistent with espree
+    allowReturnOutsideFunction: true,
+    allowSuperOutsideMethod: true,
     plugins: [
         "flow",
         "jsx",
@@ -391,7 +390,7 @@ exports.parseNoPatch = function (code) {
         "objectRestSpread",
         "trailingFunctionCommas"
     ]
-};
+  };
 
   var ast;
   try {
