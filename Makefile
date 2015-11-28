@@ -67,5 +67,5 @@ bootstrap:
 build-docs:
 	rm -rf doc/packages
 	mkdir -p doc/packages
-	documentation packages/babel-traverse/src/index.js --format md --output doc/packages/babel-traverse.md
-	documentation packages/babel-types/src/index.js --format md --output doc/packages/babel-types.md
+	documentation packages/babel-traverse/src/index.js --format md --output doc/packages/babel-traverse.md --github
+	documentation packages/babel-types/src/index.js --format md --output doc/packages/babel-types.md --github
