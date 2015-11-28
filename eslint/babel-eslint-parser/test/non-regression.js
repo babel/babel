@@ -1296,4 +1296,12 @@ describe("verify", function () {
       [ "1:13 \"x\" was used before it was defined no-use-before-define" ]
     )
   });
+
+  it("jsx and stringliteral #216", function () {
+    verifyAndAssertMessages(
+      "<div className=''></div>",
+      {},
+      []
+    )
+  });
 });

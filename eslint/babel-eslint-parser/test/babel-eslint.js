@@ -330,76 +330,84 @@ describe("acorn-to-esprima", function () {
     ].join("\n"));
   });
 
-  it("MethodDefinition", function () {
-    parseAndAssertSame([
-      "export default class A {",
-        "a() {}",
-      "}"
-    ].join("\n"));
-  });
+  describe("babel 6 tests", function () {
+    it("MethodDefinition", function () {
+      parseAndAssertSame([
+        "export default class A {",
+          "a() {}",
+        "}"
+      ].join("\n"));
+    });
 
-  it("MethodDefinition 2", function () {
-    parseAndAssertSame([
-      "export default class Bar { get bar() { return 42; }}"
-    ].join("\n"));
-  });
+    it("MethodDefinition 2", function () {
+      parseAndAssertSame([
+        "export default class Bar { get bar() { return 42; }}"
+      ].join("\n"));
+    });
 
-  it("ClassMethod", function () {
-    parseAndAssertSame([
-      "class A {",
-        "constructor() {",
-        "}",
-      "}"
-    ].join("\n"));
-  });
+    it("ClassMethod", function () {
+      parseAndAssertSame([
+        "class A {",
+          "constructor() {",
+          "}",
+        "}"
+      ].join("\n"));
+    });
 
-  it("ClassMethod multiple params", function () {
-    parseAndAssertSame([
-      "class A {",
-        "constructor(a, b, c) {",
-        "}",
-      "}"
-    ].join("\n"));
-  });
+    it("ClassMethod multiple params", function () {
+      parseAndAssertSame([
+        "class A {",
+          "constructor(a, b, c) {",
+          "}",
+        "}"
+      ].join("\n"));
+    });
 
-  it("ClassMethod multiline", function () {
-    parseAndAssertSame([
-      "class A {",
-      "  constructor(",
-      "    a,",
-      "    b,",
-      "    c",
-      "  ) {",
-      "",
-      "  }",
-      "}"
-    ].join("\n"));
-  });
+    it("ClassMethod multiline", function () {
+      parseAndAssertSame([
+        "class A {",
+        "  constructor(",
+        "    a,",
+        "    b,",
+        "    c",
+        "  ) {",
+        "",
+        "  }",
+        "}"
+      ].join("\n"));
+    });
 
-  it("ClassMethod oneline", function () {
-    parseAndAssertSame("class A { constructor(a, b, c) {} }");
-  });
+    it("ClassMethod oneline", function () {
+      parseAndAssertSame("class A { constructor(a, b, c) {} }");
+    });
 
-  it("ObjectMethod", function () {
-    parseAndAssertSame([
-      "var a = {",
-        "b(c) {",
-        "}",
-      "}"
-    ].join("\n"));
-  });
+    it("ObjectMethod", function () {
+      parseAndAssertSame([
+        "var a = {",
+          "b(c) {",
+          "}",
+        "}"
+      ].join("\n"));
+    });
 
-  it("do not allow import export everywhere", function() {
-    assert.throws(function () {
-      parseAndAssertSame("function F() { import a from \"a\"; }");
-    }, /Illegal import declaration/)
-  });
+    it("do not allow import export everywhere", function() {
+      assert.throws(function () {
+        parseAndAssertSame("function F() { import a from \"a\"; }");
+      }, /Illegal import declaration/)
+    });
 
-  it("return outside function", function () {
-    parseAndAssertSame("return;");
-  });
+    it("return outside function", function () {
+      parseAndAssertSame("return;");
+    });
 
-  it("super outside method", function () {
-    parseAndAssertSame("function F() { super(); }");
+    it("super outside method", function () {
+      parseAndAssertSame("function F() { super(); }");
+    });
+
+    it("StringLiteral", function () {
+      parseAndAssertSame('');
+      parseAndAssertSame("");
+      parseAndAssertSame("a");
+    });
   });
 });

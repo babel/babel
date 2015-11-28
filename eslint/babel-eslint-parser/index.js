@@ -414,13 +414,13 @@ exports.parseNoPatch = function (code) {
   ast.tokens.pop();
 
   // convert tokens
-  ast.tokens = acornToEsprima.toTokens(ast.tokens, tt);
+  ast.tokens = acornToEsprima.toTokens(ast.tokens, tt, code);
 
   // add comments
   acornToEsprima.convertComments(ast.comments);
 
   // transform esprima and acorn divergent nodes
-  acornToEsprima.toAST(ast, traverse);
+  acornToEsprima.toAST(ast, traverse, code);
 
   // ast.program.tokens = ast.tokens;
   // ast.program.comments = ast.comments;
