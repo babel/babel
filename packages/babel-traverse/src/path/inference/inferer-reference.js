@@ -1,6 +1,10 @@
 import type NodePath from "../index";
 import * as t from "babel-types";
 
+/**
+ * @private
+ */
+
 export default function (node: Object) {
   if (!this.isReferenced()) return;
 
@@ -24,6 +28,10 @@ export default function (node: Object) {
     // todo
   }
 }
+
+/**
+ * @private
+ */
 
 function getTypeAnnotationBindingConstantViolations(path, name) {
   let binding = path.scope.getBinding(name);
@@ -78,6 +86,10 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
   }
 }
 
+/**
+ * @private
+ */
+
 function getConstantViolationsBefore(binding, path, functions) {
   let violations = binding.constantViolations.slice();
   violations.unshift(binding.path);
@@ -88,6 +100,10 @@ function getConstantViolationsBefore(binding, path, functions) {
     return status === "before";
   });
 }
+
+/**
+ * @private
+ */
 
 function inferAnnotationFromBinaryExpression(name, path) {
   let operator = path.node.operator;
@@ -140,6 +156,10 @@ function inferAnnotationFromBinaryExpression(name, path) {
   return t.createTypeAnnotationBasedOnTypeof(typePath.node.value);
 }
 
+/**
+ * @private
+ */
+
 function getParentConditionalPath(path) {
   let parentPath;
   while (parentPath = path.parentPath) {
@@ -154,6 +174,10 @@ function getParentConditionalPath(path) {
     }
   }
 }
+
+/**
+ * @private
+ */
 
 function getConditionalAnnotation(path, name) {
   let ifStatement = getParentConditionalPath(path);

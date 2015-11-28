@@ -4,6 +4,12 @@ import type TraversalContext from "../index";
 import NodePath from "./index";
 import * as t from "babel-types";
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.getStatementParent
+ */
+
 export function getStatementParent(): ?NodePath {
   let path = this;
 
@@ -22,6 +28,12 @@ export function getStatementParent(): ?NodePath {
   return path;
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.getOpposite
+ */
+
 export function getOpposite() {
   if (this.key === "left") {
     return this.getSibling("right");
@@ -29,6 +41,12 @@ export function getOpposite() {
     return this.getSibling("left");
   }
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.getCompletionRecords
+ */
 
 export function getCompletionRecords(): Array {
   let paths = [];
@@ -57,6 +75,12 @@ export function getCompletionRecords(): Array {
   return paths;
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.getSibling
+ */
+
 export function getSibling(key) {
   return NodePath.get({
     parentPath: this.parentPath,
@@ -67,6 +91,12 @@ export function getSibling(key) {
   });
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.get
+ */
+
 export function get(key: string, context?: boolean | TraversalContext): NodePath {
   if (context === true) context = this.context;
   let parts = key.split(".");
@@ -76,6 +106,10 @@ export function get(key: string, context?: boolean | TraversalContext): NodePath
     return this._getPattern(parts, context);
   }
 }
+
+/**
+ * @private
+ */
 
 export function _getKey(key, context?) {
   let node      = this.node;
@@ -102,6 +136,10 @@ export function _getKey(key, context?) {
   }
 }
 
+/**
+ * @private
+ */
+
 export function _getPattern(parts, context) {
   let path = this;
   for (let part of (parts: Array)) {
@@ -118,9 +156,21 @@ export function _getPattern(parts, context) {
   return path;
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.getBindingIdentifiers
+ */
+
 export function getBindingIdentifiers(duplicates?) {
   return t.getBindingIdentifiers(this.node, duplicates);
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.getOuterBindingIdentifiers
+ */
 
 export function getOuterBindingIdentifiers(duplicates?) {
   return t.getOuterBindingIdentifiers(this.node, duplicates);

@@ -9,8 +9,6 @@ import Binding from "./binding";
 import globals from "globals";
 import * as t from "babel-types";
 
-//
-
 const CACHE_SINGLE_KEY = Symbol();
 const CACHE_MULTIPLE_KEY = Symbol();
 
@@ -19,6 +17,8 @@ const CACHE_MULTIPLE_KEY = Symbol();
  * node itself containing all scopes it has been associated with.
  *
  * We also optimise for the case of there being only a single scope associated with a node.
+ *
+ * @private
  */
 
 function getCache(node, parentScope, self) {
@@ -40,11 +40,19 @@ function getCache(node, parentScope, self) {
   return getCacheMultiple(node, parentScope, self, singleCache);
 }
 
+/**
+ * @private
+ */
+
 function matchesParent(scope, parentScope) {
   if (scope.parent === parentScope) {
     return true;
   }
 }
+
+/**
+ * @private
+ */
 
 function getCacheMultiple(node, parentScope, self, singleCache) {
   let scopes: Array<Scope> = node[CACHE_MULTIPLE_KEY] = node[CACHE_MULTIPLE_KEY] || [];
@@ -63,7 +71,9 @@ function getCacheMultiple(node, parentScope, self, singleCache) {
   scopes.push(self);
 }
 
-//
+/**
+ * @private
+ */
 
 let collectorVisitor = {
   For(path) {
@@ -161,6 +171,10 @@ let collectorVisitor = {
 
 let uid = 0;
 
+/**
+ * [Needs description]
+ * @public
+ */
 export default class Scope {
 
   /**
@@ -187,12 +201,14 @@ export default class Scope {
 
   /**
    * Globals.
+   * @private
    */
 
   static globals = Object.keys(globals.builtin);
 
   /**
    * Variables available in current context.
+   * @private
    */
 
   static contextVariables = [
@@ -204,6 +220,8 @@ export default class Scope {
 
   /**
    * Traverse node with current scope and path.
+   * @public
+   * @name Scope.prototype.traverse
    */
 
   traverse(node: Object, opts: Object, state?) {
@@ -212,6 +230,8 @@ export default class Scope {
 
   /**
    * Generate a unique identifier and add it to the current scope.
+   * @public
+   * @name Scope.prototype.generateDeclaredUidIdentifier
    */
 
   generateDeclaredUidIdentifier(name: string = "temp") {
@@ -222,6 +242,8 @@ export default class Scope {
 
   /**
    * Generate a unique identifier.
+   * @public
+   * @name Scope.prototype.generateUidIdentifier
    */
 
   generateUidIdentifier(name: string) {
@@ -230,6 +252,8 @@ export default class Scope {
 
   /**
    * Generate a unique `_id1` binding.
+   * @public
+   * @name Scope.prototype.generateUid
    */
 
   generateUid(name: string) {
@@ -251,6 +275,7 @@ export default class Scope {
 
   /**
    * Generate an `_id1`.
+   * @private
    */
 
   _generateUid(name, i) {
@@ -261,6 +286,8 @@ export default class Scope {
 
   /**
    * Generate a unique identifier based on a node.
+   * @public
+   * @name Scope.prototype.generateUidIdentifierBasedOnNode
    */
 
   generateUidIdentifierBasedOnNode(parent: Object, defaultName?: String):  Object {
@@ -321,6 +348,9 @@ export default class Scope {
    *  - `this` expressions
    *  - `super` expressions
    *  - Bound identifiers
+   *
+   * @public
+   * @name Scope.prototype.isStatic
    */
 
   isStatic(node: Object): boolean {
@@ -342,6 +372,8 @@ export default class Scope {
 
   /**
    * Possibly generate a memoised identifier if it is not static and has consequences.
+   * @public
+   * @name Scope.prototype.maybeGenerateMemoised
    */
 
   maybeGenerateMemoised(node: Object, dontPush?: boolean): ?Object {
@@ -353,6 +385,12 @@ export default class Scope {
       return id;
     }
   }
+
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.checkBlockScopedCollisions
+   */
 
   checkBlockScopedCollisions(local, kind: string, name: string, id: Object) {
     // ignore parameters
@@ -374,6 +412,12 @@ export default class Scope {
     }
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.rename
+   */
+
   rename(oldName: string, newName: string, block?) {
     let binding = this.getBinding(oldName);
     if (binding) {
@@ -382,12 +426,22 @@ export default class Scope {
     }
   }
 
+  /**
+   * @private
+   */
+
   _renameFromMap(map, oldName, newName, value) {
     if (map[oldName]) {
       map[newName] = value;
       map[oldName] = null;
     }
   }
+
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.dump
+   */
 
   dump() {
     let sep = repeating("-", 60);
@@ -407,6 +461,12 @@ export default class Scope {
     } while(scope = scope.parent);
     console.log(sep);
   }
+
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.toArray
+   */
 
   toArray(node: Object, i?: number) {
     let file = this.hub.file;
@@ -448,6 +508,12 @@ export default class Scope {
     return t.callExpression(file.addHelper(helperName), args);
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.registerDeclaration
+   */
+
   registerDeclaration(path: NodePath) {
     if (path.isLabeledStatement()) {
       this.registerBinding("label", path);
@@ -475,6 +541,12 @@ export default class Scope {
     }
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.buildUndefinedNode
+   */
+
   buildUndefinedNode() {
     if (this.hasBinding("undefined")) {
       return t.unaryExpression("void", t.numericLiteral(0), true);
@@ -483,6 +555,12 @@ export default class Scope {
     }
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.registerConstantViolation
+   */
+
   registerConstantViolation(path: NodePath) {
     let ids = path.getBindingIdentifiers();
     for (let name in ids) {
@@ -490,6 +568,12 @@ export default class Scope {
       if (binding) binding.reassign(path);
     }
   }
+
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.registerBinding
+   */
 
   registerBinding(kind: string, path: NodePath, bindingPath = path) {
     if (!kind) throw new ReferenceError("no `kind`");
@@ -529,9 +613,21 @@ export default class Scope {
     }
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.addGlobal
+   */
+
   addGlobal(node: Object) {
     this.globals[node.name] = node;
   }
+
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.hasUid
+   */
 
   hasUid(name): boolean {
     let scope = this;
@@ -543,6 +639,12 @@ export default class Scope {
     return false;
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.hasGlobal
+   */
+
   hasGlobal(name: string): boolean {
     let scope = this;
 
@@ -553,6 +655,12 @@ export default class Scope {
     return false;
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.hasReference
+   */
+
   hasReference(name: string): boolean {
     let scope = this;
 
@@ -562,6 +670,11 @@ export default class Scope {
 
     return false;
   }
+
+  /**
+   * [Needs description]
+   * @private
+   */
 
   isPure(node, constantsOnly?: boolean) {
     if (t.isIdentifier(node)) {
@@ -603,6 +716,8 @@ export default class Scope {
 
   /**
    * Set some arbitrary data on the current scope.
+   * @public
+   * @name Scope.prototype.setData
    */
 
   setData(key, val) {
@@ -611,6 +726,8 @@ export default class Scope {
 
   /**
    * Recursively walk up scope tree looking for the data `key`.
+   * @public
+   * @name Scope.prototype.getData
    */
 
   getData(key) {
@@ -624,6 +741,8 @@ export default class Scope {
   /**
    * Recursively walk up scope tree looking for the data `key` and if it exists,
    * remove it.
+   * @public
+   * @name Scope.prototype.removeData
    */
 
   removeData(key) {
@@ -634,9 +753,19 @@ export default class Scope {
     } while(scope = scope.parent);
   }
 
+  /**
+   * [Needs description]
+   * @private
+   */
+
   init() {
     if (!this.references) this.crawl();
   }
+
+  /**
+   * [Needs description]
+   * @private
+   */
 
   crawl() {
     let path = this.path;
@@ -732,6 +861,11 @@ export default class Scope {
     }
   }
 
+  /**
+   * [Needs description]
+   * @private
+   */
+
   push(opts: {
     id: Object;
     init: ?Object;
@@ -777,6 +911,8 @@ export default class Scope {
 
   /**
    * Walk up to the top of the scope tree and get the `Program`.
+   * @public
+   * @name Scope.prototype.getProgramParent
    */
 
   getProgramParent() {
@@ -792,6 +928,8 @@ export default class Scope {
   /**
    * Walk up the scope tree until we hit either a Function or reach the
    * very top and hit Program.
+   * @public
+   * @name Scope.prototype.getFunctionParent
    */
 
   getFunctionParent() {
@@ -807,6 +945,8 @@ export default class Scope {
   /**
    * Walk up the scope tree until we hit either a BlockStatement/Loop/Program/Function/Switch or reach the
    * very top and hit Program.
+   * @public
+   * @name Scope.prototype.getBlockParent
    */
 
   getBlockParent() {
@@ -821,6 +961,8 @@ export default class Scope {
 
   /**
    * Walks the scope tree and gathers **all** bindings.
+   * @public
+   * @name Scope.prototype.getAllBindings
    */
 
   getAllBindings(): Object {
@@ -837,6 +979,8 @@ export default class Scope {
 
   /**
    * Walks the scope tree and gathers all declarations of `kind`.
+   * @public
+   * @name Scope.prototype.getAllBindingsOfKind
    */
 
   getAllBindingsOfKind(): Object {
@@ -856,9 +1000,21 @@ export default class Scope {
     return ids;
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.bindingIdentifierEquals
+   */
+
   bindingIdentifierEquals(name: string, node: Object): boolean {
     return this.getBindingIdentifier(name) === node;
   }
+
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.getBinding
+   */
 
   getBinding(name: string) {
     let scope = this;
@@ -869,23 +1025,53 @@ export default class Scope {
     } while (scope = scope.parent);
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.getOwnBinding
+   */
+
   getOwnBinding(name: string) {
     return this.bindings[name];
   }
+
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.getBindingIdentifier
+   */
 
   getBindingIdentifier(name: string) {
     let info = this.getBinding(name);
     return info && info.identifier;
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.getOwnBindingIdentifier
+   */
+
   getOwnBindingIdentifier(name: string) {
     let binding = this.bindings[name];
     return binding && binding.identifier;
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.hasOwnBinding
+   */
+
   hasOwnBinding(name: string) {
     return !!this.getOwnBinding(name);
   }
+
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.hasBinding
+   */
 
   hasBinding(name: string, noGlobals?) {
     if (!name) return false;
@@ -897,12 +1083,20 @@ export default class Scope {
     return false;
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.parentHasBinding
+   */
+
   parentHasBinding(name: string, noGlobals?) {
     return this.parent && this.parent.hasBinding(name, noGlobals);
   }
 
   /**
    * Move a binding of `name` to another `scope`.
+   * @public
+   * @name Scope.prototype.moveBindingTo
    */
 
   moveBindingTo(name, scope) {
@@ -914,9 +1108,21 @@ export default class Scope {
     }
   }
 
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.removeOwnBinding
+   */
+
   removeOwnBinding(name: string) {
     delete this.bindings[name];
   }
+
+  /**
+   * [Needs description]
+   * @public
+   * @name Scope.prototype.removeBinding
+   */
 
   removeBinding(name: string) {
     // clear literal binding

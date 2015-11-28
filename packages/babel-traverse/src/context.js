@@ -3,6 +3,10 @@ import * as t from "babel-types";
 
 let testing = process.env.NODE_ENV === "test";
 
+/**
+ * @private
+ */
+
 export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {
     this.parentPath = parentPath;
@@ -20,6 +24,7 @@ export default class TraversalContext {
   /**
    * This method does a simple check to determine whether or not we really need to attempt
    * visit a node. This will prevent us from constructing a NodePath.
+   * @private
    */
 
   shouldVisit(node): boolean {
@@ -41,6 +46,10 @@ export default class TraversalContext {
     return false;
   }
 
+  /**
+   * @private
+   */
+
   create(node, obj, key, listKey): NodePath {
     return NodePath.get({
       parentPath: this.parentPath,
@@ -50,6 +59,10 @@ export default class TraversalContext {
       listKey
     });
   }
+
+  /**
+   * @private
+   */
 
   maybeQueue(path, notPriority?: boolean) {
     if (this.trap) {
@@ -64,6 +77,10 @@ export default class TraversalContext {
       }
     }
   }
+
+  /**
+   * @private
+   */
 
   visitMultiple(container, parent, listKey) {
     // nothing to traverse!
@@ -82,6 +99,10 @@ export default class TraversalContext {
     return this.visitQueue(queue);
   }
 
+  /**
+   * @private
+   */
+
   visitSingle(node, key): boolean {
     if (this.shouldVisit(node[key])) {
       return this.visitQueue([
@@ -91,6 +112,10 @@ export default class TraversalContext {
       return false;
     }
   }
+
+  /**
+   * @private
+   */
 
   visitQueue(queue: Array<NodePath>) {
     // set queue
@@ -136,6 +161,10 @@ export default class TraversalContext {
 
     return stop;
   }
+
+  /**
+   * @private
+   */
 
   visit(node, key) {
     let nodes = node[key];

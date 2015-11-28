@@ -1,4 +1,5 @@
-// This file contains methods responsible for introspecting the current path for certain values.
+// This file contains methods responsible for introspecting the current path for
+// certain values.
 
 import type NodePath from "./index";
 import includes from "lodash/collection/includes";
@@ -9,6 +10,8 @@ import * as t from "babel-types";
  *
  * For example, given the match `React.createClass` it would match the
  * parsed nodes of `React.createClass` and `React["createClass"]`.
+ * @public
+ * @name NodePath.prototype.matchesPattern
  */
 
 export function matchesPattern(pattern: string, allowPartial?: boolean): boolean {
@@ -63,8 +66,10 @@ export function matchesPattern(pattern: string, allowPartial?: boolean): boolean
 }
 
 /**
- * Check whether we have the input `key`. If the `key` references an array then we check
- * if the array has any items, otherwise we just check if it's falsy.
+ * Check whether we have the input `key`. If the `key` references an array then
+ * we check if the array has any items, otherwise we just check if it's falsy.
+ * @public
+ * @name NodePath.prototype.has
  */
 
 export function has(key): boolean {
@@ -77,7 +82,9 @@ export function has(key): boolean {
 }
 
 /**
- * Description
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.isStatic
  */
 
 export function isStatic() {
@@ -86,12 +93,15 @@ export function isStatic() {
 
 /**
  * Alias of `has`.
+ * @private
  */
 
 export let is = has;
 
 /**
  * Opposite of `has`.
+ * @public
+ * @name NodePath.prototype.isnt
  */
 
 export function isnt(key): boolean {
@@ -100,6 +110,8 @@ export function isnt(key): boolean {
 
 /**
  * Check whether the path node `key` strict equals `value`.
+ * @public
+ * @name NodePath.prototype.equals
  */
 
 export function equals(key, value): boolean {
@@ -107,8 +119,11 @@ export function equals(key, value): boolean {
 }
 
 /**
- * Check the type against our stored internal type of the node. This is handy when a node has
- * been removed yet we still internally know the type and need it to calculate node replacement.
+ * Check the type against our stored internal type of the node. This is handy
+ * when a node has been removed yet we still internally know the type and need
+ * it to calculate node replacement.
+ * @public
+ * @name NodePath.prototype.isNodeType
  */
 
 export function isNodeType(type: string): boolean {
@@ -121,8 +136,12 @@ export function isNodeType(type: string): boolean {
  *   for (KEY in right);
  *   for (KEY;;);
  *
- * This is because these spots allow VariableDeclarations AND normal expressions so we need
- * to tell the path replacement that it's ok to replace this with an expression.
+ * This is because these spots allow VariableDeclarations AND normal expressions
+ * so we need to tell the path replacement that it's ok to replace this with an
+ * expression.
+ *
+ * @public
+ * @name NodePath.prototype.canHaveVariableDeclarationOrExpression
  */
 
  export function canHaveVariableDeclarationOrExpression() {
@@ -131,6 +150,8 @@ export function isNodeType(type: string): boolean {
 
 /**
  * Check whether the current path references a completion record
+ * @public
+ * @name NodePath.prototype.isCompletionRecord
  */
 
 export function isCompletionRecord(allowInsideFunction?) {
@@ -158,8 +179,10 @@ export function isCompletionRecord(allowInsideFunction?) {
 }
 
 /**
- * Check whether or not the current `key` allows either a single statement or block statement
- * so we can explode it if necessary.
+ * Check whether or not the current `key` allows either a single statement or
+ * block statement so we can explode it if necessary.
+ * @public
+ * @name NodePath.prototype.isStatementOrBlock
  */
 
 export function isStatementOrBlock() {
@@ -171,7 +194,10 @@ export function isStatementOrBlock() {
 }
 
 /**
- * Check if the currently assigned path references the `importName` of `moduleSource`.
+ * Check if the currently assigned path references the `importName` of
+ * `moduleSource`.
+ * @public
+ * @name NodePath.prototype.referencesImport
  */
 
 export function referencesImport(moduleSource, importName) {
@@ -208,6 +234,8 @@ export function referencesImport(moduleSource, importName) {
 
 /**
  * Get the source code associated with this node.
+ * @public
+ * @name NodePath.prototype.getSource
  */
 
 export function getSource() {
@@ -219,19 +247,29 @@ export function getSource() {
   }
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.willIMaybeExecuteBefore
+ */
+
 export function willIMaybeExecuteBefore(target) {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
 
 /**
- * Given a `target` check the execution status of it relative to the current path.
+ * Given a `target` check the execution status of it relative to the current
+ * path.
  *
- * "Execution status" simply refers to where or not we **think** this will execuete
- * before or after the input `target` element.
+ * "Execution status" simply refers to where or not we **think** this will
+ * execuete before or after the input `target` element.
+ *
+ * @private
  */
 
 export function _guessExecutionStatusRelativeTo(target) {
-  // check if the two paths are in different functions, we can't track execution of these
+  // check if the two paths are in different functions, we can't track execution
+  // of these
   let targetFuncParent = target.scope.getFunctionParent();
   let selfFuncParent = this.scope.getFunctionParent();
 
@@ -265,7 +303,8 @@ export function _guessExecutionStatusRelativeTo(target) {
     return "before";
   }
 
-  // get the relationship paths that associate these nodes to their common ancestor
+  // get the relationship paths that associate these nodes to their common
+  // ancestor
   let targetRelationship = targetPaths[targetIndex - 1];
   let selfRelationship   = selfPaths[selfIndex - 1];
   if (!targetRelationship || !selfRelationship) {
@@ -277,18 +316,24 @@ export function _guessExecutionStatusRelativeTo(target) {
     return targetRelationship.key > selfRelationship.key ? "before" : "after";
   }
 
-  // otherwise we're associated by a parent node, check which key comes before the other
+  // otherwise we're associated by a parent node, check which key comes before
+  // the other
   let targetKeyPosition = t.VISITOR_KEYS[targetRelationship.type].indexOf(targetRelationship.key);
   let selfKeyPosition   = t.VISITOR_KEYS[selfRelationship.type].indexOf(selfRelationship.key);
   return targetKeyPosition > selfKeyPosition ? "before" : "after";
 }
 
+/**
+ * @private
+ */
+
 export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncParent) {
   let targetFuncPath = targetFuncParent.path;
   if (!targetFuncPath.isFunctionDeclaration()) return;
 
-  // so we're in a completely different function, if this is a function declaration
-  // then we can be a bit smarter and handle cases where the function is either
+  // so we're in a completely different function, if this is a function
+  // declaration then we can be a bit smarter and handle cases where the
+  // function is either
   // a. not called at all (part of an export)
   // b. called directly
   let binding = targetFuncPath.scope.getBinding(targetFuncPath.node.id.name);
@@ -309,8 +354,8 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
 
   // verify that all the calls have the same execution status
   for (let path of referencePaths) {
-    // if a reference is a child of the function we're checking against then we can
-    // safelty ignore it
+    // if a reference is a child of the function we're checking against then we
+    // can safelty ignore it
     let childOfFunction = !!path.find(path => path.node === targetFuncPath.node);
     if (childOfFunction) continue;
 
@@ -328,18 +373,25 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
 
 /**
  * Resolve a "pointer" `NodePath` to it's absolute path.
+ * @public
+ * @name NodePath.prototype.resolve
  */
 
 export function resolve(dangerous, resolved) {
   return this._resolve(dangerous, resolved) || this;
 }
 
+/**
+ * @private
+ */
+
 export function _resolve(dangerous?, resolved?): ?NodePath {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
   if (resolved && resolved.indexOf(this) >= 0) return;
 
-  // we store all the paths we've "resolved" in this array to prevent infinite recursion
+  // we store all the paths we've "resolved" in this array to prevent infinite
+  // recursion
   resolved = resolved || [];
   resolved.push(this);
 
@@ -365,8 +417,8 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
   } else if (this.isTypeCastExpression()) {
     return this.get("expression").resolve(dangerous, resolved);
   } else if (dangerous && this.isMemberExpression()) {
-    // this is dangerous, as non-direct target assignments will mutate it's state
-    // making this resolution inaccurate
+    // this is dangerous, as non-direct target assignments will mutate it's
+    // state making this resolution inaccurate
 
     let targetKey = this.toComputedKey();
     if (!t.isLiteral(targetKey)) return;

@@ -3,6 +3,11 @@ import * as messages from "babel-messages";
 import * as t from "babel-types";
 import clone from "lodash/lang/clone";
 
+/**
+ * [Needs description]
+ * @public
+ * @name traverse.visitors.explode
+ */
 export function explode(visitor) {
   if (visitor._exploded) return visitor;
   visitor._exploded = true;
@@ -103,6 +108,11 @@ export function explode(visitor) {
   return visitor;
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name traverse.visitors.verify
+ */
 export function verify(visitor) {
   if (visitor._verified) return;
 
@@ -146,6 +156,11 @@ function validateVisitorMethods(path, val) {
   }
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name traverse.visitors.merge
+ */
 export function merge(visitors: Array, states: Array = []) {
   let rootVisitor = {};
 

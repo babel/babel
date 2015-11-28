@@ -2,6 +2,8 @@
 
 /**
  * Share comments amongst siblings.
+ * @public
+ * @name NodePath.prototype.shareCommentsWithSiblings
  */
 
 export function shareCommentsWithSiblings() {
@@ -22,6 +24,12 @@ export function shareCommentsWithSiblings() {
   next.addComments("leading", trailing);
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.addComment
+ */
+
 export function addComment(type, content, line?) {
   this.addComments(type, [{
     type: line ? "CommentLine" : "CommentBlock",
@@ -31,6 +39,8 @@ export function addComment(type, content, line?) {
 
 /**
  * Give node `comments` of the specified `type`.
+ * @public
+ * @name NodePath.prototype.addComments
  */
 
 export function addComments(type: string, comments: Array) {

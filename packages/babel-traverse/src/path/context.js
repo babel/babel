@@ -2,6 +2,10 @@
 
 import traverse from "../index";
 
+/**
+ * @private
+ */
+
 export function call(key): boolean {
   let opts = this.opts;
 
@@ -17,6 +21,10 @@ export function call(key): boolean {
 
   return false;
 }
+
+/**
+ * @private
+ */
 
 export function _call(fns?: Array<Function>): boolean {
   if (!fns) return false;
@@ -39,10 +47,18 @@ export function _call(fns?: Array<Function>): boolean {
   return false;
 }
 
+/**
+ * @private
+ */
+
 export function isBlacklisted(): boolean {
   let blacklist = this.opts.blacklist;
   return blacklist && blacklist.indexOf(this.node.type) > -1;
 }
+
+/**
+ * @private
+ */
 
 export function visit(): boolean {
   if (!this.node) {
@@ -70,18 +86,34 @@ export function visit(): boolean {
   return this.shouldStop;
 }
 
+/**
+ * @private
+ */
+
 export function skip() {
   this.shouldSkip = true;
 }
+
+/**
+ * @private
+ */
 
 export function skipKey(key) {
   this.skipKeys[key] = true;
 }
 
+/**
+ * @private
+ */
+
 export function stop() {
   this.shouldStop = true;
   this.shouldSkip = true;
 }
+
+/**
+ * @private
+ */
 
 export function setScope() {
   if (this.opts && this.opts.noScope) return;
@@ -101,6 +133,10 @@ export function setScope() {
   this.scope = this.getScope(target);
   if (this.scope) this.scope.init();
 }
+
+/**
+ * @private
+ */
 
 export function setContext(context) {
   this.shouldSkip = false;
@@ -123,6 +159,7 @@ export function setContext(context) {
  * Here we resync the node paths `key` and `container`. If they've changed according
  * to what we have stored internally then we attempt to resync by crawling and looking
  * for the new values.
+ * @private
  */
 
 export function resync() {
@@ -134,11 +171,19 @@ export function resync() {
   //this._resyncRemoved();
 }
 
+/**
+ * @private
+ */
+
 export function _resyncParent() {
   if (this.parentPath) {
     this.parent = this.parentPath.node;
   }
 }
+
+/**
+ * @private
+ */
 
 export function _resyncKey() {
   if (!this.container) return;
@@ -166,6 +211,10 @@ export function _resyncKey() {
   this.key = null;
 }
 
+/**
+ * @private
+ */
+
 export function _resyncList() {
   if (!this.parent || !this.inList) return;
 
@@ -176,21 +225,37 @@ export function _resyncList() {
   this.container = newContainer || null;
 }
 
+/**
+ * @private
+ */
+
 export function _resyncRemoved() {
   if (this.key == null || !this.container || this.container[this.key] !== this.node) {
     this._markRemoved();
   }
 }
 
+/**
+ * @private
+ */
+
 export function popContext() {
   this.contexts.pop();
   this.setContext(this.contexts[this.contexts.length - 1]);
 }
 
+/**
+ * @private
+ */
+
 export function pushContext(context) {
   this.contexts.push(context);
   this.setContext(context);
 }
+
+/**
+ * @private
+ */
 
 export function setup(parentPath, container, listKey, key) {
   this.inList    = !!listKey;
@@ -202,11 +267,19 @@ export function setup(parentPath, container, listKey, key) {
   this.setKey(key);
 }
 
+/**
+ * @private
+ */
+
 export function setKey(key) {
   this.key  = key;
   this.node = this.container[this.key];
   this.type = this.node && this.node.type;
 }
+
+/**
+ * @private
+ */
 
 export function requeue(path = this) {
   if (path.removed) return;

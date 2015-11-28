@@ -39,6 +39,9 @@ let hoistVariablesVisitor = {
  *  - Inherit the comments of first provided node with that of the current node.
  *  - Insert the provided nodes after the current node.
  *  - Remove the current node.
+ *
+ * @public
+ * @name NodePath.prototype.replaceWithMultiple
  */
 
 export function replaceWithMultiple(nodes: Array<Object>) {
@@ -63,6 +66,9 @@ export function replaceWithMultiple(nodes: Array<Object>) {
  * NOTE: This is typically not a good idea to use. Building source strings when
  * transforming ASTs is an antipattern and SHOULD NOT be encouraged. Even if it's
  * easier to use, your transforms will be extremely brittle.
+ *
+ * @public
+ * @name NodePath.prototype.replaceWithSourceString
  */
 
 export function replaceWithSourceString(replacement) {
@@ -87,6 +93,9 @@ export function replaceWithSourceString(replacement) {
 
 /**
  * Replace the current node with another.
+ *
+ * @public
+ * @name NodePath.prototype.replaceWith
  */
 
 export function replaceWith(replacement) {
@@ -148,7 +157,8 @@ export function replaceWith(replacement) {
 }
 
 /**
- * Description
+ * [Needs description]
+ * @private
  */
 
 export function _replaceWith(node) {
@@ -171,6 +181,8 @@ export function _replaceWith(node) {
  * This method takes an array of statements nodes and then explodes it
  * into expressions. This method retains completion records which is
  * extremely important to retain original semantics.
+ * @public
+ * @name NodePath.prototype.replaceExpressionWithStatements
  */
 
 export function replaceExpressionWithStatements(nodes: Array<Object>) {
@@ -223,6 +235,12 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
     return this.node;
   }
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.replaceInline
+ */
 
 export function replaceInline(nodes: Object | Array<Object>) {
   this.resync();

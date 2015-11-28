@@ -11,27 +11,112 @@ import * as t from "babel-types";
 
 let debug = buildDebug("babel");
 
+/**
+ * [Needs description]
+ * @private
+ */
+
 export default class NodePath {
   constructor(hub: Hub, parent: Object) {
+    /**
+     * Parent node.
+     * @public
+     * @member {Node}
+     * @name nodePath.parent
+     */
+
     this.parent = parent;
+
+    /**
+     * Has the node been removed?
+     * @public
+     * @member {Boolean}
+     * @name nodePath.removed
+     */
+
+    this.removed = false;
+
+    /**
+     * Parent path.
+     * @public
+     * @member {?NodePath}
+     * @name nodePath.parentPath
+     */
+
+    this.parentPath = null;
+
+    /**
+     * [Needs description]
+     * @public
+     * @member {?Object | Array<Object>}
+     * @name nodePath.container
+     */
+
+    this.container = null;
+
+    /**
+     * [Needs description]
+     * @public
+     * @member {?String}
+     * @name nodePath.listKey
+     */
+
+    this.listKey = null;
+
+    /**
+     * @public
+     * @member {Boolean}
+     * @name nodePath.inList
+     */
+
+    this.inList = false;
+
+    /**
+     * [Needs description]
+     * @public
+     * @member {?String}
+     * @name nodePath.parentKey
+     */
+
+    this.parentKey = null;
+
+    /**
+     * [Needs description]
+     * @public
+     * @member {?String}
+     * @name nodePath.key
+     */
+
+    this.key = null;
+
+    /**
+     * Node.
+     * @public
+     * @member {Node}
+     * @name nodePath.node
+     */
+
+    this.node = null;
+
+    /**
+     * Scope.
+     * @public
+     * @member {Scope}
+     * @name nodePath.scope
+     */
+
+    this.scope = null;
+
+    // private members
     this.hub = hub;
     this.contexts = [];
     this.data = {};
     this.shouldSkip = false;
     this.shouldStop = false;
-    this.removed = false;
     this.state = null;
     this.opts = null;
     this.skipKeys = null;
-    this.parentPath = null;
     this.context = null;
-    this.container = null;
-    this.listKey = null;
-    this.inList = false;
-    this.parentKey = null;
-    this.key = null;
-    this.node = null;
-    this.scope = null;
     this.type = null;
     this.typeAnnotation = null;
   }
@@ -57,6 +142,11 @@ export default class NodePath {
   scope: Scope;
   type: ?string;
   typeAnnotation: ?Object;
+
+  /**
+   * [Needs description]
+   * @private
+   */
 
   static get({ hub, parentPath, parent, container, listKey, key }): NodePath {
     if (!hub && parentPath) {
@@ -100,6 +190,11 @@ export default class NodePath {
     return path;
   }
 
+  /**
+   * [Needs description]
+   * @private
+   */
+
   getScope(scope: Scope) {
     let ourScope = scope;
 
@@ -111,9 +206,19 @@ export default class NodePath {
     return ourScope;
   }
 
+  /**
+   * [Needs description]
+   * @private
+   */
+
   setData(key: string, val: any): any {
     return this.data[key] = val;
   }
+
+  /**
+   * [Needs description]
+   * @private
+   */
 
   getData(key: string, def?: any): any {
     let val = this.data[key];
@@ -121,13 +226,28 @@ export default class NodePath {
     return val;
   }
 
+  /**
+   * [Needs description]
+   * @public
+   */
+
   buildCodeFrameError(msg: string, Error: typeof Error = SyntaxError): Error {
     return this.hub.file.buildCodeFrameError(this.node, msg, Error);
   }
 
+  /**
+   * [Needs description]
+   * @public
+   */
+
   traverse(visitor: Object, state?: any) {
     traverse(this.node, visitor, this.scope, state, this);
   }
+
+  /**
+   * [Needs description]
+   * @public
+   */
 
   mark(type: string, message: string) {
     this.hub.file.metadata.marked.push({
@@ -137,10 +257,20 @@ export default class NodePath {
     });
   }
 
+  /**
+   * [Needs description]
+   * @public
+   */
+
   set(key: string, node: Object) {
     t.validate(this.node, key, node);
     this.node[key] = node;
   }
+
+  /**
+   * [Needs description]
+   * @private
+   */
 
   getPathLocation(): string {
     let parts = [];
@@ -152,6 +282,11 @@ export default class NodePath {
     } while(path = path.parentPath);
     return parts.join(".");
   }
+
+  /**
+   * [Needs description]
+   * @private
+   */
 
   debug(buildMessage: Function) {
     if (!debug.enabled) return;

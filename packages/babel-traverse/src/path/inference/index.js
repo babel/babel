@@ -4,6 +4,8 @@ import * as t from "babel-types";
 
 /**
  * Infer the type of the current `NodePath`.
+ * @public
+ * @name NodePath.prototype.getTypeAnnotation
  */
 
 export function getTypeAnnotation(): Object {
@@ -15,7 +17,8 @@ export function getTypeAnnotation(): Object {
 }
 
 /**
- * todo: split up this method
+ * @todo split up this method
+ * @private
  */
 
 export function _getTypeAnnotation(): ?Object {
@@ -58,9 +61,19 @@ export function _getTypeAnnotation(): ?Object {
   }
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.isBaseType
+ */
+
 export function isBaseType(baseName: string, soft?: boolean): boolean {
   return _isBaseType(baseName, this.getTypeAnnotation(), soft);
 }
+
+/**
+ * @private
+ */
 
 function _isBaseType(baseName: string, type?, soft?): boolean {
   if (baseName === "string") {
@@ -84,6 +97,12 @@ function _isBaseType(baseName: string, type?, soft?): boolean {
   }
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.couldBeBaseType
+ */
+
 export function couldBeBaseType(name: string): boolean {
   let type = this.getTypeAnnotation();
   if (t.isAnyTypeAnnotation(type)) return true;
@@ -100,6 +119,12 @@ export function couldBeBaseType(name: string): boolean {
   }
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.baseTypeStrictlyMatches
+ */
+
 export function baseTypeStrictlyMatches(right: NodePath) {
   let left = this.getTypeAnnotation();
   right = right.getTypeAnnotation();
@@ -108,6 +133,12 @@ export function baseTypeStrictlyMatches(right: NodePath) {
     return right.type === left.type;
   }
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.isGenericType
+ */
 
 export function isGenericType(genericName: string): boolean {
   let type = this.getTypeAnnotation();

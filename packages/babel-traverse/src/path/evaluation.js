@@ -23,6 +23,8 @@ const INVALID_METHODS = ["random"];
  *
  *   if (!t.evaluateTruthy(node)) falsyLogic();
  *
+ * @public
+ * @name NodePath.prototype.evaluateTruthy
  */
 
 export function evaluateTruthy(): boolean {
@@ -43,6 +45,8 @@ export function evaluateTruthy(): boolean {
  *   t.evaluate(parse("!true")) // { confident: true, value: false }
  *   t.evaluate(parse("foo + foo")) // { confident: false, value: undefined }
  *
+ * @public
+ * @name NodePath.prototype.evaluate
  */
 
 export function evaluate(): { confident: boolean; value: any } {

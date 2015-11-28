@@ -9,18 +9,60 @@ import type NodePath from "../path";
  *  * Amount of times referenced by other nodes.
  *  * Paths to nodes that reassign or modify this binding.
  *  * The kind of binding. (Is it a parameter, declaration etc)
+ *
+ * @public
  */
 
 export default class Binding {
   constructor({ existing, identifier, scope, path, kind }) {
-    this.identifier = identifier;
-    this.scope      = scope;
-    this.path       = path;
-    this.kind       = kind;
 
-    this.constantViolations = [];
+    /**
+     * [Needs description]
+     * @public
+     * @member
+     * @name binding.identifier
+     */
+
+    this.identifier = identifier;
+
+    /**
+     * [Needs description]
+     * @public
+     * @member {Scope}
+     * @name binding.scope
+     */
+
+    this.scope = scope;
+
+    /**
+     * [Needs description]
+     * @public
+     * @member {NodePath}
+     * @name binding.path
+     */
+
+    this.path = path;
+
+    /**
+     * [Needs description]
+     * @public
+     * @member {String}
+     * @name binding.kind
+     */
+
+    this.kind = kind;
+
+    /**
+     * [Needs description]
+     * @public
+     * @member {Boolean}
+     * @name binding.constant
+     */
+
     this.constant = true;
 
+    // private members
+    this.constantViolations = [];
     this.referencePaths = [];
     this.referenced = false;
     this.references = 0;
@@ -48,16 +90,28 @@ export default class Binding {
   hasValue: boolean;
   value: any;
 
+  /**
+   * @private
+   */
+
   deoptValue() {
     this.clearValue();
     this.hasDeoptedValue = true;
   }
+
+  /**
+   * @private
+   */
 
   setValue(value: any) {
     if (this.hasDeoptedValue) return;
     this.hasValue = true;
     this.value    = value;
   }
+
+  /**
+   * @private
+   */
 
   clearValue() {
     this.hasDeoptedValue = false;
@@ -67,6 +121,7 @@ export default class Binding {
 
   /**
    * Register a constant violation with the provided `path`.
+   * @private
    */
 
   reassign(path: Object) {
@@ -76,6 +131,7 @@ export default class Binding {
 
   /**
    * Increment the amount of references to this binding.
+   * @private
    */
 
   reference(path: NodePath) {
@@ -86,6 +142,7 @@ export default class Binding {
 
   /**
    * Decrement the amount of references to this binding.
+   * @private
    */
 
   dereference() {

@@ -4,6 +4,8 @@ import * as t from "./index";
 
 /**
  * Return a list of binding identifiers associated with the input `node`.
+ * @public
+ * @name t.getBindingIdentifiers
  */
 
 export function getBindingIdentifiers(
@@ -63,6 +65,7 @@ export function getBindingIdentifiers(
 
 /**
  * Mapping of types to their identifier keys.
+ * @private
  */
 
 getBindingIdentifiers.keys = {
@@ -107,6 +110,11 @@ getBindingIdentifiers.keys = {
   VariableDeclarator: ["id"]
 };
 
+/**
+ * [Needs description]
+ * @public
+ * @name t.getOuterBindingIdentifiers
+ */
 export function getOuterBindingIdentifiers(
   node: Object,
   duplicates?: boolean,

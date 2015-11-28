@@ -2,6 +2,7 @@
 
 /**
  * Pre hooks should be used for either rejecting removal or delegating removal
+ * @private
  */
 
 export let hooks = [

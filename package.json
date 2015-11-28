@@ -12,6 +12,7 @@
     "chalk": "1.1.1",
     "codecov.io": "^0.1.6",
     "derequire": "^2.0.2",
+    "documentation": "^3.0.4",
     "es5-shim": "^4.1.7",
     "eslint": "1.8.0",
     "flow-bin": "^0.18.1",

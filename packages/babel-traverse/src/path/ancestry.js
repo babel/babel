@@ -6,6 +6,8 @@ import NodePath from "./index";
 /**
  * Call the provided `callback` with the `NodePath`s of all the parents.
  * When the `callback` returns a truthy value, we return that node path.
+ * @public
+ * @name NodePath.prototype.findParent
  */
 
 export function findParent(callback) {
@@ -17,7 +19,9 @@ export function findParent(callback) {
 }
 
 /**
- * Description
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.find
  */
 
 export function find(callback) {
@@ -30,6 +34,8 @@ export function find(callback) {
 
 /**
  * Get the parent function of the current path.
+ * @public
+ * @name NodePath.prototype.getFunctionParent
  */
 
 export function getFunctionParent() {
@@ -38,6 +44,8 @@ export function getFunctionParent() {
 
 /**
  * Walk up the tree until we hit a parent node path in a list.
+ * @public
+ * @name NodePath.prototype.getStatementParent
  */
 
 export function getStatementParent() {
@@ -55,6 +63,9 @@ export function getStatementParent() {
  *
  * Earliest is defined as being "before" all the other nodes in terms of list container
  * position and visiting key.
+ *
+ * @public
+ * @name NodePath.prototype.getEarliestCommonAncestorFrom
  */
 
 export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath {
@@ -97,6 +108,9 @@ export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath 
  * Get the earliest path in the tree where the provided `paths` intersect.
  *
  * TODO: Possible optimisation target.
+ *
+ * @public
+ * @name NodePath.prototype.getDeepestCommonAncestorFrom
  */
 
 export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Function): NodePath {
@@ -164,6 +178,9 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
  * Build an array of node paths containing the entire ancestry of the current node path.
  *
  * NOTE: The current node path is included in this.
+ *
+ * @public
+ * @name NodePath.prototype.getAncestry
  */
 
 export function getAncestry() {
@@ -174,6 +191,12 @@ export function getAncestry() {
   } while(path = path.parentPath);
   return paths;
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.inType
+ */
 
 export function inType() {
   let path = this;
@@ -189,6 +212,8 @@ export function inType() {
 
 /**
  * Check if we're inside a shadowed function.
+ * @public
+ * @name NodePath.prototype.inShadow
  */
 
 export function inShadow(key?) {

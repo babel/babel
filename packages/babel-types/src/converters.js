@@ -6,6 +6,12 @@ import traverse from "babel-traverse";
 import type { Scope } from "babel-traverse";
 import * as t from "./index";
 
+/**
+ * [Needs description]
+ * @public
+ * @name t.toComputedKey
+ */
+
 export function toComputedKey(node: Object, key: Object = node.key || node.property): Object {
   if (!node.computed) {
     if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
@@ -20,6 +26,9 @@ export function toComputedKey(node: Object, key: Object = node.key || node.prope
  * declarations hoisted to the top of the current scope.
  *
  * Expression statements are just resolved to their expression.
+ *
+ * @public
+ * @name t.toSequenceExpression
  */
 
 export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Object {
@@ -89,8 +98,6 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
       exprs.push(scope.buildUndefinedNode());
     }
 
-    //
-
     if (exprs.length === 1) {
       return exprs[0];
     } else {
@@ -98,6 +105,12 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
     }
   }
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name t.toKeyAlias
+ */
 
 export function toKeyAlias(node: Object, key: Object = node.key): string {
   let alias;
@@ -125,6 +138,12 @@ export function toKeyAlias(node: Object, key: Object = node.key): string {
 
 toKeyAlias.uid = 0;
 
+/**
+ * [Needs description]
+ * @public
+ * @name t.toKeyAlias.increment
+ */
+
 toKeyAlias.increment = function () {
   if (toKeyAlias.uid >= Number.MAX_SAFE_INTEGER) {
     return toKeyAlias.uid = 0;
@@ -132,6 +151,12 @@ toKeyAlias.increment = function () {
     return toKeyAlias.uid++;
   }
 };
+
+/**
+ * [Needs description]
+ * @public
+ * @name t.toIdentifier
+ */
 
 export function toIdentifier(name: string): string {
   name = name + "";
@@ -154,6 +179,12 @@ export function toIdentifier(name: string): string {
   return name || "_";
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name t.toBindingIdentifierName
+ */
+
 export function toBindingIdentifierName(name: string): string {
   name = toIdentifier(name);
   if (name === "eval" || name === "arguments") name = "_" + name;
@@ -161,11 +192,12 @@ export function toBindingIdentifierName(name: string): string {
 }
 
 /**
- * [Please add a description.]
- * @returns {Object|Boolean}
+ * [Needs description]
+ * @public
+ * @name t.toStatement
  */
 
-export function toStatement(node: Object, ignore?: boolean) {
+export function toStatement(node: Object, ignore?: boolean): Object|boolean {
   if (t.isStatement(node)) {
     return node;
   }
@@ -200,6 +232,12 @@ export function toStatement(node: Object, ignore?: boolean) {
   return node;
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name t.toExpression
+ */
+
 export function toExpression(node: Object): Object {
   if (t.isExpressionStatement(node)) {
     node = node.expression;
@@ -217,6 +255,12 @@ export function toExpression(node: Object): Object {
     throw new Error(`cannot turn ${node.type} to an expression`);
   }
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name t.toBlock
+ */
 
 export function toBlock(node, parent: Object): Object {
   if (t.isBlockStatement(node)) {
@@ -241,6 +285,12 @@ export function toBlock(node, parent: Object): Object {
 
   return t.blockStatement(node);
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name t.valueToNode
+ */
 
 export function valueToNode(value: any): Object {
   // undefined

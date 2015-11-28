@@ -9,6 +9,7 @@ let t = exports;
 /**
  * Registers `is[Type]` and `assert[Type]` generated functions for a given `type`.
  * Pass `skipAliasCheck` to force it to directly compare `node.type` with `type`.
+ * @private
  */
 
 function registerType(type: string) {
@@ -24,8 +25,6 @@ function registerType(type: string) {
   };
 }
 
-//
-
 export * from "./constants";
 
 import "./definitions/init";
@@ -35,9 +34,7 @@ export { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS };
 import * as _react from "./react";
 export { _react as react };
 
-/**
- * Registers `is[Type]` and `assert[Type]` for all types.
- */
+// Registers `is[Type]` and `assert[Type]` for all types.
 
 for (let type in t.VISITOR_KEYS) {
   registerType(type);
@@ -45,6 +42,7 @@ for (let type in t.VISITOR_KEYS) {
 
 /**
  * Flip `ALIAS_KEYS` for faster access in the reverse direction.
+ * @private
  */
 
 t.FLIPPED_ALIAS_KEYS = {};
@@ -56,9 +54,7 @@ each(t.ALIAS_KEYS, function (aliases, type) {
   });
 });
 
-/**
- * Registers `is[Alias]` and `assert[Alias]` functions for all aliases.
- */
+// Registers `is[Alias]` and `assert[Alias]` functions for all aliases.
 
 each(t.FLIPPED_ALIAS_KEYS, function (types, type) {
   t[type.toUpperCase() + "_TYPES"] = types;
@@ -74,6 +70,8 @@ export const TYPES = Object.keys(t.VISITOR_KEYS)
  *
  * For better performance, use this instead of `is[Type]` when `type` is unknown.
  * Optionally, pass `skipAliasCheck` to directly compare `node.type` with `type`.
+ * @public
+ * @name t.is
  */
 
 export function is(type: string, node: Object, opts?: Object): boolean {
@@ -91,6 +89,8 @@ export function is(type: string, node: Object, opts?: Object): boolean {
 
 /**
  * Test if a `nodeType` is a `targetType` or if `targetType` is an alias of `nodeType`.
+ * @public
+ * @name t.isType
  */
 
 export function isType(nodeType: string, targetType: string): boolean {
@@ -108,9 +108,7 @@ export function isType(nodeType: string, targetType: string): boolean {
   return false;
 }
 
-/**
- * Description
- */
+// Description
 
 each(t.BUILDER_KEYS, function (keys, type) {
   function builder() {
@@ -143,27 +141,27 @@ each(t.BUILDER_KEYS, function (keys, type) {
   t[type[0].toLowerCase() + type.slice(1)] = builder;
 });
 
-/**
- * Description
- */
+// Description
 
- for (let type in t.DEPRECATED_KEYS) {
-   let newType = t.DEPRECATED_KEYS[type];
+for (let type in t.DEPRECATED_KEYS) {
+  let newType = t.DEPRECATED_KEYS[type];
 
-   function proxy(fn) {
-     return function () {
-       console.trace(`The node type ${type} has been renamed to ${newType}`);
-       return fn.apply(this, arguments);
-     };
-   }
+  function proxy(fn) {
+    return function () {
+      console.trace(`The node type ${type} has been renamed to ${newType}`);
+      return fn.apply(this, arguments);
+    };
+  }
 
-   t[type] = t[type[0].toLowerCase() + type.slice(1)] = proxy(t[newType]);
-   t[`is${type}`] = proxy(t[`is${newType}`]);
-   t[`assert${type}`] = proxy(t[`assert${newType}`]);
- }
+  t[type] = t[type[0].toLowerCase() + type.slice(1)] = proxy(t[newType]);
+  t[`is${type}`] = proxy(t[`is${newType}`]);
+  t[`assert${type}`] = proxy(t[`assert${newType}`]);
+}
 
 /**
- * Description
+ * [Needs description]
+ * @public
+ * @name t.validate
  */
 
 export function validate(node?: Object, key: string, val: any) {
@@ -181,6 +179,8 @@ export function validate(node?: Object, key: string, val: any) {
 
 /**
  * Test if an object is shallowly equal.
+ * @public
+ * @name t.shallowEqual
  */
 
 export function shallowEqual(actual: Object, expected: Object): boolean {
@@ -197,6 +197,8 @@ export function shallowEqual(actual: Object, expected: Object): boolean {
 
 /**
  * Append a node to a member expression.
+ * @public
+ * @name t.appendToMemberExpression
  */
 
 export function appendToMemberExpression(member: Object, append: Object, computed?: boolean): Object {
@@ -208,6 +210,8 @@ export function appendToMemberExpression(member: Object, append: Object, compute
 
 /**
  * Prepend a node to a member expression.
+ * @public
+ * @name t.prependToMemberExpression
  */
 
 export function prependToMemberExpression(member: Object, prepend: Object): Object {
@@ -218,6 +222,8 @@ export function prependToMemberExpression(member: Object, prepend: Object): Obje
 /**
  * Ensure the `key` (defaults to "body") of a `node` is a block.
  * Casting it to a block if it is not.
+ * @public
+ * @name t.ensureBlock
  */
 
 export function ensureBlock(node: Object, key: string = "body"): Object {
@@ -226,6 +232,8 @@ export function ensureBlock(node: Object, key: string = "body"): Object {
 
 /**
  * Create a shallow clone of a `node` excluding `_private` properties.
+ * @public
+ * @name t.clone
  */
 
 export function clone(node: Object): Object {
@@ -240,6 +248,8 @@ export function clone(node: Object): Object {
 /**
  * Create a deep clone of a `node` and all of it's child nodes
  * exluding `_private` properties.
+ * @public
+ * @name t.cloneDeep
  */
 
 export function cloneDeep(node: Object): Object {
@@ -270,6 +280,9 @@ export function cloneDeep(node: Object): Object {
  *
  * For example, given the match `React.createClass` it would match the
  * parsed nodes of `React.createClass` and `React["createClass"]`.
+ *
+ * @public
+ * @name t.buildMatchMemberExpression
  */
 
 export function buildMatchMemberExpression(match:string, allowPartial?: boolean): Function {
@@ -321,6 +334,8 @@ export function buildMatchMemberExpression(match:string, allowPartial?: boolean)
 
 /**
  * Remove comment properties from a node.
+ * @public
+ * @name t.removeComments
  */
 
 export function removeComments(node: Object): Object {
@@ -332,6 +347,8 @@ export function removeComments(node: Object): Object {
 
 /**
  * Inherit all unique comments from `parent` node to `child` node.
+ * @public
+ * @name t.inheritComments
  */
 
 export function inheritsComments(child: Object, parent: Object): Object {
@@ -341,13 +358,31 @@ export function inheritsComments(child: Object, parent: Object): Object {
   return child;
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name t.inheritTrailingComments
+ */
+
 export function inheritTrailingComments(child: Object, parent: Object) {
   _inheritComments("trailingComments", child, parent);
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name  t.inheritLeadingComments
+ */
+
 export function inheritLeadingComments(child: Object, parent: Object) {
   _inheritComments("leadingComments", child, parent);
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name t.inheritInnerComments
+ */
 
 export function inheritInnerComments(child: Object, parent: Object) {
   _inheritComments("innerComments", child, parent);
@@ -361,6 +396,8 @@ function _inheritComments(key, child, parent) {
 
 /**
  * Inherit all contextual properties from `parent` node to `child` node.
+ * @public
+ * @name t.inherits
  */
 
 export function inherits(child: Object, parent: Object): Object {
@@ -389,7 +426,9 @@ export function inherits(child: Object, parent: Object): Object {
 }
 
 /**
- * TODO
+ * [Needs description]
+ * @public
+ * @name t.assertNode
  */
 
 export function assertNode(node?) {
@@ -399,7 +438,9 @@ export function assertNode(node?) {
 }
 
 /**
- * TODO
+ * [Needs description]
+ * @public
+ * @name t.isNode
  */
 
 export function isNode(node?): boolean {
@@ -410,7 +451,6 @@ export function isNode(node?): boolean {
 toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
 
-//
 export * from "./retrievers";
 export * from "./validators";
 export * from "./converters";

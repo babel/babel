@@ -2,6 +2,12 @@
 
 import { hooks } from "./lib/removal-hooks";
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.remove
+ */
+
 export function remove() {
   this._assertUnremoved();
 
@@ -17,11 +23,19 @@ export function remove() {
   this._markRemoved();
 }
 
+/**
+ * @private
+ */
+
 export function _callRemovalHooks() {
   for (let fn of (hooks: Array<Function>)) {
     if (fn(this, this.parentPath)) return true;
   }
 }
+
+/**
+ * @private
+ */
 
 export function _remove() {
   if (Array.isArray(this.container)) {
@@ -32,11 +46,19 @@ export function _remove() {
   }
 }
 
+/**
+ * @private
+ */
+
 export function _markRemoved() {
   this.shouldSkip = true;
   this.removed    = true;
   this.node       = null;
 }
+
+/**
+ * @private
+ */
 
 export function _assertUnremoved() {
   if (this.removed) {
