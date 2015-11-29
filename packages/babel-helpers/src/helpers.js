@@ -58,11 +58,7 @@ helpers.jsx = template(`
 helpers.asyncToGenerator = template(`
   (function (fn) {
     return function () {
-      var args = new Array(arguments.length);
-      for(var i = 0; i < args.length; ++i) {
-        args[i] = arguments[i];
-      }
-      var gen = fn.apply(this, args);
+      var gen = fn.apply(this, arguments);
       return new Promise(function (resolve, reject) {
         function step(key, arg) {
           try {
