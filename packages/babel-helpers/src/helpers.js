@@ -77,14 +77,14 @@ helpers.asyncToGenerator = template(`
             resolve(value);
           } else {
             Promise.resolve(value).then(function (value) {
-              step.call(null, "next", value);
+              step("next", value);
             }, function (err) {
-              step.call(null, "throw", err);
+              step("throw", err);
             });
           }
         }
 
-        step.call(null, "next");
+        step("next");
       });
     };
   })
