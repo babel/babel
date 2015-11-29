@@ -70,6 +70,9 @@ function compile(filename) {
 
   if (!result) {
     result = babel.transformFileSync(filename, extend(opts, {
+      // Do not process config files since has already been done with the OptionManager
+      // calls above and would introduce duplicates.
+      babelrc: false,
       sourceMap: "both",
       ast:       false
     }));
