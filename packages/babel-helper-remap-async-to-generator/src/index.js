@@ -70,7 +70,6 @@ function plainFunction(path: NodePath, callId: Object) {
         t.callExpression(container, [])
       )
     ]);
-    declar._blockHoist = true;
 
     retFunction.id = asyncFnId;
     path.replaceWith(declar);
