@@ -59,11 +59,7 @@ helpers.asyncToGenerator = template(`
   (function (fn) {
     return function () {
       var gen = fn.apply(this, arguments);
-
       return new Promise(function (resolve, reject) {
-        var callNext = step.bind(null, "next");
-        var callThrow = step.bind(null, "throw");
-
         function step(key, arg) {
           try {
             var info = gen[key](arg);
@@ -76,11 +72,15 @@ helpers.asyncToGenerator = template(`
           if (info.done) {
             resolve(value);
           } else {
-            Promise.resolve(value).then(callNext, callThrow);
+            Promise.resolve(value).then(function (value) {
+              step("next", value);
+            }, function (err) {
+              step("throw", err);
+            });
           }
         }
 
-        callNext();
+        step("next");
       });
     };
   })
