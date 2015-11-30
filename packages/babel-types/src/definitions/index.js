@@ -61,6 +61,27 @@ export function assertNodeType(...types: Array<string>): Function {
   return validate;
 }
 
+export function assertNodeOrValueType(...types: Array<string>): Function {
+  function validate(node, key, val) {
+    let valid = false;
+
+    for (let type of types) {
+      if (getType(val) === type || t.is(type, val)) {
+        valid = true;
+        break;
+      }
+    }
+
+    if (!valid) {
+      throw new TypeError(`Property ${key} of ${node.type} expected node to be of a type ${JSON.stringify(types)} but instead got ${JSON.stringify(val && val.type)}`);
+    }
+  }
+
+  validate.oneOfNodeOrValueTypes = types;
+
+  return validate;
+}
+
 export function assertValueType(type: string): Function {
   function validate(node, key, val) {
     let valid = getType(val) === type;

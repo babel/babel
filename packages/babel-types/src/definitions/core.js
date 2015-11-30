@@ -12,6 +12,7 @@ import {
 import defineType, {
   assertValueType,
   assertNodeType,
+  assertNodeOrValueType,
   assertEach,
   chain,
   assertOneOf,
@@ -20,7 +21,7 @@ import defineType, {
 defineType("ArrayExpression", {
   fields: {
     elements: {
-      validate: assertValueType("array")
+      validate: chain(assertValueType("array"), assertEach(assertNodeOrValueType("null", "Expression", "SpreadElement")))
     }
   },
   visitor: ["elements"],
@@ -112,7 +113,7 @@ defineType("CallExpression", {
       validate: assertNodeType("Expression")
     },
     arguments: {
-      validate: assertValueType("array")
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement")))
     }
   },
   aliases: ["Expression"]
@@ -435,7 +436,7 @@ defineType("NewExpression", {
       validate: assertNodeType("Expression")
     },
     arguments: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement")))
     }
   }
 });
@@ -554,7 +555,9 @@ defineType("ReturnStatement", {
 defineType("SequenceExpression", {
   visitor: ["expressions"],
   fields: {
-    expressions: { validate: assertValueType("array") }
+    expressions: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression")))
+    }
   },
   aliases: ["Expression"]
 });

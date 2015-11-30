@@ -53,6 +53,12 @@ function plainFunction(path: NodePath, callId: Object) {
   let asyncFnId = node.id;
   node.id = null;
 
+  let isDeclaration = path.isFunctionDeclaration();
+
+  if (isDeclaration) {
+    node.type = "FunctionExpression";
+  }
+
   let built = t.callExpression(callId, [node]);
   let container = buildWrapper({
     FUNCTION: built,
@@ -61,9 +67,7 @@ function plainFunction(path: NodePath, callId: Object) {
 
   let retFunction = container.body.body[1].argument;
 
-  if (path.isFunctionDeclaration()) {
-    node.type = "FunctionExpression";
-
+  if (isDeclaration) {
     let declar = t.variableDeclaration("let", [
       t.variableDeclarator(
         t.identifier(asyncFnId.name),
