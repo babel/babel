@@ -1,6 +1,6 @@
 {
   "name": "babel-generator",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "description": "Turns an AST into code.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -13,7 +13,7 @@
   "dependencies": {
     "babel-messages": "^6.2.0",
     "babel-runtime": "^5.0.0",
-    "babel-types": "^6.2.0",
+    "babel-types": "^6.3.0",
     "detect-indent": "^3.0.1",
     "is-integer": "^1.0.4",
     "lodash": "^3.10.1",
@@ -23,6 +23,6 @@
   },
   "devDependencies": {
     "babel-helper-fixtures": "^6.1.18",
-    "babylon": "^6.2.0"
+    "babylon": "^6.3.0"
   }
 }
