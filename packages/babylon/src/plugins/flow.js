@@ -671,7 +671,8 @@ export default function (instance) {
 
         if (canBeArrow && this.eat(tt.arrow)) {
           // ((lol): number => {});
-          let func = this.parseArrowExpression(this.startNodeAt(startLoc, startPos), [node]);
+          let params = node.type === "SequenceExpression" ? node.expressions : [node];
+          let func = this.parseArrowExpression(this.startNodeAt(startLoc, startPos), params);
           func.returnType = typeCastNode.typeAnnotation;
           return func;
         } else {
