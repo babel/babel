@@ -51,7 +51,7 @@ export default function ({ types: t }) {
 
         for (let prop of props) {
           let propNode = prop.node;
-          if (propNode.decorators) continue;
+          if (propNode.decorators && propNode.decorators.length > 0) continue;
           if (!propNode.value) continue;
 
           let isStatic = propNode.static;
