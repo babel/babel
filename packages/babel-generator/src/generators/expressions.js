@@ -172,7 +172,9 @@ export function AssignmentExpression(node: Object, parent: Object) {
              t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" }) ||
              // Need spaces for operators of the same kind to avoid: `a+++b`
              t.isUnaryExpression(node.right, { prefix: true, operator: node.operator }) ||
-             t.isUpdateExpression(node.right, { prefix: true, operator: node.operator + node.operator });
+             t.isUpdateExpression(node.right, { prefix: true, operator: node.operator + node.operator }) ||
+             (t.isBinaryExpression(node.right) &&
+               t.isUnaryExpression(getLeftMost(node.right), { prefix: true, operator: node.operator }));
 
   }
 
@@ -229,4 +231,11 @@ export function MetaProperty(node: Object) {
   this.print(node.meta, node);
   this.push(".");
   this.print(node.property, node);
+}
+
+function getLeftMost(binaryExpr) {
+  if (!t.isBinaryExpression(binaryExpr)) {
+    return binaryExpr;
+  }
+  return getLeftMost(binaryExpr.left);
 }
