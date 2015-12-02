@@ -13,6 +13,28 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.1
+
+ * **Bug Fix**
+  * Fix spacing in binary expression when right is a binary expression and has a unary on the left in compact mode. Ex: `(a+(+b*2))` should be -> `a+ +b*2`
+
+## 6.3.0
+
+ * **Bug Fix**
+  * Fix use of old `literal` to use `stringLiteral` in babel-types.
+  * Fix issue with `babel-template` crashing in IE due to unpopulated error stack.
+  * Check for empty decorators list in `transform-class-properties`
+  * Fix babylon parser not allowing multiple parameters in arrow functions with flow types
+  * Fix exported async functions being hoisted and as a result being undefined.
+ 
+ * **Polish**
+  * Add validation to more JSX node types.
+  * Add validation for CallExpression, NewExpression, SequenceExpression, ArrayExpression, and TemplateLiteral.
+  * Add `ObjectMember` abstract type to AST for `ObjectProperty` and `ObjectMethod`.
+  * Optimize `asyncToGenerator` helper template.
+  * Respect spacing for assignment, binary expressions, and while loop in compact mode.
+  * Fix up semicolon omission in compact mode.
+
 ## 6.2.2
 
  * **Bug Fix**
