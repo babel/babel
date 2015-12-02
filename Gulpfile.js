@@ -22,8 +22,13 @@ gulp.task("build", function () {
     }))
     .pipe(through.obj(function (file, enc, callback) {
       file._path = file.path;
-      file.path = file.path.replace(/^([^\\]+)\/src/, "$1/lib");
-      callback(null, file);
+      file.path = file.path.substr(0, __dirname.length) +
+        file.path.substr(__dirname.length).replace(/\bsrc\b/, 'lib');
+      if (file.path === file._path) {
+        callback(new Error('Failed to construct build path: ' + file._path))
+      } else {
+        callback(null, file);
+      }
     }))
     .pipe(newer(dest))
     .pipe(through.obj(function (file, enc, callback) {
