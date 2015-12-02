@@ -83,7 +83,7 @@ async.parallelLimit(packages.map(function (root) {
             }, null, "  "), function (err) {
               if (err) return done(err);
 
-              fs.writeFile(linkDest + "/index.js", 'module.exports = require("' + linkSrc + '");', done);
+              fs.writeFile(linkDest + "/index.js", 'module.exports = require(' + JSON.stringify(linkSrc) + ');', done);
             });
           });
         });
