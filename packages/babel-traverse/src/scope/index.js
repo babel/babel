@@ -224,7 +224,7 @@ export default class Scope {
    * Generate a unique identifier.
    */
 
-  generateUidIdentifier(name: string) {
+  generateUidIdentifier(name: string = "temp") {
     return t.identifier(this.generateUid(name));
   }
 
@@ -232,7 +232,7 @@ export default class Scope {
    * Generate a unique `_id1` binding.
    */
 
-  generateUid(name: string) {
+  generateUid(name: string = "temp") {
     name = t.toIdentifier(name).replace(/^_+/, "").replace(/[0-9]+$/g, "");
 
     let uid;
