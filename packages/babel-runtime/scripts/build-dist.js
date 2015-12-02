@@ -64,6 +64,7 @@ var transformOpts = {
   ],
 
   plugins: [
+    require("../../babel-plugin-transform-babel-native"),
     require("../../babel-plugin-transform-runtime"),
     require("../../babel-plugin-transform-es2015-modules-commonjs")
   ]

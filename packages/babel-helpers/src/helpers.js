@@ -5,7 +5,7 @@ export default helpers;
 
 helpers.typeof = template(`
   (function (obj) {
-    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
+    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : __babel_native__("typeof", obj);
   });
 `);
 
