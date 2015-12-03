@@ -3,7 +3,7 @@
 exports.__esModule = true;
 
 exports["default"] = function (_ref) {
-  var t = _ref.types;
+  const t = _ref.types;
 
   return {
     visitor: {
@@ -13,7 +13,7 @@ exports["default"] = function (_ref) {
         }
         switch (path.node.arguments[0].value) {
           case "typeof":
-            var unary = t.unaryExpression("typeof", path.node.arguments[1]);
+            const unary = t.unaryExpression("typeof", path.node.arguments[1]);
             unary._fromBabelNative = true;
             path.replaceWith(unary);
             break;
