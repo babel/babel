@@ -18,7 +18,7 @@ exports["default"] = function (_ref) {
             path.replaceWith(unary);
             break;
           default:
-            throw new Error("Invalid native: " + path.node.arguments[0].value)
+            throw new Error("Invalid native: " + path.node.arguments[0].value);
         }
       }
     }
