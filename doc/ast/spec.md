@@ -1,6 +1,4 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-This document specifies the core ESTree AST node types that support the ES5 grammar.
+These are the core Babylon AST node types.
 
 - [Node objects](#node-objects)
 - [Identifier](#identifier)
@@ -107,11 +105,9 @@ This document specifies the core ESTree AST node types that support the ES5 gram
     - [ExportDefaultDeclaration](#exportdefaultdeclaration)
     - [ExportAllDeclaration](#exportalldeclaration)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # Node objects
 
-ESTree AST nodes are represented as `Node` objects, which may have any prototype inheritance but which implement the following interface:
+AST nodes are represented as `Node` objects, which may have any prototype inheritance but which implement the following interface:
 
 ```js
 interface Node {
