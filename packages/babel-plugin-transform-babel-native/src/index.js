@@ -12,11 +12,13 @@ exports["default"] = function (_ref) {
           return;
         }
         switch (path.node.arguments[0].value) {
-          case 'typeof':
+          case "typeof":
             var unary = t.unaryExpression("typeof", path.node.arguments[1]);
             unary._fromBabelNative = true;
             path.replaceWith(unary);
             break;
+          default:
+            throw new Error("Invalid native: " + path.node.arguments[0].value)
         }
       }
     }
