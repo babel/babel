@@ -22,13 +22,16 @@ gulp.task("build", function () {
     }))
     .pipe(through.obj(function (file, enc, callback) {
       file._path = file.path;
-      file.path = file.path.substr(0, __dirname.length) +
-        file.path.substr(__dirname.length).replace(/\bsrc\b/, 'lib');
-      if (file.path === file._path) {
-        callback(new Error('Failed to construct build path: ' + file._path))
-      } else {
-        callback(null, file);
+      // Replace src with lib
+      var sub = file.path.substr(__dirname.length);
+      var pathComp = path.normalize(sub).split(path.sep);
+      var idx = pathComp.indexOf("src");
+      if (idx < 0) {
+        return callback(new Error("Failed to construct build path: " + file.path));
       }
+      pathComp[idx] = "lib";
+      file.path = path.join(__dirname, path.join.apply(null, pathComp));
+      callback(null, file);
     }))
     .pipe(newer(dest))
     .pipe(through.obj(function (file, enc, callback) {
