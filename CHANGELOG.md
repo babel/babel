@@ -13,6 +13,20 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.14
+
+ * **Bug Fix**
+  * `babel-traverse`:
+    * [#3133](https://github.com/babel/babel/pull/3133) Fix regression with scope in switch statement (fixes an issue with `transform-es2015-spread`). Related to [#3127](https://github.com/babel/babel/pull/3127).
+
+## 6.3.8-6.3.13
+
+ Testing [lerna](https://github.com/sebmck/lerna) - A tool for managing JavaScript projects with multiple packages.
+
+ * **Bug Fix**
+  * `babylon`, `babel-types`, `babel-generator`:
+    * [#3130](https://github.com/babel/babel/pull/3130) Add support for `NullLiteralTypeAnnotation` (`null` literal type) in flow.
+ 
 ## 6.3.2
 
  * **Bug Fix**
