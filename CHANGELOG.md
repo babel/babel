@@ -34,7 +34,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 ## 6.3.1
 
  * **Bug Fix**
-  * Fix spacing in binary expression when right is a binary expression and has a unary on the left in compact mode. Ex: `(a+(+b*2))` should be -> `a+ +b*2`
+  * `babel-generator`:
+    * [#3121](https://github.com/babel/babel/pull/3121) Fix spacing in binary expression when right is a binary expression and has a unary on the left in compact mode. Ex: `(a+(+b*2))` should be -> `a+ +b*2`
 
 ## 6.3.0
 
