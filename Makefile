@@ -45,7 +45,7 @@ test-cov: clean
 
 test-ci:
 	make lint
-	NODE_ENV=test make bootstrap
+	NODE_ENV=test lerna bootstrap
 	./node_modules/.bin/flow check
 	./scripts/test-cov.sh
 	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
@@ -53,7 +53,7 @@ test-ci:
 publish:
 	git pull --rebase
 	make test
-	node scripts/publish.js
+	lerna publish
 	make clean
 	#./scripts/build-website.sh
 

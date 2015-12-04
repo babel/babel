@@ -23,6 +23,7 @@
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
     "istanbul": "^0.3.5",
+    "lerna": "^1.0.0",
     "lodash": "^3.10.0",
     "matcha": "^0.6.0",
     "mkdirp": "^0.5.1",
