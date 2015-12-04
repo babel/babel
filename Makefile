@@ -59,7 +59,7 @@ publish:
 
 bootstrap:
 	npm install
-	node scripts/bootstrap.js
 	make build
+	node scripts/bootstrap.js
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
