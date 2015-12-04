@@ -745,13 +745,13 @@ export default class Scope {
       path = this.getFunctionParent().path;
     }
 
-    if (!path.isBlockStatement() && !path.isProgram()) {
-      path = this.getBlockParent().path;
-    }
-
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
       t.ensureBlock(path.node);
       path = path.get("body");
+    }
+
+    if (!path.isBlockStatement() && !path.isProgram()) {
+      path = this.getBlockParent().path;
     }
 
     let unique = opts.unique;
