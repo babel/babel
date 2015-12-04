@@ -31,6 +31,13 @@ defineType("BooleanLiteralTypeAnnotation", {
   }
 });
 
+defineType("NullLiteralTypeAnnotation", {
+  aliases: ["Flow"],
+  fields: {
+    // todo
+  }
+});
+
 defineType("ClassImplements", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"],
