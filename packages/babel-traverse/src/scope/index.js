@@ -741,12 +741,12 @@ export default class Scope {
   }) {
     let path = this.path;
 
-    if (path.isSwitchStatement()) {
-      path = this.getFunctionParent().path;
-    }
-
     if (!path.isBlockStatement() && !path.isProgram()) {
       path = this.getBlockParent().path;
+    }
+
+    if (path.isSwitchStatement()) {
+      path = this.getFunctionParent().path;
     }
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
