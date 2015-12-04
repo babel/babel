@@ -221,6 +221,8 @@ function ship() {
     execSync("git push", true);
     execSync("git push --tags", true);
     console.log(chalk.green("Successfully shipped " + NEW_VERSION));
+    console.log("Changed Packages");
+    console.log(changedPackages);
     process.exit();
   });
 }
