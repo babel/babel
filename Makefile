@@ -45,7 +45,7 @@ test-cov: clean
 
 test-ci:
 	make lint
-	NODE_ENV=test lerna bootstrap
+	NODE_ENV=test make bootstrap
 	./node_modules/.bin/flow check
 	./scripts/test-cov.sh
 	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
@@ -59,7 +59,7 @@ publish:
 
 bootstrap:
 	npm install
-	make build
 	node scripts/bootstrap.js
+	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
