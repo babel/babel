@@ -1,13 +1,13 @@
 {
   "name": "babel-helper-bindify-decorators",
-  "version": "6.3.12",
+  "version": "6.3.13",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-bindify-decorators",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
     "babel-runtime": "^5.0.0",
-    "babel-traverse": "^6.3.12",
-    "babel-types": "^6.3.12"
+    "babel-traverse": "^6.3.13",
+    "babel-types": "^6.3.13"
   }
 }

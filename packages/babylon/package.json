@@ -1,6 +1,6 @@
 {
   "name": "babylon",
-  "version": "6.3.12",
+  "version": "6.3.13",
   "description": "A JavaScript parser",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -11,7 +11,7 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "^6.3.12"
+    "babel-helper-fixtures": "^6.3.13"
   },
   "bin": {
     "babylon": "./bin/babylon.js"

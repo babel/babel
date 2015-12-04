@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es3-member-expression-literals",
-  "version": "6.3.12",
+  "version": "6.3.13",
   "description": "Ensure that reserved words are quoted in property accesses",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es3-member-expression-literals",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.3.12"
+    "babel-helper-plugin-test-runner": "^6.3.13"
   }
 }

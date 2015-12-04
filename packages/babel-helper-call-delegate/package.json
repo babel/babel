@@ -1,14 +1,14 @@
 {
   "name": "babel-helper-call-delegate",
-  "version": "6.3.12",
+  "version": "6.3.13",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-call-delegate",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-traverse": "^6.3.12",
+    "babel-traverse": "^6.3.13",
     "babel-runtime": "^5.0.0",
-    "babel-types": "^6.3.12",
-    "babel-helper-hoist-variables": "^6.3.12"
+    "babel-types": "^6.3.13",
+    "babel-helper-hoist-variables": "^6.3.13"
   }
 }
