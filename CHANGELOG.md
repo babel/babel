@@ -13,10 +13,43 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.14
+
+ * **Bug Fix**
+  * `babel-traverse`:
+    * [#3133](https://github.com/babel/babel/pull/3133) Fix regression with scope in switch statement (fixes an issue with `transform-es2015-spread`). Related to [#3127](https://github.com/babel/babel/pull/3127).
+
+## 6.3.8-6.3.13
+
+ Testing [lerna](https://github.com/sebmck/lerna) - A tool for managing JavaScript projects with multiple packages.
+
+ * **Bug Fix**
+  * `babylon`, `babel-types`, `babel-generator`:
+    * [#3130](https://github.com/babel/babel/pull/3130) Add support for `NullLiteralTypeAnnotation` (`null` literal type) in flow.
+ 
+## 6.3.2
+
+ * **Bug Fix**
+  * `babel-core`:
+    * [#3108](https://github.com/babel/babel/pull/3108) Omit sourcemaps that cannot be used and fix source path.
+  * `babel-register`:
+    * [#3116](https://github.com/babel/babel/pull/3116) Disable processing `.babelrc` a second time.
+  * `babel-traverse`:
+    * [#3127](https://github.com/babel/babel/pull/3127) Ensure we always push into a `BlockStatement` (fixes a `babel-plugin-transform-class-properties` issue).
+  * `babel-plugin-transform-class-properties`:
+    * [#3113](https://github.com/babel/babel/pull/3113) Fix issue with using static class properties.
+  * `babel-plugin-transform-es2015-classes`:
+    * [#3112](https://github.com/babel/babel/pull/3112) Fix issue with `return super()` in class constructor causing a `super() hasn't been called` error.
+  * `babel-plugin-transform-inline-environment-variables`:
+    * Fix typo with `replaceWith`.
+  * `babel-plugin-transform-regenerator`:
+    * [#3119](https://github.com/babel/babel/pull/3119) Ensure that generator functions always have an `Identifier` (fixes an issue with exporting a generator as a default).
+
 ## 6.3.1
 
  * **Bug Fix**
-  * Fix spacing in binary expression when right is a binary expression and has a unary on the left in compact mode. Ex: `(a+(+b*2))` should be -> `a+ +b*2`
+  * `babel-generator`:
+    * [#3121](https://github.com/babel/babel/pull/3121) Fix spacing in binary expression when right is a binary expression and has a unary on the left in compact mode. Ex: `(a+(+b*2))` should be -> `a+ +b*2`
 
 ## 6.3.0
 
