@@ -20,6 +20,10 @@ export function BooleanLiteralTypeAnnotation(node: Object) {
   this.push(node.value ? "true" : "false");
 }
 
+export function NullLiteralTypeAnnotation() {
+  this.push("null");
+}
+
 export function DeclareClass(node: Object) {
   this.push("declare class ");
   this._interfaceish(node);
