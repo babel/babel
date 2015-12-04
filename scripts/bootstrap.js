@@ -35,7 +35,7 @@ ls("packages/*").forEach(function (loc) {
 
 var completed = false;
 
-var bar = new ProgressBar(":packagename ╢:bar╟", {
+var bar = !/^win/.test(process.platform) && new ProgressBar(":packagename ╢:bar╟", {
   total: packages.length,
   complete: "█",
   incomplete: "░",
@@ -83,7 +83,7 @@ async.parallelLimit(packages.map(function (root) {
             }, null, "  "), function (err) {
               if (err) return done(err);
 
-              fs.writeFile(linkDest + "/index.js", 'module.exports = require("' + linkSrc + '");', done);
+              fs.writeFile(linkDest + "/index.js", 'module.exports = require(' + JSON.stringify(linkSrc) + ');', done);
             });
           });
         });
@@ -105,7 +105,7 @@ async.parallelLimit(packages.map(function (root) {
     });
 
     tasks.push(function (done) {
-      if (!completed) bar.tick({
+      if (!completed && bar) bar.tick({
         packagename: pad(root.name.slice(0, 50), 50)
       });
       done();
