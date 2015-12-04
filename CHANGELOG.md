@@ -13,6 +13,24 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.2
+
+ * **Bug Fix**
+  * `babel-core`:
+    * [#3108](https://github.com/babel/babel/pull/3108) Omit sourcemaps that cannot be used and fix source path.
+  * `babel-register`:
+    * [#3116](https://github.com/babel/babel/pull/3116) Disable processing `.babelrc` a second time.
+  * `babel-traverse`:
+    * [#3127](https://github.com/babel/babel/pull/3127) Ensure we always push into a `BlockStatement` (fixes a `babel-plugin-transform-class-properties` issue).
+  * `babel-plugin-transform-class-properties`:
+    * [#3113](https://github.com/babel/babel/pull/3113) Fix issue with using static class properties.
+  * `babel-plugin-transform-es2015-classes`:
+    * [#3112](https://github.com/babel/babel/pull/3112) Fix issue with `return super()` in class constructor causing a `super() hasn't been called` error.
+  * `babel-plugin-transform-inline-environment-variables`:
+    * Fix typo with `replaceWith`.
+  * `babel-plugin-transform-regenerator`:
+    * [#3119](https://github.com/babel/babel/pull/3119) Ensure that generator functions always have an `Identifier` (fixes an issue with exporting a generator as a default).
+
 ## 6.3.1
 
  * **Bug Fix**
