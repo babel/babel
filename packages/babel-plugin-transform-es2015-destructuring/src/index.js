@@ -325,6 +325,25 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
+      ExportNamedDeclaration(path){
+        let declaration = path.get("declaration");
+        if (!declaration.isVariableDeclaration()) return;
+        if (!variableDeclarationHasPattern(declaration.node)) return;
+
+        let specifiers = [];
+
+        for (let name in path.getOuterBindingIdentifiers(path)){
+          let id = t.identifier(name);
+          specifiers.push(t.exportSpecifier(id, id));
+        }
+
+        // Split the declaration and export list into two declarations so that the variable
+        // declaration can be split up later without needing to worry about not being a
+        // top-level statement.
+        path.replaceWith(declaration.node);
+        path.insertAfter(t.exportNamedDeclaration(null, specifiers));
+      },
+
       ForXStatement(path, file) {
         let { node, scope } = path;
         let left = node.left;
