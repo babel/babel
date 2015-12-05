@@ -16,7 +16,7 @@ export default class LooseClassTransformer extends VanillaTransformer {
       if (!node.static) classRef = t.memberExpression(classRef, t.identifier("prototype"));
       let methodName = t.memberExpression(classRef, node.key, node.computed || t.isLiteral(node.key));
 
-      let func = t.functionExpression(null, node.params, node.body);
+      let func = t.functionExpression(null, node.params, node.body, node.generator, node.async);
       let key = t.toComputedKey(node, node.key);
       if (t.isStringLiteral(key)) {
         func = nameFunction({
