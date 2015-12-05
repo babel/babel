@@ -49,8 +49,8 @@ export function _containerInsert(from, nodes) {
       paths.push(path);
     } else {
       paths.push(NodePath.get({
-        parentPath: this,
-        parent: node,
+        parentPath: this.parentPath,
+        parent: this.parent,
         container: this.container,
         listKey: this.listKey,
         key: to
