@@ -6,13 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _foo = require("foo");
 
-for (let _key in _foo) {
+for (var _key in _foo) {
   if (_key === "default") continue;
   Object.defineProperty(exports, _key, {
     enumerable: true,
-    get: function () {
-      return _foo[_key];
-    }
+    get: (function (k) {
+      return function () {
+        return _foo[k];
+      };
+    })(_key)
   });
 }
 

@@ -30,14 +30,16 @@ let buildExportsAssignment = template(`
 `);
 
 let buildExportAll = template(`
-  for (let KEY in OBJECT) {
+  for (var KEY in OBJECT) {
     if (KEY === "default") continue;
 
     Object.defineProperty(exports, KEY, {
       enumerable: true,
-      get: function () {
-        return OBJECT[KEY];
-      }
+      get: (function (k) {
+        return function () {
+          return OBJECT[k];
+        };
+      })(KEY)
     });
   }
 `);
