@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-function-name",
-  "version": "6.3.13",
+  "version": "6.3.15",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-function-name",
   "license": "MIT",
@@ -8,7 +8,7 @@
   "dependencies": {
     "babel-runtime": "^5.0.0",
     "babel-types": "^6.3.13",
-    "babel-traverse": "^6.3.13",
+    "babel-traverse": "^6.3.15",
     "babel-helper-get-function-arity": "^6.3.13",
     "babel-template": "^6.3.13"
   }
