@@ -360,7 +360,10 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
     if (binding.kind === "module") return;
 
     if (binding.path !== this) {
-      return binding.path.resolve(dangerous, resolved);
+      let ret = binding.path.resolve(dangerous, resolved);
+      // If the identifier resolves to parent node then we can't really resolve it.
+      if (this.find(parent => parent.node === ret.node)) return;
+      return ret;
     }
   } else if (this.isTypeCastExpression()) {
     return this.get("expression").resolve(dangerous, resolved);
