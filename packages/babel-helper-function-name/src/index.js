@@ -16,7 +16,7 @@ let buildPropertyMethodAssignmentWrapper = template(`
   })(FUNCTION)
 `);
 
-let buldGeneratorPropertyMethodAssignmentWrapper = template(`
+let buildGeneratorPropertyMethodAssignmentWrapper = template(`
   (function (FUNCTION_KEY) {
     function* FUNCTION_ID() {
       return yield* FUNCTION_KEY.apply(this, arguments);
@@ -51,9 +51,12 @@ function wrap(state, method, id, scope) {
       // we can just munge the local binding
       scope.rename(id.name);
     } else {
+      // we don't currently support wrapping class expressions
+      if (!t.isFunction(method)) return;
+
       // need to add a wrapper since we can't change the references
       let build = buildPropertyMethodAssignmentWrapper;
-      if (method.generator) build = buldGeneratorPropertyMethodAssignmentWrapper;
+      if (method.generator) build = buildGeneratorPropertyMethodAssignmentWrapper;
       let template = build({
         FUNCTION: method,
         FUNCTION_ID: id,
