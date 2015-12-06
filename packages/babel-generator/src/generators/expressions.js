@@ -179,7 +179,8 @@ export function AssignmentExpression(node: Object, parent: Object) {
              t.isUnaryExpression(node.right, { prefix: true, operator: node.operator }) ||
              t.isUpdateExpression(node.right, { prefix: true, operator: node.operator + node.operator }) ||
              (t.isBinaryExpression(node.right) &&
-               t.isUnaryExpression(getLeftMost(node.right), { prefix: true, operator: node.operator }));
+               t.isUnaryExpression(getLeftMost(node.right), { prefix: true, operator: node.operator })
+               && !(node.right.extra && node.right.extra.parenthesized));
 
   }
 
