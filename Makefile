@@ -53,13 +53,13 @@ test-ci:
 publish:
 	git pull --rebase
 	make test
-	lerna publish
+	./node_modules/.bin/lerna publish
 	make clean
 	#./scripts/build-website.sh
 
 bootstrap:
 	npm install
-	lerna bootstrap
+	./node_modules/.bin/lerna bootstrap
 	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
