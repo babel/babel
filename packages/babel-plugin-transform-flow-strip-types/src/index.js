@@ -41,7 +41,7 @@ export default function ({ types: t }) {
         let { node } = path;
         do {
           node = node.expression;
-        } while(t.isTypeCastExpression(node));
+        } while (t.isTypeCastExpression(node));
         path.replaceWith(node);
       }
     }

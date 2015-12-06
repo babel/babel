@@ -113,7 +113,7 @@ pp.flowParseInterfaceish = function (node, allowStatic) {
   if (this.eat(tt._extends)) {
     do {
       node.extends.push(this.flowParseInterfaceExtends());
-    } while(this.eat(tt.comma));
+    } while (this.eat(tt.comma));
   }
 
   node.body = this.flowParseObjectType(allowStatic);
@@ -876,7 +876,7 @@ export default function (instance) {
               node.typeParameters = null;
           }
           implemented.push(this.finishNode(node, "ClassImplements"));
-        } while(this.eat(tt.comma))
+        } while (this.eat(tt.comma))
       }
     };
   });

@@ -175,7 +175,7 @@ function getConditionalAnnotation(path, name) {
       let type = inferAnnotationFromBinaryExpression(name, path);
       if (type) types.push(type);
     }
-  } while(paths.length);
+  } while (paths.length);
 
   if (types.length) {
     return {

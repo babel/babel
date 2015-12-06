@@ -149,7 +149,7 @@ export default class NodePath {
       let key = path.key;
       if (path.inList) key = `${path.listKey}[${key}]`;
       parts.unshift(key);
-    } while(path = path.parentPath);
+    } while (path = path.parentPath);
     return parts.join(".");
   }
 

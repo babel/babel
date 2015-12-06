@@ -369,7 +369,7 @@ export default class File extends Store {
           column: mapping.generatedColumn,
           source: source
         });
-        if(generatedPosition.column != null) {
+        if (generatedPosition.column != null) {
           mergedGenerator.addMapping({
             source: mapping.source,
 

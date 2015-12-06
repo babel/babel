@@ -404,7 +404,7 @@ export default class Scope {
           kind: binding.kind
         });
       }
-    } while(scope = scope.parent);
+    } while (scope = scope.parent);
     console.log(sep);
   }
 
@@ -618,7 +618,7 @@ export default class Scope {
     do {
       let data = scope.data[key];
       if (data != null) return data;
-    } while(scope = scope.parent);
+    } while (scope = scope.parent);
   }
 
   /**
@@ -631,7 +631,7 @@ export default class Scope {
     do {
       let data = scope.data[key];
       if (data != null) scope.data[key] = null;
-    } while(scope = scope.parent);
+    } while (scope = scope.parent);
   }
 
   init() {
@@ -931,6 +931,6 @@ export default class Scope {
       if (scope.uids[name]) {
         scope.uids[name] = false;
       }
-    } while(scope = scope.parent);
+    } while (scope = scope.parent);
   }
 }
