@@ -88,8 +88,9 @@ each(helpers.list, function (helperName) {
 
   // compat
   var helperAlias = _.kebabCase(helperName);
-  writeFile("helpers/_" + helperAlias + ".js", buildHelper(helperName));
-  writeFile("helpers/" + helperAlias + ".js", buildHelper(helperName));
+  var content = "module.exports = require(\"./" + helperName + ".js\");";
+  writeFile("helpers/_" + helperAlias + ".js", content);
+  if (helperAlias !== helperName) writeFile("helpers/" + helperAlias + ".js", content);
 });
 
 writeFile("regenerator/index.js", readFile("../../babel-regenerator-runtime/runtime-module", true));
