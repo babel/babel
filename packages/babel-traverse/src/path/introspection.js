@@ -361,6 +361,7 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
 
     if (binding.path !== this) {
       let ret = binding.path.resolve(dangerous, resolved);
+      // If the identifier resolves to parent node then we can't really resolve it.
       if (this.find(parent => parent.node === ret.node)) return;
       return ret;
     }
