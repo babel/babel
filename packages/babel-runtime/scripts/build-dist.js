@@ -52,8 +52,6 @@ function writeRootFile(filename, content) {
   outputFile(filename, content);
 }
 
-var buildHelperHead = template("exports.default = HELPER; exports.__esModule = true;");
-
 function writeFile(filename, content) {
   return writeRootFile(filename, content);
 }
@@ -65,22 +63,51 @@ var transformOpts = {
 
   plugins: [
     require("../../babel-plugin-transform-runtime"),
-    require("../../babel-plugin-transform-es2015-modules-commonjs")
+    [require("../../babel-plugin-transform-es2015-modules-commonjs"), {loose: true, strict: false}]
   ]
 };
 
-function selfContainify(code) {
-  return babel.transform(code, transformOpts).code;
+function buildRuntimeRewritePlugin(relativePath, helperName) {
+  return {
+    pre: function (file){
+      var original = file.get("helperGenerator");
+      file.set("helperGenerator", function(name){
+        // make sure that helpers won't insert circular references to themselves
+        if (name === helperName) return;
+
+        return original(name);
+      });
+    },
+    visitor: {
+      CallExpression: function(path){
+        if (!path.get("callee").isIdentifier({name: "require"}) ||
+          path.get("arguments").length !== 1 ||
+          !path.get("arguments")[0].isStringLiteral()) return;
+
+        // replace any reference to babel-runtime with a relative path
+        path.get("arguments")[0].node.value = path.get("arguments")[0].node.value
+          .replace(/^babel-runtime/, relativePath);
+      }
+    }
+  };
+}
+
+function selfContainify(path, code) {
+  return babel.transform(code, {
+    presets: transformOpts.presets,
+    plugins: transformOpts.plugins.concat([buildRuntimeRewritePlugin(path, null)])
+  }).code;
 }
 
 function buildHelper(helperName) {
-  var tree = t.program(
-    buildHelperHead({
-      HELPER: helpers.get(helperName)
-    })
-  );
+  var tree = t.program([
+    t.exportDefaultDeclaration(helpers.get(helperName))
+  ]);
 
-  return babel.transformFromAst(tree, null, transformOpts).code;
+  return babel.transformFromAst(tree, null, {
+    presets: transformOpts.presets,
+    plugins: transformOpts.plugins.concat([buildRuntimeRewritePlugin("..", helperName)])
+  }).code;
 }
 
 each(helpers.list, function (helperName) {
@@ -94,4 +121,4 @@ each(helpers.list, function (helperName) {
 });
 
 writeFile("regenerator/index.js", readFile("../../babel-regenerator-runtime/runtime-module", true));
-writeFile("regenerator/runtime.js", selfContainify(readFile("../../babel-regenerator-runtime/runtime")));
+writeFile("regenerator/runtime.js", selfContainify("..", readFile("../../babel-regenerator-runtime/runtime")));
