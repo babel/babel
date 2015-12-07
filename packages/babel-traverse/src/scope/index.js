@@ -597,7 +597,7 @@ export default class Scope {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {
-      return this.isPure(node.argument);
+      return this.isPure(node.argument, constantsOnly);
     } else {
       return t.isPureish(node);
     }
