@@ -231,7 +231,7 @@ export default class Printer extends Buffer {
     if (this.format.shouldPrintComment) {
       return this.format.shouldPrintComment(comment.value);
     } else {
-      if (comment.value.indexOf("@license") >= 0 || comment.value.indexOf("@preserve") >= 0) {
+      if (!this.format.compact && comment.value.indexOf("@license") >= 0 || comment.value.indexOf("@preserve") >= 0) {
         return true;
       } else {
         return this.format.comments;
