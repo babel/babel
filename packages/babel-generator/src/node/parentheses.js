@@ -124,6 +124,10 @@ export function SequenceExpression(node: Object, parent: Object): boolean {
     return false;
   }
 
+  if (t.isThrowStatement(parent)) {
+    return false;
+  }
+
   // Otherwise err on the side of overparenthesization, adding
   // explicit exceptions above if this proves overzealous.
   return true;
