@@ -221,7 +221,7 @@ export function MemberExpression(node: Object) {
     this.push("]");
   } else {
     if (t.isLiteral(node.object) && !t.isTemplateLiteral(node.object)) {
-      let val = this.getPossibleRaw(node.object) || this._stringLiteral(node.object);
+      let val = this._stringLiteral(node.object);
       if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !ZERO_DECIMAL_INTEGER.test(val) && !this.endsWith(".")) {
         this.push(".");
       }

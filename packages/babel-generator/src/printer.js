@@ -89,22 +89,9 @@ export default class Printer extends Buffer {
     }
   }
 
-  getPossibleRaw(node) {
-    let extra = node.extra;
-    if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
-      return extra.raw;
-    }
-  }
-
   _print(node, parent) {
-    let extra = this.getPossibleRaw(node);
-    if (extra) {
-      this.push("");
-      this._push(extra);
-    } else {
-      let printMethod = this[node.type];
-      printMethod.call(this, node, parent);
-    }
+    let printMethod = this[node.type];
+    printMethod.call(this, node, parent);
   }
 
   printJoin(nodes: ?Array, parent: Object, opts = {}) {
