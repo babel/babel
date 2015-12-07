@@ -21,7 +21,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * `babel-helper-function-name`:
     * [#3138](https://github.com/babel/babel/pull/3138) Skip name inference on certain uses of classes until we can handle them.
   * `babel-traverse`:
-    * [#3141](https://github.com/babel/babel/pull/3141) Fix bug with evaluating an expression on it's own binding.
+    * [#3141](https://github.com/babel/babel/pull/3141) Fix bug with evaluating an expression on its own binding.
   * `babel-plugin-transform-es2015-destructuring`:
     * [#3136](https://github.com/babel/babel/pull/3136) Seperate the destructuring statement from the export statement before converting.
   * `babel-plugin-transform-es2015-classes`:
