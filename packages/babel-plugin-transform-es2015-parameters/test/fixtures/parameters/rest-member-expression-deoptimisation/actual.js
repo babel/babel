@@ -28,3 +28,7 @@ var b = function (foo, ...bar) {
   var join = "join";
   return bar[join];
 };
+
+var b = function (...bar) {
+  return bar.len;
+};
