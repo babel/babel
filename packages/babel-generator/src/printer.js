@@ -89,7 +89,27 @@ export default class Printer extends Buffer {
     }
   }
 
+  getPossibleRaw(node) {
+    let extra = node.extra;
+    if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
+      return extra.raw;
+    }
+  }
+
   _print(node, parent) {
+    // In compact mode we need to produce as little bytes as needed
+    // and need to make sure that string quoting is consistent.
+    // That means we have to always reprint as opposed to getting
+    // the raw value.
+    if (!this.format.compact) {
+      let extra = this.getPossibleRaw(node);
+      if (extra) {
+        this.push("");
+        this._push(extra);
+        return;
+      }
+    }
+
     let printMethod = this[node.type];
     printMethod.call(this, node, parent);
   }
