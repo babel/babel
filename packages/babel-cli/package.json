@@ -6,7 +6,6 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-cli",
-  "preferGlobal": true,
   "dependencies": {
     "babel-core": "^6.3.15",
     "babel-register": "^6.3.13",
