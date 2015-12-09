@@ -1,6 +1,6 @@
 {
   "name": "babel-generator",
-  "version": "6.3.15",
+  "version": "6.3.16",
   "description": "Turns an AST into code.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
