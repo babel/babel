@@ -366,11 +366,12 @@ describe("acorn-to-esprima", function () {
     it("ClassMethod multiline", function () {
       parseAndAssertSame([
         "class A {",
-        "  constructor(",
+        "  constructor (",
         "    a,",
         "    b,",
         "    c",
-        "  ) {",
+        "  )",
+        "{",
         "",
         "  }",
         "}"
@@ -408,6 +409,29 @@ describe("acorn-to-esprima", function () {
       parseAndAssertSame('');
       parseAndAssertSame("");
       parseAndAssertSame("a");
+    });
+
+    it("getters and setters", function () {
+      parseAndAssertSame("class A { get x ( ) { ; } }");
+      parseAndAssertSame([
+        "class A {",
+          "get x(",
+          ")",
+          "{",
+            ";",
+          "}",
+        "}"
+      ].join("\n"));
+      parseAndAssertSame("class A { set x (a) { ; } }");
+      parseAndAssertSame([
+        "class A {",
+          "set x(a",
+          ")",
+          "{",
+            ";",
+          "}",
+        "}"
+      ].join("\n"));
     });
   });
 });

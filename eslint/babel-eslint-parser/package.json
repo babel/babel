@@ -8,7 +8,7 @@
     "url": "https://github.com/babel/babel-eslint.git"
   },
   "dependencies": {
-    "acorn-to-esprima": "^2.0.1",
+    "acorn-to-esprima": "^2.0.3",
     "babel-traverse": "^6.0.20",
     "babel-types": "^6.0.19",
     "babylon": "^6.0.18",
