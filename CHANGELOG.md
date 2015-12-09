@@ -13,6 +13,20 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.16
+
+ * **Bug Fix**
+  * `babel-traverse`:
+    * [#3137](https://github.com/babel/babel/pull/3137) Set the correct `parent` and `parentPath` for new a `NodePath` (fixes an issue with `export * from './a'` and `es2015-modules-commonjs`).
+  * `babel-generator`:
+    * [#3145](https://github.com/babel/babel/pull/3146) Always print `""` in `compact` mode for consistency (gzip). Will be changed in a new mode (a supserset of `compact`) in a later patch.
+    * [#3146](https://github.com/babel/babel/pull/3146) Don't print comments in `compact` mode.
+    * [#3147](https://github.com/babel/babel/pull/3147) Don't print parentheses on `throw` statements with `SequenceExpression`.
+
+ * **Internal**
+  * `babel-traverse`:
+    * [#3138](https://github.com/babel/babel/pull/3138) Support `UnaryExpression` in `isPure` check.
+
 ## 6.3.15
 
  * **Bug Fix**
