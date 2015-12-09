@@ -1304,4 +1304,31 @@ describe("verify", function () {
       []
     )
   });
+
+  it("getter/setter #218", function () {
+    verifyAndAssertMessages([
+        "class Person {",
+          "set a (v) { }",
+        "}"
+      ].join("\n"),
+      { "space-before-function-paren": 1, "space-before-keywords": 1, "indent": 1 },
+      []
+    )
+  });
+
+  it("getter/setter #220", function () {
+    verifyAndAssertMessages([
+        "var B = {",
+            "get x () {",
+                "return this.ecks;",
+            "},",
+            "set x (ecks) {",
+                "this.ecks = ecks;",
+            "}",
+        "};"
+      ].join("\n"),
+      { "no-dupe-keys": 1 },
+      []
+    )
+  });
 });

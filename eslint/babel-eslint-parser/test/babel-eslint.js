@@ -432,6 +432,16 @@ describe("acorn-to-esprima", function () {
           "}",
         "}"
       ].join("\n"));
+      parseAndAssertSame([
+        "var B = {",
+            "get x () {",
+                "return this.ecks;",
+            "},",
+            "set x (ecks) {",
+                "this.ecks = ecks;",
+            "}",
+        "};"
+      ].join("\n"));
     });
   });
 });
