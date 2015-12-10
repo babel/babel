@@ -9,6 +9,7 @@ import isAbsolute from "path-is-absolute";
 import pathExists from "path-exists";
 import cloneDeep from "lodash/lang/cloneDeep";
 import clone from "lodash/lang/clone";
+import globalModuleDir from "global-modules";
 import merge from "../../../helpers/merge";
 import config from "./config";
 import path from "path";
@@ -112,7 +113,7 @@ export default class OptionManager {
     return plugin;
   }
 
-  static normalisePlugins(loc, dirname, plugins) {
+  static normalisePlugins(loc, dirname, plugins, allowGlobal: boolean) {
     return plugins.map(function (val, i) {
       let plugin, options;
 
@@ -128,6 +129,9 @@ export default class OptionManager {
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
         let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
+        if (!pluginLoc && allowGlobal) {
+          pluginLoc = resolve(`babel-plugin-${plugin}`, globalModuleDir) || resolve(plugin, globalModuleDir);
+        }
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
@@ -205,7 +209,7 @@ export default class OptionManager {
 
     // resolve plugins
     if (opts.plugins) {
-      opts.plugins = OptionManager.normalisePlugins(loc, dirname, opts.plugins);
+      opts.plugins = OptionManager.normalisePlugins(loc, dirname, opts.plugins, opts.global);
     }
 
     // add extends clause
@@ -221,7 +225,7 @@ export default class OptionManager {
 
     // resolve presets
     if (opts.presets) {
-      this.mergePresets(opts.presets, dirname);
+      this.mergePresets(opts.presets, dirname, opts.global);
       delete opts.presets;
     }
 
@@ -240,10 +244,13 @@ export default class OptionManager {
     this.mergeOptions(envOpts, `${alias}.env.${envKey}`, null, dirname);
   }
 
-  mergePresets(presets: Array<string | Object>, dirname: string) {
+  mergePresets(presets: Array<string | Object>, dirname: string, allowGlobal: boolean) {
     for (let val of presets) {
       if (typeof val === "string") {
         let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+        if (!presetLoc && allowGlobal) {
+          presetLoc = resolve(`babel-preset-${val}`, globalModuleDir) || resolve(val, globalModuleDir);
+        }
         if (presetLoc) {
           let presetOpts = require(presetLoc);
           this.mergeOptions(presetOpts, presetLoc, presetLoc, path.dirname(presetLoc));
