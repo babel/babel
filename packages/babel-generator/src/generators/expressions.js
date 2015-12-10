@@ -62,7 +62,7 @@ export function ConditionalExpression(node: Object) {
 export function NewExpression(node: Object, parent: Object) {
   this.push("new ");
   this.print(node.callee, node);
-  if (node.arguments.length === 0 && this.format.compact &&
+  if (node.arguments.length === 0 && this.format.minified &&
       !t.isCallExpression(parent, { callee: node }) &&
       !t.isMemberExpression(parent) &&
       !t.isNewExpression(parent)) return;
@@ -222,7 +222,7 @@ export function MemberExpression(node: Object) {
   } else {
     if (t.isLiteral(node.object) && !t.isTemplateLiteral(node.object)) {
       let val;
-      if (this.format.compact) {
+      if (this.format.minified) {
         val = this._stringLiteral(node.object);
       } else {
         val = this.getPossibleRaw(node.object) || this._stringLiteral(node.object);
