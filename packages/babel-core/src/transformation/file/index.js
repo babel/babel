@@ -210,7 +210,9 @@ export default class File extends Store {
     }
 
     // remove extension
-    filenameRelative = filenameRelative.replace(/\.(\w*?)$/, "");
+    if (!opts.keepModuleIdExtensions) {
+      filenameRelative = filenameRelative.replace(/\.(\w*?)$/, "");
+    }
 
     moduleName += filenameRelative;
 
