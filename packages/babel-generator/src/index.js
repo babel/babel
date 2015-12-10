@@ -40,6 +40,7 @@ export class CodeGenerator extends Printer {
     auxiliaryCommentBefore: string;
     auxiliaryCommentAfter: string;
     compact: boolean | "auto";
+    minified: boolean;
     quotes: "single" | "double";
     concise: boolean;
     indent: {
@@ -81,6 +82,7 @@ export class CodeGenerator extends Printer {
       retainLines: opts.retainLines,
       comments: opts.comments == null || opts.comments,
       compact: opts.compact,
+      minified: opts.minified,
       concise: opts.concise,
       quotes: CodeGenerator.findCommonStringDelimiter(code, tokens),
       indent: {
@@ -89,6 +91,10 @@ export class CodeGenerator extends Printer {
         base: 0
       }
     };
+
+    if (format.minified) {
+      format.compact = true;
+    }
 
     if (format.compact === "auto") {
       format.compact = code.length > 100000; // 100KB

@@ -106,6 +106,12 @@ module.exports = {
     description: "do not include superfluous whitespace characters and line terminators [true|false|auto]"
   },
 
+  minified: {
+    type: "boolean",
+    default: false,
+    description: "save as much bytes when printing [true|false]"
+  },
+
   sourceMap: {
     alias: "sourceMaps",
     hidden: true

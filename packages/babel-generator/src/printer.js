@@ -97,11 +97,11 @@ export default class Printer extends Buffer {
   }
 
   _print(node, parent) {
-    // In compact mode we need to produce as little bytes as needed
+    // In minified mode we need to produce as little bytes as needed
     // and need to make sure that string quoting is consistent.
     // That means we have to always reprint as opposed to getting
     // the raw value.
-    if (!this.format.compact) {
+    if (!this.format.minified) {
       let extra = this.getPossibleRaw(node);
       if (extra) {
         this.push("");
@@ -238,7 +238,7 @@ export default class Printer extends Buffer {
     if (this.format.shouldPrintComment) {
       return this.format.shouldPrintComment(comment.value);
     } else {
-      if (!this.format.compact &&
+      if (!this.format.minified &&
           (comment.value.indexOf("@license") >= 0 || comment.value.indexOf("@preserve") >= 0)) {
         return true;
       } else {
