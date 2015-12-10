@@ -170,7 +170,7 @@ defineType("DoWhileStatement", {
       validate: assertNodeType("Expression")
     },
     body: {
-      validate: assertNodeType("BlockStatement")
+      validate: assertNodeType("Statement")
     }
   },
   aliases: ["Statement", "BlockParent", "Loop", "While", "Scopable"]
