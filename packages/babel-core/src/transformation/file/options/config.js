@@ -55,6 +55,13 @@ module.exports = {
     description: ""
   },
 
+  global: {
+    type: "boolean",
+    default: false,
+    description: "load plugins and presets from globally installed node modules if not found locally",
+    shorthand: "g"
+  },
+
   ignore: {
     type: "list",
     description: "list of glob paths to **not** compile",
