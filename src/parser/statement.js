@@ -27,22 +27,21 @@ const loopLabel = {kind: "loop"}, switchLabel = {kind: "switch"};
 
 // TODO
 
-pp.parseDirective = function () {
-  let directiveLiteral = this.startNode();
-  let directive        = this.startNode();
+pp.stmtToDirective = function (stmt) {
+  let expr = stmt.expression;
 
-  let raw = this.input.slice(this.state.start, this.state.end);
+  let directiveLiteral = this.startNodeAt(expr.start, expr.loc.start);
+  let directive        = this.startNodeAt(stmt.start, stmt.loc.start);
+
+  let raw = this.input.slice(expr.start, expr.end);
   let val = directiveLiteral.value = raw.slice(1, -1); // remove quotes
 
   this.addExtra(directiveLiteral, "raw", raw);
   this.addExtra(directiveLiteral, "rawValue", val);
 
-  this.next();
+  directive.value = this.finishNodeAt(directiveLiteral, "DirectiveLiteral", expr.end, expr.loc.end);
 
-  directive.value = this.finishNode(directiveLiteral, "DirectiveLiteral");
-
-  this.semicolon();
-  return this.finishNode(directive, "Directive");
+  return this.finishNodeAt(directive, "Directive", stmt.end, stmt.loc.end);
 };
 
 // Parse a single statement.
@@ -454,37 +453,31 @@ pp.parseBlockBody = function (node, allowDirectives, topLevel, end) {
   let octalPosition;
 
   while (!this.eat(end)) {
-    if (allowDirectives && !parsedNonDirective && this.match(tt.string)) {
-      let oldState = this.state;
-      let lookahead = this.lookahead();
-      this.state = lookahead;
-      let isDirective = this.isLineTerminator();
-      this.state = oldState;
+    if (!parsedNonDirective && this.state.containsOctal && !octalPosition) {
+      octalPosition = this.state.octalPosition;
+    }
 
-      if (isDirective) {
-        if (this.state.containsOctal && !octalPosition) {
-          octalPosition = this.state.octalPosition;
+    let stmt = this.parseStatement(true, topLevel);
+
+    if (allowDirectives && !parsedNonDirective &&
+        stmt.type === "ExpressionStatement" && stmt.expression.type === "StringLiteral") {
+      let directive = this.stmtToDirective(stmt);
+      node.directives.push(directive);
+
+      if (directive.value.value === "use strict") {
+        oldStrict = this.state.strict;
+        this.setStrict(true);
+
+        if (octalPosition) {
+          this.raise(octalPosition, "Octal literal in strict mode");
         }
-
-        let stmt = this.parseDirective();
-        node.directives.push(stmt);
-
-        if (allowDirectives && stmt.value.value === "use strict") {
-          oldStrict = this.state.strict;
-          this.state.strict = true;
-          this.setStrict(true);
-
-          if (octalPosition) {
-            this.raise(octalPosition, "Octal literal in strict mode");
-          }
-        }
-
-        continue;
       }
+
+      continue;
     }
 
     parsedNonDirective = true;
-    node.body.push(this.parseStatement(true, topLevel));
+    node.body.push(stmt);
   }
 
   if (oldStrict === false) {
