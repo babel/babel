@@ -11,6 +11,10 @@ let buildRest = template(`
   }
 `);
 
+let loadRest = template(`
+  ARGUMENTS.length <= KEY || ARGUMENTS[KEY] === undefined ? undefined : ARGUMENTS[KEY]
+`);
+
 let memberExpressionOptimisationVisitor = {
   Scope(path, state) {
     // check if this scope has a local binding that will shadow the rest parameter
@@ -84,21 +88,6 @@ let memberExpressionOptimisationVisitor = {
   }
 };
 
-function optimiseMemberExpression(parent, offset) {
-  if (offset === 0) return;
-
-  let newExpr;
-  let prop = parent.property;
-
-  if (t.isLiteral(prop)) {
-    prop.value += offset;
-    prop.raw = String(prop.value);
-  } else { // // UnaryExpression, BinaryExpression
-    newExpr = t.binaryExpression("+", prop, t.numericLiteral(offset));
-    parent.property = newExpr;
-  }
-}
-
 function hasRest(node) {
   return t.isRestElement(node.params[node.params.length - 1]);
 }
@@ -116,16 +105,25 @@ export let visitor = {
     // otherwise `arguments` will be remapped in arrow functions
     argsId._shadowedFunctionLiteral = path;
 
-    // support patterns
-    if (t.isPattern(rest)) {
-      let pattern = rest;
-      rest = scope.generateUidIdentifier("ref");
+    function optimiseCandidate(parent, parentPath, offset) {
+      if (t.isReturnStatement(parentPath.parent) || t.isIdentifier(parentPath.parent.id)) {
+        parentPath.replaceWith(loadRest({
+          ARGUMENTS: argsId,
+          KEY: t.numericLiteral(parent.property.value + offset)
+        }));
+      } else {
+        if (offset === 0) return;
+        let newExpr;
+        let prop = parent.property;
 
-      let declar = t.variableDeclaration("let", pattern.elements.map(function (elem, index) {
-        let accessExpr = t.memberExpression(rest, t.numericLiteral(index), true);
-        return t.variableDeclarator(elem, accessExpr);
-      }));
-      node.body.body.unshift(declar);
+        if (t.isLiteral(prop)) {
+          prop.value += offset;
+          prop.raw = String(prop.value);
+        } else { // UnaryExpression, BinaryExpression
+          newExpr = t.binaryExpression("+", prop, t.numericLiteral(offset));
+          parent.property = newExpr;
+        }
+      }
     }
 
     // check and optimise for extremely common cases
@@ -153,9 +151,7 @@ export let visitor = {
       if (state.candidates.length) {
         for (let candidate of (state.candidates: Array)) {
           candidate.replaceWith(argsId);
-          if (candidate.parentPath.isMemberExpression()) {
-            optimiseMemberExpression(candidate.parent, state.offset);
-          }
+          optimiseCandidate(candidate.parent, candidate.parentPath, state.offset);
         }
       }
       return;
@@ -165,8 +161,6 @@ export let visitor = {
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
     state.deopted = state.deopted || !!node.shadow;
-
-    //
 
     let start = t.numericLiteral(node.params.length);
     let key = scope.generateUidIdentifier("key");

@@ -14,7 +14,7 @@ var somefun = function () {
     };
     var _d = args1[1];
   };
-  let get1stArg = (...args) => args[0];
+  let get3rdArg = (...args) => args[2];
 }
 
 function demo1(...args) {
