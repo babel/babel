@@ -16,16 +16,16 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 ## 6.3.17
 
  * **Bug Fix**
-  * `babel-types`: [#3153](https://github.com/babel/babel/pull/3153) DoWhileStatement should take ndoe type `Statement` as body.
+  * `babel-types`: [#3153](https://github.com/babel/babel/pull/3153) DoWhileStatement should take node type `Statement` as body.
 
  * **New Feature**
-  * `babel-generator`: [3152](https://github.com/babel/babel/pull/3152) Add a new minified format option to do possibly dangerous byte saving.
+  * `babel-generator`: [#3152](https://github.com/babel/babel/pull/3152) Add a new minified format option to do possibly dangerous byte saving.
 
  * **Internal**
-  * `babel-traverse`: [3151](https://github.com/babel/babel/pull/3151) Support ObjectProperty in `Scope.isPure`
+  * `babel-traverse`: [#3151](https://github.com/babel/babel/pull/3151) Support ObjectProperty in `Scope.isPure`
 
  * **Polish**
-  * `babel-cli`: [3150](https://github.com/babel/babel/pull/3150) Do not prefer global when installing babel-cli
+  * `babel-cli`: [#3150](https://github.com/babel/babel/pull/3150) Do not prefer global when installing babel-cli
 
 ## 6.3.16
 
