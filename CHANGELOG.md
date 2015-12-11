@@ -13,6 +13,20 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.17
+
+ * **Bug Fix**
+  * `babel-types`: [#3153](https://github.com/babel/babel/pull/3153) DoWhileStatement should take ndoe type `Statement` as body.
+
+ * **New Feature**
+  * `babel-generator`: [3152](https://github.com/babel/babel/pull/3152) Add a new minified format option to do possibly dangerous byte saving.
+
+ * **Internal**
+  * `babel-traverse`: [3151](https://github.com/babel/babel/pull/3151) Support ObjectProperty in `Scope.isPure`
+
+ * **Polish**
+  * `babel-cli`: [3150](https://github.com/babel/babel/pull/3150) Do not prefer global when installing babel-cli
+
 ## 6.3.16
 
  * **Bug Fix**
@@ -55,7 +69,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
  * **Bug Fix**
   * `babylon`, `babel-types`, `babel-generator`:
     * [#3130](https://github.com/babel/babel/pull/3130) Add support for `NullLiteralTypeAnnotation` (`null` literal type) in flow.
- 
+
 ## 6.3.2
 
  * **Bug Fix**
@@ -88,7 +102,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * Check for empty decorators list in `transform-class-properties`
   * Fix babylon parser not allowing multiple parameters in arrow functions with flow types
   * Fix exported async functions being hoisted and as a result being undefined.
- 
+
  * **Polish**
   * Add validation to more JSX node types.
   * Add validation for CallExpression, NewExpression, SequenceExpression, ArrayExpression, and TemplateLiteral.
