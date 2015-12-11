@@ -316,8 +316,12 @@ export default class Tokenizer {
     return this.finishOp(type, width);
   }
 
-  readToken_pipe_amp(code) { // '|&'
+  readToken_pipe_amp(code) { // '|&', '|>'
     let next = this.input.charCodeAt(this.state.pos + 1);
+
+    if (code === 124 && next === 62 && this.hasPlugin("pipelineOperator")) {
+      return this.finishOp(tt.pipeline, 2);
+    }
     if (next === code) return this.finishOp(code === 124 ? tt.logicalOR : tt.logicalAND, 2);
     if (next === 61) return this.finishOp(tt.assign, 2);
     return this.finishOp(code === 124 ? tt.bitwiseOR : tt.bitwiseAND, 1);
@@ -444,7 +448,7 @@ export default class Tokenizer {
       case 37: case 42: // '%*'
         return this.readToken_mult_modulo(code);
 
-      case 124: case 38: // '|&'
+      case 124: case 38: // '|&', '|>'
         return this.readToken_pipe_amp(code);
 
       case 94: // '^'

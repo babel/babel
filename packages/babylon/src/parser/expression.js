@@ -189,6 +189,12 @@ pp.parseExprOp = function(left, leftStartPos, leftStartLoc, minPrec, noIn) {
 
       let startPos = this.state.start;
       let startLoc = this.state.startLoc;
+
+      if (node.operator === "|>") {
+        // Support syntax such as 10 |> x => x + 1
+        this.state.potentialArrowAt = startPos;
+      }
+
       node.right = this.parseExprOp(this.parseMaybeUnary(), startPos, startLoc, op.rightAssociative ? prec - 1 : prec, noIn);
 
       this.finishNode(node, (op === tt.logicalOR || op === tt.logicalAND) ? "LogicalExpression" : "BinaryExpression");
