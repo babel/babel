@@ -55,6 +55,13 @@ export function ObjectExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
+  if ((t.isBinaryExpression(parent) || t.isLogicalExpression(parent)) && parent.left === node) {
+    // We'd need to check that the parent's parent is an ExpressionStatement. But this
+    // code doesn't make any sense to begin with and should be rare.
+    // `({}) === foo`
+    return true;
+  }
+
   return false;
 }
 
