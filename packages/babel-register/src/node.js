@@ -5,7 +5,7 @@ import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import extend from "lodash/object/extend";
 import * as babel from "babel-core";
-import each from "lodash/collection/each";
+import { addHook } from "pirates";
 import { util, OptionManager } from "babel-core";
 import fs from "fs";
 import path from "path";
@@ -33,7 +33,7 @@ let transformOpts = {};
 let ignore;
 let only;
 
-let oldHandlers   = {};
+let revert        = null;
 let maps          = {};
 
 let cwd = process.cwd();
@@ -46,7 +46,7 @@ function mtime(filename) {
   return +fs.statSync(filename).mtime;
 }
 
-function compile(filename) {
+function compile(code, filename) {
   let result;
 
   let optsManager = new OptionManager;
@@ -69,7 +69,7 @@ function compile(filename) {
   }
 
   if (!result) {
-    result = babel.transformFileSync(filename, extend(opts, {
+    result = babel.transform(code, extend(opts, {
       // Do not process config files since has already been done with the OptionManager
       // calls above and would introduce duplicates.
       babelrc: false,
@@ -96,37 +96,9 @@ function shouldIgnore(filename) {
   }
 }
 
-function loader(m, filename) {
-  m._compile(compile(filename), filename);
-}
-
-function registerExtension(ext) {
-  let old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
-
-  require.extensions[ext] = function (m, filename) {
-    if (shouldIgnore(filename)) {
-      old(m, filename);
-    } else {
-      loader(m, filename, old);
-    }
-  };
-}
-
-function hookExtensions(_exts) {
-  each(oldHandlers, function (old, ext) {
-    if (old === undefined) {
-      delete require.extensions[ext];
-    } else {
-      require.extensions[ext] = old;
-    }
-  });
-
-  oldHandlers = {};
-
-  each(_exts, function (ext) {
-    oldHandlers[ext] = require.extensions[ext];
-    registerExtension(ext);
-  });
+function hookExtensions(exts) {
+  if (revert) revert();
+  revert = addHook(compile, { exts, matcher: shouldIgnore, ignoreNodeModules: false });
 }
 
 hookExtensions(util.canCompile.EXTENSIONS);
