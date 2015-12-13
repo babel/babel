@@ -15,6 +15,7 @@
     "lodash": "^4.2.0",
     "mkdirp": "^0.5.1",
     "path-exists": "^1.0.0",
+    "pirates": "^2.1.1",
     "source-map-support": "^0.2.10"
   }
 }
