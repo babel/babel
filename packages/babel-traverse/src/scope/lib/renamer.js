@@ -15,7 +15,7 @@ let renameVisitor = {
   },
 
   "AssignmentExpression|Declaration"(path, state) {
-    let ids = path.getBindingIdentifiers();
+    let ids = path.getOuterBindingIdentifiers();
 
     for (let name in ids) {
       if (name === state.oldName) ids[name].name = state.newName;
