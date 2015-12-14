@@ -12,7 +12,7 @@ let buildRest = template(`
 `);
 
 let loadRest = template(`
-  ARGUMENTS.length <= KEY || ARGUMENTS[KEY] === undefined ? undefined : ARGUMENTS[KEY]
+  ARGUMENTS.length <= INDEX ? undefined : ARGUMENTS[INDEX]
 `);
 
 let memberExpressionOptimisationVisitor = {
@@ -109,7 +109,7 @@ export let visitor = {
       if (t.isReturnStatement(parentPath.parent) || t.isIdentifier(parentPath.parent.id)) {
         parentPath.replaceWith(loadRest({
           ARGUMENTS: argsId,
-          KEY: t.numericLiteral(parent.property.value + offset)
+          INDEX: t.numericLiteral(parent.property.value + offset)
         }));
       } else {
         if (offset === 0) return;
