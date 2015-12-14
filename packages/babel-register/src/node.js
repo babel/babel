@@ -54,7 +54,7 @@ function compile(filename) {
   // merge in base options and resolve all the plugins and presets relative to this file
   optsManager.mergeOptions(deepClone(transformOpts), "base", null, path.dirname(filename));
 
-  let opts = optsManager.init({ filename });
+  let opts = optsManager.init({ filename, babelrc: transformOpts.babelrc });
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
