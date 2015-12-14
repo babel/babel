@@ -39,7 +39,7 @@ export class CodeGenerator extends Printer {
     comments: boolean;
     auxiliaryCommentBefore: string;
     auxiliaryCommentAfter: string;
-    compact: boolean | "auto";
+    compact: boolean;
     minified: boolean;
     quotes: "single" | "double";
     concise: boolean;
@@ -62,10 +62,6 @@ export class CodeGenerator extends Printer {
 
   /**
    * Normalize generator options, setting defaults.
-   *
-   * - Detects code indentation.
-   * - If `opts.compact = "auto"` and the code is over 100KB, `compact` will be set to `true`.
-
    */
 
   static normalizeOptions(code, opts, tokens) {
@@ -94,14 +90,6 @@ export class CodeGenerator extends Printer {
 
     if (format.minified) {
       format.compact = true;
-    }
-
-    if (format.compact === "auto") {
-      format.compact = code.length > 100000; // 100KB
-
-      if (format.compact) {
-        console.error("[BABEL] " + messages.get("codeGeneratorDeopt", opts.filename, "100KB"));
-      }
     }
 
     if (format.compact) {

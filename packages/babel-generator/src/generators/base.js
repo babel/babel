@@ -1,5 +1,7 @@
 /* @flow */
 
+import * as punctuators from "../fragments/punctuators";
+
 export function File(node: Object) {
   this.print(node.program, node);
 }
@@ -14,27 +16,21 @@ export function Program(node: Object) {
 }
 
 export function BlockStatement(node: Object) {
-  this.push("{");
+  this.push(new punctuators.CurlyLPunctuator);
   this.printInnerComments(node);
   if (node.body.length) {
-    this.newline();
-
     this.printSequence(node.directives, node, { indent: true });
-    if (node.directives && node.directives.length) this.newline();
-
     this.printSequence(node.body, node, { indent: true });
-    if (!this.format.retainLines) this.removeLast("\n");
-    this.rightBrace();
-  } else {
-    this.push("}");
   }
+
+  this.push(new punctuators.CurlyRPunctuator);
 }
 
 export function Noop() {}
 
 export function Directive(node: Object) {
   this.print(node.value, node);
-  this.semicolon();
+  this.push(new punctuators.SemicolonPunctuator);
 }
 
 export function DirectiveLiteral(node: Object) {

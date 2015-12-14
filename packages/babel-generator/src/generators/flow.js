@@ -1,5 +1,6 @@
 /* @flow */
 
+import * as punctuators from "../fragments/punctuators";
 import * as t from "babel-types";
 
 export function AnyTypeAnnotation() {
@@ -33,7 +34,7 @@ export function DeclareFunction(node: Object) {
   this.push("declare function ");
   this.print(node.id, node);
   this.print(node.id.typeAnnotation.typeAnnotation, node);
-  this.semicolon();
+  this.push(new punctuators.SemicolonPunctuator);
 }
 
 export function DeclareModule(node: Object) {
@@ -47,7 +48,7 @@ export function DeclareVariable(node: Object) {
   this.push("declare var ");
   this.print(node.id, node);
   this.print(node.id.typeAnnotation, node);
-  this.semicolon();
+  this.push(new punctuators.SemicolonPunctuator);
 }
 
 export function ExistentialTypeParam() {
@@ -159,7 +160,7 @@ export function TypeAlias(node: Object) {
   this.push("=");
   this.space();
   this.print(node.right, node);
-  this.semicolon();
+  this.push(new punctuators.SemicolonPunctuator);
 }
 
 export function TypeAnnotation(node: Object) {
@@ -194,7 +195,7 @@ export function ObjectTypeAnnotation(node: Object) {
       indent: true,
       iterator: () => {
         if (props.length !== 1) {
-          this.semicolon();
+          this.push(new punctuators.SemicolonPunctuator);
           this.space();
         }
       }

@@ -1,24 +1,25 @@
 import repeating from "repeating";
+import * as keywords from "../fragments/keywords";
+import * as punctuators from "../fragments/punctuators";
 import * as t from "babel-types";
 
 export function WithStatement(node: Object) {
-  this.keyword("with");
-  this.push("(");
+  this.push(new keywords.WithKeyword);
+  this.push(new punctuators.ParenLPunctuator);
   this.print(node.object, node);
-  this.push(")");
+  this.push(new punctuators.ParenRPunctuator);
   this.printBlock(node);
 }
 
 export function IfStatement(node: Object) {
-  this.keyword("if");
-  this.push("(");
+  this.push(new keywords.IfKeyword);
+  this.push(new punctuators.ParenLPunctuator);
   this.print(node.test, node);
-  this.push(")");
-  this.space();
+  this.push(new punctuators.ParenRPunctuator);
 
   let needsBlock = node.alternate && t.isIfStatement(node.consequent);
   if (needsBlock) {
-    this.push("{");
+    this.push(new punctuators.CurlyLPunctuator);
     this.newline();
     this.indent();
   }
@@ -28,56 +29,53 @@ export function IfStatement(node: Object) {
   if (needsBlock) {
     this.dedent();
     this.newline();
-    this.push("}");
+    this.push(new punctuators.CurlyRPunctuator);
   }
 
   if (node.alternate) {
-    if (this.isLast("}")) this.space();
-    this.push("else ");
+    this.push(new keywords.ElseKeyword);
     this.printAndIndentOnComments(node.alternate, node);
   }
 }
 
 export function ForStatement(node: Object) {
-  this.keyword("for");
-  this.push("(");
+  this.push(new keywords.ForKeyword);
+  this.push(new punctuators.ParenLPunctuator);
 
   this._inForStatementInit = true;
   this.print(node.init, node);
   this._inForStatementInit = false;
-  this.push(";");
+  this.push(new punctuators.SemicolonPunctuator);
 
   if (node.test) {
-    this.space();
     this.print(node.test, node);
   }
-  this.push(";");
+  this.push(new punctuators.SemicolonPunctuator);
 
   if (node.update) {
-    this.space();
     this.print(node.update, node);
   }
 
-  this.push(")");
+  this.push(new punctuators.ParenRPunctuator);
   this.printBlock(node);
 }
 
 export function WhileStatement(node: Object) {
-  this.keyword("while");
-  this.push("(");
+  this.push(new keywords.WhileKeyword);
+  this.push(new punctuators.ParenLPunctuator);
   this.print(node.test, node);
-  this.push(")");
+  this.push(new punctuators.ParenRPunctuator);
   this.printBlock(node);
 }
 
 let buildForXStatement = function (op) {
   return function (node: Object) {
-    this.keyword("for");
-    this.push("(");
+    this.push(new keywords.ForKeyword);
+    this.push(new punctuators.ParenLPunctuator);
     this.print(node.left, node);
     this.push(` ${op} `);
     this.print(node.right, node);
-    this.push(")");
+    this.push(new punctuators.ParenRPunctuator);
     this.printBlock(node);
   };
 };
@@ -86,35 +84,31 @@ export let ForInStatement = buildForXStatement("in");
 export let ForOfStatement = buildForXStatement("of");
 
 export function DoWhileStatement(node: Object) {
-  this.push("do ");
+  this.push(new keywords.DoKeyword);
   this.print(node.body, node);
-  this.space();
-  this.keyword("while");
-  this.push("(");
+  this.push(new keywords.WhileKeyword);
+  this.push(new punctuators.ParenLPunctuator);
   this.print(node.test, node);
-  this.push(");");
+  this.push(new punctuators.ParenRPunctuator);
 }
 
-function buildLabelStatement(prefix, key = "label") {
+function buildLabelStatement(PrefixKeyword, key = "label") {
   return function (node: Object) {
-    this.push(prefix);
+    this.push(new PrefixKeyword);
 
     let label = node[key];
     if (label) {
-      this.push(" ");
-      let terminatorState = this.startTerminatorless();
       this.print(label, node);
-      this.endTerminatorless(terminatorState);
     }
 
-    this.semicolon();
+    this.push(new punctuators.SemicolonPunctuator);
   };
 }
 
-export let ContinueStatement = buildLabelStatement("continue");
-export let ReturnStatement   = buildLabelStatement("return", "argument");
-export let BreakStatement    = buildLabelStatement("break");
-export let ThrowStatement    = buildLabelStatement("throw", "argument");
+export let ContinueStatement = buildLabelStatement(keywords.ContinueKeyword);
+export let ReturnStatement   = buildLabelStatement(keywords.ReturnKeyword, "argument");
+export let BreakStatement    = buildLabelStatement(keywords.BreakKeyword);
+export let ThrowStatement    = buildLabelStatement(keywords.ThrowKeyword, "argument");
 
 export function LabeledStatement(node: Object) {
   this.print(node.label, node);
@@ -123,9 +117,8 @@ export function LabeledStatement(node: Object) {
 }
 
 export function TryStatement(node: Object) {
-  this.keyword("try");
+  this.push(new keywords.TryKeyword);
   this.print(node.block, node);
-  this.space();
 
   // Esprima bug puts the catch clause in a `handlers` array.
   // see https://code.google.com/p/esprima/issues/detail?id=433
@@ -137,27 +130,25 @@ export function TryStatement(node: Object) {
   }
 
   if (node.finalizer) {
-    this.space();
-    this.push("finally ");
+    this.push(new keywords.FinallyKeyword);
     this.print(node.finalizer, node);
   }
 }
 
 export function CatchClause(node: Object) {
-  this.keyword("catch");
-  this.push("(");
+  this.push(new keywords.CatchKeyword);
+  this.push(new punctuators.ParenLPunctuator);
   this.print(node.param, node);
-  this.push(") ");
+  this.push(new punctuators.ParenRPunctuator);
   this.print(node.body, node);
 }
 
 export function SwitchStatement(node: Object) {
-  this.keyword("switch");
-  this.push("(");
+  this.push(new keywords.SwitchKeyword);
+  this.push(new punctuators.ParenLPunctuator);
   this.print(node.discriminant, node);
-  this.push(")");
-  this.space();
-  this.push("{");
+  this.push(new punctuators.ParenRPunctuator);
+  this.push(new punctuators.CurlyLPunctuator);
 
   this.printSequence(node.cases, node, {
     indent: true,
@@ -166,16 +157,17 @@ export function SwitchStatement(node: Object) {
     }
   });
 
-  this.push("}");
+  this.push(new punctuators.CurlyRPunctuator);
 }
 
 export function SwitchCase(node: Object) {
   if (node.test) {
-    this.push("case ");
+    this.push(new keywords.CaseKeyword);
     this.print(node.test, node);
-    this.push(":");
+    this.push(new punctuators.ColonPunctuator);
   } else {
-    this.push("default:");
+    this.push(new keywords.DefaultKeyword);
+    this.push(new punctuators.ColonPunctuator);
   }
 
   if (node.consequent.length) {
@@ -189,7 +181,15 @@ export function DebuggerStatement() {
 }
 
 export function VariableDeclaration(node: Object, parent: Object) {
-  this.push(node.kind + " ");
+  if (node.kind === "let") {
+    this.push(new keywords.LetKeyword);
+  } else if (node.kind === "const") {
+    this.push(new keywords.ConstKeyword);
+  } else if (node.kind === "var") {
+    this.push(new keywords.VarKeyword);
+  } else {
+    throw new TypeError(`Unknown variable declaration kind ${JSON.stringify(node.kind)}`);
+  }
 
   let hasInits = false;
   // don't add whitespace to loop heads
@@ -228,16 +228,14 @@ export function VariableDeclaration(node: Object, parent: Object) {
     if (parent.left === node || parent.init === node) return;
   }
 
-  this.semicolon();
+  this.push(new punctuators.SemicolonPunctuator);
 }
 
 export function VariableDeclarator(node: Object) {
   this.print(node.id, node);
   this.print(node.id.typeAnnotation, node);
   if (node.init) {
-    this.space();
-    this.push("=");
-    this.space();
+    this.push(" = ");
     this.print(node.init, node);
   }
 }

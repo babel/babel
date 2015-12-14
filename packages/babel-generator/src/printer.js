@@ -1,3 +1,4 @@
+import * as punctuators from "./fragments/punctuators";
 import repeating from "repeating";
 import Buffer from "./buffer";
 import n from "./node";
@@ -36,11 +37,9 @@ export default class Printer extends Buffer {
     this.printAuxBeforeComment(oldInAux);
 
     let needsParens = n.needsParens(node, parent);
-    if (needsParens) this.push("(");
+    if (needsParens) this.push(new punctuators.ParenLPunctuator);
 
     this.printLeadingComments(node, parent);
-
-    this.catchUp(node);
 
     this._printNewline(true, node, parent, opts);
 
@@ -55,7 +54,7 @@ export default class Printer extends Buffer {
 
     this.printTrailingComments(node, parent);
 
-    if (needsParens) this.push(")");
+    if (needsParens) this.push(new punctuators.ParenRPunctuator);
 
     // end
     this.map.mark(node, "end");
@@ -104,8 +103,7 @@ export default class Printer extends Buffer {
     if (!this.format.minified) {
       let extra = this.getPossibleRaw(node);
       if (extra) {
-        this.push("");
-        this._push(extra);
+        this.push(extra);
         return;
       }
     }
@@ -258,8 +256,6 @@ export default class Printer extends Buffer {
       this.printedCommentStarts[comment.start] = true;
     }
 
-    this.catchUp(comment);
-
     // whitespace before
     this.newline(this.whitespace.getNewlinesBefore(comment));
 
@@ -267,12 +263,12 @@ export default class Printer extends Buffer {
     let val    = this.generateComment(comment);
 
     if (column && !this.isLast(["\n", " ", "[", "{"])) {
-      this._push(" ");
+      this.push(" ");
       column++;
     }
 
     //
-    if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
+    /*if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
       let offset = comment.loc && comment.loc.start.column;
       if (offset) {
         let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
@@ -285,7 +281,7 @@ export default class Printer extends Buffer {
 
     if (column === 0) {
       val = this.getIndent() + val;
-    }
+    }*/
 
     // force a newline for line comments when retainLines is set in case the next printed node
     // doesn't catch up
@@ -294,7 +290,7 @@ export default class Printer extends Buffer {
     }
 
     //
-    this._push(val);
+    this.push(val);
 
     // whitespace after
     this.newline(this.whitespace.getNewlinesAfter(comment));

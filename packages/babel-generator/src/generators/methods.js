@@ -1,17 +1,18 @@
 /* @flow */
 
+import * as punctuators from "../fragments/punctuators";
 import * as t from "babel-types";
 
 export function _params(node: Object) {
   this.print(node.typeParameters, node);
-  this.push("(");
+  this.push(new punctuators.ParenLPunctuator);
   this.printList(node.params, node, {
     iterator: (node) =>{
       if (node.optional) this.push("?");
       this.print(node.typeAnnotation, node);
     }
   });
-  this.push(")");
+  this.push(new punctuators.ParenRPunctuator);
 
   if (node.returnType) {
     this.print(node.returnType, node);

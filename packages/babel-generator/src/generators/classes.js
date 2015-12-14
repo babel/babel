@@ -1,5 +1,7 @@
 /* @flow */
 
+import * as punctuators from "../fragments/punctuators";
+
 export function ClassDeclaration(node: Object) {
   this.printJoin(node.decorators, node, { separator: "" });
   this.push("class");
@@ -40,7 +42,7 @@ export function ClassBody(node: Object) {
     this.printSequence(node.body, node);
     this.dedent();
 
-    this.rightBrace();
+    this.push(new punctuators.CurlyRPunctuator);
   }
 }
 
@@ -56,7 +58,7 @@ export function ClassProperty(node: Object) {
     this.space();
     this.print(node.value, node);
   }
-  this.semicolon();
+  this.push(new punctuators.SemicolonPunctuator);
 }
 
 export function ClassMethod(node: Object) {
