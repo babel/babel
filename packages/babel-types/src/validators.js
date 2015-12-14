@@ -2,6 +2,7 @@ import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";
 import * as t from "./index";
 import { BLOCK_SCOPED_SYMBOL } from "./constants";
+import * as util from "util";
 
 /**
  * Check if the input `node` is a binding identifier.
@@ -150,7 +151,11 @@ export function isReferenced(node: Object, parent: Object): boolean {
   return true;
 }
 
-export let isValidIdentifier = isSpecIdentifier;
+// [DEPRECATED].
+export let isValidIdentifier = util.deprecate(
+  isSpecIdentifier,
+  "babel-types: isValidIdentifier() is deprecated. Use isSpecIdentifier() instead."
+);
 
 /**
  * Is `name` an ES2015 strict mode Identifier?
