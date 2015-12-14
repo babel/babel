@@ -174,13 +174,14 @@ export function AssignmentExpression(node: Object, parent: Object) {
     // http://javascript.spec.whatwg.org/#comment-syntax
     spaces = node.operator === "<" &&
              t.isUnaryExpression(node.right, { prefix: true, operator: "!" }) &&
-             t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" }) ||
-             // Need spaces for operators of the same kind to avoid: `a+++b`
-             t.isUnaryExpression(node.right, { prefix: true, operator: node.operator }) ||
-             t.isUpdateExpression(node.right, { prefix: true, operator: node.operator + node.operator }) ||
-             (t.isBinaryExpression(node.right) &&
-               t.isUnaryExpression(getLeftMost(node.right), { prefix: true, operator: node.operator }));
+             t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" });
 
+    // Need spaces for operators of the same kind to avoid: `a+++b`
+    if (!spaces) {
+      let right = getLeftMost(node.right);
+      spaces = t.isUnaryExpression(right, { prefix: true, operator: node.operator }) ||
+               t.isUpdateExpression(right, { prefix: true, operator: node.operator + node.operator });
+    }
   }
 
   if (spaces) this.push(" ");
