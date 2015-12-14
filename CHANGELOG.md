@@ -13,6 +13,18 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.18
+
+ * **Bug Fix**
+  * `babylon`: [#3107](https://github.com/babel/babel/pull/3107) Fix incorrect directive parsing
+  * `babel-generator`: [#3158](https://github.com/babel/babel/pull/3158) Parenthesize object expression when it may end up at the start of an expression
+  * `babel-plugin-transform-regenerator`: [#3160](https://github.com/babel/babel/pull/3160) Fix typo
+
+ * **Polish**
+  * `babel-types`: [#2933](https://github.com/babel/babel/pull/2933) Generate documentation for babel-types.
+  * `babel-plugin-transform-es2015-parameter`: [#2833](https://github.com/babel/babel/pull/2833) Optimize `arguments` usage.
+  * `babel-messages`: [#3123](https://github.com/babel/babel/pull/3123) clarify `traverseNeedsParent` message.
+
 ## 6.3.17
 
  * **Bug Fix**
