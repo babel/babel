@@ -1,6 +1,6 @@
 "use strict";
 
-System.register([], function (_export) {
+System.register([], function (_export, __moduleName) {
   var test, a, b, d;
   return {
     setters: [],

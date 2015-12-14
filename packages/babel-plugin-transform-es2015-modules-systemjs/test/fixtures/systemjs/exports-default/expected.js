@@ -1,6 +1,6 @@
 "use strict";
 
-System.register([], function (_export) {
+System.register([], function (_export, __moduleName) {
   _export("default", function () {});
 
   _export("default", class {});

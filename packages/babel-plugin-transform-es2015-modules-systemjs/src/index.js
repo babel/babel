@@ -2,7 +2,7 @@ import hoistVariables from "babel-helper-hoist-variables";
 import template from "babel-template";
 
 let buildTemplate = template(`
-  System.register(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER) {
+  System.register(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, __moduleName) {
     BEFORE_BODY;
     return {
       setters: [SETTERS],

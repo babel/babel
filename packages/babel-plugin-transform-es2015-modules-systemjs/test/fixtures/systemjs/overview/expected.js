@@ -1,6 +1,6 @@
 "use strict";
 
-System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export) {
+System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export, __moduleName) {
   var foo, foo2, bar, bar2, test2;
   return {
     setters: [function (_foo) {
