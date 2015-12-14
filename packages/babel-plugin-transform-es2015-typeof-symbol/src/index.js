@@ -16,7 +16,7 @@ export default function ({ types: t }) {
           }
         }
 
-        if (node.operator === "typeof") {
+        if (node.operator === "typeof" && !node._fromBabelNative) {
           let call = t.callExpression(this.addHelper("typeof"), [node.argument]);
           if (path.get("argument").isIdentifier()) {
             let undefLiteral = t.stringLiteral("undefined");
