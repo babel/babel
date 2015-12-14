@@ -15,6 +15,10 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## Unreleased
 
+  * **New Feature**
+
+    * `babel-types`: Add `isSpecIdentifierName()`.
+
   * **Internal**
 
     * `babel-types`: Start test suite.

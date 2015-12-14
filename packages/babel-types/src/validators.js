@@ -164,6 +164,17 @@ export function isValidIdentifier(name: string): boolean {
 }
 
 /**
+ * Is `name` an ES2015 IdentifierName?
+ */
+
+export function isSpecIdentifierName(name: string): boolean {
+  return (
+    typeof name === "string" &&
+    esutils.keyword.isIdentifierNameES6(name)
+  );
+}
+
+/**
  * Check if the input `node` is a `let` variable declaration.
  */
 
