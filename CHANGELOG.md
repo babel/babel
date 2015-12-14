@@ -19,6 +19,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
     * `babel-types`: Add `isSpecIdentifierName()`.
 
+    * `babel-types`: Implement validation for `name` field in `Identifier` builder. It's limited to validating that it's a `spec.IdentifierName` since `ast.Identifier` is used to represent those as well. So in cases where the value must be a `spec.Identifier`, this validation will fail to error.
+
   * **Internal**
 
     * `babel-types`: Start test suite.

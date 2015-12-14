@@ -304,8 +304,8 @@ defineType("Identifier", {
   fields: {
     name: {
       validate(node, key, val) {
-        if (!t.isValidIdentifier(val)) {
-          // todo
+        if (!t.isSpecIdentifierName(val)) {
+          throw new TypeError(`Property "${key}" of ${node.type} failed validation with value: ${JSON.stringify(val)}. Expected true for t.isSpecIdentifierName().`);
         }
       }
     }
