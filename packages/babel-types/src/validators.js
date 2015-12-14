@@ -150,17 +150,18 @@ export function isReferenced(node: Object, parent: Object): boolean {
   return true;
 }
 
+export let isValidIdentifier = isSpecIdentifier;
+
 /**
- * Check if the input `name` is a valid identifier name
- * and isn't a reserved word.
+ * Is `name` an ES2015 strict mode Identifier?
+ * (IdentifierName that isn't a ReservedWord.)
  */
 
-export function isValidIdentifier(name: string): boolean {
-  if (typeof name !== "string" || esutils.keyword.isReservedWordES6(name, true)) {
-    return false;
-  } else {
-    return esutils.keyword.isIdentifierNameES6(name);
-  }
+export function isSpecIdentifier(name: string): boolean {
+  return (
+    typeof name === "string" &&
+    esutils.keyword.isIdentifierES6(name, true)
+  );
 }
 
 /**
