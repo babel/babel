@@ -9,3 +9,10 @@ function t(f, ...items) {
     x = items[0];
     x = items[1];
 }
+
+function u(f, g, ...items) {
+    var x = f;
+    var y = g;
+    x = items[0];
+    y = items[1];
+}

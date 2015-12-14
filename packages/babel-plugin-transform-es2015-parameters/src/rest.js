@@ -121,7 +121,7 @@ export let visitor = {
     argsId._shadowedFunctionLiteral = path;
 
     function optimiseCandidate(parent, parentPath, offset) {
-      if (t.isReturnStatement(parentPath.parent) || t.isIdentifier(parentPath.parent.id)) {
+      if (t.isReturnStatement(parentPath.parent) || t.isIdentifier(parentPath.parent.id) || t.isIdentifier(parentPath.parent.left)) {
         parentPath.replaceWith(loadRest({
           ARGUMENTS: argsId,
           INDEX: t.numericLiteral(parent.property.value + offset)
