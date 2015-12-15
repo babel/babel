@@ -4,7 +4,7 @@ export default function ({ types: t }) {
       ObjectProperty: {
         exit({node}) {
           let key = node.key;
-          if (!node.computed && t.isIdentifier(key) && !t.isValidIdentifier(key.name)) {
+          if (!node.computed && t.isIdentifier(key) && !t.isSpecIdentifier(key.name)) {
             // default: "bar" -> "default": "bar"
             node.key = t.stringLiteral(key.name);
           }

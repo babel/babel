@@ -32,6 +32,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
     * `babel-types`: Start test suite.
 
+    * Replace deprecated calls: `t.isValidIdentifier() => t.isSpecIdentifier()`.
+
 ## 6.4.3 (2016-01-13)
 
 * **Bug Fix**

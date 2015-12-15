@@ -47,7 +47,7 @@ export default function ({ types: t }) {
             key = getAttributeValue(attr);
           } else {
             let name = attr.name.name;
-            let propertyKey = t.isValidIdentifier(name) ? t.identifier(name) : t.stringLiteral(name);
+            let propertyKey = t.isSpecIdentifier(name) ? t.identifier(name) : t.stringLiteral(name);
             pushProp(props.properties, propertyKey, getAttributeValue(attr));
           }
         }

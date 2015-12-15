@@ -147,7 +147,7 @@ export function toIdentifier(name: string): string {
     return c ? c.toUpperCase() : "";
   });
 
-  if (!t.isValidIdentifier(name)) {
+  if (!t.isSpecIdentifier(name)) {
     name = `_${name}`;
   }
 
@@ -285,7 +285,7 @@ export function valueToNode(value: any): Object {
     let props = [];
     for (let key in value) {
       let nodeKey;
-      if (t.isValidIdentifier(key)) {
+      if (t.isSpecIdentifier(key)) {
         nodeKey = t.identifier(key);
       } else {
         nodeKey = t.stringLiteral(key);
