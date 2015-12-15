@@ -21,4 +21,24 @@ suite("Validators", function () {
       );
     });
   });
+
+  test("isSpecIdentifierName()", function () {
+    var fixtures = require("./fixtures/identifier-name");
+
+    fixtures.forEach(function (fixture) {
+      var value = fixture[0];
+      var isValid = fixture[1];
+
+      assert.equal(
+        t.isSpecIdentifierName(value),
+        isValid,
+        (
+          "Expected t.isSpecIdentifierName(" +
+          JSON.stringify(value) +
+          ") === " +
+          JSON.stringify(isValid)
+        )
+      );
+    });
+  });
 });
