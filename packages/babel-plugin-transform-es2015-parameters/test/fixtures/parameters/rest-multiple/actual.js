@@ -13,6 +13,7 @@ function t(f, ...items) {
 function u(f, g, ...items) {
     var x = f;
     var y = g;
-    x = items[0];
-    y = items[1];
+    x[12] = items[0];
+    y.prop = items[1];
+    var z = items[2] | 0 || 12;
 }

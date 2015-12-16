@@ -121,23 +121,11 @@ export let visitor = {
     argsId._shadowedFunctionLiteral = path;
 
     function optimiseCandidate(parent, parentPath, offset) {
-      if (t.isReturnStatement(parentPath.parent) || t.isIdentifier(parentPath.parent.id) || t.isIdentifier(parentPath.parent.left)) {
+      if (parent.property) {
         parentPath.replaceWith(loadRest({
           ARGUMENTS: argsId,
           INDEX: t.numericLiteral(parent.property.value + offset)
         }));
-      } else {
-        if (offset === 0) return;
-        let newExpr;
-        let prop = parent.property;
-
-        if (t.isLiteral(prop)) {
-          prop.value += offset;
-          prop.raw = String(prop.value);
-        } else { // UnaryExpression, BinaryExpression
-          newExpr = t.binaryExpression("+", prop, t.numericLiteral(offset));
-          parent.property = newExpr;
-        }
       }
     }
 
