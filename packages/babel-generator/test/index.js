@@ -19,7 +19,8 @@ suite("generation", function () {
 
   test("valid code", function() {
     // Should not generate `0.foo`
-    new Function(generate.default(t.memberExpression(t.numericLiteral(60702), t.identifier("foo"))).code);
+    var mem = t.memberExpression(t.numericLiteral(60702), t.identifier("foo"));
+    new Function(generate.default(mem).code);
   });
 });
 
