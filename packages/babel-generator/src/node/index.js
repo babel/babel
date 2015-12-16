@@ -1,7 +1,6 @@
 import whitespace from "./whitespace";
 import * as parens from "./parentheses";
 import each from "lodash/collection/each";
-import some from "lodash/collection/some";
 import * as t from "babel-types";
 
 function find(obj, node, parent) {
@@ -20,6 +19,19 @@ function find(obj, node, parent) {
   }
 
   return result;
+}
+
+function isOrHasCallExpression(node) {
+  if (t.isCallExpression(node)) {
+    return true;
+  }
+
+  if (t.isMemberExpression(node)) {
+    return isOrHasCallExpression(node.object) ||
+      (!node.computed && isOrHasCallExpression(node.property));
+  } else {
+    return false;
+  }
 }
 
 export default class Node {
@@ -69,12 +81,7 @@ export default class Node {
     if (!parent) return false;
 
     if (t.isNewExpression(parent) && parent.callee === node) {
-      if (t.isCallExpression(node)) return true;
-
-      let hasCall = some(node, function (val) {
-        return t.isCallExpression(val);
-      });
-      if (hasCall) return true;
+      if (isOrHasCallExpression(node)) return true;
     }
 
     return find(parens, node, parent);

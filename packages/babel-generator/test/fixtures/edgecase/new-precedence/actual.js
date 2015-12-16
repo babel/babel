@@ -7,3 +7,6 @@ new (new a())(a);
 (new a()).test;
 (new a().test);
 (new (a().test)());
+new (a().b.c)();
+new a().b.c();
+new (a.b().c.d)();
