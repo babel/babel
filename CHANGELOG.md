@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.20
+
+ * **Bug Fix**
+  * `babel-generator`: [#3170](https://github.com/babel/babel/pull/3170) Fix invalid code generation for numeric `MemberExpression` (`5.toString()` -> `5..toString()`).
+  * `babel-types`: [#3172](https://github.com/babel/babel/pull/3172) Add `Expression` alias to `BindExpression`.
+
 ## 6.3.19
 
  * **New Feature**
