@@ -16,6 +16,12 @@ suite("generation", function () {
       assert.ok(t.VISITOR_KEYS[type], type + " should not exist");
     });
   });
+
+  test("valid code", function() {
+    // Should not generate `0.foo`
+    var mem = t.memberExpression(t.numericLiteral(60702), t.identifier("foo"));
+    new Function(generate.default(mem).code);
+  });
 });
 
 var suites = require("babel-helper-fixtures").default(__dirname + "/fixtures");
