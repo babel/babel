@@ -1,5 +1,6 @@
 /* @flow */
 
+import * as punctuators from "../fragments/punctuators";
 import * as t from "babel-types";
 
 export function ImportSpecifier(node: Object) {
@@ -39,7 +40,7 @@ export function ExportAllDeclaration(node: Object) {
   }
   this.push(" from ");
   this.print(node.source, node);
-  this.semicolon();
+  this.push(new punctuators.SemicolonPunctuator);
 }
 
 export function ExportNamedDeclaration() {
@@ -132,7 +133,7 @@ export function ImportDeclaration(node: Object) {
   }
 
   this.print(node.source, node);
-  this.semicolon();
+  this.push(new punctuators.SemicolonPunctuator);
 }
 
 export function ImportNamespaceSpecifier(node: Object) {

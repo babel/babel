@@ -1,5 +1,7 @@
 /* @flow */
 
+import * as punctuators from "../fragments/punctuators";
+import * as keywords from "../fragments/keywords";
 import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";
 import * as t from "babel-types";
@@ -32,9 +34,9 @@ export function DoExpression(node: Object) {
 }
 
 export function ParenthesizedExpression(node: Object) {
-  this.push("(");
+  this.push(new punctuators.ParenLPunctuator);
   this.print(node.expression, node);
-  this.push(")");
+  this.push(new punctuators.ParenRPunctuator);
 }
 
 export function UpdateExpression(node: Object) {
@@ -60,16 +62,16 @@ export function ConditionalExpression(node: Object) {
 }
 
 export function NewExpression(node: Object, parent: Object) {
-  this.push("new ");
+  this.push(new keywords.NewKeyword);
   this.print(node.callee, node);
   if (node.arguments.length === 0 && this.format.minified &&
       !t.isCallExpression(parent, { callee: node }) &&
       !t.isMemberExpression(parent) &&
       !t.isNewExpression(parent)) return;
 
-  this.push("(");
+  this.push(new punctuators.ParenLPunctuator);
   this.printList(node.arguments, node);
-  this.push(")");
+  this.push(new punctuators.ParenRPunctuator);
 }
 
 export function SequenceExpression(node: Object) {
@@ -93,30 +95,28 @@ export function Decorator(node: Object) {
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
 
-  this.push("(");
+  this.push(new punctuators.ParenLPunctuator);
 
   let isPrettyCall = node._prettyCall && !this.format.retainLines && !this.format.compact;
 
   let separator;
   if (isPrettyCall) {
     separator = ",\n";
-    this.newline();
     this.indent();
   }
 
   this.printList(node.arguments, node, { separator });
 
   if (isPrettyCall) {
-    this.newline();
     this.dedent();
   }
 
-  this.push(")");
+  this.push(new punctuators.ParenRPunctuator);
 }
 
-function buildYieldAwait(keyword: string) {
+function buildYieldAwait(Keyword) {
   return function (node: Object) {
-    this.push(keyword);
+    this.push(new Keyword);
 
     if (node.delegate || node.all) {
       this.push("*");
@@ -124,24 +124,22 @@ function buildYieldAwait(keyword: string) {
 
     if (node.argument) {
       this.push(" ");
-      let terminatorState = this.startTerminatorless();
       this.print(node.argument, node);
-      this.endTerminatorless(terminatorState);
     }
   };
 }
 
-export let YieldExpression = buildYieldAwait("yield");
-export let AwaitExpression = buildYieldAwait("await");
+export let YieldExpression = buildYieldAwait(keywords.YieldKeyword);
+export let AwaitExpression = buildYieldAwait(keywords.AwaitKeyword);
 
 export function EmptyStatement() {
   this._lastPrintedIsEmptyStatement = true;
-  this.semicolon();
+  this.push(new punctuators.SemicolonPunctuator);
 }
 
 export function ExpressionStatement(node: Object) {
   this.print(node.expression, node);
-  this.semicolon();
+  this.push(new punctuators.SemicolonPunctuator);
 }
 
 export function AssignmentPattern(node: Object) {
@@ -207,19 +205,15 @@ export {
 export function MemberExpression(node: Object) {
   this.print(node.object, node);
 
-  if (!node.computed && t.isMemberExpression(node.property)) {
-    throw new TypeError("Got a MemberExpression for MemberExpression property");
-  }
-
   let computed = node.computed;
   if (t.isLiteral(node.property) && isNumber(node.property.value)) {
     computed = true;
   }
 
   if (computed) {
-    this.push("[");
+    this.push(new punctuators.BracketLPunctuator);
     this.print(node.property, node);
-    this.push("]");
+    this.push(new punctuators.BracketRPunctuator);
   } else {
     if (t.isLiteral(node.object) && !t.isTemplateLiteral(node.object)) {
       let val;
@@ -229,19 +223,19 @@ export function MemberExpression(node: Object) {
         val = this.getPossibleRaw(node.object) || this._stringLiteral(node.object);
       }
 
-      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !ZERO_DECIMAL_INTEGER.test(val) && !this.endsWith(".")) {
-        this.push(".");
-      }
+      //if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !ZERO_DECIMAL_INTEGER.test(val) && !this.endsWith(".")) {
+      //  this.push(".");
+      //}
     }
 
-    this.push(".");
+    this.push(new punctuators.DotPunctuator);
     this.print(node.property, node);
   }
 }
 
 export function MetaProperty(node: Object) {
   this.print(node.meta, node);
-  this.push(".");
+  this.push(new punctuators.DotPunctuator);
   this.print(node.property, node);
 }
 
