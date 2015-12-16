@@ -1,8 +1,8 @@
 {
-  "name": "babel-plugin-flow-comments",
+  "name": "babel-plugin-transform-flow-comments",
   "version": "6.3.19",
   "description": "Turn flow type annotations into comments",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-flow-comments",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-flow-comments",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
