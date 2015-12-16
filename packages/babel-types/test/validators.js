@@ -2,43 +2,49 @@ var t = require("../lib");
 var assert = require("assert");
 
 suite("Validators", function () {
-  test("isValidIdentifier()", function () {
-    var fixtures = require("./fixtures/identifier");
+  suite("Identifiers", function () {
+    var tests = [
+      {
+        method: "isValidIdentifier",
+        fixtures: "./fixtures/identifier",
+      },
 
-    fixtures.forEach(function (fixture) {
-      var value = fixture[0];
-      var isValid = fixture[1];
+      {
+        method: "isSpecIdentifier",
+        fixtures: "./fixtures/identifier",
+      },
 
-      assert.equal(
-        t.isValidIdentifier(value),
-        isValid,
-        (
-          "Expected t.isValidIdentifier(" +
-          JSON.stringify(value) +
-          ") === " +
-          JSON.stringify(isValid)
-        )
-      );
+      {
+        method: "isSpecIdentifierName",
+        fixtures: "./fixtures/identifier-name",
+      },
+    ];
+
+    tests.forEach(function (testCfg) {
+      test(testCfg.method + "()", function () {
+        var fixtures = require(testCfg.fixtures);
+
+        fixtures.forEach(function (fixture) {
+          var value = fixture[0];
+          var isValid = fixture[1];
+
+          assert.equal(
+            t[testCfg.method](value),
+            isValid,
+            (
+              "Expected t." +
+              testCfg.method +
+              "(" +
+              JSON.stringify(value) +
+              ") === " +
+              JSON.stringify(isValid)
+            )
+          );
+        });
+      });
+      // test
     });
   });
-
-  test("isSpecIdentifierName()", function () {
-    var fixtures = require("./fixtures/identifier-name");
-
-    fixtures.forEach(function (fixture) {
-      var value = fixture[0];
-      var isValid = fixture[1];
-
-      assert.equal(
-        t.isSpecIdentifierName(value),
-        isValid,
-        (
-          "Expected t.isSpecIdentifierName(" +
-          JSON.stringify(value) +
-          ") === " +
-          JSON.stringify(isValid)
-        )
-      );
-    });
-  });
+  // suite("Identifiers")
 });
+// suite("Validators")
