@@ -1,4 +1,4 @@
-/* @flow */
+/* @noflow */
 
 import normalizeAst from "../helpers/normalize-ast";
 import File from "./file";
