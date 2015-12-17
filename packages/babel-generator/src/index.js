@@ -34,7 +34,7 @@ export class CodeGenerator extends Printer {
   }
 
   format: {
-    shouldPrintComment: boolean;
+    shouldPrintComment: (comment: string) => boolean;
     retainLines: boolean;
     comments: boolean;
     auxiliaryCommentBefore: string;
