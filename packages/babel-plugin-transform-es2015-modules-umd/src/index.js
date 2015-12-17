@@ -47,6 +47,7 @@ export default function ({ types: t }) {
           let moduleName = args.length === 3 ? args.shift() : null;
           let amdArgs = call.arguments[0];
           let func = call.arguments[1];
+          let browserGlobals = arguments[1].opts && arguments[1].opts.browserGlobals || {};
 
           let commonArgs = amdArgs.elements.map((arg) => {
             if (arg.value === "module" || arg.value === "exports") {
@@ -62,9 +63,8 @@ export default function ({ types: t }) {
             } else if (arg.value === "exports") {
               return t.memberExpression(t.identifier("mod"), t.identifier("exports"));
             } else {
-              return t.memberExpression(t.identifier("global"), t.identifier(
-                t.toIdentifier(basename(arg.value, extname(arg.value)))
-              ));
+              let identifier = _path.basename(arg.value, _path.extname(arg.value));
+              return t.memberExpression(t.identifier("global"), browserGlobals[identifier] ? t.identifier(t.toIdentifier(browserGlobals[identifier])) : t.identifier(t.toIdentifier(identifier)));
             }
           });
 
