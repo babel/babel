@@ -1,3 +1,5 @@
+/* @noflow */
+
 import OptionManager from "./file/options/option-manager"
 import * as messages from "babel-messages";
 import Store from "../store";

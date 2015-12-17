@@ -1,3 +1,5 @@
+/* @noflow */
+
 import whitespace from "./whitespace";
 import * as parens from "./parentheses";
 import each from "lodash/collection/each";

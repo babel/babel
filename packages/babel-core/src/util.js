@@ -1,3 +1,5 @@
+/* @noflow */
+
 import escapeRegExp from "lodash/string/escapeRegExp";
 import startsWith from "lodash/string/startsWith";
 import isBoolean from "lodash/lang/isBoolean";

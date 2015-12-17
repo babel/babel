@@ -1,3 +1,5 @@
+/* @noflow */
+
 import toFastProperties from "to-fast-properties";
 import compact from "lodash/array/compact";
 import loClone from "lodash/lang/clone";
