@@ -1,4 +1,3 @@
-import * as t from "babel-types";
 import nameFunction from "babel-helper-function-name";
 
 export default function () {
@@ -13,25 +12,11 @@ export default function () {
         }
       },
 
-      ObjectExpression(path) {
-        let props: Array<Object> = path.get("properties");
-
-        for (let prop of props) {
-          if (prop.isObjectMethod({ kind: "method", computed: false })) {
-            let node = prop.node;
-            prop.replaceWith(t.objectProperty(
-              node.key,
-              t.functionExpression(null, node.params, node.body, node.generator, node.async)
-            ));
-          }
-
-          if (prop.isObjectProperty()) {
-            let value = prop.get("value");
-            if (value.isFunction()) {
-              let newNode = nameFunction(value);
-              if (newNode) value.replaceWith(newNode);
-            }
-          }
+      ObjectProperty(path) {
+        let value = path.get("value");
+        if (value.isFunction()) {
+          let newNode = nameFunction(value);
+          if (newNode) value.replaceWith(newNode);
         }
       }
     }
