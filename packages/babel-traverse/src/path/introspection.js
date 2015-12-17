@@ -235,7 +235,9 @@ export function _guessExecutionStatusRelativeTo(target) {
   let targetFuncParent = target.scope.getFunctionParent();
   let selfFuncParent = this.scope.getFunctionParent();
 
-  if (targetFuncParent !== selfFuncParent) {
+  // here we check the `node` equality as sometimes we may have different paths for the
+  // same node due to path thrashing
+  if (targetFuncParent.node !== selfFuncParent.node) {
     let status = this._guessExecutionStatusRelativeToDifferentFunctions(targetFuncParent);
     if (status) {
       return status;
