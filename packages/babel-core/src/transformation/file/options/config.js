@@ -92,7 +92,7 @@ module.exports = {
   comments: {
     type: "boolean",
     default: true,
-    description: "strip/output comments in generated output (on by default)"
+    description: "write comments to generated output (true by default)"
   },
 
   shouldPrintComment: {
