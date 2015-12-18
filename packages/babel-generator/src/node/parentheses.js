@@ -191,6 +191,10 @@ export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
+  if (t.isBinaryExpression(parent) || t.isLogicalExpression(parent)) {
+    return true;
+  }
+
   return UnaryLike(node, parent);
 }
 
