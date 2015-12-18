@@ -464,7 +464,7 @@ pp.parseBlockBody = function (node, allowDirectives, topLevel, end) {
       let directive = this.stmtToDirective(stmt);
       node.directives.push(directive);
 
-      if (directive.value.value === "use strict") {
+      if (oldStrict === undefined && directive.value.value === "use strict") {
         oldStrict = this.state.strict;
         this.setStrict(true);
 
