@@ -1,3 +1,5 @@
+/* @flow */
+
 import * as t from "./index";
 
 /**
@@ -19,7 +21,7 @@ export function createUnionTypeAnnotation(types: Array<Object>) {
  * Dedupe type annotations.
  */
 
-export function removeTypeDuplicates(nodes: Array<Object>) {
+export function removeTypeDuplicates(nodes: Array<Object>): Array<Object> {
   let generics = {};
   let bases = {};
 

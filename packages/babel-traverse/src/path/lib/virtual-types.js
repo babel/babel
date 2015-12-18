@@ -28,14 +28,14 @@ export let ReferencedMemberExpression = {
 
 export let BindingIdentifier = {
   types: ["Identifier"],
-  checkPath({ node, parent } /*: NodePath */): boolean {
+  checkPath({ node, parent }: NodePath): boolean {
     return t.isIdentifier(node) && t.isBinding(node, parent);
   }
 };
 
 export let Statement = {
   types: ["Statement"],
-  checkPath({ node, parent } /*: NodePath */): boolean {
+  checkPath({ node, parent }: NodePath): boolean {
     if (t.isStatement(node)) {
       if (t.isVariableDeclaration(node)) {
         if (t.isForXStatement(parent, { left: node })) return false;
@@ -106,7 +106,7 @@ export let Pure = {
 
 export let Flow = {
   types: ["Flow", "ImportDeclaration", "ExportDeclaration"],
-  checkPath({ node } /*: NodePath */): boolean {
+  checkPath({ node }: NodePath): boolean {
     if (t.isFlow(node)) {
       return true;
     } else if (t.isImportDeclaration(node)) {

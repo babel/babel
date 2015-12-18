@@ -1,3 +1,5 @@
+/* @flow */
+
 import type Position from "./position";
 import repeating from "repeating";
 import trimRight from "trim-right";
@@ -21,17 +23,19 @@ export default class Buffer {
     this.last = "";
   }
 
+  printedCommentStarts: Object;
   parenPushNewlineState: ?Object;
-  buf: string;
   position: Position;
   _indent: number;
   format: Object;
+  buf: string;
+  last: string;
 
   /**
    * Description
    */
 
-  catchUp(node) {
+  catchUp(node: Object) {
     // catch up to this nodes newline if we're behind
     if (node.loc && this.format.retainLines && this.buf) {
       while (this.position.line < node.loc.start.line) {
@@ -44,7 +48,7 @@ export default class Buffer {
    * Get the current trimmed buffer.
    */
 
-  get() {
+  get(): string {
     return trimRight(this.buf);
   }
 
@@ -52,7 +56,7 @@ export default class Buffer {
    * Get the current indent.
    */
 
-  getIndent() {
+  getIndent(): string {
     if (this.format.compact || this.format.concise) {
       return "";
     } else {
@@ -64,7 +68,7 @@ export default class Buffer {
    * Get the current indent size.
    */
 
-  indentSize() {
+  indentSize(): number {
     return this.getIndent().length;
   }
 
@@ -222,7 +226,7 @@ export default class Buffer {
 
   _removeSpacesAfterLastNewline() {
     let lastNewlineIndex = this.buf.lastIndexOf("\n");
-    if (lastNewlineIndex >= 0 && this.buf.trimRight().length <= lastNewlineIndex) {
+    if (lastNewlineIndex >= 0 && this.get().length <= lastNewlineIndex) {
       this.buf = this.buf.substring(0, lastNewlineIndex + 1);
       this.last = "\n";
     }
@@ -251,7 +255,7 @@ export default class Buffer {
    * Push a string to the buffer.
    */
 
-  _push(str) {
+  _push(str: string): void {
     // see startTerminatorless() instance method
     let parenPushNewlineState = this.parenPushNewlineState;
     if (parenPushNewlineState) {
@@ -296,12 +300,12 @@ export default class Buffer {
    * Test if a character is last in the buffer.
    */
 
-  isLast(cha: string) {
+  isLast(cha: string): boolean {
     if (this.format.compact) return false;
     return this._isLast(cha);
   }
 
-  _isLast(cha: string) {
+  _isLast(cha: string): boolean {
     let last = this.last;
 
     if (Array.isArray(cha)) {

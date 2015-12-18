@@ -1,4 +1,5 @@
 [ignore]
+.*/packages/.*/lib
 
 [include]
 
@@ -10,6 +11,7 @@ lib/types.js
 [options]
 strip_root=true
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+suppress_comment= \\(.\\|\n\\)*\\$FlowIssue
 
 [version]
-0.20.1
+0.21.0
