@@ -52,19 +52,34 @@ let memberExpressionOptimisationVisitor = {
     if (state.noOptimise) {
       state.deopted = true;
     } else {
-      if (path.parentPath.isMemberExpression({ computed: true, object: node })) {
-        // if we know that this member expression is referencing a number then we can safely
-        // optimise it
-        let prop = path.parentPath.get("property");
+      let {parentPath} = path;
+
+      // ex: args[0]
+      if (parentPath.isMemberExpression({ computed: true, object: node })) {
+        // if we know that this member expression is referencing a number then
+        // we can safely optimise it
+        let prop = parentPath.get("property");
         if (prop.isBaseType("number")) {
           state.candidates.push(path);
           return;
         }
       }
 
+      // ex: args.length
+      if (parentPath.isMemberExpression({ computed: false, object: node })) {
+        let prop = parentPath.get("property");
+        if (prop.node.name === "length") {
+          state.candidates.push(path);
+          return;
+        }
+      }
+
+      // we can only do these optimizations if the rest variable would match
+      // the arguments exactly
       // optimise single spread args in calls
-      if (path.parentPath.isSpreadElement() && state.offset === 0) {
-        let call = path.parentPath.parentPath;
+      // ex: fn(...args)
+      if (state.offset === 0 && parentPath.isSpreadElement()) {
+        let call = parentPath.parentPath;
         if (call.isCallExpression() && call.node.arguments.length === 1) {
           state.candidates.push(path);
           return;

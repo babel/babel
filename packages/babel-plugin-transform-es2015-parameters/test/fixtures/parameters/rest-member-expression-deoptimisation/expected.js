@@ -53,3 +53,11 @@ var b = function (foo) {
 
   return bar[join];
 };
+
+var b = function () {
+  for (var _len7 = arguments.length, bar = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+    bar[_key7] = arguments[_key7];
+  }
+
+  return bar.len;
+};
