@@ -16,7 +16,7 @@ export function IfStatement(node: Object) {
   this.push(")");
   this.space();
 
-  let needsBlock = node.alternate && t.isIfStatement(node.consequent);
+  let needsBlock = node.alternate && t.isIfStatement(getLastStatement(node.consequent));
   if (needsBlock) {
     this.push("{");
     this.newline();
@@ -36,6 +36,12 @@ export function IfStatement(node: Object) {
     this.push("else ");
     this.printAndIndentOnComments(node.alternate, node);
   }
+}
+
+// Recursively get the last statement.
+function getLastStatement(statement) {
+  if (!t.isStatement(statement.body)) return statement;
+  return getLastStatement(statement.body);
 }
 
 export function ForStatement(node: Object) {
