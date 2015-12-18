@@ -330,7 +330,7 @@ export default function () {
                       ]));
                     }
                   }
-                  remaps[specifier.local.name] = t.memberExpression(target, specifier.imported);
+                  remaps[specifier.local.name] = t.memberExpression(target, t.cloneWithoutLoc(specifier.imported));
                 }
               }
             } else {
