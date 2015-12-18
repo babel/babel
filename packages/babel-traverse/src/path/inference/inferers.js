@@ -112,7 +112,7 @@ export function BooleanLiteral() {
 }
 
 export function NullLiteral() {
-  return t.voidTypeAnnotation();
+  return t.nullLiteralTypeAnnotation();
 }
 
 export function RegExpLiteral() {
