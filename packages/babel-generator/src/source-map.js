@@ -40,7 +40,7 @@ export default class SourceMap {
    * Mark a node's generated position, and add it to the sourcemap.
    */
 
-  mark(node, type) {
+  mark(node) {
     let loc = node.loc;
     if (!loc) return; // no location info
 
@@ -56,7 +56,7 @@ export default class SourceMap {
       column: position.column
     };
 
-    let original = loc[type];
+    let original = loc.start;
 
     // Avoid emitting duplicates on either side. Duplicated
     // original values creates unnecesssarily large source maps
