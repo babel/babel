@@ -30,7 +30,7 @@ defineType("BooleanLiteralTypeAnnotation", {
 });
 
 defineType("NullLiteralTypeAnnotation", {
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowBaseAnnotation"],
   fields: {}
 });
 
