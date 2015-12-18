@@ -182,12 +182,21 @@ export function FunctionExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
-  return ArrowFunctionExpression(node, parent);
+  // export default (function () {});
+  if (t.isExportDeclaration(parent)) {
+    return true;
+  }
+
+  return UnaryLike(node, parent);
 }
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
   // export default (function () {});
   if (t.isExportDeclaration(parent)) {
+    return true;
+  }
+
+  if (t.isBinaryExpression(parent) || t.isLogicalExpression(parent)) {
     return true;
   }
 
