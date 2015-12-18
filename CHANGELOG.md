@@ -13,6 +13,30 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.22-6.3.23
+
+ > Skipped 6.3.22.
+
+* **Breaking Change**
+ * Renamed the `Flow Comments` plugin from `babel-plugin-flow-comments` to `babel-plugin-transform-flow-comments` for naming consistency.
+
+## 6.3.21
+
+ * **Bug Fix**
+  * `babel-generator`: [#3173](https://github.com/babel/babel/pull/3173) Fix unhandled new-precedence edge cases regarding parentheses (fixes [T6829](https://phabricator.babeljs.io/T6829)).
+  * `babel-generator`: [#3180](https://github.com/babel/babel/pull/3180) Handle nested `IfStatement` with an `alternate.
+  * `babel-generator`: [#3182](https://github.com/babel/babel/pull/3182) Parenthesize `ArrowFunctionExpression` when part of a `LogicalExpression` or `BinaryExpression` (fixes [T6836](https://phabricator.babeljs.io/T6836)).
+  * `babel-traverse`: [#3171](https://github.com/babel/babel/pull/3171) Fix infinite recursion bug with `introspection` method.
+  * `transform-es2015-function-name`: [#3176](https://github.com/babel/babel/pull/3176) Stop transforming `ObjectMethod` (`MethodDefinition`) to a `FunctionExpression` since the `transform-es2015-shorthand-properties` plugin already does it.
+  * `transform-es2015-parameters`: [#3143](https://github.com/babel/babel/pull/3143) Optimizations for `RestElement` such as using `arguments.length` (fixes [T6774](https://phabricator.babeljs.io/T6774)).
+ 
+ * **Documentation**
+  * `babel-core`: [#3177](https://github.com/babel/babel/pull/3177) Clarify description of `comments` file config.
+
+ * **Internal**
+  * `*`: [#3179](https://github.com/babel/babel/pull/3179) Update flow to 0.20.0 and add `@noflow` until types are added in.
+  * `babel-generator`: [#3178](https://github.com/babel/babel/pull/3178) Fix type annotation for `shouldPrintComment`.
+
 ## 6.3.20
 
  * **Bug Fix**
