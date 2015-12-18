@@ -1,4 +1,4 @@
-/* @noflow */
+/* @flow */
 
 import { reservedWords } from "../util/identifier";
 import { getOptions } from "../options";
@@ -7,7 +7,7 @@ import Tokenizer from "../tokenizer";
 export const plugins = {};
 
 export default class Parser extends Tokenizer {
-  constructor(options, input: string) {
+  constructor(options: Object, input: string) {
     options = getOptions(options);
     super(options, input);
 
@@ -31,7 +31,7 @@ export default class Parser extends Tokenizer {
     this[name] = f(this[name]);
   }
 
-  loadPlugins(plugins: Array<string>) {
+  loadPlugins(plugins: Array<string>): Object {
     let pluginMap = {};
 
     if (plugins.indexOf("flow") >= 0) {
