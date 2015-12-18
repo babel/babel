@@ -69,6 +69,7 @@ let memberExpressionOptimisationVisitor = {
       if (parentPath.isMemberExpression({ computed: false, object: node })) {
         let prop = parentPath.get("property");
         if (prop.node.name === "length") {
+          state.replaceOnly = true;
           state.candidates.push(path);
           return;
         }
@@ -144,7 +145,10 @@ export let visitor = {
       name: rest.name,
 
       // whether any references to the rest parameter were made in a function
-      deopted: false
+      deopted: false,
+
+      // whether all we need to do is replace rest parameter identifier with 'arguments'
+      replaceOnly: false
     };
 
     path.traverse(memberExpressionOptimisationVisitor, state);
@@ -154,7 +158,9 @@ export let visitor = {
       if (state.candidates.length) {
         for (let candidate of (state.candidates: Array)) {
           candidate.replaceWith(argsId);
-          optimiseCandidate(candidate.parent, candidate.parentPath, state.offset);
+          if (!state.replaceOnly) {
+            optimiseCandidate(candidate.parent, candidate.parentPath, state.offset);
+          }
         }
       }
       return;
