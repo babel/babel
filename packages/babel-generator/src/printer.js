@@ -130,6 +130,10 @@ export default class Printer extends Buffer {
           opts.iterator(node, i);
         }
 
+        if (opts.separator && parent.loc) {
+          this.printAuxAfterComment();
+        }
+
         if (opts.separator && i < len - 1) {
           this.push(opts.separator);
         }
