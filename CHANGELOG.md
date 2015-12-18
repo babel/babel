@@ -13,6 +13,11 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.24
+
+* **Bug Fix**
+ * [#3184](https://github.com/babel/babel/pull/3184) Fixed overly permissive type inference.
+
 ## 6.3.22-6.3.23
 
  > Skipped 6.3.22.
