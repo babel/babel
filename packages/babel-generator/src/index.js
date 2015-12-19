@@ -84,7 +84,7 @@ export class CodeGenerator extends Printer {
       compact: opts.compact,
       minified: opts.minified,
       concise: opts.concise,
-      quotes: CodeGenerator.findCommonStringDelimiter(code, tokens),
+      quotes: opts.quotes || CodeGenerator.findCommonStringDelimiter(code, tokens),
       indent: {
         adjustMultilineComment: true,
         style: style,
