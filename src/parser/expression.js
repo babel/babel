@@ -968,7 +968,10 @@ pp.parseAwait = function (node) {
   if (this.isLineTerminator()) {
     this.unexpected();
   }
-  node.all = this.eat(tt.star);
+  node.all = false;
+  if (this.match(tt.star)) {
+    this.raise(node.start, "await* has been removed from the async functions proposal. Use Promise.all() instead.")
+  }
   node.argument = this.parseMaybeUnary();
   return this.finishNode(node, "AwaitExpression");
 };
