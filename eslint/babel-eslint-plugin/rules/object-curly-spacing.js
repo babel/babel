@@ -6,6 +6,8 @@
  * @copyright 2014 Vignesh Anand. All rights reserved.
  * @copyright 2015 Jamund Ferguson. All rights reserved.
  * @copyright 2015 Mathieu M-Gosselin. All rights reserved.
+ * @copyright 2015 Toru Nagashima. All rights reserved.
+ * See LICENSE file in root directory for full license.
  */
 "use strict";
 
@@ -14,7 +16,8 @@
 //------------------------------------------------------------------------------
 
 module.exports = function(context) {
-    var spaced = context.options[0] === "always";
+    var spaced = context.options[0] === "always",
+        sourceCode = context.getSourceCode();
 
     /**
      * Determines whether an option is set, relative to the spacing option.
@@ -44,7 +47,7 @@ module.exports = function(context) {
      * @returns {boolean} Whether or not there is space between the tokens.
      */
     function isSpaced(left, right) {
-        return left.range[1] < right.range[0];
+        return sourceCode.isSpaceBetweenTokens(left, right);
     }
 
     /**
@@ -64,7 +67,7 @@ module.exports = function(context) {
     * @returns {void}
     */
     function reportNoBeginningSpace(node, token) {
-        context.report(node, token.loc.start,
+        context.report(node, token.loc.end,
             "There should be no space after '" + token.value + "'");
     }
 
@@ -86,7 +89,7 @@ module.exports = function(context) {
     * @returns {void}
     */
     function reportRequiredBeginningSpace(node, token) {
-        context.report(node, token.loc.start,
+        context.report(node, token.loc.end,
             "A space is required after '" + token.value + "'");
     }
 
@@ -135,96 +138,115 @@ module.exports = function(context) {
         }
     }
 
+    /**
+     * Reports a given object node if spacing in curly braces is invalid.
+     * @param {ASTNode} node - An ObjectExpression or ObjectPattern node to check.
+     * @returns {void}
+     */
+    function checkForObject(node) {
+        if (node.properties.length === 0) {
+            return;
+        }
+
+        var firstSpecifier = node.properties[0],
+            lastSpecifier = node.properties[node.properties.length - 1];
+
+        var first = sourceCode.getTokenBefore(firstSpecifier),
+            last = sourceCode.getTokenAfter(lastSpecifier);
+
+        // support trailing commas
+        if (last.value === ",") {
+            last = sourceCode.getTokenAfter(last);
+        }
+
+        var second = sourceCode.getTokenAfter(first),
+            penultimate = sourceCode.getTokenBefore(last);
+
+        validateBraceSpacing(node, first, second, penultimate, last);
+    }
+
+    /**
+     * Reports a given import node if spacing in curly braces is invalid.
+     * @param {ASTNode} node - An ImportDeclaration node to check.
+     * @returns {void}
+     */
+    function checkForImport(node) {
+        if (node.specifiers.length === 0) {
+            return;
+        }
+
+        var firstSpecifier = node.specifiers[0],
+            lastSpecifier = node.specifiers[node.specifiers.length - 1];
+
+        if (lastSpecifier.type !== "ImportSpecifier") {
+            return;
+        }
+        if (firstSpecifier.type !== "ImportSpecifier") {
+            firstSpecifier = node.specifiers[1];
+        }
+
+        var first = sourceCode.getTokenBefore(firstSpecifier),
+            last = sourceCode.getTokenAfter(lastSpecifier);
+
+        // to support a trailing comma.
+        if (last.value === ",") {
+            last = sourceCode.getTokenAfter(last);
+        }
+
+        var second = sourceCode.getTokenAfter(first),
+            penultimate = sourceCode.getTokenBefore(last);
+
+        validateBraceSpacing(node, first, second, penultimate, last);
+    }
+
+    /**
+     * Reports a given export node if spacing in curly braces is invalid.
+     * @param {ASTNode} node - An ExportNamedDeclaration node to check.
+     * @returns {void}
+     */
+    function checkForExport(node) {
+        if (node.specifiers.length === 0) {
+            return;
+        }
+
+        var firstSpecifier = node.specifiers[0],
+            lastSpecifier = node.specifiers[node.specifiers.length - 1],
+            first = sourceCode.getTokenBefore(firstSpecifier),
+            last = sourceCode.getTokenAfter(lastSpecifier);
+
+        // export * as x from '...';
+        // export x from '...';
+        if (first.value === "export") {
+            return;
+        }
+
+        // to support a trailing comma.
+        if (last.value === ",") {
+            last = sourceCode.getTokenAfter(last);
+        }
+
+        var second = sourceCode.getTokenAfter(first),
+            penultimate = sourceCode.getTokenBefore(last);
+
+        validateBraceSpacing(node, first, second, penultimate, last);
+    }
+
     //--------------------------------------------------------------------------
     // Public
     //--------------------------------------------------------------------------
 
     return {
-
         // var {x} = y;
-        ObjectPattern: function(node) {
-            var firstSpecifier = node.properties[0],
-                lastSpecifier = node.properties[node.properties.length - 1];
-
-            var first = context.getTokenBefore(firstSpecifier),
-                second = context.getFirstToken(firstSpecifier),
-                penultimate = context.getLastToken(lastSpecifier),
-                last = context.getTokenAfter(lastSpecifier);
-
-            // support trailing commas
-            if (last.value === ",") {
-                penultimate = last;
-                last = context.getTokenAfter(last);
-            }
-
-            validateBraceSpacing(node, first, second, penultimate, last);
-        },
-
-        // import {y} from 'x';
-        ImportDeclaration: function(node) {
-
-            var firstSpecifier = node.specifiers[0],
-                lastSpecifier = node.specifiers[node.specifiers.length - 1];
-
-            // don't do anything for namespace or default imports
-            if (firstSpecifier && lastSpecifier && firstSpecifier.type === "ImportSpecifier" && lastSpecifier.type === "ImportSpecifier") {
-                var first = context.getTokenBefore(firstSpecifier),
-                    second = context.getFirstToken(firstSpecifier),
-                    penultimate = context.getLastToken(lastSpecifier),
-                    last = context.getTokenAfter(lastSpecifier);
-
-                // support trailing commas
-                if (last.value === ",") {
-                    penultimate = last;
-                    last = context.getTokenAfter(last);
-                }
-
-                validateBraceSpacing(node, first, second, penultimate, last);
-            }
-
-        },
-
-        // export {name} from 'yo';
-        ExportNamedDeclaration: function(node) {
-            if (!node.specifiers.length) {
-                return;
-            }
-
-            var firstSpecifier = node.specifiers[0],
-                lastSpecifier = node.specifiers[node.specifiers.length - 1],
-                first = context.getTokenBefore(firstSpecifier),
-                second = context.getFirstToken(firstSpecifier),
-                penultimate = context.getLastToken(lastSpecifier),
-                last = context.getTokenAfter(lastSpecifier);
-
-            if (first.value === "export") {
-                return;
-            }
-
-            // support trailing commas
-            if (last.value === ",") {
-                penultimate = last;
-                last = context.getTokenAfter(last);
-            }
-
-            validateBraceSpacing(node, first, second, penultimate, last);
-
-        },
+        ObjectPattern: checkForObject,
 
         // var y = {x: 'y'}
-        ObjectExpression: function(node) {
-            if (node.properties.length === 0) {
-                return;
-            }
+        ObjectExpression: checkForObject,
 
-            var first = context.getFirstToken(node),
-                second = context.getFirstToken(node, 1),
-                penultimate = context.getLastToken(node, 1),
-                last = context.getLastToken(node);
+        // import {y} from 'x';
+        ImportDeclaration: checkForImport,
 
-            validateBraceSpacing(node, first, second, penultimate, last);
-        }
-
+        // export {name} from 'yo';
+        ExportNamedDeclaration: checkForExport
     };
 
 };

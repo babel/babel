@@ -31,18 +31,28 @@ ruleTester.run('babel/object-curly-spacing', rule, {
         { code: "var { x: { z }, y } = y", options: ["always"], ecmaFeatures: { destructuring: true } },
         { code: "var {\ny,\n} = x", options: ["always"], ecmaFeatures: { destructuring: true } },
         { code: "var { y, } = x", options: ["always"], ecmaFeatures: { destructuring: true } },
+        { code: "var { y: x } = x", options: ["always"], ecmaFeatures: { destructuring: true } },
 
         // always - import / export
+        { code: "import door from 'room'", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "import * as door from 'room'", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "import { door } from 'room'", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "import {\ndoor } from 'room'", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "export { door } from 'room'", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "import { house, mouse } from 'caravan'", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "import {\nhouse,\nmouse\n} from 'caravan'", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "import {\nhouse,\nmouse,\n} from 'caravan'", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "import house, { mouse } from 'caravan'", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "import door, { house, mouse } from 'caravan'", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "export { door }", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "export {\ndoor,\nhouse\n}", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "export {\ndoor,\nhouse,\n}", options: ["always"], ecmaFeatures: { modules: true } },
         { code: "import 'room'", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "import { bar as x } from 'foo';", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "import { x, } from 'foo';", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "import {\nx,\n} from 'foo';", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "export { x, } from 'foo';", options: ["always"], ecmaFeatures: { modules: true } },
+        { code: "export {\nx,\n} from 'foo';", options: ["always"], ecmaFeatures: { modules: true } },
 
         // always - empty object
         { code: "var foo = {};", options: ["always"] },
@@ -81,8 +91,11 @@ ruleTester.run('babel/object-curly-spacing', rule, {
         { code: "var {\nx: {z\n}, y} = y", options: ["never"], ecmaFeatures: { destructuring: true } },
         { code: "var {\ny,\n} = x", options: ["never"], ecmaFeatures: { destructuring: true } },
         { code: "var {y,} = x", options: ["never"], ecmaFeatures: { destructuring: true } },
+        { code: "var {y:x} = x", options: ["never"], ecmaFeatures: { destructuring: true } },
 
         // never - import / export
+        { code: "import door from 'room'", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "import * as door from 'room'", options: ["never"], ecmaFeatures: { modules: true } },
         { code: "import {door} from 'room'", options: ["never"], ecmaFeatures: { modules: true } },
         { code: "export {door} from 'room'", options: ["never"], ecmaFeatures: { modules: true } },
         { code: "import {\ndoor} from 'room'", options: ["never"], ecmaFeatures: { modules: true } },
@@ -95,6 +108,14 @@ ruleTester.run('babel/object-curly-spacing', rule, {
         { code: "export {\ndoor,\nmouse\n}", options: ["never"], ecmaFeatures: { modules: true } },
         { code: "export {\ndoor,\nmouse,\n}", options: ["never"], ecmaFeatures: { modules: true } },
         { code: "import 'room'", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "import x, {bar} from 'foo';", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "import x, {bar, baz} from 'foo';", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "import {bar as y} from 'foo';", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "import {x,} from 'foo';", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "import {\nx,\n} from 'foo';", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "export {x,} from 'foo';", options: ["never"], ecmaFeatures: { modules: true } },
+        { code: "export {\nx,\n} from 'foo';", options: ["never"], ecmaFeatures: { modules: true } },
+
 
         // never - empty object
         { code: "var foo = {};", options: ["never"] },
@@ -102,9 +123,32 @@ ruleTester.run('babel/object-curly-spacing', rule, {
         // never - objectsInObjects
         { code: "var obj = {'foo': {'bar': 1, 'baz': 2} };", options: ["never", {"objectsInObjects": true}]},
 
+        // https://github.com/eslint/eslint/issues/3658
+        // Empty cases.
+        { code: "var {} = foo;", ecmaFeatures: { destructuring: true }},
+        { code: "var [] = foo;", ecmaFeatures: { destructuring: true }},
+        { code: "var {a: {}} = foo;", ecmaFeatures: { destructuring: true }},
+        { code: "var {a: []} = foo;", ecmaFeatures: { destructuring: true }},
+        { code: "import {} from 'foo';", ecmaFeatures: { modules: true }},
+        { code: "export {} from 'foo';", ecmaFeatures: { modules: true }},
+        { code: "export {};", ecmaFeatures: { modules: true }},
+        { code: "var {} = foo;", options: ["never"], ecmaFeatures: { destructuring: true }},
+        { code: "var [] = foo;", options: ["never"], ecmaFeatures: { destructuring: true }},
+        { code: "var {a: {}} = foo;", options: ["never"], ecmaFeatures: { destructuring: true }},
+        { code: "var {a: []} = foo;", options: ["never"], ecmaFeatures: { destructuring: true }},
+        { code: "import {} from 'foo';", options: ["never"], ecmaFeatures: { modules: true }},
+        { code: "export {} from 'foo';", options: ["never"], ecmaFeatures: { modules: true }},
+        { code: "export {};", options: ["never"], ecmaFeatures: { modules: true }},
+
         // Babel test cases.
         { code: "export * as x from \"mod\";", parser: "babel-eslint", ecmaFeatures: { modules: true } },
         { code: "export x from \"mod\";", parser: "babel-eslint", ecmaFeatures: { modules: true } },
+
+        // always - destructuring typed object param
+        { code: "function fn({ a,b }:Object){}", options: ["always"], parser: "babel-eslint", ecmaFeatures: { destructuring: true } },
+
+        // never - destructuring typed object param
+        { code: "function fn({a,b}: Object){}", options: ["never"], parser: "babel-eslint", ecmaFeatures: { destructuring: true } },
     ],
 
     invalid: [
@@ -119,13 +163,182 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "A space is required after '{'",
                     type: "ImportDeclaration",
                     line: 1,
-                    column: 8
+                    column: 9
                 },
                 {
                     message: "A space is required before '}'",
                     type: "ImportDeclaration",
                     line: 1,
                     column: 12
+                }
+            ]
+        },
+        {
+            code: "import { bar as y} from 'foo.js';",
+            options: ["always"],
+            ecmaFeatures: {
+                modules: true
+            },
+            errors: [
+                {
+                    message: "A space is required before '}'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 18
+                }
+            ]
+        },
+        {
+            code: "import {bar as y} from 'foo.js';",
+            options: ["always"],
+            ecmaFeatures: {
+                modules: true
+            },
+            errors: [
+                {
+                    message: "A space is required after '{'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 9
+                },
+                {
+                    message: "A space is required before '}'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 17
+                }
+            ]
+        },
+        {
+            code: "import { bar} from 'foo.js';",
+            options: ["always"],
+            ecmaFeatures: {
+                modules: true
+            },
+            errors: [
+                {
+                    message: "A space is required before '}'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 13
+                }
+            ]
+        },
+        {
+            code: "import x, { bar} from 'foo';",
+            options: ["always"],
+            ecmaFeatures: {
+                modules: true
+            },
+            errors: [
+                {
+                    message: "A space is required before '}'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 16
+                }
+
+            ]
+        },
+        {
+            code: "import x, { bar, baz} from 'foo';",
+            options: ["always"],
+            ecmaFeatures: {
+                modules: true
+            },
+            errors: [
+                {
+                    message: "A space is required before '}'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 21
+                }
+
+            ]
+        },
+        {
+            code: "import x, {bar} from 'foo';",
+            options: ["always"],
+            ecmaFeatures: {
+                modules: true
+            },
+            errors: [
+                {
+                    message: "A space is required after '{'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 12
+                },
+                {
+                    message: "A space is required before '}'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 15
+                }
+
+            ]
+        },
+        {
+            code: "import x, {bar, baz} from 'foo';",
+            options: ["always"],
+            ecmaFeatures: {
+                modules: true
+            },
+            errors: [
+                {
+                    message: "A space is required after '{'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 12
+                },
+                {
+                    message: "A space is required before '}'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 20
+                }
+            ]
+        },
+        {
+            code: "import {bar,} from 'foo';",
+            options: ["always"],
+            ecmaFeatures: {
+                modules: true
+            },
+            errors: [
+                {
+                    message: "A space is required after '{'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 9
+                },
+                {
+                    message: "A space is required before '}'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 13
+                }
+
+            ]
+        },
+        {
+            code: "import { bar, } from 'foo';",
+            options: ["never"],
+            ecmaFeatures: {
+                modules: true
+            },
+            errors: [
+                {
+                    message: "There should be no space after '{'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 9
+                },
+                {
+                    message: "There should be no space before '}'",
+                    type: "ImportDeclaration",
+                    line: 1,
+                    column: 15
                 }
             ]
         },
@@ -140,7 +353,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "A space is required after '{'",
                     type: "ExportNamedDeclaration",
                     line: 1,
-                    column: 8
+                    column: 9
                 },
                 {
                     message: "A space is required before '}'",
@@ -226,6 +439,38 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                 }
             ]
         },
+        {
+            code: "var {a:b } = x;",
+            options: ["never"],
+            ecmaFeatures: { destructuring: true },
+            errors: [
+               {
+                    message: "There should be no space before '}'",
+                    type: "ObjectPattern",
+                    line: 1,
+                    column: 10
+                }
+            ]
+        },
+        {
+            code: "var { a:b } = x;",
+            options: ["never"],
+            ecmaFeatures: { destructuring: true },
+            errors: [
+               {
+                    message: "There should be no space after '{'",
+                    type: "ObjectPattern",
+                    line: 1,
+                    column: 6
+                },
+                {
+                    message: "There should be no space before '}'",
+                    type: "ObjectPattern",
+                    line: 1,
+                    column: 11
+                }
+            ]
+        },
 
         // never-objectsInObjects
         {
@@ -262,7 +507,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "A space is required after '{'",
                     type: "ObjectExpression",
                     line: 1,
-                    column: 11
+                    column: 12
                 },
                 {
                     message: "A space is required before '}'",
@@ -280,7 +525,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "A space is required after '{'",
                     type: "ObjectExpression",
                     line: 1,
-                    column: 11
+                    column: 12
                 }
             ]
         },
@@ -304,7 +549,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "There should be no space after '{'",
                     type: "ObjectExpression",
                     line: 1,
-                    column: 11
+                    column: 12
                 },
                 {
                     message: "There should be no space before '}'",
@@ -334,7 +579,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "There should be no space after '{'",
                     type: "ObjectExpression",
                     line: 1,
-                    column: 11
+                    column: 12
                 }
             ]
         },
@@ -346,13 +591,13 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "There should be no space after '{'",
                     type: "ObjectExpression",
                     line: 1,
-                    column: 11
+                    column: 12
                 },
                 {
                     message: "There should be no space after '{'",
                     type: "ObjectExpression",
                     line: 1,
-                    column: 18
+                    column: 19
                 }
             ]
         },
@@ -386,7 +631,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "A space is required after '{'",
                     type: "ObjectExpression",
                     line: 1,
-                    column: 22
+                    column: 23
                 }
             ]
         },
@@ -394,6 +639,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
         // destructuring
         {
             code: "var {x, y} = y",
+            utput: "var { x, y  = y",
             ecmaFeatures: {destructuring: true},
             options: ["always"],
             errors: [
@@ -401,7 +647,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "A space is required after '{'",
                     type: "ObjectPattern",
                     line: 1,
-                    column: 5
+                    column: 6
                 },
                 {
                     message: "A space is required before '}'",
@@ -413,6 +659,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
         },
         {
             code: "var { x, y} = y",
+            ouput: "var { x, y }  y",
             ecmaFeatures: {destructuring: true},
             options: ["always"],
             errors: [
@@ -426,6 +673,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
         },
         {
             code: "var { x, y } = y",
+            ouput: "var {x, y} = ",
             ecmaFeatures: {destructuring: true},
             options: ["never"],
             errors: [
@@ -433,7 +681,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "There should be no space after '{'",
                     type: "ObjectPattern",
                     line: 1,
-                    column: 5
+                    column: 6
                 },
                 {
                     message: "There should be no space before '}'",
@@ -478,7 +726,7 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                     message: "A space is required after '{'",
                     type: "ObjectPattern",
                     line: 1,
-                    column: 5
+                    column: 6
                 }
             ]
         },
