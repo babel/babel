@@ -67,8 +67,15 @@ module.exports = function(context) {
     * @returns {void}
     */
     function reportNoBeginningSpace(node, token) {
-        context.report(node, token.loc.end,
-            "There should be no space after '" + token.value + "'");
+        context.report({
+            node: node,
+            loc: token.loc.end,
+            message: "There should be no space after '" + token.value + "'",
+            fix: function(fixer) {
+                var nextToken = sourceCode.getTokenAfter(token);
+                return fixer.removeRange([token.range[1], nextToken.range[0]]);
+            }
+        });
     }
 
     /**
@@ -78,8 +85,15 @@ module.exports = function(context) {
     * @returns {void}
     */
     function reportNoEndingSpace(node, token) {
-        context.report(node, token.loc.start,
-            "There should be no space before '" + token.value + "'");
+        context.report({
+            node: node,
+            loc: token.loc.start,
+            message: "There should be no space before '" + token.value + "'",
+            fix: function(fixer) {
+                var previousToken = sourceCode.getTokenBefore(token);
+                return fixer.removeRange([previousToken.range[1], token.range[0]]);
+            }
+        });
     }
 
     /**
@@ -89,8 +103,14 @@ module.exports = function(context) {
     * @returns {void}
     */
     function reportRequiredBeginningSpace(node, token) {
-        context.report(node, token.loc.end,
-            "A space is required after '" + token.value + "'");
+        context.report({
+            node: node,
+            loc: token.loc.end,
+            message: "A space is required after '" + token.value + "'",
+            fix: function(fixer) {
+                return fixer.insertTextAfter(token, " ");
+            }
+        });
     }
 
     /**
@@ -100,8 +120,14 @@ module.exports = function(context) {
     * @returns {void}
     */
     function reportRequiredEndingSpace(node, token) {
-        context.report(node, token.loc.start,
-                    "A space is required before '" + token.value + "'");
+        context.report({
+            node: node,
+            loc: token.loc.start,
+            message: "A space is required before '" + token.value + "'",
+            fix: function(fixer) {
+                return fixer.insertTextBefore(token, " ");
+            }
+        });
     }
 
     /**
