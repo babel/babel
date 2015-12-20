@@ -1,0 +1,4 @@
+{
+  "plugins": ["asyncFunctions"],
+  "throws": "await* has been removed from the async functions proposal. Use Promise.all() instead. (2:2)"
+}

@@ -247,7 +247,7 @@ let awaitVisitor = {
   },
 
   AwaitExpression: function(path) {
-    // Convert await and await* expressions to yield expressions.
+    // Convert await expressions to yield expressions.
     let argument = path.node.argument;
 
     // Transforming `await x` to `yield regeneratorRuntime.awrap(x)`
