@@ -143,6 +143,12 @@ ruleTester.run('babel/object-curly-spacing', rule, {
         // Babel test cases.
         { code: "export * as x from \"mod\";", parser: "babel-eslint", ecmaFeatures: { modules: true } },
         { code: "export x from \"mod\";", parser: "babel-eslint", ecmaFeatures: { modules: true } },
+
+        // always - destructuring typed object param
+        { code: "function fn({ a,b }:Object){}", options: ["always"], parser: "babel-eslint", ecmaFeatures: { destructuring: true } },
+
+        // never - destructuring typed object param
+        { code: "function fn({a,b}: Object){}", options: ["never"], parser: "babel-eslint", ecmaFeatures: { destructuring: true } },
     ],
 
     invalid: [
@@ -778,6 +784,58 @@ ruleTester.run('babel/object-curly-spacing', rule, {
                 {
                     message: "A space is required before '}'",
                     type: "ObjectExpression"
+                }
+            ]
+        },
+
+        // Babel test cases.
+
+        // always - destructuring typed object param
+        {
+            code: "function fn({a,b}: Object){}",
+            output: "function fn({ a,b }: Object){}",
+            options: ["always"],
+            parser: "babel-eslint",
+            ecmaFeatures: {
+                destructuring: true
+            },
+            errors: [
+                {
+                    message: "A space is required after '{'",
+                    type: "ObjectPattern",
+                    line: 1,
+                    column: 14
+                },
+                {
+                    message: "A space is required before '}'",
+                    type: "ObjectPattern",
+                    line: 1,
+                    column: 17
+                }
+            ]
+        },
+
+        // never - destructuring typed object param
+        {
+            code: "function fn({ a,b }: Object){}",
+            output: "function fn({a,b}: Object){}",
+            options: ["never"],
+            parser: "babel-eslint",
+            ecmaFeatures: {
+                destructuring: true
+            },
+            errors: [
+                {
+                    message: "There should be no space after '{'",
+                    type: "ObjectPattern",
+                    line: 1,
+                    column: 14
+                },
+                {
+                    message: "There should be no space before '}'",
+                    type: "ObjectPattern",
+                    line: 1,
+                    column: 19
                 }
             ]
         }
