@@ -1,6 +1,6 @@
 {
   "name": "babel-traverse",
-  "version": "6.3.24",
+  "version": "6.3.25",
   "description": "",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -12,7 +12,7 @@
     "babel-messages": "^6.3.13",
     "babel-runtime": "^5.0.0",
     "babel-types": "^6.3.24",
-    "babylon": "^6.3.21",
+    "babylon": "^6.3.25",
     "debug": "^2.2.0",
     "globals": "^8.3.0",
     "invariant": "^2.2.0",
