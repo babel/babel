@@ -99,11 +99,14 @@ export function evaluate(): { confident: boolean; value: any } {
         if (expr) str += String(evaluate(expr));
       }
 
-      if (confident) return str;
+      if (!confident) return;
+      return str;
     }
 
     if (path.isConditionalExpression()) {
-      if (evaluate(path.get("test"))) {
+      let testResult = evaluate(path.get("test"));
+      if (!confident) return;
+      if (testResult) {
         return evaluate(path.get("consequent"));
       } else {
         return evaluate(path.get("alternate"));
@@ -162,6 +165,7 @@ export function evaluate(): { confident: boolean; value: any } {
       }
 
       let arg = evaluate(argument);
+      if (!confident) return;
       switch (node.operator) {
         case "!": return !arg;
         case "+": return +arg;
@@ -218,7 +222,9 @@ export function evaluate(): { confident: boolean; value: any } {
 
     if (path.isBinaryExpression()) {
       let left = evaluate(path.get("left"));
+      if (!confident) return;
       let right = evaluate(path.get("right"));
+      if (!confident) return;
 
       switch (node.operator) {
         case "-": return left - right;

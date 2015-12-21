@@ -19,7 +19,7 @@ suite("evaluation", function () {
     test("it should work with null", function () {
       assert.strictEqual(
         getPath("false || a.length === 0;").get("body")[0].evaluateTruthy(),
-        false
+        undefined
       );
     });
   });
