@@ -26,6 +26,7 @@ original ones as well!).
   "rules": {
     "babel/generator-star-spacing": 1,
     "babel/new-cap": 1,
+    "babel/array-bracket-spacing": 1,
     "babel/object-curly-spacing": 1,
     "babel/object-shorthand": 1,
     "babel/arrow-parens": 1,
@@ -39,6 +40,7 @@ Each rule corresponds to a core `eslint` rule, and has the same options.
 
 - `babel/generator-star-spacing`: Handles async/await functions correctly
 - `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
+- `babel/array-bracket-spacing`: Handles destructuring arrays with flow type in function parametres
 - `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";`
 - `babel/object-shorthand`: doesn't fail when using object spread (`...obj`)
 - `babel/arrow-parens`: Handles async functions correctly
