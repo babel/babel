@@ -16,13 +16,13 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 ## 6.3.25
 
 * **Bug Fix**
- * [#3187](https://github.com/babel/babel/pull/3187) Multiple `"use strict"` in function causes outer scope to be parsed as strict
- * [#3188](https://github.com/babel/babel/pull/3188) Correctly set `format.quotes` to `opts.quotes`
- * [#3189](https://github.com/babel/babel/pull/3189) JSX attributes should use double qoutes
- * [#3192](https://github.com/babel/babel/pull/3192) Fixed static evaluation bug
+ * `babylon`: [#3187](https://github.com/babel/babel/pull/3187) Multiple `"use strict"` in function causes outer scope to be parsed as strict
+ * `babel-generator`: [#3188](https://github.com/babel/babel/pull/3188) Correctly set `format.quotes` to `opts.quotes`
+ * `babel-generator`: [#3189](https://github.com/babel/babel/pull/3189) JSX attributes should use double qoutes
+ * `babel-traverse`: [#3192](https://github.com/babel/babel/pull/3192) Fixed static evaluation bug
 
 * **Internal**
- * [#3165](https://github.com/babel/babel/pull/3165) Optimize `arguments` access
+ * `babel-plugin-transform-es2015-parameters`: [#3165](https://github.com/babel/babel/pull/3165) Optimize `arguments` access
 
 
 ## 6.3.24
