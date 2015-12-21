@@ -12,7 +12,7 @@ let buildRest = template(`
 `);
 
 let loadRest = template(`
-  ARGUMENTS.length <= KEY || ARGUMENTS[KEY] === undefined ? undefined : ARGUMENTS[KEY]
+  ARGUMENTS.length <= INDEX ? undefined : ARGUMENTS[INDEX]
 `);
 
 let memberExpressionOptimisationVisitor = {
@@ -69,6 +69,7 @@ let memberExpressionOptimisationVisitor = {
       if (parentPath.isMemberExpression({ computed: false, object: node })) {
         let prop = parentPath.get("property");
         if (prop.node.name === "length") {
+          state.replaceOnly = true;
           state.candidates.push(path);
           return;
         }
@@ -121,23 +122,11 @@ export let visitor = {
     argsId._shadowedFunctionLiteral = path;
 
     function optimiseCandidate(parent, parentPath, offset) {
-      if (t.isReturnStatement(parentPath.parent) || t.isIdentifier(parentPath.parent.id)) {
+      if (parent.property) {
         parentPath.replaceWith(loadRest({
           ARGUMENTS: argsId,
-          KEY: t.numericLiteral(parent.property.value + offset)
+          INDEX: t.numericLiteral(parent.property.value + offset)
         }));
-      } else {
-        if (offset === 0) return;
-        let newExpr;
-        let prop = parent.property;
-
-        if (t.isLiteral(prop)) {
-          prop.value += offset;
-          prop.raw = String(prop.value);
-        } else { // UnaryExpression, BinaryExpression
-          newExpr = t.binaryExpression("+", prop, t.numericLiteral(offset));
-          parent.property = newExpr;
-        }
       }
     }
 
@@ -156,7 +145,10 @@ export let visitor = {
       name: rest.name,
 
       // whether any references to the rest parameter were made in a function
-      deopted: false
+      deopted: false,
+
+      // whether all we need to do is replace rest parameter identifier with 'arguments'
+      replaceOnly: false
     };
 
     path.traverse(memberExpressionOptimisationVisitor, state);
@@ -166,7 +158,9 @@ export let visitor = {
       if (state.candidates.length) {
         for (let candidate of (state.candidates: Array)) {
           candidate.replaceWith(argsId);
-          optimiseCandidate(candidate.parent, candidate.parentPath, state.offset);
+          if (!state.replaceOnly) {
+            optimiseCandidate(candidate.parent, candidate.parentPath, state.offset);
+          }
         }
       }
       return;

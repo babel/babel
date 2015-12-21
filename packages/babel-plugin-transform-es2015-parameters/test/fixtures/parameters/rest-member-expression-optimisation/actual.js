@@ -15,3 +15,10 @@ function t(...items) {
   }
   return a;
 }
+
+// https://github.com/babel/babel/pull/2833#issuecomment-166039291
+function t(...items) {
+  for (let i = 0; i < items.length; i++) {
+    return items[i];
+  }
+}
