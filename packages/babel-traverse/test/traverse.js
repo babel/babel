@@ -1,5 +1,6 @@
 var traverse = require("../lib").default;
 var assert   = require("assert");
+var parse    = require("babylon").parse;
 var _        = require("lodash");
 
 suite("traverse", function () {
@@ -122,5 +123,20 @@ suite("traverse", function () {
     assert.ok(!traverse.hasType(ast, null, "ThisExpression", ["Program"]));
 
     assert.ok(!traverse.hasType(ast, null, "ArrowFunctionExpression"));
+  });
+
+  test("FunctionDeclaration binding should be in it's own scope", function () {
+    var ast = parse("function a() {var a;}");
+    traverse(ast, {
+      FunctionDeclaration: function (path) {
+        assert.equal(path.scope.getBinding(path.node.id.name).path.node, path.node.id);
+      }
+    });
+
+    traverse(ast, {
+      BindingIdentifier: function (path) {
+        assert.equal(path.scope.getBinding(path.node.name).path.node, path.node);
+      }
+    });
   });
 });
