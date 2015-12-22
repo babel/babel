@@ -243,7 +243,7 @@ export default class OptionManager {
   mergePresets(presets: Array<string | Object>, dirname: string) {
     for (let val of presets) {
       if (typeof val === "string") {
-        let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+        let presetLoc = resolve(`babel-preset-${val}`, process.argv[1]) || resolve(val, process.argv[1]);
         if (presetLoc) {
           let presetOpts = require(presetLoc);
           this.mergeOptions(presetOpts, presetLoc, presetLoc, path.dirname(presetLoc));
