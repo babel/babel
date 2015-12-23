@@ -186,6 +186,14 @@ export function NullableTypeAnnotation(node, print) {
 }
 
 /**
+ * Prints NullLiteralTypeAnnotation, prints value.
+ */
+
+export function NullLiteralTypeAnnotation() {
+  this.push("null");
+}
+
+/**
  * Prints NumberLiteralTypeAnnotation, prints value.
  */
 
