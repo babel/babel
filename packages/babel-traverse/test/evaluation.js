@@ -22,5 +22,12 @@ suite("evaluation", function () {
         undefined
       );
     });
+
+    test("it should not mistake lack of confidence for falsy", function () {
+      assert.strictEqual(
+        getPath("foo || 'bar'").get("body")[0].evaluate().value,
+        undefined
+      );
+    });
   });
 });
