@@ -152,7 +152,6 @@
                           "column": 49
                         }
                       },
-                      "all": false,
                       "argument": {
                         "type": "Identifier",
                         "start": 42,
