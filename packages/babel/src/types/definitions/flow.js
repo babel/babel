@@ -86,6 +86,10 @@ defineType("NullableTypeAnnotation", {
   aliases: ["Flow"]
 });
 
+defineType("NullLiteralTypeAnnotation", {
+  aliases: ["Flow"]
+});
+
 defineType("NumberLiteralTypeAnnotation", {
   aliases: ["Flow"]
 });
