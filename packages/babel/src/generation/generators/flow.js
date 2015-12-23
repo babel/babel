@@ -224,6 +224,14 @@ export function StringTypeAnnotation() {
 }
 
 /**
+ * Prints ThisTypeAnnotation, prints this.
+ */
+
+export function ThisTypeAnnotation() {
+  this.push("this");
+}
+
+/**
  * Prints TupleTypeAnnotation, prints types.
  */
 

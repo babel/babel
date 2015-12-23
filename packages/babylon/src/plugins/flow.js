@@ -509,6 +509,11 @@ pp.flowParsePrimaryType = function () {
       this.next();
       return this.finishNode(node, "NullLiteralTypeAnnotation");
 
+    case tt._this:
+      node.value = this.match(tt._this);
+      this.next();
+      return this.finishNode(node, "ThisTypeAnnotation");
+
     default:
       if (this.state.type.keyword === "typeof") {
         return this.flowParseTypeofType();
