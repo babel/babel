@@ -140,6 +140,10 @@ export function StringTypeAnnotation() {
   this.push("string");
 }
 
+export function ThisTypeAnnotation() {
+  this.push("this");
+}
+
 export function TupleTypeAnnotation(node: Object) {
   this.push("[");
   this.printJoin(node.types, node, { separator: ", " });
