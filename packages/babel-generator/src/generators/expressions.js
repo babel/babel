@@ -118,7 +118,7 @@ function buildYieldAwait(keyword: string) {
   return function (node: Object) {
     this.push(keyword);
 
-    if (node.delegate || node.all) {
+    if (node.delegate) {
       this.push("*");
     }
 

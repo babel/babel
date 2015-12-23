@@ -139,7 +139,6 @@
                     "column": 35
                   }
                 },
-                "all": false,
                 "argument": {
                   "type": "Identifier",
                   "start": 28,
