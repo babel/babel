@@ -13,6 +13,20 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.3.26
+
+* **Bug Fix**
+ * `babel-plugin-transform-es2015-parameters`: [#3191](https://github.com/babel/babel/pull/3191) Fix the order of arguements intitialization (fixes [T6809](http://phabricator.babeljs.io/T6809))
+ * `babel-traverse`: [#3198](https://github.com/babel/babel/pull/3198) In `evaluate()`, it should not mistake lack of confidence for falsy
+
+* **Spec Compliancy**
+ * `babylon`, `babel-generator`, `babel-plugin-transform-regenerator`: [#3190](https://github.com/babel/babel/pull/3190): Remove `await *` from `babylon` and raise an error for that syntax since it was removed from the proposal and was causing an issue at runtime but not at compile time (fixes [T6688](http://phabricator.babeljs.io/T6688)).
+
+* **Internal**
+ * Fix gulp build path to work on windows (fixes [T6855](http://phabricator.babeljs.io/T6855)).
+ * `babel`: [#3193](https://github.com/babel/babel/pull/3193) Point users to the cli docs
+ * `babel-core`: [#3196](https://github.com/babel/babel/pull/3196) Add a test for checking plugins/presets are resolved relative to `filename`
+ 
 ## 6.3.25
 
 * **Bug Fix**
@@ -23,7 +37,6 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 * **Internal**
  * `babel-plugin-transform-es2015-parameters`: [#3165](https://github.com/babel/babel/pull/3165) Optimize `arguments` access
-
 
 ## 6.3.24
 
