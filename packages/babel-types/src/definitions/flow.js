@@ -174,6 +174,11 @@ defineType("StringTypeAnnotation", {
   }
 });
 
+defineType("ThisTypeAnnotation", {
+  aliases: ["Flow", "FlowBaseAnnotation"],
+  fields: {}
+});
+
 defineType("TupleTypeAnnotation", {
   visitor: ["types"],
   aliases: ["Flow"],
