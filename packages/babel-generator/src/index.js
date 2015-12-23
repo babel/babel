@@ -100,7 +100,7 @@ export class CodeGenerator extends Printer {
       format.compact = code.length > 100000; // 100KB
 
       if (format.compact) {
-        console.error("[BABEL] " + messages.get("codeGeneratorDeopt", opts.filename, "100KB"));
+        console.info("[BABEL] " + messages.get("codeGeneratorDeopt", opts.filename, "100KB"));
       }
     }
 
