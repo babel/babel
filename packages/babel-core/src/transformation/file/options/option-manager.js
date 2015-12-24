@@ -326,6 +326,7 @@ export default class OptionManager {
 
   init(opts: Object = {}): Object {
     let filename = opts.filename;
+    let root     = opts.sourceRoot || (filename && path.dirname(filename));
 
     // resolve all .babelrc files
     if (opts.babelrc !== false) {
@@ -333,7 +334,7 @@ export default class OptionManager {
     }
 
     // merge in base options
-    this.mergeOptions(opts, "base", null, filename && path.dirname(filename));
+    this.mergeOptions(opts, "base", null, root));
 
     // normalise
     this.normaliseOptions(opts);
