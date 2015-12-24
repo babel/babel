@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var babylon = require("../lib/index");
+var babylon = require("..");
 var fs      = require("fs");
 
 var filename = process.argv[2];
