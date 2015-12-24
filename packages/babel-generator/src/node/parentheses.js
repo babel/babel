@@ -44,25 +44,13 @@ export function UpdateExpression(node: Object, parent: Object): boolean {
   return false;
 }
 
-export function ObjectExpression(node: Object, parent: Object): boolean {
+export function ObjectExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
   if (t.isExpressionStatement(parent)) {
     // ({ foo: "bar" });
     return true;
   }
 
-  if (t.isMemberExpression(parent) && parent.object === node) {
-    // ({ foo: "bar" }).foo
-    return true;
-  }
-
-  if ((t.isBinaryExpression(parent) || t.isLogicalExpression(parent)) && parent.left === node) {
-    // We'd need to check that the parent's parent is an ExpressionStatement. But this
-    // code doesn't make any sense to begin with and should be rare.
-    // `({}) === foo`
-    return true;
-  }
-
-  return false;
+  return isFirstInStatement(printStack);
 }
 
 export function Binary(node: Object, parent: Object): boolean {
@@ -187,31 +175,7 @@ export function FunctionExpression(node: Object, parent: Object, printStack: Arr
     return true;
   }
 
-  // Walk up the tree and determine if the function will be printed first in a statement.
-  let i = printStack.length - 1;
-  node = printStack[i];
-  i--;
-  parent = printStack[i];
-  while (i > 0) {
-    if (t.isExpressionStatement(parent, { expression: node })) {
-      return true;
-    }
-
-    if ((t.isCallExpression(parent, { callee: node })) ||
-        (t.isSequenceExpression(parent) && parent.expressions[0] === node) ||
-        (t.isMemberExpression(parent, { object: node })) ||
-        (t.isConditional(parent, { test: node })) ||
-        (t.isBinary(parent, { left: node })) ||
-        (t.isAssignmentExpression(parent, { left: node }))) {
-      node = parent;
-      i--;
-      parent = printStack[i];
-    } else {
-      return false;
-    }
-  }
-
-  return false;
+  return isFirstInStatement(printStack);
 }
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
@@ -249,4 +213,33 @@ export function AssignmentExpression(node: Object): boolean {
   } else {
     return ConditionalExpression(...arguments);
   }
+}
+
+// Walk up the print stack to deterimine if our node can come first
+// in statement.
+function isFirstInStatement(printStack: Array<Object>): boolean {
+  let i = printStack.length - 1;
+  let node = printStack[i];
+  i--;
+  let parent = printStack[i];
+  while (i > 0) {
+    if (t.isExpressionStatement(parent, { expression: node })) {
+      return true;
+    }
+
+    if ((t.isCallExpression(parent, { callee: node })) ||
+        (t.isSequenceExpression(parent) && parent.expressions[0] === node) ||
+        (t.isMemberExpression(parent, { object: node })) ||
+        (t.isConditional(parent, { test: node })) ||
+        (t.isBinary(parent, { left: node })) ||
+        (t.isAssignmentExpression(parent, { left: node }))) {
+      node = parent;
+      i--;
+      parent = printStack[i];
+    } else {
+      return false;
+    }
+  }
+
+  return false;
 }
