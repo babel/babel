@@ -334,7 +334,7 @@ export default class OptionManager {
     }
 
     // merge in base options
-    this.mergeOptions(opts, "base", null, root));
+    this.mergeOptions(opts, "base", null, root);
 
     // normalise
     this.normaliseOptions(opts);
