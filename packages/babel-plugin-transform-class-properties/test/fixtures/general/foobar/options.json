@@ -1,4 +1,4 @@
 {
-  "plugins": ["external-helpers-2"],
+  "plugins": ["external-helpers"],
   "presets": ["stage-0", "es2015"]
 }
