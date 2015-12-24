@@ -16,7 +16,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 ## 6.3.26
 
 * **Bug Fix**
- * `babel-plugin-transform-es2015-parameters`: [#3191](https://github.com/babel/babel/pull/3191) Fix the order of arguements intitialization (fixes [T6809](http://phabricator.babeljs.io/T6809))
+ * `babel-plugin-transform-es2015-parameters`: [#3191](https://github.com/babel/babel/pull/3191) Fix the order of arguments initialization (fixes [T6809](http://phabricator.babeljs.io/T6809))
  * `babel-traverse`: [#3198](https://github.com/babel/babel/pull/3198) In `evaluate()`, it should not mistake lack of confidence for falsy
 
 * **Spec Compliancy**
