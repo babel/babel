@@ -1,8 +1,8 @@
 {
-  "name": "babel-plugin-external-helpers-2",
+  "name": "babel-plugin-external-helpers",
   "version": "6.3.13",
   "description": "",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-external-helpers-2",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-external-helpers",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [

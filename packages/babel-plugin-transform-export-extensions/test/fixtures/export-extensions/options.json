@@ -1,3 +1,3 @@
 {
-  "plugins": ["external-helpers-2", "transform-export-extensions"]
+  "plugins": ["external-helpers", "transform-export-extensions"]
 }
