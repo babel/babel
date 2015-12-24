@@ -64,6 +64,7 @@ defineType("ClassDeclaration", {
     "id",
     "body",
     "superClass",
+    "mixins",
     "typeParameters",
     "superTypeParameters",
     "implements",
