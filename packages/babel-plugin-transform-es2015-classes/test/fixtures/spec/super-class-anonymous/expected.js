@@ -1,4 +1,4 @@
-var TestEmpty = (function (_ref) {
+var TestEmpty = function (_ref) {
   babelHelpers.inherits(TestEmpty, _ref);
 
   function TestEmpty() {
@@ -7,15 +7,15 @@ var TestEmpty = (function (_ref) {
   }
 
   return TestEmpty;
-})((function () {
+}(function () {
   function _class() {
     babelHelpers.classCallCheck(this, _class);
   }
 
   return _class;
-})());
+}());
 
-var TestConstructorOnly = (function (_ref2) {
+var TestConstructorOnly = function (_ref2) {
   babelHelpers.inherits(TestConstructorOnly, _ref2);
 
   function TestConstructorOnly() {
@@ -24,15 +24,15 @@ var TestConstructorOnly = (function (_ref2) {
   }
 
   return TestConstructorOnly;
-})((function () {
+}(function () {
   function _class2() {
     babelHelpers.classCallCheck(this, _class2);
   }
 
   return _class2;
-})());
+}());
 
-var TestMethodOnly = (function (_ref3) {
+var TestMethodOnly = function (_ref3) {
   babelHelpers.inherits(TestMethodOnly, _ref3);
 
   function TestMethodOnly() {
@@ -41,7 +41,7 @@ var TestMethodOnly = (function (_ref3) {
   }
 
   return TestMethodOnly;
-})((function () {
+}(function () {
   function _class3() {
     babelHelpers.classCallCheck(this, _class3);
   }
@@ -51,9 +51,9 @@ var TestMethodOnly = (function (_ref3) {
     value: function method() {}
   }]);
   return _class3;
-})());
+}());
 
-var TestConstructorAndMethod = (function (_ref4) {
+var TestConstructorAndMethod = function (_ref4) {
   babelHelpers.inherits(TestConstructorAndMethod, _ref4);
 
   function TestConstructorAndMethod() {
@@ -62,7 +62,7 @@ var TestConstructorAndMethod = (function (_ref4) {
   }
 
   return TestConstructorAndMethod;
-})((function () {
+}(function () {
   function _class4() {
     babelHelpers.classCallCheck(this, _class4);
   }
@@ -72,9 +72,9 @@ var TestConstructorAndMethod = (function (_ref4) {
     value: function method() {}
   }]);
   return _class4;
-})());
+}());
 
-var TestMultipleMethods = (function (_ref5) {
+var TestMultipleMethods = function (_ref5) {
   babelHelpers.inherits(TestMultipleMethods, _ref5);
 
   function TestMultipleMethods() {
@@ -83,7 +83,7 @@ var TestMultipleMethods = (function (_ref5) {
   }
 
   return TestMultipleMethods;
-})((function () {
+}(function () {
   function _class5() {
     babelHelpers.classCallCheck(this, _class5);
   }
@@ -96,4 +96,4 @@ var TestMultipleMethods = (function (_ref5) {
     value: function m2() {}
   }]);
   return _class5;
-})());
+}());

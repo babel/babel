@@ -176,7 +176,7 @@ export function UnaryLike(node: Object, parent: Object): boolean {
   return false;
 }
 
-export function FunctionExpression(node: Object, parent: Object): boolean {
+export function FunctionExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
   // (function () {});
   if (t.isExpressionStatement(parent)) {
     return true;
@@ -187,7 +187,31 @@ export function FunctionExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
-  return UnaryLike(node, parent);
+  // Walk up the tree and determine if the function will be printed first in a statement.
+  let i = printStack.length - 1;
+  node = printStack[i];
+  i--;
+  parent = printStack[i];
+  while (i > 0) {
+    if (t.isExpressionStatement(parent, { expression: node })) {
+      return true;
+    }
+
+    if ((t.isCallExpression(parent, { callee: node })) ||
+        (t.isSequenceExpression(parent) && parent.expressions[0] === node) ||
+        (t.isMemberExpression(parent, { object: node })) ||
+        (t.isConditional(parent, { test: node })) ||
+        (t.isBinary(parent, { left: node })) ||
+        (t.isAssignmentExpression(parent, { left: node }))) {
+      node = parent;
+      i--;
+      parent = printStack[i];
+    } else {
+      return false;
+    }
+  }
+
+  return false;
 }
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {

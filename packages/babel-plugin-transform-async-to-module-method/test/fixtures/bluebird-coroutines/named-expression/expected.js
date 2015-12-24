@@ -1,5 +1,5 @@
 import { coroutine as _coroutine } from "bluebird";
-var foo = (function () {
+var foo = function () {
   var ref = _coroutine(function* () {
     console.log(bar);
   });
@@ -7,4 +7,4 @@ var foo = (function () {
   return function bar() {
     return ref.apply(this, arguments);
   };
-})();
+}();

@@ -4,7 +4,7 @@ var A = function A() {
   babelHelpers.classCallCheck(this, A);
 };
 
-var B = (function (_A) {
+var B = function (_A) {
   babelHelpers.inherits(B, _A);
 
   function B() {
@@ -16,5 +16,4 @@ var B = (function (_A) {
   }
 
   return B;
-})(A);
-
+}(A);

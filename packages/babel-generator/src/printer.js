@@ -8,6 +8,7 @@ export default class Printer extends Buffer {
     super(...args);
     this.insideAux = false;
     this.printAuxAfterOnNextUserNode = false;
+    this._printStack = [];
   }
 
   print(node, parent, opts = {}) {
@@ -32,10 +33,12 @@ export default class Printer extends Buffer {
       throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
 
+    this._printStack.push(node);
+
     if (node.loc) this.printAuxAfterComment();
     this.printAuxBeforeComment(oldInAux);
 
-    let needsParens = n.needsParens(node, parent);
+    let needsParens = n.needsParens(node, parent, this._printStack);
     if (needsParens) this.push("(");
 
     this.printLeadingComments(node, parent);
@@ -58,6 +61,7 @@ export default class Printer extends Buffer {
     if (needsParens) this.push(")");
 
     // end
+    this._printStack.pop();
     this.map.mark(node, "end");
     if (opts.after) opts.after();
 

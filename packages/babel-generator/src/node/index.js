@@ -5,7 +5,7 @@ import * as parens from "./parentheses";
 import each from "lodash/collection/each";
 import * as t from "babel-types";
 
-function find(obj, node, parent) {
+function find(obj, node, parent, printStack) {
   if (!obj) return;
   let result;
 
@@ -15,7 +15,7 @@ function find(obj, node, parent) {
 
     if (t.is(type, node)) {
       let fn = obj[type];
-      result = fn(node, parent);
+      result = fn(node, parent, printStack);
       if (result != null) break;
     }
   }
@@ -79,14 +79,14 @@ export default class Node {
     return Node.needsWhitespace(node, parent, "after");
   }
 
-  static needsParens(node, parent) {
+  static needsParens(node, parent, printStack) {
     if (!parent) return false;
 
     if (t.isNewExpression(parent) && parent.callee === node) {
       if (isOrHasCallExpression(node)) return true;
     }
 
-    return find(parens, node, parent);
+    return find(parens, node, parent, printStack);
   }
 }
 

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _store = require("./store");
 
-let Login = (function (_React$Component) {
+let Login = function (_React$Component) {
   babelHelpers.inherits(Login, _React$Component);
 
   function Login() {
@@ -21,6 +21,6 @@ let Login = (function (_React$Component) {
     }
   }]);
   return Login;
-})(React.Component);
+}(React.Component);
 
 exports.default = Login;

@@ -8,7 +8,7 @@ var _last2 = require("lodash/array/last");
 
 var _last3 = babelHelpers.interopRequireDefault(_last2);
 
-let Container = (function () {
+let Container = function () {
   function Container() {
     babelHelpers.classCallCheck(this, Container);
   }
@@ -24,6 +24,6 @@ let Container = (function () {
     }
   }]);
   return Container;
-})();
+}();
 
 exports.default = Container;

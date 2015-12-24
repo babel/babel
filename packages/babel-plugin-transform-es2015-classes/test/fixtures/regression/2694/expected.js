@@ -8,7 +8,7 @@ var _BaseFoo2 = require('./BaseFoo');
 
 var _BaseFoo3 = babelHelpers.interopRequireDefault(_BaseFoo2);
 
-var SubFoo = (function (_BaseFoo) {
+var SubFoo = function (_BaseFoo) {
   babelHelpers.inherits(SubFoo, _BaseFoo);
 
   function SubFoo() {
@@ -24,6 +24,6 @@ var SubFoo = (function (_BaseFoo) {
     }
   }]);
   return SubFoo;
-})(_BaseFoo3.default);
+}(_BaseFoo3.default);
 
 exports.default = SubFoo;
