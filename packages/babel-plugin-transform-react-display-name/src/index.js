@@ -38,42 +38,48 @@ export default function ({ types: t }) {
     return true;
   }
 
+  const addDisplayNameVisitor = {
+    ExportDefaultDeclaration({ node }) {
+      if (isCreateClass(node.declaration)) {
+        let displayName = this.file.opts.basename;
+
+        // ./{module name}/index.js
+        if (displayName === "index") {
+          displayName = path.basename(path.dirname(this.file.opts.filename));
+        }
+
+        addDisplayName(displayName, node.declaration);
+      }
+    },
+
+    "AssignmentExpression|ObjectProperty|VariableDeclarator"({ node }) {
+      let left, right;
+
+      if (t.isAssignmentExpression(node)) {
+        left = node.left;
+        right = node.right;
+      } else if (t.isObjectProperty(node)) {
+        left = node.key;
+        right = node.value;
+      } else if (t.isVariableDeclarator(node)) {
+        left = node.id;
+        right = node.init;
+      }
+
+      if (t.isMemberExpression(left)) {
+        left = left.property;
+      }
+
+      if (t.isIdentifier(left) && isCreateClass(right)) {
+        addDisplayName(left.name, right);
+      }
+    }
+  };
+
   return {
     visitor: {
-      ExportDefaultDeclaration({ node }, state) {
-        if (isCreateClass(node.declaration)) {
-          let displayName = state.file.opts.basename;
-
-          // ./{module name}/index.js
-          if (displayName === "index") {
-            displayName = path.basename(path.dirname(state.file.opts.filename));
-          }
-
-          addDisplayName(displayName, node.declaration);
-        }
-      },
-
-      "AssignmentExpression|ObjectProperty|VariableDeclarator"({ node }) {
-        let left, right;
-
-        if (t.isAssignmentExpression(node)) {
-          left = node.left;
-          right = node.right;
-        } else if (t.isObjectProperty(node)) {
-          left = node.key;
-          right = node.value;
-        } else if (t.isVariableDeclarator(node)) {
-          left = node.id;
-          right = node.init;
-        }
-
-        if (t.isMemberExpression(left)) {
-          left = left.property;
-        }
-
-        if (t.isIdentifier(left) && isCreateClass(right)) {
-          addDisplayName(left.name, right);
-        }
+      Program(path, state) {
+        path.traverse(addDisplayNameVisitor, state);
       }
     }
   };
