@@ -20,6 +20,7 @@ program.option("-i, --ignore [globs]", "");
 program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]");
 program.option("-w, --plugins [string]", "", util.list);
 program.option("-b, --presets [string]", "", util.list);
+program.option("-r, --root [directory]", "Root of the package; used when searching for .babelrc", process.cwd())
 
 let pkg = require("../package.json");
 program.version(pkg.version);
@@ -29,6 +30,7 @@ program.parse(process.argv);
 //
 
 register({
+  root:       program.root,
   extensions: program.extensions,
   ignore:     program.ignore,
   only:       program.only,

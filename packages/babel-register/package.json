@@ -8,12 +8,13 @@
   "main": "lib/node.js",
   "browser": "lib/browser.js",
   "dependencies": {
+    "babel-core": "^6.3.13",
+    "babel-runtime": "^5.0.0",
+    "caller": "^1.0.1",
     "core-js": "^1.0.0",
     "home-or-tmp": "^1.0.0",
-    "path-exists": "^1.0.0",
     "lodash": "^3.10.0",
-    "source-map-support": "^0.2.10",
-    "babel-core": "^6.3.13",
-    "babel-runtime": "^5.0.0"
+    "path-exists": "^1.0.0",
+    "source-map-support": "^0.2.10"
   }
 }

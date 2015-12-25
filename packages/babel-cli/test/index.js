@@ -28,7 +28,7 @@ var pluginLocs = [
 var readDir = function (loc) {
   var files = {};
   if (pathExists.sync(loc)) {
-    _.each(readdir(loc), function (filename) {
+    _.each(readdir(loc, () => true), function (filename) {
       var contents = helper.readFile(loc + "/" + filename);
       files[filename] = contents;
     });
