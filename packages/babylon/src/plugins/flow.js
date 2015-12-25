@@ -109,10 +109,18 @@ pp.flowParseInterfaceish = function (node, allowStatic) {
   }
 
   node.extends = [];
+  node.mixins = [];
 
   if (this.eat(tt._extends)) {
     do {
       node.extends.push(this.flowParseInterfaceExtends());
+    } while(this.eat(tt.comma));
+  }
+
+  if (this.isContextual("mixins")) {
+    this.next();
+    do {
+      node.mixins.push(this.flowParseInterfaceExtends());
     } while(this.eat(tt.comma));
   }
 
