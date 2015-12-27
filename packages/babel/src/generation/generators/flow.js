@@ -147,6 +147,10 @@ export function _interfaceish(node, print) {
     this.push(" extends ");
     print.join(node.extends, { separator: ", " });
   }
+  if (node.mixins && node.mixins.length) {
+    this.push(" mixins ");
+    print.join(node.mixins, { separator: ", " });
+  }
   this.space();
   print.plain(node.body);
 }

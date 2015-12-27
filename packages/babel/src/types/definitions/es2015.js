@@ -21,7 +21,7 @@ defineType("ClassBody", {
 });
 
 defineType("ClassDeclaration", {
-  visitor: ["id", "body", "superClass", "typeParameters", "superTypeParameters", "implements", "decorators"],
+  visitor: ["id", "body", "superClass", "mixins", "typeParameters", "superTypeParameters", "implements", "decorators"],
   aliases: ["Scopable", "Class", "Statement", "Declaration"]
 });
 
