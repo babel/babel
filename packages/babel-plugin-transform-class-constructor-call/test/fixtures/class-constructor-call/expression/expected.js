@@ -1,4 +1,4 @@
-let Foo = (function () {
+let Foo = function () {
   let _class2 = class {};
 
   var _classCall = function () {
@@ -15,4 +15,4 @@ let Foo = (function () {
 
   _class.__proto__ = _class2;
   return _class;
-})();
+}();

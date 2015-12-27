@@ -5,7 +5,7 @@ var obj = {
     })();
   },
 
-  h: (function (_h) {
+  h: function (_h) {
     function h() {
       return _h.apply(this, arguments);
     }
@@ -15,7 +15,7 @@ var obj = {
     };
 
     return h;
-  })(function () {
+  }(function () {
     console.log(h);
   }),
 

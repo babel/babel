@@ -1,7 +1,7 @@
 "use strict";
 
 var x = {
-  Foo: (function (_Foo) {
+  Foo: function (_Foo) {
     babelHelpers.inherits(_class, _Foo);
 
     function _class() {
@@ -10,5 +10,5 @@ var x = {
     }
 
     return _class;
-  })(Foo)
+  }(Foo)
 };

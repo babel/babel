@@ -23,9 +23,9 @@
     return (0, _evens.isEven)(n) ? n + 1 : n + 2;
   }
 
-  var isOdd = exports.isOdd = (function (isEven) {
+  var isOdd = exports.isOdd = function (isEven) {
     return function (n) {
       return !isEven(n);
     };
-  })(_evens.isEven);
+  }(_evens.isEven);
 });

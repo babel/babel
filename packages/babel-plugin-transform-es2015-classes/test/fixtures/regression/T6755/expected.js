@@ -2,7 +2,7 @@
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Example = (function () {
+var Example = function () {
   function Example() {
     _classCallCheck(this, Example);
   }
@@ -27,4 +27,4 @@ var Example = (function () {
     }, test2, this);
   });
   return Example;
-})();
+}();
