@@ -11,3 +11,5 @@ switch (a, b, c) {}
 for (a in b, c);
 
 while (a, b, c);
+
+!(function () {})(), a();
