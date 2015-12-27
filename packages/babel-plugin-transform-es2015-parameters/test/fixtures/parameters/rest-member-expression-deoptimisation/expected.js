@@ -61,3 +61,11 @@ var b = function () {
 
   return bar.len;
 };
+
+var b = function (foo) {
+  return (arguments.length - 1) * 2;
+};
+
+var b = function (foo, baz) {
+  return arguments.length - 2;
+};

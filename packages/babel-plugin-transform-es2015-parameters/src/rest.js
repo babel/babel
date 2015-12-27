@@ -60,7 +60,7 @@ let memberExpressionOptimisationVisitor = {
         // we can safely optimise it
         let prop = parentPath.get("property");
         if (prop.isBaseType("number")) {
-          state.candidates.push(path);
+          state.candidates.push({cause: "indexGetter", path});
           return;
         }
       }
@@ -69,8 +69,7 @@ let memberExpressionOptimisationVisitor = {
       if (parentPath.isMemberExpression({ computed: false, object: node })) {
         let prop = parentPath.get("property");
         if (prop.node.name === "length") {
-          state.replaceOnly = true;
-          state.candidates.push(path);
+          state.candidates.push({cause: "lengthGetter", path});
           return;
         }
       }
@@ -82,7 +81,7 @@ let memberExpressionOptimisationVisitor = {
       if (state.offset === 0 && parentPath.isSpreadElement()) {
         let call = parentPath.parentPath;
         if (call.isCallExpression() && call.node.arguments.length === 1) {
-          state.candidates.push(path);
+          state.candidates.push({cause: "argSpread", path});
           return;
         }
       }
@@ -103,9 +102,29 @@ let memberExpressionOptimisationVisitor = {
     }
   }
 };
-
 function hasRest(node) {
   return t.isRestElement(node.params[node.params.length - 1]);
+}
+
+function optimiseIndexGetter(path, argsId, offset) {
+  path.parentPath.replaceWith(loadRest({
+    ARGUMENTS: argsId,
+    INDEX: t.numericLiteral(path.parent.property.value + offset)
+  }));
+}
+
+function optimiseLengthGetter(path, argsLengthExpression, argsId, offset) {
+  if (offset) {
+    path.parentPath.replaceWith(
+      t.binaryExpression(
+        "-",
+        argsLengthExpression,
+        t.numericLiteral(offset),
+      )
+    );
+  } else {
+    path.replaceWith(argsId);
+  }
 }
 
 export let visitor = {
@@ -113,22 +132,16 @@ export let visitor = {
     let { node, scope } = path;
     if (!hasRest(node)) return;
 
-    let restParam = node.params.pop();
-    let rest = restParam.argument;
+    let rest = node.params.pop().argument;
 
     let argsId = t.identifier("arguments");
+    let argsLengthExpression = t.memberExpression(
+      argsId,
+      t.identifier("length"),
+    );
 
     // otherwise `arguments` will be remapped in arrow functions
     argsId._shadowedFunctionLiteral = path;
-
-    function optimiseCandidate(parent, parentPath, offset) {
-      if (parent.property) {
-        parentPath.replaceWith(loadRest({
-          ARGUMENTS: argsId,
-          INDEX: t.numericLiteral(parent.property.value + offset)
-        }));
-      }
-    }
 
     // check and optimise for extremely common cases
     let state = {
@@ -146,9 +159,6 @@ export let visitor = {
 
       // whether any references to the rest parameter were made in a function
       deopted: false,
-
-      // whether all we need to do is replace rest parameter identifier with 'arguments'
-      replaceOnly: false
     };
 
     path.traverse(memberExpressionOptimisationVisitor, state);
@@ -156,16 +166,24 @@ export let visitor = {
     if (!state.deopted && !state.references.length) {
       // we only have shorthands and there are no other references
       if (state.candidates.length) {
-        for (let candidate of (state.candidates: Array)) {
-          candidate.replaceWith(argsId);
-          if (!state.replaceOnly) {
-            optimiseCandidate(candidate.parent, candidate.parentPath, state.offset);
+        for (let {path, cause} of (state.candidates: Array)) {
+          switch (cause) {
+            case "indexGetter":
+              optimiseIndexGetter(path, argsId, state.offset);
+              break;
+            case "lengthGetter":
+              optimiseLengthGetter(path, argsLengthExpression, argsId, state.offset);
+              break;
+            default:
+              path.replaceWith(argsId);
           }
         }
       }
       return;
     } else {
-      state.references = state.references.concat(state.candidates);
+      state.references = state.references.concat(
+        state.candidates.map(({path}) => path)
+      );
     }
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop

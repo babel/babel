@@ -32,3 +32,11 @@ var b = function (foo, ...bar) {
 var b = function (...bar) {
   return bar.len;
 };
+
+var b = function (foo, ...bar) {
+  return bar.length * 2;
+};
+
+var b = function (foo, baz, ...bar) {
+  return bar.length;
+};
