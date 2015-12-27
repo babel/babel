@@ -42,7 +42,7 @@ defineType("AssignmentExpression", {
   },
   builder: ["operator", "left", "right"],
   visitor: ["left", "right"],
-  aliases: ["Expression"]
+  aliases: ["Binary", "Expression"]
 });
 
 defineType("BinaryExpression", {
