@@ -104,6 +104,10 @@ export function _interfaceish(node: Object) {
     this.push(" extends ");
     this.printJoin(node.extends, node, { separator: ", " });
   }
+  if (node.mixins && node.mixins.length) {
+    this.push(" mixins ");
+    this.printJoin(node.mixins, node, { separator: ", " });
+  }
   this.space();
   this.print(node.body, node);
 }
