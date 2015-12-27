@@ -123,6 +123,22 @@ export function SequenceExpression(node: Object, parent: Object): boolean {
     return false;
   }
 
+  if (t.isSwitchStatement(parent) && parent.discriminant === node) {
+    return false;
+  }
+
+  if (t.isWhileStatement(parent) && parent.test === node) {
+    return false;
+  }
+
+  if (t.isIfStatement(parent) && parent.test === node) {
+    return false;
+  }
+
+  if (t.isForInStatement(parent) && parent.right === node) {
+    return false;
+  }
+
   // Otherwise err on the side of overparenthesization, adding
   // explicit exceptions above if this proves overzealous.
   return true;
