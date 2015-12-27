@@ -144,6 +144,9 @@ export default function ({ node, parent, scope, id }) {
         return;
       }
     }
+  } else if (t.isAssignmentExpression(parent)) {
+    // foo = function () {};
+    id = parent.left;
   } else if (!id) {
     return;
   }

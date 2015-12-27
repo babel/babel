@@ -1,17 +1,13 @@
 var _class, _temp;
 
-call((_temp = _class = function () {
-  function _class2() {
-    babelHelpers.classCallCheck(this, _class2);
-  }
+call((_temp = _class = function _class() {
+  babelHelpers.classCallCheck(this, _class);
+}, _class.test = true, _temp));
 
-  return _class2;
-}(), _class.test = true, _temp));
-
-var _class3 = function _class3() {
-  babelHelpers.classCallCheck(this, _class3);
+var _class2 = function _class2() {
+  babelHelpers.classCallCheck(this, _class2);
 };
 
-_class3.test = true;
-export default _class3;
+_class2.test = true;
+export default _class2;
 ;
