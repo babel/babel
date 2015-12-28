@@ -107,7 +107,12 @@ function buildLabelStatement(prefix, key = "label") {
 
     let label = node[key];
     if (label) {
-      this.push(" ");
+      if (!(this.format.minified && (t.isUnaryExpression(label, { prefix: true }) ||
+                                     t.isUpdateExpression(label, { prefix: true })))) {
+        this.push(" ");
+
+      }
+
       let terminatorState = this.startTerminatorless();
       this.print(label, node);
       this.endTerminatorless(terminatorState);
@@ -153,7 +158,8 @@ export function CatchClause(node: Object) {
   this.keyword("catch");
   this.push("(");
   this.print(node.param, node);
-  this.push(") ");
+  this.push(")");
+  this.space();
   this.print(node.body, node);
 }
 
