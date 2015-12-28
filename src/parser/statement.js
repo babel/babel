@@ -460,7 +460,8 @@ pp.parseBlockBody = function (node, allowDirectives, topLevel, end) {
     let stmt = this.parseStatement(true, topLevel);
 
     if (allowDirectives && !parsedNonDirective &&
-        stmt.type === "ExpressionStatement" && stmt.expression.type === "StringLiteral") {
+        stmt.type === "ExpressionStatement" && stmt.expression.type === "StringLiteral" &&
+        !stmt.expression.extra.parenthesized) {
       let directive = this.stmtToDirective(stmt);
       node.directives.push(directive);
 
