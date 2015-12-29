@@ -9,6 +9,7 @@ cache:
 
 node_js:
  - stable
+ - "5.0"
  - "4.0"
  - iojs
  - "0.10"
