@@ -37,6 +37,10 @@ getV8Flags(function (err, v8Flags) {
       case "--expose-gc":
         args.unshift("--expose-gc");
         break;
+        
+      case "--nolazy":
+        args.unshift("--nolazy");
+        break;
 
       default:
         if (v8Flags.indexOf(arg) >= 0 || arg.indexOf("--trace") === 0) {
