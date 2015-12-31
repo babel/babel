@@ -1,6 +1,6 @@
 "use strict";
 
-System.register(["./evens"], function (_export, __moduleName) {
+System.register(["./evens"], function (_export, _context) {
   var isEven, p, a, i, j, isOdd;
   return {
     setters: [function (_evens) {

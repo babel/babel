@@ -2,7 +2,7 @@ import hoistVariables from "babel-helper-hoist-variables";
 import template from "babel-template";
 
 let buildTemplate = template(`
-  System.register(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, __moduleName) {
+  System.register(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
     BEFORE_BODY;
     return {
       setters: [SETTERS],
@@ -52,9 +52,19 @@ export default function ({ types: t }) {
     inherits: require("babel-plugin-transform-strict-mode"),
 
     visitor: {
+      ReferencedIdentifier(path, state) {
+        if (path.node.name == "__moduleName" && !path.scope.hasBinding("__moduleName")) {
+          path.replaceWith(t.memberExpression(state.contextIdent, t.identifier("id")));
+        }
+      },
+
       Program: {
-        exit(path) {
+        enter(path, state) {
+          state.contextIdent = path.scope.generateUidIdentifier("context");
+        },
+        exit(path, state) {
           let exportIdent = path.scope.generateUidIdentifier("export");
+          let contextIdent = state.contextIdent;
 
           let exportNames = Object.create(null);
           let modules = Object.create(null);
@@ -241,7 +251,8 @@ export default function ({ types: t }) {
               SETTERS: setters,
               SOURCES: sources,
               BODY: path.node.body,
-              EXPORT_IDENTIFIER: exportIdent
+              EXPORT_IDENTIFIER: exportIdent,
+              CONTEXT_IDENTIFIER: contextIdent
             })
           ];
         }

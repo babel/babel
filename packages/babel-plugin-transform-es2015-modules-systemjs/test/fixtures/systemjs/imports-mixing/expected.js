@@ -1,6 +1,6 @@
 "use strict";
 
-System.register(["foo"], function (_export, __moduleName) {
+System.register(["foo"], function (_export, _context) {
   var foo, xyz;
   return {
     setters: [function (_foo) {
