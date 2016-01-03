@@ -51,6 +51,10 @@ module.exports = {
       values: "object/values"
     },
 
+    RegExp: {
+      escape: "regexp/escape"
+    },
+
     Math: {
       acosh: "math/acosh",
       asinh: "math/asinh",
@@ -68,11 +72,7 @@ module.exports = {
       sign: "math/sign",
       sinh: "math/sinh",
       tanh: "math/tanh",
-      trunc: "math/trunc",
-      iaddh: "math/iaddh",
-      isubh: "math/isubh",
-      imulh: "math/imulh",
-      umulh: "math/umulh"
+      trunc: "math/trunc"
     },
 
     Symbol: {
@@ -97,16 +97,14 @@ module.exports = {
       endsWith: "string/ends-with",
       fromCodePoint: "string/from-code-point",
       includes: "string/includes",
-      padStart: "string/pad-start",
-      padEnd: "string/pad-end",
+      padLeft: "string/pad-left",
+      padRight: "string/pad-right",
       raw: "string/raw",
       repeat: "string/repeat",
       startsWith: "string/starts-with",
       trim: "string/trim",
       trimLeft: "string/trim-left",
-      trimRight: "string/trim-right",
-      trimStart: "string/trim-left",
-      trimEnd: "string/trim-right"
+      trimRight: "string/trim-right"
     },
 
     Number: {
@@ -136,14 +134,6 @@ module.exports = {
       preventExtensions: "reflect/prevent-extensions",
       setPrototypeOf: "reflect/set-prototype-of",
       set: "reflect/set"
-    },
-
-    System: {
-      global: "system/global"
-    },
-
-    Error: {
-      isError: "error/is-error"
     }
   }
 };
