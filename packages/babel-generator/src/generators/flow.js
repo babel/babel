@@ -43,6 +43,11 @@ export function DeclareModule(node: Object) {
   this.print(node.body, node);
 }
 
+export function DeclareTypeAlias(node: Object) {
+  this.push("declare ");
+  this.TypeAlias(node);
+}
+
 export function DeclareVariable(node: Object) {
   this.push("declare var ");
   this.print(node.id, node);

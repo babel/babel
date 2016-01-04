@@ -10,3 +10,5 @@ declare class A { static foo(): number; static x: string; }
 declare class A { static [indexer: number]: string }
 declare class A { static (): number }
 declare class A mixins B<T>, C {}
+declare type A = string;
+declare type T<U> = { [k: string]: U };
