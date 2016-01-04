@@ -36,6 +36,11 @@ export function DeclareFunction(node: Object) {
   this.semicolon();
 }
 
+export function DeclareInterface(node: Object) {
+  this.push("declare ");
+  this.InterfaceDeclaration(node);
+}
+
 export function DeclareModule(node: Object) {
   this.push("declare module ");
   this.print(node.id, node);
