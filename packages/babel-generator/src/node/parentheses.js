@@ -144,6 +144,16 @@ export function SequenceExpression(node: Object, parent: Object): boolean {
   return true;
 }
 
+export function AwaitExpression(node: Object, parent: Object): boolean {
+  return t.isBinary(parent) ||
+         t.isUnaryLike(parent) ||
+         t.isCallExpression(parent) ||
+         t.isMemberExpression(parent) ||
+         t.isNewExpression(parent) ||
+         t.isConditionalExpression(parent) ||
+         t.isAwaitExpression(parent);
+}
+
 export function YieldExpression(node: Object, parent: Object): boolean {
   return t.isBinary(parent) ||
          t.isUnaryLike(parent) ||
