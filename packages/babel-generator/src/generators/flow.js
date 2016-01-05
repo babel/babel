@@ -36,11 +36,21 @@ export function DeclareFunction(node: Object) {
   this.semicolon();
 }
 
+export function DeclareInterface(node: Object) {
+  this.push("declare ");
+  this.InterfaceDeclaration(node);
+}
+
 export function DeclareModule(node: Object) {
   this.push("declare module ");
   this.print(node.id, node);
   this.space();
   this.print(node.body, node);
+}
+
+export function DeclareTypeAlias(node: Object) {
+  this.push("declare ");
+  this.TypeAlias(node);
 }
 
 export function DeclareVariable(node: Object) {

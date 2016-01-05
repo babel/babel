@@ -58,6 +58,10 @@ pp.flowParseDeclare = function (node) {
     return this.flowParseDeclareVariable(node);
   } else if (this.isContextual("module")) {
     return this.flowParseDeclareModule(node);
+  } else if (this.isContextual("type")) {
+    return this.flowParseDeclareTypeAlias(node);
+  } else if (this.isContextual("interface")) {
+    return this.flowParseDeclareInterface(node);
   } else {
     this.unexpected();
   }
@@ -95,6 +99,18 @@ pp.flowParseDeclareModule = function (node) {
   this.finishNode(bodyNode, "BlockStatement");
   return this.finishNode(node, "DeclareModule");
 };
+
+pp.flowParseDeclareTypeAlias = function (node) {
+  this.next();
+  this.flowParseTypeAlias(node);
+  return this.finishNode(node, "DeclareTypeAlias");
+};
+
+pp.flowParseDeclareInterface = function (node) {
+  this.next();
+  this.flowParseInterfaceish(node);
+  return this.finishNode(node, "DeclareInterface");
+}
 
 
 // Interfaces
