@@ -33,6 +33,8 @@ export default function ({ types: t }) {
           return;
         }
 
+        if (state.opts.polyfill === false) return;
+
         if (t.isMemberExpression(parent)) return;
         if (!has(definitions.builtins, node.name)) return;
         if (scope.getBindingIdentifier(node.name)) return;
