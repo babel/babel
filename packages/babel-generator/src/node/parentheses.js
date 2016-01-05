@@ -145,23 +145,17 @@ export function SequenceExpression(node: Object, parent: Object): boolean {
 }
 
 export function AwaitExpression(node: Object, parent: Object): boolean {
-  return t.isBinary(parent) ||
-         t.isUnaryLike(parent) ||
+  return t.isUnaryLike(parent) ||
          t.isCallExpression(parent) ||
          t.isMemberExpression(parent) ||
-         t.isNewExpression(parent) ||
-         t.isConditionalExpression(parent) ||
-         t.isAwaitExpression(parent);
+         t.isNewExpression(parent);
 }
 
 export function YieldExpression(node: Object, parent: Object): boolean {
-  return t.isBinary(parent) ||
-         t.isUnaryLike(parent) ||
+  return t.isUnaryLike(parent) ||
          t.isCallExpression(parent) ||
          t.isMemberExpression(parent) ||
-         t.isNewExpression(parent) ||
-         t.isConditionalExpression(parent) ||
-         t.isYieldExpression(parent);
+         t.isNewExpression(parent);
 }
 
 export function ClassExpression(node: Object, parent: Object): boolean {

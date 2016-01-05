@@ -4,5 +4,5 @@ function* foo() {
   var c = yield a = b;
   yield a, yield b;
   yield a = b;
-  return (yield 1) || (yield 2);
+  return yield 1 || yield 2;
 }
