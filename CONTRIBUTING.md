@@ -66,6 +66,12 @@ This is mostly overkill and you can limit the package to a select by using the `
 $ TEST_ONLY=babel-cli make test
 ```
 
+If want to run tests in continues mode:
+
+```sh
+TEST_ONLY=babel-cli TEST_WATCH=true make test
+```
+
 Use the `TEST_GREP` variable to run a subset of tests by name:
 
 ```sh
