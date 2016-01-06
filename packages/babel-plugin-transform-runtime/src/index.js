@@ -24,11 +24,9 @@ export default function ({ types: t }) {
 
     visitor: {
       ReferencedIdentifier(path, state) {
-        if (state.opts.regenerator === false) return;
-        
         let { node, parent, scope } = path;
 
-        if (node.name === "regeneratorRuntime") {
+        if (node.name === "regeneratorRuntime" && state.opts.regenerator !== false) {
           path.replaceWith(state.get("regeneratorIdentifier"));
           return;
         }
