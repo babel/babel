@@ -37,8 +37,18 @@ defineType("DeclareFunction", {
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"]
 });
 
+defineType("DeclareInterface", {
+  visitor: ["id", "typeParameters", "extends", "body"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"]
+});
+
 defineType("DeclareModule", {
   visitor: ["id", "body"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"]
+});
+
+defineType("DeclareTypeAlias", {
+  visitor: ["id", "typeParameters", "right"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"]
 });
 

@@ -55,6 +55,15 @@ export function DeclareFunction(node, print) {
 }
 
 /**
+ * Prints DeclareInterface.
+ */
+
+export function DeclareInterface(node, print) {
+  this.push("declare ");
+  this.InterfaceDeclaration(node, print);
+}
+
+/**
  * Prints DeclareModule, prints id and body.
  */
 
@@ -63,6 +72,15 @@ export function DeclareModule(node, print) {
   print.plain(node.id);
   this.space();
   print.plain(node.body);
+}
+
+/**
+ * Prints DeclareTypeAlias.
+ */
+
+export function DeclareTypeAlias(node, print) {
+  this.push("declare ");
+  this.TypeAlias(node, print);
 }
 
 /**
