@@ -658,7 +658,9 @@ export default function (instance) {
 
   instance.extend("shouldParseExportDeclaration", function (inner) {
     return function () {
-      return this.isContextual("type") || inner.call(this);
+      return this.isContextual("type")
+          || this.isContextual("interface")
+          || inner.call(this);
     };
   });
 
@@ -714,6 +716,11 @@ export default function (instance) {
           // export type Foo = Bar;
           return this.flowParseTypeAlias(declarationNode);
         }
+      } else if (this.isContextual("interface")) {
+        node.exportKind = "type";
+        let declarationNode = this.startNode();
+        this.next();
+        return this.flowParseInterface(declarationNode);
       } else {
         return inner.call(this, node);
       }
