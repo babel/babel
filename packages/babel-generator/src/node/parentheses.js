@@ -54,6 +54,14 @@ export function ObjectExpression(node: Object, parent: Object, printStack: Array
 }
 
 export function Binary(node: Object, parent: Object): boolean {
+  if (t.isAssignmentExpression(node)) {
+    if (t.isObjectPattern(node.left)) {
+      return true;
+    } else {
+      return ConditionalExpression(...arguments);
+    }
+  }
+
   if ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) {
     return true;
   }
@@ -225,14 +233,6 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
   }
 
   return UnaryLike(node, parent);
-}
-
-export function AssignmentExpression(node: Object): boolean {
-  if (t.isObjectPattern(node.left)) {
-    return true;
-  } else {
-    return ConditionalExpression(...arguments);
-  }
 }
 
 // Walk up the print stack to deterimine if our node can come first
