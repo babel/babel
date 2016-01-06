@@ -13,6 +13,45 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.4.0
+
+Thanks to @samwgoldman for all the new flow support!
+
+* **New Feature**
+ * `babylon`, `babel-types`, `babel-generator`: [#3202](https://github.com/babel/babel/pull/3202) Add support for `this` flow type.
+ * `babylon`, `babel-types`, `babel-generator`: [#3236](https://github.com/babel/babel/pull/3236) Add support for `export interface` flow syntax.
+ * `babylon`, `babel-types`, `babel-generator`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-flow-comments`: [#3230](https://github.com/babel/babel/pull/3230) Add support for `declare type` and `declare interface` flow syntax.
+ * `babylon`, `babel-types`, `babel-generator`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-flow-comments`: [#3203](https://github.com/babel/babel/pull/3203) Add support for flow mixins.
+ * `babel-cli`: [#3221](https://github.com/babel/babel/pull/3221): Handle `--nolazy` flag.
+ * `babel-plugin-transform-es2015-modules-systemjs`: [#3166](https://github.com/babel/babel/pull/3166) Add `__moduleName` support to `System.register`. Thanks @guybedford!
+ 
+* **Bug Fix**
+ * `babel-types`: [#3195](https://github.com/babel/babel/pull/3195) Allow `JSXText` node in `JSXElement` children property and remove `StringLiteral`.
+ * `babel-plugin-transform-es2015-parameters`: [#3214](https://github.com/babel/babel/pull/3214) Bugfix for `arguments.length` optimization having the wrong length. Thanks @fabiomcosta!
+ * `babylon`: [#3220](https://github.com/babel/babel/pull/3220) Don't parse parenthesized string as a `Directive`.
+ * `babel-helpers`: [#3218](https://github.com/babel/babel/pull/3218) Defer to the built-in `typeof` if support for Symbols exists. Thanks @jdalton!
+ * `babel-generator`: [#3213](https://github.com/babel/babel/pull/3213) Fix various parentheses bugs.
+ * `babel-plugin-transform-react-display-name`: [#3216](https://github.com/babel/babel/pull/3216) More relaxed `displayName` inference.
+ * `babel-helper-function-name`: [#3215](https://github.com/babel/babel/pull/3215) Set function names from `AssignmentExpression`. Thanks @spicyj!
+ * `babel-generator`: [#3210](https://github.com/babel/babel/pull/3210) Use a print stack to determine in parenthesis needs to be added.
+ * `babel-plugin-transform-runtime`: [#3235](https://github.com/babel/babel/pull/3235) Ensure `opts.polyfill = false` behaves correctly for all visitors. Thanks @guybedford!
+ * `babel-plugin-transform-runtime`: Ensure `regenerator` option doesn't cancel out core-js polyfill.
+ * `babel-generator`: [#3229](https://github.com/babel/babel/pull/3229) Check for parentheses for `AwaitExpressions` and fix over-parentheses in `YieldExpressions`.
+
+* **Spec Compliancy**
+ * `babylon`: [#3225](https://github.com/babel/babel/pull/3225) throw parse error if class properties do not have a semicolon.
+
+* **Breaking Change**
+ * `babel-plugin-external-helpers`: [#3205](https://github.com/babel/babel/pull/3205) Renamed from `babel-plugin-external-helpers-2` due to someone taking the npm name beforehand.
+
+* **Documentation**
+ * `babel-generator`: [#3240](https://github.com/babel/babel/pull/3240) Fix small in babel-generator README sample code. Thanks @athaeryn!
+
+* **Internal**
+ * [#3233](https://github.com/babel/babel/pull/3233) Update LICENSE end date to 2016. Thanks @maclover7!
+ * `babylon`: [#3204](https://github.com/babel/babel/pull/3204) Prevent users from patching by building it.
+ * `babel-types`: [#3217](https://github.com/babel/babel/pull/3217) Add `Binary` alias to `AssignmentExpression`.
+
 ## 6.3.26
 
 * **Bug Fix**
