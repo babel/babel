@@ -54,6 +54,11 @@ export function ObjectExpression(node: Object, parent: Object, printStack: Array
 }
 
 export function Binary(node: Object, parent: Object): boolean {
+  if (t.isAssignmentExpression(node)) {
+    // Delegate to the assignment expression visitor.
+    return null;
+  }
+
   if ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) {
     return true;
   }
