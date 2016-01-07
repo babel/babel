@@ -66,7 +66,7 @@ export function Binary(node: Object, parent: Object): boolean {
     return true;
   }
 
-  if (t.isBinary(parent) && !t.isAssignmentExpression(parent)) {
+  if (t.isBinary(parent)) {
     let parentOp  = parent.operator;
     let parentPos = PRECEDENCE[parentOp];
 
@@ -216,7 +216,7 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
-  if (t.isBinary(parent) && !t.isAssignmentExpression(parent)) {
+  if (t.isBinary(parent)) {
     return true;
   }
 
