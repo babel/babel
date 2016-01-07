@@ -13,12 +13,19 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
-## 6.4.1
+## 6.4.2 (2016-01-06)
+
+* **Bug Fix**
+ * `babylon`: [#3244](https://github.com/babel/babel/pull/3244) fix error location for class properties with a missing semicolon (Ref [#3225](https://github.com/babel/babel/pull/3225)).
+ * `babel-plugin-transform-es2015-parameters`: [#3246](https://github.com/babel/babel/pull/3246) Support expressions in rest arg access for `arguments.length` optimization.
+ * `babel-generator`: [#3247](https://github.com/babel/babel/pull/3247) Parenthesize await/yield expression in `BinaryExpression` (Ref [#3229](https://github.com/babel/babel/pull/3229)).
+
+## 6.4.1 (2016-01-06)
 
 * **Bug Fix**
  * `babel-types`: [#3245](https://github.com/babel/babel/pull/3245) Temporarily revert adding the `Binary` alias [#3217](https://github.com/babel/babel/pull/3217) and tests.
 
-## 6.4.0
+## 6.4.0 (2016-01-06)
 
 Thanks to @samwgoldman for all the new flow support!
 
