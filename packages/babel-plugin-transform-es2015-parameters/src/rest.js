@@ -107,9 +107,17 @@ function hasRest(node) {
 }
 
 function optimiseIndexGetter(path, argsId, offset) {
+  let index;
+
+  if (t.isNumericLiteral(path.parent.property)) {
+    index = t.numericLiteral(path.parent.property.value + offset);
+  } else {
+    index = t.binaryExpression("+", path.parent.property, t.numericLiteral(offset));
+  }
+
   path.parentPath.replaceWith(loadRest({
     ARGUMENTS: argsId,
-    INDEX: t.numericLiteral(path.parent.property.value + offset)
+    INDEX: index,
   }));
 }
 
