@@ -1,5 +1,6 @@
 /* @flow */
 
+import caller from "caller";
 import deepClone from "lodash/lang/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
@@ -131,7 +132,14 @@ function hookExtensions(_exts) {
 
 hookExtensions(util.canCompile.EXTENSIONS);
 
+function appendMatchers(current, next) {
+  if (!next || next.length == 0) return current;
+  return util.arrayify(current).concat(util.arrayify(next, util.regexify));
+}
+
 export default function (opts?: Object = {}) {
+  const root = opts.root || caller();
+
   if (opts.only != null) only = util.arrayify(opts.only, util.regexify);
   if (opts.ignore != null) ignore = util.arrayify(opts.ignore, util.regexify);
 
@@ -139,6 +147,15 @@ export default function (opts?: Object = {}) {
 
   if (opts.cache === false) cache = null;
 
+  // Honor the .babelrc configuration relative to the package that called
+  // babel-register, while still caching only/ignore for files being tested.
+  const packageOptions = (new OptionManager).init({filename: path.join(root, "dummy")});
+  only   = appendMatchers(only,   packageOptions.only);
+  ignore = appendMatchers(ignore, packageOptions.ignore);
+  only   = appendMatchers(only,   opts.only);
+  ignore = appendMatchers(ignore, opts.ignore);
+
+  delete opts.root;
   delete opts.extensions;
   delete opts.ignore;
   delete opts.cache;

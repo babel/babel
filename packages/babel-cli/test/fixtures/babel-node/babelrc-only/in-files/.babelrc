@@ -1,0 +1,5 @@
+{
+  "only": [
+    "node_modules/whitelisted/*"
+  ]
+}
