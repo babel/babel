@@ -1,5 +1,3 @@
-"use strict";
-
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define("MyLib", [], factory);
@@ -13,5 +11,7 @@
     global.MyLib = mod.exports;
   }
 })(this, function () {
+  "use strict";
+
   foobar();
 });
