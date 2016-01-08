@@ -5,14 +5,20 @@ define(["exports", "foo"], function (exports, _foo) {
     value: true
   });
 
-  for (let _key in _foo) {
-    if (_key === "default") continue;
-    Object.defineProperty(exports, _key, {
+  var _loop = function (_key2) {
+    if (_key2 === "default") return "continue";
+    Object.defineProperty(exports, _key2, {
       enumerable: true,
       get: function () {
-        return _foo[_key];
+        return _foo[_key2];
       }
     });
+  };
+
+  for (var _key2 in _foo) {
+    var _ret = _loop(_key2);
+
+    if (_ret === "continue") continue;
   }
 
   Object.defineProperty(exports, "foo", {
