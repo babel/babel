@@ -66,7 +66,7 @@ export function Binary(node: Object, parent: Object): boolean {
     return true;
   }
 
-  if (t.isBinary(parent) && !t.isAssignmentExpression(parent)) {
+  if (t.isBinary(parent)) {
     let parentOp  = parent.operator;
     let parentPos = PRECEDENCE[parentOp];
 
@@ -149,10 +149,10 @@ export function YieldExpression(node: Object, parent: Object): boolean {
          t.isUnaryLike(parent) ||
          t.isCallExpression(parent) ||
          t.isMemberExpression(parent) ||
-         t.isNewExpression(parent) ||
-         t.isConditionalExpression(parent) ||
-         t.isYieldExpression(parent);
+         t.isNewExpression(parent);
 }
+
+export { YieldExpression as AwaitExpression };
 
 export function ClassExpression(node: Object, parent: Object): boolean {
   // (class {});
@@ -212,7 +212,7 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
-  if (t.isBinary(parent) && !t.isAssignmentExpression(parent)) {
+  if (t.isBinary(parent)) {
     return true;
   }
 

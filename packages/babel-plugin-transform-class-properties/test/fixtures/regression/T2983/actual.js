@@ -1,7 +1,7 @@
 call(class {
-  static test = true
+  static test = true;
 });
 
 export default class {
-  static test = true
+  static test = true;
 };

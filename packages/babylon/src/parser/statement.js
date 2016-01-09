@@ -595,7 +595,7 @@ pp.parseClass = function (node, isStatement, optionalId) {
 };
 
 pp.isClassProperty = function () {
-  return this.match(tt.eq) || this.isLineTerminator();
+  return this.match(tt.eq) || this.match(tt.semi) || this.canInsertSemicolon();
 };
 
 pp.parseClassBody = function (node) {
@@ -747,7 +747,9 @@ pp.parseClassProperty = function (node) {
   } else {
     node.value = null;
   }
-  this.semicolon();
+  if (!this.eat(tt.semi)) {
+    this.raise(node.value && node.value.end || node.key.end, "A semicolon is required after a class property");
+  }
   return this.finishNode(node, "ClassProperty");
 };
 
