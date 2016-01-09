@@ -84,6 +84,12 @@ To test the code coverage, use:
 $ make test-cov
 ```
 
+Running the tests with node's debugger:
+
+```sh
+$ TEST_DEBUG=true make test
+```
+
 #### Internals
 
 Please see [`/doc`](/doc) for internals documentation relevant to developing babel.
