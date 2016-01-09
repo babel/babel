@@ -11,6 +11,7 @@ var ignore = [
   'harmony',
   'jsx'
 ];
+// var onlyTitle = '4';
 
 var fixtures = getFixtures(__dirname + "/fixtures", ignore);
 
@@ -19,6 +20,7 @@ _.each(fixtures, function (suites, name) {
     suite(name + "/" + testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
         test(task.title, !task.disabled && function () {
+          if (typeof onlyTitle !== 'undefined' && onlyTitle !== task.title) return;
           try {
             return runTest(task);
           } catch (err) {
@@ -46,6 +48,7 @@ function runTest(test) {
     var ast = parse(test.actual.code, opts);
     // console.log(JSON.stringify(ast, null, 2));
     // console.log(JSON.stringify(ast.program.body, null, 2));
+    // console.log(JSON.stringify(ast.tokens, null, 2));
   } catch (err) {
     if (opts.throws) {
       if (err.message === opts.throws) {
