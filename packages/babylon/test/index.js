@@ -2,7 +2,17 @@ var getFixtures = require("babel-helper-fixtures").multiple;
 var parse       = require("../lib").parse;
 var _           = require("lodash");
 
-var fixtures = getFixtures(__dirname + "/fixtures");
+var ignore = [
+  'comments',
+  'core',
+  'esprima',
+  'experimental',
+  'flow',
+  'harmony',
+  'jsx'
+];
+
+var fixtures = getFixtures(__dirname + "/fixtures", ignore);
 
 _.each(fixtures, function (suites, name) {
   _.each(suites, function (testSuite) {
@@ -34,6 +44,8 @@ function runTest(test) {
 
   try {
     var ast = parse(test.actual.code, opts);
+    // console.log(JSON.stringify(ast, null, 2));
+    // console.log(JSON.stringify(ast.program.body, null, 2));
   } catch (err) {
     if (opts.throws) {
       if (err.message === opts.throws) {
