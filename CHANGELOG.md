@@ -36,7 +36,7 @@ Thanks to @samwgoldman for all the new flow support!
  * `babylon`, `babel-types`, `babel-generator`, `babel-plugin-transform-flow-strip-types`, `babel-plugin-transform-flow-comments`: [#3203](https://github.com/babel/babel/pull/3203) Add support for flow mixins.
  * `babel-cli`: [#3221](https://github.com/babel/babel/pull/3221): Handle `--nolazy` flag.
  * `babel-plugin-transform-es2015-modules-systemjs`: [#3166](https://github.com/babel/babel/pull/3166) Add `__moduleName` support to `System.register`. Thanks @guybedford!
- 
+
 * **Bug Fix**
  * `babel-plugin-transform-es2015-parameters`: [#3214](https://github.com/babel/babel/pull/3214) Bugfix for `arguments.length` optimization having the wrong length. Thanks @fabiomcosta!
  * `babylon`: [#3220](https://github.com/babel/babel/pull/3220) Don't parse parenthesized string as a `Directive`.
@@ -52,12 +52,12 @@ Thanks to @samwgoldman for all the new flow support!
 * **Breaking Change**
  * `babylon`: [#3225](https://github.com/babel/babel/pull/3225) throw parse error if class properties do not have a semicolon.
  * `babel-types`: [#3195](https://github.com/babel/babel/pull/3195) Allow `JSXText` node in `JSXElement` children property and remove `StringLiteral`.
- * `babel-plugin-external-helpers`: [#3205](https://github.com/babel/babel/pull/3205) Renamed from `babel-plugin-external-helpers-2` due to someone taking the npm name beforehand.
 
 * **Documentation**
  * `babel-generator`: [#3240](https://github.com/babel/babel/pull/3240) Fix small in babel-generator README sample code. Thanks @athaeryn!
 
 * **Internal**
+ * `babel-plugin-external-helpers`: [#3205](https://github.com/babel/babel/pull/3205) Renamed from `babel-plugin-external-helpers-2` due to someone taking the npm name beforehand.
  * [#3233](https://github.com/babel/babel/pull/3233) Update LICENSE end date to 2016. Thanks @maclover7!
  * `babylon`: [#3204](https://github.com/babel/babel/pull/3204) Prevent users from patching by building it.
  * `babel-types`: [#3217](https://github.com/babel/babel/pull/3217) Add `Binary` alias to `AssignmentExpression`.
@@ -75,7 +75,7 @@ Thanks to @samwgoldman for all the new flow support!
  * Fix gulp build path to work on windows (fixes [T6855](http://phabricator.babeljs.io/T6855)).
  * `babel`: [#3193](https://github.com/babel/babel/pull/3193) Point users to the cli docs
  * `babel-core`: [#3196](https://github.com/babel/babel/pull/3196) Add a test for checking plugins/presets are resolved relative to `filename`
- 
+
 ## 6.3.25
 
 * **Bug Fix**
@@ -96,7 +96,7 @@ Thanks to @samwgoldman for all the new flow support!
 
  > Skipped 6.3.22.
 
-* **Breaking Change**
+* **Internal**
  * Renamed the `Flow Comments` plugin from `babel-plugin-flow-comments` to `babel-plugin-transform-flow-comments` for naming consistency.
 
 ## 6.3.21
@@ -108,7 +108,7 @@ Thanks to @samwgoldman for all the new flow support!
   * `babel-traverse`: [#3171](https://github.com/babel/babel/pull/3171) Fix infinite recursion bug with `introspection` method.
   * `transform-es2015-function-name`: [#3176](https://github.com/babel/babel/pull/3176) Stop transforming `ObjectMethod` (`MethodDefinition`) to a `FunctionExpression` since the `transform-es2015-shorthand-properties` plugin already does it.
   * `transform-es2015-parameters`: [#3143](https://github.com/babel/babel/pull/3143) Optimizations for `RestElement` such as using `arguments.length` (fixes [T6774](https://phabricator.babeljs.io/T6774)).
- 
+
  * **Documentation**
   * `babel-core`: [#3177](https://github.com/babel/babel/pull/3177) Clarify description of `comments` file config.
 
