@@ -59,7 +59,7 @@
           "value": "body header"
         },
         "body": {
-          "type": "BlockStatement",
+          "type": "CSSXRules",
           "start": 12,
           "end": 14,
           "loc": {
@@ -72,8 +72,7 @@
               "column": 14
             }
           },
-          "body": [],
-          "directives": []
+          "body": []
         }
       }
     ],
@@ -91,7 +90,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "body header",
       "start": 0,
@@ -109,9 +109,9 @@
     },
     {
       "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
+        "label": "cssxRulesStart",
+        "beforeExpr": false,
+        "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
@@ -134,7 +134,7 @@
     },
     {
       "type": {
-        "label": "}",
+        "label": "cssxRulesEnd",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -142,7 +142,8 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "start": 13,
       "end": 14,

@@ -28,7 +28,7 @@ export default function CSSX(instance) {
     return function (declaration, topLevel) {
       var fallback = () => inner.call(this, declaration, topLevel);
       var nextState, context;
-      // debugger;
+      debugger;
 
       if (this.matchOneOfThose(CSSXElementStartAssumption)) {
         nextState = this.lookahead();
@@ -54,20 +54,21 @@ export default function CSSX(instance) {
     return function (allowDirectives?) {
       var fallback = () => inner.call(this, allowDirectives);
       var context = this.curContext(), blockStmtNode;
-      debugger;
-      if (context === tc.cssx) {
-        blockStmtNode = this.startNode();
-        blockStmtNode.body = [];
+
+      if (context === tc.cssx) {        
         this.next();
+        blockStmtNode = this.startNodeAt(this.state.lastTokStart, this.state.lastTokStartLoc);
+        blockStmtNode.body = [];
+        this.cssxCheckForRulesEnd();
         // reading the property
         while (!this.eat(tt.cssxRulesEnd)) {
-          blockStmtNode.body.push(this.cssxBuildRuleNode(
-            this.cssxReadProperty(),
-            this.cssxReadValue()
-          ));
-          if (this.match(tt.braceR)) {
-            this.finishToken(tt.cssxRulesEnd);
-          }
+          blockStmtNode.body.push(
+            this.cssxBuildRuleNode(
+              this.cssxReadProperty(),
+              this.cssxReadValue()
+            )
+          );
+          this.cssxCheckForRulesEnd();
         }
         
         return this.finishNode(blockStmtNode, "CSSXRules");
@@ -94,65 +95,21 @@ export default function CSSX(instance) {
     }
   });
 
-  /*
-  instance.extend('readToken', function (inner) {
-    return function (code) {
-      var fallback = () => inner.call(this, code);
-      var curContext = this.curContext();
-      var beforeCurContext = this.state.context[this.state.context.length-2];
-      var propValue;
-
-      if (this.match(tt.colon) && curContext === tc.b_stat && beforeCurContext === tc.cssx) {
-        return this.finishToken(tt.cssxPropValue, this.cssxReadPropertyValue())
-      }
-
-      return fallback();  
-    }
-  });
-
-  instance.extend('parseLabeledStatement', function (inner) {
-    return function (node, maybeName, expr) {
-      var fallback = () => inner.call(this, code);
-      var exprStatNode, exprIdentifierNode, labelIdentifierNode;
-
-      if (this.match(tt.cssxPropValue)) {
-        exprStatNode = this.startNode();
-        exprStatNode.type = 'ExpressionStatement';
-        exprStatNode.body = exprIdentifierNode = this.startNode();
-        exprIdentifierNode.type = 'Identifier';
-        exprIdentifierNode.value = this.state.value;
-        node.body = exprStatNode;
-        node.label = labelIdentifierNode = this.startNode();
-        labelIdentifierNode.type = 'Identifier';
-        labelIdentifierNode.value = this.getPreviousToken(1).value;
-        var n = this.finishNode(node, "LabeledStatement");
-        this.next();
-        return n;
-      }
-
-      return fallback();
-    };
-  });
-
-  */
-
 };
 
 pp.cssxParseStyles = function() {
-  var elementNode = this.startNodeAt(this.state.start, this.state.startLoc);
-  var selectorNode = this.startNodeAt(this.state.start, this.state.startLoc);
-  var result;
+  var elementNode = this.startNode();
+  var selectorNode = this.startNode();
 
   selectorNode.value = this.state.value;
-  elementNode.selector = this.finishNode(
-    selectorNode, 'CSSXSelector', this.state.end, this.state.endLoc
-  );
+  elementNode.selector = this.finishNodeAt(selectorNode, 'CSSXSelector', this.state.end, this.state.endLoc);
   elementNode.body = this.parseBlock();
 
   this.cssxOut();
   return this.finishNode(elementNode, "CSSXElement");
 };
 
+// this function besically merged last two tokens into one
 pp.cssxParseSelector = function (nextState) {
   var lastToken, beforeLastToken;
 
@@ -193,20 +150,35 @@ pp.cssxReadSelector = function (token) {
 pp.cssxReadProperty = function() {
   var property = '';
   var pos = this.state.start;
-  var loc = this.state.startLoc.start;
+  var loc = this.state.startLoc;
 
   do {
     property += this.state.value;
     this.next();
   } while (!this.eat(tt.colon));
-  return this.cssxBuildRuleChildNode('CSSXProperty', property, pos, loc);
+  debugger;
+  return this.cssxBuildRuleChildNode(
+    'CSSXProperty',
+    property,
+    pos, 
+    loc,
+    this.state.lastTokStart,
+    this.state.lastTokStartLoc
+  );
 };
 
 pp.cssxReadValue = function() {
   var value = '';
   var pos = this.state.start;
-  var loc = this.state.startLoc.start;
-  var result = () => this.cssxBuildRuleChildNode('CSSXValue', value, pos, loc);
+  var loc = this.state.startLoc;
+  var result = () => this.cssxBuildRuleChildNode(
+    'CSSXValue',
+    value,
+    pos, 
+    loc,
+    this.state.lastTokEnd,
+    this.state.lastTokEndLoc
+  );
 
   while (!this.eat(tt.semi)) {
     if (this.match(tt.braceR)) {
@@ -227,12 +199,16 @@ pp.cssxBuildRuleNode = function (propertyNode, valueNode) {
   return this.finishNodeAt(node, 'CSSXRule', valueNode.end, valueNode.loc.end);
 };
 
-pp.cssxBuildRuleChildNode = function (type, value, pos, loc) {
+pp.cssxBuildRuleChildNode = function (type, value, pos, loc, posEnd, locEnd) {
   var node = this.startNodeAt(pos, loc);
 
   node.name = value;
-  return this.finishNodeAt(node, type, this.state.end, this.state.endLoc);
+  return this.finishNodeAt(node, type, posEnd || this.state.end, locEnd || this.state.endLoc);
 };
+
+pp.cssxCheckForRulesEnd = function () {
+  if (this.match(tt.braceR)) this.finishToken(tt.cssxRulesEnd);
+}
 
 pp.cssxIn = function () {
   const curContext = this.curContext();
