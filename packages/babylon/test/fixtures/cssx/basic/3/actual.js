@@ -1,1 +1,1 @@
-body header { margin: 0 }
+body { margin: 0 }

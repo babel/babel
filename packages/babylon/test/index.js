@@ -11,7 +11,7 @@ var ignore = [
   'harmony',
   'jsx'
 ];
-// var onlyTitle = '4';
+var onlyTitle = '3';
 
 var fixtures = getFixtures(__dirname + "/fixtures", ignore);
 
@@ -47,7 +47,7 @@ function runTest(test) {
   try {
     var ast = parse(test.actual.code, opts);
     // console.log(JSON.stringify(ast, null, 2));
-    // console.log(JSON.stringify(ast.program.body, null, 2));
+    console.log(JSON.stringify(ast.program.body, null, 2));
     // console.log(JSON.stringify(ast.tokens, null, 2));
   } catch (err) {
     if (opts.throws) {

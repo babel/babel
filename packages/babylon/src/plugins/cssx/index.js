@@ -2,48 +2,148 @@ import { TokenType, types as tt } from "../../tokenizer/types";
 import { Token } from "../../tokenizer";
 import { TokContext, types as tc } from "../../tokenizer/context";
 import Parser from "../../parser";
+import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 
 let pp = Parser.prototype;
 
 tc.cssx = new TokContext('cssx');
+tc.cssxRules = new TokContext('cssxRules');
+
+tt.cssxSelector = new TokenType('cssxSelector');
+tt.cssxRulesStart = new TokenType('cssxRulesStart');
+tt.cssxRulesEnd = new TokenType('cssxRulesEnd');
+tt.cssxPropValue = new TokenType('cssxPropValue');
+
+tt.cssxRulesStart.updateContext = function (prevType) {
+  if (prevType === tt.cssxSelector) this.state.context.push(tc.cssxRules);
+};
+
+const CSSXElementStartAssumption = [
+  tt.name, tt.star, tt.dot, tt.relational, tt.cssxSelector
+];
 
 export default function CSSX(instance) {
+
   instance.extend('parseStatement', function (inner) {
     return function (declaration, topLevel) {
-      const fallback = () => inner.call(this, declaration, topLevel);
-      debugger;
+      var fallback = () => inner.call(this, declaration, topLevel);
+      var nextState, context;
+      // debugger;
 
-      if (this.match(tt.name)) {
-        // we can't use lookahead here because we want to stay
-        // in the next state
-        let nextState = this.lookahead();
-        // reading the actual styles
-        if (nextState.type === tt.braceL) {
-          this.cssxIn();
-          return this.cssxParseElement(nextState);
-        // reading selector
-        } else if (nextState.type === tt.name) {
+      if (this.matchOneOfThose(CSSXElementStartAssumption)) {
+        nextState = this.lookahead();
+        context = this.curContext();
+        // complex selector (more then one word)
+        if (nextState.type === tt.name || nextState.type === tt.relational) {
           this.cssxIn();
           this.cssxParseSelector(nextState);
           return this.parseStatement();
-        // returning the old state and fallback to
-        // the default behavior
+        // reading the actual styles
+        } else if (nextState.type === tt.braceL) {
+          this.cssxIn();
+          this.finishToken(tt.cssxSelector, this.state.value);
+          return this.cssxParseStyles(nextState);
         }
       }
 
       return fallback();
     }
   });
+
+  instance.extend('parseBlock', function (inner) {
+    return function (allowDirectives?) {
+      var fallback = () => inner.call(this, allowDirectives);
+      var context = this.curContext(), blockStmtNode;
+      debugger;
+      if (context === tc.cssx) {
+        blockStmtNode = this.startNode();
+        blockStmtNode.body = [];
+        this.next();
+        // reading the property
+        while (!this.eat(tt.cssxRulesEnd)) {
+          blockStmtNode.body.push(this.cssxBuildRuleNode(
+            this.cssxReadProperty(),
+            this.cssxReadValue()
+          ));
+          if (this.match(tt.braceR)) {
+            this.finishToken(tt.cssxRulesEnd);
+          }
+        }
+        
+        return this.finishNode(blockStmtNode, "CSSXRules");
+      }
+
+      return fallback();
+    }
+  });
+
+  instance.extend('readToken', function (inner) {
+    return function (code) {
+      var fallback = () => inner.call(this, code);
+      var context = this.curContext();
+      
+      if (this.isLookahead) return fallback();
+
+      if (context === tc.cssx && this.lookahead().type === tt.braceL) {
+        ++this.state.pos;
+        this.finishToken(tt.cssxRulesStart);
+        return this.next();
+      }
+
+      return fallback();  
+    }
+  });
+
+  /*
+  instance.extend('readToken', function (inner) {
+    return function (code) {
+      var fallback = () => inner.call(this, code);
+      var curContext = this.curContext();
+      var beforeCurContext = this.state.context[this.state.context.length-2];
+      var propValue;
+
+      if (this.match(tt.colon) && curContext === tc.b_stat && beforeCurContext === tc.cssx) {
+        return this.finishToken(tt.cssxPropValue, this.cssxReadPropertyValue())
+      }
+
+      return fallback();  
+    }
+  });
+
+  instance.extend('parseLabeledStatement', function (inner) {
+    return function (node, maybeName, expr) {
+      var fallback = () => inner.call(this, code);
+      var exprStatNode, exprIdentifierNode, labelIdentifierNode;
+
+      if (this.match(tt.cssxPropValue)) {
+        exprStatNode = this.startNode();
+        exprStatNode.type = 'ExpressionStatement';
+        exprStatNode.body = exprIdentifierNode = this.startNode();
+        exprIdentifierNode.type = 'Identifier';
+        exprIdentifierNode.value = this.state.value;
+        node.body = exprStatNode;
+        node.label = labelIdentifierNode = this.startNode();
+        labelIdentifierNode.type = 'Identifier';
+        labelIdentifierNode.value = this.getPreviousToken(1).value;
+        var n = this.finishNode(node, "LabeledStatement");
+        this.next();
+        return n;
+      }
+
+      return fallback();
+    };
+  });
+
+  */
+
 };
 
-pp.cssxParseElement = function() {
-  // we expect that state is tt.name
+pp.cssxParseStyles = function() {
   var elementNode = this.startNodeAt(this.state.start, this.state.startLoc);
   var selectorNode = this.startNodeAt(this.state.start, this.state.startLoc);
   var result;
 
   selectorNode.value = this.state.value;
-  this.next();
   elementNode.selector = this.finishNode(
     selectorNode, 'CSSXSelector', this.state.end, this.state.endLoc
   );
@@ -56,37 +156,13 @@ pp.cssxParseElement = function() {
 pp.cssxParseSelector = function (nextState) {
   var lastToken, beforeLastToken;
 
-  /*
-export class Token {
-  constructor(state) {
-    this.type = state.type;
-    this.value = state.value;
-    this.start = state.start;
-    this.end = state.end;
-    this.loc = new SourceLocation(state.startLoc, state.endLoc);
-  }
-
-  type: TokenType;
-  value: any;
-  start: number;
-  end: number;
-  loc: SourceLocation;
-}
-
-    this.state.end = this.state.pos;
-    this.state.endLoc = this.state.curPosition();
-    let prevType = this.state.type;
-    this.state.type = type;
-    this.state.value = val;
-  */
-
   // getting the state into a new token
   this.next();
 
   // merging the newly added token into the current state
   lastToken = this.getPreviousToken();
   beforeLastToken = this.getPreviousToken(1);
-  this.state.value = lastToken.value + ' ' + this.state.value;
+  this.state.value = this.cssxReadSelector(lastToken);
   this.state.start = lastToken.start;
   this.state.startLoc = lastToken.loc.start;
 
@@ -103,8 +179,59 @@ export class Token {
     this.state.lastTokStart = 0;
   }
 
-  // the merging is done and we don't need the token
+  // the merging is done so we erase the last registered token
   this.state.tokens.length -= 1;
+};
+
+pp.cssxReadSelector = function (token) {
+  if (token.type === tt.dot) {
+    return '.' + this.state.value;
+  }
+  return token.value + ' ' + this.state.value
+};
+
+pp.cssxReadProperty = function() {
+  var property = '';
+  var pos = this.state.start;
+  var loc = this.state.startLoc.start;
+
+  do {
+    property += this.state.value;
+    this.next();
+  } while (!this.eat(tt.colon));
+  return this.cssxBuildRuleChildNode('CSSXProperty', property, pos, loc);
+};
+
+pp.cssxReadValue = function() {
+  var value = '';
+  var pos = this.state.start;
+  var loc = this.state.startLoc.start;
+  var result = () => this.cssxBuildRuleChildNode('CSSXValue', value, pos, loc);
+
+  while (!this.eat(tt.semi)) {
+    if (this.match(tt.braceR)) {
+      return result();
+      break;
+    }
+    value += this.state.value;
+    this.next();
+  }
+  return result();
+};
+
+pp.cssxBuildRuleNode = function (propertyNode, valueNode) {
+  var node = this.startNodeAt(propertyNode.start, propertyNode.loc.start);
+
+  node.label = propertyNode;
+  node.body = valueNode;
+  return this.finishNodeAt(node, 'CSSXRule', valueNode.end, valueNode.loc.end);
+};
+
+pp.cssxBuildRuleChildNode = function (type, value, pos, loc) {
+  var node = this.startNodeAt(pos, loc);
+
+  node.name = value;
+  return this.finishNodeAt(node, type, this.state.end, this.state.endLoc);
 };
 
 pp.cssxIn = function () {
@@ -126,7 +253,27 @@ pp.cssxOut = function () {
 };
 
 // utilities
+
 pp.getPreviousToken = function (steps=0) {
   return this.state.tokens[this.state.tokens.length - (steps+1)];
 };
+
+pp.matchOneOfThose = function (assumtion) {
+  for(let i=0; i<assumtion.length; i++) {
+    if (this.match(assumtion[i])) return true;
+  }
+  return false;
+};
+
+pp.printTokens = function () {
+  this.state.tokens.forEach(t => {
+    console.log(t.type.label + ' value=' + t.value);
+  });
+};
+pp.printContext = function () {
+  this.state.context.forEach(c => {
+    console.log(c.token);
+  });
+};
+
 
