@@ -27,7 +27,9 @@ let awaitVisitor = {
   },
 
   ArrowFunctionExpression(path) {
-    path.arrowFunctionToShadowed();
+    if (!path.node.async) {
+      path.arrowFunctionToShadowed();
+    }
   },
 
   AwaitExpression({ node }) {
