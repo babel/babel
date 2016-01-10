@@ -14,9 +14,20 @@ let buildWrapper = template(`
   })
 `);
 
+let arrowBuildWrapper =  template(`
+  (() => {
+    var ref = FUNCTION;
+    return (PARAMS) => ref.apply(this, arguments);
+  })
+`);
+
 let awaitVisitor = {
   Function(path) {
     path.skip();
+  },
+
+  ArrowFunctionExpression(path) {
+    path.arrowFunctionToShadowed();
   },
 
   AwaitExpression({ node }) {
@@ -42,9 +53,11 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
 
 function plainFunction(path: NodePath, callId: Object) {
   let node = path.node;
+  let wrapper = buildWrapper;
 
   if (path.isArrowFunctionExpression()) {
     path.arrowFunctionToShadowed();
+    wrapper = arrowBuildWrapper;
   }
 
   node.async = false;
@@ -60,7 +73,7 @@ function plainFunction(path: NodePath, callId: Object) {
   }
 
   let built = t.callExpression(callId, [node]);
-  let container = buildWrapper({
+  let container = wrapper({
     FUNCTION: built,
     PARAMS: node.params.map(() => path.scope.generateUidIdentifier("x"))
   }).expression;
