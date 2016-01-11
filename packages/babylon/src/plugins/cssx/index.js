@@ -34,7 +34,7 @@ export default function CSSX(instance) {
     return function (declaration, topLevel) {
       var fallback = () => inner.call(this, declaration, topLevel);
       var nextState, context;
-      debugger;
+
       if (this.matchOneOfThose(CSSXElementStartAssumption)) {
         nextState = this.lookahead();
         context = this.curContext();
@@ -69,7 +69,7 @@ export default function CSSX(instance) {
           this.skipSpace();
           this.next();
         } else {
-        // reading the property        
+          // reading the style        
           while (!this.match(tt.cssxRulesEnd)) {
             rules.push(this.cssxBuildRuleNode(this.cssxReadProperty(), this.cssxReadValue()));
           }
@@ -90,22 +90,40 @@ export default function CSSX(instance) {
 
       if (this.isLookahead) return fallback();
 
+      // the beginning of the rules block
       if (context === tc.cssx && this.matchNextToken(tt.braceL)) {
         ++this.state.pos;
         return this.finishToken(tt.cssxRulesStart);
       } else if (this.match(tt.cssxRulesStart)) {
+        // no styles
         if (this.lookahead().type === tt.braceR) {
-          debugger;
           ++this.state.pos;
           this.finishToken(tt.cssxRulesEnd);
           return this.next();
+        // finishg the { token
         } else {
           return this.finishToken(tt.cssxRulesStart);
         }
-      } else if (this.matchPreviousToken(tt.cssxProperty, 1) && this.match(tt.colon)) {
-        return this.finishToken(tt.colon);
-      } else if (this.match(tt.cssxValue) && this.matchNextToken(tt.braceR)) {
+      // matching the : between the property and the value
+      } else if (this.match(tt.cssxProperty) && code === 58) { // 58 = :
+        this.finishToken(tt.colon);
         ++this.state.pos;
+        return this.cssxStoreToken();
+      // matching the semicolon at the end of the rule
+      } else if (this.match(tt.cssxValue) && code === 59) { // 59 = ;
+        this.finishToken(tt.semi);
+        ++this.state.pos;
+        this.cssxStoreToken();
+        if (this.matchNextToken(tt.braceR)) {
+          ++this.state.pos;
+          this.skipSpace();
+          return this.finishToken(tt.cssxRulesEnd);
+        }
+        return;
+      } else if (this.match(tt.cssxValue) && this.matchNextToken(tt.braceR)) {
+        // ending without semicolon
+        ++this.state.pos;
+        this.skipSpace();
         return this.finishToken(tt.cssxRulesEnd);
       }
 
@@ -227,8 +245,7 @@ pp.cssxReadProperty = function() {
 
 pp.cssxReadValue = function() {
   let loc, pos, value;
-
-  if (this.match(tt.colon)) this.next();
+  debugger;
   this.skipSpace();
 
   loc = this.state.startLoc;
@@ -270,6 +287,17 @@ pp.cssxOut = function () {
   };
   this.state.context.pop();
   return this;
+};
+
+pp.cssxStoreToken = function () {
+  if (!this.isLookahead) {
+    this.state.tokens.push(new Token(this.state));
+  }
+
+  this.state.lastTokEnd = this.state.end;
+  this.state.lastTokStart = this.state.start;
+  this.state.lastTokEndLoc = this.state.endLoc;
+  this.state.lastTokStartLoc = this.state.startLoc;
 };
 
 // utilities
