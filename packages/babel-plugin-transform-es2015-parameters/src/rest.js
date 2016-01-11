@@ -186,11 +186,11 @@ export let visitor = {
         }
       }
       return;
-    } else {
-      state.references = state.references.concat(
-        state.candidates.map(({path}) => path)
-      );
     }
+
+    state.references = state.references.concat(
+      state.candidates.map(({path}) => path)
+    );
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
     state.deopted = state.deopted || !!node.shadow;
