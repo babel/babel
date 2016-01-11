@@ -1,4 +1,4 @@
-import rewritePattern from "regexpu/rewrite-pattern";
+import rewritePattern from "regexpu-core";
 import * as regex from "babel-helper-regex";
 
 export default function () {
