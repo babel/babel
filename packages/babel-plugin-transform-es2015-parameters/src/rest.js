@@ -29,12 +29,15 @@ let memberExpressionOptimisationVisitor = {
   },
 
   Function(path, state) {
-    // skip over functions as whatever `arguments` we reference inside will refer
-    // to the wrong function
+    // Detect whether any reference to rest is contained in nested functions to
+    // determine if deopt is necessary.
     let oldNoOptimise = state.noOptimise;
     state.noOptimise = true;
     path.traverse(memberExpressionOptimisationVisitor, state);
     state.noOptimise = oldNoOptimise;
+
+    // Skip because optimizing references to rest would refer to the `arguments`
+    // of the nested function.
     path.skip();
   },
 
@@ -165,7 +168,18 @@ export let visitor = {
       // local rest binding name
       name: rest.name,
 
-      // whether any references to the rest parameter were made in a function
+      /*
+      It may be possible to optimize the output code in certain ways, such as
+      not generating code to initialize an array (perhaps substituting direct
+      references to arguments[i] or arguments.length for reads of the
+      corresponding rest parameter property) or positioning the initialization
+      code so that it may not have to execute depending on runtime conditions.
+
+      This property tracks eligibility for optimization. "deopted" means give up
+      and don't perform optimization. For example, when any of rest's elements /
+      properties is assigned to at the top level, or referenced at all in a
+      nested function.
+      */
       deopted: false,
     };
 
