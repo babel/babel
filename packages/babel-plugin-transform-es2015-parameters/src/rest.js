@@ -242,16 +242,14 @@ export let visitor = {
       let target = path.getEarliestCommonAncestorFrom(state.references).getStatementParent();
 
       // don't perform the allocation inside a loop
-      let highestLoop;
       target.findParent(function (path) {
         if (path.isLoop()) {
-          highestLoop = path;
+          target = path;
         } else if (path.isFunction()) {
           // stop crawling up for functions
           return true;
         }
       });
-      if (highestLoop) target = highestLoop;
 
       target.insertBefore(loop);
     }
