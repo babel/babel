@@ -245,9 +245,9 @@ export let visitor = {
       target.findParent(function (path) {
         if (path.isLoop()) {
           target = path;
-        } else if (path.isFunction()) {
-          // stop crawling up for functions
-          return true;
+        } else {
+          // Stop crawling up if this is a function.
+          return path.isFunction();
         }
       });
 
