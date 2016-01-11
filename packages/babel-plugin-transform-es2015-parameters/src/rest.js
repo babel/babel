@@ -171,20 +171,18 @@ export let visitor = {
 
     path.traverse(memberExpressionOptimisationVisitor, state);
 
+    // There are only "shorthand" references
     if (!state.deopted && !state.references.length) {
-      // we only have shorthands and there are no other references
-      if (state.candidates.length) {
-        for (let {path, cause} of (state.candidates: Array)) {
-          switch (cause) {
-            case "indexGetter":
-              optimiseIndexGetter(path, argsId, state.offset);
-              break;
-            case "lengthGetter":
-              optimiseLengthGetter(path, argsLengthExpression, argsId, state.offset);
-              break;
-            default:
-              path.replaceWith(argsId);
-          }
+      for (let {path, cause} of (state.candidates: Array)) {
+        switch (cause) {
+          case "indexGetter":
+            optimiseIndexGetter(path, argsId, state.offset);
+            break;
+          case "lengthGetter":
+            optimiseLengthGetter(path, argsLengthExpression, argsId, state.offset);
+            break;
+          default:
+            path.replaceWith(argsId);
         }
       }
       return;
