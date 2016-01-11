@@ -1,6 +1,7 @@
 var getFixtures = require("babel-helper-fixtures").multiple;
 var parse       = require("../lib").parse;
 var _           = require("lodash");
+var fs          = require("fs");
 
 var ignore = [
   'comments',
@@ -11,7 +12,7 @@ var ignore = [
   'harmony',
   'jsx'
 ];
-var onlyTitle = ['1', '2', '3'];
+var onlyTitle = '';
 
 var fixtures = getFixtures(__dirname + "/fixtures", ignore);
 
@@ -20,7 +21,7 @@ _.each(fixtures, function (suites, name) {
     suite(name + "/" + testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
         test(task.title, !task.disabled && function () {
-          if (typeof onlyTitle !== 'undefined' && onlyTitle.indexOf(task.title) < 0) return;
+          if (typeof onlyTitle !== 'undefined' && onlyTitle.split(',').indexOf(task.title) < 0) return;
           console.log('Testing: ' + task.title);
           try {
             return runTest(task);
@@ -47,9 +48,7 @@ function runTest(test) {
 
   try {
     var ast = parse(test.actual.code, opts);
-    // console.log(JSON.stringify(ast, null, 2));
-    // console.log(JSON.stringify(ast.program.body, null, 2));
-    // console.log(JSON.stringify(ast.tokens, null, 2));
+    require("fs").writeFileSync(__dirname + '/result.json', JSON.stringify(ast, null, 2));
   } catch (err) {
     if (opts.throws) {
       if (err.message === opts.throws) {

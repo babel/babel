@@ -8,14 +8,20 @@ let pp = Parser.prototype;
 
 tc.cssx = new TokContext('cssx');
 tc.cssxRules = new TokContext('cssxRules');
+tc.cssxProperty = new TokContext('cssxProperty');
+tc.cssxValue = new TokContext('cssxValue');
 
 tt.cssxSelector = new TokenType('cssxSelector');
 tt.cssxRulesStart = new TokenType('cssxRulesStart');
 tt.cssxRulesEnd = new TokenType('cssxRulesEnd');
-tt.cssxPropValue = new TokenType('cssxPropValue');
+tt.cssxProperty = new TokenType('cssxProperty');
+tt.cssxValue = new TokenType('cssxValue');
 
 tt.cssxRulesStart.updateContext = function (prevType) {
   if (prevType === tt.cssxSelector) this.state.context.push(tc.cssxRules);
+};
+tt.cssxRulesEnd.updateContext = function (prevType) {
+  if (prevType === tt.cssxValue || prevType === tt.cssxRulesStart) this.state.context.length -= 1;
 };
 
 const CSSXElementStartAssumption = [
@@ -29,7 +35,6 @@ export default function CSSX(instance) {
       var fallback = () => inner.call(this, declaration, topLevel);
       var nextState, context;
       debugger;
-
       if (this.matchOneOfThose(CSSXElementStartAssumption)) {
         nextState = this.lookahead();
         context = this.curContext();
@@ -42,6 +47,7 @@ export default function CSSX(instance) {
         } else if (nextState.type === tt.braceL) {
           this.cssxIn();
           this.finishToken(tt.cssxSelector, this.state.value);
+          this.next();
           return this.cssxParseStyles(nextState);
         }
       }
@@ -54,23 +60,22 @@ export default function CSSX(instance) {
     return function (allowDirectives?) {
       var fallback = () => inner.call(this, allowDirectives);
       var context = this.curContext(), blockStmtNode;
+      var rules = [];
 
-      if (context === tc.cssx) {        
-        this.next();
-        blockStmtNode = this.startNodeAt(this.state.lastTokStart, this.state.lastTokStartLoc);
-        blockStmtNode.body = [];
-        this.cssxCheckForRulesEnd();
-        // reading the property
-        while (!this.eat(tt.cssxRulesEnd)) {
-          blockStmtNode.body.push(
-            this.cssxBuildRuleNode(
-              this.cssxReadProperty(),
-              this.cssxReadValue()
-            )
-          );
-          this.cssxCheckForRulesEnd();
+      if (context === tc.cssxRules && this.match(tt.cssxRulesStart)) {
+        blockStmtNode = this.startNode();
+        // no rules
+        if (this.match(tt.cssxRulesStart) && this.lookahead().type === tt.braceR) {
+          this.skipSpace();
+          this.next();
+        } else {
+        // reading the property        
+          while (!this.match(tt.cssxRulesEnd)) {
+            rules.push(this.cssxBuildRuleNode(this.cssxReadProperty(), this.cssxReadValue()));
+          }
+          this.next();
         }
-        
+        blockStmtNode.body = rules;
         return this.finishNode(blockStmtNode, "CSSXRules");
       }
 
@@ -82,13 +87,26 @@ export default function CSSX(instance) {
     return function (code) {
       var fallback = () => inner.call(this, code);
       var context = this.curContext();
-      
+
       if (this.isLookahead) return fallback();
 
-      if (context === tc.cssx && this.lookahead().type === tt.braceL) {
+      if (context === tc.cssx && this.matchNextToken(tt.braceL)) {
         ++this.state.pos;
-        this.finishToken(tt.cssxRulesStart);
-        return this.next();
+        return this.finishToken(tt.cssxRulesStart);
+      } else if (this.match(tt.cssxRulesStart)) {
+        if (this.lookahead().type === tt.braceR) {
+          debugger;
+          ++this.state.pos;
+          this.finishToken(tt.cssxRulesEnd);
+          return this.next();
+        } else {
+          return this.finishToken(tt.cssxRulesStart);
+        }
+      } else if (this.matchPreviousToken(tt.cssxProperty, 1) && this.match(tt.colon)) {
+        return this.finishToken(tt.colon);
+      } else if (this.match(tt.cssxValue) && this.matchNextToken(tt.braceR)) {
+        ++this.state.pos;
+        return this.finishToken(tt.cssxRulesEnd);
       }
 
       return fallback();  
@@ -97,19 +115,25 @@ export default function CSSX(instance) {
 
 };
 
+// entry point
 pp.cssxParseStyles = function() {
-  var elementNode = this.startNode();
-  var selectorNode = this.startNode();
+  let cssxSelectorToken = this.getPreviousToken();
+  let elementNode = this.startNodeAt(cssxSelectorToken.start, cssxSelectorToken.loc.start);
+  let selectorNode = this.startNodeAt(cssxSelectorToken.start, cssxSelectorToken.loc.start);
 
-  selectorNode.value = this.state.value;
-  elementNode.selector = this.finishNodeAt(selectorNode, 'CSSXSelector', this.state.end, this.state.endLoc);
+  selectorNode.value = cssxSelectorToken.value;
+  elementNode.selector = this.finishNodeAt(
+    selectorNode,
+    'CSSXSelector',
+    cssxSelectorToken.end,
+    cssxSelectorToken.loc.end
+  );
   elementNode.body = this.parseBlock();
-
   this.cssxOut();
   return this.finishNode(elementNode, "CSSXElement");
 };
 
-// this function besically merged last two tokens into one
+// merges last two tokens into one
 pp.cssxParseSelector = function (nextState) {
   var lastToken, beforeLastToken;
 
@@ -147,48 +171,72 @@ pp.cssxReadSelector = function (token) {
   return token.value + ' ' + this.state.value
 };
 
-pp.cssxReadProperty = function() {
-  var property = '';
-  var pos = this.state.start;
-  var loc = this.state.startLoc;
+pp.cssxReadWord = function (readUntil) {
+  let word = '';
+  let first = true;
+  let chunkStart;
 
-  do {
-    property += this.state.value;
-    this.next();
-  } while (!this.eat(tt.colon));
-  debugger;
-  return this.cssxBuildRuleChildNode(
-    'CSSXProperty',
-    property,
-    pos, 
-    loc,
-    this.state.lastTokStart,
-    this.state.lastTokStartLoc
-  );
+  chunkStart = this.state.pos;
+  
+  this.state.containsEsc = false;
+  
+  while (this.state.pos < this.input.length) {
+    let ch = this.fullCharCodeAtPos();
+    if (readUntil(ch)) {
+      this.state.pos += ch <= 0xffff ? 1 : 2;
+    } else if (ch === 92) { // "\"
+      this.state.containsEsc = true;
+
+      word += this.input.slice(chunkStart, this.state.pos);
+      let escStart = this.state.pos;
+
+      if (this.input.charCodeAt(++this.state.pos) !== 117) { // "u"
+        this.raise(this.state.pos, "Expecting Unicode escape sequence \\uXXXX");
+      }
+
+      ++this.state.pos;
+      let esc = this.readCodePoint();
+      if (!(first ? isIdentifierStart : isIdentifierChar)(esc, true)) {
+        this.raise(escStart, "Invalid Unicode escape");
+      }
+
+      word += codePointToString(esc);
+      chunkStart = this.state.pos;
+    } else {
+      break;
+    }
+    first = false;
+  }
+  word = word + this.input.slice(chunkStart, this.state.pos);
+  return word;
+};
+
+pp.cssxReadProperty = function() {
+  let loc, pos, property;
+
+  if (this.match(tt.cssxRulesStart)) this.next();
+  this.skipSpace();
+
+  loc = this.state.startLoc;
+  pos = this.state.start;
+  property = this.cssxReadWord(isIdentifierChar);
+  this.finishToken(tt.cssxProperty, property);
+  this.next();
+  return this.cssxBuildRuleChildNode('CSSXProperty', property, pos, loc);
 };
 
 pp.cssxReadValue = function() {
-  var value = '';
-  var pos = this.state.start;
-  var loc = this.state.startLoc;
-  var result = () => this.cssxBuildRuleChildNode(
-    'CSSXValue',
-    value,
-    pos, 
-    loc,
-    this.state.lastTokEnd,
-    this.state.lastTokEndLoc
-  );
+  let loc, pos, value;
 
-  while (!this.eat(tt.semi)) {
-    if (this.match(tt.braceR)) {
-      return result();
-      break;
-    }
-    value += this.state.value;
-    this.next();
-  }
-  return result();
+  if (this.match(tt.colon)) this.next();
+  this.skipSpace();
+
+  loc = this.state.startLoc;
+  pos = this.state.start;
+  value = this.cssxReadWord(isIdentifierChar);
+  this.finishToken(tt.cssxValue, value);
+  this.next();
+  return this.cssxBuildRuleChildNode('CSSXValue', value, pos, loc);
 };
 
 pp.cssxBuildRuleNode = function (propertyNode, valueNode) {
@@ -199,16 +247,12 @@ pp.cssxBuildRuleNode = function (propertyNode, valueNode) {
   return this.finishNodeAt(node, 'CSSXRule', valueNode.end, valueNode.loc.end);
 };
 
-pp.cssxBuildRuleChildNode = function (type, value, pos, loc, posEnd, locEnd) {
+pp.cssxBuildRuleChildNode = function (type, value, pos, loc) {
   var node = this.startNodeAt(pos, loc);
 
   node.name = value;
-  return this.finishNodeAt(node, type, posEnd || this.state.end, locEnd || this.state.endLoc);
+  return this.finishNodeAt(node, type, this.state.lastTokEnd, this.state.lastTokEndLoc);
 };
-
-pp.cssxCheckForRulesEnd = function () {
-  if (this.match(tt.braceR)) this.finishToken(tt.cssxRulesEnd);
-}
 
 pp.cssxIn = function () {
   const curContext = this.curContext();
@@ -234,6 +278,20 @@ pp.getPreviousToken = function (steps=0) {
   return this.state.tokens[this.state.tokens.length - (steps+1)];
 };
 
+pp.matchPreviousToken = function (type, step) {
+  let previous = this.getPreviousToken(step);
+
+  if (previous && previous.type === type) return true;
+  return false;
+};
+
+pp.matchNextToken = function (type) {
+  let next = this.lookahead();
+
+  if (next && next.type === type) return true;
+  return false;
+};
+
 pp.matchOneOfThose = function (assumtion) {
   for(let i=0; i<assumtion.length; i++) {
     if (this.match(assumtion[i])) return true;
@@ -241,15 +299,22 @@ pp.matchOneOfThose = function (assumtion) {
   return false;
 };
 
+pp.charAtPos = function () {
+  return String.fromCharCode(this.fullCharCodeAtPos());
+};
+
 pp.printTokens = function () {
   this.state.tokens.forEach(t => {
     console.log(t.type.label + ' value=' + t.value);
   });
 };
+
 pp.printContext = function () {
   this.state.context.forEach(c => {
     console.log(c.token);
   });
 };
 
-
+pp.printSoFar = function () {
+  console.log(this.state.input.substr(0, this.state.pos));
+};

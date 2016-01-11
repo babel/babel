@@ -1,3 +1,3 @@
 .selector > p {
-  margin: 10px;
+  margin: 10px
 }

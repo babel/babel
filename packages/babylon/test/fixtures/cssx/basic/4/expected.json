@@ -59,7 +59,7 @@
           "value": "*"
         },
         "body": {
-          "type": "BlockStatement",
+          "type": "CSSXRules",
           "start": 2,
           "end": 20,
           "loc": {
@@ -74,7 +74,7 @@
           },
           "body": [
             {
-              "type": "LabeledStatement",
+              "type": "CSSXRule",
               "start": 4,
               "end": 18,
               "loc": {
@@ -87,39 +87,8 @@
                   "column": 18
                 }
               },
-              "body": {
-                "type": "ExpressionStatement",
-                "start": 13,
-                "end": 18,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 13
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 18
-                  }
-                },
-                "expression": {
-                  "type": "Identifier",
-                  "start": 13,
-                  "end": 18,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 13
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 18
-                    }
-                  },
-                  "name": "block"
-                }
-              },
               "label": {
-                "type": "Identifier",
+                "type": "CSSXProperty",
                 "start": 4,
                 "end": 11,
                 "loc": {
@@ -133,10 +102,25 @@
                   }
                 },
                 "name": "display"
+              },
+              "body": {
+                "type": "CSSXValue",
+                "start": 13,
+                "end": 18,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 18
+                  }
+                },
+                "name": "block"
               }
             }
-          ],
-          "directives": []
+          ]
         }
       }
     ],
@@ -146,15 +130,15 @@
   "tokens": [
     {
       "type": {
-        "label": "*",
-        "beforeExpr": true,
+        "label": "cssxSelector",
+        "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": 10,
+        "binop": null,
         "updateContext": null
       },
       "value": "*",
@@ -173,9 +157,9 @@
     },
     {
       "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
+        "label": "cssxRulesStart",
+        "beforeExpr": false,
+        "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
@@ -198,15 +182,16 @@
     },
     {
       "type": {
-        "label": "name",
+        "label": "cssxProperty",
         "beforeExpr": false,
-        "startsExpr": true,
+        "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "display",
       "start": 4,
@@ -250,15 +235,16 @@
     },
     {
       "type": {
-        "label": "name",
+        "label": "cssxValue",
         "beforeExpr": false,
-        "startsExpr": true,
+        "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "block",
       "start": 13,
@@ -276,7 +262,7 @@
     },
     {
       "type": {
-        "label": "}",
+        "label": "cssxRulesEnd",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,

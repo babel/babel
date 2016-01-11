@@ -182,15 +182,16 @@
     },
     {
       "type": {
-        "label": "name",
+        "label": "cssxProperty",
         "beforeExpr": false,
-        "startsExpr": true,
+        "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null
+        "binop": null,
+        "updateContext": null
       },
       "value": "margin",
       "start": 7,
@@ -234,9 +235,9 @@
     },
     {
       "type": {
-        "label": "num",
+        "label": "cssxValue",
         "beforeExpr": false,
-        "startsExpr": true,
+        "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
@@ -245,7 +246,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": 0,
+      "value": "0",
       "start": 15,
       "end": 16,
       "loc": {
@@ -269,8 +270,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "start": 17,
       "end": 18,
