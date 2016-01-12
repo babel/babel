@@ -1,5 +1,3 @@
-"use strict";
-
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define(["foo", "foo-bar", "./directory/foo-bar"], factory);

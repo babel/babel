@@ -1,5 +1,3 @@
-"use strict";
-
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define(["./lib/render"], factory);

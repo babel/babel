@@ -1,6 +1,6 @@
-"use strict";
-
 define(["exports", "foo", "foo-bar", "./directory/foo-bar"], function (exports, _foo) {
+  "use strict";
+
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
