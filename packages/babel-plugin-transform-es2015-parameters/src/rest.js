@@ -46,14 +46,14 @@ let memberExpressionOptimisationVisitor = {
 
     // we can't guarantee the purity of arguments
     if (node.name === "arguments") {
-      state.deopted = true;
+      state.optEligible = false;
     }
 
     // is this a referenced identifier and is it referencing the rest parameter?
     if (node.name !== state.name) return;
 
     if (state.noOptimise) {
-      state.deopted = true;
+      state.optEligible = false;
     } else {
       let {parentPath} = path;
 
@@ -101,7 +101,7 @@ let memberExpressionOptimisationVisitor = {
 
   BindingIdentifier({ node }, state) {
     if (node.name === state.name) {
-      state.deopted = true;
+      state.optEligible = false;
     }
   }
 };
@@ -175,18 +175,18 @@ export let visitor = {
       corresponding rest parameter property) or positioning the initialization
       code so that it may not have to execute depending on runtime conditions.
 
-      This property tracks eligibility for optimization. "deopted" means give up
-      and don't perform optimization. For example, when any of rest's elements /
-      properties is assigned to at the top level, or referenced at all in a
-      nested function.
+      This property tracks eligibility for optimization. "deopted" refers to
+      optEligible: false and means give up and don't perform optimization. For
+      example, when any of rest's elements / properties is assigned to at the
+      top level, or referenced at all in a nested function.
       */
-      deopted: false,
+      optEligible: true,
     };
 
     path.traverse(memberExpressionOptimisationVisitor, state);
 
     // There are only "shorthand" references
-    if (!state.deopted && !state.references.length) {
+    if (state.optEligible && !state.references.length) {
       for (let {path, cause} of (state.candidates: Array)) {
         switch (cause) {
           case "indexGetter":
@@ -207,7 +207,7 @@ export let visitor = {
     );
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
-    state.deopted = state.deopted || !!node.shadow;
+    if (node.shadow) state.optEligible = false;
 
     let start = t.numericLiteral(node.params.length);
     let key = scope.generateUidIdentifier("key");
@@ -244,7 +244,7 @@ export let visitor = {
       LEN:       len,
     });
 
-    if (state.deopted) {
+    if (!state.optEligible) {
       loop._blockHoist = node.params.length + 1;
       node.body.body.unshift(loop);
     } else {
