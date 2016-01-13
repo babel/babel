@@ -1,7 +1,7 @@
 import repeating from "repeating";
 import * as t from "babel-types";
 
-const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(['!']);
+const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(["!"]);
 
 export function WithStatement(node: Object) {
   this.keyword("with");
