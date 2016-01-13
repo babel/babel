@@ -3,6 +3,7 @@ import { Token } from "../../tokenizer";
 import { TokContext, types as tc } from "../../tokenizer/context";
 import Parser from "../../parser";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
+import { SourceLocation } from "../../util/location";
 
 let pp = Parser.prototype;
 
@@ -76,7 +77,7 @@ export default function CSSX(instance) {
           this.next();
         }
         blockStmtNode.body = rules;
-        return this.finishNode(blockStmtNode, "CSSXRules");
+        return this.finishNode(blockStmtNode, 'CSSXRules');
       }
 
       return fallback();
@@ -108,17 +109,20 @@ export default function CSSX(instance) {
       } else if (this.match(tt.cssxProperty) && code === 58) { // 58 = :
         this.finishToken(tt.colon);
         ++this.state.pos;
-        return this.cssxStoreToken();
+        this.cssxStoreToken();
+        this.lastTokenPlusEndPos();
+        return;
       // matching the semicolon at the end of the rule
       } else if (this.match(tt.cssxValue) && code === 59) { // 59 = ;
         this.finishToken(tt.semi);
         ++this.state.pos;
-        this.cssxStoreToken();
         if (this.matchNextToken(tt.braceR)) {
-          ++this.state.pos;
-          this.skipSpace();
+          this.next();
+          this.lastTokenPlusEndPos();
           return this.finishToken(tt.cssxRulesEnd);
         }
+        this.cssxStoreToken();
+        this.lastTokenPlusEndPos();
         return;
       } else if (this.match(tt.cssxValue) && this.matchNextToken(tt.braceR)) {
         // ending without semicolon
@@ -148,7 +152,7 @@ pp.cssxParseStyles = function() {
   );
   elementNode.body = this.parseBlock();
   this.cssxOut();
-  return this.finishNode(elementNode, "CSSXElement");
+  return this.finishNode(elementNode, 'CSSXElement');
 };
 
 // merges last two tokens into one
@@ -235,9 +239,11 @@ pp.cssxReadProperty = function() {
   if (this.match(tt.cssxRulesStart)) this.next();
   this.skipSpace();
 
-  loc = this.state.startLoc;
-  pos = this.state.start;
+  loc = this.state.curPosition();
+  pos = this.state.pos;
   property = this.cssxReadWord(isIdentifierChar);
+
+  this.state.startLoc = loc;
   this.finishToken(tt.cssxProperty, property);
   this.next();
   return this.cssxBuildRuleChildNode('CSSXProperty', property, pos, loc);
@@ -245,12 +251,13 @@ pp.cssxReadProperty = function() {
 
 pp.cssxReadValue = function() {
   let loc, pos, value;
-  debugger;
+
   this.skipSpace();
 
-  loc = this.state.startLoc;
-  pos = this.state.start;
+  loc = this.state.curPosition();
+  pos = this.state.pos;
   value = this.cssxReadWord(isIdentifierChar);
+  this.state.startLoc = loc;
   this.finishToken(tt.cssxValue, value);
   this.next();
   return this.cssxBuildRuleChildNode('CSSXValue', value, pos, loc);
@@ -258,10 +265,17 @@ pp.cssxReadValue = function() {
 
 pp.cssxBuildRuleNode = function (propertyNode, valueNode) {
   var node = this.startNodeAt(propertyNode.start, propertyNode.loc.start);
+  var pos = this.state.pos;
+  var locEnd = this.clonePosition(valueNode.loc.end);
+
+  if (this.match(tt.semi) || (this.match(tt.cssxRulesEnd) && this.matchPreviousToken(tt.semi))) {
+   ++locEnd.column;
+  }
 
   node.label = propertyNode;
   node.body = valueNode;
-  return this.finishNodeAt(node, 'CSSXRule', valueNode.end, valueNode.loc.end);
+
+  return this.finishNodeAt(node, 'CSSXRule', pos, locEnd);
 };
 
 pp.cssxBuildRuleChildNode = function (type, value, pos, loc) {
@@ -345,4 +359,21 @@ pp.printContext = function () {
 
 pp.printSoFar = function () {
   console.log(this.state.input.substr(0, this.state.pos));
+};
+
+pp.clonePosition = function (loc) {
+  return {
+    line: loc.line,
+    column: loc.column
+  }
+};
+
+pp.lastTokenPlusEndPos = function () {
+  var token = this.getPreviousToken();
+  var locEnd = this.clonePosition(token.loc.end);
+  var locStart = this.clonePosition(token.loc.start);
+
+  ++token.end;
+  ++locEnd.column;
+  token.loc = new SourceLocation(locStart, locEnd);
 };
