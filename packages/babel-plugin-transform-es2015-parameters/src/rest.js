@@ -31,11 +31,10 @@ let memberExpressionOptimisationVisitor = {
   Function(path, state) {
     // Detect whether any reference to rest is contained in nested functions to
     // determine if deopt is necessary.
-    let oldNoOptimise = state.noOptimise;
-    state.noOptimise = true;
+    let nested = state.nested;
+    state.nested = true;
     path.traverse(memberExpressionOptimisationVisitor, state);
-    state.noOptimise = oldNoOptimise;
-
+    state.nested = nested;
     // Skip because optimizing references to rest would refer to the `arguments`
     // of the nested function.
     path.skip();
@@ -52,7 +51,9 @@ let memberExpressionOptimisationVisitor = {
     // is this a referenced identifier and is it referencing the rest parameter?
     if (node.name !== state.name) return;
 
-    if (state.noOptimise) {
+    // A ref in a nested function makes the top-level function ineligible for
+    // optimization.
+    if (state.nested) {
       state.optEligible = false;
     } else {
       let {parentPath} = path;
@@ -181,6 +182,9 @@ export let visitor = {
       top level, or referenced at all in a nested function.
       */
       optEligible: true,
+
+      // Is the node being visited in a function descendant of this node.
+      nested: false,
     };
 
     path.traverse(memberExpressionOptimisationVisitor, state);
