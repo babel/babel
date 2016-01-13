@@ -20,14 +20,14 @@ export function shareCommentsWithSiblings() {
 
   prev.addComments("trailing", leading);
   next.addComments("leading", trailing);
-}
+};
 
 export function addComment(type, content, line?) {
   this.addComments(type, [{
     type: line ? "CommentLine" : "CommentBlock",
     value: content
   }]);
-}
+};
 
 /**
  * Give node `comments` of the specified `type`.
@@ -46,4 +46,4 @@ export function addComments(type: string, comments: Array) {
   } else {
     node[key] = comments;
   }
-}
+};

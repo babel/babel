@@ -1,1 +1,1 @@
-export default function *yield() {}
+export default function *yield() {};

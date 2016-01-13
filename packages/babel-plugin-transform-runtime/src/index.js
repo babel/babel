@@ -140,6 +140,6 @@ export default function ({ types: t }) {
       }
     }
   };
-}
+};
 
 export { definitions };

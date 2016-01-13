@@ -1,8 +1,8 @@
 export var foo = "yes", foob = "no";
 
-export function whatever() {}
+export function whatever() {};
 
-export default function wowzers() {}
+export default function wowzers() {};
 
 var bar = {
   foo: function () {

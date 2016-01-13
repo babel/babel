@@ -9,13 +9,13 @@ let _         = require("lodash");
 
 export function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
-}
+};
 
 export function readdirFilter(filename) {
   return readdir(filename).filter(function (filename) {
     return util.canCompile(filename);
   });
-}
+};
 
 export { readdir };
 
@@ -23,15 +23,15 @@ export let canCompile = util.canCompile;
 
 export function shouldIgnore(loc) {
   return util.shouldIgnore(loc, index.opts.ignore, index.opts.only);
-}
+};
 
 export function addSourceMappingUrl(code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
-}
+};
 
 export function log(msg) {
   if (!commander.quiet) console.log(msg);
-}
+};
 
 export function transform(filename, code, opts) {
   opts = _.defaults(opts || {}, index.opts);
@@ -43,7 +43,7 @@ export function transform(filename, code, opts) {
   result.filename = filename;
   result.actual = code;
   return result;
-}
+};
 
 export function compile(filename, opts) {
   try {
@@ -57,7 +57,7 @@ export function compile(filename, opts) {
       throw err;
     }
   }
-}
+};
 
 function toErrorStack(err) {
   if (err._babel && err instanceof SyntaxError) {

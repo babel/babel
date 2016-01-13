@@ -22,7 +22,7 @@ export function isBinding(node: Object, parent: Object): boolean {
   }
 
   return false;
-}
+};
 
 /**
  * Check if the input `node` is a reference to a bound variable.
@@ -148,7 +148,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
   }
 
   return true;
-}
+};
 
 /**
  * Check if the input `name` is a valid identifier name
@@ -161,7 +161,7 @@ export function isValidIdentifier(name: string): boolean {
   } else {
     return esutils.keyword.isIdentifierNameES6(name);
   }
-}
+};
 
 /**
  * Check if the input `node` is a `let` variable declaration.
@@ -169,7 +169,7 @@ export function isValidIdentifier(name: string): boolean {
 
 export function isLet(node: Object): boolean {
   return t.isVariableDeclaration(node) && (node.kind !== "var" || node[BLOCK_SCOPED_SYMBOL]);
-}
+};
 
 /**
  * Check if the input `node` is block scoped.
@@ -177,7 +177,7 @@ export function isLet(node: Object): boolean {
 
 export function isBlockScoped(node: Object): boolean {
   return t.isFunctionDeclaration(node) || t.isClassDeclaration(node) || t.isLet(node);
-}
+};
 
 /**
  * Check if the input `node` is a variable declaration.
@@ -185,7 +185,7 @@ export function isBlockScoped(node: Object): boolean {
 
 export function isVar(node: Object): boolean {
   return t.isVariableDeclaration(node, { kind: "var" }) && !node[BLOCK_SCOPED_SYMBOL];
-}
+};
 
 /**
  * Check if the input `specifier` is a `default` import or export.
@@ -194,7 +194,7 @@ export function isVar(node: Object): boolean {
 export function isSpecifierDefault(specifier: Object): boolean {
   return t.isImportDefaultSpecifier(specifier) ||
          t.isIdentifier(specifier.imported || specifier.exported, { name: "default" });
-}
+};
 
 /**
  * Check if the input `node` is a scope.
@@ -206,7 +206,7 @@ export function isScope(node: Object, parent: Object): boolean {
   }
 
   return t.isScopable(node);
-}
+};
 
 /**
  * Check if the input `node` is definitely immutable.
@@ -226,4 +226,4 @@ export function isImmutable(node: Object): boolean {
   }
 
   return false;
-}
+};

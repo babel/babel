@@ -33,4 +33,4 @@ export default function bindifyDecorators(decorators: Array<NodePath>): Array<No
       decorator.expression = t.sequenceExpression(nodes);
     }
   }
-}
+};

@@ -158,9 +158,9 @@ export class CodeGenerator extends Printer {
       code: this.get()
     };
   }
-}
+};
 
 export default function (ast: Object, opts: Object, code: string): Object {
   let gen = new CodeGenerator(ast, opts, code);
   return gen.generate();
-}
+};

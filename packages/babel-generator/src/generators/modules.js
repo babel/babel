@@ -8,15 +8,15 @@ export function ImportSpecifier(node: Object) {
     this.push(" as ");
     this.print(node.local, node);
   }
-}
+};
 
 export function ImportDefaultSpecifier(node: Object) {
   this.print(node.local, node);
-}
+};
 
 export function ExportDefaultSpecifier(node: Object) {
   this.print(node.exported, node);
-}
+};
 
 export function ExportSpecifier(node: Object) {
   this.print(node.local, node);
@@ -24,12 +24,12 @@ export function ExportSpecifier(node: Object) {
     this.push(" as ");
     this.print(node.exported, node);
   }
-}
+};
 
 export function ExportNamespaceSpecifier(node: Object) {
   this.push("* as ");
   this.print(node.exported, node);
-}
+};
 
 export function ExportAllDeclaration(node: Object) {
   this.push("export *");
@@ -40,17 +40,17 @@ export function ExportAllDeclaration(node: Object) {
   this.push(" from ");
   this.print(node.source, node);
   this.semicolon();
-}
+};
 
 export function ExportNamedDeclaration() {
   this.push("export ");
   ExportDeclaration.apply(this, arguments);
-}
+};
 
 export function ExportDefaultDeclaration() {
   this.push("export default ");
   ExportDeclaration.apply(this, arguments);
-}
+};
 
 function ExportDeclaration(node: Object) {
   if (node.declaration) {
@@ -133,9 +133,9 @@ export function ImportDeclaration(node: Object) {
 
   this.print(node.source, node);
   this.semicolon();
-}
+};
 
 export function ImportNamespaceSpecifier(node: Object) {
   this.push("* as ");
   this.print(node.local, node);
-}
+};

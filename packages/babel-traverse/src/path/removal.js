@@ -15,13 +15,13 @@ export function remove() {
   this.shareCommentsWithSiblings();
   this._remove();
   this._markRemoved();
-}
+};
 
 export function _callRemovalHooks() {
   for (let fn of (hooks: Array<Function>)) {
     if (fn(this, this.parentPath)) return true;
   }
-}
+};
 
 export function _remove() {
   if (Array.isArray(this.container)) {
@@ -30,16 +30,16 @@ export function _remove() {
   } else {
     this._replaceWith(null);
   }
-}
+};
 
 export function _markRemoved() {
   this.shouldSkip = true;
   this.removed    = true;
   this.node       = null;
-}
+};
 
 export function _assertUnremoved() {
   if (this.removed) {
     throw this.buildCodeFrameError("NodePath has been removed so is read-only.");
   }
-}
+};

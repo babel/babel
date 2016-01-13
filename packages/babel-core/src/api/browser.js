@@ -5,7 +5,7 @@ export * from "./node";
 
 export function run(code: string, opts: Object = {}): any {
   return new Function(transform(code, opts).code)();
-}
+};
 
 export function load(url: string, callback: Function, opts: Object = {}, hold?: boolean) {
   opts.filename = opts.filename || url;
@@ -28,7 +28,7 @@ export function load(url: string, callback: Function, opts: Object = {}, hold?: 
   };
 
   xhr.send(null);
-}
+};
 
 function runScripts() {
   let scripts: Array<Array<any> | Object> = [];

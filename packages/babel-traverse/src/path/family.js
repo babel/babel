@@ -20,7 +20,7 @@ export function getStatementParent(): ?NodePath {
   }
 
   return path;
-}
+};
 
 export function getOpposite() {
   if (this.key === "left") {
@@ -28,7 +28,7 @@ export function getOpposite() {
   } else if (this.key === "right") {
     return this.getSibling("left");
   }
-}
+};
 
 export function getCompletionRecords(): Array {
   let paths = [];
@@ -55,7 +55,7 @@ export function getCompletionRecords(): Array {
   }
 
   return paths;
-}
+};
 
 export function getSibling(key) {
   return NodePath.get({
@@ -65,7 +65,7 @@ export function getSibling(key) {
     listKey: this.listKey,
     key: key
   });
-}
+};
 
 export function get(key: string, context?: boolean | TraversalContext): NodePath {
   if (context === true) context = this.context;
@@ -75,7 +75,7 @@ export function get(key: string, context?: boolean | TraversalContext): NodePath
   } else { // "foo.bar"
     return this._getPattern(parts, context);
   }
-}
+};
 
 export function _getKey(key, context?) {
   let node      = this.node;
@@ -100,7 +100,7 @@ export function _getKey(key, context?) {
       key: key
     }).setContext(context);
   }
-}
+};
 
 export function _getPattern(parts, context) {
   let path = this;
@@ -116,12 +116,12 @@ export function _getPattern(parts, context) {
     }
   }
   return path;
-}
+};
 
 export function getBindingIdentifiers(duplicates?) {
   return t.getBindingIdentifiers(this.node, duplicates);
-}
+};
 
 export function getOuterBindingIdentifiers(duplicates?) {
   return t.getOuterBindingIdentifiers(this.node, duplicates);
-}
+};

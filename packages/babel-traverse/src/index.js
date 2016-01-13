@@ -28,7 +28,7 @@ export default function traverse(
   visitors.explode(opts);
 
   traverse.node(parent, opts, scope, state, parentPath);
-}
+};
 
 traverse.visitors = visitors;
 traverse.verify = visitors.verify;

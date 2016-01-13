@@ -165,4 +165,4 @@ export default function ({ node, parent, scope, id }) {
 
   let state = visit(node, name, scope);
   return wrap(state, node, id, scope) || node;
-}
+};

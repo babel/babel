@@ -5,7 +5,7 @@ export default function () {
     visitor: {
       Program(path, state) {
         if (state.opts.strict === false) return;
-        
+
         let { node } = path;
 
         for (let directive of (node.directives: Array<Object>)) {
@@ -16,4 +16,4 @@ export default function () {
       }
     }
   };
-}
+};

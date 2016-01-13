@@ -29,7 +29,7 @@ export function assertEach(callback: Function): Function {
   }
   validator.each = callback;
   return validator;
-}
+};
 
 export function assertOneOf(...vals): Function {
   function validate(node, key, val) {
@@ -41,7 +41,7 @@ export function assertOneOf(...vals): Function {
   validate.oneOf = vals;
 
   return validate;
-}
+};
 
 export function assertNodeType(...types: Array<string>): Function {
   function validate(node, key, val) {
@@ -62,7 +62,7 @@ export function assertNodeType(...types: Array<string>): Function {
   validate.oneOfNodeTypes = types;
 
   return validate;
-}
+};
 
 export function assertNodeOrValueType(...types: Array<string>): Function {
   function validate(node, key, val) {
@@ -83,7 +83,7 @@ export function assertNodeOrValueType(...types: Array<string>): Function {
   validate.oneOfNodeOrValueTypes = types;
 
   return validate;
-}
+};
 
 export function assertValueType(type: string): Function {
   function validate(node, key, val) {
@@ -97,7 +97,7 @@ export function assertValueType(type: string): Function {
   validate.type = type;
 
   return validate;
-}
+};
 
 export function chain(...fns: Array<Function>): Function {
   function validate(...args) {
@@ -107,7 +107,7 @@ export function chain(...fns: Array<Function>): Function {
   }
   validate.chainOf = fns;
   return validate;
-}
+};
 
 export default function defineType(
   type: string,
@@ -151,6 +151,6 @@ export default function defineType(
   ALIAS_KEYS[type]   = opts.aliases;
 
   store[type] = opts;
-}
+};
 
 let store = {};

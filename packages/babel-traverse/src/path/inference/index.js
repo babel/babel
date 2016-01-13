@@ -12,7 +12,7 @@ export function getTypeAnnotation(): Object {
   let type = this._getTypeAnnotation() || t.anyTypeAnnotation();
   if (t.isTypeAnnotation(type)) type = type.typeAnnotation;
   return this.typeAnnotation = type;
-}
+};
 
 /**
  * todo: split up this method
@@ -56,11 +56,11 @@ export function _getTypeAnnotation(): ?Object {
   if (inferer && inferer.validParent) {
     return this.parentPath.getTypeAnnotation();
   }
-}
+};
 
 export function isBaseType(baseName: string, soft?: boolean): boolean {
   return _isBaseType(baseName, this.getTypeAnnotation(), soft);
-}
+};
 
 function _isBaseType(baseName: string, type?, soft?): boolean {
   if (baseName === "string") {
@@ -98,7 +98,7 @@ export function couldBeBaseType(name: string): boolean {
   } else {
     return _isBaseType(name, type, true);
   }
-}
+};
 
 export function baseTypeStrictlyMatches(right: NodePath) {
   let left = this.getTypeAnnotation();
@@ -107,9 +107,9 @@ export function baseTypeStrictlyMatches(right: NodePath) {
   if (!t.isAnyTypeAnnotation(left) && t.isFlowBaseAnnotation(left)) {
     return right.type === left.type;
   }
-}
+};
 
 export function isGenericType(genericName: string): boolean {
   let type = this.getTypeAnnotation();
   return t.isGenericTypeAnnotation(type) && t.isIdentifier(type.id, { name: genericName });
-}
+};

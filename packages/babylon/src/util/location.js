@@ -34,4 +34,4 @@ export function getLineInfo(input, offset) {
       return new Position(line, offset - cur);
     }
   }
-}
+};

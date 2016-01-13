@@ -276,4 +276,4 @@ export default class ReplaceSupers {
     thisNode[HARDCORE_THIS_REF] = true;
     return optimiseCall(callee, thisNode, args);
   }
-}
+};

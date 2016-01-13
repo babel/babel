@@ -31,7 +31,7 @@ const PRECEDENCE = {
 
 export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
   return t.isArrayTypeAnnotation(parent);
-}
+};
 
 export { NullableTypeAnnotation as FunctionTypeAnnotation };
 
@@ -42,7 +42,7 @@ export function UpdateExpression(node: Object, parent: Object): boolean {
   }
 
   return false;
-}
+};
 
 export function ObjectExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
   if (t.isExpressionStatement(parent)) {
@@ -51,7 +51,7 @@ export function ObjectExpression(node: Object, parent: Object, printStack: Array
   }
 
   return isFirstInStatement(printStack);
-}
+};
 
 export function Binary(node: Object, parent: Object): boolean {
   if ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) {
@@ -84,7 +84,7 @@ export function Binary(node: Object, parent: Object): boolean {
   }
 
   return false;
-}
+};
 
 export function BinaryExpression(node: Object, parent: Object): boolean {
   if (node.operator === "in") {
@@ -100,7 +100,7 @@ export function BinaryExpression(node: Object, parent: Object): boolean {
   }
 
   return false;
-}
+};
 
 export function SequenceExpression(node: Object, parent: Object): boolean {
   if (t.isForStatement(parent)) {
@@ -142,7 +142,7 @@ export function SequenceExpression(node: Object, parent: Object): boolean {
   // Otherwise err on the side of overparenthesization, adding
   // explicit exceptions above if this proves overzealous.
   return true;
-}
+};
 
 export function YieldExpression(node: Object, parent: Object): boolean {
   return t.isBinary(parent) ||
@@ -150,7 +150,7 @@ export function YieldExpression(node: Object, parent: Object): boolean {
          t.isCallExpression(parent) ||
          t.isMemberExpression(parent) ||
          t.isNewExpression(parent);
-}
+};
 
 export { YieldExpression as AwaitExpression };
 
@@ -166,7 +166,7 @@ export function ClassExpression(node: Object, parent: Object): boolean {
   }
 
   return false;
-}
+};
 
 export function UnaryLike(node: Object, parent: Object): boolean {
   if (t.isMemberExpression(parent, { object: node })) {
@@ -178,7 +178,7 @@ export function UnaryLike(node: Object, parent: Object): boolean {
   }
 
   return false;
-}
+};
 
 export function FunctionExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
   // (function () {});
@@ -192,7 +192,7 @@ export function FunctionExpression(node: Object, parent: Object, printStack: Arr
   }
 
   return isFirstInStatement(printStack);
-}
+};
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
   // export default (function () {});
@@ -205,7 +205,7 @@ export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
   }
 
   return UnaryLike(node, parent);
-}
+};
 
 export function ConditionalExpression(node: Object, parent: Object): boolean {
   if (t.isUnaryLike(parent)) {
@@ -221,7 +221,7 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
   }
 
   return UnaryLike(node, parent);
-}
+};
 
 export function AssignmentExpression(node: Object): boolean {
   if (t.isObjectPattern(node.left)) {
@@ -229,7 +229,7 @@ export function AssignmentExpression(node: Object): boolean {
   } else {
     return ConditionalExpression(...arguments);
   }
-}
+};
 
 // Walk up the print stack to deterimine if our node can come first
 // in statement.

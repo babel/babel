@@ -105,4 +105,4 @@ export default function (
   }
 
   return generator(tree).code;
-}
+};

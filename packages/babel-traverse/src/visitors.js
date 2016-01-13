@@ -135,7 +135,7 @@ export function verify(visitor) {
   }
 
   visitor._verified = true;
-}
+};
 
 function validateVisitorMethods(path, val) {
   let fns = [].concat(val);
@@ -167,7 +167,7 @@ export function merge(visitors: Array, states: Array = []) {
   }
 
   return rootVisitor;
-}
+};
 
 function wrapWithState(oldVisitor, state) {
   let newVisitor = {};

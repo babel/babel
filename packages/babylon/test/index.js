@@ -95,4 +95,4 @@ function misMatch(exp, act) {
       if (mis) return addPath(mis, prop);
     }
   }
-}
+};

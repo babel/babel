@@ -30,8 +30,8 @@ export default function ({ types: t }) {
   let visitor = {
     JSXOpeningElement(node, state) {
       const id = t.jSXIdentifier(TRACE_ID);
-      const fileName = state.file.log.filename !== "unknown" 
-        ? path.relative(__dirname, state.file.log.filename) 
+      const fileName = state.file.log.filename !== "unknown"
+        ? path.relative(__dirname, state.file.log.filename)
         : null;
       const trace = makeTrace(fileName, node.container.openingElement.loc.start.line);
 
@@ -42,4 +42,4 @@ export default function ({ types: t }) {
   return {
     visitor
   };
-}
+};

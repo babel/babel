@@ -13,7 +13,7 @@ export function createUnionTypeAnnotation(types: Array<Object>) {
   } else {
     return t.unionTypeAnnotation(flattened);
   }
-}
+};
 
 /**
  * Dedupe type annotations.
@@ -93,7 +93,7 @@ export function removeTypeDuplicates(nodes: Array<Object>) {
   }
 
   return types;
-}
+};
 
 /**
  * Create a type anotation based on typeof expression.
@@ -117,4 +117,4 @@ export function createTypeAnnotationBasedOnTypeof(type: string) {
   } else {
     throw new Error("Invalid typeof value");
   }
-}
+};

@@ -145,7 +145,7 @@ export default function get(entryLoc): Array<Suite> {
   }
 
   return suites;
-}
+};
 
 export function multiple(entryLoc, ignore?: Array<string>) {
   let categories = {};
@@ -160,7 +160,7 @@ export function multiple(entryLoc, ignore?: Array<string>) {
   }
 
   return categories;
-}
+};
 
 export function readFile(filename) {
   if (pathExists.sync(filename)) {
@@ -170,4 +170,4 @@ export function readFile(filename) {
   } else {
     return "";
   }
-}
+};

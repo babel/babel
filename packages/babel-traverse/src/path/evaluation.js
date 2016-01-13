@@ -28,7 +28,7 @@ const INVALID_METHODS = ["random"];
 export function evaluateTruthy(): boolean {
   let res = this.evaluate();
   if (res.confident) return !!res.value;
-}
+};
 
 /**
  * Walk the input `node` and statically evaluate it.
@@ -298,4 +298,4 @@ export function evaluate(): { confident: boolean; value: any } {
 
     deopt(path);
   }
-}
+};

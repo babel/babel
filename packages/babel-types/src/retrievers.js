@@ -59,7 +59,7 @@ export function getBindingIdentifiers(
   }
 
   return ids;
-}
+};
 
 /**
  * Mapping of types to their identifier keys.
@@ -112,4 +112,4 @@ export function getOuterBindingIdentifiers(
   duplicates?: boolean,
 ): Object {
   return getBindingIdentifiers(node, duplicates, true);
-}
+};

@@ -18,6 +18,6 @@ plugins.jsx = jsxPlugin;
 
 export function parse(input, options) {
   return new Parser(options, input).parse();
-}
+};
 
 export { tokTypes };

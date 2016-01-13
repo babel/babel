@@ -32,7 +32,7 @@ export function insertBefore(nodes) {
   }
 
   return [this];
-}
+};
 
 export function _containerInsert(from, nodes) {
   this.updateSiblingKeys(from, nodes.length);
@@ -75,15 +75,15 @@ export function _containerInsert(from, nodes) {
   }
 
   return paths;
-}
+};
 
 export function _containerInsertBefore(nodes) {
   return this._containerInsert(this.key, nodes);
-}
+};
 
 export function _containerInsertAfter(nodes) {
   return this._containerInsert(this.key + 1, nodes);
-}
+};
 
 export function _maybePopFromStatements(nodes) {
   let last = nodes[nodes.length - 1];
@@ -92,7 +92,7 @@ export function _maybePopFromStatements(nodes) {
   if (isIdentifier && !this.isCompletionRecord()) {
     nodes.pop();
   }
-}
+};
 
 /**
  * Insert the provided nodes after the current one. When inserting nodes after an
@@ -126,7 +126,7 @@ export function insertAfter(nodes) {
   }
 
   return [this];
-}
+};
 
 /**
  * Update all sibling node paths after `fromIndex` by `incrementBy`.
@@ -142,7 +142,7 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
       path.key += incrementBy;
     }
   }
-}
+};
 
 export function _verifyNodeList(nodes) {
   if (!nodes) {
@@ -174,7 +174,7 @@ export function _verifyNodeList(nodes) {
   }
 
   return nodes;
-}
+};
 
 export function unshiftContainer(listKey, nodes) {
   this._assertUnremoved();
@@ -192,7 +192,7 @@ export function unshiftContainer(listKey, nodes) {
   });
 
   return path.insertBefore(nodes);
-}
+};
 
 export function pushContainer(listKey, nodes) {
   this._assertUnremoved();
@@ -212,7 +212,7 @@ export function pushContainer(listKey, nodes) {
   });
 
   return path.replaceWithMultiple(nodes);
-}
+};
 
 /**
  * Hoist the current node to the highest scope possible and return a UID
@@ -222,4 +222,4 @@ export function pushContainer(listKey, nodes) {
 export function hoist(scope = this.scope) {
   let hoister = new PathHoister(this, scope);
   return hoister.run();
-}
+};

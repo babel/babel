@@ -26,4 +26,4 @@ export function getOptions(opts?: Object): Object {
     options[key] = opts && key in opts ? opts[key] : defaultOptions[key];
   }
   return options;
-}
+};

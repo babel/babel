@@ -25,7 +25,7 @@ export function save() {
   }
   mkdirpSync(path.dirname(FILENAME));
   fs.writeFileSync(FILENAME, serialised);
-}
+};
 
 /**
  * Load cache from disk and parse.
@@ -44,7 +44,7 @@ export function load() {
   } catch (err) {
     return;
   }
-}
+};
 
 /**
  * Retrieve data from cache.
@@ -52,4 +52,4 @@ export function load() {
 
 export function get() {
   return data;
-}
+};

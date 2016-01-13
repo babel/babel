@@ -118,4 +118,4 @@ export default function (
   } else {
     return frame;
   }
-}
+};

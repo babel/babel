@@ -62,4 +62,4 @@ export default class Parser extends Tokenizer {
     this.nextToken();
     return this.parseTopLevel(file, program);
   }
-}
+};

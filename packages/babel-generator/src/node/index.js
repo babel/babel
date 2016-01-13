@@ -88,7 +88,7 @@ export default class Node {
 
     return find(parens, node, parent, printStack);
   }
-}
+};
 
 each(Node, function (fn, key) {
   Node.prototype[key] = function () {

@@ -53,4 +53,4 @@ export default function (path: NodePath, scope = path.scope) {
   if (node.generator) call = t.yieldExpression(call, true);
 
   return t.returnStatement(call);
-}
+};

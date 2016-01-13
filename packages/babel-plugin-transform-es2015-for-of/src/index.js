@@ -224,4 +224,4 @@ export default function ({ messages, template, types: t }) {
       node:          template
     };
   }
-}
+};

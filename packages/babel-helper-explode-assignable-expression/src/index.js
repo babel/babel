@@ -78,4 +78,4 @@ export default function (
     uid: uid,
     ref: ref
   };
-}
+};

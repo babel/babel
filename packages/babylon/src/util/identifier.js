@@ -90,7 +90,7 @@ export function isIdentifierStart(code) {
   if (code < 123) return true;
   if (code <= 0xffff) return code >= 0xaa && nonASCIIidentifierStart.test(String.fromCharCode(code));
   return isInAstralSet(code, astralIdentifierStartCodes);
-}
+};
 
 // Test whether a given character is part of an identifier.
 
@@ -103,4 +103,4 @@ export function isIdentifierChar(code) {
   if (code < 123) return true;
   if (code <= 0xffff) return code >= 0xaa && nonASCIIidentifier.test(String.fromCharCode(code));
   return isInAstralSet(code, astralIdentifierStartCodes) || isInAstralSet(code, astralIdentifierCodes);
-}
+};

@@ -20,7 +20,7 @@ export function canCompile(filename: string, altExts?: Array<string>) {
   let exts = altExts || canCompile.EXTENSIONS;
   let ext = path.extname(filename);
   return contains(exts, ext);
-}
+};
 
 /**
  * Default set of compilable extensions.
@@ -42,7 +42,7 @@ export function list(val?: string): Array<string> {
   } else {
     return [val];
   }
-}
+};
 
 /**
  * Create a RegExp from a string, array, or regexp.
@@ -74,7 +74,7 @@ export function regexify(val: any): RegExp {
   }
 
   throw new TypeError("illegal type for regexify");
-}
+};
 
 /**
  * Create an array from a boolean, string, or array, mapped by and optional function.
@@ -91,7 +91,7 @@ export function arrayify(val: any, mapFn?: Function): Array<any> {
   }
 
   return [val];
-}
+};
 
 /**
  * Makes boolean-like strings into booleans.
@@ -107,7 +107,7 @@ export function booleanify(val: any): boolean | any {
   }
 
   return val;
-}
+};
 
 /**
  * Tests if a filename should be ignored based on "ignore" and "only" options.
@@ -132,7 +132,7 @@ export function shouldIgnore(
   }
 
   return false;
-}
+};
 
 /**
  * Returns result of calling function with filename if pattern is a function.

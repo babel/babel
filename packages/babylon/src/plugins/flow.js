@@ -1050,4 +1050,4 @@ export default function (instance) {
       }
     };
   });
-}
+};

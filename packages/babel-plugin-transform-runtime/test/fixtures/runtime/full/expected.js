@@ -18,7 +18,7 @@ export function giveWord() {
         return _context.stop();
     }
   }, _marked[0], this);
-}
+};
 
 foo;
 bar;

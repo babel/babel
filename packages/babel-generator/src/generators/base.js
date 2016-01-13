@@ -2,7 +2,7 @@
 
 export function File(node: Object) {
   this.print(node.program, node);
-}
+};
 
 export function Program(node: Object) {
   this.printInnerComments(node, false);
@@ -11,7 +11,7 @@ export function Program(node: Object) {
   if (node.directives && node.directives.length) this.newline();
 
   this.printSequence(node.body, node);
-}
+};
 
 export function BlockStatement(node: Object) {
   this.push("{");
@@ -28,15 +28,15 @@ export function BlockStatement(node: Object) {
   } else {
     this.push("}");
   }
-}
+};
 
-export function Noop() {}
+export function Noop() {};
 
 export function Directive(node: Object) {
   this.print(node.value, node);
   this.semicolon();
-}
+};
 
 export function DirectiveLiteral(node: Object) {
   this.push(this._stringLiteral(node.value));
-}
+};
