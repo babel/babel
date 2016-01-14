@@ -28,6 +28,10 @@ tt.cssxRulesEnd.updateContext = function (prevType) {
 const CSSXElementStartAssumption = [
   tt.name, tt.star, tt.dot, tt.relational, tt.cssxSelector
 ];
+const CSSXValueAllowedCodes = [
+  35 // #
+];
+const CSSXPropertyAllowedCodes = []
 
 export default function CSSX(instance) {
 
@@ -241,7 +245,7 @@ pp.cssxReadProperty = function() {
 
   loc = this.state.curPosition();
   pos = this.state.pos;
-  property = this.cssxReadWord(isIdentifierChar);
+  property = this.cssxReadWord(pp.cssxReadPropCharUntil);
 
   this.state.startLoc = loc;
   this.state.start = pos;
@@ -257,7 +261,8 @@ pp.cssxReadValue = function() {
 
   startLoc = this.state.curPosition();
   pos = this.state.pos;
-  value = this.cssxReadWord(isIdentifierChar); // changes state.pos
+  debugger;
+  value = this.cssxReadWord(pp.cssxReadValueCharUntil); // changes state.pos
 
   this.state.startLoc = startLoc;
   this.state.start = pos;
@@ -319,6 +324,14 @@ pp.cssxStoreToken = function () {
   this.state.lastTokStart = this.state.start;
   this.state.lastTokEndLoc = this.state.endLoc;
   this.state.lastTokStartLoc = this.state.startLoc;
+};
+
+pp.cssxReadValueCharUntil = function (code) {
+  return CSSXValueAllowedCodes.indexOf(code) >= 0 ? true : isIdentifierChar(code);
+};
+
+pp.cssxReadPropCharUntil = function (code) {
+  return CSSXPropertyAllowedCodes.indexOf(code) >= 0 ? true : isIdentifierChar(code);
 };
 
 // utilities

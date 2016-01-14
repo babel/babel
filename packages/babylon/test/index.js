@@ -3,19 +3,19 @@ var parse       = require("../lib").parse;
 var _           = require("lodash");
 var fs          = require("fs");
 
-var ignore = [];
-var onlyTitle = '';
+// var ignore = [];
+// var onlyTitle = '';
 
-// var ignore = [
-//   'comments',
-//   'core',
-//   'esprima',
-//   'experimental',
-//   'flow',
-//   'harmony',
-//   'jsx'
-// ];
-// var onlyTitle = '1,2,3,4,5,6';
+var ignore = [
+  'comments',
+  'core',
+  'esprima',
+  'experimental',
+  'flow',
+  'harmony',
+  'jsx'
+];
+var onlyTitle = '8';
 
 var fixtures = getFixtures(__dirname + "/fixtures", ignore);
 
