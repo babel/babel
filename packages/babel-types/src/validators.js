@@ -2,6 +2,7 @@ import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";
 import * as t from "./index";
 import { BLOCK_SCOPED_SYMBOL } from "./constants";
+import * as util from "util";
 
 /**
  * Check if the input `node` is a binding identifier.
@@ -150,17 +151,33 @@ export function isReferenced(node: Object, parent: Object): boolean {
   return true;
 }
 
+// [DEPRECATED].
+export let isValidIdentifier = util.deprecate(
+  isSpecIdentifier,
+  "babel-types: isValidIdentifier() is deprecated. Use isSpecIdentifier() instead."
+);
+
 /**
- * Check if the input `name` is a valid identifier name
- * and isn't a reserved word.
+ * Is `name` an ES2015 strict mode Identifier?
+ * (IdentifierName that isn't a ReservedWord.)
  */
 
-export function isValidIdentifier(name: string): boolean {
-  if (typeof name !== "string" || esutils.keyword.isReservedWordES6(name, true)) {
-    return false;
-  } else {
-    return esutils.keyword.isIdentifierNameES6(name);
-  }
+export function isSpecIdentifier(name: string): boolean {
+  return (
+    typeof name === "string" &&
+    esutils.keyword.isIdentifierES6(name, true)
+  );
+}
+
+/**
+ * Is `name` an ES2015 IdentifierName?
+ */
+
+export function isSpecIdentifierName(name: string): boolean {
+  return (
+    typeof name === "string" &&
+    esutils.keyword.isIdentifierNameES6(name)
+  );
 }
 
 /**

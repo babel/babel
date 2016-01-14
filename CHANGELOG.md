@@ -8,10 +8,31 @@
 > - [Documentation]
 > - [Internal]
 > - [Polish]
+> - [Deprecated]
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
+
+## Unreleased
+
+  * **New Feature**
+
+    * `babel-types`: Add `isSpecIdentifierName()`.
+
+    * `babel-types`: Implement validation for `name` field in `Identifier` builder. It's limited to validating that it's a `spec.IdentifierName` since `ast.Identifier` is used to represent those as well. So in cases where the value must be a `spec.Identifier`, this validation will fail to error.
+
+    * `babel-types`: Add `isSpecIdentifier()` as new name for `isValidIdentifier()`.
+
+  * **Deprecated**
+
+    * `babel-types`: `isValidIdentifier()`. The name is confusing due to differences between the AST type `Identifier` and the specification production. Use `isSpecIdentifier()` instead.
+
+  * **Internal**
+
+    * `babel-types`: Start test suite.
+
+    * Replace deprecated calls: `t.isValidIdentifier() => t.isSpecIdentifier()`.
 
 ## 6.4.3 (2016-01-13)
 

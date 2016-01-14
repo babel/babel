@@ -4,7 +4,7 @@ export default function ({ types: t }) {
       MemberExpression: {
         exit({ node }) {
           let prop = node.property;
-          if (node.computed && t.isLiteral(prop) && t.isValidIdentifier(prop.value)) {
+          if (node.computed && t.isLiteral(prop) && t.isSpecIdentifier(prop.value)) {
             // foo["bar"] => foo.bar
             node.property = t.identifier(prop.value);
             node.computed = false;

@@ -67,7 +67,7 @@ export default function (opts) {
       value.value = value.value.replace(/\n\s+/g, " ");
     }
 
-    if (t.isValidIdentifier(node.name.name)) {
+    if (t.isSpecIdentifier(node.name.name)) {
       node.name.type = "Identifier";
     } else {
       node.name = t.stringLiteral(node.name.name);
