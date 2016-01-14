@@ -75,10 +75,10 @@ function wrap(state, method, id, scope, isClassMethod) {
     }
   }
 
-  if(isClassMethod){
+  if (isClassMethod) {
     return template(`Object.defineProperty(FUNCTION, 'name', { value: '${id.name}' })`)
     .build({ FUNCTION: method }).expression;
-  }else{
+  } else {
     method.id = id;
     scope.getProgramParent().references[id.name] = true;
   }
