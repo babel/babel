@@ -15,8 +15,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## 6.4.4 (2016-01-13)
 
-* **Bug Fix**
- * `babel-plugin-transform-regenerator`: Re-built/published a new version since there was a publishing issue ([T2892](https://phabricator.babeljs.io/T2892)).
+* `babel-plugin-transform-regenerator`: Publishing issue ([T2892](https://phabricator.babeljs.io/T2892)).
 
 ## 6.4.3 (2016-01-13)
 
