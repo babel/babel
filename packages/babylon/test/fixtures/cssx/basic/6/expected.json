@@ -123,7 +123,7 @@
             {
               "type": "CSSXRule",
               "start": 34,
-              "end": 50,
+              "end": 48,
               "loc": {
                 "start": {
                   "line": 3,
@@ -294,7 +294,7 @@
         "updateContext": null
       },
       "value": "10px",
-      "start": 24,
+      "start": 26,
       "end": 30,
       "loc": {
         "start": {
@@ -347,7 +347,7 @@
         "updateContext": null
       },
       "value": "padding",
-      "start": 30,
+      "start": 34,
       "end": 41,
       "loc": {
         "start": {
@@ -400,7 +400,7 @@
         "updateContext": null
       },
       "value": "20px",
-      "start": 41,
+      "start": 43,
       "end": 47,
       "loc": {
         "start": {

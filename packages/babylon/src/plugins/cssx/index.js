@@ -3,7 +3,7 @@ import { Token } from "../../tokenizer";
 import { TokContext, types as tc } from "../../tokenizer/context";
 import Parser from "../../parser";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
-import { SourceLocation } from "../../util/location";
+import { SourceLocation, Position } from "../../util/location";
 
 let pp = Parser.prototype;
 
@@ -244,32 +244,39 @@ pp.cssxReadProperty = function() {
   property = this.cssxReadWord(isIdentifierChar);
 
   this.state.startLoc = loc;
+  this.state.start = pos;
   this.finishToken(tt.cssxProperty, property);
   this.next();
   return this.cssxBuildRuleChildNode('CSSXProperty', property, pos, loc);
 };
 
 pp.cssxReadValue = function() {
-  let loc, pos, value;
+  let startLoc, endLoc, pos, value;
 
   this.skipSpace();
 
-  loc = this.state.curPosition();
+  startLoc = this.state.curPosition();
   pos = this.state.pos;
-  value = this.cssxReadWord(isIdentifierChar);
-  this.state.startLoc = loc;
+  value = this.cssxReadWord(isIdentifierChar); // changes state.pos
+
+  this.state.startLoc = startLoc;
+  this.state.start = pos;
+  this.state.endLoc = endLoc = this.state.curPosition();
+  this.state.end = this.state.pos;
+
   this.finishToken(tt.cssxValue, value);
   this.next();
-  return this.cssxBuildRuleChildNode('CSSXValue', value, pos, loc);
+  return this.cssxBuildRuleChildNode('CSSXValue', value, pos, startLoc);
 };
 
 pp.cssxBuildRuleNode = function (propertyNode, valueNode) {
   var node = this.startNodeAt(propertyNode.start, propertyNode.loc.start);
-  var pos = this.state.pos;
+  var pos = valueNode.end;
   var locEnd = this.clonePosition(valueNode.loc.end);
 
   if (this.match(tt.semi) || (this.match(tt.cssxRulesEnd) && this.matchPreviousToken(tt.semi))) {
    ++locEnd.column;
+   ++pos;
   }
 
   node.label = propertyNode;
