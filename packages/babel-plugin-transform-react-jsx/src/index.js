@@ -42,4 +42,4 @@ export default function ({ types: t }) {
     inherits: require("babel-plugin-syntax-jsx"),
     visitor
   };
-}
+};

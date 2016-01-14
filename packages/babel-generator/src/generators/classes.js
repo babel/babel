@@ -24,7 +24,7 @@ export function ClassDeclaration(node: Object) {
 
   this.space();
   this.print(node.body, node);
-}
+};
 
 export { ClassDeclaration as ClassExpression };
 
@@ -42,7 +42,7 @@ export function ClassBody(node: Object) {
 
     this.rightBrace();
   }
-}
+};
 
 export function ClassProperty(node: Object) {
   this.printJoin(node.decorators, node, { separator: "" });
@@ -57,7 +57,7 @@ export function ClassProperty(node: Object) {
     this.print(node.value, node);
   }
   this.semicolon();
-}
+};
 
 export function ClassMethod(node: Object) {
   this.printJoin(node.decorators, node, { separator: "" });
@@ -71,4 +71,4 @@ export function ClassMethod(node: Object) {
   }
 
   this._method(node);
-}
+};

@@ -109,4 +109,4 @@ export default function (path: NodePath, callId: Object) {
   } else {
     return plainFunction(path, callId);
   }
-}
+};

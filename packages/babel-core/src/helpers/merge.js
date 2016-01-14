@@ -18,4 +18,4 @@ export default function (dest?: Object, src?: Object): ?Object {
       return newArray;
     }
   });
-}
+};

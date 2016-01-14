@@ -62,9 +62,9 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
       callback(null, result);
     }
   });
-}
+};
 
 export function transformFileSync(filename: string, opts?: Object = {}): string {
   opts.filename = filename;
   return transform(fs.readFileSync(filename, "utf8"), opts);
-}
+};

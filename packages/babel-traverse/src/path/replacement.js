@@ -55,7 +55,7 @@ export function replaceWithMultiple(nodes: Array<Object>) {
   } else {
     this.remove();
   }
-}
+};
 
 /**
  * Parse a string as an expression and replace the current node with the result.
@@ -83,7 +83,7 @@ export function replaceWithSourceString(replacement) {
   replacement = replacement.program.body[0].expression;
   traverse.removeProperties(replacement);
   return this.replaceWith(replacement);
-}
+};
 
 /**
  * Replace the current node with another.
@@ -145,7 +145,7 @@ export function replaceWith(replacement) {
 
   // requeue for visiting
   this.requeue();
-}
+};
 
 /**
  * Description
@@ -165,7 +165,7 @@ export function _replaceWith(node) {
   this.debug(() => `Replace with ${node && node.type}`);
 
   this.node = this.container[this.key] = node;
-}
+};
 
 /**
  * This method takes an array of statements nodes and then explodes it
@@ -222,7 +222,7 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
     return this.node;
   }
-}
+};
 
 export function replaceInline(nodes: Object | Array<Object>) {
   this.resync();
@@ -238,4 +238,4 @@ export function replaceInline(nodes: Object | Array<Object>) {
   } else {
     return this.replaceWith(nodes);
   }
-}
+};

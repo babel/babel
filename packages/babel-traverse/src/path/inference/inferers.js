@@ -10,11 +10,11 @@ export function VariableDeclarator() {
   } else {
     return;
   }
-}
+};
 
 export function TypeCastExpression(node) {
   return node.typeAnnotation;
-}
+};
 
 TypeCastExpression.validParent = true;
 
@@ -23,11 +23,11 @@ export function NewExpression(node) {
     // only resolve identifier callee
     return t.genericTypeAnnotation(node.callee);
   }
-}
+};
 
 export function TemplateLiteral() {
   return t.stringTypeAnnotation();
-}
+};
 
 export function UnaryExpression(node) {
   let operator = node.operator;
@@ -41,7 +41,7 @@ export function UnaryExpression(node) {
   } else if (t.BOOLEAN_UNARY_OPERATORS.indexOf(operator) >= 0) {
     return t.booleanTypeAnnotation();
   }
-}
+};
 
 export function BinaryExpression(node) {
   let operator = node.operator;
@@ -68,68 +68,68 @@ export function BinaryExpression(node) {
       t.numberTypeAnnotation()
     ]);
   }
-}
+};
 
 export function LogicalExpression() {
   return t.createUnionTypeAnnotation([
     this.get("left").getTypeAnnotation(),
     this.get("right").getTypeAnnotation()
   ]);
-}
+};
 
 export function ConditionalExpression() {
   return t.createUnionTypeAnnotation([
     this.get("consequent").getTypeAnnotation(),
     this.get("alternate").getTypeAnnotation()
   ]);
-}
+};
 
 export function SequenceExpression() {
   return this.get("expressions").pop().getTypeAnnotation();
-}
+};
 
 export function AssignmentExpression() {
   return this.get("right").getTypeAnnotation();
-}
+};
 
 export function UpdateExpression(node) {
   let operator = node.operator;
   if (operator === "++" || operator === "--") {
     return t.numberTypeAnnotation();
   }
-}
+};
 
 export function StringLiteral() {
   return t.stringTypeAnnotation();
-}
+};
 
 export function NumericLiteral() {
   return t.numberTypeAnnotation();
-}
+};
 
 export function BooleanLiteral() {
   return t.booleanTypeAnnotation();
-}
+};
 
 export function NullLiteral() {
   return t.nullLiteralTypeAnnotation();
-}
+};
 
 export function RegExpLiteral() {
   return t.genericTypeAnnotation(t.identifier("RegExp"));
-}
+};
 
 export function ObjectExpression() {
   return t.genericTypeAnnotation(t.identifier("Object"));
-}
+};
 
 export function ArrayExpression() {
   return t.genericTypeAnnotation(t.identifier("Array"));
-}
+};
 
 export function RestElement() {
   return ArrayExpression();
-}
+};
 
 RestElement.validParent = true;
 
@@ -141,11 +141,11 @@ export { Func as Function, Func as Class };
 
 export function CallExpression() {
   return resolveCall(this.get("callee"));
-}
+};
 
 export function TaggedTemplateExpression() {
   return resolveCall(this.get("tag"));
-}
+};
 
 function resolveCall(callee) {
   callee = callee.resolve();

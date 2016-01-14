@@ -21,4 +21,4 @@ export function normaliseOptions(options: Object = {}): Object {
   }
 
   return options;
-}
+};

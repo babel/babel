@@ -193,4 +193,4 @@ for (let type in virtualTypes) {
   NodePath.prototype[`is${type}`] = function (opts) {
     return virtualType.checkPath(this, opts);
   };
-}
+};

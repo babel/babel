@@ -145,4 +145,4 @@ export default function (opts?: Object = {}) {
   delete opts.only;
 
   extend(transformOpts, opts);
-}
+};

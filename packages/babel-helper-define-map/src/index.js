@@ -71,7 +71,7 @@ export function push(mutatorMap: Object, node: Object, kind: string, file, scope
   }
 
   return map;
-}
+};
 
 export function hasComputed(mutatorMap: Object): boolean {
   for (let key in mutatorMap) {
@@ -80,7 +80,7 @@ export function hasComputed(mutatorMap: Object): boolean {
     }
   }
   return false;
-}
+};
 
 export function toComputedObjectFromClass(obj: Object): Object {
   let objExpr = t.arrayExpression([]);
@@ -93,7 +93,7 @@ export function toComputedObjectFromClass(obj: Object): Object {
   }
 
   return objExpr;
-}
+};
 
 export function toClassObject(mutatorMap: Object): Object {
   let objExpr = t.objectExpression([]);
@@ -120,7 +120,7 @@ export function toClassObject(mutatorMap: Object): Object {
   });
 
   return objExpr;
-}
+};
 
 export function toDefineObject(mutatorMap: Object): Object {
   each(mutatorMap, function (map) {
@@ -130,4 +130,4 @@ export function toDefineObject(mutatorMap: Object): Object {
   });
 
   return toClassObject(mutatorMap);
-}
+};

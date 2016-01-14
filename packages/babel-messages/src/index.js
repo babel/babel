@@ -58,10 +58,10 @@ export function get(key: string, ...args: Array<any>): string {
   return msg.replace(/\$(\d+)/g, function (str, i) {
     return args[i - 1];
   });
-}
+};
 
 /**
- * Stingify arguments to be used inside messages.
+ * Stringify arguments to be used inside messages.
  */
 
 export function parseArgs(args: Array<any>): Array<string> {
@@ -76,4 +76,4 @@ export function parseArgs(args: Array<any>): Array<string> {
       }
     }
   });
-}
+};

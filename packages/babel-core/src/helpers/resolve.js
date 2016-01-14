@@ -19,4 +19,4 @@ export default function (loc: string, relative: string = process.cwd()): ?string
   } catch (err) {
     return null;
   }
-}
+};

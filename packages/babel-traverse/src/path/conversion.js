@@ -19,11 +19,11 @@ export function toComputedKey(): Object {
   }
 
   return key;
-}
+};
 
 export function ensureBlock() {
   return t.ensureBlock(this.node);
-}
+};
 
 export function arrowFunctionToShadowed() {
   // todo: maybe error
@@ -35,4 +35,4 @@ export function arrowFunctionToShadowed() {
   node.expression = false;
   node.type = "FunctionExpression";
   node.shadow = node.shadow || true;
-}
+};

@@ -13,4 +13,4 @@ export default function (callee, thisNode, args) {
       [thisNode, ...args]
     );
   }
-}
+};

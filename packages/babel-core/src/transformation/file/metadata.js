@@ -133,8 +133,8 @@ export function ExportDeclaration(path, file) {
       source
     });
   }
-}
+};
 
 export function Scope(path) {
   path.skip();
-}
+};

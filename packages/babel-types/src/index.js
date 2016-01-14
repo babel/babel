@@ -89,7 +89,7 @@ export function is(type: string, node: Object, opts?: Object): boolean {
   } else {
     return t.shallowEqual(node, opts);
   }
-}
+};
 
 /**
  * Test if a `nodeType` is a `targetType` or if `targetType` is an alias of `nodeType`.
@@ -108,7 +108,7 @@ export function isType(nodeType: string, targetType: string): boolean {
   }
 
   return false;
-}
+};
 
 /**
  * Description
@@ -179,7 +179,7 @@ export function validate(node?: Object, key: string, val: any) {
   if (field.optional && val == null) return;
 
   field.validate(node, key, val);
-}
+};
 
 /**
  * Test if an object is shallowly equal.
@@ -195,7 +195,7 @@ export function shallowEqual(actual: Object, expected: Object): boolean {
   }
 
   return true;
-}
+};
 
 /**
  * Append a node to a member expression.
@@ -206,7 +206,7 @@ export function appendToMemberExpression(member: Object, append: Object, compute
   member.property = append;
   member.computed = !!computed;
   return member;
-}
+};
 
 /**
  * Prepend a node to a member expression.
@@ -215,7 +215,7 @@ export function appendToMemberExpression(member: Object, append: Object, compute
 export function prependToMemberExpression(member: Object, prepend: Object): Object {
   member.object = t.memberExpression(prepend, member.object);
   return member;
-}
+};
 
 /**
  * Ensure the `key` (defaults to "body") of a `node` is a block.
@@ -224,7 +224,7 @@ export function prependToMemberExpression(member: Object, prepend: Object): Obje
 
 export function ensureBlock(node: Object, key: string = "body"): Object {
   return node[key] = t.toBlock(node[key], node);
-}
+};
 
 /**
  * Create a shallow clone of a `node` excluding `_private` properties.
@@ -237,7 +237,7 @@ export function clone(node: Object): Object {
     newNode[key] = node[key];
   }
   return newNode;
-}
+};
 
 /**
  * Create a deep clone of a `node` and all of it's child nodes
@@ -264,7 +264,7 @@ export function cloneDeep(node: Object): Object {
   }
 
   return newNode;
-}
+};
 
 /**
  * Build a function that when called will return whether or not the
@@ -319,7 +319,7 @@ export function buildMatchMemberExpression(match:string, allowPartial?: boolean)
 
     return true;
   };
-}
+};
 
 /**
  * Remove comment properties from a node.
@@ -330,7 +330,7 @@ export function removeComments(node: Object): Object {
     delete node[key];
   }
   return node;
-}
+};
 
 /**
  * Inherit all unique comments from `parent` node to `child` node.
@@ -341,19 +341,19 @@ export function inheritsComments(child: Object, parent: Object): Object {
   inheritLeadingComments(child, parent);
   inheritInnerComments(child, parent);
   return child;
-}
+};
 
 export function inheritTrailingComments(child: Object, parent: Object) {
   _inheritComments("trailingComments", child, parent);
-}
+};
 
 export function inheritLeadingComments(child: Object, parent: Object) {
   _inheritComments("leadingComments", child, parent);
-}
+};
 
 export function inheritInnerComments(child: Object, parent: Object) {
   _inheritComments("innerComments", child, parent);
-}
+};
 
 function _inheritComments(key, child, parent) {
   if (child && parent) {
@@ -388,7 +388,7 @@ export function inherits(child: Object, parent: Object): Object {
   t.inheritsComments(child, parent);
 
   return child;
-}
+};
 
 /**
  * TODO
@@ -398,7 +398,7 @@ export function assertNode(node?) {
   if (!isNode(node)) {
     throw new TypeError("Not a valid node " + (node && node.type));
   }
-}
+};
 
 /**
  * TODO
@@ -406,7 +406,7 @@ export function assertNode(node?) {
 
 export function isNode(node?): boolean {
   return !!(node && VISITOR_KEYS[node.type]);
-}
+};
 
 // Optimize property access.
 toFastProperties(t);

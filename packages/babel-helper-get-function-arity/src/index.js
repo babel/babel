@@ -9,4 +9,4 @@ export default function (node): number {
     }
   }
   return params.length;
-}
+};

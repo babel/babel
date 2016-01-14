@@ -793,4 +793,4 @@ export default class Tokenizer {
       this.state.exprAllowed = type.beforeExpr;
     }
   }
-}
+};

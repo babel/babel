@@ -6,7 +6,7 @@ export let isReactComponent = t.buildMatchMemberExpression("React.Component");
 
 export function isCompatTag(tagName?: string): boolean {
   return !!tagName && /^[a-z]|\-/.test(tagName);
-}
+};
 
 function cleanJSXElementLiteralChild(
   child: { value: string },
@@ -74,4 +74,4 @@ export function buildChildren(node: Object): Array<Object> {
   }
 
   return elems;
-}
+};

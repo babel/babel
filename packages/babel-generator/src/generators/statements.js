@@ -9,7 +9,7 @@ export function WithStatement(node: Object) {
   this.print(node.object, node);
   this.push(")");
   this.printBlock(node);
-}
+};
 
 export function IfStatement(node: Object) {
   this.keyword("if");
@@ -38,7 +38,7 @@ export function IfStatement(node: Object) {
     this.push("else ");
     this.printAndIndentOnComments(node.alternate, node);
   }
-}
+};
 
 // Recursively get the last statement.
 function getLastStatement(statement) {
@@ -68,7 +68,7 @@ export function ForStatement(node: Object) {
 
   this.push(")");
   this.printBlock(node);
-}
+};
 
 export function WhileStatement(node: Object) {
   this.keyword("while");
@@ -76,7 +76,7 @@ export function WhileStatement(node: Object) {
   this.print(node.test, node);
   this.push(")");
   this.printBlock(node);
-}
+};
 
 let buildForXStatement = function (op) {
   return function (node: Object) {
@@ -101,7 +101,7 @@ export function DoWhileStatement(node: Object) {
   this.push("(");
   this.print(node.test, node);
   this.push(");");
-}
+};
 
 function buildLabelStatement(prefix, key = "label") {
   return function (node: Object) {
@@ -134,7 +134,7 @@ export function LabeledStatement(node: Object) {
   this.print(node.label, node);
   this.push(": ");
   this.print(node.body, node);
-}
+};
 
 export function TryStatement(node: Object) {
   this.keyword("try");
@@ -155,7 +155,7 @@ export function TryStatement(node: Object) {
     this.push("finally ");
     this.print(node.finalizer, node);
   }
-}
+};
 
 export function CatchClause(node: Object) {
   this.keyword("catch");
@@ -164,7 +164,7 @@ export function CatchClause(node: Object) {
   this.push(")");
   this.space();
   this.print(node.body, node);
-}
+};
 
 export function SwitchStatement(node: Object) {
   this.keyword("switch");
@@ -182,7 +182,7 @@ export function SwitchStatement(node: Object) {
   });
 
   this.push("}");
-}
+};
 
 export function SwitchCase(node: Object) {
   if (node.test) {
@@ -197,11 +197,11 @@ export function SwitchCase(node: Object) {
     this.newline();
     this.printSequence(node.consequent, node, { indent: true });
   }
-}
+};
 
 export function DebuggerStatement() {
   this.push("debugger;");
-}
+};
 
 export function VariableDeclaration(node: Object, parent: Object) {
   this.push(node.kind + " ");
@@ -244,7 +244,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
   }
 
   this.semicolon();
-}
+};
 
 export function VariableDeclarator(node: Object) {
   this.print(node.id, node);
@@ -255,4 +255,4 @@ export function VariableDeclarator(node: Object) {
     this.space();
     this.print(node.init, node);
   }
-}
+};

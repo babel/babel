@@ -60,7 +60,7 @@ export function matchesPattern(pattern: string, allowPartial?: boolean): boolean
   }
 
   return i === parts.length;
-}
+};
 
 /**
  * Check whether we have the input `key`. If the `key` references an array then we check
@@ -74,7 +74,7 @@ export function has(key): boolean {
   } else {
     return !!val;
   }
-}
+};
 
 /**
  * Description
@@ -82,7 +82,7 @@ export function has(key): boolean {
 
 export function isStatic() {
   return this.scope.isStatic(this.node);
-}
+};
 
 /**
  * Alias of `has`.
@@ -96,7 +96,7 @@ export let is = has;
 
 export function isnt(key): boolean {
   return !this.has(key);
-}
+};
 
 /**
  * Check whether the path node `key` strict equals `value`.
@@ -104,7 +104,7 @@ export function isnt(key): boolean {
 
 export function equals(key, value): boolean {
   return this.node[key] === value;
-}
+};
 
 /**
  * Check the type against our stored internal type of the node. This is handy when a node has
@@ -113,7 +113,7 @@ export function equals(key, value): boolean {
 
 export function isNodeType(type: string): boolean {
   return t.isType(this.type, type);
-}
+};
 
 /**
  * This checks whether or now we're in one of the following positions:
@@ -127,7 +127,7 @@ export function isNodeType(type: string): boolean {
 
  export function canHaveVariableDeclarationOrExpression() {
     return (this.key === "init" || this.key === "left") && this.parentPath.isFor();
- }
+ };
 
 /**
  * Check whether the current path references a completion record
@@ -155,7 +155,7 @@ export function isCompletionRecord(allowInsideFunction?) {
   } while ((path = path.parentPath) && !path.isProgram());
 
   return true;
-}
+};
 
 /**
  * Check whether or not the current `key` allows either a single statement or block statement
@@ -168,7 +168,7 @@ export function isStatementOrBlock() {
   } else {
     return includes(t.STATEMENT_OR_BLOCK_KEYS, this.key);
   }
-}
+};
 
 /**
  * Check if the currently assigned path references the `importName` of `moduleSource`.
@@ -204,7 +204,7 @@ export function referencesImport(moduleSource, importName) {
   }
 
   return false;
-}
+};
 
 /**
  * Get the source code associated with this node.
@@ -217,11 +217,11 @@ export function getSource() {
   } else {
     return "";
   }
-}
+};
 
 export function willIMaybeExecuteBefore(target) {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
-}
+};
 
 /**
  * Given a `target` check the execution status of it relative to the current path.
@@ -283,7 +283,7 @@ export function _guessExecutionStatusRelativeTo(target) {
   let targetKeyPosition = t.VISITOR_KEYS[targetRelationship.type].indexOf(targetRelationship.key);
   let selfKeyPosition   = t.VISITOR_KEYS[selfRelationship.type].indexOf(selfRelationship.key);
   return targetKeyPosition > selfKeyPosition ? "before" : "after";
-}
+};
 
 export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncParent) {
   let targetFuncPath = targetFuncParent.path;
@@ -326,7 +326,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
   }
 
   return allStatus;
-}
+};
 
 /**
  * Resolve a "pointer" `NodePath` to it's absolute path.
@@ -334,7 +334,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
 
 export function resolve(dangerous, resolved) {
   return this._resolve(dangerous, resolved) || this;
-}
+};
 
 export function _resolve(dangerous?, resolved?): ?NodePath {
   // detect infinite recursion
@@ -401,4 +401,4 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
       if (elem) return elem.resolve(dangerous, resolved);
     }
   }
-}
+};

@@ -14,7 +14,7 @@ export function findParent(callback) {
     if (callback(path)) return path;
   }
   return null;
-}
+};
 
 /**
  * Description
@@ -26,7 +26,7 @@ export function find(callback) {
     if (callback(path)) return path;
   } while (path = path.parentPath);
   return null;
-}
+};
 
 /**
  * Get the parent function of the current path.
@@ -34,7 +34,7 @@ export function find(callback) {
 
 export function getFunctionParent() {
   return this.findParent((path) => path.isFunction() || path.isProgram());
-}
+};
 
 /**
  * Walk up the tree until we hit a parent node path in a list.
@@ -47,7 +47,7 @@ export function getStatementParent() {
       return path;
     }
   } while (path = path.parentPath);
-}
+};
 
 /**
  * Get the deepest common ancestor and then from it, get the earliest relationship path
@@ -91,7 +91,7 @@ export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath 
 
     return earliest;
   });
-}
+};
 
 /**
  * Get the earliest path in the tree where the provided `paths` intersect.
@@ -158,7 +158,7 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
   } else {
     throw new Error("Couldn't find intersection");
   }
-}
+};
 
 /**
  * Build an array of node paths containing the entire ancestry of the current node path.
@@ -173,7 +173,7 @@ export function getAncestry() {
     paths.push(path);
   } while (path = path.parentPath);
   return paths;
-}
+};
 
 export function inType() {
   let path = this;
@@ -214,4 +214,4 @@ export function inShadow(key?) {
     }
   } while (path = path.parentPath);
   return null;
-}
+};

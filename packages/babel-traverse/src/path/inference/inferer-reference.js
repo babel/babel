@@ -23,7 +23,7 @@ export default function (node: Object) {
   } else if (node.name === "arguments") {
     // todo
   }
-}
+};
 
 function getTypeAnnotationBindingConstantViolations(path, name) {
   let binding = path.scope.getBinding(name);

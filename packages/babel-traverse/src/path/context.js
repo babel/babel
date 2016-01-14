@@ -16,7 +16,7 @@ export function call(key): boolean {
   }
 
   return false;
-}
+};
 
 export function _call(fns?: Array<Function>): boolean {
   if (!fns) return false;
@@ -37,12 +37,12 @@ export function _call(fns?: Array<Function>): boolean {
   }
 
   return false;
-}
+};
 
 export function isBlacklisted(): boolean {
   let blacklist = this.opts.blacklist;
   return blacklist && blacklist.indexOf(this.node.type) > -1;
-}
+};
 
 export function visit(): boolean {
   if (!this.node) {
@@ -68,20 +68,20 @@ export function visit(): boolean {
   this.call("exit");
 
   return this.shouldStop;
-}
+};
 
 export function skip() {
   this.shouldSkip = true;
-}
+};
 
 export function skipKey(key) {
   this.skipKeys[key] = true;
-}
+};
 
 export function stop() {
   this.shouldStop = true;
   this.shouldSkip = true;
-}
+};
 
 export function setScope() {
   if (this.opts && this.opts.noScope) return;
@@ -100,7 +100,7 @@ export function setScope() {
 
   this.scope = this.getScope(target);
   if (this.scope) this.scope.init();
-}
+};
 
 export function setContext(context) {
   this.shouldSkip = false;
@@ -117,7 +117,7 @@ export function setContext(context) {
   this.setScope();
 
   return this;
-}
+};
 
 /**
  * Here we resync the node paths `key` and `container`. If they've changed according
@@ -132,13 +132,13 @@ export function resync() {
   this._resyncList();
   this._resyncKey();
   //this._resyncRemoved();
-}
+};
 
 export function _resyncParent() {
   if (this.parentPath) {
     this.parent = this.parentPath.node;
   }
-}
+};
 
 export function _resyncKey() {
   if (!this.container) return;
@@ -164,7 +164,7 @@ export function _resyncKey() {
 
   // ¯\_(ツ)_/¯ who knows where it's gone lol
   this.key = null;
-}
+};
 
 export function _resyncList() {
   if (!this.parent || !this.inList) return;
@@ -174,23 +174,23 @@ export function _resyncList() {
 
   // container is out of sync. this is likely the result of it being reassigned
   this.container = newContainer || null;
-}
+};
 
 export function _resyncRemoved() {
   if (this.key == null || !this.container || this.container[this.key] !== this.node) {
     this._markRemoved();
   }
-}
+};
 
 export function popContext() {
   this.contexts.pop();
   this.setContext(this.contexts[this.contexts.length - 1]);
-}
+};
 
 export function pushContext(context) {
   this.contexts.push(context);
   this.setContext(context);
-}
+};
 
 export function setup(parentPath, container, listKey, key) {
   this.inList    = !!listKey;
@@ -200,13 +200,13 @@ export function setup(parentPath, container, listKey, key) {
 
   this.parentPath = parentPath || this.parentPath;
   this.setKey(key);
-}
+};
 
 export function setKey(key) {
   this.key  = key;
   this.node = this.container[this.key];
   this.type = this.node && this.node.type;
-}
+};
 
 export function requeue(path = this) {
   if (path.removed) return;
@@ -214,4 +214,4 @@ export function requeue(path = this) {
   for (let context of this.contexts) {
     context.maybeQueue(path);
   }
-}
+};

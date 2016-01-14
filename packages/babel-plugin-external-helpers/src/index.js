@@ -4,4 +4,4 @@ export default function ({ types: t }) {
       file.set("helpersNamespace", t.identifier("babelHelpers"));
     }
   };
-}
+};

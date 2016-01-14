@@ -47,7 +47,7 @@ export default function (code: string): Function {
   return function (...args) {
     return useTemplate(getAst(), args);
   };
-}
+};
 
 function useTemplate(ast, nodes?: Array<Object>) {
   ast = cloneDeep(ast);

@@ -935,4 +935,4 @@ export default class Scope {
       }
     } while (scope = scope.parent);
   }
-}
+};

@@ -10,4 +10,4 @@
 
 export default function () {
   return require("./visit");
-}
+};

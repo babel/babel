@@ -4,4 +4,4 @@ export default function () {
       parserOpts.plugins.push("functionBind");
     }
   };
-}
+};

@@ -16,7 +16,7 @@ export function _params(node: Object) {
   if (node.returnType) {
     this.print(node.returnType, node);
   }
-}
+};
 
 export function _method(node: Object) {
   let kind = node.kind;
@@ -45,7 +45,7 @@ export function _method(node: Object) {
   this._params(node);
   this.space();
   this.print(node.body, node);
-}
+};
 
 export function FunctionExpression(node: Object) {
   if (node.async) this.push("async ");
@@ -62,7 +62,7 @@ export function FunctionExpression(node: Object) {
   this._params(node);
   this.space();
   this.print(node.body, node);
-}
+};
 
 export { FunctionExpression as FunctionDeclaration };
 
@@ -88,4 +88,4 @@ export function ArrowFunctionExpression(node: Object) {
   if (bodyNeedsParens) {
     this.push(")");
   }
-}
+};

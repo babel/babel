@@ -20,4 +20,4 @@ export default function () {
       }
     }, destructuring.visitor, rest.visitor, def.visitor])
   };
-}
+};

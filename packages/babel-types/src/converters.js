@@ -11,7 +11,7 @@ export function toComputedKey(node: Object, key: Object = node.key || node.prope
     if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
   }
   return key;
-}
+};
 
 /**
  * Turn an array of statement `nodes` into a `SequenceExpression`.
@@ -97,7 +97,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
       return t.sequenceExpression(exprs);
     }
   }
-}
+};
 
 export function toKeyAlias(node: Object, key: Object = node.key): string {
   let alias;
@@ -121,7 +121,7 @@ export function toKeyAlias(node: Object, key: Object = node.key): string {
   }
 
   return alias;
-}
+};
 
 toKeyAlias.uid = 0;
 
@@ -152,13 +152,13 @@ export function toIdentifier(name: string): string {
   }
 
   return name || "_";
-}
+};
 
 export function toBindingIdentifierName(name: string): string {
   name = toIdentifier(name);
   if (name === "eval" || name === "arguments") name = "_" + name;
   return name;
-}
+};
 
 /**
  * [Please add a description.]
@@ -198,7 +198,7 @@ export function toStatement(node: Object, ignore?: boolean) {
   node.type = newType;
 
   return node;
-}
+};
 
 export function toExpression(node: Object): Object {
   if (t.isExpressionStatement(node)) {
@@ -216,7 +216,7 @@ export function toExpression(node: Object): Object {
   } else {
     throw new Error(`cannot turn ${node.type} to an expression`);
   }
-}
+};
 
 export function toBlock(node, parent: Object): Object {
   if (t.isBlockStatement(node)) {
@@ -240,7 +240,7 @@ export function toBlock(node, parent: Object): Object {
   }
 
   return t.blockStatement(node);
-}
+};
 
 export function valueToNode(value: any): Object {
   // undefined
@@ -296,4 +296,4 @@ export function valueToNode(value: any): Object {
   }
 
   throw new Error("don't know how to turn this value into a node");
-}
+};
