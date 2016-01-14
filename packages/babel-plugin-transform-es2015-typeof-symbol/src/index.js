@@ -3,6 +3,14 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
+      Scope({ scope }) {
+        if (!scope.getBinding("Symbol")) {
+          return;
+        }
+
+        scope.rename("Symbol");
+      },
+
       UnaryExpression(path) {
         let { node, parent } = path;
         if (node[IGNORE]) return;

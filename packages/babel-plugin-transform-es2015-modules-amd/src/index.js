@@ -1,9 +1,13 @@
 import template from "babel-template";
 
 let buildDefine = template(`
-  define(MODULE_NAME, [SOURCES], function (PARAMS) {
+  define(MODULE_NAME, [SOURCES], FACTORY);
+`);
+
+let buildFactory = template(`
+  (function (PARAMS) {
     BODY;
-  });
+  })
 `);
 
 export default function ({ types: t }) {
@@ -73,7 +77,7 @@ export default function ({ types: t }) {
         exit(path) {
           if (this.ran) return;
           this.ran = true;
-          
+
           path.traverse(amdVisitor, this);
 
           let params = this.sources.map(source => source[0]);
@@ -96,11 +100,18 @@ export default function ({ types: t }) {
             params.unshift(t.identifier("module"));
           }
 
-          path.node.body = [buildDefine({
+          let { node } = path;
+          let factory = buildFactory({
+            PARAMS: params,
+            BODY: node.body
+          });
+          factory.expression.body.directives = node.directives;
+          node.directives = [];
+
+          node.body = [buildDefine({
             MODULE_NAME: moduleName,
             SOURCES: sources,
-            PARAMS: params,
-            BODY: path.node.body
+            FACTORY: factory
           })];
         }
       }
