@@ -21,7 +21,8 @@ import defineType, {
 defineType("ArrayExpression", {
   fields: {
     elements: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeOrValueType("null", "Expression", "SpreadElement")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeOrValueType("null", "Expression", "SpreadElement"))),
+      default: [],
     }
   },
   visitor: ["elements"],
