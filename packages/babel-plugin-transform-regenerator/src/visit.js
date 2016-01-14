@@ -132,7 +132,7 @@ exports.visitor = {
 
       // Generators are processed in 'exit' handlers so that regenerator only has to run on
       // an ES5 AST, but that means traversal will not pick up newly inserted references
-      // to things like 'regeneratorRuntime'. To avoid this, we explicitly re-queue.
+      // to things like 'regeneratorRuntime'. To avoid this, we explicitly requeue.
       path.requeue();
     }
   }
