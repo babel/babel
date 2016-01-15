@@ -12,10 +12,10 @@ var ignore = [
   'harmony',
   'jsx'
 ];
-var onlyTitle = 'all selectors';
+var onlyTitle = '22';
 
-var ignore = [];
-var onlyTitle = '';
+// var ignore = [];
+// var onlyTitle = '';
 
 var fixtures = getFixtures(__dirname + "/fixtures", ignore);
 

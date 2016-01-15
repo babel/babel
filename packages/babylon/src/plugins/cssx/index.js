@@ -40,7 +40,8 @@ const CSSXElementStartAssumption = [
   tt.assign,
   tt.plusMin,
   tt.parenL,
-  tt.parenR
+  tt.parenR,
+  tt._class
 ];
 const CSSXValueAllowedCodes = [
   35, // #
@@ -59,7 +60,10 @@ export default function CSSX(instance) {
         nextState = this.lookahead();
         context = this.curContext();        
         // complex selector (more then one word)
-        if (this.matchOneOfThose(CSSXElementStartAssumption, nextState)) {
+        if (
+          this.matchOneOfThose(CSSXElementStartAssumption, nextState) ||
+          (this.match(tt.dot) && this.matchNextToken(tt._class))
+        ) {
           this.cssxIn();
           this.cssxParseSelector(nextState);
           return this.parseStatement();
@@ -230,7 +234,8 @@ pp.cssxReadSelector = function (lastToken) {
       tt.assign,
       tt.plusMin,
       tt.parenL,
-      tt.parenR
+      tt.parenR,
+      tt._class
     ];
     for (let i=0; i<types.length; i++) {
       if (this.state.type === types[i]) {
@@ -262,7 +267,7 @@ pp.cssxReadWord = function (readUntil) {
   chunkStart = this.state.pos;
   
   this.state.containsEsc = false;
-  debugger;
+
   while (this.state.pos < this.input.length) {
     let ch = this.fullCharCodeAtPos();
     if (readUntil(ch)) {
@@ -436,7 +441,7 @@ pp.printContext = function () {
 };
 
 pp.printSoFar = function () {
-  console.log(this.state.input.substr(0, this.state.pos));
+  console.log('"' + this.state.input.substr(0, this.state.pos) + '"');
 };
 
 pp.clonePosition = function (loc) {
