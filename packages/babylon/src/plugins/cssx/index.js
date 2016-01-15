@@ -26,10 +26,25 @@ tt.cssxRulesEnd.updateContext = function (prevType) {
 };
 
 const CSSXElementStartAssumption = [
-  tt.name, tt.star, tt.dot, tt.relational, tt.cssxSelector
+  tt.name,
+  tt.star,
+  tt.dot,
+  tt.relational,
+  tt.cssxSelector,
+  tt.colon,
+  tt.bracketL,
+  tt.bracketR,
+  tt.eq,
+  tt.string,
+  tt.prefix,
+  tt.assign,
+  tt.plusMin,
+  tt.parenL,
+  tt.parenR
 ];
 const CSSXValueAllowedCodes = [
-  35 // #
+  35, // #
+  46  // .
 ];
 const CSSXPropertyAllowedCodes = []
 
@@ -42,9 +57,9 @@ export default function CSSX(instance) {
 
       if (this.matchOneOfThose(CSSXElementStartAssumption)) {
         nextState = this.lookahead();
-        context = this.curContext();
+        context = this.curContext();        
         // complex selector (more then one word)
-        if (nextState.type === tt.name || nextState.type === tt.relational) {
+        if (this.matchOneOfThose(CSSXElementStartAssumption, nextState)) {
           this.cssxIn();
           this.cssxParseSelector(nextState);
           return this.parseStatement();
@@ -139,6 +154,19 @@ export default function CSSX(instance) {
     }
   });
 
+  instance.extend('getTokenFromCode', function (inner) {
+    return function (code) {
+      var fallback = () => inner.call(this, code);
+
+      if (code === 35 && (this.match(tt.name) || this.match(tt.eof))) { // having #
+        ++this.state.pos;
+        return this.finishToken(tt.string, '#');
+      }
+
+      return fallback();
+    };
+  });
+
 };
 
 // entry point
@@ -169,7 +197,7 @@ pp.cssxParseSelector = function (nextState) {
   // merging the newly added token into the current state
   lastToken = this.getPreviousToken();
   beforeLastToken = this.getPreviousToken(1);
-  this.state.value = this.cssxReadSelector(lastToken);
+  this.state.value = this.cssxReadSelector(lastToken);  
   this.state.start = lastToken.start;
   this.state.startLoc = lastToken.loc.start;
 
@@ -190,11 +218,40 @@ pp.cssxParseSelector = function (nextState) {
   this.state.tokens.length -= 1;
 };
 
-pp.cssxReadSelector = function (token) {
-  if (token.type === tt.dot) {
+pp.cssxReadSelector = function (lastToken) {
+  var lastTokenValuePlusType = () => {
+    let types = [
+      tt.colon,
+      tt.bracketL,
+      tt.bracketR,
+      tt.eq,
+      tt.prefix,
+      tt.string,
+      tt.assign,
+      tt.plusMin,
+      tt.parenL,
+      tt.parenR
+    ];
+    for (let i=0; i<types.length; i++) {
+      if (this.state.type === types[i]) {
+        if (types[i] === tt.string) {
+          return lastToken.value + '"' + this.state.value + '"';
+        }
+        return lastToken.value + types[i].label;
+      }
+    }
+    return false;
+  };
+  var tmp;
+
+  if (lastToken.type === tt.dot) {
     return '.' + this.state.value;
+  } else if(lastToken.type === tt.colon || lastToken.type === tt.bracketL) {
+    return lastToken.value + this.state.value;
+  } else if ((tmp = lastTokenValuePlusType()) !== false) {
+    return tmp;
   }
-  return token.value + ' ' + this.state.value
+  return lastToken.value + ' ' + this.state.value;
 };
 
 pp.cssxReadWord = function (readUntil) {
@@ -205,7 +262,7 @@ pp.cssxReadWord = function (readUntil) {
   chunkStart = this.state.pos;
   
   this.state.containsEsc = false;
-  
+  debugger;
   while (this.state.pos < this.input.length) {
     let ch = this.fullCharCodeAtPos();
     if (readUntil(ch)) {
@@ -261,7 +318,7 @@ pp.cssxReadValue = function() {
 
   startLoc = this.state.curPosition();
   pos = this.state.pos;
-  debugger;
+
   value = this.cssxReadWord(pp.cssxReadValueCharUntil); // changes state.pos
 
   this.state.startLoc = startLoc;
@@ -354,9 +411,10 @@ pp.matchNextToken = function (type) {
   return false;
 };
 
-pp.matchOneOfThose = function (assumtion) {
+pp.matchOneOfThose = function (assumtion, compareTo) {
+  var c = compareTo || this.state;
   for(let i=0; i<assumtion.length; i++) {
-    if (this.match(assumtion[i])) return true;
+    if (c.type === assumtion[i]) return true;
   }
   return false;
 };
