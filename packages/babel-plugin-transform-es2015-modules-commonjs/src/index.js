@@ -270,7 +270,11 @@ export default function () {
                     } else if (specifier.isExportDefaultSpecifier()) {
                       // todo
                     } else if (specifier.isExportSpecifier()) {
-                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(ref, specifier.node.local)));
+                      if (specifier.node.local.name === "default") {
+                        topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(t.callExpression(this.addHelper("interopRequireDefault"), [ref]), specifier.node.local)));
+                      } else {
+                        topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(ref, specifier.node.local)));
+                      }
                       nonHoistedExportNames[specifier.node.exported.name] = true;
                     }
                   }
