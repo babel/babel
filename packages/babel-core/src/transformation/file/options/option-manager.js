@@ -113,6 +113,9 @@ export default class OptionManager {
   }
 
   static normalisePlugins(loc, dirname, plugins) {
+    plugins = plugins.filter(function (val) {
+      return val;
+    });
     return plugins.map(function (val, i) {
       let plugin, options;
 
