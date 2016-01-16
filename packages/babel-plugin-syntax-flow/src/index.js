@@ -1,7 +1,9 @@
 export default function () {
   return {
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push("flow");
+      if (parserOpts.plugins.indexOf("flow") === -1) {
+        parserOpts.plugins.push("flow");
+      }
     }
   };
 }
