@@ -43,7 +43,7 @@ pp.processComment = function (node) {
   let stack = this.state.commentStack;
 
   let lastChild, trailingComments, i;
-
+  // if (node.type === 'CSSXRule') debugger;
   if (this.state.trailingComments.length > 0) {
     // If the first comment in trailingComments comes after the
     // current node, then we're good - all comments in the array will

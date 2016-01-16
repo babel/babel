@@ -244,7 +244,7 @@
               "column": 13
             }
           },
-          "value": "E[fooprefix=\"bar\"]"
+          "value": "E[foo~=\"bar\"]"
         },
         "body": {
           "type": "CSSXRules",
@@ -526,7 +526,7 @@
               "column": 14
             }
           },
-          "value": "E:nth+/- child( n)"
+          "value": "E:nth - child( n)"
         },
         "body": {
           "type": "CSSXRules",
@@ -573,7 +573,7 @@
               "column": 19
             }
           },
-          "value": "E:nth+/- last+/- child( n)"
+          "value": "E:nth - last - child( n)"
         },
         "body": {
           "type": "CSSXRules",
@@ -620,7 +620,7 @@
               "column": 16
             }
           },
-          "value": "E:nth+/- of+/- type( n)"
+          "value": "E:nth - of - type( n)"
         },
         "body": {
           "type": "CSSXRules",
@@ -667,7 +667,7 @@
               "column": 21
             }
           },
-          "value": "E:nth+/- last+/- of+/- type( n)"
+          "value": "E:nth - last - of - type( n)"
         },
         "body": {
           "type": "CSSXRules",
@@ -714,7 +714,7 @@
               "column": 13
             }
           },
-          "value": "E:first+/- child"
+          "value": "E:first - child"
         },
         "body": {
           "type": "CSSXRules",
@@ -761,7 +761,7 @@
               "column": 12
             }
           },
-          "value": "E:last+/- child"
+          "value": "E:last - child"
         },
         "body": {
           "type": "CSSXRules",
@@ -808,7 +808,7 @@
               "column": 15
             }
           },
-          "value": "E:first+/- of+/- type"
+          "value": "E:first - of - type"
         },
         "body": {
           "type": "CSSXRules",
@@ -855,7 +855,7 @@
               "column": 14
             }
           },
-          "value": "E:last+/- of+/- type"
+          "value": "E:last - of - type"
         },
         "body": {
           "type": "CSSXRules",
@@ -902,7 +902,7 @@
               "column": 12
             }
           },
-          "value": "E:only+/- child"
+          "value": "E:only - child"
         },
         "body": {
           "type": "CSSXRules",
@@ -949,7 +949,7 @@
               "column": 14
             }
           },
-          "value": "E:only+/- of+/- type"
+          "value": "E:only - of - type"
         },
         "body": {
           "type": "CSSXRules",
@@ -1513,7 +1513,7 @@
               "column": 13
             }
           },
-          "value": "E:undefinedfirst+/- line"
+          "value": "E:undefinedfirst - line"
         },
         "body": {
           "type": "CSSXRules",
@@ -1560,7 +1560,7 @@
               "column": 15
             }
           },
-          "value": "E:undefinedfirst+/- letter"
+          "value": "E:undefinedfirst - letter"
         },
         "body": {
           "type": "CSSXRules",
@@ -1936,7 +1936,7 @@
               "column": 5
             }
           },
-          "value": "E+/- F"
+          "value": "E + F"
         },
         "body": {
           "type": "CSSXRules",
@@ -1983,7 +1983,7 @@
               "column": 5
             }
           },
-          "value": "Eprefix F"
+          "value": "E ~ F"
         },
         "body": {
           "type": "CSSXRules",
@@ -2328,7 +2328,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E[fooprefix=\"bar\"]",
+      "value": "E[foo ~=\"bar\"]",
       "start": 40,
       "end": 53,
       "loc": {
@@ -2790,7 +2790,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:nth+/- child( n)",
+      "value": "E:nth - child( n)",
       "start": 140,
       "end": 154,
       "loc": {
@@ -2867,7 +2867,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:nth+/- last+/- child( n)",
+      "value": "E:nth - last - child( n)",
       "start": 159,
       "end": 178,
       "loc": {
@@ -2944,7 +2944,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:nth+/- of+/- type( n)",
+      "value": "E:nth - of - type( n)",
       "start": 183,
       "end": 199,
       "loc": {
@@ -3021,7 +3021,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:nth+/- last+/- of+/- type( n)",
+      "value": "E:nth - last - of - type( n)",
       "start": 204,
       "end": 225,
       "loc": {
@@ -3098,7 +3098,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:first+/- child",
+      "value": "E:first - child",
       "start": 230,
       "end": 243,
       "loc": {
@@ -3175,7 +3175,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:last+/- child",
+      "value": "E:last - child",
       "start": 248,
       "end": 260,
       "loc": {
@@ -3252,7 +3252,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:first+/- of+/- type",
+      "value": "E:first - of - type",
       "start": 265,
       "end": 280,
       "loc": {
@@ -3329,7 +3329,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:last+/- of+/- type",
+      "value": "E:last - of - type",
       "start": 285,
       "end": 299,
       "loc": {
@@ -3406,7 +3406,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:only+/- child",
+      "value": "E:only - child",
       "start": 304,
       "end": 316,
       "loc": {
@@ -3483,7 +3483,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:only+/- of+/- type",
+      "value": "E:only - of - type",
       "start": 321,
       "end": 335,
       "loc": {
@@ -4407,7 +4407,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:undefinedfirst+/- line",
+      "value": "E:undefinedfirst - line",
       "start": 485,
       "end": 498,
       "loc": {
@@ -4484,7 +4484,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E:undefinedfirst+/- letter",
+      "value": "E:undefinedfirst - letter",
       "start": 503,
       "end": 518,
       "loc": {
@@ -5100,7 +5100,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "E+/- F",
+      "value": "E + F",
       "start": 606,
       "end": 611,
       "loc": {
@@ -5177,7 +5177,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "Eprefix F",
+      "value": "E ~ F",
       "start": 616,
       "end": 621,
       "loc": {

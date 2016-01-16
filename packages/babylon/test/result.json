@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 99,
+  "end": 39,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 4,
+      "line": 9,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 99,
+    "end": 39,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 4,
+        "line": 9,
         "column": 1
       }
     },
@@ -31,21 +31,21 @@
       {
         "type": "CSSXElement",
         "start": 0,
-        "end": 99,
+        "end": 6,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 4,
+            "line": 3,
             "column": 1
           }
         },
         "selector": {
           "type": "CSSXSelector",
           "start": 0,
-          "end": 9,
+          "end": 1,
           "loc": {
             "start": {
               "line": 1,
@@ -53,251 +53,220 @@
             },
             "end": {
               "line": 1,
-              "column": 9
+              "column": 1
             }
           },
-          "value": ".p"
+          "value": "a"
         },
         "body": {
           "type": "CSSXRules",
-          "start": 10,
-          "end": 99,
+          "start": 2,
+          "end": 6,
           "loc": {
             "start": {
               "line": 1,
-              "column": 10
+              "column": 2
+            },
+            "end": {
+              "line": 3,
+              "column": 1
+            }
+          },
+          "body": []
+        }
+      },
+      {
+        "type": "CSSXElement",
+        "start": 7,
+        "end": 11,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 4
+          }
+        },
+        "selector": {
+          "type": "CSSXSelector",
+          "start": 7,
+          "end": 8,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 0
             },
             "end": {
               "line": 4,
               "column": 1
             }
           },
-          "body": [
-            {
-              "type": "CSSXRule",
-              "start": 14,
-              "end": 25,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 2
-                },
-                "end": {
-                  "line": 2,
-                  "column": 13
-                }
-              },
-              "label": {
-                "type": "CSSXProperty",
-                "start": 14,
-                "end": 19,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 7
-                  }
-                },
-                "name": "color"
-              },
-              "body": {
-                "type": "CSSXValue",
-                "start": 21,
-                "end": 24,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 9
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 12
-                  }
-                },
-                "name": "red",
-                "leadingComments": null,
-                "trailingComments": null
-              },
-              "trailingComments": [
-                {
-                  "type": "CommentLine",
-                  "value": " because the red is cool",
-                  "start": 26,
-                  "end": 52,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 14
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 40
-                    }
-                  }
-                }
-              ]
+          "value": "b"
+        },
+        "body": {
+          "type": "CSSXRules",
+          "start": 9,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 2
             },
-            {
-              "type": "CSSXRule",
-              "start": 55,
-              "end": 66,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 2
-                },
-                "end": {
-                  "line": 3,
-                  "column": 13
-                }
-              },
-              "label": {
-                "type": "CSSXProperty",
-                "start": 55,
-                "end": 61,
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 3,
-                    "column": 8
-                  }
-                },
-                "name": "margin",
-                "leadingComments": null
-              },
-              "body": {
-                "type": "CSSXValue",
-                "start": 63,
-                "end": 66,
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 10
-                  },
-                  "end": {
-                    "line": 3,
-                    "column": 13
-                  }
-                },
-                "name": "3em",
-                "leadingComments": null,
-                "trailingComments": null
-              },
-              "leadingComments": [
-                {
-                  "type": "CommentLine",
-                  "value": " because the red is cool",
-                  "start": 26,
-                  "end": 52,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 14
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 40
-                    }
-                  }
-                },
-                {
-                  "type": "CommentLine",
-                  "value": " because the red is cool",
-                  "start": 26,
-                  "end": 52,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 14
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 40
-                    }
-                  }
-                }
-              ],
-              "trailingComments": [
-                {
-                  "type": "CommentLine",
-                  "value": " because we need more space",
-                  "start": 68,
-                  "end": 97,
-                  "loc": {
-                    "start": {
-                      "line": 3,
-                      "column": 15
-                    },
-                    "end": {
-                      "line": 3,
-                      "column": 44
-                    }
-                  }
-                },
-                {
-                  "type": "CommentLine",
-                  "value": " because we need more space",
-                  "start": 68,
-                  "end": 98,
-                  "loc": {
-                    "start": {
-                      "line": 3,
-                      "column": 15
-                    },
-                    "end": {
-                      "line": 3,
-                      "column": 45
-                    }
-                  }
-                }
-              ]
+            "end": {
+              "line": 4,
+              "column": 4
             }
-          ]
+          },
+          "body": []
+        }
+      },
+      {
+        "type": "CSSXElement",
+        "start": 12,
+        "end": 17,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 5
+          }
+        },
+        "selector": {
+          "type": "CSSXSelector",
+          "start": 12,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 0
+            },
+            "end": {
+              "line": 5,
+              "column": 1
+            }
+          },
+          "value": "c"
+        },
+        "body": {
+          "type": "CSSXRules",
+          "start": 14,
+          "end": 17,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 2
+            },
+            "end": {
+              "line": 5,
+              "column": 5
+            }
+          },
+          "body": []
+        }
+      },
+      {
+        "type": "CSSXElement",
+        "start": 18,
+        "end": 26,
+        "loc": {
+          "start": {
+            "line": 6,
+            "column": 0
+          },
+          "end": {
+            "line": 6,
+            "column": 8
+          }
+        },
+        "selector": {
+          "type": "CSSXSelector",
+          "start": 18,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 0
+            },
+            "end": {
+              "line": 6,
+              "column": 1
+            }
+          },
+          "value": "d"
+        },
+        "body": {
+          "type": "CSSXRules",
+          "start": 20,
+          "end": 26,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 2
+            },
+            "end": {
+              "line": 6,
+              "column": 8
+            }
+          },
+          "body": []
+        }
+      },
+      {
+        "type": "CSSXElement",
+        "start": 27,
+        "end": 39,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 1
+          }
+        },
+        "selector": {
+          "type": "CSSXSelector",
+          "start": 27,
+          "end": 28,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 0
+            },
+            "end": {
+              "line": 7,
+              "column": 1
+            }
+          },
+          "value": "f"
+        },
+        "body": {
+          "type": "CSSXRules",
+          "start": 29,
+          "end": 39,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 2
+            },
+            "end": {
+              "line": 9,
+              "column": 1
+            }
+          },
+          "body": []
         }
       }
     ],
     "directives": []
   },
-  "comments": [
-    {
-      "type": "CommentLine",
-      "value": " because the red is cool",
-      "start": 26,
-      "end": 52,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 14
-        },
-        "end": {
-          "line": 2,
-          "column": 40
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " because we need more space",
-      "start": 68,
-      "end": 98,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 15
-        },
-        "end": {
-          "line": 3,
-          "column": 45
-        }
-      }
-    }
-  ],
+  "comments": [],
   "tokens": [
     {
       "type": {
@@ -312,9 +281,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": ".p",
+      "value": "a",
       "start": 0,
-      "end": 9,
+      "end": 1,
       "loc": {
         "start": {
           "line": 1,
@@ -322,7 +291,7 @@
         },
         "end": {
           "line": 1,
-          "column": 9
+          "column": 1
         }
       }
     },
@@ -338,260 +307,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 10,
-      "end": 11,
+      "start": 2,
+      "end": 3,
       "loc": {
         "start": {
           "line": 1,
-          "column": 10
+          "column": 2
         },
         "end": {
           "line": 1,
-          "column": 11
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "cssxProperty",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "color",
-      "start": 14,
-      "end": 19,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 2
-        },
-        "end": {
-          "line": 2,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ":",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 19,
-      "end": 20,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 7
-        },
-        "end": {
-          "line": 2,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "cssxValue",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "red",
-      "start": 21,
-      "end": 24,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 9
-        },
-        "end": {
-          "line": 2,
-          "column": 12
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 24,
-      "end": 25,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 12
-        },
-        "end": {
-          "line": 2,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " because the red is cool",
-      "start": 26,
-      "end": 52,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 14
-        },
-        "end": {
-          "line": 2,
-          "column": 40
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "cssxProperty",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "margin",
-      "start": 55,
-      "end": 61,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 2
-        },
-        "end": {
-          "line": 3,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ":",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 61,
-      "end": 62,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 8
-        },
-        "end": {
-          "line": 3,
-          "column": 9
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "cssxValue",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "3em",
-      "start": 63,
-      "end": 66,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 10
-        },
-        "end": {
-          "line": 3,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 66,
-      "end": 66,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 13
-        },
-        "end": {
-          "line": 3,
-          "column": 13
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " because we need more space",
-      "start": 68,
-      "end": 98,
-      "loc": {
-        "start": {
-          "line": 3,
-          "column": 15
-        },
-        "end": {
-          "line": 3,
-          "column": 45
+          "column": 3
         }
       }
     },
@@ -607,8 +332,35 @@
         "postfix": false,
         "binop": null
       },
-      "start": 98,
-      "end": 99,
+      "start": 5,
+      "end": 6,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxSelector",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "b",
+      "start": 7,
+      "end": 8,
       "loc": {
         "start": {
           "line": 4,
@@ -616,6 +368,287 @@
         },
         "end": {
           "line": 4,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxRulesStart",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 9,
+      "end": 10,
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 2
+        },
+        "end": {
+          "line": 4,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxRulesEnd",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 10,
+      "end": 11,
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 3
+        },
+        "end": {
+          "line": 4,
+          "column": 4
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxSelector",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "c",
+      "start": 12,
+      "end": 13,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxRulesStart",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 14,
+      "end": 15,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 2
+        },
+        "end": {
+          "line": 5,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxRulesEnd",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 16,
+      "end": 17,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 4
+        },
+        "end": {
+          "line": 5,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxSelector",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "d",
+      "start": 18,
+      "end": 19,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxRulesStart",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 20,
+      "end": 21,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 2
+        },
+        "end": {
+          "line": 6,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxRulesEnd",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 25,
+      "end": 26,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 7
+        },
+        "end": {
+          "line": 6,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxSelector",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "f",
+      "start": 27,
+      "end": 28,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 7,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxRulesStart",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 29,
+      "end": 30,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 2
+        },
+        "end": {
+          "line": 7,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "cssxRulesEnd",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 38,
+      "end": 39,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 0
+        },
+        "end": {
+          "line": 9,
           "column": 1
         }
       }
@@ -633,15 +666,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 99,
-      "end": 99,
+      "start": 39,
+      "end": 39,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 9,
           "column": 1
         },
         "end": {
-          "line": 4,
+          "line": 9,
           "column": 1
         }
       }
