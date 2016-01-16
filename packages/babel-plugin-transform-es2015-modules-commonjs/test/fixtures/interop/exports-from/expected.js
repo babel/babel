@@ -61,6 +61,6 @@ Object.defineProperty(exports, "bar", {
 Object.defineProperty(exports, "foo", {
   enumerable: true,
   get: function () {
-    return babelHelpers.interopRequire(_foo);
+    return babelHelpers.interopRequireDefault(_foo).default;
   }
 });
