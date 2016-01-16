@@ -41,10 +41,12 @@ export default class Parser extends Tokenizer {
     }
 
     for (let name of plugins) {
-      pluginMap[name] = true;
+      if (!pluginMap[name]) {
+        pluginMap[name] = true;
 
-      let plugin = exports.plugins[name];
-      if (plugin) plugin(this);
+        let plugin = exports.plugins[name];
+        if (plugin) plugin(this);
+      }
     }
 
     return pluginMap;
