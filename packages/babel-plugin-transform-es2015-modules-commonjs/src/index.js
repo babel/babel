@@ -270,7 +270,7 @@ export default function () {
                     } else if (specifier.isExportDefaultSpecifier()) {
                       // todo
                     } else if (specifier.isExportSpecifier()) {
-                      if(specifier.node.local.name === "default") {
+                      if (specifier.node.local.name === "default") {
                         topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.callExpression(this.addHelper("interopRequireDefault"), [ref])));
                       } else {
                         topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(ref, specifier.node.local)));
