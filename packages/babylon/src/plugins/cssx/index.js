@@ -8,6 +8,7 @@ import { SourceLocation, Position } from "../../util/location";
 let pp = Parser.prototype;
 
 tc.cssx = new TokContext('cssx');
+tc.cssxSelector = new TokContext('cssxSelector');
 tc.cssxRules = new TokContext('cssxRules');
 tc.cssxProperty = new TokContext('cssxProperty');
 tc.cssxValue = new TokContext('cssxValue');
@@ -30,6 +31,9 @@ tt.cssxRulesEnd.updateContext = function (prevType) {
     this.state.context.length -= 1; // out of cssxRules
     this.cssxOut();
   }
+};
+tt.cssxSelector.updateContext = function (prevType) {
+  this.state.context.length -= 1;
 };
 
 const CSSXElementStartAssumption = [
@@ -56,7 +60,8 @@ const CSSXValueAllowedCodes = [
 ].map(stringToCode);
 
 const CSSXSelectorAllowedCodes = [
-  ' ', '*', '>', '+', '~', '.', ':', '(', ')', '=', '[', ']'
+  ' ', '*', '>', '+', '~', '.', ':', '(', ')', '=', '[', ']', '"', '-',
+  '!', '?', '@', '#', '$', '%', '^', '&', '\''
 ].map(stringToCode);
 
 export default function CSSX(instance) {
@@ -113,9 +118,7 @@ export default function CSSX(instance) {
       } else if (this.match(tt.cssxRulesStart)) {
         // no styles
         if (this.matchNextToken(tt.braceR)) {
-          ++this.state.pos;
-          this.finishToken(tt.cssxRulesEnd);
-          return this.next();
+          return this.cssxStoreNextCharAsToken(tt.cssxRulesEnd);
         } else {
           return this.finishToken(tt.cssxRulesStart);
         }
@@ -142,7 +145,11 @@ export default function CSSX(instance) {
           this.matchNextToken(tt.name, tt.braceL) ||
           this.matchNextToken(tt.name, tt.name) ||
           this.matchNextToken(tt.star) && this.state.exprAllowed ||
-          this.matchNextToken(tt.dot, tt.name)
+          this.matchNextToken(tt.dot, tt.name) ||
+          this.matchNextToken(tt.name, tt.colon) ||
+          this.matchNextToken(tt.name, tt.bracketL) ||
+          this.matchNextToken(tt.name, tt.bracketR) ||
+          this.match(tt.cssxSelector) && this.matchNextToken(tt.string)
         )
       ) {
         this.cssxIn();
@@ -171,6 +178,8 @@ export default function CSSX(instance) {
 pp.cssxReadSelector = function (lastToken) {
   let startLoc, pos, value, node;
 
+  this.state.context.push(tc.cssxSelector);
+
   startLoc = this.state.curPosition();
   pos = this.state.pos;
   value = this.cssxReadWord(pp.cssxReadSelectorCharUntil); // changes state.pos
@@ -193,7 +202,9 @@ pp.cssxParseElement = function() {
   this.next();
   elementNode.body = this.parseBlock();
   lastToken = this.getPreviousToken();
-  return this.finishNodeAt(elementNode, 'CSSXElement', lastToken.end, lastToken.loc.end);
+  result = this.finishNodeAt(elementNode, 'CSSXElement', lastToken.end, lastToken.loc.end);
+  this.nextToken();
+  return result;
 };
 
 pp.cssxReadWord = function (readUntil) {
@@ -202,7 +213,7 @@ pp.cssxReadWord = function (readUntil) {
   let chunkStart;
 
   chunkStart = this.state.pos;
-
+  
   this.state.containsEsc = false;
   while (this.state.pos < this.input.length) {
     let ch = this.fullCharCodeAtPos();
@@ -448,6 +459,6 @@ function posToLoc (pos, input) {
 
 /* watchers
 
-watch('this.state.type.label'),watch('this.state.pos'),watch('this.state.start'),watch('this.state.end'),watch('this.state.startLoc'),watch('this.state.endLoc'),watch('this.state.input.substr(0, this.state.pos)')
+watch('this.state.type.label'),watch('this.state.pos'),watch('this.state.start'),watch('this.state.end'),watch('this.state.startLoc'),watch('this.state.endLoc'),watch('this.state.input.substr(0, this.state.pos)'),watch('this.curContext().token'),watch('this.lookahead().type.label')
 
 */

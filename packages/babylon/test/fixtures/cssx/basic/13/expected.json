@@ -56,7 +56,7 @@
               "column": 13
             }
           },
-          "value": "E[fooprefix=\"bar\"]"
+          "value": "E[foo~=\"bar\"]"
         },
         "body": {
           "type": "CSSXRules",
@@ -185,10 +185,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E[fooprefix=\"bar\"]",
+      "value": "E[foo~=\"bar\"]",
       "start": 0,
       "end": 13,
       "loc": {
