@@ -22,8 +22,14 @@ tt.cssxRulesStart.updateContext = function (prevType) {
   if (prevType === tt.cssxSelector) this.state.context.push(tc.cssxRules);
 };
 tt.cssxRulesEnd.updateContext = function (prevType) {
-  if (prevType === tt.cssxValue || prevType === tt.cssxRulesStart) this.state.context.length -= 1;
-  if (this.matchNextToken(tt.eof)) this.next();
+  if (
+    prevType === tt.cssxValue ||
+    prevType === tt.cssxRulesStart ||
+    prevType === tt.semi
+  ) {
+    this.state.context.length -= 1; // out of cssxRules
+    this.cssxOut();
+  }
 };
 
 const CSSXElementStartAssumption = [
@@ -57,9 +63,6 @@ export default function CSSX(instance) {
 
   instance.extend('parseStatement', function (inner) {
     return function (declaration, topLevel) {
-      if (this.match(tt.cssxRulesEnd)) {
-        this.next();
-      }
       if (this.match(tt.cssxSelector)) {
         return this.cssxParseElement(this.state);
       }
@@ -71,22 +74,26 @@ export default function CSSX(instance) {
     return function (allowDirectives?) {
       var fallback = () => inner.call(this, allowDirectives);
       var context = this.curContext(), blockStmtNode;
-      var rules = [];
+      var rules = [], lastToken;
 
       if (context === tc.cssxRules && this.match(tt.cssxRulesStart)) {
+
         blockStmtNode = this.startNode();
         // no rules
         if (this.match(tt.cssxRulesStart) && this.lookahead().type === tt.braceR) {
           this.next();
         } else {
-          // reading the style        
+          // reading the style
           while (!this.match(tt.cssxRulesEnd)) {
             rules.push(this.cssxBuildRuleNode(this.cssxReadProperty(), this.cssxReadValue()));
           }
-          this.next();
+          if (this.state.pos >= this.input.length) this.finishToken(tt.eof);
         }
         blockStmtNode.body = rules;
-        return this.finishNodeAt(blockStmtNode, 'CSSXRules', this.state.end, this.state.endLoc);
+        lastToken = this.getPreviousToken();
+        return this.finishNodeAt(
+          blockStmtNode, 'CSSXRules', lastToken.end, lastToken.loc.end
+        );
       }
 
       return fallback();
@@ -107,43 +114,36 @@ export default function CSSX(instance) {
         // no styles
         if (this.matchNextToken(tt.braceR)) {
           ++this.state.pos;
-          return this.finishToken(tt.cssxRulesEnd);
+          this.finishToken(tt.cssxRulesEnd);
+          return this.next();
         } else {
           return this.finishToken(tt.cssxRulesStart);
         }
       // matching the : between the property and the value
-      } else if (this.match(tt.cssxProperty) && code === 58) { // 58 = :
-        this.finishToken(tt.colon);
-        ++this.state.pos;
-        this.cssxStoreToken();
-        this.lastTokenPlusEndPos();
-        return;
+      } else if (this.match(tt.cssxProperty) && code === 58) { // 58 = :        
+        return this.cssxStoreNextCharAsToken(tt.colon);
       // matching the semicolon at the end of the rule
       } else if (this.match(tt.cssxValue) && code === 59) { // 59 = ;
-        this.finishToken(tt.semi);
-        ++this.state.pos;
+        this.cssxStoreNextCharAsToken(tt.semi);
+        // eding with semicolon
         if (this.matchNextToken(tt.braceR)) {
-          this.next();
-          this.lastTokenPlusEndPos();
-          return this.finishToken(tt.cssxRulesEnd);
+          this.cssxStoreNextCharAsToken(tt.cssxRulesEnd);
         }
-        this.cssxStoreToken();
-        this.lastTokenPlusEndPos();
         return;
       } else if (this.match(tt.cssxValue) && this.matchNextToken(tt.braceR)) {
         // ending without semicolon
-        ++this.state.pos;
-        this.skipSpace();
-        return this.finishToken(tt.cssxRulesEnd);
+        return this.cssxStoreNextCharAsToken(tt.cssxRulesEnd);
       }
 
       // entry point
       if (
         context !== tc.cssx &&
-        this.matchNextToken(tt.name, tt.braceL) ||
-        this.matchNextToken(tt.name, tt.name) ||
-        this.matchNextToken(tt.star) && this.state.exprAllowed ||
-        this.matchNextToken(tt.dot, tt.name)
+        (
+          this.matchNextToken(tt.name, tt.braceL) ||
+          this.matchNextToken(tt.name, tt.name) ||
+          this.matchNextToken(tt.star) && this.state.exprAllowed ||
+          this.matchNextToken(tt.dot, tt.name)
+        )
       ) {
         this.cssxIn();
         return this.cssxReadSelector();
@@ -169,7 +169,6 @@ export default function CSSX(instance) {
 };
 
 pp.cssxReadSelector = function (lastToken) {
-
   let startLoc, pos, value, node;
 
   startLoc = this.state.curPosition();
@@ -179,20 +178,22 @@ pp.cssxReadSelector = function (lastToken) {
   this.state.startLoc = startLoc;
   this.state.start = pos;
   this.finishToken(tt.cssxSelector, value);
-  ++this.state.pos;
+  this.skipSpace();
 };
 
 pp.cssxParseElement = function() {
   let elementNode = this.startNodeAt(this.state.start, this.state.startLoc);
   let selectorNode = this.startNodeAt(this.state.start, this.state.startLoc);
-  let result;
-
+  let result, lastToken;
+  
   selectorNode.value = this.state.value;
-  elementNode.selector = this.finishNodeAt(selectorNode, 'CSSXSelector', this.state.end, this.state.endLoc);
+  elementNode.selector = this.finishNodeAt(
+    selectorNode, 'CSSXSelector', this.state.end, this.state.endLoc
+  );
   this.next();
   elementNode.body = this.parseBlock();
-  this.cssxOut();
-  return this.finishNodeAt(elementNode, 'CSSXElement', this.state.end, this.state.endLoc);
+  lastToken = this.getPreviousToken();
+  return this.finishNodeAt(elementNode, 'CSSXElement', lastToken.end, lastToken.loc.end);
 };
 
 pp.cssxReadWord = function (readUntil) {
@@ -245,6 +246,7 @@ pp.cssxReadProperty = function() {
 
   this.state.startLoc = loc;
   this.state.start = pos;
+
   this.finishToken(tt.cssxProperty, property);
   this.next();
   node = this.cssxBuildRuleChildNode('CSSXProperty', property, pos, loc);
@@ -260,15 +262,12 @@ pp.cssxReadValue = function() {
 
   value = this.cssxReadWord(pp.cssxReadValueCharUntil); // changes state.pos
 
-  this.state.startLoc = startLoc;
   this.state.start = pos;
-  this.state.endLoc = endLoc = this.state.curPosition();
-  this.state.end = this.state.pos;
-
+  this.state.startLoc = startLoc;
   this.finishToken(tt.cssxValue, value);
   this.next();
-
   node = this.cssxBuildRuleChildNode('CSSXValue', value, pos, startLoc);
+
   this.state.commentStack.length -= 1;
 
   return node;
@@ -279,7 +278,7 @@ pp.cssxBuildRuleNode = function (propertyNode, valueNode) {
   var pos = valueNode.end;
   var locEnd = this.clonePosition(valueNode.loc.end);
 
-  if (this.match(tt.semi) || (this.match(tt.cssxRulesEnd) && this.matchPreviousToken(tt.semi))) {
+  if (this.match(tt.semi) || (this.match(tt.cssxRulesEnd) && this.matchPreviousToken(tt.semi, 1))) {
    ++locEnd.column;
    ++pos;
   }
@@ -313,19 +312,25 @@ pp.cssxOut = function () {
   this.state.context.length -= 1;
 };
 
-pp.cssxStoreToken = function () {
+pp.cssxStoreNextCharAsToken = function (type) {
   let curContext = this.curContext();
+
+  ++this.state.pos;
+  this.finishToken(type);
 
   if (!this.isLookahead) {
     this.state.tokens.push(new Token(this.state));
   }
 
-  this.state.lastTokEnd = this.state.end;
-  this.state.lastTokStart = this.state.start;
-  this.state.lastTokEndLoc = this.state.endLoc;
-  this.state.lastTokStartLoc = this.state.startLoc;
-
   if (!curContext || !curContext.preserveSpace) this.skipSpace();
+  this.cssxSyncLocPropsToCurPos();
+};
+
+pp.cssxSyncLocPropsToCurPos = function (p) {
+  let pos = typeof p === 'undefined' ? this.state.pos : p;
+
+  this.state.start = this.state.end = pos;
+  this.state.startLoc = this.state.endLoc = posToLoc(pos, this.state.input);
 };
 
 pp.cssxReadSelectorCharUntil = function (code) {
@@ -419,19 +424,30 @@ pp.clonePosition = function (loc) {
   }
 };
 
-pp.lastTokenPlusEndPos = function () {
-  var token = this.getPreviousToken();
-  var locEnd = this.clonePosition(token.loc.end);
-  var locStart = this.clonePosition(token.loc.start);
-
-  ++token.end;
-  ++locEnd.column;
-  token.loc = new SourceLocation(locStart, locEnd);
-};
-
 // utilities that are not babylon specific
 
 function stringToCode (ch) {
   return String(ch).charCodeAt(0);
-}
+};
 
+function posToLoc (pos, input) {
+  var line=1, loopPos=0, linePos = 0;
+
+  while(loopPos < input.length && loopPos !== pos) {
+    if (input.charAt(loopPos) === '\n') {
+      linePos = 0;
+      ++line;
+    } else {
+      ++linePos;
+    }
+    ++loopPos;
+  }
+  return { line, column: linePos };
+};
+
+
+/* watchers
+
+watch('this.state.type.label'),watch('this.state.pos'),watch('this.state.start'),watch('this.state.end'),watch('this.state.startLoc'),watch('this.state.endLoc'),watch('this.state.input.substr(0, this.state.pos)')
+
+*/
