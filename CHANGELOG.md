@@ -13,6 +13,26 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.4.4 (2016-01-13)
+
+* `babel-plugin-transform-regenerator`: Publishing issue ([T2892](https://phabricator.babeljs.io/T2892)).
+
+## 6.4.3 (2016-01-13)
+
+* **Bug Fix**
+ * `babel-plugin-transform-es2015-typeof-symbol`: [#3250](https://github.com/babel/babel/pull/3250) The typeof transform should always use the global `Symbol`.
+ * `babel-plugin-transform-es2015-modules-amd`: [#3252](https://github.com/babel/babel/pull/3252) Stop leaking directives
+ * `babel-pluginn-transform-es2015-unicode-regex`: [#3259](https://github.com/babel/babel/pull/3259) Use only `regexpu-core` instead of all of `regexpu`
+ * `babel-generator`: [Fix minified labeledStatement printing](https://github.com/babel/babel/commit/0d9459dbb65f7a717d97ec8c723935ae9a83bcf1)
+ * `babel-plugin-transform-regenerator`: [#3162](https://github.com/babel/babel/pull/3162) Make sure babel helper picks up `regeneratorRuntime`
+
+* **Polish**
+ * `babel-types`: [#3261](https://github.com/babel/babel/pull/3261) Add ArrayExpression.elements.default
+ * `babel-register`: [#3232](https://github.com/babel/babel/pull/3232) Make sure the cache file's directory exists
+
+* **Documentation**
+ * `babel-generator-options`: [#3251](https://github.com/babel/babel/pull/3251) Document babel-generator options
+
 ## 6.4.2 (2016-01-06)
 
 * **Bug Fix**
