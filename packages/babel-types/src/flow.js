@@ -3,6 +3,8 @@ import * as t from "./index";
 /**
  * Takes an array of `types` and flattens them, removing duplicates and
  * returns a `UnionTypeAnnotation` node containg them.
+ * @public
+ * @name t.createUnionTypeAnnotation
  */
 
 export function createUnionTypeAnnotation(types: Array<Object>) {
@@ -17,6 +19,8 @@ export function createUnionTypeAnnotation(types: Array<Object>) {
 
 /**
  * Dedupe type annotations.
+ * @public
+ * @name t.removeTypeDuplicates
  */
 
 export function removeTypeDuplicates(nodes: Array<Object>) {
@@ -97,6 +101,8 @@ export function removeTypeDuplicates(nodes: Array<Object>) {
 
 /**
  * Create a type anotation based on typeof expression.
+ * @public
+ * @name t.createTypeAnnotationBasedOnTypeof
  */
 
 export function createTypeAnnotationBasedOnTypeof(type: string) {

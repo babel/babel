@@ -63,3 +63,9 @@ bootstrap:
 	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
+
+build-docs:
+	rm -rf doc/packages
+	mkdir -p doc/packages
+	documentation packages/babel-traverse/src/index.js --format md --output doc/packages/babel-traverse.md --github
+	documentation packages/babel-types/src/index.js --format md --output doc/packages/babel-types.md --github

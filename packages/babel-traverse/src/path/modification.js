@@ -7,6 +7,8 @@ import * as t from "babel-types";
 
 /**
  * Insert the provided nodes before the current one.
+ * @public
+ * @name NodePath.prototype.insertBefore
  */
 
 export function insertBefore(nodes) {
@@ -33,6 +35,10 @@ export function insertBefore(nodes) {
 
   return [this];
 }
+
+/**
+ * @private
+ */
 
 export function _containerInsert(from, nodes) {
   this.updateSiblingKeys(from, nodes.length);
@@ -77,13 +83,25 @@ export function _containerInsert(from, nodes) {
   return paths;
 }
 
+/**
+ * @private
+ */
+
 export function _containerInsertBefore(nodes) {
   return this._containerInsert(this.key, nodes);
 }
 
+/**
+ * @private
+ */
+
 export function _containerInsertAfter(nodes) {
   return this._containerInsert(this.key + 1, nodes);
 }
+
+/**
+ * @private
+ */
 
 export function _maybePopFromStatements(nodes) {
   let last = nodes[nodes.length - 1];
@@ -97,6 +115,8 @@ export function _maybePopFromStatements(nodes) {
 /**
  * Insert the provided nodes after the current one. When inserting nodes after an
  * expression, ensure that the completion record is correct by pushing the current node.
+ * @public
+ * @name NodePath.prototype.insertAfter
  */
 
 export function insertAfter(nodes) {
@@ -130,6 +150,8 @@ export function insertAfter(nodes) {
 
 /**
  * Update all sibling node paths after `fromIndex` by `incrementBy`.
+ * @public
+ * @name NodePath.prototype.updateSiblingKeys
  */
 
 export function updateSiblingKeys(fromIndex, incrementBy) {
@@ -143,6 +165,10 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
     }
   }
 }
+
+/**
+ * @private
+ */
 
 export function _verifyNodeList(nodes) {
   if (!nodes) {
@@ -176,6 +202,12 @@ export function _verifyNodeList(nodes) {
   return nodes;
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.unshiftContainer
+ */
+
 export function unshiftContainer(listKey, nodes) {
   this._assertUnremoved();
 
@@ -193,6 +225,12 @@ export function unshiftContainer(listKey, nodes) {
 
   return path.insertBefore(nodes);
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.pushContainer
+ */
 
 export function pushContainer(listKey, nodes) {
   this._assertUnremoved();
@@ -217,6 +255,8 @@ export function pushContainer(listKey, nodes) {
 /**
  * Hoist the current node to the highest scope possible and return a UID
  * referencing it.
+ * @public
+ * @name NodePath.prototype.hoist
  */
 
 export function hoist(scope = this.scope) {

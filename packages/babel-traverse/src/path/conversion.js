@@ -2,6 +2,12 @@
 
 import * as t from "babel-types";
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.toComputedKey
+ */
+
 export function toComputedKey(): Object {
   let node = this.node;
 
@@ -21,9 +27,21 @@ export function toComputedKey(): Object {
   return key;
 }
 
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.ensureBlock
+ */
+
 export function ensureBlock() {
   return t.ensureBlock(this.node);
 }
+
+/**
+ * [Needs description]
+ * @public
+ * @name NodePath.prototype.arrowFunctionToShadowed
+ */
 
 export function arrowFunctionToShadowed() {
   // todo: maybe error

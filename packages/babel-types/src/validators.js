@@ -5,6 +5,8 @@ import { BLOCK_SCOPED_SYMBOL } from "./constants";
 
 /**
  * Check if the input `node` is a binding identifier.
+ * @public
+ * @name t.isBinding
  */
 
 export function isBinding(node: Object, parent: Object): boolean {
@@ -26,6 +28,8 @@ export function isBinding(node: Object, parent: Object): boolean {
 
 /**
  * Check if the input `node` is a reference to a bound variable.
+ * @public
+ * @name t.isReferenced
  */
 
 export function isReferenced(node: Object, parent: Object): boolean {
@@ -153,6 +157,8 @@ export function isReferenced(node: Object, parent: Object): boolean {
 /**
  * Check if the input `name` is a valid identifier name
  * and isn't a reserved word.
+ * @public
+ * @name t.isValidIdentifier
  */
 
 export function isValidIdentifier(name: string): boolean {
@@ -165,6 +171,8 @@ export function isValidIdentifier(name: string): boolean {
 
 /**
  * Check if the input `node` is a `let` variable declaration.
+ * @public
+ * @name t.isLet
  */
 
 export function isLet(node: Object): boolean {
@@ -173,6 +181,8 @@ export function isLet(node: Object): boolean {
 
 /**
  * Check if the input `node` is block scoped.
+ * @public
+ * @name t.isBlockScoped
  */
 
 export function isBlockScoped(node: Object): boolean {
@@ -181,6 +191,8 @@ export function isBlockScoped(node: Object): boolean {
 
 /**
  * Check if the input `node` is a variable declaration.
+ * @public
+ * @name t.isVar
  */
 
 export function isVar(node: Object): boolean {
@@ -189,6 +201,8 @@ export function isVar(node: Object): boolean {
 
 /**
  * Check if the input `specifier` is a `default` import or export.
+ * @public
+ * @name t.isSpecifierDefault
  */
 
 export function isSpecifierDefault(specifier: Object): boolean {
@@ -198,6 +212,8 @@ export function isSpecifierDefault(specifier: Object): boolean {
 
 /**
  * Check if the input `node` is a scope.
+ * @public
+ * @name t.isScope
  */
 
 export function isScope(node: Object, parent: Object): boolean {
@@ -210,6 +226,8 @@ export function isScope(node: Object, parent: Object): boolean {
 
 /**
  * Check if the input `node` is definitely immutable.
+ * @public
+ * @name t.isImmutable
  */
 
 export function isImmutable(node: Object): boolean {

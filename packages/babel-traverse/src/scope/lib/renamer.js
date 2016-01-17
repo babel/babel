@@ -1,6 +1,10 @@
 import Binding from "../binding";
 import * as t from "babel-types";
 
+/**
+ * @private
+ */
+
 let renameVisitor = {
   ReferencedIdentifier({ node }, state) {
     if (node.name === state.oldName) {
@@ -23,6 +27,10 @@ let renameVisitor = {
   }
 };
 
+/**
+ * @private
+ */
+
 export default class Renamer {
   constructor(binding: Binding, oldName: string, newName: string) {
     this.newName = newName;
@@ -33,6 +41,10 @@ export default class Renamer {
   oldName: string;
   newName: string;
   binding: Binding;
+
+  /**
+   * @private
+   */
 
   maybeConvertFromExportDeclaration(parentDeclar) {
     let exportDeclar = parentDeclar.parentPath.isExportDeclaration() && parentDeclar.parentPath;
@@ -68,6 +80,10 @@ export default class Renamer {
     exportDeclar.replaceWith(parentDeclar.node);
   }
 
+  /**
+   * @private
+   */
+
   maybeConvertFromClassFunctionDeclaration(path) {
     return; // TODO
 
@@ -83,6 +99,10 @@ export default class Renamer {
       t.variableDeclarator(t.identifier(this.newName), t.toExpression(path.node))
     ]));
   }
+
+  /**
+   * @private
+   */
 
   maybeConvertFromClassFunctionExpression(path) {
     return; // TODO
@@ -100,6 +120,10 @@ export default class Renamer {
 
     path.replaceWith(t.assignmentExpression("=", t.identifier(this.newName), path.node));
   }
+
+  /**
+   * @private
+   */
 
   rename(block?) {
     let { binding, oldName, newName } = this;

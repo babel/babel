@@ -4,6 +4,11 @@ import * as t from "./index";
 
 export let isReactComponent = t.buildMatchMemberExpression("React.Component");
 
+/**
+ * Is a given string a valid non-component JSX tagName?
+ * @param tagName The string to check
+ * @name t.isCompatTag
+ */
 export function isCompatTag(tagName?: string): boolean {
   return !!tagName && /^[a-z]|\-/.test(tagName);
 }
@@ -56,6 +61,10 @@ function cleanJSXElementLiteralChild(
   if (str) args.push(t.stringLiteral(str));
 }
 
+/**
+ * [Needs description]
+ * @name t.buildChildren
+ */
 export function buildChildren(node: Object): Array<Object> {
   let elems = [];
 

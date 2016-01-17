@@ -1,6 +1,10 @@
 import { react } from "babel-types";
 import * as t from "babel-types";
 
+/**
+ * @private
+ */
+
 let referenceVisitor = {
   ReferencedIdentifier(path, state) {
     if (path.isJSXIdentifier() && react.isCompatTag(path.node.name)) {
@@ -25,6 +29,10 @@ let referenceVisitor = {
   }
 };
 
+/**
+ * @private
+ */
+
 export default class PathHoister {
   constructor(path, scope) {
     this.breakOnScopePaths = [];
@@ -33,6 +41,10 @@ export default class PathHoister {
     this.scope             = scope;
     this.path              = path;
   }
+
+  /**
+   * @private
+   */
 
   isCompatibleScope(scope) {
     for (let key in this.bindings) {
@@ -44,6 +56,10 @@ export default class PathHoister {
 
     return true;
   }
+
+  /**
+   * @private
+   */
 
   getCompatibleScopes() {
     let scope = this.path.scope;
@@ -59,6 +75,10 @@ export default class PathHoister {
       }
     } while (scope = scope.parent);
   }
+
+  /**
+   * @private
+   */
 
   getAttachmentPath() {
     let scopes = this.scopes;
@@ -82,10 +102,18 @@ export default class PathHoister {
     }
   }
 
+  /**
+   * @private
+   */
+
   getNextScopeStatementParent() {
     let scope = this.scopes.pop();
     if (scope) return scope.path.getStatementParent();
   }
+
+  /**
+   * @private
+   */
 
   hasOwnParamBindings(scope) {
     for (let name in this.bindings) {
@@ -96,6 +124,10 @@ export default class PathHoister {
     }
     return false;
   }
+
+  /**
+   * @private
+   */
 
   run() {
     let node = this.path.node;
