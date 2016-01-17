@@ -12,4 +12,4 @@ strip_root=true
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 
 [version]
-0.20.0
+0.20.1
