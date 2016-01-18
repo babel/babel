@@ -58,7 +58,7 @@ const CSSXPropertyAllowedCodes = [
 ].map(stringToCode);
 
 const CSSXValueAllowedCodes = [
-  ' ' , '\n', '\t', '#', '.', '-', '(', ')', '[', ']', '\'', '"', '%', ','
+  ' ' , '\n', '\t', '#', '.', '-', '(', ')', '[', ']', '\'', '"', '%', ',', ':', '/', '\\'
 ].map(stringToCode);
 
 const CSSXSelectorAllowedCodes = [
@@ -233,14 +233,19 @@ pp.cssxParseElement = function() {
 pp.cssxReadWord = function (readUntil) {
   let word = '';
   let first = true;
-  let chunkStart;
+  let chunkStart, cut;
+  let readingDataURI;
+  let dataURIPattern = ['url(data:', 41]; // 41 = )
 
   chunkStart = this.state.pos;
+  cut = () => this.input.slice(chunkStart, this.state.pos);
 
   this.state.containsEsc = false;
   while (this.state.pos < this.input.length) {
-    let ch = this.fullCharCodeAtPos();    
-    if (readUntil.call(this, ch)) {
+    let ch = this.fullCharCodeAtPos();
+    if (cut() === dataURIPattern[0]) readingDataURI = true;
+    if (ch === dataURIPattern[1]) readingDataURI = false;
+    if (readUntil.call(this, ch) || readingDataURI) {
       let inc = (ch <= 0xffff ? 1 : 2);
       this.state.pos += inc;
       if (ch === 10) { // new line
@@ -270,7 +275,7 @@ pp.cssxReadWord = function (readUntil) {
     }
     first = false;
   }
-  word = word + this.input.slice(chunkStart, this.state.pos);
+  word = word + cut();
   return word;
 };
 
@@ -299,6 +304,11 @@ pp.cssxReadValue = function() {
   startLoc = this.state.curPosition();
   pos = this.state.pos;
   value = this.cssxReadWord(pp.cssxReadValueCharUntil); // changes state.pos
+
+  // if value is a string like \"<something here>\"
+  if (value.charAt(0) === '"' && value.charAt(value.length-1) === '"') {
+    value = value.substr(1, value.length-2);
+  }
   
   this.state.start = pos;
   this.state.startLoc = startLoc;
