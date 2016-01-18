@@ -14,8 +14,11 @@ var ignore = [
 ];
 var writeResultedJSONIfFail = true;
 var checkStartEndPosToLoc = true;
+// var onlyTitle = '27';
 
-var onlyTitle = '27';
+// var writeResultedJSONIfFail = false;
+// var checkStartEndPosToLoc = false;
+// var onlyTitle = undefined;
 // var ignore = [];
 
 var fixtures = getFixtures(__dirname + "/fixtures", ignore);
