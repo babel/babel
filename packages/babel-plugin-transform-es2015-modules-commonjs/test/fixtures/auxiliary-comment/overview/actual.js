@@ -9,7 +9,7 @@ import {foo as bar2} from "foo5";
 export {test};
 export var test = 5;
 
-bar(foo);
+bar(foo, bar2);
 
 /* my comment */
 bar2;
