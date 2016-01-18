@@ -7,7 +7,7 @@ PATH := node_modules/.bin:$(PATH)
 .PHONY: clean test test-only test-cov test-clean test-travis publish build bootstrap publish-core publish-runtime build-website build-core watch-core build-core-test clean-core prepublish
 
 build: clean
-	gulp build
+	node_modules/.bin/gulp build
 
 build-dist: build
 	cd packages/babel-polyfill; \
@@ -16,7 +16,7 @@ build-dist: build
 	node scripts/build-dist.js
 
 watch: clean
-	gulp watch
+	node_modules/.bin/gulp watch
 
 lint:
 	node node_modules/.bin/eslint packages/*/src
@@ -39,7 +39,7 @@ test: lint test-only
 test-cov: clean
 	# rebuild with test
 	rm -rf packages/*/lib
-	BABEL_ENV=test; gulp build
+	BABEL_ENV=test; node_modules/.bin/gulp build
 
 	./scripts/test-cov.sh
 
