@@ -49,7 +49,7 @@ export default class Printer extends Buffer {
 
     if (opts.before) opts.before();
 
-    this.map.mark(node, "start");
+    this.map.mark(node);
 
     this._print(node, parent);
 
@@ -62,7 +62,7 @@ export default class Printer extends Buffer {
 
     // end
     this._printStack.pop();
-    this.map.mark(node, "end");
+    if (parent) this.map.mark(parent);
     if (opts.after) opts.after();
 
     this.format.concise = oldConcise;
@@ -132,6 +132,10 @@ export default class Printer extends Buffer {
       after: () => {
         if (opts.iterator) {
           opts.iterator(node, i);
+        }
+
+        if (opts.separator && parent.loc) {
+          this.printAuxAfterComment();
         }
 
         if (opts.separator && i < len - 1) {

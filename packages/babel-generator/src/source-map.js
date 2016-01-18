@@ -9,6 +9,7 @@ export default class SourceMap {
   constructor(position, opts, code) {
     this.position = position;
     this.opts     = opts;
+    this.last     = {generated: {}, original: {}};
 
     if (opts.sourceMaps) {
       this.map = new sourceMap.SourceMapGenerator({
@@ -39,7 +40,7 @@ export default class SourceMap {
    * Mark a node's generated position, and add it to the sourcemap.
    */
 
-  mark(node, type) {
+  mark(node) {
     let loc = node.loc;
     if (!loc) return; // no location info
 
@@ -55,12 +56,27 @@ export default class SourceMap {
       column: position.column
     };
 
-    let original = loc[type];
+    let original = loc.start;
 
-    map.addMapping({
+    // Avoid emitting duplicates on either side. Duplicated
+    // original values creates unnecesssarily large source maps
+    // and increases compile time. Duplicates on the generated
+    // side can lead to incorrect mappings.
+    if (comparePosition(original, this.last.original)
+        || comparePosition(generated, this.last.generated)) {
+      return;
+    }
+
+    this.last = {
       source: this.opts.sourceFileName,
       generated: generated,
       original: original
-    });
+    };
+
+    map.addMapping(this.last);
   }
+}
+
+function comparePosition(a, b) {
+  return a.line === b.line &&  a.column === b.column;
 }

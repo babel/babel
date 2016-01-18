@@ -92,6 +92,7 @@ export function Decorator(node: Object) {
 
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
+  if (node.loc) this.printAuxAfterComment();
 
   this.push("(");
 
