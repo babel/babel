@@ -56,7 +56,7 @@
               "column": 14
             }
           },
-          "value": "# my+/- other+/- id p"
+          "value": "#my-other-id p"
         },
         "body": {
           "type": "CSSXRules",
@@ -138,10 +138,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "# my+/- other+/- id p",
+      "value": "#my-other-id p",
       "start": 0,
       "end": 14,
       "loc": {

@@ -291,7 +291,7 @@
               "column": 13
             }
           },
-          "value": "E[foo_=\"bar\"]"
+          "value": "E[foo^=\"bar\"]"
         },
         "body": {
           "type": "CSSXRules",
@@ -385,7 +385,7 @@
               "column": 13
             }
           },
-          "value": "E[foo_=\"bar\"]"
+          "value": "E[foo*=\"bar\"]"
         },
         "body": {
           "type": "CSSXRules",
@@ -432,7 +432,7 @@
               "column": 12
             }
           },
-          "value": "E[foo_=\"en\"]"
+          "value": "E[foo|=\"en\"]"
         },
         "body": {
           "type": "CSSXRules",
@@ -526,7 +526,7 @@
               "column": 14
             }
           },
-          "value": "E:nth - child( n)"
+          "value": "E:nth-child(n)"
         },
         "body": {
           "type": "CSSXRules",
@@ -573,7 +573,7 @@
               "column": 19
             }
           },
-          "value": "E:nth - last - child( n)"
+          "value": "E:nth-last-child(n)"
         },
         "body": {
           "type": "CSSXRules",
@@ -620,7 +620,7 @@
               "column": 16
             }
           },
-          "value": "E:nth - of - type( n)"
+          "value": "E:nth-of-type(n)"
         },
         "body": {
           "type": "CSSXRules",
@@ -667,7 +667,7 @@
               "column": 21
             }
           },
-          "value": "E:nth - last - of - type( n)"
+          "value": "E:nth-last-of-type(n)"
         },
         "body": {
           "type": "CSSXRules",
@@ -714,7 +714,7 @@
               "column": 13
             }
           },
-          "value": "E:first - child"
+          "value": "E:first-child"
         },
         "body": {
           "type": "CSSXRules",
@@ -761,7 +761,7 @@
               "column": 12
             }
           },
-          "value": "E:last - child"
+          "value": "E:last-child"
         },
         "body": {
           "type": "CSSXRules",
@@ -808,7 +808,7 @@
               "column": 15
             }
           },
-          "value": "E:first - of - type"
+          "value": "E:first-of-type"
         },
         "body": {
           "type": "CSSXRules",
@@ -855,7 +855,7 @@
               "column": 14
             }
           },
-          "value": "E:last - of - type"
+          "value": "E:last-of-type"
         },
         "body": {
           "type": "CSSXRules",
@@ -902,7 +902,7 @@
               "column": 12
             }
           },
-          "value": "E:only - child"
+          "value": "E:only-child"
         },
         "body": {
           "type": "CSSXRules",
@@ -949,7 +949,7 @@
               "column": 14
             }
           },
-          "value": "E:only - of - type"
+          "value": "E:only-of-type"
         },
         "body": {
           "type": "CSSXRules",
@@ -1325,7 +1325,7 @@
               "column": 10
             }
           },
-          "value": "E:lang( fr)"
+          "value": "E:lang(fr)"
         },
         "body": {
           "type": "CSSXRules",
@@ -1513,7 +1513,7 @@
               "column": 13
             }
           },
-          "value": "E:undefinedfirst - line"
+          "value": "E::first-line"
         },
         "body": {
           "type": "CSSXRules",
@@ -1560,7 +1560,7 @@
               "column": 15
             }
           },
-          "value": "E:undefinedfirst - letter"
+          "value": "E::first-letter"
         },
         "body": {
           "type": "CSSXRules",
@@ -1607,7 +1607,7 @@
               "column": 9
             }
           },
-          "value": "E:undefinedbefore"
+          "value": "E::before"
         },
         "body": {
           "type": "CSSXRules",
@@ -1654,7 +1654,7 @@
               "column": 8
             }
           },
-          "value": "E:undefinedafter"
+          "value": "E::after"
         },
         "body": {
           "type": "CSSXRules",
@@ -1701,7 +1701,7 @@
               "column": 9
             }
           },
-          "value": ".warning"
+          "value": "E.warning"
         },
         "body": {
           "type": "CSSXRules",
@@ -1748,7 +1748,7 @@
               "column": 6
             }
           },
-          "value": "E\"#\" myid"
+          "value": "E#myid"
         },
         "body": {
           "type": "CSSXRules",
@@ -1795,7 +1795,7 @@
               "column": 8
             }
           },
-          "value": "E:not( s)"
+          "value": "E:not(s)"
         },
         "body": {
           "type": "CSSXRules",
@@ -2017,8 +2017,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "*",
       "start": 0,
@@ -2094,8 +2093,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E",
       "start": 6,
@@ -2171,8 +2169,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E[foo]",
       "start": 12,
@@ -2248,8 +2245,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E[foo=\"bar\"]",
       "start": 23,
@@ -2325,10 +2321,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E[foo ~=\"bar\"]",
+      "value": "E[foo~=\"bar\"]",
       "start": 40,
       "end": 53,
       "loc": {
@@ -2402,10 +2397,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E[foo_=\"bar\"]",
+      "value": "E[foo^=\"bar\"]",
       "start": 58,
       "end": 71,
       "loc": {
@@ -2479,8 +2473,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E[foo$=\"bar\"]",
       "start": 76,
@@ -2556,10 +2549,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E[foo_=\"bar\"]",
+      "value": "E[foo*=\"bar\"]",
       "start": 94,
       "end": 107,
       "loc": {
@@ -2633,10 +2625,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E[foo_=\"en\"]",
+      "value": "E[foo|=\"en\"]",
       "start": 112,
       "end": 124,
       "loc": {
@@ -2710,8 +2701,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:root",
       "start": 129,
@@ -2787,10 +2777,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:nth - child( n)",
+      "value": "E:nth-child(n)",
       "start": 140,
       "end": 154,
       "loc": {
@@ -2864,10 +2853,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:nth - last - child( n)",
+      "value": "E:nth-last-child(n)",
       "start": 159,
       "end": 178,
       "loc": {
@@ -2941,10 +2929,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:nth - of - type( n)",
+      "value": "E:nth-of-type(n)",
       "start": 183,
       "end": 199,
       "loc": {
@@ -3018,10 +3005,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:nth - last - of - type( n)",
+      "value": "E:nth-last-of-type(n)",
       "start": 204,
       "end": 225,
       "loc": {
@@ -3095,10 +3081,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:first - child",
+      "value": "E:first-child",
       "start": 230,
       "end": 243,
       "loc": {
@@ -3172,10 +3157,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:last - child",
+      "value": "E:last-child",
       "start": 248,
       "end": 260,
       "loc": {
@@ -3249,10 +3233,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:first - of - type",
+      "value": "E:first-of-type",
       "start": 265,
       "end": 280,
       "loc": {
@@ -3326,10 +3309,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:last - of - type",
+      "value": "E:last-of-type",
       "start": 285,
       "end": 299,
       "loc": {
@@ -3403,10 +3385,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:only - child",
+      "value": "E:only-child",
       "start": 304,
       "end": 316,
       "loc": {
@@ -3480,10 +3461,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:only - of - type",
+      "value": "E:only-of-type",
       "start": 321,
       "end": 335,
       "loc": {
@@ -3557,8 +3537,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:empty",
       "start": 340,
@@ -3634,8 +3613,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:link",
       "start": 352,
@@ -3711,8 +3689,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:visited",
       "start": 363,
@@ -3788,8 +3765,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:active",
       "start": 377,
@@ -3865,8 +3841,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:hover",
       "start": 390,
@@ -3942,8 +3917,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:focus",
       "start": 402,
@@ -4019,8 +3993,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:target",
       "start": 414,
@@ -4096,10 +4069,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:lang( fr)",
+      "value": "E:lang(fr)",
       "start": 427,
       "end": 437,
       "loc": {
@@ -4173,8 +4145,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:enabled",
       "start": 442,
@@ -4250,8 +4221,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:disabled",
       "start": 456,
@@ -4327,8 +4297,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E:checked",
       "start": 471,
@@ -4404,10 +4373,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:undefinedfirst - line",
+      "value": "E::first-line",
       "start": 485,
       "end": 498,
       "loc": {
@@ -4481,10 +4449,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:undefinedfirst - letter",
+      "value": "E::first-letter",
       "start": 503,
       "end": 518,
       "loc": {
@@ -4558,10 +4525,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:undefinedbefore",
+      "value": "E::before",
       "start": 523,
       "end": 532,
       "loc": {
@@ -4635,10 +4601,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:undefinedafter",
+      "value": "E::after",
       "start": 537,
       "end": 545,
       "loc": {
@@ -4712,10 +4677,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": ".warning",
+      "value": "E.warning",
       "start": 550,
       "end": 559,
       "loc": {
@@ -4789,10 +4753,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E\"#\" myid",
+      "value": "E#myid",
       "start": 564,
       "end": 570,
       "loc": {
@@ -4866,10 +4829,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:not( s)",
+      "value": "E:not(s)",
       "start": 575,
       "end": 583,
       "loc": {
@@ -4943,8 +4905,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E F",
       "start": 588,
@@ -5020,8 +4981,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E > F",
       "start": 596,
@@ -5097,8 +5057,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E + F",
       "start": 606,
@@ -5174,8 +5133,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "E ~ F",
       "start": 616,

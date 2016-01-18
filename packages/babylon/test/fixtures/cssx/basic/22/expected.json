@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 67,
+  "end": 99,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 67,
+    "end": 99,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "CSSXElement",
         "start": 0,
-        "end": 67,
+        "end": 99,
         "loc": {
           "start": {
             "line": 1,
@@ -45,7 +45,7 @@
         "selector": {
           "type": "CSSXSelector",
           "start": 0,
-          "end": 28,
+          "end": 9,
           "loc": {
             "start": {
               "line": 1,
@@ -53,19 +53,19 @@
             },
             "end": {
               "line": 1,
-              "column": 28
+              "column": 9
             }
           },
-          "value": "E[foo=\"bar_- ±!@#$%^&*'QWR\"]"
+          "value": "#styles.p"
         },
         "body": {
           "type": "CSSXRules",
-          "start": 29,
-          "end": 67,
+          "start": 10,
+          "end": 99,
           "loc": {
             "start": {
               "line": 1,
-              "column": 29
+              "column": 10
             },
             "end": {
               "line": 4,
@@ -75,8 +75,8 @@
           "body": [
             {
               "type": "CSSXRule",
-              "start": 33,
-              "end": 45,
+              "start": 14,
+              "end": 25,
               "loc": {
                 "start": {
                   "line": 2,
@@ -84,13 +84,13 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 14
+                  "column": 13
                 }
               },
               "label": {
                 "type": "CSSXProperty",
-                "start": 33,
-                "end": 38,
+                "start": 14,
+                "end": 19,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -105,8 +105,8 @@
               },
               "body": {
                 "type": "CSSXValue",
-                "start": 40,
-                "end": 44,
+                "start": 21,
+                "end": 24,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -114,16 +114,35 @@
                   },
                   "end": {
                     "line": 2,
-                    "column": 13
+                    "column": 12
                   }
                 },
-                "name": "#000"
+                "name": "red",
+                "leadingComments": null,
+                "trailingComments": [
+                  {
+                    "type": "CommentLine",
+                    "value": " because the red is cool",
+                    "start": 26,
+                    "end": 52,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 40
+                      }
+                    }
+                  }
+                ]
               }
             },
             {
               "type": "CSSXRule",
-              "start": 48,
-              "end": 65,
+              "start": 55,
+              "end": 66,
               "loc": {
                 "start": {
                   "line": 3,
@@ -131,13 +150,13 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 19
+                  "column": 13
                 }
               },
               "label": {
                 "type": "CSSXProperty",
-                "start": 48,
-                "end": 58,
+                "start": 55,
+                "end": 61,
                 "loc": {
                   "start": {
                     "line": 3,
@@ -145,26 +164,46 @@
                   },
                   "end": {
                     "line": 3,
-                    "column": 12
+                    "column": 8
                   }
                 },
-                "name": "background"
+                "name": "margin",
+                "leadingComments": null
               },
               "body": {
                 "type": "CSSXValue",
-                "start": 60,
-                "end": 64,
+                "start": 63,
+                "end": 66,
                 "loc": {
                   "start": {
                     "line": 3,
-                    "column": 14
+                    "column": 10
                   },
                   "end": {
                     "line": 3,
-                    "column": 18
+                    "column": 13
                   }
                 },
-                "name": "#F00"
+                "name": "3em",
+                "leadingComments": null,
+                "trailingComments": [
+                  {
+                    "type": "CommentLine",
+                    "value": " because we need more space",
+                    "start": 68,
+                    "end": 97,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 44
+                      }
+                    }
+                  }
+                ]
               }
             }
           ]
@@ -173,7 +212,40 @@
     ],
     "directives": []
   },
-  "comments": [],
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " because the red is cool",
+      "start": 26,
+      "end": 52,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 14
+        },
+        "end": {
+          "line": 2,
+          "column": 40
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " because we need more space",
+      "start": 68,
+      "end": 97,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 15
+        },
+        "end": {
+          "line": 3,
+          "column": 44
+        }
+      }
+    }
+  ],
   "tokens": [
     {
       "type": {
@@ -185,12 +257,11 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E[foo=\"bar_- ±!@#$%^&*'QWR\"]",
+      "value": "#styles.p",
       "start": 0,
-      "end": 28,
+      "end": 9,
       "loc": {
         "start": {
           "line": 1,
@@ -198,7 +269,7 @@
         },
         "end": {
           "line": 1,
-          "column": 28
+          "column": 9
         }
       }
     },
@@ -214,16 +285,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 29,
-      "end": 30,
+      "start": 10,
+      "end": 11,
       "loc": {
         "start": {
           "line": 1,
-          "column": 29
+          "column": 10
         },
         "end": {
           "line": 1,
-          "column": 30
+          "column": 11
         }
       }
     },
@@ -241,8 +312,8 @@
         "updateContext": null
       },
       "value": "color",
-      "start": 33,
-      "end": 38,
+      "start": 14,
+      "end": 19,
       "loc": {
         "start": {
           "line": 2,
@@ -267,8 +338,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 38,
-      "end": 39,
+      "start": 19,
+      "end": 20,
       "loc": {
         "start": {
           "line": 2,
@@ -293,9 +364,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "#000",
-      "start": 40,
-      "end": 44,
+      "value": "red",
+      "start": 21,
+      "end": 24,
       "loc": {
         "start": {
           "line": 2,
@@ -303,7 +374,7 @@
         },
         "end": {
           "line": 2,
-          "column": 13
+          "column": 12
         }
       }
     },
@@ -320,16 +391,32 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 44,
-      "end": 45,
+      "start": 24,
+      "end": 25,
       "loc": {
         "start": {
           "line": 2,
-          "column": 13
+          "column": 12
         },
         "end": {
           "line": 2,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " because the red is cool",
+      "start": 26,
+      "end": 52,
+      "loc": {
+        "start": {
+          "line": 2,
           "column": 14
+        },
+        "end": {
+          "line": 2,
+          "column": 40
         }
       }
     },
@@ -346,9 +433,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "background",
-      "start": 48,
-      "end": 58,
+      "value": "margin",
+      "start": 55,
+      "end": 61,
       "loc": {
         "start": {
           "line": 3,
@@ -356,7 +443,7 @@
         },
         "end": {
           "line": 3,
-          "column": 12
+          "column": 8
         }
       }
     },
@@ -373,16 +460,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 58,
-      "end": 59,
+      "start": 61,
+      "end": 62,
       "loc": {
         "start": {
           "line": 3,
-          "column": 12
+          "column": 8
         },
         "end": {
           "line": 3,
-          "column": 13
+          "column": 9
         }
       }
     },
@@ -399,17 +486,17 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "#F00",
-      "start": 60,
-      "end": 64,
+      "value": "3em",
+      "start": 63,
+      "end": 66,
       "loc": {
         "start": {
           "line": 3,
-          "column": 14
+          "column": 10
         },
         "end": {
           "line": 3,
-          "column": 18
+          "column": 13
         }
       }
     },
@@ -426,16 +513,32 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 64,
-      "end": 65,
+      "start": 66,
+      "end": 67,
       "loc": {
         "start": {
           "line": 3,
-          "column": 18
+          "column": 13
         },
         "end": {
           "line": 3,
-          "column": 19
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " because we need more space",
+      "start": 68,
+      "end": 97,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 15
+        },
+        "end": {
+          "line": 3,
+          "column": 44
         }
       }
     },
@@ -451,8 +554,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 66,
-      "end": 67,
+      "start": 98,
+      "end": 99,
       "loc": {
         "start": {
           "line": 4,
@@ -477,8 +580,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 67,
-      "end": 67,
+      "start": 99,
+      "end": 99,
       "loc": {
         "start": {
           "line": 4,

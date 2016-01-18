@@ -56,7 +56,7 @@
               "column": 6
             }
           },
-          "value": "E\"#\" myid"
+          "value": "E#myid"
         },
         "body": {
           "type": "CSSXRules",
@@ -185,10 +185,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E\"#\" myid",
+      "value": "E#myid",
       "start": 0,
       "end": 6,
       "loc": {

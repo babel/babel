@@ -39,11 +39,12 @@ pp.addComment = function (comment) {
 
 pp.processComment = function (node) {
   if (node.type === "Program" && node.body.length > 0) return;
-
   let stack = this.state.commentStack;
 
   let lastChild, trailingComments, i;
-  // if (node.type === 'CSSXRule') debugger;
+  console.log('----------- ' + node.type);
+  console.log('leadingComments = ' + this.cssxDebugComments(this.state.leadingComments));
+  console.log('trailingComments = ' + this.cssxDebugComments(this.state.trailingComments));
   if (this.state.trailingComments.length > 0) {
     // If the first comment in trailingComments comes after the
     // current node, then we're good - all comments in the array will
@@ -139,5 +140,7 @@ pp.processComment = function (node) {
     }
   }
 
+  console.log('leading = ' + this.cssxDebugComments(node.leadingComments));
+  console.log('trailing = ' + this.cssxDebugComments(node.trailingComments));
   stack.push(node);
 };

@@ -56,7 +56,7 @@
               "column": 19
             }
           },
-          "value": "E:nth+/- last+/- child( n)"
+          "value": "E:nth-last-child(n)"
         },
         "body": {
           "type": "CSSXRules",
@@ -185,10 +185,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:nth+/- last+/- child( n)",
+      "value": "E:nth-last-child(n)",
       "start": 0,
       "end": 19,
       "loc": {

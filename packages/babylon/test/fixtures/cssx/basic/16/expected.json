@@ -56,7 +56,7 @@
               "column": 15
             }
           },
-          "value": "E:undefinedfirst+/- letter"
+          "value": "E::first-letter"
         },
         "body": {
           "type": "CSSXRules",
@@ -185,10 +185,9 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "E:undefinedfirst+/- letter",
+      "value": "E::first-letter",
       "start": 0,
       "end": 15,
       "loc": {

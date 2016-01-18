@@ -45,7 +45,7 @@
         "selector": {
           "type": "CSSXSelector",
           "start": 0,
-          "end": 13,
+          "end": 9,
           "loc": {
             "start": {
               "line": 1,
@@ -53,19 +53,19 @@
             },
             "end": {
               "line": 1,
-              "column": 13
+              "column": 9
             }
           },
-          "value": "E[foo~=\"bar\"]"
+          "value": "#styles.p"
         },
         "body": {
           "type": "CSSXRules",
-          "start": 14,
+          "start": 10,
           "end": 52,
           "loc": {
             "start": {
               "line": 1,
-              "column": 14
+              "column": 10
             },
             "end": {
               "line": 4,
@@ -75,8 +75,8 @@
           "body": [
             {
               "type": "CSSXRule",
-              "start": 18,
-              "end": 30,
+              "start": 14,
+              "end": 25,
               "loc": {
                 "start": {
                   "line": 2,
@@ -84,13 +84,13 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 14
+                  "column": 13
                 }
               },
               "label": {
                 "type": "CSSXProperty",
-                "start": 18,
-                "end": 23,
+                "start": 14,
+                "end": 19,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -105,8 +105,8 @@
               },
               "body": {
                 "type": "CSSXValue",
-                "start": 25,
-                "end": 29,
+                "start": 21,
+                "end": 24,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -114,16 +114,36 @@
                   },
                   "end": {
                     "line": 2,
-                    "column": 13
+                    "column": 12
                   }
                 },
-                "name": "#000"
-              }
+                "name": "red",
+                "leadingComments": null,
+                "trailingComments": null
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " a",
+                  "start": 26,
+                  "end": 30,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 18
+                    }
+                  }
+                }
+              ]
             },
             {
               "type": "CSSXRule",
               "start": 33,
-              "end": 50,
+              "end": 44,
               "loc": {
                 "start": {
                   "line": 3,
@@ -131,13 +151,13 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 19
+                  "column": 13
                 }
               },
               "label": {
                 "type": "CSSXProperty",
                 "start": 33,
-                "end": 43,
+                "end": 39,
                 "loc": {
                   "start": {
                     "line": 3,
@@ -145,27 +165,66 @@
                   },
                   "end": {
                     "line": 3,
-                    "column": 12
+                    "column": 8
                   }
                 },
-                "name": "background"
+                "name": "margin",
+                "leadingComments": null
               },
               "body": {
                 "type": "CSSXValue",
-                "start": 45,
-                "end": 49,
+                "start": 41,
+                "end": 44,
                 "loc": {
                   "start": {
                     "line": 3,
-                    "column": 14
+                    "column": 10
                   },
                   "end": {
                     "line": 3,
-                    "column": 18
+                    "column": 13
                   }
                 },
-                "name": "#F00"
-              }
+                "name": "3em",
+                "leadingComments": null,
+                "trailingComments": null
+              },
+              "leadingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " a",
+                  "start": 26,
+                  "end": 30,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 18
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " b",
+                  "start": 46,
+                  "end": 50,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 19
+                    }
+                  }
+                }
+              ]
             }
           ]
         }
@@ -173,7 +232,40 @@
     ],
     "directives": []
   },
-  "comments": [],
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " a",
+      "start": 26,
+      "end": 30,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 14
+        },
+        "end": {
+          "line": 2,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " b",
+      "start": 46,
+      "end": 50,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 15
+        },
+        "end": {
+          "line": 3,
+          "column": 19
+        }
+      }
+    }
+  ],
   "tokens": [
     {
       "type": {
@@ -187,9 +279,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "E[foo~=\"bar\"]",
+      "value": "#styles.p",
       "start": 0,
-      "end": 13,
+      "end": 9,
       "loc": {
         "start": {
           "line": 1,
@@ -197,7 +289,7 @@
         },
         "end": {
           "line": 1,
-          "column": 13
+          "column": 9
         }
       }
     },
@@ -213,16 +305,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 14,
-      "end": 15,
+      "start": 10,
+      "end": 11,
       "loc": {
         "start": {
           "line": 1,
-          "column": 14
+          "column": 10
         },
         "end": {
           "line": 1,
-          "column": 15
+          "column": 11
         }
       }
     },
@@ -240,8 +332,8 @@
         "updateContext": null
       },
       "value": "color",
-      "start": 18,
-      "end": 23,
+      "start": 14,
+      "end": 19,
       "loc": {
         "start": {
           "line": 2,
@@ -266,8 +358,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 23,
-      "end": 24,
+      "start": 19,
+      "end": 20,
       "loc": {
         "start": {
           "line": 2,
@@ -292,9 +384,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "#000",
-      "start": 25,
-      "end": 29,
+      "value": "red",
+      "start": 21,
+      "end": 24,
       "loc": {
         "start": {
           "line": 2,
@@ -302,7 +394,7 @@
         },
         "end": {
           "line": 2,
-          "column": 13
+          "column": 12
         }
       }
     },
@@ -319,16 +411,32 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 29,
+      "start": 24,
+      "end": 25,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 12
+        },
+        "end": {
+          "line": 2,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a",
+      "start": 26,
       "end": 30,
       "loc": {
         "start": {
           "line": 2,
-          "column": 13
+          "column": 14
         },
         "end": {
           "line": 2,
-          "column": 14
+          "column": 18
         }
       }
     },
@@ -345,9 +453,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "background",
+      "value": "margin",
       "start": 33,
-      "end": 43,
+      "end": 39,
       "loc": {
         "start": {
           "line": 3,
@@ -355,7 +463,7 @@
         },
         "end": {
           "line": 3,
-          "column": 12
+          "column": 8
         }
       }
     },
@@ -372,16 +480,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 43,
-      "end": 44,
+      "start": 39,
+      "end": 40,
       "loc": {
         "start": {
           "line": 3,
-          "column": 12
+          "column": 8
         },
         "end": {
           "line": 3,
-          "column": 13
+          "column": 9
         }
       }
     },
@@ -398,17 +506,17 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "#F00",
-      "start": 45,
-      "end": 49,
+      "value": "3em",
+      "start": 41,
+      "end": 44,
       "loc": {
         "start": {
           "line": 3,
-          "column": 14
+          "column": 10
         },
         "end": {
           "line": 3,
-          "column": 18
+          "column": 13
         }
       }
     },
@@ -425,12 +533,28 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 49,
+      "start": 44,
+      "end": 45,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 13
+        },
+        "end": {
+          "line": 3,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " b",
+      "start": 46,
       "end": 50,
       "loc": {
         "start": {
           "line": 3,
-          "column": 18
+          "column": 15
         },
         "end": {
           "line": 3,
