@@ -72,15 +72,15 @@ helpers.asyncToGenerator = template(`
           if (info.done) {
             resolve(value);
           } else {
-            Promise.resolve(value).then(function (value) {
-              step("next", value);
+            return Promise.resolve(value).then(function (value) {
+              return step("next", value);
             }, function (err) {
-              step("throw", err);
+              return step("throw", err);
             });
           }
         }
 
-        step("next");
+        return step("next");
       });
     };
   })

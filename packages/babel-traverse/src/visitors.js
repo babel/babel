@@ -3,6 +3,22 @@ import * as messages from "babel-messages";
 import * as t from "babel-types";
 import clone from "lodash/lang/clone";
 
+/**
+ * explode() will take a visitor object with all of the various shorthands
+ * that we support, and validates & normalizes it into a common format, ready
+ * to be used in traversal
+ *
+ * The various shorthands are:
+ * * `Identifier() { ... }` -> `Identifier: { enter() { ... } }`
+ * * `"Identifier|NumericLiteral": { ... }` -> `Identifier: { ... }, NumericLiteral: { ... }`
+ * * Aliases in `babel-types`: e.g. `Property: { ... }` -> `ObjectProperty: { ... }, ClassProperty: { ... }`
+ *
+ * Other normalizations are:
+ * * Visitors of virtual types are wrapped, so that they are only visited when
+ *   their dynamic check passes
+ * * `enter` and `exit` functions are wrapped in arrays, to ease merging of
+ *   visitors
+ */
 export function explode(visitor) {
   if (visitor._exploded) return visitor;
   visitor._exploded = true;

@@ -29,12 +29,15 @@ let memberExpressionOptimisationVisitor = {
   },
 
   Function(path, state) {
-    // skip over functions as whatever `arguments` we reference inside will refer
-    // to the wrong function
+    // Detect whether any reference to rest is contained in nested functions to
+    // determine if deopt is necessary.
     let oldNoOptimise = state.noOptimise;
     state.noOptimise = true;
     path.traverse(memberExpressionOptimisationVisitor, state);
     state.noOptimise = oldNoOptimise;
+
+    // Skip because optimizing references to rest would refer to the `arguments`
+    // of the nested function.
     path.skip();
   },
 
@@ -165,34 +168,43 @@ export let visitor = {
       // local rest binding name
       name: rest.name,
 
-      // whether any references to the rest parameter were made in a function
+      /*
+      It may be possible to optimize the output code in certain ways, such as
+      not generating code to initialize an array (perhaps substituting direct
+      references to arguments[i] or arguments.length for reads of the
+      corresponding rest parameter property) or positioning the initialization
+      code so that it may not have to execute depending on runtime conditions.
+
+      This property tracks eligibility for optimization. "deopted" means give up
+      and don't perform optimization. For example, when any of rest's elements /
+      properties is assigned to at the top level, or referenced at all in a
+      nested function.
+      */
       deopted: false,
     };
 
     path.traverse(memberExpressionOptimisationVisitor, state);
 
+    // There are only "shorthand" references
     if (!state.deopted && !state.references.length) {
-      // we only have shorthands and there are no other references
-      if (state.candidates.length) {
-        for (let {path, cause} of (state.candidates: Array)) {
-          switch (cause) {
-            case "indexGetter":
-              optimiseIndexGetter(path, argsId, state.offset);
-              break;
-            case "lengthGetter":
-              optimiseLengthGetter(path, argsLengthExpression, argsId, state.offset);
-              break;
-            default:
-              path.replaceWith(argsId);
-          }
+      for (let {path, cause} of (state.candidates: Array)) {
+        switch (cause) {
+          case "indexGetter":
+            optimiseIndexGetter(path, argsId, state.offset);
+            break;
+          case "lengthGetter":
+            optimiseLengthGetter(path, argsLengthExpression, argsId, state.offset);
+            break;
+          default:
+            path.replaceWith(argsId);
         }
       }
       return;
-    } else {
-      state.references = state.references.concat(
-        state.candidates.map(({path}) => path)
-      );
     }
+
+    state.references = state.references.concat(
+      state.candidates.map(({path}) => path)
+    );
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
     state.deopted = state.deopted || !!node.shadow;
@@ -242,16 +254,14 @@ export let visitor = {
       let target = path.getEarliestCommonAncestorFrom(state.references).getStatementParent();
 
       // don't perform the allocation inside a loop
-      let highestLoop;
-      target.findParent(function (path) {
+      target.findParent(path => {
         if (path.isLoop()) {
-          highestLoop = path;
-        } else if (path.isFunction()) {
-          // stop crawling up for functions
-          return true;
+          target = path;
+        } else {
+          // Stop crawling up if this is a function.
+          return path.isFunction();
         }
       });
-      if (highestLoop) target = highestLoop;
 
       target.insertBefore(loop);
     }
