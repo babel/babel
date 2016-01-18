@@ -36,15 +36,17 @@ export default class Parser extends Tokenizer {
 
     if (plugins.indexOf("flow") >= 0) {
       // ensure flow plugin loads last
-      plugins.splice(plugins.indexOf("flow"), 1);
+      plugins = plugins.filter(plugin => plugin !== "flow");
       plugins.push("flow");
     }
 
     for (let name of plugins) {
-      pluginMap[name] = true;
+      if (!pluginMap[name]) {
+        pluginMap[name] = true;
 
-      let plugin = exports.plugins[name];
-      if (plugin) plugin(this);
+        let plugin = exports.plugins[name];
+        if (plugin) plugin(this);
+      }
     }
 
     return pluginMap;
