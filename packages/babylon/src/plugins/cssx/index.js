@@ -163,6 +163,26 @@ export default function CSSX(instance) {
     };
   });
 
+  instance.extend("parseExprAtom", function(inner) {
+    return function(refShortHandDefaultPos) {
+      var node;
+
+      if (this.cssxEntryPoint()) {
+        if (this.match(tt.parenL)) {
+          --this.state.pos;
+          this.cssxStoreNextCharAsToken(tt.parenL);
+        }
+        this.cssxIn();
+        this.cssxReadSelector();
+        node = this.cssxParseElement(this.state);
+        this.next();
+        return node;
+      }
+
+      return inner.call(this, refShortHandDefaultPos);
+    };
+  });
+
   instance.extend('processComment', function (inner) {
     return function (node) {
       var last;

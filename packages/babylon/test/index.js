@@ -13,10 +13,10 @@ var ignore = [
   'jsx'
 ];
 var writeResultedJSONIfFail = true;
-var checkStartEndPosToLoc = false;
+var checkStartEndPosToLoc = true;
 
-// var onlyTitle = '5';
-var ignore = [];
+var onlyTitle = '27';
+// var ignore = [];
 
 var fixtures = getFixtures(__dirname + "/fixtures", ignore);
 
