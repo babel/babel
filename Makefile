@@ -17,7 +17,7 @@ watch: clean
 	node_modules/.bin/gulp watch
 
 lint:
-	node node_modules/.bin/eslint packages/*/src
+	node_modules/.bin/eslint packages/*/src
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
