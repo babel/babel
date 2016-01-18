@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 99,
+  "end": 52,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 99,
+    "end": 52,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "CSSXElement",
         "start": 0,
-        "end": 99,
+        "end": 52,
         "loc": {
           "start": {
             "line": 1,
@@ -61,7 +61,7 @@
         "body": {
           "type": "CSSXRules",
           "start": 10,
-          "end": 99,
+          "end": 52,
           "loc": {
             "start": {
               "line": 1,
@@ -119,30 +119,31 @@
                 },
                 "name": "red",
                 "leadingComments": null,
-                "trailingComments": [
-                  {
-                    "type": "CommentLine",
-                    "value": " because the red is cool",
-                    "start": 26,
-                    "end": 52,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 14
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 40
-                      }
+                "trailingComments": null
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " a",
+                  "start": 26,
+                  "end": 30,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 18
                     }
                   }
-                ]
-              }
+                }
+              ]
             },
             {
               "type": "CSSXRule",
-              "start": 55,
-              "end": 66,
+              "start": 33,
+              "end": 44,
               "loc": {
                 "start": {
                   "line": 3,
@@ -155,8 +156,8 @@
               },
               "label": {
                 "type": "CSSXProperty",
-                "start": 55,
-                "end": 61,
+                "start": 33,
+                "end": 39,
                 "loc": {
                   "start": {
                     "line": 3,
@@ -167,13 +168,12 @@
                     "column": 8
                   }
                 },
-                "name": "margin",
-                "leadingComments": null
+                "name": "margin"
               },
               "body": {
                 "type": "CSSXValue",
-                "start": 63,
-                "end": 66,
+                "start": 41,
+                "end": 44,
                 "loc": {
                   "start": {
                     "line": 3,
@@ -186,25 +186,26 @@
                 },
                 "name": "3em",
                 "leadingComments": null,
-                "trailingComments": [
-                  {
-                    "type": "CommentLine",
-                    "value": " because we need more space",
-                    "start": 68,
-                    "end": 97,
-                    "loc": {
-                      "start": {
-                        "line": 3,
-                        "column": 15
-                      },
-                      "end": {
-                        "line": 3,
-                        "column": 44
-                      }
+                "trailingComments": null
+              },
+              "trailingComments": [
+                {
+                  "type": "CommentLine",
+                  "value": " b",
+                  "start": 46,
+                  "end": 50,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 19
                     }
                   }
-                ]
-              }
+                }
+              ]
             }
           ]
         }
@@ -215,9 +216,9 @@
   "comments": [
     {
       "type": "CommentLine",
-      "value": " because the red is cool",
+      "value": " a",
       "start": 26,
-      "end": 52,
+      "end": 30,
       "loc": {
         "start": {
           "line": 2,
@@ -225,15 +226,15 @@
         },
         "end": {
           "line": 2,
-          "column": 40
+          "column": 18
         }
       }
     },
     {
       "type": "CommentLine",
-      "value": " because we need more space",
-      "start": 68,
-      "end": 97,
+      "value": " b",
+      "start": 46,
+      "end": 50,
       "loc": {
         "start": {
           "line": 3,
@@ -241,7 +242,7 @@
         },
         "end": {
           "line": 3,
-          "column": 44
+          "column": 19
         }
       }
     }
@@ -406,9 +407,9 @@
     },
     {
       "type": "CommentLine",
-      "value": " because the red is cool",
+      "value": " a",
       "start": 26,
-      "end": 52,
+      "end": 30,
       "loc": {
         "start": {
           "line": 2,
@@ -416,7 +417,7 @@
         },
         "end": {
           "line": 2,
-          "column": 40
+          "column": 18
         }
       }
     },
@@ -434,8 +435,8 @@
         "updateContext": null
       },
       "value": "margin",
-      "start": 55,
-      "end": 61,
+      "start": 33,
+      "end": 39,
       "loc": {
         "start": {
           "line": 3,
@@ -460,8 +461,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 61,
-      "end": 62,
+      "start": 39,
+      "end": 40,
       "loc": {
         "start": {
           "line": 3,
@@ -487,8 +488,8 @@
         "updateContext": null
       },
       "value": "3em",
-      "start": 63,
-      "end": 66,
+      "start": 41,
+      "end": 44,
       "loc": {
         "start": {
           "line": 3,
@@ -513,8 +514,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 66,
-      "end": 67,
+      "start": 44,
+      "end": 45,
       "loc": {
         "start": {
           "line": 3,
@@ -528,9 +529,9 @@
     },
     {
       "type": "CommentLine",
-      "value": " because we need more space",
-      "start": 68,
-      "end": 97,
+      "value": " b",
+      "start": 46,
+      "end": 50,
       "loc": {
         "start": {
           "line": 3,
@@ -538,7 +539,7 @@
         },
         "end": {
           "line": 3,
-          "column": 44
+          "column": 19
         }
       }
     },
@@ -554,8 +555,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 98,
-      "end": 99,
+      "start": 51,
+      "end": 52,
       "loc": {
         "start": {
           "line": 4,
@@ -580,8 +581,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 99,
-      "end": 99,
+      "start": 52,
+      "end": 52,
       "loc": {
         "start": {
           "line": 4,

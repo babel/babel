@@ -58,7 +58,7 @@ const CSSXPropertyAllowedCodes = [
 ].map(stringToCode);
 
 const CSSXValueAllowedCodes = [
-  '#', '.'
+  ' ' , '\n', '\t', '#', '.', '-', '(', ')', '[', ']', '\'', '"', '%', ','
 ].map(stringToCode);
 
 const CSSXSelectorAllowedCodes = [
@@ -163,6 +163,19 @@ export default function CSSX(instance) {
     };
   });
 
+  instance.extend('processComment', function (inner) {
+    return function (node) {
+      var last;
+      
+      if (node.type === 'CSSXRule') {
+        this.state.trailingComments.length = 0;
+        this.state.leadingComments.length = 0;
+      }
+
+      return inner.call(this, node);
+    };
+  });
+
 };
 
 pp.cssxEntryPoint = function (code) {
@@ -226,10 +239,14 @@ pp.cssxReadWord = function (readUntil) {
 
   this.state.containsEsc = false;
   while (this.state.pos < this.input.length) {
-    let ch = this.fullCharCodeAtPos();
+    let ch = this.fullCharCodeAtPos();    
     if (readUntil.call(this, ch)) {
       let inc = (ch <= 0xffff ? 1 : 2);
       this.state.pos += inc;
+      if (ch === 10) { // new line
+        ++this.state.curLine;
+        this.state.lineStart = this.state.pos;
+      }
     } else if (ch === 92) { // "\"
       this.state.containsEsc = true;
 
@@ -282,7 +299,7 @@ pp.cssxReadValue = function() {
   startLoc = this.state.curPosition();
   pos = this.state.pos;
   value = this.cssxReadWord(pp.cssxReadValueCharUntil); // changes state.pos
-
+  
   this.state.start = pos;
   this.state.startLoc = startLoc;
   this.finishToken(tt.cssxValue, value);

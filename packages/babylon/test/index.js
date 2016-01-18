@@ -12,7 +12,7 @@ var ignore = [
   'harmony',
   'jsx'
 ];
-var onlyTitle = '22';
+var onlyTitle = '24';
 
 // var ignore = [];
 
