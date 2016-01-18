@@ -12,9 +12,11 @@ var ignore = [
   'harmony',
   'jsx'
 ];
-var onlyTitle = '26';
+var writeResultedJSONIfFail = true;
+var checkStartEndPosToLoc = false;
 
-// var ignore = [];
+// var onlyTitle = '5';
+var ignore = [];
 
 var fixtures = getFixtures(__dirname + "/fixtures", ignore);
 
@@ -39,7 +41,7 @@ _.each(fixtures, function (suites, name) {
 function save(test, ast) {
   delete ast.tokens;
   if (!ast.comments.length) delete ast.comments;
-  require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
+  fs.writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
 }
 
 function runTest(test) {
@@ -49,7 +51,6 @@ function runTest(test) {
 
   try {
     var ast = parse(test.actual.code, opts);
-    writeResultedAST(ast);
   } catch (err) {
     if (opts.throws) {
       if (err.message === opts.throws) {
@@ -73,13 +74,18 @@ function runTest(test) {
   } else {
     var mis = misMatch(JSON.parse(test.expect.code), ast);
     var misPosLoc = posLocMatch(test.actual.code, ast);
+    if ((mis || misPosLoc) && writeResultedJSONIfFail) {
+      writeResultedJSON(test, ast);
+    }
     if (mis) {
-      //save(test, ast);
       throw new Error(mis);
     }
     if (misPosLoc) {
       throw new Error(misPosLoc);
     }
+  }
+  if (writeResultedJSONIfFail) {
+    clearResultedJSON(test);
   }
 }
 
@@ -118,6 +124,7 @@ function misMatch(exp, act) {
 }
 
 function posLocMatch(input, ast) {
+  if (!checkStartEndPosToLoc) return false;
   var areDefined = function () {
     return Array.prototype.slice.call(arguments).reduce(function(status, arg) {
       if (typeof arg === 'undefined') status = false;
@@ -182,6 +189,12 @@ function locToPos(input, startLoc, endLoc) {
   return { start: startPos, end: endPos };
 };
 
-function writeResultedAST(ast) {
-  require("fs").writeFileSync(__dirname + '/result.json', JSON.stringify(ast, null, 2));
+function writeResultedJSON(test, ast) {
+  fs.writeFileSync(test.expect.loc + '.result', JSON.stringify(ast, null, "  "));
+}
+
+function clearResultedJSON(test) {
+  if (fs.existsSync(test.expect.loc + '.result')) {
+    fs.unlinkSync(test.expect.loc + '.result');
+  }
 }

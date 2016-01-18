@@ -76,7 +76,7 @@
             {
               "type": "CSSXRule",
               "start": 4,
-              "end": 18,
+              "end": 19,
               "loc": {
                 "start": {
                   "line": 1,
@@ -84,7 +84,7 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 18
+                  "column": 19
                 }
               },
               "label": {
@@ -106,7 +106,7 @@
               "body": {
                 "type": "CSSXValue",
                 "start": 13,
-                "end": 18,
+                "end": 19,
                 "loc": {
                   "start": {
                     "line": 1,
@@ -114,10 +114,10 @@
                   },
                   "end": {
                     "line": 1,
-                    "column": 18
+                    "column": 19
                   }
                 },
-                "name": "block"
+                "name": "block "
               }
             }
           ]
@@ -138,8 +138,7 @@
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
       "value": "*",
       "start": 0,
@@ -246,9 +245,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "block",
+      "value": "block ",
       "start": 13,
-      "end": 18,
+      "end": 19,
       "loc": {
         "start": {
           "line": 1,
@@ -256,7 +255,7 @@
         },
         "end": {
           "line": 1,
-          "column": 18
+          "column": 19
         }
       }
     },

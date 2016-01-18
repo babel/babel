@@ -77,15 +77,15 @@
             {
               "type": "CSSXRule",
               "start": 84,
-              "end": 94,
+              "end": 95,
               "loc": {
                 "start": {
                   "line": 4,
                   "column": 20
                 },
                 "end": {
-                  "line": 4,
-                  "column": 30
+                  "line": 5,
+                  "column": 0
                 }
               },
               "label": {
@@ -107,18 +107,18 @@
               "body": {
                 "type": "CSSXValue",
                 "start": 92,
-                "end": 94,
+                "end": 95,
                 "loc": {
                   "start": {
                     "line": 4,
                     "column": 28
                   },
                   "end": {
-                    "line": 4,
-                    "column": 30
+                    "line": 5,
+                    "column": 0
                   }
                 },
-                "name": "10"
+                "name": "10\n"
               }
             }
           ]
@@ -297,17 +297,17 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "10",
+      "value": "10\n",
       "start": 92,
-      "end": 94,
+      "end": 95,
       "loc": {
         "start": {
           "line": 4,
           "column": 28
         },
         "end": {
-          "line": 4,
-          "column": 30
+          "line": 5,
+          "column": 0
         }
       }
     },
