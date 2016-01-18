@@ -2,8 +2,6 @@ MAKEFLAGS = -j1
 
 export NODE_ENV = test
 
-PATH := node_modules/.bin:$(PATH)
-
 .PHONY: clean test test-only test-cov test-clean test-travis publish build bootstrap publish-core publish-runtime build-website build-core watch-core build-core-test clean-core prepublish
 
 build: clean
