@@ -221,8 +221,19 @@ export default class OptionManager {
 
     // resolve presets
     if (opts.presets) {
-      this.mergePresets(opts.presets, dirname);
-      delete opts.presets;
+      // If we're in the "pass per preset" mode, we resolve the presets
+      // and keep them for further execution to calculate the options.
+      if (opts.passPerPresset) {
+        opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
+          if (preset.plugins) {
+            preset.plugins = OptionManager.normalisePlugins(presetLoc, dirname, preset.plugins);
+          }
+        });
+      } else {
+        // Otherwise, just merge presets options into the main options.
+        this.mergePresets(opts.presets, dirname);
+        delete opts.presets;
+      }
     }
 
     // env
@@ -240,22 +251,43 @@ export default class OptionManager {
     this.mergeOptions(envOpts, `${alias}.env.${envKey}`, null, dirname);
   }
 
+  /**
+   * Merges all presets into the main options in case we are not in the
+   * "pass per preset" mode. Otherwise, options are calculated per preset.
+   */
   mergePresets(presets: Array<string | Object>, dirname: string) {
-    for (let val of presets) {
+    this.resolvePresets(presets, dirname, (presetOpts, presetLoc) => {
+      this.mergeOptions(
+        presetOpts,
+        presetLoc,
+        presetLoc,
+        path.dirname(presetLoc)
+      );
+    });
+  }
+
+  /**
+   * Resolves presets options which can be either direct object data,
+   * or a module name to require.
+   */
+  resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
+    return presets.map(val => {
       if (typeof val === "string") {
         let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
         if (presetLoc) {
-          let presetOpts = require(presetLoc);
-          this.mergeOptions(presetOpts, presetLoc, presetLoc, path.dirname(presetLoc));
+          let val = require(presetLoc);
+          onResolve && onResolve(val, presetLoc);
+          return val;
         } else {
           throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ${JSON.stringify(dirname)}`);
         }
       } else if (typeof val === "object") {
-        this.mergeOptions(val);
+        onResolve && onResolve(val);
+        return val;
       } else {
-        throw new Error("todo");
+        throw new Error(`Unsupported preset format: ${val}.`);
       }
-    }
+    });
   }
 
   addIgnoreConfig(loc) {

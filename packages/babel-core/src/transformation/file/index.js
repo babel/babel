@@ -8,7 +8,6 @@ import * as metadataVisitor from "./metadata";
 import convertSourceMap from "convert-source-map";
 import OptionManager from "./options/option-manager";
 import type Pipeline from "../pipeline";
-import type Plugin from "../plugin";
 import PluginPass from "../plugin-pass";
 import shebangRegex from "shebang-regex";
 import { NodePath, Hub, Scope } from "babel-traverse";
@@ -61,8 +60,21 @@ export default class File extends Store {
 
     this.pluginVisitors = [];
     this.pluginPasses = [];
-    this.pluginStack = [];
-    this.buildPlugins();
+
+    // Plugins for top-level options.
+    this.buildPluginsForOptions(this.opts);
+
+    // If we are in the "pass per preset" mode, build
+    // also plugins for each preset.
+    if (this.opts.passPerPresset) {
+      // All the "per preset" options are inherited from the main options.
+      this.perPresetOpts = [];
+      this.opts.presets.forEach(presetOpts => {
+        let perPresetOpts = Object.assign(Object.create(this.opts), presetOpts);
+        this.perPresetOpts.push(perPresetOpts);
+        this.buildPluginsForOptions(perPresetOpts);
+      });
+    }
 
     this.metadata = {
       usedHelpers: [],
@@ -95,7 +107,6 @@ export default class File extends Store {
 
   pluginVisitors: Array<Object>;
   pluginPasses: Array<PluginPass>;
-  pluginStack: Array<Plugin>;
   pipeline: Pipeline;
   parserOpts: BabelParserOptions;
   log: Logger;
@@ -165,21 +176,29 @@ export default class File extends Store {
     return opts;
   }
 
-  buildPlugins() {
-    let plugins: Array<[PluginPass, Object]> = this.opts.plugins.concat(INTERNAL_PLUGINS);
+  buildPluginsForOptions(opts) {
+    if (!Array.isArray(opts.plugins)) {
+      return;
+    }
+
+    let plugins: Array<[PluginPass, Object]> = opts.plugins.concat(INTERNAL_PLUGINS);
+    let currentPluginVisitors = [];
+    let currentPluginPasses = [];
 
     // init plugins!
     for (let ref of plugins) {
       let [plugin, pluginOpts] = ref; // todo: fix - can't embed in loop head because of flow bug
 
-      this.pluginStack.push(plugin);
-      this.pluginVisitors.push(plugin.visitor);
-      this.pluginPasses.push(new PluginPass(this, plugin, pluginOpts));
+      currentPluginVisitors.push(plugin.visitor);
+      currentPluginPasses.push(new PluginPass(this, plugin, pluginOpts));
 
       if (plugin.manipulateOptions) {
-        plugin.manipulateOptions(this.opts, this.parserOpts, this);
+        plugin.manipulateOptions(opts, this.parserOpts, this);
       }
     }
+
+    this.pluginVisitors.push(currentPluginVisitors);
+    this.pluginPasses.push(currentPluginPasses);
   }
 
   getModuleName(): ?string {
@@ -419,11 +438,16 @@ export default class File extends Store {
   }
 
   transform(): BabelFileResult {
-    this.call("pre");
-    this.log.debug(`Start transform traverse`);
-    traverse(this.ast, traverse.visitors.merge(this.pluginVisitors, this.pluginPasses), this.scope);
-    this.log.debug(`End transform traverse`);
-    this.call("post");
+    // In the "pass per preset" mode, we have grouped passes.
+    // Otherwise, there is only one plain pluginPasses array.
+    this.pluginPasses.forEach((pluginPasses, index) => {
+      this.call("pre", pluginPasses);
+      this.log.debug(`Start transform traverse`);
+      traverse(this.ast, traverse.visitors.merge(this.pluginVisitors[index], pluginPasses), this.scope);
+      this.log.debug(`End transform traverse`);
+      this.call("post", pluginPasses);
+    });
+
     return this.generate();
   }
 
@@ -483,8 +507,8 @@ export default class File extends Store {
     return util.shouldIgnore(opts.filename, opts.ignore, opts.only);
   }
 
-  call(key: "pre" | "post") {
-    for (let pass of (this.pluginPasses: Array<PluginPass>)) {
+  call(key: "pre" | "post", pluginPasses: Array<PluginPass>) {
+    for (let pass of pluginPasses) {
       let plugin = pass.plugin;
       let fn = plugin[key];
       if (fn) fn.call(pass, this);
