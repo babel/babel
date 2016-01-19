@@ -139,7 +139,8 @@ export default class Buffer {
 
   _removeLast(cha: string) {
     if (!this._isLast(cha)) return;
-    this.buf = this.buf.substr(0, this.buf.length - 1);
+    this.buf = this.buf.slice(0, -1);
+    this.last = this.buf[this.buf.length - 1];
     this.position.unshift(cha);
   }
 
@@ -249,6 +250,7 @@ export default class Buffer {
 
     if (index === lastNewlineIndex) {
       this.buf = this.buf.substring(0, index + 1);
+      this.last = "\n";
     }
   }
 
@@ -301,6 +303,7 @@ export default class Buffer {
     //
     this.position.push(str);
     this.buf += str;
+    this.last = str[str.length - 1];
   }
 
   /**
@@ -325,8 +328,7 @@ export default class Buffer {
   }
 
   _isLast(cha: string) {
-    let buf = this.buf;
-    let last = buf[buf.length - 1];
+    let last = this.last;
 
     if (Array.isArray(cha)) {
       return cha.indexOf(last) >= 0;
