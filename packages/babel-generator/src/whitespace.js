@@ -17,7 +17,7 @@ export default class Whitespace {
     let endToken;
     let tokens = this.tokens;
 
-    let index = this.findToken(token => token.start - node.start, 0, tokens.length);
+    let index = this._findToken(token => token.start - node.start, 0, tokens.length);
     if (typeof index === "number") {
       while (index && node.start === tokens[index - 1].start) --index;
       startToken = tokens[index - 1];
@@ -36,7 +36,7 @@ export default class Whitespace {
     let endToken;
     let tokens = this.tokens;
 
-    let index = this.findToken(token => token.end - node.end, 0, tokens.length);
+    let index = this._findToken(token => token.end - node.end, 0, tokens.length);
     if (typeof index === "number") {
       while (index && node.end === tokens[index - 1].end) --index;
       startToken = tokens[index];
@@ -54,18 +54,6 @@ export default class Whitespace {
       } else {
         return lines;
       }
-    }
-  }
-
-  findToken(test, start, end) {
-    const middle = (start + end) >>> 1;
-    const match = test(this.tokens[middle]);
-    if (match < 0 && end > middle) {
-      return this.findToken(test, middle + 1, end);
-    } else if (match > 0 && start < middle) {
-      return this.findToken(test, start, middle);
-    } else if (match === 0) {
-      return middle;
     }
   }
 
@@ -88,5 +76,21 @@ export default class Whitespace {
     }
 
     return lines;
+  }
+
+  /**
+   * Find a token between start and end.
+   */
+
+  _findToken(test, start, end) {
+    const middle = (start + end) >>> 1;
+    const match = test(this.tokens[middle]);
+    if (match < 0 && end > middle) {
+      return this._findToken(test, middle + 1, end);
+    } else if (match > 0 && start < middle) {
+      return this._findToken(test, start, middle);
+    } else if (match === 0) {
+      return middle;
+    }
   }
 }
