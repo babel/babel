@@ -66,6 +66,12 @@ This is mostly overkill and you can limit the package to a select by using the `
 $ TEST_ONLY=babel-cli make test
 ```
 
+If you want to run tests with the debugger of node:
+
+```sh
+TEST_ONLY=babel-cli TEST_DEBUG=true make test
+```
+
 Use the `TEST_GREP` variable to run a subset of tests by name:
 
 ```sh
