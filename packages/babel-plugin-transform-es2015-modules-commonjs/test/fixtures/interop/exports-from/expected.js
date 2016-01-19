@@ -58,3 +58,9 @@ Object.defineProperty(exports, "bar", {
     return _foo.bar;
   }
 });
+Object.defineProperty(exports, "foo", {
+  enumerable: true,
+  get: function () {
+    return babelHelpers.interopRequireDefault(_foo).default;
+  }
+});
