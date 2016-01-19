@@ -183,5 +183,12 @@ module.exports = {
   moduleId: {
     description: "specify a custom name for module ids",
     type: "string"
+  },
+
+  keepModuleIdExtensions: {
+    type: "boolean",
+    default: false,
+    shorthand: "k",
+    description: "keep extensions when generating module ids"
   }
 };
