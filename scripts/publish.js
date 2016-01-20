@@ -123,7 +123,7 @@ function publish() {
 
   changedPackages.forEach(function (name) {
     var loc = getPackageLocation(name);
-    exec("cd " + loc + " && npm publish", true);
+    exec("cd " + loc + " && npm publish --tag old", true);
 
     // postpublish script
     var postPub = loc + "/scripts/postpublish.js";
