@@ -10,30 +10,39 @@
  *
  * becomes:
  *
- * <sometag __source={{fileName: 'this/file.js', lineNumber: 10}}/>
+ * var __jsxFileName = 'this/file.js';
+ * <sometag __source={{fileName: __jsxFileName, lineNumber: 10}}/>
  */
 
 
-import path from "path";
-
 const TRACE_ID = "__source";
+const FILE_NAME_VAR = "__jsxFileName";
 
 export default function ({ types: t }) {
-  function makeTrace(fileName, lineNumber) {
-    const fileNameLiteral = fileName != null ? t.stringLiteral(fileName) : t.nullLiteral();
+  function makeTrace(lineNumber) {
     const fileLineLiteral = lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
-    const fileNameProperty = t.objectProperty(t.identifier("fileName"), fileNameLiteral);
+    const fileNameProperty = t.objectProperty(t.identifier("fileName"), t.identifier(FILE_NAME_VAR));
     const lineNumberProperty = t.objectProperty(t.identifier("lineNumber"), fileLineLiteral);
     return t.objectExpression([fileNameProperty, lineNumberProperty]);
   }
 
+  function makeFileNameConst(fileName) {
+    const declaration = t.variableDeclarator(t.identifier(FILE_NAME_VAR), t.stringLiteral(fileName));
+    return t.variableDeclaration("var", [declaration]);
+  }
+
   let visitor = {
-    JSXOpeningElement(node, state) {
-      const id = t.jSXIdentifier(TRACE_ID);
-      const fileName = state.file.log.filename !== "unknown" 
-        ? path.relative(__dirname, state.file.log.filename) 
+    Program(node, state) {
+      const fileName = state.file.log.filename !== "unknown"
+        ? state.file.log.filename
         : null;
-      const trace = makeTrace(fileName, node.container.openingElement.loc.start.line);
+
+      node.container.program.body.unshift(makeFileNameConst(fileName));
+    },
+
+    JSXOpeningElement(node) {
+      const id = t.jSXIdentifier(TRACE_ID);
+      const trace = makeTrace(node.container.openingElement.loc.start.line);
 
       node.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
     }
