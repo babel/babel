@@ -4,8 +4,11 @@ import { TokContext, types as tc } from "../../tokenizer/context";
 import Parser from "../../parser";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
 import { SourceLocation, Position } from "../../util/location";
+import mediaQueries from "./mediaQueries";
 
 let pp = Parser.prototype;
+
+mediaQueries(pp);
 
 tc.cssx = new TokContext('cssx');
 tc.cssxSelector = new TokContext('cssxSelector');
@@ -71,7 +74,10 @@ export default function CSSX(instance) {
   instance.extend('parseStatement', function (inner) {
     return function (declaration, topLevel) {
       if (this.match(tt.cssxSelector)) {
-        return this.cssxParseElement(this.state);
+        if (this.cssxIsMediaQuery()) {
+          return this.cssxParseMediaQueryElement();
+        }
+        return this.cssxParseElement();
       }
       return inner.call(this, declaration, topLevel)
     }
@@ -97,7 +103,7 @@ export default function CSSX(instance) {
           if (this.state.pos >= this.input.length) this.finishToken(tt.eof);
         }
         blockStmtNode.body = rules;
-        lastToken = this.getPreviousToken();
+        lastToken = this.cssxGetPreviousToken();
         return this.finishNodeAt(
           blockStmtNode, 'CSSXRules', lastToken.end, lastToken.loc.end
         );
@@ -114,12 +120,12 @@ export default function CSSX(instance) {
 
       if (this.isLookahead) return fallback();
 
-      if (this.match(tt.cssxSelector) && this.matchNextToken(tt.braceL)) {
+      if (this.match(tt.cssxSelector) && this.cssxMatchNextToken(tt.braceL)) {
         ++this.state.pos;
         return this.finishToken(tt.cssxRulesStart);
       } else if (this.match(tt.cssxRulesStart)) {
         // no styles
-        if (this.matchNextToken(tt.braceR)) {
+        if (this.cssxMatchNextToken(tt.braceR)) {
           return this.cssxStoreNextCharAsToken(tt.cssxRulesEnd);
         } else {
           return this.finishToken(tt.cssxRulesStart);
@@ -131,13 +137,16 @@ export default function CSSX(instance) {
       } else if (this.match(tt.cssxValue) && code === 59) { // 59 = ;
         this.cssxStoreNextCharAsToken(tt.semi);
         // eding with semicolon
-        if (this.matchNextToken(tt.braceR)) {
+        if (this.cssxMatchNextToken(tt.braceR)) {
           this.cssxStoreNextCharAsToken(tt.cssxRulesEnd);
         }
         return;
-      } else if (this.match(tt.cssxValue) && this.matchNextToken(tt.braceR)) {
+      } else if (this.match(tt.cssxValue) && this.cssxMatchNextToken(tt.braceR)) {
         // ending without semicolon
         return this.cssxStoreNextCharAsToken(tt.cssxRulesEnd);
+      } else if (this.match(tt.cssxRulesEnd) && context === tt.cssxMediaQuery) {
+        // end of media query
+        return;
       }
 
       // entry point
@@ -200,43 +209,30 @@ export default function CSSX(instance) {
 
 pp.cssxEntryPoint = function (code) {
   return (
-    this.matchNextToken(tt.name, tt.braceL) ||
-    this.matchNextToken(tt.name, tt.name) ||
-    this.matchNextToken(tt.star) && this.state.exprAllowed ||
-    this.matchNextToken(tt.dot, tt.name) ||
-    this.matchNextToken(tt.dot, tt._class) ||
-    this.matchNextToken(tt.name, tt.colon) ||
-    this.matchNextToken(tt.name, tt.bracketL) ||
-    this.matchNextToken(tt.name, tt.bracketR) ||
-    this.matchNextToken(tt.name, tt.prefix) ||
-    this.matchNextToken(tt.name, tt.relational) ||
-    this.matchNextToken(tt.name, tt.plusMin) ||
-    this.matchNextToken(tt.name, tt.string) ||
-    this.matchNextToken(tt.name, tt.dot) ||
-    this.match(tt.cssxSelector) && this.matchNextToken(tt.string) ||
-    code === 35 && this.matchNextToken(tt.string, tt.name)
+    this.cssxMatchNextToken(tt.name, tt.braceL) ||
+    this.cssxMatchNextToken(tt.name, tt.name) ||
+    this.cssxMatchNextToken(tt.star) && this.state.exprAllowed ||
+    this.cssxMatchNextToken(tt.dot, tt.name) ||
+    this.cssxMatchNextToken(tt.dot, tt._class) ||
+    this.cssxMatchNextToken(tt.name, tt.colon) ||
+    this.cssxMatchNextToken(tt.name, tt.bracketL) ||
+    this.cssxMatchNextToken(tt.name, tt.bracketR) ||
+    this.cssxMatchNextToken(tt.name, tt.prefix) ||
+    this.cssxMatchNextToken(tt.name, tt.relational) ||
+    this.cssxMatchNextToken(tt.name, tt.plusMin) ||
+    this.cssxMatchNextToken(tt.name, tt.string) ||
+    this.cssxMatchNextToken(tt.name, tt.dot) ||
+    this.cssxMatchNextToken(tt.at, tt.name) ||
+    code === 35 && this.cssxMatchNextToken(tt.string, tt.name) || // #E
+    this.match(tt.cssxSelector) && this.cssxMatchNextToken(tt.string)
   );
 };
 
-pp.cssxReadSelector = function (lastToken) {
-  let startLoc, pos, value, node;
-
-  this.state.context.push(tc.cssxSelector);
-
-  startLoc = this.state.curPosition();
-  pos = this.state.pos;
-  value = this.cssxReadWord(pp.cssxReadSelectorCharUntil); // changes state.pos
-
-  this.state.startLoc = startLoc;
-  this.state.start = pos;
-  this.finishToken(tt.cssxSelector, value);
-  this.skipSpace();
-};
-
 pp.cssxParseElement = function() {
-  let elementNode = this.startNodeAt(this.state.start, this.state.startLoc);
-  let selectorNode = this.startNodeAt(this.state.start, this.state.startLoc);
-  let result, lastToken;
+  let elementNode, selectorNode, result, lastToken;
+
+  elementNode = this.startNodeAt(this.state.start, this.state.startLoc);
+  selectorNode = this.startNodeAt(this.state.start, this.state.startLoc);
   
   selectorNode.value = this.state.value;  
   elementNode.selector = this.finishNodeAt(
@@ -244,7 +240,7 @@ pp.cssxParseElement = function() {
   );
   this.next();
   elementNode.body = this.parseBlock();
-  lastToken = this.getPreviousToken();
+  lastToken = this.cssxGetPreviousToken();
   result = this.finishNodeAt(elementNode, 'CSSXElement', lastToken.end, lastToken.loc.end);
   this.nextToken();
   return result;
@@ -254,13 +250,13 @@ pp.cssxReadWord = function (readUntil) {
   let word = '';
   let first = true;
   let chunkStart, cut;
-  let readingDataURI;
+  let readingDataURI = false;
   let dataURIPattern = ['url(data:', 41]; // 41 = )
 
   chunkStart = this.state.pos;
   cut = () => this.input.slice(chunkStart, this.state.pos);
-
   this.state.containsEsc = false;
+
   while (this.state.pos < this.input.length) {
     let ch = this.fullCharCodeAtPos();
     if (cut() === dataURIPattern[0]) readingDataURI = true;
@@ -297,6 +293,21 @@ pp.cssxReadWord = function (readUntil) {
   }
   word = word + cut();
   return word;
+};
+
+pp.cssxReadSelector = function (lastToken) {
+  let startLoc, pos, value, node;
+
+  this.state.context.push(tc.cssxSelector);
+
+  startLoc = this.state.curPosition();
+  pos = this.state.pos;
+  value = this.cssxClearSpaceAtTheEnd(this.cssxReadWord(pp.cssxReadSelectorCharUntil));
+
+  this.state.startLoc = startLoc;
+  this.state.start = pos;
+  this.finishToken(tt.cssxSelector, value);
+  this.skipSpace();
 };
 
 pp.cssxReadProperty = function() {
@@ -342,9 +353,9 @@ pp.cssxReadValue = function() {
 pp.cssxBuildRuleNode = function (propertyNode, valueNode) {
   var node = this.startNodeAt(propertyNode.start, propertyNode.loc.start);
   var pos = valueNode.end;
-  var locEnd = this.clonePosition(valueNode.loc.end);
+  var locEnd = this.cssxClonePosition(valueNode.loc.end);
 
-  if (this.match(tt.semi) || (this.match(tt.cssxRulesEnd) && this.matchPreviousToken(tt.semi, 1))) {
+  if (this.match(tt.semi) || (this.match(tt.cssxRulesEnd) && this.cssxMatchPreviousToken(tt.semi, 1))) {
    ++locEnd.column;
    ++pos;
   }
@@ -400,10 +411,12 @@ pp.cssxSyncLocPropsToCurPos = function (p) {
 };
 
 pp.cssxReadSelectorCharUntil = function (code) {
-  if (code === 32 && this.matchNextToken(tt.braceL)) {
+  if (CSSXSelectorAllowedCodes.indexOf(code) >= 0 || isNumber(code)) { // check for allow characters
+    return true;
+  } else if (code === 123) { // end the selector with {
     return false;
   }
-  return CSSXSelectorAllowedCodes.indexOf(code) >= 0 ? true : isIdentifierChar(code);
+  return isIdentifierChar(code);
 };
 
 pp.cssxReadValueCharUntil = function (code) {
@@ -416,18 +429,18 @@ pp.cssxReadPropCharUntil = function (code) {
 
 // utilities
 
-pp.getPreviousToken = function (steps=0) {
+pp.cssxGetPreviousToken = function (steps=0) {
   return this.state.tokens[this.state.tokens.length - (steps+1)];
 };
 
-pp.matchPreviousToken = function (type, step) {
-  let previous = this.getPreviousToken(step);
+pp.cssxMatchPreviousToken = function (type, step) {
+  let previous = this.cssxGetPreviousToken(step);
 
   if (previous && previous.type === type) return true;
   return false;
 };
 
-pp.matchNextToken = function () {
+pp.cssxMatchNextToken = function () {
   let next, nextA, nextB, old;
 
   if (arguments.length === 1) {
@@ -455,35 +468,7 @@ pp.matchNextToken = function () {
   }
 };
 
-pp.matchOneOfThose = function (assumtion, compareTo) {
-  var c = compareTo || this.state;
-  for(let i=0; i<assumtion.length; i++) {
-    if (c.type === assumtion[i]) return true;
-  }
-  return false;
-};
-
-pp.charAtPos = function () {
-  return String.fromCharCode(this.fullCharCodeAtPos());
-};
-
-pp.printTokens = function () {
-  this.state.tokens.forEach(t => {
-    console.log(t.type.label + ' value=' + t.value);
-  });
-};
-
-pp.printContext = function () {
-  this.state.context.forEach(c => {
-    console.log(c.token);
-  });
-};
-
-pp.printSoFar = function () {
-  console.log('"' + this.state.input.substr(0, this.state.pos) + '"');
-};
-
-pp.clonePosition = function (loc) {
+pp.cssxClonePosition = function (loc) {
   return {
     line: loc.line,
     column: loc.column
@@ -495,6 +480,28 @@ pp.cssxDebugComments = function (comments) {
   return JSON.stringify(comments.map(function (c) {
     return { type: c.type, value: c.value };
   }));
+};
+
+pp.cssxClearSpaceAtTheEnd = function (value) {
+  if (value.charAt(value.length-1) === ' ') {
+    --this.state.pos;
+    return value.substr(0, value.length-1);
+  }
+  return value;
+};
+
+pp.finishTokenAt = function (type, val, pos, loc) {
+  this.state.end = pos;
+  this.state.endLoc = loc;
+  let prevType = this.state.type;
+  this.state.type = type;
+  this.state.value = val;
+
+  this.updateContext(prevType);
+};
+
+pp.replaceCurrentTokenType = function (type) {
+  this.state.type = type;
 };
 
 // utilities that are not babylon specific
@@ -517,6 +524,10 @@ function posToLoc (pos, input) {
   }
   return { line, column: linePos };
 };
+
+function isNumber(code) {
+  return code > 47 && code < 58;
+}
 
 
 /* watchers

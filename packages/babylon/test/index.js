@@ -12,13 +12,13 @@ var ignore = [
   'harmony',
   'jsx'
 ];
-var writeResultedJSONIfFail = true;
-var checkStartEndPosToLoc = true;
-// var onlyTitle = '27';
+var writeResultedJSONIfFail = true; // if the test fail write a .result file in the same folder
+var checkStartEndPosToLoc = true; // verify that start and end props match the info under loc prop
+// var runOnly = 'media queries 2'; // separated by comma
 
 // var writeResultedJSONIfFail = false;
 // var checkStartEndPosToLoc = false;
-// var onlyTitle = undefined;
+// var runOnly = undefined;
 // var ignore = [];
 
 var fixtures = getFixtures(__dirname + "/fixtures", ignore);
@@ -27,8 +27,8 @@ _.each(fixtures, function (suites, name) {
   _.each(suites, function (testSuite) {
     suite(name + "/" + testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
+        if (ifSkip(task)) return;
         test(task.title, !task.disabled && function () {
-          if (typeof onlyTitle !== 'undefined' && onlyTitle.split(',').indexOf(task.title) < 0) return;
           try {
             return runTest(task);
           } catch (err) {
@@ -194,10 +194,14 @@ function locToPos(input, startLoc, endLoc) {
 
 function writeResultedJSON(test, ast) {
   fs.writeFileSync(test.expect.loc + '.result', JSON.stringify(ast, null, "  "));
-}
+};
 
 function clearResultedJSON(test) {
   if (fs.existsSync(test.expect.loc + '.result')) {
     fs.unlinkSync(test.expect.loc + '.result');
   }
-}
+};
+
+function ifSkip(task) {
+  return typeof runOnly !== 'undefined' && runOnly.split(',').indexOf(task.title) < 0;
+};
