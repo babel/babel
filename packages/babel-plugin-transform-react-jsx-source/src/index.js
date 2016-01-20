@@ -26,27 +26,25 @@ export default function ({ types: t }) {
     return t.objectExpression([fileNameProperty, lineNumberProperty]);
   }
 
-  let jsxVisitor = {
-    JSXOpeningElement(node) {
+  let visitor = {
+    JSXOpeningElement(node, state) {
+      if (!state.fileNameIdentifier) {
+        const fileName = state.file.log.filename !== "unknown"
+          ? state.file.log.filename
+          : null;
+
+        const fileNameIdentifier = node.scope.generateUidIdentifier(FILE_NAME_VAR);
+        node.hub.file.scope.push({id: fileNameIdentifier, init: t.stringLiteral(fileName)});
+        state.fileNameIdentifier = fileNameIdentifier;
+      }
+
       const id = t.jSXIdentifier(TRACE_ID);
       const location = node.container.openingElement.loc; // undefined for generated elements
       if (location) {
-        const trace = makeTrace(this.fileNameIdentifier, location.start.line);
+        const trace = makeTrace(state.fileNameIdentifier, location.start.line);
         node.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
       }
     }
-  };
-
-  let visitor = {
-    Program(node, state) {
-      const fileName = state.file.log.filename !== "unknown"
-        ? state.file.log.filename
-        : null;
-
-      const fileNameIdentifier = node.scope.generateUidIdentifier(FILE_NAME_VAR);
-      node.scope.push({id: fileNameIdentifier, init: t.stringLiteral(fileName)});
-      node.traverse(jsxVisitor, {fileNameIdentifier});
-    },
   };
 
   return {

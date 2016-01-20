@@ -1,14 +1,14 @@
-var res = transform(
+var actual = transform(
   'var x = <sometag />',
   Object.assign({}, opts, { filename: '/fake/path/mock.js' })
-);
+).code;
 
 var expected = multiline([
-  'var __jsxFileName = "/fake/path/mock.js";',
+  'var _jsxFileName = "/fake/path/mock.js";',
   'var x = <sometag __source={{',
-  '  fileName: __jsxFileName,',
+  '  fileName: _jsxFileName,',
   '  lineNumber: 1',
   '}} />;',
 ]);
 
-assert.equal(expected, res.code);
+assert.equal(actual, expected);
