@@ -16,8 +16,10 @@ let buildWrapper = template(`
 
 let arrowBuildWrapper =  template(`
   (() => {
-    var ref = FUNCTION;
-    return (PARAMS) => ref.apply(this, arguments);
+    var ref = FUNCTION, _this = this;
+    return function(PARAMS) {
+      return ref.apply(_this, arguments);
+    };
   })
 `);
 
