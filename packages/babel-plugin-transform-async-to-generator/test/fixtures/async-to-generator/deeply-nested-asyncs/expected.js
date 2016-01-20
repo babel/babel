@@ -1,25 +1,34 @@
 let s = function () {
   var ref = babelHelpers.asyncToGenerator(function* (x) {
     let t = (() => {
-      var _this2 = this;
+      var _this3 = this;
 
-      var ref = babelHelpers.asyncToGenerator(function* (y) {
+      var ref = babelHelpers.asyncToGenerator(function* (y, a) {
         let r = (() => {
-          var _this = this;
+          var _this2 = this;
 
-          var ref = babelHelpers.asyncToGenerator(function* (z) {
+          var ref = babelHelpers.asyncToGenerator(function* (z, b) {
             yield z;
-            return _this.x;
-          });
-          return _x3 => ref.apply(this, arguments);
-        })();
-        yield r;
+            return _this2.x;
+          }),
+              _this = this;
 
-        return _this2.g(r);
-      });
-      return _x2 => ref.apply(this, arguments);
+          return function r(_x4, _x5) {
+            return ref.apply(_this, arguments);
+          };
+        })();
+        yield r();
+
+        return _this3.g(r);
+      }),
+          _this = this;
+
+      return function t(_x2, _x3) {
+        return ref.apply(_this, arguments);
+      };
     })();
-    yield t;
+
+    yield t();
     return this.h(t);
   });
   return function s(_x) {
