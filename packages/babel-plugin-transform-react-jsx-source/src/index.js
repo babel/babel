@@ -16,20 +16,26 @@
 
 
 const TRACE_ID = "__source";
-const FILE_NAME_VAR = "__jsxFileName";
+const FILE_NAME_VAR = "_jsxFileName";
 
 export default function ({ types: t }) {
-  function makeTrace(lineNumber) {
+  function makeTrace(fileNameIdentifier, lineNumber) {
     const fileLineLiteral = lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
-    const fileNameProperty = t.objectProperty(t.identifier("fileName"), t.identifier(FILE_NAME_VAR));
+    const fileNameProperty = t.objectProperty(t.identifier("fileName"), fileNameIdentifier);
     const lineNumberProperty = t.objectProperty(t.identifier("lineNumber"), fileLineLiteral);
     return t.objectExpression([fileNameProperty, lineNumberProperty]);
   }
 
-  function makeFileNameConst(fileName) {
-    const declaration = t.variableDeclarator(t.identifier(FILE_NAME_VAR), t.stringLiteral(fileName));
-    return t.variableDeclaration("var", [declaration]);
-  }
+  let jsxVisitor = {
+    JSXOpeningElement(node) {
+      const id = t.jSXIdentifier(TRACE_ID);
+      const location = node.container.openingElement.loc; // undefined for generated elements
+      if (location) {
+        const trace = makeTrace(this.fileNameIdentifier, location.start.line);
+        node.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
+      }
+    }
+  };
 
   let visitor = {
     Program(node, state) {
@@ -37,17 +43,10 @@ export default function ({ types: t }) {
         ? state.file.log.filename
         : null;
 
-      node.container.program.body.unshift(makeFileNameConst(fileName));
+      const fileNameIdentifier = node.scope.generateUidIdentifier(FILE_NAME_VAR);
+      node.scope.push({id: fileNameIdentifier, init: t.stringLiteral(fileName)});
+      node.traverse(jsxVisitor, {fileNameIdentifier});
     },
-
-    JSXOpeningElement(node) {
-      const id = t.jSXIdentifier(TRACE_ID);
-      const location = node.container.openingElement.loc; // undefined for generated elements
-      if (location) {
-        const trace = makeTrace(location.start.line);
-        node.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
-      }
-    }
   };
 
   return {
