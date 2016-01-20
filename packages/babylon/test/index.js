@@ -14,7 +14,7 @@ var ignore = [
 ];
 var writeResultedJSONIfFail = true; // if the test fail write a .result file in the same folder
 var checkStartEndPosToLoc = true; // verify that start and end props match the info under loc prop
-// var runOnly = 'media queries 2'; // separated by comma
+// var runOnly = 'media queries 4'; // separated by comma
 
 // var writeResultedJSONIfFail = false;
 // var checkStartEndPosToLoc = false;
