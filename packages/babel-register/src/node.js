@@ -27,11 +27,12 @@ sourceMapSupport.install({
 
 registerCache.load();
 let cache = registerCache.get();
+let babelrcOpts = new OptionManager().init({});
 
 let transformOpts = {};
 
-let ignore;
-let only;
+let ignore = babelrcOpts.ignore;
+let only = babelrcOpts.only;
 
 let oldHandlers   = {};
 let maps          = {};
