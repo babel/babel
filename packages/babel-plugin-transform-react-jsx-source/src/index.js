@@ -42,9 +42,11 @@ export default function ({ types: t }) {
 
     JSXOpeningElement(node) {
       const id = t.jSXIdentifier(TRACE_ID);
-      const trace = makeTrace(node.container.openingElement.loc.start.line);
-
-      node.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
+      const location = node.container.openingElement.loc; // undefined for generated elements
+      if (location) {
+        const trace = makeTrace(location.start.line);
+        node.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
+      }
     }
   };
 
