@@ -66,7 +66,7 @@ export default class File extends Store {
 
     // If we are in the "pass per preset" mode, build
     // also plugins for each preset.
-    if (this.opts.passPerPresset) {
+    if (this.opts.passPerPreset) {
       // All the "per preset" options are inherited from the main options.
       this.perPresetOpts = [];
       this.opts.presets.forEach(presetOpts => {

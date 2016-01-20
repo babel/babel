@@ -185,9 +185,10 @@ module.exports = {
     type: "string"
   },
 
-  passPerPresset: {
+  passPerPreset: {
     description: "Whether to spawn a traversal pass per a preset. By default all presets are merged.",
     type: "boolean",
-    default: false
+    default: false,
+    hidden: true,
   },
 };

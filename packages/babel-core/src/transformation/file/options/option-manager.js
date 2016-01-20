@@ -157,22 +157,23 @@ export default class OptionManager {
       throw err;
     }
 
-    this.mergeOptions(opts, loc, null, path.dirname(loc));
+    this.mergeOptions(opts, this.options, loc, null, path.dirname(loc));
     this.resolvedConfigs.push(loc);
 
     return !!opts;
   }
 
   /**
-   * This is called when we want to merge the input `opts` into our
-   * base options.
+   * This is called when we want to merge the input `opts` into the
+   * base options (passed as the `extendingOpts`: at top-level it's the
+   * main options, at presets level it's presets options).
    *
    *  - `alias` is used to output pretty traces back to the original source.
    *  - `loc` is used to point to the original config.
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(rawOpts?: Object, alias: string = "foreign", loc?: string, dirname?: string) {
+  mergeOptions(rawOpts?: Object, extendingOpts?: Object, alias: string = "foreign", loc?: string, dirname?: string) {
     if (!rawOpts) return;
 
     //
@@ -223,11 +224,9 @@ export default class OptionManager {
     if (opts.presets) {
       // If we're in the "pass per preset" mode, we resolve the presets
       // and keep them for further execution to calculate the options.
-      if (opts.passPerPresset) {
+      if (opts.passPerPreset) {
         opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
-          if (preset.plugins) {
-            preset.plugins = OptionManager.normalisePlugins(presetLoc, dirname, preset.plugins);
-          }
+          this.mergeOptions(preset, preset, presetLoc, presetLoc, dirname);
         });
       } else {
         // Otherwise, just merge presets options into the main options.
@@ -244,11 +243,17 @@ export default class OptionManager {
       delete opts.env;
     }
 
-    // merge them into this current files options
-    merge(this.options, opts);
+    // Merge them into current extending options in case of top-level
+    // options. In case of presets, just re-assign options which are got
+    // normalized during the `mergeOptions`.
+    if (rawOpts !== extendingOpts) {
+      merge(extendingOpts, opts);
+    } else {
+      Object.assign(extendingOpts, opts);
+    }
 
     // merge in env options
-    this.mergeOptions(envOpts, `${alias}.env.${envKey}`, null, dirname);
+    this.mergeOptions(envOpts, extendingOpts, `${alias}.env.${envKey}`, null, dirname);
   }
 
   /**
@@ -259,6 +264,7 @@ export default class OptionManager {
     this.resolvePresets(presets, dirname, (presetOpts, presetLoc) => {
       this.mergeOptions(
         presetOpts,
+        this.options,
         presetLoc,
         presetLoc,
         path.dirname(presetLoc)
@@ -298,7 +304,7 @@ export default class OptionManager {
       .map((line) => line.replace(/#(.*?)$/, "").trim())
       .filter((line) => !!line);
 
-    this.mergeOptions({ ignore: lines }, loc);
+    this.mergeOptions({ ignore: lines }, this.options, loc);
   }
 
   findConfigs(loc) {
@@ -365,7 +371,7 @@ export default class OptionManager {
     }
 
     // merge in base options
-    this.mergeOptions(opts, "base", null, filename && path.dirname(filename));
+    this.mergeOptions(opts, this.options, "base", null, filename && path.dirname(filename));
 
     // normalise
     this.normaliseOptions(opts);
