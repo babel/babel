@@ -82,9 +82,9 @@ export default class Whitespace {
    * Find a token between start and end.
    */
 
-  _findToken(test, start, end) {
+  _findToken(test: Function, start: number, end: number): ?number {
     const middle = (start + end) >>> 1;
-    const match = test(this.tokens[middle]);
+    const match: number = test(this.tokens[middle]);
     if (match < 0 && end > middle) {
       return this._findToken(test, middle + 1, end);
     } else if (match > 0 && start < middle) {
