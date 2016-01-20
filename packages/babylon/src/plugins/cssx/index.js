@@ -183,8 +183,7 @@ export default function CSSX(instance) {
         }
         this.cssxIn();
         this.cssxReadSelector();
-        node = this.cssxParseElement(this.state);
-        this.next();
+        node = this.cssxParseExpression();
         return node;
       }
 
@@ -226,6 +225,26 @@ pp.cssxEntryPoint = function (code) {
     code === 35 && this.cssxMatchNextToken(tt.string, tt.name) || // #E
     this.match(tt.cssxSelector) && this.cssxMatchNextToken(tt.string)
   );
+};
+
+pp.cssxParseExpression = function () {
+  let exprNode, lastToken, result;
+
+  lastToken = this.cssxGetPreviousToken();
+  exprNode = this.startNodeAt(lastToken.start, lastToken.loc.start);
+  exprNode.body = [];
+
+  while(this.match(tt.cssxSelector)) {
+    if (this.cssxIsMediaQuery()) {
+      exprNode.body.push(this.cssxParseMediaQueryElement());
+    } else {
+      exprNode.body.push(this.cssxParseElement());
+    }
+  }
+
+  result = this.finishNodeAt(exprNode, 'CSSXExpression', this.state.end, this.state.endLoc);
+  this.next();
+  return result;
 };
 
 pp.cssxParseElement = function() {

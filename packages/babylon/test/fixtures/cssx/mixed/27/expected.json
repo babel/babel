@@ -74,99 +74,116 @@
               "name": "a"
             },
             "init": {
-              "type": "CSSXElement",
-              "start": 12,
-              "end": 43,
+              "type": "CSSXExpression",
+              "start": 8,
+              "end": 45,
               "loc": {
                 "start": {
-                  "line": 2,
-                  "column": 2
+                  "line": 1,
+                  "column": 8
                 },
                 "end": {
-                  "line": 4,
-                  "column": 3
+                  "line": 5,
+                  "column": 1
                 }
               },
-              "selector": {
-                "type": "CSSXSelector",
-                "start": 12,
-                "end": 16,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 2
+              "body": [
+                {
+                  "type": "CSSXElement",
+                  "start": 12,
+                  "end": 43,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 3
+                    }
                   },
-                  "end": {
-                    "line": 2,
-                    "column": 6
-                  }
-                },
-                "value": "body"
-              },
-              "body": {
-                "type": "CSSXRules",
-                "start": 17,
-                "end": 43,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 7
-                  },
-                  "end": {
-                    "line": 4,
-                    "column": 3
-                  }
-                },
-                "body": [
-                  {
-                    "type": "CSSXRule",
-                    "start": 23,
-                    "end": 39,
+                  "selector": {
+                    "type": "CSSXSelector",
+                    "start": 12,
+                    "end": 16,
                     "loc": {
                       "start": {
-                        "line": 3,
-                        "column": 4
+                        "line": 2,
+                        "column": 2
                       },
                       "end": {
-                        "line": 3,
-                        "column": 20
+                        "line": 2,
+                        "column": 6
                       }
                     },
-                    "label": {
-                      "type": "CSSXProperty",
-                      "start": 23,
-                      "end": 32,
-                      "loc": {
-                        "start": {
-                          "line": 3,
-                          "column": 4
-                        },
-                        "end": {
-                          "line": 3,
-                          "column": 13
-                        }
+                    "value": "body"
+                  },
+                  "body": {
+                    "type": "CSSXRules",
+                    "start": 17,
+                    "end": 43,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 7
                       },
-                      "name": "font-size"
+                      "end": {
+                        "line": 4,
+                        "column": 3
+                      }
                     },
-                    "body": {
-                      "type": "CSSXValue",
-                      "start": 34,
-                      "end": 38,
-                      "loc": {
-                        "start": {
-                          "line": 3,
-                          "column": 15
+                    "body": [
+                      {
+                        "type": "CSSXRule",
+                        "start": 23,
+                        "end": 39,
+                        "loc": {
+                          "start": {
+                            "line": 3,
+                            "column": 4
+                          },
+                          "end": {
+                            "line": 3,
+                            "column": 20
+                          }
                         },
-                        "end": {
-                          "line": 3,
-                          "column": 19
+                        "label": {
+                          "type": "CSSXProperty",
+                          "start": 23,
+                          "end": 32,
+                          "loc": {
+                            "start": {
+                              "line": 3,
+                              "column": 4
+                            },
+                            "end": {
+                              "line": 3,
+                              "column": 13
+                            }
+                          },
+                          "name": "font-size"
+                        },
+                        "body": {
+                          "type": "CSSXValue",
+                          "start": 34,
+                          "end": 38,
+                          "loc": {
+                            "start": {
+                              "line": 3,
+                              "column": 15
+                            },
+                            "end": {
+                              "line": 3,
+                              "column": 19
+                            }
+                          },
+                          "name": "20px"
                         }
-                      },
-                      "name": "20px"
-                    }
+                      }
+                    ]
                   }
-                ]
-              }
+                }
+              ]
             }
           }
         ],
