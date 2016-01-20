@@ -8,8 +8,8 @@ import * as t from "babel-types";
 let buildWrapper = template(`
   (function () {
     var ref = FUNCTION;
-    return function (PARAMS) {
-      return ref.apply(this, arguments);
+    return function (...PARAMS) {
+      return ref.apply(this, PARAMS);
     };
   })
 `);
@@ -17,7 +17,7 @@ let buildWrapper = template(`
 let arrowBuildWrapper =  template(`
   (() => {
     var ref = FUNCTION;
-    return (PARAMS) => ref.apply(this, arguments);
+    return (...PARAMS) => ref.apply(this, PARAMS);
   })
 `);
 
@@ -77,7 +77,7 @@ function plainFunction(path: NodePath, callId: Object) {
   let built = t.callExpression(callId, [node]);
   let container = wrapper({
     FUNCTION: built,
-    PARAMS: node.params.map(() => path.scope.generateUidIdentifier("x"))
+    PARAMS: path.scope.generateUidIdentifier("x")
   }).expression;
 
   let retFunction = container.body.body[1].argument;
