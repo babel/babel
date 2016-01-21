@@ -9,7 +9,7 @@ import "./mediaqueries";
 import "./parsers";
 import "./readers";
 import "./builders";
-import "./utilitiescssx";
+import "./helpers";
 
 const pp = Parser.prototype;
 
@@ -118,7 +118,6 @@ export default function CSSX(instance) {
 
   instance.extend("parseExprAtom", function(inner) {
     return function(refShortHandDefaultPos) {
-      var node;
 
       if (this.cssxEntryPoint()) {
         if (this.match(tt.parenL)) {
@@ -127,8 +126,7 @@ export default function CSSX(instance) {
         }
         this.cssxIn();
         this.cssxReadSelector();
-        node = this.cssxParseExpression();
-        return node;
+        return this.cssxParseExpression();
       }
 
       return inner.call(this, refShortHandDefaultPos);
@@ -171,7 +169,7 @@ pp.cssxEntryPoint = function (code) {
   );
 };
 
-/* watchers
+/* useful watchers
 
 watch('this.state.type.label'),watch('this.state.pos'),watch('this.state.start'),watch('this.state.end'),watch('this.state.startLoc'),watch('this.state.endLoc'),watch('this.state.input.substr(0, this.state.pos)'),watch('this.curContext().token'),watch('this.lookahead().type.label')
 

@@ -101,7 +101,7 @@ pp.cssxReadValue = function() {
 
   startLoc = this.state.curPosition();
   pos = this.state.pos;
-  value = this.cssxReadWord(pp.cssxReadValueCharUntil); // changes state.pos
+  value = this.cssxClearSpaceAtTheEnd(this.cssxReadWord(pp.cssxReadValueCharUntil)); // changes state.pos
 
   // if value is a string like \"<something here>\"
   if (value.charAt(0) === '"' && value.charAt(value.length-1) === '"') {

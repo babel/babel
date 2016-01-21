@@ -73,7 +73,7 @@ pp.cssxClearSpaceAtTheEnd = function (value) {
   return value;
 };
 
-pp.finishTokenAt = function (type, val, pos, loc) {
+pp.cssxFinishTokenAt = function (type, val, pos, loc) {
   this.state.end = pos;
   this.state.endLoc = loc;
   let prevType = this.state.type;

@@ -47,7 +47,7 @@ pp.cssxParseMediaQueryElement = function () {
   mediaQueryElement = this.startNodeAt(this.state.start, this.state.startLoc);
   mediaQueryElement.query = this.state.value;
   this.cssxMediaQueryIn();
-  this.finishTokenAt(tt.cssxMediaQuery, this.state.value, this.state.end, this.state.endLoc);
+  this.cssxFinishTokenAt(tt.cssxMediaQuery, this.state.value, this.state.end, this.state.endLoc);
   
   if (!this.cssxMatchNextToken(tt.braceL)) {
     this.raise(this.state.pos, "Expected { after query definition");
