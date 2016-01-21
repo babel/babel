@@ -57,7 +57,7 @@ suite("api", function () {
             plugins: [
               new Plugin({
                 visitor: {
-                  Function(path) {
+                  Function: function(path) {
                     var node = path.node;
                     var scope = path.scope;
 
