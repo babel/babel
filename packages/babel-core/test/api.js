@@ -4,6 +4,7 @@ var Pipeline             = require("../lib/transformation/pipeline");
 var sourceMap            = require("source-map");
 var assert               = require("assert");
 var File                 = require("../lib/transformation/file").default;
+var Plugin               = require("../lib/transformation/plugin");
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
@@ -42,6 +43,89 @@ suite("api", function () {
     }).then(function (result) {
       assert.ok(result.options.plugins[0][0].manipulateOptions.toString().indexOf("jsx") >= 0);
     });
+  });
+
+  test("pass per preset", function () {
+    var aliasBaseType = null;
+
+    function execTest(passPerPreset) {
+      return babel.transform('type Foo = number; let x = (y): Foo => y;', {
+        passPerPreset: passPerPreset,
+        presets: [
+          // First preset with our plugin, "before"
+          {
+            plugins: [
+              new Plugin({
+                visitor: {
+                  Function(path) {
+                    var node = path.node;
+                    var scope = path.scope;
+
+                    var alias = scope
+                      .getProgramParent()
+                      .getBinding(node.returnType.typeAnnotation.id.name)
+                      .path
+                      .node;
+
+                    // In case of `passPerPreset` being `false`, the
+                    // alias node is already removed by Flow plugin.
+                    if (!alias) {
+                      return;
+                    }
+
+                    // In case of `passPerPreset` being `true`, the
+                    // alias node should still exist.
+                    aliasBaseType = alias.right.type; // NumberTypeAnnotation
+                  }
+                }
+              })
+            ]
+          },
+
+          // ES2015 preset
+          require(__dirname + "/../../babel-preset-es2015"),
+
+          // Third preset for Flow.
+          {
+            plugins: [
+              require(__dirname + "/../../babel-plugin-syntax-flow"),
+              require(__dirname + "/../../babel-plugin-transform-flow-strip-types"),
+            ]
+          }
+        ],
+      });
+    }
+
+    // 1. passPerPreset: true
+
+    var result = execTest(true);
+
+    assert.equal(aliasBaseType, "NumberTypeAnnotation");
+
+    assert.deepEqual([
+      '"use strict";',
+      '',
+      'var x = function x(y) {',
+      '  return y;',
+      '};'
+    ].join("\n"), result.code);
+
+    // 2. passPerPreset: false
+
+    aliasBaseType = null;
+
+    var result = execTest(false);
+
+    assert.equal(aliasBaseType, null);
+
+    assert.deepEqual([
+      '"use strict";',
+      '',
+      'var x = function x(y) {',
+      '  return y;',
+      '};'
+    ].join("\n"), result.code);
+
   });
 
   test("source map merging", function () {
