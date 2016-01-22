@@ -704,7 +704,7 @@ defineType("WithStatement", {
       object: assertNodeType("Expression")
     },
     body: {
-      validate: assertNodeType("BlockStatement")
+      validate: assertNodeType("BlockStatement", "Statement")
     }
   }
 });
