@@ -24,7 +24,9 @@ module.exports = function(context) {
         if (node.async) token = context.getTokenAfter(token);
 
         // as-needed: x => x
-        if (asNeeded && node.params.length === 1 && node.params[0].type === "Identifier") {
+        if (asNeeded && node.params.length === 1
+                && node.params[0].type === "Identifier"
+                && node.params[0].typeAnnotation === undefined) {
             if (token.type === "Punctuator" && token.value === "(") {
                 context.report(node, asNeededMessage);
             }
