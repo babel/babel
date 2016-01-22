@@ -3,6 +3,7 @@
 "foobar";
 '\x20';
 "\n\r";
+"😂";
 /foobar/g;
 null;
 true;
