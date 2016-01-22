@@ -14,6 +14,10 @@ export default class Buffer {
     this._indent = format.indent.base;
     this.format = format;
     this.buf = "";
+
+    // Maintaining a reference to the last char in the buffer is an optimization
+    // to make sure that v8 doesn't "flatten" the string more often than needed
+    // see https://github.com/babel/babel/pull/3283 for details.
     this.last = "";
   }
 
