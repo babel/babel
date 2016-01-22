@@ -523,7 +523,7 @@ A variable declarator.
 ```js
 interface Decorator <: Node {
   type: "Decorator";
-  value: Expression;
+  expression: Expression;
 }
 ```
 
