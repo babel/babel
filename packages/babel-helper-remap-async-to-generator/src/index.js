@@ -24,10 +24,6 @@ let arrowBuildWrapper =  template(`
 `);
 
 let awaitVisitor = {
-  Function(path) {
-    path.skip();
-  },
-
   ArrowFunctionExpression(path) {
     if (!path.node.async) {
       path.arrowFunctionToShadowed();
