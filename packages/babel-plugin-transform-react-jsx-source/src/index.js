@@ -27,22 +27,22 @@ export default function ({ types: t }) {
   }
 
   let visitor = {
-    JSXOpeningElement(node, state) {
+    JSXOpeningElement(path, state) {
       if (!state.fileNameIdentifier) {
         const fileName = state.file.log.filename !== "unknown"
           ? state.file.log.filename
           : null;
 
-        const fileNameIdentifier = node.scope.generateUidIdentifier(FILE_NAME_VAR);
-        node.hub.file.scope.push({id: fileNameIdentifier, init: t.stringLiteral(fileName)});
+        const fileNameIdentifier = path.scope.generateUidIdentifier(FILE_NAME_VAR);
+        path.hub.file.scope.push({id: fileNameIdentifier, init: t.stringLiteral(fileName)});
         state.fileNameIdentifier = fileNameIdentifier;
       }
 
       const id = t.jSXIdentifier(TRACE_ID);
-      const location = node.container.openingElement.loc; // undefined for generated elements
+      const location = path.container.openingElement.loc; // undefined for generated elements
       if (location) {
         const trace = makeTrace(state.fileNameIdentifier, location.start.line);
-        node.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
+        path.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
       }
     }
   };
