@@ -1,1 +1,1 @@
-body { margin: 0 }
+cssx(body { margin: 0 })

@@ -3,6 +3,17 @@ import { TokenType, types as tt } from "../../tokenizer/types";
 
 let pp = Parser.prototype;
 
+pp.cssxParse = function () {
+  let lastToken = this.cssxGetPreviousToken();
+  let definition = this.startNodeAt(lastToken.start, lastToken.loc.start);
+
+  this.skipSpace();
+  this.cssxReadSelector();
+  this.parseBlockBody(definition, true, false, tt.cssxEnd);
+  this.finishNode(definition, 'CSSXDefinition');
+  return definition;
+};
+
 pp.cssxParseExpression = function () {
   let exprNode, lastToken, result;
 
@@ -50,7 +61,7 @@ pp.cssxParseMediaQueryElement = function () {
   this.cssxFinishTokenAt(tt.cssxMediaQuery, this.state.value, this.state.end, this.state.endLoc);
   
   if (!this.cssxMatchNextToken(tt.braceL)) {
-    this.raise(this.state.pos, "Expected { after query definition");
+    this.raise(this.state.pos, 'Expected { after query definition');
   }
   this.next();
 

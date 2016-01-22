@@ -1,11 +1,15 @@
-E ~ F {
+cssx(E ~ F {
   color: #000;
   background: #F00;
-}
-E > F {
+})
+
+cssx(E > F {
   color: #000;
-}
-E + F {
-  color: #000;
-  background: #F00;
-}
+});
+
+cssx(
+  E + F {
+    color: #000;
+                        background: #F00;
+  }
+)

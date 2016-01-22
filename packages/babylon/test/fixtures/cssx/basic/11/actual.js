@@ -1,4 +1,4 @@
-something[foo] {
+cssx(something[foo] {
   color: #000;
   background: #F00;
-}
+})

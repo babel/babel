@@ -1,4 +1,11 @@
-E[foo~="bar"] {
-  color: #000;
-  background: #F00;
-}
+cssx(
+
+
+  E[foo~="bar"] {
+    color: #000;
+    background: #F00;
+  }
+
+
+
+)

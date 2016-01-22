@@ -51,6 +51,28 @@ pp.cssxMatchNextToken = function () {
   }
 };
 
+pp.cssxLookahead = function (numOfTokens=2) {
+  let old = this.state;
+  let stack = [];
+
+  this.state = old.clone(true);
+
+  this.isLookahead = true;
+  while(numOfTokens > 0) {
+    this.next();
+    stack.push(this.state.clone(true))
+    --numOfTokens;
+  }
+  this.isLookahead = false;
+  this.state = old;
+
+  return {
+    stack,
+    last: stack[stack.length-1],
+    first: stack[0]
+  };  
+};
+
 pp.cssxClonePosition = function (loc) {
   return {
     line: loc.line,
@@ -92,12 +114,17 @@ pp.cssxStoreNextCharAsToken = function (type) {
 
   ++this.state.pos;
   this.finishToken(type);
-
-  if (!this.isLookahead) {
-    this.state.tokens.push(new Token(this.state));
-  }
-
+  
+  this.state.tokens.push(new Token(this.state));
   if (!curContext || !curContext.preserveSpace) this.skipSpace();
+  this.cssxSyncLocPropsToCurPos();
+};
+
+pp.cssxStoreCurrentToken = function () {
+  let curContext = this.curContext();
+
+  this.state.tokens.push(new Token(this.state));
+  // if (!curContext || !curContext.preserveSpace) this.skipSpace();
   this.cssxSyncLocPropsToCurPos();
 };
 

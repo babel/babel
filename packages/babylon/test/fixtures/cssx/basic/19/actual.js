@@ -1,3 +1,1 @@
-#my-other-id p {
-  margin: .2em;
-}
+cssx( #my-other-id p { margin: .2em;})

@@ -1,4 +1,6 @@
-#styles.p {
-  color: red; // a
-  margin: 3em; // b
-}
+cssx(
+  #styles.p {
+    color: red; // a
+    margin: 3em; // b
+  }
+);

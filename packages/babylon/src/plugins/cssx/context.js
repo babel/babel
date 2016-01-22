@@ -2,6 +2,7 @@ import { TokContext, types as tc } from "../../tokenizer/context";
 import Parser from "../../parser";
 
 tc.cssx = new TokContext('cssx');
+tc.cssxDefinition = new TokContext('cssxDefinition');
 tc.cssxSelector = new TokContext('cssxSelector');
 tc.cssxRules = new TokContext('cssxRules');
 tc.cssxProperty = new TokContext('cssxProperty');
@@ -10,34 +11,24 @@ tc.cssxMediaQuery = new TokContext('CSSXMediaQuery');
 
 const pp = Parser.prototype;
 
-pp.cssxIn = function () {
-  const curContext = this.curContext();
+var registerInOut = function (name, context) {
+  pp['cssx' + name + 'In'] = function () {
+    const curContext = this.curContext();
 
-  if (curContext === tc.cssx) return this;
-  this.state.context.push(tc.cssx);
-};
-
-pp.cssxOut = function () {
-  const curContext = this.curContext();
-
-  if (curContext !== tc.cssx) {
-    this.raise(this.state.start, 'Not in CSSX context');
+    if (curContext === context) return;
+    this.state.context.push(context);
   };
-  this.state.context.length -= 1;
-};
 
-pp.cssxMediaQueryIn = function () {
-  const curContext = this.curContext();
+  pp['cssx' + name + 'Out'] = function () {
+    const curContext = this.curContext();
 
-  if (curContext === tc.cssxMediaQuery) return this;
-  this.state.context.push(tc.cssxMediaQuery);
-};
-
-pp.cssxMediaQueryOut = function () {
-  const curContext = this.curContext();
-
-  if (curContext !== tc.cssxMediaQuery) {
-    this.raise(this.state.start, 'Not in CSSXMediaQuery context');
+    if (curContext !== context) {
+      this.raise(this.state.start, 'Not in ' + context.token + ' context');
+    };
+    this.state.context.length -= 1;
   };
-  this.state.context.length -= 1;
-};
+}
+
+registerInOut('', tc.cssx);
+registerInOut('Media', tc.cssxMediaQuery);
+registerInOut('Definition', tc.cssxDefinition);

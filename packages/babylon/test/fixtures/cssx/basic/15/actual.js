@@ -1,4 +1,4 @@
-E:nth-last-child(n) {
+cssx(E:nth-last-child(n) {
   color: #000;
   background: #F00;
-}
+})

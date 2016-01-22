@@ -1,4 +1,4 @@
 // here is some styling in js
-.class {
+cssx(.class {
   color: red;
-}
+})

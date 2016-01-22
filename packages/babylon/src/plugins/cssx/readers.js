@@ -64,7 +64,7 @@ pp.cssxReadWord = function (readUntil) {
 
 pp.cssxReadSelector = function (lastToken) {
   let startLoc, pos, value, node;
-
+  
   this.state.context.push(tc.cssxSelector);
 
   startLoc = this.state.curPosition();

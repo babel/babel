@@ -1,1 +1,1 @@
-* { display: block }
+cssx(* { display: block })

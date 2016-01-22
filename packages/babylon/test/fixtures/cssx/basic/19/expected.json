@@ -1,127 +1,145 @@
 {
   "type": "File",
   "start": 0,
-  "end": 34,
+  "end": 38,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 3,
-      "column": 1
+      "line": 1,
+      "column": 38
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 34,
+    "end": 38,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 3,
-        "column": 1
+        "line": 1,
+        "column": 38
       }
     },
     "sourceType": "script",
     "body": [
       {
-        "type": "CSSXElement",
+        "type": "CSSXDefinition",
         "start": 0,
-        "end": 34,
+        "end": 38,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 3,
-            "column": 1
+            "line": 1,
+            "column": 38
           }
         },
-        "selector": {
-          "type": "CSSXSelector",
-          "start": 0,
-          "end": 14,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 0
+        "body": [
+          {
+            "type": "CSSXElement",
+            "start": 6,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 1,
+                "column": 37
+              }
             },
-            "end": {
-              "line": 1,
-              "column": 14
-            }
-          },
-          "value": "#my-other-id p"
-        },
-        "body": {
-          "type": "CSSXRules",
-          "start": 15,
-          "end": 34,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 15
-            },
-            "end": {
-              "line": 3,
-              "column": 1
-            }
-          },
-          "body": [
-            {
-              "type": "CSSXRule",
-              "start": 19,
-              "end": 32,
+            "selector": {
+              "type": "CSSXSelector",
+              "start": 6,
+              "end": 20,
               "loc": {
                 "start": {
-                  "line": 2,
-                  "column": 2
+                  "line": 1,
+                  "column": 6
                 },
                 "end": {
-                  "line": 2,
-                  "column": 15
+                  "line": 1,
+                  "column": 20
                 }
               },
-              "label": {
-                "type": "CSSXProperty",
-                "start": 19,
-                "end": 25,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 8
-                  }
+              "value": "#my-other-id p"
+            },
+            "body": {
+              "type": "CSSXRules",
+              "start": 21,
+              "end": 37,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 21
                 },
-                "name": "margin"
+                "end": {
+                  "line": 1,
+                  "column": 37
+                }
               },
-              "body": {
-                "type": "CSSXValue",
-                "start": 27,
-                "end": 31,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 10
+              "body": [
+                {
+                  "type": "CSSXRule",
+                  "start": 23,
+                  "end": 36,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 36
+                    }
                   },
-                  "end": {
-                    "line": 2,
-                    "column": 14
+                  "label": {
+                    "type": "CSSXProperty",
+                    "start": 23,
+                    "end": 29,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 29
+                      }
+                    },
+                    "name": "margin"
+                  },
+                  "body": {
+                    "type": "CSSXValue",
+                    "start": 31,
+                    "end": 35,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 31
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 35
+                      }
+                    },
+                    "name": ".2em"
                   }
-                },
-                "name": ".2em"
-              }
+                }
+              ]
             }
-          ]
-        }
+          }
+        ],
+        "directives": []
       }
     ],
     "directives": []
@@ -130,7 +148,33 @@
   "tokens": [
     {
       "type": {
-        "label": "cssxSelector",
+        "label": "CSSXStart",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 0,
+      "end": 5,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "CSSXSelector",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -141,22 +185,22 @@
         "binop": null
       },
       "value": "#my-other-id p",
-      "start": 0,
-      "end": 14,
+      "start": 6,
+      "end": 20,
       "loc": {
         "start": {
           "line": 1,
-          "column": 0
+          "column": 6
         },
         "end": {
           "line": 1,
-          "column": 14
+          "column": 20
         }
       }
     },
     {
       "type": {
-        "label": "cssxRulesStart",
+        "label": "CSSXRulesStart",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -166,22 +210,22 @@
         "postfix": false,
         "binop": null
       },
-      "start": 15,
-      "end": 16,
+      "start": 21,
+      "end": 22,
       "loc": {
         "start": {
           "line": 1,
-          "column": 15
+          "column": 21
         },
         "end": {
           "line": 1,
-          "column": 16
+          "column": 22
         }
       }
     },
     {
       "type": {
-        "label": "cssxProperty",
+        "label": "CSSXProperty",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -193,16 +237,16 @@
         "updateContext": null
       },
       "value": "margin",
-      "start": 19,
-      "end": 25,
+      "start": 23,
+      "end": 29,
       "loc": {
         "start": {
-          "line": 2,
-          "column": 2
+          "line": 1,
+          "column": 23
         },
         "end": {
-          "line": 2,
-          "column": 8
+          "line": 1,
+          "column": 29
         }
       }
     },
@@ -219,22 +263,22 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 25,
-      "end": 26,
+      "start": 29,
+      "end": 30,
       "loc": {
         "start": {
-          "line": 2,
-          "column": 8
+          "line": 1,
+          "column": 29
         },
         "end": {
-          "line": 2,
-          "column": 9
+          "line": 1,
+          "column": 30
         }
       }
     },
     {
       "type": {
-        "label": "cssxValue",
+        "label": "CSSXValue",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -246,16 +290,16 @@
         "updateContext": null
       },
       "value": ".2em",
-      "start": 27,
-      "end": 31,
+      "start": 31,
+      "end": 35,
       "loc": {
         "start": {
-          "line": 2,
-          "column": 10
+          "line": 1,
+          "column": 31
         },
         "end": {
-          "line": 2,
-          "column": 14
+          "line": 1,
+          "column": 35
         }
       }
     },
@@ -272,22 +316,22 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 31,
-      "end": 32,
+      "start": 35,
+      "end": 36,
       "loc": {
         "start": {
-          "line": 2,
-          "column": 14
+          "line": 1,
+          "column": 35
         },
         "end": {
-          "line": 2,
-          "column": 15
+          "line": 1,
+          "column": 36
         }
       }
     },
     {
       "type": {
-        "label": "cssxRulesEnd",
+        "label": "CSSXRulesEnd",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -297,16 +341,41 @@
         "postfix": false,
         "binop": null
       },
-      "start": 33,
-      "end": 34,
+      "start": 36,
+      "end": 37,
       "loc": {
         "start": {
-          "line": 3,
-          "column": 0
+          "line": 1,
+          "column": 36
         },
         "end": {
-          "line": 3,
-          "column": 1
+          "line": 1,
+          "column": 37
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "CSSXEnd",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 37,
+      "end": 38,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 37
+        },
+        "end": {
+          "line": 1,
+          "column": 38
         }
       }
     },
@@ -323,16 +392,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 34,
-      "end": 34,
+      "start": 38,
+      "end": 38,
       "loc": {
         "start": {
-          "line": 3,
-          "column": 1
+          "line": 1,
+          "column": 38
         },
         "end": {
-          "line": 3,
-          "column": 1
+          "line": 1,
+          "column": 38
         }
       }
     }

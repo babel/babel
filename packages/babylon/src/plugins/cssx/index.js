@@ -17,7 +17,12 @@ export default function CSSX(instance) {
 
   instance.extend('parseStatement', function (inner) {
     return function (declaration, topLevel) {
-      if (this.match(tt.cssxSelector)) {
+      let result;
+      
+      if (this.cssxMatchPreviousToken(tt.cssxStart) && this.curContext() !== tc.cssxDefinition) {
+        this.cssxDefinitionIn();
+        return this.cssxParse();
+      } else if (this.match(tt.cssxSelector)) {
         if (this.cssxIsMediaQuery()) {
           return this.cssxParseMediaQueryElement();
         }
@@ -91,11 +96,20 @@ export default function CSSX(instance) {
       } else if (this.match(tt.cssxRulesEnd) && context === tt.cssxMediaQuery) {
         // end of media query
         return;
+      } else if (this.match(tt.cssxRulesEnd) && this.cssxMatchNextToken(tt.parenR)) {
+        ++this.state.pos;
+        this.finishToken(tt.cssxEnd);
+        return;
       }
 
-      // entry point
-      if (context !== tc.cssx && this.cssxEntryPoint(code)) {
-        this.cssxIn();
+      // cssx entry point
+      if (this.cssxEntryPoint()) {
+        return;
+      }
+
+      // looping through the cssx elements
+      if (context === tc.cssxDefinition) {
+        this.skipSpace();
         return this.cssxReadSelector();
       }
 
@@ -118,8 +132,13 @@ export default function CSSX(instance) {
 
   instance.extend("parseExprAtom", function(inner) {
     return function(refShortHandDefaultPos) {
-
-      if (this.cssxEntryPoint()) {
+      // if (this.cssxRulesEntryPoint()) {
+      //   this.cssxIn();
+      //   this.state.context.push(tc.cssxRules);
+      //   this.finishToken(tt.cssxRulesStart);
+      //   return this.parseBlock();
+      // } else 
+      if (this.cssxElementEntryPoint()) {
         if (this.match(tt.parenL)) {
           --this.state.pos;
           this.cssxStoreNextCharAsToken(tt.parenL);
@@ -149,25 +168,50 @@ export default function CSSX(instance) {
 };
 
 pp.cssxEntryPoint = function (code) {
+  let nextToken = this.lookahead();
+  let name, parenL, future;
+
+  if (
+    nextToken.type === tt.name &&
+    nextToken.value === 'cssx' &&
+    this.cssxMatchNextToken(tt.name, tt.parenL)
+  ) {
+    this.cssxIn();
+    future = this.cssxLookahead(2);
+    name = future.first;
+    parenL = future.last;
+    this.state.pos = parenL.end;
+    this.finishToken(tt.cssxStart);
+    this.cssxStoreCurrentToken();
+    return true;
+  }
+  return false;
+};
+
+pp.cssxRulesEntryPoint = function (code) {
   return (
-    this.cssxMatchNextToken(tt.name, tt.braceL) ||
-    this.cssxMatchNextToken(tt.name, tt.name) ||
-    this.cssxMatchNextToken(tt.star) && this.state.exprAllowed ||
-    this.cssxMatchNextToken(tt.dot, tt.name) ||
-    this.cssxMatchNextToken(tt.dot, tt._class) ||
-    this.cssxMatchNextToken(tt.name, tt.colon) ||
-    this.cssxMatchNextToken(tt.name, tt.bracketL) ||
-    this.cssxMatchNextToken(tt.name, tt.bracketR) ||
-    this.cssxMatchNextToken(tt.name, tt.prefix) ||
-    this.cssxMatchNextToken(tt.name, tt.relational) ||
-    this.cssxMatchNextToken(tt.name, tt.plusMin) ||
-    this.cssxMatchNextToken(tt.name, tt.string) ||
-    this.cssxMatchNextToken(tt.name, tt.dot) ||
-    this.cssxMatchNextToken(tt.at, tt.name) ||
-    code === 35 && this.cssxMatchNextToken(tt.string, tt.name) || // #E
-    this.match(tt.cssxSelector) && this.cssxMatchNextToken(tt.string)
+    (this.match(tt.braceL) && this.cssxMatchNextToken(tt.name, tt.colon))
   );
 };
+
+// pp.cssxElementEntryPoint = function (code) {
+//   return (
+//     this.cssxMatchNextToken(tt.name, tt.braceL) ||
+//     this.cssxMatchNextToken(tt.name, tt.name) ||
+//     this.cssxMatchNextToken(tt.star) && this.state.exprAllowed ||
+//     this.cssxMatchNextToken(tt.dot, tt.name) ||
+//     this.cssxMatchNextToken(tt.dot, tt._class) ||
+//     this.cssxMatchNextToken(tt.name, tt.bracketL) ||
+//     this.cssxMatchNextToken(tt.name, tt.prefix) ||
+//     this.cssxMatchNextToken(tt.name, tt.relational) ||
+//     this.cssxMatchNextToken(tt.name, tt.plusMin) ||
+//     this.cssxMatchNextToken(tt.name, tt.string) ||
+//     this.cssxMatchNextToken(tt.name, tt.dot) ||
+//     this.cssxMatchNextToken(tt.at, tt.name) ||
+//     code === 35 && this.cssxMatchNextToken(tt.string, tt.name) || // #E
+//     this.match(tt.cssxSelector) && this.cssxMatchNextToken(tt.string)
+//   );
+// };
 
 /* useful watchers
 

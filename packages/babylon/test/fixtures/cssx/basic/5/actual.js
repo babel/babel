@@ -1,3 +1,5 @@
-.selector > p {
-  margin: 10px
-}
+cssx(
+  .selector > p {
+    margin: 10px
+  }
+)

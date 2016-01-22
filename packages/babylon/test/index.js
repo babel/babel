@@ -14,7 +14,7 @@ var ignore = [
 ];
 var writeResultedJSONIfFail = true; // if the test fail write a .result file in the same folder
 var checkStartEndPosToLoc = true; // verify that start and end props match the info under loc prop
-// var runOnly = '29'; // separated by comma
+var runOnly = '23'; // separated by comma
 
 // var writeResultedJSONIfFail = false;
 // var checkStartEndPosToLoc = false;
@@ -170,7 +170,6 @@ function posLocMatch(input, ast) {
 
 function locToPos(input, startLoc, endLoc) {
   var line = 0, linePos = 0, startPos, endPos, newLine = false;
-  // debugger;
   for (var i=0; i<=input.length; i++) {
     if (input.charAt(i) === '\n') {
       newLine = true;

@@ -1,4 +1,4 @@
-E::first-letter {
+cssx(E::first-letter {
   color: #000;
   background: #F00;
-}
+})

@@ -1,3 +1,3 @@
-a:hover {
+cssx(a:hover {
   color: #F00;
-}
+})
