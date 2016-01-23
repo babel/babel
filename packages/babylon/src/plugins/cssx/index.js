@@ -11,6 +11,7 @@ import "./parsers";
 import "./readers";
 import "./builders";
 import "./helpers";
+import "./expressions";
 
 const pp = Parser.prototype;
 
@@ -69,7 +70,7 @@ export default function CSSX(instance) {
       var context = this.curContext();
 
       if (this.isLookahead) return fallback();
-
+      
       if (this.match(tt.cssxSelector) && this.cssxMatchNextToken(tt.braceL)) {
         ++this.state.pos;
         return this.finishToken(tt.cssxRulesStart);

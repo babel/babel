@@ -11,7 +11,7 @@ const CSSXValueAllowedCodes = [
 
 const CSSXSelectorAllowedCodes = [
   ' ', '*', '>', '+', '~', '.', ':', '(', ')', '=', '[', ']', '"', '-',
-  '!', '?', '@', '#', '$', '%', '^', '&', '\'', '|', ','
+  '!', '?', '@', '#', '$', '%', '^', '&', '\'', '|', ',', '\n'
 ].map(stringToCode);
 
 export default {

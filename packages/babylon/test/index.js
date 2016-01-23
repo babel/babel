@@ -14,8 +14,8 @@ var ignore = [
 ];
 var writeResultedJSONIfFail = true; // if the test fail write a .result file in the same folder
 var checkStartEndPosToLoc = true; // verify that start and end props match the info under loc prop
-var runOnly = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,all selectors,media queries,media queries 2,media queries 3,media queries 4,real,27,28,29,30'; // separated by comma
-// var runOnly = '30'; // separated by comma
+var runOnly = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,all selectors,media queries,media queries 2,media queries 3,media queries 4,real,27,28,29,30,31,styles only,32,33,34'; // separated by comma
+// var runOnly = '34'; // separated by comma
 
 // var writeResultedJSONIfFail = false;
 // var checkStartEndPosToLoc = false;
@@ -135,10 +135,12 @@ function posLocMatch(input, ast) {
       return status;
     }, true);
   };
+  var KeysToSkip = ['expressions'];
+
   return (function loop(obj) {
     var positions;
 
-    if(!obj) return false;
+    if (!obj) return false;
 
     if (areDefined(obj.start, obj.end, obj.loc)) {
       positions = locToPos(input, obj.loc.start, obj.loc.end);
@@ -161,6 +163,7 @@ function posLocMatch(input, ast) {
     if (typeof obj === 'object') {
       return Object.keys(obj).reduce(function(status, key) {
         if (status !== false) return status;
+        if (KeysToSkip.indexOf(key) >= 0) return status;
         return loop(obj[key]);
       }, false);
     }
