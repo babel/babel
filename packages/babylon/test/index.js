@@ -1,34 +1,13 @@
 var getFixtures = require("babel-helper-fixtures").multiple;
 var parse       = require("../lib").parse;
 var _           = require("lodash");
-var fs          = require("fs");
 
-var ignore = [
-  'comments',
-  'core',
-  'esprima',
-  'experimental',
-  'flow',
-  'harmony',
-  'jsx'
-];
-var writeResultedJSONIfFail = true; // if the test fail write a .result file in the same folder
-var checkStartEndPosToLoc = true; // verify that start and end props match the info under loc prop
-var runOnly = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,all selectors,media queries,media queries 2,media queries 3,media queries 4,real,27,28,29,30,31,styles only,32,33,34,35,36,wrong expression,empty cssx'; // separated by comma
-var runOnly = '37'; // separated by comma
-
-// var writeResultedJSONIfFail = false;
-// var checkStartEndPosToLoc = false;
-// var runOnly = undefined;
-// var ignore = [];
-
-var fixtures = getFixtures(__dirname + "/fixtures", ignore);
+var fixtures = getFixtures(__dirname + "/fixtures");
 
 _.each(fixtures, function (suites, name) {
   _.each(suites, function (testSuite) {
     suite(name + "/" + testSuite.title, function () {
       _.each(testSuite.tests, function (task) {
-        if (ifSkip(task)) return;
         test(task.title, !task.disabled && function () {
           try {
             return runTest(task);
@@ -45,7 +24,7 @@ _.each(fixtures, function (suites, name) {
 function save(test, ast) {
   delete ast.tokens;
   if (!ast.comments.length) delete ast.comments;
-  fs.writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
+  require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
 }
 
 function runTest(test) {
@@ -77,19 +56,10 @@ function runTest(test) {
     throw new Error("Expected error message: " + opts.throws + ". But parsing succeeded.");
   } else {
     var mis = misMatch(JSON.parse(test.expect.code), ast);
-    var misPosLoc = posLocMatch(test.actual.code, ast);
-    if ((mis || misPosLoc) && writeResultedJSONIfFail) {
-      writeResultedJSON(test, ast);
-    }
     if (mis) {
+      //save(test, ast);
       throw new Error(mis);
     }
-    if (misPosLoc) {
-      throw new Error(misPosLoc);
-    }
-  }
-  if (writeResultedJSONIfFail) {
-    clearResultedJSON(test);
   }
 }
 
@@ -126,85 +96,3 @@ function misMatch(exp, act) {
     }
   }
 }
-
-function posLocMatch(input, ast) {
-  if (!checkStartEndPosToLoc) return false;
-  var areDefined = function () {
-    return Array.prototype.slice.call(arguments).reduce(function(status, arg) {
-      if (typeof arg === 'undefined') status = false;
-      return status;
-    }, true);
-  };
-  var KeysToSkip = ['expressions'];
-
-  return (function loop(obj) {
-    var positions;
-
-    if (!obj) return false;
-
-    if (areDefined(obj.start, obj.end, obj.loc)) {
-      positions = locToPos(input, obj.loc.start, obj.loc.end);
-      if (obj.start !== positions.start) {
-        return 'node.start (' + obj.start + ') mismatch node.loc.start' +
-        ' (' + positions.start + ') in \n' + JSON.stringify(obj, null, 2).substr(0, 400);
-      } else if (obj.end !== positions.end) {
-        return 'node.end (' + obj.end + ') mismatch node.loc.end' +
-        ' (' + positions.end + ') in \n' + JSON.stringify(obj, null, 2).substr(0, 400);
-      }
-    }
-
-    if (Array.isArray(obj)) {
-      return obj.reduce(function(status, child) {
-        if (status !== false) return status;
-        return loop(child);
-      }, false);
-    }
-
-    if (typeof obj === 'object') {
-      return Object.keys(obj).reduce(function(status, key) {
-        if (status !== false) return status;
-        if (KeysToSkip.indexOf(key) >= 0) return status;
-        return loop(obj[key]);
-      }, false);
-    }
-
-    return false;
-  })(ast);
-}
-
-function locToPos(input, startLoc, endLoc) {
-  var line = 0, linePos = 0, startPos, endPos, newLine = false;
-  for (var i=0; i<=input.length; i++) {
-    if (input.charAt(i) === '\n') {
-      newLine = true;
-    }
-    if (line === startLoc.line-1 && linePos === startLoc.column) {
-      startPos = i;
-    }
-    if (line === endLoc.line-1 && linePos === endLoc.column) {
-      endPos = i;
-    }
-    if (newLine) {
-      newLine = false;
-      linePos = 0;
-      ++line;
-    } else {
-      ++linePos;  
-    }
-  }
-  return { start: startPos, end: endPos };
-};
-
-function writeResultedJSON(test, ast) {
-  fs.writeFileSync(test.expect.loc + '.result', JSON.stringify(ast, null, "  "));
-};
-
-function clearResultedJSON(test) {
-  if (fs.existsSync(test.expect.loc + '.result')) {
-    fs.unlinkSync(test.expect.loc + '.result');
-  }
-};
-
-function ifSkip(task) {
-  return typeof runOnly !== 'undefined' && runOnly.split(',').indexOf(task.title) < 0;
-};
