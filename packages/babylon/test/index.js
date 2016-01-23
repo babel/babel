@@ -21,6 +21,26 @@ _.each(fixtures, function (suites, name) {
   });
 });
 
+/*
+  `TEST_ONLY=babylon make test-only` indeed runs the tests of babylon only.
+  However, we may need to test specific fixture category and specific test inside.
+  The function below allow us providing the following options:
+  ```
+  // test/fixtures/cssx/options.json
+  {
+    "plugins": ["cssx"],
+    "only": {}
+  }
+  ```
+  This will run only `cssx` fixture category. We may go further and use 
+  ```
+  {
+    "plugin": ["cssx"],
+    "only": { "test": "10" }
+  }
+  ````
+  which will run `/test/fixtures/cssx/basic/10` test only.
+*/
 function reduceFixtures (fixturesCategories) {
   return _.reduce(fixturesCategories, function (result, value, key) {
     if (!result.onlyOne) {

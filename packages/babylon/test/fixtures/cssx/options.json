@@ -1,6 +1,6 @@
 {
   "plugins": ["cssx"],
   "only": {
-    "test": "19"
+    "test": "1"
   }
 }
