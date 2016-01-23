@@ -1,10 +1,10 @@
 # Changelog
 
 > **Tags:**
+> - [Breaking Change]
+> - [Spec Compliancy]
 > - [New Feature]
 > - [Bug Fix]
-> - [Spec Compliancy]
-> - [Breaking Change]
 > - [Documentation]
 > - [Internal]
 > - [Polish]
@@ -12,6 +12,67 @@
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
+
+## 6.4.6 (2016-01-20)
+
+* **Bug Fix**
+ * `babel-helper-remap-async-to-generator`: [#3288](https://github.com/babel/babel/pull/3288) Async arrow functions should compile to regular functions because they reference `arguments`.
+
+## 6.4.5 (2016-01-19)
+
+* **Bug Fix**
+ * `babel-plugin-transform-es2015-modules-commonjs`: [#3118](https://github.com/babel/babel/pull/3118) Fix bad import hoisting interaction (copy `_blockHoist` values) regarding import statements. ([T6738](https://phabricator.babeljs.io/T6738)). Thanks @benjamn for your patience for this one!
+   - This fixes:
+    ```js
+    var _templateObject = (0, _taggedTemplateLiteral3.default)(["foo"], ["foo"]); // this should come after _taggedTemplateLiteral 2 and 3
+    var _taggedTemplateLiteral2 = require("babel-runtime/helpers/taggedTemplateLiteral");
+    var _taggedTemplateLiteral3 = _interopRequireDefault(_taggedTemplateLiteral2);
+
+    tag(_templateObject);
+    ```
+ * `babel-types`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-generator`: [#3183](https://github.com/babel/babel/pull/3183) Fix various source map issues. ([T6851](https://phabricator.babeljs.io/T6851)). Thanks for your work @kpdecker! Committed as [`de51bf5`](https://github.com/babel/babel/commit/de51bf5486bd038455d3d450ff34aa86111c3b91)
+ * `babel-helper-remap-async-to-generator`: [#3257](https://github.com/babel/babel/pull/3257) Fix issue with using `this` inside an arrow function ([T2765](https://phabricator.babeljs.io/T2765)). Thanks @horpto!
+   - This fixes:
+    ```js
+    class A {
+      async method() {
+        () => this; // this `this` wasn't being transpiled correctly
+      }
+    }
+    ```
+ * `babylon`: [#3272](https://github.com/babel/babel/pull/3272) Dedupe parser opts from passsed in multiple times. ([T3084](https://phabricator.babeljs.io/T3084)). Thanks @AgentME!
+   - This fixes a specific issue with the [react preset](https://babeljs.io/docs/plugins/preset-react/) since it includes `syntax-flow` and `transform-flow-strip-types` which caused an issue with the flow types not to be stripped and the general case of other people are including the flow syntax option in their own plugins.
+ * `babel-helper-define-map`, `babel-traverse`, `babel-plugin-transform-es2015-classes`: [#3274](https://github.com/babel/babel/pull/3274) Prevent method names in classes from being locally bound to the transformed function body. ([T6712](https://phabricator.babeljs.io/T6712)). Thanks @willheslam for helping to debug and coming up with alternative solutions for this issue!
+   - This fixes:
+    ```js
+      SyntaxError: index.js: "foo" is read-only (This is an error on an internal node. Probably an internal error. Location has been estimated.)
+      1 | class Component {
+      2 |   foo() {
+      3 |     const foo = obj;
+      4 |   }
+      5 | }
+      6 |
+    ```
+ * `babel-helpers`: [#3276](https://github.com/babel/babel/pull/3276) Add missing return statements to `asyncToGenerator` helper.
+ * `babel-plugin-transform-es2015-modules-commonjs`: [#3282](https://github.com/babel/babel/pull/3282) Fixes an issue with using `default` as a specifier in an export.
+   - This fixes an issue with:
+    ```js
+    export {default as foo} from "foo";
+    ```
+
+* **Documentation**
+ * `babel-traverse`: [#3269](https://github.com/babel/babel/pull/3269) Document visitors.explode. Thanks @forivall!
+
+* **Internal**
+ * `babel-plugin-transform-es2015-parameters`: [#3263](https://github.com/babel/babel/pull/3263) Test coverage.
+ * `babel-core`: [#3268](https://github.com/babel/babel/pull/3268) Add a test for ([T2892](https://phabricator.babeljs.io/T2892)).
+ * [#3275](https://github.com/babel/babel/pull/3275) Temporarily change flow types to fix lint.
+ * [#3277](https://github.com/babel/babel/pull/3277) Fixup Makefile `.bin` references. Thanks @charliesome!
+ * [#3278](https://github.com/babel/babel/pull/3278) Use local bin references instead of implied global in Makefile.
+ * `babylon`: [#3284](https://github.com/babel/babel/pull/3284) Add some more flow types. Thanks @bmeck!
+
+* **Polish**
+ * `babel-plugin-transform-es2015-parameters`: [#3264](https://github.com/babel/babel/pull/3264) Simplify code, add comments.
 
 ## 6.4.4 (2016-01-13)
 

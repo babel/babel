@@ -3,13 +3,17 @@ let TestClass = {
 
   testMethodFailure() {
     return new Promise((() => {
-      var _this = this;
+      var _this2 = this;
 
       var ref = babelHelpers.asyncToGenerator(function* (resolve) {
-        console.log(_this);
+        console.log(_this2);
         setTimeout(resolve, 1000);
-      });
-      return _x => ref.apply(this, arguments);
+      }),
+          _this = this;
+
+      return function (_x) {
+        return ref.apply(_this, arguments);
+      };
     })());
   }
 };

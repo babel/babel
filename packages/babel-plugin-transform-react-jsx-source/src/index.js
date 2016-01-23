@@ -10,32 +10,40 @@
  *
  * becomes:
  *
- * <sometag __source={{fileName: 'this/file.js', lineNumber: 10}}/>
+ * var __jsxFileName = 'this/file.js';
+ * <sometag __source={{fileName: __jsxFileName, lineNumber: 10}}/>
  */
 
 
-import path from "path";
-
 const TRACE_ID = "__source";
+const FILE_NAME_VAR = "_jsxFileName";
 
 export default function ({ types: t }) {
-  function makeTrace(fileName, lineNumber) {
-    const fileNameLiteral = fileName != null ? t.stringLiteral(fileName) : t.nullLiteral();
+  function makeTrace(fileNameIdentifier, lineNumber) {
     const fileLineLiteral = lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
-    const fileNameProperty = t.objectProperty(t.identifier("fileName"), fileNameLiteral);
+    const fileNameProperty = t.objectProperty(t.identifier("fileName"), fileNameIdentifier);
     const lineNumberProperty = t.objectProperty(t.identifier("lineNumber"), fileLineLiteral);
     return t.objectExpression([fileNameProperty, lineNumberProperty]);
   }
 
   let visitor = {
-    JSXOpeningElement(node, state) {
-      const id = t.jSXIdentifier(TRACE_ID);
-      const fileName = state.file.log.filename !== "unknown" 
-        ? path.relative(__dirname, state.file.log.filename) 
-        : null;
-      const trace = makeTrace(fileName, node.container.openingElement.loc.start.line);
+    JSXOpeningElement(path, state) {
+      if (!state.fileNameIdentifier) {
+        const fileName = state.file.log.filename !== "unknown"
+          ? state.file.log.filename
+          : null;
 
-      node.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
+        const fileNameIdentifier = path.scope.generateUidIdentifier(FILE_NAME_VAR);
+        path.hub.file.scope.push({id: fileNameIdentifier, init: t.stringLiteral(fileName)});
+        state.fileNameIdentifier = fileNameIdentifier;
+      }
+
+      const id = t.jSXIdentifier(TRACE_ID);
+      const location = path.container.openingElement.loc; // undefined for generated elements
+      if (location) {
+        const trace = makeTrace(state.fileNameIdentifier, location.start.line);
+        path.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
+      }
     }
   };
 

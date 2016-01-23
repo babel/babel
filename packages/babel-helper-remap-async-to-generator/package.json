@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-remap-async-to-generator",
-  "version": "6.3.13",
+  "version": "6.4.6",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-remap-async-to-generator",
   "license": "MIT",
@@ -8,8 +8,8 @@
   "dependencies": {
     "babel-runtime": "^5.0.0",
     "babel-template": "^6.3.13",
-    "babel-types": "^6.3.13",
-    "babel-traverse": "^6.3.13",
+    "babel-types": "^6.4.5",
+    "babel-traverse": "^6.4.5",
     "babel-helper-function-name": "^6.3.13"
   }
 }

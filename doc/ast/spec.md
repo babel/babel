@@ -71,6 +71,7 @@ These are the core Babylon AST node types.
       - [LogicalOperator](#logicaloperator)
     - [SpreadElement](#spreadelement)
     - [MemberExpression](#memberexpression)
+    - [BindExpression](#bindexpression)
   - [ConditionalExpression](#conditionalexpression)
   - [CallExpression](#callexpression)
   - [NewExpression](#newexpression)
@@ -522,7 +523,7 @@ A variable declarator.
 ```js
 interface Decorator <: Node {
   type: "Decorator";
-  value: Expression;
+  expression: Expression;
 }
 ```
 
@@ -832,6 +833,18 @@ interface MemberExpression <: Expression, Pattern {
 ```
 
 A member expression. If `computed` is `true`, the node corresponds to a computed (`a[b]`) member expression and `property` is an `Expression`. If `computed` is `false`, the node corresponds to a static (`a.b`) member expression and `property` is an `Identifier`.
+
+### BindExpression
+
+```js
+interface BindExpression <: Expression {
+    type: "BindExpression";
+    object: [ Expression | null ];
+    callee: [ Expression ]
+}
+```
+
+If `object` is `null`, then `callee` should be a `MemberExpression`.
 
 ## ConditionalExpression
 

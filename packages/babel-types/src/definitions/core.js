@@ -626,7 +626,7 @@ defineType("UnaryExpression", {
   builder: ["operator", "argument", "prefix"],
   fields: {
     prefix: {
-      default: false
+      default: true
     },
     argument: {
       validate: assertNodeType("Expression")
@@ -704,7 +704,7 @@ defineType("WithStatement", {
       object: assertNodeType("Expression")
     },
     body: {
-      validate: assertNodeType("BlockStatement")
+      validate: assertNodeType("BlockStatement", "Statement")
     }
   }
 });

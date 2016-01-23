@@ -59,7 +59,7 @@ function run(task) {
     execCode = result.code;
 
     try {
-      runExec(exec.loc, execCode);
+      runExec(execOpts, execCode);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);
@@ -97,12 +97,13 @@ function run(task) {
   }
 }
 
-function runExec(filename, execCode) {
+function runExec(opts, execCode) {
   let sandbox = {
     ...helpers,
     babelHelpers,
     assert: chai.assert,
     transform: babel.transform,
+    opts,
     exports: {},
   };
 
