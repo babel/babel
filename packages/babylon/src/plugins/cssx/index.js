@@ -68,7 +68,7 @@ export default function CSSX(instance) {
       var context = this.curContext();
 
       if (this.isLookahead) return fallback();
-      
+
       if (this.match(tt.cssxSelector) && this.cssxMatchNextToken(tt.braceL)) {
         ++this.state.pos;
         return this.finishToken(tt.cssxRulesStart);
@@ -123,7 +123,11 @@ export default function CSSX(instance) {
     return function (code) {
       var fallback = () => inner.call(this, code);
 
-      if (code === 35 && (this.match(tt.name) || this.match(tt.eof))) { // having #
+      // when the selector starts with #
+      if (code === 35 && (
+        this.match(tt.cssxStart) ||
+        this.match(tt.cssxRulesEnd)
+      )) {
         ++this.state.pos;
         return this.finishToken(tt.string, '#');
       }
