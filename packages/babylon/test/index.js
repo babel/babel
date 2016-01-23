@@ -2,7 +2,7 @@ var getFixtures = require("babel-helper-fixtures").multiple;
 var parse       = require("../lib").parse;
 var _           = require("lodash");
 
-var fixtures = getFixtures(__dirname + "/fixtures");
+var fixtures = reduceFixtures(getFixtures(__dirname + "/fixtures"));
 
 _.each(fixtures, function (suites, name) {
   _.each(suites, function (testSuite) {
@@ -20,6 +20,30 @@ _.each(fixtures, function (suites, name) {
     });
   });
 });
+
+function reduceFixtures (fixturesCategories) {
+  return _.reduce(fixturesCategories, function (result, value, key) {
+    if (!result.onlyOne) {
+      var ops = value[0].options;
+      if (ops && typeof ops.only !== 'undefined') {
+        result.onlyOne = true;
+        result.fixtures = {};
+        if (typeof ops.only.test !== 'undefined') {
+          value = _.reduce(value, function (result, subCategory) {
+            var test = _.find(subCategory.tests, function (t) { return t.title === ops.only.test; });
+            if (typeof test !== 'undefined') {
+              subCategory.tests = [test];
+              result.push(subCategory);
+            }
+            return result;
+          }, []);
+        }
+      }
+      result.fixtures[key] = value;
+    }
+    return result;
+  }, { onlyOne: false, fixtures: {} }).fixtures;
+}
 
 function save(test, ast) {
   delete ast.tokens;
