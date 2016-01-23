@@ -1,3 +1,3 @@
-body {
+cssx(body {
   font-family: "Arial";
-}
+})

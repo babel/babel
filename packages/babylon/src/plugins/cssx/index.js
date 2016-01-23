@@ -2,6 +2,7 @@ import { TokenType, types as tt } from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";
 import Parser from "../../parser";
 import { SourceLocation, Position } from "../../util/location";
+import { posToLoc } from "./utilities";
 
 import "./types";
 import "./context";
@@ -182,6 +183,7 @@ pp.cssxEntryPoint = function (code) {
     parenL = future.last;
     this.state.pos = parenL.end;
     this.finishToken(tt.cssxStart);
+    this.cssxSyncEndTokenStateToCurPos();
     this.cssxStoreCurrentToken();
     return true;
   }

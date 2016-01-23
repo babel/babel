@@ -1,364 +1,382 @@
 {
   "type": "File",
   "start": 0,
-  "end": 191,
+  "end": 199,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 10,
+      "line": 12,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 191,
+    "end": 199,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 10,
+        "line": 12,
         "column": 1
       }
     },
     "sourceType": "script",
     "body": [
       {
-        "type": "CSSXElement",
+        "type": "CSSXDefinition",
         "start": 0,
-        "end": 83,
+        "end": 199,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 4,
+            "line": 12,
             "column": 1
           }
         },
-        "selector": {
-          "type": "CSSXSelector",
-          "start": 0,
-          "end": 4,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 0
+        "body": [
+          {
+            "type": "CSSXElement",
+            "start": 6,
+            "end": 89,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 0
+              },
+              "end": {
+                "line": 5,
+                "column": 1
+              }
             },
-            "end": {
-              "line": 1,
-              "column": 4
-            }
-          },
-          "value": "body"
-        },
-        "body": {
-          "type": "CSSXRules",
-          "start": 5,
-          "end": 83,
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 5
-            },
-            "end": {
-              "line": 4,
-              "column": 1
-            }
-          },
-          "body": [
-            {
-              "type": "CSSXRule",
-              "start": 9,
-              "end": 39,
+            "selector": {
+              "type": "CSSXSelector",
+              "start": 6,
+              "end": 10,
               "loc": {
                 "start": {
                   "line": 2,
-                  "column": 2
+                  "column": 0
                 },
                 "end": {
                   "line": 2,
-                  "column": 32
+                  "column": 4
                 }
               },
-              "label": {
-                "type": "CSSXProperty",
-                "start": 9,
-                "end": 19,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 12
-                  }
-                },
-                "name": "background"
-              },
-              "body": {
-                "type": "CSSXValue",
-                "start": 21,
-                "end": 38,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 14
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 31
-                  }
-                },
-                "name": "url(fallback.png)"
-              }
+              "value": "body"
             },
-            {
-              "type": "CSSXRule",
-              "start": 42,
-              "end": 81,
+            "body": {
+              "type": "CSSXRules",
+              "start": 11,
+              "end": 89,
               "loc": {
                 "start": {
-                  "line": 3,
-                  "column": 2
+                  "line": 2,
+                  "column": 5
                 },
                 "end": {
-                  "line": 3,
-                  "column": 41
+                  "line": 5,
+                  "column": 1
                 }
               },
-              "label": {
-                "type": "CSSXProperty",
-                "start": 42,
-                "end": 58,
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 2
+              "body": [
+                {
+                  "type": "CSSXRule",
+                  "start": 15,
+                  "end": 45,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 32
+                    }
                   },
-                  "end": {
-                    "line": 3,
-                    "column": 18
+                  "label": {
+                    "type": "CSSXProperty",
+                    "start": 15,
+                    "end": 25,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 12
+                      }
+                    },
+                    "name": "background"
+                  },
+                  "body": {
+                    "type": "CSSXValue",
+                    "start": 27,
+                    "end": 44,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 31
+                      }
+                    },
+                    "name": "url(fallback.png)"
                   }
                 },
-                "name": "background-image"
+                {
+                  "type": "CSSXRule",
+                  "start": 48,
+                  "end": 87,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 41
+                    }
+                  },
+                  "label": {
+                    "type": "CSSXProperty",
+                    "start": 48,
+                    "end": 64,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 18
+                      }
+                    },
+                    "name": "background-image"
+                  },
+                  "body": {
+                    "type": "CSSXValue",
+                    "start": 66,
+                    "end": 86,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 20
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 40
+                      }
+                    },
+                    "name": "url(image.svg), none"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "type": "CSSXElement",
+            "start": 90,
+            "end": 143,
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 0
               },
-              "body": {
-                "type": "CSSXValue",
-                "start": 60,
-                "end": 80,
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 20
-                  },
-                  "end": {
-                    "line": 3,
-                    "column": 40
-                  }
-                },
-                "name": "url(image.svg), none"
+              "end": {
+                "line": 8,
+                "column": 1
               }
-            }
-          ]
-        }
-      },
-      {
-        "type": "CSSXElement",
-        "start": 84,
-        "end": 137,
-        "loc": {
-          "start": {
-            "line": 5,
-            "column": 0
-          },
-          "end": {
-            "line": 7,
-            "column": 1
-          }
-        },
-        "selector": {
-          "type": "CSSXSelector",
-          "start": 84,
-          "end": 85,
-          "loc": {
-            "start": {
-              "line": 5,
-              "column": 0
             },
-            "end": {
-              "line": 5,
-              "column": 1
-            }
-          },
-          "value": "p"
-        },
-        "body": {
-          "type": "CSSXRules",
-          "start": 86,
-          "end": 137,
-          "loc": {
-            "start": {
-              "line": 5,
-              "column": 2
-            },
-            "end": {
-              "line": 7,
-              "column": 1
-            }
-          },
-          "body": [
-            {
-              "type": "CSSXRule",
+            "selector": {
+              "type": "CSSXSelector",
               "start": 90,
-              "end": 135,
+              "end": 91,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 0
+                },
+                "end": {
+                  "line": 6,
+                  "column": 1
+                }
+              },
+              "value": "p"
+            },
+            "body": {
+              "type": "CSSXRules",
+              "start": 92,
+              "end": 143,
               "loc": {
                 "start": {
                   "line": 6,
                   "column": 2
                 },
                 "end": {
-                  "line": 6,
-                  "column": 47
+                  "line": 8,
+                  "column": 1
                 }
               },
-              "label": {
-                "type": "CSSXProperty",
-                "start": 90,
-                "end": 100,
-                "loc": {
-                  "start": {
-                    "line": 6,
-                    "column": 2
+              "body": [
+                {
+                  "type": "CSSXRule",
+                  "start": 96,
+                  "end": 141,
+                  "loc": {
+                    "start": {
+                      "line": 7,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 7,
+                      "column": 47
+                    }
                   },
-                  "end": {
-                    "line": 6,
-                    "column": 12
+                  "label": {
+                    "type": "CSSXProperty",
+                    "start": 96,
+                    "end": 106,
+                    "loc": {
+                      "start": {
+                        "line": 7,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 7,
+                        "column": 12
+                      }
+                    },
+                    "name": "background"
+                  },
+                  "body": {
+                    "type": "CSSXValue",
+                    "start": 108,
+                    "end": 140,
+                    "loc": {
+                      "start": {
+                        "line": 7,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 7,
+                        "column": 46
+                      }
+                    },
+                    "name": "url('http://site.com/image.png')"
                   }
-                },
-                "name": "background"
+                }
+              ]
+            }
+          },
+          {
+            "type": "CSSXElement",
+            "start": 144,
+            "end": 197,
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 0
               },
-              "body": {
-                "type": "CSSXValue",
-                "start": 102,
-                "end": 134,
-                "loc": {
-                  "start": {
-                    "line": 6,
-                    "column": 14
-                  },
-                  "end": {
-                    "line": 6,
-                    "column": 46
-                  }
-                },
-                "name": "url('http://site.com/image.png')"
+              "end": {
+                "line": 11,
+                "column": 1
               }
-            }
-          ]
-        }
-      },
-      {
-        "type": "CSSXElement",
-        "start": 138,
-        "end": 191,
-        "loc": {
-          "start": {
-            "line": 8,
-            "column": 0
-          },
-          "end": {
-            "line": 10,
-            "column": 1
-          }
-        },
-        "selector": {
-          "type": "CSSXSelector",
-          "start": 138,
-          "end": 139,
-          "loc": {
-            "start": {
-              "line": 8,
-              "column": 0
             },
-            "end": {
-              "line": 8,
-              "column": 1
-            }
-          },
-          "value": "a"
-        },
-        "body": {
-          "type": "CSSXRules",
-          "start": 140,
-          "end": 191,
-          "loc": {
-            "start": {
-              "line": 8,
-              "column": 2
-            },
-            "end": {
-              "line": 10,
-              "column": 1
-            }
-          },
-          "body": [
-            {
-              "type": "CSSXRule",
+            "selector": {
+              "type": "CSSXSelector",
               "start": 144,
-              "end": 189,
+              "end": 145,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 0
+                },
+                "end": {
+                  "line": 9,
+                  "column": 1
+                }
+              },
+              "value": "a"
+            },
+            "body": {
+              "type": "CSSXRules",
+              "start": 146,
+              "end": 197,
               "loc": {
                 "start": {
                   "line": 9,
                   "column": 2
                 },
                 "end": {
-                  "line": 9,
-                  "column": 47
+                  "line": 11,
+                  "column": 1
                 }
               },
-              "label": {
-                "type": "CSSXProperty",
-                "start": 144,
-                "end": 154,
-                "loc": {
-                  "start": {
-                    "line": 9,
-                    "column": 2
+              "body": [
+                {
+                  "type": "CSSXRule",
+                  "start": 150,
+                  "end": 195,
+                  "loc": {
+                    "start": {
+                      "line": 10,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 10,
+                      "column": 47
+                    }
                   },
-                  "end": {
-                    "line": 9,
-                    "column": 12
-                  }
-                },
-                "name": "background"
-              },
-              "body": {
-                "type": "CSSXValue",
-                "start": 156,
-                "end": 188,
-                "loc": {
-                  "start": {
-                    "line": 9,
-                    "column": 14
+                  "label": {
+                    "type": "CSSXProperty",
+                    "start": 150,
+                    "end": 160,
+                    "loc": {
+                      "start": {
+                        "line": 10,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 10,
+                        "column": 12
+                      }
+                    },
+                    "name": "background"
                   },
-                  "end": {
-                    "line": 9,
-                    "column": 46
+                  "body": {
+                    "type": "CSSXValue",
+                    "start": 162,
+                    "end": 194,
+                    "loc": {
+                      "start": {
+                        "line": 10,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 10,
+                        "column": 46
+                      }
+                    },
+                    "name": "url(\"http://site.com/image.png\")"
                   }
-                },
-                "name": "url(\"http://site.com/image.png\")"
-              }
+                }
+              ]
             }
-          ]
-        }
+          }
+        ],
+        "directives": []
       }
     ],
     "directives": []
@@ -367,7 +385,33 @@
   "tokens": [
     {
       "type": {
-        "label": "cssxSelector",
+        "label": "CSSXStart",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 0,
+      "end": 5,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "CSSXSelector",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -378,22 +422,22 @@
         "binop": null
       },
       "value": "body",
-      "start": 0,
-      "end": 4,
+      "start": 6,
+      "end": 10,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 2,
           "column": 0
         },
         "end": {
-          "line": 1,
+          "line": 2,
           "column": 4
         }
       }
     },
     {
       "type": {
-        "label": "cssxRulesStart",
+        "label": "CSSXRulesStart",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -403,22 +447,22 @@
         "postfix": false,
         "binop": null
       },
-      "start": 5,
-      "end": 6,
+      "start": 11,
+      "end": 12,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 2,
           "column": 5
         },
         "end": {
-          "line": 1,
+          "line": 2,
           "column": 6
         }
       }
     },
     {
       "type": {
-        "label": "cssxProperty",
+        "label": "CSSXProperty",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -430,15 +474,15 @@
         "updateContext": null
       },
       "value": "background",
-      "start": 9,
-      "end": 19,
+      "start": 15,
+      "end": 25,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 2
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 12
         }
       }
@@ -456,22 +500,22 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 19,
-      "end": 20,
+      "start": 25,
+      "end": 26,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 12
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 13
         }
       }
     },
     {
       "type": {
-        "label": "cssxValue",
+        "label": "CSSXValue",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -483,15 +527,15 @@
         "updateContext": null
       },
       "value": "url(fallback.png)",
-      "start": 21,
-      "end": 38,
+      "start": 27,
+      "end": 44,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 14
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 31
         }
       }
@@ -509,22 +553,22 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 38,
-      "end": 39,
+      "start": 44,
+      "end": 45,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 31
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 32
         }
       }
     },
     {
       "type": {
-        "label": "cssxProperty",
+        "label": "CSSXProperty",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -536,15 +580,15 @@
         "updateContext": null
       },
       "value": "background-image",
-      "start": 42,
-      "end": 58,
+      "start": 48,
+      "end": 64,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 2
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 18
         }
       }
@@ -562,22 +606,22 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 58,
-      "end": 59,
+      "start": 64,
+      "end": 65,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 18
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 19
         }
       }
     },
     {
       "type": {
-        "label": "cssxValue",
+        "label": "CSSXValue",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -589,15 +633,15 @@
         "updateContext": null
       },
       "value": "url(image.svg), none",
-      "start": 60,
-      "end": 80,
+      "start": 66,
+      "end": 86,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 20
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 40
         }
       }
@@ -615,22 +659,22 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 80,
-      "end": 81,
+      "start": 86,
+      "end": 87,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 40
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 41
         }
       }
     },
     {
       "type": {
-        "label": "cssxRulesEnd",
+        "label": "CSSXRulesEnd",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -640,22 +684,22 @@
         "postfix": false,
         "binop": null
       },
-      "start": 82,
-      "end": 83,
+      "start": 88,
+      "end": 89,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 0
         },
         "end": {
-          "line": 4,
+          "line": 5,
           "column": 1
         }
       }
     },
     {
       "type": {
-        "label": "cssxSelector",
+        "label": "CSSXSelector",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -666,22 +710,22 @@
         "binop": null
       },
       "value": "p",
-      "start": 84,
-      "end": 85,
+      "start": 90,
+      "end": 91,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 6,
           "column": 0
         },
         "end": {
-          "line": 5,
+          "line": 6,
           "column": 1
         }
       }
     },
     {
       "type": {
-        "label": "cssxRulesStart",
+        "label": "CSSXRulesStart",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -691,22 +735,22 @@
         "postfix": false,
         "binop": null
       },
-      "start": 86,
-      "end": 87,
+      "start": 92,
+      "end": 93,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 6,
           "column": 2
         },
         "end": {
-          "line": 5,
+          "line": 6,
           "column": 3
         }
       }
     },
     {
       "type": {
-        "label": "cssxProperty",
+        "label": "CSSXProperty",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -718,15 +762,15 @@
         "updateContext": null
       },
       "value": "background",
-      "start": 90,
-      "end": 100,
+      "start": 96,
+      "end": 106,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 7,
           "column": 2
         },
         "end": {
-          "line": 6,
+          "line": 7,
           "column": 12
         }
       }
@@ -744,22 +788,22 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 100,
-      "end": 101,
+      "start": 106,
+      "end": 107,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 7,
           "column": 12
         },
         "end": {
-          "line": 6,
+          "line": 7,
           "column": 13
         }
       }
     },
     {
       "type": {
-        "label": "cssxValue",
+        "label": "CSSXValue",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -771,15 +815,15 @@
         "updateContext": null
       },
       "value": "url('http://site.com/image.png')",
-      "start": 102,
-      "end": 134,
+      "start": 108,
+      "end": 140,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 7,
           "column": 14
         },
         "end": {
-          "line": 6,
+          "line": 7,
           "column": 46
         }
       }
@@ -797,22 +841,22 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 134,
-      "end": 135,
+      "start": 140,
+      "end": 141,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 7,
           "column": 46
         },
         "end": {
-          "line": 6,
+          "line": 7,
           "column": 47
         }
       }
     },
     {
       "type": {
-        "label": "cssxRulesEnd",
+        "label": "CSSXRulesEnd",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -822,22 +866,22 @@
         "postfix": false,
         "binop": null
       },
-      "start": 136,
-      "end": 137,
+      "start": 142,
+      "end": 143,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 8,
           "column": 0
         },
         "end": {
-          "line": 7,
+          "line": 8,
           "column": 1
         }
       }
     },
     {
       "type": {
-        "label": "cssxSelector",
+        "label": "CSSXSelector",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -848,22 +892,22 @@
         "binop": null
       },
       "value": "a",
-      "start": 138,
-      "end": 139,
+      "start": 144,
+      "end": 145,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 9,
           "column": 0
         },
         "end": {
-          "line": 8,
+          "line": 9,
           "column": 1
         }
       }
     },
     {
       "type": {
-        "label": "cssxRulesStart",
+        "label": "CSSXRulesStart",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -873,22 +917,22 @@
         "postfix": false,
         "binop": null
       },
-      "start": 140,
-      "end": 141,
+      "start": 146,
+      "end": 147,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 9,
           "column": 2
         },
         "end": {
-          "line": 8,
+          "line": 9,
           "column": 3
         }
       }
     },
     {
       "type": {
-        "label": "cssxProperty",
+        "label": "CSSXProperty",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -900,15 +944,15 @@
         "updateContext": null
       },
       "value": "background",
-      "start": 144,
-      "end": 154,
+      "start": 150,
+      "end": 160,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 10,
           "column": 2
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "column": 12
         }
       }
@@ -926,22 +970,22 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 154,
-      "end": 155,
+      "start": 160,
+      "end": 161,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 10,
           "column": 12
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "column": 13
         }
       }
     },
     {
       "type": {
-        "label": "cssxValue",
+        "label": "CSSXValue",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -953,15 +997,15 @@
         "updateContext": null
       },
       "value": "url(\"http://site.com/image.png\")",
-      "start": 156,
-      "end": 188,
+      "start": 162,
+      "end": 194,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 10,
           "column": 14
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "column": 46
         }
       }
@@ -979,22 +1023,22 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 188,
-      "end": 189,
+      "start": 194,
+      "end": 195,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 10,
           "column": 46
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "column": 47
         }
       }
     },
     {
       "type": {
-        "label": "cssxRulesEnd",
+        "label": "CSSXRulesEnd",
         "beforeExpr": false,
         "startsExpr": false,
         "rightAssociative": false,
@@ -1004,15 +1048,40 @@
         "postfix": false,
         "binop": null
       },
-      "start": 190,
-      "end": 191,
+      "start": 196,
+      "end": 197,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 11,
           "column": 0
         },
         "end": {
-          "line": 10,
+          "line": 11,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "CSSXEnd",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 198,
+      "end": 199,
+      "loc": {
+        "start": {
+          "line": 12,
+          "column": 0
+        },
+        "end": {
+          "line": 12,
           "column": 1
         }
       }
@@ -1030,15 +1099,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 191,
-      "end": 191,
+      "start": 199,
+      "end": 199,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 12,
           "column": 1
         },
         "end": {
-          "line": 10,
+          "line": 12,
           "column": 1
         }
       }

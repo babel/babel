@@ -2,19 +2,29 @@ export function stringToCode (ch) {
   return String(ch).charCodeAt(0);
 };
 
-export function posToLoc (pos, input) {
-  var line=1, loopPos=0, linePos = 0;
+export function posToLoc (pos, input, verbose) {
+  var line=1, loopPos=0, linePos = 0, lineStart = 0;
 
   while(loopPos < input.length && loopPos !== pos) {
     if (input.charAt(loopPos) === '\n') {
       linePos = 0;
+      lineStart = loopPos+1;
       ++line;
     } else {
       ++linePos;
     }
     ++loopPos;
   }
-  return { line, column: linePos };
+  if (!verbose) {
+    return { line, column: linePos };
+  } else {
+    return {
+      line,
+      curLine: line,
+      column: linePos,
+      lineStart
+    };
+  }
 };
 
 export function isNumber(code) {

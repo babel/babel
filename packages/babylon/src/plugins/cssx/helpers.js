@@ -134,3 +134,13 @@ pp.cssxSyncLocPropsToCurPos = function (p) {
   this.state.start = this.state.end = pos;
   this.state.startLoc = this.state.endLoc = posToLoc(pos, this.state.input);
 };
+
+pp.cssxSyncEndTokenStateToCurPos = function (p) {
+  let pos = typeof p === 'undefined' ? this.state.pos : p;
+  let meta = posToLoc(this.state.pos, this.state.input, true);
+
+  this.state.endLoc.line = meta.line;
+  this.state.endLoc.column = meta.column;
+  this.state.lineStart = meta.lineStart;
+  this.state.curLine = meta.curLine;
+};
