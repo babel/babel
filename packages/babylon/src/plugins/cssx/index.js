@@ -6,10 +6,8 @@ import { posToLoc } from "./utilities";
 
 import "./types";
 import "./context";
-import "./mediaqueries";
 import "./parsers";
 import "./readers";
-import "./builders";
 import "./helpers";
 import "./expressions";
 
@@ -49,7 +47,7 @@ export default function CSSX(instance) {
         } else {
           // reading the style
           while (!this.match(tt.cssxRulesEnd)) {
-            rules.push(this.cssxBuildRuleNode(this.cssxReadProperty(), this.cssxReadValue()));
+            rules.push(this.cssxParseRule(this.cssxReadProperty(), this.cssxReadValue()));
           }
           if (this.state.pos >= this.input.length) this.finishToken(tt.eof);
         }
@@ -186,25 +184,6 @@ pp.cssxRulesEntryPoint = function (code) {
     (this.match(tt.braceL) && this.cssxMatchNextToken(tt.name, tt.colon))
   );
 };
-
-// pp.cssxElementEntryPoint = function (code) {
-//   return (
-//     this.cssxMatchNextToken(tt.name, tt.braceL) ||
-//     this.cssxMatchNextToken(tt.name, tt.name) ||
-//     this.cssxMatchNextToken(tt.star) && this.state.exprAllowed ||
-//     this.cssxMatchNextToken(tt.dot, tt.name) ||
-//     this.cssxMatchNextToken(tt.dot, tt._class) ||
-//     this.cssxMatchNextToken(tt.name, tt.bracketL) ||
-//     this.cssxMatchNextToken(tt.name, tt.prefix) ||
-//     this.cssxMatchNextToken(tt.name, tt.relational) ||
-//     this.cssxMatchNextToken(tt.name, tt.plusMin) ||
-//     this.cssxMatchNextToken(tt.name, tt.string) ||
-//     this.cssxMatchNextToken(tt.name, tt.dot) ||
-//     this.cssxMatchNextToken(tt.at, tt.name) ||
-//     code === 35 && this.cssxMatchNextToken(tt.string, tt.name) || // #E
-//     this.match(tt.cssxSelector) && this.cssxMatchNextToken(tt.string)
-//   );
-// };
 
 /* useful watchers
 

@@ -95,7 +95,6 @@ pp.cssxReadWord = function (readUntil) {
 pp.cssxReadSelector = function (lastToken) {
   let startLoc, pos, value, node, word;
   this.state.context.push(tc.cssxSelector);
-
   startLoc = this.state.curPosition();
   pos = this.state.pos;
 
@@ -125,7 +124,7 @@ pp.cssxReadProperty = function() {
 
   this.finishToken(tt.cssxProperty, property);
   this.next();
-  node = this.cssxBuildRuleChildNode('CSSXProperty', property, pos, loc);
+  node = this.cssxParseRuleChild('CSSXProperty', property, pos, loc);
 
   return node;
 };
@@ -148,7 +147,7 @@ pp.cssxReadValue = function() {
   this.state.startLoc = startLoc;
   this.finishToken(tt.cssxValue, value);
   this.next();
-  node = this.cssxBuildRuleChildNode('CSSXValue', value, pos, startLoc);
+  node = this.cssxParseRuleChild('CSSXValue', value, pos, startLoc);
 
   return node;
 };
