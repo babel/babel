@@ -135,22 +135,10 @@ export default function CSSX(instance) {
 
   instance.extend("parseExprAtom", function(inner) {
     return function(refShortHandDefaultPos) {
-      // if (this.cssxRulesEntryPoint()) {
-      //   this.cssxIn();
-      //   this.state.context.push(tc.cssxRules);
-      //   this.finishToken(tt.cssxRulesStart);
-      //   return this.parseBlock();
-      // } else 
-      if (this.cssxElementEntryPoint()) {
-        if (this.match(tt.parenL)) {
-          --this.state.pos;
-          this.cssxStoreNextCharAsToken(tt.parenL);
-        }
-        this.cssxIn();
-        this.cssxReadSelector();
-        return this.cssxParseExpression();
+      if (this.match(tt.cssxStart)) {
+        this.cssxDefinitionIn();
+        return this.cssxParse();
       }
-
       return inner.call(this, refShortHandDefaultPos);
     };
   });

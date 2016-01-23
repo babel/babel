@@ -1,4 +1,4 @@
-var styles = (
+var styles = cssx(
   body {
     font-size: 20px;
     line-height: 40px;

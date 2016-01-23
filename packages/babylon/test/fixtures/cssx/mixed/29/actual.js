@@ -1,6 +1,6 @@
 function getMainStyles() {
-  return (body { margin: 10px });
+  return cssx(body { margin: 10px });
 };
 function getHeaderStyles() {
-  return (.header { margin: 10px; });
+  return cssx(.header { margin: 10px; });
 };

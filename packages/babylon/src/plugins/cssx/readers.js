@@ -4,7 +4,6 @@ import { TokenType, types as tt } from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";
 
 import {
-  CSSXElementStartAssumption,
   CSSXPropertyAllowedCodes,
   CSSXValueAllowedCodes,
   CSSXSelectorAllowedCodes
