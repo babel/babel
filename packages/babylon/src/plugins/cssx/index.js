@@ -174,6 +174,9 @@ pp.cssxEntryPoint = function (code) {
     this.finishToken(tt.cssxStart);
     this.cssxSyncEndTokenStateToCurPos();
     this.cssxStoreCurrentToken();
+    if (this.cssxMatchNextToken(tt.parenR)) {
+      this.raise(this.state.pos, 'Empty CSSX definition');
+    }
     return true;
   }
   return false;

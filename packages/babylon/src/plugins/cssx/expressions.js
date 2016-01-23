@@ -22,7 +22,11 @@ pp.cssExpressionSet = function (node) {
         length = expr.end - expr.start;
         codeStr = this.state.input.substr(expr.start, length).substr(1, length-2);
         if (codeStr === '') return false;
-        exprNode = parse(codeStr, PARSER_OPTIONS);
+        try {
+          exprNode = parse(codeStr, PARSER_OPTIONS);
+        } catch(err) {
+          this.raise(expr.start, err.toString().split('(')[0]);
+        }
         return {
           start: expr.start,
           end: expr.end,
