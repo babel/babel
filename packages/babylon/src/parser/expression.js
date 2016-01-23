@@ -246,6 +246,7 @@ pp.parseExprSubscripts = function (refShorthandDefaultPos) {
   let startPos = this.state.start, startLoc = this.state.startLoc;
   let potentialArrowAt = this.state.potentialArrowAt;
   let expr = this.parseExprAtom(refShorthandDefaultPos);
+
   if (expr.type === "ArrowFunctionExpression" && expr.start === potentialArrowAt) {
     return expr;
   }

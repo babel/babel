@@ -39,6 +39,7 @@ pp.addComment = function (comment) {
 
 pp.processComment = function (node) {
   if (node.type === "Program" && node.body.length > 0) return;
+
   let stack = this.state.commentStack;
 
   let lastChild, trailingComments, i;
