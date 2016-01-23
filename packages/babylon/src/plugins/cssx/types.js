@@ -31,3 +31,7 @@ tt.cssxEnd.updateContext = function (prevType) {
 tt.cssxSelector.updateContext = function (prevType) {
   this.state.context.length -= 1;
 };
+
+tt.cssxMediaQueryEnd.updateContext = function (prevType) {
+  this.cssxMediaQueryOut();
+};

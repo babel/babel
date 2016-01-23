@@ -94,10 +94,12 @@ export default function CSSX(instance) {
       } else if (this.match(tt.cssxValue) && this.cssxMatchNextToken(tt.braceR)) {
         // ending without semicolon
         return this.cssxStoreNextCharAsToken(tt.cssxRulesEnd);
-      } else if (this.match(tt.cssxRulesEnd) && context === tt.cssxMediaQuery) {
+      } else if (this.match(tt.cssxRulesEnd) && context === tc.cssxMediaQuery) {
         // end of media query
         return;
-      } else if (this.match(tt.cssxRulesEnd) && this.cssxMatchNextToken(tt.parenR)) {
+      } else if (
+          (this.match(tt.cssxRulesEnd) && this.cssxMatchNextToken(tt.parenR)) ||
+          (this.match(tt.cssxMediaQueryEnd) && this.cssxMatchNextToken(tt.parenR))) {
         ++this.state.pos;
         this.finishToken(tt.cssxEnd);
         return;
@@ -109,7 +111,7 @@ export default function CSSX(instance) {
       }
 
       // looping through the cssx elements
-      if (context === tc.cssxDefinition) {
+      if (context === tc.cssxDefinition || context === tc.cssxMediaQuery) {
         this.skipSpace();
         return this.cssxReadSelector();
       }
@@ -217,7 +219,7 @@ pp.cssxRulesEntryPoint = function (code) {
 
 /* useful watchers
 
-watch('this.state.type.label'),watch('this.state.pos'),watch('this.state.start'),watch('this.state.end'),watch('this.state.startLoc'),watch('this.state.endLoc'),watch('this.state.input.substr(0, this.state.pos)'),watch('this.curContext().token'),watch('this.lookahead().type.label')
+watch('this.state.type.label'),watch('this.state.pos'),watch('this.state.start'),watch('this.state.end'),watch('this.state.startLoc'),watch('this.state.endLoc'),watch('this.state.input.substr(0, this.state.pos)'),watch('this.state.context.map(function(i){return i.token}).join(",")'),watch('this.lookahead().type.label')
 
 watch('String.fromCharCode(ch) + " / " + ch')
 

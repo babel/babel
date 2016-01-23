@@ -30,5 +30,5 @@ var registerInOut = function (name, context) {
 }
 
 registerInOut('', tc.cssx);
-registerInOut('Media', tc.cssxMediaQuery);
+registerInOut('MediaQuery', tc.cssxMediaQuery);
 registerInOut('Definition', tc.cssxDefinition);

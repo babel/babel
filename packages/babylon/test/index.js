@@ -14,7 +14,8 @@ var ignore = [
 ];
 var writeResultedJSONIfFail = true; // if the test fail write a .result file in the same folder
 var checkStartEndPosToLoc = true; // verify that start and end props match the info under loc prop
-var runOnly = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,all selectors'; // separated by comma
+var runOnly = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,all selectors,media queries,media queries 2,media queries 3,media queries 4'; // separated by comma
+var runOnly = 'real'; // separated by comma
 
 // var writeResultedJSONIfFail = false;
 // var checkStartEndPosToLoc = false;

@@ -121,10 +121,7 @@ pp.cssxStoreNextCharAsToken = function (type) {
 };
 
 pp.cssxStoreCurrentToken = function () {
-  let curContext = this.curContext();
-
   this.state.tokens.push(new Token(this.state));
-  // if (!curContext || !curContext.preserveSpace) this.skipSpace();
   this.cssxSyncLocPropsToCurPos();
 };
 

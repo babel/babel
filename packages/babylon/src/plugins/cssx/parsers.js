@@ -54,41 +54,43 @@ pp.cssxParseElement = function() {
 
 pp.cssxParseMediaQueryElement = function () {
   let mediaQueryElement, result;
-
   mediaQueryElement = this.startNodeAt(this.state.start, this.state.startLoc);
   mediaQueryElement.query = this.state.value;
+  
   this.cssxMediaQueryIn();
   this.cssxFinishTokenAt(tt.cssxMediaQuery, this.state.value, this.state.end, this.state.endLoc);
-  
+  this.cssxStoreCurrentToken();
+
   if (!this.cssxMatchNextToken(tt.braceL)) {
     this.raise(this.state.pos, 'Expected { after query definition');
   }
-  this.next();
 
-  // removing the context added by tt.braceL type
-  // so we stay with CSSXMediaQuery
-  this.state.context.length -= 1;
+  ++this.state.pos;
+  this.finishToken(tt.cssxMediaQueryStart);
 
-  this.replaceCurrentTokenType(tt.cssxMediaQueryStart);
-
-  this.next();
-
-  mediaQueryElement.body = [];
-
-  if (!this.match(tt.braceR)) {
-    mediaQueryElement.body.push(this.cssxParseElement());
-
+  if (this.cssxMatchNextToken(tt.braceR)) { // empty media query
+    this.cssxStoreCurrentToken();
+    this.skipSpace();
+    this.cssxSyncLocPropsToCurPos();
+  } else {
+    this.next();
+    mediaQueryElement.body = [];
     if (this.match(tt.cssxSelector)) {
-      while(!this.match(tt.braceR)) {
+      mediaQueryElement.body.push(this.cssxParseElement());
+      while(!this.cssxMatchNextToken(tt.braceR)) {
+        if (this.match(tt.cssxRulesEnd)) {
+          this.cssxReadSelector();
+        }
         mediaQueryElement.body.push(this.cssxParseElement());
       }
-    } else if (!this.match(tt.braceR)) {
-      this.raise(this.state.pos, "Expected } as end of the media query definition");
+    } else {
+      this.raise(this.state.pos, "Expected css selector after media query definition");
     }
   }
 
-  result = this.finishNodeAt(mediaQueryElement, 'CSSXMediaQueryElement', this.state.end, this.state.endLoc);
+  ++this.state.pos;
   this.finishToken(tt.cssxMediaQueryEnd);
+  result = this.finishNodeAt(mediaQueryElement, 'CSSXMediaQueryElement', this.state.end, this.state.endLoc);
   this.next();
   return result;
 };
