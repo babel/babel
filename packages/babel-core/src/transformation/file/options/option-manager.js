@@ -116,6 +116,10 @@ export default class OptionManager {
     return plugins.map(function (val, i) {
       let plugin, options;
 
+      if (!val) {
+        throw new TypeError("Falsy value found in plugins");
+      }
+
       // destructure plugins
       if (Array.isArray(val)) {
         [plugin, options] = val;
