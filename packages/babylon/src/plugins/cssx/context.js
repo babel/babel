@@ -23,7 +23,7 @@ var registerInOut = function (name, context) {
     const curContext = this.curContext();
 
     if (curContext !== context) {
-      this.raise(this.state.start, 'Not in ' + context.token + ' context');
+      this.raise(this.state.start, 'CSSX: Not in ' + context.token + ' context');
     };
     this.state.context.length -= 1;
   };

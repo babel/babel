@@ -71,13 +71,13 @@ pp.cssxReadWord = function (readUntil) {
       let escStart = this.state.pos;
 
       if (this.input.charCodeAt(++this.state.pos) !== 117) { // "u"
-        this.raise(this.state.pos, "Expecting Unicode escape sequence \\uXXXX");
+        this.raise(this.state.pos, "CSSX: expecting Unicode escape sequence \\uXXXX");
       }
 
       ++this.state.pos;
       let esc = this.readCodePoint();
       if (!(first ? isIdentifierStart : isIdentifierChar)(esc, true)) {
-        this.raise(escStart, "Invalid Unicode escape");
+        this.raise(escStart, "CSSX: invalid Unicode escape");
       }
 
       word += codePointToString(esc);
@@ -118,6 +118,10 @@ pp.cssxReadProperty = function() {
   word = this.cssxReadWord(pp.cssxReadPropCharUntil);
   property = word.str;
 
+  if (property === '') {
+    this.raise(this.state.pos, 'CSSX: missing CSS property');
+  }
+
   this.cssxExpressionRegister(word.expressions);
   this.state.startLoc = loc;
   this.state.start = pos;
@@ -140,6 +144,10 @@ pp.cssxReadValue = function() {
   // if value is a string like \"<something here>\"
   if (value.charAt(0) === '"' && value.charAt(value.length-1) === '"') {
     value = value.substr(1, value.length-2);
+  }
+
+  if (value === '') {
+    this.raise(this.state.pos, 'CSSX: missing CSS value');
   }
   
   this.cssxExpressionRegister(word.expressions);

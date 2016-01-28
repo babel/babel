@@ -41,7 +41,7 @@ pp.cssxParseElement = function() {
   selectorNode = this.startNodeAt(this.state.start, this.state.startLoc);
   
   selectorNode.value = this.state.value;
-  this.cssExpressionSet(selectorNode);
+  this.cssxExpressionSet(selectorNode);
   elementNode.selector = this.finishNodeAt(
     selectorNode, 'CSSXSelector', this.state.end, this.state.endLoc
   );
@@ -58,13 +58,13 @@ pp.cssxParseMediaQueryElement = function () {
   mediaQueryElement = this.startNodeAt(this.state.start, this.state.startLoc);
   mediaQueryElement.query = this.state.value;
 
-  this.cssExpressionSet(mediaQueryElement);
+  this.cssxExpressionSet(mediaQueryElement);
   this.cssxMediaQueryIn();
   this.cssxFinishTokenAt(tt.cssxMediaQuery, this.state.value, this.state.end, this.state.endLoc);
   this.cssxStoreCurrentToken();
 
   if (!this.cssxMatchNextToken(tt.braceL)) {
-    this.raise(this.state.pos, 'Expected { after query definition');
+    this.raise(this.state.pos, 'CSSX: expected { after query definition');
   }
 
   ++this.state.pos;
@@ -86,7 +86,7 @@ pp.cssxParseMediaQueryElement = function () {
         mediaQueryElement.body.push(this.cssxParseElement());
       }
     } else {
-      this.raise(this.state.pos, "Expected css selector after media query definition");
+      this.raise(this.state.pos, "CSSX: expected css selector after media query definition");
     }
   }
 
@@ -116,7 +116,7 @@ pp.cssxParseRule = function (propertyNode, valueNode) {
 pp.cssxParseRuleChild = function (type, value, pos, loc) {
   var node = this.startNodeAt(pos, loc);
 
-  this.cssExpressionSet(node);
+  this.cssxExpressionSet(node);
   node.name = value;
   return this.finishNodeAt(node, type, this.state.lastTokEnd, this.state.lastTokEndLoc);
 };

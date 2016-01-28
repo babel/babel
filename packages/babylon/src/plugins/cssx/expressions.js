@@ -13,7 +13,7 @@ pp.cssxExpressionRegister = function (expressions) {
     this.state._cssxExpressions = expressions;
   }
 };
-pp.cssExpressionSet = function (node) {
+pp.cssxExpressionSet = function (node) {
   let length, codeStr, exprNode;
 
   if (this.state._cssxExpressions && this.state._cssxExpressions.length > 0) {
@@ -25,7 +25,7 @@ pp.cssExpressionSet = function (node) {
         try {
           exprNode = parse(codeStr, PARSER_OPTIONS);
         } catch(err) {
-          this.raise(expr.start, err.toString().split('(')[0]);
+          this.raise(expr.start, 'CSSX: ' + err.toString().split('(')[0]);
         }
         return {
           start: expr.start,
