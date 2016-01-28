@@ -46,7 +46,9 @@ pp.cssxParseElement = function() {
     selectorNode, 'CSSXSelector', this.state.end, this.state.endLoc
   );
   this.next();
-  elementNode.body = this.parseBlock();
+  if (!this.match(tt.cssxRulesEnd)) {
+    elementNode.body = this.parseBlock();
+  }
   lastToken = this.cssxGetPreviousToken();
   result = this.finishNodeAt(elementNode, 'CSSXElement', lastToken.end, lastToken.loc.end);
   this.nextToken();

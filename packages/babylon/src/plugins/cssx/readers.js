@@ -17,9 +17,11 @@ pp.cssxReadWord = function (readUntil) {
   let first = true;
   let chunkStart, cut, toggle;
   let readingDataURI = false;
+  let readingNth = false;
   let readingExpression = false;
   let dataURIPattern = ['url(data:', 41]; // 41 = )
   let expressionPattern = [96, 96]; // 96 = `
+  let nthPattern = [40, 41]; // 40 = (, 41 = )
   let expression = false;
   let expressions = [];
   let numOfCharRead = 0;
@@ -34,9 +36,12 @@ pp.cssxReadWord = function (readUntil) {
     if (cut() === dataURIPattern[0]) readingDataURI = true;
     if (ch === dataURIPattern[1]) readingDataURI = false;
 
+    if (ch === nthPattern[0]) readingNth = true;
+
     if (
       readUntil.call(this, ch) ||
       readingDataURI ||
+      readingNth ||
       ch === expressionPattern[0] ||
       expression !== false
     ) {
@@ -44,7 +49,7 @@ pp.cssxReadWord = function (readUntil) {
       let inc = (ch <= 0xffff ? 1 : 2);
       this.state.pos += inc;
 
-      // expression block end detaction
+      // expression block end detection
       if (ch === expressionPattern[1] && expression) {
         expression.end = this.state.pos;
         expression.inner.end = numOfCharRead + 1;
@@ -85,6 +90,7 @@ pp.cssxReadWord = function (readUntil) {
     } else {
       break;
     }
+    if (ch === nthPattern[1]) readingNth = false;
     first = false;
     ++numOfCharRead;
   }

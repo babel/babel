@@ -72,6 +72,9 @@ export default function CSSX(instance) {
       if (this.match(tt.cssxSelector) && this.cssxMatchNextToken(tt.braceL)) {
         ++this.state.pos;
         return this.finishToken(tt.cssxRulesStart);
+      } else if (this.match(tt.cssxSelector) && this.cssxMatchNextToken(tt.parenR)) {
+        this.finishToken(tt.cssxRulesEnd);
+        return;
       } else if (this.match(tt.cssxRulesStart)) {
         // no styles
         if (this.cssxMatchNextToken(tt.braceR)) {
