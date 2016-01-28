@@ -45,8 +45,8 @@ export default function CSSX(instance) {
         if (this.match(tt.cssxRulesStart) && this.lookahead().type === tt.braceR) {
           this.next();
         } else {
-          // reading the style
-          while (!this.match(tt.cssxRulesEnd)) {
+          // reading the style          
+          while (!this.match(tt.cssxRulesEnd) && !this.match(tt.eof)) {
             rules.push(this.cssxParseRule(this.cssxReadProperty(), this.cssxReadValue()));
           }
           if (this.state.pos >= this.input.length) this.finishToken(tt.eof);
@@ -163,24 +163,26 @@ export default function CSSX(instance) {
 
 pp.cssxEntryPoint = function (code) {
   let nextToken = this.lookahead();
-  let name, parenL, future;
+  let name, parenL, future, cState;
 
   if (
     nextToken.type === tt.name &&
     nextToken.value === 'cssx' &&
     this.cssxMatchNextToken(tt.name, tt.parenL)
   ) {
-    this.cssxIn();
+    cState = this.state.clone();
     future = this.cssxLookahead(2);
     name = future.first;
     parenL = future.last;
+    this.cssxIn();
     this.state.pos = parenL.end;
     this.finishToken(tt.cssxStart);
     this.cssxSyncEndTokenStateToCurPos();
-    this.cssxStoreCurrentToken();
     if (this.cssxMatchNextToken(tt.parenR)) {
-      this.raise(this.state.pos, 'CSSX: empty definition');
+      this.state =cState;
+      return false;
     }
+    this.cssxStoreCurrentToken();
     return true;
   }
   return false;

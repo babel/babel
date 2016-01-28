@@ -118,9 +118,9 @@ pp.cssxReadProperty = function() {
   word = this.cssxReadWord(pp.cssxReadPropCharUntil);
   property = word.str;
 
-  if (property === '') {
-    this.raise(this.state.pos, 'CSSX: missing CSS property');
-  }
+  // if (property === '') {
+  //   this.raise(this.state.pos, 'CSSX: missing CSS property');
+  // }
 
   this.cssxExpressionRegister(word.expressions);
   this.state.startLoc = loc;
@@ -144,10 +144,6 @@ pp.cssxReadValue = function() {
   // if value is a string like \"<something here>\"
   if (value.charAt(0) === '"' && value.charAt(value.length-1) === '"') {
     value = value.substr(1, value.length-2);
-  }
-
-  if (value === '') {
-    this.raise(this.state.pos, 'CSSX: missing CSS value');
   }
   
   this.cssxExpressionRegister(word.expressions);

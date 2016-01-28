@@ -101,6 +101,7 @@ function runTest(test) {
   } else {
     var mis = misMatch(JSON.parse(test.expect.code), ast);
     if (mis) {
+      // require("fs").writeFileSync(test.expect.loc + '.result', JSON.stringify(ast, null, 2));
       //save(test, ast);
       throw new Error(mis);
     }
