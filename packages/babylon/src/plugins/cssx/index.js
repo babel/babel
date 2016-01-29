@@ -199,7 +199,15 @@ pp.cssxRulesEntryPoint = function (code) {
 
 /* useful watchers
 
-watch('this.state.type.label'),watch('this.state.pos'),watch('this.state.start'),watch('this.state.end'),watch('this.state.startLoc'),watch('this.state.endLoc'),watch('this.state.input.substr(0, this.state.pos)'),watch('this.state.context.map(function(i){return i.token}).join(",")'),watch('this.lookahead().type.label')
+watch('this.state.type.label')
+watch('this.state.pos')
+watch('this.state.start')
+watch('this.state.end')
+watch('this.state.startLoc')
+watch('this.state.endLoc')
+watch('this.state.input.substr(0, this.state.pos)')
+watch('this.state.context.map(function(i){return i.token}).join(",")')
+watch('this.lookahead().type.label')
 
 watch('String.fromCharCode(ch) + " / " + ch')
 

@@ -39,7 +39,7 @@ pp.cssxParseElement = function() {
 
   elementNode = this.startNodeAt(this.state.start, this.state.startLoc);
   selectorNode = this.startNodeAt(this.state.start, this.state.startLoc);
-  
+
   selectorNode.value = this.state.value;
   this.cssxExpressionSet(selectorNode);
   elementNode.selector = this.finishNodeAt(

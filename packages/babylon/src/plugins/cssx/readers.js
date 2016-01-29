@@ -121,18 +121,23 @@ pp.cssxReadProperty = function() {
 
   loc = this.state.curPosition();
   pos = this.state.pos;
+
   word = this.cssxReadWord(pp.cssxReadPropCharUntil);
   property = word.str;
 
-  // if (property === '') {
-  //   this.raise(this.state.pos, 'CSSX: missing CSS property');
-  // }
+  if (property === '') {
+    this.raise(this.state.pos, 'CSSX: no CSS property provided');
+  }
 
   this.cssxExpressionRegister(word.expressions);
   this.state.startLoc = loc;
   this.state.start = pos;
 
   this.finishToken(tt.cssxProperty, property);
+
+  if (this.lookahead().type !== tt.colon) {
+    this.raise(this.state.pos, 'CSSX: expecting a colon after CSS property');
+  }
   this.next();
   node = this.cssxParseRuleChild('CSSXProperty', property, pos, loc);
 
