@@ -138,13 +138,21 @@ describe("verify", function () {
     );
   });
 
-  // fix after updating to ESLint 1.0.0
-  it.skip("Arrow function with non-block bodies (issue #20)", function () {
+  it("Arrow function with non-block bodies (issue #20)", function () {
     verifyAndAssertMessages(
       "\"use strict\"; () => 1",
       { "strict": [1, "global"] },
       [],
       { modules: false }
+    );
+  });
+
+  it("#242", function () {
+    verifyAndAssertMessages(
+      "\"use strict\"; asdf;",
+      { "no-irregular-whitespace": 1 },
+      [],
+      {}
     );
   });
 
