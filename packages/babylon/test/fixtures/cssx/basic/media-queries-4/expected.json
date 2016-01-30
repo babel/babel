@@ -385,7 +385,7 @@
                             "column": 24
                           }
                         },
-                        "name": "Email: "
+                        "name": "\"Email: \""
                       }
                     },
                     {
@@ -1413,7 +1413,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "Email: ",
+      "value": "\"Email: \"",
       "start": 223,
       "end": 232,
       "loc": {

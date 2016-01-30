@@ -1876,7 +1876,7 @@
                         "column": 881
                       }
                     },
-                    "name": " "
+                    "name": "\" \""
                   }
                 },
                 {
@@ -10145,7 +10145,7 @@
                         "column": 3885
                       }
                     },
-                    "name": " "
+                    "name": "\" \""
                   }
                 },
                 {
@@ -17987,7 +17987,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": " ",
+      "value": "\" \"",
       "start": 878,
       "end": 881,
       "loc": {
@@ -34593,7 +34593,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": " ",
+      "value": "\" \"",
       "start": 3882,
       "end": 3885,
       "loc": {

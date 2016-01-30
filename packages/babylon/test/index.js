@@ -1,8 +1,10 @@
 var getFixtures = require("babel-helper-fixtures").multiple;
 var parse       = require("../lib").parse;
 var _           = require("lodash");
+var fs          = require("fs");
 
 var fixtures = reduceFixtures(getFixtures(__dirname + "/fixtures"));
+var saveResultedJSON = false;
 
 _.each(fixtures, function (suites, name) {
   _.each(suites, function (testSuite) {
@@ -68,7 +70,7 @@ function reduceFixtures (fixturesCategories) {
 function save(test, ast) {
   delete ast.tokens;
   if (!ast.comments.length) delete ast.comments;
-  require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
+  fs.writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
 }
 
 function runTest(test) {
@@ -101,9 +103,11 @@ function runTest(test) {
   } else {
     var mis = misMatch(JSON.parse(test.expect.code), ast);
     if (mis) {
-      // require("fs").writeFileSync(test.expect.loc + '.result', JSON.stringify(ast, null, 2));
+      saveResultedJSON ? fs.writeFileSync(test.expect.loc + '.result', JSON.stringify(ast, null, 2)) : null;
       //save(test, ast);
       throw new Error(mis);
+    } else if (saveResultedJSON && fs.existsSync(test.expect.loc + '.result')) {
+      fs.unlink(test.expect.loc + '.result');
     }
   }
 }

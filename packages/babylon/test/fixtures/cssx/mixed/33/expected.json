@@ -675,7 +675,7 @@
                               "column": 22
                             }
                           },
-                          "name": " "
+                          "name": "\" \""
                         }
                       },
                       {
@@ -1011,7 +1011,7 @@
         "binop": null,
         "updateContext": null
       },
-      "value": " ",
+      "value": "\" \"",
       "start": 193,
       "end": 196,
       "loc": {
