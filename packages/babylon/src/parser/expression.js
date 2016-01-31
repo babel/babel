@@ -528,7 +528,7 @@ pp.parseParenExpression = function () {
   return val;
 };
 
-pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow, isAsync) {
+pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow, isAsync, allowOptionalCommaStart) {
   startPos = startPos || this.state.start;
   startLoc = startLoc || this.state.startLoc;
 
@@ -578,7 +578,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
       this.unexpected(this.state.lastTokStart);
     }
   }
-  if (optionalCommaStart) this.unexpected(optionalCommaStart);
+  if (optionalCommaStart && !allowOptionalCommaStart) this.unexpected(optionalCommaStart);
   if (spreadStart) this.unexpected(spreadStart);
   if (refShorthandDefaultPos.start) this.unexpected(refShorthandDefaultPos.start);
 
