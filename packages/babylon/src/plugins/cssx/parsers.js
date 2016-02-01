@@ -85,6 +85,9 @@ pp.cssxParseMediaQueryElement = function () {
         if (this.match(tt.cssxRulesEnd)) {
           this.cssxReadSelector();
         }
+        if (this.cssxMatchNextToken(tt.parenR)) {
+          this.raise(this.state.pos, 'CSSX: unclosed media query block');
+        }
         mediaQueryElement.body.push(this.cssxParseElement());
       }
     } else {
