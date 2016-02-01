@@ -80,6 +80,9 @@ function monkeypatch() {
   }
   var referencerMod = createModule(referencerLoc);
   var referencer = require(referencerLoc);
+  if (typeof referencer === 'object' && referencer.default) {
+    referencer = referencer.default;
+  }
 
   // monkeypatch escope/pattern-visitor
   var patternVisitorLoc;
@@ -89,6 +92,9 @@ function monkeypatch() {
     patternVisitorLoc = Module._resolveFilename("./pattern-visitor", escopeMod);
     patternVisitorMod = createModule(patternVisitorLoc);
     patternVisitor = require(patternVisitorLoc);
+    if (typeof patternVisitor === 'object' && patternVisitor.default) {
+      patternVisitor = patternVisitor.default;
+    }
   } catch (err) {
     // When eslint uses old escope, we cannot find pattern visitor.
     // Fallback to the old way.
