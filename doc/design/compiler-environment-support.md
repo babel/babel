@@ -19,5 +19,5 @@ to:
  - Internet Explorer
  - ...
 
-**NOTE:** If Babel works in any of the unsupported environments then it is purely
-coincidental has no bearing on future compatibility. Use at your own risk.
+**NOTE:** If Babel works in any of the unsupported environments, it is purely
+coincidental and has no bearing on future compatibility. Use at your own risk.
