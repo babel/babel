@@ -132,7 +132,7 @@ module.exports = function (commander, filenames, opts) {
     walk();
 
     if (commander.watch) {
-      let chokidar = require("chokidar");
+      let chokidar = util.requireChokidar();
       chokidar.watch(filenames, {
         persistent: true,
         ignoreInitial: true

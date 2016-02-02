@@ -64,7 +64,7 @@ module.exports = function (commander, filenames) {
   _.each(filenames, handle);
 
   if (commander.watch) {
-    let chokidar = require("chokidar");
+    let chokidar = util.requireChokidar();
 
     _.each(filenames, function (dirname) {
       let watcher = chokidar.watch(dirname, {
