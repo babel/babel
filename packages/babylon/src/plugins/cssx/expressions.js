@@ -1,5 +1,5 @@
 import Parser from "../../parser";
-import { parse } from "../../../";
+import { parse } from "../../";
 
 let pp = Parser.prototype;
 
