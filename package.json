@@ -4,7 +4,7 @@
   "devDependencies": {
     "async": "^1.5.0",
     "babel": "5.8.21",
-    "babel-eslint": "^4.0.6",
+    "babel-eslint": "^4.1.8",
     "babel-plugin-flow-comments": "^1.0.9",
     "browserify": "^11.2.0",
     "bundle-collapser": "^1.2.1",
@@ -13,7 +13,7 @@
     "codecov.io": "^0.1.6",
     "derequire": "^2.0.2",
     "es5-shim": "^4.1.7",
-    "eslint": "1.8.0",
+    "eslint": "~1.10.3",
     "flow-bin": "^0.21.0",
     "fs-readdir-recursive": "^0.1.2",
     "gulp": "^3.9.0",
