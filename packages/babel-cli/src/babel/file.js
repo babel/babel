@@ -1,7 +1,6 @@
 let convertSourceMap = require("convert-source-map");
 let pathExists       = require("path-exists");
 let sourceMap        = require("source-map");
-let chokidar         = require("chokidar");
 let slash            = require("slash");
 let path             = require("path");
 let util             = require("./util");
@@ -133,6 +132,7 @@ module.exports = function (commander, filenames, opts) {
     walk();
 
     if (commander.watch) {
+      let chokidar = require("chokidar");
       chokidar.watch(filenames, {
         persistent: true,
         ignoreInitial: true
