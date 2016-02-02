@@ -47,17 +47,23 @@ function monkeypatch() {
     estraverseRelative = createModule(esrecurseLoc);
   } catch (err) {}
 
+  // contains all the instances of estraverse so we can modify them if necessary
+  var estraverses = [];
+
   // monkeypatch estraverse
   estraverse = estraverseRelative.require("estraverse");
+  estraverses.push(estraverse);
   assign(estraverse.VisitorKeys, t.VISITOR_KEYS);
 
   // monkeypatch estraverse-fb
   var estraverseFb = eslintMod.require("estraverse-fb");
+  estraverses.push(estraverseFb);
   assign(estraverseFb.VisitorKeys, t.VISITOR_KEYS);
 
   // ESLint v1.9.0 uses estraverse directly to work around https://github.com/npm/npm/issues/9663
   var estraverseOfEslint = eslintMod.require("estraverse");
   if (estraverseOfEslint !== estraverseFb) {
+    estraverses.push(estraverseOfEslint);
     assign(estraverseOfEslint.VisitorKeys, t.VISITOR_KEYS);
   }
 
@@ -279,7 +285,18 @@ function monkeypatch() {
         }
       }
     }
+    // set ArrayPattern/ObjectPattern visitor keys back to their original. otherwise
+    // escope will traverse into them and include the identifiers within as declarations
+    estraverses.forEach(function (estraverse) {
+      estraverse.VisitorKeys.ObjectPattern = ["properties"];
+      estraverse.VisitorKeys.ArrayPattern = ["elements"];
+    });
     visitFunction.call(this, node);
+    // set them back to normal...
+    estraverses.forEach(function (estraverse) {
+      estraverse.VisitorKeys.ObjectPattern = t.VISITOR_KEYS.ObjectPattern;
+      estraverse.VisitorKeys.ArrayPattern = t.VISITOR_KEYS.ArrayPattern;
+    });
     if (typeParamScope) {
       this.close(node);
     }

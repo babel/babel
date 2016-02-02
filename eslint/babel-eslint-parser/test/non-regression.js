@@ -1340,6 +1340,19 @@ describe("verify", function () {
     );
   });
 
+  it("fixes issues with flow types and ObjectPattern", function () {
+    verifyAndAssertMessages([
+        "import type Foo from 'bar';",
+        "export default class Foobar {",
+        "  foo({ bar }: Foo) { bar; }",
+        "  bar({ foo }: Foo) { foo; }",
+        "}"
+      ].join("\n"),
+      { "no-unused-vars": 1 },
+      []
+    );
+  });
+
   // it("regex with es6 unicodeCodePointEscapes", function () {
   //   verifyAndAssertMessages(
   //     "string.replace(/[\u{0000A0}-\u{10FFFF}<>\&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);",
