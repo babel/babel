@@ -1348,7 +1348,7 @@ describe("verify", function () {
         "  bar({ foo }: Foo) { foo; }",
         "}"
       ].join("\n"),
-      { "no-unused-vars": 1 },
+      { "no-unused-vars": 1, "no-shadow": 1 },
       []
     );
   });
