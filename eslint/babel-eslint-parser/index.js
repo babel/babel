@@ -80,7 +80,7 @@ function monkeypatch() {
   }
   var referencerMod = createModule(referencerLoc);
   var referencer = require(referencerLoc);
-  if (typeof referencer === 'object' && referencer.default) {
+  if (referencer.__esModule) {
     referencer = referencer.default;
   }
 
@@ -92,7 +92,7 @@ function monkeypatch() {
     patternVisitorLoc = Module._resolveFilename("./pattern-visitor", escopeMod);
     patternVisitorMod = createModule(patternVisitorLoc);
     patternVisitor = require(patternVisitorLoc);
-    if (typeof patternVisitor === 'object' && patternVisitor.default) {
+    if (patternVisitor.__esModule) {
       patternVisitor = patternVisitor.default;
     }
   } catch (err) {
