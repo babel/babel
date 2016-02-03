@@ -57,7 +57,7 @@ suite("util", function () {
     assert.deepEqual(util.regexify(false), /.^/);
     assert.deepEqual(util.regexify(null), /.^/);
     assert.deepEqual(util.regexify(""), /.^/);
-    assert.deepEqual(util.regexify(["foo", "bar"]), /\x66oo|\x62ar/i);
+    assert.deepEqual(util.regexify(["foo", "bar"]), /foo|bar/i);
     assert.deepEqual(util.regexify("foobar"), /(?:(?=.)foobar)/i);
     assert.deepEqual(util.regexify(/foobar/), /foobar/);
 
