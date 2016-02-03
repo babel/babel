@@ -44,7 +44,7 @@ test-cov: clean
 test-ci:
 	make lint
 	NODE_ENV=test make bootstrap
-	./node_modules/.bin/flow check
+	node scripts/run-flow-check.js
 	./scripts/test-cov.sh
 	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
 
