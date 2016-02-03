@@ -99,6 +99,7 @@ let templateVisitor = {
   },
 
   exit({ node }) {
-    traverse.clearNode(node);
+    if (!node.loc)
+      traverse.clearNode(node);
   }
 };

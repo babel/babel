@@ -25,11 +25,8 @@
   exports.default = [];
   exports.default = foo;
   exports.default = class {};
-
   function foo() {}
-
   class Foo {}
-
   exports.default = Foo;
   exports.default = foo;
 

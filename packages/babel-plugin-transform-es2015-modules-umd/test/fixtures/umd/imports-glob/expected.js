@@ -14,5 +14,7 @@
   "use strict";
 
   var foo = babelHelpers.interopRequireWildcard(_foo);
+
+
   foo;
 });
