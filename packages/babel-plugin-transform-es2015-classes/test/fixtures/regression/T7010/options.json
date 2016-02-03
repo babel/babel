@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-es2015-classes",
+    "external-helpers"
+  ]
+}

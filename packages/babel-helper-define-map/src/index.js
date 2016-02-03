@@ -63,11 +63,6 @@ export function push(mutatorMap: Object, node: Object, kind: string, file, scope
   // infer function name
   if (scope && t.isStringLiteral(key) && (kind === "value" || kind === "initializer") && t.isFunctionExpression(value)) {
     value = nameFunction({ id: key, node: value, scope });
-
-    // Class methods don't have their name bound in the funciton body.
-    if (t.isClassMethod(node)) {
-      value.id[t.NOT_LOCAL_BINDING] = true
-    }
   }
 
   if (value) {
