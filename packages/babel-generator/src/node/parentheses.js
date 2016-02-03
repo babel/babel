@@ -50,7 +50,7 @@ export function ObjectExpression(node: Object, parent: Object, printStack: Array
     return true;
   }
 
-  return isFirstInStatement(printStack);
+  return isFirstInStatement(printStack, true);
 }
 
 export function Binary(node: Object, parent: Object): boolean {
@@ -233,13 +233,17 @@ export function AssignmentExpression(node: Object): boolean {
 
 // Walk up the print stack to deterimine if our node can come first
 // in statement.
-function isFirstInStatement(printStack: Array<Object>): boolean {
+function isFirstInStatement(printStack: Array<Object>, considerArrow: bool = false): boolean {
   let i = printStack.length - 1;
   let node = printStack[i];
   i--;
   let parent = printStack[i];
   while (i > 0) {
     if (t.isExpressionStatement(parent, { expression: node })) {
+      return true;
+    }
+
+    if (considerArrow && t.isArrowFunctionExpression(parent, { body: node })) {
       return true;
     }
 
