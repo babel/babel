@@ -141,7 +141,7 @@ interface Position {
 # Identifier
 
 ```js
-interface Identifier <: Node, Expression, Pattern {
+interface Identifier <: Expression, Pattern {
   type: "Identifier";
   name: string;
 }
@@ -150,6 +150,12 @@ interface Identifier <: Node, Expression, Pattern {
 An identifier. Note that an identifier may be an expression or a destructuring pattern.
 
 # Literals
+
+```js
+interface Literal <: Expression { }
+```
+
+A literal token. May or may not represent an expression.
 
 ## RegExpLiteral
 
@@ -928,6 +934,10 @@ interface TemplateElement <: Node {
 ```
 
 # Patterns
+
+```js
+interface Pattern <: Node { }
+```
 
 ## ObjectPattern
 
