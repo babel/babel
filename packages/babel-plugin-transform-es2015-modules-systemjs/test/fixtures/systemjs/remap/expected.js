@@ -10,7 +10,6 @@ System.register([], function (_export, _context) {
       _export("test", test);
 
       _export("test", test = 5);
-
       _export("test", test++);
 
       (function () {
