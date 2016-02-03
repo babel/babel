@@ -24,6 +24,26 @@ function transformAsync(code, opts) {
 }
 
 suite("api", function () {
+  test("analyze", function () {
+    assert.equal(babel.analyse("foobar;").marked.length, 0);
+
+    assert.equal(babel.analyse("foobar;", {
+      plugins: [new Plugin({
+        visitor: {
+          Program: function (path) {
+            path.mark("category", "foobar");
+          }
+        }
+      })]
+    }).marked[0].message, "foobar");
+
+    assert.equal(babel.analyse("foobar;", {}, {
+      Program: function (path) {
+        path.mark("category", "foobar");
+      }
+    }).marked[0].message, "foobar");
+  });
+
   test("transformFile", function (done) {
     babel.transformFile(__dirname + "/fixtures/api/file.js", {}, function (err, res) {
       if (err) return done(err);
