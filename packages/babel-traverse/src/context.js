@@ -105,6 +105,9 @@ export default class TraversalContext {
       path.resync();
       path.pushContext(this);
 
+      // this path no longer belongs to the tree
+      if (path.key === null) continue;
+
       if (testing && queue.length >= 1000) {
         this.trap = true;
       }
