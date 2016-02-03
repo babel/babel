@@ -1,6 +1,5 @@
 let outputFileSync = require("output-file-sync");
 let pathExists     = require("path-exists");
-let chokidar       = require("chokidar");
 let slash          = require("slash");
 let path           = require("path");
 let util           = require("./util");
@@ -65,6 +64,8 @@ module.exports = function (commander, filenames) {
   _.each(filenames, handle);
 
   if (commander.watch) {
+    let chokidar = util.requireChokidar();
+
     _.each(filenames, function (dirname) {
       let watcher = chokidar.watch(dirname, {
         persistent: true,
