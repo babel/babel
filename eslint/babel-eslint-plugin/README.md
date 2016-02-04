@@ -1,6 +1,8 @@
 # eslint-plugin-babel
 
-An `eslint` plugin companion to `babel-eslint`. `babel-eslint` does a great job at adapting `eslint` for use with Babel, but it can't change the built in rules to support experimental features. `eslint-plugin-babel` reimplements problematic rules so they do not give false positives or negatives.
+An `eslint` plugin companion to `babel-eslint`. `babel-eslint` does a great job at adapting `eslint`
+for use with Babel, but it can't change the built in rules to support experimental features.
+`eslint-plugin-babel` re-implements problematic rules so they do not give false positives or negatives.
 
 ### Install
 
@@ -40,7 +42,7 @@ Each rule corresponds to a core `eslint` rule, and has the same options.
 
 - `babel/generator-star-spacing`: Handles async/await functions correctly
 - `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
-- `babel/array-bracket-spacing`: Handles destructuring arrays with flow type in function parametres
+- `babel/array-bracket-spacing`: Handles destructuring arrays with flow type in function parameters
 - `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";`
 - `babel/object-shorthand`: doesn't fail when using object spread (`...obj`)
 - `babel/arrow-parens`: Handles async functions correctly
