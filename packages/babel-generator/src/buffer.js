@@ -9,7 +9,7 @@ import trimRight from "trim-right";
  */
 
 export default class Buffer {
-  constructor(position: Position, format: Array) {
+  constructor(position: Position, format: Array ) {
     this.printedCommentStarts = {};
     this.parenPushNewlineState = null;
     this.position = position;
