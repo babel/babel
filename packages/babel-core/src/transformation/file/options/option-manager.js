@@ -9,7 +9,7 @@ import resolve from "../../../helpers/resolve";
 import json5 from "json5";
 import isAbsolute from "path-is-absolute";
 import pathExists from "path-exists";
-import cloneDeep from "lodash/cloneDeep";
+import cloneDeepWith from "lodash/cloneDeepWith";
 import clone from "lodash/clone";
 import merge from "../../../helpers/merge";
 import config from "./config";
@@ -208,7 +208,7 @@ export default class OptionManager {
     }
 
     //
-    let opts = cloneDeep(rawOpts, (val) => {
+    let opts = cloneDeepWith(rawOpts, (val) => {
       if (val instanceof Plugin) {
         return val;
       }
