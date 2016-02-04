@@ -9,7 +9,7 @@ binVersionCheck("npm", ">=3.3.0", function (err) {
     console.log("Running ./node_modules/.bin/flow check");
     var cmd = child.spawn("./node_modules/.bin/flow", ["check"], { stdio: "inherit" });
     cmd.on("exit", function(code) {
-      console.log(code);
+      process.exit(code);
     });
   }
 });
