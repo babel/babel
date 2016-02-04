@@ -1,3 +1,5 @@
+/* @noflow */
+
 import isPlainObject from "lodash/lang/isPlainObject";
 import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
@@ -218,7 +220,7 @@ export function toExpression(node: Object): Object {
   }
 }
 
-export function toBlock(node, parent: Object): Object {
+export function toBlock(node: Object, parent: Object): Object {
   if (t.isBlockStatement(node)) {
     return node;
   }

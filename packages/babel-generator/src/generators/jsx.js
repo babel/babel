@@ -1,3 +1,5 @@
+/* @flow */
+
 export function JSXAttribute(node: Object) {
   this.print(node.name, node);
   if (node.value) {

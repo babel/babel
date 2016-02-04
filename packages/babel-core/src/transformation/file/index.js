@@ -537,7 +537,7 @@ export default class File extends Store {
     }
   }
 
-  makeResult({ code, map, ast, ignored } /*: BabelFileResult */): BabelFileResult {
+  makeResult({ code, map, ast, ignored }: BabelFileResult): BabelFileResult {
     let result = {
       metadata: null,
       options:  this.opts,
