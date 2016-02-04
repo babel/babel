@@ -201,7 +201,7 @@
                               {
                                 "start": 64,
                                 "end": 70,
-                                "inSelector": {
+                                "contextLoc": {
                                   "start": 1,
                                   "end": 7
                                 },
@@ -300,6 +300,49 @@
                                       "column": 25
                                     }
                                   },
+                                  "expressions": [
+                                    {
+                                      "start": 96,
+                                      "end": 102,
+                                      "contextLoc": {
+                                        "start": 0,
+                                        "end": 6
+                                      },
+                                      "body": [
+                                        {
+                                          "type": "ExpressionStatement",
+                                          "start": 0,
+                                          "end": 4,
+                                          "loc": {
+                                            "start": {
+                                              "line": 1,
+                                              "column": 0
+                                            },
+                                            "end": {
+                                              "line": 1,
+                                              "column": 4
+                                            }
+                                          },
+                                          "expression": {
+                                            "type": "Identifier",
+                                            "start": 0,
+                                            "end": 4,
+                                            "loc": {
+                                              "start": {
+                                                "line": 1,
+                                                "column": 0
+                                              },
+                                              "end": {
+                                                "line": 1,
+                                                "column": 4
+                                              }
+                                            },
+                                            "name": "size"
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ],
                                   "name": "`size`px"
                                 }
                               }

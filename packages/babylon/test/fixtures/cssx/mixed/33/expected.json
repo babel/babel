@@ -121,7 +121,7 @@
                       {
                         "start": 21,
                         "end": 171,
-                        "inSelector": {
+                        "contextLoc": {
                           "start": 0,
                           "end": 150
                         },

@@ -62,7 +62,7 @@
               {
                 "start": 37,
                 "end": 60,
-                "inSelector": {
+                "contextLoc": {
                   "start": 30,
                   "end": 53
                 },
@@ -135,7 +135,7 @@
                     {
                       "start": 67,
                       "end": 82,
-                      "inSelector": {
+                      "contextLoc": {
                         "start": 0,
                         "end": 15
                       },
@@ -303,7 +303,7 @@
                           {
                             "start": 87,
                             "end": 103,
-                            "inSelector": {
+                            "contextLoc": {
                               "start": 0,
                               "end": 16
                             },
@@ -378,7 +378,7 @@
                           {
                             "start": 105,
                             "end": 116,
-                            "inSelector": {
+                            "contextLoc": {
                               "start": 0,
                               "end": 11
                             },

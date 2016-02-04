@@ -76,7 +76,7 @@
                 {
                   "start": 8,
                   "end": 13,
-                  "inSelector": {
+                  "contextLoc": {
                     "start": 0,
                     "end": 5
                   },

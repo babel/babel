@@ -30,14 +30,16 @@ pp.cssxExpressionSet = function (node) {
         return {
           start: expr.start,
           end: expr.end,
-          inSelector: {
+          contextLoc: {
             start: expr.inner.start,
             end: expr.inner.end
           },
           body: exprNode.program.body
         }
       })
-      .filter(expr => expr !== false);
+      .filter(function(expr) {
+        return expr !== false;
+      });
   }
   this.state._cssxExpressions = false;
 };
