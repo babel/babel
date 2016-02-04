@@ -71,3 +71,12 @@ process.on("uncaughtException", function (err) {
   console.error(toErrorStack(err));
   process.exit(1);
 });
+
+export function requireChokidar() {
+  try {
+    return require("chokidar");
+  } catch (err) {
+    console.error("The optional dependency chokidar failed to install and is required for --watch. Chokidar is likely not supported on your platform.")
+    throw err;
+  }
+}

@@ -141,6 +141,7 @@ export default function ({ node, parent, scope, id }) {
       if (binding && binding.constant && scope.getBinding(id.name) === binding) {
         // always going to reference this method
         node.id = id;
+        node.id[t.NOT_LOCAL_BINDING] = true;
         return;
       }
     }
@@ -162,6 +163,11 @@ export default function ({ node, parent, scope, id }) {
 
   name = t.toBindingIdentifierName(name);
   id = t.identifier(name);
+
+  // The id shouldn't be considered a local binding to the function because
+  // we are simply trying to set the function name and not actually create
+  // a local binding.
+  id[t.NOT_LOCAL_BINDING] = true;
 
   let state = visit(node, name, scope);
   return wrap(state, node, id, scope) || node;
