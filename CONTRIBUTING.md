@@ -78,6 +78,23 @@ To test the code coverage, use:
 $ make test-cov
 ```
 
+#### Writing tests
+
+When writing tests in `babylon`, you can easily generate an `expected.json` automatically by just providing the `actual.js` and running `make test-only` like normal.
+
+```js
+// Example
+- babylon
+  - test
+    - fixtures
+      - comments
+        - basic
+          - block-trailing-comment
+            - actual.js
+            - expected.json (will be generated if not created)
+```
+
+
 #### Internals
 
 Please see [`/doc`](/doc) for internals documentation relevant to developing babel.
