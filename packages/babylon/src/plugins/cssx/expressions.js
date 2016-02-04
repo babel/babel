@@ -1,5 +1,4 @@
 import Parser from "../../parser";
-import { parse } from "../../";
 
 let pp = Parser.prototype;
 
@@ -22,19 +21,13 @@ pp.cssxExpressionSet = function (node) {
         length = expr.end - expr.start;
         codeStr = this.state.input.substr(expr.start, length).substr(1, length-2);
         if (codeStr === '') return false;
-        try {
-          exprNode = parse(codeStr, PARSER_OPTIONS);
-        } catch(err) {
-          this.raise(expr.start, 'CSSX: ' + err.toString().split('(')[0]);
-        }
         return {
           start: expr.start,
           end: expr.end,
           contextLoc: {
             start: expr.inner.start,
             end: expr.inner.end
-          },
-          body: exprNode.program.body
+          }
         }
       })
       .filter(function(expr) {

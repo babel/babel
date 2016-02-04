@@ -4,7 +4,7 @@ var _           = require("lodash");
 var fs          = require("fs");
 
 var fixtures = reduceFixtures(getFixtures(__dirname + "/fixtures"));
-var saveResultedJSON = false;
+var saveResultedJSON = true;
 
 _.each(fixtures, function (suites, name) {
   _.each(suites, function (testSuite) {
