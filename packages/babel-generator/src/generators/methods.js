@@ -77,15 +77,5 @@ export function ArrowFunctionExpression(node: Object) {
 
   this.push(" => ");
 
-  const bodyNeedsParens = t.isObjectExpression(node.body);
-
-  if (bodyNeedsParens) {
-    this.push("(");
-  }
-
   this.print(node.body, node);
-
-  if (bodyNeedsParens) {
-    this.push(")");
-  }
 }
