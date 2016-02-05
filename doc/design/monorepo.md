@@ -1,9 +1,12 @@
 # Why is Babel a monorepo?
 
+> The tool for managing the monorepo in Babel has been extracted out as [lerna](https://github.com/kittens/lerna)
+
 Juggling a multimodule project over multiple repos is like trying to teach a newborn baby how to
 ride a bike.
 
 Babel follows a monorepo approach, all officially maintained modules are in the same repo.
+
 This is quite taboo but let's look at the pros and cons:
 
 **Pros:**

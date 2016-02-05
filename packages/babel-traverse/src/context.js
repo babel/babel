@@ -1,5 +1,3 @@
-/* @flow */
-
 import NodePath from "./path";
 import * as t from "babel-types";
 
@@ -53,13 +51,17 @@ export default class TraversalContext {
     });
   }
 
-  maybeQueue(path) {
+  maybeQueue(path, notPriority?: boolean) {
     if (this.trap) {
       throw new Error("Infinite cycle detected");
     }
-    
+
     if (this.queue) {
-      this.priorityQueue.push(path);
+      if (notPriority) {
+        this.queue.push(path);
+      } else {
+        this.priorityQueue.push(path);
+      }
     }
   }
 
@@ -102,6 +104,9 @@ export default class TraversalContext {
     for (let path of queue) {
       path.resync();
       path.pushContext(this);
+
+      // this path no longer belongs to the tree
+      if (path.key === null) continue;
 
       if (testing && queue.length >= 1000) {
         this.trap = true;

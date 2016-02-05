@@ -1,5 +1,3 @@
-/* @flow */
-
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
 import * as messages from "babel-messages";

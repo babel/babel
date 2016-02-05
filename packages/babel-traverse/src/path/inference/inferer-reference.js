@@ -1,5 +1,3 @@
-/* @flow */
-
 import type NodePath from "../index";
 import * as t from "babel-types";
 
@@ -50,6 +48,14 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
   if (constantViolations.length) {
     // pick one constant from each scope which will represent the last possible
     // control flow path that it could've taken/been
+    /* This code is broken for the following problems:
+     * It thinks that assignments can only happen in scopes.
+     * What about conditionals, if statements without block,
+     * or guarded assignments.
+     * It also checks to see if one of the assignments is in the
+     * same scope and uses that as the only "violation". However,
+     * the binding is returned by `getConstantViolationsBefore` so we for
+     * sure always going to return that as the only "violation".
     let rawConstantViolations = constantViolations.reverse();
     let visitedScopes = [];
     constantViolations = [];
@@ -64,7 +70,7 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
         constantViolations = [violation];
         break;
       }
-    }
+    }*/
 
     // add back on function constant violations since we can't track calls
     constantViolations = constantViolations.concat(functionConstantViolations);
@@ -177,7 +183,7 @@ function getConditionalAnnotation(path, name) {
       let type = inferAnnotationFromBinaryExpression(name, path);
       if (type) types.push(type);
     }
-  } while(paths.length);
+  } while (paths.length);
 
   if (types.length) {
     return {

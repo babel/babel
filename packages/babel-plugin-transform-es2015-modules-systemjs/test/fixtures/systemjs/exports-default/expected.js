@@ -1,6 +1,6 @@
 "use strict";
 
-System.register([], function (_export) {
+System.register([], function (_export, _context) {
   _export("default", function () {});
 
   _export("default", class {});
@@ -24,9 +24,9 @@ System.register([], function (_export) {
 
       _export("default", Foo);
 
-      _export("default", (function () {
+      _export("default", function () {
         return "foo";
-      })());
+      }());
     }
   };
 });

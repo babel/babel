@@ -18,6 +18,32 @@ suite("generation", function () {
   });
 });
 
+
+suite("programmatic generation", function() {
+  test("numeric member expression", function() {
+    // Should not generate `0.foo`
+    var mem = t.memberExpression(t.numericLiteral(60702), t.identifier("foo"));
+    new Function(generate.default(mem).code);
+  });
+
+  test("nested if statements needs block", function() {
+    var ifStatement = t.ifStatement(
+      t.stringLiteral("top cond"),
+      t.whileStatement(
+        t.stringLiteral("while cond"),
+        t.ifStatement(
+          t.stringLiteral("nested"),
+          t.expressionStatement(t.numericLiteral(1))
+        )
+      ),
+      t.expressionStatement(t.stringLiteral("alt"))
+    );
+
+    var ast = parse(generate.default(ifStatement).code);
+    assert.equal(ast.program.body[0].consequent.type, 'BlockStatement');
+  });
+});
+
 var suites = require("babel-helper-fixtures").default(__dirname + "/fixtures");
 
 suites.forEach(function (testSuite) {

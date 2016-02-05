@@ -1,5 +1,3 @@
-/* @flow */
-
 import includes from "lodash/collection/includes";
 import repeating from "repeating";
 import Renamer from "./lib/renamer";
@@ -226,7 +224,7 @@ export default class Scope {
    * Generate a unique identifier.
    */
 
-  generateUidIdentifier(name: string) {
+  generateUidIdentifier(name: string = "temp") {
     return t.identifier(this.generateUid(name));
   }
 
@@ -234,7 +232,7 @@ export default class Scope {
    * Generate a unique `_id1` binding.
    */
 
-  generateUid(name: string) {
+  generateUid(name: string = "temp") {
     name = t.toIdentifier(name).replace(/^_+/, "").replace(/[0-9]+$/g, "");
 
     let uid;
@@ -406,7 +404,7 @@ export default class Scope {
           kind: binding.kind
         });
       }
-    } while(scope = scope.parent);
+    } while (scope = scope.parent);
     console.log(sep);
   }
 
@@ -595,9 +593,11 @@ export default class Scope {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.kind === "get" || node.kind === "set") return false;
       return true;
-    } else if (t.isClassProperty(node)) {
+    } else if (t.isClassProperty(node) || t.isObjectProperty(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       return this.isPure(node.value, constantsOnly);
+    } else if (t.isUnaryExpression(node)) {
+      return this.isPure(node.argument, constantsOnly);
     } else {
       return t.isPureish(node);
     }
@@ -620,7 +620,7 @@ export default class Scope {
     do {
       let data = scope.data[key];
       if (data != null) return data;
-    } while(scope = scope.parent);
+    } while (scope = scope.parent);
   }
 
   /**
@@ -633,7 +633,7 @@ export default class Scope {
     do {
       let data = scope.data[key];
       if (data != null) scope.data[key] = null;
-    } while(scope = scope.parent);
+    } while (scope = scope.parent);
   }
 
   init() {
@@ -663,13 +663,17 @@ export default class Scope {
     // FunctionExpression - id
 
     if (path.isFunctionExpression() && path.has("id")) {
-      this.registerBinding("local", path.get("id"), path);
+      if (!path.get("id").node[t.NOT_LOCAL_BINDING]) {
+        this.registerBinding("local", path.get("id"), path);
+      }
     }
 
     // Class
 
     if (path.isClassExpression() && path.has("id")) {
-      this.registerBinding("local", path);
+      if (!path.get("id").node[t.NOT_LOCAL_BINDING]) {
+        this.registerBinding("local", path);
+      }
     }
 
     // Function - params, rest
@@ -743,6 +747,10 @@ export default class Scope {
   }) {
     let path = this.path;
 
+    if (!path.isBlockStatement() && !path.isProgram()) {
+      path = this.getBlockParent().path;
+    }
+
     if (path.isSwitchStatement()) {
       path = this.getFunctionParent().path;
     }
@@ -750,10 +758,6 @@ export default class Scope {
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
       t.ensureBlock(path.node);
       path = path.get("body");
-    }
-
-    if (!path.isBlockStatement() && !path.isProgram()) {
-      path = this.getBlockParent().path;
     }
 
     let unique = opts.unique;
@@ -933,6 +937,6 @@ export default class Scope {
       if (scope.uids[name]) {
         scope.uids[name] = false;
       }
-    } while(scope = scope.parent);
+    } while (scope = scope.parent);
   }
 }

@@ -64,6 +64,7 @@ defineType("ClassDeclaration", {
     "id",
     "body",
     "superClass",
+    "mixins",
     "typeParameters",
     "superTypeParameters",
     "implements",
@@ -254,7 +255,7 @@ defineType("ClassMethod", {
     },
     key: {
       validate(node, key, val) {
-        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "Literal"];
+        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
         assertNodeType(...expectedTypes)(node, key, val);
       }
     },
@@ -329,7 +330,12 @@ defineType("TemplateLiteral", {
   visitor: ["quasis", "expressions"],
   aliases: ["Expression", "Literal"],
   fields: {
-    // todo
+    quasis: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("TemplateElement")))
+    },
+    expressions: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression")))
+    }
   }
 });
 

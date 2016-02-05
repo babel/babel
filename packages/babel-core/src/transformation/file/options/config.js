@@ -92,7 +92,7 @@ module.exports = {
   comments: {
     type: "boolean",
     default: true,
-    description: "strip/output comments in generated output (on by default)"
+    description: "write comments to generated output (true by default)"
   },
 
   shouldPrintComment: {
@@ -104,6 +104,12 @@ module.exports = {
     type: "booleanString",
     default: "auto",
     description: "do not include superfluous whitespace characters and line terminators [true|false|auto]"
+  },
+
+  minified: {
+    type: "boolean",
+    default: false,
+    description: "save as much bytes when printing [true|false]"
   },
 
   sourceMap: {
@@ -177,5 +183,12 @@ module.exports = {
   moduleId: {
     description: "specify a custom name for module ids",
     type: "string"
-  }
+  },
+
+  passPerPreset: {
+    description: "Whether to spawn a traversal pass per a preset. By default all presets are merged.",
+    type: "boolean",
+    default: false,
+    hidden: true,
+  },
 };

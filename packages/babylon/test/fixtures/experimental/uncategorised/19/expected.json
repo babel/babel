@@ -170,7 +170,6 @@
                             "column": 47
                           }
                         },
-                        "all": false,
                         "argument": {
                           "type": "Identifier",
                           "start": 46,

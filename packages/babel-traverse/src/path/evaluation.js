@@ -1,5 +1,3 @@
-/* @flow */
-
 import type NodePath from "./index";
 
 // This file contains Babels metainterpreter that can evaluate static code.
@@ -101,11 +99,14 @@ export function evaluate(): { confident: boolean; value: any } {
         if (expr) str += String(evaluate(expr));
       }
 
-      if (confident) return str;
+      if (!confident) return;
+      return str;
     }
 
     if (path.isConditionalExpression()) {
-      if (evaluate(path.get("test"))) {
+      let testResult = evaluate(path.get("test"));
+      if (!confident) return;
+      if (testResult) {
         return evaluate(path.get("consequent"));
       } else {
         return evaluate(path.get("alternate"));
@@ -164,6 +165,7 @@ export function evaluate(): { confident: boolean; value: any } {
       }
 
       let arg = evaluate(argument);
+      if (!confident) return;
       switch (node.operator) {
         case "!": return !arg;
         case "+": return +arg;
@@ -193,34 +195,44 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isLogicalExpression()) {
-      // If we are confident that one side of an && is false, or one side of
-      // an || is true, we can be confident about the entire expression
+      // If we are confident that one side of an && is false, or the left
+      // side of an || is true, we can be confident about the entire expression
       let wasConfident = confident;
       let left = evaluate(path.get("left"));
       let leftConfident = confident;
       confident = wasConfident;
       let right = evaluate(path.get("right"));
       let rightConfident = confident;
-      let uncertain = leftConfident !== rightConfident;
       confident = leftConfident && rightConfident;
 
       switch (node.operator) {
         case "||":
-          if ((left || right) && uncertain) {
+          // TODO consider having a "truthy type" that doesn't bail on
+          // left uncertainity but can still evaluate to truthy.
+          if (left && leftConfident) {
             confident = true;
+            return left;
           }
+
+          if (!confident) return;
+
           return left || right;
         case "&&":
           if ((!left && leftConfident) || (!right && rightConfident)) {
             confident = true;
           }
+
+          if (!confident) return;
+
           return left && right;
       }
     }
 
     if (path.isBinaryExpression()) {
       let left = evaluate(path.get("left"));
+      if (!confident) return;
       let right = evaluate(path.get("right"));
+      if (!confident) return;
 
       switch (node.operator) {
         case "-": return left - right;

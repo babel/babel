@@ -15,6 +15,7 @@ defineType("AwaitExpression", {
 
 defineType("BindExpression", {
   visitor: ["object", "callee"],
+  aliases: ["Expression"],
   fields: {
     // todo
   }

@@ -1,6 +1,4 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-This document specifies the core ESTree AST node types that support the ES5 grammar.
+These are the core Babylon AST node types.
 
 - [Node objects](#node-objects)
 - [Identifier](#identifier)
@@ -53,8 +51,9 @@ This document specifies the core ESTree AST node types that support the ES5 gram
   - [AwaitExpression](#awaitexpression)
   - [ArrayExpression](#arrayexpression)
   - [ObjectExpression](#objectexpression)
-    - [ObjectProperty](#objectproperty)
-    - [ObjectMethod](#objectmethod)
+    - [ObjectMember](#objectmember)
+      - [ObjectProperty](#objectproperty)
+      - [ObjectMethod](#objectmethod)
   - [RestProperty](#restproperty)
   - [SpreadProperty](#spreadproperty)
   - [FunctionExpression](#functionexpression)
@@ -72,6 +71,7 @@ This document specifies the core ESTree AST node types that support the ES5 gram
       - [LogicalOperator](#logicaloperator)
     - [SpreadElement](#spreadelement)
     - [MemberExpression](#memberexpression)
+    - [BindExpression](#bindexpression)
   - [ConditionalExpression](#conditionalexpression)
   - [CallExpression](#callexpression)
   - [NewExpression](#newexpression)
@@ -106,11 +106,9 @@ This document specifies the core ESTree AST node types that support the ES5 gram
     - [ExportDefaultDeclaration](#exportdefaultdeclaration)
     - [ExportAllDeclaration](#exportalldeclaration)
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # Node objects
 
-ESTree AST nodes are represented as `Node` objects, which may have any prototype inheritance but which implement the following interface:
+AST nodes are represented as `Node` objects, which may have any prototype inheritance but which implement the following interface:
 
 ```js
 interface Node {
@@ -143,7 +141,7 @@ interface Position {
 # Identifier
 
 ```js
-interface Identifier <: Node, Expression, Pattern {
+interface Identifier <: Expression, Pattern {
   type: "Identifier";
   name: string;
 }
@@ -152,6 +150,12 @@ interface Identifier <: Node, Expression, Pattern {
 An identifier. Note that an identifier may be an expression or a destructuring pattern.
 
 # Literals
+
+```js
+interface Literal <: Expression { }
+```
+
+A literal token. May or may not represent an expression.
 
 ## RegExpLiteral
 
@@ -525,7 +529,7 @@ A variable declarator.
 ```js
 interface Decorator <: Node {
   type: "Decorator";
-  value: Expression;
+  expression: Expression;
 }
 ```
 
@@ -631,29 +635,32 @@ interface ObjectExpression <: Expression {
 
 An object expression.
 
-### ObjectProperty
+### ObjectMember
 
 ```js
-interface ObjectProperty <: Node {
-  type: "ObjectProperty";
+interface ObjectMember <: Node {
   key: Expression;
   computed: boolean;
   value: Expression;
-  shorthand: boolean;
   decorators: [ Decorator ];
 }
 ```
 
-### ObjectMethod
+#### ObjectProperty
 
 ```js
-interface ObjectMethod <: Function {
+interface ObjectProperty <: ObjectMember {
+  type: "ObjectProperty";
+  shorthand: boolean;
+}
+```
+
+#### ObjectMethod
+
+```js
+interface ObjectMethod <: ObjectMember, Function {
   type: "ObjectMethod";
-  key: Expression;
-  computed: boolean;
-  value: Expression;
   kind: "get" | "set" | "method";
-  decorators: [ Decorator ];
 }
 ```
 
@@ -833,6 +840,18 @@ interface MemberExpression <: Expression, Pattern {
 
 A member expression. If `computed` is `true`, the node corresponds to a computed (`a[b]`) member expression and `property` is an `Expression`. If `computed` is `false`, the node corresponds to a static (`a.b`) member expression and `property` is an `Identifier`.
 
+### BindExpression
+
+```js
+interface BindExpression <: Expression {
+    type: "BindExpression";
+    object: [ Expression | null ];
+    callee: [ Expression ]
+}
+```
+
+If `object` is `null`, then `callee` should be a `MemberExpression`.
+
 ## ConditionalExpression
 
 ```js
@@ -915,6 +934,10 @@ interface TemplateElement <: Node {
 ```
 
 # Patterns
+
+```js
+interface Pattern <: Node { }
+```
 
 ## ObjectPattern
 

@@ -37,19 +37,20 @@ exports.visitor = {
         return;
       }
 
-      if (node.expression) {
-        // Transform expression lambdas into normal functions.
-        node.expression = false;
-        node.body = t.blockStatement([
-          t.returnStatement(node.body)
-        ]);
-      }
+      let contextId = path.scope.generateUidIdentifier("context");
+      let argsId = path.scope.generateUidIdentifier("args");
+
+      path.ensureBlock();
+      let bodyBlockPath = path.get("body");
 
       if (node.async) {
-        path.get("body").traverse(awaitVisitor);
+        bodyBlockPath.traverse(awaitVisitor);
       }
 
-      let bodyBlockPath = path.get("body");
+      bodyBlockPath.traverse(functionSentVisitor, {
+        context: contextId
+      });
+
       let outerBody = [];
       let innerBody = [];
 
@@ -74,8 +75,6 @@ exports.visitor = {
       // if a temporary name has to be synthesized.
       t.assertIdentifier(node.id);
       let innerFnId = t.identifier(node.id.name + "$");
-      let contextId = path.scope.generateUidIdentifier("context");
-      let argsId = path.scope.generateUidIdentifier("args");
 
       // Turn all declarations into vars, and replace the original
       // declarations with equivalent assignment expressions.
@@ -127,10 +126,14 @@ exports.visitor = {
         node.async = false;
       }
 
-      if (wasGeneratorFunction &&
-          t.isExpression(node)) {
+      if (wasGeneratorFunction && t.isExpression(node)) {
         path.replaceWith(t.callExpression(util.runtimeProperty("mark"), [node]));
       }
+
+      // Generators are processed in 'exit' handlers so that regenerator only has to run on
+      // an ES5 AST, but that means traversal will not pick up newly inserted references
+      // to things like 'regeneratorRuntime'. To avoid this, we explicitly requeue.
+      path.requeue();
     }
   }
 };
@@ -142,6 +145,12 @@ exports.visitor = {
 function getOuterFnExpr(funPath) {
   let node = funPath.node;
   t.assertFunction(node);
+
+  if (!node.id){
+    // Default-exported function declarations, and function expressions may not
+    // have a name to reference, so we explicitly add one.
+    node.id = funPath.scope.parent.generateUidIdentifier("callee");
+  }
 
   if (node.generator && // Non-generator functions don't need to be marked.
       t.isFunctionDeclaration(node)) {
@@ -168,9 +177,7 @@ function getOuterFnExpr(funPath) {
     );
   }
 
-  return node.id || (
-    node.id = funPath.scope.parent.generateUidIdentifier("callee")
-  );
+  return node.id;
 }
 
 function getRuntimeMarkDecl(blockPath) {
@@ -229,13 +236,23 @@ let argumentsVisitor = {
   }
 };
 
+let functionSentVisitor = {
+  MetaProperty(path) {
+    let { node } = path;
+
+    if (node.meta.name === "function" && node.property.name === "sent") {
+      path.replaceWith(t.memberExpression(this.context, t.identifier("_sent")));
+    }
+  }
+};
+
 let awaitVisitor = {
   Function: function(path) {
     path.skip(); // Don't descend into nested function scopes.
   },
 
   AwaitExpression: function(path) {
-    // Convert await and await* expressions to yield expressions.
+    // Convert await expressions to yield expressions.
     let argument = path.node.argument;
 
     // Transforming `await x` to `yield regeneratorRuntime.awrap(x)`

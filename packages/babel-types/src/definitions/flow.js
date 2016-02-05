@@ -26,9 +26,12 @@ defineType("BooleanTypeAnnotation", {
 
 defineType("BooleanLiteralTypeAnnotation", {
   aliases: ["Flow"],
-  fields: {
-    // todo
-  }
+  fields: {}
+});
+
+defineType("NullLiteralTypeAnnotation", {
+  aliases: ["Flow", "FlowBaseAnnotation"],
+  fields: {}
 });
 
 defineType("ClassImplements", {
@@ -63,8 +66,24 @@ defineType("DeclareFunction", {
   }
 });
 
+defineType("DeclareInterface", {
+  visitor: ["id", "typeParameters", "extends", "body"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  }
+});
+
 defineType("DeclareModule", {
   visitor: ["id", "body"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  }
+});
+
+defineType("DeclareTypeAlias", {
+  visitor: ["id", "typeParameters", "right"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     // todo
@@ -169,6 +188,11 @@ defineType("StringTypeAnnotation", {
   fields: {
     // todo
   }
+});
+
+defineType("ThisTypeAnnotation", {
+  aliases: ["Flow", "FlowBaseAnnotation"],
+  fields: {}
 });
 
 defineType("TupleTypeAnnotation", {

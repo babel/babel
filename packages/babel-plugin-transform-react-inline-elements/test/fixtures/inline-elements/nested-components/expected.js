@@ -1,18 +1,3 @@
-({
-  $$typeof: babelHelpers.typeofReactElement,
-  type: Foo,
-  key: null,
-  ref: null,
-  props: babelHelpers.defaultProps(Foo.defaultProps, {
-    className: "foo",
-    children: [bar, {
-      $$typeof: babelHelpers.typeofReactElement,
-      type: Baz,
-      key: "baz",
-      ref: null,
-      props: Baz.defaultProps,
-      _owner: null
-    }]
-  }),
-  _owner: null
-});
+babelHelpers.jsx(Foo, {
+  className: "foo"
+}, void 0, bar, babelHelpers.jsx(Baz, {}, "baz"));

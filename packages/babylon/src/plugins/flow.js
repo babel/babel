@@ -1,5 +1,3 @@
-/* @flow */
-
 import { types as tt } from "../tokenizer/types";
 import Parser from "../parser";
 
@@ -60,6 +58,10 @@ pp.flowParseDeclare = function (node) {
     return this.flowParseDeclareVariable(node);
   } else if (this.isContextual("module")) {
     return this.flowParseDeclareModule(node);
+  } else if (this.isContextual("type")) {
+    return this.flowParseDeclareTypeAlias(node);
+  } else if (this.isContextual("interface")) {
+    return this.flowParseDeclareInterface(node);
   } else {
     this.unexpected();
   }
@@ -98,6 +100,18 @@ pp.flowParseDeclareModule = function (node) {
   return this.finishNode(node, "DeclareModule");
 };
 
+pp.flowParseDeclareTypeAlias = function (node) {
+  this.next();
+  this.flowParseTypeAlias(node);
+  return this.finishNode(node, "DeclareTypeAlias");
+};
+
+pp.flowParseDeclareInterface = function (node) {
+  this.next();
+  this.flowParseInterfaceish(node);
+  return this.finishNode(node, "DeclareInterface");
+}
+
 
 // Interfaces
 
@@ -111,11 +125,19 @@ pp.flowParseInterfaceish = function (node, allowStatic) {
   }
 
   node.extends = [];
+  node.mixins = [];
 
   if (this.eat(tt._extends)) {
     do {
       node.extends.push(this.flowParseInterfaceExtends());
-    } while(this.eat(tt.comma));
+    } while (this.eat(tt.comma));
+  }
+
+  if (this.isContextual("mixins")) {
+    this.next();
+    do {
+      node.mixins.push(this.flowParseInterfaceExtends());
+    } while (this.eat(tt.comma));
   }
 
   node.body = this.flowParseObjectType(allowStatic);
@@ -516,6 +538,16 @@ pp.flowParsePrimaryType = function () {
       this.next();
       return this.finishNode(node, "NumericLiteralTypeAnnotation");
 
+    case tt._null:
+      node.value = this.match(tt._null);
+      this.next();
+      return this.finishNode(node, "NullLiteralTypeAnnotation");
+
+    case tt._this:
+      node.value = this.match(tt._this);
+      this.next();
+      return this.finishNode(node, "ThisTypeAnnotation");
+
     default:
       if (this.state.type.keyword === "typeof") {
         return this.flowParseTypeofType();
@@ -655,7 +687,9 @@ export default function (instance) {
   // export type
   instance.extend("shouldParseExportDeclaration", function (inner) {
     return function () {
-      return this.isContextual("type") || inner.call(this);
+      return this.isContextual("type")
+          || this.isContextual("interface")
+          || inner.call(this);
     };
   });
 
@@ -673,7 +707,8 @@ export default function (instance) {
 
         if (canBeArrow && this.eat(tt.arrow)) {
           // ((lol): number => {});
-          let func = this.parseArrowExpression(this.startNodeAt(startLoc, startPos), [node]);
+          let params = node.type === "SequenceExpression" ? node.expressions : [node];
+          let func = this.parseArrowExpression(this.startNodeAt(startLoc, startPos), params);
           func.returnType = typeCastNode.typeAnnotation;
           return func;
         } else {
@@ -712,6 +747,11 @@ export default function (instance) {
           // export type Foo = Bar;
           return this.flowParseTypeAlias(declarationNode);
         }
+      } else if (this.isContextual("interface")) {
+        node.exportKind = "type";
+        let declarationNode = this.startNode();
+        this.next();
+        return this.flowParseInterface(declarationNode);
       } else {
         return inner.call(this, node);
       }
@@ -872,7 +912,7 @@ export default function (instance) {
               node.typeParameters = null;
           }
           implemented.push(this.finishNode(node, "ClassImplements"));
-        } while(this.eat(tt.comma))
+        } while (this.eat(tt.comma))
       }
     };
   });

@@ -1,5 +1,3 @@
-/* @flow */
-
 // This file contains methods that modify the path/node in some ways.
 
 import { PATH_CACHE_KEY } from "./constants";
@@ -51,8 +49,8 @@ export function _containerInsert(from, nodes) {
       paths.push(path);
     } else {
       paths.push(NodePath.get({
-        parentPath: this,
-        parent: node,
+        parentPath: this.parentPath,
+        parent: this.parent,
         container: this.container,
         listKey: this.listKey,
         key: to
@@ -69,9 +67,10 @@ export function _containerInsert(from, nodes) {
 
   for (let path of paths) {
     path.setScope();
+    path.debug(() => "Inserted.");
 
     for (let context of contexts) {
-      context.maybeQueue(path);
+      context.maybeQueue(path, true);
     }
   }
 

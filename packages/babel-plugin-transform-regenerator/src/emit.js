@@ -1019,7 +1019,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
         // will receive the object of the MemberExpression as its `this`
         // object.
         newCallee = t.sequenceExpression([
-          t.numbericLiteral(0),
+          t.numericLiteral(0),
           newCallee
         ]);
       }

@@ -12,7 +12,7 @@ module.exports = {
     require("babel-plugin-transform-es2015-for-of"),
     require("babel-plugin-transform-es2015-sticky-regex"),
     require("babel-plugin-transform-es2015-unicode-regex"),
-    require("babel-plugin-transform-es2015-constants"),
+    require("babel-plugin-check-es2015-constants"),
     require("babel-plugin-transform-es2015-spread"),
     require("babel-plugin-transform-es2015-parameters"),
     require("babel-plugin-transform-es2015-destructuring"),

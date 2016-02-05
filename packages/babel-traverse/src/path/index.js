@@ -1,14 +1,15 @@
-/* @flow */
-
 import type Hub from "../hub";
 import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
+import buildDebug from "debug";
 import { PATH_CACHE_KEY } from "./constants";
 import invariant from "invariant";
 import traverse from "../index";
 import assign from "lodash/object/assign";
 import Scope from "../scope";
 import * as t from "babel-types";
+
+let debug = buildDebug("babel");
 
 export default class NodePath {
   constructor(hub: Hub, parent: Object) {
@@ -141,15 +142,20 @@ export default class NodePath {
     this.node[key] = node;
   }
 
-  dump() {
+  getPathLocation(): string {
     let parts = [];
     let path = this;
     do {
       let key = path.key;
       if (path.inList) key = `${path.listKey}[${key}]`;
       parts.unshift(key);
-    } while(path = path.parentPath);
-    console.log(parts.join("."));
+    } while (path = path.parentPath);
+    return parts.join(".");
+  }
+
+  debug(buildMessage: Function) {
+    if (!debug.enabled) return;
+    debug(`${this.getPathLocation()} ${this.type}: ${buildMessage()}`);
   }
 }
 

@@ -1,5 +1,3 @@
-"use strict";
-
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define(["foo"], factory);
@@ -13,6 +11,10 @@
     global.actual = mod.exports;
   }
 })(this, function (_foo) {
+  "use strict";
+
   var foo = babelHelpers.interopRequireWildcard(_foo);
+
+
   foo;
 });

@@ -1,11 +1,11 @@
-/* @flow */
-
 // This file contains methods responsible for maintaining a TraversalContext.
 
 import traverse from "../index";
 
 export function call(key): boolean {
   let opts = this.opts;
+
+  this.debug(() => key);
 
   if (this.node) {
     if (this._call(opts[key])) return true;
@@ -28,7 +28,7 @@ export function _call(fns?: Array<Function>): boolean {
     if (!node) return true;
 
     let ret = fn.call(this.state, this, this.state);
-    if (ret) throw new Error("Unexpected return value from visitor method " + fn);
+    if (ret) throw new Error(`Unexpected return value from visitor method ${fn}`);
 
     // node has been replaced, it will have been requeued
     if (this.node !== node) return true;
@@ -58,9 +58,11 @@ export function visit(): boolean {
   }
 
   if (this.call("enter") || this.shouldSkip) {
+    this.debug(() => "Skip...");
     return this.shouldStop;
   }
 
+  this.debug(() => "Recursing into...");
   traverse.node(this.node, this.opts, this.scope, this.state, this, this.skipKeys);
 
   this.call("exit");

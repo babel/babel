@@ -240,6 +240,16 @@ export function clone(node: Object): Object {
 }
 
 /**
+ * Create a shallow clone of a `node` excluding `_private` and location properties.
+ */
+
+export function cloneWithoutLoc(node: Object): Object {
+  let newNode = clone(node);
+  delete newNode.loc;
+  return newNode;
+}
+
+/**
  * Create a deep clone of a `node` and all of it's child nodes
  * exluding `_private` properties.
  */
@@ -396,6 +406,7 @@ export function inherits(child: Object, parent: Object): Object {
 
 export function assertNode(node?) {
   if (!isNode(node)) {
+    // $FlowFixMe
     throw new TypeError("Not a valid node " + (node && node.type));
   }
 }

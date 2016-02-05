@@ -1,4 +1,4 @@
-var Test = (function (_Foo) {
+var Test = function (_Foo) {
   babelHelpers.inherits(Test, _Foo);
 
   function Test() {
@@ -12,4 +12,4 @@ var Test = (function (_Foo) {
   }
 
   return Test;
-})(Foo);
+}(Foo);

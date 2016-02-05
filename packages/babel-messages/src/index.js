@@ -32,14 +32,14 @@ export const MESSAGES = {
   undeclaredVariableType: "Referencing a type alias outside of a type annotation",
   undeclaredVariableSuggestion: "Reference to undeclared variable $1 - did you mean $2?",
 
-  traverseNeedsParent: "You must pass a scope and parentPath unless traversing a Program/File got a $1 node",
+  traverseNeedsParent: "You must pass a scope and parentPath unless traversing a Program/File. Instead of that you tried to traverse a $1 node without passing scope and parentPath.",
   traverseVerifyRootFunction: "You passed `traverse()` a function when it expected a visitor object, are you sure you didn't mean `{ enter: Function }`?",
   traverseVerifyVisitorProperty: "You passed `traverse()` a visitor object with the property $1 that has the invalid property $2",
   traverseVerifyNodeType: "You gave us a visitor for the node type $1 but it's not a valid type",
 
   pluginNotObject: "Plugin $2 specified in $1 was expected to return an object when invoked but returned $3",
   pluginNotFunction: "Plugin $2 specified in $1 was expected to return a function but returned $3",
-  pluginUnknown: "Unknown plugin $1 specified in $2 at $3",
+  pluginUnknown: "Unknown plugin $1 specified in $2 at $3, attempted to resolve relative to $4",
   pluginInvalidProperty: "Plugin $2 specified in $1 provided an invalid property of $3"
 };
 
@@ -47,7 +47,7 @@ export const MESSAGES = {
  * Get a message with $0 placeholders replaced by arguments.
  */
 
-export function get(key: string, ...args): string {
+export function get(key: string, ...args: Array<any>): string {
   let msg = MESSAGES[key];
   if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 

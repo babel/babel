@@ -1,5 +1,3 @@
-/* @flow */
-
 // This file contains that retrieve or validate anything related to the current paths ancestry.
 
 import * as t from "babel-types";
@@ -48,7 +46,7 @@ export function getStatementParent() {
     if (Array.isArray(path.container)) {
       return path;
     }
-  } while(path = path.parentPath);
+  } while (path = path.parentPath);
 }
 
 /**
@@ -122,7 +120,7 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
 
     do {
       ancestry.unshift(path);
-    } while((path = path.parentPath) && path !== this);
+    } while ((path = path.parentPath) && path !== this);
 
     // save min depth to avoid going too far in
     if (ancestry.length < minDepth) {
@@ -173,7 +171,7 @@ export function getAncestry() {
   let paths = [];
   do {
     paths.push(path);
-  } while(path = path.parentPath);
+  } while (path = path.parentPath);
   return paths;
 }
 
@@ -214,6 +212,6 @@ export function inShadow(key?) {
       // normal function, we've found our function context
       return null;
     }
-  } while(path = path.parentPath);
+  } while (path = path.parentPath);
   return null;
 }

@@ -14,9 +14,20 @@ let buildWrapper = template(`
   })
 `);
 
+let arrowBuildWrapper =  template(`
+  (() => {
+    var ref = FUNCTION, _this = this;
+    return function(PARAMS) {
+      return ref.apply(_this, arguments);
+    };
+  })
+`);
+
 let awaitVisitor = {
-  Function(path) {
-    path.skip();
+  ArrowFunctionExpression(path) {
+    if (!path.node.async) {
+      path.arrowFunctionToShadowed();
+    }
   },
 
   AwaitExpression({ node }) {
@@ -42,9 +53,11 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
 
 function plainFunction(path: NodePath, callId: Object) {
   let node = path.node;
+  let wrapper = buildWrapper;
 
   if (path.isArrowFunctionExpression()) {
     path.arrowFunctionToShadowed();
+    wrapper = arrowBuildWrapper;
   }
 
   node.async = false;
@@ -53,24 +66,27 @@ function plainFunction(path: NodePath, callId: Object) {
   let asyncFnId = node.id;
   node.id = null;
 
+  let isDeclaration = path.isFunctionDeclaration();
+
+  if (isDeclaration) {
+    node.type = "FunctionExpression";
+  }
+
   let built = t.callExpression(callId, [node]);
-  let container = buildWrapper({
+  let container = wrapper({
     FUNCTION: built,
     PARAMS: node.params.map(() => path.scope.generateUidIdentifier("x"))
   }).expression;
 
   let retFunction = container.body.body[1].argument;
 
-  if (path.isFunctionDeclaration()) {
-    node.type = "FunctionExpression";
-
+  if (isDeclaration) {
     let declar = t.variableDeclaration("let", [
       t.variableDeclarator(
         t.identifier(asyncFnId.name),
         t.callExpression(container, [])
       )
     ]);
-    declar._blockHoist = true;
 
     retFunction.id = asyncFnId;
     path.replaceWith(declar);

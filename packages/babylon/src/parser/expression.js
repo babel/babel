@@ -1,5 +1,3 @@
-/* @flow */
-
 // A recursive descent parser operates by defining functions for all
 // syntactic elements, and recursively calling those, each function
 // advancing the input stream and returning an AST node. Precedence
@@ -30,7 +28,7 @@ const pp = Parser.prototype;
 // strict mode, init properties are also not allowed to be repeated.
 
 pp.checkPropClash = function (prop, propHash) {
-  if (prop.computed || prop.method) return;
+  if (prop.computed) return;
 
   let key = prop.key;
   let name;
@@ -135,7 +133,7 @@ pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse) {
   } else if (failOnShorthandAssign && refShorthandDefaultPos.start) {
     this.unexpected(refShorthandDefaultPos.start);
   }
-  
+
   return left;
 };
 
@@ -461,9 +459,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       return this.parseObj(false, refShorthandDefaultPos);
 
     case tt._function:
-      node = this.startNode();
-      this.next();
-      return this.parseFunction(node, false);
+      return this.parseFunctionExpression();
 
     case tt.at:
       this.parseDecorators();
@@ -493,6 +489,27 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
     default:
       this.unexpected();
   }
+};
+
+pp.parseFunctionExpression = function () {
+  let node = this.startNode();
+  let meta = this.parseIdentifier(true);
+  if (this.state.inGenerator && this.eat(tt.dot) && this.hasPlugin("functionSent")) {
+    return this.parseMetaProperty(node, meta, "sent");
+  } else {
+    return this.parseFunction(node, false);
+  }
+};
+
+pp.parseMetaProperty = function (node, meta, propertyName) {
+  node.meta = meta;
+  node.property = this.parseIdentifier(true);
+
+  if (node.property.name !== propertyName) {
+    this.raise(node.property.start, `The only valid meta property for new is ${meta.name}.${propertyName}`);
+  }
+
+  return this.finishNode(node, "MetaProperty");
 };
 
 pp.parseLiteral = function (value, type) {
@@ -594,14 +611,7 @@ pp.parseNew = function () {
   let meta = this.parseIdentifier(true);
 
   if (this.eat(tt.dot)) {
-    node.meta = meta;
-    node.property = this.parseIdentifier(true);
-
-    if (node.property.name !== "target") {
-      this.raise(node.property.start, "The only valid meta property for new is new.target");
-    }
-
-    return this.finishNode(node, "MetaProperty");
+    return this.parseMetaProperty(node, meta, "target");
   }
 
   node.callee = this.parseNoCallExpr();
@@ -958,7 +968,9 @@ pp.parseAwait = function (node) {
   if (this.isLineTerminator()) {
     this.unexpected();
   }
-  node.all = this.eat(tt.star);
+  if (this.match(tt.star)) {
+    this.raise(node.start, "await* has been removed from the async functions proposal. Use Promise.all() instead.")
+  }
   node.argument = this.parseMaybeUnary();
   return this.finishNode(node, "AwaitExpression");
 };

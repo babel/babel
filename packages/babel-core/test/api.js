@@ -1,11 +1,10 @@
-require("../lib/api/node");
-
+var babel                = require("../lib/api/node");
 var buildExternalHelpers = require("../lib/tools/build-external-helpers");
-var transform            = require("../lib/api/node").transform;
 var Pipeline             = require("../lib/transformation/pipeline");
 var sourceMap            = require("source-map");
 var assert               = require("assert");
 var File                 = require("../lib/transformation/file").default;
+var Plugin               = require("../lib/transformation/plugin");
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
@@ -19,12 +18,55 @@ function assertNotIgnored(result) {
 function transformAsync(code, opts) {
   return {
     then: function (resolve) {
-      resolve(transform(code, opts));
+      resolve(babel.transform(code, opts));
     }
   };
 }
 
 suite("api", function () {
+  test("analyze", function () {
+    assert.equal(babel.analyse("foobar;").marked.length, 0);
+
+    assert.equal(babel.analyse("foobar;", {
+      plugins: [new Plugin({
+        visitor: {
+          Program: function (path) {
+            path.mark("category", "foobar");
+          }
+        }
+      })]
+    }).marked[0].message, "foobar");
+
+    assert.equal(babel.analyse("foobar;", {}, {
+      Program: function (path) {
+        path.mark("category", "foobar");
+      }
+    }).marked[0].message, "foobar");
+  });
+
+  test("transformFile", function (done) {
+    babel.transformFile(__dirname + "/fixtures/api/file.js", {}, function (err, res) {
+      if (err) return done(err);
+      assert.equal(res.code, "foo();");
+      done();
+    });
+  });
+
+  test("transformFileSync", function () {
+    assert.equal(babel.transformFileSync(__dirname + "/fixtures/api/file.js", {}).code, "foo();");
+  });
+
+  test("options throw on falsy true", function () {
+    return assert.throws(
+      function () {
+        babel.transform("", {
+          plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false]
+        });
+      },
+      /TypeError: Falsy value found in plugins/
+    );
+  });
+
   test("options merge backwards", function () {
     return transformAsync("", {
       presets: [__dirname + "/../../babel-preset-es2015"],
@@ -34,8 +76,91 @@ suite("api", function () {
     });
   });
 
+  test("pass per preset", function () {
+    var aliasBaseType = null;
+
+    function execTest(passPerPreset) {
+      return babel.transform('type Foo = number; let x = (y): Foo => y;', {
+        passPerPreset: passPerPreset,
+        presets: [
+          // First preset with our plugin, "before"
+          {
+            plugins: [
+              new Plugin({
+                visitor: {
+                  Function: function(path) {
+                    var node = path.node;
+                    var scope = path.scope;
+
+                    var alias = scope
+                      .getProgramParent()
+                      .getBinding(node.returnType.typeAnnotation.id.name)
+                      .path
+                      .node;
+
+                    // In case of `passPerPreset` being `false`, the
+                    // alias node is already removed by Flow plugin.
+                    if (!alias) {
+                      return;
+                    }
+
+                    // In case of `passPerPreset` being `true`, the
+                    // alias node should still exist.
+                    aliasBaseType = alias.right.type; // NumberTypeAnnotation
+                  }
+                }
+              })
+            ]
+          },
+
+          // ES2015 preset
+          require(__dirname + "/../../babel-preset-es2015"),
+
+          // Third preset for Flow.
+          {
+            plugins: [
+              require(__dirname + "/../../babel-plugin-syntax-flow"),
+              require(__dirname + "/../../babel-plugin-transform-flow-strip-types"),
+            ]
+          }
+        ],
+      });
+    }
+
+    // 1. passPerPreset: true
+
+    var result = execTest(true);
+
+    assert.equal(aliasBaseType, "NumberTypeAnnotation");
+
+    assert.deepEqual([
+      '"use strict";',
+      '',
+      'var x = function x(y) {',
+      '  return y;',
+      '};'
+    ].join("\n"), result.code);
+
+    // 2. passPerPreset: false
+
+    aliasBaseType = null;
+
+    var result = execTest(false);
+
+    assert.equal(aliasBaseType, null);
+
+    assert.deepEqual([
+      '"use strict";',
+      '',
+      'var x = function x(y) {',
+      '  return y;',
+      '};'
+    ].join("\n"), result.code);
+
+  });
+
   test("source map merging", function () {
-    var result = transform([
+    var result = babel.transform([
       'function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }',
       '',
       'let Foo = function Foo() {',
@@ -386,6 +511,11 @@ suite("api", function () {
       var script = buildExternalHelpers([]);
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") === -1);
+    });
+
+    test("underscored", function () {
+      var script = buildExternalHelpers(["typeof"]);
+      assert.ok(script.indexOf("typeof") >= 0);
     });
   });
 });

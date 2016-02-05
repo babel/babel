@@ -1,8 +1,6 @@
-/* @flow */
-
 import repeating from "repeating";
 import Buffer from "./buffer";
-import n from "./node";
+import * as n from "./node";
 import * as t from "babel-types";
 
 export default class Printer extends Buffer {
@@ -10,10 +8,13 @@ export default class Printer extends Buffer {
     super(...args);
     this.insideAux = false;
     this.printAuxAfterOnNextUserNode = false;
+    this._printStack = [];
   }
 
   print(node, parent, opts = {}) {
     if (!node) return;
+
+    this._lastPrintedIsEmptyStatement = false;
 
     if (parent && parent._compact) {
       node._compact = true;
@@ -32,10 +33,12 @@ export default class Printer extends Buffer {
       throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
 
+    this._printStack.push(node);
+
     if (node.loc) this.printAuxAfterComment();
     this.printAuxBeforeComment(oldInAux);
 
-    let needsParens = n.needsParens(node, parent);
+    let needsParens = n.needsParens(node, parent, this._printStack);
     if (needsParens) this.push("(");
 
     this.printLeadingComments(node, parent);
@@ -46,16 +49,20 @@ export default class Printer extends Buffer {
 
     if (opts.before) opts.before();
 
-    this.map.mark(node, "start");
+    this.map.mark(node);
 
     this._print(node, parent);
+
+    // Check again if any of our children may have left an aux comment on the stack
+    if (node.loc) this.printAuxAfterComment();
 
     this.printTrailingComments(node, parent);
 
     if (needsParens) this.push(")");
 
     // end
-    this.map.mark(node, "end");
+    this._printStack.pop();
+    if (parent) this.map.mark(parent);
     if (opts.after) opts.after();
 
     this.format.concise = oldConcise;
@@ -66,7 +73,7 @@ export default class Printer extends Buffer {
 
   printAuxBeforeComment(wasInAux) {
     let comment = this.format.auxiliaryCommentBefore;
-    if (!wasInAux && this.insideAux) {
+    if (!wasInAux && this.insideAux && !this.printAuxAfterOnNextUserNode) {
       this.printAuxAfterOnNextUserNode = true;
       if (comment) this.printComment({
         type: "CommentBlock",
@@ -94,14 +101,21 @@ export default class Printer extends Buffer {
   }
 
   _print(node, parent) {
-    let extra = this.getPossibleRaw(node);
-    if (extra) {
-      this.push("");
-      this._push(extra);
-    } else {
-      let printMethod = this[node.type];
-      printMethod.call(this, node, parent);
+    // In minified mode we need to produce as little bytes as needed
+    // and need to make sure that string quoting is consistent.
+    // That means we have to always reprint as opposed to getting
+    // the raw value.
+    if (!this.format.minified) {
+      let extra = this.getPossibleRaw(node);
+      if (extra) {
+        this.push("");
+        this._push(extra);
+        return;
+      }
     }
+
+    let printMethod = this[node.type];
+    printMethod.call(this, node, parent);
   }
 
   printJoin(nodes: ?Array, parent: Object, opts = {}) {
@@ -118,6 +132,10 @@ export default class Printer extends Buffer {
       after: () => {
         if (opts.iterator) {
           opts.iterator(node, i);
+        }
+
+        if (opts.separator && parent.loc) {
+          this.printAuxAfterComment();
         }
 
         if (opts.separator && i < len - 1) {
@@ -143,12 +161,12 @@ export default class Printer extends Buffer {
 
   printBlock(parent) {
     let node = parent.body;
-    if (t.isEmptyStatement(node)) {
-      this.semicolon();
-    } else {
-      this.push(" ");
-      this.print(node, parent);
+
+    if (!t.isEmptyStatement(node)) {
+      this.space();
     }
+
+    this.print(node, parent);
   }
 
   generateComment(comment) {
@@ -197,7 +215,7 @@ export default class Printer extends Buffer {
 
     let lines = 0;
 
-    if (node.start != null && !node._ignoreUserWhitespace) {
+    if (node.start != null && !node._ignoreUserWhitespace && this.tokens.length) {
       // user node
       if (leading) {
         lines = this.whitespace.getNewlinesBefore(node);
@@ -228,7 +246,8 @@ export default class Printer extends Buffer {
     if (this.format.shouldPrintComment) {
       return this.format.shouldPrintComment(comment.value);
     } else {
-      if (comment.value.indexOf("@license") >= 0 || comment.value.indexOf("@preserve") >= 0) {
+      if (!this.format.minified &&
+          (comment.value.indexOf("@license") >= 0 || comment.value.indexOf("@preserve") >= 0)) {
         return true;
       } else {
         return this.format.comments;

@@ -14,7 +14,7 @@ var somefun = function () {
     };
     var _d = args1[1];
   };
-  let get1stArg = (...args) => args[0];
+  let get3rdArg = (...args) => args[2];
 }
 
 function demo1(...args) {
@@ -22,3 +22,8 @@ function demo1(...args) {
     return args[i+0];
   };
 }
+
+var x = (...rest) => {
+  if (noNeedToWork) return 0;
+  return rest;
+};

@@ -1,7 +1,7 @@
 (function (global) {
   var babelHelpers = global.babelHelpers = {};
 
-  babelHelpers.createClass = (function () {
+  babelHelpers.createClass = function () {
     function defineProperties(target, props) {
       for (var i = 0; i < props.length; i++) {
         var descriptor = props[i];
@@ -17,5 +17,5 @@
       if (staticProps) defineProperties(Constructor, staticProps);
       return Constructor;
     };
-  })();
+  }();
 })(typeof global === "undefined" ? self : global);

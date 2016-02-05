@@ -1,6 +1,6 @@
 import { coroutine as _coroutine } from "bluebird";
 
-let foo = (function () {
+let foo = function () {
   var ref = _coroutine(function* () {
     var wat = yield bar();
   });
@@ -8,4 +8,4 @@ let foo = (function () {
   return function foo() {
     return ref.apply(this, arguments);
   };
-})();
+}();

@@ -1,6 +1,6 @@
 "use strict";
 
-System.register([], function (_export) {
+System.register([], function (_export, _context) {
   var test, a, b, d;
   return {
     setters: [],
@@ -10,7 +10,6 @@ System.register([], function (_export) {
       _export("test", test);
 
       _export("test", test = 5);
-
       _export("test", test++);
 
       (function () {

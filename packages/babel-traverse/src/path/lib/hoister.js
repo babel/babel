@@ -1,5 +1,3 @@
-/* @flow */
-
 import { react } from "babel-types";
 import * as t from "babel-types";
 
@@ -59,7 +57,7 @@ export default class PathHoister {
       if (this.breakOnScopePaths.indexOf(scope.path) >= 0) {
         break;
       }
-    } while(scope = scope.parent);
+    } while (scope = scope.parent);
   }
 
   getAttachmentPath() {

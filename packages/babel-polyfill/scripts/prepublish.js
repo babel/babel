@@ -1,3 +1,5 @@
+require("shelljs/global");
+
 function relative(loc) {
   return __dirname + "/../" + loc;
 }

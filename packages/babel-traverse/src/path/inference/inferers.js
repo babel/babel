@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as t from "babel-types";
 
 export { default as Identifier } from "./inferer-reference";
@@ -114,7 +112,7 @@ export function BooleanLiteral() {
 }
 
 export function NullLiteral() {
-  return t.voidTypeAnnotation();
+  return t.nullLiteralTypeAnnotation();
 }
 
 export function RegExpLiteral() {

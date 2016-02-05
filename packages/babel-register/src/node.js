@@ -46,14 +46,15 @@ function mtime(filename) {
   return +fs.statSync(filename).mtime;
 }
 
-function compile(filename, opts = {}) {
+function compile(filename) {
   let result;
 
-  opts.filename = filename;
-
   let optsManager = new OptionManager;
-  optsManager.mergeOptions(deepClone(transformOpts));
-  opts = optsManager.init(opts);
+
+  // merge in base options and resolve all the plugins and presets relative to this file
+  optsManager.mergeOptions(deepClone(transformOpts), "base", null, path.dirname(filename));
+
+  let opts = optsManager.init({ filename });
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
@@ -69,6 +70,9 @@ function compile(filename, opts = {}) {
 
   if (!result) {
     result = babel.transformFileSync(filename, extend(opts, {
+      // Do not process config files since has already been done with the OptionManager
+      // calls above and would introduce duplicates.
+      babelrc: false,
       sourceMap: "both",
       ast:       false
     }));

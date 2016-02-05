@@ -1,0 +1,14 @@
+5;
+5.0;
+"foobar";
+'\x20';
+"\n\r";
+"😂";
+/foobar/g;
+null;
+true;
+false;
+5.;
+0b10;
+0o70;
+0X1F;

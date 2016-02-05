@@ -1,5 +1,3 @@
-/* @flow */
-
 // This file contains methods responsible for replacing a node with another.
 
 import codeFrame from "babel-code-frame";
@@ -163,6 +161,8 @@ export function _replaceWith(node) {
   } else {
     t.validate(this.parent, this.key, node);
   }
+
+  this.debug(() => `Replace with ${node && node.type}`);
 
   this.node = this.container[this.key] = node;
 }

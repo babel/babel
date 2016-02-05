@@ -2,7 +2,7 @@
 
 var _a2 = require("./a");
 
-var Foo = (function () {
+var Foo = function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }
@@ -14,4 +14,4 @@ var Foo = (function () {
     }
   }]);
   return Foo;
-})();
+}();

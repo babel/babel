@@ -1,24 +1,65 @@
 import template from "babel-template";
 
-export let _typeof = template(`
-  (function (obj) {
-    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
-  });
+let helpers = {};
+export default helpers;
+
+helpers.typeof = template(`
+  (typeof Symbol === "function" && typeof Symbol.iterator === "symbol")
+    ? function (obj) { return typeof obj; }
+    : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 `);
 
-export let typeofReactElement = template(`
-  (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
+helpers.jsx = template(`
+  (function () {
+    var REACT_ELEMENT_TYPE = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
+
+    return function createRawReactElement (type, props, key, children) {
+      var defaultProps = type && type.defaultProps;
+      var childrenLength = arguments.length - 3;
+
+      if (!props && childrenLength !== 0) {
+        // If we're going to assign props.children, we create a new object now
+        // to avoid mutating defaultProps.
+        props = {};
+      }
+      if (props && defaultProps) {
+        for (var propName in defaultProps) {
+          if (props[propName] === void 0) {
+            props[propName] = defaultProps[propName];
+          }
+        }
+      } else if (!props) {
+        props = defaultProps || {};
+      }
+
+      if (childrenLength === 1) {
+        props.children = children;
+      } else if (childrenLength > 1) {
+        var childArray = Array(childrenLength);
+        for (var i = 0; i < childrenLength; i++) {
+          childArray[i] = arguments[i + 3];
+        }
+        props.children = childArray;
+      }
+
+      return {
+        $$typeof: REACT_ELEMENT_TYPE,
+        type: type,
+        key: key === undefined ? null : '' + key,
+        ref: null,
+        props: props,
+        _owner: null,
+      };
+    };
+
+  })()
 `);
 
-export let asyncToGenerator = template(`
+helpers.asyncToGenerator = template(`
   (function (fn) {
     return function () {
       var gen = fn.apply(this, arguments);
-
       return new Promise(function (resolve, reject) {
-        var callNext = step.bind(null, "next");
-        var callThrow = step.bind(null, "throw");
-
         function step(key, arg) {
           try {
             var info = gen[key](arg);
@@ -31,18 +72,22 @@ export let asyncToGenerator = template(`
           if (info.done) {
             resolve(value);
           } else {
-            Promise.resolve(value).then(callNext, callThrow);
+            return Promise.resolve(value).then(function (value) {
+              return step("next", value);
+            }, function (err) {
+              return step("throw", err);
+            });
           }
         }
 
-        callNext();
+        return step("next");
       });
     };
   })
 `);
 
 
-export let classCallCheck = template(`
+helpers.classCallCheck = template(`
   (function (instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -50,7 +95,7 @@ export let classCallCheck = template(`
   });
 `);
 
-export let createClass = template(`
+helpers.createClass = template(`
   (function() {
     function defineProperties(target, props) {
       for (var i = 0; i < props.length; i ++) {
@@ -70,21 +115,7 @@ export let createClass = template(`
   })()
 `);
 
-export let defaultProps = template(`
-  (function (defaultProps, props) {
-    if (defaultProps) {
-      for (var propName in defaultProps) {
-        if (typeof props[propName] === "undefined") {
-          props[propName] = defaultProps[propName];
-        }
-      }
-    }
-    return props;
-  })
-`);
-
-
-export let defineEnumerableProperties = template(`
+helpers.defineEnumerableProperties = template(`
   (function (obj, descs) {
     for (var key in descs) {
       var desc = descs[key];
@@ -96,7 +127,7 @@ export let defineEnumerableProperties = template(`
   })
 `);
 
-export let defaults = template(`
+helpers.defaults = template(`
   (function (obj, defaults) {
     var keys = Object.getOwnPropertyNames(defaults);
     for (var i = 0; i < keys.length; i++) {
@@ -110,7 +141,7 @@ export let defaults = template(`
   })
 `);
 
-export let defineProperty = template(`
+helpers.defineProperty = template(`
   (function (obj, key, value) {
     // Shortcircuit the slow defineProperty path when possible.
     // We are trying to avoid issues where setters defined on the
@@ -131,7 +162,7 @@ export let defineProperty = template(`
   });
 `);
 
-export let _extends = template(`
+helpers.extends = template(`
   Object.assign || (function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
@@ -145,7 +176,7 @@ export let _extends = template(`
   })
 `);
 
-export let get = template(`
+helpers.get = template(`
   (function get(object, property, receiver) {
     if (object === null) object = Function.prototype;
 
@@ -174,7 +205,7 @@ export let get = template(`
 `);
 
 
-export let inherits = template(`
+helpers.inherits = template(`
   (function (subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
@@ -191,7 +222,7 @@ export let inherits = template(`
   })
 `);
 
-export let _instanceof = template(`
+helpers.instanceof = template(`
   (function (left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
       return right[Symbol.hasInstance](left);
@@ -202,13 +233,13 @@ export let _instanceof = template(`
 `);
 
 
-export let interopRequireDefault = template(`
+helpers.interopRequireDefault = template(`
   (function (obj) {
     return obj && obj.__esModule ? obj : { default: obj };
   })
 `);
 
-export let interopRequireWildcard = template(`
+helpers.interopRequireWildcard = template(`
   (function (obj) {
     if (obj && obj.__esModule) {
       return obj;
@@ -225,7 +256,7 @@ export let interopRequireWildcard = template(`
   })
 `);
 
-export let newArrowCheck = template(`
+helpers.newArrowCheck = template(`
   (function (innerThis, boundThis) {
     if (innerThis !== boundThis) {
       throw new TypeError("Cannot instantiate an arrow function");
@@ -233,13 +264,13 @@ export let newArrowCheck = template(`
   });
 `);
 
-export let objectDestructuringEmpty = template(`
+helpers.objectDestructuringEmpty = template(`
   (function (obj) {
     if (obj == null) throw new TypeError("Cannot destructure undefined");
   });
 `);
 
-export let objectWithoutProperties = template(`
+helpers.objectWithoutProperties = template(`
   (function (obj, keys) {
     var target = {};
     for (var i in obj) {
@@ -251,7 +282,7 @@ export let objectWithoutProperties = template(`
   })
 `);
 
-export let possibleConstructorReturn = template(`
+helpers.possibleConstructorReturn = template(`
   (function (self, call) {
     if (!self) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -260,11 +291,11 @@ export let possibleConstructorReturn = template(`
   });
 `);
 
-export let selfGlobal = template(`
+helpers.selfGlobal = template(`
   typeof global === "undefined" ? self : global
 `);
 
-export let set = template(`
+helpers.set = template(`
   (function set(object, property, value, receiver) {
     var desc = Object.getOwnPropertyDescriptor(object, property);
 
@@ -288,7 +319,7 @@ export let set = template(`
   });
 `);
 
-export let slicedToArray = template(`
+helpers.slicedToArray = template(`
   (function () {
     // Broken out into a separate function to avoid deoptimizations due to the try/catch for the
     // array iterator case.
@@ -337,7 +368,7 @@ export let slicedToArray = template(`
   })();
 `);
 
-export let slicedToArrayLoose = template(`
+helpers.slicedToArrayLoose = template(`
   (function (arr, i) {
     if (Array.isArray(arr)) {
       return arr;
@@ -354,7 +385,7 @@ export let slicedToArrayLoose = template(`
   });
 `);
 
-export let taggedTemplateLiteral = template(`
+helpers.taggedTemplateLiteral = template(`
   (function (strings, raw) {
     return Object.freeze(Object.defineProperties(strings, {
         raw: { value: Object.freeze(raw) }
@@ -362,14 +393,14 @@ export let taggedTemplateLiteral = template(`
   });
 `);
 
-export let taggedTemplateLiteralLoose = template(`
+helpers.taggedTemplateLiteralLoose = template(`
   (function (strings, raw) {
     strings.raw = raw;
     return strings;
   });
 `);
 
-export let temporalRef = template(`
+helpers.temporalRef = template(`
   (function (val, name, undef) {
     if (val === undef) {
       throw new ReferenceError(name + " is not defined - temporal dead zone");
@@ -379,17 +410,17 @@ export let temporalRef = template(`
   })
 `);
 
-export let temporalUndefined = template(`
+helpers.temporalUndefined = template(`
   ({})
 `);
 
-export let toArray = template(`
+helpers.toArray = template(`
   (function (arr) {
     return Array.isArray(arr) ? arr : Array.from(arr);
   });
 `);
 
-export let toConsumableArray = template(`
+helpers.toConsumableArray = template(`
   (function (arr) {
     if (Array.isArray(arr)) {
       for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];

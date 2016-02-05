@@ -10,7 +10,7 @@ export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
 export const EQUALITY_BINARY_OPERATORS       = ["==", "===", "!=", "!=="];
 export const COMPARISON_BINARY_OPERATORS     = [...EQUALITY_BINARY_OPERATORS, "in", "instanceof"];
 export const BOOLEAN_BINARY_OPERATORS        = [...COMPARISON_BINARY_OPERATORS, ...BOOLEAN_NUMBER_BINARY_OPERATORS];
-export const NUMBER_BINARY_OPERATORS         = ["-", "/", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
+export const NUMBER_BINARY_OPERATORS         = ["-", "/", "%", "*", "**", "&", "|", ">>", ">>>", "<<", "^"];
 export const BINARY_OPERATORS                = ["+", ...NUMBER_BINARY_OPERATORS, ...BOOLEAN_BINARY_OPERATORS];
 
 export const BOOLEAN_UNARY_OPERATORS = ["delete", "!"];
@@ -22,3 +22,6 @@ export const INHERIT_KEYS = {
   optional: ["typeAnnotation", "typeParameters", "returnType"],
   force: ["start", "loc", "end"]
 };
+
+export const BLOCK_SCOPED_SYMBOL = Symbol.for("var used to be block scoped");
+export const NOT_LOCAL_BINDING = Symbol.for("should not be considered a local binding");

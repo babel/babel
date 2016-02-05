@@ -4,7 +4,7 @@ var _events2 = require("events");
 
 var _events3 = babelHelpers.interopRequireDefault(_events2);
 
-let Template = (function () {
+let Template = function () {
   function Template() {
     babelHelpers.classCallCheck(this, Template);
   }
@@ -16,6 +16,6 @@ let Template = (function () {
     }
   }]);
   return Template;
-})();
+}();
 
 console.log(new Template().events());

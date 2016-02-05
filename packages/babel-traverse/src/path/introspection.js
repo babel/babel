@@ -1,5 +1,3 @@
-/* @flow */
-
 // This file contains methods responsible for introspecting the current path for certain values.
 
 import type NodePath from "./index";
@@ -237,7 +235,9 @@ export function _guessExecutionStatusRelativeTo(target) {
   let targetFuncParent = target.scope.getFunctionParent();
   let selfFuncParent = this.scope.getFunctionParent();
 
-  if (targetFuncParent !== selfFuncParent) {
+  // here we check the `node` equality as sometimes we may have different paths for the
+  // same node due to path thrashing
+  if (targetFuncParent.node !== selfFuncParent.node) {
     let status = this._guessExecutionStatusRelativeToDifferentFunctions(targetFuncParent);
     if (status) {
       return status;
@@ -313,7 +313,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
   for (let path of referencePaths) {
     // if a reference is a child of the function we're checking against then we can
     // safelty ignore it
-    let childOfFunction = !!path.find(path => path === targetFuncPath);
+    let childOfFunction = !!path.find(path => path.node === targetFuncPath.node);
     if (childOfFunction) continue;
 
     let status = this._guessExecutionStatusRelativeTo(path);
@@ -362,7 +362,10 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
     if (binding.kind === "module") return;
 
     if (binding.path !== this) {
-      return binding.path.resolve(dangerous, resolved);
+      let ret = binding.path.resolve(dangerous, resolved);
+      // If the identifier resolves to parent node then we can't really resolve it.
+      if (this.find(parent => parent.node === ret.node)) return;
+      return ret;
     }
   } else if (this.isTypeCastExpression()) {
     return this.get("expression").resolve(dangerous, resolved);

@@ -65,6 +65,9 @@ export default function ({ types: t }) {
         let args = node.arguments;
         if (!hasSpread(args)) return;
 
+        let calleePath = path.get("callee");
+        if (calleePath.isSuper()) return;
+
         let contextLiteral = t.identifier("undefined");
 
         node.arguments = [];
@@ -85,7 +88,7 @@ export default function ({ types: t }) {
 
         let callee = node.callee;
 
-        if (path.get("callee").isMemberExpression()) {
+        if (calleePath.isMemberExpression()) {
           let temp = scope.maybeGenerateMemoised(callee.object);
           if (temp) {
             callee.object = t.assignmentExpression("=", temp, callee.object);

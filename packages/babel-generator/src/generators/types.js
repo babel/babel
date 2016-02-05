@@ -115,11 +115,11 @@ export function NumericLiteral(node: Object) {
   this.push(node.value + "");
 }
 
-export function StringLiteral(node: Object) {
-  this.push(this._stringLiteral(node.value));
+export function StringLiteral(node: Object, parent: Object) {
+  this.push(this._stringLiteral(node.value, parent));
 }
 
-export function _stringLiteral(val: string): string {
+export function _stringLiteral(val: string, parent: Object): string {
   val = JSON.stringify(val);
 
   // escape illegal js but valid json unicode characters
@@ -127,7 +127,7 @@ export function _stringLiteral(val: string): string {
     return "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4);
   });
 
-  if (this.format.quotes === "single") {
+  if (this.format.quotes === "single" && !t.isJSX(parent)) {
     // remove double quotes
     val = val.slice(1, -1);
 

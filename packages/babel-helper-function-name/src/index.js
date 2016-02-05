@@ -1,5 +1,3 @@
-/* @flow */
-
 import getFunctionArity from "babel-helper-get-function-arity";
 import template from "babel-template";
 import * as t from "babel-types";
@@ -18,7 +16,7 @@ let buildPropertyMethodAssignmentWrapper = template(`
   })(FUNCTION)
 `);
 
-let buldGeneratorPropertyMethodAssignmentWrapper = template(`
+let buildGeneratorPropertyMethodAssignmentWrapper = template(`
   (function (FUNCTION_KEY) {
     function* FUNCTION_ID() {
       return yield* FUNCTION_KEY.apply(this, arguments);
@@ -53,16 +51,19 @@ function wrap(state, method, id, scope) {
       // we can just munge the local binding
       scope.rename(id.name);
     } else {
+      // we don't currently support wrapping class expressions
+      if (!t.isFunction(method)) return;
+
       // need to add a wrapper since we can't change the references
       let build = buildPropertyMethodAssignmentWrapper;
-      if (method.generator) build = buldGeneratorPropertyMethodAssignmentWrapper;
+      if (method.generator) build = buildGeneratorPropertyMethodAssignmentWrapper;
       let template = build({
         FUNCTION: method,
         FUNCTION_ID: id,
         FUNCTION_KEY: scope.generateUidIdentifier(id.name)
       }).expression;
       template.callee._skipModulesRemap = true;
-      
+
       // shim in dummy params to retain function arity, if you try to read the
       // source then you'll get the original since it's proxied so it's all good
       let params = template.callee.body.body[0].params;
@@ -140,9 +141,13 @@ export default function ({ node, parent, scope, id }) {
       if (binding && binding.constant && scope.getBinding(id.name) === binding) {
         // always going to reference this method
         node.id = id;
+        node.id[t.NOT_LOCAL_BINDING] = true;
         return;
       }
     }
+  } else if (t.isAssignmentExpression(parent)) {
+    // foo = function () {};
+    id = parent.left;
   } else if (!id) {
     return;
   }
@@ -158,6 +163,11 @@ export default function ({ node, parent, scope, id }) {
 
   name = t.toBindingIdentifierName(name);
   id = t.identifier(name);
+
+  // The id shouldn't be considered a local binding to the function because
+  // we are simply trying to set the function name and not actually create
+  // a local binding.
+  id[t.NOT_LOCAL_BINDING] = true;
 
   let state = visit(node, name, scope);
   return wrap(state, node, id, scope) || node;

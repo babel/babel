@@ -3,6 +3,8 @@
 import repeating from "repeating";
 import * as t from "babel-types";
 
+const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(["!"]);
+
 export function WithStatement(node: Object) {
   this.keyword("with");
   this.push("(");
@@ -18,13 +20,32 @@ export function IfStatement(node: Object) {
   this.push(")");
   this.space();
 
+  let needsBlock = node.alternate && t.isIfStatement(getLastStatement(node.consequent));
+  if (needsBlock) {
+    this.push("{");
+    this.newline();
+    this.indent();
+  }
+
   this.printAndIndentOnComments(node.consequent, node);
+
+  if (needsBlock) {
+    this.dedent();
+    this.newline();
+    this.push("}");
+  }
 
   if (node.alternate) {
     if (this.isLast("}")) this.space();
     this.push("else ");
     this.printAndIndentOnComments(node.alternate, node);
   }
+}
+
+// Recursively get the last statement.
+function getLastStatement(statement) {
+  if (!t.isStatement(statement.body)) return statement;
+  return getLastStatement(statement.body);
 }
 
 export function ForStatement(node: Object) {
@@ -90,7 +111,13 @@ function buildLabelStatement(prefix, key = "label") {
 
     let label = node[key];
     if (label) {
-      this.push(" ");
+      if (!(this.format.minified && ((t.isUnaryExpression(label, { prefix: true }) ||
+                                      t.isUpdateExpression(label, { prefix: true })) &&
+                                     NON_ALPHABETIC_UNARY_OPERATORS.indexOf(label.operator) > -1))) {
+        this.push(" ");
+
+      }
+
       let terminatorState = this.startTerminatorless();
       this.print(label, node);
       this.endTerminatorless(terminatorState);
@@ -136,7 +163,8 @@ export function CatchClause(node: Object) {
   this.keyword("catch");
   this.push("(");
   this.print(node.param, node);
-  this.push(") ");
+  this.push(")");
+  this.space();
   this.print(node.body, node);
 }
 

@@ -1,7 +1,6 @@
-/* @flow */
-
 import path from "path";
 import fs from "fs";
+import { sync as mkdirpSync } from "mkdirp";
 import homeOrTmp from "home-or-tmp";
 import pathExists from "path-exists";
 
@@ -24,6 +23,7 @@ export function save() {
       throw err;
     }
   }
+  mkdirpSync(path.dirname(FILENAME));
   fs.writeFileSync(FILENAME, serialised);
 }
 

@@ -34,5 +34,9 @@ suite("scope", function () {
       assert.ok(getPath("var [ foo ] = null;").scope.getBinding("foo").path.type === "VariableDeclarator");
       assert.ok(getPath("var { bar: [ foo ] } = null;").scope.getBinding("foo").path.type === "VariableDeclarator");
     });
+
+    test("purity", function () {
+      assert.ok(getPath("({ x: 1 })").get("body")[0].get("expression").isPure());
+    });
   });
 });

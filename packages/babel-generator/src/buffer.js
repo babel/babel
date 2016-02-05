@@ -16,19 +16,26 @@ export default class Buffer {
     this._indent = format.indent.base;
     this.format = format;
     this.buf = "";
+
+    // Maintaining a reference to the last char in the buffer is an optimization
+    // to make sure that v8 doesn't "flatten" the string more often than needed
+    // see https://github.com/babel/babel/pull/3283 for details.
+    this.last = "";
   }
 
+  printedCommentStarts: Object;
   parenPushNewlineState: ?Object;
-  buf: string;
   position: Position;
   _indent: number;
   format: Object;
+  buf: string;
+  last: string;
 
   /**
    * Description
    */
 
-  catchUp(node) {
+  catchUp(node: Object) {
     // catch up to this nodes newline if we're behind
     if (node.loc && this.format.retainLines && this.buf) {
       while (this.position.line < node.loc.start.line) {
@@ -41,7 +48,7 @@ export default class Buffer {
    * Get the current trimmed buffer.
    */
 
-  get() {
+  get(): string {
     return trimRight(this.buf);
   }
 
@@ -49,7 +56,7 @@ export default class Buffer {
    * Get the current indent.
    */
 
-  getIndent() {
+  getIndent(): string {
     if (this.format.compact || this.format.concise) {
       return "";
     } else {
@@ -61,7 +68,7 @@ export default class Buffer {
    * Get the current indent size.
    */
 
-  indentSize() {
+  indentSize(): number {
     return this.getIndent().length;
   }
 
@@ -103,7 +110,9 @@ export default class Buffer {
 
   rightBrace() {
     this.newline(true);
-    //if (this.format.compact) this._removeLast(";");
+    if (this.format.minified && !this._lastPrintedIsEmptyStatement) {
+      this._removeLast(";");
+    }
     this.push("}");
   }
 
@@ -139,7 +148,8 @@ export default class Buffer {
 
   _removeLast(cha: string) {
     if (!this._isLast(cha)) return;
-    this.buf = this.buf.substr(0, this.buf.length - 1);
+    this.buf = this.buf.slice(0, -1);
+    this.last = this.buf[this.buf.length - 1];
     this.position.unshift(cha);
   }
 
@@ -190,42 +200,24 @@ export default class Buffer {
       return;
     }
 
-    removeLast = removeLast || false;
-
-    if (typeof i === "number") {
-      i = Math.min(2, i);
-
-      if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
-      if (i <= 0) return;
-
-      while (i > 0) {
-        this._newline(removeLast);
-        i--;
-      }
-      return;
-    }
-
-    if (typeof i === "boolean") {
-      removeLast = i;
-    }
-
-    this._newline(removeLast);
-  }
-
-  /**
-   * Adds a newline unless there is already two previous newlines.
-   */
-
-  _newline(removeLast?: boolean) {
     // never allow more than two lines
     if (this.endsWith("\n\n")) return;
 
+    if (typeof i === "boolean") removeLast = i;
+    if (typeof i !== "number") i = 1;
+
+    i = Math.min(2, i);
+    if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
+    if (i <= 0) return;
+
     // remove the last newline
-    if (removeLast && this.isLast("\n")) this.removeLast("\n");
+    if (removeLast) {
+      this.removeLast("\n");
+    }
 
     this.removeLast(" ");
     this._removeSpacesAfterLastNewline();
-    this._push("\n");
+    this._push(repeating("\n", i));
   }
 
   /**
@@ -234,21 +226,9 @@ export default class Buffer {
 
   _removeSpacesAfterLastNewline() {
     let lastNewlineIndex = this.buf.lastIndexOf("\n");
-    if (lastNewlineIndex === -1) {
-      return;
-    }
-
-    let index = this.buf.length - 1;
-    while (index > lastNewlineIndex) {
-      if (this.buf[index] !== " ") {
-        break;
-      }
-
-      index--;
-    }
-
-    if (index === lastNewlineIndex) {
-      this.buf = this.buf.substring(0, index + 1);
+    if (lastNewlineIndex >= 0 && this.get().length <= lastNewlineIndex) {
+      this.buf = this.buf.substring(0, lastNewlineIndex + 1);
+      this.last = "\n";
     }
   }
 
@@ -275,7 +255,7 @@ export default class Buffer {
    * Push a string to the buffer.
    */
 
-  _push(str) {
+  _push(str: string): void {
     // see startTerminatorless() instance method
     let parenPushNewlineState = this.parenPushNewlineState;
     if (parenPushNewlineState) {
@@ -301,17 +281,18 @@ export default class Buffer {
     //
     this.position.push(str);
     this.buf += str;
+    this.last = str[str.length - 1];
   }
 
   /**
    * Test if the buffer ends with a string.
    */
 
-  endsWith(str: string, buf: string = this.buf): boolean {
+  endsWith(str: string): boolean {
     if (str.length === 1) {
-      return buf[buf.length - 1] === str;
+      return this.last === str;
     } else {
-      return buf.slice(-str.length) === str;
+      return this.buf.slice(-str.length) === str;
     }
   }
 
@@ -319,14 +300,13 @@ export default class Buffer {
    * Test if a character is last in the buffer.
    */
 
-  isLast(cha: string) {
+  isLast(cha: string): boolean {
     if (this.format.compact) return false;
     return this._isLast(cha);
   }
 
-  _isLast(cha: string) {
-    let buf = this.buf;
-    let last = buf[buf.length - 1];
+  _isLast(cha: string): boolean {
+    let last = this.last;
 
     if (Array.isArray(cha)) {
       return cha.indexOf(last) >= 0;

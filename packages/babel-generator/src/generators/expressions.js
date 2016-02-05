@@ -3,9 +3,10 @@
 import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";
 import * as t from "babel-types";
-import n from "../node";
+import * as n from "../node";
 
 const SCIENTIFIC_NOTATION = /e/i;
+const ZERO_DECIMAL_INTEGER = /\.0+$/;
 
 export function UnaryExpression(node: Object) {
   let needsSpace = /[a-z]$/.test(node.operator);
@@ -58,9 +59,14 @@ export function ConditionalExpression(node: Object) {
   this.print(node.alternate, node);
 }
 
-export function NewExpression(node: Object) {
+export function NewExpression(node: Object, parent: Object) {
   this.push("new ");
   this.print(node.callee, node);
+  if (node.arguments.length === 0 && this.format.minified &&
+      !t.isCallExpression(parent, { callee: node }) &&
+      !t.isMemberExpression(parent) &&
+      !t.isNewExpression(parent)) return;
+
   this.push("(");
   this.printList(node.arguments, node);
   this.push(")");
@@ -86,6 +92,7 @@ export function Decorator(node: Object) {
 
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
+  if (node.loc) this.printAuxAfterComment();
 
   this.push("(");
 
@@ -112,7 +119,7 @@ function buildYieldAwait(keyword: string) {
   return function (node: Object) {
     this.push(keyword);
 
-    if (node.delegate || node.all) {
+    if (node.delegate) {
       this.push("*");
     }
 
@@ -129,6 +136,7 @@ export let YieldExpression = buildYieldAwait("yield");
 export let AwaitExpression = buildYieldAwait("await");
 
 export function EmptyStatement() {
+  this._lastPrintedIsEmptyStatement = true;
   this.semicolon();
 }
 
@@ -139,7 +147,9 @@ export function ExpressionStatement(node: Object) {
 
 export function AssignmentPattern(node: Object) {
   this.print(node.left, node);
-  this.push(" = ");
+  this.space();
+  this.push("=");
+  this.space();
   this.print(node.right, node);
 }
 
@@ -156,7 +166,6 @@ export function AssignmentExpression(node: Object, parent: Object) {
   this.print(node.left, node);
 
   let spaces = !this.format.compact || node.operator === "in" || node.operator === "instanceof";
-  spaces = true; // todo: https://github.com/babel/babel/issues/1835
   if (spaces) this.push(" ");
 
   this.push(node.operator);
@@ -167,6 +176,13 @@ export function AssignmentExpression(node: Object, parent: Object) {
     spaces = node.operator === "<" &&
              t.isUnaryExpression(node.right, { prefix: true, operator: "!" }) &&
              t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" });
+
+    // Need spaces for operators of the same kind to avoid: `a+++b`
+    if (!spaces) {
+      let right = getLeftMost(node.right);
+      spaces = t.isUnaryExpression(right, { prefix: true, operator: node.operator }) ||
+               t.isUpdateExpression(right, { prefix: true, operator: node.operator + node.operator });
+    }
   }
 
   if (spaces) this.push(" ");
@@ -206,9 +222,9 @@ export function MemberExpression(node: Object) {
     this.print(node.property, node);
     this.push("]");
   } else {
-    if (t.isLiteral(node.object) && !t.isTemplateLiteral(node.object)) {
-      let val = this.getPossibleRaw(node.object) || this._stringLiteral(node.object);
-      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !this.endsWith(".")) {
+    if (t.isNumericLiteral(node.object)) {
+      let val = this.getPossibleRaw(node.object) || node.object.value;
+      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !ZERO_DECIMAL_INTEGER.test(val) && !this.endsWith(".")) {
         this.push(".");
       }
     }
@@ -222,4 +238,11 @@ export function MetaProperty(node: Object) {
   this.print(node.meta, node);
   this.push(".");
   this.print(node.property, node);
+}
+
+function getLeftMost(binaryExpr) {
+  if (!t.isBinaryExpression(binaryExpr)) {
+    return binaryExpr;
+  }
+  return getLeftMost(binaryExpr.left);
 }

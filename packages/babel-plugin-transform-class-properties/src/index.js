@@ -41,9 +41,9 @@ export default function ({ types: t }) {
         let nodes = [];
         let ref;
 
-        if (path.isClassExpression()) {
-          ref = path.scope.generateUidIdentifier();
-        } else { // path.isClassDeclaration()
+        if (path.isClassExpression() || !path.node.id) {
+          ref = path.scope.generateUidIdentifier("class");
+        } else { // path.isClassDeclaration() && path.node.id
           ref = path.node.id;
         }
 
@@ -51,7 +51,7 @@ export default function ({ types: t }) {
 
         for (let prop of props) {
           let propNode = prop.node;
-          if (propNode.decorators) continue;
+          if (propNode.decorators && propNode.decorators.length > 0) continue;
           if (!propNode.value) continue;
 
           let isStatic = propNode.static;
@@ -131,7 +131,16 @@ export default function ({ types: t }) {
         if (!nodes.length) return;
 
         if (path.isClassExpression()) {
-          nodes.push(t.expressionStatement(ref));
+          path.scope.push({ id: ref });
+          path.replaceWith(t.assignmentExpression("=", ref, path.node));
+        } else { // path.isClassDeclaration()
+          if (!path.node.id) {
+            path.node.id = ref;
+          }
+
+          if (path.parentPath.isExportDeclaration()) {
+            path = path.parentPath;
+          }
         }
 
         path.insertAfter(nodes);

@@ -1,4 +1,4 @@
-var Foo = (function () {
+var Foo = function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }
@@ -6,4 +6,4 @@ var Foo = (function () {
   Foo.prototype["bar"] = function bar() {};
 
   return Foo;
-})();
+}();

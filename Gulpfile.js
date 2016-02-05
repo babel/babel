@@ -11,6 +11,16 @@ var path    = require("path");
 var scripts = "./packages/*/src/**/*.js";
 var dest = "packages";
 
+var srcEx, libFragment;
+
+if (path.win32 === path) {
+  srcEx = /(packages\\[^\\]+)\\src\\/;
+  libFragment = "$1\\lib\\";
+} else {
+  srcEx = new RegExp("(packages/[^/]+)/src/");
+  libFragment = "$1/lib/";
+}
+
 gulp.task("default", ["build"]);
 
 gulp.task("build", function () {
@@ -22,7 +32,7 @@ gulp.task("build", function () {
     }))
     .pipe(through.obj(function (file, enc, callback) {
       file._path = file.path;
-      file.path = file.path.replace(/^([^\\]+)\/src/, "$1/lib");
+      file.path = file.path.replace(srcEx, libFragment);
       callback(null, file);
     }))
     .pipe(newer(dest))

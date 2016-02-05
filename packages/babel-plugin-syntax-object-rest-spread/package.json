@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-syntax-object-rest-spread",
-  "version": "6.0.14",
+  "version": "6.3.13",
   "description": "Allow parsing of object rest/spread",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-object-rest-spread",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.0.0"
+    "babel-helper-plugin-test-runner": "^6.3.13"
   }
 }

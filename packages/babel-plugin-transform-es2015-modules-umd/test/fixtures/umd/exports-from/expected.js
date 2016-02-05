@@ -1,5 +1,3 @@
-"use strict";
-
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports", "foo"], factory);
@@ -13,6 +11,8 @@
     global.actual = mod.exports;
   }
 })(this, function (exports, _foo) {
+  "use strict";
+
   Object.defineProperty(exports, "__esModule", {
     value: true
   });

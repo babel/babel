@@ -12,6 +12,7 @@ import {
 import defineType, {
   assertValueType,
   assertNodeType,
+  assertNodeOrValueType,
   assertEach,
   chain,
   assertOneOf,
@@ -20,7 +21,8 @@ import defineType, {
 defineType("ArrayExpression", {
   fields: {
     elements: {
-      validate: assertValueType("array")
+      validate: chain(assertValueType("array"), assertEach(assertNodeOrValueType("null", "Expression", "SpreadElement"))),
+      default: [],
     }
   },
   visitor: ["elements"],
@@ -112,7 +114,7 @@ defineType("CallExpression", {
       validate: assertNodeType("Expression")
     },
     arguments: {
-      validate: assertValueType("array")
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement")))
     }
   },
   aliases: ["Expression"]
@@ -169,7 +171,7 @@ defineType("DoWhileStatement", {
       validate: assertNodeType("Expression")
     },
     body: {
-      validate: assertNodeType("BlockStatement")
+      validate: assertNodeType("Statement")
     }
   },
   aliases: ["Statement", "BlockParent", "Loop", "While", "Scopable"]
@@ -435,7 +437,7 @@ defineType("NewExpression", {
       validate: assertNodeType("Expression")
     },
     arguments: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement")))
     }
   }
 });
@@ -478,7 +480,7 @@ defineType("ObjectMethod", {
     },
     key: {
       validate(node, key, val) {
-        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "Literal"];
+        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
         assertNodeType(...expectedTypes)(node, key, val);
       }
     },
@@ -498,7 +500,7 @@ defineType("ObjectMethod", {
     }
   },
   visitor: ["key", "params", "body", "decorators", "returnType", "typeParameters"],
-  aliases: ["UserWhitespacable", "Function", "Scopable", "BlockParent", "FunctionParent", "Method"]
+  aliases: ["UserWhitespacable", "Function", "Scopable", "BlockParent", "FunctionParent", "Method", "ObjectMember"]
 });
 
 defineType("ObjectProperty", {
@@ -510,7 +512,7 @@ defineType("ObjectProperty", {
     },
     key: {
       validate(node, key, val) {
-        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "Literal"];
+        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
         assertNodeType(...expectedTypes)(node, key, val);
       }
     },
@@ -527,7 +529,7 @@ defineType("ObjectProperty", {
     }
   },
   visitor: ["key", "value", "decorators"],
-  aliases: ["UserWhitespacable", "Property"]
+  aliases: ["UserWhitespacable", "Property", "ObjectMember"]
 });
 
 defineType("RestElement", {
@@ -554,7 +556,9 @@ defineType("ReturnStatement", {
 defineType("SequenceExpression", {
   visitor: ["expressions"],
   fields: {
-    expressions: { validate: assertValueType("array") }
+    expressions: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression")))
+    }
   },
   aliases: ["Expression"]
 });
@@ -622,7 +626,7 @@ defineType("UnaryExpression", {
   builder: ["operator", "argument", "prefix"],
   fields: {
     prefix: {
-      default: false
+      default: true
     },
     argument: {
       validate: assertNodeType("Expression")
@@ -700,7 +704,7 @@ defineType("WithStatement", {
       object: assertNodeType("Expression")
     },
     body: {
-      validate: assertNodeType("BlockStatement")
+      validate: assertNodeType("BlockStatement", "Statement")
     }
   }
 });

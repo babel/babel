@@ -1,4 +1,4 @@
-/* @flow */
+/* @noflow */
 
 import isPlainObject from "lodash/lang/isPlainObject";
 import isNumber from "lodash/lang/isNumber";
@@ -220,7 +220,7 @@ export function toExpression(node: Object): Object {
   }
 }
 
-export function toBlock(node, parent: Object): Object {
+export function toBlock(node: Object, parent: Object): Object {
   if (t.isBlockStatement(node)) {
     return node;
   }
@@ -290,7 +290,7 @@ export function valueToNode(value: any): Object {
       if (t.isValidIdentifier(key)) {
         nodeKey = t.identifier(key);
       } else {
-        nodeKey = t.literal(key);
+        nodeKey = t.stringLiteral(key);
       }
       props.push(t.objectProperty(nodeKey, t.valueToNode(value[key])));
     }

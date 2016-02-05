@@ -1,5 +1,3 @@
-/* @flow */
-
 import type { TokContext } from "./context";
 import type { Token } from "./index";
 import { Position } from "../util/location";

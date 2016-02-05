@@ -282,7 +282,6 @@
                                   "column": 38
                                 }
                               },
-                              "all": false,
                               "argument": {
                                 "type": "CallExpression",
                                 "start": 97,

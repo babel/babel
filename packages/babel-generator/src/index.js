@@ -1,5 +1,3 @@
-/* @flow */
-
 import detectIndent from "detect-indent";
 import Whitespace from "./whitespace";
 import SourceMap from "./source-map";
@@ -36,12 +34,13 @@ export class CodeGenerator extends Printer {
   }
 
   format: {
-    shouldPrintComment: boolean;
+    shouldPrintComment: (comment: string) => boolean;
     retainLines: boolean;
     comments: boolean;
     auxiliaryCommentBefore: string;
     auxiliaryCommentAfter: string;
     compact: boolean | "auto";
+    minified: boolean;
     quotes: "single" | "double";
     concise: boolean;
     indent: {
@@ -83,14 +82,19 @@ export class CodeGenerator extends Printer {
       retainLines: opts.retainLines,
       comments: opts.comments == null || opts.comments,
       compact: opts.compact,
+      minified: opts.minified,
       concise: opts.concise,
-      quotes: CodeGenerator.findCommonStringDelimiter(code, tokens),
+      quotes: opts.quotes || CodeGenerator.findCommonStringDelimiter(code, tokens),
       indent: {
         adjustMultilineComment: true,
         style: style,
         base: 0
       }
     };
+
+    if (format.minified) {
+      format.compact = true;
+    }
 
     if (format.compact === "auto") {
       format.compact = code.length > 100000; // 100KB

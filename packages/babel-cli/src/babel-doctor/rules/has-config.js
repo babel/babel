@@ -23,7 +23,7 @@ export default async function () {
     }
 
     parts.pop();
-  } while(parts.length);
+  } while (parts.length);
 
   return [false, "Found no .babelrc config"];
 }

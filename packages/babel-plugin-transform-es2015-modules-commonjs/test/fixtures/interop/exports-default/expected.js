@@ -17,6 +17,6 @@ class Foo {}
 exports.default = Foo;
 exports.default = foo;
 
-exports.default = (function () {
+exports.default = function () {
   return "foo";
-})();
+}();

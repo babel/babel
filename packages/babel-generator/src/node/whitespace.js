@@ -1,9 +1,14 @@
-/* @flow */
+/* @noflow */
 
 import isBoolean from "lodash/lang/isBoolean";
 import each from "lodash/collection/each";
 import map from "lodash/collection/map";
 import * as t from "babel-types";
+
+type WhitespaceObject = {
+  before?: boolean,
+  after?: boolean
+};
 
 /**
  * Crawl a node to test if it contains a CallExpression, a Function, or a Helper.
@@ -65,7 +70,7 @@ exports.nodes = {
    * Test if AssignmentExpression needs whitespace.
    */
 
-  AssignmentExpression(node) {
+  AssignmentExpression(node: Object): ?WhitespaceObject {
     let state = crawl(node.right);
     if ((state.hasCall && state.hasHelper) || state.hasFunction) {
       return {
@@ -79,7 +84,7 @@ exports.nodes = {
    * Test if SwitchCase needs whitespace.
    */
 
-  SwitchCase(node, parent) {
+  SwitchCase(node: Object, parent: Object): ?WhitespaceObject {
     return {
       before: node.consequent.length || parent.cases[0] === node
     };
@@ -89,7 +94,7 @@ exports.nodes = {
    * Test if LogicalExpression needs whitespace.
    */
 
-  LogicalExpression(node) {
+  LogicalExpression(node: Object): ?WhitespaceObject {
     if (t.isFunction(node.left) || t.isFunction(node.right)) {
       return {
         after: true
@@ -101,7 +106,7 @@ exports.nodes = {
    * Test if Literal needs whitespace.
    */
 
-  Literal(node) {
+  Literal(node: Object): ?WhitespaceObject {
     if (node.value === "use strict") {
       return {
         after: true
@@ -113,7 +118,7 @@ exports.nodes = {
    * Test if CallExpression needs whitespace.
    */
 
-  CallExpression(node) {
+  CallExpression(node: Object): ?WhitespaceObject {
     if (t.isFunction(node.callee) || isHelper(node)) {
       return {
         before: true,
@@ -126,7 +131,7 @@ exports.nodes = {
    * Test if VariableDeclaration needs whitespace.
    */
 
-  VariableDeclaration(node) {
+  VariableDeclaration(node: Object): ?WhitespaceObject {
     for (let i = 0; i < node.declarations.length; i++) {
       let declar = node.declarations[i];
 
@@ -149,7 +154,7 @@ exports.nodes = {
    * Test if IfStatement needs whitespace.
    */
 
-  IfStatement(node) {
+  IfStatement(node: Object): ?WhitespaceObject {
     if (t.isBlockStatement(node.consequent)) {
       return {
         before: true,
@@ -165,7 +170,7 @@ exports.nodes = {
 
 exports.nodes.ObjectProperty =
 exports.nodes.ObjectMethod =
-exports.nodes.SpreadProperty = function (node, parent) {
+exports.nodes.SpreadProperty = function (node: Object, parent): ?WhitespaceObject {
   if (parent.properties[0] === node) {
     return {
       before: true
@@ -183,7 +188,7 @@ exports.list = {
    * Return VariableDeclaration declarations init properties.
    */
 
-  VariableDeclaration(node) {
+  VariableDeclaration(node: Object): Array<Object> {
     return map(node.declarations, "init");
   },
 
@@ -191,7 +196,7 @@ exports.list = {
    * Return VariableDeclaration elements.
    */
 
-  ArrayExpression(node) {
+  ArrayExpression(node: Object): Array<Object> {
     return node.elements;
   },
 
@@ -199,7 +204,7 @@ exports.list = {
    * Return VariableDeclaration properties.
    */
 
-  ObjectExpression(node) {
+  ObjectExpression(node: Object): Array<Object> {
     return node.properties;
   }
 };

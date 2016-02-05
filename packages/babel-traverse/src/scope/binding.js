@@ -1,5 +1,3 @@
-/* @flow */
-
 import type NodePath from "../path";
 
 /**
