@@ -399,14 +399,21 @@ export default function () {
               hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode).expression;
             }
 
-            topNodes.unshift(t.expressionStatement(hoistedExportsNode));
+            const node = t.expressionStatement(hoistedExportsNode);
+            node._blockHoist = 3;
+
+            topNodes.unshift(node);
           }
 
           // add __esModule declaration if this file has any exports
           if (hasExports && !strict) {
             let buildTemplate = buildExportsModuleDeclaration;
             if (this.opts.loose) buildTemplate = buildLooseExportsModuleDeclaration;
-            topNodes.unshift(buildTemplate());
+
+            const declar = buildTemplate();
+            declar._blockHoist = 3;
+
+            topNodes.unshift(declar);
           }
 
           path.unshiftContainer("body", topNodes);
