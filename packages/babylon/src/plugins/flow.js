@@ -1038,7 +1038,7 @@ export default function (instance) {
         return this.parseArrowExpression(node, [], isAsync);
       } else {
         // let foo = (foo): number => {};
-        let node = inner.call(this, startPos, startLoc, canBeArrow, isAsync);
+        let node = inner.call(this, startPos, startLoc, canBeArrow, isAsync, this.hasPlugin("trailingFunctionCommas"));
 
         if (this.match(tt.colon)) {
           let state = this.state.clone();
