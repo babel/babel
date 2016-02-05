@@ -28,6 +28,7 @@ export class CodeGenerator extends Printer {
     this.format   = format;
     this.opts     = opts;
     this.ast      = ast;
+    this._inForStatementInitCounter = 0;
 
     this.whitespace = new Whitespace(tokens);
     this.map        = new SourceMap(position, opts, code);
