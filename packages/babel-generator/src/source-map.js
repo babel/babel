@@ -68,7 +68,7 @@ export default class SourceMap {
     }
 
     this.last = {
-      source: this.opts.sourceFileName,
+      source: loc.filename || this.opts.sourceFileName,
       generated: generated,
       original: original
     };
