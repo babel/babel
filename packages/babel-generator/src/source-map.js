@@ -17,7 +17,13 @@ export default class SourceMap {
         sourceRoot: opts.sourceRoot
       });
 
-      this.map.setSourceContent(opts.sourceFileName, code);
+      if (typeof code === "string") {
+        this.map.setSourceContent(opts.sourceFileName, code);
+      } else if (typeof code === "object") {
+        Object.keys(code).forEach((sourceFileName) => {
+          this.map.setSourceContent(sourceFileName, code[sourceFileName]);
+        });
+      }
     } else {
       this.map = null;
     }
