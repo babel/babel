@@ -89,8 +89,7 @@ All the babel plugins (and other packages) that have a `/test/fixtures` are writ
 
 For example in [`babel-plugin-transform-exponentiation-operator/test`](/packages/babel-plugin-transform-exponentiation-operator/test)
 
-- There is an `index.js` file. It imports our [test helper](/packages/babel-helper-plugin-test-runner) with `
-require("babel-helper-plugin-test-runner")(__dirname);`. (You don't have to worry about this).
+- There is an `index.js` file. It imports our [test helper](/packages/babel-helper-plugin-test-runner). (You don't have to worry about this).
 - There can be multiple folders under [`/fixtures`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures)
    - There is an [`options.json`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) is basically a `.babelrc` file to pass in the plugins and setttings you need for your tests.
    - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["transform-exponentiation-operator"] }`.
@@ -98,8 +97,8 @@ require("babel-helper-plugin-test-runner")(__dirname);`. (You don't have to worr
 
 - In each sub-folder, you can actually write out your different categories of tests. (You can name this by the feature you are testing, or you can reference the issue number)
 - There are mainly two kinds of tests for plugins.
-   - One is a simple test of input/output by Babel. We do this by creating an `actual.js` (the code before transformation) and `expected.js`.
-   - The other type is a test to actually evaluate code an assert certain properties are true or not (this is usually better). We do this by creating an `exec.js`.
+   - One is a simple test of input/output by Babel. We do this by creating an [`actual.js`](packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/actual.js) (the code before transformation) and [`expected.js`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/expected.js).
+   - The other type is a test to actually evaluate code an assert certain properties are true or not (this is usually better). We do this by creating an [`exec.js`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js).
 
 In an actual/expected test, you simply write out the code you want transformed in `actual.js`.
 
