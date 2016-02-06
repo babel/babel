@@ -20,7 +20,7 @@ contributing, please read the
 
 ## Developing
 
-**Note:** Versions `< 5.1.10` can't be built.
+**Note:** Versions `< 5.1.10` can't be built. Make sure you are on npm 3.
 
 #### Setup
 
