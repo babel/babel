@@ -748,7 +748,7 @@ pp.parseClassProperty = function (node) {
     node.value = null;
   }
   if (!this.eat(tt.semi)) {
-    this.raise(node.value && node.value.end || node.key.end, "A semicolon is required after a class property");
+    this.raise(this.state.start, "A semicolon is required after a class property");
   }
   return this.finishNode(node, "ClassProperty");
 };
