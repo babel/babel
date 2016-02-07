@@ -39,10 +39,9 @@ export default function ({ types: t }) {
           args.unshift(t.objectExpression([]));
         }
 
-        const helper = file.opts.polyfill === false ? {
-          type: "Identifier",
-          name: "Object.assign"
-        } : file.addHelper("extends");
+        const helper = file.opts.polyfill === false ?
+          t.memberExpression(t.identifier('Object'), t.identifier('assign')) :
+          file.addHelper("extends");
 
         path.replaceWith(t.callExpression(helper, args));
       }
