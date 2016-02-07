@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-define-map",
-  "version": "6.4.5",
+  "version": "6.5.0",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-define-map",
   "license": "MIT",

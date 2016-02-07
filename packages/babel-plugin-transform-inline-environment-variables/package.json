@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-inline-environment-variables",
-  "version": "6.3.13",
+  "version": "6.5.0",
   "description": "Inline environment variables",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-inline-environment-variables",
   "license": "MIT",
