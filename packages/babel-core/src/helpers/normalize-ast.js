@@ -1,4 +1,4 @@
-/* @noflow */
+/* @flow */
 
 import * as t from "babel-types";
 

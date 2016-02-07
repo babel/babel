@@ -1,4 +1,4 @@
-/* @noflow */
+/* @flow */
 
 import toFastProperties from "to-fast-properties";
 import compact from "lodash/array/compact";
@@ -406,6 +406,7 @@ export function inherits(child: Object, parent: Object): Object {
 
 export function assertNode(node?) {
   if (!isNode(node)) {
+    // $FlowFixMe
     throw new TypeError("Not a valid node " + (node && node.type));
   }
 }

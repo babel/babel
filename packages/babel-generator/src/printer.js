@@ -1,6 +1,6 @@
 import repeating from "repeating";
 import Buffer from "./buffer";
-import n from "./node";
+import * as n from "./node";
 import * as t from "babel-types";
 
 export default class Printer extends Buffer {

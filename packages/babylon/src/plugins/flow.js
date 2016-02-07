@@ -3,10 +3,15 @@ import Parser from "../parser";
 
 let pp = Parser.prototype;
 
-pp.flowParseTypeInitialiser = function (tok) {
+pp.flowParseTypeInitialiser = function (tok, allowLeadingPipeOrAnd) {
   let oldInType = this.state.inType;
   this.state.inType = true;
   this.expect(tok || tt.colon);
+  if (allowLeadingPipeOrAnd) {
+    if (this.match(tt.bitwiseAND) || this.match(tt.bitwiseOR)) {
+      this.next();
+    }
+  }
   let type = this.flowParseType();
   this.state.inType = oldInType;
   return type;
@@ -172,7 +177,10 @@ pp.flowParseTypeAlias = function (node) {
     node.typeParameters = null;
   }
 
-  node.right = this.flowParseTypeInitialiser(tt.eq);
+  node.right = this.flowParseTypeInitialiser(
+    tt.eq,
+    /*allowLeadingPipeOrAnd*/ true
+  );
   this.semicolon();
 
   return this.finishNode(node, "TypeAlias");
@@ -1030,7 +1038,7 @@ export default function (instance) {
         return this.parseArrowExpression(node, [], isAsync);
       } else {
         // let foo = (foo): number => {};
-        let node = inner.call(this, startPos, startLoc, canBeArrow, isAsync);
+        let node = inner.call(this, startPos, startLoc, canBeArrow, isAsync, this.hasPlugin("trailingFunctionCommas"));
 
         if (this.match(tt.colon)) {
           let state = this.state.clone();

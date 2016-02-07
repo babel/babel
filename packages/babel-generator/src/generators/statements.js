@@ -1,3 +1,5 @@
+/* @flow */
+
 import repeating from "repeating";
 import * as t from "babel-types";
 
@@ -50,9 +52,9 @@ export function ForStatement(node: Object) {
   this.keyword("for");
   this.push("(");
 
-  this._inForStatementInit = true;
+  this._inForStatementInitCounter++;
   this.print(node.init, node);
-  this._inForStatementInit = false;
+  this._inForStatementInitCounter--;
   this.push(";");
 
   if (node.test) {

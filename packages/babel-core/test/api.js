@@ -56,6 +56,17 @@ suite("api", function () {
     assert.equal(babel.transformFileSync(__dirname + "/fixtures/api/file.js", {}).code, "foo();");
   });
 
+  test("options throw on falsy true", function () {
+    return assert.throws(
+      function () {
+        babel.transform("", {
+          plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false]
+        });
+      },
+      /TypeError: Falsy value found in plugins/
+    );
+  });
+
   test("options merge backwards", function () {
     return transformAsync("", {
       presets: [__dirname + "/../../babel-preset-es2015"],

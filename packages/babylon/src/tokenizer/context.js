@@ -26,7 +26,9 @@ export class TokContext {
   override: ?Function;
 }
 
-export const types = {
+export const types: {
+  [key: string]: TokContext;
+} = {
   b_stat: new TokContext("{", false),
   b_expr: new TokContext("{", true),
   b_tmpl: new TokContext("${", true),
@@ -57,7 +59,7 @@ tt.parenR.updateContext = tt.braceR.updateContext = function () {
 
 tt.name.updateContext = function (prevType) {
   this.state.exprAllowed = false;
-  
+
   if (prevType === tt._let || prevType === tt._const || prevType === tt._var) {
     if (lineBreak.test(this.input.slice(this.state.end))) {
       this.state.exprAllowed = true;

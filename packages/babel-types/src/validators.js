@@ -1,3 +1,5 @@
+/* @flow */
+
 import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";
 import * as t from "./index";
@@ -67,7 +69,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
     case "ArrowFunctionExpression":
     case "FunctionDeclaration":
     case "FunctionExpression":
-      for (let param of (parent.params: Array)) {
+      for (let param of (parent.params: Array<any>)) {
         if (param === node) return false;
       }
 
