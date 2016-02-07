@@ -6,7 +6,7 @@ const CSSXPropertyAllowedCodes = [
 ].map(stringToCode);
 
 const CSSXValueAllowedCodes = [
-  ' ' , '\n', '\t', '#', '.', '-', '(', ')', '[', ']', '\'', '"', '%', ',', ':', '/', '\\'
+  ' ' , '\n', '\t', '#', '.', '-', '(', ')', '[', ']', '\'', '"', '%', ',', ':', '/', '\\', '!', '?'
 ].map(stringToCode);
 
 const CSSXSelectorAllowedCodes = [
