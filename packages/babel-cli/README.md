@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install --global babel-cli
+$ npm install babel-cli
 ```
 
 ## Usage 
