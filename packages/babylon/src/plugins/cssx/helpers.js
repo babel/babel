@@ -4,7 +4,12 @@ import { posToLoc } from './utilities';
 
 const pp = Parser.prototype;
 const MediaQueryEntryPoint = '@media ';
-const keyframesEntryPoint = '@keyframes ';
+const keyframesEntryPoint = [
+  '@keyframes',
+  '@-webkit-keyframes',
+  '@-moz-keyframes',
+  '@-o-keyframes'
+];
 
 pp.cssxIsMediaQuery = function () {
   if (this.state.value.toString().indexOf(MediaQueryEntryPoint) === 0) {
@@ -14,7 +19,8 @@ pp.cssxIsMediaQuery = function () {
 };
 
 pp.cssxIsKeyFramesEntryPoint = function () {
-  if (this.state.value.toString().indexOf(keyframesEntryPoint) === 0) {
+  var value = this.state.value.toString().split(' ')[0];
+  if (keyframesEntryPoint.indexOf(value) >= 0) {
     return true;
   }
   return false;
