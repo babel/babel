@@ -20,29 +20,33 @@ export default function ({ types: t }) {
         path.insertAfter(t.exportDefaultDeclaration(ref));
       },
 
-      ClassDeclaration(path) {
-        let { node } = path;
+      ClassDeclaration: {
+        lossy(path) {
+          let { node } = path;
 
-        let ref = node.id || path.scope.generateUidIdentifier("class");
+          let ref = node.id || path.scope.generateUidIdentifier("class");
 
-        path.replaceWith(t.variableDeclaration("let", [
-          t.variableDeclarator(ref, t.toExpression(node))
-        ]));
+          path.replaceWith(t.variableDeclaration("let", [
+            t.variableDeclarator(ref, t.toExpression(node))
+          ]));
+        }
       },
 
-      ClassExpression(path, state) {
-        let { node } = path;
-        if (node[VISITED]) return;
+      ClassExpression: {
+        lossy(path, state) {
+          let { node } = path;
+          if (node[VISITED]) return;
 
-        let inferred = nameFunction(path);
-        if (inferred && inferred !== node) return path.replaceWith(inferred);
+          let inferred = nameFunction(path);
+          if (inferred && inferred !== node) return path.replaceWith(inferred);
 
-        node[VISITED] = true;
+          node[VISITED] = true;
 
-        let Constructor = VanillaTransformer;
-        if (state.opts.loose) Constructor = LooseTransformer;
+          let Constructor = VanillaTransformer;
+          if (state.opts.loose) Constructor = LooseTransformer;
 
-        path.replaceWith(new Constructor(path, state.file).run());
+          path.replaceWith(new Constructor(path, state.file).run());
+        }
       }
     }
   };

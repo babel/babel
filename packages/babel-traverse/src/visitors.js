@@ -89,10 +89,10 @@ export function explode(visitor) {
 
     let aliases: ?Array<string> = t.FLIPPED_ALIAS_KEYS[nodeType];
 
-    let deprecratedKey = t.DEPRECATED_KEYS[nodeType];
-    if (deprecratedKey) {
-      console.trace(`Visitor defined for ${nodeType} but it has been renamed to ${deprecratedKey}`);
-      aliases = [deprecratedKey];
+    let deprecatedKey = t.DEPRECATED_KEYS[nodeType];
+    if (deprecatedKey) {
+      console.trace(`Visitor defined for ${nodeType} but it has been renamed to ${deprecatedKey}`);
+      aliases = [deprecatedKey];
     }
 
     if (!aliases) continue;
@@ -110,10 +110,30 @@ export function explode(visitor) {
     }
   }
 
+  // explode lossy methods
   for (let nodeType in visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    ensureCallbackArrays(visitor[nodeType]);
+    let fns = visitor[nodeType];
+    ensureCallbackArrays(fns);
+    if (!fns.lossy) continue;
+
+    // `lossy` could be an empty array due to prior normalisation which will mess with our
+    // detection
+    fns.lossy = false;
+    if (!fns.lossy.length) continue;
+
+    if (fns.lossy.length > 1) {
+      throw new TypeError(`Visitor ${nodeType} has more than one lossy method`);
+    }
+
+    // flag these methods as `lossy` so if we need to merge the `exit` handler we can
+    // properly shift the `lossy` method to the end
+    for (let fn of fns) fn.lossy = true;
+
+    // declare this visitor as having a lossy method so `visitors.merge` can complain
+    fns.lossy = true;
+    mergePair(fns, { exit: fns.lossy });
   }
 
   return visitor;
@@ -140,9 +160,12 @@ export function verify(visitor) {
     let visitors = visitor[nodeType];
     if (typeof visitors === "object") {
       for (let visitorKey in visitors) {
-        if (visitorKey === "enter" || visitorKey === "exit") {
+        let path = `${nodeType}.${visitorKey}`;
+        if (visitorKey === "lossy") {
+          validateVisitorMethod(path, visitors[visitorKey]);
+        } else if (visitorKey === "enter" || visitorKey === "exit") {
           // verify that it just contains functions
-          validateVisitorMethods(`${nodeType}.${visitorKey}`, visitors[visitorKey]);
+          validateVisitorMethods(path, visitors[visitorKey]);
         } else {
           throw new Error(messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey));
         }
@@ -153,12 +176,16 @@ export function verify(visitor) {
   visitor._verified = true;
 }
 
+function validateVisitorMethod(path, fn) {
+  if (typeof fn !== "function") {
+    throw new TypeError(`Non-function found defined in ${path} with type ${typeof fn}`);
+  }
+}
+
 function validateVisitorMethods(path, val) {
   let fns = [].concat(val);
   for (let fn of fns) {
-    if (typeof fn !== "function") {
-      throw new TypeError(`Non-function found defined in ${path} with type ${typeof fn}`);
-    }
+    validateVisitorMethod(path, fn);
   }
 }
 
@@ -178,11 +205,43 @@ export function merge(visitors: Array, states: Array = []) {
       if (state) visitorType = wrapWithState(visitorType, state);
 
       let nodeVisitor = rootVisitor[type] = rootVisitor[type] || {};
+
+      // prevent duplicate lossy methods
+      if (nodeVisitor.lossy && visitorType.lossy) {
+        throw new TypeError(
+          `Visitor ${getId(visitorType)}.${visitorType} is trying to redeclare a lossy ` +
+          `visitor method that was already specified by ${getId(nodeVisitor)}`
+        );
+      }
+
       mergePair(nodeVisitor, visitorType);
+
+      // shift lossy methods to the end
+      if (visitorType.exit) {
+        // loop over all visitor methods, we ignore the last function as if it's lossy
+        // then it's already in the right place and we can avoid some operations
+        for (let i = 0; i < nodeVisitor.exit.length - 1; i++) {
+          let fn = nodeVisitor.exit[i];
+          if (!fn.lossy) continue;
+
+          // remove it from the array
+          nodeVisitor.exit.splice(i, 1);
+
+          // push it back onto the end
+          nodeVisitor.exit.push(fn);
+
+          // we can only have one lossy method per node type so we can break
+          break;
+        }
+      }
     }
   }
 
   return rootVisitor;
+}
+
+function getId(visitor) {
+  return visitor._id || "unknown";
 }
 
 function wrapWithState(oldVisitor, state) {
@@ -239,7 +298,7 @@ function shouldIgnoreKey(key) {
   if (key[0] === "_") return true;
 
   // ignore function keys
-  if (key === "enter" || key === "exit" || key === "shouldSkip") return true;
+  if (key === "enter" || key === "exit" || key === "lossy" || key === "shouldSkip") return true;
 
   // ignore other options
   if (key === "blacklist" || key === "noScope" || key === "skipKeys") return true;
