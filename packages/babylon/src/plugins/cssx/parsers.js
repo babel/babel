@@ -24,6 +24,8 @@ pp.cssxParseExpression = function () {
   while(this.match(tt.cssxSelector)) {
     if (this.cssxIsMediaQuery()) {
       exprNode.body.push(this.cssxParseMediaQueryElement());
+    } else if (this.cssxIsKeyFramesEntryPoint()) {
+      exprNode.body.push(this.cssxParseKeyframesElement());
     } else {
       exprNode.body.push(this.cssxParseElement());
     }
@@ -56,13 +58,49 @@ pp.cssxParseElement = function() {
 };
 
 pp.cssxParseMediaQueryElement = function () {
-  let mediaQueryElement, result;
-  mediaQueryElement = this.startNodeAt(this.state.start, this.state.startLoc);
-  mediaQueryElement.query = this.state.value;
+  return this.cssxParseNestedSelectors({
+    name: 'CSSXMediaQueryElement',
+    context: {
+      in: () => this.cssxMediaQueryIn()
+    },
+    tokens: {
+      el: tt.cssxMediaQuery,
+      start: tt.cssxMediaQueryStart,
+      end: tt.cssxMediaQueryEnd
+    },
+    errors: {
+      unclosed: 'CSSX: unclosed media query block',
+      expectSelector: 'CSSX: expected css selector after media query definition'
+    }
+  });
+};
 
-  this.cssxExpressionSet(mediaQueryElement);
-  this.cssxMediaQueryIn();
-  this.cssxFinishTokenAt(tt.cssxMediaQuery, this.state.value, this.state.end, this.state.endLoc);
+pp.cssxParseKeyframesElement = function () {
+  return this.cssxParseNestedSelectors({
+    name: 'CSSXKeyframesElement',
+    context: {
+      in: () => this.cssxKeyframesIn()
+    },
+    tokens: {
+      el: tt.cssxKeyframes,
+      start: tt.cssxKeyframesStart,
+      end: tt.cssxKeyframesEnd
+    },
+    errors: {
+      unclosed: 'CSSX: unclosed @keyframes block',
+      expectSelector: 'CSSX: expected keyframe as a start of the @keyframes block'
+    }
+  });
+};
+
+pp.cssxParseNestedSelectors = function (options) {
+  let nestedElement, result;
+  nestedElement = this.startNodeAt(this.state.start, this.state.startLoc);
+  nestedElement.query = this.state.value;
+
+  this.cssxExpressionSet(nestedElement);
+  options.context.in();
+  this.cssxFinishTokenAt(options.tokens.el, this.state.value, this.state.end, this.state.endLoc);
   this.cssxStoreCurrentToken();
 
   if (!this.cssxMatchNextToken(tt.braceL)) {
@@ -70,7 +108,7 @@ pp.cssxParseMediaQueryElement = function () {
   }
 
   ++this.state.pos;
-  this.finishToken(tt.cssxMediaQueryStart);
+  this.finishToken(options.tokens.start);
 
   if (this.cssxMatchNextToken(tt.braceR)) { // empty media query
     this.cssxStoreCurrentToken();
@@ -78,26 +116,26 @@ pp.cssxParseMediaQueryElement = function () {
     this.cssxSyncLocPropsToCurPos();
   } else {
     this.next();
-    mediaQueryElement.body = [];
+    nestedElement.body = [];
     if (this.match(tt.cssxSelector)) {
-      mediaQueryElement.body.push(this.cssxParseElement());
+      nestedElement.body.push(this.cssxParseElement());
       while(!this.cssxMatchNextToken(tt.braceR)) {
         if (this.match(tt.cssxRulesEnd)) {
           this.cssxReadSelector();
         }
         if (this.cssxMatchNextToken(tt.parenR)) {
-          this.raise(this.state.pos, 'CSSX: unclosed media query block');
+          this.raise(this.state.pos, options.errors.unclosed);
         }
-        mediaQueryElement.body.push(this.cssxParseElement());
+        nestedElement.body.push(this.cssxParseElement());
       }
     } else {
-      this.raise(this.state.pos, "CSSX: expected css selector after media query definition");
+      this.raise(this.state.pos, options.errors.expectSelector);
     }
   }
 
   ++this.state.pos;
-  this.finishToken(tt.cssxMediaQueryEnd);
-  result = this.finishNodeAt(mediaQueryElement, 'CSSXMediaQueryElement', this.state.end, this.state.endLoc);
+  this.finishToken(options.tokens.end);
+  result = this.finishNodeAt(nestedElement, options.name, this.state.end, this.state.endLoc);
   this.next();
   return result;
 };

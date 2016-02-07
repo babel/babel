@@ -11,6 +11,9 @@ tt.cssxValue = new TokenType('CSSXValue');
 tt.cssxMediaQuery = new TokenType('CSSXMediaQuery');
 tt.cssxMediaQueryStart = new TokenType('CSSXMediaQueryStart');
 tt.cssxMediaQueryEnd = new TokenType('CSSXMediaQueryEnd');
+tt.cssxKeyframes = new TokenType('CSSXKeyframes');
+tt.cssxKeyframesStart = new TokenType('CSSXKeyframesStart');
+tt.cssxKeyframesEnd = new TokenType('CSSXKeyframesEnd');
 
 tt.cssxRulesStart.updateContext = function (prevType) {
   if (prevType === tt.cssxSelector) this.state.context.push(tc.cssxRules);
@@ -34,4 +37,8 @@ tt.cssxSelector.updateContext = function (prevType) {
 
 tt.cssxMediaQueryEnd.updateContext = function (prevType) {
   this.cssxMediaQueryOut();
+};
+
+tt.cssxKeyframesEnd.updateContext = function (prevType) {
+  this.cssxKeyframesOut();
 };

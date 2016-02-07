@@ -8,6 +8,7 @@ tc.cssxRules = new TokContext('cssxRules');
 tc.cssxProperty = new TokContext('cssxProperty');
 tc.cssxValue = new TokContext('cssxValue');
 tc.cssxMediaQuery = new TokContext('CSSXMediaQuery');
+tc.cssxKeyframes = new TokContext('CSSXKeyframes');
 
 const pp = Parser.prototype;
 
@@ -31,4 +32,5 @@ var registerInOut = function (name, context) {
 
 registerInOut('', tc.cssx);
 registerInOut('MediaQuery', tc.cssxMediaQuery);
+registerInOut('Keyframes', tc.cssxKeyframes);
 registerInOut('Definition', tc.cssxDefinition);

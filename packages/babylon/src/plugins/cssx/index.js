@@ -25,6 +25,8 @@ export default function CSSX(instance) {
       } else if (this.match(tt.cssxSelector)) {
         if (this.cssxIsMediaQuery()) {
           return this.cssxParseMediaQueryElement();
+        } else if (this.cssxIsKeyFramesEntryPoint()) {
+          return this.cssxParseKeyframesElement();
         }
         return this.cssxParseElement();
       }
@@ -96,12 +98,17 @@ export default function CSSX(instance) {
       } else if (this.match(tt.cssxValue) && this.cssxMatchNextToken(tt.braceR)) {
         // ending without semicolon
         return this.cssxStoreNextCharAsToken(tt.cssxRulesEnd);
-      } else if (this.match(tt.cssxRulesEnd) && context === tc.cssxMediaQuery) {
+      } else if (
+        (this.match(tt.cssxRulesEnd) && context === tc.cssxMediaQuery) ||
+        (this.match(tt.cssxRulesEnd) && context === tc.cssxKeyframes)
+      ) {
         // end of media query
         return;
       } else if (
-          (this.match(tt.cssxRulesEnd) && this.cssxMatchNextToken(tt.parenR)) ||
-          (this.match(tt.cssxMediaQueryEnd) && this.cssxMatchNextToken(tt.parenR))) {
+        (this.match(tt.cssxRulesEnd) && this.cssxMatchNextToken(tt.parenR)) ||
+        (this.match(tt.cssxMediaQueryEnd) && this.cssxMatchNextToken(tt.parenR)) ||
+        (this.match(tt.cssxKeyframesEnd) && this.cssxMatchNextToken(tt.parenR))
+      ) {
         ++this.state.pos;
         this.finishToken(tt.cssxEnd);
         return;
@@ -113,7 +120,7 @@ export default function CSSX(instance) {
       }
 
       // looping through the cssx elements
-      if (context === tc.cssxDefinition || context === tc.cssxMediaQuery) {
+      if (context === tc.cssxDefinition || context === tc.cssxMediaQuery || context === tc.cssxKeyframes) {
         this.skipSpace();
         return this.cssxReadSelector();
       }
