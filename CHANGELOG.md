@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.5.1 (2016-02-08) Daddy does a release.
+
+ * **Bug Fix**
+   * bc2f84f3712a4bcf5619161955c5597298db5c5b Fix options being ignored in `babel-register`.
+   * #3329 Fix `ExportSpecifier` node validator validating `imported` instead of `exported`.
+ * **Polish**
+   * #3333 Improve the error messaging for using the wrong CLI script.
+
 ## 6.5.0 (2016-02-07)
 
 Happy Superbowl Sunday! There's many contributors (17 + core) this release!
