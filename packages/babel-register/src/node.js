@@ -52,7 +52,11 @@ function compile(filename) {
   let optsManager = new OptionManager;
 
   // merge in base options and resolve all the plugins and presets relative to this file
-  optsManager.mergeOptions(deepClone(transformOpts), "base", null, path.dirname(filename));
+  optsManager.mergeOptions({
+    options: deepClone(transformOpts),
+    alias: "base",
+    dirname: path.dirname(filename)
+  });
 
   let opts = optsManager.init({ filename });
 

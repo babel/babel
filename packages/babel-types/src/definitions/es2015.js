@@ -154,7 +154,7 @@ defineType("ExportSpecifier", {
     local: {
       validate: assertNodeType("Identifier")
     },
-    imported: {
+    exported: {
       validate: assertNodeType("Identifier")
     }
   }
