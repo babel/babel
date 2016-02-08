@@ -43,6 +43,14 @@ type PluginObject = {
   };
 };
 
+type MergeOptions = {
+  options?: Object,
+  extending?: Object,
+  alias: string,
+  loc?: string,
+  dirname?: string
+};
+
 export default class OptionManager {
   constructor(log?: Logger) {
     this.resolvedConfigs = [];
@@ -161,7 +169,11 @@ export default class OptionManager {
       throw err;
     }
 
-    this.mergeOptions(opts, this.options, loc, null, path.dirname(loc));
+    this.mergeOptions({
+      options: opts,
+      alias: loc,
+      dirname: path.dirname(loc)
+    });
     this.resolvedConfigs.push(loc);
 
     return !!opts;
@@ -177,7 +189,14 @@ export default class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(rawOpts?: Object, extendingOpts?: Object, alias: string = "foreign", loc?: string, dirname?: string) {
+  mergeOptions({
+    options: rawOpts,
+    extending: extendingOpts,
+    alias,
+    loc,
+    dirname
+  }: MergeOptions) {
+    alias = alias || "foreign";
     if (!rawOpts) return;
 
     //
@@ -230,7 +249,13 @@ export default class OptionManager {
       // and keep them for further execution to calculate the options.
       if (opts.passPerPreset) {
         opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
-          this.mergeOptions(preset, preset, presetLoc, presetLoc, dirname);
+          this.mergeOptions({
+            options: preset,
+            extending: preset,
+            alias: presetLoc,
+            loc: presetLoc,
+            dirname: dirname
+          });
         });
       } else {
         // Otherwise, just merge presets options into the main options.
@@ -250,14 +275,19 @@ export default class OptionManager {
     // Merge them into current extending options in case of top-level
     // options. In case of presets, just re-assign options which are got
     // normalized during the `mergeOptions`.
-    if (rawOpts !== extendingOpts) {
-      merge(extendingOpts, opts);
-    } else {
+    if (rawOpts === extendingOpts) {
       Object.assign(extendingOpts, opts);
+    } else {
+      merge(extendingOpts || this.options, opts);
     }
 
     // merge in env options
-    this.mergeOptions(envOpts, extendingOpts, `${alias}.env.${envKey}`, null, dirname);
+    this.mergeOptions({
+      options: envOpts,
+      extending: extendingOpts,
+      alias: `${alias}.env.${envKey}`,
+      dirname: dirname
+    });
   }
 
   /**
@@ -266,13 +296,12 @@ export default class OptionManager {
    */
   mergePresets(presets: Array<string | Object>, dirname: string) {
     this.resolvePresets(presets, dirname, (presetOpts, presetLoc) => {
-      this.mergeOptions(
-        presetOpts,
-        this.options,
-        presetLoc,
-        presetLoc,
-        path.dirname(presetLoc)
-      );
+      this.mergeOptions({
+        options: presetOpts,
+        alias: presetLoc,
+        loc: presetLoc,
+        dirname: path.dirname(presetLoc)
+      });
     });
   }
 
@@ -308,7 +337,10 @@ export default class OptionManager {
       .map((line) => line.replace(/#(.*?)$/, "").trim())
       .filter((line) => !!line);
 
-    this.mergeOptions({ ignore: lines }, this.options, loc);
+    this.mergeOptions({
+      options: { ignore: lines },
+      loc
+    });
   }
 
   findConfigs(loc) {
@@ -370,7 +402,11 @@ export default class OptionManager {
     let filename = opts.filename;
 
     // merge in base options
-    this.mergeOptions(opts, this.options, "base", null, filename && path.dirname(filename));
+    this.mergeOptions({
+      options: opts,
+      alias: "base",
+      dirname: filename && path.dirname(filename)
+    });
 
     // resolve all .babelrc files
     if (this.options.babelrc !== false) {
