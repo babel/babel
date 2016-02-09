@@ -38,13 +38,12 @@ test-cov: clean
 	# rebuild with test
 	rm -rf packages/*/lib
 	BABEL_ENV=test; ./node_modules/.bin/gulp build
-
 	./scripts/test-cov.sh
 
 test-ci:
 	make lint
 	NODE_ENV=test make bootstrap
-	node scripts/run-flow-check.js
+	if ./node_modules/.bin/semver `npm --version` -r ">=3.3.0"; then ./node_modules/.bin/flow check; fi
 	./scripts/test-cov.sh
 	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
 
