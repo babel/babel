@@ -95,3 +95,43 @@ function x() {
     foo(rest[0]);
   }
 }
+
+function inc() {
+  for (var _len11 = arguments.length, rest = Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+    rest[_key11] = arguments[_key11];
+  }
+
+  ++rest[0];
+}
+
+function dec() {
+  for (var _len12 = arguments.length, rest = Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+    rest[_key12] = arguments[_key12];
+  }
+
+  --rest[0];
+}
+
+function del() {
+  for (var _len13 = arguments.length, rest = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+    rest[_key13] = arguments[_key13];
+  }
+
+  delete rest[0];
+}
+
+function method() {
+  for (var _len14 = arguments.length, rest = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
+    rest[_key14] = arguments[_key14];
+  }
+
+  rest[0]();
+}
+
+function newExp() {
+  for (var _len15 = arguments.length, rest = Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
+    rest[_key15] = arguments[_key15];
+  }
+
+  new rest[0]();
+}
