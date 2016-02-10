@@ -14,9 +14,20 @@ $ npm install babel-plugin-transform-async-to-module-method
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-async-to-module-method"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-async-to-module-method", {
+      "module": "bluebird",
+      "method": "coroutine"
+    }]
+  ]
 }
 ```
 
