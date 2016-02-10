@@ -60,6 +60,12 @@ let memberExpressionOptimisationVisitor = {
       let {parentPath} = path;
       let grandparentPath = parentPath.parentPath;
 
+      // ex: [rest[0]] = [rest[1]]
+      if (grandparentPath.isLVal()) {
+        state.deopted = true;
+        return;
+      }
+
       // ex: args[0]
       if (
         parentPath.isMemberExpression({ computed: true, object: node }) &&
@@ -68,7 +74,8 @@ let memberExpressionOptimisationVisitor = {
         !(
           grandparentPath.isAssignmentExpression() &&
           parentPath.node === grandparentPath.node.left
-        )
+        ) &&
+        !grandparentPath.isForInStatement()
       ) {
         // if we know that this member expression is referencing a number then
         // we can safely optimise it

@@ -83,10 +83,12 @@ function swap() {
     rest[_key9] = arguments[_key9];
   }
 
-  [rest[0], rest[1]] = [rest[1], rest[0]];
+  var _ref = [rest[1], rest[0]];
+  rest[0] = _ref[0];
+  rest[1] = _ref[1];
 }
 
-function x() {
+function forIn() {
   for (var _len10 = arguments.length, rest = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
     rest[_key10] = arguments[_key10];
   }
