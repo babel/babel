@@ -93,7 +93,7 @@ function replace(path, node, scope, remaps) {
 
   let ownBinding = scope.getBindingIdentifier(node.name);
   if (ownBinding === remap.binding) {
-    node.name = remap.uid;
+    scope.rename(node.name, remap.uid);
   } else {
     // scope already has it's own binding that doesn't
     // match the one we have a stored replacement for
