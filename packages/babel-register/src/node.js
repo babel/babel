@@ -85,6 +85,7 @@ function compile(filename) {
   if (cache) {
     cache[cacheKey] = result;
     result.mtime = mtime(filename);
+    registerCache.save();
   }
 
   maps[filename] = result.map;

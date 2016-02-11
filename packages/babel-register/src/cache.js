@@ -6,12 +6,14 @@ import pathExists from "path-exists";
 
 const FILENAME = process.env.BABEL_CACHE_PATH || path.join(homeOrTmp, ".babel.json");
 let data = {};
+let savePending = false;
 
 /**
  * Write stringified cache to disk.
  */
 
-export function save() {
+function saveWorker() {
+  savePending = false;
   let serialised = {};
   try {
     serialised = JSON.stringify(data, null, "  ");
@@ -28,14 +30,24 @@ export function save() {
 }
 
 /**
+ * Write stringified cache to disk at next opportunity
+ */
+
+export function save() {
+  if (savePending)
+    return;
+  savePending = true;
+  process.nextTick(saveWorker);
+}
+
+/**
  * Load cache from disk and parse.
  */
 
 export function load() {
   if (process.env.BABEL_DISABLE_CACHE) return;
 
-  process.on("exit", save);
-  process.nextTick(save);
+  process.on("exit", saveWorker);
 
   if (!pathExists.sync(FILENAME)) return;
 
