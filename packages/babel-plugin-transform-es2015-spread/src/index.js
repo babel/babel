@@ -101,6 +101,10 @@ export default function ({ types: t }) {
           node.callee = t.memberExpression(node.callee, t.identifier("apply"));
         }
 
+        if (t.isSuper(contextLiteral)) {
+          contextLiteral = t.thisExpression();
+        }
+
         node.arguments.unshift(contextLiteral);
       },
 
