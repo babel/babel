@@ -25,7 +25,10 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 Happy Superbowl Sunday! There's many contributors (17 + core) this release!
 
-### A traversal per preset
+### A traversal per preset (Experimental)
+
+> This is an experimental feature that will most likely change.
+> Depending on usage/feedback, we will switch the way this is used to instead define a explicit preset-level config flag (rather than the global one below). This will give more control over how you want to use this option.
 
 [@DmitrySoshnikov](https://github.com/DmitrySoshnikov) added a new option you can put in your `.babelrc`!
 
@@ -48,8 +51,6 @@ Happy Superbowl Sunday! There's many contributors (17 + core) this release!
 `passPerPreset: true` will modify how babel traverses through plugins. Instead of a single traversal in which all plugins/presets are merged together, each preset will get their own traversal.
 
 This allows users to have a specific order to how presets/plugins are applied and can help avoid potential collisions between plugins (and probably some known issues).
-
-Depending on usage, we will switch the way this is used to instead define a explicit preset-level config flag (rather than the current global one).
 
 ---
 

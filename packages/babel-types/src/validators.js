@@ -32,12 +32,16 @@ export function isBinding(node: Object, parent: Object): boolean {
 
 export function isReferenced(node: Object, parent: Object): boolean {
   switch (parent.type) {
+    // yes: object::NODE
+    // yes: NODE::callee
+    case "BindExpression":
+      return parent.object === node || parent.callee === node;
+
     // yes: PARENT[NODE]
     // yes: NODE.child
     // no: parent.NODE
     case "MemberExpression":
     case "JSXMemberExpression":
-    case "BindExpression":
       if (parent.property === node && parent.computed) {
         return true;
       } else if (parent.object === node) {

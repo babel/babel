@@ -8,8 +8,8 @@ cache:
   - node_modules
 
 node_js:
- - stable
- - "4.0"
+ - "5"
+ - "4"
  - iojs
  - "0.10"
  - "0.12"

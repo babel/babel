@@ -6,7 +6,6 @@
     "babel": "5.8.21",
     "babel-eslint": "^4.1.8",
     "babel-plugin-flow-comments": "^1.0.9",
-    "bin-version-check": "^2.1.0",
     "browserify": "^11.2.0",
     "bundle-collapser": "^1.2.1",
     "chai": "^2.2.0",

@@ -5,5 +5,5 @@ class Child extends Parent {
 
     scopedFunctionWithThis = () => {
         this.name = {};
-    };
+    }
 }
