@@ -401,17 +401,17 @@ export default class OptionManager {
   init(opts: Object = {}): Object {
     let filename = opts.filename;
 
+    // resolve all .babelrc files
+    if (opts.babelrc !== false) {
+      this.findConfigs(filename);
+    }
+
     // merge in base options
     this.mergeOptions({
       options: opts,
       alias: "base",
       dirname: filename && path.dirname(filename)
     });
-
-    // resolve all .babelrc files
-    if (this.options.babelrc !== false) {
-      this.findConfigs(filename);
-    }
 
     // normalise
     this.normaliseOptions(opts);

@@ -49,16 +49,10 @@ function mtime(filename) {
 function compile(filename) {
   let result;
 
-  let optsManager = new OptionManager;
-
   // merge in base options and resolve all the plugins and presets relative to this file
-  optsManager.mergeOptions({
-    options: deepClone(transformOpts),
-    alias: "base",
-    dirname: path.dirname(filename)
-  });
-
-  let opts = optsManager.init({ filename });
+  let opts = new OptionManager().init(extend(deepClone(transformOpts), {
+    filename
+  }));
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
