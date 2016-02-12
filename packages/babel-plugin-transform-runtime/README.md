@@ -14,9 +14,20 @@ $ npm install babel-plugin-transform-runtime
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-runtime"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-runtime", {
+      "polyfill": false,
+      "regenerator": true
+    }]
+  ]
 }
 ```
 
