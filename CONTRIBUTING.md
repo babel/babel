@@ -91,7 +91,7 @@ For example in [`babel-plugin-transform-exponentiation-operator/test`](/packages
 
 - There is an `index.js` file. It imports our [test helper](/packages/babel-helper-plugin-test-runner). (You don't have to worry about this).
 - There can be multiple folders under [`/fixtures`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures)
-   - There is an [`options.json`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) is basically a `.babelrc` file to pass in the plugins and setttings you need for your tests.
+   - There is an [`options.json`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) is basically a `.babelrc` file to pass in the plugins and settings you need for your tests.
    - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["transform-exponentiation-operator"] }`.
    - If necessary, you can specify a different `options.json` for each sub folder if you need different options.
 
