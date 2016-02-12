@@ -13,6 +13,54 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.5.2 (2016-02-12) "Who needs semicolons anyway” ¯\\_(ツ)_/¯
+
+Changes to note:
+
+- Reverting the class properties semicolon parser error.
+- Fix regression with plugin ordering with `babel-register`.
+
+#### Spec Compliancy
+* `babel-plugin-transform-class-properties`, `babylon`
+  * [#3332](https://github.com/babel/babel/pull/3332) Revert to standard ASI behavior for class properties. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+#### Bug Fix
+* `babel-core`, `babel-register`
+  * [#3348](https://github.com/babel/babel/pull/3348) Merge config options into list after babelrc options - fixes [T7079](https://phabricator.babeljs.io/T7079). ([@loganfsmyth](https://github.com/loganfsmyth))
+  * This fixes a regression from [#3168](https://github.com/babel/babel/pull/3168)
+* `babel-plugin-transform-es2015-spread`
+  * [#3326](https://github.com/babel/babel/pull/3326) Fix spread to work with `super` method calls. ([@eetulatja](https://github.com/eetulatja))
+  
+  ```js
+  // input
+  super.method(...args);
+  // wrong output
+  super.method.apply(super, babelHelpers.toConsumableArray(args));
+  // new fixed output
+  super.method.apply(this, babelHelpers.toConsumableArray(args));
+  ```
+  
+  
+* `babel-plugin-transform-function-bind`, `babel-types`
+  * [#3334](https://github.com/babel/babel/pull/3334) Check `BindExpression` callee for reference - fixes [T6984](https://phabricator.babeljs.io/T6984). ([@loganfsmyth](https://github.com/loganfsmyth))
+
+#### Documentation
+* `babel-register`
+  * [#3342](https://github.com/babel/babel/pull/3342) babel-register: update README.md. ([@rstacruz](https://github.com/rstacruz))
+* `babel-plugin-transform-async-to-module-method`, `babel-plugin-transform-es2015-arrow-functions`, `babel-plugin-transform-es2015-classes`, `babel-plugin-transform-es2015-computed-properties`, `babel-plugin-transform-es2015-for-of`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-es2015-spread`, `babel-plugin-transform-es2015-template-literals`, `babel-plugin-transform-react-jsx`, `babel-plugin-transform-regenerator`, `babel-plugin-transform-runtime`, `babel-plugin-transform-strict-mode`
+  * [#3345](https://github.com/babel/babel/pull/3345) Update all plugin readmes with options. ([@hzoo](https://github.com/hzoo))
+* [#3352](https://github.com/babel/babel/pull/3352) Fix a typo. ([@pra85](https://github.com/pra85))
+
+#### Internal
+* `babel`
+  * [#3337](https://github.com/babel/babel/pull/3337) Don't preferGlobal on the `babel` package.. ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babylon`
+  * [#3351](https://github.com/babel/babel/pull/3351) Add class properties test with a generator method that results in a p…. ([@hzoo](https://github.com/hzoo))
+* [#3344](https://github.com/babel/babel/pull/3344) Travis: Remove 0.10, since it's covered by Circle. ([@hzoo](https://github.com/hzoo))
+* [#3343](https://github.com/babel/babel/pull/3343) Travis CI: Switch from deprecated `stable` NodeJS to latest 4.x.x & 5.x.x. ([@ntwb](https://github.com/ntwb))
+* [#3341](https://github.com/babel/babel/pull/3341) bin-version-check is unnecessary now. ([@chicoxyzzy](https://github.com/chicoxyzzy))
+* [#3339](https://github.com/babel/babel/pull/3339) Know how to write good shell scripts. ([@hzoo](https://github.com/hzoo))
+
 ## 6.5.1 (2016-02-08) Daddy does a release.
 
  * **Bug Fix**
