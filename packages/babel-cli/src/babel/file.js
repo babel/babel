@@ -69,7 +69,7 @@ module.exports = function (commander, filenames, opts) {
     let result = buildResult();
 
     if (commander.outFile) {
-      // we've requested for a sorucemap to be written to disk
+      // we've requested for a sourcemap to be written to disk
       if (commander.sourceMaps && commander.sourceMaps !== "inline") {
         let mapLoc = commander.outFile + ".map";
         result.code = util.addSourceMappingUrl(result.code, mapLoc);
