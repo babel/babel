@@ -23,11 +23,46 @@ var plugins = [
   ["babel-plugin-transform-regenerator", { async: false, asyncGenerators: false }],
 ];
 
-module.exports = function () {
-  return plugins.map(function () {
-    if (Array.isArray(plugin) {
-      plugin = [plugin[0], assign({}, plugin[1]];
+module.exports = function (opts) {
+  var loose = false;
+  var modules = true;
+  if (opts !== undefined){
+    if (opts.loose !== undefined) loose = opts.loose;
+    if (opts.modules !== undefined) modules = opts.modules;
+  }
+
+  if (typeof loose !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
+  if (typeof modules !== "boolean") throw new Error("Preset es2015 'modules' option must be a boolean.");
+
+  var loosePlugins = [
+    "template-literals",
+    "classes",
+    "computed-properties",
+    "for-of",
+    "spread",
+    "destructuring",
+    "modules-commonjs"
+  ];
+
+  var exportedPlugins = [].concat(plugins);
+
+  if (!modules) {
+    exportedPlugins.splice(exportedPlugins.indexOf(
+      "babel-plugin-transform-es2015-modules-commonjs"
+    ), 1);
+  }
+
+  return exportedPlugins.map(function (plugin) {
+    plugin = [].concat(plugin);
+    var pluginOpts = {};
+
+    if (
+      loosePlugins.indexOf("babel-plugin-transform-es2015-" + plugin[0]) >= 0
+    ) {
+      pluginOpts.loose = loose;
     }
+
+    plugin[1] = assign(pluginOpts, plugin[1]);
     return plugin;
-  };
+  });
 };
