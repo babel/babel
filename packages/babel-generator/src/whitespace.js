@@ -83,11 +83,12 @@ export default class Whitespace {
    */
 
   _findToken(test: Function, start: number, end: number): number {
+    if (start >= end) return -1;
     const middle = (start + end) >>> 1;
     const match: number = test(this.tokens[middle]);
-    if (match < 0 && end > middle) {
+    if (match < 0) {
       return this._findToken(test, middle + 1, end);
-    } else if (match > 0 && start < middle) {
+    } else if (match > 0) {
       return this._findToken(test, start, middle);
     } else if (match === 0) {
       return middle;

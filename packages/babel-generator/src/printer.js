@@ -299,7 +299,7 @@ export default class Printer extends Buffer {
 
     // force a newline for line comments when retainLines is set in case the next printed node
     // doesn't catch up
-    if ((this.format.compact || this.format.retainLines) && comment.type === "CommentLine") {
+    if ((this.format.compact || this.format.concise || this.format.retainLines) && comment.type === "CommentLine") {
       val += "\n";
     }
 
