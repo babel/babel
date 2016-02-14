@@ -38,7 +38,7 @@ register({
 
 //
 
-let replPlugin = () => ({
+let replPlugin = ({ types: t }) => ({
   visitor: {
     ModuleDeclaration(path) {
       throw path.buildCodeFrameError("Modules aren't supported in the REPL");
@@ -47,6 +47,14 @@ let replPlugin = () => ({
     VariableDeclaration(path) {
       if (path.node.kind !== "var") {
         throw path.buildCodeFrameError("Only `var` variables are supported in the REPL");
+      }
+    },
+
+    Directive(path) {
+      if (_.isUndefined(path.node.loc)) {
+        // If the executed code doesn't evaluate to a value,
+        // prevent implicit strict mode from printing 'use strict'.
+        path.parent.body.unshift(t.expressionStatement(t.identifier("undefined")));
       }
     }
   }
