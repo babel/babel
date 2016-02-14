@@ -46,6 +46,7 @@ export function _containerInsert(from, nodes) {
 
     if (this.context) {
       let path = this.context.create(this.parent, this.container, to, this.listKey);
+      path.pushContext(this.context);
       paths.push(path);
     } else {
       paths.push(NodePath.get({
