@@ -1,3 +1,4 @@
+/* eslint max-len: 0 */
 // This file contains methods responsible for replacing a node with another.
 
 import codeFrame from "babel-code-frame";

@@ -1,5 +1,5 @@
 import bindifyDecorators from "babel-helper-bindify-decorators";
-import type { NodePath } from "babel-traverse"
+import type { NodePath } from "babel-traverse";
 import * as t from "babel-types";
 
 export default function (classPath) {

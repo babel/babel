@@ -1,3 +1,4 @@
+/* eslint max-len: 0 */
 /* eslint no-new-func: 0 */
 
 import { transform } from "./node";

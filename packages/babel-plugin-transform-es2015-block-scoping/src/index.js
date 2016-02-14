@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import type NodePath from "babel-traverse";
 import type Scope from "babel-traverse";
 import type File from "../../../file";
@@ -171,7 +173,7 @@ let hoistVarDeclarationsVisitor = {
         node.left = node.left.declarations[0].id;
       }
     } else if (isVar(node, parent)) {
-      path.replaceWithMultiple(self.pushDeclar(node).map(expr => t.expressionStatement(expr)));
+      path.replaceWithMultiple(self.pushDeclar(node).map((expr) => t.expressionStatement(expr)));
     } else if (path.isFunction()) {
       return path.skip();
     }

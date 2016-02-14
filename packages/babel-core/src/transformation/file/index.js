@@ -2,6 +2,7 @@
 /* global BabelParserOptions */
 /* global BabelFileMetadata */
 /* global BabelFileResult */
+/* eslint max-len: 0 */
 
 import getHelper from "babel-helpers";
 import * as metadataVisitor from "./metadata";
@@ -69,7 +70,7 @@ export default class File extends Store {
     if (this.opts.passPerPreset) {
       // All the "per preset" options are inherited from the main options.
       this.perPresetOpts = [];
-      this.opts.presets.forEach(presetOpts => {
+      this.opts.presets.forEach((presetOpts) => {
         let perPresetOpts = Object.assign(Object.create(this.opts), presetOpts);
         this.perPresetOpts.push(perPresetOpts);
         this.buildPluginsForOptions(perPresetOpts);
@@ -364,7 +365,7 @@ export default class File extends Store {
       err.message += ")";
     }
 
-    return err
+    return err;
   }
 
   mergeSourceMap(map: Object) {
@@ -442,9 +443,9 @@ export default class File extends Store {
     // Otherwise, there is only one plain pluginPasses array.
     this.pluginPasses.forEach((pluginPasses, index) => {
       this.call("pre", pluginPasses);
-      this.log.debug(`Start transform traverse`);
+      this.log.debug("Start transform traverse");
       traverse(this.ast, traverse.visitors.merge(this.pluginVisitors[index], pluginPasses), this.scope);
-      this.log.debug(`End transform traverse`);
+      this.log.debug("End transform traverse");
       this.call("post", pluginPasses);
     });
 

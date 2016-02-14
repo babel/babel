@@ -6,7 +6,7 @@ function getTDZStatus(refPath, bindingPath) {
   if (executionStatus === "before") {
     return "inside";
   } else if (executionStatus === "after") {
-    return "outside"
+    return "outside";
   } else {
     return "maybe";
   }

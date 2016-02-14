@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 export default function ({ types: t }) {
 
   /**

@@ -34,7 +34,7 @@ export const types: {
   b_tmpl: new TokContext("${", true),
   p_stat: new TokContext("(", false),
   p_expr: new TokContext("(", true),
-  q_tmpl: new TokContext("`", true, true, p => p.readTmplToken()),
+  q_tmpl: new TokContext("`", true, true, (p) => p.readTmplToken()),
   f_expr: new TokContext("function", true)
 };
 
@@ -78,7 +78,8 @@ tt.dollarBraceL.updateContext = function () {
 };
 
 tt.parenL.updateContext = function (prevType) {
-  let statementParens = prevType === tt._if || prevType === tt._for || prevType === tt._with || prevType === tt._while;
+  let statementParens = prevType === tt._if || prevType === tt._for ||
+                        prevType === tt._with || prevType === tt._while;
   this.state.context.push(statementParens ? types.p_stat : types.p_expr);
   this.state.exprAllowed = true;
 };

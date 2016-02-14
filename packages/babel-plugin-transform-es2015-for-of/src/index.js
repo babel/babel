@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 export default function ({ messages, template, types: t }) {
   let buildForOfArray = template(`
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;

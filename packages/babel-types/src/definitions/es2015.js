@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint max-len: 0 */
 
 import defineType, {
   assertNodeType,
@@ -181,7 +182,10 @@ defineType("ImportDeclaration", {
   aliases: ["Statement", "Declaration", "ModuleDeclaration"],
   fields: {
     specifiers: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("ImportSpecifier", "ImportDefaultSpecifier", "ImportNamespaceSpecifier")))
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("ImportSpecifier", "ImportDefaultSpecifier", "ImportNamespaceSpecifier"))
+      )
     },
     source: {
       validate: assertNodeType("StringLiteral")

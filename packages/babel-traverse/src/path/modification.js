@@ -1,3 +1,4 @@
+/* eslint max-len: 0 */
 // This file contains methods that modify the path/node in some ways.
 
 import { PATH_CACHE_KEY } from "./constants";

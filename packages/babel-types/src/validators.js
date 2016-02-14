@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint indent: 0 */
 
 import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";

@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 export default function ({ types: t }) {
   let JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
 

@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import pull from "lodash/array/pull";
 
 export default function ({ types: t }) {

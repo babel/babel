@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import type { NodePath } from "babel-traverse";
 import { visitors } from "babel-traverse";
 import ReplaceSupers from "babel-helper-replace-supers";
@@ -357,7 +359,7 @@ export default class ClassTransformer {
       [t.thisExpression(), bareSuperNode]
     );
 
-    let bareSuperAfter = this.bareSuperAfter.map(fn => fn(thisRef));
+    let bareSuperAfter = this.bareSuperAfter.map((fn) => fn(thisRef));
 
     if (bareSuper.parentPath.isExpressionStatement() && bareSuper.parentPath.container === body.node.body && body.node.body.length - 1 === bareSuper.parentPath.key) {
       // this super call is the last statement in the body so we can just straight up
@@ -420,7 +422,7 @@ export default class ClassTransformer {
       thisPath.replaceWith(thisRef);
     }
 
-    let wrapReturn = returnArg => t.callExpression(
+    let wrapReturn = (returnArg) => t.callExpression(
       this.file.addHelper("possibleConstructorReturn"),
       [thisRef].concat(returnArg || [])
     );
@@ -440,7 +442,7 @@ export default class ClassTransformer {
           wrapReturn(ref)
         ]);
       } else {
-        returnPath.get("argument").replaceWith(wrapReturn())
+        returnPath.get("argument").replaceWith(wrapReturn());
       }
     }
   }

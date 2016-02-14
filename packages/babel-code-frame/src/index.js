@@ -1,4 +1,6 @@
 /* @flow */
+/* eslint indent: 0 */
+/* eslint max-len: 0 */
 
 import lineNumbers from "line-numbers";
 import repeating from "repeating";
@@ -65,7 +67,7 @@ function highlight(text: string) {
     let type = getTokenType(args);
     let colorize = defs[type];
     if (colorize) {
-      return args[0].split(NEWLINE).map(str => colorize(str)).join("\n");
+      return args[0].split(NEWLINE).map((str) => colorize(str)).join("\n");
     } else {
       return args[0];
     }
