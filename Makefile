@@ -17,7 +17,7 @@ watch: clean
 	./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/klint
+	./node_modules/.bin/kcheck
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
