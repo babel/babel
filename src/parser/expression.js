@@ -1,3 +1,6 @@
+/* eslint indent: 0 */
+/* eslint max-len: 0 */
+
 // A recursive descent parser operates by defining functions for all
 // syntactic elements, and recursively calling those, each function
 // advancing the input stream and returning an AST node. Precedence
@@ -969,7 +972,7 @@ pp.parseAwait = function (node) {
     this.unexpected();
   }
   if (this.match(tt.star)) {
-    this.raise(node.start, "await* has been removed from the async functions proposal. Use Promise.all() instead.")
+    this.raise(node.start, "await* has been removed from the async functions proposal. Use Promise.all() instead.");
   }
   node.argument = this.parseMaybeUnary();
   return this.finishNode(node, "AwaitExpression");
