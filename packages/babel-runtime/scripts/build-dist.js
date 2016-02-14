@@ -21,6 +21,15 @@ each(paths, function (path) {
   writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
 });
 
+// Should be removed in the next major release:
+var legacy = {
+  "string/pad-left": "string/pad-start",
+  "string/pad-right": "string/pad-end"
+};
+
+each(legacy, function (value, key) {
+  writeFile("core-js/" + key + ".js", defaultify('require("core-js/library/fn/' + value + '")'));
+});
 
 var template   = require("babel-template");
 var helpers    = require("babel-helpers");

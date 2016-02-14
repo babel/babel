@@ -10,7 +10,7 @@
   "dependencies": {
     "babel-core": "^6.5.2",
     "babel-runtime": "^5.0.0",
-    "core-js": "^1.0.0",
+    "core-js": "^2.1.0",
     "home-or-tmp": "^1.0.0",
     "lodash": "^3.10.0",
     "mkdirp": "^0.5.1",
