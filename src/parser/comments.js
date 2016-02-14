@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint max-len: 0 */
 
 /**
  * Based on the comment attachment algorithm used in espree and estraverse.

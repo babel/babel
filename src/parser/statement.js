@@ -1,3 +1,6 @@
+/* eslint indent: 0 */
+/* eslint max-len: 0 */
+
 import { types as tt } from "../tokenizer/types";
 import Parser from "./index";
 import { lineBreak } from "../util/whitespace";

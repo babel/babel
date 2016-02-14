@@ -1,3 +1,5 @@
+/* eslint indent: 0 */
+
 import { types as tt } from "../tokenizer/types";
 import Parser from "./index";
 import { reservedWords } from "../util/identifier";
