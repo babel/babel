@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import * as helpers from "babel-helpers";
 import generator from "babel-generator";
 import * as messages from "babel-messages";

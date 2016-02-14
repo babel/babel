@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import repeating from "repeating";
 import Buffer from "./buffer";
 import * as n from "./node";

@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import cloneDeep from "lodash/lang/cloneDeep";
 import assign from "lodash/object/assign";
 import has from "lodash/object/has";
@@ -16,7 +18,7 @@ export default function (code: string, opts?: Object): Function {
     // error stack gets populated in IE only on throw (https://msdn.microsoft.com/en-us/library/hh699850(v=vs.94).aspx)
     throw new Error();
   } catch (error) {
-    stack = error.stack.split("\n").slice(1).join("\n")
+    stack = error.stack.split("\n").slice(1).join("\n");
   }
 
   let getAst = function () {

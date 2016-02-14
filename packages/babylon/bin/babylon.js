@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint no-var: 0 */
 
 var babylon = require("..");
 var fs      = require("fs");

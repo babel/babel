@@ -80,8 +80,8 @@ export default function ({ types: t }) {
 
           path.traverse(amdVisitor, this);
 
-          let params = this.sources.map(source => source[0]);
-          let sources = this.sources.map(source => source[1]);
+          let params = this.sources.map((source) => source[0]);
+          let sources = this.sources.map((source) => source[1]);
 
           sources = sources.concat(this.bareSources.filter((str) => {
             return !this.sourceNames[str.value];

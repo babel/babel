@@ -1,5 +1,5 @@
 /* @flow */
-
+/* eslint max-len: 0 */
 /* eslint quotes: 0 */
 
 import * as t from "babel-types";

@@ -1,3 +1,5 @@
+/* eslint indent: 0 */
+
 import template from "babel-template";
 import * as t from "babel-types";
 
@@ -203,7 +205,7 @@ export let visitor = {
     }
 
     state.references = state.references.concat(
-      state.candidates.map(({path}) => path)
+      state.candidates.map(({ path }) => path)
     );
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
@@ -254,7 +256,7 @@ export let visitor = {
       let target = path.getEarliestCommonAncestorFrom(state.references).getStatementParent();
 
       // don't perform the allocation inside a loop
-      target.findParent(path => {
+      target.findParent((path) => {
         if (path.isLoop()) {
           target = path;
         } else {

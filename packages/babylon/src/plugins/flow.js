@@ -1,3 +1,6 @@
+/* eslint indent: 0 */
+/* eslint max-len: 0 */
+
 import { types as tt } from "../tokenizer/types";
 import Parser from "../parser";
 
@@ -115,8 +118,7 @@ pp.flowParseDeclareInterface = function (node) {
   this.next();
   this.flowParseInterfaceish(node);
   return this.finishNode(node, "DeclareInterface");
-}
-
+};
 
 // Interfaces
 
@@ -920,7 +922,7 @@ export default function (instance) {
               node.typeParameters = null;
           }
           implemented.push(this.finishNode(node, "ClassImplements"));
-        } while (this.eat(tt.comma))
+        } while (this.eat(tt.comma));
       }
     };
   });

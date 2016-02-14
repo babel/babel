@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import { basename, extname } from "path";
 import template from "babel-template";
 import * as t from "babel-types";
@@ -191,7 +193,7 @@ export default function () {
               for (let specifier of specifiers) {
                 let ids = specifier.getBindingIdentifiers();
                 if (ids.__esModule) {
-                  throw specifier.buildCodeFrameError(`Illegal export "__esModule"`);
+                  throw specifier.buildCodeFrameError("Illegal export \"__esModule\"");
                 }
               }
             }
@@ -285,7 +287,7 @@ export default function () {
               let specifiers = path.get("specifiers");
               if (specifiers.length) {
                 let nodes = [];
-                let source = path.node.source
+                let source = path.node.source;
                 if (source) {
                   let ref = addRequire(source.value, path.node._blockHoist);
 
