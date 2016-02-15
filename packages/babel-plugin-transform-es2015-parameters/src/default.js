@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import getFunctionArity from "babel-helper-get-function-arity";
 import callDelegate from "babel-helper-call-delegate";
 import template from "babel-template";

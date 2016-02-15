@@ -7,12 +7,14 @@ module.exports = {
     Set: "set",
     WeakSet: "weak-set",
     setImmediate: "set-immediate",
-    clearImmediate: "clear-immediate"
+    clearImmediate: "clear-immediate",
+    parseFloat: "parse-float",
+    parseInt: "parse-int"
   },
 
   methods: {
     Array: {
-      concat: "array/concat",
+      concat: "array/concat", // deprecated
       copyWithin: "array/copy-within",
       entries: "array/entries",
       every: "array/every",
@@ -24,22 +26,23 @@ module.exports = {
       from: "array/from",
       includes: "array/includes",
       indexOf: "array/index-of",
+      isArray: "array/is-array",
       join: "array/join",
       keys: "array/keys",
       lastIndexOf: "array/last-index-of",
       map: "array/map",
       of: "array/of",
-      pop: "array/pop",
-      push: "array/push",
+      pop: "array/pop", // deprecated
+      push: "array/push", // deprecated
       reduceRight: "array/reduce-right",
       reduce: "array/reduce",
-      reverse: "array/reverse",
-      shift: "array/shift",
-      slice: "array/slice",
+      reverse: "array/reverse", // deprecated
+      shift: "array/shift", // deprecated
+      slice: "array/slice", // deprecated
       some: "array/some",
       sort: "array/sort",
       splice: "array/splice",
-      unshift: "array/unshift",
+      unshift: "array/unshift", // deprecated
       values: "array/values"
     },
 
@@ -71,7 +74,7 @@ module.exports = {
     },
 
     RegExp: {
-      escape: "regexp/escape"
+      escape: "regexp/escape" // deprecated
     },
 
     Math: {
@@ -91,7 +94,11 @@ module.exports = {
       sign: "math/sign",
       sinh: "math/sinh",
       tanh: "math/tanh",
-      trunc: "math/trunc"
+      trunc: "math/trunc",
+      iaddh: "math/iaddh",
+      isubh: "math/isubh",
+      imulh: "math/imulh",
+      umulh: "math/umulh"
     },
 
     Symbol: {
@@ -116,14 +123,18 @@ module.exports = {
       endsWith: "string/ends-with",
       fromCodePoint: "string/from-code-point",
       includes: "string/includes",
-      padLeft: "string/pad-left",
-      padRight: "string/pad-right",
+      padLeft: "string/pad-start", // deprecated
+      padRight: "string/pad-end", // deprecated
+      padStart: "string/pad-start",
+      padEnd: "string/pad-end",
       raw: "string/raw",
       repeat: "string/repeat",
       startsWith: "string/starts-with",
       trim: "string/trim",
       trimLeft: "string/trim-left",
-      trimRight: "string/trim-right"
+      trimRight: "string/trim-right",
+      trimStart: "string/trim-start",
+      trimEnd: "string/trim-end"
     },
 
     Number: {
@@ -143,7 +154,7 @@ module.exports = {
       construct: "reflect/construct",
       defineProperty: "reflect/define-property",
       deleteProperty: "reflect/delete-property",
-      enumerate: "reflect/enumerate",
+      enumerate: "reflect/enumerate", // deprecated
       getOwnPropertyDescriptor: "reflect/get-own-property-descriptor",
       getPrototypeOf: "reflect/get-prototype-of",
       get: "reflect/get",
@@ -152,7 +163,33 @@ module.exports = {
       ownKeys: "reflect/own-keys",
       preventExtensions: "reflect/prevent-extensions",
       setPrototypeOf: "reflect/set-prototype-of",
-      set: "reflect/set"
+      set: "reflect/set",
+      defineMetadata: "reflect/define-metadata",
+      deleteMetadata: "reflect/delete-metadata",
+      getMetadata: "reflect/get-metadata",
+      getMetadataKeys: "reflect/get-metadata-keys",
+      getOwnMetadata: "reflect/get-own-metadata",
+      getOwnMetadataKeys: "reflect/get-own-metadata-keys",
+      hasMetadata: "reflect/has-metadata",
+      hasOwnMetadata: "reflect/has-own-metadata",
+      metadata: "reflect/metadata"
+    },
+
+    System: {
+      global: "system/global"
+    },
+
+    Error: {
+      isError: "error/is-error"
+    },
+
+    Date: {
+      now: "date/now"
+    },
+
+    Function: {
+      // Warning: /virtual/ method - prototype, not static, version
+      bind: "function/virtual/bind"
     }
   }
 };

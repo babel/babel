@@ -117,7 +117,10 @@ export function isType(nodeType: string, targetType: string): boolean {
 each(t.BUILDER_KEYS, function (keys, type) {
   function builder() {
     if (arguments.length > keys.length) {
-      throw new Error(`t.${type}: Too many arguments passed. Received ${arguments.length} but can receive no more than ${keys.length}`);
+      throw new Error(
+        `t.${type}: Too many arguments passed. Received ${arguments.length} but can receive ` +
+        `no more than ${keys.length}`
+      );
     }
 
     let node = {};
@@ -149,20 +152,20 @@ each(t.BUILDER_KEYS, function (keys, type) {
  * Description
  */
 
- for (let type in t.DEPRECATED_KEYS) {
-   let newType = t.DEPRECATED_KEYS[type];
+for (let type in t.DEPRECATED_KEYS) {
+  let newType = t.DEPRECATED_KEYS[type];
 
-   function proxy(fn) {
-     return function () {
-       console.trace(`The node type ${type} has been renamed to ${newType}`);
-       return fn.apply(this, arguments);
-     };
-   }
+  function proxy(fn) {
+    return function () {
+      console.trace(`The node type ${type} has been renamed to ${newType}`);
+      return fn.apply(this, arguments);
+    };
+  }
 
-   t[type] = t[type[0].toLowerCase() + type.slice(1)] = proxy(t[newType]);
-   t[`is${type}`] = proxy(t[`is${newType}`]);
-   t[`assert${type}`] = proxy(t[`assert${newType}`]);
- }
+  t[type] = t[type[0].toLowerCase() + type.slice(1)] = proxy(t[newType]);
+  t[`is${type}`] = proxy(t[`is${newType}`]);
+  t[`assert${type}`] = proxy(t[`assert${newType}`]);
+}
 
 /**
  * Description

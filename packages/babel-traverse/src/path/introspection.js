@@ -125,9 +125,9 @@ export function isNodeType(type: string): boolean {
  * to tell the path replacement that it's ok to replace this with an expression.
  */
 
- export function canHaveVariableDeclarationOrExpression() {
-    return (this.key === "init" || this.key === "left") && this.parentPath.isFor();
- }
+export function canHaveVariableDeclarationOrExpression() {
+  return (this.key === "init" || this.key === "left") && this.parentPath.isFor();
+}
 
 /**
  * Check whether the current path references a completion record
@@ -313,7 +313,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
   for (let path of referencePaths) {
     // if a reference is a child of the function we're checking against then we can
     // safelty ignore it
-    let childOfFunction = !!path.find(path => path.node === targetFuncPath.node);
+    let childOfFunction = !!path.find((path) => path.node === targetFuncPath.node);
     if (childOfFunction) continue;
 
     let status = this._guessExecutionStatusRelativeTo(path);
@@ -364,7 +364,7 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
     if (binding.path !== this) {
       let ret = binding.path.resolve(dangerous, resolved);
       // If the identifier resolves to parent node then we can't really resolve it.
-      if (this.find(parent => parent.node === ret.node)) return;
+      if (this.find((parent) => parent.node === ret.node)) return;
       return ret;
     }
   } else if (this.isTypeCastExpression()) {

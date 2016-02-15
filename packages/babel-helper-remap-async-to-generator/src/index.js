@@ -1,4 +1,4 @@
-/* @flow */
+/* @noflow */
 
 import type { NodePath } from "babel-traverse";
 import nameFunction from "babel-helper-function-name";

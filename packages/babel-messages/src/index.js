@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint max-len: 0 */
 
 import * as util from "util";
 

@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import hoistVariables from "babel-helper-hoist-variables";
 import template from "babel-template";
 
@@ -231,11 +233,11 @@ export default function ({ types: t }) {
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
           if (canHoist) {
-            hoistVariables(path, id => variableIds.push(id));
+            hoistVariables(path, (id) => variableIds.push(id));
           }
 
           if (variableIds.length) {
-            beforeBody.unshift(t.variableDeclaration("var", variableIds.map(id => t.variableDeclarator(id))));
+            beforeBody.unshift(t.variableDeclaration("var", variableIds.map((id) => t.variableDeclarator(id))));
           }
 
           path.traverse(reassignmentVisitor, {

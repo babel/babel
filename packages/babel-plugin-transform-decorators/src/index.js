@@ -7,7 +7,7 @@ let buildClassDecorator = template(`
 
 export default function ({ types: t }) {
   function cleanDecorators(decorators) {
-    return decorators.reverse().map(dec => dec.expression);
+    return decorators.reverse().map((dec) => dec.expression);
   }
 
   function transformClass(path, ref, state) {
@@ -104,7 +104,7 @@ export default function ({ types: t }) {
         let ref = path.node.id;
         let nodes = [];
 
-        nodes = nodes.concat(transformClass(path, ref, this).map(expr => t.expressionStatement(expr)));
+        nodes = nodes.concat(transformClass(path, ref, this).map((expr) => t.expressionStatement(expr)));
         nodes.push(t.expressionStatement(ref));
 
         path.insertAfter(nodes);

@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import type { NodePath, Scope } from "babel-traverse";
 import optimiseCall from "babel-helper-optimise-call-expression";
 import * as messages from "babel-messages";

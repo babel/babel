@@ -12,9 +12,19 @@ $ npm install babel-plugin-transform-es2015-modules-commonjs
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-es2015-modules-commonjs"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-es2015-modules-commonjs", {
+      "allowTopLevelThis": true
+    }]
+  ]
 }
 ```
 

@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import * as context from "../../../api/node";
 import type Logger from "../logger";
 import Plugin from "../../plugin";
@@ -205,7 +207,7 @@ export default class OptionManager {
     }
 
     //
-    let opts = cloneDeep(rawOpts, val => {
+    let opts = cloneDeep(rawOpts, (val) => {
       if (val instanceof Plugin) {
         return val;
       }
@@ -310,7 +312,7 @@ export default class OptionManager {
    * or a module name to require.
    */
   resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
-    return presets.map(val => {
+    return presets.map((val) => {
       if (typeof val === "string") {
         let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
         if (presetLoc) {
@@ -401,17 +403,17 @@ export default class OptionManager {
   init(opts: Object = {}): Object {
     let filename = opts.filename;
 
+    // resolve all .babelrc files
+    if (opts.babelrc !== false) {
+      this.findConfigs(filename);
+    }
+
     // merge in base options
     this.mergeOptions({
       options: opts,
       alias: "base",
       dirname: filename && path.dirname(filename)
     });
-
-    // resolve all .babelrc files
-    if (this.options.babelrc !== false) {
-      this.findConfigs(filename);
-    }
 
     // normalise
     this.normaliseOptions(opts);

@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint max-len: 0 */
 
 import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";

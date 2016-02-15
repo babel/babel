@@ -1,3 +1,6 @@
+/* eslint indent: 0 */
+/* eslint max-len: 0 */
+
 import type NodePath from "./index";
 
 // This file contains Babels metainterpreter that can evaluate static code.

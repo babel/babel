@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-async-to-module-method",
-  "version": "6.5.0",
+  "version": "6.5.2",
   "description": "Turn async functions into a module method",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-async-to-module-method",
   "license": "MIT",
@@ -11,7 +11,7 @@
   "dependencies": {
     "babel-plugin-syntax-async-functions": "^6.3.13",
     "babel-helper-remap-async-to-generator": "^6.3.13",
-    "babel-types": "^6.4.0",
+    "babel-types": "^6.5.2",
     "babel-runtime": "^5.0.0"
   },
   "devDependencies": {

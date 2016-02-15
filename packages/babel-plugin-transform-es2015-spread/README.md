@@ -14,9 +14,19 @@ $ npm install babel-plugin-transform-es2015-spread
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-es2015-spread"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-es2015-spread", {
+      "loose": true
+    }]
+  ]
 }
 ```
 

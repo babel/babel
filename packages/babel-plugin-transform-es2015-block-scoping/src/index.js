@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import type NodePath from "babel-traverse";
 import type Scope from "babel-traverse";
 import type File from "../../../file";
@@ -93,7 +95,7 @@ function replace(path, node, scope, remaps) {
 
   let ownBinding = scope.getBindingIdentifier(node.name);
   if (ownBinding === remap.binding) {
-    node.name = remap.uid;
+    scope.rename(node.name, remap.uid);
   } else {
     // scope already has it's own binding that doesn't
     // match the one we have a stored replacement for
@@ -171,7 +173,7 @@ let hoistVarDeclarationsVisitor = {
         node.left = node.left.declarations[0].id;
       }
     } else if (isVar(node, parent)) {
-      path.replaceWithMultiple(self.pushDeclar(node).map(expr => t.expressionStatement(expr)));
+      path.replaceWithMultiple(self.pushDeclar(node).map((expr) => t.expressionStatement(expr)));
     } else if (path.isFunction()) {
       return path.skip();
     }

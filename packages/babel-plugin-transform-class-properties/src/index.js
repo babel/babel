@@ -1,3 +1,4 @@
+/* eslint max-len: 0 */
 // todo: define instead of assign
 
 export default function ({ types: t }) {
@@ -114,7 +115,7 @@ export default function ({ types: t }) {
           //
 
           if (isDerived) {
-            let bareSupers = []
+            let bareSupers = [];
             constructor.traverse(findBareSupers, bareSupers);
             for (let bareSuper of bareSupers) {
               bareSuper.insertAfter(instanceBody);
