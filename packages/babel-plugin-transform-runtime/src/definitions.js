@@ -7,9 +7,9 @@ module.exports = {
     Set: "set",
     WeakSet: "weak-set",
     setImmediate: "set-immediate",
-    clearImmediate: "clear-immediate",
-    parseFloat: "parse-float",
-    parseInt: "parse-int"
+    clearImmediate: "clear-immediate"
+    //parseFloat: "parse-float", // temporary disabled
+    //parseInt: "parse-int" // temporary disabled
   },
 
   methods: {
@@ -26,7 +26,7 @@ module.exports = {
       from: "array/from",
       includes: "array/includes",
       indexOf: "array/index-of",
-      isArray: "array/is-array",
+      //isArray: "array/is-array", // temporary disabled
       join: "array/join",
       keys: "array/keys",
       lastIndexOf: "array/last-index-of",
@@ -123,8 +123,8 @@ module.exports = {
       endsWith: "string/ends-with",
       fromCodePoint: "string/from-code-point",
       includes: "string/includes",
-      padLeft: "string/pad-start", // deprecated
-      padRight: "string/pad-end", // deprecated
+      padLeft: "string/pad-left", // deprecated
+      padRight: "string/pad-right", // deprecated
       padStart: "string/pad-start",
       padEnd: "string/pad-end",
       raw: "string/raw",
@@ -184,12 +184,12 @@ module.exports = {
     },
 
     Date: {
-      now: "date/now"
+      //now: "date/now" // temporary disabled
     },
 
     Function: {
       // Warning: /virtual/ method - prototype, not static, version
-      bind: "function/virtual/bind"
+      //bind: "function/virtual/bind" // temporary disabled
     }
   }
 };
