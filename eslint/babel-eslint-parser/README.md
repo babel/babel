@@ -3,7 +3,7 @@
 **babel-eslint** allows you to lint **ALL** valid Babel code with the fantastic
 [ESLint](https://github.com/eslint/eslint).
 
-`babel-eslint` is successfully linting [babel core](https://github.com/babel/babel/blob/master/.eslintrc) and many other projects.
+`babel-eslint` is successfully linting babel and many other projects.
 
 > If there is an issue, first check if it can be reproduced with the regular parser or with the latest versions of `eslint` and `babel-eslint`!
 
@@ -35,12 +35,15 @@ aren't supported by ESLint. When using this plugin, ESLint is monkeypatched and 
 transformed into code that ESLint can understand. All location info such as line numbers,
 columns is also retained so you can track down errors with ease.
 
+Basically `babel-eslint` exports an [`index.js`](/index.js) that a linter can use.
+It just needs to export a `parse` method that takes in a string of code and outputs an AST.
+
 ## Usage
 
 ### Install
 
 ```sh
-$ npm install -g eslint babel-eslint
+$ npm install eslint babel-eslint --save-dev
 ```
 
 ### Setup
