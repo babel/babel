@@ -3,6 +3,7 @@
   "version": "5.0.0-beta10",
   "description": "",
   "main": "index.js",
+  "files": ["index.js"],
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel-eslint.git"
