@@ -12,7 +12,7 @@
     "codecov.io": "^0.1.6",
     "derequire": "^2.0.2",
     "es5-shim": "^4.1.7",
-    "kcheck": "^1.0.6",
+    "kcheck": "^1.0.7",
     "fs-readdir-recursive": "^0.1.2",
     "gulp": "^3.9.0",
     "gulp-babel": "^5.3.0",
