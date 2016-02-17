@@ -41,6 +41,7 @@ test-cov: clean
 	./scripts/test-cov.sh
 
 test-ci:
+	npm install -g npm@3
 	make lint
 	NODE_ENV=test make bootstrap
 	./scripts/test-cov.sh
