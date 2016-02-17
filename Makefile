@@ -41,9 +41,6 @@ test-cov: clean
 	./scripts/test-cov.sh
 
 test-ci:
-	rm -rf node_modules
-	npm install -g npm@3
-	npm install
 	make lint
 	NODE_ENV=test make bootstrap
 	./scripts/test-cov.sh
