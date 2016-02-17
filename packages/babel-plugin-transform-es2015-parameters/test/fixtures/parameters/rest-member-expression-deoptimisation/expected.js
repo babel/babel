@@ -149,3 +149,32 @@ function arrayDestructure() {
 
   rest[0] = _x[0];
 }
+
+function forOf() {
+  for (var _len17 = arguments.length, rest = Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
+    rest[_key17] = arguments[_key17];
+  }
+
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = this[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      rest[0] = _step.value;
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+}

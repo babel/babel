@@ -80,3 +80,7 @@ function newExp (...rest) {
 function arrayDestructure (...rest) {
   [rest[0]] = x;
 }
+
+function forOf (...rest) {
+  for (rest[0] of this);
+}
