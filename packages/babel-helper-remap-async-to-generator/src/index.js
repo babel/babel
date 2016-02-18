@@ -62,6 +62,12 @@ function plainFunction(path: NodePath, callId: Object) {
 
   node.async = false;
   node.generator = true;
+  // Either the wrapped generator is invoked with `.apply(this, arguments)` or it has no params,
+  // so it should capture `arguments`
+  if (node.shadow) {
+    // node.shadow may be `true` or an object
+    node.shadow = Object.assign({}, node.shadow, { arguments: false });
+  }
 
   let asyncFnId = node.id;
   node.id = null;
