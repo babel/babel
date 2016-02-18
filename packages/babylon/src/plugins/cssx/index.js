@@ -173,7 +173,7 @@ export default function CSSX(instance) {
 
 pp.cssxEntryPoint = function (code) {
   let nextToken = this.lookahead();
-  let name, parenL, future, cState;
+  let name, parenL, future, cState, firstInCSSX;
 
   if (
     nextToken.type === tt.name &&
@@ -181,9 +181,16 @@ pp.cssxEntryPoint = function (code) {
     this.cssxMatchNextToken(tt.name, tt.parenL)
   ) {
     cState = this.state.clone();
-    future = this.cssxLookahead(2);
-    name = future.first;
-    parenL = future.last;
+    future = this.cssxLookahead(3);
+    parenL = future.stack[1];
+    firstInCSSX = future.stack[2];
+
+    // Making sure that we don't parse
+    // cssx('something') or cssx("something")
+    if (firstInCSSX.type === tt.string) {
+      return false;
+    }
+
     this.cssxIn();
     this.state.pos = parenL.end;
     this.finishToken(tt.cssxStart);

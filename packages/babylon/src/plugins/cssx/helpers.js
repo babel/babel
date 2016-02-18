@@ -73,8 +73,16 @@ pp.cssxLookahead = function (numOfTokens=2) {
 
   this.isLookahead = true;
   while(numOfTokens > 0) {
-    this.next();
-    stack.push(this.state.clone(true))
+    try {
+      this.next();
+      stack.push(this.state.clone(true))
+    } catch(e) {
+      // The next token cannot be parsed.
+      // We still put something in the stack though so we 
+      // don't break the logic that uses the result of
+      // this function
+      stack.push({ type: null });
+    }
     --numOfTokens;
   }
   this.isLookahead = false;
