@@ -74,3 +74,9 @@ function method (...rest) {
 function newExp (...rest) {
   new rest[0]();
 }
+
+// In addition to swap() above because at some point someone tried checking
+// grandparent path for isArrayExpression() to deopt.
+function arrayDestructure (...rest) {
+  [rest[0]] = x;
+}

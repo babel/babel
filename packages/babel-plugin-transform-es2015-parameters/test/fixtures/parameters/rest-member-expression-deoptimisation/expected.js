@@ -135,3 +135,15 @@ function newExp() {
 
   new rest[0]();
 }
+
+// In addition to swap() above because at some point someone tried checking
+// grandparent path for isArrayExpression() to deopt.
+function arrayDestructure() {
+  for (var _len16 = arguments.length, rest = Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
+    rest[_key16] = arguments[_key16];
+  }
+
+  var _x = babelHelpers.slicedToArray(x, 1);
+
+  rest[0] = _x[0];
+}
