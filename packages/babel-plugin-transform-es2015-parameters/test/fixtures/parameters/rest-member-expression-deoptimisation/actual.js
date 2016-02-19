@@ -40,3 +40,7 @@ var b = function (foo, ...bar) {
 var b = function (foo, baz, ...bar) {
   return bar.length;
 };
+
+function x (...rest) {
+  rest[0] = 0;
+}

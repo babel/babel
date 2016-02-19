@@ -58,9 +58,18 @@ let memberExpressionOptimisationVisitor = {
       state.deopted = true;
     } else {
       let {parentPath} = path;
+      let grandparentPath = parentPath.parentPath;
 
       // ex: args[0]
-      if (parentPath.isMemberExpression({ computed: true, object: node })) {
+      if (
+        parentPath.isMemberExpression({ computed: true, object: node }) &&
+
+        // ex: `args[0] = "whatever"`
+        !(
+          grandparentPath.isAssignmentExpression() &&
+          parentPath.node === grandparentPath.node.left
+        )
+      ) {
         // if we know that this member expression is referencing a number then
         // we can safely optimise it
         let prop = parentPath.get("property");
