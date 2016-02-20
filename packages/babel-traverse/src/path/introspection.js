@@ -116,7 +116,7 @@ export function isNodeType(type: string): boolean {
 }
 
 /**
- * This checks whether or now we're in one of the following positions:
+ * This checks whether or not we're in one of the following positions:
  *
  *   for (KEY in right);
  *   for (KEY;;);
@@ -127,6 +127,28 @@ export function isNodeType(type: string): boolean {
 
 export function canHaveVariableDeclarationOrExpression() {
   return (this.key === "init" || this.key === "left") && this.parentPath.isFor();
+}
+
+/**
+ * This checks whether we are swapping an arrow function's body between an
+ * expression and a block statement (or vice versa).
+ *
+ * This is because arrow functions may implicitly return an expression, which
+ * is the same as containing a block statement.
+ */
+
+export function canSwapBetweenExpressionAndStatement(replacement) {
+  if (this.key !== "body" || !this.parentPath.isArrowFunctionExpression()) {
+    return false;
+  }
+
+  if (this.isExpression()) {
+    return t.isBlockStatement(replacement);
+  } else if (this.isBlockStatement()) {
+    return t.isExpression(replacement);
+  }
+
+  return false;
 }
 
 /**
