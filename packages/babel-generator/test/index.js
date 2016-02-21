@@ -1,9 +1,10 @@
-var generate = require("../lib");
-var assert   = require("assert");
-var parse    = require("babylon").parse;
-var chai     = require("chai");
-var t        = require("babel-types");
-var _        = require("lodash");
+var Whitespace = require("../lib/whitespace");
+var generate   = require("../lib");
+var assert     = require("assert");
+var parse      = require("babylon").parse;
+var chai       = require("chai");
+var t          = require("babel-types");
+var _          = require("lodash");
 
 suite("generation", function () {
   test("completeness", function () {
@@ -41,6 +42,14 @@ suite("programmatic generation", function() {
 
     var ast = parse(generate.default(ifStatement).code);
     assert.equal(ast.program.body[0].consequent.type, 'BlockStatement');
+  });
+});
+
+
+suite("whitespace", function () {
+  test("empty token list", function () {
+    var w = new Whitespace([]);
+    assert.equal(w.getNewlinesBefore(t.stringLiteral('1')), 0);
   });
 });
 
