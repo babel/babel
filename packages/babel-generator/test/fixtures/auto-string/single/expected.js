@@ -1,3 +1,4 @@
+foo('double');
 foo('foo');
 foo('foo\nlol');
 foo('foo\n"lol');
