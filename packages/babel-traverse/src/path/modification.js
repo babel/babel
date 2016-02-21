@@ -60,12 +60,7 @@ export function _containerInsert(from, nodes) {
     }
   }
 
-  let contexts = this.contexts;
-  let path = this;
-  while (!contexts.length) {
-    path = path.parentPath;
-    contexts = path.contexts;
-  }
+  let contexts = this._getQueueContexts();
 
   for (let path of paths) {
     path.setScope();

@@ -125,6 +125,11 @@ export default function () {
 
     visitor: {
       ThisExpression(path, state) {
+        // If other plugins run after this plugin's Program#exit handler, we allow them to
+        // insert top-level `this` values. This allows the AMD and UMD plugins to
+        // function properly.
+        if (this.ranCommonJS) return;
+
         if (
           state.opts.allowTopLevelThis !== true &&
           !path.findParent((path) => !path.is("shadow") &&
@@ -136,6 +141,8 @@ export default function () {
 
       Program: {
         exit(path) {
+          this.ranCommonJS = true;
+
           let strict = !!this.opts.strict;
 
           let { scope } = path;
