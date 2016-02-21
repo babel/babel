@@ -69,3 +69,11 @@ var b = function (foo) {
 var b = function (foo, baz) {
   return arguments.length - 2;
 };
+
+function x() {
+  for (var _len8 = arguments.length, rest = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+    rest[_key8] = arguments[_key8];
+  }
+
+  rest[0] = 0;
+}
