@@ -1,25 +1,33 @@
 import Parser from "../../parser";
 import { isIdentifierChar, isIdentifierStart } from "../../util/identifier";
-import { TokenType, types as tt } from "../../tokenizer/types";
-import { TokContext, types as tc } from "../../tokenizer/context";
+import { types as tt } from "../../tokenizer/types";
+import { types as tc } from "../../tokenizer/context";
 
 import {
   CSSXPropertyAllowedCodes,
   CSSXValueAllowedCodes,
   CSSXSelectorAllowedCodes
 } from "./settings";
-import { isNumber } from './utilities';
+import { isNumber } from "./utilities";
 
 let pp = Parser.prototype;
 
+function codePointToString(code) {
+  // UTF-16 Decoding
+  if (code <= 0xFFFF) {
+    return String.fromCharCode(code);
+  } else {
+    return String.fromCharCode(((code - 0x10000) >> 10) + 0xD800, ((code - 0x10000) & 1023) + 0xDC00);
+  }
+}
+
 pp.cssxReadWord = function (readUntil) {
-  let word = '';
+  let word = "";
   let first = true;
-  let chunkStart, cut, toggle;
+  let chunkStart, cut;
   let readingDataURI = false;
   let readingNth = false;
-  let readingExpression = false;
-  let dataURIPattern = ['url(data:', 41]; // 41 = )
+  let dataURIPattern = ["url(data:", 41]; // 41 = )
   let expressionPattern = [96, 96]; // 96 = `
   let nthPattern = [40, 41]; // 40 = (, 41 = )
   let expression = false;
@@ -53,7 +61,7 @@ pp.cssxReadWord = function (readUntil) {
       if (ch === expressionPattern[1] && expression) {
         expression.end = this.state.pos;
         expression.inner.end = numOfCharRead + 1;
-        expressions.push(expression)
+        expressions.push(expression);
         expression = false;
       // expression block start detection
       } else if (ch === expressionPattern[0] && !expression) {
@@ -98,8 +106,8 @@ pp.cssxReadWord = function (readUntil) {
   return { str: word, expressions };
 };
 
-pp.cssxReadSelector = function (lastToken) {
-  let startLoc, pos, value, node, word;
+pp.cssxReadSelector = function () {
+  let startLoc, pos, value, word;
   this.state.context.push(tc.cssxSelector);
   startLoc = this.state.curPosition();
   pos = this.state.pos;
@@ -125,8 +133,8 @@ pp.cssxReadProperty = function() {
   word = this.cssxReadWord(pp.cssxReadPropCharUntil);
   property = word.str;
 
-  if (property === '') {
-    this.raise(this.state.pos, 'CSSX: no CSS property provided');
+  if (property === "") {
+    this.raise(this.state.pos, "CSSX: no CSS property provided");
   }
 
   this.cssxExpressionRegister(word.expressions);
@@ -136,16 +144,16 @@ pp.cssxReadProperty = function() {
   this.finishToken(tt.cssxProperty, property);
 
   if (this.lookahead().type !== tt.colon) {
-    this.raise(this.state.pos, 'CSSX: expecting a colon after CSS property');
+    this.raise(this.state.pos, "CSSX: expecting a colon after CSS property");
   }
   this.next();
-  node = this.cssxParseRuleChild('CSSXProperty', property, pos, loc);
+  node = this.cssxParseRuleChild("CSSXProperty", property, pos, loc);
 
   return node;
 };
 
 pp.cssxReadValue = function() {
-  let startLoc, endLoc, pos, value, node, word;
+  let startLoc, pos, value, node, word;
 
   startLoc = this.state.curPosition();
   pos = this.state.pos;
@@ -157,7 +165,7 @@ pp.cssxReadValue = function() {
   this.state.startLoc = startLoc;
   this.finishToken(tt.cssxValue, value);
   this.next();
-  node = this.cssxParseRuleChild('CSSXValue', value, pos, startLoc);
+  node = this.cssxParseRuleChild("CSSXValue", value, pos, startLoc);
 
   return node;
 };

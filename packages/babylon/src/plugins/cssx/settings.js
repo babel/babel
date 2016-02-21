@@ -1,17 +1,16 @@
-import { TokenType, types as tt } from "../../tokenizer/types";
-import { stringToCode } from './utilities';
+import { stringToCode } from "./utilities";
 
 const CSSXPropertyAllowedCodes = [
-  '-'
+  "-"
 ].map(stringToCode);
 
 const CSSXValueAllowedCodes = [
-  ' ' , '\n', '\t', '#', '.', '-', '(', ')', '[', ']', '\'', '"', '%', ',', ':', '/', '\\', '!', '?'
+  " ", "\n", "\t", "#", ".", "-", "(", ")", "[", "]", "'", "\"", "%", ",", ":", "/", "\\", "!", "?"
 ].map(stringToCode);
 
 const CSSXSelectorAllowedCodes = [
-  ' ', '*', '>', '+', '~', '.', ':', '=', '[', ']', '"', '-',
-  '!', '?', '@', '#', '$', '%', '^', '&', '\'', '|', ',', '\n'
+  " ", "*", ">", "+", "~", ".", ":", "=", "[", "]", "\"", "-",
+  "!", "?", "@", "#", "$", "%", "^", "&", "'", "|", ",", "\n"
 ].map(stringToCode);
 
 export default {

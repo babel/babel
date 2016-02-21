@@ -2,25 +2,20 @@ import Parser from "../../parser";
 
 let pp = Parser.prototype;
 
-const PARSER_OPTIONS = {
-  locations: true,
-  ranges: true
-};
-
 pp.cssxExpressionRegister = function (expressions) {
   if (expressions && expressions.length > 0) {
     this.state._cssxExpressions = expressions;
   }
 };
 pp.cssxExpressionSet = function (node) {
-  let length, codeStr, exprNode;
+  let length, codeStr;
 
   if (this.state._cssxExpressions && this.state._cssxExpressions.length > 0) {
     node.expressions = this.state._cssxExpressions
-      .map(expr => {
+      .map((expr) => {
         length = expr.end - expr.start;
         codeStr = this.state.input.substr(expr.start, length).substr(1, length-2);
-        if (codeStr === '') return false;
+        if (codeStr === "") return false;
         return {
           start: expr.start,
           end: expr.end,
@@ -28,7 +23,7 @@ pp.cssxExpressionSet = function (node) {
             start: expr.inner.start,
             end: expr.inner.end
           }
-        }
+        };
       })
       .filter(function(expr) {
         return expr !== false;

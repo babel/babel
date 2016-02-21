@@ -1,12 +1,12 @@
 export function stringToCode (ch) {
   return String(ch).charCodeAt(0);
-};
+}
 
 export function posToLoc (pos, input, verbose) {
-  var line=1, loopPos=0, linePos = 0, lineStart = 0;
+  let line=1, loopPos=0, linePos = 0, lineStart = 0;
 
-  while(loopPos < input.length && loopPos !== pos) {
-    if (input.charAt(loopPos) === '\n') {
+  while (loopPos < input.length && loopPos !== pos) {
+    if (input.charAt(loopPos) === "\n") {
       linePos = 0;
       lineStart = loopPos+1;
       ++line;
@@ -25,8 +25,8 @@ export function posToLoc (pos, input, verbose) {
       lineStart
     };
   }
-};
+}
 
 export function isNumber(code) {
   return code > 47 && code < 58;
-};
+}

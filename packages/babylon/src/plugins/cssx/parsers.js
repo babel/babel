@@ -1,5 +1,5 @@
 import Parser from "../../parser";
-import { TokenType, types as tt } from "../../tokenizer/types";
+import { types as tt } from "../../tokenizer/types";
 
 let pp = Parser.prototype;
 
@@ -10,7 +10,7 @@ pp.cssxParse = function () {
   this.skipSpace();
   this.cssxReadSelector();
   this.parseBlockBody(definition, true, false, tt.cssxEnd);
-  this.finishNode(definition, 'CSSXDefinition');
+  this.finishNode(definition, "CSSXDefinition");
   return definition;
 };
 
@@ -21,7 +21,7 @@ pp.cssxParseExpression = function () {
   exprNode = this.startNodeAt(lastToken.start, lastToken.loc.start);
   exprNode.body = [];
 
-  while(this.match(tt.cssxSelector)) {
+  while (this.match(tt.cssxSelector)) {
     if (this.cssxIsMediaQuery()) {
       exprNode.body.push(this.cssxParseMediaQueryElement());
     } else if (this.cssxIsKeyFramesEntryPoint()) {
@@ -31,7 +31,7 @@ pp.cssxParseExpression = function () {
     }
   }
 
-  result = this.finishNodeAt(exprNode, 'CSSXExpression', this.state.end, this.state.endLoc);
+  result = this.finishNodeAt(exprNode, "CSSXExpression", this.state.end, this.state.endLoc);
   this.next();
   return result;
 };
@@ -45,21 +45,21 @@ pp.cssxParseElement = function() {
   selectorNode.value = this.state.value;
   this.cssxExpressionSet(selectorNode);
   elementNode.selector = this.finishNodeAt(
-    selectorNode, 'CSSXSelector', this.state.end, this.state.endLoc
+    selectorNode, "CSSXSelector", this.state.end, this.state.endLoc
   );
   this.next();
   if (!this.match(tt.cssxRulesEnd)) {
     elementNode.body = this.parseBlock();
   }
   lastToken = this.cssxGetPreviousToken();
-  result = this.finishNodeAt(elementNode, 'CSSXElement', lastToken.end, lastToken.loc.end);
+  result = this.finishNodeAt(elementNode, "CSSXElement", lastToken.end, lastToken.loc.end);
   this.nextToken();
   return result;
 };
 
 pp.cssxParseMediaQueryElement = function () {
   return this.cssxParseNestedSelectors({
-    name: 'CSSXMediaQueryElement',
+    name: "CSSXMediaQueryElement",
     context: {
       in: () => this.cssxMediaQueryIn()
     },
@@ -69,15 +69,15 @@ pp.cssxParseMediaQueryElement = function () {
       end: tt.cssxMediaQueryEnd
     },
     errors: {
-      unclosed: 'CSSX: unclosed media query block',
-      expectSelector: 'CSSX: expected css selector after media query definition'
+      unclosed: "CSSX: unclosed media query block",
+      expectSelector: "CSSX: expected css selector after media query definition"
     }
   });
 };
 
 pp.cssxParseKeyframesElement = function () {
   return this.cssxParseNestedSelectors({
-    name: 'CSSXKeyframesElement',
+    name: "CSSXKeyframesElement",
     context: {
       in: () => this.cssxKeyframesIn()
     },
@@ -87,8 +87,8 @@ pp.cssxParseKeyframesElement = function () {
       end: tt.cssxKeyframesEnd
     },
     errors: {
-      unclosed: 'CSSX: unclosed @keyframes block',
-      expectSelector: 'CSSX: expected keyframe as a start of the @keyframes block'
+      unclosed: "CSSX: unclosed @keyframes block",
+      expectSelector: "CSSX: expected keyframe as a start of the @keyframes block"
     }
   });
 };
@@ -104,7 +104,7 @@ pp.cssxParseNestedSelectors = function (options) {
   this.cssxStoreCurrentToken();
 
   if (!this.cssxMatchNextToken(tt.braceL)) {
-    this.raise(this.state.pos, 'CSSX: expected { after query definition');
+    this.raise(this.state.pos, "CSSX: expected { after query definition");
   }
 
   ++this.state.pos;
@@ -119,7 +119,7 @@ pp.cssxParseNestedSelectors = function (options) {
     nestedElement.body = [];
     if (this.match(tt.cssxSelector)) {
       nestedElement.body.push(this.cssxParseElement());
-      while(!this.cssxMatchNextToken(tt.braceR)) {
+      while (!this.cssxMatchNextToken(tt.braceR)) {
         if (this.match(tt.cssxRulesEnd)) {
           this.cssxReadSelector();
         }
@@ -141,23 +141,23 @@ pp.cssxParseNestedSelectors = function (options) {
 };
 
 pp.cssxParseRule = function (propertyNode, valueNode) {
-  var node = this.startNodeAt(propertyNode.start, propertyNode.loc.start);
-  var pos = valueNode.end;
-  var locEnd = this.cssxClonePosition(valueNode.loc.end);
+  let node = this.startNodeAt(propertyNode.start, propertyNode.loc.start);
+  let pos = valueNode.end;
+  let locEnd = this.cssxClonePosition(valueNode.loc.end);
 
   if (this.match(tt.semi) || (this.match(tt.cssxRulesEnd) && this.cssxMatchPreviousToken(tt.semi, 1))) {
-   ++locEnd.column;
-   ++pos;
+    ++locEnd.column;
+    ++pos;
   }
 
   node.label = propertyNode;
   node.body = valueNode;
 
-  return this.finishNodeAt(node, 'CSSXRule', pos, locEnd);
+  return this.finishNodeAt(node, "CSSXRule", pos, locEnd);
 };
 
 pp.cssxParseRuleChild = function (type, value, pos, loc) {
-  var node = this.startNodeAt(pos, loc);
+  let node = this.startNodeAt(pos, loc);
 
   this.cssxExpressionSet(node);
   node.name = value;

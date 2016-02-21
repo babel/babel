@@ -1,8 +1,6 @@
-import { TokenType, types as tt } from "../../tokenizer/types";
-import { TokContext, types as tc } from "../../tokenizer/context";
+import { types as tt } from "../../tokenizer/types";
+import { types as tc } from "../../tokenizer/context";
 import Parser from "../../parser";
-import { SourceLocation, Position } from "../../util/location";
-import { posToLoc } from "./utilities";
 
 import "./types";
 import "./context";
@@ -15,10 +13,8 @@ const pp = Parser.prototype;
 
 export default function CSSX(instance) {
 
-  instance.extend('parseStatement', function (inner) {
+  instance.extend("parseStatement", function (inner) {
     return function (declaration, topLevel) {
-      let result;
-      
       if (this.cssxMatchPreviousToken(tt.cssxStart) && this.curContext() !== tc.cssxDefinition) {
         this.cssxDefinitionIn();
         return this.cssxParse();
@@ -30,15 +26,15 @@ export default function CSSX(instance) {
         }
         return this.cssxParseElement();
       }
-      return inner.call(this, declaration, topLevel)
-    }
+      return inner.call(this, declaration, topLevel);
+    };
   });
 
-  instance.extend('parseBlock', function (inner) {
+  instance.extend("parseBlock", function (inner) {
     return function (allowDirectives?) {
-      var fallback = () => inner.call(this, allowDirectives);
-      var context = this.curContext(), blockStmtNode;
-      var rules = [], lastToken;
+      let fallback = () => inner.call(this, allowDirectives);
+      let context = this.curContext(), blockStmtNode;
+      let rules = [], lastToken;
 
       if (context === tc.cssxRules && this.match(tt.cssxRulesStart)) {
 
@@ -56,18 +52,18 @@ export default function CSSX(instance) {
         blockStmtNode.body = rules;
         lastToken = this.cssxGetPreviousToken();
         return this.finishNodeAt(
-          blockStmtNode, 'CSSXRules', lastToken.end, lastToken.loc.end
+          blockStmtNode, "CSSXRules", lastToken.end, lastToken.loc.end
         );
       }
 
       return fallback();
-    }
+    };
   });
 
-  instance.extend('readToken', function (inner) {
+  instance.extend("readToken", function (inner) {
     return function (code) {
-      var fallback = () => inner.call(this, code);
-      var context = this.curContext();
+      let fallback = () => inner.call(this, code);
+      let context = this.curContext();
 
       if (this.isLookahead) return fallback();
 
@@ -126,12 +122,12 @@ export default function CSSX(instance) {
       }
 
       return fallback();  
-    }
+    };
   });
 
-  instance.extend('getTokenFromCode', function (inner) {
+  instance.extend("getTokenFromCode", function (inner) {
     return function (code) {
-      var fallback = () => inner.call(this, code);
+      let fallback = () => inner.call(this, code);
 
       // when the selector starts with #
       if (code === 35 && (
@@ -139,7 +135,7 @@ export default function CSSX(instance) {
         this.match(tt.cssxRulesEnd)
       )) {
         ++this.state.pos;
-        return this.finishToken(tt.string, '#');
+        return this.finishToken(tt.string, "#");
       }
 
       return fallback();
@@ -156,28 +152,25 @@ export default function CSSX(instance) {
     };
   });
 
-  instance.extend('processComment', function (inner) {
+  instance.extend("processComment", function (inner) {
     return function (node) {
-      var last;
-      
-      if (node.type === 'CSSXRule') {
+      if (node.type === "CSSXRule") {
         this.state.trailingComments.length = 0;
         this.state.leadingComments.length = 0;
       }
-
       return inner.call(this, node);
     };
   });
 
-};
+}
 
-pp.cssxEntryPoint = function (code) {
+pp.cssxEntryPoint = function () {
   let nextToken = this.lookahead();
-  let name, parenL, future, cState, firstInCSSX;
+  let parenL, future, cState, firstInCSSX;
 
   if (
     nextToken.type === tt.name &&
-    nextToken.value === 'cssx' &&
+    nextToken.value === "cssx" &&
     this.cssxMatchNextToken(tt.name, tt.parenL)
   ) {
     cState = this.state.clone();
@@ -185,8 +178,8 @@ pp.cssxEntryPoint = function (code) {
     parenL = future.stack[1];
     firstInCSSX = future.stack[2];
 
-    // Making sure that we don't parse
-    // cssx('something') or cssx("something")
+    // Making sure that we don"t parse
+    // cssx("something") or cssx("something")
     if (firstInCSSX.type === tt.string) {
       return false;
     }
@@ -205,7 +198,7 @@ pp.cssxEntryPoint = function (code) {
   return false;
 };
 
-pp.cssxRulesEntryPoint = function (code) {
+pp.cssxRulesEntryPoint = function () {
   return (
     (this.match(tt.braceL) && this.cssxMatchNextToken(tt.name, tt.colon))
   );
@@ -213,16 +206,16 @@ pp.cssxRulesEntryPoint = function (code) {
 
 /* useful watchers
 
-watch('this.state.type.label')
-watch('this.state.pos')
-watch('this.state.start')
-watch('this.state.end')
-watch('this.state.startLoc')
-watch('this.state.endLoc')
-watch('this.state.input.substr(0, this.state.pos)')
-watch('this.state.context.map(function(i){return i.token}).join(",")')
-watch('this.lookahead().type.label')
+watch("this.state.type.label")
+watch("this.state.pos")
+watch("this.state.start")
+watch("this.state.end")
+watch("this.state.startLoc")
+watch("this.state.endLoc")
+watch("this.state.input.substr(0, this.state.pos)")
+watch("this.state.context.map(function(i){return i.token}).join(",")")
+watch("this.lookahead().type.label")
 
-watch('String.fromCharCode(ch) + " / " + ch')
+watch("String.fromCharCode(ch) + " / " + ch")
 
 */

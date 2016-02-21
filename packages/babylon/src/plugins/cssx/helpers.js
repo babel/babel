@@ -1,14 +1,14 @@
 import Parser from "../../parser";
 import { Token } from "../../tokenizer";
-import { posToLoc } from './utilities';
+import { posToLoc } from "./utilities";
 
 const pp = Parser.prototype;
-const MediaQueryEntryPoint = '@media ';
+const MediaQueryEntryPoint = "@media ";
 const keyframesEntryPoint = [
-  '@keyframes',
-  '@-webkit-keyframes',
-  '@-moz-keyframes',
-  '@-o-keyframes'
+  "@keyframes",
+  "@-webkit-keyframes",
+  "@-moz-keyframes",
+  "@-o-keyframes"
 ];
 
 pp.cssxIsMediaQuery = function () {
@@ -19,7 +19,7 @@ pp.cssxIsMediaQuery = function () {
 };
 
 pp.cssxIsKeyFramesEntryPoint = function () {
-  var value = this.state.value.toString().split(' ')[0];
+  let value = this.state.value.toString().split(" ")[0];
   if (keyframesEntryPoint.indexOf(value) >= 0) {
     return true;
   }
@@ -72,14 +72,14 @@ pp.cssxLookahead = function (numOfTokens=2) {
   this.state = old.clone(true);
 
   this.isLookahead = true;
-  while(numOfTokens > 0) {
+  while (numOfTokens > 0) {
     try {
       this.next();
-      stack.push(this.state.clone(true))
-    } catch(e) {
+      stack.push(this.state.clone(true));
+    } catch (e) {
       // The next token cannot be parsed.
       // We still put something in the stack though so we 
-      // don't break the logic that uses the result of
+      // don"t break the logic that uses the result of
       // this function
       stack.push({ type: null });
     }
@@ -99,7 +99,7 @@ pp.cssxClonePosition = function (loc) {
   return {
     line: loc.line,
     column: loc.column
-  }
+  };
 };
 
 pp.cssxDebugComments = function (comments) {
@@ -110,7 +110,7 @@ pp.cssxDebugComments = function (comments) {
 };
 
 pp.cssxClearSpaceAtTheEnd = function (value) {
-  if (value.charAt(value.length-1) === ' ') {
+  if (value.charAt(value.length-1) === " ") {
     --this.state.pos;
     return value.substr(0, value.length-1);
   }
@@ -148,14 +148,13 @@ pp.cssxStoreCurrentToken = function () {
 };
 
 pp.cssxSyncLocPropsToCurPos = function (p) {
-  let pos = typeof p === 'undefined' ? this.state.pos : p;
+  let pos = typeof p === "undefined" ? this.state.pos : p;
 
   this.state.start = this.state.end = pos;
   this.state.startLoc = this.state.endLoc = posToLoc(pos, this.state.input);
 };
 
-pp.cssxSyncEndTokenStateToCurPos = function (p) {
-  let pos = typeof p === 'undefined' ? this.state.pos : p;
+pp.cssxSyncEndTokenStateToCurPos = function () {
   let meta = posToLoc(this.state.pos, this.state.input, true);
 
   this.state.endLoc.line = meta.line;
