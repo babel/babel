@@ -1,4 +1,4 @@
-// single referenes
+// single reference
 function r(...rest){
   if (noNeedToWork) return 0;
   return rest;
@@ -65,4 +65,10 @@ function runQueue(queue, ...args) {
       queue[i](...args)
     }
   }
+}
+
+function r(...rest){
+  if (noNeedToWork) return 0;
+  [rest[0]] = x;
+  return rest;
 }
