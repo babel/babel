@@ -178,3 +178,19 @@ function forOf() {
     }
   }
 }
+
+function postfixIncrement() {
+  for (var _len18 = arguments.length, rest = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
+    rest[_key18] = arguments[_key18];
+  }
+
+  rest[0]++;
+}
+
+function postfixDecrement() {
+  for (var _len19 = arguments.length, rest = Array(_len19), _key19 = 0; _key19 < _len19; _key19++) {
+    rest[_key19] = arguments[_key19];
+  }
+
+  rest[0]--;
+}

@@ -84,3 +84,11 @@ function arrayDestructure (...rest) {
 function forOf (...rest) {
   for (rest[0] of this);
 }
+
+function postfixIncrement (...rest) {
+  rest[0]++;
+}
+
+function postfixDecrement (...rest) {
+  rest[0]--;
+}
