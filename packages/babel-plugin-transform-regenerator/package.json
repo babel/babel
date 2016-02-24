@@ -4,6 +4,7 @@
   "description": "Explode async and generator functions into a state machine.",
   "version": "6.5.2",
   "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-regenerator",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-regenerator",
   "main": "lib/index.js",
   "dependencies": {
     "babel-plugin-transform-es2015-block-scoping": "^6.3.13",
