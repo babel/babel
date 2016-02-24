@@ -193,4 +193,11 @@ module.exports = {
     default: false,
     hidden: true,
   },
+  
+  indent: {
+    description: "the number use to indent the code.",
+    type: "number",
+    default: 2,
+    hidden: true,
+  },
 };
