@@ -193,4 +193,10 @@ module.exports = {
     default: false,
     hidden: true,
   },
+
+  npmpath: {
+    type: "npmpath",
+    description: "path to use when resolving presets and plugins",
+    shorthand: "p"
+  },
 };

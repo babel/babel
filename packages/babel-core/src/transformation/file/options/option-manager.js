@@ -174,7 +174,7 @@ export default class OptionManager {
     this.mergeOptions({
       options: opts,
       alias: loc,
-      dirname: path.dirname(loc)
+      dirname: opts.npmpath || path.dirname(loc)
     });
     this.resolvedConfigs.push(loc);
 
@@ -302,7 +302,7 @@ export default class OptionManager {
         options: presetOpts,
         alias: presetLoc,
         loc: presetLoc,
-        dirname: path.dirname(presetLoc)
+        dirname: presetOpts.npmpath || path.dirname(presetLoc)
       });
     });
   }
@@ -412,7 +412,7 @@ export default class OptionManager {
     this.mergeOptions({
       options: opts,
       alias: "base",
-      dirname: filename && path.dirname(filename)
+      dirname: opts.npmpath || (filename && path.dirname(filename))
     });
 
     // normalise
