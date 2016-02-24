@@ -195,7 +195,7 @@ module.exports = {
   },
   
   indent: {
-    description: "the number use to indent the code.",
+    description: "the number of space use to indent the code.",
     type: "number",
     default: 2,
     hidden: true,
