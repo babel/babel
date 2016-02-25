@@ -58,40 +58,59 @@ let memberExpressionOptimisationVisitor = {
       state.deopted = true;
     } else {
       let {parentPath} = path;
-      let grandparentPath = parentPath.parentPath;
 
-      // ex: [rest[0]] = [rest[1]]
-      if (grandparentPath.isLVal()) {
-        state.deopted = true;
-        return;
-      }
+      // ex: `args[0]`
+      // ex: `args.whatever`
+      if (parentPath.isMemberExpression({ object: node })) {
+        let grandparentPath = parentPath.parentPath;
 
-      // ex: args[0]
-      if (
-        parentPath.isMemberExpression({ computed: true, object: node }) &&
+        let argsOptEligible = !state.deopted && !(
+          // ex: `args[0] = "whatever"`
+          (
+            grandparentPath.isAssignmentExpression() &&
+            parentPath.node === grandparentPath.node.left
+          ) ||
 
-        // ex: `args[0] = "whatever"`
-        !(
-          grandparentPath.isAssignmentExpression() &&
-          parentPath.node === grandparentPath.node.left
-        ) &&
-        !grandparentPath.isForInStatement()
-      ) {
-        // if we know that this member expression is referencing a number then
-        // we can safely optimise it
-        let prop = parentPath.get("property");
-        if (prop.isBaseType("number")) {
-          state.candidates.push({cause: "indexGetter", path});
-          return;
-        }
-      }
+          // ex: `[args[0]] = ["whatever"]`
+          grandparentPath.isLVal() ||
 
-      // ex: args.length
-      if (parentPath.isMemberExpression({ computed: false, object: node })) {
-        let prop = parentPath.get("property");
-        if (prop.node.name === "length") {
-          state.candidates.push({cause: "lengthGetter", path});
-          return;
+          // ex: `for (rest[0] in this)`
+          // ex: `for (rest[0] of this)`
+          grandparentPath.isForXStatement() ||
+
+          // ex: `++args[0]`
+          // ex: `args[0]--`
+          grandparentPath.isUpdateExpression() ||
+
+          // ex: `delete args[0]`
+          grandparentPath.isUnaryExpression({ operator: "delete" }) ||
+
+          // ex: `args[0]()`
+          // ex: `new args[0]()`
+          // ex: `new args[0]`
+          (
+            (
+              grandparentPath.isCallExpression() ||
+              grandparentPath.isNewExpression()
+            ) &&
+            parentPath.node === grandparentPath.node.callee
+          )
+        );
+
+        if (argsOptEligible) {
+          if (parentPath.node.computed) {
+            // if we know that this member expression is referencing a number then
+            // we can safely optimise it
+            if (parentPath.get("property").isBaseType("number")) {
+              state.candidates.push({cause: "indexGetter", path});
+              return;
+            }
+          }
+          // args.length
+          else if (parentPath.node.property.name === "length") {
+            state.candidates.push({cause: "lengthGetter", path});
+            return;
+          }
         }
       }
 
