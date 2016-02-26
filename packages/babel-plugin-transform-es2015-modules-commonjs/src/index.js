@@ -63,6 +63,7 @@ export default function () {
       } else {
         path.replaceWith(remap);
       }
+      this.requeueInParent(path);
     },
 
     AssignmentExpression(path) {
@@ -86,6 +87,7 @@ export default function () {
       }
 
       path.replaceWith(node);
+      this.requeueInParent(path);
     },
 
     UpdateExpression(path) {
@@ -102,7 +104,9 @@ export default function () {
       let node = t.assignmentExpression(path.node.operator[0] + "=", arg.node, t.numericLiteral(1));
 
       if ((path.parentPath.isExpressionStatement() && !path.isCompletionRecord()) || path.node.prefix) {
-        return path.replaceWith(node);
+        path.replaceWith(node);
+        this.requeueInParent(path);
+        return;
       }
 
       let nodes = [];
@@ -116,7 +120,8 @@ export default function () {
       }
       nodes.push(t.binaryExpression(operator, arg.node, t.numericLiteral(1)));
 
-      path.replaceWithMultiple(t.sequenceExpression(nodes));
+      let newPaths = path.replaceWithMultiple(t.sequenceExpression(nodes));
+      for (const newPath of newPaths) this.requeueInParent(newPath);
     }
   };
 
@@ -125,6 +130,11 @@ export default function () {
 
     visitor: {
       ThisExpression(path, state) {
+        // If other plugins run after this plugin's Program#exit handler, we allow them to
+        // insert top-level `this` values. This allows the AMD and UMD plugins to
+        // function properly.
+        if (this.ranCommonJS) return;
+
         if (
           state.opts.allowTopLevelThis !== true &&
           !path.findParent((path) => !path.is("shadow") &&
@@ -136,6 +146,8 @@ export default function () {
 
       Program: {
         exit(path) {
+          this.ranCommonJS = true;
+
           let strict = !!this.opts.strict;
 
           let { scope } = path;
@@ -419,7 +431,12 @@ export default function () {
           }
 
           path.unshiftContainer("body", topNodes);
-          path.traverse(reassignmentVisitor, { remaps, scope, exports });
+          path.traverse(reassignmentVisitor, {
+            remaps,
+            scope,
+            exports,
+            requeueInParent: (newPath) => path.requeue(newPath),
+          });
         }
       }
     }
