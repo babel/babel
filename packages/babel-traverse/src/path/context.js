@@ -208,10 +208,22 @@ export function setKey(key) {
   this.type = this.node && this.node.type;
 }
 
-export function requeue(path = this) {
-  if (path.removed) return;
+export function requeue(pathToQueue = this) {
+  if (pathToQueue.removed) return;
 
-  for (let context of this.contexts) {
-    context.maybeQueue(path);
+  let contexts = this._getQueueContexts();
+
+  for (let context of contexts) {
+    context.maybeQueue(pathToQueue);
   }
+}
+
+export function _getQueueContexts(){
+  let path = this;
+  let contexts = this.contexts;
+  while (!contexts.length) {
+    path = path.parentPath;
+    contexts = path.contexts;
+  }
+  return contexts;
 }
