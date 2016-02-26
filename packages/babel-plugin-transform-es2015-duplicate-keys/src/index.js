@@ -12,7 +12,7 @@ export default function() {
     visitor: {
       ObjectExpression(path) {
         const { node } = path;
-        const plainProps = node.properties.filter(prop => !t.isSpreadProperty(prop) && !prop.computed);
+        const plainProps = node.properties.filter((prop) => !t.isSpreadProperty(prop) && !prop.computed);
 
         const alreadySeenNames = Object.create(null);
 
