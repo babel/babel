@@ -13,6 +13,7 @@ import cloneDeep from "lodash/lang/cloneDeep";
 import clone from "lodash/lang/clone";
 import merge from "../../../helpers/merge";
 import config from "./config";
+import removed from "./removed";
 import path from "path";
 import fs from "fs";
 
@@ -222,7 +223,13 @@ export default class OptionManager {
 
       // check for an unknown option
       if (!option && this.log) {
-        this.log.error(`Unknown option: ${alias}.${key}`, ReferenceError);
+        let pluginOptsInfo = "Check out http://babeljs.io/docs/usage/options/ for more info";
+
+        if (removed[key]) {
+          this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`, ReferenceError);
+        } else {
+          this.log.error(`Unknown option: ${alias}.${key}. ${pluginOptsInfo}`, ReferenceError);
+        }
       }
     }
 
