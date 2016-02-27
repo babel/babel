@@ -86,6 +86,9 @@ pp.cssxReadWord = function (readUntil) {
         expression.inner.end = numOfCharRead + expressionMarkerLength;
         expressions.push(expression);
         expression = false;
+        if (expressionMarkerLength > 1) {
+          numOfCharRead += expressionMarkerLength - 1;
+        }
       // expression block start detection
       } else if (readingExpression && !expression) {
         expression = { 
