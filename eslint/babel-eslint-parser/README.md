@@ -43,7 +43,7 @@ It just needs to export a `parse` method that takes in a string of code and outp
 ### Install
 
 ```sh
-$ npm install eslint babel-eslint --save-dev
+$ npm install eslint@1.x babel-eslint --save-dev
 ```
 
 ### Setup
