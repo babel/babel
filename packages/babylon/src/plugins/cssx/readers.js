@@ -24,25 +24,46 @@ function codePointToString(code) {
 pp.cssxReadWord = function (readUntil) {
   let word = "";
   let first = true;
-  let chunkStart, cut;
+  let chunkStart, cut, cutPart;
   let readingDataURI = false;
   let readingNth = false;
+  let readingExpression = false;
   let dataURIPattern = ["url(data:", 41]; // 41 = )
   let expressionPattern = [96, 96]; // 96 = `
+  let expressionStartPatterns = ["`", "{{", "<%"];
+  let expressionEndPattern = ["`", "}}", "%>"];
   let nthPattern = [40, 41]; // 40 = (, 41 = )
   let expression = false;
   let expressions = [];
   let numOfCharRead = 0;
+  let expressionMarkerLength = null;
 
   chunkStart = this.state.pos;
   cut = () => this.input.slice(chunkStart, this.state.pos);
+  cutPart = (length) => this.input.substr(this.state.pos, length);
+
   this.state.containsEsc = false;
 
   while (this.state.pos < this.input.length) {
+    let expressionStartPos = null;
     let ch = this.fullCharCodeAtPos();
-
+    let pos = this.state.pos;
     if (cut() === dataURIPattern[0]) readingDataURI = true;
     if (ch === dataURIPattern[1]) readingDataURI = false;
+
+    expressionStartPatterns.forEach(function(esp) {
+      if (cutPart(esp.length) === esp && !readingExpression) {
+        readingExpression = true;
+        expressionStartPos = pos;
+        expressionMarkerLength = esp.length;
+      }
+    });
+    
+    expressionEndPattern.forEach(function(eep) {
+      if (cutPart(eep.length) === eep && pos !== expressionStartPos) { 
+        readingExpression = false;
+      }
+    });
 
     if (ch === nthPattern[0]) readingNth = true;
 
@@ -50,7 +71,7 @@ pp.cssxReadWord = function (readUntil) {
       readUntil.call(this, ch) ||
       readingDataURI ||
       readingNth ||
-      ch === expressionPattern[0] ||
+      readingExpression ||
       expression !== false
     ) {
 
@@ -58,13 +79,16 @@ pp.cssxReadWord = function (readUntil) {
       this.state.pos += inc;
 
       // expression block end detection
-      if (ch === expressionPattern[1] && expression) {
+      if (!readingExpression && expression) {
+        if (expressionMarkerLength > 1) {
+          this.state.pos += expressionMarkerLength - 1;
+        }
         expression.end = this.state.pos;
-        expression.inner.end = numOfCharRead + 1;
+        expression.inner.end = numOfCharRead + expressionMarkerLength;
         expressions.push(expression);
         expression = false;
       // expression block start detection
-      } else if (ch === expressionPattern[0] && !expression) {
+      } else if (readingExpression && !expression) {
         expression = { 
           start: this.state.pos - 1,
           inner: { start: numOfCharRead }
