@@ -29,7 +29,6 @@ pp.cssxReadWord = function (readUntil) {
   let readingNth = false;
   let readingExpression = false;
   let dataURIPattern = ["url(data:", 41]; // 41 = )
-  let expressionPattern = [96, 96]; // 96 = `
   let expressionStartPatterns = ["`", "{{", "<%"];
   let expressionEndPattern = ["`", "}}", "%>"];
   let nthPattern = [40, 41]; // 40 = (, 41 = )
