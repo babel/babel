@@ -1,8 +1,8 @@
-/* @flow */
+
 
 import * as t from "babel-types";
 
-export function _params(node: Object) {
+export function _params(node) {
   this.print(node.typeParameters, node);
   this.push("(");
   this.printList(node.params, node, {
@@ -18,9 +18,9 @@ export function _params(node: Object) {
   }
 }
 
-export function _method(node: Object) {
+export function _method(node) {
   let kind = node.kind;
-  let key  = node.key;
+  let key = node.key;
 
   if (kind === "method" || kind === "init") {
     if (node.generator) {
@@ -47,7 +47,7 @@ export function _method(node: Object) {
   this.print(node.body, node);
 }
 
-export function FunctionExpression(node: Object) {
+export function FunctionExpression(node) {
   if (node.async) this.push("async ");
   this.push("function");
   if (node.generator) this.push("*");
@@ -66,7 +66,7 @@ export function FunctionExpression(node: Object) {
 
 export { FunctionExpression as FunctionDeclaration };
 
-export function ArrowFunctionExpression(node: Object) {
+export function ArrowFunctionExpression(node) {
   if (node.async) this.push("async ");
 
   if (node.params.length === 1 && t.isIdentifier(node.params[0])) {

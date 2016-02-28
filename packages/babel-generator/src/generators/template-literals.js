@@ -1,15 +1,14 @@
-/* @flow */
 
-export function TaggedTemplateExpression(node: Object) {
+export function TaggedTemplateExpression(node) {
   this.print(node.tag, node);
   this.print(node.quasi, node);
 }
 
-export function TemplateElement(node: Object) {
+export function TemplateElement(node) {
   this._push(node.value.raw);
 }
 
-export function TemplateLiteral(node: Object) {
+export function TemplateLiteral(node) {
   this.push("`");
 
   let quasis = node.quasis;

@@ -3,13 +3,7 @@
 import explode from "babel-helper-explode-assignable-expression";
 import * as t from "babel-types";
 
-export default function (
-  exports: Object,
-  opts: {
-    build: Function;
-    is: Function;
-  },
-) {
+export default function (exports, opts) {
   let buildAssignment = function (left, right) {
     return t.assignmentExpression("=", left, right);
   };

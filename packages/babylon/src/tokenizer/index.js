@@ -1,8 +1,7 @@
-/* @noflow */
+import { isIdentifierStart, isIdentifierChar, isKeyword } from "../util/identifier";
 /* eslint max-len: 0 */
 /* eslint indent: 0 */
 
-import type { TokenType } from "./types";
 import { isIdentifierStart, isIdentifierChar, isKeyword } from "../util/identifier";
 import { types as tt, keywords as keywordTypes } from "./types";
 import { types as ct } from "./context";
@@ -23,11 +22,6 @@ export class Token {
     this.loc = new SourceLocation(state.startLoc, state.endLoc);
   }
 
-  type: TokenType;
-  value: any;
-  start: number;
-  end: number;
-  loc: SourceLocation;
 }
 
 // ## Tokenizer

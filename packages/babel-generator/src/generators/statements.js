@@ -5,7 +5,7 @@ import * as t from "babel-types";
 
 const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(["!"]);
 
-export function WithStatement(node: Object) {
+export function WithStatement(node) {
   this.keyword("with");
   this.push("(");
   this.print(node.object, node);
@@ -13,7 +13,7 @@ export function WithStatement(node: Object) {
   this.printBlock(node);
 }
 
-export function IfStatement(node: Object) {
+export function IfStatement(node) {
   this.keyword("if");
   this.push("(");
   this.print(node.test, node);
@@ -48,7 +48,7 @@ function getLastStatement(statement) {
   return getLastStatement(statement.body);
 }
 
-export function ForStatement(node: Object) {
+export function ForStatement(node) {
   this.keyword("for");
   this.push("(");
 
@@ -72,7 +72,7 @@ export function ForStatement(node: Object) {
   this.printBlock(node);
 }
 
-export function WhileStatement(node: Object) {
+export function WhileStatement(node) {
   this.keyword("while");
   this.push("(");
   this.print(node.test, node);
@@ -81,7 +81,7 @@ export function WhileStatement(node: Object) {
 }
 
 let buildForXStatement = function (op) {
-  return function (node: Object) {
+  return function (node) {
     this.keyword("for");
     this.push("(");
     this.print(node.left, node);
@@ -95,7 +95,7 @@ let buildForXStatement = function (op) {
 export let ForInStatement = buildForXStatement("in");
 export let ForOfStatement = buildForXStatement("of");
 
-export function DoWhileStatement(node: Object) {
+export function DoWhileStatement(node) {
   this.push("do ");
   this.print(node.body, node);
   this.space();
@@ -106,7 +106,7 @@ export function DoWhileStatement(node: Object) {
 }
 
 function buildLabelStatement(prefix, key = "label") {
-  return function (node: Object) {
+  return function (node) {
     this.push(prefix);
 
     let label = node[key];
@@ -132,13 +132,13 @@ export let ReturnStatement   = buildLabelStatement("return", "argument");
 export let BreakStatement    = buildLabelStatement("break");
 export let ThrowStatement    = buildLabelStatement("throw", "argument");
 
-export function LabeledStatement(node: Object) {
+export function LabeledStatement(node) {
   this.print(node.label, node);
   this.push(": ");
   this.print(node.body, node);
 }
 
-export function TryStatement(node: Object) {
+export function TryStatement(node) {
   this.keyword("try");
   this.print(node.block, node);
   this.space();
@@ -159,7 +159,7 @@ export function TryStatement(node: Object) {
   }
 }
 
-export function CatchClause(node: Object) {
+export function CatchClause(node) {
   this.keyword("catch");
   this.push("(");
   this.print(node.param, node);
@@ -168,7 +168,7 @@ export function CatchClause(node: Object) {
   this.print(node.body, node);
 }
 
-export function SwitchStatement(node: Object) {
+export function SwitchStatement(node) {
   this.keyword("switch");
   this.push("(");
   this.print(node.discriminant, node);
@@ -186,7 +186,7 @@ export function SwitchStatement(node: Object) {
   this.push("}");
 }
 
-export function SwitchCase(node: Object) {
+export function SwitchCase(node) {
   if (node.test) {
     this.push("case ");
     this.print(node.test, node);
@@ -205,13 +205,13 @@ export function DebuggerStatement() {
   this.push("debugger;");
 }
 
-export function VariableDeclaration(node: Object, parent: Object) {
+export function VariableDeclaration(node, parent) {
   this.push(node.kind + " ");
 
   let hasInits = false;
   // don't add whitespace to loop heads
   if (!t.isFor(parent)) {
-    for (let declar of (node.declarations: Array<Object>)) {
+    for (let declar of node.declarations) {
       if (declar.init) {
         // has an init so let's split it up over multiple lines
         hasInits = true;
@@ -248,7 +248,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
   this.semicolon();
 }
 
-export function VariableDeclarator(node: Object) {
+export function VariableDeclarator(node) {
   this.print(node.id, node);
   this.print(node.id.typeAnnotation, node);
   if (node.init) {

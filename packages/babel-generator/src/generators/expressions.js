@@ -1,4 +1,3 @@
-/* @flow */
 /* eslint max-len: 0 */
 
 import isInteger from "is-integer";
@@ -9,7 +8,7 @@ import * as n from "../node";
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
 
-export function UnaryExpression(node: Object) {
+export function UnaryExpression(node) {
   let needsSpace = /[a-z]$/.test(node.operator);
   let arg = node.argument;
 
@@ -26,19 +25,19 @@ export function UnaryExpression(node: Object) {
   this.print(node.argument, node);
 }
 
-export function DoExpression(node: Object) {
+export function DoExpression(node) {
   this.push("do");
   this.space();
   this.print(node.body, node);
 }
 
-export function ParenthesizedExpression(node: Object) {
+export function ParenthesizedExpression(node) {
   this.push("(");
   this.print(node.expression, node);
   this.push(")");
 }
 
-export function UpdateExpression(node: Object) {
+export function UpdateExpression(node) {
   if (node.prefix) {
     this.push(node.operator);
     this.print(node.argument, node);
@@ -48,7 +47,7 @@ export function UpdateExpression(node: Object) {
   }
 }
 
-export function ConditionalExpression(node: Object) {
+export function ConditionalExpression(node) {
   this.print(node.test, node);
   this.space();
   this.push("?");
@@ -60,7 +59,7 @@ export function ConditionalExpression(node: Object) {
   this.print(node.alternate, node);
 }
 
-export function NewExpression(node: Object, parent: Object) {
+export function NewExpression(node, parent) {
   this.push("new ");
   this.print(node.callee, node);
   if (node.arguments.length === 0 && this.format.minified &&
@@ -73,7 +72,7 @@ export function NewExpression(node: Object, parent: Object) {
   this.push(")");
 }
 
-export function SequenceExpression(node: Object) {
+export function SequenceExpression(node) {
   this.printList(node.expressions, node);
 }
 
@@ -85,13 +84,13 @@ export function Super() {
   this.push("super");
 }
 
-export function Decorator(node: Object) {
+export function Decorator(node) {
   this.push("@");
   this.print(node.expression, node);
   this.newline();
 }
 
-export function CallExpression(node: Object) {
+export function CallExpression(node) {
   this.print(node.callee, node);
   if (node.loc) this.printAuxAfterComment();
 
@@ -116,8 +115,8 @@ export function CallExpression(node: Object) {
   this.push(")");
 }
 
-function buildYieldAwait(keyword: string) {
-  return function (node: Object) {
+function buildYieldAwait(keyword) {
+  return function (node) {
     this.push(keyword);
 
     if (node.delegate) {
@@ -141,12 +140,12 @@ export function EmptyStatement() {
   this.semicolon();
 }
 
-export function ExpressionStatement(node: Object) {
+export function ExpressionStatement(node) {
   this.print(node.expression, node);
   this.semicolon();
 }
 
-export function AssignmentPattern(node: Object) {
+export function AssignmentPattern(node) {
   this.print(node.left, node);
   this.space();
   this.push("=");
@@ -154,7 +153,7 @@ export function AssignmentPattern(node: Object) {
   this.print(node.right, node);
 }
 
-export function AssignmentExpression(node: Object, parent: Object) {
+export function AssignmentExpression(node, parent) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
   let parens = this._inForStatementInitCounter && node.operator === "in" &&
@@ -195,7 +194,7 @@ export function AssignmentExpression(node: Object, parent: Object) {
   }
 }
 
-export function BindExpression(node: Object) {
+export function BindExpression(node) {
   this.print(node.object, node);
   this.push("::");
   this.print(node.callee, node);
@@ -206,7 +205,7 @@ export {
   AssignmentExpression as LogicalExpression
 };
 
-export function MemberExpression(node: Object) {
+export function MemberExpression(node) {
   this.print(node.object, node);
 
   if (!node.computed && t.isMemberExpression(node.property)) {
@@ -235,7 +234,7 @@ export function MemberExpression(node: Object) {
   }
 }
 
-export function MetaProperty(node: Object) {
+export function MetaProperty(node) {
   this.print(node.meta, node);
   this.push(".");
   this.print(node.property, node);

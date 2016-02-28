@@ -1,8 +1,7 @@
-/* @flow */
 
 import * as t from "babel-types";
 
-export function ImportSpecifier(node: Object) {
+export function ImportSpecifier(node) {
   this.print(node.imported, node);
   if (node.local && node.local.name !== node.imported.name) {
     this.push(" as ");
@@ -10,15 +9,15 @@ export function ImportSpecifier(node: Object) {
   }
 }
 
-export function ImportDefaultSpecifier(node: Object) {
+export function ImportDefaultSpecifier(node) {
   this.print(node.local, node);
 }
 
-export function ExportDefaultSpecifier(node: Object) {
+export function ExportDefaultSpecifier(node) {
   this.print(node.exported, node);
 }
 
-export function ExportSpecifier(node: Object) {
+export function ExportSpecifier(node) {
   this.print(node.local, node);
   if (node.exported && node.local.name !== node.exported.name) {
     this.push(" as ");
@@ -26,12 +25,12 @@ export function ExportSpecifier(node: Object) {
   }
 }
 
-export function ExportNamespaceSpecifier(node: Object) {
+export function ExportNamespaceSpecifier(node) {
   this.push("* as ");
   this.print(node.exported, node);
 }
 
-export function ExportAllDeclaration(node: Object) {
+export function ExportAllDeclaration(node) {
   this.push("export *");
   if (node.exported) {
     this.push(" as ");
@@ -52,7 +51,7 @@ export function ExportDefaultDeclaration() {
   ExportDeclaration.apply(this, arguments);
 }
 
-function ExportDeclaration(node: Object) {
+function ExportDeclaration(node) {
   if (node.declaration) {
     let declar = node.declaration;
     this.print(declar, node);
@@ -98,7 +97,7 @@ function ExportDeclaration(node: Object) {
   this.ensureSemicolon();
 }
 
-export function ImportDeclaration(node: Object) {
+export function ImportDeclaration(node) {
   this.push("import ");
 
   if (node.importKind === "type" || node.importKind === "typeof") {
@@ -135,7 +134,7 @@ export function ImportDeclaration(node: Object) {
   this.semicolon();
 }
 
-export function ImportNamespaceSpecifier(node: Object) {
+export function ImportNamespaceSpecifier(node) {
   this.push("* as ");
   this.print(node.local, node);
 }

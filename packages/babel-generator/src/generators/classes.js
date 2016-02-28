@@ -1,6 +1,5 @@
-/* @flow */
 
-export function ClassDeclaration(node: Object) {
+export function ClassDeclaration(node) {
   this.printJoin(node.decorators, node, { separator: "" });
   this.push("class");
 
@@ -28,7 +27,7 @@ export function ClassDeclaration(node: Object) {
 
 export { ClassDeclaration as ClassExpression };
 
-export function ClassBody(node: Object) {
+export function ClassBody(node) {
   this.push("{");
   this.printInnerComments(node);
   if (node.body.length === 0) {
@@ -44,7 +43,7 @@ export function ClassBody(node: Object) {
   }
 }
 
-export function ClassProperty(node: Object) {
+export function ClassProperty(node) {
   this.printJoin(node.decorators, node, { separator: "" });
 
   if (node.static) this.push("static ");
@@ -59,7 +58,7 @@ export function ClassProperty(node: Object) {
   this.semicolon();
 }
 
-export function ClassMethod(node: Object) {
+export function ClassMethod(node) {
   this.printJoin(node.decorators, node, { separator: "" });
 
   if (node.static) {
