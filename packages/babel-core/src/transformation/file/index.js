@@ -1,4 +1,3 @@
-/* @noflow */
 /* eslint max-len: 0 */
 
 import getHelper from "babel-helpers";

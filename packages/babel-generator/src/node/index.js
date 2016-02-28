@@ -1,5 +1,3 @@
-/* @noflow */
-
 import whitespace from "./whitespace";
 import * as parens from "./parentheses";
 import * as t from "babel-types";

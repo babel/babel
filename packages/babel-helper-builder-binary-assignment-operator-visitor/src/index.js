@@ -1,5 +1,3 @@
-/* @noflow */
-
 import explode from "babel-helper-explode-assignable-expression";
 import * as t from "babel-types";
 

@@ -1,5 +1,3 @@
-/* @noflow */
-
 import isPlainObject from "lodash/lang/isPlainObject";
 import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";

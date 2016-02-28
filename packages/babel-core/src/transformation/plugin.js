@@ -1,4 +1,3 @@
-/* @noflow */
 /* eslint max-len: 0 */
 
 import OptionManager from "./file/options/option-manager";
