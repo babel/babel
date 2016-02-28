@@ -1,4 +1,3 @@
-import { isIdentifierStart, isIdentifierChar, isKeyword } from "../util/identifier";
 /* eslint max-len: 0 */
 /* eslint indent: 0 */
 
