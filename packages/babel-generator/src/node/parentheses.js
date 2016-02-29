@@ -203,6 +203,10 @@ export function ArrowFunctionExpression(node, parent) {
     return true;
   }
 
+  if (t.isUnaryExpression(parent)) {
+    return true;
+  }
+
   return UnaryLike(node, parent);
 }
 
