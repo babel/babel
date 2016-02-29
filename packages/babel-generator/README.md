@@ -66,16 +66,10 @@ import {parse} from 'babylon';
 import traverse from "babel-traverse";
 import generate from 'babel-generator';
 
-function addFilename (ast, filename) {
-  traverse.cheap(ast, node => {
-    if (node.loc) { node.loc.source = sourcePath };
-  });
-}
-
 const a = 'var a = 1;';
 const b = 'var b = 2;';
-const astA = addFilename(parse(a), 'a.js');
-const astB = addFilename(parse(b), 'b.js');
+const astA = parse(a, { filename: 'a.js' });
+const astB = parse(b, { filename: 'b.js' });
 const ast = {
   type: 'Program',
   body: [].concat(astA.body, ast2.body)

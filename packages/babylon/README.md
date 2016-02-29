@@ -37,6 +37,8 @@ Significant diversions are expected to occur in the future such as streaming, EB
 - **sourceType**: Indicate the mode the code should be parsed in. Can be
   either `"script"` or `"module"`.
 
+- **sourceFilename**: Correlate output AST nodes with their source filename.  Useful when generating code and source maps from the ASTs of multiple input files.
+
 - **plugins**: Array containing the plugins that you want to enable.
 
 ### Example

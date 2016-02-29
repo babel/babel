@@ -6,11 +6,12 @@ import { SourceLocation } from "../util/location";
 const pp = Parser.prototype;
 
 class Node {
-  constructor(pos?: number, loc?: SourceLocation) {
+  constructor(pos?: number, loc?: SourceLocation, filename?: string) {
     this.type = "";
     this.start = pos;
     this.end = 0;
     this.loc = new SourceLocation(loc);
+    if (filename) this.loc.filename = filename;
   }
 
   type: string;
@@ -26,11 +27,11 @@ class Node {
 }
 
 pp.startNode = function () {
-  return new Node(this.state.start, this.state.startLoc);
+  return new Node(this.state.start, this.state.startLoc, this.filename);
 };
 
 pp.startNodeAt = function (pos, loc) {
-  return new Node(pos, loc);
+  return new Node(pos, loc, this.filename);
 };
 
 function finishNodeAt(node, type, pos, loc) {
