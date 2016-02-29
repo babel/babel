@@ -1,14 +1,14 @@
 {
   "name": "babel-plugin-transform-es2015-block-scoping",
-  "version": "6.5.0",
+  "version": "6.6.0",
   "description": "Compile ES2015 block scoping (const and let) to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-block-scoping",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-traverse": "^6.3.13",
-    "babel-types": "^6.4.0",
-    "babel-template": "^6.3.13",
+    "babel-traverse": "^6.6.0",
+    "babel-types": "^6.6.0",
+    "babel-template": "^6.6.0",
     "lodash": "^3.10.0",
     "babel-runtime": "^5.0.0"
   },

@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es2015-template-literals",
-  "version": "6.5.2",
+  "version": "6.6.0",
   "description": "Compile ES2015 template literals to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-template-literals",
   "license": "MIT",
