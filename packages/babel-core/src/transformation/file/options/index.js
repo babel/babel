@@ -1,11 +1,10 @@
-/* @flow */
 
 import * as parsers from "./parsers";
 import config from "./config";
 
 export { config };
 
-export function normaliseOptions(options: Object = {}): Object {
+export function normaliseOptions(options = {}) {
   for (let key in options) {
     let val = options[key];
     if (val == null) continue;

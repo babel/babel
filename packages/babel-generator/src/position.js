@@ -1,12 +1,9 @@
-/* @flow */
 
 /**
  * Track current position in code generation.
  */
 
 export default class Position {
-  column: number;
-  line: number;
 
   constructor() {
     this.line = 1;
@@ -17,7 +14,7 @@ export default class Position {
    * Push a string to the current position, mantaining the current line and column.
    */
 
-  push(str: string): void {
+  push(str) {
     for (let i = 0; i < str.length; i++) {
       if (str[i] === "\n") {
         this.line++;
@@ -32,7 +29,7 @@ export default class Position {
    * Unshift a string from the current position, mantaining the current line and column.
    */
 
-  unshift(str: string): void {
+  unshift(str) {
     for (let i = 0; i < str.length; i++) {
       if (str[i] === "\n") {
         this.line--;

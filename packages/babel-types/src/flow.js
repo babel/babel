@@ -1,4 +1,3 @@
-/* @flow */
 
 import * as t from "./index";
 
@@ -7,7 +6,7 @@ import * as t from "./index";
  * returns a `UnionTypeAnnotation` node containg them.
  */
 
-export function createUnionTypeAnnotation(types: Array<Object>) {
+export function createUnionTypeAnnotation(types) {
   let flattened  = removeTypeDuplicates(types);
 
   if (flattened.length === 1) {
@@ -21,7 +20,7 @@ export function createUnionTypeAnnotation(types: Array<Object>) {
  * Dedupe type annotations.
  */
 
-export function removeTypeDuplicates(nodes: Array<Object>): Array<Object> {
+export function removeTypeDuplicates(nodes) {
   let generics = {};
   let bases = {};
 
@@ -101,7 +100,7 @@ export function removeTypeDuplicates(nodes: Array<Object>): Array<Object> {
  * Create a type anotation based on typeof expression.
  */
 
-export function createTypeAnnotationBasedOnTypeof(type: string) {
+export function createTypeAnnotationBasedOnTypeof(type) {
   if (type === "string") {
     return t.stringTypeAnnotation();
   } else if (type === "number") {

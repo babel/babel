@@ -1,18 +1,18 @@
-/* @flow */
+
 
 import slash from "slash";
 import * as util from "../../../util";
 
 export let filename = slash;
 
-export function boolean(val: any): boolean {
+export function boolean(val) {
   return !!val;
 }
 
-export function booleanString(val: any): boolean | any {
+export function booleanString(val) {
   return util.booleanify(val);
 }
 
-export function list(val: any): Array<string> {
+export function list(val) {
   return util.list(val);
 }

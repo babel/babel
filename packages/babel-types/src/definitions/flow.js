@@ -1,4 +1,3 @@
-/* @flow */
 
 import defineType from "./index";
 

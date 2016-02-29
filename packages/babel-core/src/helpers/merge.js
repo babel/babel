@@ -1,8 +1,8 @@
-/* @flow */
+
 
 import merge from "lodash/object/merge";
 
-export default function (dest?: Object, src?: Object): ?Object {
+export default function (dest, src) {
   if (!dest || !src) return;
 
   return merge(dest, src, function (a, b) {

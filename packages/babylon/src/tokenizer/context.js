@@ -1,4 +1,3 @@
-/* @flow */
 
 // The algorithm used to determine whether a regexp can appear at a
 // given point in the program is loosely based on sweet.js' approach.
@@ -8,27 +7,16 @@ import { types as tt } from "./types";
 import { lineBreak } from "../util/whitespace";
 
 export class TokContext {
-  constructor(
-    token: string,
-    isExpr?: boolean,
-    preserveSpace?: boolean,
-    override?: Function,
-  ) {
+  constructor(token, isExpr, preserveSpace, override) {
     this.token = token;
     this.isExpr = !!isExpr;
     this.preserveSpace = !!preserveSpace;
     this.override = override;
   }
 
-  token: string;
-  isExpr: boolean;
-  preserveSpace: boolean;
-  override: ?Function;
 }
 
-export const types: {
-  [key: string]: TokContext;
-} = {
+export const types = {
   b_stat: new TokContext("{", false),
   b_expr: new TokContext("{", true),
   b_tmpl: new TokContext("${", true),

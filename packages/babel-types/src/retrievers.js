@@ -1,4 +1,3 @@
-/* @flow */
 
 import * as t from "./index";
 
@@ -6,11 +5,7 @@ import * as t from "./index";
  * Return a list of binding identifiers associated with the input `node`.
  */
 
-export function getBindingIdentifiers(
-  node: Object,
-  duplicates?: boolean,
-  outerOnly?: boolean
-): Object {
+export function getBindingIdentifiers(node, duplicates, outerOnly) {
   let search = [].concat(node);
   let ids    = Object.create(null);
 
@@ -107,9 +102,6 @@ getBindingIdentifiers.keys = {
   VariableDeclarator: ["id"]
 };
 
-export function getOuterBindingIdentifiers(
-  node: Object,
-  duplicates?: boolean,
-): Object {
+export function getOuterBindingIdentifiers(node, duplicates) {
   return getBindingIdentifiers(node, duplicates, true);
 }

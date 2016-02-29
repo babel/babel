@@ -1,4 +1,3 @@
-/* @noflow */
 /* eslint max-len: 0 */
 
 import OptionManager from "./file/options/option-manager";
@@ -11,7 +10,7 @@ import clone from "lodash/lang/clone";
 const GLOBAL_VISITOR_PROPS = ["enter", "exit"];
 
 export default class Plugin extends Store {
-  constructor(plugin: Object, key?: string) {
+  constructor(plugin, key) {
     super();
 
     this.initialized = false;
@@ -24,13 +23,6 @@ export default class Plugin extends Store {
     this.visitor           = this.normaliseVisitor(clone(this.take("visitor")) || {});
   }
 
-  initialized: boolean;
-  raw: Object;
-  manipulateOptions: ?Function;
-  post: ?Function;
-  pre: ?Function;
-  visitor: Object;
-
   take(key) {
     let val = this.raw[key];
     delete this.raw[key];
@@ -41,7 +33,7 @@ export default class Plugin extends Store {
     if (!target[key]) return this[key];
     if (!this[key]) return target[key];
 
-    let fns: Array<?Function> = [target[key], this[key]];
+    let fns = [target[key], this[key]];
 
     return function (...args) {
       let val;
@@ -55,7 +47,7 @@ export default class Plugin extends Store {
     };
   }
 
-  maybeInherit(loc: string) {
+  maybeInherit(loc) {
     let inherits = this.take("inherits");
     if (!inherits) return;
 
@@ -72,7 +64,7 @@ export default class Plugin extends Store {
    * position on disk and how it was specified.
    */
 
-  init(loc: string, i: number) {
+  init(loc, i) {
     if (this.initialized) return;
     this.initialized = true;
 
@@ -83,7 +75,7 @@ export default class Plugin extends Store {
     }
   }
 
-  normaliseVisitor(visitor: Object): Object {
+  normaliseVisitor(visitor) {
     for (let key of GLOBAL_VISITOR_PROPS) {
       if (visitor[key]) {
         throw new Error("Plugins aren't allowed to specify catch-all enter/exit handlers. Please target individual nodes.");

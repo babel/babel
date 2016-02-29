@@ -1,4 +1,3 @@
-/* @flow */
 
 import toFastProperties from "to-fast-properties";
 import compact from "lodash/array/compact";
@@ -13,7 +12,7 @@ let t = exports;
  * Pass `skipAliasCheck` to force it to directly compare `node.type` with `type`.
  */
 
-function registerType(type: string) {
+function registerType(type) {
   let is = t[`is${type}`] = function (node, opts) {
     return t.is(type, node, opts);
   };
@@ -78,7 +77,7 @@ export const TYPES = Object.keys(t.VISITOR_KEYS)
  * Optionally, pass `skipAliasCheck` to directly compare `node.type` with `type`.
  */
 
-export function is(type: string, node: Object, opts?: Object): boolean {
+export function is(type, node, opts) {
   if (!node) return false;
 
   let matches = isType(node.type, type);
@@ -95,7 +94,7 @@ export function is(type: string, node: Object, opts?: Object): boolean {
  * Test if a `nodeType` is a `targetType` or if `targetType` is an alias of `nodeType`.
  */
 
-export function isType(nodeType: string, targetType: string): boolean {
+export function isType(nodeType, targetType) {
   if (nodeType === targetType) return true;
 
   let aliases: ?Array<string> = t.FLIPPED_ALIAS_KEYS[targetType];
@@ -128,7 +127,7 @@ each(t.BUILDER_KEYS, function (keys, type) {
 
     let i = 0;
 
-    for (let key of (keys: Array<string>)) {
+    for (let key of keys) {
       let field = t.NODE_FIELDS[type][key];
 
       let arg = arguments[i++];
@@ -171,7 +170,7 @@ for (let type in t.DEPRECATED_KEYS) {
  * Description
  */
 
-export function validate(node?: Object, key: string, val: any) {
+export function validate(node, key, val) {
   if (!node) return;
 
   let fields = t.NODE_FIELDS[node.type];
@@ -188,10 +187,10 @@ export function validate(node?: Object, key: string, val: any) {
  * Test if an object is shallowly equal.
  */
 
-export function shallowEqual(actual: Object, expected: Object): boolean {
+export function shallowEqual(actual, expected) {
   let keys = Object.keys(expected);
 
-  for (let key of (keys: Array<string>)) {
+  for (let key of keys) {
     if (actual[key] !== expected[key]) {
       return false;
     }
@@ -204,7 +203,7 @@ export function shallowEqual(actual: Object, expected: Object): boolean {
  * Append a node to a member expression.
  */
 
-export function appendToMemberExpression(member: Object, append: Object, computed?: boolean): Object {
+export function appendToMemberExpression(member, append, computed) {
   member.object   = t.memberExpression(member.object, member.property, member.computed);
   member.property = append;
   member.computed = !!computed;
@@ -215,7 +214,7 @@ export function appendToMemberExpression(member: Object, append: Object, compute
  * Prepend a node to a member expression.
  */
 
-export function prependToMemberExpression(member: Object, prepend: Object): Object {
+export function prependToMemberExpression(member, prepend) {
   member.object = t.memberExpression(prepend, member.object);
   return member;
 }
@@ -225,7 +224,7 @@ export function prependToMemberExpression(member: Object, prepend: Object): Obje
  * Casting it to a block if it is not.
  */
 
-export function ensureBlock(node: Object, key: string = "body"): Object {
+export function ensureBlock(node, key = "body") {
   return node[key] = t.toBlock(node[key], node);
 }
 
@@ -233,7 +232,7 @@ export function ensureBlock(node: Object, key: string = "body"): Object {
  * Create a shallow clone of a `node` excluding `_private` properties.
  */
 
-export function clone(node: Object): Object {
+export function clone(node) {
   let newNode = {};
   for (let key in node) {
     if (key[0] === "_") continue;
@@ -246,7 +245,7 @@ export function clone(node: Object): Object {
  * Create a shallow clone of a `node` excluding `_private` and location properties.
  */
 
-export function cloneWithoutLoc(node: Object): Object {
+export function cloneWithoutLoc(node) {
   let newNode = clone(node);
   delete newNode.loc;
   return newNode;
@@ -257,7 +256,7 @@ export function cloneWithoutLoc(node: Object): Object {
  * exluding `_private` properties.
  */
 
-export function cloneDeep(node: Object): Object {
+export function cloneDeep(node) {
   let newNode = {};
 
   for (let key in node) {
@@ -287,7 +286,7 @@ export function cloneDeep(node: Object): Object {
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 
-export function buildMatchMemberExpression(match:string, allowPartial?: boolean): Function {
+export function buildMatchMemberExpression(match, allowPartial) {
   let parts = match.split(".");
 
   return function (member) {
@@ -338,7 +337,7 @@ export function buildMatchMemberExpression(match:string, allowPartial?: boolean)
  * Remove comment properties from a node.
  */
 
-export function removeComments(node: Object): Object {
+export function removeComments(node) {
   for (let key of t.COMMENT_KEYS) {
     delete node[key];
   }
@@ -349,22 +348,22 @@ export function removeComments(node: Object): Object {
  * Inherit all unique comments from `parent` node to `child` node.
  */
 
-export function inheritsComments(child: Object, parent: Object): Object {
+export function inheritsComments(child, parent) {
   inheritTrailingComments(child, parent);
   inheritLeadingComments(child, parent);
   inheritInnerComments(child, parent);
   return child;
 }
 
-export function inheritTrailingComments(child: Object, parent: Object) {
+export function inheritTrailingComments(child, parent) {
   _inheritComments("trailingComments", child, parent);
 }
 
-export function inheritLeadingComments(child: Object, parent: Object) {
+export function inheritLeadingComments(child, parent) {
   _inheritComments("leadingComments", child, parent);
 }
 
-export function inheritInnerComments(child: Object, parent: Object) {
+export function inheritInnerComments(child, parent) {
   _inheritComments("innerComments", child, parent);
 }
 
@@ -378,11 +377,11 @@ function _inheritComments(key, child, parent) {
  * Inherit all contextual properties from `parent` node to `child` node.
  */
 
-export function inherits(child: Object, parent: Object): Object {
+export function inherits(child, parent) {
   if (!child || !parent) return child;
 
   // optionally inherit specific properties if not null
-  for (let key of (t.INHERIT_KEYS.optional: Array<string>)) {
+  for (let key of t.INHERIT_KEYS.optional) {
     if (child[key] == null) {
       child[key] = parent[key];
     }
@@ -394,7 +393,7 @@ export function inherits(child: Object, parent: Object): Object {
   }
 
   // force inherit select properties
-  for (let key of (t.INHERIT_KEYS.force: Array<string>)) {
+  for (let key of t.INHERIT_KEYS.force) {
     child[key] = parent[key];
   }
 
@@ -407,7 +406,7 @@ export function inherits(child: Object, parent: Object): Object {
  * TODO
  */
 
-export function assertNode(node?) {
+export function assertNode(node) {
   if (!isNode(node)) {
     // $FlowFixMe
     throw new TypeError("Not a valid node " + (node && node.type));
@@ -418,7 +417,7 @@ export function assertNode(node?) {
  * TODO
  */
 
-export function isNode(node?): boolean {
+export function isNode(node) {
   return !!(node && VISITOR_KEYS[node.type]);
 }
 

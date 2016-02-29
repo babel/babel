@@ -1,17 +1,13 @@
-/* @noflow */
-/* global BabelParserOptions */
-/* global BabelFileMetadata */
-/* global BabelFileResult */
 /* eslint max-len: 0 */
 
 import getHelper from "babel-helpers";
 import * as metadataVisitor from "./metadata";
 import convertSourceMap from "convert-source-map";
 import OptionManager from "./options/option-manager";
-import type Pipeline from "../pipeline";
+
 import PluginPass from "../plugin-pass";
 import shebangRegex from "shebang-regex";
-import { NodePath, Hub, Scope } from "babel-traverse";
+import { NodePath, Hub } from "babel-traverse";
 import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
@@ -43,7 +39,7 @@ let errorVisitor = {
 };
 
 export default class File extends Store {
-  constructor(opts: Object = {}, pipeline: Pipeline) {
+  constructor(opts = {}, pipeline) {
     super();
 
     this.pipeline = pipeline;
@@ -104,30 +100,9 @@ export default class File extends Store {
     this.hub = new Hub(this);
   }
 
-  static helpers: Array<string>;
-
-  pluginVisitors: Array<Object>;
-  pluginPasses: Array<PluginPass>;
-  pipeline: Pipeline;
-  parserOpts: BabelParserOptions;
-  log: Logger;
-  opts: Object;
-  dynamicImportTypes: Object;
-  dynamicImportIds: Object;
-  dynamicImports: Array<Object>;
-  declarations: Object;
-  usedHelpers: Object;
-  path: NodePath;
-  ast: Object;
-  scope: Scope;
-  metadata: BabelFileMetadata;
-  hub: Hub;
-  code: string;
-  shebang: string;
-
   getMetadata() {
     let has = false;
-    for (let node of (this.ast.program.body: Array<Object>)) {
+    for (let node of this.ast.program.body) {
       if (t.isModuleDeclaration(node)) {
         has = true;
         break;
@@ -182,7 +157,7 @@ export default class File extends Store {
       return;
     }
 
-    let plugins: Array<[PluginPass, Object]> = opts.plugins.concat(INTERNAL_PLUGINS);
+    let plugins = opts.plugins.concat(INTERNAL_PLUGINS);
     let currentPluginVisitors = [];
     let currentPluginPasses = [];
 
@@ -202,7 +177,7 @@ export default class File extends Store {
     this.pluginPasses.push(currentPluginPasses);
   }
 
-  getModuleName(): ?string {
+  getModuleName() {
     let opts = this.opts;
     if (!opts.moduleIds) {
       return null;
@@ -246,13 +221,13 @@ export default class File extends Store {
     }
   }
 
-  resolveModuleSource(source: string): string {
+  resolveModuleSource(source) {
     let resolveModuleSource = this.opts.resolveModuleSource;
     if (resolveModuleSource) source = resolveModuleSource(source, this.opts.filename);
     return source;
   }
 
-  addImport(source: string, imported: string, name?: string = imported): Object {
+  addImport(source, imported, name = imported) {
     let alias = `${source}:${imported}`;
     let id = this.dynamicImportIds[alias];
 
@@ -279,7 +254,7 @@ export default class File extends Store {
     return id;
   }
 
-  addHelper(name: string): Object {
+  addHelper(name) {
     let declar = this.declarations[name];
     if (declar) return declar;
 
@@ -318,11 +293,7 @@ export default class File extends Store {
     return uid;
   }
 
-  addTemplateObject(
-    helperName: string,
-    strings: Array<Object>,
-    raw: Object,
-  ): Object {
+  addTemplateObject(helperName, strings, raw) {
     // Generate a unique name based on the string literals so we dedupe
     // identical strings used in the program.
     let stringIds = raw.elements.map(function(string) {
@@ -346,7 +317,7 @@ export default class File extends Store {
     return uid;
   }
 
-  buildCodeFrameError(node: Object, msg: string, Error: typeof Error = SyntaxError): Error {
+  buildCodeFrameError(node, msg, Error = SyntaxError) {
     let loc = node && (node.loc || node._loc);
 
     let err = new Error(msg);
@@ -368,7 +339,7 @@ export default class File extends Store {
     return err;
   }
 
-  mergeSourceMap(map: Object) {
+  mergeSourceMap(map) {
     let inputMap = this.opts.inputSourceMap;
 
     if (inputMap) {
@@ -412,7 +383,7 @@ export default class File extends Store {
     }
   }
 
-  parse(code: string) {
+  parse(code) {
     this.log.debug("Parse start");
     let ast = parse(code, this.parserOpts);
     this.log.debug("Parse stop");
@@ -438,7 +409,7 @@ export default class File extends Store {
     this.log.debug("End set AST");
   }
 
-  transform(): BabelFileResult {
+  transform() {
     // In the "pass per preset" mode, we have grouped passes.
     // Otherwise, there is only one plain pluginPasses array.
     this.pluginPasses.forEach((pluginPasses, index) => {
@@ -452,7 +423,7 @@ export default class File extends Store {
     return this.generate();
   }
 
-  wrap(code: string, callback: Function): BabelFileResult {
+  wrap(code, callback) {
     code = code + "";
 
     try {
@@ -491,7 +462,7 @@ export default class File extends Store {
     }
   }
 
-  addCode(code: string) {
+  addCode(code) {
     code = (code || "") + "";
     code = this.parseInputSourceMap(code);
     this.code = code;
@@ -508,7 +479,7 @@ export default class File extends Store {
     return util.shouldIgnore(opts.filename, opts.ignore, opts.only);
   }
 
-  call(key: "pre" | "post", pluginPasses: Array<PluginPass>) {
+  call(key, pluginPasses) {
     for (let pass of pluginPasses) {
       let plugin = pass.plugin;
       let fn = plugin[key];
@@ -516,7 +487,7 @@ export default class File extends Store {
     }
   }
 
-  parseInputSourceMap(code: string): string {
+  parseInputSourceMap(code) {
     let opts = this.opts;
 
     if (opts.inputSourceMap !== false) {
@@ -538,7 +509,7 @@ export default class File extends Store {
     }
   }
 
-  makeResult({ code, map, ast, ignored }: BabelFileResult): BabelFileResult {
+  makeResult({ code, map, ast, ignored }) {
     let result = {
       metadata: null,
       options:  this.opts,
@@ -563,11 +534,11 @@ export default class File extends Store {
     return result;
   }
 
-  generate(): BabelFileResult {
+  generate() {
     let opts = this.opts;
     let ast  = this.ast;
 
-    let result: BabelFileResult = { ast };
+    let result = { ast };
     if (!opts.code) return this.makeResult(result);
 
     this.log.debug("Generation start");

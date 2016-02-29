@@ -1,4 +1,3 @@
-/* @flow */
 
 import deepClone from "lodash/lang/cloneDeep";
 import sourceMapSupport from "source-map-support";
@@ -129,7 +128,7 @@ function hookExtensions(_exts) {
 
 hookExtensions(util.canCompile.EXTENSIONS);
 
-export default function (opts?: Object = {}) {
+export default function (opts = {}) {
   if (opts.only != null) only = util.arrayify(opts.only, util.regexify);
   if (opts.ignore != null) ignore = util.arrayify(opts.ignore, util.regexify);
 

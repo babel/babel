@@ -1,6 +1,4 @@
-/* @noflow */
 
-import type { NodePath } from "babel-traverse";
 import nameFunction from "babel-helper-function-name";
 import template from "babel-template";
 import * as t from "babel-types";
@@ -35,7 +33,7 @@ let awaitVisitor = {
   }
 };
 
-function classOrObjectMethod(path: NodePath, callId: Object) {
+function classOrObjectMethod(path, callId) {
   let node = path.node;
   let body = node.body;
 
@@ -51,7 +49,7 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
   ];
 }
 
-function plainFunction(path: NodePath, callId: Object) {
+function plainFunction(path, callId) {
   let node = path.node;
   let wrapper = buildWrapper;
 
@@ -118,7 +116,7 @@ function plainFunction(path: NodePath, callId: Object) {
   }
 }
 
-export default function (path: NodePath, callId: Object) {
+export default function (path, callId) {
   let node = path.node;
   if (node.generator) return;
 

@@ -1,4 +1,3 @@
-/* @noflow */
 import * as t from "../index";
 
 export let VISITOR_KEYS = {};
@@ -19,7 +18,7 @@ function getType(val) {
   }
 }
 
-export function assertEach(callback: Function): Function {
+export function assertEach(callback) {
   function validator(node, key, val) {
     if (!Array.isArray(val)) return;
 
@@ -31,7 +30,7 @@ export function assertEach(callback: Function): Function {
   return validator;
 }
 
-export function assertOneOf(...vals): Function {
+export function assertOneOf(...vals) {
   function validate(node, key, val) {
     if (vals.indexOf(val) < 0) {
       throw new TypeError(
@@ -45,7 +44,7 @@ export function assertOneOf(...vals): Function {
   return validate;
 }
 
-export function assertNodeType(...types: Array<string>): Function {
+export function assertNodeType(...types) {
   function validate(node, key, val) {
     let valid = false;
 
@@ -69,7 +68,7 @@ export function assertNodeType(...types: Array<string>): Function {
   return validate;
 }
 
-export function assertNodeOrValueType(...types: Array<string>): Function {
+export function assertNodeOrValueType(...types) {
   function validate(node, key, val) {
     let valid = false;
 
@@ -93,7 +92,7 @@ export function assertNodeOrValueType(...types: Array<string>): Function {
   return validate;
 }
 
-export function assertValueType(type: string): Function {
+export function assertValueType(type) {
   function validate(node, key, val) {
     let valid = getType(val) === type;
 
@@ -107,7 +106,7 @@ export function assertValueType(type: string): Function {
   return validate;
 }
 
-export function chain(...fns: Array<Function>): Function {
+export function chain(...fns) {
   function validate(...args) {
     for (let fn of fns) {
       fn(...args);
@@ -117,16 +116,7 @@ export function chain(...fns: Array<Function>): Function {
   return validate;
 }
 
-export default function defineType(
-  type: string,
-  opts: {
-    fields?: Object;
-    visitor?: Array<string>;
-    aliases?: Array<string>;
-    builder?: Array<string>;
-    inherits?: string;
-  } = {},
-) {
+export default function defineType(type, opts = {}) {
   let inherits = (opts.inherits && store[opts.inherits]) || {};
 
   opts.fields  = opts.fields || inherits.fields || {};
@@ -139,7 +129,7 @@ export default function defineType(
   }
 
   // ensure all field keys are represented in `fields`
-  for (let key of (opts.visitor.concat(opts.builder): Array<string>)) {
+  for (let key of opts.visitor.concat(opts.builder)) {
     opts.fields[key] = opts.fields[key] || {};
   }
 

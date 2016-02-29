@@ -1,10 +1,9 @@
-/* @flow */
 
-export function File(node: Object) {
+export function File(node) {
   this.print(node.program, node);
 }
 
-export function Program(node: Object) {
+export function Program(node) {
   this.printInnerComments(node, false);
 
   this.printSequence(node.directives, node);
@@ -13,7 +12,7 @@ export function Program(node: Object) {
   this.printSequence(node.body, node);
 }
 
-export function BlockStatement(node: Object) {
+export function BlockStatement(node) {
   this.push("{");
   this.printInnerComments(node);
   if (node.body.length) {
@@ -32,11 +31,11 @@ export function BlockStatement(node: Object) {
 
 export function Noop() {}
 
-export function Directive(node: Object) {
+export function Directive(node) {
   this.print(node.value, node);
   this.semicolon();
 }
 
-export function DirectiveLiteral(node: Object) {
+export function DirectiveLiteral(node) {
   this.push(this._stringLiteral(node.value));
 }
