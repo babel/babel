@@ -17,6 +17,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 Whoo a :frog: leap day release!
 
+![](http://i.imgur.com/XmMMZKg.gif)
+
 ### exports.default fix
 
 We finally fixed both [T2817](https://phabricator.babeljs.io/T2817), [T6863](https://phabricator.babeljs.io/T6863) where using both `transform-es3-member-expression-literals` and `transform-es2015-modules-commonjs`!
