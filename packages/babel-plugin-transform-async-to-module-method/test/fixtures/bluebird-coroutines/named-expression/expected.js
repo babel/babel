@@ -4,7 +4,9 @@ var foo = function () {
     console.log(bar);
   });
 
-  return function bar() {
+  function bar() {
     return ref.apply(this, arguments);
-  };
+  }
+
+  return bar;
 }();
