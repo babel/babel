@@ -8,6 +8,7 @@ import * as n from "../node";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
+const NON_DECIMAL_LITERAL = /^0[box]/;
 
 export function UnaryExpression(node: Object) {
   let needsSpace = /[a-z]$/.test(node.operator);
@@ -225,7 +226,11 @@ export function MemberExpression(node: Object) {
   } else {
     if (t.isNumericLiteral(node.object)) {
       let val = this.getPossibleRaw(node.object) || node.object.value;
-      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !ZERO_DECIMAL_INTEGER.test(val) && !this.endsWith(".")) {
+      if (isInteger(+val) &&
+        !NON_DECIMAL_LITERAL.test(val) &&
+        !SCIENTIFIC_NOTATION.test(val) &&
+        !ZERO_DECIMAL_INTEGER.test(val) &&
+        !this.endsWith(".")) {
         this.push(".");
       }
     }
