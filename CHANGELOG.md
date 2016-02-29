@@ -60,6 +60,9 @@ The object-assign Babel 5 plugin is being run with Babel 6.
 ---
 
 #### New Feature
+
+##### New plugin `babel-plugin-transform-es2015-duplicate-keys`
+
 * `babel-plugin-transform-es2015-duplicate-keys`, `babel-preset-es2015`
   * [#3280](https://github.com/babel/babel/pull/3280) Fixes [T2462](https://phabricator.babeljs.io/T2462), compile duplicate keys in objects to valid strict ES5. ([@AgentME](https://github.com/AgentME))
   
@@ -76,6 +79,25 @@ Example:
 var x = { a: 5, "a": 6 };
 // Output
 var x = { a: 5, ["a"]: 6 };
+```
+
+##### New `globals` option for `transform-es2015-modules-umd`
+
+* `babel-plugin-transform-es2015-modules-umd`
+  * [#3366](https://github.com/babel/babel/pull/3366) [UMD] Fixed T6832. ([@clayreimann](https://github.com/clayreimann))
+
+```js
+// Adds a new plugin option to let you override the names of globals
+// .babelrc
+{
+  "plugins": [
+    ["transform-es2015-modules-umd", {
+      "globals": {
+        "es6-promise": "Promise"
+      }
+    }]
+  ]
+}
 ```
 
 #### Bug Fix
@@ -119,11 +141,33 @@ var x = async (...rest) => {
 
 Fixes the `_regeneratorRuntime is not defined` error when using `transform-runtime`/`transform-regenerator` (this happened when using polyfillable code in `core-js`.
 
-
 * `babylon`
   * [#3356](https://github.com/babel/babel/pull/3356) Properly fail to parse >== and <== - Fixes [T2921](https://phabricator.babeljs.io/T2921). ([@loganfsmyth](https://github.com/loganfsmyth))
 * `babel-plugin-transform-es2015-block-scoping`
   * [#3346](https://github.com/babel/babel/pull/3346) Rename scope bindings during block scope transform. ([@schmod](https://github.com/schmod))
+* `babel-generator`
+  * [#3380](https://github.com/babel/babel/pull/3380) Fix: Add parens for unary arrow function. ([@hzoo](https://github.com/hzoo))
+
+```js
+// input
+void (() => {});
+// correct output
+void (() => {});
+// wrong
+void () => {};
+```
+
+* `babel-generator`
+  * [#3379](https://github.com/babel/babel/pull/3379) Fix: invalid codegen for non decimal numeric literals in MemberExpression. ([@hzoo](https://github.com/hzoo))
+
+```js
+// input
+(0xFFFF).toString()
+// correct output
+0xFFFF.toString()
+// wrong
+0xFFFF..toString()
+```
 
 #### Documentation
 * `babel-plugin-transform-regenerator`
