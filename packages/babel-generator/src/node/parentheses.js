@@ -204,6 +204,10 @@ export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
+  if (t.isUnaryExpression(parent)) {
+    return true;
+  }
+
   return UnaryLike(node, parent);
 }
 
