@@ -13,6 +13,144 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.6.0 (2016-02-29) "core-js 2, better error feedback"
+
+Whoo a :frog: leap day release!
+
+### exports.default fix
+
+We finally fixed both [T2817](https://phabricator.babeljs.io/T2817), [T6863](https://phabricator.babeljs.io/T6863) where using both `transform-es3-member-expression-literals` and `transform-es2015-modules-commonjs`!
+
+```js
+exports.default = {};
+// was not to transformed to
+exports["default"] = {};
+```
+
+You should be able to remove `es3ify` (a useful workaround for this issue). Thanks everyone for your patience, and much thanks to @loganfsmyth for the fix!
+
+### More helpful error messages
+- If you are using a .babelrc with babel 5 options that were removed (there is a specific message for each one)
+
+```bash
+# before
+ReferenceError: [BABEL] unknown: Unknown option: base.stage
+# now
+ReferenceError: [BABEL] unknown: Using removed Babel 5 option: base.stage
+- Check out the corresponding stage-x presets http://babeljs.io/docs/plugins/#presets
+# another example
+ReferenceError: [BABEL] unknown: Using removed Babel 5 option: base.externalHelpers
+- Use the `external-helpers` plugin instead. Check out http://babeljs.io/docs/plugins/external-helpers/
+```
+
+- If you are trying to use a babel 5 plugin
+
+```bash
+# before
+babel Plugin is not a function
+# now
+The object-assign Babel 5 plugin is being run with Babel 6.
+```
+
+### core-js
+- `core-js` was updated to `^2.1.0`.
+
+---
+
+#### New Feature
+* `babel-plugin-transform-es2015-duplicate-keys`, `babel-preset-es2015`
+  * [#3280](https://github.com/babel/babel/pull/3280) Fixes [T2462](https://phabricator.babeljs.io/T2462), compile duplicate keys in objects to valid strict ES5. ([@AgentME](https://github.com/AgentME))
+  
+`babel-plugin-transform-es2015-duplicate-keys` is a new plugin that is included in the es2015 preset. It was added since ES5 doesn't allow duplicate properties (it is valid in ES2015 strict mode however).
+
+It will compile objects with duplicate keys to computed properties, which can be compiled with the `transform-es2015-computed-properties` plugin.
+
+Example:
+
+```js
+// .babelrc
+{ "plugins": ["transform-es2015-duplicate-keys"] }
+// Input
+var x = { a: 5, "a": 6 };
+// Output
+var x = { a: 5, ["a"]: 6 };
+```
+
+#### Bug Fix
+* `babel-plugin-transform-es2015-modules-commonjs`, `babel-traverse`
+  * [#3368](https://github.com/babel/babel/pull/3368) Fix the module plugin to properly requeue so the ES3 transforms can work. ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babylon`
+  * [#3355](https://github.com/babel/babel/pull/3355) Clean up babylon bundle to allow it to be re-bundled - Fixes [T6930](https://phabricator.babeljs.io/T6930). ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babel-generator`
+  * [#3358](https://github.com/babel/babel/pull/3358) Fix generator with empty token list and force a newline for line comments in concise mode. ([@gzzhanghao](https://github.com/gzzhanghao))
+* `babel-plugin-transform-es2015-parameters`
+  * [#3249](https://github.com/babel/babel/pull/3249) Assignment to rest param element triggers error T6932. ([@jmm](https://github.com/jmm))
+
+```js
+// .babelrc
+{ plugins: ["transform-es2015-parameters"] }
+
+// Fixes an internal error with the code:
+function x (...items) {
+  items[0] = 0;
+}
+```
+
+* `babel-helper-remap-async-to-generator`, `babel-plugin-transform-es2015-parameters`
+  * [#3336](https://github.com/babel/babel/pull/3336) Fixes [T3077](https://phabricator.babeljs.io/T3077) (incorrect _arguments for async arrow functions with rest params). ([@erikdesjardins](https://github.com/erikdesjardins))
+
+```js
+// .babelrc
+{
+  "plugins": ["external-helpers", "transform-es2015-parameters", "transform-async-to-generator"]
+}
+
+// Fixes an issue with using incorrect `arguments`
+var x = async (...rest) => {
+  if (noNeedToWork) return 0;
+  return rest;
+};
+```
+  
+* `babel-plugin-transform-regenerator`, `babel-traverse`
+  * [#3359](https://github.com/babel/babel/pull/3359) Queue regeneratorRuntime so it is transformed before Program#exit. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+Fixes the `_regeneratorRuntime is not defined` error when using `transform-runtime`/`transform-regenerator` (this happened when using polyfillable code in `core-js`.
+
+
+* `babylon`
+  * [#3356](https://github.com/babel/babel/pull/3356) Properly fail to parse >== and <== - Fixes [T2921](https://phabricator.babeljs.io/T2921). ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babel-plugin-transform-es2015-block-scoping`
+  * [#3346](https://github.com/babel/babel/pull/3346) Rename scope bindings during block scope transform. ([@schmod](https://github.com/schmod))
+
+#### Documentation
+* `babel-plugin-transform-regenerator`
+  * [#3370](https://github.com/babel/babel/pull/3370) Adds repository field to babel-plugin-transform-regenerator. ([@siroky](https://github.com/siroky))
+* `babel-plugin-transform-object-set-prototype-of-to-assign`
+  * [#3369](https://github.com/babel/babel/pull/3369) fix babel-plugin-transform-proto-to-assign readme url. ([@tiemevanveen](https://github.com/tiemevanveen))
+* `babel-cli`
+  * [#3357](https://github.com/babel/babel/pull/3357) Fix typo: sorucemap -> sourcemap. ([@forivall](https://github.com/forivall))
+
+#### Internal
+* [#3378](https://github.com/babel/babel/pull/3378) Remove Flow annotations and pragmas. ([@samwgoldman](https://github.com/samwgoldman))
+* [#3361](https://github.com/babel/babel/pull/3361) Switch to kcheck*, fix some lint rules. ([@kittens](https://github.com/kittens))
+* `babel-plugin-transform-runtime`, `babel-polyfill`, `babel-register`, `babel-runtime`
+  * [#3340](https://github.com/babel/babel/pull/3340) update core-js. ([@zloirock](https://github.com/zloirock))
+
+#### Polish
+* `babel-core`, `babel-traverse`
+  * [#3365](https://github.com/babel/babel/pull/3365) Replace arrow expression body with block statement. ([@jridgewell](https://github.com/jridgewell))
+* `babel-core`
+  * [#3362](https://github.com/babel/babel/pull/3362) Show a better error when trying to use a babel 5 plugin. ([@hzoo](https://github.com/hzoo))
+* `babel-core`
+  * [#3377](https://github.com/babel/babel/pull/3377) Give specific error messages for babel 5 options that were removed in babel 6. ([@hzoo](https://github.com/hzoo))
+  
+---
+
+We have 15 committers this release!
+
+Thanks to: AgentME, clayreimann, erikdesjardins, forivall, gzzhanghao, hzoo, jmm, jridgewell, kittens, loganfsmyth, samwgoldman, schmod, siroky, tiemevanveen, zloirock
+
 ## 6.5.2 (2016-02-12) "Who needs semicolons anyway” ¯\\_(ツ)_/¯
 
 Changes to note:
