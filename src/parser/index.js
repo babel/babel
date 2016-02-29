@@ -14,6 +14,7 @@ export default class Parser extends Tokenizer {
     this.isReservedWord = reservedWords[6];
     this.input = input;
     this.plugins = this.loadPlugins(this.options.plugins);
+    this.filename = options.sourceFilename;
 
     // If enabled, skip leading hashbang line.
     if (this.state.pos === 0 && this.input[0] === "#" && this.input[1] === "!") {

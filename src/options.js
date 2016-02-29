@@ -3,6 +3,7 @@
 
 export const defaultOptions: {
   sourceType: string,
+  sourceFilename: any,
   allowReturnOutsideFunction: boolean,
   allowImportExportEverywhere: boolean,
   allowSuperOutsideMethod: boolean,
@@ -11,6 +12,8 @@ export const defaultOptions: {
 } = {
   // Source type ("script" or "module") for different semantics
   sourceType: "script",
+  // Source filename.
+  sourceFilename: undefined,
   // When enabled, a return at the top level is not considered an
   // error.
   allowReturnOutsideFunction: false,
