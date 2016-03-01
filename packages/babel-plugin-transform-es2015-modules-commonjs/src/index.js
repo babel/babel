@@ -258,6 +258,11 @@ export default function () {
                 }
               } else {
                 path.replaceWith(buildExportsAssignment(t.identifier("default"), declaration.node));
+
+                // Manualy re-queue `export default foo;` expressions so that the ES3 transform
+                // has an opportunity to convert them. Ideally this would happen automatically from the
+                // replaceWith above. See T7166 for more info.
+                path.parentPath.requeue(path.get("expression.left"));
               }
             } else if (path.isExportNamedDeclaration()) {
               let declaration = path.get("declaration");

@@ -211,7 +211,10 @@ export function setKey(key) {
 export function requeue(pathToQueue = this) {
   if (pathToQueue.removed) return;
 
-  let contexts = this._getQueueContexts();
+  // TODO(loganfsmyth): This should be switched back to queue in parent contexts
+  // automatically once T2892 and T7160 have been resolved. See T7166.
+  // let contexts = this._getQueueContexts();
+  let contexts = this.contexts;
 
   for (let context of contexts) {
     context.maybeQueue(pathToQueue);
