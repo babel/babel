@@ -47,7 +47,11 @@ export function _containerInsert(from, nodes) {
 
     if (this.context) {
       let path = this.context.create(this.parent, this.container, to, this.listKey);
-      path.pushContext(this.context);
+
+      // While this path may have a context, there is currently no guarantee that the context
+      // will be the active context, because `popContext` may leave a final context in place.
+      // We should remove this `if` and always push once T7171 has been resolved.
+      if (this.context.queue) path.pushContext(this.context);
       paths.push(path);
     } else {
       paths.push(NodePath.get({
