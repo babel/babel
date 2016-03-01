@@ -49,6 +49,7 @@ test-ci:
 publish:
 	git pull --rebase
 	make build
+	make build-dist
 	make test
 	./node_modules/.bin/lerna publish
 	make clean
