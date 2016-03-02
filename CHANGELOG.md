@@ -13,6 +13,44 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.6.4 (2016-03-02)
+
+Some more fixes!
+
+#### Bug Fix
+* `babel-plugin-transform-es2015-duplicate-keys`
+  * [#3388](https://github.com/babel/babel/pull/3388) Partial T7173 Fix: Prevent accessors being seen as duplicates of each other. ([@AgentME](https://github.com/AgentME))
+
+```js
+// sample code that was erroring
+const obj = {
+  set a (a) {
+    values.a = a;   
+  },
+  get a () {
+    return values.a;
+  }
+};
+```
+
+* `babel-core`
+  * [#3350](https://github.com/babel/babel/pull/3350) Make Babel actually resolve plugins relative to where they were specified (via .babelrc).. ([@skevy](https://github.com/skevy))
+
+```js
+// .babelrc
+{
+  "plugins": ["./myPluginDir/somePlugin.js"]
+}
+```
+
+Babel will now resolve the plugin above relative to the directory that contains the .babelrc file rather than the `process.cwd()`.
+
+#### Internal
+* `A lot of packages`
+  * [#3392](https://github.com/babel/babel/pull/3392) Remove flow. ([@samwgoldman](https://github.com/samwgoldman))
+
+Since users were getting error reports since Babel's codebase wasn't typechecking correctly. (Ref [T7114](https://phabricator.babeljs.io/T7114)) - Will be adding it back into the codebase itself soon.
+
 ## 6.6.3 (2016-03-01)
 
 #### Bug Fix
