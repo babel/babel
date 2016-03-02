@@ -9,6 +9,7 @@ import * as t from "babel-types";
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";
+export { default as cache } from "./path/cache";
 export { visitors };
 
 export default function traverse(

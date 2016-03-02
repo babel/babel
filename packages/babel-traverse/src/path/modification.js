@@ -1,7 +1,7 @@
 /* eslint max-len: 0 */
 // This file contains methods that modify the path/node in some ways.
 
-import { PATH_CACHE_KEY } from "./constants";
+import cache from "./cache";
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
 import * as t from "babel-types";
@@ -136,7 +136,7 @@ export function insertAfter(nodes) {
 export function updateSiblingKeys(fromIndex, incrementBy) {
   if (!this.parent) return;
 
-  let paths = this.parent[PATH_CACHE_KEY];
+  let paths = cache.get(this.parent);
   for (let i = 0; i < paths.length; i++) {
     let path = paths[i];
     if (path.key >= fromIndex) {

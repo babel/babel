@@ -4,12 +4,12 @@ import type Hub from "../hub";
 import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
-import { PATH_CACHE_KEY } from "./constants";
 import invariant from "invariant";
 import traverse from "../index";
 import assign from "lodash/object/assign";
 import Scope from "../scope";
 import * as t from "babel-types";
+import cache from "./cache";
 
 let debug = buildDebug("babel");
 
@@ -69,7 +69,11 @@ export default class NodePath {
 
     let targetNode = container[key];
 
-    let paths = parent[PATH_CACHE_KEY] = parent[PATH_CACHE_KEY] || [];
+    let paths = cache.get(parent) || [];
+    if (!cache.has(parent)) {
+      cache.set(parent, paths);
+    }
+
     let path;
 
     for (let i = 0; i < paths.length; i++) {
