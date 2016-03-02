@@ -1,17 +1,17 @@
 {
   "name": "babel-eslint",
   "version": "5.0.0",
-  "description": "",
+  "description": "Custom parser for ESLint",
   "main": "index.js",
   "files": [
-    "index.js"
+    "index.js",
+    "babylon-to-espree"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/babel/babel-eslint.git"
   },
   "dependencies": {
-    "acorn-to-esprima": "^2.0.4",
     "babel-traverse": "^6.0.20",
     "babel-types": "^6.0.19",
     "babylon": "^6.0.18",
@@ -22,7 +22,8 @@
     "bootstrap": "git submodule update --init && cd eslint && npm install",
     "eslint": "cd eslint && mocha -c tests/lib/rules/*.js -r ../eslint-tester.js",
     "test": "mocha",
-    "lint": "./node_modules/eslint/bin/eslint.js ./test index.js acorn-to-esprima.js",
+    "lint": "./node_modules/eslint/bin/eslint.js index.js babylon-to-espree test",
+    "fix": "./node_modules/eslint/bin/eslint.js index.js babylon-to-espree test --fix",
     "preversion": "npm test"
   },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
@@ -32,8 +33,8 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
-    "eslint": "^1.10.2",
-    "espree": "^2.2.5",
+    "eslint": "^2.0.0",
+    "espree": "^3.0.0",
     "mocha": "^2.3.3"
   }
 }

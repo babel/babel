@@ -32,49 +32,49 @@ function assertImplementsAST(target, source, path) {
   }
 }
 
+function lookup(obj, keypath, backwardsDepth) {
+  if (!keypath) { return obj; }
+
+  return keypath.split(".").slice(0, -1 * backwardsDepth)
+  .reduce(function (base, segment) { return base && base[segment], obj });
+}
+
 function parseAndAssertSame(code) {
   var esAST = espree.parse(code, {
     ecmaFeatures: {
-      arrowFunctions: true,
-      binaryLiterals: true,
-      blockBindings: true,
-      classes: true,
-      defaultParams: true,
-      destructuring: true,
-      forOf: true,
-      generators: true,
-      modules: true,
-      objectLiteralComputedProperties: true,
-      objectLiteralDuplicateProperties: true,
-      objectLiteralShorthandMethods: true,
-      objectLiteralShorthandProperties: true,
-      octalLiterals: true,
-      regexUFlag: true,
-      regexYFlag: true,
-      restParams: true,
-      spread: true,
-      superInFunctions: true,
-      templateStrings: true,
-      unicodeCodePointEscapes: true,
-      globalReturn: true,
-      jsx: true,
-      experimentalObjectRestSpread: true,
+        // enable JSX parsing
+        jsx: true,
+        // enable return in global scope
+        globalReturn: true,
+        // enable implied strict mode (if ecmaVersion >= 5)
+        impliedStrict: true,
+        // allow experimental object rest/spread
+        experimentalObjectRestSpread: true
     },
     tokens: true,
     loc: true,
     range: true,
     comment: true,
-    attachComment: true
+    attachComment: true,
+    ecmaVersion: 6,
+    sourceType: "module"
   });
   var babylonAST = babelEslint.parse(code);
   try {
     assertImplementsAST(esAST, babylonAST);
   } catch(err) {
+    var traversal = err.message.slice(3, err.message.indexOf(":"));
+    if (esAST.tokens) {
+      delete esAST.tokens;
+    }
+    if (babylonAST.tokens) {
+      delete babylonAST.tokens;
+    }
     err.message +=
       "\nespree:\n" +
-      util.inspect(esAST, {depth: err.depth, colors: true}) +
+      util.inspect(lookup(esAST, traversal, 2), {depth: err.depth, colors: true}) +
       "\nbabel-eslint:\n" +
-      util.inspect(babylonAST, {depth: err.depth, colors: true});
+      util.inspect(lookup(babylonAST, traversal, 2), {depth: err.depth, colors: true});
     throw err;
   }
   // assert.equal(esAST, babylonAST);
@@ -394,7 +394,7 @@ describe("acorn-to-esprima", function () {
     it("do not allow import export everywhere", function() {
       assert.throws(function () {
         parseAndAssertSame("function F() { import a from \"a\"; }");
-      }, /Illegal import declaration/)
+      }, /SyntaxError: 'import' and 'export' may only appear at the top level/)
     });
 
     it("return outside function", function () {
@@ -406,7 +406,7 @@ describe("acorn-to-esprima", function () {
     });
 
     it("StringLiteral", function () {
-      parseAndAssertSame('');
+      parseAndAssertSame("");
       parseAndAssertSame("");
       parseAndAssertSame("a");
     });
@@ -442,6 +442,18 @@ describe("acorn-to-esprima", function () {
             "}",
         "};"
       ].join("\n"));
+    });
+
+    it("RestOperator", function () {
+      parseAndAssertSame("var { a, ...b } = c");
+      parseAndAssertSame("var [ a, ...b ] = c");
+      parseAndAssertSame("var a = function (...b) {}");
+    });
+
+    it("SpreadOperator", function () {
+      parseAndAssertSame("var a = { b, ...c }");
+      parseAndAssertSame("var a = [ a, ...b ]");
+      parseAndAssertSame("var a = sum(...b)");
     });
   });
 });

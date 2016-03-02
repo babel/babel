@@ -1,4 +1,4 @@
-var acornToEsprima = require("acorn-to-esprima");
+var babylonToEspree = require("./babylon-to-espree");
 var assign         = require("lodash.assign");
 var pick           = require("lodash.pick");
 var Module         = require("module");
@@ -380,7 +380,9 @@ function monkeypatch() {
   };
 }
 
-exports.parse = function (code) {
+exports.parse = function (code, options) {
+  options = options || {};
+
   try {
     monkeypatch();
   } catch (err) {
@@ -388,12 +390,12 @@ exports.parse = function (code) {
     process.exit(1);
   }
 
-  return exports.parseNoPatch(code);
+  return exports.parseNoPatch(code, options);
 }
 
-exports.parseNoPatch = function (code) {
+exports.parseNoPatch = function (code, options) {
   var opts = {
-    sourceType: "module",
+    sourceType: options.sourceType || "module",
     strictMode: true,
     allowImportExportEverywhere: false, // consistent with espree
     allowReturnOutsideFunction: true,
@@ -422,7 +424,7 @@ exports.parseNoPatch = function (code) {
   } catch (err) {
     if (err instanceof SyntaxError) {
       err.lineNumber = err.loc.line;
-      err.column = err.loc.column;
+      err.column = err.loc.column + 1;
 
       // remove trailing "(LINE:COLUMN)" acorn message and add in esprima syntax error message start
       err.message = "Line " + err.lineNumber + ": " + err.message.replace(/ \((\d+):(\d+)\)$/, "");
@@ -437,27 +439,27 @@ exports.parseNoPatch = function (code) {
   ast.tokens.pop();
 
   // convert tokens
-  ast.tokens = acornToEsprima.toTokens(ast.tokens, tt, code);
+  ast.tokens = babylonToEspree.toTokens(ast.tokens, tt, code);
 
   // add comments
-  acornToEsprima.convertComments(ast.comments);
+  babylonToEspree.convertComments(ast.comments);
 
   // transform esprima and acorn divergent nodes
-  acornToEsprima.toAST(ast, traverse, code);
+  babylonToEspree.toAST(ast, traverse, code);
 
   // ast.program.tokens = ast.tokens;
   // ast.program.comments = ast.comments;
   // ast = ast.program;
 
   // remove File
-  ast.type = 'Program';
+  ast.type = "Program";
   ast.sourceType = ast.program.sourceType;
   ast.directives = ast.program.directives;
   ast.body = ast.program.body;
   delete ast.program;
   delete ast._paths;
 
-  acornToEsprima.attachComments(ast, ast.comments, ast.tokens);
+  babylonToEspree.attachComments(ast, ast.comments, ast.tokens);
 
   return ast;
 }

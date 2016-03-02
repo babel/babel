@@ -2,43 +2,25 @@
 "use strict";
 var eslint = require("eslint");
 
-function verifyAndAssertMessages(code, rules, expectedMessages, features) {
-  var defaultEcmaFeatures = {
-    arrowFunctions: true,
-    binaryLiterals: true,
-    blockBindings: true,
-    classes: true,
-    defaultParams: true,
-    destructuring: true,
-    forOf: true,
-    generators: true,
-    modules: true,
-    objectLiteralComputedProperties: true,
-    objectLiteralDuplicateProperties: true,
-    objectLiteralShorthandMethods: true,
-    objectLiteralShorthandProperties: true,
-    octalLiterals: true,
-    regexUFlag: true,
-    regexYFlag: true,
-    restParams: true,
-    spread: true,
-    superInFunctions: true,
-    templateStrings: true,
-    unicodeCodePointEscapes: true,
-    globalReturn: true,
-    jsx: true,
-    experimentalObjectRestSpread: true
-  };
-
+function verifyAndAssertMessages(code, rules, expectedMessages, sourceType) {
   var messages = eslint.linter.verify(
     code,
     {
       parser: require.resolve(".."),
       rules: rules,
       env: {
-        node: true
+        node: true,
+        es6: true
       },
-      ecmaFeatures: features || defaultEcmaFeatures
+      parserOptions: {
+        ecmaVersion: 6,
+        ecmaFeatures: {
+          jsx: true,
+          experimentalObjectRestSpread: true,
+          globalReturn: true
+        },
+        sourceType: sourceType || "module"
+      }
     }
   );
 
@@ -143,7 +125,7 @@ describe("verify", function () {
       "\"use strict\"; () => 1",
       { "strict": [1, "global"] },
       [],
-      { modules: false }
+      "script"
     );
   });
 
@@ -415,8 +397,8 @@ describe("verify", function () {
           "var b: T = 1; b;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "1:21 \"T\" is defined but never used no-unused-vars",
-          '2:8 "T" is not defined. no-undef' ]
+        [ "1:21 'T' is defined but never used no-unused-vars",
+          "2:8 'T' is not defined. no-undef" ]
       );
     });
 
@@ -426,7 +408,7 @@ describe("verify", function () {
           "export class Foo extends Bar<T> {}",
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ '2:30 "T" is not defined. no-undef' ]
+        [ "2:30 'T' is not defined. no-undef" ]
       );
     });
 
@@ -1151,7 +1133,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "var unused;",
       { "no-unused-vars": 1 },
-      [ "1:5 \"unused\" is defined but never used no-unused-vars" ]
+      [ "1:5 'unused' is defined but never used no-unused-vars" ]
     );
   });
 
@@ -1175,7 +1157,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "const {Bacona} = require('baconjs')",
       { "no-undef": 1, "no-unused-vars": 1 },
-      [ "1:8 \"Bacona\" is defined but never used no-unused-vars" ]
+      [ "1:8 'Bacona' is defined but never used no-unused-vars" ]
     );
   });
 
@@ -1301,7 +1283,7 @@ describe("verify", function () {
         "var x = 1;"
       ].join("\n"),
       { "no-use-before-define": 1 },
-      [ "1:13 \"x\" was used before it was defined no-use-before-define" ]
+      [ "1:13 'x' was used before it was defined no-use-before-define" ]
     )
   });
 
@@ -1316,10 +1298,10 @@ describe("verify", function () {
   it("getter/setter #218", function () {
     verifyAndAssertMessages([
         "class Person {",
-          "set a (v) { }",
+        "    set a (v) { }",
         "}"
       ].join("\n"),
-      { "space-before-function-paren": 1, "space-before-keywords": 1, "indent": 1 },
+      { "space-before-function-paren": 1, "keyword-spacing": [1, {"before": true}], "indent": 1 },
       []
     )
   });

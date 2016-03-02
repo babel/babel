@@ -13,6 +13,9 @@ var errorLevel = 2;
 
 var baseEslintOpts = {
   parser: require.resolve(".."),
+  parserOptions: {
+    sourceType: "script"
+  }
 };
 
 /**
