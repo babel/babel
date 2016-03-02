@@ -33,23 +33,20 @@ export default function() {
           case "get":
             if (alreadySeenData[name] || alreadySeenGetters[name]) {
               isDuplicate = true;
-            } else {
-              alreadySeenGetters[name] = true;
             }
+            alreadySeenGetters[name] = true;
             break;
           case "set":
             if (alreadySeenData[name] || alreadySeenSetters[name]) {
               isDuplicate = true;
-            } else {
-              alreadySeenSetters[name] = true;
             }
+            alreadySeenSetters[name] = true;
             break;
           default:
             if (alreadySeenData[name] || alreadySeenGetters[name] || alreadySeenSetters[name]) {
               isDuplicate = true;
-            } else {
-              alreadySeenData[name] = true;
             }
+            alreadySeenData[name] = true;
           }
 
           if (isDuplicate) {
