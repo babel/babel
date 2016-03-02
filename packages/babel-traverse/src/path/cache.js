@@ -7,15 +7,15 @@ export default {
   },
 
   delete(k) {
-    return wm.delete(k)
+    return wm.delete(k);
   },
 
   get(k) {
-    return wm.get(k)
+    return wm.get(k);
   },
 
   has(k) {
-    return wm.has(k)
+    return wm.has(k);
   },
 
   set(k, v) {
