@@ -3,9 +3,9 @@ let b = false;
 
 switch (a) {
   case true:
-    let b = 2;
+    let c = 2;
     break;
   case false:
-    let c = 3;
+    let d = 3;
     break;
 }

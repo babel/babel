@@ -3,9 +3,9 @@ var b = false;
 
 switch (a) {
   case true:
-    var b = 2;
+    var c = 2;
     break;
   case false:
-    var c = 3;
+    var d = 3;
     break;
 }
