@@ -12,6 +12,7 @@ For questions and support please visit the [`#linting`](https://babeljs.slack.co
 > Note that the `ecmaFeatures` config property may still be required for ESLint to work properly with features not in ECMAScript 5 by default. Examples are `globalReturn` and `modules`)
 
 ## Known Issues
+
 Flow:
 > Check out [eslint-plugin-flow-vars](https://github.com/zertosh/eslint-plugin-flow-vars): An `eslint` plugin that makes flow type annotations global variables and marks declarations as used. Solves the problem of false positives with `no-undef` and `no-unused-vars`.
 - `no-undef` for global flow types: `ReactElement`, `ReactClass` [#130](https://github.com/babel/babel-eslint/issues/130#issuecomment-111215076)
@@ -44,6 +45,8 @@ It just needs to export a `parse` method that takes in a string of code and outp
 
 ```sh
 $ npm install eslint@1.x babel-eslint --save-dev
+
+$ npm install eslint@2.x babel-eslint@next --save-dev
 ```
 
 ### Setup
