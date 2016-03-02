@@ -11,18 +11,12 @@ export default class TraversalContext {
     this.opts       = opts;
   }
 
-  parentPath: NodePath;
-  scope;
-  state;
-  opts;
-  queue: ?Array<NodePath> = null;
-
   /**
    * This method does a simple check to determine whether or not we really need to attempt
    * visit a node. This will prevent us from constructing a NodePath.
    */
 
-  shouldVisit(node): boolean {
+  shouldVisit(node) {
     let opts = this.opts;
     if (opts.enter || opts.exit) return true;
 
@@ -30,7 +24,7 @@ export default class TraversalContext {
     if (opts[node.type]) return true;
 
     // check if we're going to traverse into this node
-    let keys: ?Array<string> = t.VISITOR_KEYS[node.type];
+    let keys = t.VISITOR_KEYS[node.type];
     if (!keys || !keys.length) return false;
 
     // we need to traverse into this node so ensure that it has children to traverse into!
@@ -41,7 +35,7 @@ export default class TraversalContext {
     return false;
   }
 
-  create(node, obj, key, listKey): NodePath {
+  create(node, obj, key, listKey) {
     return NodePath.get({
       parentPath: this.parentPath,
       parent: node,
@@ -51,7 +45,7 @@ export default class TraversalContext {
     });
   }
 
-  maybeQueue(path, notPriority?: boolean) {
+  maybeQueue(path, notPriority) {
     if (this.trap) {
       throw new Error("Infinite cycle detected");
     }
@@ -82,7 +76,7 @@ export default class TraversalContext {
     return this.visitQueue(queue);
   }
 
-  visitSingle(node, key): boolean {
+  visitSingle(node, key) {
     if (this.shouldVisit(node[key])) {
       return this.visitQueue([
         this.create(node, node, key)
@@ -92,7 +86,7 @@ export default class TraversalContext {
     }
   }
 
-  visitQueue(queue: Array<NodePath>) {
+  visitQueue(queue) {
     // set queue
     this.queue = queue;
     this.priorityQueue = [];

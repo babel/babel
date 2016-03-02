@@ -160,7 +160,7 @@ export default function () {
           let hasExports = false;
           let hasImports = false;
 
-          let body: Array<Object> = path.get("body");
+          let body = path.get("body");
           let imports = Object.create(null);
           let exports = Object.create(null);
 

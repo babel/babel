@@ -22,7 +22,7 @@ let buildCutOff = template(`
 `);
 
 function hasDefaults(node) {
-  for (let param of (node.params: Array<Object>)) {
+  for (let param of node.params) {
     if (!t.isIdentifier(param)) return true;
   }
   return false;

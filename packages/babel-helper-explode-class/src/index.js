@@ -1,5 +1,4 @@
 import bindifyDecorators from "babel-helper-bindify-decorators";
-import type { NodePath } from "babel-traverse";
 import * as t from "babel-types";
 
 export default function (classPath) {
@@ -15,7 +14,7 @@ export default function (classPath) {
     path.replaceWith(uid);
   }
 
-  function memoiseDecorators(paths: Array<NodePath>) {
+  function memoiseDecorators(paths) {
     if (!Array.isArray(paths) || !paths.length) return;
 
     // ensure correct evaluation order of decorators
@@ -32,7 +31,7 @@ export default function (classPath) {
   maybeMemoise(classPath.get("superClass"));
   memoiseDecorators(classPath.get("decorators"), true);
 
-  let methods: Array<NodePath> = classPath.get("body.body");
+  let methods = classPath.get("body.body");
   for (let methodPath of methods) {
     if (methodPath.is("computed")) {
       maybeMemoise(methodPath.get("key"));

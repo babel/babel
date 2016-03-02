@@ -45,7 +45,7 @@ export default function ({ types: t }) {
         let proto;
         let { node } = path;
 
-        for (let prop of (node.properties: Array)) {
+        for (let prop of node.properties) {
           if (isProtoKey(prop)) {
             proto = prop.value;
             pull(node.properties, prop);

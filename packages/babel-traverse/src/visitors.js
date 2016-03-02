@@ -27,7 +27,7 @@ export function explode(visitor) {
   for (let nodeType in visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
-    let parts: Array<string> = nodeType.split("|");
+    let parts = nodeType.split("|");
     if (parts.length === 1) continue;
 
     let fns = visitor[nodeType];
@@ -52,7 +52,7 @@ export function explode(visitor) {
   ensureCallbackArrays(visitor);
 
   // add type wrappers
-  for (let nodeType of (Object.keys(visitor): Array)) {
+  for (let nodeType of Object.keys(visitor)) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     let wrapper = virtualTypes[nodeType];
@@ -68,7 +68,7 @@ export function explode(visitor) {
     delete visitor[nodeType];
 
     if (wrapper.types) {
-      for (let type of (wrapper.types: Array<string>)) {
+      for (let type of wrapper.types) {
         // merge the visitor if necessary or just put it back in
         if (visitor[type]) {
           mergePair(visitor[type], fns);
@@ -87,7 +87,7 @@ export function explode(visitor) {
 
     let fns = visitor[nodeType];
 
-    let aliases: ?Array<string> = t.FLIPPED_ALIAS_KEYS[nodeType];
+    let aliases = t.FLIPPED_ALIAS_KEYS[nodeType];
 
     let deprecratedKey = t.DEPRECATED_KEYS[nodeType];
     if (deprecratedKey) {
@@ -162,7 +162,7 @@ function validateVisitorMethods(path, val) {
   }
 }
 
-export function merge(visitors: Array, states: Array = []) {
+export function merge(visitors, states = []) {
   let rootVisitor = {};
 
   for (let i = 0; i < visitors.length; i++) {

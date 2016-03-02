@@ -54,13 +54,13 @@ export default function ({ types: t }) {
     if (path.isClass()) {
       if (path.node.decorators) return true;
 
-      for (let method of (path.node.body.body: Array<Object>)) {
+      for (let method of path.node.body.body) {
         if (method.decorators) {
           return true;
         }
       }
     } else if (path.isObjectExpression()) {
-      for (let prop of (path.node.properties: Array<Object>)) {
+      for (let prop of path.node.properties) {
         if (prop.decorators) {
           return true;
         }

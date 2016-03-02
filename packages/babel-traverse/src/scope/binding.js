@@ -1,4 +1,3 @@
-import type NodePath from "../path";
 
 /**
  * This class is responsible for a binding inside of a scope.
@@ -36,24 +35,12 @@ export default class Binding {
     }
   }
 
-
-  constantViolations: Array<NodePath>;
-  constant: boolean;
-
-  referencePaths: Array<NodePath>;
-  referenced: boolean;
-  references: number;
-
-  hasDeoptedValue: boolean;
-  hasValue: boolean;
-  value: any;
-
   deoptValue() {
     this.clearValue();
     this.hasDeoptedValue = true;
   }
 
-  setValue(value: any) {
+  setValue(value) {
     if (this.hasDeoptedValue) return;
     this.hasValue = true;
     this.value    = value;
@@ -69,7 +56,7 @@ export default class Binding {
    * Register a constant violation with the provided `path`.
    */
 
-  reassign(path: Object) {
+  reassign(path) {
     this.constant = false;
     this.constantViolations.push(path);
   }
@@ -78,7 +65,7 @@ export default class Binding {
    * Increment the amount of references to this binding.
    */
 
-  reference(path: NodePath) {
+  reference(path) {
     this.referenced = true;
     this.references++;
     this.referencePaths.push(path);

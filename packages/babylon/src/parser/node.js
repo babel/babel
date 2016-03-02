@@ -6,19 +6,14 @@ import { SourceLocation } from "../util/location";
 const pp = Parser.prototype;
 
 class Node {
-  constructor(pos?: number, loc?: SourceLocation) {
+  constructor(pos, loc) {
     this.type = "";
     this.start = pos;
     this.end = 0;
     this.loc = new SourceLocation(loc);
   }
 
-  type: string;
-  start: ?number;
-  end: number;
-  loc: SourceLocation;
-
-  __clone(): Node {
+  __clone() {
     let node2 = new Node;
     for (let key in this) node2[key] = this[key];
     return node2;

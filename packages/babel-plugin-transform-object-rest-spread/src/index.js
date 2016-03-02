@@ -1,6 +1,6 @@
 export default function ({ types: t }) {
   function hasSpread(node) {
-    for (let prop of (node.properties: Array<Object>)) {
+    for (let prop of node.properties) {
       if (t.isSpreadProperty(prop)) {
         return true;
       }
@@ -24,7 +24,7 @@ export default function ({ types: t }) {
           props = [];
         }
 
-        for (let prop of (path.node.properties: Array)) {
+        for (let prop of path.node.properties) {
           if (t.isSpreadProperty(prop)) {
             push();
             args.push(prop.argument);

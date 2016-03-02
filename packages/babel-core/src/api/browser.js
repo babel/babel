@@ -4,11 +4,11 @@
 import { transform } from "./node";
 export * from "./node";
 
-export function run(code: string, opts: Object = {}): any {
+export function run(code, opts = {}) {
   return new Function(transform(code, opts).code)();
 }
 
-export function load(url: string, callback: Function, opts: Object = {}, hold?: boolean) {
+export function load(url, callback, opts = {}, hold) {
   opts.filename = opts.filename || url;
 
   let xhr = global.ActiveXObject ? new global.ActiveXObject("Microsoft.XMLHTTP") : new global.XMLHttpRequest();
@@ -32,7 +32,7 @@ export function load(url: string, callback: Function, opts: Object = {}, hold?: 
 }
 
 function runScripts() {
-  let scripts: Array<Array<any> | Object> = [];
+  let scripts = [];
   let types   = ["text/ecmascript-6", "text/6to5", "text/babel", "module"];
   let index   = 0;
 
@@ -53,7 +53,7 @@ function runScripts() {
    * Load, transform, and execute all scripts.
    */
 
-  function run(script: Object, i: number) {
+  function run(script, i) {
     let opts = {};
 
     if (script.src) {

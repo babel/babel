@@ -10,35 +10,13 @@ function humanize(val, noext) {
   return val.replace(/-/g, " ");
 }
 
-type TestFile = {
-  loc: string;
-  code: string;
-  filename: string;
-};
-
-type Test = {
-  title: string;
-  disabled: boolean;
-  options: Object;
-  exec: TestFile;
-  actual: TestFile;
-  expected: TestFile;
-};
-
-type Suite = {
-  options: Object;
-  tests: Array<Test>;
-  title: string;
-  filename: string;
-};
-
 function assertDirectory(loc) {
   if (!fs.statSync(loc).isDirectory()) {
     throw new Error(`Expected ${loc} to be a directory.`);
   }
 }
 
-function shouldIgnore(name, blacklist?: Array<string>) {
+function shouldIgnore(name, blacklist) {
   if (blacklist && blacklist.indexOf(name) >= 0) {
     return true;
   }
@@ -49,7 +27,7 @@ function shouldIgnore(name, blacklist?: Array<string>) {
   return name[0] === "." || ext === ".md" || base === "LICENSE" || base === "options";
 }
 
-export default function get(entryLoc): Array<Suite> {
+export default function get(entryLoc) {
   let suites = [];
 
   let rootOpts = {};
@@ -147,7 +125,7 @@ export default function get(entryLoc): Array<Suite> {
   return suites;
 }
 
-export function multiple(entryLoc, ignore?: Array<string>) {
+export function multiple(entryLoc, ignore) {
   let categories = {};
 
   for (let name of fs.readdirSync(entryLoc)) {

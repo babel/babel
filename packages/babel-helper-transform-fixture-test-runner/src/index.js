@@ -111,13 +111,7 @@ function runExec(opts, execCode) {
   return fn.apply(null, Object.values(sandbox));
 }
 
-export default function (
-  fixturesLoc: string,
-  name: string,
-  suiteOpts = {},
-  taskOpts = {},
-  dynamicOpts?: Function,
-) {
+export default function (fixturesLoc, name, suiteOpts = {}, taskOpts = {}, dynamicOpts) {
   let suites = getFixtures(fixturesLoc);
 
   for (let testSuite of suites) {

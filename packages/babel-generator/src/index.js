@@ -34,33 +34,6 @@ export class CodeGenerator extends Printer {
     this.map        = new SourceMap(position, opts, code);
   }
 
-  format: {
-    shouldPrintComment: (comment: string) => boolean;
-    retainLines: boolean;
-    comments: boolean;
-    auxiliaryCommentBefore: string;
-    auxiliaryCommentAfter: string;
-    compact: boolean | "auto";
-    minified: boolean;
-    quotes: "single" | "double";
-    concise: boolean;
-    indent: {
-      adjustMultilineComment: boolean;
-      style: string;
-      base: number;
-    }
-  };
-
-  auxiliaryCommentBefore: string;
-  auxiliaryCommentAfter: string;
-  whitespace: Whitespace;
-  position: Position;
-  map: SourceMap;
-  comments: Array<Object>;
-  tokens: Array<Object>;
-  opts: Object;
-  ast: Object;
-
   /**
    * Normalize generator options, setting defaults.
    *
@@ -161,7 +134,7 @@ export class CodeGenerator extends Printer {
   }
 }
 
-export default function (ast: Object, opts: Object, code: string): Object {
+export default function (ast, opts, code) {
   let gen = new CodeGenerator(ast, opts, code);
   return gen.generate();
 }

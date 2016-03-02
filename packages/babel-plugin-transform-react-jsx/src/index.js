@@ -23,7 +23,7 @@ export default function ({ types: t }) {
     let { file } = state;
     let id = state.opts.pragma || "React.createElement";
 
-    for (let comment of (file.ast.comments: Array<Object>)) {
+    for (let comment of file.ast.comments) {
       let matches = JSX_ANNOTATION_REGEX.exec(comment.value);
       if (matches) {
         id = matches[1];

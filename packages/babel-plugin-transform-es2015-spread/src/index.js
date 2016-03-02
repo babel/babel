@@ -16,7 +16,7 @@ export default function ({ types: t }) {
     return false;
   }
 
-  function build(props: Array, scope, state) {
+  function build(props, scope, state) {
     let nodes = [];
 
     let _props = [];

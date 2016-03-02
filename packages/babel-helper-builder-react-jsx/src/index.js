@@ -1,14 +1,6 @@
 import esutils from "esutils";
 import * as t from "babel-types";
 
-type ElementState = {
-  tagExpr: Object; // tag node
-  tagName: string; // raw string tag name
-  args: Array<Object>; // array of call arguments
-  call?: Object; // optional call property that can be set to override the call expression returned
-  pre?: Function; // function called with (state: ElementState) before building attribs
-  post?: Function; // function called with (state: ElementState) after building attribs
-};
 
 export default function (opts) {
   let visitor = {};
@@ -89,7 +81,7 @@ export default function (opts) {
       tagName = tagExpr.value;
     }
 
-    let state: ElementState = {
+    let state = {
       tagExpr: tagExpr,
       tagName: tagName,
       args:    args

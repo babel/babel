@@ -1,7 +1,6 @@
-import type { NodePath } from "babel-traverse";
 import * as t from "babel-types";
 
-export default function bindifyDecorators(decorators: Array<NodePath>): Array<NodePath> {
+export default function bindifyDecorators(decorators) {
   for (let decoratorPath of decorators) {
     let decorator = decoratorPath.node;
     let expression = decorator.expression;

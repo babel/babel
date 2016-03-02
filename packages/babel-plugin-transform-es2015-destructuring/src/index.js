@@ -7,7 +7,7 @@ export default function ({ types: t }) {
    */
 
   function variableDeclarationHasPattern(node) {
-    for (let declar of (node.declarations: Array)) {
+    for (let declar of node.declarations) {
       if (t.isPattern(declar.id)) {
         return true;
       }
@@ -20,7 +20,7 @@ export default function ({ types: t }) {
    */
 
   function hasRest(pattern) {
-    for (let elem of (pattern.elements: Array)) {
+    for (let elem of pattern.elements) {
       if (t.isRestElement(elem)) {
         return true;
       }
@@ -210,7 +210,7 @@ export default function ({ types: t }) {
       if (pattern.elements.length > arr.elements.length) return;
       if (pattern.elements.length < arr.elements.length && !hasRest(pattern)) return false;
 
-      for (let elem of (pattern.elements: Array)) {
+      for (let elem of pattern.elements) {
         // deopt on holes
         if (!elem) return false;
 
@@ -218,7 +218,7 @@ export default function ({ types: t }) {
         if (t.isMemberExpression(elem)) return false;
       }
 
-      for (let elem of (arr.elements: Array)) {
+      for (let elem of arr.elements) {
         // deopt on spread elements
         if (t.isSpreadElement(elem)) return false;
       }
