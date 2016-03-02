@@ -20,4 +20,4 @@ export function parse(input, options) {
   return new Parser(options, input).parse();
 }
 
-export { tokTypes };
+export { tokTypes, plugins };
