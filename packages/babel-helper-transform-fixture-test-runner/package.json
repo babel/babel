@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-transform-fixture-test-runner",
-  "version": "6.5.0",
+  "version": "6.6.4",
   "description": "Transform test runner for babel-helper-fixtures module",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -10,9 +10,9 @@
   "dependencies": {
     "babel-runtime": "^5.0.0",
     "babel-register": "^6.3.13",
-    "babel-core": "^6.3.13",
+    "babel-core": "^6.6.4",
     "babel-polyfill": "^6.3.13",
-    "babel-helper-fixtures": "^6.3.13",
+    "babel-helper-fixtures": "^6.6.4",
     "source-map": "^0.5.0",
     "babel-code-frame": "^6.3.13",
     "chai": "^2.2.0",
