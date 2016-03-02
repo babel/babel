@@ -97,7 +97,7 @@ export function is(type, node, opts) {
 export function isType(nodeType, targetType) {
   if (nodeType === targetType) return true;
 
-  let aliases: ?Array<string> = t.FLIPPED_ALIAS_KEYS[targetType];
+  let aliases = t.FLIPPED_ALIAS_KEYS[targetType];
   if (aliases) {
     if (aliases[0] === nodeType) return true;
 

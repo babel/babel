@@ -2,7 +2,7 @@ import * as t from "babel-types";
 
 export let visitor = {
   Function(path) {
-    let params: Array = path.get("params");
+    let params = path.get("params");
 
     // If there's a rest param, no need to loop through it. Also, we need to
     // hoist one more level to get `declar` at the right spot.

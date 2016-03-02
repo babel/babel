@@ -1,4 +1,3 @@
-import type { Scope } from "babel-traverse";
 import * as t from "babel-types";
 
 function getObjRef(node, nodes, file, scope) {
@@ -46,16 +45,7 @@ function getPropRef(node, nodes, file, scope) {
   return temp;
 }
 
-export default function (
-  node: Object,
-  nodes: Array<Object>,
-  file,
-  scope: Scope,
-  allowedSingleIdent?: boolean,
-): {
-  uid: Object;
-  ref: Object;
-} {
+export default function (node, nodes, file, scope, allowedSingleIdent) {
   let obj;
   if (t.isIdentifier(node) && allowedSingleIdent) {
     obj = node;

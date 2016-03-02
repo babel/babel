@@ -1,10 +1,9 @@
 // This file contains methods responsible for dealing with/retrieving children or siblings.
 
-import type TraversalContext from "../index";
 import NodePath from "./index";
 import * as t from "babel-types";
 
-export function getStatementParent(): ?NodePath {
+export function getStatementParent() {
   let path = this;
 
   do {
@@ -30,7 +29,7 @@ export function getOpposite() {
   }
 }
 
-export function getCompletionRecords(): Array {
+export function getCompletionRecords() {
   let paths = [];
 
   let add = function (path) {
@@ -67,7 +66,7 @@ export function getSibling(key) {
   });
 }
 
-export function get(key: string, context?: boolean | TraversalContext): NodePath {
+export function get(key, context) {
   if (context === true) context = this.context;
   let parts = key.split(".");
   if (parts.length === 1) { // "foo"
@@ -77,7 +76,7 @@ export function get(key: string, context?: boolean | TraversalContext): NodePath
   }
 }
 
-export function _getKey(key, context?) {
+export function _getKey(key, context) {
   let node      = this.node;
   let container = node[key];
 
@@ -104,7 +103,7 @@ export function _getKey(key, context?) {
 
 export function _getPattern(parts, context) {
   let path = this;
-  for (let part of (parts: Array)) {
+  for (let part of parts) {
     if (part === ".") {
       path = path.parentPath;
     } else {
@@ -118,10 +117,10 @@ export function _getPattern(parts, context) {
   return path;
 }
 
-export function getBindingIdentifiers(duplicates?) {
+export function getBindingIdentifiers(duplicates) {
   return t.getBindingIdentifiers(this.node, duplicates);
 }
 
-export function getOuterBindingIdentifiers(duplicates?) {
+export function getOuterBindingIdentifiers(duplicates) {
   return t.getOuterBindingIdentifiers(this.node, duplicates);
 }

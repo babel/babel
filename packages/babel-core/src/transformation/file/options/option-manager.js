@@ -1,7 +1,6 @@
 /* eslint max-len: 0 */
 
 import * as context from "../../../api/node";
-import type Logger from "../logger";
 import Plugin from "../../plugin";
 import * as messages from "babel-messages";
 import { normaliseOptions } from "./index";
@@ -33,49 +32,19 @@ function exists(filename) {
   }
 }
 
-type PluginObject = {
-  pre?: Function;
-  post?: Function;
-  manipulateOptions?: Function;
-
-  visitor: ?{
-    [key: string]: Function | {
-      enter?: Function | Array<Function>;
-      exit?: Function | Array<Function>;
-    }
-  };
-};
-
-type MergeOptions = {
-  options?: Object,
-  extending?: Object,
-  alias: string,
-  loc?: string,
-  dirname?: string
-};
-
 export default class OptionManager {
-  constructor(log?: Logger) {
+  constructor(log) {
     this.resolvedConfigs = [];
     this.options = OptionManager.createBareOptions();
     this.log = log;
   }
 
-  resolvedConfigs: Array<string>;
-  options: Object;
-  log: ?Logger;
-
-  static memoisedPlugins: Array<{
-    container: Function;
-    plugin: Plugin;
-  }>;
-
   static memoisePluginContainer(fn, loc, i, alias) {
-    for (let cache of (OptionManager.memoisedPlugins: Array<Object>)) {
+    for (let cache of OptionManager.memoisedPlugins) {
       if (cache.container === fn) return cache.plugin;
     }
 
-    let obj: ?PluginObject;
+    let obj;
 
     if (typeof fn === "function") {
       obj = fn(context);
@@ -156,7 +125,7 @@ export default class OptionManager {
     });
   }
 
-  addConfig(loc: string, key?: string, json = json5): boolean {
+  addConfig(loc, key, json = json5) {
     if (this.resolvedConfigs.indexOf(loc) >= 0) {
       return false;
     }
@@ -198,7 +167,7 @@ export default class OptionManager {
     alias,
     loc,
     dirname
-  }: MergeOptions) {
+  }) {
     alias = alias || "foreign";
     if (!rawOpts) return;
 
@@ -303,7 +272,7 @@ export default class OptionManager {
    * Merges all presets into the main options in case we are not in the
    * "pass per preset" mode. Otherwise, options are calculated per preset.
    */
-  mergePresets(presets: Array<string | Object>, dirname: string) {
+  mergePresets(presets, dirname) {
     this.resolvePresets(presets, dirname, (presetOpts, presetLoc) => {
       this.mergeOptions({
         options: presetOpts,
@@ -318,7 +287,7 @@ export default class OptionManager {
    * Resolves presets options which can be either direct object data,
    * or a module name to require.
    */
-  resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
+  resolvePresets(presets, dirname, onResolve) {
     return presets.map((val) => {
       if (typeof val === "string") {
         let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
@@ -407,7 +376,7 @@ export default class OptionManager {
     }
   }
 
-  init(opts: Object = {}): Object {
+  init(opts = {}) {
     let filename = opts.filename;
 
     // resolve all .babelrc files

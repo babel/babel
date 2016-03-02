@@ -11,13 +11,7 @@ export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";
 export { visitors };
 
-export default function traverse(
-  parent: Object | Array<Object>,
-  opts?: Object,
-  scope?: Object,
-  state: Object,
-  parentPath: Object,
-) {
+export default function traverse(parent, opts, scope, state, parentPath) {
   if (!parent) return;
   if (!opts) opts = {};
 
@@ -61,8 +55,8 @@ traverse.cheap = function (node, enter) {
   }
 };
 
-traverse.node = function (node: Object, opts: Object, scope: Object, state: Object, parentPath: Object, skipKeys?) {
-  let keys: Array = t.VISITOR_KEYS[node.type];
+traverse.node = function (node, opts, scope, state, parentPath, skipKeys) {
+  let keys = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
   let context = new TraversalContext(scope, opts, state, parentPath);
@@ -72,7 +66,7 @@ traverse.node = function (node: Object, opts: Object, scope: Object, state: Obje
   }
 };
 
-const CLEAR_KEYS: Array = t.COMMENT_KEYS.concat([
+const CLEAR_KEYS = t.COMMENT_KEYS.concat([
   "tokens", "comments",
   "start", "end", "loc",
   "raw", "rawValue"
@@ -87,7 +81,7 @@ traverse.clearNode = function (node) {
     if (key[0] === "_" && node[key] != null) node[key] = undefined;
   }
 
-  let syms: Array<Symbol> = Object.getOwnPropertySymbols(node);
+  let syms = Object.getOwnPropertySymbols(node);
   for (let sym of syms) {
     node[sym] = null;
   }
@@ -105,7 +99,7 @@ function hasBlacklistedType(path, state) {
   }
 }
 
-traverse.hasType = function (tree: Object, scope: Object, type: Object, blacklistTypes: Array<string>): boolean {
+traverse.hasType = function (tree, scope, type, blacklistTypes) {
   // the node we're searching in is blacklisted
   if (includes(blacklistTypes, tree.type)) return false;
 

@@ -198,7 +198,7 @@ export let visitor = {
 
     // There are only "shorthand" references
     if (!state.deopted && !state.references.length) {
-      for (let {path, cause} of (state.candidates: Array)) {
+      for (let {path, cause} of state.candidates) {
         switch (cause) {
           case "indexGetter":
             optimiseIndexGetter(path, argsId, state.offset);

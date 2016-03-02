@@ -92,7 +92,7 @@ export default function ({ types: t }) {
             );
           }
 
-          let body: Array<Object> = path.get("body");
+          let body = path.get("body");
 
           let canHoist = true;
           for (let path of body) {

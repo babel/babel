@@ -6,7 +6,7 @@ export default function ({ types: t }) {
 
     visitor: {
       Program(path, { file: { ast: { comments } } }) {
-        for (let comment of (comments: Array<Object>)) {
+        for (let comment of comments) {
           if (comment.value.indexOf(FLOW_DIRECTIVE) >= 0) {
             // remove flow directive
             comment.value = comment.value.replace(FLOW_DIRECTIVE, "");

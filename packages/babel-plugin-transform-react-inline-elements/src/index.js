@@ -42,7 +42,7 @@ export default function ({ types: t }) {
         }
 
         // props
-        for (let attr of (open.attributes: Array<Object>)) {
+        for (let attr of open.attributes) {
           if (isJSXAttributeOfName(attr, "key")) {
             key = getAttributeValue(attr);
           } else {

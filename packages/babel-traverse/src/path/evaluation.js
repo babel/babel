@@ -1,8 +1,6 @@
 /* eslint indent: 0 */
 /* eslint max-len: 0 */
 
-import type NodePath from "./index";
-
 // This file contains Babels metainterpreter that can evaluate static code.
 
 /* eslint eqeqeq: 0 */
@@ -28,7 +26,7 @@ const INVALID_METHODS = ["random"];
  *
  */
 
-export function evaluateTruthy(): boolean {
+export function evaluateTruthy() {
   let res = this.evaluate();
   if (res.confident) return !!res.value;
 }
@@ -48,9 +46,9 @@ export function evaluateTruthy(): boolean {
  *
  */
 
-export function evaluate(): { confident: boolean; value: any } {
+export function evaluate() {
   let confident = true;
-  let deoptPath: ?NodePath;
+  let deoptPath;
 
   function deopt(path) {
     if (!confident) return;
@@ -90,7 +88,7 @@ export function evaluate(): { confident: boolean; value: any } {
       let i = 0;
       let exprs = path.get("expressions");
 
-      for (let elem of (node.quasis: Array<Object>)) {
+      for (let elem of node.quasis) {
         // not confident, evaluated an expression we don't like
         if (!confident) break;
 
@@ -180,7 +178,7 @@ export function evaluate(): { confident: boolean; value: any } {
 
     if (path.isArrayExpression()) {
       let arr = [];
-      let elems: Array<NodePath> = path.get("elements");
+      let elems = path.get("elements");
       for (let elem of elems) {
         elem = elem.evaluate();
 

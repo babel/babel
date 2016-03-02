@@ -704,7 +704,7 @@ export default function (instance) {
   });
 
   instance.extend("parseParenItem", function () {
-    return function (node, startLoc, startPos, forceArrow?) {
+    return function (node, startLoc, startPos, forceArrow) {
       let canBeArrow = this.state.potentialArrowAt = startPos;
       if (this.match(tt.colon)) {
         let typeCastNode = this.startNodeAt(startLoc, startPos);

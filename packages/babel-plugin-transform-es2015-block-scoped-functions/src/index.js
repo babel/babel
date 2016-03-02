@@ -1,6 +1,6 @@
 export default function ({ types: t }) {
   function statementList(key, path) {
-    let paths: Array = path.get(key);
+    let paths = path.get(key);
 
     for (let path of paths) {
       let func = path.node;

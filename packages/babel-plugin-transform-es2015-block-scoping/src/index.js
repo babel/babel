@@ -1,8 +1,5 @@
 /* eslint max-len: 0 */
 
-import type NodePath from "babel-traverse";
-import type Scope from "babel-traverse";
-import type File from "../../../file";
 import traverse from "babel-traverse";
 import { visitor as tdzVisitor } from "./tdz";
 import * as t from "babel-types";
@@ -276,7 +273,7 @@ let loopVisitor = {
 };
 
 class BlockScoping {
-  constructor(loopPath?: NodePath, blockPath: NodePath, parent: Object, scope: Scope, file: File) {
+  constructor(loopPath, blockPath, parent, scope, file) {
     this.parent = parent;
     this.scope  = scope;
     this.file   = file;
@@ -445,7 +442,7 @@ class BlockScoping {
    * Push the closure to the body.
    */
 
-  buildClosure(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {
+  buildClosure(ret, call) {
     let has = this.has;
     if (has.hasReturn || has.hasBreakContinue) {
       this.buildHas(ret, call);
@@ -539,7 +536,7 @@ class BlockScoping {
    * later on.
    */
 
-  checkLoop(): Object {
+  checkLoop() {
     let state = {
       hasBreakContinue: false,
       ignoreLabeless:   false,
@@ -571,7 +568,7 @@ class BlockScoping {
    * their declarations hoisted to before the closure wrapper.
    */
 
-  pushDeclar(node: { type: "VariableDeclaration" }): Array<Object> {
+  pushDeclar(node) {
     let declars = [];
     let names = t.getBindingIdentifiers(node);
     for (let name in names) {
@@ -593,7 +590,7 @@ class BlockScoping {
     return replace;
   }
 
-  buildHas(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {
+  buildHas(ret, call) {
     let body = this.body;
 
     body.push(t.variableDeclaration("var", [
