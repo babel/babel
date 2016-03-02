@@ -18,7 +18,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 #### Bug Fix
 
 - `babel-plugin-transform-es2015-modules-commonjs`, `babel-traverse`
-  - Fix regression with [T7165](https://phabricator.babeljs.io/T7165) - let is not being transpiled when using export all (block-scoping transform wasn't run) ([@loganfsmyth](https://github.com/loganfsmyth))
+  - [#3387](https://github.com/babel/babel/pull/3387) Fix regression with [T7165](https://phabricator.babeljs.io/T7165) - let is not being transpiled when using export all (block-scoping transform wasn't run) ([@loganfsmyth](https://github.com/loganfsmyth))
 
 ```js
 // example code
@@ -30,7 +30,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 #### Bug Fix
 
 - `babel-plugin-transform-es2015-modules-commonjs`, `babel-traverse`
-  - [#3387](https://github.com/babel/babel/pull/3387) Fix regression with [T7160](https://phabricator.babeljs.io/T7160) - exported arrow functions with default parameters ([@loganfsmyth](https://github.com/loganfsmyth))
+  - [#3386](https://github.com/babel/babel/pull/3386) Fix regression with [T7160](https://phabricator.babeljs.io/T7160) - exported arrow functions with default parameters ([@loganfsmyth](https://github.com/loganfsmyth))
 
 ```js
 // example code
