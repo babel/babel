@@ -91,7 +91,7 @@ getBindingIdentifiers.keys = {
   RestElement: ["argument"],
   UpdateExpression: ["argument"],
 
-  SpreadProperty: ["argument"],
+  RestProperty: ["argument"],
   ObjectProperty: ["value"],
 
   AssignmentPattern: ["left"],
