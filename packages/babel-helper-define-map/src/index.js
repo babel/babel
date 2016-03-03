@@ -5,7 +5,7 @@ import each from "lodash/collection/each";
 import has from "lodash/object/has";
 import * as t from "babel-types";
 
-function toKind(node) {
+function toKind(node: Object) {
   if (t.isClassMethod(node) || t.isObjectMethod(node)) {
     if (node.kind === "get" || node.kind === "set") {
       return node.kind;
@@ -15,7 +15,7 @@ function toKind(node) {
   return "value";
 }
 
-export function push(mutatorMap, node, kind, file, scope) {
+export function push(mutatorMap: Object, node: Object, kind: string, file, scope?): Object {
   let alias = t.toKeyAlias(node);
 
   //
@@ -75,7 +75,7 @@ export function push(mutatorMap, node, kind, file, scope) {
   return map;
 }
 
-export function hasComputed(mutatorMap) {
+export function hasComputed(mutatorMap: Object): boolean {
   for (let key in mutatorMap) {
     if (mutatorMap[key]._computed) {
       return true;
@@ -84,7 +84,7 @@ export function hasComputed(mutatorMap) {
   return false;
 }
 
-export function toComputedObjectFromClass(obj) {
+export function toComputedObjectFromClass(obj: Object): Object {
   let objExpr = t.arrayExpression([]);
 
   for (let i = 0; i < obj.properties.length; i++) {
@@ -97,7 +97,7 @@ export function toComputedObjectFromClass(obj) {
   return objExpr;
 }
 
-export function toClassObject(mutatorMap) {
+export function toClassObject(mutatorMap: Object): Object {
   let objExpr = t.objectExpression([]);
 
   each(mutatorMap, function (map) {
@@ -124,7 +124,7 @@ export function toClassObject(mutatorMap) {
   return objExpr;
 }
 
-export function toDefineObject(mutatorMap) {
+export function toDefineObject(mutatorMap: Object): Object {
   each(mutatorMap, function (map) {
     if (map.value) map.writable = t.booleanLiteral(true);
     map.configurable = t.booleanLiteral(true);

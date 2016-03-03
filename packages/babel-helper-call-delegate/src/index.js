@@ -1,4 +1,5 @@
 import hoistVariables from "babel-helper-hoist-variables";
+import type { NodePath } from "babel-traverse";
 import * as t from "babel-types";
 
 let visitor = {
@@ -17,7 +18,7 @@ let visitor = {
   }
 };
 
-export default function (path, scope = path.scope) {
+export default function (path: NodePath, scope = path.scope) {
   let { node } = path;
   let container = t.functionExpression(null, [], node.body, node.generator, node.async);
 

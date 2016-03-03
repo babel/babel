@@ -1,5 +1,7 @@
 /* eslint max-len: 0 */
 
+import type Hub from "../hub";
+import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
 import { PATH_CACHE_KEY } from "./constants";
@@ -12,7 +14,7 @@ import * as t from "babel-types";
 let debug = buildDebug("babel");
 
 export default class NodePath {
-  constructor(hub, parent) {
+  constructor(hub: Hub, parent: Object) {
     this.parent = parent;
     this.hub = hub;
     this.contexts = [];
@@ -36,7 +38,29 @@ export default class NodePath {
     this.typeAnnotation = null;
   }
 
-  static get({ hub, parentPath, parent, container, listKey, key }) {
+  parent: Object;
+  hub: Hub;
+  contexts: Array<TraversalContext>;
+  data: Object;
+  shouldSkip: boolean;
+  shouldStop: boolean;
+  removed: boolean;
+  state: any;
+  opts: ?Object;
+  skipKeys: ?Object;
+  parentPath: ?NodePath;
+  context: TraversalContext;
+  container: ?Object | Array<Object>;
+  listKey: ?string;
+  inList: boolean;
+  parentKey: ?string;
+  key: ?string;
+  node: ?Object;
+  scope: Scope;
+  type: ?string;
+  typeAnnotation: ?Object;
+
+  static get({ hub, parentPath, parent, container, listKey, key }): NodePath {
     if (!hub && parentPath) {
       hub = parentPath.hub;
     }
@@ -78,7 +102,7 @@ export default class NodePath {
     return path;
   }
 
-  getScope(scope) {
+  getScope(scope: Scope) {
     let ourScope = scope;
 
     // we're entering a new scope so let's construct it!
@@ -89,25 +113,25 @@ export default class NodePath {
     return ourScope;
   }
 
-  setData(key, val) {
+  setData(key: string, val: any): any {
     return this.data[key] = val;
   }
 
-  getData(key, def) {
+  getData(key: string, def?: any): any {
     let val = this.data[key];
     if (!val && def) val = this.data[key] = def;
     return val;
   }
 
-  buildCodeFrameError(msg, Error = SyntaxError) {
+  buildCodeFrameError(msg: string, Error: typeof Error = SyntaxError): Error {
     return this.hub.file.buildCodeFrameError(this.node, msg, Error);
   }
 
-  traverse(visitor, state) {
+  traverse(visitor: Object, state?: any) {
     traverse(this.node, visitor, this.scope, state, this);
   }
 
-  mark(type, message) {
+  mark(type: string, message: string) {
     this.hub.file.metadata.marked.push({
       type,
       message,
@@ -115,12 +139,12 @@ export default class NodePath {
     });
   }
 
-  set(key, node) {
+  set(key: string, node: Object) {
     t.validate(this.node, key, node);
     this.node[key] = node;
   }
 
-  getPathLocation() {
+  getPathLocation(): string {
     let parts = [];
     let path = this;
     do {
@@ -131,7 +155,7 @@ export default class NodePath {
     return parts.join(".");
   }
 
-  debug(buildMessage) {
+  debug(buildMessage: Function) {
     if (!debug.enabled) return;
     debug(`${this.getPathLocation()} ${this.type}: ${buildMessage()}`);
   }
@@ -149,7 +173,7 @@ assign(NodePath.prototype, require("./modification"));
 assign(NodePath.prototype, require("./family"));
 assign(NodePath.prototype, require("./comments"));
 
-for (let type of t.TYPES) {
+for (let type of (t.TYPES: Array<string>)) {
   let typeKey = `is${type}`;
   NodePath.prototype[typeKey] = function (opts) {
     return t[typeKey](this.node, opts);

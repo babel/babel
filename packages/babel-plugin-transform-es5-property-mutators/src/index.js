@@ -6,7 +6,7 @@ export default function ({ types: t }) {
       ObjectExpression(path, file) {
         let { node } = path;
         let hasAny = false;
-        for (let prop of node.properties) {
+        for (let prop of (node.properties: Array)) {
           if (prop.kind === "get" || prop.kind === "set") {
             hasAny = true;
             break;

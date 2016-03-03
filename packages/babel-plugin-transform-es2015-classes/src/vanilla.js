@@ -1,5 +1,6 @@
 /* eslint max-len: 0 */
 
+import type { NodePath } from "babel-traverse";
 import { visitors } from "babel-traverse";
 import ReplaceSupers from "babel-helper-replace-supers";
 import optimiseCall from "babel-helper-optimise-call-expression";
@@ -60,7 +61,7 @@ let findThisesVisitor = visitors.merge([noMethodVisitor, {
 }]);
 
 export default class ClassTransformer {
-  constructor(path, file) {
+  constructor(path: NodePath, file) {
     this.parent = path.parent;
     this.scope  = path.scope;
     this.node   = path.node;
@@ -148,7 +149,7 @@ export default class ClassTransformer {
     return func;
   }
 
-  pushToMap(node, enumerable, kind = "value", scope) {
+  pushToMap(node, enumerable, kind = "value", scope?) {
     let mutatorMap;
     if (node.static) {
       this.hasStaticDescriptors = true;
@@ -175,7 +176,7 @@ export default class ClassTransformer {
   constructorMeMaybe() {
     let hasConstructor = false;
     let paths = this.path.get("body.body");
-    for (let path of paths) {
+    for (let path of (paths: Array)) {
       hasConstructor = path.equals("kind", "constructor");
       if (hasConstructor) break;
     }
@@ -216,7 +217,7 @@ export default class ClassTransformer {
   }
 
   pushBody() {
-    let classBodyPaths = this.path.get("body.body");
+    let classBodyPaths: Array<Object> = this.path.get("body.body");
 
     for (let path of classBodyPaths) {
       let node = path.node;
@@ -450,7 +451,7 @@ export default class ClassTransformer {
    * Push a method to its respective mutatorMap.
    */
 
-  pushMethod(node, path) {
+  pushMethod(node: { type: "ClassMethod" }, path?: NodePath) {
     let scope = path ? path.scope : this.scope;
 
     if (node.kind === "method") {
@@ -468,7 +469,7 @@ export default class ClassTransformer {
    * Replace the constructor body of our class.
    */
 
-  pushConstructor(replaceSupers, method, path) {
+  pushConstructor(replaceSupers, method: { type: "ClassMethod" }, path: NodePath) {
     this.bareSupers = replaceSupers.bareSupers;
     this.superReturns = replaceSupers.returns;
 

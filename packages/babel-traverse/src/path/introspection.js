@@ -1,5 +1,6 @@
 // This file contains methods responsible for introspecting the current path for certain values.
 
+import type NodePath from "./index";
 import includes from "lodash/collection/includes";
 import * as t from "babel-types";
 
@@ -10,7 +11,7 @@ import * as t from "babel-types";
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 
-export function matchesPattern(pattern, allowPartial) {
+export function matchesPattern(pattern: string, allowPartial?: boolean): boolean {
   // not a member expression
   if (!this.isMemberExpression()) return false;
 
@@ -66,7 +67,7 @@ export function matchesPattern(pattern, allowPartial) {
  * if the array has any items, otherwise we just check if it's falsy.
  */
 
-export function has(key) {
+export function has(key): boolean {
   let val = this.node && this.node[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
@@ -93,7 +94,7 @@ export let is = has;
  * Opposite of `has`.
  */
 
-export function isnt(key) {
+export function isnt(key): boolean {
   return !this.has(key);
 }
 
@@ -101,7 +102,7 @@ export function isnt(key) {
  * Check whether the path node `key` strict equals `value`.
  */
 
-export function equals(key, value) {
+export function equals(key, value): boolean {
   return this.node[key] === value;
 }
 
@@ -110,7 +111,7 @@ export function equals(key, value) {
  * been removed yet we still internally know the type and need it to calculate node replacement.
  */
 
-export function isNodeType(type) {
+export function isNodeType(type: string): boolean {
   return t.isType(this.type, type);
 }
 
@@ -154,7 +155,7 @@ export function canSwapBetweenExpressionAndStatement(replacement) {
  * Check whether the current path references a completion record
  */
 
-export function isCompletionRecord(allowInsideFunction) {
+export function isCompletionRecord(allowInsideFunction?) {
   let path = this;
   let first = true;
 
@@ -319,7 +320,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
   // no references!
   if (!binding.references) return "before";
 
-  let referencePaths = binding.referencePaths;
+  let referencePaths: Array<NodePath> = binding.referencePaths;
 
   // verify that all of the references are calls
   for (let path of referencePaths) {
@@ -357,7 +358,7 @@ export function resolve(dangerous, resolved) {
   return this._resolve(dangerous, resolved) || this;
 }
 
-export function _resolve(dangerous, resolved) {
+export function _resolve(dangerous?, resolved?): ?NodePath {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
   if (resolved && resolved.indexOf(this) >= 0) return;
@@ -403,7 +404,7 @@ export function _resolve(dangerous, resolved) {
 
     if (target.isObjectExpression()) {
       let props = target.get("properties");
-      for (let prop of props) {
+      for (let prop of (props: Array)) {
         if (!prop.isProperty()) continue;
 
         let key = prop.get("key");

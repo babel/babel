@@ -1,6 +1,7 @@
 // This file contains that retrieve or validate anything related to the current paths ancestry.
 
 import * as t from "babel-types";
+import NodePath from "./index";
 
 /**
  * Call the provided `callback` with the `NodePath`s of all the parents.
@@ -56,12 +57,12 @@ export function getStatementParent() {
  * position and visiting key.
  */
 
-export function getEarliestCommonAncestorFrom(paths) {
+export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath {
   return this.getDeepestCommonAncestorFrom(paths, function (deepest, i, ancestries) {
     let earliest;
     let keys = t.VISITOR_KEYS[deepest.type];
 
-    for (let ancestry of ancestries) {
+    for (let ancestry of (ancestries: Array)) {
       let path = ancestry[i + 1];
 
       // first path
@@ -98,7 +99,7 @@ export function getEarliestCommonAncestorFrom(paths) {
  * TODO: Possible optimisation target.
  */
 
-export function getDeepestCommonAncestorFrom(paths, filter) {
+export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Function): NodePath {
   if (!paths.length) {
     return this;
   }
@@ -136,7 +137,7 @@ export function getDeepestCommonAncestorFrom(paths, filter) {
   depthLoop: for (let i = 0; i < minDepth; i++) {
     let shouldMatch = first[i];
 
-    for (let ancestry of ancestries) {
+    for (let ancestry of (ancestries: Array)) {
       if (ancestry[i] !== shouldMatch) {
         // we've hit a snag
         break depthLoop;
@@ -177,7 +178,7 @@ export function getAncestry() {
 export function inType() {
   let path = this;
   while (path) {
-    for (let type of arguments) {
+    for (let type of (arguments: Array)) {
       if (path.node.type === type) return true;
     }
     path = path.parentPath;
@@ -190,7 +191,7 @@ export function inType() {
  * Check if we're inside a shadowed function.
  */
 
-export function inShadow(key) {
+export function inShadow(key?) {
   let path = this;
   do {
     if (path.isFunction()) {

@@ -1,3 +1,4 @@
+import type File from "./index";
 import buildDebug from "debug/node";
 
 let verboseDebug = buildDebug("babel:verbose");
@@ -6,26 +7,29 @@ let generalDebug = buildDebug("babel");
 let seenDeprecatedMessages = [];
 
 export default class Logger {
-  constructor(file, filename) {
+  constructor(file: File, filename: string) {
     this.filename = filename;
     this.file     = file;
   }
 
-  _buildMessage(msg) {
+  filename: string;
+  file: File;
+
+  _buildMessage(msg: string): string {
     let parts = `[BABEL] ${this.filename}`;
     if (msg) parts += `: ${msg}`;
     return parts;
   }
 
-  warn(msg) {
+  warn(msg: string) {
     console.warn(this._buildMessage(msg));
   }
 
-  error(msg, Constructor = Error) {
+  error(msg: string, Constructor: typeof Error = Error): Error {
     throw new Constructor(this._buildMessage(msg));
   }
 
-  deprecate(msg) {
+  deprecate(msg: string) {
     if (this.file.opts && this.file.opts.suppressDeprecationMessages) return;
 
     msg = this._buildMessage(msg);
@@ -39,15 +43,15 @@ export default class Logger {
     console.error(msg);
   }
 
-  verbose(msg) {
+  verbose(msg: string) {
     if (verboseDebug.enabled) verboseDebug(this._buildMessage(msg));
   }
 
-  debug(msg) {
+  debug(msg: string) {
     if (generalDebug.enabled) generalDebug(this._buildMessage(msg));
   }
 
-  deopt(node, msg) {
+  deopt(node: Object, msg: string) {
     this.debug(msg);
   }
 }

@@ -404,7 +404,7 @@ pp.parseEmptyStatement = function (node) {
 };
 
 pp.parseLabeledStatement = function (node, maybeName, expr) {
-  for (let label of this.state.labels) {
+  for (let label of (this.state.labels: Array<Object>)){
     if (label.name === maybeName) {
       this.raise(expr.start, `Label '${maybeName}' is already declared`);
     }
@@ -438,7 +438,7 @@ pp.parseExpressionStatement = function (node, expr) {
 // strict"` declarations when `allowStrict` is true (used for
 // function bodies).
 
-pp.parseBlock = function (allowDirectives) {
+pp.parseBlock = function (allowDirectives?) {
   let node = this.startNode();
   this.expect(tt.braceL);
   this.parseBlockBody(node, allowDirectives, false, tt.braceR);
@@ -860,7 +860,7 @@ pp.parseExportSpecifiersMaybe = function (node) {
   }
 };
 
-pp.parseExportFrom = function (node, expect) {
+pp.parseExportFrom = function (node, expect?) {
   if (this.eatContextual("from")) {
     node.source = this.match(tt.string) ? this.parseExprAtom() : this.unexpected();
     this.checkExport(node);

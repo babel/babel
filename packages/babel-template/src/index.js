@@ -10,7 +10,7 @@ import * as t from "babel-types";
 let FROM_TEMPLATE = "_fromTemplate"; //Symbol(); // todo: probably wont get copied over
 let TEMPLATE_SKIP = Symbol();
 
-export default function (code, opts) {
+export default function (code: string, opts?: Object): Function {
   // since we lazy parse the template, we get the current stack so we have the
   // original stack to append if it errors when parsing
   let stack;
@@ -52,7 +52,7 @@ export default function (code, opts) {
   };
 }
 
-function useTemplate(ast, nodes) {
+function useTemplate(ast, nodes?: Array<Object>) {
   ast = cloneDeep(ast);
   let { program } = ast;
 

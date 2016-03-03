@@ -89,7 +89,7 @@ export default function ({ types: t, template }) {
         exit(path, state) {
           let { node, parent, scope } = path;
           let hasComputed = false;
-          for (let prop of node.properties) {
+          for (let prop of (node.properties: Array<Object>)) {
             hasComputed = prop.computed === true;
             if (hasComputed) break;
           }

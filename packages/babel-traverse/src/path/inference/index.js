@@ -1,3 +1,4 @@
+import type NodePath from "./index";
 import * as inferers from "./inferers";
 import * as t from "babel-types";
 
@@ -5,7 +6,7 @@ import * as t from "babel-types";
  * Infer the type of the current `NodePath`.
  */
 
-export function getTypeAnnotation() {
+export function getTypeAnnotation(): Object {
   if (this.typeAnnotation) return this.typeAnnotation;
 
   let type = this._getTypeAnnotation() || t.anyTypeAnnotation();
@@ -17,7 +18,7 @@ export function getTypeAnnotation() {
  * todo: split up this method
  */
 
-export function _getTypeAnnotation() {
+export function _getTypeAnnotation(): ?Object {
   let node = this.node;
 
   if (!node) {
@@ -57,11 +58,11 @@ export function _getTypeAnnotation() {
   }
 }
 
-export function isBaseType(baseName, soft) {
+export function isBaseType(baseName: string, soft?: boolean): boolean {
   return _isBaseType(baseName, this.getTypeAnnotation(), soft);
 }
 
-function _isBaseType(baseName, type, soft) {
+function _isBaseType(baseName: string, type?, soft?): boolean {
   if (baseName === "string") {
     return t.isStringTypeAnnotation(type);
   } else if (baseName === "number") {
@@ -83,12 +84,12 @@ function _isBaseType(baseName, type, soft) {
   }
 }
 
-export function couldBeBaseType(name) {
+export function couldBeBaseType(name: string): boolean {
   let type = this.getTypeAnnotation();
   if (t.isAnyTypeAnnotation(type)) return true;
 
   if (t.isUnionTypeAnnotation(type)) {
-    for (let type2 of type.types) {
+    for (let type2 of (type.types: Array<Object>)) {
       if (t.isAnyTypeAnnotation(type2) || _isBaseType(name, type2, true)) {
         return true;
       }
@@ -99,7 +100,7 @@ export function couldBeBaseType(name) {
   }
 }
 
-export function baseTypeStrictlyMatches(right) {
+export function baseTypeStrictlyMatches(right: NodePath) {
   let left = this.getTypeAnnotation();
   right = right.getTypeAnnotation();
 
@@ -108,7 +109,7 @@ export function baseTypeStrictlyMatches(right) {
   }
 }
 
-export function isGenericType(genericName) {
+export function isGenericType(genericName: string): boolean {
   let type = this.getTypeAnnotation();
   return t.isGenericTypeAnnotation(type) && t.isIdentifier(type.id, { name: genericName });
 }

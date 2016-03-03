@@ -2,7 +2,7 @@
 
 import traverse from "../index";
 
-export function call(key) {
+export function call(key): boolean {
   let opts = this.opts;
 
   this.debug(() => key);
@@ -18,7 +18,7 @@ export function call(key) {
   return false;
 }
 
-export function _call(fns) {
+export function _call(fns?: Array<Function>): boolean {
   if (!fns) return false;
 
   for (let fn of fns) {
@@ -39,12 +39,12 @@ export function _call(fns) {
   return false;
 }
 
-export function isBlacklisted() {
+export function isBlacklisted(): boolean {
   let blacklist = this.opts.blacklist;
   return blacklist && blacklist.indexOf(this.node.type) > -1;
 }
 
-export function visit() {
+export function visit(): boolean {
   if (!this.node) {
     return false;
   }

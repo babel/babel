@@ -42,7 +42,7 @@ export let transformFromAst = pipeline.transformFromAst.bind(pipeline);
 
 //
 
-export function transformFile(filename, opts, callback) {
+export function transformFile(filename: string, opts?: Object, callback: Function) {
   if (isFunction(opts)) {
     callback = opts;
     opts = {};
@@ -69,7 +69,7 @@ export function transformFile(filename, opts, callback) {
   });
 }
 
-export function transformFileSync(filename, opts = {}) {
+export function transformFileSync(filename: string, opts?: Object = {}): string {
   opts.filename = filename;
   return transform(fs.readFileSync(filename, "utf8"), opts);
 }

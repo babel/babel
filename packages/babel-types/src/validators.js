@@ -197,7 +197,7 @@ export function isVar(node) {
  * Check if the input `specifier` is a `default` import or export.
  */
 
-export function isSpecifierDefault(specifier) {
+export function isSpecifierDefault(specifier: Object): boolean {
   return t.isImportDefaultSpecifier(specifier) ||
          t.isIdentifier(specifier.imported || specifier.exported, { name: "default" });
 }
