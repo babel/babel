@@ -9,7 +9,7 @@ import traverse from "../index";
 import assign from "lodash/object/assign";
 import Scope from "../scope";
 import * as t from "babel-types";
-import { path as pathCache } from "./cache";
+import { path as pathCache } from "../cache";
 
 let debug = buildDebug("babel");
 

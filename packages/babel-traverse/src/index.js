@@ -9,7 +9,6 @@ import * as t from "babel-types";
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";
-export { default as cache } from "./path/cache";
 export { visitors };
 
 export default function traverse(
@@ -40,7 +39,7 @@ traverse.explode = visitors.explode;
 traverse.NodePath = require("./path");
 traverse.Scope    = require("./scope");
 traverse.Hub      = require("./hub");
-traverse.cache    = require("./path/cache");
+traverse.cache    = require("./cache");
 
 traverse.cheap = function (node, enter) {
   if (!node) return;

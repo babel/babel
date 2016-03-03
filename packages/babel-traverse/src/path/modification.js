@@ -1,7 +1,7 @@
 /* eslint max-len: 0 */
 // This file contains methods that modify the path/node in some ways.
 
-import { path as pathCache } from "./cache";
+import { path as pathCache } from "../cache";
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
 import * as t from "babel-types";
