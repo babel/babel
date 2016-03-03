@@ -32,16 +32,15 @@ let buildExportsAssignment = template(`
 `);
 
 let buildExportAll = template(`
-  for (let KEY in OBJECT) {
-    if (KEY === "default") continue;
-
-    Object.defineProperty(exports, KEY, {
+  Object.keys(OBJECT).forEach(function (key) {
+    if (key === "default") return;
+    Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
-        return OBJECT[KEY];
+        return OBJECT[key];
       }
     });
-  }
+  });
 `);
 
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty", "ClassMethod", "ObjectMethod"];
@@ -335,7 +334,6 @@ export default function () {
               }
             } else if (path.isExportAllDeclaration()) {
               topNodes.push(buildExportAll({
-                KEY: path.scope.generateUidIdentifier("key"),
                 OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
               }));
               path.remove();
