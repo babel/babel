@@ -1,7 +1,3 @@
-/* @flow */
-/* global BabelFileResult */
-/* global BabelFileMetadata */
-
 import normalizeAst from "../helpers/normalize-ast";
 import Plugin from "./plugin";
 import File from "./file";

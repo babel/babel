@@ -1,4 +1,3 @@
-/* @flow */
 /* eslint indent: 0 */
 /* eslint max-len: 0 */
 

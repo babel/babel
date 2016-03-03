@@ -1,5 +1,3 @@
-/* @flow */
-
 import deepClone from "lodash/lang/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";

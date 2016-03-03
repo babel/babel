@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as parsers from "./parsers";
 import config from "./config";
 

@@ -1,5 +1,3 @@
-/* @flow */
-
 import defineType, { assertNodeType, assertValueType, chain, assertEach } from "./index";
 
 defineType("JSXAttribute", {

@@ -1,5 +1,3 @@
-/* @flow */
-
 export function File(node: Object) {
   this.print(node.program, node);
 }

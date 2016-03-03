@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as t from "babel-types";
 
 export function _params(node: Object) {

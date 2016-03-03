@@ -1,5 +1,3 @@
-/* @flow */
-
 import slash from "slash";
 import * as util from "../../../util";
 

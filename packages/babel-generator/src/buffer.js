@@ -1,5 +1,3 @@
-/* @flow */
-
 import type Position from "./position";
 import repeating from "repeating";
 import trimRight from "trim-right";

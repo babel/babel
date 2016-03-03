@@ -1,5 +1,3 @@
-/* @flow */
-
 import pull from "lodash/array/pull";
 import * as t from "babel-types";
 
