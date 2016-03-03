@@ -1,3 +1,4 @@
+/* @flow */
 /* eslint max-len: 0 */
 
 /**
@@ -118,7 +119,7 @@ pp.processComment = function (node) {
       // result in an empty array, and if so, the array must be
       // deleted.
       node.leadingComments = this.state.leadingComments.slice(0, i);
-      if (node.leadingComments.length === 0) {
+      if ((node.leadingComments: Array<any>).length === 0) {
         node.leadingComments = null;
       }
 
