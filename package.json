@@ -45,14 +45,11 @@
     "loose": [
       "all"
     ],
-    "plugins": [
-      "flow-comments"
-    ],
     "blacklist": [
-      "flow",
       "es6.tailCall"
     ],
     "optional": [
+      "flow",
       "optimisation.flow.forOf",
       "runtime"
     ],
