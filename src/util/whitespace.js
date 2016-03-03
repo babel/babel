@@ -1,5 +1,3 @@
-/* @flow */
-
 // Matches a whole line break (where CRLF is considered a single
 // line break). Used to count lines.
 

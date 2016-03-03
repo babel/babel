@@ -1,4 +1,3 @@
-/* @flow */
 // A second optional argument can be given to further configure
 // the parser process. These options are recognized:
 
