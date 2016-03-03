@@ -1,13 +1,14 @@
+/* @flow */
 /* eslint max-len: 0 */
 /* eslint quotes: 0 */
 
 import * as t from "babel-types";
 
-export function Identifier(node) {
+export function Identifier(node: Object) {
   this.push(node.name);
 }
 
-export function RestElement(node) {
+export function RestElement(node: Object) {
   this.push("...");
   this.print(node.argument, node);
 }
@@ -18,7 +19,7 @@ export {
   RestElement as RestProperty,
 };
 
-export function ObjectExpression(node) {
+export function ObjectExpression(node: Object) {
   let props = node.properties;
 
   this.push("{");
@@ -35,12 +36,12 @@ export function ObjectExpression(node) {
 
 export { ObjectExpression as ObjectPattern };
 
-export function ObjectMethod(node) {
+export function ObjectMethod(node: Object) {
   this.printJoin(node.decorators, node, { separator: "" });
   this._method(node);
 }
 
-export function ObjectProperty(node) {
+export function ObjectProperty(node: Object) {
   this.printJoin(node.decorators, node, { separator: "" });
 
   if (node.computed) {
@@ -70,7 +71,7 @@ export function ObjectProperty(node) {
   this.print(node.value, node);
 }
 
-export function ArrayExpression(node) {
+export function ArrayExpression(node: Object) {
   let elems = node.elements;
   let len   = elems.length;
 
@@ -98,11 +99,11 @@ export function ArrayExpression(node) {
 
 export { ArrayExpression as ArrayPattern };
 
-export function RegExpLiteral(node) {
+export function RegExpLiteral(node: Object) {
   this.push(`/${node.pattern}/${node.flags}`);
 }
 
-export function BooleanLiteral(node) {
+export function BooleanLiteral(node: Object) {
   this.push(node.value ? "true" : "false");
 }
 
@@ -110,15 +111,15 @@ export function NullLiteral() {
   this.push("null");
 }
 
-export function NumericLiteral(node) {
+export function NumericLiteral(node: Object) {
   this.push(node.value + "");
 }
 
-export function StringLiteral(node, parent) {
+export function StringLiteral(node: Object, parent: Object) {
   this.push(this._stringLiteral(node.value, parent));
 }
 
-export function _stringLiteral(val, parent) {
+export function _stringLiteral(val: string, parent: Object): string {
   val = JSON.stringify(val);
 
   // escape illegal js but valid json unicode characters

@@ -1,3 +1,4 @@
+/* @flow */
 /* eslint indent: 0 */
 /* eslint max-len: 0 */
 
@@ -61,7 +62,7 @@ function getTokenType(match) {
  * Highlight `text`.
  */
 
-function highlight(text) {
+function highlight(text: string) {
   return text.replace(jsTokens, function (...args) {
     let type = getTokenType(args);
     let colorize = defs[type];
@@ -77,7 +78,12 @@ function highlight(text) {
  * Create a code frame, adding line numbers, code highlighting, and pointing to a given position.
  */
 
-export default function (rawLines, lineNumber, colNumber, opts = {}) {
+export default function (
+  rawLines: string,
+  lineNumber: number,
+  colNumber: number,
+  opts: Object = {},
+): string {
   colNumber = Math.max(colNumber, 0);
 
   let highlighted = opts.highlightCode && chalk.supportsColor;

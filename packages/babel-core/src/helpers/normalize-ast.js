@@ -1,3 +1,4 @@
+/* @flow */
 
 import * as t from "babel-types";
 
@@ -7,7 +8,11 @@ import * as t from "babel-types";
  * - Wrap `Program` node with a `File` node.
  */
 
-export default function (ast, comments, tokens) {
+export default function (
+  ast: Object,
+  comments?: Array<Object>,
+  tokens?: Array<Object>,
+) {
   if (ast) {
     if (ast.type === "Program") {
       return t.file(ast, comments || [], tokens || []);

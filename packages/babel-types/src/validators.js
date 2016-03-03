@@ -1,3 +1,4 @@
+/* @flow */
 /* eslint indent: 0 */
 
 import { getBindingIdentifiers } from "./retrievers";
@@ -9,7 +10,7 @@ import { BLOCK_SCOPED_SYMBOL } from "./constants";
  * Check if the input `node` is a binding identifier.
  */
 
-export function isBinding(node, parent) {
+export function isBinding(node: Object, parent: Object): boolean {
   let keys = getBindingIdentifiers.keys[parent.type];
   if (keys) {
     for (let i = 0; i < keys.length; i++) {
@@ -30,7 +31,7 @@ export function isBinding(node, parent) {
  * Check if the input `node` is a reference to a bound variable.
  */
 
-export function isReferenced(node, parent) {
+export function isReferenced(node: Object, parent: Object): boolean {
   switch (parent.type) {
     // yes: object::NODE
     // yes: NODE::callee
@@ -73,7 +74,7 @@ export function isReferenced(node, parent) {
     case "ArrowFunctionExpression":
     case "FunctionDeclaration":
     case "FunctionExpression":
-      for (let param of parent.params) {
+      for (let param of (parent.params: Array<any>)) {
         if (param === node) return false;
       }
 
@@ -161,7 +162,7 @@ export function isReferenced(node, parent) {
  * and isn't a reserved word.
  */
 
-export function isValidIdentifier(name) {
+export function isValidIdentifier(name: string): boolean {
   if (typeof name !== "string" || esutils.keyword.isReservedWordES6(name, true)) {
     return false;
   } else {
@@ -173,7 +174,7 @@ export function isValidIdentifier(name) {
  * Check if the input `node` is a `let` variable declaration.
  */
 
-export function isLet(node) {
+export function isLet(node: Object): boolean {
   return t.isVariableDeclaration(node) && (node.kind !== "var" || node[BLOCK_SCOPED_SYMBOL]);
 }
 
@@ -181,7 +182,7 @@ export function isLet(node) {
  * Check if the input `node` is block scoped.
  */
 
-export function isBlockScoped(node) {
+export function isBlockScoped(node: Object): boolean {
   return t.isFunctionDeclaration(node) || t.isClassDeclaration(node) || t.isLet(node);
 }
 
@@ -189,7 +190,7 @@ export function isBlockScoped(node) {
  * Check if the input `node` is a variable declaration.
  */
 
-export function isVar(node) {
+export function isVar(node: Object): boolean {
   return t.isVariableDeclaration(node, { kind: "var" }) && !node[BLOCK_SCOPED_SYMBOL];
 }
 
@@ -206,7 +207,7 @@ export function isSpecifierDefault(specifier: Object): boolean {
  * Check if the input `node` is a scope.
  */
 
-export function isScope(node, parent) {
+export function isScope(node: Object, parent: Object): boolean {
   if (t.isBlockStatement(node) && t.isFunction(parent, { body: node })) {
     return false;
   }
@@ -218,7 +219,7 @@ export function isScope(node, parent) {
  * Check if the input `node` is definitely immutable.
  */
 
-export function isImmutable(node) {
+export function isImmutable(node: Object): boolean {
   if (t.isType(node.type, "Immutable")) return true;
 
   if (t.isIdentifier(node)) {

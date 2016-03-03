@@ -1,3 +1,4 @@
+/* @flow */
 /* eslint max-len: 0 */
 
 import * as util from "util";
@@ -47,7 +48,7 @@ export const MESSAGES = {
  * Get a message with $0 placeholders replaced by arguments.
  */
 
-export function get(key, ...args) {
+export function get(key: string, ...args: Array<any>): string {
   let msg = MESSAGES[key];
   if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 
@@ -64,7 +65,7 @@ export function get(key, ...args) {
  * Stingify arguments to be used inside messages.
  */
 
-export function parseArgs(args) {
+export function parseArgs(args: Array<any>): Array<string> {
   return args.map(function (val) {
     if (val != null && val.inspect) {
       return val.inspect();

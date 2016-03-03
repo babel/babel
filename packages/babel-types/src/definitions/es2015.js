@@ -1,3 +1,4 @@
+/* @flow */
 /* eslint max-len: 0 */
 
 import defineType, {

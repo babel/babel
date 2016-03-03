@@ -1,14 +1,17 @@
-
+/* @flow */
 
 import * as t from "./index";
 
 export let isReactComponent = t.buildMatchMemberExpression("React.Component");
 
-export function isCompatTag(tagName) {
+export function isCompatTag(tagName?: string): boolean {
   return !!tagName && /^[a-z]|\-/.test(tagName);
 }
 
-function cleanJSXElementLiteralChild(child, args) {
+function cleanJSXElementLiteralChild(
+  child: { value: string },
+  args: Array<Object>,
+) {
   let lines = child.value.split(/\r\n|\n|\r/);
 
   let lastNonEmptyLine = 0;
@@ -53,7 +56,7 @@ function cleanJSXElementLiteralChild(child, args) {
   if (str) args.push(t.stringLiteral(str));
 }
 
-export function buildChildren(node) {
+export function buildChildren(node: Object): Array<Object> {
   let elems = [];
 
   for (let i = 0; i < node.children.length; i++) {
