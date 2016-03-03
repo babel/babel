@@ -10,7 +10,7 @@ import * as messages from "babel-messages";
 import Binding from "./binding";
 import globals from "globals";
 import * as t from "babel-types";
-import { scope as scopeCache } from "../path/cache";
+import { scope as scopeCache } from "../cache";
 
 /**
  * To avoid creating a new Scope instance for each traversal, we maintain a cache on the
