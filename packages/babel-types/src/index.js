@@ -405,8 +405,9 @@ export function inherits(child, parent) {
 
   t.inheritsComments(child, parent);
 
-  if (traverse.cache.has(parent)) {
-    traverse.cache.set(child, traverse.cache.get(parent));
+  const pathCache = traverse.cache.path;
+  if (pathCache.has(parent)) {
+    pathCache.set(child, pathCache.get(parent));
   }
   return child;
 }

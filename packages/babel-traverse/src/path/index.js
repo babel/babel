@@ -9,7 +9,7 @@ import traverse from "../index";
 import assign from "lodash/object/assign";
 import Scope from "../scope";
 import * as t from "babel-types";
-import cache from "./cache";
+import { path as pathCache } from "./cache";
 
 let debug = buildDebug("babel");
 
@@ -69,9 +69,9 @@ export default class NodePath {
 
     let targetNode = container[key];
 
-    let paths = cache.get(parent) || [];
-    if (!cache.has(parent)) {
-      cache.set(parent, paths);
+    let paths = pathCache.get(parent) || [];
+    if (!pathCache.has(parent)) {
+      pathCache.set(parent, paths);
     }
 
     let path;
