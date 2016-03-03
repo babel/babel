@@ -13,7 +13,7 @@ export default function () {
       VariableDeclaration(path, file) {
         let { node, parent, scope } = path;
         if (!isBlockScoped(node)) return;
-        convertBlockScopedToVar(node, parent, scope);
+        convertBlockScopedToVar(path, parent, scope, true);
 
         if (node._tdzThis) {
           let nodes = [node];
@@ -69,7 +69,8 @@ function isBlockScoped(node) {
   return true;
 }
 
-function convertBlockScopedToVar(node, parent, scope) {
+function convertBlockScopedToVar(path, parent, scope, moveBindingsToParent = false) {
+  const { node } = path;
   // https://github.com/babel/babel/issues/255
   if (!t.isFor(parent)) {
     for (let i = 0; i < node.declarations.length; i++) {
@@ -80,6 +81,20 @@ function convertBlockScopedToVar(node, parent, scope) {
 
   node[t.BLOCK_SCOPED_SYMBOL] = true;
   node.kind = "var";
+
+  // Move bindings from current block scope to function scope.
+  if (moveBindingsToParent) {
+    const parentScope = scope.getFunctionParent();
+    if (parentScope === scope) {
+      return;
+    }
+
+    const ids = path.getBindingIdentifiers();
+    for (let name in ids) {
+      scope.removeOwnBinding(name);
+    }
+    parentScope.registerBinding("var", path);
+  }
 }
 
 function isVar(node) {
@@ -284,6 +299,7 @@ class BlockScoping {
     this.outsideLetReferences = Object.create(null);
     this.hasLetReferences     = false;
     this.letReferences        = Object.create(null);
+    this.letReferencesDeclars = [];
     this.body                 = [];
 
     if (loopPath) {
@@ -327,6 +343,8 @@ class BlockScoping {
     let letRefs   = this.letReferences;
     let scope     = this.scope;
 
+    const parentScope = scope.getFunctionParent();
+
     // alright, so since we aren't wrapping this block in a closure
     // we have to check if any of our let variables collide with
     // those in upper scopes and then if they do, generate a uid
@@ -348,6 +366,18 @@ class BlockScoping {
           binding: ref,
           uid: uid
         };
+      }
+
+      // Remove binding from block scope so it's moved to function scope.
+      if (parentScope !== scope) {
+        scope.removeOwnBinding(ref.name);
+      }
+    }
+
+    // Move bindings to parent scope.
+    if (parentScope !== scope) {
+      for (let declar of (this.letReferencesDeclars: Array<Object>)) {
+        parentScope.registerBinding("var", declar);
       }
     }
 
@@ -499,7 +529,11 @@ class BlockScoping {
       for (let i = 0; i < block.body.length; i++) {
         let declar = block.body[i];
         if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar) || isBlockScoped(declar)) {
-          if (isBlockScoped(declar)) convertBlockScopedToVar(declar, block, this.scope);
+          let declarPath = this.blockPath.get("body")[i];
+          if (isBlockScoped(declar)) {
+            convertBlockScopedToVar(declarPath, block, this.scope);
+            this.letReferencesDeclars.push(declarPath);
+          }
           declarators = declarators.concat(declar.declarations || declar);
         }
       }
