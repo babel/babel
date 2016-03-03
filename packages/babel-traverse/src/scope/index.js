@@ -20,25 +20,6 @@ import { scope as scopeCache } from "../cache";
 function getCache(node, parentScope, self) {
   let scopes: Array<Scope> = scopeCache.get(node) || [];
 
-<<<<<<< HEAD
-function matchesParent(scope, parentScope) {
-  if (scope.parent === parentScope) {
-    return true;
-  }
-}
-
-function getCacheMultiple(node, parentScope, self, singleCache) {
-  let scopes: Array<Scope> = node[CACHE_MULTIPLE_KEY] = node[CACHE_MULTIPLE_KEY] || [];
-
-  if (singleCache) {
-    // we have a scope assocation miss so push it onto our scopes
-    scopes.push(singleCache);
-    node[CACHE_SINGLE_KEY] = null;
-  }
-
-  // loop through and check each scope to see if it matches our parent
-=======
->>>>>>> Move scope cache to the cache module
   for (let scope of scopes) {
     if (scope.parent === parentScope) return scope;
   }
