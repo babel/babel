@@ -13,6 +13,54 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.6.5 (2016-03-04)
+
+And.. some more bug fixes!
+
+#### Bug Fix
+* `babel-plugin-transform-es2015-computed-properties`
+  * [#3396](https://github.com/babel/babel/pull/3396) Fixes [T7183](https://phabricator.babeljs.io/T7183): Object accessors after computed property were broken. ([@AgentME](https://github.com/AgentME))
+
+```js
+// lead to `ReferenceError: b is not defined` at runtime
+var obj = {
+  ["a"]: 5,
+  set b(x) { console.log('set b', x); }
+};
+
+obj.b = 55;
+```
+
+* `babel-plugin-transform-object-rest-spread`, `babel-types`
+  * [#3395](https://github.com/babel/babel/pull/3395) Recognize object rest properties as binding identifiers - Fixes [T7178](https://phabricator.babeljs.io/T7178). ([@loganfsmyth](https://github.com/loganfsmyth))
+
+```js
+import props from 'props';
+console.log(props);
+
+(function(){
+  const { ...props } = this.props;
+
+  console.log(props); // props was referencing the imported props rather than in object spread
+})();
+```
+
+* `babel-plugin-transform-es2015-block-scoping`
+  * [#3389](https://github.com/babel/babel/pull/3389) Update scope binding info after transforming block-scoped bindings. ([@amasad](https://github.com/amasad))
+
+Scope binding info wasn't updated after converting const/let/block bindings to var which could lead to errors with other transforms.
+
+#### Internal
+* [#3398](https://github.com/babel/babel/pull/3398) Revert "Remove flow". ([@amasad](https://github.com/amasad))
+* [#3397](https://github.com/babel/babel/pull/3397) Make sure lib is clean before publishing. ([@hzoo](https://github.com/hzoo))
+* `babel-core`, `babel-plugin-transform-es2015-block-scoping`, `babel-plugin-transform-es2015-classes`
+  * [#3399](https://github.com/babel/babel/pull/3399) use `flow` instead of `flow-comments`. ([@hzoo](https://github.com/hzoo))
+* `babel-plugin-transform-es2015-modules-amd`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-es2015-modules-umd`
+  * [#3391](https://github.com/babel/babel/pull/3391) Make buildExportAll generate pure ES5 code.. ([@benjamn](https://github.com/benjamn))
+
+#### Commiters: 5
+AgentME, amasad, benjamn, hzoo, loganfsmyth
+
 ## 6.6.4 (2016-03-02)
 
 Some more fixes!
