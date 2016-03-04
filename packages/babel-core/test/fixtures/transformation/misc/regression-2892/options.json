@@ -1,3 +1,4 @@
- {
-  "plugins": ["external-helpers", "transform-async-to-generator", "transform-regenerator"]
+{
+  "plugins": ["transform-async-to-generator"],
+  "presets": ["es2015"]
 }
