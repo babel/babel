@@ -1,8 +1,10 @@
 var getFixtures = require("babel-helper-fixtures").multiple;
 var parse       = require("../lib").parse;
 var _           = require("lodash");
+var fs          = require("fs");
 
-var fixtures = getFixtures(__dirname + "/fixtures");
+var fixtures = reduceFixtures(getFixtures(__dirname + "/fixtures"));
+var saveResultedJSON = false;
 
 _.each(fixtures, function (suites, name) {
   _.each(suites, function (testSuite) {
@@ -21,10 +23,54 @@ _.each(fixtures, function (suites, name) {
   });
 });
 
+/*
+  `TEST_ONLY=babylon make test-only` indeed runs the tests of babylon only.
+  However, we may need to test specific fixture category and specific test inside.
+  The function below allow us providing the following options:
+  ```
+  // test/fixtures/cssx/options.json
+  {
+    "plugins": ["cssx"],
+    "only": {}
+  }
+  ```
+  This will run only `cssx` fixture category. We may go further and use 
+  ```
+  {
+    "plugin": ["cssx"],
+    "only": { "test": "10" }
+  }
+  ````
+  which will run `/test/fixtures/cssx/basic/10` test only.
+*/
+function reduceFixtures (fixturesCategories) {
+  return _.reduce(fixturesCategories, function (result, value, key) {
+    if (!result.onlyOne) {
+      var ops = value[0].options;
+      if (ops && typeof ops.only !== 'undefined') {
+        result.onlyOne = true;
+        result.fixtures = {};
+        if (typeof ops.only.test !== 'undefined') {
+          value = _.reduce(value, function (result, subCategory) {
+            var test = _.find(subCategory.tests, function (t) { return t.title === ops.only.test; });
+            if (typeof test !== 'undefined') {
+              subCategory.tests = [test];
+              result.push(subCategory);
+            }
+            return result;
+          }, []);
+        }
+      }
+      result.fixtures[key] = value;
+    }
+    return result;
+  }, { onlyOne: false, fixtures: {} }).fixtures;
+}
+
 function save(test, ast) {
   delete ast.tokens;
   if (!ast.comments.length) delete ast.comments;
-  require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
+  fs.writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
 }
 
 function runTest(test) {
@@ -57,8 +103,11 @@ function runTest(test) {
   } else {
     var mis = misMatch(JSON.parse(test.expect.code), ast);
     if (mis) {
+      saveResultedJSON ? fs.writeFileSync(test.expect.loc + '.result', JSON.stringify(ast, null, 2)) : null;
       //save(test, ast);
       throw new Error(mis);
+    } else if (saveResultedJSON && fs.existsSync(test.expect.loc + '.result')) {
+      fs.unlink(test.expect.loc + '.result');
     }
   }
 }
