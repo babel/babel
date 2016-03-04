@@ -1,12 +1,12 @@
 {
   "name": "babel-helper-get-function-arity",
-  "version": "6.6.4",
+  "version": "6.6.5",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-get-function-arity",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
     "babel-runtime": "^5.0.0",
-    "babel-types": "^6.6.4"
+    "babel-types": "^6.6.5"
   }
 }
