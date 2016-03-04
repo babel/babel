@@ -1,4 +1,3 @@
-
 import defineType from "./index";
 
 defineType("AnyTypeAnnotation", {

@@ -1,4 +1,3 @@
-
 import { types as tt } from "../tokenizer/types";
 import Parser from "./index";
 import { lineBreak } from "../util/whitespace";

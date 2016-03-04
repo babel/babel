@@ -4,11 +4,13 @@ export default class Store extends Map {
     this.dynamicData = {};
   }
 
+  dynamicData: Object;
+
   setDynamic(key, fn) {
     this.dynamicData[key] = fn;
   }
 
-  get(key) {
+  get(key: string): any {
     if (this.has(key)) {
       return super.get(key);
     } else {

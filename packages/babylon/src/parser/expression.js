@@ -873,7 +873,7 @@ pp.parseFunctionBody = function (node, allowExpression) {
 
   // normal function
   if (!isExpression && node.body.directives.length) {
-    for (let directive of node.body.directives) {
+    for (let directive of (node.body.directives: Array<Object>)) {
       if (directive.value.value === "use strict") {
         isStrict = true;
         checkLVal = true;
@@ -895,7 +895,7 @@ pp.parseFunctionBody = function (node, allowExpression) {
     if (node.id) {
       this.checkLVal(node.id, true);
     }
-    for (let param of node.params) {
+    for (let param of (node.params: Array<Object>)) {
       this.checkLVal(param, true, nameHash);
     }
     this.state.strict = oldStrict;

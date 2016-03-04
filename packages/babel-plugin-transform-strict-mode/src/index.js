@@ -8,7 +8,7 @@ export default function () {
         
         let { node } = path;
 
-        for (let directive of node.directives) {
+        for (let directive of (node.directives: Array<Object>)) {
           if (directive.value.value === "use strict") return;
         }
 

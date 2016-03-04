@@ -14,7 +14,7 @@ let visitor = {
 
     let nodes = [];
 
-    let declarations = path.get("declarations");
+    let declarations: Array<Object> = path.get("declarations");
     let firstId;
 
     for (let declar of declarations) {
@@ -40,6 +40,6 @@ let visitor = {
   }
 };
 
-export default function (path, emit, kind = "var") {
+export default function (path, emit: Function, kind: "var" | "let" = "var") {
   path.traverse(visitor, { kind, emit });
 }

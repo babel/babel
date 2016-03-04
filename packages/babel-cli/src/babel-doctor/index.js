@@ -36,7 +36,7 @@ while (nodeModulesDirectories.length) {
   let loc = nodeModulesDirectories.shift();
   if (!fs.existsSync(loc)) continue;
 
-  let packagesNames = fs.readdirSync(loc);
+  let packagesNames: Array<string> = fs.readdirSync(loc);
 
   for (let packageName of packagesNames) {
     if (packageName[0] === ".") continue;

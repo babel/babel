@@ -1,7 +1,6 @@
-
 import * as t from "babel-types";
 
-export function ImportSpecifier(node) {
+export function ImportSpecifier(node: Object) {
   this.print(node.imported, node);
   if (node.local && node.local.name !== node.imported.name) {
     this.push(" as ");
@@ -9,15 +8,15 @@ export function ImportSpecifier(node) {
   }
 }
 
-export function ImportDefaultSpecifier(node) {
+export function ImportDefaultSpecifier(node: Object) {
   this.print(node.local, node);
 }
 
-export function ExportDefaultSpecifier(node) {
+export function ExportDefaultSpecifier(node: Object) {
   this.print(node.exported, node);
 }
 
-export function ExportSpecifier(node) {
+export function ExportSpecifier(node: Object) {
   this.print(node.local, node);
   if (node.exported && node.local.name !== node.exported.name) {
     this.push(" as ");
@@ -25,12 +24,12 @@ export function ExportSpecifier(node) {
   }
 }
 
-export function ExportNamespaceSpecifier(node) {
+export function ExportNamespaceSpecifier(node: Object) {
   this.push("* as ");
   this.print(node.exported, node);
 }
 
-export function ExportAllDeclaration(node) {
+export function ExportAllDeclaration(node: Object) {
   this.push("export *");
   if (node.exported) {
     this.push(" as ");
@@ -51,7 +50,7 @@ export function ExportDefaultDeclaration() {
   ExportDeclaration.apply(this, arguments);
 }
 
-function ExportDeclaration(node) {
+function ExportDeclaration(node: Object) {
   if (node.declaration) {
     let declar = node.declaration;
     this.print(declar, node);
@@ -97,7 +96,7 @@ function ExportDeclaration(node) {
   this.ensureSemicolon();
 }
 
-export function ImportDeclaration(node) {
+export function ImportDeclaration(node: Object) {
   this.push("import ");
 
   if (node.importKind === "type" || node.importKind === "typeof") {
@@ -134,7 +133,7 @@ export function ImportDeclaration(node) {
   this.semicolon();
 }
 
-export function ImportNamespaceSpecifier(node) {
+export function ImportNamespaceSpecifier(node: Object) {
   this.push("* as ");
   this.print(node.local, node);
 }

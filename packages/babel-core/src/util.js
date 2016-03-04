@@ -1,4 +1,3 @@
-
 import escapeRegExp from "lodash/string/escapeRegExp";
 import startsWith from "lodash/string/startsWith";
 import isBoolean from "lodash/lang/isBoolean";
@@ -15,7 +14,7 @@ export { inherits, inspect } from "util";
  * Test if a filename ends with a compilable extension.
  */
 
-export function canCompile(filename, altExts) {
+export function canCompile(filename: string, altExts?: Array<string>): boolean {
   let exts = altExts || canCompile.EXTENSIONS;
   let ext = path.extname(filename);
   return contains(exts, ext);
@@ -31,7 +30,7 @@ canCompile.EXTENSIONS = [".js", ".jsx", ".es6", ".es"];
  * Create an array from any value, splitting strings by ",".
  */
 
-export function list(val) {
+export function list(val?: string): Array<string> {
   if (!val) {
     return [];
   } else if (Array.isArray(val)) {
@@ -47,7 +46,7 @@ export function list(val) {
  * Create a RegExp from a string, array, or regexp.
  */
 
-export function regexify(val) {
+export function regexify(val: any): RegExp {
   if (!val) {
     return new RegExp(/.^/);
   }
@@ -79,7 +78,7 @@ export function regexify(val) {
  * Create an array from a boolean, string, or array, mapped by and optional function.
  */
 
-export function arrayify(val, mapFn) {
+export function arrayify(val: any, mapFn?: Function): Array<any> {
   if (!val) return [];
   if (isBoolean(val)) return arrayify([val], mapFn);
   if (isString(val)) return arrayify(list(val), mapFn);
@@ -96,7 +95,7 @@ export function arrayify(val, mapFn) {
  * Makes boolean-like strings into booleans.
  */
 
-export function booleanify(val) {
+export function booleanify(val: any): boolean | any {
   if (val === "true" || val == 1) {
     return true;
   }
@@ -112,7 +111,11 @@ export function booleanify(val) {
  * Tests if a filename should be ignored based on "ignore" and "only" options.
  */
 
-export function shouldIgnore(filename, ignore = [], only) {
+export function shouldIgnore(
+  filename: string,
+  ignore: Array<RegExp | Function> = [],
+  only?: Array<RegExp | Function>,
+): boolean {
   filename = slash(filename);
 
   if (only) {
@@ -134,7 +137,7 @@ export function shouldIgnore(filename, ignore = [], only) {
  * Otherwise returns result of matching pattern Regex with filename.
  */
 
-function _shouldIgnore(pattern, filename) {
+function _shouldIgnore(pattern: Function | RegExp, filename: string) {
   if (typeof pattern === "function") {
     return pattern(filename);
   } else {

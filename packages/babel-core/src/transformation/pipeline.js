@@ -1,15 +1,16 @@
+/* global BabelFileResult, BabelFileMetadata */
 import normalizeAst from "../helpers/normalize-ast";
 import Plugin from "./plugin";
 import File from "./file";
 
 export default class Pipeline {
-  lint(code, opts = {}) {
+  lint(code: string, opts?: Object = {}): BabelFileResult {
     opts.code = false;
     opts.mode = "lint";
     return this.transform(code, opts);
   }
 
-  pretransform(code, opts) {
+  pretransform(code: string, opts?: Object): BabelFileResult {
     let file = new File(opts, this);
     return file.wrap(code, function () {
       file.addCode(code);
@@ -18,7 +19,7 @@ export default class Pipeline {
     });
   }
 
-  transform(code, opts) {
+  transform(code: string, opts?: Object): BabelFileResult {
     let file = new File(opts, this);
     return file.wrap(code, function () {
       file.addCode(code);
@@ -27,7 +28,7 @@ export default class Pipeline {
     });
   }
 
-  analyse(code, opts = {}, visitor) {
+  analyse(code: string, opts: Object = {}, visitor?: Object): ?BabelFileMetadata {
     opts.code = false;
     if (visitor) {
       opts.plugins = opts.plugins || [];
@@ -36,7 +37,7 @@ export default class Pipeline {
     return this.transform(code, opts).metadata;
   }
 
-  transformFromAst(ast, code, opts) {
+  transformFromAst(ast: Object, code: string, opts: Object): BabelFileResult {
     ast = normalizeAst(ast);
 
     let file = new File(opts, this);

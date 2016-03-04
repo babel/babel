@@ -30,7 +30,7 @@ export default function ({ types: t }) {
           let objectRef;
           let getObjectRef = () => objectRef = objectRef || path.scope.generateUidIdentifier("obj");
 
-          let propPaths = path.get("properties");
+          let propPaths: Array = path.get("properties");
           for (let propPath of propPaths) {
             if (propPath.isObjectProperty()) propPath = propPath.get("value");
             Property(propPath, propPath.node, path.scope, getObjectRef, file);

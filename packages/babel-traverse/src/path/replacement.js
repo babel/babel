@@ -22,7 +22,7 @@ let hoistVariablesVisitor = {
 
     let exprs = [];
 
-    for (let declar of path.node.declarations) {
+    for (let declar of (path.node.declarations: Array<Object>)) {
       if (declar.init) {
         exprs.push(t.expressionStatement(
           t.assignmentExpression("=", declar.id, declar.init)
@@ -42,7 +42,7 @@ let hoistVariablesVisitor = {
  *  - Remove the current node.
  */
 
-export function replaceWithMultiple(nodes) {
+export function replaceWithMultiple(nodes: Array<Object>) {
   this.resync();
 
   nodes = this._verifyNodeList(nodes);
@@ -178,7 +178,7 @@ export function _replaceWith(node) {
  * extremely important to retain original semantics.
  */
 
-export function replaceExpressionWithStatements(nodes) {
+export function replaceExpressionWithStatements(nodes: Array<Object>) {
   this.resync();
 
   let toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
@@ -206,7 +206,7 @@ export function replaceExpressionWithStatements(nodes) {
     this.traverse(hoistVariablesVisitor);
 
     // add implicit returns to all ending expression statements
-    let completionRecords = this.get("callee").getCompletionRecords();
+    let completionRecords: Array<NodePath> = this.get("callee").getCompletionRecords();
     for (let path of completionRecords) {
       if (!path.isExpressionStatement()) continue;
 
@@ -229,7 +229,7 @@ export function replaceExpressionWithStatements(nodes) {
   }
 }
 
-export function replaceInline(nodes) {
+export function replaceInline(nodes: Object | Array<Object>) {
   this.resync();
 
   if (Array.isArray(nodes)) {

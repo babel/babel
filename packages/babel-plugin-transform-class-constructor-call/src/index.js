@@ -17,8 +17,8 @@ let buildWrapper = template(`
 export default function ({ types: t }) {
   let ALREADY_VISITED = Symbol();
 
-  function findConstructorCall(path) {
-    let methods = path.get("body.body");
+  function findConstructorCall(path): ?Object {
+    let methods: Array<Object> = path.get("body.body");
 
     for (let method of methods) {
       if (method.node.kind === "constructorCall") {

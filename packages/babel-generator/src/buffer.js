@@ -1,4 +1,4 @@
-
+import type Position from "./position";
 import repeating from "repeating";
 import trimRight from "trim-right";
 
@@ -7,7 +7,7 @@ import trimRight from "trim-right";
  */
 
 export default class Buffer {
-  constructor(position, format) {
+  constructor(position: Position, format: Object) {
     this.printedCommentStarts = {};
     this.parenPushNewlineState = null;
     this.position = position;
@@ -21,11 +21,19 @@ export default class Buffer {
     this.last = "";
   }
 
+  printedCommentStarts: Object;
+  parenPushNewlineState: ?Object;
+  position: Position;
+  _indent: number;
+  format: Object;
+  buf: string;
+  last: string;
+
   /**
    * Description
    */
 
-  catchUp(node) {
+  catchUp(node: Object) {
     // catch up to this nodes newline if we're behind
     if (node.loc && this.format.retainLines && this.buf) {
       while (this.position.line < node.loc.start.line) {
@@ -38,7 +46,7 @@ export default class Buffer {
    * Get the current trimmed buffer.
    */
 
-  get() {
+  get(): string {
     return trimRight(this.buf);
   }
 
@@ -46,7 +54,7 @@ export default class Buffer {
    * Get the current indent.
    */
 
-  getIndent() {
+  getIndent(): string {
     if (this.format.compact || this.format.concise) {
       return "";
     } else {
@@ -58,7 +66,7 @@ export default class Buffer {
    * Get the current indent size.
    */
 
-  indentSize() {
+  indentSize(): number {
     return this.getIndent().length;
   }
 
@@ -110,7 +118,7 @@ export default class Buffer {
    * Add a keyword to the buffer.
    */
 
-  keyword(name) {
+  keyword(name: string) {
     this.push(name);
     this.space();
   }
@@ -119,7 +127,7 @@ export default class Buffer {
    * Add a space to the buffer unless it is compact (override with force).
    */
 
-  space(force) {
+  space(force?: boolean) {
     if (!force && this.format.compact) return;
 
     if (force || this.buf && !this.isLast(" ") && !this.isLast("\n")) {
@@ -131,12 +139,12 @@ export default class Buffer {
    * Remove the last character.
    */
 
-  removeLast(cha) {
+  removeLast(cha: string) {
     if (this.format.compact) return;
     return this._removeLast(cha);
   }
 
-  _removeLast(cha) {
+  _removeLast(cha: string) {
     if (!this._isLast(cha)) return;
     this.buf = this.buf.slice(0, -1);
     this.last = this.buf[this.buf.length - 1];
@@ -159,7 +167,7 @@ export default class Buffer {
    *  `undefined` will be returned and not `foo` due to the terminator.
    */
 
-  startTerminatorless() {
+  startTerminatorless(): Object {
     return this.parenPushNewlineState = {
       printed: false
     };
@@ -169,7 +177,7 @@ export default class Buffer {
    * Print an ending parentheses if a starting one has been printed.
    */
 
-  endTerminatorless(state) {
+  endTerminatorless(state: Object) {
     if (state.printed) {
       this.dedent();
       this.newline();
@@ -182,7 +190,7 @@ export default class Buffer {
    * Strips multiple newlines if removeLast is true.
    */
 
-  newline(i, removeLast) {
+  newline(i?: boolean | number, removeLast?: boolean) {
     if (this.format.retainLines || this.format.compact) return;
 
     if (this.format.concise) {
@@ -226,7 +234,7 @@ export default class Buffer {
    * Push a string to the buffer, maintaining indentation and newlines.
    */
 
-  push(str, noIndent) {
+  push(str: string, noIndent?: boolean) {
     if (!this.format.compact && this._indent && !noIndent && str !== "\n") {
       // we have an indent level and we aren't pushing a newline
       let indent = this.getIndent();
@@ -245,7 +253,7 @@ export default class Buffer {
    * Push a string to the buffer.
    */
 
-  _push(str) {
+  _push(str: string): void {
     // see startTerminatorless() instance method
     let parenPushNewlineState = this.parenPushNewlineState;
     if (parenPushNewlineState) {
@@ -278,7 +286,7 @@ export default class Buffer {
    * Test if the buffer ends with a string.
    */
 
-  endsWith(str) {
+  endsWith(str: string): boolean {
     if (str.length === 1) {
       return this.last === str;
     } else {
@@ -290,12 +298,12 @@ export default class Buffer {
    * Test if a character is last in the buffer.
    */
 
-  isLast(cha) {
+  isLast(cha: string): boolean {
     if (this.format.compact) return false;
     return this._isLast(cha);
   }
 
-  _isLast(cha) {
+  _isLast(cha: string): boolean {
     let last = this.last;
 
     if (Array.isArray(cha)) {

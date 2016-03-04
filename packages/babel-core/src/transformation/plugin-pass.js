@@ -1,13 +1,19 @@
+import type Plugin from "./plugin";
 import Store from "../store";
 import traverse from "babel-traverse";
+import File from "./file";
 
 export default class PluginPass extends Store {
-  constructor(file, plugin, options = {}) {
+  constructor(file: File, plugin: Plugin, options: Object = {}) {
     super();
     this.plugin = plugin;
     this.file   = file;
     this.opts   = options;
   }
+
+  plugin: Plugin;
+  file: File;
+  opts: Object;
 
   transform() {
     let file = this.file;

@@ -17,7 +17,7 @@ export default function ({ types: t }) {
         let strings = [];
         let raw     = [];
 
-        for (let elem of quasi.quasis) {
+        for (let elem of (quasi.quasis: Array)) {
           strings.push(t.stringLiteral(elem.value.cooked));
           raw.push(t.stringLiteral(elem.value.raw));
         }
@@ -37,11 +37,11 @@ export default function ({ types: t }) {
       },
 
       TemplateLiteral(path, state) {
-        let nodes = [];
+        let nodes: Array<Object> = [];
 
         let expressions = path.get("expressions");
 
-        for (let elem of path.node.quasis) {
+        for (let elem of (path.node.quasis: Array)) {
           nodes.push(t.stringLiteral(elem.value.cooked));
 
           let expr = expressions.shift();

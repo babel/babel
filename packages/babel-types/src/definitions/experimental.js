@@ -1,4 +1,3 @@
-
 import defineType, { assertNodeType } from "./index";
 
 defineType("AwaitExpression", {

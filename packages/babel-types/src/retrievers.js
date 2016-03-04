@@ -1,11 +1,14 @@
-
 import * as t from "./index";
 
 /**
  * Return a list of binding identifiers associated with the input `node`.
  */
 
-export function getBindingIdentifiers(node, duplicates, outerOnly) {
+export function getBindingIdentifiers(
+  node: Object,
+  duplicates?: boolean,
+  outerOnly?: boolean
+): Object {
   let search = [].concat(node);
   let ids    = Object.create(null);
 
@@ -102,6 +105,9 @@ getBindingIdentifiers.keys = {
   VariableDeclarator: ["id"]
 };
 
-export function getOuterBindingIdentifiers(node, duplicates) {
+export function getOuterBindingIdentifiers(
+  node: Object,
+  duplicates?: boolean,
+): Object {
   return getBindingIdentifiers(node, duplicates, true);
 }

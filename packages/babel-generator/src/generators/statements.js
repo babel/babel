@@ -3,7 +3,7 @@ import * as t from "babel-types";
 
 const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(["!"]);
 
-export function WithStatement(node) {
+export function WithStatement(node: Object) {
   this.keyword("with");
   this.push("(");
   this.print(node.object, node);
@@ -11,7 +11,7 @@ export function WithStatement(node) {
   this.printBlock(node);
 }
 
-export function IfStatement(node) {
+export function IfStatement(node: Object) {
   this.keyword("if");
   this.push("(");
   this.print(node.test, node);
@@ -46,7 +46,7 @@ function getLastStatement(statement) {
   return getLastStatement(statement.body);
 }
 
-export function ForStatement(node) {
+export function ForStatement(node: Object) {
   this.keyword("for");
   this.push("(");
 
@@ -70,7 +70,7 @@ export function ForStatement(node) {
   this.printBlock(node);
 }
 
-export function WhileStatement(node) {
+export function WhileStatement(node: Object) {
   this.keyword("while");
   this.push("(");
   this.print(node.test, node);
@@ -79,7 +79,7 @@ export function WhileStatement(node) {
 }
 
 let buildForXStatement = function (op) {
-  return function (node) {
+  return function (node: Object) {
     this.keyword("for");
     this.push("(");
     this.print(node.left, node);
@@ -93,7 +93,7 @@ let buildForXStatement = function (op) {
 export let ForInStatement = buildForXStatement("in");
 export let ForOfStatement = buildForXStatement("of");
 
-export function DoWhileStatement(node) {
+export function DoWhileStatement(node: Object) {
   this.push("do ");
   this.print(node.body, node);
   this.space();
@@ -104,7 +104,7 @@ export function DoWhileStatement(node) {
 }
 
 function buildLabelStatement(prefix, key = "label") {
-  return function (node) {
+  return function (node: Object) {
     this.push(prefix);
 
     let label = node[key];
@@ -130,13 +130,13 @@ export let ReturnStatement   = buildLabelStatement("return", "argument");
 export let BreakStatement    = buildLabelStatement("break");
 export let ThrowStatement    = buildLabelStatement("throw", "argument");
 
-export function LabeledStatement(node) {
+export function LabeledStatement(node: Object) {
   this.print(node.label, node);
   this.push(": ");
   this.print(node.body, node);
 }
 
-export function TryStatement(node) {
+export function TryStatement(node: Object) {
   this.keyword("try");
   this.print(node.block, node);
   this.space();
@@ -157,7 +157,7 @@ export function TryStatement(node) {
   }
 }
 
-export function CatchClause(node) {
+export function CatchClause(node: Object) {
   this.keyword("catch");
   this.push("(");
   this.print(node.param, node);
@@ -166,7 +166,7 @@ export function CatchClause(node) {
   this.print(node.body, node);
 }
 
-export function SwitchStatement(node) {
+export function SwitchStatement(node: Object) {
   this.keyword("switch");
   this.push("(");
   this.print(node.discriminant, node);
@@ -184,7 +184,7 @@ export function SwitchStatement(node) {
   this.push("}");
 }
 
-export function SwitchCase(node) {
+export function SwitchCase(node: Object) {
   if (node.test) {
     this.push("case ");
     this.print(node.test, node);
@@ -203,13 +203,13 @@ export function DebuggerStatement() {
   this.push("debugger;");
 }
 
-export function VariableDeclaration(node, parent) {
+export function VariableDeclaration(node: Object, parent: Object) {
   this.push(node.kind + " ");
 
   let hasInits = false;
   // don't add whitespace to loop heads
   if (!t.isFor(parent)) {
-    for (let declar of node.declarations) {
+    for (let declar of (node.declarations: Array<Object>)) {
       if (declar.init) {
         // has an init so let's split it up over multiple lines
         hasInits = true;
@@ -246,7 +246,7 @@ export function VariableDeclaration(node, parent) {
   this.semicolon();
 }
 
-export function VariableDeclarator(node) {
+export function VariableDeclarator(node: Object) {
   this.print(node.id, node);
   this.print(node.id.typeAnnotation, node);
   if (node.init) {

@@ -1,9 +1,8 @@
-
-export function File(node) {
+export function File(node: Object) {
   this.print(node.program, node);
 }
 
-export function Program(node) {
+export function Program(node: Object) {
   this.printInnerComments(node, false);
 
   this.printSequence(node.directives, node);
@@ -12,7 +11,7 @@ export function Program(node) {
   this.printSequence(node.body, node);
 }
 
-export function BlockStatement(node) {
+export function BlockStatement(node: Object) {
   this.push("{");
   this.printInnerComments(node);
   if (node.body.length) {
@@ -31,11 +30,11 @@ export function BlockStatement(node) {
 
 export function Noop() {}
 
-export function Directive(node) {
+export function Directive(node: Object) {
   this.print(node.value, node);
   this.semicolon();
 }
 
-export function DirectiveLiteral(node) {
+export function DirectiveLiteral(node: Object) {
   this.push(this._stringLiteral(node.value));
 }

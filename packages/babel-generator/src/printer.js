@@ -120,7 +120,7 @@ export default class Printer extends Buffer {
     printMethod.call(this, node, parent);
   }
 
-  printJoin(nodes, parent, opts = {}) {
+  printJoin(nodes: ?Array, parent: Object, opts = {}) {
     if (!nodes || !nodes.length) return;
 
     let len = nodes.length;
@@ -310,7 +310,7 @@ export default class Printer extends Buffer {
     this.newline(this.whitespace.getNewlinesAfter(comment));
   }
 
-  printComments(comments) {
+  printComments(comments?: Array<Object>) {
     if (!comments || !comments.length) return;
 
     for (let comment of comments) {

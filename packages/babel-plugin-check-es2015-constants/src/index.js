@@ -6,11 +6,11 @@ export default function ({ messages }) {
           let binding = scope.bindings[name];
           if (binding.kind !== "const" && binding.kind !== "module") continue;
 
-          for (let violation of binding.constantViolations) {
+          for (let violation of (binding.constantViolations: Array)) {
             throw violation.buildCodeFrameError(messages.get("readOnly", name));
           }
         }
-      }
+      },
     }
   };
 }

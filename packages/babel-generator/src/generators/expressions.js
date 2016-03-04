@@ -9,7 +9,7 @@ const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
 
-export function UnaryExpression(node) {
+export function UnaryExpression(node: Object) {
   let needsSpace = /[a-z]$/.test(node.operator);
   let arg = node.argument;
 
@@ -26,19 +26,19 @@ export function UnaryExpression(node) {
   this.print(node.argument, node);
 }
 
-export function DoExpression(node) {
+export function DoExpression(node: Object) {
   this.push("do");
   this.space();
   this.print(node.body, node);
 }
 
-export function ParenthesizedExpression(node) {
+export function ParenthesizedExpression(node: Object) {
   this.push("(");
   this.print(node.expression, node);
   this.push(")");
 }
 
-export function UpdateExpression(node) {
+export function UpdateExpression(node: Object) {
   if (node.prefix) {
     this.push(node.operator);
     this.print(node.argument, node);
@@ -48,7 +48,7 @@ export function UpdateExpression(node) {
   }
 }
 
-export function ConditionalExpression(node) {
+export function ConditionalExpression(node: Object) {
   this.print(node.test, node);
   this.space();
   this.push("?");
@@ -60,7 +60,7 @@ export function ConditionalExpression(node) {
   this.print(node.alternate, node);
 }
 
-export function NewExpression(node, parent) {
+export function NewExpression(node: Object, parent: Object) {
   this.push("new ");
   this.print(node.callee, node);
   if (node.arguments.length === 0 && this.format.minified &&
@@ -73,7 +73,7 @@ export function NewExpression(node, parent) {
   this.push(")");
 }
 
-export function SequenceExpression(node) {
+export function SequenceExpression(node: Object) {
   this.printList(node.expressions, node);
 }
 
@@ -85,13 +85,13 @@ export function Super() {
   this.push("super");
 }
 
-export function Decorator(node) {
+export function Decorator(node: Object) {
   this.push("@");
   this.print(node.expression, node);
   this.newline();
 }
 
-export function CallExpression(node) {
+export function CallExpression(node: Object) {
   this.print(node.callee, node);
   if (node.loc) this.printAuxAfterComment();
 
@@ -116,8 +116,8 @@ export function CallExpression(node) {
   this.push(")");
 }
 
-function buildYieldAwait(keyword) {
-  return function (node) {
+function buildYieldAwait(keyword: string) {
+  return function (node: Object) {
     this.push(keyword);
 
     if (node.delegate) {
@@ -141,12 +141,12 @@ export function EmptyStatement() {
   this.semicolon();
 }
 
-export function ExpressionStatement(node) {
+export function ExpressionStatement(node: Object) {
   this.print(node.expression, node);
   this.semicolon();
 }
 
-export function AssignmentPattern(node) {
+export function AssignmentPattern(node: Object) {
   this.print(node.left, node);
   this.space();
   this.push("=");
@@ -154,7 +154,7 @@ export function AssignmentPattern(node) {
   this.print(node.right, node);
 }
 
-export function AssignmentExpression(node, parent) {
+export function AssignmentExpression(node: Object, parent: Object) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
   let parens = this._inForStatementInitCounter && node.operator === "in" &&
@@ -195,7 +195,7 @@ export function AssignmentExpression(node, parent) {
   }
 }
 
-export function BindExpression(node) {
+export function BindExpression(node: Object) {
   this.print(node.object, node);
   this.push("::");
   this.print(node.callee, node);
@@ -206,7 +206,7 @@ export {
   AssignmentExpression as LogicalExpression
 };
 
-export function MemberExpression(node) {
+export function MemberExpression(node: Object) {
   this.print(node.object, node);
 
   if (!node.computed && t.isMemberExpression(node.property)) {
@@ -239,7 +239,7 @@ export function MemberExpression(node) {
   }
 }
 
-export function MetaProperty(node) {
+export function MetaProperty(node: Object) {
   this.print(node.meta, node);
   this.push(".");
   this.print(node.property, node);

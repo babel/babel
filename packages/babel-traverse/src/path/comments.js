@@ -22,7 +22,7 @@ export function shareCommentsWithSiblings() {
   next.addComments("leading", trailing);
 }
 
-export function addComment(type, content, line) {
+export function addComment(type, content, line?) {
   this.addComments(type, [{
     type: line ? "CommentLine" : "CommentBlock",
     value: content
@@ -33,7 +33,7 @@ export function addComment(type, content, line) {
  * Give node `comments` of the specified `type`.
  */
 
-export function addComments(type, comments) {
+export function addComments(type: string, comments: Array) {
   if (!comments) return;
 
   let node = this.node;

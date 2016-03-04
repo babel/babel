@@ -3,7 +3,7 @@ import path from "path";
 
 let relativeModules = {};
 
-export default function (loc, relative = process.cwd()) {
+export default function (loc: string, relative: string = process.cwd()): ?string {
   // we're in the browser, probably
   if (typeof Module === "object") return null;
 

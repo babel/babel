@@ -2,7 +2,7 @@
 
 import * as t from "babel-types";
 
-export function toComputedKey() {
+export function toComputedKey(): Object {
   let node = this.node;
 
   let key;

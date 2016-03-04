@@ -21,7 +21,7 @@ export let ImportDeclaration = {
       specifiers
     });
 
-    for (let specifier of path.get("specifiers")) {
+    for (let specifier of (path.get("specifiers"): Array<Object>)) {
       let local = specifier.node.local.name;
 
       if (specifier.isImportDefaultSpecifier()) {
@@ -77,7 +77,7 @@ export function ExportDeclaration(path, file) {
   }
 
   if (path.isExportNamedDeclaration() && node.specifiers) {
-    for (let specifier of node.specifiers) {
+    for (let specifier of (node.specifiers: Array<Object>)) {
       let exported = specifier.exported.name;
       exports.exported.push(exported);
 

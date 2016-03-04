@@ -1,11 +1,10 @@
-
 // Matches a whole line break (where CRLF is considered a single
 // line break). Used to count lines.
 
 export const lineBreak = /\r\n?|\n|\u2028|\u2029/;
 export const lineBreakG = new RegExp(lineBreak.source, "g");
 
-export function isNewLine(code) {
+export function isNewLine(code: number): boolean {
   return code === 10 || code === 13 || code === 0x2028 || code === 0x2029;
 }
 

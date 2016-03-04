@@ -1,5 +1,6 @@
 /* eslint max-len: 0 */
 
+import type { NodePath, Scope } from "babel-traverse";
 import optimiseCall from "babel-helper-optimise-call-expression";
 import * as messages from "babel-messages";
 import * as t from "babel-types";
@@ -72,7 +73,7 @@ let visitor = {
 };
 
 export default class ReplaceSupers {
-  constructor(opts, inClass = false) {
+  constructor(opts: Object, inClass?: boolean = false) {
     this.forceSuperMemoisation = opts.forceSuperMemoisation;
     this.methodPath            = opts.methodPath;
     this.methodNode            = opts.methodNode;
@@ -90,6 +91,27 @@ export default class ReplaceSupers {
     this.thises     = [];
   }
 
+  forceSuperMemoisation: boolean;
+  methodPath: NodePath;
+  methodNode: Object;
+  superRef: Object;
+  isStatic: boolean;
+  hasSuper: boolean;
+  inClass: boolean;
+  isLoose: boolean;
+  scope: Scope;
+  file;
+  opts: {
+    forceSuperMemoisation: boolean;
+    getObjetRef: Function;
+    methodPath: NodePath;
+    methodNode: Object;
+    superRef: Object;
+    isStatic: boolean;
+    isLoose: boolean;
+    file: any;
+  };
+
   getObjectRef() {
     return this.opts.objectRef || this.opts.getObjectRef();
   }
@@ -103,7 +125,7 @@ export default class ReplaceSupers {
    *
    */
 
-  setSuperProperty(property, value, isComputed) {
+  setSuperProperty(property: Object, value: Object, isComputed: boolean): Object {
     return t.callExpression(
       this.file.addHelper("set"),
       [
@@ -129,7 +151,7 @@ export default class ReplaceSupers {
    *
    */
 
-  getSuperProperty(property, isComputed) {
+  getSuperProperty(property: Object, isComputed: boolean): Object {
     return t.callExpression(
       this.file.addHelper("get"),
       [
@@ -149,7 +171,7 @@ export default class ReplaceSupers {
     this.methodPath.traverse(visitor, this);
   }
 
-  getLooseSuperProperty(id, parent) {
+  getLooseSuperProperty(id: Object, parent: Object) {
     let methodNode = this.methodNode;
     let superRef   = this.superRef || t.identifier("Function");
 
@@ -165,7 +187,7 @@ export default class ReplaceSupers {
     }
   }
 
-  looseHandle(path) {
+  looseHandle(path: NodePath) {
     let node = path.node;
     if (path.isSuper()) {
       return this.getLooseSuperProperty(node, path.parent);
@@ -199,7 +221,7 @@ export default class ReplaceSupers {
     }
   }
 
-  specHandle(path) {
+  specHandle(path: NodePath) {
     let property;
     let computed;
     let args;

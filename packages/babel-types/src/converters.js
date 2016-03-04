@@ -3,9 +3,10 @@ import isNumber from "lodash/lang/isNumber";
 import isRegExp from "lodash/lang/isRegExp";
 import isString from "lodash/lang/isString";
 import traverse from "babel-traverse";
+import type { Scope } from "babel-traverse";
 import * as t from "./index";
 
-export function toComputedKey(node, key = node.key || node.property) {
+export function toComputedKey(node: Object, key: Object = node.key || node.property): Object {
   if (!node.computed) {
     if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
   }
@@ -21,7 +22,7 @@ export function toComputedKey(node, key = node.key || node.property) {
  * Expression statements are just resolved to their expression.
  */
 
-export function toSequenceExpression(nodes, scope) {
+export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Object {
   if (!nodes || !nodes.length) return;
 
   let declars = [];
@@ -40,7 +41,7 @@ export function toSequenceExpression(nodes, scope) {
     let ensureLastUndefined = false;
     let exprs   = [];
 
-    for (let node of nodes) {
+    for (let node of (nodes: Array)) {
       if (t.isExpression(node)) {
         exprs.push(node);
       } else if (t.isExpressionStatement(node)) {
@@ -48,7 +49,7 @@ export function toSequenceExpression(nodes, scope) {
       } else if (t.isVariableDeclaration(node)) {
         if (node.kind !== "var") return bailed = true; // bailed
 
-        for (let declar of node.declarations) {
+        for (let declar of (node.declarations: Array)) {
           let bindings = t.getBindingIdentifiers(declar);
           for (let key in bindings) {
             declars.push({
@@ -98,7 +99,7 @@ export function toSequenceExpression(nodes, scope) {
   }
 }
 
-export function toKeyAlias(node, key = node.key) {
+export function toKeyAlias(node: Object, key: Object = node.key): string {
   let alias;
 
   if (node.kind === "method") {
@@ -132,7 +133,7 @@ toKeyAlias.increment = function () {
   }
 };
 
-export function toIdentifier(name) {
+export function toIdentifier(name: string): string {
   name = name + "";
 
   // replace all non-valid identifiers with dashes
@@ -153,7 +154,7 @@ export function toIdentifier(name) {
   return name || "_";
 }
 
-export function toBindingIdentifierName(name) {
+export function toBindingIdentifierName(name: string): string {
   name = toIdentifier(name);
   if (name === "eval" || name === "arguments") name = "_" + name;
   return name;
@@ -164,7 +165,7 @@ export function toBindingIdentifierName(name) {
  * @returns {Object|Boolean}
  */
 
-export function toStatement(node, ignore) {
+export function toStatement(node: Object, ignore?: boolean) {
   if (t.isStatement(node)) {
     return node;
   }
@@ -199,7 +200,7 @@ export function toStatement(node, ignore) {
   return node;
 }
 
-export function toExpression(node) {
+export function toExpression(node: Object): Object {
   if (t.isExpressionStatement(node)) {
     node = node.expression;
   }
@@ -217,7 +218,7 @@ export function toExpression(node) {
   }
 }
 
-export function toBlock(node, parent) {
+export function toBlock(node: Object, parent: Object): Object {
   if (t.isBlockStatement(node)) {
     return node;
   }
@@ -241,7 +242,7 @@ export function toBlock(node, parent) {
   return t.blockStatement(node);
 }
 
-export function valueToNode(value) {
+export function valueToNode(value: any): Object {
   // undefined
   if (value === undefined) {
     return t.identifier("undefined");
