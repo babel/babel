@@ -1,7 +1,7 @@
 function A() {
-  var a = undefined;
+  var a = void 0;
 }
 
 function B() {
-  var a = undefined;
+  var a = void 0;
 }
