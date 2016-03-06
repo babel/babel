@@ -435,7 +435,7 @@ export default class File extends Store {
     this.log.debug("End set AST");
   }
 
-  transform(): BabelFileResult {
+  applyPlugins() {
     // In the "pass per preset" mode, we have grouped passes.
     // Otherwise, there is only one plain pluginPasses array.
     this.pluginPasses.forEach((pluginPasses, index) => {
@@ -445,7 +445,10 @@ export default class File extends Store {
       this.log.debug("End transform traverse");
       this.call("post", pluginPasses);
     });
+  }
 
+  transform(): BabelFileResult {
+    this.applyPlugins();
     return this.generate();
   }
 
