@@ -20,11 +20,7 @@ function isMemberExpressionSuper(node) {
 }
 
 let visitor = {
-  "ObjectMethod|ClassMethod"(path) {
-    path.skip();
-  },
-
-  "FunctionDeclaration|FunctionExpression"(path) {
+  Function(path) {
     if (!path.inShadow("this")) {
       path.skip();
     }

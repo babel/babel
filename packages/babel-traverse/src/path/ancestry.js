@@ -220,14 +220,15 @@ export function inShadow(key?) {
   let parentFn = this.isFunction() ? this : this.findParent((p) => p.isFunction());
   if (!parentFn) return;
 
-  let shadow = parentFn.node.shadow;
-  if (shadow) {
+  if (parentFn.isFunctionExpression() || parentFn.isFunctionDeclaration()) {
+    let shadow = parentFn.node.shadow;
+
     // this is because sometimes we may have a `shadow` value of:
     //
     //   { this: false }
     //
     // we need to catch this case if `inShadow` has been passed a `key`
-    if (!key || shadow[key] !== false) {
+    if (shadow && (!key || shadow[key] !== false)) {
       return parentFn;
     }
   } else if (parentFn.isArrowFunctionExpression()) {
