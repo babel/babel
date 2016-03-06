@@ -624,8 +624,22 @@ pp.flowParseTypeAnnotation = function () {
 };
 
 pp.flowParseTypeAnnotatableIdentifier = function (requireTypeAnnotation, canBeOptionalParam) {
+  let variance;
+  if (this.match(tt.plusMin)) {
+    if (this.state.value === "+") {
+      variance = "plus";
+    } else if (this.state.value === "-") {
+      variance = "minus";
+    }
+    this.eat(tt.plusMin);
+  }
+
   let ident = this.parseIdentifier();
   let isOptionalParam = false;
+
+  if (variance) {
+    ident.variance = variance;
+  }
 
   if (canBeOptionalParam && this.eat(tt.question)) {
     this.expect(tt.question);
