@@ -5,12 +5,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.foo = undefined;
 
-let foo = exports.foo = function () {
+let foo = exports.foo = (() => {
   var ref = babelHelpers.asyncToGenerator(function* () {});
   return function foo() {
     return ref.apply(this, arguments);
   };
-}();
+})();
 
 var _bar = require('bar');
 

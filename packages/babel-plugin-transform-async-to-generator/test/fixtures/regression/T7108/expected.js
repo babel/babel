@@ -20,10 +20,9 @@ class Test {
       setTimeout((() => {
         var ref = babelHelpers.asyncToGenerator(function* (arg) {
           console.log(_this2);
-        }),
-            _this = _this2;
+        });
         return function (_x) {
-          return ref.apply(_this, arguments);
+          return ref.apply(this, arguments);
         };
       })());
     })();
@@ -50,10 +49,9 @@ class Test {
       setTimeout((() => {
         var ref = babelHelpers.asyncToGenerator(function* (arg) {
           console.log(_this4);
-        }),
-            _this = _this4;
+        });
         return function (_x2) {
-          return ref.apply(_this, arguments);
+          return ref.apply(this, arguments);
         };
       })());
     })();

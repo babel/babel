@@ -1,4 +1,4 @@
-var foo = function () {
+var foo = (() => {
   var ref = babelHelpers.asyncToGenerator(function* () {
     console.log(bar);
   });
@@ -8,4 +8,4 @@ var foo = function () {
   }
 
   return bar;
-}();
+})();
