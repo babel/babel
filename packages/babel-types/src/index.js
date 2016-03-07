@@ -372,6 +372,12 @@ function _inheritComments(key, child, parent) {
   }
 }
 
+
+// Can't use import because of cyclic dependency between babel-traverse
+// and this module (babel-types). This require needs to appear after
+// we export the TYPES constant.
+const traverse = require("babel-traverse").default;
+
 /**
  * Inherit all contextual properties from `parent` node to `child` node.
  */
@@ -397,6 +403,7 @@ export function inherits(child: Object, parent: Object): Object {
   }
 
   t.inheritsComments(child, parent);
+  traverse.copyCache(parent, child);
 
   return child;
 }

@@ -123,4 +123,26 @@ suite("traverse", function () {
 
     assert.ok(!traverse.hasType(ast, null, "ArrowFunctionExpression"));
   });
+
+  test("clearCache", function () {
+    var paths = [];
+    traverse(ast, {
+      enter: function (path) {
+        paths.push(path);
+      }
+    });
+
+    traverse.clearCache();
+
+    var paths2 = [];
+    traverse(ast, {
+      enter: function (path) {
+        paths2.push(path);
+      }
+    });
+
+    paths2.forEach(function (p, i) {
+      assert.notStrictEqual(p, paths[i]);
+    });
+  });
 });

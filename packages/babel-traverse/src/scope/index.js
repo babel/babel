@@ -10,59 +10,25 @@ import * as messages from "babel-messages";
 import Binding from "./binding";
 import globals from "globals";
 import * as t from "babel-types";
-
-//
-
-const CACHE_SINGLE_KEY = Symbol();
-const CACHE_MULTIPLE_KEY = Symbol();
+import { scope as scopeCache } from "../cache";
 
 /**
  * To avoid creating a new Scope instance for each traversal, we maintain a cache on the
  * node itself containing all scopes it has been associated with.
- *
- * We also optimise for the case of there being only a single scope associated with a node.
  */
 
 function getCache(node, parentScope, self) {
-  let singleCache = node[CACHE_SINGLE_KEY];
+  let scopes: Array<Scope> = scopeCache.get(node) || [];
 
-  if (singleCache) {
-    // we've only ever associated one scope with this node so let's check it
-    if (matchesParent(singleCache, parentScope)) {
-      return singleCache;
-    }
-  } else if (!node[CACHE_MULTIPLE_KEY]) {
-    // no scope has ever been associated with this node
-    node[CACHE_SINGLE_KEY] = self;
-    return;
-  }
-
-  // looks like we have either a single scope association that was never matched or
-  // multiple assocations, let's find the right one!
-  return getCacheMultiple(node, parentScope, self, singleCache);
-}
-
-function matchesParent(scope, parentScope) {
-  if (scope.parent === parentScope) {
-    return true;
-  }
-}
-
-function getCacheMultiple(node, parentScope, self, singleCache) {
-  let scopes: Array<Scope> = node[CACHE_MULTIPLE_KEY] = node[CACHE_MULTIPLE_KEY] || [];
-
-  if (singleCache) {
-    // we have a scope assocation miss so push it onto our scopes
-    scopes.push(singleCache);
-    node[CACHE_SINGLE_KEY] = null;
-  }
-
-  // loop through and check each scope to see if it matches our parent
   for (let scope of scopes) {
-    if (matchesParent(scope, parentScope)) return scope;
+    if (scope.parent === parentScope) return scope;
   }
 
   scopes.push(self);
+
+  if (!scopeCache.has(node)) {
+    scopeCache.set(node, scopes);
+  }
 }
 
 //
