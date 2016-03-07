@@ -188,30 +188,52 @@ export function inType() {
 }
 
 /**
- * Check if we're inside a shadowed function.
+ * Checks whether the binding for 'key' is a local binding in its current function context.
+ *
+ * Checks if the current path either is, or has a direct parent function that is, inside
+ * of a function that is marked for shadowing of a binding matching 'key'. Also returns
+ * the parent path if the parent path is an arrow, since arrow functions pass through
+ * binding values to their parent, meaning they have no local bindings.
+ *
+ * Shadowing means that when the given binding is transformed, it will read the binding
+ * value from the container containing the shadow function, rather than from inside the
+ * shadow function.
+ *
+ * Function shadowing is acheieved by adding a "shadow" property on "FunctionExpression"
+ * and "FunctionDeclaration" node types.
+ *
+ * Node's "shadow" props have the following behavior:
+ *
+ * - Boolean true will cause the function to shadow both "this" and "arguments".
+ * - {this: false} Shadows "arguments" but not "this".
+ * - {arguments: false} Shadows "this" but not "arguments".
+ *
+ * Separately, individual identifiers can be flagged with two flags:
+ *
+ * - _forceShadow - If truthy, this specific identifier will be bound in the closest
+ *    Function that is not flagged "shadow", or the Program.
+ * - _shadowedFunctionLiteral - When set to a NodePath, this specific identifier will be bound
+ *    to this NodePath/Node or the Program.
  */
 
 export function inShadow(key?) {
-  let path = this;
-  do {
-    if (path.isFunction()) {
-      let shadow = path.node.shadow;
-      if (shadow) {
-        // this is because sometimes we may have a `shadow` value of:
-        //
-        //   { this: false }
-        //
-        // we need to catch this case if `inShadow` has been passed a `key`
-        if (!key || shadow[key] !== false) {
-          return path;
-        }
-      } else if (path.isArrowFunctionExpression()) {
-        return path;
-      }
+  let parentFn = this.isFunction() ? this : this.findParent((p) => p.isFunction());
+  if (!parentFn) return;
 
-      // normal function, we've found our function context
-      return null;
+  let shadow = parentFn.node.shadow;
+  if (shadow) {
+    // this is because sometimes we may have a `shadow` value of:
+    //
+    //   { this: false }
+    //
+    // we need to catch this case if `inShadow` has been passed a `key`
+    if (!key || shadow[key] !== false) {
+      return parentFn;
     }
-  } while (path = path.parentPath);
+  } else if (parentFn.isArrowFunctionExpression()) {
+    return parentFn;
+  }
+
+  // normal function, we've found our function context
   return null;
 }
