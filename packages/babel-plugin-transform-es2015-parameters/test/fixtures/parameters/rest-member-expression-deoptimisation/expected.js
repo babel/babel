@@ -77,3 +77,120 @@ function x() {
 
   rest[0] = 0;
 }
+
+function swap() {
+  for (var _len9 = arguments.length, rest = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+    rest[_key9] = arguments[_key9];
+  }
+
+  var _ref = [rest[1], rest[0]];
+  rest[0] = _ref[0];
+  rest[1] = _ref[1];
+}
+
+function forIn() {
+  for (var _len10 = arguments.length, rest = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+    rest[_key10] = arguments[_key10];
+  }
+
+  for (rest[0] in this) {
+    foo(rest[0]);
+  }
+}
+
+function inc() {
+  for (var _len11 = arguments.length, rest = Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+    rest[_key11] = arguments[_key11];
+  }
+
+  ++rest[0];
+}
+
+function dec() {
+  for (var _len12 = arguments.length, rest = Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+    rest[_key12] = arguments[_key12];
+  }
+
+  --rest[0];
+}
+
+function del() {
+  for (var _len13 = arguments.length, rest = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
+    rest[_key13] = arguments[_key13];
+  }
+
+  delete rest[0];
+}
+
+function method() {
+  for (var _len14 = arguments.length, rest = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
+    rest[_key14] = arguments[_key14];
+  }
+
+  rest[0]();
+}
+
+function newExp() {
+  for (var _len15 = arguments.length, rest = Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
+    rest[_key15] = arguments[_key15];
+  }
+
+  new rest[0]();
+}
+
+// In addition to swap() above because at some point someone tried checking
+// grandparent path for isArrayExpression() to deopt.
+function arrayDestructure() {
+  for (var _len16 = arguments.length, rest = Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
+    rest[_key16] = arguments[_key16];
+  }
+
+  var _x = babelHelpers.slicedToArray(x, 1);
+
+  rest[0] = _x[0];
+}
+
+function forOf() {
+  for (var _len17 = arguments.length, rest = Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
+    rest[_key17] = arguments[_key17];
+  }
+
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = this[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      rest[0] = _step.value;
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+}
+
+function postfixIncrement() {
+  for (var _len18 = arguments.length, rest = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
+    rest[_key18] = arguments[_key18];
+  }
+
+  rest[0]++;
+}
+
+function postfixDecrement() {
+  for (var _len19 = arguments.length, rest = Array(_len19), _key19 = 0; _key19 < _len19; _key19++) {
+    rest[_key19] = arguments[_key19];
+  }
+
+  rest[0]--;
+}
