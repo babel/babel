@@ -5,6 +5,7 @@ import * as visitors from "./visitors";
 import * as messages from "babel-messages";
 import includes from "lodash/collection/includes";
 import * as t from "babel-types";
+import * as cache from "./cache";
 
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
@@ -39,7 +40,6 @@ traverse.explode = visitors.explode;
 traverse.NodePath = require("./path");
 traverse.Scope    = require("./scope");
 traverse.Hub      = require("./hub");
-traverse.cache    = require("./cache");
 
 traverse.cheap = function (node, enter) {
   if (!node) return;
@@ -88,7 +88,7 @@ traverse.clearNode = function (node) {
     if (key[0] === "_" && node[key] != null) node[key] = undefined;
   }
 
-  traverse.cache.path.delete(node);
+  cache.path.delete(node);
 
   let syms: Array<Symbol> = Object.getOwnPropertySymbols(node);
   for (let sym of syms) {
@@ -126,4 +126,14 @@ traverse.hasType = function (tree: Object, scope: Object, type: Object, blacklis
   }, scope, state);
 
   return state.has;
+};
+
+traverse.clearCache = function() {
+  cache.clear();
+};
+
+traverse.copyCache = function(source, destination) {
+  if (cache.path.has(source)) {
+    cache.path.set(destination, cache.path.get(source));
+  }
 };

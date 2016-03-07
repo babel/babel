@@ -404,11 +404,8 @@ export function inherits(child, parent) {
   }
 
   t.inheritsComments(child, parent);
+  traverse.copyCache(parent, child);
 
-  const pathCache = traverse.cache.path;
-  if (pathCache.has(parent)) {
-    pathCache.set(child, pathCache.get(parent));
-  }
   return child;
 }
 
