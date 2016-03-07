@@ -25,7 +25,7 @@ contributing, please read the
 #### Setup
 
 ```sh
-$ git clone https://github.com/babel/babel
+$ git clone git@github.com:babel/babel.git
 $ cd babel
 $ make bootstrap
 ```
