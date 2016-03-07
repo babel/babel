@@ -1,0 +1,1 @@
+var node = "shouldHaveFilenameLocProp";
