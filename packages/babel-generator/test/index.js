@@ -17,6 +17,44 @@ suite("generation", function () {
       assert.ok(t.VISITOR_KEYS[type], type + " should not exist");
     });
   });
+
+  test("multiple sources", function () {
+    var sources = {
+      "a.js": "function hi (msg) { console.log(msg); }\n",
+      "b.js": "hi('hello');\n"
+    };
+    var parsed = _.keys(sources).reduce(function (_parsed, filename) {
+      _parsed[filename] = parse(sources[filename], { sourceFilename: filename });
+      return _parsed;
+    }, {});
+
+    var combinedAst = {
+      "type": "File",
+      "program": {
+        "type": "Program",
+        "sourceType": "module",
+        "body": [].concat(parsed["a.js"].program.body, parsed["b.js"].program.body)
+      }
+    };
+
+    var generated = generate.default(combinedAst, { sourceMaps: true }, sources);
+
+    chai.expect(generated.map).to.deep.equal({
+      version: 3,
+      sources: [ 'a.js', 'b.js' ],
+      names: [],
+      mappings: 'AAAA,SAAS,EAAT,CAAa,GAAb,EAAkB;AAAE,UAAQ,GAAR,CAAY,GAAZ,EAAF;CAAlB;;GCAG,OAAH',
+      sourcesContent: [
+      'function hi (msg) { console.log(msg); }\n',
+        'hi(\'hello\');\n'
+      ]
+    }, "sourcemap was incorrectly generated");
+
+    chai.expect(generated.code).to.equal(
+      "function hi(msg) {\n  console.log(msg);\n}\n\nhi('hello');",
+      "code was incorrectly generated"
+    );
+  });
 });
 
 

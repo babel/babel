@@ -71,7 +71,7 @@ export class CodeGenerator extends Printer {
 
   static normalizeOptions(code, opts, tokens) {
     let style = "  ";
-    if (code) {
+    if (code && typeof code === "string") {
       let indent = detectIndent(code).indent;
       if (indent && indent !== " ") style = indent;
     }
