@@ -19,7 +19,7 @@ function shouldShadow(path, shadowPath) {
   if (path.is("_forceShadow")) {
     return true;
   } else {
-    return shadowPath && !shadowPath.isArrowFunctionExpression();
+    return shadowPath;
   }
 }
 
@@ -39,7 +39,7 @@ function remap(path, key, create) {
 
     if (path.isProgram()) {
       return true;
-    } else if (path.isFunction()) {
+    } else if (path.isFunction() && !path.isArrowFunctionExpression()) {
       if (shadowFunction) {
         return path === shadowFunction || path.node === shadowFunction.node;
       } else {
