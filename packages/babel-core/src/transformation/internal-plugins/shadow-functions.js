@@ -29,6 +29,7 @@ function remap(path, key, create) {
   if (!shouldShadow(path, shadowPath)) return;
 
   let shadowFunction = path.node._shadowedFunctionLiteral;
+
   let currentFunction;
   let passedShadowFunction = false;
 
@@ -55,6 +56,13 @@ function remap(path, key, create) {
 
     return false;
   });
+
+  if (shadowFunction && fnPath.isProgram() && !shadowFunction.isProgram()){
+    // If the shadow wasn't found, take the closest function as a backup.
+    // This is a bit of a hack, but it will allow the parameter transforms to work properly
+    // without introducing yet another shadow-controlling flag.
+    fnPath = path.findParent((p) => p.isProgram() || p.isFunction());
+  }
 
   // no point in realiasing if we're in this function
   if (fnPath === currentFunction) return;

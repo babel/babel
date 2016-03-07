@@ -213,7 +213,11 @@ export function inType() {
  * - _forceShadow - If truthy, this specific identifier will be bound in the closest
  *    Function that is not flagged "shadow", or the Program.
  * - _shadowedFunctionLiteral - When set to a NodePath, this specific identifier will be bound
- *    to this NodePath/Node or the Program.
+ *    to this NodePath/Node or the Program. If this path is not found relative to the
+ *    starting location path, the closest function will be used.
+ *
+ * Please Note, these flags are for private internal use only and should be avoided.
+ * Only "shadow" is a public property that other transforms may manipulate.
  */
 
 export function inShadow(key?) {
