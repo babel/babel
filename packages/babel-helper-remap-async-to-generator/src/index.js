@@ -8,9 +8,19 @@ import * as t from "babel-types";
 let buildWrapper = template(`
   (function () {
     var ref = FUNCTION;
-    return function (PARAMS) {
+    return function NAME(PARAMS) {
       return ref.apply(this, arguments);
     };
+  })
+`);
+
+let namedBuildWrapper = template(`
+  (function () {
+    var ref = FUNCTION;
+    function NAME(PARAMS) {
+      return ref.apply(this, arguments);
+    }
+    return NAME;
   })
 `);
 
@@ -53,11 +63,15 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
 
 function plainFunction(path: NodePath, callId: Object) {
   let node = path.node;
+  let isDeclaration = path.isFunctionDeclaration();
+  let asyncFnId = node.id;
   let wrapper = buildWrapper;
 
   if (path.isArrowFunctionExpression()) {
     path.arrowFunctionToShadowed();
     wrapper = arrowBuildWrapper;
+  } else if (!isDeclaration && asyncFnId) {
+    wrapper = namedBuildWrapper;
   }
 
   node.async = false;
@@ -69,10 +83,7 @@ function plainFunction(path: NodePath, callId: Object) {
     node.shadow = Object.assign({}, node.shadow, { arguments: false });
   }
 
-  let asyncFnId = node.id;
   node.id = null;
-
-  let isDeclaration = path.isFunctionDeclaration();
 
   if (isDeclaration) {
     node.type = "FunctionExpression";
@@ -80,11 +91,10 @@ function plainFunction(path: NodePath, callId: Object) {
 
   let built = t.callExpression(callId, [node]);
   let container = wrapper({
+    NAME: asyncFnId,
     FUNCTION: built,
     PARAMS: node.params.map(() => path.scope.generateUidIdentifier("x"))
   }).expression;
-
-  let retFunction = container.body.body[1].argument;
 
   if (isDeclaration) {
     let declar = t.variableDeclaration("let", [
@@ -95,12 +105,10 @@ function plainFunction(path: NodePath, callId: Object) {
     ]);
     declar._blockHoist = true;
 
-    retFunction.id = asyncFnId;
     path.replaceWith(declar);
   } else {
-    if (asyncFnId && asyncFnId.name) {
-      retFunction.id = asyncFnId;
-    } else {
+    let retFunction = container.body.body[1].argument;
+    if (!asyncFnId) {
       nameFunction({
         node: retFunction,
         parent: path.parent,
@@ -108,7 +116,7 @@ function plainFunction(path: NodePath, callId: Object) {
       });
     }
 
-    if (retFunction.id || node.params.length) {
+    if (!retFunction || retFunction.id || node.params.length) {
       // we have an inferred function id or params so we need this wrapper
       path.replaceWith(t.callExpression(container, []));
     } else {
