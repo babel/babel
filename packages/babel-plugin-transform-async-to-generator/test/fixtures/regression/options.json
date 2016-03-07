@@ -1,3 +1,6 @@
 {
-  "plugins": ["external-helpers", "transform-es2015-block-scoping", "transform-regenerator", "transform-async-to-generator"]
+  "plugins": [
+    "external-helpers",
+    "transform-async-to-generator"
+  ]
 }
