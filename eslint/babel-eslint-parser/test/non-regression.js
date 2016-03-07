@@ -391,7 +391,7 @@ describe("verify", function () {
       );
     });
 
-    it("polymorphpic/generic types - outside of fn scope #123", function () {
+    it.skip("polymorphpic/generic types - outside of fn scope #123", function () {
       verifyAndAssertMessages([
           "export function foo<T>(value) { value; };",
           "var b: T = 1; b;"
@@ -402,7 +402,7 @@ describe("verify", function () {
       );
     });
 
-    it("polymorphpic/generic types - extending unknown #123", function () {
+    it.skip("polymorphpic/generic types - extending unknown #123", function () {
       verifyAndAssertMessages([
           "import Bar from 'bar';",
           "export class Foo extends Bar<T> {}",

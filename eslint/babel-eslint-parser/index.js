@@ -55,10 +55,12 @@ function monkeypatch() {
   estraverses.push(estraverse);
   assign(estraverse.VisitorKeys, t.VISITOR_KEYS);
 
-  // monkeypatch estraverse-fb
-  var estraverseFb = eslintMod.require("estraverse-fb");
-  estraverses.push(estraverseFb);
-  assign(estraverseFb.VisitorKeys, t.VISITOR_KEYS);
+  // monkeypatch estraverse-fb (only for eslint < 2.3.0)
+  try {
+    var estraverseFb = eslintMod.require("estraverse-fb");
+    estraverses.push(estraverseFb);
+    assign(estraverseFb.VisitorKeys, t.VISITOR_KEYS);
+  } catch (err) {}
 
   // ESLint v1.9.0 uses estraverse directly to work around https://github.com/npm/npm/issues/9663
   var estraverseOfEslint = eslintMod.require("estraverse");
@@ -379,6 +381,8 @@ function monkeypatch() {
     }
   };
 }
+
+exports.VisitorKeys = t.VISITOR_KEYS;
 
 exports.parse = function (code, options) {
   options = options || {};
