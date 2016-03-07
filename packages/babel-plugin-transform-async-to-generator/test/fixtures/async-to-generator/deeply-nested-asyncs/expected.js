@@ -1,17 +1,15 @@
 let s = function () {
   var ref = babelHelpers.asyncToGenerator(function* (x) {
-    let t = (() => {
-      var _this3 = this;
+    var _this2 = this;
 
+    let t = (() => {
       var ref = babelHelpers.asyncToGenerator(function* (y, a) {
         let r = (() => {
-          var _this2 = this;
-
           var ref = babelHelpers.asyncToGenerator(function* (z, b) {
             yield z;
             return _this2.x;
           }),
-              _this = this;
+              _this = _this2;
 
           return function r(_x4, _x5) {
             return ref.apply(_this, arguments);
@@ -19,10 +17,9 @@ let s = function () {
         })();
         yield r();
 
-        return _this3.g(r);
+        return _this2.g(r);
       }),
           _this = this;
-
       return function t(_x2, _x3) {
         return ref.apply(_this, arguments);
       };

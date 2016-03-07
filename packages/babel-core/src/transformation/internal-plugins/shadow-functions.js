@@ -30,6 +30,7 @@ function remap(path, key, create) {
 
   let shadowFunction = path.node._shadowedFunctionLiteral;
   let currentFunction;
+  let passedShadowFunction = false;
 
   let fnPath = path.findParent(function (path) {
     if (path.isProgram() || path.isFunction()) {
@@ -38,13 +39,18 @@ function remap(path, key, create) {
     }
 
     if (path.isProgram()) {
+      passedShadowFunction = true;
+
       return true;
     } else if (path.isFunction() && !path.isArrowFunctionExpression()) {
       if (shadowFunction) {
-        return path === shadowFunction || path.node === shadowFunction.node;
+        if (path === shadowFunction || path.node === shadowFunction.node) return true;
       } else {
-        return !path.is("shadow");
+        if (!path.is("shadow")) return true;
       }
+
+      passedShadowFunction = true;
+      return false;
     }
 
     return false;
@@ -52,6 +58,10 @@ function remap(path, key, create) {
 
   // no point in realiasing if we're in this function
   if (fnPath === currentFunction) return;
+
+  // If the only functions that were encountered are arrow functions, skip remapping the
+  // binding since arrow function syntax already does that.
+  if (!passedShadowFunction) return;
 
   let cached = fnPath.getData(key);
   if (cached) return path.replaceWith(cached);
