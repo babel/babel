@@ -10,3 +10,20 @@ function f() {
     };
   }();
 };
+
+class Class {
+  m() {
+    var _this2 = this;
+
+    return babelHelpers.asyncToGenerator(function* () {
+      var c = function () {
+        var ref = babelHelpers.asyncToGenerator(function* (b) {
+          _this2;
+        });
+        return function c(_x) {
+          return ref.apply(this, arguments);
+        };
+      }();
+    })();
+  }
+}
