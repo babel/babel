@@ -7,6 +7,13 @@ var tests = [
   'import {bar2, baz} from "foo";',
   'import {bar as baz2} from "foo";',
   'import {bar as baz3, xyz} from "foo";',
+
+  'export default 42;',
+  'export {foo};',
+  'export { foo as default };',
+  'export * from "foo";',
+  'export {foo} from "foo";',
+  'export {default as foo} from "foo";',
 ];
 
 tests.forEach(function (code) {

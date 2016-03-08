@@ -184,7 +184,9 @@ export default function () {
 
             // Copy location from the original import statement for sourcemap
             // generation.
-            varDecl.loc = imports[source].loc;
+            if (imports[source]) {
+              varDecl.loc = imports[source].loc;
+            }
 
             if (typeof blockHoist === "number" && blockHoist > 0) {
               varDecl._blockHoist = blockHoist;
@@ -338,9 +340,11 @@ export default function () {
                 path.replaceWithMultiple(nodes);
               }
             } else if (path.isExportAllDeclaration()) {
-              topNodes.push(buildExportAll({
+              let exportNode = buildExportAll({
                 OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
-              }));
+              });
+              exportNode.loc = path.node.loc;
+              topNodes.push(exportNode);
               path.remove();
             }
           }
