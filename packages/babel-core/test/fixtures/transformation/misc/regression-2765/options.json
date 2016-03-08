@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-es2015-arrow-functions",
+    "syntax-async-functions",
+    "transform-async-to-generator",
+    "external-helpers"
+  ]
+}
