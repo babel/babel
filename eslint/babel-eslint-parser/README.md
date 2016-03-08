@@ -1,4 +1,5 @@
-# babel-eslint [![Build Status][travis-image]][travis-url]
+# babel-eslint
+[![Build Status][travis-image]][travis-url]
 
 **babel-eslint** allows you to lint **ALL** valid Babel code with the fantastic
 [ESLint](https://github.com/eslint/eslint).
