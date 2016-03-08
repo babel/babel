@@ -3,3 +3,9 @@ export default class Foo {
     const baz = 0;
   }
 }
+
+async function foo() {
+  async function bar() {
+    const baz = {};
+  }
+}
