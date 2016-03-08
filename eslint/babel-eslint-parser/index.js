@@ -45,9 +45,7 @@ function monkeypatch() {
   try {
     var esrecurseLoc = Module._resolveFilename("esrecurse", eslintMod);
     estraverseRelative = createModule(esrecurseLoc);
-  } catch (err) {
-    throw new Error("babel-eslint isn't currently compatible with ESLint 2.3.x. The recommendation is to pin to ESLint 2.2.x right now.");
-  }
+  } catch (err) {}
 
   // contains all the instances of estraverse so we can modify them if necessary
   var estraverses = [];
@@ -62,7 +60,9 @@ function monkeypatch() {
     var estraverseFb = eslintMod.require("estraverse-fb");
     estraverses.push(estraverseFb);
     assign(estraverseFb.VisitorKeys, t.VISITOR_KEYS);
-  } catch (err) {}
+  } catch (err) {
+    throw new Error("babel-eslint isn't currently compatible with ESLint 2.3.x. The recommendation is to pin to ESLint 2.2.x right now.");
+  }
 
   // ESLint v1.9.0 uses estraverse directly to work around https://github.com/npm/npm/issues/9663
   var estraverseOfEslint = eslintMod.require("estraverse");
