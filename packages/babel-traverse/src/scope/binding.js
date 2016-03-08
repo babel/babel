@@ -71,7 +71,7 @@ export default class Binding {
 
   reassign(path: Object) {
     this.constant = false;
-    if (this.constantViolations.includes(path)) {
+    if (this.constantViolations.indexOf(path) !== -1) {
       return;
     }
     this.constantViolations.push(path);
