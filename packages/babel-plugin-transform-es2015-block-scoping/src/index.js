@@ -346,12 +346,11 @@ class BlockScoping {
     let parentScope = scope.getFunctionParent();
     let letRefs = this.letReferences;
 
-    const i = 0;
     for (let key in letRefs) {
       let ref = letRefs[key];
       const binding = scope.getBinding(ref.name);
       if (!binding) continue;
-      if (binding.kind === 'let' || binding.kind === 'const') {
+      if (binding.kind === "let" || binding.kind === "const") {
         scope.removeOwnBinding(ref.name);
         parentScope.registerBinding("var", binding.path);
       }
