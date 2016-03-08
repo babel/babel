@@ -45,7 +45,9 @@ function monkeypatch() {
   try {
     var esrecurseLoc = Module._resolveFilename("esrecurse", eslintMod);
     estraverseRelative = createModule(esrecurseLoc);
-  } catch (err) {}
+  } catch (err) {
+    throw new Error("babel-eslint isn't currently compatible with ESLint 2.3.x. The recommendation is to pin to ESLint 2.2.x right now.");
+  }
 
   // contains all the instances of estraverse so we can modify them if necessary
   var estraverses = [];
