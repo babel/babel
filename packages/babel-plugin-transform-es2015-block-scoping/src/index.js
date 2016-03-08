@@ -88,10 +88,6 @@ function convertBlockScopedToVar(path, parent, scope, moveBindingsToParent = fal
   // Move bindings from current block scope to function scope.
   if (moveBindingsToParent) {
     const parentScope = scope.getFunctionParent();
-    if (parentScope === scope) {
-      return;
-    }
-
     const ids = path.getBindingIdentifiers();
     for (let name in ids) {
       scope.removeOwnBinding(name);
@@ -302,7 +298,6 @@ class BlockScoping {
     this.outsideLetReferences = Object.create(null);
     this.hasLetReferences     = false;
     this.letReferences        = Object.create(null);
-    this.letReferencesDeclars = [];
     this.body                 = [];
 
     if (loopPath) {
@@ -325,7 +320,10 @@ class BlockScoping {
     let needsClosure = this.getLetReferences();
 
     // this is a block within a `Function/Program` so we can safely leave it be
-    if (t.isFunction(this.parent) || t.isProgram(this.block)) return;
+    if (t.isFunction(this.parent) || t.isProgram(this.block)) {
+      this.updateScopeInfo();
+      return;
+    }
 
     // we can skip everything
     if (!this.hasLetReferences) return;
@@ -336,17 +334,33 @@ class BlockScoping {
       this.remap();
     }
 
+    this.updateScopeInfo();
+
     if (this.loopLabel && !t.isLabeledStatement(this.loopParent)) {
       return t.labeledStatement(this.loopLabel, this.loop);
     }
   }
 
+  updateScopeInfo() {
+    let scope = this.scope;
+    let parentScope = scope.getFunctionParent();
+    let letRefs = this.letReferences;
+
+    const i = 0;
+    for (let key in letRefs) {
+      let ref = letRefs[key];
+      const binding = scope.getBinding(ref.name);
+      if (!binding) continue;
+      if (binding.kind === 'let' || binding.kind === 'const') {
+        scope.removeOwnBinding(ref.name);
+        parentScope.registerBinding("var", binding.path);
+      }
+    }
+  }
   remap() {
     let hasRemaps = false;
     let letRefs   = this.letReferences;
     let scope     = this.scope;
-
-    const parentScope = scope.getFunctionParent();
 
     // alright, so since we aren't wrapping this block in a closure
     // we have to check if any of our let variables collide with
@@ -369,18 +383,6 @@ class BlockScoping {
           binding: ref,
           uid: uid
         };
-      }
-
-      // Remove binding from block scope so it's moved to function scope.
-      if (parentScope !== scope) {
-        scope.removeOwnBinding(ref.name);
-      }
-    }
-
-    // Move bindings to parent scope.
-    if (parentScope !== scope) {
-      for (let declar of (this.letReferencesDeclars: Array<Object>)) {
-        parentScope.registerBinding("var", declar);
       }
     }
 
@@ -535,7 +537,6 @@ class BlockScoping {
           let declarPath = this.blockPath.get("body")[i];
           if (isBlockScoped(declar)) {
             convertBlockScopedToVar(declarPath, block, this.scope);
-            this.letReferencesDeclars.push(declarPath);
           }
           declarators = declarators.concat(declar.declarations || declar);
         }
