@@ -1137,18 +1137,45 @@ describe("verify", function () {
     );
   });
 
-  it("visits excluded properties left of spread #95", function () {
+  // This two tests are disabled, as the feature to visit properties when
+  // there is a spread/rest operator has been removed as it caused problems
+  // with other rules #249
+  it.skip("visits excluded properties left of spread #95", function () {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
-      { "no-undef": 1, "no-unused-vars": 1, "no-redeclare": 1 },
+      { "no-unused-vars": 1 },
       []
     );
   });
 
-  it("visits excluded properties left of spread #210", function () {
+  it.skip("visits excluded properties left of spread #210", function () {
     verifyAndAssertMessages(
       "const props = { yo: 'yo' }; const { ...otherProps } = props;",
-      { "no-undef": 1, "no-unused-vars": 1, "no-redeclare": 1 },
+      { "no-unused-vars": 1 },
+      []
+    );
+  });
+
+  it("does not mark spread variables false-positive", function () {
+    verifyAndAssertMessages(
+      "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
+      { "no-undef": 1, "no-redeclare": 1 },
+      []
+    );
+  });
+
+  it("does not mark spread variables false-positive", function () {
+    verifyAndAssertMessages(
+      "const props = { yo: 'yo' }; const { ...otherProps } = props;",
+      { "no-undef": 1, "no-redeclare": 1 },
+      []
+    );
+  });
+
+  it("does not mark spread variables as use-before-define #249", function () {
+    verifyAndAssertMessages(
+      "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
+      { "no-use-before-define": 1 },
       []
     );
   });

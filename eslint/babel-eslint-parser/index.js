@@ -298,18 +298,6 @@ function monkeypatch() {
         if (typeAnnotation) {
           checkIdentifierOrVisit.call(this, typeAnnotation);
         }
-        if (id.type === "ObjectPattern") {
-          // check if object destructuring has a spread
-          var hasSpread = id.properties.filter(function(p) {
-            return p._babelType === "SpreadProperty" || p._babelType === "RestProperty";
-          });
-          // visit properties if so
-          if (hasSpread.length > 0) {
-            for (var j = 0; j < id.properties.length; j++) {
-              this.visit(id.properties[j]);
-            }
-          }
-        }
       }
     }
     variableDeclaration.call(this, node);
