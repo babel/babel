@@ -3,3 +3,11 @@ function f() {
     this;
   };
 };
+
+class Class {
+  async m() {
+    var c = async (b) => {
+      this
+    }
+  }
+}
