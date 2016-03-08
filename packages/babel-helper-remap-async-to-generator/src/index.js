@@ -6,7 +6,7 @@ import template from "babel-template";
 import * as t from "babel-types";
 
 let buildWrapper = template(`
-  (function () {
+  (() => {
     var ref = FUNCTION;
     return function NAME(PARAMS) {
       return ref.apply(this, arguments);
@@ -15,21 +15,12 @@ let buildWrapper = template(`
 `);
 
 let namedBuildWrapper = template(`
-  (function () {
+  (() => {
     var ref = FUNCTION;
     function NAME(PARAMS) {
       return ref.apply(this, arguments);
     }
     return NAME;
-  })
-`);
-
-let arrowBuildWrapper =  template(`
-  (() => {
-    var ref = FUNCTION, _this = this;
-    return function(PARAMS) {
-      return ref.apply(_this, arguments);
-    };
   })
 `);
 
@@ -69,19 +60,12 @@ function plainFunction(path: NodePath, callId: Object) {
 
   if (path.isArrowFunctionExpression()) {
     path.arrowFunctionToShadowed();
-    wrapper = arrowBuildWrapper;
   } else if (!isDeclaration && asyncFnId) {
     wrapper = namedBuildWrapper;
   }
 
   node.async = false;
   node.generator = true;
-  // Either the wrapped generator is invoked with `.apply(this, arguments)` or it has no params,
-  // so it should capture `arguments`
-  if (node.shadow) {
-    // node.shadow may be `true` or an object
-    node.shadow = Object.assign({}, node.shadow, { arguments: false });
-  }
 
   node.id = null;
 
