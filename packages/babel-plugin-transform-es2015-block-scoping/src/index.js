@@ -352,7 +352,7 @@ class BlockScoping {
       const binding = scope.getBinding(ref.name);
       if (!binding) continue;
       if (binding.kind === "let" || binding.kind === "const") {
-        binding.kind = 'var';
+        binding.kind = "var";
         scope.moveBindingTo(ref.name, parentScope);
       }
     }
