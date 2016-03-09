@@ -90,9 +90,10 @@ function convertBlockScopedToVar(path, parent, scope, moveBindingsToParent = fal
     const parentScope = scope.getFunctionParent();
     const ids = path.getBindingIdentifiers();
     for (let name in ids) {
-      scope.removeOwnBinding(name);
+      let binding = scope.getOwnBinding(name);
+      if (binding) binding.kind = "var";
+      scope.moveBindingTo(name, parentScope);
     }
-    parentScope.registerBinding("var", path);
   }
 }
 
@@ -351,8 +352,8 @@ class BlockScoping {
       const binding = scope.getBinding(ref.name);
       if (!binding) continue;
       if (binding.kind === "let" || binding.kind === "const") {
-        scope.removeOwnBinding(ref.name);
-        parentScope.registerBinding("var", binding.path);
+        binding.kind = "var";
+        scope.moveBindingTo(ref.name, parentScope);
       }
     }
   }
