@@ -13,6 +13,170 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.7.1 (2016-03-09)
+
+#### Bug Fix
+* `babel-plugin-transform-es2015-block-scoping`
+  * [#3411](https://github.com/babel/babel/pull/3411) Fixes [T7197](https://phabricator.babeljs.io/T7197): Move bindings without losing any information.
+
+The following code:
+```js
+let foo = () => {
+  foo = () => { };
+};
+
+foo();
+```
+
+Was generating:
+
+```js
+var foo = function foo() {
+  foo = function foo() {};
+};
+
+foo();
+```
+
+Notice how the function name `foo` was is shadowing the upper scope variable. This was fixed and the generated code now is:
+
+```js
+var _foo = function foo() {
+  _foo = function foo() {};
+};
+
+_foo();
+```
+
+## 6.7.0 (2016-03-08)
+
+Notable changes:
+- Various async function fixes (const read-only error, wrong this, etc)
+- Proper sourcemaps for import/export statements
+- Moved internal Babel cache out of the AST
+
+#### New Feature
+* `babel-traverse`
+  * [#3393](https://github.com/babel/babel/pull/3393) Move NodePath cache out of the AST. ([@amasad](https://github.com/amasad))
+
+Move cache into a clearable WeakMap, adds `traverse.clearCache` and `traverse.copyCache`. This doubles as a bug fix because previously reusable AST Nodes would carry their cache with them even if they're used across multiple files and transform passes.
+
+* `babel-generator`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babylon`
+  * [#3385](https://github.com/babel/babel/pull/3385) Add support for Flow def-site variance syntax. ([@samwgoldman](https://github.com/samwgoldman))
+
+```js
+// examples
+class C<+T,-U> {}
+function f<+T,-U>() {}
+type T<+T,-U> = {}
+```
+
+This syntax allows you to specify whether a type variable can appear in
+a covariant or contravariant position, and is super useful for, say,
+`Promise`. @samwgoldman can tell you more 😄.
+
+* `babel-generator`, `babylon`
+  * [#3323](https://github.com/babel/babel/pull/3323) Source-map support for multiple input source files. ([@divmain](https://github.com/divmain))
+
+More docs on this in the [`babel-generator` README](https://github.com/babel/babel/blob/master/packages/babel-generator/README.md#ast-from-multiple-sources)
+
+#### Bug Fix
+* `babel-traverse`
+  * [#3406](https://github.com/babel/babel/pull/3406) Update scope info after block-scoping transform [T2892](https://phabricator.babeljs.io/T2892). ([@amasad](https://github.com/amasad))
+
+Make sure all existing let/const bindings are removed and replaced with vars after the block-scoping plugin is run.
+
+This fixes: `SyntaxError: src/foo.js: "baz" is read-only (This is an error on an internal node. Probably an internal error. Location has been estimated.)`
+
+```js
+async function foo() {
+  async function bar() {
+    const baz = {}; // was creating a read-only error
+  }
+}
+```
+
+* `babel-core`, `babel-traverse`, `babel-helper-remap-async-to-generator`, `babel-helper-replace-supers`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-async-to-module-method`
+  * [#3405](https://github.com/babel/babel/pull/3405) Fix shadow function processing for async functions ([@loganfsmyth](https://github.com/loganfsmyth))
+  
+Should fix the majority of issues dealing with async functions and use of parameters, `this`, and `arguments`.
+
+```js
+// fixes
+class Test {
+  static async method2() {
+    setTimeout(async (arg) => {
+      console.log(this); // was showing undefined with arg
+    });
+  }
+
+  async method2() {
+    setTimeout(async (arg) => {
+      console.log(this); // was showing undefined with arg
+    });
+  }
+}
+```
+
+* `babel-helper-remap-async-to-generator`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-async-to-module-method`
+  * [#3381](https://github.com/babel/babel/pull/3381) Fix named async FunctionExpression scoping issue.. ([@keijokapp](https://github.com/keijokapp))
+
+The problem is that the name `bar` of `FunctionExpression` is only visible inside that function, not in `foo` or `ref`.
+
+```js
+// input
+var foo = async function bar() {
+  console.log(bar);
+};
+
+
+// before
+var foo = function () {
+  var ref = babelHelpers.asyncToGenerator(function* () {
+    console.log(bar);
+  });
+  
+  return function bar() {
+    return ref.apply(this, arguments);
+  };
+}();
+
+// now
+var foo = function () {
+  var ref = babelHelpers.asyncToGenerator(function* () {
+    console.log(bar);
+  });
+  
+  function bar() {
+    return ref.apply(this, arguments);
+  }
+
+  return bar
+}();
+```
+
+
+* `babel-plugin-transform-es2015-parameters`
+  * [#3375](https://github.com/babel/babel/pull/3375) Fix errors in parameters rest transformation [T7138](https://phabricator.babeljs.io/T7138). ([@jmm](https://github.com/jmm))
+  
+Many fixes to rest params: `function asdf(...rest) { ... }`
+
+* `babel-template`
+  * [#3363](https://github.com/babel/babel/pull/3363) Fix usage in IE <= 9 ([@danez](https://github.com/danez))
+
+* `babel-plugin-transform-es2015-modules-commonjs`
+  * [#3409](https://github.com/babel/babel/pull/3409) Fix source map generation for import and export statement.
+
+
+#### Internal
+* `babel-plugin-transform-es2015-modules-commonjs`
+  * [#3383](https://github.com/babel/babel/pull/3383) Test for regression with exporting an arrow function with a default param. ([@hzoo](https://github.com/hzoo))
+
+#### Commiters: 6
+
+amasad, divmain, hzoo, jmm, keijokapp, loganfsmyth, samwgoldman
+
+
 ## 6.6.5 (2016-03-04)
 
 And.. some more bug fixes!
