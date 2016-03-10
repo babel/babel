@@ -13,6 +13,33 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.7.2 (2016-03-10)
+
+Flow fix, mention babylon move
+
+#### Bug Fix
+* `babel-traverse`
+  * [#3414](https://github.com/babel/babel/pull/3414): Warn on Flow-based bindings and don't count as a const violation. (@amasad)
+
+We are treating static type information as part of the runtime scope information. So a Flow type declaration was being considered a binding on the scope. This was specifically problematic when we thinking that we're overwriting a binding:
+
+The following code:
+```js
+declare class foo {}
+const foo = 1;
+```
+
+Will result in the error: `"foo" is read-only`
+
+Since removing support for flow-based bindings would be a breaking change, in this release I'm adding a warning whenever someone tries to use Flow types as bindings.
+
+#### Internal
+* `babel-code-frame`, `babel-generator`, `babel-messages`, `babel-plugin-undeclared-variables-check`, `babel-polyfill`, `babel-register`, `babel-traverse`, `babel-types`
+  * [#3410](https://github.com/babel/babel/pull/3410) add test to npmignores [ci skip]. ([@hzoo](https://github.com/hzoo))
+* `babylon`
+  * [#3413](https://github.com/babel/babel/pull/3413) move babylon to https://github.com/babel/babylon. ([@kittens](https://github.com/kittens))
+
+
 ## 6.7.1 (2016-03-09)
 
 #### Bug Fix
