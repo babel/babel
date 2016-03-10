@@ -48,8 +48,8 @@ let collectorVisitor = {
     // this will be hit again once we traverse into it after this iteration
     if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) return;
 
-    // Skip flow declarations
-    if (path.isFlow()) return;
+    // TODO(amasad): remove support for flow as bindings (See warning below).
+    //if (path.isFlow()) return;
 
     // we've ran into a declaration!
     path.scope.getFunctionParent().registerDeclaration(path);
@@ -487,6 +487,11 @@ export default class Scope {
           this.checkBlockScopedCollisions(local, kind, name, id);
         }
 
+        // It's erroneous that we currently consider flow a binding, however, we can't
+        // remove it because people might be depending on it. See warning section
+        // in `getBinding`
+        if (local && local.path.isFlow()) local = null;
+
         parent.references[name] = true;
 
         this.bindings[name] = new Binding({
@@ -837,17 +842,27 @@ export default class Scope {
     return this.getBindingIdentifier(name) === node;
   }
 
+  warnOnFlowBinding(binding) {
+    if (binding && binding.path.isFlow()) {
+      console.warn(`
+        You are using Flow declarations as bindings and it is not supported anymore
+        and will be removed in the next version 6.8.
+      `);
+    }
+    return binding;
+  }
+
   getBinding(name: string) {
     let scope = this;
 
     do {
       let binding = scope.getOwnBinding(name);
-      if (binding) return binding;
+      if (binding) return this.warnOnFlowBinding(binding);
     } while (scope = scope.parent);
   }
 
   getOwnBinding(name: string) {
-    return this.bindings[name];
+    return this.warnOnFlowBinding(this.bindings[name]);
   }
 
   getBindingIdentifier(name: string) {
