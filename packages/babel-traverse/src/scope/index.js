@@ -682,6 +682,7 @@ export default class Scope {
     path.traverse(collectorVisitor, state);
     this.crawling = false;
 
+    this._warnOnFlowBinding = false;
     // register assignments
     for (let path of state.assignments) {
       // register undeclared bindings as globals
@@ -712,6 +713,7 @@ export default class Scope {
     for (let path of state.constantViolations) {
       path.scope.registerConstantViolation(path);
     }
+    this._warnOnFlowBinding = true;
   }
 
   push(opts: {
@@ -843,10 +845,11 @@ export default class Scope {
   }
 
   warnOnFlowBinding(binding) {
-    if (binding && binding.path.isFlow()) {
+    if (!this.crawling && this._warnOnFlowBinding && binding && binding.path.isFlow()) {
       console.warn(`
-        You are using Flow declarations as bindings and it is not supported anymore
-        and will be removed in the next version 6.8.
+        You or one of the Babel plugins you are using are using Flow declarations as bindings.
+        Support for this will be removed in version 6.8. To find out the caller, grep for this message
+        and change it to a \`console.trace()\`.
       `);
     }
     return binding;
