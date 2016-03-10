@@ -48,6 +48,9 @@ let collectorVisitor = {
     // this will be hit again once we traverse into it after this iteration
     if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) return;
 
+    // Skip flow declarations
+    if (path.isFlow()) return;
+
     // we've ran into a declaration!
     path.scope.getFunctionParent().registerDeclaration(path);
   },
