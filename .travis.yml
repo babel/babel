@@ -1,0 +1,19 @@
+---
+git:
+  depth: 1
+sudo: false
+language: node_js
+cache:
+  directories:
+  - node_modules
+
+node_js:
+ - "5"
+ - "4"
+ - iojs
+ - "0.12"
+
+script: npm test
+
+notifications:
+  slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK
