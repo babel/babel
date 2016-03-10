@@ -489,7 +489,7 @@ export default class Scope {
 
         // It's erroneous that we currently consider flow a binding, however, we can't
         // remove it because people might be depending on it. See warning section
-        // in `getBinding`
+        // in `warnOnFlowBinding`.
         if (local && local.path.isFlow()) local = null;
 
         parent.references[name] = true;
@@ -848,8 +848,8 @@ export default class Scope {
     if (!this.crawling && this._warnOnFlowBinding && binding && binding.path.isFlow()) {
       console.warn(`
         You or one of the Babel plugins you are using are using Flow declarations as bindings.
-        Support for this will be removed in version 6.8. To find out the caller, grep for this message
-        and change it to a \`console.trace()\`.
+        Support for this will be removed in version 6.8. To find out the caller, grep for this
+        message and change it to a \`console.trace()\`.
       `);
     }
     return binding;
