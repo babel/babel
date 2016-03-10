@@ -89,14 +89,8 @@ suite("api", function () {
               new Plugin({
                 visitor: {
                   Function: function(path) {
-                    var node = path.node;
-                    var scope = path.scope;
-
-                    var alias = scope
-                      .getProgramParent()
-                      .getBinding(node.returnType.typeAnnotation.id.name)
-                      .path
-                      .node;
+                    var alias = path.scope.getProgramParent().path.get('body')[0].node;
+                    if (!babel.types.isTypeAlias(alias)) return;
 
                     // In case of `passPerPreset` being `false`, the
                     // alias node is already removed by Flow plugin.

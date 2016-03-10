@@ -48,6 +48,9 @@ let collectorVisitor = {
     // this will be hit again once we traverse into it after this iteration
     if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) return;
 
+    // TODO(amasad): remove support for flow as bindings (See warning below).
+    //if (path.isFlow()) return;
+
     // we've ran into a declaration!
     path.scope.getFunctionParent().registerDeclaration(path);
   },
@@ -484,6 +487,11 @@ export default class Scope {
           this.checkBlockScopedCollisions(local, kind, name, id);
         }
 
+        // It's erroneous that we currently consider flow a binding, however, we can't
+        // remove it because people might be depending on it. See warning section
+        // in `warnOnFlowBinding`.
+        if (local && local.path.isFlow()) local = null;
+
         parent.references[name] = true;
 
         this.bindings[name] = new Binding({
@@ -674,6 +682,7 @@ export default class Scope {
     path.traverse(collectorVisitor, state);
     this.crawling = false;
 
+    this._warnOnFlowBinding = false;
     // register assignments
     for (let path of state.assignments) {
       // register undeclared bindings as globals
@@ -704,6 +713,7 @@ export default class Scope {
     for (let path of state.constantViolations) {
       path.scope.registerConstantViolation(path);
     }
+    this._warnOnFlowBinding = true;
   }
 
   push(opts: {
@@ -834,17 +844,28 @@ export default class Scope {
     return this.getBindingIdentifier(name) === node;
   }
 
+  warnOnFlowBinding(binding) {
+    if (!this.crawling && this._warnOnFlowBinding && binding && binding.path.isFlow()) {
+      console.warn(`
+        You or one of the Babel plugins you are using are using Flow declarations as bindings.
+        Support for this will be removed in version 6.8. To find out the caller, grep for this
+        message and change it to a \`console.trace()\`.
+      `);
+    }
+    return binding;
+  }
+
   getBinding(name: string) {
     let scope = this;
 
     do {
       let binding = scope.getOwnBinding(name);
-      if (binding) return binding;
+      if (binding) return this.warnOnFlowBinding(binding);
     } while (scope = scope.parent);
   }
 
   getOwnBinding(name: string) {
-    return this.bindings[name];
+    return this.warnOnFlowBinding(this.bindings[name]);
   }
 
   getBindingIdentifier(name: string) {
