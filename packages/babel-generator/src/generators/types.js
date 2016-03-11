@@ -135,10 +135,10 @@ export function _stringLiteral(val: string, parent: Object): string {
   val = val.replace(/[\u000A\u000D\u2028\u2029]/g, function (c) {
     return "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4);
   });
-  
+
   const hasJSXParent = t.isJSX(parent);
 
-  if (this.format.quotes === "single" && (!hasJSXParent || (hasJSXParent && this.format.jsxQuotes !== "double")) {
+  if (this.format.quotes === "single" && (!hasJSXParent || (hasJSXParent && this.format.jsxQuotes !== "double"))) {
     // remove double quotes
     val = val.slice(1, -1);
 
