@@ -12,6 +12,12 @@ import globals from "globals";
 import * as t from "babel-types";
 import { scope as scopeCache } from "../cache";
 
+// Number of calls to the crawl method to figure out whether we're
+// somewhere inside a call that was trigerred by call. This is meant
+// to be used to figure out whether a warning should be trigerred.
+// See `warnOnFlowBinding`.
+let _crawlCallsCount = 0;
+
 /**
  * To avoid creating a new Scope instance for each traversal, we maintain a cache on the
  * node itself containing all scopes it has been associated with.
@@ -617,6 +623,12 @@ export default class Scope {
   }
 
   crawl() {
+    _crawlCallsCount++;
+    this._crawl();
+    _crawlCallsCount--;
+  }
+
+  _crawl() {
     let path = this.path;
 
     //
@@ -682,7 +694,6 @@ export default class Scope {
     path.traverse(collectorVisitor, state);
     this.crawling = false;
 
-    this._warnOnFlowBinding = false;
     // register assignments
     for (let path of state.assignments) {
       // register undeclared bindings as globals
@@ -713,7 +724,6 @@ export default class Scope {
     for (let path of state.constantViolations) {
       path.scope.registerConstantViolation(path);
     }
-    this._warnOnFlowBinding = true;
   }
 
   push(opts: {
@@ -845,7 +855,7 @@ export default class Scope {
   }
 
   warnOnFlowBinding(binding) {
-    if (!this.crawling && this._warnOnFlowBinding && binding && binding.path.isFlow()) {
+    if (_crawlCallsCount === 0 && binding && binding.path.isFlow()) {
       console.warn(`
         You or one of the Babel plugins you are using are using Flow declarations as bindings.
         Support for this will be removed in version 6.8. To find out the caller, grep for this
