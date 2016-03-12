@@ -23,17 +23,17 @@ let _crawlCallsCount = 0;
  * node itself containing all scopes it has been associated with.
  */
 
-function getCache(node, parentScope, self) {
-  let scopes: Array<Scope> = scopeCache.get(node) || [];
+function getCache(path, parentScope, self) {
+  let scopes: Array<Scope> = scopeCache.get(path.node) || [];
 
   for (let scope of scopes) {
-    if (scope.parent === parentScope) return scope;
+    if (scope.parent === parentScope && scope.path === path) return scope;
   }
 
   scopes.push(self);
 
-  if (!scopeCache.has(node)) {
-    scopeCache.set(node, scopes);
+  if (!scopeCache.has(path.node)) {
+    scopeCache.set(path.node, scopes);
   }
 }
 
@@ -150,7 +150,7 @@ export default class Scope {
       return parentScope;
     }
 
-    let cached = getCache(path.node, parentScope, this);
+    let cached = getCache(path, parentScope, this);
     if (cached) return cached;
 
     this.uid = uid++;
