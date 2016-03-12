@@ -135,10 +135,7 @@
                         "column": 20
                       }
                     },
-                    "name": "foo",
-                    "extra": {
-                      "parenthesized": true
-                    }
+                    "name": "foo"
                   }
                 ],
                 "body": {

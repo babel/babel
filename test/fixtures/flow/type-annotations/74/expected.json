@@ -119,10 +119,7 @@
                         "column": 16
                       }
                     },
-                    "name": "bar",
-                    "extra": {
-                      "parenthesized": true
-                    }
+                    "name": "bar"
                   }
                 ],
                 "body": {

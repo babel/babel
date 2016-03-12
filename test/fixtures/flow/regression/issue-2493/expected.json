@@ -171,10 +171,6 @@
                       "raw": "' world'"
                     },
                     "value": " world"
-                  },
-                  "extra": {
-                    "parenthesized": true,
-                    "parenStart": 12
                   }
                 }
               ],

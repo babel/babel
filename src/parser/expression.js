@@ -531,12 +531,12 @@ pp.parseParenExpression = function () {
   return val;
 };
 
-pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow, isAsync, allowOptionalCommaStart) {
+pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow, isAsync) {
   startPos = startPos || this.state.start;
   startLoc = startLoc || this.state.startLoc;
 
   let val;
-  this.next();
+  this.expect(tt.parenL);
 
   let innerStartPos = this.state.start, innerStartLoc = this.state.startLoc;
   let exprList = [], first = true;
@@ -566,12 +566,13 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   let innerEndLoc = this.state.startLoc;
   this.expect(tt.parenR);
 
-  if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
+  let arrowNode = this.startNodeAt(startPos, startLoc);
+  if (canBeArrow && !this.canInsertSemicolon() && (arrowNode = this.parseArrow(arrowNode))) {
     for (let param of exprList) {
       if (param.extra && param.extra.parenthesized) this.unexpected(param.extra.parenStart);
     }
 
-    return this.parseArrowExpression(this.startNodeAt(startPos, startLoc), exprList, isAsync);
+    return this.parseArrowExpression(arrowNode, exprList, isAsync);
   }
 
   if (!exprList.length) {
@@ -581,7 +582,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
       this.unexpected(this.state.lastTokStart);
     }
   }
-  if (optionalCommaStart && !allowOptionalCommaStart) this.unexpected(optionalCommaStart);
+  if (optionalCommaStart) this.unexpected(optionalCommaStart);
   if (spreadStart) this.unexpected(spreadStart);
   if (refShorthandDefaultPos.start) this.unexpected(refShorthandDefaultPos.start);
 
@@ -599,6 +600,12 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   this.addExtra(val, "parenStart", startPos);
 
   return val;
+};
+
+pp.parseArrow = function (node) {
+  if (this.eat(tt.arrow)) {
+    return node;
+  }
 };
 
 pp.parseParenItem = function (node) {
