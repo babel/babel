@@ -57,6 +57,7 @@
       "test": {
         "auxiliaryCommentBefore": "istanbul ignore next"
       }
-    }
+    },
+    "breakConfig": true
   }
 }
