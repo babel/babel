@@ -23,7 +23,7 @@ function shouldShadow(path, shadowPath) {
   }
 }
 
-function remap(path, key, create) {
+function getShadowBindingRoot(path, key){
   // ensure that we're shadowed
   let shadowPath = path.inShadow(key);
   if (!shouldShadow(path, shadowPath)) return;
@@ -70,6 +70,13 @@ function remap(path, key, create) {
   // If the only functions that were encountered are arrow functions, skip remapping the
   // binding since arrow function syntax already does that.
   if (!passedShadowFunction) return;
+
+  return fnPath;
+}
+
+function remap(path, key, create) {
+  let fnPath = getShadowBindingRoot(path, key);
+  if (!fnPath) return;
 
   let cached = fnPath.getData(key);
   if (cached) return path.replaceWith(cached);
