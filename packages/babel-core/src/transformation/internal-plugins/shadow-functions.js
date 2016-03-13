@@ -1,15 +1,29 @@
 import Plugin from "../plugin";
 import * as t from "babel-types";
 
+const SUPER_THIS_BOUND = Symbol("super this bound");
+
+const superVisitor = {
+  CallExpression(path){
+    if (!path.get("callee").isSuper()) return;
+
+    const {node} = path;
+    if (node[SUPER_THIS_BOUND]) return;
+    node[SUPER_THIS_BOUND] = true;
+
+    path.replaceWith(t.assignmentExpression("=", this.id, node));
+  }
+};
+
 export default new Plugin({
   visitor: {
     ThisExpression(path) {
-      remap(path, "this", () => t.thisExpression());
+      remap(path, "this");
     },
 
     ReferencedIdentifier(path) {
       if (path.node.name === "arguments") {
-        remap(path, "arguments", () => t.identifier("arguments"));
+        remap(path, "arguments");
       }
     }
   }
@@ -23,7 +37,7 @@ function shouldShadow(path, shadowPath) {
   }
 }
 
-function remap(path, key, create) {
+function remap(path, key) {
   // ensure that we're shadowed
   let shadowPath = path.inShadow(key);
   if (!shouldShadow(path, shadowPath)) return;
@@ -74,11 +88,19 @@ function remap(path, key, create) {
   let cached = fnPath.getData(key);
   if (cached) return path.replaceWith(cached);
 
-  let init = create();
   let id   = path.scope.generateUidIdentifier(key);
 
   fnPath.setData(key, id);
-  fnPath.scope.push({ id, init });
+
+  if (key === "this" && fnPath.isMethod({kind: "constructor"})){
+    fnPath.scope.push({ id });
+
+    fnPath.traverse(superVisitor, { id });
+  } else {
+    const init = key === "this" ? t.thisExpression() : t.identifier(key);
+
+    fnPath.scope.push({ id, init });
+  }
 
   return path.replaceWith(id);
 }
