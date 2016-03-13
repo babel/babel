@@ -13,11 +13,15 @@ export default new Plugin({
     },
 
     CallExpression(path){
-      if (!isSuperMember(path.get("callee")) || !getShadowBindingRoot(path, "this")) return;
+      if (path.get("callee").isSuper() && getShadowBindingRoot(path, "this")){
+        remapSuperCall(path);
+      }
 
-      // super.foo(a, b, c); => super.foo.call(this, a, b, c);
-      path.node.callee = t.memberExpression(path.node.callee, t.identifier("call"));
-      path.node.arguments.unshift(t.thisExpression());
+      if (isSuperMember(path.get("callee")) && getShadowBindingRoot(path, "this")){
+        // super.foo(a, b, c); => super.foo.call(this, a, b, c);
+        path.node.callee = t.memberExpression(path.node.callee, t.identifier("call"));
+        path.node.arguments.unshift(t.thisExpression());
+      }
     },
 
     AssignmentExpression(path){
@@ -177,6 +181,33 @@ function remapSuperSet(path){
 }
 
 /**
+ * Given a CallExpression for 'super()' move the call to a sibling arrow function and replace
+ * the original call with one calling the new helper.
+ */
+function remapSuperCall(path){
+  let fnPath = getShadowBindingRoot(path, "this");
+  if (!fnPath) return;
+
+  let key = "super-call-" + path.node.arguments.length;
+  let id = fnPath.getData(key);
+  if (!id){
+    // Ensure that there is a "var _superSet = (...args) => super(...args)" helper.
+    id = path.scope.generateUidIdentifier(key);
+    fnPath.setData(key, id);
+
+    const args = path.get("arguments").map(() => path.scope.generateUidIdentifier("x"));
+    const params = args.map((arg) => t.identifier(arg.name));
+
+    fnPath.scope.push({ id, init: t.arrowFunctionExpression(
+      args, t.callExpression(t.super(), params)) });
+  }
+
+  assertNotCircular(path, id);
+
+  path.node.callee = id;
+}
+
+/**
  * Given an UpdateExpression, decompose and replace it with one or more AssignmentExpressions.
  */
 function decomposeUpdateExpression(path){
@@ -242,7 +273,12 @@ function assertNotCircular(path, id){
   const binding = path.scope.getBinding(id.name);
 
   if (binding && path.findParent((parent) => parent === binding.path)){
-    throw path.buildCodeFrameError("'super.*' property usage inside arrow functions is not " +
-      "supported with native classes and transpiled arrows.");
+    if (path.isCallExpression()){
+      throw path.buildCodeFrameError("'super()' call usage inside arrow functions is not " +
+        "supported with native classes and transpiled arrows.");
+    } else {
+      throw path.buildCodeFrameError("'super.*' property usage inside arrow functions is not " +
+        "supported with native classes and transpiled arrows.");
+    }
   }
 }

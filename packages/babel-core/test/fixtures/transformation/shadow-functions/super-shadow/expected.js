@@ -1,5 +1,15 @@
 class Child extends Parent {
 
+  constructor() {
+    var _superCall = (_x2, _x3, _x4, _x5, _x6) => super(_x2, _x3, _x4, _x5, _x6);
+
+    var foo = function () {
+      let arg = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
+      return _superCall(arg, 2, 3, 4, 5);
+    };
+    foo();
+  }
+
   params() {
     var _superGet = prop => super[prop],
         _this = this,

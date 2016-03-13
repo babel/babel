@@ -1,5 +1,10 @@
 class Child extends Parent {
 
+  constructor(){
+    var foo = (arg = 1) => super(arg, 2, 3, 4, 5);
+    foo();
+  }
+
   params(){
     var fn = () => {
       super.params(a, b, c, d);
