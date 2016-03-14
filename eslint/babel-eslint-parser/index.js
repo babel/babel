@@ -61,7 +61,7 @@ function monkeypatch() {
     estraverses.push(estraverseFb);
     assign(estraverseFb.VisitorKeys, t.VISITOR_KEYS);
   } catch (err) {
-    throw new Error("babel-eslint isn't currently compatible with ESLint 2.3.x. The recommendation is to pin to ESLint 2.2.x right now.");
+      // Ignore: ESLint v2.3.0 does not have estraverse-fb
   }
 
   // ESLint v1.9.0 uses estraverse directly to work around https://github.com/npm/npm/issues/9663
@@ -77,6 +77,7 @@ function monkeypatch() {
   escope.analyze = function (ast, opts) {
     opts.ecmaVersion = 6;
     opts.sourceType = "module";
+
     var results = analyze.call(this, ast, opts);
     return results;
   };
@@ -349,8 +350,6 @@ function monkeypatch() {
     }
   };
 }
-
-exports.VisitorKeys = t.VISITOR_KEYS;
 
 exports.parse = function (code, options) {
   options = options || {};
