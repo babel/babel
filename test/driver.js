@@ -27,13 +27,13 @@
       try {
         var ast = parse(test.code, testOpts);
       } catch(e) {
-        if (!(e instanceof SyntaxError)) throw e;
+        if (!(e instanceof SyntaxError)) { console.log(e.stack); throw e; }
         if (test.error) {
           if (e.message == test.error) callback("ok", test.code);
           else callback("fail", test.code,
                         "Expected error message: " + test.error + "\nGot error message: " + e.message);
         } else {
-          callback("error", test.code, e.stack || e.toString());
+          callback("error", test.code, e.message || e.toString());
         }
         continue
       }
@@ -69,7 +69,8 @@
 
   var misMatch = exports.misMatch = function(exp, act) {
     if (!exp || !act || (typeof exp != "object") || (typeof act != "object")) {
-      if (exp !== act) return ppJSON(exp) + " !== " + ppJSON(act);
+      if (exp !== act && typeof exp != "function")
+        return ppJSON(exp) + " !== " + ppJSON(act);
     } else if (exp instanceof RegExp || act instanceof RegExp) {
       var left = ppJSON(exp), right = ppJSON(act);
       if (left !== right) return left + " !== " + right;

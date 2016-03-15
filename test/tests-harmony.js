@@ -7463,7 +7463,7 @@ test("\"use strict\"; (class A {constructor() { super() }})", {
                   expression: {
                     type: "CallExpression",
                     callee: {
-                      type: "SuperExpression",
+                      type: "Super",
                       loc: {
                         start: {line: 1, column: 40},
                         end: {line: 1, column: 45}
@@ -7794,7 +7794,7 @@ test("\"use strict\"; (class A { static constructor() { super() }})", {
                   expression: {
                     type: "CallExpression",
                     callee: {
-                      type: "SuperExpression",
+                      type: "Super",
                       loc: {
                         start: {line: 1, column: 48},
                         end: {line: 1, column: 53}
@@ -13995,7 +13995,7 @@ testFail("x \n isnt y", "Unexpected token (2:6)", {ecmaVersion: 6});
 
 testFail("function default() {}", "Unexpected token (1:9)", {ecmaVersion: 6});
 
-testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Defining 'eval' in strict mode (1:44)", {ecmaVersion: 6});
+testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Binding eval in strict mode (1:44)", {ecmaVersion: 6});
 
 testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Argument name clash in strict mode (1:37)", {ecmaVersion: 6});
 
@@ -14027,15 +14027,15 @@ testFail("(a, (b)) => 42", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; (eval = 10) => 42", "Assigning to eval in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; eval => 42", "Defining 'eval' in strict mode (1:14)", {ecmaVersion: 6});
+testFail("\"use strict\"; eval => 42", "Binding eval in strict mode (1:14)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; arguments => 42", "Defining 'arguments' in strict mode (1:14)", {ecmaVersion: 6});
+testFail("\"use strict\"; arguments => 42", "Binding arguments in strict mode (1:14)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (eval, a) => 42", "Defining 'eval' in strict mode (1:15)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval, a) => 42", "Binding eval in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (arguments, a) => 42", "Defining 'arguments' in strict mode (1:15)", {ecmaVersion: 6});
+testFail("\"use strict\"; (arguments, a) => 42", "Binding arguments in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (eval, a = 10) => 42", "Defining 'eval' in strict mode (1:15)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval, a = 10) => 42", "Binding eval in strict mode (1:15)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; (a, a) => 42", "Argument name clash in strict mode (1:18)", {ecmaVersion: 6});
 
@@ -14050,6 +14050,8 @@ testFail("(10, 20) => 00", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 testFail("yield v", "Unexpected token (1:6)", {ecmaVersion: 6});
 
 testFail("yield 10", "Unexpected token (1:6)", {ecmaVersion: 6});
+
+testFail("void { [1, 2]: 3 };", "Unexpected token (1:9)", {ecmaVersion: 6});
 
 test("yield* 10", {
   type: "Program",
@@ -14289,7 +14291,7 @@ testFail("[...{ a }] = b", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("[...a, b] = c", "Assigning to rvalue (1:1)", {ecmaVersion: 6});
 
-testFail("({ t(eval) { \"use strict\"; } });", "Defining 'eval' in strict mode (1:5)", {ecmaVersion: 6});
+testFail("({ t(eval) { \"use strict\"; } });", "Binding eval in strict mode (1:5)", {ecmaVersion: 6});
 
 testFail("\"use strict\"; `${test}\\02`;", "Octal literal in strict mode (1:22)", {ecmaVersion: 6});
 
@@ -14358,9 +14360,9 @@ testFail("(b, ...a)", "Unexpected token (1:4)", {ecmaVersion: 6});
 
 testFail("switch (cond) { case 10: let a = 20; ", "Unexpected token (1:37)", {ecmaVersion: 6});
 
-testFail("\"use strict\"; (eval) => 42", "Defining 'eval' in strict mode (1:15)", {ecmaVersion: 6});
+testFail("\"use strict\"; (eval) => 42", "Binding eval in strict mode (1:15)", {ecmaVersion: 6});
 
-testFail("(eval) => { \"use strict\"; 42 }", "Defining 'eval' in strict mode (1:1)", {ecmaVersion: 6});
+testFail("(eval) => { \"use strict\"; 42 }", "Binding eval in strict mode (1:1)", {ecmaVersion: 6});
 
 testFail("({ get test() { } }) => 42", "Object pattern can't contain getter or setter (1:7)", {ecmaVersion: 6});
 
@@ -15522,6 +15524,47 @@ test("[x,,] = 1", {
   ]
 }, {ecmaVersion: 6});
 
+test("for (var [name, value] in obj) {}", {
+  body: [
+    {
+      left: {
+        declarations: [
+          {
+            id: {
+              elements: [
+                {
+                  name: "name",
+                  type: "Identifier"
+                },
+                {
+                  name: "value",
+                  type: "Identifier"
+                }
+              ],
+              type: "ArrayPattern"
+            },
+            init: null,
+            type: "VariableDeclarator"
+          }
+        ],
+        kind: "var",
+        type: "VariableDeclaration"
+      },
+      right: {
+        name: "obj",
+        type: "Identifier"
+      },
+      body: {
+        body: [],
+        type: "BlockStatement"
+      },
+      type: "ForInStatement"
+    }
+  ],
+  sourceType: "script",
+  type: "Program"
+}, {ecmaVersion: 6})
+
 testFail("let [x]", "Complex binding patterns require an initialization value (1:7)", {ecmaVersion: 6})
 testFail("var [x]", "Complex binding patterns require an initialization value (1:7)", {ecmaVersion: 6})
 testFail("var _𖫵 = 11;", "Unexpected character '𖫵' (1:5)", {ecmaVersion: 6});
@@ -15538,3 +15581,18 @@ testFail("'use strict'; ({eval = defValue} = obj)", "Assigning to eval in strict
 testFail("[...eval] = arr", "Assigning to eval in strict mode (1:4)", {ecmaVersion: 6, sourceType: "module"});
 
 testFail("function* y({yield}) {}", "Binding yield (1:13)", {ecmaVersion: 6});
+
+test("new.target", {
+  type: "Program",
+  body: [{
+    type: "ExpressionStatement",
+    expression: {
+      type: "MetaProperty",
+      meta: {type: "Identifier", name: "new"},
+      property: {type: "Identifier", name: "target"}
+    }
+  }],
+  sourceType: "script"
+}, {ecmaVersion: 6});
+
+testFail("new.prop", "The only valid meta property for new is new.target (1:4)", {ecmaVersion: 6});

@@ -5,9 +5,6 @@
     driver = require("./driver.js");
     require("./tests.js");
     require("./tests-harmony.js");
-    require("./tests-flow.js");
-    require("./tests-jsx.js");
-    require("./tests-babel.js");
     require("babel/register")
     acorn = require("../src")
   } else {
@@ -54,6 +51,17 @@
     Normal: {
       config: {
         parse: acorn.parse
+      }
+    },
+    Loose: {
+      config: {
+        parse: acorn.parse_dammit,
+        loose: true,
+        filter: function (test) {
+          var opts = test.options || {};
+          if (opts.loose === false) return false;
+          return (opts.ecmaVersion || 5) <= 6;
+        }
       }
     }
   };

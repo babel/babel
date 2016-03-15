@@ -1,4 +1,4 @@
-var acorn = require("../acorn");
+var acorn = require("..")
 
 var tt = acorn.tokTypes;
 var tc = acorn.tokContexts;
@@ -437,7 +437,7 @@ pp.jsx_parseIdentifier = function() {
 // Parse namespaced identifier.
 
 pp.jsx_parseNamespacedName = function() {
-  var start = this.currentPos();
+  var start = this.markPosition();
   var name = this.jsx_parseIdentifier();
   if (!this.eat(tt.colon)) return name;
   var node = this.startNodeAt(start);
@@ -450,7 +450,7 @@ pp.jsx_parseNamespacedName = function() {
 // or single identifier.
 
 pp.jsx_parseElementName = function() {
-  var start = this.currentPos();
+  var start = this.markPosition();
   var node = this.jsx_parseNamespacedName();
   while (this.eat(tt.dot)) {
     var newNode = this.startNodeAt(start);
@@ -559,7 +559,7 @@ pp.jsx_parseElementAt = function(start) {
     contents: for (;;) {
       switch (this.type) {
       case tt.jsxTagStart:
-        start = this.currentPos();
+        start = this.markPosition();
         this.next();
         if (this.eat(tt.slash)) {
           closingElement = this.jsx_parseClosingElementAt(start);
@@ -595,7 +595,7 @@ pp.jsx_parseElementAt = function(start) {
 // Parses entire JSX element from current position.
 
 pp.jsx_parseElement = function() {
-  var start = this.currentPos();
+  var start = this.markPosition();
   this.next();
   return this.jsx_parseElementAt(start);
 };
@@ -634,7 +634,6 @@ acorn.plugins.jsx = function(instance) {
         ++this.pos;
         return this.finishToken(tt.jsxTagStart);
       }
-
       return inner.call(this, code);
     };
   });
