@@ -77,7 +77,7 @@ function plainFunction(path: NodePath, callId: Object) {
   let container = wrapper({
     NAME: asyncFnId,
     FUNCTION: built,
-    PARAMS: node.params.map(() => t.identifier(x.name))
+    PARAMS: node.params.map((param) => t.identifier(param.name))
   }).expression;
 
   if (isDeclaration) {
