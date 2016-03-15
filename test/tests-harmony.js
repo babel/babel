@@ -4453,7 +4453,7 @@ test("var {a:b} = {}", {
 test("export var document", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: {
       type: "VariableDeclaration",
       declarations: [{
@@ -4478,8 +4478,7 @@ test("export var document", {
         end: {line: 1, column: 19}
       }
     },
-    default: false,
-    specifiers: null,
+    specifiers: [],
     source: null,
     loc: {
       start: {line: 1, column: 0},
@@ -4499,7 +4498,7 @@ test("export var document", {
 test("export var document = { }", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: {
       type: "VariableDeclaration",
       declarations: [{
@@ -4531,8 +4530,7 @@ test("export var document = { }", {
         end: {line: 1, column: 25}
       }
     },
-    default: false,
-    specifiers: null,
+    specifiers: [],
     source: null,
     loc: {
       start: {line: 1, column: 0},
@@ -4552,7 +4550,7 @@ test("export var document = { }", {
 test("export let document", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: {
       type: "VariableDeclaration",
       declarations: [{
@@ -4577,8 +4575,7 @@ test("export let document", {
         end: {line: 1, column: 19}
       }
     },
-    default: false,
-    specifiers: null,
+    specifiers: [],
     source: null,
     loc: {
       start: {line: 1, column: 0},
@@ -4598,7 +4595,7 @@ test("export let document", {
 test("export let document = { }", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: {
       type: "VariableDeclaration",
       declarations: [{
@@ -4630,8 +4627,7 @@ test("export let document = { }", {
         end: {line: 1, column: 25}
       }
     },
-    default: false,
-    specifiers: null,
+    specifiers: [],
     source: null,
     loc: {
       start: {line: 1, column: 0},
@@ -4651,7 +4647,7 @@ test("export let document = { }", {
 test("export const document = { }", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: {
       type: "VariableDeclaration",
       declarations: [{
@@ -4683,8 +4679,7 @@ test("export const document = { }", {
         end: {line: 1, column: 27}
       }
     },
-    default: false,
-    specifiers: null,
+    specifiers: [],
     source: null,
     loc: {
       start: {line: 1, column: 0},
@@ -4704,7 +4699,7 @@ test("export const document = { }", {
 test("export function parse() { }", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: {
       type: "FunctionDeclaration",
       id: {
@@ -4731,8 +4726,7 @@ test("export function parse() { }", {
         end: {line: 1, column: 27}
       }
     },
-    default: false,
-    specifiers: null,
+    specifiers: [],
     source: null,
     loc: {
       start: {line: 1, column: 0},
@@ -4752,7 +4746,7 @@ test("export function parse() { }", {
 test("export class Class {}", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: {
       type: "ClassDeclaration",
       id: {
@@ -4777,8 +4771,7 @@ test("export class Class {}", {
         end: {line: 1, column: 21}
       }
     },
-    default: false,
-    specifiers: null,
+    specifiers: [],
     source: null,
     loc: {
       start: {line: 1, column: 0},
@@ -4798,7 +4791,7 @@ test("export class Class {}", {
 test("export default 42", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportDefaultDeclaration",
     declaration: {
       type: "Literal",
       value: 42,
@@ -4808,9 +4801,6 @@ test("export default 42", {
         end: {line: 1, column: 17}
       }
     },
-    default: true,
-    specifiers: null,
-    source: null,
     loc: {
       start: {line: 1, column: 0},
       end: {line: 1, column: 17}
@@ -4830,7 +4820,7 @@ test("export default function () {}", {
   type: "Program",
   range: [0, 29],
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportDefaultDeclaration",
     range: [0, 29],
     declaration: {
       type: "FunctionExpression",
@@ -4844,10 +4834,7 @@ test("export default function () {}", {
         range: [27, 29],
         body: []
       }
-    },
-    default: true,
-    specifiers: null,
-    source: null
+    }
   }]
 }, {ecmaVersion: 6, ranges: true});
 
@@ -4855,7 +4842,7 @@ test("export default function f() {}", {
   type: "Program",
   range: [0, 30],
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportDefaultDeclaration",
     range: [0, 30],
     declaration: {
       type: "FunctionDeclaration",
@@ -4873,10 +4860,7 @@ test("export default function f() {}", {
         range: [28, 30],
         body: []
       }
-    },
-    default: true,
-    specifiers: null,
-    source: null
+    }
   }]
 }, {ecmaVersion: 6, ranges: true});
 
@@ -4884,7 +4868,7 @@ test("export default class {}", {
   type: "Program",
   range: [0, 23],
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportDefaultDeclaration",
     range: [0, 23],
     declaration: {
       type: "ClassExpression",
@@ -4896,10 +4880,7 @@ test("export default class {}", {
         range: [21, 23],
         body: []
       }
-    },
-    default: true,
-    specifiers: null,
-    source: null
+    }
   }]
 }, {ecmaVersion: 6, ranges: true});
 
@@ -4907,7 +4888,7 @@ test("export default class A {}", {
   type: "Program",
   range: [0, 25],
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportDefaultDeclaration",
     range: [0, 25],
     declaration: {
       type: "ClassDeclaration",
@@ -4923,10 +4904,7 @@ test("export default class A {}", {
         range: [23, 25],
         body: []
       }
-    },
-    default: true,
-    specifiers: null,
-    source: null
+    }
   }]
 }, {ecmaVersion: 6, ranges: true});
 
@@ -4935,15 +4913,7 @@ testFail("export *", "Unexpected token (1:8)", {ecmaVersion: 6});
 test("export * from \"crypto\"", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
-    declaration: null,
-    specifiers: [{
-      type: "ExportBatchSpecifier",
-      loc: {
-        start: {line: 1, column: 7},
-        end: {line: 1, column: 8}
-      }
-    }],
+    type: "ExportAllDeclaration",
     source: {
       type: "Literal",
       value: "crypto",
@@ -4971,11 +4941,11 @@ test("export * from \"crypto\"", {
 test("export { encrypt }", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: null,
     specifiers: [{
       type: "ExportSpecifier",
-      id: {
+      exported: {
         type: "Identifier",
         name: "encrypt",
         loc: {
@@ -4983,7 +4953,14 @@ test("export { encrypt }", {
           end: {line: 1, column: 16}
         }
       },
-      name: null,
+      local: {
+        type: "Identifier",
+        name: "encrypt",
+        loc: {
+          start: {line: 1, column: 9},
+          end: {line: 1, column: 16}
+        }
+      },
       loc: {
         start: {line: 1, column: 9},
         end: {line: 1, column: 16}
@@ -5008,12 +4985,12 @@ test("export { encrypt }", {
 test("export { encrypt, decrypt }", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: null,
     specifiers: [
       {
         type: "ExportSpecifier",
-        id: {
+        exported: {
           type: "Identifier",
           name: "encrypt",
           loc: {
@@ -5021,7 +4998,14 @@ test("export { encrypt, decrypt }", {
             end: {line: 1, column: 16}
           }
         },
-        name: null,
+        local: {
+          type: "Identifier",
+          name: "encrypt",
+          loc: {
+            start: {line: 1, column: 9},
+            end: {line: 1, column: 16}
+          }
+        },
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
@@ -5029,7 +5013,7 @@ test("export { encrypt, decrypt }", {
       },
       {
         type: "ExportSpecifier",
-        id: {
+        exported: {
           type: "Identifier",
           name: "decrypt",
           loc: {
@@ -5037,7 +5021,14 @@ test("export { encrypt, decrypt }", {
             end: {line: 1, column: 25}
           }
         },
-        name: null,
+        local: {
+          type: "Identifier",
+          name: "decrypt",
+          loc: {
+            start: {line: 1, column: 18},
+            end: {line: 1, column: 25}
+          }
+        },
         loc: {
           start: {line: 1, column: 18},
           end: {line: 1, column: 25}
@@ -5063,24 +5054,24 @@ test("export { encrypt, decrypt }", {
 test("export { encrypt as default }", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: null,
     specifiers: [{
       type: "ExportSpecifier",
-      id: {
-        type: "Identifier",
-        name: "encrypt",
-        loc: {
-          start: {line: 1, column: 9},
-          end: {line: 1, column: 16}
-        }
-      },
-      name: {
+      exported: {
         type: "Identifier",
         name: "default",
         loc: {
           start: {line: 1, column: 20},
           end: {line: 1, column: 27}
+        }
+      },
+      local: {
+        type: "Identifier",
+        name: "encrypt",
+        loc: {
+          start: {line: 1, column: 9},
+          end: {line: 1, column: 16}
         }
       },
       loc: {
@@ -5107,12 +5098,12 @@ test("export { encrypt as default }", {
 test("export { encrypt, decrypt as dec }", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: null,
     specifiers: [
       {
         type: "ExportSpecifier",
-        id: {
+        exported: {
           type: "Identifier",
           name: "encrypt",
           loc: {
@@ -5120,7 +5111,14 @@ test("export { encrypt, decrypt as dec }", {
             end: {line: 1, column: 16}
           }
         },
-        name: null,
+        local: {
+          type: "Identifier",
+          name: "encrypt",
+          loc: {
+            start: {line: 1, column: 9},
+            end: {line: 1, column: 16}
+          }
+        },
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
@@ -5128,20 +5126,20 @@ test("export { encrypt, decrypt as dec }", {
       },
       {
         type: "ExportSpecifier",
-        id: {
-          type: "Identifier",
-          name: "decrypt",
-          loc: {
-            start: {line: 1, column: 18},
-            end: {line: 1, column: 25}
-          }
-        },
-        name: {
+        exported: {
           type: "Identifier",
           name: "dec",
           loc: {
             start: {line: 1, column: 29},
             end: {line: 1, column: 32}
+          }
+        },
+        local: {
+          type: "Identifier",
+          name: "decrypt",
+          loc: {
+            start: {line: 1, column: 18},
+            end: {line: 1, column: 25}
           }
         },
         loc: {
@@ -5169,12 +5167,12 @@ test("export { encrypt, decrypt as dec }", {
 test("export { default } from \"other\"", {
   type: "Program",
   body: [{
-    type: "ExportDeclaration",
+    type: "ExportNamedDeclaration",
     declaration: null,
     specifiers: [
       {
         type: "ExportSpecifier",
-        id: {
+        exported: {
           type: "Identifier",
           name: "default",
           loc: {
@@ -5182,7 +5180,14 @@ test("export { default } from \"other\"", {
             end: {line: 1, column: 16}
           }
         },
-        name: null,
+        local: {
+          type: "Identifier",
+          name: "default",
+          loc: {
+            start: {line: 1, column: 9},
+            end: {line: 1, column: 16}
+          }
+        },
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
@@ -5253,8 +5258,8 @@ test("import $ from \"jquery\"", {
   body: [{
     type: "ImportDeclaration",
     specifiers: [{
-      type: "ImportSpecifier",
-      id: {
+      type: "ImportDefaultSpecifier",
+      local: {
         type: "Identifier",
         name: "$",
         loc: {
@@ -5262,7 +5267,6 @@ test("import $ from \"jquery\"", {
           end: {line: 1, column: 8}
         }
       },
-      name: null,
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 8}
@@ -5299,7 +5303,7 @@ test("import { encrypt, decrypt } from \"crypto\"", {
     specifiers: [
       {
         type: "ImportSpecifier",
-        id: {
+        imported: {
           type: "Identifier",
           name: "encrypt",
           loc: {
@@ -5307,7 +5311,14 @@ test("import { encrypt, decrypt } from \"crypto\"", {
             end: {line: 1, column: 16}
           }
         },
-        name: null,
+        local: {
+          type: "Identifier",
+          name: "encrypt",
+          loc: {
+            start: {line: 1, column: 9},
+            end: {line: 1, column: 16}
+          }
+        },
         loc: {
           start: {line: 1, column: 9},
           end: {line: 1, column: 16}
@@ -5315,7 +5326,7 @@ test("import { encrypt, decrypt } from \"crypto\"", {
       },
       {
         type: "ImportSpecifier",
-        id: {
+        imported: {
           type: "Identifier",
           name: "decrypt",
           loc: {
@@ -5323,7 +5334,14 @@ test("import { encrypt, decrypt } from \"crypto\"", {
             end: {line: 1, column: 25}
           }
         },
-        name: null,
+        local: {
+          type: "Identifier",
+          name: "decrypt",
+          loc: {
+            start: {line: 1, column: 18},
+            end: {line: 1, column: 25}
+          }
+        },
         loc: {
           start: {line: 1, column: 18},
           end: {line: 1, column: 25}
@@ -5360,7 +5378,7 @@ test("import { encrypt as enc } from \"crypto\"", {
     type: "ImportDeclaration",
     specifiers: [{
       type: "ImportSpecifier",
-      id: {
+      imported: {
         type: "Identifier",
         name: "encrypt",
         loc: {
@@ -5368,7 +5386,7 @@ test("import { encrypt as enc } from \"crypto\"", {
           end: {line: 1, column: 16}
         }
       },
-      name: {
+      local: {
         type: "Identifier",
         name: "enc",
         loc: {
@@ -5419,21 +5437,19 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
     },
     specifiers: [
       {
-        type: "ImportSpecifier",
+        type: "ImportDefaultSpecifier",
         loc: {
           start: {line: 1, column: 7},
           end: {line: 1, column: 13}
         },
-        id: {
+        local: {
           type: "Identifier",
           loc: {
             start: {line: 1, column: 7},
             end: {line: 1, column: 13}
           },
           name: "crypto"
-        },
-        name: null,
-        default: true
+        }
       },
       {
         type: "ImportSpecifier",
@@ -5441,7 +5457,7 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
           start: {line: 1, column: 17},
           end: {line: 1, column: 24}
         },
-        id: {
+        imported: {
           type: "Identifier",
           loc: {
             start: {line: 1, column: 17},
@@ -5449,8 +5465,14 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
           },
           name: "decrypt"
         },
-        name: null,
-        default: false
+        local: {
+          type: "Identifier",
+          loc: {
+            start: {line: 1, column: 17},
+            end: {line: 1, column: 24}
+          },
+          name: "decrypt"
+        }
       },
       {
         type: "ImportSpecifier",
@@ -5458,7 +5480,7 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
           start: {line: 1, column: 26},
           end: {line: 1, column: 40}
         },
-        id: {
+        imported: {
           type: "Identifier",
           loc: {
             start: {line: 1, column: 26},
@@ -5466,15 +5488,14 @@ test("import crypto, { decrypt, encrypt as enc } from \"crypto\"", {
           },
           name: "encrypt"
         },
-        name: {
+        local: {
           type: "Identifier",
           loc: {
             start: {line: 1, column: 37},
             end: {line: 1, column: 40}
           },
           name: "enc"
-        },
-        default: false
+        }
       }
     ],
     source: {
@@ -5501,7 +5522,7 @@ test("import { null as nil } from \"bar\"", {
     type: "ImportDeclaration",
     specifiers: [{
       type: "ImportSpecifier",
-      id: {
+      imported: {
         type: "Identifier",
         name: "null",
         loc: {
@@ -5509,7 +5530,7 @@ test("import { null as nil } from \"bar\"", {
           end: {line: 1, column: 13}
         }
       },
-      name: {
+      local: {
         type: "Identifier",
         name: "nil",
         loc: {
@@ -5559,12 +5580,12 @@ test("import * as crypto from \"crypto\"", {
       end: {line: 1, column: 32}
     },
     specifiers: [{
-      type: "ImportBatchSpecifier",
+      type: "ImportNamespaceSpecifier",
       loc: {
         start: {line: 1, column: 7},
         end: {line: 1, column: 18}
       },
-      name: {
+      local: {
         type: "Identifier",
         loc: {
           start: {line: 1, column: 12},
@@ -13850,7 +13871,7 @@ testFail("function hello() {'use strict'; ({ i: 10, s(eval) { } }); }", "Definin
 
 testFail("function a() { \"use strict\"; ({ b(t, t) { } }); }", "Argument name clash in strict mode (1:37)", {ecmaVersion: 6});
 
-testFail("var super", "The keyword 'super' is reserved (1:4)", {ecmaVersion: 6, forbidReserved: true});
+testFail("var super", "The keyword 'super' is reserved (1:4)", {ecmaVersion: 6, allowReserved: false});
 
 testFail("var default", "Unexpected token (1:4)", {ecmaVersion: 6});
 
@@ -14346,17 +14367,15 @@ test("import foo, * as bar from 'baz';", {
     type: "ImportDeclaration",
     specifiers: [
       {
-        type: "ImportSpecifier",
-        id: {
+        type: "ImportDefaultSpecifier",
+        local: {
           type: "Identifier",
           name: "foo"
-        },
-        name: null,
-        default: true
+        }
       },
       {
-        type: "ImportBatchSpecifier",
-        name: {
+        type: "ImportNamespaceSpecifier",
+        local: {
           type: "Identifier",
           name: "bar"
         }
@@ -14951,6 +14970,55 @@ test("class A { static() {} }", {
   locations: true
 });
 
+// https://github.com/marijnh/acorn/issues/213
+
+test("for (const x of list) process(x);", {
+  type: "Program",
+  body: [{
+    type: "ForOfStatement",
+    left: {
+      type: "VariableDeclaration",
+      declarations: [{
+        type: "VariableDeclarator",
+        id: {
+          type: "Identifier",
+          name: "x",
+          range: [11, 12]
+        },
+        init: null,
+        range: [11, 12]
+      }],
+      kind: "const",
+      range: [5, 12]
+    },
+    right: {
+      type: "Identifier",
+      name: "list",
+      range: [16, 20]
+    },
+    body: {
+      type: "ExpressionStatement",
+      expression: {
+        type: "CallExpression",
+        callee: {
+          type: "Identifier",
+          name: "process",
+          range: [22, 29]
+        },
+        arguments: [{
+          type: "Identifier",
+          name: "x",
+          range: [30, 31]
+        }],
+        range: [22, 32]
+      },
+      range: [22, 33]
+    },
+    range: [0, 33]
+  }],
+  range: [0, 33]
+}, {ecmaVersion: 6, ranges: true});
+
 test("class A { *static() {} }", {
   type: "Program",
   range: [0, 24],
@@ -15194,6 +15262,109 @@ test("var _\\u{104A6} = 10;", {
     }
   ]
 }, {ecmaVersion: 6});
+
+test("let [x,] = [1]", {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "declarations": [
+        {
+          "start": 4,
+          "id": {
+            "start": 4,
+            "elements": [
+              {
+                "start": 5,
+                "name": "x",
+                "type": "Identifier",
+                "end": 6
+              }
+            ],
+            "type": "ArrayPattern",
+            "end": 8
+          },
+          "init": {
+            "start": 11,
+            "elements": [
+              {
+                "start": 12,
+                "value": 1,
+                "raw": "1",
+                "type": "Literal",
+                "end": 13
+              }
+            ],
+            "type": "ArrayExpression",
+            "end": 14
+          },
+          "type": "VariableDeclarator",
+          "end": 14
+        }
+      ],
+      "kind": "let",
+      "type": "VariableDeclaration",
+      "end": 14
+    }
+  ],
+  "type": "Program",
+  "end": 14
+}, {ecmaVersion: 6});
+
+test("let {x} = y", {
+  "start": 0,
+  "body": [
+    {
+      "start": 0,
+      "declarations": [
+        {
+          "start": 4,
+          "id": {
+            "start": 4,
+            "properties": [
+              {
+                "start": 5,
+                "method": false,
+                "shorthand": true,
+                "computed": false,
+                "key": {
+                  "start": 5,
+                  "name": "x",
+                  "type": "Identifier",
+                  "end": 6
+                },
+                "kind": "init",
+                "value": {
+                  "start": 5,
+                  "name": "x",
+                  "type": "Identifier",
+                  "end": 6
+                },
+                "type": "Property",
+                "end": 6
+              }
+            ],
+            "type": "ObjectPattern",
+            "end": 7
+          },
+          "init": {
+            "start": 10,
+            "name": "y",
+            "type": "Identifier",
+            "end": 11
+          },
+          "type": "VariableDeclarator",
+          "end": 11
+        }
+      ],
+      "kind": "let",
+      "type": "VariableDeclaration",
+      "end": 11
+    }
+  ],
+  "type": "Program",
+  "end": 11
+}, {ecmaVersion: 6})
 
 testFail("var _𖫵 = 11;", "Unexpected character '𖫵' (1:5)", {ecmaVersion: 6});
 testFail("var 𫠞_ = 12;", "Unexpected character '𫠞' (1:4)", {ecmaVersion: 6});

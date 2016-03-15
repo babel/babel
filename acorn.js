@@ -51,17 +51,20 @@
     // mode, the set of reserved words, support for getters and
     // setters and other features.
     ecmaVersion: 5,
-    // Turn on `strictSemicolons` to prevent the parser from doing
-    // automatic semicolon insertion.
-    strictSemicolons: false,
-    // When `allowTrailingCommas` is false, the parser will not allow
-    // trailing commas in array and object literals.
-    allowTrailingCommas: true,
-    // By default, reserved words are not enforced. Enable
-    // `forbidReserved` to enforce them. When this option has the
-    // value "everywhere", reserved words and keywords can also not be
+    // `onInsertedSemicolon` can be a callback that will be called
+    // when a semicolon is automatically inserted. It will be passed
+    // th position of the comma as an offset, and if `locations` is
+    // enabled, it is given the location as a `{line, column}` object
+    // as second argument.
+    onInsertedSemicolon: null,
+    // `onTrailingComma` is similar to `onInsertedSemicolon`, but for
+    // trailing commas.
+    onTrailingComma: null,
+    // By default, reserved words are not enforced. Disable
+    // `allowReserved` to enforce them. When this option has the
+    // value "never", reserved words and keywords can also not be
     // used as property names.
-    forbidReserved: false,
+    allowReserved: true,
     // When enabled, a return at the top level is not considered an
     // error.
     allowReturnOutsideFunction: false,
@@ -117,7 +120,10 @@
     // When enabled, parenthesized expressions are represented by
     // (non-standard) ParenthesizedExpression nodes
     preserveParens: false,
-    plugins: {}
+    plugins: {},
+    // Babel-specific options
+    transformers: {},
+    strictMode: false
   };
 
   exports.plugins = {};
@@ -235,6 +241,7 @@
     this.label = label;
     this.keyword = conf.keyword;
     this.beforeExpr = !!conf.beforeExpr;
+    this.rightAssociative = !!conf.rightAssociative;
     this.isLoop = !!conf.isLoop;
     this.isAssign = !!conf.isAssign;
     this.prefix = !!conf.prefix;
@@ -302,7 +309,8 @@
     plusMin: new TokenType("+/-", {beforeExpr: true, binop: 9, prefix: true}),
     modulo: binop("%", 10),
     star: binop("*", 10),
-    slash: binop("/", 10)
+    slash: binop("/", 10),
+    exponent: new TokenType("**", {beforeExpr: true, binop: 11, rightAssociative: true})
   };
 
   // Map keyword names to token types.
@@ -566,7 +574,7 @@
     this.startLoc = this.endLoc = null;
 
     // Position information for the previous token
-    this.lastTokEndLoc = null;
+    this.lastTokEndLoc = this.lastTokStartLoc = null;
     this.lastTokStart = this.lastTokEnd = this.pos;
 
     // The context stack is used to superficially track syntactic
@@ -611,6 +619,7 @@
     this.lastTokEnd = this.end;
     this.lastTokStart = this.start;
     this.lastTokEndLoc = this.endLoc;
+    this.lastTokStartLoc = this.startLoc;
     this.nextToken();
   };
 
@@ -898,9 +907,22 @@
   };
 
   pp.readToken_mult_modulo = function(code) { // '%*'
+    var type = code === 42 ? tt.star : tt.modulo;
+    var width = 1;
     var next = this.input.charCodeAt(this.pos + 1);
-    if (next === 61) return this.finishOp(tt.assign, 2);
-    return this.finishOp(code === 42 ? tt.star : tt.modulo, 1);
+
+    if (this.options.transformers["es7.exponentiationOperator"] && next === 42) { // '*'
+      width++;
+      next = this.input.charCodeAt(this.pos + 2);
+      type = tt.exponent;
+    }
+
+    if (next === 61) {
+      width++;
+      type = tt.assign;
+    }
+
+    return this.finishOp(type, width);
   };
 
   pp.readToken_pipe_amp = function(code) { // '|&'
@@ -1078,7 +1100,7 @@
         // ASCII symbol to avoid throwing on regular expressions that
         // are only valid in combination with the `/u` flag.
         tmp = tmp
-          .replace(/\\u\{([0-9a-fA-F]{5,6})\}/g, "x")
+          .replace(/\\u\{([0-9a-fA-F]+)\}/g, "x")
           .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, "x");
       }
     }
@@ -1453,15 +1475,33 @@
   // Test whether a semicolon can be inserted at the current position.
 
   pp.canInsertSemicolon = function() {
-    return !this.options.strictSemicolons &&
-      (this.type === tt.eof || this.type === tt.braceR || newline.test(this.input.slice(this.lastTokEnd, this.start)));
+    return this.type === tt.eof ||
+      this.type === tt.braceR ||
+      newline.test(this.input.slice(this.lastTokEnd, this.start));
+  };
+
+  pp.insertSemicolon = function() {
+    if (this.canInsertSemicolon()) {
+      if (this.options.onInsertedSemicolon)
+        this.options.onInsertedSemicolon(this.lastTokEnd, this.lastTokEndLoc)
+      return true;
+    }
   };
 
   // Consume a semicolon, or, failing that, see if we are allowed to
   // pretend that there is a semicolon at this position.
 
   pp.semicolon = function() {
-    if (!this.eat(tt.semi) && !this.canInsertSemicolon()) this.unexpected();
+    if (!this.eat(tt.semi) && !this.insertSemicolon()) this.unexpected();
+  };
+
+  pp.afterTrailingComma = function(tokType) {
+    if (this.type == tokType) {
+      if (this.options.onTrailingComma)
+        this.options.onTrailingComma(this.lastTokStart, this.lastTokStartLoc);
+      this.next();
+      return true;
+    }
   };
 
   // Expect a token of a given type. If found, consume it, otherwise,
@@ -1583,7 +1623,7 @@
       case tt.bracketL:
         var node = this.startNode();
         this.next();
-        node.elements = this.parseBindingList(tt.bracketR, true);
+        node.elements = this.parseBindingList(tt.bracketR, true, true);
         return this.finishNode(node, "ArrayPattern");
 
       case tt.braceL:
@@ -1594,18 +1634,28 @@
     }
   };
 
-  pp.parseBindingList = function(close, allowEmpty) {
+  pp.parseBindingList = function(close, allowEmpty, allowTrailingComma) {
     var elts = [], first = true;
     while (!this.eat(close)) {
-      first ? first = false : this.expect(tt.comma);
-      if (this.type === tt.ellipsis) {
-        elts.push(this.parseRest());
+      if (first) first = false;
+      else this.expect(tt.comma);
+      if (allowEmpty && this.type === tt.comma) {
+        elts.push(null);
+      } else if (allowTrailingComma && this.afterTrailingComma(close)) {
+        break;
+      } else if (this.type === tt.ellipsis) {
+        elts.push(this.parseAssignableListItemTypes(this.parseRest()));
         this.expect(close);
         break;
+      } else {
+        elts.push(this.parseAssignableListItemTypes(this.parseMaybeDefault()));
       }
-      elts.push(allowEmpty && this.type === tt.comma ? null : this.parseMaybeDefault());
     }
     return elts;
+  };
+
+  pp.parseAssignableListItemTypes = function(param) {
+    return param;
   };
 
   // Parses assignment pattern around given atom if possible.
@@ -1695,8 +1745,11 @@
         break;
 
       case "ObjectPattern":
-        for (var i = 0; i < expr.properties.length; i++)
-          this.checkLVal(expr.properties[i].value, isBinding);
+        for (var i = 0; i < expr.properties.length; i++) {
+          var prop = expr.properties[i];
+          if (prop.type === "Property") prop = prop.value;
+          this.checkLVal(prop, isBinding);
+        }
         break;
 
       case "ArrayPattern":
@@ -1710,6 +1763,7 @@
         this.checkLVal(expr.left);
         break;
 
+      case "SpreadProperty":
       case "RestElement":
         this.checkLVal(expr.argument);
         break;
@@ -1773,7 +1827,7 @@
     case tt._throw: return this.parseThrowStatement(node);
     case tt._try: return this.parseTryStatement(node);
     case tt._let: case tt._const: if (!declaration) this.unexpected(); // NOTE: falls through to _var
-    case tt._var: return this.parseVarStatement(node, starttype.keyword);
+    case tt._var: return this.parseVarStatement(node, starttype);
     case tt._while: return this.parseWhileStatement(node);
     case tt._with: return this.parseWithStatement(node);
     case tt.braceL: return this.parseBlock(); // no point creating a function for this
@@ -1800,7 +1854,7 @@
   pp.parseBreakContinueStatement = function(node, keyword) {
     var isBreak = keyword == "break";
     this.next();
-    if (this.eat(tt.semi) || this.canInsertSemicolon()) node.label = null;
+    if (this.eat(tt.semi) || this.insertSemicolon()) node.label = null;
     else if (this.type !== tt.name) this.unexpected();
     else {
       node.label = this.parseIdent();
@@ -1853,13 +1907,13 @@
     this.labels.push(loopLabel);
     this.expect(tt.parenL);
     if (this.type === tt.semi) return this.parseFor(node, null);
-    if (this.type === tt._var || this.type === tt._let) {
-      var init = this.startNode(), varKind = this.type.keyword, isLet = this.type === tt._let;
+    if (this.type === tt._var || this.type === tt._let || this.type === tt._const) {
+      var init = this.startNode(), varKind = this.type;
       this.next();
       this.parseVar(init, true, varKind);
       this.finishNode(init, "VariableDeclaration");
       if ((this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of"))) && init.declarations.length === 1 &&
-          !(isLet && init.declarations[0].init))
+          !(varKind !== tt._var && init.declarations[0].init))
         return this.parseForIn(node, init);
       return this.parseFor(node, init);
     }
@@ -1897,7 +1951,7 @@
     // optional arguments, we eagerly look for a semicolon or the
     // possibility to insert one.
 
-    if (this.eat(tt.semi) || this.canInsertSemicolon()) node.argument = null;
+    if (this.eat(tt.semi) || this.insertSemicolon()) node.argument = null;
     else { node.argument = this.parseExpression(); this.semicolon(); }
     return this.finishNode(node, "ReturnStatement");
   };
@@ -2079,16 +2133,26 @@
 
   pp.parseVar = function(node, noIn, kind) {
     node.declarations = [];
-    node.kind = kind;
+    node.kind = kind.keyword;
     for (;;) {
       var decl = this.startNode();
-      decl.id = this.parseBindingAtom();
-      this.checkLVal(decl.id, true);
-      decl.init = this.eat(tt.eq) ? this.parseMaybeAssign(noIn) : (kind === tt._const.keyword ? this.unexpected() : null);
+      this.parseVarHead(decl);
+      if (this.eat(tt.eq)) {
+        decl.init = this.parseMaybeAssign(noIn);
+      } else if (kind === tt._const && !(this.type === tt._in || (this.options.ecmaVersion >= 6 && this.isContextual("of")))) {
+        this.unexpected();
+      } else {
+        decl.init = null;
+      }
       node.declarations.push(this.finishNode(decl, "VariableDeclarator"));
       if (!this.eat(tt.comma)) break;
     }
     return node;
+  };
+
+  pp.parseVarHead = function (decl) {
+    decl.id = this.parseBindingAtom();
+    this.checkLVal(decl.id, true);
   };
 
   // ### Expression parsing
@@ -2121,7 +2185,9 @@
   // Parse an assignment expression. This includes applications of
   // operators like `+=`.
 
-  pp.parseMaybeAssign = function(noIn, refShorthandDefaultPos) {
+  pp.parseMaybeAssign = function(noIn, refShorthandDefaultPos, afterLeftParse) {
+    if (this.type == tt._yield && this.inGenerator) return this.parseYield();
+
     var failOnShorthandAssign;
     if (!refShorthandDefaultPos) {
       refShorthandDefaultPos = {start: 0};
@@ -2131,6 +2197,7 @@
     }
     var start = this.currentPos();
     var left = this.parseMaybeConditional(noIn, refShorthandDefaultPos);
+    if (afterLeftParse) left = afterLeftParse.call(this, left, start);
     if (this.type.isAssign) {
       var node = this.startNodeAt(start);
       node.operator = this.value;
@@ -2188,7 +2255,7 @@
         var op = this.type;
         this.next();
         var start = this.currentPos();
-        node.right = this.parseExprOp(this.parseMaybeUnary(), start, prec, noIn);
+        node.right = this.parseExprOp(this.parseMaybeUnary(), start, op.rightAssociative ? (prec - 1) : prec, noIn);
         this.finishNode(node, (op === tt.logicalOR || op === tt.logicalAND) ? "LogicalExpression" : "BinaryExpression");
         return this.parseExprOp(node, leftStart, minPrec, noIn);
       }
@@ -2276,7 +2343,7 @@
       return this.finishNode(node, "ThisExpression");
 
     case tt._yield:
-      if (this.inGenerator) return this.parseYield();
+      if (this.inGenerator) unexpected();
 
     case tt.name:
       var start = this.currentPos();
@@ -2309,7 +2376,7 @@
       var node = this.startNode();
       this.next();
       // check whether this is array comprehension or regular array
-      if (this.options.ecmaVersion >= 7 && this.type === tt._for) {
+      if (this.options.transformers["es7.comprehensions"] && this.type === tt._for) {
         return this.parseComprehension(node, false);
       }
       node.elements = this.parseExprList(tt.bracketR, true, true, refShorthandDefaultPos);
@@ -2350,7 +2417,7 @@
     if (this.options.ecmaVersion >= 6) {
       this.next();
 
-      if (this.options.ecmaVersion >= 7 && this.type === tt._for) {
+      if (this.options.transformers["es7.comprehensions"] && this.type === tt._for) {
         return this.parseComprehension(this.startNodeAt(start), true);
       }
 
@@ -2359,14 +2426,15 @@
       while (this.type !== tt.parenR) {
         first ? first = false : this.expect(tt.comma);
         if (this.type === tt.ellipsis) {
+          var spreadNodeStart = this.currentPos();
           spreadStart = this.start;
-          exprList.push(this.parseRest());
+          exprList.push(this.parseParenItem(this.parseRest(), spreadNodeStart));
           break;
         } else {
           if (this.type === tt.parenL && !innerParenStart) {
             innerParenStart = this.start;
           }
-          exprList.push(this.parseMaybeAssign(false, refShorthandDefaultPos));
+          exprList.push(this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem));
         }
       }
       var innerEnd = this.currentPos();
@@ -2399,6 +2467,10 @@
     } else {
       return val;
     }
+  };
+
+  pp.parseParenItem = function (node, start) {
+    return node;
   };
 
   // New's precedence is slightly tricky. It must allow its argument
@@ -2453,10 +2525,16 @@
     while (!this.eat(tt.braceR)) {
       if (!first) {
         this.expect(tt.comma);
-        if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
+        if (this.afterTrailingComma(tt.braceR)) break;
       } else first = false;
 
       var prop = this.startNode(), isGenerator, start;
+      if (this.options.transformers["es7.objectRestSpread"] && this.type === tt.ellipsis) {
+        prop = this.parseSpread();
+        prop.type = "SpreadProperty";
+        node.properties.push(prop);
+        continue;
+      }
       if (this.options.ecmaVersion >= 6) {
         prop.method = false;
         prop.shorthand = false;
@@ -2538,10 +2616,14 @@
     if (isStatement || this.type === tt.name) {
       node.id = this.parseIdent();
     }
-    this.expect(tt.parenL);
-    node.params = this.parseBindingList(tt.parenR, false);
+    this.parseFunctionParams(node);
     this.parseFunctionBody(node, allowExpressionBody);
     return this.finishNode(node, isStatement ? "FunctionDeclaration" : "FunctionExpression");
+  };
+
+  pp.parseFunctionParams = function(node) {
+    this.expect(tt.parenL);
+    node.params = this.parseBindingList(tt.parenR, false, false);
   };
 
   // Parse object or class method.
@@ -2550,7 +2632,7 @@
     var node = this.startNode();
     this.initFunction(node);
     this.expect(tt.parenL);
-    node.params = this.parseBindingList(tt.parenR, false);
+    node.params = this.parseBindingList(tt.parenR, false, false);
     var allowExpressionBody;
     if (this.options.ecmaVersion >= 6) {
       node.generator = isGenerator;
@@ -2606,8 +2688,8 @@
 
   pp.parseClass = function(node, isStatement) {
     this.next();
-    node.id = this.type === tt.name ? this.parseIdent() : isStatement ? this.unexpected() : null;
-    node.superClass = this.eat(tt._extends) ? this.parseExprSubscripts() : null;
+    this.parseClassId(node, isStatement);
+    this.parseClassSuper(node);
     var classBody = this.startNode();
     classBody.body = [];
     this.expect(tt.braceL);
@@ -2640,6 +2722,14 @@
     return this.finishNode(node, isStatement ? "ClassDeclaration" : "ClassExpression");
   };
 
+  pp.parseClassId = function (node, isStatement) {
+    node.id = this.type === tt.name ? this.parseIdent() : isStatement ? this.unexpected() : null;
+  };
+
+  pp.parseClassSuper = function (node) {
+    node.superClass = this.eat(tt._extends) ? this.parseExprSubscripts() : null;
+  };
+
   // Parses a comma-separated list of expressions, and returns them as
   // an array. `close` is the token type that ends the list, and
   // `allowEmpty` can be turned on to allow subsequent commas with
@@ -2651,7 +2741,7 @@
     while (!this.eat(close)) {
       if (!first) {
         this.expect(tt.comma);
-        if (allowTrailingComma && this.options.allowTrailingCommas && this.eat(close)) break;
+        if (allowTrailingComma && this.afterTrailingComma(close)) break;
       } else first = false;
 
       if (allowEmpty && this.type === tt.comma) {
@@ -2672,10 +2762,10 @@
 
   pp.parseIdent = function(liberal) {
     var node = this.startNode();
-    if (liberal && this.options.forbidReserved == "everywhere") liberal = false;
+    if (liberal && this.options.allowReserved == "never") liberal = false;
     if (this.type === tt.name) {
       if (!liberal &&
-          (this.options.forbidReserved &&
+          (!this.options.allowReserved &&
            (this.options.ecmaVersion === 3 ? isReservedWord3 : isReservedWord5)(this.value) ||
            this.strict && isStrictReservedWord(this.value)) &&
           this.input.slice(this.start, this.end).indexOf("\\") == -1)
@@ -2694,15 +2784,13 @@
 
   pp.parseExport = function(node) {
     this.next();
-    // export var|const|let|function|class ...;
-    if (this.type === tt._var || this.type === tt._const || this.type === tt._let || this.type === tt._function || this.type === tt._class) {
-      node.declaration = this.parseStatement(true);
-      node['default'] = false;
-      node.specifiers = null;
-      node.source = null;
-    } else
-    // export default ...;
-    if (this.eat(tt._default)) {
+    // export * from '...';
+    if (this.eat(tt.star)) {
+      this.expectContextual("from");
+      node.source = this.type === tt.string ? this.parseExprAtom() : this.unexpected();
+      return this.finishNode(node, "ExportAllDeclaration");
+    }
+    if (this.eat(tt._default)) { // export default ...;
       var expr = this.parseMaybeAssign();
       if (expr.id) {
         switch (expr.type) {
@@ -2711,51 +2799,43 @@
         }
       }
       node.declaration = expr;
-      node['default'] = true;
-      node.specifiers = null;
-      node.source = null;
       this.semicolon();
-    } else {
-      // export * from '...';
-      // export { x, y as z } [from '...'];
-      var isBatch = this.type === tt.star;
+      return this.finishNode(node, "ExportDefaultDeclaration");
+    }
+    // export var|const|let|function|class ...;
+    if (this.type.keyword) {
+      node.declaration = this.parseStatement(true);
+      node.specifiers = [];
+      node.source = null;
+    } else { // export { x, y as z } [from '...'];
       node.declaration = null;
-      node['default'] = false;
       node.specifiers = this.parseExportSpecifiers();
       if (this.eatContextual("from")) {
         node.source = this.type === tt.string ? this.parseExprAtom() : this.unexpected();
       } else {
-        if (isBatch) this.unexpected();
         node.source = null;
       }
       this.semicolon();
     }
-    return this.finishNode(node, "ExportDeclaration");
+    return this.finishNode(node, "ExportNamedDeclaration");
   };
 
   // Parses a comma-separated list of module exports.
 
   pp.parseExportSpecifiers = function() {
     var nodes = [], first = true;
-    if (this.type === tt.star) {
-      // export * from '...'
-      var node = this.startNode();
-      this.next();
-      nodes.push(this.finishNode(node, "ExportBatchSpecifier"));
-    } else {
-      // export { x, y as z } [from '...']
-      this.expect(tt.braceL);
-      while (!this.eat(tt.braceR)) {
-        if (!first) {
-          this.expect(tt.comma);
-          if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
-        } else first = false;
+    // export { x, y as z } [from '...']
+    this.expect(tt.braceL);
+    while (!this.eat(tt.braceR)) {
+      if (!first) {
+        this.expect(tt.comma);
+        if (this.afterTrailingComma(tt.braceR)) break;
+      } else first = false;
 
-        var node = this.startNode();
-        node.id = this.parseIdent(this.type === tt._default);
-        node.name = this.eatContextual("as") ? this.parseIdent(true) : null;
-        nodes.push(this.finishNode(node, "ExportSpecifier"));
-      }
+      var node = this.startNode();
+      node.local = this.parseIdent(this.type === tt._default);
+      node.exported = this.eatContextual("as") ? this.parseIdent(true) : node.local;
+      nodes.push(this.finishNode(node, "ExportSpecifier"));
     }
     return nodes;
   };
@@ -2785,34 +2865,31 @@
     if (this.type === tt.name) {
       // import defaultObj, { x, y as z } from '...'
       var node = this.startNode();
-      node.id = this.parseIdent();
-      this.checkLVal(node.id, true);
-      node.name = null;
-      node['default'] = true;
-      nodes.push(this.finishNode(node, "ImportSpecifier"));
+      node.local = this.parseIdent();
+      this.checkLVal(node.local, true);
+      nodes.push(this.finishNode(node, "ImportDefaultSpecifier"));
       if (!this.eat(tt.comma)) return nodes;
     }
     if (this.type === tt.star) {
       var node = this.startNode();
       this.next();
       this.expectContextual("as");
-      node.name = this.parseIdent();
-      this.checkLVal(node.name, true);
-      nodes.push(this.finishNode(node, "ImportBatchSpecifier"));
+      node.local = this.parseIdent();
+      this.checkLVal(node.local, true);
+      nodes.push(this.finishNode(node, "ImportNamespaceSpecifier"));
       return nodes;
     }
     this.expect(tt.braceL);
     while (!this.eat(tt.braceR)) {
       if (!first) {
         this.expect(tt.comma);
-        if (this.options.allowTrailingCommas && this.eat(tt.braceR)) break;
+        if (this.afterTrailingComma(tt.braceR)) break;
       } else first = false;
 
       var node = this.startNode();
-      node.id = this.parseIdent(true);
-      node.name = this.eatContextual("as") ? this.parseIdent() : null;
-      this.checkLVal(node.name || node.id, true);
-      node['default'] = false;
+      node.imported = this.parseIdent(true);
+      node.local = this.eatContextual("as") ? this.parseIdent() : node.imported;
+      this.checkLVal(node.local, true);
       nodes.push(this.finishNode(node, "ImportSpecifier"));
     }
     return nodes;
@@ -2823,7 +2900,7 @@
   pp.parseYield = function() {
     var node = this.startNode();
     this.next();
-    if (this.eat(tt.semi) || this.canInsertSemicolon()) {
+    if (this.type == tt.semi || this.canInsertSemicolon()) {
       node.delegate = false;
       node.argument = null;
     } else {
