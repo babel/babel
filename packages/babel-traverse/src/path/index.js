@@ -92,7 +92,7 @@ export default class NodePath {
         path = null;
       } else {
         // badly deserialised probably
-        throw new Error("We found a path that isn't a NodePath instance. Possiblly due to bad serialisation.");
+        throw new Error("We found a path that isn't a NodePath instance. Possibly due to bad serialisation.");
       }
     }
 
