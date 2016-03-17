@@ -45,7 +45,7 @@ gulp.task("build", function () {
 });
 
 gulp.task("watch", ["build"], function (callback) {
-  watch(scripts, function () {
+  watch(scripts, {debounceDelay: 200}, function () {
     gulp.start("build");
   });
 });
