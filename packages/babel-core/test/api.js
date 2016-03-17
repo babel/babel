@@ -432,46 +432,54 @@ suite("api", function () {
     var oldBabelEnv = process.env.BABEL_ENV;
     var oldNodeEnv = process.env.NODE_ENV;
 
-    before(function () {
+
+    // This this a global side effect and we need to make sure it's localized
+    // to every test below.
+    function before() {
       delete process.env.BABEL_ENV;
       delete process.env.NODE_ENV;
-    });
+    }
 
-    after(function () {
+
+    afterEach(function () {
       process.env.BABEL_ENV = oldBabelEnv;
       process.env.NODE_ENV = oldNodeEnv;
     });
 
     test("default", function () {
-      return transformAsync("foo;", {
+      before();
+
+      var result = babel.transform("foo;", {
         env: {
           development: { code: false }
         }
-      }).then(function (result) {
-        assert.equal(result.code, undefined);
       });
+
+      assert.equal(result.code, undefined);
     });
 
     test("BABEL_ENV", function () {
+      before();
+
       process.env.BABEL_ENV = "foo";
-      return transformAsync("foo;", {
+      var result = babel.transform("foo;", {
         env: {
           foo: { code: false }
         }
-      }).then(function (result) {
-        assert.equal(result.code, undefined);
       });
+      assert.equal(result.code, undefined);
     });
 
     test("NODE_ENV", function () {
+      before();
+
       process.env.NODE_ENV = "foo";
-      return transformAsync("foo;", {
+      var result = babel.transform("foo;", {
         env: {
           foo: { code: false }
         }
-      }).then(function (result) {
-        assert.equal(result.code, undefined);
       });
+      assert.equal(result.code, undefined);
     });
   });
 
