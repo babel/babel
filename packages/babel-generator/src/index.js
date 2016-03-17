@@ -28,6 +28,7 @@ export class CodeGenerator extends Printer {
     this.format   = format;
     this.opts     = opts;
     this.ast      = ast;
+    this._inForStatementInitCounter = 0;
 
     this.whitespace = new Whitespace(tokens);
     this.map        = new SourceMap(position, opts, code);
@@ -70,7 +71,7 @@ export class CodeGenerator extends Printer {
 
   static normalizeOptions(code, opts, tokens) {
     let style = "  ";
-    if (code) {
+    if (code && typeof code === "string") {
       let indent = detectIndent(code).indent;
       if (indent && indent !== " ") style = indent;
     }

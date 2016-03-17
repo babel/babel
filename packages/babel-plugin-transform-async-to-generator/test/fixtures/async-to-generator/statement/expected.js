@@ -1,6 +1,4 @@
-function normalFunction() {}
-
-let foo = (function () {
+let foo = (() => {
   var ref = babelHelpers.asyncToGenerator(function* () {
     var wat = yield bar();
   });

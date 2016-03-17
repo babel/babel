@@ -4,6 +4,7 @@ var Pipeline             = require("../lib/transformation/pipeline");
 var sourceMap            = require("source-map");
 var assert               = require("assert");
 var File                 = require("../lib/transformation/file").default;
+var Plugin               = require("../lib/transformation/plugin");
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
@@ -23,6 +24,26 @@ function transformAsync(code, opts) {
 }
 
 suite("api", function () {
+  test("analyze", function () {
+    assert.equal(babel.analyse("foobar;").marked.length, 0);
+
+    assert.equal(babel.analyse("foobar;", {
+      plugins: [new Plugin({
+        visitor: {
+          Program: function (path) {
+            path.mark("category", "foobar");
+          }
+        }
+      })]
+    }).marked[0].message, "foobar");
+
+    assert.equal(babel.analyse("foobar;", {}, {
+      Program: function (path) {
+        path.mark("category", "foobar");
+      }
+    }).marked[0].message, "foobar");
+  });
+
   test("transformFile", function (done) {
     babel.transformFile(__dirname + "/fixtures/api/file.js", {}, function (err, res) {
       if (err) return done(err);
@@ -35,6 +56,17 @@ suite("api", function () {
     assert.equal(babel.transformFileSync(__dirname + "/fixtures/api/file.js", {}).code, "foo();");
   });
 
+  test("options throw on falsy true", function () {
+    return assert.throws(
+      function () {
+        babel.transform("", {
+          plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false]
+        });
+      },
+      /TypeError: Falsy value found in plugins/
+    );
+  });
+
   test("options merge backwards", function () {
     return transformAsync("", {
       presets: [__dirname + "/../../babel-preset-es2015"],
@@ -42,6 +74,83 @@ suite("api", function () {
     }).then(function (result) {
       assert.ok(result.options.plugins[0][0].manipulateOptions.toString().indexOf("jsx") >= 0);
     });
+  });
+
+  test("pass per preset", function () {
+    var aliasBaseType = null;
+
+    function execTest(passPerPreset) {
+      return babel.transform('type Foo = number; let x = (y): Foo => y;', {
+        passPerPreset: passPerPreset,
+        presets: [
+          // First preset with our plugin, "before"
+          {
+            plugins: [
+              new Plugin({
+                visitor: {
+                  Function: function(path) {
+                    var alias = path.scope.getProgramParent().path.get('body')[0].node;
+                    if (!babel.types.isTypeAlias(alias)) return;
+
+                    // In case of `passPerPreset` being `false`, the
+                    // alias node is already removed by Flow plugin.
+                    if (!alias) {
+                      return;
+                    }
+
+                    // In case of `passPerPreset` being `true`, the
+                    // alias node should still exist.
+                    aliasBaseType = alias.right.type; // NumberTypeAnnotation
+                  }
+                }
+              })
+            ]
+          },
+
+          // ES2015 preset
+          require(__dirname + "/../../babel-preset-es2015"),
+
+          // Third preset for Flow.
+          {
+            plugins: [
+              require(__dirname + "/../../babel-plugin-syntax-flow"),
+              require(__dirname + "/../../babel-plugin-transform-flow-strip-types"),
+            ]
+          }
+        ],
+      });
+    }
+
+    // 1. passPerPreset: true
+
+    var result = execTest(true);
+
+    assert.equal(aliasBaseType, "NumberTypeAnnotation");
+
+    assert.deepEqual([
+      '"use strict";',
+      '',
+      'var x = function x(y) {',
+      '  return y;',
+      '};'
+    ].join("\n"), result.code);
+
+    // 2. passPerPreset: false
+
+    aliasBaseType = null;
+
+    var result = execTest(false);
+
+    assert.equal(aliasBaseType, null);
+
+    assert.deepEqual([
+      '"use strict";',
+      '',
+      'var x = function x(y) {',
+      '  return y;',
+      '};'
+    ].join("\n"), result.code);
+
   });
 
   test("source map merging", function () {
@@ -323,46 +432,54 @@ suite("api", function () {
     var oldBabelEnv = process.env.BABEL_ENV;
     var oldNodeEnv = process.env.NODE_ENV;
 
-    before(function () {
+
+    // This this a global side effect and we need to make sure it's localized
+    // to every test below.
+    function before() {
       delete process.env.BABEL_ENV;
       delete process.env.NODE_ENV;
-    });
+    }
 
-    after(function () {
+
+    afterEach(function () {
       process.env.BABEL_ENV = oldBabelEnv;
       process.env.NODE_ENV = oldNodeEnv;
     });
 
     test("default", function () {
-      return transformAsync("foo;", {
+      before();
+
+      var result = babel.transform("foo;", {
         env: {
           development: { code: false }
         }
-      }).then(function (result) {
-        assert.equal(result.code, undefined);
       });
+
+      assert.equal(result.code, undefined);
     });
 
     test("BABEL_ENV", function () {
+      before();
+
       process.env.BABEL_ENV = "foo";
-      return transformAsync("foo;", {
+      var result = babel.transform("foo;", {
         env: {
           foo: { code: false }
         }
-      }).then(function (result) {
-        assert.equal(result.code, undefined);
       });
+      assert.equal(result.code, undefined);
     });
 
     test("NODE_ENV", function () {
+      before();
+
       process.env.NODE_ENV = "foo";
-      return transformAsync("foo;", {
+      var result = babel.transform("foo;", {
         env: {
           foo: { code: false }
         }
-      }).then(function (result) {
-        assert.equal(result.code, undefined);
       });
+      assert.equal(result.code, undefined);
     });
   });
 

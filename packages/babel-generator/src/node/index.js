@@ -1,11 +1,8 @@
-/* @noflow */
-
 import whitespace from "./whitespace";
 import * as parens from "./parentheses";
-import each from "lodash/collection/each";
 import * as t from "babel-types";
 
-function find(obj, node, parent) {
+function find(obj, node, parent, printStack) {
   if (!obj) return;
   let result;
 
@@ -15,7 +12,7 @@ function find(obj, node, parent) {
 
     if (t.is(type, node)) {
       let fn = obj[type];
-      result = fn(node, parent);
+      result = fn(node, parent, printStack);
       if (result != null) break;
     }
   }
@@ -36,72 +33,47 @@ function isOrHasCallExpression(node) {
   }
 }
 
-export default class Node {
-  constructor(node: Object, parent: Object) {
-    this.parent = parent;
-    this.node   = node;
-  }
 
-  parent: Object;
-  node: Object;
-
-  static isUserWhitespacable(node) {
-    return t.isUserWhitespacable(node);
-  }
-
-  static needsWhitespace(node, parent, type) {
-    if (!node) return 0;
-
-    if (t.isExpressionStatement(node)) {
-      node = node.expression;
-    }
-
-    let linesInfo = find(whitespace.nodes, node, parent);
-
-    if (!linesInfo) {
-      let items = find(whitespace.list, node, parent);
-      if (items) {
-        for (let i = 0; i < items.length; i++) {
-          linesInfo = Node.needsWhitespace(items[i], node, type);
-          if (linesInfo) break;
-        }
-      }
-    }
-
-    return (linesInfo && linesInfo[type]) || 0;
-  }
-
-  static needsWhitespaceBefore(node, parent) {
-    return Node.needsWhitespace(node, parent, "before");
-  }
-
-  static needsWhitespaceAfter(node, parent) {
-    return Node.needsWhitespace(node, parent, "after");
-  }
-
-  static needsParens(node, parent) {
-    if (!parent) return false;
-
-    if (t.isNewExpression(parent) && parent.callee === node) {
-      if (isOrHasCallExpression(node)) return true;
-    }
-
-    return find(parens, node, parent);
-  }
+export function isUserWhitespacable(node) {
+  return t.isUserWhitespacable(node);
 }
 
-each(Node, function (fn, key) {
-  Node.prototype[key] = function () {
-    // Avoid leaking arguments to prevent deoptimization
-    let args = new Array(arguments.length + 2);
+export function needsWhitespace(node, parent, type) {
+  if (!node) return 0;
 
-    args[0] = this.node;
-    args[1] = this.parent;
+  if (t.isExpressionStatement(node)) {
+    node = node.expression;
+  }
 
-    for (let i = 0; i < args.length; i++) {
-      args[i + 2] = arguments[i];
+  let linesInfo = find(whitespace.nodes, node, parent);
+
+  if (!linesInfo) {
+    let items = find(whitespace.list, node, parent);
+    if (items) {
+      for (let i = 0; i < items.length; i++) {
+        linesInfo = needsWhitespace(items[i], node, type);
+        if (linesInfo) break;
+      }
     }
+  }
 
-    return Node[key].apply(null, args);
-  };
-});
+  return (linesInfo && linesInfo[type]) || 0;
+}
+
+export function needsWhitespaceBefore(node, parent) {
+  return needsWhitespace(node, parent, "before");
+}
+
+export function needsWhitespaceAfter(node, parent) {
+  return needsWhitespace(node, parent, "after");
+}
+
+export function needsParens(node, parent, printStack) {
+  if (!parent) return false;
+
+  if (t.isNewExpression(parent) && parent.callee === node) {
+    if (isOrHasCallExpression(node)) return true;
+  }
+
+  return find(parens, node, parent, printStack);
+}

@@ -26,12 +26,17 @@ export { traverse };
 import OptionManager from "../transformation/file/options/option-manager";
 export { OptionManager };
 
+export function Plugin(alias) {
+  throw new Error(`The (${alias}) Babel 5 plugin is being run with Babel 6.`);
+}
+
 //
 
 import Pipeline from "../transformation/pipeline";
 export { Pipeline };
 
 let pipeline = new Pipeline;
+export let analyse = pipeline.analyse.bind(pipeline);
 export let transform = pipeline.transform.bind(pipeline);
 export let transformFromAst = pipeline.transformFromAst.bind(pipeline);
 

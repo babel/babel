@@ -1,13 +1,15 @@
+/* eslint max-len: 0 */
+
 import type Hub from "../hub";
 import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
-import { PATH_CACHE_KEY } from "./constants";
 import invariant from "invariant";
 import traverse from "../index";
 import assign from "lodash/object/assign";
 import Scope from "../scope";
 import * as t from "babel-types";
+import { path as pathCache } from "../cache";
 
 let debug = buildDebug("babel");
 
@@ -67,7 +69,11 @@ export default class NodePath {
 
     let targetNode = container[key];
 
-    let paths = parent[PATH_CACHE_KEY] = parent[PATH_CACHE_KEY] || [];
+    let paths = pathCache.get(parent) || [];
+    if (!pathCache.has(parent)) {
+      pathCache.set(parent, paths);
+    }
+
     let path;
 
     for (let i = 0; i < paths.length; i++) {
@@ -86,7 +92,7 @@ export default class NodePath {
         path = null;
       } else {
         // badly deserialised probably
-        throw new Error("We found a path that isn't a NodePath instance. Possiblly due to bad serialisation.");
+        throw new Error("We found a path that isn't a NodePath instance. Possibly due to bad serialisation.");
       }
     }
 

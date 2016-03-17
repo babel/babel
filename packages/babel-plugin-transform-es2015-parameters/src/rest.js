@@ -1,3 +1,5 @@
+/* eslint indent: 0 */
+
 import template from "babel-template";
 import * as t from "babel-types";
 
@@ -29,12 +31,15 @@ let memberExpressionOptimisationVisitor = {
   },
 
   Function(path, state) {
-    // skip over functions as whatever `arguments` we reference inside will refer
-    // to the wrong function
+    // Detect whether any reference to rest is contained in nested functions to
+    // determine if deopt is necessary.
     let oldNoOptimise = state.noOptimise;
     state.noOptimise = true;
     path.traverse(memberExpressionOptimisationVisitor, state);
     state.noOptimise = oldNoOptimise;
+
+    // Skip because optimizing references to rest would refer to the `arguments`
+    // of the nested function.
     path.skip();
   },
 
@@ -54,24 +59,58 @@ let memberExpressionOptimisationVisitor = {
     } else {
       let {parentPath} = path;
 
-      // ex: args[0]
-      if (parentPath.isMemberExpression({ computed: true, object: node })) {
-        // if we know that this member expression is referencing a number then
-        // we can safely optimise it
-        let prop = parentPath.get("property");
-        if (prop.isBaseType("number")) {
-          state.candidates.push(path);
-          return;
-        }
-      }
+      // ex: `args[0]`
+      // ex: `args.whatever`
+      if (parentPath.isMemberExpression({ object: node })) {
+        let grandparentPath = parentPath.parentPath;
 
-      // ex: args.length
-      if (parentPath.isMemberExpression({ computed: false, object: node })) {
-        let prop = parentPath.get("property");
-        if (prop.node.name === "length") {
-          state.replaceOnly = true;
-          state.candidates.push(path);
-          return;
+        let argsOptEligible = !state.deopted && !(
+          // ex: `args[0] = "whatever"`
+          (
+            grandparentPath.isAssignmentExpression() &&
+            parentPath.node === grandparentPath.node.left
+          ) ||
+
+          // ex: `[args[0]] = ["whatever"]`
+          grandparentPath.isLVal() ||
+
+          // ex: `for (rest[0] in this)`
+          // ex: `for (rest[0] of this)`
+          grandparentPath.isForXStatement() ||
+
+          // ex: `++args[0]`
+          // ex: `args[0]--`
+          grandparentPath.isUpdateExpression() ||
+
+          // ex: `delete args[0]`
+          grandparentPath.isUnaryExpression({ operator: "delete" }) ||
+
+          // ex: `args[0]()`
+          // ex: `new args[0]()`
+          // ex: `new args[0]`
+          (
+            (
+              grandparentPath.isCallExpression() ||
+              grandparentPath.isNewExpression()
+            ) &&
+            parentPath.node === grandparentPath.node.callee
+          )
+        );
+
+        if (argsOptEligible) {
+          if (parentPath.node.computed) {
+            // if we know that this member expression is referencing a number then
+            // we can safely optimise it
+            if (parentPath.get("property").isBaseType("number")) {
+              state.candidates.push({cause: "indexGetter", path});
+              return;
+            }
+          }
+          // args.length
+          else if (parentPath.node.property.name === "length") {
+            state.candidates.push({cause: "lengthGetter", path});
+            return;
+          }
         }
       }
 
@@ -82,7 +121,7 @@ let memberExpressionOptimisationVisitor = {
       if (state.offset === 0 && parentPath.isSpreadElement()) {
         let call = parentPath.parentPath;
         if (call.isCallExpression() && call.node.arguments.length === 1) {
-          state.candidates.push(path);
+          state.candidates.push({cause: "argSpread", path});
           return;
         }
       }
@@ -103,9 +142,37 @@ let memberExpressionOptimisationVisitor = {
     }
   }
 };
-
 function hasRest(node) {
   return t.isRestElement(node.params[node.params.length - 1]);
+}
+
+function optimiseIndexGetter(path, argsId, offset) {
+  let index;
+
+  if (t.isNumericLiteral(path.parent.property)) {
+    index = t.numericLiteral(path.parent.property.value + offset);
+  } else {
+    index = t.binaryExpression("+", path.parent.property, t.numericLiteral(offset));
+  }
+
+  path.parentPath.replaceWith(loadRest({
+    ARGUMENTS: argsId,
+    INDEX: index,
+  }));
+}
+
+function optimiseLengthGetter(path, argsLengthExpression, argsId, offset) {
+  if (offset) {
+    path.parentPath.replaceWith(
+      t.binaryExpression(
+        "-",
+        argsLengthExpression,
+        t.numericLiteral(offset),
+      )
+    );
+  } else {
+    path.replaceWith(argsId);
+  }
 }
 
 export let visitor = {
@@ -113,22 +180,16 @@ export let visitor = {
     let { node, scope } = path;
     if (!hasRest(node)) return;
 
-    let restParam = node.params.pop();
-    let rest = restParam.argument;
+    let rest = node.params.pop().argument;
 
     let argsId = t.identifier("arguments");
+    let argsLengthExpression = t.memberExpression(
+      argsId,
+      t.identifier("length"),
+    );
 
     // otherwise `arguments` will be remapped in arrow functions
     argsId._shadowedFunctionLiteral = path;
-
-    function optimiseCandidate(parent, parentPath, offset) {
-      if (parent.property) {
-        parentPath.replaceWith(loadRest({
-          ARGUMENTS: argsId,
-          INDEX: t.numericLiteral(parent.property.value + offset)
-        }));
-      }
-    }
 
     // check and optimise for extremely common cases
     let state = {
@@ -144,29 +205,43 @@ export let visitor = {
       // local rest binding name
       name: rest.name,
 
-      // whether any references to the rest parameter were made in a function
-      deopted: false,
+      /*
+      It may be possible to optimize the output code in certain ways, such as
+      not generating code to initialize an array (perhaps substituting direct
+      references to arguments[i] or arguments.length for reads of the
+      corresponding rest parameter property) or positioning the initialization
+      code so that it may not have to execute depending on runtime conditions.
 
-      // whether all we need to do is replace rest parameter identifier with 'arguments'
-      replaceOnly: false
+      This property tracks eligibility for optimization. "deopted" means give up
+      and don't perform optimization. For example, when any of rest's elements /
+      properties is assigned to at the top level, or referenced at all in a
+      nested function.
+      */
+      deopted: false,
     };
 
     path.traverse(memberExpressionOptimisationVisitor, state);
 
+    // There are only "shorthand" references
     if (!state.deopted && !state.references.length) {
-      // we only have shorthands and there are no other references
-      if (state.candidates.length) {
-        for (let candidate of (state.candidates: Array)) {
-          candidate.replaceWith(argsId);
-          if (!state.replaceOnly) {
-            optimiseCandidate(candidate.parent, candidate.parentPath, state.offset);
-          }
+      for (let {path, cause} of (state.candidates: Array)) {
+        switch (cause) {
+          case "indexGetter":
+            optimiseIndexGetter(path, argsId, state.offset);
+            break;
+          case "lengthGetter":
+            optimiseLengthGetter(path, argsLengthExpression, argsId, state.offset);
+            break;
+          default:
+            path.replaceWith(argsId);
         }
       }
       return;
-    } else {
-      state.references = state.references.concat(state.candidates);
     }
+
+    state.references = state.references.concat(
+      state.candidates.map(({ path }) => path)
+    );
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
     state.deopted = state.deopted || !!node.shadow;
@@ -216,16 +291,14 @@ export let visitor = {
       let target = path.getEarliestCommonAncestorFrom(state.references).getStatementParent();
 
       // don't perform the allocation inside a loop
-      let highestLoop;
-      target.findParent(function (path) {
+      target.findParent((path) => {
         if (path.isLoop()) {
-          highestLoop = path;
-        } else if (path.isFunction()) {
-          // stop crawling up for functions
-          return true;
+          target = path;
+        } else {
+          // Stop crawling up if this is a function.
+          return path.isFunction();
         }
       });
-      if (highestLoop) target = highestLoop;
 
       target.insertBefore(loop);
     }

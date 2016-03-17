@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import { basename, extname } from "path";
 import template from "babel-template";
 import * as t from "babel-types";
@@ -30,16 +32,15 @@ let buildExportsAssignment = template(`
 `);
 
 let buildExportAll = template(`
-  for (let KEY in OBJECT) {
-    if (KEY === "default") continue;
-
-    Object.defineProperty(exports, KEY, {
+  Object.keys(OBJECT).forEach(function (key) {
+    if (key === "default") return;
+    Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
-        return OBJECT[KEY];
+        return OBJECT[key];
       }
     });
-  }
+  });
 `);
 
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty", "ClassMethod", "ObjectMethod"];
@@ -61,6 +62,7 @@ export default function () {
       } else {
         path.replaceWith(remap);
       }
+      this.requeueInParent(path);
     },
 
     AssignmentExpression(path) {
@@ -84,6 +86,7 @@ export default function () {
       }
 
       path.replaceWith(node);
+      this.requeueInParent(path);
     },
 
     UpdateExpression(path) {
@@ -100,7 +103,9 @@ export default function () {
       let node = t.assignmentExpression(path.node.operator[0] + "=", arg.node, t.numericLiteral(1));
 
       if ((path.parentPath.isExpressionStatement() && !path.isCompletionRecord()) || path.node.prefix) {
-        return path.replaceWith(node);
+        path.replaceWith(node);
+        this.requeueInParent(path);
+        return;
       }
 
       let nodes = [];
@@ -114,7 +119,8 @@ export default function () {
       }
       nodes.push(t.binaryExpression(operator, arg.node, t.numericLiteral(1)));
 
-      path.replaceWithMultiple(t.sequenceExpression(nodes));
+      let newPaths = path.replaceWithMultiple(t.sequenceExpression(nodes));
+      for (const newPath of newPaths) this.requeueInParent(newPath);
     }
   };
 
@@ -123,6 +129,11 @@ export default function () {
 
     visitor: {
       ThisExpression(path, state) {
+        // If other plugins run after this plugin's Program#exit handler, we allow them to
+        // insert top-level `this` values. This allows the AMD and UMD plugins to
+        // function properly.
+        if (this.ranCommonJS) return;
+
         if (
           state.opts.allowTopLevelThis !== true &&
           !path.findParent((path) => !path.is("shadow") &&
@@ -134,6 +145,8 @@ export default function () {
 
       Program: {
         exit(path) {
+          this.ranCommonJS = true;
+
           let strict = !!this.opts.strict;
 
           let { scope } = path;
@@ -157,15 +170,29 @@ export default function () {
 
           let requires = Object.create(null);
 
-          function addRequire(source) {
+          function addRequire(source, blockHoist) {
             let cached = requires[source];
             if (cached) return cached;
 
             let ref = path.scope.generateUidIdentifier(basename(source, extname(source)));
 
-            topNodes.push(t.variableDeclaration("var", [
-              t.variableDeclarator(ref, buildRequire(t.stringLiteral(source)).expression)
-            ]));
+            let varDecl = t.variableDeclaration("var", [
+              t.variableDeclarator(ref, buildRequire(
+                t.stringLiteral(source)
+              ).expression)
+            ]);
+
+            // Copy location from the original import statement for sourcemap
+            // generation.
+            if (imports[source]) {
+              varDecl.loc = imports[source].loc;
+            }
+
+            if (typeof blockHoist === "number" && blockHoist > 0) {
+              varDecl._blockHoist = blockHoist;
+            }
+
+            topNodes.push(varDecl);
 
             return requires[source] = ref;
           }
@@ -183,14 +210,32 @@ export default function () {
               for (let specifier of specifiers) {
                 let ids = specifier.getBindingIdentifiers();
                 if (ids.__esModule) {
-                  throw specifier.buildCodeFrameError(`Illegal export "__esModule"`);
+                  throw specifier.buildCodeFrameError("Illegal export \"__esModule\"");
                 }
               }
             }
 
             if (path.isImportDeclaration()) {
               hasImports = true;
-              addTo(imports, path.node.source.value, path.node.specifiers);
+
+              let key = path.node.source.value;
+              let importsEntry = imports[key] || {
+                specifiers: [],
+                maxBlockHoist: 0,
+                loc: path.node.loc,
+              };
+
+              importsEntry.specifiers.push(...path.node.specifiers);
+
+              if (typeof path.node._blockHoist === "number") {
+                importsEntry.maxBlockHoist = Math.max(
+                  path.node._blockHoist,
+                  importsEntry.maxBlockHoist
+                );
+              }
+
+              imports[key] = importsEntry;
+
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
               let declaration = path.get("declaration");
@@ -219,6 +264,11 @@ export default function () {
                 }
               } else {
                 path.replaceWith(buildExportsAssignment(t.identifier("default"), declaration.node));
+
+                // Manualy re-queue `export default foo;` expressions so that the ES3 transform
+                // has an opportunity to convert them. Ideally this would happen automatically from the
+                // replaceWith above. See T7166 for more info.
+                path.parentPath.requeue(path.get("expression.left"));
               }
             } else if (path.isExportNamedDeclaration()) {
               let declaration = path.get("declaration");
@@ -260,9 +310,9 @@ export default function () {
               let specifiers = path.get("specifiers");
               if (specifiers.length) {
                 let nodes = [];
-                let source = path.node.source
+                let source = path.node.source;
                 if (source) {
-                  let ref = addRequire(source.value);
+                  let ref = addRequire(source.value, path.node._blockHoist);
 
                   for (let specifier of specifiers) {
                     if (specifier.isExportNamespaceSpecifier()) {
@@ -270,7 +320,11 @@ export default function () {
                     } else if (specifier.isExportDefaultSpecifier()) {
                       // todo
                     } else if (specifier.isExportSpecifier()) {
-                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(ref, specifier.node.local)));
+                      if (specifier.node.local.name === "default") {
+                        topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(t.callExpression(this.addHelper("interopRequireDefault"), [ref]), specifier.node.local)));
+                      } else {
+                        topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(ref, specifier.node.local)));
+                      }
                       nonHoistedExportNames[specifier.node.exported.name] = true;
                     }
                   }
@@ -286,18 +340,19 @@ export default function () {
                 path.replaceWithMultiple(nodes);
               }
             } else if (path.isExportAllDeclaration()) {
-              topNodes.push(buildExportAll({
-                KEY: path.scope.generateUidIdentifier("key"),
-                OBJECT: addRequire(path.node.source.value)
-              }));
+              let exportNode = buildExportAll({
+                OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
+              });
+              exportNode.loc = path.node.loc;
+              topNodes.push(exportNode);
               path.remove();
             }
           }
 
           for (let source in imports) {
-            let specifiers = imports[source];
+            let {specifiers, maxBlockHoist} = imports[source];
             if (specifiers.length) {
-              let uid = addRequire(source);
+              let uid = addRequire(source, maxBlockHoist);
 
               let wildcard;
 
@@ -307,9 +362,21 @@ export default function () {
                   if (strict) {
                     remaps[specifier.local.name] = uid;
                   } else {
-                    topNodes.push(t.variableDeclaration("var", [
-                      t.variableDeclarator(specifier.local, t.callExpression(this.addHelper("interopRequireWildcard"), [uid]))
-                    ]));
+                    const varDecl = t.variableDeclaration("var", [
+                      t.variableDeclarator(
+                        specifier.local,
+                        t.callExpression(
+                          this.addHelper("interopRequireWildcard"),
+                          [uid]
+                        )
+                      )
+                    ]);
+
+                    if (maxBlockHoist > 0) {
+                      varDecl._blockHoist = maxBlockHoist;
+                    }
+
+                    topNodes.push(varDecl);
                   }
                   wildcard = specifier.local;
                 } else if (t.isImportDefaultSpecifier(specifier)) {
@@ -325,17 +392,31 @@ export default function () {
                       target = wildcard;
                     } else {
                       target = wildcard = path.scope.generateUidIdentifier(uid.name);
-                      topNodes.push(t.variableDeclaration("var", [
-                        t.variableDeclarator(target, t.callExpression(this.addHelper("interopRequireDefault"), [uid]))
-                      ]));
+                      const varDecl = t.variableDeclaration("var", [
+                        t.variableDeclarator(
+                          target,
+                          t.callExpression(
+                            this.addHelper("interopRequireDefault"),
+                            [uid]
+                          )
+                        )
+                      ]);
+
+                      if (maxBlockHoist > 0) {
+                        varDecl._blockHoist = maxBlockHoist;
+                      }
+
+                      topNodes.push(varDecl);
                     }
                   }
-                  remaps[specifier.local.name] = t.memberExpression(target, specifier.imported);
+                  remaps[specifier.local.name] = t.memberExpression(target, t.cloneWithoutLoc(specifier.imported));
                 }
               }
             } else {
               // bare import
-              topNodes.push(buildRequire(t.stringLiteral(source)));
+              let requireNode = buildRequire(t.stringLiteral(source));
+              requireNode.loc = imports[source].loc;
+              topNodes.push(requireNode);
             }
           }
 
@@ -346,18 +427,30 @@ export default function () {
               hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode).expression;
             }
 
-            topNodes.unshift(t.expressionStatement(hoistedExportsNode));
+            const node = t.expressionStatement(hoistedExportsNode);
+            node._blockHoist = 3;
+
+            topNodes.unshift(node);
           }
 
           // add __esModule declaration if this file has any exports
           if (hasExports && !strict) {
             let buildTemplate = buildExportsModuleDeclaration;
             if (this.opts.loose) buildTemplate = buildLooseExportsModuleDeclaration;
-            topNodes.unshift(buildTemplate());
+
+            const declar = buildTemplate();
+            declar._blockHoist = 3;
+
+            topNodes.unshift(declar);
           }
 
           path.unshiftContainer("body", topNodes);
-          path.traverse(reassignmentVisitor, { remaps, scope, exports });
+          path.traverse(reassignmentVisitor, {
+            remaps,
+            scope,
+            exports,
+            requeueInParent: (newPath) => path.requeue(newPath),
+          });
         }
       }
     }

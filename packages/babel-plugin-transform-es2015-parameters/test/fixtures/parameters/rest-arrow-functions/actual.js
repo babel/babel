@@ -22,3 +22,8 @@ function demo1(...args) {
     return args[i+0];
   };
 }
+
+var x = (...rest) => {
+  if (noNeedToWork) return 0;
+  return rest;
+};

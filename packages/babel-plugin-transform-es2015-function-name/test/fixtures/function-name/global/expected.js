@@ -1,5 +1,5 @@
 var test = {
-  setInterval: (function (_setInterval) {
+  setInterval: function (_setInterval) {
     function setInterval(_x, _x2) {
       return _setInterval.apply(this, arguments);
     }
@@ -9,7 +9,7 @@ var test = {
     };
 
     return setInterval;
-  })(function (fn, ms) {
+  }(function (fn, ms) {
     setInterval(fn, ms);
   })
 };

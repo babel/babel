@@ -27,9 +27,9 @@ export default function ({ types: t, template }) {
   }
 
   function pushMutatorDefine({ objId, body, getMutatorId, scope }, prop) {
-    let key = prop.key;
+    let key = !prop.computed && t.isIdentifier(prop.key) ? t.stringLiteral(prop.key.name) : prop.key;
 
-    let maybeMemoise = scope.maybeGenerateMemoised(prop.key);
+    let maybeMemoise = scope.maybeGenerateMemoised(key);
     if (maybeMemoise) {
       body.push(t.expressionStatement(t.assignmentExpression("=", maybeMemoise, key)));
       key = maybeMemoise;

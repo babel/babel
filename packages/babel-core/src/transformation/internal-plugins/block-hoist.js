@@ -1,5 +1,3 @@
-/* @flow */
-
 import Plugin from "../plugin";
 import sortBy from "lodash/collection/sortBy";
 

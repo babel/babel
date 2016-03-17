@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import includes from "lodash/collection/includes";
 import repeating from "repeating";
 import Renamer from "./lib/renamer";
@@ -8,59 +10,31 @@ import * as messages from "babel-messages";
 import Binding from "./binding";
 import globals from "globals";
 import * as t from "babel-types";
+import { scope as scopeCache } from "../cache";
 
-//
-
-const CACHE_SINGLE_KEY = Symbol();
-const CACHE_MULTIPLE_KEY = Symbol();
+// Number of calls to the crawl method to figure out whether we're
+// somewhere inside a call that was trigerred by call. This is meant
+// to be used to figure out whether a warning should be trigerred.
+// See `warnOnFlowBinding`.
+let _crawlCallsCount = 0;
 
 /**
  * To avoid creating a new Scope instance for each traversal, we maintain a cache on the
  * node itself containing all scopes it has been associated with.
- *
- * We also optimise for the case of there being only a single scope associated with a node.
  */
 
-function getCache(node, parentScope, self) {
-  let singleCache = node[CACHE_SINGLE_KEY];
+function getCache(path, parentScope, self) {
+  let scopes: Array<Scope> = scopeCache.get(path.node) || [];
 
-  if (singleCache) {
-    // we've only ever associated one scope with this node so let's check it
-    if (matchesParent(singleCache, parentScope)) {
-      return singleCache;
-    }
-  } else if (!node[CACHE_MULTIPLE_KEY]) {
-    // no scope has ever been associated with this node
-    node[CACHE_SINGLE_KEY] = self;
-    return;
-  }
-
-  // looks like we have either a single scope association that was never matched or
-  // multiple assocations, let's find the right one!
-  return getCacheMultiple(node, parentScope, self, singleCache);
-}
-
-function matchesParent(scope, parentScope) {
-  if (scope.parent === parentScope) {
-    return true;
-  }
-}
-
-function getCacheMultiple(node, parentScope, self, singleCache) {
-  let scopes: Array<Scope> = node[CACHE_MULTIPLE_KEY] = node[CACHE_MULTIPLE_KEY] || [];
-
-  if (singleCache) {
-    // we have a scope assocation miss so push it onto our scopes
-    scopes.push(singleCache);
-    node[CACHE_SINGLE_KEY] = null;
-  }
-
-  // loop through and check each scope to see if it matches our parent
   for (let scope of scopes) {
-    if (matchesParent(scope, parentScope)) return scope;
+    if (scope.parent === parentScope && scope.path === path) return scope;
   }
 
   scopes.push(self);
+
+  if (!scopeCache.has(path.node)) {
+    scopeCache.set(path.node, scopes);
+  }
 }
 
 //
@@ -79,6 +53,9 @@ let collectorVisitor = {
 
     // this will be hit again once we traverse into it after this iteration
     if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) return;
+
+    // TODO(amasad): remove support for flow as bindings (See warning below).
+    //if (path.isFlow()) return;
 
     // we've ran into a declaration!
     path.scope.getFunctionParent().registerDeclaration(path);
@@ -173,7 +150,7 @@ export default class Scope {
       return parentScope;
     }
 
-    let cached = getCache(path.node, parentScope, this);
+    let cached = getCache(path, parentScope, this);
     if (cached) return cached;
 
     this.uid = uid++;
@@ -516,6 +493,11 @@ export default class Scope {
           this.checkBlockScopedCollisions(local, kind, name, id);
         }
 
+        // It's erroneous that we currently consider flow a binding, however, we can't
+        // remove it because people might be depending on it. See warning section
+        // in `warnOnFlowBinding`.
+        if (local && local.path.isFlow()) local = null;
+
         parent.references[name] = true;
 
         this.bindings[name] = new Binding({
@@ -641,6 +623,12 @@ export default class Scope {
   }
 
   crawl() {
+    _crawlCallsCount++;
+    this._crawl();
+    _crawlCallsCount--;
+  }
+
+  _crawl() {
     let path = this.path;
 
     //
@@ -663,13 +651,17 @@ export default class Scope {
     // FunctionExpression - id
 
     if (path.isFunctionExpression() && path.has("id")) {
-      this.registerBinding("local", path.get("id"), path);
+      if (!path.get("id").node[t.NOT_LOCAL_BINDING]) {
+        this.registerBinding("local", path.get("id"), path);
+      }
     }
 
     // Class
 
     if (path.isClassExpression() && path.has("id")) {
-      this.registerBinding("local", path);
+      if (!path.get("id").node[t.NOT_LOCAL_BINDING]) {
+        this.registerBinding("local", path);
+      }
     }
 
     // Function - params, rest
@@ -862,17 +854,28 @@ export default class Scope {
     return this.getBindingIdentifier(name) === node;
   }
 
+  warnOnFlowBinding(binding) {
+    if (_crawlCallsCount === 0 && binding && binding.path.isFlow()) {
+      console.warn(`
+        You or one of the Babel plugins you are using are using Flow declarations as bindings.
+        Support for this will be removed in version 6.8. To find out the caller, grep for this
+        message and change it to a \`console.trace()\`.
+      `);
+    }
+    return binding;
+  }
+
   getBinding(name: string) {
     let scope = this;
 
     do {
       let binding = scope.getOwnBinding(name);
-      if (binding) return binding;
+      if (binding) return this.warnOnFlowBinding(binding);
     } while (scope = scope.parent);
   }
 
   getOwnBinding(name: string) {
-    return this.bindings[name];
+    return this.warnOnFlowBinding(this.bindings[name]);
   }
 
   getBindingIdentifier(name: string) {

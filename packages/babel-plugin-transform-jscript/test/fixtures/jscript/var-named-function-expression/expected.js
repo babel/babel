@@ -1,10 +1,10 @@
-var IdenticalName = (function () {
+var IdenticalName = function () {
   function IdenticalName(x) {
     return x;
   }
 
   return IdenticalName;
-})();
+}();
 
 (function () {
   function foo() {}

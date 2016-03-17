@@ -1,5 +1,3 @@
-/* @flow */
-
 import merge from "lodash/object/merge";
 
 export default function (dest?: Object, src?: Object): ?Object {

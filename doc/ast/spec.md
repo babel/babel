@@ -71,6 +71,7 @@ These are the core Babylon AST node types.
       - [LogicalOperator](#logicaloperator)
     - [SpreadElement](#spreadelement)
     - [MemberExpression](#memberexpression)
+    - [BindExpression](#bindexpression)
   - [ConditionalExpression](#conditionalexpression)
   - [CallExpression](#callexpression)
   - [NewExpression](#newexpression)
@@ -140,7 +141,7 @@ interface Position {
 # Identifier
 
 ```js
-interface Identifier <: Node, Expression, Pattern {
+interface Identifier <: Expression, Pattern {
   type: "Identifier";
   name: string;
 }
@@ -149,6 +150,12 @@ interface Identifier <: Node, Expression, Pattern {
 An identifier. Note that an identifier may be an expression or a destructuring pattern.
 
 # Literals
+
+```js
+interface Literal <: Expression { }
+```
+
+A literal token. May or may not represent an expression.
 
 ## RegExpLiteral
 
@@ -522,7 +529,7 @@ A variable declarator.
 ```js
 interface Decorator <: Node {
   type: "Decorator";
-  value: Expression;
+  expression: Expression;
 }
 ```
 
@@ -833,6 +840,18 @@ interface MemberExpression <: Expression, Pattern {
 
 A member expression. If `computed` is `true`, the node corresponds to a computed (`a[b]`) member expression and `property` is an `Expression`. If `computed` is `false`, the node corresponds to a static (`a.b`) member expression and `property` is an `Identifier`.
 
+### BindExpression
+
+```js
+interface BindExpression <: Expression {
+    type: "BindExpression";
+    object: [ Expression | null ];
+    callee: [ Expression ]
+}
+```
+
+If `object` is `null`, then `callee` should be a `MemberExpression`.
+
 ## ConditionalExpression
 
 ```js
@@ -915,6 +934,10 @@ interface TemplateElement <: Node {
 ```
 
 # Patterns
+
+```js
+interface Pattern <: Node { }
+```
 
 ## ObjectPattern
 

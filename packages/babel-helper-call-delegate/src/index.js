@@ -26,7 +26,7 @@ export default function (path: NodePath, scope = path.scope) {
   let args   = [];
 
   // todo: only hoist if necessary
-  hoistVariables(path, id => scope.push({ id }));
+  hoistVariables(path, (id) => scope.push({ id }));
 
   let state = {
     foundThis: false,

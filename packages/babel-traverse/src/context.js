@@ -103,7 +103,16 @@ export default class TraversalContext {
     // visit the queue
     for (let path of queue) {
       path.resync();
-      path.pushContext(this);
+
+      if (path.contexts.length === 0 || path.contexts[path.contexts.length - 1] !== this){
+        // The context might already have been pushed when this path was inserted and queued.
+        // If we always re-pushed here, we could get duplicates and risk leaving contexts
+        // on the stack after the traversal has completed, which could break things.
+        path.pushContext(this);
+      }
+
+      // this path no longer belongs to the tree
+      if (path.key === null) continue;
 
       if (testing && queue.length >= 1000) {
         this.trap = true;

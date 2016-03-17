@@ -1,6 +1,6 @@
 "use strict";
 
-System.register(["./evens"], function (_export) {
+System.register(["./evens"], function (_export, _context) {
   var isEven, p, a, i, j, isOdd;
   return {
     setters: [function (_evens) {
@@ -21,11 +21,11 @@ System.register(["./evens"], function (_export) {
 
       for (i = 0, j = 0;;);
 
-      _export("isOdd", isOdd = (function (isEven) {
+      _export("isOdd", isOdd = function (isEven) {
         return function (n) {
           return !isEven(n);
         };
-      })(isEven));
+      }(isEven));
 
       _export("isOdd", isOdd);
     }

@@ -14,9 +14,17 @@ $ npm install babel-plugin-transform-es2015-arrow-functions
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-es2015-arrow-functions"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-es2015-arrow-functions", { "spec": true }]
+  ]
 }
 ```
 

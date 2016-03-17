@@ -1,6 +1,8 @@
 import repeating from "repeating";
 import * as t from "babel-types";
 
+const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(["!"]);
+
 export function WithStatement(node: Object) {
   this.keyword("with");
   this.push("(");
@@ -48,9 +50,9 @@ export function ForStatement(node: Object) {
   this.keyword("for");
   this.push("(");
 
-  this._inForStatementInit = true;
+  this._inForStatementInitCounter++;
   this.print(node.init, node);
-  this._inForStatementInit = false;
+  this._inForStatementInitCounter--;
   this.push(";");
 
   if (node.test) {
@@ -107,7 +109,13 @@ function buildLabelStatement(prefix, key = "label") {
 
     let label = node[key];
     if (label) {
-      this.push(" ");
+      if (!(this.format.minified && ((t.isUnaryExpression(label, { prefix: true }) ||
+                                      t.isUpdateExpression(label, { prefix: true })) &&
+                                     NON_ALPHABETIC_UNARY_OPERATORS.indexOf(label.operator) > -1))) {
+        this.push(" ");
+
+      }
+
       let terminatorState = this.startTerminatorless();
       this.print(label, node);
       this.endTerminatorless(terminatorState);
@@ -153,7 +161,8 @@ export function CatchClause(node: Object) {
   this.keyword("catch");
   this.push("(");
   this.print(node.param, node);
-  this.push(") ");
+  this.push(")");
+  this.space();
   this.print(node.body, node);
 }
 

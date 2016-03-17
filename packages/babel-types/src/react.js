@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as t from "./index";
 
 export let isReactComponent = t.buildMatchMemberExpression("React.Component");

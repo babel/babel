@@ -1,5 +1,3 @@
-/* @flow */
-
 import defineType, { assertNodeType, assertValueType, chain, assertEach } from "./index";
 
 defineType("JSXAttribute", {
@@ -41,7 +39,7 @@ defineType("JSXElement", {
     children: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("StringLiteral", "JSXExpressionContainer", "JSXElement"))
+        assertEach(assertNodeType("JSXText", "JSXExpressionContainer", "JSXElement"))
       )
     }
   }

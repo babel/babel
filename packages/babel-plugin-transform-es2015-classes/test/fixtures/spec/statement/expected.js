@@ -10,7 +10,7 @@ var BaseView = function BaseView() {
   this.autoRender = true;
 };
 
-var BaseView = (function () {
+var BaseView = function () {
   function BaseView() {
     babelHelpers.classCallCheck(this, BaseView);
   }
@@ -22,4 +22,4 @@ var BaseView = (function () {
     }
   }]);
   return BaseView;
-})();
+}();

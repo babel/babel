@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 export const STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
 export const FLATTENABLE_KEYS        = ["body", "expressions"];
 export const FOR_INIT_KEYS           = ["left", "init"];
@@ -24,3 +26,4 @@ export const INHERIT_KEYS = {
 };
 
 export const BLOCK_SCOPED_SYMBOL = Symbol.for("var used to be block scoped");
+export const NOT_LOCAL_BINDING = Symbol.for("should not be considered a local binding");

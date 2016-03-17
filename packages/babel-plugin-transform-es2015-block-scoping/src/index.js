@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import type NodePath from "babel-traverse";
 import type Scope from "babel-traverse";
 import type File from "../../../file";
@@ -14,7 +16,7 @@ export default function () {
       VariableDeclaration(path, file) {
         let { node, parent, scope } = path;
         if (!isBlockScoped(node)) return;
-        convertBlockScopedToVar(node, parent, scope);
+        convertBlockScopedToVar(path, parent, scope, true);
 
         if (node._tdzThis) {
           let nodes = [node];
@@ -70,7 +72,8 @@ function isBlockScoped(node) {
   return true;
 }
 
-function convertBlockScopedToVar(node, parent, scope) {
+function convertBlockScopedToVar(path, parent, scope, moveBindingsToParent = false) {
+  const { node } = path;
   // https://github.com/babel/babel/issues/255
   if (!t.isFor(parent)) {
     for (let i = 0; i < node.declarations.length; i++) {
@@ -81,6 +84,17 @@ function convertBlockScopedToVar(node, parent, scope) {
 
   node[t.BLOCK_SCOPED_SYMBOL] = true;
   node.kind = "var";
+
+  // Move bindings from current block scope to function scope.
+  if (moveBindingsToParent) {
+    const parentScope = scope.getFunctionParent();
+    const ids = path.getBindingIdentifiers();
+    for (let name in ids) {
+      let binding = scope.getOwnBinding(name);
+      if (binding) binding.kind = "var";
+      scope.moveBindingTo(name, parentScope);
+    }
+  }
 }
 
 function isVar(node) {
@@ -93,7 +107,7 @@ function replace(path, node, scope, remaps) {
 
   let ownBinding = scope.getBindingIdentifier(node.name);
   if (ownBinding === remap.binding) {
-    node.name = remap.uid;
+    scope.rename(node.name, remap.uid);
   } else {
     // scope already has it's own binding that doesn't
     // match the one we have a stored replacement for
@@ -171,7 +185,7 @@ let hoistVarDeclarationsVisitor = {
         node.left = node.left.declarations[0].id;
       }
     } else if (isVar(node, parent)) {
-      path.replaceWithMultiple(self.pushDeclar(node).map(expr => t.expressionStatement(expr)));
+      path.replaceWithMultiple(self.pushDeclar(node).map((expr) => t.expressionStatement(expr)));
     } else if (path.isFunction()) {
       return path.skip();
     }
@@ -307,7 +321,10 @@ class BlockScoping {
     let needsClosure = this.getLetReferences();
 
     // this is a block within a `Function/Program` so we can safely leave it be
-    if (t.isFunction(this.parent) || t.isProgram(this.block)) return;
+    if (t.isFunction(this.parent) || t.isProgram(this.block)) {
+      this.updateScopeInfo();
+      return;
+    }
 
     // we can skip everything
     if (!this.hasLetReferences) return;
@@ -318,11 +335,28 @@ class BlockScoping {
       this.remap();
     }
 
+    this.updateScopeInfo();
+
     if (this.loopLabel && !t.isLabeledStatement(this.loopParent)) {
       return t.labeledStatement(this.loopLabel, this.loop);
     }
   }
 
+  updateScopeInfo() {
+    let scope = this.scope;
+    let parentScope = scope.getFunctionParent();
+    let letRefs = this.letReferences;
+
+    for (let key in letRefs) {
+      let ref = letRefs[key];
+      const binding = scope.getBinding(ref.name);
+      if (!binding) continue;
+      if (binding.kind === "let" || binding.kind === "const") {
+        binding.kind = "var";
+        scope.moveBindingTo(ref.name, parentScope);
+      }
+    }
+  }
   remap() {
     let hasRemaps = false;
     let letRefs   = this.letReferences;
@@ -500,7 +534,10 @@ class BlockScoping {
       for (let i = 0; i < block.body.length; i++) {
         let declar = block.body[i];
         if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar) || isBlockScoped(declar)) {
-          if (isBlockScoped(declar)) convertBlockScopedToVar(declar, block, this.scope);
+          let declarPath = this.blockPath.get("body")[i];
+          if (isBlockScoped(declar)) {
+            convertBlockScopedToVar(declarPath, block, this.scope);
+          }
           declarators = declarators.concat(declar.declarations || declar);
         }
       }

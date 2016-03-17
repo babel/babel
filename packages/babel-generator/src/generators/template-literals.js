@@ -1,5 +1,3 @@
-/* @flow */
-
 export function TaggedTemplateExpression(node: Object) {
   this.print(node.tag, node);
   this.print(node.quasi, node);

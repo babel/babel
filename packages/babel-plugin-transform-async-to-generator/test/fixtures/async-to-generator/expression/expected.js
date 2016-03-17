@@ -1,4 +1,4 @@
-var foo = (function () {
+var foo = (() => {
   var ref = babelHelpers.asyncToGenerator(function* () {
     var wat = yield bar();
   });

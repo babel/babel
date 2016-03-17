@@ -1,5 +1,5 @@
 import { coroutine as _coroutine } from "bluebird";
-var foo = (function () {
+var foo = (() => {
   var ref = _coroutine(function* () {
     var wat = yield bar();
   });

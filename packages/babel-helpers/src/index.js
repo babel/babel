@@ -1,3 +1,5 @@
+/* eslint no-confusing-arrow: 0 */
+
 import helpers from "./helpers";
 
 export function get(name) {
@@ -8,7 +10,7 @@ export function get(name) {
 }
 
 export let list = Object.keys(helpers)
-  .map(name => name[0] === "_" ? name.slice(1) : name)
-  .filter(name => name !== "__esModule");
+  .map((name) => name[0] === "_" ? name.slice(1) : name)
+  .filter((name) => name !== "__esModule");
 
 export default get;

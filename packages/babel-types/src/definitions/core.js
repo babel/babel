@@ -1,4 +1,4 @@
-/* @flow */
+/* eslint max-len: 0 */
 
 import * as t from "../index";
 
@@ -21,7 +21,11 @@ import defineType, {
 defineType("ArrayExpression", {
   fields: {
     elements: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeOrValueType("null", "Expression", "SpreadElement")))
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeOrValueType("null", "Expression", "SpreadElement"))
+      ),
+      default: [],
     }
   },
   visitor: ["elements"],
@@ -461,7 +465,10 @@ defineType("ObjectExpression", {
   aliases: ["Expression"],
   fields: {
     properties: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("ObjectMethod", "ObjectProperty", "SpreadProperty")))
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("ObjectMethod", "ObjectProperty", "SpreadProperty"))
+      )
     }
   }
 });
@@ -625,7 +632,7 @@ defineType("UnaryExpression", {
   builder: ["operator", "argument", "prefix"],
   fields: {
     prefix: {
-      default: false
+      default: true
     },
     argument: {
       validate: assertNodeType("Expression")
@@ -703,7 +710,7 @@ defineType("WithStatement", {
       object: assertNodeType("Expression")
     },
     body: {
-      validate: assertNodeType("BlockStatement")
+      validate: assertNodeType("BlockStatement", "Statement")
     }
   }
 });

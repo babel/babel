@@ -1,4 +1,4 @@
-/* @flow */
+/* eslint max-len: 0 */
 
 import * as t from "babel-types";
 
@@ -36,11 +36,21 @@ export function DeclareFunction(node: Object) {
   this.semicolon();
 }
 
+export function DeclareInterface(node: Object) {
+  this.push("declare ");
+  this.InterfaceDeclaration(node);
+}
+
 export function DeclareModule(node: Object) {
   this.push("declare module ");
   this.print(node.id, node);
   this.space();
   this.print(node.body, node);
+}
+
+export function DeclareTypeAlias(node: Object) {
+  this.push("declare ");
+  this.TypeAlias(node);
 }
 
 export function DeclareVariable(node: Object) {
@@ -103,6 +113,10 @@ export function _interfaceish(node: Object) {
   if (node.extends.length) {
     this.push(" extends ");
     this.printJoin(node.extends, node, { separator: ", " });
+  }
+  if (node.mixins && node.mixins.length) {
+    this.push(" mixins ");
+    this.printJoin(node.mixins, node, { separator: ", " });
   }
   this.space();
   this.print(node.body, node);

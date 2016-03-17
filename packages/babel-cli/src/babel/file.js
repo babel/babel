@@ -1,7 +1,6 @@
 let convertSourceMap = require("convert-source-map");
 let pathExists       = require("path-exists");
 let sourceMap        = require("source-map");
-let chokidar         = require("chokidar");
 let slash            = require("slash");
 let path             = require("path");
 let util             = require("./util");
@@ -70,7 +69,7 @@ module.exports = function (commander, filenames, opts) {
     let result = buildResult();
 
     if (commander.outFile) {
-      // we've requested for a sorucemap to be written to disk
+      // we've requested for a sourcemap to be written to disk
       if (commander.sourceMaps && commander.sourceMaps !== "inline") {
         let mapLoc = commander.outFile + ".map";
         result.code = util.addSourceMappingUrl(result.code, mapLoc);
@@ -133,6 +132,7 @@ module.exports = function (commander, filenames, opts) {
     walk();
 
     if (commander.watch) {
+      let chokidar = util.requireChokidar();
       chokidar.watch(filenames, {
         persistent: true,
         ignoreInitial: true

@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es2015-spread",
-  "version": "6.3.14",
+  "version": "6.6.5",
   "description": "Compile ES2015 spread to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-spread",
   "license": "MIT",

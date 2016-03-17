@@ -19,7 +19,7 @@ function shouldShadow(path, shadowPath) {
   if (path.is("_forceShadow")) {
     return true;
   } else {
-    return shadowPath && !shadowPath.isArrowFunctionExpression();
+    return shadowPath;
   }
 }
 
@@ -29,7 +29,9 @@ function remap(path, key, create) {
   if (!shouldShadow(path, shadowPath)) return;
 
   let shadowFunction = path.node._shadowedFunctionLiteral;
+
   let currentFunction;
+  let passedShadowFunction = false;
 
   let fnPath = path.findParent(function (path) {
     if (path.isProgram() || path.isFunction()) {
@@ -38,20 +40,36 @@ function remap(path, key, create) {
     }
 
     if (path.isProgram()) {
+      passedShadowFunction = true;
+
       return true;
-    } else if (path.isFunction()) {
+    } else if (path.isFunction() && !path.isArrowFunctionExpression()) {
       if (shadowFunction) {
-        return path === shadowFunction || path.node === shadowFunction.node;
+        if (path === shadowFunction || path.node === shadowFunction.node) return true;
       } else {
-        return !path.is("shadow");
+        if (!path.is("shadow")) return true;
       }
+
+      passedShadowFunction = true;
+      return false;
     }
 
     return false;
   });
 
+  if (shadowFunction && fnPath.isProgram() && !shadowFunction.isProgram()){
+    // If the shadow wasn't found, take the closest function as a backup.
+    // This is a bit of a hack, but it will allow the parameter transforms to work properly
+    // without introducing yet another shadow-controlling flag.
+    fnPath = path.findParent((p) => p.isProgram() || p.isFunction());
+  }
+
   // no point in realiasing if we're in this function
   if (fnPath === currentFunction) return;
+
+  // If the only functions that were encountered are arrow functions, skip remapping the
+  // binding since arrow function syntax already does that.
+  if (!passedShadowFunction) return;
 
   let cached = fnPath.getData(key);
   if (cached) return path.replaceWith(cached);

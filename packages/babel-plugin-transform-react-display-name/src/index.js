@@ -53,26 +53,40 @@ export default function ({ types: t }) {
         }
       },
 
-      "AssignmentExpression|ObjectProperty|VariableDeclarator"({ node }) {
-        let left, right;
+      CallExpression(path) {
+        let { node } = path;
+        if (!isCreateClass(node)) return;
 
-        if (t.isAssignmentExpression(node)) {
-          left = node.left;
-          right = node.right;
-        } else if (t.isObjectProperty(node)) {
-          left = node.key;
-          right = node.value;
-        } else if (t.isVariableDeclarator(node)) {
-          left = node.id;
-          right = node.init;
+        let id;
+
+        // crawl up the ancestry looking for possible candidates for displayName inference
+        path.find(function (path) {
+          if (path.isAssignmentExpression()) {
+            id = path.node.left;
+          } else if (path.isObjectProperty()) {
+            id = path.node.key;
+          } else if (path.isVariableDeclarator()) {
+            id = path.node.id;
+          } else if (path.isStatement()) {
+            // we've hit a statement, we should stop crawling up
+            return true;
+          }
+
+          // we've got an id! no need to continue
+          if (id) return true;
+        });
+
+        // ensure that we have an identifier we can inherit from
+        if (!id) return;
+
+        // foo.bar -> bar
+        if (t.isMemberExpression(id)) {
+          id = id.property;
         }
 
-        if (t.isMemberExpression(left)) {
-          left = left.property;
-        }
-
-        if (t.isIdentifier(left) && isCreateClass(right)) {
-          addDisplayName(left.name, right);
+        // identifiers are the only thing we can reliably get a name from
+        if (t.isIdentifier(id)) {
+          addDisplayName(id.name, node);
         }
       }
     }

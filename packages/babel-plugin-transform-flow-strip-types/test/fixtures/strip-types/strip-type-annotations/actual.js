@@ -97,3 +97,5 @@ import type2, { foo3 } from "bar";
 import type * as namespace from "bar";
 export type { foo };
 export type { foo } from "bar";
+export interface foo { p: number }
+export interface foo<T> { p: T }

@@ -4,30 +4,32 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.test = undefined;
+/*after*/
+/*before*/require("foo"); /*after*/
 
-require("foo");
+/*before*/require("foo-bar"); /*after*/
 
-require("foo-bar");
+/*before*/require("./directory/foo-bar"); /*after*/
 
-require("./directory/foo-bar");
+var /*before*/_foo = require("foo2") /*after*/;
 
-var _foo = require("foo2");
-
+/*before*/
 var _foo2 = babelHelpers.interopRequireDefault(_foo);
 
-var _foo3 = require("foo3");
+/*after*/
+var /*before*/_foo3 = require("foo3") /*after*/;
 
-var /*after*/foo2 = babelHelpers.interopRequireWildcard(_foo3);
-/*before*/
-var _foo4 = require("foo4");
+/*before*/var /*after*/foo2 = babelHelpers.interopRequireWildcard(_foo3);
 
-var _foo5 = require("foo5");
+var /*before*/_foo4 = require("foo4") /*after*/;
 
-exports. /*after*/test = test;
+var /*before*/_foo5 = require("foo5") /*after*/;
+
+/*before*/exports. /*after*/test = test;
 var test = /*before*/exports. /*after*/test = 5;
 
-/*before*/(0, _foo4. /*after*/bar)( /*before*/_foo2.default) /*after*/;
+/*before*/(0, _foo4.bar) /*after*/( /*before*/_foo2.default /*after*/, /*before*/_foo5.foo /*after*/);
 
 /* my comment */
-/*before*/_foo5. /*after*/foo;
+/*before*/_foo5.foo; /*after*/
 /*before*/_foo2.default; /*after*/

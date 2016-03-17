@@ -1,4 +1,7 @@
+/* eslint max-len: 0 */
+
 import cloneDeep from "lodash/lang/cloneDeep";
+import assign from "lodash/object/assign";
 import has from "lodash/object/has";
 import traverse from "babel-traverse";
 import * as babylon from "babylon";
@@ -7,7 +10,7 @@ import * as t from "babel-types";
 let FROM_TEMPLATE = "_fromTemplate"; //Symbol(); // todo: probably wont get copied over
 let TEMPLATE_SKIP = Symbol();
 
-export default function (code: string): Function {
+export default function (code: string, opts?: Object): Function {
   // since we lazy parse the template, we get the current stack so we have the
   // original stack to append if it errors when parsing
   let stack;
@@ -15,17 +18,20 @@ export default function (code: string): Function {
     // error stack gets populated in IE only on throw (https://msdn.microsoft.com/en-us/library/hh699850(v=vs.94).aspx)
     throw new Error();
   } catch (error) {
-    stack = error.stack.split("\n").slice(1).join("\n")
+    if (error.stack) {
+      // error.stack does not exists in IE <= 9
+      stack = error.stack.split("\n").slice(1).join("\n");
+    }
   }
 
   let getAst = function () {
     let ast;
 
     try {
-      ast = babylon.parse(code, {
+      ast = babylon.parse(code, assign({
         allowReturnOutsideFunction: true,
         allowSuperOutsideMethod: true
-      });
+      }, opts));
 
       ast = traverse.removeProperties(ast);
 
@@ -98,6 +104,7 @@ let templateVisitor = {
   },
 
   exit({ node }) {
-    traverse.clearNode(node);
+    if (!node.loc)
+      traverse.clearNode(node);
   }
 };

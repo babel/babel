@@ -1,12 +1,14 @@
+/* eslint max-len: 0 */
+
 import template from "babel-template";
 
 let helpers = {};
 export default helpers;
 
 helpers.typeof = template(`
-  (function (obj) {
-    return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj;
-  });
+  (typeof Symbol === "function" && typeof Symbol.iterator === "symbol")
+    ? function (obj) { return typeof obj; }
+    : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 `);
 
 helpers.jsx = template(`
@@ -72,15 +74,15 @@ helpers.asyncToGenerator = template(`
           if (info.done) {
             resolve(value);
           } else {
-            Promise.resolve(value).then(function (value) {
-              step("next", value);
+            return Promise.resolve(value).then(function (value) {
+              return step("next", value);
             }, function (err) {
-              step("throw", err);
+              return step("throw", err);
             });
           }
         }
 
-        step("next");
+        return step("next");
       });
     };
   })

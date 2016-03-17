@@ -1,5 +1,3 @@
-/* @noflow */
-
 import escapeRegExp from "lodash/string/escapeRegExp";
 import startsWith from "lodash/string/startsWith";
 import isBoolean from "lodash/lang/isBoolean";
@@ -16,7 +14,7 @@ export { inherits, inspect } from "util";
  * Test if a filename ends with a compilable extension.
  */
 
-export function canCompile(filename: string, altExts?: Array<string>) {
+export function canCompile(filename: string, altExts?: Array<string>): boolean {
   let exts = altExts || canCompile.EXTENSIONS;
   let ext = path.extname(filename);
   return contains(exts, ext);

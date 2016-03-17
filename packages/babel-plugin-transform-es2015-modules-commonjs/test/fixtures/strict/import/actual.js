@@ -6,3 +6,4 @@ import * as foo4 from "foo";
 foo;
 foo2;
 foo3;
+foo3();

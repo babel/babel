@@ -218,7 +218,7 @@ export function toExpression(node: Object): Object {
   }
 }
 
-export function toBlock(node, parent: Object): Object {
+export function toBlock(node: Object, parent: Object): Object {
   if (t.isBlockStatement(node)) {
     return node;
   }

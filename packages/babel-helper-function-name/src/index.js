@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import getFunctionArity from "babel-helper-get-function-arity";
 import template from "babel-template";
 import * as t from "babel-types";
@@ -141,9 +143,13 @@ export default function ({ node, parent, scope, id }) {
       if (binding && binding.constant && scope.getBinding(id.name) === binding) {
         // always going to reference this method
         node.id = id;
+        node.id[t.NOT_LOCAL_BINDING] = true;
         return;
       }
     }
+  } else if (t.isAssignmentExpression(parent)) {
+    // foo = function () {};
+    id = parent.left;
   } else if (!id) {
     return;
   }
@@ -159,6 +165,11 @@ export default function ({ node, parent, scope, id }) {
 
   name = t.toBindingIdentifierName(name);
   id = t.identifier(name);
+
+  // The id shouldn't be considered a local binding to the function because
+  // we are simply trying to set the function name and not actually create
+  // a local binding.
+  id[t.NOT_LOCAL_BINDING] = true;
 
   let state = visit(node, name, scope);
   return wrap(state, node, id, scope) || node;

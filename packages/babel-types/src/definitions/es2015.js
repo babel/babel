@@ -1,4 +1,4 @@
-/* @flow */
+/* eslint max-len: 0 */
 
 import defineType, {
   assertNodeType,
@@ -64,6 +64,7 @@ defineType("ClassDeclaration", {
     "id",
     "body",
     "superClass",
+    "mixins",
     "typeParameters",
     "superTypeParameters",
     "implements",
@@ -153,7 +154,7 @@ defineType("ExportSpecifier", {
     local: {
       validate: assertNodeType("Identifier")
     },
-    imported: {
+    exported: {
       validate: assertNodeType("Identifier")
     }
   }
@@ -180,7 +181,10 @@ defineType("ImportDeclaration", {
   aliases: ["Statement", "Declaration", "ModuleDeclaration"],
   fields: {
     specifiers: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("ImportSpecifier", "ImportDefaultSpecifier", "ImportNamespaceSpecifier")))
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("ImportSpecifier", "ImportDefaultSpecifier", "ImportNamespaceSpecifier"))
+      )
     },
     source: {
       validate: assertNodeType("StringLiteral")

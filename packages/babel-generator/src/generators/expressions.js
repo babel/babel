@@ -1,12 +1,13 @@
-/* @flow */
+/* eslint max-len: 0 */
 
 import isInteger from "is-integer";
 import isNumber from "lodash/lang/isNumber";
 import * as t from "babel-types";
-import n from "../node";
+import * as n from "../node";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
+const NON_DECIMAL_LITERAL = /^0[box]/;
 
 export function UnaryExpression(node: Object) {
   let needsSpace = /[a-z]$/.test(node.operator);
@@ -92,6 +93,7 @@ export function Decorator(node: Object) {
 
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
+  if (node.loc) this.printAuxAfterComment();
 
   this.push("(");
 
@@ -155,7 +157,7 @@ export function AssignmentPattern(node: Object) {
 export function AssignmentExpression(node: Object, parent: Object) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
-  let parens = this._inForStatementInit && node.operator === "in" &&
+  let parens = this._inForStatementInitCounter && node.operator === "in" &&
                !n.needsParens(node, parent);
 
   if (parens) {
@@ -223,7 +225,11 @@ export function MemberExpression(node: Object) {
   } else {
     if (t.isNumericLiteral(node.object)) {
       let val = this.getPossibleRaw(node.object) || node.object.value;
-      if (isInteger(+val) && !SCIENTIFIC_NOTATION.test(val) && !ZERO_DECIMAL_INTEGER.test(val) && !this.endsWith(".")) {
+      if (isInteger(+val) &&
+        !NON_DECIMAL_LITERAL.test(val) &&
+        !SCIENTIFIC_NOTATION.test(val) &&
+        !ZERO_DECIMAL_INTEGER.test(val) &&
+        !this.endsWith(".")) {
         this.push(".");
       }
     }

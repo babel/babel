@@ -116,7 +116,7 @@ export function isNodeType(type: string): boolean {
 }
 
 /**
- * This checks whether or now we're in one of the following positions:
+ * This checks whether or not we're in one of the following positions:
  *
  *   for (KEY in right);
  *   for (KEY;;);
@@ -125,9 +125,31 @@ export function isNodeType(type: string): boolean {
  * to tell the path replacement that it's ok to replace this with an expression.
  */
 
- export function canHaveVariableDeclarationOrExpression() {
-    return (this.key === "init" || this.key === "left") && this.parentPath.isFor();
- }
+export function canHaveVariableDeclarationOrExpression() {
+  return (this.key === "init" || this.key === "left") && this.parentPath.isFor();
+}
+
+/**
+ * This checks whether we are swapping an arrow function's body between an
+ * expression and a block statement (or vice versa).
+ *
+ * This is because arrow functions may implicitly return an expression, which
+ * is the same as containing a block statement.
+ */
+
+export function canSwapBetweenExpressionAndStatement(replacement) {
+  if (this.key !== "body" || !this.parentPath.isArrowFunctionExpression()) {
+    return false;
+  }
+
+  if (this.isExpression()) {
+    return t.isBlockStatement(replacement);
+  } else if (this.isBlockStatement()) {
+    return t.isExpression(replacement);
+  }
+
+  return false;
+}
 
 /**
  * Check whether the current path references a completion record
@@ -313,7 +335,7 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
   for (let path of referencePaths) {
     // if a reference is a child of the function we're checking against then we can
     // safelty ignore it
-    let childOfFunction = !!path.find(path => path.node === targetFuncPath.node);
+    let childOfFunction = !!path.find((path) => path.node === targetFuncPath.node);
     if (childOfFunction) continue;
 
     let status = this._guessExecutionStatusRelativeTo(path);
@@ -364,7 +386,7 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
     if (binding.path !== this) {
       let ret = binding.path.resolve(dangerous, resolved);
       // If the identifier resolves to parent node then we can't really resolve it.
-      if (this.find(parent => parent.node === ret.node)) return;
+      if (this.find((parent) => parent.node === ret.node)) return;
       return ret;
     }
   } else if (this.isTypeCastExpression()) {

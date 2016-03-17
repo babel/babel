@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import { basename, extname } from "path";
 import template from "babel-template";
 
@@ -37,7 +39,7 @@ export default function ({ types: t }) {
 
     visitor: {
       Program: {
-        exit(path) {
+        exit(path, state) {
           let last = path.get("body").pop();
           if (!isValidDefine(last)) return;
 
@@ -47,6 +49,7 @@ export default function ({ types: t }) {
           let moduleName = args.length === 3 ? args.shift() : null;
           let amdArgs = call.arguments[0];
           let func = call.arguments[1];
+          let browserGlobals = state.opts.globals || {};
 
           let commonArgs = amdArgs.elements.map((arg) => {
             if (arg.value === "module" || arg.value === "exports") {
@@ -62,8 +65,11 @@ export default function ({ types: t }) {
             } else if (arg.value === "exports") {
               return t.memberExpression(t.identifier("mod"), t.identifier("exports"));
             } else {
+              let requireName = basename(arg.value, extname(arg.value));
+              let globalName = browserGlobals[requireName] || requireName;
+
               return t.memberExpression(t.identifier("global"), t.identifier(
-                t.toIdentifier(basename(arg.value, extname(arg.value)))
+                t.toIdentifier(globalName)
               ));
             }
           });

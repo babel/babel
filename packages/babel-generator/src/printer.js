@@ -1,6 +1,8 @@
+/* eslint max-len: 0 */
+
 import repeating from "repeating";
 import Buffer from "./buffer";
-import n from "./node";
+import * as n from "./node";
 import * as t from "babel-types";
 
 export default class Printer extends Buffer {
@@ -8,6 +10,7 @@ export default class Printer extends Buffer {
     super(...args);
     this.insideAux = false;
     this.printAuxAfterOnNextUserNode = false;
+    this._printStack = [];
   }
 
   print(node, parent, opts = {}) {
@@ -32,10 +35,12 @@ export default class Printer extends Buffer {
       throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
 
+    this._printStack.push(node);
+
     if (node.loc) this.printAuxAfterComment();
     this.printAuxBeforeComment(oldInAux);
 
-    let needsParens = n.needsParens(node, parent);
+    let needsParens = n.needsParens(node, parent, this._printStack);
     if (needsParens) this.push("(");
 
     this.printLeadingComments(node, parent);
@@ -46,7 +51,7 @@ export default class Printer extends Buffer {
 
     if (opts.before) opts.before();
 
-    this.map.mark(node, "start");
+    this.map.mark(node);
 
     this._print(node, parent);
 
@@ -58,7 +63,8 @@ export default class Printer extends Buffer {
     if (needsParens) this.push(")");
 
     // end
-    this.map.mark(node, "end");
+    this._printStack.pop();
+    if (parent) this.map.mark(parent);
     if (opts.after) opts.after();
 
     this.format.concise = oldConcise;
@@ -128,6 +134,10 @@ export default class Printer extends Buffer {
       after: () => {
         if (opts.iterator) {
           opts.iterator(node, i);
+        }
+
+        if (opts.separator && parent.loc) {
+          this.printAuxAfterComment();
         }
 
         if (opts.separator && i < len - 1) {
@@ -289,7 +299,7 @@ export default class Printer extends Buffer {
 
     // force a newline for line comments when retainLines is set in case the next printed node
     // doesn't catch up
-    if ((this.format.compact || this.format.retainLines) && comment.type === "CommentLine") {
+    if ((this.format.compact || this.format.concise || this.format.retainLines) && comment.type === "CommentLine") {
       val += "\n";
     }
 

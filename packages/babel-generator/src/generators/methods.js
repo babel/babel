@@ -1,12 +1,10 @@
-/* @flow */
-
 import * as t from "babel-types";
 
 export function _params(node: Object) {
   this.print(node.typeParameters, node);
   this.push("(");
   this.printList(node.params, node, {
-    iterator: (node) =>{
+    iterator: (node) => {
       if (node.optional) this.push("?");
       this.print(node.typeAnnotation, node);
     }
@@ -77,15 +75,5 @@ export function ArrowFunctionExpression(node: Object) {
 
   this.push(" => ");
 
-  const bodyNeedsParens = t.isObjectExpression(node.body);
-
-  if (bodyNeedsParens) {
-    this.push("(");
-  }
-
   this.print(node.body, node);
-
-  if (bodyNeedsParens) {
-    this.push(")");
-  }
 }

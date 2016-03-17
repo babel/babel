@@ -1,4 +1,4 @@
-let Foo = (function () {
+let Foo = function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }
@@ -10,4 +10,4 @@ let Foo = (function () {
     }
   }]);
   return Foo;
-})();
+}();

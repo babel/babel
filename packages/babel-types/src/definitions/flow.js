@@ -1,5 +1,3 @@
-/* @flow */
-
 import defineType from "./index";
 
 defineType("AnyTypeAnnotation", {
@@ -66,8 +64,24 @@ defineType("DeclareFunction", {
   }
 });
 
+defineType("DeclareInterface", {
+  visitor: ["id", "typeParameters", "extends", "body"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  }
+});
+
 defineType("DeclareModule", {
   visitor: ["id", "body"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  }
+});
+
+defineType("DeclareTypeAlias", {
+  visitor: ["id", "typeParameters", "right"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     // todo

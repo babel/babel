@@ -1,20 +1,18 @@
-"use strict";
-
 define(["exports", "foo"], function (exports, _foo) {
+  "use strict";
+
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-
-  for (let _key in _foo) {
-    if (_key === "default") continue;
-    Object.defineProperty(exports, _key, {
+  Object.keys(_foo).forEach(function (key) {
+    if (key === "default") return;
+    Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
-        return _foo[_key];
+        return _foo[key];
       }
     });
-  }
-
+  });
   Object.defineProperty(exports, "foo", {
     enumerable: true,
     get: function () {

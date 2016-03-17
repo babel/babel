@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-flow-strip-types",
-  "version": "6.3.15",
+  "version": "6.7.0",
   "description": "Strip flow type annotations from your output code.",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-flow-strip-types",
   "license": "MIT",

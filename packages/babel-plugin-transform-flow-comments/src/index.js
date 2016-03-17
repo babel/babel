@@ -33,7 +33,7 @@ export default function ({ types: t }) {
       // strip optional property from function params - facebook/fbjs#17
       Function: {
         exit({ node }) {
-          node.params.forEach(param => param.optional = false);
+          node.params.forEach((param) => param.optional = false);
         }
       },
 

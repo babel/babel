@@ -24,14 +24,14 @@ export default function ({ types: t }) {
 
     visitor: {
       ReferencedIdentifier(path, state) {
-        if (state.opts.regenerator === false) return;
-        
         let { node, parent, scope } = path;
 
-        if (node.name === "regeneratorRuntime") {
+        if (node.name === "regeneratorRuntime" && state.opts.regenerator !== false) {
           path.replaceWith(state.get("regeneratorIdentifier"));
           return;
         }
+
+        if (state.opts.polyfill === false) return;
 
         if (t.isMemberExpression(parent)) return;
         if (!has(definitions.builtins, node.name)) return;

@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import type { NodePath, Scope } from "babel-traverse";
 import optimiseCall from "babel-helper-optimise-call-expression";
 import * as messages from "babel-messages";
@@ -18,11 +20,7 @@ function isMemberExpressionSuper(node) {
 }
 
 let visitor = {
-  "ObjectMethod|ClassMethod"(path) {
-    path.skip();
-  },
-
-  "FunctionDeclaration|FunctionExpression"(path) {
+  Function(path) {
     if (!path.inShadow("this")) {
       path.skip();
     }

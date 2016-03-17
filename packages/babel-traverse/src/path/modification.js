@@ -1,6 +1,7 @@
+/* eslint max-len: 0 */
 // This file contains methods that modify the path/node in some ways.
 
-import { PATH_CACHE_KEY } from "./constants";
+import { path as pathCache } from "../cache";
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
 import * as t from "babel-types";
@@ -46,6 +47,11 @@ export function _containerInsert(from, nodes) {
 
     if (this.context) {
       let path = this.context.create(this.parent, this.container, to, this.listKey);
+
+      // While this path may have a context, there is currently no guarantee that the context
+      // will be the active context, because `popContext` may leave a final context in place.
+      // We should remove this `if` and always push once T7171 has been resolved.
+      if (this.context.queue) path.pushContext(this.context);
       paths.push(path);
     } else {
       paths.push(NodePath.get({
@@ -58,12 +64,7 @@ export function _containerInsert(from, nodes) {
     }
   }
 
-  let contexts = this.contexts;
-  let path = this;
-  while (!contexts.length) {
-    path = path.parentPath;
-    contexts = path.contexts;
-  }
+  let contexts = this._getQueueContexts();
 
   for (let path of paths) {
     path.setScope();
@@ -135,7 +136,7 @@ export function insertAfter(nodes) {
 export function updateSiblingKeys(fromIndex, incrementBy) {
   if (!this.parent) return;
 
-  let paths = this.parent[PATH_CACHE_KEY];
+  let paths = pathCache.get(this.parent);
   for (let i = 0; i < paths.length; i++) {
     let path = paths[i];
     if (path.key >= fromIndex) {

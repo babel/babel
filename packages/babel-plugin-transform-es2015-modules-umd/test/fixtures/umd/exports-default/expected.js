@@ -1,5 +1,3 @@
-"use strict";
-
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define(["exports"], factory);
@@ -13,6 +11,8 @@
     global.actual = mod.exports;
   }
 })(this, function (exports) {
+  "use strict";
+
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
@@ -25,15 +25,12 @@
   exports.default = [];
   exports.default = foo;
   exports.default = class {};
-
   function foo() {}
-
   class Foo {}
-
   exports.default = Foo;
   exports.default = foo;
 
-  exports.default = (function () {
+  exports.default = function () {
     return "foo";
-  })();
+  }();
 });

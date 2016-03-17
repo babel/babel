@@ -16,7 +16,7 @@ var _binarySerializer2 = babelHelpers.interopRequireDefault(_binarySerializer);
 
 // import ...
 
-var Connection = (function (_EventEmitter) {
+var Connection = function (_EventEmitter) {
     babelHelpers.inherits(Connection, _EventEmitter);
 
     function Connection(endpoint, joinKey, joinData, roomId) {
@@ -43,6 +43,6 @@ var Connection = (function (_EventEmitter) {
         }
     }]);
     return Connection;
-})(_events.EventEmitter);
+}(_events.EventEmitter);
 
 exports.default = Connection;

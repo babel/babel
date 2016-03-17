@@ -1,5 +1,3 @@
-/* @noflow */
-
 import toFastProperties from "to-fast-properties";
 import compact from "lodash/array/compact";
 import loClone from "lodash/lang/clone";
@@ -117,7 +115,10 @@ export function isType(nodeType: string, targetType: string): boolean {
 each(t.BUILDER_KEYS, function (keys, type) {
   function builder() {
     if (arguments.length > keys.length) {
-      throw new Error(`t.${type}: Too many arguments passed. Received ${arguments.length} but can receive no more than ${keys.length}`);
+      throw new Error(
+        `t.${type}: Too many arguments passed. Received ${arguments.length} but can receive ` +
+        `no more than ${keys.length}`
+      );
     }
 
     let node = {};
@@ -149,20 +150,20 @@ each(t.BUILDER_KEYS, function (keys, type) {
  * Description
  */
 
- for (let type in t.DEPRECATED_KEYS) {
-   let newType = t.DEPRECATED_KEYS[type];
+for (let type in t.DEPRECATED_KEYS) {
+  let newType = t.DEPRECATED_KEYS[type];
 
-   function proxy(fn) {
-     return function () {
-       console.trace(`The node type ${type} has been renamed to ${newType}`);
-       return fn.apply(this, arguments);
-     };
-   }
+  function proxy(fn) {
+    return function () {
+      console.trace(`The node type ${type} has been renamed to ${newType}`);
+      return fn.apply(this, arguments);
+    };
+  }
 
-   t[type] = t[type[0].toLowerCase() + type.slice(1)] = proxy(t[newType]);
-   t[`is${type}`] = proxy(t[`is${newType}`]);
-   t[`assert${type}`] = proxy(t[`assert${newType}`]);
- }
+  t[type] = t[type[0].toLowerCase() + type.slice(1)] = proxy(t[newType]);
+  t[`is${type}`] = proxy(t[`is${newType}`]);
+  t[`assert${type}`] = proxy(t[`assert${newType}`]);
+}
 
 /**
  * Description
@@ -236,6 +237,16 @@ export function clone(node: Object): Object {
     if (key[0] === "_") continue;
     newNode[key] = node[key];
   }
+  return newNode;
+}
+
+/**
+ * Create a shallow clone of a `node` excluding `_private` and location properties.
+ */
+
+export function cloneWithoutLoc(node: Object): Object {
+  let newNode = clone(node);
+  delete newNode.loc;
   return newNode;
 }
 
@@ -361,6 +372,12 @@ function _inheritComments(key, child, parent) {
   }
 }
 
+
+// Can't use import because of cyclic dependency between babel-traverse
+// and this module (babel-types). This require needs to appear after
+// we export the TYPES constant.
+const traverse = require("babel-traverse").default;
+
 /**
  * Inherit all contextual properties from `parent` node to `child` node.
  */
@@ -386,6 +403,7 @@ export function inherits(child: Object, parent: Object): Object {
   }
 
   t.inheritsComments(child, parent);
+  traverse.copyCache(parent, child);
 
   return child;
 }
@@ -396,6 +414,7 @@ export function inherits(child: Object, parent: Object): Object {
 
 export function assertNode(node?) {
   if (!isNode(node)) {
+    // $FlowFixMe
     throw new TypeError("Not a valid node " + (node && node.type));
   }
 }
