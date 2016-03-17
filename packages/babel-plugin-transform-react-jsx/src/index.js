@@ -37,7 +37,7 @@ export default function ({ types: t }) {
 
     state.set(
       "jsxIdentifier",
-      ()=> id.split(".").map((name) => t.identifier(name)).reduce(
+      () => id.split(".").map((name) => t.identifier(name)).reduce(
         (object, property) => t.memberExpression(object, property)
       )
     );
