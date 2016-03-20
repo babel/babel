@@ -12,8 +12,9 @@ import "babel-regenerator-runtime";
 
 import "core-js/fn/regexp/escape";
 
+let DEFINE_PROPERTY = "defineProperty";
 function define(O, key, value){
-  O[key] || Object.defineProperty(O, key, {
+  O[key] || Object[DEFINE_PROPERTY](O, key, {
     writable:     true,
     configurable: true,
     value:        value
