@@ -1,8 +1,12 @@
-import lineNumbers from "line-numbers";
+//import lineNumbers from "line-numbers";
 import repeating from "repeating";
 import jsTokens from "js-tokens";
 import esutils from "esutils";
 import chalk from "chalk";
+
+function lineNumbers(lines) {
+  return lines;
+}
 
 /**
  * Chalk styles for token types.

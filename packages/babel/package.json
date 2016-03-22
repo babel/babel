@@ -56,7 +56,6 @@
     "is-integer": "^1.0.4",
     "js-tokens": "1.0.1",
     "json5": "^0.4.0",
-    "line-numbers": "0.2.0",
     "lodash": "^3.10.0",
     "minimatch": "^2.0.3",
     "output-file-sync": "^1.1.0",
