@@ -10,7 +10,7 @@
     "babel-core": "^6.7.7",
     "babel-register": "^6.6.5",
     "babel-polyfill": "^6.6.0",
-    "babel-runtime": "^5.0.0",
+    "babel-runtime": "^6.0.0",
     "bin-version-check": "^2.1.0",
     "chalk": "1.1.1",
     "commander": "^2.8.1",
