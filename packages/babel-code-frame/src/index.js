@@ -84,7 +84,7 @@ function highlight(text: string) {
 export default function (
   rawLines: string,
   lineNumber: number,
-  colNumber: number,
+  colNumber: ?number,
   opts: Object = {},
 ): string {
   colNumber = Math.max(colNumber, 0);
