@@ -10,7 +10,7 @@
     "babel-helper-function-name": "^6.6.0",
     "babel-helper-replace-supers": "^6.6.5",
     "babel-template": "^6.6.5",
-    "babel-traverse": "^6.6.5",
+    "babel-traverse": "^6.7.4",
     "babel-helper-define-map": "^6.6.5",
     "babel-messages": "^6.6.5",
     "babel-runtime": "^5.0.0",
