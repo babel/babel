@@ -30,3 +30,11 @@ console.log(result);
     |                ^
   3 | }
 ```
+
+If the column number is not known, you may pass `null` instead.
+
+## Options
+
+name                   | type     | default         | description
+-----------------------|----------|-----------------|------------------------------------------------------
+highlightCode          | boolean  | `false`         | Syntax highlight the code as JavaScript for terminals
