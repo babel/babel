@@ -1,5 +1,3 @@
-/* eslint indent: 0 */
-
 import repeating from "repeating";
 import jsTokens from "js-tokens";
 import esutils from "esutils";
@@ -40,15 +38,15 @@ function getTokenType(match) {
 
   if (token.type === "punctuator") {
     switch (token.value) {
-      case "{":
-      case "}":
-        return "curly";
-      case "(":
-      case ")":
-        return "parens";
-      case "[":
-      case "]":
-        return "square";
+    case "{":
+    case "}":
+      return "curly";
+    case "(":
+    case ")":
+      return "parens";
+    case "[":
+    case "]":
+      return "square";
     }
   }
 
