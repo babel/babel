@@ -35,7 +35,12 @@
 
   function wrap(innerFn, outerFn, self, tryLocsList) {
     // If outerFn provided, then outerFn.prototype instanceof Generator.
-    var generator = Object.create((outerFn || Generator).prototype);
+    if(global.navigator.appName == "Microsoft Internet Explorer"){
+      //for IE8
+      var generator = Object.create(Generator.prototype)
+    }else{
+      var generator = Object.create((outerFn || Generator).prototype);
+    }
     var context = new Context(tryLocsList || []);
 
     // The ._invoke method unifies the implementations of the .next,
