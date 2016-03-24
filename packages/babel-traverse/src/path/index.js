@@ -84,18 +84,6 @@ export default class NodePath {
       }
     }
 
-    if (path && !(path instanceof NodePath)) {
-      if (path.constructor.name === "NodePath") {
-        // we're going to absolutley thrash the tree and allocate way too many node paths
-        // than is necessary but there's no way around this as the node module resolution
-        // algorithm is ridiculous
-        path = null;
-      } else {
-        // badly deserialised probably
-        throw new Error("We found a path that isn't a NodePath instance. Possibly due to bad serialisation.");
-      }
-    }
-
     if (!path) {
       path = new NodePath(hub, parent);
       paths.push(path);
