@@ -63,7 +63,7 @@ export default function (opts) {
   function convertAttribute(node) {
     let value = convertAttributeValue(node.value || t.booleanLiteral(true));
 
-    if (t.isStringLiteral(value)) {
+    if (t.isStringLiteral(value) && !t.isJSXExpressionContainer(node.value)) {
       value.value = value.value.replace(/\n\s+/g, " ");
     }
 
