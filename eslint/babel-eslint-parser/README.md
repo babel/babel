@@ -45,9 +45,9 @@ It just needs to export a `parse` method that takes in a string of code and outp
 ### Install
 
 ```sh
-$ npm install eslint@1.x babel-eslint --save-dev
+$ npm install eslint@1.x babel-eslint@5 --save-dev
 
-$ npm install eslint@2.x babel-eslint@next --save-dev
+$ npm install eslint@2.x babel-eslint@6 --save-dev
 ```
 
 ### Setup
