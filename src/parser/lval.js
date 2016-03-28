@@ -162,7 +162,14 @@ pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
       this.expect(close);
       break;
     } else {
+      let decorators = [];
+      while (this.match(tt.at)) {
+        decorators.push(this.parseDecorator());
+      }
       let left = this.parseMaybeDefault();
+      if (decorators.length) {
+        left.decorators = decorators;
+      }
       this.parseAssignableListItemTypes(left);
       elts.push(this.parseMaybeDefault(null, null, left));
     }
