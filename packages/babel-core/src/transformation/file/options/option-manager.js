@@ -419,7 +419,7 @@ export default class OptionManager {
     this.mergeOptions({
       options: opts,
       alias: "base",
-      dirname: filename && path.dirname(filename)
+      dirname: path.resolve(__dirname, '../../../../../')
     });
 
     // normalise
