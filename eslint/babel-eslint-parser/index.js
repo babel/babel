@@ -76,7 +76,6 @@ function monkeypatch() {
   var analyze = escope.analyze;
   escope.analyze = function (ast, opts) {
     opts.ecmaVersion = 6;
-    opts.sourceType = "module";
 
     var results = analyze.call(this, ast, opts);
     return results;
