@@ -2,32 +2,27 @@
 "use strict";
 var eslint = require("eslint");
 
-function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, overrideConfig) {
-  var config = {
-    parser: require.resolve(".."),
-    rules: rules,
-    env: {
-      node: true,
-      es6: true
-    },
-    parserOptions: {
-      ecmaVersion: 6,
-      ecmaFeatures: {
-        jsx: true,
-        experimentalObjectRestSpread: true,
-        globalReturn: true
+function verifyAndAssertMessages(code, rules, expectedMessages, sourceType) {
+  var messages = eslint.linter.verify(
+    code,
+    {
+      parser: require.resolve(".."),
+      rules: rules,
+      env: {
+        node: true,
+        es6: true
       },
-      sourceType: sourceType || "module"
+      parserOptions: {
+        ecmaVersion: 6,
+        ecmaFeatures: {
+          jsx: true,
+          experimentalObjectRestSpread: true,
+          globalReturn: true
+        },
+        sourceType: sourceType || "module"
+      }
     }
-  }
-
-  if (overrideConfig) {
-    for (var key in overrideConfig) {
-      config[key] = overrideConfig[key]
-    }
-  }
-
-  var messages = eslint.linter.verify(code, config);
+  );
 
   if (messages.length !== expectedMessages.length) {
     throw new Error("Expected " + expectedMessages.length + " message(s), got " + messages.length + " " + JSON.stringify(messages));
@@ -1139,32 +1134,6 @@ describe("verify", function () {
       "var unused;",
       { "no-unused-vars": 1 },
       [ "1:5 'unused' is defined but never used no-unused-vars" ]
-    );
-  });
-
-  it("no-implicit-globals in script", function () {
-    verifyAndAssertMessages(
-      "var leakedGlobal = 1;",
-      { "no-implicit-globals": 1 },
-      [ "1:5 Implicit global variable, assign as global property instead. no-implicit-globals" ],
-      "script",
-      {
-        env: {},
-        parserOptions: { ecmaVersion: 6, sourceType: "script" }
-      }
-    );
-  });
-
-  it("no-implicit-globals in module", function () {
-    verifyAndAssertMessages(
-      "var leakedGlobal = 1;",
-      { "no-implicit-globals": 1 },
-      [],
-      "module",
-      {
-        env: {},
-        parserOptions: { ecmaVersion: 6, sourceType: "module" }
-      }
     );
   });
 
