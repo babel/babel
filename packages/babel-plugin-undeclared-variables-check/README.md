@@ -20,6 +20,22 @@ $ npm install babel-plugin-undeclared-variables-check
 }
 ```
 
+You can also declare custom global variables and / or a predefined environment.
+Currently only `"node"` is implemented.
+
+```json
+{
+  "plugins": [
+    ["undeclared-variables-check", {
+      "env": "node",
+      "globals": [
+        "someExtraCustomGlobal"
+      ]
+    }]
+  ]
+}
+```
+
 ### Via CLI
 
 ```sh
