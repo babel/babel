@@ -43,9 +43,9 @@ module.exports = function (commander, filenames, opts) {
           map._mappings.add({
             generatedLine: mapping.generatedLine + offset,
             generatedColumn: mapping.generatedColumn,
-            originalLine: mapping.originalLine,
-            originalColumn: mapping.originalColumn,
-            source: sourceFilename
+            originalLine: mapping.source == null ? null : mapping.originalLine,
+            originalColumn: mapping.source == null ? null : mapping.originalColumn,
+            source: mapping.source == null ? null : sourceFilename
           });
         });
 
