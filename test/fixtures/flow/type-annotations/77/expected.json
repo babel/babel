@@ -169,7 +169,10 @@
                   },
                   "name": "bar"
                 },
-                "parenthesizedExpression": true
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 11
+                }
               },
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -201,13 +204,16 @@
                   }
                 }
               },
-              "parenthesizedExpression": true
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 10
+              }
             }
           }
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

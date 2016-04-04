@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 37,
+  "end": 39,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 37
+      "column": 39
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 37,
+    "end": 39,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 37
+        "column": 39
       }
     },
     "sourceType": "module",
@@ -31,7 +31,7 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 37,
+        "end": 39,
         "loc": {
           "start": {
             "line": 1,
@@ -39,14 +39,14 @@
           },
           "end": {
             "line": 1,
-            "column": 37
+            "column": 39
           }
         },
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 4,
-            "end": 36,
+            "end": 38,
             "loc": {
               "start": {
                 "line": 1,
@@ -54,7 +54,7 @@
               },
               "end": {
                 "line": 1,
-                "column": 36
+                "column": 38
               }
             },
             "id": {
@@ -75,44 +75,44 @@
             },
             "init": {
               "type": "ArrowFunctionExpression",
-              "start": 10,
-              "end": 36,
+              "start": 11,
+              "end": 37,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 10
+                  "column": 11
                 },
                 "end": {
                   "line": 1,
-                  "column": 36
+                  "column": 37
                 }
               },
               "returnType": {
                 "type": "TypeAnnotation",
-                "start": 21,
-                "end": 29,
+                "start": 22,
+                "end": 30,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 21
+                    "column": 22
                   },
                   "end": {
                     "line": 1,
-                    "column": 29
+                    "column": 30
                   }
                 },
                 "typeAnnotation": {
                   "type": "NumberTypeAnnotation",
-                  "start": 23,
-                  "end": 29,
+                  "start": 24,
+                  "end": 30,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 23
+                      "column": 24
                     },
                     "end": {
                       "line": 1,
-                      "column": 29
+                      "column": 30
                     }
                   }
                 }
@@ -124,16 +124,16 @@
               "params": [
                 {
                   "type": "Identifier",
-                  "start": 17,
-                  "end": 20,
+                  "start": 18,
+                  "end": 21,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 17
+                      "column": 18
                     },
                     "end": {
                       "line": 1,
-                      "column": 20
+                      "column": 21
                     }
                   },
                   "name": "bar"
@@ -141,26 +141,30 @@
               ],
               "body": {
                 "type": "Identifier",
-                "start": 33,
-                "end": 36,
+                "start": 34,
+                "end": 37,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 33
+                    "column": 34
                   },
                   "end": {
                     "line": 1,
-                    "column": 36
+                    "column": 37
                   }
                 },
                 "name": "bar"
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 10
               }
             }
           }
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }
