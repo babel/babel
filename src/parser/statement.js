@@ -224,9 +224,18 @@ pp.parseDoStatement = function (node) {
 pp.parseForStatement = function (node) {
   this.next();
   this.state.labels.push(loopLabel);
+
+  let forAwait = false;
+  if (this.hasPlugin("asyncGenerators") && this.state.inAsync && this.isContextual("await")) {
+      forAwait = true;
+      this.next();
+  }
   this.expect(tt.parenL);
 
   if (this.match(tt.semi)) {
+    if (forAwait) {
+      this.unexpected();
+    }
     return this.parseFor(node, null);
   }
 
@@ -238,10 +247,12 @@ pp.parseForStatement = function (node) {
 
     if (this.match(tt._in) || this.isContextual("of")) {
       if (init.declarations.length === 1 && !init.declarations[0].init) {
-        return this.parseForIn(node, init);
+        return this.parseForIn(node, init, forAwait);
       }
     }
-
+    if (forAwait) {
+      this.unexpected();
+    }
     return this.parseFor(node, init);
   }
 
@@ -250,9 +261,12 @@ pp.parseForStatement = function (node) {
   if (this.match(tt._in) || this.isContextual("of")) {
     this.toAssignable(init);
     this.checkLVal(init);
-    return this.parseForIn(node, init);
+    return this.parseForIn(node, init, forAwait);
   } else if (refShorthandDefaultPos.start) {
     this.unexpected(refShorthandDefaultPos.start);
+  }
+  if (forAwait) {
+    this.unexpected();
   }
   return this.parseFor(node, init);
 };
@@ -508,9 +522,15 @@ pp.parseFor = function (node, init) {
 // Parse a `for`/`in` and `for`/`of` loop, which are almost
 // same from parser's perspective.
 
-pp.parseForIn = function (node, init) {
-  let type = this.match(tt._in) ? "ForInStatement" : "ForOfStatement";
-  this.next();
+pp.parseForIn = function (node, init, forAwait) {
+  let type;
+  if (forAwait) {
+    this.eatContextual("of");
+    type = "ForAwaitStatement";
+  } else {
+    type = this.match(tt._in) ? "ForInStatement" : "ForOfStatement";
+    this.next();
+  }
   node.left = init;
   node.right = this.parseExpression();
   this.expect(tt.parenR);
