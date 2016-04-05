@@ -9,6 +9,7 @@ module.exports = {
     'object-shorthand': require('./rules/object-shorthand'),
     'arrow-parens': require('./rules/arrow-parens'),
     'no-await-in-loop': require('./rules/no-await-in-loop'),
+    'flow-object-type': require('./rules/flow-object-type'),
   },
   rulesConfig: {
     'generator-star-spacing': 0,
@@ -18,5 +19,6 @@ module.exports = {
     'object-shorthand': 0,
     'arrow-parens': 0,
     'no-await-in-loop': 0,
+    'flow-object-type': 0,
   }
 };
