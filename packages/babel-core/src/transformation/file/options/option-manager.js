@@ -33,6 +33,20 @@ function exists(filename) {
   }
 }
 
+let requireCache = {};
+
+function requireFromCache(loc) {
+  let obj = requireCache[loc];
+  if (obj) return obj;
+
+  obj = require(loc);
+
+  // remove it from the require cache so it's not observable
+  delete require.cache[loc];
+
+  return requireCache[loc] = obj;
+}
+
 type PluginObject = {
   pre?: Function;
   post?: Function;
@@ -144,7 +158,7 @@ export default class OptionManager {
       if (typeof plugin === "string") {
         let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
         if (pluginLoc) {
-          plugin = require(pluginLoc);
+          plugin = requireFromCache(pluginLoc);
         } else {
           throw new ReferenceError(messages.get("pluginUnknown", plugin, loc, i, dirname));
         }
@@ -323,7 +337,7 @@ export default class OptionManager {
       if (typeof val === "string") {
         let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
         if (presetLoc) {
-          let val = require(presetLoc);
+          let val = requireFromCache(presetLoc);
           onResolve && onResolve(val, presetLoc);
           return val;
         } else {
