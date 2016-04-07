@@ -309,7 +309,7 @@ export default class OptionManager {
         options: presetOpts,
         alias: presetLoc,
         loc: presetLoc,
-        dirname: path.dirname(presetLoc)
+        dirname: path.dirname(presetLoc || "")
       });
     });
   }
