@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.7.6 (2016-04-08)
+
+* `babel-traverse`
+  * [#3458](https://github.com/babel/babel/pull/3458): Revert PR [#3433](https://github.com/babel/babel/pull/3433) which introduced https://phabricator.babeljs.io/T7272 ([@loganfsmyth](https://github.com/loganfsmyth))
+
+
 ## 6.7.5 (2016-04-07)
 
 #### Bug Fix
