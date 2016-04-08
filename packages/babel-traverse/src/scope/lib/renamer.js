@@ -105,7 +105,7 @@ export default class Renamer {
     let { binding, oldName, newName } = this;
     let { scope, path } = binding;
 
-    let parentDeclar = path.find((path) => path.isDeclaration());
+    let parentDeclar = path.find((path) => path.isDeclaration() || path.isFunctionExpression());
     if (parentDeclar) {
       this.maybeConvertFromExportDeclaration(parentDeclar);
     }
