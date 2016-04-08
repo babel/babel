@@ -20,7 +20,6 @@ function _callee() {
           x = _context.sent;
           return _context.abrupt("return", 5);
 
-        case 4:
         case "end":
           return _context.stop();
       }
