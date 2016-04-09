@@ -1,6 +1,6 @@
 import type Position from "./position";
-import repeat from "lodash/string/repeat";
-import trimRight from "lodash/string/trimRight";
+import repeat from "lodash/repeat";
+import trimEnd from "lodash/trimEnd";
 
 /**
  * Buffer for collecting generated output.
@@ -47,7 +47,7 @@ export default class Buffer {
    */
 
   get(): string {
-    return trimRight(this.buf);
+    return trimEnd(this.buf);
   }
 
   /**

@@ -1,6 +1,6 @@
 /* eslint max-len: 0 */
 
-import repeat from "lodash/string/repeat";
+import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
 import * as t from "babel-types";

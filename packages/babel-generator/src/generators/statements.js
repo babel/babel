@@ -1,4 +1,4 @@
-import repeat from "lodash/string/repeat";
+import repeat from "lodash/repeat";
 import * as t from "babel-types";
 
 const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(["!"]);
