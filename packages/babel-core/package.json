@@ -1,6 +1,6 @@
 {
   "name": "babel-core",
-  "version": "6.7.4",
+  "version": "6.7.6",
   "description": "Babel compiler core.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -24,14 +24,14 @@
     "test": "make test"
   },
   "dependencies": {
-    "babel-code-frame": "^6.7.4",
-    "babel-generator": "^6.7.2",
+    "babel-code-frame": "^6.7.5",
+    "babel-generator": "^6.7.5",
     "babel-helpers": "^6.6.0",
     "babel-messages": "^6.7.2",
     "babel-template": "^6.7.0",
     "babel-runtime": "^5.0.0",
     "babel-register": "^6.7.2",
-    "babel-traverse": "^6.7.4",
+    "babel-traverse": "^6.7.6",
     "babel-types": "^6.7.2",
     "babylon": "^6.7.0",
     "convert-source-map": "^1.1.0",

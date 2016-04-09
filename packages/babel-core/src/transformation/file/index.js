@@ -391,7 +391,7 @@ export default class File extends Store {
           mergedGenerator.addMapping({
             source: mapping.source,
 
-            original: {
+            original: mapping.source == null ? null : {
               line: mapping.originalLine,
               column: mapping.originalColumn
             },

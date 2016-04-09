@@ -13,6 +13,38 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.7.6 (2016-04-08)
+
+* `babel-traverse`
+  * [#3458](https://github.com/babel/babel/pull/3458): Revert PR [#3433](https://github.com/babel/babel/pull/3433) which introduced https://phabricator.babeljs.io/T7272 ([@loganfsmyth](https://github.com/loganfsmyth))
+
+
+## 6.7.5 (2016-04-07)
+
+#### Bug Fix
+
+* `babel-traverse`
+  * [#3433](https://github.com/babel/babel/pull/3433): Only attempt to rename export declarations, not expressions. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+* `babel-core`/`babel-cli`
+  * [#3448](https://github.com/babel/babel/pull/3448): Make sure input to path.{dir,base}name is a string. ([@addaleax](https://github.com/addaleax))
+  * [#3451](https://github.com/babel/babel/pull/3451): Handle input sourcemaps with mappings to nothing to better support sourcemaps from other tools in a pipeline. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+* `babel-helper-builder-react-jsx`
+  * [#3444](https://github.com/babel/babel/pull/3444): Preserve whitespace in JSXExpressionContainer StringLiteral children. ([@drd](https://github.com/drd))
+
+* `babel-generator`
+  * [#3421](https://github.com/babel/babel/pull/3421): Wrap parens around default exports starting with function/class. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+#### Misc
+* `babel-plugin-transform-runtime`
+  * [#3258](https://github.com/babel/babel/pull/3258): Expanded documentation ([@trodrigues](https://github.com/trodrigues))
+  * [#3441](https://github.com/babel/babel/pull/3441): Improve babel-code-frame. Kill the line-numbers dependency. ([@lydell](https://github.com/lydell))
+
+* `babel-traverse`
+  * [#3442](https://github.com/babel/babel/pull/3442): Remove the old NodePath validation check ([@loganfsmyth](https://github.com/loganfsmyth))
+  * [#3447](https://github.com/babel/babel/pull/3447): Stop traversing when target type is found. ([@nkzawa](https://github.com/nkzawa))
+
 ## 6.7.4 (2016-03-22)
 
 #### Bug Fix
