@@ -1,6 +1,6 @@
 /* eslint max-len: 0 */
 
-import repeating from "repeating";
+import repeat from "lodash/string/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
 import * as t from "babel-types";
@@ -290,7 +290,7 @@ export default class Printer extends Buffer {
       }
 
       let indent = Math.max(this.indentSize(), column);
-      val = val.replace(/\n/g, `\n${repeating(" ", indent)}`);
+      val = val.replace(/\n/g, `\n${repeat(" ", indent)}`);
     }
 
     if (column === 0) {
