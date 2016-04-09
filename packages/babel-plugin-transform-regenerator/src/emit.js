@@ -18,12 +18,13 @@ let hasOwn = Object.prototype.hasOwnProperty;
 
 function checkAbruptReturn(stmt, contextId) {
   // Abrupt if stmt like `return context.abrupt('return', ...);`
-  return t.isReturnStatement(stmt)
+  // or; `throw ...`
+  return t.isThrowStatement(stmt) || (t.isReturnStatement(stmt)
       && t.isCallExpression(stmt.argument)
       && stmt.argument.callee.object === contextId
       && stmt.argument.callee.property.name === "abrupt"
       && t.isLiteral(stmt.argument.arguments[0])
-      && stmt.argument.arguments[0].value === "return";
+      && stmt.argument.arguments[0].value === "return");
 }
 
 function Emitter(contextId) {
