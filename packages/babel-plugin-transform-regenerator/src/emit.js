@@ -16,6 +16,17 @@ import * as util from "./util";
 
 let hasOwn = Object.prototype.hasOwnProperty;
 
+function checkAbruptReturn(stmt, contextId) {
+  // Abrupt if stmt like `return context.abrupt('return', ...);`
+  // or; `throw ...`
+  return t.isThrowStatement(stmt) || (t.isReturnStatement(stmt)
+      && t.isCallExpression(stmt.argument)
+      && stmt.argument.callee.object === contextId
+      && stmt.argument.callee.property.name === "abrupt"
+      && t.isLiteral(stmt.argument.arguments[0])
+      && stmt.argument.arguments[0].value === "return");
+}
+
 function Emitter(contextId) {
   assert.ok(this instanceof Emitter);
   t.assertIdentifier(contextId);
@@ -225,6 +236,8 @@ Ep.getDispatchLoop = function() {
   // If we encounter a break, continue, or return statement in a switch
   // case, we can skip the rest of the statements until the next case.
   let alreadyEnded = false;
+  let wasAbruptReturn = false;
+  const lastListingIndex = self.listing.length - 1;
 
   self.listing.forEach(function(stmt, i) {
     if (self.marked.hasOwnProperty(i)) {
@@ -239,17 +252,23 @@ Ep.getDispatchLoop = function() {
       if (t.isCompletionStatement(stmt))
         alreadyEnded = true;
     }
+    wasAbruptReturn = i === lastListingIndex
+      && checkAbruptReturn(stmt, self.contextId);
   });
 
   // Now that we know how many statements there will be in this.listing,
   // we can finally resolve this.finalLoc.value.
   this.finalLoc.value = this.listing.length;
 
-  cases.push(
-    t.switchCase(this.finalLoc, [
-      // Intentionally fall through to the "end" case...
-    ]),
+  if (!wasAbruptReturn) {
+    cases.push(
+      t.switchCase(this.finalLoc, [
+        // Intentionally fall through to the "end" case...
+      ])
+    );
+  }
 
+  cases.push(
     // So that the runtime can jump to the final location without having
     // to know its offset, we provide the "end" case as a synonym.
     t.switchCase(t.stringLiteral("end"), [
