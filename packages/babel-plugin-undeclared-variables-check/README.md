@@ -20,8 +20,7 @@ $ npm install babel-plugin-undeclared-variables-check
 }
 ```
 
-You can also declare custom global variables and / or a predefined environment.
-Currently only `"node"` is implemented.
+You can also declare custom global variables and / or a predefined environments.
 
 ```json
 {
@@ -29,12 +28,32 @@ Currently only `"node"` is implemented.
     ["undeclared-variables-check", {
       "env": "node",
       "globals": [
-        "someExtraCustomGlobal"
+        "myGlobalA",
+        "myGlobalB"
       ]
     }]
   ]
 }
 ```
+With multiple environments:
+```json
+{
+  "plugins": [
+    ["undeclared-variables-check", {
+      "env": ["node", "mocha"],
+      "globals": [
+        "myGlobalA",
+        "myGlobalB"
+      ]
+    }]
+  ]
+}
+```
+Under the hood this plugin uses the [globals](https://github.com/sindresorhus/globals) package to determine environment specific globals.
+
+For a complete list of supported environments visit [globals.json](https://github.com/sindresorhus/globals/blob/master/globals.json)
+
+**NOTE:** By default all environment and custom globals are cached to improve performance. If you wish to disable caching you can do this by setting `"cacheGlobals": false` in the plugin options.
 
 ### Via CLI
 

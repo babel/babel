@@ -1,34 +1,23 @@
 import leven from "leven";
+import predefinedEnvs from "globals";
 
-const envGlobals = {
-  node: [
-    "Buffer",
-    "__dirname",
-    "__filename",
-    "clearInterval",
-    "clearTimeout",
-    "console",
-    "exports",
-    "global",
-    "module",
-    "process",
-    "require",
-    "setInterval",
-    "setTimeout"
-  ]
-};
+let globals = null;
 
 export default function ({ messages }) {
   return {
     visitor: {
       ReferencedIdentifier(path, options) {
         let pluginOptions  = options.opts;
-        let envOption      = pluginOptions.env;
-        let globalsOption  = pluginOptions.globals;
-        let globals        = [];
+        let envNames       = pluginOptions.env;
+        let customGlobals  = pluginOptions.globals;
+        let cacheGlobals   = pluginOptions.cacheGlobals;
         let scope          = path.scope;
         let variableName   = path.node.name;
         let binding        = scope.getBinding(variableName);
+
+        // set default
+        if (typeof cacheGlobals === "undefined")
+          cacheGlobals = true;
 
         if (binding && binding.kind === "type" && !path.parentPath.isFlow()) {
           throw path.buildCodeFrameError(
@@ -36,38 +25,51 @@ export default function ({ messages }) {
             ReferenceError);
         }
 
-        // check for environemnt globals
-        if ( envOption ) {
-          if ( typeof envOption !== "string" )
-            throw new Error("\"env\" has to be of type string");
+        // cache globals in module scope
+        // to prevent computing the globals array
+        // on each function call
+        if ( ! cacheGlobals || (cacheGlobals && ! globals) ) {
+          globals = [];
 
-          globals = envGlobals[envOption];
+          // add environemnt globals
+          if (envNames) {
+            if (typeof envNames !== "string" && ! (envNames instanceof Array))
+              throw new Error("\"env\" has to be of type String or Array");
 
-          if ( ! globals )
-            throw new Error(
-              "\"env\": \"" + envOption + "\"" +
-              "is unkown or not yet implemented.\n" +
-              "Use the \"globals\" option to add custom globals.");
-        }
+            [].concat(envNames).forEach( (envName) => {
+              let envGlobals = predefinedEnvs[envName];
 
-        // add custom global variables
-        if ( globalsOption ) {
-          if ( ! (globalsOption instanceof Array) )
-            throw new Error("\"globals\" has to be an array");
+              if ( ! envGlobals )
+                throw new Error([
+                  "Unkown environment \"" + envName + "\".\n",
+                  "Supported environments:",
+                  Object.keys(predefinedEnvs).map( (w) => "\t" + w ).join("\n"),
+                  "\nFor more details visit:\n",
+                  "\thttps://github.com/sindresorhus/globals\n",
+                  "or use the \"globals\" option to add custom globals."
+                ].join("\n"));
 
-          globals = globals.concat(globalsOption);
+              globals = globals.concat( Object.keys(envGlobals) );
+            });
+          }
+
+          // add custom globals
+          if (customGlobals) {
+            if ( ! (customGlobals instanceof Array) )
+              throw new Error("\"globals\" has to be an array");
+
+            globals = globals.concat( customGlobals );
+          }
         }
 
         if (scope.hasBinding(variableName) ||
-            globals.indexOf(variableName) !== -1 ) return;
+            globals.indexOf(variableName) !== -1) return;
 
         // get the closest declaration to offer as a suggestion
         // the variable name may have just been mistyped
-
-        let bindings = scope.getAllBindings();
-
         let closest;
         let shortest = -1;
+        let bindings = scope.getAllBindings();
 
         for (let name in bindings) {
           let distance = leven(variableName, name);
@@ -84,8 +86,6 @@ export default function ({ messages }) {
         } else {
           msg = messages.get("undeclaredVariable", variableName);
         }
-
-        //
 
         throw path.buildCodeFrameError(msg, ReferenceError);
       }
