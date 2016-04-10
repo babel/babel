@@ -717,9 +717,30 @@ export default function (instance) {
     };
   });
 
+  instance.extend("parseConditional", function (inner) {
+    return function (expr, noIn, startPos, startLoc, refNeedsArrowPos) {
+      const state = this.state.clone();
+      try {
+        return inner.call(this, expr, noIn, startPos, startLoc);
+      } catch (err) {
+        if (refNeedsArrowPos && err instanceof SyntaxError) {
+          this.state = state;
+          refNeedsArrowPos.start = this.state.start;
+          return expr;
+        } else {
+          throw err;
+        }
+      }
+    };
+  });
+
   instance.extend("parseParenItem", function () {
     return function (node, startLoc, startPos, forceArrow?) {
       let canBeArrow = this.state.potentialArrowAt = startPos;
+      if (this.eat(tt.question)) {
+        node.optional = true;
+      }
+
       if (this.match(tt.colon)) {
         let typeCastNode = this.startNodeAt(startLoc, startPos);
         typeCastNode.expression = node;
