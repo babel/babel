@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "mappings": "AAAA;SAAgB,A,AAAC,E;CAAP",
+  "mappings": "AAAA,UAAU;SAAM,A,AAAC;A",
   "names": [],
   "sources": [
     "original.js"
