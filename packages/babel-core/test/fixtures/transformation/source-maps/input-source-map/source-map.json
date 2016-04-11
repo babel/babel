@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "mappings": "AAAA,UAAU;SAAM,A,AAAC;A",
+  "mappings": "AAAA,UAAU,Y;SAAM,A;AAAC",
   "names": [],
   "sources": [
     "original.js"
