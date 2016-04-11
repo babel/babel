@@ -88,7 +88,7 @@ export default class ClassTransformer {
     this.classId = this.node.id;
 
     // this is the name of the binding that will **always** reference the class we've constructed
-    this.classRef = this.node.id || this.scope.generateUidIdentifier("class");
+    this.classRef = this.node.id ? t.identifier(this.node.id.name) : this.scope.generateUidIdentifier("class");
 
     this.superName = this.node.superClass || t.identifier("Function");
     this.isDerived = !!this.node.superClass;
