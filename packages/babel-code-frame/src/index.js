@@ -1,4 +1,3 @@
-import repeating from "repeating";
 import jsTokens from "js-tokens";
 import esutils from "esutils";
 import chalk from "chalk";
@@ -100,9 +99,11 @@ export default function (
     let paddedNumber = ` ${number}`.slice(-numberMaxWidth);
     let gutter = ` ${paddedNumber} | `;
     if (number === lineNumber) {
-      let markerLine = colNumber
-        ? `\n ${gutter.replace(/\d/g, " ")}${repeating(" ", colNumber - 1)}^`
-        : "";
+      let markerLine = "";
+      if (colNumber) {
+        let markerSpacing = line.slice(0, colNumber - 1).replace(/[^\t]/g, " ");
+        markerLine =`\n ${gutter.replace(/\d/g, " ")}${markerSpacing}^`;
+      }
       return `>${gutter}${line}${markerLine}`;
     } else {
       return ` ${gutter}${line}`;
