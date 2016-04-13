@@ -72,6 +72,24 @@ function buildVar(namespace, builder) {
   return t.program(body);
 }
 
+function buildExport(whitelist) {
+
+  let body = [];
+  each(helpers.list, function (name) {
+    if (whitelist && whitelist.indexOf(name) < 0) return;
+
+    let key = t.identifier(name);
+    body.push(
+      t.exportNamedDeclaration(
+        t.variableDeclaration("var", [
+          t.variableDeclarator(key, helpers.get(name))
+        ]),
+      [])
+    );
+  });
+  return t.program(body);
+}
+
 function buildHelpers(body, namespace, whitelist) {
   each(helpers.list, function (name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
@@ -84,7 +102,7 @@ function buildHelpers(body, namespace, whitelist) {
 }
 export default function (
   whitelist?: Array<string>,
-  outputType: "global" | "umd" | "var" = "global",
+  outputType: "export" | "global" | "umd" | "var" = "global",
 ) {
   let namespace = t.identifier("babelHelpers");
 
@@ -95,6 +113,7 @@ export default function (
   let tree;
 
   let build = {
+    export: function(){ return buildExport(whitelist); },
     global: buildGlobal,
     umd:    buildUmd,
     var:    buildVar,
