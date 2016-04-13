@@ -75,18 +75,33 @@ function buildVar(namespace, builder) {
 function buildExport(whitelist) {
 
   let body = [];
+  let exports = [];
+
   each(helpers.list, function (name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
 
     let key = t.identifier(name);
+    let _key = t.identifier("_" + name);
+
+    exports.push(t.exportSpecifier(_key, key));
+
     body.push(
-      t.exportNamedDeclaration(
-        t.variableDeclaration("var", [
-          t.variableDeclarator(key, helpers.get(name))
-        ]),
-      [])
+      t.variableDeclaration("var", [
+        t.variableDeclarator(_key, helpers.get(name))
+      ])
     );
   });
+
+  if (exports.length) {
+    body.push(
+      t.exportNamedDeclaration(
+        null,
+        exports,
+        null
+      )
+    );
+  }
+
   return t.program(body);
 }
 

@@ -521,14 +521,15 @@ suite("api", function () {
     });
 
     test("output export", function () {
-      var script = buildExternalHelpers(["inherits"], "export");
-      assert.ok(script.indexOf("export var inherits") >= 0);
+      var script = buildExternalHelpers(["extends"], "export");
+      assert.ok(script.indexOf("var _extends = ") >= 0);
+      assert.ok(script.indexOf("export { _extends as extends };") >= 0);
     });
 
     test("output var", function () {
-      var script = buildExternalHelpers(["inherits"], "var");
+      var script = buildExternalHelpers(["extends"], "var");
       assert.ok(script.indexOf("var babelHelpers = {};") >= 0);
-      assert.ok(script.indexOf("babelHelpers.inherits = ") >= 0);
+      assert.ok(script.indexOf("babelHelpers.extends = ") >= 0);
     });
   });
 });
