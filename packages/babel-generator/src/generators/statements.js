@@ -34,7 +34,7 @@ export function IfStatement(node: Object) {
   }
 
   if (node.alternate) {
-    if (this.isLast("}")) this.space();
+    if (this.endsWith("}")) this.space();
     this.push("else ");
     this.printAndIndentOnComments(node.alternate, node);
   }

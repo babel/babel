@@ -290,7 +290,7 @@ export default class Printer extends Buffer {
       let column = this.position.column;
       let val    = this.generateComment(comment);
 
-      if (column && !this.isLast(["\n", " ", "[", "{"])) {
+      if (column && !this.endsWith(["\n", " ", "[", "{"])) {
         this._push(" ");
         column++;
       }
