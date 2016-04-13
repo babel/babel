@@ -131,13 +131,13 @@ export default class Buffer {
   }
 
   /**
-   * Add a space to the buffer unless it is compact (override with force).
+   * Add a space to the buffer unless it is compact.
    */
 
-  space(force?: boolean) {
-    if (!force && this.format.compact) return;
+  space() {
+    if (this.format.compact) return;
 
-    if (force || this.buf && !this.isLast(" ") && !this.isLast("\n")) {
+    if (this.buf && !this.isLast(" ") && !this.isLast("\n")) {
       this.push(" ");
     }
   }
