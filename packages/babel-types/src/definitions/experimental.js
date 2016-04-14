@@ -11,6 +11,22 @@ defineType("AwaitExpression", {
   }
 });
 
+defineType("ForAwaitStatement", {
+  visitor: ["left", "right", "body"],
+  aliases: ["Scopable", "Statement", "For", "BlockParent", "Loop", "ForXStatement"],
+  fields: {
+    left: {
+      validate: assertNodeType("VariableDeclaration", "LVal")
+    },
+    right: {
+      validate: assertNodeType("Expression")
+    },
+    body: {
+      validate: assertNodeType("Statement")
+    }
+  }
+});
+
 defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],

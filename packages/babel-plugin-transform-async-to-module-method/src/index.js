@@ -8,10 +8,9 @@ export default function () {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
 
-        remapAsyncToGenerator(
-          path,
-          state.addImport(state.opts.module, state.opts.method)
-        );
+        remapAsyncToGenerator(path, state.file, {
+          wrapAsync: state.addImport(state.opts.module, state.opts.method)
+        });
       }
     }
   };

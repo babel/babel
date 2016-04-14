@@ -10,6 +10,7 @@
   "dependencies": {
     "babel-plugin-syntax-trailing-function-commas": "^6.3.13",
     "babel-plugin-transform-object-rest-spread": "^6.3.13",
+    "babel-plugin-transform-async-generator-functions": "^6.7.4",
     "babel-preset-stage-3": "^6.3.13"
   }
 }
