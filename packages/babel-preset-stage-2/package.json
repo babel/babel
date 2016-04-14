@@ -8,6 +8,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-2",
   "main": "lib/index.js",
   "dependencies": {
+    "babel-plugin-transform-async-generator-functions": "^6.7.4",
     "babel-plugin-transform-class-properties": "^6.3.13",
     "babel-plugin-transform-decorators": "^6.13.0",
     "babel-plugin-transform-object-rest-spread": "^6.3.13",

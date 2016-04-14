@@ -84,7 +84,13 @@ let buildForXStatement = function (op) {
   return function (node: Object) {
     this.word("for");
     this.space();
+    if (op === "await") {
+      this.word("await");
+      this.space();
+      op = "of";
+    }
     this.token("(");
+
     this.print(node.left, node);
     this.space();
     this.word(op);
@@ -97,6 +103,7 @@ let buildForXStatement = function (op) {
 
 export let ForInStatement = buildForXStatement("in");
 export let ForOfStatement = buildForXStatement("of");
+export let ForAwaitStatement = buildForXStatement("await");
 
 export function DoWhileStatement(node: Object) {
   this.word("do");
