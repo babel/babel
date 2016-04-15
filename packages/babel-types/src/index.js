@@ -26,7 +26,27 @@ function registerType(type: string) {
 
 //
 
-export * from "./constants";
+export {
+  STATEMENT_OR_BLOCK_KEYS,
+  FLATTENABLE_KEYS,
+  FOR_INIT_KEYS,
+  COMMENT_KEYS,
+  LOGICAL_OPERATORS,
+  UPDATE_OPERATORS,
+  BOOLEAN_NUMBER_BINARY_OPERATORS,
+  EQUALITY_BINARY_OPERATORS,
+  COMPARISON_BINARY_OPERATORS,
+  BOOLEAN_BINARY_OPERATORS,
+  NUMBER_BINARY_OPERATORS,
+  BINARY_OPERATORS,
+  BOOLEAN_UNARY_OPERATORS,
+  NUMBER_UNARY_OPERATORS,
+  STRING_UNARY_OPERATORS,
+  UNARY_OPERATORS,
+  INHERIT_KEYS,
+  BLOCK_SCOPED_SYMBOL,
+  NOT_LOCAL_BINDING
+} from "./constants";
 
 import "./definitions/init";
 import { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS } from "./definitions";
@@ -436,7 +456,37 @@ toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
 
 //
-export * from "./retrievers";
-export * from "./validators";
-export * from "./converters";
-export * from "./flow";
+export {
+  getBindingIdentifiers,
+  getOuterBindingIdentifiers
+} from "./retrievers";
+
+export {
+  isBinding,
+  isReferenced,
+  isValidIdentifier,
+  isLet,
+  isBlockScoped,
+  isVar,
+  isSpecifierDefault,
+  isScope,
+  isImmutable
+} from "./validators";
+
+export {
+  toComputedKey,
+  toSequenceExpression,
+  toKeyAlias,
+  toIdentifier,
+  toBindingIdentifierName,
+  toStatement,
+  toExpression,
+  toBlock,
+  valueToNode
+} from "./converters";
+
+export {
+  createUnionTypeAnnotation,
+  removeTypeDuplicates,
+  createTypeAnnotationBasedOnTypeof
+} from "./flow";
