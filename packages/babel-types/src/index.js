@@ -12,9 +12,12 @@ let t = exports;
  */
 
 function registerType(type: string) {
-  let is = t[`is${type}`] = function (node, opts) {
-    return t.is(type, node, opts);
-  };
+  let is = t[`is${type}`];
+  if (!is) {
+    is = t[`is${type}`] = function (node, opts) {
+      return t.is(type, node, opts);
+    };
+  }
 
   t[`assert${type}`] = function (node, opts) {
     opts = opts || {};
