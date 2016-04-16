@@ -22,8 +22,13 @@
 
 <p align="center">Bugs and feature requests should be posted at <a href="https://phabricator.babeljs.io/">phabricator.babeljs.io</a>.</p>
 
-> You can directly translate a github issue to phabricator.
-> e.g. The 6.0 issue is #2168. Just add a T before and you will get: https://phabricator.babeljs.io/T2168
+> You can directly translate a github issue to phabricator; just add a T to the beginning of the issue.
+
+```
+https://phabricator.babeljs.io/T2168
+corresponds to
+https://github.com/babel/babel/issues/2168
+```
 
 ## Want to report an issue with [babeljs.io](https://babeljs.io)?
 
