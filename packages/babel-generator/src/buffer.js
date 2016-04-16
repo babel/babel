@@ -224,8 +224,10 @@ export default class Buffer {
   _removeSpacesAfterLastNewline() {
     let lastNewlineIndex = this.buf.lastIndexOf("\n");
     if (lastNewlineIndex >= 0 && this.get().length <= lastNewlineIndex) {
+      let toRemove = this.buf.slice(lastNewlineIndex + 1);
       this.buf = this.buf.substring(0, lastNewlineIndex + 1);
       this.last = "\n";
+      this.position.unshift(toRemove);
     }
   }
 
