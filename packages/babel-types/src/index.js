@@ -96,6 +96,10 @@ export function is(type: string, node: Object, opts?: Object): boolean {
 export function isType(nodeType: string, targetType: string): boolean {
   if (nodeType === targetType) return true;
 
+  // This is a fast-path. If the test above failed, but an alias key is found, then the
+  // targetType was a primary node type, so there's no need to check the aliases.
+  if (t.ALIAS_KEYS[targetType]) return false;
+
   let aliases: ?Array<string> = t.FLIPPED_ALIAS_KEYS[targetType];
   if (aliases) {
     if (aliases[0] === nodeType) return true;
