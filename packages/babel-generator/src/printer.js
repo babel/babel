@@ -211,7 +211,17 @@ export default class Printer extends Buffer {
   }
 
   _printNewline(leading, node, parent, opts) {
+    // Fast path since 'this.newline' does nothing when not tracking lines.
+    if (this.format.retainLines || this.format.compact) return;
+
     if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
+      return;
+    }
+
+    // Fast path for concise since 'this.newline' just inserts a space when
+    // concise formatting is in use.
+    if (this.format.concise) {
+      this.space();
       return;
     }
 
