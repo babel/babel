@@ -182,11 +182,11 @@ export default class Printer extends Buffer {
   }
 
   printTrailingComments(node, parent) {
-    this.printComments(this.getComments("trailingComments", node, parent));
+    this.printComments(this.getComments(false, node, parent));
   }
 
   printLeadingComments(node, parent) {
-    this.printComments(this.getComments("leadingComments", node, parent));
+    this.printComments(this.getComments(true, node, parent));
   }
 
   printInnerComments(node, indent = true) {
@@ -250,8 +250,10 @@ export default class Printer extends Buffer {
     this.newline(lines);
   }
 
-  getComments(key, node) {
-    return (node && node[key]) || [];
+  getComments(leading, node) {
+    // Note, we use a boolean flag here instead of passing in the attribute name as it is faster
+    // because this is called extremely frequently.
+    return (node && (leading ? node.leadingComments : node.trailingComments)) || [];
   }
 
   shouldPrintComment(comment) {
