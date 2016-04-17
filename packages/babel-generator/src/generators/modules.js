@@ -54,7 +54,7 @@ function ExportDeclaration(node: Object) {
   if (node.declaration) {
     let declar = node.declaration;
     this.print(declar, node);
-    if (!(t.isStatement(declar) || t.isFunction(declar) || t.isClass(declar))) this.semicolon();
+    if (!t.isStatement(declar)) this.semicolon();
   } else {
     if (node.exportKind === "type") {
       this.push("type ");
