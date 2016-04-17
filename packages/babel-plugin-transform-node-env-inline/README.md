@@ -35,9 +35,19 @@ $ npm install babel-plugin-transform-node-env-inline
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-node-env-inline"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-node-env-inline", {
+      "default": "development"
+    }]
+  ]
 }
 ```
 
