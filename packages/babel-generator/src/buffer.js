@@ -249,6 +249,8 @@ export default class Buffer {
    */
 
   withSource(prop: string, loc: Location, cb: () => void) {
+    if (!this.opts.sourceMaps) return cb();
+
     // Use the call stack to manage a stack of "source location" data.
     let originalLine = this._sourcePosition.line;
     let originalColumn = this._sourcePosition.column;
@@ -310,7 +312,7 @@ export default class Buffer {
     }
 
     // If there the line is ending, adding a new mapping marker is redundant
-    if (str[0] !== "\n") this.map.mark(this._sourcePosition);
+    if (this.opts.sourceMaps && str[0] !== "\n") this.map.mark(this._sourcePosition);
 
     //
     this.position.push(str);
