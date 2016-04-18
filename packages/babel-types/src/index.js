@@ -3,6 +3,7 @@ import compact from "lodash/array/compact";
 import loClone from "lodash/lang/clone";
 import each from "lodash/collection/each";
 import uniq from "lodash/array/uniq";
+import traverse from "babel-traverse";
 
 let t = exports;
 
@@ -398,12 +399,6 @@ function _inheritComments(key, child, parent) {
     child[key] = uniq(compact([].concat(child[key], parent[key])));
   }
 }
-
-
-// Can't use import because of cyclic dependency between babel-traverse
-// and this module (babel-types). This require needs to appear after
-// we export the TYPES constant.
-const traverse = require("babel-traverse").default;
 
 /**
  * Inherit all contextual properties from `parent` node to `child` node.
