@@ -287,13 +287,10 @@ export default class Printer extends Buffer {
       // whitespace before
       this.newline(this.whitespace.getNewlinesBefore(comment));
 
+      if (!this.endsWith(["[", "{"])) this.space();
+
       let column = this.position.column;
       let val    = this.generateComment(comment);
-
-      if (column && !this.endsWith(["\n", " ", "[", "{"])) {
-        this._push(" ");
-        column++;
-      }
 
       //
       if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
