@@ -20,6 +20,14 @@ Contributions are always welcome, no matter how large or small. Before
 contributing, please read the
 [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
 
+## Not sure where to start?
+
+- If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
+  - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): Our current [spec](https://github.com/babel/babel/tree/master/doc/ast) is a bit different from [ESTree](https://github.com/estree/estree).
+  - [`/doc`](/doc) for notes on babel internals
+  - Check out [the babel plugin handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook). Core babel plugins are written the same way as any other plugin!
+  - Checkout [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or making your own plugin live
+
 ## Developing
 
 **Note:** Versions `< 5.1.10` can't be built. Make sure you are on npm 3.
@@ -138,7 +146,3 @@ For `babylon` specifically, you can easily generate an `expected.json` automatic
             - actual.js
             - expected.json (will be generated if not created)
 ```
-
-#### Internals
-
-Please see [`/doc`](/doc) for internals documentation relevant to developing babel.
