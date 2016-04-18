@@ -1,4 +1,5 @@
 {
+  "root": true,
   "rules": {
     "strict": 0,
     "no-underscore-dangle": 0,
