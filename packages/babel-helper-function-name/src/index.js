@@ -131,9 +131,12 @@ export default function ({ node, parent, scope, id }) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
+  let shouldRename = false;
+
   if ((t.isObjectProperty(parent) || t.isObjectMethod(parent, { kind: "method" })) && (!parent.computed || t.isLiteral(parent.key))) {
     // { foo() {} };
     id = parent.key;
+    shouldRename = true;
   } else if (t.isVariableDeclarator(parent)) {
     // let foo = function () {};
     id = parent.id;
@@ -164,7 +167,7 @@ export default function ({ node, parent, scope, id }) {
   }
 
   name = t.toBindingIdentifierName(name);
-  id = t.identifier(name);
+  id = shouldRename ? scope.generateUidIdentifier(name) : t.identifier(name);
 
   // The id shouldn't be considered a local binding to the function because
   // we are simply trying to set the function name and not actually create
