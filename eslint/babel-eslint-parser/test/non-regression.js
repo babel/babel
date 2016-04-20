@@ -2,27 +2,32 @@
 "use strict";
 var eslint = require("eslint");
 
-function verifyAndAssertMessages(code, rules, expectedMessages, sourceType) {
-  var messages = eslint.linter.verify(
-    code,
-    {
-      parser: require.resolve(".."),
-      rules: rules,
-      env: {
-        node: true,
-        es6: true
+function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, overrideConfig) {
+  var config = {
+    parser: require.resolve(".."),
+    rules: rules,
+    env: {
+      node: true,
+      es6: true
+    },
+    parserOptions: {
+      ecmaVersion: 6,
+      ecmaFeatures: {
+        jsx: true,
+        experimentalObjectRestSpread: true,
+        globalReturn: true
       },
-      parserOptions: {
-        ecmaVersion: 6,
-        ecmaFeatures: {
-          jsx: true,
-          experimentalObjectRestSpread: true,
-          globalReturn: true
-        },
-        sourceType: sourceType || "module"
-      }
+      sourceType: sourceType
     }
-  );
+  };
+
+  if (overrideConfig) {
+    for (var key in overrideConfig) {
+      config[key] = overrideConfig[key]
+    }
+  }
+
+  var messages = eslint.linter.verify(code, config);
 
   if (messages.length !== expectedMessages.length) {
     throw new Error("Expected " + expectedMessages.length + " message(s), got " + messages.length + " " + JSON.stringify(messages));
@@ -1359,6 +1364,67 @@ describe("verify", function () {
       ].join("\n"),
       { "no-unused-vars": 1, "no-shadow": 1 },
       []
+    );
+  });
+
+  it("correctly detects redeclares if in script mode #217", function () {
+    verifyAndAssertMessages([
+        "var a = 321;",
+        "var a = 123;",
+      ].join("\n"),
+      { "no-redeclare": 1 },
+      [ "2:5 'a' is already defined no-redeclare" ],
+      "script"
+    );
+  });
+
+  it("correctly detects redeclares if in module mode #217", function () {
+    verifyAndAssertMessages([
+        "var a = 321;",
+        "var a = 123;",
+      ].join("\n"),
+      { "no-redeclare": 1 },
+      [ "2:5 'a' is already defined no-redeclare" ],
+      "module"
+    );
+  });
+
+  it("no-implicit-globals in script", function () {
+    verifyAndAssertMessages(
+      "var leakedGlobal = 1;",
+      { "no-implicit-globals": 1 },
+      [ "1:5 Implicit global variable, assign as global property instead. no-implicit-globals" ],
+      "script",
+      {
+        env: {},
+        parserOptions: { ecmaVersion: 6, sourceType: "script" }
+      }
+    );
+  });
+
+  it("no-implicit-globals in module", function () {
+    verifyAndAssertMessages(
+      "var leakedGlobal = 1;",
+      { "no-implicit-globals": 1 },
+      [],
+      "module",
+      {
+        env: {},
+        parserOptions: { ecmaVersion: 6, sourceType: "module" }
+      }
+    );
+  });
+
+  it("no-implicit-globals in default", function () {
+    verifyAndAssertMessages(
+      "var leakedGlobal = 1;",
+      { "no-implicit-globals": 1 },
+      [],
+      null,
+      {
+        env: {},
+        parserOptions: { ecmaVersion: 6 }
+      }
     );
   });
 

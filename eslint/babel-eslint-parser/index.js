@@ -10,6 +10,7 @@ var traverse       = require("babel-traverse").default;
 
 var estraverse;
 var hasPatched = false;
+var eslintOptions = {};
 
 function createModule(filename) {
   var mod = new Module(filename);
@@ -75,8 +76,11 @@ function monkeypatch() {
   var escope  = require(escopeLoc);
   var analyze = escope.analyze;
   escope.analyze = function (ast, opts) {
-    opts.ecmaVersion = 6;
-    opts.sourceType = "module";
+    opts.ecmaVersion = eslintOptions.ecmaVersion;
+    opts.sourceType = eslintOptions.sourceType;
+    if (eslintOptions.globalReturn !== undefined) {
+      opts.nodejsScope = eslintOptions.globalReturn;
+    }
 
     var results = analyze.call(this, ast, opts);
     return results;
@@ -353,6 +357,13 @@ function monkeypatch() {
 
 exports.parse = function (code, options) {
   options = options || {};
+  eslintOptions.ecmaVersion = options.ecmaVersion = options.ecmaVersion || 6;
+  eslintOptions.sourceType = options.sourceType = options.sourceType || "module";
+  if (options.sourceType === "module") {
+    eslintOptions.globalReturn = false;
+  } else {
+    delete eslintOptions.globalReturn;
+  }
 
   try {
     monkeypatch();
@@ -366,7 +377,7 @@ exports.parse = function (code, options) {
 
 exports.parseNoPatch = function (code, options) {
   var opts = {
-    sourceType: options.sourceType || "module",
+    sourceType: options.sourceType,
     strictMode: true,
     allowImportExportEverywhere: false, // consistent with espree
     allowReturnOutsideFunction: true,
