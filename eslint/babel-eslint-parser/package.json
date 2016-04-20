@@ -22,8 +22,8 @@
     "bootstrap": "git submodule update --init && cd eslint && npm install",
     "eslint": "cd eslint && mocha -c tests/lib/rules/*.js -r ../eslint-tester.js",
     "test": "mocha",
-    "lint": "node node_modules/eslint/bin/eslint.js index.js babylon-to-espree test",
-    "fix": "node node_modules/eslint/bin/eslint.js index.js babylon-to-espree test --fix",
+    "lint": "eslint index.js babylon-to-espree test",
+    "fix": "eslint index.js babylon-to-espree test --fix",
     "preversion": "npm test"
   },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
