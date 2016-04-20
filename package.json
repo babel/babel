@@ -46,12 +46,10 @@
   "babel": {
     "presets": ["stage-0", "es2015-loose"],
     "plugins": [
-        "transform-runtime",
-        "transform-class-properties",
-        "transform-flow-strip-types"
-    ],
-    "ignore": [
-      "packages/babel-cli/src/babel-plugin/templates"
+      "./scripts/add-module-exports",
+      "transform-runtime",
+      "transform-class-properties",
+      "transform-flow-strip-types"
     ],
     "env": {
       "test": {
