@@ -1,4 +1,4 @@
-import repeating from "repeating";
+import repeat from "lodash/string/repeat";
 import * as t from "babel-types";
 
 const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(["!"]);
@@ -231,7 +231,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
 
   let sep;
   if (!this.format.compact && !this.format.concise && hasInits && !this.format.retainLines) {
-    sep = `,\n${repeating(" ", node.kind.length + 1)}`;
+    sep = `,\n${repeat(" ", node.kind.length + 1)}`;
   }
 
   //
