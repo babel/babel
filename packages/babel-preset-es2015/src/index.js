@@ -1,9 +1,16 @@
+<<<<<<< HEAD:packages/babel-preset-es2015/src/index.js
 module.exports = function(context, opts) {
   const moduleTypes = ["commonjs", "amd", "umd", "systemjs"];
   let loose = false;
   let modules = "commonjs";
 
   if (opts !== undefined) {
+=======
+module.exports = function(opts){
+  let loose = false;
+  let modules = true;
+  if (opts !== undefined){
+>>>>>>> 56a3ede... babel-preset-env:packages/babel-preset-es2015/index.js
     if (opts.loose !== undefined) loose = opts.loose;
     if (opts.modules !== undefined) modules = opts.modules;
   }
