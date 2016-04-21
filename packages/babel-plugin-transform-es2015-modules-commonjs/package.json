@@ -1,12 +1,12 @@
 {
   "name": "babel-plugin-transform-es2015-modules-commonjs",
-  "version": "6.7.4",
+  "version": "6.7.7",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-modules-commonjs",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-types": "^6.7.0",
+    "babel-types": "^6.7.7",
     "babel-runtime": "^5.0.0",
     "babel-template": "^6.7.0",
     "babel-plugin-transform-strict-mode": "^6.6.5"

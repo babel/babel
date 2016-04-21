@@ -1,13 +1,13 @@
 {
   "name": "babel-cli",
-  "version": "6.7.5",
+  "version": "6.7.7",
   "description": "Babel command line.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-cli",
   "dependencies": {
-    "babel-core": "^6.7.5",
+    "babel-core": "^6.7.7",
     "babel-register": "^6.6.5",
     "babel-polyfill": "^6.6.0",
     "babel-runtime": "^5.0.0",
