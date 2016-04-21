@@ -19,6 +19,13 @@ export default class Buffer {
     // to make sure that v8 doesn't "flatten" the string more often than needed
     // see https://github.com/babel/babel/pull/3283 for details.
     this.last = "";
+
+    this.map = null;
+    this._sourcePosition = {
+      line: null,
+      column: null,
+      filename: null,
+    };
   }
 
   printedCommentStarts: Object;
@@ -231,6 +238,40 @@ export default class Buffer {
   }
 
   /**
+   * Sets a given position as the current source location so generated code after this call
+   * will be given this position in the sourcemap.
+   */
+
+  source(prop: string, loc: Location) {
+    if (prop && !loc) return;
+
+    let pos = loc ? loc[prop] : null;
+
+    this._sourcePosition.line = pos ? pos.line : null;
+    this._sourcePosition.column = pos ? pos.column : null;
+    this._sourcePosition.filename = loc && loc.filename || null;
+  }
+
+  /**
+   * Call a callback with a specific source location and restore on completion.
+   */
+
+  withSource(prop: string, loc: Location, cb: () => void) {
+    // Use the call stack to manage a stack of "source location" data.
+    let originalLine = this._sourcePosition.line;
+    let originalColumn = this._sourcePosition.column;
+    let originalFilename = this._sourcePosition.filename;
+
+    this.source(prop, loc);
+
+    cb();
+
+    this._sourcePosition.line = originalLine;
+    this._sourcePosition.column = originalColumn;
+    this._sourcePosition.filename = originalFilename;
+  }
+
+  /**
    * Push a string to the buffer, maintaining indentation and newlines.
    */
 
@@ -275,6 +316,9 @@ export default class Buffer {
         break;
       }
     }
+
+    // If there the line is ending, adding a new mapping marker is redundant
+    if (str[0] !== "\n") this.map.mark(this._sourcePosition);
 
     //
     this.position.push(str);

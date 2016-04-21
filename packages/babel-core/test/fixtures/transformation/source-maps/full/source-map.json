@@ -3,6 +3,6 @@
   "file": "source-maps/full/expected.js",
   "sources": ["source-maps/full/actual.js"],
   "names": [],
-  "mappings": "AAAA,IAAI,GAAJ,CAAQ;SAAK,IAAI,CAAJ;CAAL,CAAR",
+  "mappings": "AAAA,IAAI,GAAJ,CAAQ;AAAA,SAAK,IAAI,CAAT;AAAA,CAAR",
   "sourcesContent": ["arr.map(x => x * x);"]
 }
