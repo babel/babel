@@ -182,11 +182,11 @@ export default class Printer extends Buffer {
   }
 
   printTrailingComments(node, parent) {
-    this.printComments(this.getComments("trailingComments", node, parent));
+    this.printComments(this.getComments(false, node, parent));
   }
 
   printLeadingComments(node, parent) {
-    this.printComments(this.getComments("leadingComments", node, parent));
+    this.printComments(this.getComments(true, node, parent));
   }
 
   printInnerComments(node, indent = true) {
@@ -211,7 +211,17 @@ export default class Printer extends Buffer {
   }
 
   _printNewline(leading, node, parent, opts) {
+    // Fast path since 'this.newline' does nothing when not tracking lines.
+    if (this.format.retainLines || this.format.compact) return;
+
     if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
+      return;
+    }
+
+    // Fast path for concise since 'this.newline' just inserts a space when
+    // concise formatting is in use.
+    if (this.format.concise) {
+      this.space();
       return;
     }
 
@@ -240,8 +250,10 @@ export default class Printer extends Buffer {
     this.newline(lines);
   }
 
-  getComments(key, node) {
-    return (node && node[key]) || [];
+  getComments(leading, node) {
+    // Note, we use a boolean flag here instead of passing in the attribute name as it is faster
+    // because this is called extremely frequently.
+    return (node && (leading ? node.leadingComments : node.trailingComments)) || [];
   }
 
   shouldPrintComment(comment) {
