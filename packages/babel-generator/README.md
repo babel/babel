@@ -63,7 +63,6 @@ Here's an example of what that might look like:
 
 ```js
 import {parse} from 'babylon';
-import traverse from "babel-traverse";
 import generate from 'babel-generator';
 
 const a = 'var a = 1;';
