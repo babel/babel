@@ -7,7 +7,8 @@ module.exports = {
     Set: "set",
     WeakSet: "weak-set",
     setImmediate: "set-immediate",
-    clearImmediate: "clear-immediate"
+    clearImmediate: "clear-immediate",
+    asap: "asap"
     //parseFloat: "parse-float", // temporary disabled
     //parseInt: "parse-int" // temporary disabled
   },
@@ -102,12 +103,14 @@ module.exports = {
     },
 
     Symbol: {
+      asyncIterator: "symbol/async-iterator",
       for: "symbol/for",
       hasInstance: "symbol/has-instance",
       isConcatSpreadable: "symbol/is-concat-spreadable",
       iterator: "symbol/iterator",
       keyFor: "symbol/key-for",
       match: "symbol/match",
+      observable: "symbol/observable",
       replace: "symbol/replace",
       search: "symbol/search",
       species: "symbol/species",
@@ -123,6 +126,7 @@ module.exports = {
       endsWith: "string/ends-with",
       fromCodePoint: "string/from-code-point",
       includes: "string/includes",
+      matchAll: "string/match-all",
       padLeft: "string/pad-left", // deprecated
       padRight: "string/pad-right", // deprecated
       padStart: "string/pad-start",
@@ -180,7 +184,7 @@ module.exports = {
     },
 
     Error: {
-      isError: "error/is-error"
+      isError: "error/is-error" // deprecated
     },
 
     Date: {
