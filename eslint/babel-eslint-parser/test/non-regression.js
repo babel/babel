@@ -1428,6 +1428,23 @@ describe("verify", function () {
     );
   });
 
+  it("with does not crash parsing in script mode (strict off) #171", function () {
+    verifyAndAssertMessages(
+      "with (arguments) { length; }",
+      {},
+      [],
+      "script"
+    );
+  });
+
+  it("with does crash parsing in module mode (strict on) #171", function () {
+    verifyAndAssertMessages(
+      "with (arguments) { length; }",
+      {},
+      [ "1:1 Parsing error: 'with' in strict mode" ]
+    );
+  });
+
   // it("regex with es6 unicodeCodePointEscapes", function () {
   //   verifyAndAssertMessages(
   //     "string.replace(/[\u{0000A0}-\u{10FFFF}<>\&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);",
