@@ -72,6 +72,11 @@ function monkeypatch() {
     assign(estraverseOfEslint.VisitorKeys, t.VISITOR_KEYS);
   }
 
+  estraverses.forEach(function (estraverse) {
+    estraverse.VisitorKeys.MethodDefinition.push("decorators");
+    estraverse.VisitorKeys.Property.push("decorators");
+  });
+
   // monkeypatch escope
   var escope  = require(escopeLoc);
   var analyze = escope.analyze;
