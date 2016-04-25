@@ -44,7 +44,7 @@ export default class Buffer {
     // catch up to this nodes newline if we're behind
     if (node.loc && this.format.retainLines && this.buf) {
       while (this.position.line < node.loc.start.line) {
-        this._push("\n");
+        this.push("\n");
       }
     }
   }
@@ -214,7 +214,7 @@ export default class Buffer {
 
     this.removeLast(" ");
     this._removeSpacesAfterLastNewline();
-    this._push(repeat("\n", i));
+    this.push(repeat("\n", i), true /* noIndent */);
   }
 
   /**
@@ -280,17 +280,9 @@ export default class Buffer {
       str = str.replace(/\n/g, `\n${indent}`);
 
       // we've got a newline before us so prepend on the indentation
-      if (this.endsWith("\n")) this._push(indent);
+      if (this.endsWith("\n")) this.push(indent, true /* noIndent */);
     }
 
-    this._push(str);
-  }
-
-  /**
-   * Push a string to the buffer.
-   */
-
-  _push(str: string): void {
     // see startTerminatorless() instance method
     let parenPushNewlineState = this.parenPushNewlineState;
     if (parenPushNewlineState) {
@@ -304,7 +296,7 @@ export default class Buffer {
 
         if (cha === "\n" || cha === "/") {
           // we're going to break this terminator expression so we need to add a parentheses
-          this._push("(");
+          this.push("(", true /* noIndent */);
           this.indent();
           parenPushNewlineState.printed = true;
         }

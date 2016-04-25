@@ -4,7 +4,7 @@ export function TaggedTemplateExpression(node: Object) {
 }
 
 export function TemplateElement(node: Object) {
-  this._push(node.value.raw);
+  this.push(node.value.raw, true/* noIndent */);
 }
 
 export function TemplateLiteral(node: Object) {
@@ -16,11 +16,11 @@ export function TemplateLiteral(node: Object) {
     this.print(quasis[i], node);
 
     if (i + 1 < quasis.length) {
-      this._push("${ ");
+      this.push("${ ", true /* noIndent */);
       this.print(node.expressions[i], node);
       this.push(" }");
     }
   }
 
-  this._push("`");
+  this.push("`", true /* noIndent */);
 }

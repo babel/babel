@@ -300,7 +300,7 @@ export default class Printer extends Buffer {
       }
 
       //
-      this._push(val);
+      this.push(val, true /* noIndent */);
 
       // whitespace after
       this.newline(this.whitespace.getNewlinesAfter(comment));
