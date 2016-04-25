@@ -38,6 +38,4 @@ export function Directive(node: Object) {
   this.semicolon();
 }
 
-export function DirectiveLiteral(node: Object) {
-  this.push(this._stringLiteral(node.value));
-}
+export { StringLiteral as DirectiveLiteral } from "./types";

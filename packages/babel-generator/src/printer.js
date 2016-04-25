@@ -53,7 +53,7 @@ export default class Printer extends Buffer {
 
     let loc = (t.isProgram(node) || t.isFile(node)) ? null : node.loc;
     this.withSource("start", loc, () => {
-      this._print(node, parent);
+      this[node.type](node, parent);
     });
 
     // Check again if any of our children may have left an aux comment on the stack
@@ -96,28 +96,12 @@ export default class Printer extends Buffer {
   }
 
   getPossibleRaw(node) {
+    if (this.format.minified) return;
+
     let extra = node.extra;
     if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
       return extra.raw;
     }
-  }
-
-  _print(node, parent) {
-    // In minified mode we need to produce as little bytes as needed
-    // and need to make sure that string quoting is consistent.
-    // That means we have to always reprint as opposed to getting
-    // the raw value.
-    if (!this.format.minified) {
-      let extra = this.getPossibleRaw(node);
-      if (extra) {
-        this.push("");
-        this._push(extra);
-        return;
-      }
-    }
-
-    let printMethod = this[node.type];
-    printMethod.call(this, node, parent);
   }
 
   printJoin(nodes: ?Array, parent: Object, opts = {}) {

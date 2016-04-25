@@ -123,15 +123,27 @@ export function NullLiteral() {
 }
 
 export function NumericLiteral(node: Object) {
+  let raw = this.getPossibleRaw(node);
+  if (raw != null) {
+    // Write an empty string to add indentation on just this first time.
+    this.push("");
+    this.push(raw, true /* noIndent */);
+    return;
+  }
+
   this.push(node.value + "");
 }
 
 export function StringLiteral(node: Object, parent: Object) {
-  this.push(this._stringLiteral(node.value, parent));
-}
+  let raw = this.getPossibleRaw(node);
+  if (raw != null) {
+    // Write an empty string to add indentation on just this first time.
+    this.push("");
+    this.push(raw, true /* noIndent */);
+    return;
+  }
 
-export function _stringLiteral(val: string, parent: Object): string {
-  val = JSON.stringify(val);
+  let val = JSON.stringify(node.value);
 
   // escape illegal js but valid json unicode characters
   val = val.replace(/[\u000A\u000D\u2028\u2029]/g, function (c) {
@@ -152,5 +164,5 @@ export function _stringLiteral(val: string, parent: Object): string {
     val = `'${val}'`;
   }
 
-  return val;
+  return this.push(val);
 }
