@@ -24,7 +24,8 @@
     "test": "mocha",
     "lint": "eslint index.js babylon-to-espree test",
     "fix": "eslint index.js babylon-to-espree test --fix",
-    "preversion": "npm test"
+    "preversion": "npm test",
+    "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
   },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "license": "MIT",
