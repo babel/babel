@@ -35,7 +35,7 @@ export function JSXExpressionContainer(node: Object) {
 }
 
 export function JSXText(node: Object) {
-  this.push(node.value, true);
+  this.push(node.value);
 }
 
 export function JSXElement(node: Object) {

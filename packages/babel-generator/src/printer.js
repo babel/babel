@@ -287,10 +287,6 @@ export default class Printer extends Buffer {
         val = val.replace(/\n/g, `\n${repeat(" ", indent)}`);
       }
 
-      if (column === 0) {
-        val = this.getIndent() + val;
-      }
-
       // force a newline for line comments when retainLines is set in case the next printed node
       // doesn't catch up
       if ((this.format.compact || this.format.concise || this.format.retainLines) &&
@@ -299,7 +295,7 @@ export default class Printer extends Buffer {
       }
 
       //
-      this.push(val, true /* noIndent */);
+      this.push(val);
 
       // whitespace after
       this.newline(this.whitespace.getNewlinesAfter(comment));

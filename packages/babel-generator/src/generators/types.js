@@ -125,9 +125,7 @@ export function NullLiteral() {
 export function NumericLiteral(node: Object) {
   let raw = this.getPossibleRaw(node);
   if (raw != null) {
-    // Write an empty string to add indentation on just this first time.
-    this.push("");
-    this.push(raw, true /* noIndent */);
+    this.push(raw);
     return;
   }
 
@@ -137,9 +135,7 @@ export function NumericLiteral(node: Object) {
 export function StringLiteral(node: Object, parent: Object) {
   let raw = this.getPossibleRaw(node);
   if (raw != null) {
-    // Write an empty string to add indentation on just this first time.
-    this.push("");
-    this.push(raw, true /* noIndent */);
+    this.push(raw);
     return;
   }
 

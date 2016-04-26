@@ -3,24 +3,25 @@ export function TaggedTemplateExpression(node: Object) {
   this.print(node.quasi, node);
 }
 
-export function TemplateElement(node: Object) {
-  this.push(node.value.raw, true/* noIndent */);
+export function TemplateElement(node: Object, parent: Object) {
+  const isFirst = parent.quasis[0] === node;
+  const isLast = parent.quasis[parent.quasis.length - 1] === node;
+
+  let value = (isFirst ? "`" : "}") + node.value.raw + (isLast ? "`" : "${");
+
+  if (!isFirst) this.push(" ");
+  this.push(value);
+  if (!isLast) this.push(" ");
 }
 
 export function TemplateLiteral(node: Object) {
-  this.push("`");
-
   let quasis = node.quasis;
 
   for (let i = 0; i < quasis.length; i++) {
     this.print(quasis[i], node);
 
     if (i + 1 < quasis.length) {
-      this.push("${ ", true /* noIndent */);
       this.print(node.expressions[i], node);
-      this.push(" }");
     }
   }
-
-  this.push("`", true /* noIndent */);
 }
