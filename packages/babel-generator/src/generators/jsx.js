@@ -52,12 +52,16 @@ export function JSXElement(node: Object) {
   this.print(node.closingElement, node);
 }
 
+function spaceSeparator() {
+  this.push(" ");
+}
+
 export function JSXOpeningElement(node: Object) {
   this.push("<");
   this.print(node.name, node);
   if (node.attributes.length > 0) {
     this.push(" ");
-    this.printJoin(node.attributes, node, { separator: " " });
+    this.printJoin(node.attributes, node, { separator: spaceSeparator });
   }
   this.push(node.selfClosing ? " />" : ">");
 }

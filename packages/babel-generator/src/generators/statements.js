@@ -1,4 +1,3 @@
-import repeat from "lodash/repeat";
 import * as t from "babel-types";
 
 const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(["!"]);
@@ -205,6 +204,16 @@ export function DebuggerStatement() {
   this.semicolon();
 }
 
+function variableDeclarationIdent() {
+  // "let " or "var " indentation.
+  this.push(",\n    ");
+}
+
+function constDeclarationIdent() {
+  // "const " indentation.
+  this.push(",\n      ");
+}
+
 export function VariableDeclaration(node: Object, parent: Object) {
   this.push(node.kind + " ");
 
@@ -231,14 +240,14 @@ export function VariableDeclaration(node: Object, parent: Object) {
   //       bar = "foo";
   //
 
-  let sep;
+  let separator;
   if (!this.format.compact && !this.format.concise && hasInits && !this.format.retainLines) {
-    sep = `,\n${repeat(" ", node.kind.length + 1)}`;
+    separator = node.kind === "const" ? constDeclarationIdent : variableDeclarationIdent;
   }
 
   //
 
-  this.printList(node.declarations, node, { separator: sep });
+  this.printList(node.declarations, node, { separator });
 
   if (t.isFor(parent)) {
     // don't give semicolons to these nodes since they'll be inserted in the parent generator

@@ -127,8 +127,12 @@ export function InterfaceDeclaration(node: Object) {
   this._interfaceish(node);
 }
 
+function andSeparator() {
+  this.push(" & ");
+}
+
 export function IntersectionTypeAnnotation(node: Object) {
-  this.printJoin(node.types, node, { separator: " & " });
+  this.printJoin(node.types, node, { separator: andSeparator });
 }
 
 export function MixedTypeAnnotation() {
@@ -277,8 +281,12 @@ export function QualifiedTypeIdentifier(node: Object) {
   this.print(node.id, node);
 }
 
+function orSeparator() {
+  this.push(" | ");
+}
+
 export function UnionTypeAnnotation(node: Object) {
-  this.printJoin(node.types, node, { separator: " | " });
+  this.printJoin(node.types, node, { separator: orSeparator });
 }
 
 export function TypeCastExpression(node: Object) {

@@ -91,6 +91,10 @@ export function Decorator(node: Object) {
   this.newline();
 }
 
+function commaSeparatorNewline() {
+  this.push(",\n");
+}
+
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
   if (node.loc) this.printAuxAfterComment();
@@ -101,7 +105,7 @@ export function CallExpression(node: Object) {
 
   let separator;
   if (isPrettyCall) {
-    separator = ",\n";
+    separator = commaSeparatorNewline;
     this.newline();
     this.indent();
   }
