@@ -65,6 +65,21 @@ $ npm install eslint@2.x babel-eslint@6 --save-dev
 
 Check out the [ESLint docs](http://eslint.org/docs/rules/) for all possible rules.
 
+### Configuration
+
+`sourceType` can be set to `'module'`(default) or `'script'` if your code isn't using ECMAScript modules.
+
+**.eslintrc**
+
+```json
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "sourceType": "module"
+  }
+}
+```
+
 ### Run
 
 ```sh
