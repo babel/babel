@@ -273,14 +273,8 @@ export default class Buffer {
 
   push(str: string, noIndent?: boolean) {
     if (!this.format.compact && this._indent && !noIndent && str !== "\n") {
-      // we have an indent level and we aren't pushing a newline
-      let indent = this.getIndent();
-
-      // replace all newlines with newlines with the indentation
-      str = str.replace(/\n/g, `\n${indent}`);
-
       // we've got a newline before us so prepend on the indentation
-      if (this.endsWith("\n")) this.push(indent, true /* noIndent */);
+      if (this.endsWith("\n")) this.push(this.getIndent(), true /* noIndent */);
     }
 
     // see startTerminatorless() instance method

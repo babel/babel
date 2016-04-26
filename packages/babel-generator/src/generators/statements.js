@@ -206,12 +206,14 @@ export function DebuggerStatement() {
 
 function variableDeclarationIdent() {
   // "let " or "var " indentation.
-  this.push(",\n    ");
+  this.push(",\n");
+  this.push("    ");
 }
 
 function constDeclarationIdent() {
   // "const " indentation.
-  this.push(",\n      ");
+  this.push(",\n");
+  this.push("      ");
 }
 
 export function VariableDeclaration(node: Object, parent: Object) {
