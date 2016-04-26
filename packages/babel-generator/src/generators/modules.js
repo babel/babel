@@ -81,7 +81,7 @@ function ExportDeclaration(node: Object) {
       this.push("{");
       if (specifiers.length) {
         this.space();
-        this.printJoin(specifiers, node, { separator: ", " });
+        this.printList(specifiers, node);
         this.space();
       }
       this.push("}");
@@ -121,7 +121,7 @@ export function ImportDeclaration(node: Object) {
     if (specifiers.length) {
       this.push("{");
       this.space();
-      this.printJoin(specifiers, node, { separator: ", " });
+      this.printList(specifiers, node);
       this.space();
       this.push("}");
     }

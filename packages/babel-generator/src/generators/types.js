@@ -48,12 +48,12 @@ export function ObjectExpression(node: Object) {
 export { ObjectExpression as ObjectPattern };
 
 export function ObjectMethod(node: Object) {
-  this.printJoin(node.decorators, node, { separator: "" });
+  this.printJoin(node.decorators, node);
   this._method(node);
 }
 
 export function ObjectProperty(node: Object) {
-  this.printJoin(node.decorators, node, { separator: "" });
+  this.printJoin(node.decorators, node);
 
   if (node.computed) {
     this.push("[");

@@ -1,5 +1,5 @@
 export function ClassDeclaration(node: Object) {
-  this.printJoin(node.decorators, node, { separator: "" });
+  this.printJoin(node.decorators, node);
   this.push("class");
 
   if (node.id) {
@@ -17,7 +17,7 @@ export function ClassDeclaration(node: Object) {
 
   if (node.implements) {
     this.push(" implements ");
-    this.printJoin(node.implements, node, { separator: ", " });
+    this.printList(node.implements, node);
   }
 
   this.space();
@@ -43,7 +43,7 @@ export function ClassBody(node: Object) {
 }
 
 export function ClassProperty(node: Object) {
-  this.printJoin(node.decorators, node, { separator: "" });
+  this.printJoin(node.decorators, node);
 
   if (node.static) this.push("static ");
   this.print(node.key, node);
@@ -58,7 +58,7 @@ export function ClassProperty(node: Object) {
 }
 
 export function ClassMethod(node: Object) {
-  this.printJoin(node.decorators, node, { separator: "" });
+  this.printJoin(node.decorators, node);
 
   if (node.static) {
     this.push("static ");

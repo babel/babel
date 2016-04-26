@@ -112,11 +112,11 @@ export function _interfaceish(node: Object) {
   this.print(node.typeParameters, node);
   if (node.extends.length) {
     this.push(" extends ");
-    this.printJoin(node.extends, node, { separator: ", " });
+    this.printList(node.extends, node);
   }
   if (node.mixins && node.mixins.length) {
     this.push(" mixins ");
-    this.printJoin(node.mixins, node, { separator: ", " });
+    this.printList(node.mixins, node);
   }
   this.space();
   this.print(node.body, node);
@@ -159,7 +159,7 @@ export function ThisTypeAnnotation() {
 
 export function TupleTypeAnnotation(node: Object) {
   this.push("[");
-  this.printJoin(node.types, node, { separator: ", " });
+  this.printList(node.types, node);
   this.push("]");
 }
 
@@ -209,8 +209,7 @@ export function TypeParameter(node: Object) {
 
 export function TypeParameterInstantiation(node: Object) {
   this.push("<");
-  this.printJoin(node.params, node, {
-    separator: ", ",
+  this.printList(node.params, node, {
     iterator: (node: Object) => {
       this.print(node.typeAnnotation, node);
     }
@@ -228,7 +227,6 @@ export function ObjectTypeAnnotation(node: Object) {
     this.space();
 
     this.printJoin(props, node, {
-      separator: false,
       indent: true,
       iterator: () => {
         if (props.length !== 1) {
