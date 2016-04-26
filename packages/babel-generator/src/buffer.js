@@ -103,7 +103,8 @@ export default class Buffer {
    */
 
   rightBrace() {
-    this.newline(true);
+    if (!this.endsWith("\n")) this.newline();
+
     if (this.format.minified && !this._lastPrintedIsEmptyStatement) {
       this._removeLast(";");
     }
@@ -212,10 +213,9 @@ export default class Buffer {
 
   /**
    * Add a newline (or many newlines), maintaining formatting.
-   * Strips multiple newlines if removeLast is true.
    */
 
-  newline(i?: boolean | number, removeLast?: boolean) {
+  newline(i?: number) {
     if (this.format.retainLines || this.format.compact) return;
 
     if (this.format.concise) {
@@ -226,17 +226,11 @@ export default class Buffer {
     // never allow more than two lines
     if (this.endsWith("\n\n")) return;
 
-    if (typeof i === "boolean") removeLast = i;
     if (typeof i !== "number") i = 1;
 
     i = Math.min(2, i);
     if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
     if (i <= 0) return;
-
-    // remove the last newline
-    if (removeLast) {
-      this.removeLast("\n");
-    }
 
     this._removeSpacesAfterLastNewline();
     for (let j = 0; j < i; j++) {
