@@ -109,31 +109,31 @@ export function run(program) {
       replStart();
     }
   }
-}
 
-function replStart() {
-  repl.start({
-    prompt: "> ",
-    input: process.stdin,
-    output: process.stdout,
-    eval: replEval,
-    useGlobal: true
-  });
-}
-
-function replEval(code, context, filename, callback) {
-  let err;
-  let result;
-
-  try {
-    if (code[0] === "(" && code[code.length - 1] === ")") {
-      code = code.slice(1, -1); // remove "(" and ")"
-    }
-
-    result = _eval(code, filename);
-  } catch (e) {
-    err = e;
+  function replStart() {
+    repl.start({
+      prompt: "> ",
+      input: process.stdin,
+      output: process.stdout,
+      eval: replEval,
+      useGlobal: true
+    });
   }
 
-  callback(err, result);
+  function replEval(code, context, filename, callback) {
+    let err;
+    let result;
+
+    try {
+      if (code[0] === "(" && code[code.length - 1] === ")") {
+        code = code.slice(1, -1); // remove "(" and ")"
+      }
+
+      result = _eval(code, filename);
+    } catch (e) {
+      err = e;
+    }
+
+    callback(err, result);
+  }
 }
