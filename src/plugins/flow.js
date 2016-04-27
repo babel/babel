@@ -190,28 +190,46 @@ pp.flowParseTypeAlias = function (node) {
 
 // Type annotations
 
+pp.flowParseTypeParameter = function () {
+  let node = this.startNode();
+
+  let variance;
+  if (this.match(tt.plusMin)) {
+    if (this.state.value === "+") {
+      variance = "plus";
+    } else if (this.state.value === "-") {
+      variance = "minus";
+    }
+    this.eat(tt.plusMin);
+  }
+
+  let ident = this.flowParseTypeAnnotatableIdentifier(false, false);
+  node.name = ident.name;
+  node.variance = variance;
+  node.bound = ident.typeAnnotation;
+
+  if (this.match(tt.eq)) {
+    this.eat(tt.eq);
+    node.default = this.flowParseType ();
+  }
+
+  return this.finishNode(node, "TypeParameter");
+};
+
 pp.flowParseTypeParameterDeclaration = function () {
   let node = this.startNode();
   node.params = [];
 
   this.expectRelational("<");
-  while (!this.isRelational(">")) {
-    node.params.push(this.flowParseExistentialTypeParam() || this.flowParseTypeAnnotatableIdentifier());
+  do {
+    node.params.push(this.flowParseTypeParameter());
     if (!this.isRelational(">")) {
       this.expect(tt.comma);
     }
-  }
+  } while (!this.isRelational(">"));
   this.expectRelational(">");
 
   return this.finishNode(node, "TypeParameterDeclaration");
-};
-
-pp.flowParseExistentialTypeParam = function () {
-  if (this.match(tt.star)) {
-    let node = this.startNode();
-    this.next();
-    return this.finishNode(node, "ExistentialTypeParam");
-  }
 };
 
 pp.flowParseTypeParameterInstantiation = function () {
@@ -222,7 +240,7 @@ pp.flowParseTypeParameterInstantiation = function () {
 
   this.expectRelational("<");
   while (!this.isRelational(">")) {
-    node.params.push(this.flowParseExistentialTypeParam() || this.flowParseType());
+    node.params.push(this.flowParseType());
     if (!this.isRelational(">")) {
       this.expect(tt.comma);
     }
@@ -558,6 +576,10 @@ pp.flowParsePrimaryType = function () {
       this.next();
       return this.finishNode(node, "ThisTypeAnnotation");
 
+    case tt.star:
+      this.next();
+      return this.finishNode(node, "ExistentialTypeParam");
+
     default:
       if (this.state.type.keyword === "typeof") {
         return this.flowParseTypeofType();
@@ -624,22 +646,9 @@ pp.flowParseTypeAnnotation = function () {
 };
 
 pp.flowParseTypeAnnotatableIdentifier = function (requireTypeAnnotation, canBeOptionalParam) {
-  let variance;
-  if (this.match(tt.plusMin)) {
-    if (this.state.value === "+") {
-      variance = "plus";
-    } else if (this.state.value === "-") {
-      variance = "minus";
-    }
-    this.eat(tt.plusMin);
-  }
 
   let ident = this.parseIdentifier();
   let isOptionalParam = false;
-
-  if (variance) {
-    ident.variance = variance;
-  }
 
   if (canBeOptionalParam && this.eat(tt.question)) {
     this.expect(tt.question);

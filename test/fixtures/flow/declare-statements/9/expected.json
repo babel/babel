@@ -74,7 +74,7 @@
           },
           "params": [
             {
-              "type": "Identifier",
+              "type": "TypeParameter",
               "start": 16,
               "end": 17,
               "loc": {
@@ -173,6 +173,7 @@
             }
           }
         ],
+        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start": 32,
@@ -240,7 +241,7 @@
           "indexers": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -60,6 +60,7 @@
         },
         "generator": false,
         "expression": false,
+        "async": false,
         "typeParameters": {
           "type": "TypeParameterDeclaration",
           "start": 12,
@@ -76,7 +77,7 @@
           },
           "params": [
             {
-              "type": "Identifier",
+              "type": "TypeParameter",
               "start": 13,
               "end": 23,
               "loc": {
@@ -90,7 +91,7 @@
                 }
               },
               "name": "T",
-              "typeAnnotation": {
+              "bound": {
                 "type": "TypeAnnotation",
                 "start": 14,
                 "end": 23,
