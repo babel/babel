@@ -14,11 +14,11 @@ function expandAliases(obj) {
     } : func;
   }
 
-  for (let type of Object.keys(obj)) {
+  for (let type of (Object.keys(obj): Array)) {
 
     let aliases = t.FLIPPED_ALIAS_KEYS[type];
     if (aliases) {
-      for (let alias of aliases) {
+      for (let alias of (aliases: Array)) {
         add(alias, obj[type]);
       }
     } else {

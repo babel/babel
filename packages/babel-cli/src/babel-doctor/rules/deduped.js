@@ -12,7 +12,7 @@ export default async function (packages) {
     foundDeps[name] = true;
   }
 
-  for (let pkg of packages) {
+  for (let pkg of (packages: Array)) {
     checkDep(pkg.name);
   }
 

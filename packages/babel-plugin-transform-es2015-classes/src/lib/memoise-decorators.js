@@ -2,7 +2,7 @@ import type { Scope } from "babel-traverse";
 import * as t from "babel-types";
 
 export default function (decorators: Array<Object>, scope: Scope): Array<Object> {
-  for (let decorator of decorators) {
+  for (let decorator of (decorators: Array)) {
     let expression = decorator.expression;
     if (!t.isMemberExpression(expression)) continue;
 

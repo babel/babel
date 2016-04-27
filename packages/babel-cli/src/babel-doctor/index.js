@@ -36,9 +36,9 @@ while (nodeModulesDirectories.length) {
   let loc = nodeModulesDirectories.shift();
   if (!fs.existsSync(loc)) continue;
 
-  let packagesNames: Array<string> = fs.readdirSync(loc);
+  let packagesNames = fs.readdirSync(loc);
 
-  for (let packageName of packagesNames) {
+  for (let packageName of (packagesNames: Array<string>)) {
     if (packageName[0] === ".") continue;
 
     let packageLoc = path.join(loc, packageName);
@@ -69,7 +69,7 @@ async function run() {
 
   let results = await Promise.all(promises);
 
-  for (let [success, message] of results) {
+  for (let [success, message] of (results: Array)) {
     if (!success) didError = true;
     let multiline = message.indexOf("\n") >= 0;
     if (multiline) sep();

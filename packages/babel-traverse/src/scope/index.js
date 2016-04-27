@@ -26,7 +26,7 @@ let _crawlCallsCount = 0;
 function getCache(path, parentScope, self) {
   let scopes: Array<Scope> = scopeCache.get(path.node) || [];
 
-  for (let scope of scopes) {
+  for (let scope of (scopes: Array)) {
     if (scope.parent === parentScope && scope.path === path) return scope;
   }
 
@@ -473,7 +473,7 @@ export default class Scope {
 
     if (path.isVariableDeclaration()) {
       let declarators: Array<NodePath> = path.get("declarations");
-      for (let declar of declarators) {
+      for (let declar of (declarators: Array)) {
         this.registerBinding(kind, declar);
       }
       return;
@@ -555,7 +555,7 @@ export default class Scope {
       if (node.superClass && !this.isPure(node.superClass, constantsOnly)) return false;
       return this.isPure(node.body, constantsOnly);
     } else if (t.isClassBody(node)) {
-      for (let method of node.body) {
+      for (let method of (node.body: Array)) {
         if (!this.isPure(method, constantsOnly)) return false;
       }
       return true;
@@ -668,7 +668,7 @@ export default class Scope {
 
     if (path.isFunction()) {
       let params: Array<NodePath> = path.get("params");
-      for (let param of params) {
+      for (let param of (params: Array)) {
         this.registerBinding("param", param);
       }
     }
@@ -695,7 +695,7 @@ export default class Scope {
     this.crawling = false;
 
     // register assignments
-    for (let path of state.assignments) {
+    for (let path of (state.assignments: Array)) {
       // register undeclared bindings as globals
       let ids = path.getBindingIdentifiers();
       let programParent;
@@ -711,7 +711,7 @@ export default class Scope {
     }
 
     // register references
-    for (let ref of state.references) {
+    for (let ref of (state.references: Array)) {
       let binding = ref.scope.getBinding(ref.node.name);
       if (binding) {
         binding.reference(ref);
@@ -721,7 +721,7 @@ export default class Scope {
     }
 
     // register constant violations
-    for (let path of state.constantViolations) {
+    for (let path of (state.constantViolations: Array)) {
       path.scope.registerConstantViolation(path);
     }
   }
