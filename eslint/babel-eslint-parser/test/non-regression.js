@@ -1468,7 +1468,17 @@ describe("verify", function () {
         "}"
       ].join("\n"),
       { "no-undef": 1 },
-      [ "2:4 'test' is not defined. no-undef"]
+      [ "2:4 'test' is not defined. no-undef" ]
+    );
+  });
+
+  it("Flow definition does not trigger warnings #223", function () {
+    verifyAndAssertMessages([
+        "import { Map as $Map } from 'immutable';",
+        "function myFunction($state: $Map, { a, b, c } : { a: ?Object, b: ?Object, c: $Map }) {}"
+      ].join("\n"),
+      { "no-dupe-args": 1, "no-redeclare": 1, "no-shadow": 1 },
+      []
     );
   });
 
