@@ -80,7 +80,7 @@ function parseAndAssertSame(code) {
   // assert.equal(esAST, babylonAST);
 }
 
-describe("acorn-to-esprima", function () {
+describe("babylon-to-esprima", function () {
   describe("templates", function () {
     it("empty template string", function () {
       parseAndAssertSame("``");

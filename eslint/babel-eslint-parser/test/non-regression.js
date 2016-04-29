@@ -1452,6 +1452,26 @@ describe("verify", function () {
     );
   });
 
+  it("new.target is not reported as undef #235", function () {
+    verifyAndAssertMessages(
+      "function foo () { return new.target }",
+      { "no-undef": 1 },
+      []
+    );
+  });
+
+  it("decorator does not create TypeError #229", function () {
+    verifyAndAssertMessages([
+        "class A {",
+        "  @test",
+        "  f() {}",
+        "}"
+      ].join("\n"),
+      { "no-undef": 1 },
+      [ "2:4 'test' is not defined. no-undef"]
+    );
+  });
+
   // it("regex with es6 unicodeCodePointEscapes", function () {
   //   verifyAndAssertMessages(
   //     "string.replace(/[\u{0000A0}-\u{10FFFF}<>\&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);",
