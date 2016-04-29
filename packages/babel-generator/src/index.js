@@ -71,7 +71,8 @@ export class CodeGenerator extends Printer {
 
   static normalizeOptions(code, opts, tokens) {
     let style = "  ";
-    if (code && typeof code === "string") {
+    let hasIndentStyle = typeof opts.indentStyle === "string" && opts.indentStyle;
+    if ((code && typeof code === "string") && !hasIndentStyle) {
       let indent = detectIndent(code).indent;
       if (indent && indent !== " ") style = indent;
     }
@@ -88,7 +89,7 @@ export class CodeGenerator extends Printer {
       quotes: opts.quotes || CodeGenerator.findCommonStringDelimiter(code, tokens),
       indent: {
         adjustMultilineComment: true,
-        style: style,
+        style: hasIndentStyle ? opts.indentStyle : style,
         base: 0
       }
     };
