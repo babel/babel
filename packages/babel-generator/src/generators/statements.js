@@ -1,7 +1,5 @@
 import * as t from "babel-types";
 
-const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(["!"]);
-
 export function WithStatement(node: Object) {
   this.keyword("with");
   this.token("(");
@@ -113,12 +111,7 @@ function buildLabelStatement(prefix, key = "label") {
 
     let label = node[key];
     if (label) {
-      if (!(this.format.minified && ((t.isUnaryExpression(label, { prefix: true }) ||
-                                      t.isUpdateExpression(label, { prefix: true })) &&
-                                     NON_ALPHABETIC_UNARY_OPERATORS.indexOf(label.operator) > -1))) {
-        this.push(" ");
-
-      }
+      this.space();
 
       let terminatorState = this.startTerminatorless();
       this.print(label, node);
