@@ -10,23 +10,13 @@ const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
 
 export function UnaryExpression(node: Object) {
-  let needsSpace = /[a-z]$/.test(node.operator);
-  let arg = node.argument;
-
-  if (t.isUpdateExpression(arg) || t.isUnaryExpression(arg)) {
-    needsSpace = true;
-  }
-
-  if (t.isUnaryExpression(arg) && arg.operator === "!") {
-    needsSpace = false;
-  }
-
   if (node.operator === "void" || node.operator === "delete" || node.operator === "typeof") {
     this.word(node.operator);
+    this.space();
   } else {
     this.token(node.operator);
   }
-  if (needsSpace) this.push(" ");
+
   this.print(node.argument, node);
 }
 
@@ -176,31 +166,13 @@ export function AssignmentExpression(node: Object, parent: Object) {
 
   this.print(node.left, node);
 
-  let spaces = !this.format.compact || node.operator === "in" || node.operator === "instanceof";
-  if (spaces) this.push(" ");
-
+  this.space();
   if (node.operator === "in" || node.operator === "instanceof") {
     this.word(node.operator);
   } else {
     this.token(node.operator);
   }
-
-  if (!spaces) {
-    // space is mandatory to avoid outputting <!--
-    // http://javascript.spec.whatwg.org/#comment-syntax
-    spaces = node.operator === "<" &&
-             t.isUnaryExpression(node.right, { prefix: true, operator: "!" }) &&
-             t.isUnaryExpression(node.right.argument, { prefix: true, operator: "--" });
-
-    // Need spaces for operators of the same kind to avoid: `a+++b`
-    if (!spaces) {
-      let right = getLeftMost(node.right);
-      spaces = t.isUnaryExpression(right, { prefix: true, operator: node.operator }) ||
-               t.isUpdateExpression(right, { prefix: true, operator: node.operator + node.operator });
-    }
-  }
-
-  if (spaces) this.push(" ");
+  this.space();
 
   this.print(node.right, node);
 
@@ -257,11 +229,4 @@ export function MetaProperty(node: Object) {
   this.print(node.meta, node);
   this.token(".");
   this.print(node.property, node);
-}
-
-function getLeftMost(binaryExpr) {
-  if (!t.isBinaryExpression(binaryExpr)) {
-    return binaryExpr;
-  }
-  return getLeftMost(binaryExpr.left);
 }

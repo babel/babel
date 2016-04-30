@@ -151,6 +151,16 @@ export default class Buffer {
    */
 
   token(str: string) {
+    // space is mandatory to avoid outputting <!--
+    // http://javascript.spec.whatwg.org/#comment-syntax
+    if ((str === "--" && this.last === "!") ||
+
+      // Need spaces for operators of the same kind to avoid: `a+++b`
+      (str[0] === "+" && this.last === "+") ||
+      (str[0] === "-" && this.last === "-")) {
+      this.push(" ");
+    }
+
     this.push(str);
   }
 
