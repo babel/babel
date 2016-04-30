@@ -34,7 +34,8 @@ export function IfStatement(node: Object) {
 
   if (node.alternate) {
     if (this.endsWith("}")) this.space();
-    this.push("else ");
+    this.push("else");
+    this.push(" ");
     this.printAndIndentOnComments(node.alternate, node);
   }
 }
@@ -82,7 +83,9 @@ let buildForXStatement = function (op) {
     this.keyword("for");
     this.push("(");
     this.print(node.left, node);
-    this.push(` ${op} `);
+    this.push(" ");
+    this.push(op);
+    this.push(" ");
     this.print(node.right, node);
     this.push(")");
     this.printBlock(node);
@@ -93,7 +96,8 @@ export let ForInStatement = buildForXStatement("in");
 export let ForOfStatement = buildForXStatement("of");
 
 export function DoWhileStatement(node: Object) {
-  this.push("do ");
+  this.push("do");
+  this.push(" ");
   this.print(node.body, node);
   this.space();
   this.keyword("while");
@@ -132,7 +136,8 @@ export let ThrowStatement    = buildLabelStatement("throw", "argument");
 
 export function LabeledStatement(node: Object) {
   this.print(node.label, node);
-  this.push(": ");
+  this.push(":");
+  this.push(" ");
   this.print(node.body, node);
 }
 
@@ -152,7 +157,8 @@ export function TryStatement(node: Object) {
 
   if (node.finalizer) {
     this.space();
-    this.push("finally ");
+    this.push("finally");
+    this.push(" ");
     this.print(node.finalizer, node);
   }
 }
@@ -186,11 +192,13 @@ export function SwitchStatement(node: Object) {
 
 export function SwitchCase(node: Object) {
   if (node.test) {
-    this.push("case ");
+    this.push("case");
+    this.push(" ");
     this.print(node.test, node);
     this.push(":");
   } else {
-    this.push("default:");
+    this.push("default");
+    this.push(":");
   }
 
   if (node.consequent.length) {
@@ -206,18 +214,21 @@ export function DebuggerStatement() {
 
 function variableDeclarationIdent() {
   // "let " or "var " indentation.
-  this.push(",\n");
-  this.push("    ");
+  this.push(",");
+  this.push("\n");
+  for (let i = 0; i < 4; i++) this.push(" ");
 }
 
 function constDeclarationIdent() {
   // "const " indentation.
-  this.push(",\n");
-  this.push("      ");
+  this.push(",");
+  this.push("\n");
+  for (let i = 0; i < 6; i++) this.push(" ");
 }
 
 export function VariableDeclaration(node: Object, parent: Object) {
-  this.push(node.kind + " ");
+  this.push(node.kind);
+  this.push(" ");
 
   let hasInits = false;
   // don't add whitespace to loop heads

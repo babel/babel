@@ -213,7 +213,10 @@ export default class Buffer {
     }
 
     this.removeLast(" ");
-    this.push(repeat("\n", i));
+    this._removeSpacesAfterLastNewline();
+    for (let j = 0; j < i; j++) {
+      this.push("\n");
+    }
   }
 
   /**

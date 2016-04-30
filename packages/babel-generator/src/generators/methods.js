@@ -27,10 +27,14 @@ export function _method(node: Object) {
   }
 
   if (kind === "get" || kind === "set") {
-    this.push(kind + " ");
+    this.push(kind);
+    this.push(" ");
   }
 
-  if (node.async) this.push("async ");
+  if (node.async) {
+    this.push("async");
+    this.push(" ");
+  }
 
   if (node.computed) {
     this.push("[");
@@ -46,7 +50,10 @@ export function _method(node: Object) {
 }
 
 export function FunctionExpression(node: Object) {
-  if (node.async) this.push("async ");
+  if (node.async) {
+    this.push("async");
+    this.push(" ");
+  }
   this.push("function");
   if (node.generator) this.push("*");
 
@@ -65,7 +72,10 @@ export function FunctionExpression(node: Object) {
 export { FunctionExpression as FunctionDeclaration };
 
 export function ArrowFunctionExpression(node: Object) {
-  if (node.async) this.push("async ");
+  if (node.async) {
+    this.push("async");
+    this.push(" ");
+  }
 
   if (node.params.length === 1 && t.isIdentifier(node.params[0])) {
     this.print(node.params[0], node);
@@ -73,7 +83,9 @@ export function ArrowFunctionExpression(node: Object) {
     this._params(node);
   }
 
-  this.push(" => ");
+  this.push(" ");
+  this.push("=>");
+  this.push(" ");
 
   this.print(node.body, node);
 }

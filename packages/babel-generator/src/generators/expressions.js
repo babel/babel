@@ -61,7 +61,8 @@ export function ConditionalExpression(node: Object) {
 }
 
 export function NewExpression(node: Object, parent: Object) {
-  this.push("new ");
+  this.push("new");
+  this.push(" ");
   this.print(node.callee, node);
   if (node.arguments.length === 0 && this.format.minified &&
       !t.isCallExpression(parent, { callee: node }) &&
@@ -92,7 +93,8 @@ export function Decorator(node: Object) {
 }
 
 function commaSeparatorNewline() {
-  this.push(",\n");
+  this.push(",");
+  this.push("\n");
 }
 
 export function CallExpression(node: Object) {

@@ -23,7 +23,8 @@ export function JSXMemberExpression(node: Object) {
 }
 
 export function JSXSpreadAttribute(node: Object) {
-  this.push("{...");
+  this.push("{");
+  this.push("...");
   this.print(node.argument, node);
   this.push("}");
 }
@@ -63,7 +64,12 @@ export function JSXOpeningElement(node: Object) {
     this.push(" ");
     this.printJoin(node.attributes, node, { separator: spaceSeparator });
   }
-  this.push(node.selfClosing ? " />" : ">");
+  if (node.selfClosing) {
+    this.push(" ");
+    this.push("/>");
+  } else {
+    this.push(">");
+  }
 }
 
 export function JSXClosingElement(node: Object) {
