@@ -61,7 +61,9 @@ module.exports = function (commander, filenames) {
     }
   }
 
-  _.each(filenames, handle);
+  if (!commander.skipInitialBuild) {
+    _.each(filenames, handle);
+  }
 
   if (commander.watch) {
     let chokidar = util.requireChokidar();
