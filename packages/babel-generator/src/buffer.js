@@ -26,6 +26,7 @@ export default class Buffer {
       column: null,
       filename: null,
     };
+    this._endsWithWord = false;
   }
 
   printedCommentStarts: Object;
@@ -139,7 +140,10 @@ export default class Buffer {
    */
 
   word(str: string) {
+    if (this._endsWithWord) this.push(" ");
+
     this.push(str);
+    this._endsWithWord = true;
   }
 
   /**
@@ -325,6 +329,9 @@ export default class Buffer {
     this.position.push(str);
     this.buf += str;
     this.last = str[str.length - 1];
+
+    // Clear any state-tracking flags that may have been set.
+    this._endsWithWord = false;
   }
 
   /**
