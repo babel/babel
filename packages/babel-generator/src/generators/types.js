@@ -10,17 +10,17 @@ export function Identifier(node: Object) {
   // the next major.
   if (node.variance) {
     if (node.variance === "plus") {
-      this.push("+");
+      this.token("+");
     } else if (node.variance === "minus") {
-      this.push("-");
+      this.token("-");
     }
   }
 
-  this.push(node.name);
+  this.word(node.name);
 }
 
 export function RestElement(node: Object) {
-  this.push("...");
+  this.token("...");
   this.print(node.argument, node);
 }
 
@@ -33,7 +33,7 @@ export {
 export function ObjectExpression(node: Object) {
   let props = node.properties;
 
-  this.push("{");
+  this.token("{");
   this.printInnerComments(node);
 
   if (props.length) {
@@ -42,7 +42,7 @@ export function ObjectExpression(node: Object) {
     this.space();
   }
 
-  this.push("}");
+  this.token("}");
 }
 
 export { ObjectExpression as ObjectPattern };
@@ -56,9 +56,9 @@ export function ObjectProperty(node: Object) {
   this.printJoin(node.decorators, node);
 
   if (node.computed) {
-    this.push("[");
+    this.token("[");
     this.print(node.key, node);
-    this.push("]");
+    this.token("]");
   } else {
     // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
     if (t.isAssignmentPattern(node.value) && t.isIdentifier(node.key) && node.key.name === node.value.left.name) {
@@ -77,7 +77,7 @@ export function ObjectProperty(node: Object) {
     }
   }
 
-  this.push(":");
+  this.token(":");
   this.space();
   this.print(node.value, node);
 }
@@ -86,7 +86,7 @@ export function ArrayExpression(node: Object) {
   let elems = node.elements;
   let len   = elems.length;
 
-  this.push("[");
+  this.token("[");
   this.printInnerComments(node);
 
   for (let i = 0; i < elems.length; i++) {
@@ -94,48 +94,48 @@ export function ArrayExpression(node: Object) {
     if (elem) {
       if (i > 0) this.space();
       this.print(elem, node);
-      if (i < len - 1) this.push(",");
+      if (i < len - 1) this.token(",");
     } else {
       // If the array expression ends with a hole, that hole
       // will be ignored by the interpreter, but if it ends with
       // two (or more) holes, we need to write out two (or more)
       // commas so that the resulting code is interpreted with
       // both (all) of the holes.
-      this.push(",");
+      this.token(",");
     }
   }
 
-  this.push("]");
+  this.token("]");
 }
 
 export { ArrayExpression as ArrayPattern };
 
 export function RegExpLiteral(node: Object) {
-  this.push(`/${node.pattern}/${node.flags}`);
+  this.word(`/${node.pattern}/${node.flags}`);
 }
 
 export function BooleanLiteral(node: Object) {
-  this.push(node.value ? "true" : "false");
+  this.word(node.value ? "true" : "false");
 }
 
 export function NullLiteral() {
-  this.push("null");
+  this.word("null");
 }
 
 export function NumericLiteral(node: Object) {
   let raw = this.getPossibleRaw(node);
   if (raw != null) {
-    this.push(raw);
+    this.word(raw);
     return;
   }
 
-  this.push(node.value + "");
+  this.word(node.value + "");
 }
 
 export function StringLiteral(node: Object, parent: Object) {
   let raw = this.getPossibleRaw(node);
   if (raw != null) {
-    this.push(raw);
+    this.token(raw);
     return;
   }
 
@@ -160,5 +160,5 @@ export function StringLiteral(node: Object, parent: Object) {
     val = `'${val}'`;
   }
 
-  return this.push(val);
+  return this.token(val);
 }

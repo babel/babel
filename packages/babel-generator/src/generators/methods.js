@@ -2,14 +2,14 @@ import * as t from "babel-types";
 
 export function _params(node: Object) {
   this.print(node.typeParameters, node);
-  this.push("(");
+  this.token("(");
   this.printList(node.params, node, {
     iterator: (node) => {
-      if (node.optional) this.push("?");
+      if (node.optional) this.token("?");
       this.print(node.typeAnnotation, node);
     }
   });
-  this.push(")");
+  this.token(")");
 
   if (node.returnType) {
     this.print(node.returnType, node);
@@ -22,24 +22,24 @@ export function _method(node: Object) {
 
   if (kind === "method" || kind === "init") {
     if (node.generator) {
-      this.push("*");
+      this.token("*");
     }
   }
 
   if (kind === "get" || kind === "set") {
-    this.push(kind);
+    this.word(kind);
     this.push(" ");
   }
 
   if (node.async) {
-    this.push("async");
+    this.word("async");
     this.push(" ");
   }
 
   if (node.computed) {
-    this.push("[");
+    this.token("[");
     this.print(key, node);
-    this.push("]");
+    this.token("]");
   } else {
     this.print(key, node);
   }
@@ -51,11 +51,11 @@ export function _method(node: Object) {
 
 export function FunctionExpression(node: Object) {
   if (node.async) {
-    this.push("async");
+    this.word("async");
     this.push(" ");
   }
-  this.push("function");
-  if (node.generator) this.push("*");
+  this.word("function");
+  if (node.generator) this.token("*");
 
   if (node.id) {
     this.push(" ");
@@ -73,7 +73,7 @@ export { FunctionExpression as FunctionDeclaration };
 
 export function ArrowFunctionExpression(node: Object) {
   if (node.async) {
-    this.push("async");
+    this.word("async");
     this.push(" ");
   }
 
@@ -84,7 +84,7 @@ export function ArrowFunctionExpression(node: Object) {
   }
 
   this.push(" ");
-  this.push("=>");
+  this.token("=>");
   this.push(" ");
 
   this.print(node.body, node);

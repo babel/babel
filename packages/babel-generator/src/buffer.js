@@ -98,7 +98,7 @@ export default class Buffer {
    */
 
   semicolon() {
-    this.push(";");
+    this.token(";");
   }
 
   /**
@@ -110,7 +110,7 @@ export default class Buffer {
     if (this.format.minified && !this._lastPrintedIsEmptyStatement) {
       this._removeLast(";");
     }
-    this.push("}");
+    this.token("}");
   }
 
   /**
@@ -118,7 +118,7 @@ export default class Buffer {
    */
 
   keyword(name: string) {
-    this.push(name);
+    this.word(name);
     this.space();
   }
 
@@ -133,6 +133,23 @@ export default class Buffer {
       this.push(" ");
     }
   }
+
+  /**
+   * Writes a token that can't be safely parsed without taking whitespace into account.
+   */
+
+  word(str: string) {
+    this.push(str);
+  }
+
+  /**
+   * Writes a simple token.
+   */
+
+  token(str: string) {
+    this.push(str);
+  }
+
 
   /**
    * Remove the last character.
@@ -180,7 +197,7 @@ export default class Buffer {
     if (state.printed) {
       this.dedent();
       this.newline();
-      this.push(")");
+      this.token(")");
     }
   }
 

@@ -41,7 +41,7 @@ export default class Printer extends Buffer {
     this.printAuxBeforeComment(oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
-    if (needsParens) this.push("(");
+    if (needsParens) this.token("(");
 
     this.printLeadingComments(node, parent);
 
@@ -61,7 +61,7 @@ export default class Printer extends Buffer {
 
     this.printTrailingComments(node, parent);
 
-    if (needsParens) this.push(")");
+    if (needsParens) this.token(")");
 
     // end
     this._printStack.pop();
@@ -312,7 +312,7 @@ export default class Printer extends Buffer {
 }
 
 function commaSeparator() {
-  this.push(",");
+  this.token(",");
   this.space();
 }
 

@@ -4,7 +4,7 @@ export function ImportSpecifier(node: Object) {
   this.print(node.imported, node);
   if (node.local && node.local.name !== node.imported.name) {
     this.push(" ");
-    this.push("as");
+    this.word("as");
     this.push(" ");
     this.print(node.local, node);
   }
@@ -22,47 +22,47 @@ export function ExportSpecifier(node: Object) {
   this.print(node.local, node);
   if (node.exported && node.local.name !== node.exported.name) {
     this.push(" ");
-    this.push("as");
+    this.word("as");
     this.push(" ");
     this.print(node.exported, node);
   }
 }
 
 export function ExportNamespaceSpecifier(node: Object) {
-  this.push("*");
+  this.token("*");
   this.push(" ");
-  this.push("as");
+  this.word("as");
   this.push(" ");
   this.print(node.exported, node);
 }
 
 export function ExportAllDeclaration(node: Object) {
-  this.push("export");
+  this.word("export");
   this.push(" ");
-  this.push("*");
+  this.token("*");
   if (node.exported) {
     this.push(" ");
-    this.push("as");
+    this.word("as");
     this.push(" ");
     this.print(node.exported, node);
   }
   this.push(" ");
-  this.push("from");
+  this.word("from");
   this.push(" ");
   this.print(node.source, node);
   this.semicolon();
 }
 
 export function ExportNamedDeclaration() {
-  this.push("export");
+  this.word("export");
   this.push(" ");
   ExportDeclaration.apply(this, arguments);
 }
 
 export function ExportDefaultDeclaration() {
-  this.push("export");
+  this.word("export");
   this.push(" ");
-  this.push("default");
+  this.word("default");
   this.push(" ");
   ExportDeclaration.apply(this, arguments);
 }
@@ -74,7 +74,7 @@ function ExportDeclaration(node: Object) {
     if (!t.isStatement(declar)) this.semicolon();
   } else {
     if (node.exportKind === "type") {
-      this.push("type");
+      this.word("type");
       this.push(" ");
     }
 
@@ -88,7 +88,7 @@ function ExportDeclaration(node: Object) {
         hasSpecial = true;
         this.print(specifiers.shift(), node);
         if (specifiers.length) {
-          this.push(",");
+          this.token(",");
           this.push(" ");
         }
       } else {
@@ -97,18 +97,18 @@ function ExportDeclaration(node: Object) {
     }
 
     if (specifiers.length || (!specifiers.length && !hasSpecial)) {
-      this.push("{");
+      this.token("{");
       if (specifiers.length) {
         this.space();
         this.printList(specifiers, node);
         this.space();
       }
-      this.push("}");
+      this.token("}");
     }
 
     if (node.source) {
       this.push(" ");
-      this.push("from");
+      this.word("from");
       this.push(" ");
       this.print(node.source, node);
     }
@@ -118,11 +118,11 @@ function ExportDeclaration(node: Object) {
 }
 
 export function ImportDeclaration(node: Object) {
-  this.push("import");
+  this.word("import");
   this.push(" ");
 
   if (node.importKind === "type" || node.importKind === "typeof") {
-    this.push(node.importKind);
+    this.word(node.importKind);
     this.push(" ");
   }
 
@@ -134,7 +134,7 @@ export function ImportDeclaration(node: Object) {
       if (t.isImportDefaultSpecifier(first) || t.isImportNamespaceSpecifier(first)) {
         this.print(specifiers.shift(), node);
         if (specifiers.length) {
-          this.push(",");
+          this.token(",");
           this.push(" ");
         }
       } else {
@@ -143,15 +143,15 @@ export function ImportDeclaration(node: Object) {
     }
 
     if (specifiers.length) {
-      this.push("{");
+      this.token("{");
       this.space();
       this.printList(specifiers, node);
       this.space();
-      this.push("}");
+      this.token("}");
     }
 
     this.push(" ");
-    this.push("from");
+    this.word("from");
     this.push(" ");
   }
 
@@ -160,9 +160,9 @@ export function ImportDeclaration(node: Object) {
 }
 
 export function ImportNamespaceSpecifier(node: Object) {
-  this.push("*");
+  this.token("*");
   this.push(" ");
-  this.push("as");
+  this.word("as");
   this.push(" ");
   this.print(node.local, node);
 }

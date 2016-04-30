@@ -10,7 +10,7 @@ export function TemplateElement(node: Object, parent: Object) {
   let value = (isFirst ? "`" : "}") + node.value.raw + (isLast ? "`" : "${");
 
   if (!isFirst) this.push(" ");
-  this.push(value);
+  this.token(value);
   if (!isLast) this.push(" ");
 }
 

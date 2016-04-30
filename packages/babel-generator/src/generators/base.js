@@ -12,7 +12,7 @@ export function Program(node: Object) {
 }
 
 export function BlockStatement(node: Object) {
-  this.push("{");
+  this.token("{");
   this.printInnerComments(node);
   if (node.body.length) {
     this.newline();
@@ -27,7 +27,7 @@ export function BlockStatement(node: Object) {
     this.rightBrace();
   } else {
     this.source("end", node.loc);
-    this.push("}");
+    this.token("}");
   }
 }
 

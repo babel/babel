@@ -21,47 +21,51 @@ export function UnaryExpression(node: Object) {
     needsSpace = false;
   }
 
-  this.push(node.operator);
+  if (node.operator === "void" || node.operator === "delete" || node.operator === "typeof") {
+    this.word(node.operator);
+  } else {
+    this.token(node.operator);
+  }
   if (needsSpace) this.push(" ");
   this.print(node.argument, node);
 }
 
 export function DoExpression(node: Object) {
-  this.push("do");
+  this.word("do");
   this.space();
   this.print(node.body, node);
 }
 
 export function ParenthesizedExpression(node: Object) {
-  this.push("(");
+  this.token("(");
   this.print(node.expression, node);
-  this.push(")");
+  this.token(")");
 }
 
 export function UpdateExpression(node: Object) {
   if (node.prefix) {
-    this.push(node.operator);
+    this.token(node.operator);
     this.print(node.argument, node);
   } else {
     this.print(node.argument, node);
-    this.push(node.operator);
+    this.token(node.operator);
   }
 }
 
 export function ConditionalExpression(node: Object) {
   this.print(node.test, node);
   this.space();
-  this.push("?");
+  this.token("?");
   this.space();
   this.print(node.consequent, node);
   this.space();
-  this.push(":");
+  this.token(":");
   this.space();
   this.print(node.alternate, node);
 }
 
 export function NewExpression(node: Object, parent: Object) {
-  this.push("new");
+  this.word("new");
   this.push(" ");
   this.print(node.callee, node);
   if (node.arguments.length === 0 && this.format.minified &&
@@ -69,9 +73,9 @@ export function NewExpression(node: Object, parent: Object) {
       !t.isMemberExpression(parent) &&
       !t.isNewExpression(parent)) return;
 
-  this.push("(");
+  this.token("(");
   this.printList(node.arguments, node);
-  this.push(")");
+  this.token(")");
 }
 
 export function SequenceExpression(node: Object) {
@@ -79,21 +83,21 @@ export function SequenceExpression(node: Object) {
 }
 
 export function ThisExpression() {
-  this.push("this");
+  this.word("this");
 }
 
 export function Super() {
-  this.push("super");
+  this.word("super");
 }
 
 export function Decorator(node: Object) {
-  this.push("@");
+  this.token("@");
   this.print(node.expression, node);
   this.newline();
 }
 
 function commaSeparatorNewline() {
-  this.push(",");
+  this.token(",");
   this.push("\n");
 }
 
@@ -101,7 +105,7 @@ export function CallExpression(node: Object) {
   this.print(node.callee, node);
   if (node.loc) this.printAuxAfterComment();
 
-  this.push("(");
+  this.token("(");
 
   let isPrettyCall = node._prettyCall && !this.format.retainLines && !this.format.compact;
 
@@ -119,15 +123,15 @@ export function CallExpression(node: Object) {
     this.dedent();
   }
 
-  this.push(")");
+  this.token(")");
 }
 
 function buildYieldAwait(keyword: string) {
   return function (node: Object) {
-    this.push(keyword);
+    this.word(keyword);
 
     if (node.delegate) {
-      this.push("*");
+      this.token("*");
     }
 
     if (node.argument) {
@@ -155,7 +159,7 @@ export function ExpressionStatement(node: Object) {
 export function AssignmentPattern(node: Object) {
   this.print(node.left, node);
   this.space();
-  this.push("=");
+  this.token("=");
   this.space();
   this.print(node.right, node);
 }
@@ -167,7 +171,7 @@ export function AssignmentExpression(node: Object, parent: Object) {
                !n.needsParens(node, parent);
 
   if (parens) {
-    this.push("(");
+    this.token("(");
   }
 
   this.print(node.left, node);
@@ -175,7 +179,11 @@ export function AssignmentExpression(node: Object, parent: Object) {
   let spaces = !this.format.compact || node.operator === "in" || node.operator === "instanceof";
   if (spaces) this.push(" ");
 
-  this.push(node.operator);
+  if (node.operator === "in" || node.operator === "instanceof") {
+    this.word(node.operator);
+  } else {
+    this.token(node.operator);
+  }
 
   if (!spaces) {
     // space is mandatory to avoid outputting <!--
@@ -197,13 +205,13 @@ export function AssignmentExpression(node: Object, parent: Object) {
   this.print(node.right, node);
 
   if (parens) {
-    this.push(")");
+    this.token(")");
   }
 }
 
 export function BindExpression(node: Object) {
   this.print(node.object, node);
-  this.push("::");
+  this.token("::");
   this.print(node.callee, node);
 }
 
@@ -225,9 +233,9 @@ export function MemberExpression(node: Object) {
   }
 
   if (computed) {
-    this.push("[");
+    this.token("[");
     this.print(node.property, node);
-    this.push("]");
+    this.token("]");
   } else {
     if (t.isNumericLiteral(node.object)) {
       let val = this.getPossibleRaw(node.object) || node.object.value;
@@ -236,18 +244,18 @@ export function MemberExpression(node: Object) {
         !SCIENTIFIC_NOTATION.test(val) &&
         !ZERO_DECIMAL_INTEGER.test(val) &&
         !this.endsWith(".")) {
-        this.push(".");
+        this.token(".");
       }
     }
 
-    this.push(".");
+    this.token(".");
     this.print(node.property, node);
   }
 }
 
 export function MetaProperty(node: Object) {
   this.print(node.meta, node);
-  this.push(".");
+  this.token(".");
   this.print(node.property, node);
 }
 
