@@ -9,9 +9,9 @@ export function TemplateElement(node: Object, parent: Object) {
 
   let value = (isFirst ? "`" : "}") + node.value.raw + (isLast ? "`" : "${");
 
-  if (!isFirst) this.push(" ");
+  if (!isFirst) this.space();
   this.token(value);
-  if (!isLast) this.push(" ");
+  if (!isLast) this.space();
 }
 
 export function TemplateLiteral(node: Object) {

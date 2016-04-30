@@ -54,18 +54,18 @@ export function JSXElement(node: Object) {
 }
 
 function spaceSeparator() {
-  this.push(" ");
+  this.space();
 }
 
 export function JSXOpeningElement(node: Object) {
   this.token("<");
   this.print(node.name, node);
   if (node.attributes.length > 0) {
-    this.push(" ");
+    this.space();
     this.printJoin(node.attributes, node, { separator: spaceSeparator });
   }
   if (node.selfClosing) {
-    this.push(" ");
+    this.space();
     this.token("/>");
   } else {
     this.token(">");

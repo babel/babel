@@ -33,7 +33,7 @@ export function IfStatement(node: Object) {
   if (node.alternate) {
     if (this.endsWith("}")) this.space();
     this.word("else");
-    this.push(" ");
+    this.space();
     this.printAndIndentOnComments(node.alternate, node);
   }
 }
@@ -81,9 +81,9 @@ let buildForXStatement = function (op) {
     this.keyword("for");
     this.token("(");
     this.print(node.left, node);
-    this.push(" ");
+    this.space();
     this.word(op);
-    this.push(" ");
+    this.space();
     this.print(node.right, node);
     this.token(")");
     this.printBlock(node);
@@ -95,7 +95,7 @@ export let ForOfStatement = buildForXStatement("of");
 
 export function DoWhileStatement(node: Object) {
   this.word("do");
-  this.push(" ");
+  this.space();
   this.print(node.body, node);
   this.space();
   this.keyword("while");
@@ -130,7 +130,7 @@ export let ThrowStatement    = buildLabelStatement("throw", "argument");
 export function LabeledStatement(node: Object) {
   this.print(node.label, node);
   this.token(":");
-  this.push(" ");
+  this.space();
   this.print(node.body, node);
 }
 
@@ -151,7 +151,7 @@ export function TryStatement(node: Object) {
   if (node.finalizer) {
     this.space();
     this.word("finally");
-    this.push(" ");
+    this.space();
     this.print(node.finalizer, node);
   }
 }
@@ -186,7 +186,7 @@ export function SwitchStatement(node: Object) {
 export function SwitchCase(node: Object) {
   if (node.test) {
     this.word("case");
-    this.push(" ");
+    this.space();
     this.print(node.test, node);
     this.token(":");
   } else {
@@ -221,7 +221,7 @@ function constDeclarationIdent() {
 
 export function VariableDeclaration(node: Object, parent: Object) {
   this.word(node.kind);
-  this.push(" ");
+  this.space();
 
   let hasInits = false;
   // don't add whitespace to loop heads

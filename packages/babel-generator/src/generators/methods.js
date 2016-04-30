@@ -28,12 +28,12 @@ export function _method(node: Object) {
 
   if (kind === "get" || kind === "set") {
     this.word(kind);
-    this.push(" ");
+    this.space();
   }
 
   if (node.async) {
     this.word("async");
-    this.push(" ");
+    this.space();
   }
 
   if (node.computed) {
@@ -52,13 +52,13 @@ export function _method(node: Object) {
 export function FunctionExpression(node: Object) {
   if (node.async) {
     this.word("async");
-    this.push(" ");
+    this.space();
   }
   this.word("function");
   if (node.generator) this.token("*");
 
   if (node.id) {
-    this.push(" ");
+    this.space();
     this.print(node.id, node);
   } else {
     this.space();
@@ -74,7 +74,7 @@ export { FunctionExpression as FunctionDeclaration };
 export function ArrowFunctionExpression(node: Object) {
   if (node.async) {
     this.word("async");
-    this.push(" ");
+    this.space();
   }
 
   if (node.params.length === 1 && t.isIdentifier(node.params[0])) {
@@ -83,9 +83,9 @@ export function ArrowFunctionExpression(node: Object) {
     this._params(node);
   }
 
-  this.push(" ");
+  this.space();
   this.token("=>");
-  this.push(" ");
+  this.space();
 
   this.print(node.body, node);
 }

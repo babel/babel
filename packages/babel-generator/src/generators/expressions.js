@@ -56,7 +56,7 @@ export function ConditionalExpression(node: Object) {
 
 export function NewExpression(node: Object, parent: Object) {
   this.word("new");
-  this.push(" ");
+  this.space();
   this.print(node.callee, node);
   if (node.arguments.length === 0 && this.format.minified &&
       !t.isCallExpression(parent, { callee: node }) &&
@@ -125,7 +125,7 @@ function buildYieldAwait(keyword: string) {
     }
 
     if (node.argument) {
-      this.push(" ");
+      this.space();
       let terminatorState = this.startTerminatorless();
       this.print(node.argument, node);
       this.endTerminatorless(terminatorState);

@@ -3,9 +3,9 @@ import * as t from "babel-types";
 export function ImportSpecifier(node: Object) {
   this.print(node.imported, node);
   if (node.local && node.local.name !== node.imported.name) {
-    this.push(" ");
+    this.space();
     this.word("as");
-    this.push(" ");
+    this.space();
     this.print(node.local, node);
   }
 }
@@ -21,49 +21,49 @@ export function ExportDefaultSpecifier(node: Object) {
 export function ExportSpecifier(node: Object) {
   this.print(node.local, node);
   if (node.exported && node.local.name !== node.exported.name) {
-    this.push(" ");
+    this.space();
     this.word("as");
-    this.push(" ");
+    this.space();
     this.print(node.exported, node);
   }
 }
 
 export function ExportNamespaceSpecifier(node: Object) {
   this.token("*");
-  this.push(" ");
+  this.space();
   this.word("as");
-  this.push(" ");
+  this.space();
   this.print(node.exported, node);
 }
 
 export function ExportAllDeclaration(node: Object) {
   this.word("export");
-  this.push(" ");
+  this.space();
   this.token("*");
   if (node.exported) {
-    this.push(" ");
+    this.space();
     this.word("as");
-    this.push(" ");
+    this.space();
     this.print(node.exported, node);
   }
-  this.push(" ");
+  this.space();
   this.word("from");
-  this.push(" ");
+  this.space();
   this.print(node.source, node);
   this.semicolon();
 }
 
 export function ExportNamedDeclaration() {
   this.word("export");
-  this.push(" ");
+  this.space();
   ExportDeclaration.apply(this, arguments);
 }
 
 export function ExportDefaultDeclaration() {
   this.word("export");
-  this.push(" ");
+  this.space();
   this.word("default");
-  this.push(" ");
+  this.space();
   ExportDeclaration.apply(this, arguments);
 }
 
@@ -75,7 +75,7 @@ function ExportDeclaration(node: Object) {
   } else {
     if (node.exportKind === "type") {
       this.word("type");
-      this.push(" ");
+      this.space();
     }
 
     let specifiers = node.specifiers.slice(0);
@@ -89,7 +89,7 @@ function ExportDeclaration(node: Object) {
         this.print(specifiers.shift(), node);
         if (specifiers.length) {
           this.token(",");
-          this.push(" ");
+          this.space();
         }
       } else {
         break;
@@ -107,9 +107,9 @@ function ExportDeclaration(node: Object) {
     }
 
     if (node.source) {
-      this.push(" ");
+      this.space();
       this.word("from");
-      this.push(" ");
+      this.space();
       this.print(node.source, node);
     }
 
@@ -119,11 +119,11 @@ function ExportDeclaration(node: Object) {
 
 export function ImportDeclaration(node: Object) {
   this.word("import");
-  this.push(" ");
+  this.space();
 
   if (node.importKind === "type" || node.importKind === "typeof") {
     this.word(node.importKind);
-    this.push(" ");
+    this.space();
   }
 
   let specifiers = node.specifiers.slice(0);
@@ -135,7 +135,7 @@ export function ImportDeclaration(node: Object) {
         this.print(specifiers.shift(), node);
         if (specifiers.length) {
           this.token(",");
-          this.push(" ");
+          this.space();
         }
       } else {
         break;
@@ -150,9 +150,9 @@ export function ImportDeclaration(node: Object) {
       this.token("}");
     }
 
-    this.push(" ");
+    this.space();
     this.word("from");
-    this.push(" ");
+    this.space();
   }
 
   this.print(node.source, node);
@@ -161,8 +161,8 @@ export function ImportDeclaration(node: Object) {
 
 export function ImportNamespaceSpecifier(node: Object) {
   this.token("*");
-  this.push(" ");
+  this.space();
   this.word("as");
-  this.push(" ");
+  this.space();
   this.print(node.local, node);
 }

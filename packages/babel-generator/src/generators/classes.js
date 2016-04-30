@@ -3,24 +3,24 @@ export function ClassDeclaration(node: Object) {
   this.word("class");
 
   if (node.id) {
-    this.push(" ");
+    this.space();
     this.print(node.id, node);
   }
 
   this.print(node.typeParameters, node);
 
   if (node.superClass) {
-    this.push(" ");
+    this.space();
     this.word("extends");
-    this.push(" ");
+    this.space();
     this.print(node.superClass, node);
     this.print(node.superTypeParameters, node);
   }
 
   if (node.implements) {
-    this.push(" ");
+    this.space();
     this.word("implements");
-    this.push(" ");
+    this.space();
     this.printList(node.implements, node);
   }
 
@@ -51,7 +51,7 @@ export function ClassProperty(node: Object) {
 
   if (node.static) {
     this.word("static");
-    this.push(" ");
+    this.space();
   }
   this.print(node.key, node);
   this.print(node.typeAnnotation, node);
@@ -69,12 +69,12 @@ export function ClassMethod(node: Object) {
 
   if (node.static) {
     this.word("static");
-    this.push(" ");
+    this.space();
   }
 
   if (node.kind === "constructorCall") {
     this.word("call");
-    this.push(" ");
+    this.space();
   }
 
   this._method(node);
