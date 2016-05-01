@@ -100,7 +100,8 @@ export function DoWhileStatement(node: Object) {
   this.keyword("while");
   this.push("(");
   this.print(node.test, node);
-  this.push(");");
+  this.push(")");
+  this.semicolon();
 }
 
 function buildLabelStatement(prefix, key = "label") {
@@ -200,7 +201,8 @@ export function SwitchCase(node: Object) {
 }
 
 export function DebuggerStatement() {
-  this.push("debugger;");
+  this.push("debugger");
+  this.semicolon();
 }
 
 export function VariableDeclaration(node: Object, parent: Object) {
