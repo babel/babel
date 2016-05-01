@@ -102,14 +102,6 @@ export default class Buffer {
   }
 
   /**
-   * Ensure last character is a semicolon.
-   */
-
-  ensureSemicolon() {
-    if (!this.isLast(";")) this.semicolon();
-  }
-
-  /**
    * Add a right brace to the buffer.
    */
 
