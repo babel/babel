@@ -8,7 +8,7 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
-      ExportDefaultDeclaration(path){
+      ExportDefaultDeclaration(path) {
         if (!path.get("declaration").isClassDeclaration()) return;
 
         let { node } = path;
