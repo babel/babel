@@ -40,10 +40,10 @@ module.exports = exports;
 // To include the runtime globally in the current node process, call
 // require("regenerator").runtime().
 function runtime() {
-  require("./runtime");
+  require("regenerator-runtime");
 }
 exports.runtime = runtime;
-runtime.path = path.join(__dirname, "runtime.js");
+runtime.path = require("regenerator-runtime/path.js").path;
 
 function compile(source, options) {
   options = normalizeOptions(options);
@@ -52,7 +52,7 @@ function compile(source, options) {
     return {
       // Shortcut: no generators or async functions to transform.
       code: (options.includeRuntime === true ? fs.readFileSync(
-        path.join(__dirname, "runtime.js"), "utf-8"
+        runtime.path, "utf-8"
       ) + "\n" : "") + source
     };
   }
