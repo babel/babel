@@ -48,7 +48,7 @@ Now it should be more like:
   ├─┬ babel-plugin-syntax-exponentiation-operator@6.8.0
 ```
 
-Ref [T7252](https://phabricator.babeljs.io/T7252), [T7275](https://phabricator.babeljs.io/T7275), [T6689](https://phabricator.babeljs.io/T6689)
+Related issues: [T7252](https://phabricator.babeljs.io/T7252), [T7275](https://phabricator.babeljs.io/T7275), [T6689](https://phabricator.babeljs.io/T6689), [sindresorhus/ava#660](https://github.com/sindresorhus/ava/issues/660), [vuejs/vue-loader#96](https://github.com/vuejs/vue-loader/issues/96), etc.
 
 #### Internal
 * [#3438](https://github.com/babel/babel/pull/3438) Self host on babel6. ([@hzoo](https://github.com/hzoo))
