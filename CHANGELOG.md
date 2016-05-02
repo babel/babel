@@ -13,6 +13,51 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.8.0 (2016-05-02)
+
+**Babel is compiling with Babel 6!**
+
+![](http://i.imgur.com/7drHiqr.gif)
+
+### Why this may be useful
+tldr: This fixes npm deduping issues with babel-runtime 5 and 6.
+
+- Because all Babel packages were using babel-runtime@5, npm can't dedupe any of them and you end up with a lot of babel-runtime@5s if a consumer of Babel also depended on babel-runtime@6.
+
+Example:
+
+```
+└─┬ babel-plugin-transform-exponentiation-operator@6.5.0
+  ├─┬ babel-helper-builder-binary-assignment-operator-visitor@6.6.5
+  │ ├─┬ babel-helper-explode-assignable-expression@6.6.5
+  │ │ └── babel-runtime@5.8.38
+  │ └── babel-runtime@5.8.38
+  ├─┬ babel-plugin-syntax-exponentiation-operator@6.5.0
+  │ └── babel-runtime@5.8.38
+  └── babel-runtime@5.8.38
+```
+
+Now it should be more like:
+
+```
+└─┬ babel-runtime@6.8.0
+└─┬ babel-plugin-transform-exponentiation-operator@6.8.0
+  ├─┬ babel-helper-builder-binary-assignment-operator-visitor@6.8.0
+  │ ├─┬ babel-helper-explode-assignable-expression@6.8.0
+  ├─┬ babel-plugin-syntax-exponentiation-operator@6.8.0
+```
+
+Ref [T7252](https://phabricator.babeljs.io/T7252), [T7275](https://phabricator.babeljs.io/T7275), [T6689](https://phabricator.babeljs.io/T6689)
+
+#### Internal
+* [#3438](https://github.com/babel/babel/pull/3438) Self host on babel6. ([@hzoo](https://github.com/hzoo))
+* [#3477](https://github.com/babel/babel/pull/3477) turn transform into a simple `for` loop. ([@mattkrick](https://github.com/mattkrick))
+
+#### Misc
+* [#3484](https://github.com/babel/babel/pull/3484) Travis: add node 6, remove iojs. ([@hzoo](https://github.com/hzoo))
+* [#3491](https://github.com/babel/babel/pull/3491) babel-template is an implementation of quasiquotes. ([@rektide](https://github.com/rektide))
+* [#3479](https://github.com/babel/babel/pull/3479) Remove unused import in README ([@oliviertassinari](https://github.com/oliviertassinari))
+
 ## 6.7.7 (2016-04-20)
 
 #### Bug Fix
