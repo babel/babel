@@ -88,7 +88,7 @@ export function Decorator(node: Object) {
 
 function commaSeparatorNewline() {
   this.token(",");
-  this.push("\n");
+  this.newline();
 }
 
 export function CallExpression(node: Object) {
