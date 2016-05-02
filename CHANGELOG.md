@@ -19,8 +19,9 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ![](http://i.imgur.com/7drHiqr.gif)
 
-### Why this may be useful
-tldr: This fixes npm deduping issues with babel-runtime 5 and 6.
+### Why this is relevant
+
+TLDR: This fixes npm deduping issues with babel-runtime 5 and 6.
 
 - Because all Babel packages were using babel-runtime@5, npm can't dedupe any of them and you end up with a lot of babel-runtime@5s if a consumer of Babel also depended on babel-runtime@6.
 
