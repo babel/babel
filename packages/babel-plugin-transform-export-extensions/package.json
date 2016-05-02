@@ -10,7 +10,7 @@
   ],
   "dependencies": {
     "babel-plugin-syntax-export-extensions": "^6.3.13",
-    "babel-runtime": "^5.0.0"
+    "babel-runtime": "^6.0.0"
   },
   "devDependencies": {
     "babel-helper-plugin-test-runner": "^6.3.13"

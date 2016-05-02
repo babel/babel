@@ -10,6 +10,6 @@
   "dependencies": {
     "core-js": "^2.1.0",
     "babel-regenerator-runtime": "^6.3.13",
-    "babel-runtime": "^5.0.0"
+    "babel-runtime": "^6.0.0"
   }
 }

@@ -8,6 +8,6 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-messages",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-runtime": "^5.0.0"
+    "babel-runtime": "^6.0.0"
   }
 }

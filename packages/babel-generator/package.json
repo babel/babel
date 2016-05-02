@@ -12,7 +12,7 @@
   ],
   "dependencies": {
     "babel-messages": "^6.7.2",
-    "babel-runtime": "^5.0.0",
+    "babel-runtime": "^6.0.0",
     "babel-types": "^6.7.7",
     "detect-indent": "^3.0.1",
     "is-integer": "^1.0.4",
