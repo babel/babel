@@ -1156,7 +1156,10 @@ describe("delegated yield", function() {
     assert.ok(checkResult.throwResult.value instanceof TypeError);
     assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, false);
-    assert.strictEqual(checkResult.returnCalled, true);
+    if (runningInTranslation) {
+      // BUG: Nodes <v6 neglect to call .return here.
+      assert.strictEqual(checkResult.returnCalled, true);
+    }
 
     var checkResult = check(function(thrown) {
       return { value: "from throw", done: true };
