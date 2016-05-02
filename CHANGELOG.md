@@ -15,15 +15,15 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## 6.8.0 (2016-05-02)
 
-**Babel is compiling with Babel 6!**
+**Babel is now compiled with Babel 6!**
 
 ![](http://i.imgur.com/7drHiqr.gif)
 
 ### Why this is relevant
 
-TLDR: This fixes npm deduping issues with babel-runtime 5 and 6.
+TLDR: This fixes the npm deduping issues regarding babel-runtime 5 and 6.
 
-- Because all Babel packages were using babel-runtime@5, npm can't dedupe any of them and you end up with a lot of babel-runtime@5s if a consumer of Babel also depended on babel-runtime@6.
+- Because all Babel packages were compiled with Babel 5 and using babel-runtime@5, npm can't dedupe any of them given if a consumer of Babel also added a dependency on babel-runtime@6.
 
 Example:
 
