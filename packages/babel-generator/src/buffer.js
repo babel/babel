@@ -106,7 +106,7 @@ export default class Buffer {
     if (!this.endsWith("\n")) this.newline();
 
     if (this.format.minified && !this._lastPrintedIsEmptyStatement) {
-      this._removeLast(";");
+      this.removeLast(";");
     }
     this.token("}");
   }
@@ -166,11 +166,6 @@ export default class Buffer {
    */
 
   removeLast(cha: string) {
-    if (this.format.compact) return;
-    return this._removeLast(cha);
-  }
-
-  _removeLast(cha: string) {
     if (!this.endsWith(cha)) return;
     this.buf = this.buf.slice(0, -1);
     this.last = this.buf[this.buf.length - 1];
