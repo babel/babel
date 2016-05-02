@@ -1139,14 +1139,13 @@ describe("delegated yield", function() {
       // BUG: Node v0.11 and v0.12 neglect to call .return here.
       assert.strictEqual(checkResult.throwResult.value, thrownFromReturn);
     } else {
-      // This is the TypeError that results from trying to call the
-      // undefined .throw method of the iterator.
-      assert.ok(checkResult.throwResult.value instanceof TypeError);
+      // This is the Error that results from trying to call the undefined
+      // .throw method of the iterator.
+      assert.ok(checkResult.throwResult.value instanceof Error);
     }
     assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, false);
-    // BUG: Node v0.11 and v0.12 neglect to call .return here.
-    assert.strictEqual(checkResult.returnCalled, runningInTranslation);
+    assert.strictEqual(checkResult.returnCalled, true);
 
     checkResult = check(undefined, function() {
       return { value: "from return", done: true };
@@ -1157,8 +1156,7 @@ describe("delegated yield", function() {
     assert.ok(checkResult.throwResult.value instanceof TypeError);
     assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, false);
-    // BUG: Node v0.11 and v0.12 neglect to call .return here.
-    assert.strictEqual(checkResult.returnCalled, runningInTranslation);
+    assert.strictEqual(checkResult.returnCalled, true);
 
     var checkResult = check(function(thrown) {
       return { value: "from throw", done: true };
@@ -1181,11 +1179,13 @@ describe("delegated yield", function() {
     assert.strictEqual(checkResult.returnCalled, false);
 
     var checkResult = check(undefined, undefined);
-    assert.notStrictEqual(checkResult.throwResult.value, throwee);
-    // This is the TypeError that results from trying to call the
-    // undefined .throw method of the iterator.
-    assert.ok(checkResult.throwResult.value instanceof TypeError);
-    assert.strictEqual(checkResult.throwResult.done, true);
+    if (runningInTranslation) {
+      assert.notStrictEqual(checkResult.throwResult.value, throwee);
+      // This is the TypeError that results from trying to call the
+      // undefined .throw method of the iterator.
+      assert.ok(checkResult.throwResult.value instanceof Error);
+      assert.strictEqual(checkResult.throwResult.done, true);
+    }
     assert.strictEqual(checkResult.throwCalled, false);
     assert.strictEqual(checkResult.returnCalled, false);
   });
@@ -1207,7 +1207,10 @@ describe("delegated yield", function() {
     assert.deepEqual(g.next(), { value: 2, done: false });
 
     if (typeof g.return === "function") {
-      assert.deepEqual(g.return(-1), { value: -1, done: true });
+      var returnResult = g.return(-1);
+      if (runningInTranslation) {
+        assert.deepEqual(returnResult, { value: -1, done: true });
+      }
       assert.deepEqual(g.next(), { value: void 0, done: true });
     }
   });
@@ -2245,9 +2248,6 @@ describe("generator function prototype", function() {
     var g2 = f();
     assert.strictEqual(g2.x, 42);
 
-    var g3 = new f();
-    assert.strictEqual(g3.x, 42);
-
     function* f2() {
       yield 1;
     }
@@ -2411,6 +2411,13 @@ describe("generator return method", function() {
 
     assert.deepEqual(g1.next(), { value: 0, done: false });
     assert.deepEqual(g1.next(), { value: 1, done: false });
+
+    if (! runningInTranslation) {
+      // Returning when the generator is suspended on a delegate doesn't
+      // seem to work correctly in Node 6.
+      return;
+    }
+
     assert.deepEqual(g1.return(-1), { value: -1, done: true });
     assert.deepEqual(checkpoints, [
       "callee finally",
