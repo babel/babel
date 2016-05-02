@@ -1136,8 +1136,9 @@ describe("delegated yield", function() {
       throw thrownFromReturn;
     });
     if (runningInTranslation) {
-      // BUG: Node v0.11 and v0.12 neglect to call .return here.
+      // BUG: Nodes <v6 neglect to call .return here.
       assert.strictEqual(checkResult.throwResult.value, thrownFromReturn);
+      assert.strictEqual(checkResult.returnCalled, true);
     } else {
       // This is the Error that results from trying to call the undefined
       // .throw method of the iterator.
@@ -1145,7 +1146,6 @@ describe("delegated yield", function() {
     }
     assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, false);
-    assert.strictEqual(checkResult.returnCalled, true);
 
     checkResult = check(undefined, function() {
       return { value: "from return", done: true };
