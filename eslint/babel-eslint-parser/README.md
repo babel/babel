@@ -4,7 +4,9 @@
 **babel-eslint** allows you to lint **ALL** valid Babel code with the fantastic
 [ESLint](https://github.com/eslint/eslint).
 
-`babel-eslint` is successfully linting babel and many other projects.
+#### Note: You don't need to use babel-eslint if you are only using ES6/ES2015. ESLint actually supports ES6/ES7, JSX, and object rest/spread by default now.
+
+##### At the moment, you'll need it if you use stuff like class properties, decorators, async/await, types.
 
 > If there is an issue, first check if it can be reproduced with the regular parser or with the latest versions of `eslint` and `babel-eslint`!
 
