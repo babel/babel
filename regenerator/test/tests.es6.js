@@ -2342,12 +2342,6 @@ describe("for-of loops", function() {
 });
 
 describe("generator return method", function() {
-  if (!runningInTranslation) {
-    // The return method has not been specified or implemented natively,
-    // yet, so these tests need only pass in translation.
-    return;
-  }
-
   it("should work with newborn generators", function() {
     function *gen() {
       yield 0;
