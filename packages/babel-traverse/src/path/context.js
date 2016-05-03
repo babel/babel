@@ -221,7 +221,7 @@ export function requeue(pathToQueue = this) {
   }
 }
 
-export function _getQueueContexts(){
+export function _getQueueContexts() {
   let path = this;
   let contexts = this.contexts;
   while (!contexts.length) {

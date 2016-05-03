@@ -327,14 +327,14 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
-      ExportNamedDeclaration(path){
+      ExportNamedDeclaration(path) {
         let declaration = path.get("declaration");
         if (!declaration.isVariableDeclaration()) return;
         if (!variableDeclarationHasPattern(declaration.node)) return;
 
         let specifiers = [];
 
-        for (let name in path.getOuterBindingIdentifiers(path)){
+        for (let name in path.getOuterBindingIdentifiers(path)) {
           let id = t.identifier(name);
           specifiers.push(t.exportSpecifier(id, id));
         }
