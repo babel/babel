@@ -23,7 +23,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 TLDR: This fixes the npm deduping issues regarding babel-runtime 5 and 6.
 
-- Because all Babel packages were compiled with Babel 5 and using babel-runtime@5, npm can't dedupe any of them given if a consumer of Babel also added a dependency on babel-runtime@6.
+- Because all Babel packages were compiled with Babel 5 and using babel-runtime@5, npm can't dedupe any of them if a consumer of Babel also added a dependency on babel-runtime@6.
 
 Example:
 
