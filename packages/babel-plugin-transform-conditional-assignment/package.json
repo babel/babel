@@ -1,0 +1,18 @@
+{
+  "name": "babel-plugin-transform-conditional-assignment",
+  "version": "6.8.0",
+  "description": "Compile ES2017 conditional assignment to ES5",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-conditional-assignment",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "babel-plugin-syntax-conditional-assignment": "^6.8.0",
+    "babel-runtime": "^6.0.0"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.8.0"
+  }
+}
