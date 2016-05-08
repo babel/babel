@@ -93,6 +93,20 @@ suite("babel-code-frame", function () {
     ].join("\n"));
   });
 
+  test("tabs", function () {
+    const rawLines = [
+      "\tclass Foo {",
+      "\t  \t\t    constructor\t(\t)",
+      "\t};",
+    ].join('\n');
+    assert.equal(codeFrame(rawLines, 2, 25), [
+      "  1 | \tclass Foo {",
+      "> 2 | \t  \t\t    constructor\t(\t)",
+      "    | \t  \t\t               \t \t ^",
+      "  3 | \t};",
+    ].join('\n'));
+  });
+
   test("opts.highlightCode", function () {
     const rawLines = "console.log('babel')";
     const result = codeFrame(rawLines, 1, 9, {highlightCode: true})

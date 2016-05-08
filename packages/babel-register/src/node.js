@@ -36,7 +36,7 @@ let maps          = {};
 
 let cwd = process.cwd();
 
-function getRelativePath(filename){
+function getRelativePath(filename) {
   return path.relative(cwd, filename);
 }
 

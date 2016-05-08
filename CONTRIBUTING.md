@@ -7,6 +7,8 @@
    |
    <strong><a href="#running-tests">Running tests</a></strong>
    |
+   <strong><a href="#writing-tests">Writing tests</a></strong>
+   |
    <strong><a href="#internals">Internals</a></strong>
 </p>
 

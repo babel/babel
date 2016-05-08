@@ -2,6 +2,8 @@
 
 > Generate an AST from a string template.
 
+In computer science, this is known as an implementation of quasiquotes.
+
 ## Install
 
 ```sh

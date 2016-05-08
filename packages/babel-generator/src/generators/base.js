@@ -22,8 +22,11 @@ export function BlockStatement(node: Object) {
 
     this.printSequence(node.body, node, { indent: true });
     if (!this.format.retainLines && !this.format.concise) this.removeLast("\n");
+
+    this.source("end", node.loc);
     this.rightBrace();
   } else {
+    this.source("end", node.loc);
     this.push("}");
   }
 }
