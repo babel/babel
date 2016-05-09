@@ -1,3 +1,10 @@
 {
-  "plugins": ["undeclared-variables-check"]
+  "plugins": [
+    ["undeclared-variables-check", {
+      "env": "node",
+      "globals": [
+        "myTestGlobal"
+      ]
+    }]
+  ]
 }
