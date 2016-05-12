@@ -16,7 +16,7 @@ tc.j_expr = new TokContext("<tag>...</tag>", true, true);
 
 tt.jsxName = new TokenType("jsxName");
 tt.jsxText = new TokenType("jsxText", { beforeExpr: true });
-tt.jsxTagStart = new TokenType("jsxTagStart");
+tt.jsxTagStart = new TokenType("jsxTagStart", { startsExpr: true });
 tt.jsxTagEnd = new TokenType("jsxTagEnd");
 
 tt.jsxTagStart.updateContext = function() {
