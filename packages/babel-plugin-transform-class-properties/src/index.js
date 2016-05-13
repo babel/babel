@@ -145,6 +145,16 @@ export default function ({ types: t }) {
         }
 
         path.insertAfter(nodes);
+      },
+      ArrowFunctionExpression(path) {
+        let classExp = path.get("body");
+        if (!classExp.isClassExpression()) return;
+
+        let body = classExp.get("body");
+        let members = body.get("body");
+        if (members.some((member) => member.isClassProperty())) {
+          path.ensureBlock();
+        }
       }
     }
   };
