@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    ["undeclared-variables-check", {
+      "cacheGlobals": false,
+      "globals": [
+        "myTestGlobal"
+      ]
+    }]
+  ]
+}

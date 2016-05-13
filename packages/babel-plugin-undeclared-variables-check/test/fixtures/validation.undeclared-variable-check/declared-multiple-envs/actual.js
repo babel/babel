@@ -1,0 +1,2 @@
+require("some-module");
+mocha();
