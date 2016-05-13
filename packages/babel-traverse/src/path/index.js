@@ -6,7 +6,7 @@ import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
 import invariant from "invariant";
 import traverse from "../index";
-import assign from "lodash/object/assign";
+import assign from "lodash/assign";
 import Scope from "../scope";
 import * as t from "babel-types";
 import { path as pathCache } from "../cache";

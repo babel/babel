@@ -1,5 +1,5 @@
 var outputFile = require("output-file-sync");
-var each       = require("lodash/collection/each");
+var each       = require("lodash/each");
 var fs         = require("fs");
 var _          = require("lodash");
 

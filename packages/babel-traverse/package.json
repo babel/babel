@@ -16,7 +16,7 @@
     "debug": "^2.2.0",
     "globals": "^8.3.0",
     "invariant": "^2.2.0",
-    "lodash": "^3.10.1",
+    "lodash": "^4.2.0",
     "repeating": "^1.1.3"
   }
 }

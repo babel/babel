@@ -16,6 +16,6 @@
     "source-map": "^0.5.0",
     "babel-code-frame": "^6.8.0",
     "chai": "^2.2.0",
-    "lodash": "^3.10.0"
+    "lodash": "^4.2.0"
   }
 }
