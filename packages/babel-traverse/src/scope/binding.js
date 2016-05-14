@@ -82,6 +82,9 @@ export default class Binding {
    */
 
   reference(path: NodePath) {
+    if (this.referencePaths.indexOf(path) !== -1) {
+      return;
+    }
     this.referenced = true;
     this.references++;
     this.referencePaths.push(path);

@@ -1,11 +1,11 @@
 /* eslint max-len: 0 */
 
-import includes from "lodash/collection/includes";
+import includes from "lodash/includes";
 import repeating from "repeating";
 import Renamer from "./lib/renamer";
 import type NodePath from "../path";
 import traverse from "../index";
-import defaults from "lodash/object/defaults";
+import defaults from "lodash/defaults";
 import * as messages from "babel-messages";
 import Binding from "./binding";
 import globals from "globals";

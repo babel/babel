@@ -1,9 +1,9 @@
-import merge from "lodash/object/merge";
+import mergeWith from "lodash/mergeWith";
 
 export default function (dest?: Object, src?: Object): ?Object {
   if (!dest || !src) return;
 
-  return merge(dest, src, function (a, b) {
+  return mergeWith(dest, src, function (a, b) {
     if (b && Array.isArray(a)) {
       let newArray = b.slice(0);
 
