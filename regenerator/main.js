@@ -28,8 +28,10 @@ function exports(file, options) {
   }
 
   function end() {
-    this.queue(compile(data.join(""), options).code);
-    this.queue(null);
+    try {
+      this.queue(compile(data.join(""), options).code);
+      this.queue(null);
+    } catch (e) { this.emit('error', e); }
   }
 }
 
