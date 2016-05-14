@@ -1,8 +1,8 @@
 import toFastProperties from "to-fast-properties";
-import compact from "lodash/array/compact";
-import loClone from "lodash/lang/clone";
-import each from "lodash/collection/each";
-import uniq from "lodash/array/uniq";
+import compact from "lodash/compact";
+import loClone from "lodash/clone";
+import each from "lodash/each";
+import uniq from "lodash/uniq";
 
 let t = exports;
 

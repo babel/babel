@@ -11,7 +11,7 @@
     "babel-runtime": "^6.0.0",
     "babel-traverse": "^6.8.0",
     "esutils": "^2.0.2",
-    "lodash": "^3.10.1",
+    "lodash": "^4.2.0",
     "to-fast-properties": "^1.0.1"
   }
 }

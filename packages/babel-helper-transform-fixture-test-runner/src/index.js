@@ -121,12 +121,12 @@ export default function (
   let suites = getFixtures(fixturesLoc);
 
   for (let testSuite of suites) {
-    if (_.contains(suiteOpts.ignoreSuites, testSuite.title)) continue;
+    if (_.includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
     suite(name + "/" + testSuite.title, function () {
       for (let task of testSuite.tests) {
-        if (_.contains(suiteOpts.ignoreTasks, task.title) ||
-            _.contains(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
+        if (_.includes(suiteOpts.ignoreTasks, task.title) ||
+            _.includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
 
         test(task.title, !task.disabled && function () {
           function runTask() {
