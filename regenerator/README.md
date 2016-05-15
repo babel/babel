@@ -1,4 +1,4 @@
-regenerator [![Build Status](https://travis-ci.org/facebook/regenerator.png?branch=master)](https://travis-ci.org/facebook/regenerator)
+regenerator [![Build Status](https://travis-ci.org/facebook/regenerator.svg?branch=master)](https://travis-ci.org/facebook/regenerator)
 ===
 
 This package implements a fully-functional source transformation that
