@@ -6,6 +6,7 @@ module.exports = {
     WeakMap: "weak-map",
     Set: "set",
     WeakSet: "weak-set",
+    Observable: "observable",
     setImmediate: "set-immediate",
     clearImmediate: "clear-immediate",
     asap: "asap"
