@@ -28,6 +28,22 @@ export default function ({ types: t }) {
 
   let visitor = {
     JSXOpeningElement(path, state) {
+      const id = t.jSXIdentifier(TRACE_ID);
+      const location = path.container.openingElement.loc;
+      if (!location) {
+        // the element was generated and doesn't have location information
+        return;
+      }
+
+      const attributes = path.container.openingElement.attributes;
+      for (let i = 0; i < attributes.length; i++) {
+        const name = attributes[i].name;
+        if (name && name.name === TRACE_ID) {
+          // The __source attibute already exists
+          return;
+        }
+      }
+
       if (!state.fileNameIdentifier) {
         const fileName = state.file.log.filename !== "unknown"
           ? state.file.log.filename
@@ -38,12 +54,8 @@ export default function ({ types: t }) {
         state.fileNameIdentifier = fileNameIdentifier;
       }
 
-      const id = t.jSXIdentifier(TRACE_ID);
-      const location = path.container.openingElement.loc; // undefined for generated elements
-      if (location) {
-        const trace = makeTrace(state.fileNameIdentifier, location.start.line);
-        path.container.openingElement.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
-      }
+      const trace = makeTrace(state.fileNameIdentifier, location.start.line);
+      attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
     }
   };
 
