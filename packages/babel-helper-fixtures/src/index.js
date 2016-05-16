@@ -1,5 +1,4 @@
 import pathExists from "path-exists";
-import trimRight from "trim-right";
 import resolve from "try-resolve";
 import path from "path";
 import fs from "fs";
@@ -164,7 +163,7 @@ export function multiple(entryLoc, ignore?: Array<string>) {
 
 export function readFile(filename) {
   if (pathExists.sync(filename)) {
-    let file = trimRight(fs.readFileSync(filename, "utf8"));
+    let file = _.trimEnd(fs.readFileSync(filename, "utf8"));
     file = file.replace(/\r\n/g, "\n");
     return file;
   } else {
