@@ -15,17 +15,25 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## 6.9.0 (2016-05-16)
 
-- Update `core-js` to `2.4.0`
+- Update `core-js` from `2.1.0` to `2.4.0`. Check the [releases](https://github.com/zloirock/core-js/releases) for more info.
 - Add a `systemGlobal` option in the systemjs transform.
+
+```js
+["transform-es2015-modules-systemjs", {
+ // outputs scoped_system.register(...)
+ "systemGlobal": "scoped_system" // defaults to System.register
+}]
+```
+
 - Bug fixes for `class-properties` and `react-jsx-source` plugins.
 
 #### New Feature
 * `babel-types`
-  * [#3470](https://github.com/babel/babel/pull/3470) Add type fields for parameter decorators. ([@shuhei](https://github.com/shuhei))
+  * [#3470](https://github.com/babel/babel/pull/3470) Add validation of type fields for parameter decorators. ([@shuhei](https://github.com/shuhei))
 * `babel-plugin-transform-runtime`, `babel-polyfill`, `babel-register`, `babel-runtime`
-  * [#3480](https://github.com/babel/babel/pull/3480) Update `core-js`. ([@zloirock](https://github.com/zloirock))
+  * [#3480](https://github.com/babel/babel/pull/3480) Update `core-js` to `2.4.0`. ([@zloirock](https://github.com/zloirock))
 * `babel-plugin-transform-es2015-modules-systemjs`
-  * [#3482](https://github.com/babel/babel/pull/3482) Modules systemjs system global name, use strict wrapping. ([@guybedford](https://github.com/guybedford))
+  * [#3482](https://github.com/babel/babel/pull/3482) Add `systemGlobal` option to allow changing the `System` in `System.register` to be `systemGlobal`. Also move `use strict` wrapping. ([@guybedford](https://github.com/guybedford))
 
 #### Bug Fix
 * `babel-plugin-transform-react-jsx-source`
