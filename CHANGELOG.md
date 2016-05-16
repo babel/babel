@@ -13,6 +13,48 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.9.0 (2016-05-16)
+
+- Update `core-js` to `2.4.0`
+- Add a `systemGlobal` option in the systemjs transform.
+- Bug fixes for `class-properties` and `react-jsx-source` plugins.
+
+#### New Feature
+* `babel-types`
+  * [#3470](https://github.com/babel/babel/pull/3470) Add type fields for parameter decorators. ([@shuhei](https://github.com/shuhei))
+* `babel-plugin-transform-runtime`, `babel-polyfill`, `babel-register`, `babel-runtime`
+  * [#3480](https://github.com/babel/babel/pull/3480) Update core-js. ([@zloirock](https://github.com/zloirock))
+* `babel-plugin-transform-es2015-modules-systemjs`
+  * [#3482](https://github.com/babel/babel/pull/3482) Modules systemjs system global name, use strict wrapping. ([@guybedford](https://github.com/guybedford))
+
+#### Bug Fix
+* `babel-plugin-transform-react-jsx-source`
+  * [#3504](https://github.com/babel/babel/pull/3504) Skip adding __source if it already exists. ([@frantic](https://github.com/frantic))
+* `babel-plugin-transform-class-properties`
+  * [#3486](https://github.com/babel/babel/pull/3486) Class properties: Add path.ensureBlock for ArrowFunctionExpression. ([@jhen0409](https://github.com/jhen0409))
+* `babel-traverse`
+  * [#3465](https://github.com/babel/babel/pull/3465) don't double count binding references. ([@amasad](https://github.com/amasad))
+* `babel-plugin-transform-es2015-parameters`
+  * [#3481](https://github.com/babel/babel/pull/3481) also visit ClassProperty's for rest param deopt check, fixes #T7311. ([@jayphelps](https://github.com/jayphelps))
+
+#### Documentation
+* [#3498](https://github.com/babel/babel/pull/3498) Fix grammar in CHANGELOG. ([@graingert](https://github.com/graingert))
+
+#### Internal
+
+Upgrade to lodash 4.
+
+* `babel-traverse`
+  * [#3501](https://github.com/babel/babel/pull/3501) Remove repeating dependency from babel-traverse. ([@dlwalsh](https://github.com/dlwalsh))
+* `babel-helper-fixtures`
+  * [#3502](https://github.com/babel/babel/pull/3502) Replace trim-right with _.trimEnd in babel-helper-fixtures. ([@dlwalsh](https://github.com/dlwalsh))
+* `babel-generator`
+  * [#3500](https://github.com/babel/babel/pull/3500) Remove micro dependencies in favour of lodash functions for babel-generator. ([@dlwalsh](https://github.com/dlwalsh))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-builder-react-jsx`, `babel-helper-define-map`, `babel-helper-fixtures`, `babel-helper-regex`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-es2015-block-scoping`, `babel-plugin-transform-es2015-function-name`, `babel-plugin-transform-proto-to-assign`, `babel-preset-es2015`, `babel-register`, `babel-runtime`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#3315](https://github.com/babel/babel/pull/3315) Upgrade to lodash 4. ([@forivall](https://github.com/forivall))
+
+Thanks to amasad, dlwalsh, forivall, frantic, graingert, guybedford, jayphelps, jhen0409, loganfsmyth, shuhei, zloirock!
+
 ## 6.8.0 (2016-05-02)
 
 **Babel is now compiled with Babel 6!**
