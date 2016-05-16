@@ -39,6 +39,12 @@ module.exports = {
     default: true
   },
 
+  allowReturnOutsideFunction: {
+    description: "when enabled, a return at the top level is not considered an error",
+    type: "boolean",
+    default: false
+  },
+
   suppressDeprecationMessages: {
     type: "boolean",
     default: false,
