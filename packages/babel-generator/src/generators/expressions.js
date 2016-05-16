@@ -1,6 +1,6 @@
 /* eslint max-len: 0 */
 
-import isInteger from "is-integer";
+import isInteger from "lodash/isInteger";
 import isNumber from "lodash/isNumber";
 import * as t from "babel-types";
 import * as n from "../node";

@@ -1,6 +1,6 @@
 import type Position from "./position";
-import repeating from "repeating";
-import trimRight from "trim-right";
+import repeat from "lodash/repeat";
+import trimEnd from "lodash/trimEnd";
 
 /**
  * Buffer for collecting generated output.
@@ -54,7 +54,7 @@ export default class Buffer {
    */
 
   get(): string {
-    return trimRight(this.buf);
+    return trimEnd(this.buf);
   }
 
   /**
@@ -65,7 +65,7 @@ export default class Buffer {
     if (this.format.compact || this.format.concise) {
       return "";
     } else {
-      return repeating(this.format.indent.style, this._indent);
+      return repeat(this.format.indent.style, this._indent);
     }
   }
 
@@ -222,7 +222,7 @@ export default class Buffer {
 
     this.removeLast(" ");
     this._removeSpacesAfterLastNewline();
-    this._push(repeating("\n", i));
+    this._push(repeat("\n", i));
   }
 
   /**
