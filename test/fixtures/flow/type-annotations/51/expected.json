@@ -127,7 +127,7 @@
                 },
                 "params": [
                   {
-                    "type": "Identifier",
+                    "type": "TypeParameter",
                     "start": 18,
                     "end": 19,
                     "loc": {

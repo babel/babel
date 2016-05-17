@@ -119,7 +119,7 @@
               },
               "params": [
                 {
-                  "type": "Identifier",
+                  "type": "TypeParameter",
                   "start": 14,
                   "end": 15,
                   "loc": {
@@ -220,7 +220,7 @@
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

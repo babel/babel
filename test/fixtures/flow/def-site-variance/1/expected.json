@@ -74,38 +74,38 @@
           },
           "params": [
             {
-              "type": "Identifier",
-              "start": 9,
+              "type": "TypeParameter",
+              "start": 8,
               "end": 10,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 9
+                  "column": 8
                 },
                 "end": {
                   "line": 1,
                   "column": 10
                 }
               },
-              "name": "T",
-              "variance": "plus"
+              "variance": "plus",
+              "name": "T"
             },
             {
-              "type": "Identifier",
-              "start": 12,
+              "type": "TypeParameter",
+              "start": 11,
               "end": 13,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 12
+                  "column": 11
                 },
                 "end": {
                   "line": 1,
                   "column": 13
                 }
               },
-              "name": "U",
-              "variance": "minus"
+              "variance": "minus",
+              "name": "U"
             }
           ]
         },
@@ -176,38 +176,38 @@
           },
           "params": [
             {
-              "type": "Identifier",
-              "start": 30,
+              "type": "TypeParameter",
+              "start": 29,
               "end": 31,
               "loc": {
                 "start": {
                   "line": 2,
-                  "column": 12
+                  "column": 11
                 },
                 "end": {
                   "line": 2,
                   "column": 13
                 }
               },
-              "name": "T",
-              "variance": "plus"
+              "variance": "plus",
+              "name": "T"
             },
             {
-              "type": "Identifier",
-              "start": 33,
+              "type": "TypeParameter",
+              "start": 32,
               "end": 34,
               "loc": {
                 "start": {
                   "line": 2,
-                  "column": 15
+                  "column": 14
                 },
                 "end": {
                   "line": 2,
                   "column": 16
                 }
               },
-              "name": "U",
-              "variance": "minus"
+              "variance": "minus",
+              "name": "U"
             }
           ]
         },
@@ -276,38 +276,38 @@
           },
           "params": [
             {
-              "type": "Identifier",
-              "start": 49,
+              "type": "TypeParameter",
+              "start": 48,
               "end": 50,
               "loc": {
                 "start": {
                   "line": 3,
-                  "column": 8
+                  "column": 7
                 },
                 "end": {
                   "line": 3,
                   "column": 9
                 }
               },
-              "name": "T",
-              "variance": "plus"
+              "variance": "plus",
+              "name": "T"
             },
             {
-              "type": "Identifier",
-              "start": 52,
+              "type": "TypeParameter",
+              "start": 51,
               "end": 53,
               "loc": {
                 "start": {
                   "line": 3,
-                  "column": 11
+                  "column": 10
                 },
                 "end": {
                   "line": 3,
                   "column": 12
                 }
               },
-              "name": "U",
-              "variance": "minus"
+              "variance": "minus",
+              "name": "U"
             }
           ]
         },

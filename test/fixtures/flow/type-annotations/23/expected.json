@@ -271,7 +271,7 @@
                   },
                   "params": [
                     {
-                      "type": "Identifier",
+                      "type": "TypeParameter",
                       "start": 6,
                       "end": 7,
                       "loc": {

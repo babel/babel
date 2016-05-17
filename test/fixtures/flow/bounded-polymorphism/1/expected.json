@@ -74,7 +74,7 @@
           },
           "params": [
             {
-              "type": "Identifier",
+              "type": "TypeParameter",
               "start": 8,
               "end": 14,
               "loc": {
@@ -88,7 +88,7 @@
                 }
               },
               "name": "T",
-              "typeAnnotation": {
+              "bound": {
                 "type": "TypeAnnotation",
                 "start": 9,
                 "end": 14,
@@ -156,7 +156,7 @@
           "body": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -90,6 +90,7 @@
             "id": null,
             "generator": false,
             "expression": false,
+            "async": false,
             "typeParameters": {
               "type": "TypeParameterDeclaration",
               "start": 10,
@@ -106,7 +107,7 @@
               },
               "params": [
                 {
-                  "type": "Identifier",
+                  "type": "TypeParameter",
                   "start": 11,
                   "end": 12,
                   "loc": {
@@ -122,7 +123,7 @@
                   "name": "T"
                 },
                 {
-                  "type": "Identifier",
+                  "type": "TypeParameter",
                   "start": 13,
                   "end": 14,
                   "loc": {

@@ -124,7 +124,7 @@
                   },
                   "params": [
                     {
-                      "type": "Identifier",
+                      "type": "TypeParameter",
                       "start": 15,
                       "end": 16,
                       "loc": {
@@ -163,7 +163,8 @@
             }
           ],
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }
