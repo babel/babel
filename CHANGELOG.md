@@ -13,7 +13,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
-## 6.9.0 (2016-05-16)
+## 6.9.0 (2016-05-17)
 
 - Update `core-js` from `2.1.0` to `2.4.0`. Check the [releases](https://github.com/zloirock/core-js/releases) for more info.
 - Add a `systemGlobal` option in the systemjs transform.
