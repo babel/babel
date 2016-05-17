@@ -20,8 +20,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ```js
 ["transform-es2015-modules-systemjs", {
- // outputs scoped_system.register(...)
- "systemGlobal": "scoped_system" // defaults to System.register
+  // outputs scoped_system.register(...)
+  "systemGlobal": "scoped_system" // defaults to System.register
 }]
 ```
 
@@ -39,7 +39,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 * `babel-plugin-transform-react-jsx-source`
   * [#3504](https://github.com/babel/babel/pull/3504) Skip adding `__source` if it already exists. ([@frantic](https://github.com/frantic))
 * `babel-plugin-transform-class-properties`
-  * [#3486](https://github.com/babel/babel/pull/3486) Class properties: Add `path.ensureBlock` for `ArrowFunctionExpression`. ([@jhen0409](https://github.com/jhen0409))
+  * [#3486](https://github.com/babel/babel/pull/3486) Add `path.ensureBlock` for `ArrowFunctionExpression` in a `ClassExpression` when there is a `ClassProperty`. ([@jhen0409](https://github.com/jhen0409))
 * `babel-traverse`
   * [#3465](https://github.com/babel/babel/pull/3465) don't double count binding references. ([@amasad](https://github.com/amasad))
 * `babel-plugin-transform-es2015-parameters`
