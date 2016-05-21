@@ -92,7 +92,10 @@ function remap(path, key) {
 
   fnPath.setData(key, id);
 
-  if (key === "this" && fnPath.isMethod({kind: "constructor"})) {
+  let classPath = fnPath.findParent((p) => p.isClassDeclaration());
+  let hasSuperClass = !!(classPath && classPath.node && classPath.node.superClass);
+
+  if (key === "this" && fnPath.isMethod({kind: "constructor"}) && hasSuperClass) {
     fnPath.scope.push({ id });
 
     fnPath.traverse(superVisitor, { id });
