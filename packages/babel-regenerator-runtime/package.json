@@ -6,5 +6,5 @@
   "homepage": "https://github.com/babel/babel/tree/master/packages/babel-regenerator-runtime",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-regenerator-runtime",
   "main": "runtime.js",
-  "license": "BSD"
+  "license": "BSD-2-Clause"
 }
