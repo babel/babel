@@ -15,10 +15,11 @@ import merge from "../../../helpers/merge";
 import config from "./config";
 import removed from "./removed";
 import path from "path";
-import fs from "fs";
+import fs from "graceful-fs";
 
-let existsCache = {};
-let jsonCache   = {};
+let existsCache         = {};
+let jsonCache           = {};
+let configContentCache  = new Map();
 
 const BABELIGNORE_FILENAME = ".babelignore";
 const BABELRC_FILENAME     = ".babelrc";
@@ -161,7 +162,12 @@ export default class OptionManager {
       return false;
     }
 
-    let content = fs.readFileSync(loc, "utf8");
+    let content = configContentCache.get(loc);
+    if (!content) {
+      content = fs.readFileSync(loc, "utf8");
+      configContentCache.set(loc, content);
+    }
+
     let opts;
 
     try {
