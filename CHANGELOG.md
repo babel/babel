@@ -19,6 +19,8 @@ Just 2 fixes this release!
 - A class property fix (set `this` correctly when using async arrow function class properties without a super class).
 - A fix for `react-constant-elements` plugin to help optimize react more (the plugin wasn't applying to JSX with text).
 
+Also, thanks to [@mucsi96](https://github.com/mucsi96) for catching the extraneous code coverage comments we were leaving when publishing!
+
 #### Bug Fix
 * `babel-core`
   * [#3508](https://github.com/babel/babel/pull/3510) Assign `_this` to `this` when there is no `Superclass` in a `Class` when using class properties. Fixes T7364. ([@ehjay](https://github.com/ehjay))
@@ -69,7 +71,7 @@ var Foo = React.createClass({
 
 #### Internal
 
-* [#3513](https://github.com/babel/babel/pull/3513) Make sure the env is production when publishing. Thanks @mucsi96 for catching the extraneous code coverage comments! ([@hzoo](https://github.com/hzoo))
+* [#3513](https://github.com/babel/babel/pull/3513) Make sure the env is production when publishing. ([@hzoo](https://github.com/hzoo))
 
 * `babel-regenerator-runtime`
   * [#3507](https://github.com/babel/babel/pull/3507) babel-regenerator-runtime license field. ([@leipert](https://github.com/leipert))
