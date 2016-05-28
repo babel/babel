@@ -21,6 +21,8 @@ Just 2 fixes this release!
 
 Also, thanks to [@mucsi96](https://github.com/mucsi96) for catching the extraneous code coverage comments we were leaving when publishing!
 
+> We are removing/deprecating `babel-regenerator-runtime` in favor of depending on the original `regenerator-runtime` since the differences are resolved. Thanks to ([@benjamn](https://github.com/benjamn)) for the suggestion to maintain it (and for originally creating it!). 
+
 #### Bug Fix
 * `babel-core`
   * [#3508](https://github.com/babel/babel/pull/3510) Assign `_this` to `this` when there is no `Superclass` in a `Class` when using class properties. Fixes T7364. ([@ehjay](https://github.com/ehjay))
@@ -77,6 +79,8 @@ var Foo = React.createClass({
   * [#3507](https://github.com/babel/babel/pull/3507) babel-regenerator-runtime license field. ([@leipert](https://github.com/leipert))
 * `babel-core`
   * [#3446](https://github.com/babel/babel/pull/3446) Use more ideal mocha hooks in babel-core/test/api. ([@jmm](https://github.com/jmm))
+* `babel-polyfill`, `babel-regenerator-runtime`, `babel-runtime`
+  * [#3494](https://github.com/babel/babel/pull/3494) Use `regenerator-runtime` from npm; removed `babel-regenerator-runtime` fork since there aren't differences anymore. ([@benjamn](https://github.com/benjamn))
 
 ## 6.9.0 (2016-05-17)
 
