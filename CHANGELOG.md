@@ -68,16 +68,13 @@ var Foo = React.createClass({
 ```
 
 #### Internal
+
+* [#3513](https://github.com/babel/babel/pull/3513) Make sure the env is production when publishing. Thanks @mucsi96 for catching the extraneous code coverage comments! ([@hzoo](https://github.com/hzoo))
+
 * `babel-regenerator-runtime`
   * [#3507](https://github.com/babel/babel/pull/3507) babel-regenerator-runtime license field. ([@leipert](https://github.com/leipert))
 * `babel-core`
   * [#3446](https://github.com/babel/babel/pull/3446) Use more ideal mocha hooks in babel-core/test/api. ([@jmm](https://github.com/jmm))
-
-#### Commiters: 4
-- Andrew Johnston ([ehjay](https://github.com/ehjay))
-- Jesse McCarthy ([jmm](https://github.com/jmm))
-- Leonid Nikiforenko ([le0nik](https://github.com/le0nik))
-- Lukas Eipert ([leipert](https://github.com/leipert))
 
 ## 6.9.0 (2016-05-17)
 
