@@ -23,10 +23,12 @@ contributing, please read the
 ## Not sure where to start?
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
-  - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): Our current [spec](https://github.com/babel/babel/tree/master/doc/ast) is a bit different from [ESTree](https://github.com/estree/estree).
-  - [`/doc`](/doc) for notes on babel internals
-  - Check out [the babel plugin handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook). Core babel plugins are written the same way as any other plugin!
-  - Checkout [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or making your own plugin live
+ - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): Our current [spec](https://github.com/babel/babel/tree/master/doc/ast) is a bit different from [ESTree](https://github.com/estree/estree).
+ - [`/doc`](/doc) for notes on babel internals
+ - Check out [the babel plugin handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook). Core babel plugins are written the same way as any other plugin!
+ - Checkout [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or making your own plugin live
+
+> If you're stuck, feel free to check out the `#development` channel on our [slack](https://slack.babeljs.io).
 
 ## Developing
 
