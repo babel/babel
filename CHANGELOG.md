@@ -13,6 +13,71 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.9.1 (2016-05-28)
+
+Just 2 fixes this release!
+- A class property fix (set `this` correctly when using async arrow function class properties without a super class).
+- A fix for `react-constant-elements` plugin to help optimize react more (the plugin wasn't applying to JSX with text).
+
+Also, thanks to [@mucsi96](https://github.com/mucsi96) for catching the extraneous code coverage comments we were leaving when publishing!
+
+#### Bug Fix
+* `babel-core`
+  * [#3508](https://github.com/babel/babel/pull/3510) Assign `_this` to `this` when there is no `Superclass` in a `Class` when using class properties. Fixes T7364. ([@ehjay](https://github.com/ehjay))
+
+The fix correctly set this: `var _this;` -> `var _this = this;`
+
+```js
+// input
+class MyClass {
+  myAsyncMethod = async () => {
+    console.log(this);
+  }
+}
+
+// output
+class MyClass {
+  constructor() {
+    var _this = this; // _this wasn't being set to `this`
+    this.myAsyncMethod = babelHelpers.asyncToGenerator(function* () {
+      console.log(_this);
+    });
+  }
+}
+```
+
+* `babel-plugin-transform-react-constant-elements`, `babel-types`
+  * [#3510](https://github.com/babel/babel/pull/3510) Make JSXText Immutable. Fixes T7251. ([@le0nik](https://github.com/le0nik))
+
+JSX with text in it was not being hoisted as other constant elements.
+
+```text
+// input
+var Foo = React.createClass({
+  render() {
+    return <div>Text</div>; // text wasn't considered constant
+  }
+});
+
+// output
+var _ref = <div>Text</div>;
+
+var Foo = React.createClass({
+  render() {
+    return _ref;
+  }
+});
+```
+
+#### Internal
+
+* [#3513](https://github.com/babel/babel/pull/3513) Make sure the env is production when publishing. ([@hzoo](https://github.com/hzoo))
+
+* `babel-regenerator-runtime`
+  * [#3507](https://github.com/babel/babel/pull/3507) babel-regenerator-runtime license field. ([@leipert](https://github.com/leipert))
+* `babel-core`
+  * [#3446](https://github.com/babel/babel/pull/3446) Use more ideal mocha hooks in babel-core/test/api. ([@jmm](https://github.com/jmm))
+
 ## 6.9.0 (2016-05-17)
 
 - Update `core-js` from `2.1.0` to `2.4.0`. Check the [releases](https://github.com/zloirock/core-js/releases) for more info.

@@ -49,7 +49,7 @@ test-ci:
 publish:
 	git pull --rebase
 	rm -rf packages/*/lib
-	make build-dist
+	BABEL_ENV=production make build-dist
 	make test
 	./node_modules/.bin/lerna publish
 	make clean
