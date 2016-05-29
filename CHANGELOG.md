@@ -13,7 +13,14 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
-## 6.9.1 (2016-05-28)
+## 6.9.2 (2016-05-29)
+
+Fixup missing dependency.
+
+#### Bug Fix
+* `babel-runtime`: Fix an issue with getting `Cannot find module 'regenerator-runtime'` because it was set as a devDependency instead of a dependency.
+
+## 6.9.1 (2016-05-29)
 
 Just 2 fixes this release!
 - A class property fix (set `this` correctly when using async arrow function class properties without a super class).
