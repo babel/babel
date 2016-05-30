@@ -129,7 +129,10 @@ module.exports = function (commander, filenames, opts) {
   };
 
   let files = function () {
-    walk();
+
+    if (!commander.skipInitialBuild) {
+      walk();
+    }
 
     if (commander.watch) {
       let chokidar = util.requireChokidar();
