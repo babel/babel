@@ -16,7 +16,7 @@ export default function () {
       VariableDeclaration(path, file) {
         let { node, parent, scope } = path;
         if (!isBlockScoped(node)) return;
-        convertBlockScopedToVar(path, parent, scope, true);
+        convertBlockScopedToVar(path, null, parent, scope, true);
 
         if (node._tdzThis) {
           let nodes = [node];
@@ -51,7 +51,7 @@ export default function () {
         if (replace) path.replaceWith(replace);
       },
 
-      "BlockStatement|Program"(path, file) {
+      "BlockStatement|SwitchStatement|Program"(path, file) {
         if (!t.isLoop(path.parent)) {
           let blockScoping = new BlockScoping(null, path, path.parent, path.scope, file);
           blockScoping.run();
@@ -72,8 +72,10 @@ function isBlockScoped(node) {
   return true;
 }
 
-function convertBlockScopedToVar(path, parent, scope, moveBindingsToParent = false) {
-  const { node } = path;
+function convertBlockScopedToVar(path, node, parent, scope, moveBindingsToParent = false) {
+  if (!node) {
+    node = path.node;
+  }
   // https://github.com/babel/babel/issues/255
   if (!t.isFor(parent)) {
     for (let i = 0; i < node.declarations.length; i++) {
@@ -536,9 +538,26 @@ class BlockScoping {
         if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar) || isBlockScoped(declar)) {
           let declarPath = this.blockPath.get("body")[i];
           if (isBlockScoped(declar)) {
-            convertBlockScopedToVar(declarPath, block, this.scope);
+            convertBlockScopedToVar(declarPath, null, block, this.scope);
           }
           declarators = declarators.concat(declar.declarations || declar);
+        }
+      }
+    }
+
+    if (block.cases) {
+      for (let i = 0; i < block.cases.length; i++) {
+        let consequents = block.cases[i].consequent;
+
+        for (let j = 0; j < consequents.length; j++) {
+          let declar = consequents[j];
+          if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar) || isBlockScoped(declar)) {
+            let declarPath = this.blockPath.get("cases")[i];
+            if (isBlockScoped(declar)) {
+              convertBlockScopedToVar(declarPath, declar, block, this.scope);
+            }
+            declarators = declarators.concat(declar.declarations || declar);
+          }
         }
       }
     }
