@@ -32,14 +32,8 @@
     "babel-preset-es2015": "~6.9.0"
   },
   "dependencies": {
-    "babel-core": "~6.9.1",
-    "babel-plugin-syntax-async-functions": "~6.8.0",
-    "babel-plugin-transform-es2015-block-scoping": "~6.9.0",
-    "babel-plugin-transform-es2015-for-of": "~6.8.0",
     "babel-runtime": "~6.9.2",
-    "babel-traverse": "~6.9.0",
     "babel-types": "~6.9.1",
-    "babylon": "~6.8.0",
     "private": "~0.1.6"
   }
 }
