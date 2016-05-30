@@ -57,12 +57,11 @@ module.exports = {
     default: null
   },
 
-  allowSuperOutsideMethod {
+  allowSuperOutsideMethod: {
     description: "When enabled, import/export statements are not constrained to appearing at the top of the program.",
     type: "boolean",
     default: false
   },
-
 
   suppressDeprecationMessages: {
     type: "boolean",
