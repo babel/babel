@@ -55,7 +55,7 @@ module.exports = {
     description: "TODO",
     type: "string",
     default: null
-  }
+  },
 
   allowSuperOutsideMethod {
     description: "When enabled, import/export statements are not constrained to appearing at the top of the program.",
