@@ -17,6 +17,9 @@ defineType("AssignmentPattern", {
     },
     right: {
       validate: assertNodeType("Expression")
+    },
+    decorators: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
     }
   }
 });
@@ -27,6 +30,9 @@ defineType("ArrayPattern", {
   fields: {
     elements: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression")))
+    },
+    decorators: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
     }
   }
 });
@@ -285,6 +291,9 @@ defineType("ObjectPattern", {
   fields: {
     properties: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("RestProperty", "Property")))
+    },
+    decorators: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
     }
   }
 });

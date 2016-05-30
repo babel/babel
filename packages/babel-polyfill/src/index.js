@@ -6,7 +6,7 @@ if (global._babelPolyfill) {
 global._babelPolyfill = true;
 
 import "core-js/shim";
-import "babel-regenerator-runtime";
+import "regenerator-runtime/runtime";
 
 // Should be removed in the next major release:
 

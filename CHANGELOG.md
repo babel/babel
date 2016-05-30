@@ -13,6 +13,132 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.9.2 (2016-05-29)
+
+Fixup missing dependency.
+
+#### Bug Fix
+* `babel-runtime`: Fix an issue with getting `Cannot find module 'regenerator-runtime'` because it was set as a devDependency instead of a dependency.
+
+## 6.9.1 (2016-05-29)
+
+Just 2 fixes this release!
+- A class property fix (set `this` correctly when using async arrow function class properties without a super class).
+- A fix for `react-constant-elements` plugin to help optimize react more (the plugin wasn't applying to JSX with text).
+
+Also, thanks to [@mucsi96](https://github.com/mucsi96) for catching the extraneous code coverage comments we were leaving when publishing!
+
+> We are removing/deprecating `babel-regenerator-runtime` in favor of depending on the original `regenerator-runtime` since the differences are resolved. Thanks to ([@benjamn](https://github.com/benjamn)) for the suggestion to maintain it (and for originally creating it!). 
+
+#### Bug Fix
+* `babel-core`
+  * [#3508](https://github.com/babel/babel/pull/3510) Assign `_this` to `this` when there is no `Superclass` in a `Class` when using class properties. Fixes T7364. ([@ehjay](https://github.com/ehjay))
+
+The fix correctly set this: `var _this;` -> `var _this = this;`
+
+```js
+// input
+class MyClass {
+  myAsyncMethod = async () => {
+    console.log(this);
+  }
+}
+
+// output
+class MyClass {
+  constructor() {
+    var _this = this; // _this wasn't being set to `this`
+    this.myAsyncMethod = babelHelpers.asyncToGenerator(function* () {
+      console.log(_this);
+    });
+  }
+}
+```
+
+* `babel-plugin-transform-react-constant-elements`, `babel-types`
+  * [#3510](https://github.com/babel/babel/pull/3510) Make JSXText Immutable. Fixes T7251. ([@le0nik](https://github.com/le0nik))
+
+JSX with text in it was not being hoisted as other constant elements.
+
+```text
+// input
+var Foo = React.createClass({
+  render() {
+    return <div>Text</div>; // text wasn't considered constant
+  }
+});
+
+// output
+var _ref = <div>Text</div>;
+
+var Foo = React.createClass({
+  render() {
+    return _ref;
+  }
+});
+```
+
+#### Internal
+
+* [#3513](https://github.com/babel/babel/pull/3513) Make sure the env is production when publishing. ([@hzoo](https://github.com/hzoo))
+
+* `babel-regenerator-runtime`
+  * [#3507](https://github.com/babel/babel/pull/3507) babel-regenerator-runtime license field. ([@leipert](https://github.com/leipert))
+* `babel-core`
+  * [#3446](https://github.com/babel/babel/pull/3446) Use more ideal mocha hooks in babel-core/test/api. ([@jmm](https://github.com/jmm))
+* `babel-polyfill`, `babel-regenerator-runtime`, `babel-runtime`
+  * [#3494](https://github.com/babel/babel/pull/3494) Use `regenerator-runtime` from npm; removed `babel-regenerator-runtime` fork since there aren't differences anymore. ([@benjamn](https://github.com/benjamn))
+
+## 6.9.0 (2016-05-17)
+
+- Update `core-js` from `2.1.0` to `2.4.0`. Check the [releases](https://github.com/zloirock/core-js/releases) for more info.
+- Add a `systemGlobal` option in the systemjs transform.
+
+```js
+["transform-es2015-modules-systemjs", {
+  // outputs scoped_system.register(...)
+  "systemGlobal": "scoped_system" // defaults to System.register
+}]
+```
+
+- Bug fixes for `class-properties` and `react-jsx-source` plugins.
+
+#### New Feature
+* `babel-types`
+  * [#3470](https://github.com/babel/babel/pull/3470) Add validation of type fields for parameter decorators. ([@shuhei](https://github.com/shuhei))
+* `babel-plugin-transform-runtime`, `babel-polyfill`, `babel-register`, `babel-runtime`
+  * [#3480](https://github.com/babel/babel/pull/3480) Update `core-js` to `2.4.0`. ([@zloirock](https://github.com/zloirock))
+* `babel-plugin-transform-es2015-modules-systemjs`
+  * [#3482](https://github.com/babel/babel/pull/3482) Add `systemGlobal` option to allow changing the `System` in `System.register` to be `systemGlobal`. Also move `use strict` wrapping. ([@guybedford](https://github.com/guybedford))
+
+#### Bug Fix
+* `babel-plugin-transform-react-jsx-source`
+  * [#3504](https://github.com/babel/babel/pull/3504) Skip adding `__source` if it already exists. ([@frantic](https://github.com/frantic))
+* `babel-plugin-transform-class-properties`
+  * [#3486](https://github.com/babel/babel/pull/3486) Add `path.ensureBlock` for `ArrowFunctionExpression` in a `ClassExpression` when there is a `ClassProperty`. ([@jhen0409](https://github.com/jhen0409))
+* `babel-traverse`
+  * [#3465](https://github.com/babel/babel/pull/3465) don't double count binding references. ([@amasad](https://github.com/amasad))
+* `babel-plugin-transform-es2015-parameters`
+  * [#3481](https://github.com/babel/babel/pull/3481) also visit `ClassProperty` for rest param deopt check, fixes [T7311](https://phabricator.babeljs.io/T7311). ([@jayphelps](https://github.com/jayphelps))
+
+#### Documentation
+* [#3498](https://github.com/babel/babel/pull/3498) Fix grammar in CHANGELOG. ([@graingert](https://github.com/graingert))
+
+#### Internal
+
+Upgrade to lodash 4.
+
+* `babel-traverse`
+  * [#3501](https://github.com/babel/babel/pull/3501) Remove repeating dependency from babel-traverse. ([@dlwalsh](https://github.com/dlwalsh))
+* `babel-helper-fixtures`
+  * [#3502](https://github.com/babel/babel/pull/3502) Replace trim-right with _.trimEnd in babel-helper-fixtures. ([@dlwalsh](https://github.com/dlwalsh))
+* `babel-generator`
+  * [#3500](https://github.com/babel/babel/pull/3500) Remove micro dependencies in favour of lodash functions for babel-generator. ([@dlwalsh](https://github.com/dlwalsh))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-builder-react-jsx`, `babel-helper-define-map`, `babel-helper-fixtures`, `babel-helper-regex`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-es2015-block-scoping`, `babel-plugin-transform-es2015-function-name`, `babel-plugin-transform-proto-to-assign`, `babel-preset-es2015`, `babel-register`, `babel-runtime`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#3315](https://github.com/babel/babel/pull/3315) Upgrade to lodash 4. ([@forivall](https://github.com/forivall))
+
+Thanks to amasad, dlwalsh, forivall, frantic, graingert, guybedford, jayphelps, jhen0409, loganfsmyth, shuhei, zloirock!
+
 ## 6.8.0 (2016-05-02)
 
 **Babel is now compiled with Babel 6!**
