@@ -41,17 +41,19 @@ original ones as well!).
 
 Each rule corresponds to a core `eslint` rule, and has the same options.
 
+🛠 : means it's autofixable with `--fix`.
+
 - `babel/generator-star-spacing`: Handles async/await functions correctly
 - `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
-- `babel/array-bracket-spacing`: Handles destructuring arrays with flow type in function parameters
-- `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";`
+- `babel/array-bracket-spacing`: Handles destructuring arrays with flow type in function parameters (🛠 )
+- `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";` (🛠 )
 - `babel/object-shorthand`: doesn't fail when using object spread (`...obj`)
-- `babel/arrow-parens`: Handles async functions correctly
+- `babel/arrow-parens`: Handles async functions correctly (🛠 )
 
 The following rules are not in `eslint`, but are relevant only to syntax that is not specified by
 the current JavaScript standard or supported by `eslint`.
 
 - `babel/no-await-in-loop`: guard against awaiting async functions inside of a loop
-- `babel/flow-object-type`: Require a particular separator between properties in Flow object types.
+- `babel/flow-object-type`: Require a particular separator between properties in Flow object types. (🛠 )
   - Use the option `semicolon` to require semicolons (e.g. `type Foo = { bar: number; baz: string }`).
   - Use the option `comma` to require commas (e.g. `type Foo = { bar: number, baz: string }`).
