@@ -1,5 +1,5 @@
 var outputFile = require("output-file-sync");
-var each       = require("lodash/collection/each");
+var each       = require("lodash/each");
 var fs         = require("fs");
 var _          = require("lodash");
 
@@ -128,6 +128,3 @@ each(helpers.list, function (helperName) {
   writeFile("helpers/_" + helperAlias + ".js", content);
   if (helperAlias !== helperName) writeFile("helpers/" + helperAlias + ".js", content);
 });
-
-writeFile("regenerator/index.js", readFile("../../babel-regenerator-runtime/runtime-module", true));
-writeFile("regenerator/runtime.js", selfContainify("..", readFile("../../babel-regenerator-runtime/runtime")));

@@ -49,7 +49,7 @@ test-ci:
 publish:
 	git pull --rebase
 	rm -rf packages/*/lib
-	make build-dist
+	BABEL_ENV=production make build-dist
 	make test
 	./node_modules/.bin/lerna publish
 	make clean
@@ -58,6 +58,8 @@ publish:
 bootstrap:
 	npm install
 	./node_modules/.bin/lerna bootstrap
+	# remove all existing babel-runtimes and use the top-level babel-runtime
+	rm -rf packages/*/node_modules/babel-runtime
 	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js

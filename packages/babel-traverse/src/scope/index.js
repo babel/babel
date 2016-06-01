@@ -1,11 +1,11 @@
 /* eslint max-len: 0 */
 
-import includes from "lodash/collection/includes";
-import repeating from "repeating";
+import includes from "lodash/includes";
+import repeat from "lodash/repeat";
 import Renamer from "./lib/renamer";
 import type NodePath from "../path";
 import traverse from "../index";
-import defaults from "lodash/object/defaults";
+import defaults from "lodash/defaults";
 import * as messages from "babel-messages";
 import Binding from "./binding";
 import globals from "globals";
@@ -367,7 +367,7 @@ export default class Scope {
   }
 
   dump() {
-    let sep = repeating("-", 60);
+    let sep = repeat("-", 60);
     console.log(sep);
     let scope = this;
     do {

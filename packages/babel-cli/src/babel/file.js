@@ -16,7 +16,7 @@ module.exports = function (commander, filenames, opts) {
 
   let buildResult = function () {
     let map = new sourceMap.SourceMapGenerator({
-      file: path.basename(commander.outFile) || "stdout",
+      file: path.basename(commander.outFile || "") || "stdout",
       sourceRoot: opts.sourceRoot
     });
 
@@ -43,9 +43,9 @@ module.exports = function (commander, filenames, opts) {
           map._mappings.add({
             generatedLine: mapping.generatedLine + offset,
             generatedColumn: mapping.generatedColumn,
-            originalLine: mapping.originalLine,
-            originalColumn: mapping.originalColumn,
-            source: sourceFilename
+            originalLine: mapping.source == null ? null : mapping.originalLine,
+            originalColumn: mapping.source == null ? null : mapping.originalColumn,
+            source: mapping.source == null ? null : sourceFilename
           });
         });
 
@@ -129,7 +129,10 @@ module.exports = function (commander, filenames, opts) {
   };
 
   let files = function () {
-    walk();
+
+    if (!commander.skipInitialBuild) {
+      walk();
+    }
 
     if (commander.watch) {
       let chokidar = util.requireChokidar();

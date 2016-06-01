@@ -1,7 +1,7 @@
 import * as virtualTypes from "./path/lib/virtual-types";
 import * as messages from "babel-messages";
 import * as t from "babel-types";
-import clone from "lodash/lang/clone";
+import clone from "lodash/clone";
 
 /**
  * explode() will take a visitor object with all of the various shorthands
@@ -219,7 +219,7 @@ function ensureEntranceObjects(obj) {
   }
 }
 
-function ensureCallbackArrays(obj){
+function ensureCallbackArrays(obj) {
   if (obj.enter && !Array.isArray(obj.enter)) obj.enter = [obj.enter];
   if (obj.exit && !Array.isArray(obj.exit)) obj.exit = [obj.exit];
 }

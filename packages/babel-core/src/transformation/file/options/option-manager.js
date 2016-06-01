@@ -9,8 +9,8 @@ import resolve from "../../../helpers/resolve";
 import json5 from "json5";
 import isAbsolute from "path-is-absolute";
 import pathExists from "path-exists";
-import cloneDeep from "lodash/lang/cloneDeep";
-import clone from "lodash/lang/clone";
+import cloneDeepWith from "lodash/cloneDeepWith";
+import clone from "lodash/clone";
 import merge from "../../../helpers/merge";
 import config from "./config";
 import removed from "./removed";
@@ -208,7 +208,7 @@ export default class OptionManager {
     }
 
     //
-    let opts = cloneDeep(rawOpts, (val) => {
+    let opts = cloneDeepWith(rawOpts, (val) => {
       if (val instanceof Plugin) {
         return val;
       }
@@ -309,7 +309,7 @@ export default class OptionManager {
         options: presetOpts,
         alias: presetLoc,
         loc: presetLoc,
-        dirname: path.dirname(presetLoc)
+        dirname: path.dirname(presetLoc || "")
       });
     });
   }

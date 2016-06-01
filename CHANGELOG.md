@@ -13,6 +13,278 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.9.2 (2016-05-29)
+
+Fixup missing dependency.
+
+#### Bug Fix
+* `babel-runtime`: Fix an issue with getting `Cannot find module 'regenerator-runtime'` because it was set as a devDependency instead of a dependency.
+
+## 6.9.1 (2016-05-29)
+
+Just 2 fixes this release!
+- A class property fix (set `this` correctly when using async arrow function class properties without a super class).
+- A fix for `react-constant-elements` plugin to help optimize react more (the plugin wasn't applying to JSX with text).
+
+Also, thanks to [@mucsi96](https://github.com/mucsi96) for catching the extraneous code coverage comments we were leaving when publishing!
+
+> We are removing/deprecating `babel-regenerator-runtime` in favor of depending on the original `regenerator-runtime` since the differences are resolved. Thanks to ([@benjamn](https://github.com/benjamn)) for the suggestion to maintain it (and for originally creating it!). 
+
+#### Bug Fix
+* `babel-core`
+  * [#3508](https://github.com/babel/babel/pull/3510) Assign `_this` to `this` when there is no `Superclass` in a `Class` when using class properties. Fixes T7364. ([@ehjay](https://github.com/ehjay))
+
+The fix correctly set this: `var _this;` -> `var _this = this;`
+
+```js
+// input
+class MyClass {
+  myAsyncMethod = async () => {
+    console.log(this);
+  }
+}
+
+// output
+class MyClass {
+  constructor() {
+    var _this = this; // _this wasn't being set to `this`
+    this.myAsyncMethod = babelHelpers.asyncToGenerator(function* () {
+      console.log(_this);
+    });
+  }
+}
+```
+
+* `babel-plugin-transform-react-constant-elements`, `babel-types`
+  * [#3510](https://github.com/babel/babel/pull/3510) Make JSXText Immutable. Fixes T7251. ([@le0nik](https://github.com/le0nik))
+
+JSX with text in it was not being hoisted as other constant elements.
+
+```text
+// input
+var Foo = React.createClass({
+  render() {
+    return <div>Text</div>; // text wasn't considered constant
+  }
+});
+
+// output
+var _ref = <div>Text</div>;
+
+var Foo = React.createClass({
+  render() {
+    return _ref;
+  }
+});
+```
+
+#### Internal
+
+* [#3513](https://github.com/babel/babel/pull/3513) Make sure the env is production when publishing. ([@hzoo](https://github.com/hzoo))
+
+* `babel-regenerator-runtime`
+  * [#3507](https://github.com/babel/babel/pull/3507) babel-regenerator-runtime license field. ([@leipert](https://github.com/leipert))
+* `babel-core`
+  * [#3446](https://github.com/babel/babel/pull/3446) Use more ideal mocha hooks in babel-core/test/api. ([@jmm](https://github.com/jmm))
+* `babel-polyfill`, `babel-regenerator-runtime`, `babel-runtime`
+  * [#3494](https://github.com/babel/babel/pull/3494) Use `regenerator-runtime` from npm; removed `babel-regenerator-runtime` fork since there aren't differences anymore. ([@benjamn](https://github.com/benjamn))
+
+## 6.9.0 (2016-05-17)
+
+- Update `core-js` from `2.1.0` to `2.4.0`. Check the [releases](https://github.com/zloirock/core-js/releases) for more info.
+- Add a `systemGlobal` option in the systemjs transform.
+
+```js
+["transform-es2015-modules-systemjs", {
+  // outputs scoped_system.register(...)
+  "systemGlobal": "scoped_system" // defaults to System.register
+}]
+```
+
+- Bug fixes for `class-properties` and `react-jsx-source` plugins.
+
+#### New Feature
+* `babel-types`
+  * [#3470](https://github.com/babel/babel/pull/3470) Add validation of type fields for parameter decorators. ([@shuhei](https://github.com/shuhei))
+* `babel-plugin-transform-runtime`, `babel-polyfill`, `babel-register`, `babel-runtime`
+  * [#3480](https://github.com/babel/babel/pull/3480) Update `core-js` to `2.4.0`. ([@zloirock](https://github.com/zloirock))
+* `babel-plugin-transform-es2015-modules-systemjs`
+  * [#3482](https://github.com/babel/babel/pull/3482) Add `systemGlobal` option to allow changing the `System` in `System.register` to be `systemGlobal`. Also move `use strict` wrapping. ([@guybedford](https://github.com/guybedford))
+
+#### Bug Fix
+* `babel-plugin-transform-react-jsx-source`
+  * [#3504](https://github.com/babel/babel/pull/3504) Skip adding `__source` if it already exists. ([@frantic](https://github.com/frantic))
+* `babel-plugin-transform-class-properties`
+  * [#3486](https://github.com/babel/babel/pull/3486) Add `path.ensureBlock` for `ArrowFunctionExpression` in a `ClassExpression` when there is a `ClassProperty`. ([@jhen0409](https://github.com/jhen0409))
+* `babel-traverse`
+  * [#3465](https://github.com/babel/babel/pull/3465) don't double count binding references. ([@amasad](https://github.com/amasad))
+* `babel-plugin-transform-es2015-parameters`
+  * [#3481](https://github.com/babel/babel/pull/3481) also visit `ClassProperty` for rest param deopt check, fixes [T7311](https://phabricator.babeljs.io/T7311). ([@jayphelps](https://github.com/jayphelps))
+
+#### Documentation
+* [#3498](https://github.com/babel/babel/pull/3498) Fix grammar in CHANGELOG. ([@graingert](https://github.com/graingert))
+
+#### Internal
+
+Upgrade to lodash 4.
+
+* `babel-traverse`
+  * [#3501](https://github.com/babel/babel/pull/3501) Remove repeating dependency from babel-traverse. ([@dlwalsh](https://github.com/dlwalsh))
+* `babel-helper-fixtures`
+  * [#3502](https://github.com/babel/babel/pull/3502) Replace trim-right with _.trimEnd in babel-helper-fixtures. ([@dlwalsh](https://github.com/dlwalsh))
+* `babel-generator`
+  * [#3500](https://github.com/babel/babel/pull/3500) Remove micro dependencies in favour of lodash functions for babel-generator. ([@dlwalsh](https://github.com/dlwalsh))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-builder-react-jsx`, `babel-helper-define-map`, `babel-helper-fixtures`, `babel-helper-regex`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-es2015-block-scoping`, `babel-plugin-transform-es2015-function-name`, `babel-plugin-transform-proto-to-assign`, `babel-preset-es2015`, `babel-register`, `babel-runtime`, `babel-template`, `babel-traverse`, `babel-types`
+  * [#3315](https://github.com/babel/babel/pull/3315) Upgrade to lodash 4. ([@forivall](https://github.com/forivall))
+
+Thanks to amasad, dlwalsh, forivall, frantic, graingert, guybedford, jayphelps, jhen0409, loganfsmyth, shuhei, zloirock!
+
+## 6.8.0 (2016-05-02)
+
+**Babel is now compiled with Babel 6!**
+
+![](http://i.imgur.com/7drHiqr.gif)
+
+### Why this is relevant
+
+TLDR: This fixes the npm deduping issues regarding babel-runtime 5 and 6.
+
+- Because all Babel packages were compiled with Babel 5 and using babel-runtime@5, npm can't dedupe any of them if a consumer of Babel also added a dependency on babel-runtime@6.
+
+Example:
+
+```
+└─┬ babel-plugin-transform-exponentiation-operator@6.5.0
+  ├─┬ babel-helper-builder-binary-assignment-operator-visitor@6.6.5
+  │ ├─┬ babel-helper-explode-assignable-expression@6.6.5
+  │ │ └── babel-runtime@5.8.38
+  │ └── babel-runtime@5.8.38
+  ├─┬ babel-plugin-syntax-exponentiation-operator@6.5.0
+  │ └── babel-runtime@5.8.38
+  └── babel-runtime@5.8.38
+```
+
+Now it should be more like:
+
+```
+└─┬ babel-runtime@6.8.0
+└─┬ babel-plugin-transform-exponentiation-operator@6.8.0
+  ├─┬ babel-helper-builder-binary-assignment-operator-visitor@6.8.0
+  │ ├─┬ babel-helper-explode-assignable-expression@6.8.0
+  ├─┬ babel-plugin-syntax-exponentiation-operator@6.8.0
+```
+
+Related issues: [T7252](https://phabricator.babeljs.io/T7252), [T7275](https://phabricator.babeljs.io/T7275), [T6689](https://phabricator.babeljs.io/T6689), [sindresorhus/ava#660](https://github.com/sindresorhus/ava/issues/660), [vuejs/vue-loader#96](https://github.com/vuejs/vue-loader/issues/96), etc.
+
+#### Internal
+* [#3438](https://github.com/babel/babel/pull/3438) Self host on babel6. ([@hzoo](https://github.com/hzoo))
+* [#3477](https://github.com/babel/babel/pull/3477) turn transform into a simple `for` loop. ([@mattkrick](https://github.com/mattkrick))
+
+#### Misc
+* [#3484](https://github.com/babel/babel/pull/3484) Travis: add node 6, remove iojs. ([@hzoo](https://github.com/hzoo))
+* [#3491](https://github.com/babel/babel/pull/3491) babel-template is an implementation of quasiquotes. ([@rektide](https://github.com/rektide))
+* [#3479](https://github.com/babel/babel/pull/3479) Remove unused import in README ([@oliviertassinari](https://github.com/oliviertassinari))
+
+## 6.7.7 (2016-04-20)
+
+#### Bug Fix
+
+* `babel-code-frame`
+  * [#3464](https://github.com/babel/babel/pull/3464) - Handle tab-indented code when marking errors ([@lydell](https://github.com/lydell))
+
+* `babel-core`
+  * [#3422](https://github.com/babel/babel/pull/3422) - Insert `this` references in `constructor` after `super()` ([@loganfsmyth](https://github.com/loganfsmyth))
+
+* `babel-generator`
+  * [#3463](https://github.com/babel/babel/pull/3475) - Better sourcemaps for function bodies ([@loganfsmyth](https://github.com/loganfsmyth))
+
+#### Misc
+
+* `babel-plugin-transform-es2015-modules-commonjs`
+  * [#3457](https://github.com/babel/babel/pull/3457) - Some new tests ([@hzoo](https://github.com/hzoo))
+
+* `babel-generator`, `babel-types`
+  * [#3475](https://github.com/babel/babel/pull/3475) - Performance improvements for the code generator ([@loganfsmyth](https://github.com/loganfsmyth))
+
+
+## 6.7.6 (2016-04-08)
+
+* `babel-traverse`
+  * [#3458](https://github.com/babel/babel/pull/3458): Revert PR [#3433](https://github.com/babel/babel/pull/3433) which introduced https://phabricator.babeljs.io/T7272 ([@loganfsmyth](https://github.com/loganfsmyth))
+
+
+## 6.7.5 (2016-04-07)
+
+#### Bug Fix
+
+* `babel-traverse`
+  * [#3433](https://github.com/babel/babel/pull/3433): Only attempt to rename export declarations, not expressions. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+* `babel-core`/`babel-cli`
+  * [#3448](https://github.com/babel/babel/pull/3448): Make sure input to path.{dir,base}name is a string. ([@addaleax](https://github.com/addaleax))
+  * [#3451](https://github.com/babel/babel/pull/3451): Handle input sourcemaps with mappings to nothing to better support sourcemaps from other tools in a pipeline. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+* `babel-helper-builder-react-jsx`
+  * [#3444](https://github.com/babel/babel/pull/3444): Preserve whitespace in JSXExpressionContainer StringLiteral children. ([@drd](https://github.com/drd))
+
+* `babel-generator`
+  * [#3421](https://github.com/babel/babel/pull/3421): Wrap parens around default exports starting with function/class. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+#### Misc
+
+* `babel-plugin-transform-runtime`
+  * [#3258](https://github.com/babel/babel/pull/3258): Expanded documentation ([@trodrigues](https://github.com/trodrigues))
+  * [#3441](https://github.com/babel/babel/pull/3441): Improve babel-code-frame. Kill the line-numbers dependency. ([@lydell](https://github.com/lydell))
+
+* `babel-traverse`
+  * [#3442](https://github.com/babel/babel/pull/3442): Remove the old NodePath validation check ([@loganfsmyth](https://github.com/loganfsmyth))
+  * [#3447](https://github.com/babel/babel/pull/3447): Stop traversing when target type is found. ([@nkzawa](https://github.com/nkzawa))
+
+## 6.7.4 (2016-03-22)
+
+#### Bug Fix
+* `babel-traverse`
+  * [#3419](https://github.com/babel/babel/pull/3419): Keep the context stack balanced to ensure that contexts are properly popped off. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+    This bug was causing issues internally because the context system relies on the queues being balanced when deciding what nodes need to be re-processed and which do not. When it becomes imbalanced, nodes can be forgotten or skipped, causing issues like https://phabricator.babeljs.io/T7199 which broke ES6 modules on IE8 with the ES3 transforms.
+
+  * [#3420](https://github.com/babel/babel/pull/3420): Invalidate the scope cache when nodes are moved. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+    This bug was causing scoping issues in some cases if a node was moved to a new location that was not nested inside a new scope. When this case was hit, the old cached scope would be used, causing issues like https://phabricator.babeljs.io/T7194, https://phabricator.babeljs.io/T6934, and https://phabricator.babeljs.io/T6728.
+
+* `babel-runtime`
+  * [#3424](https://github.com/babel/babel/pull/3424): Fix an issue causing runtime breakage on IE8. ([@zloirock](https://github.com/zloirock))
+
+* `babel-plugin-transform-react-jsx`
+  * [#3430](https://github.com/babel/babel/pull/3430): Stop the JSX transform from using an AST node in two places. ([@amasad](https://github.com/amasad))
+
+#### Misc
+
+* `babel-traverse`
+  * [#3432](https://github.com/babel/babel/pull/3432): Fix a spelling mistake in an error message. ([@simeonwillbanks](https://github.com/simeonwillbanks))
+
+#### Internal
+* [#3400](https://github.com/babel/babel/pull/3400): Fix an issue that could cause a local clone of Babel to error out if the github repo was in a location with a parent `.babelrc` file. ([@callumlocke](https://github.com/callumlocke))
+* [#3431](https://github.com/babel/babel/pull/3431): Fix an issue that was causing the local-development watcher to occasionally rebuild with the incorrect file content. ([@loganfsmyth](https://github.com/loganfsmyth))
+* [#3436](https://github.com/babel/babel/pull/3436): Update our linting utility version. ([@hzoo](https://github.com/hzoo))
+* [#3437](https://github.com/babel/babel/pull/3437): Remove an unused dependency. ([@hzoo](https://github.com/hzoo))
+* `babel-core`
+  * [#3429](https://github.com/babel/babel/pull/3429): Avoid potential side-effects in a test. ([@amasad](https://github.com/amasad))
+
+
+## 6.7.3 (2016-03-22)
+
+* `babel-code-frame`
+  * Dropped problematic `line-numbers` dependency which was broken due to the unexpected unpublishing of its dependency `left-pad@0.0.3`.
+
+
+## 6.7.3 (2016-03-10)
+
+#### Bug Fix
+* `babel-traverse`
+  * Fix a bug which caused the new Flow binding warning to show more often than expected ([@amasad](https://github.com/amasad)).
+
+
 ## 6.7.2 (2016-03-10)
 
 Flow fix, mention babylon move
@@ -125,7 +397,7 @@ async function foo() {
 
 * `babel-core`, `babel-traverse`, `babel-helper-remap-async-to-generator`, `babel-helper-replace-supers`, `babel-plugin-transform-async-to-generator`, `babel-plugin-transform-async-to-module-method`
   * [#3405](https://github.com/babel/babel/pull/3405) Fix shadow function processing for async functions ([@loganfsmyth](https://github.com/loganfsmyth))
-  
+
 Should fix the majority of issues dealing with async functions and use of parameters, `this`, and `arguments`.
 
 ```js
@@ -162,7 +434,7 @@ var foo = function () {
   var ref = babelHelpers.asyncToGenerator(function* () {
     console.log(bar);
   });
-  
+
   return function bar() {
     return ref.apply(this, arguments);
   };
@@ -173,7 +445,7 @@ var foo = function () {
   var ref = babelHelpers.asyncToGenerator(function* () {
     console.log(bar);
   });
-  
+
   function bar() {
     return ref.apply(this, arguments);
   }
@@ -185,7 +457,7 @@ var foo = function () {
 
 * `babel-plugin-transform-es2015-parameters`
   * [#3375](https://github.com/babel/babel/pull/3375) Fix errors in parameters rest transformation [T7138](https://phabricator.babeljs.io/T7138). ([@jmm](https://github.com/jmm))
-  
+
 Many fixes to rest params: `function asdf(...rest) { ... }`
 
 * `babel-template`
@@ -264,7 +536,7 @@ Some more fixes!
 // sample code that was erroring
 const obj = {
   set a (a) {
-    values.a = a;   
+    values.a = a;
   },
   get a () {
     return values.a;
@@ -372,7 +644,7 @@ The object-assign Babel 5 plugin is being run with Babel 6.
 
 * `babel-plugin-transform-es2015-duplicate-keys`, `babel-preset-es2015`
   * [#3280](https://github.com/babel/babel/pull/3280) Fixes [T2462](https://phabricator.babeljs.io/T2462), compile duplicate keys in objects to valid strict ES5. ([@AgentME](https://github.com/AgentME))
-  
+
 `babel-plugin-transform-es2015-duplicate-keys` is a new plugin that is included in the es2015 preset. It was added since ES5 doesn't allow duplicate properties (it is valid in ES2015 strict mode however).
 
 It will compile objects with duplicate keys to computed properties, which can be compiled with the `transform-es2015-computed-properties` plugin.
@@ -442,7 +714,7 @@ var x = async (...rest) => {
   return rest;
 };
 ```
-  
+
 * `babel-plugin-transform-regenerator`, `babel-traverse`
   * [#3359](https://github.com/babel/babel/pull/3359) Queue regeneratorRuntime so it is transformed before Program#exit. ([@loganfsmyth](https://github.com/loganfsmyth))
 
@@ -497,7 +769,7 @@ void () => {};
   * [#3362](https://github.com/babel/babel/pull/3362) Show a better error when trying to use a babel 5 plugin. ([@hzoo](https://github.com/hzoo))
 * `babel-core`
   * [#3377](https://github.com/babel/babel/pull/3377) Give specific error messages for babel 5 options that were removed in babel 6. ([@hzoo](https://github.com/hzoo))
-  
+
 ---
 
 We have 15 committers this release!
@@ -521,7 +793,7 @@ Changes to note:
   * This fixes a regression from [#3168](https://github.com/babel/babel/pull/3168)
 * `babel-plugin-transform-es2015-spread`
   * [#3326](https://github.com/babel/babel/pull/3326) Fix spread to work with `super` method calls. ([@eetulatja](https://github.com/eetulatja))
-  
+
   ```js
   // input
   super.method(...args);
@@ -530,8 +802,8 @@ Changes to note:
   // new fixed output
   super.method.apply(this, babelHelpers.toConsumableArray(args));
   ```
-  
-  
+
+
 * `babel-plugin-transform-function-bind`, `babel-types`
   * [#3334](https://github.com/babel/babel/pull/3334) Check `BindExpression` callee for reference - fixes [T6984](https://phabricator.babeljs.io/T6984). ([@loganfsmyth](https://github.com/loganfsmyth))
 
@@ -622,7 +894,7 @@ A big change had to do with keeping `this.last` as an instance variable in the b
 
 > You can read more about his changes [here](https://github.com/babel/babel/pull/3283#discussion-diff-50198857).  Hoping to see more PR's like this!
 
-We will try to setup some perf tests soon to track these stats for the future (or you can help!). 
+We will try to setup some perf tests soon to track these stats for the future (or you can help!).
 
 #### New Feature
 
@@ -632,7 +904,7 @@ We will try to setup some perf tests soon to track these stats for the future (o
   + [#3281](https://github.com/babel/babel/pull/3281) `passPerPreset` option in `.babelrc`: if `true`, babel will create a new traversal for each preset. ([@DmitrySoshnikov](https://github.com/DmitrySoshnikov))
 + `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-react-jsx-source`
   + [#3285](https://github.com/babel/babel/pull/3285) Hoist the current file name (an absolute path) for `transform-react-jsx-source` . ([@frantic](https://github.com/frantic))
-  
+
 This plugin (useful for tooling) will turn
 
 ```js
@@ -640,7 +912,7 @@ This plugin (useful for tooling) will turn
 <sometag />
 ```
 
-into 
+into
 
 ```js
 var _jsxFileName = "this/file.js"; // the output will be an absolute path
@@ -667,7 +939,7 @@ babel.analyse("foobar;", {}, {
 
 + `babylon`
   + [#3319](https://github.com/babel/babel/pull/3319) Add support for leading pipes in Flow type alias RHS syntax ([@jeffmo](https://github.com/jeffmo))
-  
+
 ```js
 // allows for either `|` or `&`
 type union =
@@ -684,7 +956,7 @@ type union =
 
 + `babel-helper-define-map`, `babel-helper-function-name`, `babel-plugin-transform-es2015-classes`
   + [#3298](https://github.com/babel/babel/pull/3298) Set `NOT_LOCAL_BINDING` symbol on all inferred function names. (issue [T7010](https://phabricator.babeljs.io/T7010), regression of [#3274](https://github.com/babel/babel/pull/3274)) ([@amasad](https://github.com/amasad))
-  
+
 ```js
 // When the same name as a method in a class is used
 
@@ -697,7 +969,7 @@ class Foo {
   }
 }
 ```
-  
+
 + `babel-helper-remap-async-to-generator`, `babel-plugin-transform-async-to-generator`
   + [#3297](https://github.com/babel/babel/pull/3297) Fixes the wrong `this` for nested arrow functions. (Issue [T2765#72428](https://phabricator.babeljs.io/T2765#72428)) ([@horpto](https://github.com/horpto))
 
@@ -774,7 +1046,7 @@ const X = (
 + [#3301](https://github.com/babel/babel/pull/3301) ast/spec: add `Literal` and `Pattern` interfaces, update `Identifier` interface. ([@jmm](https://github.com/jmm))
 
 #### Internal
-+ [#3317](https://github.com/babel/babel/pull/3317) `make 
++ [#3317](https://github.com/babel/babel/pull/3317) `make
 publish`: add `make build` in case it wasn't run. ([@hzoo](https://github.com/hzoo))
 + `babel-generator`
   + [#3316](https://github.com/babel/babel/pull/3316) Simplify `babel-generator/node/index.js`. ([@forivall](https://github.com/forivall))

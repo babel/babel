@@ -6,7 +6,7 @@ import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
 import invariant from "invariant";
 import traverse from "../index";
-import assign from "lodash/object/assign";
+import assign from "lodash/assign";
 import Scope from "../scope";
 import * as t from "babel-types";
 import { path as pathCache } from "../cache";
@@ -81,18 +81,6 @@ export default class NodePath {
       if (pathCheck.node === targetNode) {
         path = pathCheck;
         break;
-      }
-    }
-
-    if (path && !(path instanceof NodePath)) {
-      if (path.constructor.name === "NodePath") {
-        // we're going to absolutley thrash the tree and allocate way too many node paths
-        // than is necessary but there's no way around this as the node module resolution
-        // algorithm is ridiculous
-        path = null;
-      } else {
-        // badly deserialised probably
-        throw new Error("We found a path that isn't a NodePath instance. Possibly due to bad serialisation.");
       }
     }
 

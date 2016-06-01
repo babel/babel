@@ -15,7 +15,7 @@ export default function ({ types: t }) {
     },
 
     post(state, pass) {
-      state.callee = pass.get("jsxIdentifier");
+      state.callee = pass.get("jsxIdentifier")();
     }
   });
 
@@ -35,9 +35,12 @@ export default function ({ types: t }) {
       }
     }
 
-    state.set("jsxIdentifier", id.split(".").map((name) => t.identifier(name)).reduce(function (object, property) {
-      return t.memberExpression(object, property);
-    }));
+    state.set(
+      "jsxIdentifier",
+      () => id.split(".").map((name) => t.identifier(name)).reduce(
+        (object, property) => t.memberExpression(object, property)
+      )
+    );
   };
 
   return {

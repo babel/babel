@@ -43,7 +43,7 @@ suite("generation", function () {
       version: 3,
       sources: [ 'a.js', 'b.js' ],
       names: [],
-      mappings: 'AAAA,SAAS,EAAT,CAAa,GAAb,EAAkB;AAAE,UAAQ,GAAR,CAAY,GAAZ,EAAF;CAAlB;;GCAG,OAAH',
+      mappings: 'AAAA,SAAS,EAAT,CAAa,GAAb,EAAkB;AAAE,UAAQ,GAAR,CAAY,GAAZ;AAAmB;;ACAvC,GAAG,OAAH',
       sourcesContent: [
       'function hi (msg) { console.log(msg); }\n',
         'hi(\'hello\');\n'

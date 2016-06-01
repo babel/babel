@@ -3,7 +3,7 @@
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
 import * as messages from "babel-messages";
-import includes from "lodash/collection/includes";
+import includes from "lodash/includes";
 import * as t from "babel-types";
 import * as cache from "./cache";
 
@@ -104,7 +104,7 @@ traverse.removeProperties = function (tree) {
 function hasBlacklistedType(path, state) {
   if (path.node.type === state.type) {
     state.has = true;
-    path.skip();
+    path.stop();
   }
 }
 

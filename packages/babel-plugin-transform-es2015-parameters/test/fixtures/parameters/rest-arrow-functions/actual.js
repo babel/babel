@@ -27,3 +27,10 @@ var x = (...rest) => {
   if (noNeedToWork) return 0;
   return rest;
 };
+
+var innerclassproperties = (...args) => (
+  class {
+    static args = args;
+    args = args;
+  }
+);

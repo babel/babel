@@ -1,8 +1,3 @@
-/* eslint indent: 0 */
-/* eslint max-len: 0 */
-
-import lineNumbers from "line-numbers";
-import repeating from "repeating";
 import jsTokens from "js-tokens";
 import esutils from "esutils";
 import chalk from "chalk";
@@ -42,15 +37,15 @@ function getTokenType(match) {
 
   if (token.type === "punctuator") {
     switch (token.value) {
-      case "{":
-      case "}":
-        return "curly";
-      case "(":
-      case ")":
-        return "parens";
-      case "[":
-      case "]":
-        return "square";
+    case "{":
+    case "}":
+      return "curly";
+    case "(":
+    case ")":
+      return "parens";
+    case "[":
+    case "]":
+      return "square";
     }
   }
 
@@ -80,7 +75,7 @@ function highlight(text: string) {
 export default function (
   rawLines: string,
   lineNumber: number,
-  colNumber: number,
+  colNumber: ?number,
   opts: Object = {},
 ): string {
   colNumber = Math.max(colNumber, 0);
@@ -97,20 +92,21 @@ export default function (
     end = lines.length;
   }
 
-  let frame = lineNumbers(lines.slice(start, end), {
-    start: start + 1,
-    before: "  ",
-    after: " | ",
-    transform(params) {
-      if (params.number !== lineNumber) {
-        return;
-      }
+  let numberMaxWidth = String(end).length;
 
+  let frame = lines.slice(start, end).map((line, index) => {
+    let number = start + 1 + index;
+    let paddedNumber = ` ${number}`.slice(-numberMaxWidth);
+    let gutter = ` ${paddedNumber} | `;
+    if (number === lineNumber) {
+      let markerLine = "";
       if (colNumber) {
-        params.line += `\n${params.before}${repeating(" ", params.width)}${params.after}${repeating(" ", colNumber - 1)}^`;
+        let markerSpacing = line.slice(0, colNumber - 1).replace(/[^\t]/g, " ");
+        markerLine =`\n ${gutter.replace(/\d/g, " ")}${markerSpacing}^`;
       }
-
-      params.before = params.before.replace(/^./, ">");
+      return `>${gutter}${line}${markerLine}`;
+    } else {
+      return ` ${gutter}${line}`;
     }
   }).join("\n");
 

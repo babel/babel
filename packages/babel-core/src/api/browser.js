@@ -2,7 +2,25 @@
 /* eslint no-new-func: 0 */
 
 import { transform } from "./node";
-export * from "./node";
+export {
+  File,
+  options,
+  buildExternalHelpers,
+  template,
+  version,
+  util,
+  messages,
+  types,
+  traverse,
+  OptionManager,
+  Plugin,
+  Pipeline,
+  analyse,
+  transform,
+  transformFromAst,
+  transformFile,
+  transformFileSync
+} from "./node";
 
 export function run(code: string, opts: Object = {}): any {
   return new Function(transform(code, opts).code)();

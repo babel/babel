@@ -13,7 +13,6 @@ dist
 /.package.json
 /packages/babel-runtime/core-js
 /packages/babel-runtime/helpers/*.js
-/packages/babel-runtime/regenerator/*.js
 /packages/*/lib
 _babel.github.io
 /tests/.browser-build.js

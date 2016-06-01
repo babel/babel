@@ -4,7 +4,8 @@ import hoistVariables from "babel-helper-hoist-variables";
 import template from "babel-template";
 
 let buildTemplate = template(`
-  System.register(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
+  SYSTEM_REGISTER(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
+    "use strict";
     BEFORE_BODY;
     return {
       setters: [SETTERS],
@@ -51,8 +52,6 @@ export default function ({ types: t }) {
   };
 
   return {
-    inherits: require("babel-plugin-transform-strict-mode"),
-
     visitor: {
       ReferencedIdentifier(path, state) {
         if (path.node.name == "__moduleName" && !path.scope.hasBinding("__moduleName")) {
@@ -248,6 +247,7 @@ export default function ({ types: t }) {
 
           path.node.body = [
             buildTemplate({
+              SYSTEM_REGISTER: t.memberExpression(t.identifier(state.opts.systemGlobal || "System"), t.identifier("register")),
               BEFORE_BODY: beforeBody,
               MODULE_NAME: moduleName,
               SETTERS: setters,
