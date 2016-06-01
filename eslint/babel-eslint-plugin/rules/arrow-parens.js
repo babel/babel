@@ -28,7 +28,18 @@ module.exports = function(context) {
                 && node.params[0].type === "Identifier"
                 && node.params[0].typeAnnotation === undefined) {
             if (token.type === "Punctuator" && token.value === "(") {
-                context.report(node, asNeededMessage);
+                context.report({
+                    node: node,
+                    message: asNeededMessage,
+                    fix: function(fixer) {
+                      var paramToken = context.getTokenAfter(token);
+                      var closingParenToken = context.getTokenAfter(paramToken);
+                      return fixer.replaceTextRange([
+                        token.range[0],
+                        closingParenToken.range[1]
+                      ], paramToken.value);
+                    }
+                });
             }
             return;
         }
@@ -38,7 +49,13 @@ module.exports = function(context) {
 
             // (x) => x
             if (after.value !== ")") {
-                context.report(node, message);
+                context.report({
+                    node: node,
+                    message: message,
+                    fix: function(fixer) {
+                        return fixer.replaceText(token, '(' + token.value + ')');
+                    }
+                });
             }
         }
     }

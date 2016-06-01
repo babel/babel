@@ -18,9 +18,10 @@ function ok(code, args){
   return { code: code, options: args,  parser: 'babel-eslint' }
 }
 
-function err(code, errors, args){
+function err(code, output, errors, args){
   var e = ok(code, args)
   e.errors = errors
+  e.output = output
   return e
 }
 
@@ -74,6 +75,7 @@ var type = type;
 var invalid = [
     {
         code: "a => {}",
+        output: "(a) => {}",
         ecmaFeatures: { arrowFunctions: true },
         errors: [{
             line: 1,
@@ -84,6 +86,7 @@ var invalid = [
     },
     {
         code: "a => a",
+        output: "(a) => a",
         ecmaFeatures: { arrowFunctions: true },
         errors: [{
             line: 1,
@@ -94,6 +97,7 @@ var invalid = [
     },
     {
         code: "a => {\n}",
+        output: "(a) => {\n}",
         ecmaFeatures: { arrowFunctions: true },
         errors: [{
             line: 1,
@@ -104,6 +108,7 @@ var invalid = [
     },
     {
         code: "a.then(foo => {});",
+        output: "a.then((foo) => {});",
         ecmaFeatures: { arrowFunctions: true },
         errors: [{
             line: 1,
@@ -114,6 +119,7 @@ var invalid = [
     },
     {
         code: "a.then(foo => a);",
+        output: "a.then((foo) => a);",
         ecmaFeatures: { arrowFunctions: true },
         errors: [{
             line: 1,
@@ -124,6 +130,7 @@ var invalid = [
     },
     {
         code: "a(foo => { if (true) {}; });",
+        output: "a((foo) => { if (true) {}; });",
         ecmaFeatures: { arrowFunctions: true },
         errors: [{
             line: 1,
@@ -136,6 +143,7 @@ var invalid = [
     // as-needed
     {
         code: "(a) => a",
+        output: "a => a",
         options: ["as-needed"],
         ecmaFeatures: { arrowFunctions: true },
         errors: [{
@@ -147,6 +155,7 @@ var invalid = [
     },
     {
         code: "(b) => b",
+        output: "b => b",
         options: ["as-needed"],
         ecmaFeatures: { arrowFunctions: true },
         errors: [{
@@ -158,15 +167,15 @@ var invalid = [
     },
 
     // async
-    err('async a => {}', [
+    err('async a => {}', 'async (a) => {}', [
       { message: 'Expected parentheses around arrow function argument.' },
     ]),
 
-    err('async a => a', [
+    err('async a => a', 'async (a) => a', [
       { message: 'Expected parentheses around arrow function argument.' },
     ]),
 
-    err('async (a) => a', [
+    err('async (a) => a', 'async a => a', [
       { message: 'Unexpected parentheses around single function argument' },
     ],
     ["as-needed"])
