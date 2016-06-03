@@ -1,7 +1,5 @@
-/* @noflow */
-/* global BabelParserOptions */
-/* global BabelFileMetadata */
-/* global BabelFileResult */
+/* global BabelFileResult, BabelParserOptions, BabelFileMetadata */
+/* eslint max-len: 0 */
 
 import getHelper from "babel-helpers";
 import * as metadataVisitor from "./metadata";
@@ -14,7 +12,7 @@ import { NodePath, Hub, Scope } from "babel-traverse";
 import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
-import defaults from "lodash/object/defaults";
+import defaults from "lodash/defaults";
 import traverse from "babel-traverse";
 import Logger from "./logger";
 import Store from "../../store";
@@ -69,7 +67,7 @@ export default class File extends Store {
     if (this.opts.passPerPreset) {
       // All the "per preset" options are inherited from the main options.
       this.perPresetOpts = [];
-      this.opts.presets.forEach(presetOpts => {
+      this.opts.presets.forEach((presetOpts) => {
         let perPresetOpts = Object.assign(Object.create(this.opts), presetOpts);
         this.perPresetOpts.push(perPresetOpts);
         this.buildPluginsForOptions(perPresetOpts);
@@ -364,7 +362,7 @@ export default class File extends Store {
       err.message += ")";
     }
 
-    return err
+    return err;
   }
 
   mergeSourceMap(map: Object) {
@@ -393,7 +391,7 @@ export default class File extends Store {
           mergedGenerator.addMapping({
             source: mapping.source,
 
-            original: {
+            original: mapping.source == null ? null : {
               line: mapping.originalLine,
               column: mapping.originalColumn
             },
@@ -440,13 +438,14 @@ export default class File extends Store {
   transform(): BabelFileResult {
     // In the "pass per preset" mode, we have grouped passes.
     // Otherwise, there is only one plain pluginPasses array.
-    this.pluginPasses.forEach((pluginPasses, index) => {
+    for (let i = 0; i < this.pluginPasses.length; i++) {
+      const pluginPasses = this.pluginPasses[i];
       this.call("pre", pluginPasses);
-      this.log.debug(`Start transform traverse`);
-      traverse(this.ast, traverse.visitors.merge(this.pluginVisitors[index], pluginPasses), this.scope);
-      this.log.debug(`End transform traverse`);
+      this.log.debug("Start transform traverse");
+      traverse(this.ast, traverse.visitors.merge(this.pluginVisitors[i], pluginPasses), this.scope);
+      this.log.debug("End transform traverse");
       this.call("post", pluginPasses);
-    });
+    }
 
     return this.generate();
   }

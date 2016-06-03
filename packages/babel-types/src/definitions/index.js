@@ -1,4 +1,3 @@
-/* @noflow */
 import * as t from "../index";
 
 export let VISITOR_KEYS = {};
@@ -34,7 +33,9 @@ export function assertEach(callback: Function): Function {
 export function assertOneOf(...vals): Function {
   function validate(node, key, val) {
     if (vals.indexOf(val) < 0) {
-      throw new TypeError(`Property ${key} expected value to be one of ${JSON.stringify(vals)} but got ${JSON.stringify(val)}`);
+      throw new TypeError(
+        `Property ${key} expected value to be one of ${JSON.stringify(vals)} but got ${JSON.stringify(val)}`
+      );
     }
   }
 
@@ -55,7 +56,10 @@ export function assertNodeType(...types: Array<string>): Function {
     }
 
     if (!valid) {
-      throw new TypeError(`Property ${key} of ${node.type} expected node to be of a type ${JSON.stringify(types)} but instead got ${JSON.stringify(val && val.type)}`);
+      throw new TypeError(
+        `Property ${key} of ${node.type} expected node to be of a type ${JSON.stringify(types)} ` +
+        `but instead got ${JSON.stringify(val && val.type)}`
+      );
     }
   }
 
@@ -76,7 +80,10 @@ export function assertNodeOrValueType(...types: Array<string>): Function {
     }
 
     if (!valid) {
-      throw new TypeError(`Property ${key} of ${node.type} expected node to be of a type ${JSON.stringify(types)} but instead got ${JSON.stringify(val && val.type)}`);
+      throw new TypeError(
+        `Property ${key} of ${node.type} expected node to be of a type ${JSON.stringify(types)} ` +
+        `but instead got ${JSON.stringify(val && val.type)}`
+      );
     }
   }
 

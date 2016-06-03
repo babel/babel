@@ -14,9 +14,20 @@ $ npm install babel-plugin-transform-es2015-template-literals
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-es2015-template-literals"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-es2015-template-literals", {
+      "loose": true,
+      "spec": true
+    }]
+  ]
 }
 ```
 

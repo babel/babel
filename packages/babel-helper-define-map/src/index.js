@@ -1,6 +1,8 @@
+/* eslint max-len: 0 */
+
 import nameFunction from "babel-helper-function-name";
-import each from "lodash/collection/each";
-import has from "lodash/object/has";
+import each from "lodash/each";
+import has from "lodash/has";
 import * as t from "babel-types";
 
 function toKind(node: Object) {
@@ -35,7 +37,7 @@ export function push(mutatorMap: Object, node: Object, kind: string, file, scope
 
   if (node.decorators) {
     let decorators = map.decorators = map.decorators || t.arrayExpression([]);
-    decorators.elements = decorators.elements.concat(node.decorators.map(dec => dec.expression).reverse());
+    decorators.elements = decorators.elements.concat(node.decorators.map((dec) => dec.expression).reverse());
   }
 
   if (map.value || map.initializer) {

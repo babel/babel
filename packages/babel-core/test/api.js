@@ -89,14 +89,8 @@ suite("api", function () {
               new Plugin({
                 visitor: {
                   Function: function(path) {
-                    var node = path.node;
-                    var scope = path.scope;
-
-                    var alias = scope
-                      .getProgramParent()
-                      .getBinding(node.returnType.typeAnnotation.id.name)
-                      .path
-                      .node;
+                    var alias = path.scope.getProgramParent().path.get('body')[0].node;
+                    if (!babel.types.isTypeAlias(alias)) return;
 
                     // In case of `passPerPreset` being `false`, the
                     // alias node is already removed by Flow plugin.
@@ -438,46 +432,46 @@ suite("api", function () {
     var oldBabelEnv = process.env.BABEL_ENV;
     var oldNodeEnv = process.env.NODE_ENV;
 
-    before(function () {
+    setup(function () {
+      // Tests need to run with the default and specific values for these. They
+      // need to be cleared for each test.
       delete process.env.BABEL_ENV;
       delete process.env.NODE_ENV;
     });
 
-    after(function () {
+    suiteTeardown(function () {
       process.env.BABEL_ENV = oldBabelEnv;
       process.env.NODE_ENV = oldNodeEnv;
     });
 
     test("default", function () {
-      return transformAsync("foo;", {
+      var result = babel.transform("foo;", {
         env: {
           development: { code: false }
         }
-      }).then(function (result) {
-        assert.equal(result.code, undefined);
       });
+
+      assert.equal(result.code, undefined);
     });
 
     test("BABEL_ENV", function () {
       process.env.BABEL_ENV = "foo";
-      return transformAsync("foo;", {
+      var result = babel.transform("foo;", {
         env: {
           foo: { code: false }
         }
-      }).then(function (result) {
-        assert.equal(result.code, undefined);
       });
+      assert.equal(result.code, undefined);
     });
 
     test("NODE_ENV", function () {
       process.env.NODE_ENV = "foo";
-      return transformAsync("foo;", {
+      var result = babel.transform("foo;", {
         env: {
           foo: { code: false }
         }
-      }).then(function (result) {
-        assert.equal(result.code, undefined);
       });
+      assert.equal(result.code, undefined);
     });
   });
 

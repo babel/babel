@@ -1,4 +1,4 @@
-/* @flow */
+/* eslint max-len: 0 */
 
 import defineType, {
   assertNodeType,
@@ -17,6 +17,9 @@ defineType("AssignmentPattern", {
     },
     right: {
       validate: assertNodeType("Expression")
+    },
+    decorators: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
     }
   }
 });
@@ -27,6 +30,9 @@ defineType("ArrayPattern", {
   fields: {
     elements: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression")))
+    },
+    decorators: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
     }
   }
 });
@@ -154,7 +160,7 @@ defineType("ExportSpecifier", {
     local: {
       validate: assertNodeType("Identifier")
     },
-    imported: {
+    exported: {
       validate: assertNodeType("Identifier")
     }
   }
@@ -181,7 +187,10 @@ defineType("ImportDeclaration", {
   aliases: ["Statement", "Declaration", "ModuleDeclaration"],
   fields: {
     specifiers: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("ImportSpecifier", "ImportDefaultSpecifier", "ImportNamespaceSpecifier")))
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("ImportSpecifier", "ImportDefaultSpecifier", "ImportNamespaceSpecifier"))
+      )
     },
     source: {
       validate: assertNodeType("StringLiteral")
@@ -282,6 +291,9 @@ defineType("ObjectPattern", {
   fields: {
     properties: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("RestProperty", "Property")))
+    },
+    decorators: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
     }
   }
 });

@@ -1,10 +1,19 @@
-/* @flow */
-
+/* eslint max-len: 0 */
 /* eslint quotes: 0 */
 
 import * as t from "babel-types";
 
 export function Identifier(node: Object) {
+  // FIXME: We hang variance off Identifer to support Flow's def-site variance.
+  // This is a terrible hack, but changing type annotations to use a new,
+  // dedicated node would be a breaking change. This should be cleaned up in
+  // the next major.
+  if (node.variance === "plus") {
+    this.push("+");
+  } else if (node.variance === "minus") {
+    this.push("-");
+  }
+
   this.push(node.name);
 }
 

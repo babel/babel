@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import getFunctionArity from "babel-helper-get-function-arity";
 import template from "babel-template";
 import * as t from "babel-types";

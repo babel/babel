@@ -1,5 +1,5 @@
 var outputFile = require("output-file-sync");
-var each       = require("lodash/collection/each");
+var each       = require("lodash/each");
 var fs         = require("fs");
 var _          = require("lodash");
 
@@ -21,6 +21,15 @@ each(paths, function (path) {
   writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
 });
 
+// Should be removed in the next major release:
+var legacy = {
+  "string/pad-left": "string/pad-start",
+  "string/pad-right": "string/pad-end"
+};
+
+each(legacy, function (value, key) {
+  writeFile("core-js/" + key + ".js", defaultify('require("core-js/library/fn/' + value + '")'));
+});
 
 var template   = require("babel-template");
 var helpers    = require("babel-helpers");
@@ -119,6 +128,3 @@ each(helpers.list, function (helperName) {
   writeFile("helpers/_" + helperAlias + ".js", content);
   if (helperAlias !== helperName) writeFile("helpers/" + helperAlias + ".js", content);
 });
-
-writeFile("regenerator/index.js", readFile("../../babel-regenerator-runtime/runtime-module", true));
-writeFile("regenerator/runtime.js", selfContainify("..", readFile("../../babel-regenerator-runtime/runtime")));

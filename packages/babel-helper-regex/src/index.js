@@ -1,6 +1,4 @@
-/* @flow */
-
-import pull from "lodash/array/pull";
+import pull from "lodash/pull";
 import * as t from "babel-types";
 
 export function is(node: Object, flag: string): boolean {

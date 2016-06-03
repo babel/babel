@@ -1,9 +1,10 @@
-var generate = require("../lib");
-var assert   = require("assert");
-var parse    = require("babylon").parse;
-var chai     = require("chai");
-var t        = require("babel-types");
-var _        = require("lodash");
+var Whitespace = require("../lib/whitespace");
+var generate   = require("../lib");
+var assert     = require("assert");
+var parse      = require("babylon").parse;
+var chai       = require("chai");
+var t          = require("babel-types");
+var _          = require("lodash");
 
 suite("generation", function () {
   test("completeness", function () {
@@ -15,6 +16,44 @@ suite("generation", function () {
       if (!/[A-Z]/.test(type[0])) return;
       assert.ok(t.VISITOR_KEYS[type], type + " should not exist");
     });
+  });
+
+  test("multiple sources", function () {
+    var sources = {
+      "a.js": "function hi (msg) { console.log(msg); }\n",
+      "b.js": "hi('hello');\n"
+    };
+    var parsed = _.keys(sources).reduce(function (_parsed, filename) {
+      _parsed[filename] = parse(sources[filename], { sourceFilename: filename });
+      return _parsed;
+    }, {});
+
+    var combinedAst = {
+      "type": "File",
+      "program": {
+        "type": "Program",
+        "sourceType": "module",
+        "body": [].concat(parsed["a.js"].program.body, parsed["b.js"].program.body)
+      }
+    };
+
+    var generated = generate.default(combinedAst, { sourceMaps: true }, sources);
+
+    chai.expect(generated.map).to.deep.equal({
+      version: 3,
+      sources: [ 'a.js', 'b.js' ],
+      names: [],
+      mappings: 'AAAA,SAAS,EAAT,CAAa,GAAb,EAAkB;AAAE,UAAQ,GAAR,CAAY,GAAZ;AAAmB;;ACAvC,GAAG,OAAH',
+      sourcesContent: [
+      'function hi (msg) { console.log(msg); }\n',
+        'hi(\'hello\');\n'
+      ]
+    }, "sourcemap was incorrectly generated");
+
+    chai.expect(generated.code).to.equal(
+      "function hi(msg) {\n  console.log(msg);\n}\n\nhi('hello');",
+      "code was incorrectly generated"
+    );
   });
 });
 
@@ -41,6 +80,14 @@ suite("programmatic generation", function() {
 
     var ast = parse(generate.default(ifStatement).code);
     assert.equal(ast.program.body[0].consequent.type, 'BlockStatement');
+  });
+});
+
+
+suite("whitespace", function () {
+  test("empty token list", function () {
+    var w = new Whitespace([]);
+    assert.equal(w.getNewlinesBefore(t.stringLiteral('1')), 0);
   });
 });
 

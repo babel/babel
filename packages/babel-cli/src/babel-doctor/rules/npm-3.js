@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import binVersionCheck from "bin-version-check";
 import chalk from "chalk";
 

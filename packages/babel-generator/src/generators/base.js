@@ -1,5 +1,3 @@
-/* @flow */
-
 export function File(node: Object) {
   this.print(node.program, node);
 }
@@ -23,9 +21,12 @@ export function BlockStatement(node: Object) {
     if (node.directives && node.directives.length) this.newline();
 
     this.printSequence(node.body, node, { indent: true });
-    if (!this.format.retainLines) this.removeLast("\n");
+    if (!this.format.retainLines && !this.format.concise) this.removeLast("\n");
+
+    this.source("end", node.loc);
     this.rightBrace();
   } else {
+    this.source("end", node.loc);
     this.push("}");
   }
 }

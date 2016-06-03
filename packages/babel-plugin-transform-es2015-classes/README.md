@@ -14,9 +14,19 @@ $ npm install babel-plugin-transform-es2015-classes
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-es2015-classes"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-es2015-classes", {
+      "loose": true
+    }]
+  ]
 }
 ```
 

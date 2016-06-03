@@ -1,4 +1,4 @@
-/* @flow */
+/* eslint max-len: 0 */
 
 import * as t from "babel-types";
 

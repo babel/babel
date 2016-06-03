@@ -8,20 +8,10 @@ cache:
   - node_modules
 
 node_js:
- - stable
- - "4.0"
- - iojs
- - "0.10"
+ - "6"
+ - "5"
+ - "4"
  - "0.12"
-
-env:
-  - CXX=g++-4.8
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
 
 script: make test-ci
 

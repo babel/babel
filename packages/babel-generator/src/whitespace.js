@@ -17,7 +17,7 @@ export default class Whitespace {
     let endToken;
     let tokens = this.tokens;
 
-    let index = this._findToken(token => token.start - node.start, 0, tokens.length);
+    let index = this._findToken((token) => token.start - node.start, 0, tokens.length);
     if (index >= 0) {
       while (index && node.start === tokens[index - 1].start) --index;
       startToken = tokens[index - 1];
@@ -36,7 +36,7 @@ export default class Whitespace {
     let endToken;
     let tokens = this.tokens;
 
-    let index = this._findToken(token => token.end - node.end, 0, tokens.length);
+    let index = this._findToken((token) => token.end - node.end, 0, tokens.length);
     if (index >= 0) {
       while (index && node.end === tokens[index - 1].end) --index;
       startToken = tokens[index];
@@ -83,11 +83,12 @@ export default class Whitespace {
    */
 
   _findToken(test: Function, start: number, end: number): number {
+    if (start >= end) return -1;
     const middle = (start + end) >>> 1;
     const match: number = test(this.tokens[middle]);
-    if (match < 0 && end > middle) {
+    if (match < 0) {
       return this._findToken(test, middle + 1, end);
-    } else if (match > 0 && start < middle) {
+    } else if (match > 0) {
       return this._findToken(test, start, middle);
     } else if (match === 0) {
       return middle;

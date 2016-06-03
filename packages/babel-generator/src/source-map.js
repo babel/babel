@@ -1,5 +1,4 @@
 import sourceMap from "source-map";
-import * as t from "babel-types";
 
 /**
  * Build a sourcemap.
@@ -17,7 +16,13 @@ export default class SourceMap {
         sourceRoot: opts.sourceRoot
       });
 
-      this.map.setSourceContent(opts.sourceFileName, code);
+      if (typeof code === "string") {
+        this.map.setSourceContent(opts.sourceFileName, code);
+      } else if (typeof code === "object") {
+        Object.keys(code).forEach((sourceFileName) => {
+          this.map.setSourceContent(sourceFileName, code[sourceFileName]);
+        });
+      }
     } else {
       this.map = null;
     }
@@ -37,46 +42,40 @@ export default class SourceMap {
   }
 
   /**
-   * Mark a node's generated position, and add it to the sourcemap.
+   * Mark the current generated position with a source position. May also be passed null line/column
+   * values to insert a mapping to nothing.
    */
 
-  mark(node) {
-    let loc = node.loc;
-    if (!loc) return; // no location info
-
+  mark(sourcePos: Object) {
     let map = this.map;
     if (!map) return; // no source map
 
-    if (t.isProgram(node) || t.isFile(node)) return; // illegal mapping nodes
-
     let position = this.position;
 
-    let generated = {
-      line: position.line,
-      column: position.column
-    };
+    // Adding an empty mapping at the start of a generated line just clutters the map.
+    if (this._lastGenLine !== position.line && sourcePos.line === null) return;
 
-    let original = loc.start;
-
-    // Avoid emitting duplicates on either side. Duplicated
-    // original values creates unnecesssarily large source maps
-    // and increases compile time. Duplicates on the generated
-    // side can lead to incorrect mappings.
-    if (comparePosition(original, this.last.original)
-        || comparePosition(generated, this.last.generated)) {
+    // If this mapping points to the same source location as the last one, we can ignore it since
+    // the previous one covers it.
+    if (this._lastGenLine === position.line && this._lastSourceLine === sourcePos.line &&
+      this._lastSourceColumn === sourcePos.column) {
       return;
     }
 
-    this.last = {
-      source: this.opts.sourceFileName,
-      generated: generated,
-      original: original
-    };
+    this._lastGenLine = position.line;
+    this._lastSourceLine = sourcePos.line;
+    this._lastSourceColumn = sourcePos.column;
 
-    map.addMapping(this.last);
+    map.addMapping({
+      generated: {
+        line: position.line,
+        column: position.column
+      },
+      source: sourcePos.line == null ? null : sourcePos.filename || this.opts.sourceFileName,
+      original: sourcePos.line == null ? null : {
+        line: sourcePos.line,
+        column: sourcePos.column,
+      },
+    });
   }
-}
-
-function comparePosition(a, b) {
-  return a.line === b.line &&  a.column === b.column;
 }

@@ -14,9 +14,19 @@ $ npm install babel-plugin-transform-strict-mode
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-strict-mode"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-strict-mode", {
+      "strict": true
+    }]
+  ]
 }
 ```
 

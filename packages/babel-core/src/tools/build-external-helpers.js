@@ -1,8 +1,10 @@
+/* eslint max-len: 0 */
+
 import * as helpers from "babel-helpers";
 import generator from "babel-generator";
 import * as messages from "babel-messages";
 import template from "babel-template";
-import each from "lodash/collection/each";
+import each from "lodash/each";
 import * as t from "babel-types";
 
 let buildUmdWrapper = template(`

@@ -17,7 +17,7 @@ watch: clean
 	./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/eslint packages/*/src
+	./node_modules/.bin/kcheck
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
@@ -38,19 +38,18 @@ test-cov: clean
 	# rebuild with test
 	rm -rf packages/*/lib
 	BABEL_ENV=test; ./node_modules/.bin/gulp build
-
 	./scripts/test-cov.sh
 
 test-ci:
 	make lint
 	NODE_ENV=test make bootstrap
-	node scripts/run-flow-check.js
 	./scripts/test-cov.sh
 	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
 
 publish:
 	git pull --rebase
-	make build
+	rm -rf packages/*/lib
+	BABEL_ENV=production make build-dist
 	make test
 	./node_modules/.bin/lerna publish
 	make clean
@@ -59,6 +58,8 @@ publish:
 bootstrap:
 	npm install
 	./node_modules/.bin/lerna bootstrap
+	# remove all existing babel-runtimes and use the top-level babel-runtime
+	rm -rf packages/*/node_modules/babel-runtime
 	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js

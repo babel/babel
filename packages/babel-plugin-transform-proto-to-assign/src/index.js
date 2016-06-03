@@ -1,4 +1,6 @@
-import pull from "lodash/array/pull";
+/* eslint max-len: 0 */
+
+import pull from "lodash/pull";
 
 export default function ({ types: t }) {
   function isProtoKey(node) {

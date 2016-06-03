@@ -1,6 +1,4 @@
-/* @flow */
-
-import repeating from "repeating";
+import repeat from "lodash/repeat";
 import * as t from "babel-types";
 
 const NON_ALPHABETIC_UNARY_OPERATORS = t.UPDATE_OPERATORS.concat(t.NUMBER_UNARY_OPERATORS).concat(["!"]);
@@ -52,9 +50,9 @@ export function ForStatement(node: Object) {
   this.keyword("for");
   this.push("(");
 
-  this._inForStatementInit = true;
+  this._inForStatementInitCounter++;
   this.print(node.init, node);
-  this._inForStatementInit = false;
+  this._inForStatementInitCounter--;
   this.push(";");
 
   if (node.test) {
@@ -233,7 +231,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
 
   let sep;
   if (!this.format.compact && !this.format.concise && hasInits && !this.format.retainLines) {
-    sep = `,\n${repeating(" ", node.kind.length + 1)}`;
+    sep = `,\n${repeat(" ", node.kind.length + 1)}`;
   }
 
   //

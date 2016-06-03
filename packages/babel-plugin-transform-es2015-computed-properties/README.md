@@ -14,9 +14,19 @@ $ npm install babel-plugin-transform-es2015-computed-properties
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-es2015-computed-properties"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-es2015-computed-properties", {
+      "loose": true
+    }]
+  ]
 }
 ```
 

@@ -1,3 +1,5 @@
+/* eslint max-len: 0 */
+
 import template from "babel-template";
 
 let helpers = {};

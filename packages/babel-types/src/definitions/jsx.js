@@ -1,5 +1,3 @@
-/* @flow */
-
 import defineType, { assertNodeType, assertValueType, chain, assertEach } from "./index";
 
 defineType("JSXAttribute", {
@@ -129,7 +127,7 @@ defineType("JSXSpreadAttribute", {
 });
 
 defineType("JSXText", {
-  aliases: ["JSX"],
+  aliases: ["JSX", "Immutable"],
   builder: ["value"],
   fields: {
     value: {

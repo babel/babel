@@ -1,10 +1,8 @@
-/* @flow */
-
 import toFastProperties from "to-fast-properties";
-import compact from "lodash/array/compact";
-import loClone from "lodash/lang/clone";
-import each from "lodash/collection/each";
-import uniq from "lodash/array/uniq";
+import compact from "lodash/compact";
+import loClone from "lodash/clone";
+import each from "lodash/each";
+import uniq from "lodash/uniq";
 
 let t = exports;
 
@@ -14,9 +12,12 @@ let t = exports;
  */
 
 function registerType(type: string) {
-  let is = t[`is${type}`] = function (node, opts) {
-    return t.is(type, node, opts);
-  };
+  let is = t[`is${type}`];
+  if (!is) {
+    is = t[`is${type}`] = function (node, opts) {
+      return t.is(type, node, opts);
+    };
+  }
 
   t[`assert${type}`] = function (node, opts) {
     opts = opts || {};
@@ -28,7 +29,27 @@ function registerType(type: string) {
 
 //
 
-export * from "./constants";
+export {
+  STATEMENT_OR_BLOCK_KEYS,
+  FLATTENABLE_KEYS,
+  FOR_INIT_KEYS,
+  COMMENT_KEYS,
+  LOGICAL_OPERATORS,
+  UPDATE_OPERATORS,
+  BOOLEAN_NUMBER_BINARY_OPERATORS,
+  EQUALITY_BINARY_OPERATORS,
+  COMPARISON_BINARY_OPERATORS,
+  BOOLEAN_BINARY_OPERATORS,
+  NUMBER_BINARY_OPERATORS,
+  BINARY_OPERATORS,
+  BOOLEAN_UNARY_OPERATORS,
+  NUMBER_UNARY_OPERATORS,
+  STRING_UNARY_OPERATORS,
+  UNARY_OPERATORS,
+  INHERIT_KEYS,
+  BLOCK_SCOPED_SYMBOL,
+  NOT_LOCAL_BINDING
+} from "./constants";
 
 import "./definitions/init";
 import { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS } from "./definitions";
@@ -98,6 +119,10 @@ export function is(type: string, node: Object, opts?: Object): boolean {
 export function isType(nodeType: string, targetType: string): boolean {
   if (nodeType === targetType) return true;
 
+  // This is a fast-path. If the test above failed, but an alias key is found, then the
+  // targetType was a primary node type, so there's no need to check the aliases.
+  if (t.ALIAS_KEYS[targetType]) return false;
+
   let aliases: ?Array<string> = t.FLIPPED_ALIAS_KEYS[targetType];
   if (aliases) {
     if (aliases[0] === nodeType) return true;
@@ -117,7 +142,10 @@ export function isType(nodeType: string, targetType: string): boolean {
 each(t.BUILDER_KEYS, function (keys, type) {
   function builder() {
     if (arguments.length > keys.length) {
-      throw new Error(`t.${type}: Too many arguments passed. Received ${arguments.length} but can receive no more than ${keys.length}`);
+      throw new Error(
+        `t.${type}: Too many arguments passed. Received ${arguments.length} but can receive ` +
+        `no more than ${keys.length}`
+      );
     }
 
     let node = {};
@@ -149,20 +177,20 @@ each(t.BUILDER_KEYS, function (keys, type) {
  * Description
  */
 
- for (let type in t.DEPRECATED_KEYS) {
-   let newType = t.DEPRECATED_KEYS[type];
+for (let type in t.DEPRECATED_KEYS) {
+  let newType = t.DEPRECATED_KEYS[type];
 
-   function proxy(fn) {
-     return function () {
-       console.trace(`The node type ${type} has been renamed to ${newType}`);
-       return fn.apply(this, arguments);
-     };
-   }
+  function proxy(fn) {
+    return function () {
+      console.trace(`The node type ${type} has been renamed to ${newType}`);
+      return fn.apply(this, arguments);
+    };
+  }
 
-   t[type] = t[type[0].toLowerCase() + type.slice(1)] = proxy(t[newType]);
-   t[`is${type}`] = proxy(t[`is${newType}`]);
-   t[`assert${type}`] = proxy(t[`assert${newType}`]);
- }
+  t[type] = t[type[0].toLowerCase() + type.slice(1)] = proxy(t[newType]);
+  t[`is${type}`] = proxy(t[`is${newType}`]);
+  t[`assert${type}`] = proxy(t[`assert${newType}`]);
+}
 
 /**
  * Description
@@ -371,11 +399,18 @@ function _inheritComments(key, child, parent) {
   }
 }
 
+// Can't use import because of cyclic dependency between babel-traverse
+// and this module (babel-types). This require needs to appear after
+// we export the TYPES constant, so we lazy-initialize it before use.
+let traverse;
+
 /**
  * Inherit all contextual properties from `parent` node to `child` node.
  */
 
 export function inherits(child: Object, parent: Object): Object {
+  if (!traverse) traverse = require("babel-traverse").default;
+
   if (!child || !parent) return child;
 
   // optionally inherit specific properties if not null
@@ -396,6 +431,7 @@ export function inherits(child: Object, parent: Object): Object {
   }
 
   t.inheritsComments(child, parent);
+  traverse.copyCache(parent, child);
 
   return child;
 }
@@ -424,7 +460,37 @@ toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
 
 //
-export * from "./retrievers";
-export * from "./validators";
-export * from "./converters";
-export * from "./flow";
+export {
+  getBindingIdentifiers,
+  getOuterBindingIdentifiers
+} from "./retrievers";
+
+export {
+  isBinding,
+  isReferenced,
+  isValidIdentifier,
+  isLet,
+  isBlockScoped,
+  isVar,
+  isSpecifierDefault,
+  isScope,
+  isImmutable
+} from "./validators";
+
+export {
+  toComputedKey,
+  toSequenceExpression,
+  toKeyAlias,
+  toIdentifier,
+  toBindingIdentifierName,
+  toStatement,
+  toExpression,
+  toBlock,
+  valueToNode
+} from "./converters";
+
+export {
+  createUnionTypeAnnotation,
+  removeTypeDuplicates,
+  createTypeAnnotationBasedOnTypeof
+} from "./flow";

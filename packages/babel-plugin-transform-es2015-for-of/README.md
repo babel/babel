@@ -14,9 +14,19 @@ $ npm install babel-plugin-transform-es2015-for-of
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-es2015-for-of"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-es2015-for-of", {
+      "loose": true
+    }]
+  ]
 }
 ```
 

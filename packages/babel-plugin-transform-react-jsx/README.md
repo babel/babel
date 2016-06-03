@@ -14,9 +14,18 @@ $ npm install babel-plugin-transform-react-jsx
 
 **.babelrc**
 
-```json
+```js
+// without options
 {
   "plugins": ["transform-react-jsx"]
+}
+// with options
+{
+  "plugins": [
+    ["transform-react-jsx", {
+      "pragma": "dom" // default pragma is React.createElement
+    }]
+  ]
 }
 ```
 

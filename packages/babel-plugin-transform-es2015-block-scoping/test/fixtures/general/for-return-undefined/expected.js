@@ -4,7 +4,7 @@
       return i;
     });
     return {
-      v: undefined
+      v: void 0
     };
   };
 

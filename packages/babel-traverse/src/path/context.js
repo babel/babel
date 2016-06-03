@@ -208,10 +208,25 @@ export function setKey(key) {
   this.type = this.node && this.node.type;
 }
 
-export function requeue(path = this) {
-  if (path.removed) return;
+export function requeue(pathToQueue = this) {
+  if (pathToQueue.removed) return;
 
-  for (let context of this.contexts) {
-    context.maybeQueue(path);
+  // TODO(loganfsmyth): This should be switched back to queue in parent contexts
+  // automatically once T2892 and T7160 have been resolved. See T7166.
+  // let contexts = this._getQueueContexts();
+  let contexts = this.contexts;
+
+  for (let context of contexts) {
+    context.maybeQueue(pathToQueue);
   }
+}
+
+export function _getQueueContexts() {
+  let path = this;
+  let contexts = this.contexts;
+  while (!contexts.length) {
+    path = path.parentPath;
+    contexts = path.contexts;
+  }
+  return contexts;
 }

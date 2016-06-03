@@ -1,12 +1,10 @@
-/* @flow */
-
 import * as t from "babel-types";
 
 export function _params(node: Object) {
   this.print(node.typeParameters, node);
   this.push("(");
   this.printList(node.params, node, {
-    iterator: (node) =>{
+    iterator: (node) => {
       if (node.optional) this.push("?");
       this.print(node.typeAnnotation, node);
     }

@@ -1,3 +1,4 @@
+/* eslint max-len: 0 */
 // todo: define instead of assign
 
 export default function ({ types: t }) {
@@ -114,7 +115,7 @@ export default function ({ types: t }) {
           //
 
           if (isDerived) {
-            let bareSupers = []
+            let bareSupers = [];
             constructor.traverse(findBareSupers, bareSupers);
             for (let bareSuper of bareSupers) {
               bareSuper.insertAfter(instanceBody);
@@ -144,6 +145,16 @@ export default function ({ types: t }) {
         }
 
         path.insertAfter(nodes);
+      },
+      ArrowFunctionExpression(path) {
+        let classExp = path.get("body");
+        if (!classExp.isClassExpression()) return;
+
+        let body = classExp.get("body");
+        let members = body.get("body");
+        if (members.some((member) => member.isClassProperty())) {
+          path.ensureBlock();
+        }
       }
     }
   };

@@ -1,4 +1,0 @@
-{
-  "plugins": ["trailingFunctionCommas"],
-  "throws": "Unexpected token (1:13)"
-}

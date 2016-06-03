@@ -1,5 +1,3 @@
-/* @flow */
-
 export function ClassDeclaration(node: Object) {
   this.printJoin(node.decorators, node, { separator: "" });
   this.push("class");

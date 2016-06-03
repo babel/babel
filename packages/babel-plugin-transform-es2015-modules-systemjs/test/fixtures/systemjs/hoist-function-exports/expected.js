@@ -1,6 +1,6 @@
-"use strict";
-
 System.register(["./evens"], function (_export, _context) {
+  "use strict";
+
   var isEven, p, a, i, j, isOdd;
   return {
     setters: [function (_evens) {

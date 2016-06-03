@@ -1,2 +1,10 @@
 packages/babel-core/src/transformation/templates
 scripts
+lib
+packages/babel-runtime
+packages/*/node_modules
+packages/*/test
+packages/*/dist
+vendor
+_babel.github.io
+Gulpfile.js

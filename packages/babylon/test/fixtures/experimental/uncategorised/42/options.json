@@ -1,4 +1,0 @@
-{
-  "plugins": ["decorators"],
-  "throws": "You have trailing decorators with no method (1:18)"
-}

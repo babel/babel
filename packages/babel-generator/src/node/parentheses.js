@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as t from "babel-types";
 
 const PRECEDENCE = {
@@ -45,12 +43,7 @@ export function UpdateExpression(node: Object, parent: Object): boolean {
 }
 
 export function ObjectExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
-  if (t.isExpressionStatement(parent)) {
-    // ({ foo: "bar" });
-    return true;
-  }
-
-  return isFirstInStatement(printStack, true);
+  return isFirstInStatement(printStack, {considerArrow: true});
 }
 
 export function Binary(node: Object, parent: Object): boolean {
@@ -154,18 +147,8 @@ export function YieldExpression(node: Object, parent: Object): boolean {
 
 export { YieldExpression as AwaitExpression };
 
-export function ClassExpression(node: Object, parent: Object): boolean {
-  // (class {});
-  if (t.isExpressionStatement(parent)) {
-    return true;
-  }
-
-  // export default (class () {});
-  if (t.isExportDeclaration(parent)) {
-    return true;
-  }
-
-  return false;
+export function ClassExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
+  return isFirstInStatement(printStack, {considerDefaultExports: true});
 }
 
 export function UnaryLike(node: Object, parent: Object): boolean {
@@ -181,17 +164,7 @@ export function UnaryLike(node: Object, parent: Object): boolean {
 }
 
 export function FunctionExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
-  // (function () {});
-  if (t.isExpressionStatement(parent)) {
-    return true;
-  }
-
-  // export default (function () {});
-  if (t.isExportDeclaration(parent)) {
-    return true;
-  }
-
-  return isFirstInStatement(printStack);
+  return isFirstInStatement(printStack, {considerDefaultExports: true});
 }
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
@@ -201,6 +174,10 @@ export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
   }
 
   if (t.isBinaryExpression(parent) || t.isLogicalExpression(parent)) {
+    return true;
+  }
+
+  if (t.isUnaryExpression(parent)) {
     return true;
   }
 
@@ -233,13 +210,20 @@ export function AssignmentExpression(node: Object): boolean {
 
 // Walk up the print stack to deterimine if our node can come first
 // in statement.
-function isFirstInStatement(printStack: Array<Object>, considerArrow: bool = false): boolean {
+function isFirstInStatement(printStack: Array<Object>, {
+    considerArrow = false,
+    considerDefaultExports = false
+  } = {}): boolean {
   let i = printStack.length - 1;
   let node = printStack[i];
   i--;
   let parent = printStack[i];
   while (i > 0) {
     if (t.isExpressionStatement(parent, { expression: node })) {
+      return true;
+    }
+
+    if (considerDefaultExports && t.isExportDefaultDeclaration(parent, { declaration: node })) {
       return true;
     }
 

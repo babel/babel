@@ -1,11 +1,11 @@
-/* @noflow */
+/* eslint max-len: 0 */
 
-import OptionManager from "./file/options/option-manager"
+import OptionManager from "./file/options/option-manager";
 import * as messages from "babel-messages";
 import Store from "../store";
 import traverse from "babel-traverse";
-import assign from "lodash/object/assign";
-import clone from "lodash/lang/clone";
+import assign from "lodash/assign";
+import clone from "lodash/clone";
 
 const GLOBAL_VISITOR_PROPS = ["enter", "exit"];
 

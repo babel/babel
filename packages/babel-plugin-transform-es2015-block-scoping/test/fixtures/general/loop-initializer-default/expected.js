@@ -1,5 +1,5 @@
 while (value) {
-  var foo = undefined;
+  var foo = void 0;
 
   if (bar) {
     foo = [];

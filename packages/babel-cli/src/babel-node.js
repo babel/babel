@@ -1,3 +1,5 @@
+/* eslint indent: 0 */
+
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _babel-node(1) executable.
@@ -19,7 +21,7 @@ if (argSeparator > -1) {
 }
 
 getV8Flags(function (err, v8Flags) {
-  babelArgs.forEach(function(arg){
+  babelArgs.forEach(function(arg) {
     let flag = arg.split("=")[0];
 
     switch (flag) {
@@ -37,7 +39,7 @@ getV8Flags(function (err, v8Flags) {
       case "--expose-gc":
         args.unshift("--expose-gc");
         break;
-        
+
       case "--nolazy":
         args.unshift("--nolazy");
         break;

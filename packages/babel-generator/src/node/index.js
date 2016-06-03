@@ -1,25 +1,43 @@
-/* @noflow */
-
 import whitespace from "./whitespace";
 import * as parens from "./parentheses";
 import * as t from "babel-types";
 
-function find(obj, node, parent, printStack) {
-  if (!obj) return;
-  let result;
+function expandAliases(obj) {
+  let newObj = {};
 
-  let types = Object.keys(obj);
-  for (let i = 0; i < types.length; i++) {
-    let type = types[i];
+  function add(type, func) {
+    let fn = newObj[type];
+    newObj[type] = fn ? function(node, parent, stack) {
+      let result = fn(node, parent, stack);
 
-    if (t.is(type, node)) {
-      let fn = obj[type];
-      result = fn(node, parent, printStack);
-      if (result != null) break;
+      return result == null ? func(node, parent, stack) : result;
+    } : func;
+  }
+
+  for (let type of Object.keys(obj)) {
+
+    let aliases = t.FLIPPED_ALIAS_KEYS[type];
+    if (aliases) {
+      for (let alias of aliases) {
+        add(alias, obj[type]);
+      }
+    } else {
+      add(type, obj[type]);
     }
   }
 
-  return result;
+  return newObj;
+}
+
+// Rather than using `t.is` on each object property, we pre-expand any type aliases
+// into concrete types so that the 'find' call below can be as fast as possible.
+let expandedParens = expandAliases(parens);
+let expandedWhitespaceNodes = expandAliases(whitespace.nodes);
+let expandedWhitespaceList = expandAliases(whitespace.list);
+
+function find(obj, node, parent, printStack) {
+  let fn = obj[node.type];
+  return fn ? fn(node, parent, printStack) : null;
 }
 
 function isOrHasCallExpression(node) {
@@ -47,10 +65,10 @@ export function needsWhitespace(node, parent, type) {
     node = node.expression;
   }
 
-  let linesInfo = find(whitespace.nodes, node, parent);
+  let linesInfo = find(expandedWhitespaceNodes, node, parent);
 
   if (!linesInfo) {
-    let items = find(whitespace.list, node, parent);
+    let items = find(expandedWhitespaceList, node, parent);
     if (items) {
       for (let i = 0; i < items.length; i++) {
         linesInfo = needsWhitespace(items[i], node, type);
@@ -77,5 +95,5 @@ export function needsParens(node, parent, printStack) {
     if (isOrHasCallExpression(node)) return true;
   }
 
-  return find(parens, node, parent, printStack);
+  return find(expandedParens, node, parent, printStack);
 }
