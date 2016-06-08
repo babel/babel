@@ -10,7 +10,7 @@ export default function () {
 
       StringLiteral({ node }) {
         // unicode escape
-        if (node.extra && /\\[u]/gi.test(node.extra.raw)) {
+        if (node.extra && /\\u\{.*\}/gi.test(node.extra.raw)) {
           node.extra = undefined;
         }
       }
