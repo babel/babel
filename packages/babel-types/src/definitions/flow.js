@@ -233,6 +233,14 @@ defineType("TypeCastExpression", {
   }
 });
 
+defineType("TypeParameter", {
+  visitor: ["name", "bound"],
+  aliases: ["Flow"],
+  fields: {
+    // todo
+  }
+});
+
 defineType("TypeParameterDeclaration", {
   visitor: ["params"],
   aliases: ["Flow"],
