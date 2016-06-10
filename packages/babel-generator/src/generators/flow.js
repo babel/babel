@@ -199,6 +199,13 @@ export function TypeParameter(node: Object) {
   if (node.bound) {
     this.print(node.bound, node);
   }
+
+  if (node.default) {
+    this.space();
+    this.push("=");
+    this.space();
+    this.print(node.default, node);
+  }
 }
 
 export function TypeParameterInstantiation(node: Object) {
