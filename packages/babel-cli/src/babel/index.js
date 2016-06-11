@@ -40,7 +40,7 @@ each(options, function (option, key) {
 
 commander.option("-x, --extensions [extensions]", "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx]");
 commander.option("-w, --watch", "Recompile files on changes");
-commander.option("-s, --skip-initial-build", "Do not compile files before watching");
+commander.option("--skip-initial-build", "Do not compile files before watching");
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
