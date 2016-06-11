@@ -8,10 +8,12 @@ export function Identifier(node: Object) {
   // This is a terrible hack, but changing type annotations to use a new,
   // dedicated node would be a breaking change. This should be cleaned up in
   // the next major.
-  if (node.variance === "plus") {
-    this.push("+");
-  } else if (node.variance === "minus") {
-    this.push("-");
+  if (node.variance) {
+    if (node.variance === "plus") {
+      this.push("+");
+    } else if (node.variance === "minus") {
+      this.push("-");
+    }
   }
 
   this.push(node.name);

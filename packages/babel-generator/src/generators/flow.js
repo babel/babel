@@ -187,6 +187,27 @@ export function TypeAnnotation(node: Object) {
   this.print(node.typeAnnotation, node);
 }
 
+export function TypeParameter(node: Object) {
+  if (node.variance === "plus") {
+    this.push("+");
+  } else if (node.variance === "minus") {
+    this.push("-");
+  }
+
+  this.push(node.name);
+
+  if (node.bound) {
+    this.print(node.bound, node);
+  }
+
+  if (node.default) {
+    this.space();
+    this.push("=");
+    this.space();
+    this.print(node.default, node);
+  }
+}
+
 export function TypeParameterInstantiation(node: Object) {
   this.push("<");
   this.printJoin(node.params, node, {
