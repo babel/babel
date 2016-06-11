@@ -75,7 +75,9 @@ export class CodeGenerator extends Printer {
       let indent = detectIndent(code).indent;
       if (indent && indent !== " ") style = indent;
     }
-
+    
+    let commonQuotes = CodeGenerator.findCommonStringDelimiter(code, tokens);
+    
     let format = {
       auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
       auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
@@ -85,7 +87,8 @@ export class CodeGenerator extends Printer {
       compact: opts.compact,
       minified: opts.minified,
       concise: opts.concise,
-      quotes: opts.quotes || CodeGenerator.findCommonStringDelimiter(code, tokens),
+      quotes: opts.quotes || commonQuotes,
+      jsxQuotes: opts.jsxQuotes || commonQuotes,
       indent: {
         adjustMultilineComment: true,
         style: style,

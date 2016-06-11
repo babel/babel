@@ -35,6 +35,7 @@ compact                | boolean or `'auto'` | `opts.minified` | Set to `true` t
 minified               | boolean  | `false`         | Should the output be minified
 concise                | boolean  | `false`         | Set to `true` to reduce whitespace (but not as much as `opts.compact`)
 quotes                 | `'single'` or `'double'` | autodetect based on `ast.tokens` | The type of quote to use in the output
+jsxQuotes              | `'single'` or `'double'` | autodetect based on `ast.tokens` | The type of quote to use in the output
 filename               | string   |                 | Used in warning messages
 
 Options for source maps:

@@ -138,7 +138,9 @@ export function _stringLiteral(val: string, parent: Object): string {
     return "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4);
   });
 
-  if (this.format.quotes === "single" && !t.isJSX(parent)) {
+  const hasJSXParent = t.isJSX(parent);
+
+  if (this.format.quotes === "single" && (!hasJSXParent || (hasJSXParent && this.format.jsxQuotes !== "double"))) {
     // remove double quotes
     val = val.slice(1, -1);
 
