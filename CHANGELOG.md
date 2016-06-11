@@ -13,6 +13,44 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.10.0 (2016-06-11)
+
+#### New Feature
+* `babel-cli`: Add a new option `--skip-initial-build, -s`  ([#3489](https://github.com/babel/babel/pull/3489)) ([@lxe](https://github.com/lxe))
+
+- Do not compile files before watching
+
+```sh
+$ babel src -d dest --watch --skip-initial-build
+```
+
+#### Bug Fix
+* `babel-plugin-transform-es2015-block-scoping`: Create a new lexical environment inside switch statement blocks for identifier bindings ([#3490](https://github.com/babel/babel/pull/3490), [T7324](https://phabricator.babeljs.io/T7324)) ([@jayphelps](https://github.com/jayphelps))
+
+```js
+let foo = false;
+
+switch (true) {
+  default:
+    let foo = true;
+}
+
+alert(foo); // should be false
+```
+
+* `babel-types`, `babel-generator`: Support changes in flow parsing in babylon
+
+Add support for a `TypeParameter` node.
+
+```js
+type A<T = string> = T;
+class A<S = number, T: ?string = string> {};
+```
+
+#### Documentation
+* Clean up language/consistency in CONTRIBUTING.md ([#3517](https://github.com/babel/babel/pull/3517)) ([@kaicataldo](https://github.com/kaicataldo))
+* Fix up broken links in monorepo.md ([#3519](https://github.com/babel/babel/pull/3519)) ([@koenkivits](https://github.com/koenkivits))
+
 ## 6.9.2 (2016-05-29)
 
 Fixup missing dependency.
