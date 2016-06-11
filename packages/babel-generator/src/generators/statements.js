@@ -81,6 +81,10 @@ export function WhileStatement(node: Object) {
 let buildForXStatement = function (op) {
   return function (node: Object) {
     this.keyword("for");
+    if (op === "await") {
+      this.push("await ");
+      op = "of";
+    }
     this.push("(");
     this.print(node.left, node);
     this.push(` ${op} `);
@@ -92,6 +96,7 @@ let buildForXStatement = function (op) {
 
 export let ForInStatement = buildForXStatement("in");
 export let ForOfStatement = buildForXStatement("of");
+export let ForAwaitStatement = buildForXStatement("await");
 
 export function DoWhileStatement(node: Object) {
   this.push("do ");

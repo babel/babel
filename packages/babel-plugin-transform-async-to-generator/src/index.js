@@ -8,7 +8,9 @@ export default function () {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
 
-        remapAsyncToGenerator(path, state.addHelper("asyncToGenerator"));
+        remapAsyncToGenerator(path, state.file, {
+          wrapAsync: state.addHelper("asyncToGenerator")
+        });
       }
     }
   };
