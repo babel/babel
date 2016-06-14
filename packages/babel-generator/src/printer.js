@@ -110,9 +110,13 @@ export default class Printer extends Buffer {
     if (!this.format.minified) {
       let extra = this.getPossibleRaw(node);
       if (extra) {
-        this.push("");
-        this._push(extra);
-        return;
+        let isString = extra.indexOf("\"") >= 0 || extra.indexOf("'") >= 0;
+        let isFlow = parent && t.isFlow(parent);
+        if (!isString || isFlow) {
+          this.push("");
+          this._push(extra);
+          return;
+        }
       }
     }
 
