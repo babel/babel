@@ -125,11 +125,18 @@ export default class ReplaceSupers {
     return t.callExpression(
       this.file.addHelper("set"),
       [
-        t.callExpression(
-          t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
-          [
-            this.isStatic ? this.getObjectRef() : t.memberExpression(this.getObjectRef(), t.identifier("prototype"))
-          ]
+        t.logicalExpression(
+          "||",
+          t.memberExpression(
+            this.isStatic ? this.getObjectRef() : t.memberExpression(this.getObjectRef(), t.identifier("prototype")),
+            t.identifier("__proto__")
+          ),
+          t.callExpression(
+            t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
+            [
+              this.isStatic ? this.getObjectRef() : t.memberExpression(this.getObjectRef(), t.identifier("prototype"))
+            ]
+          ),
         ),
         isComputed ? property : t.stringLiteral(property.name),
         value,
@@ -151,11 +158,18 @@ export default class ReplaceSupers {
     return t.callExpression(
       this.file.addHelper("get"),
       [
-        t.callExpression(
-          t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
-          [
-            this.isStatic ? this.getObjectRef() : t.memberExpression(this.getObjectRef(), t.identifier("prototype"))
-          ]
+        t.logicalExpression(
+          "||",
+          t.memberExpression(
+            this.isStatic ? this.getObjectRef() : t.memberExpression(this.getObjectRef(), t.identifier("prototype")),
+            t.identifier("__proto__")
+          ),
+          t.callExpression(
+            t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
+            [
+              this.isStatic ? this.getObjectRef() : t.memberExpression(this.getObjectRef(), t.identifier("prototype"))
+            ]
+          ),
         ),
         isComputed ? property : t.stringLiteral(property.name),
         t.thisExpression()
