@@ -1,41 +1,42 @@
 export function JSXAttribute(node: Object) {
   this.print(node.name, node);
   if (node.value) {
-    this.push("=");
+    this.token("=");
     this.print(node.value, node);
   }
 }
 
 export function JSXIdentifier(node: Object) {
-  this.push(node.name);
+  this.word(node.name);
 }
 
 export function JSXNamespacedName(node: Object) {
   this.print(node.namespace, node);
-  this.push(":");
+  this.token(":");
   this.print(node.name, node);
 }
 
 export function JSXMemberExpression(node: Object) {
   this.print(node.object, node);
-  this.push(".");
+  this.token(".");
   this.print(node.property, node);
 }
 
 export function JSXSpreadAttribute(node: Object) {
-  this.push("{...");
+  this.token("{");
+  this.token("...");
   this.print(node.argument, node);
-  this.push("}");
+  this.token("}");
 }
 
 export function JSXExpressionContainer(node: Object) {
-  this.push("{");
+  this.token("{");
   this.print(node.expression, node);
-  this.push("}");
+  this.token("}");
 }
 
 export function JSXText(node: Object) {
-  this.push(node.value, true);
+  this.token(node.value);
 }
 
 export function JSXElement(node: Object) {
@@ -52,20 +53,29 @@ export function JSXElement(node: Object) {
   this.print(node.closingElement, node);
 }
 
+function spaceSeparator() {
+  this.space();
+}
+
 export function JSXOpeningElement(node: Object) {
-  this.push("<");
+  this.token("<");
   this.print(node.name, node);
   if (node.attributes.length > 0) {
-    this.push(" ");
-    this.printJoin(node.attributes, node, { separator: " " });
+    this.space();
+    this.printJoin(node.attributes, node, { separator: spaceSeparator });
   }
-  this.push(node.selfClosing ? " />" : ">");
+  if (node.selfClosing) {
+    this.space();
+    this.token("/>");
+  } else {
+    this.token(">");
+  }
 }
 
 export function JSXClosingElement(node: Object) {
-  this.push("</");
+  this.token("</");
   this.print(node.name, node);
-  this.push(">");
+  this.token(">");
 }
 
 export function JSXEmptyExpression() {}

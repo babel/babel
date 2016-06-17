@@ -12,7 +12,7 @@ export function Program(node: Object) {
 }
 
 export function BlockStatement(node: Object) {
-  this.push("{");
+  this.token("{");
   this.printInnerComments(node);
   if (node.body.length) {
     this.newline();
@@ -27,7 +27,7 @@ export function BlockStatement(node: Object) {
     this.rightBrace();
   } else {
     this.source("end", node.loc);
-    this.push("}");
+    this.token("}");
   }
 }
 
@@ -38,6 +38,4 @@ export function Directive(node: Object) {
   this.semicolon();
 }
 
-export function DirectiveLiteral(node: Object) {
-  this.push(this._stringLiteral(node.value));
-}
+export { StringLiteral as DirectiveLiteral } from "./types";
