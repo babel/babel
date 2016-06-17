@@ -29,7 +29,7 @@ And a fix for [`babel/babel-eslint#321`](https://github.com/babel/babel-eslint/i
 * `babel-generator`, `babel-plugin-transform-class-properties`
   * [#3492](https://github.com/babel/babel/pull/3492) Refactor space insertion and remove some unneeded function options. ([@loganfsmyth](https://github.com/loganfsmyth))
 
-- ## 6.10.1 (2016-06-11)
+## 6.10.1 (2016-06-11)
 
 #### Bug Fixes
 
