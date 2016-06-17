@@ -13,6 +13,22 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.10.2 (2016-06-17)
+
+@loganfsmyth made some awesome optimizations and better whitspace handling for `babel-generator` again (~10-15% perf improvement)!
+
+And a fix for [`babel/babel-eslint#321`](https://github.com/babel/babel-eslint/issues/321)
+
+#### Bug Fix
+* `babel-types`
+  * [#3529](https://github.com/babel/babel/pull/3529) "name" should not be visited for TypeParameter. ([@danez](https://github.com/danez))
+
+#### Internal
+* Other
+  * [#3528](https://github.com/babel/babel/pull/3528) cleanup transpiled files in `make clean` - Fixes [#7434](https://github.com/babel/babel/issues/7434) [skip ci]. ([@hzoo](https://github.com/hzoo))
+* `babel-generator`
+  * [#3492](https://github.com/babel/babel/pull/3492) Refactor space insertion and remove some unneeded function options. ([@loganfsmyth](https://github.com/loganfsmyth))
+
 ## 6.10.1 (2016-06-11)
 
 #### Bug Fixes
