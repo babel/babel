@@ -26,7 +26,7 @@ And a fix for [`babel/babel-eslint#321`](https://github.com/babel/babel-eslint/i
 #### Internal
 * Other
   * [#3528](https://github.com/babel/babel/pull/3528) cleanup transpiled files in `make clean` - Fixes [#7434](https://github.com/babel/babel/issues/7434) [skip ci]. ([@hzoo](https://github.com/hzoo))
-* `babel-generator`, `babel-plugin-transform-class-properties`
+* `babel-generator`
   * [#3492](https://github.com/babel/babel/pull/3492) Refactor space insertion and remove some unneeded function options. ([@loganfsmyth](https://github.com/loganfsmyth))
 
 ## 6.10.1 (2016-06-11)
