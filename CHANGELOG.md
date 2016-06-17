@@ -15,9 +15,9 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## 6.10.2 (2016-06-17)
 
-@loganfsmyth made some awesome optimizations and better whitspace handling for `babel-generator` again (~10-15% perf improvement)!
+@loganfsmyth made some awesome optimizations and better whitespace handling for `babel-generator` again (~10-15% performance improvement)!
 
-And a fix for [`babel/babel-eslint#321`](https://github.com/babel/babel-eslint/issues/321)
+Also a small fix for [`babel/babel-eslint#321`](https://github.com/babel/babel-eslint/issues/321)
 
 #### Bug Fix
 * `babel-types`
