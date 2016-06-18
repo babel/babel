@@ -308,37 +308,35 @@ export default function () {
               }
 
               let specifiers = path.get("specifiers");
-              if (specifiers.length) {
-                let nodes = [];
-                let source = path.node.source;
-                if (source) {
-                  let ref = addRequire(source.value, path.node._blockHoist);
+              let nodes = [];
+              let source = path.node.source;
+              if (source) {
+                let ref = addRequire(source.value, path.node._blockHoist);
 
-                  for (let specifier of specifiers) {
-                    if (specifier.isExportNamespaceSpecifier()) {
-                      // todo
-                    } else if (specifier.isExportDefaultSpecifier()) {
-                      // todo
-                    } else if (specifier.isExportSpecifier()) {
-                      if (specifier.node.local.name === "default") {
-                        topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(t.callExpression(this.addHelper("interopRequireDefault"), [ref]), specifier.node.local)));
-                      } else {
-                        topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(ref, specifier.node.local)));
-                      }
-                      nonHoistedExportNames[specifier.node.exported.name] = true;
+                for (let specifier of specifiers) {
+                  if (specifier.isExportNamespaceSpecifier()) {
+                    // todo
+                  } else if (specifier.isExportDefaultSpecifier()) {
+                    // todo
+                  } else if (specifier.isExportSpecifier()) {
+                    if (specifier.node.local.name === "default") {
+                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(t.callExpression(this.addHelper("interopRequireDefault"), [ref]), specifier.node.local)));
+                    } else {
+                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(ref, specifier.node.local)));
                     }
-                  }
-                } else {
-                  for (let specifier of specifiers) {
-                    if (specifier.isExportSpecifier()) {
-                      addTo(exports, specifier.node.local.name, specifier.node.exported);
-                      nonHoistedExportNames[specifier.node.exported.name] = true;
-                      nodes.push(buildExportsAssignment(specifier.node.exported, specifier.node.local));
-                    }
+                    nonHoistedExportNames[specifier.node.exported.name] = true;
                   }
                 }
-                path.replaceWithMultiple(nodes);
+              } else {
+                for (let specifier of specifiers) {
+                  if (specifier.isExportSpecifier()) {
+                    addTo(exports, specifier.node.local.name, specifier.node.exported);
+                    nonHoistedExportNames[specifier.node.exported.name] = true;
+                    nodes.push(buildExportsAssignment(specifier.node.exported, specifier.node.local));
+                  }
+                }
               }
+              path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
               let exportNode = buildExportAll({
                 OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
