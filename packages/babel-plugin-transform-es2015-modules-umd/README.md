@@ -20,9 +20,9 @@ $ npm install babel-plugin-transform-es2015-modules-umd
 
 You can also override the names of particular libraries when this module is
 running in the browser.  For example the `es6-promise` library exposes itself
-as `global.Promise` rather than `global.es6Promise`. This can be accomidated by:
+as `global.Promise` rather than `global.es6Promise`. This can be accommodated by:
 
-```
+```json
 {
   "plugins": [
     ["transform-es2015-modules-umd", {
