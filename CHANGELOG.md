@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.10.3 (2016-06-18)
+
+#### Bug Fix
+* `babel-plugin-transform-es2015-modules-commonjs`
+  * [#3532](https://github.com/babel/babel/pull/3532) Allow export statements with no export specifiers ([@loganfsmyth](https://github.com/loganfsmyth))
+
 ## 6.10.2 (2016-06-17)
 
 @loganfsmyth made some awesome optimizations and better whitespace handling for `babel-generator` again (~10-15% performance improvement)!
