@@ -26,7 +26,7 @@ Significant diversions are expected to occur in the future such as streaming, EB
 
 ### `babylon.parse(code, [options])`
 
-## Options
+### Options
 
 - **allowImportExportEverywhere**: By default, `import` and `export`
   declarations can only appear at a program's top level. Setting this
