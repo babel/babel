@@ -34,6 +34,104 @@ as `global.Promise` rather than `global.es6Promise`. This can be accommodated by
 }
 ```
 
+#### Default semantics
+
+There are a couple things to note about the default semantics.
+
+_First_, this transform uses the
+[basename](https://en.wikipedia.org/wiki/Basename) of each import to generate
+the global names in the UMD output. This means that if you're importing
+multiple modules with the same basename, like:
+
+```js
+import fooBar1 from "foo-bar";
+import fooBar2 from "./mylib/foo-bar";
+```
+
+it will transpile into two references to the same browser global:
+
+```js
+factory(global.fooBar, global.fooBar);
+```
+
+If you set the plugin options to:
+
+```json
+{
+  "globals": {
+    "foo-bar": "fooBAR",
+    "./mylib/foo-bar": "mylib.fooBar"
+  }
+}
+```
+
+it will still transpile both to one browser global:
+
+```js
+factory(global.fooBAR, global.fooBAR);
+```
+
+because again the transform is only using the basename of the import.
+
+_Second_, the specified override will still be passed to the `toIdentifier`
+function in [babel-types/src/converters](../babel-types/src/converters.js).
+This means that if you specify an override as a member expression like:
+
+```json
+{
+  "globals": {
+    "fizzbuzz": "fizz.buzz"
+  }
+}
+```
+
+this will _not_ transpile to `factory(global.fizz.buzz)`. Instead, it will
+transpile to `factory(global.fizzBuzz)` based on the logic in `toIdentifier`.
+
+#### More flexible semantics with `exactGlobals: true`
+
+Both of these behaviors can limit the flexibility of the `globals` map. To
+remove these limitations, you can set the `exactGlobals` option to `true`.
+Doing this instructs the plugin to:
+
+1. always use the full import string instead of the basename when generating
+the global names
+2. skip passing `globals` overrides to the `toIdentifier` function. Instead,
+they are used exactly as written, so you will get errors if you do not use
+valid identifiers or valid uncomputed (dot) member expressions.
+
+Thus, if you set `exactGlobals` to `true` and do not pass any overrides, the
+first example of:
+
+```js
+import fooBar1 from "foo-bar";
+import fooBar2 from "./mylib/foo-bar";
+```
+
+will transpile to:
+
+```js
+factory(global.fooBar, global.mylibFooBar);
+```
+
+And if you set the plugin options to:
+
+```json
+{
+  "globals": {
+    "foo-bar": "fooBAR",
+    "./mylib/foo-bar": "mylib.fooBar"
+  },
+  "exactGlobals": true
+}
+```
+
+then it'll transpile to:
+
+```js
+factory(global.fooBAR, global.mylib.fooBar)
+```
+
 ### Via CLI
 
 ```sh

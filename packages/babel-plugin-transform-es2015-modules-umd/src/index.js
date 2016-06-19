@@ -65,12 +65,32 @@ export default function ({ types: t }) {
             } else if (arg.value === "exports") {
               return t.memberExpression(t.identifier("mod"), t.identifier("exports"));
             } else {
-              let requireName = basename(arg.value, extname(arg.value));
-              let globalName = browserGlobals[requireName] || requireName;
+              let memberExpression;
 
-              return t.memberExpression(t.identifier("global"), t.identifier(
-                t.toIdentifier(globalName)
-              ));
+              if (state.opts.exactGlobals) {
+                let globalRef = browserGlobals[arg.value];
+                if (globalRef) {
+                  if (globalRef.indexOf(".") > -1) {
+                    memberExpression = globalRef.split(".").reduce(
+                      (accum, curr) => t.memberExpression(accum, t.identifier(curr)), t.identifier("global")
+                    );
+                  } else {
+                    memberExpression = t.memberExpression(t.identifier("global"), t.identifier(globalRef));
+                  }
+                } else {
+                  memberExpression = t.memberExpression(
+                    t.identifier("global"), t.identifier(t.toIdentifier(arg.value))
+                  );
+                }
+              } else {
+                let requireName = basename(arg.value, extname(arg.value));
+                let globalName = browserGlobals[requireName] || requireName;
+                memberExpression = t.memberExpression(
+                  t.identifier("global"), t.identifier(t.toIdentifier(globalName))
+                );
+              }
+
+              return memberExpression;
             }
           });
 
