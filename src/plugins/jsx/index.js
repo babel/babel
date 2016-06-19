@@ -345,6 +345,15 @@ pp.jsxParseElementAt = function(startPos, startLoc) {
           break;
 
         case tt.braceL:
+          if (this.lookahead().type === tt.ellipsis) {
+            let node = this.startNode();
+            this.next();
+            this.next();
+            node.expression = this.parseExpression();
+            this.expect(tt.braceR);
+            children.push(this.finishNode(node, "JSXSpreadChild"));
+            break;
+          }
           children.push(this.jsxParseExpressionContainer());
           break;
 
