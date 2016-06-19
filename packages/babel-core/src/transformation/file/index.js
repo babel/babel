@@ -290,7 +290,9 @@ export default class File extends Store {
     if (generator) {
       let res = generator(name);
       if (res) return res;
-    } else if (runtime) {
+    }
+    
+    if (runtime) {
       return t.memberExpression(runtime, t.identifier(name));
     }
 
