@@ -41,7 +41,7 @@ export default class Printer extends Buffer {
     this.printAuxBeforeComment(oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
-    if (needsParens) this.push("(");
+    if (needsParens) this.token("(");
 
     this.printLeadingComments(node, parent);
 
@@ -53,7 +53,7 @@ export default class Printer extends Buffer {
 
     let loc = (t.isProgram(node) || t.isFile(node)) ? null : node.loc;
     this.withSource("start", loc, () => {
-      this._print(node, parent);
+      this[node.type](node, parent);
     });
 
     // Check again if any of our children may have left an aux comment on the stack
@@ -61,7 +61,7 @@ export default class Printer extends Buffer {
 
     this.printTrailingComments(node, parent);
 
-    if (needsParens) this.push(")");
+    if (needsParens) this.token(")");
 
     // end
     this._printStack.pop();
@@ -96,28 +96,12 @@ export default class Printer extends Buffer {
   }
 
   getPossibleRaw(node) {
+    if (this.format.minified) return;
+
     let extra = node.extra;
     if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
       return extra.raw;
     }
-  }
-
-  _print(node, parent) {
-    // In minified mode we need to produce as little bytes as needed
-    // and need to make sure that string quoting is consistent.
-    // That means we have to always reprint as opposed to getting
-    // the raw value.
-    if (!this.format.minified) {
-      let extra = this.getPossibleRaw(node);
-      if (extra) {
-        this.push("");
-        this._push(extra);
-        return;
-      }
-    }
-
-    let printMethod = this[node.type];
-    printMethod.call(this, node, parent);
   }
 
   printJoin(nodes: ?Array, parent: Object, opts = {}) {
@@ -141,7 +125,7 @@ export default class Printer extends Buffer {
         }
 
         if (opts.separator && i < len - 1) {
-          this.push(opts.separator);
+          opts.separator.call(this);
         }
       }
     };
@@ -203,8 +187,7 @@ export default class Printer extends Buffer {
 
   printList(items, parent, opts = {}) {
     if (opts.separator == null) {
-      opts.separator = ",";
-      if (!this.format.compact) opts.separator += " ";
+      opts.separator = commaSeparator;
     }
 
     return this.printJoin(items, parent, opts);
@@ -287,13 +270,10 @@ export default class Printer extends Buffer {
       // whitespace before
       this.newline(this.whitespace.getNewlinesBefore(comment));
 
+      if (!this.endsWith(["[", "{"])) this.space();
+
       let column = this.position.column;
       let val    = this.generateComment(comment);
-
-      if (column && !this.isLast(["\n", " ", "[", "{"])) {
-        this._push(" ");
-        column++;
-      }
 
       //
       if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
@@ -307,10 +287,6 @@ export default class Printer extends Buffer {
         val = val.replace(/\n/g, `\n${repeat(" ", indent)}`);
       }
 
-      if (column === 0) {
-        val = this.getIndent() + val;
-      }
-
       // force a newline for line comments when retainLines is set in case the next printed node
       // doesn't catch up
       if ((this.format.compact || this.format.concise || this.format.retainLines) &&
@@ -319,7 +295,7 @@ export default class Printer extends Buffer {
       }
 
       //
-      this._push(val);
+      this.push(val);
 
       // whitespace after
       this.newline(this.whitespace.getNewlinesAfter(comment));
@@ -333,6 +309,11 @@ export default class Printer extends Buffer {
       this.printComment(comment);
     }
   }
+}
+
+function commaSeparator() {
+  this.token(",");
+  this.space();
 }
 
 for (let generator of [

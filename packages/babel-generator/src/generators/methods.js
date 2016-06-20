@@ -2,14 +2,14 @@ import * as t from "babel-types";
 
 export function _params(node: Object) {
   this.print(node.typeParameters, node);
-  this.push("(");
+  this.token("(");
   this.printList(node.params, node, {
     iterator: (node) => {
-      if (node.optional) this.push("?");
+      if (node.optional) this.token("?");
       this.print(node.typeAnnotation, node);
     }
   });
-  this.push(")");
+  this.token(")");
 
   if (node.returnType) {
     this.print(node.returnType, node);
@@ -22,20 +22,24 @@ export function _method(node: Object) {
 
   if (kind === "method" || kind === "init") {
     if (node.generator) {
-      this.push("*");
+      this.token("*");
     }
   }
 
   if (kind === "get" || kind === "set") {
-    this.push(kind + " ");
+    this.word(kind);
+    this.space();
   }
 
-  if (node.async) this.push("async ");
+  if (node.async) {
+    this.word("async");
+    this.space();
+  }
 
   if (node.computed) {
-    this.push("[");
+    this.token("[");
     this.print(key, node);
-    this.push("]");
+    this.token("]");
   } else {
     this.print(key, node);
   }
@@ -46,12 +50,15 @@ export function _method(node: Object) {
 }
 
 export function FunctionExpression(node: Object) {
-  if (node.async) this.push("async ");
-  this.push("function");
-  if (node.generator) this.push("*");
+  if (node.async) {
+    this.word("async");
+    this.space();
+  }
+  this.word("function");
+  if (node.generator) this.token("*");
 
   if (node.id) {
-    this.push(" ");
+    this.space();
     this.print(node.id, node);
   } else {
     this.space();
@@ -65,7 +72,10 @@ export function FunctionExpression(node: Object) {
 export { FunctionExpression as FunctionDeclaration };
 
 export function ArrowFunctionExpression(node: Object) {
-  if (node.async) this.push("async ");
+  if (node.async) {
+    this.word("async");
+    this.space();
+  }
 
   if (node.params.length === 1 && t.isIdentifier(node.params[0])) {
     this.print(node.params[0], node);
@@ -73,7 +83,9 @@ export function ArrowFunctionExpression(node: Object) {
     this._params(node);
   }
 
-  this.push(" => ");
+  this.space();
+  this.token("=>");
+  this.space();
 
   this.print(node.body, node);
 }

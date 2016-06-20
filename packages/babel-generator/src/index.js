@@ -10,13 +10,13 @@ import Printer from "./printer";
  * user preferences, and valid output.
  */
 
-export class CodeGenerator extends Printer {
+class Generator extends Printer {
   constructor(ast, opts, code) {
     opts = opts || {};
 
     let comments = ast.comments || [];
     let tokens   = ast.tokens || [];
-    let format   = CodeGenerator.normalizeOptions(code, opts, tokens);
+    let format   = Generator.normalizeOptions(code, opts, tokens);
 
     let position = new Position;
 
@@ -66,7 +66,6 @@ export class CodeGenerator extends Printer {
    *
    * - Detects code indentation.
    * - If `opts.compact = "auto"` and the code is over 100KB, `compact` will be set to `true`.
-
    */
 
   static normalizeOptions(code, opts, tokens) {
@@ -85,7 +84,7 @@ export class CodeGenerator extends Printer {
       compact: opts.compact,
       minified: opts.minified,
       concise: opts.concise,
-      quotes: opts.quotes || CodeGenerator.findCommonStringDelimiter(code, tokens),
+      quotes: opts.quotes || Generator.findCommonStringDelimiter(code, tokens),
       indent: {
         adjustMultilineComment: true,
         style: style,
@@ -161,7 +160,23 @@ export class CodeGenerator extends Printer {
   }
 }
 
+
+/**
+ * We originally exported the Generator class above, but to make it extra clear that it is a private API,
+ * we have moved that to an internal class instance and simplified the interface to the two public methods
+ * that we wish to support.
+ */
+
+export class CodeGenerator {
+  constructor(ast, opts, code) {
+    this._generator = new Generator(ast, opts, code);
+  }
+  generate() {
+    return this._generator.generate();
+  }
+}
+
 export default function (ast: Object, opts: Object, code: string): Object {
-  let gen = new CodeGenerator(ast, opts, code);
+  let gen = new Generator(ast, opts, code);
   return gen.generate();
 }

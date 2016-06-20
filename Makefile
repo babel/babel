@@ -20,6 +20,7 @@ lint:
 	./node_modules/.bin/kcheck
 
 clean: test-clean
+	rm -rf packages/*/lib
 	rm -rf packages/babel-polyfill/browser*
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*

@@ -8,17 +8,19 @@ export function Identifier(node: Object) {
   // This is a terrible hack, but changing type annotations to use a new,
   // dedicated node would be a breaking change. This should be cleaned up in
   // the next major.
-  if (node.variance === "plus") {
-    this.push("+");
-  } else if (node.variance === "minus") {
-    this.push("-");
+  if (node.variance) {
+    if (node.variance === "plus") {
+      this.token("+");
+    } else if (node.variance === "minus") {
+      this.token("-");
+    }
   }
 
-  this.push(node.name);
+  this.word(node.name);
 }
 
 export function RestElement(node: Object) {
-  this.push("...");
+  this.token("...");
   this.print(node.argument, node);
 }
 
@@ -31,7 +33,7 @@ export {
 export function ObjectExpression(node: Object) {
   let props = node.properties;
 
-  this.push("{");
+  this.token("{");
   this.printInnerComments(node);
 
   if (props.length) {
@@ -40,23 +42,23 @@ export function ObjectExpression(node: Object) {
     this.space();
   }
 
-  this.push("}");
+  this.token("}");
 }
 
 export { ObjectExpression as ObjectPattern };
 
 export function ObjectMethod(node: Object) {
-  this.printJoin(node.decorators, node, { separator: "" });
+  this.printJoin(node.decorators, node);
   this._method(node);
 }
 
 export function ObjectProperty(node: Object) {
-  this.printJoin(node.decorators, node, { separator: "" });
+  this.printJoin(node.decorators, node);
 
   if (node.computed) {
-    this.push("[");
+    this.token("[");
     this.print(node.key, node);
-    this.push("]");
+    this.token("]");
   } else {
     // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
     if (t.isAssignmentPattern(node.value) && t.isIdentifier(node.key) && node.key.name === node.value.left.name) {
@@ -75,7 +77,7 @@ export function ObjectProperty(node: Object) {
     }
   }
 
-  this.push(":");
+  this.token(":");
   this.space();
   this.print(node.value, node);
 }
@@ -84,7 +86,7 @@ export function ArrayExpression(node: Object) {
   let elems = node.elements;
   let len   = elems.length;
 
-  this.push("[");
+  this.token("[");
   this.printInnerComments(node);
 
   for (let i = 0; i < elems.length; i++) {
@@ -92,44 +94,52 @@ export function ArrayExpression(node: Object) {
     if (elem) {
       if (i > 0) this.space();
       this.print(elem, node);
-      if (i < len - 1) this.push(",");
+      if (i < len - 1) this.token(",");
     } else {
       // If the array expression ends with a hole, that hole
       // will be ignored by the interpreter, but if it ends with
       // two (or more) holes, we need to write out two (or more)
       // commas so that the resulting code is interpreted with
       // both (all) of the holes.
-      this.push(",");
+      this.token(",");
     }
   }
 
-  this.push("]");
+  this.token("]");
 }
 
 export { ArrayExpression as ArrayPattern };
 
 export function RegExpLiteral(node: Object) {
-  this.push(`/${node.pattern}/${node.flags}`);
+  this.word(`/${node.pattern}/${node.flags}`);
 }
 
 export function BooleanLiteral(node: Object) {
-  this.push(node.value ? "true" : "false");
+  this.word(node.value ? "true" : "false");
 }
 
 export function NullLiteral() {
-  this.push("null");
+  this.word("null");
 }
 
 export function NumericLiteral(node: Object) {
-  this.push(node.value + "");
+  let raw = this.getPossibleRaw(node);
+  if (raw != null) {
+    this.word(raw);
+    return;
+  }
+
+  this.word(node.value + "");
 }
 
 export function StringLiteral(node: Object, parent: Object) {
-  this.push(this._stringLiteral(node.value, parent));
-}
+  let raw = this.getPossibleRaw(node);
+  if (raw != null) {
+    this.token(raw);
+    return;
+  }
 
-export function _stringLiteral(val: string, parent: Object): string {
-  val = JSON.stringify(val);
+  let val = JSON.stringify(node.value);
 
   // escape illegal js but valid json unicode characters
   val = val.replace(/[\u000A\u000D\u2028\u2029]/g, function (c) {
@@ -150,5 +160,5 @@ export function _stringLiteral(val: string, parent: Object): string {
     val = `'${val}'`;
   }
 
-  return val;
+  return this.token(val);
 }

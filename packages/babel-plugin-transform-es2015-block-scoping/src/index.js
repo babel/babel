@@ -435,15 +435,14 @@ class BlockScoping {
     let params = values(outsideRefs);
     let args   = values(outsideRefs);
 
-    // build the closure that we're going to wrap the block with
-    let fn = t.functionExpression(null, params, t.blockStatement(block.body));
+    const isSwitch = this.blockPath.isSwitchStatement();
+
+    // build the closure that we're going to wrap the block with, possible wrapping switch(){}
+    let fn = t.functionExpression(null, params, t.blockStatement(isSwitch ? [block] : block.body));
     fn.shadow = true;
 
     // continuation
     this.addContinuations(fn);
-
-    // replace the current block body with the one we're going to build
-    block.body = this.body;
 
     let ref = fn;
 
@@ -473,6 +472,10 @@ class BlockScoping {
     }
 
     this.buildClosure(ret, call);
+
+    // replace the current block body with the one we're going to build
+    if (isSwitch) this.blockPath.replaceWithMultiple(this.body);
+    else block.body = this.body;
   }
 
   /**

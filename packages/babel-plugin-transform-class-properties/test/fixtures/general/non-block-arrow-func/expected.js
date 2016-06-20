@@ -17,4 +17,4 @@ export default (param => {
     prop1: 'prop1',
     prop2: 'prop2'
   }, _temp;
-})
+});
