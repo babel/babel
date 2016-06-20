@@ -233,14 +233,15 @@
                     "column": 42
                   }
                 },
-                "body": []
+                "body": [],
+                "directives": []
               }
             }
           }
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }
