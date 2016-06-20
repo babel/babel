@@ -38,7 +38,7 @@
     "debug": "^2.1.1",
     "json5": "^0.4.0",
     "lodash": "^4.2.0",
-    "minimatch": "^2.0.3",
+    "minimatch": "^3.0.2",
     "path-exists": "^1.0.0",
     "path-is-absolute": "^1.0.0",
     "private": "^0.1.6",
