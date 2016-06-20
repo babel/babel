@@ -6,7 +6,7 @@ var Test = function (_Foo) {
 
     var _this = babelHelpers.possibleConstructorReturn(this, _Foo.call(this));
 
-    _Foo.prototype.test.whatever();
+    babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", _this).whatever();
     _Foo.prototype.test.call(_this);
     return _this;
   }
