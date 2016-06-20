@@ -193,9 +193,14 @@ export default class ReplaceSupers {
       if (!t.isSuper(callee.object)) return;
 
       // super.test(); -> objectRef.prototype.MethodName.call(this);
+      // do the super -> objectRef.prototype here to distingish from member access that specHandle will handle
+      callee.object = this.getLooseSuperProperty(callee.object, callee)
       t.appendToMemberExpression(callee, t.identifier("call"));
       node.arguments.unshift(t.thisExpression());
-      return true;
+      // no need to requeue, now that everything is converted
+    } else {
+      // if it is not a call expression, fall back to the spec handle for member access and assignments
+      return this.specHandle(path);
     }
   }
 
