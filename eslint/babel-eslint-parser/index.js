@@ -250,7 +250,8 @@ function monkeypatch() {
       this.close(node);
     }
   };
-    // visit decorators that are in: Property / MethodDefinition
+
+  // visit decorators that are in: Property / MethodDefinition
   var visitProperty = referencer.prototype.visitProperty;
   referencer.prototype.visitProperty = function(node) {
     if (node.value && node.value.type === "TypeCastExpression") {

@@ -167,6 +167,12 @@ var astTransformVisitor = {
       node.type = "Experimental" + node.type;
     }
 
+    if (path.isTypeParameter && path.isTypeParameter()) {
+      node.type = "Identifier";
+      node.typeAnnotation = node.bound;
+      delete node.bound;
+    }
+
     // flow: prevent "no-undef"
     // for "Component" in: "let x: React.Component"
     if (path.isQualifiedTypeIdentifier()) {
