@@ -158,9 +158,12 @@ export default class ReplaceSupers {
     property: Object,
     value: Object,
     isComputed: boolean,
+    loose: boolean = false,
   ): Object {
     return t.callExpression(this.file.addHelper("set"), [
-      getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
+      loose
+        ? t.memberExpression(this.superRef, t.identifier("prototype"))
+        : getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
       isComputed ? property : t.stringLiteral(property.name),
       value,
       t.thisExpression(),
@@ -176,9 +179,13 @@ export default class ReplaceSupers {
    *
    */
 
-  getSuperProperty(property: Object, isComputed: boolean): Object {
+  getSuperProperty(
+    property: Object,
+    isComputed: boolean,
+    loose: boolean = false,
+  ): Object {
     let thisExpr = t.thisExpression();
-    if (this.inConstructor) {
+    if (this.inConstructor && !loose) {
       thisExpr = t.callExpression(
         this.file.addHelper("assertThisInitialized"),
         [thisExpr],
@@ -186,7 +193,9 @@ export default class ReplaceSupers {
     }
 
     return t.callExpression(this.file.addHelper("get"), [
-      getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
+      loose
+        ? t.memberExpression(this.superRef, t.identifier("prototype"))
+        : getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
       isComputed ? property : t.stringLiteral(property.name),
       thisExpr,
     ]);
@@ -206,6 +215,7 @@ export default class ReplaceSupers {
       return;
     } else if (t.isMemberExpression(parent) && !methodNode.static) {
       // super.test -> objectRef.prototype.test
+
       return t.memberExpression(
         t.cloneNode(superRef),
         t.identifier("prototype"),
@@ -221,19 +231,73 @@ export default class ReplaceSupers {
       return this.getLooseSuperProperty(node, path.parent);
     } else if (path.isCallExpression()) {
       const callee = node.callee;
-      if (!t.isMemberExpression(callee)) return;
-      if (!t.isSuper(callee.object)) return;
+      if (!isMemberExpressionSuper(callee)) return;
 
       // super.test(); -> objectRef.prototype.MethodName.call(this);
       t.appendToMemberExpression(callee, t.identifier("call"));
       node.arguments.unshift(t.thisExpression());
       return true;
+    } else if (
+      t.isUpdateExpression(node) &&
+      isMemberExpressionSuper(node.argument)
+    ) {
+      const binary = t.assignmentExpression(
+        node.operator[0] + "=",
+        node.argument,
+        t.numericLiteral(1),
+      );
+      if (node.prefix) {
+        // ++super.foo;
+        // to
+        // super.foo += 1;
+        return this.looseHandleAssignmentExpression(null, path, binary);
+      } else {
+        // super.foo++;
+        // to
+        // let _ref = super.foo; super.foo = _ref + 1;
+        const ref = path.scope.generateUidIdentifier("ref");
+        return this.looseHandleAssignmentExpression(ref, path, binary).concat(
+          // concat the reference in case the whole statement is within a returnStatement
+          t.expressionStatement(ref),
+        );
+      }
+    } else if (
+      t.isAssignmentExpression(node) &&
+      isMemberExpressionSuper(node.left)
+    ) {
+      return this.looseHandleAssignmentExpression(null, path, node);
+    } else if (isMemberExpressionSuper(node)) {
+      const isWritable = path.findParent(({ node }) => {
+        if (t.isAssignmentExpression(node) || t.isUpdateExpression(node)) {
+          return true;
+        }
+      });
+
+      // if any parent is a assignment or update convert to
+      // super.a.b = v; -> _get(objectRef.prottype, "a", this).b = v;
+      if (isWritable) {
+        return this.getSuperProperty(node.property, node.isComputed, true);
+      }
     }
+  }
+
+  looseHandleAssignmentExpression(ref, path, node) {
+    if (node.operator === "=") {
+      // super.name = "val"; -> _set(Object.getPrototypeOf(objectRef.prototype), "name", "val", this);
+      return this.setSuperProperty(
+        node.left.property,
+        node.right,
+        node.left.computed,
+        true,
+      );
+    }
+
+    return this.specHandleAssignmentExpression(ref, path, node);
   }
 
   specHandleAssignmentExpression(ref, path, node) {
     if (node.operator === "=") {
-      // super.name = "val"; -> _set(Object.getPrototypeOf(objectRef.prototype), "name", this);
+      // super.name = "val"; -> _set(Object.getPrototypeOf(objectRef.prototype), "name", "val", this);
       return this.setSuperProperty(
         node.left.property,
         node.right,
@@ -285,7 +349,7 @@ export default class ReplaceSupers {
         computed = callee.computed;
         args = node.arguments;
       }
-    } else if (t.isMemberExpression(node) && t.isSuper(node.object)) {
+    } else if (isMemberExpressionSuper(node)) {
       // super.name;
       // to
       // _get(Object.getPrototypeOf(objectRef.prototype), "name", this);
@@ -308,9 +372,10 @@ export default class ReplaceSupers {
       } else {
         // super.foo++;
         // to
-        // let _ref = super.foo; super.foo = _ref + 1;
+        // let _ref = super.foo; super.foo = _ref + 1; _ref;
         const ref = path.scope.generateUidIdentifier("ref");
         return this.specHandleAssignmentExpression(ref, path, binary).concat(
+          // concat the reference in case the whole statement is within a returnStatement
           t.expressionStatement(ref),
         );
       }
