@@ -4,6 +4,7 @@ import { SourceLocation } from "../util/location";
 // Start an AST node, attaching a start offset.
 
 const pp = Parser.prototype;
+const commentKeys = ["leadingComments", "trailingComments", "innerComments"];
 
 class Node {
   constructor(pos?: number, loc?: SourceLocation, filename?: string) {
@@ -20,8 +21,14 @@ class Node {
   loc: SourceLocation;
 
   __clone(): Node {
-    let node2 = new Node;
-    for (let key in this) node2[key] = this[key];
+    const node2 = new Node;
+    for (let key in this) {
+      // Do not clone comments that are already attached to the node
+      if (commentKeys.indexOf(key) < 0) {
+        node2[key] = this[key];
+      }
+    }
+
     return node2;
   }
 }
