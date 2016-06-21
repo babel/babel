@@ -21,7 +21,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 #### Internal
 * `babel-core`
-  * Bump the from `2.x` to `3.x` for `minimatch` to avoid a deprecation warning
+  * Bump the from `2.x` to `3.x` for `minimatch` to avoid a deprecation warning ([@theJian](https://github.com/theJian))
 
 ## 6.10.3 (2016-06-18)
 
