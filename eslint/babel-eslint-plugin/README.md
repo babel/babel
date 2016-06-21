@@ -33,7 +33,8 @@ original ones as well!).
     "babel/object-shorthand": 1,
     "babel/arrow-parens": 1,
     "babel/no-await-in-loop": 1,
-    "babel/flow-object-type": 1
+    "babel/flow-object-type": 1,
+    "babel/func-params-comma-dangle": 1
   }
 }
 ```
@@ -57,3 +58,4 @@ the current JavaScript standard or supported by `eslint`.
 - `babel/flow-object-type`: Require a particular separator between properties in Flow object types. (🛠 )
   - Use the option `semicolon` to require semicolons (e.g. `type Foo = { bar: number; baz: string }`).
   - Use the option `comma` to require commas (e.g. `type Foo = { bar: number, baz: string }`).
+- `babel/func-params-comma-dangle`: Require or forbid trailing commas for function paramater lists. Behaves like, and takes the same options as, `eslint`'s [`comma-dangle`](http://eslint.org/docs/rules/comma-dangle). (🛠 )

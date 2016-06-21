@@ -10,6 +10,7 @@ module.exports = {
     'arrow-parens': require('./rules/arrow-parens'),
     'no-await-in-loop': require('./rules/no-await-in-loop'),
     'flow-object-type': require('./rules/flow-object-type'),
+    'func-params-comma-dangle': require('./rules/func-params-comma-dangle'),
   },
   rulesConfig: {
     'generator-star-spacing': 0,
@@ -20,5 +21,6 @@ module.exports = {
     'arrow-parens': 0,
     'no-await-in-loop': 0,
     'flow-object-type': 0,
+    'func-params-comma-dangle': 0,
   }
 };
