@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.10.4 (2016-06-21)
+
+#### Bug Fix
+* `babel-traverse`
+  * Fix NodePath#evaluate to avoid a possible max-recursion-depth from an evaluation cycle ([@kittens](https://github.com/kittens))
+
+#### Internal
+* `babel-core`
+  * Bump the from `2.x` to `3.x` for `minimatch` to avoid a deprecation warning
+
 ## 6.10.3 (2016-06-18)
 
 #### Bug Fix
