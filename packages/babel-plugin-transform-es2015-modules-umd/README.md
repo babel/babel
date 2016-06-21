@@ -36,7 +36,7 @@ as `global.Promise` rather than `global.es6Promise`. This can be accommodated by
 
 #### Default semantics
 
-There are a couple things to note about the default semantics.
+There are a few things to note about the default semantics.
 
 _First_, this transform uses the
 [basename](https://en.wikipedia.org/wiki/Basename) of each import to generate
@@ -88,9 +88,11 @@ This means that if you specify an override as a member expression like:
 this will _not_ transpile to `factory(global.fizz.buzz)`. Instead, it will
 transpile to `factory(global.fizzBuzz)` based on the logic in `toIdentifier`.
 
+_Third_, you cannot override the exported global name.
+
 #### More flexible semantics with `exactGlobals: true`
 
-Both of these behaviors can limit the flexibility of the `globals` map. To
+All of these behaviors can limit the flexibility of the `globals` map. To
 remove these limitations, you can set the `exactGlobals` option to `true`.
 Doing this instructs the plugin to:
 
@@ -99,6 +101,8 @@ the global names
 2. skip passing `globals` overrides to the `toIdentifier` function. Instead,
 they are used exactly as written, so you will get errors if you do not use
 valid identifiers or valid uncomputed (dot) member expressions.
+3. allow the exported global name to be overridden via the `globals` map. Any
+override must again be a valid identifier or valid member expression.
 
 Thus, if you set `exactGlobals` to `true` and do not pass any overrides, the
 first example of:
@@ -130,6 +134,33 @@ then it'll transpile to:
 
 ```js
 factory(global.fooBAR, global.mylib.fooBar)
+```
+
+Finally, with the plugin options set to:
+
+```json
+{
+  "plugins": [
+    "external-helpers",
+    ["transform-es2015-modules-umd", {
+      "globals": {
+        "my/custom/module/name": "My.Custom.Module.Name"
+      },
+      "exactGlobals": true
+    }]
+  ],
+  "moduleId": "my/custom/module/name"
+}
+```
+
+it will transpile to:
+
+```js
+factory(mod.exports);
+global.My = global.My || {};
+global.My.Custom = global.My.Custom || {};
+global.My.Custom.Module = global.My.Custom.Module || {};
+global.My.Custom.Module.Name = mod.exports;
 ```
 
 ### Via CLI

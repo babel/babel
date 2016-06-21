@@ -3,6 +3,17 @@
 import { basename, extname } from "path";
 import template from "babel-template";
 
+let buildPrerequisiteAssignment = template(`
+  GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
+`);
+
+let buildGlobalExport = template(`
+  var mod = { exports: {} };
+  factory(BROWSER_ARGUMENTS);
+  PREREQUISITE_ASSIGNMENTS
+  GLOBAL_TO_ASSIGN = mod.exports;
+`);
+
 let buildWrapper = template(`
   (function (global, factory) {
     if (typeof define === "function" && define.amd) {
@@ -10,9 +21,7 @@ let buildWrapper = template(`
     } else if (typeof exports !== "undefined") {
       factory(COMMON_ARGUMENTS);
     } else {
-      var mod = { exports: {} };
-      factory(BROWSER_ARGUMENTS);
-      global.GLOBAL_ARG = mod.exports;
+      GLOBAL_EXPORT
     }
   })(this, FUNC);
 `);
@@ -94,14 +103,45 @@ export default function ({ types: t }) {
             }
           });
 
-          let globalArg = t.identifier(t.toIdentifier(moduleName ? moduleName.value : this.file.opts.basename));
+          let moduleNameOrBasename = moduleName ? moduleName.value : this.file.opts.basename;
+          let globalToAssign = t.memberExpression(
+            t.identifier("global"), t.identifier(t.toIdentifier(moduleNameOrBasename))
+          );
+          let prerequisiteAssignments = null;
+
+          if (state.opts.exactGlobals) {
+            let globalName = browserGlobals[moduleNameOrBasename];
+
+            if (globalName) {
+              if (globalName.indexOf(".") > -1) {
+                prerequisiteAssignments = [];
+
+                let members = globalName.split(".");
+                let namespacedProperties = members.slice(1).reduce((accum, curr, index) => {
+                  let prerequisiteAssignment = buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum[index] });
+                  prerequisiteAssignments.push(prerequisiteAssignment);
+                  accum.push(t.memberExpression(accum[index], t.identifier(curr)));
+                  return accum;
+                }, [t.memberExpression(t.identifier("global"), t.identifier(members[0]))]);
+
+                globalToAssign = namespacedProperties[namespacedProperties.length -1];
+              } else {
+                globalToAssign = t.memberExpression(t.identifier("global"), t.identifier(globalName));
+              }
+            }
+          }
+
+          let globalExport = buildGlobalExport({
+            BROWSER_ARGUMENTS: browserArgs,
+            PREREQUISITE_ASSIGNMENTS: prerequisiteAssignments,
+            GLOBAL_TO_ASSIGN: globalToAssign
+          });
 
           last.replaceWith(buildWrapper({
             MODULE_NAME: moduleName,
-            BROWSER_ARGUMENTS: browserArgs,
             AMD_ARGUMENTS: amdArgs,
             COMMON_ARGUMENTS: commonArgs,
-            GLOBAL_ARG: globalArg,
+            GLOBAL_EXPORT: globalExport,
             FUNC: func
           }));
         }
