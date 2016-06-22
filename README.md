@@ -54,33 +54,37 @@ It is based on [ESTree spec][] with the following deviations:
 - [Property][] token is replaced with [ObjectProperty][] and [ObjectMethod][]
 - [MethodDefinition][] is replaced with [ClassMethod][]
 - [Program][] and [BlockStatement][] contain additional `directives` field with [Directive][] and [DirectiveLiteral][]
+- [ClassMethod][], [ObjectProperty][], and [ObjectMethod][] value property's properties in [FunctionExpression][] is coerced/brought into the main method node.
+
+The MethodDefinition node type has been renamed to ClassMethod and it's FunctionExpression value property has been coerced into the main method node.
+The Property node type with the boolean flag method has been renamed to ObjectMethod and it's FunctionExpression value property has been coerced into the main method node.
 
 AST for JSX code is based on [Facebook JSX AST][] with the addition of one node type:
 
 - `JSXText`
 
-[Babel AST format]: https://github.com/babel/babel/blob/master/doc/ast/spec.md
+[Babel AST format]: https://github.com/babel/babylon/ast/spec.md
 [ESTree spec]: https://github.com/estree/estree
 
 [Literal]: https://github.com/estree/estree/blob/master/spec.md#literal
 [Property]: https://github.com/estree/estree/blob/master/spec.md#property
 [MethodDefinition]: https://github.com/estree/estree/blob/master/es6.md#methoddefinition
 
-[StringLiteral]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#stringliteral
-[NumericLiteral]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#numericliteral
-[BooleanLiteral]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#booleanliteral
-[NullLiteral]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#nullliteral
-[RegExpLiteral]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#regexpliteral
-[ObjectProperty]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#objectproperty
-[ObjectMethod]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#objectmethod
-[ClassMethod]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#classmethod
-[Program]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#programs
-[BlockStatement]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#blockstatement
-[Directive]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#directive
-[DirectiveLiteral]: https://github.com/babel/babel/blob/master/doc/ast/spec.md#directiveliteral
+[StringLiteral]: https://github.com/babel/babylon/ast/spec.md#stringliteral
+[NumericLiteral]: https://github.com/babel/babylon/ast/spec.md#numericliteral
+[BooleanLiteral]: https://github.com/babel/babylon/ast/spec.md#booleanliteral
+[NullLiteral]: https://github.com/babel/babylon/ast/spec.md#nullliteral
+[RegExpLiteral]: https://github.com/babel/babylon/ast/spec.md#regexpliteral
+[ObjectProperty]: https://github.com/babel/babylon/ast/spec.md#objectproperty
+[ObjectMethod]: https://github.com/babel/babylon/ast/spec.md#objectmethod
+[ClassMethod]: https://github.com/babel/babylon/ast/spec.md#classmethod
+[Program]: https://github.com/babel/babylon/ast/spec.md#programs
+[BlockStatement]: https://github.com/babel/babylon/ast/spec.md#blockstatement
+[Directive]: https://github.com/babel/babylon/ast/spec.md#directive
+[DirectiveLiteral]: https://github.com/babel/babylon/ast/spec.md#directiveliteral
+[FunctionExpression]: https://github.com/babel/babylon/ast/spec.md#functionexpression
 
 [Facebook JSX AST]: https://github.com/facebook/jsx/blob/master/AST.md
-
 
 ### Example
 
