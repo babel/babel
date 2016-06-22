@@ -56,9 +56,6 @@ It is based on [ESTree spec][] with the following deviations:
 - [Program][] and [BlockStatement][] contain additional `directives` field with [Directive][] and [DirectiveLiteral][]
 - [ClassMethod][], [ObjectProperty][], and [ObjectMethod][] value property's properties in [FunctionExpression][] is coerced/brought into the main method node.
 
-The MethodDefinition node type has been renamed to ClassMethod and it's FunctionExpression value property has been coerced into the main method node.
-The Property node type with the boolean flag method has been renamed to ObjectMethod and it's FunctionExpression value property has been coerced into the main method node.
-
 AST for JSX code is based on [Facebook JSX AST][] with the addition of one node type:
 
 - `JSXText`
