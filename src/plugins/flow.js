@@ -726,30 +726,19 @@ export default function (instance) {
     };
   });
 
-  instance.extend("parseParenItem", function () {
-    return function (node, startLoc, startPos, forceArrow?) {
-      let canBeArrow = this.state.potentialArrowAt = startPos;
+  instance.extend("parseParenItem", function (inner) {
+    return function (node, startLoc, startPos) {
+      node = inner.call(this, node, startLoc, startPos);
+
       if (this.match(tt.colon)) {
         let typeCastNode = this.startNodeAt(startLoc, startPos);
         typeCastNode.expression = node;
         typeCastNode.typeAnnotation = this.flowParseTypeAnnotation();
 
-        if (forceArrow && !this.match(tt.arrow)) {
-          this.unexpected();
-        }
-
-        if (canBeArrow && this.eat(tt.arrow)) {
-          // ((lol): number => {});
-          let params = node.type === "SequenceExpression" ? node.expressions : [node];
-          let func = this.parseArrowExpression(this.startNodeAt(startLoc, startPos), params);
-          func.returnType = typeCastNode.typeAnnotation;
-          return func;
-        } else {
-          return this.finishNode(typeCastNode, "TypeCastExpression");
-        }
-      } else {
-        return node;
+        return this.finishNode(typeCastNode, "TypeCastExpression");
       }
+
+      return node;
     };
   });
 
@@ -1047,40 +1036,25 @@ export default function (instance) {
   });
 
   // handle return types for arrow functions
-  instance.extend("parseParenAndDistinguishExpression", function (inner) {
-    return function (startPos, startLoc, canBeArrow, isAsync) {
-      startPos = startPos || this.state.start;
-      startLoc = startLoc || this.state.startLoc;
-
-      if (canBeArrow && this.lookahead().type === tt.parenR) {
-        // let foo = (): number => {};
-        this.expect(tt.parenL);
-        this.expect(tt.parenR);
-
-        let node = this.startNodeAt(startPos, startLoc);
-        if (this.match(tt.colon)) node.returnType = this.flowParseTypeAnnotation();
-        this.expect(tt.arrow);
-        return this.parseArrowExpression(node, [], isAsync);
-      } else {
-        // let foo = (foo): number => {};
-        let node = inner.call(this, startPos, startLoc, canBeArrow, isAsync, this.hasPlugin("trailingFunctionCommas"));
-
-        if (this.match(tt.colon)) {
-          let state = this.state.clone();
-          try {
-            return this.parseParenItem(node, startPos, startLoc, true);
-          } catch (err) {
-            if (err instanceof SyntaxError) {
-              this.state = state;
-              return node;
-            } else {
-              throw err;
-            }
+  instance.extend("parseArrow", function (inner) {
+    return function (node) {
+      if (this.match(tt.colon)) {
+        let state = this.state.clone();
+        try {
+          let returnType = this.flowParseTypeAnnotation();
+          if (!this.match(tt.arrow)) this.unexpected();
+          // assign after it is clear it is an arrow
+          node.returnType = returnType;
+        } catch (err) {
+          if (err instanceof SyntaxError) {
+            this.state = state;
+          } else {
+            throw err;
           }
-        } else {
-          return node;
         }
       }
+
+      return inner.call(this, node);
     };
   });
 }
