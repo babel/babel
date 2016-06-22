@@ -146,7 +146,7 @@ pp.parseMaybeConditional = function (noIn, refShorthandDefaultPos, refNeedsArrow
   let startPos = this.state.start, startLoc = this.state.startLoc;
   let expr = this.parseExprOps(noIn, refShorthandDefaultPos);
   if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
-  
+
   return this.parseConditional(expr, noIn, startPos, startLoc, refNeedsArrowPos);
 };
 
@@ -980,9 +980,6 @@ pp.parseIdentifier = function (liberal) {
 
 pp.parseAwait = function (node) {
   if (!this.state.inAsync) {
-    this.unexpected();
-  }
-  if (this.isLineTerminator()) {
     this.unexpected();
   }
   if (this.match(tt.star)) {
