@@ -88,7 +88,7 @@ pp.parseExpression = function (noIn, refShorthandDefaultPos) {
 // Parse an assignment expression. This includes applications of
 // operators like `+=`.
 
-pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse) {
+pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse, refNeedsArrowPos) {
   if (this.match(tt._yield) && this.state.inGenerator) {
     return this.parseYield();
   }
@@ -108,7 +108,7 @@ pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse) {
     this.state.potentialArrowAt = this.state.start;
   }
 
-  let left = this.parseMaybeConditional(noIn, refShorthandDefaultPos);
+  let left = this.parseMaybeConditional(noIn, refShorthandDefaultPos, refNeedsArrowPos);
   if (afterLeftParse) left = afterLeftParse.call(this, left, startPos, startLoc);
   if (this.state.type.isAssign) {
     let node = this.startNodeAt(startPos, startLoc);
@@ -142,10 +142,15 @@ pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse) {
 
 // Parse a ternary conditional (`?:`) operator.
 
-pp.parseMaybeConditional = function (noIn, refShorthandDefaultPos) {
+pp.parseMaybeConditional = function (noIn, refShorthandDefaultPos, refNeedsArrowPos) {
   let startPos = this.state.start, startLoc = this.state.startLoc;
   let expr = this.parseExprOps(noIn, refShorthandDefaultPos);
   if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
+  
+  return this.parseConditional(expr, noIn, startPos, startLoc, refNeedsArrowPos);
+};
+
+pp.parseConditional = function (expr, noIn, startPos, startLoc) {
   if (this.eat(tt.question)) {
     let node = this.startNodeAt(startPos, startLoc);
     node.test = expr;
@@ -541,6 +546,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   let innerStartPos = this.state.start, innerStartLoc = this.state.startLoc;
   let exprList = [], first = true;
   let refShorthandDefaultPos = { start: 0 }, spreadStart, optionalCommaStart;
+  let refNeedsArrowPos = { start: 0 };
   while (!this.match(tt.parenR)) {
     if (first) {
       first = false;
@@ -558,7 +564,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
       exprList.push(this.parseParenItem(this.parseRest(), spreadNodeStartLoc, spreadNodeStartPos));
       break;
     } else {
-      exprList.push(this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem));
+      exprList.push(this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem, refNeedsArrowPos));
     }
   }
 
@@ -585,6 +591,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   if (optionalCommaStart) this.unexpected(optionalCommaStart);
   if (spreadStart) this.unexpected(spreadStart);
   if (refShorthandDefaultPos.start) this.unexpected(refShorthandDefaultPos.start);
+  if (refNeedsArrowPos.start) this.unexpected(refNeedsArrowPos.start);
 
   if (exprList.length > 1) {
     val = this.startNodeAt(innerStartPos, innerStartLoc);
