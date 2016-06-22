@@ -517,20 +517,6 @@ pp.flowParsePrimaryType = function () {
       if (isGroupedType) {
         type = this.flowParseType();
         this.expect(tt.parenR);
-
-        // If we see a => next then someone was probably confused about
-        // function types, so we can provide a better error message
-        if (this.eat(tt.arrow)) {
-          this.raise(node,
-            "Unexpected token =>. It looks like " +
-            "you are trying to write a function type, but you ended up " +
-            "writing a grouped type followed by an =>, which is a syntax " +
-            "error. Remember, function type parameters are named so function " +
-            "types look like (name1: type1, name2: type2) => returnType. You " +
-            "probably wrote (type1) => returnType"
-          );
-        }
-
         return type;
       }
 
