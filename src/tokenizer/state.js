@@ -37,7 +37,7 @@ export default class State {
     this.lastTokEndLoc = this.lastTokStartLoc = null;
     this.lastTokStart = this.lastTokEnd = this.pos;
 
-    this.context = [ct.b_stat];
+    this.context = [ct.braceStatement];
     this.exprAllowed = true;
 
     this.containsEsc = this.containsOctal = false;

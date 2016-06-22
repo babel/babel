@@ -27,13 +27,13 @@ export class TokContext {
 export const types: {
   [key: string]: TokContext;
 } = {
-  b_stat: new TokContext("{", false),
-  b_expr: new TokContext("{", true),
-  b_tmpl: new TokContext("${", true),
-  p_stat: new TokContext("(", false),
-  p_expr: new TokContext("(", true),
-  q_tmpl: new TokContext("`", true, true, (p) => p.readTmplToken()),
-  f_expr: new TokContext("function", true)
+  braceStatement: new TokContext("{", false),
+  braceExpression: new TokContext("{", true),
+  templateQuasi: new TokContext("${", true),
+  parenStatement: new TokContext("(", false),
+  parenExpression: new TokContext("(", true),
+  template: new TokContext("`", true, true, (p) => p.readTmplToken()),
+  functionExpression: new TokContext("function", true)
 };
 
 // Token-specific context update code
@@ -45,10 +45,10 @@ tt.parenR.updateContext = tt.braceR.updateContext = function () {
   }
 
   let out = this.state.context.pop();
-  if (out === types.b_stat && this.curContext() === types.f_expr) {
+  if (out === types.braceStatement && this.curContext() === types.functionExpression) {
     this.state.context.pop();
     this.state.exprAllowed = false;
-  } else if (out === types.b_tmpl) {
+  } else if (out === types.templateQuasi) {
     this.state.exprAllowed = true;
   } else {
     this.state.exprAllowed = !out.isExpr;
@@ -66,19 +66,19 @@ tt.name.updateContext = function (prevType) {
 };
 
 tt.braceL.updateContext = function (prevType) {
-  this.state.context.push(this.braceIsBlock(prevType) ? types.b_stat : types.b_expr);
+  this.state.context.push(this.braceIsBlock(prevType) ? types.braceStatement : types.braceExpression);
   this.state.exprAllowed = true;
 };
 
 tt.dollarBraceL.updateContext = function () {
-  this.state.context.push(types.b_tmpl);
+  this.state.context.push(types.templateQuasi);
   this.state.exprAllowed = true;
 };
 
 tt.parenL.updateContext = function (prevType) {
   let statementParens = prevType === tt._if || prevType === tt._for ||
                         prevType === tt._with || prevType === tt._while;
-  this.state.context.push(statementParens ? types.p_stat : types.p_expr);
+  this.state.context.push(statementParens ? types.parenStatement : types.parenExpression);
   this.state.exprAllowed = true;
 };
 
@@ -87,18 +87,18 @@ tt.incDec.updateContext = function () {
 };
 
 tt._function.updateContext = function () {
-  if (this.curContext() !== types.b_stat) {
-    this.state.context.push(types.f_expr);
+  if (this.curContext() !== types.braceStatement) {
+    this.state.context.push(types.functionExpression);
   }
 
   this.state.exprAllowed = false;
 };
 
 tt.backQuote.updateContext = function () {
-  if (this.curContext() === types.q_tmpl) {
+  if (this.curContext() === types.template) {
     this.state.context.pop();
   } else {
-    this.state.context.push(types.q_tmpl);
+    this.state.context.push(types.template);
   }
   this.state.exprAllowed = false;
 };

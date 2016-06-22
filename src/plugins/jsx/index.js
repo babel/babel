@@ -431,9 +431,9 @@ export default function(instance) {
       if (this.match(tt.braceL)) {
         let curContext = this.curContext();
         if (curContext === tc.j_oTag) {
-          this.state.context.push(tc.b_expr);
+          this.state.context.push(tc.braceExpression);
         } else if (curContext === tc.j_expr) {
-          this.state.context.push(tc.b_tmpl);
+          this.state.context.push(tc.templateQuasi);
         } else {
           inner.call(this, prevType);
         }

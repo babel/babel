@@ -767,7 +767,7 @@ export default class Tokenizer {
   braceIsBlock(prevType) {
     if (prevType === tt.colon) {
       let parent = this.curContext();
-      if (parent === ct.b_stat || parent === ct.b_expr) {
+      if (parent === ct.braceStatement || parent === ct.braceExpression) {
         return !parent.isExpr;
       }
     }
@@ -781,7 +781,7 @@ export default class Tokenizer {
     }
 
     if (prevType === tt.braceL) {
-      return this.curContext() === ct.b_stat;
+      return this.curContext() === ct.braceStatement;
     }
 
     return !this.state.exprAllowed;
