@@ -21,7 +21,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "kcheck": "^2.0.1",
     "lodash": "^4.6.1",
-    "unicode-7.0.0": "~0.1.5"
+    "unicode-9.0.0": "~0.7.0"
   },
   "bin": {
     "babylon": "./bin/babylon.js"
