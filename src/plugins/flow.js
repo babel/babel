@@ -559,6 +559,18 @@ pp.flowParsePrimaryType = function () {
       this.next();
       return this.finishNode(node, "BooleanLiteralTypeAnnotation");
 
+    case tt.plusMin:
+      if (this.state.value === "-") {
+        this.next();
+        if (!this.match(tt.num)) this.unexpected();
+
+        node.value = -this.state.value;
+        this.addExtra(node, "rawValue", node.value);
+        this.addExtra(node, "raw", this.input.slice(this.state.start, this.state.end));
+        this.next();
+        return this.finishNode(node, "NumericLiteralTypeAnnotation");
+      }
+
     case tt.num:
       node.value = this.state.value;
       this.addExtra(node, "rawValue", node.value);
