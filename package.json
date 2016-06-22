@@ -20,7 +20,8 @@
     "babel-preset-react": "^6.0.0",
     "babel-preset-stage-0": "^6.5.0",
     "kcheck": "^2.0.1",
-    "lodash": "^4.6.1"
+    "lodash": "^4.6.1",
+    "unicode-7.0.0": "~0.1.5"
   },
   "bin": {
     "babylon": "./bin/babylon.js"
