@@ -11,7 +11,7 @@
     "babel-runtime": "^6.0.0"
   },
   "devDependencies": {
-    "ava": "^0.12.0",
+    "ava": "^0.15.2",
     "babel-cli": "^6.0.0",
     "babel-helper-fixtures": "^6.6.5",
     "babel-plugin-transform-class-properties": "^6.6.0",
