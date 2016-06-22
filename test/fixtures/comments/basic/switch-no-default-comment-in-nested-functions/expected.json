@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 287,
+  "end": 296,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 12,
+      "line": 13,
       "column": 2
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 287,
+    "end": 296,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 12,
+        "line": 13,
         "column": 2
       }
     },
@@ -31,28 +31,28 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 287,
+        "end": 296,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 12,
+            "line": 13,
             "column": 2
           }
         },
         "expression": {
           "type": "AssignmentExpression",
           "start": 0,
-          "end": 286,
+          "end": 295,
           "loc": {
             "start": {
               "line": 1,
               "column": 0
             },
             "end": {
-              "line": 12,
+              "line": 13,
               "column": 1
             }
           },
@@ -108,14 +108,14 @@
           "right": {
             "type": "FunctionExpression",
             "start": 17,
-            "end": 286,
+            "end": 295,
             "loc": {
               "start": {
                 "line": 1,
                 "column": 17
               },
               "end": {
-                "line": 12,
+                "line": 13,
                 "column": 1
               }
             },
@@ -143,14 +143,14 @@
             "body": {
               "type": "BlockStatement",
               "start": 35,
-              "end": 286,
+              "end": 295,
               "loc": {
                 "start": {
                   "line": 1,
                   "column": 35
                 },
                 "end": {
-                  "line": 12,
+                  "line": 13,
                   "column": 1
                 }
               },
@@ -158,14 +158,14 @@
                 {
                   "type": "FunctionDeclaration",
                   "start": 42,
-                  "end": 283,
+                  "end": 292,
                   "loc": {
                     "start": {
                       "line": 3,
                       "column": 4
                     },
                     "end": {
-                      "line": 10,
+                      "line": 11,
                       "column": 5
                     }
                   },
@@ -208,14 +208,14 @@
                   "body": {
                     "type": "BlockStatement",
                     "start": 68,
-                    "end": 283,
+                    "end": 292,
                     "loc": {
                       "start": {
                         "line": 3,
                         "column": 30
                       },
                       "end": {
-                        "line": 10,
+                        "line": 11,
                         "column": 5
                       }
                     },
@@ -571,53 +571,34 @@
                       },
                       {
                         "type": "ReturnStatement",
-                        "start": 264,
-                        "end": 277,
+                        "start": 273,
+                        "end": 286,
                         "loc": {
                           "start": {
-                            "line": 9,
+                            "line": 10,
                             "column": 8
                           },
                           "end": {
-                            "line": 9,
+                            "line": 10,
                             "column": 21
                           }
                         },
                         "argument": {
                           "type": "BooleanLiteral",
-                          "start": 271,
-                          "end": 276,
+                          "start": 280,
+                          "end": 285,
                           "loc": {
                             "start": {
-                              "line": 9,
+                              "line": 10,
                               "column": 15
                             },
                             "end": {
-                              "line": 9,
+                              "line": 10,
                               "column": 20
                             }
                           },
-                          "value": false,
-                          "leadingComments": null
-                        },
-                        "leadingComments": [
-                          {
-                            "type": "CommentLine",
-                            "value": " no default",
-                            "start": 232,
-                            "end": 245,
-                            "loc": {
-                              "start": {
-                                "line": 7,
-                                "column": 12
-                              },
-                              "end": {
-                                "line": 7,
-                                "column": 25
-                              }
-                            }
-                          }
-                        ]
+                          "value": false
+                        }
                       }
                     ],
                     "directives": []
