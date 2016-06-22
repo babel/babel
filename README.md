@@ -60,7 +60,7 @@ AST for JSX code is based on [Facebook JSX AST][] with the addition of one node 
 
 - `JSXText`
 
-[Babel AST format]: https://github.com/babel/babylon/ast/spec.md
+[Babel AST format]: https://github.com/babel/babylon/blob/master/ast/spec.md
 [ESTree spec]: https://github.com/estree/estree
 
 [Literal]: https://github.com/estree/estree/blob/master/spec.md#literal
