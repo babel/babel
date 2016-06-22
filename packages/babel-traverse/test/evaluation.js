@@ -30,4 +30,11 @@ suite("evaluation", function () {
       );
     });
   });
+
+  test("should bail out on recursive evaluation", function () {
+    assert.strictEqual(
+      getPath("function fn(a) { var g = a ? 1 : 2, a = g * this.foo; }").get("body.0.body.body.0.declarations.1.init").evaluate().confident,
+      false
+    );
+  });
 });
