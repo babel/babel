@@ -1435,6 +1435,22 @@ describe("verify", function () {
     );
   });
 
+  it("allowImportExportEverywhere option (#327)", function () {
+    verifyAndAssertMessages([
+        "if (true) { import Foo from 'foo'; }",
+        "function foo() { import Bar from 'bar'; }",
+        "switch (a) { case 1: import FooBar from 'foobar'; }"
+      ].join("\n"),
+      {},
+      [],
+      "module",
+      {
+        env: {},
+        parserOptions: { ecmaVersion: 6, sourceType: "module", allowImportExportEverywhere: true }
+      }
+    );
+  });
+
   it("with does not crash parsing in script mode (strict off) #171", function () {
     verifyAndAssertMessages(
       "with (arguments) { length; }",

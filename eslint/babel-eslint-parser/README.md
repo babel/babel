@@ -70,6 +70,7 @@ Check out the [ESLint docs](http://eslint.org/docs/rules/) for all possible rule
 ### Configuration
 
 `sourceType` can be set to `'module'`(default) or `'script'` if your code isn't using ECMAScript modules.
+`allowImportExportEverywhere` can be set to true to allow import and export declarations to appear anywhere a statement is allowed if your build environment supports that. By default, import and export declarations can only appear at a program's top level.
 
 **.eslintrc**
 
@@ -77,7 +78,8 @@ Check out the [ESLint docs](http://eslint.org/docs/rules/) for all possible rule
 {
   "parser": "babel-eslint",
   "parserOptions": {
-    "sourceType": "module"
+    "sourceType": "module",
+    "allowImportExportEverywhere": false
   }
 }
 ```

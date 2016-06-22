@@ -365,6 +365,7 @@ exports.parse = function (code, options) {
   options = options || {};
   eslintOptions.ecmaVersion = options.ecmaVersion = options.ecmaVersion || 6;
   eslintOptions.sourceType = options.sourceType = options.sourceType || "module";
+  eslintOptions.allowImportExportEverywhere = options.allowImportExportEverywhere = options.allowImportExportEverywhere || false;
   if (options.sourceType === "module") {
     eslintOptions.globalReturn = false;
   } else {
@@ -385,7 +386,7 @@ exports.parseNoPatch = function (code, options) {
   var opts = {
     sourceType: options.sourceType,
     strictMode: true,
-    allowImportExportEverywhere: false, // consistent with espree
+    allowImportExportEverywhere: options.allowImportExportEverywhere, // consistent with espree
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
     plugins: [
