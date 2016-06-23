@@ -236,11 +236,7 @@ export function TypeParameter(node: Object) {
 
 export function TypeParameterInstantiation(node: Object) {
   this.token("<");
-  this.printList(node.params, node, {
-    iterator: (node: Object) => {
-      this.print(node.typeAnnotation, node);
-    }
-  });
+  this.printList(node.params, node, {});
   this.token(">");
 }
 
