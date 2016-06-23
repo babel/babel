@@ -100,4 +100,4 @@ export type { foo };
 export type { foo } from "bar";
 export interface foo { p: number };
 export interface foo<T> { p: T };
-var a: ?Array<?string>
+var a: ?Array<?string>;
