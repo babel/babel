@@ -167,6 +167,7 @@ exports.nodes = {
  */
 
 exports.nodes.ObjectProperty =
+exports.nodes.ObjectTypeProperty =
 exports.nodes.ObjectMethod =
 exports.nodes.SpreadProperty = function (node: Object, parent): ?WhitespaceObject {
   if (parent.properties[0] === node) {

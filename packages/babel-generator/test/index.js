@@ -82,8 +82,27 @@ suite("programmatic generation", function() {
     var ast = parse(generate.default(ifStatement).code);
     assert.equal(ast.program.body[0].consequent.type, 'BlockStatement');
   });
-});
 
+  test("flow object indentation", function() {
+    var objectStatement = t.objectTypeAnnotation(
+      [
+        t.objectTypeProperty(
+          t.identifier('bar'),
+          t.stringTypeAnnotation()
+        ),
+      ],
+      null,
+      null
+    );
+
+    var output = generate.default(objectStatement).code;
+    assert.equal(output, [
+      '{',
+      '  bar: string;',
+      '}',
+    ].join('\n'));
+  });
+});
 
 suite("whitespace", function () {
   test("empty token list", function () {
