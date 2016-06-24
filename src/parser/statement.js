@@ -621,6 +621,10 @@ pp.isClassProperty = function () {
   return this.match(tt.eq) || this.isLineTerminator();
 };
 
+pp.isClassMutatorStarter = function () {
+  return false;
+};
+
 pp.parseClassBody = function (node) {
   // class bodies are implicitly strict
   let oldStrict = this.state.strict;
@@ -658,7 +662,6 @@ pp.parseClassBody = function (node) {
     let isGenerator = this.eat(tt.star);
     let isGetSet = false;
     let isAsync = false;
-    let isGeneric = false;
 
     this.parsePropertyName(method);
 
@@ -693,13 +696,9 @@ pp.parseClassBody = function (node) {
     if (!method.computed) {
       let { key } = method;
 
-      if (this.hasPlugin("flow") && this.isRelational("<")) {
-        isGeneric = true;
-      }
-
       // handle get/set methods
       // eg. class Foo { get bar() {} set bar() {} }
-      if (!isAsync && !isGenerator && !isGeneric && key.type === "Identifier" && !this.match(tt.parenL) && (key.name === "get" || key.name === "set")) {
+      if (!isAsync && !isGenerator && !this.isClassMutatorStarter() && key.type === "Identifier" && !this.match(tt.parenL) && (key.name === "get" || key.name === "set")) {
         isGetSet = true;
         method.kind = key.name;
         key = this.parsePropertyName(method);
