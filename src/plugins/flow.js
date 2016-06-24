@@ -2,6 +2,7 @@
 /* eslint max-len: 0 */
 
 import { types as tt } from "../tokenizer/types";
+import { types as ct } from "../tokenizer/context";
 import Parser from "../parser";
 
 let pp = Parser.prototype;
@@ -220,7 +221,12 @@ pp.flowParseTypeParameterDeclaration = function () {
   let node = this.startNode();
   node.params = [];
 
-  this.expectRelational("<");
+  if (this.isRelational("<") || this.match(tt.jsxTagStart)) {
+    this.next();
+  } else {
+    this.unexpected();
+  }
+
   do {
     node.params.push(this.flowParseTypeParameter());
     if (!this.isRelational(">")) {
@@ -1017,9 +1023,12 @@ export default function (instance) {
   // parse function type parameters - function foo<T>() {}
   instance.extend("parseFunctionParams", function (inner) {
     return function (node) {
+      const oldInType = this.state.inType;
+      this.state.inType = true;
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
+      this.state.inType = oldInType;
       inner.call(this, node);
     };
   });
@@ -1050,6 +1059,68 @@ export default function (instance) {
   instance.extend("shouldParseAsyncArrow", function (inner) {
     return function () {
       return this.match(tt.colon) || inner.call(this);
+    };
+  });
+
+  // We need to support type parameter declarations for arrow functions. This
+  // is tricky. There are three situations we need to handle
+  //
+  // 1. This is either JSX or an arrow function. We'll try JSX first. If that
+  //    fails, we'll try an arrow function. If that fails, we'll throw the JSX
+  //    error.
+  // 2. This is an arrow function. We'll parse the type parameter declaration,
+  //    parse the rest, make sure the rest is an arrow function, and go from
+  //    there
+  // 3. This is neither. Just call the inner function
+  instance.extend("parseMaybeAssign", function (inner) {
+    return function (...args) {
+      let jsxError = null;
+      if (tt.jsxTagStart && this.match(tt.jsxTagStart)) {
+        const state = this.state.clone();
+        try {
+          return inner.apply(this, args);
+        } catch (err) {
+          if (err instanceof SyntaxError) {
+            this.state = state;
+            jsxError = err;
+          } else {
+            throw err;
+          }
+        }
+      }
+
+      // Need to push something onto the context to stop
+      // the JSX plugin from messing with the tokens
+      this.state.context.push(ct.parenExpression);
+      if (jsxError != null || this.isRelational("<")) {
+        let arrowExpression;
+        let typeParameters;
+        try {
+          const oldInType = this.state.inType;
+          this.state.inType = true;
+          typeParameters = this.flowParseTypeParameterDeclaration();
+          this.state.inType = oldInType;
+
+          arrowExpression = inner.apply(this, args);
+          arrowExpression.typeParameters = typeParameters;
+        } catch (err) {
+          throw jsxError || err;
+        }
+
+        if (arrowExpression.type === "ArrowFunctionExpression") {
+          return arrowExpression;
+        } else if (jsxError != null) {
+          throw jsxError;
+        } else {
+          this.raise(
+            typeParameters.start,
+            "Expected an arrow function after this type parameter declaration",
+          );
+        }
+      }
+      this.state.context.pop();
+
+      return inner.apply(this, args);
     };
   });
 
