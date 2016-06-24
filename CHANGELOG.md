@@ -13,6 +13,30 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
+## 6.8.1 (2016-06-06)
+
+### New Feature
+
+- Parse type parameter declarations with defaults like `type Foo<T = string> = T`
+
+### Bug Fixes
+- Type parameter declarations need 1 or more type parameters.
+- The existential type `*` is not a valid type parameter.
+- The existential type `*` is a primary type
+
+### Spec Compliancy
+- The param list for type parameter declarations now consists of `TypeParameter` nodes
+- New `TypeParameter` AST Node (replaces using the `Identifier` node before)
+
+```
+interface TypeParameter <: Node {
+  bound: TypeAnnotation;
+  default: TypeAnnotation;
+  name: string;
+  variance: "plus" | "minus";
+}
+```
+
 ## 6.8.0 (2016-05-02)
 
 #### New Feature
