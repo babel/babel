@@ -1075,4 +1075,14 @@ export default function (instance) {
       return inner.call(this, node);
     };
   });
+
+  instance.extend("isClassMutatorStarter", function (inner) {
+    return function () {
+      if (this.isRelational("<")) {
+        return true;
+      } else {
+        return inner.call(this);
+      }
+    };
+  });
 }
