@@ -12,6 +12,7 @@ build-dist: build
 	scripts/build-dist.sh
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
+	node scripts/generate-babel-types-docs.js
 
 watch: clean
 	./node_modules/.bin/gulp watch
