@@ -29,6 +29,7 @@ Aliases: `Pattern`, `LVal`
 
  - `elements`: `Array<Expression>` (required)
  - `typeAnnotation` (required)
+ - `decorators`: `Array<Decorator>` (required)
 
 ### t.arrayTypeAnnotation(elementType)
 
@@ -47,6 +48,7 @@ Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, 
  - `params`: `Array<LVal>` (required)
  - `body`: `BlockStatement | Expression` (required)
  - `async`: `boolean` (default: `false`)
+ - `returnType` (required)
 
 ### t.assignmentExpression(operator, left, right)
 
@@ -66,6 +68,7 @@ Aliases: `Pattern`, `LVal`
 
  - `left`: `Identifier` (required)
  - `right`: `Expression` (required)
+ - `decorators`: `Array<Decorator>` (required)
 
 ### t.awaitExpression(argument)
 
@@ -167,6 +170,10 @@ Aliases: `Scopable`, `Class`, `Statement`, `Declaration`, `Pureish`
  - `superClass`: `Expression` (default: `null`)
  - `body`: `ClassBody` (required)
  - `decorators`: `Array<Decorator>` (required)
+ - `implements` (required)
+ - `mixins` (required)
+ - `superTypeParameters` (required)
+ - `typeParameters` (required)
 
 ### t.classExpression(id, superClass, body, decorators)
 
@@ -178,6 +185,10 @@ Aliases: `Scopable`, `Class`, `Expression`, `Pureish`
  - `superClass`: `Expression` (default: `null`)
  - `body`: `ClassBody` (required)
  - `decorators`: `Array<Decorator>` (required)
+ - `implements` (required)
+ - `mixins` (required)
+ - `superTypeParameters` (required)
+ - `typeParameters` (required)
 
 ### t.classImplements(id, typeParameters)
 
@@ -200,6 +211,11 @@ Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
  - `body`: `BlockStatement` (required)
  - `computed`: `boolean` (default: `false`)
  - `static`: `boolean` (default: `false`)
+ - `async`: `boolean` (default: `false`)
+ - `decorators` (required)
+ - `generator`: `boolean` (default: `false`)
+ - `returnType` (required)
+ - `typeParameters` (required)
 
 ### t.classProperty(key, value, typeAnnotation, decorators)
 
@@ -452,6 +468,8 @@ Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Statement`, `
  - `body`: `BlockStatement` (required)
  - `generator`: `boolean` (default: `false`)
  - `async`: `boolean` (default: `false`)
+ - `returnType` (required)
+ - `typeParameters` (required)
 
 ### t.functionExpression(id, params, body, generator, async)
 
@@ -464,6 +482,8 @@ Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, 
  - `body`: `BlockStatement` (required)
  - `generator`: `boolean` (default: `false`)
  - `async`: `boolean` (default: `false`)
+ - `returnType` (required)
+ - `typeParameters` (required)
 
 ### t.functionTypeAnnotation(typeParameters, params, rest, returnType)
 
@@ -501,6 +521,8 @@ See also `t.isIdentifier(node, opts)` and `t.assertIdentifier(node, opts)`.
 Aliases: `Expression`, `LVal`
 
  - `name``string` (required)
+ - `decorators`: `Array<Decorator>` (required)
+ - `typeAnnotation` (required)
 
 ### t.ifStatement(test, consequent, alternate)
 
@@ -791,6 +813,11 @@ Aliases: `UserWhitespacable`, `Function`, `Scopable`, `BlockParent`, `FunctionPa
  - `params` (required)
  - `body`: `BlockStatement` (required)
  - `computed`: `boolean` (default: `false`)
+ - `async`: `boolean` (default: `false`)
+ - `decorators`: `Array<Decorator>` (required)
+ - `generator`: `boolean` (default: `false`)
+ - `returnType` (required)
+ - `typeParameters` (required)
 
 ### t.objectPattern(properties, typeAnnotation)
 
@@ -800,6 +827,7 @@ Aliases: `Pattern`, `LVal`
 
  - `properties`: `Array<RestProperty | Property>` (required)
  - `typeAnnotation` (required)
+ - `decorators`: `Array<Decorator>` (required)
 
 ### t.objectProperty(key, value, computed, shorthand, decorators)
 
@@ -893,6 +921,7 @@ Aliases: `LVal`
 
  - `argument`: `LVal` (required)
  - `typeAnnotation` (required)
+ - `decorators`: `Array<Decorator>` (required)
 
 ### t.restProperty(argument)
 
@@ -1035,6 +1064,7 @@ Aliases: `Statement`
  - `block` (required)
  - `handler` (default: `null`)
  - `finalizer`: `BlockStatement` (default: `null`)
+ - `body`: `BlockStatement` (required)
 
 ### t.tupleTypeAnnotation(types)
 

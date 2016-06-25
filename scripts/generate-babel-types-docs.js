@@ -75,7 +75,15 @@ Object.keys(types.BUILDER_KEYS).sort().forEach(function (key) {
     }).join(', '));
     readme.push('');
   }
-  types.BUILDER_KEYS[key].forEach(function (field) {
+  Object.keys(types.NODE_FIELDS[key]).sort(function (fieldA, fieldB) {
+    var indexA = types.BUILDER_KEYS[key].indexOf(fieldA);
+    var indexB = types.BUILDER_KEYS[key].indexOf(fieldB);
+    if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  })
+  .forEach(function (field) {
     var defaultValue = types.NODE_FIELDS[key][field].default;
     var fieldDescription = ['`' + field + '`'];
     var validator = types.NODE_FIELDS[key][field].validate;
