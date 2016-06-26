@@ -257,7 +257,7 @@
             {
               "type": "Identifier",
               "start": 33,
-              "end": 34,
+              "end": 42,
               "loc": {
                 "start": {
                   "line": 3,
@@ -265,7 +265,7 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 5
+                  "column": 13
                 }
               },
               "name": "x",
@@ -392,7 +392,7 @@
             {
               "type": "Identifier",
               "start": 56,
-              "end": 57,
+              "end": 65,
               "loc": {
                 "start": {
                   "line": 4,
@@ -400,7 +400,7 @@
                 },
                 "end": {
                   "line": 4,
-                  "column": 5
+                  "column": 13
                 }
               },
               "name": "x",

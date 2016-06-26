@@ -126,7 +126,7 @@
                   "left": {
                     "type": "Identifier",
                     "start": 15,
-                    "end": 16,
+                    "end": 24,
                     "loc": {
                       "start": {
                         "line": 1,
@@ -134,7 +134,7 @@
                       },
                       "end": {
                         "line": 1,
-                        "column": 16
+                        "column": 24
                       }
                     },
                     "name": "y",

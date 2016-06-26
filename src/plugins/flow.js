@@ -685,6 +685,17 @@ pp.flowParseTypeAnnotatableIdentifier = function (requireTypeAnnotation, canBeOp
   return ident;
 };
 
+pp.typeCastToParameter = function (node) {
+  node.expression.typeAnnotation = node.typeAnnotation;
+
+  return this.finishNodeAt(
+    node.expression,
+    node.expression.type,
+    node.typeAnnotation.end,
+    node.typeAnnotation.loc.end
+  );
+};
+
 export default function (instance) {
   // plain function return types: function name(): string {}
   instance.extend("parseFunctionBody", function (inner) {
@@ -862,15 +873,10 @@ export default function (instance) {
     };
   });
 
-  function typeCastToParameter(node) {
-    node.expression.typeAnnotation = node.typeAnnotation;
-    return node.expression;
-  }
-
   instance.extend("toAssignable", function (inner) {
     return function (node) {
       if (node.type === "TypeCastExpression") {
-        return typeCastToParameter(node);
+        return this.typeCastToParameter(node);
       } else {
         return inner.apply(this, arguments);
       }
@@ -883,7 +889,7 @@ export default function (instance) {
       for (let i = 0; i < exprList.length; i++) {
         let expr = exprList[i];
         if (expr && expr.type === "TypeCastExpression") {
-          exprList[i] = typeCastToParameter(expr);
+          exprList[i] = this.typeCastToParameter(expr);
         }
       }
       return inner.call(this, exprList, isBinding);
@@ -982,7 +988,7 @@ export default function (instance) {
     };
   });
 
-    // parse type parameters for object method shorthand
+  // parse type parameters for object method shorthand
   instance.extend("parseObjPropValue", function (inner) {
     return function (prop) {
       let typeParameters;

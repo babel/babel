@@ -95,7 +95,7 @@
                 {
                   "type": "Identifier",
                   "start": 17,
-                  "end": 20,
+                  "end": 25,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -103,7 +103,7 @@
                     },
                     "end": {
                       "line": 1,
-                      "column": 20
+                      "column": 25
                     }
                   },
                   "name": "foo",
@@ -158,7 +158,7 @@
                 {
                   "type": "Identifier",
                   "start": 27,
-                  "end": 30,
+                  "end": 35,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -166,7 +166,7 @@
                     },
                     "end": {
                       "line": 1,
-                      "column": 30
+                      "column": 35
                     }
                   },
                   "name": "bar",
