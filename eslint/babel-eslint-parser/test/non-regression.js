@@ -1499,16 +1499,28 @@ describe("verify", function () {
   });
 
   it("newline-before-return with comments #289", function () {
-    verifyAndAssertMessages(["function a() {",
-      "if (b) {",
-        "/* eslint-disable no-console */",
-        "console.log('test');",
-         "/* eslint-enable no-console */",
-        "}",
-        "",
-        "return hasGlobal;",
-        "}"].join("\n"),
+    verifyAndAssertMessages([
+        "function a() {",
+          "if (b) {",
+            "/* eslint-disable no-console */",
+            "console.log('test');",
+            "/* eslint-enable no-console */",
+          "}",
+          "",
+          "return hasGlobal;",
+        "}"
+      ].join("\n"),
       { "newline-before-return": 1 },
+      []
+    );
+  });
+
+  it("spaced-comment with shebang #163", function () {
+    verifyAndAssertMessages(["#!/usr/bin/env babel-node",
+        "",
+        "import {spawn} from 'foobar';"
+      ].join("\n"),
+      { "spaced-comment": 1 },
       []
     );
   });
