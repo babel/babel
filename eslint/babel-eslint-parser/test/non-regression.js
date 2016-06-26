@@ -1498,6 +1498,21 @@ describe("verify", function () {
     );
   });
 
+  it("newline-before-return with comments #289", function () {
+    verifyAndAssertMessages(["function a() {",
+      "if (b) {",
+        "/* eslint-disable no-console */",
+        "console.log('test');",
+         "/* eslint-enable no-console */",
+        "}",
+        "",
+        "return hasGlobal;",
+        "}"].join("\n"),
+      { "newline-before-return": 1 },
+      []
+    );
+  });
+
   // it("regex with es6 unicodeCodePointEscapes", function () {
   //   verifyAndAssertMessages(
   //     "string.replace(/[\u{0000A0}-\u{10FFFF}<>\&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);",
