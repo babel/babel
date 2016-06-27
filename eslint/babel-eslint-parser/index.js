@@ -385,7 +385,6 @@ exports.parse = function (code, options) {
 exports.parseNoPatch = function (code, options) {
   var opts = {
     sourceType: options.sourceType,
-    strictMode: true,
     allowImportExportEverywhere: options.allowImportExportEverywhere, // consistent with espree
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
