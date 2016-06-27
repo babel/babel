@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.11.1 (2016-06-28)
+
+#### Bug Fix
+
+- [#3552](https://github.com/babel/babel/pull/3552) Remove `jsx-self` plugin from the react preset for now @hzoo
+
+#### Documentation
+
+- `babel-types` Update docs + scripts @ForbesLindesay 
+
 ## v6.11.0 (2016-06-27)
 
 - In this release, there's now an `es2016` preset which includes the [exponentiation operator](http://babeljs.io/docs/plugins/transform-exponentiation-operator/) (thanks for ([@ysmood](https://github.com/ysmood)) for giving us the npm package).
