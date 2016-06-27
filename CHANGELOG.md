@@ -15,27 +15,27 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## v6.11.0 (2016-06-27)
 
-- In this release, there's now an `es2016` preset which includes the exponentiation operator (thanks for ([@ysmood](https://github.com/ysmood)) for giving us the npm package).
+- In this release, there's now an `es2016` preset which includes the [exponentiation operator](http://babeljs.io/docs/plugins/transform-exponentiation-operator/) (thanks for ([@ysmood](https://github.com/ysmood)) for giving us the npm package).
 - The `trailing-function-commas` plugin has been moved from `stage-2` preset to `stage-3` preset.
-- `babel-plugin-transform-react-jsx-self` has been added to the `react` preset in development mode. There is a new dev warning being added and this plugin `__self={this}` JSX attribute to all JSX elements
+- `babel-plugin-transform-react-jsx-self` has been added to the `react` preset in `development` mode. There is a new dev warning being added in react and this plugin adds the `__self={this}` JSX attribute to all JSX elements.
 - `babel-plugin-es2015-unicode-regex` has it's `regexpu-core` dependency updated to `2.x`.
- - Babel now uses [lerna 2.x](https://github.com/lerna/lerna)!
+- Babel now uses [lerna 2.x](https://github.com/lerna/lerna)!
 
 #### New Feature
 * `babel-preset-es2016`
-  * [#3531](https://github.com/babel/babel/pull/3531) Add es2016 preset. ([@chicoxyzzy](https://github.com/chicoxyzzy))
+  * [#3531](https://github.com/babel/babel/pull/3531) Add `es2016` preset. ([@chicoxyzzy](https://github.com/chicoxyzzy))
 * `babel-preset-stage-2`, `babel-preset-stage-3`
-  * [#3522](https://github.com/babel/babel/pull/3522) Promote trailing-function-commas to stage 3. ([@jacobrask](https://github.com/jacobrask))
+  * [#3522](https://github.com/babel/babel/pull/3522) Promote `trailing-function-commas` to stage 3. ([@jacobrask](https://github.com/jacobrask))
 * `babel-plugin-transform-react-jsx-self`, `babel-preset-react`
   * [#3540](https://github.com/babel/babel/pull/3540) Added jsx-self babel transform plugin. ([@jimfb](https://github.com/jimfb))
 
 #### Spec Compliancy
 * `babel-plugin-transform-es2015-unicode-regex`
-  * [#3338](https://github.com/babel/babel/pull/3338) Update to regexpu-core@2.0.0 for ES2016 compliance. ([@mathiasbynens](https://github.com/mathiasbynens))
+  * [#3338](https://github.com/babel/babel/pull/3338) Update to `regexpu-core@2.0.0` for ES2016 compliance. ([@mathiasbynens](https://github.com/mathiasbynens))
 
 #### Bug Fix
 * `babel-plugin-transform-react-jsx-self`
-  * [#3550](https://github.com/babel/babel/pull/3550) Fix some mistakes in the jsx-self transform.. ([@loganfsmyth](https://github.com/loganfsmyth))
+  * [#3550](https://github.com/babel/babel/pull/3550) Fix some mistakes in the jsx-self transform. ([@loganfsmyth](https://github.com/loganfsmyth))
 * `babel-generator`
   * [#3548](https://github.com/babel/babel/pull/3548) Fix incorrect Flow object whitespacing. ([@sampepose](https://github.com/sampepose))
 
@@ -43,7 +43,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 * Other
   * [#3509](https://github.com/babel/babel/pull/3509) Build: use lerna 2.x beta. ([@hzoo](https://github.com/hzoo))
 * `babel-code-frame`
-  * [#3533](https://github.com/babel/babel/pull/3533) babel-code-frame: Upgrade to js-tokens@2. ([@lydell](https://github.com/lydell))
+  * [#3533](https://github.com/babel/babel/pull/3533) `babel-code-frame`: Upgrade to `js-tokens@2`. ([@lydell](https://github.com/lydell))
 
 #### Commiters: 9
 - Henry Zhu ([hzoo](https://github.com/hzoo))
