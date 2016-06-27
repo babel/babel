@@ -145,6 +145,9 @@ export default function defineType(
   for (let key in opts.fields) {
     let field = opts.fields[key];
 
+    if (opts.builder.indexOf(key) === -1) {
+      field.optional = true;
+    }
     if (field.default === undefined) {
       field.default = null;
     } else if (!field.validate) {
