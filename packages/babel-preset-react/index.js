@@ -9,8 +9,8 @@ module.exports = {
   env: {
     development: {
       plugins: [
-   //     require("babel-plugin-transform-react-jsx-source"),
-        require("babel-plugin-transform-react-jsx-self")
+        // require("babel-plugin-transform-react-jsx-source"),
+        // require("babel-plugin-transform-react-jsx-self")
       ]
     }
   }
