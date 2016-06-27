@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-react",
-  "version": "6.5.0",
+  "version": "6.11.0",
   "description": "Babel preset for all React plugins.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -14,6 +14,6 @@
     "babel-plugin-transform-react-display-name": "^6.3.13",
     "babel-plugin-transform-react-jsx": "^6.3.13",
     "babel-plugin-transform-react-jsx-source": "^6.3.13",
-    "babel-plugin-transform-react-jsx-self": "^6.9.0"
+    "babel-plugin-transform-react-jsx-self": "^6.11.0"
   }
 }
