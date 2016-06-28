@@ -1,4 +1,3 @@
----
 git:
   depth: 1
 sudo: false
@@ -6,14 +5,19 @@ language: node_js
 cache:
   directories:
   - node_modules
-
 node_js:
- - "6"
- - "5"
- - "4"
- - "0.12"
-
+- '6'
+- '5'
+- '4'
+- '0.12'
 script: make test-ci
 
 notifications:
-  slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK
+  on_success: change
+  on_failure: always
+  slack:
+    rooms:
+      # Generate with
+      #     travis encrypt "babeljs:<token>#activity" --add notifications.slack.rooms
+      # where <token> is from the Slack integration settings.
+      secure: SrwPKRe2AiNAKRo/+2yW/x4zxbWf2FBXuBuuPkdTJVTpWe++Jin1lXYJWTKP1a1i/IbmhffBO9YZcUFbeuXJpRM083vO8VYpyuBMQRqWD+Z3o+ttPlHGOJgnj0nkIcGRk6k7PpyHNnIkixfEJDvbbg9lN1Jswb3xkL8iYIHpuFE=
