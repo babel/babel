@@ -264,8 +264,22 @@ export function VariableDeclaration(node: Object, parent: Object) {
 }
 
 export function VariableDeclarator(node: Object) {
+  let nodeOrigLocation = null;
+
+  // To prevent extra newlines, we should remove node's location for a while,
+  // until we finish printing nodes as declaration identifiers (T7436).
+  if (this.format.retainLines) {
+    nodeOrigLocation = node.id.loc;
+    node.id.loc      = null;
+  }
+
   this.print(node.id, node);
   this.print(node.id.typeAnnotation, node);
+
+  // Restoring node's original location
+  if (this.format.retainLines)
+    node.id.loc = nodeOrigLocation;
+
   if (node.init) {
     this.space();
     this.token("=");
