@@ -91,7 +91,7 @@ export function evaluate(): { confident: boolean; value: any } {
 
       let val = _evaluate(path);
       item.resolved = true;
-      item.value = value;
+      item.value = val;
       return val;
     }
   }
