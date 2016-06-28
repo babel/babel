@@ -90,8 +90,10 @@ export function evaluate(): { confident: boolean; value: any } {
       seen.set(node, item);
 
       let val = _evaluate(path);
-      item.resolved = true;
-      item.value = val;
+      if (confident) {
+        item.resolved = true;
+        item.value = val;
+      }
       return val;
     }
   }
