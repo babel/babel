@@ -7,18 +7,18 @@ import * as t from "babel-types";
 
 let buildWrapper = template(`
   (() => {
-    var ref = FUNCTION;
+    var REF = FUNCTION;
     return function NAME(PARAMS) {
-      return ref.apply(this, arguments);
+      return REF.apply(this, arguments);
     };
   })
 `);
 
 let namedBuildWrapper = template(`
   (() => {
-    var ref = FUNCTION;
+    var REF = FUNCTION;
     function NAME(PARAMS) {
-      return ref.apply(this, arguments);
+      return REF.apply(this, arguments);
     }
     return NAME;
   })
@@ -76,6 +76,7 @@ function plainFunction(path: NodePath, callId: Object) {
   let built = t.callExpression(callId, [node]);
   let container = wrapper({
     NAME: asyncFnId,
+    REF: path.scope.generateUidIdentifier("ref"),
     FUNCTION: built,
     PARAMS: node.params.map(() => path.scope.generateUidIdentifier("x"))
   }).expression;

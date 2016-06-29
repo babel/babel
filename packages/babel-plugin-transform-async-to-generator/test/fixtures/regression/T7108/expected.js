@@ -18,11 +18,12 @@ class Test {
       console.log(_this2);
 
       setTimeout((() => {
-        var ref = babelHelpers.asyncToGenerator(function* (arg) {
+        var _ref2 = babelHelpers.asyncToGenerator(function* (arg) {
           console.log(_this2);
         });
+
         return function (_x) {
-          return ref.apply(this, arguments);
+          return _ref2.apply(this, arguments);
         };
       })());
     })();
@@ -47,11 +48,12 @@ class Test {
       console.log(_this4);
 
       setTimeout((() => {
-        var ref = babelHelpers.asyncToGenerator(function* (arg) {
+        var _ref4 = babelHelpers.asyncToGenerator(function* (arg) {
           console.log(_this4);
         });
+
         return function (_x2) {
-          return ref.apply(this, arguments);
+          return _ref4.apply(this, arguments);
         };
       })());
     })();
