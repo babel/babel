@@ -13,17 +13,23 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
-## v6.11.1 (2016-06-28)
+## v6.11.2 (2016-06-28)
 
 #### Bug Fix
 
-- [#3552](https://github.com/babel/babel/pull/3552) Remove `jsx-self` plugin from the react preset for now @hzoo
+- [#3558](https://github.com/babel/babel/pull/3558) Fix non-unique 'ref' binding name for async functions. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+## v6.11.1 (2016-06-27)
+
+#### Bug Fix
+
+- [#3552](https://github.com/babel/babel/pull/3552) Remove `jsx-self` plugin from the react preset for now. ([@hzoo](https://github.com/hzoo))
 
 #### Documentation
 
-- `babel-types` Update docs + scripts @ForbesLindesay 
+- `babel-types` Update docs + scripts @ForbesLindesay
 
-## v6.11.0 (2016-06-27)
+## v6.11.0 (2016-06-26)
 
 - In this release, there's now an `es2016` preset which includes the [exponentiation operator](http://babeljs.io/docs/plugins/transform-exponentiation-operator/) (thanks for ([@ysmood](https://github.com/ysmood)) for giving us the npm package).
 - The `trailing-function-commas` plugin has been moved from `stage-2` preset to `stage-3` preset.
@@ -158,7 +164,7 @@ Just 2 fixes this release!
 
 Also, thanks to [@mucsi96](https://github.com/mucsi96) for catching the extraneous code coverage comments we were leaving when publishing!
 
-> We are removing/deprecating `babel-regenerator-runtime` in favor of depending on the original `regenerator-runtime` since the differences are resolved. Thanks to ([@benjamn](https://github.com/benjamn)) for the suggestion to maintain it (and for originally creating it!). 
+> We are removing/deprecating `babel-regenerator-runtime` in favor of depending on the original `regenerator-runtime` since the differences are resolved. Thanks to ([@benjamn](https://github.com/benjamn)) for the suggestion to maintain it (and for originally creating it!).
 
 #### Bug Fix
 * `babel-core`
