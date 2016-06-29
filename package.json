@@ -10,6 +10,10 @@
   "dependencies": {
     "babel-runtime": "^6.0.0"
   },
+  "files": [
+    "bin",
+    "lib"
+  ],
   "devDependencies": {
     "ava": "^0.15.2",
     "babel-cli": "^6.0.0",
