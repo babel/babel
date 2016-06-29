@@ -51,4 +51,11 @@ suite("evaluation", function () {
       true
     );
   });
+
+  test("should not be confident when var is redeclared in the same scope", function () {
+    assert.strictEqual(
+      getPath("var x = 2; var y = x + 2; { var x = 3 }").get("body.1.declarations.0.init").evaluate().confident,
+      false
+    );
+  });
 });
