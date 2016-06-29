@@ -13,7 +13,11 @@ node_js:
  - "4"
  - "0.12"
 
-script: npm test
+before_script: make bootstrap-babel
+
+script:
+ - npm test
+ - make test-babel
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK

@@ -8,7 +8,7 @@ clean: ; rm -rf ./build
 
 bootstrap-babel: clean
 	mkdir ./build
-	git clone git@github.com:babel/babel.git ./build/babel
+	git clone https://github.com/babel/babel.git ./build/babel
 	cd ./build/babel; \
 	make bootstrap
 	find ./build/babel/packages -type d -name 'babylon' -prune -exec rm -rf '{}' \; -exec ln -s '../../../../../' '{}' \;
