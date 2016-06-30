@@ -1,0 +1,33 @@
+{
+  "version": "0.0.0",
+  "description": "Helps obtain an array of keys, values, and key/value pairs (what the spec calls “entries”) from an object, for the purposes of iteration or serialization",
+  "repository": "babel/babel-plugin-object-enumerables",
+  "author": "Doug Wade <doug@dougwade.io>",
+  "main": "lib/index.js",
+  "devDependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
+    "babel-register": "^6.9.0",
+    "mocha": "^2.2.5"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "build": "babel src -d lib",
+    "test": "mocha --compilers js:babel-register",
+    "test:watch": "npm run test -- --watch",
+    "prepublish": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "enumerable",
+    "Keys",
+    "Values",
+    "Entries",
+    "enumerables",
+    "babel",
+    "plugin",
+    "es",
+    "2016",
+    "babel-plugin"
+  ]
+}
