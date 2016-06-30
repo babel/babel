@@ -23,6 +23,37 @@ function transformAsync(code, opts) {
   };
 }
 
+suite("parser and generator options", function() {
+  var oldString = "original;";
+  var newString = "withOptions;";
+
+  test("no options", function() {
+    var noOptsResults = babel.transform(oldString, {});
+
+    assert.deepEqual(noOptsResults.ast, babel.transform(oldString).ast);
+    assert.equal(noOptsResults.code, oldString);
+  });
+
+  test("options", function() {
+    var recast = {
+      parse: function() { return babel.transform(newString).ast; },
+      print: function() { return { code: newString }; }
+    };
+
+    var results = babel.transform(oldString, {
+      parserOpts: {
+        parser: recast.parse
+      },
+      generatorOpts: {
+        generator: recast.print
+      }
+    });
+
+    assert.deepEqual(results.ast, babel.transform(newString).ast);
+    assert.equal(results.code, newString);
+  });
+});
+
 suite("api", function () {
   test("analyze", function () {
     assert.equal(babel.analyse("foobar;").marked.length, 0);

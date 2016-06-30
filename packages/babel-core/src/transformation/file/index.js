@@ -21,6 +21,8 @@ import * as util from  "../../util";
 import path from "path";
 import * as t from "babel-types";
 
+import resolve from "../../helpers/resolve";
+
 import blockHoistPlugin from "../internal-plugins/block-hoist";
 import shadowFunctionsPlugin from "../internal-plugins/shadow-functions";
 
@@ -411,8 +413,54 @@ export default class File extends Store {
   }
 
   parse(code: string) {
+    let opts = this.opts;
+    let parseCode = parse;
+    if (opts.parserOpts.parser) {
+      parseCode = opts.parserOpts.parser;
+
+      if (typeof parseCode === "string") {
+        let dirname = opts.parserOpts.dirname || process.cwd();
+        let parser = resolve(parseCode, dirname);
+        if (parser) {
+          parseCode = require(parser).parse;
+        } else {
+          throw new Error(`Couldn't find parser ${parseCode} relative to directory ${dirname}`);
+        }
+      }
+
+      if (!this.parserOpts.parser) {
+        const babylonOptions = {
+          sourceType: "module",
+          allowImportExportEverywhere: true,
+          allowReturnOutsideFunction: false,
+          plugins: [
+            "asyncFunctions",
+            "asyncGenerators",
+            "classConstructorCall",
+            "classProperties",
+            "decorators",
+            "doExpressions",
+            "exponentiationOperator",
+            "exportExtensions",
+            "flow",
+            "functionSent",
+            "functionBind",
+            "jsx",
+            "objectRestSpread",
+            "trailingFunctionCommas"
+          ]
+        };
+
+        this.parserOpts.parser = {
+          parse(source) {
+            return require("babylon").parse(source, babylonOptions);
+          }
+        };
+      }
+    }
+
     this.log.debug("Parse start");
-    let ast = parse(code, this.parserOpts);
+    let ast = parseCode(code, this.parserOpts);
     this.log.debug("Parse stop");
     return ast;
   }
@@ -573,9 +621,24 @@ export default class File extends Store {
     let result: BabelFileResult = { ast };
     if (!opts.code) return this.makeResult(result);
 
+    let gen = generate;
+    if (opts.generatorOpts.generator) {
+      gen = opts.generatorOpts.generator;
+
+      if (typeof gen === "string") {
+        let dirname = opts.generatorOpts.dirname || process.cwd();
+        let generator = resolve(gen, dirname);
+        if (generator) {
+          gen = require(generator).print;
+        } else {
+          throw new Error(`Couldn't find generator ${gen} relative to directory ${dirname}`);
+        }
+      }
+    }
+
     this.log.debug("Generation start");
 
-    let _result = generate(ast, opts, this.code);
+    let _result = gen(ast, opts, this.code);
     result.code = _result.code;
     result.map  = _result.map;
 
