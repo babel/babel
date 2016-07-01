@@ -5,8 +5,8 @@
 
 "use strict";
 
-var rule = require("../rules/flow-object-type"),
-    RuleTester = require('eslint').RuleTester;
+var rule = require("../../rules/flow-object-type"),
+    RuleTester = require('../RuleTester');
 
 var features = {
 };

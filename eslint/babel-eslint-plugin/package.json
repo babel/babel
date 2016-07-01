@@ -4,7 +4,7 @@
   "description": "an eslint rule plugin companion to babel-eslint",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./tests/*.js"
+    "test": "mocha ./tests/rules/*.js"
   },
   "repository": {
     "type": "git",
@@ -27,10 +27,8 @@
     "eslint": ">=1.0.0"
   },
   "devDependencies": {
-    "babel-eslint": "^4.0.7",
-    "eslint": "^1.1.0",
-    "is-my-json-valid": "^2.12.0",
-    "mocha": "^2.2.5",
-    "phantomjs": "^1.9.17"
+    "babel-eslint": "^6.1.0",
+    "eslint": "^2.13.1",
+    "mocha": "^2.2.5"
   }
 }

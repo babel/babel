@@ -11,8 +11,8 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var rule = require("../rules/arrow-parens"),
-    RuleTester = require('eslint').RuleTester;
+var rule = require("../../rules/arrow-parens"),
+    RuleTester = require('../RuleTester');
 
 function ok(code, args){
   return { code: code, options: args,  parser: 'babel-eslint' }

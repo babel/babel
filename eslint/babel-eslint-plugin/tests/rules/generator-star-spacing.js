@@ -1,6 +1,6 @@
 /* eslint-disable */
-var rule = require('../rules/generator-star-spacing'),
-    RuleTester = require('eslint').RuleTester;
+var rule = require('../../rules/generator-star-spacing'),
+    RuleTester = require('../RuleTester');
 
 var features = {
     generators: true

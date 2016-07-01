@@ -5,8 +5,8 @@
  * @author Nicholas C. Zakas
  */
 
-var rule = require('../rules/new-cap'),
-    RuleTester = require('eslint').RuleTester;
+var rule = require('../../rules/new-cap'),
+    RuleTester = require('../RuleTester');
 
 var ruleTester = new RuleTester();
 ruleTester.run('babel/new-cap', rule, {

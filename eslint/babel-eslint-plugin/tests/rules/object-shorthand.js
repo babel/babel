@@ -1,6 +1,6 @@
 /* eslint-disable */
-var rule = require('../rules/object-shorthand'),
-    RuleTester = require('eslint').RuleTester;
+var rule = require('../../rules/object-shorthand'),
+    RuleTester = require('../RuleTester');
 
 var features = {
     objectLiteralShorthandMethods: true,

@@ -9,8 +9,8 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var rule = require('../rules/array-bracket-spacing'),
-    RuleTester = require('eslint').RuleTester;
+var rule = require('../../rules/array-bracket-spacing'),
+    RuleTester = require('../RuleTester');
 
 //------------------------------------------------------------------------------
 // Tests

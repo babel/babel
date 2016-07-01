@@ -5,8 +5,8 @@
 
 "use strict";
 
-var rule = require("../rules/no-await-in-loop"),
-    RuleTester = require('eslint').RuleTester;
+var rule = require("../../rules/no-await-in-loop"),
+    RuleTester = require('../RuleTester');
 
 var features = {
 };

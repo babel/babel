@@ -8,8 +8,8 @@
  * @copyright 2015 Mathieu M-Gosselin. All rights reserved.
  */
 
-var rule = require('../rules/object-curly-spacing'),
-    RuleTester = require('eslint').RuleTester;
+var rule = require('../../rules/object-curly-spacing'),
+    RuleTester = require('../RuleTester');
 
 var ruleTester = new RuleTester();
 ruleTester.run('babel/object-curly-spacing', rule, {

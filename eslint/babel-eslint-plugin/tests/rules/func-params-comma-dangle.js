@@ -1,7 +1,7 @@
 'use strict';
 
-var rule = require('../rules/func-params-comma-dangle');
-var RuleTester = require('eslint').RuleTester;
+var rule = require('../../rules/func-params-comma-dangle');
+var RuleTester = require('../RuleTester');
 
 var MISSING_I = [{message: 'Missing trailing comma.', type: 'Identifier'}];
 var MISSING_AP = [{message: 'Missing trailing comma.', type: 'AssignmentPattern'}];
