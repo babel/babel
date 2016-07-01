@@ -7,7 +7,7 @@ for use with Babel, but it can't change the built in rules to support experiment
 ### Install
 
 ```sh
-npm install eslint-plugin-babel -D
+npm install eslint-plugin-babel --save-dev
 ```
 
 Load the plugin in your `.eslintrc` file:
