@@ -1,4 +1,4 @@
-import type Position from "./position";
+import Position from "./position";
 import repeat from "lodash/repeat";
 import trimEnd from "lodash/trimEnd";
 
@@ -7,10 +7,10 @@ import trimEnd from "lodash/trimEnd";
  */
 
 export default class Buffer {
-  constructor(position: Position, format: Object) {
+  constructor(format: Object) {
     this.printedCommentStarts = {};
     this.parenPushNewlineState = null;
-    this.position = position;
+    this._position = new Position();
     this._indent = format.indent.base;
     this.format = format;
     this.buf = "";
@@ -44,7 +44,7 @@ export default class Buffer {
   catchUp(node: Object) {
     // catch up to this nodes newline if we're behind
     if (node.loc && this.format.retainLines && this.buf) {
-      while (this.position.line < node.loc.start.line) {
+      while (this.getCurrentLine() < node.loc.start.line) {
         this.push("\n");
       }
     }
@@ -164,7 +164,6 @@ export default class Buffer {
     this.push(str);
   }
 
-
   /**
    * Remove the last character.
    */
@@ -178,7 +177,7 @@ export default class Buffer {
     if (!this.endsWith(cha)) return;
     this.buf = this.buf.slice(0, -1);
     this.last = this.buf[this.buf.length - 1];
-    this.position.unshift(cha);
+    this._position.unshift(cha);
   }
 
   /**
@@ -260,7 +259,7 @@ export default class Buffer {
       let toRemove = this.buf.slice(lastNewlineIndex + 1);
       this.buf = this.buf.substring(0, lastNewlineIndex + 1);
       this.last = "\n";
-      this.position.unshift(toRemove);
+      this._position.unshift(toRemove);
     }
   }
 
@@ -333,10 +332,10 @@ export default class Buffer {
     }
 
     // If there the line is ending, adding a new mapping marker is redundant
-    if (this.opts.sourceMaps && str[0] !== "\n") this.map.mark(this.position, this._sourcePosition);
+    if (this.opts.sourceMaps && str[0] !== "\n") this.map.mark(this._position, this._sourcePosition);
 
     //
-    this.position.push(str);
+    this._position.push(str);
     this.buf += str;
     this.last = str[str.length - 1];
 
@@ -358,4 +357,11 @@ export default class Buffer {
     }
   }
 
+  getCurrentColumn() {
+    return this._position.column;
+  }
+
+  getCurrentLine() {
+    return this._position.line;
+  }
 }

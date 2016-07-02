@@ -272,7 +272,6 @@ export default class Printer extends Buffer {
 
       if (!this.endsWith(["[", "{"])) this.space();
 
-      let column = this.position.column;
       let val    = this.generateComment(comment);
 
       //
@@ -283,7 +282,7 @@ export default class Printer extends Buffer {
           val = val.replace(newlineRegex, "\n");
         }
 
-        let indent = Math.max(this.indentSize(), column);
+        let indent = Math.max(this.indentSize(), this.getCurrentColumn());
         val = val.replace(/\n/g, `\n${repeat(" ", indent)}`);
       }
 
