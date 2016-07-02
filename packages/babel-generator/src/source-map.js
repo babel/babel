@@ -5,8 +5,7 @@ import sourceMap from "source-map";
  */
 
 export default class SourceMap {
-  constructor(position, opts, code) {
-    this.position = position;
+  constructor(opts, code) {
     this.opts     = opts;
     this.last     = {generated: {}, original: {}};
 
@@ -46,11 +45,9 @@ export default class SourceMap {
    * values to insert a mapping to nothing.
    */
 
-  mark(sourcePos: Object) {
+  mark(position, sourcePos: Object) {
     let map = this.map;
     if (!map) return; // no source map
-
-    let position = this.position;
 
     // Adding an empty mapping at the start of a generated line just clutters the map.
     if (this._lastGenLine !== position.line && sourcePos.line === null) return;

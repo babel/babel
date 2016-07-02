@@ -31,7 +31,7 @@ class Generator extends Printer {
     this._inForStatementInitCounter = 0;
 
     this.whitespace = new Whitespace(tokens);
-    this.map        = new SourceMap(position, opts, code);
+    this.map        = new SourceMap(opts, code);
   }
 
   format: {
