@@ -37,14 +37,10 @@ export default class Buffer {
   buf: string;
   last: string;
 
-  /**
-   * Description
-   */
-
-  catchUp(node: Object) {
+  _catchUp(){
     // catch up to this nodes newline if we're behind
-    if (node.loc && this.format.retainLines && this.buf) {
-      while (this.getCurrentLine() < node.loc.start.line) {
+    if (this.format.retainLines && this._sourcePosition.line !== null) {
+      while (this.getCurrentLine() < this._sourcePosition.line) {
         this.push("\n");
       }
     }
@@ -276,6 +272,8 @@ export default class Buffer {
     this._sourcePosition.line = pos ? pos.line : null;
     this._sourcePosition.column = pos ? pos.column : null;
     this._sourcePosition.filename = loc && loc.filename || null;
+
+    this._catchUp();
   }
 
   /**
@@ -283,7 +281,7 @@ export default class Buffer {
    */
 
   withSource(prop: string, loc: Location, cb: () => void) {
-    if (!this.opts.sourceMaps) return cb();
+    if (!this.opts.sourceMaps && !this.format.retainLines) return cb();
 
     // Use the call stack to manage a stack of "source location" data.
     let originalLine = this._sourcePosition.line;

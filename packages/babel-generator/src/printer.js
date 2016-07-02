@@ -45,8 +45,6 @@ export default class Printer extends Buffer {
 
     this.printLeadingComments(node, parent);
 
-    this.catchUp(node);
-
     this._printNewline(true, node, parent, opts);
 
     if (opts.before) opts.before();
@@ -264,9 +262,7 @@ export default class Printer extends Buffer {
     }
 
     // Exclude comments from source mappings since they will only clutter things.
-    this.withSource(null, null, () => {
-      this.catchUp(comment);
-
+    this.withSource("start", comment.loc, () => {
       // whitespace before
       this.newline(this.whitespace.getNewlinesBefore(comment));
 
