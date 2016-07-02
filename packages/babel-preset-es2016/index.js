@@ -1,5 +1,5 @@
 module.exports = {
   plugins: [
-    require("babel-plugin-syntax-exponentiation-operator"),
+    require("babel-plugin-transform-exponentiation-operator"),
   ]
 };
