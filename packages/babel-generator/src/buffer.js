@@ -238,7 +238,6 @@ export default class Buffer {
       this.removeLast("\n");
     }
 
-    this.removeLast(" ");
     this._removeSpacesAfterLastNewline();
     for (let j = 0; j < i; j++) {
       this.push("\n");
@@ -250,12 +249,13 @@ export default class Buffer {
    */
 
   _removeSpacesAfterLastNewline() {
-    let lastNewlineIndex = this.buf.lastIndexOf("\n");
-    if (lastNewlineIndex >= 0 && this.get().length <= lastNewlineIndex) {
-      let toRemove = this.buf.slice(lastNewlineIndex + 1);
-      this.buf = this.buf.substring(0, lastNewlineIndex + 1);
-      this.last = "\n";
-      this._position.unshift(toRemove);
+    const originalBuf = this.buf;
+    this.buf = this.buf.replace(/[ \t]+$/, "");
+
+    if (originalBuf.length !== this.buf.length){
+      const removed = originalBuf.slice(this.buf.length);
+      this._position.unshift(removed);
+      this.last = this.buf[this.buf.length - 1];
     }
   }
 
