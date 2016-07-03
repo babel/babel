@@ -558,7 +558,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
     if (first) {
       first = false;
     } else {
-      this.expect(tt.comma);
+      this.expect(tt.comma, refNeedsArrowPos.start || null);
       if (this.match(tt.parenR) && this.hasPlugin("trailingFunctionCommas")) {
         optionalCommaStart = this.state.start;
         break;
