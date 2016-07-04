@@ -209,14 +209,14 @@ function variableDeclarationIdent() {
   // "let " or "var " indentation.
   this.token(",");
   this.newline();
-  for (let i = 0; i < 4; i++) this.push(" ");
+  for (let i = 0; i < 4; i++) this.space(true);
 }
 
 function constDeclarationIdent() {
   // "const " indentation.
   this.token(",");
   this.newline();
-  for (let i = 0; i < 6; i++) this.push(" ");
+  for (let i = 0; i < 6; i++) this.space(true);
 }
 
 export function VariableDeclaration(node: Object, parent: Object) {

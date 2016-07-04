@@ -124,10 +124,10 @@ export default class Buffer {
    * Add a space to the buffer unless it is compact.
    */
 
-  space() {
+  space(force: boolean = false) {
     if (this.format.compact) return;
 
-    if (this.buf && !this.endsWith(" ") && !this.endsWith("\n")) {
+    if ((this.buf && !this.endsWith(" ") && !this.endsWith("\n")) || force) {
       this.push(" ");
     }
   }
