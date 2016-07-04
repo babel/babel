@@ -17,7 +17,9 @@ class Generator extends Printer {
     let tokens   = ast.tokens || [];
     let format   = Generator.normalizeOptions(code, opts, tokens);
 
-    super(format);
+    let map        = opts.sourceMaps ? new SourceMap(opts, code) : null;
+
+    super(format, map);
 
     this.comments = comments;
     this.tokens   = tokens;
@@ -27,7 +29,6 @@ class Generator extends Printer {
     this._inForStatementInitCounter = 0;
 
     this.whitespace = new Whitespace(tokens);
-    this.map        = new SourceMap(opts, code);
   }
 
   format: {
@@ -50,7 +51,6 @@ class Generator extends Printer {
   auxiliaryCommentBefore: string;
   auxiliaryCommentAfter: string;
   whitespace: Whitespace;
-  map: SourceMap;
   comments: Array<Object>;
   tokens: Array<Object>;
   opts: Object;
@@ -148,10 +148,7 @@ class Generator extends Printer {
     this.print(this.ast);
     this.printAuxAfterComment();
 
-    return {
-      map:  this.map.get(),
-      code: this.get()
-    };
+    return this._buf.get();
   }
 }
 

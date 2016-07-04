@@ -1,251 +1,99 @@
 import Position from "./position";
-import repeat from "lodash/repeat";
+import type SourceMap from "./source-map";
 import trimEnd from "lodash/trimEnd";
 
 /**
- * Buffer for collecting generated output.
+ * The Buffer class exists to manage the queue of tokens being pushed onto the output string
+ * in such a way that the final string buffer is treated as write-only until the final .get()
+ * call. This allows V8 to optimize the output efficiently by not requiring it to store the
+ * string in contiguous memory.
  */
 
 export default class Buffer {
-  constructor(format: Object) {
-    this.printedCommentStarts = {};
-    this.parenPushNewlineState = null;
-    this._position = new Position();
-    this._indent = format.indent.base;
-    this.format = format;
-    this.buf = "";
-
-    // Maintaining a reference to the last char in the buffer is an optimization
-    // to make sure that v8 doesn't "flatten" the string more often than needed
-    // see https://github.com/babel/babel/pull/3283 for details.
-    this.last = "";
-
-    this.map = null;
-    this._sourcePosition = {
-      line: null,
-      column: null,
-      filename: null,
-    };
-    this._endsWithWord = false;
+  constructor(map: ?SourceMap) {
+    this._map = map;
   }
 
-  printedCommentStarts: Object;
-  parenPushNewlineState: ?Object;
-  position: Position;
-  _indent: number;
-  format: Object;
-  buf: string;
-  last: string;
+  _map: SourceMap = null;
+  _buf: string = "";
+  _last: string = "";
+  _queue: Array = [];
 
-  _catchUp(){
-    // catch up to this nodes newline if we're behind
-    if (this.format.retainLines && this._sourcePosition.line !== null) {
-      while (this.getCurrentLine() < this._sourcePosition.line) {
-        this.push("\n");
-      }
-    }
-  }
+  _position: Position = new Position;
+  _sourcePosition: Object = {
+    line: null,
+    column: null,
+    filename: null,
+  };
 
   /**
-   * Get the current trimmed buffer.
+   * Get the final string output from the buffer, along with the sourcemap if one exists.
    */
 
-  get(): string {
-    return trimEnd(this.buf);
-  }
-
-  /**
-   * Get the current indent.
-   */
-
-  getIndent(): string {
-    if (this.format.compact || this.format.concise) {
-      return "";
-    } else {
-      return repeat(this.format.indent.style, this._indent);
-    }
-  }
-
-  /**
-   * Get the current indent size.
-   */
-
-  indentSize(): number {
-    return this.getIndent().length;
-  }
-
-  /**
-   * Increment indent size.
-   */
-
-  indent() {
-    this._indent++;
-  }
-
-  /**
-   * Decrement indent size.
-   */
-
-  dedent() {
-    this._indent--;
-  }
-
-  /**
-   * Add a semicolon to the buffer.
-   */
-
-  semicolon() {
-    this.token(";");
-  }
-
-  /**
-   * Add a right brace to the buffer.
-   */
-
-  rightBrace() {
-    if (!this.endsWith("\n")) this.newline();
-
-    if (this.format.minified && !this._lastPrintedIsEmptyStatement) {
-      this.removeLast(";");
-    }
-    this.token("}");
-  }
-
-  /**
-   * Add a keyword to the buffer.
-   */
-
-  keyword(name: string) {
-    this.word(name);
-    this.space();
-  }
-
-  /**
-   * Add a space to the buffer unless it is compact.
-   */
-
-  space(force: boolean = false) {
-    if (this.format.compact) return;
-
-    if ((this.buf && !this.endsWith(" ") && !this.endsWith("\n")) || force) {
-      this.push(" ");
-    }
-  }
-
-  /**
-   * Writes a token that can't be safely parsed without taking whitespace into account.
-   */
-
-  word(str: string) {
-    if (this._endsWithWord) this.push(" ");
-
-    this.push(str);
-    this._endsWithWord = true;
-  }
-
-  /**
-   * Writes a simple token.
-   */
-
-  token(str: string) {
-    // space is mandatory to avoid outputting <!--
-    // http://javascript.spec.whatwg.org/#comment-syntax
-    if ((str === "--" && this.last === "!") ||
-
-      // Need spaces for operators of the same kind to avoid: `a+++b`
-      (str[0] === "+" && this.last === "+") ||
-      (str[0] === "-" && this.last === "-")) {
-      this.push(" ");
-    }
-
-    this.push(str);
-  }
-
-  /**
-   * Remove the last character.
-   */
-
-  removeLast(cha: string) {
-    if (!this.endsWith(cha)) return;
-    this.buf = this.buf.slice(0, -1);
-    this.last = this.buf[this.buf.length - 1];
-    this._position.unshift(cha);
-  }
-
-  /**
-   * Set some state that will be modified if a newline has been inserted before any
-   * non-space characters.
-   *
-   * This is to prevent breaking semantics for terminatorless separator nodes. eg:
-   *
-   *    return foo;
-   *
-   * returns `foo`. But if we do:
-   *
-   *   return
-   *   foo;
-   *
-   *  `undefined` will be returned and not `foo` due to the terminator.
-   */
-
-  startTerminatorless(): Object {
-    return this.parenPushNewlineState = {
-      printed: false
+  get(): Object {
+    return {
+      code: trimEnd(this._buf),
+      map: this._map ? this._map.get() : null,
     };
   }
 
   /**
-   * Print an ending parentheses if a starting one has been printed.
+   * Add a string to the buffer that cannot be reverted.
    */
 
-  endTerminatorless(state: Object) {
-    if (state.printed) {
-      this.dedent();
-      this.newline();
-      this.token(")");
-    }
+  append(str: string): void {
+    // If there the line is ending, adding a new mapping marker is redundant
+    if (this._map && str[0] !== "\n") this._map.mark(this._position, this._sourcePosition.line,
+      this._sourcePosition.column, this._sourcePosition.filename);
+
+    this._buf += str;
+    this._last = str[str.length - 1];
+    this._position.push(str);
   }
 
   /**
-   * Add a newline (or many newlines), maintaining formatting.
+   * Add a string to the buffer than can be reverted.
    */
 
-  newline(i?: number) {
-    if (this.format.retainLines || this.format.compact) return;
-
-    if (this.format.concise) {
-      this.space();
-      return;
-    }
-
-    // never allow more than two lines
-    if (this.endsWith("\n\n")) return;
-
-    if (typeof i !== "number") i = 1;
-
-    i = Math.min(2, i);
-    if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
-    if (i <= 0) return;
-
-    this._removeSpacesAfterLastNewline();
-    for (let j = 0; j < i; j++) {
-      this.push("\n");
-    }
+  queue(str: string): void {
+    this.append(str);
   }
 
-  /**
-   * If buffer ends with a newline and some spaces after it, trim those spaces.
-   */
+  removeTrailingSpaces(): void {
+    const oldBuf = this._buf;
+    this._buf = this._buf.replace(/[ \t]+$/, "");
+    this._last = this._buf[this._buf.length - 1];
+    this._position.unshift(oldBuf.slice(this._buf.length));
+  }
 
-  _removeSpacesAfterLastNewline() {
-    const originalBuf = this.buf;
-    this.buf = this.buf.replace(/[ \t]+$/, "");
+  removeTrailingNewline(): void {
+    if (this._last !== "\n") return;
 
-    if (originalBuf.length !== this.buf.length){
-      const removed = originalBuf.slice(this.buf.length);
-      this._position.unshift(removed);
-      this.last = this.buf[this.buf.length - 1];
-    }
+    this._buf = this._buf.slice(0, -1);
+    this._last = this._buf[this._buf.length - 1];
+    this._position.unshift("\n");
+  }
+
+  removeLastSemicolon(): void {
+    if (this._last !== ";") return;
+
+    this._buf = this._buf.slice(0, -1);
+    this._last = this._buf[this._buf.length - 1];
+    this._position.unshift(";");
+  }
+
+  endsWith(str: string): boolean {
+    if (str.length === 1) return str === this._last;
+
+    return this._buf.slice(-str.length) === str;
+  }
+
+  getLast(): string {
+    return this._last;
+  }
+
+  hasContent(): boolean {
+    return !!this._last;
   }
 
   /**
@@ -253,7 +101,7 @@ export default class Buffer {
    * will be given this position in the sourcemap.
    */
 
-  source(prop: string, loc: Location) {
+  source(prop: string, loc: Location): void {
     if (prop && !loc) return;
 
     let pos = loc ? loc[prop] : null;
@@ -261,16 +109,14 @@ export default class Buffer {
     this._sourcePosition.line = pos ? pos.line : null;
     this._sourcePosition.column = pos ? pos.column : null;
     this._sourcePosition.filename = loc && loc.filename || null;
-
-    this._catchUp();
   }
 
   /**
    * Call a callback with a specific source location and restore on completion.
    */
 
-  withSource(prop: string, loc: Location, cb: () => void) {
-    if (!this.opts.sourceMaps && !this.format.retainLines) return cb();
+  withSource(prop: string, loc: Location, cb: () => void): void {
+    if (!this._map) return cb();
 
     // Use the call stack to manage a stack of "source location" data.
     let originalLine = this._sourcePosition.line;
@@ -286,68 +132,11 @@ export default class Buffer {
     this._sourcePosition.filename = originalFilename;
   }
 
-  /**
-   * Push a string to the buffer, maintaining indentation and newlines.
-   */
-
-  push(str: string) {
-    if (!this.format.compact && this._indent && str[0] !== "\n") {
-      // we've got a newline before us so prepend on the indentation
-      if (this.endsWith("\n")) str = this.getIndent() + str;
-    }
-
-    // see startTerminatorless() instance method
-    let parenPushNewlineState = this.parenPushNewlineState;
-    if (parenPushNewlineState) {
-      for (let i = 0; i < str.length; i++) {
-        let cha = str[i];
-
-        // we can ignore spaces since they wont interupt a terminatorless separator
-        if (cha === " ") continue;
-
-        this.parenPushNewlineState = null;
-
-        if (cha === "\n" || cha === "/") {
-          // we're going to break this terminator expression so we need to add a parentheses
-          str = "(" + str;
-          this.indent();
-          parenPushNewlineState.printed = true;
-        }
-
-        break;
-      }
-    }
-
-    // If there the line is ending, adding a new mapping marker is redundant
-    if (this.opts.sourceMaps && str[0] !== "\n") this.map.mark(this._position, this._sourcePosition.line,
-      this._sourcePosition.column, this._sourcePosition.filename);
-
-    //
-    this._position.push(str);
-    this.buf += str;
-    this.last = str[str.length - 1];
-
-    // Clear any state-tracking flags that may have been set.
-    this._endsWithWord = false;
-  }
-
-  /**
-   * Test if the buffer ends with a string.
-   */
-
-  endsWith(str: string): boolean {
-    if (str.length === 1) {
-      return this.last === str;
-    } else {
-      return this.buf.slice(-str.length) === str;
-    }
-  }
-
-  getCurrentColumn() {
+  getCurrentColumn(): number {
     return this._position.column;
   }
 
-  getCurrentLine() {
+  getCurrentLine(): number {
     return this._position.line;
   }
 }

@@ -5,12 +5,257 @@ import Buffer from "./buffer";
 import * as n from "./node";
 import * as t from "babel-types";
 
-export default class Printer extends Buffer {
-  constructor(...args) {
-    super(...args);
+export default class Printer {
+  constructor(format, map) {
+    this._format = format || {};
+    this._buf = new Buffer(map);
     this.insideAux = false;
     this.printAuxAfterOnNextUserNode = false;
     this._printStack = [];
+    this.printedCommentStarts = {};
+    this.parenPushNewlineState = null;
+    this._indent = 0;
+  }
+
+  printedCommentStarts: Object;
+  parenPushNewlineState: ?Object;
+
+  /**
+   * Get the current indent.
+   */
+
+  _getIndent(): string {
+    if (this._format.compact || this._format.concise) {
+      return "";
+    } else {
+      return repeat(this._format.indent.style, this._indent);
+    }
+  }
+
+  /**
+   * Increment indent size.
+   */
+
+  indent(): void {
+    this._indent++;
+  }
+
+  /**
+   * Decrement indent size.
+   */
+
+  dedent(): void {
+    this._indent--;
+  }
+
+  /**
+   * Add a semicolon to the buffer.
+   */
+
+  semicolon(): void {
+    this._append(";", true /* queue */);
+  }
+
+  /**
+   * Add a right brace to the buffer.
+   */
+
+  rightBrace(): void {
+    if (!this.endsWith("\n")) this.newline();
+
+    if (this._format.minified && !this._lastPrintedIsEmptyStatement) {
+      this._buf.removeLastSemicolon();
+    }
+    this.token("}");
+  }
+
+  /**
+   * Add a keyword to the buffer.
+   */
+
+  keyword(name: string): void {
+    this.word(name);
+    this.space();
+  }
+
+  /**
+   * Add a space to the buffer unless it is compact.
+   */
+
+  space(force: boolean = false): void {
+    if (this._format.compact) return;
+
+    if ((this._buf.hasContent() && !this.endsWith(" ") && !this.endsWith("\n")) || force) {
+      this._space();
+    }
+  }
+
+  /**
+   * Writes a token that can't be safely parsed without taking whitespace into account.
+   */
+
+  word(str: string): void {
+    if (this._endsWithWord) this._space();
+
+    this._append(str);
+
+    this._endsWithWord = true;
+  }
+
+  /**
+   * Writes a simple token.
+   */
+
+  token(str: string): void {
+    const last = this._buf.getLast();
+    // space is mandatory to avoid outputting <!--
+    // http://javascript.spec.whatwg.org/#comment-syntax
+    if ((str === "--" && last === "!") ||
+
+      // Need spaces for operators of the same kind to avoid: `a+++b`
+      (str[0] === "+" && last === "+") ||
+      (str[0] === "-" && last === "-")) {
+      this._space();
+    }
+
+    this._append(str);
+  }
+
+  /**
+   * Add a newline (or many newlines), maintaining formatting.
+   */
+
+  newline(i?: number): void {
+    if (this._format.retainLines || this._format.compact) return;
+
+    if (this._format.concise) {
+      this.space();
+      return;
+    }
+
+    // never allow more than two lines
+    if (this.endsWith("\n\n")) return;
+
+    if (typeof i !== "number") i = 1;
+
+    i = Math.min(2, i);
+    if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
+    if (i <= 0) return;
+
+    this._buf.removeTrailingSpaces();
+    for (let j = 0; j < i; j++) {
+      this._newline();
+    }
+  }
+
+  endsWith(str: string): boolean {
+    return this._buf.endsWith(str);
+  }
+
+  removeTrailingNewline(): void {
+    this._buf.removeTrailingNewline();
+  }
+
+  source(prop: string, loc: Object): void {
+    this._catchUp(prop, loc);
+
+    this._buf.source(prop, loc);
+  }
+
+  withSource(prop: string, loc: Object, cb: () => void): void {
+    this._catchUp(prop, loc);
+
+    this._buf.withSource(prop, loc, cb);
+  }
+
+  _space(): void {
+    this._append(" ", true /* queue */);
+  }
+
+  _newline(): void {
+    this._append("\n", true /* queue */);
+  }
+
+  _append(str: string, queue: boolean = false) {
+    this._maybeAddParen(str);
+    this._maybeIndent(str);
+
+    if (queue) this._buf.queue(str);
+    else this._buf.append(str);
+
+    this._endsWithWord = false;
+  }
+
+  _maybeIndent(str: string): void {
+    // we've got a newline before us so prepend on the indentation
+    if (!this._format.compact && this._indent && this.endsWith("\n") && str[0] !== "\n") {
+      this._buf.queue(this._getIndent());
+    }
+  }
+
+  _maybeAddParen(str: string): void {
+    // see startTerminatorless() instance method
+    let parenPushNewlineState = this.parenPushNewlineState;
+    if (!parenPushNewlineState) return;
+    this.parenPushNewlineState = null;
+
+    let i;
+    for (i = 0; i < str.length && str[i] === " "; i++) continue;
+    if (i === str.length) return;
+
+    const cha = str[i];
+    if (cha === "\n" || cha === "/") {
+      // we're going to break this terminator expression so we need to add a parentheses
+      this.token("(");
+      this.indent();
+      parenPushNewlineState.printed = true;
+    }
+  }
+
+  _catchUp(prop: string, loc: Object) {
+    if (!this._format.retainLines) return;
+
+    // catch up to this nodes newline if we're behind
+    const pos = loc ? loc[prop] : null;
+    if (pos && pos.line !== null) {
+      while (this._buf.getCurrentLine() < pos.line) {
+        this._newline();
+      }
+    }
+  }
+
+  /**
+   * Set some state that will be modified if a newline has been inserted before any
+   * non-space characters.
+   *
+   * This is to prevent breaking semantics for terminatorless separator nodes. eg:
+   *
+   *    return foo;
+   *
+   * returns `foo`. But if we do:
+   *
+   *   return
+   *   foo;
+   *
+   *  `undefined` will be returned and not `foo` due to the terminator.
+   */
+
+  startTerminatorless(): Object {
+    return this.parenPushNewlineState = {
+      printed: false
+    };
+  }
+
+  /**
+   * Print an ending parentheses if a starting one has been printed.
+   */
+
+  endTerminatorless(state: Object) {
+    if (state.printed) {
+      this.dedent();
+      this.newline();
+      this.token(")");
+    }
   }
 
   print(node, parent, opts = {}) {
@@ -25,9 +270,9 @@ export default class Printer extends Buffer {
     let oldInAux = this.insideAux;
     this.insideAux = !node.loc;
 
-    let oldConcise = this.format.concise;
+    let oldConcise = this._format.concise;
     if (node._compact) {
-      this.format.concise = true;
+      this._format.concise = true;
     }
 
     let printMethod = this[node.type];
@@ -65,14 +310,14 @@ export default class Printer extends Buffer {
     this._printStack.pop();
     if (opts.after) opts.after();
 
-    this.format.concise = oldConcise;
+    this._format.concise = oldConcise;
     this.insideAux = oldInAux;
 
     this._printNewline(false, node, parent, opts);
   }
 
   printAuxBeforeComment(wasInAux) {
-    let comment = this.format.auxiliaryCommentBefore;
+    let comment = this._format.auxiliaryCommentBefore;
     if (!wasInAux && this.insideAux && !this.printAuxAfterOnNextUserNode) {
       this.printAuxAfterOnNextUserNode = true;
       if (comment) this.printComment({
@@ -85,7 +330,7 @@ export default class Printer extends Buffer {
   printAuxAfterComment() {
     if (this.printAuxAfterOnNextUserNode) {
       this.printAuxAfterOnNextUserNode = false;
-      let comment = this.format.auxiliaryCommentAfter;
+      let comment = this._format.auxiliaryCommentAfter;
       if (comment) this.printComment({
         type: "CommentBlock",
         value: comment
@@ -94,7 +339,7 @@ export default class Printer extends Buffer {
   }
 
   getPossibleRaw(node) {
-    if (this.format.minified) return;
+    if (this._format.minified) return;
 
     let extra = node.extra;
     if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
@@ -193,7 +438,7 @@ export default class Printer extends Buffer {
 
   _printNewline(leading, node, parent, opts) {
     // Fast path since 'this.newline' does nothing when not tracking lines.
-    if (this.format.retainLines || this.format.compact) return;
+    if (this._format.retainLines || this._format.compact) return;
 
     if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
       return;
@@ -201,7 +446,7 @@ export default class Printer extends Buffer {
 
     // Fast path for concise since 'this.newline' just inserts a space when
     // concise formatting is in use.
-    if (this.format.concise) {
+    if (this._format.concise) {
       this.space();
       return;
     }
@@ -225,7 +470,7 @@ export default class Printer extends Buffer {
       if (needs(node, parent)) lines++;
 
       // generated nodes can't add starting file whitespace
-      if (!this.buf) lines = 0;
+      if (!this._buf.hasContent()) lines = 0;
     }
 
     this.newline(lines);
@@ -238,14 +483,14 @@ export default class Printer extends Buffer {
   }
 
   shouldPrintComment(comment) {
-    if (this.format.shouldPrintComment) {
-      return this.format.shouldPrintComment(comment.value);
+    if (this._format.shouldPrintComment) {
+      return this._format.shouldPrintComment(comment.value);
     } else {
-      if (!this.format.minified &&
+      if (!this._format.minified &&
           (comment.value.indexOf("@license") >= 0 || comment.value.indexOf("@preserve") >= 0)) {
         return true;
       } else {
-        return this.format.comments;
+        return this._format.comments;
       }
     }
   }
@@ -271,26 +516,26 @@ export default class Printer extends Buffer {
       let val    = this.generateComment(comment);
 
       //
-      if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
+      if (comment.type === "CommentBlock" && this._format.indent.adjustMultilineComment) {
         let offset = comment.loc && comment.loc.start.column;
         if (offset) {
           let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
           val = val.replace(newlineRegex, "\n");
         }
 
-        let indent = Math.max(this.indentSize(), this.getCurrentColumn());
-        val = val.replace(/\n/g, `\n${repeat(" ", indent)}`);
+        let indentSize = Math.max(this._getIndent().length, this._buf.getCurrentColumn());
+        val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
       }
 
       // force a newline for line comments when retainLines is set in case the next printed node
       // doesn't catch up
-      if ((this.format.compact || this.format.concise || this.format.retainLines) &&
+      if ((this._format.compact || this._format.concise || this._format.retainLines) &&
           comment.type === "CommentLine") {
         val += "\n";
       }
 
       //
-      this.push(val);
+      this.token(val);
 
       // whitespace after
       this.newline(this.whitespace.getNewlinesAfter(comment));
