@@ -95,7 +95,8 @@ class ConfigChainBuilder {
     if (lines.length) {
       this.mergeConfig({
         options: { ignore: lines },
-        loc
+        alias: loc,
+        dirname: path.dirname(loc)
       });
     }
   }
