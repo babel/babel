@@ -2,6 +2,8 @@ import Position from "./position";
 import type SourceMap from "./source-map";
 import trimEnd from "lodash/trimEnd";
 
+const SPACES_RE = /^[ \t]+$/;
+
 /**
  * The Buffer class exists to manage the queue of tokens being pushed onto the output string
  * in such a way that the final string buffer is treated as write-only until the final .get()
@@ -31,6 +33,8 @@ export default class Buffer {
    */
 
   get(): Object {
+    this._flush();
+
     return {
       code: trimEnd(this._buf),
       map: this._map ? this._map.get() : null,
@@ -42,13 +46,9 @@ export default class Buffer {
    */
 
   append(str: string): void {
-    // If there the line is ending, adding a new mapping marker is redundant
-    if (this._map && str[0] !== "\n") this._map.mark(this._position, this._sourcePosition.line,
-      this._sourcePosition.column, this._sourcePosition.filename);
-
-    this._buf += str;
-    this._last = str[str.length - 1];
-    this._position.push(str);
+    this._flush();
+    this._append(str, this._sourcePosition.line, this._sourcePosition.column,
+      this._sourcePosition.filename);
   }
 
   /**
@@ -56,44 +56,58 @@ export default class Buffer {
    */
 
   queue(str: string): void {
-    this.append(str);
+    this._queue.unshift([str, this._sourcePosition.line, this._sourcePosition.column,
+      this._sourcePosition.filename]);
+  }
+
+  _flush(): void {
+    let item;
+    while (item = this._queue.pop()) this._append(...item);
+  }
+
+  _append(str: string, line: number, column: number, filename: ?string): void {
+    // If there the line is ending, adding a new mapping marker is redundant
+    if (this._map && str[0] !== "\n") this._map.mark(this._position, line, column, filename);
+
+    this._buf += str;
+    this._last = str[str.length - 1];
+    this._position.push(str);
   }
 
   removeTrailingSpaces(): void {
-    const oldBuf = this._buf;
-    this._buf = this._buf.replace(/[ \t]+$/, "");
-    this._last = this._buf[this._buf.length - 1];
-    this._position.unshift(oldBuf.slice(this._buf.length));
+    while (this._queue.length > 0 && SPACES_RE.test(this._queue[0][0])) this._queue.shift();
   }
 
   removeTrailingNewline(): void {
-    if (this._last !== "\n") return;
-
-    this._buf = this._buf.slice(0, -1);
-    this._last = this._buf[this._buf.length - 1];
-    this._position.unshift("\n");
+    if (this._queue.length > 0 && this._queue[0][0] === "\n") this._queue.shift();
   }
 
   removeLastSemicolon(): void {
-    if (this._last !== ";") return;
-
-    this._buf = this._buf.slice(0, -1);
-    this._last = this._buf[this._buf.length - 1];
-    this._position.unshift(";");
+    if (this._queue.length > 0 && this._queue[0][0] === ";") this._queue.shift();
   }
 
   endsWith(str: string): boolean {
-    if (str.length === 1) return str === this._last;
+    const end = this._last + this._queue.reduce((acc, item) => item[0] + acc, "");
+    if (str.length <= end.length) {
+      return end.slice(-str.length) === str;
+    }
 
-    return this._buf.slice(-str.length) === str;
+    // We assume that everything being matched is at most a single token plus some whitespace,
+    // which everything currently is, but otherwise we'd have to expand _last or check _buf.
+    return false;
   }
 
   getLast(): string {
+    if (this._queue.length > 0) {
+      const last = this._queue[this._queue.length - 1][0];
+      return last[last.length - 1];
+    }
+
     return this._last;
   }
 
   hasContent(): boolean {
-    return !!this._last;
+    return this._queue.length > 0 || !!this._last;
   }
 
   /**
@@ -133,10 +147,20 @@ export default class Buffer {
   }
 
   getCurrentColumn(): number {
-    return this._position.column;
+    const extra = this._queue.reduce((acc, item) => item[0] + acc, "");
+    const lastIndex = extra.lastIndexOf("\n");
+
+    return lastIndex === -1 ? this._position.column + extra.length : (extra.length - 1 - lastIndex);
   }
 
   getCurrentLine(): number {
-    return this._position.line;
+    const extra = this._queue.reduce((acc, item) => item[0] + acc, "");
+
+    let count = 0;
+    for (let i = 0; i < extra.length; i++) {
+      if (extra[i] === "\n") count++;
+    }
+
+    return this._position.line + count;
   }
 }
