@@ -335,8 +335,6 @@ export default class Buffer {
    */
 
   endsWith(str: string): boolean {
-    if (Array.isArray(str)) return str.some((s) => this.endsWith(s));
-
     if (str.length === 1) {
       return this.last === str;
     } else {

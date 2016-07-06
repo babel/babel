@@ -266,7 +266,7 @@ export default class Printer extends Buffer {
       // whitespace before
       this.newline(this.whitespace.getNewlinesBefore(comment));
 
-      if (!this.endsWith(["[", "{"])) this.space();
+      if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
       let val    = this.generateComment(comment);
 
