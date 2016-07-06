@@ -171,7 +171,7 @@ pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
         left.decorators = decorators;
       }
       this.parseAssignableListItemTypes(left);
-      elts.push(this.parseMaybeDefault(null, null, left));
+      elts.push(this.parseMaybeDefault(left.start, left.loc.start, left));
     }
   }
   return elts;
