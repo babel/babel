@@ -319,7 +319,8 @@ export default class Buffer {
     }
 
     // If there the line is ending, adding a new mapping marker is redundant
-    if (this.opts.sourceMaps && str[0] !== "\n") this.map.mark(this._position, this._sourcePosition);
+    if (this.opts.sourceMaps && str[0] !== "\n") this.map.mark(this._position, this._sourcePosition.line,
+      this._sourcePosition.column, this._sourcePosition.filename);
 
     //
     this._position.push(str);
