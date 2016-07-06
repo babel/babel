@@ -13,6 +13,36 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
+## 6.8.2 (2016-06-24)
+
+### Bug Fixes
+
+- Fix parse error with yielding jsx elements in generators `function* it() { yield <a></a>; }`
+- When cloning nodes do not clone its comments
+- Fix parse errors when using arrow functions with an spread element and return type `(...props): void => {}`
+- Fix leading comments added from previous node
+- Fix parse errors with flow's optional arguments `(arg?) => {}`
+- Support negative numeric type literals
+- Remove line terminator restriction after await keyword
+- Remove grouped type arrow restriction as it seems flow no longer has it
+- Fix parse error with generic methods that have the name `get` or `set` `class foo { get() {} }`
+- Fix parse error with arrow functions that have flow type parameter declarations `<T>(x: T): T => x;`
+
+### Documentation
+
+- Document AST differences from ESTree
+- Move ast spec from babel/babel
+
+### Internal
+
+- Enable skipped tests
+- Add script to test latest version of babylon with babel
+- Upgrade test runner ava
+- Add missing generate-identifier-regex script
+- Rename parser context types
+- Add node v6 to travis testing
+- Update to Unicode v9
+
 ## 6.8.1 (2016-06-06)
 
 ### New Feature
