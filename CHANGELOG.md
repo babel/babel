@@ -13,6 +13,18 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
+## 6.8.4 (2016-07-06)
+
+### Bug Fixes
+
+- Fix the location of params, when flow and default value used (#68) Fixes #67 @danez
+
+## 6.8.3 (2016-07-02)
+
+### Bug Fixes
+
+- Fix performance regression introduced in 6.8.2 with conditionals [#63](https://github.com/babel/babylon/pull/63) @danez
+
 ## 6.8.2 (2016-06-24)
 
 ### Bug Fixes
