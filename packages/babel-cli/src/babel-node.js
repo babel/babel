@@ -35,7 +35,7 @@ getV8Flags(function (err, v8Flags) {
         args.unshift(arg);
         break;
       case "--inspect":
-        args.unshift('--inspect');
+        args.unshift("--inspect");
         break;
 
       case "-gc":
