@@ -99,7 +99,7 @@ export default class Buffer {
 
   getLast(): string {
     if (this._queue.length > 0) {
-      const last = this._queue[this._queue.length - 1][0];
+      const last = this._queue[0][0];
       return last[last.length - 1];
     }
 
