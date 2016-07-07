@@ -1,12 +1,12 @@
 import sourceMap from "source-map";
+import type Position from "./position";
 
 /**
  * Build a sourcemap.
  */
 
 export default class SourceMap {
-  constructor(position, opts, code) {
-    this.position = position;
+  constructor(opts, code) {
     this.opts     = opts;
     this.last     = {generated: {}, original: {}};
 
@@ -46,35 +46,33 @@ export default class SourceMap {
    * values to insert a mapping to nothing.
    */
 
-  mark(sourcePos: Object) {
+  mark(position: Position, line: number, column: number, filename: ?string) {
     let map = this.map;
     if (!map) return; // no source map
 
-    let position = this.position;
-
     // Adding an empty mapping at the start of a generated line just clutters the map.
-    if (this._lastGenLine !== position.line && sourcePos.line === null) return;
+    if (this._lastGenLine !== position.line && line === null) return;
 
     // If this mapping points to the same source location as the last one, we can ignore it since
     // the previous one covers it.
-    if (this._lastGenLine === position.line && this._lastSourceLine === sourcePos.line &&
-      this._lastSourceColumn === sourcePos.column) {
+    if (this._lastGenLine === position.line && this._lastSourceLine === line &&
+      this._lastSourceColumn === column) {
       return;
     }
 
     this._lastGenLine = position.line;
-    this._lastSourceLine = sourcePos.line;
-    this._lastSourceColumn = sourcePos.column;
+    this._lastSourceLine = line;
+    this._lastSourceColumn = column;
 
     map.addMapping({
       generated: {
         line: position.line,
         column: position.column
       },
-      source: sourcePos.line == null ? null : sourcePos.filename || this.opts.sourceFileName,
-      original: sourcePos.line == null ? null : {
-        line: sourcePos.line,
-        column: sourcePos.column,
+      source: line == null ? null : filename || this.opts.sourceFileName,
+      original: line == null ? null : {
+        line: line,
+        column: column,
       },
     });
   }

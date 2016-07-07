@@ -1,7 +1,6 @@
 import detectIndent from "detect-indent";
 import Whitespace from "./whitespace";
 import SourceMap from "./source-map";
-import Position from "./position";
 import * as messages from "babel-messages";
 import Printer from "./printer";
 
@@ -18,12 +17,11 @@ class Generator extends Printer {
     let tokens   = ast.tokens || [];
     let format   = Generator.normalizeOptions(code, opts, tokens);
 
-    let position = new Position;
+    let map        = opts.sourceMaps ? new SourceMap(opts, code) : null;
 
-    super(position, format);
+    super(format, map);
 
     this.comments = comments;
-    this.position = position;
     this.tokens   = tokens;
     this.format   = format;
     this.opts     = opts;
@@ -31,7 +29,6 @@ class Generator extends Printer {
     this._inForStatementInitCounter = 0;
 
     this.whitespace = new Whitespace(tokens);
-    this.map        = new SourceMap(position, opts, code);
   }
 
   format: {
@@ -54,8 +51,6 @@ class Generator extends Printer {
   auxiliaryCommentBefore: string;
   auxiliaryCommentAfter: string;
   whitespace: Whitespace;
-  position: Position;
-  map: SourceMap;
   comments: Array<Object>;
   tokens: Array<Object>;
   opts: Object;
@@ -153,10 +148,7 @@ class Generator extends Printer {
     this.print(this.ast);
     this.printAuxAfterComment();
 
-    return {
-      map:  this.map.get(),
-      code: this.get()
-    };
+    return this._buf.get();
   }
 }
 
