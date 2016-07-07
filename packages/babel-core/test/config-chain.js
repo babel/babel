@@ -156,7 +156,7 @@ suite("buildConfigChain", function () {
 
   test("env - foo", function () {
     process.env.NODE_ENV = "foo";
-    
+
     var chain = buildConfigChain({
       filename: fixture("env", "src.js")
     });
@@ -204,11 +204,11 @@ suite("buildConfigChain", function () {
 
     assert.deepEqual(chain, expected);
   });
-  
+
   test("env - bar", function () {
     process.env.NODE_ENV = "foo"; // overridden
     process.env.NODE_ENV = "bar";
-    
+
     var chain = buildConfigChain({
       filename: fixture("env", "src.js")
     });
@@ -251,6 +251,44 @@ suite("buildConfigChain", function () {
         alias: "base",
         loc: "base",
         dirname: fixture("env")
+      }
+    ];
+
+    assert.deepEqual(chain, expected);
+  });
+
+
+  test("env - foo", function () {
+    process.env.NODE_ENV = "foo";
+
+    var chain = buildConfigChain({
+      filename: fixture("pkg", "src.js")
+    });
+
+    var expected = [
+      {
+        options: {
+          plugins: ["pkg-plugin"]
+        },
+        alias: fixture("pkg", "package.json"),
+        loc: fixture("pkg", "package.json"),
+        dirname: fixture("pkg")
+      },
+      {
+        options: {
+          ignore: ["pkg-ignore"]
+        },
+        alias: fixture("pkg", ".babelignore"),
+        loc: fixture("pkg", ".babelignore"),
+        dirname: fixture("pkg")
+      },
+      {
+        options: {
+          filename: fixture("pkg", "src.js")
+        },
+        alias: "base",
+        loc: "base",
+        dirname: fixture("pkg")
       }
     ];
 
