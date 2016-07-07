@@ -17,43 +17,43 @@ See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.m
 
 ### Bug Fixes
 
-- Fix the location of params, when flow and default value used (#68) Fixes #67 @danez
+- Fix the location of params, when flow and default value used ([#68](https://github.com/babel/babylon/pull/68)) @danez
 
 ## 6.8.3 (2016-07-02)
 
 ### Bug Fixes
 
-- Fix performance regression introduced in 6.8.2 with conditionals [#63](https://github.com/babel/babylon/pull/63) @danez
+- Fix performance regression introduced in 6.8.2 with conditionals ([#63](https://github.com/babel/babylon/pull/63)) @danez
 
 ## 6.8.2 (2016-06-24)
 
 ### Bug Fixes
 
-- Fix parse error with yielding jsx elements in generators `function* it() { yield <a></a>; }`
-- When cloning nodes do not clone its comments
-- Fix parse errors when using arrow functions with an spread element and return type `(...props): void => {}`
-- Fix leading comments added from previous node
-- Fix parse errors with flow's optional arguments `(arg?) => {}`
-- Support negative numeric type literals
-- Remove line terminator restriction after await keyword
-- Remove grouped type arrow restriction as it seems flow no longer has it
-- Fix parse error with generic methods that have the name `get` or `set` `class foo { get() {} }`
-- Fix parse error with arrow functions that have flow type parameter declarations `<T>(x: T): T => x;`
+- Fix parse error with yielding jsx elements in generators `function* it() { yield <a></a>; }` ([#31](https://github.com/babel/babylon/pull/31)) @eldereal
+- When cloning nodes do not clone its comments ([#24](https://github.com/babel/babylon/pull/24)) @danez
+- Fix parse errors when using arrow functions with an spread element and return type `(...props): void => {}` ([#10](https://github.com/babel/babylon/pull/10)) @danez
+- Fix leading comments added from previous node ([#23](https://github.com/babel/babylon/pull/23)) @danez
+- Fix parse errors with flow's optional arguments `(arg?) => {}` ([#19](https://github.com/babel/babylon/pull/19)) @danez
+- Support negative numeric type literals @kittens
+- Remove line terminator restriction after await keyword @kittens
+- Remove grouped type arrow restriction as it seems flow no longer has it @kittens
+- Fix parse error with generic methods that have the name `get` or `set` `class foo { get() {} }` ([#55](https://github.com/babel/babylon/pull/55)) @vkurchatkin
+- Fix parse error with arrow functions that have flow type parameter declarations `<T>(x: T): T => x;` ([#54](https://github.com/babel/babylon/pull/54)) @gabelevi
 
 ### Documentation
 
-- Document AST differences from ESTree
-- Move ast spec from babel/babel
+- Document AST differences from ESTree ([#41](https://github.com/babel/babylon/pull/41)) @nene
+- Move ast spec from babel/babel ([#46](https://github.com/babel/babylon/pull/46)) @hzoo
 
 ### Internal
 
-- Enable skipped tests
-- Add script to test latest version of babylon with babel
-- Upgrade test runner ava
-- Add missing generate-identifier-regex script
-- Rename parser context types
-- Add node v6 to travis testing
-- Update to Unicode v9
+- Enable skipped tests ([#16](https://github.com/babel/babylon/pull/16)) @danez
+- Add script to test latest version of babylon with babel ([#21](https://github.com/babel/babylon/pull/21)) @danez
+- Upgrade test runner ava @kittens
+- Add missing generate-identifier-regex script @kittens
+- Rename parser context types @kittens
+- Add node v6 to travis testing @hzoo
+- Update to Unicode v9 ([#45](https://github.com/babel/babylon/pull/45)) @mathiasbynens
 
 ## 6.8.1 (2016-06-06)
 
