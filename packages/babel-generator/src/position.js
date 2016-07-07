@@ -25,18 +25,4 @@ export default class Position {
       }
     }
   }
-
-  /**
-   * Unshift a string from the current position, mantaining the current line and column.
-   */
-
-  unshift(str: string): void {
-    for (let i = 0; i < str.length; i++) {
-      if (str[i] === "\n") {
-        this.line--;
-      } else {
-        this.column--;
-      }
-    }
-  }
 }
