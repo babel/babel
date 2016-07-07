@@ -34,12 +34,15 @@ getV8Flags(function (err, v8Flags) {
       case "--debug-brk":
         args.unshift(arg);
         break;
+      case "--inspect":
+        args.unshift('--inspect');
+        break;
 
       case "-gc":
       case "--expose-gc":
         args.unshift("--expose-gc");
         break;
-
+      
       case "--nolazy":
         args.unshift("--nolazy");
         break;
