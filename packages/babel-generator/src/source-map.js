@@ -1,5 +1,4 @@
 import sourceMap from "source-map";
-import type Position from "./position";
 
 /**
  * Build a sourcemap.
@@ -35,25 +34,25 @@ export default class SourceMap {
    * values to insert a mapping to nothing.
    */
 
-  mark(position: Position, line: number, column: number, filename: ?string) {
+  mark(generatedLine: number, generatedColumn: number, line: number, column: number, filename: ?string) {
     // Adding an empty mapping at the start of a generated line just clutters the map.
-    if (this._lastGenLine !== position.line && line === null) return;
+    if (this._lastGenLine !== generatedLine && line === null) return;
 
     // If this mapping points to the same source location as the last one, we can ignore it since
     // the previous one covers it.
-    if (this._lastGenLine === position.line && this._lastSourceLine === line &&
+    if (this._lastGenLine === generatedLine && this._lastSourceLine === line &&
       this._lastSourceColumn === column) {
       return;
     }
 
-    this._lastGenLine = position.line;
+    this._lastGenLine = generatedLine;
     this._lastSourceLine = line;
     this._lastSourceColumn = column;
 
     this._map.addMapping({
       generated: {
-        line: position.line,
-        column: position.column
+        line: generatedLine,
+        column: generatedColumn,
       },
       source: line == null ? null : filename || this._opts.sourceFileName,
       original: line == null ? null : {
