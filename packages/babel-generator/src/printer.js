@@ -443,12 +443,12 @@ export default class Printer {
 
     let lines = 0;
 
-    if (node.start != null && !node._ignoreUserWhitespace && this.tokens.length) {
+    if (node.start != null && !node._ignoreUserWhitespace && this._whitespace) {
       // user node
       if (leading) {
-        lines = this.whitespace.getNewlinesBefore(node);
+        lines = this._whitespace.getNewlinesBefore(node);
       } else {
-        lines = this.whitespace.getNewlinesAfter(node);
+        lines = this._whitespace.getNewlinesAfter(node);
       }
     } else {
       // generated node
@@ -499,7 +499,7 @@ export default class Printer {
     // Exclude comments from source mappings since they will only clutter things.
     this.withSource("start", comment.loc, () => {
       // whitespace before
-      this.newline(this.whitespace.getNewlinesBefore(comment));
+      this.newline(this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0);
 
       if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
@@ -528,7 +528,8 @@ export default class Printer {
       this.token(val);
 
       // whitespace after
-      this.newline(this.whitespace.getNewlinesAfter(comment));
+      this.newline((this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) ||
+        (comment.type === "CommentLine" ? 1 : 0));
     });
   }
 

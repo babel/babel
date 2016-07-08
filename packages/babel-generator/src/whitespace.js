@@ -47,13 +47,7 @@ export default class Whitespace {
     if (endToken && endToken.type.label === "eof") {
       return 1;
     } else {
-      let lines = this._getNewlinesBetween(startToken, endToken);
-      if (node.type === "CommentLine" && !lines) {
-        // line comment
-        return 1;
-      } else {
-        return lines;
-      }
+      return this._getNewlinesBetween(startToken, endToken);
     }
   }
 
