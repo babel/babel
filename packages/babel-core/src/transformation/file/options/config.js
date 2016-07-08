@@ -187,6 +187,12 @@ module.exports = {
     type: "string"
   },
 
+  modulesDirectories: {
+    type: "list",
+    default: [],
+    description: "An array of directory names to be resolved and searched for modules."
+  },
+
   passPerPreset: {
     description: "Whether to spawn a traversal pass per a preset. By default all presets are merged.",
     type: "boolean",

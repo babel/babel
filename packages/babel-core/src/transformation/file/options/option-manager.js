@@ -123,7 +123,22 @@ export default class OptionManager {
     return plugin;
   }
 
-  static normalisePlugins(loc, dirname, plugins) {
+  static resolveModule(module: string, prefixes: Array<string>, dirnames: Array<string>) {
+    let presetLoc;
+    for (let i in prefixes) {
+      if (!prefixes.hasOwnProperty(i)) { continue; }
+      for (let j in dirnames) {
+        if (!dirnames.hasOwnProperty(j)) { continue; }
+        if (presetLoc = resolve(prefixes[i] + module, dirnames[j])) {
+          return presetLoc;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  static normalisePlugins(loc, dirnames, plugins) {
     return plugins.map(function (val, i) {
       let plugin, options;
 
@@ -142,11 +157,11 @@ export default class OptionManager {
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
+        let pluginLoc = OptionManager.resolveModule(plugin, ["babel-plugin-", ""], dirnames);
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
-          throw new ReferenceError(messages.get("pluginUnknown", plugin, loc, i, dirname));
+          throw new ReferenceError(messages.get("pluginUnknown", plugin, loc, i, dirnames));
         }
       }
 
@@ -214,10 +229,6 @@ export default class OptionManager {
       }
     });
 
-    //
-    dirname = dirname || process.cwd();
-    loc = loc || alias;
-
     for (let key in opts) {
       let option = config[key];
 
@@ -233,17 +244,26 @@ export default class OptionManager {
       }
     }
 
+    //
+    dirname = dirname || process.cwd();
+    let dirnames = [dirname];
+    if (opts.modulesDirectories) {
+      dirnames = dirnames.concat(opts.modulesDirectories);
+    }
+    loc = loc || alias;
+
+
     // normalise options
     normaliseOptions(opts);
 
     // resolve plugins
     if (opts.plugins) {
-      opts.plugins = OptionManager.normalisePlugins(loc, dirname, opts.plugins);
+      opts.plugins = OptionManager.normalisePlugins(loc, dirnames, opts.plugins);
     }
 
     // add extends clause
     if (opts.extends) {
-      let extendsLoc = resolve(opts.extends, dirname);
+      let extendsLoc = OptionManager.resolveModule(opts.extends, [""], dirnames);
       if (extendsLoc) {
         this.addConfig(extendsLoc);
       } else {
@@ -257,7 +277,7 @@ export default class OptionManager {
       // If we're in the "pass per preset" mode, we resolve the presets
       // and keep them for further execution to calculate the options.
       if (opts.passPerPreset) {
-        opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
+        opts.presets = this.resolvePresets(opts.presets, dirnames, (preset, presetLoc) => {
           this.mergeOptions({
             options: preset,
             extending: preset,
@@ -268,7 +288,7 @@ export default class OptionManager {
         });
       } else {
         // Otherwise, just merge presets options into the main options.
-        this.mergePresets(opts.presets, dirname);
+        this.mergePresets(opts.presets, dirnames);
         delete opts.presets;
       }
     }
@@ -303,8 +323,8 @@ export default class OptionManager {
    * Merges all presets into the main options in case we are not in the
    * "pass per preset" mode. Otherwise, options are calculated per preset.
    */
-  mergePresets(presets: Array<string | Object>, dirname: string) {
-    this.resolvePresets(presets, dirname, (presetOpts, presetLoc) => {
+  mergePresets(presets: Array<string | Object>, dirnames: Array<string>) {
+    this.resolvePresets(presets, dirnames, (presetOpts, presetLoc) => {
       this.mergeOptions({
         options: presetOpts,
         alias: presetLoc,
@@ -318,16 +338,16 @@ export default class OptionManager {
    * Resolves presets options which can be either direct object data,
    * or a module name to require.
    */
-  resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
+  resolvePresets(presets: Array<string | Object>, dirnames: Array<string>, onResolve?) {
     return presets.map((val) => {
       if (typeof val === "string") {
-        let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+        let presetLoc = OptionManager.resolveModule(val, ["babel-preset-", ""], dirnames);
         if (presetLoc) {
           let val = require(presetLoc);
           onResolve && onResolve(val, presetLoc);
           return val;
         } else {
-          throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ${JSON.stringify(dirname)}`);
+          throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directories ${JSON.stringify(dirnames)}`);
         }
       } else if (typeof val === "object") {
         onResolve && onResolve(val);
