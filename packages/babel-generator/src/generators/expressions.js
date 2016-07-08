@@ -157,7 +157,7 @@ export function AssignmentPattern(node: Object) {
 export function AssignmentExpression(node: Object, parent: Object) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
-  let parens = this._inForStatementInitCounter && node.operator === "in" &&
+  let parens = this.inForStatementInitCounter && node.operator === "in" &&
                !n.needsParens(node, parent);
 
   if (parens) {

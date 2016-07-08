@@ -15,6 +15,7 @@ export default class Printer {
     this._printedCommentStarts = {};
     this._parenPushNewlineState = null;
     this._indent = 0;
+    this.inForStatementInitCounter = 0;
   }
 
   _printedCommentStarts: Object;

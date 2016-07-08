@@ -22,7 +22,6 @@ class Generator extends Printer {
 
     this.opts     = opts;
     this.ast      = ast;
-    this._inForStatementInitCounter = 0;
 
     this._whitespace = tokens.length > 0 ? new Whitespace(tokens) : null;
   }
