@@ -206,11 +206,6 @@ var astTransformVisitor = {
       }
     }
 
-    // remove class property keys (or patch in escope)
-    if (path.isClassProperty()) {
-      delete node.key;
-    }
-
     // async function as generator
     if (path.isFunction()) {
       if (node.async) node.generator = true;

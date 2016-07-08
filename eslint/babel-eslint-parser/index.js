@@ -229,6 +229,13 @@ function monkeypatch() {
   // visit decorators that are in: ClassDeclaration / ClassExpression
   var visitClass = referencer.prototype.visitClass;
   referencer.prototype.visitClass = function(node) {
+    var classBody = node.body.body;
+    for (var a = 0; a < classBody.length; a++) {
+      if (classBody[a].type === "ClassProperty") {
+        createScopeVariable.call(this, classBody[a], classBody[a].key);
+      }
+    }
+
     visitDecorators.call(this, node);
     var typeParamScope;
     if (node.typeParameters) {
