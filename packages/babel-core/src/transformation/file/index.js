@@ -139,7 +139,7 @@ export default class File extends Store {
     opts = new OptionManager(this.log, this.pipeline).init(opts);
 
     if (opts.inputSourceMap) {
-      opts.sourceMaps = true;
+      opts.sourceMaps = opts.sourceMaps || true; //don't stomp on 'inline' option
     }
 
     if (opts.moduleId) {
