@@ -7,7 +7,7 @@ import * as t from "babel-types";
 
 export default class Printer {
   constructor(format, map) {
-    this._format = format || {};
+    this.format = format || {};
     this._buf = new Buffer(map);
     this.insideAux = false;
     this.printAuxAfterOnNextUserNode = false;
@@ -25,10 +25,10 @@ export default class Printer {
    */
 
   _getIndent(): string {
-    if (this._format.compact || this._format.concise) {
+    if (this.format.compact || this.format.concise) {
       return "";
     } else {
-      return repeat(this._format.indent.style, this._indent);
+      return repeat(this.format.indent.style, this._indent);
     }
   }
 
@@ -63,7 +63,7 @@ export default class Printer {
   rightBrace(): void {
     if (!this.endsWith("\n")) this.newline();
 
-    if (this._format.minified && !this._lastPrintedIsEmptyStatement) {
+    if (this.format.minified && !this._lastPrintedIsEmptyStatement) {
       this._buf.removeLastSemicolon();
     }
     this.token("}");
@@ -83,7 +83,7 @@ export default class Printer {
    */
 
   space(force: boolean = false): void {
-    if (this._format.compact) return;
+    if (this.format.compact) return;
 
     if ((this._buf.hasContent() && !this.endsWith(" ") && !this.endsWith("\n")) || force) {
       this._space();
@@ -126,9 +126,9 @@ export default class Printer {
    */
 
   newline(i?: number): void {
-    if (this._format.retainLines || this._format.compact) return;
+    if (this.format.retainLines || this.format.compact) return;
 
-    if (this._format.concise) {
+    if (this.format.concise) {
       this.space();
       return;
     }
@@ -188,7 +188,7 @@ export default class Printer {
 
   _maybeIndent(str: string): void {
     // we've got a newline before us so prepend on the indentation
-    if (!this._format.compact && this._indent && this.endsWith("\n") && str[0] !== "\n") {
+    if (!this.format.compact && this._indent && this.endsWith("\n") && str[0] !== "\n") {
       this._buf.queue(this._getIndent());
     }
   }
@@ -213,7 +213,7 @@ export default class Printer {
   }
 
   _catchUp(prop: string, loc: Object) {
-    if (!this._format.retainLines) return;
+    if (!this.format.retainLines) return;
 
     // catch up to this nodes newline if we're behind
     const pos = loc ? loc[prop] : null;
@@ -270,9 +270,9 @@ export default class Printer {
     let oldInAux = this.insideAux;
     this.insideAux = !node.loc;
 
-    let oldConcise = this._format.concise;
+    let oldConcise = this.format.concise;
     if (node._compact) {
-      this._format.concise = true;
+      this.format.concise = true;
     }
 
     let printMethod = this[node.type];
@@ -310,14 +310,14 @@ export default class Printer {
     this._printStack.pop();
     if (opts.after) opts.after();
 
-    this._format.concise = oldConcise;
+    this.format.concise = oldConcise;
     this.insideAux = oldInAux;
 
     this._printNewline(false, node, parent, opts);
   }
 
   _printAuxBeforeComment(wasInAux) {
-    let comment = this._format.auxiliaryCommentBefore;
+    let comment = this.format.auxiliaryCommentBefore;
     if (!wasInAux && this.insideAux && !this.printAuxAfterOnNextUserNode) {
       this.printAuxAfterOnNextUserNode = true;
       if (comment) this._printComment({
@@ -330,7 +330,7 @@ export default class Printer {
   printAuxAfterComment() {
     if (this.printAuxAfterOnNextUserNode) {
       this.printAuxAfterOnNextUserNode = false;
-      let comment = this._format.auxiliaryCommentAfter;
+      let comment = this.format.auxiliaryCommentAfter;
       if (comment) this._printComment({
         type: "CommentBlock",
         value: comment
@@ -339,7 +339,7 @@ export default class Printer {
   }
 
   getPossibleRaw(node) {
-    if (this._format.minified) return;
+    if (this.format.minified) return;
 
     let extra = node.extra;
     if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
@@ -428,7 +428,7 @@ export default class Printer {
 
   _printNewline(leading, node, parent, opts) {
     // Fast path since 'this.newline' does nothing when not tracking lines.
-    if (this._format.retainLines || this._format.compact) return;
+    if (this.format.retainLines || this.format.compact) return;
 
     if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
       return;
@@ -436,7 +436,7 @@ export default class Printer {
 
     // Fast path for concise since 'this.newline' just inserts a space when
     // concise formatting is in use.
-    if (this._format.concise) {
+    if (this.format.concise) {
       this.space();
       return;
     }
@@ -473,14 +473,14 @@ export default class Printer {
   }
 
   _shouldPrintComment(comment) {
-    if (this._format.shouldPrintComment) {
-      return this._format.shouldPrintComment(comment.value);
+    if (this.format.shouldPrintComment) {
+      return this.format.shouldPrintComment(comment.value);
     } else {
-      if (!this._format.minified &&
+      if (!this.format.minified &&
           (comment.value.indexOf("@license") >= 0 || comment.value.indexOf("@preserve") >= 0)) {
         return true;
       } else {
-        return this._format.comments;
+        return this.format.comments;
       }
     }
   }
@@ -506,7 +506,7 @@ export default class Printer {
       let val = comment.type === "CommentLine" ? `//${comment.value}` : `/*${comment.value}*/`;
 
       //
-      if (comment.type === "CommentBlock" && this._format.indent.adjustMultilineComment) {
+      if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
         let offset = comment.loc && comment.loc.start.column;
         if (offset) {
           let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
@@ -519,7 +519,7 @@ export default class Printer {
 
       // force a newline for line comments when retainLines is set in case the next printed node
       // doesn't catch up
-      if ((this._format.compact || this._format.concise || this._format.retainLines) &&
+      if ((this.format.compact || this.format.concise || this.format.retainLines) &&
           comment.type === "CommentLine") {
         val += "\n";
       }

@@ -23,7 +23,6 @@ class Generator extends Printer {
 
     this.comments = comments;
     this.tokens   = tokens;
-    this.format   = format;
     this.opts     = opts;
     this.ast      = ast;
     this._inForStatementInitCounter = 0;
