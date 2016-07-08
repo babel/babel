@@ -12,13 +12,13 @@ export default class Printer {
     this.insideAux = false;
     this.printAuxAfterOnNextUserNode = false;
     this._printStack = [];
-    this.printedCommentStarts = {};
-    this.parenPushNewlineState = null;
+    this._printedCommentStarts = {};
+    this._parenPushNewlineState = null;
     this._indent = 0;
   }
 
-  printedCommentStarts: Object;
-  parenPushNewlineState: ?Object;
+  _printedCommentStarts: Object;
+  _parenPushNewlineState: ?Object;
 
   /**
    * Get the current indent.
@@ -195,9 +195,9 @@ export default class Printer {
 
   _maybeAddParen(str: string): void {
     // see startTerminatorless() instance method
-    let parenPushNewlineState = this.parenPushNewlineState;
+    let parenPushNewlineState = this._parenPushNewlineState;
     if (!parenPushNewlineState) return;
-    this.parenPushNewlineState = null;
+    this._parenPushNewlineState = null;
 
     let i;
     for (i = 0; i < str.length && str[i] === " "; i++) continue;
@@ -241,7 +241,7 @@ export default class Printer {
    */
 
   startTerminatorless(): Object {
-    return this.parenPushNewlineState = {
+    return this._parenPushNewlineState = {
       printed: false
     };
   }
@@ -283,12 +283,12 @@ export default class Printer {
     this._printStack.push(node);
 
     if (node.loc) this.printAuxAfterComment();
-    this.printAuxBeforeComment(oldInAux);
+    this._printAuxBeforeComment(oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
     if (needsParens) this.token("(");
 
-    this.printLeadingComments(node, parent);
+    this._printLeadingComments(node, parent);
 
     this._printNewline(true, node, parent, opts);
 
@@ -302,7 +302,7 @@ export default class Printer {
     // Check again if any of our children may have left an aux comment on the stack
     if (node.loc) this.printAuxAfterComment();
 
-    this.printTrailingComments(node, parent);
+    this._printTrailingComments(node, parent);
 
     if (needsParens) this.token(")");
 
@@ -316,11 +316,11 @@ export default class Printer {
     this._printNewline(false, node, parent, opts);
   }
 
-  printAuxBeforeComment(wasInAux) {
+  _printAuxBeforeComment(wasInAux) {
     let comment = this._format.auxiliaryCommentBefore;
     if (!wasInAux && this.insideAux && !this.printAuxAfterOnNextUserNode) {
       this.printAuxAfterOnNextUserNode = true;
-      if (comment) this.printComment({
+      if (comment) this._printComment({
         type: "CommentBlock",
         value: comment
       });
@@ -331,7 +331,7 @@ export default class Printer {
     if (this.printAuxAfterOnNextUserNode) {
       this.printAuxAfterOnNextUserNode = false;
       let comment = this._format.auxiliaryCommentAfter;
-      if (comment) this.printComment({
+      if (comment) this._printComment({
         type: "CommentBlock",
         value: comment
       });
@@ -398,18 +398,18 @@ export default class Printer {
     this.print(node, parent);
   }
 
-  printTrailingComments(node, parent) {
-    this.printComments(this.getComments(false, node, parent));
+  _printTrailingComments(node, parent) {
+    this._printComments(this._getComments(false, node, parent));
   }
 
-  printLeadingComments(node, parent) {
-    this.printComments(this.getComments(true, node, parent));
+  _printLeadingComments(node, parent) {
+    this._printComments(this._getComments(true, node, parent));
   }
 
   printInnerComments(node, indent = true) {
     if (!node.innerComments) return;
     if (indent) this.indent();
-    this.printComments(node.innerComments);
+    this._printComments(node.innerComments);
     if (indent) this.dedent();
   }
 
@@ -466,13 +466,13 @@ export default class Printer {
     this.newline(lines);
   }
 
-  getComments(leading, node) {
+  _getComments(leading, node) {
     // Note, we use a boolean flag here instead of passing in the attribute name as it is faster
     // because this is called extremely frequently.
     return (node && (leading ? node.leadingComments : node.trailingComments)) || [];
   }
 
-  shouldPrintComment(comment) {
+  _shouldPrintComment(comment) {
     if (this._format.shouldPrintComment) {
       return this._format.shouldPrintComment(comment.value);
     } else {
@@ -485,15 +485,15 @@ export default class Printer {
     }
   }
 
-  printComment(comment) {
-    if (!this.shouldPrintComment(comment)) return;
+  _printComment(comment) {
+    if (!this._shouldPrintComment(comment)) return;
 
     if (comment.ignore) return;
     comment.ignore = true;
 
     if (comment.start != null) {
-      if (this.printedCommentStarts[comment.start]) return;
-      this.printedCommentStarts[comment.start] = true;
+      if (this._printedCommentStarts[comment.start]) return;
+      this._printedCommentStarts[comment.start] = true;
     }
 
     // Exclude comments from source mappings since they will only clutter things.
@@ -532,11 +532,11 @@ export default class Printer {
     });
   }
 
-  printComments(comments?: Array<Object>) {
+  _printComments(comments?: Array<Object>) {
     if (!comments || !comments.length) return;
 
     for (let comment of comments) {
-      this.printComment(comment);
+      this._printComment(comment);
     }
   }
 }
