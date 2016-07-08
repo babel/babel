@@ -398,16 +398,6 @@ export default class Printer {
     this.print(node, parent);
   }
 
-  generateComment(comment) {
-    let val = comment.value;
-    if (comment.type === "CommentLine") {
-      val = `//${val}`;
-    } else {
-      val = `/*${val}*/`;
-    }
-    return val;
-  }
-
   printTrailingComments(node, parent) {
     this.printComments(this.getComments(false, node, parent));
   }
@@ -513,7 +503,7 @@ export default class Printer {
 
       if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
-      let val    = this.generateComment(comment);
+      let val = comment.type === "CommentLine" ? `//${comment.value}` : `/*${comment.value}*/`;
 
       //
       if (comment.type === "CommentBlock" && this._format.indent.adjustMultilineComment) {
