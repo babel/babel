@@ -293,8 +293,6 @@ export default class Printer {
 
     this._printNewline(true, node, parent, opts);
 
-    if (opts.before) opts.before();
-
     let loc = (t.isProgram(node) || t.isFile(node)) ? null : node.loc;
     this.withSource("start", loc, () => {
       this[node.type](node, parent);

@@ -20,7 +20,6 @@ class Generator extends Printer {
 
     super(format, map);
 
-    this.opts     = opts;
     this.ast      = ast;
 
     this._whitespace = tokens.length > 0 ? new Whitespace(tokens) : null;
@@ -43,10 +42,7 @@ class Generator extends Printer {
     }
   };
 
-  auxiliaryCommentBefore: string;
-  auxiliaryCommentAfter: string;
   _whitespace: Whitespace;
-  opts: Object;
   ast: Object;
 
   /**
