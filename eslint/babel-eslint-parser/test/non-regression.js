@@ -1525,6 +1525,54 @@ describe("verify", function () {
     );
   });
 
+  describe("Class Property Declarations", function() {
+    it("no-redeclare false positive 1", function() {
+      verifyAndAssertMessages(
+        [
+          "class Group {",
+          "  static propTypes = {};",
+          "}",
+          "class TypicalForm {",
+          "  static propTypes = {};",
+          "}"
+        ].join("\n"),
+        { "no-redeclare": 1 },
+        []
+      );
+    });
+
+    it("no-redeclare false positive 2", function() {
+      verifyAndAssertMessages(
+        [
+          "function validate() {}",
+          "class MyComponent {",
+          "  static validate = validate;",
+          "}"
+        ].join("\n"),
+        { "no-redeclare": 1 },
+        []
+      );
+    });
+
+    it("check references", function() {
+      verifyAndAssertMessages(
+        [
+          "var a;",
+          "class A {",
+          "  prop1;",
+          "  prop2 = a;",
+          "  prop3 = b;",
+          "}",
+          "new A"
+        ].join("\n"),
+        { "no-undef": 1, "no-unused-vars": 1, "no-redeclare": 1 },
+        [
+          "5:11 'b' is not defined. no-undef"
+        ]
+      );
+    });
+  });
+
   // it("regex with es6 unicodeCodePointEscapes", function () {
   //   verifyAndAssertMessages(
   //     "string.replace(/[\u{0000A0}-\u{10FFFF}<>\&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);",
