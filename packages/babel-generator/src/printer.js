@@ -10,7 +10,7 @@ export default class Printer {
     this.format = format || {};
     this._buf = new Buffer(map);
     this.insideAux = false;
-    this.printAuxAfterOnNextUserNode = false;
+    this._printAuxAfterOnNextUserNode = false;
     this._printStack = [];
     this._printedCommentStarts = {};
     this._parenPushNewlineState = null;
@@ -268,9 +268,6 @@ export default class Printer {
       node._compact = true;
     }
 
-    let oldInAux = this.insideAux;
-    this.insideAux = !node.loc;
-
     let oldConcise = this.format.concise;
     if (node._compact) {
       this.format.concise = true;
@@ -283,8 +280,10 @@ export default class Printer {
 
     this._printStack.push(node);
 
-    if (node.loc) this.printAuxAfterComment();
-    this._printAuxBeforeComment(oldInAux);
+    let oldInAux = this.insideAux;
+    this.insideAux = !node.loc;
+    if (!this.insideAux) this.printAuxAfterComment();
+    else if (!oldInAux) this._printAuxBeforeComment();
 
     let needsParens = n.needsParens(node, parent, this._printStack);
     if (needsParens) this.token("(");
@@ -299,7 +298,7 @@ export default class Printer {
     });
 
     // Check again if any of our children may have left an aux comment on the stack
-    if (node.loc) this.printAuxAfterComment();
+    if (!this.insideAux) this.printAuxAfterComment();
 
     this._printTrailingComments(node, parent);
 
@@ -315,11 +314,13 @@ export default class Printer {
     this._printNewline(false, node, parent, opts);
   }
 
-  _printAuxBeforeComment(wasInAux) {
-    let comment = this.format.auxiliaryCommentBefore;
-    if (!wasInAux && this.insideAux && !this.printAuxAfterOnNextUserNode) {
-      this.printAuxAfterOnNextUserNode = true;
-      if (comment) this._printComment({
+  _printAuxBeforeComment() {
+    if (this._printAuxAfterOnNextUserNode) return;
+    this._printAuxAfterOnNextUserNode = true;
+
+    const comment = this.format.auxiliaryCommentBefore;
+    if (comment) {
+      this._printComment({
         type: "CommentBlock",
         value: comment
       });
@@ -327,10 +328,12 @@ export default class Printer {
   }
 
   printAuxAfterComment() {
-    if (this.printAuxAfterOnNextUserNode) {
-      this.printAuxAfterOnNextUserNode = false;
-      let comment = this.format.auxiliaryCommentAfter;
-      if (comment) this._printComment({
+    if (!this._printAuxAfterOnNextUserNode) return;
+    this._printAuxAfterOnNextUserNode = false;
+
+    const comment = this.format.auxiliaryCommentAfter;
+    if (comment) {
+      this._printComment({
         type: "CommentBlock",
         value: comment
       });
