@@ -174,7 +174,7 @@ describe("verify", function () {
   describe("flow", function () {
     it("check regular function", function () {
       verifyAndAssertMessages([
-          "function a(b, c) { b += 1; c += 1; } a;",
+          "function a(b, c) { b += 1; c += 1; return b + c; } a;",
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
@@ -389,7 +389,7 @@ describe("verify", function () {
     it("polymorphpic/generic types for type alias #123", function () {
       verifyAndAssertMessages([
           "import Bar from './Bar';",
-          "type Foo<T> = Bar<T>; var x: Foo = 1; x++"
+          "type Foo<T> = Bar<T>; var x: Foo = 1; console.log(x);"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
