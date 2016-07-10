@@ -44,12 +44,22 @@ It just needs to export a `parse` method that takes in a string of code and outp
 
 ## Usage
 
+### Supported ESLint versions
+
+ESLint | babel-eslint
+------------ | -------------
+1.x | <= 5.x
+2.x | >= 6.x
+3.x | >= 6.x
+
 ### Install
 
 ```sh
 $ npm install eslint@1.x babel-eslint@5 --save-dev
 
 $ npm install eslint@2.x babel-eslint@6 --save-dev
+
+$ npm install eslint@3.x babel-eslint@6 --save-dev
 ```
 
 ### Setup
