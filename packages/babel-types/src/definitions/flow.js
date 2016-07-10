@@ -80,6 +80,14 @@ defineType("DeclareModule", {
   }
 });
 
+defineType("DeclareModuleExports", {
+  visitor: ["typeAnnotation"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  }
+});
+
 defineType("DeclareTypeAlias", {
   visitor: ["id", "typeParameters", "right"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],

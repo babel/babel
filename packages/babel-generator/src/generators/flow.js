@@ -58,6 +58,15 @@ export function DeclareModule(node: Object) {
   this.print(node.body, node);
 }
 
+export function DeclareModuleExports(node: Object) {
+  this.word("declare");
+  this.space();
+  this.word("module");
+  this.token(".");
+  this.word("exports");
+  this.print(node.typeAnnotation, node);
+}
+
 export function DeclareTypeAlias(node: Object) {
   this.word("declare");
   this.space();

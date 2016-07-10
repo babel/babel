@@ -9,3 +9,6 @@ declare module A {
 declare module A {
   declare class B { foo(): number }
 }
+declare module A {
+  declare module.exports: { foo(): number }
+}
