@@ -46,7 +46,7 @@ function runTest(test) {
     throw err;
   }
 
-  if (!test.expect.code) {
+  if (!test.expect.code && !opts.throws) {
     test.expect.loc += "on";
     return save(test, ast);
   }
