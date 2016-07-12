@@ -63,11 +63,11 @@ var b = function () {
 };
 
 var b = function (foo) {
-  return (arguments.length - 1) * 2;
+  return (arguments.length <= 1 ? 0 : arguments.length - 1) * 2;
 };
 
 var b = function (foo, baz) {
-  return arguments.length - 2;
+  return arguments.length <= 2 ? 0 : arguments.length - 2;
 };
 
 function x() {

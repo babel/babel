@@ -1,6 +1,6 @@
 var t = function (f) {
   arguments.length <= 1 ? undefined : arguments[1];
-  arguments.length <= arguments.length - 1 - 1 + 1 ? undefined : arguments[arguments.length - 1 - 1 + 1];
+  arguments.length <= (arguments.length <= 1 ? 0 : arguments.length - 1) - 1 + 1 ? undefined : arguments[(arguments.length <= 1 ? 0 : arguments.length - 1) - 1 + 1];
 };
 
 function t(f) {
