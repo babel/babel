@@ -5,16 +5,20 @@ sudo: false
 language: node_js
 
 node_js:
- - "6"
- - "5"
- - "4"
- - "0.12"
+  - "6"
+  - "5"
+  - "4"
+  - "0.12"
 
 before_script: make bootstrap-babel
 
 script:
- - npm test
- - make test-babel
+  - npm run test_cov
+  - make test-babel
+
+after_success:
+  - ./node_modules/.bin/nyc report --reporter=lcov > coverage.lcov
+  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK

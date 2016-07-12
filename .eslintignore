@@ -1,3 +1,5 @@
+.nyc_output
 build
-test
+coverage
 lib
+test

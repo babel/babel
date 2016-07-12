@@ -25,6 +25,7 @@
     "babel-preset-stage-0": "^6.5.0",
     "kcheck": "^2.0.1",
     "lodash": "^4.6.1",
+    "nyc": "^7.0.0",
     "unicode-9.0.0": "~0.7.0"
   },
   "bin": {
@@ -32,8 +33,10 @@
   },
   "scripts": {
     "test": "npm run build && npm run lint && ava test/",
+    "test_cov": "npm run build && npm run lint && nyc ava test/",
     "lint": "kcheck",
     "build": "babel src --out-dir lib",
+    "preversion": "npm run test",
     "watch": "babel src --out-dir lib --watch"
   }
 }
