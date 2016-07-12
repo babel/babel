@@ -59,6 +59,11 @@ let memberExpressionOptimisationVisitor = {
     } else {
       let {parentPath} = path;
 
+      // Is this identifier the right hand side of a default parameter?
+      if (parentPath.listKey === "params" && parentPath.key < state.offset) {
+        return;
+      }
+
       // ex: `args[0]`
       // ex: `args.whatever`
       if (parentPath.isMemberExpression({ object: node })) {
