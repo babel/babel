@@ -79,7 +79,7 @@ export let visitor = {
       let param = params[i];
 
       if (!param.isAssignmentPattern()) {
-        if (!param.isIdentifier()) {
+        if (!state.iife && !param.isIdentifier()) {
           param.traverse(iifeVisitor, state);
         }
 
