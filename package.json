@@ -34,12 +34,13 @@
     "babylon": "./bin/babylon.js"
   },
   "scripts": {
+    "build": "babel src --out-dir lib",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "lint": "kcheck",
+    "prepublish": "cross-env BABEL_ENV=production npm run build",
+    "preversion": "npm run test",
     "test": "npm run build && npm run lint && ava test/",
     "test_cov": "cross-env BABEL_ENV=test npm run build && npm run lint && nyc ava test/",
-    "lint": "kcheck",
-    "build": "babel src --out-dir lib",
-    "preversion": "npm run test",
     "watch": "babel src --out-dir lib --watch"
   }
 }
