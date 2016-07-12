@@ -16,9 +16,7 @@ script:
   - npm run test_cov
   - make test-babel
 
-after_success:
-  - ./node_modules/.bin/nyc report --reporter=text-lcov > coverage.lcov
-  - ./node_modules/.bin/codecov
+after_success: npm run coverage
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK

@@ -24,6 +24,7 @@
     "babel-preset-react": "^6.0.0",
     "babel-preset-stage-0": "^6.5.0",
     "codecov": "^1.0.1",
+    "cross-env": "^1.0.8",
     "kcheck": "^2.0.1",
     "lodash": "^4.6.1",
     "nyc": "^7.0.0",
@@ -33,8 +34,9 @@
     "babylon": "./bin/babylon.js"
   },
   "scripts": {
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "test": "npm run build && npm run lint && ava test/",
-    "test_cov": "npm run build && npm run lint && nyc ava test/",
+    "test_cov": "cross-env BABEL_ENV=test npm run build && npm run lint && nyc ava test/",
     "lint": "kcheck",
     "build": "babel src --out-dir lib",
     "preversion": "npm run test",
