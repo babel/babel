@@ -23,6 +23,7 @@
     "babel-preset-es2015": "^6.0.0",
     "babel-preset-react": "^6.0.0",
     "babel-preset-stage-0": "^6.5.0",
+    "codecov": "^1.0.1",
     "kcheck": "^2.0.1",
     "lodash": "^4.6.1",
     "nyc": "^7.0.0",
