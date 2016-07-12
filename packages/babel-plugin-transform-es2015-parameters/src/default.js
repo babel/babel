@@ -13,10 +13,6 @@ let buildDefaultParam = template(`
       ARGUMENTS[ARGUMENT_KEY];
 `);
 
-let buildDefaultParamAssign = template(`
-  if (VARIABLE_NAME === undefined) VARIABLE_NAME = DEFAULT_VALUE;
-`);
-
 let buildCutOff = template(`
   let $0 = $1[$2];
 `);
@@ -64,27 +60,14 @@ export let visitor = {
 
     // push a default parameter definition
     function pushDefNode(left, right, i) {
-      let defNode;
-      if (exceedsLastNonDefault(i) || t.isPattern(left)) {
-        defNode = buildDefaultParam({
-          VARIABLE_NAME: left,
-          DEFAULT_VALUE: right,
-          ARGUMENT_KEY:  t.numericLiteral(i),
-          ARGUMENTS:     argsIdentifier
-        });
-      } else {
-        defNode = buildDefaultParamAssign({
-          VARIABLE_NAME: left,
-          DEFAULT_VALUE: right
-        });
-      }
+      const defNode = buildDefaultParam({
+        VARIABLE_NAME: left,
+        DEFAULT_VALUE: right,
+        ARGUMENT_KEY:  t.numericLiteral(i),
+        ARGUMENTS:     argsIdentifier
+      });
       defNode._blockHoist = node.params.length - i;
       body.push(defNode);
-    }
-
-    // check if an index exceeds the functions arity
-    function exceedsLastNonDefault(i) {
-      return i + 1 > lastNonDefaultParam;
     }
 
     //
@@ -107,7 +90,7 @@ export let visitor = {
       let right = param.get("right");
 
       //
-      if (exceedsLastNonDefault(i) || left.isPattern()) {
+      if (i >= lastNonDefaultParam || left.isPattern()) {
         let placeholder = scope.generateUidIdentifier("x");
         placeholder._isDefaultPlaceholder = true;
         node.params[i] = placeholder;
