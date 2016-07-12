@@ -262,10 +262,6 @@ export default class Printer {
   print(node, parent, opts = {}) {
     if (!node) return;
 
-    if (parent && parent._compact) {
-      node._compact = true;
-    }
-
     let oldConcise = this.format.concise;
     if (node._compact) {
       this.format.concise = true;
