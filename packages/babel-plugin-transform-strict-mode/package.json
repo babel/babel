@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-strict-mode",
-  "version": "6.8.0",
+  "version": "6.11.3",
   "description": "TODO",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-strict-mode",
   "license": "MIT",
