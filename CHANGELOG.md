@@ -13,6 +13,52 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.11.3 (2016-07-13)
+
+The main fix is @loganfsmyth's changes of some parts in babel-generator in [#3565](https://github.com/babel/babel/pull/3565) to fix issues with exponential code generation times in certain cases. 
+
+Items: the size of the array being generated
+Time: The time in ms to generate the code
+Length: The number of characters in the output code
+
+| Items | Old Time  | New Time | Length |
+|-------|-------|----------|--------|
+| 2     | 9     | 7        | 239    |
+| 4     | 2     | 5        | 465    |
+| 8     | 6     | 5        | 917    |
+| 16    | 6     | 6        | 1840   |
+| 32    | 15    | 11       | 3696   |
+| 64    | 25    | 3        | 7408   |
+| 128   | 93    | 13       | 14917  |
+| 256   | 380   | 18       | 30149  |
+| 512   | 1399  | 45       | 60613  |
+| 1024  | 5301  | 63       | 121614 |
+| 2048  | 20676 | 117      | 246542 |
+
+- Fix rest param optimization bug
+- Allow disabling "use strict" when using the cjs module transform.
+- Fix typo with es2016 preset
+
+#### Bug Fix
+* `babel-plugin-transform-es2015-parameters`
+  * [#3573](https://github.com/babel/babel/pull/3573) Fix error in rest parameter length optimization. ([@jridgewell](https://github.com/jridgewell))
+* `babel-generator`
+  * [#3567](https://github.com/babel/babel/pull/3567) Use the first item in the queue since it is the most recent.. ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-strict-mode`
+  * [#3562](https://github.com/babel/babel/pull/3562) Adds strictMode option to strict-mode transform. ([@thejameskyle](https://github.com/thejameskyle))
+* `babel-preset-es2016`
+  * [#3563](https://github.com/babel/babel/pull/3563) Use the proper transform plugin for preset-es2016.. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+#### Polish
+* `babel-generator`
+  * [#3566](https://github.com/babel/babel/pull/3566) Remove unused Position#unshift. ([@jridgewell](https://github.com/jridgewell))
+  * [#3565](https://github.com/babel/babel/pull/3565) Make the code generator write-only to avoid exponential time generation. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+#### Commiters: 3
+- James Kyle ([thejameskyle](https://github.com/thejameskyle))
+- Justin Ridgewell ([jridgewell](https://github.com/jridgewell))
+- Logan Smyth ([loganfsmyth](https://github.com/loganfsmyth))
+
 ## v6.11.2 (2016-06-28)
 
 #### Bug Fix
