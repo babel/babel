@@ -13,8 +13,12 @@ let buildRest = template(`
   }
 `);
 
-let loadRest = template(`
+let restIndex = template(`
   ARGUMENTS.length <= INDEX ? undefined : ARGUMENTS[INDEX]
+`);
+
+let restLength = template(`
+  ARGUMENTS.length <= OFFSET ? 0 : ARGUMENTS.length - OFFSET
 `);
 
 let memberExpressionOptimisationVisitor = {
@@ -155,21 +159,18 @@ function optimiseIndexGetter(path, argsId, offset) {
     index = t.binaryExpression("+", path.parent.property, t.numericLiteral(offset));
   }
 
-  path.parentPath.replaceWith(loadRest({
+  path.parentPath.replaceWith(restIndex({
     ARGUMENTS: argsId,
     INDEX: index,
   }));
 }
 
-function optimiseLengthGetter(path, argsLengthExpression, argsId, offset) {
+function optimiseLengthGetter(path, argsId, offset) {
   if (offset) {
-    path.parentPath.replaceWith(
-      t.binaryExpression(
-        "-",
-        argsLengthExpression,
-        t.numericLiteral(offset),
-      )
-    );
+    path.parentPath.replaceWith(restLength({
+      ARGUMENTS: argsId,
+      OFFSET: t.numericLiteral(offset),
+    }));
   } else {
     path.replaceWith(argsId);
   }
@@ -183,10 +184,6 @@ export let visitor = {
     let rest = node.params.pop().argument;
 
     let argsId = t.identifier("arguments");
-    let argsLengthExpression = t.memberExpression(
-      argsId,
-      t.identifier("length"),
-    );
 
     // otherwise `arguments` will be remapped in arrow functions
     argsId._shadowedFunctionLiteral = path;
@@ -230,7 +227,7 @@ export let visitor = {
             optimiseIndexGetter(path, argsId, state.offset);
             break;
           case "lengthGetter":
-            optimiseLengthGetter(path, argsLengthExpression, argsId, state.offset);
+            optimiseLengthGetter(path, argsId, state.offset);
             break;
           default:
             path.replaceWith(argsId);
