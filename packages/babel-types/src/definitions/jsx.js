@@ -67,7 +67,7 @@ defineType("JSXSpreadChild", {
       validate: assertNodeType("Expression")
     }
   }
-})
+});
 
 defineType("JSXIdentifier", {
   builder: ["name"],
