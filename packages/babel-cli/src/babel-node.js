@@ -36,6 +36,7 @@ getV8Flags(function (err, v8Flags) {
         break;
 
       case "--expose_debug_as":
+      case "--expose-debug-as":
         args.unshift(arg);
         break;
 
