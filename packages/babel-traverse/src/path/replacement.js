@@ -207,7 +207,7 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
     // add implicit returns to all ending expression statements
     let completionRecords: Array<NodePath> = this.get("callee").getCompletionRecords();
-    for (let path of completionRecords) {
+    for (let path of (completionRecords: Array)) {
       if (!path.isExpressionStatement()) continue;
 
       let loop = path.findParent((path) => path.isLoop());

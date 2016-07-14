@@ -48,7 +48,7 @@ export function assertNodeType(...types: Array<string>): Function {
   function validate(node, key, val) {
     let valid = false;
 
-    for (let type of types) {
+    for (let type of (types: Array)) {
       if (t.is(type, val)) {
         valid = true;
         break;
@@ -72,7 +72,7 @@ export function assertNodeOrValueType(...types: Array<string>): Function {
   function validate(node, key, val) {
     let valid = false;
 
-    for (let type of types) {
+    for (let type of (types: Array)) {
       if (getType(val) === type || t.is(type, val)) {
         valid = true;
         break;
@@ -108,7 +108,7 @@ export function assertValueType(type: string): Function {
 
 export function chain(...fns: Array<Function>): Function {
   function validate(...args) {
-    for (let fn of fns) {
+    for (let fn of (fns: Array)) {
       fn(...args);
     }
   }

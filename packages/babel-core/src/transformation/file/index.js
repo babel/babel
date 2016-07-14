@@ -184,7 +184,7 @@ export default class File extends Store {
     let currentPluginPasses = [];
 
     // init plugins!
-    for (let ref of plugins) {
+    for (let ref of (plugins: Array)) {
       let [plugin, pluginOpts] = ref; // todo: fix - can't embed in loop head because of flow bug
 
       currentPluginVisitors.push(plugin.visitor);
@@ -507,7 +507,7 @@ export default class File extends Store {
   }
 
   call(key: "pre" | "post", pluginPasses: Array<PluginPass>) {
-    for (let pass of pluginPasses) {
+    for (let pass of (pluginPasses: Array)) {
       let plugin = pass.plugin;
       let fn = plugin[key];
       if (fn) fn.call(pass, this);

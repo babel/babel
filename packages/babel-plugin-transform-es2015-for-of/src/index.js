@@ -92,7 +92,7 @@ export default function ({ messages, template, types: t }) {
   return {
     visitor: {
       ForOfStatement(path, state) {
-        if (path.get("right").isArrayExpression()) {
+        if (path.get("right").isArrayExpression() || path.get("right").isGenericType("Array")) {
           return path.replaceWithMultiple(_ForOfStatementArray.call(this, path, state));
         }
 

@@ -66,11 +66,11 @@ export function _containerInsert(from, nodes) {
 
   let contexts = this._getQueueContexts();
 
-  for (let path of paths) {
+  for (let path of (paths: Array)) {
     path.setScope();
     path.debug(() => "Inserted.");
 
-    for (let context of contexts) {
+    for (let context of (contexts: Array)) {
       context.maybeQueue(path, true);
     }
   }

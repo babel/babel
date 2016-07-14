@@ -25,7 +25,7 @@ export default async function (packages) {
   let filteredPackages = [];
   let promises = [];
 
-  for (let pkg of packages) {
+  for (let pkg of (packages: Array)) {
     if (pkg.name.indexOf("babel-") !== 0) continue;
 
     promises.push(getInfo(pkg.name));

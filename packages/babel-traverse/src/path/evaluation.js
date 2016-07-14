@@ -211,7 +211,7 @@ export function evaluate(): { confident: boolean; value: any } {
     if (path.isArrayExpression()) {
       let arr = [];
       let elems: Array<NodePath> = path.get("elements");
-      for (let elem of elems) {
+      for (let elem of (elems: Array)) {
         elem = elem.evaluate();
 
         if (elem.confident) {

@@ -21,7 +21,7 @@ export function call(key): boolean {
 export function _call(fns?: Array<Function>): boolean {
   if (!fns) return false;
 
-  for (let fn of fns) {
+  for (let fn of (fns: Array)) {
     if (!fn) continue;
 
     let node = this.node;
@@ -216,7 +216,7 @@ export function requeue(pathToQueue = this) {
   // let contexts = this._getQueueContexts();
   let contexts = this.contexts;
 
-  for (let context of contexts) {
+  for (let context of (contexts: Array)) {
     context.maybeQueue(pathToQueue);
   }
 }
