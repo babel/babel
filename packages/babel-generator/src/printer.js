@@ -9,17 +9,17 @@ export default class Printer {
   constructor(format, map) {
     this.format = format || {};
     this._buf = new Buffer(map);
-    this.insideAux = false;
-    this._printAuxAfterOnNextUserNode = false;
-    this._printStack = [];
-    this._printedCommentStarts = {};
-    this._parenPushNewlineState = null;
-    this._indent = 0;
-    this.inForStatementInitCounter = 0;
   }
 
-  _printedCommentStarts: Object;
-  _parenPushNewlineState: ?Object;
+  insideAux: boolean = false;
+  inForStatementInitCounter: number = 0;
+
+  _buf: Buffer;
+  _printStack: Array<Node> = [];
+  _indent: number = 0;
+  _printedCommentStarts: Object = {};
+  _parenPushNewlineState: ?Object = null;
+  _printAuxAfterOnNextUserNode: boolean = false;
   _printedComments: WeakSet = new WeakSet();
 
   /**
