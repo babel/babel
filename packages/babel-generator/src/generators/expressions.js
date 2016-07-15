@@ -137,8 +137,7 @@ export let YieldExpression = buildYieldAwait("yield");
 export let AwaitExpression = buildYieldAwait("await");
 
 export function EmptyStatement() {
-  this._lastPrintedIsEmptyStatement = true;
-  this.semicolon();
+  this.semicolon(true /* force */);
 }
 
 export function ExpressionStatement(node: Object) {

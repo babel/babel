@@ -53,8 +53,8 @@ export default class Printer {
    * Add a semicolon to the buffer.
    */
 
-  semicolon(): void {
-    this._append(";", true /* queue */);
+  semicolon(force: boolean = false): void {
+    this._append(";", !force /* queue */);
   }
 
   /**
@@ -64,7 +64,7 @@ export default class Printer {
   rightBrace(): void {
     if (!this.endsWith("\n")) this.newline();
 
-    if (this.format.minified && !this._lastPrintedIsEmptyStatement) {
+    if (this.format.minified) {
       this._buf.removeLastSemicolon();
     }
     this.token("}");
@@ -261,8 +261,6 @@ export default class Printer {
 
   print(node, parent, opts = {}) {
     if (!node) return;
-
-    this._lastPrintedIsEmptyStatement = false;
 
     if (parent && parent._compact) {
       node._compact = true;
