@@ -490,21 +490,8 @@ export default class Printer {
     return (node && (leading ? node.leadingComments : node.trailingComments)) || [];
   }
 
-  _shouldPrintComment(comment) {
-    if (this.format.shouldPrintComment) {
-      return this.format.shouldPrintComment(comment.value);
-    } else {
-      if (!this.format.minified &&
-          (comment.value.indexOf("@license") >= 0 || comment.value.indexOf("@preserve") >= 0)) {
-        return true;
-      } else {
-        return this.format.comments;
-      }
-    }
-  }
-
   _printComment(comment) {
-    if (!this._shouldPrintComment(comment)) return;
+    if (!this.format.shouldPrintComment(comment.value)) return;
 
     // Some plugins use this to mark comments as removed using the AST-root 'comments' property,
     // where they can't manually mutate the AST node comment lists.

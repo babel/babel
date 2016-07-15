@@ -70,6 +70,11 @@ function normalizeOptions(code, opts, tokens): Format {
 
   if (format.minified) {
     format.compact = true;
+
+    format.shouldPrintComment = format.shouldPrintComment || (() => format.comments);
+  } else {
+    format.shouldPrintComment = format.shouldPrintComment || ((value) => format.comments ||
+      (value.indexOf("@license") >= 0 || value.indexOf("@preserve") >= 0));
   }
 
   if (format.compact === "auto") {
