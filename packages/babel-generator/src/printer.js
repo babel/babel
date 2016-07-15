@@ -22,22 +22,12 @@ export default class Printer {
   _parenPushNewlineState: ?Object;
 
   /**
-   * Get the current indent.
-   */
-
-  _getIndent(): string {
-    if (this.format.compact || this.format.concise) {
-      return "";
-    } else {
-      return repeat(this.format.indent.style, this._indent);
-    }
-  }
-
-  /**
    * Increment indent size.
    */
 
   indent(): void {
+    if (this.format.compact || this.format.concise) return;
+
     this._indent++;
   }
 
@@ -46,6 +36,8 @@ export default class Printer {
    */
 
   dedent(): void {
+    if (this.format.compact || this.format.concise) return;
+
     this._indent--;
   }
 
@@ -189,7 +181,7 @@ export default class Printer {
 
   _maybeIndent(str: string): void {
     // we've got a newline before us so prepend on the indentation
-    if (!this.format.compact && this._indent && this.endsWith("\n") && str[0] !== "\n") {
+    if (this._indent && this.endsWith("\n") && str[0] !== "\n") {
       this._buf.queue(this._getIndent());
     }
   }
@@ -223,6 +215,14 @@ export default class Printer {
         this._newline();
       }
     }
+  }
+
+  /**
+   * Get the current indent.
+   */
+
+  _getIndent(): string {
+    return repeat(this.format.indent.style, this._indent);
   }
 
   /**
