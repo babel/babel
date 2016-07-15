@@ -2,6 +2,7 @@ import detectIndent from "detect-indent";
 import SourceMap from "./source-map";
 import * as messages from "babel-messages";
 import Printer from "./printer";
+import type {Format} from "./printer";
 
 /**
  * Babel's code generator, turns an ast into code, maintaining sourcemaps,
@@ -19,23 +20,6 @@ class Generator extends Printer {
 
     this.ast = ast;
   }
-
-  format: {
-    shouldPrintComment: (comment: string) => boolean;
-    retainLines: boolean;
-    comments: boolean;
-    auxiliaryCommentBefore: string;
-    auxiliaryCommentAfter: string;
-    compact: boolean | "auto";
-    minified: boolean;
-    quotes: "single" | "double";
-    concise: boolean;
-    indent: {
-      adjustMultilineComment: boolean;
-      style: string;
-      base: number;
-    }
-  };
 
   ast: Object;
 
@@ -60,7 +44,7 @@ class Generator extends Printer {
  * - If `opts.compact = "auto"` and the code is over 100KB, `compact` will be set to `true`.
  */
 
-function normalizeOptions(code, opts, tokens) {
+function normalizeOptions(code, opts, tokens): Format {
   let style = "  ";
   if (code && typeof code === "string") {
     let indent = detectIndent(code).indent;

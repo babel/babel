@@ -6,6 +6,23 @@ import * as n from "./node";
 import Whitespace from "./whitespace";
 import * as t from "babel-types";
 
+export type Format = {
+  shouldPrintComment: (comment: string) => boolean;
+  retainLines: boolean;
+  comments: boolean;
+  auxiliaryCommentBefore: string;
+  auxiliaryCommentAfter: string;
+  compact: boolean | "auto";
+  minified: boolean;
+  quotes: "single" | "double";
+  concise: boolean;
+  indent: {
+    adjustMultilineComment: boolean;
+    style: string;
+    base: number;
+  }
+};
+
 export default class Printer {
   constructor(format, map, tokens) {
     this.format = format || {};
@@ -13,6 +30,7 @@ export default class Printer {
     this._whitespace = tokens.length > 0 ? new Whitespace(tokens) : null;
   }
 
+  format: Format;
   insideAux: boolean = false;
   inForStatementInitCounter: number = 0;
 
