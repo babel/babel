@@ -3,18 +3,21 @@
 import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
+import Whitespace from "./whitespace";
 import * as t from "babel-types";
 
 export default class Printer {
-  constructor(format, map) {
+  constructor(format, map, tokens) {
     this.format = format || {};
     this._buf = new Buffer(map);
+    this._whitespace = tokens.length > 0 ? new Whitespace(tokens) : null;
   }
 
   insideAux: boolean = false;
   inForStatementInitCounter: number = 0;
 
   _buf: Buffer;
+  _whitespace: Whitespace;
   _printStack: Array<Node> = [];
   _indent: number = 0;
   _printedCommentStarts: Object = {};

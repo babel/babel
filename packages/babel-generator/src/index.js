@@ -1,5 +1,4 @@
 import detectIndent from "detect-indent";
-import Whitespace from "./whitespace";
 import SourceMap from "./source-map";
 import * as messages from "babel-messages";
 import Printer from "./printer";
@@ -14,15 +13,11 @@ class Generator extends Printer {
     opts = opts || {};
 
     const tokens = ast.tokens || [];
-    let format   = Generator.normalizeOptions(code, opts, tokens);
+    let format = Generator.normalizeOptions(code, opts, tokens);
+    let map = opts.sourceMaps ? new SourceMap(opts, code) : null;
+    super(format, map, tokens);
 
-    let map        = opts.sourceMaps ? new SourceMap(opts, code) : null;
-
-    super(format, map);
-
-    this.ast      = ast;
-
-    this._whitespace = tokens.length > 0 ? new Whitespace(tokens) : null;
+    this.ast = ast;
   }
 
   format: {
@@ -42,7 +37,6 @@ class Generator extends Printer {
     }
   };
 
-  _whitespace: Whitespace;
   ast: Object;
 
   /**
