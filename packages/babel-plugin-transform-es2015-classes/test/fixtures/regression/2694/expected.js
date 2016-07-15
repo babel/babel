@@ -13,7 +13,7 @@ var SubFoo = function (_BaseFoo) {
 
   function SubFoo() {
     babelHelpers.classCallCheck(this, SubFoo);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(SubFoo).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(SubFoo)).apply(this, arguments));
   }
 
   babelHelpers.createClass(SubFoo, null, [{
