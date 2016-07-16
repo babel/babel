@@ -281,7 +281,7 @@ export default class Printer {
     }
   }
 
-  print(node, parent, opts = {}) {
+  print(node, parent) {
     if (!node) return;
 
     let oldConcise = this.format.concise;
@@ -320,7 +320,6 @@ export default class Printer {
 
     // end
     this._printStack.pop();
-    if (opts.after) opts.after();
 
     this.format.concise = oldConcise;
     this.insideAux = oldInAux;
@@ -364,37 +363,32 @@ export default class Printer {
   printJoin(nodes: ?Array, parent: Object, opts = {}) {
     if (!nodes || !nodes.length) return;
 
-    let len = nodes.length;
-    let node, i;
-
     if (opts.indent) this.indent();
-
-    let printOpts = {
-      after: () => {
-        if (opts.iterator) {
-          opts.iterator(node, i);
-        }
-
-        if (opts.separator && parent.loc) {
-          this.printAuxAfterComment();
-        }
-
-        if (opts.separator && i < len - 1) {
-          opts.separator.call(this);
-        }
-      }
-    };
 
     const newlineOpts = {
       addNewlines: opts.addNewlines,
     };
 
-    for (i = 0; i < nodes.length; i++) {
-      node = nodes[i];
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
       if (!node) continue;
 
       if (opts.statement) this._printNewline(true, node, parent, newlineOpts);
-      this.print(node, parent, printOpts);
+
+      this.print(node, parent);
+
+      if (opts.iterator) {
+        opts.iterator(node, i);
+      }
+
+      if (opts.separator && parent.loc) {
+        this.printAuxAfterComment();
+      }
+
+      if (opts.separator && i < nodes.length - 1) {
+        opts.separator.call(this);
+      }
+
       if (opts.statement) this._printNewline(false, node, parent, newlineOpts);
     }
 
