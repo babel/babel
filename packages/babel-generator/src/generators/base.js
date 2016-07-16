@@ -24,6 +24,9 @@ export function BlockStatement(node: Object) {
     this.removeTrailingNewline();
 
     this.source("end", node.loc);
+
+    if (!this.endsWith("\n")) this.newline();
+
     this.rightBrace();
   } else {
     this.source("end", node.loc);

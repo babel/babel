@@ -76,8 +76,6 @@ export default class Printer {
    */
 
   rightBrace(): void {
-    if (!this.endsWith("\n")) this.newline();
-
     if (this.format.minified) {
       this._buf.removeLastSemicolon();
     }
