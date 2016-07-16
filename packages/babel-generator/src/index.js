@@ -13,22 +13,16 @@ class Generator extends Printer {
   constructor(ast, opts, code) {
     opts = opts || {};
 
-    let comments = ast.comments || [];
-    let tokens   = ast.tokens || [];
+    const tokens = ast.tokens || [];
     let format   = Generator.normalizeOptions(code, opts, tokens);
 
     let map        = opts.sourceMaps ? new SourceMap(opts, code) : null;
 
     super(format, map);
 
-    this.comments = comments;
-    this.tokens   = tokens;
-    this.format   = format;
-    this.opts     = opts;
     this.ast      = ast;
-    this._inForStatementInitCounter = 0;
 
-    this.whitespace = new Whitespace(tokens);
+    this._whitespace = tokens.length > 0 ? new Whitespace(tokens) : null;
   }
 
   format: {
@@ -48,12 +42,7 @@ class Generator extends Printer {
     }
   };
 
-  auxiliaryCommentBefore: string;
-  auxiliaryCommentAfter: string;
-  whitespace: Whitespace;
-  comments: Array<Object>;
-  tokens: Array<Object>;
-  opts: Object;
+  _whitespace: Whitespace;
   ast: Object;
 
   /**

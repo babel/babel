@@ -24,7 +24,7 @@ export default class Whitespace {
       endToken = tokens[index];
     }
 
-    return this.getNewlinesBetween(startToken, endToken);
+    return this._getNewlinesBetween(startToken, endToken);
   }
 
   /**
@@ -47,13 +47,7 @@ export default class Whitespace {
     if (endToken && endToken.type.label === "eof") {
       return 1;
     } else {
-      let lines = this.getNewlinesBetween(startToken, endToken);
-      if (node.type === "CommentLine" && !lines) {
-        // line comment
-        return 1;
-      } else {
-        return lines;
-      }
+      return this._getNewlinesBetween(startToken, endToken);
     }
   }
 
@@ -61,7 +55,7 @@ export default class Whitespace {
    * Count all the newlines between two tokens.
    */
 
-  getNewlinesBetween(startToken, endToken) {
+  _getNewlinesBetween(startToken, endToken) {
     if (!endToken || !endToken.loc) return 0;
 
     let start = startToken ? startToken.loc.end.line : 1;

@@ -48,9 +48,9 @@ export function ForStatement(node: Object) {
   this.keyword("for");
   this.token("(");
 
-  this._inForStatementInitCounter++;
+  this.inForStatementInitCounter++;
   this.print(node.init, node);
-  this._inForStatementInitCounter--;
+  this.inForStatementInitCounter--;
   this.token(";");
 
   if (node.test) {

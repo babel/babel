@@ -137,8 +137,7 @@ export let YieldExpression = buildYieldAwait("yield");
 export let AwaitExpression = buildYieldAwait("await");
 
 export function EmptyStatement() {
-  this._lastPrintedIsEmptyStatement = true;
-  this.semicolon();
+  this.semicolon(true /* force */);
 }
 
 export function ExpressionStatement(node: Object) {
@@ -157,7 +156,7 @@ export function AssignmentPattern(node: Object) {
 export function AssignmentExpression(node: Object, parent: Object) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
-  let parens = this._inForStatementInitCounter && node.operator === "in" &&
+  let parens = this.inForStatementInitCounter && node.operator === "in" &&
                !n.needsParens(node, parent);
 
   if (parens) {

@@ -1,4 +1,3 @@
-import Position from "./position";
 import type SourceMap from "./source-map";
 import trimEnd from "lodash/trimEnd";
 
@@ -21,7 +20,10 @@ export default class Buffer {
   _last: string = "";
   _queue: Array = [];
 
-  _position: Position = new Position;
+  _position: Object = {
+    line: 1,
+    column: 0,
+  };
   _sourcePosition: Object = {
     line: null,
     column: null,
@@ -67,11 +69,21 @@ export default class Buffer {
 
   _append(str: string, line: number, column: number, filename: ?string): void {
     // If there the line is ending, adding a new mapping marker is redundant
-    if (this._map && str[0] !== "\n") this._map.mark(this._position, line, column, filename);
+    if (this._map && str[0] !== "\n") {
+      this._map.mark(this._position.line, this._position.column, line, column, filename);
+    }
 
     this._buf.push(str);
     this._last = str[str.length - 1];
-    this._position.push(str);
+
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] === "\n") {
+        this._position.line++;
+        this._position.column = 0;
+      } else {
+        this._position.column++;
+      }
+    }
   }
 
   removeTrailingSpaces(): void {
