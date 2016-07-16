@@ -284,8 +284,6 @@ export default class Printer {
   print(node, parent, opts = {}) {
     if (!node) return;
 
-    this._printNewline(true, node, parent, opts);
-
     let oldConcise = this.format.concise;
     if (node._compact) {
       this.format.concise = true;
@@ -326,8 +324,6 @@ export default class Printer {
 
     this.format.concise = oldConcise;
     this.insideAux = oldInAux;
-
-    this._printNewline(false, node, parent, opts);
   }
 
   _printAuxBeforeComment() {
@@ -374,8 +370,6 @@ export default class Printer {
     if (opts.indent) this.indent();
 
     let printOpts = {
-      statement: opts.statement,
-      addNewlines: opts.addNewlines,
       after: () => {
         if (opts.iterator) {
           opts.iterator(node, i);
@@ -391,9 +385,17 @@ export default class Printer {
       }
     };
 
+    const newlineOpts = {
+      addNewlines: opts.addNewlines,
+    };
+
     for (i = 0; i < nodes.length; i++) {
       node = nodes[i];
+      if (!node) continue;
+
+      if (opts.statement) this._printNewline(true, node, parent, newlineOpts);
       this.print(node, parent, printOpts);
+      if (opts.statement) this._printNewline(false, node, parent, newlineOpts);
     }
 
     if (opts.indent) this.dedent();
@@ -447,10 +449,6 @@ export default class Printer {
   _printNewline(leading, node, parent, opts) {
     // Fast path since 'this.newline' does nothing when not tracking lines.
     if (this.format.retainLines || this.format.compact) return;
-
-    if (!opts.statement) {
-      return;
-    }
 
     // Fast path for concise since 'this.newline' just inserts a space when
     // concise formatting is in use.
