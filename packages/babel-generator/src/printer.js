@@ -448,7 +448,7 @@ export default class Printer {
     // Fast path since 'this.newline' does nothing when not tracking lines.
     if (this.format.retainLines || this.format.compact) return;
 
-    if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
+    if (!opts.statement) {
       return;
     }
 

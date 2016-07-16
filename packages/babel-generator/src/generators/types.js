@@ -38,7 +38,7 @@ export function ObjectExpression(node: Object) {
 
   if (props.length) {
     this.space();
-    this.printList(props, node, { indent: true });
+    this.printList(props, node, { indent: true, statement: true });
     this.space();
   }
 
