@@ -1,5 +1,7 @@
 /* eslint max-len: 0 */
 
+import find from "lodash/find";
+import findLast from "lodash/findLast";
 import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
@@ -282,6 +284,8 @@ export default class Printer {
   print(node, parent, opts = {}) {
     if (!node) return;
 
+    this._printNewline(true, node, parent, opts);
+
     let oldConcise = this.format.concise;
     if (node._compact) {
       this.format.concise = true;
@@ -303,8 +307,6 @@ export default class Printer {
     if (needsParens) this.token("(");
 
     this._printLeadingComments(node, parent);
-
-    this._printNewline(true, node, parent, opts);
 
     let loc = (t.isProgram(node) || t.isFile(node)) ? null : node.loc;
     this.withSource("start", loc, () => {
@@ -462,9 +464,17 @@ export default class Printer {
     if (node.start != null && !node._ignoreUserWhitespace && this._whitespace) {
       // user node
       if (leading) {
-        lines = this._whitespace.getNewlinesBefore(node);
+        const comments = node.leadingComments;
+        const comment = comments && find(comments, (comment) =>
+          !!comment.loc && this.format.shouldPrintComment(comment.value));
+
+        lines = this._whitespace.getNewlinesBefore(comment || node);
       } else {
-        lines = this._whitespace.getNewlinesAfter(node);
+        const comments = node.trailingComments;
+        const comment = comments && findLast(comments, (comment) =>
+          !!comment.loc && this.format.shouldPrintComment(comment.value));
+
+        lines = this._whitespace.getNewlinesAfter(comment || node);
       }
     } else {
       // generated node

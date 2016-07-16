@@ -4,8 +4,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.test = undefined;
-/*after*/
-/*before*/require("foo"); /*after*/
+
+/*after*/ /*before*/require("foo"); /*after*/
 
 /*before*/require("foo-bar"); /*after*/
 
@@ -13,11 +13,9 @@ exports.test = undefined;
 
 var /*before*/_foo = require("foo2") /*after*/;
 
-/*before*/
-var _foo2 = babelHelpers.interopRequireDefault(_foo);
+/*before*/var _foo2 = babelHelpers.interopRequireDefault(_foo);
 
-/*after*/
-var /*before*/_foo3 = require("foo3") /*after*/;
+/*after*/var /*before*/_foo3 = require("foo3") /*after*/;
 
 /*before*/var /*after*/foo2 = babelHelpers.interopRequireWildcard(_foo3);
 
