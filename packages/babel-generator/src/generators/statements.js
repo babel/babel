@@ -209,14 +209,14 @@ function variableDeclarationIdent() {
   // "let " or "var " indentation.
   this.token(",");
   this.newline();
-  for (let i = 0; i < 4; i++) this.space(true);
+  if (this.endsWith("\n")) for (let i = 0; i < 4; i++) this.space(true);
 }
 
 function constDeclarationIdent() {
   // "const " indentation.
   this.token(",");
   this.newline();
-  for (let i = 0; i < 6; i++) this.space(true);
+  if (this.endsWith("\n")) for (let i = 0; i < 6; i++) this.space(true);
 }
 
 export function VariableDeclaration(node: Object, parent: Object) {
@@ -247,7 +247,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
   //
 
   let separator;
-  if (!this.format.compact && !this.format.concise && hasInits && !this.format.retainLines) {
+  if (hasInits) {
     separator = node.kind === "const" ? constDeclarationIdent : variableDeclarationIdent;
   }
 

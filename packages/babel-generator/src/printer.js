@@ -512,7 +512,7 @@ export default class Printer {
 
       if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
-      let val = comment.type === "CommentLine" ? `//${comment.value}` : `/*${comment.value}*/`;
+      let val = comment.type === "CommentLine" ? `//${comment.value}\n` : `/*${comment.value}*/`;
 
       //
       if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
@@ -526,19 +526,13 @@ export default class Printer {
         val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
       }
 
-      // force a newline for line comments when retainLines is set in case the next printed node
-      // doesn't catch up
-      if ((this.format.compact || this.format.concise || this.format.retainLines) &&
-          comment.type === "CommentLine") {
-        val += "\n";
-      }
-
       //
       this.token(val);
 
       // whitespace after
-      this.newline((this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) ||
-        (comment.type === "CommentLine" ? 1 : 0));
+      this.newline((this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) +
+        // Subtract one to account for the line force-added above.
+        (comment.type === "CommentLine" ? -1 : 0));
     });
   }
 

@@ -89,6 +89,8 @@ export function Decorator(node: Object) {
 function commaSeparatorNewline() {
   this.token(",");
   this.newline();
+
+  if (!this.endsWith("\n")) this.space();
 }
 
 export function CallExpression(node: Object) {
@@ -97,7 +99,7 @@ export function CallExpression(node: Object) {
 
   this.token("(");
 
-  let isPrettyCall = node._prettyCall && !this.format.retainLines && !this.format.compact;
+  let isPrettyCall = node._prettyCall;
 
   let separator;
   if (isPrettyCall) {
