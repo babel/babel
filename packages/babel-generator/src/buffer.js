@@ -17,7 +17,7 @@ export default class Buffer {
   }
 
   _map: SourceMap = null;
-  _buf: string = "";
+  _buf: Array = [];
   _last: string = "";
   _queue: Array = [];
 
@@ -36,7 +36,7 @@ export default class Buffer {
     this._flush();
 
     return {
-      code: trimEnd(this._buf),
+      code: trimEnd(this._buf.join("")),
       map: this._map ? this._map.get() : null,
     };
   }
@@ -47,8 +47,8 @@ export default class Buffer {
 
   append(str: string): void {
     this._flush();
-    this._append(str, this._sourcePosition.line, this._sourcePosition.column,
-      this._sourcePosition.filename);
+    const { line, column, filename } = this._sourcePosition;
+    this._append(str, line, column, filename);
   }
 
   /**
@@ -56,8 +56,8 @@ export default class Buffer {
    */
 
   queue(str: string): void {
-    this._queue.unshift([str, this._sourcePosition.line, this._sourcePosition.column,
-      this._sourcePosition.filename]);
+    const { line, column, filename } = this._sourcePosition;
+    this._queue.unshift([str, line, column, filename]);
   }
 
   _flush(): void {
@@ -69,7 +69,7 @@ export default class Buffer {
     // If there the line is ending, adding a new mapping marker is redundant
     if (this._map && str[0] !== "\n") this._map.mark(this._position, line, column, filename);
 
-    this._buf += str;
+    this._buf.push(str);
     this._last = str[str.length - 1];
     this._position.push(str);
   }
