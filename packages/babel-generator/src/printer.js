@@ -20,6 +20,7 @@ export default class Printer {
 
   _printedCommentStarts: Object;
   _parenPushNewlineState: ?Object;
+  _printedComments: WeakSet = new WeakSet();
 
   /**
    * Increment indent size.
@@ -484,8 +485,12 @@ export default class Printer {
   _printComment(comment) {
     if (!this._shouldPrintComment(comment)) return;
 
+    // Some plugins use this to mark comments as removed using the AST-root 'comments' property,
+    // where they can't manually mutate the AST node comment lists.
     if (comment.ignore) return;
-    comment.ignore = true;
+
+    if (this._printedComments.has(comment)) return;
+    this._printedComments.add(comment);
 
     if (comment.start != null) {
       if (this._printedCommentStarts[comment.start]) return;
