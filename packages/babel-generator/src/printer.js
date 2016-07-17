@@ -100,15 +100,6 @@ export default class Printer {
   }
 
   /**
-   * Add a keyword to the buffer.
-   */
-
-  keyword(name: string): void {
-    this.word(name);
-    this.space();
-  }
-
-  /**
    * Add a space to the buffer unless it is compact.
    */
 

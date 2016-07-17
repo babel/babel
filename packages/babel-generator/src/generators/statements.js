@@ -1,7 +1,8 @@
 import * as t from "babel-types";
 
 export function WithStatement(node: Object) {
-  this.keyword("with");
+  this.word("with");
+  this.space();
   this.token("(");
   this.print(node.object, node);
   this.token(")");
@@ -9,7 +10,8 @@ export function WithStatement(node: Object) {
 }
 
 export function IfStatement(node: Object) {
-  this.keyword("if");
+  this.word("if");
+  this.space();
   this.token("(");
   this.print(node.test, node);
   this.token(")");
@@ -45,7 +47,8 @@ function getLastStatement(statement) {
 }
 
 export function ForStatement(node: Object) {
-  this.keyword("for");
+  this.word("for");
+  this.space();
   this.token("(");
 
   this.inForStatementInitCounter++;
@@ -69,7 +72,8 @@ export function ForStatement(node: Object) {
 }
 
 export function WhileStatement(node: Object) {
-  this.keyword("while");
+  this.word("while");
+  this.space();
   this.token("(");
   this.print(node.test, node);
   this.token(")");
@@ -78,7 +82,8 @@ export function WhileStatement(node: Object) {
 
 let buildForXStatement = function (op) {
   return function (node: Object) {
-    this.keyword("for");
+    this.word("for");
+    this.space();
     this.token("(");
     this.print(node.left, node);
     this.space();
@@ -98,7 +103,8 @@ export function DoWhileStatement(node: Object) {
   this.space();
   this.print(node.body, node);
   this.space();
-  this.keyword("while");
+  this.word("while");
+  this.space();
   this.token("(");
   this.print(node.test, node);
   this.token(")");
@@ -135,7 +141,8 @@ export function LabeledStatement(node: Object) {
 }
 
 export function TryStatement(node: Object) {
-  this.keyword("try");
+  this.word("try");
+  this.space();
   this.print(node.block, node);
   this.space();
 
@@ -157,7 +164,8 @@ export function TryStatement(node: Object) {
 }
 
 export function CatchClause(node: Object) {
-  this.keyword("catch");
+  this.word("catch");
+  this.space();
   this.token("(");
   this.print(node.param, node);
   this.token(")");
@@ -166,7 +174,8 @@ export function CatchClause(node: Object) {
 }
 
 export function SwitchStatement(node: Object) {
-  this.keyword("switch");
+  this.word("switch");
+  this.space();
   this.token("(");
   this.print(node.discriminant, node);
   this.token(")");
