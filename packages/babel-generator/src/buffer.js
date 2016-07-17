@@ -58,6 +58,9 @@ export default class Buffer {
    */
 
   queue(str: string): void {
+    // Drop trailing spaces when a newline is inserted.
+    if (str === "\n") while (this._queue.length > 0 && SPACES_RE.test(this._queue[0][0])) this._queue.shift();
+
     const { line, column, filename } = this._sourcePosition;
     this._queue.unshift([str, line, column, filename]);
   }
@@ -84,10 +87,6 @@ export default class Buffer {
         this._position.column++;
       }
     }
-  }
-
-  removeTrailingSpaces(): void {
-    while (this._queue.length > 0 && SPACES_RE.test(this._queue[0][0])) this._queue.shift();
   }
 
   removeTrailingNewline(): void {

@@ -167,7 +167,6 @@ export default class Printer {
     if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
     if (i <= 0) return;
 
-    this._buf.removeTrailingSpaces();
     for (let j = 0; j < i; j++) {
       this._newline();
     }
