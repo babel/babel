@@ -243,7 +243,9 @@ export default class Printer {
     // catch up to this nodes newline if we're behind
     const pos = loc ? loc[prop] : null;
     if (pos && pos.line !== null) {
-      while (this._buf.getCurrentLine() < pos.line) {
+      const count = pos.line - this._buf.getCurrentLine();
+
+      for (let i = 0; i < count; i++) {
         this._newline();
       }
     }
