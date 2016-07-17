@@ -170,6 +170,11 @@ module.exports = {
     hidden: true
   },
 
+  indentStyle: {
+    type: "string",
+    description: "override the default indentation style detection with a custom indentation string"
+  },
+
   moduleRoot: {
     type: "filename",
     description: "optional prefix for the AMD module formatter that will be prepend to the filename on module definitions"
