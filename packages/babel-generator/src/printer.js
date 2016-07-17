@@ -513,35 +513,33 @@ export default class Printer {
       this._printedCommentStarts[comment.start] = true;
     }
 
-    // Exclude comments from source mappings since they will only clutter things.
-    this.withSource("start", comment.loc, () => {
-      // whitespace before
-      this.newline(this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0);
+    // whitespace before
+    this.newline(this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0);
 
-      if (!this.endsWith("[") && !this.endsWith("{")) this.space();
+    if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
-      let val = comment.type === "CommentLine" ? `//${comment.value}\n` : `/*${comment.value}*/`;
+    let val = comment.type === "CommentLine" ? `//${comment.value}\n` : `/*${comment.value}*/`;
 
-      //
-      if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
-        let offset = comment.loc && comment.loc.start.column;
-        if (offset) {
-          let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
-          val = val.replace(newlineRegex, "\n");
-        }
-
-        let indentSize = Math.max(this._getIndent().length, this._buf.getCurrentColumn());
-        val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
+    //
+    if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
+      let offset = comment.loc && comment.loc.start.column;
+      if (offset) {
+        let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
+        val = val.replace(newlineRegex, "\n");
       }
 
-      //
-      this._append(val);
+      let indentSize = Math.max(this._getIndent().length, this._buf.getCurrentColumn());
+      val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
+    }
 
-      // whitespace after
-      this.newline((this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) +
-        // Subtract one to account for the line force-added above.
-        (comment.type === "CommentLine" ? -1 : 0));
+    this.withSource("start", comment.loc, () => {
+      this._append(val);
     });
+
+    // whitespace after
+    this.newline((this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) +
+      // Subtract one to account for the line force-added above.
+      (comment.type === "CommentLine" ? -1 : 0));
   }
 
   _printComments(comments?: Array<Object>) {
