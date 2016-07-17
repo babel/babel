@@ -265,6 +265,18 @@ pp.jsxParseEmptyExpression = function() {
   return this.finishNodeAt(node, "JSXEmptyExpression", this.start, this.startLoc);
 };
 
+// Parse JSX spread child
+
+pp.jsxParseSpreadChild = function() {
+  let node = this.startNode();
+  this.expect(tt.braceL);
+  this.expect(tt.ellipsis);
+  node.expression = this.parseExpression();
+  this.expect(tt.braceR);
+
+  return this.finishNode(node, "JSXSpreadChild");
+};
+
 // Parses JSX expression enclosed into curly brackets.
 
 
@@ -346,15 +358,11 @@ pp.jsxParseElementAt = function(startPos, startLoc) {
 
         case tt.braceL:
           if (this.lookahead().type === tt.ellipsis) {
-            let node = this.startNode();
-            this.next();
-            this.next();
-            node.expression = this.parseExpression();
-            this.expect(tt.braceR);
-            children.push(this.finishNode(node, "JSXSpreadChild"));
-            break;
+            children.push(this.jsxParseSpreadChild());
+          } else {
+            children.push(this.jsxParseExpressionContainer());
           }
-          children.push(this.jsxParseExpressionContainer());
+
           break;
 
         default:

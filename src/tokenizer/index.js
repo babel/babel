@@ -166,9 +166,8 @@ export default class Tokenizer {
     if (!this.isLookahead) {
       this.state.tokens.push(comment);
       this.state.comments.push(comment);
+      this.addComment(comment);
     }
-
-    this.addComment(comment);
   }
 
   skipBlockComment() {
