@@ -188,7 +188,13 @@ pp.parseExprOp = function(left, leftStartPos, leftStartLoc, minPrec, noIn) {
       node.left = left;
       node.operator = this.state.value;
 
-      if (node.operator === "**" && left.type === "UnaryExpression" && left.extra && !left.extra.parenthesizedArgument) {
+      if (
+        node.operator === "**" &&
+        left.type === "UnaryExpression" &&
+        left.extra &&
+        !left.extra.parenthesizedArgument &&
+        !left.extra.parenthesized
+      ) {
         this.raise(left.argument.start, "Illegal expression. Wrap left hand side or entire exponentiation in parentheses.");
       }
 
@@ -217,8 +223,9 @@ pp.parseMaybeUnary = function (refShorthandDefaultPos) {
     this.next();
 
     let argType = this.state.type;
-    this.addExtra(node, "parenthesizedArgument", argType === tt.parenL);
     node.argument = this.parseMaybeUnary();
+
+    this.addExtra(node, "parenthesizedArgument", argType === tt.parenL && (!node.argument.extra || !node.argument.extra.parenthesized));
 
     if (refShorthandDefaultPos && refShorthandDefaultPos.start) {
       this.unexpected(refShorthandDefaultPos.start);
