@@ -131,14 +131,13 @@ export default class Printer {
    */
 
   token(str: string): void {
-    const last = this._buf.getLast();
     // space is mandatory to avoid outputting <!--
     // http://javascript.spec.whatwg.org/#comment-syntax
-    if ((str === "--" && last === "!") ||
+    if ((str === "--" && this.endsWith("!")) ||
 
       // Need spaces for operators of the same kind to avoid: `a+++b`
-      (str[0] === "+" && last === "+") ||
-      (str[0] === "-" && last === "-")) {
+      (str[0] === "+" && this.endsWith("+")) ||
+      (str[0] === "-" && this.endsWith("-"))) {
       this._space();
     }
 
