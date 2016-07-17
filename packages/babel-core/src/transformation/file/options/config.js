@@ -193,4 +193,9 @@ module.exports = {
     default: false,
     hidden: true,
   },
+
+  babelWD: {
+    description: "Location to resolve plugins and presets relative to.",
+    type: "string"
+  },
 };

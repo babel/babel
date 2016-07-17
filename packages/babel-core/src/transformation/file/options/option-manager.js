@@ -409,6 +409,7 @@ export default class OptionManager {
 
   init(opts: Object = {}): Object {
     let filename = opts.filename;
+    let dirname = opts.babelWD || (filename && path.dirname(filename));
 
     // resolve all .babelrc files
     if (opts.babelrc !== false) {
@@ -419,7 +420,7 @@ export default class OptionManager {
     this.mergeOptions({
       options: opts,
       alias: "base",
-      dirname: filename && path.dirname(filename)
+      dirname: dirname
     });
 
     // normalise
