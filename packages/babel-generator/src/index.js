@@ -30,10 +30,7 @@ class Generator extends Printer {
    */
 
   generate() {
-    this.print(this.ast);
-    this.printAuxAfterComment();
-
-    return this._buf.get();
+    return super.generate(this.ast);
   }
 }
 

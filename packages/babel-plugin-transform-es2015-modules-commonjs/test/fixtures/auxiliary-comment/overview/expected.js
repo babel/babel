@@ -5,11 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.test = undefined;
 
-/*after*/ /*before*/require("foo"); /*after*/
+/*after*/ /*before*/require("foo") /*after*/;
 
-/*before*/require("foo-bar"); /*after*/
+/*before*/require("foo-bar") /*after*/;
 
-/*before*/require("./directory/foo-bar"); /*after*/
+/*before*/require("./directory/foo-bar") /*after*/;
 
 var /*before*/_foo = require("foo2") /*after*/;
 
@@ -29,5 +29,5 @@ var test = /*before*/exports. /*after*/test = 5;
 /*before*/(0, _foo4.bar) /*after*/( /*before*/_foo2.default /*after*/, /*before*/_foo5.foo /*after*/);
 
 /* my comment */
-/*before*/_foo5.foo; /*after*/
-/*before*/_foo2.default; /*after*/
+/*before*/_foo5.foo /*after*/;
+/*before*/_foo2.default /*after*/;

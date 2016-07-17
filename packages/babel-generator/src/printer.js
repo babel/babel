@@ -33,17 +33,24 @@ export default class Printer {
   }
 
   format: Format;
-  insideAux: boolean = false;
   inForStatementInitCounter: number = 0;
 
   _buf: Buffer;
   _whitespace: Whitespace;
   _printStack: Array<Node> = [];
   _indent: number = 0;
+  _insideAux: boolean = false;
   _printedCommentStarts: Object = {};
   _parenPushNewlineState: ?Object = null;
   _printAuxAfterOnNextUserNode: boolean = false;
   _printedComments: WeakSet = new WeakSet();
+
+  generate(ast) {
+    this.print(ast);
+    this._maybeAddAuxComment();
+
+    return this._buf.get();
+  }
 
   /**
    * Increment indent size.
@@ -70,6 +77,7 @@ export default class Printer {
    */
 
   semicolon(force: boolean = false): void {
+    this._maybeAddAuxComment();
     this._append(";", !force /* queue */);
   }
 
@@ -112,6 +120,7 @@ export default class Printer {
   word(str: string): void {
     if (this._endsWithWord) this._space();
 
+    this._maybeAddAuxComment();
     this._append(str);
 
     this._endsWithWord = true;
@@ -133,6 +142,7 @@ export default class Printer {
       this._space();
     }
 
+    this._maybeAddAuxComment();
     this._append(str);
   }
 
@@ -296,10 +306,9 @@ export default class Printer {
 
     this._printStack.push(node);
 
-    let oldInAux = this.insideAux;
-    this.insideAux = !node.loc;
-    if (!this.insideAux) this.printAuxAfterComment();
-    else if (!oldInAux) this._printAuxBeforeComment();
+    let oldInAux = this._insideAux;
+    this._insideAux = !node.loc;
+    this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
     if (needsParens) this.token("(");
@@ -311,9 +320,6 @@ export default class Printer {
       this[node.type](node, parent);
     });
 
-    // Check again if any of our children may have left an aux comment on the stack
-    if (!this.insideAux) this.printAuxAfterComment();
-
     this._printTrailingComments(node, parent);
 
     if (needsParens) this.token(")");
@@ -322,7 +328,12 @@ export default class Printer {
     this._printStack.pop();
 
     this.format.concise = oldConcise;
-    this.insideAux = oldInAux;
+    this._insideAux = oldInAux;
+  }
+
+  _maybeAddAuxComment(enteredPositionlessNode) {
+    if (enteredPositionlessNode) this._printAuxBeforeComment();
+    if (!this._insideAux) this._printAuxAfterComment();
   }
 
   _printAuxBeforeComment() {
@@ -338,7 +349,7 @@ export default class Printer {
     }
   }
 
-  printAuxAfterComment() {
+  _printAuxAfterComment() {
     if (!this._printAuxAfterOnNextUserNode) return;
     this._printAuxAfterOnNextUserNode = false;
 
@@ -379,10 +390,6 @@ export default class Printer {
 
       if (opts.iterator) {
         opts.iterator(node, i);
-      }
-
-      if (opts.separator && parent.loc) {
-        this.printAuxAfterComment();
       }
 
       if (opts.separator && i < nodes.length - 1) {
@@ -527,7 +534,7 @@ export default class Printer {
       }
 
       //
-      this.token(val);
+      this._append(val);
 
       // whitespace after
       this.newline((this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) +
