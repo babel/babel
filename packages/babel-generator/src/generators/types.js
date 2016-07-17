@@ -124,12 +124,8 @@ export function NullLiteral() {
 
 export function NumericLiteral(node: Object) {
   let raw = this.getPossibleRaw(node);
-  if (raw != null) {
-    this.word(raw);
-    return;
-  }
 
-  this.word(node.value + "");
+  this.number(raw == null ? node.value + "" : raw);
 }
 
 export function StringLiteral(node: Object, parent: Object) {

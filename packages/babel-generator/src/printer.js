@@ -2,11 +2,16 @@
 
 import find from "lodash/find";
 import findLast from "lodash/findLast";
+import isInteger from "lodash/isInteger";
 import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
 import Whitespace from "./whitespace";
 import * as t from "babel-types";
+
+const SCIENTIFIC_NOTATION = /e/i;
+const ZERO_DECIMAL_INTEGER = /\.0+$/;
+const NON_DECIMAL_LITERAL = /^0[box]/;
 
 export type Format = {
   shouldPrintComment: (comment: string) => boolean;
@@ -44,6 +49,8 @@ export default class Printer {
   _parenPushNewlineState: ?Object = null;
   _printAuxAfterOnNextUserNode: boolean = false;
   _printedComments: WeakSet = new WeakSet();
+  _endsWithInteger = false;
+  _endsWithWord = false;
 
   generate(ast) {
     this.print(ast);
@@ -127,6 +134,23 @@ export default class Printer {
   }
 
   /**
+   * Writes a number token so that we can validate if it is an integer.
+   */
+
+  number(str: string): void {
+    this.word(str);
+
+    // Integer tokens need special handling because they cannot have '.'s inserted
+    // immediately after them.
+    this._endsWithInteger =
+      isInteger(+str) &&
+      !NON_DECIMAL_LITERAL.test(str) &&
+      !SCIENTIFIC_NOTATION.test(str) &&
+      !ZERO_DECIMAL_INTEGER.test(str) &&
+      str[str.length - 1] !== ".";
+  }
+
+  /**
    * Writes a simple token.
    */
 
@@ -137,7 +161,10 @@ export default class Printer {
 
       // Need spaces for operators of the same kind to avoid: `a+++b`
       (str[0] === "+" && this.endsWith("+")) ||
-      (str[0] === "-" && this.endsWith("-"))) {
+      (str[0] === "-" && this.endsWith("-")) ||
+
+      // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
+      (str[0] === "." && this._endsWithInteger)) {
       this._space();
     }
 
@@ -207,6 +234,7 @@ export default class Printer {
     else this._buf.append(str);
 
     this._endsWithWord = false;
+    this._endsWithInteger = false;
   }
 
   _maybeIndent(str: string): void {
