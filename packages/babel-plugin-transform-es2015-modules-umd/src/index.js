@@ -45,6 +45,10 @@ export default function({ types: t }) {
   return {
     inherits: transformAMD,
 
+    pre() {
+      this.modulesType = "umd";
+    },
+
     visitor: {
       Program: {
         exit(path, state) {

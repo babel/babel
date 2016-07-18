@@ -184,6 +184,10 @@ export default function() {
   return {
     inherits: transformStrictMode,
 
+    pre() {
+      this.modulesType = "commonjs";
+    },
+
     visitor: {
       ThisExpression(path, state) {
         // If other plugins run after this plugin's Program#exit handler, we allow them to
@@ -227,7 +231,7 @@ export default function() {
 
           const requires = Object.create(null);
 
-          function addRequire(source, blockHoist) {
+          function addRequire(source, blockHoist, opts = {}) {
             const cached = requires[source];
             if (cached) return cached;
 
@@ -235,10 +239,12 @@ export default function() {
               basename(source, extname(source)),
             );
 
+            let builtRequire = buildRequire(t.stringLiteral(source)).expression;
+
             const varDecl = t.variableDeclaration("var", [
               t.variableDeclarator(
                 ref,
-                buildRequire(t.stringLiteral(source)).expression,
+                 opts.inline ? t.callExpression(opts.inline, [builtRequire]) : builtRequire,
               ),
             ]);
 
@@ -260,6 +266,15 @@ export default function() {
           function addTo(obj, key, arr) {
             const existing = obj[key] || [];
             obj[key] = existing.concat(arr);
+          }
+
+          function hasSingleDefaultImport(specifiers) {
+            if (specifiers.length !== 1) { return; }
+
+            let onlySpecifier = specifiers[0];
+
+            return t.isImportDefaultSpecifier(onlySpecifier) ||
+              t.isImportSpecifier(onlySpecifier) && onlySpecifier.imported.name === "default";
           }
 
           for (const path of body) {
@@ -469,13 +484,25 @@ export default function() {
           for (const source in imports) {
             const { specifiers, maxBlockHoist } = imports[source];
             if (specifiers.length) {
-              const uid = addRequire(source, maxBlockHoist);
+              let uid;
+
+              if (hasSingleDefaultImport(specifiers) && this.modulesType === "commonjs") {
+                uid = addRequire(source, maxBlockHoist, {
+                  inline: this.addHelper("interopRequireDefault")
+                });
+              } else if (specifiers.length === 1 && t.isImportNamespaceSpecifier(specifiers[0]) && this.modulesType === "commonjs") {
+                uid = addRequire(source, maxBlockHoist, {
+                  inline: this.addHelper("interopRequireWildcard")
+                });
+              } else {
+                uid = addRequire(source, maxBlockHoist);
+              }
 
               let wildcard;
 
               for (let i = 0; i < specifiers.length; i++) {
                 const specifier = specifiers[i];
-                if (t.isImportNamespaceSpecifier(specifier)) {
+                if (t.isImportNamespaceSpecifier(specifier) && !(specifiers.length === 1 && t.isImportNamespaceSpecifier(specifiers[0]) && this.modulesType === "commonjs")) {
                   if (strict || noInterop) {
                     remaps[specifier.local.name] = uid;
                   } else {
@@ -507,7 +534,7 @@ export default function() {
               for (const specifier of specifiers) {
                 if (t.isImportSpecifier(specifier)) {
                   let target = uid;
-                  if (specifier.imported.name === "default") {
+                  if (specifier.imported.name === "default" && !(hasSingleDefaultImport(specifiers) && this.modulesType === "commonjs")) {
                     if (wildcard) {
                       target = wildcard;
                     } else if (!noInterop) {

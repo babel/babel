@@ -1,10 +1,8 @@
 "use strict";
 
-var _props = require("props");
+var _props = babelHelpers.interopRequireDefault(require("props"));
 
-var _props2 = babelHelpers.interopRequireDefault(_props);
-
-console.log(_props2.default);
+console.log(_props.default);
 
 (function () {
   const props = babelHelpers.objectWithoutProperties(this.props, []);
