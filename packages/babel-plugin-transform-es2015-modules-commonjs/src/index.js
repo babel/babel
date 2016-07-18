@@ -170,16 +170,15 @@ export default function () {
 
           let requires = Object.create(null);
 
-          function addRequire(source, blockHoist) {
+          function addRequire(source, blockHoist, opts = {}) {
             let cached = requires[source];
             if (cached) return cached;
 
             let ref = path.scope.generateUidIdentifier(basename(source, extname(source)));
+            let builtRequire = buildRequire(t.stringLiteral(source)).expression;
 
             let varDecl = t.variableDeclaration("var", [
-              t.variableDeclarator(ref, buildRequire(
-                t.stringLiteral(source)
-              ).expression)
+              t.variableDeclarator(ref, opts.inlineDefault ? t.callExpression(opts.inlineDefault, [builtRequire]) : builtRequire)
             ]);
 
             // Copy location from the original import statement for sourcemap
@@ -200,6 +199,15 @@ export default function () {
           function addTo(obj, key, arr) {
             let existing = obj[key] || [];
             obj[key] = existing.concat(arr);
+          }
+
+          function hasSingleDefaultImport(specifiers) {
+            if (specifiers.length !== 1) { return; }
+
+            let onlySpecifier = specifiers[0];
+
+            return t.isImportDefaultSpecifier(onlySpecifier) ||
+              t.isImportSpecifier(onlySpecifier) && onlySpecifier.imported.name === "default";
           }
 
           for (let path of body) {
@@ -350,7 +358,15 @@ export default function () {
           for (let source in imports) {
             let {specifiers, maxBlockHoist} = imports[source];
             if (specifiers.length) {
-              let uid = addRequire(source, maxBlockHoist);
+              let uid;
+
+              if (hasSingleDefaultImport(specifiers)) {
+                uid = addRequire(source, maxBlockHoist, {
+                  inlineDefault: this.addHelper("interopRequireDefault")
+                });
+              } else {
+                uid = addRequire(source, maxBlockHoist);
+              }
 
               let wildcard;
 
@@ -385,7 +401,7 @@ export default function () {
               for (let specifier of specifiers) {
                 if (t.isImportSpecifier(specifier)) {
                   let target = uid;
-                  if (specifier.imported.name === "default") {
+                  if (specifier.imported.name === "default" && !hasSingleDefaultImport(specifiers)) {
                     if (wildcard) {
                       target = wildcard;
                     } else {
