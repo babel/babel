@@ -127,6 +127,10 @@ export default function () {
   return {
     inherits: require("babel-plugin-transform-strict-mode"),
 
+    pre() {
+      this.modulesType = "commonjs";
+    },
+
     visitor: {
       ThisExpression(path, state) {
         // If other plugins run after this plugin's Program#exit handler, we allow them to
@@ -360,7 +364,7 @@ export default function () {
             if (specifiers.length) {
               let uid;
 
-              if (hasSingleDefaultImport(specifiers)) {
+              if (hasSingleDefaultImport(specifiers) && this.modulesType === "commonjs") {
                 uid = addRequire(source, maxBlockHoist, {
                   inlineDefault: this.addHelper("interopRequireDefault")
                 });
@@ -401,7 +405,7 @@ export default function () {
               for (let specifier of specifiers) {
                 if (t.isImportSpecifier(specifier)) {
                   let target = uid;
-                  if (specifier.imported.name === "default" && !hasSingleDefaultImport(specifiers)) {
+                  if (specifier.imported.name === "default" && !(hasSingleDefaultImport(specifiers) && this.modulesType === "commonjs")) {
                     if (wildcard) {
                       target = wildcard;
                     } else {
