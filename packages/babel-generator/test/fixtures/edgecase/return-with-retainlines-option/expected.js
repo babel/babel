@@ -6,6 +6,6 @@ function foo(l) {
 
 function foo() {
   return (
-    1 && 2 || 
+    1 && 2 ||
     3);
 }

@@ -1,13 +1,9 @@
 /* eslint max-len: 0 */
 
-import isInteger from "lodash/isInteger";
 import isNumber from "lodash/isNumber";
 import * as t from "babel-types";
 import * as n from "../node";
 
-const SCIENTIFIC_NOTATION = /e/i;
-const ZERO_DECIMAL_INTEGER = /\.0+$/;
-const NON_DECIMAL_LITERAL = /^0[box]/;
 
 export function UnaryExpression(node: Object) {
   if (node.operator === "void" || node.operator === "delete" || node.operator === "typeof") {
@@ -89,15 +85,16 @@ export function Decorator(node: Object) {
 function commaSeparatorNewline() {
   this.token(",");
   this.newline();
+
+  if (!this.endsWith("\n")) this.space();
 }
 
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
-  if (node.loc) this.printAuxAfterComment();
 
   this.token("(");
 
-  let isPrettyCall = node._prettyCall && !this.format.retainLines && !this.format.compact;
+  let isPrettyCall = node._prettyCall;
 
   let separator;
   if (isPrettyCall) {
@@ -208,17 +205,6 @@ export function MemberExpression(node: Object) {
     this.print(node.property, node);
     this.token("]");
   } else {
-    if (t.isNumericLiteral(node.object)) {
-      let val = this.getPossibleRaw(node.object) || node.object.value;
-      if (isInteger(+val) &&
-        !NON_DECIMAL_LITERAL.test(val) &&
-        !SCIENTIFIC_NOTATION.test(val) &&
-        !ZERO_DECIMAL_INTEGER.test(val) &&
-        !this.endsWith(".")) {
-        this.token(".");
-      }
-    }
-
     this.token(".");
     this.print(node.property, node);
   }

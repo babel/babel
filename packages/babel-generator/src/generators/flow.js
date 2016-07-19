@@ -251,6 +251,7 @@ export function ObjectTypeAnnotation(node: Object) {
 
     this.printJoin(props, node, {
       indent: true,
+      statement: true,
       iterator: () => {
         if (props.length !== 1) {
           this.semicolon();

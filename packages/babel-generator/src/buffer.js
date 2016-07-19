@@ -58,6 +58,9 @@ export default class Buffer {
    */
 
   queue(str: string): void {
+    // Drop trailing spaces when a newline is inserted.
+    if (str === "\n") while (this._queue.length > 0 && SPACES_RE.test(this._queue[0][0])) this._queue.shift();
+
     const { line, column, filename } = this._sourcePosition;
     this._queue.unshift([str, line, column, filename]);
   }
@@ -86,10 +89,6 @@ export default class Buffer {
     }
   }
 
-  removeTrailingSpaces(): void {
-    while (this._queue.length > 0 && SPACES_RE.test(this._queue[0][0])) this._queue.shift();
-  }
-
   removeTrailingNewline(): void {
     if (this._queue.length > 0 && this._queue[0][0] === "\n") this._queue.shift();
   }
@@ -98,24 +97,28 @@ export default class Buffer {
     if (this._queue.length > 0 && this._queue[0][0] === ";") this._queue.shift();
   }
 
-  endsWith(str: string): boolean {
+  endsWith(suffix: string): boolean {
+    // Fast path to avoid iterating over this._queue.
+    if (suffix.length === 1) {
+      let last;
+      if (this._queue.length > 0) {
+        const str = this._queue[0][0];
+        last = str[str.length - 1];
+      } else {
+        last = this._last;
+      }
+
+      return last === suffix;
+    }
+
     const end = this._last + this._queue.reduce((acc, item) => item[0] + acc, "");
-    if (str.length <= end.length) {
-      return end.slice(-str.length) === str;
+    if (suffix.length <= end.length) {
+      return end.slice(-suffix.length) === suffix;
     }
 
     // We assume that everything being matched is at most a single token plus some whitespace,
     // which everything currently is, but otherwise we'd have to expand _last or check _buf.
     return false;
-  }
-
-  getLast(): string {
-    if (this._queue.length > 0) {
-      const last = this._queue[0][0];
-      return last[last.length - 1];
-    }
-
-    return this._last;
   }
 
   hasContent(): boolean {

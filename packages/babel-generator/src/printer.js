@@ -1,25 +1,63 @@
 /* eslint max-len: 0 */
 
+import find from "lodash/find";
+import findLast from "lodash/findLast";
+import isInteger from "lodash/isInteger";
 import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
+import Whitespace from "./whitespace";
 import * as t from "babel-types";
 
+const SCIENTIFIC_NOTATION = /e/i;
+const ZERO_DECIMAL_INTEGER = /\.0+$/;
+const NON_DECIMAL_LITERAL = /^0[box]/;
+
+export type Format = {
+  shouldPrintComment: (comment: string) => boolean;
+  retainLines: boolean;
+  comments: boolean;
+  auxiliaryCommentBefore: string;
+  auxiliaryCommentAfter: string;
+  compact: boolean | "auto";
+  minified: boolean;
+  quotes: "single" | "double";
+  concise: boolean;
+  indent: {
+    adjustMultilineComment: boolean;
+    style: string;
+    base: number;
+  }
+};
+
 export default class Printer {
-  constructor(format, map) {
+  constructor(format, map, tokens) {
     this.format = format || {};
     this._buf = new Buffer(map);
-    this.insideAux = false;
-    this._printAuxAfterOnNextUserNode = false;
-    this._printStack = [];
-    this._printedCommentStarts = {};
-    this._parenPushNewlineState = null;
-    this._indent = 0;
-    this.inForStatementInitCounter = 0;
+    this._whitespace = tokens.length > 0 ? new Whitespace(tokens) : null;
   }
 
-  _printedCommentStarts: Object;
-  _parenPushNewlineState: ?Object;
+  format: Format;
+  inForStatementInitCounter: number = 0;
+
+  _buf: Buffer;
+  _whitespace: Whitespace;
+  _printStack: Array<Node> = [];
+  _indent: number = 0;
+  _insideAux: boolean = false;
+  _printedCommentStarts: Object = {};
+  _parenPushNewlineState: ?Object = null;
+  _printAuxAfterOnNextUserNode: boolean = false;
+  _printedComments: WeakSet = new WeakSet();
+  _endsWithInteger = false;
+  _endsWithWord = false;
+
+  generate(ast) {
+    this.print(ast);
+    this._maybeAddAuxComment();
+
+    return this._buf.get();
+  }
 
   /**
    * Increment indent size.
@@ -46,6 +84,7 @@ export default class Printer {
    */
 
   semicolon(force: boolean = false): void {
+    this._maybeAddAuxComment();
     this._append(";", !force /* queue */);
   }
 
@@ -54,21 +93,10 @@ export default class Printer {
    */
 
   rightBrace(): void {
-    if (!this.endsWith("\n")) this.newline();
-
     if (this.format.minified) {
       this._buf.removeLastSemicolon();
     }
     this.token("}");
-  }
-
-  /**
-   * Add a keyword to the buffer.
-   */
-
-  keyword(name: string): void {
-    this.word(name);
-    this.space();
   }
 
   /**
@@ -90,9 +118,27 @@ export default class Printer {
   word(str: string): void {
     if (this._endsWithWord) this._space();
 
+    this._maybeAddAuxComment();
     this._append(str);
 
     this._endsWithWord = true;
+  }
+
+  /**
+   * Writes a number token so that we can validate if it is an integer.
+   */
+
+  number(str: string): void {
+    this.word(str);
+
+    // Integer tokens need special handling because they cannot have '.'s inserted
+    // immediately after them.
+    this._endsWithInteger =
+      isInteger(+str) &&
+      !NON_DECIMAL_LITERAL.test(str) &&
+      !SCIENTIFIC_NOTATION.test(str) &&
+      !ZERO_DECIMAL_INTEGER.test(str) &&
+      str[str.length - 1] !== ".";
   }
 
   /**
@@ -100,17 +146,20 @@ export default class Printer {
    */
 
   token(str: string): void {
-    const last = this._buf.getLast();
     // space is mandatory to avoid outputting <!--
     // http://javascript.spec.whatwg.org/#comment-syntax
-    if ((str === "--" && last === "!") ||
+    if ((str === "--" && this.endsWith("!")) ||
 
       // Need spaces for operators of the same kind to avoid: `a+++b`
-      (str[0] === "+" && last === "+") ||
-      (str[0] === "-" && last === "-")) {
+      (str[0] === "+" && this.endsWith("+")) ||
+      (str[0] === "-" && this.endsWith("-")) ||
+
+      // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
+      (str[0] === "." && this._endsWithInteger)) {
       this._space();
     }
 
+    this._maybeAddAuxComment();
     this._append(str);
   }
 
@@ -135,7 +184,6 @@ export default class Printer {
     if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
     if (i <= 0) return;
 
-    this._buf.removeTrailingSpaces();
     for (let j = 0; j < i; j++) {
       this._newline();
     }
@@ -177,6 +225,7 @@ export default class Printer {
     else this._buf.append(str);
 
     this._endsWithWord = false;
+    this._endsWithInteger = false;
   }
 
   _maybeIndent(str: string): void {
@@ -211,7 +260,9 @@ export default class Printer {
     // catch up to this nodes newline if we're behind
     const pos = loc ? loc[prop] : null;
     if (pos && pos.line !== null) {
-      while (this._buf.getCurrentLine() < pos.line) {
+      const count = pos.line - this._buf.getCurrentLine();
+
+      for (let i = 0; i < count; i++) {
         this._newline();
       }
     }
@@ -259,7 +310,7 @@ export default class Printer {
     }
   }
 
-  print(node, parent, opts = {}) {
+  print(node, parent) {
     if (!node) return;
 
     let oldConcise = this.format.concise;
@@ -274,25 +325,19 @@ export default class Printer {
 
     this._printStack.push(node);
 
-    let oldInAux = this.insideAux;
-    this.insideAux = !node.loc;
-    if (!this.insideAux) this.printAuxAfterComment();
-    else if (!oldInAux) this._printAuxBeforeComment();
+    let oldInAux = this._insideAux;
+    this._insideAux = !node.loc;
+    this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
     if (needsParens) this.token("(");
 
     this._printLeadingComments(node, parent);
 
-    this._printNewline(true, node, parent, opts);
-
     let loc = (t.isProgram(node) || t.isFile(node)) ? null : node.loc;
     this.withSource("start", loc, () => {
       this[node.type](node, parent);
     });
-
-    // Check again if any of our children may have left an aux comment on the stack
-    if (!this.insideAux) this.printAuxAfterComment();
 
     this._printTrailingComments(node, parent);
 
@@ -300,12 +345,14 @@ export default class Printer {
 
     // end
     this._printStack.pop();
-    if (opts.after) opts.after();
 
     this.format.concise = oldConcise;
-    this.insideAux = oldInAux;
+    this._insideAux = oldInAux;
+  }
 
-    this._printNewline(false, node, parent, opts);
+  _maybeAddAuxComment(enteredPositionlessNode) {
+    if (enteredPositionlessNode) this._printAuxBeforeComment();
+    if (!this._insideAux) this._printAuxAfterComment();
   }
 
   _printAuxBeforeComment() {
@@ -321,7 +368,7 @@ export default class Printer {
     }
   }
 
-  printAuxAfterComment() {
+  _printAuxAfterComment() {
     if (!this._printAuxAfterOnNextUserNode) return;
     this._printAuxAfterOnNextUserNode = false;
 
@@ -346,32 +393,29 @@ export default class Printer {
   printJoin(nodes: ?Array, parent: Object, opts = {}) {
     if (!nodes || !nodes.length) return;
 
-    let len = nodes.length;
-    let node, i;
-
     if (opts.indent) this.indent();
 
-    let printOpts = {
-      statement: opts.statement,
+    const newlineOpts = {
       addNewlines: opts.addNewlines,
-      after: () => {
-        if (opts.iterator) {
-          opts.iterator(node, i);
-        }
-
-        if (opts.separator && parent.loc) {
-          this.printAuxAfterComment();
-        }
-
-        if (opts.separator && i < len - 1) {
-          opts.separator.call(this);
-        }
-      }
     };
 
-    for (i = 0; i < nodes.length; i++) {
-      node = nodes[i];
-      this.print(node, parent, printOpts);
+    for (let i = 0; i < nodes.length; i++) {
+      const node = nodes[i];
+      if (!node) continue;
+
+      if (opts.statement) this._printNewline(true, node, parent, newlineOpts);
+
+      this.print(node, parent);
+
+      if (opts.iterator) {
+        opts.iterator(node, i);
+      }
+
+      if (opts.separator && i < nodes.length - 1) {
+        opts.separator.call(this);
+      }
+
+      if (opts.statement) this._printNewline(false, node, parent, newlineOpts);
     }
 
     if (opts.indent) this.dedent();
@@ -426,10 +470,6 @@ export default class Printer {
     // Fast path since 'this.newline' does nothing when not tracking lines.
     if (this.format.retainLines || this.format.compact) return;
 
-    if (!opts.statement && !n.isUserWhitespacable(node, parent)) {
-      return;
-    }
-
     // Fast path for concise since 'this.newline' just inserts a space when
     // concise formatting is in use.
     if (this.format.concise) {
@@ -442,9 +482,17 @@ export default class Printer {
     if (node.start != null && !node._ignoreUserWhitespace && this._whitespace) {
       // user node
       if (leading) {
-        lines = this._whitespace.getNewlinesBefore(node);
+        const comments = node.leadingComments;
+        const comment = comments && find(comments, (comment) =>
+          !!comment.loc && this.format.shouldPrintComment(comment.value));
+
+        lines = this._whitespace.getNewlinesBefore(comment || node);
       } else {
-        lines = this._whitespace.getNewlinesAfter(node);
+        const comments = node.trailingComments;
+        const comment = comments && findLast(comments, (comment) =>
+          !!comment.loc && this.format.shouldPrintComment(comment.value));
+
+        lines = this._whitespace.getNewlinesAfter(comment || node);
       }
     } else {
       // generated node
@@ -468,65 +516,48 @@ export default class Printer {
     return (node && (leading ? node.leadingComments : node.trailingComments)) || [];
   }
 
-  _shouldPrintComment(comment) {
-    if (this.format.shouldPrintComment) {
-      return this.format.shouldPrintComment(comment.value);
-    } else {
-      if (!this.format.minified &&
-          (comment.value.indexOf("@license") >= 0 || comment.value.indexOf("@preserve") >= 0)) {
-        return true;
-      } else {
-        return this.format.comments;
-      }
-    }
-  }
-
   _printComment(comment) {
-    if (!this._shouldPrintComment(comment)) return;
+    if (!this.format.shouldPrintComment(comment.value)) return;
 
+    // Some plugins use this to mark comments as removed using the AST-root 'comments' property,
+    // where they can't manually mutate the AST node comment lists.
     if (comment.ignore) return;
-    comment.ignore = true;
+
+    if (this._printedComments.has(comment)) return;
+    this._printedComments.add(comment);
 
     if (comment.start != null) {
       if (this._printedCommentStarts[comment.start]) return;
       this._printedCommentStarts[comment.start] = true;
     }
 
-    // Exclude comments from source mappings since they will only clutter things.
+    // whitespace before
+    this.newline(this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0);
+
+    if (!this.endsWith("[") && !this.endsWith("{")) this.space();
+
+    let val = comment.type === "CommentLine" ? `//${comment.value}\n` : `/*${comment.value}*/`;
+
+    //
+    if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
+      let offset = comment.loc && comment.loc.start.column;
+      if (offset) {
+        let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
+        val = val.replace(newlineRegex, "\n");
+      }
+
+      let indentSize = Math.max(this._getIndent().length, this._buf.getCurrentColumn());
+      val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
+    }
+
     this.withSource("start", comment.loc, () => {
-      // whitespace before
-      this.newline(this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0);
-
-      if (!this.endsWith("[") && !this.endsWith("{")) this.space();
-
-      let val = comment.type === "CommentLine" ? `//${comment.value}` : `/*${comment.value}*/`;
-
-      //
-      if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
-        let offset = comment.loc && comment.loc.start.column;
-        if (offset) {
-          let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
-          val = val.replace(newlineRegex, "\n");
-        }
-
-        let indentSize = Math.max(this._getIndent().length, this._buf.getCurrentColumn());
-        val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
-      }
-
-      // force a newline for line comments when retainLines is set in case the next printed node
-      // doesn't catch up
-      if ((this.format.compact || this.format.concise || this.format.retainLines) &&
-          comment.type === "CommentLine") {
-        val += "\n";
-      }
-
-      //
-      this.token(val);
-
-      // whitespace after
-      this.newline((this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) ||
-        (comment.type === "CommentLine" ? 1 : 0));
+      this._append(val);
     });
+
+    // whitespace after
+    this.newline((this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) +
+      // Subtract one to account for the line force-added above.
+      (comment.type === "CommentLine" ? -1 : 0));
   }
 
   _printComments(comments?: Array<Object>) {
