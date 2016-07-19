@@ -16,3 +16,4 @@ dist
 /packages/*/lib
 _babel.github.io
 /tests/.browser-build.js
+!packages/babel-core/test/fixtures/transformation/presets/*

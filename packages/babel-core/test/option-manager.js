@@ -1,4 +1,5 @@
 var assert = require("assert");
+var path = require("path");
 var OptionManager = require("../lib/transformation/file/options/option-manager");
 var Logger = require("../lib/transformation/file/logger");
 
@@ -18,7 +19,22 @@ suite("option-manager", function () {
       );
     })
   });
+  suite("init", function () {
+    test("can resolve presets against sourceRoot", function () {
+      var opt = new OptionManager(new Logger(null, "unknown"));
+      var fixture = path.join(__dirname, 'fixtures', 'transformation', 'presets');
+      var options = {
+        'presets': ['react'],
+        'passPerPreset': true,
+        'sourceRoot': fixture
+      };
 
+      options = opt.init(options);
+
+      assert.equal(options.presets[0].filename, 'mocked-preset-react.js');
+      return assert.equal(options.sourceRoot, fixture);
+    })
+  });
   suite("mergeOptions", function () {
     test("throws for removed babel 5 options", function() {
       return assert.throws(
