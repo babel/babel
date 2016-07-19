@@ -182,7 +182,7 @@ export default function () {
             let builtRequire = buildRequire(t.stringLiteral(source)).expression;
 
             let varDecl = t.variableDeclaration("var", [
-              t.variableDeclarator(ref, opts.inlineDefault ? t.callExpression(opts.inlineDefault, [builtRequire]) : builtRequire)
+              t.variableDeclarator(ref, opts.inline ? t.callExpression(opts.inline, [builtRequire]) : builtRequire)
             ]);
 
             // Copy location from the original import statement for sourcemap
@@ -366,7 +366,11 @@ export default function () {
 
               if (hasSingleDefaultImport(specifiers) && this.modulesType === "commonjs") {
                 uid = addRequire(source, maxBlockHoist, {
-                  inlineDefault: this.addHelper("interopRequireDefault")
+                  inline: this.addHelper("interopRequireDefault")
+                });
+              } else if (specifiers.length === 1 && t.isImportNamespaceSpecifier(specifiers[0]) && this.modulesType === "commonjs") {
+                uid = addRequire(source, maxBlockHoist, {
+                  inline: this.addHelper("interopRequireWildcard")
                 });
               } else {
                 uid = addRequire(source, maxBlockHoist);
@@ -376,7 +380,7 @@ export default function () {
 
               for (let i = 0; i < specifiers.length; i++) {
                 let specifier = specifiers[i];
-                if (t.isImportNamespaceSpecifier(specifier)) {
+                if (t.isImportNamespaceSpecifier(specifier) && !(specifiers.length === 1 && t.isImportNamespaceSpecifier(specifiers[0]) && this.modulesType === "commonjs")) {
                   if (strict) {
                     remaps[specifier.local.name] = uid;
                   } else {

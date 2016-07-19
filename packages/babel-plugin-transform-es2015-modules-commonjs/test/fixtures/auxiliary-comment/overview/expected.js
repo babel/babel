@@ -13,9 +13,7 @@ exports.test = undefined;
 
 var /*before*/_foo = babelHelpers.interopRequireDefault(require("foo2")) /*after*/;
 
-var /*before*/_foo2 = require("foo3") /*after*/;
-
-/*before*/var /*after*/foo2 = babelHelpers.interopRequireWildcard(_foo2);
+var /*before*/_foo2 = babelHelpers.interopRequireWildcard(require("foo3")) /*after*/;
 
 var /*before*/_foo3 = require("foo4") /*after*/;
 

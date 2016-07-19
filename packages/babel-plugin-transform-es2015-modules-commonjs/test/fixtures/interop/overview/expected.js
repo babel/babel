@@ -13,9 +13,7 @@ require("./directory/foo-bar");
 
 var _foo = babelHelpers.interopRequireDefault(require("foo2"));
 
-var _foo2 = require("foo3");
-
-var foo2 = babelHelpers.interopRequireWildcard(_foo2);
+var _foo2 = babelHelpers.interopRequireWildcard(require("foo3"));
 
 var _foo3 = require("foo4");
 
