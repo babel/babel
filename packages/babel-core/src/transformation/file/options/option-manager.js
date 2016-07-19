@@ -330,7 +330,7 @@ export default class OptionManager {
           throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ${JSON.stringify(dirname)}`);
         }
       } else if (typeof val === "object") {
-        onResolve && onResolve(val);
+        onResolve && onResolve(val,"");
         return val;
       } else {
         throw new Error(`Unsupported preset format: ${val}.`);
