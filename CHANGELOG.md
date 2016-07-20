@@ -13,6 +13,32 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.11.4 (2016-07-20)
+
+In this release among other things are some more optimizations for babel-generator ([#3584](https://github.com/babel/babel/pull/3584), [#3580](https://github.com/babel/babel/pull/3580)).
+
+#### Bug Fix
+* `babel-plugin-transform-remove-console`, `babel-plugin-transform-remove-debugger`, `babel-traverse`
+  * [#3583](https://github.com/babel/babel/pull/3583) Add block if parent is non-block statement for remove-console/debugger. ([@jhen0409](https://github.com/jhen0409))
+* `babel-cli`
+  * [#3578](https://github.com/babel/babel/pull/3578) Support all variations of v8Flags in babel-node. ([@danez](https://github.com/danez))
+
+#### Polish
+* `babel-generator`, `babel-plugin-transform-es2015-modules-commonjs`
+  * [#3584](https://github.com/babel/babel/pull/3584) babel-generator: More refactoring and optimizations. ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babel-plugin-transform-es2015-parameters`
+  * [#3574](https://github.com/babel/babel/pull/3574) Default parameters cleanup. ([@jridgewell](https://github.com/jridgewell))
+* `babel-generator`
+  * [#3580](https://github.com/babel/babel/pull/3580) Further optimize babel-generator Buffer. ([@jridgewell](https://github.com/jridgewell))
+
+#### Commiters: 6
+- Daniel Tschinder ([danez](https://github.com/danez))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- James Talmage ([jamestalmage](https://github.com/jamestalmage))
+- Jhen-Jie Hong ([jhen0409](https://github.com/jhen0409))
+- Justin Ridgewell ([jridgewell](https://github.com/jridgewell))
+- Logan Smyth ([loganfsmyth](https://github.com/loganfsmyth))
+
 ## v6.11.3 (2016-07-13)
 
 The main fix is @loganfsmyth's changes of some parts in babel-generator in [#3565](https://github.com/babel/babel/pull/3565) to fix issues with exponential code generation times in certain cases. 
