@@ -6,32 +6,13 @@ import Plugin from "../../plugin";
 import * as messages from "babel-messages";
 import { normaliseOptions } from "./index";
 import resolve from "../../../helpers/resolve";
-import json5 from "json5";
-import isAbsolute from "path-is-absolute";
-import pathExists from "path-exists";
 import cloneDeepWith from "lodash/cloneDeepWith";
 import clone from "lodash/clone";
 import merge from "../../../helpers/merge";
 import config from "./config";
 import removed from "./removed";
+import buildConfigChain from "./build-config-chain";
 import path from "path";
-import fs from "fs";
-
-let existsCache = {};
-let jsonCache   = {};
-
-const BABELIGNORE_FILENAME = ".babelignore";
-const BABELRC_FILENAME     = ".babelrc";
-const PACKAGE_FILENAME     = "package.json";
-
-function exists(filename) {
-  let cached = existsCache[filename];
-  if (cached == null) {
-    return existsCache[filename] = pathExists.sync(filename);
-  } else {
-    return cached;
-  }
-}
 
 type PluginObject = {
   pre?: Function;
@@ -156,32 +137,6 @@ export default class OptionManager {
     });
   }
 
-  addConfig(loc: string, key?: string, json = json5): boolean {
-    if (this.resolvedConfigs.indexOf(loc) >= 0) {
-      return false;
-    }
-
-    let content = fs.readFileSync(loc, "utf8");
-    let opts;
-
-    try {
-      opts = jsonCache[content] = jsonCache[content] || json.parse(content);
-      if (key) opts = opts[key];
-    } catch (err) {
-      err.message = `${loc}: Error while parsing JSON - ${err.message}`;
-      throw err;
-    }
-
-    this.mergeOptions({
-      options: opts,
-      alias: loc,
-      dirname: path.dirname(loc)
-    });
-    this.resolvedConfigs.push(loc);
-
-    return !!opts;
-  }
-
   /**
    * This is called when we want to merge the input `opts` into the
    * base options (passed as the `extendingOpts`: at top-level it's the
@@ -241,17 +196,6 @@ export default class OptionManager {
       opts.plugins = OptionManager.normalisePlugins(loc, dirname, opts.plugins);
     }
 
-    // add extends clause
-    if (opts.extends) {
-      let extendsLoc = resolve(opts.extends, dirname);
-      if (extendsLoc) {
-        this.addConfig(extendsLoc);
-      } else {
-        if (this.log) this.log.error(`Couldn't resolve extends clause of ${opts.extends} in ${alias}`);
-      }
-      delete opts.extends;
-    }
-
     // resolve presets
     if (opts.presets) {
       // If we're in the "pass per preset" mode, we resolve the presets
@@ -273,14 +217,6 @@ export default class OptionManager {
       }
     }
 
-    // env
-    let envOpts;
-    let envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
-    if (opts.env) {
-      envOpts = opts.env[envKey];
-      delete opts.env;
-    }
-
     // Merge them into current extending options in case of top-level
     // options. In case of presets, just re-assign options which are got
     // normalized during the `mergeOptions`.
@@ -289,14 +225,6 @@ export default class OptionManager {
     } else {
       merge(extendingOpts || this.options, opts);
     }
-
-    // merge in env options
-    this.mergeOptions({
-      options: envOpts,
-      extending: extendingOpts,
-      alias: `${alias}.env.${envKey}`,
-      dirname: dirname
-    });
   }
 
   /**
@@ -338,56 +266,6 @@ export default class OptionManager {
     });
   }
 
-  addIgnoreConfig(loc) {
-    let file  = fs.readFileSync(loc, "utf8");
-    let lines = file.split("\n");
-
-    lines = lines
-      .map((line) => line.replace(/#(.*?)$/, "").trim())
-      .filter((line) => !!line);
-
-    this.mergeOptions({
-      options: { ignore: lines },
-      loc
-    });
-  }
-
-  findConfigs(loc) {
-    if (!loc) return;
-
-    if (!isAbsolute(loc)) {
-      loc = path.join(process.cwd(), loc);
-    }
-
-    let foundConfig = false;
-    let foundIgnore = false;
-
-    while (loc !== (loc = path.dirname(loc))) {
-      if (!foundConfig) {
-        let configLoc = path.join(loc, BABELRC_FILENAME);
-        if (exists(configLoc)) {
-          this.addConfig(configLoc);
-          foundConfig = true;
-        }
-
-        let pkgLoc = path.join(loc, PACKAGE_FILENAME);
-        if (!foundConfig && exists(pkgLoc)) {
-          foundConfig = this.addConfig(pkgLoc, "babel", JSON);
-        }
-      }
-
-      if (!foundIgnore) {
-        let ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
-        if (exists(ignoreLoc)) {
-          this.addIgnoreConfig(ignoreLoc);
-          foundIgnore = true;
-        }
-      }
-
-      if (foundIgnore && foundConfig) return;
-    }
-  }
-
   normaliseOptions() {
     let opts = this.options;
 
@@ -408,19 +286,9 @@ export default class OptionManager {
   }
 
   init(opts: Object = {}): Object {
-    let filename = opts.filename;
-
-    // resolve all .babelrc files
-    if (opts.babelrc !== false) {
-      this.findConfigs(filename);
+    for (let config of buildConfigChain(opts, this.log)) {
+      this.mergeOptions(config);
     }
-
-    // merge in base options
-    this.mergeOptions({
-      options: opts,
-      alias: "base",
-      dirname: filename && path.dirname(filename)
-    });
 
     // normalise
     this.normaliseOptions(opts);
