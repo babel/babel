@@ -15,20 +15,27 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## v6.11.4 (2016-07-20)
 
-In this release among other things are some more optimizations for babel-generator ([#3584](https://github.com/babel/babel/pull/3584), [#3580](https://github.com/babel/babel/pull/3580)).
+In this release among other things are some more optimizations for babel-generator ([#3584](https://github.com/babel/babel/pull/3584), [#3580](https://github.com/babel/babel/pull/3580)) as well as refactors.
+
+[@jamestalmage](https://github.com/jamestalmage) did some awesome clean for OptionsManager and some tests which may help future improvements to `babel-register` performance.
 
 #### Bug Fix
 * `babel-plugin-transform-remove-console`, `babel-plugin-transform-remove-debugger`, `babel-traverse`
   * [#3583](https://github.com/babel/babel/pull/3583) Add block if parent is non-block statement for remove-console/debugger. ([@jhen0409](https://github.com/jhen0409))
+* `babel-plugin-transform-regenerator`
+  * [#3586](https://github.com/babel/babel/pull/3586) Avoid duplicated identifier sharing location - Fixes [#7436](https://github.com/babel/babel/issues/7436). ([@loganfsmyth](https://github.com/loganfsmyth))
 * `babel-cli`
   * [#3578](https://github.com/babel/babel/pull/3578) Support all variations of v8Flags in babel-node. ([@danez](https://github.com/danez))
 
 #### Polish
+* `babel-core`
+  * [#3564](https://github.com/babel/babel/pull/3564) Extract config file resolution from OptionsManager . ([@jamestalmage](https://github.com/jamestalmage))
 * `babel-generator`, `babel-plugin-transform-es2015-modules-commonjs`
   * [#3584](https://github.com/babel/babel/pull/3584) babel-generator: More refactoring and optimizations. ([@loganfsmyth](https://github.com/loganfsmyth))
 * `babel-plugin-transform-es2015-parameters`
   * [#3574](https://github.com/babel/babel/pull/3574) Default parameters cleanup. ([@jridgewell](https://github.com/jridgewell))
 * `babel-generator`
+  * [#3581](https://github.com/babel/babel/pull/3581) babel-generator: Misc cleanup and stale code removal. ([@loganfsmyth](https://github.com/loganfsmyth))
   * [#3580](https://github.com/babel/babel/pull/3580) Further optimize babel-generator Buffer. ([@jridgewell](https://github.com/jridgewell))
 
 #### Commiters: 6
