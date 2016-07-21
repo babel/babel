@@ -1,5 +1,6 @@
 /* eslint max-len: 0 */
 // todo: define instead of assign
+import nameFunction from "babel-helper-function-name";
 
 export default function ({ types: t }) {
   let findBareSupers = {
@@ -43,6 +44,7 @@ export default function ({ types: t }) {
         let ref;
 
         if (path.isClassExpression() || !path.node.id) {
+          nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else { // path.isClassDeclaration() && path.node.id
           ref = path.node.id;
