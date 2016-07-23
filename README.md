@@ -46,5 +46,46 @@ https://github.com/babel/babel/issues/2168
 ## Want to contribute to Babel?
 
 <p align="center">
-  Check out our <a href="https://github.com/babel/babel/blob/master/CONTRIBUTING.md">CONTRIBUTING.md</a>
+  Check out our <a href="https://github.com/babel/babel/blob/master/CONTRIBUTING.md">CONTRIBUTING.md.</a> If you have already joined slack, join our <a href="https://babeljs.slack.com/messages/development">#development</a> channel!
 </p>
+
+## Packages
+
+The Babel repo is managed as a [monorepo](https://github.com/babel/babel/blob/master/doc/design/monorepo.md); it's composed of many npm packages.
+
+### Core Packages
+
+| Package | Version | Dependencies | DevDependencies |
+|--------|-------|------------|----------|
+| [`babel-core`](/packages/babel-core) | [![npm](https://img.shields.io/npm/v/babel-core.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-core) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-core)](https://david-dm.org/babel/babel?path=packages/babel-core) | [![devDependency Status](https://david-dm.org/babel/babel/dev-status.svg?path=packages/babel-core)](https://david-dm.org/babel/babel?path=packages/babel-core#info=devDependencies) |
+| [`babylon`](https://github.com/babel/babylon) | [![npm](https://img.shields.io/npm/v/babylon.svg?maxAge=2592000)](https://www.npmjs.com/package/babylon) | [![Dependency Status](https://david-dm.org/babel/babylon.svg)](https://david-dm.org/babel/babylon) | [![devDependency Status](https://david-dm.org/babel/babylon/dev-status.svg)](https://david-dm.org/babel/babylon#info=devDependencies) |
+| [`babel-traverse`](/packages/babel-traverse) | [![npm](https://img.shields.io/npm/v/babel-traverse.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-traverse) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-traverse)](https://david-dm.org/babel/babel?path=packages/babel-traverse) | [![devDependency Status](https://david-dm.org/babel/babel/dev-status.svg?path=packages/babel-traverse)](https://david-dm.org/babel/babel?path=packages/babel-traverse#info=devDependencies) |
+| [`babel-types`](/packages/babel-types) | [![npm](https://img.shields.io/npm/v/babel-types.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-types) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-types)](https://david-dm.org/babel/babel?path=packages/babel-types) | [![devDependency Status](https://david-dm.org/babel/babel/dev-status.svg?path=packages/babel-types)](https://david-dm.org/babel/babel?path=packages/babel-types#info=devDependencies) |
+| [`babel-generator`](/packages/babel-generator) | [![npm](https://img.shields.io/npm/v/babel-generator.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-generator) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-generator)](https://david-dm.org/babel/babel?path=packages/babel-generator) | [![devDependency Status](https://david-dm.org/babel/babel/dev-status.svg?path=packages/babel-generator)](https://david-dm.org/babel/babel?path=packages/babel-generator#info=devDependencies) |
+
+`babel-core` is the compiler itself.
+
+It is the package that exposes the `babel.transform` method, where `babel.transform(srcCode, opts) -> distCode`
+
+The compiler can be broken down into 3 parts:
+- The parser: [`babylon`](https://github.com/babel/babylon) (actually moved to a seperate repo)
+- The transformer[s]: All the plugins/presets
+  - These all use [`babel-traverse`](/packages/babel-traverse) to traverse through the AST
+  - and [`babel-types`](/packages/babel-types) to validate, build, change AST nodes
+- The generator: [`babel-generator`](/packages/babel-generator)
+
+Check out the [`babel-handbook`](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#introduction) for more information on this.
+
+### Presets
+
+### Plugins
+
+#### Transform Plugins
+
+#### Syntax Plugins
+
+### Helpers (mostly for internal/plugin use)
+
+## License
+
+[MIT](https://github.com/babel/babel/blob/master/LICENSE)
