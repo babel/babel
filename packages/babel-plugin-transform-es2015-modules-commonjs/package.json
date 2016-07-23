@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es2015-modules-commonjs",
-  "version": "6.10.3",
+  "version": "6.11.5",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-modules-commonjs",
   "license": "MIT",
