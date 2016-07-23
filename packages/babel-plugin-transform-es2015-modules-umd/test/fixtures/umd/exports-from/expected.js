@@ -17,7 +17,7 @@
     value: true
   });
   Object.keys(_foo).forEach(function (key) {
-    if (key === "default") return;
+    if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
