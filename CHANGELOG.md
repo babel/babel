@@ -15,7 +15,9 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## v6.11.5 (2016-07-23)
 
-A few fixes: fix `babel-register` file paths on error, infer class name for classes with class properties, fix `export *` to account for previously compiled modules.
+Thanks to Rob Eisenberg ([EisenbergEffect](https://github.com/EisenbergEffect)), Keyan Zhang ([keyanzhang](https://github.com/keyanzhang)), Rolf Timmermans ([rolftimmermans](https://github.com/rolftimmermans)), Thomas Grainger ([graingert](https://github.com/graingert)), 
+
+we have  few fixes: fix `babel-register` file paths on error, infer class name for classes with class properties, fix `export *` to account for previously compiled modules.
 
 #### Bug Fix
 * `babel-plugin-transform-es2015-modules-amd`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-es2015-modules-systemjs`, `babel-plugin-transform-es2015-modules-umd`
@@ -26,13 +28,7 @@ A few fixes: fix `babel-register` file paths on error, infer class name for clas
 * `babel-plugin-transform-class-properties`
   * [#3589](https://github.com/babel/babel/pull/3589) Infer class name for classes that have static property initializer(s). ([@keyanzhang](https://github.com/keyanzhang))
 
-#### Commiters: 4
-- Henry Zhu ([hzoo](https://github.com/hzoo))
-- Keyan Zhang ([keyanzhang](https://github.com/keyanzhang))
-- Rolf Timmermans ([rolftimmermans](https://github.com/rolftimmermans))
-- Thomas Grainger ([graingert](https://github.com/graingert))
-
-- ## v6.11.4 (2016-07-20)
+## v6.11.4 (2016-07-20)
 
 In this release among other things are some more optimizations for babel-generator ([#3584](https://github.com/babel/babel/pull/3584), [#3580](https://github.com/babel/babel/pull/3580)) as well as refactors.
 
