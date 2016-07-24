@@ -1,6 +1,14 @@
 System.register([], function (_export, _context) {
   "use strict";
 
+  function foo() {}
+
+  _export("foo", foo);
+
+  function foo2(bar) {}
+
+  _export("foo2", foo2);
+
   return {
     setters: [],
     execute: function () {
@@ -17,14 +25,6 @@ System.register([], function (_export, _context) {
       _export("default", foo);
 
       _export("bar", bar);
-
-      function foo() {}
-
-      _export("foo", foo);
-
-      function foo2(bar) {}
-
-      _export("foo2", foo2);
     }
   };
 });
