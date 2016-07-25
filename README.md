@@ -62,7 +62,7 @@ The Babel repo is managed as a [monorepo](https://github.com/babel/babel/blob/ma
 | [`babel-traverse`](/packages/babel-traverse) | [![npm](https://img.shields.io/npm/v/babel-traverse.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-traverse) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-traverse)](https://david-dm.org/babel/babel?path=packages/babel-traverse) | [![devDependency Status](https://david-dm.org/babel/babel/dev-status.svg?path=packages/babel-traverse)](https://david-dm.org/babel/babel?path=packages/babel-traverse#info=devDependencies) |
 | [`babel-generator`](/packages/babel-generator) | [![npm](https://img.shields.io/npm/v/babel-generator.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-generator) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-generator)](https://david-dm.org/babel/babel?path=packages/babel-generator) | [![devDependency Status](https://david-dm.org/babel/babel/dev-status.svg?path=packages/babel-generator)](https://david-dm.org/babel/babel?path=packages/babel-generator#info=devDependencies) |
 
-`babel-core` is the Babel compiler itself; it exposes the `babel.transform` method, where `transformedCode = transform(src).code`.
+[`babel-core`](/packages/babel-core) is the Babel compiler itself; it exposes the `babel.transform` method, where `transformedCode = transform(src).code`.
 
 The compiler can be broken down into 3 parts:
 - The parser: [`babylon`](https://github.com/babel/babylon) (moved to a seperate repo and versioned independently)
@@ -116,11 +116,19 @@ There are a few presets that we maintain officially.
 | [`babel-preset-stage-3`](/packages/babel-preset-stage-3) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-3.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-3) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-3)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-3) | [![devDependency Status](https://david-dm.org/babel/babel/dev-status.svg?path=packages/babel-preset-stage-3)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-3#info=devDependencies) |
 | [`babel-preset-react`](/packages/babel-preset-react) | [![npm](https://img.shields.io/npm/v/babel-preset-react.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-react) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-react)](https://david-dm.org/babel/babel?path=packages/babel-preset-react) | [![devDependency Status](https://david-dm.org/babel/babel/dev-status.svg?path=packages/babel-preset-react)](https://david-dm.org/babel/babel?path=packages/babel-preset-react#info=devDependencies) |
 
-We will maintain a preset for each yearly release of ECMAScript (Javascript) starting from ES6/ES2015, a preset for react (JSX/Flow), and a preset for each [stage (0-3)](http://babeljs.io/docs/plugins/#stage-x-experimental-presets) of the [TC-39 Process](https://tc39.github.io/process-document/) for ECMAScript proposals.
+We maintain:
+
+- a preset for each yearly release of ECMAScript (Javascript) starting from ES6/ES2015
+- a preset for react (JSX/Flow)
+- a preset for each [stage (0-3)](http://babeljs.io/docs/plugins/#stage-x-experimental-presets) of the [TC-39 Process](https://tc39.github.io/process-document/) for ECMAScript proposals.
+
+> You can find community maintained presets on [npm](https://www.npmjs.com/search?q=babel-preset)
 
 ### [Plugins](http://babeljs.io/docs/plugins)
 
 Plugins are the heart of Babel and what make it work.
+
+> You can find community plugins on [npm](https://www.npmjs.com/search?q=babel-plugin).
 
 #### Transform Plugins
 
