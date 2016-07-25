@@ -31,7 +31,6 @@ each(legacy, function (value, key) {
   writeFile("core-js/" + key + ".js", defaultify('require("core-js/library/fn/' + value + '")'));
 });
 
-var template   = require("babel-template");
 var helpers    = require("babel-helpers");
 var babel      = require("../../babel-core");
 var util       = require("../../babel-core/lib/util");
