@@ -79,7 +79,7 @@ export function evaluate(): { confident: boolean; value: any } {
 
     if (seen.has(node)) {
       let existing = seen.get(node);
-      if (existing.resolved) {
+      if (existing.resolved && existing.confident) {
         return existing.value;
       } else {
         deopt(path);
@@ -91,7 +91,8 @@ export function evaluate(): { confident: boolean; value: any } {
 
       let val = _evaluate(path);
       item.resolved = true;
-      item.value = value;
+      item.confident = confident;
+      item.value = val;
       return val;
     }
   }
