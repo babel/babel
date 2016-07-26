@@ -13,6 +13,25 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.11.6 (2016-07-26)
+
+- Reverts [#3523](https://github.com/babel/babel/pull/3523) since it caused some issues with code coverage tools.
+- Update readme to explain Babel packages
+
+#### Bug Fix
+* `babel-register`
+  * [#3599](https://github.com/babel/babel/pull/3599) Revert "Correct source map paths for babel-register.". ([@hzoo](https://github.com/hzoo))
+* `babel-plugin-transform-es2015-modules-systemjs`
+  * [#3594](https://github.com/babel/babel/pull/3594) systemjs: hoist named function exports - Fixes [#6973](https://github.com/babel/babel/issues/6973). ([@asapach](https://github.com/asapach))
+
+#### Documentation
+* Other
+  * [#3593](https://github.com/babel/babel/pull/3593) Add badges. ([@hzoo](https://github.com/hzoo))
+
+#### Commiters: 3
+- Aliaksei Sapach ([asapach](https://github.com/asapach))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+
 ## v6.11.5 (2016-07-23)
 
 Thanks to Rob Eisenberg ([EisenbergEffect](https://github.com/EisenbergEffect)), Keyan Zhang ([keyanzhang](https://github.com/keyanzhang)), Rolf Timmermans ([rolftimmermans](https://github.com/rolftimmermans)), Thomas Grainger ([graingert](https://github.com/graingert)), 
