@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es2015-modules-systemjs",
-  "version": "6.11.5",
+  "version": "6.11.6",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-modules-systemjs",
   "license": "MIT",
@@ -8,7 +8,7 @@
   "dependencies": {
     "babel-template": "^6.9.0",
     "babel-helper-hoist-variables": "^6.8.0",
-    "babel-runtime": "^6.9.0"
+    "babel-runtime": "^6.11.6"
   },
   "keywords": [
     "babel-plugin"
