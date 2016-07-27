@@ -13,6 +13,30 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.12.0 (2016-07-27)
+
+- Add a `helpers: false` option to `transform-runtime` to not bundle in babel helpers.
+- Add a `exactGlobals` option to `modules-umd`
+- Fix a regression with `modules-systemjs`
+- Fix a hoisting issue with `react-constant-elements` (@kittens is back!)
+
+#### Bug Fix
+* `babel-plugin-transform-react-constant-elements`, `babel-traverse`
+  * [#3596](https://github.com/babel/babel/pull/3596) Fix React constant elements transform from hoisting elements to positions where their referenced bindings haven't been evaluated yet. ([@kittens](https://github.com/kittens))
+* `babel-plugin-transform-es2015-modules-systemjs`
+  * [#3602](https://github.com/babel/babel/pull/3602) Fix: use correct identifier in template - Fixes [#7509](https://github.com/babel/babel/issues/7509). ([@hzoo](https://github.com/hzoo))
+
+#### New Feature
+* `babel-plugin-transform-runtime`
+  * [#3603](https://github.com/babel/babel/pull/3603) Add `helpers: false` option to babel-plugin-transform-runtime. ([@kittens](https://github.com/kittens))
+* `babel-plugin-transform-es2015-modules-umd`
+  * [#3534](https://github.com/babel/babel/pull/3534) Add `exactGlobals` option to transform-es2015-modules-umd plugin to enable more flexibility in specifying global names. ([@rmacklin](https://github.com/rmacklin))
+
+#### Commiters: 3
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- Sebastian McKenzie ([kittens](https://github.com/kittens))
+- rmacklin ([rmacklin](https://github.com/rmacklin))
+
 ## v6.11.6 (2016-07-26)
 
 - Reverts [#3523](https://github.com/babel/babel/pull/3523) since it caused some issues with code coverage tools.
