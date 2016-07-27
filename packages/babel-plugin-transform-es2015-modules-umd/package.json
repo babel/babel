@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es2015-modules-umd",
-  "version": "6.8.0",
+  "version": "6.12.0",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-modules-umd",
   "license": "MIT",
