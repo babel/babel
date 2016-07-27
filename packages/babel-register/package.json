@@ -9,7 +9,7 @@
   "browser": "lib/browser.js",
   "dependencies": {
     "babel-core": "^6.9.0",
-    "babel-runtime": "^6.11.6",
+    "babel-runtime": "^6.9.0",
     "core-js": "^2.4.0",
     "home-or-tmp": "^1.0.0",
     "lodash": "^4.2.0",
