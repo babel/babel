@@ -79,13 +79,9 @@ export default function ({ types: t }) {
               if (state.opts.exactGlobals) {
                 let globalRef = browserGlobals[arg.value];
                 if (globalRef) {
-                  if (globalRef.indexOf(".") > -1) {
-                    memberExpression = globalRef.split(".").reduce(
-                      (accum, curr) => t.memberExpression(accum, t.identifier(curr)), t.identifier("global")
-                    );
-                  } else {
-                    memberExpression = t.memberExpression(t.identifier("global"), t.identifier(globalRef));
-                  }
+                  memberExpression = globalRef.split(".").reduce(
+                    (accum, curr) => t.memberExpression(accum, t.identifier(curr)), t.identifier("global")
+                  );
                 } else {
                   memberExpression = t.memberExpression(
                     t.identifier("global"), t.identifier(t.toIdentifier(arg.value))
@@ -113,21 +109,17 @@ export default function ({ types: t }) {
             let globalName = browserGlobals[moduleNameOrBasename];
 
             if (globalName) {
-              if (globalName.indexOf(".") > -1) {
-                prerequisiteAssignments = [];
+              prerequisiteAssignments = [];
 
-                let members = globalName.split(".");
-                let namespacedProperties = members.slice(1).reduce((accum, curr, index) => {
-                  let prerequisiteAssignment = buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum[index] });
-                  prerequisiteAssignments.push(prerequisiteAssignment);
-                  accum.push(t.memberExpression(accum[index], t.identifier(curr)));
-                  return accum;
-                }, [t.memberExpression(t.identifier("global"), t.identifier(members[0]))]);
+              let members = globalName.split(".");
+              let namespacedProperties = members.slice(1).reduce((accum, curr, index) => {
+                let prerequisiteAssignment = buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum[index] });
+                prerequisiteAssignments.push(prerequisiteAssignment);
+                accum.push(t.memberExpression(accum[index], t.identifier(curr)));
+                return accum;
+              }, [t.memberExpression(t.identifier("global"), t.identifier(members[0]))]);
 
-                globalToAssign = namespacedProperties[namespacedProperties.length -1];
-              } else {
-                globalToAssign = t.memberExpression(t.identifier("global"), t.identifier(globalName));
-              }
+              globalToAssign = namespacedProperties[namespacedProperties.length -1];
             }
           }
 
