@@ -112,14 +112,10 @@ export default function ({ types: t }) {
               prerequisiteAssignments = [];
 
               let members = globalName.split(".");
-              let namespacedProperties = members.slice(1).reduce((accum, curr, index) => {
-                let prerequisiteAssignment = buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum[index] });
-                prerequisiteAssignments.push(prerequisiteAssignment);
-                accum.push(t.memberExpression(accum[index], t.identifier(curr)));
-                return accum;
-              }, [t.memberExpression(t.identifier("global"), t.identifier(members[0]))]);
-
-              globalToAssign = namespacedProperties[namespacedProperties.length -1];
+              globalToAssign = members.slice(1).reduce((accum, curr) => {
+                prerequisiteAssignments.push(buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum }));
+                return t.memberExpression(accum, t.identifier(curr));
+              }, t.memberExpression(t.identifier("global"), t.identifier(members[0])));
             }
           }
 
