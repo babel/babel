@@ -18,7 +18,7 @@ let buildTemplate = template(`
 
 let buildExportAll = template(`
   for (var KEY in TARGET) {
-    if (KEY !== "default" && key !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
+    if (KEY !== "default" && KEY !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
   }
 `);
 
