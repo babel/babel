@@ -1,14 +1,14 @@
 {
   "type": "File",
   "start": 0,
-  "end": 39,
+  "end": 99,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 1,
+      "line": 2,
       "column": 39
     },
     "filename": "path/to/input-file.js"
@@ -16,14 +16,14 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 39,
+    "end": 99,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 1,
+        "line": 2,
         "column": 39
       },
       "filename": "path/to/input-file.js"
@@ -32,15 +32,15 @@
     "body": [
       {
         "type": "VariableDeclaration",
-        "start": 0,
-        "end": 39,
+        "start": 60,
+        "end": 99,
         "loc": {
           "start": {
-            "line": 1,
+            "line": 2,
             "column": 0
           },
           "end": {
-            "line": 1,
+            "line": 2,
             "column": 39
           },
           "filename": "path/to/input-file.js"
@@ -48,47 +48,48 @@
         "declarations": [
           {
             "type": "VariableDeclarator",
-            "start": 4,
-            "end": 38,
+            "start": 64,
+            "end": 98,
             "loc": {
               "start": {
-                "line": 1,
+                "line": 2,
                 "column": 4
               },
               "end": {
-                "line": 1,
+                "line": 2,
                 "column": 38
               },
               "filename": "path/to/input-file.js"
             },
             "id": {
               "type": "Identifier",
-              "start": 4,
-              "end": 8,
+              "start": 64,
+              "end": 68,
               "loc": {
                 "start": {
-                  "line": 1,
+                  "line": 2,
                   "column": 4
                 },
                 "end": {
-                  "line": 1,
+                  "line": 2,
                   "column": 8
                 },
                 "filename": "path/to/input-file.js"
               },
-              "name": "node"
+              "name": "node",
+              "leadingComments": null
             },
             "init": {
               "type": "StringLiteral",
-              "start": 11,
-              "end": 38,
+              "start": 71,
+              "end": 98,
               "loc": {
                 "start": {
-                  "line": 1,
+                  "line": 2,
                   "column": 11
                 },
                 "end": {
-                  "line": 1,
+                  "line": 2,
                   "column": 38
                 },
                 "filename": "path/to/input-file.js"
@@ -98,12 +99,51 @@
                 "raw": "\"shouldHaveFilenameLocProp\""
               },
               "value": "shouldHaveFilenameLocProp"
-            }
+            },
+            "leadingComments": null
           }
         ],
-        "kind": "var"
+        "kind": "var",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " This comment should have a filename prop attached to loc",
+            "start": 0,
+            "end": 59,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 59
+              },
+              "filename": "path/to/input-file.js"
+            }
+          }
+        ]
       }
     ],
     "directives": []
-  }
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " This comment should have a filename prop attached to loc",
+      "start": 0,
+      "end": 59,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 59
+        },
+        "filename": "path/to/input-file.js"
+      }
+    }
+  ]
 }
