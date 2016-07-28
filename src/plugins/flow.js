@@ -506,6 +506,7 @@ pp.flowParsePrimaryType = function () {
 
         return this.finishNode(node, "FunctionTypeAnnotation");
       }
+      break;
 
     case tt.parenL:
       this.next();
