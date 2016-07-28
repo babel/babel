@@ -66,7 +66,11 @@ pp.flowParseDeclare = function (node) {
   } else if (this.match(tt._var)) {
     return this.flowParseDeclareVariable(node);
   } else if (this.isContextual("module")) {
-    return this.flowParseDeclareModule(node);
+    if (this.lookahead().type === tt.dot) {
+      return this.flowParseDeclareModuleExports(node);
+    } else {
+      return this.flowParseDeclareModule(node);
+    }
   } else if (this.isContextual("type")) {
     return this.flowParseDeclareTypeAlias(node);
   } else if (this.isContextual("interface")) {
@@ -107,6 +111,14 @@ pp.flowParseDeclareModule = function (node) {
 
   this.finishNode(bodyNode, "BlockStatement");
   return this.finishNode(node, "DeclareModule");
+};
+
+pp.flowParseDeclareModuleExports = function (node) {
+  this.expectContextual("module");
+  this.expect(tt.dot);
+  this.expectContextual("exports");
+  node.typeAnnotation = this.flowParseTypeAnnotation();
+  return this.finishNode(node, "DeclareModuleExports");
 };
 
 pp.flowParseDeclareTypeAlias = function (node) {
