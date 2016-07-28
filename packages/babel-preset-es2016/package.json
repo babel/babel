@@ -1,0 +1,13 @@
+{
+  "name": "babel-preset-es2016",
+  "version": "6.11.3",
+  "description": "Babel preset for all es2016 plugins.",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-es2016",
+  "main": "index.js",
+  "dependencies": {
+    "babel-plugin-transform-exponentiation-operator": "^6.3.13"
+  }
+}

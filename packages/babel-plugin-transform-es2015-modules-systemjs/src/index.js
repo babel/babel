@@ -4,7 +4,8 @@ import hoistVariables from "babel-helper-hoist-variables";
 import template from "babel-template";
 
 let buildTemplate = template(`
-  System.register(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
+  SYSTEM_REGISTER(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
+    "use strict";
     BEFORE_BODY;
     return {
       setters: [SETTERS],
@@ -17,7 +18,7 @@ let buildTemplate = template(`
 
 let buildExportAll = template(`
   for (var KEY in TARGET) {
-    if (KEY !== "default") EXPORT_OBJ[KEY] = TARGET[KEY];
+    if (KEY !== "default" && KEY !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
   }
 `);
 
@@ -51,8 +52,6 @@ export default function ({ types: t }) {
   };
 
   return {
-    inherits: require("babel-plugin-transform-strict-mode"),
-
     visitor: {
       ReferencedIdentifier(path, state) {
         if (path.node.name == "__moduleName" && !path.scope.hasBinding("__moduleName")) {
@@ -75,6 +74,7 @@ export default function ({ types: t }) {
           let setters = [];
           let sources = [];
           let variableIds = [];
+          let removedPaths = [];
 
           function addExportName(key, val) {
             exportNames[key] = exportNames[key] || [];
@@ -106,7 +106,7 @@ export default function ({ types: t }) {
           for (let path of body) {
             if (canHoist && path.isFunctionDeclaration()) {
               beforeBody.push(path.node);
-              path.remove();
+              removedPaths.push(path);
             } else if (path.isImportDeclaration()) {
               let source = path.node.source.value;
               pushModule(source, "imports", path.node.specifiers);
@@ -136,7 +136,7 @@ export default function ({ types: t }) {
                   path.replaceWithMultiple(nodes);
                 } else {
                   beforeBody = beforeBody.concat(nodes);
-                  path.remove();
+                  removedPaths.push(path);
                 }
               } else {
                 path.replaceWith(buildExportCall("default", declar.node));
@@ -150,7 +150,16 @@ export default function ({ types: t }) {
                 let nodes = [];
                 let bindingIdentifiers;
                 if (path.isFunction()) {
-                  bindingIdentifiers = { [declar.node.id.name]: declar.node.id };
+                  let node = declar.node;
+                  let name = node.id.name;
+                  if (canHoist) {
+                    addExportName(name, name);
+                    beforeBody.push(node);
+                    beforeBody.push(buildExportCall(name, node.id));
+                    removedPaths.push(path);
+                  } else {
+                    bindingIdentifiers = { [name]: node.id };  
+                  }
                 } else {
                   bindingIdentifiers = declar.getBindingIdentifiers();
                 }
@@ -159,22 +168,22 @@ export default function ({ types: t }) {
                   nodes.push(buildExportCall(name, t.identifier(name)));
                 }
                 path.insertAfter(nodes);
-              }
+              } else {
+                let specifiers = path.node.specifiers;
+                if (specifiers && specifiers.length) {
+                  if (path.node.source) {
+                    pushModule(path.node.source.value, "exports", specifiers);
+                    path.remove();
+                  } else {
+                    let nodes = [];
 
-              let specifiers = path.node.specifiers;
-              if (specifiers && specifiers.length) {
-                if (path.node.source) {
-                  pushModule(path.node.source.value, "exports", specifiers);
-                  path.remove();
-                } else {
-                  let nodes = [];
+                    for (let specifier of specifiers) {
+                      nodes.push(buildExportCall(specifier.exported.name, specifier.local));
+                      addExportName(specifier.local.name, specifier.exported.name);
+                    }
 
-                  for (let specifier of specifiers) {
-                    nodes.push(buildExportCall(specifier.exported.name, specifier.local));
-                    addExportName(specifier.local.name, specifier.exported.name);
+                    path.replaceWithMultiple(nodes);
                   }
-
-                  path.replaceWithMultiple(nodes);
                 }
               }
             }
@@ -246,8 +255,13 @@ export default function ({ types: t }) {
             scope: path.scope
           });
 
+          for (let path of removedPaths) {
+            path.remove();
+          }
+
           path.node.body = [
             buildTemplate({
+              SYSTEM_REGISTER: t.memberExpression(t.identifier(state.opts.systemGlobal || "System"), t.identifier("register")),
               BEFORE_BODY: beforeBody,
               MODULE_NAME: moduleName,
               SETTERS: setters,

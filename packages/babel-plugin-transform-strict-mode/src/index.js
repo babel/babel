@@ -4,8 +4,8 @@ export default function () {
   return {
     visitor: {
       Program(path, state) {
-        if (state.opts.strict === false) return;
-        
+        if (state.opts.strict === false || state.opts.strictMode === false) return;
+
         let { node } = path;
 
         for (let directive of (node.directives: Array<Object>)) {

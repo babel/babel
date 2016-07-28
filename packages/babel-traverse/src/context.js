@@ -104,7 +104,7 @@ export default class TraversalContext {
     for (let path of queue) {
       path.resync();
 
-      if (path.contexts.length === 0 || path.contexts[path.contexts.length - 1] !== this){
+      if (path.contexts.length === 0 || path.contexts[path.contexts.length - 1] !== this) {
         // The context might already have been pushed when this path was inserted and queued.
         // If we always re-pushed here, we could get duplicates and risk leaving contexts
         // on the stack after the traversal has completed, which could break things.

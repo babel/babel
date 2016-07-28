@@ -4,7 +4,7 @@ import * as t from "babel-types";
 const SUPER_THIS_BOUND = Symbol("super this bound");
 
 const superVisitor = {
-  CallExpression(path){
+  CallExpression(path) {
     if (!path.get("callee").isSuper()) return;
 
     const {node} = path;
@@ -71,7 +71,7 @@ function remap(path, key) {
     return false;
   });
 
-  if (shadowFunction && fnPath.isProgram() && !shadowFunction.isProgram()){
+  if (shadowFunction && fnPath.isProgram() && !shadowFunction.isProgram()) {
     // If the shadow wasn't found, take the closest function as a backup.
     // This is a bit of a hack, but it will allow the parameter transforms to work properly
     // without introducing yet another shadow-controlling flag.
@@ -92,7 +92,10 @@ function remap(path, key) {
 
   fnPath.setData(key, id);
 
-  if (key === "this" && fnPath.isMethod({kind: "constructor"})){
+  let classPath = fnPath.findParent((p) => p.isClass());
+  let hasSuperClass = !!(classPath && classPath.node && classPath.node.superClass);
+
+  if (key === "this" && fnPath.isMethod({kind: "constructor"}) && hasSuperClass) {
     fnPath.scope.push({ id });
 
     fnPath.traverse(superVisitor, { id });

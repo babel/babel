@@ -1,8 +1,7 @@
-import isPlainObject from "lodash/lang/isPlainObject";
-import isNumber from "lodash/lang/isNumber";
-import isRegExp from "lodash/lang/isRegExp";
-import isString from "lodash/lang/isString";
-import traverse from "babel-traverse";
+import isPlainObject from "lodash/isPlainObject";
+import isNumber from "lodash/isNumber";
+import isRegExp from "lodash/isRegExp";
+import isString from "lodash/isString";
 import type { Scope } from "babel-traverse";
 import * as t from "./index";
 
@@ -99,7 +98,14 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
   }
 }
 
+// Can't use import because of cyclic dependency between babel-traverse
+// and this module (babel-types). This require needs to appear after
+// we export the TYPES constant, so we lazy-initialize it before use.
+let traverse;
+
 export function toKeyAlias(node: Object, key: Object = node.key): string {
+  if (!traverse) traverse = require("babel-traverse").default;
+
   let alias;
 
   if (node.kind === "method") {

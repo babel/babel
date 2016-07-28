@@ -432,23 +432,19 @@ suite("api", function () {
     var oldBabelEnv = process.env.BABEL_ENV;
     var oldNodeEnv = process.env.NODE_ENV;
 
-
-    // This this a global side effect and we need to make sure it's localized
-    // to every test below.
-    function before() {
+    setup(function () {
+      // Tests need to run with the default and specific values for these. They
+      // need to be cleared for each test.
       delete process.env.BABEL_ENV;
       delete process.env.NODE_ENV;
-    }
+    });
 
-
-    afterEach(function () {
+    suiteTeardown(function () {
       process.env.BABEL_ENV = oldBabelEnv;
       process.env.NODE_ENV = oldNodeEnv;
     });
 
     test("default", function () {
-      before();
-
       var result = babel.transform("foo;", {
         env: {
           development: { code: false }
@@ -459,8 +455,6 @@ suite("api", function () {
     });
 
     test("BABEL_ENV", function () {
-      before();
-
       process.env.BABEL_ENV = "foo";
       var result = babel.transform("foo;", {
         env: {
@@ -471,8 +465,6 @@ suite("api", function () {
     });
 
     test("NODE_ENV", function () {
-      before();
-
       process.env.NODE_ENV = "foo";
       var result = babel.transform("foo;", {
         env: {

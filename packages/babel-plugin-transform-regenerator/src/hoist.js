@@ -26,7 +26,9 @@ exports.hoist = function(funPath) {
     let exprs = [];
 
     vdec.declarations.forEach(function(dec) {
-      vars[dec.id.name] = dec.id;
+      // Note: We duplicate 'dec.id' here to ensure that the variable declaration IDs don't
+      // have the same 'loc' value, since that can make sourcemaps and retainLines behave poorly.
+      vars[dec.id.name] = t.identifier(dec.id.name);
 
       if (dec.init) {
         exprs.push(t.assignmentExpression(

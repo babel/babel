@@ -53,11 +53,6 @@ function isOrHasCallExpression(node) {
   }
 }
 
-
-export function isUserWhitespacable(node) {
-  return t.isUserWhitespacable(node);
-}
-
 export function needsWhitespace(node, parent, type) {
   if (!node) return 0;
 

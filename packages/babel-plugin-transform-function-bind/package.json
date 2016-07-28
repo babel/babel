@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-function-bind",
-  "version": "6.5.2",
+  "version": "6.8.0",
   "description": "Compile function bind operator to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-function-bind",
   "license": "MIT",
@@ -9,10 +9,10 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-plugin-syntax-function-bind": "^6.3.13",
-    "babel-runtime": "^5.0.0"
+    "babel-plugin-syntax-function-bind": "^6.8.0",
+    "babel-runtime": "^6.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.3.13"
+    "babel-helper-plugin-test-runner": "^6.8.0"
   }
 }

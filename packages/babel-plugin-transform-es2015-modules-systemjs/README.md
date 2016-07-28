@@ -12,9 +12,20 @@ $ npm install babel-plugin-transform-es2015-modules-systemjs
 
 **.babelrc**
 
-```json
+```javascript
+// without options
 {
   "plugins": ["transform-es2015-modules-systemjs"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-es2015-modules-systemjs", {
+      // outputs SystemJS.register(...)
+      "systemGlobal": "SystemJS"
+    }]
+  ]
 }
 ```
 

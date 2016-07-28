@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _last2 = require("lodash/array/last");
+var _last2 = require("lodash/last");
 
 var _last3 = babelHelpers.interopRequireDefault(_last2);
 

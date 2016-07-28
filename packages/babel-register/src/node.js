@@ -1,9 +1,9 @@
-import deepClone from "lodash/lang/cloneDeep";
+import deepClone from "lodash/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import extend from "lodash/object/extend";
+import extend from "lodash/extend";
 import * as babel from "babel-core";
-import each from "lodash/collection/each";
+import each from "lodash/each";
 import { util, OptionManager } from "babel-core";
 import fs from "fs";
 import path from "path";
@@ -36,7 +36,7 @@ let maps          = {};
 
 let cwd = process.cwd();
 
-function getRelativePath(filename){
+function getRelativePath(filename) {
   return path.relative(cwd, filename);
 }
 
@@ -69,7 +69,7 @@ function compile(filename) {
       // Do not process config files since has already been done with the OptionManager
       // calls above and would introduce duplicates.
       babelrc: false,
-      sourceMap: "both",
+      sourceMaps: "both",
       ast:       false
     }));
   }

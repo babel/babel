@@ -311,6 +311,9 @@ defineType("Identifier", {
           // todo
         }
       }
+    },
+    decorators: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
     }
   }
 });
@@ -544,6 +547,9 @@ defineType("RestElement", {
   fields: {
     argument: {
       validate: assertNodeType("LVal")
+    },
+    decorators: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
     }
   }
 });

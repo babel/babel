@@ -1,4 +1,5 @@
 var Whitespace = require("../lib/whitespace");
+var Printer    = require("../lib/printer");
 var generate   = require("../lib");
 var assert     = require("assert");
 var parse      = require("babylon").parse;
@@ -9,10 +10,10 @@ var _          = require("lodash");
 suite("generation", function () {
   test("completeness", function () {
     _.each(t.VISITOR_KEYS, function (keys, type) {
-      assert.ok(!!generate.CodeGenerator.prototype[type], type + " should exist");
+      assert.ok(!!Printer.prototype[type], type + " should exist");
     });
 
-    _.each(generate.CodeGenerator.prototype, function (fn, type) {
+    _.each(Printer.prototype, function (fn, type) {
       if (!/[A-Z]/.test(type[0])) return;
       assert.ok(t.VISITOR_KEYS[type], type + " should not exist");
     });
@@ -81,8 +82,27 @@ suite("programmatic generation", function() {
     var ast = parse(generate.default(ifStatement).code);
     assert.equal(ast.program.body[0].consequent.type, 'BlockStatement');
   });
-});
 
+  test("flow object indentation", function() {
+    var objectStatement = t.objectTypeAnnotation(
+      [
+        t.objectTypeProperty(
+          t.identifier('bar'),
+          t.stringTypeAnnotation()
+        ),
+      ],
+      null,
+      null
+    );
+
+    var output = generate.default(objectStatement).code;
+    assert.equal(output, [
+      '{',
+      '  bar: string;',
+      '}',
+    ].join('\n'));
+  });
+});
 
 suite("whitespace", function () {
   test("empty token list", function () {

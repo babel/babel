@@ -1,23 +1,23 @@
 {
   "name": "babel-cli",
-  "version": "6.7.7",
+  "version": "6.11.4",
   "description": "Babel command line.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-cli",
   "dependencies": {
-    "babel-core": "^6.7.7",
-    "babel-register": "^6.6.5",
-    "babel-polyfill": "^6.6.0",
-    "babel-runtime": "^5.0.0",
+    "babel-core": "^6.11.4",
+    "babel-register": "^6.9.0",
+    "babel-polyfill": "^6.9.0",
+    "babel-runtime": "^6.9.0",
     "bin-version-check": "^2.1.0",
     "chalk": "1.1.1",
     "commander": "^2.8.1",
     "convert-source-map": "^1.1.0",
     "fs-readdir-recursive": "^0.1.0",
     "glob": "^5.0.5",
-    "lodash": "^3.2.0",
+    "lodash": "^4.2.0",
     "log-symbols": "^1.0.2",
     "output-file-sync": "^1.1.0",
     "path-exists": "^1.0.0",
@@ -31,7 +31,7 @@
     "chokidar": "^1.0.0"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "^6.6.5"
+    "babel-helper-fixtures": "^6.9.0"
   },
   "bin": {
     "babel-doctor": "./bin/babel-doctor.js",

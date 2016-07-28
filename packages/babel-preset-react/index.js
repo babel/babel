@@ -6,11 +6,12 @@ module.exports = {
     require("babel-plugin-syntax-jsx"),
     require("babel-plugin-transform-react-display-name"),
   ],
-  /*env: {
+  env: {
     development: {
       plugins: [
-        require("babel-plugin-transform-react-jsx-source")
+        // require("babel-plugin-transform-react-jsx-source"),
+        // require("babel-plugin-transform-react-jsx-self")
       ]
     }
-  }*/
+  }
 };

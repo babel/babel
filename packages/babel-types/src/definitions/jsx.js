@@ -127,7 +127,7 @@ defineType("JSXSpreadAttribute", {
 });
 
 defineType("JSXText", {
-  aliases: ["JSX"],
+  aliases: ["JSX", "Immutable"],
   builder: ["value"],
   fields: {
     value: {

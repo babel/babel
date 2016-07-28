@@ -6,8 +6,8 @@ import type File from "../../../file";
 import traverse from "babel-traverse";
 import { visitor as tdzVisitor } from "./tdz";
 import * as t from "babel-types";
-import values from "lodash/object/values";
-import extend from "lodash/object/extend";
+import values from "lodash/values";
+import extend from "lodash/extend";
 import template from "babel-template";
 
 export default function () {
@@ -16,7 +16,7 @@ export default function () {
       VariableDeclaration(path, file) {
         let { node, parent, scope } = path;
         if (!isBlockScoped(node)) return;
-        convertBlockScopedToVar(path, parent, scope, true);
+        convertBlockScopedToVar(path, null, parent, scope, true);
 
         if (node._tdzThis) {
           let nodes = [node];
@@ -51,7 +51,7 @@ export default function () {
         if (replace) path.replaceWith(replace);
       },
 
-      "BlockStatement|Program"(path, file) {
+      "BlockStatement|SwitchStatement|Program"(path, file) {
         if (!t.isLoop(path.parent)) {
           let blockScoping = new BlockScoping(null, path, path.parent, path.scope, file);
           blockScoping.run();
@@ -72,8 +72,10 @@ function isBlockScoped(node) {
   return true;
 }
 
-function convertBlockScopedToVar(path, parent, scope, moveBindingsToParent = false) {
-  const { node } = path;
+function convertBlockScopedToVar(path, node, parent, scope, moveBindingsToParent = false) {
+  if (!node) {
+    node = path.node;
+  }
   // https://github.com/babel/babel/issues/255
   if (!t.isFor(parent)) {
     for (let i = 0; i < node.declarations.length; i++) {
@@ -433,15 +435,14 @@ class BlockScoping {
     let params = values(outsideRefs);
     let args   = values(outsideRefs);
 
-    // build the closure that we're going to wrap the block with
-    let fn = t.functionExpression(null, params, t.blockStatement(block.body));
+    const isSwitch = this.blockPath.isSwitchStatement();
+
+    // build the closure that we're going to wrap the block with, possible wrapping switch(){}
+    let fn = t.functionExpression(null, params, t.blockStatement(isSwitch ? [block] : block.body));
     fn.shadow = true;
 
     // continuation
     this.addContinuations(fn);
-
-    // replace the current block body with the one we're going to build
-    block.body = this.body;
 
     let ref = fn;
 
@@ -471,6 +472,10 @@ class BlockScoping {
     }
 
     this.buildClosure(ret, call);
+
+    // replace the current block body with the one we're going to build
+    if (isSwitch) this.blockPath.replaceWithMultiple(this.body);
+    else block.body = this.body;
   }
 
   /**
@@ -536,9 +541,26 @@ class BlockScoping {
         if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar) || isBlockScoped(declar)) {
           let declarPath = this.blockPath.get("body")[i];
           if (isBlockScoped(declar)) {
-            convertBlockScopedToVar(declarPath, block, this.scope);
+            convertBlockScopedToVar(declarPath, null, block, this.scope);
           }
           declarators = declarators.concat(declar.declarations || declar);
+        }
+      }
+    }
+
+    if (block.cases) {
+      for (let i = 0; i < block.cases.length; i++) {
+        let consequents = block.cases[i].consequent;
+
+        for (let j = 0; j < consequents.length; j++) {
+          let declar = consequents[j];
+          if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar) || isBlockScoped(declar)) {
+            let declarPath = this.blockPath.get("cases")[i];
+            if (isBlockScoped(declar)) {
+              convertBlockScopedToVar(declarPath, declar, block, this.scope);
+            }
+            declarators = declarators.concat(declar.declarations || declar);
+          }
         }
       }
     }

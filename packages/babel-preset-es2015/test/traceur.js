@@ -80,7 +80,7 @@ require("babel-helper-transform-fixture-test-runner")(__dirname + "/fixtures/tra
 }, {
 
 }, function (opts, task) {
-  if (_.contains(task.exec.loc, "module.js")) {
+  if (_.includes(task.exec.loc, "module.js")) {
     opts.plugins.push("transform-es2015-modules-commonjs");
   } else {
     opts.sourceType = "script";

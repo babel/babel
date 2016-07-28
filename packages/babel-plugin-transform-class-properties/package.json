@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-class-properties",
-  "version": "6.6.0",
+  "version": "6.11.5",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-class-properties",
   "license": "MIT",
@@ -9,10 +9,11 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-plugin-syntax-class-properties": "^6.3.13",
-    "babel-runtime": "^5.0.0"
+    "babel-helper-function-name": "^6.8.0",
+    "babel-plugin-syntax-class-properties": "^6.8.0",
+    "babel-runtime": "^6.9.1"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.3.13"
+    "babel-helper-plugin-test-runner": "^6.8.0"
   }
 }

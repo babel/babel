@@ -20,9 +20,24 @@ if (argSeparator > -1) {
   babelArgs = babelArgs.slice(0, argSeparator);
 }
 
+/**
+ * Replace dashes with underscores in the v8Flag name
+ * Also ensure that if the arg contains a value (e.g. --arg=true)
+ * that only the flag is returned.
+ */
+function getNormalizedV8Flag(arg) {
+  const matches = arg.match(/--(.+)/);
+
+  if (matches) {
+    return `--${matches[1].replace(/-/g, "_")}`;
+  }
+
+  return arg;
+}
+
 getV8Flags(function (err, v8Flags) {
-  babelArgs.forEach(function(arg){
-    let flag = arg.split("=")[0];
+  babelArgs.forEach(function(arg) {
+    const flag = arg.split("=")[0];
 
     switch (flag) {
       case "-d":
@@ -36,16 +51,16 @@ getV8Flags(function (err, v8Flags) {
         break;
 
       case "-gc":
-      case "--expose-gc":
         args.unshift("--expose-gc");
         break;
 
+      case "--inspect":
       case "--nolazy":
-        args.unshift("--nolazy");
+        args.unshift(flag);
         break;
 
       default:
-        if (v8Flags.indexOf(arg) >= 0 || arg.indexOf("--trace") === 0) {
+        if (v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0 || arg.indexOf("--trace") === 0) {
           args.unshift(arg);
         } else {
           args.push(arg);

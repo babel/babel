@@ -1,240 +1,128 @@
-import type Position from "./position";
-import repeating from "repeating";
-import trimRight from "trim-right";
+import type SourceMap from "./source-map";
+import trimEnd from "lodash/trimEnd";
+
+const SPACES_RE = /^[ \t]+$/;
 
 /**
- * Buffer for collecting generated output.
+ * The Buffer class exists to manage the queue of tokens being pushed onto the output string
+ * in such a way that the final string buffer is treated as write-only until the final .get()
+ * call. This allows V8 to optimize the output efficiently by not requiring it to store the
+ * string in contiguous memory.
  */
 
 export default class Buffer {
-  constructor(position: Position, format: Object) {
-    this.printedCommentStarts = {};
-    this.parenPushNewlineState = null;
-    this.position = position;
-    this._indent = format.indent.base;
-    this.format = format;
-    this.buf = "";
+  constructor(map: ?SourceMap) {
+    this._map = map;
+  }
 
-    // Maintaining a reference to the last char in the buffer is an optimization
-    // to make sure that v8 doesn't "flatten" the string more often than needed
-    // see https://github.com/babel/babel/pull/3283 for details.
-    this.last = "";
+  _map: SourceMap = null;
+  _buf: Array = [];
+  _last: string = "";
+  _queue: Array = [];
 
-    this.map = null;
-    this._sourcePosition = {
-      line: null,
-      column: null,
-      filename: null,
+  _position: Object = {
+    line: 1,
+    column: 0,
+  };
+  _sourcePosition: Object = {
+    line: null,
+    column: null,
+    filename: null,
+  };
+
+  /**
+   * Get the final string output from the buffer, along with the sourcemap if one exists.
+   */
+
+  get(): Object {
+    this._flush();
+
+    return {
+      code: trimEnd(this._buf.join("")),
+      map: this._map ? this._map.get() : null,
     };
   }
 
-  printedCommentStarts: Object;
-  parenPushNewlineState: ?Object;
-  position: Position;
-  _indent: number;
-  format: Object;
-  buf: string;
-  last: string;
-
   /**
-   * Description
+   * Add a string to the buffer that cannot be reverted.
    */
 
-  catchUp(node: Object) {
-    // catch up to this nodes newline if we're behind
-    if (node.loc && this.format.retainLines && this.buf) {
-      while (this.position.line < node.loc.start.line) {
-        this._push("\n");
+  append(str: string): void {
+    this._flush();
+    const { line, column, filename } = this._sourcePosition;
+    this._append(str, line, column, filename);
+  }
+
+  /**
+   * Add a string to the buffer than can be reverted.
+   */
+
+  queue(str: string): void {
+    // Drop trailing spaces when a newline is inserted.
+    if (str === "\n") while (this._queue.length > 0 && SPACES_RE.test(this._queue[0][0])) this._queue.shift();
+
+    const { line, column, filename } = this._sourcePosition;
+    this._queue.unshift([str, line, column, filename]);
+  }
+
+  _flush(): void {
+    let item;
+    while (item = this._queue.pop()) this._append(...item);
+  }
+
+  _append(str: string, line: number, column: number, filename: ?string): void {
+    // If there the line is ending, adding a new mapping marker is redundant
+    if (this._map && str[0] !== "\n") {
+      this._map.mark(this._position.line, this._position.column, line, column, filename);
+    }
+
+    this._buf.push(str);
+    this._last = str[str.length - 1];
+
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] === "\n") {
+        this._position.line++;
+        this._position.column = 0;
+      } else {
+        this._position.column++;
       }
     }
   }
 
-  /**
-   * Get the current trimmed buffer.
-   */
-
-  get(): string {
-    return trimRight(this.buf);
+  removeTrailingNewline(): void {
+    if (this._queue.length > 0 && this._queue[0][0] === "\n") this._queue.shift();
   }
 
-  /**
-   * Get the current indent.
-   */
-
-  getIndent(): string {
-    if (this.format.compact || this.format.concise) {
-      return "";
-    } else {
-      return repeating(this.format.indent.style, this._indent);
-    }
+  removeLastSemicolon(): void {
+    if (this._queue.length > 0 && this._queue[0][0] === ";") this._queue.shift();
   }
 
-  /**
-   * Get the current indent size.
-   */
+  endsWith(suffix: string): boolean {
+    // Fast path to avoid iterating over this._queue.
+    if (suffix.length === 1) {
+      let last;
+      if (this._queue.length > 0) {
+        const str = this._queue[0][0];
+        last = str[str.length - 1];
+      } else {
+        last = this._last;
+      }
 
-  indentSize(): number {
-    return this.getIndent().length;
-  }
-
-  /**
-   * Increment indent size.
-   */
-
-  indent() {
-    this._indent++;
-  }
-
-  /**
-   * Decrement indent size.
-   */
-
-  dedent() {
-    this._indent--;
-  }
-
-  /**
-   * Add a semicolon to the buffer.
-   */
-
-  semicolon() {
-    this.push(";");
-  }
-
-  /**
-   * Ensure last character is a semicolon.
-   */
-
-  ensureSemicolon() {
-    if (!this.isLast(";")) this.semicolon();
-  }
-
-  /**
-   * Add a right brace to the buffer.
-   */
-
-  rightBrace() {
-    this.newline(true);
-    if (this.format.minified && !this._lastPrintedIsEmptyStatement) {
-      this._removeLast(";");
-    }
-    this.push("}");
-  }
-
-  /**
-   * Add a keyword to the buffer.
-   */
-
-  keyword(name: string) {
-    this.push(name);
-    this.space();
-  }
-
-  /**
-   * Add a space to the buffer unless it is compact (override with force).
-   */
-
-  space(force?: boolean) {
-    if (!force && this.format.compact) return;
-
-    if (force || this.buf && !this.isLast(" ") && !this.isLast("\n")) {
-      this.push(" ");
-    }
-  }
-
-  /**
-   * Remove the last character.
-   */
-
-  removeLast(cha: string) {
-    if (this.format.compact) return;
-    return this._removeLast(cha);
-  }
-
-  _removeLast(cha: string) {
-    if (!this._isLast(cha)) return;
-    this.buf = this.buf.slice(0, -1);
-    this.last = this.buf[this.buf.length - 1];
-    this.position.unshift(cha);
-  }
-
-  /**
-   * Set some state that will be modified if a newline has been inserted before any
-   * non-space characters.
-   *
-   * This is to prevent breaking semantics for terminatorless separator nodes. eg:
-   *
-   *    return foo;
-   *
-   * returns `foo`. But if we do:
-   *
-   *   return
-   *   foo;
-   *
-   *  `undefined` will be returned and not `foo` due to the terminator.
-   */
-
-  startTerminatorless(): Object {
-    return this.parenPushNewlineState = {
-      printed: false
-    };
-  }
-
-  /**
-   * Print an ending parentheses if a starting one has been printed.
-   */
-
-  endTerminatorless(state: Object) {
-    if (state.printed) {
-      this.dedent();
-      this.newline();
-      this.push(")");
-    }
-  }
-
-  /**
-   * Add a newline (or many newlines), maintaining formatting.
-   * Strips multiple newlines if removeLast is true.
-   */
-
-  newline(i?: boolean | number, removeLast?: boolean) {
-    if (this.format.retainLines || this.format.compact) return;
-
-    if (this.format.concise) {
-      this.space();
-      return;
+      return last === suffix;
     }
 
-    // never allow more than two lines
-    if (this.endsWith("\n\n")) return;
-
-    if (typeof i === "boolean") removeLast = i;
-    if (typeof i !== "number") i = 1;
-
-    i = Math.min(2, i);
-    if (this.endsWith("{\n") || this.endsWith(":\n")) i--;
-    if (i <= 0) return;
-
-    // remove the last newline
-    if (removeLast) {
-      this.removeLast("\n");
+    const end = this._last + this._queue.reduce((acc, item) => item[0] + acc, "");
+    if (suffix.length <= end.length) {
+      return end.slice(-suffix.length) === suffix;
     }
 
-    this.removeLast(" ");
-    this._removeSpacesAfterLastNewline();
-    this._push(repeating("\n", i));
+    // We assume that everything being matched is at most a single token plus some whitespace,
+    // which everything currently is, but otherwise we'd have to expand _last or check _buf.
+    return false;
   }
 
-  /**
-   * If buffer ends with a newline and some spaces after it, trim those spaces.
-   */
-
-  _removeSpacesAfterLastNewline() {
-    let lastNewlineIndex = this.buf.lastIndexOf("\n");
-    if (lastNewlineIndex >= 0 && this.get().length <= lastNewlineIndex) {
-      this.buf = this.buf.substring(0, lastNewlineIndex + 1);
-      this.last = "\n";
-    }
+  hasContent(): boolean {
+    return this._queue.length > 0 || !!this._last;
   }
 
   /**
@@ -242,7 +130,7 @@ export default class Buffer {
    * will be given this position in the sourcemap.
    */
 
-  source(prop: string, loc: Location) {
+  source(prop: string, loc: Location): void {
     if (prop && !loc) return;
 
     let pos = loc ? loc[prop] : null;
@@ -256,7 +144,9 @@ export default class Buffer {
    * Call a callback with a specific source location and restore on completion.
    */
 
-  withSource(prop: string, loc: Location, cb: () => void) {
+  withSource(prop: string, loc: Location, cb: () => void): void {
+    if (!this._map) return cb();
+
     // Use the call stack to manage a stack of "source location" data.
     let originalLine = this._sourcePosition.line;
     let originalColumn = this._sourcePosition.column;
@@ -271,89 +161,21 @@ export default class Buffer {
     this._sourcePosition.filename = originalFilename;
   }
 
-  /**
-   * Push a string to the buffer, maintaining indentation and newlines.
-   */
+  getCurrentColumn(): number {
+    const extra = this._queue.reduce((acc, item) => item[0] + acc, "");
+    const lastIndex = extra.lastIndexOf("\n");
 
-  push(str: string, noIndent?: boolean) {
-    if (!this.format.compact && this._indent && !noIndent && str !== "\n") {
-      // we have an indent level and we aren't pushing a newline
-      let indent = this.getIndent();
-
-      // replace all newlines with newlines with the indentation
-      str = str.replace(/\n/g, `\n${indent}`);
-
-      // we've got a newline before us so prepend on the indentation
-      if (this.isLast("\n")) this._push(indent);
-    }
-
-    this._push(str);
+    return lastIndex === -1 ? this._position.column + extra.length : (extra.length - 1 - lastIndex);
   }
 
-  /**
-   * Push a string to the buffer.
-   */
+  getCurrentLine(): number {
+    const extra = this._queue.reduce((acc, item) => item[0] + acc, "");
 
-  _push(str: string): void {
-    // see startTerminatorless() instance method
-    let parenPushNewlineState = this.parenPushNewlineState;
-    if (parenPushNewlineState) {
-      for (let i = 0; i < str.length; i++) {
-        let cha = str[i];
-
-        // we can ignore spaces since they wont interupt a terminatorless separator
-        if (cha === " ") continue;
-
-        this.parenPushNewlineState = null;
-
-        if (cha === "\n" || cha === "/") {
-          // we're going to break this terminator expression so we need to add a parentheses
-          this._push("(");
-          this.indent();
-          parenPushNewlineState.printed = true;
-        }
-
-        break;
-      }
+    let count = 0;
+    for (let i = 0; i < extra.length; i++) {
+      if (extra[i] === "\n") count++;
     }
 
-    // If there the line is ending, adding a new mapping marker is redundant
-    if (str[0] !== "\n") this.map.mark(this._sourcePosition);
-
-    //
-    this.position.push(str);
-    this.buf += str;
-    this.last = str[str.length - 1];
-  }
-
-  /**
-   * Test if the buffer ends with a string.
-   */
-
-  endsWith(str: string): boolean {
-    if (str.length === 1) {
-      return this.last === str;
-    } else {
-      return this.buf.slice(-str.length) === str;
-    }
-  }
-
-  /**
-   * Test if a character is last in the buffer.
-   */
-
-  isLast(cha: string): boolean {
-    if (this.format.compact) return false;
-    return this._isLast(cha);
-  }
-
-  _isLast(cha: string): boolean {
-    let last = this.last;
-
-    if (Array.isArray(cha)) {
-      return cha.indexOf(last) >= 0;
-    } else {
-      return cha === last;
-    }
+    return this._position.line + count;
   }
 }

@@ -1,6 +1,6 @@
-import isBoolean from "lodash/lang/isBoolean";
-import each from "lodash/collection/each";
-import map from "lodash/collection/map";
+import isBoolean from "lodash/isBoolean";
+import each from "lodash/each";
+import map from "lodash/map";
 import * as t from "babel-types";
 
 type WhitespaceObject = {
@@ -167,6 +167,7 @@ exports.nodes = {
  */
 
 exports.nodes.ObjectProperty =
+exports.nodes.ObjectTypeProperty =
 exports.nodes.ObjectMethod =
 exports.nodes.SpreadProperty = function (node: Object, parent): ?WhitespaceObject {
   if (parent.properties[0] === node) {

@@ -1,4 +1,6 @@
 function foo(l){
-return (
+return(
 
-l);}
+l);
+
+}

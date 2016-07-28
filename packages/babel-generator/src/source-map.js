@@ -5,26 +5,19 @@ import sourceMap from "source-map";
  */
 
 export default class SourceMap {
-  constructor(position, opts, code) {
-    this.position = position;
-    this.opts     = opts;
-    this.last     = {generated: {}, original: {}};
+  constructor(opts, code) {
+    this._opts     = opts;
+    this._map = new sourceMap.SourceMapGenerator({
+      file: opts.sourceMapTarget,
+      sourceRoot: opts.sourceRoot
+    });
 
-    if (opts.sourceMaps) {
-      this.map = new sourceMap.SourceMapGenerator({
-        file: opts.sourceMapTarget,
-        sourceRoot: opts.sourceRoot
+    if (typeof code === "string") {
+      this._map.setSourceContent(opts.sourceFileName, code);
+    } else if (typeof code === "object") {
+      Object.keys(code).forEach((sourceFileName) => {
+        this._map.setSourceContent(sourceFileName, code[sourceFileName]);
       });
-
-      if (typeof code === "string") {
-        this.map.setSourceContent(opts.sourceFileName, code);
-      } else if (typeof code === "object") {
-        Object.keys(code).forEach((sourceFileName) => {
-          this.map.setSourceContent(sourceFileName, code[sourceFileName]);
-        });
-      }
-    } else {
-      this.map = null;
     }
   }
 
@@ -33,12 +26,7 @@ export default class SourceMap {
    */
 
   get() {
-    let map = this.map;
-    if (map) {
-      return map.toJSON();
-    } else {
-      return map;
-    }
+    return this._map.toJSON();
   }
 
   /**
@@ -46,35 +34,30 @@ export default class SourceMap {
    * values to insert a mapping to nothing.
    */
 
-  mark(sourcePos: Object) {
-    let map = this.map;
-    if (!map) return; // no source map
-
-    let position = this.position;
-
+  mark(generatedLine: number, generatedColumn: number, line: number, column: number, filename: ?string) {
     // Adding an empty mapping at the start of a generated line just clutters the map.
-    if (this._lastGenLine !== position.line && sourcePos.line === null) return;
+    if (this._lastGenLine !== generatedLine && line === null) return;
 
     // If this mapping points to the same source location as the last one, we can ignore it since
     // the previous one covers it.
-    if (this._lastGenLine === position.line && this._lastSourceLine === sourcePos.line &&
-      this._lastSourceColumn === sourcePos.column) {
+    if (this._lastGenLine === generatedLine && this._lastSourceLine === line &&
+      this._lastSourceColumn === column) {
       return;
     }
 
-    this._lastGenLine = position.line;
-    this._lastSourceLine = sourcePos.line;
-    this._lastSourceColumn = sourcePos.column;
+    this._lastGenLine = generatedLine;
+    this._lastSourceLine = line;
+    this._lastSourceColumn = column;
 
-    map.addMapping({
+    this._map.addMapping({
       generated: {
-        line: position.line,
-        column: position.column
+        line: generatedLine,
+        column: generatedColumn,
       },
-      source: sourcePos.line == null ? null : sourcePos.filename || this.opts.sourceFileName,
-      original: sourcePos.line == null ? null : {
-        line: sourcePos.line,
-        column: sourcePos.column,
+      source: line == null ? null : filename || this._opts.sourceFileName,
+      original: line == null ? null : {
+        line: line,
+        column: column,
       },
     });
   }

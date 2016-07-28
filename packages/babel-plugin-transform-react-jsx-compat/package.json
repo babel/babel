@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-react-jsx-compat",
-  "version": "6.5.0",
+  "version": "6.8.0",
   "description": "Turn JSX into React Pre-0.12 function calls",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-compat",
   "license": "MIT",
@@ -9,10 +9,10 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-runtime": "^5.0.0",
-    "babel-helper-builder-react-jsx": "^6.3.13"
+    "babel-runtime": "^6.0.0",
+    "babel-helper-builder-react-jsx": "^6.8.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.3.13"
+    "babel-helper-plugin-test-runner": "^6.8.0"
   }
 }

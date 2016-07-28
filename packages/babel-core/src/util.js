@@ -1,10 +1,10 @@
-import escapeRegExp from "lodash/string/escapeRegExp";
-import startsWith from "lodash/string/startsWith";
-import isBoolean from "lodash/lang/isBoolean";
+import escapeRegExp from "lodash/escapeRegExp";
+import startsWith from "lodash/startsWith";
+import isBoolean from "lodash/isBoolean";
 import minimatch from "minimatch";
-import contains from "lodash/collection/contains";
-import isString from "lodash/lang/isString";
-import isRegExp from "lodash/lang/isRegExp";
+import includes from "lodash/includes";
+import isString from "lodash/isString";
+import isRegExp from "lodash/isRegExp";
 import path from "path";
 import slash from "slash";
 
@@ -17,7 +17,7 @@ export { inherits, inspect } from "util";
 export function canCompile(filename: string, altExts?: Array<string>): boolean {
   let exts = altExts || canCompile.EXTENSIONS;
   let ext = path.extname(filename);
-  return contains(exts, ext);
+  return includes(exts, ext);
 }
 
 /**

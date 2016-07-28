@@ -2,7 +2,6 @@ packages/babel-core/src/transformation/templates
 scripts
 lib
 packages/babel-runtime
-packages/babel-regenerator-runtime
 packages/*/node_modules
 packages/*/test
 packages/*/dist

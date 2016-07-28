@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-member-expression-literals",
-  "version": "6.5.0",
+  "version": "6.8.0",
   "description": "Turn valid member expression property literals into plain identifiers",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-member-expression-literals",
   "license": "MIT",
@@ -9,9 +9,9 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-runtime": "^5.0.0"
+    "babel-runtime": "^6.0.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.3.13"
+    "babel-helper-plugin-test-runner": "^6.8.0"
   }
 }
