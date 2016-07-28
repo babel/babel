@@ -11,10 +11,7 @@ program.option("-i, --ignore [globs]", "");
 program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]");
 program.option("-w, --plugins [string]", "", util.list);
 program.option("-b, --presets [string]", "", util.list);
-program.option(
-  "-d, --no-transpile [version]",
-  "Disable Babel transpilation if the Node version in the given range is being used"
-);
+program.option("-d, --no-transpile [version]", "Disable Babel transpilation if the Node version in the given range is being used");
 
 let pkg = require("../package.json");
 program.version(pkg.version);
