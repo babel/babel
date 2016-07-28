@@ -8,8 +8,8 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-cli",
   "dependencies": {
     "babel-core": "^6.7.7",
-    "babel-polyfill": "^6.6.0",
     "babel-register": "^6.6.5",
+    "babel-polyfill": "^6.6.0",
     "babel-runtime": "^5.0.0",
     "bin-version-check": "^2.1.0",
     "chalk": "1.1.1",
@@ -23,7 +23,6 @@
     "path-exists": "^1.0.0",
     "path-is-absolute": "^1.0.0",
     "request": "^2.65.0",
-    "semver": "^5.1.0",
     "slash": "^1.0.0",
     "source-map": "^0.5.0",
     "v8flags": "^2.0.10"
