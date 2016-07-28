@@ -3,6 +3,7 @@ module.exports = {
     require("babel-preset-stage-3")
   ],
   plugins: [
+    require("babel-plugin-transform-class-properties"),
     require("babel-plugin-transform-object-rest-spread")
   ]
 };
