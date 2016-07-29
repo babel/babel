@@ -102,8 +102,7 @@ pp.flowParseDeclareModule = function (node) {
   while (!this.match(tt.braceR)) {
     let node2 = this.startNode();
 
-    // todo: declare check
-    this.next();
+    this.expectContextual("declare", "Unexpected token. Only declares are allowed inside declare module");
 
     body.push(this.flowParseDeclare(node2));
   }
