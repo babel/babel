@@ -230,8 +230,11 @@ pp.flowParseTypeParameter = function () {
 };
 
 pp.flowParseTypeParameterDeclaration = function () {
+  const oldInType = this.state.inType;
   let node = this.startNode();
   node.params = [];
+
+  this.state.inType = true;
 
   if (this.isRelational("<") || this.match(tt.jsxTagStart)) {
     this.next();
@@ -246,6 +249,8 @@ pp.flowParseTypeParameterDeclaration = function () {
     }
   } while (!this.isRelational(">"));
   this.expectRelational(">");
+
+  this.state.inType = oldInType;
 
   return this.finishNode(node, "TypeParameterDeclaration");
 };
@@ -1042,12 +1047,9 @@ export default function (instance) {
   // parse function type parameters - function foo<T>() {}
   instance.extend("parseFunctionParams", function (inner) {
     return function (node) {
-      const oldInType = this.state.inType;
-      this.state.inType = true;
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
-      this.state.inType = oldInType;
       inner.call(this, node);
     };
   });
@@ -1115,10 +1117,7 @@ export default function (instance) {
         let arrowExpression;
         let typeParameters;
         try {
-          const oldInType = this.state.inType;
-          this.state.inType = true;
           typeParameters = this.flowParseTypeParameterDeclaration();
-          this.state.inType = oldInType;
 
           arrowExpression = inner.apply(this, args);
           arrowExpression.typeParameters = typeParameters;

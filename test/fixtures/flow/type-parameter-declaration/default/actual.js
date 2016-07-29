@@ -19,3 +19,4 @@ interface A<T = string> {}
 interface A<T: ?string = string> {}
 interface A<S, T: ?string = string> {}
 interface A<S = number, T: ?string = string> {}
+type A<T = void> = T
