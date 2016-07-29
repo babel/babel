@@ -28,7 +28,7 @@
     "istanbul": "^0.3.5",
     "kcheck": "^2.0.0",
     "lerna": "2.0.0-beta.23",
-    "lerna-changelog": "^0.2.0",
+    "lerna-changelog": "^0.2.1",
     "lodash": "^4.2.0",
     "matcha": "^0.6.0",
     "mkdirp": "^0.5.1",
