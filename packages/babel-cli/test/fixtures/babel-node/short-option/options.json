@@ -1,0 +1,3 @@
+{
+  "args": ["-i", "bar.js", "foo.js"]
+}
