@@ -9,7 +9,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-runtime": "^6.9.1",
-    "babel-traverse": "^6.14.0",
     "esutils": "^2.0.2",
     "lodash": "^4.2.0",
     "to-fast-properties": "^1.0.1"
