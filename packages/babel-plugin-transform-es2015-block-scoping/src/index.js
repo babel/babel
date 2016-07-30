@@ -684,11 +684,13 @@ class BlockScoping {
           single.consequent[0]
         ));
       } else {
-        // https://github.com/babel/babel/issues/998
-        for (let i = 0; i < cases.length; i++) {
-          let caseConsequent = cases[i].consequent[0];
-          if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {
-            caseConsequent.label = this.loopLabel = this.loopLabel || this.scope.generateUidIdentifier("loop");
+        if (this.loop) {
+          // https://github.com/babel/babel/issues/998
+          for (let i = 0; i < cases.length; i++) {
+            let caseConsequent = cases[i].consequent[0];
+            if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {
+              caseConsequent.label = this.loopLabel = this.loopLabel || this.scope.generateUidIdentifier("loop");
+            }
           }
         }
 
