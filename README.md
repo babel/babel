@@ -45,6 +45,8 @@ For documentation and website issues please visit the [babel/babel.github.io](ht
 
 Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md). If you have already joined slack, join our [#development](https://babeljs.slack.com/messages/development) channel!
 
+Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
+
 ## Packages
 
 The Babel repo is managed as a [monorepo](https://github.com/babel/babel/blob/master/doc/design/monorepo.md); it's composed of many npm packages.
