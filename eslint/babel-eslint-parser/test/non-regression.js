@@ -402,7 +402,7 @@ describe("verify", function () {
           "var b: T = 1; b;"
         ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "1:21 'T' is defined but never used no-unused-vars",
+        [ "1:21 'T' is defined but never used. no-unused-vars",
           "2:8 'T' is not defined. no-undef" ]
       );
     });
@@ -1145,7 +1145,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "var unused;",
       { "no-unused-vars": 1 },
-      [ "1:5 'unused' is defined but never used no-unused-vars" ]
+      [ "1:5 'unused' is defined but never used. no-unused-vars" ]
     );
   });
 
@@ -1196,7 +1196,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "const {Bacona} = require('baconjs')",
       { "no-undef": 1, "no-unused-vars": 1 },
-      [ "1:8 'Bacona' is defined but never used no-unused-vars" ]
+      [ "1:8 'Bacona' is defined but never used. no-unused-vars" ]
     );
   });
 
