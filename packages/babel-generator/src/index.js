@@ -93,6 +93,11 @@ function normalizeOptions(code, opts, tokens): Format {
  * Determine if input code uses more single or double quotes.
  */
 function findCommonStringDelimiter(code, tokens) {
+  const DEFAULT_STRING_DELIMITER = "double";
+  if (!code) {
+    return DEFAULT_STRING_DELIMITER;
+  }
+
   let occurences = {
     single: 0,
     double: 0
@@ -117,7 +122,7 @@ function findCommonStringDelimiter(code, tokens) {
   if (occurences.single > occurences.double) {
     return "single";
   } else {
-    return "double";
+    return DEFAULT_STRING_DELIMITER;
   }
 }
 
