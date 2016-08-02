@@ -9,7 +9,6 @@
   "main": "index.js",
   "dependencies": {
     "babel-plugin-transform-class-constructor-call": "^6.3.13",
-    "babel-plugin-transform-class-properties": "^6.3.13",
     "babel-plugin-transform-decorators": "^6.3.13",
     "babel-plugin-transform-export-extensions": "^6.3.13",
     "babel-preset-stage-2": "^6.3.13"
