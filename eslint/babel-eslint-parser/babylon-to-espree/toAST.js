@@ -17,6 +17,18 @@ function changeToLiteral(node) {
   }
 }
 
+function changeComments(nodeComments) {
+  for (var i = 0; i < nodeComments.length; i++) {
+    var comment = nodeComments[i];
+    if (comment.type === "CommentLine") {
+      comment.type = "Line";
+    } else if (comment.type === "CommentBlock") {
+      comment.type = "Block";
+    }
+    comment.range = [comment.start, comment.end];
+  }
+}
+
 var astTransformVisitor = {
   noScope: true,
   enter: function (path) {
@@ -33,27 +45,11 @@ var astTransformVisitor = {
     }
 
     if (node.trailingComments) {
-      for (var i = 0; i < node.trailingComments.length; i++) {
-        var comment = node.trailingComments[i];
-        if (comment.type === "CommentLine") {
-          comment.type = "Line";
-        } else if (comment.type === "CommentBlock") {
-          comment.type = "Block";
-        }
-        comment.range = [comment.start, comment.end];
-      }
+      changeComments(node.trailingComments);
     }
 
     if (node.leadingComments) {
-      for (var i = 0; i < node.leadingComments.length; i++) {
-        var comment = node.leadingComments[i];
-        if (comment.type === "CommentLine") {
-          comment.type = "Line";
-        } else if (comment.type === "CommentBlock") {
-          comment.type = "Block";
-        }
-        comment.range = [comment.start, comment.end];
-      }
+      changeComments(node.leadingComments);
     }
 
     // make '_paths' non-enumerable (babel-eslint #200)

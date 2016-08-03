@@ -36,20 +36,20 @@ function lookup(obj, keypath, backwardsDepth) {
   if (!keypath) { return obj; }
 
   return keypath.split(".").slice(0, -1 * backwardsDepth)
-  .reduce(function (base, segment) { return base && base[segment], obj });
+  .reduce(function (base, segment) { return base && base[segment], obj; });
 }
 
 function parseAndAssertSame(code) {
   var esAST = espree.parse(code, {
     ecmaFeatures: {
         // enable JSX parsing
-        jsx: true,
+      jsx: true,
         // enable return in global scope
-        globalReturn: true,
+      globalReturn: true,
         // enable implied strict mode (if ecmaVersion >= 5)
-        impliedStrict: true,
+      impliedStrict: true,
         // allow experimental object rest/spread
-        experimentalObjectRestSpread: true
+      experimentalObjectRestSpread: true
     },
     tokens: true,
     loc: true,
@@ -62,7 +62,7 @@ function parseAndAssertSame(code) {
   var babylonAST = babelEslint.parse(code);
   try {
     assertImplementsAST(esAST, babylonAST);
-  } catch(err) {
+  } catch (err) {
     var traversal = err.message.slice(3, err.message.indexOf(":"));
     if (esAST.tokens) {
       delete esAST.tokens;
@@ -145,10 +145,10 @@ describe("babylon-to-esprima", function () {
     it("template with destructuring #31", function () {
       parseAndAssertSame([
         "module.exports = {",
-          "render() {",
-            "var {name} = this.props;",
-            "return Math.max(null, `Name: ${name}, Name: ${name}`);",
-          "}",
+        "render() {",
+        "var {name} = this.props;",
+        "return Math.max(null, `Name: ${name}, Name: ${name}`);",
+        "}",
         "};"
       ].join("\n"));
     });
@@ -199,19 +199,19 @@ describe("babylon-to-esprima", function () {
   });
 
   it("default import", function () {
-    parseAndAssertSame('import foo from "foo";');
+    parseAndAssertSame("import foo from \"foo\";");
   });
 
   it("import specifier", function () {
-    parseAndAssertSame('import { foo } from "foo";');
+    parseAndAssertSame("import { foo } from \"foo\";");
   });
 
   it("import specifier with name", function () {
-    parseAndAssertSame('import { foo as bar } from "foo";');
+    parseAndAssertSame("import { foo as bar } from \"foo\";");
   });
 
   it("import bare", function () {
-    parseAndAssertSame('import "foo";');
+    parseAndAssertSame("import \"foo\";");
   });
 
   it("export default class declaration", function () {
@@ -231,7 +231,7 @@ describe("babylon-to-esprima", function () {
   });
 
   it("export all", function () {
-    parseAndAssertSame('export * from "foo";');
+    parseAndAssertSame("export * from \"foo\";");
   });
 
   it("export named", function () {
@@ -272,11 +272,11 @@ describe("babylon-to-esprima", function () {
   it("block comments #124", function () {
     parseAndAssertSame([
       "React.createClass({",
-        "render() {",
-           "// return (",
-           "//   <div />",
-           "// ); // <-- this is the line that is reported",
-        "}",
+      "render() {",
+      "// return (",
+      "//   <div />",
+      "// ); // <-- this is the line that is reported",
+      "}",
       "});"
     ].join("\n"));
   });
@@ -308,24 +308,24 @@ describe("babylon-to-esprima", function () {
   it("jsdoc", function () {
     parseAndAssertSame([
       "/**",
-       "* @param {object} options",
-       "* @return {number}",
-       "*/",
+      "* @param {object} options",
+      "* @return {number}",
+      "*/",
       "const test = function({ a, b, c }) {",
-        "return a + b + c;",
+      "return a + b + c;",
       "};",
       "module.exports = test;"
     ].join("\n"));
-  })
+  });
 
   it("empty block with comment", function () {
     parseAndAssertSame([
       "function a () {",
-        "try {",
-          "b();",
-        "} catch (e) {",
-          "// asdf",
-        "}",
+      "try {",
+      "b();",
+      "} catch (e) {",
+      "// asdf",
+      "}",
       "}"
     ].join("\n"));
   });
@@ -334,7 +334,7 @@ describe("babylon-to-esprima", function () {
     it("MethodDefinition", function () {
       parseAndAssertSame([
         "export default class A {",
-          "a() {}",
+        "a() {}",
         "}"
       ].join("\n"));
     });
@@ -348,8 +348,8 @@ describe("babylon-to-esprima", function () {
     it("ClassMethod", function () {
       parseAndAssertSame([
         "class A {",
-          "constructor() {",
-          "}",
+        "constructor() {",
+        "}",
         "}"
       ].join("\n"));
     });
@@ -357,8 +357,8 @@ describe("babylon-to-esprima", function () {
     it("ClassMethod multiple params", function () {
       parseAndAssertSame([
         "class A {",
-          "constructor(a, b, c) {",
-          "}",
+        "constructor(a, b, c) {",
+        "}",
         "}"
       ].join("\n"));
     });
@@ -385,8 +385,8 @@ describe("babylon-to-esprima", function () {
     it("ObjectMethod", function () {
       parseAndAssertSame([
         "var a = {",
-          "b(c) {",
-          "}",
+        "b(c) {",
+        "}",
         "}"
       ].join("\n"));
     });
@@ -394,7 +394,7 @@ describe("babylon-to-esprima", function () {
     it("do not allow import export everywhere", function() {
       assert.throws(function () {
         parseAndAssertSame("function F() { import a from \"a\"; }");
-      }, /SyntaxError: 'import' and 'export' may only appear at the top level/)
+      }, /SyntaxError: 'import' and 'export' may only appear at the top level/);
     });
 
     it("return outside function", function () {
@@ -415,31 +415,31 @@ describe("babylon-to-esprima", function () {
       parseAndAssertSame("class A { get x ( ) { ; } }");
       parseAndAssertSame([
         "class A {",
-          "get x(",
-          ")",
-          "{",
-            ";",
-          "}",
+        "get x(",
+        ")",
+        "{",
+        ";",
+        "}",
         "}"
       ].join("\n"));
       parseAndAssertSame("class A { set x (a) { ; } }");
       parseAndAssertSame([
         "class A {",
-          "set x(a",
-          ")",
-          "{",
-            ";",
-          "}",
+        "set x(a",
+        ")",
+        "{",
+        ";",
+        "}",
         "}"
       ].join("\n"));
       parseAndAssertSame([
         "var B = {",
-            "get x () {",
-                "return this.ecks;",
-            "},",
-            "set x (ecks) {",
-                "this.ecks = ecks;",
-            "}",
+        "get x () {",
+        "return this.ecks;",
+        "},",
+        "set x (ecks) {",
+        "this.ecks = ecks;",
+        "}",
         "};"
       ].join("\n"));
     });

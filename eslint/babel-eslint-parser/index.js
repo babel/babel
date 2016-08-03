@@ -388,7 +388,7 @@ exports.parse = function (code, options) {
   }
 
   return exports.parseNoPatch(code, options);
-}
+};
 
 exports.parseNoPatch = function (code, options) {
   var opts = {
@@ -397,20 +397,20 @@ exports.parseNoPatch = function (code, options) {
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
     plugins: [
-        "flow",
-        "jsx",
-        "asyncFunctions",
-        "asyncGenerators",
-        "classConstructorCall",
-        "classProperties",
-        "decorators",
-        "doExpressions",
-        "exponentiationOperator",
-        "exportExtensions",
-        "functionBind",
-        "functionSent",
-        "objectRestSpread",
-        "trailingFunctionCommas"
+      "flow",
+      "jsx",
+      "asyncFunctions",
+      "asyncGenerators",
+      "classConstructorCall",
+      "classProperties",
+      "decorators",
+      "doExpressions",
+      "exponentiationOperator",
+      "exportExtensions",
+      "functionBind",
+      "functionSent",
+      "objectRestSpread",
+      "trailingFunctionCommas"
     ]
   };
 
@@ -458,4 +458,4 @@ exports.parseNoPatch = function (code, options) {
   babylonToEspree.attachComments(ast, ast.comments, ast.tokens);
 
   return ast;
-}
+};

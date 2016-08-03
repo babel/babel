@@ -22,6 +22,7 @@
     "bootstrap": "git submodule update --init && cd eslint && npm install",
     "eslint": "cd eslint && mocha -c tests/lib/rules/*.js -r ../eslint-tester.js",
     "test": "mocha",
+    "test-ci" "npm test && npm run lint",
     "lint": "eslint index.js babylon-to-espree test",
     "fix": "eslint index.js babylon-to-espree test --fix",
     "preversion": "npm test",
@@ -38,6 +39,7 @@
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
     "eslint": "^3.0.0",
+    "eslint-config-babel": "^1.0.1",
     "espree": "^3.0.0",
     "mocha": "^3.0.0"
   }

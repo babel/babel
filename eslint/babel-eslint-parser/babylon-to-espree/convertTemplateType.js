@@ -90,4 +90,4 @@ module.exports = function (tokens, tt) {
     }
     startingToken++;
   }
-}
+};

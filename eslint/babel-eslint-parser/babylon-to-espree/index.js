@@ -17,4 +17,4 @@ exports.convertComments = function (comments) {
       comment.range = [comment.start, comment.end];
     }
   }
-}
+};

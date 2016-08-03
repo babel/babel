@@ -7,3 +7,5 @@ matrix:
     - node_js: "4"
     - node_js: "5"
     - node_js: "6"
+
+script: npm run test-ci

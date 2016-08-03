@@ -23,7 +23,7 @@ function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, over
 
   if (overrideConfig) {
     for (var key in overrideConfig) {
-      config[key] = overrideConfig[key]
+      config[key] = overrideConfig[key];
     }
   }
 
@@ -161,11 +161,11 @@ describe("verify", function () {
 
   it("comment with padded-blocks (issue #33)", function () {
     verifyAndAssertMessages([
-        "if (a){",
-          "// i'm a comment!",
-         "let b = c",
-        "}"
-      ].join("\n"),
+      "if (a){",
+      "// i'm a comment!",
+      "let b = c",
+      "}"
+    ].join("\n"),
       { "padded-blocks": [1, "never"] },
       []
     );
@@ -174,8 +174,8 @@ describe("verify", function () {
   describe("flow", function () {
     it("check regular function", function () {
       verifyAndAssertMessages([
-          "function a(b, c) { b += 1; c += 1; return b + c; } a;",
-        ].join("\n"),
+        "function a(b, c) { b += 1; c += 1; return b + c; } a;",
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -199,14 +199,14 @@ describe("verify", function () {
 
     it("multiple nullable type annotations and return #108", function () {
       verifyAndAssertMessages([
-          "import type Foo from 'foo';",
-          "import type Foo2 from 'foo';",
-          "import type Foo3 from 'foo';",
-          "function log(foo: ?Foo, foo2: ?Foo2): ?Foo3 {",
-            "console.log(foo, foo2);",
-          "}",
-          "log(1, 2);"
-        ].join("\n"),
+        "import type Foo from 'foo';",
+        "import type Foo2 from 'foo';",
+        "import type Foo3 from 'foo';",
+        "function log(foo: ?Foo, foo2: ?Foo2): ?Foo3 {",
+        "console.log(foo, foo2);",
+        "}",
+        "log(1, 2);"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -214,11 +214,11 @@ describe("verify", function () {
 
     it("type parameters", function () {
       verifyAndAssertMessages([
-          "import type Foo from 'foo';",
-          "import type Foo2 from 'foo';",
-          "function log<T1, T2>(a: T1, b: T2) { return a + b; }",
-          "log<Foo, Foo2>(1, 2);"
-        ].join("\n"),
+        "import type Foo from 'foo';",
+        "import type Foo2 from 'foo';",
+        "function log<T1, T2>(a: T1, b: T2) { return a + b; }",
+        "log<Foo, Foo2>(1, 2);"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -226,12 +226,12 @@ describe("verify", function () {
 
     it("nested type annotations", function () {
       verifyAndAssertMessages([
-          "import type Foo from 'foo';",
-          "function foo(callback: () => Foo) {",
-            "return callback();",
-          "}",
-          "foo();"
-        ].join("\n"),
+        "import type Foo from 'foo';",
+        "function foo(callback: () => Foo) {",
+        "return callback();",
+        "}",
+        "foo();"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -239,10 +239,10 @@ describe("verify", function () {
 
     it("type in var declaration", function () {
       verifyAndAssertMessages([
-          "import type Foo from 'foo';",
-          "var x: Foo = 1;",
-          "x;"
-        ].join("\n"),
+        "import type Foo from 'foo';",
+        "var x: Foo = 1;",
+        "x;"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -250,10 +250,10 @@ describe("verify", function () {
 
     it("object type annotation", function () {
       verifyAndAssertMessages([
-          "import type Foo from 'foo';",
-          "var a: {numVal: Foo};",
-          "a;"
-        ].join("\n"),
+        "import type Foo from 'foo';",
+        "var a: {numVal: Foo};",
+        "a;"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -261,13 +261,13 @@ describe("verify", function () {
 
     it("object property types", function () {
       verifyAndAssertMessages([
-          "import type Foo from 'foo';",
-          "import type Foo2 from 'foo';",
-          "var a = {",
-            "circle: (null : ?{ setNativeProps(props: Foo): Foo2 })",
-          "};",
-          "a;"
-        ].join("\n"),
+        "import type Foo from 'foo';",
+        "import type Foo2 from 'foo';",
+        "var a = {",
+        "circle: (null : ?{ setNativeProps(props: Foo): Foo2 })",
+        "};",
+        "a;"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -275,16 +275,16 @@ describe("verify", function () {
 
     it("namespaced types", function () {
       verifyAndAssertMessages([
-          "var React = require('react-native');",
-          "var b = {",
-            "openExternalExample: (null: ?React.Component)",
-          "};",
-          "var c = {",
-            "render(): React.Component {}",
-          "};",
-          "b;",
-          "c;"
-        ].join("\n"),
+        "var React = require('react-native');",
+        "var b = {",
+        "openExternalExample: (null: ?React.Component)",
+        "};",
+        "var c = {",
+        "render(): React.Component {}",
+        "};",
+        "b;",
+        "c;"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -292,9 +292,9 @@ describe("verify", function () {
 
     it("ArrayTypeAnnotation", function () {
       verifyAndAssertMessages([
-          "import type Foo from 'foo';",
-          "var x: Foo[]; x;"
-        ].join("\n"),
+        "import type Foo from 'foo';",
+        "var x: Foo[]; x;"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -302,9 +302,9 @@ describe("verify", function () {
 
     it("ClassImplements", function () {
       verifyAndAssertMessages([
-          "import type Bar from 'foo';",
-          "export default class Foo implements Bar {}"
-        ].join("\n"),
+        "import type Bar from 'foo';",
+        "export default class Foo implements Bar {}"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -312,9 +312,9 @@ describe("verify", function () {
 
     it("type alias creates declaration + usage", function () {
       verifyAndAssertMessages([
-          "type Foo = any;",
-          "var x : Foo = 1; x;"
-        ].join("\n"),
+        "type Foo = any;",
+        "var x : Foo = 1; x;"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -322,11 +322,11 @@ describe("verify", function () {
 
     it("type alias with type parameters", function () {
       verifyAndAssertMessages([
-          "import type Bar from 'foo';",
-          "import type Foo3 from 'foo';",
-          "type Foo<T> = Bar<T, Foo3>",
-          "var x : Foo = 1; x;"
-        ].join("\n"),
+        "import type Bar from 'foo';",
+        "import type Foo3 from 'foo';",
+        "type Foo<T> = Bar<T, Foo3>",
+        "var x : Foo = 1; x;"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -334,9 +334,9 @@ describe("verify", function () {
 
     it("export type alias", function () {
       verifyAndAssertMessages([
-          "import type Foo2 from 'foo';",
-          "export type Foo = Foo2;"
-        ].join("\n"),
+        "import type Foo2 from 'foo';",
+        "export type Foo = Foo2;"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -344,8 +344,8 @@ describe("verify", function () {
 
     it("polymorphpic types #109", function () {
       verifyAndAssertMessages([
-          "export default function groupByEveryN<T>(array: Array<T>, n: number): Array<Array<?T>> { n; }"
-        ].join("\n"),
+        "export default function groupByEveryN<T>(array: Array<T>, n: number): Array<Array<?T>> { n; }"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -353,10 +353,10 @@ describe("verify", function () {
 
     it("types definition from import", function () {
       verifyAndAssertMessages([
-          "import type Promise from 'bluebird';",
-          "type Operation = () => Promise;",
-          "x: Operation;"
-        ].join("\n"),
+        "import type Promise from 'bluebird';",
+        "type Operation = () => Promise;",
+        "x: Operation;"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -364,12 +364,12 @@ describe("verify", function () {
 
     it("polymorphpic/generic types for class #123", function () {
       verifyAndAssertMessages([
-          "class Box<T> {",
-            "value: T;",
-          "}",
-          "var box = new Box();",
-          "console.log(box.value);"
-        ].join("\n"),
+        "class Box<T> {",
+        "value: T;",
+        "}",
+        "var box = new Box();",
+        "console.log(box.value);"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -377,10 +377,10 @@ describe("verify", function () {
 
     it("polymorphpic/generic types for function #123", function () {
       verifyAndAssertMessages([
-          "export function identity<T>(value) {",
-            "var a: T = value; a;",
-          "}"
-        ].join("\n"),
+        "export function identity<T>(value) {",
+        "var a: T = value; a;",
+        "}"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -388,9 +388,9 @@ describe("verify", function () {
 
     it("polymorphpic/generic types for type alias #123", function () {
       verifyAndAssertMessages([
-          "import Bar from './Bar';",
-          "type Foo<T> = Bar<T>; var x: Foo = 1; console.log(x);"
-        ].join("\n"),
+        "import Bar from './Bar';",
+        "type Foo<T> = Bar<T>; var x: Foo = 1; console.log(x);"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
       );
@@ -398,9 +398,9 @@ describe("verify", function () {
 
     it("polymorphpic/generic types - outside of fn scope #123", function () {
       verifyAndAssertMessages([
-          "export function foo<T>(value) { value; };",
-          "var b: T = 1; b;"
-        ].join("\n"),
+        "export function foo<T>(value) { value; };",
+        "var b: T = 1; b;"
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         [ "1:21 'T' is defined but never used. no-unused-vars",
           "2:8 'T' is not defined. no-undef" ]
@@ -409,9 +409,9 @@ describe("verify", function () {
 
     it("polymorphpic/generic types - extending unknown #123", function () {
       verifyAndAssertMessages([
-          "import Bar from 'bar';",
-          "export class Foo extends Bar<T> {}",
-        ].join("\n"),
+        "import Bar from 'bar';",
+        "export class Foo extends Bar<T> {}",
+      ].join("\n"),
         { "no-unused-vars": 1, "no-undef": 1 },
         [ "2:30 'T' is not defined. no-undef" ]
       );
@@ -419,12 +419,12 @@ describe("verify", function () {
 
     it("support declarations #132", function () {
       verifyAndAssertMessages([
-          "declare class A { static () : number }",
-          "declare module B { declare var x: number; }",
-          "declare function foo<T>(): void;",
-          "declare var bar",
-          "A; B; foo(); bar;"
-        ].join("\n"),
+        "declare class A { static () : number }",
+        "declare module B { declare var x: number; }",
+        "declare function foo<T>(): void;",
+        "declare var bar",
+        "A; B; foo(); bar;"
+      ].join("\n"),
         { "no-undef": 1, "no-unused-vars": 1 },
         []
       );
@@ -1002,12 +1002,12 @@ describe("verify", function () {
 
   it("class definition: gaearon/redux#24", function () {
     verifyAndAssertMessages([
-        "export default function root(stores) {",
-          "return DecoratedComponent => class ReduxRootDecorator {",
-            "a() { DecoratedComponent; stores; }",
-          "};",
-        "}",
-      ].join("\n"),
+      "export default function root(stores) {",
+      "return DecoratedComponent => class ReduxRootDecorator {",
+      "a() { DecoratedComponent; stores; }",
+      "};",
+      "}",
+    ].join("\n"),
       { "no-undef": 1, "no-unused-vars": 1 },
       []
     );
@@ -1032,10 +1032,10 @@ describe("verify", function () {
   it("template with destructuring #31", function () {
     verifyAndAssertMessages([
       "module.exports = {",
-        "render() {",
-          "var {name} = this.props;",
-          "return Math.max(null, `Name: ${name}, Name: ${name}`);",
-        "}",
+      "render() {",
+      "var {name} = this.props;",
+      "return Math.max(null, `Name: ${name}, Name: ${name}`);",
+      "}",
       "};"].join("\n"),
       { "comma-spacing": 1 },
       []
@@ -1064,12 +1064,12 @@ describe("verify", function () {
           "import classMethodDeclarationA from 'decorator';",
           "import decoratorParameter from 'decorator';",
           "export class TextareaAutosize {",
-            "@classMethodDeclarationA((parameter) => parameter)",
-            "@classMethodDeclarationA(decoratorParameter)",
-            "@classMethodDeclarationA",
-            "methodDeclaration(e) {",
-              "e();",
-            "}",
+          "@classMethodDeclarationA((parameter) => parameter)",
+          "@classMethodDeclarationA(decoratorParameter)",
+          "@classMethodDeclarationA",
+          "methodDeclaration(e) {",
+          "e();",
+          "}",
           "}"
         ].join("\n"),
         { "no-unused-vars": 1 },
@@ -1083,14 +1083,14 @@ describe("verify", function () {
           "import classMethodDeclarationA from 'decorator';",
           "import decoratorParameter from 'decorator';",
           "export class TextareaAutosize {",
-            "@classMethodDeclarationA((parameter) => parameter)",
-            "@classMethodDeclarationA(decoratorParameter)",
-            "@classMethodDeclarationA",
-            "get bar() { }",
-            "@classMethodDeclarationA((parameter) => parameter)",
-            "@classMethodDeclarationA(decoratorParameter)",
-            "@classMethodDeclarationA",
-            "set bar(val) { val; }",
+          "@classMethodDeclarationA((parameter) => parameter)",
+          "@classMethodDeclarationA(decoratorParameter)",
+          "@classMethodDeclarationA",
+          "get bar() { }",
+          "@classMethodDeclarationA((parameter) => parameter)",
+          "@classMethodDeclarationA(decoratorParameter)",
+          "@classMethodDeclarationA",
+          "set bar(val) { val; }",
           "}"
         ].join("\n"),
         { "no-unused-vars": 1 },
@@ -1104,12 +1104,12 @@ describe("verify", function () {
           "import classMethodDeclarationA from 'decorator';",
           "import decoratorParameter from 'decorator';",
           "var obj = {",
-            "@classMethodDeclarationA((parameter) => parameter)",
-            "@classMethodDeclarationA(decoratorParameter)",
-            "@classMethodDeclarationA",
-            "methodDeclaration(e) {",
-              "e();",
-            "}",
+          "@classMethodDeclarationA((parameter) => parameter)",
+          "@classMethodDeclarationA(decoratorParameter)",
+          "@classMethodDeclarationA",
+          "methodDeclaration(e) {",
+          "e();",
+          "}",
           "};",
           "obj;"
         ].join("\n"),
@@ -1124,14 +1124,14 @@ describe("verify", function () {
           "import classMethodDeclarationA from 'decorator';",
           "import decoratorParameter from 'decorator';",
           "var obj = {",
-            "@classMethodDeclarationA((parameter) => parameter)",
-            "@classMethodDeclarationA(decoratorParameter)",
-            "@classMethodDeclarationA",
-            "get bar() { },",
-            "@classMethodDeclarationA((parameter) => parameter)",
-            "@classMethodDeclarationA(decoratorParameter)",
-            "@classMethodDeclarationA",
-            "set bar(val) { val; }",
+          "@classMethodDeclarationA((parameter) => parameter)",
+          "@classMethodDeclarationA(decoratorParameter)",
+          "@classMethodDeclarationA",
+          "get bar() { },",
+          "@classMethodDeclarationA((parameter) => parameter)",
+          "@classMethodDeclarationA(decoratorParameter)",
+          "@classMethodDeclarationA",
+          "set bar(val) { val; }",
           "};",
           "obj;"
         ].join("\n"),
@@ -1202,13 +1202,13 @@ describe("verify", function () {
 
   it("don't warn no-unused-vars with spread #142", function () {
     verifyAndAssertMessages([
-        "export default function test(data) {",
-          "return {",
-            "foo: 'bar',",
-            "...data",
-          "};",
-        "}",
-      ].join("\n"),
+      "export default function test(data) {",
+      "return {",
+      "foo: 'bar',",
+      "...data",
+      "};",
+      "}",
+    ].join("\n"),
       { "no-undef": 1, "no-unused-vars": 1 },
       []
     );
@@ -1218,8 +1218,8 @@ describe("verify", function () {
     verifyAndAssertMessages(
       [
         "var a = [",
-          "1,",
-          "2, // a trailing comment makes this line fail comma-dangle (always-multiline)",
+        "1,",
+        "2, // a trailing comment makes this line fail comma-dangle (always-multiline)",
         "];",
       ].join("\n"),
       { "comma-dangle": [2, "always-multiline"] },
@@ -1229,9 +1229,9 @@ describe("verify", function () {
     verifyAndAssertMessages(
       [
         "switch (a) {",
-          "// A comment here makes the above line fail brace-style",
-          "case 1:",
-            "console.log(a);",
+        "// A comment here makes the above line fail brace-style",
+        "case 1:",
+        "console.log(a);",
         "}"
       ].join("\n"),
       { "brace-style": 2 },
@@ -1241,8 +1241,8 @@ describe("verify", function () {
 
   it("ternary and parens #149", function () {
     verifyAndAssertMessages([
-        "true ? (true) : false;"
-      ].join("\n"),
+      "true ? (true) : false;"
+    ].join("\n"),
       { "space-infix-ops": 1 },
       []
     );
@@ -1252,67 +1252,67 @@ describe("verify", function () {
     verifyAndAssertMessages(
       [
         "React.createClass({",
-          "render() {",
-             "// return (",
-             "//   <div />",
-             "// ); // <-- this is the line that is reported",
-          "}",
+        "render() {",
+        "// return (",
+        "//   <div />",
+        "// ); // <-- this is the line that is reported",
+        "}",
         "});"
       ].join("\n"),
       { "space-in-parens": 1 },
       [ ]
-    )
+    );
   });
 
   it("block comment space-in-parens #124", function () {
     verifyAndAssertMessages(
       [
         "React.createClass({",
-          "render() {",
-            "/*",
-            "return (",
-            "  <div />",
-            "); // <-- this is the line that is reported",
-            "*/",
-          "}",
+        "render() {",
+        "/*",
+        "return (",
+        "  <div />",
+        "); // <-- this is the line that is reported",
+        "*/",
+        "}",
         "});"
       ].join("\n"),
       { "space-in-parens": 1 },
       [ ]
-    )
+    );
   });
 
   it("no no-undef error with rest #11", function () {
     verifyAndAssertMessages("const [a, ...rest] = ['1', '2', '3']; a; rest;",
       { "no-undef": 1, "no-unused-vars": 1 },
       [ ]
-    )
+    );
   });
 
   it("async function with space-before-function-paren #168", function () {
     verifyAndAssertMessages("it('handles updates', async function() {});",
       { "space-before-function-paren": [1, "never"] },
       [ ]
-    )
+    );
   });
 
   it("default param flow type no-unused-vars #184", function () {
     verifyAndAssertMessages(
       [
         "type ResolveOptionType = {",
-          "depth?: number,",
-          "identifier?: string",
+        "depth?: number,",
+        "identifier?: string",
         "};",
         "",
         "export default function resolve(",
-          "options: ResolveOptionType = {}",
+        "options: ResolveOptionType = {}",
         "): Object {",
-          "options;",
+        "options;",
         "}",
       ].join("\n"),
       { "no-unused-vars": 1, "no-undef": 1 },
       [ ]
-    )
+    );
   });
 
   it("no-use-before-define #192", function () {
@@ -1322,8 +1322,8 @@ describe("verify", function () {
         "var x = 1;"
       ].join("\n"),
       { "no-use-before-define": 1 },
-      [ "1:13 'x' was used before it was defined no-use-before-define" ]
-    )
+      [ "1:13 'x' was used before it was defined. no-use-before-define" ]
+    );
   });
 
   it("jsx and stringliteral #216", function () {
@@ -1331,31 +1331,31 @@ describe("verify", function () {
       "<div className=''></div>",
       {},
       []
-    )
+    );
   });
 
   it("getter/setter #218", function () {
     verifyAndAssertMessages([
-        "class Person {",
-        "    set a (v) { }",
-        "}"
-      ].join("\n"),
+      "class Person {",
+      "    set a (v) { }",
+      "}"
+    ].join("\n"),
       { "space-before-function-paren": 1, "keyword-spacing": [1, {"before": true}], "indent": 1 },
       []
-    )
+    );
   });
 
   it("getter/setter #220", function () {
     verifyAndAssertMessages([
-        "var B = {",
-            "get x () {",
-                "return this.ecks;",
-            "},",
-            "set x (ecks) {",
-                "this.ecks = ecks;",
-            "}",
-        "};"
-      ].join("\n"),
+      "var B = {",
+      "get x () {",
+      "return this.ecks;",
+      "},",
+      "set x (ecks) {",
+      "this.ecks = ecks;",
+      "}",
+      "};"
+    ].join("\n"),
       { "no-dupe-keys": 1 },
       []
     );
@@ -1363,12 +1363,12 @@ describe("verify", function () {
 
   it("fixes issues with flow types and ObjectPattern", function () {
     verifyAndAssertMessages([
-        "import type Foo from 'bar';",
-        "export default class Foobar {",
-        "  foo({ bar }: Foo) { bar; }",
-        "  bar({ foo }: Foo) { foo; }",
-        "}"
-      ].join("\n"),
+      "import type Foo from 'bar';",
+      "export default class Foobar {",
+      "  foo({ bar }: Foo) { bar; }",
+      "  bar({ foo }: Foo) { foo; }",
+      "}"
+    ].join("\n"),
       { "no-unused-vars": 1, "no-shadow": 1 },
       []
     );
@@ -1376,22 +1376,22 @@ describe("verify", function () {
 
   it("correctly detects redeclares if in script mode #217", function () {
     verifyAndAssertMessages([
-        "var a = 321;",
-        "var a = 123;",
-      ].join("\n"),
+      "var a = 321;",
+      "var a = 123;",
+    ].join("\n"),
       { "no-redeclare": 1 },
-      [ "2:5 'a' is already defined no-redeclare" ],
+      [ "2:5 'a' is already defined. no-redeclare" ],
       "script"
     );
   });
 
   it("correctly detects redeclares if in module mode #217", function () {
     verifyAndAssertMessages([
-        "var a = 321;",
-        "var a = 123;",
-      ].join("\n"),
+      "var a = 321;",
+      "var a = 123;",
+    ].join("\n"),
       { "no-redeclare": 1 },
-      [ "2:5 'a' is already defined no-redeclare" ],
+      [ "2:5 'a' is already defined. no-redeclare" ],
       "module"
     );
   });
@@ -1437,10 +1437,10 @@ describe("verify", function () {
 
   it("allowImportExportEverywhere option (#327)", function () {
     verifyAndAssertMessages([
-        "if (true) { import Foo from 'foo'; }",
-        "function foo() { import Bar from 'bar'; }",
-        "switch (a) { case 1: import FooBar from 'foobar'; }"
-      ].join("\n"),
+      "if (true) { import Foo from 'foo'; }",
+      "function foo() { import Bar from 'bar'; }",
+      "switch (a) { case 1: import FooBar from 'foobar'; }"
+    ].join("\n"),
       {},
       [],
       "module",
@@ -1478,11 +1478,11 @@ describe("verify", function () {
 
   it("decorator does not create TypeError #229", function () {
     verifyAndAssertMessages([
-        "class A {",
-        "  @test",
-        "  f() {}",
-        "}"
-      ].join("\n"),
+      "class A {",
+      "  @test",
+      "  f() {}",
+      "}"
+    ].join("\n"),
       { "no-undef": 1 },
       [ "2:4 'test' is not defined. no-undef" ]
     );
@@ -1490,9 +1490,9 @@ describe("verify", function () {
 
   it("Flow definition does not trigger warnings #223", function () {
     verifyAndAssertMessages([
-        "import { Map as $Map } from 'immutable';",
-        "function myFunction($state: $Map, { a, b, c } : { a: ?Object, b: ?Object, c: $Map }) {}"
-      ].join("\n"),
+      "import { Map as $Map } from 'immutable';",
+      "function myFunction($state: $Map, { a, b, c } : { a: ?Object, b: ?Object, c: $Map }) {}"
+    ].join("\n"),
       { "no-dupe-args": 1, "no-redeclare": 1, "no-shadow": 1 },
       []
     );
@@ -1500,16 +1500,16 @@ describe("verify", function () {
 
   it("newline-before-return with comments #289", function () {
     verifyAndAssertMessages([
-        "function a() {",
-          "if (b) {",
-            "/* eslint-disable no-console */",
-            "console.log('test');",
-            "/* eslint-enable no-console */",
-          "}",
-          "",
-          "return hasGlobal;",
-        "}"
-      ].join("\n"),
+      "function a() {",
+      "if (b) {",
+      "/* eslint-disable no-console */",
+      "console.log('test');",
+      "/* eslint-enable no-console */",
+      "}",
+      "",
+      "return hasGlobal;",
+      "}"
+    ].join("\n"),
       { "newline-before-return": 1 },
       []
     );
