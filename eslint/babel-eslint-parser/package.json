@@ -22,7 +22,7 @@
     "bootstrap": "git submodule update --init && cd eslint && npm install",
     "eslint": "cd eslint && mocha -c tests/lib/rules/*.js -r ../eslint-tester.js",
     "test": "mocha",
-    "test-ci" "npm test && npm run lint",
+    "test-ci": "npm test && npm run lint",
     "lint": "eslint index.js babylon-to-espree test",
     "fix": "eslint index.js babylon-to-espree test --fix",
     "preversion": "npm test",
