@@ -251,8 +251,7 @@ export default class OptionManager {
       let options;
       if (Array.isArray(val)) {
         if (val.length > 2) {
-          throw new Error(`Unexpected extra options ${JSON.stringify(val.slice(2))} many ` +
-            "options passed to preset.");
+          throw new Error(`Unexpected extra options ${JSON.stringify(val.slice(2))} passed to preset.`);
         }
 
         [val, options] = val;

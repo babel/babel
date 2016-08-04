@@ -1,42 +1,47 @@
 module.exports = function(context, opts) {
-  /* eslint-disable no-var */
-  var loose = false;
-  var modules = true;
-  /* eslint-enable no-var */
+  const moduleTypes = ["commonjs", "amd", "umd", "systemjs"];
+  let loose = false;
+  let modules = "commonjs";
+
   if (opts !== undefined) {
     if (opts.loose !== undefined) loose = opts.loose;
     if (opts.modules !== undefined) modules = opts.modules;
   }
 
   if (typeof loose !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
-  if (typeof modules !== "boolean") throw new Error("Preset es2015 'modules' option must be a boolean.");
+  if (modules !== false && moduleTypes.indexOf(modules) === -1) {
+    throw new Error("Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
+      "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
+  }
 
   return {
     plugins: [
-      [require("babel-plugin-transform-es2015-template-literals"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-template-literals"), { loose }],
       require("babel-plugin-transform-es2015-literals"),
       require("babel-plugin-transform-es2015-function-name"),
-      require("babel-plugin-transform-es2015-arrow-functions"),
+      [require("babel-plugin-transform-es2015-arrow-functions")],
       require("babel-plugin-transform-es2015-block-scoped-functions"),
-      [require("babel-plugin-transform-es2015-classes"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-classes"), { loose }],
       require("babel-plugin-transform-es2015-object-super"),
       require("babel-plugin-transform-es2015-shorthand-properties"),
       require("babel-plugin-transform-es2015-duplicate-keys"),
-      [require("babel-plugin-transform-es2015-computed-properties"), {loose: loose}],
-      [require("babel-plugin-transform-es2015-for-of"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-computed-properties"), { loose }],
+      [require("babel-plugin-transform-es2015-for-of"), { loose }],
       require("babel-plugin-transform-es2015-sticky-regex"),
       require("babel-plugin-transform-es2015-unicode-regex"),
       require("babel-plugin-check-es2015-constants"),
-      [require("babel-plugin-transform-es2015-spread"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-spread"), { loose }],
       require("babel-plugin-transform-es2015-parameters"),
-      [require("babel-plugin-transform-es2015-destructuring"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-destructuring"), { loose }],
       require("babel-plugin-transform-es2015-block-scoping"),
       require("babel-plugin-transform-es2015-typeof-symbol"),
-    ].concat(modules ? [
-      [require("babel-plugin-transform-es2015-modules-commonjs"), {loose: loose}],
-    ] : []).concat([
-      [require("babel-plugin-transform-regenerator"), { async: false, asyncGenerators: false }],
-    ]),
+      modules === "commonjs" && [require("babel-plugin-transform-es2015-modules-commonjs"), { loose }],
+      modules === "systemjs" && [require("babel-plugin-transform-es2015-modules-systemjs"), { loose }],
+      modules === "amd" && [require("babel-plugin-transform-es2015-modules-amd"), { loose }],
+      modules === "umd" && [require("babel-plugin-transform-es2015-modules-umd"), { loose }],
+      [require("babel-plugin-transform-regenerator"), { async: false, asyncGenerators: false }]
+    // filter out falsy values
+    ].filter(Boolean)
   };
 };
 
