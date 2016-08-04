@@ -123,7 +123,7 @@ export default class OptionManager {
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
+        let pluginLoc = this.resolve(`babel-plugin-${plugin}`, dirname) || this.resolve(plugin, dirname);
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
@@ -242,6 +242,13 @@ export default class OptionManager {
     });
   }
 
+  resolve(name: string, dirname: string) {
+    return resolve(name, dirname) 
+      || resolve(name, path.resolve(__dirname, "../../../../../"))
+      || resolve(name, process.cwd())
+      || resolve(name, process.env.PWD);
+  }
+
   /**
    * Resolves presets options which can be either direct object data,
    * or a module name to require.
@@ -249,7 +256,7 @@ export default class OptionManager {
   resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
     return presets.map((val) => {
       if (typeof val === "string") {
-        let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+        let presetLoc = this.resolve(`babel-preset-${val}`, dirname) || this.resolve(val, dirname);
         if (presetLoc) {
           let val = require(presetLoc);
           onResolve && onResolve(val, presetLoc);
