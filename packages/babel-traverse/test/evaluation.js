@@ -37,4 +37,28 @@ suite("evaluation", function () {
       false
     );
   });
+
+  test("should bail out on repeated evaluation", function () {
+    assert.strictEqual(
+      getPath("function fn(a) { var code = a; if (code >= 0 && code <= 1) { alert(); } }")
+        .get("body.0.body.body.1.test").evaluate().confident,
+      false
+    );
+  });
+
+  test("should resolve variable to true", function () {
+    assert.strictEqual(
+      getPath("function fn() { var code = 1; if (code >= 0 && code <= 2) { alert(); } }")
+        .get("body.0.body.body.1.test").evaluateTruthy(),
+      true
+    );
+  });
+
+  test("should resolve variable to false", function () {
+    assert.strictEqual(
+      getPath("function fn() { var code = 3; if (code >= 0 && code <= 2) { alert(); } }")
+        .get("body.0.body.body.1.test").evaluateTruthy(),
+      false
+    );
+  });
 });
