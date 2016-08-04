@@ -15,6 +15,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## v6.13.0 (2016-08-04)
 
+> Since the last release we've created https://github.com/babel/notes to track discussions on our slack and high level features/changes that could be added - definetely check it out if you're interested in Babel's development!
+
 Some small but very important additions in this release:
 
 ### Preset options ([babel/notes](https://github.com/babel/notes/blob/master/2016-07/july-31.md#preset-options-pr-3331))
@@ -44,6 +46,10 @@ Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "
 - [#3613](https://github.com/babel/babel/pull/3613) Move the [decorators transform](http://babeljs.io/docs/plugins/transform-decorators).
   - [#3626](https://github.com/babel/babel/pull/3626) Make a more informative error message when using the default decorators transform and link to the [legacy transform](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)
 - [#3611](https://github.com/babel/babel/pull/3611) Move [class properties transform](http://babeljs.io/docs/plugins/transform-class-properties/).
+
+### Coming Up
+
+- `babel-preset-es2017`, `babel-preset-latest` (still deciding the name), supporting codemods, and more!
 
 #### New Feature
 * `babel-core`, `babel-preset-es2015`
