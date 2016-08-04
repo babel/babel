@@ -63,4 +63,5 @@ suite("evaluation", function () {
   addTest("'abc' === 'xyz' || (1 === 1 && config.flag)", "LogicalExpression", undefined, true);
   addTest("'abc' === 'xyz' || (1 === 1 && 'four' === 'four')", "LogicalExpression", true);
   addTest("'abc' === 'abc' && (1 === 1 && 'four' === 'four')", "LogicalExpression", true);
+  addTest("var a; a > 1 && a < 100", "LogicalExpression", undefined, true);
 });
