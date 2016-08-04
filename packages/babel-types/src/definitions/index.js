@@ -124,6 +124,7 @@ export default function defineType(
     aliases?: Array<string>;
     builder?: Array<string>;
     inherits?: string;
+    deprecatedAlias?: string;
   } = {},
 ) {
   let inherits = (opts.inherits && store[opts.inherits]) || {};
