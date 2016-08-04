@@ -6,7 +6,7 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-es2015",
-  "main": "index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "babel-plugin-transform-es2015-template-literals": "^6.6.0",
     "babel-plugin-transform-es2015-literals": "^6.3.13",

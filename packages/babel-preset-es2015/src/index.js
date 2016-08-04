@@ -1,39 +1,41 @@
 module.exports = function(context, opts) {
-  /* eslint-disable no-var */
-  var loose = false;
-  var modules = true;
-  /* eslint-enable no-var */
+  let loose = false;
+  let modules = true;
+  let spec = false;
+
   if (opts !== undefined) {
     if (opts.loose !== undefined) loose = opts.loose;
     if (opts.modules !== undefined) modules = opts.modules;
+    if (opts.spec !== undefined) spec = opts.spec;
   }
 
   if (typeof loose !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
   if (typeof modules !== "boolean") throw new Error("Preset es2015 'modules' option must be a boolean.");
+  if (typeof spec !== "boolean") throw new Error("Preset es2015 'spec' option must be a boolean.");
 
   return {
     plugins: [
-      [require("babel-plugin-transform-es2015-template-literals"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-template-literals"), { loose, spec }],
       require("babel-plugin-transform-es2015-literals"),
       require("babel-plugin-transform-es2015-function-name"),
-      require("babel-plugin-transform-es2015-arrow-functions"),
+      [require("babel-plugin-transform-es2015-arrow-functions"), { spec }],
       require("babel-plugin-transform-es2015-block-scoped-functions"),
-      [require("babel-plugin-transform-es2015-classes"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-classes"), { loose }],
       require("babel-plugin-transform-es2015-object-super"),
       require("babel-plugin-transform-es2015-shorthand-properties"),
       require("babel-plugin-transform-es2015-duplicate-keys"),
-      [require("babel-plugin-transform-es2015-computed-properties"), {loose: loose}],
-      [require("babel-plugin-transform-es2015-for-of"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-computed-properties"), { loose }],
+      [require("babel-plugin-transform-es2015-for-of"), { loose }],
       require("babel-plugin-transform-es2015-sticky-regex"),
       require("babel-plugin-transform-es2015-unicode-regex"),
       require("babel-plugin-check-es2015-constants"),
-      [require("babel-plugin-transform-es2015-spread"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-spread"), { loose }],
       require("babel-plugin-transform-es2015-parameters"),
-      [require("babel-plugin-transform-es2015-destructuring"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-destructuring"), { loose }],
       require("babel-plugin-transform-es2015-block-scoping"),
       require("babel-plugin-transform-es2015-typeof-symbol"),
     ].concat(modules ? [
-      [require("babel-plugin-transform-es2015-modules-commonjs"), {loose: loose}],
+      [require("babel-plugin-transform-es2015-modules-commonjs"), { loose }],
     ] : []).concat([
       [require("babel-plugin-transform-regenerator"), { async: false, asyncGenerators: false }],
     ]),
