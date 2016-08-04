@@ -1,6 +1,7 @@
 module.exports = function(context, opts) {
+  const moduleTypes = ["commonjs", "amd", "umd", "systemjs"];
   let loose = false;
-  let modules = true;
+  let modules = "commonjs";
   let spec = false;
 
   if (opts !== undefined) {
@@ -10,7 +11,10 @@ module.exports = function(context, opts) {
   }
 
   if (typeof loose !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
-  if (typeof modules !== "boolean") throw new Error("Preset es2015 'modules' option must be a boolean.");
+  if (modules === true || moduleTypes.indexOf(modules) === -1) {
+    throw new Error("Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
+      "or a module type which be be one of ['commonjs', 'amd', 'umd', 'systemjs']");
+  }
   if (typeof spec !== "boolean") throw new Error("Preset es2015 'spec' option must be a boolean.");
 
   return {
@@ -34,11 +38,13 @@ module.exports = function(context, opts) {
       [require("babel-plugin-transform-es2015-destructuring"), { loose }],
       require("babel-plugin-transform-es2015-block-scoping"),
       require("babel-plugin-transform-es2015-typeof-symbol"),
-    ].concat(modules ? [
-      [require("babel-plugin-transform-es2015-modules-commonjs"), { loose }],
-    ] : []).concat([
-      [require("babel-plugin-transform-regenerator"), { async: false, asyncGenerators: false }],
-    ]),
+      modules === "commonjs" && [require("babel-plugin-transform-es2015-modules-commonjs"), { loose }],
+      modules === "systemjs" && require("babel-plugin-transform-es2015-modules-systemjs"),
+      modules === "amd" && require("babel-plugin-transform-es2015-modules-amd"),
+      modules === "umd" && require("babel-plugin-transform-es2015-modules-umd"),
+      [require("babel-plugin-transform-regenerator"), { async: false, asyncGenerators: false }]
+    // filter out falsy values
+    ].filter((plugin) => plugin)
   };
 };
 
