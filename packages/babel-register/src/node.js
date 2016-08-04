@@ -58,11 +58,10 @@ function compile(filename) {
   let env = process.env.BABEL_ENV || process.env.NODE_ENV;
   if (env) cacheKey += `:${env}`;
 
+  let cached;
   if (cache) {
-    let cached = cache[cacheKey];
-    if (cached && cached.mtime === mtime(filename)) {
-      result = cached;
-    }
+    cached = registerCache.getEntry(cacheKey, mtime(filename));
+    result = cached;
   }
 
   if (!result) {
@@ -75,9 +74,9 @@ function compile(filename) {
     }));
   }
 
-  if (cache) {
-    cache[cacheKey] = result;
+  if (cache && !cached) {
     result.mtime = mtime(filename);
+    registerCache.newEntry(cacheKey, result);
   }
 
   maps[filename] = result.map;
