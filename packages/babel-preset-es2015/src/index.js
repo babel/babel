@@ -36,9 +36,9 @@ module.exports = function(context, opts) {
       require("babel-plugin-transform-es2015-block-scoping"),
       require("babel-plugin-transform-es2015-typeof-symbol"),
       modules === "commonjs" && [require("babel-plugin-transform-es2015-modules-commonjs"), { loose }],
-      modules === "systemjs" && require("babel-plugin-transform-es2015-modules-systemjs"),
-      modules === "amd" && require("babel-plugin-transform-es2015-modules-amd"),
-      modules === "umd" && require("babel-plugin-transform-es2015-modules-umd"),
+      modules === "systemjs" && [require("babel-plugin-transform-es2015-modules-systemjs"), { loose }],
+      modules === "amd" && [require("babel-plugin-transform-es2015-modules-amd"), { loose }],
+      modules === "umd" && [require("babel-plugin-transform-es2015-modules-umd"), { loose }],
       [require("babel-plugin-transform-regenerator"), { async: false, asyncGenerators: false }]
     // filter out falsy values
     ].filter(Boolean)
