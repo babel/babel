@@ -37,4 +37,18 @@ suite("evaluation", function () {
       false
     );
   });
+
+  test("should work with repeated, indeterminate identifiers", function () {
+    assert.strictEqual(
+      getPath("var num = foo(); (num > 0 && num < 100);").get("body")[1].evaluateTruthy(),
+      undefined
+    );
+  });
+
+  test("should work with repeated, determinate identifiers", function () {
+    assert.strictEqual(
+      getPath("var num = 5; (num > 0 && num < 100);").get("body")[1].evaluateTruthy(),
+      true
+    );
+  });
 });
