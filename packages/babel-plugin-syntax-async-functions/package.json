@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-syntax-async-functions",
-  "version": "6.8.0",
+  "version": "6.13.0",
   "description": "Allow parsing of async functions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-async-functions",
   "license": "MIT",
