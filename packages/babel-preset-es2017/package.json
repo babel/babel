@@ -1,0 +1,33 @@
+{
+  "name": "babel-preset-es2017",
+  "version": "6.13.2",
+  "description": "Babel preset for all ES2017 plugins and polyfills.",
+  "author": "Marco Bettiolo <marco@bettiolo.it>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-es2017",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha ./test/*.test.js",
+    "test:watch": "nodemon -e js,json --watch ./ --exec npm test"
+  },
+  "dependencies": {
+    "babel-plugin-syntax-trailing-function-commas": "^6.13.0",
+    "babel-plugin-transform-async-to-generator": "^6.8.0",
+    "core-js": "^2.4.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.11.5",
+    "babel-plugin-transform-strict-mode": "^6.11.3",
+    "babel-register": "^6.11.6",
+    "chai": "^3.5.0",
+    "mocha": "^3.0.1",
+    "nodemon": "^1.10.0"
+  },
+  "keywords": [
+    "babel-preset-es2017",
+    "babel-preset",
+    "babel",
+    "es2017"
+  ]
+}

@@ -1,0 +1,4 @@
+--require ./test/babel-setup.js
+--reporter spec
+--colors
+--bail
