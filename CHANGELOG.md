@@ -13,6 +13,14 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.13.1 (2016-08-04)
+
+We had a regression in our new babel-preset-es2015@6.13.0 that made it unexpectedly backward-incompatible. This release introduces a new alternative plugin-options approach that is uglier but supports backward-compatiblity. Ideally new plugins would use the new `module.exports = function(babel, options){ }` approach and simple skip supporting `babel-core@<6.13.x`.
+
+#### Bug Fix
+* `babel-core`, `babel-preset-es2015`
+  * [#3635](https://github.com/babel/babel/pull/3635) Fix backward-compatibility of babel-preset-es2015. ([@loganfsmyth](https://github.com/loganfsmyth))
+
 ## v6.13.0 (2016-08-04)
 
 > Since the last release we've created https://github.com/babel/notes to track discussions on our slack and high level features/changes that could be added - definetely check it out if you're interested in Babel's development!
