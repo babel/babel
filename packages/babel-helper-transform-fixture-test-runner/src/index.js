@@ -44,7 +44,11 @@ function run(task) {
 
     newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins);
     newOpts.presets = wrapPackagesArray("preset", newOpts.presets).map(function (val) {
-      return val[0];
+      if (val.length > 2) {
+        throw new Error(`Unexpected extra options ${JSON.stringify(val.slice(2))} passed to preset.`);
+      }
+
+      return val;
     });
 
     return newOpts;
