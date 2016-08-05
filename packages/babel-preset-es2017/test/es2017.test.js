@@ -1,3 +1,4 @@
+import '../polyfill';
 import {assert} from 'chai';
 
 async function asyncTimeout(delay) {

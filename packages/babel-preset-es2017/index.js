@@ -9,5 +9,3 @@ module.exports = {
     require("babel-plugin-syntax-trailing-function-commas"),
   ]
 };
-
-require("./polyfill");
