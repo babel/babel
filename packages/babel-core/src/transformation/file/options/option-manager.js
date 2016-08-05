@@ -273,6 +273,11 @@ export default class OptionManager {
           (presetLoc || "a preset") + " which does not accept options.");
       }
 
+      // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
+      // a 'buildPreset' function that will return the preset itself, while still exporting a
+      // simple object (rather than a function), for supporting old Babel versions.
+      if (typeof val === "object" && val.buildPreset) val = val.buildPreset;
+
       if (typeof val === "function") val = val(context, options);
 
       if (typeof val !== "object") {

@@ -1,4 +1,27 @@
-module.exports = function(context, opts) {
+/**
+ * This file is a bit of a mess. If you're looking at it as a reference for how to write a preset,
+ * I'd recommend looking only at `function preset(){}` and ignoring the rest, unless your new preset
+ * really needs to work on babel-core < 6.13.x, which is unlikely.
+ */
+
+/**
+ * This preset was originally an object, before function-based configurable presets were introduced.
+ * For backward-compatibility with anything that may have been loading this preset and expecting
+ * it to be a simple Babel config object, we maintain the old config here.
+ */
+module.exports = preset({});
+
+// For backward compatibility with babel-core < v6.13.x, we use the 'buildPreset' property
+// of the preset object for the preset creation function.
+Object.defineProperty(module.exports, "buildPreset", {
+  configurable: true,
+  writable: true,
+  enumerable: false,
+  value: preset,
+});
+
+
+function preset(context, opts) {
   const moduleTypes = ["commonjs", "amd", "umd", "systemjs"];
   let loose = false;
   let modules = "commonjs";
@@ -43,33 +66,5 @@ module.exports = function(context, opts) {
     // filter out falsy values
     ].filter(Boolean)
   };
-};
+}
 
-/**
- * This preset was originally an object, before function-based configurable presets were introduced.
- * For backward-compatibility with anything that may have been loading this preset and expecting
- * it to be a simple Babel config object, we maintain the old config here.
- */
-module.exports.plugins = [
-  require("babel-plugin-transform-es2015-template-literals"),
-  require("babel-plugin-transform-es2015-literals"),
-  require("babel-plugin-transform-es2015-function-name"),
-  require("babel-plugin-transform-es2015-arrow-functions"),
-  require("babel-plugin-transform-es2015-block-scoped-functions"),
-  require("babel-plugin-transform-es2015-classes"),
-  require("babel-plugin-transform-es2015-object-super"),
-  require("babel-plugin-transform-es2015-shorthand-properties"),
-  require("babel-plugin-transform-es2015-duplicate-keys"),
-  require("babel-plugin-transform-es2015-computed-properties"),
-  require("babel-plugin-transform-es2015-for-of"),
-  require("babel-plugin-transform-es2015-sticky-regex"),
-  require("babel-plugin-transform-es2015-unicode-regex"),
-  require("babel-plugin-check-es2015-constants"),
-  require("babel-plugin-transform-es2015-spread"),
-  require("babel-plugin-transform-es2015-parameters"),
-  require("babel-plugin-transform-es2015-destructuring"),
-  require("babel-plugin-transform-es2015-block-scoping"),
-  require("babel-plugin-transform-es2015-typeof-symbol"),
-  require("babel-plugin-transform-es2015-modules-commonjs"),
-  [require("babel-plugin-transform-regenerator"), { async: false, asyncGenerators: false }],
-];
