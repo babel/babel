@@ -30,14 +30,14 @@ This has been rather annoying. Having to install `babel-preset-es2015-loose-nati
 With [#3627](https://github.com/babel/babel/pull/3627), you can pass 2 options in:
 
 - `loose` - Enable "loose" transformations for any plugins in this preset that allow them (Disabled by default).
-- `modules` - Enable transformation of ES6 module syntax to another module type (Enabled by default to `"commonjs"``).
-Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]``
+- `modules` - Enable transformation of ES6 module syntax to another module type (Enabled by default to `"commonjs"`).
+Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]`
 
 ```js
 // for loose and native modules
 {
   presets: [
-    ["es2015", { loose: true, modules: false }]
+    ["es2015", { "loose": true, "modules": false }]
   ]
 }
 ```
