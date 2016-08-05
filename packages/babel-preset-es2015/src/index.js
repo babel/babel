@@ -16,6 +16,8 @@ module.exports = preset({});
 Object.defineProperty(module.exports, "buildPreset", {
   configurable: true,
   writable: true,
+  // We make this non-enumerable so old versions of babel-core won't see it as an unknown property,
+  // while allowing new versions to see it as a preset builder function.
   enumerable: false,
   value: preset,
 });
