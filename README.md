@@ -21,7 +21,7 @@ Check out our website: [babeljs.io](http://babeljs.io/)
 
 ## Looking for support?
 
-For questions and support please visit our [discussion forum](https://discuss.babeljs.io/), sign up for our[Slack community](https://slack.babeljs.io/), or [StackOverflow](http://stackoverflow.com/questions/tagged/babeljs).
+For questions and support please visit our [discussion forum](https://discuss.babeljs.io/), sign up for our [Slack community](https://slack.babeljs.io/), or [StackOverflow](http://stackoverflow.com/questions/tagged/babeljs).
 
 ## Want to report a bug or request a feature?
 
