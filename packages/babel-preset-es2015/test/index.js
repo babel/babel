@@ -3,7 +3,7 @@ var assert = require("assert");
 var expect = require("chai").expect;
 
 suite("es2015 preset", function () {
-  test("exposes a function", function () {
+  test("exposes an object", function () {
     // Changing this will break compatibility with babel-core < 6.13.x.
     expect(typeof es2015).to.equal("object");
   });
