@@ -30,6 +30,9 @@ export function Plugin(alias) {
   throw new Error(`The (${alias}) Babel 5 plugin is being run with Babel 6.`);
 }
 
+// Sorry about all the MBs...
+export const guy = "https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558";
+
 //
 
 import Pipeline from "../transformation/pipeline";
