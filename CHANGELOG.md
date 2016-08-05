@@ -13,6 +13,15 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.13.2 (2016-08-05)
+
+Hi again, just fixing up logic from the backwards-compatibility fix which broke options in presets.
+Also added more tests and will update Babel to use the new preset options after this release.
+
+#### Bug Fix
+* `babel-core`, `babel-preset-es2015`
+  * [#3638](https://github.com/babel/babel/pull/3638) [Bug Fix] option manager: val = val.buildPreset should be before the check if the preset supports options ([@christophehurpeau](https://github.com/christophehurpeau))
+
 ## v6.13.1 (2016-08-04)
 
 We had a regression in our new babel-preset-es2015@6.13.0 that made it unexpectedly backward-incompatible. This release introduces a new alternative plugin-options approach that is uglier but supports backward-compatiblity. Ideally new plugins would use the new `module.exports = function(babel, options){ }` approach and simple skip supporting `babel-core@<6.13.x`.
