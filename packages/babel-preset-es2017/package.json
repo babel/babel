@@ -13,8 +13,7 @@
   },
   "dependencies": {
     "babel-plugin-syntax-trailing-function-commas": "^6.13.0",
-    "babel-plugin-transform-async-to-generator": "^6.8.0",
-    "core-js": "^2.4.1"
+    "babel-plugin-transform-async-to-generator": "^6.8.0"
   },
   "devDependencies": {
     "babel-plugin-transform-runtime": "^6.12.0",
@@ -24,6 +23,9 @@
     "chai": "^3.5.0",
     "mocha": "^3.0.1",
     "nodemon": "^1.10.0"
+  },
+  "peerDependencies": {
+    "core-js": ">= 2.4.0"
   },
   "keywords": [
     "babel-preset-es2017",
