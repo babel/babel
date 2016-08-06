@@ -15,7 +15,7 @@
     "lib"
   ],
   "devDependencies": {
-    "ava": "^0.15.2",
+    "ava": "^0.16.0",
     "babel-cli": "^6.0.0",
     "babel-helper-fixtures": "^6.6.5",
     "babel-plugin-istanbul": "^1.0.3",
