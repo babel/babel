@@ -6,29 +6,29 @@ async function asyncTimeout(delay) {
   });
 }
 
-describe('ES2017', () => {
-  it('async functions', async () => {
+suite('ES2017', () => {
+  test('async functions', async () => {
     assert.equal(await asyncTimeout(10), 'OK');
   });
 
-  it('Object.entries', () => {
+  test('Object.entries', () => {
     assert.deepEqual(Object.entries({q: 1, w: 2, e: 3}), [['q', 1], ['w', 2], ['e', 3]]);
   });
 
-  it('Object.values', () => {
+  test('Object.values', () => {
     assert.deepEqual(Object.values({q: 1, w: 2, e: 3}), [1, 2, 3]);
   });
 
 
-  it('String.padStart', () => {
+  test('String.padStart', () => {
     assert.equal('abc'.padStart(6, '-'), '---abc');
   });
 
-  it('String.padEnd', () => {
+  test('String.padEnd', () => {
     assert.equal('xyz'.padEnd(6, '-'), 'xyz---');
   });
 
-  it('Object.getOwnPropertyDescriptors', () => {
+  test('Object.getOwnPropertyDescriptors', () => {
     const obj = {
       'foo': 123,
     };
@@ -42,7 +42,7 @@ describe('ES2017', () => {
     });
   });
 
-  it('Parses Trailing Commas in Function Param Lists', () => {
+  test('Parses Trailing Commas in Function Param Lists', () => {
     function clownPuppiesEverywhere(
       param1,
       param2, // Trailing commas in function definition

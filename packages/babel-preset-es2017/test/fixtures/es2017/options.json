@@ -1,6 +1,9 @@
 {
+  "presets": ["es2015"],
   "plugins": [
-    "babel-plugin-transform-async-to-generator",
-    "babel-plugin-syntax-trailing-function-commas"
+    "transform-runtime",
+
+    "transform-async-to-generator",
+    "syntax-trailing-function-commas"
   ]
 }
