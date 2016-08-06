@@ -1,5 +1,4 @@
-import '../polyfill';
-import {assert} from 'chai';
+import '../../../polyfill';
 
 async function asyncTimeout(delay) {
   return await new Promise((resolve) => {
