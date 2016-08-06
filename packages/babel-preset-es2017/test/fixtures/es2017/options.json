@@ -1,9 +1,3 @@
 {
-  "presets": ["es2015"],
-  "plugins": [
-    "transform-runtime",
-
-    "transform-async-to-generator",
-    "syntax-trailing-function-commas"
-  ]
+  "presets": ["es2015", "es2017"]
 }
