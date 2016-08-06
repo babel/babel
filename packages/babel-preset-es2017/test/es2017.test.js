@@ -31,10 +31,10 @@ describe('ES2017', () => {
 
   it('Object.getOwnPropertyDescriptors', () => {
     const obj = {
-      [Symbol('foo')]: 123,
+      'foo': 123,
     };
     assert.deepEqual(Object.getOwnPropertyDescriptors(obj), {
-      [Symbol('foo')]: {
+      'foo': {
         value: 123,
         writable: true,
         enumerable: true,
