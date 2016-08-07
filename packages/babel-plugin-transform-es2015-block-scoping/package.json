@@ -9,7 +9,8 @@
     "babel-traverse": "^6.9.0",
     "babel-types": "^6.10.0",
     "babel-template": "^6.9.0",
-    "lodash": "^4.2.0",
+    "lodash.values": "^4.2.0",
+    "lodash.assignin": "^4.1.0",
     "babel-runtime": "^6.9.0"
   },
   "keywords": [
