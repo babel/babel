@@ -11,7 +11,14 @@
     "babel-runtime": "^6.9.1",
     "babel-traverse": "^6.13.0",
     "esutils": "^2.0.2",
-    "lodash": "^4.2.0",
+    "lodash.clone": "^4.2.0",
+    "lodash.compact": "^3.0.1",
+    "lodash.foreach": "^4.2.0",
+    "lodash.isnumber": "^3.0.3",
+    "lodash.isplainobject": "^4.0.5",
+    "lodash.isregexp": "^4.0.1",
+    "lodash.isstring": "^4.0.1",
+    "lodash.uniq": "^4.2.0",
     "to-fast-properties": "^1.0.1"
   }
 }

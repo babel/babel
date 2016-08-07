@@ -1,7 +1,7 @@
-import isPlainObject from "lodash/isPlainObject";
-import isNumber from "lodash/isNumber";
-import isRegExp from "lodash/isRegExp";
-import isString from "lodash/isString";
+import isPlainObject from "lodash.isplainobject";
+import isNumber from "lodash.isnumber";
+import isRegExp from "lodash.isregexp";
+import isString from "lodash.isstring";
 import type { Scope } from "babel-traverse";
 import * as t from "./index";
 
