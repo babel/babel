@@ -10,7 +10,11 @@ import codeFrame from "babel-code-frame";
 import * as helpers from "./helpers";
 import assert from "assert";
 import chai from "chai";
-import _ from "lodash";
+import merge from "lodash.merge";
+import each from "lodash.foreach";
+import includes from "lodash.includes";
+import defaults from "lodash.defaults";
+import extend from "lodash.assignin";
 import "babel-polyfill";
 import register from "babel-register";
 
@@ -38,7 +42,7 @@ function run(task) {
   let opts   = task.options;
 
   function getOpts(self) {
-    let newOpts = _.merge({
+    let newOpts = merge({
       filename: self.loc,
     }, opts);
 
@@ -92,7 +96,7 @@ function run(task) {
   if (task.sourceMappings) {
     let consumer = new sourceMap.SourceMapConsumer(result.map);
 
-    _.each(task.sourceMappings, function (mapping) {
+    each(task.sourceMappings, function (mapping) {
       let actual = mapping.original;
 
       let expect = consumer.originalPositionFor(mapping.generated);
@@ -125,19 +129,19 @@ export default function (
   let suites = getFixtures(fixturesLoc);
 
   for (let testSuite of suites) {
-    if (_.includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
+    if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
     suite(name + "/" + testSuite.title, function () {
       for (let task of testSuite.tests) {
-        if (_.includes(suiteOpts.ignoreTasks, task.title) ||
-            _.includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
+        if (includes(suiteOpts.ignoreTasks, task.title) ||
+            includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
 
         test(task.title, !task.disabled && function () {
           function runTask() {
             run(task);
           }
 
-          _.defaults(task.options, {
+          defaults(task.options, {
             filenameRelative: task.expect.filename,
             sourceFileName:   task.actual.filename,
             sourceMapTarget:  task.expect.filename,
@@ -146,7 +150,7 @@ export default function (
             sourceMap: !!(task.sourceMappings || task.sourceMap),
           });
 
-          _.extend(task.options, taskOpts);
+          extend(task.options, taskOpts);
 
           if (dynamicOpts) dynamicOpts(task.options, task);
 
