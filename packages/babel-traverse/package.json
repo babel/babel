@@ -16,6 +16,10 @@
     "debug": "^2.2.0",
     "globals": "^8.3.0",
     "invariant": "^2.2.0",
-    "lodash": "^4.2.0"
+    "lodash.assign": "^4.1.0",
+    "lodash.clone": "^4.2.0",
+    "lodash.defaults": "^4.1.0",
+    "lodash.includes": "^4.2.0",
+    "lodash.repeat": "^4.0.4"
   }
 }

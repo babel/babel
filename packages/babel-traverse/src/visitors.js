@@ -1,7 +1,7 @@
 import * as virtualTypes from "./path/lib/virtual-types";
 import * as messages from "babel-messages";
 import * as t from "babel-types";
-import clone from "lodash/clone";
+import clone from "lodash.clone";
 
 /**
  * explode() will take a visitor object with all of the various shorthands

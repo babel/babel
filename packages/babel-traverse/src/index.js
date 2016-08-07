@@ -3,7 +3,7 @@
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
 import * as messages from "babel-messages";
-import includes from "lodash/includes";
+import includes from "lodash.includes";
 import * as t from "babel-types";
 import * as cache from "./cache";
 
