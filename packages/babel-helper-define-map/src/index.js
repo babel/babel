@@ -1,8 +1,8 @@
 /* eslint max-len: 0 */
 
 import nameFunction from "babel-helper-function-name";
-import each from "lodash/each";
-import has from "lodash/has";
+import each from "lodash.foreach";
+import has from "lodash.has";
 import * as t from "babel-types";
 
 function toKind(node: Object) {
