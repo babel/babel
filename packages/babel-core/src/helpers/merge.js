@@ -1,4 +1,4 @@
-import mergeWith from "lodash/mergeWith";
+import mergeWith from "lodash.mergewith";
 
 export default function (dest?: Object, src?: Object): ?Object {
   if (!dest || !src) return;

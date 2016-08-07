@@ -12,7 +12,7 @@ import { NodePath, Hub, Scope } from "babel-traverse";
 import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
-import defaults from "lodash/defaults";
+import defaults from "lodash.defaults";
 import traverse from "babel-traverse";
 import Logger from "./logger";
 import Store from "../../store";

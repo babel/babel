@@ -1,10 +1,10 @@
-import escapeRegExp from "lodash/escapeRegExp";
-import startsWith from "lodash/startsWith";
-import isBoolean from "lodash/isBoolean";
+import escapeRegExp from "lodash.escaperegexp";
+import startsWith from "lodash.startswith";
+import isBoolean from "lodash.isboolean";
 import minimatch from "minimatch";
-import includes from "lodash/includes";
-import isString from "lodash/isString";
-import isRegExp from "lodash/isRegExp";
+import includes from "lodash.includes";
+import isString from "lodash.isstring";
+import isRegExp from "lodash.isregexp";
 import path from "path";
 import slash from "slash";
 
