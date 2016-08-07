@@ -1,8 +1,8 @@
 /* eslint max-len: 0 */
 
-import cloneDeep from "lodash/cloneDeep";
-import assign from "lodash/assign";
-import has from "lodash/has";
+import cloneDeep from "lodash.clonedeep";
+import assign from "lodash.assign";
+import has from "lodash.has";
 import traverse from "babel-traverse";
 import * as babylon from "babylon";
 import * as t from "babel-types";
