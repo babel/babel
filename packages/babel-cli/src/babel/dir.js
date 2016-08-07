@@ -4,7 +4,7 @@ let slash          = require("slash");
 let path           = require("path");
 let util           = require("./util");
 let fs             = require("fs");
-let _              = require("lodash");
+let each           = require("lodash.foreach");
 
 module.exports = function (commander, filenames) {
   function write(src, relative) {
@@ -52,7 +52,7 @@ module.exports = function (commander, filenames) {
     if (stat.isDirectory(filename)) {
       let dirname = filename;
 
-      _.each(util.readdir(dirname), function (filename) {
+      each(util.readdir(dirname), function (filename) {
         let src = path.join(dirname, filename);
         handleFile(src, filename);
       });
@@ -62,19 +62,19 @@ module.exports = function (commander, filenames) {
   }
 
   if (!commander.skipInitialBuild) {
-    _.each(filenames, handle);
+    each(filenames, handle);
   }
 
   if (commander.watch) {
     let chokidar = util.requireChokidar();
 
-    _.each(filenames, function (dirname) {
+    each(filenames, function (dirname) {
       let watcher = chokidar.watch(dirname, {
         persistent: true,
         ignoreInitial: true
       });
 
-      _.each(["add", "change"], function (type) {
+      each(["add", "change"], function (type) {
         watcher.on(type, function (filename) {
           let relative = path.relative(dirname, filename) || filename;
           try {
