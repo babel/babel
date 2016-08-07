@@ -1,5 +1,5 @@
 var fs = require("fs");
-var _  = require("lodash");
+var includes  = require("lodash.includes");
 
 require("babel-helper-transform-fixture-test-runner")(__dirname + "/fixtures/traceur", "traceur", {
   ignoreSuites: [
@@ -80,7 +80,7 @@ require("babel-helper-transform-fixture-test-runner")(__dirname + "/fixtures/tra
 }, {
 
 }, function (opts, task) {
-  if (_.includes(task.exec.loc, "module.js")) {
+  if (includes(task.exec.loc, "module.js")) {
     opts.plugins.push("transform-es2015-modules-commonjs");
   } else {
     opts.sourceType = "script";
