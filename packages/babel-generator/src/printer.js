@@ -1,9 +1,9 @@
 /* eslint max-len: 0 */
 
-import find from "lodash/find";
-import findLast from "lodash/findLast";
-import isInteger from "lodash/isInteger";
-import repeat from "lodash/repeat";
+import find from "lodash.find";
+import findLast from "lodash.findlast";
+import isInteger from "lodash.isinteger";
+import repeat from "lodash.repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
 import Whitespace from "./whitespace";
