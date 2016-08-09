@@ -7,7 +7,8 @@ import repl from "repl";
 import { util } from "babel-core";
 import * as babel from "babel-core";
 import vm from "vm";
-import _ from "lodash";
+import isString from "lodash.isstring";
+import each from "lodash.foreach";
 import "babel-polyfill";
 import register from "babel-register";
 
@@ -86,7 +87,7 @@ if (program.eval || program.print) {
 
   let result = _eval(code, global.__filename);
   if (program.print) {
-    let output = _.isString(result) ? result : inspect(result);
+    let output = isString(result) ? result : inspect(result);
     process.stdout.write(output + "\n");
   }
 } else {
@@ -96,7 +97,7 @@ if (program.eval || program.print) {
 
     let i = 0;
     let ignoreNext = false;
-    _.each(args, function (arg, i2) {
+    each(args, function (arg, i2) {
       if (ignoreNext) {
         ignoreNext = false;
         return;

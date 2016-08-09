@@ -10,7 +10,9 @@ var path           = require("path");
 var chai           = require("chai");
 var fs             = require("fs");
 var pathExists     = require("path-exists");
-var _              = require("lodash");
+var each           = require("lodash.foreach");
+var includes       = require("lodash.includes");
+var merge          = require("lodash.merge");
 
 var fixtureLoc = __dirname + "/fixtures";
 var tmpLoc = __dirname + "/tmp";
@@ -28,7 +30,7 @@ var pluginLocs = [
 var readDir = function (loc) {
   var files = {};
   if (pathExists.sync(loc)) {
-    _.each(readdir(loc), function (filename) {
+    each(readdir(loc), function (filename) {
       var contents = helper.readFile(loc + "/" + filename);
       files[filename] = contents;
     });
@@ -37,7 +39,7 @@ var readDir = function (loc) {
 };
 
 var saveInFiles = function (files) {
-  _.each(files, function (content, filename) {
+  each(files, function (content, filename) {
     outputFileSync(filename, content);
   });
 };
@@ -48,7 +50,7 @@ var assertTest = function (stdout, stderr, opts) {
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      assert.ok(_.includes(stderr, expectStderr), "stderr " + JSON.stringify(stderr) + " didn't contain " + JSON.stringify(expectStderr));
+      assert.ok(includes(stderr, expectStderr), "stderr " + JSON.stringify(stderr) + " didn't contain " + JSON.stringify(expectStderr));
     } else {
       chai.expect(stderr).to.equal(expectStderr, "stderr didn't match");
     }
@@ -62,7 +64,7 @@ var assertTest = function (stdout, stderr, opts) {
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      assert.ok(_.includes(stdout, expectStdout), "stdout " + JSON.stringify(stdout) + " didn't contain " + JSON.stringify(expectStdout));
+      assert.ok(includes(stdout, expectStdout), "stdout " + JSON.stringify(stdout) + " didn't contain " + JSON.stringify(expectStdout));
     } else {
       chai.expect(stdout).to.equal(expectStdout, "stdout didn't match");
     }
@@ -70,7 +72,7 @@ var assertTest = function (stdout, stderr, opts) {
     throw new Error("stdout:\n" + stdout);
   }
 
-  _.each(opts.outFiles, function (expect, filename) {
+  each(opts.outFiles, function (expect, filename) {
     var actual = helper.readFile(filename);
     chai.expect(actual).to.equal(expect, "out-file " + filename);
   });
@@ -139,12 +141,12 @@ var clear = function () {
   process.chdir(tmpLoc);
 };
 
-_.each(fs.readdirSync(fixtureLoc), function (binName) {
+each(fs.readdirSync(fixtureLoc), function (binName) {
   if (binName[0] === ".") return;
 
   var suiteLoc = fixtureLoc + "/" + binName;
   suite("bin/" + binName, function () {
-    _.each(fs.readdirSync(fixtureLoc + "/" + binName), function (testName) {
+    each(fs.readdirSync(fixtureLoc + "/" + binName), function (testName) {
       if (testName[0] === ".") return;
 
       var testLoc = suiteLoc + "/" + testName;
@@ -154,9 +156,9 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
       };
 
       var optionsLoc = testLoc + "/options.json"
-      if (pathExists.sync(optionsLoc)) _.merge(opts, require(optionsLoc));
+      if (pathExists.sync(optionsLoc)) merge(opts, require(optionsLoc));
 
-      _.each(["stdout", "stdin", "stderr"], function (key) {
+      each(["stdout", "stdin", "stderr"], function (key) {
         var loc = testLoc + "/" + key + ".txt";
         if (pathExists.sync(loc)) {
           opts[key] = helper.readFile(loc);

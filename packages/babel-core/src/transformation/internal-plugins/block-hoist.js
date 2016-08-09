@@ -1,5 +1,5 @@
 import Plugin from "../plugin";
-import sortBy from "lodash/sortBy";
+import sortBy from "lodash.sortby";
 
 export default new Plugin({
   /**

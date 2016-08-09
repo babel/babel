@@ -1,5 +1,5 @@
 import type SourceMap from "./source-map";
-import trimEnd from "lodash/trimEnd";
+import trimEnd from "lodash.trimend";
 
 const SPACES_RE = /^[ \t]+$/;
 

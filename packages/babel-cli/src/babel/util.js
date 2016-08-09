@@ -5,7 +5,7 @@ let babel     = require("babel-core");
 let util      = require("babel-core").util;
 let path      = require("path");
 let fs        = require("fs");
-let _         = require("lodash");
+let defaults  = require("lodash.defaults");
 
 export function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
@@ -34,7 +34,7 @@ export function log(msg) {
 }
 
 export function transform(filename, code, opts) {
-  opts = _.defaults(opts || {}, index.opts);
+  opts = defaults(opts || {}, index.opts);
   opts.filename = filename;
   opts.ignore = null;
   opts.only = null;

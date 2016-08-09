@@ -6,8 +6,8 @@ import type File from "../../../file";
 import traverse from "babel-traverse";
 import { visitor as tdzVisitor } from "./tdz";
 import * as t from "babel-types";
-import values from "lodash/values";
-import extend from "lodash/extend";
+import values from "lodash.values";
+import extend from "lodash.assignin";
 import template from "babel-template";
 
 export default function () {

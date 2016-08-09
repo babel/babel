@@ -1,6 +1,6 @@
-import isBoolean from "lodash/isBoolean";
-import each from "lodash/each";
-import map from "lodash/map";
+import isBoolean from "lodash.isboolean";
+import each from "lodash.foreach";
+import map from "lodash.map";
 import * as t from "babel-types";
 
 type WhitespaceObject = {

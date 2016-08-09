@@ -8,10 +8,12 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-template",
   "main": "lib/index.js",
   "dependencies": {
-    "babylon": "^6.7.0",
+    "babel-runtime": "^6.9.0",
     "babel-traverse": "^6.9.0",
     "babel-types": "^6.9.0",
-    "babel-runtime": "^6.9.0",
-    "lodash": "^4.2.0"
+    "babylon": "^6.7.0",
+    "lodash.assign": "^4.1.0",
+    "lodash.clonedeep": "^4.2.0",
+    "lodash.has": "^4.2.0"
   }
 }

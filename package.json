@@ -29,7 +29,10 @@
     "kcheck": "^2.0.0",
     "lerna": "2.0.0-beta.23",
     "lerna-changelog": "^0.2.0",
-    "lodash": "^4.2.0",
+    "lodash.foreach": "^4.2.0",
+    "lodash.includes": "^4.2.0",
+    "lodash.keys": "^4.0.8",
+    "lodash.merge": "^4.2.0",
     "matcha": "^0.6.0",
     "mkdirp": "^0.5.1",
     "mocha": "^3.0.0",
@@ -60,5 +63,6 @@
         "auxiliaryCommentBefore": "istanbul ignore next"
       }
     }
-  }
+  },
+  "dependencies": {}
 }

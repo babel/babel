@@ -1,7 +1,7 @@
 // This file contains methods responsible for introspecting the current path for certain values.
 
 import type NodePath from "./index";
-import includes from "lodash/includes";
+import includes from "lodash.includes";
 import * as t from "babel-types";
 
 /**

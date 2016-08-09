@@ -15,7 +15,15 @@
     "babel-runtime": "^6.9.0",
     "babel-types": "^6.10.2",
     "detect-indent": "^3.0.1",
-    "lodash": "^4.2.0",
+    "lodash.find": "^4.2.0",
+    "lodash.findlast": "^4.2.0",
+    "lodash.foreach": "^4.2.0",
+    "lodash.isboolean": "^3.0.3",
+    "lodash.isinteger": "^4.0.3",
+    "lodash.isnumber": "^3.0.3",
+    "lodash.map": "^4.2.0",
+    "lodash.repeat": "^4.0.4",
+    "lodash.trimend": "^4.2.0",
     "source-map": "^0.5.0"
   },
   "devDependencies": {

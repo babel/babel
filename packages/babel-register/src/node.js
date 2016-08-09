@@ -1,9 +1,9 @@
-import deepClone from "lodash/cloneDeep";
+import deepClone from "lodash.clonedeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import extend from "lodash/extend";
+import extend from "lodash.assignin";
 import * as babel from "babel-core";
-import each from "lodash/each";
+import each from "lodash.foreach";
 import { util, OptionManager } from "babel-core";
 import fs from "fs";
 import path from "path";

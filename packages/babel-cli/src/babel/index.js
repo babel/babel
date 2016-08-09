@@ -5,11 +5,11 @@ require("babel-core");
 
 let pathExists = require("path-exists");
 let commander  = require("commander");
-let kebabCase  = require("lodash/kebabCase");
+let kebabCase  = require("lodash.kebabcase");
 let options    = require("babel-core").options;
 let util       = require("babel-core").util;
-let uniq       = require("lodash/uniq");
-let each       = require("lodash/each");
+let uniq       = require("lodash.uniq");
+let each       = require("lodash.foreach");
 let glob       = require("glob");
 
 each(options, function (option, key) {

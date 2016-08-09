@@ -5,7 +5,7 @@ let slash            = require("slash");
 let path             = require("path");
 let util             = require("./util");
 let fs               = require("fs");
-let _                = require("lodash");
+let each             = require("lodash.foreach");
 
 module.exports = function (commander, filenames, opts) {
   if (commander.sourceMaps === "inline") {
@@ -23,7 +23,7 @@ module.exports = function (commander, filenames, opts) {
     let code = "";
     let offset = 0;
 
-    _.each(results, function (result) {
+    each(results, function (result) {
       let filename = result.filename || "stdout";
       code += result.code + "\n";
 
@@ -102,14 +102,14 @@ module.exports = function (commander, filenames, opts) {
     let _filenames = [];
     results = [];
 
-    _.each(filenames, function (filename) {
+    each(filenames, function (filename) {
       if (!pathExists.sync(filename)) return;
 
       let stat = fs.statSync(filename);
       if (stat.isDirectory()) {
         let dirname = filename;
 
-        _.each(util.readdirFilter(filename), function (filename) {
+        each(util.readdirFilter(filename), function (filename) {
           _filenames.push(path.join(dirname, filename));
         });
       } else {
@@ -117,7 +117,7 @@ module.exports = function (commander, filenames, opts) {
       }
     });
 
-    _.each(_filenames, function (filename) {
+    each(_filenames, function (filename) {
       if (util.shouldIgnore(filename)) return;
 
       let data = util.compile(filename);
