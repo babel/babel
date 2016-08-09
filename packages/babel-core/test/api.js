@@ -428,10 +428,6 @@ suite("api", function () {
     ])
   });
 
-  test("guy", function() {
-    assert.equal(typeof babel.guy, "string");
-  });
-
   suite("env option", function () {
     var oldBabelEnv = process.env.BABEL_ENV;
     var oldNodeEnv = process.env.NODE_ENV;
