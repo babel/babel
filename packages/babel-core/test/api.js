@@ -5,7 +5,6 @@ var sourceMap            = require("source-map");
 var assert               = require("assert");
 var File                 = require("../lib/transformation/file").default;
 var Plugin               = require("../lib/transformation/plugin");
-var url                  = require("url");
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
