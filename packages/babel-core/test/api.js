@@ -5,6 +5,7 @@ var sourceMap            = require("source-map");
 var assert               = require("assert");
 var File                 = require("../lib/transformation/file").default;
 var Plugin               = require("../lib/transformation/plugin");
+var url                  = require("url");
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
@@ -426,6 +427,10 @@ suite("api", function () {
         filename: "/foo/node_modules/bar.foo"
       }).then(assertIgnored)
     ])
+  });
+
+  test("guy", function() {
+    assert.equal(typeof babel.guy, "string");
   });
 
   suite("env option", function () {
