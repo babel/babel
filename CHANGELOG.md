@@ -13,6 +13,96 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.13.2 (2016-08-05)
+
+Hi again, just fixing up logic from the backwards-compatibility fix which broke options in presets.
+Also added more tests and will update Babel to use the new preset options after this release.
+
+#### Bug Fix
+* `babel-core`, `babel-preset-es2015`
+  * [#3638](https://github.com/babel/babel/pull/3638) [Bug Fix] option manager: val = val.buildPreset should be before the check if the preset supports options ([@christophehurpeau](https://github.com/christophehurpeau))
+
+## v6.13.1 (2016-08-04)
+
+We had a regression in our new babel-preset-es2015@6.13.0 that made it unexpectedly backward-incompatible. This release introduces a new alternative plugin-options approach that is uglier but supports backward-compatiblity. Ideally new plugins would use the new `module.exports = function(babel, options){ }` approach and simple skip supporting `babel-core@<6.13.x`.
+
+#### Bug Fix
+* `babel-core`, `babel-preset-es2015`
+  * [#3635](https://github.com/babel/babel/pull/3635) Fix backward-compatibility of babel-preset-es2015. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+## v6.13.0 (2016-08-04)
+
+> Since the last release we've created https://github.com/babel/notes to track discussions on our slack and high level features/changes that could be added - definetely check it out if you're interested in Babel's development!
+
+Some small but very important additions in this release:
+
+### Preset options ([babel/notes](https://github.com/babel/notes/blob/master/2016-07/july-31.md#preset-options-pr-3331))
+
+Initially, presets were supposed to be one-off sets of plugins that didn't have any configuration. If you wanted to do something different you would make your own presets. There are [> 600 presets](https://www.npmjs.com/search?q=babel-preset-) on npm now. We want to give users more flexibility in certain cases: like when you want to pass the same option to multiple presets or to remove a default plugin.
+
+### `loose` and `modules` options for `babel-preset-es2015` ([#3331](https://github.com/babel/babel/pull/3331), [#3627](https://github.com/babel/babel/pull/3627))
+
+This has been rather annoying. Having to install `babel-preset-es2015-loose-native-modules` seems rather crazy when it could be an option.
+
+With [#3627](https://github.com/babel/babel/pull/3627), you can pass 2 options in:
+
+- `loose` - Enable "loose" transformations for any plugins in this preset that allow them (Disabled by default).
+- `modules` - Enable transformation of ES6 module syntax to another module type (Enabled by default to `"commonjs"`).
+Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]`
+
+```js
+// for loose and native modules
+{
+  presets: [
+    ["es2015", { "loose": true, "modules": false }]
+  ]
+}
+```
+
+### Updates to `babel-preset-stage-2`
+- [#3613](https://github.com/babel/babel/pull/3613) Move the [decorators transform](http://babeljs.io/docs/plugins/transform-decorators).
+  - [#3626](https://github.com/babel/babel/pull/3626) Make a more informative error message when using the default decorators transform and link to the [legacy transform](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)
+- [#3611](https://github.com/babel/babel/pull/3611) Move [class properties transform](http://babeljs.io/docs/plugins/transform-class-properties/).
+
+### Coming Up
+
+- `babel-preset-es2017`, `babel-preset-latest` (still deciding the name), supporting codemods, and more!
+
+#### New Feature
+* `babel-core`, `babel-preset-es2015`
+  * [#3627](https://github.com/babel/babel/pull/3627) es2015: transpile the preset, modify modules option to support "amd,umd,systemjs" as well, tests. ([@hzoo](https://github.com/hzoo))
+  * [#3331](https://github.com/babel/babel/pull/3331) Support passing options to presets.. ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babel-preset-stage-1`, `babel-preset-stage-2`
+  * [#3613](https://github.com/babel/babel/pull/3613) Move decorators to stage 2. ([@doug-wade](https://github.com/doug-wade))
+  * [#3611](https://github.com/babel/babel/pull/3611) Move `babel-plugin-transform-class-properties` to stage 2. ([@kripod](https://github.com/kripod))
+
+#### Bug Fix
+* `babel-traverse`
+  * [#3557](https://github.com/babel/babel/pull/3557) Fix bug where `path.evaluate` treats repeated identifiers as undefined. ([@erikdesjardins](https://github.com/erikdesjardins))
+
+#### Polish
+* `babel-plugin-transform-decorators`
+  * [#3626](https://github.com/babel/babel/pull/3626) Show a more informative error message when using the decorator transf…. ([@hzoo](https://github.com/hzoo))
+
+#### Internal
+* `babel-types`
+  * [#3628](https://github.com/babel/babel/pull/3628) Missing FlowType definition opts.deprecatedAlias. ([@kpman](https://github.com/kpman))
+* `babel-plugin-syntax-async-functions`, `babel-plugin-syntax-async-generators`, `babel-plugin-syntax-class-constructor-call`, `babel-plugin-syntax-class-properties`, `babel-plugin-syntax-decorators`, `babel-plugin-syntax-do-expressions`, `babel-plugin-syntax-exponentiation-operator`, `babel-plugin-syntax-export-extensions`, `babel-plugin-syntax-flow`, `babel-plugin-syntax-function-bind`, `babel-plugin-syntax-function-sent`, `babel-plugin-syntax-jsx`, `babel-plugin-syntax-object-rest-spread`, `babel-plugin-syntax-trailing-function-commas`
+  * [#3604](https://github.com/babel/babel/pull/3604) Misc: remove deps from syntax plugins. ([@hzoo](https://github.com/hzoo))
+* `babel-plugin-transform-inline-environment-variables`, `babel-plugin-transform-member-expression-literals`, `babel-plugin-transform-merge-sibling-variables`, `babel-plugin-transform-minify-booleans`, `babel-plugin-transform-node-env-inline`, `babel-plugin-transform-property-literals`, `babel-plugin-transform-remove-console`, `babel-plugin-transform-remove-debugger`, `babel-plugin-transform-simplify-comparison-operators`, `babel-plugin-transform-undefined-to-void`
+  * [#3621](https://github.com/babel/babel/pull/3621) transfer minify plugins (will be in another repo). ([@hzoo](https://github.com/hzoo))
+* Other
+  * [#3622](https://github.com/babel/babel/pull/3622) Update mocha to version 3.0.0 🚀. ([@greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
+#### Commiters: 7
+- Daniel Tseng ([kpman](https://github.com/kpman))
+- Douglas Wade ([doug-wade](https://github.com/doug-wade))
+- Erik Desjardins ([erikdesjardins](https://github.com/erikdesjardins))
+- Greenkeeper ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- Kristóf Poduszló ([kripod](https://github.com/kripod))
+- Logan Smyth ([loganfsmyth](https://github.com/loganfsmyth))
+
 ## v6.12.0 (2016-07-27)
 
 - Add a `helpers: false` option to `transform-runtime` to not bundle in babel helpers.

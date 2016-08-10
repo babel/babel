@@ -1,6 +1,6 @@
 {
   "name": "babel-core",
-  "version": "6.11.4",
+  "version": "6.13.2",
   "description": "Babel compiler core.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -31,8 +31,8 @@
     "babel-template": "^6.9.0",
     "babel-runtime": "^6.9.1",
     "babel-register": "^6.9.0",
-    "babel-traverse": "^6.11.4",
-    "babel-types": "^6.9.1",
+    "babel-traverse": "^6.13.0",
+    "babel-types": "^6.13.0",
     "babylon": "^6.7.0",
     "convert-source-map": "^1.1.0",
     "debug": "^2.1.1",
@@ -48,7 +48,7 @@
   },
   "devDependencies": {
     "babel-helper-fixtures": "^6.9.0",
-    "babel-helper-transform-fixture-test-runner": "^6.9.0",
-    "babel-polyfill": "^6.9.1"
+    "babel-helper-transform-fixture-test-runner": "^6.13.2",
+    "babel-polyfill": "^6.13.0"
   }
 }
