@@ -58,6 +58,7 @@ function normalizeOptions(code, opts, tokens): Format {
     minified: opts.minified,
     concise: opts.concise,
     quotes: opts.quotes || findCommonStringDelimiter(code, tokens),
+    avoidEscapingQuotes: opts.avoidEscapingQuotes || false,
     indent: {
       adjustMultilineComment: true,
       style: style,
@@ -94,7 +95,7 @@ function normalizeOptions(code, opts, tokens): Format {
  */
 function findCommonStringDelimiter(code, tokens) {
   const DEFAULT_STRING_DELIMITER = "double";
-  if (!code) {
+  if (code == null) {
     return DEFAULT_STRING_DELIMITER;
   }
 
