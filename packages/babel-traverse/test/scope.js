@@ -38,5 +38,10 @@ suite("scope", function () {
     test("purity", function () {
       assert.ok(getPath("({ x: 1 })").get("body")[0].get("expression").isPure());
     });
+
+    test("label", function () {
+      assert.strictEqual(getPath("foo: { }").scope.getBinding("foo"), undefined);
+      assert.strictEqual(getPath("foo: { }").scope.getLabel("foo").type, "LabeledStatement");
+    });
   });
 });
