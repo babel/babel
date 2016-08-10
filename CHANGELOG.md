@@ -13,6 +13,19 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.13.3 (2016-08-10) TAKE ME TO FLAVOUR TOWN
+
+- export `babel.guy`.
+- Use the new es2015 preset option on when compiling babel with itself.
+
+#### Bug Fix
+* `babel-core`
+  * [#3641](https://github.com/babel/babel/pull/3641) Fix exports of babel-core. ([@thejameskyle](https://github.com/thejameskyle))
+
+#### Internal
+* Other
+  * [#3639](https://github.com/babel/babel/pull/3639) Use the new es2015 loose mode option on babel itself. ([@hzoo](https://github.com/hzoo))
+
 ## v6.13.2 (2016-08-05)
 
 Hi again, just fixing up logic from the backwards-compatibility fix which broke options in presets.
