@@ -5,6 +5,7 @@
 '\n\r\u2028\u2029';
 'He said: "..."';
 "He said: '...'";
+"He said: \"...\"";
 /foobar/g;
 null;
 true;
