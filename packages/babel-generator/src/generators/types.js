@@ -129,31 +129,60 @@ export function NumericLiteral(node: Object) {
 }
 
 export function StringLiteral(node: Object, parent: Object) {
-  let raw = this.getPossibleRaw(node);
-  if (raw != null) {
-    this.token(raw);
-    return;
+  // raw is the string literal's representation as it occurs
+  // in the source code. This preserves quotes, line break
+  // characters and unicode code units.
+  let val = this.getPossibleRaw(node);
+  // fall back to stringified value if raw does not exist
+  if (val == null) {
+    val = JSON.stringify(node.value);
   }
-
-  let val = JSON.stringify(node.value);
 
   // escape illegal js but valid json unicode characters
   val = val.replace(/[\u000A\u000D\u2028\u2029]/g, function (c) {
     return "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4);
   });
 
-  if (this.format.quotes === "single" && !t.isJSX(parent)) {
-    // remove double quotes
-    val = val.slice(1, -1);
+  // Early return when inside JSX, because quotes
+  // should not be altered in this case.
+  if (t.isJSX(parent)) {
+    return this.token(val);
+  }
 
+  // remove current quotes (keep originalVal for comparison below)
+  let originalVal = val;
+  val = val.slice(1, -1);
+
+  if (this.format.quotes === "single") {
     // unescape double quotes
     val = val.replace(/\\"/g, '"');
 
-    // escape single quotes
-    val = val.replace(/'/g, "\\'");
+    // escape single quotes not already escaped
+    val = val.replace(/\\([\s\S])|(')/g,"\\$1$2");
 
     // add single quotes
     val = `'${val}'`;
+  }
+
+  // double quotes - default
+  if (this.format.quotes !== "single") {
+    // unescape single quotes
+    val = val.replace(/\\'/g, "'");
+
+    // escape double quotes not already escaped
+    val = val.replace(/\\([\s\S])|(")/g,"\\$1$2");
+
+    // add double quotes
+    val = `"${val}"`;
+  }
+
+  // If conversion to led to escaping quotes and
+  // original string had no escaped quotes, prefer
+  // the original if avoidEscapingQuotes is true.
+  if (this.format.avoidEscapingQuotes
+    && /\\'|\\"/.test(val)
+    && !/\\'|\\"/.test(originalVal)) {
+    return this.token(originalVal);
   }
 
   return this.token(val);
