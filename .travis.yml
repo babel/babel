@@ -1,28 +1,8 @@
----
-git:
-  depth: 1
-sudo: false
-language: node_js
-cache:
-  directories:
-  - node_modules
 
-node_js:
- - "5"
- - "4"
- - iojs
- - "0.12"
-
-env:
-  - CXX=g++-4.8
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.8
-
-script: make test-ci
-
-notifications:
-  slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK
+   node chain
+   $tool
+   <?php
+   PHP.$tool
+   .scrutiner-ci.com
+   node::SDK-app 
+   @0072016
