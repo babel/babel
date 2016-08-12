@@ -38,8 +38,12 @@ function preset(context, opts) {
   }
 
   if (typeof loose !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
-  if (typeof strict !== "boolean") throw new Error("Preset es2015 'strict' option must be a boolean.");
-  if (typeof allowTopLevelThis !== "boolean") throw new Error("Preset es2015 'allowTopLevelThis' option must be a boolean.");
+  if (typeof strict !== "boolean") {
+    throw new Error("Preset es2015 'strict' option must be a boolean.")
+  };
+  if (typeof allowTopLevelThis !== "boolean") {
+    throw new Error("Preset es2015 'allowTopLevelThis' option must be a boolean.")
+  };
   if (modules !== false && moduleTypes.indexOf(modules) === -1) {
     throw new Error("Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
       "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
@@ -66,7 +70,11 @@ function preset(context, opts) {
       [require("babel-plugin-transform-es2015-destructuring"), { loose }],
       require("babel-plugin-transform-es2015-block-scoping"),
       require("babel-plugin-transform-es2015-typeof-symbol"),
-      modules === "commonjs" && [require("babel-plugin-transform-es2015-modules-commonjs"), { loose, allowTopLevelThis, strict }],
+      modules === "commonjs" && [require("babel-plugin-transform-es2015-modules-commonjs"), {
+        loose, 
+        allowTopLevelThis, 
+        strict
+      }],
       modules === "systemjs" && [require("babel-plugin-transform-es2015-modules-systemjs"), { loose }],
       modules === "amd" && [require("babel-plugin-transform-es2015-modules-amd"), { loose }],
       modules === "umd" && [require("babel-plugin-transform-es2015-modules-umd"), { loose }],
