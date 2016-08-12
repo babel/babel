@@ -63,7 +63,7 @@ The Babel repo is managed as a [monorepo](https://github.com/babel/babel/blob/ma
 [`babel-core`](/packages/babel-core) is the Babel compiler itself; it exposes the `babel.transform` method, where `transformedCode = transform(src).code`.
 
 The compiler can be broken down into 3 parts:
-- The parser: [`babylon`](https://github.com/babel/babylon) (moved to a seperate repo and versioned independently)
+- The parser: [`babylon`](https://github.com/babel/babylon) (moved to a separate repo and versioned independently)
 - The transformer[s]: All the plugins/presets
   - These all use [`babel-traverse`](/packages/babel-traverse) to traverse through the AST
 - The generator: [`babel-generator`](/packages/babel-generator)
