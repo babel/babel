@@ -75,9 +75,9 @@ helpers.asyncToGenerator = template(`
             resolve(value);
           } else {
             return Promise.resolve(value).then(function (value) {
-              return step("next", value);
+              step("next", value);
             }, function (err) {
-              return step("throw", err);
+              step("throw", err);
             });
           }
         }
