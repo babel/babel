@@ -26,8 +26,17 @@ export default function ({ types: t }) {
         if (!path.node.value) path.remove();
       },
 
-      Class({ node }) {
-        node.implements = null;
+      Class(path) {
+        path.node.implements = null;
+
+        // We do this here instead of in a `ClassProperty` visitor because the class transform
+        // would transform the class before we reached the class property.
+        path.get("body.body").forEach((child) => {
+          if (child.isClassProperty()) {
+            child.node.typeAnnotation = null;
+            if (!child.node.value) child.remove();
+          }
+        });
       },
 
       Function({ node }) {
