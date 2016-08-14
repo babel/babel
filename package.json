@@ -45,6 +45,10 @@
     "watch": "babel src --out-dir lib --watch"
   },
   "nyc": {
+    "include": [
+      "src/*.js",
+      "bin/*.js"
+    ],
     "sourceMap": false,
     "instrument": false
   }
