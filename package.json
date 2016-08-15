@@ -1,6 +1,10 @@
 {
   "private": true,
   "license": "MIT",
+  "scripts": {
+    "test": "make test",
+    "build": "make build"
+  },
   "devDependencies": {
     "async": "^1.5.0",
     "babel-core": "^6.3.17",
@@ -45,6 +49,7 @@
     "uglify-js": "^2.4.16"
   },
   "babel": {
+    "comments": false,
     "presets": [
       "stage-0",
       "es2015-loose"
