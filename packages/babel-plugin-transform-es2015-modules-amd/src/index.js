@@ -70,6 +70,8 @@ export default function ({ types: t }) {
 
       this.hasExports = false;
       this.hasModule = false;
+
+      this.modulesType = "amd";
     },
 
     visitor: {

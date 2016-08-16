@@ -127,6 +127,10 @@ export default function () {
   return {
     inherits: require("babel-plugin-transform-strict-mode"),
 
+    pre() {
+      this.modulesType = "commonjs";
+    },
+
     visitor: {
       ThisExpression(path, state) {
         // If other plugins run after this plugin's Program#exit handler, we allow them to
@@ -170,16 +174,15 @@ export default function () {
 
           let requires = Object.create(null);
 
-          function addRequire(source, blockHoist) {
+          function addRequire(source, blockHoist, opts = {}) {
             let cached = requires[source];
             if (cached) return cached;
 
             let ref = path.scope.generateUidIdentifier(basename(source, extname(source)));
+            let builtRequire = buildRequire(t.stringLiteral(source)).expression;
 
             let varDecl = t.variableDeclaration("var", [
-              t.variableDeclarator(ref, buildRequire(
-                t.stringLiteral(source)
-              ).expression)
+              t.variableDeclarator(ref, opts.inline ? t.callExpression(opts.inline, [builtRequire]) : builtRequire)
             ]);
 
             // Copy location from the original import statement for sourcemap
@@ -200,6 +203,15 @@ export default function () {
           function addTo(obj, key, arr) {
             let existing = obj[key] || [];
             obj[key] = existing.concat(arr);
+          }
+
+          function hasSingleDefaultImport(specifiers) {
+            if (specifiers.length !== 1) { return; }
+
+            let onlySpecifier = specifiers[0];
+
+            return t.isImportDefaultSpecifier(onlySpecifier) ||
+              t.isImportSpecifier(onlySpecifier) && onlySpecifier.imported.name === "default";
           }
 
           for (let path of body) {
@@ -350,13 +362,25 @@ export default function () {
           for (let source in imports) {
             let {specifiers, maxBlockHoist} = imports[source];
             if (specifiers.length) {
-              let uid = addRequire(source, maxBlockHoist);
+              let uid;
+
+              if (hasSingleDefaultImport(specifiers) && this.modulesType === "commonjs") {
+                uid = addRequire(source, maxBlockHoist, {
+                  inline: this.addHelper("interopRequireDefault")
+                });
+              } else if (specifiers.length === 1 && t.isImportNamespaceSpecifier(specifiers[0]) && this.modulesType === "commonjs") {
+                uid = addRequire(source, maxBlockHoist, {
+                  inline: this.addHelper("interopRequireWildcard")
+                });
+              } else {
+                uid = addRequire(source, maxBlockHoist);
+              }
 
               let wildcard;
 
               for (let i = 0; i < specifiers.length; i++) {
                 let specifier = specifiers[i];
-                if (t.isImportNamespaceSpecifier(specifier)) {
+                if (t.isImportNamespaceSpecifier(specifier) && !(specifiers.length === 1 && t.isImportNamespaceSpecifier(specifiers[0]) && this.modulesType === "commonjs")) {
                   if (strict) {
                     remaps[specifier.local.name] = uid;
                   } else {
@@ -385,7 +409,7 @@ export default function () {
               for (let specifier of specifiers) {
                 if (t.isImportSpecifier(specifier)) {
                   let target = uid;
-                  if (specifier.imported.name === "default") {
+                  if (specifier.imported.name === "default" && !(hasSingleDefaultImport(specifiers) && this.modulesType === "commonjs")) {
                     if (wildcard) {
                       target = wildcard;
                     } else {

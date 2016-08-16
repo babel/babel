@@ -46,6 +46,10 @@ export default function ({ types: t }) {
   return {
     inherits: require("babel-plugin-transform-es2015-modules-amd"),
 
+    pre() {
+      this.modulesType = "umd";
+    },
+
     visitor: {
       Program: {
         exit(path, state) {
