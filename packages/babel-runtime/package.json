@@ -1,6 +1,6 @@
 {
   "name": "babel-runtime",
-  "version": "6.9.2",
+  "version": "6.11.6",
   "description": "babel selfContained runtime",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime",
@@ -11,7 +11,6 @@
   },
   "devDependencies": {
     "babel-helpers": "^6.6.0",
-    "babel-plugin-transform-runtime": "^6.9.0",
-    "babel-template": "^6.9.0"
+    "babel-plugin-transform-runtime": "^6.9.0"
   }
 }

@@ -11,11 +11,13 @@ export default function ({ types: t }) {
 
   return {
     pre(file) {
-      file.set("helperGenerator", function (name) {
-        if (HELPER_BLACKLIST.indexOf(name) < 0) {
-          return file.addImport(`${RUNTIME_MODULE_NAME}/helpers/${name}`, "default", name);
-        }
-      });
+      if (this.opts.helpers !== false) {
+        file.set("helperGenerator", function (name) {
+          if (HELPER_BLACKLIST.indexOf(name) < 0) {
+            return file.addImport(`${RUNTIME_MODULE_NAME}/helpers/${name}`, "default", name);
+          }
+        });
+      }
 
       this.setDynamic("regeneratorIdentifier", function () {
         return file.addImport(`${RUNTIME_MODULE_NAME}/regenerator`, "default", "regeneratorRuntime");

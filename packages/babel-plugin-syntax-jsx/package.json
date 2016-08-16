@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-syntax-jsx",
-  "version": "6.8.0",
+  "version": "6.13.0",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-jsx",
   "license": "MIT",
@@ -8,10 +8,6 @@
   "keywords": [
     "babel-plugin"
   ],
-  "dependencies": {
-    "babel-runtime": "^6.0.0"
-  },
-  "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.8.0"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }

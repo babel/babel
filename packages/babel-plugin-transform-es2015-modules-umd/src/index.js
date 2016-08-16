@@ -3,6 +3,17 @@
 import { basename, extname } from "path";
 import template from "babel-template";
 
+let buildPrerequisiteAssignment = template(`
+  GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
+`);
+
+let buildGlobalExport = template(`
+  var mod = { exports: {} };
+  factory(BROWSER_ARGUMENTS);
+  PREREQUISITE_ASSIGNMENTS
+  GLOBAL_TO_ASSIGN = mod.exports;
+`);
+
 let buildWrapper = template(`
   (function (global, factory) {
     if (typeof define === "function" && define.amd) {
@@ -10,9 +21,7 @@ let buildWrapper = template(`
     } else if (typeof exports !== "undefined") {
       factory(COMMON_ARGUMENTS);
     } else {
-      var mod = { exports: {} };
-      factory(BROWSER_ARGUMENTS);
-      global.GLOBAL_ARG = mod.exports;
+      GLOBAL_EXPORT
     }
   })(this, FUNC);
 `);
@@ -65,23 +74,62 @@ export default function ({ types: t }) {
             } else if (arg.value === "exports") {
               return t.memberExpression(t.identifier("mod"), t.identifier("exports"));
             } else {
-              let requireName = basename(arg.value, extname(arg.value));
-              let globalName = browserGlobals[requireName] || requireName;
+              let memberExpression;
 
-              return t.memberExpression(t.identifier("global"), t.identifier(
-                t.toIdentifier(globalName)
-              ));
+              if (state.opts.exactGlobals) {
+                let globalRef = browserGlobals[arg.value];
+                if (globalRef) {
+                  memberExpression = globalRef.split(".").reduce(
+                    (accum, curr) => t.memberExpression(accum, t.identifier(curr)), t.identifier("global")
+                  );
+                } else {
+                  memberExpression = t.memberExpression(
+                    t.identifier("global"), t.identifier(t.toIdentifier(arg.value))
+                  );
+                }
+              } else {
+                let requireName = basename(arg.value, extname(arg.value));
+                let globalName = browserGlobals[requireName] || requireName;
+                memberExpression = t.memberExpression(
+                  t.identifier("global"), t.identifier(t.toIdentifier(globalName))
+                );
+              }
+
+              return memberExpression;
             }
           });
 
-          let globalArg = t.identifier(t.toIdentifier(moduleName ? moduleName.value : this.file.opts.basename));
+          let moduleNameOrBasename = moduleName ? moduleName.value : this.file.opts.basename;
+          let globalToAssign = t.memberExpression(
+            t.identifier("global"), t.identifier(t.toIdentifier(moduleNameOrBasename))
+          );
+          let prerequisiteAssignments = null;
+
+          if (state.opts.exactGlobals) {
+            let globalName = browserGlobals[moduleNameOrBasename];
+
+            if (globalName) {
+              prerequisiteAssignments = [];
+
+              let members = globalName.split(".");
+              globalToAssign = members.slice(1).reduce((accum, curr) => {
+                prerequisiteAssignments.push(buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum }));
+                return t.memberExpression(accum, t.identifier(curr));
+              }, t.memberExpression(t.identifier("global"), t.identifier(members[0])));
+            }
+          }
+
+          let globalExport = buildGlobalExport({
+            BROWSER_ARGUMENTS: browserArgs,
+            PREREQUISITE_ASSIGNMENTS: prerequisiteAssignments,
+            GLOBAL_TO_ASSIGN: globalToAssign
+          });
 
           last.replaceWith(buildWrapper({
             MODULE_NAME: moduleName,
-            BROWSER_ARGUMENTS: browserArgs,
             AMD_ARGUMENTS: amdArgs,
             COMMON_ARGUMENTS: commonArgs,
-            GLOBAL_ARG: globalArg,
+            GLOBAL_EXPORT: globalExport,
             FUNC: func
           }));
         }
