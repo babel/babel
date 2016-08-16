@@ -442,7 +442,11 @@ export default class File extends Store {
       const pluginPasses = this.pluginPasses[i];
       this.call("pre", pluginPasses);
       this.log.debug("Start transform traverse");
-      traverse(this.ast, traverse.visitors.merge(this.pluginVisitors[i], pluginPasses), this.scope);
+
+      // merge all plugin visitors into a single visitor
+      let visitor = traverse.visitors.merge(this.pluginVisitors[i], pluginPasses, this.opts.wrapPluginVisitorMethod);
+      traverse(this.ast, visitor, this.scope);
+
       this.log.debug("End transform traverse");
       this.call("post", pluginPasses);
     }

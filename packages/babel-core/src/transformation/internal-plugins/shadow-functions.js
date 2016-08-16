@@ -16,6 +16,8 @@ const superVisitor = {
 };
 
 export default new Plugin({
+  name: "internal.shadowFunctions",
+  
   visitor: {
     ThisExpression(path) {
       remap(path, "this");

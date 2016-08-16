@@ -13,6 +13,8 @@ export default new Plugin({
    *  - 3 We want this to be at the **very** top
    */
 
+  name: "internal.blockHoist",
+
   visitor: {
     Block: {
       exit({ node }) {

@@ -162,7 +162,7 @@ function validateVisitorMethods(path, val) {
   }
 }
 
-export function merge(visitors: Array, states: Array = []) {
+export function merge(visitors: Array, states: Array = [], wrapper?: ?Function) {
   let rootVisitor = {};
 
   for (let i = 0; i < visitors.length; i++) {
@@ -174,8 +174,10 @@ export function merge(visitors: Array, states: Array = []) {
     for (let type in visitor) {
       let visitorType = visitor[type];
 
-      // if we have state then overload the callbacks to take it
-      if (state) visitorType = wrapWithState(visitorType, state);
+      // if we have state or wrapper then overload the callbacks to take it
+      if (state || wrapper) {
+        visitorType = wrapWithStateOrWrapper(visitorType, state, wrapper);
+      }
 
       let nodeVisitor = rootVisitor[type] = rootVisitor[type] || {};
       mergePair(nodeVisitor, visitorType);
@@ -185,7 +187,7 @@ export function merge(visitors: Array, states: Array = []) {
   return rootVisitor;
 }
 
-function wrapWithState(oldVisitor, state) {
+function wrapWithStateOrWrapper(oldVisitor, state, wrapper: ?Function) {
   let newVisitor = {};
 
   for (let key in oldVisitor) {
@@ -195,10 +197,18 @@ function wrapWithState(oldVisitor, state) {
     if (!Array.isArray(fns)) continue;
 
     fns = fns.map(function (fn) {
-      let newFn = function (path) {
-        return fn.call(state, path, state);
-      };
-      newFn.toString = () => fn.toString();
+      let newFn = fn;
+
+      if (state) {
+        newFn = function (path) {
+          return fn.call(state, path, state);
+        };
+      }
+
+      if (wrapper) {
+        newFn = wrapper(state.key, key, newFn);
+      }
+
       return newFn;
     });
 
