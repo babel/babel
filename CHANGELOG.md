@@ -13,6 +13,53 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
+## 6.9.0 (2016-08-16)
+
+### New syntax support
+
+- Add JSX spread children ([#42](https://github.com/babel/babylon/pull/42)) @calebmer
+
+(Be aware that React is not going to support this syntax)
+
+```js
+<div>
+  {...todos.map(todo => <Todo key={todo.id} todo={todo}/>)}
+</div>
+```
+
+- Add support for declare module.exports ([#72](https://github.com/babel/babylon/pull/72)) @danez
+
+```js
+declare module {
+  declare module.exports: {}
+}
+```
+
+### New Features
+
+- If supplied, attach filename property to comment node loc. ([#80](https://github.com/babel/babylon/pull/80)) @divmain
+- Add identifier name to node loc field ([#90](https://github.com/babel/babylon/pull/90)) @kittens
+
+### Bug Fixes
+
+- Fix exponential operator to behave according to spec ([#75](https://github.com/babel/babylon/pull/75)) @danez
+- Fix lookahead to not add comments to arrays which are not cloned ([#76](https://github.com/babel/babylon/pull/76)) @danez
+- Fix accidental fall-through in Flow type parsing. ([#82](https://github.com/babel/babylon/pull/82)) @xiemaisi
+- Only allow declares inside declare module ([#73](https://github.com/babel/babylon/pull/73)) @danez
+- Small fix for parsing type parameter declarations ([#83](https://github.com/babel/babylon/pull/83)) @gabelevi
+- Fix arrow param locations with flow types ([#57](https://github.com/babel/babylon/pull/57)) @danez
+- Fixes SyntaxError position with flow optional type ([#65](https://github.com/babel/babylon/pull/65)) @danez
+
+### Internal
+
+- Add codecoverage to tests @danez
+- Fix tests to not save expected output if we expect the test to fail @danez
+- Make a shallow clone of babel for testing @danez
+- chore(package): update cross-env to version 2.0.0 ([#77](https://github.com/babel/babylon/pull/77)) @greenkeeperio-bot
+- chore(package): update ava to version 0.16.0 ([#86](https://github.com/babel/babylon/pull/86)) @greenkeeperio-bot
+- chore(package): update babel-plugin-istanbul to version 2.0.0 ([#89](https://github.com/babel/babylon/pull/89)) @greenkeeperio-bot
+- chore(package): update nyc to version 8.0.0 ([#88](https://github.com/babel/babylon/pull/88)) @greenkeeperio-bot
+
 ## 6.8.4 (2016-07-06)
 
 ### Bug Fixes
