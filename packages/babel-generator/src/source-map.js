@@ -34,7 +34,14 @@ export default class SourceMap {
    * values to insert a mapping to nothing.
    */
 
-  mark(generatedLine: number, generatedColumn: number, line: number, column: number, filename: ?string) {
+  mark(
+    generatedLine: number,
+    generatedColumn: number,
+    line: number,
+    column: number,
+    identifierName: ?string,
+    filename: ?string,
+  ) {
     // Adding an empty mapping at the start of a generated line just clutters the map.
     if (this._lastGenLine !== generatedLine && line === null) return;
 
@@ -50,6 +57,7 @@ export default class SourceMap {
     this._lastSourceColumn = column;
 
     this._map.addMapping({
+      name: identifierName,
       generated: {
         line: generatedLine,
         column: generatedColumn,

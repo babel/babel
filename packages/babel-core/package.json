@@ -33,7 +33,7 @@
     "babel-register": "^6.9.0",
     "babel-traverse": "^6.13.0",
     "babel-types": "^6.13.0",
-    "babylon": "^6.7.0",
+    "babylon": "^6.9.0",
     "convert-source-map": "^1.1.0",
     "debug": "^2.1.1",
     "json5": "^0.4.0",
