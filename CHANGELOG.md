@@ -30,7 +30,7 @@ See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.m
 - Add support for declare module.exports ([#72](https://github.com/babel/babylon/pull/72)) @danez
 
 ```js
-declare module {
+declare module "foo" {
   declare module.exports: {}
 }
 ```
