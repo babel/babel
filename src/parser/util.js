@@ -71,10 +71,10 @@ pp.semicolon = function () {
 };
 
 // Expect a token of a given type. If found, consume it, otherwise,
-// raise an unexpected token error.
+// raise an unexpected token error at given pos.
 
-pp.expect = function (type) {
-  return this.eat(type) || this.unexpected();
+pp.expect = function (type, pos) {
+  return this.eat(type) || this.unexpected(pos);
 };
 
 // Raise an unexpected token error.
