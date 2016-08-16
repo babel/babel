@@ -979,6 +979,8 @@ pp.parseIdentifier = function (liberal) {
     this.raise(node.start, "invalid use of await inside of an async function");
   }
 
+  node.loc.identifierName = node.name;
+
   this.next();
   return this.finishNode(node, "Identifier");
 };
