@@ -25,6 +25,7 @@ export default class Buffer {
     column: 0,
   };
   _sourcePosition: Object = {
+    identifierName: null,
     line: null,
     column: null,
     filename: null,
@@ -49,8 +50,8 @@ export default class Buffer {
 
   append(str: string): void {
     this._flush();
-    const { line, column, filename } = this._sourcePosition;
-    this._append(str, line, column, filename);
+    const { line, column, filename, identifierName } = this._sourcePosition;
+    this._append(str, line, column, identifierName, filename);
   }
 
   /**
@@ -61,8 +62,8 @@ export default class Buffer {
     // Drop trailing spaces when a newline is inserted.
     if (str === "\n") while (this._queue.length > 0 && SPACES_RE.test(this._queue[0][0])) this._queue.shift();
 
-    const { line, column, filename } = this._sourcePosition;
-    this._queue.unshift([str, line, column, filename]);
+    const { line, column, filename, identifierName } = this._sourcePosition;
+    this._queue.unshift([str, line, column, identifierName, filename]);
   }
 
   _flush(): void {
@@ -70,10 +71,10 @@ export default class Buffer {
     while (item = this._queue.pop()) this._append(...item);
   }
 
-  _append(str: string, line: number, column: number, filename: ?string): void {
+  _append(str: string, line: number, column: number, identifierName: ?string, filename: ?string): void {
     // If there the line is ending, adding a new mapping marker is redundant
     if (this._map && str[0] !== "\n") {
-      this._map.mark(this._position.line, this._position.column, line, column, filename);
+      this._map.mark(this._position.line, this._position.column, line, column, identifierName, filename);
     }
 
     this._buf.push(str);
@@ -135,6 +136,7 @@ export default class Buffer {
 
     let pos = loc ? loc[prop] : null;
 
+    this._sourcePosition.identifierName = loc && loc.identifierName || null;
     this._sourcePosition.line = pos ? pos.line : null;
     this._sourcePosition.column = pos ? pos.column : null;
     this._sourcePosition.filename = loc && loc.filename || null;
@@ -151,6 +153,7 @@ export default class Buffer {
     let originalLine = this._sourcePosition.line;
     let originalColumn = this._sourcePosition.column;
     let originalFilename = this._sourcePosition.filename;
+    let originalIdentifierName = this._sourcePosition.identifierName;
 
     this.source(prop, loc);
 
@@ -159,6 +162,7 @@ export default class Buffer {
     this._sourcePosition.line = originalLine;
     this._sourcePosition.column = originalColumn;
     this._sourcePosition.filename = originalFilename;
+    this._sourcePosition.identifierName = originalIdentifierName;
   }
 
   getCurrentColumn(): number {

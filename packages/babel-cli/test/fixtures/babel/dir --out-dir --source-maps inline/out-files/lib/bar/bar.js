@@ -5,4 +5,4 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Test = function Test() {
   _classCallCheck(this, Test);
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9iYXIvYmFyLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7SUFBTSxJIiwiZmlsZSI6ImJhci5qcyIsInNvdXJjZXNDb250ZW50IjpbImNsYXNzIFRlc3Qge1xuXG59Il19
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9iYXIvYmFyLmpzIl0sIm5hbWVzIjpbIlRlc3QiXSwibWFwcGluZ3MiOiI7Ozs7SUFBTUEsSSIsImZpbGUiOiJiYXIuanMiLCJzb3VyY2VzQ29udGVudCI6WyJjbGFzcyBUZXN0IHtcblxufSJdfQ==

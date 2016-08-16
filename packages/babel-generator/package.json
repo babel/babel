@@ -20,6 +20,6 @@
   },
   "devDependencies": {
     "babel-helper-fixtures": "^6.9.0",
-    "babylon": "^6.7.0"
+    "babylon": "^6.9.0"
   }
 }
