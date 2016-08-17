@@ -168,6 +168,11 @@ export function evaluate(): { confident: boolean; value: any } {
 
     if (path.isReferencedIdentifier()) {
       let binding = path.scope.getBinding(node.name);
+
+      if (binding && binding.constantViolations.length > 0) {
+        return deopt(binding.path);
+      }
+
       if (binding && binding.hasValue) {
         return binding.value;
       } else {
