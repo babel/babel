@@ -125,6 +125,7 @@ export default function (opts) {
   function buildOpeningElementAttributes(attribs, file) {
     let _props = [];
     let objs = [];
+    let hasSpreadAttribute = false;
 
     function pushProps() {
       if (!_props.length) return;
@@ -136,16 +137,17 @@ export default function (opts) {
     while (attribs.length) {
       let prop = attribs.shift();
       if (t.isJSXSpreadAttribute(prop)) {
+
+        hasSpreadAttribute = true;
         pushProps();
         objs.push(prop.argument);
       } else {
         _props.push(convertAttribute(prop));
       }
     }
-
     pushProps();
 
-    if (objs.length === 1) {
+    if (objs.length === 1 && !hasSpreadAttribute) {
       // only one object
       attribs = objs[0];
     } else {
