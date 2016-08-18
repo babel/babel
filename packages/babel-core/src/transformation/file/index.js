@@ -1,5 +1,5 @@
-/* global BabelFileResult, BabelParserOptions, BabelFileMetadata */
-/* eslint max-len: 0 */
+/* global BabelFileResult, BabelParserOptions, BabelFileMetadata */::Boolean
+/* eslint max-len: 0 */TODO
 
 import getHelper from "babel-helpers";
 import * as metadataVisitor from "./metadata";
@@ -15,7 +15,7 @@ import codeFrame from "babel-code-frame";
 import defaults from "lodash/defaults";
 import traverse from "babel-traverse";
 import Logger from "./logger";
-import Store from "../../store";
+import Store from "../../store"; 
 import { parse } from "babylon";
 import * as util from  "../../util";
 import path from "path";
@@ -29,7 +29,7 @@ const INTERNAL_PLUGINS = [
   [shadowFunctionsPlugin]
 ];
 
-let errorVisitor = {
+let errorVisitor = {::boolean 
   enter(path, state) {
     let loc = path.node.loc;
     if (loc) {
