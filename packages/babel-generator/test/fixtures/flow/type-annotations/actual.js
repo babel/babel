@@ -47,6 +47,7 @@ var a: { param1: number; param2: string }
 var a: { param1: number; param2?: string }
 var a: { [a: number]: string; [b: number]: string; };
 var a: { add(x: number, ...y: Array<string>): void };
+var a: { subtract: (x: number, ...y: Array<string>) => void };
 var a: { id<T>(x: T): T; };
 var a:Array<number> = [1, 2, 3]
 a = class Foo<T> {}
