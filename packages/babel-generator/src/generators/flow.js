@@ -1,7 +1,5 @@
 /* eslint max-len: 0 */
 
-import * as t from "babel-types";
-
 export function AnyTypeAnnotation() {
   this.word("any");
 }
@@ -104,7 +102,7 @@ export function FunctionTypeAnnotation(node: Object, parent: Object) {
   this.token(")");
 
   // this node type is overloaded, not sure why but it makes it EXTREMELY annoying
-  if (parent.type === "ObjectTypeProperty" || parent.type === "ObjectTypeCallProperty" || parent.type === "DeclareFunction") {
+  if (parent.type === "ObjectTypeCallProperty" || parent.type === "DeclareFunction") {
     this.token(":");
   } else {
     this.space();
@@ -306,10 +304,8 @@ export function ObjectTypeProperty(node: Object) {
   }
   this.print(node.key, node);
   if (node.optional) this.token("?");
-  if (!t.isFunctionTypeAnnotation(node.value)) {
-    this.token(":");
-    this.space();
-  }
+  this.token(":");
+  this.space();
   this.print(node.value, node);
 }
 
