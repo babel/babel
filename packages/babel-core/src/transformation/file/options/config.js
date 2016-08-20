@@ -102,6 +102,11 @@ module.exports = {
     description: "optional callback to control whether a comment should be inserted, when this is used the comments option is ignored"
   },
 
+  wrapPluginVisitorMethod: {
+    hidden: true,
+    description: "optional callback to wrap all visitor methods"
+  },
+
   compact: {
     type: "booleanString",
     default: "auto",
