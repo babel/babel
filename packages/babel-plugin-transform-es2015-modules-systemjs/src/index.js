@@ -43,9 +43,25 @@ export default function ({ types: t }) {
 
       let node = path.node;
 
+      // if it is a non-prefix update expression (x++ etc)
+      // then we must replace with the expression (_export('x', x + 1), x++)
+      // in order to ensure the same update expression value
+      let isPostUpdateExpression = path.isUpdateExpression() && !node.prefix;
+      if (isPostUpdateExpression) {
+        if (node.operator === "++")
+          node = t.binaryExpression("+", node.argument, t.numericLiteral(1));
+        else if (node.operator === "--")
+          node = t.binaryExpression("-", node.argument, t.numericLiteral(1));
+        else
+          isPostUpdateExpression = false;
+      }
+
       for (let exportedName of exportedNames) {
         node = this.buildCall(exportedName, node).expression;
       }
+
+      if (isPostUpdateExpression)
+        node = t.sequenceExpression([node, path.node]);
 
       path.replaceWith(node);
     }
