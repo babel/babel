@@ -7,7 +7,7 @@ import traverse from "babel-traverse";
 import assign from "lodash/assign";
 import clone from "lodash/clone";
 
-const GLOBAL_VISITOR_PROPS = ["enter", "exit"];
+const GLOBAL_VISITOR_PROPS = ["enter", "exit", "lossy"];
 
 export default class Plugin extends Store {
   constructor(plugin: Object, key?: string) {
@@ -89,7 +89,16 @@ export default class Plugin extends Store {
       }
     }
 
-    traverse.explode(visitor);
+    // set an `id` that we can use to possibly refer to this visitor if an error occurs
+    // when merging
+    visitor._id = this.key;
+
+    try {
+      traverse.explode(visitor);
+    } catch (err) {
+      err.message = `Error exploding visitor for plugin ${this.key}: ${err.message}`;
+    }
+
     return visitor;
   }
 }
