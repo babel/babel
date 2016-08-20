@@ -13,6 +13,16 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.13.3 (2016-08-10)
+
+- Use the new es2015 preset option on when compiling babel with itself and remove comments from published files.
+
+#### Internal
+* Other
+  * [#3639](https://github.com/babel/babel/pull/3639) Use the new es2015 loose mode option on babel itself. ([@hzoo](https://github.com/hzoo))
+  * [#3657](https://github.com/babel/babel/pull/3657) Remove comments from published files. ([@hzoo](https://github.com/hzoo))
+
+
 ## v6.13.2 (2016-08-05)
 
 Hi again, just fixing up logic from the backwards-compatibility fix which broke options in presets.
