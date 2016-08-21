@@ -9,7 +9,7 @@ import defineType, {
 } from "./index";
 
 defineType("AssignmentPattern", {
-  visitor: ["left", "right"],
+  visitor: ["left", "right", "decorators"],
   aliases: ["Pattern", "LVal"],
   fields: {
     left: {
@@ -25,7 +25,7 @@ defineType("AssignmentPattern", {
 });
 
 defineType("ArrayPattern", {
-  visitor: ["elements", "typeAnnotation"],
+  visitor: ["elements", "typeAnnotation", "decorators"],
   aliases: ["Pattern", "LVal"],
   fields: {
     elements: {
@@ -286,7 +286,7 @@ defineType("ClassMethod", {
 });
 
 defineType("ObjectPattern", {
-  visitor: ["properties", "typeAnnotation"],
+  visitor: ["properties", "typeAnnotation", "decorators"],
   aliases: ["Pattern", "LVal"],
   fields: {
     properties: {
