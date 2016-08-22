@@ -28,7 +28,7 @@
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
-    "istanbul": "^0.3.5",
+    "istanbul": "^0.4.5",
     "kcheck": "^2.0.0",
     "lerna": "2.0.0-beta.23",
     "lerna-changelog": "^0.2.0",
@@ -50,7 +50,12 @@
   "babel": {
     "comments": false,
     "presets": [
-      ["es2015", { "loose": true }],
+      [
+        "es2015",
+        {
+          "loose": true
+        }
+      ],
       "stage-0"
     ],
     "plugins": [
