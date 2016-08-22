@@ -141,7 +141,7 @@ export function verify(visitor) {
     if (typeof visitors === "object") {
       for (let visitorKey in visitors) {
         // ignore Object and Object prototype keys (in case the global Object has been modified)
-        if(Object[visitorKey] != undefined || Object.prototype[visitorKey] != undefined) continue;
+        if (Object[visitorKey] != undefined || Object.prototype[visitorKey] != undefined) continue;
         
         if (visitorKey === "enter" || visitorKey === "exit") {
           // verify that it just contains functions
@@ -176,7 +176,7 @@ export function merge(visitors: Array, states: Array = [], wrapper?: ?Function) 
 
     for (let type in visitor) {
       // ignore Object and Object prototype keys (in case the global Object has been modified)
-      if(Object[type] != undefined || Object.prototype[type] != undefined) continue;
+      if (Object[type] != undefined || Object.prototype[type] != undefined) continue;
       
       let visitorType = visitor[type];
 
@@ -261,7 +261,7 @@ function shouldIgnoreKey(key) {
   if (key === "blacklist" || key === "noScope" || key === "skipKeys") return true;
 
   // ignore Object and Object prototype keys (in case the global Object has been modified)
-  if(Object[key] != undefined || Object.prototype[key] != undefined) return true;
+  if (Object[key] != undefined || Object.prototype[key] != undefined) return true;
 
   return false;
 }
