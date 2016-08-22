@@ -43,7 +43,7 @@
     "readline-sync": "^1.2.19",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
-    "shelljs": "^0.5.1",
+    "shelljs": "^0.7.3",
     "through2": "^2.0.0",
     "uglify-js": "^2.4.16"
   },
