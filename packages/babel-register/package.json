@@ -13,7 +13,7 @@
     "home-or-tmp": "^3.0.0",
     "lodash": "^4.2.0",
     "mkdirp": "^0.5.1",
-    "pirates": "^2.1.1",
+    "pirates": "danez/pirates",
     "source-map-support": "^0.4.2"
   },
   "devDependencies": {
