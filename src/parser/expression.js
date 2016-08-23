@@ -946,7 +946,7 @@ pp.parseExprListItem = function (allowEmpty, refShorthandDefaultPos) {
   } else if (this.match(tt.ellipsis)) {
     elt = this.parseSpread(refShorthandDefaultPos);
   } else {
-    elt = this.parseMaybeAssign(false, refShorthandDefaultPos);
+    elt = this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem);
   }
   return elt;
 };

@@ -916,7 +916,7 @@ export default function (instance) {
   });
 
   // parse an item inside a expression list eg. `(NODE, NODE)` where NODE represents
-  // the position where this function is cal;ed
+  // the position where this function is called
   instance.extend("parseExprListItem", function (inner) {
     return function (allowEmpty, refShorthandDefaultPos) {
       let container = this.startNode();
