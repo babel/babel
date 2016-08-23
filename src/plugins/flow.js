@@ -165,7 +165,7 @@ pp.flowParseInterfaceish = function (node, allowStatic) {
 pp.flowParseInterfaceExtends = function () {
   let node = this.startNode();
 
-  node.id = this.parseIdentifier();
+  node.id = this.flowParseQualifiedTypeIdentifier();
   if (this.isRelational("<")) {
     node.typeParameters = this.flowParseTypeParameterInstantiation();
   } else {
@@ -394,18 +394,26 @@ pp.flowObjectTypeSemicolon = function () {
   }
 };
 
+pp.flowParseQualifiedTypeIdentifier = function (startPos, startLoc, id) {
+  startPos = startPos || this.state.start;
+  startLoc = startLoc || this.state.startLoc;
+  let node = id || this.parseIdentifier();
+
+  while (this.eat(tt.dot)) {
+    let node2 = this.startNodeAt(startPos, startLoc);
+    node2.qualification = node;
+    node2.id = this.parseIdentifier();
+    node = this.finishNode(node2, "QualifiedTypeIdentifier");
+  }
+
+  return node;
+};
+
 pp.flowParseGenericType = function (startPos, startLoc, id) {
   let node = this.startNodeAt(startPos, startLoc);
 
   node.typeParameters = null;
-  node.id = id;
-
-  while (this.eat(tt.dot)) {
-    let node2 = this.startNodeAt(startPos, startLoc);
-    node2.qualification = node.id;
-    node2.id = this.parseIdentifier();
-    node.id = this.finishNode(node2, "QualifiedTypeIdentifier");
-  }
+  node.id = this.flowParseQualifiedTypeIdentifier(startPos, startLoc, id);
 
   if (this.isRelational("<")) {
     node.typeParameters = this.flowParseTypeParameterInstantiation();
