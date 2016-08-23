@@ -11,7 +11,7 @@
   <a href="https://codecov.io/gh/babel/babylon"><img alt="Codecov Status" src="https://img.shields.io/codecov/c/github/babel/babylon/master.svg?style=flat"></a>
 </p>
 
- - ES6 enabled by default.
+ - The latest ECMAScript version enabled by default (ES2017).
  - Comment attachment.
  - Support for JSX and Flow.
  - Support for experimental language proposals.
