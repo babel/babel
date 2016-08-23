@@ -11,5 +11,8 @@
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-es2016": "^6.11.3",
     "babel-preset-es2017": "^2.0.0"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.8.0"
   }
 }
