@@ -1,6 +1,6 @@
 # babel-preset-latest
 
-> Babel preset including es2015, 2016, 2017.
+> Babel preset including es2015, es2016, es2017.
 
 ## Install
 
