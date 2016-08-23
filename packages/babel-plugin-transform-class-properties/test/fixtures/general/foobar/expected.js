@@ -6,7 +6,7 @@ var Child = function (_Parent) {
     function Child() {
         babelHelpers.classCallCheck(this, Child);
 
-        var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Child).call(this));
+        var _this = babelHelpers.possibleConstructorReturn(this, (Child.__proto__ || Object.getPrototypeOf(Child)).call(this));
 
         _this.scopedFunctionWithThis = function () {
             _this.name = {};
