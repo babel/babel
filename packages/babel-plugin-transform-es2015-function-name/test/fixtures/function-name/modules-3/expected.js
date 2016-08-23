@@ -11,7 +11,7 @@ let Login = function (_React$Component) {
 
   function Login() {
     babelHelpers.classCallCheck(this, Login);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Login).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(Login)).apply(this, arguments));
   }
 
   babelHelpers.createClass(Login, [{

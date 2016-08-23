@@ -432,3 +432,21 @@ helpers.toConsumableArray = template(`
     }
   });
 `);
+
+helpers.wrapCtor = template(`
+  (function (ctor) {
+    if (!ctor.length || ctor.length > 3 || ("prototype" in ctor &&
+        !("byteLength" in ctor.prototype || "delete" in ctor.prototype))) {
+      return ctor;
+    }
+    return function () {
+      var a = arguments;
+      var l = a.length;
+      if (l > 3) return ctor.apply(this, a);
+      var obj = !l ? new ctor : l < 2 ? new ctor(a[0]) : l < 3 ? new ctor(a[0], a[1]) : new ctor(a[0], a[1], a[2]);
+      var p = Object.getPrototypeOf(this);
+      Object.setPrototypeOf ? Object.setPrototypeOf(obj, p) : obj.__proto__ = p;
+      return obj;
+    };
+  });
+`);

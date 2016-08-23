@@ -2,19 +2,19 @@ var Test = function (_Foo) {
   babelHelpers.inherits(Test, _Foo);
 
   function Test() {
-    var _Object$getPrototypeO, _babelHelpers$get;
+    var _babelHelpers$wrapCto, _babelHelpers$get;
 
     babelHelpers.classCallCheck(this, Test);
 
     woops.super.test();
 
-    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Test).call(this));
+    var _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(Test)).call(this));
 
     babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", _this).call(_this);
 
-    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Test).apply(this, arguments));
+    var _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(Test)).apply(this, arguments));
 
-    var _this = babelHelpers.possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Test)).call.apply(_Object$getPrototypeO, [this, "test"].concat(Array.prototype.slice.call(arguments))));
+    var _this = babelHelpers.possibleConstructorReturn(this, (_babelHelpers$wrapCto = babelHelpers.wrapCtor(Object.getPrototypeOf(Test))).call.apply(_babelHelpers$wrapCto, [this, "test"].concat(Array.prototype.slice.call(arguments))));
 
     babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", _this).apply(_this, arguments);
     (_babelHelpers$get = babelHelpers.get(Object.getPrototypeOf(Test.prototype), "test", _this)).call.apply(_babelHelpers$get, [_this, "test"].concat(Array.prototype.slice.call(arguments)));

@@ -346,8 +346,11 @@ export default class ClassTransformer {
     } else {
       bareSuperNode = optimiseCall(
         t.callExpression(
-          t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
-          [this.classRef]
+          this.file.addHelper("wrapCtor"),
+          [t.callExpression(
+            t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
+            [this.classRef]
+          )]
         ),
         t.thisExpression(),
         bareSuperNode.arguments

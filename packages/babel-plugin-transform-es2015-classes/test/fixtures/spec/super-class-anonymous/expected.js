@@ -3,7 +3,7 @@ var TestEmpty = function (_ref) {
 
   function TestEmpty() {
     babelHelpers.classCallCheck(this, TestEmpty);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(TestEmpty).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(TestEmpty)).apply(this, arguments));
   }
 
   return TestEmpty;
@@ -20,7 +20,7 @@ var TestConstructorOnly = function (_ref2) {
 
   function TestConstructorOnly() {
     babelHelpers.classCallCheck(this, TestConstructorOnly);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(TestConstructorOnly).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(TestConstructorOnly)).apply(this, arguments));
   }
 
   return TestConstructorOnly;
@@ -37,7 +37,7 @@ var TestMethodOnly = function (_ref3) {
 
   function TestMethodOnly() {
     babelHelpers.classCallCheck(this, TestMethodOnly);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(TestMethodOnly).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(TestMethodOnly)).apply(this, arguments));
   }
 
   return TestMethodOnly;
@@ -58,7 +58,7 @@ var TestConstructorAndMethod = function (_ref4) {
 
   function TestConstructorAndMethod() {
     babelHelpers.classCallCheck(this, TestConstructorAndMethod);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(TestConstructorAndMethod).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(TestConstructorAndMethod)).apply(this, arguments));
   }
 
   return TestConstructorAndMethod;
@@ -79,7 +79,7 @@ var TestMultipleMethods = function (_ref5) {
 
   function TestMultipleMethods() {
     babelHelpers.classCallCheck(this, TestMultipleMethods);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(TestMultipleMethods).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(TestMultipleMethods)).apply(this, arguments));
   }
 
   return TestMultipleMethods;

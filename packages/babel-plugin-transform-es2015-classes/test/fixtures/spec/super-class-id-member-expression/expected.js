@@ -3,7 +3,7 @@ var BaseController = function (_Chaplin$Controller) {
 
   function BaseController() {
     babelHelpers.classCallCheck(this, BaseController);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(BaseController).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(BaseController)).apply(this, arguments));
   }
 
   return BaseController;
@@ -14,7 +14,7 @@ var BaseController2 = function (_Chaplin$Controller$A) {
 
   function BaseController2() {
     babelHelpers.classCallCheck(this, BaseController2);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(BaseController2).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.wrapCtor(Object.getPrototypeOf(BaseController2)).apply(this, arguments));
   }
 
   return BaseController2;
