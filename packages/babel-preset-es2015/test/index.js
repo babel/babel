@@ -27,7 +27,7 @@ suite("es2015 preset", function () {
       });
     });
 
-    test("modules", function () {
+    suite("modules", function () {
       test("doesn't throw when passing one false", function () {
         expect(function () {
           es2015.buildPreset(null, { modules: false });
