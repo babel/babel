@@ -92,9 +92,6 @@ require("babylon").parse("code", {
   sourceType: "module",
 
   plugins: [
-    // enable experimental async functions
-    "asyncFunctions",
-
     // enable jsx and flow syntax
     "jsx",
     "flow"
@@ -106,15 +103,12 @@ require("babylon").parse("code", {
 
  - `jsx`
  - `flow`
- - `asyncFunctions`
  - `classConstructorCall`
  - `doExpressions`
- - `trailingFunctionCommas`
  - `objectRestSpread`
  - `decorators`
  - `classProperties`
  - `exportExtensions`
- - `exponentiationOperator`
  - `asyncGenerators`
  - `functionBind`
  - `functionSent`

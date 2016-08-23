@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "plugins": ["jsx", "flow", "asyncFunctions", "trailingFunctionCommas"]
+  "plugins": ["jsx", "flow"]
 }

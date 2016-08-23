@@ -299,7 +299,7 @@ pp.parseSubscripts = function (base, startPos, startLoc, noCalls) {
 
       let node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
-      node.arguments = this.parseCallExpressionArguments(tt.parenR, this.hasPlugin("trailingFunctionCommas"), possibleAsync);
+      node.arguments = this.parseCallExpressionArguments(tt.parenR, possibleAsync);
       base = this.finishNode(node, "CallExpression");
 
       if (possibleAsync && this.shouldParseAsyncArrow()) {
@@ -318,7 +318,7 @@ pp.parseSubscripts = function (base, startPos, startLoc, noCalls) {
   }
 };
 
-pp.parseCallExpressionArguments = function (close, allowTrailingComma, possibleAsyncArrow) {
+pp.parseCallExpressionArguments = function (close, possibleAsyncArrow) {
   let innerParenStart;
 
   let elts = [], first = true;
@@ -327,7 +327,7 @@ pp.parseCallExpressionArguments = function (close, allowTrailingComma, possibleA
       first = false;
     } else {
       this.expect(tt.comma);
-      if (allowTrailingComma && this.eat(close)) break;
+      if (this.eat(close)) break;
     }
 
     // we need to make sure that if this is an async arrow functions, that we don't allow inner parens inside the params
@@ -351,7 +351,6 @@ pp.shouldParseAsyncArrow = function () {
 };
 
 pp.parseAsyncArrowFromCallExpression = function (node, call) {
-  if (!this.hasPlugin("asyncFunctions")) this.unexpected();
   this.expect(tt.arrow);
   return this.parseArrowExpression(node, call.arguments, true);
 };
@@ -396,24 +395,22 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
 
     case tt.name:
       node = this.startNode();
-      let allowAwait = this.hasPlugin("asyncFunctions") && this.state.value === "await" && this.state.inAsync;
+      let allowAwait = this.state.value === "await" && this.state.inAsync;
       let allowYield = this.shouldAllowYieldIdentifier();
       let id = this.parseIdentifier(allowAwait || allowYield);
 
-      if (this.hasPlugin("asyncFunctions")) {
-        if (id.name === "await") {
-          if (this.state.inAsync || this.inModule) {
-            return this.parseAwait(node);
-          }
-        } else if (id.name === "async" && this.match(tt._function) && !this.canInsertSemicolon()) {
-          this.next();
-          return this.parseFunction(node, false, false, true);
-        } else if (canBeArrow && id.name === "async" && this.match(tt.name)) {
-          let params = [this.parseIdentifier()];
-          this.expect(tt.arrow);
-          // let foo = bar => {};
-          return this.parseArrowExpression(node, params, true);
+      if (id.name === "await") {
+        if (this.state.inAsync || this.inModule) {
+          return this.parseAwait(node);
         }
+      } else if (id.name === "async" && this.match(tt._function) && !this.canInsertSemicolon()) {
+        this.next();
+        return this.parseFunction(node, false, false, true);
+      } else if (canBeArrow && id.name === "async" && this.match(tt.name)) {
+        let params = [this.parseIdentifier()];
+        this.expect(tt.arrow);
+        // let foo = bar => {};
+        return this.parseArrowExpression(node, params, true);
       }
 
       if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
@@ -466,7 +463,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
     case tt.bracketL:
       node = this.startNode();
       this.next();
-      node.elements = this.parseExprList(tt.bracketR, true, true, refShorthandDefaultPos);
+      node.elements = this.parseExprList(tt.bracketR, true, refShorthandDefaultPos);
       this.toReferencedList(node.elements);
       return this.finishNode(node, "ArrayExpression");
 
@@ -559,7 +556,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
       first = false;
     } else {
       this.expect(tt.comma, refNeedsArrowPos.start || null);
-      if (this.match(tt.parenR) && this.hasPlugin("trailingFunctionCommas")) {
+      if (this.match(tt.parenR)) {
         optionalCommaStart = this.state.start;
         break;
       }
@@ -641,7 +638,7 @@ pp.parseNew = function () {
   node.callee = this.parseNoCallExpr();
 
   if (this.eat(tt.parenL)) {
-    node.arguments = this.parseExprList(tt.parenR, this.hasPlugin("trailingFunctionCommas"));
+    node.arguments = this.parseExprList(tt.parenR);
     this.toReferencedList(node.arguments);
   } else {
     node.arguments = [];
@@ -727,7 +724,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
       isGenerator = this.eat(tt.star);
     }
 
-    if (!isPattern && this.hasPlugin("asyncFunctions") && this.isContextual("async")) {
+    if (!isPattern && this.isContextual("async")) {
       if (isGenerator) this.unexpected();
 
       let asyncId = this.parseIdentifier();
@@ -833,9 +830,7 @@ pp.initFunction = function (node, isAsync) {
   node.id = null;
   node.generator = false;
   node.expression = false;
-  if (this.hasPlugin("asyncFunctions")) {
-    node.async = !!isAsync;
-  }
+  node.async = !!isAsync;
 };
 
 // Parse object or class method.
@@ -845,7 +840,7 @@ pp.parseMethod = function (node, isGenerator, isAsync) {
   this.state.inMethod = node.kind || true;
   this.initFunction(node, isAsync);
   this.expect(tt.parenL);
-  node.params = this.parseBindingList(tt.parenR, false, this.hasPlugin("trailingFunctionCommas"));
+  node.params = this.parseBindingList(tt.parenR);
   node.generator = isGenerator;
   this.parseFunctionBody(node);
   this.state.inMethod = oldInMethod;
@@ -929,14 +924,14 @@ pp.parseFunctionBody = function (node, allowExpression) {
 // nothing in between them to be parsed as `null` (which is needed
 // for array literals).
 
-pp.parseExprList = function (close, allowTrailingComma, allowEmpty, refShorthandDefaultPos) {
+pp.parseExprList = function (close, allowEmpty, refShorthandDefaultPos) {
   let elts = [], first = true;
   while (!this.eat(close)) {
     if (first) {
       first = false;
     } else {
       this.expect(tt.comma);
-      if (allowTrailingComma && this.eat(close)) break;
+      if (this.eat(close)) break;
     }
 
     elts.push(this.parseExprListItem(allowEmpty, refShorthandDefaultPos));

@@ -304,7 +304,7 @@ export default class Tokenizer {
     let width = 1;
     let next = this.input.charCodeAt(this.state.pos + 1);
 
-    if (next === 42 && this.hasPlugin("exponentiationOperator")) { // '*'
+    if (next === 42) { // '*'
       width++;
       next = this.input.charCodeAt(this.state.pos + 2);
       type = tt.exponent;

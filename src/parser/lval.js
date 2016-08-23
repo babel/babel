@@ -126,14 +126,14 @@ pp.parseBindingAtom = function () {
   switch (this.state.type) {
     case tt._yield:
       if (this.state.strict || this.state.inGenerator) this.unexpected();
-
+      // fall-through
     case tt.name:
       return this.parseIdentifier(true);
 
     case tt.bracketL:
       let node = this.startNode();
       this.next();
-      node.elements = this.parseBindingList(tt.bracketR, true, true);
+      node.elements = this.parseBindingList(tt.bracketR, true);
       return this.finishNode(node, "ArrayPattern");
 
     case tt.braceL:
@@ -144,7 +144,7 @@ pp.parseBindingAtom = function () {
   }
 };
 
-pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
+pp.parseBindingList = function (close, allowEmpty) {
   let elts = [];
   let first = true;
   while (!this.eat(close)) {
@@ -155,7 +155,7 @@ pp.parseBindingList = function (close, allowEmpty, allowTrailingComma) {
     }
     if (allowEmpty && this.match(tt.comma)) {
       elts.push(null);
-    } else if (allowTrailingComma && this.eat(close)) {
+    } else if (this.eat(close)) {
       break;
     } else if (this.match(tt.ellipsis)) {
       elts.push(this.parseAssignableListItemTypes(this.parseRest()));
