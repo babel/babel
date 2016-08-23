@@ -878,11 +878,11 @@ export default function (instance) {
   });
 
   instance.extend("toAssignable", function (inner) {
-    return function (node) {
+    return function (node, isBinding) {
       if (node.type === "TypeCastExpression") {
-        return this.typeCastToParameter(node);
+        return inner.call(this, this.typeCastToParameter(node), isBinding);
       } else {
-        return inner.apply(this, arguments);
+        return inner.call(this, node, isBinding);
       }
     };
   });
