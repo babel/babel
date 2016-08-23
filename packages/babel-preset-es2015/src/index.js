@@ -27,13 +27,16 @@ function preset(context, opts) {
   const moduleTypes = ["commonjs", "amd", "umd", "systemjs"];
   let loose = false;
   let modules = "commonjs";
+  let spec = false;
 
   if (opts !== undefined) {
     if (opts.loose !== undefined) loose = opts.loose;
     if (opts.modules !== undefined) modules = opts.modules;
+    if (opts.spec !== undefined) spec = opts.spec;
   }
 
   if (typeof loose !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
+  if (typeof spec !== "boolean") throw new Error("Preset es2015 'spec' option must be a boolean.");
   if (modules !== false && moduleTypes.indexOf(modules) === -1) {
     throw new Error("Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
       "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
@@ -41,10 +44,10 @@ function preset(context, opts) {
 
   return {
     plugins: [
-      [require("babel-plugin-transform-es2015-template-literals"), { loose }],
+      [require("babel-plugin-transform-es2015-template-literals"), { loose, spec }],
       require("babel-plugin-transform-es2015-literals"),
       require("babel-plugin-transform-es2015-function-name"),
-      [require("babel-plugin-transform-es2015-arrow-functions")],
+      [require("babel-plugin-transform-es2015-arrow-functions"), { spec }],
       require("babel-plugin-transform-es2015-block-scoped-functions"),
       [require("babel-plugin-transform-es2015-classes"), { loose }],
       require("babel-plugin-transform-es2015-object-super"),
