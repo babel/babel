@@ -335,7 +335,7 @@ pp.parseCallExpressionArguments = function (close, possibleAsyncArrow) {
       innerParenStart = this.state.start;
     }
 
-    elts.push(this.parseExprListItem());
+    elts.push(this.parseExprListItem(undefined, possibleAsyncArrow ? { start: 0 } : undefined));
   }
 
   // we found an async arrow function so let's not allow any inner parens
