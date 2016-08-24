@@ -74,7 +74,7 @@ export default function ({ types: t }) {
 
     visitor: {
       Program: {
-        exit(path, state) {
+        exit(path) {
           if (this.ran) return;
           this.ran = true;
 
@@ -83,11 +83,9 @@ export default function ({ types: t }) {
           let params = this.sources.map((source) => source[0]);
           let sources = this.sources.map((source) => source[1]);
 
-          if (state.opts.addBareSourceParams) {
-            params = params.concat(this.bareSources.map(() => {
-              return path.scope.generateUidIdentifier();
-            }));
-          }
+          params = params.concat(this.bareSources.map(() => {
+            return path.scope.generateUidIdentifier();
+          }));
 
           sources = sources.concat(this.bareSources.filter((str) => {
             return !this.sourceNames[str.value];
