@@ -222,26 +222,23 @@ export default function ({ types: t }) {
       // once
 
       let hasRestProperty = false;
-      let hasComputedProperty = false;
       for (let i = 0; i < pattern.properties.length; i++) {
         const prop = pattern.properties[i];
         if (t.isRestProperty(prop)) {
           hasRestProperty = true;
-        }
-        if (t.isObjectProperty(prop, { computed: true })) {
-          hasComputedProperty = true;
-        }
-
-        if (hasRestProperty && hasComputedProperty) {
           break;
         }
       }
 
-      if (hasRestProperty && hasComputedProperty) {
-        for (let i = 0; i < pattern.properties.length; i++) {
-          const prop = pattern.properties[i];
+      //
 
-          if (t.isObjectProperty(prop, { computed: true })) {
+      for (let i = 0; i < pattern.properties.length; i++) {
+        let prop = pattern.properties[i];
+        if (t.isRestProperty(prop)) {
+          this.pushObjectRest(pattern, objRef, prop, i);
+        } else {
+          // extract key to temp var to avoid multiple evaluation
+          if (hasRestProperty && prop.computed) {
             const key = prop.key;
 
             if (!this.scope.isStatic(key)) {
@@ -254,16 +251,6 @@ export default function ({ types: t }) {
               prop.key = temp;
             }
           }
-        }
-      }
-
-      //
-
-      for (let i = 0; i < pattern.properties.length; i++) {
-        let prop = pattern.properties[i];
-        if (t.isRestProperty(prop)) {
-          this.pushObjectRest(pattern, objRef, prop, i);
-        } else {
           this.pushObjectProperty(prop, objRef);
         }
       }
