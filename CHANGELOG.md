@@ -19,14 +19,22 @@ Lots of stuff in this release!
 
 - [#3624](https://github.com/babel/babel/pull/3624) A new preset for `es2017`: it includes the 2 previous stage-3 plugins: async/await (via [transform-async-to-generator](http://babeljs.io/docs/plugins/transform-async-to-generator)) and [trailing commas in functions](syntax-trailing-function-commas). (thanks to @bettiolo for the npm package)
 
+```bash
+npm install babel-preset-es2017 --save-dev
+```
+
 ```js
 // .babelrc
 { "presets": ["es2017"] }
 ```
 
-- [#3625](https://github.com/babel/babel/pull/3625), [#3673](https://github.com/babel/babel/pull/3673) A new preset called `latest` to include at transforms ES2015+ (currently ES2015, ES2016, ES2017). You can also pass options down to the `es2015` preset.
+- [#3625](https://github.com/babel/babel/pull/3625), [#3673](https://github.com/babel/babel/pull/3673) A new preset called `latest` that transforms ES2015+ (currently ES2015, ES2016, ES2017). You can also pass options down to the `es2015` preset.
 
 > We also will be working on getting a target/env (autoprefixer) preset soon.
+
+```bash
+npm install babel-preset-latest --save-dev
+```
 
 ```js
 // .babelrc
