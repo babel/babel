@@ -145,7 +145,35 @@ export default function ({ types: t }) {
         if (t.isRestProperty(prop)) continue;
 
         let key = prop.key;
-        if (t.isIdentifier(key) && !prop.computed) key = t.stringLiteral(prop.key.name);
+        if (t.isIdentifier(key) && !prop.computed) {
+          key = t.stringLiteral(prop.key.name);
+        } else if (prop.computed) {
+          // stringify key, but only if it is not a symbol
+          // to avoid false positives.
+          //
+          // ensures the indexOf test done inside the
+          // objectWithoutProperties helper correctly excludes
+          // computed keys that are not strings.
+          key = t.conditionalExpression(
+            t.binaryExpression(
+              "===",
+              t.unaryExpression(
+                "typeof",
+                key
+              ),
+              t.stringLiteral("symbol")
+            ),
+            key,
+            t.templateLiteral(
+              [
+                t.templateElement({raw: "", cooked: ""}),
+                t.templateElement({raw: "", cooked: ""}, true)
+              ],
+              [ key ]
+            )
+          );
+        }
+
         keys.push(key);
       }
 
@@ -187,6 +215,46 @@ export default function ({ types: t }) {
         let temp = this.scope.generateUidIdentifierBasedOnNode(objRef);
         this.nodes.push(this.buildVariableDeclaration(temp, objRef));
         objRef = temp;
+      }
+
+      // if we have a rest object in this pattern, computed properties
+      // are extracted into temporary vars so they are only evaluated
+      // once
+
+      let hasRestProperty = false;
+      let hasComputedProperty = false;
+      for (let i = 0; i < pattern.properties.length; i++) {
+        const prop = pattern.properties[i];
+        if (t.isRestProperty(prop)) {
+          hasRestProperty = true;
+        }
+        if (t.isObjectProperty(prop, { computed: true })) {
+          hasComputedProperty = true;
+        }
+
+        if (hasRestProperty && hasComputedProperty) {
+          break;
+        }
+      }
+
+      if (hasRestProperty && hasComputedProperty) {
+        for (let i = 0; i < pattern.properties.length; i++) {
+          const prop = pattern.properties[i];
+
+          if (t.isObjectProperty(prop, { computed: true })) {
+            const key = prop.key;
+
+            if (!this.scope.isStatic(key)) {
+              const temp = this.scope.generateUidIdentifierBasedOnNode(key);
+              this.nodes.push(
+                t.variableDeclaration("const", [
+                  t.variableDeclarator(temp, key)
+                ])
+              );
+              prop.key = temp;
+            }
+          }
+        }
       }
 
       //
