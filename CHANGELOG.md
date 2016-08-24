@@ -13,6 +13,18 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
+## 6.9.1 (2016-08-23)
+
+This release contains mainly small bugfixes but also updates babylons default mode to es2017. The features for `exponentiationOperator`, `asyncFunctions` and `trailingFunctionCommas` which previously needed to be activated via plugin are now enabled by default and the plugins are now no-ops.
+
+### Bug Fixes
+
+- Fix issues with default object params in async functions ([#96](https://github.com/babel/babylon/pull/96)) @danez
+- Fix issues with flow-types and async function ([#95](https://github.com/babel/babylon/pull/95)) @danez
+- Fix arrow functions with destructuring, types & default value ([#94](https://github.com/babel/babylon/pull/94)) @danharper
+- Fix declare class with qualified type identifier ([#97](https://github.com/babel/babylon/pull/97)) @danez
+- Remove exponentiationOperator, asyncFunctions, trailingFunctionCommas plugins and enable them by default ([#98](https://github.com/babel/babylon/pull/98)) @danez
+
 ## 6.9.0 (2016-08-16)
 
 ### New syntax support
