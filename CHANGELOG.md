@@ -51,7 +51,7 @@ npm install babel-preset-latest --save-dev
 
 - [#3671](https://github.com/babel/babel/pull/3671) We also are including a `spec` option for the `es2015` preset since the [arrow function](http://babeljs.io/docs/plugins/transform-es2015-arrow-functions/)/[template string](http://babeljs.io/docs/plugins/transform-es2015-template-literals/) plugins support this option.
 
-> `spec` for arrow functions adds a runtime check to make sure arrow functions are not instantiated (since they transform into normal functions).
+> `spec` for arrow functions uses `.bind(this)`, instead of renaming, to make `this` available inside the transformed function. It also adds a runtime check to make sure they are not instantiated (since they transform into bound regular functions).
 > `spec` for template literals wraps all expressions in `String` rather than simple string concatenation.
 
 ```js
