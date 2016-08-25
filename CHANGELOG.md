@@ -17,7 +17,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 Lots of stuff in this release!
 
-- [#3624](https://github.com/babel/babel/pull/3624) A new preset for `es2017`: it includes the 2 previous stage-3 plugins: async/await (via [transform-async-to-generator](http://babeljs.io/docs/plugins/transform-async-to-generator)) and [trailing commas in functions](syntax-trailing-function-commas). (thanks to @bettiolo for the npm package)
+- [#3624](https://github.com/babel/babel/pull/3624) A new preset for `es2017`: it includes the 2 previous stage-3 plugins: async/await (via [transform-async-to-generator](http://babeljs.io/docs/plugins/transform-async-to-generator)) and [trailing commas in functions](http://babeljs.io/docs/plugins/syntax-trailing-function-commas). (thanks to @bettiolo for the npm package)
 
 ```bash
 npm install babel-preset-es2017 --save-dev
