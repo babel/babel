@@ -103,7 +103,6 @@ require("babylon").parse("code", {
 
  - `jsx`
  - `flow`
- - `classConstructorCall`
  - `doExpressions`
  - `objectRestSpread`
  - `decorators`
