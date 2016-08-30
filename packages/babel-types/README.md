@@ -292,6 +292,14 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
  - `id` (required)
  - `body` (required)
 
+### t.declareModuleExports(typeAnnotation)
+
+See also `t.isDeclareModuleExports(node, opts)` and `t.assertDeclareModuleExports(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `typeAnnotation` (required)
+
 ### t.declareTypeAlias(id, typeParameters, right)
 
 See also `t.isDeclareTypeAlias(node, opts)` and `t.assertDeclareTypeAlias(node, opts)`.
