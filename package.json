@@ -36,7 +36,7 @@
   },
   "scripts": {
     "build": "babel src --out-dir lib",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "coverage": "nyc report --reporter=json && codecov -f coverage/coverage-final.json",
     "lint": "kcheck",
     "prepublish": "cross-env BABEL_ENV=production npm run build",
     "preversion": "npm run test",
