@@ -15,7 +15,7 @@ export default class Plugin extends Store {
 
     this.initialized = false;
     this.raw         = assign({}, plugin);
-    this.key         = key;
+    this.key         = this.take("name") || key;
 
     this.manipulateOptions = this.take("manipulateOptions");
     this.post              = this.take("post");

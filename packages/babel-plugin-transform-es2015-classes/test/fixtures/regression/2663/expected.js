@@ -22,7 +22,7 @@ var Connection = function (_EventEmitter) {
     function Connection(endpoint, joinKey, joinData, roomId) {
         babelHelpers.classCallCheck(this, Connection);
 
-        var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(Connection).call(this));
+        var _this = babelHelpers.possibleConstructorReturn(this, (Connection.__proto__ || Object.getPrototypeOf(Connection)).call(this));
 
         _this.isConnected = false;
         _this.roomId = roomId;

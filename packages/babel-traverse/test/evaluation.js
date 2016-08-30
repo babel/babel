@@ -51,4 +51,39 @@ suite("evaluation", function () {
       true
     );
   });
+
+  test("should deopt when var is redeclared in the same scope", function () {
+    assert.strictEqual(
+      getPath("var x = 2; var y = x + 2; { var x = 3 }").get("body.1.declarations.0.init").evaluate().confident,
+      false
+    );
+  });
+
+  test("it should not deopt vars in different scope", function () {
+    const input = "var a = 5; function x() { var a = 5; var b = a + 1; } var b = a + 2";
+    assert.strictEqual(
+      getPath(input).get("body.1.body.body.1.declarations.0.init").evaluate().value,
+      6
+    );
+    assert.strictEqual(
+      getPath(input).get("body.2.declarations.0.init").evaluate().value,
+      7
+    );
+  });
+
+  test("it should not deopt let/const inside blocks", function () {
+    assert.strictEqual(
+      getPath("let x = 5; { let x = 1; } let y = x + 5").get("body.2.declarations.0.init").evaluate().value,
+      10
+    );
+    const constExample = "const d = true; if (d && true || false) { const d = false; d && 5; }";
+    assert.strictEqual(
+      getPath(constExample).get("body.1.test").evaluate().value,
+      true
+    );
+    assert.strictEqual(
+      getPath(constExample).get("body.1.consequent.body.1").evaluate().value,
+      false
+    );
+  });
 });

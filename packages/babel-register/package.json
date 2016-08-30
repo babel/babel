@@ -1,6 +1,6 @@
 {
   "name": "babel-register",
-  "version": "6.11.6",
+  "version": "6.14.0",
   "description": "babel require hook",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-register",
@@ -8,7 +8,7 @@
   "main": "lib/node.js",
   "browser": "lib/browser.js",
   "dependencies": {
-    "babel-core": "^6.9.0",
+    "babel-core": "^6.14.0",
     "babel-runtime": "^6.11.6",
     "core-js": "^2.4.0",
     "home-or-tmp": "^1.0.0",

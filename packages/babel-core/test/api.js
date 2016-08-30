@@ -76,6 +76,38 @@ suite("api", function () {
     });
   });
 
+  test("option wrapPluginVisitorMethod", function () {
+    var calledRaw = 0;
+    var calledIntercept = 0;
+
+    babel.transform("function foo() { bar(foobar); }", {
+      wrapPluginVisitorMethod: function (pluginAlias, visitorType, callback) {
+        if (pluginAlias !== "foobar") {
+          return callback;
+        }
+
+        assert.equal(visitorType, "enter");
+
+        return function () {
+          calledIntercept++;
+          return callback.apply(this, arguments);
+        };
+      },
+
+      plugins: [new Plugin({
+        name: "foobar",
+        visitor: {
+          "Program|Identifier": function () {
+            calledRaw++;
+          }
+        }
+      })]
+    });
+
+    assert.equal(calledRaw, 4);
+    assert.equal(calledIntercept, 4);
+  });
+
   test("pass per preset", function () {
     var aliasBaseType = null;
 
