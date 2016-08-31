@@ -1,10 +1,12 @@
+import { default as helperBuilderReactJSX } from "babel-helper-builder-react-jsx";
+
 export default function ({ types: t }) {
   return {
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push("jsx");
     },
 
-    visitor: require("babel-helper-builder-react-jsx")({
+    visitor: helperBuilderReactJSX({
       pre(state) {
         state.callee = state.tagExpr;
       },

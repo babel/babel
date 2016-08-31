@@ -1,6 +1,7 @@
 /* eslint max-len: 0 */
 
 import { basename, extname } from "path";
+import { default as transformES2015ModulesAMD } from "babel-plugin-transform-es2015-modules-amd";
 import template from "babel-template";
 
 let buildPrerequisiteAssignment = template(`
@@ -44,7 +45,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-transform-es2015-modules-amd"),
+    inherits: transformES2015ModulesAMD,
 
     visitor: {
       Program: {

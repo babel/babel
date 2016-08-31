@@ -61,7 +61,12 @@ If you wish to build a copy of Babel for distribution, then run:
 $ make build-dist
 ```
 
-and access the files from `packages/babel-core/dist`.
+and access the built files for individual packages from `packages/<package-name>/lib`.
+
+The "top-level" package is `babel-cli`.  Accordingly, its built files live in `packages/babel-cli/lib`.
+In addition, various entry point scripts live in the top-level package at `packages/babel-cli/bin`.
+These are the shell-executable utility scripts, `babel-doctor.js`, `babel-external-helpers.js` and `babel-node.js`, and the main Babel transpiler command line script, `babel.js` itself.
+
 
 #### Running tests
 

@@ -1,6 +1,7 @@
 /* eslint max-len: 0 */
 
 import { basename, extname } from "path";
+import { default as transformStrictMode } from "babel-plugin-transform-strict-mode";
 import template from "babel-template";
 import * as t from "babel-types";
 
@@ -125,7 +126,7 @@ export default function () {
   };
 
   return {
-    inherits: require("babel-plugin-transform-strict-mode"),
+    inherits: transformStrictMode,
 
     visitor: {
       ThisExpression(path, state) {

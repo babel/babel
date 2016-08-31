@@ -1,3 +1,4 @@
+import { default as syntaxDecorators } from "babel-plugin-syntax-decorators";
 import template from "babel-template";
 import explodeClass from "babel-helper-explode-class";
 
@@ -88,7 +89,7 @@ The repo url is: https://github.com/loganfsmyth/babel-plugin-transform-decorator
   }
 
   return {
-    inherits: require("babel-plugin-syntax-decorators"),
+    inherits: syntaxDecorators,
 
     visitor: {
       ClassExpression(path) {

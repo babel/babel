@@ -1,3 +1,4 @@
+import { default as transformES2015ModulesCommonJS } from "babel-plugin-transform-es2015-modules-commonjs";
 import template from "babel-template";
 
 let buildDefine = template(`
@@ -58,7 +59,7 @@ export default function ({ types: t }) {
   };
 
   return {
-    inherits: require("babel-plugin-transform-es2015-modules-commonjs"),
+    inherits: transformES2015ModulesCommonJS,
 
     pre() {
       // source strings

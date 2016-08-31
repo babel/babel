@@ -1,3 +1,5 @@
+import { default as syntaxFunctionBind } from "babel-plugin-syntax-function-bind";
+
 export default function ({ types: t }) {
   function getTempId(scope) {
     let id = scope.path.getData("functionBind");
@@ -29,7 +31,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-function-bind"),
+    inherits: syntaxFunctionBind,
 
     visitor: {
       CallExpression({ node, scope }) {

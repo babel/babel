@@ -1,3 +1,5 @@
+import { default as syntaxObjectRestSpread } from "babel-plugin-syntax-object-rest-spread";
+
 export default function ({ types: t }) {
   function hasSpread(node) {
     for (let prop of (node.properties: Array<Object>)) {
@@ -9,7 +11,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-object-rest-spread"),
+    inherits: syntaxObjectRestSpread,
 
     visitor: {
       ObjectExpression(path, file) {

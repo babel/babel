@@ -1,3 +1,4 @@
+import { default as syntaxClassConstructorCall } from "babel-plugin-syntax-class-constructor-call";
 import template from "babel-template";
 
 let buildWrapper = template(`
@@ -50,7 +51,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-class-constructor-call"),
+    inherits: syntaxClassConstructorCall,
 
     visitor: {
       Class(path) {

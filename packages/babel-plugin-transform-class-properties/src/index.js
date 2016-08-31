@@ -1,5 +1,6 @@
 /* eslint max-len: 0 */
 // todo: define instead of assign
+import { default as syntaxClassProperties } from "babel-plugin-syntax-class-properties";
 import nameFunction from "babel-helper-function-name";
 
 export default function ({ types: t }) {
@@ -21,7 +22,7 @@ export default function ({ types: t }) {
   };
 
   return {
-    inherits: require("babel-plugin-syntax-class-properties"),
+    inherits: syntaxClassProperties,
 
     visitor: {
       Class(path) {
