@@ -1,17 +1,19 @@
 <!---
 BEFORE YOU SUBMIT please read the following:
 
-If you have a support request or question please submit them to on of this resources:
+If you have a support request or question please submit them to one of this resources:
 
 * Discussion Forum: https://discuss.babeljs.io/
-* StackOverflow: http://stackoverflow.com/questions/tagged/babeljsusing the tag `[babeljs]`
+* StackOverflow: http://stackoverflow.com/questions/tagged/babeljs using the tag `babeljs`
 * Slack community: https://slack.babeljs.io/
+* Also have a look at the Readme for more information on how to get support:
+  https://github.com/babel/babel/blob/master/README.md
 
-Issues on github are only issues related to development of babelitself.
-We cannot answer support questions here.
+Issues on github are only issues related to development of babel itself and we cannot answer 
+support questions here.
 -->
 
-<!--- Provide a general summary of the issue in the Title above -->
+<!--- Provide a general summary of the issue in the title above -->
 
 ### Input Code
 <!--- If you're describing a bug, please let us know which sample code reproduces your problem -->
@@ -47,7 +49,7 @@ var your => (code) => here;
 
 ### Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
-* Babel version:
-* node version:
-* npm version:
-* Operating System and version:
+* Babel version: 
+* node version: 
+* npm version: 
+* Operating System and version: 
