@@ -1,9 +1,12 @@
 /* eslint max-len: 0 */
 
+import { default as helperBuilderReactJSX } from "babel-helper-builder-react-jsx";
+import { default as syntaxJSX } from "babel-plugin-syntax-jsx";
+
 export default function ({ types: t }) {
   let JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
 
-  let visitor = require("babel-helper-builder-react-jsx")({
+  let visitor = helperBuilderReactJSX({
     pre(state) {
       let tagName = state.tagName;
       let args    = state.args;
@@ -44,7 +47,7 @@ export default function ({ types: t }) {
   };
 
   return {
-    inherits: require("babel-plugin-syntax-jsx"),
+    inherits: syntaxJSX,
     visitor
   };
 }

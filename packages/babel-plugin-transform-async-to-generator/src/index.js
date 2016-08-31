@@ -1,8 +1,9 @@
+import { default as syntaxAsyncFunctions } from "babel-plugin-syntax-async-functions";
 import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
 
 export default function () {
   return {
-    inherits: require("babel-plugin-syntax-async-functions"),
+    inherits: syntaxAsyncFunctions,
 
     visitor: {
       Function(path, state) {

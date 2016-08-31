@@ -1,3 +1,5 @@
+import { default as syntaxFlow } from "babel-plugin-syntax-flow";
+
 export default function ({ types: t }) {
   function wrapInFlowComment(path, parent) {
     path.addComment("trailing", generateComment(path, parent));
@@ -12,7 +14,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-flow"),
+    inherits: syntaxFlow,
 
     visitor: {
       TypeCastExpression(path) {
