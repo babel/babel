@@ -9,7 +9,7 @@ If you have a support request or question please submit them to one of this reso
 * Also have a look at the Readme for more information on how to get support:
   https://github.com/babel/babel/blob/master/README.md
 
-Issues on github are only issues related to development of babel itself and we cannot answer 
+Issues on github are only related to problems of babel itself and we cannot answer 
 support questions here.
 -->
 
