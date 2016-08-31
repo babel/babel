@@ -399,18 +399,11 @@ function _inheritComments(key, child, parent) {
   }
 }
 
-// Can't use import because of cyclic dependency between babel-traverse
-// and this module (babel-types). This require needs to appear after
-// we export the TYPES constant, so we lazy-initialize it before use.
-let traverse;
-
 /**
  * Inherit all contextual properties from `parent` node to `child` node.
  */
 
 export function inherits(child: Object, parent: Object): Object {
-  if (!traverse) traverse = require("babel-traverse").default;
-
   if (!child || !parent) return child;
 
   // optionally inherit specific properties if not null
@@ -431,7 +424,6 @@ export function inherits(child: Object, parent: Object): Object {
   }
 
   t.inheritsComments(child, parent);
-  traverse.copyCache(parent, child);
 
   return child;
 }
@@ -458,6 +450,62 @@ export function isNode(node?): boolean {
 // Optimize property access.
 toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
+
+/**
+ * A prefix AST traversal implementation implementation.
+ */
+
+export function traverseFast(node: Node, enter: (node: Node) => void) {
+  if (!node) return;
+
+  let keys = t.VISITOR_KEYS[node.type];
+  if (!keys) return;
+
+  enter(node);
+
+  for (let key of keys) {
+    let subNode = node[key];
+
+    if (Array.isArray(subNode)) {
+      for (let node of subNode) {
+        traverseFast(node, enter);
+      }
+    } else {
+      traverseFast(subNode, enter);
+    }
+  }
+}
+
+const CLEAR_KEYS: Array = t.COMMENT_KEYS.concat([
+  "tokens", "comments",
+  "start", "end", "loc",
+  "raw", "rawValue"
+]);
+
+/**
+ * Remove all of the _* properties from a node along with the additional metadata
+ * properties like location data and raw token data.
+ */
+
+export function removeProperties(node: Node): void {
+  for (let key of CLEAR_KEYS) {
+    if (node[key] != null) node[key] = undefined;
+  }
+
+  for (let key in node) {
+    if (key[0] === "_" && node[key] != null) node[key] = undefined;
+  }
+
+  let syms: Array<Symbol> = Object.getOwnPropertySymbols(node);
+  for (let sym of syms) {
+    node[sym] = null;
+  }
+}
+
+export function removePropertiesDeep(tree: Node): Node {
+  traverseFast(tree, removeProperties);
+  return tree;
+}
 
 //
 export {

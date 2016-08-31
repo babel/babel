@@ -98,14 +98,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
   }
 }
 
-// Can't use import because of cyclic dependency between babel-traverse
-// and this module (babel-types). This require needs to appear after
-// we export the TYPES constant, so we lazy-initialize it before use.
-let traverse;
-
 export function toKeyAlias(node: Object, key: Object = node.key): string {
-  if (!traverse) traverse = require("babel-traverse").default;
-
   let alias;
 
   if (node.kind === "method") {
@@ -115,7 +108,7 @@ export function toKeyAlias(node: Object, key: Object = node.key): string {
   } else if (t.isStringLiteral(key)) {
     alias = JSON.stringify(key.value);
   } else {
-    alias = JSON.stringify(traverse.removeProperties(t.cloneDeep(key)));
+    alias = JSON.stringify(t.removePropertiesDeep(t.cloneDeep(key)));
   }
 
   if (node.computed) {
