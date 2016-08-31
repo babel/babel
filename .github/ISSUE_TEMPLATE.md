@@ -49,7 +49,10 @@ var your => (code) => here;
 
 ### Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
-* Babel version: 
-* node version: 
-* npm version: 
-* Operating System and version: 
+
+| software         | version
+| ---------------- | -------
+| Babel            |  
+| node             | 
+| npm              | 
+| Operating System | 
