@@ -56,14 +56,14 @@ traverse.node = function (node: Object, opts: Object, scope: Object, state: Obje
   }
 };
 
-traverse.clearNode = function (node) {
-  t.removeProperties(node);
+traverse.clearNode = function (node, opts) {
+  t.removeProperties(node, opts);
 
   cache.path.delete(node);
 };
 
-traverse.removeProperties = function (tree) {
-  t.traverseFast(tree, traverse.clearNode);
+traverse.removeProperties = function (tree, opts) {
+  t.traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
 
