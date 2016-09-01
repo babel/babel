@@ -455,40 +455,47 @@ toFastProperties(t.VISITOR_KEYS);
  * A prefix AST traversal implementation implementation.
  */
 
-export function traverseFast(node: Node, enter: (node: Node) => void) {
+export function traverseFast(node: Node, enter: (node: Node) => void, opts?: Object) {
   if (!node) return;
 
   let keys = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
-  enter(node);
+  opts = opts || {};
+  enter(node, opts);
 
   for (let key of keys) {
     let subNode = node[key];
 
     if (Array.isArray(subNode)) {
       for (let node of subNode) {
-        traverseFast(node, enter);
+        traverseFast(node, enter, opts);
       }
     } else {
-      traverseFast(subNode, enter);
+      traverseFast(subNode, enter, opts);
     }
   }
 }
 
-const CLEAR_KEYS: Array = t.COMMENT_KEYS.concat([
-  "tokens", "comments",
+const CLEAR_KEYS: Array = [
+  "tokens",
   "start", "end", "loc",
   "raw", "rawValue"
-]);
+];
+
+const CLEAR_KEYS_PLUS_COMMENTS: Array = t.COMMENT_KEYS.concat([
+  "comments"
+]).concat(CLEAR_KEYS);
 
 /**
  * Remove all of the _* properties from a node along with the additional metadata
  * properties like location data and raw token data.
  */
 
-export function removeProperties(node: Node): void {
-  for (let key of CLEAR_KEYS) {
+export function removeProperties(node: Node, opts?: Object): void {
+  opts = opts || {};
+  let map = opts.preserveComments ? CLEAR_KEYS : CLEAR_KEYS_PLUS_COMMENTS;
+  for (let key of map) {
     if (node[key] != null) node[key] = undefined;
   }
 
@@ -502,8 +509,8 @@ export function removeProperties(node: Node): void {
   }
 }
 
-export function removePropertiesDeep(tree: Node): Node {
-  traverseFast(tree, removeProperties);
+export function removePropertiesDeep(tree: Node, opts?: Object): Node {
+  traverseFast(tree, removeProperties, opts);
   return tree;
 }
 

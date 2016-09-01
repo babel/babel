@@ -51,14 +51,24 @@ export default function () {
         if (replace) path.replaceWith(replace);
       },
 
+      CatchClause(path, file) {
+        let { parent, scope } = path;
+        let blockScoping = new BlockScoping(null, path.get("body"), parent, scope, file);
+        blockScoping.run();
+      },
+
       "BlockStatement|SwitchStatement|Program"(path, file) {
-        if (!t.isLoop(path.parent)) {
+        if (!ignoreBlock(path)) {
           let blockScoping = new BlockScoping(null, path, path.parent, path.scope, file);
           blockScoping.run();
         }
       }
     }
   };
+}
+
+function ignoreBlock(path) {
+  return t.isLoop(path.parent) || t.isCatchClause(path.parent);
 }
 
 let buildRetCheck = template(`
@@ -101,48 +111,6 @@ function convertBlockScopedToVar(path, node, parent, scope, moveBindingsToParent
 
 function isVar(node) {
   return t.isVariableDeclaration(node, { kind: "var" }) && !isBlockScoped(node);
-}
-
-function replace(path, node, scope, remaps) {
-  let remap = remaps[node.name];
-  if (!remap) return;
-
-  let ownBinding = scope.getBindingIdentifier(node.name);
-  if (ownBinding === remap.binding) {
-    scope.rename(node.name, remap.uid);
-  } else {
-    // scope already has it's own binding that doesn't
-    // match the one we have a stored replacement for
-    if (path) path.skip();
-  }
-}
-
-let replaceVisitor = {
-  ReferencedIdentifier(path, remaps) {
-    replace(path, path.node, path.scope, remaps);
-  },
-
-  AssignmentExpression(path, remaps) {
-    let ids = path.getBindingIdentifiers();
-    for (let name in ids) {
-      replace(null, ids[name], path.scope, remaps);
-    }
-  },
-};
-
-function traverseReplace(node, parent, scope, remaps) {
-  if (t.isIdentifier(node)) {
-    replace(node, parent, scope, remaps);
-  }
-
-  if (t.isAssignmentExpression(node)) {
-    let ids = t.getBindingIdentifiers(node);
-    for (let name in ids) {
-      replace(ids[name], parent, scope, remaps);
-    }
-  }
-
-  scope.traverse(node, replaceVisitor, remaps);
 }
 
 let letReferenceBlockVisitor = traverse.visitors.merge([{
@@ -359,8 +327,8 @@ class BlockScoping {
       }
     }
   }
+
   remap() {
-    let hasRemaps = false;
     let letRefs   = this.letReferences;
     let scope     = this.scope;
 
@@ -368,7 +336,6 @@ class BlockScoping {
     // we have to check if any of our let variables collide with
     // those in upper scopes and then if they do, generate a uid
     // for them and replace all references with it
-    let remaps = Object.create(null);
 
     for (let key in letRefs) {
       // just an Identifier node we collected in `getLetReferences`
@@ -377,29 +344,16 @@ class BlockScoping {
 
       // todo: could skip this if the colliding binding is in another function
       if (scope.parentHasBinding(key) || scope.hasGlobal(key)) {
-        let uid = scope.generateUidIdentifier(ref.name).name;
-        ref.name = uid;
+        // The same identifier might have been bound separately in the block scope and
+        // the enclosing scope (e.g. loop or catch statement), so we should handle both
+        // individually
+        if (scope.hasOwnBinding(key))
+          scope.rename(ref.name);
 
-        hasRemaps = true;
-        remaps[key] = remaps[uid] = {
-          binding: ref,
-          uid: uid
-        };
+        if (this.blockPath.scope.hasOwnBinding(key))
+          this.blockPath.scope.rename(ref.name);
       }
     }
-
-    if (!hasRemaps) return;
-
-    //
-
-    let loop = this.loop;
-    if (loop) {
-      traverseReplace(loop.right, loop, scope, remaps);
-      traverseReplace(loop.test, loop, scope, remaps);
-      traverseReplace(loop.update, loop, scope, remaps);
-    }
-
-    this.blockPath.traverse(replaceVisitor, remaps);
   }
 
   wrapClosure() {
