@@ -55,13 +55,13 @@ $ make watch
 
 to have Babel build itself and incrementally build files on change.
 
+You can access the built files for individual packages from `packages/<package-name>/lib`.
+
 If you wish to build a copy of Babel for distribution, then run:
 
 ```sh
 $ make build-dist
 ```
-
-and access the files from `packages/babel-core/dist`.
 
 #### Running tests
 
