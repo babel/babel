@@ -25,9 +25,13 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 }
 ```
 
+[#3689](https://github.com/babel/babel/pull/3689) Adds a `preserveComments` option to `babel-template`.
+
 #### New Feature
 * `babel-plugin-transform-runtime`
   * [#3612](https://github.com/babel/babel/pull/3612) Add an option for custom runtime. ([@gaearon](https://github.com/gaearon))
+* `babel-template`, `babel-traverse`, `babel-types`
+  * [#3689](https://github.com/babel/babel/pull/3689) Add support for preserving comments in babel-template. ([@ben-eb](https://github.com/ben-eb))
 
 #### Bug Fix
 * `babel-types`
