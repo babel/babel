@@ -13,6 +13,46 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.15.0 (2016-08-31)
+
+[#3612](https://github.com/babel/babel/pull/3612) The main change is an option to `transform-runtime` for a custom path which will be used in [create-react-app](https://github.com/facebookincubator/create-react-app). Also some bug fixes.
+
+```js
+{
+  "plugins": ["transform-runtime", {
+    "moduleName": "my-custom-babel-runtime"
+  }]
+}
+```
+
+[#3689](https://github.com/babel/babel/pull/3689) Adds a `preserveComments` option to `babel-template`.
+
+It's [@ben-eb](https://github.com/ben-eb), [@d4rkr00t](https://github.com/d4rkr00t), and [@ryb73](https://github.com/ryb73) first PRs!
+
+#### New Feature
+* `babel-plugin-transform-runtime`
+  * [#3612](https://github.com/babel/babel/pull/3612) Add an option for custom runtime. ([@gaearon](https://github.com/gaearon))
+* `babel-template`, `babel-traverse`, `babel-types`
+  * [#3689](https://github.com/babel/babel/pull/3689) Add support for preserving comments in babel-template. ([@ben-eb](https://github.com/ben-eb))
+
+#### Bug Fix
+* `babel-plugin-transform-es2015-block-scoping`
+  * [#3662](https://github.com/babel/babel/pull/3662) Block scoping: fix remapping (Fixes [#7525](https://github.com/babel/babel/issues/7525)). ([@ryb73](https://github.com/ryb73))
+* `babel-types`
+  * [#3687](https://github.com/babel/babel/pull/3687) Fix t.toExpression converting arrow functions to function expressions without block body. ([@boopathi](https://github.com/boopathi))
+* `babel-traverse`
+  * [#3629](https://github.com/babel/babel/pull/3629) Fix bug - undefined reference for export declaration. ([@boopathi](https://github.com/boopathi))
+* `babel-helper-builder-binary-assignment-operator-visitor`, `babel-plugin-transform-es2015-classes`
+  * [#3647](https://github.com/babel/babel/pull/3647) T7537: can not call super in constructor with conditional branch. ([@d4rkr00t](https://github.com/d4rkr00t))
+
+#### Documentation
+* Other
+  * [#3679](https://github.com/babel/babel/pull/3679) Mention how arrow functions' `spec` uses `.bind`. ([@Kovensky](https://github.com/Kovensky))
+
+#### Internal
+* `babel-traverse`, `babel-types`
+  * [#3676](https://github.com/babel/babel/pull/3676) Remove the cycle from babel-types/babel-traverse.. ([@loganfsmyth](https://github.com/loganfsmyth))
+
 ## v6.14.0 (2016-08-23) TAKE ME TO FLAVOR TOWN
 
 Lots of stuff in this release!
