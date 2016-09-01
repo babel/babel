@@ -27,6 +27,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 [#3689](https://github.com/babel/babel/pull/3689) Adds a `preserveComments` option to `babel-template`.
 
+It's [@ben-eb](https://github.com/ben-eb), [@d4rkr00t](https://github.com/d4rkr00t), and [@ryb73](https://github.com/ryb73) first PRs!
+
 #### New Feature
 * `babel-plugin-transform-runtime`
   * [#3612](https://github.com/babel/babel/pull/3612) Add an option for custom runtime. ([@gaearon](https://github.com/gaearon))
@@ -34,6 +36,8 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
   * [#3689](https://github.com/babel/babel/pull/3689) Add support for preserving comments in babel-template. ([@ben-eb](https://github.com/ben-eb))
 
 #### Bug Fix
+* `babel-plugin-transform-es2015-block-scoping`
+  * [#3662](https://github.com/babel/babel/pull/3662) Block scoping: fix remapping (Fixes [#7525](https://github.com/babel/babel/issues/7525)). ([@ryb73](https://github.com/ryb73))
 * `babel-types`
   * [#3687](https://github.com/babel/babel/pull/3687) Fix t.toExpression converting arrow functions to function expressions without block body. ([@boopathi](https://github.com/boopathi))
 * `babel-traverse`
