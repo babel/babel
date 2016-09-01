@@ -4,172 +4,14 @@
 // "proto-to-assign",
 // "es5-property-mutators",
 
-export const pluginsList = {
-  // es2015
-  "transform-es2015-arrow-functions": {
-    edge: 13,
-    firefox: 45,
-    chrome: 49,
-    opera: 36,
-  },
-  "transform-es2015-block-scoped-functions": {
-    edge: 11,
-    firefox: 46,
-    chrome: 41,
-    opera: 28,
-  },
-  "transform-es2015-block-scoping": {
-    edge: 11,
-    firefox: 36,
-    chrome: 49,
-    opera: 36,
-  },
-  "transform-es2015-classes": {
-    edge: 13,
-    firefox: 45,
-    chrome: 49,
-    opera: 36,
-  },
-  "transform-es2015-computed-properties": {
-    edge: 12,
-    firefox: 34,
-    chrome: 44,
-    opera: 31
-  },
-  "check-es2015-constants": {
-    edge: 11,
-    firefox: 36,
-    chrome: 49,
-    opera: 36,
-  },
-  "transform-es2015-destructuring": {
-    edge: 14,
-    firefox: Infinity,
-    chrome: 52,
-    opera: 39,
-  },
-  "transform-es2015-for-of": {
-    edge: Infinity,
-    firefox: Infinity,
-    chrome: 51,
-    opera: 38,
-  },
-  "transform-es2015-function-name": {
-    edge: Infinity,
-    firefox: Infinity,
-    chrome: 52,
-    opera: 39,
-  },
-  "transform-es2015-literals": {
-    edge: 12,
-    firefox: 36,
-    chrome: 41,
-    opera: 28
-  },
-  "transform-es2015-object-super": {
-    edge: 13,
-    firefox: 45,
-    chrome: 49,
-    opera: 36,
-  },
-  "transform-es2015-parameters": {
-    edge: 14,
-    firefox: Infinity,
-    chrome: 49,
-    opera: 36,
-  },
-  "transform-es2015-shorthand-properties": {
-    edge: 12,
-    firefox: 33,
-    chrome: 43,
-    opera: 30
-  },
-  "transform-es2015-spread": {
-    edge: 13,
-    firefox: 36,
-    chrome: 46,
-    opera: 33,
-  },
-  "transform-es2015-sticky-regex": {
-    edge: 13,
-    firefox: 31,
-    chrome: 49,
-    opera: 36
-  },
-  "transform-es2015-template-literals": {
-    edge: 13,
-    firefox: 34,
-    chrome: 41,
-    opera: 28,
-  },
-  "transform-es2015-typeof-symbol": {
-    edge: 12,
-    firefox: 36,
-    chrome: 38,
-    opera: 25,
-  },
-  "transform-es2015-unicode-regex": {
-    edge: 12,
-    firefox: 46,
-    chrome: 51,
-    opera: 38,
-  },
-  "transform-regenerator": {
-    edge: 13,
-    firefox: 45,
-    chrome: 49,
-    opera: 36,
-  },
-
-  // es2016
-  "transform-exponentiation-operator": {
-    edge: 14,
-    chrome: 52,
-  },
-
-  // es2017
-  "transform-async-to-generator": {
-    edge: 14,
-  },
-  "syntax-trailing-function-commas": {
-    edge: 14,
-  }
-};
+import includes from "lodash.includes";
+import pluginList from "./plugins.js";
 
 export const plugins = [
   "es3-member-expression-literals",
   "es3-property-literals",
   "proto-to-assign",
-
   "es5-property-mutators",
-
-  // es2015
-  "transform-es2015-arrow-functions",
-  "transform-es2015-block-scoped-functions",
-  "transform-es2015-block-scoping",
-  "transform-es2015-classes",
-  "transform-es2015-computed-properties",
-  "check-es2015-constants",
-  "transform-es2015-destructuring",
-  "transform-es2015-for-of",
-  "transform-es2015-function-name",
-  "transform-es2015-literals",
-  "transform-es2015-object-super",
-  "transform-es2015-parameters",
-  "transform-es2015-shorthand-properties",
-  "transform-es2015-spread",
-  "transform-es2015-sticky-regex",
-  "transform-es2015-template-literals",
-  "transform-es2015-typeof-symbol",
-  "transform-es2015-unicode-regex",
-  "transform-regenerator",
-
-  // es2016
-  "transform-exponentiation-operator",
-
-  // es2017
-  "transform-async-to-generator",
-  "syntax-trailing-function-commas"
 ];
 
 // modules?
@@ -190,12 +32,75 @@ export const stagePlugins = [
   "transform-object-rest-spread",
 ];
 
+/**
+ * Determine if a transformation is required
+ * @param  {Object}  supportedEnvironments  An Object containing environment keys and the lowest
+ *                                          supported version as a value
+ * @param  {Object}  plugin                 An Object containing environment keys and the lowest
+ *                                          version the feature was implmented in as a value
+ * @return {Boolean}  Whether or not the transformation is required
+ */
+export const isPluginRequired = (supportedEnvironments, plugin) => {
+  const targetEnvironments = Object.keys(supportedEnvironments);
+
+  if (targetEnvironments.length === 0) { return true; }
+
+  const isRequiredForEnvironments = targetEnvironments
+    .filter(environemt => {
+      // Feature is not implemented in that environment
+      if (!plugin[environemt]) { return true; }
+
+      const lowestImplementedVersion = plugin[environemt];
+      const lowestTargetedVersion = targetEnvironments[environemt];
+      if (lowestTargetedVersion <= lowestImplementedVersion) { return true; }
+
+      return false;
+    });
+
+  return isRequiredForEnvironments.length > 0 ? true : false;
+};
+
+const getTargets = targetOpts => {
+  return targetOpts || {};
+}
+
+// TODO: Allow specifying plugins as either shortened or full name
+// babel-plugin-transform-es2015-classes
+// transform-es2015-classes
+const getLooseMode = looseOpts => {
+  if (!looseOpts) { return []; }
+  return looseOpts;
+}
+
+// TODO: Allow specifying modules as: Boolean, String or Array of module types
+const getModules = modulesOpts => {
+  if (!modulesOpts) { return []; }
+  return modulesOpts;
+}
+
 export default function(opts) {
-  let stage = 4;
-  if (opts !== undefined){
-    if (opts.stage !== undefined) stage = opts.stage;
+  const looseMode = getLooseMode(opts.loose);
+  const modulesMode = getModules(opts.modules);
+  const targets = getTargets(opts.targets);
+
+  const transformations = Object.keys(pluginList)
+    .filter(pluginName => isPluginRequired(targets, pluginList[pluginName]))
+    .map(pluginName => {
+      return includes(looseMode, pluginName)
+        ? [require(`babel-plugin-${pluginName}`), { loose: true }]
+        : require(`babel-plugin-${pluginName}`);
+    });
+
+  // TODO: Support loose mode
+  const modules = Object.keys(modulesMode)
+    .map(moduleType => {
+      return [require(`babel-plugin-transform-es2015-modules-${moduleType}`)]
+    });
+
+  return {
+    plugins: [
+      ...modules,
+      ...transformations
+    ]
   }
-
-  if (typeof stage !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
-
 }
