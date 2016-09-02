@@ -1,17 +1,25 @@
-module.exports = {
-  plugins: [
-    require("babel-plugin-transform-react-jsx"),
-    require("babel-plugin-transform-flow-strip-types"),
-    require("babel-plugin-syntax-flow"),
-    require("babel-plugin-syntax-jsx"),
-    require("babel-plugin-transform-react-display-name"),
-  ],
-  env: {
-    development: {
-      plugins: [
-        // require("babel-plugin-transform-react-jsx-source"),
-        // require("babel-plugin-transform-react-jsx-self")
-      ]
-    }
+const transformReactJSX = require("babel-plugin-transform-react-jsx");
+const transformFlowStripTypes = require("babel-plugin-transform-flow-strip-types");
+const transformSyntaxFlow = require("babel-plugin-syntax-flow");
+const transformSyntaxJSX = require("babel-plugin-syntax-jsx");
+const transformReactDisplayName = require("babel-plugin-transform-react-display-name");
+
+//const transformReactJSXSource = require("babel-plugin-transform-react-jsx-source");
+//const transformReactJSXSelf = require("babel-plugin-transform-react-jsx-self");
+
+export const plugins = [
+  transformReactJSX,
+  transformFlowStripTypes,
+  transformSyntaxFlow,
+  transformSyntaxJSX,
+  transformReactDisplayName
+];
+
+export const env = {
+  development: {
+    plugins: [
+      // transformReactJSXSource,
+      // transformReactJSXSelf
+    ]
   }
 };

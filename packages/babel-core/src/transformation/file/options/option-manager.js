@@ -174,6 +174,10 @@ export default class OptionManager {
     loc = loc || alias;
 
     for (let key in opts) {
+      // Ignore Babel's ES2015 module sentinel on the `opts` object, if any. This
+      // is so Babel presets may be written using ES2015 modules syntax.
+      if (key === "__esModule") continue;
+
       let option = config[key];
 
       // check for an unknown option
