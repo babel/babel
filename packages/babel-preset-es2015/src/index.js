@@ -60,15 +60,21 @@ function preset(context, opts) {
  * it to be a simple Babel config object, we maintain the old config here.
  */
 const thePreset = preset({});
-module.exports = thePreset;
 
-// For backward compatibility with babel-core < v6.13.x, we use the 'buildPreset' property
-// of the preset object for the preset creation function.
-Object.defineProperty(thePreset, "buildPreset", {
-  configurable: true,
-  writable: true,
-  // We make this non-enumerable so old versions of babel-core won't see it as an unknown property,
-  // while allowing new versions to see it as a preset builder function.
-  enumerable: false,
-  value: preset
-});
+export const plugins = thePreset.plugins;
+
+//For backward compatibility with babel-core < v6.13.x, we use the 'buildPreset' property
+//of the preset object for the preset creation function.
+export const buildPreset = preset;
+
+//I don't think it is necessary to make `buildPreset` non-enumerable as this version
+//of this preset is shipped only with newer versions of babel-core so will comment
+//out noting that all tests pass without it.
+//Object.defineProperty(exports, "buildPreset", {
+//  configurable: true,
+//  writable: true,
+//  // We make this non-enumerable so old versions of babel-core won't see it as an unknown property,
+//  // while allowing new versions to see it as a preset builder function.
+//  enumerable: false,
+//  value: buildPreset
+//});
