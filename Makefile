@@ -18,7 +18,7 @@ watch: clean
 	./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/kcheck
+	./node_modules/.bin/eslint packages/*/src
 
 clean: test-clean
 	rm -rf packages/*/lib
@@ -45,6 +45,7 @@ test-cov: clean
 test-ci:
 	make lint
 	NODE_ENV=test make bootstrap
+	# if ./node_modules/.bin/semver `npm --version` -r ">=3.3.0"; then ./node_modules/.bin/flow check; fi
 	./scripts/test-cov.sh
 	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
 
