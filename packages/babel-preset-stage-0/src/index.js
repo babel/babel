@@ -1,4 +1,4 @@
-const presetStage1 = require("babel-preset-stage-1");
+import * as presetStage1 from "babel-preset-stage-1";
 
 const transformDoExpressions = require("babel-plugin-transform-do-expressions");
 const transformFunctionBind = require("babel-plugin-transform-function-bind");

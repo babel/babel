@@ -1,4 +1,4 @@
-const presetStage3 = require("babel-preset-stage-3");
+import * as presetStage3 from "babel-preset-stage-3";
 
 const transformClassProperties = require("babel-plugin-transform-class-properties");
 const transformObjectRestSpread = require("babel-plugin-transform-object-rest-spread");
