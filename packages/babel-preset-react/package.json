@@ -6,7 +6,7 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-react",
-  "main": "index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "babel-plugin-syntax-flow": "^6.3.13",
     "babel-plugin-syntax-jsx": "^6.3.13",
