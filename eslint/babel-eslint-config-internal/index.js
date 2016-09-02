@@ -44,6 +44,8 @@ module.exports = {
     "babel/arrow-parens": ["error", "always"],
     // Require a space on each side of arrow operator
     "arrow-spacing": ["error", { before: true, after: true }],
+    // Require a space on each side of all infix operators
+    "space-infix-ops": "error",
     // Prevent using => in a condition where <= is intended
     "no-confusing-arrow": "error",
     // prevent no space in `if (){`
