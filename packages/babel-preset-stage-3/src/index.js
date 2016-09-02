@@ -1,6 +1,6 @@
-const syntaxTrailingFunctionCommas = require("babel-plugin-syntax-trailing-function-commas");
-const transformAsyncToGenerator = require("babel-plugin-transform-async-to-generator");
-const transformExponentiationOperator = require("babel-plugin-transform-exponentiation-operator");
+import syntaxTrailingFunctionCommas from "babel-plugin-syntax-trailing-function-commas";
+import transformAsyncToGenerator from "babel-plugin-transform-async-to-generator";
+import transformExponentiationOperator from "babel-plugin-transform-exponentiation-operator";
 
 export const plugins = [
   syntaxTrailingFunctionCommas,

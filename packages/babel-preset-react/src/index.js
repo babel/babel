@@ -1,11 +1,11 @@
-const transformReactJSX = require("babel-plugin-transform-react-jsx");
-const transformFlowStripTypes = require("babel-plugin-transform-flow-strip-types");
-const transformSyntaxFlow = require("babel-plugin-syntax-flow");
-const transformSyntaxJSX = require("babel-plugin-syntax-jsx");
-const transformReactDisplayName = require("babel-plugin-transform-react-display-name");
+import transformReactJSX from "babel-plugin-transform-react-jsx";
+import transformFlowStripTypes from "babel-plugin-transform-flow-strip-types";
+import transformSyntaxFlow from "babel-plugin-syntax-flow";
+import transformSyntaxJSX from "babel-plugin-syntax-jsx";
+import transformReactDisplayName from "babel-plugin-transform-react-display-name";
 
-//const transformReactJSXSource = require("babel-plugin-transform-react-jsx-source");
-//const transformReactJSXSelf = require("babel-plugin-transform-react-jsx-self");
+//import transformReactJSXSource from "babel-plugin-transform-react-jsx-source";
+//import transformReactJSXSelf from "babel-plugin-transform-react-jsx-self";
 
 export const plugins = [
   transformReactJSX,

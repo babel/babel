@@ -1,7 +1,7 @@
 import * as presetStage1 from "babel-preset-stage-1";
 
-const transformDoExpressions = require("babel-plugin-transform-do-expressions");
-const transformFunctionBind = require("babel-plugin-transform-function-bind");
+import transformDoExpressions from "babel-plugin-transform-do-expressions";
+import transformFunctionBind from "babel-plugin-transform-function-bind";
 
 export const presets = [
   presetStage1

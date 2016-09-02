@@ -1,8 +1,8 @@
 import * as presetStage3 from "babel-preset-stage-3";
 
-const transformClassProperties = require("babel-plugin-transform-class-properties");
-const transformObjectRestSpread = require("babel-plugin-transform-object-rest-spread");
-const transformDecorators = require("babel-plugin-transform-decorators");
+import transformClassProperties from "babel-plugin-transform-class-properties";
+import transformObjectRestSpread from "babel-plugin-transform-object-rest-spread";
+import transformDecorators from "babel-plugin-transform-decorators";
 
 export const presets = [
   presetStage3
