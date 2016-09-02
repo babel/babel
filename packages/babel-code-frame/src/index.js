@@ -102,7 +102,7 @@ export default function (
       let markerLine = "";
       if (colNumber) {
         let markerSpacing = line.slice(0, colNumber - 1).replace(/[^\t]/g, " ");
-        markerLine =`\n ${gutter.replace(/\d/g, " ")}${markerSpacing}^`;
+        markerLine = `\n ${gutter.replace(/\d/g, " ")}${markerSpacing}^`;
       }
       return `>${gutter}${line}${markerLine}`;
     } else {
