@@ -1,6 +1,9 @@
-module.exports = {
+import syntaxTrailingFunctionCommas from "babel-plugin-syntax-trailing-function-commas";
+import transformAsyncToGenerator from "babel-plugin-transform-async-to-generator";
+
+export default {
   plugins: [
-    require("babel-plugin-syntax-trailing-function-commas"),
-    require("babel-plugin-transform-async-to-generator")
+    syntaxTrailingFunctionCommas,
+    transformAsyncToGenerator
   ]
 };

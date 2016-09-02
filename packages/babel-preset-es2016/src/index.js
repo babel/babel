@@ -1,5 +1,7 @@
-module.exports = {
+import transformExponentiationOperator from "babel-plugin-transform-exponentiation-operator";
+
+export default {
   plugins: [
-    require("babel-plugin-transform-exponentiation-operator"),
+    transformExponentiationOperator
   ]
 };

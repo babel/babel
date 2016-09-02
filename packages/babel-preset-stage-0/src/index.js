@@ -1,9 +1,14 @@
-module.exports = {
+import presetStage1 from "babel-preset-stage-1";
+
+import transformDoExpressions from "babel-plugin-transform-do-expressions";
+import transformFunctionBind from "babel-plugin-transform-function-bind";
+
+export default {
   presets: [
-    require("babel-preset-stage-1")
+    presetStage1
   ],
   plugins: [
-    require("babel-plugin-transform-do-expressions"),
-    require("babel-plugin-transform-function-bind")
+    transformDoExpressions,
+    transformFunctionBind
   ]
 };
