@@ -51,8 +51,7 @@ function preset(context, opts = {}) {
       modules === "amd" && [require("babel-plugin-transform-es2015-modules-amd"), { loose }],
       modules === "umd" && [require("babel-plugin-transform-es2015-modules-umd"), { loose }],
       [require("babel-plugin-transform-regenerator"), { async: false, asyncGenerators: false }]
-    // filter out falsy values
-    ].filter(Boolean)
+    ].filter(Boolean) // filter out falsy values
   };
 }
 
