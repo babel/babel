@@ -176,7 +176,7 @@ export default class OptionManager {
     for (let key in opts) {
       // Ignore Babel's ES2015 module sentinel on the `opts` object, if any. This
       // is so Babel presets may be written using ES2015 modules syntax.
-      if (key === "__esModule") continue;
+      if (key === "__esModule" || key === "default") continue;
 
       let option = config[key];
 
@@ -271,6 +271,7 @@ export default class OptionManager {
 
         val = require(presetLoc);
       }
+
 
       // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
       // a 'buildPreset' function that will return the preset itself, while still exporting a
