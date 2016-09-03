@@ -361,3 +361,16 @@ export function TypeCastExpression(node: Object) {
 export function VoidTypeAnnotation() {
   this.word("void");
 }
+
+export function DeclaredPredicate(node: Object) {
+  this.token("%");
+  this.word("checks");
+  this.token("(");
+  this.print(node.expression, node);
+  this.token(")");
+}
+
+export function InferredPredicate() {
+  this.token("%");
+  this.word("checks");
+}

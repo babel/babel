@@ -330,3 +330,18 @@ defineType("VoidTypeAnnotation", {
     // todo
   }
 });
+
+defineType("DeclaredPredicate", {
+  visitor: ["expression"],
+  aliases: ["Flow", "FlowPredicate"],
+  fields: {
+    // todo
+  }
+});
+
+defineType("InferredPredicate", {
+  aliases: ["Flow", "FlowPredicate"],
+  fields: {
+    // todo
+  }
+});
