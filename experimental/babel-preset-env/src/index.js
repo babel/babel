@@ -4,7 +4,6 @@
 // "proto-to-assign",
 // "es5-property-mutators",
 
-import includes from "lodash.includes";
 import pluginList from "./plugins.js";
 
 export const plugins = [
@@ -12,14 +11,6 @@ export const plugins = [
   "es3-property-literals",
   "proto-to-assign",
   "es5-property-mutators",
-];
-
-// modules?
-export const modules = [
-  "transform-es2015-modules-amd",
-  "transform-es2015-modules-commonjs",
-  "transform-es2015-modules-systemjs",
-  "transform-es2015-modules-umd"
 ];
 
 export const stagePlugins = [
@@ -31,6 +22,13 @@ export const stagePlugins = [
   "transform-function-bind",
   "transform-object-rest-spread",
 ];
+
+export const MODULE_TRANSFORMATIONS = {
+  "amd": "transform-es2015-modules-amd",
+  "commonjs": "transform-es2015-modules-commonjs",
+  "systemjs": "transform-es2015-modules-systemjs",
+  "umd": "transform-es2015-modules-umd"
+};
 
 /**
  * Determine if a transformation is required
@@ -67,35 +65,40 @@ const getTargets = targetOpts => {
 // TODO: Allow specifying plugins as either shortened or full name
 // babel-plugin-transform-es2015-classes
 // transform-es2015-classes
-const getLooseMode = looseOpts => {
-  if (!looseOpts) { return []; }
-  return looseOpts;
+export const validateLooseOption = (looseOpt = false) => {
+  if (typeof looseOpt !== "boolean") {
+    throw new Error("Preset env: 'loose' option must be a boolean.");
+  }
+
+  return looseOpt;
 }
 
-// TODO: Allow specifying modules as: Boolean, String or Array of module types
-const getModules = modulesOpts => {
-  if (!modulesOpts) { return []; }
-  return modulesOpts;
+export const validateModulesOption = (modulesOpt = "commonjs") => {
+  if (modulesOpt !== false && Object.keys(MODULE_TRANSFORMATIONS).indexOf(modulesOpt) === -1) {
+   throw new Error("The 'modules' option must be 'false' to indicate no modules\n" +
+     "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
+  }
+
+  return modulesOpt;
 }
 
-export default function(opts) {
-  const looseMode = getLooseMode(opts.loose);
-  const modulesMode = getModules(opts.modules);
+export function buildPreset(context, opts) {
+  const loose = validateLooseOption(opts.loose);
+  const moduleType = validateModulesOption(opts.modules);
   const targets = getTargets(opts.targets);
 
   const transformations = Object.keys(pluginList)
     .filter(pluginName => isPluginRequired(targets, pluginList[pluginName]))
     .map(pluginName => {
-      return includes(looseMode, pluginName)
-        ? [require(`babel-plugin-${pluginName}`), { loose: true }]
-        : require(`babel-plugin-${pluginName}`);
+      return [require(`babel-plugin-${pluginName}`), { loose }]
     });
 
-  // TODO: Support loose mode
-  const modules = Object.keys(modulesMode)
-    .map(moduleType => {
-      return [require(`babel-plugin-transform-es2015-modules-${moduleType}`)]
-    });
+  const modules = [
+    moduleType === "commonjs" && [require("babel-plugin-transform-es2015-modules-commonjs"), { loose }],
+    moduleType === "systemjs" && [require("babel-plugin-transform-es2015-modules-systemjs"), { loose }],
+    moduleType === "amd" && [require("babel-plugin-transform-es2015-modules-amd"), { loose }],
+    moduleType === "umd" && [require("babel-plugin-transform-es2015-modules-umd"), { loose }],
+  ].filter(Boolean);
 
   return {
     plugins: [

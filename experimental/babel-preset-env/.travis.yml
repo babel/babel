@@ -1,0 +1,12 @@
+git:
+  depth: 1
+sudo: false
+language: node_js
+cache:
+  directories:
+  - node_modules
+node_js:
+- '6'
+- '5'
+- '0.12'
+- '0.10'
