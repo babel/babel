@@ -250,7 +250,12 @@ export function TypeParameterInstantiation(node: Object) {
 export { TypeParameterInstantiation as TypeParameterDeclaration };
 
 export function ObjectTypeAnnotation(node: Object) {
-  this.token("{");
+  if (node.exact) {
+    this.token("{|");
+  } else {
+    this.token("{");
+  }
+
   let props = node.properties.concat(node.callProperties, node.indexers);
 
   if (props.length) {
@@ -270,7 +275,11 @@ export function ObjectTypeAnnotation(node: Object) {
     this.space();
   }
 
-  this.token("}");
+  if (node.exact) {
+    this.token("|}");
+  } else {
+    this.token("}");
+  }
 }
 
 export function ObjectTypeCallProperty(node: Object) {
