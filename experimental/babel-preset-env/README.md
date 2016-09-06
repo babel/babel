@@ -33,3 +33,61 @@ $ npm install --save-dev babel-preset-env
   ]
 }
 ```
+
+### Example
+
+```js
+// src
+export class A {}
+```
+
+```js
+// default is to run all transforms
+{
+  "presets": [
+    ["env", {}]
+  ]
+}
+
+// ...
+
+var A = exports.A = function A() {
+  _classCallCheck(this, A);
+};
+```
+
+```js
+// target chrome 52
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 52
+      }
+    }]
+  ]
+}
+
+// ...
+
+class A {}
+exports.A = A;
+```
+
+```js
+// target chrome 52 with webpack 2/rollup
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 52
+      },
+      "modules": false
+    }]
+  ]
+}
+
+// ...
+
+export class A {}
+```
