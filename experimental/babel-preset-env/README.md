@@ -1,4 +1,4 @@
-# [WIP 0.0.0] babel-preset-env
+## [WIP 0.0.0] babel-preset-env [![npm](https://img.shields.io/npm/v/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![travis](https://img.shields.io/travis/babel/babel-preset-env/master.svg)](https://travis-ci.org/babel/babel-preset-env)
 
 > Babel preset for all envs.
 
