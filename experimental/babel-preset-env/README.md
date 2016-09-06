@@ -21,7 +21,7 @@ $ npm install --save-dev babel-preset-env
 {
   "presets": [
     ["env", {
-      "target": {
+      "targets": {
         "chrome": 52
       },
       "loose": true,
