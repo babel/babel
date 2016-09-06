@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-env",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
