@@ -2,10 +2,11 @@
 5.0;
 "foobar";
 "\n\r\u2028\u2029";
-"\n\r\u2028\u2029";
-"He said: \"...\"";
+'\n\r\u2028\u2029';
+'He said: "..."';
 "He said: '...'";
 "He said: \"...\"";
+"He said: 'She said: \"...\"'";
 /foobar/g;
 null;
 true;

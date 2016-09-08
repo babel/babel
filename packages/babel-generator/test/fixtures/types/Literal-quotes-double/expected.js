@@ -6,6 +6,7 @@
 "He said: \"...\"";
 "He said: '...'";
 "He said: \"...\"";
+"He said: \"...\", then later he said: \"...\"";
 /foobar/g;
 null;
 true;

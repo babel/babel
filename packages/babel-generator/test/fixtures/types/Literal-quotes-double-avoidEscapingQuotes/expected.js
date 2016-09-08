@@ -3,9 +3,10 @@
 "foobar";
 "\n\r\u2028\u2029";
 "\n\r\u2028\u2029";
-"He said: \"...\"";
+'He said: "..."';
 "He said: '...'";
 "He said: \"...\"";
+"He said: \"She said: '...'\", then later he said: \"...\"";
 /foobar/g;
 null;
 true;

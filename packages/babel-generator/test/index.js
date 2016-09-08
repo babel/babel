@@ -4,6 +4,7 @@ var generate   = require("../lib");
 var assert     = require("assert");
 var parse      = require("babylon").parse;
 var chai       = require("chai");
+var path       = require("path");
 var t          = require("babel-types");
 var _          = require("lodash");
 
@@ -152,6 +153,15 @@ suite("whitespace", function () {
 });
 
 var suites = require("babel-helper-fixtures").default(__dirname + "/fixtures");
+var suitePlugins = [
+  "jsx",
+  "flow",
+  "decorators",
+  "asyncFunctions",
+  "exportExtensions",
+  "functionBind",
+  "classConstructorCall",
+];
 
 suites.forEach(function (testSuite) {
   suite("generation/" + testSuite.title, function () {
@@ -162,15 +172,7 @@ suites.forEach(function (testSuite) {
 
         var actualAst = parse(actual.code, {
           filename: actual.loc,
-          plugins: [
-            "jsx",
-            "flow",
-            "decorators",
-            "asyncFunctions",
-            "exportExtensions",
-            "functionBind",
-            "classConstructorCall",
-          ],
+          plugins: suitePlugins,
           strictMode: false,
           sourceType: "module",
         });
@@ -180,4 +182,27 @@ suites.forEach(function (testSuite) {
       });
     });
   });
+});
+
+var readFile = require("babel-helper-fixtures").readFile;
+
+suite("api", function () {
+  // The api of the generate function should be able to accept just an AST object.
+  test("provide just ast", function () {
+    // As "double" is the default, if we provide no code, the single actual file will become the double expected file.
+    var actualLoc = path.join(__dirname, 'fixtures', 'auto-string', 'single', 'actual.js');
+    var actual = readFile(actualLoc);
+    var expectedLoc = path.join(__dirname, 'fixtures', 'auto-string', 'double', 'expected.js');
+    var expected = readFile(expectedLoc);
+
+    var actualAst = parse(actual, {
+      filename: 'actual.js',
+      plugins: suitePlugins,
+      strictMode: false,
+      sourceType: "module",
+    });
+
+    var generatedCode = generate.default(actualAst).code;
+    chai.expect(generatedCode).to.equal(expected, actualLoc + " !== " + expectedLoc);
+  })
 });
