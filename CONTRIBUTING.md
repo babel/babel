@@ -108,6 +108,7 @@ For example, in [`babel-plugin-transform-exponentiation-operator/test`](/package
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
 - Generally, there are two kinds of tests for plugins
    - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`actual.js`](packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/actual.js) file and an [`expected.js`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/expected.js) file.
+   - If you need to expect an error, you can ignore creating the `expected.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
    - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
 
 In an actual/expected test, you simply write out the code you want transformed in `actual.js`.
@@ -129,6 +130,16 @@ In an `exec.js` test, we run or check that the code actually does what it's supp
 // exec.js
 assert.equal(8, 2 ** 3);
 assert.equal(24, 3 * 2 ** 3);
+```
+
+If you need to check for an error that is thrown you can add to the `options.json`
+
+```js
+// options.json example
+{
+  "plugins": [["transform-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
+  "throws": "transform-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
+}
 ```
 
 ##### `babylon`
