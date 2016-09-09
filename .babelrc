@@ -1,6 +1,13 @@
 {
-  "presets": ["es2015", "react", "stage-0"],
-  "plugins": ["transform-runtime"],
+  "presets": [
+    ["es2015", {
+      "loose": true
+    }],
+    "stage-0"
+  ],
+  "plugins": [
+    "transform-flow-strip-types"
+  ],
   "env": {
     "test": {
       "plugins": ["istanbul"]

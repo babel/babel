@@ -7,28 +7,24 @@
   "license": "MIT",
   "repository": "https://github.com/babel/babylon",
   "main": "lib/index.js",
-  "dependencies": {
-    "babel-runtime": "^6.0.0"
-  },
+  "dependencies": {},
   "files": [
     "bin",
     "lib"
   ],
   "devDependencies": {
     "ava": "^0.16.0",
-    "babel-cli": "^6.0.0",
-    "babel-helper-fixtures": "^6.6.5",
-    "babel-plugin-istanbul": "^2.0.0",
-    "babel-plugin-transform-class-properties": "^6.6.0",
-    "babel-plugin-transform-runtime": "^6.0.0",
-    "babel-preset-es2015": "^6.0.0",
-    "babel-preset-react": "^6.0.0",
+    "babel-cli": "^6.14.0",
+    "babel-helper-fixtures": "^6.9.0",
+    "babel-plugin-istanbul": "^2.0.1",
+    "babel-plugin-transform-flow-strip-types": "^6.14.0",
+    "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-0": "^6.5.0",
     "codecov": "^1.0.1",
-    "cross-env": "^2.0.0",
-    "kcheck": "^2.0.1",
-    "lodash": "^4.6.1",
-    "nyc": "^8.0.0",
+    "cross-env": "^2.0.1",
+    "kcheck": "^2.0.3",
+    "lodash": "^4.15.0",
+    "nyc": "^8.1.0",
     "unicode-9.0.0": "~0.7.0"
   },
   "bin": {
@@ -40,8 +36,9 @@
     "lint": "kcheck",
     "prepublish": "cross-env BABEL_ENV=production npm run build",
     "preversion": "npm run test",
-    "test": "npm run build && npm run lint && ava test/",
-    "test_cov": "cross-env BABEL_ENV=test npm run build && npm run lint && nyc ava test/",
+    "test": "npm run build && npm run lint && npm run test-only",
+    "test-only": "ava test",
+    "test_cov": "cross-env BABEL_ENV=test npm run build && npm run lint && nyc ava test",
     "watch": "babel src --out-dir lib --watch"
   },
   "nyc": {
