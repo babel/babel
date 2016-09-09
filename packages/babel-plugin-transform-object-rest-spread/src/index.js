@@ -15,6 +15,9 @@ export default function ({ types: t }) {
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
 
+        let useBuiltIns = file.opts.useBuiltIns || false;
+        if (typeof useBuiltIns !== "boolean") throw new Error;
+
         let args = [];
         let props = [];
 
@@ -39,8 +42,8 @@ export default function ({ types: t }) {
           args.unshift(t.objectExpression([]));
         }
 
-        const helper = file.opts.polyfill === false ?
-          t.memberExpression(t.identifier('Object'), t.identifier('assign')) :
+        const helper = useBuiltIns ?
+          t.memberExpression(t.identifier("Object"), t.identifier("assign")) :
           file.addHelper("extends");
 
         path.replaceWith(t.callExpression(helper, args));
