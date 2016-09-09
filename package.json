@@ -7,7 +7,6 @@
   "license": "MIT",
   "repository": "https://github.com/babel/babylon",
   "main": "lib/index.js",
-  "dependencies": {},
   "files": [
     "bin",
     "lib"
