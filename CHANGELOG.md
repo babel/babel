@@ -13,6 +13,10 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
+## 6.9.2 (2016-09-09)
+
+The only change is to remove the `babel-runtime` dependency by compiling with Babel's ES2015 loose mode. So using babylon standalone should be smaller.
+
 ## 6.9.1 (2016-08-23)
 
 This release contains mainly small bugfixes but also updates babylons default mode to es2017. The features for `exponentiationOperator`, `asyncFunctions` and `trailingFunctionCommas` which previously needed to be activated via plugin are now enabled by default and the plugins are now no-ops.
