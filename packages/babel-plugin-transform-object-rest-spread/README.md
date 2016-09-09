@@ -20,6 +20,15 @@ $ npm install babel-plugin-transform-object-rest-spread
 }
 ```
 
+This plugin will polyfill `Object.assign` by default. If you want to prevent that use a config like
+this instead:
+
+```json
+{
+  "plugins": [["transform-object-rest-spread", {"polyfill": false}]]
+}
+```
+
 ### Via CLI
 
 ```sh

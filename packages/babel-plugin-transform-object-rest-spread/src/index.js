@@ -39,7 +39,11 @@ export default function ({ types: t }) {
           args.unshift(t.objectExpression([]));
         }
 
-        path.replaceWith(t.callExpression(file.addHelper("extends"), args));
+        const helper = file.opts.polyfill === false ?
+          t.memberExpression(t.identifier('Object'), t.identifier('assign')) :
+          file.addHelper("extends");
+
+        path.replaceWith(t.callExpression(helper, args));
       }
     }
   };
