@@ -16,7 +16,9 @@ export default function ({ types: t }) {
         if (!hasSpread(path.node)) return;
 
         let useBuiltIns = file.opts.useBuiltIns || false;
-        if (typeof useBuiltIns !== "boolean") throw new Error;
+        if (typeof useBuiltIns !== "boolean") {
+          throw new Error("transform-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)");
+        }
 
         let args = [];
         let props = [];
