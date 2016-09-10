@@ -26,11 +26,13 @@ Object.defineProperty(module.exports, "buildPreset", {
 function preset(context, opts) {
   const moduleTypes = ["commonjs", "amd", "umd", "systemjs"];
   let loose = false;
+  let strictMode = undefined;
   let modules = "commonjs";
   let spec = false;
 
   if (opts !== undefined) {
     if (opts.loose !== undefined) loose = opts.loose;
+    if (opts.strictMode !== undefined) strictMode = opts.strictMode;
     if (opts.modules !== undefined) modules = opts.modules;
     if (opts.spec !== undefined) spec = opts.spec;
   }
@@ -63,7 +65,7 @@ function preset(context, opts) {
       [require("babel-plugin-transform-es2015-destructuring"), { loose }],
       require("babel-plugin-transform-es2015-block-scoping"),
       require("babel-plugin-transform-es2015-typeof-symbol"),
-      modules === "commonjs" && [require("babel-plugin-transform-es2015-modules-commonjs"), { loose }],
+      modules === "commonjs" && [require("babel-plugin-transform-es2015-modules-commonjs"), { loose, strictMode }],
       modules === "systemjs" && [require("babel-plugin-transform-es2015-modules-systemjs"), { loose }],
       modules === "amd" && [require("babel-plugin-transform-es2015-modules-amd"), { loose }],
       modules === "umd" && [require("babel-plugin-transform-es2015-modules-umd"), { loose }],
