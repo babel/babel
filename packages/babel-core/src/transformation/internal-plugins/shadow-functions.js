@@ -17,7 +17,7 @@ const superVisitor = {
 
 export default new Plugin({
   name: "internal.shadowFunctions",
-  
+
   visitor: {
     ThisExpression(path) {
       remap(path, "this");
@@ -49,21 +49,25 @@ function remap(path, key) {
   let currentFunction;
   let passedShadowFunction = false;
 
-  let fnPath = path.findParent(function (path) {
-    if (path.isProgram() || path.isFunction()) {
+  let fnPath = path.find(function (innerPath) {
+    if (innerPath.parentPath && innerPath.parentPath.isClassProperty() && innerPath.key === "value") {
+      return true;
+    }
+    if (path === innerPath) return false;
+    if (innerPath.isProgram() || innerPath.isFunction()) {
       // catch current function in case this is the shadowed one and we can ignore it
-      currentFunction = currentFunction || path;
+      currentFunction = currentFunction || innerPath;
     }
 
-    if (path.isProgram()) {
+    if (innerPath.isProgram()) {
       passedShadowFunction = true;
 
       return true;
-    } else if (path.isFunction() && !path.isArrowFunctionExpression()) {
+    } else if (innerPath.isFunction() && !innerPath.isArrowFunctionExpression()) {
       if (shadowFunction) {
-        if (path === shadowFunction || path.node === shadowFunction.node) return true;
+        if (innerPath === shadowFunction || innerPath.node === shadowFunction.node) return true;
       } else {
-        if (!path.is("shadow")) return true;
+        if (!innerPath.is("shadow")) return true;
       }
 
       passedShadowFunction = true;
