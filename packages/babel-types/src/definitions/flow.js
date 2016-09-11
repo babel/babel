@@ -1,4 +1,6 @@
-import defineType from "./index";
+import defineType, {
+  assertValueType
+} from "./index";
 
 defineType("AnyTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],
@@ -42,8 +44,13 @@ defineType("ClassImplements", {
 
 defineType("ClassProperty", {
   visitor: ["key", "value", "typeAnnotation", "decorators"],
+  builder: ["key", "value", "computed", "typeAnnotation", "decorators"],
   aliases: ["Flow", "Property"],
   fields: {
+    computed: {
+      validate: assertValueType("boolean"),
+      default: false
+    }
     // todo
   }
 });
