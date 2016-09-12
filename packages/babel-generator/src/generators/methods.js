@@ -77,8 +77,10 @@ export function ArrowFunctionExpression(node: Object) {
     this.space();
   }
 
-  if (node.params.length === 1 && t.isIdentifier(node.params[0])) {
-    this.print(node.params[0], node);
+  const firstParam = node.params[0];
+
+  if (node.params.length === 1 && t.isIdentifier(firstParam) && !hasTypes(node, firstParam)) {
+    this.print(firstParam, node);
   } else {
     this._params(node);
   }
@@ -88,4 +90,8 @@ export function ArrowFunctionExpression(node: Object) {
   this.space();
 
   this.print(node.body, node);
+}
+
+function hasTypes(node, param) {
+  return node.typeParameters || node.returnType || param.typeAnnotation || param.optional || param.trailingComments;
 }
