@@ -322,6 +322,7 @@ export default class Tokenizer {
     let next = this.input.charCodeAt(this.state.pos + 1);
     if (next === code) return this.finishOp(code === 124 ? tt.logicalOR : tt.logicalAND, 2);
     if (next === 61) return this.finishOp(tt.assign, 2);
+    if (code === 124 && next === 125 && this.hasPlugin("flow")) return this.finishOp(tt.braceBarR, 2);
     return this.finishOp(code === 124 ? tt.bitwiseOR : tt.bitwiseAND, 1);
   }
 
@@ -404,8 +405,17 @@ export default class Tokenizer {
       case 44: ++this.state.pos; return this.finishToken(tt.comma);
       case 91: ++this.state.pos; return this.finishToken(tt.bracketL);
       case 93: ++this.state.pos; return this.finishToken(tt.bracketR);
-      case 123: ++this.state.pos; return this.finishToken(tt.braceL);
-      case 125: ++this.state.pos; return this.finishToken(tt.braceR);
+
+      case 123:
+        if (this.hasPlugin("flow") && this.input.charCodeAt(this.state.pos + 1) === 124) {
+          return this.finishOp(tt.braceBarL, 2);
+        } else {
+          ++this.state.pos;
+          return this.finishToken(tt.braceL);
+        }
+
+      case 125:
+        ++this.state.pos; return this.finishToken(tt.braceR);
 
       case 58:
         if (this.hasPlugin("functionBind") && this.input.charCodeAt(this.state.pos + 1) === 58) {

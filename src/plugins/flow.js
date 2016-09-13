@@ -335,7 +335,7 @@ pp.flowParseObjectTypeCallProperty = function (node, isStatic) {
   return this.finishNode(node, "ObjectTypeCallProperty");
 };
 
-pp.flowParseObjectType = function (allowStatic) {
+pp.flowParseObjectType = function (allowStatic, allowExact) {
   let nodeStart = this.startNode();
   let node;
   let propertyKey;
@@ -345,9 +345,21 @@ pp.flowParseObjectType = function (allowStatic) {
   nodeStart.properties = [];
   nodeStart.indexers = [];
 
-  this.expect(tt.braceL);
+  let endDelim;
+  let exact;
+  if (allowExact && this.match(tt.braceBarL)) {
+    this.expect(tt.braceBarL);
+    endDelim = tt.braceBarR;
+    exact = true;
+  } else {
+    this.expect(tt.braceL);
+    endDelim = tt.braceR;
+    exact = false;
+  }
 
-  while (!this.match(tt.braceR)) {
+  nodeStart.exact = exact;
+
+  while (!this.match(endDelim)) {
     let optional = false;
     let startPos = this.state.start, startLoc = this.state.startLoc;
     node = this.startNode();
@@ -383,13 +395,14 @@ pp.flowParseObjectType = function (allowStatic) {
     }
   }
 
-  this.expect(tt.braceR);
+  this.expect(endDelim);
 
   return this.finishNode(nodeStart, "ObjectTypeAnnotation");
 };
 
 pp.flowObjectTypeSemicolon = function () {
-  if (!this.eat(tt.semi) && !this.eat(tt.comma) && !this.match(tt.braceR)) {
+  if (!this.eat(tt.semi) && !this.eat(tt.comma) &&
+      !this.match(tt.braceR) && !this.match(tt.braceBarR)) {
     this.unexpected();
   }
 };
@@ -510,7 +523,10 @@ pp.flowParsePrimaryType = function () {
       return this.flowIdentToTypeAnnotation(startPos, startLoc, node, this.parseIdentifier());
 
     case tt.braceL:
-      return this.flowParseObjectType();
+      return this.flowParseObjectType(false, false);
+
+    case tt.braceBarL:
+      return this.flowParseObjectType(false, true);
 
     case tt.bracketL:
       return this.flowParseTupleType();
