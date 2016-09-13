@@ -185,6 +185,14 @@ suite("api", function () {
 
   });
 
+  test("preset shortcut doesn\'t throw errors", function () {
+    return transformAsync("", {
+      presets: ["@babel/es2015", "@babel/react/optimizations"]
+    }).then(function (result) {
+      assert.ok(result.options.presets);
+    });
+  });
+
   test("source map merging", function () {
     var result = babel.transform([
       'function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }',
