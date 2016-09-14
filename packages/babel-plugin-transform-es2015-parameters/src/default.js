@@ -7,10 +7,10 @@ import * as t from "babel-types";
 
 let buildDefaultParam = template(`
   let VARIABLE_NAME =
-    ARGUMENTS.length <= ARGUMENT_KEY || ARGUMENTS[ARGUMENT_KEY] === undefined ?
-      DEFAULT_VALUE
+    ARGUMENTS.length > ARGUMENT_KEY && ARGUMENTS[ARGUMENT_KEY] !== undefined ?
+      ARGUMENTS[ARGUMENT_KEY]
     :
-      ARGUMENTS[ARGUMENT_KEY];
+      DEFAULT_VALUE;
 `);
 
 let buildCutOff = template(`
