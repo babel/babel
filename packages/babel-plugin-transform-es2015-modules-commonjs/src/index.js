@@ -270,7 +270,7 @@ export default function () {
 
                   // Manualy re-queue `export default class {}` expressions so that the ES3 transform
                   // has an opportunity to convert them. Ideally this would happen automatically from the
-                  // replaceWith above. See T7166 for more info.
+                  // replaceWith above. See #4140 for more info.
                   path.parentPath.requeue(path.get("expression.left"));
                 }
               } else {
@@ -278,7 +278,7 @@ export default function () {
 
                 // Manualy re-queue `export default foo;` expressions so that the ES3 transform
                 // has an opportunity to convert them. Ideally this would happen automatically from the
-                // replaceWith above. See T7166 for more info.
+                // replaceWith above. See #4140 for more info.
                 path.parentPath.requeue(path.get("expression.left"));
               }
               exportDefaultFound = true;
