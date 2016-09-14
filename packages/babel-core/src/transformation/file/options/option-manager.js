@@ -258,34 +258,41 @@ export default class OptionManager {
       }
 
       let presetLoc;
-      if (typeof val === "string") {
-        presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
-        if (!presetLoc) {
-          throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ` +
-            JSON.stringify(dirname));
+      try {
+        if (typeof val === "string") {
+          presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+          if (!presetLoc) {
+            throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ` +
+              JSON.stringify(dirname));
+          }
+
+          val = require(presetLoc);
         }
 
-        val = require(presetLoc);
+        // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
+        // a 'buildPreset' function that will return the preset itself, while still exporting a
+        // simple object (rather than a function), for supporting old Babel versions.
+        if (typeof val === "object" && val.buildPreset) val = val.buildPreset;
+
+
+        if (typeof val !== "function" && options !== undefined) {
+          throw new Error(`Options ${JSON.stringify(options)} passed to ` +
+            (presetLoc || "a preset") + " which does not accept options.");
+        }
+
+        if (typeof val === "function") val = val(context, options);
+
+        if (typeof val !== "object") {
+          throw new Error(`Unsupported preset format: ${val}.`);
+        }
+
+        onResolve && onResolve(val, presetLoc);
+      } catch (e) {
+        if (presetLoc) {
+          e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
+        }
+        throw e;
       }
-
-      // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
-      // a 'buildPreset' function that will return the preset itself, while still exporting a
-      // simple object (rather than a function), for supporting old Babel versions.
-      if (typeof val === "object" && val.buildPreset) val = val.buildPreset;
-
-
-      if (typeof val !== "function" && options !== undefined) {
-        throw new Error(`Options ${JSON.stringify(options)} passed to ` +
-          (presetLoc || "a preset") + " which does not accept options.");
-      }
-
-      if (typeof val === "function") val = val(context, options);
-
-      if (typeof val !== "object") {
-        throw new Error(`Unsupported preset format: ${val}.`);
-      }
-
-      onResolve && onResolve(val);
       return val;
     });
   }
