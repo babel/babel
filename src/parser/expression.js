@@ -885,7 +885,6 @@ pp.parseFunctionBody = function (node, allowExpression) {
   // are not repeated, and it does not try to bind the words `eval`
   // or `arguments`.
   let checkLVal = this.state.strict;
-  let checkLValStrict = false;
   let isStrict = false;
 
   // arrow function
@@ -897,7 +896,6 @@ pp.parseFunctionBody = function (node, allowExpression) {
       if (directive.value.value === "use strict") {
         isStrict = true;
         checkLVal = true;
-        checkLValStrict = true;
         break;
       }
     }
@@ -911,11 +909,14 @@ pp.parseFunctionBody = function (node, allowExpression) {
   if (checkLVal) {
     let nameHash = Object.create(null);
     let oldStrict = this.state.strict;
-    if (checkLValStrict) this.state.strict = true;
+    if (isStrict) this.state.strict = true;
     if (node.id) {
       this.checkLVal(node.id, true);
     }
     for (let param of (node.params: Array<Object>)) {
+      if (isStrict && param.type !== "Identifier") {
+        this.raise(param.start, "Non-simple parameter in strict mode");
+      }
       this.checkLVal(param, true, nameHash);
     }
     this.state.strict = oldStrict;
