@@ -13,6 +13,45 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
+## 6.10.0
+
+### Spec Compliancy
+
+* Implement ES2016 check for simple parameter list in strict mode ([#106](https://github.com/babel/babylon/pull/106)) (Timothy Gu)
+
+For example:
+
+```js
+// this errors because it uses destructuring and default parameters
+// in a function with a "use strict" directive
+function a([ option1, option2 ] = []) {
+  "use strict";
+}
+ ```
+
+### New Feature
+
+* Exact object type annotations for Flow plugin ([#104](https://github.com/babel/babylon/pull/104)) (Basil Hosmer)
+
+Added to flow in https://github.com/facebook/flow/commit/c710c40aa2a115435098d6c0dfeaadb023cd39b8
+
+Looks like:
+
+```js
+var a : {| x: number, y: string |} = { x: 0, y: 'foo' };
+```
+
+### Bug Fixes
+
+* Include `typeParameter` location in `ArrowFunctionExpression` ([#126](https://github.com/babel/babylon/pull/126)) (Daniel Tschinder)
+* Error on invalid flow type annotation with default assignment ([#122](https://github.com/babel/babylon/pull/122)) (Dan Harper)
+* Fix Flow return types on arrow functions ([#124](https://github.com/babel/babylon/pull/124)) (Dan Harper)
+
+### Misc
+
+* Add tests for export extensions ([#127](https://github.com/babel/babylon/pull/127)) (Daniel Tschinder)
+* Fix Contributing guidelines [skip ci] (Daniel Tschinder)
+
 ## 6.9.2 (2016-09-09)
 
 The only change is to remove the `babel-runtime` dependency by compiling with Babel's ES2015 loose mode. So using babylon standalone should be smaller.
