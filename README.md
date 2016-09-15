@@ -84,6 +84,12 @@ AST for JSX code is based on [Facebook JSX AST][] with the addition of one node 
 
 [Facebook JSX AST]: https://github.com/facebook/jsx/blob/master/AST.md
 
+### Semver
+
+Babylon follows semver in most situations. The only thing to note is that some spec-compliancy bug fixes may be released under patch versions.
+
+For example: We push a fix to early error on something like multiple default exports per file. That would be considered a bug fix even though it would cause a build to fail.
+
 ### Example
 
 ```javascript
