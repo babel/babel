@@ -1,1 +1,1 @@
-function g(a:number=1, e=1:number) {}
+function g(a:number=1, e:number=1) {}

@@ -1049,6 +1049,18 @@ export default function (instance) {
     };
   });
 
+  instance.extend("parseMaybeDefault", function (inner) {
+    return function (...args) {
+      const node = inner.apply(this, args);
+
+      if (node.type === "AssignmentPattern" && node.typeAnnotation && node.right.start < node.typeAnnotation.start) {
+        this.raise(node.typeAnnotation.start, "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`");
+      }
+
+      return node;
+    };
+  });
+
 
   // parse typeof and type imports
   instance.extend("parseImportSpecifiers", function (inner) {
