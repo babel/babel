@@ -37,6 +37,7 @@ cd ../../packages/babel-traverse/
 npm link babylon
 cd ../../packages/babel-generator/
 npm link babylon
+cd ../..
 make build
 make test
 ```
