@@ -1178,6 +1178,7 @@ export default function (instance) {
         let state = this.state.clone();
         try {
           let returnType = this.flowParseTypeAnnotation();
+          if (this.canInsertSemicolon()) this.unexpected();
           if (!this.match(tt.arrow)) this.unexpected();
           // assign after it is clear it is an arrow
           node.returnType = returnType;
@@ -1191,6 +1192,12 @@ export default function (instance) {
       }
 
       return inner.call(this, node);
+    };
+  });
+
+  instance.extend("shouldParseArrow", function (inner) {
+    return function () {
+      return this.match(tt.colon) || inner.call(this);
     };
   });
 

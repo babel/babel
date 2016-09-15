@@ -577,7 +577,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   this.expect(tt.parenR);
 
   let arrowNode = this.startNodeAt(startPos, startLoc);
-  if (canBeArrow && !this.canInsertSemicolon() && (arrowNode = this.parseArrow(arrowNode))) {
+  if (canBeArrow && this.shouldParseArrow() && (arrowNode = this.parseArrow(arrowNode))) {
     for (let param of exprList) {
       if (param.extra && param.extra.parenthesized) this.unexpected(param.extra.parenStart);
     }
@@ -611,6 +611,10 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
   this.addExtra(val, "parenStart", startPos);
 
   return val;
+};
+
+pp.shouldParseArrow = function () {
+  return !this.canInsertSemicolon();
 };
 
 pp.parseArrow = function (node) {
