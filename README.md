@@ -21,7 +21,7 @@
 Heavily based on [acorn](https://github.com/marijnh/acorn) and [acorn-jsx](https://github.com/RReverser/acorn-jsx),
 thanks to the awesome work of [@RReverser](https://github.com/RReverser) and [@marijnh](https://github.com/marijnh).
 
-Significant diversions are expected to occur in the future such as streaming, EBNF definitions, sweet.js integration, interspacial parsing and more.
+Significant diversions are expected to occur in the future such as streaming, EBNF definitions, sweet.js integration, interspatial parsing and more.
 
 ## API
 
