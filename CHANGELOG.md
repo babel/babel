@@ -19,6 +19,10 @@ See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.m
 
 * Implement ES2016 check for simple parameter list in strict mode ([#106](https://github.com/babel/babylon/pull/106)) (Timothy Gu)
 
+> It is a Syntax Error if ContainsUseStrict of FunctionBody is true and IsSimpleParameterList of FormalParameters is false. https://tc39.github.io/ecma262/2016/#sec-function-definitions-static-semantics-early-errors
+
+More Context: [tc39-notes](https://github.com/rwaldron/tc39-notes/blob/master/es7/2015-07/july-29.md#611-the-scope-of-use-strict-with-respect-to-destructuring-in-parameter-lists)
+
 For example:
 
 ```js
@@ -28,6 +32,8 @@ function a([ option1, option2 ] = []) {
   "use strict";
 }
  ```
+
+The solution would be to use a top level "use strict" or to remove the destructuring or default parameters when using a function + "use strict" or to.
 
 ### New Feature
 
