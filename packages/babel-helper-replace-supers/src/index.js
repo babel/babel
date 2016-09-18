@@ -22,7 +22,7 @@ function isMemberExpressionSuper(node) {
 /**
  * Creates an expression which result is the proto of objectRef.
  * Uses CLASS.__proto__ first for InternetExplorer <= 10 support
- * 
+ *
  * @example <caption>isStatic === true</caption>
  *
  *   CLASS.__proto__ || Object.getPrototypeOf(CLASS)
@@ -238,7 +238,6 @@ export default class ReplaceSupers {
     let property;
     let computed;
     let args;
-    let thisReference;
 
     let parent = path.parent;
     let node = path.node;
@@ -277,7 +276,7 @@ export default class ReplaceSupers {
 
     if (!property) return;
 
-    let superProperty = this.getSuperProperty(property, computed, thisReference);
+    let superProperty = this.getSuperProperty(property, computed);
 
     if (args) {
       return this.optimiseCall(superProperty, args);
