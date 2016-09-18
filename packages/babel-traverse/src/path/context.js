@@ -212,7 +212,7 @@ export function requeue(pathToQueue = this) {
   if (pathToQueue.removed) return;
 
   // TODO(loganfsmyth): This should be switched back to queue in parent contexts
-  // automatically once T2892 and T7160 have been resolved. See T7166.
+  // automatically once #2892 and #4135 have been resolved. See #4140.
   // let contexts = this._getQueueContexts();
   let contexts = this.contexts;
 
