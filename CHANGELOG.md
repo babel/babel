@@ -9,11 +9,15 @@
 > - [Internal]
 > - [Polish]
 
+> Semver Policy: https://github.com/babel/babylon#semver
+
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
-## 6.10.0
+## 6.10.0 (2016-09-19)
+
+> We plan to include some spec compliancy bugs in patch versions. An example was the multiple default exports issue.
 
 ### Spec Compliancy
 
