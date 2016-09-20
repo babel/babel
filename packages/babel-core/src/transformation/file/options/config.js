@@ -39,6 +39,30 @@ module.exports = {
     default: true
   },
 
+  allowReturnOutsideFunction: {
+    description: "when enabled, a return at the top level is not considered an error",
+    type: "boolean",
+    default: false
+  },
+
+  allowImportExportEverywhere: {
+    description: "TODO",
+    type: "boolean",
+    default: false
+  },
+
+  strictMode: {
+    description: "TODO",
+    type: "string",
+    default: null
+  },
+
+  allowSuperOutsideMethod: {
+    description: "When enabled, import/export statements are not constrained to appearing at the top of the program.",
+    type: "boolean",
+    default: false
+  },
+
   suppressDeprecationMessages: {
     type: "boolean",
     default: false,
