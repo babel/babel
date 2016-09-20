@@ -48,7 +48,7 @@ module.exports = function (commander, filenames, opts) {
 
         sources.forEach((source) => {
           let content = consumer.sourceContentFor(source, true);
-          if (content !== null){
+          if (content !== null) {
             map.setSourceContent(source, content);
           }
         });
