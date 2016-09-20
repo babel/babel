@@ -52,6 +52,64 @@ suite("parser and generator options", function() {
     assert.deepEqual(results.ast, babel.transform(newString).ast);
     assert.equal(results.code, newString);
   });
+
+  test("experimental syntax", function() {
+    var experimental = "var a: number = 1;";
+    var recast = {
+      parse: function() { return babel.transform(experimental, {
+        parserOpts: {
+          plugins: ['flow']
+        }
+      }).ast; },
+      print: function() { return { code: experimental }; }
+    };
+
+    var results = babel.transform(oldString, {
+      parserOpts: {
+        parser: recast.parse,
+        plugins: ['flow']
+      },
+      generatorOpts: {
+        generator: recast.print
+      }
+    });
+
+    assert.deepEqual(results.ast, babel.transform(experimental, {
+      parserOpts: {
+        plugins: ['flow']
+      }
+    }).ast);
+    assert.equal(results.code, experimental);
+  });
+
+  test("other options", function() {
+    var experimental = "if (true) { import a from 'a'; }";
+    var recast = {
+      parse: function() { return babel.transform(experimental, {
+        parserOpts: {
+          allowImportExportEverywhere: true
+        }
+      }).ast; },
+      print: function() { return { code: experimental }; }
+    };
+
+    var results = babel.transform(oldString, {
+      parserOpts: {
+        parser: recast.parse,
+        allowImportExportEverywhere: true
+      },
+      generatorOpts: {
+        generator: recast.print
+      }
+    });
+
+    assert.deepEqual(results.ast, babel.transform(experimental, {
+      parserOpts: {
+        allowImportExportEverywhere: true
+      }
+    }).ast);
+    assert.equal(results.code, experimental);
+  });
 });
 
 suite("api", function () {

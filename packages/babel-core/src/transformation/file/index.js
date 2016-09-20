@@ -424,43 +424,21 @@ export default class File extends Store {
         if (parser) {
           parseCode = require(parser).parse;
         } else {
-          throw new Error(`Couldn't find parser ${parseCode} relative to directory ${dirname}`);
+          throw new Error(`Couldn't find parser ${parseCode} with "parse" method relative to directory ${dirname}`);
         }
       }
 
       if (!this.parserOpts.parser) {
-        const babylonOptions = {
-          sourceType: "module",
-          allowImportExportEverywhere: true,
-          allowReturnOutsideFunction: false,
-          plugins: [
-            "asyncFunctions",
-            "asyncGenerators",
-            "classConstructorCall",
-            "classProperties",
-            "decorators",
-            "doExpressions",
-            "exponentiationOperator",
-            "exportExtensions",
-            "flow",
-            "functionSent",
-            "functionBind",
-            "jsx",
-            "objectRestSpread",
-            "trailingFunctionCommas"
-          ]
-        };
-
         this.parserOpts.parser = {
           parse(source) {
-            return require("babylon").parse(source, babylonOptions);
+            return require("babylon").parse(source, this.parserOpts);
           }
         };
       }
     }
 
     this.log.debug("Parse start");
-    let ast = parseCode(code, this.parserOpts);
+    let ast = parseCode(code, opts.parserOpts ? Object.assign({}, this.parserOpts, opts.parserOpts) : this.parserOpts);
     this.log.debug("Parse stop");
     return ast;
   }
@@ -631,14 +609,14 @@ export default class File extends Store {
         if (generator) {
           gen = require(generator).print;
         } else {
-          throw new Error(`Couldn't find generator ${gen} relative to directory ${dirname}`);
+          throw new Error(`Couldn't find generator ${gen} with "print" method relative to directory ${dirname}`);
         }
       }
     }
 
     this.log.debug("Generation start");
 
-    let _result = gen(ast, opts, this.code);
+    let _result = gen(ast, opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts, this.code);
     result.code = _result.code;
     result.map  = _result.map;
 
