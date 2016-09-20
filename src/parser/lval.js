@@ -101,7 +101,7 @@ pp.toReferencedList = function (exprList) {
 pp.parseSpread = function (refShorthandDefaultPos) {
   let node = this.startNode();
   this.next();
-  node.argument = this.parseMaybeAssign(refShorthandDefaultPos);
+  node.argument = this.parseMaybeAssign(false, refShorthandDefaultPos);
   return this.finishNode(node, "SpreadElement");
 };
 
