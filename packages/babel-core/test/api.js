@@ -185,12 +185,26 @@ suite("api", function () {
 
   });
 
-  test("preset shortcut doesn\'t throw errors", function () {
-    return transformAsync("", {
-      presets: ["@babel/es2015", "@babel/react/optimizations"]
-    }).then(function (result) {
-      assert.ok(result.options.presets);
-    });
+    test("handles preset shortcuts (adds babel-preset-)", function () {
+    return assert.throws(
+      function () {
+        babel.transform("", {
+          presets: ["@babel/es2015"]
+        });
+      },
+      /Couldn\'t find preset \"\@babel\/babel\-preset\-es2015\" relative to directory/
+    );
+  });
+
+  test("handles preset shortcuts 2 (adds babel-preset-)", function () {
+    return assert.throws(
+      function () {
+        babel.transform("", {
+          presets: ["@babel/react/optimizations"]
+        });
+      },
+      /Couldn\'t find preset \"\@babel\/babel\-preset\-react\/optimizations\" relative to directory/
+    );
   });
 
   test("source map merging", function () {
