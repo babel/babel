@@ -268,7 +268,8 @@ export default class OptionManager {
             let matches = val.match(/^(@[^/]+)\/(.+)$/);
             if (matches) {
               let [, orgName, presetPath] = matches;
-              presetLoc = resolve(`${orgName}/babel-preset-${presetPath}`, dirname);
+              val = `${orgName}/babel-preset-${presetPath}`;
+              presetLoc = resolve(val, dirname);
             }
           }
 
