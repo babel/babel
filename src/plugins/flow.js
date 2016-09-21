@@ -339,7 +339,7 @@ pp.flowParseObjectType = function (allowStatic, allowExact) {
   let nodeStart = this.startNode();
   let node;
   let propertyKey;
-  let isStatic;
+  let isStatic = false;
 
   nodeStart.callProperties = [];
   nodeStart.properties = [];
@@ -393,6 +393,8 @@ pp.flowParseObjectType = function (allowStatic, allowExact) {
         nodeStart.properties.push(this.finishNode(node, "ObjectTypeProperty"));
       }
     }
+
+    isStatic = false;
   }
 
   this.expect(endDelim);
