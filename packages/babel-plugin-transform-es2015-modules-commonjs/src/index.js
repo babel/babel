@@ -170,8 +170,6 @@ export default function () {
 
           let requires = Object.create(null);
 
-          let exportDefaultFound = false;
-
           function addRequire(source, blockHoist) {
             let cached = requires[source];
             if (cached) return cached;
@@ -240,10 +238,6 @@ export default function () {
 
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
-              if (exportDefaultFound) {
-                throw path.buildCodeFrameError("Only one default export allowed per module.");
-              }
-
               let declaration = path.get("declaration");
               if (declaration.isFunctionDeclaration()) {
                 let id = declaration.node.id;
@@ -281,7 +275,6 @@ export default function () {
                 // replaceWith above. See #4140 for more info.
                 path.parentPath.requeue(path.get("expression.left"));
               }
-              exportDefaultFound = true;
             } else if (path.isExportNamedDeclaration()) {
               let declaration = path.get("declaration");
               if (declaration.node) {
