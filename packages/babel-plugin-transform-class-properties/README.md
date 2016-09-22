@@ -13,8 +13,16 @@ $ npm install babel-plugin-transform-class-properties
 **.babelrc**
 
 ```json
+// without options
 {
   "plugins": ["transform-class-properties"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-class-properties", { "spec": true }]
+  ]
 }
 ```
 

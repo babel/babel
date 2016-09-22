@@ -2,12 +2,20 @@ var _class, _temp;
 
 call((_temp = _class = function _class() {
   babelHelpers.classCallCheck(this, _class);
-}, _class.test = true, _temp));
+}, Object.defineProperty(_class, "test", {
+  enumerable: true,
+  writable: true,
+  value: true
+}), _temp));
 
 var _class2 = function _class2() {
   babelHelpers.classCallCheck(this, _class2);
 };
 
-_class2.test = true;
+Object.defineProperty(_class2, "test", {
+  enumerable: true,
+  writable: true,
+  value: true
+});
 export default _class2;
 ;

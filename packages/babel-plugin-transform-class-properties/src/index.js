@@ -19,7 +19,8 @@ export default function ({ types: t }) {
     }
   };
 
-  let buildPropertyDefinition = (ref, {key, value, computed}) => t.expressionStatement(
+  let propertyBuilders = {
+    spec: (ref, {key, value, computed}) => t.expressionStatement(
     t.callExpression(
       t.memberExpression(
         t.identifier("Object"),
@@ -35,13 +36,18 @@ export default function ({ types: t }) {
         ].concat(value ? t.objectProperty(t.identifier("value"), value) : []))
       ]
     )
-  );
+    ),
+    loose: (ref, {key, value, computed}) => t.expressionStatement(
+      t.assignmentExpression("=", t.memberExpression(ref, key, computed || t.isLiteral(key)), value)
+    )
+  };
 
   return {
     inherits: require("babel-plugin-syntax-class-properties"),
 
     visitor: {
-      Class(path) {
+      Class(path, state) {
+        const buildPropertyDefinition = state.opts.spec ? propertyBuilders.spec : propertyBuilders.loose;
         let isDerived = !!path.node.superClass;
         let constructor;
         let props = [];
@@ -72,6 +78,8 @@ export default function ({ types: t }) {
         for (let prop of props) {
           let propNode = prop.node;
           if (propNode.decorators && propNode.decorators.length > 0) continue;
+
+          if (!state.opts.spec && !propNode.value) continue;
 
           let isStatic = propNode.static;
 

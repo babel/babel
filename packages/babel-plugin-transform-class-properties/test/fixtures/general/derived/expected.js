@@ -5,11 +5,7 @@ var Foo = function (_Bar) {
     var _temp, _this, _ret;
 
     babelHelpers.classCallCheck(this, Foo);
-    return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this, ...args)), _this), Object.defineProperty(_this, "bar", {
-      enumerable: true,
-      writable: true,
-      value: "foo"
-    }), _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+    return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this, ...args)), _this), _this.bar = "foo", _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
   }
 
   return Foo;
