@@ -15,6 +15,86 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
+## 6.11.0 (2016-09-22)
+
+### Spec Compliancy (will break CI)
+
+- Disallow duplicate named exports ([#107](https://github.com/babel/babylon/pull/107)) @kaicataldo
+
+```js
+// Only one default export allowed per module. (2:9)
+export default function() {};
+export { foo as default };
+
+// Only one default export allowed per module. (2:0)
+export default {};
+export default function() {};
+
+// `Foo` has already been exported. Exported identifiers must be unique. (2:0)
+export { Foo };
+export class Foo {};
+```
+
+### New Feature (Syntax)
+
+- Add support for computed class property names ([#121](https://github.com/babel/babylon/pull/121)) @motiz88
+
+```js
+// AST
+interface ClassProperty <: Node {
+  type: "ClassProperty";
+  key: Identifier;
+  value: Expression;
+  computed: boolean; // added
+}
+```
+
+```js
+// with "plugins": ["classProperties"]
+class Foo {
+  [x]
+  ['y']
+}
+
+class Bar {
+  [p]
+  [m] () {}
+}
+ ```
+
+### Bug Fix
+
+- Fix `static` property falling through in the declare class Flow AST ([#135](https://github.com/babel/babylon/pull/135)) @danharper
+
+```js
+declare class X {
+    a: number;
+    static b: number; // static
+    c: number; // this was being marked as static in the AST as well
+}
+```
+
+### Polish
+
+- Rephrase "assigning/binding to rvalue" errors to include context ([#119](https://github.com/babel/babylon/pull/119)) @motiz88
+
+```js
+// Used to error with:
+// SyntaxError: Assigning to rvalue (1:0)
+
+// Now:
+// Invalid left-hand side in assignment expression (1:0)
+3 = 4
+
+// Invalid left-hand side in for-in statement (1:5)
+for (+i in {});
+```
+
+### Internal
+
+- Fix call to `this.parseMaybeAssign` with correct arguments ([#133](https://github.com/babel/babylon/pull/133)) @danez
+- Add semver note to changelog ([#131](https://github.com/babel/babylon/pull/131)) @hzoo
+
 ## 6.10.0 (2016-09-19)
 
 > We plan to include some spec compliancy bugs in patch versions. An example was the multiple default exports issue.
