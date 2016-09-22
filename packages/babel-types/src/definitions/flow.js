@@ -44,7 +44,7 @@ defineType("ClassImplements", {
 
 defineType("ClassProperty", {
   visitor: ["key", "value", "typeAnnotation", "decorators"],
-  builder: ["key", "value", "computed", "typeAnnotation", "decorators"],
+  builder: ["key", "value", "typeAnnotation", "decorators", "computed"],
   aliases: ["Flow", "Property"],
   fields: {
     computed: {
