@@ -1,6 +1,7 @@
 var assert = require("assert");
 var OptionManager = require("../lib/transformation/file/options/option-manager");
 var Logger = require("../lib/transformation/file/logger");
+var path = require("path");
 
 suite("option-manager", function () {
   suite("memoisePluginContainer", function () {
@@ -41,6 +42,17 @@ suite("option-manager", function () {
           });
         },
         /Using removed Babel 5 option: base.auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/
+      );
+    })
+    test("throws for resolved but erroring preset", function() {
+      return assert.throws(
+        function () {
+          var opt = new OptionManager(new Logger(null, "unknown"));
+          opt.init({
+            'presets': [path.resolve(__dirname, "fixtures", "option-manager", "not-a-preset")]
+          });
+        },
+        /While processing preset: .*option-manager(?:\/|\\\\)not-a-preset\.js/
       );
     })
   });

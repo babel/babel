@@ -23,6 +23,7 @@ lint:
 clean: test-clean
 	rm -rf packages/*/lib
 	rm -rf packages/babel-polyfill/browser*
+	rm -rf packages/babel-polyfill/dist
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.test = undefined;
+exports.test2 = exports.test = undefined;
 
 /*after*/ /*before*/require("foo") /*after*/;
 
@@ -24,7 +24,7 @@ var /*before*/_foo4 = require("foo4") /*after*/;
 var /*before*/_foo5 = require("foo5") /*after*/;
 
 /*before*/exports. /*after*/test = test;
-var test = /*before*/exports. /*after*/test = 5;
+var test2 = /*before*/exports. /*after*/test2 = 5;
 
 /*before*/(0, _foo4.bar) /*after*/( /*before*/_foo2.default /*after*/, /*before*/_foo5.foo /*after*/);
 

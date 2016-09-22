@@ -9,10 +9,3 @@ var o = {
 function f({x}) {}
 f(o);
 assert.equal(1, count);
-
-count = 0;
-function g({x}) {
-  'use strict';
-}
-g(o);
-assert.equal(1, count);
