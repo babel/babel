@@ -10,11 +10,15 @@ function withContext(ComposedComponent) {
         }
 
         return WithContext;
-    }(Component), _class.propTypes = {
-        context: PropTypes.shape({
-            addCss: PropTypes.func,
-            setTitle: PropTypes.func,
-            setMeta: PropTypes.func
-        })
-    }, _temp;
+    }(Component), Object.defineProperty(_class, "propTypes", {
+        enumerable: true,
+        writable: true,
+        value: {
+            context: PropTypes.shape({
+                addCss: PropTypes.func,
+                setTitle: PropTypes.func,
+                setMeta: PropTypes.func
+            })
+        }
+    }), _temp;
 }

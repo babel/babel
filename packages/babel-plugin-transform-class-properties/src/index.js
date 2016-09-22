@@ -1,5 +1,4 @@
 /* eslint max-len: 0 */
-// todo: define instead of assign
 import nameFunction from "babel-helper-function-name";
 
 export default function ({ types: t }) {
@@ -21,7 +20,22 @@ export default function ({ types: t }) {
   };
 
   let buildPropertyDefinition = (ref, {key, value, computed}) => t.expressionStatement(
-    t.assignmentExpression("=", t.memberExpression(ref, key, computed || t.isLiteral(key)), value)
+    t.callExpression(
+      t.memberExpression(
+        t.identifier("Object"),
+        t.identifier("defineProperty")
+      ),
+      [
+        ref,
+        (t.isIdentifier(key) && !computed) ? t.stringLiteral(key.name) : key,
+        t.objectExpression([
+          // configurable is false by default
+          t.objectProperty(t.identifier("enumerable"), t.booleanLiteral(true)),
+          t.objectProperty(t.identifier("writable"), t.booleanLiteral(true)),
+          t.objectProperty(t.identifier("value"), value)
+        ])
+      ]
+    )
   );
 
   return {

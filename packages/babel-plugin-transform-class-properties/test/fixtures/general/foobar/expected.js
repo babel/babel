@@ -8,10 +8,13 @@ var Child = function (_Parent) {
 
         var _this = babelHelpers.possibleConstructorReturn(this, (Child.__proto__ || Object.getPrototypeOf(Child)).call(this));
 
-        _this.scopedFunctionWithThis = function () {
-            _this.name = {};
-        };
-
+        Object.defineProperty(_this, "scopedFunctionWithThis", {
+            enumerable: true,
+            writable: true,
+            value: function value() {
+                _this.name = {};
+            }
+        });
         return _this;
     }
 
