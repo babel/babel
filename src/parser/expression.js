@@ -113,10 +113,10 @@ pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse, re
   if (this.state.type.isAssign) {
     let node = this.startNodeAt(startPos, startLoc);
     node.operator = this.state.value;
-    node.left = this.match(tt.eq) ? this.toAssignable(left) : left;
+    node.left = this.match(tt.eq) ? this.toAssignable(left, undefined, "assignment expression") : left;
     refShorthandDefaultPos.start = 0; // reset because shorthand default was used correctly
 
-    this.checkLVal(left);
+    this.checkLVal(left, undefined, undefined, "assignment expression");
 
     if (left.extra && left.extra.parenthesized) {
       let errorMsg;
@@ -232,7 +232,7 @@ pp.parseMaybeUnary = function (refShorthandDefaultPos) {
     }
 
     if (update) {
-      this.checkLVal(node.argument);
+      this.checkLVal(node.argument, undefined, undefined, "prefix operation");
     } else if (this.state.strict && node.operator === "delete" && node.argument.type === "Identifier") {
       this.raise(node.start, "Deleting local variable in strict mode");
     }
@@ -248,7 +248,7 @@ pp.parseMaybeUnary = function (refShorthandDefaultPos) {
     node.operator = this.state.value;
     node.prefix = false;
     node.argument = expr;
-    this.checkLVal(expr);
+    this.checkLVal(expr, undefined, undefined, "postfix operation");
     this.next();
     expr = this.finishNode(node, "UpdateExpression");
   }
@@ -855,7 +855,7 @@ pp.parseMethod = function (node, isGenerator, isAsync) {
 
 pp.parseArrowExpression = function (node, params, isAsync) {
   this.initFunction(node, isAsync);
-  node.params = this.toAssignableList(params, true);
+  node.params = this.toAssignableList(params, true, "arrow function parameters");
   this.parseFunctionBody(node, true);
   return this.finishNode(node, "ArrowFunctionExpression");
 };
@@ -911,13 +911,13 @@ pp.parseFunctionBody = function (node, allowExpression) {
     let oldStrict = this.state.strict;
     if (isStrict) this.state.strict = true;
     if (node.id) {
-      this.checkLVal(node.id, true);
+      this.checkLVal(node.id, true, undefined, "function name");
     }
     for (let param of (node.params: Array<Object>)) {
       if (isStrict && param.type !== "Identifier") {
         this.raise(param.start, "Non-simple parameter in strict mode");
       }
-      this.checkLVal(param, true, nameHash);
+      this.checkLVal(param, true, nameHash, "function parameter list");
     }
     this.state.strict = oldStrict;
   }

@@ -259,8 +259,9 @@ pp.parseForStatement = function (node) {
   let refShorthandDefaultPos = {start: 0};
   let init = this.parseExpression(true, refShorthandDefaultPos);
   if (this.match(tt._in) || this.isContextual("of")) {
-    this.toAssignable(init);
-    this.checkLVal(init);
+    const description = this.isContextual("of") ? "for-of statement" : "for-in statement";
+    this.toAssignable(init, undefined, description);
+    this.checkLVal(init, undefined, undefined, description);
     return this.parseForIn(node, init, forAwait);
   } else if (refShorthandDefaultPos.start) {
     this.unexpected(refShorthandDefaultPos.start);
@@ -371,7 +372,7 @@ pp.parseTryStatement = function (node) {
 
     this.expect(tt.parenL);
     clause.param = this.parseBindingAtom();
-    this.checkLVal(clause.param, true, Object.create(null));
+    this.checkLVal(clause.param, true, Object.create(null), "catch clause");
     this.expect(tt.parenR);
 
     clause.body = this.parseBlock();
@@ -564,7 +565,7 @@ pp.parseVar = function (node, isFor, kind) {
 
 pp.parseVarHead = function (decl) {
   decl.id = this.parseBindingAtom();
-  this.checkLVal(decl.id, true);
+  this.checkLVal(decl.id, true, undefined, "variable declaration");
 };
 
 // Parse a function declaration or literal (depending on the
@@ -1021,7 +1022,7 @@ pp.parseImportSpecifiers = function (node) {
     this.next();
     this.expectContextual("as");
     specifier.local = this.parseIdentifier();
-    this.checkLVal(specifier.local, true);
+    this.checkLVal(specifier.local, true, undefined, "import namespace specifier");
     node.specifiers.push(this.finishNode(specifier, "ImportNamespaceSpecifier"));
     return;
   }
@@ -1038,7 +1039,7 @@ pp.parseImportSpecifiers = function (node) {
     let specifier = this.startNode();
     specifier.imported = this.parseIdentifier(true);
     specifier.local = this.eatContextual("as") ? this.parseIdentifier() : specifier.imported.__clone();
-    this.checkLVal(specifier.local, true);
+    this.checkLVal(specifier.local, true, undefined, "import specifier");
     node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
   }
 };
@@ -1046,6 +1047,6 @@ pp.parseImportSpecifiers = function (node) {
 pp.parseImportSpecifierDefault = function (id, startPos, startLoc) {
   let node = this.startNodeAt(startPos, startLoc);
   node.local = id;
-  this.checkLVal(node.local, true);
+  this.checkLVal(node.local, true, undefined, "default import specifier");
   return this.finishNode(node, "ImportDefaultSpecifier");
 };

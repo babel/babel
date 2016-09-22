@@ -904,25 +904,25 @@ export default function (instance) {
   });
 
   instance.extend("toAssignable", function (inner) {
-    return function (node, isBinding) {
+    return function (node, isBinding, contextDescription) {
       if (node.type === "TypeCastExpression") {
-        return inner.call(this, this.typeCastToParameter(node), isBinding);
+        return inner.call(this, this.typeCastToParameter(node), isBinding, contextDescription);
       } else {
-        return inner.call(this, node, isBinding);
+        return inner.call(this, node, isBinding, contextDescription);
       }
     };
   });
 
   // turn type casts that we found in function parameter head into type annotated params
   instance.extend("toAssignableList", function (inner) {
-    return function (exprList, isBinding) {
+    return function (exprList, isBinding, contextDescription) {
       for (let i = 0; i < exprList.length; i++) {
         let expr = exprList[i];
         if (expr && expr.type === "TypeCastExpression") {
           exprList[i] = this.typeCastToParameter(expr);
         }
       }
-      return inner.call(this, exprList, isBinding);
+      return inner.call(this, exprList, isBinding, contextDescription);
     };
   });
 
