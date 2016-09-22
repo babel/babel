@@ -413,32 +413,30 @@ export default class File extends Store {
   }
 
   parse(code: string) {
-    let opts = this.opts;
     let parseCode = parse;
-    if (opts.parserOpts.parser) {
-      parseCode = opts.parserOpts.parser;
+    let parserOpts = this.opts.parserOpts;
 
-      if (typeof parseCode === "string") {
-        let dirname = opts.parserOpts.dirname || process.cwd();
-        let parser = resolve(parseCode, dirname);
+    if (parserOpts.parser) {
+      if (typeof parserOpts.parser === "string") {
+        let dirname = parserOpts.dirname || process.cwd();
+        let parser = resolve(parserOpts.parser, dirname);
         if (parser) {
           parseCode = require(parser).parse;
         } else {
-          throw new Error(`Couldn't find parser ${parseCode} with "parse" method relative to directory ${dirname}`);
+          throw new Error(`Couldn't find parser ${parserOpts.parser} with "parse" method relative to directory ${dirname}`);
         }
       }
 
-      if (!this.parserOpts.parser) {
-        this.parserOpts.parser = {
-          parse(source) {
-            return require("babylon").parse(source, this.parserOpts);
-          }
-        };
-      }
+      parserOpts = Object.assign({}, this.parserOpts, parserOpts);
+      parserOpts.parser = {
+        parse(source) {
+          return parse(source, parserOpts);
+        }
+      };
     }
 
     this.log.debug("Parse start");
-    let ast = parseCode(code, opts.parserOpts ? Object.assign({}, this.parserOpts, opts.parserOpts) : this.parserOpts);
+    let ast = parseCode(code, parserOpts);
     this.log.debug("Parse stop");
     return ast;
   }
