@@ -844,7 +844,7 @@ pp.parseExport = function (node) {
     }
     node.declaration = expr;
     if (needsSemi) this.semicolon();
-    this.checkExport(node);
+    this.checkExport(node, true, true);
     return this.finishNode(node, "ExportDefaultDeclaration");
   } else if (this.state.type.keyword || this.shouldParseExportDeclaration()) {
     node.specifiers = [];
@@ -855,7 +855,7 @@ pp.parseExport = function (node) {
     node.specifiers = this.parseExportSpecifiers();
     this.parseExportFrom(node);
   }
-  this.checkExport(node);
+  this.checkExport(node, true);
   return this.finishNode(node, "ExportNamedDeclaration");
 };
 
@@ -903,7 +903,31 @@ pp.shouldParseExportDeclaration = function () {
   return this.isContextual("async");
 };
 
-pp.checkExport = function (node) {
+pp.checkExport = function (node, checkNames, isDefault) {
+  if (checkNames) {
+    // Check for duplicate exports
+    if (isDefault) {
+      // Default exports
+      this.checkDuplicateExports(node, "default", isDefault);
+    } else if (node.specifiers && node.specifiers.length) {
+      // Named exports
+      for (let specifier of node.specifiers) {
+        const name = specifier.exported.name;
+        if (name === "default") isDefault = true;
+        this.checkDuplicateExports(specifier, name, isDefault);
+      }
+    } else if (node.declaration) {
+      // Exported declarations
+      if (node.declaration.type === "FunctionDeclaration" || node.declaration.type === "ClassDeclaration") {
+        this.checkDuplicateExports(node, node.declaration.id.name, isDefault);
+      } else if (node.declaration.type === "VariableDeclaration") {
+        for (let declaration of node.declaration.declarations) {
+          this.checkDuplicateExports(declaration, declaration.id.name, isDefault);
+        }
+      }
+    }
+  }
+
   if (this.state.decorators.length) {
     let isClass = node.declaration && (node.declaration.type === "ClassDeclaration" || node.declaration.type === "ClassExpression");
     if (!node.declaration || !isClass) {
@@ -911,6 +935,20 @@ pp.checkExport = function (node) {
     }
     this.takeDecorators(node.declaration);
   }
+};
+
+pp.checkDuplicateExports = function(node, name, isDefault) {
+  if (this.state.exportedIdentifiers[name]) {
+    this.raiseDuplicateExportError(node, name, isDefault);
+  }
+  this.state.exportedIdentifiers[name] = true;
+};
+
+pp.raiseDuplicateExportError = function(node, name, isDefault) {
+  this.raise(node.start, isDefault ?
+    "Only one default export allowed per module." :
+    `\`${name}\` has already been exported. Exported identifiers must be unique.`
+  );
 };
 
 // Parses a comma-separated list of module exports.

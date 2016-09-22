@@ -43,6 +43,8 @@ export default class State {
     this.containsEsc = this.containsOctal = false;
     this.octalPosition = null;
 
+    this.exportedIdentifiers = {};
+
     return this;
   }
 
@@ -118,6 +120,10 @@ export default class State {
   // TODO
   containsOctal: boolean;
   octalPosition: ?number;
+
+  // Names of exports store. `default` is stored as a name for both
+  // `export default foo;` and `export { foo as default };`.
+  exportedIdentifiers: {[id:string]: boolean};
 
   curPosition() {
     return new Position(this.curLine, this.pos - this.lineStart);

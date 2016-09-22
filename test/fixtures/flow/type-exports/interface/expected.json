@@ -206,7 +206,7 @@
                 "column": 20
               }
             },
-            "name": "foo"
+            "name": "bar"
           },
           "typeParameters": {
             "type": "TypeParameterDeclaration",

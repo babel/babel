@@ -1,2 +1,2 @@
 export interface foo { p: number };
-export interface foo<T> { p: T };
+export interface bar<T> { p: T };
