@@ -20,7 +20,6 @@ See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.m
 ### Hot Fix
 - [#137](https://github.com/babel/babylon/pull/137) - Fix a regression with duplicate exports - it was erroring on all keys in `Object.prototype`. @danez
 
-```
 ```javascript
 export toString from './toString';
 ```
