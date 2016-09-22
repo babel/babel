@@ -47,14 +47,6 @@ var innerclassproperties = function () {
 
   return _temp = _class = function _class() {
     babelHelpers.classCallCheck(this, _class);
-    Object.defineProperty(this, "args", {
-      enumerable: true,
-      writable: true,
-      value: args
-    });
-  }, Object.defineProperty(_class, "args", {
-    enumerable: true,
-    writable: true,
-    value: args
-  }), _temp;
+    this.args = args;
+  }, _class.args = args, _temp;
 };
