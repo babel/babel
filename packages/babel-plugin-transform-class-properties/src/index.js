@@ -32,8 +32,7 @@ export default function ({ types: t }) {
           // configurable is false by default
           t.objectProperty(t.identifier("enumerable"), t.booleanLiteral(true)),
           t.objectProperty(t.identifier("writable"), t.booleanLiteral(true)),
-          t.objectProperty(t.identifier("value"), value)
-        ])
+        ].concat(value ? t.objectProperty(t.identifier("value"), value) : []))
       ]
     )
   );
@@ -73,13 +72,13 @@ export default function ({ types: t }) {
         for (let prop of props) {
           let propNode = prop.node;
           if (propNode.decorators && propNode.decorators.length > 0) continue;
-          if (!propNode.value) continue;
 
           let isStatic = propNode.static;
 
           if (isStatic) {
             nodes.push(buildPropertyDefinition(ref, propNode));
           } else {
+            if (!propNode.value) continue;
             instanceBody.push(buildPropertyDefinition(t.thisExpression(), propNode));
           }
         }
