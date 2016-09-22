@@ -1021,6 +1021,7 @@ interface ClassProperty <: Node {
   type: "ClassProperty";
   key: Identifier;
   value: Expression;
+  computed: boolean;
 }
 ```
 

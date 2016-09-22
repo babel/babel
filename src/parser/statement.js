@@ -672,13 +672,13 @@ pp.parseClassBody = function (node) {
       this.parsePropertyName(method);
     }
 
-    if (!isGenerator && method.key.type === "Identifier" && !method.computed) {
+    if (!isGenerator) {
       if (this.isClassProperty()) {
         classBody.body.push(this.parseClassProperty(method));
         continue;
       }
 
-      if (this.hasPlugin("classConstructorCall") && method.key.name === "call" && this.match(tt.name) && this.state.value === "constructor") {
+      if (method.key.type === "Identifier" && !method.computed && this.hasPlugin("classConstructorCall") && method.key.name === "call" && this.match(tt.name) && this.state.value === "constructor") {
         isConstructorCall = true;
         this.parsePropertyName(method);
       }
