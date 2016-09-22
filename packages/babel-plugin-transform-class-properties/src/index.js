@@ -20,6 +20,10 @@ export default function ({ types: t }) {
     }
   };
 
+  let buildPropertyDefinition = (ref, {key, value, computed}) => t.expressionStatement(
+    t.assignmentExpression("=", t.memberExpression(ref, key, computed || t.isLiteral(key)), value)
+  );
+
   return {
     inherits: require("babel-plugin-syntax-class-properties"),
 
@@ -58,16 +62,11 @@ export default function ({ types: t }) {
           if (!propNode.value) continue;
 
           let isStatic = propNode.static;
-          let isComputed = propNode.computed || t.isLiteral(prop.key);
 
           if (isStatic) {
-            nodes.push(t.expressionStatement(
-              t.assignmentExpression("=", t.memberExpression(ref, propNode.key, isComputed), propNode.value)
-            ));
+            nodes.push(buildPropertyDefinition(ref, propNode));
           } else {
-            instanceBody.push(t.expressionStatement(
-              t.assignmentExpression("=", t.memberExpression(t.thisExpression(), propNode.key, isComputed), propNode.value)
-            ));
+            instanceBody.push(buildPropertyDefinition(t.thisExpression(), propNode));
           }
         }
 
