@@ -939,10 +939,10 @@ pp.checkExport = function (node, checkNames, isDefault) {
 };
 
 pp.checkDuplicateExports = function(node, name, isDefault) {
-  if (this.state.exportedIdentifiers[name]) {
+  if (this.state.exportedIdentifiers.indexOf(name) > -1) {
     this.raiseDuplicateExportError(node, name, isDefault);
   }
-  this.state.exportedIdentifiers[name] = true;
+  this.state.exportedIdentifiers.push(name);
 };
 
 pp.raiseDuplicateExportError = function(node, name, isDefault) {
