@@ -418,13 +418,15 @@ export default class File extends Store {
 
     if (parserOpts.parser) {
       if (typeof parserOpts.parser === "string") {
-        let dirname = parserOpts.dirname || process.cwd();
+        let dirname = parserOpts.dirname || path.dirname(this.opts.filename);
         let parser = resolve(parserOpts.parser, dirname);
         if (parser) {
           parseCode = require(parser).parse;
         } else {
           throw new Error(`Couldn't find parser ${parserOpts.parser} with "parse" method relative to directory ${dirname}`);
         }
+      } else {
+        parseCode = parserOpts.parser;
       }
 
       parserOpts = Object.assign({}, this.parserOpts, parserOpts);

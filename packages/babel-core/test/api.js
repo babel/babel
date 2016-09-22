@@ -5,6 +5,7 @@ var sourceMap            = require("source-map");
 var assert               = require("assert");
 var File                 = require("../lib/transformation/file").default;
 var Plugin               = require("../lib/transformation/plugin");
+var generator            = require("babel-generator").default;
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
@@ -24,91 +25,75 @@ function transformAsync(code, opts) {
 }
 
 suite("parser and generator options", function() {
-  var oldString = "original;";
-  var newString = "withOptions;";
+  var recast = {
+    parse: function(code, opts) {
+      return opts.parser.parse(code);
+    },
+    print: function(ast) {
+      return generator(ast);
+    }
+  };
 
-  test("no options", function() {
-    var noOptsResults = babel.transform(oldString, {});
-
-    assert.deepEqual(noOptsResults.ast, babel.transform(oldString).ast);
-    assert.equal(noOptsResults.code, oldString);
-  });
-
-  test("options", function() {
-    var recast = {
-      parse: function() { return babel.transform(newString).ast; },
-      print: function() { return { code: newString }; }
-    };
-
-    var results = babel.transform(oldString, {
+  function newTransform(string) {
+    return babel.transform(string, {
       parserOpts: {
-        parser: recast.parse
+        parser: recast.parse,
+        plugins: ["flow"],
+        allowImportExportEverywhere: true,
+        sourceType: "script"
       },
       generatorOpts: {
         generator: recast.print
       }
     });
+  }
 
-    assert.deepEqual(results.ast, babel.transform(newString).ast);
-    assert.equal(results.code, newString);
+  test("options", function() {
+    var string = "original;";
+    assert.deepEqual(newTransform(string).ast, babel.transform(string).ast);
+    assert.equal(newTransform(string).code, string);
   });
 
   test("experimental syntax", function() {
     var experimental = "var a: number = 1;";
-    var recast = {
-      parse: function() { return babel.transform(experimental, {
-        parserOpts: {
-          plugins: ['flow']
-        }
-      }).ast; },
-      print: function() { return { code: experimental }; }
-    };
 
-    var results = babel.transform(oldString, {
+    assert.deepEqual(newTransform(experimental).ast, babel.transform(experimental, {
       parserOpts: {
-        parser: recast.parse,
-        plugins: ['flow']
-      },
-      generatorOpts: {
-        generator: recast.print
-      }
-    });
-
-    assert.deepEqual(results.ast, babel.transform(experimental, {
-      parserOpts: {
-        plugins: ['flow']
+        plugins: ["flow"]
       }
     }).ast);
-    assert.equal(results.code, experimental);
+    assert.equal(newTransform(experimental).code, experimental);
+
+    function newTransformWithPlugins(string) {
+      return babel.transform(string, {
+        plugins: [__dirname + "/../../babel-plugin-syntax-flow"],
+        parserOpts: {
+          parser: recast.parse,
+          sourceType: "script"
+        },
+        generatorOpts: {
+          generator: recast.print
+        }
+      });
+    }
+
+    assert.deepEqual(newTransformWithPlugins(experimental).ast, babel.transform(experimental, {
+      parserOpts: {
+        plugins: ["flow"]
+      }
+    }).ast);
+    assert.equal(newTransformWithPlugins(experimental).code, experimental);
   });
 
   test("other options", function() {
-    var experimental = "if (true) { import a from 'a'; }";
-    var recast = {
-      parse: function() { return babel.transform(experimental, {
-        parserOpts: {
-          allowImportExportEverywhere: true
-        }
-      }).ast; },
-      print: function() { return { code: experimental }; }
-    };
+    var experimental = "if (true) {\n  import a from 'a';\n}";
 
-    var results = babel.transform(oldString, {
-      parserOpts: {
-        parser: recast.parse,
-        allowImportExportEverywhere: true
-      },
-      generatorOpts: {
-        generator: recast.print
-      }
-    });
-
-    assert.deepEqual(results.ast, babel.transform(experimental, {
+    assert.notEqual(newTransform(experimental).ast, babel.transform(experimental, {
       parserOpts: {
         allowImportExportEverywhere: true
       }
     }).ast);
-    assert.equal(results.code, experimental);
+    assert.equal(newTransform(experimental).code, experimental);
   });
 });
 
