@@ -15,6 +15,23 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
+## 6.11.1 (2016-09-22)
+
+### Hot Fix
+- [#137](https://github.com/babel/babylon/pull/137) - Fix a regression with duplicate exports - it was erroring on all keys in `Object.prototype`. @danez
+
+```
+```javascript
+export toString from './toString';
+```
+
+```bash
+`toString` has already been exported. Exported identifiers must be unique. (1:7)
+> 1 | export toString from './toString';
+    |        ^
+  2 |
+```
+
 ## 6.11.0 (2016-09-22)
 
 ### Spec Compliancy (will break CI)
