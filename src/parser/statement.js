@@ -923,7 +923,9 @@ pp.checkExport = function (node, checkNames, isDefault) {
         this.checkDuplicateExports(node, node.declaration.id.name, isDefault);
       } else if (node.declaration.type === "VariableDeclaration") {
         for (let declaration of node.declaration.declarations) {
-          this.checkDuplicateExports(declaration, declaration.id.name, isDefault);
+          if (declaration.id.name) {
+            this.checkDuplicateExports(declaration, declaration.id.name, isDefault);
+          }
         }
       }
     }
