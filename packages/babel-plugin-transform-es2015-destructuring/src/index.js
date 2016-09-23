@@ -221,6 +221,9 @@ export default function ({ types: t }) {
       for (let elem of (arr.elements: Array)) {
         // deopt on spread elements
         if (t.isSpreadElement(elem)) return false;
+
+        // deopt call expressions as they might change LHS variables
+        if (t.isCallExpression(elem)) return false;
       }
 
       // deopt on reference to left side identifiers
