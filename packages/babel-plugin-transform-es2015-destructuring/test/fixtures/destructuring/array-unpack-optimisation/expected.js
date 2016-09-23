@@ -31,3 +31,6 @@ var b = _ref6[1];
 var _ref7 = [clazz.foo(), bar];
 var a = _ref7[0];
 var b = _ref7[1];
+var _ref8 = [clazz.foo, bar];
+var a = _ref8[0];
+var b = _ref8[1];

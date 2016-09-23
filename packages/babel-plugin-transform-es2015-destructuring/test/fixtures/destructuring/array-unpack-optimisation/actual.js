@@ -10,3 +10,4 @@ var [a, b] = [a, b];
 var [a, b] = [...foo, bar];
 var [a, b] = [foo(), bar];
 var [a, b] = [clazz.foo(), bar];
+var [a, b] = [clazz.foo, bar];
