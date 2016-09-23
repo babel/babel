@@ -44,6 +44,15 @@ function mtime(filename) {
   return +fs.statSync(filename).mtime;
 }
 
+function findSourceMappingURL(source) {
+    var m = /\/\/[#@] ?sourceMappingURL=([^\s'"]+)\s*$/.exec(source);
+    if (m && m[1]) {
+        return m[1];
+    } else {
+        return undefined;
+    }
+}
+
 function compile(filename) {
   let result;
 
@@ -64,6 +73,11 @@ function compile(filename) {
     if (cached && cached.mtime === mtime(filename)) {
       result = cached;
     }
+  }
+
+  var sourceMappingURL = findSourceMappingURL(fs.readFileSync(filename));
+  if (sourceMappingURL !== undefined && fs.existsSync(path.dirname(filename) + "/" + sourceMappingURL)) {
+      opts.inputSourceMap = JSON.parse(fs.readFileSync(path.dirname(filename) + "/" + sourceMappingURL));
   }
 
   if (!result) {
