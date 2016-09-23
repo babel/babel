@@ -15,9 +15,23 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version changelog.
 
+### Bug Fix
+
+- [#139](https://github.com/babel/babylon/issues/139) Don't do the duplicate check if not an identifier (#140) @hzoo
+
+```js
+// regression with duplicate export check
+SyntaxError: ./typography.js: `undefined` has already been exported. Exported identifiers must be unique. (22:13)
+  20 | 
+  21 | export const { rhythm } = typography;
+> 22 | export const { TypographyStyle } = typography
+```
+
+Bail out for now, and make a change to account for destructuring in the next release.
+
 ## 6.11.1 (2016-09-22)
 
-### Hot Fix
+### Bug Fix
 - [#137](https://github.com/babel/babylon/pull/137) - Fix a regression with duplicate exports - it was erroring on all keys in `Object.prototype`. @danez
 
 ```javascript
