@@ -39,7 +39,7 @@ defineType("ArrayPattern", {
 
 defineType("ArrowFunctionExpression", {
   builder: ["params", "body", "async"],
-  visitor: ["params", "body", "returnType"],
+  visitor: ["params", "body", "returnType", "typeParameters"],
   aliases: ["Scopable", "Function", "BlockParent", "FunctionParent", "Expression", "Pureish"],
   fields: {
     params: {

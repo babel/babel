@@ -12,25 +12,24 @@ var fs             = require("fs");
 var pathExists     = require("path-exists");
 var _              = require("lodash");
 
-var fixtureLoc = __dirname + "/fixtures";
-var tmpLoc = __dirname + "/tmp";
+var fixtureLoc = path.join(__dirname, "fixtures");
+var tmpLoc = path.join(__dirname, "tmp");
 
 var presetLocs = [
-  __dirname + "/../../babel-preset-es2015",
-  __dirname + "/../../babel-preset-react"
+  path.join(__dirname, "../../babel-preset-es2015"),
+  path.join(__dirname, "../../babel-preset-react")
 ].join(",");
 
 var pluginLocs = [
-  __dirname + "/../../babel-plugin-transform-strict-mode",
-  __dirname + "/../../babel-plugin-transform-es2015-modules-commonjs",
+  path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
+  path.join(__dirname, "/../../babel-plugin-transform-es2015-modules-commonjs"),
 ].join(",");
 
 var readDir = function (loc) {
   var files = {};
   if (pathExists.sync(loc)) {
     _.each(readdir(loc), function (filename) {
-      var contents = helper.readFile(loc + "/" + filename);
-      files[filename] = contents;
+      files[filename] = helper.readFile(path.join(loc, filename));
     });
   }
   return files;
@@ -77,7 +76,7 @@ var assertTest = function (stdout, stderr, opts) {
 };
 
 var buildTest = function (binName, testName, opts) {
-  var binLoc = path.normalize(__dirname + "/../../babel-cli/lib/" + binName);
+  var binLoc = path.join(__dirname, "../lib", binName);
 
   return function (callback) {
     this.timeout(5000);
@@ -142,22 +141,22 @@ var clear = function () {
 _.each(fs.readdirSync(fixtureLoc), function (binName) {
   if (binName[0] === ".") return;
 
-  var suiteLoc = fixtureLoc + "/" + binName;
+  var suiteLoc = path.join(fixtureLoc, binName);
   suite("bin/" + binName, function () {
-    _.each(fs.readdirSync(fixtureLoc + "/" + binName), function (testName) {
+    _.each(fs.readdirSync(suiteLoc), function (testName) {
       if (testName[0] === ".") return;
 
-      var testLoc = suiteLoc + "/" + testName;
+      var testLoc = path.join(suiteLoc, testName);
 
       var opts = {
         args: []
       };
 
-      var optionsLoc = testLoc + "/options.json"
+      var optionsLoc = path.join(testLoc, "options.json");
       if (pathExists.sync(optionsLoc)) _.merge(opts, require(optionsLoc));
 
       _.each(["stdout", "stdin", "stderr"], function (key) {
-        var loc = testLoc + "/" + key + ".txt";
+        var loc = path.join(testLoc, key + ".txt");
         if (pathExists.sync(loc)) {
           opts[key] = helper.readFile(loc);
         } else {
@@ -165,8 +164,14 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
         }
       });
 
-      opts.outFiles = readDir(testLoc + "/out-files");
-      opts.inFiles  = readDir(testLoc + "/in-files");
+      opts.outFiles = readDir(path.join(testLoc, "out-files"));
+      opts.inFiles  = readDir(path.join(testLoc, "in-files"));
+
+      var babelrcLoc = path.join(testLoc, ".babelrc");
+      if (pathExists.sync(babelrcLoc)) {
+        // copy .babelrc file to tmp directory
+        opts.inFiles['.babelrc'] = helper.readFile(babelrcLoc);
+      }
 
       test(testName, buildTest(binName, testName, opts));
     });

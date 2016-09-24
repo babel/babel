@@ -8,7 +8,7 @@ export default function (opts: {
   let visitor = {};
 
   function isAssignment(node) {
-    return node.operator === opts.operator + "=";
+    return node && node.operator === opts.operator + "=";
   }
 
   function buildAssignment(left, right) {

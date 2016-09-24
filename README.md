@@ -25,15 +25,15 @@ For questions and support please visit our [discussion forum](https://discuss.ba
 
 ## Want to report a bug or request a feature?
 
-> We are in the process of moving our issues from phabricator back to github issues! Check out https://github.com/babel/phabricator-to-github for more info
+Bugs and feature requests can be posted at https://github.com/babel/babel/issues.
 
-Bugs and feature requests should be posted at [phabricator.babeljs.io](https://phabricator.babeljs.io/).
+> We've moved our issues from phabricator back to github issues!
 
-> You can directly translate a github issue to phabricator; just add a T to the beginning of the issue.
+> You can use http://babeljs.io/phabricator-redirects/T7567 to be redirected to the corresponding Github issue.
 
 ```
 https://phabricator.babeljs.io/T2168
-corresponds to
+mostly corresponds to
 https://github.com/babel/babel/issues/2168
 ```
 
@@ -108,6 +108,7 @@ There are a few presets that we maintain officially.
 |--------|-------|------------|
 | [`babel-preset-es2015`](/packages/babel-preset-es2015) | [![npm](https://img.shields.io/npm/v/babel-preset-es2015.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-es2015) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-es2015)](https://david-dm.org/babel/babel?path=packages/babel-preset-es2015) |
 | [`babel-preset-es2016`](/packages/babel-preset-es2016) | [![npm](https://img.shields.io/npm/v/babel-preset-es2016.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-es2016) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-es2016)](https://david-dm.org/babel/babel?path=packages/babel-preset-es2016) |
+| [`babel-preset-es2017`](/packages/babel-preset-es2017) | [![npm](https://img.shields.io/npm/v/babel-preset-es2017.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-es2017) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-es2017)](https://david-dm.org/babel/babel?path=packages/babel-preset-es2017) |
 | [`babel-preset-stage-0`](/packages/babel-preset-stage-0) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-0.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-0) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-0)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-0) |
 | [`babel-preset-stage-1`](/packages/babel-preset-stage-1) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-1.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-1) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-1)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-1) |
 | [`babel-preset-stage-2`](/packages/babel-preset-stage-2) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-2.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-2) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-2)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-2) |

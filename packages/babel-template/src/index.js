@@ -24,16 +24,19 @@ export default function (code: string, opts?: Object): Function {
     }
   }
 
+  opts = assign({
+    allowReturnOutsideFunction: true,
+    allowSuperOutsideMethod: true,
+    preserveComments: false,
+  }, opts);
+
   let getAst = function () {
     let ast;
 
     try {
-      ast = babylon.parse(code, assign({
-        allowReturnOutsideFunction: true,
-        allowSuperOutsideMethod: true
-      }, opts));
+      ast = babylon.parse(code, opts);
 
-      ast = traverse.removeProperties(ast);
+      ast = traverse.removeProperties(ast, {preserveComments: opts.preserveComments});
 
       traverse.cheap(ast, function (node) {
         node[FROM_TEMPLATE] = true;

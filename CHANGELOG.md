@@ -13,6 +13,179 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.15.0 (2016-08-31)
+
+[#3612](https://github.com/babel/babel/pull/3612) The main change is an option to `transform-runtime` for a custom path which will be used in [create-react-app](https://github.com/facebookincubator/create-react-app). Also some bug fixes.
+
+```js
+{
+  "plugins": ["transform-runtime", {
+    "moduleName": "my-custom-babel-runtime"
+  }]
+}
+```
+
+[#3689](https://github.com/babel/babel/pull/3689) Adds a `preserveComments` option to `babel-template`.
+
+It's [@ben-eb](https://github.com/ben-eb), [@d4rkr00t](https://github.com/d4rkr00t), and [@ryb73](https://github.com/ryb73) first PRs!
+
+#### New Feature
+* `babel-plugin-transform-runtime`
+  * [#3612](https://github.com/babel/babel/pull/3612) Add an option for custom runtime. ([@gaearon](https://github.com/gaearon))
+* `babel-template`, `babel-traverse`, `babel-types`
+  * [#3689](https://github.com/babel/babel/pull/3689) Add support for preserving comments in babel-template. ([@ben-eb](https://github.com/ben-eb))
+
+#### Bug Fix
+* `babel-plugin-transform-es2015-block-scoping`
+  * [#3662](https://github.com/babel/babel/pull/3662) Block scoping: fix remapping (Fixes [#7525](https://github.com/babel/babel/issues/7525)). ([@ryb73](https://github.com/ryb73))
+* `babel-types`
+  * [#3687](https://github.com/babel/babel/pull/3687) Fix t.toExpression converting arrow functions to function expressions without block body. ([@boopathi](https://github.com/boopathi))
+* `babel-traverse`
+  * [#3629](https://github.com/babel/babel/pull/3629) Fix bug - undefined reference for export declaration. ([@boopathi](https://github.com/boopathi))
+* `babel-helper-builder-binary-assignment-operator-visitor`, `babel-plugin-transform-es2015-classes`
+  * [#3647](https://github.com/babel/babel/pull/3647) T7537: can not call super in constructor with conditional branch. ([@d4rkr00t](https://github.com/d4rkr00t))
+
+#### Documentation
+* Other
+  * [#3679](https://github.com/babel/babel/pull/3679) Mention how arrow functions' `spec` uses `.bind`. ([@Kovensky](https://github.com/Kovensky))
+
+#### Internal
+* `babel-traverse`, `babel-types`
+  * [#3676](https://github.com/babel/babel/pull/3676) Remove the cycle from babel-types/babel-traverse.. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+## v6.14.0 (2016-08-23) TAKE ME TO FLAVOR TOWN
+
+Lots of stuff in this release!
+
+- [#3624](https://github.com/babel/babel/pull/3624) A new preset for `es2017`: it includes the 2 previous stage-3 plugins: async/await (via [transform-async-to-generator](http://babeljs.io/docs/plugins/transform-async-to-generator)) and [trailing commas in functions](http://babeljs.io/docs/plugins/syntax-trailing-function-commas). (thanks to @bettiolo for the npm package)
+
+```bash
+npm install babel-preset-es2017 --save-dev
+```
+
+```js
+// .babelrc
+{ "presets": ["es2017"] }
+```
+
+- [#3625](https://github.com/babel/babel/pull/3625), [#3673](https://github.com/babel/babel/pull/3673) A new preset called `latest` that transforms ES2015+ (currently ES2015, ES2016, ES2017). You can also pass options down to the `es2015` preset.
+
+> We also will be working on getting a target/env (autoprefixer) preset soon.
+
+```bash
+npm install babel-preset-latest --save-dev
+```
+
+```js
+// .babelrc
+{ "presets": ["latest"] }
+// with options
+{ "presets": [
+  ["latest", {
+    "es2015": {
+      "modules": false 
+    }
+  }]
+] }
+```
+
+- [#3671](https://github.com/babel/babel/pull/3671) We also are including a `spec` option for the `es2015` preset since the [arrow function](http://babeljs.io/docs/plugins/transform-es2015-arrow-functions/)/[template string](http://babeljs.io/docs/plugins/transform-es2015-template-literals/) plugins support this option.
+
+> `spec` for arrow functions uses `.bind(this)`, instead of renaming, to make `this` available inside the transformed function. It also adds a runtime check to make sure they are not instantiated (since they transform into bound regular functions).
+> `spec` for template literals wraps all expressions in `String` rather than simple string concatenation.
+
+```js
+// .babelrc
+{
+  "presets": [
+    ["es2015", { "spec": true }]
+  ]
+}
+```
+
+- [#3659](https://github.com/babel/babel/pull/3659) @kittens added an optional `wrapPluginVisitorMethod` callback to transform to allow for performance tracking/introspection of plugins. More docs will be added on the [website](babeljs.io) soon.
+
+- [#3658](https://github.com/babel/babel/pull/3658) sourcemaps will also now have a `names` field for identifiers to allow debuggers to do re-aliasing of mangled identifiers.
+
+- [#3518](https://github.com/babel/babel/pull/3518) For spec compilancy, we now will throw on a file with multiple export default.
+
+### Notable Bug Fixes
+
+- [#3527](https://github.com/babel/babel/pull/3527) Fix class inheritance in IE <=10 without `loose` mode.
+- [#3644](https://github.com/babel/babel/pull/3644) Support the `ignore` config option in `.babelrc`.
+- [#3655](https://github.com/babel/babel/pull/3655) Flow-only class props were not be stripped without `transform-class-properties`.
+
+#### Guy Fieri
+* `babel-core`
+  * [#3641](https://github.com/babel/babel/pull/3641) Fix exports of babel-core. ([@thejameskyle](https://github.com/thejameskyle))
+  * [#3646](https://github.com/babel/babel/pull/3646) Remove Guy Fieri from Babel's source code. ([@jdan](https://github.com/jdan))
+
+#### Commiters: 17
+
+It's also a lot folk's first PR (or first code PR)!
+
+- Adam Leventhal ([ahl](https://github.com/ahl))
+- Boopathi Rajaa ([boopathi](https://github.com/boopathi))
+- Diogo Franco ([Kovensky](https://github.com/Kovensky))
+- Jordan Scales ([jdan](https://github.com/jdan))
+- Kai Cataldo ([kaicataldo](https://github.com/kaicataldo))
+- Marcelo Jorge Vieira ([marcelometal](https://github.com/marcelometal))
+- Paul O’Shannessy ([zpao](https://github.com/zpao))
+- Sota Yamashtia ([sotayamashita](https://github.com/sotayamashita))
+- Thomas Aylott ([subtleGradient](https://github.com/subtleGradient))
+
+#### New Feature
+* `babel-preset-es2015`
+  * [#3671](https://github.com/babel/babel/pull/3671) Support 'spec' option on `babel-preset-es2015`. ([@Kovensky](https://github.com/Kovensky))
+* `babel-preset-latest`
+  * [#3673](https://github.com/babel/babel/pull/3673) add options to `babel-preset-latest`. ([@hzoo](https://github.com/hzoo))
+  * [#3625](https://github.com/babel/babel/pull/3625) Create `babel-preset-latest`. ([@sotayamashita](https://github.com/sotayamashita))
+* `babel-preset-es2017`
+  * [#3624](https://github.com/babel/babel/pull/3624) Add es2017-preset. ([@sotayamashita](https://github.com/sotayamashita))
+* `babel-core`, `babel-traverse`
+  * [#3659](https://github.com/babel/babel/pull/3659) Add `wrapPluginVisitorMethod` option to allow introspection and metrics tracking of plugins. ([@kittens](https://github.com/kittens))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-plugin-transform-regenerator`, `babel-template`, `babel-traverse`
+  * [#3658](https://github.com/babel/babel/pull/3658) Generate names field for identifiers to get correct names mappings. ([@kittens](https://github.com/kittens))
+* `babel-generator`, `babel-types`
+  * [#3570](https://github.com/babel/babel/pull/3570) Add support for the new declare module.exports of flow. ([@danez](https://github.com/danez))
+
+#### Spec Compliancy
+* `babel-plugin-transform-es2015-modules-amd`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-es2015-modules-umd`
+  * [#3518](https://github.com/babel/babel/pull/3518) Throw error for multiple exports default. ([@kaicataldo](https://github.com/kaicataldo))
+
+#### Bug Fix
+* `babel-core`, `babel-helper-replace-supers`, `babel-plugin-transform-class-properties`, `babel-plugin-transform-es2015-classes`, `babel-plugin-transform-es2015-function-name`, `babel-plugin-transform-es2015-object-super`, `babel-plugin-transform-es2015-parameters`
+  * [#3527](https://github.com/babel/babel/pull/3527) Fix class inheritance in IE <=10 (T3041). ([@danez](https://github.com/danez))
+* `babel-cli`
+  * [#3644](https://github.com/babel/babel/pull/3644) Fixes [#6726](https://github.com/babel/babel/issues/6726) ignore config option. ([@subtleGradient](https://github.com/subtleGradient))
+* `babel-plugin-transform-es2015-modules-systemjs`
+  * [#3650](https://github.com/babel/babel/pull/3650) System.register update expression consistency. ([@guybedford](https://github.com/guybedford))
+* `babel-generator`
+  * [#3663](https://github.com/babel/babel/pull/3663) Use arrow syntax for ObjectTypeProperty FunctionTypeAnnotations. ([@zpao](https://github.com/zpao))
+* `babel-register`
+  * [#3608](https://github.com/babel/babel/pull/3608) Set sourceRoot in babel-register transform to fix paths in stacks. ([@danez](https://github.com/danez))
+* `babel-plugin-transform-es2015-block-scoping`
+  * [#3618](https://github.com/babel/babel/pull/3618) incorrect handling of returns nested in switch cases. ([@ahl](https://github.com/ahl))
+* `babel-traverse`
+  * [#3559](https://github.com/babel/babel/pull/3559) Fix bug where redeclaration of var doesn't deopt. ([@boopathi](https://github.com/boopathi))
+* `babel-plugin-transform-flow-strip-types`
+  * [#3655](https://github.com/babel/babel/pull/3655) Strip flow-only class props without needing transform-class-properties.. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+#### Documentation
+* Other
+  * [#3651](https://github.com/babel/babel/pull/3651) Fixed typo in README.md. ([@marcelometal](https://github.com/marcelometal))
+
+#### Internal
+* `babel-preset-es2015`, `babel-preset-latest`
+  * [#3674](https://github.com/babel/babel/pull/3674) Latest tests. ([@hzoo](https://github.com/hzoo))
+* `babel-preset-es2015`
+  * [#3672](https://github.com/babel/babel/pull/3672) Fixes modules test to actually test modules. ([@Kovensky](https://github.com/Kovensky))
+  * [#3640](https://github.com/babel/babel/pull/3640) Update test name to reflect reality.. ([@eventualbuddha](https://github.com/eventualbuddha))
+* Other
+  * [#3668](https://github.com/babel/babel/pull/3668) Ensure correct version of babel installed for preset options. ([@danez](https://github.com/danez))
+  * [#3645](https://github.com/babel/babel/pull/3645) Add es2015 loose mode back. ([@hzoo](https://github.com/hzoo))
+  * [#3639](https://github.com/babel/babel/pull/3639) Use es2015 loose mode after publish. ([@hzoo](https://github.com/hzoo))
+
 ## v6.13.2 (2016-08-05)
 
 Hi again, just fixing up logic from the backwards-compatibility fix which broke options in presets.

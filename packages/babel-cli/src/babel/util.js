@@ -36,8 +36,6 @@ export function log(msg) {
 export function transform(filename, code, opts) {
   opts = _.defaults(opts || {}, index.opts);
   opts.filename = filename;
-  opts.ignore = null;
-  opts.only = null;
 
   let result = babel.transform(code, opts);
   result.filename = filename;

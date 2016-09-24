@@ -27,28 +27,28 @@ suite("es2015 preset", function () {
       });
     });
 
-    test("modules", function () {
+    suite("modules", function () {
       test("doesn't throw when passing one false", function () {
         expect(function () {
-          es2015.buildPreset(null, { loose: false });
+          es2015.buildPreset(null, { modules: false });
         }).not.to.throw();
       });
 
       test("doesn't throw when passing one of: 'commonjs', 'amd', 'umd', 'systemjs", function () {
         expect(function () {
-          es2015.buildPreset(null, { loose: "commonjs" });
+          es2015.buildPreset(null, { modules: "commonjs" });
         }).not.to.throw();
 
         expect(function () {
-          es2015.buildPreset(null, { loose: "amd" });
+          es2015.buildPreset(null, { modules: "amd" });
         }).not.to.throw();
 
         expect(function () {
-          es2015.buildPreset(null, { loose: "umd" });
+          es2015.buildPreset(null, { modules: "umd" });
         }).not.to.throw();
 
         expect(function () {
-          es2015.buildPreset(null, { loose: "systemjs" });
+          es2015.buildPreset(null, { modules: "systemjs" });
         }).not.to.throw();
       });
     });
