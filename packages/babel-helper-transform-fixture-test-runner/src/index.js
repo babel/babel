@@ -3,7 +3,6 @@
 
 import * as babel from "babel-core";
 import { buildExternalHelpers } from "babel-core";
-import path from "path";
 import getFixtures from "babel-helper-fixtures";
 import sourceMap from "source-map";
 import codeFrame from "babel-code-frame";
@@ -12,14 +11,6 @@ import assert from "assert";
 import chai from "chai";
 import _ from "lodash";
 import "babel-polyfill";
-import register from "babel-register";
-
-register({
-  ignore: [
-    path.resolve(__dirname + "/../.."),
-    "node_modules",
-  ]
-});
 
 let babelHelpers = eval(buildExternalHelpers(null, "var"));
 
