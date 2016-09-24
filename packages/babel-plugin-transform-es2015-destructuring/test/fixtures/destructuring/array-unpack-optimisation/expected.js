@@ -25,3 +25,12 @@ var _ref5 = [].concat(babelHelpers.toConsumableArray(foo), [bar]);
 
 var a = _ref5[0];
 var b = _ref5[1];
+var _ref6 = [foo(), bar];
+var a = _ref6[0];
+var b = _ref6[1];
+var _ref7 = [clazz.foo(), bar];
+var a = _ref7[0];
+var b = _ref7[1];
+var _ref8 = [clazz.foo, bar];
+var a = _ref8[0];
+var b = _ref8[1];
