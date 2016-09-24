@@ -269,8 +269,9 @@ export default class OptionManager {
           throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ` +
             JSON.stringify(dirname));
         }
-      }
 
+        val = require(presetLoc);
+      }
 
       // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
       // a 'buildPreset' function that will return the preset itself, while still exporting a
