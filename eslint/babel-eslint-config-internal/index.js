@@ -3,8 +3,8 @@ module.exports = {
   extends: "eslint:recommended",
   plugins: ["flow-vars", "babel"],
   rules: {
-    "flow-vars/define-flow-type": "warn",
-    "flow-vars/use-flow-type": "warn",
+    "flowtype/define-flow-type": "warn",
+    "flowtype/use-flow-type": "warn",
     quotes: ["error", "double"],
     "no-var": "error",
     "keyword-spacing": "error",
