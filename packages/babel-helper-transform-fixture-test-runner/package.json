@@ -9,7 +9,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-runtime": "^6.9.0",
-    "babel-register": "^6.9.0",
     "babel-core": "^6.13.2",
     "babel-polyfill": "^6.9.0",
     "babel-helper-fixtures": "^6.9.0",
