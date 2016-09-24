@@ -10,7 +10,7 @@ import path from "path";
 
 const maps = {};
 const transformOpts = {};
-let revert = null;
+let piratesRevert = null;
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
@@ -82,8 +82,13 @@ function compile(code, filename) {
 }
 
 function hookExtensions(exts) {
-  if (revert) revert();
-  revert = addHook(compile, { exts, ignoreNodeModules: false });
+  if (piratesRevert) piratesRevert();
+  piratesRevert = addHook(compile, { exts, ignoreNodeModules: false });
+}
+
+export function revert() {
+  if (piratesRevert) piratesRevert();
+  delete require.cache[require.resolve(__filename)];
 }
 
 register({
