@@ -50,12 +50,12 @@ let replPlugin = ({ types: t }) => ({
       }
     },
 
-    Directive(path) {
-      if (_.isUndefined(path.node.loc)) {
-        // If the executed code doesn't evaluate to a value,
-        // prevent implicit strict mode from printing 'use strict'.
-        path.parent.body.unshift(t.expressionStatement(t.identifier("undefined")));
-      }
+    Program(path) {
+      if (path.get("body").some((child) => child.isExpressionStatement())) return;
+
+      // If the executed code doesn't evaluate to a value,
+      // prevent implicit strict mode from printing 'use strict'.
+      path.pushContainer("body", t.expressionStatement(t.identifier("undefined")));
     }
   }
 });
