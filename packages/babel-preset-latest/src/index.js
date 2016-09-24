@@ -2,9 +2,9 @@ import { buildPreset } from "babel-preset-es2015";
 import * as presetES2016 from "babel-preset-es2016";
 import * as presetES2017 from "babel-preset-es2017";
 
-//Rather than exporting a default object to represent the preset, we can
-//also export a default function instead, as this preset demonstrates.
-//This allows one to further configure a preset by way of specific options.
+// Rather than exporting a default object to represent the preset, we can
+// also export a default function instead, as this preset demonstrates.
+// This allows one to further configure a preset by way of specific options.
 export default function (context, opts = {}) {
   return {
     presets: [

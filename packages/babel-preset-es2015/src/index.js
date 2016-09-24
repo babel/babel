@@ -2,7 +2,7 @@
  * This file is not the canonical way of writing a Babel preset since it strives for
  * backward compatibility with babel-core < v6.13.x.  If you're looking at it as a
  * reference for how to write a preset, it's probably best to look at the other presets
- * such as babel-preset-es2016 &babel-preset-latest noting that the former example
+ * such as babel-preset-es2016 & babel-preset-latest noting that the former example
  * exports via a default object and the latter via a default function.
  */
 
@@ -92,9 +92,9 @@ const oldConfig = preset({});
 
 export default oldConfig;
 
-//However, for backward compatibility with babel-core < v6.13.x, we use the 'buildPreset'
-//property of the preset object for the preset creation function with the enumerability
-//caveat mentioned below.
+// However, for backward compatibility with babel-core < v6.13.x, we use the 'buildPreset'
+// property of the preset object for the preset creation function with the enumerability
+// caveat mentioned below.
 Object.defineProperty(oldConfig, "buildPreset", {
   configurable: true,
   writable: true,

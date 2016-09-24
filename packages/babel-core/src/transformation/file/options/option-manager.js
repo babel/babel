@@ -269,8 +269,6 @@ export default class OptionManager {
           throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ` +
             JSON.stringify(dirname));
         }
-
-        val = require(presetLoc);
       }
 
 
