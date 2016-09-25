@@ -16,6 +16,7 @@ if (babel.plugins) {
 register(babel);
 register({
   extensions: [".js"],
+  only: 'packages/*/test',
   babelrc: false,
   compact: true,
 });
