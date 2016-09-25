@@ -1,6 +1,6 @@
 // #3861
 function t() {
-  var x = arguments.length <= 0 || arguments[0] === undefined ? "default" : arguments[0];
+  var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "default";
   var _ref = arguments[1];
   var a = _ref.a;
   var b = _ref.b;
