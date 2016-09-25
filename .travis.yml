@@ -7,7 +7,7 @@ cache:
   - node_modules
 before_install:
 - |
-    git diff --name-only $TRAVIS_COMMIT_RANGE | grep -qvE '(\.md$)|(^(doc))/' || {
+    [ "$TRAVIS_COMMIT_RANGE" = "" ] || git diff --name-only $TRAVIS_COMMIT_RANGE | grep -qvE '(\.md$)|(^(doc))/' || {
       echo "Only docs were updated, stopping build process."
       exit
     }
