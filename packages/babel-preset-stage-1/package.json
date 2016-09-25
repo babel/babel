@@ -6,7 +6,7 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-1",
-  "main": "index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "babel-plugin-transform-class-constructor-call": "^6.3.13",
     "babel-plugin-transform-export-extensions": "^6.3.13",

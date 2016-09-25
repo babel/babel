@@ -6,7 +6,7 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-es2016",
-  "main": "index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "babel-plugin-transform-exponentiation-operator": "^6.3.13"
   }
