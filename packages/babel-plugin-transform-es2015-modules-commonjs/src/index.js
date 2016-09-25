@@ -119,8 +119,7 @@ export default function () {
       }
       nodes.push(t.binaryExpression(operator, arg.node, t.numericLiteral(1)));
 
-      let newPaths = path.replaceWithMultiple(t.sequenceExpression(nodes));
-      for (const newPath of newPaths) this.requeueInParent(newPath);
+      path.replaceWithMultiple(t.sequenceExpression(nodes));
     }
   };
 
