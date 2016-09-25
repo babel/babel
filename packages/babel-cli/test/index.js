@@ -1,5 +1,3 @@
-if (process.env.running_under_istanbul) return;
-
 var readdir        = require("fs-readdir-recursive");
 var helper         = require("babel-helper-fixtures");
 var assert         = require("assert");
@@ -79,7 +77,6 @@ var buildTest = function (binName, testName, opts) {
   var binLoc = path.join(__dirname, "../lib", binName);
 
   return function (callback) {
-    this.timeout(5000);
     clear();
     saveInFiles(opts.inFiles);
 
