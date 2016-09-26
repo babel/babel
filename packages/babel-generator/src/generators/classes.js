@@ -55,7 +55,13 @@ export function ClassProperty(node: Object) {
     this.word("static");
     this.space();
   }
-  this.print(node.key, node);
+  if (node.computed) {
+    this.token("[");
+    this.print(node.key, node);
+    this.token("]");
+  } else {
+    this.print(node.key, node);
+  }
   this.print(node.typeAnnotation, node);
   if (node.value) {
     this.space();

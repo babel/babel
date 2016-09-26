@@ -58,14 +58,15 @@ export default function ({ types: t }) {
           if (!propNode.value) continue;
 
           let isStatic = propNode.static;
+          let isComputed = propNode.computed || t.isLiteral(prop.key);
 
           if (isStatic) {
             nodes.push(t.expressionStatement(
-              t.assignmentExpression("=", t.memberExpression(ref, propNode.key), propNode.value)
+              t.assignmentExpression("=", t.memberExpression(ref, propNode.key, isComputed), propNode.value)
             ));
           } else {
             instanceBody.push(t.expressionStatement(
-              t.assignmentExpression("=", t.memberExpression(t.thisExpression(), propNode.key), propNode.value)
+              t.assignmentExpression("=", t.memberExpression(t.thisExpression(), propNode.key, isComputed), propNode.value)
             ));
           }
         }

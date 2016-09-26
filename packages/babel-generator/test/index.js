@@ -170,6 +170,7 @@ suites.forEach(function (testSuite) {
             "exportExtensions",
             "functionBind",
             "classConstructorCall",
+            "classProperties",
           ],
           strictMode: false,
           sourceType: "module",

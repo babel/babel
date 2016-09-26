@@ -217,7 +217,7 @@ Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
  - `returnType` (default: `null`)
  - `typeParameters` (default: `null`)
 
-### t.classProperty(key, value, typeAnnotation, decorators)
+### t.classProperty(key, value, typeAnnotation, decorators, computed)
 
 See also `t.isClassProperty(node, opts)` and `t.assertClassProperty(node, opts)`.
 
@@ -227,6 +227,7 @@ Aliases: `Flow`, `Property`
  - `value` (required)
  - `typeAnnotation` (required)
  - `decorators` (required)
+ - `computed`: `boolean` (default: `false`)
 
 ### t.conditionalExpression(test, consequent, alternate)
 
