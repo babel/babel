@@ -8,13 +8,13 @@ suite("babel-code-frame", function () {
       "class Foo {",
       "  constructor()",
       "};",
-    ].join('\n');
+    ].join("\n");
     assert.equal(codeFrame(rawLines, 2, 16), [
       "  1 | class Foo {",
       "> 2 |   constructor()",
       "    |                ^",
       "  3 | };",
-    ].join('\n'));
+    ].join("\n"));
   });
 
   test("optional column number", function () {
@@ -22,7 +22,7 @@ suite("babel-code-frame", function () {
       "class Foo {",
       "  constructor()",
       "};",
-    ].join('\n');
+    ].join("\n");
     assert.equal(codeFrame(rawLines, 2, null), [
       "  1 | class Foo {",
       "> 2 |   constructor()",
@@ -104,17 +104,86 @@ suite("babel-code-frame", function () {
       "> 2 | \t  \t\t    constructor\t(\t)",
       "    | \t  \t\t               \t \t ^",
       "  3 | \t};",
-    ].join('\n'));
+    ].join("\n"));
   });
 
   test("opts.highlightCode", function () {
     const rawLines = "console.log('babel')";
-    const result = codeFrame(rawLines, 1, 9, {highlightCode: true})
+    const result = codeFrame(rawLines, 1, 9, {highlightCode: true});
     const stripped = chalk.stripColor(result);
     assert.ok(result.length > stripped.length);
     assert.equal(stripped, [
       "> 1 | console.log('babel')",
       "    |         ^",
-    ].join("\n"))
+    ].join("\n"));
+  });
+
+  test("opts.linesAbove", function () {
+    var rawLines = [
+      "/**",
+      " * Sums two numbers.",
+      " *",
+      " * @param a Number",
+      " * @param b Number",
+      " * @returns Number",
+      " */",
+      "",
+      "function sum(a, b) {",
+      "  return a + b",
+      "}"
+    ].join("\n");
+    assert.equal(codeFrame(rawLines, 7, 2, { linesAbove: 1 }), [
+      "   6 |  * @returns Number",
+      ">  7 |  */",
+      "     |  ^",
+      "   8 | ",
+      "   9 | function sum(a, b) {",
+      "  10 |   return a + b",
+    ].join("\n"));
+  });
+
+  test("opts.linesBelow", function () {
+    var rawLines = [
+      "/**",
+      " * Sums two numbers.",
+      " *",
+      " * @param a Number",
+      " * @param b Number",
+      " * @returns Number",
+      " */",
+      "",
+      "function sum(a, b) {",
+      "  return a + b",
+      "}"
+    ].join("\n");
+    assert.equal(codeFrame(rawLines, 7, 2, { linesBelow: 1 }), [
+      "  5 |  * @param b Number",
+      "  6 |  * @returns Number",
+      "> 7 |  */",
+      "    |  ^",
+      "  8 | "
+    ].join("\n"));
+  });
+
+  test("opts.linesAbove and opts.linesBelow", function () {
+    var rawLines = [
+      "/**",
+      " * Sums two numbers.",
+      " *",
+      " * @param a Number",
+      " * @param b Number",
+      " * @returns Number",
+      " */",
+      "",
+      "function sum(a, b) {",
+      "  return a + b",
+      "}"
+    ].join("\n");
+    assert.equal(codeFrame(rawLines, 7, 2, { linesAbove: 1, linesBelow: 1 }), [
+      "  6 |  * @returns Number",
+      "> 7 |  */",
+      "    |  ^",
+      "  8 | "
+    ].join("\n"));
   });
 });

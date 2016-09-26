@@ -83,9 +83,12 @@ export default function (
   let highlighted = opts.highlightCode && chalk.supportsColor;
   if (highlighted) rawLines = highlight(rawLines);
 
+  let linesAbove = opts.linesAbove || 2;
+  let linesBelow = opts.linesBelow || 3;
+
   let lines = rawLines.split(NEWLINE);
-  let start = Math.max(lineNumber - 3, 0);
-  let end   = Math.min(lines.length, lineNumber + 3);
+  let start = Math.max(lineNumber - (linesAbove + 1), 0);
+  let end   = Math.min(lines.length, lineNumber + linesBelow);
 
   if (!lineNumber && !colNumber) {
     start = 0;
