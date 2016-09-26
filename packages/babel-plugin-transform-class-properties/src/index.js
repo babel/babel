@@ -1,5 +1,6 @@
 /* eslint max-len: 0 */
 import nameFunction from "babel-helper-function-name";
+import template from "babel-template";
 
 export default function ({ types: t }) {
   let findBareSupers = {
@@ -19,35 +20,31 @@ export default function ({ types: t }) {
     }
   };
 
-  let propertyBuilders = {
-    spec: (ref, {key, value, computed}) => t.expressionStatement(
-    t.callExpression(
-      t.memberExpression(
-        t.identifier("Object"),
-        t.identifier("defineProperty")
-      ),
-      [
-        ref,
-        (t.isIdentifier(key) && !computed) ? t.stringLiteral(key.name) : key,
-        t.objectExpression([
-          // configurable is false by default
-          t.objectProperty(t.identifier("enumerable"), t.booleanLiteral(true)),
-          t.objectProperty(t.identifier("writable"), t.booleanLiteral(true)),
-        ].concat(value ? t.objectProperty(t.identifier("value"), value) : []))
-      ]
-    )
-    ),
-    loose: (ref, {key, value, computed}) => t.expressionStatement(
-      t.assignmentExpression("=", t.memberExpression(ref, key, computed || t.isLiteral(key)), value)
-    )
-  };
+  const buildDefineProperty = template(`
+    Object.defineProperty(REF, KEY, {
+      // configurable is false by default
+      enumerable: true,
+      writable: true,
+      value: VALUE
+    });
+  `);
+
+  const buildPropertySpec = (ref, {key, value, computed}) => buildDefineProperty({
+    REF: ref,
+    KEY: (t.isIdentifier(key) && !computed) ? t.stringLiteral(key.name) : key,
+    VALUE: value ? value : t.identifier("undefined")
+  });
+
+  const buildProperty = (ref, {key, value, computed}) => t.expressionStatement(
+    t.assignmentExpression("=", t.memberExpression(ref, key, computed || t.isLiteral(key)), value)
+  );
 
   return {
     inherits: require("babel-plugin-syntax-class-properties"),
 
     visitor: {
       Class(path, state) {
-        const buildPropertyDefinition = state.opts.spec ? propertyBuilders.spec : propertyBuilders.loose;
+        const buildPropertyDefinition = state.opts.spec ? buildPropertySpec : buildProperty;
         let isDerived = !!path.node.superClass;
         let constructor;
         let props = [];
