@@ -38,7 +38,7 @@ register({
 
 //
 
-let replPlugin = () => ({
+let replPlugin = ({ types: t }) => ({
   visitor: {
     ModuleDeclaration(path) {
       throw path.buildCodeFrameError("Modules aren't supported in the REPL");
@@ -48,6 +48,14 @@ let replPlugin = () => ({
       if (path.node.kind !== "var") {
         throw path.buildCodeFrameError("Only `var` variables are supported in the REPL");
       }
+    },
+
+    Program(path) {
+      if (path.get("body").some((child) => child.isExpressionStatement())) return;
+
+      // If the executed code doesn't evaluate to a value,
+      // prevent implicit strict mode from printing 'use strict'.
+      path.pushContainer("body", t.expressionStatement(t.identifier("undefined")));
     }
   }
 });
