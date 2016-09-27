@@ -1,5 +1,4 @@
 var assert = require("assert");
-var assign = require("lodash.assign");
 var eslint = require("eslint");
 var fs = require("fs");
 var path = require("path");
@@ -56,7 +55,7 @@ function strictSuite () {
   var ruleId = "strict";
 
   describe("when set to 'never'", function () {
-    var eslintOpts = assign({}, baseEslintOpts, {
+    var eslintOpts = Object.assign({}, baseEslintOpts, {
       rules: {},
     });
     eslintOpts.rules[ruleId] = [errorLevel, "never"];
@@ -81,7 +80,7 @@ function strictSuite () {
   // describe
 
   describe("when set to 'global'", function () {
-    var eslintOpts = assign({}, baseEslintOpts, {
+    var eslintOpts = Object.assign({}, baseEslintOpts, {
       rules: {}
     });
     eslintOpts.rules[ruleId] = [errorLevel, "global"];
@@ -145,7 +144,7 @@ function strictSuite () {
   // describe
 
   describe("when set to 'function'", function () {
-    var eslintOpts = assign({}, baseEslintOpts, {
+    var eslintOpts = Object.assign({}, baseEslintOpts, {
       rules: {}
     });
     eslintOpts.rules[ruleId] = [errorLevel, "function"];

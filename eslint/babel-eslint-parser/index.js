@@ -1,5 +1,4 @@
 var babylonToEspree = require("./babylon-to-espree");
-var assign         = require("lodash.assign");
 var pick           = require("lodash.pickby");
 var Module         = require("module");
 var path           = require("path");
@@ -54,13 +53,13 @@ function monkeypatch() {
   // monkeypatch estraverse
   estraverse = estraverseRelative.require("estraverse");
   estraverses.push(estraverse);
-  assign(estraverse.VisitorKeys, t.VISITOR_KEYS);
+  Object.assign(estraverse.VisitorKeys, t.VISITOR_KEYS);
 
   // monkeypatch estraverse-fb (only for eslint < 2.3.0)
   try {
     var estraverseFb = eslintMod.require("estraverse-fb");
     estraverses.push(estraverseFb);
-    assign(estraverseFb.VisitorKeys, t.VISITOR_KEYS);
+    Object.assign(estraverseFb.VisitorKeys, t.VISITOR_KEYS);
   } catch (err) {
       // Ignore: ESLint v2.3.0 does not have estraverse-fb
   }
@@ -69,7 +68,7 @@ function monkeypatch() {
   var estraverseOfEslint = eslintMod.require("estraverse");
   if (estraverseOfEslint !== estraverseFb) {
     estraverses.push(estraverseOfEslint);
-    assign(estraverseOfEslint.VisitorKeys, t.VISITOR_KEYS);
+    Object.assign(estraverseOfEslint.VisitorKeys, t.VISITOR_KEYS);
   }
 
   estraverses.forEach(function (estraverse) {
