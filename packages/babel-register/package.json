@@ -15,6 +15,6 @@
     "lodash": "^4.2.0",
     "mkdirp": "^0.5.1",
     "path-exists": "^1.0.0",
-    "source-map-support": "^0.2.10"
+    "source-map-support": "^0.4.2"
   }
 }
