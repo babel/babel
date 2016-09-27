@@ -13,7 +13,7 @@ let defs = {
   punctuator:  chalk.yellow,
   // bracket:  intentionally omitted.
   number:      chalk.magenta,
-  string:      chalk.red,
+  string:      chalk.green,
   regex:       chalk.magenta,
   comment:     chalk.grey,
   invalid:     chalk.white.bgRed.bold,
