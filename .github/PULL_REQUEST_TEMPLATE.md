@@ -10,7 +10,7 @@ https://github.com/babel/babel/blob/master/CONTRIBUTING.md
 | New feature?      | yes/no
 | Deprecations?     | yes/no
 | Spec compliancy?  | yes/no
-| Tests added/pass? | yes/no
+| Tests added?      | yes/no
 | Fixed tickets     | comma-separated list of tickets fixed by the PR, if any
 | License           | MIT
 | Doc PR            | reference to the documentation PR, if any
