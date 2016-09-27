@@ -122,7 +122,7 @@ function findCommonStringDelimiter(code, tokens) {
   if (occurences.single > occurences.double) {
     return "single";
   } else {
-    return DEFAULT_STRING_DELIMITER;
+    return "double";
   }
 }
 

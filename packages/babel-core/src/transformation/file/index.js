@@ -414,7 +414,7 @@ export default class File extends Store {
 
   parse(code: string) {
     let parseCode = parse;
-    let parserOpts = this.opts.parserOpts || this.parserOpts;
+    let parserOpts = this.opts.parserOpts;
 
     if (parserOpts) {
       parserOpts = Object.assign({}, this.parserOpts, parserOpts);
@@ -441,7 +441,7 @@ export default class File extends Store {
     }
 
     this.log.debug("Parse start");
-    let ast = parseCode(code, parserOpts);
+    let ast = parseCode(code, parserOpts || this.parserOpts);
     this.log.debug("Parse stop");
     return ast;
   }
