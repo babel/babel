@@ -421,7 +421,7 @@ export default class File extends Store {
 
       if (parserOpts.parser) {
         if (typeof parserOpts.parser === "string") {
-          let dirname = parserOpts.dirname || path.dirname(this.opts.filename);
+          let dirname = path.dirname(this.opts.filename) || process.cwd();
           let parser = resolve(parserOpts.parser, dirname);
           if (parser) {
             parseCode = require(parser).parse;
@@ -607,7 +607,7 @@ export default class File extends Store {
       gen = opts.generatorOpts.generator;
 
       if (typeof gen === "string") {
-        let dirname = opts.generatorOpts.dirname || process.cwd();
+        let dirname = path.dirname(this.opts.filename) || process.cwd();
         let generator = resolve(gen, dirname);
         if (generator) {
           gen = require(generator).print;
