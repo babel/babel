@@ -3,5 +3,9 @@
     "external-helpers",
     "transform-async-to-generator",
     "transform-async-generator-functions"
-  ]
+  ],
+  "presets": ["es2015"],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
 }

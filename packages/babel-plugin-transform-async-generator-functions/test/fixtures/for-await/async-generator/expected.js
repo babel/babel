@@ -1,5 +1,5 @@
 let g = (() => {
-  var ref = babelHelpers.asyncGenerator.wrap(function* () {
+  var _ref = babelHelpers.asyncGenerator.wrap(function* () {
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
@@ -25,7 +25,8 @@ let g = (() => {
       }
     }
   });
+
   return function g() {
-    return ref.apply(this, arguments);
+    return _ref.apply(this, arguments);
   };
 })();

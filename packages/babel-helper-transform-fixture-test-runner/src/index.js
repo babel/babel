@@ -47,6 +47,7 @@ function run(task) {
 
   let execCode = exec.code;
   let result;
+  let resultExec;
 
   if (execCode) {
     let execOpts = getOpts(exec);
@@ -54,7 +55,7 @@ function run(task) {
     execCode = result.code;
 
     try {
-      runExec(execOpts, execCode);
+      resultExec = runExec(execOpts, execCode);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);
@@ -89,6 +90,10 @@ function run(task) {
       let expect = consumer.originalPositionFor(mapping.generated);
       chai.expect({ line: expect.line, column: expect.column }).to.deep.equal(actual);
     });
+  }
+
+  if (execCode && resultExec) {
+    return resultExec;
   }
 }
 
@@ -151,7 +156,14 @@ export default function (
               return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
             });
           } else {
-            runTask();
+            if (task.exec.code) {
+              let result = run(task);
+              if (result && typeof result.then === "function") {
+                return result;
+              }
+            } else {
+              runTask();
+            }
           }
         });
       }
