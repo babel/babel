@@ -14,7 +14,7 @@
   "dependencies": {
     "babel-traverse": "^6.0.20",
     "babel-types": "^6.0.19",
-    "babylon": "^6.0.18",
+    "babylon": "^6.11.2",
     "lodash.assign": "^4.0.0",
     "lodash.pickby": "^4.0.0"
   },
