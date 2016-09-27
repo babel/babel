@@ -31,7 +31,7 @@
     "gulp-newer": "^1.0.0",
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
-    "gulp-watch": "^4.3.5",
+    "gulp-watch": "^4.3.10",
     "istanbul": "^0.4.5",
     "lerna": "2.0.0-beta.23",
     "lerna-changelog": "^0.2.0",
