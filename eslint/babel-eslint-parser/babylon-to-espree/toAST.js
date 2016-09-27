@@ -202,23 +202,11 @@ var astTransformVisitor = {
       }
     }
 
-    // async function as generator
-    if (path.isFunction()) {
-      if (node.async) node.generator = true;
-    }
-
     // TODO: remove (old esprima)
     if (path.isFunction()) {
       if (!node.defaults) {
         node.defaults = [];
       }
-    }
-
-    // await transform to yield
-    if (path.isAwaitExpression()) {
-      node.type = "YieldExpression";
-      node.delegate = node.all;
-      delete node.all;
     }
 
     // template string range fixes

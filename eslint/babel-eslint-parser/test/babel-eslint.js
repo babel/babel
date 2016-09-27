@@ -56,7 +56,7 @@ function parseAndAssertSame(code) {
     range: true,
     comment: true,
     attachComment: true,
-    ecmaVersion: 6,
+    ecmaVersion: 8,
     sourceType: "module"
   });
   var babylonAST = babelEslint.parse(code);
@@ -454,6 +454,14 @@ describe("babylon-to-esprima", function () {
       parseAndAssertSame("var a = { b, ...c }");
       parseAndAssertSame("var a = [ a, ...b ]");
       parseAndAssertSame("var a = sum(...b)");
+    });
+
+    it("Async/Await", function() {
+      parseAndAssertSame(
+        `async function a() {
+          await 1;
+        }`
+      );
     });
   });
 });

@@ -11,7 +11,7 @@ function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, over
       es6: true
     },
     parserOptions: {
-      ecmaVersion: 6,
+      ecmaVersion: 8,
       ecmaFeatures: {
         jsx: true,
         experimentalObjectRestSpread: true,

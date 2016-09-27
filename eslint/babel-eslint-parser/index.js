@@ -1,13 +1,12 @@
 var babylonToEspree = require("./babylon-to-espree");
-var pick           = require("lodash.pickby");
-var Module         = require("module");
-var path           = require("path");
-var parse          = require("babylon").parse;
-var t              = require("babel-types");
-var tt             = require("babylon").tokTypes;
-var traverse       = require("babel-traverse").default;
+var pick            = require("lodash.pickby");
+var Module          = require("module");
+var path            = require("path");
+var parse           = require("babylon").parse;
+var t               = require("babel-types");
+var tt              = require("babylon").tokTypes;
+var traverse        = require("babel-traverse").default;
 
-var estraverse;
 var hasPatched = false;
 var eslintOptions = {};
 
@@ -37,39 +36,12 @@ function monkeypatch() {
 
   // get modules relative to what eslint will load
   var eslintMod = createModule(eslintLoc);
-  var escopeLoc = Module._resolveFilename("escope", eslintMod);
-  var escopeMod = createModule(escopeLoc);
-
-  // npm 3: monkeypatch estraverse if it's in escope
-  var estraverseRelative = escopeMod;
-  try {
-    var esrecurseLoc = Module._resolveFilename("esrecurse", eslintMod);
-    estraverseRelative = createModule(esrecurseLoc);
-  } catch (err) {}
-
   // contains all the instances of estraverse so we can modify them if necessary
   var estraverses = [];
-
-  // monkeypatch estraverse
-  estraverse = estraverseRelative.require("estraverse");
-  estraverses.push(estraverse);
-  Object.assign(estraverse.VisitorKeys, t.VISITOR_KEYS);
-
-  // monkeypatch estraverse-fb (only for eslint < 2.3.0)
-  try {
-    var estraverseFb = eslintMod.require("estraverse-fb");
-    estraverses.push(estraverseFb);
-    Object.assign(estraverseFb.VisitorKeys, t.VISITOR_KEYS);
-  } catch (err) {
-      // Ignore: ESLint v2.3.0 does not have estraverse-fb
-  }
-
   // ESLint v1.9.0 uses estraverse directly to work around https://github.com/npm/npm/issues/9663
   var estraverseOfEslint = eslintMod.require("estraverse");
-  if (estraverseOfEslint !== estraverseFb) {
-    estraverses.push(estraverseOfEslint);
-    Object.assign(estraverseOfEslint.VisitorKeys, t.VISITOR_KEYS);
-  }
+  estraverses.push(estraverseOfEslint);
+  Object.assign(estraverseOfEslint.VisitorKeys, t.VISITOR_KEYS);
 
   estraverses.forEach(function (estraverse) {
     estraverse.VisitorKeys.MethodDefinition.push("decorators");
@@ -77,6 +49,8 @@ function monkeypatch() {
   });
 
   // monkeypatch escope
+  var escopeLoc = Module._resolveFilename("escope", eslintMod);
+  var escopeMod = createModule(escopeLoc);
   var escope  = require(escopeLoc);
   var analyze = escope.analyze;
   escope.analyze = function (ast, opts) {
