@@ -414,27 +414,30 @@ export default class File extends Store {
 
   parse(code: string) {
     let parseCode = parse;
-    let parserOpts = this.opts.parserOpts;
+    let parserOpts = this.opts.parserOpts || this.parserOpts;
 
-    if (parserOpts.parser) {
-      if (typeof parserOpts.parser === "string") {
-        let dirname = parserOpts.dirname || path.dirname(this.opts.filename);
-        let parser = resolve(parserOpts.parser, dirname);
-        if (parser) {
-          parseCode = require(parser).parse;
-        } else {
-          throw new Error(`Couldn't find parser ${parserOpts.parser} with "parse" method relative to directory ${dirname}`);
-        }
-      } else {
-        parseCode = parserOpts.parser;
-      }
-
+    if (parserOpts) {
       parserOpts = Object.assign({}, this.parserOpts, parserOpts);
-      parserOpts.parser = {
-        parse(source) {
-          return parse(source, parserOpts);
+
+      if (parserOpts.parser) {
+        if (typeof parserOpts.parser === "string") {
+          let dirname = parserOpts.dirname || path.dirname(this.opts.filename);
+          let parser = resolve(parserOpts.parser, dirname);
+          if (parser) {
+            parseCode = require(parser).parse;
+          } else {
+            throw new Error(`Couldn't find parser ${parserOpts.parser} with "parse" method relative to directory ${dirname}`);
+          }
+        } else {
+          parseCode = parserOpts.parser;
         }
-      };
+
+        parserOpts.parser = {
+          parse(source) {
+            return parse(source, parserOpts);
+          }
+        };
+      }
     }
 
     this.log.debug("Parse start");

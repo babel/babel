@@ -39,8 +39,7 @@ suite("parser and generator options", function() {
       parserOpts: {
         parser: recast.parse,
         plugins: ["flow"],
-        allowImportExportEverywhere: true,
-        sourceType: "script"
+        allowImportExportEverywhere: true
       },
       generatorOpts: {
         generator: recast.print
@@ -68,8 +67,7 @@ suite("parser and generator options", function() {
       return babel.transform(string, {
         plugins: [__dirname + "/../../babel-plugin-syntax-flow"],
         parserOpts: {
-          parser: recast.parse,
-          sourceType: "script"
+          parser: recast.parse
         },
         generatorOpts: {
           generator: recast.print
