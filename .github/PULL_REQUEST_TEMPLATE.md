@@ -11,8 +11,8 @@ https://github.com/babel/babel/blob/master/CONTRIBUTING.md
 | Deprecations?     | yes/no
 | Spec compliancy?  | yes/no
 | Tests added?      | yes/no
-| Fixed tickets     | <!--comma-separated list of tickets fixed by the PR, if any -->
+| Fixed tickets     | comma-separated list of tickets fixed by the PR, if any
 | License           | MIT
-| Doc PR            | <!-- reference to the documentation PR, if any -->
+| Doc PR            | reference to the documentation PR, if any
 
 <!-- Describe your changes below in as much detail as possible -->
