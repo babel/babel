@@ -774,8 +774,8 @@ pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync,
     return this.finishNode(prop, "ObjectProperty");
   }
 
-  if (!prop.computed && prop.key.type === "Identifier" && (prop.key.name === "get" || prop.key.name === "set") && (!this.match(tt.comma) && !this.match(tt.braceR))) {
-    if (isGenerator || isAsync || isPattern) this.unexpected();
+  if (!isPattern && !prop.computed && prop.key.type === "Identifier" && (prop.key.name === "get" || prop.key.name === "set") && (!this.match(tt.comma) && !this.match(tt.braceR))) {
+    if (isGenerator || isAsync) this.unexpected();
     prop.kind = prop.key.name;
     this.parsePropertyName(prop);
     this.parseMethod(prop, false);
