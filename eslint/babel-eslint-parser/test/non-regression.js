@@ -54,7 +54,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "module.exports = \"something\";",
       { "eol-last": 1, "semi": 1 },
-      [ "1:2 Newline required at end of file but not found. eol-last" ]
+      [ "1:30 Newline required at end of file but not found. eol-last" ]
     );
   });
 
