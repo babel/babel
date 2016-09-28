@@ -149,7 +149,7 @@ Another use case (the main reason for doing this), is to be able to use [recast]
 * `babel-plugin-transform-object-rest-spread`
   * [#4491](https://github.com/babel/babel/pull/4491) object rest spread useBuiltIns option. ([@hzoo](https://github.com/hzoo))
 
-* `useBuiltIns` - Do not use Babel's helper's and just transform to use the built-in method (Disabled by default).
+`useBuiltIns` - Do not use Babel's helper's and just transform to use the built-in method (Disabled by default).
 
 ```js
 {
@@ -262,31 +262,17 @@ const find = <X> (f: (x:X) => X, xs: Array<X>): ?X => (
 * `babel-plugin-transform-es2015-destructuring`
   * [#4552](https://github.com/babel/babel/pull/4552) Fix destructuring evaluation with call expressions. ([@danez](https://github.com/danez))
 
+We noticed that we can not make this optimizations if there are function calls or member expressions on the right hand side of the assignment since the function call or the member expression (which might be getter with side-effect) could potentially change the variables we are assigning to leading to an incorrect outcome.
+
 ```js
-[x, y] = [a(), b()];
+[x, y] = [a(), obj.x];
 // was tranforming to
 x = a();
-y = b();
-```
-
-// We can not make this assumption since the function call might change the value of the variable being assigned and getters could have side effects.
-
-```js
-var [a, b] = [foo(), bar];
-var [a, b] = [clazz.foo(), bar];
-var [a, b] = [clazz.foo, bar];
-```
-
-```js
-var _ref6 = [foo(), bar];
-var a = _ref6[0];
-var b = _ref6[1];
-var _ref7 = [clazz.foo(), bar];
-var a = _ref7[0];
-var b = _ref7[1];
-var _ref8 = [clazz.foo, bar];
-var a = _ref8[0];
-var b = _ref8[1];
+y = obj.x;
+// now transforms to 
+var _ref = [a(), obj.x];
+x = _ref[0];
+y = _ref[1];
 ```
 
 * `babel-types`
@@ -308,13 +294,13 @@ After
   * `babel-core`
     * [#4517](https://github.com/babel/babel/pull/4517) If loading a preset fails, show its name/path (#4506). ([@motiz88](https://github.com/motiz88))
   * `babel-helper-replace-supers`
-    * [#4520](https://github.com/babel/babel/pull/4520) Remove unused `thisReference` argument to `getSuperProperty`.. ([@eventualbuddha](https://github.com/eventualbuddha))
+    * [#4520](https://github.com/babel/babel/pull/4520) Remove unused `thisReference` argument to `getSuperProperty`. ([@eventualbuddha](https://github.com/eventualbuddha))
   * `babel-generator`
     * [#4478](https://github.com/babel/babel/pull/4478) babel-generator: Ensure ASCII-safe output for string literals. ([@mathiasbynens](https://github.com/mathiasbynens))
   * `babel-core`, `babel-plugin-transform-es2015-arrow-functions`, `babel-plugin-transform-es2015-destructuring`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-es2015-parameters`
     * [#4515](https://github.com/babel/babel/pull/4515) Flip default parameter template. ([@jridgewell](https://github.com/jridgewell))
   * `babel-core`, `babel-helpers`
-    * [#3653](https://github.com/babel/babel/pull/3653) Removed unnecessary 'return' statements.. ([@ksjun](https://github.com/ksjun))
+    * [#3653](https://github.com/babel/babel/pull/3653) Removed unnecessary 'return' statements. ([@ksjun](https://github.com/ksjun))
 
 #### :house: Internal
 
