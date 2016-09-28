@@ -1,6 +1,6 @@
 {
   "name": "babel-code-frame",
-  "version": "6.11.0",
+  "version": "6.16.0",
   "description": "Generate errors that contain a code frame that point to source locations.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
