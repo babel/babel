@@ -262,7 +262,7 @@ const find = <X> (f: (x:X) => X, xs: Array<X>): ?X => (
 * `babel-plugin-transform-es2015-destructuring`
   * [#4552](https://github.com/babel/babel/pull/4552) Fix destructuring evaluation with call expressions. ([@danez](https://github.com/danez))
 
-We noticed that we can not make this optimizations if there are function calls or member expressions on the right hand side of the assignment since the function call or the member expression (which might be getter with side-effect) could potentially change the variables we are assigning to leading to an incorrect outcome.
+We noticed that we can not make this optimizations if there are function calls or member expressions on the right hand side of the assignment since the function call or the member expression (which might be a getter with side-effect) could potentially change the variables we are assigning to.
 
 ```js
 [x, y] = [a(), obj.x];
