@@ -34,6 +34,7 @@ let buildExportsAssignment = template(`
 let buildExportAll = template(`
   Object.keys(OBJECT).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
+    if (EXPORT_NAMES.indexOf(key) !== -1) return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
@@ -41,6 +42,10 @@ let buildExportAll = template(`
       }
     });
   });
+`);
+
+let buildExportNames = template(`
+  var $0 = $1;
 `);
 
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty", "ClassMethod", "ObjectMethod"];
@@ -143,6 +148,9 @@ export default function () {
       },
 
       Program: {
+        enter(path) {
+          this.exportNamesIdentifier = path.scope.generateUidIdentifier("exportNames");
+        },
         exit(path) {
           this.ranCommonJS = true;
 
@@ -158,10 +166,13 @@ export default function () {
           let hasExports = false;
           let hasImports = false;
 
+          let needsExportNames = false;
+
           let body: Array<Object> = path.get("body");
           let imports = Object.create(null);
           let exports = Object.create(null);
 
+          let allExportNames = Object.create(null);
           let nonHoistedExportNames = Object.create(null);
 
           let topNodes = [];
@@ -282,6 +293,7 @@ export default function () {
                   addTo(exports, id.name, id);
                   topNodes.push(buildExportsAssignment(id, id));
                   path.replaceWith(declaration.node);
+                  allExportNames[id.name] = true;
                 } else if (declaration.isClassDeclaration()) {
                   let id = declaration.node.id;
                   addTo(exports, id.name, id);
@@ -290,6 +302,7 @@ export default function () {
                     buildExportsAssignment(id, id)
                   ]);
                   nonHoistedExportNames[id.name] = true;
+                  allExportNames[id.name] = true;
                 } else if (declaration.isVariableDeclaration()) {
                   let declarators = declaration.get("declarations");
                   for (let decl of declarators) {
@@ -302,6 +315,7 @@ export default function () {
                       addTo(exports, id.node.name, id.node);
                       init.replaceWith(buildExportsAssignment(id.node, init.node).expression);
                       nonHoistedExportNames[id.node.name] = true;
+                      allExportNames[id.node.name] = true;
                     } else {
                       // todo
                     }
@@ -328,6 +342,9 @@ export default function () {
                     } else {
                       topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(ref, specifier.node.local)));
                     }
+                    if (specifier.node.exported.name !== "default") {
+                      allExportNames[specifier.node.exported.name] = true;
+                    }
                     nonHoistedExportNames[specifier.node.exported.name] = true;
                   }
                 }
@@ -335,16 +352,21 @@ export default function () {
                 for (let specifier of specifiers) {
                   if (specifier.isExportSpecifier()) {
                     addTo(exports, specifier.node.local.name, specifier.node.exported);
-                    nonHoistedExportNames[specifier.node.exported.name] = true;
                     nodes.push(buildExportsAssignment(specifier.node.exported, specifier.node.local));
+                    if (specifier.node.exported.name !== "default") {
+                      allExportNames[specifier.node.exported.name] = true;
+                    }
+                    nonHoistedExportNames[specifier.node.exported.name] = true;
                   }
                 }
               }
               path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
               let exportNode = buildExportAll({
-                OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
+                OBJECT: addRequire(path.node.source.value, path.node._blockHoist),
+                EXPORT_NAMES: this.exportNamesIdentifier
               });
+              needsExportNames = true;
               exportNode.loc = path.node.loc;
               topNodes.push(exportNode);
               path.remove();
@@ -433,6 +455,10 @@ export default function () {
             node._blockHoist = 3;
 
             topNodes.unshift(node);
+          }
+
+          if (needsExportNames) {
+            topNodes.unshift(buildExportNames(this.exportNamesIdentifier, t.valueToNode(Object.keys(allExportNames))));
           }
 
           // add __esModule declaration if this file has any exports
