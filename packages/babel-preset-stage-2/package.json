@@ -11,7 +11,6 @@
     "babel-plugin-transform-async-generator-functions": "^6.16.0",
     "babel-plugin-transform-class-properties": "^6.16.0",
     "babel-plugin-transform-decorators": "^6.13.0",
-    "babel-plugin-transform-object-rest-spread": "^6.16.0",
     "babel-preset-stage-3": "^6.16.0"
   }
 }
