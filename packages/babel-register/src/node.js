@@ -10,6 +10,7 @@ import path from "path";
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
+  environment: "node",
   retrieveSourceMap(source) {
     let map = maps && maps[source];
     if (map) {
