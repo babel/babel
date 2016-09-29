@@ -232,6 +232,12 @@ export default class OptionManager {
    * "pass per preset" mode. Otherwise, options are calculated per preset.
    */
   mergePresets(presets: Array<string | Object>, dirname: string) {
+    if (dirname.match(/node_modules\/babel/)) {
+      throw new Error(
+        "You are currently trying to transpile babel packages from node_modules with babel itself." +
+        "Ensure to ignore node_modules or at least the babel packages."
+      );
+    }
     this.resolvePresets(presets, dirname, (presetOpts, presetLoc) => {
       this.mergeOptions({
         options: presetOpts,
@@ -282,8 +288,11 @@ export default class OptionManager {
         }
 
         // If the imported preset is a transpiled ES2015 module, grab the default export.
-        // The || {} handles the case of cycle dependencies when babel-register is used to transpile babel-presets
-        if (typeof val === "object" && val.__esModule) val = val.default || {};
+        if (typeof val === "object" && val.__esModule) {
+          val = val.default;
+
+          if (!val) throw new Error('The preset uses the es-module syntax but does not have a default export.');
+        }
 
         // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
         // a 'buildPreset' function that will return the preset itself, while still exporting a
