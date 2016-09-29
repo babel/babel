@@ -4,15 +4,15 @@
 **babel-eslint** allows you to lint **ALL** valid Babel code with the fantastic
 [ESLint](https://github.com/eslint/eslint).
 
-#### Note: You don't need to use babel-eslint if you are only using ES6/ES2015. ESLint actually supports ES6/ES7, JSX, and object rest/spread by default now.
+#### Note: You don't need to use babel-eslint if you are using ES2015 (ES6), ES2016 (ES7) or ES2017 (ES8). ESLint actually supports ES2015/ES2016/ES2017, JSX, and object rest/spread by default now.
 
-##### At the moment, you'll need it if you use stuff like class properties, decorators, async/await, types.
+##### At the moment, you'll need it if you use stuff like class properties, decorators, types.
 
 > If there is an issue, first check if it can be reproduced with the regular parser or with the latest versions of `eslint` and `babel-eslint`!
 
 For questions and support please visit the [`#linting`](https://babeljs.slack.com/messages/linting/) babel slack channel (sign up [here](https://babel-slack.herokuapp.com))!
 
-> Note that the `ecmaFeatures` config property may still be required for ESLint to work properly with features not in ECMAScript 5 by default. Examples are `globalReturn` and `modules`)
+> Note that the `ecmaFeatures` config property may still be required for ESLint to work properly with features not in ECMAScript 5 by default. Examples are `globalReturn` and `modules`).
 
 ## Known Issues
 
