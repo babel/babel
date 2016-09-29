@@ -282,7 +282,8 @@ export default class OptionManager {
         }
 
         // If the imported preset is a transpiled ES2015 module, grab the default export.
-        if (typeof val === "object" && val.__esModule) val = val.default;
+        // The || {} handles the case of cycle dependencies when babel-register is used to transpile babel-presets
+        if (typeof val === "object" && val.__esModule) val = val.default || {};
 
         // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
         // a 'buildPreset' function that will return the preset itself, while still exporting a
