@@ -35,7 +35,7 @@ export default function buildConfigChain(opts: Object = {}, log?: Logger) {
   builder.mergeConfig({
     options: opts,
     alias: "base",
-    dirname: filename && path.dirname(filename)
+    dirname: opts.pluginResolutionDir || filename && path.dirname(filename)
   });
   
   return builder.configs;

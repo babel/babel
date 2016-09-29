@@ -294,4 +294,57 @@ suite("buildConfigChain", function () {
 
     assert.deepEqual(chain, expected);
   });
+
+  test("pluginResolutionDir option", function () {
+    var pluginResolutionDir = 'dir/from/which/plugins/are/resolved';
+
+    var chain = buildConfigChain({
+      filename: fixture("dir1", "src.js"),
+      pluginResolutionDir: pluginResolutionDir
+    });
+
+    var expected = [
+      {
+        options: {
+          plugins: [
+            "extended"
+          ]
+        },
+        alias: fixture("extended.babelrc.json"),
+        loc: fixture("extended.babelrc.json"),
+        dirname: fixture()
+      },
+      {
+        options: {
+          plugins: [
+            "root"
+          ]
+        },
+        alias: fixture(".babelrc"),
+        loc: fixture(".babelrc"),
+        dirname: fixture()
+      },
+      {
+        options: {
+          ignore: [
+            "root-ignore"
+          ]
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture()
+      },
+      {
+        options: {
+          filename: fixture("dir1", "src.js"),
+          pluginResolutionDir: pluginResolutionDir
+        },
+        alias: "base",
+        loc: "base",
+        dirname: pluginResolutionDir
+      }
+    ];
+
+    assert.deepEqual(chain, expected);
+  });
 });
