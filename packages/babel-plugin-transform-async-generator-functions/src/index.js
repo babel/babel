@@ -22,7 +22,7 @@ export default function ({ types: t }) {
       Function(path, state) {
         if (!path.node.async || !path.node.generator) return;
 
-        path.get("body").traverse(yieldStarVisitor, state);
+        path.traverse(yieldStarVisitor, state);
 
         remapAsyncToGenerator(path, state.file, {
           wrapAsync: t.memberExpression(

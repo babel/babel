@@ -152,7 +152,7 @@ function plainFunction(path: NodePath, callId: Object) {
 }
 
 export default function (path: NodePath, file: Object, helpers: Object) {
-  path.get("body").traverse(awaitVisitor, {
+  path.traverse(awaitVisitor, {
     file,
     wrapAwait: helpers.wrapAwait
   });
