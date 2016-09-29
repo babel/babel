@@ -291,7 +291,7 @@ export default class OptionManager {
         if (typeof val === "object" && val.__esModule) {
           val = val.default;
 
-          if (!val) throw new Error('The preset uses the es-module syntax but does not have a default export.');
+          if (!val) throw new Error("The preset uses the es-module syntax but does not have a default export.");
         }
 
         // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
