@@ -1,6 +1,6 @@
 {
   "name": "babel-register",
-  "version": "6.16.0",
+  "version": "6.16.3",
   "description": "babel require hook",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-register",
