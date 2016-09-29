@@ -234,7 +234,7 @@ export default class OptionManager {
   mergePresets(presets: Array<string | Object>, dirname: string) {
     if (dirname.match(/node_modules\/babel/)) {
       throw new Error(
-        "You are currently trying to transpile babel packages from node_modules with babel itself." +
+        "You are currently trying to transpile babel packages from node_modules with babel itself. " +
         "Ensure to ignore node_modules or at least the babel packages."
       );
     }
