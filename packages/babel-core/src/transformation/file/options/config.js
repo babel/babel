@@ -33,12 +33,6 @@ module.exports = {
     description: "retain line numbers - will result in really ugly code"
   },
 
-  retainParens: {
-    type: "boolean",
-    default: false,
-    description: "retain parens around function expressions (for perf. reasons)"
-  },
-
   highlightCode: {
     description: "enable/disable ANSI syntax highlighting of code frames (on by default)",
     type: "boolean",
