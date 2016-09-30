@@ -331,7 +331,9 @@ export default class Printer {
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
-    if (this.format.retainParens && node.type === "FunctionExpression") {
+    if (this.format.retainParens &&
+        node.type === "FunctionExpression" &&
+        node.extra && node.extra.parenthesized) {
       needsParens = true;
     }
     if (needsParens) this.token("(");
