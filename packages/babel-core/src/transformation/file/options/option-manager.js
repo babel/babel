@@ -281,8 +281,20 @@ export default class OptionManager {
           val = require(presetLoc);
         }
 
-        // If the imported preset is a transpiled ES2015 module, grab the default export.
-        if (typeof val === "object" && val.__esModule) val = val.default;
+        // If the imported preset is a transpiled ES2015 module
+        if (typeof val === "object" && val.__esModule) {
+          // Try to grab the default export.
+          if (val.default) {
+            val = val.default;
+          } else {
+            // If there is no default export we treat all named exports as options
+            // and just remove the __esModule. This is to support presets that have been
+            // exporting named exports in the past, although we definitely want presets to
+            // only use the default export (with either an object or a function)
+            const { __esModule, ...rest } = val; // eslint-disable-line no-unused-vars
+            val = rest;
+          }
+        }
 
         // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
         // a 'buildPreset' function that will return the preset itself, while still exporting a
