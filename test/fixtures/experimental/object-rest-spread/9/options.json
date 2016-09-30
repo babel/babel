@@ -1,0 +1,3 @@
+{
+  "throws": "Cannot have multiple rest elements when destructuring (1:13)"
+}

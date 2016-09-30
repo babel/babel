@@ -691,6 +691,8 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
   node.properties = [];
   this.next();
 
+  let firstRestLocation = null;
+
   while (!this.eat(tt.braceR)) {
     if (first) {
       first = false;
@@ -713,7 +715,21 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
       prop = this.parseSpread();
       prop.type = isPattern ? "RestProperty" : "SpreadProperty";
       node.properties.push(prop);
-      continue;
+      if (isPattern) {
+        const position = this.state.start;
+        if (firstRestLocation !== null) {
+          this.unexpected(firstRestLocation, "Cannot have multiple rest elements when destructuring");
+        } else if (this.eat(tt.braceR)) {
+          break;
+        } else if (this.match(tt.comma) && this.lookahead().type === tt.braceR) {
+          this.unexpected(position, "A trailing comma is not permitted after the rest element");
+        } else {
+          firstRestLocation = position;
+          continue;
+        }
+      } else {
+        continue;
+      }
     }
 
     prop.method = false;
@@ -751,6 +767,10 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
     }
 
     node.properties.push(prop);
+  }
+
+  if (firstRestLocation !== null) {
+    this.unexpected(firstRestLocation, "The rest element has to be the last element when destructuring");
   }
 
   if (decorators.length) {

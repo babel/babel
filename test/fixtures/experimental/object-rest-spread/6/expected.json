@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 23,
+  "end": 25,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 23
+      "column": 25
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 23,
+    "end": 25,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 23
+        "column": 25
       }
     },
     "sourceType": "script",
@@ -31,7 +31,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 23,
+        "end": 25,
         "loc": {
           "start": {
             "line": 1,
@@ -39,13 +39,13 @@
           },
           "end": {
             "line": 1,
-            "column": 23
+            "column": 25
           }
         },
         "expression": {
           "type": "ObjectExpression",
           "start": 1,
-          "end": 22,
+          "end": 24,
           "loc": {
             "start": {
               "line": 1,
@@ -53,7 +53,7 @@
             },
             "end": {
               "line": 1,
-              "column": 22
+              "column": 24
             }
           },
           "properties": [
@@ -86,7 +86,8 @@
                   "end": {
                     "line": 1,
                     "column": 3
-                  }
+                  },
+                  "identifierName": "x"
                 },
                 "name": "x"
               },
@@ -102,9 +103,13 @@
                   "end": {
                     "line": 1,
                     "column": 3
-                  }
+                  },
+                  "identifierName": "x"
                 },
                 "name": "x"
+              },
+              "extra": {
+                "shorthand": true
               }
             },
             {
@@ -133,7 +138,8 @@
                   "end": {
                     "line": 1,
                     "column": 9
-                  }
+                  },
+                  "identifierName": "y"
                 },
                 "name": "y"
               }
@@ -167,7 +173,8 @@
                   "end": {
                     "line": 1,
                     "column": 12
-                  }
+                  },
+                  "identifierName": "a"
                 },
                 "name": "a"
               },
@@ -183,9 +190,13 @@
                   "end": {
                     "line": 1,
                     "column": 12
-                  }
+                  },
+                  "identifierName": "a"
                 },
                 "name": "a"
+              },
+              "extra": {
+                "shorthand": true
               }
             },
             {
@@ -214,7 +225,8 @@
                   "end": {
                     "line": 1,
                     "column": 18
-                  }
+                  },
+                  "identifierName": "b"
                 },
                 "name": "b"
               }
@@ -248,7 +260,8 @@
                   "end": {
                     "line": 1,
                     "column": 21
-                  }
+                  },
+                  "identifierName": "c"
                 },
                 "name": "c"
               },
@@ -264,14 +277,19 @@
                   "end": {
                     "line": 1,
                     "column": 21
-                  }
+                  },
+                  "identifierName": "c"
                 },
                 "name": "c"
+              },
+              "extra": {
+                "shorthand": true
               }
             }
           ],
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }
