@@ -82,7 +82,7 @@ export const validateModulesOption = (modulesOpt = "commonjs") => {
   return modulesOpt;
 }
 
-export function buildPreset(context, opts) {
+export default function buildPreset(context, opts) {
   const loose = validateLooseOption(opts.loose);
   const moduleType = validateModulesOption(opts.modules);
   const targets = getTargets(opts.targets);
