@@ -53,6 +53,7 @@ function normalizeOptions(code, opts, tokens): Format {
     auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
     shouldPrintComment: opts.shouldPrintComment,
     retainLines: opts.retainLines,
+    retainFunctionParens: opts.retainFunctionParens,
     comments: opts.comments == null || opts.comments,
     compact: opts.compact,
     minified: opts.minified,
