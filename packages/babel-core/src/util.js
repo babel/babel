@@ -116,7 +116,9 @@ export function shouldIgnore(
   ignore: Array<RegExp | Function> = [],
   only?: Array<RegExp | Function>,
 ): boolean {
-  filename = slash(filename);
+  if (path.sep !== '/') {
+    filename = filename.replace(/\\/g, '/');
+  }
 
   if (only) {
     for (let pattern of only) {
