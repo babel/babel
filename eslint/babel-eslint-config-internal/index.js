@@ -6,6 +6,7 @@ module.exports = {
     "flowtype/define-flow-type": "warn",
     "flowtype/use-flow-type": "warn",
     quotes: ["error", "double"],
+    "linebreak-style": ["error", "unix"],
     "no-var": "error",
     "keyword-spacing": "error",
     strict: "off",
