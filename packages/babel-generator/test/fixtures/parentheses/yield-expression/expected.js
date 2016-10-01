@@ -2,7 +2,7 @@ function* asdf() {
   (yield 1) || (yield 2);
   (yield b)();
   new (yield b)();
-  true ? yield 1 : yield 2;
+  (yield 1) ? yield 2 : yield 3;
   yield yield 1;
 }
 
