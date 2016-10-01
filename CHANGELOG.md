@@ -15,6 +15,69 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## v6.11.3 (2016-10-01)
+
+### :eyeglasses: Spec Compliancy
+
+Add static errors for object rest (#149) ([@danez](https://github.com/danez))
+
+> https://github.com/sebmarkbage/ecmascript-rest-spread
+
+Object rest copies the *rest* of properties from the right hand side `obj` starting from the left to right.
+
+```js
+let { x, y, ...z } =  { x: 1, y: 2, z: 3 };
+// x = 1
+// y = 2
+// z = { z: 3 }
+```
+
+#### New Syntax Errors:
+
+**SyntaxError**: The rest element has to be the last element when destructuring (1:10)
+```bash
+> 1 | let { ...x, y, z } = { x: 1, y: 2, z: 3};
+    |           ^
+# Previous behavior:
+# x = { x: 1, y: 2, z: 3 }
+# y = 2
+# z = 3
+```
+
+Before, this was just a more verbose way of shallow copying `obj` since it doesn't actually do what you think.
+
+**SyntaxError**: Cannot have multiple rest elements when destructuring (1:13)
+
+```bash
+> 1 | let { x, ...y, ...z } = { x: 1, y: 2, z: 3};
+    |              ^
+# Previous behavior:
+# x = 1
+# y = { y: 2, z: 3 }
+# z = { y: 2, z: 3 }
+```
+
+Before y and z would just be the same value anyway so there is no reason to need to have both.
+
+**SyntaxError**: A trailing comma is not permitted after the rest element (1:16)
+
+```js
+let { x, y, ...z, } = obj;
+```
+
+The rationale for this is that the use case for trailing comma is that you can add something at the end without affecting the line above. Since a RestProperty always has to be the last property it doesn't make sense.
+
+---
+
+get / set are valid property names in default assignment (#142) ([@jezell](https://github.com/jezell))
+
+```js
+// valid
+function something({ set = null, get = null }) {}
+```
+
+## v6.11.2 (2016-09-23)
+
 ### Bug Fix
 
 - [#139](https://github.com/babel/babylon/issues/139) Don't do the duplicate check if not an identifier (#140) @hzoo
