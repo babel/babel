@@ -3,6 +3,8 @@ class X {
   foo = 2
   bar: number = 3
   baz: ?string
+  static d: ?number
+  static e: ?number = 3
   qux: { foo: string | 2 | 3 } = { foo: 's' }
   v: (a/* x = y */: string) => void
   w: (a/* x = y */: string) => number = (a/* x = y */: string) => 2

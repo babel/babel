@@ -2,7 +2,9 @@ class X {
   foo = 2;
   bar = 3; /*:: bar: number*/
   /*:: baz: ?string*/
+  /*:: static d: ?number*/
 
+  static e = 3; /*:: static e: ?number*/
   qux = { foo: 's' }; /*:: qux: { foo: string | 2 | 3 }*/
   /*:: v: (a/* x = y *-/: string) => void*/
 

@@ -11,7 +11,7 @@ export default function ({ types: t }) {
 
   function getSource(path) {
     if (path.isClassProperty()) {
-      return path.get("key").getSource() + path.get("typeAnnotation").getSource();
+      return (path.node.static ? "static " : "") + path.get("key").getSource() + path.get("typeAnnotation").getSource();
     } else {
       return path.getSource();
     }
