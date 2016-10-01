@@ -30,6 +30,8 @@ let memberExpressionOptimisationVisitor = {
   },
 
   Flow(path) {
+    // Do not skip TypeCastExpressions as the contain valid non flow code
+    if (path.isTypeCastExpression()) return;
     // don't touch reference in type annotations
     path.skip();
   },
