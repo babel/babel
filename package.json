@@ -34,11 +34,12 @@
     "coverage": "nyc report --reporter=json && codecov -f coverage/coverage-final.json",
     "lint": "kcheck",
     "prepublish": "cross-env BABEL_ENV=production npm run build",
-    "preversion": "npm run test",
+    "preversion": "npm run test && npm run changelog",
     "test": "npm run build && npm run lint && npm run test-only",
     "test-only": "ava test",
     "test_cov": "cross-env BABEL_ENV=test npm run build && npm run lint && nyc ava test",
-    "watch": "babel src --out-dir lib --watch"
+    "watch": "babel src --out-dir lib --watch",
+    "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
   },
   "nyc": {
     "include": [
