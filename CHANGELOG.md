@@ -13,6 +13,105 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.17.0 (2016-10-01)
+
+#### :eyeglasses: Spec Compliancy
+* `babel-preset-stage-2`, `babel-preset-stage-3`
+  * [#4617](https://github.com/babel/babel/pull/4617) Move async-generators to stage-3. ([@hzoo](https://github.com/hzoo))
+
+> https://github.com/tc39/proposals/commit/96f8d79dac33575e24f6ac3ec2082efe75d519ba
+
+Specification repo: https://github.com/tc39/proposal-async-iteration
+
+Asynchronous Iteration was already added in [6.16.0](http://babeljs.io/blog/2016/09/28/6.16.0#spec-compliancy) under stage-2 but it was moved to stage-3 at the [latest TC-39 meeting](https://github.com/tc39/agendas/blob/master/2016/09.md#agenda-for-the-54th-meeting-of-ecma-tc39).
+
+```js
+// async generator syntax
+async function* agf() {}
+// for-await statement
+async function f() {
+  for await (let x of y) {
+    g(x);
+  }
+}
+```
+
+To use it as a standalone plugin:
+```js
+{
+  "plugins": ["transform-async-generator-functions"]
+}
+```
+
+With the stage-3 preset (or below):
+```js
+{
+  "presets": ["stage-3"]
+}
+```
+
+  * [#4611](https://github.com/babel/babel/pull/4611) Move object-rest-spread to stage-3. ([@hzoo](https://github.com/hzoo))
+
+Similarly, [object-rest-spread](http://babeljs.io/docs/plugins/transform-object-rest-spread/) is now also at stage-3.
+
+> https://twitter.com/sebmarkbage/status/781564713750573056
+> https://github.com/tc39/proposals/commit/142ac3ce7f3f56989800260f029b76afe4a02e57
+
+```js
+// Rest properties
+let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+console.log(x); // 1
+console.log(y); // 2
+console.log(z); // { a: 3, b: 4 }
+
+// Spread properties
+let n = { x, y, ...z };
+console.log(n); // { x: 1, y: 2, a: 3, b: 4 }
+```
+
+To use it as a standalone plugin:
+```js
+{
+  "plugins": ["transform-object-rest-spread"]
+}
+```
+
+With the stage-3 preset (or below):
+```js
+{
+  "presets": ["stage-3"]
+}
+```
+
+#### :rocket: New Feature
+* `babel-generator`
+  * [#4621](https://github.com/babel/babel/pull/4621) Add retainFunctionParens option. ([@kangax](https://github.com/kangax))
+
+References:
+- https://github.com/nolanlawson/optimize-js
+- https://github.com/rollup/rollup/pull/774
+
+Adds a `retainFunctionParens` to `babel-generator`. This option will retain the parentheses around an IIFE.
+
+```js
+// parens are stripped without the option
+__d('x', (function () {}));
+```
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#4635](https://github.com/babel/babel/pull/4635) Forward bound shadowed function when hoisting identifiers. ([@danez](https://github.com/danez))
+  * [#4620](https://github.com/babel/babel/pull/4620) Resolve presets with named exports correctly. ([@danez](https://github.com/danez))
+* `babel-generator`
+  * [#4633](https://github.com/babel/babel/pull/4633) Fixed babel/babel#4632 - missing parentheses around yield expression …. ([@bjouhier](https://github.com/bjouhier))
+* `babel-plugin-transform-es2015-parameters`
+  * [#4636](https://github.com/babel/babel/pull/4636) Fix rest parameters with flow type casting. ([@danez](https://github.com/danez))
+* `babel-plugin-transform-flow-comments`
+  * [#4623](https://github.com/babel/babel/pull/4623) Fix regression in transform-flow-comments for class properties. ([@danharper](https://github.com/danharper))
+
+First PR!
+- Bruno Jouhier ([bjouhier](https://github.com/bjouhier))
+
 ## v6.16.0 (2016-09-28)
 
 Babel 6.16: Happy 2nd Birthday 🎂!
