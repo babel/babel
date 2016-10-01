@@ -27,6 +27,7 @@ module.exports = {
     "no-unreachable": "off",
     "no-labels": "off",
     "no-process-exit": "off",
+    "no-trailing-spaces": "error",
     camelcase: "off",
     "no-console": "off",
     "no-constant-condition": "off",
