@@ -120,10 +120,12 @@ export default function ({ types: t }) {
           if (collisionState.collision) {
             let initialisePropsRef = path.scope.generateUidIdentifier("initialiseProps");
 
+            const functionExpression = t.functionExpression(null, [], t.blockStatement(instanceBody));
+            functionExpression.shadow = { this: false };
             nodes.push(t.variableDeclaration("var", [
               t.variableDeclarator(
                 initialisePropsRef,
-                t.functionExpression(null, [], t.blockStatement(instanceBody))
+                functionExpression
               )
             ]));
 

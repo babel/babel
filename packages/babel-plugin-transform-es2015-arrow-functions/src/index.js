@@ -10,7 +10,7 @@ export default function ({ types: t }) {
           node.type = "FunctionExpression";
 
           let boundThis = t.thisExpression();
-          boundThis._forceShadow = path;
+          boundThis._forceShadow = node;
 
           // make sure that arrow function won't be instantiated
           path.ensureBlock();
