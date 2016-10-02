@@ -44,8 +44,8 @@ function remap(path, key) {
   let shadowPath = path.inShadow(key);
   if (!shouldShadow(path, shadowPath)) return;
 
-  const forceShadowNode = path.node._forceShadow;
-  let shadowFunction = path.node._shadowedFunctionLiteral;
+  const forceShadowNode = path.node._forceShadow ? path.node._forceShadow.node : null;
+  const shadowFunction = path.node._shadowedFunctionLiteral;
 
   let currentFunction;
   let passedShadowFunction = false;
