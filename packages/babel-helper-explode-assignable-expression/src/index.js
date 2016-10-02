@@ -3,7 +3,10 @@ import * as t from "babel-types";
 
 function getObjRef(node, nodes, file, scope) {
   let ref;
-  if (t.isIdentifier(node)) {
+  if (t.isSuper(node)) {
+    // Super cannot be directly assigned so lets return it directly
+    return node;
+  } else if (t.isIdentifier(node)) {
     if (scope.hasBinding(node.name)) {
       // this variable is declared in scope so we can be 100% sure
       // that evaluating it multiple times wont trigger a getter
@@ -17,10 +20,11 @@ function getObjRef(node, nodes, file, scope) {
   } else if (t.isMemberExpression(node)) {
     ref = node.object;
 
-    if (t.isIdentifier(ref) && scope.hasBinding(ref.name)) {
+    if (t.isSuper(ref) || t.isIdentifier(ref) && scope.hasBinding(ref.name)) {
       // the object reference that we need to save is locally declared
       // so as per the previous comment we can be 100% sure evaluating
       // it multiple times will be safe
+      // Super cannot be directly assigned so lets return it also
       return ref;
     }
   } else {
