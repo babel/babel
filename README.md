@@ -29,7 +29,7 @@ Bugs and feature requests can be posted at https://github.com/babel/babel/issues
 
 > We've moved our issues from phabricator back to github issues!
 
-> You can use http://babeljs.io/phabricator-redirects/T7567 to be redirected to the corresponding Github issue.
+> Former phabricator links are going to redirect to the corresponding Github issue, for example You can use http://phabricator.babeljs.io/T7567.
 
 ```
 https://phabricator.babeljs.io/T2168
