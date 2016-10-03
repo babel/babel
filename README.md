@@ -45,6 +45,8 @@ For documentation and website issues please visit the [babel/babel.github.io](ht
 
 Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md). If you have already joined slack, join our [#development](https://babeljs.slack.com/messages/development) channel!
 
+You can also start by checking out the issues with the [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
+
 Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
 
 ## Packages
