@@ -64,9 +64,9 @@ AST for JSX code is based on [Facebook JSX AST][] with the addition of one node 
 [Babel AST format]: https://github.com/babel/babylon/blob/master/ast/spec.md
 [ESTree spec]: https://github.com/estree/estree
 
-[Literal]: https://github.com/estree/estree/blob/master/spec.md#literal
-[Property]: https://github.com/estree/estree/blob/master/spec.md#property
-[MethodDefinition]: https://github.com/estree/estree/blob/master/es6.md#methoddefinition
+[Literal]: https://github.com/estree/estree/blob/master/es5.md#literal
+[Property]: https://github.com/estree/estree/blob/master/es5.md#property
+[MethodDefinition]: https://github.com/estree/estree/blob/master/es2015.md#methoddefinition
 
 [StringLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#stringliteral
 [NumericLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#numericliteral
