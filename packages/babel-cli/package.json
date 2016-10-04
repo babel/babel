@@ -12,7 +12,7 @@
     "babel-polyfill": "^6.16.0",
     "babel-runtime": "^6.9.0",
     "bin-version-check": "^2.1.0",
-    "chalk": "1.1.1",
+    "chalk": "^1.1.1",
     "commander": "^2.8.1",
     "convert-source-map": "^1.1.0",
     "fs-readdir-recursive": "^0.1.0",
