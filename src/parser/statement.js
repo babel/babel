@@ -909,23 +909,19 @@ pp.checkExport = function (node, checkNames, isDefault) {
     // Check for duplicate exports
     if (isDefault) {
       // Default exports
-      this.checkDuplicateExports(node, "default", isDefault);
+      this.checkDuplicateExports(node, "default");
     } else if (node.specifiers && node.specifiers.length) {
       // Named exports
       for (let specifier of node.specifiers) {
-        const name = specifier.exported.name;
-        if (name === "default") isDefault = true;
-        this.checkDuplicateExports(specifier, name, isDefault);
+        this.checkDuplicateExports(specifier, specifier.exported.name);
       }
     } else if (node.declaration) {
       // Exported declarations
       if (node.declaration.type === "FunctionDeclaration" || node.declaration.type === "ClassDeclaration") {
-        this.checkDuplicateExports(node, node.declaration.id.name, isDefault);
+        this.checkDuplicateExports(node, node.declaration.id.name);
       } else if (node.declaration.type === "VariableDeclaration") {
         for (let declaration of node.declaration.declarations) {
-          if (declaration.id.name) {
-            this.checkDuplicateExports(declaration, declaration.id.name, isDefault);
-          }
+          this.checkDeclaration(declaration.id);
         }
       }
     }
@@ -940,15 +936,31 @@ pp.checkExport = function (node, checkNames, isDefault) {
   }
 };
 
-pp.checkDuplicateExports = function(node, name, isDefault) {
+pp.checkDeclaration = function(node) {
+  if (node.type === "ObjectPattern") {
+    for (let prop of node.properties) {
+      this.checkDeclaration(prop);
+    }
+  } else if (node.type === "ArrayPattern") {
+    for (let elem of node.elements) {
+      this.checkDeclaration(elem);
+    }
+  } else if (node.type === "ObjectProperty") {
+    this.checkDeclaration(node.value);
+  } else if (node.type === "Identifier") {
+    this.checkDuplicateExports(node, node.name);
+  }
+};
+
+pp.checkDuplicateExports = function(node, name) {
   if (this.state.exportedIdentifiers.indexOf(name) > -1) {
-    this.raiseDuplicateExportError(node, name, isDefault);
+    this.raiseDuplicateExportError(node, name);
   }
   this.state.exportedIdentifiers.push(name);
 };
 
-pp.raiseDuplicateExportError = function(node, name, isDefault) {
-  this.raise(node.start, isDefault ?
+pp.raiseDuplicateExportError = function(node, name) {
+  this.raise(node.start, name === "default" ?
     "Only one default export allowed per module." :
     `\`${name}\` has already been exported. Exported identifiers must be unique.`
   );
