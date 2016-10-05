@@ -41,7 +41,7 @@ function getObjRef(node, nodes, file, scope) {
 function getPropRef(node, nodes, file, scope) {
   let prop = node.property;
   let key = t.toComputedKey(node, prop);
-  if (t.isLiteral(key)) return key;
+  if (t.isLiteral(key) && t.isPureish(key)) return key;
 
   let temp = scope.generateUidIdentifierBasedOnNode(prop);
   nodes.push(t.variableDeclaration("var", [
