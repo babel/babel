@@ -17,7 +17,6 @@
     "no-return-assign": "off",
     "consistent-return": "off",
     "no-shadow": "off",
-    "comma-dangle": "off",
     "no-use-before-define": "off",
     "no-empty": "off",
     "new-parens": "off",
