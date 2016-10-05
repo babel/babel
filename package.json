@@ -22,7 +22,7 @@
     "codecov.io": "^0.1.6",
     "derequire": "^2.0.2",
     "eslint": "^2.13.1",
-    "eslint-config-babel": "^1.0.1",
+    "eslint-config-babel": "^2.0.0",
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-flow-vars": "^0.5.0",
     "flow-bin": "^0.33.0",
