@@ -497,14 +497,7 @@ class BlockScoping {
         declarators = declarators.concat(node.declarations || node);
       }
       if (t.isLabeledStatement(node)) {
-        node = node.body;
-        if (t.isClassDeclaration(node) || t.isFunctionDeclaration(node) || isBlockScoped(node)) {
-          path = path.get("body");
-          if (isBlockScoped(node)) {
-            convertBlockScopedToVar(path, node, block, this.scope);
-          }
-          declarators = declarators.concat(node.declarations || node);
-        }
+        addDeclarationsFromChild(path.get("body"), node.body);
       }
     };
 
