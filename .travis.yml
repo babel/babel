@@ -5,12 +5,6 @@ language: node_js
 cache:
   directories:
   - node_modules
-before_install:
-- |
-    [ "$TRAVIS_COMMIT_RANGE" = "" ] || git diff --name-only $TRAVIS_COMMIT_RANGE | grep -qvE '(\.md$)|(^(doc))/' || {
-      echo "Only docs were updated, stopping build process."
-      exit
-    }
 node_js:
 - '6'
 - '5'
