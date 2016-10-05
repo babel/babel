@@ -15,7 +15,7 @@
     "chalk": "1.1.1",
     "commander": "^2.8.1",
     "convert-source-map": "^1.1.0",
-    "fs-readdir-recursive": "^0.1.0",
+    "fs-readdir-recursive": "^1.0.0",
     "glob": "^5.0.5",
     "lodash": "^4.2.0",
     "log-symbols": "^1.0.2",
