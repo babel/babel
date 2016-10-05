@@ -1,17 +1,17 @@
 {
   "name": "eslint-config-babel",
   "version": "1.0.2",
-  "description": "eslint config for babel",
+  "description": "ESLint config for babel",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/babel/babel/tree/master/packages/eslint-config-babel"
+    "url": "https://github.com/babel/eslint-config-babel"
   },
   "main": "index.js",
   "peerDependencies": {
-    "babel-eslint": "^6.0.0",
+    "babel-eslint": "^7.0.0",
     "eslint-plugin-babel": "^3.0.0",
     "eslint-plugin-flowtype": "^2.4.0"
   },

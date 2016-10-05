@@ -1,4 +1,4 @@
 ## eslint-config-babel
 ---
 
-eslint config for the babel codebase (copied from eslint-config-kittens)
+ESLint config for the Babel codebase (originally taken from `eslint-config-kittens`)
