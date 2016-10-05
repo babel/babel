@@ -1,7 +1,7 @@
 module.exports = {
   parser: "babel-eslint",
   extends: "eslint:recommended",
-  plugins: ["flow-vars", "babel"],
+  plugins: ["flowtype", "babel"],
   rules: {
     "flowtype/define-flow-type": "warn",
     "flowtype/use-flow-type": "warn",
