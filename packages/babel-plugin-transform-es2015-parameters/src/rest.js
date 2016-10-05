@@ -17,6 +17,10 @@ let restIndex = template(`
   ARGUMENTS.length <= INDEX ? undefined : ARGUMENTS[INDEX]
 `);
 
+let restIndexImpure = template(`
+  REF = INDEX, ARGUMENTS.length <= REF ? undefined : ARGUMENTS[REF]
+`);
+
 let restLength = template(`
   ARGUMENTS.length <= OFFSET ? 0 : ARGUMENTS.length - OFFSET
 `);
@@ -161,10 +165,21 @@ function optimiseIndexGetter(path, argsId, offset) {
     index = t.binaryExpression("+", path.parent.property, t.numericLiteral(offset));
   }
 
-  path.parentPath.replaceWith(restIndex({
-    ARGUMENTS: argsId,
-    INDEX: index,
-  }));
+  const { scope } = path;
+  if (!scope.isPure(index)) {
+    let temp = scope.generateUidIdentifierBasedOnNode(index);
+    scope.push({id: temp, kind: "var"});
+    path.parentPath.replaceWith(restIndexImpure({
+      ARGUMENTS: argsId,
+      INDEX: index,
+      REF: temp
+    }));
+  } else {
+    path.parentPath.replaceWith(restIndex({
+      ARGUMENTS: argsId,
+      INDEX: index,
+    }));
+  }
 }
 
 function optimiseLengthGetter(path, argsId, offset) {
