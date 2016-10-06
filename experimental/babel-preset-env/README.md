@@ -20,7 +20,7 @@ $ npm install --save-dev babel-preset-env
 * `modules` - Enable transformation of ES6 module syntax to another module type (Enabled by default to `"commonjs"`).
   * Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]`
 
-```
+```js
 {
   "presets": [
     ["env", {
