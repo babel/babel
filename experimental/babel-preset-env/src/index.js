@@ -4,7 +4,7 @@
 // "proto-to-assign",
 // "es5-property-mutators",
 
-import pluginList from "./plugins.js";
+import pluginList from "../data/plugins.json";
 
 export const plugins = [
   "es3-member-expression-literals",

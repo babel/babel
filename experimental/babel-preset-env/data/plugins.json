@@ -1,0 +1,117 @@
+{
+  "transform-es2015-arrow-functions": {
+    "chrome": 47,
+    "edge": 13,
+    "firefox": 45,
+    "safari": 10
+  },
+  "transform-es2015-block-scoped-functions": {
+    "chrome": 41,
+    "firefox": 46,
+    "safari": 10
+  },
+  "transform-es2015-block-scoping": {
+    "chrome": 49,
+    "firefox": 51,
+    "safari": 10
+  },
+  "transform-es2015-classes": {
+    "chrome": 46,
+    "edge": 13,
+    "firefox": 45,
+    "safari": 10
+  },
+  "transform-es2015-computed-properties": {
+    "chrome": 44,
+    "edge": 12,
+    "firefox": 34,
+    "safari": 10
+  },
+  "check-es2015-constants": {
+    "chrome": 49,
+    "firefox": 51,
+    "safari": 10
+  },
+  "transform-es2015-destructuring": {
+    "chrome": 51,
+    "edge": 14,
+    "safari": 10
+  },
+  "transform-es2015-for-of": {
+    "chrome": 51,
+    "edge": 14,
+    "safari": 10
+  },
+  "transform-es2015-function-name": {
+    "chrome": 51,
+    "safari": 10
+  },
+  "transform-es2015-literals": {
+    "chrome": 44,
+    "edge": 12,
+    "safari": 9
+  },
+  "transform-es2015-object-super": {
+    "chrome": 46,
+    "edge": 13,
+    "firefox": 45,
+    "safari": 10
+  },
+  "transform-es2015-parameters": {
+    "chrome": 49,
+    "edge": 14,
+    "safari": 10
+  },
+  "transform-es2015-shorthand-properties": {
+    "chrome": 43,
+    "edge": 12,
+    "firefox": 33,
+    "safari": 9
+  },
+  "transform-es2015-spread": {
+    "chrome": 46,
+    "edge": 13,
+    "firefox": 36,
+    "safari": 10
+  },
+  "transform-es2015-sticky-regex": {
+    "chrome": 49,
+    "edge": 13,
+    "firefox": 3,
+    "safari": 10
+  },
+  "transform-es2015-template-literals": {
+    "chrome": 41,
+    "edge": 13,
+    "firefox": 34,
+    "safari": 9
+  },
+  "transform-es2015-typeof-symbol": {
+    "chrome": 38,
+    "edge": 12,
+    "firefox": 36,
+    "safari": 9
+  },
+  "transform-es2015-unicode-regex": {
+    "chrome": 50,
+    "edge": 13,
+    "firefox": 46,
+    "safari": 10
+  },
+  "transform-regenerator": {
+    "chrome": 50,
+    "edge": 13,
+    "safari": 10
+  },
+  "transform-exponentiation-operator": {
+    "chrome": 52,
+    "edge": 14
+  },
+  "transform-async-to-generator": {
+    "edge": 14
+  },
+  "syntax-trailing-function-commas": {
+    "edge": 14,
+    "safari": 10
+  }
+}
