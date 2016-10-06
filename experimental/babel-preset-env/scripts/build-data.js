@@ -28,32 +28,66 @@ const environments = [
   "edge",
   "firefox",
   "safari",
+  "node"
 ];
+
+const envMap = {
+  safari51: "safari5",
+  safari71_8: "safari7",
+  chrome: "chrome19",
+  chrome19dev: "chrome19",
+  chrome21dev: "chrome21",
+  firefox3_5: "firefox3",
+  firefox3_6: "firefox3",
+  node012: "node0.12",
+  node64: "node6",
+  node65: "node6.5"
+};
 
 const getLowestImplementedVersion = ({ features }, env) => {
   let tests = flatten(compatibilityTests
     .filter((test) => features.indexOf(test.name) >= 0)
     .map((test) => {
       return test.subtests ?
-        test.subtests.map((subtest) => subtest.res) :
-        test.res;
+        test.subtests.map((subtest) => ({
+          name: `${test.name}/${subtest.name}`,
+          res: subtest.res
+        })) :
+      {
+        name: test.name,
+        res: test.res
+      };
     })
   );
 
-  const envVersions = versions.filter((version) => version.startsWith(env));
+  let envTests = tests
+  .map(({ res: test, name }, i) => {
+    return Object.keys(test)
+    .filter((t) => t.startsWith(env))
+    // TODO: make flagged/etc an options
+    .filter((test) => tests[i].res[test] === true || tests[i].res[test] === "strict")
+    // normalize some keys
+    .map((test) => envMap[test] || test)
+    .filter((test) => !isNaN(parseInt(test.replace(env, ""))))
+    .shift();
+  });
 
-  for (let i = 0; i < envVersions.length; i++) {
-    const version = envVersions[i];
-    tests = tests.filter((test) =>
-      test[version] !== true &&
-      test[version] !== "strict"
-    );
-    if (tests.length === 0) {
-      const number = parseInt(version.replace(env, ""), 10);
-      return isFinite(number) ? number : null;
-    }
+  let envFiltered = envTests.filter((t) => t);
+  if (envTests.length > envFiltered.length) {
+    // envTests.forEach((test, i) => {
+    //   if (!test) {
+    //     // print unsupported features
+    //     if (env === 'node') {
+    //       console.log(`ENV(${env}): ${tests[i].name}`);
+    //     }
+    //   }
+    // });
+    return null;
   }
-  return null;
+
+  return envTests
+  .map((str) => Number(str.replace(env, "")))
+  .reduce((a, b) => { return (a < b) ? b : a; });
 };
 
 const data = {};
