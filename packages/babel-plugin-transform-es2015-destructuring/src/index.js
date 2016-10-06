@@ -492,7 +492,21 @@ export default function ({ types: t }) {
           }
         }
 
-        path.replaceWithMultiple(nodes);
+        const nodesOut = [];
+        for (const node of nodes) {
+          const tail = nodesOut[nodesOut.length - 1];
+          if (tail && tail.kind === node.kind) {
+            tail.declarations.push(...node.declarations);
+          } else {
+            nodesOut.push(node);
+          }
+        }
+
+        if (nodesOut.length === 1) {
+          path.replaceWith(nodesOut[0]);
+        } else {
+          path.replaceWithMultiple(nodesOut);
+        }
       }
     }
   };
