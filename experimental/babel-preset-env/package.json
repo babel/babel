@@ -21,9 +21,6 @@
     "babel-plugin-check-es2015-constants": "^6.3.13",
     "babel-plugin-syntax-trailing-function-commas": "^6.13.0",
     "babel-plugin-transform-async-to-generator": "^6.8.0",
-    "babel-plugin-transform-class-properties": "^6.11.5",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-plugin-transform-do-expressions": "^6.8.0",
     "babel-plugin-transform-es2015-arrow-functions": "^6.3.13",
     "babel-plugin-transform-es2015-block-scoped-functions": "^6.3.13",
     "babel-plugin-transform-es2015-block-scoping": "^6.6.0",
@@ -46,14 +43,7 @@
     "babel-plugin-transform-es2015-template-literals": "^6.6.0",
     "babel-plugin-transform-es2015-typeof-symbol": "^6.6.0",
     "babel-plugin-transform-es2015-unicode-regex": "^6.3.13",
-    "babel-plugin-transform-es3-member-expression-literals": "^6.3.13",
-    "babel-plugin-transform-es3-property-literals": "^6.3.13",
-    "babel-plugin-transform-es5-property-mutators": "^6.3.13",
     "babel-plugin-transform-exponentiation-operator": "^6.8.0",
-    "babel-plugin-transform-export-extensions": "^6.8.0",
-    "babel-plugin-transform-function-bind": "^6.8.0",
-    "babel-plugin-transform-object-rest-spread": "^6.8.0",
-    "babel-plugin-transform-proto-to-assign": "^6.9.0",
     "babel-plugin-transform-regenerator": "^6.6.0"
   },
   "devDependencies": {
@@ -81,7 +71,6 @@
       ]
     ],
     "plugins": [
-      "transform-class-properties",
       "transform-flow-strip-types"
     ]
   },
