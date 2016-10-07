@@ -14,13 +14,14 @@ describe("babel-preset-env", () => {
       const isRequired = babelPresetEnv.isPluginRequired({}, {});
       assert(isRequired);
     });
+
     it("returns true if plugin feature is not implemented in one or more targets", () => {
       let targets;
       const plugin = {
         edge: false,
         firefox: 45,
         chrome: 49,
-      }
+      };
 
       targets = {
         "chrome": Number.MAX_SAFE_INTEGER,
@@ -32,6 +33,66 @@ describe("babel-preset-env", () => {
         "edge": 12,
       };
       assert(babelPresetEnv.isPluginRequired(plugin, plugin) === true);
+    });
+
+    it("returns false if plugin feature is implemented by lower than target", () => {
+      const plugin = {
+        chrome: 49,
+      };
+      const targets = {
+        "chrome": Number.MAX_SAFE_INTEGER,
+      };
+      assert(babelPresetEnv.isPluginRequired(targets, plugin) === false);
+    });
+
+    it("returns false if plugin feature is implemented is equal to target", () => {
+      const plugin = {
+        chrome: 49,
+      };
+      const targets = {
+        "chrome": 49,
+      };
+      assert(babelPresetEnv.isPluginRequired(targets, plugin) === false);
+    });
+
+    it("returns true if plugin feature is implemented is greater than target", () => {
+      const plugin = {
+        chrome: 50,
+      };
+      const targets = {
+        "chrome": 49,
+      };
+      assert(babelPresetEnv.isPluginRequired(targets, plugin) === true);
+    });
+
+    it("doesn't throw when specifiying a decimal for node", () => {
+      let targets;
+      const plugin = {
+        node: 6
+      };
+
+      targets = {
+        "node": 6.5
+      };
+
+      assert.doesNotThrow(() => {
+        babelPresetEnv.isPluginRequired(targets, plugin);
+      }, Error);
+    });
+
+    it("throws when specifiying an integer for node", () => {
+      let targets;
+      const plugin = {
+        node: 6
+      };
+
+      targets = {
+        "node": 6
+      };
+
+      assert.throws(() => {
+        babelPresetEnv.isPluginRequired(targets, plugin);
+      }, Error);
     });
   });
 

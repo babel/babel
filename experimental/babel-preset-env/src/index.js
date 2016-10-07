@@ -44,13 +44,20 @@ export const isPluginRequired = (supportedEnvironments, plugin) => {
   if (targetEnvironments.length === 0) { return true; }
 
   const isRequiredForEnvironments = targetEnvironments
-    .filter(environemt => {
+    .filter(environment => {
       // Feature is not implemented in that environment
-      if (!plugin[environemt]) { return true; }
+      if (!plugin[environment]) { return true; }
 
-      const lowestImplementedVersion = plugin[environemt];
-      const lowestTargetedVersion = targetEnvironments[environemt];
-      if (lowestTargetedVersion <= lowestImplementedVersion) { return true; }
+      const lowestImplementedVersion = plugin[environment];
+      const lowestTargetedVersion = supportedEnvironments[environment];
+
+      if (environment === "node" && lowestTargetedVersion % 1 === 0) {
+        throw new Error("Please use a minor version when specifying `node`: 6.5, 6.7");
+      }
+
+      if (lowestTargetedVersion < lowestImplementedVersion) {
+        return true;
+      }
 
       return false;
     });
@@ -60,7 +67,7 @@ export const isPluginRequired = (supportedEnvironments, plugin) => {
 
 const getTargets = targetOpts => {
   return targetOpts || {};
-}
+};
 
 // TODO: Allow specifying plugins as either shortened or full name
 // babel-plugin-transform-es2015-classes
@@ -71,16 +78,16 @@ export const validateLooseOption = (looseOpt = false) => {
   }
 
   return looseOpt;
-}
+};
 
 export const validateModulesOption = (modulesOpt = "commonjs") => {
   if (modulesOpt !== false && Object.keys(MODULE_TRANSFORMATIONS).indexOf(modulesOpt) === -1) {
-   throw new Error("The 'modules' option must be 'false' to indicate no modules\n" +
-     "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
+    throw new Error("The 'modules' option must be 'false' to indicate no modules\n" +
+      "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
   }
 
   return modulesOpt;
-}
+};
 
 export default function buildPreset(context, opts) {
   const loose = validateLooseOption(opts.loose);
@@ -90,7 +97,7 @@ export default function buildPreset(context, opts) {
   const transformations = Object.keys(pluginList)
     .filter(pluginName => isPluginRequired(targets, pluginList[pluginName]))
     .map(pluginName => {
-      return [require(`babel-plugin-${pluginName}`), { loose }]
+      return [require(`babel-plugin-${pluginName}`), { loose }];
     });
 
   const modules = [
