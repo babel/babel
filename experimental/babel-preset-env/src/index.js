@@ -51,10 +51,6 @@ export const isPluginRequired = (supportedEnvironments, plugin) => {
       const lowestImplementedVersion = plugin[environment];
       const lowestTargetedVersion = supportedEnvironments[environment];
 
-      if (environment === "node" && lowestTargetedVersion % 1 === 0) {
-        throw new Error("Please use a minor version when specifying `node`: 6.5, 6.7");
-      }
-
       if (lowestTargetedVersion < lowestImplementedVersion) {
         return true;
       }
@@ -93,12 +89,32 @@ export default function buildPreset(context, opts) {
   const loose = validateLooseOption(opts.loose);
   const moduleType = validateModulesOption(opts.modules);
   const targets = getTargets(opts.targets);
+  const debug = opts.debug;
 
-  const transformations = Object.keys(pluginList)
-    .filter(pluginName => isPluginRequired(targets, pluginList[pluginName]))
-    .map(pluginName => {
-      return [require(`babel-plugin-${pluginName}`), { loose }];
+  let transformations = Object.keys(pluginList)
+    .filter(pluginName => isPluginRequired(targets, pluginList[pluginName]));
+
+  if (debug) {
+    console.log("");
+    console.log(`Using targets: ${JSON.stringify(targets, null, 2)}`);
+    console.log("");
+    console.log("Using plugins:");
+    console.log("");
+    console.log(`module: ${moduleType}`);
+    transformations.forEach(transform => {
+      let envList = pluginList[transform];
+      let filteredList = Object.keys(targets)
+      .reduce((a, b) => {
+        a[b] = envList[b];
+        return a;
+      }, {});
+      console.log(transform, JSON.stringify(filteredList, null, 2));
     });
+  }
+
+  transformations = transformations.map(pluginName => {
+    return [require(`babel-plugin-${pluginName}`), { loose }];
+  });
 
   const modules = [
     moduleType === "commonjs" && [require("babel-plugin-transform-es2015-modules-commonjs"), { loose }],
@@ -112,5 +128,5 @@ export default function buildPreset(context, opts) {
       ...modules,
       ...transformations
     ]
-  }
+  };
 }

@@ -79,21 +79,6 @@ describe("babel-preset-env", () => {
         babelPresetEnv.isPluginRequired(targets, plugin);
       }, Error);
     });
-
-    it("throws when specifiying an integer for node", () => {
-      let targets;
-      const plugin = {
-        node: 6
-      };
-
-      targets = {
-        "node": 6
-      };
-
-      assert.throws(() => {
-        babelPresetEnv.isPluginRequired(targets, plugin);
-      }, Error);
-    });
   });
 
   describe("validateLooseOption", () => {
