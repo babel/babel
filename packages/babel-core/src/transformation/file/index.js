@@ -52,12 +52,9 @@ export default class File extends Store {
     this.opts = this.initOptions(opts);
 
     this.parserOpts = {
-      highlightCode: this.opts.highlightCode,
-      nonStandard:   this.opts.nonStandard,
-      sourceType:    this.opts.sourceType,
-      filename:      this.opts.filename,
-      sourceFileName:this.opts.filename,
-      plugins:       []
+      sourceType:     this.opts.sourceType,
+      sourceFileName: this.opts.filename,
+      plugins:        []
     };
 
     this.pluginVisitors = [];
