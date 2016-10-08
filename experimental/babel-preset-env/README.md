@@ -1,6 +1,28 @@
 ## babel-preset-env [![npm](https://img.shields.io/npm/v/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![travis](https://img.shields.io/travis/babel/babel-preset-env/master.svg)](https://travis-ci.org/babel/babel-preset-env)
 
-> Babel preset for all envs.
+> Babel preset for all environments.
+
+### How it currently works
+
+#### Determine browser support for ECMAScript features (up to `latest`)
+
+[#7](https://github.com/babel/babel-preset-env/issues/7) - Use external data such as [`compat-table`](https://github.com/kangax/compat-table) to determine browser support. We should create PRs there when necessary.
+
+![](https://cloud.githubusercontent.com/assets/588473/19214029/58deebce-8d48-11e6-9004-ee3fbcb75d8b.png)
+
+We run the script [build-data.js](/scripts/build-data.js) which creates [plugins.json](/data/plugins.json).
+
+#### Make mapping between javascript features and plugins
+
+This should be straightforward to do in most cases. There might be cases were plugins should be split up more. Currently located at [pluginFeatures.js](/data/pluginFeatures.js).
+
+#### Support all plugins in Babel that are considered `latest`
+
+[#14](https://github.com/babel/babel-preset-env/issues/14) - It won't include `stage-x` plugins. env will support all plugins in what we consider the latest version of Javascript (by matching what we do in [`babel-preset-latest`](http://babeljs.io/docs/plugins/preset-latest/)).
+
+#### Determine the lowest common denominator of plugins to be included in the preset
+
+If you are targeting IE 8 and Chrome 55 it will include all plugins required by IE 8 since you would need to support both still.
 
 ## Install
 
@@ -8,9 +30,9 @@
 $ npm install --save-dev babel-preset-env
 ```
 
-## Usage via `.babelrc`
+## Usage via [`.babelrc`](http://babeljs.io/docs/usage/babelrc/)
 
-### Options
+### [Options](http://babeljs.io/docs/plugins/#pluginpresets-options)
 
 * `targets` - an object of browsers/environment versions to support (ex: chrome, node, etc).
 
