@@ -326,3 +326,10 @@ defineType("VoidTypeAnnotation", {
     // todo
   }
 });
+
+defineType("Variance", {
+  aliases: ["Flow"],
+  fields: {
+    // todo
+  }
+});
