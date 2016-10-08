@@ -209,6 +209,7 @@ These just enable the transform plugins to be able to parse certain features (th
 | [`babel-plugin-syntax-flow`](/packages/babel-plugin-syntax-flow) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-flow.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-flow) |
 | [`babel-plugin-syntax-function-bind`](/packages/babel-plugin-syntax-function-bind) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-function-bind.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-function-bind) |
 | [`babel-plugin-syntax-function-sent`](/packages/babel-plugin-syntax-function-sent) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-function-sent.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-function-sent) |
+| [`babel-plugin-syntax-import-functions`](/packages/babel-plugin-syntax-import-functions) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-import-functions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-import-functions) |
 | [`babel-plugin-syntax-jsx`](/packages/babel-plugin-syntax-jsx) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-jsx.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-jsx) |
 | [`babel-plugin-syntax-object-rest-spread`](/packages/babel-plugin-syntax-object-rest-spread) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-object-rest-spread.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-object-rest-spread) |
 
