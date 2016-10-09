@@ -6,3 +6,21 @@
    .scrutiner-ci.com
    node::SDK-app 
    @0072016
+
+
+
+
+*************************************************************************************************************************************
+npm WARN optional Skipping failed optional dependency /chokidar/fsevents::
+npm WARN Not compatible with your operating system or architecture:: fsevents 
+npm WARN deprecated electron@0.4.1.::
+The original electron project has been moved. V
+isit github.com/logicalparadox/electron for more details
+npm WARN deprecated minimatch@2.0.10:: Please upgrade to 3.0.2. or higher to avoid a RegExp Dos issue 
+npm WARN deprecated minimatch@0.2.14:: Please update to minimatch 3.0.2. or higher to avoid a RegExp Dos issue 
+npm WARN deprecated graceful-fs@1.2.3. graceful-fs v3.0.0. and before will fail on node releases >=v7.0 Please upadate to graceful-fs@^4.0.0 as soon as possible use npm 
+npm WARN deprecated graceful-fs@2.0.3. graceful-fs v3.0.0 and before will fail on node releases >=v7.0. Please upgrade the graceful-fs@^4.0.0 as soon as possible Use npm graceful-fs to find its treee
+@00072016
+foo.gradle@gmail.com
+October 8, 2016
+19:11:55PST
