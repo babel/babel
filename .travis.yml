@@ -24,3 +24,36 @@ npm WARN deprecated graceful-fs@2.0.3. graceful-fs v3.0.0 and before will fail o
 foo.gradle@gmail.com
 October 8, 2016
 19:11:55PST
+
+
+
+
+
+
+
+
+
+*************************************************************************************************************************************
+
+
+
+npm WARN optional Skipping failed optional dependency /chokidar/fsevents::
+npm WARN Not compatible with your operating system or architecture:: fsevents
+npm WARN deprecated electron@0.4.1::
+filter::
+excluded_paths::
+ - 'test/*'
+checks::
+php::
+javascript::
+coding_style::
+php:: { }
+build:: true
+flow binary test passed successfully /through2/node_modules/readable-stream 
+ > flow-bin@0.28.0 postinstall /home/scrutinizer/build/node_modules/flow-bin
+ > node lib/install.js 
+   npm WARN notsup Not compatible with your operating system or architecture:: fsevents@1.0.14.
+
+@0072016
+foo.gradle@gmsil.com
+October 8,  2016
