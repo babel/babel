@@ -8,6 +8,7 @@ let commander  = require("commander");
 let kebabCase  = require("lodash/kebabCase");
 let options    = require("babel-core").options;
 let util       = require("babel-core").util;
+let OptionManager = require("babel-core").OptionManager;
 let uniq       = require("lodash/uniq");
 let each       = require("lodash/each");
 let glob       = require("glob");
@@ -112,10 +113,13 @@ each(options, function (opt, key) {
   }
 });
 
-opts.ignore = util.arrayify(opts.ignore, util.regexify);
+// Read options from existing .babelrc or package.json at working root or higher
+let configOptions = new OptionManager().init({filename: './.babelrc'});
 
-if (opts.only) {
-  opts.only = util.arrayify(opts.only, util.regexify);
+opts.ignore = util.arrayify(opts.ignore || configOptions.ignore, util.regexify);
+
+if (opts.only || configOptions.only) {
+  opts.only = util.arrayify(opts.only || configOptions.only, util.regexify);
 }
 
 let fn;
