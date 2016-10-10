@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-transform-es2015-modules-commonjs",
   "version": "6.16.0",
-  "description": "",
+  "description": "This plugin transforms ES2015 modules to CommonJS",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-modules-commonjs",
   "license": "MIT",
   "main": "lib/index.js",
