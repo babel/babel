@@ -44,6 +44,8 @@ Currently: "chrome, edge, firefox, safari, node"
 
 > Some node features are > `6.5`
 
+> If your config is a js file, also do `"node": parseFloat(process.versions.node)`
+
 * `loose` (boolean) - Enable "loose" transformations for any plugins in this preset that allow them (Disabled by default).
 * `modules` - Enable transformation of ES6 module syntax to another module type (Enabled by default to `"commonjs"`).
   * Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]`
