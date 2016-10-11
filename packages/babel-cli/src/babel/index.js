@@ -114,7 +114,7 @@ each(options, function (opt, key) {
 });
 
 // Read options from existing .babelrc or package.json at working root or higher
-let configOptions = new OptionManager().init({filename: './.babelrc'});
+let configOptions = new OptionManager().init({filename: "./.babelrc"});
 
 opts.ignore = util.arrayify(opts.ignore || configOptions.ignore, util.regexify);
 
