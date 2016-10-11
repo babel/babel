@@ -3,7 +3,8 @@
   "license": "MIT",
   "scripts": {
     "test": "make test",
-    "build": "make build"
+    "build": "make build",
+    "watch": "make watch"
   },
   "devDependencies": {
     "async": "^1.5.0",
