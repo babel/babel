@@ -57,6 +57,18 @@ suite("option-manager", function () {
         /While processing preset: .*option-manager(?:\/|\\\\)not-a-preset\.js/
       );
     });
+
+    test("throws for invalid preset configuration", function() {
+      return assert.throws(
+        function () {
+          var opt = new OptionManager(new Logger(null, "unknown"));
+          opt.init({
+            'presets': [{ option: "value" }]
+          });
+        },
+        /Unknown option: foreign.option\.(?:.|\n)+A common cause of this error is the presence of a configuration options object without the corresponding preset name/
+      );
+    });
   });
 
   suite("presets", function () {
