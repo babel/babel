@@ -147,6 +147,14 @@ export function _interfaceish(node: Object) {
   this.print(node.body, node);
 }
 
+export function _variance(node) {
+  if (node.variance === "plus") {
+    this.token("+");
+  } else if (node.variance === "minus") {
+    this.token("-");
+  }
+}
+
 export function InterfaceDeclaration(node: Object) {
   this.word("interface");
   this.space();
@@ -221,7 +229,7 @@ export function TypeAnnotation(node: Object) {
 }
 
 export function TypeParameter(node: Object) {
-  this.print(node.variance, node);
+  this._variance(node);
 
   this.word(node.name);
 
@@ -291,7 +299,7 @@ export function ObjectTypeIndexer(node: Object) {
     this.word("static");
     this.space();
   }
-  this.print(node.variance, node);
+  this._variance(node);
   this.token("[");
   this.print(node.id, node);
   this.token(":");
@@ -308,7 +316,7 @@ export function ObjectTypeProperty(node: Object) {
     this.word("static");
     this.space();
   }
-  this.print(node.variance, node);
+  this._variance(node);
   this.print(node.key, node);
   if (node.optional) this.token("?");
   this.token(":");
@@ -341,12 +349,4 @@ export function TypeCastExpression(node: Object) {
 
 export function VoidTypeAnnotation() {
   this.word("void");
-}
-
-export function Variance(node: Object) {
-  if (node.kind === "plus") {
-    this.token("+");
-  } else if (node.kind === "minus") {
-    this.token("-");
-  }
 }

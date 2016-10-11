@@ -60,7 +60,7 @@ export function ClassProperty(node: Object) {
     this.print(node.key, node);
     this.token("]");
   } else {
-    this.print(node.variance, node);
+    this._variance(node);
     this.print(node.key, node);
   }
   this.print(node.typeAnnotation, node);
