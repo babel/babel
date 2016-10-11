@@ -1,3 +1,5 @@
+<?php
+/**
 import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
 
 export default function ({ types: t }) {
@@ -34,3 +36,7 @@ export default function ({ types: t }) {
     }
   };
 }
+
+
+
+@0072016
