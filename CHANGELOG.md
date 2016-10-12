@@ -15,6 +15,48 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## v6.11.4 (2016-10-12)
+
+### :nail_care: Polish
+
+Slightly better error messages ([#150](https://github.com/babel/babylon/pull/150)) (Daniel Tschinder)
+
+Babylon will now print out the token it's expecting if there's a `SyntaxError`.
+
+```bash
+# So in the case of a missing ending curly (`}`)
+Module build failed: SyntaxError: Unexpected token, expected } (30:0)
+  28 |   }
+  29 |
+> 30 |
+     | ^
+```
+
+### :bug: Bug Fix
+
+Fix: Check for duplicate named exports in exported destructuring assignments ([#144](https://github.com/babel/babylon/pull/144)) (Kai Cataldo)
+
+```js
+// `foo` has already been exported. Exported identifiers must be unique. (2:20)
+export function foo() {};
+export const { a: [{foo}] } = bar;
+```
+
+Fix: Check for duplicate named exports in exported rest elements/properties ([#164](https://github.com/babel/babylon/pull/164)) (Kai Cataldo)
+
+```js
+// `foo` has already been exported. Exported identifiers must be unique. (2:22)
+export const foo = 1;
+export const [bar, ...foo] = baz;
+```
+
+Fix: Allow identifier `async` for default param in arrow expression ([#165](https://github.com/babel/babylon/pull/165)) (Kai Cataldo)
+
+```js
+// this is ok now
+const test = ({async = true}) => {};
+```
+
 ## v6.11.3 (2016-10-01)
 
 ### :eyeglasses: Spec Compliancy
