@@ -15,6 +15,17 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## v6.11.6 (2016-10-12)
+
+### :bug: Bug Fix/Regression
+
+Fix crash when exporting with destructuring and sparse array ([#170](https://github.com/babel/babylon/pull/170)) (Jeroen Engels)
+
+```js
+// was failing with `Cannot read property 'type' of null` because of null identifiers
+export const { foo: [ ,, qux7 ] } = bar;
+````
+
 ## v6.11.5 (2016-10-12)
 
 ### :eyeglasses: Spec Compliancy
