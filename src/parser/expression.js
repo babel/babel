@@ -750,7 +750,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
       if (isGenerator) this.unexpected();
 
       let asyncId = this.parseIdentifier();
-      if (this.match(tt.colon) || this.match(tt.parenL) || this.match(tt.braceR)) {
+      if (this.match(tt.colon) || this.match(tt.parenL) || this.match(tt.braceR) || this.match(tt.eq)) {
         prop.key = asyncId;
       } else {
         isAsync = true;
