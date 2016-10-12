@@ -74,7 +74,7 @@ pp.semicolon = function () {
 // raise an unexpected token error at given pos.
 
 pp.expect = function (type, pos) {
-  return this.eat(type) || this.unexpected(pos);
+  return this.eat(type) || this.unexpected(pos, `Unexpected token, expected ${type.label}`);
 };
 
 // Raise an unexpected token error.
