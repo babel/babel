@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 481,
+  "end": 522,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 11,
-      "column": 27
+      "line": 12,
+      "column": 40
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 481,
+    "end": 522,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 11,
-        "column": 27
+        "line": 12,
+        "column": 40
       }
     },
     "sourceType": "module",
@@ -2424,6 +2424,158 @@
                     "column": 26
                   },
                   "identifierName": "bar"
+                },
+                "name": "bar"
+              }
+            }
+          ],
+          "kind": "const"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 482,
+        "end": 522,
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 0
+          },
+          "end": {
+            "line": 12,
+            "column": 40
+          }
+        },
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "VariableDeclaration",
+          "start": 489,
+          "end": 522,
+          "loc": {
+            "start": {
+              "line": 12,
+              "column": 7
+            },
+            "end": {
+              "line": 12,
+              "column": 40
+            }
+          },
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 495,
+              "end": 521,
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 13
+                },
+                "end": {
+                  "line": 12,
+                  "column": 39
+                }
+              },
+              "id": {
+                "type": "ObjectPattern",
+                "start": 495,
+                "end": 515,
+                "loc": {
+                  "start": {
+                    "line": 12,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 12,
+                    "column": 33
+                  }
+                },
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start": 497,
+                    "end": 513,
+                    "loc": {
+                      "start": {
+                        "line": 12,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 12,
+                        "column": 31
+                      }
+                    },
+                    "method": false,
+                    "shorthand": false,
+                    "computed": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 497,
+                      "end": 500,
+                      "loc": {
+                        "start": {
+                          "line": 12,
+                          "column": 15
+                        },
+                        "end": {
+                          "line": 12,
+                          "column": 18
+                        }
+                      },
+                      "name": "foo"
+                    },
+                    "value": {
+                      "type": "ArrayPattern",
+                      "start": 502,
+                      "end": 513,
+                      "loc": {
+                        "start": {
+                          "line": 12,
+                          "column": 20
+                        },
+                        "end": {
+                          "line": 12,
+                          "column": 31
+                        }
+                      },
+                      "elements": [
+                        null,
+                        null,
+                        {
+                          "type": "Identifier",
+                          "start": 507,
+                          "end": 511,
+                          "loc": {
+                            "start": {
+                              "line": 12,
+                              "column": 25
+                            },
+                            "end": {
+                              "line": 12,
+                              "column": 29
+                            }
+                          },
+                          "name": "qux7"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "init": {
+                "type": "Identifier",
+                "start": 518,
+                "end": 521,
+                "loc": {
+                  "start": {
+                    "line": 12,
+                    "column": 36
+                  },
+                  "end": {
+                    "line": 12,
+                    "column": 39
+                  }
                 },
                 "name": "bar"
               }
