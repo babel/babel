@@ -1,13 +1,13 @@
 # Changelog
 
 > **Tags:**
-> - [Breaking Change]
-> - [Spec Compliancy]
-> - [New Feature]
-> - [Bug Fix]
-> - [Documentation]
-> - [Internal]
-> - [Polish]
+> - :boom:       [Breaking Change]
+> - :eyeglasses: [Spec Compliancy]
+> - :rocket:     [New Feature]
+> - :bug:        [Bug Fix]
+> - :memo:       [Documentation]
+> - :house:      [Internal]
+> - :nail_care:  [Polish]
 
 > Semver Policy: https://github.com/babel/babylon#semver
 
