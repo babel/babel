@@ -57,7 +57,9 @@ Module build failed: SyntaxError: Unexpected token, expected } (30:0)
      | ^
 ```
 
-## v6.11.4 (skipped)
+## v6.11.4 (2016-10-03)
+
+Temporary rollback for erroring on trailing comma with spread (#154) (Henry Zhu)
 
 ## v6.11.3 (2016-10-01)
 
