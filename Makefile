@@ -20,6 +20,9 @@ watch: clean
 lint:
 	./node_modules/.bin/eslint packages/*/src
 
+lint-fix:
+	./node_modules/.bin/eslint packages/*/src --fix
+
 clean: test-clean
 	rm -rf packages/*/lib
 	rm -rf packages/babel-polyfill/browser*
