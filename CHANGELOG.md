@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
-## v6.11.4 (2016-10-12)
+## v6.11.5 (2016-10-12)
 
 ### :eyeglasses: Spec Compliancy
 
@@ -56,6 +56,8 @@ Module build failed: SyntaxError: Unexpected token, expected } (30:0)
 > 30 |
      | ^
 ```
+
+## v6.11.4 (skipped)
 
 ## v6.11.3 (2016-10-01)
 
