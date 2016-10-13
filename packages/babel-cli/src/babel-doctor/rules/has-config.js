@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 
-export default async function () { // eslint-disable-line require-yield
+export default async function () {
   let cwd = process.cwd();
   let parts = cwd.split(path.sep);
 

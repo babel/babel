@@ -3,7 +3,9 @@
   "license": "MIT",
   "scripts": {
     "test": "make test",
-    "build": "make build"
+    "build": "make build",
+    "lint": "make lint",
+    "fix": "make fix"
   },
   "devDependencies": {
     "async": "^1.5.0",
@@ -23,9 +25,9 @@
     "codecov.io": "^0.1.6",
     "derequire": "^2.0.2",
     "eslint": "^3.7.1",
-    "eslint-config-babel": "^1.0.1",
+    "eslint-config-babel": "^2.0.1",
     "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-flow-vars": "^0.5.0",
+    "eslint-plugin-flowtype": "^2.20.0",
     "flow-bin": "^0.33.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.0.0",
