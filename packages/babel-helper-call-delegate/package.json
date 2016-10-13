@@ -1,7 +1,7 @@
 {
   "name": "babel-helper-call-delegate",
   "version": "6.8.0",
-  "description": "",
+  "description": "Helper function to call delegate",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-call-delegate",
   "license": "MIT",
   "main": "lib/index.js",

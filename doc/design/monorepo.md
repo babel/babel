@@ -1,6 +1,6 @@
 # Why is Babel a monorepo?
 
-> The tool for managing the monorepo in Babel has been extracted out as [lerna](https://github.com/kittens/lerna)
+> The tool for managing the monorepo in Babel has been extracted out as [Lerna](https://github.com/lerna/lerna)
 
 Juggling a multimodule project over multiple repos is like trying to teach a newborn baby how to
 ride a bike.

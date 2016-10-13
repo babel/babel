@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-syntax-class-constructor-call",
   "version": "6.13.0",
-  "description": "Allow parsing of class constructor calls",
+  "description": "Allow parsing of class constructor calls (deprecated)",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-class-constructor-call",
   "license": "MIT",
   "main": "lib/index.js",

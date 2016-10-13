@@ -1,4 +1,4 @@
-# babel-plugin-syntax-class-constructor-call
+# babel-plugin-syntax-class-constructor-call (deprecated)
 
 Allow parsing of do expressions.
 

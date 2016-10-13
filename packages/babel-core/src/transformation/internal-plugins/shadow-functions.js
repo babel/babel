@@ -17,7 +17,7 @@ const superVisitor = {
 
 export default new Plugin({
   name: "internal.shadowFunctions",
-  
+
   visitor: {
     ThisExpression(path) {
       remap(path, "this");
@@ -103,6 +103,10 @@ function remap(path, key) {
     fnPath.traverse(superVisitor, { id });
   } else {
     const init = key === "this" ? t.thisExpression() : t.identifier(key);
+
+    // Forward the shadowed function, so that the identifiers do not get hoisted
+    // up to the first non shadow function but rather up to the bound shadow function
+    if (shadowFunction) init._shadowedFunctionLiteral = shadowFunction;
 
     fnPath.scope.push({ id, init });
   }

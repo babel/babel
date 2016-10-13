@@ -2,7 +2,7 @@ MAKEFLAGS = -j1
 
 export NODE_ENV = test
 
-.PHONY: clean test test-only test-cov test-clean test-travis publish build bootstrap publish-core publish-runtime build-website build-core watch-core build-core-test clean-core prepublish
+.PHONY: build build-dist watch lint clean test-clean test-only test test-cov test-ci publish bootstrap
 
 build: clean
 	./node_modules/.bin/gulp build
@@ -31,6 +31,7 @@ test-clean:
 	rm -rf packages/*/test/tmp
 	rm -rf packages/*/test-fixtures.json
 
+# without lint
 test-only:
 	./scripts/test.sh
 	make test-clean
@@ -44,7 +45,6 @@ test-cov: clean
 	./scripts/test-cov.sh
 
 test-ci:
-	make lint
 	NODE_ENV=test make bootstrap
 	# if ./node_modules/.bin/semver `npm --version` -r ">=3.3.0"; then ./node_modules/.bin/flow check; fi
 	./scripts/test-cov.sh
@@ -55,6 +55,7 @@ publish:
 	rm -rf packages/*/lib
 	BABEL_ENV=production make build-dist
 	make test
+	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	./node_modules/.bin/lerna publish --only-explicit-updates
 	make clean
 	#./scripts/build-website.sh
