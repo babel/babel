@@ -1,28 +1,5 @@
-// use if ie
-// "es3-member-expression-literals",
-// "es3-property-literals",
-// "proto-to-assign",
-// "es5-property-mutators",
-
 import pluginList from "../data/plugins.json";
 import browserslist from "browserslist";
-
-export const plugins = [
-  "es3-member-expression-literals",
-  "es3-property-literals",
-  "proto-to-assign",
-  "es5-property-mutators",
-];
-
-export const stagePlugins = [
-  // "transform-class-constructor-call", proposal is removed
-  "transform-class-properties",
-  "transform-transform-decorators-legacy", // legacy plugin
-  "transform-do-expressions",
-  "transform-export-extensions",
-  "transform-function-bind",
-  "transform-object-rest-spread",
-];
 
 export const MODULE_TRANSFORMATIONS = {
   "amd": "transform-es2015-modules-amd",
