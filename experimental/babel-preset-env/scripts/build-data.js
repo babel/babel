@@ -29,7 +29,9 @@ const environments = [
   "firefox",
   "safari",
   "node",
-  "ie"
+  "ie",
+  "android",
+  "ios"
 ];
 
 const envMap = {
