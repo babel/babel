@@ -492,14 +492,21 @@ export default function ({ types: t }) {
           }
         }
 
-        // NOTE(motiz88): Here, nodes are all `VariableDeclaration`s with the same `kind`. We make a single node out of them.
-
-        const declarations = [];
+        const nodesOut = [];
         for (const node of nodes) {
-          declarations.push(...node.declarations);
+          const tail = nodesOut[nodesOut.length - 1];
+          if (tail && tail.kind === node.kind) {
+            tail.declarations.push(...node.declarations);
+          } else {
+            nodesOut.push(node);
+          }
         }
 
-        path.replaceWith(t.variableDeclaration(node.kind, declarations));
+        if (nodesOut.length === 1) {
+          path.replaceWith(nodesOut[0]);
+        } else {
+          path.replaceWithMultiple(nodesOut);
+        }
       }
     }
   };
