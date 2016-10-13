@@ -499,6 +499,9 @@ pp.flowIdentToTypeAnnotation = function (startPos, startLoc, node, id) {
     case "mixed":
       return this.finishNode(node, "MixedTypeAnnotation");
 
+    case "empty":
+      return this.finishNode(node, "EmptyTypeAnnotation");
+
     case "number":
       return this.finishNode(node, "NumberTypeAnnotation");
 
