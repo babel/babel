@@ -24,6 +24,10 @@ This should be straightforward to do in most cases. There might be cases were pl
 
 If you are targeting IE 8 and Chrome 55 it will include all plugins required by IE 8 since you would need to support both still.
 
+#### Support a `browsers` option like autoprefixer
+
+[#19](https://github.com/babel/babel-preset-env/pull/19) - Use [browserslist](https://github.com/ai/browserslist) to also queries like `> 1%, last 2 versions`.
+
 ## Install
 
 ```sh
@@ -143,7 +147,9 @@ export class A {}
 
 // ...
 
-export class A {}
+export var A = function A() {
+  _classCallCheck(this, A);
+};
 ```
 
 ### Example with `debug: true`
