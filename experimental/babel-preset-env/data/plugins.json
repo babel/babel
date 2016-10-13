@@ -122,13 +122,15 @@
   },
   "transform-exponentiation-operator": {
     "chrome": 52,
-    "edge": 14
+    "edge": 14,
+    "firefox": 52
   },
   "transform-async-to-generator": {
     "chrome": 55
   },
   "syntax-trailing-function-commas": {
     "edge": 14,
+    "firefox": 52,
     "safari": 10
   }
 }
