@@ -1,4 +1,4 @@
-export default async function (packages) { // eslint-disable-line require-yield
+export default async function (packages) {
   let foundDeps = {};
   let foundDuplicated = false;
   let duplicatedPackages = {};
