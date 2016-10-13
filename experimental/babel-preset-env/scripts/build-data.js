@@ -28,7 +28,8 @@ const environments = [
   "edge",
   "firefox",
   "safari",
-  "node"
+  "node",
+  "ie"
 ];
 
 const envMap = {

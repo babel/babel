@@ -10,7 +10,8 @@
     "chrome": 41,
     "firefox": 46,
     "safari": 10,
-    "node": 4
+    "node": 4,
+    "ie": 11
   },
   "transform-es2015-block-scoping": {
     "chrome": 49,
