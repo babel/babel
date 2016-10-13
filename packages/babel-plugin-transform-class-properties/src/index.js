@@ -20,7 +20,7 @@ export default function ({ types: t }) {
     }
   };
 
-  const buildDefineProperty = template(`
+  const buildObjectDefineProperty = template(`
     Object.defineProperty(REF, KEY, {
       // configurable is false by default
       enumerable: true,
@@ -29,13 +29,13 @@ export default function ({ types: t }) {
     });
   `);
 
-  const buildPropertySpec = (ref, {key, value, computed}) => buildDefineProperty({
+  const buildClassPropertySpec = (ref, {key, value, computed}) => buildObjectDefineProperty({
     REF: ref,
     KEY: (t.isIdentifier(key) && !computed) ? t.stringLiteral(key.name) : key,
     VALUE: value ? value : t.identifier("undefined")
   });
 
-  const buildProperty = (ref, {key, value, computed}) => t.expressionStatement(
+  const buildClassPropertyNonSpec = (ref, {key, value, computed}) => t.expressionStatement(
     t.assignmentExpression("=", t.memberExpression(ref, key, computed || t.isLiteral(key)), value)
   );
 
@@ -44,7 +44,7 @@ export default function ({ types: t }) {
 
     visitor: {
       Class(path, state) {
-        const buildPropertyDefinition = state.opts.spec ? buildPropertySpec : buildProperty;
+        const buildClassProperty = state.opts.spec ? buildClassPropertySpec : buildClassPropertyNonSpec;
         let isDerived = !!path.node.superClass;
         let constructor;
         let props = [];
@@ -83,10 +83,10 @@ export default function ({ types: t }) {
           let isStatic = propNode.static;
 
           if (isStatic) {
-            nodes.push(buildPropertyDefinition(ref, propNode));
+            nodes.push(buildClassProperty(ref, propNode));
           } else {
             if (!propNode.value) continue; // Ignore instance property with no value in spec mode
-            instanceBody.push(buildPropertyDefinition(t.thisExpression(), propNode));
+            instanceBody.push(buildClassProperty(t.thisExpression(), propNode));
           }
         }
 
