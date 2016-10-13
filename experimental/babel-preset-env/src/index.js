@@ -117,6 +117,22 @@ export const validateModulesOption = (modulesOpt = "commonjs") => {
 };
 
 export default function buildPreset(context, opts) {
+  if (!opts.targets) {
+    throw new Error(
+`
+babel-preset-env requires a "targets" option:
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 50
+      }
+    }]
+  ]
+}
+`);
+  }
+
   const loose = validateLooseOption(opts.loose);
   const moduleType = validateModulesOption(opts.modules);
   const targets = getTargets(opts.targets);
