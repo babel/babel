@@ -495,7 +495,7 @@ export default function ({ types: t }) {
         const nodesOut = [];
         for (const node of nodes) {
           const tail = nodesOut[nodesOut.length - 1];
-          if (tail && tail.kind === node.kind) {
+          if (tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) && tail.kind === node.kind) {
             tail.declarations.push(...node.declarations);
           } else {
             nodesOut.push(node);
