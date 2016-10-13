@@ -5,6 +5,7 @@
 // "es5-property-mutators",
 
 import pluginList from "../data/plugins.json";
+import browserslist from "browserslist";
 
 export const plugins = [
   "es3-member-expression-literals",
@@ -39,6 +40,10 @@ export const MODULE_TRANSFORMATIONS = {
  * @return {Boolean}  Whether or not the transformation is required
  */
 export const isPluginRequired = (supportedEnvironments, plugin) => {
+  if (supportedEnvironments.browsers) {
+    supportedEnvironments = getTargets(supportedEnvironments);
+  }
+
   const targetEnvironments = Object.keys(supportedEnvironments);
 
   if (targetEnvironments.length === 0) { return true; }
@@ -61,8 +66,34 @@ export const isPluginRequired = (supportedEnvironments, plugin) => {
   return isRequiredForEnvironments.length > 0 ? true : false;
 };
 
+const isBrowsersQueryValid = browsers => {
+  return typeof browsers === "string" || Array.isArray(browsers);
+};
+
+const getLowestVersions = (browsers) => {
+  return browsers.reduce((all, browser) => {
+    const [browserName, browserVersion] = browser.split(" ");
+    all[browserName] = parseInt(browserVersion);
+    return all;
+  }, {});
+};
+
+const mergeBrowsers = (fromQuery, fromTarget) => {
+  return Object.keys(fromTarget).reduce((queryObj, targKey) => {
+    if (targKey !== "browsers") {
+      queryObj[targKey] = fromTarget[targKey];
+    }
+    return queryObj;
+  }, fromQuery);
+};
+
 const getTargets = targetOpts => {
-  return targetOpts || {};
+  const browserOpts = targetOpts.browsers;
+  if (isBrowsersQueryValid(browserOpts)) {
+    const queryBrowsers = getLowestVersions(browserslist(browserOpts));
+    return mergeBrowsers(queryBrowsers, targetOpts);
+  }
+  return targetOpts;
 };
 
 // TODO: Allow specifying plugins as either shortened or full name

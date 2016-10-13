@@ -42,21 +42,26 @@ The data for this is currently at: [/data/plugins.json](/data/plugins.json) and 
 
 Currently: "chrome, edge, firefox, safari, node"
 
-> Some node features are > `6.5`
+> Some node features are > `6.5`.
+
+* `browsers` (array/string) - an query to select browsers (ex: last 2 versions, > 5%).  
+
+> Note, browsers' results are overridden by explicit items from `targets`.
 
 > If your config is a js file, also do `"node": parseFloat(process.versions.node)`
 
 * `loose` (boolean) - Enable "loose" transformations for any plugins in this preset that allow them (Disabled by default).
 * `modules` - Enable transformation of ES6 module syntax to another module type (Enabled by default to `"commonjs"`).
-  * Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]`
-* `debug` (boolean) - `console.log` out the targets and plugins being used as well as the version specified in `/data/plugins.json`
+  * Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]`.
+* `debug` (boolean) - `console.log` out the targets and plugins being used as well as the version specified in `/data/plugins.json`.
 
 ```js
 {
   "presets": [
     ["env", {
       "targets": {
-        "chrome": 52
+        "chrome": 52,
+        "browsers": "last 2 safari versions"
       },
       "loose": true,
       "modules": false
@@ -114,6 +119,24 @@ exports.A = A;
         "chrome": 52
       },
       "modules": false
+    }]
+  ]
+}
+
+// ...
+
+export class A {}
+```
+
+```js
+// using browserslist
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 52,
+        "browsers": ["last 2 versions", "safari 7"]
+      }
     }]
   ]
 }

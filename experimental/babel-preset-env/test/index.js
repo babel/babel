@@ -65,6 +65,38 @@ describe("babel-preset-env", () => {
       assert(babelPresetEnv.isPluginRequired(targets, plugin) === true);
     });
 
+    it("returns false if plugin feature is implemented by lower than target defined in browsers query", () => {
+      const plugin = {
+        chrome: 49,
+      };
+      const targets = {
+        "browsers": "chrome > 50"
+      };
+      assert(babelPresetEnv.isPluginRequired(targets, plugin) === false);
+    });
+
+    it("returns true if plugin feature is implemented is greater than target defined in browsers query", () => {
+      const plugin = {
+        chrome: 52,
+      };
+      const targets = {
+        "browsers": "chrome > 50"
+      };
+      assert(babelPresetEnv.isPluginRequired(targets, plugin) === true);
+    });
+
+    it("returns true if target's root items overrides versions defined in browsers query", () => {
+      const plugin = {
+        chrome: 45,
+      };
+      const targets = {
+        browsers: "last 2 Chrome versions",
+        chrome: 44
+      };
+
+      assert(babelPresetEnv.isPluginRequired(targets, plugin) === true);
+    });
+
     it("doesn't throw when specifiying a decimal for node", () => {
       let targets;
       const plugin = {
