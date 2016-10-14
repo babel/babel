@@ -89,8 +89,13 @@ pp.parseExpression = function (noIn, refShorthandDefaultPos) {
 // operators like `+=`.
 
 pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse, refNeedsArrowPos) {
+  let startPos = this.state.start;
+  let startLoc = this.state.startLoc;
+
   if (this.match(tt._yield) && this.state.inGenerator) {
-    return this.parseYield();
+    let left = this.parseYield();
+    if (afterLeftParse) left = afterLeftParse.call(this, left, startPos, startLoc);
+    return left;
   }
 
   let failOnShorthandAssign;
@@ -100,9 +105,6 @@ pp.parseMaybeAssign = function (noIn, refShorthandDefaultPos, afterLeftParse, re
     refShorthandDefaultPos = { start: 0 };
     failOnShorthandAssign = true;
   }
-
-  let startPos = this.state.start;
-  let startLoc = this.state.startLoc;
 
   if (this.match(tt.parenL) || this.match(tt.name)) {
     this.state.potentialArrowAt = this.state.start;
