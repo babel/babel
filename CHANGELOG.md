@@ -15,6 +15,89 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## v6.12.0 (2016-10-14)
+
+### 👓 Spec Compliancy
+
+Implement import() syntax ([#163](https://github.com/babel/babylon/pull/163)) (Jordan Gensler)
+
+#### Dynamic Import
+
+- Proposal Repo: https://github.com/domenic/proposal-dynamic-import
+- Championed by [@domenic](https://github.com/domenic)
+- stage-2
+- [sept-28 tc39 notes](https://github.com/rwaldron/tc39-notes/blob/master/es7/2016-09/sept-28.md#113a-import)
+
+> This repository contains a proposal for adding a "function-like" import() module loading syntactic form to JavaScript
+
+```js
+import(`./section-modules/${link.dataset.entryModule}.js`)
+.then(module => {
+  module.loadPageInto(main);
+})
+```
+
+Add EmptyTypeAnnotation ([#171](https://github.com/babel/babylon/pull/171)) (Sam Goldman)
+
+#### EmptyTypeAnnotation
+
+Just wasn't covered before.
+
+```js
+type T = empty;
+```
+
+### :bug: Bug Fix
+
+Fix crash when exporting with destructuring and sparse array ([#170](https://github.com/babel/babylon/pull/170)) (Jeroen Engels)
+
+```js
+// was failing due to sparse array
+export const { foo: [ ,, qux7 ] } = bar;
+```
+
+Allow keyword in Flow object declaration property names with type parameters ([#146](https://github.com/babel/babylon/pull/146)) (Dan Harper)
+
+```js
+declare class X {
+  foobar<T>(): void;
+  static foobar<T>(): void;
+}
+```
+
+Allow keyword in object/class property names with Flow type parameters ([#145](https://github.com/babel/babylon/pull/145)) (Dan Harper)
+
+```js
+class Foo {
+  delete<T>(item: T): T {
+    return item;
+  }
+}
+```
+
+Allow typeAnnotations for yield expressions ([#174](https://github.com/babel/babylon/pull/174))) (Daniel Tschinder)
+
+```js
+function *foo() {
+  const x = (yield 5: any);
+}
+```
+
+### :nail_care: Polish
+
+Annotate more errors with expected token ([#172](https://github.com/babel/babylon/pull/172))) (Moti Zilberman)
+
+```js
+// Unexpected token, expected ; (1:6)
+{ set 1 }
+```
+
+### :house: Internal
+
+Remove kcheck ([#173](https://github.com/babel/babylon/pull/173)))  (Daniel Tschinder)
+
+Also run flow, linting, babel tests on seperate instances (add back node 0.10)
+
 ## v6.11.6 (2016-10-12)
 
 ### :bug: Bug Fix/Regression
@@ -24,7 +107,7 @@ Fix crash when exporting with destructuring and sparse array ([#170](https://git
 ```js
 // was failing with `Cannot read property 'type' of null` because of null identifiers
 export const { foo: [ ,, qux7 ] } = bar;
-````
+```
 
 ## v6.11.5 (2016-10-12)
 
