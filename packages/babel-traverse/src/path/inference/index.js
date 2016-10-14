@@ -73,6 +73,8 @@ function _isBaseType(baseName: string, type?, soft?): boolean {
     return t.isAnyTypeAnnotation(type);
   } else if (baseName === "mixed") {
     return t.isMixedTypeAnnotation(type);
+  } else if (baseName === "empty") {
+    return t.isEmptyTypeAnnotation(type);
   } else if (baseName === "void") {
     return t.isVoidTypeAnnotation(type);
   } else {

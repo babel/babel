@@ -1,7 +1,7 @@
 {
   "name": "babel-helper-explode-assignable-expression",
   "version": "6.8.0",
-  "description": "",
+  "description": "Helper function to explode an assignable expression",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-explode-assignable-expression",
   "license": "MIT",
   "main": "lib/index.js",

@@ -52,7 +52,7 @@ function preset(context, opts = {}) {
 
   // be DRY
   const optsLoose = { loose };
-  
+
   return {
     plugins: [
       [transformES2015TemplateLiterals, { loose, spec }],

@@ -1,3 +1,5 @@
 instrumentation:
   root: .
-  excludes: "**/node_modules/**"
+  excludes:
+    - "**/node_modules/**"
+    - "scripts/*.js"

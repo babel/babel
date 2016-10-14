@@ -90,6 +90,10 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
       []
     ))
   ];
+
+  // Regardless of whether or not the wrapped function is a an async method
+  // or generator the outer function should not be
+  node.generator = false;
 }
 
 function plainFunction(path: NodePath, callId: Object) {
