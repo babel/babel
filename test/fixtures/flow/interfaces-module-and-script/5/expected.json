@@ -121,7 +121,8 @@
                   }
                 }
               },
-              "optional": false
+              "optional": false,
+              "variance": null
             }
           ],
           "indexers": [
@@ -184,7 +185,8 @@
                     "column": 46
                   }
                 }
-              }
+              },
+              "variance": null
             }
           ]
         }

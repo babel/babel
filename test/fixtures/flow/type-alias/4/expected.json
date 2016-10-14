@@ -140,7 +140,8 @@
                       "raw": "\"A\""
                     }
                   },
-                  "optional": false
+                  "optional": false,
+                  "variance": null
                 }
               ],
               "indexers": []
@@ -211,7 +212,8 @@
                       "raw": "\"B\""
                     }
                   },
-                  "optional": false
+                  "optional": false,
+                  "variance": null
                 }
               ],
               "indexers": []

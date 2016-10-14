@@ -147,7 +147,8 @@
                           }
                         }
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     }
                   ],
                   "indexers": [
@@ -210,7 +211,8 @@
                             "column": 49
                           }
                         }
-                      }
+                      },
+                      "variance": null
                     }
                   ]
                 }

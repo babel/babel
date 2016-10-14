@@ -147,7 +147,8 @@
                           }
                         }
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -194,7 +195,8 @@
                           }
                         }
                       },
-                      "optional": true
+                      "optional": true,
+                      "variance": null
                     }
                   ],
                   "indexers": []

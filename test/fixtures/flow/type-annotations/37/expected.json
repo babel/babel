@@ -193,12 +193,14 @@
                                 }
                               }
                             },
-                            "optional": false
+                            "optional": false,
+                            "variance": null
                           }
                         ],
                         "indexers": []
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     }
                   ],
                   "indexers": []

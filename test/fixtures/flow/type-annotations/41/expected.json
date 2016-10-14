@@ -223,7 +223,8 @@
                             "column": 49
                           }
                         }
-                      }
+                      },
+                      "variance": null
                     }
                   ]
                 }

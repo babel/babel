@@ -256,7 +256,8 @@
                       }
                     }
                   },
-                  "optional": false
+                  "optional": false,
+                  "variance": null
                 },
                 {
                   "type": "ObjectTypeProperty",
@@ -303,7 +304,8 @@
                       }
                     }
                   },
-                  "optional": false
+                  "optional": false,
+                  "variance": null
                 }
               ],
               "indexers": []

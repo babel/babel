@@ -188,7 +188,8 @@
                 }
               },
               "optional": false,
-              "static": true
+              "static": true,
+              "variance": null
             }
           ],
           "indexers": []

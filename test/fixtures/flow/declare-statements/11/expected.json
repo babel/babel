@@ -137,7 +137,8 @@
                     "column": 51
                   }
                 }
-              }
+              },
+              "variance": null
             }
           ]
         }

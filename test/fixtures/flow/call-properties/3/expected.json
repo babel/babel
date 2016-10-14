@@ -292,7 +292,8 @@
                           }
                         }
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     }
                   ],
                   "indexers": []

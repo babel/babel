@@ -125,7 +125,8 @@
                 }
               },
               "optional": false,
-              "static": false
+              "static": false,
+              "variance": null
             },
             {
               "type": "ObjectTypeProperty",
@@ -174,7 +175,8 @@
                 }
               },
               "optional": false,
-              "static": true
+              "static": true,
+              "variance": null
             },
             {
               "type": "ObjectTypeProperty",
@@ -223,7 +225,8 @@
                 }
               },
               "optional": false,
-              "static": false
+              "static": false,
+              "variance": null
             }
           ],
           "indexers": [],

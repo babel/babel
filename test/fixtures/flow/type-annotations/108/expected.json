@@ -149,7 +149,8 @@
                           }
                         }
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -197,7 +198,8 @@
                           }
                         }
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     }
                   ],
                   "indexers": [],
@@ -457,7 +459,8 @@
                           }
                         }
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -505,7 +508,8 @@
                           }
                         }
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     }
                   ],
                   "indexers": [],
@@ -912,7 +916,8 @@
                                 }
                               }
                             },
-                            "optional": false
+                            "optional": false,
+                            "variance": null
                           },
                           {
                             "type": "ObjectTypeProperty",
@@ -960,13 +965,15 @@
                                 }
                               }
                             },
-                            "optional": false
+                            "optional": false,
+                            "variance": null
                           }
                         ],
                         "indexers": [],
                         "exact": true
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -1014,7 +1021,8 @@
                           }
                         }
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     }
                   ],
                   "indexers": [],
@@ -1424,7 +1432,8 @@
                                 }
                               }
                             },
-                            "optional": false
+                            "optional": false,
+                            "variance": null
                           },
                           {
                             "type": "ObjectTypeProperty",
@@ -1472,13 +1481,15 @@
                                 }
                               }
                             },
-                            "optional": false
+                            "optional": false,
+                            "variance": null
                           }
                         ],
                         "indexers": [],
                         "exact": false
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -1526,7 +1537,8 @@
                           }
                         }
                       },
-                      "optional": false
+                      "optional": false,
+                      "variance": null
                     }
                   ],
                   "indexers": [],

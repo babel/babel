@@ -122,7 +122,8 @@
                   }
                 }
               },
-              "optional": false
+              "optional": false,
+              "variance": null
             }
           ],
           "indexers": []
@@ -271,7 +272,8 @@
                   "name": "T"
                 }
               },
-              "optional": false
+              "optional": false,
+              "variance": null
             }
           ],
           "indexers": []
