@@ -45,6 +45,7 @@ These are the core Babylon AST node types.
   - [DirectiveLiteral](#directiveliteral)
 - [Expressions](#expressions)
   - [Super](#super)
+  - [Import](#import)
   - [ThisExpression](#thisexpression)
   - [ArrowFunctionExpression](#arrowfunctionexpression)
   - [YieldExpression](#yieldexpression)
@@ -568,6 +569,16 @@ interface Super <: Node {
 
 A `super` pseudo-expression.
 
+## Import
+
+```js
+interface Import <: Node {
+    type: "Import";
+}
+```
+
+A `import` pseudo-expression.
+
 ## ThisExpression
 
 ```js
@@ -870,7 +881,7 @@ A conditional expression, i.e., a ternary `?`/`:` expression.
 ```js
 interface CallExpression <: Expression {
   type: "CallExpression";
-  callee: Expression | Super;
+  callee: Expression | Super | Import;
   arguments: [ Expression | SpreadElement ];
 }
 ```

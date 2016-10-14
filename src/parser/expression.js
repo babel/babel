@@ -302,6 +302,9 @@ pp.parseSubscripts = function (base, startPos, startLoc, noCalls) {
       let node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
       node.arguments = this.parseCallExpressionArguments(tt.parenR, possibleAsync);
+      if (node.callee.type === "Import" && node.arguments.length !== 1) {
+        this.raise(node.start, "import() requires exactly one argument");
+      }
       base = this.finishNode(node, "CallExpression");
 
       if (possibleAsync && this.shouldParseAsyncArrow()) {
@@ -386,6 +389,16 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
         this.raise(node.start, "super() outside of class constructor");
       }
       return this.finishNode(node, "Super");
+
+    case tt._import:
+      if (!this.hasPlugin("dynamicImport")) this.unexpected();
+
+      node = this.startNode();
+      this.next();
+      if (!this.match(tt.parenL)) {
+        this.unexpected();
+      }
+      return this.finishNode(node, "Import");
 
     case tt._this:
       node = this.startNode();
