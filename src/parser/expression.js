@@ -396,7 +396,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       node = this.startNode();
       this.next();
       if (!this.match(tt.parenL)) {
-        this.unexpected();
+        this.unexpected(null, tt.parenL);
       }
       return this.finishNode(node, "Import");
 
