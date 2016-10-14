@@ -336,6 +336,9 @@ pp.flowParseObjectTypeCallProperty = function (node, isStatic) {
 };
 
 pp.flowParseObjectType = function (allowStatic, allowExact) {
+  const oldInType = this.state.inType;
+  this.state.inType = true;
+
   let nodeStart = this.startNode();
   let node;
   let propertyKey;
@@ -399,7 +402,11 @@ pp.flowParseObjectType = function (allowStatic, allowExact) {
 
   this.expect(endDelim);
 
-  return this.finishNode(nodeStart, "ObjectTypeAnnotation");
+  const out = this.finishNode(nodeStart, "ObjectTypeAnnotation");
+
+  this.state.inType = oldInType;
+
+  return out;
 };
 
 pp.flowObjectTypeSemicolon = function () {
