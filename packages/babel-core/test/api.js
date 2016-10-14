@@ -114,6 +114,10 @@ describe("api", function () {
     }).marked[0].message, "foobar");
   });
 
+  it("exposes the resolvePlugin method", function() {
+    assert.equal(babel.resolvePlugin("nonexistent-plugin"), null);
+  });
+
   it("transformFile", function (done) {
     babel.transformFile(__dirname + "/fixtures/api/file.js", {}, function (err, res) {
       if (err) return done(err);

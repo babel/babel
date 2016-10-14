@@ -6,6 +6,7 @@ import Plugin from "../../plugin";
 import * as messages from "babel-messages";
 import { normaliseOptions } from "./index";
 import resolve from "../../../helpers/resolve";
+import resolvePlugin from "../../../helpers/resolve-plugin";
 import cloneDeepWith from "lodash/cloneDeepWith";
 import clone from "lodash/clone";
 import merge from "../../../helpers/merge";
@@ -123,7 +124,7 @@ export default class OptionManager {
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
+        let pluginLoc = resolvePlugin(plugin, dirname);
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
