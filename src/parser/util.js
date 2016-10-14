@@ -81,7 +81,7 @@ pp.expect = function (type, pos) {
 // instead of a message string.
 
 pp.unexpected = function (pos, messageOrType = "Unexpected token") {
-  if (messageOrType && typeof messageOrType === 'object' && messageOrType.label) {
+  if (messageOrType && typeof messageOrType === "object" && messageOrType.label) {
     messageOrType = `Unexpected token, expected ${messageOrType.label}`;
   }
   this.raise(pos != null ? pos : this.state.start, messageOrType);
