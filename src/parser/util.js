@@ -27,7 +27,7 @@ pp.expectRelational = function (op) {
   if (this.isRelational(op)) {
     this.next();
   } else {
-    this.unexpected();
+    this.unexpected(null, tt.relational);
   }
 };
 
@@ -67,18 +67,22 @@ pp.isLineTerminator = function () {
 // pretend that there is a semicolon at this position.
 
 pp.semicolon = function () {
-  if (!this.isLineTerminator()) this.unexpected();
+  if (!this.isLineTerminator()) this.unexpected(null, tt.semi);
 };
 
 // Expect a token of a given type. If found, consume it, otherwise,
 // raise an unexpected token error at given pos.
 
 pp.expect = function (type, pos) {
-  return this.eat(type) || this.unexpected(pos, `Unexpected token, expected ${type.label}`);
+  return this.eat(type) || this.unexpected(pos, type);
 };
 
-// Raise an unexpected token error.
+// Raise an unexpected token error. Can take the expected token type
+// instead of a message string.
 
-pp.unexpected = function (pos, message = "Unexpected token") {
-  this.raise(pos != null ? pos : this.state.start, message);
+pp.unexpected = function (pos, messageOrType = "Unexpected token") {
+  if (messageOrType && typeof messageOrType === 'object' && messageOrType.label) {
+    messageOrType = `Unexpected token, expected ${messageOrType.label}`;
+  }
+  this.raise(pos != null ? pos : this.state.start, messageOrType);
 };
