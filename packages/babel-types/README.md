@@ -755,6 +755,11 @@ See also `t.isMixedTypeAnnotation(node, opts)` and `t.assertMixedTypeAnnotation(
 
 Aliases: `Flow`, `FlowBaseAnnotation`
 
+### t.emptyTypeAnnotation()
+
+See also `t.isEmptyTypeAnnotation(node, opts)` and `t.assertEmptyTypeAnnotation(node, opts)`.
+
+Aliases: `Flow`, `FlowBaseAnnotation`
 
 ### t.newExpression(callee, arguments)
 
