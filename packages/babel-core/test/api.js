@@ -118,6 +118,10 @@ describe("api", function () {
     assert.equal(babel.resolvePlugin("nonexistent-plugin"), null);
   });
 
+  it("exposes the resolvePreset method", function() {
+    assert.equal(babel.resolvePreset("nonexistent-preset"), null);
+  });
+
   it("transformFile", function (done) {
     babel.transformFile(__dirname + "/fixtures/api/file.js", {}, function (err, res) {
       if (err) return done(err);
@@ -266,7 +270,7 @@ describe("api", function () {
           presets: ["@babel/es2015"]
         });
       },
-      /Couldn\'t find preset \"\@babel\/babel\-preset\-es2015\" relative to directory/
+      /Couldn\'t find preset \"\@babel\/es2015\" relative to directory/
     );
   });
 
@@ -277,7 +281,7 @@ describe("api", function () {
           presets: ["@babel/react/optimizations"]
         });
       },
-      /Couldn\'t find preset \"\@babel\/babel\-preset\-react\/optimizations\" relative to directory/
+      /Couldn\'t find preset \"\@babel\/react\/optimizations\" relative to directory/
     );
   });
 

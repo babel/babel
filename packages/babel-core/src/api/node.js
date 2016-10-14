@@ -6,6 +6,7 @@ export { default as options } from "../transformation/file/options/config";
 export { default as buildExternalHelpers } from "../tools/build-external-helpers";
 export { default as template } from "babel-template";
 export { default as resolvePlugin } from "../helpers/resolve-plugin";
+export { default as resolvePreset } from "../helpers/resolve-preset";
 export { version } from "../../package";
 
 import * as util from "../util";
