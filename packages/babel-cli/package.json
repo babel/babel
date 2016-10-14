@@ -30,6 +30,7 @@
     "babel-helper-fixtures": "^6.9.0"
   },
   "bin": {
+    "babel-doctor": "./bin/babel-doctor.js",
     "babel": "./bin/babel.js",
     "babel-node": "./bin/babel-node.js",
     "babel-external-helpers": "./bin/babel-external-helpers.js"
