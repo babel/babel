@@ -1,0 +1,6 @@
+{
+  "extends": "babel",
+  "env": {
+    "node": true
+  }
+}

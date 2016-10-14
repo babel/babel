@@ -419,7 +419,7 @@ pp.parseEmptyStatement = function (node) {
 };
 
 pp.parseLabeledStatement = function (node, maybeName, expr) {
-  for (let label of (this.state.labels: Array<Object>)){
+  for (let label of (this.state.labels: Array<Object>)) {
     if (label.name === maybeName) {
       this.raise(expr.start, `Label '${maybeName}' is already declared`);
     }

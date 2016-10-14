@@ -3,3 +3,4 @@ build
 coverage
 lib
 node_modules
+yarn.lock

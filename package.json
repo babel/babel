@@ -14,6 +14,7 @@
   "devDependencies": {
     "ava": "^0.16.0",
     "babel-cli": "^6.14.0",
+    "babel-eslint": "^7.0.0",
     "babel-helper-fixtures": "^6.9.0",
     "babel-plugin-istanbul": "^2.0.1",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
@@ -21,7 +22,11 @@
     "babel-preset-stage-0": "^6.5.0",
     "codecov": "^1.0.1",
     "cross-env": "^2.0.1",
-    "kcheck": "^2.0.3",
+    "eslint": "^3.7.1",
+    "eslint-config-babel": "^2.0.1",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-flowtype": "^2.20.0",
+    "flow-bin": "^0.33.0",
     "lodash": "^4.15.0",
     "nyc": "^8.1.0",
     "unicode-9.0.0": "~0.7.0"
@@ -32,12 +37,13 @@
   "scripts": {
     "build": "babel src --out-dir lib",
     "coverage": "nyc report --reporter=json && codecov -f coverage/coverage-final.json",
-    "lint": "kcheck",
+    "lint": "eslint src bin",
+    "flow": "flow",
     "prepublish": "cross-env BABEL_ENV=production npm run build",
     "preversion": "npm run test && npm run changelog",
-    "test": "npm run build && npm run lint && npm run test-only",
+    "test": "npm run lint && npm run flow && npm run build && npm run test-only",
     "test-only": "ava test",
-    "test_cov": "cross-env BABEL_ENV=test npm run build && npm run lint && nyc ava test",
+    "test-ci": "cross-env BABEL_ENV=test npm run build && nyc npm run test-only",
     "watch": "babel src --out-dir lib --watch",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
   },
