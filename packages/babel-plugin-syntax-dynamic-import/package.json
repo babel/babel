@@ -1,8 +1,8 @@
 {
-  "name": "babel-plugin-syntax-import-functions",
+  "name": "babel-plugin-syntax-dynamic-import",
   "version": "6.13.0",
   "description": "Allow parsing of import()",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-import-functions",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-dynamic-import",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
