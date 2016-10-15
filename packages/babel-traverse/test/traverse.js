@@ -1,9 +1,9 @@
-var traverse = require("../lib").default;
-var assert   = require("assert");
-var _        = require("lodash");
+let traverse = require("../lib").default;
+let assert   = require("assert");
+let _        = require("lodash");
 
 suite("traverse", function () {
-  var ast = {
+  let ast = {
     type: "Program",
     body: [
       {
@@ -50,14 +50,14 @@ suite("traverse", function () {
     ]
   };
 
-  var body = ast.body;
+  let body = ast.body;
 
   test("traverse replace", function () {
-    var replacement = {
+    let replacement = {
       type: "StringLiteral",
       value: "foo"
     };
-    var ast2 = _.cloneDeep(ast);
+    let ast2 = _.cloneDeep(ast);
 
     traverse(ast2, {
       enter: function (path) {
@@ -69,12 +69,12 @@ suite("traverse", function () {
   });
 
   test("traverse", function () {
-    var expect = [
+    let expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
       body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object, body[1].expression.left.property, body[1].expression.right
     ];
 
-    var actual = [];
+    let actual = [];
 
     traverse(ast, {
       enter: function (path) {
@@ -94,12 +94,12 @@ suite("traverse", function () {
   });
 
   test("traverse blacklistTypes", function () {
-    var expect = [
+    let expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
       body[1], body[1].expression, body[1].expression.right
     ];
 
-    var actual = [];
+    let actual = [];
 
     traverse(ast, {
       blacklist: ["MemberExpression"],
@@ -125,7 +125,7 @@ suite("traverse", function () {
   });
 
   test("clearCache", function () {
-    var paths = [];
+    let paths = [];
     traverse(ast, {
       enter: function (path) {
         paths.push(path);
@@ -134,7 +134,7 @@ suite("traverse", function () {
 
     traverse.clearCache();
 
-    var paths2 = [];
+    let paths2 = [];
     traverse(ast, {
       enter: function (path) {
         paths2.push(path);

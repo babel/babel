@@ -1,6 +1,6 @@
-var assert = require("assert");
-var chalk = require("chalk");
-var codeFrame = require("..");
+let assert = require("assert");
+let chalk = require("chalk");
+let codeFrame = require("..");
 
 suite("babel-code-frame", function () {
   test("basic usage", function () {
@@ -98,7 +98,7 @@ suite("babel-code-frame", function () {
       "\tclass Foo {",
       "\t  \t\t    constructor\t(\t)",
       "\t};",
-    ].join('\n');
+    ].join("\n");
     assert.equal(codeFrame(rawLines, 2, 25), [
       "  1 | \tclass Foo {",
       "> 2 | \t  \t\t    constructor\t(\t)",
@@ -119,7 +119,7 @@ suite("babel-code-frame", function () {
   });
 
   test("opts.linesAbove", function () {
-    var rawLines = [
+    let rawLines = [
       "/**",
       " * Sums two numbers.",
       " *",
@@ -143,7 +143,7 @@ suite("babel-code-frame", function () {
   });
 
   test("opts.linesBelow", function () {
-    var rawLines = [
+    let rawLines = [
       "/**",
       " * Sums two numbers.",
       " *",
@@ -166,7 +166,7 @@ suite("babel-code-frame", function () {
   });
 
   test("opts.linesAbove and opts.linesBelow", function () {
-    var rawLines = [
+    let rawLines = [
       "/**",
       " * Sums two numbers.",
       " *",

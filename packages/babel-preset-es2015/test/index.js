@@ -1,6 +1,5 @@
-var es2015 = require("../lib");
-var assert = require("assert");
-var expect = require("chai").expect;
+let es2015 = require("../lib");
+let expect = require("chai").expect;
 
 suite("es2015 preset", function () {
   test("exposes an object", function () {
@@ -16,7 +15,7 @@ suite("es2015 preset", function () {
     expect(function () {
       es2015.buildPreset(null);
     }).not.to.throw();
-  })
+  });
 
   suite("options", function () {
     suite("loose", function () {
