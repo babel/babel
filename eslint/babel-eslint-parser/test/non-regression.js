@@ -1196,7 +1196,7 @@ describe("verify", function () {
     verifyAndAssertMessages(
       "const {Bacona} = require('baconjs')",
       { "no-undef": 1, "no-unused-vars": 1 },
-      [ "1:8 'Bacona' is defined but never used. no-unused-vars" ]
+      [ "1:8 'Bacona' is assigned a value but never used. no-unused-vars" ]
     );
   });
 

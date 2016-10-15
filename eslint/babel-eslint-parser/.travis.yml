@@ -1,11 +1,16 @@
-git:
-  depth: 1
 sudo: false
 language: node_js
-matrix:
-  include:
-    - node_js: "4"
-    - node_js: "5"
-    - node_js: "6"
+node_js:
+  - "4"
+  - "5"
+  - "6"
 
-script: npm run test-ci
+matrix:
+  fast_finish: true
+  include:
+    - node_js: "node"
+      env: LINT=true
+
+script:
+  - 'if [ -n "${LINT-}" ]; then npm run lint ; fi'
+  - 'if [ -z "${LINT-}" ]; then npm test ; fi'
