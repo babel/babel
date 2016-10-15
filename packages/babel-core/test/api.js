@@ -263,28 +263,6 @@ describe("api", function () {
 
   });
 
-  it("handles preset shortcuts (adds babel-preset-)", function () {
-    return assert.throws(
-      function () {
-        babel.transform("", {
-          presets: ["@babel/es2015"]
-        });
-      },
-      /Couldn\'t find preset \"\@babel\/es2015\" relative to directory/
-    );
-  });
-
-  it("handles preset shortcuts 2 (adds babel-preset-)", function () {
-    return assert.throws(
-      function () {
-        babel.transform("", {
-          presets: ["@babel/react/optimizations"]
-        });
-      },
-      /Couldn\'t find preset \"\@babel\/react\/optimizations\" relative to directory/
-    );
-  });
-
   it("source map merging", function () {
     let result = babel.transform([
       "function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }",
