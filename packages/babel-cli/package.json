@@ -17,7 +17,6 @@
     "glob": "^5.0.5",
     "lodash": "^4.2.0",
     "output-file-sync": "^1.1.0",
-    "path-exists": "^1.0.0",
     "path-is-absolute": "^1.0.0",
     "slash": "^1.0.0",
     "source-map": "^0.5.0",
