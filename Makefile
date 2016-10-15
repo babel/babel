@@ -44,14 +44,14 @@ test: lint test-only
 test-cov: clean
 	# rebuild with test
 	rm -rf packages/*/lib
-	BABEL_ENV=test; ./node_modules/.bin/gulp build
+	BABEL_ENV=test ./node_modules/.bin/gulp build
 	./scripts/test-cov.sh
 
 test-ci:
 	NODE_ENV=test make bootstrap
 	# if ./node_modules/.bin/semver `npm --version` -r ">=3.3.0"; then ./node_modules/.bin/flow check; fi
-	./scripts/test-cov.sh
-	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
+	make test-cov
+	./node_modules/.bin/codecov -f coverage/coverage-final.json
 
 publish:
 	git pull --rebase

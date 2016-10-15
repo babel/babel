@@ -11,6 +11,7 @@
     "async": "^1.5.0",
     "babel-core": "^6.13.2",
     "babel-eslint": "^7.0.0",
+    "babel-plugin-istanbul": "^2.0.1",
     "babel-plugin-transform-class-properties": "^6.6.0",
     "babel-plugin-transform-flow-strip-types": "^6.3.13",
     "babel-plugin-transform-runtime": "^6.3.13",
@@ -22,7 +23,7 @@
     "bundle-collapser": "^1.2.1",
     "chai": "^2.2.0",
     "chalk": "1.1.1",
-    "codecov.io": "^0.1.6",
+    "codecov": "^1.0.1",
     "derequire": "^2.0.2",
     "eslint": "^3.7.1",
     "eslint-config-babel": "^2.0.1",
@@ -35,11 +36,11 @@
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
-    "istanbul": "^0.4.5",
     "lerna": "2.0.0-beta.23",
     "lerna-changelog": "^0.2.0",
     "lodash": "^4.2.0",
     "mocha": "^3.0.0",
+    "nyc": "^8.3.1",
     "output-file-sync": "^1.1.1",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
@@ -65,8 +66,19 @@
     ],
     "env": {
       "test": {
-        "auxiliaryCommentBefore": "istanbul ignore next"
+        "auxiliaryCommentBefore": "istanbul ignore next",
+        "plugins": [
+          "istanbul"
+        ]
       }
     }
+  },
+  "nyc": {
+    "exclude": [
+      "**/node_modules/**",
+      "scripts/*.js"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }
