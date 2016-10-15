@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-flow-comments",
+    "syntax-class-properties"
+  ]
+}

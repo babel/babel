@@ -5,19 +5,21 @@ language: node_js
 cache:
   directories:
   - node_modules
-before_install:
-- |
-    [ "$TRAVIS_COMMIT_RANGE" = "" ] || git diff --name-only $TRAVIS_COMMIT_RANGE | grep -qvE '(\.md$)|(^(doc))/' || {
-      echo "Only docs were updated, stopping build process."
-      exit
-    }
 node_js:
 - '6'
 - '5'
 - '4'
 - '0.12'
-script: make test-ci
+script: 
+  - 'if [ -n "${LINT-}" ]; then make lint ; fi'
+  - 'if [ -z "${LINT-}" ]; then make test-ci ; fi'
 
+matrix:
+  fast_finish: true
+  include:
+    - node_js: "node"
+      env: LINT=true
+      
 notifications:
   on_success: change
   on_failure: always

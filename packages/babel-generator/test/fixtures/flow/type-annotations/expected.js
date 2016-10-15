@@ -6,13 +6,13 @@ function foo(untypedVal, numVal: number) {}
 function foo(nullableNum: ?number) {}
 function foo(callback: () => void) {}
 function foo(callback: () => number) {}
-function foo(callback: (_: bool) => number) {}
-function foo(callback: (_1: bool, _2: string) => number) {}
-function foo(callback: (_1: bool, ...foo: Array<number>) => number) {}
+function foo(callback: (_: boolean) => number) {}
+function foo(callback: (_1: boolean, _2: string) => number) {}
+function foo(callback: (_1: boolean, ...foo: Array<number>) => number) {}
 function foo(): number {}
 function foo(): () => void {}
-function foo(): (_: bool) => number {}
-function foo(): (_?: bool) => number {}
+function foo(): (_: boolean) => number {}
+function foo(): (_?: boolean) => number {}
 function foo(): {} {}
 function foo<T>() {}
 function foo<T, S>() {}
@@ -91,7 +91,7 @@ var a: Map<string, Array<string>>;
 var a: Map<string, Array<string>>;
 var a: number[];
 var a: ?string[];
-var a: Promise<bool>[];
+var a: Promise<boolean>[];
 var a: (...rest: Array<number>) => number;
 var identity: <T>(x: T) => T;
 var identity: <T>(x: T, ...y: T[]) => T;

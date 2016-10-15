@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-stage-1",
-  "version": "6.13.0",
+  "version": "6.16.0",
   "description": "Babel preset for stage 1 plugins",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -10,6 +10,6 @@
   "dependencies": {
     "babel-plugin-transform-class-constructor-call": "^6.3.13",
     "babel-plugin-transform-export-extensions": "^6.3.13",
-    "babel-preset-stage-2": "^6.13.0"
+    "babel-preset-stage-2": "^6.16.0"
   }
 }

@@ -11,7 +11,7 @@ export function ArrayTypeAnnotation(node: Object) {
 }
 
 export function BooleanTypeAnnotation() {
-  this.word("bool");
+  this.word("boolean");
 }
 
 export function BooleanLiteralTypeAnnotation(node: Object) {

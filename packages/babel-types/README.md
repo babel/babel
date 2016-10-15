@@ -49,6 +49,7 @@ Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, 
  - `body`: `BlockStatement | Expression` (required)
  - `async`: `boolean` (default: `false`)
  - `returnType` (default: `null`)
+ - `typeParameters` (default: `null`)
 
 ### t.assignmentExpression(operator, left, right)
 
@@ -221,7 +222,7 @@ Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
 
 See also `t.isClassProperty(node, opts)` and `t.assertClassProperty(node, opts)`.
 
-Aliases: `Flow`, `Property`
+Aliases: `Property`
 
  - `key` (required)
  - `value` (required)
@@ -434,6 +435,16 @@ See also `t.isFile(node, opts)` and `t.assertFile(node, opts)`.
  - `program`: `Program` (required)
  - `comments` (required)
  - `tokens` (required)
+
+### t.forAwaitStatement(left, right, body)
+
+See also `t.isForAwaitStatement(node, opts)` and `t.assertForAwaitStatement(node, opts)`.
+
+Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
+
+ - `left`: `VariableDeclaration | LVal` (required)
+ - `right`: `Expression` (required)
+ - `body`: `Statement` (required)
 
 ### t.forInStatement(left, right, body)
 

@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-transform-es2015-modules-amd",
   "version": "6.8.0",
-  "description": "",
+  "description": "This plugin transforms ES2015 modules to AMD",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-modules-amd",
   "license": "MIT",
   "main": "lib/index.js",
