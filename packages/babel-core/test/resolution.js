@@ -1,14 +1,14 @@
-var assert = require("assert");
-var async = require("async");
-var babel = require("../lib/api/node");
-var fs = require("fs");
-var path = require("path");
+let assert = require("assert");
+let async = require("async");
+let babel = require("../lib/api/node");
+let fs = require("fs");
+let path = require("path");
 
 // Test that plugins & presets are resolved relative to `filename`.
 suite("addon resolution", function () {
   test("addon resolution", function (done) {
-    var fixtures = {};
-    var paths = {};
+    let fixtures = {};
+    let paths = {};
 
     paths.fixtures = path.join(
       __dirname,
@@ -33,7 +33,7 @@ suite("addon resolution", function () {
     function fixturesReady (err) {
       if (err) return done(err);
 
-      var actual = babel.transform(fixtures.actual, {
+      let actual = babel.transform(fixtures.actual, {
         filename: paths.actual,
         plugins: ["addons/plugin"],
         presets: ["addons/preset"],

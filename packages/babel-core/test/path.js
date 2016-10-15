@@ -1,13 +1,12 @@
-var transform = require("../lib/api/node").transform;
-var Plugin    = require("../lib/transformation/plugin");
-var babel     = require("../lib/api/node");
-var chai      = require("chai");
+let transform = require("../lib/api/node").transform;
+let Plugin    = require("../lib/transformation/plugin");
+let chai      = require("chai");
 
 suite("traversal path", function () {
   test("replaceWithSourceString", function () {
-    var expectCode = "function foo() {}";
+    let expectCode = "function foo() {}";
 
-    var actualCode = transform(expectCode, {
+    let actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           FunctionDeclaration: function (path) {
@@ -21,9 +20,9 @@ suite("traversal path", function () {
   });
 
   test("replaceWith (arrow expression body to block statement body)", function () {
-    var expectCode = "var fn = () => true;";
+    let expectCode = "var fn = () => true;";
 
-    var actualCode = transform(expectCode, {
+    let actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ArrowFunctionExpression: function (path) {
@@ -46,9 +45,9 @@ suite("traversal path", function () {
   });
 
   test("replaceWith (arrow block statement body to expression body)", function () {
-    var expectCode = "var fn = () => { return true; }";
+    let expectCode = "var fn = () => { return true; }";
 
-    var actualCode = transform(expectCode, {
+    let actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ArrowFunctionExpression: function (path) {
@@ -65,9 +64,9 @@ suite("traversal path", function () {
   });
 
   test("replaceWith (for-in left expression to variable declaration)", function () {
-    var expectCode = "for (KEY in right);";
+    let expectCode = "for (KEY in right);";
 
-    var actualCode = transform(expectCode, {
+    let actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ForInStatement: function (path) {
@@ -91,9 +90,9 @@ suite("traversal path", function () {
   });
 
   test("replaceWith (for-in left variable declaration to expression)", function () {
-    var expectCode = "for (var KEY in right);";
+    let expectCode = "for (var KEY in right);";
 
-    var actualCode = transform(expectCode, {
+    let actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ForInStatement: function (path) {
@@ -110,9 +109,9 @@ suite("traversal path", function () {
   });
 
   test("replaceWith (for-loop left expression to variable declaration)", function () {
-    var expectCode = "for (KEY;;);";
+    let expectCode = "for (KEY;;);";
 
-    var actualCode = transform(expectCode, {
+    let actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ForStatement: function (path) {
@@ -136,9 +135,9 @@ suite("traversal path", function () {
   });
 
   test("replaceWith (for-loop left variable declaration to expression)", function () {
-    var expectCode = "for (var KEY;;);";
+    let expectCode = "for (var KEY;;);";
 
-    var actualCode = transform(expectCode, {
+    let actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ForStatement: function (path) {

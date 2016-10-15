@@ -18,10 +18,10 @@ watch: clean
 	./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/eslint packages/*/src
+	./node_modules/.bin/eslint packages/*/{src,test}/*.js
 
 fix:
-	./node_modules/.bin/eslint packages/*/src --fix
+	./node_modules/.bin/eslint packages/*/{src,test}/*.js --fix
 
 clean: test-clean
 	rm -rf packages/*/lib
