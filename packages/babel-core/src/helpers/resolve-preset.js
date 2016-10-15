@@ -1,6 +1,6 @@
-import resolve from "./resolve";
+import resolveFromPossibleNames from "./resolve-from-possible-names";
 import getPossiblePresetNames from "./get-possible-preset-names";
 
 export default function resolvePreset(presetName: string, dirname: string = process.cwd()): ?string {
-  return getPossiblePresetNames(presetName).reduce((accum, curr) => accum || resolve(curr, dirname), null);
+  return resolveFromPossibleNames(getPossiblePresetNames(presetName), dirname);
 }
