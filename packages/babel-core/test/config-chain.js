@@ -10,7 +10,7 @@ function fixture() {
   return path.join.apply(path, args);
 }
 
-suite("buildConfigChain", function () {
+describe("buildConfigChain", function () {
   let oldBabelEnv;
   let oldNodeEnv;
 
@@ -27,7 +27,7 @@ suite("buildConfigChain", function () {
     process.env.NODE_ENV = oldNodeEnv;
   });
 
-  test("dir1", function () {
+  it("dir1", function () {
     let chain = buildConfigChain({
       filename: fixture("dir1", "src.js")
     });
@@ -76,7 +76,7 @@ suite("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
-  test("dir2", function () {
+  it("dir2", function () {
     let chain = buildConfigChain({
       filename: fixture("dir2", "src.js")
     });
@@ -115,7 +115,7 @@ suite("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
-  test("env - base", function () {
+  it("env - base", function () {
     let chain = buildConfigChain({
       filename: fixture("env", "src.js")
     });
@@ -154,7 +154,7 @@ suite("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
-  test("env - foo", function () {
+  it("env - foo", function () {
     process.env.NODE_ENV = "foo";
 
     let chain = buildConfigChain({
@@ -205,7 +205,7 @@ suite("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
-  test("env - bar", function () {
+  it("env - bar", function () {
     process.env.NODE_ENV = "foo"; // overridden
     process.env.NODE_ENV = "bar";
 
@@ -258,7 +258,7 @@ suite("buildConfigChain", function () {
   });
 
 
-  test("env - foo", function () {
+  it("env - foo", function () {
     process.env.NODE_ENV = "foo";
 
     let chain = buildConfigChain({

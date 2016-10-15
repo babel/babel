@@ -3,8 +3,8 @@ let assert = require("assert");
 let path = require("path");
 let vm = require("vm");
 
-suite("browserify", function() {
-  test("babel/register may be used without breaking browserify", function(done) {
+describe("browserify", function() {
+  it("babel/register may be used without breaking browserify", function(done) {
     let bundler = browserify(path.join(__dirname, "fixtures/browserify/register.js"));
 
     bundler.bundle(function(err, bundle) {

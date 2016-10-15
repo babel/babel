@@ -14,9 +14,9 @@ function getPath(code) {
   return path;
 }
 
-suite("inference", function () {
-  suite("baseTypeStrictlyMatches", function () {
-    test("it should work with null", function () {
+describe("inference", function () {
+  describe("baseTypeStrictlyMatches", function () {
+    it("it should work with null", function () {
       let path = getPath("var x = null; x === null").get("body")[1].get("expression");
       let left = path.get("left");
       let right = path.get("right");
@@ -25,7 +25,7 @@ suite("inference", function () {
       assert.ok(strictMatch, "null should be equal to null");
     });
 
-    test("it should work with numbers", function () {
+    it("it should work with numbers", function () {
       let path = getPath("var x = 1; x === 2").get("body")[1].get("expression");
       let left = path.get("left");
       let right = path.get("right");
@@ -34,7 +34,7 @@ suite("inference", function () {
       assert.ok(strictMatch, "null should be equal to null");
     });
 
-    test("it should bail when type changes", function () {
+    it("it should bail when type changes", function () {
       let path = getPath("var x = 1; if (foo) x = null;else x = 3; x === 2").get("body")[2].get("expression");
       let left = path.get("left");
       let right = path.get("right");
@@ -44,7 +44,7 @@ suite("inference", function () {
       assert.ok(!strictMatch, "type might change in if statement");
     });
 
-    test("it should differentiate between null and undefined", function () {
+    it("it should differentiate between null and undefined", function () {
       let path = getPath("var x; x === null").get("body")[1].get("expression");
       let left = path.get("left");
       let right = path.get("right");

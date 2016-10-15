@@ -22,7 +22,7 @@ function transformAsync(code, opts) {
   };
 }
 
-suite("parser and generator options", function() {
+describe("parser and generator options", function() {
   let recast = {
     parse: function(code, opts) {
       return opts.parser.parse(code);
@@ -45,13 +45,13 @@ suite("parser and generator options", function() {
     });
   }
 
-  test("options", function() {
+  it("options", function() {
     let string = "original;";
     assert.deepEqual(newTransform(string).ast, babel.transform(string).ast);
     assert.equal(newTransform(string).code, string);
   });
 
-  test("experimental syntax", function() {
+  it("experimental syntax", function() {
     let experimental = "var a: number = 1;";
 
     assert.deepEqual(newTransform(experimental).ast, babel.transform(experimental, {
@@ -81,7 +81,7 @@ suite("parser and generator options", function() {
     assert.equal(newTransformWithPlugins(experimental).code, experimental);
   });
 
-  test("other options", function() {
+  it("other options", function() {
     let experimental = "if (true) {\n  import a from 'a';\n}";
 
     assert.notEqual(newTransform(experimental).ast, babel.transform(experimental, {
@@ -93,8 +93,8 @@ suite("parser and generator options", function() {
   });
 });
 
-suite("api", function () {
-  test("analyze", function () {
+describe("api", function () {
+  it("analyze", function () {
     assert.equal(babel.analyse("foobar;").marked.length, 0);
 
     assert.equal(babel.analyse("foobar;", {
@@ -114,7 +114,7 @@ suite("api", function () {
     }).marked[0].message, "foobar");
   });
 
-  test("transformFile", function (done) {
+  it("transformFile", function (done) {
     babel.transformFile(__dirname + "/fixtures/api/file.js", {}, function (err, res) {
       if (err) return done(err);
       assert.equal(res.code, "foo();");
@@ -122,11 +122,11 @@ suite("api", function () {
     });
   });
 
-  test("transformFileSync", function () {
+  it("transformFileSync", function () {
     assert.equal(babel.transformFileSync(__dirname + "/fixtures/api/file.js", {}).code, "foo();");
   });
 
-  test("options throw on falsy true", function () {
+  it("options throw on falsy true", function () {
     return assert.throws(
       function () {
         babel.transform("", {
@@ -137,7 +137,7 @@ suite("api", function () {
     );
   });
 
-  test("options merge backwards", function () {
+  it("options merge backwards", function () {
     return transformAsync("", {
       presets: [__dirname + "/../../babel-preset-es2015"],
       plugins: [__dirname + "/../../babel-plugin-syntax-jsx"]
@@ -146,7 +146,7 @@ suite("api", function () {
     });
   });
 
-  test("option wrapPluginVisitorMethod", function () {
+  it("option wrapPluginVisitorMethod", function () {
     let calledRaw = 0;
     let calledIntercept = 0;
 
@@ -178,7 +178,7 @@ suite("api", function () {
     assert.equal(calledIntercept, 4);
   });
 
-  test("pass per preset", function () {
+  it("pass per preset", function () {
     let aliasBaseType = null;
 
     function execTest(passPerPreset) {
@@ -255,7 +255,7 @@ suite("api", function () {
 
   });
 
-  test("handles preset shortcuts (adds babel-preset-)", function () {
+  it("handles preset shortcuts (adds babel-preset-)", function () {
     return assert.throws(
       function () {
         babel.transform("", {
@@ -266,7 +266,7 @@ suite("api", function () {
     );
   });
 
-  test("handles preset shortcuts 2 (adds babel-preset-)", function () {
+  it("handles preset shortcuts 2 (adds babel-preset-)", function () {
     return assert.throws(
       function () {
         babel.transform("", {
@@ -277,7 +277,7 @@ suite("api", function () {
     );
   });
 
-  test("source map merging", function () {
+  it("source map merging", function () {
     let result = babel.transform([
       "function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }",
       "",
@@ -315,19 +315,19 @@ suite("api", function () {
     });
   });
 
-  test("code option false", function () {
+  it("code option false", function () {
     return transformAsync("foo('bar');", { code: false }).then(function (result) {
       assert.ok(!result.code);
     });
   });
 
-  test("ast option false", function () {
+  it("ast option false", function () {
     return transformAsync("foo('bar');", { ast: false }).then(function (result) {
       assert.ok(!result.ast);
     });
   });
 
-  test("auxiliaryComment option", function () {
+  it("auxiliaryComment option", function () {
     return transformAsync("class Foo {}", {
       auxiliaryCommentBefore: "before",
       auxiliaryCommentAfter: "after",
@@ -347,7 +347,7 @@ suite("api", function () {
     });
   });
 
-  test("modules metadata", function () {
+  it("modules metadata", function () {
     return Promise.all([
       transformAsync("import { externalName as localName } from \"external\";").then(function (result) {
         assert.deepEqual(result.metadata.modules.imports[0], {
@@ -499,7 +499,7 @@ suite("api", function () {
     ]);
   });
 
-  test("ignore option", function () {
+  it("ignore option", function () {
     return Promise.all([
       transformAsync("", {
         ignore: "node_modules",
@@ -518,7 +518,7 @@ suite("api", function () {
     ]);
   });
 
-  test("only option", function () {
+  it("only option", function () {
     return Promise.all([
       transformAsync("", {
         only: "node_modules",
@@ -552,7 +552,7 @@ suite("api", function () {
     ]);
   });
 
-  suite("env option", function () {
+  describe("env option", function () {
     let oldBabelEnv = process.env.BABEL_ENV;
     let oldNodeEnv = process.env.NODE_ENV;
 
@@ -568,7 +568,7 @@ suite("api", function () {
       process.env.NODE_ENV = oldNodeEnv;
     });
 
-    test("default", function () {
+    it("default", function () {
       let result = babel.transform("foo;", {
         env: {
           development: { code: false }
@@ -578,7 +578,7 @@ suite("api", function () {
       assert.equal(result.code, undefined);
     });
 
-    test("BABEL_ENV", function () {
+    it("BABEL_ENV", function () {
       process.env.BABEL_ENV = "foo";
       let result = babel.transform("foo;", {
         env: {
@@ -588,7 +588,7 @@ suite("api", function () {
       assert.equal(result.code, undefined);
     });
 
-    test("NODE_ENV", function () {
+    it("NODE_ENV", function () {
       process.env.NODE_ENV = "foo";
       let result = babel.transform("foo;", {
         env: {
@@ -599,7 +599,7 @@ suite("api", function () {
     });
   });
 
-  test("resolveModuleSource option", function () {
+  it("resolveModuleSource option", function () {
     let actual = "import foo from \"foo-import-default\";\nimport \"foo-import-bare\";\nexport { foo } from \"foo-export-named\";";
     let expected = "import foo from \"resolved/foo-import-default\";\nimport \"resolved/foo-import-bare\";\nexport { foo } from \"resolved/foo-export-named\";";
 
@@ -612,26 +612,26 @@ suite("api", function () {
     });
   });
 
-  suite("buildExternalHelpers", function () {
-    test("all", function () {
+  describe("buildExternalHelpers", function () {
+    it("all", function () {
       let script = buildExternalHelpers();
       assert.ok(script.indexOf("classCallCheck") >= -1);
       assert.ok(script.indexOf("inherits") >= 0);
     });
 
-    test("whitelist", function () {
+    it("whitelist", function () {
       let script = buildExternalHelpers(["inherits"]);
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") >= 0);
     });
 
-    test("empty whitelist", function () {
+    it("empty whitelist", function () {
       let script = buildExternalHelpers([]);
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") === -1);
     });
 
-    test("underscored", function () {
+    it("underscored", function () {
       let script = buildExternalHelpers(["typeof"]);
       assert.ok(script.indexOf("typeof") >= 0);
     });

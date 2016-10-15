@@ -7,8 +7,8 @@ let chai       = require("chai");
 let t          = require("babel-types");
 let _          = require("lodash");
 
-suite("generation", function () {
-  test("completeness", function () {
+describe("generation", function () {
+  it("completeness", function () {
     _.each(t.VISITOR_KEYS, function (keys, type) {
       assert.ok(!!Printer.prototype[type], type + " should exist");
     });
@@ -19,7 +19,7 @@ suite("generation", function () {
     });
   });
 
-  test("multiple sources", function () {
+  it("multiple sources", function () {
     let sources = {
       "a.js": "function hi (msg) { console.log(msg); }\n",
       "b.js": "hi('hello');\n"
@@ -62,7 +62,7 @@ suite("generation", function () {
     );
   });
 
-  test("identifierName", function () {
+  it("identifierName", function () {
     let code = "function foo() { bar; }\n";
 
     let ast = parse(code, { filename: "inline" }).program;
@@ -98,14 +98,14 @@ suite("generation", function () {
 });
 
 
-suite("programmatic generation", function() {
-  test("numeric member expression", function() {
+describe("programmatic generation", function() {
+  it("numeric member expression", function() {
     // Should not generate `0.foo`
     let mem = t.memberExpression(t.numericLiteral(60702), t.identifier("foo"));
     new Function(generate.default(mem).code);
   });
 
-  test("nested if statements needs block", function() {
+  it("nested if statements needs block", function() {
     let ifStatement = t.ifStatement(
       t.stringLiteral("top cond"),
       t.whileStatement(
@@ -122,7 +122,7 @@ suite("programmatic generation", function() {
     assert.equal(ast.program.body[0].consequent.type, "BlockStatement");
   });
 
-  test("flow object indentation", function() {
+  it("flow object indentation", function() {
     let objectStatement = t.objectTypeAnnotation(
       [
         t.objectTypeProperty(
@@ -143,8 +143,8 @@ suite("programmatic generation", function() {
   });
 });
 
-suite("whitespace", function () {
-  test("empty token list", function () {
+describe("whitespace", function () {
+  it("empty token list", function () {
     let w = new Whitespace([]);
     assert.equal(w.getNewlinesBefore(t.stringLiteral("1")), 0);
   });
@@ -153,9 +153,9 @@ suite("whitespace", function () {
 let suites = require("babel-helper-fixtures").default(__dirname + "/fixtures");
 
 suites.forEach(function (testSuite) {
-  suite("generation/" + testSuite.title, function () {
+  describe("generation/" + testSuite.title, function () {
     _.each(testSuite.tests, function (task) {
-      test(task.title, !task.disabled && function () {
+      it(task.title, !task.disabled && function () {
         let expect = task.expect;
         let actual = task.actual;
 

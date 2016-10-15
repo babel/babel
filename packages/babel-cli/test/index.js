@@ -139,7 +139,7 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
   if (binName[0] === ".") return;
 
   let suiteLoc = path.join(fixtureLoc, binName);
-  suite("bin/" + binName, function () {
+  describe("bin/" + binName, function () {
     _.each(fs.readdirSync(suiteLoc), function (testName) {
       if (testName[0] === ".") return;
 
@@ -170,7 +170,7 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
       }
 
-      test(testName, buildTest(binName, testName, opts));
+      it(testName, buildTest(binName, testName, opts));
     });
   });
 });

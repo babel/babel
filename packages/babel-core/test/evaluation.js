@@ -2,9 +2,9 @@ let traverse = require("babel-traverse").default;
 let assert   = require("assert");
 let parse    = require("babylon").parse;
 
-suite("evaluation", function () {
+describe("evaluation", function () {
   function addTest(code, type, value, notConfident) {
-    test(type + ": " + code, function () {
+    it(type + ": " + code, function () {
       let visitor = {};
 
       visitor[type] = function (path) {

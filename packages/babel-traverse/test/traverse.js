@@ -2,7 +2,7 @@ let traverse = require("../lib").default;
 let assert   = require("assert");
 let _        = require("lodash");
 
-suite("traverse", function () {
+describe("traverse", function () {
   let ast = {
     type: "Program",
     body: [
@@ -52,7 +52,7 @@ suite("traverse", function () {
 
   let body = ast.body;
 
-  test("traverse replace", function () {
+  it("traverse replace", function () {
     let replacement = {
       type: "StringLiteral",
       value: "foo"
@@ -68,7 +68,7 @@ suite("traverse", function () {
     assert.equal(ast2.body[1].expression.left.object, replacement);
   });
 
-  test("traverse", function () {
+  it("traverse", function () {
     let expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
       body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object, body[1].expression.left.property, body[1].expression.right
@@ -85,7 +85,7 @@ suite("traverse", function () {
     assert.deepEqual(actual, expect);
   });
 
-  test("traverse falsy parent", function () {
+  it("traverse falsy parent", function () {
     traverse(null, {
       enter: function () {
         throw new Error("should not be ran");
@@ -93,7 +93,7 @@ suite("traverse", function () {
     });
   });
 
-  test("traverse blacklistTypes", function () {
+  it("traverse blacklistTypes", function () {
     let expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
       body[1], body[1].expression, body[1].expression.right
@@ -111,7 +111,7 @@ suite("traverse", function () {
     assert.deepEqual(actual, expect);
   });
 
-  test("hasType", function () {
+  it("hasType", function () {
     assert.ok(traverse.hasType(ast, null, "ThisExpression"));
     assert.ok(!traverse.hasType(ast, null, "ThisExpression", ["AssignmentExpression"]));
 
@@ -124,7 +124,7 @@ suite("traverse", function () {
     assert.ok(!traverse.hasType(ast, null, "ArrowFunctionExpression"));
   });
 
-  test("clearCache", function () {
+  it("clearCache", function () {
     let paths = [];
     traverse(ast, {
       enter: function (path) {

@@ -5,8 +5,8 @@ let fs = require("fs");
 let path = require("path");
 
 // Test that plugins & presets are resolved relative to `filename`.
-suite("addon resolution", function () {
-  test("addon resolution", function (done) {
+describe("addon resolution", function () {
+  it("addon resolution", function (done) {
     let fixtures = {};
     let paths = {};
 

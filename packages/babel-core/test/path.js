@@ -2,8 +2,8 @@ let transform = require("../lib/api/node").transform;
 let Plugin    = require("../lib/transformation/plugin");
 let chai      = require("chai");
 
-suite("traversal path", function () {
-  test("replaceWithSourceString", function () {
+describe("traversal path", function () {
+  it("replaceWithSourceString", function () {
     let expectCode = "function foo() {}";
 
     let actualCode = transform(expectCode, {
@@ -19,7 +19,7 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("console.whatever();");
   });
 
-  test("replaceWith (arrow expression body to block statement body)", function () {
+  it("replaceWith (arrow expression body to block statement body)", function () {
     let expectCode = "var fn = () => true;";
 
     let actualCode = transform(expectCode, {
@@ -44,7 +44,7 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("var fn = () => {\n  return true;\n};");
   });
 
-  test("replaceWith (arrow block statement body to expression body)", function () {
+  it("replaceWith (arrow block statement body to expression body)", function () {
     let expectCode = "var fn = () => { return true; }";
 
     let actualCode = transform(expectCode, {
@@ -63,7 +63,7 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("var fn = () => true;");
   });
 
-  test("replaceWith (for-in left expression to variable declaration)", function () {
+  it("replaceWith (for-in left expression to variable declaration)", function () {
     let expectCode = "for (KEY in right);";
 
     let actualCode = transform(expectCode, {
@@ -89,7 +89,7 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("for (var KEY in right);");
   });
 
-  test("replaceWith (for-in left variable declaration to expression)", function () {
+  it("replaceWith (for-in left variable declaration to expression)", function () {
     let expectCode = "for (var KEY in right);";
 
     let actualCode = transform(expectCode, {
@@ -108,7 +108,7 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("for (KEY in right);");
   });
 
-  test("replaceWith (for-loop left expression to variable declaration)", function () {
+  it("replaceWith (for-loop left expression to variable declaration)", function () {
     let expectCode = "for (KEY;;);";
 
     let actualCode = transform(expectCode, {
@@ -134,7 +134,7 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("for (var KEY;;);");
   });
 
-  test("replaceWith (for-loop left variable declaration to expression)", function () {
+  it("replaceWith (for-loop left variable declaration to expression)", function () {
     let expectCode = "for (var KEY;;);";
 
     let actualCode = transform(expectCode, {
