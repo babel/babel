@@ -2,8 +2,8 @@ let assert = require("assert");
 let chalk = require("chalk");
 let codeFrame = require("..");
 
-suite("babel-code-frame", function () {
-  test("basic usage", function () {
+describe("babel-code-frame", function () {
+  it("basic usage", function () {
     const rawLines = [
       "class Foo {",
       "  constructor()",
@@ -17,7 +17,7 @@ suite("babel-code-frame", function () {
     ].join("\n"));
   });
 
-  test("optional column number", function () {
+  it("optional column number", function () {
     const rawLines = [
       "class Foo {",
       "  constructor()",
@@ -30,7 +30,7 @@ suite("babel-code-frame", function () {
     ].join("\n"));
   });
 
-  test("optional column number", function () {
+  it("optional column number", function () {
     const rawLines = [
       "class Foo {",
       "  constructor()",
@@ -43,7 +43,7 @@ suite("babel-code-frame", function () {
     ].join("\n"));
   });
 
-  test("maximum context lines and padding", function () {
+  it("maximum context lines and padding", function () {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -68,7 +68,7 @@ suite("babel-code-frame", function () {
     ].join("\n"));
   });
 
-  test("no unnecessary padding due to one-off errors", function () {
+  it("no unnecessary padding due to one-off errors", function () {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -93,7 +93,7 @@ suite("babel-code-frame", function () {
     ].join("\n"));
   });
 
-  test("tabs", function () {
+  it("tabs", function () {
     const rawLines = [
       "\tclass Foo {",
       "\t  \t\t    constructor\t(\t)",
@@ -107,7 +107,7 @@ suite("babel-code-frame", function () {
     ].join("\n"));
   });
 
-  test("opts.highlightCode", function () {
+  it("opts.highlightCode", function () {
     const rawLines = "console.log('babel')";
     const result = codeFrame(rawLines, 1, 9, {highlightCode: true});
     const stripped = chalk.stripColor(result);
@@ -118,7 +118,7 @@ suite("babel-code-frame", function () {
     ].join("\n"));
   });
 
-  test("opts.linesAbove", function () {
+  it("opts.linesAbove", function () {
     let rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -142,7 +142,7 @@ suite("babel-code-frame", function () {
     ].join("\n"));
   });
 
-  test("opts.linesBelow", function () {
+  it("opts.linesBelow", function () {
     let rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -165,7 +165,7 @@ suite("babel-code-frame", function () {
     ].join("\n"));
   });
 
-  test("opts.linesAbove and opts.linesBelow", function () {
+  it("opts.linesAbove and opts.linesBelow", function () {
     let rawLines = [
       "/**",
       " * Sums two numbers.",

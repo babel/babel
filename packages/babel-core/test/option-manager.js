@@ -3,9 +3,9 @@ import OptionManager from "../lib/transformation/file/options/option-manager";
 import Logger from "../lib/transformation/file/logger";
 import path from "path";
 
-suite("option-manager", () => {
-  suite("memoisePluginContainer", () => {
-    test("throws for babel 5 plugin", () => {
+describe("option-manager", () => {
+  describe("memoisePluginContainer", () => {
+    it("throws for babel 5 plugin", () => {
       return assert.throws(
         () => OptionManager.memoisePluginContainer(({ Plugin }) => new Plugin("object-assign", {})),
         /Babel 5 plugin is being run with Babel 6/
@@ -13,8 +13,8 @@ suite("option-manager", () => {
     });
   });
 
-  suite("mergeOptions", () => {
-    test("throws for removed babel 5 options", () => {
+  describe("mergeOptions", () => {
+    it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
           let opt = new OptionManager(new Logger(null, "unknown"));
@@ -26,7 +26,7 @@ suite("option-manager", () => {
       );
     });
 
-    test("throws for removed babel 5 options", () => {
+    it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
           let opt = new OptionManager(new Logger(null, "unknown"));
@@ -39,7 +39,7 @@ suite("option-manager", () => {
       );
     });
 
-    test("throws for resolved but erroring preset", () => {
+    it("throws for resolved but erroring preset", () => {
       return assert.throws(
         () => {
           let opt = new OptionManager(new Logger(null, "unknown"));
@@ -51,7 +51,7 @@ suite("option-manager", () => {
       );
     });
 
-    test("throws for invalid preset configuration", function() {
+    it("throws for invalid preset configuration", function() {
       return assert.throws(
         function () {
           let opt = new OptionManager(new Logger(null, "unknown"));
@@ -64,9 +64,9 @@ suite("option-manager", () => {
     });
   });
 
-  suite("presets", function () {
+  describe("presets", function () {
     function presetTest(name) {
-      test(name, function () {
+      it(name, function () {
         let opt = new OptionManager(new Logger(null, "unknown"));
         let options = opt.init({
           "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)]
