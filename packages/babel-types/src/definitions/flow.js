@@ -167,6 +167,10 @@ defineType("MixedTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"]
 });
 
+defineType("EmptyTypeAnnotation", {
+  aliases: ["Flow", "FlowBaseAnnotation"]
+});
+
 defineType("NullableTypeAnnotation", {
   visitor: ["typeAnnotation"],
   aliases: ["Flow"],

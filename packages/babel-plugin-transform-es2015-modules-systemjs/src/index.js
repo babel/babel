@@ -174,7 +174,7 @@ export default function ({ types: t }) {
                     beforeBody.push(buildExportCall(name, node.id));
                     removedPaths.push(path);
                   } else {
-                    bindingIdentifiers = { [name]: node.id };  
+                    bindingIdentifiers = { [name]: node.id };
                   }
                 } else {
                   bindingIdentifiers = declar.getBindingIdentifiers();

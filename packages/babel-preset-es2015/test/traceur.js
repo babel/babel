@@ -1,5 +1,4 @@
-var fs = require("fs");
-var _  = require("lodash");
+let _  = require("lodash");
 
 require("babel-helper-transform-fixture-test-runner")(__dirname + "/fixtures/traceur", "traceur", {
   ignoreSuites: [

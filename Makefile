@@ -2,7 +2,7 @@ MAKEFLAGS = -j1
 
 export NODE_ENV = test
 
-.PHONY: build build-dist watch lint clean test-clean test-only test test-cov test-ci publish bootstrap
+.PHONY: build build-dist watch lint fix clean test-clean test-only test test-cov test-ci publish bootstrap
 
 build: clean
 	./node_modules/.bin/gulp build
@@ -18,7 +18,10 @@ watch: clean
 	./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/eslint packages/*/src
+	./node_modules/.bin/eslint packages/*/{src,test}/*.js
+
+fix:
+	./node_modules/.bin/eslint packages/*/{src,test}/*.js --fix
 
 clean: test-clean
 	rm -rf packages/*/lib

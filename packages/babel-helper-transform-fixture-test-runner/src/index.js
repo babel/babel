@@ -1,6 +1,3 @@
-/* global test */
-/* global suite */
-
 import * as babel from "babel-core";
 import { buildExternalHelpers } from "babel-core";
 import getFixtures from "babel-helper-fixtures";
@@ -123,12 +120,12 @@ export default function (
   for (let testSuite of suites) {
     if (_.includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
-    suite(name + "/" + testSuite.title, function () {
+    describe(name + "/" + testSuite.title, function () {
       for (let task of testSuite.tests) {
         if (_.includes(suiteOpts.ignoreTasks, task.title) ||
             _.includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
 
-        test(task.title, !task.disabled && function () {
+        it(task.title, !task.disabled && function () {
           function runTask() {
             run(task);
           }
