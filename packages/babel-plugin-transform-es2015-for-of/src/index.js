@@ -93,7 +93,11 @@ export default function ({ messages, template, types: t }) {
     visitor: {
       ForOfStatement(path, state) {
         if (path.get("right").isArrayExpression()) {
-          return path.replaceWithMultiple(_ForOfStatementArray.call(this, path, state));
+          if (path.parentPath.isLabeledStatement()) {
+            return path.parentPath.replaceWithMultiple(_ForOfStatementArray(path));
+          } else {
+            return path.replaceWithMultiple(_ForOfStatementArray(path));
+          }
         }
 
         let callback = spec;
