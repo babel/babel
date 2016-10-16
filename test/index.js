@@ -46,7 +46,7 @@ function runTest(test) {
     throw err;
   }
 
-  if (!test.expect.code && !opts.throws) {
+  if (!test.expect.code && !opts.throws && !process.env.CI) {
     test.expect.loc += "on";
     return save(test, ast);
   }
