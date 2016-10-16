@@ -365,6 +365,7 @@ pp.jsxParseElementAt = function(startPos, startLoc) {
 
           break;
 
+        // istanbul ignore next - should never happen
         default:
           this.unexpected();
       }

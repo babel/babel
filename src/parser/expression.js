@@ -45,6 +45,7 @@ pp.checkPropClash = function (prop, propHash) {
       name = String(key.value);
       break;
 
+    // istanbul ignore next: non-computed property keys are always one of the above
     default:
       return;
   }
@@ -555,7 +556,7 @@ pp.parseParenExpression = function () {
   return val;
 };
 
-pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow, isAsync) {
+pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow) {
   startPos = startPos || this.state.start;
   startLoc = startLoc || this.state.startLoc;
 
@@ -597,15 +598,11 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
       if (param.extra && param.extra.parenthesized) this.unexpected(param.extra.parenStart);
     }
 
-    return this.parseArrowExpression(arrowNode, exprList, isAsync);
+    return this.parseArrowExpression(arrowNode, exprList);
   }
 
   if (!exprList.length) {
-    if (isAsync) {
-      return;
-    } else {
-      this.unexpected(this.state.lastTokStart);
-    }
+    this.unexpected(this.state.lastTokStart);
   }
   if (optionalCommaStart) this.unexpected(optionalCommaStart);
   if (spreadStart) this.unexpected(spreadStart);
@@ -1025,6 +1022,7 @@ pp.parseIdentifier = function (liberal) {
 // Parses await expression inside async function.
 
 pp.parseAwait = function (node) {
+  // istanbul ignore next: this condition is checked at the call site so won't be hit here
   if (!this.state.inAsync) {
     this.unexpected();
   }

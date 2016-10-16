@@ -207,7 +207,7 @@ pp.flowParseTypeParameter = function () {
 
   let variance = this.flowParseVariance();
 
-  let ident = this.flowParseTypeAnnotatableIdentifier(false, false);
+  let ident = this.flowParseTypeAnnotatableIdentifier();
   node.name = ident.name;
   node.variance = variance;
   node.bound = ident.typeAnnotation;
@@ -227,6 +227,7 @@ pp.flowParseTypeParameterDeclaration = function () {
 
   this.state.inType = true;
 
+  // istanbul ignore else: this condition is already checked at all call sites
   if (this.isRelational("<") || this.match(tt.jsxTagStart)) {
     this.next();
   } else {
@@ -705,26 +706,12 @@ pp.flowParseTypeAnnotation = function () {
   return this.finishNode(node, "TypeAnnotation");
 };
 
-pp.flowParseTypeAnnotatableIdentifier = function (requireTypeAnnotation, canBeOptionalParam) {
-
+pp.flowParseTypeAnnotatableIdentifier = function () {
   let ident = this.parseIdentifier();
-  let isOptionalParam = false;
-
-  if (canBeOptionalParam && this.eat(tt.question)) {
-    this.expect(tt.question);
-    isOptionalParam = true;
-  }
-
-  if (requireTypeAnnotation || this.match(tt.colon)) {
+  if (this.match(tt.colon)) {
     ident.typeAnnotation = this.flowParseTypeAnnotation();
     this.finishNode(ident, ident.type);
   }
-
-  if (isOptionalParam) {
-    ident.optional = true;
-    this.finishNode(ident, ident.type);
-  }
-
   return ident;
 };
 
@@ -824,6 +811,7 @@ export default function (instance) {
             refNeedsArrowPos.start = err.pos || this.state.start;
             return expr;
           } else {
+            // istanbul ignore next: no such error is expected
             throw err;
           }
         }
@@ -1208,6 +1196,7 @@ export default function (instance) {
             this.state = state;
             jsxError = err;
           } else {
+            // istanbul ignore next: no such error is expected
             throw err;
           }
         }
@@ -1262,6 +1251,7 @@ export default function (instance) {
           if (err instanceof SyntaxError) {
             this.state = state;
           } else {
+            // istanbul ignore next: no such error is expected
             throw err;
           }
         }
