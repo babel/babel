@@ -145,9 +145,9 @@ If you need to check for an error that is thrown you can add to the `options.jso
 }
 ```
 
-##### `babylon`
+##### Bootstrapping expected output
 
-For `babylon` specifically, you can easily generate an `expected.json` automatically by just providing the `actual.js` and running `make test-only` as you usually would.
+For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
 
 ```
 // Example
