@@ -8,7 +8,7 @@
     "fix": "make fix"
   },
   "devDependencies": {
-    "async": "^1.5.0",
+    "async": "^2.1.2",
     "babel-core": "^6.13.2",
     "babel-eslint": "^7.0.0",
     "babel-plugin-transform-class-properties": "^6.6.0",
