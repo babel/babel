@@ -50,7 +50,7 @@ pp.checkPropClash = function (prop, propHash) {
       return;
   }
 
-  if (name === "__proto__" && prop.kind === "init") {
+  if (name === "__proto__" && !prop.kind) {
     if (propHash.proto) this.raise(key.start, "Redefinition of __proto__ property");
     propHash.proto = true;
   }
