@@ -1,9 +1,9 @@
-var assert = require("assert");
-var util   = require("../lib/util");
-var t      = require("babel-types");
+let assert = require("assert");
+let util   = require("../lib/util");
+let t      = require("babel-types");
 
-suite("util", function () {
-  test("canCompile", function () {
+describe("util", function () {
+  it("canCompile", function () {
     assert.ok(util.canCompile("test.js"));
     assert.ok(util.canCompile("/test.js"));
     assert.ok(util.canCompile("/scripts/test.js"));
@@ -26,7 +26,7 @@ suite("util", function () {
     assert.ok(!util.canCompile("/scripts/test.css"));
   });
 
-  test("list", function () {
+  it("list", function () {
     assert.deepEqual(util.list(undefined), []);
     assert.deepEqual(util.list(false), []);
     assert.deepEqual(util.list(null), []);
@@ -36,11 +36,11 @@ suite("util", function () {
     assert.deepEqual(util.list(["foo", "bar"]), ["foo", "bar"]);
     assert.deepEqual(util.list(/foo/), [/foo/]);
 
-    var date = new Date;
+    let date = new Date;
     assert.deepEqual(util.list(date), [date]);
   });
 
-  test("arrayify", function () {
+  it("arrayify", function () {
     assert.deepEqual(util.arrayify(undefined), []);
     assert.deepEqual(util.arrayify(false), []);
     assert.deepEqual(util.arrayify(null), []);
@@ -52,7 +52,7 @@ suite("util", function () {
     assert.deepEqual(util.arrayify(function () { return "foo"; })[0](), "foo");
   });
 
-  test("regexify", function () {
+  it("regexify", function () {
     assert.deepEqual(util.regexify(undefined), /.^/);
     assert.deepEqual(util.regexify(false), /.^/);
     assert.deepEqual(util.regexify(null), /.^/);
@@ -73,19 +73,19 @@ suite("util", function () {
     }, /illegal type for regexify/);
   });
 
-  test("booleanify", function () {
+  it("booleanify", function () {
     assert.strictEqual(util.booleanify("true"), true);
     assert.strictEqual(util.booleanify("false"), false);
     assert.strictEqual(util.booleanify("inline"), "inline");
   });
 
-  test("toIdentifier", function () {
+  it("toIdentifier", function () {
     assert.equal(t.toIdentifier("swag-lord"), "swagLord");
   });
 
-  test("shouldIgnore", function () {
-    var reIgnore = /\-reIgnore\.js/;
-    var fnIgnore = function (src) {
+  it("shouldIgnore", function () {
+    let reIgnore = /\-reIgnore\.js/;
+    let fnIgnore = function (src) {
       if (src.indexOf("fnIgnore") > 0) {
         return true;
       }

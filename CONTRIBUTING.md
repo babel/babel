@@ -26,9 +26,11 @@ contributing, please read our [code of conduct](https://github.com/babel/babel/b
  - This repository's [`/doc`](/doc) directory for notes on Babel's internals
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
-- When you feel ready to finally jump into the babel source code a good start is to look out for issues which are labeled with `help wanted` and/or `beginner-friendly`.
+- When you feel ready to finally jump into the babel source code a good start is to look out for issues which are labeled with [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [beginner-friendly](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22beginner-friendly%22).
 
-> If you're stuck, feel free to check out the `#development` channel on our [slack](https://slack.babeljs.io).
+## Chat
+
+If you're stuck (or just want to chat), feel free to check out the `#discussion`/`#development` channels on our [slack](https://slack.babeljs.io).
 
 ## Developing
 
