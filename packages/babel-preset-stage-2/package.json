@@ -10,6 +10,7 @@
   "dependencies": {
     "babel-plugin-transform-class-properties": "^6.16.0",
     "babel-plugin-transform-decorators": "^6.13.0",
+    "babel-plugin-syntax-dynamic-import": "^6.13.0",
     "babel-preset-stage-3": "^6.17.0"
   }
 }
