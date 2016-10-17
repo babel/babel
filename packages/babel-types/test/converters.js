@@ -103,4 +103,45 @@ describe("converters", function () {
       t.assertYieldExpression(node);
     });
   });
+  describe("toExpression", function () {
+    it("noop on expressions", function () {
+      const node = t.identifier("a");
+      assert.equal(t.toExpression(node), node);
+      t.assertIdentifier(node);
+    });
+    it("mutate class declaration to expression", function () {
+      const node = t.classDeclaration(t.identifier("A"), null, t.classBody([]), []);
+      t.toExpression(node);
+      t.assertClassExpression(node);
+    });
+    it("mutate function declaration to expression", function () {
+      const node = t.functionDeclaration(t.identifier("A"), [], t.blockStatement([]));
+      t.toExpression(node);
+      t.assertFunctionExpression(node);
+    });
+    it("mutate object method to expression", function () {
+      const node = t.objectMethod("method", t.identifier("A"), [], t.blockStatement([]));
+      t.toExpression(node);
+      t.assertFunctionExpression(node);
+    });
+    it("mutate class method to expression", function () {
+      const node = t.classMethod("constructor", t.identifier("A"), [], t.blockStatement([]));
+      t.toExpression(node);
+      t.assertFunctionExpression(node);
+    });
+    it("expression statement", function () {
+      const inner = t.yieldExpression(t.identifier("foo"));
+      const node = t.expressionStatement(inner);
+      t.assertYieldExpression(t.toExpression(node));
+      assert.equal(t.toExpression(node), inner);
+      t.assertExpressionStatement(node);
+    });
+    it("fail if cannot convert node type", function () {
+      const node = t.program([]);
+      assert.throws(function() {
+        t.toExpression(node);
+      });
+      t.assertProgram(node);
+    });
+  });
 });
