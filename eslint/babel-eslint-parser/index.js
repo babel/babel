@@ -396,7 +396,7 @@ exports.parseNoPatch = function (code, options) {
       err.column = err.loc.column + 1;
 
       // remove trailing "(LINE:COLUMN)" acorn message and add in esprima syntax error message start
-      err.message = "Line " + err.lineNumber + ": " + err.message.replace(/ \((\d+):(\d+)\)$/, "");
+      err.message = `Line ${err.lineNumber}: ${err.message.replace(/ \((\d+):(\d+)\)$/, "")}`;
     }
 
     throw err;

@@ -53,7 +53,7 @@ module.exports = function (token, tt, source) {
       pattern: value.pattern,
       flags: value.flags
     };
-    token.value = "/" + value.pattern + "/" + value.flags;
+    token.value = `/${value.pattern}/${value.flags}`;
   }
 
   return token;

@@ -61,8 +61,7 @@ function strictSuite () {
     eslintOpts.rules[ruleId] = [errorLevel, "never"];
 
     ["global-with", "function-with"].forEach(function (fixture) {
-      it(
-        "should error on " + fixture.match(/^[^-]+/)[0] + " directive",
+      it(`should error on ${fixture.match(/^[^-]+/)[0]} directive`,
         function (done) {
           lint({
             fixture: ["strict", fixture],

@@ -160,7 +160,7 @@ var astTransformVisitor = {
     }
 
     if (path.isRestProperty() || path.isSpreadProperty()) {
-      node.type = "Experimental" + node.type;
+      node.type = `Experimental${node.type}`;
     }
 
     if (path.isTypeParameter && path.isTypeParameter()) {
