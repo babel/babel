@@ -1,5 +1,4 @@
 let convertSourceMap = require("convert-source-map");
-let pathExists       = require("path-exists");
 let sourceMap        = require("source-map");
 let slash            = require("slash");
 let path             = require("path");
@@ -109,7 +108,7 @@ module.exports = function (commander, filenames, opts) {
     results = [];
 
     _.each(filenames, function (filename) {
-      if (!pathExists.sync(filename)) return;
+      if (!fs.existsSync(filename)) return;
 
       let stat = fs.statSync(filename);
       if (stat.isDirectory()) {
