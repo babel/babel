@@ -57,4 +57,50 @@ describe("converters", function () {
       assert.equal(t.toKeyAlias(t.objectMethod("method", t.identifier("a"), [], t.blockStatement([]))), "0");
     });
   });
+  describe("toStatement", function () {
+    it("noop on statements", function () {
+      const node = t.emptyStatement();
+      assert.equal(t.toStatement(node), node);
+      t.assertEmptyStatement(node);
+    });
+    it("mutate class expression to declaration", function () {
+      const node = t.classExpression(t.identifier("A"), null, t.classBody([]), []);
+      t.toStatement(node);
+      t.assertClassDeclaration(node);
+    });
+    it("fail if class expression has no id", function () {
+      const node = t.classExpression(null, null, t.classBody([]), []);
+      assert.throws(function() {
+        t.toStatement(node);
+      });
+      assert.strictEqual(t.toStatement(node, /* ignore = */ true), false);
+      t.assertClassExpression(node);
+    });
+    it("mutate function expression to declaration", function () {
+      const node = t.functionExpression(t.identifier("A"), [], t.blockStatement([]));
+      t.toStatement(node);
+      t.assertFunctionDeclaration(node);
+    });
+    it("fail if function expression has no id", function () {
+      const node = t.functionExpression(null, [], t.blockStatement([]));
+      assert.throws(function() {
+        t.toStatement(node);
+      });
+      assert.strictEqual(t.toStatement(node, /* ignore = */ true), false);
+      t.assertFunctionExpression(node);
+    });
+    it("assignment expression", function () {
+      const node = t.assignmentExpression("+=", t.identifier("x"), t.numericLiteral(1));
+      t.assertExpressionStatement(t.toStatement(node));
+      t.assertAssignmentExpression(node);
+    });
+    it("fail if cannot convert node type", function () {
+      const node = t.yieldExpression(t.identifier("foo"));
+      assert.throws(function() {
+        t.toStatement(node);
+      });
+      assert.strictEqual(t.toStatement(node, /* ignore = */ true), false);
+      t.assertYieldExpression(node);
+    });
+  });
 });
