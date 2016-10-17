@@ -161,6 +161,9 @@ function optimiseIndexGetter(path, argsId, offset) {
 
   if (t.isNumericLiteral(path.parent.property)) {
     index = t.numericLiteral(path.parent.property.value + offset);
+  } else if (offset === 0) {
+    // Avoid unnecessary '+ 0'
+    index = path.parent.property;
   } else {
     index = t.binaryExpression("+", path.parent.property, t.numericLiteral(offset));
   }
