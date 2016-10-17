@@ -10,7 +10,7 @@ describe("evaluation", function () {
       visitor[type] = function (path) {
         let evaluate = path.evaluate();
         assert.equal(evaluate.confident, !notConfident);
-        assert.equal(evaluate.value, value);
+        assert.deepEqual(evaluate.value, value);
       };
 
       traverse(parse(code, {
@@ -63,4 +63,7 @@ describe("evaluation", function () {
   addTest("'abc' === 'xyz' || (1 === 1 && config.flag)", "LogicalExpression", undefined, true);
   addTest("'abc' === 'xyz' || (1 === 1 && 'four' === 'four')", "LogicalExpression", true);
   addTest("'abc' === 'abc' && (1 === 1 && 'four' === 'four')", "LogicalExpression", true);
+  addTest("({})", "ObjectExpression", {});
+  addTest("({a: '1'})", "ObjectExpression", {a: "1"});
+  addTest("({['a' + 'b']: 10 * 20, 'z': [1, 2, 3]})", "ObjectExpression", {ab: 200, z: [1, 2, 3]});
 });
