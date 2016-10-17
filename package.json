@@ -76,7 +76,8 @@
   "nyc": {
     "exclude": [
       "**/node_modules/**",
-      "scripts/*.js"
+      "scripts/*.js",
+      "packages/*/test/**"
     ],
     "sourceMap": false,
     "instrument": false
