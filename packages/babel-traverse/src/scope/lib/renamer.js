@@ -57,15 +57,17 @@ export default class Renamer {
       specifiers.push(t.exportSpecifier(t.identifier(localName), t.identifier(exportedName)));
     }
 
-    let aliasDeclar = t.exportNamedDeclaration(null, specifiers);
+    if (specifiers.length) {
+      let aliasDeclar = t.exportNamedDeclaration(null, specifiers);
 
-    // hoist to the top if it's a function
-    if (parentDeclar.isFunctionDeclaration()) {
-      aliasDeclar._blockHoist = 3;
+      // hoist to the top if it's a function
+      if (parentDeclar.isFunctionDeclaration()) {
+        aliasDeclar._blockHoist = 3;
+      }
+
+      exportDeclar.insertAfter(aliasDeclar);
+      exportDeclar.replaceWith(parentDeclar.node);
     }
-
-    exportDeclar.insertAfter(aliasDeclar);
-    exportDeclar.replaceWith(parentDeclar.node);
   }
 
   maybeConvertFromClassFunctionDeclaration(path) {

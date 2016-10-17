@@ -221,6 +221,12 @@ export default function ({ types: t }) {
       for (let elem of (arr.elements: Array)) {
         // deopt on spread elements
         if (t.isSpreadElement(elem)) return false;
+
+        // deopt call expressions as they might change values of LHS variables
+        if (t.isCallExpression(elem)) return false;
+
+        // deopt on member expressions as they may be getter/setters and have side-effects
+        if (t.isMemberExpression(elem)) return false;
       }
 
       // deopt on reference to left side identifiers
@@ -486,7 +492,21 @@ export default function ({ types: t }) {
           }
         }
 
-        path.replaceWithMultiple(nodes);
+        const nodesOut = [];
+        for (const node of nodes) {
+          const tail = nodesOut[nodesOut.length - 1];
+          if (tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) && tail.kind === node.kind) {
+            tail.declarations.push(...node.declarations);
+          } else {
+            nodesOut.push(node);
+          }
+        }
+
+        if (nodesOut.length === 1) {
+          path.replaceWith(nodesOut[0]);
+        } else {
+          path.replaceWithMultiple(nodesOut);
+        }
       }
     }
   };

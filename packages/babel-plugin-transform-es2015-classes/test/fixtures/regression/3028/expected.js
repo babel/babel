@@ -14,7 +14,7 @@ var a1 = function (_b) {
   function a1() {
     babelHelpers.classCallCheck(this, a1);
 
-    var _this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(a1).call(this));
+    var _this = babelHelpers.possibleConstructorReturn(this, (a1.__proto__ || Object.getPrototypeOf(a1)).call(this));
 
     _this.x = function () {
       return _this;
@@ -31,7 +31,7 @@ var a2 = function (_b2) {
   function a2() {
     babelHelpers.classCallCheck(this, a2);
 
-    var _this2 = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(a2).call(this));
+    var _this2 = babelHelpers.possibleConstructorReturn(this, (a2.__proto__ || Object.getPrototypeOf(a2)).call(this));
 
     _this2.x = function () {
       return _this2;

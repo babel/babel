@@ -1,7 +1,7 @@
 {
   "name": "babel-helper-optimise-call-expression",
   "version": "6.8.0",
-  "description": "",
+  "description": "Helper function to optimise call expression",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-optimise-call-expression",
   "license": "MIT",
   "main": "lib/index.js",

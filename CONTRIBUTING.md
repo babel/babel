@@ -26,8 +26,11 @@ contributing, please read our [code of conduct](https://github.com/babel/babel/b
  - This repository's [`/doc`](/doc) directory for notes on Babel's internals
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
+- When you feel ready to finally jump into the babel source code a good start is to look out for issues which are labeled with [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [beginner-friendly](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22beginner-friendly%22).
 
-> If you're stuck, feel free to check out the `#development` channel on our [slack](https://slack.babeljs.io).
+## Chat
+
+If you're stuck (or just want to chat), feel free to check out the `#discussion`/`#development` channels on our [slack](https://slack.babeljs.io).
 
 ## Developing
 
@@ -55,13 +58,13 @@ $ make watch
 
 to have Babel build itself and incrementally build files on change.
 
+You can access the built files for individual packages from `packages/<package-name>/lib`.
+
 If you wish to build a copy of Babel for distribution, then run:
 
 ```sh
 $ make build-dist
 ```
-
-and access the files from `packages/babel-core/dist`.
 
 #### Running tests
 
@@ -108,6 +111,7 @@ For example, in [`babel-plugin-transform-exponentiation-operator/test`](/package
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
 - Generally, there are two kinds of tests for plugins
    - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`actual.js`](packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/actual.js) file and an [`expected.js`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/expected.js) file.
+   - If you need to expect an error, you can ignore creating the `expected.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
    - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
 
 In an actual/expected test, you simply write out the code you want transformed in `actual.js`.
@@ -131,9 +135,19 @@ assert.equal(8, 2 ** 3);
 assert.equal(24, 3 * 2 ** 3);
 ```
 
-##### `babylon`
+If you need to check for an error that is thrown you can add to the `options.json`
 
-For `babylon` specifically, you can easily generate an `expected.json` automatically by just providing the `actual.js` and running `make test-only` as you usually would.
+```js
+// options.json example
+{
+  "plugins": [["transform-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
+  "throws": "transform-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
+}
+```
+
+##### Bootstrapping expected output
+
+For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
 
 ```
 // Example

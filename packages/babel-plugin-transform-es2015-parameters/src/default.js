@@ -7,10 +7,10 @@ import * as t from "babel-types";
 
 let buildDefaultParam = template(`
   let VARIABLE_NAME =
-    ARGUMENTS.length <= ARGUMENT_KEY || ARGUMENTS[ARGUMENT_KEY] === undefined ?
-      DEFAULT_VALUE
+    ARGUMENTS.length > ARGUMENT_KEY && ARGUMENTS[ARGUMENT_KEY] !== undefined ?
+      ARGUMENTS[ARGUMENT_KEY]
     :
-      ARGUMENTS[ARGUMENT_KEY];
+      DEFAULT_VALUE;
 `);
 
 let buildCutOff = template(`
@@ -24,10 +24,16 @@ function hasDefaults(node) {
   return false;
 }
 
+function isSafeBinding(scope, node) {
+  if (!scope.hasOwnBinding(node.name)) return true;
+  const { kind } = scope.getOwnBinding(node.name);
+  return kind === "param" || kind === "local";
+}
+
 let iifeVisitor = {
   ReferencedIdentifier(path, state) {
-    let name = path.node.name;
-    if (name === "eval" || (path.scope.hasOwnBinding(name) && path.scope.getOwnBinding(name).kind !== "param")) {
+    const { scope, node } = path;
+    if (node.name === "eval" || !isSafeBinding(scope, node)) {
       state.iife = true;
       path.stop();
     }
@@ -100,7 +106,7 @@ export let visitor = {
 
       //
       if (!state.iife) {
-        if (right.isIdentifier() && scope.hasOwnBinding(right.node.name) && scope.getOwnBinding(right.node.name).kind !== "param") {
+        if (right.isIdentifier() && !isSafeBinding(scope, right.node)) {
           // the right hand side references a parameter
           state.iife = true;
         } else {

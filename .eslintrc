@@ -1,0 +1,10 @@
+{
+  "extends": "babel",
+  "rules": {
+    "max-len": 0
+  },
+  "env": {
+    "node": true,
+    "mocha": true
+  }
+}

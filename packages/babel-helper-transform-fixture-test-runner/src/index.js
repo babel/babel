@@ -1,9 +1,5 @@
-/* global test */
-/* global suite */
-
 import * as babel from "babel-core";
 import { buildExternalHelpers } from "babel-core";
-import path from "path";
 import getFixtures from "babel-helper-fixtures";
 import sourceMap from "source-map";
 import codeFrame from "babel-code-frame";
@@ -12,14 +8,8 @@ import assert from "assert";
 import chai from "chai";
 import _ from "lodash";
 import "babel-polyfill";
-import register from "babel-register";
-
-register({
-  ignore: [
-    path.resolve(__dirname + "/../.."),
-    "node_modules",
-  ]
-});
+import fs from "fs";
+import path from "path";
 
 let babelHelpers = eval(buildExternalHelpers(null, "var"));
 
@@ -56,6 +46,7 @@ function run(task) {
 
   let execCode = exec.code;
   let result;
+  let resultExec;
 
   if (execCode) {
     let execOpts = getOpts(exec);
@@ -63,7 +54,7 @@ function run(task) {
     execCode = result.code;
 
     try {
-      runExec(execOpts, execCode);
+      resultExec = runExec(execOpts, execCode);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);
@@ -74,14 +65,12 @@ function run(task) {
   let actualCode = actual.code;
   let expectCode = expect.code;
   if (!execCode || actualCode) {
-    result     = babel.transform(actualCode, getOpts(actual));
-    actualCode = result.code.trim();
-
-    try {
+    result = babel.transform(actualCode, getOpts(actual));
+    if (!expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
+      fs.writeFileSync(expect.loc, result.code);
+    } else {
+      actualCode = result.code.trim();
       chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
-    } catch (err) {
-      //require("fs").writeFileSync(expect.loc, actualCode);
-      throw err;
     }
   }
 
@@ -98,6 +87,10 @@ function run(task) {
       let expect = consumer.originalPositionFor(mapping.generated);
       chai.expect({ line: expect.line, column: expect.column }).to.deep.equal(actual);
     });
+  }
+
+  if (execCode && resultExec) {
+    return resultExec;
   }
 }
 
@@ -127,12 +120,12 @@ export default function (
   for (let testSuite of suites) {
     if (_.includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
-    suite(name + "/" + testSuite.title, function () {
+    describe(name + "/" + testSuite.title, function () {
       for (let task of testSuite.tests) {
         if (_.includes(suiteOpts.ignoreTasks, task.title) ||
             _.includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
 
-        test(task.title, !task.disabled && function () {
+        it(task.title, !task.disabled && function () {
           function runTask() {
             run(task);
           }
@@ -160,7 +153,14 @@ export default function (
               return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
             });
           } else {
-            runTask();
+            if (task.exec.code) {
+              let result = run(task);
+              if (result && typeof result.then === "function") {
+                return result;
+              }
+            } else {
+              runTask();
+            }
           }
         });
       }

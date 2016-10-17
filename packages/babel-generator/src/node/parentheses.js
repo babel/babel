@@ -142,7 +142,9 @@ export function YieldExpression(node: Object, parent: Object): boolean {
          t.isUnaryLike(parent) ||
          t.isCallExpression(parent) ||
          t.isMemberExpression(parent) ||
-         t.isNewExpression(parent);
+         t.isNewExpression(parent) ||
+         (t.isConditionalExpression(parent) && node === parent.test);
+
 }
 
 export { YieldExpression as AwaitExpression };

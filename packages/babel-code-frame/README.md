@@ -38,3 +38,5 @@ If the column number is not known, you may pass `null` instead.
 name                   | type     | default         | description
 -----------------------|----------|-----------------|------------------------------------------------------
 highlightCode          | boolean  | `false`         | Syntax highlight the code as JavaScript for terminals
+linesAbove             | number   | 2               | The number of lines to show above the error
+linesBelow             | number   | 3               | The number of lines to show below the error

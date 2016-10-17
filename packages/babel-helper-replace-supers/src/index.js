@@ -19,6 +19,33 @@ function isMemberExpressionSuper(node) {
   return t.isMemberExpression(node) && t.isSuper(node.object);
 }
 
+/**
+ * Creates an expression which result is the proto of objectRef.
+ * Uses CLASS.__proto__ first for InternetExplorer <= 10 support
+ *
+ * @example <caption>isStatic === true</caption>
+ *
+ *   CLASS.__proto__ || Object.getPrototypeOf(CLASS)
+ *
+ * @example <caption>isStatic === false</caption>
+ *
+ *   CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype)
+ */
+function getPrototypeOfExpression(objectRef, isStatic) {
+  const targetRef = isStatic ? objectRef : t.memberExpression(objectRef, t.identifier("prototype"));
+
+  return t.logicalExpression(
+    "||",
+    t.memberExpression(targetRef, t.identifier("__proto__")),
+    t.callExpression(
+      t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
+      [
+        targetRef
+      ]
+    ),
+  );
+}
+
 let visitor = {
   Function(path) {
     if (!path.inShadow("this")) {
@@ -117,7 +144,7 @@ export default class ReplaceSupers {
    *
    * @example
    *
-   *   _set(Object.getPrototypeOf(CLASS.prototype), "METHOD", "VALUE", this)
+   *   _set(CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype), "METHOD", "VALUE", this)
    *
    */
 
@@ -125,12 +152,7 @@ export default class ReplaceSupers {
     return t.callExpression(
       this.file.addHelper("set"),
       [
-        t.callExpression(
-          t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
-          [
-            this.isStatic ? this.getObjectRef() : t.memberExpression(this.getObjectRef(), t.identifier("prototype"))
-          ]
-        ),
+        getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
         isComputed ? property : t.stringLiteral(property.name),
         value,
         t.thisExpression()
@@ -143,7 +165,7 @@ export default class ReplaceSupers {
    *
    * @example
    *
-   *   _get(Object.getPrototypeOf(CLASS.prototype), "METHOD", this)
+   *   _get(CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype), "METHOD", this)
    *
    */
 
@@ -151,12 +173,7 @@ export default class ReplaceSupers {
     return t.callExpression(
       this.file.addHelper("get"),
       [
-        t.callExpression(
-          t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
-          [
-            this.isStatic ? this.getObjectRef() : t.memberExpression(this.getObjectRef(), t.identifier("prototype"))
-          ]
-        ),
+        getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
         isComputed ? property : t.stringLiteral(property.name),
         t.thisExpression()
       ]
@@ -221,7 +238,6 @@ export default class ReplaceSupers {
     let property;
     let computed;
     let args;
-    let thisReference;
 
     let parent = path.parent;
     let node = path.node;
@@ -260,7 +276,7 @@ export default class ReplaceSupers {
 
     if (!property) return;
 
-    let superProperty = this.getSuperProperty(property, computed, thisReference);
+    let superProperty = this.getSuperProperty(property, computed);
 
     if (args) {
       return this.optimiseCall(superProperty, args);

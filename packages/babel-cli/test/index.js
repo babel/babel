@@ -1,49 +1,46 @@
-if (process.env.running_under_istanbul) return;
+let readdir        = require("fs-readdir-recursive");
+let helper         = require("babel-helper-fixtures");
+let assert         = require("assert");
+let rimraf         = require("rimraf");
+let outputFileSync = require("output-file-sync");
+let child          = require("child_process");
+let path           = require("path");
+let chai           = require("chai");
+let fs             = require("fs");
+let pathExists     = require("path-exists");
+let _              = require("lodash");
 
-var readdir        = require("fs-readdir-recursive");
-var helper         = require("babel-helper-fixtures");
-var assert         = require("assert");
-var rimraf         = require("rimraf");
-var outputFileSync = require("output-file-sync");
-var child          = require("child_process");
-var path           = require("path");
-var chai           = require("chai");
-var fs             = require("fs");
-var pathExists     = require("path-exists");
-var _              = require("lodash");
+let fixtureLoc = path.join(__dirname, "fixtures");
+let tmpLoc = path.join(__dirname, "tmp");
 
-var fixtureLoc = __dirname + "/fixtures";
-var tmpLoc = __dirname + "/tmp";
-
-var presetLocs = [
-  __dirname + "/../../babel-preset-es2015",
-  __dirname + "/../../babel-preset-react"
+let presetLocs = [
+  path.join(__dirname, "../../babel-preset-es2015"),
+  path.join(__dirname, "../../babel-preset-react")
 ].join(",");
 
-var pluginLocs = [
-  __dirname + "/../../babel-plugin-transform-strict-mode",
-  __dirname + "/../../babel-plugin-transform-es2015-modules-commonjs",
+let pluginLocs = [
+  path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
+  path.join(__dirname, "/../../babel-plugin-transform-es2015-modules-commonjs"),
 ].join(",");
 
-var readDir = function (loc) {
-  var files = {};
+let readDir = function (loc) {
+  let files = {};
   if (pathExists.sync(loc)) {
     _.each(readdir(loc), function (filename) {
-      var contents = helper.readFile(loc + "/" + filename);
-      files[filename] = contents;
+      files[filename] = helper.readFile(path.join(loc, filename));
     });
   }
   return files;
 };
 
-var saveInFiles = function (files) {
+let saveInFiles = function (files) {
   _.each(files, function (content, filename) {
     outputFileSync(filename, content);
   });
 };
 
-var assertTest = function (stdout, stderr, opts) {
-  var expectStderr = opts.stderr.trim();
+let assertTest = function (stdout, stderr, opts) {
+  let expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
 
   if (opts.stderr) {
@@ -56,7 +53,7 @@ var assertTest = function (stdout, stderr, opts) {
     throw new Error("stderr:\n" + stderr);
   }
 
-  var expectStdout = opts.stdout.trim();
+  let expectStdout = opts.stdout.trim();
   stdout = stdout.trim();
   stdout = stdout.replace(/\\/g, "/");
 
@@ -71,20 +68,19 @@ var assertTest = function (stdout, stderr, opts) {
   }
 
   _.each(opts.outFiles, function (expect, filename) {
-    var actual = helper.readFile(filename);
+    let actual = helper.readFile(filename);
     chai.expect(actual).to.equal(expect, "out-file " + filename);
   });
 };
 
-var buildTest = function (binName, testName, opts) {
-  var binLoc = path.normalize(__dirname + "/../../babel-cli/lib/" + binName);
+let buildTest = function (binName, testName, opts) {
+  let binLoc = path.join(__dirname, "../lib", binName);
 
   return function (callback) {
-    this.timeout(5000);
     clear();
     saveInFiles(opts.inFiles);
 
-    var args = [binLoc];
+    let args = [binLoc];
 
     if (binName !== "babel-external-helpers") {
       args.push("--presets", presetLocs, "--plugins", pluginLocs);
@@ -96,10 +92,10 @@ var buildTest = function (binName, testName, opts) {
 
     args = args.concat(opts.args);
 
-    var spawn = child.spawn(process.execPath, args);
+    let spawn = child.spawn(process.execPath, args);
 
-    var stderr = "";
-    var stdout = "";
+    let stderr = "";
+    let stdout = "";
 
     spawn.stderr.on("data", function (chunk) {
       stderr += chunk;
@@ -110,7 +106,7 @@ var buildTest = function (binName, testName, opts) {
     });
 
     spawn.on("close", function () {
-      var err;
+      let err;
 
       try {
         assertTest(stdout, stderr, opts);
@@ -132,7 +128,7 @@ var buildTest = function (binName, testName, opts) {
   };
 };
 
-var clear = function () {
+let clear = function () {
   process.chdir(__dirname);
   if (pathExists.sync(tmpLoc)) rimraf.sync(tmpLoc);
   fs.mkdirSync(tmpLoc);
@@ -142,22 +138,22 @@ var clear = function () {
 _.each(fs.readdirSync(fixtureLoc), function (binName) {
   if (binName[0] === ".") return;
 
-  var suiteLoc = fixtureLoc + "/" + binName;
-  suite("bin/" + binName, function () {
-    _.each(fs.readdirSync(fixtureLoc + "/" + binName), function (testName) {
+  let suiteLoc = path.join(fixtureLoc, binName);
+  describe("bin/" + binName, function () {
+    _.each(fs.readdirSync(suiteLoc), function (testName) {
       if (testName[0] === ".") return;
 
-      var testLoc = suiteLoc + "/" + testName;
+      let testLoc = path.join(suiteLoc, testName);
 
-      var opts = {
+      let opts = {
         args: []
       };
 
-      var optionsLoc = testLoc + "/options.json"
+      let optionsLoc = path.join(testLoc, "options.json");
       if (pathExists.sync(optionsLoc)) _.merge(opts, require(optionsLoc));
 
       _.each(["stdout", "stdin", "stderr"], function (key) {
-        var loc = testLoc + "/" + key + ".txt";
+        let loc = path.join(testLoc, key + ".txt");
         if (pathExists.sync(loc)) {
           opts[key] = helper.readFile(loc);
         } else {
@@ -165,10 +161,16 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
         }
       });
 
-      opts.outFiles = readDir(testLoc + "/out-files");
-      opts.inFiles  = readDir(testLoc + "/in-files");
+      opts.outFiles = readDir(path.join(testLoc, "out-files"));
+      opts.inFiles  = readDir(path.join(testLoc, "in-files"));
 
-      test(testName, buildTest(binName, testName, opts));
+      let babelrcLoc = path.join(testLoc, ".babelrc");
+      if (pathExists.sync(babelrcLoc)) {
+        // copy .babelrc file to tmp directory
+        opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
+      }
+
+      it(testName, buildTest(binName, testName, opts));
     });
   });
 });

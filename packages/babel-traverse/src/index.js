@@ -42,24 +42,7 @@ traverse.Scope    = require("./scope");
 traverse.Hub      = require("./hub");
 
 traverse.cheap = function (node, enter) {
-  if (!node) return;
-
-  let keys = t.VISITOR_KEYS[node.type];
-  if (!keys) return;
-
-  enter(node);
-
-  for (let key of keys) {
-    let subNode = node[key];
-
-    if (Array.isArray(subNode)) {
-      for (let node of subNode) {
-        traverse.cheap(node, enter);
-      }
-    } else {
-      traverse.cheap(subNode, enter);
-    }
-  }
+  return t.traverseFast(node, enter);
 };
 
 traverse.node = function (node: Object, opts: Object, scope: Object, state: Object, parentPath: Object, skipKeys?) {
@@ -73,31 +56,14 @@ traverse.node = function (node: Object, opts: Object, scope: Object, state: Obje
   }
 };
 
-const CLEAR_KEYS: Array = t.COMMENT_KEYS.concat([
-  "tokens", "comments",
-  "start", "end", "loc",
-  "raw", "rawValue"
-]);
-
-traverse.clearNode = function (node) {
-  for (let key of CLEAR_KEYS) {
-    if (node[key] != null) node[key] = undefined;
-  }
-
-  for (let key in node) {
-    if (key[0] === "_" && node[key] != null) node[key] = undefined;
-  }
+traverse.clearNode = function (node, opts) {
+  t.removeProperties(node, opts);
 
   cache.path.delete(node);
-
-  let syms: Array<Symbol> = Object.getOwnPropertySymbols(node);
-  for (let sym of syms) {
-    node[sym] = null;
-  }
 };
 
-traverse.removeProperties = function (tree) {
-  traverse.cheap(tree, traverse.clearNode);
+traverse.removeProperties = function (tree, opts) {
+  t.traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
 

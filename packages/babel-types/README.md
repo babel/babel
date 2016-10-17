@@ -49,6 +49,7 @@ Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, 
  - `body`: `BlockStatement | Expression` (required)
  - `async`: `boolean` (default: `false`)
  - `returnType` (default: `null`)
+ - `typeParameters` (default: `null`)
 
 ### t.assignmentExpression(operator, left, right)
 
@@ -217,16 +218,17 @@ Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
  - `returnType` (default: `null`)
  - `typeParameters` (default: `null`)
 
-### t.classProperty(key, value, typeAnnotation, decorators)
+### t.classProperty(key, value, typeAnnotation, decorators, computed)
 
 See also `t.isClassProperty(node, opts)` and `t.assertClassProperty(node, opts)`.
 
-Aliases: `Flow`, `Property`
+Aliases: `Property`
 
  - `key` (required)
  - `value` (required)
  - `typeAnnotation` (required)
  - `decorators` (required)
+ - `computed`: `boolean` (default: `false`)
 
 ### t.conditionalExpression(test, consequent, alternate)
 
@@ -291,6 +293,14 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id` (required)
  - `body` (required)
+
+### t.declareModuleExports(typeAnnotation)
+
+See also `t.isDeclareModuleExports(node, opts)` and `t.assertDeclareModuleExports(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `typeAnnotation` (required)
 
 ### t.declareTypeAlias(id, typeParameters, right)
 
@@ -425,6 +435,16 @@ See also `t.isFile(node, opts)` and `t.assertFile(node, opts)`.
  - `program`: `Program` (required)
  - `comments` (required)
  - `tokens` (required)
+
+### t.forAwaitStatement(left, right, body)
+
+See also `t.isForAwaitStatement(node, opts)` and `t.assertForAwaitStatement(node, opts)`.
+
+Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
+
+ - `left`: `VariableDeclaration | LVal` (required)
+ - `right`: `Expression` (required)
+ - `body`: `Statement` (required)
 
 ### t.forInStatement(left, right, body)
 
@@ -735,6 +755,11 @@ See also `t.isMixedTypeAnnotation(node, opts)` and `t.assertMixedTypeAnnotation(
 
 Aliases: `Flow`, `FlowBaseAnnotation`
 
+### t.emptyTypeAnnotation()
+
+See also `t.isEmptyTypeAnnotation(node, opts)` and `t.assertEmptyTypeAnnotation(node, opts)`.
+
+Aliases: `Flow`, `FlowBaseAnnotation`
 
 ### t.newExpression(callee, arguments)
 

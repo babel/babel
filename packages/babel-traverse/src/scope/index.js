@@ -73,20 +73,21 @@ let collectorVisitor = {
   },
 
   ExportDeclaration: {
-    exit({ node, scope }) {
+    exit(path) {
+      const { node, scope } = path;
       let declar = node.declaration;
       if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
         let id = declar.id;
         if (!id) return;
 
         let binding = scope.getBinding(id.name);
-        if (binding) binding.reference();
+        if (binding) binding.reference(path);
       } else if (t.isVariableDeclaration(declar)) {
         for (let decl of (declar.declarations: Array<Object>)) {
           let ids = t.getBindingIdentifiers(decl);
           for (let name in ids) {
             let binding = scope.getBinding(name);
-            if (binding) binding.reference();
+            if (binding) binding.reference(path);
           }
         }
       }

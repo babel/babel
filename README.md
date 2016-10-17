@@ -25,17 +25,13 @@ For questions and support please visit our [discussion forum](https://discuss.ba
 
 ## Want to report a bug or request a feature?
 
-> We are in the process of moving our issues from phabricator back to github issues! Check out https://github.com/babel/phabricator-to-github for more info
+Bugs and feature requests can be posted at https://github.com/babel/babel/issues.
 
-Bugs and feature requests should be posted at [phabricator.babeljs.io](https://phabricator.babeljs.io/).
+> We've moved our issues from phabricator back to github issues!
 
-> You can directly translate a github issue to phabricator; just add a T to the beginning of the issue.
+Former phabricator issue urls now automatically redirect to their corresponding Github issue:
 
-```
-https://phabricator.babeljs.io/T2168
-corresponds to
-https://github.com/babel/babel/issues/2168
-```
+https://phabricator.babeljs.io/T2168 mostly corresponds to https://github.com/babel/babel/issues/2168.
 
 ## Want to report an issue with [babeljs.io](https://babeljs.io) (the website)?
 
@@ -44,6 +40,8 @@ For documentation and website issues please visit the [babel/babel.github.io](ht
 ## Want to contribute to Babel?
 
 Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md). If you have already joined slack, join our [#development](https://babeljs.slack.com/messages/development) channel!
+
+You can also start by checking out the issues with the [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
 
 Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
 
@@ -108,6 +106,7 @@ There are a few presets that we maintain officially.
 |--------|-------|------------|
 | [`babel-preset-es2015`](/packages/babel-preset-es2015) | [![npm](https://img.shields.io/npm/v/babel-preset-es2015.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-es2015) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-es2015)](https://david-dm.org/babel/babel?path=packages/babel-preset-es2015) |
 | [`babel-preset-es2016`](/packages/babel-preset-es2016) | [![npm](https://img.shields.io/npm/v/babel-preset-es2016.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-es2016) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-es2016)](https://david-dm.org/babel/babel?path=packages/babel-preset-es2016) |
+| [`babel-preset-es2017`](/packages/babel-preset-es2017) | [![npm](https://img.shields.io/npm/v/babel-preset-es2017.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-es2017) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-es2017)](https://david-dm.org/babel/babel?path=packages/babel-preset-es2017) |
 | [`babel-preset-stage-0`](/packages/babel-preset-stage-0) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-0.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-0) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-0)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-0) |
 | [`babel-preset-stage-1`](/packages/babel-preset-stage-1) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-1.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-1) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-1)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-1) |
 | [`babel-preset-stage-2`](/packages/babel-preset-stage-2) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-2.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-2) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-2)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-2) |
@@ -136,9 +135,9 @@ There are many kinds of plugins: ones that convert ES6/ES2015 to ES5, transform 
 |--------|-------|------------|
 | [`babel-plugin-check-es2015-constants`](/packages/babel-plugin-check-es2015-constants) | [![npm](https://img.shields.io/npm/v/babel-plugin-check-es2015-constants.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-check-es2015-constants) | |
 | [`babel-plugin-transform-async-functions`](/packages/babel-plugin-transform-async-functions) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-async-functions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-async-functions) | |
+| [`babel-plugin-transform-async-generator-functions`](/packages/babel-plugin-transform-async-generator-functions) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-async-generator-functions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-async-generator-functions) |
 | [`babel-plugin-transform-async-to-generator`](/packages/babel-plugin-transform-async-to-generator) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-async-to-generator.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-async-to-generator) | |
 | [`babel-plugin-transform-async-to-module-method`](/packages/babel-plugin-transform-async-to-module-method) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-async-to-module-method.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-async-to-module-method) | |
-| [`babel-plugin-transform-class-constructor-call`](/packages/babel-plugin-transform-class-constructor-call) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-class-constructor-call.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-class-constructor-call) | |
 | [`babel-plugin-transform-class-properties`](/packages/babel-plugin-transform-class-properties) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-class-properties.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-class-properties) | |
 | [`babel-plugin-transform-decorators`](/packages/babel-plugin-transform-decorators) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-decorators.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-decorators) | |
 | [`babel-plugin-transform-do-expressions`](/packages/babel-plugin-transform-do-expressions) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-do-expressions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-do-expressions) | |
@@ -174,16 +173,10 @@ There are many kinds of plugins: ones that convert ES6/ES2015 to ES5, transform 
 | [`babel-plugin-transform-flow-comments`](/packages/babel-plugin-transform-flow-comments) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-flow-comments.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-flow-comments) | |
 | [`babel-plugin-transform-flow-strip-types`](/packages/babel-plugin-transform-flow-strip-types) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-flow-strip-types.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-flow-strip-types) | |
 | [`babel-plugin-transform-function-bind`](/packages/babel-plugin-transform-function-bind) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-function-bind.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-function-bind) | |
-| [`babel-plugin-transform-inline-environment-variables`](/packages/babel-plugin-transform-inline-environment-variables) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-inline-environment-variables.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-inline-environment-variables) | |
 | [`babel-plugin-transform-jscript`](/packages/babel-plugin-transform-jscript) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-jscript.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-jscript) | |
-| [`babel-plugin-transform-member-expression-literals`](/packages/babel-plugin-transform-member-expression-literals) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-member-expression-literals.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-member-expression-literals) | |
-| [`babel-plugin-transform-merge-sibling-variables`](/packages/babel-plugin-transform-merge-sibling-variables) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-merge-sibling-variables.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-merge-sibling-variables) | |
-| [`babel-plugin-transform-minify-booleans`](/packages/babel-plugin-transform-minify-booleans) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-minify-booleans.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-minify-booleans) | |
-| [`babel-plugin-transform-node-env-inline`](/packages/babel-plugin-transform-node-env-inline) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-node-env-inline.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-node-env-inline) | |
 | [`babel-plugin-transform-object-assign`](/packages/babel-plugin-transform-object-assign) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-object-assign.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-object-assign) | |
 | [`babel-plugin-transform-object-rest-spread`](/packages/babel-plugin-transform-object-rest-spread) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-object-rest-spread.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-object-rest-spread) | |
 | [`babel-plugin-transform-object-set-prototype-of-to-assign`](/packages/babel-plugin-transform-object-set-prototype-of-to-assign) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-object-set-prototype-of-to-assign.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-object-set-prototype-of-to-assign) | |
-| [`babel-plugin-transform-property-literals`](/packages/babel-plugin-transform-property-literals) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-property-literals.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-property-literals) | |
 | [`babel-plugin-transform-proto-to-assign`](/packages/babel-plugin-transform-proto-to-assign) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-proto-to-assign.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-proto-to-assign) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-plugin-transform-proto-to-assign)](https://david-dm.org/babel/babel?path=packages/babel-plugin-transform-proto-to-assign) |
 | [`babel-plugin-transform-react-constant-elements`](/packages/babel-plugin-transform-react-constant-elements) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-constant-elements.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-constant-elements) | |
 | [`babel-plugin-transform-react-display-name`](/packages/babel-plugin-transform-react-display-name) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-display-name.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-display-name) | |
@@ -193,12 +186,8 @@ There are many kinds of plugins: ones that convert ES6/ES2015 to ES5, transform 
 | [`babel-plugin-transform-react-jsx-self`](/packages/babel-plugin-transform-react-jsx-self) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-jsx-self.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-jsx-self) | |
 | [`babel-plugin-transform-react-jsx-source`](/packages/babel-plugin-transform-react-jsx-source) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-jsx-source.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-jsx-source) | |
 | [`babel-plugin-transform-regenerator`](/packages/babel-plugin-transform-regenerator) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-regenerator.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-regenerator) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-plugin-transform-regenerator)](https://david-dm.org/babel/babel?path=packages/babel-plugin-transform-regenerator) |
-| [`babel-plugin-transform-remove-console`](/packages/babel-plugin-transform-remove-console) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-remove-console.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-remove-console) | |
-| [`babel-plugin-transform-remove-debugger`](/packages/babel-plugin-transform-remove-debugger) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-remove-debugger.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-remove-debugger) | |
 | [`babel-plugin-transform-runtime`](/packages/babel-plugin-transform-runtime) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-runtime.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-runtime) | |
-| [`babel-plugin-transform-simplify-comparison-operators`](/packages/babel-plugin-transform-simplify-comparison-operators) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-simplify-comparison-operators.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-simplify-comparison-operators) | |
 | [`babel-plugin-transform-strict-mode`](/packages/babel-plugin-transform-strict-mode) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-strict-mode.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-strict-mode) | |
-| [`babel-plugin-transform-undefined-to-void`](/packages/babel-plugin-transform-undefined-to-void) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-undefined-to-void.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-undefined-to-void) | |
 
 #### Syntax Plugins
 
@@ -208,7 +197,6 @@ These just enable the transform plugins to be able to parse certain features (th
 |--------|-------|
 | [`babel-plugin-syntax-async-functions`](/packages/babel-plugin-syntax-async-functions) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-async-functions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-async-functions) |
 | [`babel-plugin-syntax-async-generators`](/packages/babel-plugin-syntax-async-generators) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-async-generators.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-async-generators) |
-| [`babel-plugin-syntax-class-constructor-call`](/packages/babel-plugin-syntax-class-constructor-call) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-class-constructor-call.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-class-constructor-call) |
 | [`babel-plugin-syntax-class-properties`](/packages/babel-plugin-syntax-class-properties) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-class-properties.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-class-properties) |
 | [`babel-plugin-syntax-decorators`](/packages/babel-plugin-syntax-decorators) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-decorators.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-decorators) |
 | [`babel-plugin-syntax-do-expressions`](/packages/babel-plugin-syntax-do-expressions) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-do-expressions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-do-expressions) |
@@ -217,6 +205,7 @@ These just enable the transform plugins to be able to parse certain features (th
 | [`babel-plugin-syntax-flow`](/packages/babel-plugin-syntax-flow) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-flow.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-flow) |
 | [`babel-plugin-syntax-function-bind`](/packages/babel-plugin-syntax-function-bind) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-function-bind.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-function-bind) |
 | [`babel-plugin-syntax-function-sent`](/packages/babel-plugin-syntax-function-sent) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-function-sent.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-function-sent) |
+| [`babel-plugin-syntax-dynamic-import`](/packages/babel-plugin-syntax-dynamic-import) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-dynamic-import.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-dynamic-import) |
 | [`babel-plugin-syntax-jsx`](/packages/babel-plugin-syntax-jsx) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-jsx.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-jsx) |
 | [`babel-plugin-syntax-object-rest-spread`](/packages/babel-plugin-syntax-object-rest-spread) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-object-rest-spread.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-object-rest-spread) |
 

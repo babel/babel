@@ -119,8 +119,7 @@ export default function () {
       }
       nodes.push(t.binaryExpression(operator, arg.node, t.numericLiteral(1)));
 
-      let newPaths = path.replaceWithMultiple(t.sequenceExpression(nodes));
-      for (const newPath of newPaths) this.requeueInParent(newPath);
+      path.replaceWithMultiple(t.sequenceExpression(nodes));
     }
   };
 
@@ -169,8 +168,6 @@ export default function () {
           let remaps = Object.create(null);
 
           let requires = Object.create(null);
-
-          let exportDefaultFound = false;
 
           function addRequire(source, blockHoist) {
             let cached = requires[source];
@@ -240,10 +237,6 @@ export default function () {
 
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
-              if (exportDefaultFound) {
-                throw path.buildCodeFrameError("Only one default export allowed per module.");
-              }
-
               let declaration = path.get("declaration");
               if (declaration.isFunctionDeclaration()) {
                 let id = declaration.node.id;
@@ -267,16 +260,20 @@ export default function () {
                   ]);
                 } else {
                   path.replaceWith(buildExportsAssignment(defNode, t.toExpression(declaration.node)));
+
+                  // Manualy re-queue `export default class {}` expressions so that the ES3 transform
+                  // has an opportunity to convert them. Ideally this would happen automatically from the
+                  // replaceWith above. See #4140 for more info.
+                  path.parentPath.requeue(path.get("expression.left"));
                 }
               } else {
                 path.replaceWith(buildExportsAssignment(t.identifier("default"), declaration.node));
 
                 // Manualy re-queue `export default foo;` expressions so that the ES3 transform
                 // has an opportunity to convert them. Ideally this would happen automatically from the
-                // replaceWith above. See T7166 for more info.
+                // replaceWith above. See #4140 for more info.
                 path.parentPath.requeue(path.get("expression.left"));
               }
-              exportDefaultFound = true;
             } else if (path.isExportNamedDeclaration()) {
               let declaration = path.get("declaration");
               if (declaration.node) {

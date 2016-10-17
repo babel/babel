@@ -178,12 +178,13 @@ export default class OptionManager {
 
       // check for an unknown option
       if (!option && this.log) {
-        let pluginOptsInfo = "Check out http://babeljs.io/docs/usage/options/ for more info";
-
         if (removed[key]) {
           this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`, ReferenceError);
         } else {
-          this.log.error(`Unknown option: ${alias}.${key}. ${pluginOptsInfo}`, ReferenceError);
+          let unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
+          let presetConfigErr = `A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:\n\nInvalid:\n  \`{ presets: [{option: value}] }\`\nValid:\n  \`{ presets: ['pluginName', {option: value}] }\`\n\nFor more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.`;
+
+          this.log.error(`${unknownOptErr}\n\n${presetConfigErr}`, ReferenceError);
         }
       }
     }
@@ -258,34 +259,68 @@ export default class OptionManager {
       }
 
       let presetLoc;
-      if (typeof val === "string") {
-        presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
-        if (!presetLoc) {
-          throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ` +
-            JSON.stringify(dirname));
+      try {
+        if (typeof val === "string") {
+          presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+
+          // trying to resolve @organization shortcat
+          // @foo/es2015 -> @foo/babel-preset-es2015
+          if (!presetLoc) {
+            let matches = val.match(/^(@[^/]+)\/(.+)$/);
+            if (matches) {
+              let [, orgName, presetPath] = matches;
+              val = `${orgName}/babel-preset-${presetPath}`;
+              presetLoc = resolve(val, dirname);
+            }
+          }
+
+          if (!presetLoc) {
+            throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ` +
+              JSON.stringify(dirname));
+          }
+
+          val = require(presetLoc);
         }
 
-        val = require(presetLoc);
+        // If the imported preset is a transpiled ES2015 module
+        if (typeof val === "object" && val.__esModule) {
+          // Try to grab the default export.
+          if (val.default) {
+            val = val.default;
+          } else {
+            // If there is no default export we treat all named exports as options
+            // and just remove the __esModule. This is to support presets that have been
+            // exporting named exports in the past, although we definitely want presets to
+            // only use the default export (with either an object or a function)
+            const { __esModule, ...rest } = val; // eslint-disable-line no-unused-vars
+            val = rest;
+          }
+        }
+
+        // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
+        // a 'buildPreset' function that will return the preset itself, while still exporting a
+        // simple object (rather than a function), for supporting old Babel versions.
+        if (typeof val === "object" && val.buildPreset) val = val.buildPreset;
+
+
+        if (typeof val !== "function" && options !== undefined) {
+          throw new Error(`Options ${JSON.stringify(options)} passed to ` +
+            (presetLoc || "a preset") + " which does not accept options.");
+        }
+
+        if (typeof val === "function") val = val(context, options);
+
+        if (typeof val !== "object") {
+          throw new Error(`Unsupported preset format: ${val}.`);
+        }
+
+        onResolve && onResolve(val, presetLoc);
+      } catch (e) {
+        if (presetLoc) {
+          e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
+        }
+        throw e;
       }
-
-      // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
-      // a 'buildPreset' function that will return the preset itself, while still exporting a
-      // simple object (rather than a function), for supporting old Babel versions.
-      if (typeof val === "object" && val.buildPreset) val = val.buildPreset;
-
-
-      if (typeof val !== "function" && options !== undefined) {
-        throw new Error(`Options ${JSON.stringify(options)} passed to ` +
-          (presetLoc || "a preset") + " which does not accept options.");
-      }
-
-      if (typeof val === "function") val = val(context, options);
-
-      if (typeof val !== "object") {
-        throw new Error(`Unsupported preset format: ${val}.`);
-      }
-
-      onResolve && onResolve(val);
       return val;
     });
   }

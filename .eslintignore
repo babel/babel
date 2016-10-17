@@ -3,7 +3,6 @@ scripts
 lib
 packages/babel-runtime
 packages/*/node_modules
-packages/*/test
 packages/*/dist
 vendor
 _babel.github.io

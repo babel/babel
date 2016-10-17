@@ -399,18 +399,11 @@ function _inheritComments(key, child, parent) {
   }
 }
 
-// Can't use import because of cyclic dependency between babel-traverse
-// and this module (babel-types). This require needs to appear after
-// we export the TYPES constant, so we lazy-initialize it before use.
-let traverse;
-
 /**
  * Inherit all contextual properties from `parent` node to `child` node.
  */
 
 export function inherits(child: Object, parent: Object): Object {
-  if (!traverse) traverse = require("babel-traverse").default;
-
   if (!child || !parent) return child;
 
   // optionally inherit specific properties if not null
@@ -431,7 +424,6 @@ export function inherits(child: Object, parent: Object): Object {
   }
 
   t.inheritsComments(child, parent);
-  traverse.copyCache(parent, child);
 
   return child;
 }
@@ -458,6 +450,69 @@ export function isNode(node?): boolean {
 // Optimize property access.
 toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
+
+/**
+ * A prefix AST traversal implementation implementation.
+ */
+
+export function traverseFast(node: Node, enter: (node: Node) => void, opts?: Object) {
+  if (!node) return;
+
+  let keys = t.VISITOR_KEYS[node.type];
+  if (!keys) return;
+
+  opts = opts || {};
+  enter(node, opts);
+
+  for (let key of keys) {
+    let subNode = node[key];
+
+    if (Array.isArray(subNode)) {
+      for (let node of subNode) {
+        traverseFast(node, enter, opts);
+      }
+    } else {
+      traverseFast(subNode, enter, opts);
+    }
+  }
+}
+
+const CLEAR_KEYS: Array = [
+  "tokens",
+  "start", "end", "loc",
+  "raw", "rawValue"
+];
+
+const CLEAR_KEYS_PLUS_COMMENTS: Array = t.COMMENT_KEYS.concat([
+  "comments"
+]).concat(CLEAR_KEYS);
+
+/**
+ * Remove all of the _* properties from a node along with the additional metadata
+ * properties like location data and raw token data.
+ */
+
+export function removeProperties(node: Node, opts?: Object): void {
+  opts = opts || {};
+  let map = opts.preserveComments ? CLEAR_KEYS : CLEAR_KEYS_PLUS_COMMENTS;
+  for (let key of map) {
+    if (node[key] != null) node[key] = undefined;
+  }
+
+  for (let key in node) {
+    if (key[0] === "_" && node[key] != null) node[key] = undefined;
+  }
+
+  let syms: Array<Symbol> = Object.getOwnPropertySymbols(node);
+  for (let sym of syms) {
+    node[sym] = null;
+  }
+}
+
+export function removePropertiesDeep(tree: Node, opts?: Object): Node {
+  traverseFast(tree, removeProperties, opts);
+  return tree;
+}
 
 //
 export {

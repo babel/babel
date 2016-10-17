@@ -1,7 +1,7 @@
 machine:
   node:
     version:
-      0.10.0
+      0.10.46
 
 test:
   override:

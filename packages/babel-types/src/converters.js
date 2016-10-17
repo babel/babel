@@ -98,14 +98,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
   }
 }
 
-// Can't use import because of cyclic dependency between babel-traverse
-// and this module (babel-types). This require needs to appear after
-// we export the TYPES constant, so we lazy-initialize it before use.
-let traverse;
-
 export function toKeyAlias(node: Object, key: Object = node.key): string {
-  if (!traverse) traverse = require("babel-traverse").default;
-
   let alias;
 
   if (node.kind === "method") {
@@ -115,7 +108,7 @@ export function toKeyAlias(node: Object, key: Object = node.key): string {
   } else if (t.isStringLiteral(key)) {
     alias = JSON.stringify(key.value);
   } else {
-    alias = JSON.stringify(traverse.removeProperties(t.cloneDeep(key)));
+    alias = JSON.stringify(t.removePropertiesDeep(t.cloneDeep(key)));
   }
 
   if (node.computed) {
@@ -211,17 +204,31 @@ export function toExpression(node: Object): Object {
     node = node.expression;
   }
 
+  // return unmodified node
+  // important for things like ArrowFunctions where
+  // type change from ArrowFunction to FunctionExpression
+  // produces bugs like -> `()=>a` to `function () a`
+  // without generating a BlockStatement for it
+  // ref: https://github.com/babel/babili/issues/130
+  if (t.isExpression(node)) {
+    return node;
+  }
+
+  // convert all classes and functions
+  // ClassDeclaration -> ClassExpression
+  // FunctionDeclaration, ObjectMethod, ClassMethod -> FunctionExpression
   if (t.isClass(node)) {
     node.type = "ClassExpression";
   } else if (t.isFunction(node)) {
     node.type = "FunctionExpression";
   }
 
-  if (t.isExpression(node)) {
-    return node;
-  } else {
+  // if it's still not an expression
+  if (!t.isExpression(node)) {
     throw new Error(`cannot turn ${node.type} to an expression`);
   }
+
+  return node;
 }
 
 export function toBlock(node: Object, parent: Object): Object {

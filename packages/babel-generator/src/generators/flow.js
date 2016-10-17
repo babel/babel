@@ -11,7 +11,7 @@ export function ArrayTypeAnnotation(node: Object) {
 }
 
 export function BooleanTypeAnnotation() {
-  this.word("bool");
+  this.word("boolean");
 }
 
 export function BooleanLiteralTypeAnnotation(node: Object) {
@@ -167,6 +167,10 @@ export function MixedTypeAnnotation() {
   this.word("mixed");
 }
 
+export function EmptyTypeAnnotation() {
+  this.word("empty");
+}
+
 export function NullableTypeAnnotation(node: Object) {
   this.token("?");
   this.print(node.typeAnnotation, node);
@@ -250,7 +254,12 @@ export function TypeParameterInstantiation(node: Object) {
 export { TypeParameterInstantiation as TypeParameterDeclaration };
 
 export function ObjectTypeAnnotation(node: Object) {
-  this.token("{");
+  if (node.exact) {
+    this.token("{|");
+  } else {
+    this.token("{");
+  }
+
   let props = node.properties.concat(node.callProperties, node.indexers);
 
   if (props.length) {
@@ -270,7 +279,11 @@ export function ObjectTypeAnnotation(node: Object) {
     this.space();
   }
 
-  this.token("}");
+  if (node.exact) {
+    this.token("|}");
+  } else {
+    this.token("}");
+  }
 }
 
 export function ObjectTypeCallProperty(node: Object) {

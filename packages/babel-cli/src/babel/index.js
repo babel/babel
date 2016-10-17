@@ -107,7 +107,7 @@ if (errors.length) {
 let opts = exports.opts = {};
 
 each(options, function (opt, key) {
-  if (commander[key] !== undefined) {
+  if (commander[key] !== undefined && commander[key] !== opt.default) {
     opts[key] = commander[key];
   }
 });

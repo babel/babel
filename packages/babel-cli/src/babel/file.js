@@ -24,29 +24,33 @@ module.exports = function (commander, filenames, opts) {
     let offset = 0;
 
     _.each(results, function (result) {
-      let filename = result.filename || "stdout";
       code += result.code + "\n";
 
       if (result.map) {
         let consumer = new sourceMap.SourceMapConsumer(result.map);
-
-        let sourceFilename = filename;
-        if (commander.outFile) {
-          sourceFilename = path.relative(path.dirname(commander.outFile), sourceFilename);
-        }
-        sourceFilename = slash(sourceFilename);
-
-        map._sources.add(sourceFilename);
-        map.setSourceContent(sourceFilename, result.actual);
+        let sources = new Set();
 
         consumer.eachMapping(function (mapping) {
-          map._mappings.add({
-            generatedLine: mapping.generatedLine + offset,
-            generatedColumn: mapping.generatedColumn,
-            originalLine: mapping.source == null ? null : mapping.originalLine,
-            originalColumn: mapping.source == null ? null : mapping.originalColumn,
-            source: mapping.source == null ? null : sourceFilename
+          if (mapping.source != null) sources.add(mapping.source);
+
+          map.addMapping({
+            generated: {
+              line: mapping.generatedLine + offset,
+              column: mapping.generatedColumn,
+            },
+            source: mapping.source,
+            original: mapping.source == null ? null : {
+              line: mapping.originalLine,
+              column: mapping.originalColumn,
+            },
           });
+        });
+
+        sources.forEach((source) => {
+          let content = consumer.sourceContentFor(source, true);
+          if (content !== null) {
+            map.setSourceContent(source, content);
+          }
         });
 
         offset = code.split("\n").length;
@@ -93,7 +97,9 @@ module.exports = function (commander, filenames, opts) {
     });
 
     process.stdin.on("end", function () {
-      results.push(util.transform(commander.filename, code));
+      results.push(util.transform(commander.filename, code, {
+        sourceFileName: "stdin",
+      }));
       output();
     });
   };
@@ -120,7 +126,16 @@ module.exports = function (commander, filenames, opts) {
     _.each(_filenames, function (filename) {
       if (util.shouldIgnore(filename)) return;
 
-      let data = util.compile(filename);
+      let sourceFilename = filename;
+      if (commander.outFile) {
+        sourceFilename = path.relative(path.dirname(commander.outFile), sourceFilename);
+      }
+      sourceFilename = slash(sourceFilename);
+
+      let data = util.compile(filename, {
+        sourceFileName: sourceFilename,
+      });
+
       if (data.ignored) return;
       results.push(data);
     });

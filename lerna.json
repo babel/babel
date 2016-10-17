@@ -1,16 +1,16 @@
 {
   "lerna": "2.0.0-beta.23",
-  "version": "6.13.2",
+  "version": "6.17.0",
   "changelog": {
     "repo": "babel/babel",
     "labels": {
-      "tag: bug fix": "Bug Fix",
-      "tag: breaking change": "Breaking Change",
+      "tag: spec compliancy": ":eyeglasses: Spec Compliancy",
+      "tag: breaking change": ":boom: Breaking Change",
+      "tag: new feature": ":rocket: New Feature",
+      "tag: bug fix": ":bug: Bug Fix",
+      "tag: polish": ":nail_care: Polish",
       "tag: documentation": "Documentation",
-      "tag: internal": "Internal",
-      "tag: new feature": "New Feature",
-      "tag: polish": "Polish",
-      "tag: spec compliancy": "Spec Compliancy"
+      "tag: internal": ":house: Internal"
     }
   },
   "bootstrapConfig": {

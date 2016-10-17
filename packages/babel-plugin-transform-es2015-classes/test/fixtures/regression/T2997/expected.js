@@ -12,7 +12,7 @@ var B = function (_A) {
 
     babelHelpers.classCallCheck(this, B);
 
-    return _ret = (_this = babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(B).call(this)), _this), babelHelpers.possibleConstructorReturn(_this, _ret);
+    return _ret = (_this = babelHelpers.possibleConstructorReturn(this, (B.__proto__ || Object.getPrototypeOf(B)).call(this)), _this), babelHelpers.possibleConstructorReturn(_this, _ret);
   }
 
   return B;

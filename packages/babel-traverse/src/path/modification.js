@@ -50,7 +50,7 @@ export function _containerInsert(from, nodes) {
 
       // While this path may have a context, there is currently no guarantee that the context
       // will be the active context, because `popContext` may leave a final context in place.
-      // We should remove this `if` and always push once T7171 has been resolved.
+      // We should remove this `if` and always push once #4145 has been resolved.
       if (this.context.queue) path.pushContext(this.context);
       paths.push(path);
     } else {

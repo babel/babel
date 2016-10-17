@@ -345,9 +345,13 @@ export default class ClassTransformer {
       }
     } else {
       bareSuperNode = optimiseCall(
-        t.callExpression(
-          t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
-          [this.classRef]
+        t.logicalExpression(
+          "||",
+          t.memberExpression(this.classRef, t.identifier("__proto__")),
+          t.callExpression(
+            t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
+            [this.classRef]
+          )
         ),
         t.thisExpression(),
         bareSuperNode.arguments

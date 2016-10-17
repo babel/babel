@@ -16,6 +16,7 @@ const NON_DECIMAL_LITERAL = /^0[box]/;
 export type Format = {
   shouldPrintComment: (comment: string) => boolean;
   retainLines: boolean;
+  retainFunctionParens: boolean;
   comments: boolean;
   auxiliaryCommentBefore: string;
   auxiliaryCommentAfter: string;
@@ -330,6 +331,11 @@ export default class Printer {
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
+    if (this.format.retainFunctionParens &&
+        node.type === "FunctionExpression" &&
+        node.extra && node.extra.parenthesized) {
+      needsParens = true;
+    }
     if (needsParens) this.token("(");
 
     this._printLeadingComments(node, parent);
