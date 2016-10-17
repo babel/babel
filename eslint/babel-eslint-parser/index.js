@@ -383,7 +383,8 @@ exports.parseNoPatch = function (code, options) {
       "functionBind",
       "functionSent",
       "objectRestSpread",
-      "trailingFunctionCommas"
+      "trailingFunctionCommas",
+      "dynamicImport"
     ]
   };
 
