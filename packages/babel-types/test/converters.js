@@ -45,4 +45,16 @@ describe("converters", function () {
       });
     });
   });
+  describe("toKeyAlias", function () {
+    beforeEach(function () {
+      // make tests deterministic
+      t.toKeyAlias.uid = 0;
+    });
+    it("doesn't change string literals", function () {
+      assert.equal(t.toKeyAlias(t.objectProperty(t.stringLiteral("a"), t.nullLiteral())), "\"a\"");
+    });
+    it("wraps around at Number.MAX_SAFE_INTEGER", function () {
+      assert.equal(t.toKeyAlias(t.objectMethod("method", t.identifier("a"), [], t.blockStatement([]))), "0");
+    });
+  });
 });
