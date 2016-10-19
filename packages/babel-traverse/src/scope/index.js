@@ -161,6 +161,8 @@ export default class Scope {
     this.parentBlock = path.parent;
     this.block       = path.node;
     this.path        = path;
+
+    this.labels      = { };
   }
 
   /**
@@ -426,9 +428,17 @@ export default class Scope {
     return t.callExpression(file.addHelper(helperName), args);
   }
 
+  getLabel(name: string) {
+    return this.labels[name];
+  }
+
+  registerLabel(path: NodePath) {
+    this.labels[path.node.label.name] = path;
+  }
+
   registerDeclaration(path: NodePath) {
     if (path.isLabeledStatement()) {
-      this.registerBinding("label", path);
+      this.registerLabel(path);
     } else if (path.isFunctionDeclaration()) {
       this.registerBinding("hoisted", path.get("id"), path);
     } else if (path.isVariableDeclaration()) {
