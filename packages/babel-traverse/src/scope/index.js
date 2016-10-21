@@ -161,6 +161,8 @@ export default class Scope {
     this.parentBlock = path.parent;
     this.block       = path.node;
     this.path        = path;
+
+    this.labels      = new Map();
   }
 
   /**
@@ -218,7 +220,7 @@ export default class Scope {
     do {
       uid = this._generateUid(name, i);
       i++;
-    } while (this.hasBinding(uid) || this.hasGlobal(uid) || this.hasReference(uid));
+    } while (this.hasLabel(uid) || this.hasBinding(uid) || this.hasGlobal(uid) || this.hasReference(uid));
 
     let program = this.getProgramParent();
     program.references[uid] = true;
@@ -426,9 +428,21 @@ export default class Scope {
     return t.callExpression(file.addHelper(helperName), args);
   }
 
+  hasLabel(name: string) {
+    return !!this.getLabel(name);
+  }
+
+  getLabel(name: string) {
+    return this.labels.get(name);
+  }
+
+  registerLabel(path: NodePath) {
+    this.labels.set(path.node.label.name, path);
+  }
+
   registerDeclaration(path: NodePath) {
     if (path.isLabeledStatement()) {
-      this.registerBinding("label", path);
+      this.registerLabel(path);
     } else if (path.isFunctionDeclaration()) {
       this.registerBinding("hoisted", path.get("id"), path);
     } else if (path.isVariableDeclaration()) {
