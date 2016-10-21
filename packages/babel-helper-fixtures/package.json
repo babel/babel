@@ -9,7 +9,6 @@
   "dependencies": {
     "babel-runtime": "^6.9.0",
     "lodash": "^4.2.0",
-    "path-exists": "^1.0.0",
     "try-resolve": "^1.0.0"
   }
 }

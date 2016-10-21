@@ -3,7 +3,7 @@
 
 require("babel-core");
 
-let pathExists = require("path-exists");
+let fs         = require("fs");
 let commander  = require("commander");
 let kebabCase  = require("lodash/kebabCase");
 let options    = require("babel-core").options;
@@ -70,7 +70,7 @@ let filenames = commander.args.reduce(function (globbed, input) {
 filenames = uniq(filenames);
 
 each(filenames, function (filename) {
-  if (!pathExists.sync(filename)) {
+  if (!fs.existsSync(filename)) {
     errors.push(filename + " doesn't exist");
   }
 });

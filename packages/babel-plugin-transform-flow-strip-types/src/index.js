@@ -22,6 +22,7 @@ export default function ({ types: t }) {
       },
 
       ClassProperty(path) {
+        path.node.variance = null;
         path.node.typeAnnotation = null;
         if (!path.node.value) path.remove();
       },
