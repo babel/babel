@@ -43,6 +43,22 @@ describe("scope", function () {
       assert.strictEqual(getPath("foo: { }").scope.getBinding("foo"), undefined);
       assert.strictEqual(getPath("foo: { }").scope.getLabel("foo").type, "LabeledStatement");
       assert.strictEqual(getPath("foo: { }").scope.getLabel("toString"), undefined);
+
+      assert.strictEqual(getPath(`
+        foo: { }
+      `).scope.generateUid("foo"), "_foo");
+    });
+
+    test("generateUid collision check with labels", function () {
+      assert.strictEqual(getPath(`
+        _foo: { }
+      `).scope.generateUid("foo"), "_foo2");
+
+      assert.strictEqual(getPath(`
+        _foo: { }
+        _foo1: { }
+        _foo2: { }
+      `).scope.generateUid("foo"), "_foo3");
     });
   });
 });

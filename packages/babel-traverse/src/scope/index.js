@@ -220,7 +220,7 @@ export default class Scope {
     do {
       uid = this._generateUid(name, i);
       i++;
-    } while (this.hasBinding(uid) || this.hasGlobal(uid) || this.hasReference(uid));
+    } while (this.hasLabel(uid) || this.hasBinding(uid) || this.hasGlobal(uid) || this.hasReference(uid));
 
     let program = this.getProgramParent();
     program.references[uid] = true;
@@ -426,6 +426,10 @@ export default class Scope {
       // TODO if (this.hub.file.isLoose("es6.forOf")) helperName += "-loose";
     }
     return t.callExpression(file.addHelper(helperName), args);
+  }
+
+  hasLabel(name: string) {
+    return !!this.getLabel(name);
   }
 
   getLabel(name: string) {
