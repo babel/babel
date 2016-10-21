@@ -15,6 +15,64 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## v6.13.0 (2016-10-21)
+
+### 👓 Spec Compliancy
+
+Property variance type annotations for Flow plugin ([#161](https://github.com/babel/babylon/pull/161)) (Sam Goldman)
+
+> See https://flowtype.org/docs/variance.html for more information
+
+```js
+type T = { +p: T };
+interface T { -p: T };
+declare class T { +[k:K]: V };
+class T { -[k:K]: V };
+class C2 { +p: T = e };
+```
+
+Raise error on duplicate definition of __proto__ ([#183](https://github.com/babel/babylon/pull/183)) (Moti Zilberman)
+
+```js
+({ __proto__: 1, __proto__: 2 }) // Throws an error now
+```
+
+### :bug: Bug Fix
+
+Flow: Allow class properties to be named `static` ([#184](https://github.com/babel/babylon/pull/184)) (Moti Zilberman)
+
+```js
+declare class A {
+  static: T;
+}
+```
+
+Allow "async" as identifier for object literal property shorthand ([#187](https://github.com/babel/babylon/pull/187)) (Andrew Levine)
+
+```js
+var foo = { async, bar };
+```
+
+### :nail_care: Polish
+
+Fix flowtype and add inType to state ([#189](https://github.com/babel/babylon/pull/189)) (Daniel Tschinder)
+
+> This improves the performance slightly (because of hidden classes)
+
+### :house: Internal
+
+Fix .gitattributes line ending setting ([#191](https://github.com/babel/babylon/pull/191)) (Moti Zilberman)
+
+Increase test coverage ([#175](https://github.com/babel/babylon/pull/175) (Moti Zilberman)
+
+Readd missin .eslinignore for IDEs (Daniel Tschinder)
+
+Error on missing expected.json fixture in CI ([#188](https://github.com/babel/babylon/pull/188)) (Moti Zilberman)
+
+Add .gitattributes and .editorconfig for LF line endings ([#179](https://github.com/babel/babylon/pull/179)) (Moti Zilberman)
+ 
+Fixes two tests that are failing after the merge of #172 ([#177](https://github.com/babel/babylon/pull/177)) (Moti Zilberman)
+
 ## v6.12.0 (2016-10-14)
 
 ### 👓 Spec Compliancy
