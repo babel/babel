@@ -11,7 +11,7 @@ $ npm install babel-core
 ## Usage
 
 ```js
-import babel from 'babel-core';
+import * as babel from 'babel-core';
 
 const code = `class Example {}`;
 const result = babel.transform(code, { /* options */ });

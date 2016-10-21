@@ -1,5 +1,5 @@
 class C {
-  *g() {
+  g() {
     var _this = this;
 
     return babelHelpers.asyncGenerator.wrap(function* () {

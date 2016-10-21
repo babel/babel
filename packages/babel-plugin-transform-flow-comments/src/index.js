@@ -37,6 +37,12 @@ export default function ({ types: t }) {
         }
       },
 
+      // support for `class X { foo: string }` - #4622
+      ClassProperty(path) {
+        let { node, parent } = path;
+        if (!node.value) wrapInFlowComment(path, parent);
+      },
+
       // support `export type a = {}` - #8 Error: You passed path.replaceWith() a falsy node
       "ExportNamedDeclaration|Flow"(path) {
         let { node, parent } = path;

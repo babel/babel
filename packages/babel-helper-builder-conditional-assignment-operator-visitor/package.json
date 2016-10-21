@@ -1,7 +1,7 @@
 {
   "name": "babel-helper-builder-conditional-assignment-operator-visitor",
   "version": "6.8.0",
-  "description": "",
+  "description": "Helper function to build conditional assignment operator visitors",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-builder-conditional-assignment-operator-visitor",
   "license": "MIT",
   "main": "lib/index.js",

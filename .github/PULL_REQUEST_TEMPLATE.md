@@ -1,5 +1,5 @@
 <!--- 
-Before making a PR please make sure to read our contributing guidlines 
+Before making a PR please make sure to read our contributing guidelines 
 https://github.com/babel/babel/blob/master/CONTRIBUTING.md
 -->
 

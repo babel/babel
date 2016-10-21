@@ -488,17 +488,24 @@ class BlockScoping {
       }
     }
 
+    const addDeclarationsFromChild = (path, node) => {
+      node = node || path.node;
+      if (t.isClassDeclaration(node) || t.isFunctionDeclaration(node) || isBlockScoped(node)) {
+        if (isBlockScoped(node)) {
+          convertBlockScopedToVar(path, node, block, this.scope);
+        }
+        declarators = declarators.concat(node.declarations || node);
+      }
+      if (t.isLabeledStatement(node)) {
+        addDeclarationsFromChild(path.get("body"), node.body);
+      }
+    };
+
     //
     if (block.body) {
       for (let i = 0; i < block.body.length; i++) {
-        let declar = block.body[i];
-        if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar) || isBlockScoped(declar)) {
-          let declarPath = this.blockPath.get("body")[i];
-          if (isBlockScoped(declar)) {
-            convertBlockScopedToVar(declarPath, null, block, this.scope);
-          }
-          declarators = declarators.concat(declar.declarations || declar);
-        }
+        let declarPath = this.blockPath.get("body")[i];
+        addDeclarationsFromChild(declarPath);
       }
     }
 
@@ -507,14 +514,9 @@ class BlockScoping {
         let consequents = block.cases[i].consequent;
 
         for (let j = 0; j < consequents.length; j++) {
+          let declarPath = this.blockPath.get("cases")[i];
           let declar = consequents[j];
-          if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar) || isBlockScoped(declar)) {
-            let declarPath = this.blockPath.get("cases")[i];
-            if (isBlockScoped(declar)) {
-              convertBlockScopedToVar(declarPath, declar, block, this.scope);
-            }
-            declarators = declarators.concat(declar.declarations || declar);
-          }
+          addDeclarationsFromChild(declarPath, declar);
         }
       }
     }

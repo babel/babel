@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-transform-class-properties",
   "version": "6.16.0",
-  "description": "",
+  "description": "This plugin transforms static class properties as well as properties declared with the property initializer syntax",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-class-properties",
   "license": "MIT",
   "main": "lib/index.js",

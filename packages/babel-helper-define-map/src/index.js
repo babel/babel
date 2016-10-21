@@ -55,6 +55,7 @@ export function push(mutatorMap: Object, node: Object, kind: string, file, scope
     value = node.value;
   } else if (t.isObjectMethod(node) || t.isClassMethod(node)) {
     value = t.functionExpression(null, node.params, node.body, node.generator, node.async);
+    value.returnType = node.returnType;
   }
 
   let inheritedKind = toKind(node);

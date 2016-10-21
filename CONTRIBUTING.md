@@ -14,25 +14,33 @@
 
 ----
 
+
 # Contributing
 
-Contributions are always welcome, no matter how large or small. Before
-contributing, please read our [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
+> Before contributing, please read our [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
+
+Contributions are always welcome, no matter how large or small.
 
 ## Not sure where to start?
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
- - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): Our current [spec](https://github.com/babel/babel/tree/master/doc/ast) is a bit different from [ESTree](https://github.com/estree/estree).
+ - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babylon/blob/master/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babylon#output).
  - This repository's [`/doc`](/doc) directory for notes on Babel's internals
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
-- When you feel ready to finally jump into the babel source code a good start is to look out for issues which are labeled with `help wanted` and/or `beginner-friendly`.
+- When you feel ready to finally jump into the babel source code a good start is to look out for issues which are labeled with [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [beginner-friendly](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22beginner-friendly%22).
 
-> If you're stuck, feel free to check out the `#development` channel on our [slack](https://slack.babeljs.io).
+## Chat
+
+Feel free to check out the `#discussion`/`#development` channels on our [slack](https://slack.babeljs.io). Some of us are always online to chat!
 
 ## Developing
 
-**Note:** Versions `< 5.1.10` can't be built. Make sure you are on npm 3.
+**Note:** Versions `< 5.1.10` can't be built.
+
+Babel is built for node 0.10 and up but we develop using node 6. Make sure you are on npm 3.
+
+You can check this with `node -v` and `npm -v`.
 
 #### Setup
 
@@ -64,15 +72,38 @@ If you wish to build a copy of Babel for distribution, then run:
 $ make build-dist
 ```
 
-#### Running tests
+#### Running linting/tests
 
-You can run tests for all packages via:
+You can run lint via:
 
 ```sh
+# ~6 sec on a MacBook Pro (Mid 2015)
+$ make lint
+```
+
+You can run eslint's autofix via:
+
+```sh
+$ make fix
+```
+
+You can run tests + lint for all packages (slow) via:
+
+```sh
+# ~46 sec on a MacBook Pro (Mid 2015)
 $ make test
 ```
 
-To run tests for a specific package, you can use the `TEST_ONLY` environment variable:
+If you just want to run all tests:
+
+```sh
+# ~40 sec on a MacBook Pro (Mid 2015)
+$ make test-only
+```
+
+Most likely you'll want to focus in on a specific issue.
+
+To run tests for a specific package in [packages](/packages), you can use the `TEST_ONLY` environment variable:
 
 ```sh
 $ TEST_ONLY=babel-cli make test
@@ -143,9 +174,9 @@ If you need to check for an error that is thrown you can add to the `options.jso
 }
 ```
 
-##### `babylon`
+##### Bootstrapping expected output
 
-For `babylon` specifically, you can easily generate an `expected.json` automatically by just providing the `actual.js` and running `make test-only` as you usually would.
+For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
 
 ```
 // Example

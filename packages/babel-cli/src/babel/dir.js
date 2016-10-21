@@ -1,5 +1,4 @@
 let outputFileSync = require("output-file-sync");
-let pathExists     = require("path-exists");
 let slash          = require("slash");
 let path           = require("path");
 let util           = require("./util");
@@ -45,7 +44,7 @@ module.exports = function (commander, filenames) {
   }
 
   function handle(filename) {
-    if (!pathExists.sync(filename)) return;
+    if (!fs.existsSync(filename)) return;
 
     let stat = fs.statSync(filename);
 

@@ -11,7 +11,7 @@ export function ArrayTypeAnnotation(node: Object) {
 }
 
 export function BooleanTypeAnnotation() {
-  this.word("bool");
+  this.word("boolean");
 }
 
 export function BooleanLiteralTypeAnnotation(node: Object) {
@@ -165,6 +165,10 @@ export function IntersectionTypeAnnotation(node: Object) {
 
 export function MixedTypeAnnotation() {
   this.word("mixed");
+}
+
+export function EmptyTypeAnnotation() {
+  this.word("empty");
 }
 
 export function NullableTypeAnnotation(node: Object) {

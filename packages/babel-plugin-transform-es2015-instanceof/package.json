@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-transform-es2015-instanceof",
   "version": "6.8.0",
-  "description": "",
+  "description": "This plugin transforms all the ES2015 'instanceof' methods",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-instanceof",
   "license": "MIT",
   "main": "lib/index.js",

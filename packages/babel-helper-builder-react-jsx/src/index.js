@@ -118,13 +118,18 @@ export default function (opts) {
   /**
    * The logic for this is quite terse. It's because we need to
    * support spread elements. We loop over all attributes,
-   * breaking on spreads, we then push a new object containg
+   * breaking on spreads, we then push a new object containing
    * all prior attributes to an array for later processing.
    */
 
   function buildOpeningElementAttributes(attribs, file) {
     let _props = [];
     let objs = [];
+
+    let useBuiltIns = file.opts.useBuiltIns || false;
+    if (typeof useBuiltIns !== "boolean") {
+      throw new Error("transform-react-jsx currently only accepts a boolean option for useBuiltIns (defaults to false)");
+    }
 
     function pushProps() {
       if (!_props.length) return;
@@ -154,11 +159,12 @@ export default function (opts) {
         objs.unshift(t.objectExpression([]));
       }
 
+      const helper = useBuiltIns ?
+        t.memberExpression(t.identifier("Object"), t.identifier("assign")) :
+        file.addHelper("extends");
+
       // spread it
-      attribs = t.callExpression(
-        file.addHelper("extends"),
-        objs
-      );
+      attribs = t.callExpression(helper, objs);
     }
 
     return attribs;

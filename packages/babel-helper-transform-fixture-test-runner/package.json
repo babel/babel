@@ -14,7 +14,7 @@
     "babel-helper-fixtures": "^6.9.0",
     "source-map": "^0.5.0",
     "babel-code-frame": "^6.16.0",
-    "chai": "^2.2.0",
+    "chai": "^3.0.0",
     "lodash": "^4.2.0"
   }
 }

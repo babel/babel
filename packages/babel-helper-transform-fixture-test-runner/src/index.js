@@ -1,6 +1,3 @@
-/* global test */
-/* global suite */
-
 import * as babel from "babel-core";
 import { buildExternalHelpers } from "babel-core";
 import getFixtures from "babel-helper-fixtures";
@@ -11,6 +8,8 @@ import assert from "assert";
 import chai from "chai";
 import _ from "lodash";
 import "babel-polyfill";
+import fs from "fs";
+import path from "path";
 
 let babelHelpers = eval(buildExternalHelpers(null, "var"));
 
@@ -66,14 +65,12 @@ function run(task) {
   let actualCode = actual.code;
   let expectCode = expect.code;
   if (!execCode || actualCode) {
-    result     = babel.transform(actualCode, getOpts(actual));
-    actualCode = result.code.trim();
-
-    try {
+    result = babel.transform(actualCode, getOpts(actual));
+    if (!expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
+      fs.writeFileSync(expect.loc, result.code);
+    } else {
+      actualCode = result.code.trim();
       chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
-    } catch (err) {
-      //require("fs").writeFileSync(expect.loc, actualCode);
-      throw err;
     }
   }
 
@@ -123,12 +120,12 @@ export default function (
   for (let testSuite of suites) {
     if (_.includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
-    suite(name + "/" + testSuite.title, function () {
+    describe(name + "/" + testSuite.title, function () {
       for (let task of testSuite.tests) {
         if (_.includes(suiteOpts.ignoreTasks, task.title) ||
             _.includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
 
-        test(task.title, !task.disabled && function () {
+        it(task.title, !task.disabled && function () {
           function runTask() {
             run(task);
           }
