@@ -178,12 +178,13 @@ export default class OptionManager {
 
       // check for an unknown option
       if (!option && this.log) {
-        let pluginOptsInfo = "Check out http://babeljs.io/docs/usage/options/ for more info";
-
         if (removed[key]) {
           this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`, ReferenceError);
         } else {
-          this.log.error(`Unknown option: ${alias}.${key}. ${pluginOptsInfo}`, ReferenceError);
+          let unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
+          let presetConfigErr = `A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:\n\nInvalid:\n  \`{ presets: [{option: value}] }\`\nValid:\n  \`{ presets: ['pluginName', {option: value}] }\`\n\nFor more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.`;
+
+          this.log.error(`${unknownOptErr}\n\n${presetConfigErr}`, ReferenceError);
         }
       }
     }

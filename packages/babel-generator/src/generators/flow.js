@@ -175,6 +175,10 @@ export function MixedTypeAnnotation() {
   this.word("mixed");
 }
 
+export function EmptyTypeAnnotation() {
+  this.word("empty");
+}
+
 export function NullableTypeAnnotation(node: Object) {
   this.token("?");
   this.print(node.typeAnnotation, node);

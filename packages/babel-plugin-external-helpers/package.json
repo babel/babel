@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-external-helpers",
   "version": "6.8.0",
-  "description": "",
+  "description": "This plugin contains helper functions that’ll be placed at the top of the generated code",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-external-helpers",
   "license": "MIT",
   "main": "lib/index.js",

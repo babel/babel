@@ -1,16 +1,16 @@
-var traverse = require("babel-traverse").default;
-var assert   = require("assert");
-var parse    = require("babylon").parse;
+let traverse = require("babel-traverse").default;
+let assert   = require("assert");
+let parse    = require("babylon").parse;
 
-suite("evaluation", function () {
+describe("evaluation", function () {
   function addTest(code, type, value, notConfident) {
-    test(type + ": " + code, function () {
-      var visitor = {};
+    it(type + ": " + code, function () {
+      let visitor = {};
 
       visitor[type] = function (path) {
-        var evaluate = path.evaluate();
+        let evaluate = path.evaluate();
         assert.equal(evaluate.confident, !notConfident);
-        assert.equal(evaluate.value, value);
+        assert.deepEqual(evaluate.value, value);
       };
 
       traverse(parse(code, {
@@ -63,4 +63,7 @@ suite("evaluation", function () {
   addTest("'abc' === 'xyz' || (1 === 1 && config.flag)", "LogicalExpression", undefined, true);
   addTest("'abc' === 'xyz' || (1 === 1 && 'four' === 'four')", "LogicalExpression", true);
   addTest("'abc' === 'abc' && (1 === 1 && 'four' === 'four')", "LogicalExpression", true);
+  addTest("({})", "ObjectExpression", {});
+  addTest("({a: '1'})", "ObjectExpression", {a: "1"});
+  addTest("({['a' + 'b']: 10 * 20, 'z': [1, 2, 3]})", "ObjectExpression", {ab: 200, z: [1, 2, 3]});
 });

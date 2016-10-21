@@ -29,13 +29,9 @@ Bugs and feature requests can be posted at https://github.com/babel/babel/issues
 
 > We've moved our issues from phabricator back to github issues!
 
-> Former phabricator links are going to redirect to the corresponding Github issue, for example You can use http://phabricator.babeljs.io/T7567.
+Former phabricator issue urls now automatically redirect to their corresponding Github issue:
 
-```
-https://phabricator.babeljs.io/T2168
-mostly corresponds to
-https://github.com/babel/babel/issues/2168
-```
+https://phabricator.babeljs.io/T2168 mostly corresponds to https://github.com/babel/babel/issues/2168.
 
 ## Want to report an issue with [babeljs.io](https://babeljs.io) (the website)?
 
@@ -209,6 +205,7 @@ These just enable the transform plugins to be able to parse certain features (th
 | [`babel-plugin-syntax-flow`](/packages/babel-plugin-syntax-flow) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-flow.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-flow) |
 | [`babel-plugin-syntax-function-bind`](/packages/babel-plugin-syntax-function-bind) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-function-bind.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-function-bind) |
 | [`babel-plugin-syntax-function-sent`](/packages/babel-plugin-syntax-function-sent) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-function-sent.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-function-sent) |
+| [`babel-plugin-syntax-dynamic-import`](/packages/babel-plugin-syntax-dynamic-import) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-dynamic-import.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-dynamic-import) |
 | [`babel-plugin-syntax-jsx`](/packages/babel-plugin-syntax-jsx) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-jsx.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-jsx) |
 | [`babel-plugin-syntax-object-rest-spread`](/packages/babel-plugin-syntax-object-rest-spread) | [![npm](https://img.shields.io/npm/v/babel-plugin-syntax-object-rest-spread.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-syntax-object-rest-spread) |
 

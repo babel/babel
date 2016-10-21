@@ -1,7 +1,7 @@
 {
   "name": "babel-helper-regex",
   "version": "6.9.0",
-  "description": "",
+  "description": "Helper function to check for literal RegEx",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-regex",
   "license": "MIT",
   "main": "lib/index.js",

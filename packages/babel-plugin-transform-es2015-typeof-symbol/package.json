@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-transform-es2015-typeof-symbol",
   "version": "6.8.0",
-  "description": "",
+  "description": "This transformer wraps all typeof expressions with a method that replicates native behaviour. (ie. returning “symbol” for symbols)",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-typeof-symbol",
   "license": "MIT",
   "main": "lib/index.js",

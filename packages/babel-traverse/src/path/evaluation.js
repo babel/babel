@@ -231,7 +231,34 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isObjectExpression()) {
-      // todo
+      let obj = {};
+      let props: Array<NodePath> = path.get("properties");
+      for (let prop of props) {
+        if (prop.isObjectMethod() || prop.isSpreadProperty()) {
+          return deopt(prop);
+        }
+        const keyPath = prop.get("key");
+        let key = keyPath;
+        if (prop.node.computed) {
+          key = key.evaluate();
+          if (!key.confident) {
+            return deopt(keyPath);
+          }
+          key = key.value;
+        } else if (key.isIdentifier()) {
+          key = key.node.name;
+        } else {
+          key = key.node.value;
+        }
+        const valuePath = prop.get("value");
+        let value = valuePath.evaluate();
+        if (!value.confident) {
+          return deopt(valuePath);
+        }
+        value = value.value;
+        obj[key] = value;
+      }
+      return obj;
     }
 
     if (path.isLogicalExpression()) {

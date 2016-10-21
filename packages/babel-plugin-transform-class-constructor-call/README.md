@@ -1,4 +1,4 @@
-# babel-plugin-transform-class-constructor-call
+# babel-plugin-transform-class-constructor-call (deprecated)
 
 ## Installation
 
