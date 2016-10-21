@@ -44,9 +44,10 @@ The data for this is currently at: [/data/plugins.json](/data/plugins.json) and 
 
 > We would like help to make sure the data is correct! This just means usage/testing!
 
-Currently: "chrome, edge, firefox, safari, node"
+Currently: "chrome, edge, firefox, safari, ie, node".
 
-> Some node features are > `6.5`.
+> adding `ie` will enable all transforms (may still need es3 transforms)
+> Each target takes a number (you can specify a decimal like `node: 6.5`)
 
 * `browsers` (array/string) - an query to select browsers (ex: last 2 versions, > 5%).  
 
