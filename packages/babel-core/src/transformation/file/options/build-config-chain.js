@@ -3,7 +3,6 @@ import type Logger from "../logger";
 import resolve from "../../../helpers/resolve";
 import json5 from "json5";
 import isAbsolute from "path-is-absolute";
-import pathExists from "path-exists";
 import path from "path";
 import fs from "fs";
 
@@ -17,7 +16,7 @@ const PACKAGE_FILENAME     = "package.json";
 function exists(filename) {
   let cached = existsCache[filename];
   if (cached == null) {
-    return existsCache[filename] = pathExists.sync(filename);
+    return existsCache[filename] = fs.existsSync(filename);
   } else {
     return cached;
   }

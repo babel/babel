@@ -34,6 +34,11 @@ test-clean:
 	rm -rf packages/*/test/tmp
 	rm -rf packages/*/test-fixtures.json
 
+clean-all:
+	rm -rf node_modules
+	rm -rf packages/*/node_modules
+	make clean
+
 # without lint
 test-only:
 	./scripts/test.sh
@@ -64,6 +69,7 @@ publish:
 	#./scripts/build-website.sh
 
 bootstrap:
+	make clean-all
 	npm install
 	./node_modules/.bin/lerna bootstrap
 	make build

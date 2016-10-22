@@ -7,7 +7,6 @@ let child          = require("child_process");
 let path           = require("path");
 let chai           = require("chai");
 let fs             = require("fs");
-let pathExists     = require("path-exists");
 let _              = require("lodash");
 
 let fixtureLoc = path.join(__dirname, "fixtures");
@@ -25,7 +24,7 @@ let pluginLocs = [
 
 let readDir = function (loc) {
   let files = {};
-  if (pathExists.sync(loc)) {
+  if (fs.existsSync(loc)) {
     _.each(readdir(loc), function (filename) {
       files[filename] = helper.readFile(path.join(loc, filename));
     });
@@ -130,7 +129,7 @@ let buildTest = function (binName, testName, opts) {
 
 let clear = function () {
   process.chdir(__dirname);
-  if (pathExists.sync(tmpLoc)) rimraf.sync(tmpLoc);
+  if (fs.existsSync(tmpLoc)) rimraf.sync(tmpLoc);
   fs.mkdirSync(tmpLoc);
   process.chdir(tmpLoc);
 };
@@ -150,11 +149,11 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
       };
 
       let optionsLoc = path.join(testLoc, "options.json");
-      if (pathExists.sync(optionsLoc)) _.merge(opts, require(optionsLoc));
+      if (fs.existsSync(optionsLoc)) _.merge(opts, require(optionsLoc));
 
       _.each(["stdout", "stdin", "stderr"], function (key) {
         let loc = path.join(testLoc, key + ".txt");
-        if (pathExists.sync(loc)) {
+        if (fs.existsSync(loc)) {
           opts[key] = helper.readFile(loc);
         } else {
           opts[key] = opts[key] || "";
@@ -165,7 +164,7 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
       opts.inFiles  = readDir(path.join(testLoc, "in-files"));
 
       let babelrcLoc = path.join(testLoc, ".babelrc");
-      if (pathExists.sync(babelrcLoc)) {
+      if (fs.existsSync(babelrcLoc)) {
         // copy .babelrc file to tmp directory
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
       }

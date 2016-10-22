@@ -8,6 +8,8 @@ import assert from "assert";
 import chai from "chai";
 import _ from "lodash";
 import "babel-polyfill";
+import fs from "fs";
+import path from "path";
 
 let babelHelpers = eval(buildExternalHelpers(null, "var"));
 
@@ -63,14 +65,12 @@ function run(task) {
   let actualCode = actual.code;
   let expectCode = expect.code;
   if (!execCode || actualCode) {
-    result     = babel.transform(actualCode, getOpts(actual));
-    actualCode = result.code.trim();
-
-    try {
+    result = babel.transform(actualCode, getOpts(actual));
+    if (!expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
+      fs.writeFileSync(expect.loc, result.code);
+    } else {
+      actualCode = result.code.trim();
       chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
-    } catch (err) {
-      //require("fs").writeFileSync(expect.loc, actualCode);
-      throw err;
     }
   }
 
