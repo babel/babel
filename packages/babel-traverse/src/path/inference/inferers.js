@@ -137,7 +137,13 @@ function Func() {
   return t.genericTypeAnnotation(t.identifier("Function"));
 }
 
-export { Func as Function, Func as Class };
+export {
+  Func as FunctionExpression,
+  Func as ArrowFunctionExpression,
+  Func as FunctionDeclaration,
+  Func as ClassExpression,
+  Func as ClassDeclaration
+};
 
 export function CallExpression() {
   return resolveCall(this.get("callee"));
