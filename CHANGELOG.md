@@ -19,7 +19,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 * `babel-generator`, `babel-plugin-transform-flow-strip-types`
   * [#4697](https://github.com/babel/babel/pull/4697) Add variance node type and generate property variance annotations. ([@samwgoldman](https://github.com/samwgoldman))
 
-Check out the [flow docs](https://flowtype.org/docs/variance.html) for more info:
+Check out the [blog post](https://flowtype.org/blog/2016/10/04/Property-Variance.html) and [flow docs](https://flowtype.org/docs/variance.html) for more info:
 
 ```js
 type T = { +p: T };
