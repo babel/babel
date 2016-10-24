@@ -115,6 +115,12 @@ Use the `TEST_GREP` variable to run a subset of tests by name:
 $ TEST_GREP=transformation make test
 ```
 
+To enable the node debugger added in v6.3.0, set the `TEST_DEBUG` environment variable:
+
+```sh
+$ TEST_DEBUG=true make test
+```
+
 To test the code coverage, use:
 
 ```sh
