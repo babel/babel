@@ -1,6 +1,6 @@
 {
   "name": "babel-runtime",
-  "version": "6.11.6",
+  "version": "6.18.0",
   "description": "babel selfContained runtime",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime",
