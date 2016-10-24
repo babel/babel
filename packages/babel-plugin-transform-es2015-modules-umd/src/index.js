@@ -1,6 +1,6 @@
 /* eslint max-len: 0 */
 
-import { basename, extname } from "path";
+import { basename, extname, posix } from "path";
 import template from "babel-template";
 
 let buildPrerequisiteAssignment = template(`
@@ -82,11 +82,19 @@ export default function ({ types: t }) {
                   memberExpression = globalRef.split(".").reduce(
                     (accum, curr) => t.memberExpression(accum, t.identifier(curr)), t.identifier("global")
                   );
+                } else if (state.opts.resolveImports) {
+                  memberExpression = resolveDependency(t, arg.value,
+                    moduleName ? moduleName.value : this.file.opts.filenameRelative
+                  );
                 } else {
                   memberExpression = t.memberExpression(
                     t.identifier("global"), t.identifier(t.toIdentifier(arg.value))
                   );
                 }
+              } else if (state.opts.resolveImports) {
+                memberExpression = resolveDependency(t, arg.value,
+                  moduleName ? moduleName.value : this.file.opts.filenameRelative
+                );
               } else {
                 let requireName = basename(arg.value, extname(arg.value));
                 let globalName = browserGlobals[requireName] || requireName;
@@ -136,4 +144,23 @@ export default function ({ types: t }) {
       }
     }
   };
+}
+
+function resolveDependency(t, dependency, moduleName) {
+  if (moduleName.includes("/")) {
+    moduleName = posix.dirname(moduleName);
+  }
+
+  let [root, ...path] = moduleName.split("/");
+  let resolved;
+
+  if (dependency.startsWith("./") || dependency.startsWith("../")) {
+    resolved = root + posix.join(`/${path.join("/")}`, posix.normalize(dependency));
+  } else {
+    resolved = posix.normalize(dependency);
+  }
+
+  return t.memberExpression(t.identifier("global"),
+    t.identifier(t.toIdentifier(resolved))
+  );
 }
