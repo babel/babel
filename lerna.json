@@ -9,7 +9,7 @@
       "tag: new feature": ":rocket: New Feature",
       "tag: bug fix": ":bug: Bug Fix",
       "tag: polish": ":nail_care: Polish",
-      "tag: documentation": "Documentation",
+      "tag: documentation": ":memo: Documentation",
       "tag: internal": ":house: Internal"
     }
   },
