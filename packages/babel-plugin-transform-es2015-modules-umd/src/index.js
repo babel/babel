@@ -1,6 +1,6 @@
 /* eslint max-len: 0 */
 
-import { basename, extname, posix } from "path";
+import { basename, extname, dirname, join, normalize } from "path";
 import template from "babel-template";
 
 let buildPrerequisiteAssignment = template(`
@@ -148,16 +148,16 @@ export default function ({ types: t }) {
 
 function resolveDependency(t, dependency, moduleName) {
   if (moduleName.includes("/")) {
-    moduleName = posix.dirname(moduleName);
+    moduleName = dirname(moduleName);
   }
 
   let [root, ...path] = moduleName.split("/");
   let resolved;
 
   if (dependency.startsWith("./") || dependency.startsWith("../")) {
-    resolved = root + posix.join(`/${path.join("/")}`, posix.normalize(dependency));
+    resolved = root + join(`/${path.join("/")}`, dependency);
   } else {
-    resolved = posix.normalize(dependency);
+    resolved = normalize(dependency);
   }
 
   return t.memberExpression(t.identifier("global"),
