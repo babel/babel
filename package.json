@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "async": "^1.5.0",
-    "babel-core": "^6.13.2",
+    "babel-core": "^6.18.0",
     "babel-eslint": "^7.0.0",
     "babel-plugin-transform-class-properties": "^6.6.0",
     "babel-plugin-transform-flow-strip-types": "^6.3.13",
