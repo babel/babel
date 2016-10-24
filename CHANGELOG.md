@@ -270,6 +270,15 @@ function first(...values) {
 }
 ```
 
+* `babel-generator`
+  * [#4646](https://github.com/babel/babel/pull/4646) Change babel-generator to output `boolean` instead of `bool` for the `BooleanTypeAnnotation` AST node. ([@existentialism](https://github.com/existentialism))
+
+```js
+var a: Promise<boolean>[];
+// instead of
+var a: Promise<bool>[];
+```
+
 * `babel-core`
   * [#4685](https://github.com/babel/babel/pull/4685) Better error messaging when preset options are given without a corresponding preset. ([@kaicataldo](https://github.com/kaicataldo))
 
