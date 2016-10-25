@@ -27,7 +27,7 @@
     "eslint": "^3.7.1",
     "eslint-config-babel": "^2.0.1",
     "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-flowtype": "^2.20.0",
+    "eslint-plugin-flowtype": "^2.23.0",
     "flow-bin": "^0.33.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.0.0",
