@@ -20,7 +20,7 @@
     "babel-runtime": "^6.0.0",
     "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
-    "chai": "^2.2.0",
+    "chai": "^3.5.0",
     "chalk": "1.1.1",
     "codecov.io": "^0.1.6",
     "derequire": "^2.0.2",
