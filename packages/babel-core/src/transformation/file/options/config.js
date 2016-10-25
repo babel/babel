@@ -1,5 +1,10 @@
 /* eslint max-len: 0 */
 
+// Checks if the current environment is node by creating a new Function which
+// by spec is created in the global scope.
+// http://www.ecma-international.org/ecma-262/5.1/#sec-15.3.2.1
+const isNode = new Function("return typeof global !== 'undefined' && this === global;");
+
 module.exports = {
   filename: {
     type: "filename",
@@ -149,7 +154,9 @@ module.exports = {
   babelrc: {
     description: "Whether or not to look up .babelrc and .babelignore files",
     type: "boolean",
-    default: true
+    // This option defaults to true in node environment and false in other environments which
+    // do not have a filesystem like browser.
+    default: isNode()
   },
 
   sourceType: {
