@@ -34,7 +34,8 @@ These are the core Babylon AST node types.
     - [DoWhileStatement](#dowhilestatement)
     - [ForStatement](#forstatement)
     - [ForInStatement](#forinstatement)
-  - [ForOfStatement](#forofstatement)
+    - [ForOfStatement](#forofstatement)
+    - [ForAwaitStatement](#forawaitstatement)
 - [Declarations](#declarations)
   - [FunctionDeclaration](#functiondeclaration)
   - [VariableDeclaration](#variabledeclaration)
@@ -477,6 +478,16 @@ A `for`/`in` statement.
 ```js
 interface ForOfStatement <: ForInStatement {
   type: "ForOfStatement";
+}
+```
+
+A `for`/`await` statement.
+
+## ForAwaitStatement
+
+```js
+interface ForAwaitStatement <: ForInStatement {
+  type: "ForAwaitStatement";
 }
 ```
 
