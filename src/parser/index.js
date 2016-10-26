@@ -30,20 +30,20 @@ export default class Parser extends Tokenizer {
     this[name] = f(this[name]);
   }
 
-  loadPlugins(plugins: Array<string>): Object {
+  loadPlugins(pluginList: Array<string>): Object {
     let pluginMap = {};
 
-    if (plugins.indexOf("flow") >= 0) {
+    if (pluginList.indexOf("flow") >= 0) {
       // ensure flow plugin loads last
-      plugins = plugins.filter((plugin) => plugin !== "flow");
-      plugins.push("flow");
+      pluginList = pluginList.filter((plugin) => plugin !== "flow");
+      pluginList.push("flow");
     }
 
-    for (let name of plugins) {
+    for (let name of pluginList) {
       if (!pluginMap[name]) {
         pluginMap[name] = true;
 
-        let plugin = exports.plugins[name];
+        let plugin = plugins[name];
         if (plugin) plugin(this);
       }
     }

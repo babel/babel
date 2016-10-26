@@ -7,7 +7,16 @@ node_js:
   - "5"
   - "6"
 
-before_script: 'if [ -n "${BABEL-}" ]; then make bootstrap-babel ; fi'
+before_install:
+    # Rollup doesn't support node < 4.x. Switch to latest for build
+  - . $HOME/.nvm/nvm.sh
+  - nvm install stable && nvm use stable
+
+before_script:
+  - 'if [ -n "${BABEL-}" ]; then make bootstrap-babel ; fi'
+  - 'BABEL_ENV=test npm run build'
+    # Switch back to node version currently being tested prior to test run
+  - 'nvm use $TRAVIS_NODE_VERSION;'
 
 script:
   - 'if [ -n "${LINT-}" ]; then npm run lint ; fi'

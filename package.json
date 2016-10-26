@@ -29,13 +29,16 @@
     "flow-bin": "^0.33.0",
     "lodash": "^4.15.0",
     "nyc": "^8.1.0",
+    "rollup": "^0.36.3",
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-node-resolve": "^2.0.0",
     "unicode-9.0.0": "~0.7.0"
   },
   "bin": {
     "babylon": "./bin/babylon.js"
   },
   "scripts": {
-    "build": "babel src --out-dir lib",
+    "build": "rollup -c",
     "coverage": "nyc report --reporter=json && codecov -f coverage/coverage-final.json",
     "lint": "eslint src bin",
     "flow": "flow",
@@ -43,8 +46,7 @@
     "preversion": "npm run test && npm run changelog",
     "test": "npm run lint && npm run flow && npm run build && npm run test-only",
     "test-only": "ava test",
-    "test-ci": "cross-env BABEL_ENV=test npm run build && nyc npm run test-only",
-    "watch": "babel src --out-dir lib --watch",
+    "test-ci": "nyc npm run test-only",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
   },
   "nyc": {
