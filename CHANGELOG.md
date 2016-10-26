@@ -15,6 +15,29 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+
+## v6.13.1 (2016-10-26)
+
+### 💅 Polish
+
+- Use rollup for bundling to speed up startup time ([#190](https://github.com/babel/babylon/pull/190)) ([@drewml](https://github.com/DrewML))
+
+```js
+const babylon = require('babylon');
+const ast = babylon.parse('var foo = "lol";');
+```
+
+With that test case, there was a ~95ms savings by removing the need for node to build/traverse the dependency graph.
+
+**Without bundling**
+![image](https://cloud.githubusercontent.com/assets/5233399/19420264/3133497e-93ad-11e6-9a6a-2da59c4f5c13.png)
+
+**With bundling**
+![image](https://cloud.githubusercontent.com/assets/5233399/19420267/388f556e-93ad-11e6-813e-7c5c396be322.png)
+
+- add clean command [skip ci] ([#201](https://github.com/babel/babylon/pull/201)) (Henry Zhu)
+- add ForAwaitStatement (async generator already added) [skip ci] ([#196](https://github.com/babel/babylon/pull/196)) (Henry Zhu)
+
 ## v6.13.0 (2016-10-21)
 
 ### 👓 Spec Compliancy
