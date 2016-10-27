@@ -11,11 +11,12 @@ export default function () {
         return;
       }
 
-      if (path.isJSXIdentifier({ name: "ref" }) && path.parentPath.isJSXAttribute({ name: path.node })) {
+      const isThisMemberExpression = path.isJSXMemberExpression({ object: { name: "this" } });
+      if (path.isJSXIdentifier({ name: "ref" }) && path.parentPath.isJSXAttribute({ name: path.node }) || isThisMemberExpression) {
         return stop();
       }
 
-      if (path.isJSXIdentifier() || path.isIdentifier() || path.isJSXMemberExpression()) {
+      if (path.isJSXIdentifier() || path.isIdentifier()) {
         return;
       }
 
