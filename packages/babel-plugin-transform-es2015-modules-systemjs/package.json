@@ -8,6 +8,7 @@
   "dependencies": {
     "babel-template": "^6.14.0",
     "babel-helper-hoist-variables": "^6.18.0",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-runtime": "^6.11.6"
   },
   "keywords": [
