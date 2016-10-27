@@ -2,6 +2,7 @@
 
 import hoistVariables from "babel-helper-hoist-variables";
 import template from "babel-template";
+import syntax from "babel-plugin-syntax-dynamic-import";
 
 let buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -21,6 +22,9 @@ let buildExportAll = template(`
     if (KEY !== "default" && KEY !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
   }
 `);
+
+
+const TYPE_IMPORT = "Import";
 
 export default function ({ types: t }) {
   let IGNORE_REASSIGNMENT_SYMBOL = Symbol();
@@ -68,7 +72,17 @@ export default function ({ types: t }) {
   };
 
   return {
+    inherits: syntax,
+
     visitor: {
+
+      CallExpression(path, state) {
+        if (path.node.callee.type === TYPE_IMPORT) {
+          let contextIdent = state.contextIdent;
+          path.replaceWith(t.callExpression(t.memberExpression(contextIdent, t.identifier("import")), path.node.arguments));
+        }
+      },
+
       ReferencedIdentifier(path, state) {
         if (path.node.name == "__moduleName" && !path.scope.hasBinding("__moduleName")) {
           path.replaceWith(t.memberExpression(state.contextIdent, t.identifier("id")));
