@@ -52,7 +52,7 @@ module.exports = function (commander, filenames, opts) {
           }
         });
 
-        offset = code.split("\n").length;
+        offset = code.split("\n").length -1;
       }
     });
 
