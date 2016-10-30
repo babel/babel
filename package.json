@@ -24,7 +24,7 @@
     "chalk": "1.1.1",
     "codecov.io": "^0.1.6",
     "derequire": "^2.0.2",
-    "eslint": "^3.7.1",
+    "eslint": "^3.9.0",
     "eslint-config-babel": "^2.0.1",
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-flowtype": "^2.20.0",
