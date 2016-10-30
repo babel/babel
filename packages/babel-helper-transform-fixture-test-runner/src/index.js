@@ -13,10 +13,24 @@ import path from "path";
 
 let babelHelpers = eval(buildExternalHelpers(null, "var"));
 
-function wrapPackagesArray(type, names) {
+function wrapPackagesArray(type, names, optionsDir) {
   return (names || []).map(function (val) {
     if (typeof val === "string") val = [val];
-    val[0] = __dirname + "/../../babel-" + type + "-" + val[0];
+
+    // relative path (outside of monorepo)
+    if (val[0][0] === ".") {
+
+      if (!optionsDir) {
+        throw new Error("Please provide an options.json in test dir when using a relative plugin path.");
+      }
+
+      val[0] = path.resolve(optionsDir, val[0]);
+    }
+    // check node_modules/babel-x-y
+    else {
+      val[0] = __dirname + "/../../babel-" + type + "-" + val[0];
+    }
+
     return val;
   });
 }
@@ -26,14 +40,15 @@ function run(task) {
   let expect = task.expect;
   let exec   = task.exec;
   let opts   = task.options;
+  let optionsDir = task.optionsDir;
 
   function getOpts(self) {
     let newOpts = _.merge({
       filename: self.loc,
     }, opts);
 
-    newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins);
-    newOpts.presets = wrapPackagesArray("preset", newOpts.presets).map(function (val) {
+    newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins, optionsDir);
+    newOpts.presets = wrapPackagesArray("preset", newOpts.presets, optionsDir).map(function (val) {
       if (val.length > 2) {
         throw new Error(`Unexpected extra options ${JSON.stringify(val.slice(2))} passed to preset.`);
       }

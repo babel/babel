@@ -102,6 +102,7 @@ export default function get(entryLoc): Array<Suite> {
       if (taskOptsLoc) _.merge(taskOpts, require(taskOptsLoc));
 
       let test = {
+        optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
         title: humanize(taskName, true),
         disabled: taskName[0] === ".",
         options: taskOpts,
