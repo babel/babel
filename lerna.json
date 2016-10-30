@@ -1,6 +1,6 @@
 {
   "lerna": "2.0.0-beta.23",
-  "version": "6.17.0",
+  "version": "6.18.0",
   "changelog": {
     "repo": "babel/babel",
     "labels": {
@@ -9,7 +9,7 @@
       "tag: new feature": ":rocket: New Feature",
       "tag: bug fix": ":bug: Bug Fix",
       "tag: polish": ":nail_care: Polish",
-      "tag: documentation": "Documentation",
+      "tag: documentation": ":memo: Documentation",
       "tag: internal": ":house: Internal"
     }
   },

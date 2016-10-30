@@ -13,6 +13,358 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.18.0 (2016-10-24)
+
+#### :rocket: New Feature
+* `babel-generator`, `babel-plugin-transform-flow-strip-types`
+  * [#4697](https://github.com/babel/babel/pull/4697) Add variance node type and generate property variance annotations. ([@samwgoldman](https://github.com/samwgoldman))
+
+Check out the [blog post](https://flowtype.org/blog/2016/10/04/Property-Variance.html) and [flow docs](https://flowtype.org/docs/variance.html) for more info:
+
+```js
+type T = { +p: T };
+interface T { -p: T };
+declare class T { +[k:K]: V };
+class T { -[k:K]: V };
+class C2 { +p: T = e };
+```
+
+* `babel-core`, `babel-traverse`
+  * [#4746](https://github.com/babel/babel/pull/4746) Support ObjectExpression in static path evaluation. ([@motiz88](https://github.com/motiz88))
+
+```js
+// in
+['a' + 'b']: 10 * 20, 'z': [1, 2, 3]}
+// out
+{ab: 200, z: [1, 2, 3]}
+```
+
+* `babel-plugin-syntax-dynamic-import`, `babel-preset-stage-2`
+  * [#4699](https://github.com/babel/babel/pull/4699) [import()] Initial support for dynamic-import. ([@kesne](https://github.com/kesne))
+
+Parser support was added in https://github.com/babel/babylon/releases/tag/v6.12.0.
+
+Just the plugin to enable it in babel.
+
+```js
+// install
+$ npm install babel-plugin-syntax-dynamic-import --save-dev
+```
+
+or use the new `parserOpts`
+
+```js
+// .babelrc
+{
+  "parserOpts": {
+    "plugins": ['dynamicImport']
+  }
+}
+```
+
+* `babel-helper-builder-react-jsx`, `babel-plugin-transform-react-jsx`
+  * [#4655](https://github.com/babel/babel/pull/4655) Add `useBuiltIns` option to helper-builder-react-jsx. ([@existentialism](https://github.com/existentialism))
+
+Previously we added a `useBuiltIns` for object-rest-spread so that it use the native/built in version if you use a polyfill or have it supported natively.
+
+This change just uses the same option from the plugin to be applied with spread inside of jsx.
+
+```js
+// in
+var div = <Component {...props} foo="bar" />
+// out
+var div = React.createElement(Component, Object.assign({}, props, { foo: "bar" }));
+```
+
+* `babel-generator`, `babel-traverse`, `babel-types`
+  * [#4724](https://github.com/babel/babel/pull/4724) Add `EmptyTypeAnnotation`. ([@samwgoldman](https://github.com/samwgoldman))
+
+`EmptyTypeAnnotation`
+
+Added in flow [here](https://github.com/facebook/flow/commit/c603505583993aa953904005f91c350f4b65d6bd) and in babylon [here](https://github.com/babel/babylon/pull/171).
+
+```js
+function f<T>(x: empty): T {
+  return x;
+}
+f(); // nothing to pass...
+```
+
+* `babel-traverse`
+  * [#4758](https://github.com/babel/babel/pull/4758) Make getBinding ignore labels; add Scope#getLabel, Scope#hasLabel, Scope#registerLabel. ([@kangax](https://github.com/kangax))
+
+Track `LabeledStatement` separately (not part of bindings).
+
+#### :bug: Bug Fix
+
+> Will give examples of code that was fixed below
+
+* `babel-plugin-transform-react-inline-elements`, `babel-traverse`
+  * [#4765](https://github.com/babel/babel/pull/4765) Don't treat `JSXIdentifier` in `JSXMemberExpression` as HTML tag. Closes [#4027](https://github.com/babel/babel/issues/4027). ([@DrewML](https://github.com/DrewML))
+
+```js
+// issue with imported components that were JSXMemberExpression
+import { form } from "./export";
+
+function ParentComponent() {
+  return <form.TestComponent />;
+}
+```
+
+* `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-react-inline-elements`
+  * [#4763](https://github.com/babel/babel/pull/4763) Handle remapping of JSXIdentifier to MemberExpression in CommonJS transform. Closes [#3728](https://github.com/babel/babel/issues/3728). ([@DrewML](https://github.com/DrewML))
+
+```js
+import { Modal } from "react-bootstrap";
+export default CustomModal = () => <Modal.Header>foobar</Modal.Header>;
+```
+
+* `babel-plugin-transform-es2015-for-of`
+  * [#4736](https://github.com/babel/babel/pull/4736) Fix replacing for-of if inside label. ([@danez](https://github.com/danez))
+
+```js
+if ( true ) {
+  loop: for (let ch of []) {}
+}
+```
+
+* `babel-core`
+  * [#4502](https://github.com/babel/babel/pull/4502) Make special case for class property initializers in `shadow-functions`. ([@motiz88](https://github.com/motiz88))
+
+```
+class A {
+  prop1 = () => this;
+  static prop2 = () => this;
+  prop3 = () => arguments;
+}
+```
+
+  * [#4631](https://github.com/babel/babel/pull/4631) fix(shouldIgnore): filename normalization should be platform sensitive. ([@rozele](https://github.com/rozele))
+* `babel-helper-remap-async-to-generator`, `babel-plugin-transform-async-generator-functions`
+  * [#4719](https://github.com/babel/babel/pull/4719) Fixed incorrect compilation of async iterator methods. ([@Jamesernator](https://github.com/Jamesernator))
+
+```js
+// in
+class C {
+  async *g() { await 1; }
+}
+// out
+class C {
+  g() { // was incorrectly outputting the method with a generator still `*g(){`
+    return _asyncGenerator.wrap(function* () {
+      yield _asyncGenerator.await(1);
+    })();
+  }
+}
+```
+
+* `babel-plugin-check-es2015-constants`, `babel-plugin-transform-es2015-destructuring`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-es2015-parameters`
+  * [#4690](https://github.com/babel/babel/pull/4690) Consolidate contiguous var declarations in destructuring transform. ([@motiz88](https://github.com/motiz88))
+
+```js
+// was wrapping variables in an IIFE incorrectly
+for ( let i = 0, { length } = list; i < length; i++ ) {
+    console.log( i + ': ' + list[i] )
+}
+```
+
+* `babel-plugin-transform-es2015-parameters`
+  * [#4666](https://github.com/babel/babel/pull/4666) Fix error when constructor default arg refers to self or own static property. ([@danharper](https://github.com/danharper))
+
+```js
+// was producing invalid code
+class Ref {
+  static nextId = 0
+  constructor(id = ++Ref.nextId, n = id) {
+    this.id = n
+  }
+}
+
+assert.equal(1, new Ref().id)
+assert.equal(2, new Ref().id)
+```
+
+  * [#4674](https://github.com/babel/babel/pull/4674) Handle side effects correctly in rest params index expressions (#4348). ([@motiz88](https://github.com/motiz88))
+
+```js
+function first(...values) {
+    let index = 0;
+    return values[index++]; // ++ was happening twice
+}
+
+console.log(first(1, 2));
+```
+
+* `babel-plugin-transform-es2015-block-scoping`
+  * [#4669](https://github.com/babel/babel/pull/4669) Fix block scoping transform for declarations in labeled statements. ([@motiz88](https://github.com/motiz88))
+
+```js
+let x = 10;
+if (1)
+{
+    ca: let x = 20;
+}
+```
+
+* `babel-helper-explode-assignable-expression`, `babel-plugin-transform-exponentiation-operator`
+  * [#4672](https://github.com/babel/babel/pull/4672) Avoid repeating impure (template) literals when desugaring **= (#4403). ([@motiz88](https://github.com/motiz88))
+
+```js
+a[`${b++}`] **= 1;
+```
+
+  * [#4642](https://github.com/babel/babel/pull/4642) Exclude super from being assign to ref variable. ([@danez](https://github.com/danez))
+* `babel-plugin-transform-es2015-shorthand-properties`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`
+
+```js
+foo = {
+  bar() {
+    return super.baz **= 12;
+  }
+}
+```
+
+  * [#4670](https://github.com/babel/babel/pull/4670) Retain return types on ObjectMethods in transform-es2015-shorthand-properties. ([@danharper](https://github.com/danharper))
+
+```js
+// @flow
+var obj = {
+  method(a: string): number {
+    return 5 + 5;
+  }
+};
+```
+
+* `babel-helper-define-map`, `babel-plugin-transform-es2015-classes`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`
+  * [#4668](https://github.com/babel/babel/pull/4668) Retain method return types on transform-es2015-classes (Closes [#4665](https://github.com/babel/babel/issues/4665)). ([@danharper](https://github.com/danharper))
+
+```js
+// @flow
+class C {
+  m(x: number): string {
+    return 'a';
+  }
+}
+```
+
+#### :nail_care: Polish
+* `babel-plugin-check-es2015-constants`, `babel-plugin-transform-es2015-destructuring`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-es2015-parameters`
+  * [#4690](https://github.com/babel/babel/pull/4690) Consolidate contiguous var declarations in destructuring transform. ([@motiz88](https://github.com/motiz88))
+
+```js
+// in
+const [a, b] = [1, 2];
+// out
+var a = 1,
+    b = 2;
+```
+
+* `babel-plugin-transform-es2015-parameters`
+  * [#4738](https://github.com/babel/babel/pull/4738) Avoid unnecessary +0 in transform-es2015-parameters. ([@existentialism](https://github.com/existentialism))
+
+```js
+// was outputting an extra `index++ + 0`
+function first(...values) {
+  var index = 0;
+  return values[index++];
+}
+```
+
+* `babel-generator`
+  * [#4646](https://github.com/babel/babel/pull/4646) Change babel-generator to output `boolean` instead of `bool` for the `BooleanTypeAnnotation` AST node. ([@existentialism](https://github.com/existentialism))
+
+```js
+var a: Promise<boolean>[];
+// instead of
+var a: Promise<bool>[];
+```
+
+* `babel-core`
+  * [#4685](https://github.com/babel/babel/pull/4685) Better error messaging when preset options are given without a corresponding preset. ([@kaicataldo](https://github.com/kaicataldo))
+
+> We've had a few reports of users not wrapping a preset in `[]` when passing in options so we added an extra error message for this.
+
+```
+ReferenceError: [BABEL] /test.js: Unknown option: base.loose2. Check out http://babeljs.io/docs/usage/options/ for more information about options.
+
+A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:
+
+Invalid:
+  `{ presets: [{option: value}] }`
+Valid:
+  `{ presets: ["pluginName", {option: value}] }`
+
+For more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.
+```
+
+  * [#4688](https://github.com/babel/babel/pull/4688) Update babel parser options. ([@existentialism](https://github.com/existentialism))
+
+#### Documentation
+* Other
+  * [#4653](https://github.com/babel/babel/pull/4653) Tweak license for GitHub display. ([@existentialism](https://github.com/existentialism))
+
+So that our MIT License [shows up](https://github.com/blog/2252-license-now-displayed-on-repository-overview).
+
+#### :house: Internal
+* `babel-cli`
+  * [#4725](https://github.com/babel/babel/pull/4725) Remove babel-doctor from babel-cli. ([@kaicataldo](https://github.com/kaicataldo))
+
+It's a one-time use tool (helpful after the initial release when upgrading from v5 to v6) that doesn't need to be a part of `babel-cli`. We'll publish it as a standalone package it someone asks for it.
+* Other
+  * [#4764](https://github.com/babel/babel/pull/4764) Add TEST_DEBUG env var option for test.sh, to enable node 6 debugger. ([@DrewML](https://github.com/DrewML))
+  * [#4762](https://github.com/babel/babel/pull/4762) Update browserify to version 13.1.1 🚀. ([@greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+  * [#4748](https://github.com/babel/babel/pull/4748) Add clean-all command to reinstall node_modules. ([@kaicataldo](https://github.com/kaicataldo))
+  * [#4744](https://github.com/babel/babel/pull/4744) Fix line endings on checkout. ([@nhajidin](https://github.com/nhajidin))
+  * [#4730](https://github.com/babel/babel/pull/4730) Add .gitattributes forcing LF line endings. ([@motiz88](https://github.com/motiz88))
+  * [#4676](https://github.com/babel/babel/pull/4676) Remove travis short-circuit script. ([@motiz88](https://github.com/motiz88))
+* `babel-traverse`, `babel-types`
+  * [#4742](https://github.com/babel/babel/pull/4742) Increase test coverage. ([@motiz88](https://github.com/motiz88))
+* `babel-cli`, `babel-core`, `babel-helper-fixtures`, `babel-register`
+  * [#4731](https://github.com/babel/babel/pull/4731) Replace `path-exists` with `fs.existsSync`. ([@SimenB](https://github.com/SimenB))
+* `babel-helper-transform-fixture-test-runner`
+  * [#4735](https://github.com/babel/babel/pull/4735) Automatically generate missing expected.js fixtures. ([@motiz88](https://github.com/motiz88))
+  * [#4664](https://github.com/babel/babel/pull/4664) 🚀 Update chai to version 3.0.0. ([@danez](https://github.com/danez))
+* `babel-cli`, `babel-code-frame`, `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`, `babel-preset-es2015`, `babel-template`, `babel-traverse`
+  * [#4734](https://github.com/babel/babel/pull/4734) Change usage of "suite"/"test" in unit-tests to "describe"/"it". ([@DrewML](https://github.com/DrewML))
+* `babel-cli`, `babel-code-frame`, `babel-core`, `babel-generator`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-preset-es2015`, `babel-template`, `babel-traverse`
+  * [#4732](https://github.com/babel/babel/pull/4732) Run ESLint on test files, and fix lint errors in test files.. ([@DrewML](https://github.com/DrewML))
+* `babel-cli`, `babel-core`
+  * [#4727](https://github.com/babel/babel/pull/4727) Update tests for changed error messages in Babylon. ([@motiz88](https://github.com/motiz88))
+  * [#4564](https://github.com/babel/babel/pull/4564) Enable babel for tests. ([@danez](https://github.com/danez))
+* `babel-cli`, `babel-core`, `babel-plugin-transform-es2015-modules-systemjs`, `babel-preset-es2015`
+  * [#4721](https://github.com/babel/babel/pull/4721) update eslint-config, fixes, add commands. ([@hzoo](https://github.com/hzoo))
+* `babel-register`
+  * [#4660](https://github.com/babel/babel/pull/4660) 🚀 Update home-or-tmp to version 2.0.0. ([@danez](https://github.com/danez))
+* `babel-cli`
+  * [#4680](https://github.com/babel/babel/pull/4680) Update: Eslint to 3.0 and update CI builds (Closes [#4638](https://github.com/babel/babel/issues/4638)). ([@gyandeeps](https://github.com/gyandeeps))
+  * [#4662](https://github.com/babel/babel/pull/4662) 🚀 Update fs-readdir-recursive to 1.0.0. ([@danez](https://github.com/danez))
+* `babel-core`
+  * [#4649](https://github.com/babel/babel/pull/4649) 🚀 Update json5 to version 0.5.0. ([@danez](https://github.com/danez))
+  * [#4650](https://github.com/babel/babel/pull/4650) 🚀 Remove shebang dependency. ([@danez](https://github.com/danez))
+* `babel-generator`
+  * [#4652](https://github.com/babel/babel/pull/4652) 🚀 Update detect-indent to version 4.0.0. ([@danez](https://github.com/danez))
+* `babel-traverse`
+  * [#4651](https://github.com/babel/babel/pull/4651) 🚀 Update globals to version 9.0.0. ([@danez](https://github.com/danez))
+
+#### Commiters: 17
+- Andrew Levine ([DrewML](https://github.com/DrewML))
+- Brian Ng ([existentialism](https://github.com/existentialism))
+- Dan Harper ([danharper](https://github.com/danharper))
+- Daniel Tschinder ([danez](https://github.com/danez))
+- Eric Rozell ([rozele](https://github.com/rozele))
+- Greenkeeper ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Gyandeep Singh ([gyandeeps](https://github.com/gyandeeps))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- Jordan Gensler ([kesne](https://github.com/kesne))
+- Juriy Zaytsev ([kangax](https://github.com/kangax))
+- Kai Cataldo ([kaicataldo](https://github.com/kaicataldo))
+- Moti Zilberman ([motiz88](https://github.com/motiz88))
+- Nazim Hajidin ([nhajidin](https://github.com/nhajidin))
+- Sam Goldman ([samwgoldman](https://github.com/samwgoldman))
+- Simen Bekkhus ([SimenB](https://github.com/SimenB))
+- [Jamesernator](https://github.com/Jamesernator)
+- [sugargreenbean](https://github.com/sugargreenbean)
+
 ## v6.17.0 (2016-10-01)
 
 #### :eyeglasses: Spec Compliancy
