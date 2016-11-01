@@ -26,7 +26,7 @@
     "eslint-config-babel": "^2.0.1",
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-flowtype": "^2.20.0",
-    "flow-bin": "^0.33.0",
+    "flow-bin": "^0.34.0",
     "lodash": "^4.15.0",
     "nyc": "^8.1.0",
     "rimraf": "^2.5.4",
