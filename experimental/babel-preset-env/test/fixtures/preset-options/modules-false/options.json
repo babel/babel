@@ -1,0 +1,8 @@
+{
+  "presets": [
+    ["../../../../lib", {
+      "targets": {},
+      "modules": false
+    }]
+  ]
+}
