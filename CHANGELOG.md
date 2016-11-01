@@ -13,6 +13,47 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## v6.18.2 (2016-11-01)
+
+Weird publishing issue with v6.18.1, same release.
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#4773](https://github.com/babel/babel/pull/4773) Fix Valid example to be actually valid. ([@Kovensky](https://github.com/Kovensky))
+
+> The error message was actually invalid!
+
+```bash
+Invalid:
+  { "presets": [{ "option": "value" }] }
+Valid:
+  {
+    "presets": [
+      ["presetName", { "option": "value" }] // the preset should be wrapped in `[ ]`
+    ]
+  }
+```
+
+#### :house: Internal
+* `babel-helper-fixtures`, `babel-helper-transform-fixture-test-runner`
+  * [#4797](https://github.com/babel/babel/pull/4797) Allow relative paths in babelrc options in options.json. ([@hzoo](https://github.com/hzoo))
+* Other
+  * [#4796](https://github.com/babel/babel/pull/4796) Update eslint, use codeframe formatter. ([@hzoo](https://github.com/hzoo))
+  * [#4792](https://github.com/babel/babel/pull/4792) Update flow-bin to version 0.34.0 🚀. ([@greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+  * [#4776](https://github.com/babel/babel/pull/4776) Update chai to version 3.5.0 🚀. ([@greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+* `babel-plugin-transform-async-to-generator`
+  * [#4793](https://github.com/babel/babel/pull/4793) Fix async-to-generator/object-method-with-arrows line endings. ([@jridgewell](https://github.com/jridgewell))
+
+#### Commiters: 4
+- Diogo Franco ([Kovensky](https://github.com/Kovensky))
+- Greenkeeper ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- Justin Ridgewell ([jridgewell](https://github.com/jridgewell))
+
+## v6.18.1 (2016-11-01)
+
+Weird publishing issue with v6.18.1, re-released as v6.18.2.
+
 ## v6.18.0 (2016-10-24)
 
 #### :rocket: New Feature
