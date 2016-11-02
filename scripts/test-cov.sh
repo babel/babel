@@ -1,4 +1,5 @@
 #!/bin/sh
 set -e
 
-node node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha -- `scripts/_get-test-directories.sh` --opts test/mocha.opts
+node_modules/.bin/nyc node_modules/mocha/bin/_mocha --opts test/mocha.opts `scripts/_get-test-directories.sh`
+node_modules/.bin/nyc report --reporter=json

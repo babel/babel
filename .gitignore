@@ -16,3 +16,4 @@ dist
 /packages/*/lib
 _babel.github.io
 /tests/.browser-build.js
+/.nyc_output
