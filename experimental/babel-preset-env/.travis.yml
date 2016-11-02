@@ -1,12 +1,21 @@
 git:
-  depth: 1
+  depth: 3
 sudo: false
 language: node_js
 cache:
   directories:
   - node_modules
 node_js:
+- '7'
 - '6'
-- '5'
+- '4'
 - '0.12'
 - '0.10'
+script:
+  - 'if [ -n "${LINT-}" ]; then npm run lint ; fi'
+  - 'if [ -z "${LINT-}" ]; then npm run ci ; fi'
+matrix:
+  fast_finish: true
+  include:
+    - node_js: "node"
+      env: LINT=true

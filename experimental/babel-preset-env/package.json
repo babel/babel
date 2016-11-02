@@ -13,7 +13,7 @@
     "dev": "babel -w src -d lib",
     "lint": "eslint scripts src test",
     "fix": "eslint scripts src test --fix",
-    "ci": "npm run lint && npm run test",
+    "ci": "npm run test",
     "prepublish": "npm run build",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
     "test": "mocha ./test --compilers js:babel-register"
