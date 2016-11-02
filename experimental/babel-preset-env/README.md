@@ -55,7 +55,7 @@ Currently: "chrome, edge, firefox, safari, ie, node".
 
 > Note, browsers' results are overridden by explicit items from `targets`.
 
-> If your config is a js file, also do `"node": parseFloat(process.versions.node)`
+If you want to compile against the current node version, you can specify `"node": true` or `"node": "current"` which would be the same as `node": parseFloat(process.versions.node)`
 
 * `loose` (boolean) - Enable "loose" transformations for any plugins in this preset that allow them (Defaults to `false`).
 * `modules` - Enable transformation of ES6 module syntax to another module type (Defaults to `"commonjs"`).
@@ -64,7 +64,7 @@ Currently: "chrome, edge, firefox, safari, ie, node".
 * `whitelist` (Array<string>) - Enable a whitelist of plugins to always include. (Defaults to `[]`)
   * Useful if there is a bug in a native implementation, or a combination of a non-supported feature + a supported one doesn't work. (Ex: Node 4 supports native classes but not spread) 
 
-### Example
+### Examples
 
 ```js
 // src
@@ -141,6 +141,26 @@ export var A = function A() {
 };
 ```
 
+#### Example with `node: true` or `node: "current"`
+
+```js
+// process.versions.node -> 6.9.0
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "current"
+      }
+    }]
+  ]
+}
+
+// ...
+
+class A {}
+exports.A = A;
+```
+
 ### Example with `debug: true`
 
 ```js
@@ -178,7 +198,6 @@ transform-async-to-generator {}
 syntax-trailing-function-commas {}
 transform-es2015-arrow-functions {}
 ```
-
 
 ## Caveats
 

@@ -64,7 +64,15 @@ const mergeBrowsers = (fromQuery, fromTarget) => {
   }, fromQuery);
 };
 
-const getTargets = (targetOpts = {}) => {
+export const getCurrentNodeVersion = () => {
+  return parseFloat(process.versions.node);
+};
+
+export const getTargets = (targetOpts = {}) => {
+  if (targetOpts.node === true || targetOpts.node === "current") {
+    targetOpts.node = getCurrentNodeVersion();
+  }
+
   const browserOpts = targetOpts.browsers;
   if (isBrowsersQueryValid(browserOpts)) {
     const queryBrowsers = getLowestVersions(browserslist(browserOpts));

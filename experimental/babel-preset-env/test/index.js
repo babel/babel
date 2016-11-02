@@ -9,6 +9,22 @@ const {
 } = babelPresetEnv;
 
 describe("babel-preset-env", () => {
+  describe("getTargets", () => {
+    it("should return the current node version with option 'current'", function() {
+      assert.deepEqual(babelPresetEnv.getTargets({
+        node: true
+      }), {
+        node: parseFloat(process.versions.node)
+      });
+
+      assert.deepEqual(babelPresetEnv.getTargets({
+        node: "current"
+      }), {
+        node: parseFloat(process.versions.node)
+      });
+    });
+  });
+
   describe("isPluginRequired", () => {
     it("returns true if no targets are specified", () => {
       const isRequired = babelPresetEnv.isPluginRequired({}, {});
