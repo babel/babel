@@ -29,6 +29,7 @@
   "devDependencies": {
     "babel-eslint": "^6.1.0",
     "eslint": "^3.0.0",
+    "lodash.clonedeep": "^4.5.0",
     "mocha": "^3.0.0"
   }
 }

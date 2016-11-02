@@ -34,7 +34,8 @@ original ones as well!).
     "babel/arrow-parens": 1,
     "babel/no-await-in-loop": 1,
     "babel/flow-object-type": 1,
-    "babel/func-params-comma-dangle": 1
+    "babel/func-params-comma-dangle": 1,
+    "babel/no-invalid-this": 1
   }
 }
 ```
@@ -50,6 +51,7 @@ Each rule corresponds to a core `eslint` rule, and has the same options.
 - `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";` (🛠 )
 - `babel/object-shorthand`: doesn't fail when using object spread (`...obj`)
 - `babel/arrow-parens`: Handles async functions correctly (🛠 )
+- `babel/no-invalid-this`: doesn't fail when inside class properties (`class A { a = this.b; }`)
 
 The following rules are not in `eslint`, but are relevant only to syntax that is not specified by
 the current JavaScript standard or supported by `eslint`.

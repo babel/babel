@@ -11,6 +11,7 @@ module.exports = {
     'no-await-in-loop': require('./rules/no-await-in-loop'),
     'flow-object-type': require('./rules/flow-object-type'),
     'func-params-comma-dangle': require('./rules/func-params-comma-dangle'),
+    'no-invalid-this': require('./rules/no-invalid-this'),
   },
   rulesConfig: {
     'generator-star-spacing': 0,
@@ -22,5 +23,6 @@ module.exports = {
     'no-await-in-loop': 0,
     'flow-object-type': 0,
     'func-params-comma-dangle': 0,
+    'no-invalid-this': 0,
   }
 };
