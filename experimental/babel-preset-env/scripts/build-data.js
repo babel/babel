@@ -3,7 +3,7 @@ const path = require("path");
 
 const flatten = require("lodash/flatten");
 const flattenDeep = require("lodash/flattenDeep");
-const naturalCompare = require("natural-compare");
+// const naturalCompare = require("natural-compare");
 const pluginFeatures = require("../data/pluginFeatures");
 
 const renameTests = (tests, getName) =>
@@ -20,8 +20,7 @@ const compatibilityTests = flattenDeep([
   })
 ));
 
-const versions = Object.keys(require("compat-table/data-es6").browsers)
-  .sort(naturalCompare);
+// const versions = Object.keys(require("compat-table/data-es6").browsers).sort(naturalCompare);
 
 const environments = [
   "chrome",
@@ -43,8 +42,16 @@ const envMap = {
   firefox3_5: "firefox3",
   firefox3_6: "firefox3",
   node012: "node0.12",
+  iojs: "node3.3",
   node64: "node6",
-  node65: "node6.5"
+  node65: "node6.5",
+  android40: "android4.0",
+  android41: "android4.1",
+  android42: "android4.2",
+  android43: "android4.3",
+  android44: "android4.4",
+  android50: "android5.0",
+  android51: "android5.1"
 };
 
 const getLowestImplementedVersion = ({ features }, env) => {
