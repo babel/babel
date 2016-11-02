@@ -93,6 +93,26 @@ export const validateModulesOption = (modulesOpt = "commonjs") => {
   return modulesOpt;
 };
 
+export const validateWhitelistOption = (whitelistOpt = []) => {
+  if (!Array.isArray(whitelistOpt)) {
+    throw new Error(`The 'whitelist' option must be an Array<string> of plugins
+      {
+        "presets": [
+          ["env", {
+            "targets": {
+              "chrome": 50
+            },
+            "whitelist": ["transform-es2015-arrow-functions"]
+          }]
+        ]
+      }
+      was passed "${whitelistOpt}" instead
+    `);
+  }
+
+  return whitelistOpt;
+};
+
 export default function buildPreset(context, opts) {
   if (!opts.targets) {
     throw new Error(
@@ -112,6 +132,7 @@ babel-preset-env requires a "targets" option:
 
   const loose = validateLooseOption(opts.loose);
   const moduleType = validateModulesOption(opts.modules);
+  const whitelist = validateWhitelistOption(opts.whitelist);
   const targets = getTargets(opts.targets);
   const debug = opts.debug;
 
@@ -136,7 +157,7 @@ babel-preset-env requires a "targets" option:
     });
   }
 
-  transformations = transformations.map(pluginName => {
+  transformations = [...transformations, ...whitelist].map(pluginName => {
     return [require(`babel-plugin-${pluginName}`), { loose }];
   });
 

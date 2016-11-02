@@ -59,6 +59,8 @@ Currently: "chrome, edge, firefox, safari, ie, node".
 * `modules` - Enable transformation of ES6 module syntax to another module type (Enabled by default to `"commonjs"`).
   * Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]`.
 * `debug` (boolean) - `console.log` out the targets and plugins being used as well as the version specified in `/data/plugins.json`.
+* `whitelist` (Array<string>) - Enable a whitelist of plugins to always include. (Defaults to `[]`)
+  * Useful if there is a bug in a native implementation, or a combination of a non-supported feature + a supported one doesn't work. (Ex: Node 4 supports native classes but not spread) 
 
 ```js
 {
@@ -168,6 +170,30 @@ transform-async-to-generator {}
 syntax-trailing-function-commas {}
 ```
 
+### Example with `whitelist`
+
+```js
+// target chrome 52 with whitelist on arrow functions
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 52
+      },
+      "whitelist": ["transform-es2015-arrow-functions"]
+    }]
+  ]
+}
+
+Using plugins:
+
+transform-exponentiation-operator {}
+transform-async-to-generator {}
+syntax-trailing-function-commas {}
+transform-es2015-arrow-functions {}
+```
+
+
 ## Caveats
 
 ### Using `babel-plugin-transform-object-rest-spread` and targeting node.js 6.5 or higher
@@ -176,4 +202,21 @@ You may get a `SyntaxError: Unexpected token ...` error if using the [object-res
 
 This is a known issue at [babel/babel#4074](https://github.com/babel/babel/issues/4074).
 
-A simple workaround would be to re-enable the following plugins: `babel-plugin-transform-es2015-destructuring` and `babel-plugin-transform-es2015-parameters`.
+A simple workaround would be to re-enable the following plugins: `babel-plugin-transform-es2015-destructuring` and `babel-plugin-transform-es2015-parameters`, which can be done with the `whitelist` option.
+
+```js
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": 6.5
+      },
+      "whitelist": [
+        "transform-es2015-destructuring",
+        "transform-es2015-parameters"
+      ]
+    }]
+  ],
+  "plugins": ["transform-object-rest-spread"]
+}
+```

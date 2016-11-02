@@ -74,7 +74,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
   .map(({ res: test, name }, i) => {
     return Object.keys(test)
     .filter((t) => t.startsWith(env))
-    // TODO: make flagged/etc an options
+    // Babel assumes strict mode
     .filter((test) => tests[i].res[test] === true || tests[i].res[test] === "strict")
     // normalize some keys
     .map((test) => envMap[test] || test)
