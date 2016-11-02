@@ -2,6 +2,21 @@
 
 > Babel preset for all environments.
 
+`npm install babel-preset-env --save-dev`
+
+```js
+// .babelrc
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 54
+      }
+    }]
+  ]
+}
+```
+
 - [How it Works](#how-it-works)
 - [Install](#install)
 - [Usage](#usage)
