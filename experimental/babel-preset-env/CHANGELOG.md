@@ -4,7 +4,7 @@
 
 ### :rocket: New Feature
 
-* hardcode a current node version option (#35) (Henry Zhu)
+* hardcode a current node version option ([#35](https://github.com/babel/babel-preset-env/pull/35)) (Henry Zhu)
 
 ```js
 {
@@ -18,7 +18,7 @@
 }
 ```
 
-* add 'whitelist' option (#31) (Henry Zhu)
+* add 'whitelist' option ([#31](https://github.com/babel/babel-preset-env/pull/31)) (Henry Zhu)
 
 ```js
  {
@@ -34,11 +34,11 @@
 ```
 
 * Add more aliases (Henry Zhu)
-* Update plugin data: firefox 52 supports async/await! (#29) (Henry Zhu)
+* Update plugin data: firefox 52 supports async/await! ([#29](https://github.com/babel/babel-preset-env/pull/29)) (Henry Zhu)
 
 ### :bug: Bug Fixes
 
-** Use compat-table equals option (#36) (Henry Zhu)
+* Use compat-table equals option ([#36](https://github.com/babel/babel-preset-env/pull/36)) (Henry Zhu)
 
 Compute and use `compat-table` equivalents
 
@@ -60,7 +60,7 @@ Compute and use `compat-table` equivalents
 }
 ```
 
-* Change default behavior to act the same as babel-preset-latest (#33) (Henry Zhu)
+* Change default behavior to act the same as babel-preset-latest ([#33](https://github.com/babel/babel-preset-env/pull/33)) (Henry Zhu)
 
 ```js
 { "presets": ["env"] } // should act the same as babel-preset-latest
@@ -68,4 +68,4 @@ Compute and use `compat-table` equivalents
 
 ## Internal
 
-* Add fixture helper for tests (#28) (Henry Zhu)
+* Add fixture helper for tests ([#28](https://github.com/babel/babel-preset-env/pull/28)) (Henry Zhu)
