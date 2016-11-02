@@ -60,8 +60,7 @@
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-flow-vars": "^0.5.0",
     "lodash": "^4.15.0",
-    "mocha": "^3.0.2",
-    "natural-compare": "^1.4.0"
+    "mocha": "^3.0.2"
   },
   "babel": {
     "presets": [

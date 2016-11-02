@@ -3,15 +3,25 @@ const path = require("path");
 
 const flatten = require("lodash/flatten");
 const flattenDeep = require("lodash/flattenDeep");
-// const naturalCompare = require("natural-compare");
 const pluginFeatures = require("../data/pluginFeatures");
 
 const renameTests = (tests, getName) =>
   tests.map((test) => Object.assign({}, test, { name: getName(test.name) }));
 
+const es6Data = require("compat-table/data-es6");
+es6Data.browsers.node6 = es6Data.browsers["node64"];
+const es6PlusData = require("compat-table/data-es2016plus");
+
+const invertedEqualsEnv = Object.keys(es6Data.browsers)
+  .filter((b) => es6Data.browsers[b].equals)
+  .reduce((a, b) => {
+    a[es6Data.browsers[b].equals] = b;
+    return a;
+  }, {});
+
 const compatibilityTests = flattenDeep([
-  require("compat-table/data-es6"),
-  require("compat-table/data-es2016plus"),
+  es6Data,
+  es6PlusData,
 ].map((data) =>
   data.tests.map((test) => {
     return test.subtests ?
@@ -19,8 +29,6 @@ const compatibilityTests = flattenDeep([
       test;
   })
 ));
-
-// const versions = Object.keys(require("compat-table/data-es6").browsers).sort(naturalCompare);
 
 const environments = [
   "chrome",
@@ -30,7 +38,8 @@ const environments = [
   "node",
   "ie",
   "android",
-  "ios"
+  "ios",
+  "phantom"
 ];
 
 const envMap = {
@@ -72,6 +81,11 @@ const getLowestImplementedVersion = ({ features }, env) => {
 
   let envTests = tests
   .map(({ res: test, name }, i) => {
+    // `equals` in compat-table
+    Object.keys(test).forEach((t) => {
+      test[invertedEqualsEnv[t]] = test[t];
+    });
+
     return Object.keys(test)
     .filter((t) => t.startsWith(env))
     // Babel assumes strict mode
