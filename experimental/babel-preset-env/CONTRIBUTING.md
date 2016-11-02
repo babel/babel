@@ -25,7 +25,7 @@ Add add them in this structure:
     "exponentiation (**) operator",
   ],
 },
- ```
+```
  
 #### Update [`plugins.json`](/data/plugins.json)
 
