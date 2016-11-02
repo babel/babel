@@ -2,9 +2,16 @@
 
 > Babel preset for all environments.
 
-## How it currently works
+- [How it Works](#how-it-works)
+- [Install](#install)
+- [Usage](#usage)
+  - [Options](#options)
+  - [Examples](#examples)
+- [Caveats](#caveats)
+  
+## How it Works
 
-### Determine browser support for ECMAScript features (up to `latest`)
+### Determine environment support for ECMAScript features
 
 [#7](https://github.com/babel/babel-preset-env/issues/7) - Use external data such as [`compat-table`](https://github.com/kangax/compat-table) to determine browser support. (We should create PRs there when necessary)
 
@@ -12,7 +19,7 @@
 
 We can periodically run [build-data.js](/scripts/build-data.js) which generates [plugins.json](/data/plugins.json).
 
-### Make mapping between javascript features and plugins
+### Maintain a mapping between javascript features and babel plugins
 
 > Currently located at [pluginFeatures.js](/data/pluginFeatures.js).
 
@@ -42,9 +49,17 @@ $ npm install --save-dev babel-preset-env
 
 ## Usage via [`.babelrc`](http://babeljs.io/docs/usage/babelrc/)
 
+Default behavior without options runs all transforms (acts as [babel-preset-latest](https://babeljs.io/docs/plugins/preset-latest/)).
+
+```js
+{
+  "presets": ["env"]
+}
+```
+
 ### [Options](http://babeljs.io/docs/plugins/#pluginpresets-options)
 
-#### `targets`: { [string]: number };
+#### `targets`: { [string]: number }
 
 Defaults to `{}`.
 
@@ -93,19 +108,6 @@ Useful if there is a bug in a native implementation, or a combination of a non-s
 ```js
 // src
 export class A {}
-```
-
-```js
-// default is to run all transforms (acts as babel-preset-latest)
-{
-  "presets": ["env"]
-}
-
-// ...
-
-var A = exports.A = function A() {
-  _classCallCheck(this, A);
-};
 ```
 
 ```js
