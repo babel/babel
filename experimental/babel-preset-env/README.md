@@ -18,6 +18,8 @@ This should be straightforward to do in most cases. There might be cases were pl
 
 #### Support all plugins in Babel that are considered `latest`
 
+> Default behavior without options is the same as `babel-preset-latest`.
+
 [#14](https://github.com/babel/babel-preset-env/issues/14) - It won't include `stage-x` plugins. env will support all plugins in what we consider the latest version of Javascript (by matching what we do in [`babel-preset-latest`](http://babeljs.io/docs/plugins/preset-latest/)).
 
 #### Determine the lowest common denominator of plugins to be included in the preset
@@ -55,27 +57,12 @@ Currently: "chrome, edge, firefox, safari, ie, node".
 
 > If your config is a js file, also do `"node": parseFloat(process.versions.node)`
 
-* `loose` (boolean) - Enable "loose" transformations for any plugins in this preset that allow them (Disabled by default).
-* `modules` - Enable transformation of ES6 module syntax to another module type (Enabled by default to `"commonjs"`).
+* `loose` (boolean) - Enable "loose" transformations for any plugins in this preset that allow them (Defaults to `false`).
+* `modules` - Enable transformation of ES6 module syntax to another module type (Defaults to `"commonjs"`).
   * Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]`.
-* `debug` (boolean) - `console.log` out the targets and plugins being used as well as the version specified in `/data/plugins.json`.
+* `debug` (boolean) - `console.log` out the targets and plugins being used as well as the version specified in `/data/plugins.json`. (Defaults to `false`)
 * `whitelist` (Array<string>) - Enable a whitelist of plugins to always include. (Defaults to `[]`)
   * Useful if there is a bug in a native implementation, or a combination of a non-supported feature + a supported one doesn't work. (Ex: Node 4 supports native classes but not spread) 
-
-```js
-{
-  "presets": [
-    ["env", {
-      "targets": {
-        "chrome": 52,
-        "browsers": "last 2 safari versions"
-      },
-      "loose": true,
-      "modules": false
-    }]
-  ]
-}
-```
 
 ### Example
 
@@ -85,11 +72,9 @@ export class A {}
 ```
 
 ```js
-// default is to run all transforms
+// default is to run all transforms (acts as babel-preset-latest)
 {
-  "presets": [
-    ["env", {}]
-  ]
+  "presets": ["env"]
 }
 
 // ...
@@ -118,14 +103,15 @@ exports.A = A;
 ```
 
 ```js
-// target chrome 52 with webpack 2/rollup
+// target chrome 52 with webpack 2/rollup and loose mode
 {
   "presets": [
     ["env", {
       "targets": {
         "chrome": 52
       },
-      "modules": false
+      "modules": false,
+      "loose": true
     }]
   ]
 }

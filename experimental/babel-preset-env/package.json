@@ -14,9 +14,8 @@
     "lint": "eslint scripts src test",
     "fix": "eslint scripts src test --fix",
     "ci": "npm run test",
-    "prepublish": "npm run build",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
-    "test": "mocha ./test --compilers js:babel-register"
+    "test": "npm run build && mocha ./test --compilers js:babel-register"
   },
   "dependencies": {
     "babel-plugin-check-es2015-constants": "^6.3.13",
@@ -85,6 +84,9 @@
     },
     "rules": {
       "max-len": 0
+    },
+    "env": {
+      "mocha": true
     }
   }
 }

@@ -26,7 +26,7 @@ export const isPluginRequired = (supportedEnvironments, plugin) => {
   if (targetEnvironments.length === 0) { return true; }
 
   const isRequiredForEnvironments = targetEnvironments
-    .filter(environment => {
+    .filter((environment) => {
       // Feature is not implemented in that environment
       if (!plugin[environment]) { return true; }
 
@@ -43,7 +43,7 @@ export const isPluginRequired = (supportedEnvironments, plugin) => {
   return isRequiredForEnvironments.length > 0 ? true : false;
 };
 
-const isBrowsersQueryValid = browsers => {
+const isBrowsersQueryValid = (browsers) => {
   return typeof browsers === "string" || Array.isArray(browsers);
 };
 
@@ -64,7 +64,7 @@ const mergeBrowsers = (fromQuery, fromTarget) => {
   }, fromQuery);
 };
 
-const getTargets = targetOpts => {
+const getTargets = (targetOpts = {}) => {
   const browserOpts = targetOpts.browsers;
   if (isBrowsersQueryValid(browserOpts)) {
     const queryBrowsers = getLowestVersions(browserslist(browserOpts));
@@ -113,23 +113,7 @@ export const validateWhitelistOption = (whitelistOpt = []) => {
   return whitelistOpt;
 };
 
-export default function buildPreset(context, opts) {
-  if (!opts.targets) {
-    throw new Error(
-`
-babel-preset-env requires a "targets" option:
-{
-  "presets": [
-    ["env", {
-      "targets": {
-        "chrome": 50
-      }
-    }]
-  ]
-}
-`);
-  }
-
+export default function buildPreset(context, opts = {}) {
   const loose = validateLooseOption(opts.loose);
   const moduleType = validateModulesOption(opts.modules);
   const whitelist = validateWhitelistOption(opts.whitelist);
@@ -137,7 +121,7 @@ babel-preset-env requires a "targets" option:
   const debug = opts.debug;
 
   let transformations = Object.keys(pluginList)
-    .filter(pluginName => isPluginRequired(targets, pluginList[pluginName]));
+    .filter((pluginName) => isPluginRequired(targets, pluginList[pluginName]));
 
   if (debug) {
     console.log("");
@@ -146,7 +130,7 @@ babel-preset-env requires a "targets" option:
     console.log("Using plugins:");
     console.log("");
     console.log(`module: ${moduleType}`);
-    transformations.forEach(transform => {
+    transformations.forEach((transform) => {
       let envList = pluginList[transform];
       let filteredList = Object.keys(targets)
       .reduce((a, b) => {
@@ -157,7 +141,7 @@ babel-preset-env requires a "targets" option:
     });
   }
 
-  transformations = [...transformations, ...whitelist].map(pluginName => {
+  transformations = [...transformations, ...whitelist].map((pluginName) => {
     return [require(`babel-plugin-${pluginName}`), { loose }];
   });
 
