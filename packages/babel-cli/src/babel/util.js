@@ -115,8 +115,15 @@ export function getSettings(filenames) {
   child.execSync("node -v", {stdio:[0, 1]});
   process.stdout.write(`npm version: `);
   child.execSync("npm -v", {stdio:[0, 1]});
-  process.stdout.write(`packages:\n`);
-  child.execSync("npm list", {stdio:[0, 1]});
+  console.log(`Babel packages:`);
+
+  let packages = child.execSync("npm list").toString().split("\n");
+  each(packages, function(p) {
+    let babelIndex = p.indexOf("babel");
+    if (babelIndex >= 0) console.log(p.slice(babelIndex));
+  });
+
+  console.log();
 
   each(allOptions, function (fileOptions, index) {
     if (index !== 0) {
