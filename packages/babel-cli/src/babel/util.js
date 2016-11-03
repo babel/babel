@@ -1,3 +1,4 @@
+let child      = require("child_process");
 let commander = require("commander");
 let readdir   = require("fs-readdir-recursive");
 let index     = require("./index");
@@ -6,6 +7,7 @@ let util      = require("babel-core").util;
 let path      = require("path");
 let fs        = require("fs");
 let _         = require("lodash");
+let each      = require("lodash/each");
 
 export function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
@@ -80,4 +82,49 @@ export function requireChokidar() {
     );
     throw err;
   }
+}
+
+export function getSettings(filenames) {
+  let File = require("babel-core").File;
+  let generalOptions = new File( { filename: "unknown" } ).opts;
+  let allOptions = [];
+
+  allOptions.push(generalOptions);
+
+  each(filenames, function (file) {
+    let fileOptions = new File( { filename: file } ).opts,
+        thisFileOptions = {};
+
+    each(fileOptions, function (fileOption, key) {
+      if (!generalOptions.hasOwnProperty(key) || JSON.stringify(generalOptions[key]) != JSON.stringify(fileOption)) {
+        thisFileOptions[key] = fileOption;
+      }
+    });
+    allOptions.push(thisFileOptions);
+  });
+
+  let printObject = function (filename, opts) {
+    console.log(`--- ${filename} options ---`);
+    each(opts, function (option, key) {
+      console.log(key, ": ", option);
+    });
+    console.log();
+  };
+
+  process.stdout.write(`node version: `);
+  child.execSync("node -v", {stdio:[0, 1]});
+  process.stdout.write(`npm version: `);
+  child.execSync("npm -v", {stdio:[0, 1]});
+  process.stdout.write(`packages:\n`);
+  child.execSync("npm list", {stdio:[0, 1]});
+
+  each(allOptions, function (fileOptions, index) {
+    if (index !== 0) {
+      printObject(fileOptions.filename, fileOptions);
+    } else {
+      let header = `General ${process.cwd()}`;
+      printObject(header, fileOptions);
+    }
+  });
+  process.exit(0);
 }

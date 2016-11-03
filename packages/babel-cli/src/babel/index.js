@@ -8,6 +8,7 @@ let commander  = require("commander");
 let kebabCase  = require("lodash/kebabCase");
 let options    = require("babel-core").options;
 let util       = require("babel-core").util;
+let cliutil    = require("./util");
 let uniq       = require("lodash/uniq");
 let each       = require("lodash/each");
 let glob       = require("glob");
@@ -45,6 +46,7 @@ commander.option("-o, --out-file [out]", "Compile all input files into a single 
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
 commander.option("-q, --quiet", "Don't log anything");
+commander.option("-S, --settings", "Show configuration settings");
 
 let pkg = require("../../package.json");
 commander.version(pkg.version + " (babel-core " + require("babel-core").version + ")");
@@ -124,6 +126,10 @@ if (commander.outDir) {
   fn = require("./dir");
 } else {
   fn = require("./file");
+}
+
+if (commander.settings) {
+  cliutil.getSettings(filenames);
 }
 
 fn(commander, filenames, exports.opts);
