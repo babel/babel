@@ -20,6 +20,9 @@ watch: clean
 lint:
 	./node_modules/.bin/eslint packages/*/{src,test}/*.js --format=codeframe
 
+flow:
+	./node_modules/.bin/flow check
+
 fix:
 	./node_modules/.bin/eslint packages/*/{src,test}/*.js --format=codeframe --fix
 
@@ -54,7 +57,6 @@ test-cov: clean
 
 test-ci:
 	NODE_ENV=test make bootstrap
-	# if ./node_modules/.bin/semver `npm --version` -r ">=3.3.0"; then ./node_modules/.bin/flow check; fi
 	./scripts/test-cov.sh
 	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
 

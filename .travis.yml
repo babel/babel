@@ -13,12 +13,15 @@ node_js:
 script: 
   - 'if [ -n "${LINT-}" ]; then make lint ; fi'
   - 'if [ -z "${LINT-}" ]; then make test-ci ; fi'
+  - 'if [ -n "${FLOW-}" ]; then make flow ; fi'
 
 matrix:
   fast_finish: true
   include:
     - node_js: "node"
-      env: LINT=true
+      env:
+        - LINT: true
+        - FLOW: true
       
 notifications:
   on_success: change
