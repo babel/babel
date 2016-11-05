@@ -496,9 +496,23 @@ export default function ({ types: t }) {
         for (const node of nodes) {
           const tail = nodesOut[nodesOut.length - 1];
           if (tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) && tail.kind === node.kind) {
+            // Create a single compound let/var rather than many.
             tail.declarations.push(...node.declarations);
           } else {
             nodesOut.push(node);
+          }
+        }
+
+        // Need to unmark the current binding to this var as a param, or other hoists
+        // could be placed above this ref.
+        // https://github.com/babel/babel/issues/4516
+        for (const nodeOut of nodesOut) {
+          if (!nodeOut.declarations) continue;
+          for (const declaration of nodeOut.declarations) {
+            const {name} = declaration.id;
+            if (scope.bindings[name]) {
+              scope.bindings[name].kind = nodeOut.kind;
+            }
           }
         }
 
