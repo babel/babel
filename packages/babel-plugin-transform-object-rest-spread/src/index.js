@@ -1,11 +1,51 @@
 export default function ({ types: t }) {
+  function hasRestProperty(node) {
+    for (let property of (node.properties)) {
+      if (t.isRestProperty(property)) {
+        return true;
+      }
+    }
+  }
+
+  function variableDeclarationHasRestProperty(node) {
+    for (let declar of (node.declarations)) {
+      if (t.isObjectPattern(declar.id)) {
+        return hasRestProperty(declar.id);
+      }
+    }
+    return false;
+  }
+
   function hasSpread(node) {
-    for (let prop of (node.properties: Array<Object>)) {
+    for (let prop of (node.properties)) {
       if (t.isSpreadProperty(prop)) {
         return true;
       }
     }
     return false;
+  }
+
+  function createObjectSpread(file, props, objRef) {
+    const restProperty = props.pop();
+
+    let keys = [];
+    for (let prop of props) {
+      let key = prop.key;
+      if (t.isIdentifier(key) && !prop.computed) {
+        key = t.stringLiteral(prop.key.name);
+      }
+      keys.push(key);
+    }
+
+    return t.variableDeclarator(
+      restProperty.argument,
+      t.callExpression(
+        file.addHelper("objectWithoutProperties"), [
+          objRef,
+          t.arrayExpression(keys)
+        ]
+      )
+    );
   }
 
   return {
@@ -16,20 +56,15 @@ export default function ({ types: t }) {
       Function(path) {
         let params = path.get("params");
 
-        // If there's a rest param, no need to loop through it. Also, we need to
-        // hoist one more level to get `declar` at the right spot.
-        let hoistTweak = t.isRestProperty(params[params.length - 1]) ? 1 : 0;
-        let outputParamsLength = params.length - hoistTweak;
-
-        for (let i = 0; i < outputParamsLength; i++) {
+        for (let i = 0; i < params.length; i++) {
           let param = params[i];
-          if (param.isObjectPattern()) {
+          if (param.isObjectPattern() && hasRestProperty(param.node)) {
             let uid = path.scope.generateUidIdentifier("ref");
 
             let declar = t.variableDeclaration("let", [
               t.variableDeclarator(param.node, uid)
             ]);
-            declar._blockHoist = outputParamsLength - i;
+            declar._blockHoist = params.length - i;
 
             path.ensureBlock();
             path.get("body").unshiftContainer("body", declar);
@@ -40,44 +75,70 @@ export default function ({ types: t }) {
       },
       // adapted from transform-es2015-destructuring/src/index.js#pushObjectRest
       VariableDeclarator(path, file) {
-        if (!t.isObjectPattern(path.node.id)) {
-          return;
-        }
+        if (!path.get("id").isObjectPattern()) { return; }
+        const kind = path.parentPath.node.kind;
+        let nodes = [];
 
-        const props = path.node.id.properties;
+        path.traverse({
+          RestProperty(path) {
+            if (!this.originalPath.node) {
+              return;
+            }
 
-        if (!t.isRestProperty(props[props.length - 1])) {
-          return;
-        }
+            let ref = this.originalPath.node.init;
 
-        const restProperty = props.pop();
+            path.findParent((path) => {
+              if (path.isObjectProperty()) {
+                ref = t.memberExpression(ref, t.identifier(path.node.key.name));
+              } else if (path.isVariableDeclarator()) {
+                return true;
+              }
+            });
 
-        let keys = [];
-        for (let prop of props) {
-          let key = prop.key;
-          if (t.isIdentifier(key) && !prop.computed) {
-            key = t.stringLiteral(prop.key.name);
+            nodes.push(
+              createObjectSpread(
+                file,
+                path.parentPath.node.properties,
+                ref
+              )
+            );
+
+            if (path.parentPath.node.properties.length === 0) {
+              path.findParent(
+                (path) => path.isObjectProperty() || path.isVariableDeclaration()
+              ).remove();
+            }
+
           }
-          keys.push(key);
+        },{
+          originalPath: path
+        });
+
+        if (nodes.length > 0) {
+          path.parentPath.getSibling(path.parentPath.key + 1)
+            .insertBefore(
+            t.variableDeclaration(kind, nodes)
+          );
+        }
+      },
+      // taken from transform-es2015-destructuring/src/index.js#visitor
+      ExportNamedDeclaration(path) {
+        let declaration = path.get("declaration");
+        if (!declaration.isVariableDeclaration()) return;
+        if (!variableDeclarationHasRestProperty(declaration.node)) return;
+
+        let specifiers = [];
+
+        for (let name in path.getOuterBindingIdentifiers(path)) {
+          let id = t.identifier(name);
+          specifiers.push(t.exportSpecifier(id, id));
         }
 
-        const value = t.variableDeclaration(path.parentPath.node.kind, [
-          t.variableDeclarator(
-            restProperty.argument,
-            t.callExpression(
-              file.addHelper("objectWithoutProperties"), [
-                path.node.init,
-                t.arrayExpression(keys)
-              ]
-            )
-          )
-        ]);
-
-        if (props.length === 0) {
-          path.parentPath.replaceWith(value);
-        } else {
-          path.parentPath.insertAfter(value);
-        }
+        // Split the declaration and export list into two declarations so that the variable
+        // declaration can be split up later without needing to worry about not being a
+        // top-level statement.
+        path.replaceWith(declaration.node);
+        path.insertAfter(t.exportNamedDeclaration(null, specifiers));
       },
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
