@@ -48,32 +48,36 @@ export default function ({ types: t }) {
     );
   }
 
+  function replaceRestProperty(paramsPath, i, numParams) {
+    if (paramsPath.isObjectPattern() && hasRestProperty(paramsPath.node)) {
+      let parentPath = paramsPath.parentPath;
+      let uid = parentPath.scope.generateUidIdentifier("ref");
+
+      let declar = t.variableDeclaration("let", [
+        t.variableDeclarator(paramsPath.node, uid)
+      ]);
+      declar._blockHoist = i ? numParams - i : 1;
+
+      parentPath.ensureBlock();
+      parentPath.get("body").unshiftContainer("body", declar);
+      paramsPath.replaceWith(uid);
+    }
+  }
+
   return {
     inherits: require("babel-plugin-syntax-object-rest-spread"),
 
     visitor: {
       // taken from transform-es2015-parameters/src/destructuring.js
+      // function a({ b, ...c }) {}
       Function(path) {
         let params = path.get("params");
-
         for (let i = 0; i < params.length; i++) {
-          let param = params[i];
-          if (param.isObjectPattern() && hasRestProperty(param.node)) {
-            let uid = path.scope.generateUidIdentifier("ref");
-
-            let declar = t.variableDeclaration("let", [
-              t.variableDeclarator(param.node, uid)
-            ]);
-            declar._blockHoist = params.length - i;
-
-            path.ensureBlock();
-            path.get("body").unshiftContainer("body", declar);
-
-            param.replaceWith(uid);
-          }
+          replaceRestProperty(params[i], i, params.length);
         }
       },
       // adapted from transform-es2015-destructuring/src/index.js#pushObjectRest
+      // const { a, ...b } = c;
       VariableDeclarator(path, file) {
         if (!path.get("id").isObjectPattern()) { return; }
         const kind = path.parentPath.node.kind;
@@ -122,6 +126,7 @@ export default function ({ types: t }) {
         }
       },
       // taken from transform-es2015-destructuring/src/index.js#visitor
+      // export var { a, ...b } = c;
       ExportNamedDeclaration(path) {
         let declaration = path.get("declaration");
         if (!declaration.isVariableDeclaration()) return;
@@ -140,6 +145,11 @@ export default function ({ types: t }) {
         path.replaceWith(declaration.node);
         path.insertAfter(t.exportNamedDeclaration(null, specifiers));
       },
+      // try {} catch ({a, ...b}) {}
+      CatchClause(path) {
+        replaceRestProperty(path.get("param"));
+      },
+      // var a = { ...b, ...c }
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
 

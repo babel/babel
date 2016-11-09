@@ -10,9 +10,9 @@ function a3(_ref3) {
   let c2 = babelHelpers.objectWithoutProperties(_ref3, ["a2", "b2"]);
 }
 function a4(_ref4, _ref5) {
-  let { a3 } = _ref4;
   let { a5 } = _ref5;
   let c5 = babelHelpers.objectWithoutProperties(_ref5, ["a5"]);
+  let { a3 } = _ref4;
   let c3 = babelHelpers.objectWithoutProperties(_ref4, ["a3"]);
 }
 // Unchanged
