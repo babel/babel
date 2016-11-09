@@ -1,3 +1,3 @@
 {
-  "throws": "The keyword 'static' is reserved (1:23)"
+  "throws": "static is a reserved word in strict mode (1:23)"
 }

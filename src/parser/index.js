@@ -11,7 +11,6 @@ export default class Parser extends Tokenizer {
 
     this.options = options;
     this.inModule = this.options.sourceType === "module";
-    this.isReservedWord = reservedWords[6];
     this.input = input;
     this.plugins = this.loadPlugins(this.options.plugins);
     this.filename = options.sourceFilename;
@@ -19,6 +18,14 @@ export default class Parser extends Tokenizer {
     // If enabled, skip leading hashbang line.
     if (this.state.pos === 0 && this.input[0] === "#" && this.input[1] === "!") {
       this.skipLineComment(2);
+    }
+  }
+
+  isReservedWord(word: string): boolean {
+    if (word === "await") {
+      return this.inModule;
+    } else {
+      return reservedWords[6](word);
     }
   }
 

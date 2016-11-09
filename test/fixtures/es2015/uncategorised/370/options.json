@@ -1,0 +1,4 @@
+{
+  "sourceType": "script",
+  "throws": "enum is a reserved word (1:6)"
+}

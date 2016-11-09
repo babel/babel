@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "throws": "Assigning to eval in strict mode (1:4)"
+  "throws": "eval is a reserved word in strict mode (1:4)"
 }

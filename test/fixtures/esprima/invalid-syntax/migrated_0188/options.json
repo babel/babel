@@ -1,3 +1,3 @@
 {
-  "throws": "Binding arguments in strict mode (1:47)"
+  "throws": "arguments is a reserved word in strict mode (1:47)"
 }

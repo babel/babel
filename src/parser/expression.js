@@ -827,13 +827,7 @@ pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync,
 
   if (!prop.computed && prop.key.type === "Identifier") {
     if (isPattern) {
-      let illegalBinding = this.isKeyword(prop.key.name);
-      if (!illegalBinding && this.state.strict) {
-        illegalBinding = reservedWords.strictBind(prop.key.name) || reservedWords.strict(prop.key.name);
-      }
-      if (illegalBinding) {
-        this.raise(prop.key.start, "Binding " + prop.key.name);
-      }
+      this.checkReservedWord(prop.key.name, prop.key.start, true, true);
       prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key.__clone());
     } else if (this.match(tt.eq) && refShorthandDefaultPos) {
       if (!refShorthandDefaultPos.start) {
@@ -843,6 +837,7 @@ pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync,
     } else {
       prop.value = prop.key.__clone();
     }
+
     prop.shorthand = true;
     return this.finishNode(prop, "ObjectProperty");
   }
@@ -998,8 +993,8 @@ pp.parseIdentifier = function (liberal) {
   let node = this.startNode();
 
   if (this.match(tt.name)) {
-    if (!liberal && this.state.strict && reservedWords.strict(this.state.value)) {
-      this.raise(this.state.start, "The keyword '" + this.state.value + "' is reserved");
+    if (!liberal) {
+      this.checkReservedWord(this.state.value, this.state.start, false, false);
     }
 
     node.name = this.state.value;
@@ -1017,6 +1012,16 @@ pp.parseIdentifier = function (liberal) {
 
   this.next();
   return this.finishNode(node, "Identifier");
+};
+
+pp.checkReservedWord = function (word, startLoc, checkKeywords, isBinding) {
+  if (this.isReservedWord(word) || (checkKeywords && this.isKeyword(word))) {
+    this.raise(startLoc, word + " is a reserved word");
+  }
+
+  if (this.state.strict && (reservedWords.strict(word) || (isBinding && reservedWords.strictBind(word)))) {
+    this.raise(startLoc, word + " is a reserved word in strict mode");
+  }
 };
 
 // Parses await expression inside async function.

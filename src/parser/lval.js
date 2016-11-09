@@ -2,7 +2,6 @@
 
 import { types as tt } from "../tokenizer/types";
 import Parser from "./index";
-import { reservedWords } from "../util/identifier";
 
 const pp = Parser.prototype;
 
@@ -204,9 +203,7 @@ pp.parseMaybeDefault = function (startPos, startLoc, left) {
 pp.checkLVal = function (expr, isBinding, checkClashes, contextDescription) {
   switch (expr.type) {
     case "Identifier":
-      if (this.state.strict && (reservedWords.strictBind(expr.name) || reservedWords.strict(expr.name))) {
-        this.raise(expr.start, (isBinding ? "Binding " : "Assigning to ") + expr.name + " in strict mode");
-      }
+      this.checkReservedWord(expr.name, expr.start, false, true);
 
       if (checkClashes) {
         // we need to prefix this with an underscore for the cases where we have a key of
