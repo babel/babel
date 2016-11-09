@@ -149,6 +149,46 @@ export default function ({ types: t }) {
       CatchClause(path) {
         replaceRestProperty(path.get("param"));
       },
+      // taken from transform-es2015-destructuring/src/index.js#visitor
+      ForXStatement(path) {
+        let { node, scope } = path;
+        let left = node.left;
+
+        // for ({a, ...b} of []) {}
+        if (t.isObjectPattern(left) && hasRestProperty(left)) {
+          let temp = scope.generateUidIdentifier("ref");
+
+          node.left = t.variableDeclaration("var", [
+            t.variableDeclarator(temp)
+          ]);
+
+          path.ensureBlock();
+
+          node.body.body.unshift(t.variableDeclaration("var", [
+            t.variableDeclarator(left, temp)
+          ]));
+
+          return;
+        }
+
+        if (!t.isVariableDeclaration(left)) return;
+
+        let pattern = left.declarations[0].id;
+        if (!t.isObjectPattern(pattern)) return;
+
+        let key = scope.generateUidIdentifier("ref");
+        node.left = t.variableDeclaration(left.kind, [
+          t.variableDeclarator(key, null)
+        ]);
+
+        path.ensureBlock();
+
+        node.body.body.unshift(
+          t.variableDeclaration(node.left.kind, [
+            t.variableDeclarator(pattern, key)
+          ])
+        );
+      },
       // var a = { ...b, ...c }
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
