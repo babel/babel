@@ -14,7 +14,10 @@ bootstrap-babel: clean
 	find ./build/babel/packages -type d -name 'babylon' -prune -exec rm -rf '{}' \; -exec ln -s '../../../../../' '{}' \;
 
 test-babel:
-	npm run build
+	BABEL_ENV=test npm run build
+	# in case babel ever switches to nyc: filter its config out of package.json
 	cd ./build/babel; \
-	make test-only
-
+	jq "del(.nyc)" package.json > package.nonyc.json; \
+	mv -f package.nonyc.json package.json; \
+	../../node_modules/.bin/nyc --no-instrument --no-source-map --report-dir ../../coverage node_modules/mocha/bin/_mocha `scripts/_get-test-directories.sh` --opts test/mocha.opts; \
+	mv .nyc_output ../../.nyc_output
