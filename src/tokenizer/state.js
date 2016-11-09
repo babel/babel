@@ -12,7 +12,13 @@ export default class State {
 
     this.potentialArrowAt = -1;
 
-    this.inMethod = this.inFunction = this.inGenerator = this.inAsync = this.inType = false;
+    this.inMethod =
+      this.inFunction =
+      this.inGenerator =
+      this.inAsync =
+      this.inType =
+      this.noAnonFunctionType =
+        false;
 
     this.labels = [];
 

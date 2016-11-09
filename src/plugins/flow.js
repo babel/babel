@@ -275,8 +275,13 @@ pp.flowParseObjectTypeIndexer = function (node, isStatic, variance) {
   node.static = isStatic;
 
   this.expect(tt.bracketL);
-  node.id = this.flowParseObjectPropertyKey();
-  node.key = this.flowParseTypeInitialiser();
+  if (this.lookahead().type === tt.colon) {
+    node.id = this.flowParseObjectPropertyKey();
+    node.key = this.flowParseTypeInitialiser();
+  } else {
+    node.id = null;
+    node.key = this.flowParseType();
+  }
   this.expect(tt.bracketR);
   node.value = this.flowParseTypeInitialiser();
   node.variance = variance;
@@ -466,19 +471,37 @@ pp.flowParseTupleType = function () {
 };
 
 pp.flowParseFunctionTypeParam = function () {
+  let name = null;
   let optional = false;
+  let typeAnnotation = null;
   let node = this.startNode();
-  node.name = this.parseIdentifier();
-  if (this.eat(tt.question)) {
-    optional = true;
+  const lh = this.lookahead();
+  if (lh.type === tt.colon ||
+      lh.type === tt.question) {
+    name = this.parseIdentifier();
+    if (this.eat(tt.question)) {
+      optional = true;
+    }
+    typeAnnotation = this.flowParseTypeInitialiser();
+  } else {
+    typeAnnotation = this.flowParseType();
   }
+  node.name = name;
   node.optional = optional;
-  node.typeAnnotation = this.flowParseTypeInitialiser();
+  node.typeAnnotation = typeAnnotation;
   return this.finishNode(node, "FunctionTypeParam");
 };
 
-pp.flowParseFunctionTypeParams = function () {
-  let ret = { params: [], rest: null };
+pp.reinterpretTypeAsFunctionTypeParam = function (type) {
+  let node = this.startNodeAt(type.start, type.loc);
+  node.name = null;
+  node.optional = false;
+  node.typeAnnotation = type;
+  return this.finishNode(node, "FunctionTypeParam");
+};
+
+pp.flowParseFunctionTypeParams = function (params = []) {
+  let ret = { params, rest: null };
   while (this.match(tt.name)) {
     ret.params.push(this.flowParseFunctionTypeParam());
     if (!this.match(tt.parenR)) {
@@ -529,6 +552,7 @@ pp.flowParsePrimaryType = function () {
   let tmp;
   let type;
   let isGroupedType = false;
+  let oldNoAnonFunctionType = this.state.noAnonFunctionType;
 
   switch (this.state.type) {
     case tt.name:
@@ -574,12 +598,30 @@ pp.flowParsePrimaryType = function () {
       }
 
       if (isGroupedType) {
+        this.state.noAnonFunctionType = false;
         type = this.flowParseType();
-        this.expect(tt.parenR);
-        return type;
+        this.state.noAnonFunctionType = oldNoAnonFunctionType;
+
+        // A `,` or a `) =>` means this is an anonymous function type
+        if (this.state.noAnonFunctionType ||
+            !(this.match(tt.comma) ||
+             (this.match(tt.parenR) && this.lookahead().type === tt.arrow))) {
+          this.expect(tt.parenR);
+          return type;
+        } else {
+          // Eat a comma if there is one
+          this.eat(tt.comma);
+        }
       }
 
-      tmp = this.flowParseFunctionTypeParams();
+      if (type) {
+        tmp = this.flowParseFunctionTypeParams(
+          [this.reinterpretTypeAsFunctionTypeParam(type)],
+        );
+      } else {
+        tmp = this.flowParseFunctionTypeParams();
+      }
+
       node.params = tmp.params;
       node.rest = tmp.rest;
 
@@ -588,6 +630,7 @@ pp.flowParsePrimaryType = function () {
       this.expect(tt.arrow);
 
       node.returnType = this.flowParseType();
+
       node.typeParameters = null;
 
       return this.finishNode(node, "FunctionTypeAnnotation");
@@ -668,12 +711,25 @@ pp.flowParsePrefixType = function () {
   }
 };
 
+pp.flowParseAnonFunctionWithoutParens = function () {
+  const param = this.flowParsePrefixType();
+  if (!this.state.noAnonFunctionType && this.eat(tt.arrow)) {
+    const node  = this.startNodeAt(param.start, param.loc);
+    node.params = [this.reinterpretTypeAsFunctionTypeParam(param)];
+    node.rest = null;
+    node.returnType = this.flowParseType();
+    node.typeParameters = null;
+    return this.finishNode(node, "FunctionTypeAnnotation");
+  }
+  return param;
+};
+
 pp.flowParseIntersectionType = function () {
   let node = this.startNode();
-  let type = this.flowParsePrefixType();
+  let type = this.flowParseAnonFunctionWithoutParens();
   node.types = [type];
   while (this.eat(tt.bitwiseAND)) {
-    node.types.push(this.flowParsePrefixType());
+    node.types.push(this.flowParseAnonFunctionWithoutParens());
   }
   return node.types.length === 1 ? type : this.finishNode(node, "IntersectionTypeAnnotation");
 };
@@ -1156,7 +1212,10 @@ export default function (instance) {
   instance.extend("parseAsyncArrowFromCallExpression", function (inner) {
     return function (node, call) {
       if (this.match(tt.colon)) {
+        const oldNoAnonFunctionType = this.state.noAnonFunctionType;
+        this.state.noAnonFunctionType = true;
         node.returnType = this.flowParseTypeAnnotation();
+        this.state.noAnonFunctionType = oldNoAnonFunctionType;
       }
 
       return inner.call(this, node, call);
@@ -1238,7 +1297,11 @@ export default function (instance) {
       if (this.match(tt.colon)) {
         let state = this.state.clone();
         try {
+          const oldNoAnonFunctionType = this.state.noAnonFunctionType;
+          this.state.noAnonFunctionType = true;
           let returnType = this.flowParseTypeAnnotation();
+          this.state.noAnonFunctionType = oldNoAnonFunctionType;
+
           if (this.canInsertSemicolon()) this.unexpected();
           if (!this.match(tt.arrow)) this.unexpected();
           // assign after it is clear it is an arrow
