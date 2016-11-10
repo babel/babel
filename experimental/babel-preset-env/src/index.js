@@ -48,13 +48,13 @@ const isBrowsersQueryValid = (browsers) => {
 };
 
 const browserNameMap = {
-  chrome: 'chrome',
-  edge: 'edge',
-  firefox: 'firefox',
-  ie: 'ie',
-  ios_saf: 'ios',
-  safari: 'safari'
-}
+  chrome: "chrome",
+  edge: "edge",
+  firefox: "firefox",
+  ie: "ie",
+  ios_saf: "ios",
+  safari: "safari"
+};
 
 const getLowestVersions = (browsers) => {
   return browsers.reduce((all, browser) => {
