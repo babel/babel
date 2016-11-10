@@ -47,10 +47,21 @@ const isBrowsersQueryValid = (browsers) => {
   return typeof browsers === "string" || Array.isArray(browsers);
 };
 
+const browserNameMap = {
+  chrome: 'chrome',
+  edge: 'edge',
+  firefox: 'firefox',
+  ie: 'ie',
+  ios_saf: 'ios',
+  safari: 'safari'
+}
+
 const getLowestVersions = (browsers) => {
   return browsers.reduce((all, browser) => {
     const [browserName, browserVersion] = browser.split(" ");
-    all[browserName] = parseInt(browserVersion);
+    if (browserName in browserNameMap) {
+      all[browserNameMap[browserName]] = parseInt(browserVersion);
+    }
     return all;
   }, {});
 };
