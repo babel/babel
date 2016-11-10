@@ -145,34 +145,7 @@ export default function ({ types: t }) {
         if (t.isRestProperty(prop)) continue;
 
         let key = prop.key;
-        if (t.isIdentifier(key) && !prop.computed) {
-          key = t.stringLiteral(prop.key.name);
-        } else if (prop.computed) {
-          // stringify key, but only if it is not a symbol
-          // to avoid false positives.
-          //
-          // ensures the indexOf test done inside the
-          // objectWithoutProperties helper correctly excludes
-          // computed keys that are not strings.
-          key = t.conditionalExpression(
-            t.binaryExpression(
-              "===",
-              t.unaryExpression(
-                "typeof",
-                key
-              ),
-              t.stringLiteral("symbol")
-            ),
-            key,
-            t.templateLiteral(
-              [
-                t.templateElement({raw: "", cooked: ""}),
-                t.templateElement({raw: "", cooked: ""}, true)
-              ],
-              [ key ]
-            )
-          );
-        }
+        if (t.isIdentifier(key) && !prop.computed) key = t.stringLiteral(prop.key.name);
 
         keys.push(key);
       }
