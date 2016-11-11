@@ -194,20 +194,12 @@ export default function ({ types: t }) {
       // are extracted into temporary vars so they are only evaluated
       // once
 
-      let hasRestProperty = false;
-      for (let i = 0; i < pattern.properties.length; i++) {
-        const prop = pattern.properties[i];
-        if (t.isRestProperty(prop)) {
-          hasRestProperty = true;
-          break;
-        }
-      }
-
-      //
+      let lastProp = pattern.properties.length - 1;
+      let hasRestProperty = t.isRestProperty(pattern.properties[lastProp]);
 
       for (let i = 0; i < pattern.properties.length; i++) {
         let prop = pattern.properties[i];
-        if (t.isRestProperty(prop)) {
+        if (i === lastProp && t.isRestProperty(prop)) {
           this.pushObjectRest(pattern, objRef, prop, i);
         } else {
           // extract key to temp var to avoid multiple evaluation
