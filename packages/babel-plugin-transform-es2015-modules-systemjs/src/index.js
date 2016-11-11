@@ -2,7 +2,6 @@
 
 import hoistVariables from "babel-helper-hoist-variables";
 import template from "babel-template";
-import syntax from "babel-plugin-syntax-dynamic-import";
 
 let buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -72,8 +71,6 @@ export default function ({ types: t }) {
   };
 
   return {
-    inherits: syntax,
-
     visitor: {
 
       CallExpression(path, state) {
