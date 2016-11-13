@@ -15,10 +15,9 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
-
 ## v6.13.1 (2016-10-26)
 
-### 💅 Polish
+### :nail_care: Polish
 
 - Use rollup for bundling to speed up startup time ([#190](https://github.com/babel/babylon/pull/190)) ([@drewml](https://github.com/DrewML))
 
@@ -40,7 +39,7 @@ With that test case, there was a ~95ms savings by removing the need for node to 
 
 ## v6.13.0 (2016-10-21)
 
-### 👓 Spec Compliancy
+### :eyeglasses: Spec Compliancy
 
 Property variance type annotations for Flow plugin ([#161](https://github.com/babel/babylon/pull/161)) (Sam Goldman)
 
@@ -98,7 +97,7 @@ Fixes two tests that are failing after the merge of #172 ([#177](https://github.
 
 ## v6.12.0 (2016-10-14)
 
-### 👓 Spec Compliancy
+### :eyeglasses: Spec Compliancy
 
 Implement import() syntax ([#163](https://github.com/babel/babylon/pull/163)) (Jordan Gensler)
 
