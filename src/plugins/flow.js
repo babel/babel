@@ -690,15 +690,16 @@ pp.flowParsePrimaryType = function () {
 };
 
 pp.flowParsePostfixType = function () {
-  let node = this.startNode();
-  let type = node.elementType = this.flowParsePrimaryType();
-  if (this.match(tt.bracketL)) {
+  const startPos = this.state.start, startLoc = this.state.startLoc;
+  let type = this.flowParsePrimaryType();
+  while (!this.canInsertSemicolon() && this.match(tt.bracketL)) {
+    const node = this.startNodeAt(startPos, startLoc);
+    node.elementType = type;
     this.expect(tt.bracketL);
     this.expect(tt.bracketR);
-    return this.finishNode(node, "ArrayTypeAnnotation");
-  } else {
-    return type;
+    type = this.finishNode(node, "ArrayTypeAnnotation");
   }
+  return type;
 };
 
 pp.flowParsePrefixType = function () {
