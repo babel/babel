@@ -84,7 +84,7 @@ export default function ({ types: t }) {
           let contextIdent = state.contextIdent;
 
           let exportNames = Object.create(null);
-          let modules = Object.create(null);
+          let modules = [];
 
           let beforeBody = [];
           let setters = [];
@@ -98,8 +98,16 @@ export default function ({ types: t }) {
           }
 
           function pushModule(source, key, specifiers) {
-            let _modules = modules[source] = modules[source] || { imports: [], exports: [] };
-            _modules[key] = _modules[key].concat(specifiers);
+            let module;
+            modules.forEach(function (m) {
+              if (m.key === source) {
+                module = m;
+              }
+            });
+            if (!module) {
+              modules.push(module = { key: source, imports: [], exports: [] });
+            }
+            module[key] = module[key].concat(specifiers);
           }
 
           function buildExportCall(name, val) {
@@ -205,11 +213,9 @@ export default function ({ types: t }) {
             }
           }
 
-          for (let source in modules) {
-            let specifiers = modules[source];
-
+          modules.forEach(function (specifiers) {
             let setterBody = [];
-            let target = path.scope.generateUidIdentifier(source);
+            let target = path.scope.generateUidIdentifier(specifiers.key);
 
             for (let specifier of specifiers.imports) {
               if (t.isImportNamespaceSpecifier(specifier)) {
@@ -249,9 +255,9 @@ export default function ({ types: t }) {
               setterBody.push(t.expressionStatement(t.callExpression(exportIdent, [exportObjRef])));
             }
 
-            sources.push(t.stringLiteral(source));
+            sources.push(t.stringLiteral(specifiers.key));
             setters.push(t.functionExpression(null, [target], t.blockStatement(setterBody)));
-          }
+          });
 
 
           let moduleName = this.getModuleName();
