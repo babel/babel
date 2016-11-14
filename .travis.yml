@@ -15,6 +15,7 @@ before_install:
 
 before_script:
   - 'if [ -n "${BABEL-}" ]; then make bootstrap-babel ; fi'
+  - 'if [ -n "${FLOWTESTS-}" ]; then make bootstrap-flow ; fi'
   - 'BABEL_ENV=test npm run build'
     # Switch back to node version currently being tested prior to test run
   - 'nvm use $TRAVIS_NODE_VERSION;'
@@ -22,8 +23,9 @@ before_script:
 script:
   - 'if [ -n "${LINT-}" ]; then npm run lint ; fi'
   - 'if [ -n "${FLOW-}" ]; then npm run flow ; fi'
+  - 'if [ -n "${FLOWTESTS-}" ]; then make test-flow ; fi'
   - 'if [ -n "${BABEL-}" ]; then make test-babel ; fi'
-  - 'if [ -z "${LINT-}" ] && [ -z "${FLOW-}" ] && [ -z "${BABEL-}" ]; then npm run test-ci ; fi'
+  - 'if [ -z "${LINT-}" ] && [ -z "${FLOW-}" ] && [ -z "${BABEL-}" ] && [ -z "${FLOWTESTS-}" ]; then npm run test-ci ; fi'
 
 matrix:
   fast_finish: true
@@ -34,8 +36,13 @@ matrix:
       env: FLOW=true
     - node_js: "node"
       env: BABEL=true
+    - node_js: "node"
+      env: FLOWTESTS=true
+  allow_failures:
+    - node_js: "node"
+      env: FLOWTESTS=true
 
-after_success: 'if [ -z "${LINT-}" ] && [ -z "${FLOW-}" ]; then npm run coverage ; fi'
+after_success: 'if [ -z "${LINT-}" ] && [ -z "${FLOW-}" && [ -z "${FLOWTESTS-}" ]; then npm run coverage ; fi'
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK

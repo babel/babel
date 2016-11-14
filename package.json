@@ -20,6 +20,7 @@
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-0": "^6.5.0",
+    "chalk": "^1.1.3",
     "codecov": "^1.0.1",
     "cross-env": "^2.0.1",
     "eslint": "^3.7.1",

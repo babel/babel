@@ -21,3 +21,10 @@ test-babel:
 	mv -f package.nonyc.json package.json; \
 	../../node_modules/.bin/nyc --no-instrument --no-source-map --report-dir ../../coverage node_modules/mocha/bin/_mocha `scripts/_get-test-directories.sh` --opts test/mocha.opts; \
 	mv .nyc_output ../../.nyc_output
+
+bootstrap-flow: clean
+	mkdir ./build
+	git clone --depth=1 --branch=master https://github.com/facebook/flow.git ./build/flow
+
+test-flow:
+	node scripts/run_flow_tests.js
