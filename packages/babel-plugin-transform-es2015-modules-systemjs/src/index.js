@@ -22,6 +22,9 @@ let buildExportAll = template(`
   }
 `);
 
+
+const TYPE_IMPORT = "Import";
+
 export default function ({ types: t }) {
   let IGNORE_REASSIGNMENT_SYMBOL = Symbol();
 
@@ -69,6 +72,14 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
+
+      CallExpression(path, state) {
+        if (path.node.callee.type === TYPE_IMPORT) {
+          let contextIdent = state.contextIdent;
+          path.replaceWith(t.callExpression(t.memberExpression(contextIdent, t.identifier("import")), path.node.arguments));
+        }
+      },
+
       ReferencedIdentifier(path, state) {
         if (path.node.name == "__moduleName" && !path.scope.hasBinding("__moduleName")) {
           path.replaceWith(t.memberExpression(state.contextIdent, t.identifier("id")));
