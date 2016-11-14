@@ -88,7 +88,7 @@ describe("traverse", function () {
     let paths = [];
     let scopes = [];
     traverse(ast, {
-      Program(path) {
+      enter(path) {
         scopes.push(path.scope);
         paths.push(path);
         path.stop();
@@ -100,7 +100,7 @@ describe("traverse", function () {
     let paths2 = [];
     let scopes2 = [];
     traverse(ast, {
-      Program(path) {
+      enter(path) {
         scopes2.push(path.scope);
         paths2.push(path);
         path.stop();
@@ -116,7 +116,7 @@ describe("traverse", function () {
   it("clearPath", function () {
     let paths = [];
     traverse(ast, {
-      enter: function (path) {
+      enter(path) {
         paths.push(path);
       }
     });
@@ -125,7 +125,7 @@ describe("traverse", function () {
 
     let paths2 = [];
     traverse(ast, {
-      enter: function (path) {
+      enter(path) {
         paths2.push(path);
       }
     });
@@ -138,7 +138,7 @@ describe("traverse", function () {
   it("clearScope", function () {
     let scopes = [];
     traverse(ast, {
-      Program(path) {
+      enter(path) {
         scopes.push(path.scope);
         path.stop();
       }
@@ -148,7 +148,7 @@ describe("traverse", function () {
 
     let scopes2 = [];
     traverse(ast, {
-      Program(path) {
+      enter(path) {
         scopes2.push(path.scope);
         path.stop();
       }
