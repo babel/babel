@@ -117,6 +117,8 @@ pp.flowParseDeclareModuleExports = function (node) {
   this.expect(tt.dot);
   this.expectContextual("exports");
   node.typeAnnotation = this.flowParseTypeAnnotation();
+  this.semicolon();
+
   return this.finishNode(node, "DeclareModuleExports");
 };
 
