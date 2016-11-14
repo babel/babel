@@ -9,13 +9,14 @@ const renameTests = (tests, getName) =>
   tests.map((test) => Object.assign({}, test, { name: getName(test.name) }));
 
 const es6Data = require("compat-table/data-es6");
-es6Data.browsers.node6 = es6Data.browsers["node64"];
 const es6PlusData = require("compat-table/data-es2016plus");
+const envs = require("compat-table/environments");
+envs.node6 = envs.node64;
 
-const invertedEqualsEnv = Object.keys(es6Data.browsers)
-  .filter((b) => es6Data.browsers[b].equals)
+const invertedEqualsEnv = Object.keys(envs)
+  .filter((b) => envs[b].equals)
   .reduce((a, b) => {
-    a[es6Data.browsers[b].equals] = b;
+    a[envs[b].equals] = b;
     return a;
   }, {});
 
