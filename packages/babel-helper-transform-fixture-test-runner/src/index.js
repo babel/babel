@@ -1,6 +1,3 @@
-/* global test */
-/* global suite */
-
 import * as babel from "babel-core";
 import { buildExternalHelpers } from "babel-core";
 import getFixtures from "babel-helper-fixtures";
@@ -11,13 +8,29 @@ import assert from "assert";
 import chai from "chai";
 import _ from "lodash";
 import "babel-polyfill";
+import fs from "fs";
+import path from "path";
 
 let babelHelpers = eval(buildExternalHelpers(null, "var"));
 
-function wrapPackagesArray(type, names) {
+function wrapPackagesArray(type, names, optionsDir) {
   return (names || []).map(function (val) {
     if (typeof val === "string") val = [val];
-    val[0] = __dirname + "/../../babel-" + type + "-" + val[0];
+
+    // relative path (outside of monorepo)
+    if (val[0][0] === ".") {
+
+      if (!optionsDir) {
+        throw new Error("Please provide an options.json in test dir when using a relative plugin path.");
+      }
+
+      val[0] = path.resolve(optionsDir, val[0]);
+    }
+    // check node_modules/babel-x-y
+    else {
+      val[0] = __dirname + "/../../babel-" + type + "-" + val[0];
+    }
+
     return val;
   });
 }
@@ -27,14 +40,15 @@ function run(task) {
   let expect = task.expect;
   let exec   = task.exec;
   let opts   = task.options;
+  let optionsDir = task.optionsDir;
 
   function getOpts(self) {
     let newOpts = _.merge({
       filename: self.loc,
     }, opts);
 
-    newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins);
-    newOpts.presets = wrapPackagesArray("preset", newOpts.presets).map(function (val) {
+    newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins, optionsDir);
+    newOpts.presets = wrapPackagesArray("preset", newOpts.presets, optionsDir).map(function (val) {
       if (val.length > 2) {
         throw new Error(`Unexpected extra options ${JSON.stringify(val.slice(2))} passed to preset.`);
       }
@@ -66,14 +80,12 @@ function run(task) {
   let actualCode = actual.code;
   let expectCode = expect.code;
   if (!execCode || actualCode) {
-    result     = babel.transform(actualCode, getOpts(actual));
-    actualCode = result.code.trim();
-
-    try {
+    result = babel.transform(actualCode, getOpts(actual));
+    if (!expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
+      fs.writeFileSync(expect.loc, result.code);
+    } else {
+      actualCode = result.code.trim();
       chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
-    } catch (err) {
-      //require("fs").writeFileSync(expect.loc, actualCode);
-      throw err;
     }
   }
 
@@ -123,12 +135,12 @@ export default function (
   for (let testSuite of suites) {
     if (_.includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
-    suite(name + "/" + testSuite.title, function () {
+    describe(name + "/" + testSuite.title, function () {
       for (let task of testSuite.tests) {
         if (_.includes(suiteOpts.ignoreTasks, task.title) ||
             _.includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
 
-        test(task.title, !task.disabled && function () {
+        it(task.title, !task.disabled && function () {
           function runTask() {
             run(task);
           }

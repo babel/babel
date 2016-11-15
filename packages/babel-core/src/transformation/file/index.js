@@ -7,7 +7,6 @@ import convertSourceMap from "convert-source-map";
 import OptionManager from "./options/option-manager";
 import type Pipeline from "../pipeline";
 import PluginPass from "../plugin-pass";
-import shebangRegex from "shebang-regex";
 import { NodePath, Hub, Scope } from "babel-traverse";
 import sourceMap from "source-map";
 import generate from "babel-generator";
@@ -25,6 +24,8 @@ import resolve from "../../helpers/resolve";
 
 import blockHoistPlugin from "../internal-plugins/block-hoist";
 import shadowFunctionsPlugin from "../internal-plugins/shadow-functions";
+
+const shebangRegex = /^#!.*/;
 
 const INTERNAL_PLUGINS = [
   [blockHoistPlugin],
@@ -51,12 +52,9 @@ export default class File extends Store {
     this.opts = this.initOptions(opts);
 
     this.parserOpts = {
-      highlightCode: this.opts.highlightCode,
-      nonStandard:   this.opts.nonStandard,
-      sourceType:    this.opts.sourceType,
-      filename:      this.opts.filename,
-      sourceFileName:this.opts.filename,
-      plugins:       []
+      sourceType:     this.opts.sourceType,
+      sourceFileName: this.opts.filename,
+      plugins:        []
     };
 
     this.pluginVisitors = [];

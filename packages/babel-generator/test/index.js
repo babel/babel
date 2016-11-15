@@ -1,14 +1,14 @@
-var Whitespace = require("../lib/whitespace");
-var Printer    = require("../lib/printer");
-var generate   = require("../lib");
-var assert     = require("assert");
-var parse      = require("babylon").parse;
-var chai       = require("chai");
-var t          = require("babel-types");
-var _          = require("lodash");
+let Whitespace = require("../lib/whitespace");
+let Printer    = require("../lib/printer");
+let generate   = require("../lib");
+let assert     = require("assert");
+let parse      = require("babylon").parse;
+let chai       = require("chai");
+let t          = require("babel-types");
+let _          = require("lodash");
 
-suite("generation", function () {
-  test("completeness", function () {
+describe("generation", function () {
+  it("completeness", function () {
     _.each(t.VISITOR_KEYS, function (keys, type) {
       assert.ok(!!Printer.prototype[type], type + " should exist");
     });
@@ -19,17 +19,17 @@ suite("generation", function () {
     });
   });
 
-  test("multiple sources", function () {
-    var sources = {
+  it("multiple sources", function () {
+    let sources = {
       "a.js": "function hi (msg) { console.log(msg); }\n",
       "b.js": "hi('hello');\n"
     };
-    var parsed = _.keys(sources).reduce(function (_parsed, filename) {
+    let parsed = _.keys(sources).reduce(function (_parsed, filename) {
       _parsed[filename] = parse(sources[filename], { sourceFilename: filename });
       return _parsed;
     }, {});
 
-    var combinedAst = {
+    let combinedAst = {
       "type": "File",
       "program": {
         "type": "Program",
@@ -38,22 +38,21 @@ suite("generation", function () {
       }
     };
 
-    var generated = generate.default(combinedAst, { sourceMaps: true }, sources);
+    let generated = generate.default(combinedAst, { sourceMaps: true }, sources);
 
     chai.expect(generated.map).to.deep.equal({
       version: 3,
-      sources: [ 'a.js', 'b.js' ],
-      names: [],
-      mappings: 'AAAA,SAASA,EAAT,CAAaC,GAAb,EAAkB;AAAEC,UAAQC,GAAR,CAAYF,GAAZ;AAAmB;;ACAvCD,GAAG,OAAH',
+      sources: [ "a.js", "b.js" ],
+      mappings: "AAAA,SAASA,EAAT,CAAaC,GAAb,EAAkB;AAAEC,UAAQC,GAAR,CAAYF,GAAZ;AAAmB;;ACAvCD,GAAG,OAAH",
       names: [
-        'hi',
-        'msg',
-        'console',
-        'log',
+        "hi",
+        "msg",
+        "console",
+        "log",
       ],
       sourcesContent: [
-      'function hi (msg) { console.log(msg); }\n',
-        'hi(\'hello\');\n'
+        "function hi (msg) { console.log(msg); }\n",
+        "hi('hello');\n"
       ]
     }, "sourcemap was incorrectly generated");
 
@@ -63,21 +62,21 @@ suite("generation", function () {
     );
   });
 
-  test("identifierName", function () {
-    var code = "function foo() { bar; }\n";
+  it("identifierName", function () {
+    let code = "function foo() { bar; }\n";
 
-    var ast = parse(code, { filename: "inline" }).program;
-    var fn = ast.body[0];
+    let ast = parse(code, { filename: "inline" }).program;
+    let fn = ast.body[0];
 
-    var id = fn.id;
+    let id = fn.id;
     id.name += "2";
     id.loc.identifierName = "foo";
 
-    var id2 = fn.body.body[0].expression;
+    let id2 = fn.body.body[0].expression;
     id2.name += "2";
     id2.loc.identiferName = "bar";
 
-    var generated = generate.default(ast, {
+    let generated = generate.default(ast, {
       filename: "inline",
       sourceFileName: "inline",
       sourceMaps: true
@@ -99,15 +98,15 @@ suite("generation", function () {
 });
 
 
-suite("programmatic generation", function() {
-  test("numeric member expression", function() {
+describe("programmatic generation", function() {
+  it("numeric member expression", function() {
     // Should not generate `0.foo`
-    var mem = t.memberExpression(t.numericLiteral(60702), t.identifier("foo"));
+    let mem = t.memberExpression(t.numericLiteral(60702), t.identifier("foo"));
     new Function(generate.default(mem).code);
   });
 
-  test("nested if statements needs block", function() {
-    var ifStatement = t.ifStatement(
+  it("nested if statements needs block", function() {
+    let ifStatement = t.ifStatement(
       t.stringLiteral("top cond"),
       t.whileStatement(
         t.stringLiteral("while cond"),
@@ -119,15 +118,15 @@ suite("programmatic generation", function() {
       t.expressionStatement(t.stringLiteral("alt"))
     );
 
-    var ast = parse(generate.default(ifStatement).code);
-    assert.equal(ast.program.body[0].consequent.type, 'BlockStatement');
+    let ast = parse(generate.default(ifStatement).code);
+    assert.equal(ast.program.body[0].consequent.type, "BlockStatement");
   });
 
-  test("flow object indentation", function() {
-    var objectStatement = t.objectTypeAnnotation(
+  it("flow object indentation", function() {
+    let objectStatement = t.objectTypeAnnotation(
       [
         t.objectTypeProperty(
-          t.identifier('bar'),
+          t.identifier("bar"),
           t.stringTypeAnnotation()
         ),
       ],
@@ -135,32 +134,32 @@ suite("programmatic generation", function() {
       null
     );
 
-    var output = generate.default(objectStatement).code;
+    let output = generate.default(objectStatement).code;
     assert.equal(output, [
-      '{',
-      '  bar: string;',
-      '}',
-    ].join('\n'));
+      "{",
+      "  bar: string;",
+      "}",
+    ].join("\n"));
   });
 });
 
-suite("whitespace", function () {
-  test("empty token list", function () {
-    var w = new Whitespace([]);
-    assert.equal(w.getNewlinesBefore(t.stringLiteral('1')), 0);
+describe("whitespace", function () {
+  it("empty token list", function () {
+    let w = new Whitespace([]);
+    assert.equal(w.getNewlinesBefore(t.stringLiteral("1")), 0);
   });
 });
 
-var suites = require("babel-helper-fixtures").default(__dirname + "/fixtures");
+let suites = require("babel-helper-fixtures").default(__dirname + "/fixtures");
 
 suites.forEach(function (testSuite) {
-  suite("generation/" + testSuite.title, function () {
+  describe("generation/" + testSuite.title, function () {
     _.each(testSuite.tests, function (task) {
-      test(task.title, !task.disabled && function () {
-        var expect = task.expect;
-        var actual = task.actual;
+      it(task.title, !task.disabled && function () {
+        let expect = task.expect;
+        let actual = task.actual;
 
-        var actualAst = parse(actual.code, {
+        let actualAst = parse(actual.code, {
           filename: actual.loc,
           plugins: [
             "jsx",
@@ -176,7 +175,7 @@ suites.forEach(function (testSuite) {
           sourceType: "module",
         });
 
-        var actualCode = generate.default(actualAst, task.options, actual.code).code;
+        let actualCode = generate.default(actualAst, task.options, actual.code).code;
         chai.expect(actualCode).to.equal(expect.code, actual.loc + " !== " + expect.loc);
       });
     });

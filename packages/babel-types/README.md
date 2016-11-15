@@ -362,6 +362,13 @@ See also `t.isEmptyStatement(node, opts)` and `t.assertEmptyStatement(node, opts
 Aliases: `Statement`
 
 
+### t.emptyTypeAnnotation()
+
+See also `t.isEmptyTypeAnnotation(node, opts)` and `t.assertEmptyTypeAnnotation(node, opts)`.
+
+Aliases: `Flow`, `FlowBaseAnnotation`
+
+
 ### t.existentialTypeParam()
 
 See also `t.isExistentialTypeParam(node, opts)` and `t.assertExistentialTypeParam(node, opts)`.

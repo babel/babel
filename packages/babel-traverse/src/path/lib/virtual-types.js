@@ -5,7 +5,7 @@ import * as t from "babel-types";
 export let ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
   checkPath({ node, parent }: NodePath, opts?: Object): boolean {
-    if (!t.isIdentifier(node, opts)) {
+    if (!t.isIdentifier(node, opts) && !t.isJSXMemberExpression(parent, opts)) {
       if (t.isJSXIdentifier(node, opts)) {
         if (react.isCompatTag(node.name)) return false;
       } else {

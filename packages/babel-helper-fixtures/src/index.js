@@ -1,4 +1,3 @@
-import pathExists from "path-exists";
 import resolve from "try-resolve";
 import path from "path";
 import fs from "fs";
@@ -103,6 +102,7 @@ export default function get(entryLoc): Array<Suite> {
       if (taskOptsLoc) _.merge(taskOpts, require(taskOptsLoc));
 
       let test = {
+        optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
         title: humanize(taskName, true),
         disabled: taskName[0] === ".",
         options: taskOpts,
@@ -132,12 +132,12 @@ export default function get(entryLoc): Array<Suite> {
       suite.tests.push(test);
 
       let sourceMappingsLoc = taskDir + "/source-mappings.json";
-      if (pathExists.sync(sourceMappingsLoc)) {
+      if (fs.existsSync(sourceMappingsLoc)) {
         test.sourceMappings = JSON.parse(readFile(sourceMappingsLoc));
       }
 
       let sourceMapLoc = taskDir + "/source-map.json";
-      if (pathExists.sync(sourceMapLoc)) {
+      if (fs.existsSync(sourceMapLoc)) {
         test.sourceMap = JSON.parse(readFile(sourceMapLoc));
       }
     }
@@ -162,7 +162,7 @@ export function multiple(entryLoc, ignore?: Array<string>) {
 }
 
 export function readFile(filename) {
-  if (pathExists.sync(filename)) {
+  if (fs.existsSync(filename)) {
     let file = _.trimEnd(fs.readFileSync(filename, "utf8"));
     file = file.replace(/\r\n/g, "\n");
     return file;

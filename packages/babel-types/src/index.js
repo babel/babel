@@ -529,7 +529,8 @@ export {
   isVar,
   isSpecifierDefault,
   isScope,
-  isImmutable
+  isImmutable,
+  isNodesEquivalent
 } from "./validators";
 
 export {

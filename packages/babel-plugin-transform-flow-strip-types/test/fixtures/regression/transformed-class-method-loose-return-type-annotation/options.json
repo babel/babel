@@ -1,0 +1,4 @@
+{
+  "presets": [["es2015", { "loose": true }]],
+  "plugins": ["transform-flow-strip-types", "external-helpers"]
+}

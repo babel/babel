@@ -9,7 +9,7 @@ If you have a support request or question please submit them to one of this reso
 * Also have a look at the Readme for more information on how to get support:
   https://github.com/babel/babel/blob/master/README.md
 
-Issues on github are only related to problems of babel itself and we cannot answer 
+Issues on GitHub are only related to problems of babel itself and we cannot answer 
 support questions here.
 -->
 
@@ -22,7 +22,7 @@ support questions here.
 var your => (code) => here;
 ```
 
-### Babel Configuration (.bablerc, package.json, cli command)
+### Babel Configuration (.babelrc, package.json, cli command)
 <!--- If describing a bug, tell us what your babel configuration looks like -->
 
 ```js
