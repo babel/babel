@@ -6,6 +6,11 @@
 $ npm install babel-plugin-transform-class-properties
 ```
 
+### Options: `spec`
+
+- Class properties are compiled to use `Object.defineProperty`
+- Static fields are now defined even if they are not initialized
+
 ## Usage
 
 ### Via `.babelrc` (Recommended)
@@ -13,8 +18,16 @@ $ npm install babel-plugin-transform-class-properties
 **.babelrc**
 
 ```json
+// without options
 {
   "plugins": ["transform-class-properties"]
+}
+
+// with options
+{
+  "plugins": [
+    ["transform-class-properties", { "spec": true }]
+  ]
 }
 ```
 
