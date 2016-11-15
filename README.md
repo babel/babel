@@ -24,7 +24,6 @@
     - [Transform Plugins](#transform-plugins)
     - [Syntax Plugins](#syntax-plugins)
   - [Misc Packages](#misc-packages)
-- [Team](#team)
 - [License](#license)
 
 # FAQ
@@ -216,10 +215,6 @@ These are mostly for internal use in various plugins: `babel-helper-x`.
 
 - [`babel`](/packages/babel) the deprecated `babel` package on npm that was used in Babel 5.
 - [`babel-messages`](/packages/babel-messages) a package to keep error messages, etc (not always used)
-
-## Team
-
-
 
 ## License
 
