@@ -1,4 +1,4 @@
 {
   "minified": true,
-  "jsonEscape": true
+  "jsonCompatibleStrings": true
 }
