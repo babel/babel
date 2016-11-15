@@ -1,14 +1,14 @@
-var t = require("../lib");
-var assert = require("assert");
-var parse = require("babylon").parse;
+let t = require("../lib");
+let assert = require("assert");
+let parse = require("babylon").parse;
 
 suite("validators", function () {
   suite("isNodesEquivalent", function () {
     it("should handle simple cases", function () {
-      var mem = t.memberExpression(t.identifier("a"), t.identifier("b"));
+      let mem = t.memberExpression(t.identifier("a"), t.identifier("b"));
       assert(t.isNodesEquivalent(mem, mem) === true);
 
-      var mem2 = t.memberExpression(t.identifier("a"), t.identifier("c"));
+      let mem2 = t.memberExpression(t.identifier("a"), t.identifier("c"));
       assert(t.isNodesEquivalent(mem, mem2) === false);
     });
 
@@ -18,11 +18,11 @@ suite("validators", function () {
     });
 
     it("should handle complex programs", function () {
-      var program = "'use strict'; function lol() { wow();return 1; }";
+      let program = "'use strict'; function lol() { wow();return 1; }";
 
       assert(t.isNodesEquivalent(parse(program), parse(program)) === true);
 
-      var program2 = "'use strict'; function lol() { wow();return -1; }";
+      let program2 = "'use strict'; function lol() { wow();return -1; }";
 
       assert(t.isNodesEquivalent(parse(program), parse(program2)) === false);
     });
