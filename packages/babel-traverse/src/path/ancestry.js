@@ -175,6 +175,20 @@ export function getAncestry() {
   return paths;
 }
 
+/**
+ * A helper to find if `this` path is an ancestor of @param maybeDescendant
+ */
+export function isAncestor(maybeDescendant) {
+  return !!maybeDescendant.findParent((parent) => parent === this);
+}
+
+/**
+ * A helper to find if `this` path is a descendant of @param maybeAncestor
+ */
+export function isDescendant(maybeAncestor) {
+  return maybeAncestor.isAncestor(this);
+}
+
 export function inType() {
   let path = this;
   while (path) {
