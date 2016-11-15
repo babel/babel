@@ -47,7 +47,7 @@
     "flow": "flow",
     "prepublish": "npm run clean && cross-env BABEL_ENV=production npm run build",
     "preversion": "npm run test && npm run changelog",
-    "test": "npm run lint && npm run flow && npm run build && npm run test-only",
+    "test": "npm run lint && npm run flow && npm run build -- -m && npm run test-only",
     "test-only": "ava test",
     "test-ci": "nyc npm run test-only",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
