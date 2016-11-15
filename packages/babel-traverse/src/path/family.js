@@ -118,10 +118,73 @@ export function _getPattern(parts, context) {
   return path;
 }
 
-export function getBindingIdentifiers(duplicates?) {
+export function getBindingIdentifiers(duplicates, returnPaths = false) {
+  if (returnPaths) {
+    return this.getBindingIdentifierPaths(duplicates);
+  }
   return t.getBindingIdentifiers(this.node, duplicates);
 }
 
-export function getOuterBindingIdentifiers(duplicates?) {
+export function getOuterBindingIdentifiers(duplicates, returnPaths = false) {
+  if (returnPaths) {
+    return this.getBindingIdentifierPaths(duplicates, true);
+  }
   return t.getOuterBindingIdentifiers(this.node, duplicates);
+}
+
+// original source - https://github.com/babel/babel/blob/master/packages/babel-types/src/retrievers.js
+// path.getBindingIdentifiers returns nodes where the following re-implementation
+// returns paths
+export function getBindingIdentifierPaths(duplicates = false, outerOnly = false) {
+  let path = this;
+  let search = [].concat(path);
+  let ids = Object.create(null);
+
+  while (search.length) {
+    let id = search.shift();
+    if (!id) continue;
+    if (!id.node) continue;
+
+    let keys = t.getBindingIdentifiers.keys[id.node.type];
+
+    if (id.isIdentifier()) {
+      if (duplicates) {
+        let _ids = ids[id.node.name] = ids[id.node.name] || [];
+        _ids.push(id);
+      } else {
+        ids[id.node.name] = id;
+      }
+      continue;
+    }
+
+    if (id.isExportDeclaration()) {
+      const declaration = id.get("declaration");
+      if (declaration.isDeclaration()) {
+        search.push(declaration);
+      }
+      continue;
+    }
+
+    if (outerOnly) {
+      if (id.isFunctionDeclaration()) {
+        search.push(id.get("id"));
+        continue;
+      }
+      if (id.isFunctionExpression()) {
+        continue;
+      }
+    }
+
+    if (keys) {
+      for (let i = 0; i < keys.length; i++) {
+        let key = keys[i];
+        let child = id.get(key);
+        if (Array.isArray(child) || child.node) {
+          search = search.concat(child);
+        }
+      }
+    }
+  }
+
+  return ids;
 }
