@@ -167,7 +167,7 @@ assert(t.isNodesEquivalent(parse("1 + 1"), parse("1+1")) === true);
 
 Support stage-2 `import()` in systemjs.
 
-It doesn't not compile by default; you'll want to add the stage-2 preset or explicitly include `babel-plugin-syntax-dynamic-import`.
+It does not compile by default; you'll want to add the stage-2 preset or explicitly include `babel-plugin-syntax-dynamic-import`.
 
 ```js
 export function lazyLoadOperation () {
