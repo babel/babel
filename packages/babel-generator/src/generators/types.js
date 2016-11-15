@@ -141,7 +141,7 @@ export function StringLiteral(node: Object, parent: Object) {
     quotes: t.isJSX(parent) ? "double" : this.format.quotes,
     wrap: true
   };
-  if (this.format.jsonEscape) {
+  if (this.format.jsonCompatibleStrings) {
     opts.json = true;
   }
   let val = jsesc(node.value, opts);
