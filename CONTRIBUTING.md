@@ -47,19 +47,19 @@ You can check this with `node -v` and `npm -v`.
 ```sh
 $ git clone https://github.com/babel/babel
 $ cd babel
-$ make bootstrap
+$ npm run bootstrap
 ```
 
 Then you can either run:
 
 ```sh
-$ make build
+$ npm run build
 ```
 
 to build Babel **once** or:
 
 ```sh
-$ make watch
+$ npm run watch
 ```
 
 to have Babel build itself and incrementally build files on change.
@@ -69,7 +69,7 @@ You can access the built files for individual packages from `packages/<package-n
 If you wish to build a copy of Babel for distribution, then run:
 
 ```sh
-$ make build-dist
+$ npm run build-dist
 ```
 
 #### Running linting/tests
@@ -78,53 +78,53 @@ You can run lint via:
 
 ```sh
 # ~6 sec on a MacBook Pro (Mid 2015)
-$ make lint
+$ npm run lint
 ```
 
 You can run eslint's autofix via:
 
 ```sh
-$ make fix
+$ npm run fix
 ```
 
 You can run tests + lint for all packages (slow) via:
 
 ```sh
 # ~46 sec on a MacBook Pro (Mid 2015)
-$ make test
+$ npm run test
 ```
 
 If you just want to run all tests:
 
 ```sh
 # ~40 sec on a MacBook Pro (Mid 2015)
-$ make test-only
+$ npm run test-only
 ```
 
 Most likely you'll want to focus in on a specific issue.
 
-To run tests for a specific package in [packages](/packages), you can use the `TEST_ONLY` environment variable:
+To run tests for a specific package in [packages](/packages), you can use the `TEST_ONLY` parameter:
 
 ```sh
-$ TEST_ONLY=babel-cli make test
+$ npm --TEST_ONLY=babel-cli run test
 ```
 
-Use the `TEST_GREP` variable to run a subset of tests by name:
+Use the `TEST_GREP` parameter to run a subset of tests by name:
 
 ```sh
-$ TEST_GREP=transformation make test
+$ npm --TEST_GREP=transformation run test
 ```
 
-To enable the node debugger added in v6.3.0, set the `TEST_DEBUG` environment variable:
+To enable the node debugger added in v6.3.0, use the `TEST_DEBUG` parameter:
 
 ```sh
-$ TEST_DEBUG=true make test
+$ npm --TEST_DEBUG=true run test
 ```
 
 To test the code coverage, use:
 
 ```sh
-$ make test-cov
+$ npm run test-cov
 ```
 
 #### Writing tests
