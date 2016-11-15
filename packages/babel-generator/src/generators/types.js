@@ -124,14 +124,20 @@ export function NullLiteral() {
 }
 
 export function NumericLiteral(node: Object) {
-  let raw = this.getPossibleRaw(node);
-
-  this.number(raw == null ? node.value + "" : raw);
+  const raw = this.getPossibleRaw(node);
+  const value = node.value + "";
+  if (raw == null) {
+    this.number(value);  // normalize
+  } else if (this.format.minified) {
+    this.number(raw.length < value.length ? raw : value);
+  } else {
+    this.number(raw);
+  }
 }
 
 export function StringLiteral(node: Object, parent: Object) {
   let raw = this.getPossibleRaw(node);
-  if (raw != null) {
+  if (!this.format.minified && raw != null) {
     this.token(raw);
     return;
   }
