@@ -179,14 +179,14 @@ export function getAncestry() {
  * A helper to find if `this` path is an ancestor of @param maybeDescendant
  */
 export function isAncestor(maybeDescendant) {
-  return !!maybeDescendant.findParent((parent) => parent === this);
+  return maybeDescendant.isDescendant(this);
 }
 
 /**
  * A helper to find if `this` path is a descendant of @param maybeAncestor
  */
 export function isDescendant(maybeAncestor) {
-  return maybeAncestor.isAncestor(this);
+  return !!this.findParent((parent) => parent === maybeAncestor);
 }
 
 export function inType() {
