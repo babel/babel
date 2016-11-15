@@ -274,7 +274,11 @@ export function ObjectTypeAnnotation(node: Object) {
       statement: true,
       iterator: () => {
         if (props.length !== 1) {
-          this.semicolon();
+          if (this.format.flowCommaSeparator) {
+            this.token(",");
+          } else {
+            this.semicolon();
+          }
           this.space();
         }
       }

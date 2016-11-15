@@ -37,6 +37,7 @@ minified               | boolean  | `false`         | Should the output be minif
 concise                | boolean  | `false`         | Set to `true` to reduce whitespace (but not as much as `opts.compact`)
 quotes                 | `'single'` or `'double'` | autodetect based on `ast.tokens` | The type of quote to use in the output
 filename               | string   |                 | Used in warning messages
+flowCommaSeparator     | boolean  | `false`         | Set to `true` to use commas instead of semicolons as Flow property separators
 
 Options for source maps:
 
