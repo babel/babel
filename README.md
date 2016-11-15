@@ -15,6 +15,19 @@
   <a href="https://slack.babeljs.io/"><img alt="Slack Status" src="https://slack.babeljs.io/badge.svg"></a>
 </p>
 
+- [FAQ](#faq)
+- [Packages](#packages)
+  - [Core Packages](#core-packages)
+  - [Other](#other) 
+  - [Presets](#presets)
+  - [Plugins](#plugins)
+    - [Transform Plugins](#transform-plugins)
+    - [Syntax Plugins](#syntax-plugins)
+  - [Misc Packages](#misc-packages)
+- [License](#license)
+
+# FAQ
+
 ## Docs?
 
 Check out our website: [babeljs.io](http://babeljs.io/)
@@ -198,7 +211,7 @@ These just enable the transform plugins to be able to parse certain features (th
 
 These are mostly for internal use in various plugins: `babel-helper-x`.
 
-### Misc
+### Misc Packages
 
 - [`babel`](/packages/babel) the deprecated `babel` package on npm that was used in Babel 5.
 - [`babel-messages`](/packages/babel-messages) a package to keep error messages, etc (not always used)
