@@ -12,7 +12,241 @@
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
+ 
+## v6.19.0 (2016-11-15)
 
+#### :rocket: New Feature
+* `babel-plugin-transform-object-rest-spread`
+  * [#4755](https://github.com/babel/babel/pull/4755) Make the plugin work standalone with parameters/destructuring plugins. ([@hzoo](https://github.com/hzoo))
+
+Fixes a long standing issue where the object-rest-spread plugin was depending on 2 other plugins to compile `RestProperty`. This has been an issue given the many browsers and newer versions of node that support destructuring. The plugin needed to be rewritten to account for destructuring. This is important given the assumption that plugins should be independent and is vital for the use of [babel-preset-env](https://github.com/babel/babel-preset-env/).
+
+RestProperty
+- [x] Parameters
+``` js
+function a({ b, ...c }) {}
+```
+- [x] VariableDeclaration
+```js
+const { a, ...b } = c;
+```
+- [x] ExportNamedDeclaration
+```js
+export var { a, ...b } = c;
+```
+- [x] CatchClause
+```js
+try {} catch ({a, ...b}) {}
+```
+- [x] AssignmentExpression
+```js
+({a, ...b} = c);
+```
+- [x] ForXStatement
+```js
+for ({a, ...b} of []) {}
+```
+
+SpreadProperty
+- [x] ObjectExpression
+```js
+var a = { ...b, ...c }
+```
+
+* `babel-plugin-transform-class-properties`
+  * [#4544](https://github.com/babel/babel/pull/4544) Greater spec compliance for class properties with the new `spec` option. ([@motiz88](https://github.com/motiz88))
+
+Usage
+```js
+{
+  "plugins": [
+    ["transform-class-properties", {
+      "spec": true
+    }]
+  ]
+}
+```
+
+- Class properties are compiled to use `Object.defineProperty`
+- Static fields are now defined even if they are not initialized
+
+In
+```js
+class Foo {
+  static bar;
+}
+```
+
+Out
+```js
+var Foo = function Foo() {
+  babelHelpers.classCallCheck(this, Foo);
+};
+
+Object.defineProperty(Foo, "bar", {
+  enumerable: true,
+  writable: true,
+  value: undefined
+});
+```
+* `babel-traverse`
+  * [#4836](https://github.com/babel/babel/pull/4836) Add path utilities `isAncestor` and `isDescendant`. ([@boopathi](https://github.com/boopathi))
+
+We've added 2 similar "ancestry" path methods to `path.findParent`:
+
+`path.isAncestor`/`path.isDescenant`
+
+Usage:
+```js
+let programPath, numberPath;
+traverse(ast, {
+  Program(path) { programPath = path; },
+  NumberPath(path) { numberPath = path; },
+});
+
+programPath.isAncestor(numberPath); // true
+numberPath.isDescendant(programPath); // true
+```
+
+  * [#4835](https://github.com/babel/babel/pull/4835) Add `clearCache` and `clearPath` as separate APIs under traverse. ([@boopathi](https://github.com/boopathi))
+
+Usage:
+```js
+traverse.clearCache(); // clears both path's and scope cache
+traverse.clearCache.clearPath();
+traverse.clearCache.clearScope();
+```
+
+* `babel-generator`
+  * [#4827](https://github.com/babel/babel/pull/4827) Add `jsonCompatibleStrings` option to generator. ([@kangax](https://github.com/kangax))
+
+Usage:
+```js
+{
+  "generatorOpts": {
+    "jsonCompatibleStrings": true // defaults to false
+  }
+}
+```
+
+Set to true for the generator to use `jsesc` with `"json": true`. This will make it print `"\u00A9"` vs. `"©"`;
+
+  * [#3547](https://github.com/babel/babel/pull/3547) Added `flowUsesCommas` option for object types. ([@sampepose](https://github.com/sampepose))
+
+Usage:
+```js
+{
+  "generatorOpts": {
+    "flowCommaSeparator": true // defaults to false
+  }
+}
+```
+
+Currently there are 2 supported syntaxes (`,` and `;`) in Flow Object Types. The use of commas is in line with the more popular style and matches how objects are defined in Javascript, making it a bit more natural to write.
+
+```js
+var a: { param1: number; param2: string }
+var a: { param1: number, param2: string }
+```
+
+* `babel-types`
+  * [#3553](https://github.com/babel/babel/pull/3553) Start babel-types tests, add `isNodesEquivalent`. ([@hzoo](https://github.com/hzoo))
+
+`t.isNodesEquivalent`
+
+Usage:
+
+```js
+assert(t.isNodesEquivalent(parse("1 + 1"), parse("1+1")) === true);
+```
+
+* `babel-plugin-transform-es2015-modules-systemjs`
+  * [#4789](https://github.com/babel/babel/pull/4789) Support `import()` as contextual import in system module format. ([@guybedford](https://github.com/guybedford))
+
+Support stage-2 `import()` in systemjs.
+
+It doesn't not compile by default; you'll want to add the stage-2 preset or explicitly include `babel-plugin-syntax-dynamic-import`.
+
+```js
+export function lazyLoadOperation () {
+  return import('./x')
+  .then(function (x) {
+    x.y();
+  });
+}
+```
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#4830](https://github.com/babel/babel/pull/4830) Bug fix for printing minified literals. ([@shinew](https://github.com/shinew))
+
+Will print the shorter of the `NumericLiteral`s if using the `minified` option.
+
+Input
+```js
+5e1;
+5e4;
+```
+
+Output
+```js
+50;
+5e4;
+```
+
+* `babel-plugin-transform-es2015-modules-systemjs`
+  * [#4832](https://github.com/babel/babel/pull/4832) Fix system transformer to ensure consistent modules iteration. ([@guybedford](https://github.com/guybedford))
+
+Fixes inconsistent modules iteration for numeric imports
+
+```js
+import "2"; // should be imported first
+import "1"; // second
+```
+
+* `babel-plugin-transform-es2015-destructuring`, `babel-plugin-transform-react-constant-elements`
+  * [#4813](https://github.com/babel/babel/pull/4813) Fix binding kind of destructured variables.. ([@STRML](https://github.com/STRML))
+
+Fixes an issue with destructuring parameters being hoisted incorrectly.
+
+Input
+```
+function render({ text }) {
+  return () => (<Component text={text} />);
+}
+```
+
+Ouput
+```
+function render(_ref) {
+  let text = _ref.text;
+  var _ref2 = <Component text={text} />;
+  return () => _ref2;
+}
+```
+
+#### :memo: Documentation
+* Other
+  * [#4802](https://github.com/babel/babel/pull/4802) Add toc [skip ci]. ([@hzoo](https://github.com/hzoo))
+
+#### :house: Internal
+* `babel-plugin-transform-async-to-generator`
+  * [#4837](https://github.com/babel/babel/pull/4837) Fix crlf to lf. ([@lion-man44](https://github.com/lion-man44))
+* Other
+  * [#4807](https://github.com/babel/babel/pull/4807) Chore: FLOW command in makefile and logic in .travis.yml(issue#4710).. ([@sstern6](https://github.com/sstern6))
+
+#### Commiters: 10
+- Boopathi Rajaa ([boopathi](https://github.com/boopathi))
+- Guy Bedford ([guybedford](https://github.com/guybedford))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- Juriy Zaytsev ([kangax](https://github.com/kangax))
+- Moti Zilberman ([motiz88](https://github.com/motiz88))
+- Sam Pepose ([sampepose](https://github.com/sampepose))
+- Samuel Reed ([STRML](https://github.com/STRML))
+- Scott Stern ([sstern6](https://github.com/sstern6))
+- Shine Wang ([shinew](https://github.com/shinew))
+- lion ([lion-man44](https://github.com/lion-man44))
+ 
 ## v6.18.2 (2016-11-01)
 
 Weird publishing issue with v6.18.1, same release.
