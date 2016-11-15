@@ -19,9 +19,10 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 * `babel-plugin-transform-object-rest-spread`
   * [#4755](https://github.com/babel/babel/pull/4755) Make the plugin work standalone with parameters/destructuring plugins. ([@hzoo](https://github.com/hzoo))
 
-Fixes a long standing issue where the object-rest-spread plugin was depending on 2 other plugins to compile `RestProperty`. This has been an issue given the many browsers and newer versions of node that support destructuring. The plugin needed to be rewritten to account for destructuring. This is important given the assumption that plugins should be independent and is vital for the use of [babel-preset-env](https://github.com/babel/babel-preset-env/).
+This rewrite fixes a long standing issue where the object-rest-spread plugin was depending on 2 other plugins to compile `RestProperty`. This is important given the assumption that plugins should be independent and is vital for the use of [babel-preset-env](https://github.com/babel/babel-preset-env/) since new environments support destructuring natively.
 
-RestProperty
+*RestProperty*
+
 - [x] Parameters
 ``` js
 function a({ b, ...c }) {}
@@ -47,7 +48,8 @@ try {} catch ({a, ...b}) {}
 for ({a, ...b} of []) {}
 ```
 
-SpreadProperty
+*SpreadProperty*
+
 - [x] ObjectExpression
 ```js
 var a = { ...b, ...c }
