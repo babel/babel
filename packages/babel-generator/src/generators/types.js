@@ -143,10 +143,14 @@ export function StringLiteral(node: Object, parent: Object) {
   }
 
   // ensure the output is ASCII-safe
-  let val = jsesc(node.value, {
+  const opts = {
     quotes: t.isJSX(parent) ? "double" : this.format.quotes,
     wrap: true
-  });
+  };
+  if (this.format.jsonCompatibleStrings) {
+    opts.json = true;
+  }
+  let val = jsesc(node.value, opts);
 
   return this.token(val);
 }
