@@ -2,6 +2,14 @@ export let path = new WeakMap();
 export let scope = new WeakMap();
 
 export function clear() {
-  path = new WeakMap();
-  scope = new WeakMap();
+  clearPath();
+  clearScope();
+}
+
+export function clearPath() {
+  path = new WeakMap;
+}
+
+export function clearScope() {
+  scope = new WeakMap;
 }
