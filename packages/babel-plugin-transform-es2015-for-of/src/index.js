@@ -1,4 +1,6 @@
 export default function ({ messages, template, types: t }) {
+  const isArrayFrom = t.buildMatchMemberExpression("Array.from");
+
   const buildForOfArray = template(`
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
   `);
@@ -89,16 +91,35 @@ export default function ({ messages, template, types: t }) {
     return nodes;
   }
 
+  function replaceWithArray(path) {
+    if (path.parentPath.isLabeledStatement()) {
+      path.parentPath.replaceWithMultiple(_ForOfStatementArray(path));
+    } else {
+      path.replaceWithMultiple(_ForOfStatementArray(path));
+    }
+  }
 
   return {
     visitor: {
       ForOfStatement(path, state) {
-        if (path.get("right").isArrayExpression() || path.get("right").isGenericType("Array")) {
-          if (path.parentPath.isLabeledStatement()) {
-            return path.parentPath.replaceWithMultiple(_ForOfStatementArray(path));
-          } else {
-            return path.replaceWithMultiple(_ForOfStatementArray(path));
+        let right = path.get("right");
+
+        if (right.isArrayExpression() || right.isGenericType("Array")) {
+          return replaceWithArray(path);
+        } else if (right.isIdentifier() && right.isPure()) {
+          const binding = path.scope.getBinding(right.node.name);
+          if (binding.path.get("init").isArrayExpression()) {
+            return replaceWithArray(path);
           }
+        } else if (right.isCallExpression() && isArrayFrom(right.get("callee").node)) {
+          const uid = path.scope.generateUidIdentifierBasedOnNode(right.node);
+          path.insertBefore(
+            t.variableDeclaration("const", [
+              t.variableDeclarator(uid, right.node)
+            ])
+          );
+          right.replaceWith(uid);
+          return replaceWithArray(path);
         }
 
         let callback = spec;
