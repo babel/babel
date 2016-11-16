@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.0.8 (2016-11-16)
+
+### :nail_polish: Polish
+
+* Only print the debug info once ([#46](https://github.com/babel/babel-preset-env/pull/46) (Henry Zhu)
+
+When using the `debug` option it was printing the data for each file processed rather than once.
+
+```js
+{
+  "presets": [
+    ["env", {
+      "debug": true
+    }]
+  ]
+}
+```
+
 ## v0.0.7 (2016-11-02)
 
 ### :rocket: New Feature
