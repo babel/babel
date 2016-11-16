@@ -244,27 +244,4 @@ transform-es2015-arrow-functions {}
 
 ## Caveats
 
-### Using `babel-plugin-transform-object-rest-spread` and targeting node.js 6.5 or higher
-
-You may get a `SyntaxError: Unexpected token ...` error if using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-rest-spread) feature and targeting node.js 6.5 or higher.
-
-This is a known issue at [babel/babel#4074](https://github.com/babel/babel/issues/4074).
-
-A simple workaround would be to re-enable the following plugins: `babel-plugin-transform-es2015-destructuring` and `babel-plugin-transform-es2015-parameters`, which can be done with the `whitelist` option.
-
-```js
-{
-  "presets": [
-    ["env", {
-      "targets": {
-        "node": 6.5
-      },
-      "whitelist": [
-        "transform-es2015-destructuring",
-        "transform-es2015-parameters"
-      ]
-    }]
-  ],
-  "plugins": ["transform-object-rest-spread"]
-}
-```
+If you get a `SyntaxError: Unexpected token ...` error if using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-rest-spread) then make sure the plugin is at `v6.19.0`.
