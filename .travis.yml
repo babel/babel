@@ -11,9 +11,9 @@ node_js:
 - '4'
 - '0.12'
 script: 
-  - 'if [ -n "${LINT-}" ]; then make lint ; fi'
-  - 'if [ -z "${LINT-}" ]; then make test-ci ; fi'
-  - 'if [ -n "${FLOW-}" ]; then make flow ; fi'
+  - 'if [ -n "${LINT-}" ]; then npm run lint ; fi'
+  - 'if [ -z "${LINT-}" ]; then npm run test-ci ; fi'
+  - 'if [ -n "${FLOW-}" ]; then npm run flow ; fi'
 
 matrix:
   fast_finish: true
@@ -22,7 +22,7 @@ matrix:
       env:
         - LINT: true
         - FLOW: true
-      
+
 notifications:
   on_success: change
   on_failure: always

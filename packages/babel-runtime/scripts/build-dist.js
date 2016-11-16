@@ -3,6 +3,7 @@ var each       = require("lodash/each");
 var fs         = require("fs");
 var _          = require("lodash");
 
+var join       = require("path").join;
 var coreDefinitions = require("babel-plugin-transform-runtime").definitions;
 
 var paths = ["is-iterable", "get-iterator"];
@@ -37,7 +38,7 @@ var util       = require("../../babel-core/lib/util");
 var t          = require("../../babel-types");
 
 function relative(filename) {
-  return __dirname + "/../" + filename;
+  return join(__dirname, "..", filename);
 }
 
 function readFile(filename, shouldDefaultify) {
@@ -56,7 +57,6 @@ function defaultify(name) {
 
 function writeRootFile(filename, content) {
   filename = relative(filename);
-  //console.log(filename);
   outputFile(filename, content);
 }
 
