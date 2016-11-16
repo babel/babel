@@ -15,6 +15,64 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## 6.14.0 (2016-11-13)
+
+### :eyeglasses: Spec Compliancy
+
+Throw error for reserved words `enum` and `await` ([#195](https://github.com/babel/babylon/pull/195)) (Kai Cataldo)
+
+[11.6.2.2 Future Reserved Words](http://www.ecma-international.org/ecma-262/6.0/#sec-future-reserved-words)
+
+Babylon will throw for more reserved words such as `enum` or `await` (in strict mode).
+
+```
+class enum {} // throws
+class await {} // throws in strict mode (module)
+```
+
+Optional names for function types and object type indexers ([#197](https://github.com/babel/babylon/pull/197)) (Gabe Levi)
+
+So where you used to have to write
+
+```js
+type A = (x: string, y: boolean) => number;
+type B = (z: string) => number;
+type C = { [key: string]: number };
+```
+
+you can now write (with flow 0.34.0)
+
+```js
+type A = (string, boolean) => number;
+type B = string => number;
+type C = { [string]: number };
+```
+
+Parse flow nested array type annotations like `number[][]` ([#219](https://github.com/babel/babylon/pull/219)) (Bernhard Häussner)
+ 
+Supports these form now of specifying array types:
+
+```js
+var a: number[][][][];
+var b: string[][];
+```
+ 
+### :bug: Bug Fix
+
+Correctly eat semicolon at the end of `DelcareModuleExports` ([#223](https://github.com/babel/babylon/pull/223))  (Daniel Tschinder)
+
+```
+declare module "foo" { declare module.exports: number } 
+declare module "foo" { declare module.exports: number; }  // also allowed now
+```
+
+### :house: Internal
+
+ * Count Babel tests towards Babylon code coverage ([#182](https://github.com/babel/babylon/pull/182)) (Moti Zilberman)
+ * Fix strange line endings ([#214](https://github.com/babel/babylon/pull/214)) (Thomas Grainger)
+ * Add node 7 (Daniel Tschinder)
+ * chore(package): update flow-bin to version 0.34.0 ([#204](https://github.com/babel/babylon/pull/204)) (Greenkeeper)
+
 ## v6.13.1 (2016-10-26)
 
 ### :nail_care: Polish
