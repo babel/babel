@@ -218,7 +218,7 @@ function render({ text }) {
 }
 ```
 
-Ouput
+Output
 ```
 function render(_ref) {
   let text = _ref.text;
@@ -237,7 +237,7 @@ function render(_ref) {
 * Other
   * [#4807](https://github.com/babel/babel/pull/4807) Chore: FLOW command in makefile and logic in .travis.yml(issue#4710).. ([@sstern6](https://github.com/sstern6))
 
-#### Commiters: 10
+#### Committers: 10
 - Boopathi Rajaa ([boopathi](https://github.com/boopathi))
 - Guy Bedford ([guybedford](https://github.com/guybedford))
 - Henry Zhu ([hzoo](https://github.com/hzoo))
