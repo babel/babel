@@ -13,7 +13,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
  
-## v6.19.0 (2016-11-15)
+## v6.19.0 (2016-11-16)
 
 #### :rocket: New Feature
 * `babel-plugin-transform-object-rest-spread`
