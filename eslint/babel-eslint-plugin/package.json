@@ -19,12 +19,15 @@
   ],
   "author": "Jason Quense @monasticpanic",
   "license": "MIT",
+  "engines": {
+    "node": ">=4"
+  },
   "bugs": {
     "url": "https://github.com/babel/eslint-plugin-babel/issues"
   },
   "homepage": "https://github.com/babel/eslint-plugin-babel#readme",
   "peerDependencies": {
-    "eslint": ">=1.0.0"
+    "eslint": ">=3.0.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.1.0",
