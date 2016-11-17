@@ -4,6 +4,8 @@ An `eslint` plugin companion to `babel-eslint`. `babel-eslint` does a great job 
 for use with Babel, but it can't change the built in rules to support experimental features.
 `eslint-plugin-babel` re-implements problematic rules so they do not give false positives or negatives.
 
+> Requires Node 4 or greater
+
 ### Install
 
 ```sh
