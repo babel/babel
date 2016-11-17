@@ -187,7 +187,7 @@ suites.forEach(function (testSuite) {
             console.log(`New test file created: ${expect.loc}`);
             fs.writeFileSync(expect.loc, result.code);
           } else {
-            actualCode = result.code.trim();
+            // actualCode = result.code.trim();
             chai.expect(actualCode).to.be.equal(expect.code, actual.loc + " !== " + expect.loc);
           }
         }
