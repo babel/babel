@@ -175,11 +175,11 @@ export default function ({ types: t }) {
           let nodeWithoutSpread = t.clone(path.node);
           nodeWithoutSpread.right = ref;
           nodes.push(t.expressionStatement(nodeWithoutSpread));
-          nodes.push(t.assignmentExpression(
+          nodes.push(t.toStatement(t.assignmentExpression(
             "=",
             argument,
             callExpression
-          ));
+          )));
 
           if (ref) {
             nodes.push(t.expressionStatement(ref));
