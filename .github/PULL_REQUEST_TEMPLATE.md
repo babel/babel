@@ -13,7 +13,7 @@ For any issue references: Add a comma-separated list of a [closing word](https:/
 | Deprecations?     | 
 | Spec compliancy?  | 
 | Tests added/pass? | 
-| Fixed tickets     | `Fixes #1, Fixes #2`
+| Fixed tickets     | `Fixes #1, Fixes #2` <!-- rm the quotes to link the issues -->
 | License           | MIT
 | Doc PR            | 
 | Dependency Changes| 
