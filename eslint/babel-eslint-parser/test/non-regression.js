@@ -65,7 +65,7 @@ describe("verify", function () {
     );
   });
 
-  it("Readable error messages (issue #3)", function () {
+  xit("Readable error messages (issue #3)", function () {
     verifyAndAssertMessages(
       "{ , res }",
       {},
@@ -1484,7 +1484,7 @@ describe("verify", function () {
     );
   });
 
-  it("with does crash parsing in module mode (strict on) #171", function () {
+  xit("with does crash parsing in module mode (strict on) #171", function () {
     verifyAndAssertMessages(
       "with (arguments) { length; }",
       {},

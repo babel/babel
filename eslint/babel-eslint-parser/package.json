@@ -12,6 +12,7 @@
     "url": "https://github.com/babel/babel-eslint.git"
   },
   "dependencies": {
+    "babel-code-frame": "^6.16.0",
     "babel-traverse": "^6.15.0",
     "babel-types": "^6.15.0",
     "babylon": "^6.13.0",

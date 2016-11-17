@@ -6,6 +6,7 @@ var parse           = require("babylon").parse;
 var t               = require("babel-types");
 var tt              = require("babylon").tokTypes;
 var traverse        = require("babel-traverse").default;
+var codeFrame       = require("babel-code-frame");
 
 var hasPatched = false;
 var eslintOptions = {};
@@ -397,7 +398,10 @@ exports.parseNoPatch = function (code, options) {
       err.column = err.loc.column + 1;
 
       // remove trailing "(LINE:COLUMN)" acorn message and add in esprima syntax error message start
-      err.message = `Line ${err.lineNumber}: ${err.message.replace(/ \((\d+):(\d+)\)$/, "")}`;
+      err.message = "Line " + err.lineNumber + ": " + err.message.replace(/ \((\d+):(\d+)\)$/, "") +
+      // add codeframe
+      "\n\n" +
+      codeFrame(code, err.lineNumber, err.column, { highlightCode: true });
     }
 
     throw err;
