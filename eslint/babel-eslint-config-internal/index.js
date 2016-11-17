@@ -43,7 +43,7 @@ module.exports = {
     "max-len": ["error", 110, 2],
 
     // Enforce parens around arrow function arguments
-    "babel/arrow-parens": ["error", "always"],
+    "arrow-parens": ["error", "always"],
     // Require a space on each side of arrow operator
     "arrow-spacing": ["error", { before: true, after: true }],
     // Require a space on each side of all infix operators
