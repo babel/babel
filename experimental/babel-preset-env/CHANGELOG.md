@@ -2,7 +2,7 @@
 
 ## v0.0.8 (2016-11-16)
 
-### :nail_polish: Polish
+### :nail_care: Polish
 
 * Only print the debug info once ([#46](https://github.com/babel/babel-preset-env/pull/46) (Henry Zhu)
 
