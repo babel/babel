@@ -82,6 +82,7 @@ function run(task) {
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
     if (!expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
+      console.log(`New test file created: ${expect.loc}`);
       fs.writeFileSync(expect.loc, result.code);
     } else {
       actualCode = result.code.trim();
