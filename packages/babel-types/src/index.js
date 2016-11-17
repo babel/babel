@@ -259,6 +259,7 @@ export function ensureBlock(node: Object, key: string = "body"): Object {
  */
 
 export function clone(node: Object): Object {
+  if (node == null) return null;
   let newNode = {};
   for (let key in node) {
     if (key[0] === "_") continue;
@@ -283,6 +284,7 @@ export function cloneWithoutLoc(node: Object): Object {
  */
 
 export function cloneDeep(node: Object): Object {
+  if (node == null) return null;
   let newNode = {};
 
   for (let key in node) {
