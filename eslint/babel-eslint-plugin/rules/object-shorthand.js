@@ -1,70 +1,20 @@
+"use strict";
 
-/**
- * @fileoverview Rule to enforce concise object methods and properties.
- * @author Jamund Ferguson
- * @copyright 2015 Jamund Ferguson. All rights reserved.
- */
+var isWarnedForDeprecation = false;
+module.exports = function() {
+    return {
+        Program() {
+            if (isWarnedForDeprecation || /\=-(f|-format)=/.test(process.argv.join('='))) {
+              return;
+            }
 
-'use strict';
-
-var OPTIONS = {
-      always: 'always',
-      never: 'never',
-      methods: 'methods',
-      properties: 'properties'
+            /* eslint-disable no-console */
+            console.log('The babel/object-shorthand rule is deprecated. Please ' +
+                        'use the built in object-shorthand rule instead.');
+            /* eslint-enable no-console */
+            isWarnedForDeprecation = true;
+        }
     };
-
-//------------------------------------------------------------------------------
-// Rule Definition
-//------------------------------------------------------------------------------
-
-module.exports = function(context) {
-
-  var APPLY = context.options[0] || OPTIONS.always;
-  var APPLY_TO_METHODS = APPLY === OPTIONS.methods || APPLY === OPTIONS.always;
-  var APPLY_TO_PROPS = APPLY === OPTIONS.properties || APPLY === OPTIONS.always;
-  var APPLY_NEVER = APPLY === OPTIONS.never;
-
-  return {
-    Property: function(node) {
-      var isConciseProperty = node.method || node.shorthand
-        , isSpreadProperty = !!this.getSource(node).match(/^\.\.\./)
-        , type;
-
-      // if we're 'never' and concise we should warn now
-      if (APPLY_NEVER && isConciseProperty) {
-        type = node.method ? 'method' : 'property';
-        context.report(node, 'Expected longform ' + type + ' syntax.');
-      }
-
-      // at this point if we're concise or if we're 'never' we can leave
-      if (APPLY_NEVER || isConciseProperty) {
-        return;
-      }
-
-      // getters, setters and computed properties are ignored
-      if (node.kind === "get" || node.kind === "set" || node.computed) {
-        return;
-      }
-
-      if (isSpreadProperty) {
-        return;
-      }
-
-      if (node.value.type === 'FunctionExpression' && node.value.id == null && APPLY_TO_METHODS) {
-        // {x: function(){}} should be written as {x() {}}
-        context.report(node, 'Expected method shorthand.');
-      }
-      else if (node.value.type === 'Identifier' && node.key.name === node.value.name && APPLY_TO_PROPS) {
-        // {x: x} should be written as {x}
-        context.report(node, 'Expected property shorthand.');
-      }
-      else if (node.value.type === 'Identifier' && node.key.type === 'Literal' && node.key.value === node.value.name && APPLY_TO_PROPS) {
-        // {'x': x} should be written as {x}
-        context.report(node, 'Expected property shorthand.');
-      }
-    }
-  };
 };
 
 module.exports.schema = [

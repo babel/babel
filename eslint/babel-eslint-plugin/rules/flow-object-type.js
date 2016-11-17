@@ -1,48 +1,21 @@
-/**
- * @fileoverview Enforces a choice between semicolons and commas in Flow object and class types.
- * @author Nat Mote
- */
 "use strict";
 
-var SEMICOLON = {
-  char: ';',
-  name: 'semicolon',
-}
+var isWarnedForDeprecation = false;
+module.exports = function() {
+    return {
+        Program() {
+            if (isWarnedForDeprecation || /\=-(f|-format)=/.test(process.argv.join('='))) {
+              return;
+            }
 
-var COMMA = {
-  char: ',',
-  name: 'comma',
-};
-
-module.exports = function(context) {
-  var GOOD;
-  var BAD;
-  if (context.options[0] === undefined || context.options[0] === SEMICOLON.name) {
-    GOOD = SEMICOLON;
-    BAD = COMMA;
-  } else {
-    GOOD = COMMA;
-    BAD = SEMICOLON;
-  }
-  function requireProperPunctuation(node) {
-    var tokens = context.getSourceCode().getTokens(node);
-    var lastToken = tokens[tokens.length - 1];
-    if (lastToken.type === 'Punctuator') {
-      if (lastToken.value === BAD.char) {
-        context.report({
-          message: 'Prefer ' + GOOD.name + 's to ' + BAD.name + 's in object and class types',
-          node: lastToken,
-          fix: function(fixer) {
-            return fixer.replaceText(lastToken, GOOD.char);
-          },
-        });
-      }
-    }
-  }
-
-  return {
-    ObjectTypeProperty: requireProperPunctuation,
-  };
+            /* eslint-disable no-console */
+            console.log('The babel/flow-object-type rule is deprecated. Please ' +
+                        'use the flowtype/object-type-delimiter rule instead.\n' +
+                        'Check out https://github.com/gajus/eslint-plugin-flowtype#eslint-plugin-flowtype-rules-object-type-delimiter');
+            /* eslint-enable no-console */
+            isWarnedForDeprecation = true;
+        }
+    };
 };
 
 module.exports.schema = [
