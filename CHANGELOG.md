@@ -15,6 +15,20 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## 6.14.1 (2016-11-17)
+
+### :bug: Bug Fix
+
+Allow `"plugins": ["*"]` ([#229](https://github.com/babel/babylon/pull/229)) (Daniel Tschinder)
+
+```js
+{
+  "plugins": ["*"]
+}
+```
+
+Will include all parser plugins instead of specifying each one individually. Useful for tools like babel-eslint, jscodeshift, and ast-explorer.
+
 ## 6.14.0 (2016-11-16)
 
 ### :eyeglasses: Spec Compliancy
