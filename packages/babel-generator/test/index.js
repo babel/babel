@@ -143,6 +143,27 @@ describe("programmatic generation", function() {
       "}",
     ].join("\n"));
   });
+
+  it("flow object indentation with empty leading ObjectTypeProperty", function() {
+    let objectStatement = t.objectTypeAnnotation(
+      [],
+      [
+        t.objectTypeIndexer(
+          t.identifier("key"),
+          t.anyTypeAnnotation(),
+          t.identifier("Test"),
+        ),
+      ]
+    );
+
+    let output = generate.default(objectStatement).code;
+
+    assert.equal(output, [
+      "{",
+      "  [key: any]: Test;",
+      "}",
+    ].join("\n"));
+  });
 });
 
 describe("whitespace", function () {
