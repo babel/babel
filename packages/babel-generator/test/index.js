@@ -124,6 +124,20 @@ describe("programmatic generation", function() {
     assert.equal(ast.program.body[0].consequent.type, "BlockStatement");
   });
 
+  it("prints directives in block with empty body", function() {
+    let blockStatement = t.blockStatement(
+      [],
+      [t.directive(t.directiveLiteral("use strict"))]
+    );
+
+    let output = generate.default(blockStatement).code;
+    assert.equal(output, [
+      "{",
+      "  \"use strict\";",
+      "}"
+    ].join("\n"));
+  });
+
   it("flow object indentation", function() {
     let objectStatement = t.objectTypeAnnotation(
       [

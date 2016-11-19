@@ -14,11 +14,14 @@ export function Program(node: Object) {
 export function BlockStatement(node: Object) {
   this.token("{");
   this.printInnerComments(node);
-  if (node.body.length) {
+
+  let hasDirectives = node.directives && node.directives.length;
+
+  if (node.body.length || hasDirectives) {
     this.newline();
 
     this.printSequence(node.directives, node, { indent: true });
-    if (node.directives && node.directives.length) this.newline();
+    if (hasDirectives) this.newline();
 
     this.printSequence(node.body, node, { indent: true });
     this.removeTrailingNewline();

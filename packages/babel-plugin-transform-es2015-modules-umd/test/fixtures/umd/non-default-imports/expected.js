@@ -10,4 +10,6 @@
     factory(global.render);
     global.actual = mod.exports;
   }
-})(this, function (_render) {});
+})(this, function (_render) {
+  "use strict";
+});
