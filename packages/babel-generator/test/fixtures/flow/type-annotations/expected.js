@@ -119,3 +119,5 @@ var a: {| [a: number]: string; [b: number]: string; |};
 var a: {| add: (x: number, ...y: Array<string>) => void |};
 var a: {| subtract: (x: number, ...y: Array<string>) => void |};
 var a: {| id: <T>(x: T) => T |};
+function foo(numVal: number = 2) {}
+function foo(numVal?: number = 2) {}

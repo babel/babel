@@ -40,6 +40,10 @@ export default function ({ types: t }) {
         });
       },
 
+      AssignmentPattern({ node }) {
+        node.left.optional = false;
+      },
+
       Function({ node }) {
         for (let i = 0; i < node.params.length; i++) {
           let param = node.params[i];
