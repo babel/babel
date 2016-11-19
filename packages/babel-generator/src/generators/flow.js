@@ -270,6 +270,9 @@ export function ObjectTypeAnnotation(node: Object) {
     this.space();
 
     this.printJoin(props, node, {
+      addNewlines(leading) {
+        if (leading && !props[0]) return 1;
+      },
       indent: true,
       statement: true,
       iterator: () => {
