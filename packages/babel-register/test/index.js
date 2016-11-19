@@ -1,11 +1,12 @@
-import assert from "assert";
+import chai from "chai";
 import path from "path";
 import decache from "decache";
 
 const DATA_ES2015 = require.resolve("./__data__/es2015");
 
 describe("babel-register", function () {
-  let babelRegister = null;
+  let babelRegister;
+  let oldCompiler;
 
   function setupRegister(config) {
     babelRegister = require("../lib/node");
@@ -23,23 +24,31 @@ describe("babel-register", function () {
     }
   }
 
+  before(() => {
+    const js = require("default-require-extensions/js");
+    oldCompiler = require.extensions[".js"];
+    require.extensions[".js"] = js;
+  });
+
+  after(() => {
+    require.extensions[".js"] = oldCompiler;
+  });
+
   afterEach(() => {
     revertRegister();
     decache(DATA_ES2015);
   });
 
-  it("basic usage", function () {
+  it("registers correctly", () => {
     setupRegister();
 
-    assert.ok(require(DATA_ES2015).default);
+    chai.expect(require(DATA_ES2015)).to.be.ok;
   });
 
   it("reverts correctly", () => {
     setupRegister();
     revertRegister();
 
-    assert.throws(function () {
-      require(DATA_ES2015);
-    }, SyntaxError);
+    chai.expect(() => { require(DATA_ES2015); }).to.throw(SyntaxError);
   });
 });

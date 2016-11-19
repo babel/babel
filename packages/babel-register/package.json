@@ -17,6 +17,7 @@
     "source-map-support": "^0.4.2"
   },
   "devDependencies": {
-    "decache": "^4.1.0"
+    "decache": "^4.1.0",
+    "default-require-extensions": "^1.0.0"
   }
 }
