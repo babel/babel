@@ -59,19 +59,9 @@ function compile(source, options) {
     };
   }
 
-  var recastOptions = getRecastOptions(options);
-  var ast = recast.parse(source, recastOptions);
-  var nodePath = new types.NodePath(ast);
-  var programPath = nodePath.get("program");
-
-  if (shouldVarify(source, options)) {
-    // Transpile let/const into var declarations.
-    varifyAst(programPath.node);
-  }
-
-  transform(programPath, options);
-
-  return recast.print(nodePath, recastOptions);
+  return require("babel-core").transform(source, {
+    presets: [require("regenerator-preset")]
+  });
 }
 
 function normalizeOptions(options) {
@@ -110,17 +100,6 @@ function getRecastOptions(options) {
   copy("sourceRoot");
 
   return recastOptions;
-}
-
-function shouldVarify(source, options) {
-  var supportBlockBinding = !!options.supportBlockBinding;
-  if (supportBlockBinding) {
-    if (!blockBindingExp.test(source)) {
-      supportBlockBinding = false;
-    }
-  }
-
-  return supportBlockBinding;
 }
 
 function varify(source, options) {
