@@ -10,22 +10,9 @@
 
 var assert = require("assert");
 var runningInTranslation = /\.wrap\(/.test(function*(){});
-var iteratorSymbol = typeof Symbol === "function"
-  && Symbol.iterator
-  || "@@iterator";
-
-function check(g, yields, returnValue) {
-  for (var i = 0; i < yields.length; ++i) {
-    var info = g.next(i);
-    assert.deepEqual(info.value, yields[i]);
-    assert.strictEqual(info.done, false);
-  }
-
-  assert.deepEqual(
-    i > 0 ? g.next(i) : g.next(),
-    { value: returnValue, done: true }
-  );
-}
+var shared = require("./shared.js");
+var iteratorSymbol = shared.iteratorSymbol;
+var check = shared.check;
 
 // A version of `throw` whose behavior can't be statically analyzed.
 // Useful for testing dynamic exception dispatching.
@@ -1424,26 +1411,6 @@ describe("the arguments object", function() {
 
     check(gen(3, 7), [3, 4, 7, 6, 6, 4]);
     check(gen(10, -5), [10, 11, -5, -6, -6, 11]);
-  });
-
-  it("should be shadowable by explicit declarations", function() {
-    function *asParameter(x, arguments) {
-      arguments = arguments + 1;
-      yield x + arguments;
-    }
-
-    check(asParameter(4, 5), [10]);
-    check(asParameter("asdf", "zxcv"), ["asdfzxcv1"]);
-
-    function *asVariable(x) {
-      // TODO References to arguments before the variable declaration
-      // seem to see the object instead of the undefined value.
-      var arguments = x + 1;
-      yield arguments;
-    }
-
-    check(asVariable(4), [5]);
-    check(asVariable("asdf"), ["asdf1"]);
   });
 
   it("should not get confused by properties", function() {
