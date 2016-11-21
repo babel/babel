@@ -1,9 +1,5 @@
 var assert = require("assert");
 
-exports.iteratorSymbol = typeof Symbol === "function"
-  && Symbol.iterator
-  || "@@iterator";
-
 exports.check = function check(g, yields, returnValue) {
   for (var i = 0; i < yields.length; ++i) {
     var info = g.next(i);

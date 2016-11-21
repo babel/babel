@@ -11,7 +11,7 @@
 var assert = require("assert");
 var runningInTranslation = /\.wrap\(/.test(function*(){});
 var shared = require("./shared.js");
-var iteratorSymbol = shared.iteratorSymbol;
+var Symbol = require("core-js/es6/symbol");
 var check = shared.check;
 
 // A version of `throw` whose behavior can't be statically analyzed.
@@ -54,12 +54,12 @@ describe("regeneratorRuntime", function() {
   it("is defined on Generator.prototype and returns this", function() {
     function *gen(){}
     var iterator = gen();
-    assert.ok(!iterator.hasOwnProperty(iteratorSymbol));
-    assert.ok(!Object.getPrototypeOf(iterator).hasOwnProperty(iteratorSymbol));
+    assert.ok(!iterator.hasOwnProperty(Symbol.iterator));
+    assert.ok(!Object.getPrototypeOf(iterator).hasOwnProperty(Symbol.iterator));
     assert.ok(Object.getPrototypeOf(
       Object.getPrototypeOf(iterator)
-    ).hasOwnProperty(iteratorSymbol));
-    assert.strictEqual(iterator[iteratorSymbol](), iterator);
+    ).hasOwnProperty(Symbol.iterator));
+    assert.strictEqual(iterator[Symbol.iterator](), iterator);
   });
 });
 
@@ -1082,7 +1082,7 @@ describe("delegated yield", function() {
         }
       };
 
-      iterator[iteratorSymbol] = function() {
+      iterator[Symbol.iterator] = function() {
         return this;
       };
 
@@ -1187,7 +1187,7 @@ describe("delegated yield", function() {
 
     var inner = range(5);
     var iterator = { next: inner.next.bind(inner) };
-    iterator[iteratorSymbol] = function() {
+    iterator[Symbol.iterator] = function() {
       return this;
     };
 
