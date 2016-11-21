@@ -26,14 +26,17 @@
       "transform-runtime"
     ]
   },
-  "devDependencies": {
-    "babel-cli": "~6.9.0",
-    "babel-plugin-transform-runtime": "~6.9.0",
-    "babel-preset-es2015": "~6.9.0"
-  },
   "dependencies": {
-    "babel-runtime": "~6.9.2",
-    "babel-types": "~6.9.1",
-    "private": "~0.1.6"
+    "babel-cli": "^6.18.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-runtime": "^6.18.0",
+    "babel-types": "^6.19.0",
+    "private": "^0.1.6"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0"
   }
 }
