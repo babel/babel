@@ -1309,13 +1309,11 @@ describe("function declaration hoisting", function() {
         halve = void 0;
       }
 
-      yield typeof halve;
-
       yield increment(increment(n));
     }
 
-    check(gen(3), [4, 1, "function", 5]);
-    check(gen(4), [5, "undefined", 6]);
+    check(gen(3), [4, 1, 5]);
+    check(gen(4), [5, 6]);
   });
 
   it("should work for nested generator function declarations", function() {
