@@ -1,2 +1,4 @@
 /node_modules
 /test
+# Don't publish the helper packages as part of the parent package.
+/packages
