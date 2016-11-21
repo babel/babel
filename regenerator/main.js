@@ -59,9 +59,19 @@ function compile(source, options) {
     };
   }
 
-  return require("babel-core").transform(source, {
-    presets: [require("regenerator-preset")]
-  });
+  var transformOptions = {
+    presets: []
+  };
+
+  if (options.babelOptions) {
+    Object.keys(options.babelOptions).forEach(function (key) {
+      transformOptions[key] = options.babelOptions[key];
+    });
+  }
+
+  transformOptions.presets.push(require("regenerator-preset"));
+
+  return require("babel-core").transform(source, transformOptions);
 }
 
 function normalizeOptions(options) {
