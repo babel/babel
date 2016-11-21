@@ -25,6 +25,7 @@
   "main": "main.js",
   "bin": "bin/regenerator",
   "scripts": {
+    "pretest": "./link.sh",
     "test": "node test/run.js"
   },
   "dependencies": {
