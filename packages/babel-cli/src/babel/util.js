@@ -7,7 +7,6 @@ let util      = require("babel-core").util;
 let path      = require("path");
 let fs        = require("fs");
 let _         = require("lodash");
-let each      = require("lodash/each");
 
 export function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
@@ -91,11 +90,11 @@ export function getSettings(filenames) {
 
   allOptions.push(generalOptions);
 
-  each(filenames, function (file) {
+  _.each(filenames, function (file) {
     let fileOptions = new File( { filename: file } ).opts,
         thisFileOptions = {};
 
-    each(fileOptions, function (fileOption, key) {
+    _.each(fileOptions, function (fileOption, key) {
       if (!generalOptions.hasOwnProperty(key) || JSON.stringify(generalOptions[key]) != JSON.stringify(fileOption)) {
         thisFileOptions[key] = fileOption;
       }
@@ -105,7 +104,7 @@ export function getSettings(filenames) {
 
   let printObject = function (filename, opts) {
     console.log(`--- ${filename} options ---`);
-    each(opts, function (option, key) {
+    _.each(opts, function (option, key) {
       console.log(key, ": ", option);
     });
     console.log();
@@ -118,14 +117,14 @@ export function getSettings(filenames) {
   console.log(`Babel packages:`);
 
   let packages = child.execSync("npm list").toString().split("\n");
-  each(packages, function(p) {
+  _.each(packages, function(p) {
     let babelIndex = p.indexOf("babel");
     if (babelIndex >= 0) console.log(p.slice(babelIndex));
   });
 
   console.log();
 
-  each(allOptions, function (fileOptions, index) {
+  _.each(allOptions, function (fileOptions, index) {
     if (index !== 0) {
       printObject(fileOptions.filename, fileOptions);
     } else {
