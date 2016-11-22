@@ -6,6 +6,8 @@ let parse      = require("babylon").parse;
 let chai       = require("chai");
 let t          = require("babel-types");
 let _          = require("lodash");
+let fs         = require("fs");
+let path       = require("path");
 
 describe("generation", function () {
   it("completeness", function () {
@@ -141,6 +143,27 @@ describe("programmatic generation", function() {
       "}",
     ].join("\n"));
   });
+
+  it("flow object indentation with empty leading ObjectTypeProperty", function() {
+    let objectStatement = t.objectTypeAnnotation(
+      [],
+      [
+        t.objectTypeIndexer(
+          t.identifier("key"),
+          t.anyTypeAnnotation(),
+          t.identifier("Test"),
+        ),
+      ]
+    );
+
+    let output = generate.default(objectStatement).code;
+
+    assert.equal(output, [
+      "{",
+      "  [key: any]: Test;",
+      "}",
+    ].join("\n"));
+  });
 });
 
 describe("whitespace", function () {
@@ -158,25 +181,24 @@ suites.forEach(function (testSuite) {
       it(task.title, !task.disabled && function () {
         let expect = task.expect;
         let actual = task.actual;
+        let actualCode = actual.code;
 
-        let actualAst = parse(actual.code, {
-          filename: actual.loc,
-          plugins: [
-            "jsx",
-            "flow",
-            "decorators",
-            "asyncFunctions",
-            "exportExtensions",
-            "functionBind",
-            "classConstructorCall",
-            "classProperties",
-          ],
-          strictMode: false,
-          sourceType: "module",
-        });
+        if (actualCode) {
+          let actualAst = parse(actualCode, {
+            filename: actual.loc,
+            plugins: ["*"],
+            strictMode: false,
+            sourceType: "module",
+          });
+          let result = generate.default(actualAst, task.options, actualCode);
 
-        let actualCode = generate.default(actualAst, task.options, actual.code).code;
-        chai.expect(actualCode).to.equal(expect.code, actual.loc + " !== " + expect.loc);
+          if (!expect.code && result.code && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
+            console.log(`New test file created: ${expect.loc}`);
+            fs.writeFileSync(expect.loc, result.code);
+          } else {
+            chai.expect(result.code).to.be.equal(expect.code, actual.loc + " !== " + expect.loc);
+          }
+        }
       });
     });
   });

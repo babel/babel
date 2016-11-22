@@ -1,6 +1,6 @@
 /* eslint max-len: 0 */
-// todo: define instead of assign
 import nameFunction from "babel-helper-function-name";
+import template from "babel-template";
 
 export default function ({ types: t }) {
   let findBareSupers = {
@@ -20,11 +20,31 @@ export default function ({ types: t }) {
     }
   };
 
+  const buildObjectDefineProperty = template(`
+    Object.defineProperty(REF, KEY, {
+      // configurable is false by default
+      enumerable: true,
+      writable: true,
+      value: VALUE
+    });
+  `);
+
+  const buildClassPropertySpec = (ref, {key, value, computed}) => buildObjectDefineProperty({
+    REF: ref,
+    KEY: (t.isIdentifier(key) && !computed) ? t.stringLiteral(key.name) : key,
+    VALUE: value ? value : t.identifier("undefined")
+  });
+
+  const buildClassPropertyNonSpec = (ref, {key, value, computed}) => t.expressionStatement(
+    t.assignmentExpression("=", t.memberExpression(ref, key, computed || t.isLiteral(key)), value)
+  );
+
   return {
     inherits: require("babel-plugin-syntax-class-properties"),
 
     visitor: {
-      Class(path) {
+      Class(path, state) {
+        const buildClassProperty = state.opts.spec ? buildClassPropertySpec : buildClassPropertyNonSpec;
         let isDerived = !!path.node.superClass;
         let constructor;
         let props = [];
@@ -55,19 +75,18 @@ export default function ({ types: t }) {
         for (let prop of props) {
           let propNode = prop.node;
           if (propNode.decorators && propNode.decorators.length > 0) continue;
-          if (!propNode.value) continue;
+
+          // In non-spec mode, all properties without values are ignored.
+          // In spec mode, *static* properties without values are still defined (see below).
+          if (!state.opts.spec && !propNode.value) continue;
 
           let isStatic = propNode.static;
-          let isComputed = propNode.computed || t.isLiteral(prop.key);
 
           if (isStatic) {
-            nodes.push(t.expressionStatement(
-              t.assignmentExpression("=", t.memberExpression(ref, propNode.key, isComputed), propNode.value)
-            ));
+            nodes.push(buildClassProperty(ref, propNode));
           } else {
-            instanceBody.push(t.expressionStatement(
-              t.assignmentExpression("=", t.memberExpression(t.thisExpression(), propNode.key, isComputed), propNode.value)
-            ));
+            if (!propNode.value) continue; // Ignore instance property with no value in spec mode
+            instanceBody.push(buildClassProperty(t.thisExpression(), propNode));
           }
         }
 

@@ -1,6 +1,6 @@
 {
   "name": "babel-types",
-  "version": "6.18.0",
+  "version": "6.19.0",
   "description": "Babel Types is a Lodash-esque utility library for AST nodes",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -12,5 +12,8 @@
     "esutils": "^2.0.2",
     "lodash": "^4.2.0",
     "to-fast-properties": "^1.0.1"
+  },
+  "devDependencies": {
+    "babylon": "^6.8.2"
   }
 }
