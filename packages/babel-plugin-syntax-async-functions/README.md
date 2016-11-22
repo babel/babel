@@ -1,6 +1,17 @@
 # babel-plugin-syntax-async-functions
 
-Allow parsing of async functions.
+This plugin allows Babel to parse async functions.
+
+## Example
+
+**Syntax**
+
+```javascript
+(async function() {
+  await loadStory();
+  console.log("Yey, story successfully loaded!");
+}());
+```
 
 ## Installation
 
@@ -33,3 +44,7 @@ require("babel-core").transform("code", {
   plugins: ["syntax-async-functions"]
 });
 ```
+
+## References
+
+* [Proposal: Async Functions for ECMAScript](https://github.com/tc39/ecmascript-asyncawait)
