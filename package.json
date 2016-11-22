@@ -40,7 +40,7 @@
     "lerna-changelog": "^0.2.0",
     "lodash": "^4.2.0",
     "mocha": "^3.0.0",
-    "nyc": "^8.3.1",
+    "nyc": "^10.0.0",
     "output-file-sync": "^1.1.1",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
@@ -74,8 +74,8 @@
     }
   },
   "nyc": {
+    "all": true,
     "exclude": [
-      "**/node_modules/**",
       "scripts/*.js",
       "packages/*/test/**"
     ],
