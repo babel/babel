@@ -11,7 +11,7 @@
 var assert = require("assert");
 var runningInTranslation = /\.wrap\(/.test(function*(){});
 var shared = require("./shared.js");
-var Symbol = require("core-js/es6/symbol");
+var Symbol = shared.Symbol;
 var check = shared.check;
 
 // A version of `throw` whose behavior can't be statically analyzed.
@@ -2246,7 +2246,10 @@ describe("generator function prototype", function() {
 });
 
 describe("for-of loops", function() {
-  (runningInTranslation ? it : xit)
+  var arraysAreIterable =
+    typeof Array.prototype[Symbol.iterator] === "function";
+
+  (runningInTranslation && arraysAreIterable ? it : xit)
   ("should work for Arrays", function() {
     var sum = 0;
     for (var x of [1, 2].concat(3)) {
