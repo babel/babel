@@ -57,7 +57,6 @@ test-cov: clean
 
 test-ci:
 	NODE_ENV=test make bootstrap
-	# if ./node_modules/.bin/semver `npm --version` -r ">=3.3.0"; then ./node_modules/.bin/flow check; fi
 	make test-cov
 	./node_modules/.bin/codecov -f coverage/coverage-final.json
 
