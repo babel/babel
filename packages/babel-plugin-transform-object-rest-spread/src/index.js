@@ -4,6 +4,9 @@ export default function ({ types: t }) {
       if (t.isRestProperty(property)) {
         return true;
       }
+      if (t.isObjectProperty(property) && t.isObjectPattern(property.value)) {
+        return hasRestProperty(property.value);
+      }
     }
 
     return false;
