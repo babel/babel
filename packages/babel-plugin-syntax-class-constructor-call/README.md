@@ -1,6 +1,8 @@
 # babel-plugin-syntax-class-constructor-call (deprecated)
 
-Allow parsing of do expressions.
+> Proposal Withdrawn: can be solved with decorators.
+
+Allow parsing of call constructors.
 
 ## Installation
 
@@ -33,3 +35,9 @@ require("babel-core").transform("code", {
   plugins: ["syntax-class-constructor-call"]
 });
 ```
+
+## References
+
+* [Inactive Proposals](https://github.com/tc39/proposals/blob/master/inactive-proposals.md)
+* [Proposal: Call Constructor](https://github.com/tc39/ecma262/blob/master/workingdocs/callconstructor.md)
+* [Blog post: ECMAScript proposal: function-callable classes](http://www.2ality.com/2015/10/call-constructor-esprop.html)
