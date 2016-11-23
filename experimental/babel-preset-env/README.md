@@ -1,6 +1,6 @@
 # babel-preset-env [![npm](https://img.shields.io/npm/v/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![travis](https://img.shields.io/travis/babel/babel-preset-env/master.svg)](https://travis-ci.org/babel/babel-preset-env)
 
-> Babel preset for all environments.
+> Babel preset that automatically determines the correct babel plugins to use based on the provided environments.
 
 `npm install babel-preset-env --save-dev`
 
