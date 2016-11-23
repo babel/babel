@@ -1,6 +1,7 @@
 {
   "transform-es2015-arrow-functions": {
     "chrome": 47,
+    "opera": 34,
     "edge": 13,
     "firefox": 45,
     "safari": 10,
@@ -9,6 +10,7 @@
   },
   "transform-es2015-block-scoped-functions": {
     "chrome": 41,
+    "opera": 28,
     "firefox": 46,
     "safari": 10,
     "node": 4,
@@ -24,6 +26,7 @@
   },
   "transform-es2015-classes": {
     "chrome": 46,
+    "opera": 33,
     "edge": 13,
     "firefox": 45,
     "safari": 10,
@@ -32,6 +35,7 @@
   },
   "transform-es2015-computed-properties": {
     "chrome": 44,
+    "opera": 31,
     "edge": 12,
     "firefox": 34,
     "safari": 7,
@@ -47,12 +51,14 @@
   },
   "transform-es2015-destructuring": {
     "chrome": 51,
+    "opera": 38,
     "safari": 10,
     "node": 6.5,
     "ios": 10
   },
   "transform-es2015-for-of": {
     "chrome": 51,
+    "opera": 38,
     "safari": 10,
     "node": 6.5,
     "ios": 10
@@ -65,6 +71,7 @@
   },
   "transform-es2015-literals": {
     "chrome": 44,
+    "opera": 31,
     "edge": 12,
     "safari": 9,
     "node": 4,
@@ -72,6 +79,7 @@
   },
   "transform-es2015-object-super": {
     "chrome": 46,
+    "opera": 33,
     "edge": 13,
     "firefox": 45,
     "safari": 10,
@@ -80,6 +88,7 @@
   },
   "transform-es2015-parameters": {
     "chrome": 49,
+    "opera": 36,
     "edge": 14,
     "safari": 10,
     "node": 6,
@@ -87,6 +96,7 @@
   },
   "transform-es2015-shorthand-properties": {
     "chrome": 43,
+    "opera": 30,
     "edge": 12,
     "firefox": 33,
     "safari": 9,
@@ -95,6 +105,7 @@
   },
   "transform-es2015-spread": {
     "chrome": 46,
+    "opera": 33,
     "edge": 13,
     "firefox": 36,
     "safari": 10,
@@ -103,6 +114,7 @@
   },
   "transform-es2015-sticky-regex": {
     "chrome": 49,
+    "opera": 36,
     "edge": 13,
     "firefox": 3,
     "safari": 10,
@@ -111,6 +123,7 @@
   },
   "transform-es2015-template-literals": {
     "chrome": 41,
+    "opera": 28,
     "edge": 13,
     "firefox": 34,
     "safari": 9,
@@ -119,6 +132,7 @@
   },
   "transform-es2015-typeof-symbol": {
     "chrome": 38,
+    "opera": 25,
     "edge": 12,
     "firefox": 36,
     "safari": 9,
@@ -127,6 +141,7 @@
   },
   "transform-es2015-unicode-regex": {
     "chrome": 50,
+    "opera": 37,
     "edge": 13,
     "firefox": 46,
     "safari": 10,
@@ -135,6 +150,7 @@
   },
   "transform-regenerator": {
     "chrome": 50,
+    "opera": 37,
     "edge": 13,
     "safari": 10,
     "node": 6,
@@ -142,11 +158,13 @@
   },
   "transform-exponentiation-operator": {
     "chrome": 52,
+    "opera": 39,
     "edge": 14,
     "firefox": 52
   },
   "transform-async-to-generator": {
     "chrome": 55,
+    "opera": 42,
     "firefox": 52
   },
   "syntax-trailing-function-commas": {

@@ -33,6 +33,7 @@ const compatibilityTests = flattenDeep([
 
 const environments = [
   "chrome",
+  "opera",
   "edge",
   "firefox",
   "safari",
@@ -82,9 +83,15 @@ const getLowestImplementedVersion = ({ features }, env) => {
 
   let envTests = tests
   .map(({ res: test, name }, i) => {
+
     // `equals` in compat-table
     Object.keys(test).forEach((t) => {
       test[invertedEqualsEnv[t]] = test[t];
+      // add opera
+      if (t.startsWith("chrome")) {
+        let opera = parseInt(t.replace("chrome", "")) - 13;
+        test[`opera${opera}`] = test[t];
+      }
     });
 
     return Object.keys(test)
