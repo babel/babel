@@ -54,6 +54,15 @@ import "./definitions/init";
 import { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS } from "./definitions";
 export { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS };
 
+export defineType, {
+  assertEach,
+  assertOneOf,
+  assertNodeType,
+  assertNodeOrValueType,
+  assertValueType,
+  chain,
+} from "./definitions";
+
 import * as _react from "./react";
 export { _react as react };
 
