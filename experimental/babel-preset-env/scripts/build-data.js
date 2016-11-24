@@ -11,7 +11,6 @@ const renameTests = (tests, getName) =>
 const es6Data = require("compat-table/data-es6");
 const es6PlusData = require("compat-table/data-es2016plus");
 const envs = require("compat-table/environments");
-envs.node6 = envs.node64;
 
 const invertedEqualsEnv = Object.keys(envs)
   .filter((b) => envs[b].equals)
@@ -47,11 +46,9 @@ const environments = [
 const envMap = {
   safari51: "safari5",
   safari71_8: "safari7",
-  chrome: "chrome19",
-  chrome19dev: "chrome19",
-  chrome21dev: "chrome21",
   firefox3_5: "firefox3",
   firefox3_6: "firefox3",
+  node010: "node0.10",
   node012: "node0.12",
   iojs: "node3.3",
   node64: "node6",
@@ -62,7 +59,8 @@ const envMap = {
   android43: "android4.3",
   android44: "android4.4",
   android50: "android5.0",
-  android51: "android5.1"
+  android51: "android5.1",
+  ios51: "ios5.1",
 };
 
 const getLowestImplementedVersion = ({ features }, env) => {
