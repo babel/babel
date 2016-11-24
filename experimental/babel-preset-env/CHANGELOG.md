@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.0.9 (2016-11-24)
+
+### :rocket: New Feature
+
+* Support Opera ([#48](https://github.com/babel/babel-preset-env/pull/48) (Henry Zhu)
+
+Was as simple as modifying the chrome version and subtracting 13! (so chrome 54 = opera 41)
+
+```js
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "opera": 41
+      }
+    }]
+  ]
+}
+```
+
 ## v0.0.8 (2016-11-16)
 
 ### :nail_care: Polish
