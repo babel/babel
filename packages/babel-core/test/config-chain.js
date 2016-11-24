@@ -294,4 +294,253 @@ describe("buildConfigChain", function () {
 
     assert.deepEqual(chain, expected);
   });
+
+  it("js-config", function () {
+    const chain = buildConfigChain({
+      filename: fixture("js-config", "src.js"),
+    });
+
+    const expected = [
+      {
+        options: {
+          plugins: [
+            "foo",
+            "bar",
+          ],
+        },
+        alias: fixture("js-config", ".babelrc.js"),
+        loc: fixture("js-config", ".babelrc.js"),
+        dirname: fixture("js-config"),
+      },
+      {
+        options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        options: {
+          filename: fixture("js-config", "src.js"),
+        },
+        alias: "base",
+        loc: "base",
+        dirname: fixture("js-config"),
+      },
+    ];
+
+    assert.deepEqual(chain, expected);
+  });
+
+  it("js-config-default - should read transpiled export default", function () {
+    const chain = buildConfigChain({
+      filename: fixture("js-config-default", "src.js"),
+    });
+
+    const expected = [
+      {
+        options: {
+          plugins: [
+            "foo",
+            "bar",
+          ],
+        },
+        alias: fixture("js-config-default", ".babelrc.js"),
+        loc: fixture("js-config-default", ".babelrc.js"),
+        dirname: fixture("js-config-default"),
+      },
+      {
+        options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        options: {
+          filename: fixture("js-config-default", "src.js"),
+        },
+        alias: "base",
+        loc: "base",
+        dirname: fixture("js-config-default"),
+      },
+    ];
+
+    assert.deepEqual(chain, expected);
+  });
+  it("js-config-extended", function () {
+    const chain = buildConfigChain({
+      filename: fixture("js-config-extended", "src.js"),
+    });
+
+    const expected = [
+      {
+        options: {
+          plugins: [
+            "extended",
+          ],
+        },
+        alias: fixture("extended.babelrc.json"),
+        loc: fixture("extended.babelrc.json"),
+        dirname: fixture(),
+      },
+      {
+        options: {
+          plugins: [
+            "foo",
+            "bar",
+          ],
+        },
+        alias: fixture("js-config-extended", ".babelrc.js"),
+        loc: fixture("js-config-extended", ".babelrc.js"),
+        dirname: fixture("js-config-extended"),
+      },
+      {
+        options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        options: {
+          filename: fixture("js-config-extended", "src.js"),
+        },
+        alias: "base",
+        loc: "base",
+        dirname: fixture("js-config-extended"),
+      },
+    ];
+
+    assert.deepEqual(chain, expected);
+  });
+
+  it("json-pkg-config-no-babel - should not throw if" +
+    " package.json doesn't contain a `babel` field", function () {
+    const chain = buildConfigChain({
+      filename: fixture("json-pkg-config-no-babel", "src.js"),
+    });
+
+    const expected = [
+      {
+        options: {
+          plugins: [
+            "json",
+          ],
+        },
+        alias: fixture("json-pkg-config-no-babel", ".babelrc"),
+        loc: fixture("json-pkg-config-no-babel", ".babelrc"),
+        dirname: fixture("json-pkg-config-no-babel"),
+      },
+      {
+        options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        options: {
+          filename: fixture("json-pkg-config-no-babel", "src.js"),
+        },
+        alias: "base",
+        loc: "base",
+        dirname: fixture("json-pkg-config-no-babel"),
+      },
+    ];
+
+    assert.deepEqual(chain, expected);
+  });
+
+  it("js-json-config - should throw an error if both a .babelrc" +
+    " and a .babelrc.js are present", function () {
+    assert.throws(
+      function () {
+        buildConfigChain({
+          filename: fixture("js-json-config", "src.js"),
+        });
+      },
+      /Multiple configuration files found\.(.|\n)*\.babelrc(.|\n)*\.babelrc\.js/
+    );
+  });
+
+  it("js-pkg-config - should throw an error if both a .babelrc.js" +
+    " and a package.json with a babel field are present", function () {
+    assert.throws(
+      function () {
+        buildConfigChain({
+          filename: fixture("js-pkg-config", "src.js"),
+        });
+      },
+      /Multiple configuration files found\.(.|\n)*\.babelrc\.js(.|\n)*package\.json/
+    );
+  });
+
+  it("json-pkg-config - should throw an error if both a .babelrc" +
+    " and a package.json with a babel field are present", function () {
+    assert.throws(
+      function () {
+        buildConfigChain({
+          filename: fixture("json-pkg-config", "src.js"),
+        });
+      },
+      /Multiple configuration files found\.(.|\n)*\.babelrc(.|\n)*package\.json/
+    );
+  });
+
+  it("js-config-error", function () {
+    assert.throws(
+      function () {
+        buildConfigChain({
+          filename: fixture("js-config-error", "src.js"),
+        });
+      },
+      /Error while loading config/
+    );
+  });
+
+  it("js-config-error2", function () {
+    assert.throws(
+      function () {
+        buildConfigChain({
+          filename: fixture("js-config-error2", "src.js"),
+        });
+      },
+      /Configuration should be an exported JavaScript object/
+    );
+  });
+
+  it("js-config-error3", function () {
+    assert.throws(
+      function () {
+        buildConfigChain({
+          filename: fixture("js-config-error3", "src.js"),
+        });
+      },
+      /Configuration should be an exported JavaScript object/
+    );
+  });
+
+  it("json-config-error", function () {
+    assert.throws(
+      function () {
+        buildConfigChain({
+          filename: fixture("json-config-error", "src.js"),
+        });
+      },
+      /Error while parsing JSON/
+    );
+  });
 });
