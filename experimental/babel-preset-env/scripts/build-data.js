@@ -85,11 +85,6 @@ const getLowestImplementedVersion = ({ features }, env) => {
     // `equals` in compat-table
     Object.keys(test).forEach((t) => {
       test[invertedEqualsEnv[t]] = test[t];
-      // add opera
-      if (t.startsWith("chrome")) {
-        let opera = parseInt(t.replace("chrome", "")) - 13;
-        test[`opera${opera}`] = test[t];
-      }
     });
 
     return Object.keys(test)
@@ -130,6 +125,11 @@ for (const pluginName in pluginFeatures) {
       if (version !== null) {
         plugin[env] = version;
       }
+    }
+
+    // add opera
+    if (plugin.chrome) {
+      plugin.opera = plugin.chrome - 13;
     }
   });
   data[pluginName] = plugin;
