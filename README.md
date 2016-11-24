@@ -16,6 +16,12 @@
   <a href="https://www.npmjs.com/package/babel-core"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/babel-core.svg"></a>
 </p>
 
+Babel is a tool that helps you write the latest version of Javascript.
+
+When your supported environments don't support certain features natively, it will compile it down to a supported version. 
+
+Try it out at our [REPL](https://babeljs.io/repl) and follow us at [@babeljs](https://twitter.com/babeljs).
+
 - [FAQ](#faq)
 - [Packages](#packages)
   - [Core Packages](#core-packages)
