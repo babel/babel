@@ -54,6 +54,16 @@ export default function ({ types: t }) {
       this.sources.push([id.node, source]);
 
       path.remove();
+    },
+    MemberExpression(path) {
+      let obj = path.get("object");
+      if (!isValidRequireCall(obj)) return;
+
+      let source = obj.node.arguments[0];
+      let id = path.scope.generateUidIdentifierBasedOnNode(source);
+      this.sourceNames[source.value] = true;
+      this.sources.push([id, source]);
+      obj.replaceWith(id);
     }
   };
 
