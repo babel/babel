@@ -49,7 +49,7 @@ describe("removal", function () {
       const body = path.get("body");
       body.remove();
 
-      assert.equal(generateCode(rootPath), "x = () => {};", "body should be replaced with undefined");
+      assert.equal(generateCode(rootPath), "x = () => {};", "body should be replaced with BlockStatement");
     });
   });
 
