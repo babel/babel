@@ -18,13 +18,13 @@ watch: clean
 	./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/eslint packages/*/{src,test}/*.js --format=codeframe
+	./node_modules/.bin/eslint packages/ --format=codeframe
 
 flow:
 	./node_modules/.bin/flow check
 
 fix:
-	./node_modules/.bin/eslint packages/*/{src,test}/*.js --format=codeframe --fix
+	./node_modules/.bin/eslint packages/ --format=codeframe --fix
 
 clean: test-clean
 	rm -rf packages/*/lib
