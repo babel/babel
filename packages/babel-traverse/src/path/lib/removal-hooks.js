@@ -6,7 +6,11 @@
 
 export let hooks = [
   function (self, parent) {
-    if (self.key === "body" && parent.isArrowFunctionExpression()) {
+    if (
+      self.key === "body" && parent.isArrowFunctionExpression() ||
+      parent.isConditionalExpression() ||
+      self.key === "right" && parent.isAssignmentExpression()
+    ) {
       self.replaceWith(self.scope.buildUndefinedNode());
       return true;
     }
