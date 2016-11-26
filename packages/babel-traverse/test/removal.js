@@ -1,7 +1,6 @@
 import traverse from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
-import * as t from "babel-types";
 import generate from "babel-generator";
 
 function getPath(code) {
@@ -25,7 +24,7 @@ describe("removal", function () {
   describe("AssignmentExpression", function () {
     it.skip("remove left", function () {
       const rootPath = getPath("x = a;");
-      const path = rootPath.get("body")[0].get('expression');
+      const path = rootPath.get("body")[0].get("expression");
       const left = path.get("left");
       left.remove();
 
@@ -34,7 +33,7 @@ describe("removal", function () {
 
     it("remove right", function () {
       const rootPath = getPath("x = a;");
-      const path = rootPath.get("body")[0].get('expression');
+      const path = rootPath.get("body")[0].get("expression");
       const right = path.get("right");
       right.remove();
 
@@ -45,7 +44,7 @@ describe("removal", function () {
   describe("ArrowFunction", function () {
     it("remove body", function () {
       const rootPath = getPath("x = () => b;");
-      const path = rootPath.get("body")[0].get('expression').get('right');
+      const path = rootPath.get("body")[0].get("expression").get("right");
       const body = path.get("body");
       body.remove();
 
@@ -56,7 +55,7 @@ describe("removal", function () {
   describe("ConditionalExpression", function () {
     it("remove alternate", function () {
       const rootPath = getPath("x = x ? a : b;");
-      const path = rootPath.get("body")[0].get('expression').get('right');
+      const path = rootPath.get("body")[0].get("expression").get("right");
       const alternate = path.get("alternate");
       alternate.remove();
 
@@ -65,7 +64,7 @@ describe("removal", function () {
 
     it("remove consequent", function () {
       const rootPath = getPath("x = x ? a : b;");
-      const path = rootPath.get("body")[0].get('expression').get('right');
+      const path = rootPath.get("body")[0].get("expression").get("right");
       const consequent = path.get("consequent");
       consequent.remove();
 
@@ -74,7 +73,7 @@ describe("removal", function () {
 
     it("remove test", function () {
       const rootPath = getPath("x = x ? a : b;");
-      const path = rootPath.get("body")[0].get('expression').get('right');
+      const path = rootPath.get("body")[0].get("expression").get("right");
       const test = path.get("test");
       test.remove();
 
