@@ -1,6 +1,12 @@
 # babel-types
 
-This module contains methods for building ASTs manually and for checking the types of AST nodes.
+> This module contains methods for building ASTs manually and for checking the types of AST nodes.
+
+## Install
+
+```sh
+$ npm install --save babel-types
+```
 
 ## API
 
