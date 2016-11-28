@@ -4,12 +4,12 @@ Adds source file and line number to JSX elements.
 
 ## Example
 
-###In
+### In
 
 ```
 <sometag />
 ```
-###Out
+### Out
 
 ```
 <sometag __source={{fileName: 'this/file.js', lineNumber: 10}}/>
@@ -18,7 +18,7 @@ Adds source file and line number to JSX elements.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-react-jsx-source
+npm install babel-plugin-transform-react-jsx-source
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ $ npm install babel-plugin-transform-react-jsx-source
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-react-jsx-source script.js
+babel --plugins transform-react-jsx-source script.js
 ```
 
 ### Via Node API
