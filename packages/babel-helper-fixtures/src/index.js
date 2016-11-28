@@ -71,7 +71,6 @@ export default function get(entryLoc): Array<Suite> {
     if (suiteOptsLoc) suite.options = require(suiteOptsLoc);
 
     for (let taskName of fs.readdirSync(suite.filename)) {
-      if (shouldIgnore(taskName)) continue;
       push(taskName, suite.filename + "/" + taskName);
     }
 
