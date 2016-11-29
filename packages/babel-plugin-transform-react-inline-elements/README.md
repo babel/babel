@@ -1,8 +1,6 @@
 # babel-plugin-transform-react-inline-elements
 
-Replaces the `React.createElement` function with one that is more optimized for production: `babelHelpers.jsx`.
-
-This transform **should be enabled only in production** (e.g., just before minifying your code) because although it improves runtime performance, it makes warning messages more cryptic and skips important checks that happen in development mode, including propTypes.
+> Replaces the `React.createElement` function with one that is more optimized for production: `babelHelpers.jsx`.
 
 ## Example
 

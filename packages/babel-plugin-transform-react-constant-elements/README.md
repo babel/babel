@@ -1,8 +1,6 @@
 # babel-plugin-transform-react-constant-elements
 
-Hoists element creation to the top level for subtrees that are fully static, which reduces both allocations and calls to `React.createElement`. More importantly, it tells React that the subtree hasn't changed so React can completely skip it when reconciling.
-
-This transform **should be enabled only in production** (e.g., just before minifying your code) because although it improves runtime performance, it makes warning messages more cryptic.
+> Treat React JSX elements as value types and hoist them to the highest scope
 
 ## Example
 

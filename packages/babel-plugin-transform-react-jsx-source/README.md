@@ -1,6 +1,6 @@
 # babel-plugin-transform-react-jsx-source
 
-Adds source file and line number to JSX elements.
+> Adds source file and line number to JSX elements.
 
 ## Example
 
@@ -9,6 +9,7 @@ Adds source file and line number to JSX elements.
 ```
 <sometag />
 ```
+
 ### Out
 
 ```
