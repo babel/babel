@@ -5,7 +5,7 @@ Add displayName to React.createClass calls
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-react-display-name
+npm install babel-plugin-transform-react-display-name
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-react-display-name
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-react-display-name script.js
+babel --plugins transform-react-display-name script.js
 ```
 
 ### Via Node API
