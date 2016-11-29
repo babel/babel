@@ -4,7 +4,7 @@ var util = require('util');
 var path = require('path');
 var fs = require('fs');
 
-var types = require('../packages/babel-types/src');
+var types = require('../packages/babel-types');
 
 var readmePath = path.join(__dirname, '..', 'packages', 'babel-types', 'README.md');
 var readmeSrc = fs.readFileSync(readmePath, 'utf8');
