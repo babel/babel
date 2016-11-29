@@ -1,6 +1,26 @@
 # babel-plugin-check-es2015-constants
 
-Validate ES2015 constants
+Validate ES2015 constants (prevents reassignment of const variables).
+
+## Example
+
+**In**
+
+```js
+const a = 1;
+a = 2;
+```
+
+**Out**
+
+```bash
+repl: "a" is read-only
+  1 | const a = 1;
+> 2 | a = 2;
+    | ^
+```
+
+[Try in REPL](http://babeljs.io/repl/#?babili=false&evaluate=true&lineWrap=false&presets=es2015&experimental=false&loose=false&spec=false&code=const%20a%20%3D%201%3B%0Aa%20%3D%202%3B&playground=true)
 
 ## Installation
 
