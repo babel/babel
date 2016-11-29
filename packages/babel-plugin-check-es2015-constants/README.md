@@ -5,7 +5,7 @@ Validate ES2015 constants
 <blockquote class="babel-callout babel-callout-info">
   <h4>Syntax only</h4>
   <p>
-    This check will only validate consts. If you need it to compile down to `var` then you must also install and enable <a href="/docs/plugins/transform-es2015-block-scoping">transform-es2015-block-scoping</a>.
+    This check will only validate consts. If you need it to compile down to `var` then you must also install and enable <a href="https://babeljs.io/docs/plugins/transform-es2015-block-scoping">transform-es2015-block-scoping</a>.
   </p>
 </blockquote>
 
