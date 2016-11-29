@@ -5,7 +5,7 @@ Compile ES2015 arrow functions to ES5
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-arrow-functions
+npm install babel-plugin-transform-es2015-arrow-functions
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ $ npm install babel-plugin-transform-es2015-arrow-functions
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-arrow-functions script.js
+babel --plugins transform-es2015-arrow-functions script.js
 ```
 
 ### Via Node API

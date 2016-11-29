@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-class-properties
+npm install babel-plugin-transform-class-properties
 ```
 
 ### Options: `spec`
@@ -34,7 +34,7 @@ $ npm install babel-plugin-transform-class-properties
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-class-properties script.js
+babel --plugins transform-class-properties script.js
 ```
 
 ### Via Node API

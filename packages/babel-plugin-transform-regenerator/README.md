@@ -5,7 +5,7 @@ Transform async/generator functions with [regenerator](https://github.com/facebo
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-regenerator
+npm install babel-plugin-transform-regenerator
 ```
 
 ## Usage
@@ -34,7 +34,7 @@ $ npm install babel-plugin-transform-regenerator
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-regenerator script.js
+babel --plugins transform-regenerator script.js
 ```
 
 ### Via Node API

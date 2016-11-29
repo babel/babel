@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-flow
+npm install babel-plugin-syntax-flow
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-syntax-flow
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-flow script.js
+babel --plugins syntax-flow script.js
 ```
 
 ### Via Node API

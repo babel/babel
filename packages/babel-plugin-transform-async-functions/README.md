@@ -5,7 +5,7 @@ Compile async functions to ES5
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-async-functions
+npm install babel-plugin-transform-async-functions
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-async-functions
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-async-functions script.js
+babel --plugins transform-async-functions script.js
 ```
 
 ### Via Node API

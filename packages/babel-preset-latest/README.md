@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install --save-dev babel-preset-latest
+npm install --save-dev babel-preset-latest
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install --save-dev babel-preset-latest
 ### Via CLI
 
 ```sh
-$ babel script.js --presets latest
+babel script.js --presets latest
 ```
 
 ### Via Node API

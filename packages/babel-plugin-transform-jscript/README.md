@@ -5,7 +5,7 @@ Babel plugin to fix buggy JScript named function expressions
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-jscript
+npm install babel-plugin-transform-jscript
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-jscript
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-jscript script.js
+babel --plugins transform-jscript script.js
 ```
 
 ### Via Node API

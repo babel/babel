@@ -5,7 +5,7 @@ The require hook will bind itself to node's require and automatically compile fi
 ## Install
 
 ```
-$ npm install babel-register
+npm install babel-register
 ```
 
 ## Usage

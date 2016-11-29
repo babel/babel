@@ -5,7 +5,7 @@ Strip flow type annotations from your output code.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-flow-strip-types
+npm install babel-plugin-transform-flow-strip-types
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-flow-strip-types
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-flow-strip-types script.js
+babel --plugins transform-flow-strip-types script.js
 ```
 
 ### Via Node API

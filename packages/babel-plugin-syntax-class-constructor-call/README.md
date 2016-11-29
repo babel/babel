@@ -7,7 +7,7 @@ Allow parsing of call constructors.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-class-constructor-call
+npm install babel-plugin-syntax-class-constructor-call
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ $ npm install babel-plugin-syntax-class-constructor-call
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-class-constructor-call script.js
+babel --plugins syntax-class-constructor-call script.js
 ```
 
 ### Via Node API

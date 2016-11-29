@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-modules-umd
+npm install babel-plugin-transform-es2015-modules-umd
 ```
 
 ## Usage
@@ -166,7 +166,7 @@ global.My.Custom.Module.Name = mod.exports;
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-modules-umd script.js
+babel --plugins transform-es2015-modules-umd script.js
 ```
 
 ### Via Node API

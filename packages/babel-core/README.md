@@ -5,7 +5,7 @@
 ## Install
 
 ```
-$ npm install babel-core
+npm install babel-core
 ```
 
 ## Usage

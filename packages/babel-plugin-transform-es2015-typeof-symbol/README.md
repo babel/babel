@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-typeof-symbol
+npm install babel-plugin-transform-es2015-typeof-symbol
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ $ npm install babel-plugin-transform-es2015-typeof-symbol
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-typeof-symbol script.js
+babel --plugins transform-es2015-typeof-symbol script.js
 ```
 
 ### Via Node API

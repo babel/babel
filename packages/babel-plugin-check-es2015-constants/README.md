@@ -5,7 +5,7 @@ Validate ES2015 constants
 ## Installation
 
 ```sh
-$ npm install babel-plugin-check-es2015-constants
+npm install babel-plugin-check-es2015-constants
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-check-es2015-constants
 ### Via CLI
 
 ```sh
-$ babel --plugins check-es2015-constants script.js
+babel --plugins check-es2015-constants script.js
 ```
 
 ### Via Node API

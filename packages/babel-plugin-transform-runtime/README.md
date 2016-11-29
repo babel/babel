@@ -17,7 +17,7 @@ See the technical details section for more information on how this works and the
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-runtime
+npm install babel-plugin-transform-runtime
 ```
 
 It is also recommended you install the `babel-runtime` package as a
@@ -52,7 +52,7 @@ Add the following line to your `.babelrc` file:
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-runtime script.js
+babel --plugins transform-runtime script.js
 ```
 
 ### Via Node API

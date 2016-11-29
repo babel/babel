@@ -9,13 +9,13 @@ There are some shell-executable utility scripts, `babel-external-helpers.js` and
 ## Install
 
 ```sh
-$ npm install babel-cli
+npm install babel-cli
 ```
 
 ## Usage 
 
 ```sh
-$ babel script.js
+babel script.js
 ```
 
 For more in depth documentation see: http://babeljs.io/docs/usage/cli/

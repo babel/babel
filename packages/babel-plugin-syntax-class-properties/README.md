@@ -5,7 +5,7 @@ Allow parsing of class properties.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-class-properties
+npm install babel-plugin-syntax-class-properties
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-syntax-class-properties
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-class-properties script.js
+babel --plugins syntax-class-properties script.js
 ```
 
 ### Via Node API
