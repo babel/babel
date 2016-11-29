@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install --save-dev babel-preset-es2015
+npm install --save-dev babel-preset-es2015
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install --save-dev babel-preset-es2015
 ### Via CLI
 
 ```sh
-$ babel script.js --presets es2015
+babel script.js --presets es2015
 ```
 
 ### Via Node API

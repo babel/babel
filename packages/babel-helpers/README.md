@@ -5,7 +5,7 @@
 ## Install
 
 ```js
-$ npm install babel-helpers
+npm install babel-helpers
 ```
 
 ## Usage

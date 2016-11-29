@@ -24,7 +24,7 @@ _defaults(bar, foo);
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-object-set-prototype-of-to-assign
+npm install babel-plugin-transform-object-set-prototype-of-to-assign
 ```
 
 ## Usage
@@ -42,7 +42,7 @@ $ npm install babel-plugin-transform-object-set-prototype-of-to-assign
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-object-set-prototype-of-to-assign script.js
+babel --plugins transform-object-set-prototype-of-to-assign script.js
 ```
 
 ### Via Node API

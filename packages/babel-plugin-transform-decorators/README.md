@@ -5,7 +5,7 @@ Compile class and object decorators to ES5
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-decorators
+npm install babel-plugin-transform-decorators
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-decorators
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-decorators script.js
+babel --plugins transform-decorators script.js
 ```
 
 ### Via Node API

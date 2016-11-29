@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-modules-systemjs
+npm install babel-plugin-transform-es2015-modules-systemjs
 ```
 
 ## Usage
@@ -32,7 +32,7 @@ $ npm install babel-plugin-transform-es2015-modules-systemjs
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-modules-systemjs script.js
+babel --plugins transform-es2015-modules-systemjs script.js
 ```
 
 ### Via Node API

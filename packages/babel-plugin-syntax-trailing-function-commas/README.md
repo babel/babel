@@ -5,7 +5,7 @@ Compile trailing function commas to ES5
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-trailing-function-commas
+npm install babel-plugin-syntax-trailing-function-commas
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-syntax-trailing-function-commas
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-trailing-function-commas script.js
+babel --plugins syntax-trailing-function-commas script.js
 ```
 
 ### Via Node API

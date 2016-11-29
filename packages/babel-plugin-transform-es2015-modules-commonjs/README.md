@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-modules-commonjs
+npm install babel-plugin-transform-es2015-modules-commonjs
 ```
 
 ## Usage
@@ -31,7 +31,7 @@ $ npm install babel-plugin-transform-es2015-modules-commonjs
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-modules-commonjs script.js
+babel --plugins transform-es2015-modules-commonjs script.js
 ```
 
 ### Via Node API

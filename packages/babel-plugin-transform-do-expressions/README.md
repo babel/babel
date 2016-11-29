@@ -5,7 +5,7 @@ Compile do expressions to ES5
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-do-expressions
+npm install babel-plugin-transform-do-expressions
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-do-expressions
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-do-expressions script.js
+babel --plugins transform-do-expressions script.js
 ```
 
 ### Via Node API

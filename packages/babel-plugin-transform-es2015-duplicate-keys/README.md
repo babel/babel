@@ -10,7 +10,7 @@ object literals with duplicate keys.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-duplicate-keys
+npm install babel-plugin-transform-es2015-duplicate-keys
 ```
 
 ## Usage
@@ -28,7 +28,7 @@ $ npm install babel-plugin-transform-es2015-duplicate-keys
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-duplicate-keys script.js
+babel --plugins transform-es2015-duplicate-keys script.js
 ```
 
 ### Via Node API

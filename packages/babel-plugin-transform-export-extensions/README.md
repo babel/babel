@@ -5,7 +5,7 @@ Compile export extensions to ES2015
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-export-extensions
+npm install babel-plugin-transform-export-extensions
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-export-extensions
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-export-extensions script.js
+babel --plugins transform-export-extensions script.js
 ```
 
 ### Via Node API

@@ -21,7 +21,7 @@ _extends(a, b);
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-object-assign
+npm install babel-plugin-transform-object-assign
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ $ npm install babel-plugin-transform-object-assign
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-object-assign script.js
+babel --plugins transform-object-assign script.js
 ```
 
 ### Via Node API

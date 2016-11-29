@@ -5,7 +5,7 @@ Compile ES2015 template literals to ES5
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-template-literals
+npm install babel-plugin-transform-es2015-template-literals
 ```
 
 ## Usage
@@ -34,7 +34,7 @@ $ npm install babel-plugin-transform-es2015-template-literals
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-template-literals script.js
+babel --plugins transform-es2015-template-literals script.js
 ```
 
 ### Via Node API

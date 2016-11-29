@@ -65,7 +65,7 @@ let nowStr = Date(); // Use the 'call constructor()' part to get a string value 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-class-constructor-call
+npm install babel-plugin-transform-class-constructor-call
 ```
 
 ## Usage
@@ -83,7 +83,7 @@ $ npm install babel-plugin-transform-class-constructor-call
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-class-constructor-call script.js
+babel --plugins transform-class-constructor-call script.js
 ```
 
 ### Via Node API

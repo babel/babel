@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install babel-messages
+npm install babel-messages
 ```
 
 ## Usage

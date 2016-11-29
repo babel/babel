@@ -5,7 +5,7 @@ Compile exponentiation operator to ES5
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-exponentiation-operator
+npm install babel-plugin-transform-exponentiation-operator
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-exponentiation-operator
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-exponentiation-operator script.js
+babel --plugins transform-exponentiation-operator script.js
 ```
 
 ### Via Node API

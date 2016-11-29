@@ -14,7 +14,7 @@ z = _extends({ x }, y);
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-object-rest-spread
+npm install babel-plugin-transform-object-rest-spread
 ```
 
 ## Usage
@@ -51,7 +51,7 @@ z = Object.assign({ x }, y);
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-object-rest-spread script.js
+babel --plugins transform-object-rest-spread script.js
 ```
 
 ### Via Node API

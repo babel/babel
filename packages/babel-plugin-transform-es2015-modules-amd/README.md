@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-modules-amd
+npm install babel-plugin-transform-es2015-modules-amd
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ $ npm install babel-plugin-transform-es2015-modules-amd
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-modules-amd script.js
+babel --plugins transform-es2015-modules-amd script.js
 ```
 
 ### Via Node API
