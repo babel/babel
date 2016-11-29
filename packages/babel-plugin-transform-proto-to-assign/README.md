@@ -45,7 +45,7 @@ _defaults(bar, foo);
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-proto-to-assign
+npm install babel-plugin-transform-proto-to-assign
 ```
 
 ## Usage
@@ -63,7 +63,7 @@ $ npm install babel-plugin-transform-proto-to-assign
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-proto-to-assign script.js
+babel --plugins transform-proto-to-assign script.js
 ```
 
 ### Via Node API

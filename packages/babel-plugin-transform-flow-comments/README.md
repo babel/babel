@@ -41,7 +41,7 @@ function foo(x /*: number*/) /*: string*/ {}
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-flow-comments
+npm install babel-plugin-transform-flow-comments
 ```
 
 ## Usage
@@ -59,7 +59,7 @@ $ npm install babel-plugin-transform-flow-comments
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-flow-comments script.js
+babel --plugins transform-flow-comments script.js
 ```
 
 ### Via Node API

@@ -23,7 +23,7 @@ async function f() {
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-async-generators
+npm install babel-plugin-syntax-async-generators
 ```
 
 ## Usage
@@ -41,7 +41,7 @@ $ npm install babel-plugin-syntax-async-generators
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-async-generators script.js
+babel --plugins syntax-async-generators script.js
 ```
 
 ### Via Node API

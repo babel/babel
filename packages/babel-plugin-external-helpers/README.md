@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-$ npm install babel-plugin-external-helpers
+npm install babel-plugin-external-helpers
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ $ npm install babel-plugin-external-helpers
 ### Via CLI
 
 ```sh
-$ babel --plugins external-helpers script.js
+babel --plugins external-helpers script.js
 ```
 
 ### Via Node API

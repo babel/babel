@@ -5,7 +5,7 @@ Allow parsing of export extensions.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-export-extensions
+npm install babel-plugin-syntax-export-extensions
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-syntax-export-extensions
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-export-extensions script.js
+babel --plugins syntax-export-extensions script.js
 ```
 
 ### Via Node API

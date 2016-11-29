@@ -5,7 +5,7 @@ Throw a compile-time error on references to undeclared variables
 ## Installation
 
 ```sh
-$ npm install babel-plugin-undeclared-variables-check
+npm install babel-plugin-undeclared-variables-check
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-undeclared-variables-check
 ### Via CLI
 
 ```sh
-$ babel --plugins undeclared-variables-check script.js
+babel --plugins undeclared-variables-check script.js
 ```
 
 ### Via Node API

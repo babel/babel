@@ -25,7 +25,7 @@ repl: "a" is read-only
 ## Installation
 
 ```sh
-$ npm install --save-dev babel-plugin-check-es2015-constants
+npm install --save-dev babel-plugin-check-es2015-constants
 ```
 
 ## Usage
@@ -43,7 +43,7 @@ $ npm install --save-dev babel-plugin-check-es2015-constants
 ### Via CLI
 
 ```sh
-$ babel --plugins check-es2015-constants script.js
+babel --plugins check-es2015-constants script.js
 ```
 
 ### Via Node API

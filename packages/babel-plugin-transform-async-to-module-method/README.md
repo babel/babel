@@ -5,7 +5,7 @@ Turn async functions into a Bluebird coroutine
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-async-to-module-method
+npm install babel-plugin-transform-async-to-module-method
 ```
 
 ## Usage
@@ -34,7 +34,7 @@ $ npm install babel-plugin-transform-async-to-module-method
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-async-to-module-method script.js
+babel --plugins transform-async-to-module-method script.js
 ```
 
 ### Via Node API

@@ -5,7 +5,7 @@ Compile ES5 property mutator shorthand syntax to Object.defineProperty
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es5-property-mutators
+npm install babel-plugin-transform-es5-property-mutators
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-es5-property-mutators
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es5-property-mutators script.js
+babel --plugins transform-es5-property-mutators script.js
 ```
 
 ### Via Node API

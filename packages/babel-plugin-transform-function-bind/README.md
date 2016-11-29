@@ -5,7 +5,7 @@ Compile function bind operator to ES5
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-function-bind
+npm install babel-plugin-transform-function-bind
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-function-bind
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-function-bind script.js
+babel --plugins transform-function-bind script.js
 ```
 
 ### Via Node API

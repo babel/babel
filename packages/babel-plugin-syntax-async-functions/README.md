@@ -16,7 +16,7 @@ This plugin allows Babel to parse async functions.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-async-functions
+npm install babel-plugin-syntax-async-functions
 ```
 
 ## Usage
@@ -34,7 +34,7 @@ $ npm install babel-plugin-syntax-async-functions
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-async-functions script.js
+babel --plugins syntax-async-functions script.js
 ```
 
 ### Via Node API

@@ -10,7 +10,7 @@ already.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-strict-mode
+npm install babel-plugin-transform-strict-mode
 ```
 
 ## Usage
@@ -38,7 +38,7 @@ $ npm install babel-plugin-transform-strict-mode
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-strict-mode script.js
+babel --plugins transform-strict-mode script.js
 ```
 
 ### Via Node API

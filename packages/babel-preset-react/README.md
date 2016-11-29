@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install --save-dev babel-preset-react
+npm install --save-dev babel-preset-react
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install --save-dev babel-preset-react
 ### Via CLI
 
 ```sh
-$ babel script.js --presets react 
+babel script.js --presets react 
 ```
 
 ### Via Node API

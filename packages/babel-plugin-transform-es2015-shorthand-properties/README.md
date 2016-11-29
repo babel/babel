@@ -5,7 +5,7 @@ Compile ES2015 shorthand properties to ES5
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-shorthand-properties
+npm install babel-plugin-transform-es2015-shorthand-properties
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-es2015-shorthand-properties
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-shorthand-properties script.js
+babel --plugins transform-es2015-shorthand-properties script.js
 ```
 
 ### Via Node API
