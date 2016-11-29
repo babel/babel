@@ -5,7 +5,7 @@ Allow parsing of decorators.
 ## Installation
 
 ```sh
-npm install babel-plugin-syntax-decorators
+npm install --save-dev babel-plugin-syntax-decorators
 ```
 
 ## Usage

@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-class-properties
+npm install --save-dev babel-plugin-transform-class-properties
 ```
 
 ### Options: `spec`

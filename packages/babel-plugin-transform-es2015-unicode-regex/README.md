@@ -5,7 +5,7 @@ Compile ES2015 unicode regex to ES5
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-es2015-unicode-regex
+npm install --save-dev babel-plugin-transform-es2015-unicode-regex
 ```
 
 ## Usage

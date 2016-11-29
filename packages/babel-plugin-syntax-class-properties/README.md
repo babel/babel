@@ -5,7 +5,7 @@ Allow parsing of class properties.
 ## Installation
 
 ```sh
-npm install babel-plugin-syntax-class-properties
+npm install --save-dev babel-plugin-syntax-class-properties
 ```
 
 ## Usage

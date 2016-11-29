@@ -5,7 +5,7 @@ Compile export extensions to ES2015
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-export-extensions
+npm install --save-dev babel-plugin-transform-export-extensions
 ```
 
 ## Usage

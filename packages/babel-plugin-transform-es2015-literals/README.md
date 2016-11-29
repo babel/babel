@@ -5,7 +5,7 @@ Compile ES2015 unicode string and number literals to ES5
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-es2015-literals
+npm install --save-dev babel-plugin-transform-es2015-literals
 ```
 
 ## Usage

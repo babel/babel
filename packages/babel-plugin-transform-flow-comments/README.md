@@ -41,7 +41,7 @@ function foo(x /*: number*/) /*: string*/ {}
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-flow-comments
+npm install --save-dev babel-plugin-transform-flow-comments
 ```
 
 ## Usage

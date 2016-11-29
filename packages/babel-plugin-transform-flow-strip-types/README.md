@@ -5,7 +5,7 @@ Strip flow type annotations from your output code.
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-flow-strip-types
+npm install --save-dev babel-plugin-transform-flow-strip-types
 ```
 
 ## Usage

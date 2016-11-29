@@ -5,7 +5,7 @@ Throw a compile-time error on references to undeclared variables
 ## Installation
 
 ```sh
-npm install babel-plugin-undeclared-variables-check
+npm install --save-dev babel-plugin-undeclared-variables-check
 ```
 
 ## Usage

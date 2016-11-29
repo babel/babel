@@ -17,7 +17,7 @@ See the technical details section for more information on how this works and the
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-runtime
+npm install --save-dev babel-plugin-transform-runtime
 ```
 
 It is also recommended you install the `babel-runtime` package as a

@@ -5,7 +5,7 @@ Allow parsing of `import()`.
 ## Installation
 
 ```sh
-npm install babel-plugin-syntax-dynamic-import
+npm install --save-dev babel-plugin-syntax-dynamic-import
 ```
 
 ## Usage

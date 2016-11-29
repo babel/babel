@@ -5,7 +5,7 @@ Compile ES2015 shorthand properties to ES5
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-es2015-shorthand-properties
+npm install --save-dev babel-plugin-transform-es2015-shorthand-properties
 ```
 
 ## Usage

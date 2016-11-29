@@ -18,7 +18,7 @@ Adds source file and line number to JSX elements.
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-react-jsx-source
+npm install --save-dev babel-plugin-transform-react-jsx-source
 ```
 
 ## Usage

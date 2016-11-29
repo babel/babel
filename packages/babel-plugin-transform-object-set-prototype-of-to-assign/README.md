@@ -24,7 +24,7 @@ _defaults(bar, foo);
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-object-set-prototype-of-to-assign
+npm install --save-dev babel-plugin-transform-object-set-prototype-of-to-assign
 ```
 
 ## Usage

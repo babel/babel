@@ -5,7 +5,7 @@ Allow parsing of function bind.
 ## Installation
 
 ```sh
-npm install babel-plugin-syntax-function-bind
+npm install --save-dev babel-plugin-syntax-function-bind
 ```
 
 ## Usage

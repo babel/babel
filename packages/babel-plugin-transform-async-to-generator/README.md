@@ -5,7 +5,7 @@ Turn async functions into ES2015 generators
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-async-to-generator
+npm install --save-dev babel-plugin-transform-async-to-generator
 ```
 
 ## Usage

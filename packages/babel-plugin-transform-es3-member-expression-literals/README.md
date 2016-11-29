@@ -5,7 +5,7 @@ Ensure that reserved words are quoted in property accesses
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-es3-member-expression-literals
+npm install --save-dev babel-plugin-transform-es3-member-expression-literals
 ```
 
 ## Usage

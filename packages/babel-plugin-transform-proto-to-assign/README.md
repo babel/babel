@@ -45,7 +45,7 @@ _defaults(bar, foo);
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-proto-to-assign
+npm install --save-dev babel-plugin-transform-proto-to-assign
 ```
 
 ## Usage

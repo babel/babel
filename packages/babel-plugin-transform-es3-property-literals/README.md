@@ -5,7 +5,7 @@ Ensure that reserved words are quoted in object property keys
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-es3-property-literals
+npm install --save-dev babel-plugin-transform-es3-property-literals
 ```
 
 ## Usage

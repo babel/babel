@@ -5,7 +5,7 @@ Compile ES2015 destructuring to ES5
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-es2015-destructuring
+npm install --save-dev babel-plugin-transform-es2015-destructuring
 ```
 
 ## Usage

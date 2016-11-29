@@ -65,7 +65,7 @@ let nowStr = Date(); // Use the 'call constructor()' part to get a string value 
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-class-constructor-call
+npm install --save-dev babel-plugin-transform-class-constructor-call
 ```
 
 ## Usage

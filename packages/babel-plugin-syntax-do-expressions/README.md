@@ -5,7 +5,7 @@ Allow parsing of do expressions.
 ## Installation
 
 ```sh
-npm install babel-plugin-syntax-do-expressions
+npm install --save-dev babel-plugin-syntax-do-expressions
 ```
 
 ## Usage

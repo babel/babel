@@ -5,7 +5,7 @@ Allow parsing of the `function.sent` meta property.
 ## Installation
 
 ```sh
-npm install babel-plugin-syntax-function-sent
+npm install --save-dev babel-plugin-syntax-function-sent
 ```
 
 ## Usage

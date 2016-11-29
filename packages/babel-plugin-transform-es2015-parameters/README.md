@@ -5,7 +5,7 @@ Compile ES2015 default and rest parameters to ES5
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-es2015-parameters
+npm install --save-dev babel-plugin-transform-es2015-parameters
 ```
 
 ## Usage

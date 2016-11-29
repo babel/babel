@@ -5,7 +5,7 @@ Compile async functions to ES5
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-async-functions
+npm install --save-dev babel-plugin-transform-async-functions
 ```
 
 ## Usage

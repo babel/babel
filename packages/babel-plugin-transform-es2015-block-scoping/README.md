@@ -5,7 +5,7 @@ Compile ES2015 block scoping (const and let) to ES5
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-es2015-block-scoping
+npm install --save-dev babel-plugin-transform-es2015-block-scoping
 ```
 
 ## Usage

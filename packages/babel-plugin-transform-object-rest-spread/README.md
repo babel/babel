@@ -14,7 +14,7 @@ z = _extends({ x }, y);
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-object-rest-spread
+npm install --save-dev babel-plugin-transform-object-rest-spread
 ```
 
 ## Usage

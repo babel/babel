@@ -5,7 +5,7 @@ Compile ES2015 object super to ES5
 ## Installation
 
 ```sh
-npm install babel-plugin-transform-es2015-object-super
+npm install --save-dev babel-plugin-transform-es2015-object-super
 ```
 
 ## Usage

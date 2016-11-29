@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-npm install babel-plugin-syntax-jsx
+npm install --save-dev babel-plugin-syntax-jsx
 ```
 
 ## Usage

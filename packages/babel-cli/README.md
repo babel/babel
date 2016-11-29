@@ -9,7 +9,7 @@ There are some shell-executable utility scripts, `babel-external-helpers.js` and
 ## Install
 
 ```sh
-npm install babel-cli
+npm install --save-dev babel-cli
 ```
 
 ## Usage 
