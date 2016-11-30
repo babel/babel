@@ -25,21 +25,25 @@
   "main": "main.js",
   "bin": "bin/regenerator",
   "scripts": {
+    "pretest": "./link.sh",
     "test": "node test/run.js"
   },
   "dependencies": {
-    "commoner": "~0.10.4",
-    "defs": "~1.1.0",
-    "esprima-fb": "~15001.1001.0-dev-harmony-fb",
-    "private": "~0.1.5",
-    "recast": "0.10.33",
-    "regenerator-runtime": "~0.10.0",
-    "through": "~2.3.8"
+    "babel-core": "^6.18.2",
+    "commoner": "^0.10.8",
+    "defs": "^1.1.1",
+    "esprima-fb": "^15001.1001.0-dev-harmony-fb",
+    "private": "^0.1.6",
+    "recast": "^0.11.17",
+    "regenerator-preset": "^0.9.3",
+    "regenerator-runtime": "^0.10.0",
+    "through": "^2.3.8"
   },
   "devDependencies": {
-    "mocha": "~2.3.3",
-    "promise": "~7.0.4",
-    "semver": "~5.0.3"
+    "babylon": "^6.14.1",
+    "mocha": "^2.3.4",
+    "promise": "^7.0.4",
+    "semver": "^5.0.3"
   },
   "license": "BSD",
   "engines": {

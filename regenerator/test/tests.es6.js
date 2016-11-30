@@ -10,22 +10,9 @@
 
 var assert = require("assert");
 var runningInTranslation = /\.wrap\(/.test(function*(){});
-var iteratorSymbol = typeof Symbol === "function"
-  && Symbol.iterator
-  || "@@iterator";
-
-function check(g, yields, returnValue) {
-  for (var i = 0; i < yields.length; ++i) {
-    var info = g.next(i);
-    assert.deepEqual(info.value, yields[i]);
-    assert.strictEqual(info.done, false);
-  }
-
-  assert.deepEqual(
-    i > 0 ? g.next(i) : g.next(),
-    { value: returnValue, done: true }
-  );
-}
+var shared = require("./shared.js");
+var Symbol = shared.Symbol;
+var check = shared.check;
 
 // A version of `throw` whose behavior can't be statically analyzed.
 // Useful for testing dynamic exception dispatching.
@@ -67,12 +54,12 @@ describe("regeneratorRuntime", function() {
   it("is defined on Generator.prototype and returns this", function() {
     function *gen(){}
     var iterator = gen();
-    assert.ok(!iterator.hasOwnProperty(iteratorSymbol));
-    assert.ok(!Object.getPrototypeOf(iterator).hasOwnProperty(iteratorSymbol));
+    assert.ok(!iterator.hasOwnProperty(Symbol.iterator));
+    assert.ok(!Object.getPrototypeOf(iterator).hasOwnProperty(Symbol.iterator));
     assert.ok(Object.getPrototypeOf(
       Object.getPrototypeOf(iterator)
-    ).hasOwnProperty(iteratorSymbol));
-    assert.strictEqual(iterator[iteratorSymbol](), iterator);
+    ).hasOwnProperty(Symbol.iterator));
+    assert.strictEqual(iterator[Symbol.iterator](), iterator);
   });
 });
 
@@ -1095,7 +1082,7 @@ describe("delegated yield", function() {
         }
       };
 
-      iterator[iteratorSymbol] = function() {
+      iterator[Symbol.iterator] = function() {
         return this;
       };
 
@@ -1200,7 +1187,7 @@ describe("delegated yield", function() {
 
     var inner = range(5);
     var iterator = { next: inner.next.bind(inner) };
-    iterator[iteratorSymbol] = function() {
+    iterator[Symbol.iterator] = function() {
       return this;
     };
 
@@ -1322,13 +1309,11 @@ describe("function declaration hoisting", function() {
         halve = void 0;
       }
 
-      yield typeof halve;
-
       yield increment(increment(n));
     }
 
-    check(gen(3), [4, 1, "function", 5]);
-    check(gen(4), [5, "undefined", 6]);
+    check(gen(3), [4, 1, 5]);
+    check(gen(4), [5, 6]);
   });
 
   it("should work for nested generator function declarations", function() {
@@ -1426,26 +1411,6 @@ describe("the arguments object", function() {
     check(gen(10, -5), [10, 11, -5, -6, -6, 11]);
   });
 
-  it("should be shadowable by explicit declarations", function() {
-    function *asParameter(x, arguments) {
-      arguments = arguments + 1;
-      yield x + arguments;
-    }
-
-    check(asParameter(4, 5), [10]);
-    check(asParameter("asdf", "zxcv"), ["asdfzxcv1"]);
-
-    function *asVariable(x) {
-      // TODO References to arguments before the variable declaration
-      // seem to see the object instead of the undefined value.
-      var arguments = x + 1;
-      yield arguments;
-    }
-
-    check(asVariable(4), [5]);
-    check(asVariable("asdf"), ["asdf1"]);
-  });
-
   it("should not get confused by properties", function() {
     function *gen(args) {
       var obj = { arguments: args };
@@ -1500,7 +1465,9 @@ describe("catch parameter shadowing", function() {
     check(gen(2), [4, 5, 2, 5, 10, 3]);
   });
 
-  it("should not replace variables defined in inner scopes", function() {
+  // This test will be fixed by https://github.com/babel/babel/pull/4880.
+  (runningInTranslation ? xit : it)(
+    "should not replace variables defined in inner scopes", function() {
     function *gen(x) {
       try {
         throw x;
@@ -2279,7 +2246,10 @@ describe("generator function prototype", function() {
 });
 
 describe("for-of loops", function() {
-  (runningInTranslation ? it : xit)
+  var arraysAreIterable =
+    typeof Array.prototype[Symbol.iterator] === "function";
+
+  (runningInTranslation && arraysAreIterable ? it : xit)
   ("should work for Arrays", function() {
     var sum = 0;
     for (var x of [1, 2].concat(3)) {

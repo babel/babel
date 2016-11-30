@@ -59,19 +59,19 @@ function compile(source, options) {
     };
   }
 
-  var recastOptions = getRecastOptions(options);
-  var ast = recast.parse(source, recastOptions);
-  var nodePath = new types.NodePath(ast);
-  var programPath = nodePath.get("program");
+  var transformOptions = {
+    presets: []
+  };
 
-  if (shouldVarify(source, options)) {
-    // Transpile let/const into var declarations.
-    varifyAst(programPath.node);
+  if (options.babelOptions) {
+    Object.keys(options.babelOptions).forEach(function (key) {
+      transformOptions[key] = options.babelOptions[key];
+    });
   }
 
-  transform(programPath, options);
+  transformOptions.presets.push(require("regenerator-preset"));
 
-  return recast.print(nodePath, recastOptions);
+  return require("babel-core").transform(source, transformOptions);
 }
 
 function normalizeOptions(options) {
@@ -110,17 +110,6 @@ function getRecastOptions(options) {
   copy("sourceRoot");
 
   return recastOptions;
-}
-
-function shouldVarify(source, options) {
-  var supportBlockBinding = !!options.supportBlockBinding;
-  if (supportBlockBinding) {
-    if (!blockBindingExp.test(source)) {
-      supportBlockBinding = false;
-    }
-  }
-
-  return supportBlockBinding;
 }
 
 function varify(source, options) {

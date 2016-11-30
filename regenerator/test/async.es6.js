@@ -266,7 +266,7 @@ describe("async generator functions", function() {
       markers.push(1);
       var result = await sent;
       markers.push(2);
-      assert.strictEqual(await yield "second", "sent after second");
+      assert.strictEqual(await (yield "second"), "sent after second");
       markers.push(3);
       return result;
     }

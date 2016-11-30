@@ -15,7 +15,9 @@ describe("_blockHoist nodes", function() {
       "  names.push(sent);",
       "  return 123;",
       "}"
-    ].join("\n"));
+    ].join("\n"), {
+      parser: require("babylon")
+    });
 
     var hoistMeStmt = ast.program.body[0].body.body[1];
     n.ExpressionStatement.assert(hoistMeStmt);

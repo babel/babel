@@ -15,13 +15,21 @@ var spawn = require("child_process").spawn;
 var regenerator = require("../main");
 var mochaDir = path.dirname(require.resolve("mocha"));
 
-function convert(es6File, es5File, callback) {
+function convert(es6File, es5File, options, callback) {
+  if (typeof options === "function" && ! callback) {
+    callback = options;
+    options = {};
+  } else {
+    options = options || {};
+  }
+
   fs.readFile(es6File, "utf-8", function(err, es6) {
     if (err) {
       return callback(err);
     }
 
-    fs.writeFile(es5File, regenerator.compile(es6).code, callback);
+    var es5 = regenerator.compile(es6, options).code;
+    fs.writeFile(es5File, es5, callback);
   });
 }
 
@@ -87,13 +95,26 @@ if (semver.gte(process.version, "0.11.2")) {
     "--harmony",
     "--reporter", "spec",
     "--require", "./test/runtime.js",
-    "./test/tests.es6.js"
+    "./test/tests.es6.js",
+    "./test/sloppy.js",
   ]);
 }
 
 enqueue(convert, [
   "./test/tests.es6.js",
   "./test/tests.es5.js"
+]);
+
+enqueue(convert, [
+  "./test/sloppy.js",
+  "./test/sloppy.es5.js",
+  {
+    babelOptions: {
+      parserOpts: {
+        strictMode: false
+      }
+    }
+  }
 ]);
 
 enqueue(convert, [
@@ -112,6 +133,7 @@ if (!semver.eq(process.version, "0.11.7")) {
     enqueue(bundle, [
       ["./test/runtime.js",
        "./test/tests.es5.js",
+       "./test/sloppy.es5.js",
        "./test/async.es5.js"],
       "./test/tests.browser.js"
     ]);
@@ -124,6 +146,7 @@ enqueue("mocha", [
   "--reporter", "spec",
   "--require", "./test/runtime.js",
   "./test/tests.es5.js",
+  "./test/sloppy.es5.js",
   "./test/async.es5.js",
   "./test/tests.transform.js"
 ]);
