@@ -42,7 +42,7 @@ module.exports = exports;
 // To include the runtime globally in the current node process, call
 // require("regenerator").runtime().
 function runtime() {
-  require("regenerator-runtime");
+  regeneratorRuntime = require("regenerator-runtime");
 }
 exports.runtime = runtime;
 runtime.path = require("regenerator-runtime/path.js").path;
