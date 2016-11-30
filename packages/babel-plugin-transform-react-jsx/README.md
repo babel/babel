@@ -1,6 +1,6 @@
 # babel-plugin-transform-react-jsx
 
-Turn JSX into React function calls
+> Turn JSX into React function calls
 
 ## Example
 
