@@ -1411,6 +1411,26 @@ describe("the arguments object", function() {
     check(gen(10, -5), [10, 11, -5, -6, -6, 11]);
   });
 
+  it("should be shadowable by explicit declarations (sloppy)", function() {
+    function *asParameter(x, arguments) {
+      arguments = arguments + 1;
+      yield x + arguments;
+    }
+
+    check(asParameter(4, 5), [10]);
+    check(asParameter("asdf", "zxcv"), ["asdfzxcv1"]);
+
+    function *asVariable(x) {
+      // TODO References to arguments before the variable declaration
+      // seem to see the object instead of the undefined value.
+      var arguments = x + 1;
+      yield arguments;
+    }
+
+    check(asVariable(4), [5]);
+    check(asVariable("asdf"), ["asdf1"]);
+  });
+
   it("should not get confused by properties", function() {
     function *gen(args) {
       var obj = { arguments: args };

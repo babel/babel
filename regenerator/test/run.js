@@ -89,18 +89,12 @@ if (semver.gte(process.version, "0.11.2")) {
     "--reporter", "spec",
     "--require", "./test/runtime.js",
     "./test/tests.es6.js",
-    "./test/sloppy.js",
   ]);
 }
 
 enqueue(convert, [
   "./test/tests.es6.js",
   "./test/tests.es5.js"
-]);
-
-enqueue(convert, [
-  "./test/sloppy.js",
-  "./test/sloppy.es5.js"
 ]);
 
 enqueue(convert, [
@@ -119,7 +113,6 @@ if (!semver.eq(process.version, "0.11.7")) {
     enqueue(bundle, [
       ["./test/runtime.js",
        "./test/tests.es5.js",
-       "./test/sloppy.es5.js",
        "./test/async.es5.js"],
       "./test/tests.browser.js"
     ]);
@@ -132,7 +125,6 @@ enqueue("mocha", [
   "--reporter", "spec",
   "--require", "./test/runtime.js",
   "./test/tests.es5.js",
-  "./test/sloppy.es5.js",
   "./test/async.es5.js",
   "./test/tests.transform.js"
 ]);
