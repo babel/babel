@@ -122,34 +122,6 @@ function getRecastOptions(options) {
   return recastOptions;
 }
 
-function varify(source, options) {
-  var recastOptions = getRecastOptions(normalizeOptions(options));
-  var ast = recast.parse(source, recastOptions);
-  varifyAst(ast.program);
-  return recast.print(ast, recastOptions).code;
-}
-
-function varifyAst(ast) {
-  types.namedTypes.Program.assert(ast);
-
-  var defsResult = require("defs")(ast, {
-    ast: true,
-    disallowUnknownReferences: false,
-    disallowDuplicated: false,
-    disallowVars: false,
-    loopClosures: "iife"
-  });
-
-  if (defsResult.errors) {
-    throw new Error(defsResult.errors.join("\n"))
-  }
-
-  return ast;
-}
-
-// Convenience for just translating let/const to var declarations.
-exports.varify = varify;
-
 // Allow packages that depend on Regenerator to use the same copy of
 // ast-types, in case multiple versions are installed by NPM.
 exports.types = types;
