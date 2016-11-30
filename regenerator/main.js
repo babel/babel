@@ -8,16 +8,11 @@
  * the same directory.
  */
 
-var assert = require("assert");
-var path = require("path");
 var fs = require("fs");
 var through = require("through");
 var transform = require("./lib/visit").transform;
 var utils = require("./lib/util");
-var recast = require("recast");
-var types = recast.types;
 var genOrAsyncFunExp = /\bfunction\s*\*|\basync\b/;
-var blockBindingExp = /\b(let|const)\s+/;
 
 function exports(file, options) {
   var data = [];
@@ -55,7 +50,10 @@ function getRuntimeCode() {
 
 function compile(source, options) {
   var result;
-  options = normalizeOptions(options);
+
+  options = utils.defaults(options || {}, {
+    includeRuntime: false
+  });
 
   // Shortcut: Transform only if generators or async functions present.
   if (genOrAsyncFunExp.test(source)) {
@@ -84,50 +82,11 @@ function compile(source, options) {
   return result;
 }
 
-function normalizeOptions(options) {
-  options = utils.defaults(options || {}, {
-    includeRuntime: false,
-    supportBlockBinding: true
-  });
-
-  if (!options.esprima) {
-    options.esprima = require("esprima-fb");
-  }
-
-  assert.ok(
-    /harmony/.test(options.esprima.version),
-    "Bad esprima version: " + options.esprima.version
-  );
-
-  return options;
-}
-
-function getRecastOptions(options) {
-  var recastOptions = {
-    range: true
-  };
-
-  function copy(name) {
-    if (name in options) {
-      recastOptions[name] = options[name];
-    }
-  }
-
-  copy("esprima");
-  copy("sourceFileName");
-  copy("sourceMapName");
-  copy("inputSourceMap");
-  copy("sourceRoot");
-
-  return recastOptions;
-}
-
 // Allow packages that depend on Regenerator to use the same copy of
 // ast-types, in case multiple versions are installed by NPM.
-exports.types = types;
+exports.types = require("recast").types;
 
-// Transforms a string of source code, returning the { code, map? } result
-// from recast.print.
+// Transforms a string of source code, returning a { code, map? } result.
 exports.compile = compile;
 
 // To modify an AST directly, call require("regenerator").transform(ast).

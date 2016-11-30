@@ -11,9 +11,12 @@
 var recast = require("recast");
 var types = recast.types;
 var n = types.namedTypes;
+var util = require("./util.js");
 
 exports.transform = function transform(node, options) {
-  options = options || {};
+  options = util.defaults(options || {}, {
+    includeRuntime: false
+  });
 
   var result = require("babel-core").transformFromAst(node, null, {
     presets: [require("regenerator-preset")],
