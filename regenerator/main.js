@@ -47,31 +47,41 @@ function runtime() {
 exports.runtime = runtime;
 runtime.path = require("regenerator-runtime/path.js").path;
 
+var cachedRuntimeCode;
+function getRuntimeCode() {
+  return cachedRuntimeCode ||
+    (cachedRuntimeCode = fs.readFileSync(runtime.path, "utf8"));
+}
+
 function compile(source, options) {
+  var result;
   options = normalizeOptions(options);
 
-  if (!genOrAsyncFunExp.test(source)) {
-    return {
-      // Shortcut: no generators or async functions to transform.
-      code: (options.includeRuntime === true ? fs.readFileSync(
-        runtime.path, "utf-8"
-      ) + "\n" : "") + source
+  // Shortcut: Transform only if generators or async functions present.
+  if (genOrAsyncFunExp.test(source)) {
+    var transformOptions = {
+      presets: []
     };
+
+    if (options.babelOptions) {
+      Object.keys(options.babelOptions).forEach(function (key) {
+        transformOptions[key] = options.babelOptions[key];
+      });
+    }
+
+    transformOptions.presets.push(require("regenerator-preset"));
+
+    result = require("babel-core").transform(source, transformOptions);
+
+  } else {
+    result = { code: source };
   }
 
-  var transformOptions = {
-    presets: []
-  };
-
-  if (options.babelOptions) {
-    Object.keys(options.babelOptions).forEach(function (key) {
-      transformOptions[key] = options.babelOptions[key];
-    });
+  if (options.includeRuntime === true) {
+    result.code = getRuntimeCode() + "\n" + result.code;
   }
 
-  transformOptions.presets.push(require("regenerator-preset"));
-
-  return require("babel-core").transform(source, transformOptions);
+  return result;
 }
 
 function normalizeOptions(options) {
