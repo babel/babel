@@ -48,6 +48,33 @@ function getRuntimeCode() {
     (cachedRuntimeCode = fs.readFileSync(runtime.path, "utf8"));
 }
 
+var transformOptions = {
+  presets: [require("regenerator-preset")],
+  parserOpts: {
+    sourceType: "module",
+    allowImportExportEverywhere: true,
+    allowReturnOutsideFunction: true,
+    allowSuperOutsideMethod: true,
+    strictMode: false,
+    plugins: [
+      "asyncFunctions",
+      "asyncGenerators",
+      "classConstructorCall",
+      "classProperties",
+      "decorators",
+      "doExpressions",
+      "exponentiationOperator",
+      "exportExtensions",
+      "flow",
+      "functionBind",
+      "functionSent",
+      "jsx",
+      "objectRestSpread",
+      "trailingFunctionCommas"
+    ]
+  }
+};
+
 function compile(source, options) {
   var result;
 
@@ -57,20 +84,7 @@ function compile(source, options) {
 
   // Shortcut: Transform only if generators or async functions present.
   if (genOrAsyncFunExp.test(source)) {
-    var transformOptions = {
-      presets: []
-    };
-
-    if (options.babelOptions) {
-      Object.keys(options.babelOptions).forEach(function (key) {
-        transformOptions[key] = options.babelOptions[key];
-      });
-    }
-
-    transformOptions.presets.push(require("regenerator-preset"));
-
     result = require("babel-core").transform(source, transformOptions);
-
   } else {
     result = { code: source };
   }

@@ -15,20 +15,13 @@ var spawn = require("child_process").spawn;
 var regenerator = require("../main");
 var mochaDir = path.dirname(require.resolve("mocha"));
 
-function convert(es6File, es5File, options, callback) {
-  if (typeof options === "function" && ! callback) {
-    callback = options;
-    options = {};
-  } else {
-    options = options || {};
-  }
-
+function convert(es6File, es5File, callback) {
   fs.readFile(es6File, "utf-8", function(err, es6) {
     if (err) {
       return callback(err);
     }
 
-    var es5 = regenerator.compile(es6, options).code;
+    var es5 = regenerator.compile(es6).code;
     fs.writeFile(es5File, es5, callback);
   });
 }
@@ -107,14 +100,7 @@ enqueue(convert, [
 
 enqueue(convert, [
   "./test/sloppy.js",
-  "./test/sloppy.es5.js",
-  {
-    babelOptions: {
-      parserOpts: {
-        strictMode: false
-      }
-    }
-  }
+  "./test/sloppy.es5.js"
 ]);
 
 enqueue(convert, [
