@@ -805,10 +805,10 @@ describe("call expression ordering (#244)", function test() {
 
     assert.deepEqual(g.next(), { value: 1, done: false });
 
-    assert.deepEqual(g.next(sent2 => {
+    assert.deepEqual(g.next(function (sent2) {
       assert.strictEqual(sent2, "sent 2");
 
-      return sent3 => {
+      return function (sent3) {
         assert.strictEqual(sent3, "sent 3")
         return "done";
       };
