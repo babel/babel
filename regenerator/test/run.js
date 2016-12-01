@@ -98,7 +98,7 @@ enqueue(convert, [
 ]);
 
 enqueue(convert, [
-  "./test/async.es6.js",
+  "./test/async.js",
   "./test/async.es5.js"
 ]);
 
