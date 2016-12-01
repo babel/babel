@@ -13,7 +13,7 @@
 ### Out
 
 ```
-<sometag __source={{fileName: 'this/file.js', lineNumber: 10}}/>
+<sometag __source={ { fileName: 'this/file.js', lineNumber: 10 } } />
 ```
 
 ## Installation
