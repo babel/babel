@@ -15,7 +15,7 @@ For any issue references: Add a comma-separated list of a [closing word](https:/
 | Tests added/pass? | 
 | Fixed tickets     | `Fixes #1, Fixes #2` <!-- rm the quotes to link the issues -->
 | License           | MIT
-| Doc PR            | 
+| Doc PR            | <!-- if yes, add `[skip ci]` to your commit message to skip CI builds -->
 | Dependency Changes| 
 
 <!-- Describe your changes below in as much detail as possible -->
