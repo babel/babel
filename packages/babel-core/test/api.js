@@ -568,16 +568,6 @@ describe("api", function () {
       process.env.NODE_ENV = oldNodeEnv;
     });
 
-    it("default", function () {
-      let result = babel.transform("foo;", {
-        env: {
-          development: { code: false }
-        }
-      });
-
-      assert.equal(result.code, undefined);
-    });
-
     it("BABEL_ENV", function () {
       process.env.BABEL_ENV = "foo";
       let result = babel.transform("foo;", {
