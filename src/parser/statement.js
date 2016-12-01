@@ -848,7 +848,7 @@ pp.parseExport = function (node) {
     if (needsSemi) this.semicolon();
     this.checkExport(node, true, true);
     return this.finishNode(node, "ExportDefaultDeclaration");
-  } else if (this.state.type.keyword || this.shouldParseExportDeclaration()) {
+  } else if (this.shouldParseExportDeclaration()) {
     node.specifiers = [];
     node.source = null;
     node.declaration = this.parseExportDeclaration(node);
@@ -901,8 +901,13 @@ pp.parseExportFrom = function (node, expect?) {
   this.semicolon();
 };
 
-pp.shouldParseExportDeclaration = function () {
-  return this.isContextual("async");
+pp.shouldParseExportDeclaration = function (): boolean {
+  return this.state.type.keyword === "var"
+    || this.state.type.keyword === "const"
+    || this.state.type.keyword === "let"
+    || this.state.type.keyword === "function"
+    || this.state.type.keyword === "class"
+    || this.isContextual("async");
 };
 
 pp.checkExport = function (node, checkNames, isDefault) {
