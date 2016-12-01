@@ -22,3 +22,11 @@ exports.check = function check(g, yields, returnValue) {
     { value: returnValue, done: true }
   );
 };
+
+exports.assertAlreadyFinished =
+function assertAlreadyFinished(generator) {
+  assert.deepEqual(generator.next(), {
+    value: void 0,
+    done: true
+  });
+};

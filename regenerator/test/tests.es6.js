@@ -13,18 +13,12 @@ var runningInTranslation = /\.wrap\(/.test(function*(){});
 var shared = require("./shared.js");
 var Symbol = shared.Symbol;
 var check = shared.check;
+var assertAlreadyFinished = shared.assertAlreadyFinished;
 
 // A version of `throw` whose behavior can't be statically analyzed.
 // Useful for testing dynamic exception dispatching.
 function raise(argument) {
   throw argument;
-}
-
-function assertAlreadyFinished(generator) {
-  assert.deepEqual(generator.next(), {
-    value: void 0,
-    done: true
-  });
 }
 
 describe("regeneratorRuntime", function() {
@@ -47,19 +41,6 @@ describe("regeneratorRuntime", function() {
       require("../lib/util").runtimeProperty("foo").object.name,
       "regeneratorRuntime"
     );
-  });
-});
-
-(runningInTranslation ? describe : xdescribe)("@@iterator", function() {
-  it("is defined on Generator.prototype and returns this", function() {
-    function *gen(){}
-    var iterator = gen();
-    assert.ok(!iterator.hasOwnProperty(Symbol.iterator));
-    assert.ok(!Object.getPrototypeOf(iterator).hasOwnProperty(Symbol.iterator));
-    assert.ok(Object.getPrototypeOf(
-      Object.getPrototypeOf(iterator)
-    ).hasOwnProperty(Symbol.iterator));
-    assert.strictEqual(iterator[Symbol.iterator](), iterator);
   });
 });
 
@@ -148,24 +129,6 @@ describe("collatz generator", function() {
 
   it("eighty two", function() {
     check(gen(82), eightyTwo, 110);
-  });
-});
-
-describe("throw", function() {
-  (runningInTranslation ? it : xit)("should complete generator", function() {
-    function *gen(x) {
-      throw 1;
-    }
-
-    var u = gen();
-
-    try {
-      u.next();
-    } catch (err) {
-      assert.strictEqual(err, 1);
-    }
-
-    assertAlreadyFinished(u);
   });
 });
 
@@ -929,23 +892,6 @@ describe("generator reentry attempt", function() {
   });
 });
 
-describe("completed generator", function() {
-  function *gen() {
-    return "ALL DONE";
-  }
-
-  (runningInTranslation ? it : xit)
-  ("should refuse to resume", function() {
-    var g = gen();
-
-    assert.deepEqual(g.next(), {
-      value: "ALL DONE", done: true
-    });
-
-    assertAlreadyFinished(g);
-  });
-});
-
 describe("delegated yield", function() {
   it("should delegate correctly", function() {
     function *gen(condition) {
@@ -1228,27 +1174,6 @@ describe("delegated yield", function() {
       }
       assert.deepEqual(g.next(), { value: void 0, done: true });
     }
-  });
-
-  (runningInTranslation ? it : xit)
-  ("should support any iterable argument", function() {
-    function *gen() {
-      yield 0;
-      yield* [
-        yield "one",
-        yield "two",
-        yield "three"
-      ];
-      yield 5;
-    }
-
-    check(gen(), [0, "one", "two", "three", 2, 3, 4, 5]);
-
-    function *string() {
-      return yield* "asdf";
-    }
-
-    check(string(), ["a", "s", "d", "f"]);
   });
 
   it("should evaluate to the return value of the delegate", function() {
@@ -1668,25 +1593,6 @@ describe("object literals with multiple yields", function() {
 });
 
 describe("generator .throw method", function() {
-  (runningInTranslation ? it : xit)("should complete generator", function() {
-    function *gen(x) {
-      yield 2;
-      throw 1;
-    }
-
-    var u = gen();
-
-    u.next();
-
-    try {
-      u.throw(2);
-    } catch (err) {
-      assert.strictEqual(err, 2);
-    }
-
-    assertAlreadyFinished(u);
-  });
-
   it("should work after the final call to .next", function() {
     function *gen() {
       yield 1;
@@ -2381,117 +2287,6 @@ describe("for-of loops", function() {
       [2, 1, 3],
       [2, 3, 1]
     ], 6);
-  });
-});
-
-describe("generator return method", function() {
-  if (!runningInTranslation) {
-    // The return method has not been specified or implemented natively,
-    // yet, so these tests need only pass in translation.
-    return;
-  }
-
-  it("should work with newborn generators", function() {
-    function *gen() {
-      yield 0;
-    }
-
-    var g = gen();
-
-    assert.deepEqual(g.return("argument"), {
-      value: "argument",
-      done: true
-    });
-
-    assertAlreadyFinished(g);
-  });
-
-  it("should behave as if generator actually returned", function() {
-    var executedFinally = false;
-
-    function *gen() {
-      try {
-        yield 0;
-      } catch (err) {
-        assert.ok(false, "should not have executed the catch handler");
-      } finally {
-        executedFinally = true;
-      }
-    }
-
-    var g = gen();
-    assert.deepEqual(g.next(), { value: 0, done: false });
-
-    assert.deepEqual(g.return("argument"), {
-      value: "argument",
-      done: true
-    });
-
-    assert.strictEqual(executedFinally, true);
-    assertAlreadyFinished(g);
-  });
-
-  it("should return both delegate and delegator", function() {
-    var checkpoints = [];
-
-    function* callee(errorToThrow) {
-      try {
-        yield 1;
-        yield 2;
-      } finally {
-        checkpoints.push("callee finally");
-        if (errorToThrow) {
-          throw errorToThrow;
-        }
-      }
-    }
-
-    function* caller(errorToThrow) {
-      try {
-        yield 0;
-        yield* callee(errorToThrow);
-        yield 3;
-      } finally {
-        checkpoints.push("caller finally");
-      }
-    }
-
-    var g1 = caller();
-
-    assert.deepEqual(g1.next(), { value: 0, done: false });
-    assert.deepEqual(g1.next(), { value: 1, done: false });
-
-    if (! runningInTranslation) {
-      // Returning when the generator is suspended on a delegate doesn't
-      // seem to work correctly in Node 6.
-      return;
-    }
-
-    assert.deepEqual(g1.return(-1), { value: -1, done: true });
-    assert.deepEqual(checkpoints, [
-      "callee finally",
-      "caller finally"
-    ]);
-
-    var error = new Error("thrown from callee");
-    var g2 = caller(error);
-
-    assert.deepEqual(g2.next(), { value: 0, done: false });
-    assert.deepEqual(g2.next(), { value: 1, done: false });
-
-    try {
-      g2.return(-1);
-      assert.ok(false, "should have thrown an exception");
-    } catch (thrown) {
-      assert.strictEqual(thrown, error);
-    }
-
-    assert.deepEqual(checkpoints, [
-      "callee finally",
-      "caller finally",
-      "callee finally",
-      "caller finally"
-    ]);
   });
 });
 

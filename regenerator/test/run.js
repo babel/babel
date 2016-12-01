@@ -98,6 +98,11 @@ enqueue(convert, [
 ]);
 
 enqueue(convert, [
+  "./test/non-native.js",
+  "./test/non-native.es5.js"
+]);
+
+enqueue(convert, [
   "./test/async.js",
   "./test/async.es5.js"
 ]);
@@ -113,6 +118,7 @@ if (!semver.eq(process.version, "0.11.7")) {
     enqueue(bundle, [
       ["./test/runtime.js",
        "./test/tests.es5.js",
+       "./test/non-native.es5.js",
        "./test/async.es5.js"],
       "./test/tests.browser.js"
     ]);
@@ -125,6 +131,7 @@ enqueue("mocha", [
   "--reporter", "spec",
   "--require", "./test/runtime.js",
   "./test/tests.es5.js",
+  "./test/non-native.es5.js",
   "./test/async.es5.js",
   "./test/tests.transform.js"
 ]);
