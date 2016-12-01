@@ -490,4 +490,17 @@ describe("async generator functions", function() {
       assert.strictEqual(error, returned);
     });
   });
+
+  it("should work with nested arrow functions", async function () {
+    var a = async b => {
+      return await (async () => {
+        return await b();
+      })();
+    };
+
+    assert.strictEqual(
+      await a(() => Promise.resolve(1234)),
+      1234
+    );
+  });
 });
