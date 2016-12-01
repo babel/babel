@@ -795,8 +795,6 @@ describe("yield chain", function() {
 });
 
 describe("call expression ordering (#244)", function test() {
-  console.log(String(test));
-
   function *gen() {
     return (yield 1)(yield 2)(yield 3);
   }
