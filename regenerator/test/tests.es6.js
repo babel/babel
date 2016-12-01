@@ -1484,6 +1484,31 @@ describe("the arguments object", function() {
   });
 });
 
+describe("directive strings", function () {
+  function *strict() {
+    "use strict";
+    yield ! this;
+  }
+
+  function *sloppy() {
+    yield ! this;
+  }
+
+  it("should be kept at top of outer function", function () {
+    var strictCode = String(strict);
+    var useStrictIndex = strictCode.indexOf("use strict");
+    var thisIndex = strictCode.indexOf("this");
+
+    assert.notStrictEqual(useStrictIndex, -1);
+    assert.ok(thisIndex > useStrictIndex);
+
+    assert.strictEqual(String(sloppy).indexOf("use strict"), -1);
+
+    check(strict(), [true]);
+    check(sloppy(), [false]);
+  });
+});
+
 describe("catch parameter shadowing", function() {
   it("should leave outer variables unmodified", function() {
     function *gen(x) {
