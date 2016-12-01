@@ -94,6 +94,28 @@ describe("delegate yield", function() {
   });
 });
 
+describe("newborn generators", function () {
+  it("should be able to access function.sent", function () {
+    function *gen() {
+      var sent = yield function.sent;
+      assert.strictEqual(sent, function.sent);
+      return function.sent;
+    }
+
+    var g = gen();
+
+    assert.deepEqual(g.next("first"), {
+      value: "first",
+      done: false
+    });
+
+    assert.deepEqual(g.next("second"), {
+      value: "second",
+      done: true
+    });
+  });
+});
+
 describe("generator return method", function() {
   it("should work with newborn generators", function() {
     function *gen() {

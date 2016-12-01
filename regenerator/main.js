@@ -56,22 +56,7 @@ var transformOptions = {
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
     strictMode: false,
-    plugins: [
-      "asyncFunctions",
-      "asyncGenerators",
-      "classConstructorCall",
-      "classProperties",
-      "decorators",
-      "doExpressions",
-      "exponentiationOperator",
-      "exportExtensions",
-      "flow",
-      "functionBind",
-      "functionSent",
-      "jsx",
-      "objectRestSpread",
-      "trailingFunctionCommas"
-    ]
+    plugins: ["*", "jsx", "flow"]
   }
 };
 
