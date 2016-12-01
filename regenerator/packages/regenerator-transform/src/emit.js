@@ -1007,7 +1007,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
       }
 
     } else {
-      newCallee = self.explodeExpression(calleePath);
+      newCallee = explodeViaTempVar(null, calleePath);
 
       if (t.isMemberExpression(newCallee)) {
         // If the callee was not previously a MemberExpression, then the

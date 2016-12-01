@@ -794,6 +794,33 @@ describe("yield chain", function() {
   });
 });
 
+describe("call expression ordering (#244)", function test() {
+  console.log(String(test));
+
+  function *gen() {
+    return (yield 1)(yield 2)(yield 3);
+  }
+
+  it("should be correct", function () {
+    var g = gen();
+    var order = [];
+
+    assert.deepEqual(g.next(), { value: 1, done: false });
+
+    assert.deepEqual(g.next(sent2 => {
+      assert.strictEqual(sent2, "sent 2");
+
+      return sent3 => {
+        assert.strictEqual(sent3, "sent 3")
+        return "done";
+      };
+    }), { value: 2, done: false });
+
+    assert.deepEqual(g.next("sent 2"), { value: 3, done: false });
+    assert.deepEqual(g.next("sent 3"), { value: "done", done: true });
+  });
+});
+
 describe("object literal generator", function() {
   function *gen(a, b) {
     yield {
