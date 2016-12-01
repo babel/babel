@@ -1,6 +1,6 @@
 # babel-plugin-transform-es2015-spread
 
-Compile ES2015 spread to ES5
+> Compile ES2015 spread to ES5
 
 ## Installation
 
@@ -43,3 +43,7 @@ require("babel-core").transform("code", {
   plugins: ["transform-es2015-spread"]
 });
 ```
+
+## Options
+
+* `loose` - All iterables are assumed to be arrays.

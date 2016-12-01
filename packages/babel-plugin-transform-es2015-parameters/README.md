@@ -1,12 +1,18 @@
 # babel-plugin-transform-es2015-parameters
 
-Compile ES2015 default and rest parameters to ES5
+> Compile ES2015 default and rest parameters to ES5
 
 ## Installation
 
 ```sh
 npm install --save-dev babel-plugin-transform-es2015-parameters
 ```
+
+## Caveats
+
+Default parameters desugar into `let` declarations to retain proper semantics. If this is
+not supported in your environment then you'll need the
+[transform-block-scoping](/docs/plugins/transform-es2015-block-scoping) plugin.
 
 ## Usage
 

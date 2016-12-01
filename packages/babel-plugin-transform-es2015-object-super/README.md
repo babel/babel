@@ -1,6 +1,6 @@
 # babel-plugin-transform-es2015-object-super
 
-Compile ES2015 object super to ES5
+> Compile ES2015 object super to ES5
 
 ## Installation
 
