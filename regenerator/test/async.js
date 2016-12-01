@@ -503,4 +503,20 @@ describe("async generator functions", function() {
       1234
     );
   });
+
+  it("should support super.method(...) in async methods", async function () {
+    class A {
+      async method() {
+        return "from A";
+      }
+    }
+
+    class B extends A {
+      async method() {
+        return "from B " + (await super.method());
+      }
+    }
+
+    assert.strictEqual(await new B().method(), "from B from A");
+  });
 });
