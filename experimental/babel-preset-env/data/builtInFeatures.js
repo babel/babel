@@ -110,5 +110,8 @@ module.exports = {
   "es6.math.sign": "Math methods / Math.sign",
   "es6.math.sinh": "Math methods / Math.sinh",
   "es6.math.tanh": "Math methods / Math.tanh",
-  "es6.math.trunc": "Math methods / Math.trunc"
+  "es6.math.trunc": "Math methods / Math.trunc",
+
+  "es7.string.pad-start": "String padding / String.prototype.padStart",
+  "es7.string.pad-end": "String padding / String.prototype.padEnd"
 };

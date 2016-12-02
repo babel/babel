@@ -712,5 +712,15 @@
     "safari": 7,
     "node": 0.12,
     "ios": 10
+  },
+  "es7.string.pad-start": {
+    "firefox": 48,
+    "safari": 10,
+    "ios": 10
+  },
+  "es7.string.pad-end": {
+    "firefox": 48,
+    "safari": 10,
+    "ios": 10
   }
 }
