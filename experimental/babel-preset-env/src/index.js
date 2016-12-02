@@ -1,5 +1,6 @@
 import pluginList from "../data/plugins.json";
 import browserslist from "browserslist";
+import transformPolyfillRequirePlugin from "./transformPolyfillRequirePlugin";
 
 export const MODULE_TRANSFORMATIONS = {
   "amd": "transform-es2015-modules-amd",
@@ -140,6 +141,7 @@ export default function buildPreset(context, opts = {}) {
   const whitelist = validateWhitelistOption(opts.whitelist);
   const targets = getTargets(opts.targets);
   const debug = opts.debug;
+  const useBuiltIns = opts.useBuiltIns;
 
   let transformations = Object.keys(pluginList)
     .filter((pluginName) => isPluginRequired(targets, pluginList[pluginName]));
@@ -179,7 +181,8 @@ export default function buildPreset(context, opts = {}) {
   return {
     plugins: [
       ...modules,
-      ...transformations
+      ...transformations,
+      // useBuiltIns && transformPolyfillRequirePlugin
     ]
   };
 }

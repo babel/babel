@@ -4,6 +4,7 @@ const path = require("path");
 const flatten = require("lodash/flatten");
 const flattenDeep = require("lodash/flattenDeep");
 const pluginFeatures = require("../data/pluginFeatures");
+const builtInFeatures = require("../data/builtInFeatures");
 
 const renameTests = (tests, getName) =>
   tests.map((test) => Object.assign({}, test, { name: getName(test.name) }));
@@ -98,7 +99,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
   });
 
   let envFiltered = envTests.filter((t) => t);
-  if (envTests.length > envFiltered.length) {
+  if (envTests.length > envFiltered.length || envTests.length === 0) {
     // envTests.forEach((test, i) => {
     //   if (!test) {
     //     // print unsupported features
@@ -115,27 +116,47 @@ const getLowestImplementedVersion = ({ features }, env) => {
   .reduce((a, b) => { return (a < b) ? b : a; });
 };
 
-const data = {};
-for (const pluginName in pluginFeatures) {
-  const options = pluginFeatures[pluginName];
-  const plugin = {};
-  environments.forEach((env) => {
-    if (Array.isArray(options.features)) {
+function generateData(features) {
+  let ret = {};
+
+  Object.keys(features).forEach((pluginName) => {
+    let options = features[pluginName];
+
+    if (!options.features) {
+      options = {
+        features: [options]
+      };
+    }
+
+    const plugin = {};
+    environments.forEach((env) => {
       const version = getLowestImplementedVersion(options, env);
       if (version !== null) {
         plugin[env] = version;
       }
-    }
 
-    // add opera
-    if (plugin.chrome) {
-      plugin.opera = plugin.chrome - 13;
-    }
+      // add opera
+      if (plugin.chrome) {
+        plugin.opera = plugin.chrome - 13;
+
+        if (plugin.chrome === 5) {
+          plugin.opera = 12;
+        }
+      }
+    });
+
+    ret[pluginName] = plugin;
   });
-  data[pluginName] = plugin;
+
+  return ret;
 }
 
 fs.writeFileSync(
   path.join(__dirname, "../data/plugins.json"),
-  JSON.stringify(data, null, 2) + "\n"
+  JSON.stringify(generateData(pluginFeatures), null, 2) + "\n"
+);
+
+fs.writeFileSync(
+  path.join(__dirname, "../data/builtIns.json"),
+  JSON.stringify(generateData(builtInFeatures), null, 2) + "\n"
 );

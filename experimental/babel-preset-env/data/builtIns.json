@@ -1,0 +1,385 @@
+{
+  "typed/data-view": {},
+  "typed/int8-array": {
+    "chrome": 5,
+    "opera": 12,
+    "firefox": 4,
+    "safari": 5,
+    "node": 0.12,
+    "ie": 10,
+    "android": 4,
+    "ios": 6
+  },
+  "typed/uint8-array": {
+    "chrome": 5,
+    "opera": 12,
+    "firefox": 4,
+    "safari": 5,
+    "node": 0.12,
+    "ie": 10,
+    "android": 4,
+    "ios": 6
+  },
+  "typed/uint8-clamped-array": {
+    "chrome": 5,
+    "opera": 12,
+    "edge": 12,
+    "firefox": 4,
+    "safari": 6,
+    "node": 0.12,
+    "ios": 10
+  },
+  "typed/int16-array": {
+    "chrome": 5,
+    "opera": 12,
+    "firefox": 4,
+    "safari": 5,
+    "node": 0.12,
+    "ie": 10,
+    "android": 4,
+    "ios": 6
+  },
+  "typed/uint16-array": {
+    "chrome": 5,
+    "opera": 12,
+    "firefox": 4,
+    "safari": 5,
+    "node": 0.12,
+    "ie": 10,
+    "android": 4,
+    "ios": 6
+  },
+  "typed/int32-array": {
+    "chrome": 5,
+    "opera": 12,
+    "firefox": 4,
+    "safari": 5,
+    "node": 0.12,
+    "ie": 10,
+    "android": 4,
+    "ios": 6
+  },
+  "typed/uint32-array": {
+    "chrome": 5,
+    "opera": 12,
+    "firefox": 4,
+    "safari": 5,
+    "node": 0.12,
+    "ie": 10,
+    "android": 4,
+    "ios": 6
+  },
+  "typed/float32-array": {
+    "chrome": 5,
+    "opera": 12,
+    "firefox": 4,
+    "safari": 5,
+    "node": 0.12,
+    "ie": 10,
+    "android": 4,
+    "ios": 6
+  },
+  "typed/float64-array": {
+    "chrome": 5,
+    "opera": 12,
+    "firefox": 4,
+    "safari": 5,
+    "node": 0.12,
+    "ie": 10,
+    "android": 4.1,
+    "ios": 6
+  },
+  "map": {
+    "chrome": 51,
+    "opera": 38,
+    "safari": 10,
+    "node": 6.5,
+    "ios": 10
+  },
+  "set": {
+    "chrome": 51,
+    "opera": 38,
+    "safari": 10,
+    "node": 6.5,
+    "ios": 10
+  },
+  "weak-map": {
+    "chrome": 51,
+    "opera": 38,
+    "safari": 9,
+    "ios": 10
+  },
+  "weak-set": {
+    "chrome": 51,
+    "opera": 38,
+    "safari": 9,
+    "ios": 9
+  },
+  "reflect": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 13,
+    "firefox": 45,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/apply": {},
+  "reflect/construct": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 12,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/define-property": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 13,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/delete-property": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 12,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/get": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 12,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/get-own-property-descriptor": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 12,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/get-prototype-of": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 12,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/has": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 12,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/is-extensible": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 12,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/own-keys": {},
+  "reflect/prevent-extensions": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 12,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/set": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 12,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "reflect/set-prototype-of": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 12,
+    "firefox": 42,
+    "safari": 10,
+    "ios": 10
+  },
+  "promise": {
+    "chrome": 51,
+    "opera": 38,
+    "edge": 13,
+    "firefox": 45,
+    "safari": 10,
+    "node": 6.5,
+    "ios": 10
+  },
+  "symbol": {
+    "chrome": 49,
+    "opera": 36,
+    "edge": 13,
+    "firefox": 36,
+    "safari": 10,
+    "ios": 10
+  },
+  "symbol/for": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 36,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
+  "symbol/key-for": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 36,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
+  "symbol/has-instance": {
+    "chrome": 51,
+    "opera": 38,
+    "firefox": 50,
+    "safari": 10,
+    "node": 6.5,
+    "ios": 10
+  },
+  "symbol/is-concat-spreadable": {
+    "chrome": 48,
+    "opera": 35,
+    "firefox": 48,
+    "safari": 10,
+    "ios": 10
+  },
+  "symbol/iterator": {},
+  "symbol/match": {
+    "chrome": 50,
+    "opera": 37,
+    "firefox": 49,
+    "safari": 10,
+    "node": 6,
+    "ios": 10
+  },
+  "symbol/replace": {
+    "chrome": 50,
+    "opera": 37,
+    "firefox": 49,
+    "safari": 10,
+    "node": 6,
+    "ios": 10
+  },
+  "symbol/search": {
+    "chrome": 50,
+    "opera": 37,
+    "firefox": 49,
+    "safari": 10,
+    "node": 6,
+    "ios": 10
+  },
+  "symbol/species": {},
+  "symbol/split": {
+    "chrome": 50,
+    "opera": 37,
+    "firefox": 49,
+    "safari": 10,
+    "node": 6,
+    "ios": 10
+  },
+  "symbol/to-primitive": {
+    "chrome": 47,
+    "opera": 34,
+    "firefox": 44,
+    "safari": 10,
+    "ios": 10
+  },
+  "symbol/to-string-tag": {
+    "chrome": 49,
+    "opera": 36,
+    "firefox": 51,
+    "safari": 10,
+    "ios": 10
+  },
+  "symbol/unscopables": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 48,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
+  "object/assign": {
+    "chrome": 45,
+    "opera": 32,
+    "edge": 12,
+    "firefox": 34,
+    "safari": 9,
+    "node": 4,
+    "ios": 9
+  },
+  "object/is": {
+    "chrome": 19,
+    "opera": 6,
+    "edge": 12,
+    "firefox": 22,
+    "safari": 9,
+    "node": 0.12,
+    "android": 4.1,
+    "ios": 9
+  },
+  "object/get-own-property-symbols": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 36,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
+  "object/set-prototype-of": {
+    "chrome": 34,
+    "opera": 21,
+    "firefox": 31,
+    "safari": 9,
+    "node": 0.12,
+    "ie": 11,
+    "ios": 9
+  },
+  "function/name": {
+    "chrome": 51,
+    "opera": 38,
+    "safari": 10,
+    "node": 6.5,
+    "ios": 10
+  },
+  "string/raw": {
+    "chrome": 41,
+    "opera": 28,
+    "edge": 12,
+    "firefox": 34,
+    "safari": 9,
+    "node": 4,
+    "ios": 9
+  },
+  "string/string/from-code-point": {
+    "chrome": 41,
+    "opera": 28,
+    "edge": 12,
+    "firefox": 29,
+    "safari": 9,
+    "node": 4,
+    "ios": 9
+  }
+}
