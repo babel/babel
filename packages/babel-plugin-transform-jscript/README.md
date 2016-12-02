@@ -1,6 +1,28 @@
 # babel-plugin-transform-jscript
 
-Babel plugin to fix buggy JScript named function expressions
+> This plugin allows Babel to transform named function expressions into function declarations to get around some [particularly nasty JScript bugs](https://kangax.github.io/nfe/#jscript-bugs) related to name function expressions.
+
+## Example
+
+**In**
+
+```javascript
+var foo = function bar() {
+
+};
+```
+
+**Out**
+
+```javascript
+"use strict";
+
+var foo = (function () {
+  function bar() {}
+
+  return bar;
+})();
+```
 
 ## Installation
 
