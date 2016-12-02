@@ -120,6 +120,39 @@ Useful if there is a bug in a native implementation, or a combination of a non-s
 
 Ex: Node 4 supports native classes but not spread.
 
+### `useBuiltIns`: `boolean`
+
+Defaults to `false`.
+
+A way to apply `babel-preset-env` for polyfills (via "babel-polyfill").
+
+```
+npm install babel-polyfill --save
+```
+
+This option will apply a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
+
+> NOTE: This means you should only use `require("babel-polyfill");` once in your whole app. I would recommend just creating a single file that only does the require.
+
+In
+
+```js
+import "babel-polyfill";
+```
+
+Out (Different based on environment)
+
+```js
+import "core-js/modules/es6.typed.data-view";
+import "core-js/modules/es6.reflect.apply";
+import "core-js/modules/es6.reflect.own-keys";
+import "core-js/modules/es6.symbol.iterator";
+import "core-js/modules/es6.symbol.species";
+import "core-js/modules/es6.array.from";
+```
+
+---
+
 ## Examples
 
 ```js
