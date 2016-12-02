@@ -11,7 +11,7 @@ export default function ({ types: t }) {
   }
 
   function addImport(polyfill) {
-    let declar = t.importDeclaration([], t.stringLiteral(`core-js/fn/${polyfill}`));
+    let declar = t.importDeclaration([], t.stringLiteral(`core-js/modules/${polyfill}`));
     declar._blockHoist = 3;
     return declar;
   }
@@ -74,7 +74,7 @@ in babel-preset-env
   };
 
   return {
-    name: "ast-transform", // not required
+    name: "transform-polyfill-require",
     visitor: isPolyfillImport
   };
 }
