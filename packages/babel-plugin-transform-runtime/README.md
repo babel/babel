@@ -1,8 +1,8 @@
 # babel-plugin-transform-runtime
 
 > Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals. (This plugin is recommended in a library/tool)
->
-> NOTE: Instance methods such as `"foobar".includes("foo")` will not work since that would require modification of existing builtins (Use [`babel-polyfill`](/docs/usage/polyfill) for that).
+
+NOTE: Instance methods such as `"foobar".includes("foo")` will not work since that would require modification of existing builtins (Use [`babel-polyfill`](http://babeljs.io/docs/usage/polyfill) for that).
 
 ## Why?
 
@@ -10,7 +10,7 @@ Babel uses very small helpers for common functions such as `_extend`. By default
 
 This is where the `transform-runtime` plugin comes in: all of the helpers will reference the module `babel-runtime` to avoid duplication across your compiled output. The runtime will be compiled into your build.
 
-Another purpose of this transformer is to create a sandboxed environment for your code. If you use [babel-polyfill](/docs/usage/polyfill/) and the built-ins it provides such as `Promise`, `Set` and `Map`, those will pollute the global scope. While this might be ok for an app or a command line tool, it becomes a problem if your code is a library which you intend to publish for others to use or if you can't exactly control the environment in which your code will run.
+Another purpose of this transformer is to create a sandboxed environment for your code. If you use [babel-polyfill](http://babeljs.io/docs/usage/polyfill/) and the built-ins it provides such as `Promise`, `Set` and `Map`, those will pollute the global scope. While this might be ok for an app or a command line tool, it becomes a problem if your code is a library which you intend to publish for others to use or if you can't exactly control the environment in which your code will run.
 
 The transformer will alias these built-ins to `core-js` so you can use them seamlessly without having to require the polyfill.
 

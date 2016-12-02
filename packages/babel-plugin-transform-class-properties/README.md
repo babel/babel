@@ -1,10 +1,10 @@
 # babel-plugin-transform-class-properties
 
-> This plugin transforms es2015 static class properties as well as
-properties declared with the es2016 property initializer syntax.
-Below is a class with four class properties which will be transformed.
+> This plugin transforms es2015 static class properties as well as properties declared with the es2016 property initializer syntax.
 
 ## Example
+
+Below is a class with four class properties which will be transformed.
 
 ```js
   class Bork {
