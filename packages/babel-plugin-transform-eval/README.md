@@ -1,6 +1,6 @@
 # babel-plugin-transform-eval
 
-Compile eval calls with string literals
+> This plugin allows Babel to compile eval calls with string literals.
 
 ## Example
 
