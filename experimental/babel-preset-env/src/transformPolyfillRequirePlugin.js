@@ -2,14 +2,8 @@
 // or if more than one is found
 
 const polyfillSource = "babel-polyfill";
-let numPolyfillImports = 0;
 
 export default function ({ types: t }) {
-  function checkNumPolyfillImports() {
-    numPolyfillImports++;
-    return numPolyfillImports > 1;
-  }
-
   function addImport(polyfill) {
     let declar = t.importDeclaration([], t.stringLiteral(`core-js/modules/${polyfill}`));
     declar._blockHoist = 3;
@@ -41,7 +35,8 @@ export default function ({ types: t }) {
     ImportDeclaration(path, state) {
       if (path.node.specifiers.length === 0 &&
           path.node.source.value === polyfillSource) {
-        if (checkNumPolyfillImports()) {
+        this.numPolyfillImports++;
+        if (this.numPolyfillImports > 1) {
           path.remove();
           return;
         }
@@ -53,18 +48,18 @@ export default function ({ types: t }) {
     Program(path, state) {
       if (!state.opts.polyfills) {
         throw path.buildCodeFrameError(`
-"polyfills" option not correctly passed
-to the transform-polyfill-require plugin
-in babel-preset-env
+There was an issue in "babel-preset-env" such that
+the "polyfills" option was not correctly passed
+to the "transform-polyfill-require" plugin
 `);
       }
       path.get("body").forEach((bodyPath) => {
         if (isRequire(bodyPath, polyfillSource)) {
-          if (checkNumPolyfillImports()) {
+          this.numPolyfillImports++;
+          if (this.numPolyfillImports > 1) {
             path.remove();
             return;
           }
-
 
           let requires = state.opts.polyfills.map((p) => addRequire(p));
           bodyPath.replaceWithMultiple(requires);
@@ -75,6 +70,9 @@ in babel-preset-env
 
   return {
     name: "transform-polyfill-require",
-    visitor: isPolyfillImport
+    visitor: isPolyfillImport,
+    pre() {
+      this.numPolyfillImports = 0;
+    }
   };
 }
