@@ -40,3 +40,4 @@ name                   | type     | default         | description
 highlightCode          | boolean  | `false`         | Syntax highlight the code as JavaScript for terminals
 linesAbove             | number   | 2               | The number of lines to show above the error
 linesBelow             | number   | 3               | The number of lines to show below the error
+forceColor             | boolean  | `false`         | Forcibly syntax highlight the code as JavaScript (for non-terminals); overrides highlightCode
