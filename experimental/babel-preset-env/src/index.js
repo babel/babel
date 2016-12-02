@@ -1,4 +1,5 @@
 import pluginList from "../data/plugins.json";
+import builtInsList from "../data/builtIns.json";
 import browserslist from "browserslist";
 import transformPolyfillRequirePlugin from "./transformPolyfillRequirePlugin";
 
@@ -146,6 +147,14 @@ export default function buildPreset(context, opts = {}) {
   let transformations = Object.keys(pluginList)
     .filter((pluginName) => isPluginRequired(targets, pluginList[pluginName]));
 
+  let polyfills;
+  if (useBuiltIns) {
+    polyfills = Object.keys(builtInsList)
+      .filter((builtInName) => isPluginRequired(targets, builtInsList[builtInName]));
+    console.log(polyfills);
+    console.log(polyfills.length, Object.keys(builtInsList).length);
+  }
+
   if (debug && !hasBeenLogged) {
     hasBeenLogged = true;
 
@@ -182,7 +191,7 @@ export default function buildPreset(context, opts = {}) {
     plugins: [
       ...modules,
       ...transformations,
-      // useBuiltIns && transformPolyfillRequirePlugin
-    ]
+      useBuiltIns === true && [transformPolyfillRequirePlugin, { polyfills }]
+    ].filter(Boolean)
   };
 }
