@@ -151,8 +151,6 @@ export default function buildPreset(context, opts = {}) {
   if (useBuiltIns) {
     polyfills = Object.keys(builtInsList)
       .filter((builtInName) => isPluginRequired(targets, builtInsList[builtInName]));
-    console.log(polyfills);
-    console.log(polyfills.length, Object.keys(builtInsList).length);
   }
 
   if (debug && !hasBeenLogged) {

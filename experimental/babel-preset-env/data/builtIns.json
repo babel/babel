@@ -364,6 +364,201 @@
     "node": 4,
     "ios": 9
   },
+  "es6.string.code-point-at": {
+    "chrome": 41,
+    "opera": 28,
+    "edge": 12,
+    "firefox": 29,
+    "safari": 9,
+    "node": 4,
+    "ios": 9
+  },
+  "es6.string.repeat": {
+    "chrome": 41,
+    "opera": 28,
+    "edge": 12,
+    "firefox": 24,
+    "safari": 9,
+    "node": 4,
+    "ios": 9
+  },
+  "es6.string.starts-with": {
+    "chrome": 41,
+    "opera": 28,
+    "edge": 12,
+    "firefox": 17,
+    "safari": 9,
+    "node": 4,
+    "ios": 9
+  },
+  "es6.string.ends-with": {
+    "chrome": 41,
+    "opera": 28,
+    "edge": 12,
+    "firefox": 17,
+    "safari": 9,
+    "node": 4,
+    "ios": 9
+  },
+  "es6.string.includes": {
+    "chrome": 41,
+    "opera": 28,
+    "edge": 12,
+    "firefox": 40,
+    "safari": 9,
+    "node": 4,
+    "ios": 9
+  },
+  "es6.regexp.flags": {
+    "chrome": 49,
+    "opera": 36,
+    "firefox": 37,
+    "safari": 9,
+    "ios": 9
+  },
+  "es6.regexp.match": {
+    "chrome": 50,
+    "opera": 37,
+    "firefox": 49,
+    "safari": 10,
+    "node": 6,
+    "ios": 10
+  },
+  "es6.regexp.replace": {
+    "chrome": 50,
+    "opera": 37,
+    "firefox": 49,
+    "safari": 10,
+    "node": 6,
+    "ios": 10
+  },
+  "es6.regexp.split": {
+    "chrome": 50,
+    "opera": 37,
+    "firefox": 49,
+    "safari": 10,
+    "node": 6,
+    "ios": 10
+  },
+  "es6.regexp.search": {
+    "chrome": 50,
+    "opera": 37,
+    "firefox": 49,
+    "safari": 10,
+    "node": 6,
+    "ios": 10
+  },
+  "es6.array.from": {},
+  "es6.array.of": {
+    "chrome": 45,
+    "opera": 32,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 9,
+    "node": 4,
+    "ios": 9
+  },
+  "es6.array.copy-within": {
+    "chrome": 45,
+    "opera": 32,
+    "edge": 12,
+    "firefox": 32,
+    "safari": 9,
+    "node": 4,
+    "ios": 9
+  },
+  "es6.array.find": {
+    "chrome": 45,
+    "opera": 32,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 4,
+    "ios": 10
+  },
+  "es6.array.find-index": {
+    "chrome": 45,
+    "opera": 32,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 4,
+    "ios": 10
+  },
+  "es6.array.fill": {
+    "chrome": 45,
+    "opera": 32,
+    "edge": 12,
+    "firefox": 31,
+    "safari": 7,
+    "node": 4,
+    "ios": 10
+  },
+  "es6.number.is-finite": {
+    "chrome": 19,
+    "opera": 6,
+    "edge": 12,
+    "firefox": 16,
+    "safari": 9,
+    "node": 0.12,
+    "android": 4.1,
+    "ios": 9
+  },
+  "es6.number.is-integer": {
+    "chrome": 34,
+    "opera": 21,
+    "edge": 12,
+    "firefox": 16,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
+  "es6.number.is-safe-integer": {
+    "chrome": 34,
+    "opera": 21,
+    "edge": 12,
+    "firefox": 32,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
+  "es6.number.is-nan": {
+    "chrome": 19,
+    "opera": 6,
+    "edge": 12,
+    "firefox": 15,
+    "safari": 9,
+    "node": 0.12,
+    "android": 4.1,
+    "ios": 9
+  },
+  "es6.number.epsilon": {
+    "chrome": 34,
+    "opera": 21,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
+  "es6.number.min-safe-integer": {
+    "chrome": 34,
+    "opera": 21,
+    "edge": 12,
+    "firefox": 31,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
+  "es6.number.max-safe-integer": {
+    "chrome": 34,
+    "opera": 21,
+    "edge": 12,
+    "firefox": 31,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
   "es6.math.acosh": {
     "chrome": 38,
     "opera": 25,
