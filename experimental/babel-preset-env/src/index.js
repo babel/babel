@@ -2,6 +2,7 @@ import pluginList from "../data/plugins.json";
 import builtInsList from "../data/builtIns.json";
 import browserslist from "browserslist";
 import transformPolyfillRequirePlugin from "./transformPolyfillRequirePlugin";
+import electronToChromium from "../data/electronToChromium";
 
 export const MODULE_TRANSFORMATIONS = {
   "amd": "transform-es2015-modules-amd",
@@ -81,9 +82,29 @@ export const getCurrentNodeVersion = () => {
   return parseFloat(process.versions.node);
 };
 
+export const electronVersionToChromeVersion = (semverVer) => {
+  const m = semverVer.match(/^(\d+\.\d+)/);
+  if (!m) {
+    throw new Error("Electron version must be a semver version");
+  }
+
+  let result = electronToChromium[m[1]];
+  if (!result) {
+    throw new Error(`Electron version ${m[1]} is either too old or too new`);
+  }
+
+  return result;
+};
+
 export const getTargets = (targetOpts = {}) => {
   if (targetOpts.node === true || targetOpts.node === "current") {
     targetOpts.node = getCurrentNodeVersion();
+  }
+
+  // Rewrite Electron versions to their Chrome equivalents
+  if (targetOpts.electron) {
+    targetOpts.chrome = electronVersionToChromeVersion(targetOpts.electron);
+    delete targetOpts.electron;
   }
 
   const browserOpts = targetOpts.browsers;
