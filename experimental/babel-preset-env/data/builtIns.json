@@ -363,5 +363,159 @@
     "safari": 9,
     "node": 4,
     "ios": 9
+  },
+  "es6.math.acosh": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.asinh": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.atanh": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.cbrt": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.clz32": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 31,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
+  "es6.math.cosh": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.expm1": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.fround": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 26,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.hypot": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 27,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.imul": {
+    "chrome": 30,
+    "opera": 17,
+    "edge": 12,
+    "firefox": 23,
+    "safari": 7,
+    "node": 0.12,
+    "android": 4.4,
+    "ios": 8
+  },
+  "es6.math.log1p": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.log10": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.log2": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.sign": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 9,
+    "node": 0.12,
+    "ios": 9
+  },
+  "es6.math.sinh": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.tanh": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
+  },
+  "es6.math.trunc": {
+    "chrome": 38,
+    "opera": 25,
+    "edge": 12,
+    "firefox": 25,
+    "safari": 7,
+    "node": 0.12,
+    "ios": 10
   }
 }
