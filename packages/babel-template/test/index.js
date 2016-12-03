@@ -1,6 +1,7 @@
 import generator from "../../babel-generator";
 import template from "../lib";
 import chai from "chai";
+import * as types from "../../babel-types";
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 
@@ -26,5 +27,21 @@ describe("templating", function () {
   it("should preserve comments with a flag", function () {
     const output = template(comments, { preserveComments: true })();
     chai.expect(generator(output).code).to.be.equal(comments);
+  });
+
+  it("should skip replacement node", function () {
+    const output = template("const a = TEST")({
+      TEST: types.identifier("TEST2"),
+      TEST2: types.identifier("TEST3"),
+    });
+    chai.expect(generator(output).code).to.be.equal("const a = TEST2;");
+  });
+
+  it("should skip an array of replacement nodes", function () {
+    const output = template("{ TEST }")({
+      TEST: [types.identifier("TEST2"), types.identifier("TEST2")],
+      TEST2: types.identifier("TEST3"),
+    });
+    chai.expect(generator(output).code).to.be.equal("{\n  TEST2\n  TEST2\n}");
   });
 });

@@ -2,10 +2,6 @@ import cloneDeep from "lodash/cloneDeep";
 import has from "lodash/has";
 import traverse from "babel-traverse";
 import * as babylon from "babylon";
-import * as t from "babel-types";
-
-const FROM_TEMPLATE = "_fromTemplate"; //Symbol(); // todo: probably wont get copied over
-const TEMPLATE_SKIP = Symbol();
 
 export default function (code: string, opts?: Object): Function {
   // since we lazy parse the template, we get the current stack so we have the
@@ -33,12 +29,7 @@ export default function (code: string, opts?: Object): Function {
 
     try {
       ast = babylon.parse(code, opts);
-
       ast = traverse.removeProperties(ast, { preserveComments: opts.preserveComments });
-
-      traverse.cheap(ast, function (node) {
-        node[FROM_TEMPLATE] = true;
-      });
     } catch (err) {
       err.stack = `${err.stack}from\n${stack}`;
       throw err;
@@ -75,37 +66,40 @@ const templateVisitor = {
   // 360
   noScope: true,
 
-  enter(path, args) {
-    let { node } = path;
-    if (node[TEMPLATE_SKIP]) return path.skip();
-
-    if (t.isExpressionStatement(node)) {
-      node = node.expression;
+  Identifier(path, args) {
+    if (path.shouldSkip) {
+      return;
     }
+
+    const { name } = path.node;
 
     let replacement;
 
-    if (t.isIdentifier(node) && node[FROM_TEMPLATE]) {
-      if (has(args[0], node.name)) {
-        replacement = args[0][node.name];
-      } else if (node.name[0] === "$") {
-        const i = +node.name.slice(1);
-        if (args[i]) replacement = args[i];
-      }
+    if (has(args[0], name)) {
+      replacement = args[0][name];
+    } else if (name[0] === "$") {
+      const i = +name.slice(1);
+      if (args.length > i) replacement = args[i];
+    }
+
+    const { parentPath } = path;
+    if (parentPath.isExpressionStatement()) {
+      path = parentPath;
     }
 
     if (replacement === null) {
       path.remove();
-    }
-
-    if (replacement) {
-      replacement[TEMPLATE_SKIP] = true;
-      path.replaceInline(replacement);
+    } else if (replacement) {
+      const paths = path.replaceInline(replacement);
+      for (const p of (paths: Array)) {
+        p.skip();
+      }
     }
   },
 
   exit({ node }) {
-    if (!node.loc)
-      {traverse.clearNode(node);}
+    if (!node.loc) {
+      traverse.clearNode(node);
+    }
   },
 };
