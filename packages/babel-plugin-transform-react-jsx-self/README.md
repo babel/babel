@@ -4,13 +4,13 @@
 
 ## Example
 
-### In
+**In**
 
 ```
 <sometag />
 ```
 
-### Out
+**Out**
 
 ```
 <sometag __self={this} />

@@ -4,13 +4,13 @@
 
 ## Example
 
-### In
+**In**
 
 ```
 <sometag />
 ```
 
-### Out
+**Out**
 
 ```
 <sometag __source={ { fileName: 'this/file.js', lineNumber: 10 } } />
