@@ -2,6 +2,22 @@
 
 > Add displayName to React.createClass calls
 
+## Example
+
+**In**
+
+```js
+var foo = React.createClass({});
+```
+
+**Out**
+
+```js
+var foo = React.createClass({
+  displayName: "foo"
+});
+```
+
 ## Installation
 
 ```sh
