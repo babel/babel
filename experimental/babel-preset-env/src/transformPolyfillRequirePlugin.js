@@ -1,6 +1,3 @@
-// Should throw if no babel-polyfill import is found in all files
-// or if more than one is found
-
 const polyfillSource = "babel-polyfill";
 
 export default function ({ types: t }) {

@@ -1,6 +1,5 @@
 // https://github.com/zloirock/core-js
 
-/* eslint-disable quotes */
 module.exports = {
   // es2015
   // core-js/fn/map
@@ -18,17 +17,12 @@ module.exports = {
   "es6.typed.float64-array": "typed arrays / Float64Array",
 
   "es6.map": "Map",
-
   "es6.set": "Set",
-
   "es6.weak-map": "WeakMap",
-
   "es6.weak-set": "WeakSet",
+  // proxy not implemented
 
-  // no proxy
-
-  "es6.reflect": "Reflect",
-  "es6.reflect.apply": "Reflect / ",
+  "es6.reflect.apply": "Reflect / Reflect.apply",
   "es6.reflect.construct": "Reflect / Reflect.construct",
   "es6.reflect.define-property": "Reflect / Reflect.defineProperty",
   "es6.reflect.delete-property": "Reflect / Reflect.deleteProperty",
@@ -43,20 +37,19 @@ module.exports = {
   "es6.reflect.set-prototype-of": "Reflect / Reflect.setPrototypeOf",
 
   "es6.promise": "Promise",
-
   "es6.symbol": "Symbol",
 
-  "es6.symbol.has-instance": "well-known symbols / Symbol.hasInstance",
-  "es6.symbol.is-concat-spreadable": "well-known symbols / Symbol.isConcatSpreadable",
-  "es6.symbol.iterator": "well-known symbols / Symbol.iterator",
-  "es6.symbol.match": "well-known symbols / Symbol.match",
-  "es6.symbol.replace": "well-known symbols / Symbol.replace",
-  "es6.symbol.search": "well-known symbols / Symbol.search",
-  "es6.symbol.species": "well-known symbols / Symbol.species",
-  "es6.symbol.split": "well-known symbols / Symbol.split",
-  "es6.symbol.to-primitive": "well-known symbols / Symbol.toPrimitive",
-  "es6.symbol.to-string-tag": "well-known symbols / Symbol.toStringTag",
-  "es6.symbol.unscopables": "well-known symbols / Symbol.unscopables",
+  "es6.symbol": "well-known symbols / Symbol.hasInstance",
+  "es6.symbol": "well-known symbols / Symbol.isConcatSpreadable",
+  "es6.symbol": "well-known symbols / Symbol.iterator",
+  "es6.symbol": "well-known symbols / Symbol.match",
+  "es6.symbol": "well-known symbols / Symbol.replace",
+  "es6.symbol": "well-known symbols / Symbol.search",
+  "es6.symbol": "well-known symbols / Symbol.species",
+  "es6.symbol": "well-known symbols / Symbol.split",
+  "es6.symbol": "well-known symbols / Symbol.toPrimitive",
+  "es6.symbol": "well-known symbols / Symbol.toStringTag",
+  "es6.symbol": "well-known symbols / Symbol.unscopables",
 
   "es6.object.assign": "Object static methods / Object.assign",
   "es6.object.is": "Object static methods / Object.is",
@@ -69,7 +62,7 @@ module.exports = {
   "es6.string.from-code-point": "String static methods / String.fromCodePoint",
 
   "es6.string.code-point-at": "String.prototype methods / String.prototype.codePointAt",
-  // "es6.string.normalize": "String.prototype methods / String.prototype.normalize",
+  // "String.prototype methods / String.prototype.normalize" not implemented
   "es6.string.repeat": "String.prototype methods / String.prototype.repeat",
   "es6.string.starts-with": "String.prototype methods / String.prototype.startsWith",
   "es6.string.ends-with": "String.prototype methods / String.prototype.endsWith",
@@ -88,9 +81,10 @@ module.exports = {
   "es6.array.find": "Array.prototype methods / Array.prototype.find",
   "es6.array.find-index": "Array.prototype methods / Array.prototype.findIndex",
   "es6.array.fill": "Array.prototype methods / Array.prototype.fill",
-  // "es6.array.keys": "Array.prototype methods / Array.prototype.keys",
-  // "es6.array.values": "Array.prototype methods / Array.prototype.values",
-  // "es6.array.entries": "Array.prototype methods / Array.prototype.entries",
+  "es6.array.iterator": "Array.prototype methods / Array.prototype.keys",
+  // can use Symbol.iterator, not implemented in many environments
+  // "es6.array.iterator": "Array.prototype methods / Array.prototype.values",
+  "es6.array.iterator": "Array.prototype methods / Array.prototype.entries",
 
   "es6.number.is-finite": "Number properties / Number.isFinite",
   "es6.number.is-integer": "Number properties / Number.isInteger",

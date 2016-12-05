@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 module.exports = {
   // es2015
   "transform-es2015-arrow-functions": {

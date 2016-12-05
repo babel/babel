@@ -137,9 +137,9 @@ function generateData(features) {
 
       // add opera
       if (plugin.chrome) {
-        plugin.opera = plugin.chrome - 13;
-
-        if (plugin.chrome === 5) {
+        if (plugin.chrome >= 28) {
+          plugin.opera = plugin.chrome - 13;
+        } else if (plugin.chrome === 5) {
           plugin.opera = 12;
         }
       }
