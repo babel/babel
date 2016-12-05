@@ -10,4 +10,8 @@ require("core-js/modules/es6.symbol.species");
 
 require("core-js/modules/es6.array.from");
 
+require("core-js/modules/es7.string.pad-start");
+
+require("core-js/modules/es7.string.pad-end");
+
 1 ** 2;

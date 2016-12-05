@@ -1,9 +1,6 @@
 // https://github.com/zloirock/core-js
 
-module.exports = {
-  // es2015
-  // core-js/fn/map
-
+const es2015 = {
   // "es6.typed/array-buffer": "typed arrays / ",
   "es6.typed.data-view": "typed arrays / DataView",
   "es6.typed.int8-array": "typed arrays / Int8Array",
@@ -111,7 +108,18 @@ module.exports = {
   "es6.math.sinh": "Math methods / Math.sinh",
   "es6.math.tanh": "Math methods / Math.tanh",
   "es6.math.trunc": "Math methods / Math.trunc",
-
-  "es7.string.pad-start": "String padding / String.prototype.padStart",
-  "es7.string.pad-end": "String padding / String.prototype.padEnd"
 };
+
+const es2016 = {
+  "es7.array.includes.js": "Array.prototype.includes",
+};
+
+const es2017 = {
+  "es7.object.values": "Object.values",
+  "es7.object.entries": "Object.entries",
+  "es7.object.get-own-property-descriptors": "Object.getOwnPropertyDescriptors",
+  "es7.string.pad-start": "String padding / String.prototype.padStart",
+  "es7.string.pad-end": "String padding / String.prototype.padEnd",
+};
+
+module.exports = Object.assign({}, es2015, es2016, es2017);
