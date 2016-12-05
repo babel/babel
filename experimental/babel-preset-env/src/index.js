@@ -136,6 +136,17 @@ export const validateWhitelistOption = (whitelistOpt = []) => {
 
 let hasBeenLogged = false;
 
+const logPlugin = (plugin, targets, list) => {
+  const envList = list[plugin];
+  const filteredList = Object.keys(targets)
+  .reduce((a, b) => {
+    a[b] = envList[b];
+    return a;
+  }, {});
+  const logStr = `\n ${plugin} ${JSON.stringify(filteredList)}`;
+  console.log(logStr);
+};
+
 export default function buildPreset(context, opts = {}) {
   const loose = validateLooseOption(opts.loose);
   const moduleType = validateModulesOption(opts.modules);
@@ -155,23 +166,22 @@ export default function buildPreset(context, opts = {}) {
 
   if (debug && !hasBeenLogged) {
     hasBeenLogged = true;
-
     console.log("babel-preset-env: `DEBUG` option");
     console.log("");
     console.log(`Using targets: ${JSON.stringify(targets, null, 2)}`);
     console.log("");
-    console.log("Using plugins:");
-    console.log("");
     console.log(`module: ${moduleType}`);
+    console.log("");
+    console.log("Using plugins:");
     transformations.forEach((transform) => {
-      let envList = pluginList[transform];
-      let filteredList = Object.keys(targets)
-      .reduce((a, b) => {
-        a[b] = envList[b];
-        return a;
-      }, {});
-      console.log(transform, JSON.stringify(filteredList, null, 2));
+      logPlugin(transform, targets, pluginList);
     });
+    console.log("\nUsing polyfills:");
+    if (useBuiltIns && polyfills.length) {
+      polyfills.forEach((polyfill) => {
+        logPlugin(polyfill, targets, builtInsList);
+      });
+    }
   }
 
   transformations = [...transformations, ...whitelist].map((pluginName) => {
