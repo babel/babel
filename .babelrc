@@ -10,6 +10,14 @@
     "transform-flow-strip-types"
   ],
   "env": {
+    "watch": {
+      "presets": [
+        ["es2015", {
+          "loose": true
+        }],
+        "stage-0"
+      ]
+    },
     "test": {
       "plugins": ["istanbul"]
     }
