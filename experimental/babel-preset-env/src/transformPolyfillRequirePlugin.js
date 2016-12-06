@@ -1,13 +1,13 @@
 const polyfillSource = "babel-polyfill";
 
 export default function ({ types: t }) {
-  function addImport(polyfill) {
+  function createImportDeclaration(polyfill) {
     let declar = t.importDeclaration([], t.stringLiteral(`core-js/modules/${polyfill}`));
     declar._blockHoist = 3;
     return declar;
   }
 
-  function addRequire(polyfill) {
+  function createRequireStatement(polyfill) {
     return t.expressionStatement(
       t.callExpression(
         t.identifier("require"),
@@ -38,7 +38,9 @@ export default function ({ types: t }) {
           return;
         }
 
-        let imports = state.opts.polyfills.map((p) => addImport(p));
+        let imports = state.opts.polyfills
+        .filter((el, i, arr) => arr.indexOf(el) === i)
+        .map((p) => createImportDeclaration(p));
         path.replaceWithMultiple(imports);
       }
     },
@@ -58,7 +60,9 @@ to the "transform-polyfill-require" plugin
             return;
           }
 
-          let requires = state.opts.polyfills.map((p) => addRequire(p));
+          let requires = state.opts.polyfills
+          .filter((el, i, arr) => arr.indexOf(el) === i)
+          .map((p) => createRequireStatement(p));
           bodyPath.replaceWithMultiple(requires);
         }
       });
