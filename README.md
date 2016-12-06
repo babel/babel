@@ -16,11 +16,26 @@
   <a href="https://www.npmjs.com/package/babel-core"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/babel-core.svg"></a>
 </p>
 
-Babel is a tool that helps you write the latest version of Javascript.
+Babel is a community-driven tool that helps you write the latest version of JavaScript.
 
-When your supported environments don't support certain features natively, it will compile it down to a supported version. 
+When your supported environments don't support certain features natively, it will help you compile it down to a supported version.
 
-Try it out at our [REPL](https://babeljs.io/repl) and follow us at [@babeljs](https://twitter.com/babeljs).
+**In**
+
+```js
+// ES2015 arrow function
+[1,2,3].map(n => n + 1);
+```
+
+**Out**
+
+```js
+[1,2,3].map(function(n) {
+  return n + 1;
+});
+```
+
+Try it out at our [REPL](https://babeljs.io/repl/#?babili=false&evaluate=true&lineWrap=false&presets=latest&code=%5B1%2C2%2C3%5D.map(n%20%3D%3E%20n%20%2B%201)%3B&experimental=true&loose=true&spec=false&playground=false&stage=0) and follow us at [@babeljs](https://twitter.com/babeljs).
 
 - [FAQ](#faq)
 - [Packages](#packages)
