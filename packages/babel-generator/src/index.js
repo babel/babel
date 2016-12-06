@@ -81,7 +81,7 @@ function normalizeOptions(code, opts, tokens): Format {
     format.compact = code.length > 100000; // 100KB
 
     if (format.compact) {
-      console.error("[BABEL] " + messages.get("codeGeneratorDeopt", opts.filename, "100KB"));
+      console.log("[BABEL] " + messages.get("codeGeneratorDeopt", opts.filename, "100KB"));
     }
   }
 
