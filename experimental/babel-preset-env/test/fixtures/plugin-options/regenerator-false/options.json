@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["../../../../lib/transformPolyfillRequirePlugin", {
+      "regenerator": false,
+      "polyfills": []
+    }]
+  ]
+}

@@ -184,7 +184,12 @@ export default function buildPreset(context, opts = {}) {
     }
   }
 
-  transformations = [...transformations, ...whitelist].map((pluginName) => {
+  let allTransformations = [...transformations, ...whitelist];
+  let regenerator = allTransformations.indexOf("transform-regenerator") >= 0;
+
+  console.log(allTransformations, regenerator);
+
+  let plugins = allTransformations.map((pluginName) => {
     return [require(`babel-plugin-${pluginName}`), { loose }];
   });
 
@@ -198,8 +203,8 @@ export default function buildPreset(context, opts = {}) {
   return {
     plugins: [
       ...modules,
-      ...transformations,
-      useBuiltIns === true && [transformPolyfillRequirePlugin, { polyfills }]
+      ...plugins,
+      useBuiltIns === true && [transformPolyfillRequirePlugin, { polyfills, regenerator }]
     ].filter(Boolean)
   };
 }

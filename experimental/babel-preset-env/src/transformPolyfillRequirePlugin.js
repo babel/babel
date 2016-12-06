@@ -30,6 +30,25 @@ export default function ({ types: t }) {
       isPolyfillSource(path.node.expression.arguments[0].value);
   }
 
+  function createImport(polyfill, requireType) {
+    if (requireType === "import") {
+      return createImportDeclaration(polyfill);
+    } else {
+      return createRequireStatement(polyfill);
+    }
+  }
+
+  function createImports(polyfills, requireType, regenerator) {
+    let imports = polyfills
+    .filter((el, i, arr) => arr.indexOf(el) === i)
+    .map((polyfill) => createImport(polyfill, requireType));
+
+    return [
+      ...imports,
+      regenerator && createImport("regenerator-runtime/runtime", requireType)
+    ].filter(Boolean);
+  }
+
   const isPolyfillImport = {
     ImportDeclaration(path, state) {
       if (path.node.specifiers.length === 0 &&
@@ -40,10 +59,9 @@ export default function ({ types: t }) {
           return;
         }
 
-        let imports = state.opts.polyfills
-        .filter((el, i, arr) => arr.indexOf(el) === i)
-        .map((p) => createImportDeclaration(p));
-        path.replaceWithMultiple(imports);
+        path.replaceWithMultiple(
+          createImports(state.opts.polyfills, "import", state.opts.regenerator)
+        );
       }
     },
     Program(path, state) {
@@ -62,10 +80,9 @@ to the "transform-polyfill-require" plugin
             return;
           }
 
-          let requires = state.opts.polyfills
-          .filter((el, i, arr) => arr.indexOf(el) === i)
-          .map((p) => createRequireStatement(p));
-          bodyPath.replaceWithMultiple(requires);
+          bodyPath.replaceWithMultiple(
+            createImports(state.opts.polyfills, "require", state.opts.regenerator)
+          );
         }
       });
     }
