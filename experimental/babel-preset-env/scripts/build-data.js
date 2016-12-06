@@ -66,7 +66,12 @@ const envMap = {
 
 const getLowestImplementedVersion = ({ features }, env) => {
   let tests = flatten(compatibilityTests
-    .filter((test) => features.indexOf(test.name) >= 0)
+    .filter((test) => {
+      return features.indexOf(test.name) >= 0 ||
+      // for features === ["DataView"]
+      // it covers "DataView (Int8)" and "DataView (UInt8)"
+      features.length === 1 && test.name.indexOf(features[0]) === 0;
+    })
     .map((test) => {
       return test.subtests ?
         test.subtests.map((subtest) => ({
