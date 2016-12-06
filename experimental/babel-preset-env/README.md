@@ -126,6 +126,9 @@ Defaults to `false`.
 
 A way to apply `babel-preset-env` for polyfills (via "babel-polyfill").
 
+> NOTE: This does not currently polyfill experimental/stage-x built-ins like the regular "babel-polyfill" does.
+> This will only work with npm >= 3 (which should be used with Babel 6 anyway)
+
 ```
 npm install babel-polyfill --save
 ```
@@ -149,6 +152,12 @@ import "core-js/modules/es6.reflect.own-keys";
 import "core-js/modules/es6.symbol.iterator";
 import "core-js/modules/es6.symbol.species";
 import "core-js/modules/es6.array.from";
+```
+
+> This will also work for "core-js" directly (`import "core-js";`)
+
+```
+npm install core-js --save
 ```
 
 ---

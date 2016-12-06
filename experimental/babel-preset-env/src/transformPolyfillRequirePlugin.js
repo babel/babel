@@ -1,4 +1,6 @@
-const polyfillSource = "babel-polyfill";
+function isPolyfillSource(value) {
+  return value === "babel-polyfill" || value === "core-js";
+}
 
 export default function ({ types: t }) {
   function createImportDeclaration(polyfill) {
@@ -18,20 +20,20 @@ export default function ({ types: t }) {
     );
   }
 
-  function isRequire(path, source) {
+  function isRequire(path) {
     return t.isExpressionStatement(path.node) &&
       t.isCallExpression(path.node.expression) &&
       t.isIdentifier(path.node.expression.callee) &&
       path.node.expression.callee.name === "require" &&
       path.node.expression.arguments.length === 1 &&
       t.isStringLiteral(path.node.expression.arguments[0]) &&
-      path.node.expression.arguments[0].value === source;
+      isPolyfillSource(path.node.expression.arguments[0].value);
   }
 
   const isPolyfillImport = {
     ImportDeclaration(path, state) {
       if (path.node.specifiers.length === 0 &&
-          path.node.source.value === polyfillSource) {
+          isPolyfillSource(path.node.source.value)) {
         this.numPolyfillImports++;
         if (this.numPolyfillImports > 1) {
           path.remove();
@@ -53,7 +55,7 @@ to the "transform-polyfill-require" plugin
 `);
       }
       path.get("body").forEach((bodyPath) => {
-        if (isRequire(bodyPath, polyfillSource)) {
+        if (isRequire(bodyPath)) {
           this.numPolyfillImports++;
           if (this.numPolyfillImports > 1) {
             path.remove();
