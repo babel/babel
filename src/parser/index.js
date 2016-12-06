@@ -3,6 +3,19 @@ import { getOptions } from "../options";
 import Tokenizer from "../tokenizer";
 
 export const plugins = {};
+const frozenDeprecatedWildcardPluginList = [
+  "jsx",
+  "doExpressions",
+  "objectRestSpread",
+  "decorators",
+  "classProperties",
+  "exportExtensions",
+  "asyncGenerators",
+  "functionBind",
+  "functionSent",
+  "dynamicImport",
+  "flow"
+];
 
 export default class Parser extends Tokenizer {
   constructor(options: Object, input: string) {
@@ -30,7 +43,11 @@ export default class Parser extends Tokenizer {
   }
 
   hasPlugin(name: string): boolean {
-    return !!(this.plugins["*"] || this.plugins[name]);
+    if (this.plugins["*"] && frozenDeprecatedWildcardPluginList.indexOf(name) > -1) {
+      return true;
+    }
+
+    return !!this.plugins[name];
   }
 
   extend(name: string, f: Function) {
@@ -49,6 +66,7 @@ export default class Parser extends Tokenizer {
   }
 
   loadPlugins(pluginList: Array<string>): { [key: string]: boolean } {
+    // TODO: Deprecate "*" option in next major version of Babylon
     if (pluginList.indexOf("*") >= 0) {
       this.loadAllPlugins();
 

@@ -107,8 +107,6 @@ require("babylon").parse("code", {
 
 ### Plugins
 
-> You can use `"*"` to include everything (may be useful in certain cases)
-
  - `jsx`
  - `flow`
  - `doExpressions`
