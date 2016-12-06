@@ -28,7 +28,7 @@ export function _call(fns?: Array<Function>): boolean {
     if (!node) return true;
 
     let ret = fn.call(this.state, this, this.state);
-    if (ret) throw new Error(`Unexpected return value from visitor method ${fn}`);
+    if (ret) return true;
 
     // node has been replaced, it will have been requeued
     if (this.node !== node) return true;
