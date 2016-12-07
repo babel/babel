@@ -366,43 +366,51 @@
     };
   }
 
-  // for browsers that support it, return the shared %IteratorPrototype%.
-  function getIteratorPrototype() {
-    if (!([][iteratorSymbol])) {
-      return null;
-    }
-    var iteratorInstance = [][iteratorSymbol]();
-    if (!iteratorInstance) {
-      return null;
-    }
-    var iteratorPrototype = Object.getPrototypeOf(Object.getPrototypeOf(iteratorInstance));
-    // some older browser engines don't support %IteratorPrototype% and have
-    // %ArrayIteratorPrototype% inherit directly from Object.prototype. these checks
-    // are to weed out those non-compliant browsers.
-    if (!iteratorPrototype
-      || !iteratorPrototype.hasOwnProperty(iteratorSymbol)
-      || iteratorPrototype === Object.prototype) {
-      return null;
-    }
-    return iteratorPrototype;
-  }
-
   // Define Generator.prototype.{next,throw,return} in terms of the
   // unified ._invoke helper method.
   defineIteratorMethods(Gp);
 
-  if (getIteratorPrototype()) {
-    // for browsers that do support %IteratorPrototype%, (Generator).prototype
-    // should inherit from %IteratorPrototype%.
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(Gp, getIteratorPrototype());
-    } else {
-      Gp.__proto__ = getIteratorPrototype();
+  // for browsers that do not support %IteratorPrototype%, this is a polyfilled
+  // %IteratorPrototype%
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function() {
+    return this;
+  };
+
+  // for browsers that support it, return the shared %IteratorPrototype%. for ones,
+  // that don't, return the polyfill.
+  function getIteratorPrototype() {
+    if (!([][iteratorSymbol])) {
+      // arrays don't have an @@iterator property, return the polyfill.
+      return IteratorPrototype;
     }
+    var iteratorInstance = [][iteratorSymbol]();
+    if (!iteratorInstance) {
+      // for some reason, array iterators aren't callable. return the polyfill.
+      return IteratorPrototype;
+    }
+    var nativeIteratorPrototype = Object.getPrototypeOf(Object.getPrototypeOf(iteratorInstance));
+    // some older browser engines don't support %IteratorPrototype% and have
+    // %ArrayIteratorPrototype% inherit directly from Object.prototype. these checks
+    // are to weed out those non-compliant browsers.
+    if (nativeIteratorPrototype
+      && nativeIteratorPrototype.hasOwnProperty(iteratorSymbol)
+      && nativeIteratorPrototype !== Object.prototype) {
+      // looks like the browser has an ES2015-compliant %IteratorPrototype%, so
+      // we can return it.
+      return nativeIteratorPrototype;
+    }
+    // otherwise, return the polyfill.
+    return IteratorPrototype;
+  }
+
+  if (Object.setPrototypeOf) {
+    Object.setPrototypeOf(Gp, getIteratorPrototype());
+  } else if ('__proto__' in Object.prototype){
+    Gp.__proto__ = getIteratorPrototype();
   } else {
-    // in browsers that don't support %IteratorPrototype%, set the [Symbol.iterator]
-    // property on (Generator).prototype, which is not spec-compliant, but the best
-    // we can do.
+    // this is an environment where we can't reset prototypes; the best we can do
+    // is add the @@iterator property directly to %GeneratorPrototype%.
     Gp[iteratorSymbol] = function() {
       return this;
     };
