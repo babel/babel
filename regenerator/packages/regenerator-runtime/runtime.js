@@ -11,7 +11,8 @@
 !(function(global) {
   "use strict";
 
-  var hasOwn = Object.prototype.hasOwnProperty;
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
   var undefined; // More compressible than void 0.
   var $Symbol = typeof Symbol === "function" ? Symbol : {};
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
@@ -83,26 +84,29 @@
   function GeneratorFunction() {}
   function GeneratorFunctionPrototype() {}
 
-  // this is a polyfill for %IteratorPrototype% for environments that don't
-  // natively support it.
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
   var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function() {return this;};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
   var getProto = Object.getPrototypeOf;
-  if (getProto) {
-    var NativeIteratorPrototype = getProto(getProto(values([])));
-    if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Object.prototype &&
-      NativeIteratorPrototype.hasOwnProperty(iteratorSymbol)) {
-      // this environment has a native %IteratorPrototype%; use it instead of
-      // a polyfill.
-      IteratorPrototype = NativeIteratorPrototype;
-    }
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
   }
 
-  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
   GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
   GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] = GeneratorFunction.displayName = "GeneratorFunction";
+  GeneratorFunctionPrototype[toStringTagSymbol] =
+    GeneratorFunction.displayName = "GeneratorFunction";
 
   // Helper for defining the .next, .throw, and .return methods of the
   // Iterator interface in terms of a single ._invoke method.
