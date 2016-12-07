@@ -35,6 +35,10 @@ defineType("BindExpression", {
   }
 });
 
+defineType("Import", {
+  aliases: ["Expression"]
+});
+
 defineType("Decorator", {
   visitor: ["expression"],
   fields: {
