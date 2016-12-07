@@ -169,6 +169,9 @@ export function isReferenced(node: Object, parent: Object): boolean {
 export function isValidIdentifier(name: string): boolean {
   if (typeof name !== "string" || esutils.keyword.isReservedWordES6(name, true)) {
     return false;
+  } else if (name === "await") {
+    // invalid in module, valid in script; better be safe (see #4952)
+    return false;
   } else {
     return esutils.keyword.isIdentifierNameES6(name);
   }
