@@ -12,9 +12,9 @@ describe("@@iterator", function() {
     var iterator = gen();
     assert.ok(!iterator.hasOwnProperty(Symbol.iterator));
     assert.ok(!Object.getPrototypeOf(iterator).hasOwnProperty(Symbol.iterator));
-    assert.ok(Object.getPrototypeOf(
+    assert.ok(Object.getPrototypeOf(Object.getPrototypeOf(
       Object.getPrototypeOf(iterator)
-    ).hasOwnProperty(Symbol.iterator));
+    )).hasOwnProperty(Symbol.iterator));
     assert.strictEqual(iterator[Symbol.iterator](), iterator);
   });
 });

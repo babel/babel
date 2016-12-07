@@ -366,13 +366,47 @@
     };
   }
 
+  // for browsers that support it, return the shared %IteratorPrototype%.
+  function getIteratorPrototype() {
+    if (!([][iteratorSymbol])) {
+      return null;
+    }
+    var iteratorInstance = [][iteratorSymbol]();
+    if (!iteratorInstance) {
+      return null;
+    }
+    var iteratorPrototype = Object.getPrototypeOf(Object.getPrototypeOf(iteratorInstance));
+    // some older browser engines don't support %IteratorPrototype% and have
+    // %ArrayIteratorPrototype% inherit directly from Object.prototype. these checks
+    // are to weed out those non-compliant browsers.
+    if (!iteratorPrototype
+      || !iteratorPrototype.hasOwnProperty(iteratorSymbol)
+      || iteratorPrototype === Object.prototype) {
+      return null;
+    }
+    return iteratorPrototype;
+  }
+
   // Define Generator.prototype.{next,throw,return} in terms of the
   // unified ._invoke helper method.
   defineIteratorMethods(Gp);
 
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
+  if (getIteratorPrototype()) {
+    // for browsers that do support %IteratorPrototype%, (Generator).prototype
+    // should inherit from %IteratorPrototype%.
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(Gp, getIteratorPrototype());
+    } else {
+      Gp.__proto__ = getIteratorPrototype();
+    }
+  } else {
+    // in browsers that don't support %IteratorPrototype%, set the [Symbol.iterator]
+    // property on (Generator).prototype, which is not spec-compliant, but the best
+    // we can do.
+    Gp[iteratorSymbol] = function() {
+      return this;
+    };
+  }
 
   Gp[toStringTagSymbol] = "Generator";
 
