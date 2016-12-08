@@ -46,7 +46,7 @@ let buildExportAll = template(`
 const specBuildNamespace = template(`
   $0 = $1 = Object.create(null, { __esModule: { value: true } });
   if (Symbol && Symbol.toStringTag) {
-    Object.defineProperty($0, Symbol.toStringTag, { value: "Module" })
+    Object.defineProperty($0, Symbol.toStringTag, { value: "Module" });
   }
 `);
 
@@ -642,15 +642,16 @@ export default function () {
             topNodes.unshift(declar);
           }
 
-          if (hasExports && spec) {
-            const decl = specBuildNamespace(moduleExports, exportsObj);
-            decl._blockHoist = 3;
-            topNodes.unshift(decl);
+          path.unshiftContainer("body", topNodes);
 
+          if (hasExports && spec) {
+            const decls = specBuildNamespace(moduleExports, exportsObj);
+            decls.forEach((decl) => { decl._blockHoist = 3; });
+
+            path.unshiftContainer("body", decls);
             path.pushContainer("body", [specFinishNamespaceExport(exportsObj)]);
           }
 
-          path.unshiftContainer("body", topNodes);
           path.traverse(reassignmentVisitor, {
             remaps,
             scope,

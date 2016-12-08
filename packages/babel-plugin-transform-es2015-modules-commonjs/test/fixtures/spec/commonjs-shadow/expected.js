@@ -6,6 +6,12 @@ module.exports = exports = Object.create(null, {
   }
 });
 
+if (Symbol && Symbol.toStringTag) {
+  Object.defineProperty(module.exports, Symbol.toStringTag, {
+    value: "Module"
+  });
+}
+
 var _bar = babelHelpers.specRequireInterop(require('bar'));
 
 Object.defineProperty(exports, "default", {

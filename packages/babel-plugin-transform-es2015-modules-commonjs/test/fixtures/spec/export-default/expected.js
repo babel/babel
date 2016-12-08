@@ -5,6 +5,13 @@ module.exports = exports = Object.create(null, {
     value: true
   }
 });
+
+if (Symbol && Symbol.toStringTag) {
+  Object.defineProperty(module.exports, Symbol.toStringTag, {
+    value: "Module"
+  });
+}
+
 Object.defineProperty(exports, "default", {
   enumerable: true,
   writable: true,

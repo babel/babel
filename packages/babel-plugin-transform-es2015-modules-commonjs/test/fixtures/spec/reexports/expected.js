@@ -5,6 +5,13 @@ module.exports = exports = Object.create(null, {
     value: true
   }
 });
+
+if (Symbol && Symbol.toStringTag) {
+  Object.defineProperty(module.exports, Symbol.toStringTag, {
+    value: "Module"
+  });
+}
+
 const _undefined = {
   enumerable: true,
   writable: true,
