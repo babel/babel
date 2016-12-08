@@ -2,6 +2,12 @@ function isPolyfillSource(value) {
   return value === "babel-polyfill" || value === "core-js";
 }
 
+const whitelist = [
+  "web.timers",
+  "web.immediate",
+  "web.dom.iterable"
+];
+
 export default function ({ types: t }) {
   function createImportDeclaration(polyfill) {
     let declar = t.importDeclaration([], t.stringLiteral(`core-js/modules/${polyfill}`));
@@ -60,7 +66,7 @@ export default function ({ types: t }) {
         }
 
         path.replaceWithMultiple(
-          createImports(state.opts.polyfills, "import", state.opts.regenerator)
+          createImports([...state.opts.polyfills, ...whitelist], "import", state.opts.regenerator)
         );
       }
     },
@@ -81,7 +87,7 @@ to the "transform-polyfill-require" plugin
           }
 
           bodyPath.replaceWithMultiple(
-            createImports(state.opts.polyfills, "require", state.opts.regenerator)
+            createImports([...state.opts.polyfills, ...whitelist], "require", state.opts.regenerator)
           );
         }
       });
