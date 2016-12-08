@@ -7,7 +7,7 @@ module.exports = exports = Object.create(null, {
 });
 
 if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
-  Object.defineProperty(module.exports, Symbol.toStringTag, {
+  Object.defineProperty(exports, Symbol.toStringTag, {
     value: "Module"
   });
 }
@@ -24,7 +24,6 @@ Object.defineProperties(exports, {
 });
 Object.defineProperty(exports, "foo", {
   enumerable: true,
-  writable: true,
 
   get() {
     return foo;
@@ -37,7 +36,6 @@ var _outside = babelHelpers.specRequireInterop(require("outside"));
 var def;
 Object.defineProperty(exports, "default", {
   enumerable: true,
-  writable: true,
 
   get() {
     return def;
@@ -53,7 +51,6 @@ class Bar {}
 
 Object.defineProperty(exports, "Bar", {
   enumerable: true,
-  writable: true,
 
   get() {
     return Bar;
@@ -63,7 +60,6 @@ Object.defineProperty(exports, "Bar", {
 const baz = foo();
 Object.defineProperty(exports, "baz", {
   enumerable: true,
-  writable: true,
 
   get() {
     return baz;

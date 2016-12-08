@@ -7,7 +7,7 @@ module.exports = exports = Object.create(null, {
 });
 
 if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
-  Object.defineProperty(module.exports, Symbol.toStringTag, {
+  Object.defineProperty(exports, Symbol.toStringTag, {
     value: "Module"
   });
 }
@@ -29,7 +29,6 @@ Object.keys(_iDontKnow).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   Object.defineProperty(exports, key, {
     enumerable: true,
-    writable: true,
 
     get() {
       return _iDontKnow[key];
@@ -42,7 +41,6 @@ var _because = babelHelpers.specRequireInterop(require('./because'));
 
 Object.defineProperty(exports, 'why', {
   enumerable: true,
-  writable: true,
 
   get() {
     return _because.default;
@@ -61,7 +59,6 @@ Object.defineProperty(exports, 'namespace', {
 });
 Object.defineProperty(exports, 'default', {
   enumerable: true,
-  writable: true,
 
   get() {
     return _elsewhere.stuff;
