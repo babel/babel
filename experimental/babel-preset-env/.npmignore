@@ -2,3 +2,5 @@ src
 test
 node_modules
 scripts
+.eslintignore
+.travis.yml
