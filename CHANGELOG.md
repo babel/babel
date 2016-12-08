@@ -17,7 +17,7 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 > If you missed it, please check out our latest blog post: [The State of Babel](http://babeljs.io/blog/2016/12/07/the-state-of-babel). Talks about where we can possibly move forward as a project and how you can help!
 
-- Maybe fix that crazy deopt message you've all probably seen!
+- Maybe fix that crazy babel-generator deopt message you've all probably seen!
 - Change to `babel-code-frame` for [facebookincubator/create-react-app#1101](https://github.com/facebookincubator/create-react-app/issues/1101)
 - Change to `babel-generator` for [webpack/webpack#3413](https://github.com/webpack/webpack/pull/3413)
 - Move implementation of Regenerator back to the original repo.
@@ -33,11 +33,8 @@ You've probably seen this more than a few times and had no idea what it meant...
 Generating code used to get really slow as file size increased. We've mostly fixed that, but we still automatically fall back to compact output on large files. We're going to bump the limit to 500KB and if there aren't issues just remove it.
 
 ---
-[Ben Newman, @benjamn](https://github.com/benjamn): wrote [Regenerator](https://github.com/facebook/regenerator) while at Facebook. It used a bunch of other libraries such as `ast-types` but has now been rewritten as a standalone **Babel plugin** (also thanks to [Sebastian's](https://github.com/kittens) previous work in [facebook/regenerator#222](https://github.com/facebook/regenerator/pull/222)).
 
-Why move the implementation of Regenerator back into this repository?
-
-As Ben writes: test coverage, a place to file and fix bugs, and Babel ecosystem compatibility.
+[Ben Newman, @benjamn](https://github.com/benjamn): wrote [Regenerator](https://github.com/facebook/regenerator) while at Facebook. It used a bunch of other libraries such as `ast-types` but has now been rewritten as a standalone **Babel plugin** (also thanks to [Sebastian's](https://github.com/kittens) previous work in [facebook/regenerator#222](https://github.com/facebook/regenerator/pull/222)). We're also moving the implementation of Regenerator back into the original repository since Ben is the creator/maintainer.
 
 #### :rocket: New Feature
 * `babel-traverse`
