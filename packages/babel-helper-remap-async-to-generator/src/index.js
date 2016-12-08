@@ -122,7 +122,18 @@ function plainFunction(path: NodePath, callId: Object) {
     NAME: asyncFnId,
     REF: path.scope.generateUidIdentifier("ref"),
     FUNCTION: built,
-    PARAMS: node.params.map(() => path.scope.generateUidIdentifier("x"))
+    PARAMS: node.params.reduce((acc, param) => {
+      acc.done = acc.done || !t.isIdentifier(param);
+
+      if (!acc.done) {
+        acc.params.push(path.scope.generateUidIdentifier("x"));
+      }
+
+      return acc;
+    }, {
+      params: [],
+      done: false,
+    }).params,
   }).expression;
 
   if (isDeclaration) {

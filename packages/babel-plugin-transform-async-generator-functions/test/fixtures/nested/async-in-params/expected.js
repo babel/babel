@@ -6,7 +6,7 @@ let g = (() => {
     yield 3;
   });
 
-  return function g(_x) {
+  return function g() {
     return _ref.apply(this, arguments);
   };
 })();
