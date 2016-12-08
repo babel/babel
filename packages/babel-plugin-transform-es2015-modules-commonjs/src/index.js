@@ -51,28 +51,19 @@ const specBuildFunctionNameWrapper = template(`
   ({ default: $0 }).default
 `);
 
+// The descriptors are as specified in https://tc39.github.io/ecma262/#sec-module-namespace-exotic-objects-getownproperty-p
 const specBuildExportDefault = template(`
-  Object.defineProperty(EXPORTS, "default", { enumerable: true, value: VALUE });
+  Object.defineProperty(EXPORTS, "default", { enumerable: true, writable: true, value: VALUE });
 `);
 
-const specBuildTempExportDescriptor = template(`
-  const $0 = { enumerable: true, configurable: true, value: undefined };
-`);
-
-const specBuildTempExportProperty = (id, descriptorId) => t.objectProperty(id, descriptorId);
-
-// Being configurable is not spec compliant; but not doing this would prevent updating
-// the export with the true value later.
-const specBuildTempExport = template(`
-  Object.defineProperties($0, $1);
-`);
-
+// Unfortunately, regular objects can't synthesize a value descriptor every time they're read,
+// so a getter needs to be used for live bindings.
 const specBuildExport = template(`
-  Object.defineProperty(EXPORTS, NAME, { enumerable: true, get() { return VALUE; } });
+  Object.defineProperty(EXPORTS, NAME, { enumerable: true, writable: true, get() { return VALUE; } });
 `);
 
 const specBuildNamespaceReexport = template(`
-  Object.defineProperty(EXPORTS, NAME, { enumerable: true, value: VALUE });
+  Object.defineProperty(EXPORTS, NAME, { enumerable: true, writable: true, value: VALUE });
 `);
 
 const specBuildNamespaceSpread = template(`
@@ -80,11 +71,22 @@ const specBuildNamespaceSpread = template(`
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(EXPORTS, key, {
       enumerable: true,
-      get: function () {
+      writable: true,
+      get() {
         return OBJECT[key];
       }
     });
   });
+`);
+
+const specBuildTempExportDescriptor = template(`
+  const $0 = { enumerable: true, writable: true, value: undefined };
+`);
+
+const specBuildTempExportProperty = (id, descriptorId) => t.objectProperty(id, descriptorId);
+
+const specBuildTempExport = template(`
+  Object.defineProperties($0, $1);
 `);
 
 const specFinishNamespaceExport = template(`
