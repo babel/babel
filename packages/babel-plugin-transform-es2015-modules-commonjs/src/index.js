@@ -62,7 +62,7 @@ const specBuildExportDefault = template(`
 // Unfortunately, regular objects can't synthesize a value descriptor every time they're read,
 // so a getter needs to be used for live bindings.
 const specBuildExport = template(`
-  Object.defineProperty(EXPORTS, NAME, { enumerable: true, writable: true, get() { return VALUE; } });
+  Object.defineProperty(EXPORTS, NAME, { enumerable: true, get() { return VALUE; } });
 `);
 
 const specBuildNamespaceReexport = template(`
@@ -74,7 +74,6 @@ const specBuildNamespaceSpread = template(`
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(EXPORTS, key, {
       enumerable: true,
-      writable: true,
       get() {
         return OBJECT[key];
       }
