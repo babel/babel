@@ -19,14 +19,12 @@ describe("path/family", function () {
 
     it("should contain keys of nodes in paths", function () {
       Object.keys(nodes).forEach((id) => {
-        console.log(id) &&
         assert.strictEqual(hop(paths, id), true, "Node's keys exists in paths");
       });
     });
 
     it("should contain outer bindings", function () {
       Object.keys(outerNodes).forEach((id) => {
-        console.log(id) &&
         assert.strictEqual(hop(outerPaths, id), true, "Has same outer keys");
       });
     });

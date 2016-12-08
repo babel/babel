@@ -9,7 +9,7 @@
   "dependencies": {
     "regenerator-transform": "0.9.8"
   },
-  "license": "BSD",
+  "license": "MIT",
   "devDependencies": {
     "babel-helper-plugin-test-runner": "^6.8.0"
   }
