@@ -95,7 +95,6 @@ const getLowestImplementedVersion = ({ features }, env) => {
     // don't count against it
     // only doing this for built-ins atm
     if (!test.babel && isBuiltIn) {
-      console.log(name);
       return "-1";
     }
 

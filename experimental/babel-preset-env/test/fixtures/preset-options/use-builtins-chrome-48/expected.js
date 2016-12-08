@@ -16,6 +16,7 @@ import "core-js/modules/es6.reflect.prevent-extensions";
 import "core-js/modules/es6.reflect.set";
 import "core-js/modules/es6.reflect.set-prototype-of";
 import "core-js/modules/es6.promise";
+import "core-js/modules/es6.symbol";
 import "core-js/modules/es6.function.name";
 import "core-js/modules/es6.regexp.flags";
 import "core-js/modules/es6.regexp.match";

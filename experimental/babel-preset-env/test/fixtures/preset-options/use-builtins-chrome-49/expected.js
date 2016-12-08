@@ -3,6 +3,7 @@ import "core-js/modules/es6.set";
 import "core-js/modules/es6.weak-map";
 import "core-js/modules/es6.weak-set";
 import "core-js/modules/es6.promise";
+import "core-js/modules/es6.symbol";
 import "core-js/modules/es6.function.name";
 import "core-js/modules/es6.regexp.match";
 import "core-js/modules/es6.regexp.replace";

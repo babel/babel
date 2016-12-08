@@ -170,7 +170,7 @@ export default function buildPreset(context, opts = {}) {
     console.log("");
     console.log(`Using targets: ${JSON.stringify(targets, null, 2)}`);
     console.log("");
-    console.log(`module: ${moduleType}`);
+    console.log(`modules transform: ${moduleType}`);
     console.log("");
     console.log("Using plugins:");
     transformations.forEach((transform) => {
@@ -186,8 +186,6 @@ export default function buildPreset(context, opts = {}) {
 
   let allTransformations = [...transformations, ...whitelist];
   let regenerator = allTransformations.indexOf("transform-regenerator") >= 0;
-
-  console.log(allTransformations, regenerator);
 
   let plugins = allTransformations.map((pluginName) => {
     return [require(`babel-plugin-${pluginName}`), { loose }];

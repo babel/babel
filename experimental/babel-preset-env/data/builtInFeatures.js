@@ -17,7 +17,7 @@ const es2015 = {
   "es6.set": "Set",
   "es6.weak-map": "WeakMap",
   "es6.weak-set": "WeakSet",
-  // proxy not implemented
+  // Proxy not implementable
 
   "es6.reflect.apply": "Reflect / Reflect.apply",
   "es6.reflect.construct": "Reflect / Reflect.construct",
@@ -82,7 +82,7 @@ const es2015 = {
   "es6.array.find": "Array.prototype methods / Array.prototype.find",
   "es6.array.find-index": "Array.prototype methods / Array.prototype.findIndex",
   "es6.array.fill": "Array.prototype methods / Array.prototype.fill",
- 
+
   "es6.array.iterator": {
    features: [
      "Array.prototype methods / Array.prototype.keys",
