@@ -665,7 +665,9 @@ export default function () {
             path.pushContainer("body", [specFinishNamespaceExport(exportsObj)]);
           }
 
-          commonjsExportsMasked = {};
+          if (spec) {
+            commonjsExportsMasked = {};
+          }
 
           path.traverse(reassignmentVisitor, {
             remaps,
