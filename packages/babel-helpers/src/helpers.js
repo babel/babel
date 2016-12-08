@@ -396,6 +396,9 @@ helpers.interopRequireDefault = template(`
   })
 `);
 
+// interopRequireDefault doesn't technically match spec,
+// but where it does not match is not observable
+
 helpers.interopRequireWildcard = template(`
   (function (obj) {
     if (obj && obj.__esModule) {
@@ -409,6 +412,34 @@ helpers.interopRequireWildcard = template(`
       }
       newObj.default = obj;
       return newObj;
+    }
+  })
+`);
+
+helpers.specRequireInterop = template(`
+  (function (obj) {
+    if (obj && obj.__esModule) {
+      return obj;
+    } else {
+      var newObj = Object.create
+        ? Object.create(null, {
+          default: {
+            value: obj,
+            writable: true,
+            enumerable: true
+          },
+          __esModule: {
+            value: true
+          }
+        })
+        : {
+          default: obj,
+          __esModule: true
+        };
+      if (Symbol && Symbol.toStringTag) {
+        Object.defineProperty(newObj, Symbol.toStringTag, { value: "Module" })
+      }
+      return (Object.freeze || Object)(newObj);
     }
   })
 `);
