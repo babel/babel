@@ -45,7 +45,7 @@ let buildExportAll = template(`
 
 const specBuildNamespace = template(`
   $0 = $1 = Object.create(null, { __esModule: { value: true } });
-  if (Symbol && Symbol.toStringTag) {
+  if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
     Object.defineProperty($0, Symbol.toStringTag, { value: "Module" });
   }
 `);
