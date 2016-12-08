@@ -73,20 +73,31 @@ const getLowestImplementedVersion = ({ features }, env) => {
       features.length === 1 && test.name.indexOf(features[0]) === 0;
     })
     .map((test) => {
+      const isBuiltIn = test.category === "built-ins" || test.category === "built-in extensions";
+
       return test.subtests ?
         test.subtests.map((subtest) => ({
           name: `${test.name}/${subtest.name}`,
-          res: subtest.res
+          res: subtest.res,
+          isBuiltIn
         })) :
       {
         name: test.name,
-        res: test.res
+        res: test.res,
+        isBuiltIn
       };
     })
   );
 
   let envTests = tests
-  .map(({ res: test, name }, i) => {
+  .map(({ res: test, name, isBuiltIn }, i) => {
+    // Babel itself doesn't implement the feature correctly,
+    // don't count against it
+    // only doing this for built-ins atm
+    if (!test.babel && isBuiltIn) {
+      console.log(name);
+      return "-1";
+    }
 
     // `equals` in compat-table
     Object.keys(test).forEach((t) => {
