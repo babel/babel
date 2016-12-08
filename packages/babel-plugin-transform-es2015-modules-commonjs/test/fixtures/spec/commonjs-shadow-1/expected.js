@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 module.exports = exports = Object.create(null, {
   __esModule: {
@@ -12,21 +12,15 @@ if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
   });
 }
 
-var _exports = {},
-    _moduleExports = _exports;
-
-var _bar = babelHelpers.specRequireInterop(require('bar'));
-
+var _exports = {};
 Object.defineProperty(exports, "default", {
   enumerable: true,
   writable: true,
   value: {
-    default: class {}
+    default: function () {}
   }.default
 });
-;
 
-// neither of these should be able to use or affect the real exports
-new _exports.default();
-_moduleExports = {};
+
+_exports = function () {};
 Object.freeze(exports);

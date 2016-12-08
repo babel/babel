@@ -1,0 +1,3 @@
+export {}
+
+module.exports = class {};
