@@ -7,6 +7,7 @@ module.exports = exports = Object.create(null, {
 });
 Object.defineProperty(exports, "default", {
   enumerable: true,
+  writable: true,
   value: {
     default: function () {}
   }.default
@@ -14,6 +15,7 @@ Object.defineProperty(exports, "default", {
 var unrelated = undefined;
 Object.defineProperty(exports, "unrelated", {
   enumerable: true,
+  writable: true,
 
   get() {
     return unrelated;

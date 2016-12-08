@@ -10,6 +10,7 @@ var _bar = babelHelpers.specRequireInterop(require('bar'));
 
 Object.defineProperty(exports, "default", {
   enumerable: true,
+  writable: true,
   value: {
     default: class {}
   }.default

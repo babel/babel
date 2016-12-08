@@ -7,7 +7,7 @@ module.exports = exports = Object.create(null, {
 });
 const _undefined = {
   enumerable: true,
-  configurable: true,
+  writable: true,
   value: undefined
 };
 Object.defineProperties(exports, {
@@ -22,9 +22,12 @@ Object.keys(_iDontKnow).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   Object.defineProperty(exports, key, {
     enumerable: true,
-    get: function () {
+    writable: true,
+
+    get() {
       return _iDontKnow[key];
     }
+
   });
 });
 
@@ -32,6 +35,7 @@ var _because = babelHelpers.specRequireInterop(require('./because'));
 
 Object.defineProperty(exports, 'why', {
   enumerable: true,
+  writable: true,
 
   get() {
     return _because.default;
@@ -45,10 +49,12 @@ var _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));
 
 Object.defineProperty(exports, 'namespace', {
   enumerable: true,
+  writable: true,
   value: _somewhere
 });
 Object.defineProperty(exports, 'default', {
   enumerable: true,
+  writable: true,
 
   get() {
     return _elsewhere.stuff;
