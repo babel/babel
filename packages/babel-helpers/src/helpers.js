@@ -431,7 +431,7 @@ helpers.specRequireInterop = template(`
             value: true
           }
         });
-      if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
+      if (typeof Symbol === "function" && Symbol.toStringTag) {
         Object.defineProperty(newObj, Symbol.toStringTag, { value: "Module" })
       }
       return Object.freeze(newObj);
