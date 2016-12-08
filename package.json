@@ -28,7 +28,6 @@
     "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-flowtype": "^2.20.0",
     "flow-bin": "^0.35.0",
-    "lodash": "^4.15.0",
     "nyc": "^10.0.0",
     "rimraf": "^2.5.4",
     "rollup": "^0.36.3",
@@ -48,7 +47,7 @@
     "prepublish": "cross-env BABEL_ENV=production npm run build",
     "preversion": "npm run test && npm run changelog",
     "test": "npm run lint && npm run flow && npm run build -- -m && npm run test-only",
-    "test-only": "ava test",
+    "test-only": "ava",
     "test-ci": "nyc npm run test-only",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
     "watch": "npm run clean && cross-env BABEL_ENV=watch babel src --out-dir lib --watch"
@@ -60,6 +59,15 @@
     ],
     "sourceMap": false,
     "instrument": false
+  },
+  "ava": {
+    "files": [
+      "test/*.js"
+    ],
+    "source": [
+      "src/**/*.js",
+      "bin/**/*.js"
+    ]
   },
   "greenkeeper": {
     "ignore": [
