@@ -34,19 +34,23 @@ const es2015 = {
   "es6.reflect.set-prototype-of": "Reflect / Reflect.setPrototypeOf",
 
   "es6.promise": "Promise",
-  "es6.symbol": "Symbol",
 
-  "es6.symbol": "well-known symbols / Symbol.hasInstance",
-  "es6.symbol": "well-known symbols / Symbol.isConcatSpreadable",
-  "es6.symbol": "well-known symbols / Symbol.iterator",
-  "es6.symbol": "well-known symbols / Symbol.match",
-  "es6.symbol": "well-known symbols / Symbol.replace",
-  "es6.symbol": "well-known symbols / Symbol.search",
-  "es6.symbol": "well-known symbols / Symbol.species",
-  "es6.symbol": "well-known symbols / Symbol.split",
-  "es6.symbol": "well-known symbols / Symbol.toPrimitive",
-  "es6.symbol": "well-known symbols / Symbol.toStringTag",
-  "es6.symbol": "well-known symbols / Symbol.unscopables",
+  "es6.symbol": {
+    features: [
+      "Symbol",
+      "well-known symbols / Symbol.hasInstance",
+      "well-known symbols / Symbol.isConcatSpreadable",
+      "well-known symbols / Symbol.iterator",
+      "well-known symbols / Symbol.match",
+      "well-known symbols / Symbol.replace",
+      "well-known symbols / Symbol.search",
+      "well-known symbols / Symbol.species",
+      "well-known symbols / Symbol.split",
+      "well-known symbols / Symbol.toPrimitive",
+      "well-known symbols / Symbol.toStringTag",
+      "well-known symbols / Symbol.unscopables",
+    ]
+  },
 
   "es6.object.assign": "Object static methods / Object.assign",
   "es6.object.is": "Object static methods / Object.is",
@@ -78,10 +82,15 @@ const es2015 = {
   "es6.array.find": "Array.prototype methods / Array.prototype.find",
   "es6.array.find-index": "Array.prototype methods / Array.prototype.findIndex",
   "es6.array.fill": "Array.prototype methods / Array.prototype.fill",
-  "es6.array.iterator": "Array.prototype methods / Array.prototype.keys",
-  // can use Symbol.iterator, not implemented in many environments
-  // "es6.array.iterator": "Array.prototype methods / Array.prototype.values",
-  "es6.array.iterator": "Array.prototype methods / Array.prototype.entries",
+ 
+  "es6.array.iterator": {
+   features: [
+     "Array.prototype methods / Array.prototype.keys",
+     // can use Symbol.iterator, not implemented in many environments
+     // "Array.prototype methods / Array.prototype.values",
+     "Array.prototype methods / Array.prototype.entries",
+    ]
+  },
 
   "es6.number.is-finite": "Number properties / Number.isFinite",
   "es6.number.is-integer": "Number properties / Number.isInteger",

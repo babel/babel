@@ -238,13 +238,11 @@
     "ios": 10
   },
   "es6.symbol": {
-    "chrome": 38,
-    "opera": 25,
-    "edge": 12,
-    "firefox": 48,
-    "safari": 9,
-    "node": 0.12,
-    "ios": 9
+    "chrome": 51,
+    "opera": 38,
+    "firefox": 51,
+    "safari": 10,
+    "ios": 10
   },
   "es6.object.assign": {
     "chrome": 45,
