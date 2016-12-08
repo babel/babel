@@ -6,7 +6,7 @@ module.exports = exports = Object.create(null, {
   }
 });
 
-if (Symbol && Symbol.toStringTag) {
+if (typeof Symbol !== "undefined" && Symbol.toStringTag) {
   Object.defineProperty(module.exports, Symbol.toStringTag, {
     value: "Module"
   });
