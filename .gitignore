@@ -17,3 +17,4 @@ dist
 _babel.github.io
 /tests/.browser-build.js
 .nyc_output
+/babel.sublime-workspace
