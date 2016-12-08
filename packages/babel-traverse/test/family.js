@@ -9,11 +9,11 @@ describe("path/family", function () {
     traverse(ast, {
       VariableDeclaration(path) {
         nodes = path.getBindingIdentifiers();
-        paths = path.getBindingIdentifiers(false, true);
+        paths = path.getBindingIdentifierPaths();
       },
       FunctionDeclaration(path) {
         outerNodes = path.getOuterBindingIdentifiers();
-        outerPaths = path.getOuterBindingIdentifiers(false, true);
+        outerPaths = path.getOuterBindingIdentifierPaths();
       }
     });
 

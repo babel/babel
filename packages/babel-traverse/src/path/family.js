@@ -118,17 +118,11 @@ export function _getPattern(parts, context) {
   return path;
 }
 
-export function getBindingIdentifiers(duplicates, returnPaths = false) {
-  if (returnPaths) {
-    return this.getBindingIdentifierPaths(duplicates);
-  }
+export function getBindingIdentifiers(duplicates?) {
   return t.getBindingIdentifiers(this.node, duplicates);
 }
 
-export function getOuterBindingIdentifiers(duplicates, returnPaths = false) {
-  if (returnPaths) {
-    return this.getBindingIdentifierPaths(duplicates, true);
-  }
+export function getOuterBindingIdentifiers(duplicates?) {
   return t.getOuterBindingIdentifiers(this.node, duplicates);
 }
 
@@ -187,4 +181,8 @@ export function getBindingIdentifierPaths(duplicates = false, outerOnly = false)
   }
 
   return ids;
+}
+
+export function getOuterBindingIdentifierPaths(duplicates?) {
+  return this.getBindingIdentifierPaths(duplicates, true);
 }
