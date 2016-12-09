@@ -82,7 +82,8 @@
       "sourceType": "module"
     },
     "rules": {
-      "max-len": 0
+      "max-len": 0,
+      "quotes": ["error", "double", { "avoidEscape": true }]
     },
     "env": {
       "mocha": true

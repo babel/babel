@@ -120,6 +120,47 @@ Useful if there is a bug in a native implementation, or a combination of a non-s
 
 Ex: Node 4 supports native classes but not spread.
 
+### `useBuiltIns`: `boolean`
+
+Defaults to `false`.
+
+A way to apply `babel-preset-env` for polyfills (via "babel-polyfill").
+
+> NOTE: This does not currently polyfill experimental/stage-x built-ins like the regular "babel-polyfill" does.
+> This will only work with npm >= 3 (which should be used with Babel 6 anyway)
+
+```
+npm install babel-polyfill --save
+```
+
+This option will apply a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
+
+> NOTE: Only use `require("babel-polyfill");` once in your whole app. One option is to create single entry file that only contains the require statement.
+
+In
+
+```js
+import "babel-polyfill";
+```
+
+Out (different based on environment)
+
+```js
+import "core-js/modules/es7.string.pad-start";
+import "core-js/modules/es7.string.pad-end";
+import "core-js/modules/web.timers";
+import "core-js/modules/web.immediate";
+import "core-js/modules/web.dom.iterable";
+```
+
+> This will also work for "core-js" directly (`import "core-js";`)
+
+```
+npm install core-js --save
+```
+
+---
+
 ## Examples
 
 ```js

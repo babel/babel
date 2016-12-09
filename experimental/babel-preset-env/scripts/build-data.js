@@ -4,6 +4,7 @@ const path = require("path");
 const flatten = require("lodash/flatten");
 const flattenDeep = require("lodash/flattenDeep");
 const pluginFeatures = require("../data/pluginFeatures");
+const builtInFeatures = require("../data/builtInFeatures");
 
 const renameTests = (tests, getName) =>
   tests.map((test) => Object.assign({}, test, { name: getName(test.name) }));
@@ -65,22 +66,37 @@ const envMap = {
 
 const getLowestImplementedVersion = ({ features }, env) => {
   let tests = flatten(compatibilityTests
-    .filter((test) => features.indexOf(test.name) >= 0)
+    .filter((test) => {
+      return features.indexOf(test.name) >= 0 ||
+      // for features === ["DataView"]
+      // it covers "DataView (Int8)" and "DataView (UInt8)"
+      features.length === 1 && test.name.indexOf(features[0]) === 0;
+    })
     .map((test) => {
+      const isBuiltIn = test.category === "built-ins" || test.category === "built-in extensions";
+
       return test.subtests ?
         test.subtests.map((subtest) => ({
           name: `${test.name}/${subtest.name}`,
-          res: subtest.res
+          res: subtest.res,
+          isBuiltIn
         })) :
       {
         name: test.name,
-        res: test.res
+        res: test.res,
+        isBuiltIn
       };
     })
   );
 
   let envTests = tests
-  .map(({ res: test, name }, i) => {
+  .map(({ res: test, name, isBuiltIn }, i) => {
+    // Babel itself doesn't implement the feature correctly,
+    // don't count against it
+    // only doing this for built-ins atm
+    if (!test.babel && isBuiltIn) {
+      return "-1";
+    }
 
     // `equals` in compat-table
     Object.keys(test).forEach((t) => {
@@ -98,7 +114,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
   });
 
   let envFiltered = envTests.filter((t) => t);
-  if (envTests.length > envFiltered.length) {
+  if (envTests.length > envFiltered.length || envTests.length === 0) {
     // envTests.forEach((test, i) => {
     //   if (!test) {
     //     // print unsupported features
@@ -115,27 +131,47 @@ const getLowestImplementedVersion = ({ features }, env) => {
   .reduce((a, b) => { return (a < b) ? b : a; });
 };
 
-const data = {};
-for (const pluginName in pluginFeatures) {
-  const options = pluginFeatures[pluginName];
-  const plugin = {};
-  environments.forEach((env) => {
-    if (Array.isArray(options.features)) {
+function generateData(features) {
+  let ret = {};
+
+  Object.keys(features).forEach((pluginName) => {
+    let options = features[pluginName];
+
+    if (!options.features) {
+      options = {
+        features: [options]
+      };
+    }
+
+    const plugin = {};
+    environments.forEach((env) => {
       const version = getLowestImplementedVersion(options, env);
       if (version !== null) {
         plugin[env] = version;
       }
-    }
 
-    // add opera
-    if (plugin.chrome) {
-      plugin.opera = plugin.chrome - 13;
-    }
+      // add opera
+      if (plugin.chrome) {
+        if (plugin.chrome >= 28) {
+          plugin.opera = plugin.chrome - 13;
+        } else if (plugin.chrome === 5) {
+          plugin.opera = 12;
+        }
+      }
+    });
+
+    ret[pluginName] = plugin;
   });
-  data[pluginName] = plugin;
+
+  return ret;
 }
 
 fs.writeFileSync(
   path.join(__dirname, "../data/plugins.json"),
-  JSON.stringify(data, null, 2) + "\n"
+  JSON.stringify(generateData(pluginFeatures), null, 2) + "\n"
+);
+
+fs.writeFileSync(
+  path.join(__dirname, "../data/builtIns.json"),
+  JSON.stringify(generateData(builtInFeatures), null, 2) + "\n"
 );
