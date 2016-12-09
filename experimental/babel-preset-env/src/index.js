@@ -83,6 +83,12 @@ export const getCurrentNodeVersion = () => {
 };
 
 export const electronVersionToChromeVersion = (semverVer) => {
+  semverVer = String(semverVer);
+
+  if (semverVer === "1") {
+    semverVer = "1.0";
+  }
+
   const m = semverVer.match(/^(\d+\.\d+)/);
   if (!m) {
     throw new Error("Electron version must be a semver version");
@@ -96,23 +102,38 @@ export const electronVersionToChromeVersion = (semverVer) => {
   return result;
 };
 
-export const getTargets = (targetOpts = {}) => {
-  if (targetOpts.node === true || targetOpts.node === "current") {
-    targetOpts.node = getCurrentNodeVersion();
+const _extends = Object.assign || function (target) {
+  for (let i = 1; i < arguments.length; i++) {
+    const source = arguments[i];
+    for (let key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+  return target;
+};
+
+
+export const getTargets = (targets = {}) => {
+  const targetOps = _extends({}, targets);
+
+  if (targetOps.node === true || targetOps.node === "current") {
+    targetOps.node = getCurrentNodeVersion();
   }
 
   // Rewrite Electron versions to their Chrome equivalents
-  if (targetOpts.electron) {
-    targetOpts.chrome = electronVersionToChromeVersion(targetOpts.electron);
-    delete targetOpts.electron;
+  if (targetOps.electron) {
+    targetOps.chrome = electronVersionToChromeVersion(targetOps.electron);
+    delete targetOps.electron;
   }
 
-  const browserOpts = targetOpts.browsers;
+  const browserOpts = targetOps.browsers;
   if (isBrowsersQueryValid(browserOpts)) {
     const queryBrowsers = getLowestVersions(browserslist(browserOpts));
-    return mergeBrowsers(queryBrowsers, targetOpts);
+    return mergeBrowsers(queryBrowsers, targetOps);
   }
-  return targetOpts;
+  return targetOps;
 };
 
 // TODO: Allow specifying plugins as either shortened or full name
@@ -189,18 +210,18 @@ export default function buildPreset(context, opts = {}) {
     hasBeenLogged = true;
     console.log("babel-preset-env: `DEBUG` option");
     console.log("");
-    console.log(`Using targets: ${JSON.stringify(targets, null, 2)}`);
+    console.log(`Using targets: ${JSON.stringify(opts.targets, null, 2)}`);
     console.log("");
     console.log(`modules transform: ${moduleType}`);
     console.log("");
     console.log("Using plugins:");
     transformations.forEach((transform) => {
-      logPlugin(transform, targets, pluginList);
+      logPlugin(transform, opts.targets, pluginList);
     });
     console.log("\nUsing polyfills:");
     if (useBuiltIns && polyfills.length) {
       polyfills.forEach((polyfill) => {
-        logPlugin(polyfill, targets, builtInsList);
+        logPlugin(polyfill, opts.targets, builtInsList);
       });
     }
   }

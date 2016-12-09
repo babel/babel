@@ -2,6 +2,7 @@
 
 const babelPresetEnv = require("../lib/index.js");
 const assert = require("assert");
+const electronToChromiumData = require("../data/electronToChromium");
 
 const {
   validateModulesOption,
@@ -21,6 +22,34 @@ describe("babel-preset-env", () => {
         node: "current"
       }), {
         node: parseFloat(process.versions.node)
+      });
+    });
+  });
+
+  describe("getTargets + electron", () => {
+    it("should work with a string", function() {
+      assert.deepEqual(babelPresetEnv.getTargets({
+        electron: "1.0"
+      }), {
+        chrome: 50
+      });
+    });
+
+    it("should work with a number", function() {
+      assert.deepEqual(babelPresetEnv.getTargets({
+        electron: 1.0
+      }), {
+        chrome: 50
+      });
+    });
+
+    Object.keys(electronToChromiumData).forEach((electronVersion) => {
+      it(`"should work for Electron: ${electronVersion}`, function() {
+        assert.deepEqual(babelPresetEnv.getTargets({
+          electron: electronVersion
+        }), {
+          chrome: electronToChromiumData[electronVersion]
+        });
       });
     });
   });
