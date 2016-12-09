@@ -385,7 +385,10 @@ export default function () {
                 let defNode = t.identifier("default");
                 if (id) {
                   addTo(exports, id.name, defNode);
-                  topNodes.push(spec ? specBuildExportDefault({ EXPORTS: exportsObj, VALUE: id }) : buildExportsAssignment(defNode, id));
+                  topNodes.push(spec
+                    ? specBuildExport({ EXPORTS: exportsObj, NAME: t.stringLiteral("default"), VALUE: id })
+                    : buildExportsAssignment(defNode, id)
+                  );
                   path.replaceWith(declaration.node);
                 } else if (spec) {
                   const expr = specBuildFunctionNameWrapper(t.toExpression(declaration.node)).expression;
@@ -403,7 +406,9 @@ export default function () {
                   addTo(exports, id.name, defNode);
                   path.replaceWithMultiple([
                     declaration.node,
-                    spec ? specBuildExportDefault({ EXPORTS: exportsObj, VALUE: id }) : buildExportsAssignment(defNode, id)
+                    spec
+                      ? specBuildExport({ EXPORTS: exportsObj, NAME: t.stringLiteral("default"), VALUE: id })
+                      : buildExportsAssignment(defNode, id)
                   ]);
                 } else if (spec) {
                   const expr = specBuildFunctionNameWrapper(t.toExpression(declaration.node)).expression;
