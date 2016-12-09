@@ -38,10 +38,25 @@ export default class Buffer {
   get(): Object {
     this._flush();
 
-    return {
+    const map = this._map;
+    const result = {
       code: trimEnd(this._buf.join("")),
-      map: this._map ? this._map.get() : null,
+      map: null,
+      rawMappings: map && map.getRawMappings(),
     };
+
+    if (map) {
+      Object.defineProperty(result, "map", {
+        get() {
+          return this.map = map.get();
+        },
+        set(value) {
+          Object.defineProperty(this, "map", {value, writable: true});
+        },
+      });
+    }
+
+    return result;
   }
 
   /**
