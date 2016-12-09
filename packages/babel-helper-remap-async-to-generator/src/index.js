@@ -123,7 +123,7 @@ function plainFunction(path: NodePath, callId: Object) {
     REF: path.scope.generateUidIdentifier("ref"),
     FUNCTION: built,
     PARAMS: node.params.reduce((acc, param) => {
-      acc.done = acc.done || !t.isIdentifier(param);
+      acc.done = acc.done || t.isAssignmentPattern(param) || t.isRestElement(param);
 
       if (!acc.done) {
         acc.params.push(path.scope.generateUidIdentifier("x"));
