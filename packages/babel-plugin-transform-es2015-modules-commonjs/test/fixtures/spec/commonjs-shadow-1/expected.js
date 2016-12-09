@@ -1,10 +1,12 @@
 "use strict";
 
-module.exports = exports = Object.create(null, {
+module.exports = exports = Object.create ? Object.create(null, {
   __esModule: {
     value: true
   }
-});
+}) : {
+  __esModule: true
+};
 
 if (typeof Symbol === "function" && Symbol.toStringTag) {
   Object.defineProperty(exports, Symbol.toStringTag, {
@@ -12,7 +14,6 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
   });
 }
 
-var _exports = {};
 Object.defineProperty(exports, "default", {
   enumerable: true,
   writable: true,
@@ -23,4 +24,6 @@ Object.defineProperty(exports, "default", {
 
 
 _exports = function () {};
-Object.freeze(exports);
+(Object.freeze || Object)(exports);
+
+let _exports;

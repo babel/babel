@@ -1,10 +1,12 @@
 "use strict";
 
-module.exports = exports = Object.create(null, {
+module.exports = exports = Object.create ? Object.create(null, {
   __esModule: {
     value: true
   }
-});
+}) : {
+  __esModule: true
+};
 
 if (typeof Symbol === "function" && Symbol.toStringTag) {
   Object.defineProperty(exports, Symbol.toStringTag, {
@@ -66,4 +68,4 @@ Object.defineProperty(exports, "baz", {
   }
 
 });
-Object.freeze(exports);
+(Object.freeze || Object)(exports);
