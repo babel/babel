@@ -93,7 +93,7 @@ const specBuildTempExport = template(`
 `);
 
 const specFinishNamespaceExport = template(`
-  !(Object.freeze || Object)($0);
+  (Object.freeze || Object)($0);
 `);
 
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty", "ClassMethod", "ObjectMethod"];
