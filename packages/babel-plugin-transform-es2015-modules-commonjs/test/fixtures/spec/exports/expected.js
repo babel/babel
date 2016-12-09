@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = exports = Object.create ? Object.create(null, {
+const exports = module.exports = Object.create ? Object.create(null, {
   __esModule: {
     value: true
   }
@@ -17,6 +17,7 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
 const _undefined = {
   enumerable: true,
   writable: true,
+  configurable: true,
   value: undefined
 };
 Object.defineProperties(exports, {
