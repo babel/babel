@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-remap-async-to-generator",
-  "version": "6.20.0",
+  "version": "6.20.3",
   "description": "Helper function to remap async functions to generators",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-remap-async-to-generator",
   "license": "MIT",
