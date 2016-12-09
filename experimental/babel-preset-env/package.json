@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-env",
-  "version": "0.0.9",
+  "version": "1.0.0",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
@@ -83,7 +83,13 @@
     },
     "rules": {
       "max-len": 0,
-      "quotes": ["error", "double", { "avoidEscape": true }]
+      "quotes": [
+        "error",
+        "double",
+        {
+          "avoidEscape": true
+        }
+      ]
     },
     "env": {
       "mocha": true
