@@ -4,6 +4,7 @@ export default function ({ types: t }) {
     path.traverse({
       RestProperty() {
         foundRestProperty = true;
+        path.stop();
       }
     });
     return foundRestProperty;
@@ -14,6 +15,7 @@ export default function ({ types: t }) {
     path.traverse({
       SpreadProperty() {
         foundSpreadProperty = true;
+        path.stop();
       }
     });
     return foundSpreadProperty;
