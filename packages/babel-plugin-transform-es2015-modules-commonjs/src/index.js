@@ -44,7 +44,7 @@ let buildExportAll = template(`
 `);
 
 const specBuildNamespace = template(`
-  $1 = $0 = Object.create ? Object.create(null, { __esModule: { value: true } }) : { __esModule: true };
+  const $0 = $1 = Object.create ? Object.create(null, { __esModule: { value: true } }) : { __esModule: true };
   if (typeof Symbol === "function" && Symbol.toStringTag) {
     Object.defineProperty($0, Symbol.toStringTag, { value: "Module" });
   }
@@ -82,8 +82,11 @@ const specBuildNamespaceSpread = template(`
   });
 `);
 
+// It should _not_ be configurable, but this is needed as referring to
+// the real export, even with a getter, may cause DMZ errors with circular
+// references.
 const specBuildTempExportDescriptor = template(`
-  const $0 = { enumerable: true, writable: true, value: undefined };
+  const $0 = { enumerable: true, writable: true, configurable: true, value: undefined };
 `);
 
 const specBuildTempExportProperty = (id, descriptorId) => t.objectProperty(id, descriptorId);
