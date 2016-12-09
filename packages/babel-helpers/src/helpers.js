@@ -421,7 +421,7 @@ helpers.specRequireInterop = template(`
     if (obj && obj.__esModule) {
       return obj;
     } else {
-      var newObj = Object.create(null, {
+      var newObj = Object.create ? Object.create(null, {
           default: {
             value: obj,
             writable: true,
@@ -430,11 +430,14 @@ helpers.specRequireInterop = template(`
           __esModule: {
             value: true
           }
-        });
+        }) : {
+          default: obj,
+          __esModule: true
+        };
       if (typeof Symbol === "function" && Symbol.toStringTag) {
         Object.defineProperty(newObj, Symbol.toStringTag, { value: "Module" })
       }
-      return Object.freeze(newObj);
+      return (Object.freeze || Object)(newObj);
     }
   })
 `);

@@ -44,7 +44,7 @@ let buildExportAll = template(`
 `);
 
 const specBuildNamespace = template(`
-  $1 = $0 = Object.create(null, { __esModule: { value: true } });
+  $1 = $0 = Object.create ? Object.create(null, { __esModule: { value: true } }) : { __esModule: true };
   if (typeof Symbol === "function" && Symbol.toStringTag) {
     Object.defineProperty($0, Symbol.toStringTag, { value: "Module" });
   }
@@ -61,6 +61,7 @@ const specBuildExportDefault = template(`
 
 // Unfortunately, regular objects can't synthesize a value descriptor every time they're read,
 // so a getter needs to be used for live bindings.
+// It's also not allowed to specify writable when using getters/setters.
 const specBuildExport = template(`
   Object.defineProperty(EXPORTS, NAME, { enumerable: true, get() { return VALUE; } });
 `);
@@ -92,7 +93,7 @@ const specBuildTempExport = template(`
 `);
 
 const specFinishNamespaceExport = template(`
-  Object.freeze($0);
+  !(Object.freeze || Object)($0);
 `);
 
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty", "ClassMethod", "ObjectMethod"];
