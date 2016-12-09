@@ -10,15 +10,13 @@ export default function ({ types: t }) {
     return foundRestProperty;
   }
 
-  function hasSpread(path) {
-    let foundSpreadProperty = false;
-    path.traverse({
-      SpreadProperty() {
-        foundSpreadProperty = true;
-        path.stop();
+  function hasSpread(node) {
+    for (let prop of (node.properties)) {
+      if (t.isSpreadProperty(prop)) {
+        return true;
       }
-    });
-    return foundSpreadProperty;
+    }
+    return false;
   }
 
   function createObjectSpread(file, props, objRef) {
@@ -225,7 +223,7 @@ export default function ({ types: t }) {
       },
       // var a = { ...b, ...c }
       ObjectExpression(path, file) {
-        if (!hasSpread(path)) return;
+        if (!hasSpread(path.node)) return;
 
         let useBuiltIns = file.opts.useBuiltIns || false;
         if (typeof useBuiltIns !== "boolean") {

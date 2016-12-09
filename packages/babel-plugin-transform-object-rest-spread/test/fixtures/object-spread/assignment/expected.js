@@ -2,4 +2,4 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 z = _extends({ x }, y);
 
-z = _extends({ x, w: { ...y } });
+z = { x, w: _extends({}, y) };
