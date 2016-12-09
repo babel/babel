@@ -1,10 +1,81 @@
 # Changelog
 
+## v1.0.0 (2016-12-09)
+
+### :rocket: New Feature
+
+* Add `useBuiltIns` option ([#56](https://github.com/babel/babel-preset-env/pull/55)) ([@hzoo](https://github.com/hzoo)), ([@yavorsky](https://github.com/yavorsky)), ([@existentialism](https://github.com/existentialism))
+
+A way to apply `babel-preset-env` for polyfills (via `"babel-polyfill"``).
+
+> This option will apply a new Babel plugin that replaces `require("babel-polyfill")` with the individual requires for `babel-polyfill` based on the target environments.
+
+Install
+
+```
+npm install babel-polyfill --save
+```
+
+In
+
+```js
+import "babel-polyfill"; // create an entry js file that contains this
+// or 
+import "core-js";
+```
+
+Out (different based on environment)
+
+```js
+// chrome 55
+import "core-js/modules/es7.string.pad-start"; // haha left_pad
+import "core-js/modules/es7.string.pad-end";
+import "core-js/modules/web.timers";
+import "core-js/modules/web.immediate";
+import "core-js/modules/web.dom.iterable";
+```
+
+`.babelrc` Usage
+
+```js
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "electron": 1.4
+      },
+      "modules": false, // webpack 2
+      "useBuiltIns": true // new option
+    }]
+  ]
+}
+```
+
+> Also looking to make an easier integration point via Webpack with this method. Please reach out if you have ideas!
+
+---
+
+* Support [Electron](http://electron.atom.io/) ([#55](https://github.com/babel/babel-preset-env/pull/55)) ([@paulcbetts](https://github.com/paulcbetts))
+
+Electron is also an environment, so [Paul went ahead](https://twitter.com/paulcbetts/status/804507070103851008) and added support for this!
+
+`.babelrc` Usage
+
+```js
+{
+  "presets": [ ["env", {"targets": { "electron": 1.4 }}]]
+}
+```
+
+> Currently we are manually updating the data in [/data/electronToChromium.js](https://github.com/babel/babel-preset-env/blob/master/data/electronToChromium.js), but [@kevinsawicki](https://github.com/kevinsawicki) says we could generate the data from [atom-shell/dist/index.json](https://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/index.json) as well! (Someone should make a PR :smile:)
+
+
+
 ## v0.0.9 (2016-11-24)
 
 ### :rocket: New Feature
 
-* Support Opera ([#48](https://github.com/babel/babel-preset-env/pull/48) (Henry Zhu)
+* Support Opera ([#48](https://github.com/babel/babel-preset-env/pull/48)) (Henry Zhu)
 
 Was as simple as modifying the chrome version and subtracting 13! (so chrome 54 = opera 41)
 
