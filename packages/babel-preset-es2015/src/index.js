@@ -47,7 +47,7 @@ function preset(context, opts = {}) {
     throw new Error("Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
       "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
   }
-  if (moduleSpec !== false && (modules !== false || modules !== "commonjs")) {
+  if (moduleSpec !== false && (modules !== false && modules !== "commonjs")) {
     throw new Error("The 'moduleSpec' option is only supported with 'commonjs' modules");
   }
 
