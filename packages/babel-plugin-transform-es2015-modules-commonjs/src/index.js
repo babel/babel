@@ -103,10 +103,12 @@ export default function () {
 
   const exportsObj = t.identifier("exports");
   exportsObj[REASSIGN_REMAP_SKIP] = true;
-  const moduleExports = t.memberExpression(t.identifier("module"), exportsObj);
-  moduleExports[REASSIGN_REMAP_SKIP] = true;
+  const moduleObj = t.identifier("module");
+  moduleObj[REASSIGN_REMAP_SKIP] = true;
+  const module = t.memberExpression(moduleObj, exportsObj);
+  module[REASSIGN_REMAP_SKIP] = true;
 
-  const isModuleExports = t.buildMatchMemberExpression("module.exports", true);
+  const isModuleObj = t.buildMatchMemberExpression("module", true);
   const isExports = t.buildMatchMemberExpression("exports", true);
   let commonjsExportsMasked = null;
 
@@ -123,7 +125,7 @@ export default function () {
       if (spec) {
         if (name === "exports" && !path.node[REASSIGN_REMAP_SKIP] &&
           // Apparently replacing "module.exports" still visits the ".exports" here
-          !(this.remaps[".module.exports"] && t.isIdentifier(path.parent, this.remaps[".module.exports"])) &&
+          !(this.remaps[".module"] && t.isIdentifier(path.parent, this.remaps[".module"])) &&
           // Avoid entering when it's just some other object key named export
           !(isExports(path.parent) && t.isMemberExpression(path.parent.parent))) {
           remap = this.remaps[".exports"] = this.remaps[".exports"] || path.scope.generateUidIdentifier("exports");
@@ -131,10 +133,11 @@ export default function () {
           commonjsExportsMasked.exports = remap;
           return;
         }
-        if (isModuleExports(path.parent) && !path.parent[REASSIGN_REMAP_SKIP] && !t.isMemberExpression(path.parent.parent)) {
-          remap = this.remaps[".module.exports"] = this.remaps[".module.exports"] || path.scope.generateUidIdentifier("module.exports");
-          path.parentPath.replaceWith(remap);
-          commonjsExportsMasked.moduleExports = remap;
+        if (name === "module" && !path.node[REASSIGN_REMAP_SKIP] &&
+          !(isModuleObj(path.parent) && !path.parent[REASSIGN_REMAP_SKIP] && !t.isMemberExpression(path.parent.parent))) {
+          remap = this.remaps[".module"] = this.remaps[".module"] || path.scope.generateUidIdentifier("module");
+          path.replaceWith(remap);
+          commonjsExportsMasked.module = remap;
           return;
         }
 
@@ -154,11 +157,34 @@ export default function () {
 
     AssignmentExpression(path, state) {
       if (isSpec(state)) {
-        if (!path.node[REASSIGN_REMAP_SKIP] && t.isIdentifier(path.node.left, { name: "exports" }) &&
-          !path.node.left[REASSIGN_REMAP_SKIP] && this.scope.getBinding(name) === path.scope.getBinding(name)) {
-          let remap = this.remaps[".exports"] = this.remaps[".exports"] || path.scope.generateUidIdentifier("exports");
-          path.get("left").replaceWith(remap);
-          commonjsExportsMasked.exports = remap;
+        if (!path.node[REASSIGN_REMAP_SKIP]) {
+          const target = t.isIdentifier(path.node.left)
+            ? path.node.left
+            : t.isMemberExpression(path.node.left) && t.isIdentifier(path.node.left.object)
+              ? path.node.left.object : null;
+          const name = target && target.name;
+
+          if (target[REASSIGN_REMAP_SKIP] || this.scope.getBinding(name) !== path.scope.getBinding(name)) {
+            return;
+          }
+
+          let remap = null;
+          if (name === "exports") {
+            remap = this.remaps[".exports"] = this.remaps[".exports"] || path.scope.generateUidIdentifier("exports");
+            commonjsExportsMasked.exports = remap;
+          }
+          if (name === "module") {
+            remap = this.remaps[".module"] = this.remaps[".module"] || path.scope.generateUidIdentifier("module");
+            commonjsExportsMasked.module = remap;
+          }
+
+          if (remap) {
+            if (t.isIdentifier(path.node.left)) {
+              path.get("left").replaceWith(remap);
+            } else {
+              path.get("left.object").replaceWith(remap);
+            }
+          }
         }
         return;
       }
@@ -659,7 +685,7 @@ export default function () {
           path.unshiftContainer("body", topNodes);
 
           if (hasExports && spec) {
-            const decls = specBuildNamespace(exportsObj, moduleExports);
+            const decls = specBuildNamespace(exportsObj, module);
             decls.forEach((decl) => { decl._blockHoist = 3; });
 
             path.unshiftContainer("body", decls);
@@ -678,14 +704,11 @@ export default function () {
             requeueInParent: (newPath) => path.requeue(newPath),
           });
 
-          if (spec && (commonjsExportsMasked.exports || commonjsExportsMasked.moduleExports)) {
-            path.unshiftContainer("body", [
-              t.variableDeclaration("var", [
-                commonjsExportsMasked.exports && t.variableDeclarator(commonjsExportsMasked.exports, t.objectExpression([])),
-                commonjsExportsMasked.moduleExports && commonjsExportsMasked.exports &&
-                  t.variableDeclarator(commonjsExportsMasked.moduleExports, commonjsExportsMasked.exports),
-                commonjsExportsMasked.moduleExports && !commonjsExportsMasked.exports &&
-                  t.variableDeclarator(commonjsExportsMasked.moduleExports, t.objectExpression([]))
+          if (spec && (commonjsExportsMasked.exports || commonjsExportsMasked.module)) {
+            path.pushContainer("body", [
+              t.variableDeclaration("let", [
+                commonjsExportsMasked.exports && t.variableDeclarator(commonjsExportsMasked.exports),
+                commonjsExportsMasked.module && t.variableDeclarator(commonjsExportsMasked.module)
               ].filter(Boolean))
             ]);
           }
