@@ -33,21 +33,22 @@ import transformRegenerator from "babel-plugin-transform-regenerator";
 
 function preset(context, opts = {}) {
   const moduleTypes = ["commonjs", "amd", "umd", "systemjs"];
-  let loose = false;
-  let modules = "commonjs";
-  let spec = false;
-
-  if (opts !== undefined) {
-    if (opts.loose !== undefined) loose = opts.loose;
-    if (opts.modules !== undefined) modules = opts.modules;
-    if (opts.spec !== undefined) spec = opts.spec;
-  }
+  const {
+    loose = false,
+    modules = "commonjs",
+    spec = false,
+    moduleSpec = false
+  } = opts;
 
   if (typeof loose !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
   if (typeof spec !== "boolean") throw new Error("Preset es2015 'spec' option must be a boolean.");
+  if (typeof moduleSpec !== "boolean") throw new Error("Preset es2015 'moduleSpec' option must be a boolean.");
   if (modules !== false && moduleTypes.indexOf(modules) === -1) {
     throw new Error("Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
       "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
+  }
+  if (moduleSpec !== false && (modules !== false || modules !== "commonjs")) {
+    throw new Error("The 'moduleSpec' option is only supported with 'commonjs' modules");
   }
 
   // be DRY
@@ -74,7 +75,7 @@ function preset(context, opts = {}) {
       [transformES2015Destructuring, optsLoose],
       transformES2015BlockScoping,
       transformES2015TypeofSymbol,
-      modules === "commonjs" && [transformES2015ModulesCommonJS, optsLoose],
+      modules === "commonjs" && [transformES2015ModulesCommonJS, { loose, spec: moduleSpec }],
       modules === "systemjs" && [transformES2015ModulesSystemJS, optsLoose],
       modules === "amd" && [transformES2015ModulesAMD, optsLoose],
       modules === "umd" && [transformES2015ModulesUMD, optsLoose],
