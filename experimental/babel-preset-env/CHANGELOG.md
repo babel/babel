@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.0.1 (2016-12-10)
+
+### :bug: Bug Fix
+
+* Fix regenerator import (#68)  ([@hzoo](https://github.com/hzoo))
+
+We were outputting an invalid path for `regenerator`!
+
+```diff
++import "regenerator-runtime/runtime";
+-import "core-js/modules/regenerator-runtime/runtime"-
+```
+
 ## v1.0.0 (2016-12-09)
 
 ### :rocket: New Feature
