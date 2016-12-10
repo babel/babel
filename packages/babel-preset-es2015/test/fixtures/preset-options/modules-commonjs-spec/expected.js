@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = exports = Object.create ? Object.create(null, {
+var exports = module.exports = Object.create ? Object.create(null, {
   __esModule: {
     value: true
   }
