@@ -1,31 +1,31 @@
-# babel-plugin-transform-strict-mode
+# babel-plugin-transform-dynamic-import-commonjs
 
-> This plugin places a `"use strict";` directive at the top of all files to enable [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
+> This plugin translates dynamic `import(specifier)` calls into `Promise`s for a `require(specifier)` module.
 
-This plugin may be enabled via `babel-plugin-transform-es2015-modules-commonjs`.
-If you wish to disable it you can either turn `strict` off or pass
-`strictMode: false` as an option to the commonjs transform.
+Note that this plugin will produce calls to the ordinary `require` function,
+so using this with bundlers that implement code splitting will **prevent**
+code splitting.
 
 ## Example
 
 **In**
 
 ```javascript
-foo();
+import('os')
+.then(os => os.default.uptime());
 ```
 
 **Out**
 
 ```javascript
-"use strict";
-
-foo();
+Promise.resolve().then(() => babelHelpers._specInteropRequire(require('os')))
+.then(os => os.default.uptime());
 ```
 
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-strict-mode
+npm install --save-dev babel-plugin-transform-dynamic-import-commonjs
 ```
 
 ## Usage
@@ -35,31 +35,21 @@ npm install --save-dev babel-plugin-transform-strict-mode
 **.babelrc**
 
 ```js
-// without options
 {
-  "plugins": ["transform-strict-mode"]
-}
-
-// with options
-{
-  "plugins": [
-    ["transform-strict-mode", {
-      "strict": true
-    }]
-  ]
+  "plugins": ["transform-dynamic-import-commonjs"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-strict-mode script.js
+babel --plugins transform-dynamic-import-commonjs script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("babel-core").transform("code", {
-  plugins: ["transform-strict-mode"]
+  plugins: ["transform-dynamic-import-commonjs"]
 });
 ```
