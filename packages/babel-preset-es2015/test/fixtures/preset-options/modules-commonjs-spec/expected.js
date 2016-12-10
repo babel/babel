@@ -15,6 +15,12 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
 }
 
 Object.defineProperties(exports, {
+  default: {
+    enumerable: true,
+    get: function get() {
+      return _default;
+    }
+  },
   b: {
     enumerable: true,
     get: function get() {
@@ -22,12 +28,8 @@ Object.defineProperties(exports, {
     }
   }
 });
-Object.defineProperty(exports, "default", {
-  enumerable: true,
-  writable: true,
-  value: {
-    default: function _default() {}
-  }.default
-});
+var _default = {
+  default: function _default() {}
+}.default;
 function b() {}
 (Object.freeze || Object)(exports);

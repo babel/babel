@@ -14,13 +14,19 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
   });
 }
 
-Object.defineProperty(exports, "default", {
-  enumerable: true,
-  writable: true,
-  value: {
-    default: function () {}
-  }.default
+Object.defineProperties(exports, {
+  default: {
+    enumerable: true,
+
+    get() {
+      return _default;
+    }
+
+  }
 });
+let _default = {
+  default: function () {}
+}.default;
 
 
 _exports = function () {};

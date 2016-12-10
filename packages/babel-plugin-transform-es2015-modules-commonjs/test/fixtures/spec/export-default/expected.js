@@ -15,6 +15,14 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
 }
 
 Object.defineProperties(exports, {
+  default: {
+    enumerable: true,
+
+    get() {
+      return _default;
+    }
+
+  },
   unrelated: {
     enumerable: true,
 
@@ -24,13 +32,9 @@ Object.defineProperties(exports, {
 
   }
 });
-Object.defineProperty(exports, "default", {
-  enumerable: true,
-  writable: true,
-  value: {
-    default: function () {}
-  }.default
-});
+let _default = {
+  default: function () {}
+}.default;
 var unrelated;
 unrelated = "changed";
 (Object.freeze || Object)(exports);

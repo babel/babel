@@ -14,15 +14,22 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
   });
 }
 
+Object.defineProperties(exports, {
+  default: {
+    enumerable: true,
+
+    get() {
+      return _default;
+    }
+
+  }
+});
+
 var _bar = babelHelpers.specRequireInterop(require('bar'));
 
-Object.defineProperty(exports, "default", {
-  enumerable: true,
-  writable: true,
-  value: {
-    default: class {}
-  }.default
-});
+let _default = {
+  default: class {}
+}.default;
 ;
 
 // neither of these should be able to use or affect the real exports
