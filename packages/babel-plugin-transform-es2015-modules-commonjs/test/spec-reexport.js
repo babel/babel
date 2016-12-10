@@ -24,7 +24,7 @@ describe("spec reexport", function () {
     });
 
     it("is tagged as Module", function () {
-      if (typeof Symbol === "function" && Symbol.toStringTag) {
+      if (helpers.hasToStringTag()) {
         assert.strictEqual(exports[Symbol.toStringTag], "Module");
       } else {
         this.skip();
@@ -32,7 +32,7 @@ describe("spec reexport", function () {
     });
 
     it("has the __esModule flag", function () {
-      assert.deepStrictEqual(
+      assert.deepEqual(
         Object.getOwnPropertyDescriptor(exports, "__esModule"),
         { value: true, configurable: false, writable: false, enumerable: false }
       );
@@ -63,7 +63,7 @@ describe("spec reexport", function () {
     });
 
     it("the reexport is tagged as Module", function () {
-      if (typeof Symbol === "function" && Symbol.toStringTag) {
+      if (helpers.hasToStringTag()) {
         assert.strictEqual(exports.ab[Symbol.toStringTag], "Module");
       } else {
         this.skip();
@@ -71,7 +71,7 @@ describe("spec reexport", function () {
     });
 
     it("the reexport has the __esModule flag", function () {
-      assert.deepStrictEqual(
+      assert.deepEqual(
         Object.getOwnPropertyDescriptor(exports.ab, "__esModule"),
         { value: true, configurable: false, writable: false, enumerable: false }
       );
@@ -96,7 +96,7 @@ describe("spec reexport", function () {
     });
 
     it("is tagged as Module", function () {
-      if (typeof Symbol === "function" && Symbol.toStringTag) {
+      if (helpers.hasToStringTag()) {
         assert.strictEqual(exports[Symbol.toStringTag], "Module");
       } else {
         this.skip();
@@ -104,7 +104,7 @@ describe("spec reexport", function () {
     });
 
     it("has the __esModule flag", function () {
-      assert.deepStrictEqual(
+      assert.deepEqual(
         Object.getOwnPropertyDescriptor(exports, "__esModule"),
         { value: true, configurable: false, writable: false, enumerable: false }
       );

@@ -14,11 +14,13 @@ test("spec Interop import", function () {
   assert(Object.isFrozen(exports), "exports is frozen");
   assert.strictEqual(Object.getPrototypeOf(exports), null, "exports has null prototype");
 
-  if (typeof Symbol === "function" && Symbol.toStringTag) {
+  if (helpers.hasToStringTag()) {
     assert.strictEqual(exports[Symbol.toStringTag], "Module", "exports is tagged as Module");
+  } else {
+    it.skip("exports is tagged as Module");
   }
 
-  assert.deepStrictEqual(
+  assert.deepEqual(
     Object.getOwnPropertyDescriptor(exports, "__esModule"),
     { value: true, configurable: false, writable: false, enumerable: false },
     "__esModule in top level Module"
@@ -44,7 +46,7 @@ test("spec Interop import", function () {
 
   const ns = exports.ns;
 
-  assert.deepStrictEqual(
+  assert.deepEqual(
     Object.getOwnPropertyDescriptor(ns, "__esModule"),
     { value: true, configurable: false, writable: false, enumerable: false },
     "__esModule in the imported ns Module"
@@ -53,13 +55,15 @@ test("spec Interop import", function () {
   assert(Object.isFrozen(ns), "ns export is frozen");
   assert.strictEqual(Object.getPrototypeOf(ns), null, "ns export has null prototype");
 
-  if (typeof Symbol === "function" && Symbol.toStringTag) {
+  if (helpers.hasToStringTag()) {
     assert.strictEqual(ns[Symbol.toStringTag], "Module", "ns export is tagged as Module");
+  } else {
+    it.skip("ns export is tagged as Module");
   }
 
   const imported = Object.getOwnPropertyNames(ns).filter(function (name) { return name !== "__esModule"; });
 
-  assert.deepStrictEqual(imported, [ "default" ], "No exports other than 'default' in ns Module");
+  assert.deepEqual(imported, [ "default" ], "No exports other than 'default' in ns Module");
 
   const defaultDesc = Object.getOwnPropertyDescriptor(ns, "default");
 

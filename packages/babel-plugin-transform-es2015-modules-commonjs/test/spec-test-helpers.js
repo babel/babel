@@ -15,6 +15,12 @@ function prepareExtraPlugins () {
   } catch (e) {
     extraPlugins.push(require("../../babel-plugin-transform-es2015-shorthand-properties"));
   }
+
+  try {
+    eval("'use strict'; class Foo {}");
+  } catch (e) {
+    extraPlugins.push(require("../../babel-plugin-transform-es2015-classes"));
+  }
 }
 
 prepareExtraPlugins();
@@ -28,8 +34,8 @@ module.exports.Runner = function Runner (initialModules) {
   this.cache = {};
   this.babelConfig = {
     "plugins": [
-      [require("../"), {spec: true}].concat(extraPlugins),
-    ],
+      [require("../"), {spec: true}],
+    ].concat(extraPlugins),
     "ast": false,
   };
 
@@ -92,4 +98,16 @@ module.exports.Runner.prototype = {
     }
     throw new Error("Unmocked module " + id + " required");
   }
+};
+
+let hasToStringTag = null;
+module.exports.hasToStringTag = function () {
+  if (hasToStringTag != null) {
+    return hasToStringTag;
+  }
+
+  const context = { module: { exports : {} } };
+  vm.runInNewContext("module.exports = typeof Symbol === 'function' && Symbol.toStringTag", context);
+  hasToStringTag = typeof context.module.exports === "symbol";
+  return hasToStringTag;
 };

@@ -18,7 +18,7 @@ describe("spec export", function () {
     });
 
     it("is tagged as Module", function () {
-      if (typeof Symbol === "function" && Symbol.toStringTag) {
+      if (helpers.hasToStringTag()) {
         assert.strictEqual(exports[Symbol.toStringTag], "Module");
       } else {
         this.skip();
@@ -26,14 +26,14 @@ describe("spec export", function () {
     });
 
     it("has the __esModule flag", function () {
-      assert.deepStrictEqual(
+      assert.deepEqual(
         Object.getOwnPropertyDescriptor(exports, "__esModule"),
         { value: true, configurable: false, writable: false, enumerable: false }
       );
     });
 
     it("has no exports", function () {
-      assert.deepStrictEqual(Object.keys(exports), []);
+      assert.deepEqual(Object.keys(exports), []);
     });
   });
 
@@ -42,7 +42,7 @@ describe("spec export", function () {
       const exports = runner.transformAndRun("const foo = 'foo';\nexport default foo");
 
       it("has no exports other than 'default'", function () {
-        assert.deepStrictEqual(Object.keys(exports), ["default"]);
+        assert.deepEqual(Object.keys(exports), ["default"]);
       });
 
       it("has the correct value", function () {
@@ -50,11 +50,20 @@ describe("spec export", function () {
       });
     });
 
+    // Use Function to make sure it is not transformed by babel-register
+    // Even with the function name transform, it would not be possible to get the correct
+    // Function.name to be generated, so use this to decide whether to skip tests
+    const hasFunctionName = Function("return { foo: function () {} }.foo")().name === "foo";
+
     describe("of anonymous function", function () {
       const exports = runner.transformAndRun("export default function () {}");
 
       it("has Function.name of 'default'", function () {
-        assert.strictEqual(exports.default.name, "default");
+        if (hasFunctionName) {
+          assert.strictEqual(exports.default.name, "default");
+        } else {
+          this.skip();
+        }
       });
     });
 
@@ -62,7 +71,11 @@ describe("spec export", function () {
       const exports = runner.transformAndRun("export default class {}");
 
       it("has Function.name of 'default'", function () {
-        assert.strictEqual(exports.default.name, "default");
+        if (hasFunctionName) {
+          assert.strictEqual(exports.default.name, "default");
+        } else {
+          this.skip();
+        }
       });
     });
   });
@@ -72,7 +85,7 @@ describe("spec export", function () {
       const exports = runner.transformAndRun("export const a = 'a'");
 
       it("has no exports other than 'a'", function () {
-        assert.deepStrictEqual(Object.keys(exports), ["a"]);
+        assert.deepEqual(Object.keys(exports), ["a"]);
       });
 
       it("has the correct value", function () {
@@ -100,7 +113,7 @@ describe("spec export", function () {
       const exports = runner.transformAndRun("export function foo () { return 'bar'; }");
 
       it("has no exports other than 'foo'", function () {
-        assert.deepStrictEqual(Object.keys(exports), ["foo"]);
+        assert.deepEqual(Object.keys(exports), ["foo"]);
       });
 
       it("hass the correct Function.name", function () {
@@ -117,7 +130,7 @@ describe("spec export", function () {
       const exports = runner.transformAndRun("export class Foo {}");
 
       it("has no exports other than 'Foo'", function () {
-        assert.deepStrictEqual(Object.keys(exports), ["Foo"]);
+        assert.deepEqual(Object.keys(exports), ["Foo"]);
       });
 
       it("has the correct Function.name", function () {
@@ -129,7 +142,7 @@ describe("spec export", function () {
       const exports = runner.transformAndRun("var foo\nexport { foo }");
 
       it("has no exports other than 'foo'", function () {
-        assert.deepStrictEqual(Object.keys(exports), ["foo"]);
+        assert.deepEqual(Object.keys(exports), ["foo"]);
       });
     });
 
@@ -137,7 +150,7 @@ describe("spec export", function () {
       const exports = runner.transformAndRun("function foo () {}\nexport { foo as bar }");
 
       it("has no exports other than 'bar'", function () {
-        assert.deepStrictEqual(Object.keys(exports), ["bar"]);
+        assert.deepEqual(Object.keys(exports), ["bar"]);
       });
 
       it("has the correct Function.name", function () {
