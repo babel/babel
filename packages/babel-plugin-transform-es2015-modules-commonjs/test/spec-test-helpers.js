@@ -1,6 +1,24 @@
 const babel = require("../../babel-core");
 const vm = require("vm");
 
+const extraPlugins = [];
+
+function prepareExtraPlugins () {
+  try {
+    eval("'use strict'; const foo = 'bar'");
+  } catch (e) {
+    extraPlugins.push(require("../../babel-plugin-transform-es2015-block-scoping"));
+  }
+
+  try {
+    eval("'use strict'; ({ get () {} })");
+  } catch (e) {
+    extraPlugins.push(require("../../babel-plugin-transform-es2015-shorthand-properties"));
+  }
+}
+
+prepareExtraPlugins();
+
 module.exports.Runner = function Runner (initialModules) {
   if (!(this instanceof Runner)) {
     throw new Error("Runner can only be instantiated");
@@ -8,6 +26,12 @@ module.exports.Runner = function Runner (initialModules) {
 
   this.modules = {};
   this.cache = {};
+  this.babelConfig = {
+    "plugins": [
+      [require("../"), {spec: true}].concat(extraPlugins),
+    ],
+    "ast": false,
+  };
 
   if (initialModules != null) {
     this.addModules(initialModules);
@@ -45,12 +69,7 @@ module.exports.Runner.prototype = {
   },
 
   transformAndRunInNewContext: function (code, context) {
-    code = babel.transform(code, {
-      "plugins": [
-        [require("../"), {spec: true}],
-      ],
-      "ast": false,
-    }).code;
+    code = babel.transform(code, this.babelConfig).code;
     vm.runInNewContext(code, context);
 
     return context.module.exports;
