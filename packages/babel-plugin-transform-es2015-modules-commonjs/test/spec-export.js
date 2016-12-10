@@ -7,7 +7,11 @@ describe("spec export", function () {
   const runner = new helpers.Runner();
 
   describe("basic shape", function () {
-    const exports = runner.transformAndRun("export {}");
+    let exports;
+
+    before(function () {
+      exports = runner.transformAndRun("export {}");
+    });
 
     it("is frozen", function () {
       assert(Object.isFrozen(exports));
@@ -39,7 +43,11 @@ describe("spec export", function () {
 
   describe("default export", function () {
     describe("of single value", function () {
-      const exports = runner.transformAndRun("const foo = 'foo';\nexport default foo");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("const foo = 'foo';\nexport default foo");
+      });
 
       it("has no exports other than 'default'", function () {
         assert.deepEqual(Object.keys(exports), ["default"]);
@@ -56,7 +64,11 @@ describe("spec export", function () {
     const hasFunctionName = Function("return { foo: function () {} }.foo")().name === "foo";
 
     describe("of anonymous function", function () {
-      const exports = runner.transformAndRun("export default function () {}");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("export default function () {}");
+      });
 
       it("has Function.name of 'default'", function () {
         if (hasFunctionName) {
@@ -68,7 +80,11 @@ describe("spec export", function () {
     });
 
     describe("of anonymous class", function () {
-      const exports = runner.transformAndRun("export default class {}");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("export default class {}");
+      });
 
       it("has Function.name of 'default'", function () {
         if (hasFunctionName) {
@@ -82,7 +98,11 @@ describe("spec export", function () {
 
   describe("named export", function () {
     describe("of single value declaration", function () {
-      const exports = runner.transformAndRun("export const a = 'a'");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("export const a = 'a'");
+      });
 
       it("has no exports other than 'a'", function () {
         assert.deepEqual(Object.keys(exports), ["a"]);
@@ -94,7 +114,11 @@ describe("spec export", function () {
     });
 
     describe("of multiple value declaration", function () {
-      const exports = runner.transformAndRun("export const a = 'a', b = 'b'");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("export const a = 'a', b = 'b'");
+      });
 
       it("has no exports other than 'a' and 'b'", function () {
         const keys = Object.keys(exports);
@@ -110,7 +134,11 @@ describe("spec export", function () {
     });
 
     describe("of function", function () {
-      const exports = runner.transformAndRun("export function foo () { return 'bar'; }");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("export function foo () { return 'bar'; }");
+      });
 
       it("has no exports other than 'foo'", function () {
         assert.deepEqual(Object.keys(exports), ["foo"]);
@@ -127,7 +155,11 @@ describe("spec export", function () {
     });
 
     describe("of class", function () {
-      const exports = runner.transformAndRun("export class Foo {}");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("export class Foo {}");
+      });
 
       it("has no exports other than 'Foo'", function () {
         assert.deepEqual(Object.keys(exports), ["Foo"]);
@@ -139,7 +171,11 @@ describe("spec export", function () {
     });
 
     describe("of identifier", function () {
-      const exports = runner.transformAndRun("var foo\nexport { foo }");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("var foo\nexport { foo }");
+      });
 
       it("has no exports other than 'foo'", function () {
         assert.deepEqual(Object.keys(exports), ["foo"]);
@@ -147,7 +183,11 @@ describe("spec export", function () {
     });
 
     describe("of renamed identifier", function () {
-      const exports = runner.transformAndRun("function foo () {}\nexport { foo as bar }");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("function foo () {}\nexport { foo as bar }");
+      });
 
       it("has no exports other than 'bar'", function () {
         assert.deepEqual(Object.keys(exports), ["bar"]);
@@ -161,7 +201,11 @@ describe("spec export", function () {
 
   describe("live binding", function () {
     describe("of default export", function () {
-      const exports = runner.transformAndRun("export default function foo () { foo = ':scream:' }");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("export default function foo () { foo = ':scream:' }");
+      });
 
       it("has the correct initial value", function () {
         assert.strictEqual(typeof exports.default, "function");
@@ -174,7 +218,11 @@ describe("spec export", function () {
     });
 
     describe("of named export", function () {
-      const exports = runner.transformAndRun("export let count = 0\nexport default function up () { count += 1 }");
+      let exports;
+
+      before(function () {
+        exports = runner.transformAndRun("export let count = 0\nexport default function up () { count += 1 }");
+      });
 
       it("has the correct initial value", function () {
         assert.strictEqual(exports.count, 0);

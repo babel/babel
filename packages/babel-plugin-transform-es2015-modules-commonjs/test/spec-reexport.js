@@ -13,7 +13,11 @@ describe("spec reexport", function () {
   });
 
   describe("individual reexports", function () {
-    const exports = runner.getExportsOf("ab");
+    let exports;
+
+    before(function () {
+      exports = runner.getExportsOf("ab");
+    });
 
     it("is frozen", function () {
       assert(Object.isFrozen(exports));
@@ -52,7 +56,11 @@ describe("spec reexport", function () {
   });
 
   describe("namespace reexport", function () {
-    const exports = runner.getExportsOf("ns");
+    let exports;
+
+    before(function () {
+      exports = runner.getExportsOf("ns");
+    });
 
     it("the reexport is frozen", function () {
       assert(Object.isFrozen(exports.ab));
@@ -84,8 +92,11 @@ describe("spec reexport", function () {
   });
 
   describe("star reexport", function () {
-    const exports = runner.getExportsOf("star");
+    let exports;
 
+    before(function () {
+      exports = runner.getExportsOf("star");
+    });
 
     it("is frozen", function () {
       assert(Object.isFrozen(exports));

@@ -7,13 +7,21 @@ describe("spec Interop import", function () {
   const fakeMod = { "fakeFs": true };
   runner.addToCache("fs", { module: { exports: fakeMod } });
 
-  const exports = runner.transformAndRun(
-    "import * as ns from 'fs'\nimport fs from 'fs'\nexport { fs, ns }\n"
-  );
+  let exports;
+
+  before(function () {
+    exports = runner.transformAndRun(
+      "import * as ns from 'fs'\nimport fs from 'fs'\nexport { fs, ns }\n"
+    );
+  });
 
   describe("export descriptors", function () {
     describe("ns", function () {
-      const nsDesc = Object.getOwnPropertyDescriptor(exports, "ns");
+      let nsDesc;
+
+      before(function () {
+        nsDesc = Object.getOwnPropertyDescriptor(exports, "ns");
+      });
 
       it("is enumerable", function () {
         assert(nsDesc.enumerable);
@@ -38,7 +46,11 @@ describe("spec Interop import", function () {
     });
 
     describe("fs", function () {
-      const fsDesc = Object.getOwnPropertyDescriptor(exports, "fs");
+      let fsDesc;
+
+      before(function () {
+        fsDesc = Object.getOwnPropertyDescriptor(exports, "fs");
+      });
 
       it("is enumerable", function () {
         assert(fsDesc.enumerable);
@@ -61,7 +73,11 @@ describe("spec Interop import", function () {
   });
 
   describe("synthetic namespace", function () {
-    const ns = exports.ns;
+    let ns;
+
+    before(function () {
+      ns = exports.ns;
+    });
 
     it("is frozen", function () {
       assert(Object.isFrozen(ns));
@@ -91,7 +107,11 @@ describe("spec Interop import", function () {
     });
 
     describe("'default' descriptor", function () {
-      const defaultDesc = Object.getOwnPropertyDescriptor(ns, "default");
+      let defaultDesc;
+
+      before(function () {
+        defaultDesc = Object.getOwnPropertyDescriptor(ns, "default");
+      });
 
       it("is enumerable", function () {
         assert(defaultDesc.enumerable);
