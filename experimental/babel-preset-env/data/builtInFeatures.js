@@ -38,6 +38,7 @@ const es2015 = {
   "es6.symbol": {
     features: [
       "Symbol",
+      "Object static methods / Object.getOwnPropertySymbols",
       "well-known symbols / Symbol.hasInstance",
       "well-known symbols / Symbol.isConcatSpreadable",
       "well-known symbols / Symbol.iterator",
@@ -54,7 +55,6 @@ const es2015 = {
 
   "es6.object.assign": "Object static methods / Object.assign",
   "es6.object.is": "Object static methods / Object.is",
-  "es6.object.get-own-property-symbols": "Object static methods / Object.getOwnPropertySymbols",
   "es6.object.set-prototype-of": "Object static methods / Object.setPrototypeOf",
 
   "es6.function.name": 'function "name" property',

@@ -262,15 +262,6 @@
     "android": 4.1,
     "ios": 9
   },
-  "es6.object.get-own-property-symbols": {
-    "chrome": 38,
-    "opera": 25,
-    "edge": 12,
-    "firefox": 36,
-    "safari": 9,
-    "node": 0.12,
-    "ios": 9
-  },
   "es6.object.set-prototype-of": {
     "chrome": 34,
     "opera": 21,
