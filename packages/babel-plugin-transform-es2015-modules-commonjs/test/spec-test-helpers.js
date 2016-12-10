@@ -33,6 +33,13 @@ module.exports.Runner.prototype = {
     this.cache[name] = context;
   },
 
+  getExportsOf: function (name) {
+    if (! (name in this.cache || name in this.modules)) {
+      throw new Error("Unknown module " + name + " requested");
+    }
+    return this.contextRequire(name);
+  },
+
   transformAndRun: function (code) {
     return this.transformAndRunInNewContext(code, this.makeContext());
   },

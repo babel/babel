@@ -3,7 +3,130 @@
 const assert = require("assert");
 const helpers = require("./spec-test-helpers");
 
-describe("spec star reexport", function () {
+describe("spec reexport", function () {
+  const runner = new helpers.Runner({
+    a: "export const a = 'a'",
+    b: "export const b = 'b'",
+    ab: "export { a } from 'a'\nexport { b } from 'b'",
+    ns: "import * as ab from 'ab'\nexport { ab }",
+    star: "export * from 'ab'\nexport * from 'ns'"
+  });
+
+  describe("individual reexports", function () {
+    const exports = runner.getExportsOf("ab");
+
+    it("is frozen", function () {
+      assert(Object.isFrozen(exports));
+    });
+
+    it("has a null prototype", function () {
+      assert.strictEqual(Object.getPrototypeOf(exports), null);
+    });
+
+    it("is tagged as Module", function () {
+      if (typeof Symbol === "function" && Symbol.toStringTag) {
+        assert.strictEqual(exports[Symbol.toStringTag], "Module");
+      } else {
+        this.skip();
+      }
+    });
+
+    it("has the __esModule flag", function () {
+      assert.deepStrictEqual(
+        Object.getOwnPropertyDescriptor(exports, "__esModule"),
+        { value: true, configurable: false, writable: false, enumerable: false }
+      );
+    });
+
+    it("has no exports other than 'a' and 'b'", function () {
+      const keys = Object.keys(exports);
+      assert.strictEqual(keys.length, 2);
+      assert(keys.indexOf("a") >= 0);
+      assert(keys.indexOf("b") >= 0);
+    });
+
+    it("has the correct values", function () {
+      assert.strictEqual(exports.a, "a");
+      assert.strictEqual(exports.b, "b");
+    });
+  });
+
+  describe("namespace reexport", function () {
+    const exports = runner.getExportsOf("ns");
+
+    it("the reexport is frozen", function () {
+      assert(Object.isFrozen(exports.ab));
+    });
+
+    it("the reexport has a null prototype", function () {
+      assert.strictEqual(Object.getPrototypeOf(exports.ab), null);
+    });
+
+    it("the reexport is tagged as Module", function () {
+      if (typeof Symbol === "function" && Symbol.toStringTag) {
+        assert.strictEqual(exports.ab[Symbol.toStringTag], "Module");
+      } else {
+        this.skip();
+      }
+    });
+
+    it("the reexport has the __esModule flag", function () {
+      assert.deepStrictEqual(
+        Object.getOwnPropertyDescriptor(exports.ab, "__esModule"),
+        { value: true, configurable: false, writable: false, enumerable: false }
+      );
+    });
+
+    it("the reexport has the correct values", function () {
+      assert.strictEqual(exports.ab.a, "a");
+      assert.strictEqual(exports.ab.b, "b");
+    });
+  });
+
+  describe("star reexport", function () {
+    const exports = runner.getExportsOf("star");
+
+
+    it("is frozen", function () {
+      assert(Object.isFrozen(exports));
+    });
+
+    it("has a null prototype", function () {
+      assert.strictEqual(Object.getPrototypeOf(exports), null);
+    });
+
+    it("is tagged as Module", function () {
+      if (typeof Symbol === "function" && Symbol.toStringTag) {
+        assert.strictEqual(exports[Symbol.toStringTag], "Module");
+      } else {
+        this.skip();
+      }
+    });
+
+    it("has the __esModule flag", function () {
+      assert.deepStrictEqual(
+        Object.getOwnPropertyDescriptor(exports, "__esModule"),
+        { value: true, configurable: false, writable: false, enumerable: false }
+      );
+    });
+
+    it("has no exports other than 'a', 'b' and 'ab'", function () {
+      const keys = Object.keys(exports);
+      assert.strictEqual(keys.length, 3);
+      assert(keys.indexOf("a") >= 0);
+      assert(keys.indexOf("b") >= 0);
+      assert(keys.indexOf("ab") >= 0);
+    });
+
+    it("has the correct values", function () {
+      assert.strictEqual(exports.a, "a");
+      assert.strictEqual(exports.b, "b");
+      assert.strictEqual(exports.ab, runner.getExportsOf("ab"));
+    });
+  });
+});
+
+describe("spec reexport star with duplicates", function () {
   const runner = new helpers.Runner({
     a: "export const name = {key: 'value'}",
     b: "export const name = {key: 'value'}",
@@ -17,7 +140,7 @@ describe("spec star reexport", function () {
     }, "Cannot redefine property: name");
   });
 
-  describe("SameValue duplicate reexport", function () {
+  describe("SameValue", function () {
     const exports = runner.transformAndRun("export * from 'aSame'\nexport * from 'bSame'");
 
     it("has the correct value", function () {
