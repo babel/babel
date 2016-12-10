@@ -117,6 +117,7 @@ function runExec(opts, execCode) {
     assert: chai.assert,
     transform: babel.transform,
     opts,
+    require,
     exports: {},
   };
 
