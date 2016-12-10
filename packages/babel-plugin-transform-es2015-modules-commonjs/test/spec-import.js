@@ -1,32 +1,15 @@
 const assert = require("assert");
-const babel = require("../../babel-core");
-const vm = require("vm");
+const helpers = require("./spec-test-helpers");
 
 test("spec Interop import", function () {
-  const src = "import * as ns from 'fs'\nimport fs from 'fs'\nexport { fs, ns }\n";
+  const runner = new helpers.Runner();
 
   const fakeMod = { "fakeFs": true };
-  const context = {
-    module: {
-      exports: {}
-    },
-    require: function (id) {
-      if (id === "fs") return fakeMod;
-      throw new Error("Unmocked module " + id + " required");
-    }
-  };
-  context.exports = context.module.exports;
+  runner.addToCache("fs", { module: { exports: fakeMod } });
 
-  const code = babel.transform(src, {
-    "plugins": [
-      [require("../"), {spec: true}],
-    ],
-    "ast": false,
-  }).code;
-
-  vm.runInNewContext(code, context);
-
-  const exports = context.module.exports;
+  const exports = runner.transformAndRun(
+    "import * as ns from 'fs'\nimport fs from 'fs'\nexport { fs, ns }\n"
+  );
 
   assert(Object.isFrozen(exports), "exports is frozen");
   assert.strictEqual(Object.getPrototypeOf(exports), null, "exports has null prototype");
