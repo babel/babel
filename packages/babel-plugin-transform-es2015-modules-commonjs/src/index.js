@@ -557,14 +557,21 @@ export default function () {
                 if (ownExportsUid == null) {
                   ownExportsUid = path.scope.generateUidIdentifier("ownExports");
                   const ownExportsNode = specBuildOwnExports(ownExportsUid, exportsObj);
+                  ownExportsNode._blockHoist = 3;
                   topNodes.push(ownExportsNode);
                 }
+
+                // Unfortunately, the namespace spread needs to happen _before_
+                // the namespace is frozen. This _will_ result in out-of-order
+                // imports, with the 'export * from' imports all running before
+                // any of the other imports.
 
                 exportNode = specBuildNamespaceSpread({
                   EXPORTS: exportsObj,
                   OWN_EXPORTS: ownExportsUid,
-                  OBJECT: addRequire(path.node.source.value, spec, path.node._blockHoist)
+                  OBJECT: addRequire(path.node.source.value, spec, 3)
                 });
+                exportNode._blockHoist = 3;
               } else {
                 exportNode = buildExportAll({
                   OBJECT: addRequire(path.node.source.value, spec, path.node._blockHoist)
@@ -675,30 +682,36 @@ export default function () {
 
               topNodes.unshift(node);
             }
-          }
 
-          if (!spec && hasImports && Object.keys(nonHoistedExportNames).length) {
-            let hoistedExportsNode = t.identifier("undefined");
+            if (hasExports) {
+              const node = specFinishNamespaceExport(exportsObj);
+              node._blockHoist = 3;
+              topNodes.push(node);
+            }
+          } else {
+            if (hasImports && Object.keys(nonHoistedExportNames).length) {
+              let hoistedExportsNode = t.identifier("undefined");
 
-            for (let name in nonHoistedExportNames) {
-              hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode).expression;
+              for (let name in nonHoistedExportNames) {
+                hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode).expression;
+              }
+
+              const node = t.expressionStatement(hoistedExportsNode);
+              node._blockHoist = 3;
+
+              topNodes.unshift(node);
             }
 
-            const node = t.expressionStatement(hoistedExportsNode);
-            node._blockHoist = 3;
+            // add __esModule declaration if this file has any exports
+            if (hasExports && !strict) {
+              let buildTemplate = buildExportsModuleDeclaration;
+              if (state.opts.loose) buildTemplate = buildLooseExportsModuleDeclaration;
 
-            topNodes.unshift(node);
-          }
+              const declar = buildTemplate();
+              declar._blockHoist = 3;
 
-          // add __esModule declaration if this file has any exports
-          if (hasExports && !strict && !spec) {
-            let buildTemplate = buildExportsModuleDeclaration;
-            if (state.opts.loose) buildTemplate = buildLooseExportsModuleDeclaration;
-
-            const declar = buildTemplate();
-            declar._blockHoist = 3;
-
-            topNodes.unshift(declar);
+              topNodes.unshift(declar);
+            }
           }
 
           path.unshiftContainer("body", topNodes);
@@ -708,7 +721,6 @@ export default function () {
             decls.forEach((decl) => { decl._blockHoist = 3; });
 
             path.unshiftContainer("body", decls);
-            path.pushContainer("body", [specFinishNamespaceExport(exportsObj)]);
           }
 
           if (spec) {
