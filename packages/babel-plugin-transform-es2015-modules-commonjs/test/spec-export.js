@@ -95,6 +95,83 @@ describe("spec export", function () {
         assert.strictEqual(exports.b, "b");
       });
     });
+
+    describe("of function", function () {
+      const exports = runner.transformAndRun("export function foo () { return 'bar'; }");
+
+      it("has no exports other than 'foo'", function () {
+        assert.deepStrictEqual(Object.keys(exports), ["foo"]);
+      });
+
+      it("hass the correct Function.name", function () {
+        assert.strictEqual(exports.foo.name, "foo");
+      });
+
+      it("has the correct value", function () {
+        assert.strictEqual(typeof exports.foo, "function");
+        assert.strictEqual((0, exports).foo(), "bar");
+      });
+    });
+
+    describe("of class", function () {
+      const exports = runner.transformAndRun("export class Foo {}");
+
+      it("has no exports other than 'Foo'", function () {
+        assert.deepStrictEqual(Object.keys(exports), ["Foo"]);
+      });
+
+      it("has the correct Function.name", function () {
+        assert.strictEqual(exports.Foo.name, "Foo");
+      });
+    });
+
+    describe("of identifier", function () {
+      const exports = runner.transformAndRun("var foo\nexport { foo }");
+
+      it("has no exports other than 'foo'", function () {
+        assert.deepStrictEqual(Object.keys(exports), ["foo"]);
+      });
+    });
+
+    describe("of renamed identifier", function () {
+      const exports = runner.transformAndRun("function foo () {}\nexport { foo as bar }");
+
+      it("has no exports other than 'bar'", function () {
+        assert.deepStrictEqual(Object.keys(exports), ["bar"]);
+      });
+
+      it("has the correct Function.name", function () {
+        assert.strictEqual(exports.bar.name, "foo");
+      });
+    });
+  });
+
+  describe("live binding", function () {
+    describe("of default export", function () {
+      const exports = runner.transformAndRun("export default function foo () { foo = ':scream:' }");
+
+      it("has the correct initial value", function () {
+        assert.strictEqual(typeof exports.default, "function");
+      });
+
+      it("correctly updates when executed", function () {
+        (0, exports).default();
+        assert.strictEqual(exports.default, ":scream:");
+      });
+    });
+
+    describe("of named export", function () {
+      const exports = runner.transformAndRun("export let count = 0\nexport default function up () { count += 1 }");
+
+      it("has the correct initial value", function () {
+        assert.strictEqual(exports.count, 0);
+      });
+
+      it("correctly updates", function () {
+        (0, exports).default();
+        assert.strictEqual(exports.count, 1);
+      });
+    });
   });
 
   describe("early errors", function () {

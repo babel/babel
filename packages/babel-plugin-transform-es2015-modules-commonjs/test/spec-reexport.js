@@ -14,14 +14,22 @@ describe("spec star reexport", function () {
   it("throws when not shadowed and duplicate is not SameValue", function () {
     assert.throws(function () {
       runner.transformAndRun("export * from 'a'\nexport * from 'b'");
+    }, "Cannot redefine property: name");
+  });
+
+  describe("SameValue duplicate reexport", function () {
+    const exports = runner.transformAndRun("export * from 'aSame'\nexport * from 'bSame'");
+
+    it("has the correct value", function () {
+      assert.strictEqual(exports.name, "name");
     });
   });
 
-  it("does not throw when not shadowed but is SameValue", function () {
-    runner.transformAndRun("export * from 'aSame'\nexport * from 'bSame'");
-  });
+  describe("shadowed reexport", function () {
+    const exports = runner.transformAndRun("export * from 'a'\nexport * from 'b'\nexport const name = 'foo'");
 
-  it("does not throw when shadowed even if it is not SameValue", function () {
-    runner.transformAndRun("export * from 'a'\nexport * from 'b'\nexport const name = {}");
+    it("has the correct value", function () {
+      assert.strictEqual(exports.name, "foo");
+    });
   });
 });
