@@ -14,6 +14,16 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
   });
 }
 
+Object.defineProperties(exports, {
+  unrelated: {
+    enumerable: true,
+
+    get() {
+      return unrelated;
+    }
+
+  }
+});
 Object.defineProperty(exports, "default", {
   enumerable: true,
   writable: true,
@@ -21,14 +31,6 @@ Object.defineProperty(exports, "default", {
     default: function () {}
   }.default
 });
-var unrelated = undefined;
-Object.defineProperty(exports, "unrelated", {
-  enumerable: true,
-
-  get() {
-    return unrelated;
-  }
-
-});
+var unrelated;
 unrelated = "changed";
 (Object.freeze || Object)(exports);

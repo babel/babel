@@ -14,22 +14,40 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
   });
 }
 
-const _undefined = {
-  enumerable: true,
-  writable: true,
-  configurable: true,
-  value: undefined
-};
 Object.defineProperties(exports, {
-  namespace: _undefined,
-  default: _undefined,
-  why: _undefined
+  namespace: {
+    enumerable: true,
+
+    get() {
+      return _somewhere;
+    }
+
+  },
+  default: {
+    enumerable: true,
+
+    get() {
+      return _elsewhere.stuff;
+    }
+
+  },
+  why: {
+    enumerable: true,
+
+    get() {
+      return _because.default;
+    }
+
+  }
 });
+
+const _ownExports = Object.keys(exports);
 
 var _iDontKnow = babelHelpers.specRequireInterop(require('./i-dont-know'));
 
 Object.keys(_iDontKnow).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
+  if (key === "__esModule" || key === "default" || _ownExports.indexOf(key) >= 0) return;
+  if (key in exports && (exports[key] === _iDontKnow[key] || typeof exports[key] === 'number' && isNaN(exports[key]))) return;
   Object.defineProperty(exports, key, {
     enumerable: true,
 
@@ -42,30 +60,8 @@ Object.keys(_iDontKnow).forEach(function (key) {
 
 var _because = babelHelpers.specRequireInterop(require('./because'));
 
-Object.defineProperty(exports, 'why', {
-  enumerable: true,
-
-  get() {
-    return _because.default;
-  }
-
-});
-
 var _somewhere = babelHelpers.specRequireInterop(require('./somewhere'));
 
 var _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));
 
-Object.defineProperty(exports, 'namespace', {
-  enumerable: true,
-  writable: true,
-  value: _somewhere
-});
-Object.defineProperty(exports, 'default', {
-  enumerable: true,
-
-  get() {
-    return _elsewhere.stuff;
-  }
-
-});
 (Object.freeze || Object)(exports);

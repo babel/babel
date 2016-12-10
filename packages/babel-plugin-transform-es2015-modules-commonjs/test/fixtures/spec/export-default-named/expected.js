@@ -14,13 +14,15 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
   });
 }
 
-Object.defineProperty(exports, "default", {
-  enumerable: true,
+Object.defineProperties(exports, {
+  default: {
+    enumerable: true,
 
-  get() {
-    return named;
+    get() {
+      return named;
+    }
+
   }
-
 });
 function named() {
   named = function () {};
