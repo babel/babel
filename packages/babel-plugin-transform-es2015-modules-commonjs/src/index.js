@@ -59,13 +59,6 @@ const specBuildExportDefault = template(`
   Object.defineProperty(EXPORTS, "default", { enumerable: true, writable: true, value: VALUE });
 `);
 
-// Unfortunately, regular objects can't synthesize a value descriptor every time they're read,
-// so a getter needs to be used for live bindings.
-// It's also not allowed to specify writable when using getters/setters.
-const specBuildExport = template(`
-  Object.defineProperty(EXPORTS, NAME, { enumerable: true, get() { return VALUE; } });
-`);
-
 const specBuildOwnExports = template(`
   const $0 = Object.keys($1)
 `);
@@ -83,9 +76,12 @@ const specBuildNamespaceSpread = template(`
   });
 `);
 
-// It should _not_ be configurable, but this is needed as referring to
-// the real export, even with a getter, may cause DMZ errors with circular
-// references.
+// Unfortunately, regular objects can't synthesize a value descriptor every time they're read,
+// so a getter needs to be used for live bindings.
+// It's also not allowed to specify writable when using getters/setters.
+//
+// Accessing a non-hoisted export should cause a DMZ error instead of just
+// returning undefined, so a getter is also needed for that.
 const specBuildHoistedExportDescriptor = template(`
   ({ enumerable: true, get() { return $0; } })
 `);
