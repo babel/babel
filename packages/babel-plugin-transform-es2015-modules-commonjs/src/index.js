@@ -54,11 +54,6 @@ const specBuildFunctionNameWrapper = template(`
   ({ default: $0 }).default
 `);
 
-// The descriptors are as specified in https://tc39.github.io/ecma262/#sec-module-namespace-exotic-objects-getownproperty-p
-const specBuildExportDefault = template(`
-  Object.defineProperty(EXPORTS, "default", { enumerable: true, writable: true, value: VALUE });
-`);
-
 const specBuildOwnExports = template(`
   const $0 = Object.keys($1)
 `);
@@ -79,9 +74,13 @@ const specBuildNamespaceSpread = template(`
 // Unfortunately, regular objects can't synthesize a value descriptor every time they're read,
 // so a getter needs to be used for live bindings.
 // It's also not allowed to specify writable when using getters/setters.
+// Even if it was a value, getOwnPropertyDescriptor would return writable: false after
+// the exports are frozen by specFinishNamespaceExport.
 //
 // Accessing a non-hoisted export should cause a DMZ error instead of just
 // returning undefined, so a getter is also needed for that.
+//
+// This is as close as we can get to https://tc39.github.io/ecma262/#sec-module-namespace-exotic-objects-getownproperty-p
 const specBuildHoistedExportDescriptor = template(`
   ({ enumerable: true, get() { return $0; } })
 `);
@@ -297,6 +296,7 @@ export default function () {
           let remaps = Object.create(null);
 
           const hoistedExports = spec && new Map();
+          let defaultExportUid = null;
           let ownExportsUid = null;
 
           let requires = Object.create(null);
@@ -388,9 +388,12 @@ export default function () {
                   }
                   path.replaceWith(declaration.node);
                 } else if (spec) {
-                  hoistedExports.set("default", null);
+                  defaultExportUid = path.scope.generateUidIdentifier("default");
+                  hoistedExports.set("default", defaultExportUid);
                   const expr = specBuildFunctionNameWrapper(t.toExpression(declaration.node)).expression;
-                  topNodes.push(specBuildExportDefault({ EXPORTS: exportsObj, VALUE: expr }));
+                  topNodes.push(t.variableDeclaration("let", [
+                    t.variableDeclarator(defaultExportUid, expr)
+                  ]));
                   path.remove();
                 } else {
                   const expr = t.toExpression(declaration.node);
@@ -412,15 +415,19 @@ export default function () {
                     ]);
                   }
                 } else if (spec) {
-                  hoistedExports.set("default", null);
+                  defaultExportUid = path.scope.generateUidIdentifier("default");
+                  hoistedExports.set("default", defaultExportUid);
 
                   const expr = specBuildFunctionNameWrapper(t.toExpression(declaration.node)).expression;
-                  path.replaceWith(specBuildExportDefault({ EXPORTS: exportsObj, VALUE: expr }));
+
+                  path.replaceWith(t.variableDeclaration("let", [
+                    t.variableDeclarator(defaultExportUid, expr)
+                  ]));
 
                   // Manually re-queue the expression so other transforms can get to it.
                   // Ideally this would happen automatically from the replaceWith above.
                   // See #4140 for more info.
-                  path.parentPath.requeue(path.get("expression.arguments.2"));
+                  path.parentPath.requeue(path.get("declarations.init"));
                 } else {
                   const expr = t.toExpression(declaration.node);
                   path.replaceWith(buildExportsAssignment(defNode, expr));
@@ -433,13 +440,17 @@ export default function () {
               } else {
                 const defNode = t.identifier("default");
                 if (spec) {
-                  hoistedExports.set("default", null);
-                  path.replaceWith(specBuildExportDefault({ EXPORTS: exportsObj, VALUE: declaration.node }));
+                  defaultExportUid = path.scope.generateUidIdentifier("default");
+                  hoistedExports.set("default", defaultExportUid);
+
+                  path.replaceWith(t.variableDeclaration("let", [
+                    t.variableDeclarator(defaultExportUid, declaration.node)
+                  ]));
 
                   // Manually re-queue the expression so other transforms can get to it.
                   // Ideally this would happen automatically from the replaceWith above.
                   // See #4140 for more info.
-                  path.parentPath.requeue(path.get("expression.arguments.2"));
+                  path.parentPath.requeue(path.get("declarations.init"));
                 } else {
                   path.replaceWith(buildExportsAssignment(defNode, declaration.node));
 
