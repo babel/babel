@@ -391,9 +391,12 @@ export default function () {
                   defaultExportUid = path.scope.generateUidIdentifier("default");
                   hoistedExports.set("default", defaultExportUid);
                   const expr = specBuildFunctionNameWrapper(t.toExpression(declaration.node)).expression;
-                  topNodes.push(t.variableDeclaration("let", [
+                  const decl = t.variableDeclaration("let", [
                     t.variableDeclarator(defaultExportUid, expr)
-                  ]));
+                  ]);
+                  decl.loc = declaration.node.loc;
+                  decl._blockHoist = 3;
+                  topNodes.unshift(decl);
                   path.remove();
                 } else {
                   const expr = t.toExpression(declaration.node);
