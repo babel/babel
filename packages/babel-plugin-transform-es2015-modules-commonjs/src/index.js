@@ -66,13 +66,14 @@ const specBuildExport = template(`
   Object.defineProperty(EXPORTS, NAME, { enumerable: true, get() { return VALUE; } });
 `);
 
-const specBuildNamespaceReexport = template(`
-  Object.defineProperty(EXPORTS, NAME, { enumerable: true, writable: true, value: VALUE });
+const specBuildOwnExports = template(`
+  const $0 = Object.keys($1)
 `);
 
 const specBuildNamespaceSpread = template(`
   Object.keys(OBJECT).forEach(function (key) {
-    if (key === "default" || key === "__esModule") return;
+    if (key === "__esModule" || key === "default" || OWN_EXPORTS.indexOf(key) >= 0) return;
+    if (key in EXPORTS && (EXPORTS[key] === OBJECT[key] || typeof EXPORTS[key] === 'number' && isNaN(EXPORTS[key]))) return;
     Object.defineProperty(EXPORTS, key, {
       enumerable: true,
       get() {
@@ -85,13 +86,14 @@ const specBuildNamespaceSpread = template(`
 // It should _not_ be configurable, but this is needed as referring to
 // the real export, even with a getter, may cause DMZ errors with circular
 // references.
-const specBuildTempExportDescriptor = template(`
-  const $0 = { enumerable: true, writable: true, configurable: true, value: undefined };
+const specBuildHoistedExportDescriptor = template(`
+  ({ enumerable: true, get() { return $0; } })
 `);
 
-const specBuildTempExportProperty = (id, descriptorId) => t.objectProperty(id, descriptorId);
+const specBuildHoistedExportProperty = (id, descriptorId) =>
+  t.objectProperty(id, specBuildHoistedExportDescriptor(descriptorId).expression);
 
-const specBuildTempExport = template(`
+const specBuildHoistedExport = template(`
   Object.defineProperties($0, $1);
 `);
 
@@ -297,7 +299,9 @@ export default function () {
 
           let topNodes = [];
           let remaps = Object.create(null);
-          const namespaceImports = new Set();
+
+          const hoistedExports = spec && new Map();
+          let ownExportsUid = null;
 
           let requires = Object.create(null);
 
@@ -364,13 +368,6 @@ export default function () {
 
               importsEntry.specifiers.push(...path.node.specifiers);
 
-              if (spec) {
-                path.node.specifiers
-                .filter((s) => t.isImportNamespaceSpecifier(s))
-                .map((specifier) => specifier.local.name)
-                .forEach((name) => { namespaceImports.add(name); });
-              }
-
               if (typeof path.node._blockHoist === "number") {
                 importsEntry.maxBlockHoist = Math.max(
                   path.node._blockHoist,
@@ -382,18 +379,24 @@ export default function () {
 
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
+              if (spec && hoistedExports.has("default")) {
+                let todo;
+              }
+
               let declaration = path.get("declaration");
               if (declaration.isFunctionDeclaration()) {
                 let id = declaration.node.id;
                 let defNode = t.identifier("default");
                 if (id) {
                   addTo(exports, id.name, defNode);
-                  topNodes.push(spec
-                    ? specBuildExport({ EXPORTS: exportsObj, NAME: t.stringLiteral("default"), VALUE: id })
-                    : buildExportsAssignment(defNode, id)
-                  );
+                  if (spec) {
+                    hoistedExports.set("default", id);
+                  } else {
+                    topNodes.push(spec, buildExportsAssignment(defNode, id));
+                  }
                   path.replaceWith(declaration.node);
                 } else if (spec) {
+                  hoistedExports.set("default", null);
                   const expr = specBuildFunctionNameWrapper(t.toExpression(declaration.node)).expression;
                   topNodes.push(specBuildExportDefault({ EXPORTS: exportsObj, VALUE: expr }));
                   path.remove();
@@ -407,13 +410,18 @@ export default function () {
                 let defNode = t.identifier("default");
                 if (id) {
                   addTo(exports, id.name, defNode);
-                  path.replaceWithMultiple([
-                    declaration.node,
-                    spec
-                      ? specBuildExport({ EXPORTS: exportsObj, NAME: t.stringLiteral("default"), VALUE: id })
-                      : buildExportsAssignment(defNode, id)
-                  ]);
+                  if (spec) {
+                    hoistedExports.set("default", id);
+                    path.replaceWith(declaration.node);
+                  } else {
+                    path.replaceWithMultiple([
+                      declaration.node,
+                      buildExportsAssignment(defNode, id)
+                    ]);
+                  }
                 } else if (spec) {
+                  hoistedExports.set("default", null);
+
                   const expr = specBuildFunctionNameWrapper(t.toExpression(declaration.node)).expression;
                   path.replaceWith(specBuildExportDefault({ EXPORTS: exportsObj, VALUE: expr }));
 
@@ -433,6 +441,7 @@ export default function () {
               } else {
                 const defNode = t.identifier("default");
                 if (spec) {
+                  hoistedExports.set("default", null);
                   path.replaceWith(specBuildExportDefault({ EXPORTS: exportsObj, VALUE: declaration.node }));
 
                   // Manually re-queue the expression so other transforms can get to it.
@@ -454,34 +463,44 @@ export default function () {
                 if (declaration.isFunctionDeclaration()) {
                   let id = declaration.node.id;
                   addTo(exports, id.name, id);
-                  topNodes.push(spec
-                    ? specBuildExport({ EXPORTS: exportsObj, NAME: t.stringLiteral(id.name), VALUE: id })
-                    : buildExportsAssignment(id, id));
+                  if (spec) {
+                    if (hoistedExports.has(id.name)) {
+                      let todo;
+                    }
+                    hoistedExports.set(id.name, id);
+                  } else {
+                    topNodes.push(buildExportsAssignment(id, id));
+                  }
                   path.replaceWith(declaration.node);
                 } else if (declaration.isClassDeclaration()) {
                   let id = declaration.node.id;
                   addTo(exports, id.name, id);
-                  path.replaceWithMultiple([
-                    declaration.node,
-                    spec
-                    ? specBuildExport({ EXPORTS: exportsObj, NAME: t.stringLiteral(id.name), VALUE: id })
-                    : buildExportsAssignment(id, id)
-                  ]);
-                  nonHoistedExportNames[id.name] = true;
+                  if (spec) {
+                    if (hoistedExports.has(id.name)) {
+                      let todo;
+                    }
+                    hoistedExports.set(id.name, id);
+                    path.replaceWith(declaration.node);
+                  } else {
+                    path.replaceWithMultiple([
+                      declaration.node,
+                      buildExportsAssignment(id, id)
+                    ]);
+                    nonHoistedExportNames[id.name] = true;
+                  }
                 } else if (declaration.isVariableDeclaration()) {
                   let declarators = declaration.get("declarations");
                   const toExport = spec && new Set();
                   for (let decl of declarators) {
                     let id = decl.get("id");
 
-                    let init = decl.get("init");
-                    if (!init.node) init.replaceWith(t.identifier("undefined"));
-
                     if (spec) {
                       toExport.add(id.node);
-                      nonHoistedExportNames[id.node.name] = true;
                       continue;
                     }
+
+                    let init = decl.get("init");
+                    if (!init.node) init.replaceWith(t.identifier("undefined"));
 
                     if (id.isIdentifier()) {
                       addTo(exports, id.node.name, id.node);
@@ -495,16 +514,14 @@ export default function () {
                     }
                   }
                   if (spec) {
-                    path.replaceWithMultiple([
-                      declaration.node
-                    ].concat(
-                      Array.from(toExport)
-                      .map((id) => specBuildExport({ EXPORTS: exportsObj, NAME: t.stringLiteral(id.name), VALUE: id}))
-                    )
-                  );
-                  } else {
-                    path.replaceWith(declaration.node);
+                    Array.from(toExport).forEach((id) => {
+                      if (hoistedExports.has(id.name)) {
+                        let todo;
+                      }
+                      hoistedExports.set(id.name, id);
+                    });
                   }
+                  path.replaceWith(declaration.node);
                 }
                 continue;
               }
@@ -522,7 +539,10 @@ export default function () {
                     // todo
                   } else if (specifier.isExportSpecifier()) {
                     if (spec) {
-                      topNodes.push(specBuildExport({ EXPORTS: exportsObj, NAME: t.stringLiteral(specifier.node.exported.name), VALUE: t.memberExpression(ref, specifier.node.local) }));
+                      if (hoistedExports.has(specifier.node.exported.name)) {
+                        let todo;
+                      }
+                      hoistedExports.set(specifier.node.exported.name, t.memberExpression(ref, specifier.node.local));
                     } else if (specifier.node.local.name === "default") {
                       topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(t.callExpression(this.addHelper("interopRequireDefault"), [ref]), specifier.node.local)));
                     } else {
@@ -538,12 +558,10 @@ export default function () {
                     nonHoistedExportNames[specifier.node.exported.name] = true;
 
                     if (spec) {
-                      if (namespaceImports.has(specifier.node.local.name)) {
-                        // it's a namespace, doesn't go through a getter, safe to reexport as a value
-                        nodes.push(specBuildNamespaceReexport({ EXPORTS: exportsObj, NAME: t.stringLiteral(specifier.node.exported.name), VALUE: specifier.node.local }));
-                      } else {
-                        nodes.push(specBuildExport({ EXPORTS: exportsObj, NAME: t.stringLiteral(specifier.node.exported.name), VALUE: specifier.node.local }));
+                      if (hoistedExports.has(specifier.node.exported.name)) {
+                        let todo;
                       }
+                      hoistedExports.set(specifier.node.exported.name, specifier.node.local);
                     } else {
                       nodes.push(buildExportsAssignment(specifier.node.exported, specifier.node.local));
                     }
@@ -552,14 +570,24 @@ export default function () {
               }
               path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
-              let exportNode = spec
-                ? specBuildNamespaceSpread({
+              let exportNode;
+              if (spec) {
+                if (ownExportsUid == null) {
+                  ownExportsUid = path.scope.generateUidIdentifier("ownExports");
+                  const ownExportsNode = specBuildOwnExports(ownExportsUid, exportsObj);
+                  topNodes.push(ownExportsNode);
+                }
+
+                exportNode = specBuildNamespaceSpread({
                   EXPORTS: exportsObj,
-                  OBJECT: addRequire(path.node.source.value, spec, path.node._blockHoist)
-                })
-                : buildExportAll({
+                  OWN_EXPORTS: ownExportsUid,
                   OBJECT: addRequire(path.node.source.value, spec, path.node._blockHoist)
                 });
+              } else {
+                exportNode = buildExportAll({
+                  OBJECT: addRequire(path.node.source.value, spec, path.node._blockHoist)
+                });
+              }
               exportNode.loc = path.node.loc;
               topNodes.push(exportNode);
               path.remove();
@@ -649,34 +677,35 @@ export default function () {
             }
           }
 
-          if (hasImports && Object.keys(nonHoistedExportNames).length) {
-            let hoistedExportsNode = t.identifier("undefined");
-
-            if (spec) {
-              const descId = path.scope.generateUidIdentifier("undefined");
-              const desc = specBuildTempExportDescriptor(descId);
-              desc._blockHoist = 3;
-
-              const expr = t.objectExpression(
-                Object.keys(nonHoistedExportNames).map((name) =>
-                  specBuildTempExportProperty(t.identifier(name), descId)
-                )
-              );
-              const node = specBuildTempExport(exportsObj, expr);
-              node._blockHoist = 3;
-
-              topNodes.unshift(node);
-              topNodes.unshift(desc);
-            } else {
-              for (let name in nonHoistedExportNames) {
-                hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode).expression;
+          if (spec) {
+            const entries = Array.from(hoistedExports.entries()).map(([name, id]) => {
+              if (name === "default" && id === null) {
+                // explicit export is generated
+                return;
               }
+              return specBuildHoistedExportProperty(t.identifier(name), id);
+            }).filter(Boolean);
 
-              const node = t.expressionStatement(hoistedExportsNode);
+            if (entries.length > 0) {
+              const expr = t.objectExpression(entries);
+              const node = specBuildHoistedExport(exportsObj, expr);
               node._blockHoist = 3;
 
               topNodes.unshift(node);
             }
+          }
+
+          if (!spec && hasImports && Object.keys(nonHoistedExportNames).length) {
+            let hoistedExportsNode = t.identifier("undefined");
+
+            for (let name in nonHoistedExportNames) {
+              hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode).expression;
+            }
+
+            const node = t.expressionStatement(hoistedExportsNode);
+            node._blockHoist = 3;
+
+            topNodes.unshift(node);
           }
 
           // add __esModule declaration if this file has any exports
