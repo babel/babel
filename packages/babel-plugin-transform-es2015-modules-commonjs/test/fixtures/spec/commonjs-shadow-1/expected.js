@@ -24,10 +24,10 @@ Object.defineProperties(exports, {
 
   }
 });
-(Object.freeze || Object)(exports);
 let _default = {
   default: function () {}
 }.default;
+(Object.freeze || Object)(exports);
 
 
 _exports = function () {};

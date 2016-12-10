@@ -28,8 +28,8 @@ Object.defineProperties(exports, {
     }
   }
 });
-(Object.freeze || Object)(exports);
 var _default = {
   default: function _default() {}
 }.default;
+(Object.freeze || Object)(exports);
 function b() {}
