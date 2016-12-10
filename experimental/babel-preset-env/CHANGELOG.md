@@ -33,7 +33,7 @@ We were outputting an invalid path for `regenerator`!
 
 ### :rocket: New Feature
 
-* Add `useBuiltIns` option ([#56](https://github.com/babel/babel-preset-env/pull/55)) ([@hzoo](https://github.com/hzoo)), ([@yavorsky](https://github.com/yavorsky)), ([@existentialism](https://github.com/existentialism))
+* Add `useBuiltIns` option ([#56](https://github.com/babel/babel-preset-env/pull/56)) ([@hzoo](https://github.com/hzoo)), ([@yavorsky](https://github.com/yavorsky)), ([@existentialism](https://github.com/existentialism))
 
 A way to apply `babel-preset-env` for polyfills (via `"babel-polyfill"``).
 
