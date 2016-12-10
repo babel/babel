@@ -10,7 +10,7 @@ const whitelist = [
 
 export default function ({ types: t }) {
   function createImportDeclaration(polyfill) {
-    let declar = t.importDeclaration([], t.stringLiteral(`core-js/modules/${polyfill}`));
+    let declar = t.importDeclaration([], t.stringLiteral(polyfill));
     declar._blockHoist = 3;
     return declar;
   }
@@ -20,7 +20,7 @@ export default function ({ types: t }) {
       t.callExpression(
         t.identifier("require"),
         [
-          t.stringLiteral(`core-js/modules/${polyfill}`)
+          t.stringLiteral(polyfill)
         ]
       )
     );
@@ -36,7 +36,11 @@ export default function ({ types: t }) {
       isPolyfillSource(path.node.expression.arguments[0].value);
   }
 
-  function createImport(polyfill, requireType) {
+  function createImport(polyfill, requireType, core) {
+    if (core) {
+      polyfill = `core-js/modules/${polyfill}`;
+    }
+
     if (requireType === "import") {
       return createImportDeclaration(polyfill);
     } else {
@@ -47,7 +51,7 @@ export default function ({ types: t }) {
   function createImports(polyfills, requireType, regenerator) {
     let imports = polyfills
     .filter((el, i, arr) => arr.indexOf(el) === i)
-    .map((polyfill) => createImport(polyfill, requireType));
+    .map((polyfill) => createImport(polyfill, requireType, true));
 
     return [
       ...imports,

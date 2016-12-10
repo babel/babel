@@ -84,6 +84,6 @@ import "core-js/modules/es7.string.pad-end";
 import "core-js/modules/web.timers";
 import "core-js/modules/web.immediate";
 import "core-js/modules/web.dom.iterable";
-import "core-js/modules/regenerator-runtime/runtime";
+import "regenerator-runtime/runtime";
 
 Math.pow(1, 2);
