@@ -375,10 +375,6 @@ export default function () {
 
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
-              if (spec && hoistedExports.has("default")) {
-                let todo;
-              }
-
               let declaration = path.get("declaration");
               if (declaration.isFunctionDeclaration()) {
                 let id = declaration.node.id;
@@ -460,9 +456,6 @@ export default function () {
                   let id = declaration.node.id;
                   addTo(exports, id.name, id);
                   if (spec) {
-                    if (hoistedExports.has(id.name)) {
-                      let todo;
-                    }
                     hoistedExports.set(id.name, id);
                   } else {
                     topNodes.push(buildExportsAssignment(id, id));
@@ -472,9 +465,6 @@ export default function () {
                   let id = declaration.node.id;
                   addTo(exports, id.name, id);
                   if (spec) {
-                    if (hoistedExports.has(id.name)) {
-                      let todo;
-                    }
                     hoistedExports.set(id.name, id);
                     path.replaceWith(declaration.node);
                   } else {
@@ -486,12 +476,11 @@ export default function () {
                   }
                 } else if (declaration.isVariableDeclaration()) {
                   let declarators = declaration.get("declarations");
-                  const toExport = spec && new Set();
                   for (let decl of declarators) {
                     let id = decl.get("id");
 
                     if (spec) {
-                      toExport.add(id.node);
+                      hoistedExports.set(id.node.name, id.node);
                       continue;
                     }
 
@@ -508,14 +497,6 @@ export default function () {
                     } else {
                       // todo
                     }
-                  }
-                  if (spec) {
-                    Array.from(toExport).forEach((id) => {
-                      if (hoistedExports.has(id.name)) {
-                        let todo;
-                      }
-                      hoistedExports.set(id.name, id);
-                    });
                   }
                   path.replaceWith(declaration.node);
                 }
@@ -535,9 +516,6 @@ export default function () {
                     // todo
                   } else if (specifier.isExportSpecifier()) {
                     if (spec) {
-                      if (hoistedExports.has(specifier.node.exported.name)) {
-                        let todo;
-                      }
                       hoistedExports.set(specifier.node.exported.name, t.memberExpression(ref, specifier.node.local));
                     } else if (specifier.node.local.name === "default") {
                       topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(t.callExpression(this.addHelper("interopRequireDefault"), [ref]), specifier.node.local)));
@@ -554,9 +532,6 @@ export default function () {
                     nonHoistedExportNames[specifier.node.exported.name] = true;
 
                     if (spec) {
-                      if (hoistedExports.has(specifier.node.exported.name)) {
-                        let todo;
-                      }
                       hoistedExports.set(specifier.node.exported.name, specifier.node.local);
                     } else {
                       nodes.push(buildExportsAssignment(specifier.node.exported, specifier.node.local));
