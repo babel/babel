@@ -384,7 +384,7 @@ export default function () {
                   if (spec) {
                     hoistedExports.set("default", id);
                   } else {
-                    topNodes.push(spec, buildExportsAssignment(defNode, id));
+                    topNodes.push(buildExportsAssignment(defNode, id));
                   }
                   path.replaceWith(declaration.node);
                 } else if (spec) {
