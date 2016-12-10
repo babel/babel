@@ -1,7 +1,7 @@
 const assert = require("assert");
 const helpers = require("./spec-test-helpers");
 
-test("spec Interop import", function () {
+describe("spec Interop import", function () {
   const runner = new helpers.Runner();
 
   const fakeMod = { "fakeFs": true };
@@ -11,70 +11,117 @@ test("spec Interop import", function () {
     "import * as ns from 'fs'\nimport fs from 'fs'\nexport { fs, ns }\n"
   );
 
-  assert(Object.isFrozen(exports), "exports is frozen");
-  assert.strictEqual(Object.getPrototypeOf(exports), null, "exports has null prototype");
+  describe("export descriptors", function () {
+    describe("ns", function () {
+      const nsDesc = Object.getOwnPropertyDescriptor(exports, "ns");
 
-  if (helpers.hasToStringTag()) {
-    assert.strictEqual(exports[Symbol.toStringTag], "Module", "exports is tagged as Module");
-  } else {
-    it.skip("exports is tagged as Module");
-  }
+      it("is enumerable", function () {
+        assert(nsDesc.enumerable);
+      });
 
-  assert.deepEqual(
-    Object.getOwnPropertyDescriptor(exports, "__esModule"),
-    { value: true, configurable: false, writable: false, enumerable: false },
-    "__esModule in top level Module"
-  );
+      it("is writable", function () {
+        // This should be the actual observable behavior, but getters
+        // are being used, which forbids setting writable.
+        // Even if it was a value descriptor, freezing the export
+        // forces the result of getOwnPropertyDescriptor to have writable: false
+        // // assert(nsDesc.writable);
+        this.skip();
+      });
 
-  const nsDesc = Object.getOwnPropertyDescriptor(exports, "ns");
+      it("happens to be a getter", function () {
+        assert.strictEqual(typeof nsDesc.get, "function");
+      });
 
-  assert(nsDesc.enumerable, "ns export is enumerable");
-  // This should be the actual observable behavior, but freezing the export
-  // makes this change to false.
-  // // assert(nsDesc.writable, "ns export is writable");
-  assert(!nsDesc.writable, "ns export happens to not be writable");
-  assert(!nsDesc.configurable,"ns export is not configurable");
+      it("is not configurable", function () {
+        assert(!nsDesc.configurable);
+      });
+    });
 
-  const fsDesc = Object.getOwnPropertyDescriptor(exports, "fs");
+    describe("fs", function () {
+      const fsDesc = Object.getOwnPropertyDescriptor(exports, "fs");
 
-  assert(fsDesc.enumerable, "fs export is enumerable");
-  // fsDesc.writable cannot be true like the spec asks because...
-  // // assert.strictEqual(fsDesc.writable, true);
-  // ...fsDesc.get must be provided (and be a function)
-  assert.strictEqual(typeof fsDesc.get, "function", "fs export is a getter");
-  assert(!fsDesc.configurable, "fs export is not configurable");
+      it("is enumerable", function () {
+        assert(fsDesc.enumerable);
+      });
 
-  const ns = exports.ns;
+      it("is writable", function () {
+        // fsDesc.writable cannot be true for the same reason nsDesc.writable could not
+        // // assert(fsDesc.writable);
+      });
 
-  assert.deepEqual(
-    Object.getOwnPropertyDescriptor(ns, "__esModule"),
-    { value: true, configurable: false, writable: false, enumerable: false },
-    "__esModule in the imported ns Module"
-  );
+      it("happens to be a getter", function () {
+        assert.strictEqual(typeof fsDesc.get, "function");
+      });
 
-  assert(Object.isFrozen(ns), "ns export is frozen");
-  assert.strictEqual(Object.getPrototypeOf(ns), null, "ns export has null prototype");
+      it("is not configurable", function () {
+        assert(!fsDesc.configurable);
+      });
+    });
+  });
 
-  if (helpers.hasToStringTag()) {
-    assert.strictEqual(ns[Symbol.toStringTag], "Module", "ns export is tagged as Module");
-  } else {
-    it.skip("ns export is tagged as Module");
-  }
+  describe("synthetic namespace", function () {
+    const ns = exports.ns;
 
-  const imported = Object.getOwnPropertyNames(ns).filter(function (name) { return name !== "__esModule"; });
+    it("is frozen", function () {
+      assert(Object.isFrozen(ns));
+    });
 
-  assert.deepEqual(imported, [ "default" ], "No exports other than 'default' in ns Module");
+    it("has a null prototype", function () {
+      assert.strictEqual(Object.getPrototypeOf(ns), null);
+    });
 
-  const defaultDesc = Object.getOwnPropertyDescriptor(ns, "default");
+    it("is tagged as Module", function () {
+      if (helpers.hasToStringTag()) {
+        assert.strictEqual(ns[Symbol.toStringTag], "Module");
+      } else {
+        this.skip();
+      }
+    });
 
-  assert.strictEqual(defaultDesc.enumerable, true, "ns.default export is enumerable");
-  // This is also not writable for the same reason nsDesc.writable was false
-  // // assert.strictEqual(defaultDesc.writable, true, "ns.default export is writable");
-  assert.strictEqual(defaultDesc.writable, false, "ns export happens to not be writable");
-  assert.strictEqual(defaultDesc.configurable, false, "ns.default export is configurable");
-  assert.strictEqual("value" in defaultDesc, true, "ns.default export has a value");
+    it("has the __esModule flag", function () {
+      assert.deepEqual(
+        Object.getOwnPropertyDescriptor(ns, "__esModule"),
+        { value: true, configurable: false, writable: false, enumerable: false }
+      );
+    });
 
-  assert(!("__esModule" in ns.default), "ns.default export is not a Module");
-  assert.strictEqual(ns.default, fakeMod, "ns.default export is the commonjs namespace");
-  assert.strictEqual(exports.fs, fakeMod, "fs reexport is the commonjs namespace");
+    it("has no exports other than 'default'", function () {
+      assert.deepEqual(Object.keys(ns), ["default"]);
+    });
+
+    describe("'default' descriptor", function () {
+      const defaultDesc = Object.getOwnPropertyDescriptor(ns, "default");
+
+      it("is enumerable", function () {
+        assert(defaultDesc.enumerable);
+      });
+      it("is writable", function () {
+        // Unfortunately, when the namespace is frozen, all value descriptors
+        // returned by getOwnPropertyDescriptors have writable: false
+        // // assert(defaultDesc.writable)
+        this.skip();
+      });
+      it("happens to not be writable", function () {
+        assert(!defaultDesc.writable);
+      });
+      it("has a value", function () {
+        assert("value" in defaultDesc);
+      });
+    });
+  });
+
+  describe("ns export", function () {
+    it("is not a Module", function () {
+      assert(!("__esModule" in exports.ns.default));
+    });
+    it("is the original commonjs namespace", function () {
+      assert.strictEqual(exports.ns.default, fakeMod);
+    });
+  });
+
+  describe("fs reexport", function () {
+    it("is the original commonjs namespace", function() {
+      assert.strictEqual(exports.fs, fakeMod);
+    });
+  });
 });
