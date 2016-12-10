@@ -24,7 +24,7 @@ Object.defineProperties(exports, {
 
   }
 });
+(Object.freeze || Object)(exports);
 function named() {
   named = function () {};
 }
-(Object.freeze || Object)(exports);

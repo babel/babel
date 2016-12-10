@@ -14,7 +14,9 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
   });
 }
 
-_module.exports = class {};
 (Object.freeze || Object)(exports);
+
+
+_module.exports = class {};
 
 let _module;

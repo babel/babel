@@ -24,6 +24,7 @@ Object.defineProperties(exports, {
 
   }
 });
+(Object.freeze || Object)(exports);
 
 var _bar = babelHelpers.specRequireInterop(require('bar'));
 
@@ -35,6 +36,5 @@ let _default = {
 // neither of these should be able to use or affect the real exports
 new _exports.default();
 _module.exports = {};
-(Object.freeze || Object)(exports);
 
 let _exports, _module;

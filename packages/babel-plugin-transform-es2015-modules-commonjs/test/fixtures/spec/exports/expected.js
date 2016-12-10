@@ -48,6 +48,7 @@ Object.defineProperties(exports, {
 
   }
 });
+(Object.freeze || Object)(exports);
 
 var _outside = babelHelpers.specRequireInterop(require("outside"));
 
@@ -60,4 +61,3 @@ function foo() {
 class Bar {}
 
 const baz = foo();
-(Object.freeze || Object)(exports);

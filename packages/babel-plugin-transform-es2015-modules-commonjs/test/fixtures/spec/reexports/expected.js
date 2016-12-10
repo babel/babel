@@ -57,11 +57,10 @@ Object.keys(_iDontKnow).forEach(function (key) {
 
   });
 });
+(Object.freeze || Object)(exports);
 
 var _because = babelHelpers.specRequireInterop(require('./because'));
 
 var _somewhere = babelHelpers.specRequireInterop(require('./somewhere'));
 
 var _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));
-
-(Object.freeze || Object)(exports);

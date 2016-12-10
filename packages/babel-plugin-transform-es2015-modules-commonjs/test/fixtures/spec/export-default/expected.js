@@ -32,9 +32,9 @@ Object.defineProperties(exports, {
 
   }
 });
+(Object.freeze || Object)(exports);
 let _default = {
   default: function () {}
 }.default;
 var unrelated;
 unrelated = "changed";
-(Object.freeze || Object)(exports);
