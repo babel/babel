@@ -14,18 +14,20 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
   });
 }
 
+Object.defineProperties(exports, {
+  b: {
+    enumerable: true,
+    get: function get() {
+      return b;
+    }
+  }
+});
 Object.defineProperty(exports, "default", {
   enumerable: true,
   writable: true,
   value: {
     default: function _default() {}
   }.default
-});
-Object.defineProperty(exports, "b", {
-  enumerable: true,
-  get: function get() {
-    return b;
-  }
 });
 function b() {}
 (Object.freeze || Object)(exports);
