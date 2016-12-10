@@ -47,6 +47,7 @@ describe("spec Interop import", function () {
       it("is writable", function () {
         // fsDesc.writable cannot be true for the same reason nsDesc.writable could not
         // // assert(fsDesc.writable);
+        this.skip();
       });
 
       it("happens to be a getter", function () {
