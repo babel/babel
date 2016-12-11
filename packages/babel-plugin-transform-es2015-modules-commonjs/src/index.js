@@ -110,6 +110,7 @@ export default function () {
 
   const isModuleObj = t.buildMatchMemberExpression("module", true);
   const isExports = t.buildMatchMemberExpression("exports", true);
+
   let commonjsExportsMasked = null;
 
   let reassignmentVisitor = {
@@ -150,6 +151,29 @@ export default function () {
         const { object, property } = remap;
         path.replaceWith(t.JSXMemberExpression(t.JSXIdentifier(object.name), t.JSXIdentifier(property.name)));
       } else {
+        if (remap.nameSet) {
+          if (t.isMemberExpression(remap)) {
+            const name = t.isIdentifier(remap.property)
+              ? remap.property.name
+              : t.isStringLiteral(remap.property)
+              ? remap.property.value
+              : undefined;
+            if (name == null) {
+              throw new Error(`Unexpected ${remap.type}`);
+            }
+            remap.nameSet.add(name);
+          } else if (t.isIdentifier(remap)) {
+            if (t.isMemberExpression(path.parent) && !path.parent.computed) {
+              const name = t.isIdentifier(path.parent.property)
+                ? path.parent.property.name
+                : t.isStringLiteral(path.parent.property)
+                ? path.parent.property.value
+                : undefined;
+
+              remap.nameSet.add(name);
+            }
+          }
+        }
         path.replaceWith(remap);
       }
       this.requeueInParent(path);
@@ -302,7 +326,7 @@ export default function () {
 
           let requires = Object.create(null);
 
-          const addRequire = (source, spec, blockHoist) => {
+          const addRequire = (source, specImport, blockHoist) => {
             let cached = requires[source];
             if (cached) return cached;
 
@@ -326,10 +350,16 @@ export default function () {
               varDecl.loc = imports[source].loc;
             }
 
+            if (specImport) {
+              blockHoist = Math.max(
+                imports[source] && imports[source].maxBlockHoist || 0,
+                blockHoist || 0
+              );
+            }
+
             if (typeof blockHoist === "number" && blockHoist > 0) {
               varDecl._blockHoist = blockHoist;
             }
-
             topNodes.push(varDecl);
 
             return requires[source] = ref;
@@ -359,7 +389,7 @@ export default function () {
               let key = path.node.source.value;
               let importsEntry = imports[key] || {
                 specifiers: [],
-                maxBlockHoist: 0,
+                maxBlockHoist: specImport ? 2 : 0,
                 loc: path.node.loc,
               };
 
@@ -522,7 +552,29 @@ export default function () {
               let nodes = [];
               let source = path.node.source;
               if (source) {
-                let ref = addRequire(source.value, spec, path.node._blockHoist);
+                let ref, importsEntry;
+                if (specImport) {
+                  let key = path.node.source.value;
+                  importsEntry = imports[key] || {
+                    specifiers: [],
+                    maxBlockHoist: 2,
+                    loc: path.node.loc,
+                  };
+                  importsEntry.reexports = importsEntry.reexports || new Map(),
+
+                  importsEntry.specifiers.push(...path.node.specifiers);
+
+                  if (typeof path.node._blockHoist === "number") {
+                    importsEntry.maxBlockHoist = Math.max(
+                      path.node._blockHoist,
+                      importsEntry.maxBlockHoist
+                    );
+                  }
+
+                  imports[key] = importsEntry;
+                } else {
+                  ref = addRequire(source.value, specImport, path.node._blockHoist);
+                }
 
                 for (let specifier of specifiers) {
                   if (specifier.isExportNamespaceSpecifier()) {
@@ -530,8 +582,8 @@ export default function () {
                   } else if (specifier.isExportDefaultSpecifier()) {
                     // todo
                   } else if (specifier.isExportSpecifier()) {
-                    if (spec) {
-                      hoistedExports.set(specifier.node.exported.name, t.memberExpression(ref, specifier.node.local));
+                    if (specImport) {
+                      importsEntry.reexports.set(specifier.node.exported.name, specifier.node.local);
                     } else if (specifier.node.local.name === "default") {
                       topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(t.callExpression(this.addHelper("interopRequireDefault"), [ref]), specifier.node.local)));
                     } else {
@@ -573,12 +625,12 @@ export default function () {
                 exportNode = specBuildNamespaceSpread({
                   EXPORTS: exportsObj,
                   OWN_EXPORTS: ownExportsUid,
-                  OBJECT: addRequire(path.node.source.value, spec, 3)
+                  OBJECT: addRequire(path.node.source.value, specImport, 3)
                 });
                 exportNode._blockHoist = 3;
               } else {
                 exportNode = buildExportAll({
-                  OBJECT: addRequire(path.node.source.value, spec, path.node._blockHoist)
+                  OBJECT: addRequire(path.node.source.value, specImport, path.node._blockHoist)
                 });
               }
               exportNode.loc = path.node.loc;
@@ -587,19 +639,82 @@ export default function () {
             }
           }
 
+          const checkedImportMap = specImport && new Map();
           for (let source in imports) {
             let {specifiers, maxBlockHoist} = imports[source];
             if (specifiers.length) {
-              const uid = addRequire(source, spec, maxBlockHoist);
+              const uid = addRequire(source, specImport, maxBlockHoist);
+
+              if (imports[source].reexports) {
+                if (!spec) {
+                  for (const [name, local] of imports[source].reexports.entries()) {
+                    if (name === "default") {
+                      topNodes.push(buildExportsFrom(t.stringLiteral(name), t.memberExpression(t.callExpression(this.addHelper("interopRequireDefault"), [uid]), local)));
+                    } else {
+                      topNodes.push(buildExportsFrom(t.stringLiteral(name), t.memberExpression(uid, local)));
+                    }
+                  }
+                } else {
+                  for (const [name, local] of imports[source].reexports.entries()) {
+                    hoistedExports.set(name, t.memberExpression(uid, local));
+                  }
+                }
+              }
 
               if (specImport) {
+                if (!checkedImportMap.has(uid)) {
+                  const nameSet = new Set(
+                    Array.from(new Set(specifiers))
+                    .filter((specifier) => !t.isImportNamespaceSpecifier(specifier))
+                    .map((specifier) => {
+                      if (t.isImportDefaultSpecifier(specifier)) {
+                        return "default";
+                      }
+                      if (t.isExportSpecifier(specifier)) {
+                        return specifier.local.name;
+                      }
+                      return specifier.imported.name;
+                    })
+                  );
+                  nameSet.source = source;
+
+                  checkedImportMap.set(uid, nameSet);
+
+                  if (nameSet.size > 0) {
+                    nameSet.generated = Array.from(nameSet).map((name) => t.stringLiteral(name));
+                    const names = t.arrayExpression(nameSet.generated);
+
+                    const stmt =
+                      t.expressionStatement(
+                        t.callExpression(
+                          this.addHelper("specImportCheck"),
+                          [
+                            uid,
+                            t.stringLiteral(nameSet.source),
+                            names
+                          ]
+                        )
+                      );
+
+                    stmt.loc = imports[source].loc;
+                    stmt._blockHoist = Math.max(imports[source].maxBlockHoist, 2);
+
+                    topNodes.push(stmt);
+                  }
+                }
+
                 for (const specifier of specifiers) {
                   if (t.isImportNamespaceSpecifier(specifier)) {
                     remaps[specifier.local.name] = uid;
                   } else if (t.isImportDefaultSpecifier(specifier)) {
                     remaps[specifier.local.name] = t.memberExpression(uid, t.identifier("default"));
+                  } else if (specImport && t.isExportSpecifier(specifier)) {
+                    // do nothing
                   } else {
                     remaps[specifier.local.name] = t.memberExpression(uid, t.cloneWithoutLoc(specifier.imported));
+                  }
+                  if (specImport && !t.isExportSpecifier(specifier)) {
+                    remaps[specifier.local.name].nameSet = checkedImportMap.get(uid);
                   }
                 }
               } else {
@@ -665,6 +780,9 @@ export default function () {
             } else {
               // bare import
               let requireNode = buildRequire(t.stringLiteral(source));
+              if (specImport) {
+                requireNode._blockHoist = 2;
+              }
               requireNode.loc = imports[source].loc;
               topNodes.push(requireNode);
             }
@@ -738,6 +856,48 @@ export default function () {
             opts: state.opts,
             requeueInParent: (newPath) => path.requeue(newPath),
           });
+
+          if (specImport && hasImports) {
+            const checks = Array.from(checkedImportMap.entries())
+            .map(([uid, nameSet]) => {
+              if (nameSet.size < 1) return;
+
+              if (nameSet.generated) {
+                if (nameSet.generated.length === nameSet.generated.size) return;
+                // nameSet.generated must be modified in-place
+                // to update the nodes of the pre-existing nameSet check
+                for (const name of nameSet) {
+                  if (!nameSet.generated.some((existing) => existing.value === name)) {
+                    nameSet.generated.push(t.stringLiteral(name));
+                  }
+                }
+                return;
+              }
+
+              const names = t.arrayExpression(Array.from(nameSet).map((name) => t.stringLiteral(name)));
+
+              const stmt =
+                t.expressionStatement(
+                  t.callExpression(
+                    this.addHelper("specImportCheck"),
+                    [
+                      uid,
+                      t.stringLiteral(nameSet.source),
+                      names
+                    ]
+                  )
+                );
+
+              stmt.loc = imports[nameSet.source].loc;
+              stmt._blockHoist = Math.max(imports[nameSet.source].maxBlockHoist, 1);
+
+              return stmt;
+            }).filter(Boolean);
+
+            if (checks.length > 0) {
+              path.pushContainer("body", checks);
+            }
+          }
 
           if (spec && (commonjsExportsMasked.exports || commonjsExportsMasked.module)) {
             path.pushContainer("body", [

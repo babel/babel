@@ -442,6 +442,21 @@ helpers.specRequireInterop = template(`
   })
 `);
 
+helpers.specImportCheck = template(`
+  (function (module, moduleName, imports) {
+    if (!module.__esModule) throw new Error("Only ES modules can be checked");
+    const realImports = Object.keys(module);
+    const invalid = imports.filter(function (i) { return realImports.indexOf(i) < 0; });
+    if (invalid.length > 0) {
+      throw new Error(
+        "Unknown imports (" +
+        invalid.map(function (i) { return "'" + i + "'"; }).join(', ') +
+        ") used from module '" + moduleName + "'"
+      );
+    }
+  })
+`);
+
 helpers.newArrowCheck = template(`
   (function (innerThis, boundThis) {
     if (innerThis !== boundThis) {
