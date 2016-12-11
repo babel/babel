@@ -62,6 +62,69 @@ require("babel-core").transform("code", {
 });
 ```
 
+## Options `spec`
+
+By default, `babel` actually implements importing very loosely, by
+supporting treating a commonjs export as if it was a namespace export.
+The exported namespace is also not frozen and has an incorrect prototype.
+
+The `spec` option, when set to `true`, tries to generate code that is as
+close as possible to what is required by the ECMA262 spec without relying
+on `Proxy`. The exports will be frozen, and imports will always be treated
+like ES modules.
+
+Importing a commonjs module (say, the standard `fs` module) will always
+wrap it in an ES module that has a single `default` export. This means that
+some imports that work in non-`spec` mode, like `import { readFile } from 'fs'`,
+will result in `undefined` in `spec` mode.
+
+Note that exports, under this mode, always require runtime support for
+getters. It also is not possible to access or write to the commonjs
+`exports` or `module` objects; attempts to access them will result in
+TDZ errors at runtime.
+
+```javascript
+import 'module1';
+import defaultImport from 'module2';
+import * as namespace from 'module3';
+import { pick } from 'module4';
+
+defaultImport(namespace, pick);
+
+export { pick }
+export default function () {}
+```
+
+```javascript
+const exports = module.exports = Object.create ? Object.create(null, {
+  __esModule: { value: true }
+}) : { __esModule: true }
+Object.defineProperties(exports, {
+  default: {
+    enumerable: true,
+    get() { return _default; }
+  },
+  pick: {
+    enumerable: true,
+    get() { return _module4.pick; }
+  }
+})
+let _default = {
+  default: function () {}
+}.default;
+(Object.freeze || Object)(exports);
+
+require('module1');
+
+const _module2 = babelHelpers._specInteropImport(require('module2'));
+
+const _module3 = babelHelpers._specInteropImport(require('module3'));
+
+const _module4 = babelHelpers._specInteropImport(require('module4'));
+
+_module2.default(_module3, _module4.pick);
+```
+
 ## Options `loose`
 
 As per the spec, `import` and `export` are only allowed to be used at the top
@@ -85,3 +148,5 @@ and instead of using `Object.defineProperty` an assignment will be used instead.
 var foo = exports.foo = 5;
 exports.__esModule = true;
 ```
+
+The `loose` option is **ignored** if used in combination with `spec`.
