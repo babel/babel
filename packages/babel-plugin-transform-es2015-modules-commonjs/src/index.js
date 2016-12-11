@@ -312,7 +312,7 @@ export default function () {
               t.stringLiteral(source)
             ).expression;
 
-            let varDecl = t.variableDeclaration("var", [
+            let varDecl = t.variableDeclaration(specImport ? "const" : "var", [
               t.variableDeclarator(ref,
                 specImport
                 ? t.callExpression(this.addHelper("specRequireInterop"), [req])
