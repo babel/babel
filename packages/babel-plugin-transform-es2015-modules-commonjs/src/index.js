@@ -690,7 +690,6 @@ export default function () {
                           this.addHelper("specImportCheck"),
                           [
                             uid,
-                            t.stringLiteral(nameSet.source),
                             names
                           ]
                         )
@@ -882,7 +881,6 @@ export default function () {
                     this.addHelper("specImportCheck"),
                     [
                       uid,
-                      t.stringLiteral(nameSet.source),
                       names
                     ]
                   )

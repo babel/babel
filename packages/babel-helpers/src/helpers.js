@@ -443,16 +443,18 @@ helpers.specRequireInterop = template(`
 `);
 
 helpers.specImportCheck = template(`
-  (function (module, moduleName, imports) {
+  (function (module, imports) {
     if (!module.__esModule) throw new Error("Only ES modules can be checked");
     const realImports = Object.keys(module);
     const invalid = imports.filter(function (i) { return realImports.indexOf(i) < 0; });
     if (invalid.length > 0) {
-      throw new Error(
-        "Unknown imports (" +
+      const error = new Error(
+        "Unknown exports" + (invalid.length > 1 ? "s " : " ") +
         invalid.map(function (i) { return "'" + i + "'"; }).join(', ') +
-        ") used from module '" + moduleName + "'"
+        " imported"
       );
+      error.module = module;
+      throw error;
     }
   })
 `);
