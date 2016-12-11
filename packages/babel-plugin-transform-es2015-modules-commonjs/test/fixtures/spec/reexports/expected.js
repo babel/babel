@@ -27,6 +27,14 @@ Object.defineProperties(exports, {
     enumerable: true,
 
     get() {
+      return _somewhereElse.stuff;
+    }
+
+  },
+  stuff: {
+    enumerable: true,
+
+    get() {
       return _elsewhere.stuff;
     }
 
@@ -59,8 +67,16 @@ Object.keys(_iDontKnow).forEach(function (key) {
 });
 (Object.freeze || Object)(exports);
 
-const _because = babelHelpers.specRequireInterop(require('./because'));
-
 const _somewhere = babelHelpers.specRequireInterop(require('./somewhere'));
 
 const _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));
+
+babelHelpers.specImportCheck(_elsewhere, './elsewhere', ['stuff']);
+
+const _somewhereElse = babelHelpers.specRequireInterop(require('./somewhereElse'));
+
+babelHelpers.specImportCheck(_somewhereElse, './somewhereElse', ['stuff']);
+
+const _because = babelHelpers.specRequireInterop(require('./because'));
+
+babelHelpers.specImportCheck(_because, './because', ['default']);

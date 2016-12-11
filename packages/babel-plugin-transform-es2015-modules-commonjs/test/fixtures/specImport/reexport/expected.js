@@ -3,7 +3,23 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.pick = exports.def = exports.ns = undefined;
+exports.baz = exports.foo = exports.pick = exports.def = exports.ns = undefined;
+
+const _module2 = babelHelpers.specRequireInterop(require('module1'));
+
+const _module3 = babelHelpers.specRequireInterop(require('module2'));
+
+babelHelpers.specImportCheck(_module3, 'module2', ['default']);
+
+const _module4 = babelHelpers.specRequireInterop(require('module3'));
+
+babelHelpers.specImportCheck(_module4, 'module3', ['pick']);
+
+const _module5 = babelHelpers.specRequireInterop(require('module5'));
+
+babelHelpers.specImportCheck(_module5, 'module5', ['foo', 'bar']);
+
+require('module6');
 
 const _module = babelHelpers.specRequireInterop(require('module4'));
 
@@ -16,13 +32,18 @@ Object.keys(_module).forEach(function (key) {
     }
   });
 });
-
-const _module2 = babelHelpers.specRequireInterop(require('module1'));
-
-const _module3 = babelHelpers.specRequireInterop(require('module2'));
-
-const _module4 = babelHelpers.specRequireInterop(require('module3'));
-
+Object.defineProperty(exports, 'foo', {
+  enumerable: true,
+  get: function () {
+    return _module5.foo;
+  }
+});
+Object.defineProperty(exports, 'baz', {
+  enumerable: true,
+  get: function () {
+    return _module5.bar;
+  }
+});
 exports.default = _module2;
 exports.ns = _module2;
 exports.def = _module3.default;

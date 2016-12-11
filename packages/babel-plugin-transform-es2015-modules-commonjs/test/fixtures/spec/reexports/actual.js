@@ -1,6 +1,8 @@
 import * as namespace from './somewhere';
 
-import { stuff } from './elsewhere';
+export { stuff } from './elsewhere'
+
+import { stuff } from './somewhereElse';
 
 export { namespace };
 
