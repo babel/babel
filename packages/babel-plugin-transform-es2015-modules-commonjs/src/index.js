@@ -275,6 +275,7 @@ export default function () {
 
           let strict = !!this.opts.strict;
           const spec = isSpec(state);
+          const specImport = isSpecImport(state);
 
           let { scope } = path;
 
@@ -313,7 +314,7 @@ export default function () {
 
             let varDecl = t.variableDeclaration("var", [
               t.variableDeclarator(ref,
-                spec
+                specImport
                 ? t.callExpression(this.addHelper("specRequireInterop"), [req])
                 : req
               )
@@ -591,7 +592,7 @@ export default function () {
             if (specifiers.length) {
               const uid = addRequire(source, spec, maxBlockHoist);
 
-              if (spec) {
+              if (specImport) {
                 for (const specifier of specifiers) {
                   if (t.isImportNamespaceSpecifier(specifier)) {
                     remaps[specifier.local.name] = uid;
@@ -754,4 +755,8 @@ export default function () {
 
 function isSpec (state) {
   return state && state.opts && !!state.opts.spec;
+}
+
+function isSpecImport (state) {
+  return state && state.opts && (!!state.opts.spec || !!state.opts.specImport);
 }
