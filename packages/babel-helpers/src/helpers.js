@@ -449,7 +449,7 @@ helpers.specImportCheck = template(`
     const invalid = imports.filter(function (i) { return realImports.indexOf(i) < 0; });
     if (invalid.length > 0) {
       const error = new Error(
-        "Unknown exports" + (invalid.length > 1 ? "s " : " ") +
+        "Unknown export" + (invalid.length > 1 ? "s " : " ") +
         invalid.map(function (i) { return "'" + i + "'"; }).join(', ') +
         " imported"
       );
