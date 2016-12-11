@@ -50,7 +50,7 @@ Object.defineProperties(exports, {
 });
 (Object.freeze || Object)(exports);
 
-var _outside = babelHelpers.specRequireInterop(require("outside"));
+const _outside = babelHelpers.specRequireInterop(require("outside"));
 
 var def;
 function foo() {

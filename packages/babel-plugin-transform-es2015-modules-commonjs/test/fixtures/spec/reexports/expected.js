@@ -43,7 +43,7 @@ Object.defineProperties(exports, {
 
 const _ownExports = Object.keys(exports);
 
-var _iDontKnow = babelHelpers.specRequireInterop(require('./i-dont-know'));
+const _iDontKnow = babelHelpers.specRequireInterop(require('./i-dont-know'));
 
 Object.keys(_iDontKnow).forEach(function (key) {
   if (key === "__esModule" || key === "default" || _ownExports.indexOf(key) >= 0) return;
@@ -59,8 +59,8 @@ Object.keys(_iDontKnow).forEach(function (key) {
 });
 (Object.freeze || Object)(exports);
 
-var _because = babelHelpers.specRequireInterop(require('./because'));
+const _because = babelHelpers.specRequireInterop(require('./because'));
 
-var _somewhere = babelHelpers.specRequireInterop(require('./somewhere'));
+const _somewhere = babelHelpers.specRequireInterop(require('./somewhere'));
 
-var _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));
+const _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));

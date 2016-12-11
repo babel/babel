@@ -32,7 +32,7 @@ let _default = {
 
 const _ownExports = Object.keys(exports);
 
-var _bar = babelHelpers.specRequireInterop(require('bar'));
+const _bar = babelHelpers.specRequireInterop(require('bar'));
 
 Object.keys(_bar).forEach(function (key) {
   if (key === "__esModule" || key === "default" || _ownExports.indexOf(key) >= 0) return;
@@ -48,4 +48,4 @@ Object.keys(_bar).forEach(function (key) {
 });
 (Object.freeze || Object)(exports);
 
-var _foo = babelHelpers.specRequireInterop(require('foo'));
+const _foo = babelHelpers.specRequireInterop(require('foo'));

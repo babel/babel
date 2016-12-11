@@ -26,7 +26,7 @@ Object.defineProperties(exports, {
 });
 (Object.freeze || Object)(exports);
 
-var _bar = babelHelpers.specRequireInterop(require('bar'));
+const _bar = babelHelpers.specRequireInterop(require('bar'));
 
 let _default = {
   default: class {}

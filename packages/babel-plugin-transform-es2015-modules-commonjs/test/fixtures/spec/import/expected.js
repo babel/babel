@@ -1,18 +1,18 @@
 'use strict';
 
-var _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));
+const _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));
 
-var _outside = babelHelpers.specRequireInterop(require('./outside'));
+const _outside = babelHelpers.specRequireInterop(require('./outside'));
 
-var _anywhere = babelHelpers.specRequireInterop(require('./anywhere'));
+const _anywhere = babelHelpers.specRequireInterop(require('./anywhere'));
 
 require('./empty');
 
 require('./imperative');
 
-var _iDontKnow = babelHelpers.specRequireInterop(require('./i-dont-know'));
+const _iDontKnow = babelHelpers.specRequireInterop(require('./i-dont-know'));
 
-var _naturally = babelHelpers.specRequireInterop(require('./naturally'));
+const _naturally = babelHelpers.specRequireInterop(require('./naturally'));
 
 (0, _outside.default)(_outside.obj.key);
 
