@@ -163,15 +163,29 @@ export default function () {
             }
             remap.nameSet.add(name);
           } else if (t.isIdentifier(remap)) {
-            if (t.isMemberExpression(path.parent) && !path.parent.computed) {
-              const name = t.isIdentifier(path.parent.property)
-                ? path.parent.property.name
-                : t.isStringLiteral(path.parent.property)
-                ? path.parent.property.value
+            if (t.isMemberExpression(path.parent)) {
+              const { property, computed } = path.parent;
+
+              const name = !computed && t.isIdentifier(property)
+                ? property.name
+                : t.isStringLiteral(property)
+                ? property.value
                 : undefined;
 
-              remap.nameSet.add(name);
+              if (name !== undefined) {
+                remap.nameSet.add(name);
+              } else {
+                path.parentPath.replaceWith(
+                  t.callExpression(
+                    this.addHelper("specNamespaceGet"),
+                    [ remap, property ]
+                  )
+                );
+                return;
+              }
             }
+          } else {
+            throw new Error(`Unexpected ${remap.type}`);
           }
         }
         path.replaceWith(remap);
@@ -857,6 +871,7 @@ export default function () {
             scope,
             exports,
             opts: state.opts,
+            addHelper: this.addHelper.bind(this),
             requeueInParent: (newPath) => path.requeue(newPath),
           });
 

@@ -458,6 +458,24 @@ helpers.specImportCheck = template(`
   })
 `);
 
+// The name && typeof Symbol === "function" && ... line is from helpers.typeof, which may be needed
+// when polyfilled. Helpers might not be transformed when using external-helpers, so can't rely on
+// the typeof being augmented when targeting ES5.
+helpers.specNamespaceGet = template(`
+  (function (module, name) {
+    if (!module.__esModule) throw new Error("Only ES modules can be checked");
+    if (
+      typeof name === "symbol" ||
+      name && typeof Symbol === "function" && name.constructor === Symbol && name !== Symbol.prototype
+    ) {
+      return module[name];
+    }
+    var d = Object.getOwnPropertyDescriptor(module, name);
+    if (!d || !d.enumerable) throw new Error("Unknown export " + JSON.stringify(name) + " imported");
+    return module[name];
+  })
+`);
+
 helpers.newArrowCheck = template(`
   (function (innerThis, boundThis) {
     if (innerThis !== boundThis) {
