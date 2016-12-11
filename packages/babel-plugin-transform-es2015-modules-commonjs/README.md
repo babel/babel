@@ -72,7 +72,8 @@ The `spec` option, when set to `true`, tries to generate code that is as
 close as possible to what is required by the ECMA262 spec without relying
 on `Proxy`. The exports will be frozen, and imports will always be treated
 like ES modules. All imported names will be checked, at import time, if
-they exist in the exports of the imported module.
+they exist in the exports of the imported module. If `let` and `const` are
+not transformed to `var`, the exports will also implement TDZ.
 
 Importing a commonjs module (say, the standard `fs` module) will always
 wrap it in an ES module that has a single `default` export. This means that
