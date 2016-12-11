@@ -47,8 +47,66 @@ describe("spec import", function () {
       }, /Unknown exports \["b","c"] imported$/);
     });
 
+    it("throws when using indexed access with constant string", function () {
+      assert.throws(function () {
+        runner.transformAndRun("import * as a from 'a'; a['b']");
+      }, /Unknown export \["b"] imported$/);
+    });
+
+    it("throws when using indexed access with null", function () {
+      assert.throws(function () {
+        runner.transformAndRun("import * as a from 'a'; a[null]");
+      }, /Unknown export null imported$/);
+    });
+
+    it("throws when using indexed access with variable", function () {
+      assert.throws(function () {
+        exports = runner.transformAndRun("import * as a from 'a'; const name = 'b'; a[name]");
+      }, /Unknown export "b" imported$/);
+    });
+
     it("does not throw when only known imports are used", function () {
       runner.transformAndRun("import * as a from 'a'\nimport { b } from 'b'\na.a");
+    });
+
+    describe("with variable", function () {
+      runner.addModule("variable", "import * as a from 'a'\nconst name = 'a'\nexport const simple = a[name]\nexport const recursive = a[a[name]]");
+
+      it("does not throw", function () {
+        runner.getExportsOf("variable");
+      });
+
+      describe("has the correct result", function () {
+        const exports = runner.getExportsOf("variable");
+
+        it("simple", function () {
+          assert.strictEqual(exports.simple, "a");
+        });
+
+        it("recursive", function () {
+          assert.strictEqual(exports.recursive, "a");
+        });
+      });
+    });
+
+    describe("with Symbol", function () {
+      runner.addModule("symbol", "import * as a from 'a'\nexport default a[Symbol.toStringTag]");
+      if (!helpers.hasToStringTag()) {
+        this.skip();
+      }
+
+      it("does not throw", function () {
+        runner.getExportsOf("symbol");
+      });
+
+      it("has the correct result", function () {
+        const exports = runner.getExportsOf("symbol");
+        assert.strictEqual(exports.default, "Module");
+      });
+
+      it("does not throw with unknown symbols either", function () {
+        runner.transformAndRun("import * as a from 'a'\na[Symbol('foo')]");
+      });
     });
   });
 
