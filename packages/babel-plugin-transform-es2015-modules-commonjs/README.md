@@ -71,12 +71,13 @@ The exported namespace is also not frozen and has an incorrect prototype.
 The `spec` option, when set to `true`, tries to generate code that is as
 close as possible to what is required by the ECMA262 spec without relying
 on `Proxy`. The exports will be frozen, and imports will always be treated
-like ES modules.
+like ES modules. All imported names will be checked, at import time, if
+they exist in the exports of the imported module.
 
 Importing a commonjs module (say, the standard `fs` module) will always
 wrap it in an ES module that has a single `default` export. This means that
 some imports that work in non-`spec` mode, like `import { readFile } from 'fs'`,
-will result in `undefined` in `spec` mode.
+will result errors in `spec` mode.
 
 Note that exports, under this mode, always require runtime support for
 getters. It also is not possible to access or write to the commonjs
@@ -91,7 +92,7 @@ import defaultImport from 'module2';
 import * as namespace from 'module3';
 import { pick } from 'module4';
 
-defaultImport(namespace, pick);
+defaultImport(namespace.foo, pick);
 
 export { pick }
 export default function () {}
@@ -122,13 +123,18 @@ let _default = {
 
 require('module1');
 
-const _module2 = babelHelpers._specInteropImport(require('module2'));
+const _module2 = babelHelpers.specInteropImport(require('module2'));
 
-const _module3 = babelHelpers._specInteropImport(require('module3'));
+babelHelpers.specImportCheck(_module2, [ 'default' ]);
 
-const _module4 = babelHelpers._specInteropImport(require('module4'));
+const _module3 = babelHelpers.specInteropImport(require('module3'));
 
-_module2.default(_module3, _module4.pick);
+const _module4 = babelHelpers.specInteropImport(require('module4'));
+
+babelHelpers.specImportCheck(_module4, [ 'pick' ]);
+babelHelpers.specImportCheck(_module3, [ 'foo' ]);
+
+_module2.default(_module3.foo, _module4.pick);
 ```
 
 ## Options `specImport`
@@ -137,8 +143,9 @@ This option enables only the half of `spec` mode that affects the imports, witho
 changing how exports are generated. This would allow the generation of code that
 may still be compatible with engines that do not support getters.
 
-Note that the require helper does use `Object.defineProperty`, so when running on
-an old engine that does not support it, a polyfill like `es5-sham` is still required.
+Note that the require helpers do use `Object.keys` and `Object.defineProperty`, so
+ES5 polyfills may still be required. When running on an old engine that does not support
+`Object.defineProperty`, a polyfill to fake it like `es5-sham` is still required.
 
 This option is **ignored** if `spec` is enabled. Enabling `spec` implies that this
 option is also enabled.
@@ -161,6 +168,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _module = babelHelpers.specRequireInterop(require('module'));
+
+babelHelpers.specImportCheck(_module, [ 'pick' ]);
 
 exports.default = (0, _module.pick)();
 ```
