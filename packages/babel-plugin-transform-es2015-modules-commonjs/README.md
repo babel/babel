@@ -42,7 +42,7 @@ npm install --save-dev babel-plugin-transform-es2015-modules-commonjs
 {
   "plugins": [
     ["transform-es2015-modules-commonjs", {
-      "allowTopLevelThis": true
+      "spec": true
     }]
   ]
 }
