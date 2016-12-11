@@ -47,6 +47,13 @@ describe("spec import", function () {
       }, /Unknown exports \["b","c"] imported$/);
     });
 
+    it("throws when attempting to import __esModule", function () {
+      // This one unfortunately won't work with { spec: false, specImport: true, loose: true } :cry:
+      assert.throws(function () {
+        runner.transformAndRun("import { __esModule } from 'b'");
+      }, /Unknown export \["__esModule"] imported$/);
+    });
+
     it("throws when using indexed access with constant string", function () {
       assert.throws(function () {
         runner.transformAndRun("import * as a from 'a'; a['b']");
