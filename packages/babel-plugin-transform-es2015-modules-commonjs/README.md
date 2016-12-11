@@ -199,3 +199,14 @@ exports.__esModule = true;
 ```
 
 The `loose` option is **ignored** if used in combination with `spec`.
+
+## Caveats
+
+Star reexports (`export * from 'module'`) always run before other imports or
+reexports, as this module's exports must be known before other modules execute.
+That is, they behave as if there was an `import 'module'` that runs before any
+of the other imports.
+
+This is particularly hard to avoid in the `spec` / `specImport` mode, as the
+exports must be frozen before importing other modules. Star reexports are the
+only exception.
