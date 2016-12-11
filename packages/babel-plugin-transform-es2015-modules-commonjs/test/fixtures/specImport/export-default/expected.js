@@ -6,5 +6,5 @@ Object.defineProperty(exports, "__esModule", {
 
 const _module = babelHelpers.specRequireInterop(require('module'));
 
-babelHelpers.specImportCheck(_module, 'module', ['pick']);
+babelHelpers.specImportCheck(_module, ['pick']);
 exports.default = (0, _module.pick)();

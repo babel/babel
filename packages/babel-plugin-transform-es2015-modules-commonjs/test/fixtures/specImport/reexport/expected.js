@@ -9,15 +9,15 @@ const _module2 = babelHelpers.specRequireInterop(require('module1'));
 
 const _module3 = babelHelpers.specRequireInterop(require('module2'));
 
-babelHelpers.specImportCheck(_module3, 'module2', ['default']);
+babelHelpers.specImportCheck(_module3, ['default']);
 
 const _module4 = babelHelpers.specRequireInterop(require('module3'));
 
-babelHelpers.specImportCheck(_module4, 'module3', ['pick']);
+babelHelpers.specImportCheck(_module4, ['pick']);
 
 const _module5 = babelHelpers.specRequireInterop(require('module5'));
 
-babelHelpers.specImportCheck(_module5, 'module5', ['foo', 'bar']);
+babelHelpers.specImportCheck(_module5, ['foo', 'bar']);
 
 require('module6');
 

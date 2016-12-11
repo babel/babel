@@ -52,7 +52,7 @@ Object.defineProperties(exports, {
 
 const _outside = babelHelpers.specRequireInterop(require("outside"));
 
-babelHelpers.specImportCheck(_outside, "outside", ["anything"]);
+babelHelpers.specImportCheck(_outside, ["anything"]);
 
 
 var def;

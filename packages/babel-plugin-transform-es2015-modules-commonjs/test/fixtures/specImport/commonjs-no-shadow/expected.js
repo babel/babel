@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 const _bar = babelHelpers.specRequireInterop(require('bar'));
 
-babelHelpers.specImportCheck(_bar, 'bar', ['default']);
+babelHelpers.specImportCheck(_bar, ['default']);
 
 
 module.exports = exports = {};

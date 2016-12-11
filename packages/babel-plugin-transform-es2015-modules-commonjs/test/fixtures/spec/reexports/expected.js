@@ -71,12 +71,12 @@ const _somewhere = babelHelpers.specRequireInterop(require('./somewhere'));
 
 const _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));
 
-babelHelpers.specImportCheck(_elsewhere, './elsewhere', ['stuff']);
+babelHelpers.specImportCheck(_elsewhere, ['stuff']);
 
 const _somewhereElse = babelHelpers.specRequireInterop(require('./somewhereElse'));
 
-babelHelpers.specImportCheck(_somewhereElse, './somewhereElse', ['stuff']);
+babelHelpers.specImportCheck(_somewhereElse, ['stuff']);
 
 const _because = babelHelpers.specRequireInterop(require('./because'));
 
-babelHelpers.specImportCheck(_because, './because', ['default']);
+babelHelpers.specImportCheck(_because, ['default']);
