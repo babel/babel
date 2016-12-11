@@ -629,9 +629,13 @@ export default function () {
                 });
                 exportNode._blockHoist = 3;
               } else {
+                const ref = addRequire(path.node.source.value, specImport, path.node._blockHoist);
                 exportNode = buildExportAll({
-                  OBJECT: addRequire(path.node.source.value, specImport, path.node._blockHoist)
+                  OBJECT: ref
                 });
+                if (specImport) {
+                  exportNode._blockHoist = ref._blockHoist;
+                }
               }
               exportNode.loc = path.node.loc;
               topNodes.push(exportNode);
