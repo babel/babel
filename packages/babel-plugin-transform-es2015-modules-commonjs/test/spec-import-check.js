@@ -43,8 +43,8 @@ describe("spec import", function () {
 
     it("throws when namespace and name imports are combined", function () {
       assert.throws(function () {
-        runner.transformAndRun("import * as a, { b } from 'a'\na.c");
-      }, "Unknown exports 'b', 'c' imported");
+        runner.transformAndRun("import * as a from 'a'\nimport { b } from 'a'\na.c");
+      }, /Unknown exports \["b","c"] imported$/);
     });
 
     it("does not throw when only known imports are used", function () {

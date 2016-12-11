@@ -148,7 +148,7 @@ describe("spec reexport star with duplicates", function () {
   it("throws when not shadowed and duplicate is not SameValue", function () {
     assert.throws(function () {
       runner.transformAndRun("export * from 'a'\nexport * from 'b'");
-    }, "Cannot redefine property: name");
+    }, /Cannot redefine property: name$/);
   });
 
   describe("SameValue", function () {
