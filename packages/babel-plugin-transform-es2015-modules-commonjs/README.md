@@ -83,6 +83,8 @@ getters. It also is not possible to access or write to the commonjs
 `exports` or `module` objects; attempts to access them will result in
 TDZ errors at runtime.
 
+### Input
+
 ```javascript
 import 'module1';
 import defaultImport from 'module2';
@@ -95,10 +97,14 @@ export { pick }
 export default function () {}
 ```
 
+### Output
+
 ```javascript
+'use strict';
+
 const exports = module.exports = Object.create ? Object.create(null, {
   __esModule: { value: true }
-}) : { __esModule: true }
+}) : { __esModule: true };
 Object.defineProperties(exports, {
   default: {
     enumerable: true,
@@ -108,7 +114,7 @@ Object.defineProperties(exports, {
     enumerable: true,
     get() { return _module4.pick; }
   }
-})
+});
 let _default = {
   default: function () {}
 }.default;
@@ -123,6 +129,40 @@ const _module3 = babelHelpers._specInteropImport(require('module3'));
 const _module4 = babelHelpers._specInteropImport(require('module4'));
 
 _module2.default(_module3, _module4.pick);
+```
+
+## Options `specImport`
+
+This option enables only the half of `spec` mode that affects the imports, without
+changing how exports are generated. This would allow the generation of code that
+may still be compatible with engines that do not support getters.
+
+Note that the require helper does use `Object.defineProperty`, so when running on
+an old engine that does not support it, a polyfill like `es5-sham` is still required.
+
+This option is **ignored** if `spec` is enabled. Enabling `spec` implies that this
+option is also enabled.
+
+### Input
+
+```javascript
+import { pick } from 'module'
+
+export default pick()
+```
+
+### Output
+
+```javascript
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _module = babelHelpers.specRequireInterop(require('module'));
+
+exports.default = (0, _module.pick)();
 ```
 
 ## Options `loose`
