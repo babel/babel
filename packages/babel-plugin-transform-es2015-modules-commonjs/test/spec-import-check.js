@@ -72,6 +72,14 @@ describe("spec import", function () {
       }, /Unknown export "b" imported$/);
     });
 
+    it("throws when accessing unknown import when aliased", function () {
+      this.skip("would require a Proxy-based implementation to work");
+
+      assert.throws(function () {
+        runner.transformAndRun("import * as a from 'a'; function get (ns, key) { return ns[key]; }; get(a, 'b')");
+      }, /Unknown export "b" imported$/);
+    });
+
     it("does not throw when only known imports are used", function () {
       runner.transformAndRun("import * as a from 'a'\nimport { b } from 'b'\na.a");
     });
