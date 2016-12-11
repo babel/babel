@@ -445,10 +445,10 @@ helpers.specRequireInterop = template(`
 helpers.specImportCheck = template(`
   (function (module, imports) {
     if (!module.__esModule) throw new Error("Only ES modules can be checked");
-    const realImports = Object.keys(module);
-    const invalid = imports.filter(function (i) { return realImports.indexOf(i) < 0; });
+    var realImports = Object.keys(module);
+    var invalid = imports.filter(function (i) { return realImports.indexOf(i) < 0; });
     if (invalid.length > 0) {
-      const error = new Error(
+      var error = new Error(
         "Unknown export" + (invalid.length > 1 ? "s " : " ") +
         invalid.map(function (i) { return "'" + i + "'"; }).join(', ') +
         " imported"
