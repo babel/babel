@@ -14,31 +14,31 @@ describe("spec import", function () {
     it("throws when directly importing unknown name", function () {
       assert.throws(function () {
         runner.transformAndRun("import { b } from 'a'");
-      }, "Unknown export 'b' imported");
+      }, /Unknown export \["b"] imported$/);
     });
 
     it("throws when importing renamed unknown name", function () {
       assert.throws(function () {
         runner.transformAndRun("import { b as a } from 'a'");
-      }, "Unknown export 'b' imported");
+      }, /Unknown export \["b"] imported$/);
     });
 
     it("throws when using unknown name from namespace", function () {
       assert.throws(function () {
         runner.transformAndRun("import * as b from 'b'\nb.a");
-      }, "Unknown export 'a' imported");
+      }, /Unknown export \["a"] imported$/);
     });
 
     it("throws when using multiple unknown names", function () {
       assert.throws(function () {
         runner.transformAndRun("import { a, b, c, d } from 'a'");
-      }, "Unknown exports 'b', 'c', 'd' imported");
+      }, /Unknown exports \["b","c","d"] imported$/);
     });
 
     it("throws when using default export of module without default export", function () {
       assert.throws(function () {
         runner.transformAndRun("import a from 'a'");
-      }, "Unknown export 'default' imported");
+      }, /Unknown export \["default"] imported$/);
     });
 
     it("throws when namespace and name imports are combined", function () {
