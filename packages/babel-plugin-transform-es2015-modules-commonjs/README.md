@@ -104,17 +104,21 @@ export default function () {}
 'use strict';
 
 const exports = module.exports = Object.create ? Object.create(null, {
-  __esModule: { value: true }
-}) : { __esModule: true };
-Object.defineProperties(exports, {
-  default: {
-    enumerable: true,
-    get() { return _default; }
-  },
-  pick: {
-    enumerable: true,
-    get() { return _module4.pick; }
+  __esModule: {
+    value: true
   }
+}) : {
+  __esModule: true
+};
+if (typeof Symbol === "function" && Symbol.toStringTag) {
+  Object.defineProperty(exports, Symbol.toStringTag, {
+    value: "Module"
+  });
+}
+
+Object.defineProperties(exports, {
+  pick: { enumerable: true, get() { return _module4.pick; } },
+  default: { enumerable: true, get() { return _default; } }
 });
 let _default = {
   default: function () {}
@@ -123,18 +127,19 @@ let _default = {
 
 require('module1');
 
-const _module2 = babelHelpers.specInteropImport(require('module2'));
+const _module2 = babelHelpers.specRequireInterop(require('module2'));
 
-babelHelpers.specImportCheck(_module2, [ 'default' ]);
+babelHelpers.specImportCheck(_module2, ['default']);
 
-const _module3 = babelHelpers.specInteropImport(require('module3'));
+const _module3 = babelHelpers.specRequireInterop(require('module3'));
 
-const _module4 = babelHelpers.specInteropImport(require('module4'));
+const _module4 = babelHelpers.specRequireInterop(require('module4'));
 
-babelHelpers.specImportCheck(_module4, [ 'pick' ]);
-babelHelpers.specImportCheck(_module3, [ 'foo' ]);
+babelHelpers.specImportCheck(_module4, ['pick']);
+babelHelpers.specImportCheck(_module3, ['foo']);
 
-_module2.default(_module3.foo, _module4.pick);
+
+(0, _module2.default)(_module3.foo, _module4.pick);
 ```
 
 ## Options `specImport`
@@ -167,10 +172,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _module = babelHelpers.specRequireInterop(require('module'));
+const _module = babelHelpers.specRequireInterop(require('module'));
 
-babelHelpers.specImportCheck(_module, [ 'pick' ]);
-
+babelHelpers.specImportCheck(_module, ['pick']);
 exports.default = (0, _module.pick)();
 ```
 
