@@ -416,6 +416,14 @@ helpers.interopRequireWildcard = template(`
   })
 `);
 
+// based on core-js's SameValue implementation
+// https://github.com/zloirock/core-js/blob/693767b/modules/_same-value.js
+helpers.sameValue = template(`
+  (function (x, y) {
+    return x === y ? x !== 0 || 1 / x === 1 / y : x != x && y != y;
+  })
+`);
+
 helpers.specRequireInterop = template(`
   (function (obj) {
     if (obj && obj.__esModule) {

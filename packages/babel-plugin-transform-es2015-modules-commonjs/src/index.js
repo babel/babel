@@ -58,16 +58,10 @@ const specBuildOwnExports = template(`
   const $0 = Object.keys($1)
 `);
 
-// The SameValue check between own and other was adapted from core-js's
-// Object.is implementation.
-// https://github.com/zloirock/core-js/blob/master/modules/_same-value.js
 const specBuildNamespaceSpread = template(`
   Object.keys(OBJECT).forEach(function (key) {
     if (key === "__esModule" || key === "default" || OWN_EXPORTS.indexOf(key) >= 0) return;
-    if (key in EXPORTS) {
-      var own = EXPORTS[key], other = OBJECT[key]
-      if (own === other ? own !== 0 || 1 / own === 1 / other : own != own && other != other) return;
-    }
+    if (key in EXPORTS && SAME_VALUE(EXPORTS[key], OBJECT[key])) return;
     Object.defineProperty(EXPORTS, key, {
       enumerable: true,
       get() {
@@ -645,6 +639,7 @@ export default function () {
                 exportNode = specBuildNamespaceSpread({
                   EXPORTS: exportsObj,
                   OWN_EXPORTS: ownExportsUid,
+                  SAME_VALUE: this.addHelper("sameValue"),
                   OBJECT: addRequire(path.node.source.value, 3)
                 });
                 exportNode._blockHoist = 3;
