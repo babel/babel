@@ -45,8 +45,7 @@
     "babel-plugin-transform-es2015-unicode-regex": "^6.3.13",
     "babel-plugin-transform-exponentiation-operator": "^6.8.0",
     "babel-plugin-transform-regenerator": "^6.6.0",
-    "browserslist": "^1.4.0",
-    "eslint-plugin-flowtype": "^2.29.1"
+    "browserslist": "^1.4.0"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
@@ -60,6 +59,7 @@
     "eslint-config-babel": "^3.0.0",
     "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-flow-vars": "^0.5.0",
+    "eslint-plugin-flowtype": "^2.29.1",
     "lodash": "^4.15.0",
     "mocha": "^3.0.2"
   },
