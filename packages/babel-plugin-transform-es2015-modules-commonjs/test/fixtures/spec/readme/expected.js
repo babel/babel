@@ -19,7 +19,7 @@ Object.defineProperties(exports, {
     enumerable: true,
 
     get() {
-      return _module3.pick;
+      return _d.pick;
     }
 
   },
@@ -37,19 +37,19 @@ let _default = {
 }.default;
 (Object.freeze || Object)(exports);
 
-require('module1');
+require('a');
 
-const _module = babelHelpers.specRequireInterop(require('module2'));
+const _b = babelHelpers.specRequireInterop(require('b'));
 
-babelHelpers.specImportCheck(_module, ['default']);
+babelHelpers.specImportCheck(_b, ['default']);
 
-const _module2 = babelHelpers.specRequireInterop(require('module3'));
+const _c = babelHelpers.specRequireInterop(require('c'));
 
-babelHelpers.specImportCheck(_module2, ['foo']);
+babelHelpers.specImportCheck(_c, ['foo']);
 
-const _module3 = babelHelpers.specRequireInterop(require('module4'));
+const _d = babelHelpers.specRequireInterop(require('d'));
 
-babelHelpers.specImportCheck(_module3, ['pick']);
+babelHelpers.specImportCheck(_d, ['pick']);
 
 
-(0, _module.default)(_module2.foo, _module3.pick);
+(0, _b.default)(_c.foo, _d.pick);

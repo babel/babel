@@ -1,7 +1,7 @@
-import 'module1';
-import defaultImport from 'module2';
-import * as namespace from 'module3';
-import { pick } from 'module4';
+import 'a';
+import defaultImport from 'b';
+import * as namespace from 'c';
+import { pick } from 'd';
 
 defaultImport(namespace.foo, pick);
 
