@@ -88,10 +88,10 @@ TDZ errors at runtime.
 ### Input
 
 ```javascript
-import 'module1';
-import defaultImport from 'module2';
-import * as namespace from 'module3';
-import { pick } from 'module4';
+import 'a';
+import defaultImport from 'b';
+import * as namespace from 'c';
+import { pick } from 'd';
 
 defaultImport(namespace.foo, pick);
 
@@ -118,7 +118,7 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
 }
 
 Object.defineProperties(exports, {
-  pick: { enumerable: true, get() { return _module4.pick; } },
+  pick: { enumerable: true, get() { return _d.pick; } },
   default: { enumerable: true, get() { return _default; } }
 });
 let _default = {
@@ -126,21 +126,22 @@ let _default = {
 }.default;
 (Object.freeze || Object)(exports);
 
-require('module1');
+require('a');
 
-const _module2 = babelHelpers.specRequireInterop(require('module2'));
+const _b = babelHelpers.specRequireInterop(require('b'));
 
-babelHelpers.specImportCheck(_module2, ['default']);
+babelHelpers.specImportCheck(_b, ['default']);
 
-const _module3 = babelHelpers.specRequireInterop(require('module3'));
+const _c = babelHelpers.specRequireInterop(require('c'));
 
-const _module4 = babelHelpers.specRequireInterop(require('module4'));
+babelHelpers.specImportCheck(_c, ['foo']);
 
-babelHelpers.specImportCheck(_module4, ['pick']);
-babelHelpers.specImportCheck(_module3, ['foo']);
+const _d = babelHelpers.specRequireInterop(require('d'));
+
+babelHelpers.specImportCheck(_d, ['pick']);
 
 
-(0, _module2.default)(_module3.foo, _module4.pick);
+(0, _b.default)(_c.foo, _d.pick);
 ```
 
 ## Options `specImport`
@@ -149,9 +150,10 @@ This option enables only the half of `spec` mode that affects the imports, witho
 changing how exports are generated. This would allow the generation of code that
 may still be compatible with engines that do not support getters.
 
-Note that the require helpers do use `Object.keys` and `Object.defineProperty`, so
-ES5 polyfills may still be required. When running on an old engine that does not support
-`Object.defineProperty`, a polyfill to fake it like `es5-sham` is still required.
+Note that the require helpers do use `Object.getOwnPropertyDescriptor` and
+`Object.defineProperty`, so ES5 polyfills may still be required. When running on an
+old engine that does not support `Object.defineProperty`, a polyfill to fake it like
+`es5-sham` is required.
 
 This option is **ignored** if `spec` is enabled. Enabling `spec` implies that this
 option is also enabled.
