@@ -108,7 +108,7 @@ Following is a table of the options you can use:
 | `code`                   | `true`               | Enable code generation |
 | `no-babelrc`             | [CLI flag](http://babeljs.io/docs/usage/cli/#ignoring-babelrc) | Specify whether or not to use .babelrc and .babelignore files. Only available when using the CLI. |
 | `ast`                    | `true`               | Include the AST in the returned object |
-| `compact`                | `"auto"`             | Do not include superfluous whitespace characters and line terminators. When set to `"auto"` compact is set to `true` on input sizes of >100KB. |
+| `compact`                | `"auto"`             | Do not include superfluous whitespace characters and line terminators. When set to `"auto"` compact is set to `true` on input sizes of >500KB. |
 | `minified`               | `false`              | Should the output be minified (not printing last semicolons in blocks, printing literal string values instead of escaped ones, stripping `()` from `new` when safe) |
 | `comments`               | `true`               | Output comments in generated output. |
 | `shouldPrintComment`     | `null`                 | An optional callback that controls whether a comment should be output or not. Called as `shouldPrintComment(commentContents)`. **NOTE:** This overrides the `comment` option when used. |

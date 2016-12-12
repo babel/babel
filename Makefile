@@ -15,6 +15,7 @@ build-dist: build
 	node scripts/generate-babel-types-docs.js
 
 watch: clean
+	rm -rf packages/*/lib
 	./node_modules/.bin/gulp watch
 
 lint:
@@ -27,7 +28,6 @@ fix:
 	./node_modules/.bin/eslint packages/ --format=codeframe --fix
 
 clean: test-clean
-	rm -rf packages/*/lib
 	rm -rf packages/babel-polyfill/browser*
 	rm -rf packages/babel-polyfill/dist
 	rm -rf coverage

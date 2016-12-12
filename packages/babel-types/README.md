@@ -867,6 +867,18 @@ Aliases: `Statement`, `Conditional`
 
 ---
 
+### import
+```javascript
+t.import()
+```
+
+See also `t.isImport(node, opts)` and `t.assertImport(node, opts)`.
+
+Aliases: `Expression`
+
+
+---
+
 ### importDeclaration
 ```javascript
 t.importDeclaration(specifiers, source)

@@ -8,6 +8,4 @@
  * the same directory.
  */
 
-export default function () {
-  return require("./visit");
-}
+export default require("regenerator-transform");
