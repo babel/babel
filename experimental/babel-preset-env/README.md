@@ -22,6 +22,7 @@
 - [Options](#options)
 - [Examples](#examples)
 - [Caveats](#caveats)
+- [Other Cool Projects](#other-cool-projects)
   
 ## How it Works
 
@@ -285,3 +286,11 @@ transform-es2015-arrow-functions {}
 ## Caveats
 
 If you get a `SyntaxError: Unexpected token ...` error if using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-rest-spread) then make sure the plugin is at `v6.19.0`.
+
+## Other Cool Projects
+
+- [auto-babel](https://github.com/jakepusateri/auto-babel)
+- [babel-preset-target](https://github.com/sdkennedy/babel-preset-target)
+- [babel-preset-modern-node](https://github.com/michaelcontento/babel-preset-modern-node)
+- [babel-preset-modern-browsers](https://github.com/christophehurpeau/babel-preset-modern-browsers)
+- ?
