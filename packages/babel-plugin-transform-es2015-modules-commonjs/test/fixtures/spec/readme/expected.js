@@ -45,10 +45,11 @@ babelHelpers.specImportCheck(_module, ['default']);
 
 const _module2 = babelHelpers.specRequireInterop(require('module3'));
 
+babelHelpers.specImportCheck(_module2, ['foo']);
+
 const _module3 = babelHelpers.specRequireInterop(require('module4'));
 
 babelHelpers.specImportCheck(_module3, ['pick']);
-babelHelpers.specImportCheck(_module2, ['foo']);
 
 
 (0, _module.default)(_module2.foo, _module3.pick);
