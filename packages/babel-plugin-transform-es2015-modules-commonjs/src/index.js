@@ -1015,7 +1015,6 @@ export default function () {
 
           if (spec) {
             const { exportAllSet } = state;
-            let tail = state.exportPath;
 
             if (exportAllSet.size > 0) {
               const toAdd = new Set();
@@ -1048,7 +1047,6 @@ export default function () {
               }
 
               state.ownExportsPath.insertAfter(Array.from(toAdd));
-              tail = state.ownExportsPath.getSibling(state.ownExportsPath.key + toAdd.size);
             }
 
             if (state.exportMap.size > 0) {
