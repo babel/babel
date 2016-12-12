@@ -85,14 +85,20 @@ describe("spec import", function () {
     });
 
     describe("with variable", function () {
-      runner.addModule("variable", "import * as a from 'a'\nconst name = 'a'\nexport const simple = a[name]\nexport const recursive = a[a[name]]");
+      before(function () {
+        runner.addModule("variable", "import * as a from 'a'\nconst name = 'a'\nexport const simple = a[name]\nexport const recursive = a[a[name]]");
 
-      it("does not throw", function () {
-        runner.getExportsOf("variable");
+        it("does not throw", function () {
+          runner.getExportsOf("variable");
+        });
       });
 
       describe("has the correct result", function () {
-        const exports = runner.getExportsOf("variable");
+        let exports;
+
+        before(function () {
+          exports = runner.getExportsOf("variable");
+        });
 
         it("simple", function () {
           assert.strictEqual(exports.simple, "a");
@@ -105,10 +111,13 @@ describe("spec import", function () {
     });
 
     describe("with Symbol", function () {
-      runner.addModule("symbol", "import * as a from 'a'\nexport default a[Symbol.toStringTag]");
-      if (!helpers.hasToStringTag()) {
-        this.skip();
-      }
+      before(function () {
+        runner.addModule("symbol", "import * as a from 'a'\nexport default a[Symbol.toStringTag]");
+
+        if (!helpers.hasToStringTag()) {
+          this.skip();
+        }
+      });
 
       it("does not throw", function () {
         runner.getExportsOf("symbol");
