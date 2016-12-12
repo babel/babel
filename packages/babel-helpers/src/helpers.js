@@ -445,7 +445,7 @@ helpers.specRequireInterop = template(`
 helpers.specImportCheck = template(`
   (function (module, imports) {
     if (!module.__esModule) throw new Error("Only ES modules can be checked");
-    var invalid = imports.filter(function (i) { var d = Object.getOwnPropertyDescriptor(module, i); return !d || !d.enumerable; });
+    var invalid = imports.filter(function (i) { return !Object.prototype.propertyIsEnumerable.call(module, i) });
     if (invalid.length > 0) {
       var error = new Error(
         "Unknown export" + (invalid.length > 1 ? "s " : " ") +
@@ -470,8 +470,9 @@ helpers.specNamespaceGet = template(`
     ) {
       return module[name];
     }
-    var d = Object.getOwnPropertyDescriptor(module, name);
-    if (!d || !d.enumerable) throw new Error("Unknown export " + JSON.stringify(name) + " imported");
+    if (!Object.prototype.propertyIsEnumerable.call(module, name)) {
+      throw new Error("Unknown export " + JSON.stringify(name) + " imported");
+    }
     return module[name];
   })
 `);
