@@ -1,8 +1,12 @@
+"use strict";
+
 const fs = require("fs");
 const path = require("path");
 
 const flatten = require("lodash/flatten");
 const flattenDeep = require("lodash/flattenDeep");
+const mapValues = require("lodash/mapValues");
+
 const pluginFeatures = require("../data/pluginFeatures");
 const builtInFeatures = require("../data/builtInFeatures");
 
@@ -90,28 +94,28 @@ const getLowestImplementedVersion = ({ features }, env) => {
   );
 
   let envTests = tests
-  .map(({ res: test, name, isBuiltIn }, i) => {
-    // Babel itself doesn't implement the feature correctly,
-    // don't count against it
-    // only doing this for built-ins atm
-    if (!test.babel && isBuiltIn) {
-      return "-1";
-    }
+    .map(({ res: test, name, isBuiltIn }, i) => {
+      // Babel itself doesn't implement the feature correctly,
+      // don't count against it
+      // only doing this for built-ins atm
+      if (!test.babel && isBuiltIn) {
+        return "-1";
+      }
 
-    // `equals` in compat-table
-    Object.keys(test).forEach((t) => {
-      test[invertedEqualsEnv[t]] = test[t];
+      // `equals` in compat-table
+      Object.keys(test).forEach((t) => {
+        test[invertedEqualsEnv[t]] = test[t];
+      });
+
+      return Object.keys(test)
+      .filter((t) => t.startsWith(env))
+      // Babel assumes strict mode
+      .filter((test) => tests[i].res[test] === true || tests[i].res[test] === "strict")
+      // normalize some keys
+      .map((test) => envMap[test] || test)
+      .filter((test) => !isNaN(parseInt(test.replace(env, ""))))
+      .shift();
     });
-
-    return Object.keys(test)
-    .filter((t) => t.startsWith(env))
-    // Babel assumes strict mode
-    .filter((test) => tests[i].res[test] === true || tests[i].res[test] === "strict")
-    // normalize some keys
-    .map((test) => envMap[test] || test)
-    .filter((test) => !isNaN(parseInt(test.replace(env, ""))))
-    .shift();
-  });
 
   let envFiltered = envTests.filter((t) => t);
   if (envTests.length > envFiltered.length || envTests.length === 0) {
@@ -127,16 +131,12 @@ const getLowestImplementedVersion = ({ features }, env) => {
   }
 
   return envTests
-  .map((str) => Number(str.replace(env, "")))
-  .reduce((a, b) => { return (a < b) ? b : a; });
+    .map((str) => Number(str.replace(env, "")))
+    .reduce((a, b) => { return (a < b) ? b : a; });
 };
 
-function generateData(features) {
-  let ret = {};
-
-  Object.keys(features).forEach((pluginName) => {
-    let options = features[pluginName];
-
+const generateData = (environments, features) => {
+  return mapValues(features, (options) => {
     if (!options.features) {
       options = {
         features: [options]
@@ -149,29 +149,27 @@ function generateData(features) {
       if (version !== null) {
         plugin[env] = version;
       }
-
-      // add opera
-      if (plugin.chrome) {
-        if (plugin.chrome >= 28) {
-          plugin.opera = plugin.chrome - 13;
-        } else if (plugin.chrome === 5) {
-          plugin.opera = 12;
-        }
-      }
     });
 
-    ret[pluginName] = plugin;
-  });
+    // add opera
+    if (plugin.chrome) {
+      if (plugin.chrome >= 28) {
+        plugin.opera = plugin.chrome - 13;
+      } else if (plugin.chrome === 5) {
+        plugin.opera = 12;
+      }
+    }
 
-  return ret;
-}
+    return plugin;
+  });
+};
 
 fs.writeFileSync(
   path.join(__dirname, "../data/plugins.json"),
-  JSON.stringify(generateData(pluginFeatures), null, 2) + "\n"
+  JSON.stringify(generateData(environments, pluginFeatures), null, 2) + "\n"
 );
 
 fs.writeFileSync(
   path.join(__dirname, "../data/builtIns.json"),
-  JSON.stringify(generateData(builtInFeatures), null, 2) + "\n"
+  JSON.stringify(generateData(environments, builtInFeatures), null, 2) + "\n"
 );

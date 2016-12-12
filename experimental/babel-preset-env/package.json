@@ -9,7 +9,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src -d lib",
-    "build-data": "babel-node ./scripts/build-data.js",
+    "build-data": "node ./scripts/build-data.js",
     "dev": "babel -w src -d lib",
     "lint": "eslint .",
     "fix": "eslint . --fix",
