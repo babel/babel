@@ -196,13 +196,13 @@ export default function () {
     AssignmentExpression(path, state) {
       if (isSpec(state)) {
         if (!path.node[REASSIGN_REMAP_SKIP]) {
-          const target = t.isIdentifier(path.node.left)
-            ? path.node.left
-            : t.isMemberExpression(path.node.left) && t.isIdentifier(path.node.left.object)
-              ? path.node.left.object : null;
-          const name = target && target.name;
+          const left = path.get("left");
+          if (!left.isIdentifier() && !left.isMemberExpression()) return;
+          const target = left.isIdentifier() ? left : left.get("object");
+          if (!target.isIdentifier()) return;
+          const name = target.node.name;
 
-          if (target[REASSIGN_REMAP_SKIP] || this.scope.getBinding(name) !== path.scope.getBinding(name)) {
+          if (target.node[REASSIGN_REMAP_SKIP] || this.scope.getBinding(name) !== path.scope.getBinding(name)) {
             return;
           }
 
@@ -217,11 +217,7 @@ export default function () {
           }
 
           if (remap) {
-            if (t.isIdentifier(path.node.left)) {
-              path.get("left").replaceWith(remap);
-            } else {
-              path.get("left.object").replaceWith(remap);
-            }
+            target.replaceWith(remap);
           }
         }
         return;
