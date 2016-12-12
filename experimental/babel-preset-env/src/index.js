@@ -226,25 +226,22 @@ export default function buildPreset(context, opts = {}) {
     }
   }
 
-  let allTransformations = [...transformations, ...whitelist];
-  let regenerator = allTransformations.indexOf("transform-regenerator") >= 0;
+  const allTransformations = [...transformations, ...whitelist];
+  const regenerator = allTransformations.indexOf("transform-regenerator") >= 0;
+  const modulePlugin = moduleType !== false && MODULE_TRANSFORMATIONS[moduleType];
+  const plugins = [];
+  
+  modulePlugin &&
+    plugins.push([require(`babel-plugin-${modulePlugin}`), { loose }]);
 
-  let plugins = allTransformations.map((pluginName) => {
-    return [require(`babel-plugin-${pluginName}`), { loose }];
-  });
+  plugins.push(...allTransformations.map((pluginName) =>
+    [require(`babel-plugin-${pluginName}`), { loose }]
+  ));
 
-  const modules = [
-    moduleType === "commonjs" && [require("babel-plugin-transform-es2015-modules-commonjs"), { loose }],
-    moduleType === "systemjs" && [require("babel-plugin-transform-es2015-modules-systemjs"), { loose }],
-    moduleType === "amd" && [require("babel-plugin-transform-es2015-modules-amd"), { loose }],
-    moduleType === "umd" && [require("babel-plugin-transform-es2015-modules-umd"), { loose }],
-  ].filter(Boolean);
+  useBuiltIns &&
+    plugins.push([transformPolyfillRequirePlugin, { polyfills, regenerator }]);
 
   return {
-    plugins: [
-      ...modules,
-      ...plugins,
-      useBuiltIns === true && [transformPolyfillRequirePlugin, { polyfills, regenerator }]
-    ].filter(Boolean)
+    plugins
   };
 }
