@@ -1,6 +1,6 @@
 import * as namespace from './somewhere';
 
-export { stuff } from './elsewhere'
+export { stuff as renamed } from './elsewhere'
 
 import { stuff } from './somewhereElse';
 

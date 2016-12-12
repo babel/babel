@@ -31,7 +31,7 @@ Object.defineProperties(exports, {
     }
 
   },
-  stuff: {
+  renamed: {
     enumerable: true,
 
     get() {
