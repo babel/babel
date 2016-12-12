@@ -16,6 +16,8 @@
 }
 ```
 
+Check out the many options (especially `useBuiltIns` to polyfill less)!
+
 - [How it Works](#how-it-works)
 - [Install](#install)
 - [Usage](#usage)
