@@ -11,8 +11,8 @@
     "build": "babel src -d lib",
     "build-data": "babel-node ./scripts/build-data.js",
     "dev": "babel -w src -d lib",
-    "lint": "eslint scripts src test",
-    "fix": "eslint scripts src test --fix",
+    "lint": "eslint .",
+    "fix": "eslint . --fix",
     "ci": "npm run test",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
     "test": "npm run build && mocha ./test --compilers js:babel-register -t 5000"

@@ -46,7 +46,7 @@ module.exports = {
   },
   "transform-es2015-function-name": {
     features: [
-      'function "name" property',
+      "function \"name\" property",
     ]
   },
   "transform-es2015-literals": {
@@ -77,8 +77,8 @@ module.exports = {
   },
   "transform-es2015-sticky-regex": {
     features: [
-      'RegExp "y" and "u" flags / "y" flag, lastIndex',
-      'RegExp "y" and "u" flags / "y" flag',
+      "RegExp \"y\" and \"u\" flags / \"y\" flag, lastIndex",
+      "RegExp \"y\" and \"u\" flags / \"y\" flag",
     ],
   },
   "transform-es2015-template-literals": {
@@ -93,9 +93,9 @@ module.exports = {
   },
   "transform-es2015-unicode-regex": {
     features: [
-      'RegExp "y" and "u" flags / "u" flag, case folding',
-      'RegExp "y" and "u" flags / "u" flag, Unicode code point escapes',
-      'RegExp "y" and "u" flags / "u" flag',
+      "RegExp \"y\" and \"u\" flags / \"u\" flag, case folding",
+      "RegExp \"y\" and \"u\" flags / \"u\" flag, Unicode code point escapes",
+      "RegExp \"y\" and \"u\" flags / \"u\" flag",
     ],
   },
   "transform-regenerator": {

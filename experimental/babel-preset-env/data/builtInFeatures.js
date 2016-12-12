@@ -57,7 +57,7 @@ const es2015 = {
   "es6.object.is": "Object static methods / Object.is",
   "es6.object.set-prototype-of": "Object static methods / Object.setPrototypeOf",
 
-  "es6.function.name": 'function "name" property',
+  "es6.function.name": "function \"name\" property",
 
   "es6.string.raw": "String static methods / String.raw",
   "es6.string.from-code-point": "String static methods / String.fromCodePoint",
@@ -84,11 +84,11 @@ const es2015 = {
   "es6.array.fill": "Array.prototype methods / Array.prototype.fill",
 
   "es6.array.iterator": {
-   features: [
-     "Array.prototype methods / Array.prototype.keys",
+    features: [
+      "Array.prototype methods / Array.prototype.keys",
      // can use Symbol.iterator, not implemented in many environments
      // "Array.prototype methods / Array.prototype.values",
-     "Array.prototype methods / Array.prototype.entries",
+      "Array.prototype methods / Array.prototype.entries",
     ]
   },
 
