@@ -340,7 +340,7 @@ export default function () {
 
           let requires = Object.create(null);
 
-          const addRequire = (source, specImport, blockHoist) => {
+          const addRequire = (source, blockHoist) => {
             let cached = requires[source];
             if (cached) return cached;
 
@@ -587,7 +587,7 @@ export default function () {
 
                   imports[key] = importsEntry;
                 } else {
-                  ref = addRequire(source.value, specImport, path.node._blockHoist);
+                  ref = addRequire(source.value, path.node._blockHoist);
                 }
 
                 for (let specifier of specifiers) {
@@ -639,11 +639,11 @@ export default function () {
                 exportNode = specBuildNamespaceSpread({
                   EXPORTS: exportsObj,
                   OWN_EXPORTS: ownExportsUid,
-                  OBJECT: addRequire(path.node.source.value, specImport, 3)
+                  OBJECT: addRequire(path.node.source.value, 3)
                 });
                 exportNode._blockHoist = 3;
               } else {
-                const ref = addRequire(path.node.source.value, specImport, path.node._blockHoist);
+                const ref = addRequire(path.node.source.value, path.node._blockHoist);
                 exportNode = buildExportAll({
                   OBJECT: ref
                 });
@@ -661,7 +661,7 @@ export default function () {
           for (let source in imports) {
             let {specifiers, maxBlockHoist} = imports[source];
             if (specifiers.length) {
-              const uid = addRequire(source, specImport, maxBlockHoist);
+              const uid = addRequire(source, maxBlockHoist);
 
               if (specImport) {
                 if (!checkedImportMap.has(uid)) {
