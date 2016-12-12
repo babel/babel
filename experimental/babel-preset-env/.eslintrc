@@ -1,0 +1,7 @@
+{
+  "extends": "babel",
+  "parserOptions": {
+    "ecmaVersion": 7,
+    "sourceType": "module"
+  }
+}

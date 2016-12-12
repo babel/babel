@@ -45,19 +45,20 @@
     "babel-plugin-transform-es2015-unicode-regex": "^6.3.13",
     "babel-plugin-transform-exponentiation-operator": "^6.8.0",
     "babel-plugin-transform-regenerator": "^6.6.0",
-    "browserslist": "^1.4.0"
+    "browserslist": "^1.4.0",
+    "eslint-plugin-flowtype": "^2.29.1"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
-    "babel-eslint": "^6.1.2",
+    "babel-eslint": "^7.1.1",
     "babel-helper-plugin-test-runner": "^6.18.0",
     "babel-plugin-transform-flow-strip-types": "^6.8.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-register": "^6.14.0",
     "compat-table": "github:kangax/compat-table#e732718eab42c6c83a364450f456474638d31f94",
     "eslint": "^3.3.1",
-    "eslint-config-babel": "^1.0.1",
-    "eslint-plugin-babel": "^3.3.0",
+    "eslint-config-babel": "^3.0.0",
+    "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-flow-vars": "^0.5.0",
     "lodash": "^4.15.0",
     "mocha": "^3.0.2"
@@ -74,25 +75,5 @@
     "plugins": [
       "transform-flow-strip-types"
     ]
-  },
-  "eslintConfig": {
-    "extends": "babel",
-    "parserOptions": {
-      "ecmaVersion": 7,
-      "sourceType": "module"
-    },
-    "rules": {
-      "max-len": 0,
-      "quotes": [
-        "error",
-        "double",
-        {
-          "avoidEscape": true
-        }
-      ]
-    },
-    "env": {
-      "mocha": true
-    }
   }
 }
