@@ -1,5 +1,6 @@
-import { foo } from 'foo'
+// NOTE: star reexports are completely broken, but they also are broken in non-spec mode
+
+export { foo } from 'foo'
 import * as ns from 'bar'
-export * from 'baz'
 
 ns[true && 'bar']

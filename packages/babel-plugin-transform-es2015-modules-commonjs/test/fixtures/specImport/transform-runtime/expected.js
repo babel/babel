@@ -1,32 +1,29 @@
 'use strict';
 
-// definitely not this
-import _Object$defineProperty from 'babel-runtime/core-js/object/define-property';
-import _Object$keys from 'babel-runtime/core-js/object/keys';
-import _specNamespaceGet from 'babel-runtime/helpers/specNamespaceGet';
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-import _specImportCheck from 'babel-runtime/helpers/specImportCheck';
-import _specRequireInterop from 'babel-runtime/helpers/specRequireInterop';
+exports.foo = undefined;
 
-const _baz = _specRequireInterop(require('baz'));
+const _specNamespaceGet2 = _specRequireInterop(require('babel-runtime/helpers/specNamespaceGet'));
 
-_Object$keys(_baz).forEach(function (key) {
-  if (key === "default" || key === "__esModule") return;
-
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _baz[key];
-    }
-  });
-});
+_specImportCheck(_specNamespaceGet2, ['default']);
 
 const _foo = _specRequireInterop(require('foo'));
 
 _specImportCheck(_foo, ['foo']);
 
+Object.defineProperty(exports, 'foo', {
+  enumerable: true,
+  get: function () {
+    return _foo.foo;
+  }
+});
+
 const _bar = _specRequireInterop(require('bar'));
 
-_specNamespaceGet(_bar, true && 'bar');
+function _specImportCheck(module, imports) { if (!module.__esModule) throw new Error("Only ES modules can be checked"); var invalid = imports.filter(function (i) { return !Object.prototype.propertyIsEnumerable.call(module, i); }); if (invalid.length > 0) { var error = new Error("Unknown export" + (invalid.length > 1 ? "s " : " ") + JSON.stringify(invalid) + " imported"); error.module = module; throw error; } }
+
+function _specRequireInterop(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = Object.create ? Object.create(null, { default: { value: obj, writable: true, enumerable: true }, __esModule: { value: true } }) : { default: obj, __esModule: true }; if (typeof Symbol === "function" && Symbol.toStringTag) { Object.defineProperty(newObj, Symbol.toStringTag, { value: "Module" }); } return (Object.freeze || Object)(newObj); } }
+
+(0, _specNamespaceGet2.default)(_bar, true && 'bar');

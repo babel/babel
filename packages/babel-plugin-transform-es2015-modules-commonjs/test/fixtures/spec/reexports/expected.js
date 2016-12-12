@@ -15,6 +15,14 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
 }
 
 Object.defineProperties(exports, {
+  renamed: {
+    enumerable: true,
+
+    get() {
+      return _elsewhere.stuff;
+    }
+
+  },
   namespace: {
     enumerable: true,
 
@@ -28,14 +36,6 @@ Object.defineProperties(exports, {
 
     get() {
       return _somewhereElse.stuff;
-    }
-
-  },
-  renamed: {
-    enumerable: true,
-
-    get() {
-      return _elsewhere.stuff;
     }
 
   },
@@ -53,18 +53,7 @@ const _ownExports = Object.keys(exports);
 
 const _iDontKnow = babelHelpers.specRequireInterop(require('./i-dont-know'));
 
-Object.keys(_iDontKnow).forEach(function (key) {
-  if (key === "__esModule" || key === "default" || _ownExports.indexOf(key) >= 0) return;
-  if (key in exports && babelHelpers.sameValue(exports[key], _iDontKnow[key])) return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-
-    get() {
-      return _iDontKnow[key];
-    }
-
-  });
-});
+babelHelpers.specNamespaceSpread(exports, _ownExports, _iDontKnow);
 (Object.freeze || Object)(exports);
 
 const _somewhere = babelHelpers.specRequireInterop(require('./somewhere'));

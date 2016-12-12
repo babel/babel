@@ -38,6 +38,7 @@ module.exports.Runner = function Runner (initialModules) {
     ].concat(extraPlugins),
     "ast": false,
   };
+  this.fallbackRequire = null;
 
   if (initialModules != null) {
     this.addModules(initialModules);
@@ -92,9 +93,14 @@ module.exports.Runner.prototype = {
       return this.cache[id].module.exports;
     }
     if (id in this.modules) {
-      this.cache[id] = this.makeContext();
-      this.transformAndRunInNewContext(this.modules[id], this.cache[id]);
-      return this.cache[id].module.exports;
+      const cache = this.makeContext();
+      this.transformAndRunInNewContext(this.modules[id], cache);
+      this.cache[id] = cache;
+      return cache.module.exports;
+    }
+    if (this.fallbackRequire) {
+      const res = this.fallbackRequire(id);
+      if (res) return res;
     }
     throw new Error("Unmocked module " + id + " required");
   }

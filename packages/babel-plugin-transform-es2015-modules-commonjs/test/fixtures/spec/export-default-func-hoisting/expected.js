@@ -24,28 +24,17 @@ Object.defineProperties(exports, {
 
   }
 });
-let _default = {
-  default: function () {
-    return _foo;
-  }
-}.default;
 
 const _ownExports = Object.keys(exports);
 
 const _bar = babelHelpers.specRequireInterop(require('bar'));
 
-Object.keys(_bar).forEach(function (key) {
-  if (key === "__esModule" || key === "default" || _ownExports.indexOf(key) >= 0) return;
-  if (key in exports && babelHelpers.sameValue(exports[key], _bar[key])) return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-
-    get() {
-      return _bar[key];
-    }
-
-  });
-});
+babelHelpers.specNamespaceSpread(exports, _ownExports, _bar);
 (Object.freeze || Object)(exports);
+let _default = {
+  default: function () {
+    return _foo;
+  }
+}.default;
 
 const _foo = babelHelpers.specRequireInterop(require('foo'));
