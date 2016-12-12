@@ -2,7 +2,7 @@
 
 ### Adding a new plugin to support (when approved in the next ECMAScript version)
 
-#### Update [`pluginFeatures.js`](/data/pluginFeatures.js)
+#### Update [`pluginFeatures.js`](/data/plugin-features.js)
 
 Example:
 

@@ -2,7 +2,7 @@
 
 const babelPresetEnv = require("../lib/index.js");
 const assert = require("assert");
-const electronToChromiumData = require("../data/electronToChromium");
+const electronToChromiumData = require("../data/electron-to-chromium");
 
 const {
   validateModulesOption,

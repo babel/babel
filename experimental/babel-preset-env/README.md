@@ -38,7 +38,7 @@ We can periodically run [build-data.js](/scripts/build-data.js) which generates 
 
 ### Maintain a mapping between javascript features and babel plugins
 
-> Currently located at [pluginFeatures.js](/data/pluginFeatures.js).
+> Currently located at [plugin-features.js](/data/plugin-features.js).
 
 This should be straightforward to do in most cases. There might be cases were plugins should be split up more or certain plugins aren't standalone enough (or impossible to do).
 

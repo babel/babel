@@ -96,7 +96,7 @@ Electron is also an environment, so [Paul went ahead](https://twitter.com/paulcb
 }
 ```
 
-> Currently we are manually updating the data in [/data/electronToChromium.js](https://github.com/babel/babel-preset-env/blob/master/data/electronToChromium.js), but [@kevinsawicki](https://github.com/kevinsawicki) says we could generate the data from [atom-shell/dist/index.json](https://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/index.json) as well! (Someone should make a PR :smile:)
+> Currently we are manually updating the data in [/data/electron-to-chromium.js](https://github.com/babel/babel-preset-env/blob/master/data/electron-to-chromium.js), but [@kevinsawicki](https://github.com/kevinsawicki) says we could generate the data from [atom-shell/dist/index.json](https://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/index.json) as well! (Someone should make a PR :smile:)
 
 
 

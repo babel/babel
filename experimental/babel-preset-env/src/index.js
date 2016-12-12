@@ -1,8 +1,8 @@
 import pluginList from "../data/plugins.json";
-import builtInsList from "../data/builtIns.json";
+import builtInsList from "../data/built-ins.json";
 import browserslist from "browserslist";
-import transformPolyfillRequirePlugin from "./transformPolyfillRequirePlugin";
-import electronToChromium from "../data/electronToChromium";
+import transformPolyfillRequirePlugin from "./transform-polyfill-require-plugin";
+import electronToChromium from "../data/electron-to-chromium";
 
 export const MODULE_TRANSFORMATIONS = {
   "amd": "transform-es2015-modules-amd",
