@@ -230,7 +230,7 @@ export default function buildPreset(context, opts = {}) {
   const regenerator = allTransformations.indexOf("transform-regenerator") >= 0;
   const modulePlugin = moduleType !== false && MODULE_TRANSFORMATIONS[moduleType];
   const plugins = [];
-  
+
   modulePlugin &&
     plugins.push([require(`babel-plugin-${modulePlugin}`), { loose }]);
 
