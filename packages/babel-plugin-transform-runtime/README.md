@@ -18,18 +18,21 @@ See the [technical details](#technical-details) section for more information on 
 
 ## Installation
 
+**NOTE - Production vs. development dependencies**
+
+In most cases, you should install `babel-plugin-transform-runtime` as a development dependency (with `--save-dev`).
+
 ```sh
 npm install --save-dev babel-plugin-transform-runtime
 ```
 
-It is also recommended you install the [babel-runtime](https://www.npmjs.com/package/babel-runtime) package as a runtime dependency, if you haven't already, as the transformed code will require that package. See the examples below for more details.
+and `babel-runtime` as a production dependency (with `--save`).
 
-**NOTE - Production vs. development dependencies**
+```sh
+npm install --save babel-runtime
+```
 
-In most cases, you should install `babel-plugin-transform-runtime` as a development dependency (with `--save-dev`) and `babel-runtime` as a production dependency (with `--save`).
-
-The transformation plugin is typically used only in development, but the runtime itself will be depended on by your deployed/published code.
-
+The transformation plugin is typically used only in development, but the runtime itself will be depended on by your deployed/published code. See the examples below for more details.
 
 ## Usage
 
