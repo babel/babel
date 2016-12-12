@@ -36,7 +36,13 @@ const _bar = babelHelpers.specRequireInterop(require('bar'));
 
 Object.keys(_bar).forEach(function (key) {
   if (key === "__esModule" || key === "default" || _ownExports.indexOf(key) >= 0) return;
-  if (key in exports && (exports[key] === _bar[key] || typeof exports[key] === 'number' && isNaN(exports[key]))) return;
+
+  if (key in exports) {
+    var own = exports[key],
+        other = _bar[key];
+    if (own === other ? own !== 0 || 1 / own === 1 / other : own != own && other != other) return;
+  }
+
   Object.defineProperty(exports, key, {
     enumerable: true,
 

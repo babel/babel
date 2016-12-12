@@ -55,7 +55,13 @@ const _iDontKnow = babelHelpers.specRequireInterop(require('./i-dont-know'));
 
 Object.keys(_iDontKnow).forEach(function (key) {
   if (key === "__esModule" || key === "default" || _ownExports.indexOf(key) >= 0) return;
-  if (key in exports && (exports[key] === _iDontKnow[key] || typeof exports[key] === 'number' && isNaN(exports[key]))) return;
+
+  if (key in exports) {
+    var own = exports[key],
+        other = _iDontKnow[key];
+    if (own === other ? own !== 0 || 1 / own === 1 / other : own != own && other != other) return;
+  }
+
   Object.defineProperty(exports, key, {
     enumerable: true,
 
