@@ -8,7 +8,7 @@
   "repository": "https://github.com/babel/babel-preset-env",
   "main": "lib/index.js",
   "scripts": {
-    "build": "babel src -d lib",
+    "build": "rimraf lib && babel src -d lib",
     "build-data": "node ./scripts/build-data.js",
     "dev": "babel -w src -d lib",
     "lint": "eslint .",
@@ -61,7 +61,8 @@
     "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-flow-vars": "^0.5.0",
     "lodash": "^4.15.0",
-    "mocha": "^3.0.2"
+    "mocha": "^3.0.2",
+    "rimraf": "^2.5.4"
   },
   "babel": {
     "presets": [
