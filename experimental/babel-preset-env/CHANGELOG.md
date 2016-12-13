@@ -16,7 +16,11 @@ Example:
         "browsers": ["last 2 versions", "safari >= 7"]
       },
       "include": ["transform-es2015-arrow-functions"],
-      "exclude": ["transform-regenerator"],
+      "exclude": [
+        "transform-regenerator",
+        "transform-async-to-generator",
+        "map"
+      ],
       "useBuiltIns": true
     }]
   ]
