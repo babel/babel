@@ -1,5 +1,51 @@
 # Changelog
 
+## v1.1.0 (2016-12-13)
+
+### :rocket: New Feature
+
+- Add `exclude` option, rename `whitelist` to `include` ([#89](https://github.com/babel/babel-preset-env/pull/89)) (@hzoo)
+
+Example:
+
+```js
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "browsers": ["last 2 versions", "safari >= 7"]
+      },
+      "include": ["transform-es2015-arrow-functions"],
+      "exclude": ["transform-regenerator"],
+      "useBuiltIns": true
+    }]
+  ]
+}
+```
+
+`"exclude": ["transform-regenerator"]` doesn't transform generators and removes `regeneratorRuntime` from being imported.
+
+`"exclude": ["transform-async-to-generator"]` doesn't use the built-in async-to-gen transform so you can use something like [fast-async](https://github.com/MatAtBread/fast-async).
+
+`"exclude": ["map"]` doesn't include the `Map` polyfill if you know you aren't using it in your code (w/ `useBuiltIns`). (We will figure out a way to automatically do this [#84](https://github.com/babel/babel-preset-env/issues/84)).
+
+If you pass a wrong plugin it will error: valid options for `include/exclude` are in [/data/plugin-features.js](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) and [/data/built-in-features.js](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js) (without the `es6.`)
+
+### :house: Internal
+
+- Optimize result filtration. ([#77](https://github.com/babel/babel-preset-env/pull/77)) (@yavorsky)
+- Update eslint config to align with other babel projects ([#79](https://github.com/babel/babel-preset-env/pull/79)) (@baer)
+- Update pathnames to avoid uppercase ([#80](https://github.com/babel/babel-preset-env/pull/80)) (@baer)
+- Refactor build data for clarity/consistency ([#81](https://github.com/babel/babel-preset-env/pull/81)) (@baer)
+- Update linting rules to cover all js ([#82](https://github.com/babel/babel-preset-env/pull/82)) (@baer)
+- Cleanup lib before rebuilding ([#87](https://github.com/babel/babel-preset-env/pull/87)) (@baer)
+- Move linting dependency to be dev only ([#88](https://github.com/babel/babel-preset-env/pull/88)) (@baer)
+
+### :memo: Documentation
+
+- Fix typo ([#78](https://github.com/babel/babel-preset-env/pull/78)) (@rohmanhm)
+- Fix PR link in changelog. ([#75](https://github.com/babel/babel-preset-env/pull/75)) (@nhajidin)
+
 ## v1.0.2 (2016-12-10)
 
 ### :bug: Bug Fix
