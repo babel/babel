@@ -14,6 +14,7 @@
   <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/master.svg?style=flat"></a>
   <a href="https://slack.babeljs.io/"><img alt="Slack Status" src="https://slack.babeljs.io/badge.svg"></a>
   <a href="https://www.npmjs.com/package/babel-core"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/babel-core.svg"></a>
+  <a href="https://cdnjs.com/libraries/6to5"><img alt="cdnjs" src="https://img.shields.io/cdnjs/v/6to5.svg"></a>
 </p>
 
 Babel is a community-driven tool that helps you write the latest version of JavaScript.
