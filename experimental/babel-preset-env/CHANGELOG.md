@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.1 (2016-12-13)
+
+### :bug: Bug Fix
+
+Regression with the previous release due to using `Object.values` (ES2017). This wasn't caught because we are using babel-register to run tests and includes polyfills so it didn't fail on CI even though we have Node 0.10 as an env. Looking into fixing this to prevent future issues.
+
 ## v1.1.0 (2016-12-13)
 
 ### :rocket: New Feature
