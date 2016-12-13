@@ -2,7 +2,7 @@
   "presets": [
     ["../../../../lib", {
       "targets": {},
-      "whitelist": ["transform-es2015-modules-commonjs"],
+      "include": ["transform-es2015-modules-commonjs"],
       "modules": false
     }]
   ]

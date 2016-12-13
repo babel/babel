@@ -1,0 +1,9 @@
+{
+  "presets": [
+    ["../../../../lib", {
+      "modules": false,
+      "useBuiltIns": true,
+      "exclude": ["transform-regenerator"]
+    }]
+  ]
+}

@@ -1,4 +1,5 @@
 import pluginList from "../data/plugins.json";
+import pluginFeatures from "../data/plugin-features";
 import builtInsList from "../data/built-ins.json";
 import browserslist from "browserslist";
 import transformPolyfillRequirePlugin from "./transform-polyfill-require-plugin";
@@ -10,6 +11,12 @@ export const MODULE_TRANSFORMATIONS = {
   "systemjs": "transform-es2015-modules-systemjs",
   "umd": "transform-es2015-modules-umd"
 };
+
+export const validIncludesAndExcludes = [
+  ...Object.keys(pluginFeatures),
+  ...Object.values(MODULE_TRANSFORMATIONS),
+  ...Object.keys(builtInsList).slice(4) // remove the `es6.`
+];
 
 /**
  * Determine if a transformation is required
@@ -156,27 +163,45 @@ export const validateModulesOption = (modulesOpt = "commonjs") => {
   return modulesOpt;
 };
 
-export const validateWhitelistOption = (whitelistOpt = []) => {
-  if (!Array.isArray(whitelistOpt)) {
-    throw new Error(`The 'whitelist' option must be an Array<string> of plugins
-      {
-        "presets": [
-          ["env", {
-            "targets": {
-              "chrome": 50
-            },
-            "whitelist": ["transform-es2015-arrow-functions"]
-          }]
-        ]
-      }
-      was passed "${whitelistOpt}" instead
-    `);
+export function validatePluginsOption(opts = [], type) {
+  if (!Array.isArray(opts)) {
+    throw new Error(`The '${type}' option must be an Array<string> of plugins/built-ins`);
   }
 
-  return whitelistOpt;
-};
+  let unknownOpts = [];
+  opts.forEach((opt) => {
+    if (validIncludesAndExcludes.indexOf(opt) === -1) {
+      unknownOpts.push(opt);
+    }
+  });
+
+  if (unknownOpts.length > 0) {
+    throw new Error(`Invalid plugins/built-ins '${unknownOpts}' passed to '${type}' option.
+      Check data/[plugin-features|built-in-features].js in babel-preset-env`);
+  }
+
+  return opts;
+}
+
+const validateIncludeOption = (opts) => validatePluginsOption(opts, "include");
+const validateExcludeOption = (opts) => validatePluginsOption(opts, "exclude");
+
+export function checkDuplicateIncludeExcludes(include, exclude) {
+  let duplicates = [];
+  include.forEach((opt) => {
+    if (exclude.indexOf(opt) >= 0) {
+      duplicates.push(opt);
+    }
+  });
+
+  if (duplicates.length > 0) {
+    throw new Error(`Duplicate plugins/built-ins: '${duplicates}' found
+      in both the "include" and "exclude" options.`);
+  }
+}
 
 let hasBeenLogged = false;
+let hasBeenWarned = false;
 
 const logPlugin = (plugin, targets, list) => {
   const envList = list[plugin];
@@ -192,7 +217,15 @@ const logPlugin = (plugin, targets, list) => {
 export default function buildPreset(context, opts = {}) {
   const loose = validateLooseOption(opts.loose);
   const moduleType = validateModulesOption(opts.modules);
-  const whitelist = validateWhitelistOption(opts.whitelist);
+  // TODO: remove whitelist in favor of include in next major
+  if (opts.whitelist && !hasBeenWarned) {
+    hasBeenWarned = true;
+    console.warn(`The "whitelist" option has been deprecated
+    in favor of "include" to match the newly added "exclude" option (instead of "blacklist").`);
+  }
+  const include = validateIncludeOption(opts.whitelist || opts.include);
+  const exclude = validateExcludeOption(opts.exclude);
+  checkDuplicateIncludeExcludes(include, exclude);
   const targets = getTargets(opts.targets);
   const debug = opts.debug;
   const useBuiltIns = opts.useBuiltIns;
@@ -226,7 +259,10 @@ export default function buildPreset(context, opts = {}) {
     }
   }
 
-  const allTransformations = [...transformations, ...whitelist];
+  const allTransformations = transformations
+  .filter((plugin) => exclude.indexOf(plugin) === -1)
+  .concat(include);
+
   const regenerator = allTransformations.indexOf("transform-regenerator") >= 0;
   const modulePlugin = moduleType !== false && MODULE_TRANSFORMATIONS[moduleType];
   const plugins = [];

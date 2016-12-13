@@ -2,7 +2,7 @@ function isPolyfillSource(value) {
   return value === "babel-polyfill" || value === "core-js";
 }
 
-const whitelist = [
+const alwaysInclude = [
   "web.timers",
   "web.immediate",
   "web.dom.iterable"
@@ -70,7 +70,7 @@ export default function ({ types: t }) {
         }
 
         path.replaceWithMultiple(
-          createImports([...state.opts.polyfills, ...whitelist], "import", state.opts.regenerator)
+          createImports([...state.opts.polyfills, ...alwaysInclude], "import", state.opts.regenerator)
         );
       }
     },
@@ -91,7 +91,7 @@ to the "transform-polyfill-require" plugin
           }
 
           bodyPath.replaceWithMultiple(
-            createImports([...state.opts.polyfills, ...whitelist], "require", state.opts.regenerator)
+            createImports([...state.opts.polyfills, ...alwaysInclude], "require", state.opts.regenerator)
           );
         }
       });
