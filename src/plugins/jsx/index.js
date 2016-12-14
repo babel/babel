@@ -261,8 +261,8 @@ pp.jsxParseAttributeValue = function() {
 // at the beginning of the next one (right brace).
 
 pp.jsxParseEmptyExpression = function() {
-  let node = this.startNodeAt(this.lastTokEnd, this.lastTokEndLoc);
-  return this.finishNodeAt(node, "JSXEmptyExpression", this.start, this.startLoc);
+  let node = this.startNodeAt(this.state.lastTokEnd, this.state.lastTokEndLoc);
+  return this.finishNodeAt(node, "JSXEmptyExpression", this.state.start, this.state.startLoc);
 };
 
 // Parse JSX spread child
