@@ -118,6 +118,7 @@ function runExec(opts, execCode) {
     transform: babel.transform,
     opts,
     exports: {},
+    require
   };
 
   let fn = new Function(...Object.keys(sandbox), execCode);
