@@ -47,6 +47,8 @@ export default class Buffer {
 
     if (map) {
       Object.defineProperty(result, "map", {
+        configurable: true,
+        enumerable: true,
         get() {
           return this.map = map.get();
         },
