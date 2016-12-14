@@ -107,22 +107,23 @@ export default function () {
       let remap = this.remaps[name];
       if (!spec && !remap) return;
 
-      // redeclared in this scope
-      if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
-
       if (spec) {
         if (name === "exports" && !path.node[REASSIGN_REMAP_SKIP] &&
           // Apparently replacing "module.exports" still visits the ".exports" here
           !(this.remaps[".module"] && t.isIdentifier(path.parent, this.remaps[".module"])) &&
           // Avoid entering when it's just some other object key named export
-          !(isExports(path.parent) && t.isMemberExpression(path.parent.parent))) {
+          !(isExports(path.parent) && t.isMemberExpression(path.parent.parent)) &&
+          // not shadowed
+          this.scope.getBinding(name) === path.scope.getBinding(name)
+        ) {
           remap = this.remaps[".exports"] = this.remaps[".exports"] || path.scope.generateUidIdentifier("exports");
           path.replaceWith(remap);
           commonjsExportsMasked.exports = remap;
           return;
         }
         if (name === "module" && !path.node[REASSIGN_REMAP_SKIP] &&
-          !(isModuleObj(path.parent) && !path.parent[REASSIGN_REMAP_SKIP] && !t.isMemberExpression(path.parent.parent))) {
+          !(isModuleObj(path.parent) && !path.parent[REASSIGN_REMAP_SKIP] && !t.isMemberExpression(path.parent.parent)) &&
+          this.scope.getBinding(name) === path.scope.getBinding(name)) {
           remap = this.remaps[".module"] = this.remaps[".module"] || path.scope.generateUidIdentifier("module");
           path.replaceWith(remap);
           commonjsExportsMasked.module = remap;
@@ -131,6 +132,9 @@ export default function () {
 
         if (!remap) return;
       }
+
+      // redeclared in this scope
+      if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
       if (path.parentPath.isCallExpression({ callee: path.node })) {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), remap]));
@@ -533,16 +537,16 @@ export default function () {
             if (namespaceImportSet.size > 0) {
               path.traverse({
                 ReferencedIdentifier(path) {
-                  const name = path.node.name;
-
-                  // redeclared in this scope
-                  if (scope.getBinding(name) !== path.scope.getBinding(name)) return;
-
                   if (
                     t.isMemberExpression(path.parent) &&
                     t.isIdentifier(path.parent.object) &&
                     namespaceImportSet.has(path.parent.object.name)
                   ) {
+                    const name = path.parent.object.name;
+
+                    // redeclared in this scope
+                    if (!scope.getBinding(name) !== path.scope.getBinding(name)) return;
+
                     const { property, computed } = path.parent;
 
                     if (computed && !t.isStringLiteral(property)) {
