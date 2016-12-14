@@ -1,5 +1,5 @@
-const babel = require("../../babel-core");
-const vm = require("vm");
+import * as babel from "../../babel-core";
+import vm from "vm";
 
 const extraPlugins = [];
 
@@ -25,70 +25,67 @@ function prepareExtraPlugins () {
 
 prepareExtraPlugins();
 
-module.exports.Runner = function Runner (initialModules) {
-  if (!(this instanceof Runner)) {
-    throw new Error("Runner can only be instantiated");
+export class Runner {
+
+  constructor (initialModules) {
+    this.modules = {};
+    this.cache = {};
+    this.babelConfig = {
+      "plugins": [
+        [require("../"), {spec: true}],
+      ].concat(extraPlugins),
+      "ast": false,
+    };
+    this.fallbackRequire = null;
+
+    if (initialModules != null) {
+      this.addModules(initialModules);
+    }
   }
 
-  this.modules = {};
-  this.cache = {};
-  this.babelConfig = {
-    "plugins": [
-      [require("../"), {spec: true}],
-    ].concat(extraPlugins),
-    "ast": false,
-  };
-  this.fallbackRequire = null;
-
-  if (initialModules != null) {
-    this.addModules(initialModules);
-  }
-};
-
-module.exports.Runner.prototype = {
-  addModule: function (name, code) {
+  addModule (name, code) {
     this.modules[name] = code;
-  },
+  }
 
-  addModules: function (dict) {
+  addModules (dict) {
     for (const key in dict) {
       if (!Object.prototype.hasOwnProperty.call(dict, key)) continue;
       this.addModule(key, dict[key]);
     }
-  },
+  }
 
-  addToCache: function (name, context) {
+  addToCache (name, context) {
     if (! (context && context.module && "exports" in context.module)) {
       throw new Error("The context to cache must have a module.exports");
     }
     this.cache[name] = context;
-  },
+  }
 
-  getExportsOf: function (name) {
+  getExportsOf (name) {
     if (! (name in this.cache || name in this.modules)) {
       throw new Error("Unknown module " + name + " requested");
     }
     return this.contextRequire(name);
-  },
+  }
 
-  transformAndRun: function (code) {
+  transformAndRun (code) {
     return this.transformAndRunInNewContext(code, this.makeContext());
-  },
+  }
 
-  transformAndRunInNewContext: function (code, context) {
+  transformAndRunInNewContext (code, context) {
     code = babel.transform(code, this.babelConfig).code;
     vm.runInNewContext(code, context);
 
     return context.module.exports;
-  },
+  }
 
-  makeContext: function () {
+  makeContext () {
     const context = { module: { exports: {} }, require: this.contextRequire.bind(this) };
     context.exports = context.module.exports;
     return context;
-  },
+  }
 
-  contextRequire: function (id) {
+  contextRequire (id) {
     if (id in this.cache) {
       return this.cache[id].module.exports;
     }
@@ -104,16 +101,16 @@ module.exports.Runner.prototype = {
     }
     throw new Error("Unmocked module " + id + " required");
   }
-};
+}
 
-let hasToStringTag = null;
-module.exports.hasToStringTag = function () {
-  if (hasToStringTag != null) {
-    return hasToStringTag;
+let hasToStringTagResult = null;
+export function hasToStringTag () {
+  if (hasToStringTagResult != null) {
+    return hasToStringTagResult;
   }
 
   const context = { module: { exports : {} } };
   vm.runInNewContext("module.exports = typeof Symbol === 'function' && Symbol.toStringTag", context);
-  hasToStringTag = typeof context.module.exports === "symbol";
-  return hasToStringTag;
-};
+  hasToStringTagResult = typeof context.module.exports === "symbol";
+  return hasToStringTagResult;
+}
