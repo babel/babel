@@ -13,7 +13,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
-## v6.20.2 (2016-12-08)
+## v6.20.3 (2016-12-08)
 
 ## :cry: Regression
 
