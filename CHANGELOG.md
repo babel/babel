@@ -15,20 +15,20 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 ## v6.20.3 (2016-12-08)
 
-## :cry: Regression
+#### :cry: Regression
 
 * `babel-plugin-transform-async-to-generator`
  * [#4978](https://github.com/babel/babel/pull/4978) Calculate the correct arity for async functions with destructuring. (fixes [#4977](https://github.com/babel/babel/issues/4977)) ([@loganfsmyth](https://github.com/loganfsmyth))
 
 ## v6.20.2 (2016-12-08)
 
-## :cry: Regression
+#### :cry: Regression
 
 Issue: https://github.com/babel/babel/issues/4972 again. Fixed by reverting part of the original PR in [babel/babel#4883](https://github.com/babel/babel/pull/4883).
 
 ## v6.20.1 (2016-12-08)
 
-## :cry: Regression
+#### :cry: Regression
 
 Issue: https://github.com/babel/babel/issues/4972
 
