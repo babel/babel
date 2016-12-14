@@ -77,6 +77,10 @@ export default class Plugin extends Store {
 
     this.maybeInherit(loc);
 
+    if (this.raw._c) {
+      throw new Error(`Plugin ${JSON.stringify(i)} specified ${JSON.stringify(loc)} appears to be a different plugin instance. Possible duplicate babel-core versions.`);
+    }
+
     for (let key in this.raw) {
       throw new Error(messages.get("pluginInvalidProperty", loc, i, key));
     }
