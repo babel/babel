@@ -360,15 +360,15 @@ export default function () {
           this.addHelper("specRequireInterop");
           this.addHelper("specImportCheck");
 
-          addImportDependency(path, state);
-
-          try {
-            path.remove();
-          } catch (e) {
+          if (state.ranCommonJS && !state.importMap.has(path.node.source.value)) {
             throw new Error(
               `Invalid import ${JSON.stringify(path.node.source.value)} created after commonjs transform finished executing`
             );
           }
+
+          addImportDependency(path, state);
+
+          path.remove();
         }
       },
 
