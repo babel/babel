@@ -56,7 +56,7 @@ Ref: [#14](https://github.com/babel/babel-preset-env/issues/14)
 
 If you are targeting IE 8 and Chrome 55 it will include all plugins required by IE 8 since you would need to support both still.
 
-### Support a target option `"node": "current"` to only compile for the currently running node version.
+### Support a target option `"node": "current"` to compile for the currently running node version.
 
 For example, if you are building on Node 4, arrow functions won't be converted, but they will if you build on Node 0.12.
 
@@ -102,7 +102,7 @@ The [data](https://github.com/babel/babel-preset-env/blob/master/data/plugins.js
 
 `number | "current" | true`
 
-If you want to compile against the current node version, you can specify `"node": true` or `"node": "current"` which would be the same as `"node": parseFloat(process.versions.node)`.
+If you want to compile against the current node version, you can specify `"node": true` or `"node": "current"`, which would be the same as `"node": parseFloat(process.versions.node)`.
 
 ### `targets.browsers`
 
