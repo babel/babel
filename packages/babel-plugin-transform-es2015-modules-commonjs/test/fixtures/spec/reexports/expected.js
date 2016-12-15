@@ -15,6 +15,14 @@ if (typeof Symbol === "function" && Symbol.toStringTag) {
 }
 
 Object.defineProperties(exports, {
+  renamed: {
+    enumerable: true,
+
+    get() {
+      return _elsewhere.stuff;
+    }
+
+  },
   namespace: {
     enumerable: true,
 
@@ -27,7 +35,7 @@ Object.defineProperties(exports, {
     enumerable: true,
 
     get() {
-      return _elsewhere.stuff;
+      return _somewhereElse.stuff;
     }
 
   },
@@ -43,24 +51,21 @@ Object.defineProperties(exports, {
 
 const _ownExports = Object.keys(exports);
 
-var _iDontKnow = babelHelpers.specRequireInterop(require('./i-dont-know'));
+const _iDontKnow = babelHelpers.specRequireInterop(require('./i-dont-know'));
 
-Object.keys(_iDontKnow).forEach(function (key) {
-  if (key === "__esModule" || key === "default" || _ownExports.indexOf(key) >= 0) return;
-  if (key in exports && (exports[key] === _iDontKnow[key] || typeof exports[key] === 'number' && isNaN(exports[key]))) return;
-  Object.defineProperty(exports, key, {
-    enumerable: true,
-
-    get() {
-      return _iDontKnow[key];
-    }
-
-  });
-});
+babelHelpers.specNamespaceSpread(exports, _ownExports, _iDontKnow);
 (Object.freeze || Object)(exports);
 
-var _because = babelHelpers.specRequireInterop(require('./because'));
+const _somewhere = babelHelpers.specRequireInterop(require('./somewhere'));
 
-var _somewhere = babelHelpers.specRequireInterop(require('./somewhere'));
+const _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));
 
-var _elsewhere = babelHelpers.specRequireInterop(require('./elsewhere'));
+babelHelpers.specImportCheck(_elsewhere, ['stuff']);
+
+const _somewhereElse = babelHelpers.specRequireInterop(require('./somewhereElse'));
+
+babelHelpers.specImportCheck(_somewhereElse, ['stuff']);
+
+const _because = babelHelpers.specRequireInterop(require('./because'));
+
+babelHelpers.specImportCheck(_because, ['default']);

@@ -148,11 +148,15 @@ describe("spec reexport star with duplicates", function () {
   it("throws when not shadowed and duplicate is not SameValue", function () {
     assert.throws(function () {
       runner.transformAndRun("export * from 'a'\nexport * from 'b'");
-    }, "Cannot redefine property: name");
+    }, /Cannot redefine property: name$/);
   });
 
   describe("SameValue", function () {
-    const exports = runner.transformAndRun("export * from 'aSame'\nexport * from 'bSame'");
+    let exports;
+
+    before(function () {
+      exports = runner.transformAndRun("export * from 'aSame'\nexport * from 'bSame'");
+    });
 
     it("has the correct value", function () {
       assert.strictEqual(exports.name, "name");
@@ -160,7 +164,11 @@ describe("spec reexport star with duplicates", function () {
   });
 
   describe("shadowed reexport", function () {
-    const exports = runner.transformAndRun("export * from 'a'\nexport * from 'b'\nexport const name = 'foo'");
+    let exports;
+
+    before(function () {
+      exports = runner.transformAndRun("export * from 'a'\nexport * from 'b'\nexport const name = 'foo'");
+    });
 
     it("has the correct value", function () {
       assert.strictEqual(exports.name, "foo");

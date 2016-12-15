@@ -442,6 +442,67 @@ helpers.specRequireInterop = template(`
   })
 `);
 
+helpers.specImportCheck = template(`
+  (function (module, imports) {
+    if (!module.__esModule) throw new Error("Only ES modules can be checked");
+    var invalid = imports.filter(function (i) { return !Object.prototype.propertyIsEnumerable.call(module, i) });
+    if (invalid.length > 0) {
+      var error = new Error(
+        "Unknown export" + (invalid.length > 1 ? "s " : " ") +
+        JSON.stringify(invalid) +
+        " imported"
+      );
+      error.module = module;
+      throw error;
+    }
+  })
+`);
+
+// The name && typeof Symbol === "function" && ... line is from helpers.typeof, which may be needed
+// when polyfilled. Helpers might not be transformed when using external-helpers, so can't rely on
+// the typeof being augmented when targeting ES5.
+helpers.specNamespaceGet = template(`
+  (function (module, name) {
+    if (!module.__esModule) throw new Error("Only ES modules can be checked");
+    if (
+      typeof name === "symbol" ||
+      name && typeof Symbol === "function" && name.constructor === Symbol && name !== Symbol.prototype
+    ) {
+      return module[name];
+    }
+    if (!Object.prototype.propertyIsEnumerable.call(module, name)) {
+      throw new Error("Unknown export " + JSON.stringify(name) + " imported");
+    }
+    return module[name];
+  })
+`);
+
+// sameValue function based on core-js's SameValue implementation
+// https://github.com/zloirock/core-js/blob/693767b/modules/_same-value.js
+helpers.specNamespaceSpread = template(`
+  (function (exports, ownExports, module) {
+    if (!module.__esModule) throw new Error("Only ES modules can be spread");
+    for (var key in module) {
+      if (!Object.prototype.hasOwnProperty.call(module, key)) continue;
+      if (key === "__esModule" || key === "default" || ownExports.indexOf(key) >= 0) continue;
+      if (key in exports && sameValue(exports[key], module[key])) continue;
+
+      Object.defineProperty(exports, key, {
+        enumerable: true,
+        get: (function (key) {
+          return function () {
+            return module[key];
+          }
+        })(key)
+      });
+    }
+
+    function sameValue(x, y) {
+      return x === y ? x !== 0 || 1 / x === 1 / y : x != x && y != y;
+    }
+  })
+`);
+
 helpers.newArrowCheck = template(`
   (function (innerThis, boundThis) {
     if (innerThis !== boundThis) {

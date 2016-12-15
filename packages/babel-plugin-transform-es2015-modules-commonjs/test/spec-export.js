@@ -240,31 +240,31 @@ describe("spec export", function () {
     it("throws when generating duplicate default exports", function () {
       assert.throws(function () {
         runner.transformAndRun("export default class {}\nexport default class {}");
-      });
+      }, SyntaxError);
     });
 
     it("throws when generating duplicate default export via renaming", function () {
       assert.throws(function () {
         runner.transformAndRun("var foo\nexport default foo\nexport { foo as default }");
-      });
+      }, SyntaxError);
     });
 
     it("throws when generating duplicate exports in the same specifier", function () {
       assert.throws(function () {
         runner.transformAndRun("export var foo, foo");
-      });
+      }, SyntaxError);
     });
 
     it("throws when generating duplicate named exports in the same specifier", function () {
       assert.throws(function () {
         runner.transformAndRun("const foo = 'foo'\nexport { foo, foo }");
-      });
+      }, SyntaxError);
     });
 
     it("throws when generating duplicate renamed exports", function () {
       assert.throws(function () {
         runner.transformAndRun("const foo = 'foo'\nconst bar = 'bar'\nexport { foo, bar as foo }");
-      });
+      }, SyntaxError);
     });
 
     // babel extension; check for the flag used to distinguish
@@ -272,7 +272,7 @@ describe("spec export", function () {
     it("throws when attempting to export __esModule", function () {
       assert.throws(function () {
         runner.transformAndRun("const __esModule = false\nexport { __esModule }");
-      });
+      }, SyntaxError);
     });
   });
 });
