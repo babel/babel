@@ -2,7 +2,9 @@
 
 > A Babel preset that can automatically determine the Babel plugins and polyfills you need based on your supported environments.
 
-`npm install babel-preset-env --save-dev`
+```sh
+npm install babel-preset-env --save-dev
+```
 
 ```js
 {
