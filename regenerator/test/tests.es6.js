@@ -2695,3 +2695,37 @@ describe("expressions containing yield subexpressions", function() {
     });
   });
 });
+
+describe("object properties", function () {
+  it("should work if the generator is a simple object property", function () {
+    var obj = {
+      gen: function*(x) {
+        yield x;
+      }
+    };
+
+    check(obj.gen("oyez"), ["oyez"]);
+  });
+
+  it("should work if the generator is a shorthand object method", function () {
+    var obj = {
+      *gen(x) {
+        yield x;
+      }
+    };
+
+    check(obj.gen("oyez"), ["oyez"]);
+  });
+
+  it("should work if the generator is a shorthand computed object method", function () {
+    var fnName = "gen";
+    var obj = {
+      *[fnName](x) {
+        yield x;
+      }
+    };
+
+    check(obj.gen("oyez"), ["oyez"]);
+  });
+
+})
