@@ -50,13 +50,15 @@ This should be straightforward to do in most cases. There might be cases were pl
 
 It won't include `stage-x` plugins. env will support all plugins in what we consider the latest version of Javascript (by matching what we do in [`babel-preset-latest`](http://babeljs.io/docs/plugins/preset-latest/)).
 
-Support a node option `"node": "current"` to only compile for the current running node version.
-
 Ref: [#14](https://github.com/babel/babel-preset-env/issues/14)
 
 ### Determine the lowest common denominator of plugins to be included in the preset
 
 If you are targeting IE 8 and Chrome 55 it will include all plugins required by IE 8 since you would need to support both still.
+
+### Support a target option `"node": "current"` to only compile for the currently running node version.
+
+For example, if you are building on Node 4, arrow functions won't be converted, but they will if you build on Node 0.12.
 
 ### Support a `browsers` option like autoprefixer
 
@@ -100,7 +102,7 @@ The [data](https://github.com/babel/babel-preset-env/blob/master/data/plugins.js
 
 `number | "current" | true`
 
-If you want to compile against the current node version, you can specify `"node": true` or `"node": "current"` which would be the same as `"node": parseFloat(process.versions.node)`
+If you want to compile against the current node version, you can specify `"node": true` or `"node": "current"` which would be the same as `"node": parseFloat(process.versions.node)`.
 
 ### `targets.browsers`
 
@@ -144,7 +146,7 @@ Valid options include any of the [babel plugins](https://github.com/babel/babel-
 
 This option is useful if there is a bug in a native implementation, or a combination of a non-supported feature + a supported one doesn't work.
 
-Ex: Node 4 supports native classes but not spread.
+For example, Node 4 supports native classes but not spread. If `super` is used with a spread argument, then the `transform-es2015-classes` transform needs to be `include`d, as it is not possible to transpile a spread with `super` otherwise.
 
 ### `exclude`
 
@@ -298,7 +300,7 @@ syntax-trailing-function-commas {}
 
 ### Example with `include`/`exclude`
 
-> always include arrow functions, explicitly blacklist generators
+> always include arrow functions, explicitly exclude generators
 
 ```js
 {
@@ -316,7 +318,7 @@ syntax-trailing-function-commas {}
 
 ## Caveats
 
-If you get a `SyntaxError: Unexpected token ...` error if using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-rest-spread) then make sure the plugin is at `v6.19.0`.
+If you get a `SyntaxError: Unexpected token ...` error when using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-rest-spread) transform then make sure the plugin has been updated to, at least, `v6.19.0`.
 
 ## Other Cool Projects
 
