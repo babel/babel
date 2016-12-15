@@ -545,7 +545,7 @@ export default function () {
                     const name = path.parent.object.name;
 
                     // redeclared in this scope
-                    if (!scope.getBinding(name) !== path.scope.getBinding(name)) return;
+                    if (scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
                     const { property, computed } = path.parent;
 
