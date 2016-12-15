@@ -65,11 +65,12 @@ function run(task) {
 
   if (execCode) {
     let execOpts = getOpts(exec);
+    let execDirName = path.dirname(exec.loc);
     result = babel.transform(execCode, execOpts);
     execCode = result.code;
 
     try {
-      resultExec = runExec(execOpts, execCode);
+      resultExec = runExec(execOpts, execCode, execDirName);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);
@@ -110,7 +111,7 @@ function run(task) {
   }
 }
 
-function runExec(opts, execCode) {
+function runExec(opts, execCode, execDirname) {
   let sandbox = {
     ...helpers,
     babelHelpers,
@@ -118,7 +119,9 @@ function runExec(opts, execCode) {
     transform: babel.transform,
     opts,
     exports: {},
-    require
+    require(id) {
+      return require(id[0] === "." ? path.resolve(execDirname, id) : id);
+    }
   };
 
   let fn = new Function(...Object.keys(sandbox), execCode);
