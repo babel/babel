@@ -13,6 +13,141 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.21.0 (2016-12-16)
+
+#### :rocket: New Feature
+* `babel-generator`
+  * [#4979](https://github.com/babel/babel/pull/4979) `babel-generator`: Expose raw mappings. ([@davidaurelio](https://github.com/davidaurelio))
+
+Exposes raw mappings when source map generation is enabled. To avoid the cost of source map generation for consumers of the raw mappings only, `.map` is changed to a getter that generates the source map lazily on first access.
+
+Raw mappings can be useful for post-processing source maps more efficiently by avoiding one decoding/encoding cycle of the b64 vlq mappings. This will be used in the React Native packager.
+
+```js
+let generator = require("babel-generator");
+let generated = generator(ast, { sourceMaps: true }, sources);
+
+// generated.rawMappings
+[
+  {
+    name: undefined,
+    generated: { line: 1, column: 0 },
+    source: "inline",
+    original: { line: 1, column: 0 }
+  },
+  ...
+]
+```
+
+#### :bug: Bug Fix
+* `babel-generator`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`
+  * [#4872](https://github.com/babel/babel/pull/4872) Print Flow optional & type annotations in function params with defaults. ([@danharper](https://github.com/danharper))
+
+Works with generator, transform-flow-comments, flow-strip-types.
+
+```js
+function foo(numVal: number = 2) {}
+```
+
+* `babel-generator`, `babel-plugin-transform-es2015-modules-amd`, `babel-plugin-transform-es2015-modules-umd`
+  * [#4873](https://github.com/babel/babel/pull/4873) Ensure directives get printed in block statements. ([@existentialism](https://github.com/existentialism))
+
+```js
+let blockStatement = t.blockStatement(
+  [],
+  [t.directive(t.directiveLiteral("use strict"))]
+);
+```
+
+* `babel-generator`, `babel-helper-builder-react-jsx`, `babel-plugin-transform-react-jsx`, `babel-types`
+  * [#4988](https://github.com/babel/babel/pull/4988) Add `JSXSpreadChildren` but throw in JSX transform plugin. ([@jridgewell](https://github.com/jridgewell))
+
+Will still error with `Spread children are not supported.`
+
+```js
+<div>{...this.props.children}</div>;
+```
+  
+* `babel-plugin-transform-es2015-block-scoping`, `babel-plugin-transform-react-constant-elements`, `babel-traverse`
+  * [#4940](https://github.com/babel/babel/pull/4940) Fix React constant element bugs. ([@appden](https://github.com/appden))
+
+When multiple declarators are present in a declaration, we want to insert the constant element inside the declaration rather than placing it before because it may rely on a declarator inside that same declaration.
+
+```js
+function render() {
+  const bar = "bar", renderFoo = () => <foo bar={bar} baz={baz} />, baz = "baz";
+  
+  return renderFoo();
+}
+```
+
+When block scoped variables caused the block to be wrapped in a closure, the variable bindings remained in parent function scope, which caused the JSX element to be hoisted out of the closure.
+
+```js
+function render(flag) {
+  if (flag) {
+    let bar = "bar";
+    
+    [].map(() => bar);
+    
+    return <foo bar={bar} />;
+  }
+    
+  return null;
+}
+```
+
+* `babel-plugin-transform-es2015-parameters`
+  * [#3572](https://github.com/babel/babel/pull/3572) Fix default parameter - rest parameter edge case. ([@jridgewell](https://github.com/jridgewell))
+
+Was erroring if the rest parameter shared the same name as a default identifier for a param, needed to be deopt'd.
+
+```js
+const a = 1;
+function rest(b = a, ...a) {
+  assert.equal(b, 1);
+}
+rest(undefined, 2)
+```
+
+* `babel-plugin-transform-es2015-for-of`, `babel-traverse`
+  * [#5007](https://github.com/babel/babel/pull/5007) Bail on sharing comments with siblings if key is a string. ([@existentialism](https://github.com/existentialism))
+
+```js
+myLabel: //woops
+for (let a of b) {
+  continue myLabel;
+}
+```
+
+#### :memo: Documentation
+* Other
+  * [#4989](https://github.com/babel/babel/pull/4989) Fix links in CONTRIBUTING.md. ([@abouthiroppy](https://github.com/abouthiroppy))
+* `babel-plugin-transform-runtime`
+  * [#4991](https://github.com/babel/babel/pull/4991) make installing runtime/transform-runtime clearer [skip ci]. ([@hzoo](https://github.com/hzoo))
+* `babel-plugin-transform-es2015-unicode-regex`
+  * [#4983](https://github.com/babel/babel/pull/4983) Add example to es2015-unicode-regex. ([@existentialism](https://github.com/existentialism))
+
+#### :house: Internal
+* `babel-helper-transform-fixture-test-runner`, `babel-plugin-syntax-trailing-function-commas`
+  * [#4999](https://github.com/babel/babel/pull/4999) babel-helper-transform-fixture-test-runner: pass require as a global. ([@hzoo](https://github.com/hzoo))
+
+Allows running `require()` in exec.js tests like for [babel/babel-preset-env#95](https://github.com/babel/babel-preset-env/pull/95)
+  
+* Other
+  * [#5005](https://github.com/babel/babel/pull/5005) internal: don't run watch with the test env (skip building with code …. ([@hzoo](https://github.com/hzoo))
+
+#### Committers: 9
+- Andrey Marchenko ([Tom910](https://github.com/Tom910))
+- Babel Bot ([babel-bot](https://github.com/babel-bot))
+- Brian Ng ([existentialism](https://github.com/existentialism))
+- Dan Harper ([danharper](https://github.com/danharper))
+- David Aurelio ([davidaurelio](https://github.com/davidaurelio))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- Justin Ridgewell ([jridgewell](https://github.com/jridgewell))
+- Scott Kyle ([appden](https://github.com/appden))
+- Yuta Hiroto ([abouthiroppy](https://github.com/abouthiroppy))
+
 ## v6.20.3 (2016-12-08)
 
 #### :cry: Regression
