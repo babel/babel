@@ -6,19 +6,10 @@ import sourceMap from "source-map";
 
 export default class SourceMap {
   constructor(opts, code) {
-    this._opts     = opts;
-    this._map = new sourceMap.SourceMapGenerator({
-      file: opts.sourceMapTarget,
-      sourceRoot: opts.sourceRoot
-    });
-
-    if (typeof code === "string") {
-      this._map.setSourceContent(opts.sourceFileName, code);
-    } else if (typeof code === "object") {
-      Object.keys(code).forEach((sourceFileName) => {
-        this._map.setSourceContent(sourceFileName, code[sourceFileName]);
-      });
-    }
+    this._cachedMap = null;
+    this._code = code;
+    this._opts = opts;
+    this._rawMappings = [];
   }
 
   /**
@@ -26,7 +17,29 @@ export default class SourceMap {
    */
 
   get() {
-    return this._map.toJSON();
+    if (!this._cachedMap) {
+      const map = this._cachedMap = new sourceMap.SourceMapGenerator({
+        file: this._opts.sourceMapTarget,
+        sourceRoot: this._opts.sourceRoot,
+      });
+
+      const code = this._code;
+      if (typeof code === "string") {
+        map.setSourceContent(this._opts.sourceFileName, code);
+      } else if (typeof code === "object") {
+        Object.keys(code).forEach((sourceFileName) => {
+          map.setSourceContent(sourceFileName, code[sourceFileName]);
+        });
+      }
+
+      this._rawMappings.forEach(map.addMapping, map);
+    }
+
+    return this._cachedMap.toJSON();
+  }
+
+  getRawMappings() {
+    return this._rawMappings.slice();
   }
 
   /**
@@ -52,18 +65,22 @@ export default class SourceMap {
       return;
     }
 
+    this._cachedMap = null;
     this._lastGenLine = generatedLine;
     this._lastSourceLine = line;
     this._lastSourceColumn = column;
 
-    this._map.addMapping({
-      name: identifierName,
+    // We are deliberately not using the `source-map` library here to allow
+    // callers to use these mappings without any overhead
+    this._rawMappings.push({
+      // undefined to allow for more compact json serialization
+      name: identifierName || undefined,
       generated: {
         line: generatedLine,
         column: generatedColumn,
       },
-      source: line == null ? null : filename || this._opts.sourceFileName,
-      original: line == null ? null : {
+      source: line == null ? undefined : filename || this._opts.sourceFileName,
+      original: line == null ? undefined : {
         line: line,
         column: column,
       },
