@@ -46,6 +46,8 @@ export default class Buffer {
     };
 
     if (map) {
+      // The `.map` property is lazy to allow callers to use the raw mappings
+      // without any overhead
       Object.defineProperty(result, "map", {
         configurable: true,
         enumerable: true,

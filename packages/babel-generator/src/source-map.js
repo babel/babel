@@ -70,6 +70,8 @@ export default class SourceMap {
     this._lastSourceLine = line;
     this._lastSourceColumn = column;
 
+    // We are deliberately not using the `source-map` library here to allow
+    // callers to use these mappings without any overhead
     this._rawMappings.push({
       // undefined to allow for more compact json serialization
       name: identifierName || undefined,
