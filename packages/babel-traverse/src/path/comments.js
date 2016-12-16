@@ -5,6 +5,9 @@
  */
 
 export function shareCommentsWithSiblings() {
+  // NOTE: this assumes numbered keys
+  if (typeof this.key === "string") return;
+
   let node = this.node;
   if (!node) return;
 
