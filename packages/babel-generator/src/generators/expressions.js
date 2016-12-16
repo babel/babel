@@ -113,6 +113,10 @@ export function CallExpression(node: Object) {
   this.token(")");
 }
 
+export function Import() {
+  this.word("import");
+}
+
 function buildYieldAwait(keyword: string) {
   return function (node: Object) {
     this.word(keyword);

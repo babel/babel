@@ -12,7 +12,212 @@
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
+
+## v6.20.3 (2016-12-08)
+
+#### :cry: Regression
+
+* `babel-plugin-transform-async-to-generator`
+ * [#4978](https://github.com/babel/babel/pull/4978) Calculate the correct arity for async functions with destructuring. (fixes [#4977](https://github.com/babel/babel/issues/4977)) ([@loganfsmyth](https://github.com/loganfsmyth))
+
+## v6.20.2 (2016-12-08)
+
+#### :cry: Regression
+
+Issue: https://github.com/babel/babel/issues/4972 again. Fixed by reverting part of the original PR in [babel/babel#4883](https://github.com/babel/babel/pull/4883).
+
+## v6.20.1 (2016-12-08)
+
+#### :cry: Regression
+
+Issue: https://github.com/babel/babel/issues/4972
+
+The way that [babel/babel#4883](https://github.com/babel/babel/pull/4883) changed visiting SpreadProperty (which didn't need to modified) caused an infinite loop. Added `path.stop` which ended up not fixing it correctly.
+
+## v6.20.0 (2016-12-08)
+
+> If you missed it, please check out our latest blog post: [The State of Babel](http://babeljs.io/blog/2016/12/07/the-state-of-babel). Talks about where we can possibly move forward as a project and how you can help!
+
+- Maybe fix that crazy babel-generator deopt message you've all probably seen!
+- Change to `babel-code-frame` for [facebookincubator/create-react-app#1101](https://github.com/facebookincubator/create-react-app/issues/1101)
+- Change to `babel-generator` for [webpack/webpack#3413](https://github.com/webpack/webpack/pull/3413)
+- Move implementation of Regenerator back to the original repo.
+
+---
+
+You've probably seen this more than a few times and had no idea what it meant...
+
+```
+[BABEL] Note: The code generator has deoptimised the styling of "app.js" as it exceeds the max of "100KB".
+```
+
+Generating code used to get really slow as file size increased. We've mostly fixed that, but we still automatically fall back to compact output on large files. We're going to bump the limit to 500KB and if there aren't issues just remove it.
+
+---
+
+[Ben Newman, @benjamn](https://github.com/benjamn): wrote [Regenerator](https://github.com/facebook/regenerator) while at Facebook. It used a bunch of other libraries such as `ast-types` but has now been rewritten as a standalone **Babel plugin** (also thanks to [Sebastian's](https://github.com/kittens) previous work in [facebook/regenerator#222](https://github.com/facebook/regenerator/pull/222)). We're also moving the implementation of Regenerator back into the original repository since Ben is the creator/maintainer.
+
+#### :rocket: New Feature
+* `babel-traverse`
+  * [#4876](https://github.com/babel/babel/pull/4876) Add `getBindingIdentifierPaths`/`getOuterBindingIdentifierPaths`. ([@boopathi](https://github.com/boopathi))
+
+Returns `Array<Path>` rather than `Array<Node>`.
+
+- `path.getBindingIdentifierPaths()`
+- `path.getOuterBindingIdentifierPaths()`
+
+```js
+traverse(parse(`
+  var a = 1, {b} = c, [d] = e, function f() {};
+`), {
+  VariableDeclaration(path) {
+    let nodes = path.getBindingIdentifiers(); // a, d, b
+    let paths = path.getBindingIdentifierPaths();
+  },
+  FunctionDeclaration(path) {
+    let outerNodes = path.getOuterBindingIdentifiers(); // f
+    let outerPaths = path.getOuterBindingIdentifierPaths();
+  }
+});
+```
+
+* `babel-code-frame`
+  * [#4913](https://github.com/babel/babel/pull/4913) Add `forceColor` option to `babel-code-frame`. ([@Timer](https://github.com/Timer))
+
+> Forcibly syntax highlight the code as JavaScript (for non-terminals); overrides `highlightCode`. For [facebookincubator/create-react-app#1101](https://github.com/facebookincubator/create-react-app/issues/1101)
+
+Usage
+
+```js
+const result = codeFrame(rawLines, lineNumber, colNumber, {
+  forceColor: true
+});
+```
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-es2015-block-scoping`
+  * [#4880](https://github.com/babel/babel/pull/4880) Add (and fix) failing test of function parameter bindings in a catch block. ([@benjamn](https://github.com/benjamn))
+
+**In**
+
+```js
+try {
+  foo();
+} catch (x) {
+  function harmless(x) {
+    return x;
+  }
+}
+```
+
+**Correct Out**
+
+```js
+try {
+  foo();
+} catch (x) {
+  var harmless = function (x) {
+    return x;
+  };
+}
+```  
+  
+* `babel-helper-remap-async-to-generator`, `babel-plugin-transform-async-generator-functions`, `babel-plugin-transform-async-to-generator`
+  * [#4901](https://github.com/babel/babel/pull/4901) Only base async fn arity on non-default/non-rest params - Closes [#4891](https://github.com/babel/babel/issues/4891). ([@loganfsmyth](https://github.com/loganfsmyth))
+
+```js
+// both length's should be 0
+const foo = (...args) => { }
+console.log(foo.length)  // 0
+const asyncFoo = async (...args) => { }
+console.log(asyncFoo.length)  // 0
+```
+  
+* `babel-generator`, `babel-types`
+  * [#4945](https://github.com/babel/babel/pull/4945) Add `babel-generator` support for `Import`. ([@TheLarkInn](https://github.com/TheLarkInn))
+
+> Relevant for webpack 2 support of `Import`. Just allows Babel to print it correctly.
+
+```js
+import("module.js");
+```
+  
+* `babel-plugin-transform-object-rest-spread`
+  * [#4883](https://github.com/babel/babel/pull/4883) Fix for object-rest with parameters destructuring nested rest. ([@christophehurpeau](https://github.com/christophehurpeau))
+
+```js
+function a5({a3, b2: { ba1, ...ba2 }, ...c3}) {}
+```  
  
+* `babel-traverse`
+  * [#4875](https://github.com/babel/babel/pull/4875) Fix `path.evaluate` for references before declarations. ([@boopathi](https://github.com/boopathi))
+
+```js
+// should deopt if ids are referenced before the bindings
+var a = b + 2; var b = 2 + 2;
+```
+
+* `babel-core`, `babel-generator`, `babel-helper-transform-fixture-test-runner`, `babel-plugin-transform-object-rest-spread`
+  * [#4858](https://github.com/babel/babel/pull/4858) Fix bug + Generate test fixtures if no expected.js. ([@hzoo](https://github.com/hzoo))
+* `babel-types`
+  * [#4853](https://github.com/babel/babel/pull/4853) Preserve null in `babel-types` `t.clone` and `t.deepClone` ([@NTillmann](https://github.com/NTillmann))
+
+#### :nail_care: Polish
+* `babel-generator`
+  * [#4862](https://github.com/babel/babel/pull/4862) Fix identation with empty leading `ObjectTypeProperty`. ([@existentialism](https://github.com/existentialism))
+
+#### :memo: Documentation
+* `Various Packages`
+  * [#4938](https://github.com/babel/babel/pull/4938) Update babel-core documentation. ([@xtuc](https://github.com/xtuc))
+  * [#4939](https://github.com/babel/babel/pull/4939) Add example to transform-react-display-name docs. ([@existentialism](https://github.com/existentialism))
+  * [#4931](https://github.com/babel/babel/pull/4931) Update plugins READMEs from babel.github.io [skip ci]. ([@raspo](https://github.com/raspo))
+  * [#4926](https://github.com/babel/babel/pull/4926) Update transform-es2015 READMEs from babel.github.io [skip ci]. ([@existentialism](https://github.com/existentialism))
+  * [#4930](https://github.com/babel/babel/pull/4930) Update transform-object-rest-spread's README from babel.github.io [skip ci]. ([@lukyth](https://github.com/lukyth))
+  * [#4929](https://github.com/babel/babel/pull/4929) Update transform-object-assign's README from babel.github.io [skip ci]. ([@lukyth](https://github.com/lukyth))
+  * [#4928](https://github.com/babel/babel/pull/4928) mention [skip ci] in PR template. ([@hzoo](https://github.com/hzoo))
+  * [#4925](https://github.com/babel/babel/pull/4925) Tweak example in transform-jsx-source README [skip ci]. ([@existentialism](https://github.com/existentialism))
+  * [#4919](https://github.com/babel/babel/pull/4919) Update async READMEs from babel.github.io [skip-ci]. ([@existentialism](https://github.com/existentialism))
+  * [#4917](https://github.com/babel/babel/pull/4917) Fix some React transform README issues [skip-ci]. ([@existentialism](https://github.com/existentialism))
+  * [#4903](https://github.com/babel/babel/pull/4903) Update React transform READMEs from babel.github.io [skip ci]. ([@existentialism](https://github.com/existentialism))
+  * [#4884](https://github.com/babel/babel/pull/4884) Readme updates from babel.github.io [skip ci]. ([@hzoo](https://github.com/hzoo))
+
+#### :house: Internal
+* `babel-plugin-transform-regenerator`
+  * [#4881](https://github.com/babel/babel/pull/4881) Use `regenerator-transform` to implement `babel-plugin-transform-regenerator`. ([@benjamn](https://github.com/benjamn))
+* `babel-traverse`
+  * [#4934](https://github.com/babel/babel/pull/4934) Hoist `generateDeclaredUidIdentifier` helper function. ([@jridgewell](https://github.com/jridgewell))
+* `babel-polyfill`
+  * [#4966](https://github.com/babel/babel/pull/4966) update `regenerator-runtime` in `babel-polyfill`. ([@zloirock](https://github.com/zloirock))
+* `babel-runtime`
+  * [#4877](https://github.com/babel/babel/pull/4877) Upgrade `regenerator-runtime` to version 0.10.0. ([@benjamn](https://github.com/benjamn))
+* `babel-plugin-syntax-trailing-function-commas`
+  * [#4936](https://github.com/babel/babel/pull/4936) Add `test` to `babel-plugin-syntax-trailing-function-commas` `.npmignore` ([@wtgtybhertgeghgtwtg](https://github.com/wtgtybhertgeghgtwtg))
+* `babel-helper-fixtures`
+  * [#4907](https://github.com/babel/babel/pull/4907) Remove `shouldIgnore` check. ([@danez](https://github.com/danez))
+* `babel-core`, `babel-traverse`
+  * [#4897](https://github.com/babel/babel/pull/4897) Fix eslint. ([@danez](https://github.com/danez))
+* `babel-generator`
+  * [#4965](https://github.com/babel/babel/pull/4965) Raise limit on code size before compacting ([@existentialism](https://github.com/existentialism))
+
+#### Committers: 17
+- Ben Newman ([benjamn](https://github.com/benjamn))
+- Benjamin E. Coe ([bcoe](https://github.com/bcoe))
+- Boopathi Rajaa ([boopathi](https://github.com/boopathi))
+- Brian Ng ([existentialism](https://github.com/existentialism))
+- Christophe Hurpeau ([christophehurpeau](https://github.com/christophehurpeau))
+- Daniel Tschinder ([danez](https://github.com/danez))
+- Denis Pushkarev ([zloirock](https://github.com/zloirock))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- Joe Haddad ([Timer](https://github.com/Timer))
+- Justin Ridgewell ([jridgewell](https://github.com/jridgewell))
+- Kanitkorn Sujautra ([lukyth](https://github.com/lukyth))
+- Logan Smyth ([loganfsmyth](https://github.com/loganfsmyth))
+- Nikolai Tillmann ([NTillmann](https://github.com/NTillmann))
+- Sean Larkin ([TheLarkInn](https://github.com/TheLarkInn))
+- Sven SAULEAU ([xtuc](https://github.com/xtuc))
+- Tommaso ([raspo](https://github.com/raspo))
+- [wtgtybhertgeghgtwtg](https://github.com/wtgtybhertgeghgtwtg)
+
 ## v6.19.0 (2016-11-16)
 
 #### :rocket: New Feature

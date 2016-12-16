@@ -186,4 +186,21 @@ describe("babel-code-frame", function () {
       "  8 | "
     ].join("\n"));
   });
+
+  it("opts.forceColor", function() {
+    let marker = chalk.red.bold;
+    let gutter = chalk.grey;
+
+    let rawLines = [
+      "",
+      "",
+      "",
+      ""
+    ].join("\n");
+    assert.equal(codeFrame(rawLines, 3, null, { linesAbove: 1, linesBelow: 1, forceColor: true }), chalk.reset([
+      " " + gutter(" 2 | "),
+      marker(">") + gutter(" 3 | "),
+      " " + gutter(" 4 | ")
+    ].join("\n")));
+  });
 });

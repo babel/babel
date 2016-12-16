@@ -143,6 +143,27 @@ describe("programmatic generation", function() {
       "}",
     ].join("\n"));
   });
+
+  it("flow object indentation with empty leading ObjectTypeProperty", function() {
+    let objectStatement = t.objectTypeAnnotation(
+      [],
+      [
+        t.objectTypeIndexer(
+          t.identifier("key"),
+          t.anyTypeAnnotation(),
+          t.identifier("Test"),
+        ),
+      ]
+    );
+
+    let output = generate.default(objectStatement).code;
+
+    assert.equal(output, [
+      "{",
+      "  [key: any]: Test;",
+      "}",
+    ].join("\n"));
+  });
 });
 
 describe("whitespace", function () {
@@ -165,19 +186,7 @@ suites.forEach(function (testSuite) {
         if (actualCode) {
           let actualAst = parse(actualCode, {
             filename: actual.loc,
-            plugins: [
-              "jsx",
-              "flow",
-              "doExpressions",
-              "objectRestSpread",
-              "decorators",
-              "classProperties",
-              "exportExtensions",
-              "asyncGenerators",
-              "functionBind",
-              "functionSent",
-              "dynamicImport"
-            ],
+            plugins: ["*"],
             strictMode: false,
             sourceType: "module",
           });

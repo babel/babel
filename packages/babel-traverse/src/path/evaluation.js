@@ -173,6 +173,10 @@ export function evaluate(): { confident: boolean; value: any } {
         return deopt(binding.path);
       }
 
+      if (binding && path.node.start < binding.path.node.end) {
+        return deopt(binding.path);
+      }
+
       if (binding && binding.hasValue) {
         return binding.value;
       } else {

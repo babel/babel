@@ -1,25 +1,27 @@
 import jsTokens from "js-tokens";
 import esutils from "esutils";
-import chalk from "chalk";
+import Chalk from "chalk";
 
 /**
  * Chalk styles for token types.
  */
 
-let defs = {
-  keyword:     chalk.cyan,
-  capitalized: chalk.yellow,
-  jsx_tag:     chalk.yellow,
-  punctuator:  chalk.yellow,
-  // bracket:  intentionally omitted.
-  number:      chalk.magenta,
-  string:      chalk.green,
-  regex:       chalk.magenta,
-  comment:     chalk.grey,
-  invalid:     chalk.white.bgRed.bold,
-  gutter:      chalk.grey,
-  marker:      chalk.red.bold,
-};
+function getDefs(chalk) {
+  return {
+    keyword:     chalk.cyan,
+    capitalized: chalk.yellow,
+    jsx_tag:     chalk.yellow,
+    punctuator:  chalk.yellow,
+    // bracket:  intentionally omitted.
+    number:      chalk.magenta,
+    string:      chalk.green,
+    regex:       chalk.magenta,
+    comment:     chalk.grey,
+    invalid:     chalk.white.bgRed.bold,
+    gutter:      chalk.grey,
+    marker:      chalk.red.bold,
+  };
+}
 
 /**
  * RegExp to test for newlines in terminal.
@@ -75,7 +77,7 @@ function getTokenType(match) {
  * Highlight `text`.
  */
 
-function highlight(text: string) {
+function highlight(defs: Object, text: string) {
   return text.replace(jsTokens, function (...args) {
     let type = getTokenType(args);
     let colorize = defs[type];
@@ -99,11 +101,16 @@ export default function (
 ): string {
   colNumber = Math.max(colNumber, 0);
 
-  let highlighted = opts.highlightCode && chalk.supportsColor;
+  let highlighted = (opts.highlightCode && Chalk.supportsColor) || opts.forceColor;
+  let chalk = Chalk;
+  if (opts.forceColor) {
+    chalk = new Chalk.constructor({ enabled: true });
+  }
   let maybeHighlight = (chalkFn, string) => {
     return highlighted ? chalkFn(string) : string;
   };
-  if (highlighted) rawLines = highlight(rawLines);
+  let defs = getDefs(chalk);
+  if (highlighted) rawLines = highlight(defs, rawLines);
 
   let linesAbove = opts.linesAbove || 2;
   let linesBelow = opts.linesBelow || 3;

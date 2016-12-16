@@ -42,7 +42,7 @@ export default class Renamer {
     let isDefault = exportDeclar.isExportDefaultDeclaration();
 
     if (isDefault && (parentDeclar.isFunctionDeclaration() ||
-        parentDeclar.isClassDeclaration())&& !parentDeclar.node.id) {
+        parentDeclar.isClassDeclaration()) && !parentDeclar.node.id) {
       // Ensure that default class and function exports have a name so they have a identifier to
       // reference from the export specifier list.
       parentDeclar.node.id = parentDeclar.scope.generateUidIdentifier("default");

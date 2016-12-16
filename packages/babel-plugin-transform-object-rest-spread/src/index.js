@@ -1,21 +1,13 @@
 export default function ({ types: t }) {
-  function hasRestProperty(node) {
-    for (let property of (node.properties)) {
-      if (t.isRestProperty(property)) {
-        return true;
+  function hasRestProperty(path) {
+    let foundRestProperty = false;
+    path.traverse({
+      RestProperty() {
+        foundRestProperty = true;
+        path.stop();
       }
-    }
-
-    return false;
-  }
-
-  function variableDeclarationHasRestProperty(node) {
-    for (let declar of (node.declarations)) {
-      if (t.isObjectPattern(declar.id)) {
-        return hasRestProperty(declar.id);
-      }
-    }
-    return false;
+    });
+    return foundRestProperty;
   }
 
   function hasSpread(node) {
@@ -51,7 +43,7 @@ export default function ({ types: t }) {
   }
 
   function replaceRestProperty(paramsPath, i, numParams) {
-    if (paramsPath.isObjectPattern() && hasRestProperty(paramsPath.node)) {
+    if (paramsPath.isObjectPattern() && hasRestProperty(paramsPath)) {
       let parentPath = paramsPath.parentPath;
       let uid = parentPath.scope.generateUidIdentifier("ref");
 
@@ -132,7 +124,7 @@ export default function ({ types: t }) {
       ExportNamedDeclaration(path) {
         let declaration = path.get("declaration");
         if (!declaration.isVariableDeclaration()) return;
-        if (!variableDeclarationHasRestProperty(declaration.node)) return;
+        if (!hasRestProperty(declaration)) return;
 
         let specifiers = [];
 
@@ -154,7 +146,7 @@ export default function ({ types: t }) {
       // ({a, ...b} = c);
       AssignmentExpression(path, file) {
         let leftPath = path.get("left");
-        if (leftPath.isObjectPattern() && hasRestProperty(leftPath.node)) {
+        if (leftPath.isObjectPattern() && hasRestProperty(leftPath)) {
           let nodes = [];
 
           let ref;
@@ -191,10 +183,11 @@ export default function ({ types: t }) {
       // taken from transform-es2015-destructuring/src/index.js#visitor
       ForXStatement(path) {
         let { node, scope } = path;
+        let leftPath = path.get("left");
         let left = node.left;
 
         // for ({a, ...b} of []) {}
-        if (t.isObjectPattern(left) && hasRestProperty(left)) {
+        if (t.isObjectPattern(left) && hasRestProperty(leftPath)) {
           let temp = scope.generateUidIdentifier("ref");
 
           node.left = t.variableDeclaration("var", [

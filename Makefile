@@ -15,19 +15,19 @@ build-dist: build
 	node scripts/generate-babel-types-docs.js
 
 watch: clean
+	rm -rf packages/*/lib
 	./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/eslint packages/*/{src,test}/*.js --format=codeframe
+	./node_modules/.bin/eslint packages/ --format=codeframe
 
 flow:
 	./node_modules/.bin/flow check
 
 fix:
-	./node_modules/.bin/eslint packages/*/{src,test}/*.js --format=codeframe --fix
+	./node_modules/.bin/eslint packages/ --format=codeframe --fix
 
 clean: test-clean
-	rm -rf packages/*/lib
 	rm -rf packages/babel-polyfill/browser*
 	rm -rf packages/babel-polyfill/dist
 	rm -rf coverage
@@ -52,13 +52,13 @@ test: lint test-only
 test-cov: clean
 	# rebuild with test
 	rm -rf packages/*/lib
-	BABEL_ENV=test; ./node_modules/.bin/gulp build
+	BABEL_ENV=test ./node_modules/.bin/gulp build
 	./scripts/test-cov.sh
 
 test-ci:
 	NODE_ENV=test make bootstrap
-	./scripts/test-cov.sh
-	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
+	make test-cov
+	./node_modules/.bin/codecov -f coverage/coverage-final.json
 
 publish:
 	git pull --rebase

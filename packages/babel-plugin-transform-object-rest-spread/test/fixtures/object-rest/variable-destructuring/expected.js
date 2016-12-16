@@ -19,6 +19,9 @@ const z4 = babelHelpers.objectWithoutProperties(z, ["w3", "x3", "y3"]);
 let {
   x: { a: xa, [d]: f }
 } = complex;
+
 let asdf = babelHelpers.objectWithoutProperties(complex.x, ["a", d]),
     d = babelHelpers.objectWithoutProperties(complex.y, []),
     g = babelHelpers.objectWithoutProperties(complex, ["x"]);
+let {} = z;
+let y4 = babelHelpers.objectWithoutProperties(z.x4, []);

@@ -524,7 +524,11 @@ class BlockScoping {
     //
     for (let i = 0; i < declarators.length; i++) {
       let declar = declarators[i];
-      let keys = t.getBindingIdentifiers(declar);
+      // Passing true as the third argument causes t.getBindingIdentifiers
+      // to return only the *outer* binding identifiers of this
+      // declaration, rather than (for example) mistakenly including the
+      // parameters of a function declaration. Fixes #4880.
+      let keys = t.getBindingIdentifiers(declar, false, true);
       extend(this.letReferences, keys);
       this.hasLetReferences = true;
     }

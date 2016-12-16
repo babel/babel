@@ -5,7 +5,7 @@ Allow parsing of the exponentiation operator.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-exponentiation-operator
+npm install --save-dev babel-plugin-syntax-exponentiation-operator
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-syntax-exponentiation-operator
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-exponentiation-operator script.js
+babel --plugins syntax-exponentiation-operator script.js
 ```
 
 ### Via Node API

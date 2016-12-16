@@ -37,6 +37,36 @@ function getCache(path, parentScope, self) {
   }
 }
 
+// Recursively gathers the identifying names of a node.
+function gatherNodeParts(node: Object, parts: Array) {
+  if (t.isModuleDeclaration(node)) {
+    if (node.source) {
+      gatherNodeParts(node.source, parts);
+    } else if (node.specifiers && node.specifiers.length) {
+      for (let specifier of (node.specifiers: Array)) {
+        gatherNodeParts(specifier, parts);
+      }
+    } else if (node.declaration) {
+      gatherNodeParts(node.declaration, parts);
+    }
+  } else if (t.isModuleSpecifier(node)) {
+    gatherNodeParts(node.local, parts);
+  } else if (t.isMemberExpression(node)) {
+    gatherNodeParts(node.object, parts);
+    gatherNodeParts(node.property, parts);
+  } else if (t.isIdentifier(node)) {
+    parts.push(node.name);
+  } else if (t.isLiteral(node)) {
+    parts.push(node.value);
+  } else if (t.isCallExpression(node)) {
+    gatherNodeParts(node.callee, parts);
+  } else if (t.isObjectExpression(node) || t.isObjectPattern(node)) {
+    for (let prop of (node.properties: Array)) {
+      gatherNodeParts(prop.key || prop.argument, parts);
+    }
+  }
+}
+
 //
 
 let collectorVisitor = {
@@ -254,38 +284,8 @@ export default class Scope {
       node = node.key;
     }
 
-    let parts = [];
-
-    let add = function (node) {
-      if (t.isModuleDeclaration(node)) {
-        if (node.source) {
-          add(node.source);
-        } else if (node.specifiers && node.specifiers.length) {
-          for (let specifier of (node.specifiers: Array)) {
-            add(specifier);
-          }
-        } else if (node.declaration) {
-          add(node.declaration);
-        }
-      } else if (t.isModuleSpecifier(node)) {
-        add(node.local);
-      } else if (t.isMemberExpression(node)) {
-        add(node.object);
-        add(node.property);
-      } else if (t.isIdentifier(node)) {
-        parts.push(node.name);
-      } else if (t.isLiteral(node)) {
-        parts.push(node.value);
-      } else if (t.isCallExpression(node)) {
-        add(node.callee);
-      } else if (t.isObjectExpression(node) || t.isObjectPattern(node)) {
-        for (let prop of (node.properties: Array)) {
-          add(prop.key || prop.argument);
-        }
-      }
-    };
-
-    add(node);
+    const parts = [];
+    gatherNodeParts(node, parts);
 
     let id = parts.join("$");
     id = id.replace(/^_/, "") || defaultName || "ref";

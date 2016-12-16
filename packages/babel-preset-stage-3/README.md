@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install --save-dev babel-preset-stage-3
+npm install --save-dev babel-preset-stage-3
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install --save-dev babel-preset-stage-3
 ### Via CLI
 
 ```sh
-$ babel script.js --presets stage-3
+babel script.js --presets stage-3
 ```
 
 ### Via Node API

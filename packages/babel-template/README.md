@@ -7,7 +7,7 @@ In computer science, this is known as an implementation of quasiquotes.
 ## Install
 
 ```sh
-$ npm install babel-template
+npm install --save-dev babel-template
 ```
 
 ## Usage
