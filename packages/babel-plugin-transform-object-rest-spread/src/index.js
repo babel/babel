@@ -75,6 +75,7 @@ export default function ({ types: t }) {
       VariableDeclarator(path, file) {
         if (!path.get("id").isObjectPattern()) { return; }
         const kind = path.parentPath.node.kind;
+        const preNodes = [];
         let nodes = [];
 
         path.traverse({
@@ -86,6 +87,17 @@ export default function ({ types: t }) {
                 ref = t.memberExpression(ref, t.identifier(path.node.key.name));
               } else if (path.isVariableDeclarator()) {
                 return true;
+              }
+            });
+
+            const pattern = path.find((p) => p.isObjectPattern());
+            pattern.traverse({
+              ObjectProperty(path) {
+                if (path.node.computed && !path.scope.isStatic(path.node.key)) {
+                  const temp = path.scope.generateUidIdentifierBasedOnNode(path.node.key);
+                  preNodes.push(t.variableDeclarator(temp, path.node.key));
+                  path.node.key = temp;
+                }
               }
             });
 
@@ -112,9 +124,15 @@ export default function ({ types: t }) {
           originalPath: path
         });
 
-        if (nodes.length > 0) {
-          path.parentPath.getSibling(path.parentPath.key + 1)
+        if (preNodes.length > 0) {
+          path.parentPath.getSibling(path.parentPath.key)
             .insertBefore(
+            t.variableDeclaration(kind === "var" ? "var" : "const", preNodes)
+          );
+        }
+        if (nodes.length > 0) {
+          path.parentPath.getSibling(path.parentPath.key)
+            .insertAfter(
             t.variableDeclaration(kind, nodes)
           );
         }
