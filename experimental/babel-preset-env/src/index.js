@@ -215,7 +215,7 @@ let hasBeenLogged = false;
 let hasBeenWarned = false;
 
 const logPlugin = (plugin, targets, list) => {
-  const envList = list[plugin];
+  const envList = list[plugin] || {};
   const filteredList = Object.keys(targets)
   .reduce((a, b) => {
     a[b] = envList[b];
