@@ -31,9 +31,9 @@ let generated = generator(ast, { sourceMaps: true }, sources);
 [
   {
     name: undefined,
-     generated: { line: 1, column: 0 },
-   source: "inline",
-     original: { line: 1, column: 0 }
+    generated: { line: 1, column: 0 },
+    source: "inline",
+    original: { line: 1, column: 0 }
   },
   ...
 ]
