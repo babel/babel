@@ -3,7 +3,7 @@ import nameFunction from "babel-helper-function-name";
 export default function () {
   return {
     visitor: {
-      "ArrowFunctionExpression|FunctionExpression": {
+      FunctionExpression: {
         exit(path) {
           if (path.key !== "value" && !path.parentPath.isObjectProperty()) {
             let replacement = nameFunction(path);
