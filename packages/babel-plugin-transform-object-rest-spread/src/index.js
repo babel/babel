@@ -176,6 +176,20 @@ export default function ({ types: t }) {
             ]));
           }
 
+          const preNodes = [];
+          leftPath.traverse({
+            ObjectProperty(path) {
+              if (path.node.computed && !path.scope.isStatic(path.node.key)) {
+                const temp = path.scope.generateUidIdentifierBasedOnNode(path.node.key);
+                preNodes.push(t.variableDeclarator(temp, path.node.key));
+                path.node.key = temp;
+              }
+            }
+          });
+          if (preNodes.length > 0) {
+            nodes.push(t.variableDeclaration("var", preNodes));
+          }
+
           let [ argument, callExpression ] = createObjectSpread(
             file,
             path.node.left.properties,
@@ -194,7 +208,6 @@ export default function ({ types: t }) {
           if (ref) {
             nodes.push(t.expressionStatement(ref));
           }
-
           path.replaceWithMultiple(nodes);
         }
       },
