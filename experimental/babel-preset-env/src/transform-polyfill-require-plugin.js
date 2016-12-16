@@ -2,12 +2,6 @@ function isPolyfillSource(value) {
   return value === "babel-polyfill" || value === "core-js";
 }
 
-const alwaysInclude = [
-  "web.timers",
-  "web.immediate",
-  "web.dom.iterable"
-];
-
 export default function ({ types: t }) {
   function createImportDeclaration(polyfill) {
     let declar = t.importDeclaration([], t.stringLiteral(polyfill));
@@ -70,7 +64,7 @@ export default function ({ types: t }) {
         }
 
         path.replaceWithMultiple(
-          createImports([...state.opts.polyfills, ...alwaysInclude], "import", state.opts.regenerator)
+          createImports(state.opts.polyfills, "import", state.opts.regenerator)
         );
       }
     },
@@ -91,7 +85,7 @@ to the "transform-polyfill-require" plugin
           }
 
           bodyPath.replaceWithMultiple(
-            createImports([...state.opts.polyfills, ...alwaysInclude], "require", state.opts.regenerator)
+            createImports(state.opts.polyfills, "require", state.opts.regenerator)
           );
         }
       });

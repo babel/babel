@@ -144,8 +144,6 @@ An array of plugins to always include.
 
 Valid options include any of the [babel plugins](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) or [built-ins](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js), such as `transform-es2015-arrow-functions`, `map`, `set`, or `object.assign`.
 
-> For the built-ins like `es6.typed.data-view` just put `typed.data-view`.
-
 This option is useful if there is a bug in a native implementation, or a combination of a non-supported feature + a supported one doesn't work.
 
 For example, Node 4 supports native classes but not spread. If `super` is used with a spread argument, then the `transform-es2015-classes` transform needs to be `include`d, as it is not possible to transpile a spread with `super` otherwise.
@@ -311,8 +309,8 @@ syntax-trailing-function-commas {}
       "targets": {
         "browsers": ["last 2 versions", "safari >= 7"]
       },
-      "include": ["transform-es2015-arrow-functions"],
-      "exclude": ["transform-regenerator"]
+      "include": ["transform-es2015-arrow-functions", "es6.map"],
+      "exclude": ["transform-regenerator", "es6.set"]
     }]
   ]
 }

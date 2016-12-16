@@ -12,10 +12,17 @@ export const MODULE_TRANSFORMATIONS = {
   "umd": "transform-es2015-modules-umd"
 };
 
+const defaultInclude = [
+  "web.timers",
+  "web.immediate",
+  "web.dom.iterable"
+];
+
 export const validIncludesAndExcludes = [
   ...Object.keys(pluginFeatures),
   ...Object.keys(MODULE_TRANSFORMATIONS).map((m) => MODULE_TRANSFORMATIONS[m]),
-  ...Object.keys(builtInsList).slice(4) // remove the `es6.`
+  ...Object.keys(builtInsList),
+  ...defaultInclude
 ];
 
 /**
@@ -180,7 +187,11 @@ export function validatePluginsOption(opts = [], type) {
       Check data/[plugin-features|built-in-features].js in babel-preset-env`);
   }
 
-  return opts;
+  return {
+    all: opts,
+    plugins: opts.filter((opt) => !opt.match(/^(es\d+|web)\./)),
+    builtIns: opts.filter((opt) => opt.match(/^(es\d+|web)\./))
+  };
 }
 
 const validateIncludeOption = (opts) => validatePluginsOption(opts, "include");
@@ -225,7 +236,7 @@ export default function buildPreset(context, opts = {}) {
   }
   const include = validateIncludeOption(opts.whitelist || opts.include);
   const exclude = validateExcludeOption(opts.exclude);
-  checkDuplicateIncludeExcludes(include, exclude);
+  checkDuplicateIncludeExcludes(include.all, exclude.all);
   const targets = getTargets(opts.targets);
   const debug = opts.debug;
   const useBuiltIns = opts.useBuiltIns;
@@ -236,7 +247,10 @@ export default function buildPreset(context, opts = {}) {
   let polyfills;
   if (useBuiltIns) {
     polyfills = Object.keys(builtInsList)
-      .filter((builtInName) => isPluginRequired(targets, builtInsList[builtInName]));
+      .filter((builtInName) => isPluginRequired(targets, builtInsList[builtInName]))
+      .concat(defaultInclude)
+      .filter((plugin) => exclude.builtIns.indexOf(plugin) === -1)
+      .concat(include.builtIns);
   }
 
   if (debug && !hasBeenLogged) {
@@ -260,8 +274,8 @@ export default function buildPreset(context, opts = {}) {
   }
 
   const allTransformations = transformations
-  .filter((plugin) => exclude.indexOf(plugin) === -1)
-  .concat(include);
+  .filter((plugin) => exclude.plugins.indexOf(plugin) === -1)
+  .concat(include.plugins);
 
   const regenerator = allTransformations.indexOf("transform-regenerator") >= 0;
   const modulePlugin = moduleType !== false && MODULE_TRANSFORMATIONS[moduleType];

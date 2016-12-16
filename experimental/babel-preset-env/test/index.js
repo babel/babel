@@ -8,7 +8,6 @@ const {
   validateModulesOption,
   validateLooseOption,
   validatePluginsOption,
-  validIncludesAndExcludes,
   checkDuplicateIncludeExcludes
 } = babelPresetEnv;
 
@@ -219,14 +218,29 @@ describe("babel-preset-env", () => {
     });
 
     describe("validatePluginsOption", function() {
-      it("should return an empty array if undefined", function() {
-        assert.deepEqual(validatePluginsOption(), []);
+      it("should return empty arrays if undefined", function() {
+        assert.deepEqual(validatePluginsOption(), { all: [], plugins: [], builtIns: [] });
       });
 
-      it("should return itself if in features", function() {
+      it("should return in transforms array", function() {
         assert.deepEqual(
-          validatePluginsOption(validIncludesAndExcludes),
-          validIncludesAndExcludes
+          validatePluginsOption(["transform-es2015-arrow-functions"]),
+          {
+            all: ["transform-es2015-arrow-functions"],
+            plugins: ["transform-es2015-arrow-functions"],
+            builtIns: []
+          }
+        );
+      });
+
+      it("should return in built-ins array", function() {
+        assert.deepEqual(
+          validatePluginsOption(["es6.map"]),
+          {
+            all: ["es6.map"],
+            plugins: [],
+            builtIns: ["es6.map"]
+          }
         );
       });
 
