@@ -17,7 +17,8 @@
     "modules",
     "transpile",
     "transpiler",
-    "var"
+    "var",
+    "babel-core"
   ],
   "scripts": {
     "bench": "make bench",
