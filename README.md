@@ -13,7 +13,42 @@
   <a href="https://circleci.com/gh/babel/babel"><img alt="CircleCI Status" src="https://img.shields.io/circleci/project/babel/babel/master.svg?style=flat&label=circle"></a>
   <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/master.svg?style=flat"></a>
   <a href="https://slack.babeljs.io/"><img alt="Slack Status" src="https://slack.babeljs.io/badge.svg"></a>
+  <a href="https://www.npmjs.com/package/babel-core"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/babel-core.svg"></a>
 </p>
+
+Babel is a community-driven tool that helps you write the latest version of JavaScript.
+
+When your supported environments don't support certain features natively, it will help you compile it down to a supported version.
+
+**In**
+
+```js
+// ES2015 arrow function
+[1,2,3].map(n => n + 1);
+```
+
+**Out**
+
+```js
+[1,2,3].map(function(n) {
+  return n + 1;
+});
+```
+
+Try it out at our [REPL](https://babeljs.io/repl/#?babili=false&evaluate=true&lineWrap=false&presets=latest&code=%5B1%2C2%2C3%5D.map(n%20%3D%3E%20n%20%2B%201)%3B&experimental=true&loose=true&spec=false&playground=false&stage=0) and follow us at [@babeljs](https://twitter.com/babeljs).
+
+- [FAQ](#faq)
+- [Packages](#packages)
+  - [Core Packages](#core-packages)
+  - [Other](#other) 
+  - [Presets](#presets)
+  - [Plugins](#plugins)
+    - [Transform Plugins](#transform-plugins)
+    - [Syntax Plugins](#syntax-plugins)
+  - [Misc Packages](#misc-packages)
+- [License](#license)
+
+# FAQ
 
 ## Docs?
 
@@ -198,7 +233,7 @@ These just enable the transform plugins to be able to parse certain features (th
 
 These are mostly for internal use in various plugins: `babel-helper-x`.
 
-### Misc
+### Misc Packages
 
 - [`babel`](/packages/babel) the deprecated `babel` package on npm that was used in Babel 5.
 - [`babel-messages`](/packages/babel-messages) a package to keep error messages, etc (not always used)

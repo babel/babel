@@ -1,9 +1,32 @@
 # babel-plugin-transform-es2015-modules-systemjs
 
+> This plugin transforms ES2015 modules to [SystemJS](https://github.com/systemjs/systemjs).
+
+## Example
+
+**In**
+
+```javascript
+export default 42;
+```
+
+**Out**
+
+```javascript
+System.register([], function (_export, _context) {
+  return {
+    setters: [],
+    execute: function () {
+      _export("default", 42);
+    }
+  };
+});
+```
+
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-modules-systemjs
+npm install --save-dev babel-plugin-transform-es2015-modules-systemjs
 ```
 
 ## Usage
@@ -32,7 +55,7 @@ $ npm install babel-plugin-transform-es2015-modules-systemjs
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-modules-systemjs script.js
+babel --plugins transform-es2015-modules-systemjs script.js
 ```
 
 ### Via Node API

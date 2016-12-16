@@ -182,7 +182,7 @@ export default class OptionManager {
           this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`, ReferenceError);
         } else {
           let unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
-          let presetConfigErr = `A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:\n\nInvalid:\n  \`{ presets: [{option: value}] }\`\nValid:\n  \`{ presets: [['presetName', {option: value}]] }\`\n\nFor more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.`;
+          let presetConfigErr = "A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:\n\nInvalid:\n  `{ presets: [{option: value}] }`\nValid:\n  `{ presets: [['presetName', {option: value}]] }`\n\nFor more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.";
 
           this.log.error(`${unknownOptErr}\n\n${presetConfigErr}`, ReferenceError);
         }

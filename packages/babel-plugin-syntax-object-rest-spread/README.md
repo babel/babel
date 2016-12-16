@@ -5,7 +5,7 @@ Allow parsing of object rest/spread.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-object-rest-spread
+npm install --save-dev babel-plugin-syntax-object-rest-spread
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-syntax-object-rest-spread
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-object-rest-spread script.js
+babel --plugins syntax-object-rest-spread script.js
 ```
 
 ### Via Node API

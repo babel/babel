@@ -38,7 +38,7 @@ class Generator extends Printer {
  * Normalize generator options, setting defaults.
  *
  * - Detects code indentation.
- * - If `opts.compact = "auto"` and the code is over 100KB, `compact` will be set to `true`.
+ * - If `opts.compact = "auto"` and the code is over 500KB, `compact` will be set to `true`.
  */
 
 function normalizeOptions(code, opts, tokens): Format {
@@ -59,11 +59,13 @@ function normalizeOptions(code, opts, tokens): Format {
     minified: opts.minified,
     concise: opts.concise,
     quotes: opts.quotes || findCommonStringDelimiter(code, tokens),
+    jsonCompatibleStrings: opts.jsonCompatibleStrings,
     indent: {
       adjustMultilineComment: true,
       style: style,
       base: 0
-    }
+    },
+    flowCommaSeparator: opts.flowCommaSeparator,
   };
 
   if (format.minified) {
@@ -76,10 +78,10 @@ function normalizeOptions(code, opts, tokens): Format {
   }
 
   if (format.compact === "auto") {
-    format.compact = code.length > 100000; // 100KB
+    format.compact = code.length > 500000; // 500KB
 
     if (format.compact) {
-      console.error("[BABEL] " + messages.get("codeGeneratorDeopt", opts.filename, "100KB"));
+      console.error("[BABEL] " + messages.get("codeGeneratorDeopt", opts.filename, "500KB"));
     }
   }
 
