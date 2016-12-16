@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.1.4 (2016-12-16)
+
+v1.1.2-v1.1.4
+
+### :bug: Bug Fix
+
+The new `exclude`/`include` options weren't working correctly for built-ins. ([#102](https://github.com/babel/babel-preset-env/pull/102)).
+
+Also fixes an issue with debug option.
+
 ## v1.1.1 (2016-12-13)
 
 ### :bug: Bug Fix
