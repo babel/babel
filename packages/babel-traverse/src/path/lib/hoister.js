@@ -83,7 +83,7 @@ export default class PathHoister {
         if (binding.kind === "param") continue;
 
         // if this binding appears after our attachment point then don't hoist it
-        if (binding.path.getStatementParent().key > path.key) return;
+        if (this.getAttachmentParentForPath(binding.path).key > path.key) return;
       }
     }
 
@@ -105,16 +105,25 @@ export default class PathHoister {
         return scope.path.get("body").get("body")[0];
       } else {
         // doesn't need to be be attached to this scope
-        return this.getNextScopeStatementParent();
+        return this.getNextScopeAttachmentParent();
       }
     } else if (scope.path.isProgram()) {
-      return this.getNextScopeStatementParent();
+      return this.getNextScopeAttachmentParent();
     }
   }
 
-  getNextScopeStatementParent() {
+  getNextScopeAttachmentParent() {
     let scope = this.scopes.pop();
-    if (scope) return scope.path.getStatementParent();
+    if (scope) return this.getAttachmentParentForPath(scope.path);
+  }
+
+  getAttachmentParentForPath(path) {
+    do {
+      if (!path.parentPath ||
+          (Array.isArray(path.container) && path.isStatement()) ||
+          (path.isVariableDeclarator() && path.parentPath.node.declarations.length > 1))
+        return path;
+    } while ((path = path.parentPath));
   }
 
   hasOwnParamBindings(scope) {
@@ -144,10 +153,10 @@ export default class PathHoister {
 
     // generate declaration and insert it to our point
     let uid = attachTo.scope.generateUidIdentifier("ref");
+    let declarator = t.variableDeclarator(uid, this.path.node);
+
     attachTo.insertBefore([
-      t.variableDeclaration("var", [
-        t.variableDeclarator(uid, this.path.node)
-      ])
+      attachTo.isVariableDeclarator() ? declarator : t.variableDeclaration("var", [declarator])
     ]);
 
     let parent = this.path.parentPath;

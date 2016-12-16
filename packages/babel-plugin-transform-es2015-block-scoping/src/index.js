@@ -305,14 +305,14 @@ class BlockScoping {
       this.remap();
     }
 
-    this.updateScopeInfo();
+    this.updateScopeInfo(needsClosure);
 
     if (this.loopLabel && !t.isLabeledStatement(this.loopParent)) {
       return t.labeledStatement(this.loopLabel, this.loop);
     }
   }
 
-  updateScopeInfo() {
+  updateScopeInfo(wrappedInClosure) {
     let scope = this.scope;
     let parentScope = scope.getFunctionParent();
     let letRefs = this.letReferences;
@@ -323,7 +323,12 @@ class BlockScoping {
       if (!binding) continue;
       if (binding.kind === "let" || binding.kind === "const") {
         binding.kind = "var";
-        scope.moveBindingTo(ref.name, parentScope);
+
+        if (wrappedInClosure) {
+          scope.removeBinding(ref.name);
+        } else {
+          scope.moveBindingTo(ref.name, parentScope);
+        }
       }
     }
   }
