@@ -86,11 +86,11 @@ When block scoped variables caused the block to be wrapped in a closure, the var
 ```js
 function render(flag) {
   if (flag) {
-  let bar = "bar";
+    let bar = "bar";
     
-  [].map(() => bar);
+    [].map(() => bar);
     
-  return <foo bar={bar} />;
+    return <foo bar={bar} />;
   }
     
   return null;
