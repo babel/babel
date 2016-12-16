@@ -16,7 +16,7 @@ build-dist: build
 
 watch: clean
 	rm -rf packages/*/lib
-	./node_modules/.bin/gulp watch
+	BABEL_ENV=development ./node_modules/.bin/gulp watch
 
 lint:
 	./node_modules/.bin/eslint packages/ --format=codeframe
