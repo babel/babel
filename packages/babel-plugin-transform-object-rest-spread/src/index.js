@@ -93,7 +93,7 @@ export default function ({ types: t }) {
             const pattern = path.find((p) => p.isObjectPattern());
             pattern.traverse({
               ObjectProperty(path) {
-                if (path.node.computed && !path.scope.isStatic(path.node.key)) {
+                if (path.node.computed && !path.scope.isStatic(path.node.key) && !t.isIdentifier(path.node.key)) {
                   const temp = path.scope.generateUidIdentifierBasedOnNode(path.node.key);
                   preNodes.push(t.variableDeclarator(temp, path.node.key));
                   path.node.key = temp;
@@ -179,7 +179,7 @@ export default function ({ types: t }) {
           const preNodes = [];
           leftPath.traverse({
             ObjectProperty(path) {
-              if (path.node.computed && !path.scope.isStatic(path.node.key)) {
+              if (path.node.computed && !path.scope.isStatic(path.node.key) && !t.isIdentifier(path.node.key)) {
                 const temp = path.scope.generateUidIdentifierBasedOnNode(path.node.key);
                 preNodes.push(t.variableDeclarator(temp, path.node.key));
                 path.node.key = temp;
