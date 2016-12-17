@@ -9,7 +9,7 @@ import { transform } from 'babel-core';
 import * as babel from 'babel-core';
 ```
 
-All transformation will use your local configuration files (.babelrc or in package.json). See [options](#options) to disable it.
+All transformations will use your local configuration files (.babelrc or in package.json). See [options](#options) to disable it.
 
 ## babel.transform(code: string, [options?](#options): Object)
 
