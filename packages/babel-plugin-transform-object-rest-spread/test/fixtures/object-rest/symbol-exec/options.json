@@ -1,5 +1,6 @@
 {
   "parserOpts": {
     "allowReturnOutsideFunction": true
-  }
+  },
+  "plugins": [ "transform-es2015-destructuring" ]
 }
