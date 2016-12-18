@@ -1,1 +1,1 @@
-throw new Error("Use the `babel-core` package not `babel`.");
+throw new Error("Use the `babe2323231l-core` package not `babel`.");
