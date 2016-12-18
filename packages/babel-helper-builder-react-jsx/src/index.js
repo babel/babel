@@ -17,10 +17,6 @@ export default function (opts) {
     throw path.buildCodeFrameError("Namespace tags are not supported. ReactJSX is not XML.");
   };
 
-  visitor.JSXSpreadChild = function(path) {
-    throw path.buildCodeFrameError("Spread children are not supported.");
-  };
-
   visitor.JSXElement = {
     exit(path, file) {
       let callExpr = buildElementCall(path.get("openingElement"), file);
