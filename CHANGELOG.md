@@ -13,6 +13,12 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.21.1 (2016-12-17)
+
+#### :bug: Bug Fix
+* `babel-helper-builder-react-jsx`, `babel-plugin-transform-react-jsx`
+  * [#5015](https://github.com/babel/babel/pull/5015) Revert the introduction of a new error message that ended up introducing its own error ([@loganfsmyth](https://github.com/loganfsmyth))
+
 ## 6.21.0 (2016-12-16)
 
 #### :rocket: New Feature
