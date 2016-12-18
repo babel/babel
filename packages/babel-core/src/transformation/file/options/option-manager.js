@@ -104,7 +104,7 @@ export default class OptionManager {
     return plugin;
   }
 
-  static normalisePlugins(loc, dirname, plugins) {
+  static normalisePlugins(loc, dirname, {plugins = [], sourceRoot = process.cwd()}) {
     return plugins.map(function (val, i) {
       let plugin, options;
 
@@ -123,7 +123,7 @@ export default class OptionManager {
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
+        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname) || resolve(`babel-plugin-${plugin}`, sourceRoot) || resolve(plugin, sourceRoot);
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
@@ -194,7 +194,7 @@ export default class OptionManager {
 
     // resolve plugins
     if (opts.plugins) {
-      opts.plugins = OptionManager.normalisePlugins(loc, dirname, opts.plugins);
+      opts.plugins = OptionManager.normalisePlugins(loc, dirname, opts);
     }
 
     // resolve presets
@@ -202,7 +202,7 @@ export default class OptionManager {
       // If we're in the "pass per preset" mode, we resolve the presets
       // and keep them for further execution to calculate the options.
       if (opts.passPerPreset) {
-        opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
+        opts.presets = this.resolvePresets(opts, dirname, (preset, presetLoc) => {
           this.mergeOptions({
             options: preset,
             extending: preset,
@@ -213,7 +213,7 @@ export default class OptionManager {
         });
       } else {
         // Otherwise, just merge presets options into the main options.
-        this.mergePresets(opts.presets, dirname);
+        this.mergePresets(opts, dirname);
         delete opts.presets;
       }
     }
@@ -232,8 +232,8 @@ export default class OptionManager {
    * Merges all presets into the main options in case we are not in the
    * "pass per preset" mode. Otherwise, options are calculated per preset.
    */
-  mergePresets(presets: Array<string | Object>, dirname: string) {
-    this.resolvePresets(presets, dirname, (presetOpts, presetLoc) => {
+  mergePresets(opts, dirname: string) {
+    this.resolvePresets(opts, dirname, (presetOpts, presetLoc) => {
       this.mergeOptions({
         options: presetOpts,
         alias: presetLoc,
@@ -247,7 +247,7 @@ export default class OptionManager {
    * Resolves presets options which can be either direct object data,
    * or a module name to require.
    */
-  resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
+  resolvePresets({presets = [], sourceRoot = process.cwd()}, dirname: string, onResolve?) {
     return presets.map((val) => {
       let options;
       if (Array.isArray(val)) {
@@ -261,7 +261,7 @@ export default class OptionManager {
       let presetLoc;
       try {
         if (typeof val === "string") {
-          presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+          presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname) || resolve(`babel-preset-${val}`, sourceRoot) || resolve(val, sourceRoot);
 
           // trying to resolve @organization shortcat
           // @foo/es2015 -> @foo/babel-preset-es2015
