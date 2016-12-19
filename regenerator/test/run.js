@@ -92,10 +92,31 @@ if (semver.gte(process.version, "0.11.2")) {
   ]);
 }
 
+if (semver.gte(process.version, "4.0.0")) {
+  enqueue("mocha", [
+    "--harmony",
+    "--reporter", "spec",
+    "--require", "./test/runtime.js",
+    "./test/tests-node4.es6.js",
+  ]);
+}
+
 enqueue(convert, [
   "./test/tests.es6.js",
   "./test/tests.es5.js"
 ]);
+
+if (semver.gte(process.version, "4.0.0")) {
+  enqueue(convert, [
+    "./test/tests-node4.es6.js",
+    "./test/tests-node4.es5.js"
+  ]);
+} else {
+  // we are on an older platform, but we still need to create an empty
+  // tests-node4.es5.js file so that the test commands below have a file to refer
+  // to.
+  fs.writeFileSync("./test/tests-node4.es5.js", "");
+}
 
 enqueue(convert, [
   "./test/non-native.js",
@@ -118,6 +139,7 @@ if (!semver.eq(process.version, "0.11.7")) {
     enqueue(bundle, [
       ["./test/runtime.js",
        "./test/tests.es5.js",
+       "./test/tests-node4.es5.js",
        "./test/non-native.es5.js",
        "./test/async.es5.js"],
       "./test/tests.browser.js"
@@ -131,6 +153,7 @@ enqueue("mocha", [
   "--reporter", "spec",
   "--require", "./test/runtime.js",
   "./test/tests.es5.js",
+  "./test/tests-node4.es5.js",
   "./test/non-native.es5.js",
   "./test/async.es5.js",
   "./test/tests.transform.js"
