@@ -123,7 +123,7 @@ export default class OptionManager {
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
+        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname) || resolve(`babel-plugin-${plugin}`) || resolve(plugin);
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
@@ -261,7 +261,7 @@ export default class OptionManager {
       let presetLoc;
       try {
         if (typeof val === "string") {
-          presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+          presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname) || resolve(`babel-preset-${val}`) || resolve(val);
 
           // trying to resolve @organization shortcat
           // @foo/es2015 -> @foo/babel-preset-es2015
