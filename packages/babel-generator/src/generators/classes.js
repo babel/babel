@@ -1,5 +1,10 @@
-export function ClassDeclaration(node: Object) {
-  this.printJoin(node.decorators, node);
+import * as t from "babel-types";
+
+export function ClassDeclaration(node: Object, parent: Object) {
+  if (!t.isExportDeclaration(parent)) {
+    this.printJoin(node.decorators, node);
+  }
+
   this.word("class");
 
   if (node.id) {

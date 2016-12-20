@@ -53,13 +53,21 @@ export function ExportAllDeclaration(node: Object) {
   this.semicolon();
 }
 
-export function ExportNamedDeclaration() {
+export function ExportNamedDeclaration(node: Object) {
+  if (t.isClassDeclaration(node.declaration)) {
+    this.printJoin(node.declaration.decorators, node);
+  }
+
   this.word("export");
   this.space();
   ExportDeclaration.apply(this, arguments);
 }
 
-export function ExportDefaultDeclaration() {
+export function ExportDefaultDeclaration(node: Object) {
+  if (t.isClassDeclaration(node.declaration)) {
+    this.printJoin(node.declaration.decorators, node);
+  }
+
   this.word("export");
   this.space();
   this.word("default");

@@ -1,0 +1,3 @@
+
+@decorator
+export class Test {}
