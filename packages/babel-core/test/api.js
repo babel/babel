@@ -114,6 +114,14 @@ describe("api", function () {
     }).marked[0].message, "foobar");
   });
 
+  it("exposes the resolvePlugin method", function() {
+    assert.equal(babel.resolvePlugin("nonexistent-plugin"), null);
+  });
+
+  it("exposes the resolvePreset method", function() {
+    assert.equal(babel.resolvePreset("nonexistent-preset"), null);
+  });
+
   it("transformFile", function (done) {
     babel.transformFile(__dirname + "/fixtures/api/file.js", {}, function (err, res) {
       if (err) return done(err);
@@ -253,28 +261,6 @@ describe("api", function () {
       "};"
     ].join("\n"), result.code);
 
-  });
-
-  it("handles preset shortcuts (adds babel-preset-)", function () {
-    return assert.throws(
-      function () {
-        babel.transform("", {
-          presets: ["@babel/es2015"]
-        });
-      },
-      /Couldn\'t find preset \"\@babel\/babel\-preset\-es2015\" relative to directory/
-    );
-  });
-
-  it("handles preset shortcuts 2 (adds babel-preset-)", function () {
-    return assert.throws(
-      function () {
-        babel.transform("", {
-          presets: ["@babel/react/optimizations"]
-        });
-      },
-      /Couldn\'t find preset \"\@babel\/babel\-preset\-react\/optimizations\" relative to directory/
-    );
   });
 
   it("source map merging", function () {
