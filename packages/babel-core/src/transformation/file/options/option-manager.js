@@ -5,7 +5,8 @@ import type Logger from "../logger";
 import Plugin from "../../plugin";
 import * as messages from "babel-messages";
 import { normaliseOptions } from "./index";
-import resolve from "../../../helpers/resolve";
+import resolvePlugin from "../../../helpers/resolve-plugin";
+import resolvePreset from "../../../helpers/resolve-preset";
 import cloneDeepWith from "lodash/cloneDeepWith";
 import clone from "lodash/clone";
 import merge from "../../../helpers/merge";
@@ -123,7 +124,7 @@ export default class OptionManager {
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
+        let pluginLoc = resolvePlugin(plugin, dirname);
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
@@ -261,18 +262,7 @@ export default class OptionManager {
       let presetLoc;
       try {
         if (typeof val === "string") {
-          presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
-
-          // trying to resolve @organization shortcat
-          // @foo/es2015 -> @foo/babel-preset-es2015
-          if (!presetLoc) {
-            let matches = val.match(/^(@[^/]+)\/(.+)$/);
-            if (matches) {
-              let [, orgName, presetPath] = matches;
-              val = `${orgName}/babel-preset-${presetPath}`;
-              presetLoc = resolve(val, dirname);
-            }
-          }
+          presetLoc = resolvePreset(val, dirname);
 
           if (!presetLoc) {
             throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ` +
