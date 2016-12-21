@@ -1,4 +1,6 @@
 if (!Object.getOwnPropertySymbols) return;
+// as the helper is external, it only has acccess to native typeof. check if native typeof works.
+if (eval("typeof Symbol === 'function' && typeof Symbol()") !== "symbol") return;
 
 const sym = Symbol("test");
 const sym2 = Symbol("not enumerable");
