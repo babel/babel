@@ -11,7 +11,7 @@
   "dependencies": {
     "babel-helper-regex": "^6.8.0",
     "babel-runtime": "^6.0.0",
-    "regexpu-core": "^2.0.0"
+    "regexpu-core": "^4.0.2"
   },
   "devDependencies": {
     "babel-helper-plugin-test-runner": "^6.8.0"
