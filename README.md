@@ -46,8 +46,8 @@ Try it out at our [REPL](https://babeljs.io/repl/#?babili=false&evaluate=true&li
     - [Transform Plugins](#transform-plugins)
     - [Syntax Plugins](#syntax-plugins)
   - [Misc Packages](#misc-packages)
-- [License](#license)
 - [Team](#team)
+- [License](#license)
 
 # FAQ
 
@@ -166,82 +166,15 @@ Plugins are the heart of Babel and what make it work.
 
 #### Transform Plugins
 
-There are many kinds of plugins: ones that convert ES6/ES2015 to ES5, transform to ES3, minification, JSX, flow, experimental features, and more.
-
-| Package | Version | External Deps |
-|--------|-------|------------|
-| [`babel-plugin-check-es2015-constants`](/packages/babel-plugin-check-es2015-constants) | [![npm](https://img.shields.io/npm/v/babel-plugin-check-es2015-constants.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-check-es2015-constants) | |
-| [`babel-plugin-transform-async-functions`](/packages/babel-plugin-transform-async-functions) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-async-functions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-async-functions) | |
-| [`babel-plugin-transform-async-generator-functions`](/packages/babel-plugin-transform-async-generator-functions) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-async-generator-functions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-async-generator-functions) |
-| [`babel-plugin-transform-async-to-generator`](/packages/babel-plugin-transform-async-to-generator) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-async-to-generator.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-async-to-generator) | |
-| [`babel-plugin-transform-async-to-module-method`](/packages/babel-plugin-transform-async-to-module-method) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-async-to-module-method.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-async-to-module-method) | |
-| [`babel-plugin-transform-class-properties`](/packages/babel-plugin-transform-class-properties) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-class-properties.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-class-properties) | |
-| [`babel-plugin-transform-decorators`](/packages/babel-plugin-transform-decorators) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-decorators.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-decorators) | |
-| [`babel-plugin-transform-do-expressions`](/packages/babel-plugin-transform-do-expressions) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-do-expressions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-do-expressions) | |
-| [`babel-plugin-transform-es2015-arrow-functions`](/packages/babel-plugin-transform-es2015-arrow-functions) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-arrow-functions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-arrow-functions) | |
-| [`babel-plugin-transform-es2015-block-scoped-functions`](/packages/babel-plugin-transform-es2015-block-scoped-functions) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-block-scoped-functions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-block-scoped-functions) | |
-| [`babel-plugin-transform-es2015-block-scoping`](/packages/babel-plugin-transform-es2015-block-scoping) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-block-scoping.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-block-scoping) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-plugin-transform-es2015-block-scoping)](https://david-dm.org/babel/babel?path=packages/babel-plugin-transform-es2015-block-scoping) |
-| [`babel-plugin-transform-es2015-classes`](/packages/babel-plugin-transform-es2015-classes) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-classes.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-classes) | |
-| [`babel-plugin-transform-es2015-computed-properties`](/packages/babel-plugin-transform-es2015-computed-properties) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-computed-properties.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-computed-properties) | |
-| [`babel-plugin-transform-es2015-destructuring`](/packages/babel-plugin-transform-es2015-destructuring) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-destructuring.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-destructuring) | |
-| [`babel-plugin-transform-es2015-duplicate-keys`](/packages/babel-plugin-transform-es2015-duplicate-keys) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-duplicate-keys.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-duplicate-keys) | |
-| [`babel-plugin-transform-es2015-for-of`](/packages/babel-plugin-transform-es2015-for-of) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-for-of.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-for-of) | |
-| [`babel-plugin-transform-es2015-function-name`](/packages/babel-plugin-transform-es2015-function-name) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-function-name.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-function-name) | |
-| [`babel-plugin-transform-es2015-instanceof`](/packages/babel-plugin-transform-es2015-instanceof) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-instanceof.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-instanceof) | |
-| [`babel-plugin-transform-es2015-literals`](/packages/babel-plugin-transform-es2015-literals) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-literals.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-literals) | |
-| [`babel-plugin-transform-es2015-modules-amd`](/packages/babel-plugin-transform-es2015-modules-amd) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-modules-amd.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-modules-amd) | |
-| [`babel-plugin-transform-es2015-modules-commonjs`](/packages/babel-plugin-transform-es2015-modules-commonjs) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-modules-commonjs.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-modules-commonjs) | |
-| [`babel-plugin-transform-es2015-modules-systemjs`](/packages/babel-plugin-transform-es2015-modules-systemjs) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-modules-systemjs.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-modules-systemjs) | |
-| [`babel-plugin-transform-es2015-modules-umd`](/packages/babel-plugin-transform-es2015-modules-umd) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-modules-umd.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-modules-umd) | |
-| [`babel-plugin-transform-es2015-object-super`](/packages/babel-plugin-transform-es2015-object-super) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-object-super.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-object-super) | |
-| [`babel-plugin-transform-es2015-parameters`](/packages/babel-plugin-transform-es2015-parameters) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-parameters.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-parameters) | |
-| [`babel-plugin-transform-es2015-shorthand-properties`](/packages/babel-plugin-transform-es2015-shorthand-properties) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-shorthand-properties.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-shorthand-properties) | |
-| [`babel-plugin-transform-es2015-spread`](/packages/babel-plugin-transform-es2015-spread) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-spread.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-spread) | |
-| [`babel-plugin-transform-es2015-sticky-regex`](/packages/babel-plugin-transform-es2015-sticky-regex) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-sticky-regex.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-sticky-regex) | |
-| [`babel-plugin-transform-es2015-template-literals`](/packages/babel-plugin-transform-es2015-template-literals) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-template-literals.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-template-literals) | |
-| [`babel-plugin-transform-es2015-typeof-symbol`](/packages/babel-plugin-transform-es2015-typeof-symbol) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-typeof-symbol.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-typeof-symbol) | |
-| [`babel-plugin-transform-es2015-unicode-regex`](/packages/babel-plugin-transform-es2015-unicode-regex) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es2015-unicode-regex.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es2015-unicode-regex) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-plugin-transform-es2015-unicode-regex)](https://david-dm.org/babel/babel?path=packages/babel-plugin-transform-es2015-unicode-regex) |
-| [`babel-plugin-transform-es3-member-expression-literals`](/packages/babel-plugin-transform-es3-member-expression-literals) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es3-member-expression-literals.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es3-member-expression-literals) | |
-| [`babel-plugin-transform-es3-property-literals`](/packages/babel-plugin-transform-es3-property-literals) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es3-property-literals.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es3-property-literals) | |
-| [`babel-plugin-transform-es5-property-mutators`](/packages/babel-plugin-transform-es5-property-mutators) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-es5-property-mutators.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-es5-property-mutators) | |
-| [`babel-plugin-transform-eval`](/packages/babel-plugin-transform-eval) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-eval.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-eval) | |
-| [`babel-plugin-transform-exponentiation-operator`](/packages/babel-plugin-transform-exponentiation-operator) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-exponentiation-operator.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-exponentiation-operator) | |
-| [`babel-plugin-transform-export-extensions`](/packages/babel-plugin-transform-export-extensions) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-export-extensions.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-export-extensions) | |
-| [`babel-plugin-transform-flow-comments`](/packages/babel-plugin-transform-flow-comments) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-flow-comments.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-flow-comments) | |
-| [`babel-plugin-transform-flow-strip-types`](/packages/babel-plugin-transform-flow-strip-types) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-flow-strip-types.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-flow-strip-types) | |
-| [`babel-plugin-transform-function-bind`](/packages/babel-plugin-transform-function-bind) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-function-bind.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-function-bind) | |
-| [`babel-plugin-transform-jscript`](/packages/babel-plugin-transform-jscript) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-jscript.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-jscript) | |
-| [`babel-plugin-transform-object-assign`](/packages/babel-plugin-transform-object-assign) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-object-assign.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-object-assign) | |
-| [`babel-plugin-transform-object-rest-spread`](/packages/babel-plugin-transform-object-rest-spread) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-object-rest-spread.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-object-rest-spread) | |
-| [`babel-plugin-transform-object-set-prototype-of-to-assign`](/packages/babel-plugin-transform-object-set-prototype-of-to-assign) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-object-set-prototype-of-to-assign.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-object-set-prototype-of-to-assign) | |
-| [`babel-plugin-transform-proto-to-assign`](/packages/babel-plugin-transform-proto-to-assign) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-proto-to-assign.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-proto-to-assign) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-plugin-transform-proto-to-assign)](https://david-dm.org/babel/babel?path=packages/babel-plugin-transform-proto-to-assign) |
-| [`babel-plugin-transform-react-constant-elements`](/packages/babel-plugin-transform-react-constant-elements) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-constant-elements.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-constant-elements) | |
-| [`babel-plugin-transform-react-display-name`](/packages/babel-plugin-transform-react-display-name) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-display-name.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-display-name) | |
-| [`babel-plugin-transform-react-inline-elements`](/packages/babel-plugin-transform-react-inline-elements) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-inline-elements.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-inline-elements) | |
-| [`babel-plugin-transform-react-jsx`](/packages/babel-plugin-transform-react-jsx) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-jsx.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-jsx) | |
-| [`babel-plugin-transform-react-jsx-compat`](/packages/babel-plugin-transform-react-jsx-compat) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-jsx-compat.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-jsx-compat) | |
-| [`babel-plugin-transform-react-jsx-self`](/packages/babel-plugin-transform-react-jsx-self) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-jsx-self.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-jsx-self) | |
-| [`babel-plugin-transform-react-jsx-source`](/packages/babel-plugin-transform-react-jsx-source) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-react-jsx-source.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-react-jsx-source) | |
-| [`babel-plugin-transform-regenerator`](/packages/babel-plugin-transform-regenerator) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-regenerator.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-regenerator) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-plugin-transform-regenerator)](https://david-dm.org/babel/babel?path=packages/babel-plugin-transform-regenerator) |
-| [`babel-plugin-transform-runtime`](/packages/babel-plugin-transform-runtime) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-runtime.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-runtime) | |
-| [`babel-plugin-transform-strict-mode`](/packages/babel-plugin-transform-strict-mode) | [![npm](https://img.shields.io/npm/v/babel-plugin-transform-strict-mode.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-plugin-transform-strict-mode) | |
+There are many kinds of plugins: ones that convert ES6/ES2015 to ES5, transform to ES3, minification, JSX, flow, experimental features, and more. Check out our [website for more](http://babeljs.io/docs/plugins/#transform-plugins).
 
 #### Syntax Plugins
 
-These just enable the transform plugins to be able to parse certain features (the transform plugins already include the syntax plugins so you don't need both): `babel-plugin-syntax-x`.
+These just enable the transform plugins to be able to parse certain features (the transform plugins already include the syntax plugins so you don't need both): `babel-plugin-syntax-x`. Check out our [website for more](http://babeljs.io/docs/plugins/#syntax-plugins).
 
 ### Helpers
 
 These are mostly for internal use in various plugins: `babel-helper-x`.
-
-### Misc Packages
-
-- [`babel`](/packages/babel) the deprecated `babel` package on npm that was used in Babel 5.
-- [`babel-messages`](/packages/babel-messages) a package to keep error messages, etc (not always used)
-
-## License
-
-[MIT](https://github.com/babel/babel/blob/master/LICENSE)
 
 ## Team
 
@@ -275,3 +208,6 @@ Amjad Masad | James Kyle | Jesse McCarthy | Sebastian McKenzie |
 [@amasad](https://github.com/amasad) | [@thejameskyle](https://github.com/thejameskyle) | [@jmm](https://github.com/jmm) | [@sebmck](https://twitter.com/sebmck) |
 | [@amasad](https://twitter.com/amasad) | [@thejameskyle](https://twitter.com/thejameskyle) | [@mccjm](https://twitter.com/mccjm) | [@kittens](https://github.com/kittens) 
 
+## License
+
+[MIT](https://github.com/babel/babel/blob/master/LICENSE)
