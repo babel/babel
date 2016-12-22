@@ -221,7 +221,7 @@ const logPlugin = (plugin, targets, list) => {
     a[b] = envList[b];
     return a;
   }, {});
-  const logStr = `\n ${plugin} ${JSON.stringify(filteredList)}`;
+  const logStr = `\n  ${plugin}\n  ${JSON.stringify(filteredList)}`;
   console.log(logStr);
 };
 
@@ -256,19 +256,17 @@ export default function buildPreset(context, opts = {}) {
   if (debug && !hasBeenLogged) {
     hasBeenLogged = true;
     console.log("babel-preset-env: `DEBUG` option");
-    console.log("");
-    console.log(`Using targets: ${JSON.stringify(opts.targets, null, 2)}`);
-    console.log("");
-    console.log(`modules transform: ${moduleType}`);
-    console.log("");
-    console.log("Using plugins:");
+    console.log("\nUsing targets:");
+    console.log(JSON.stringify(opts.targets, null, 2));
+    console.log(`\nModules transform: ${moduleType}`);
+    console.log("\nUsing plugins:");
     transformations.forEach((transform) => {
-      logPlugin(transform, opts.targets, pluginList);
+      logPlugin(transform, targets, pluginList);
     });
     console.log("\nUsing polyfills:");
     if (useBuiltIns && polyfills.length) {
       polyfills.forEach((polyfill) => {
-        logPlugin(polyfill, opts.targets, builtInsList);
+        logPlugin(polyfill, targets, builtInsList);
       });
     }
   }
