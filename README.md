@@ -166,11 +166,11 @@ Plugins are the heart of Babel and what make it work.
 
 #### Transform Plugins
 
-There are many kinds of plugins: ones that convert ES6/ES2015 to ES5, transform to ES3, minification, JSX, flow, experimental features, and more.
+There are many kinds of plugins: ones that convert ES6/ES2015 to ES5, transform to ES3, minification, JSX, flow, experimental features, and more. Check out our [website for more](http://babeljs.io/docs/plugins/#transform-plugins).
 
 #### Syntax Plugins
 
-These just enable the transform plugins to be able to parse certain features (the transform plugins already include the syntax plugins so you don't need both): `babel-plugin-syntax-x`.
+These just enable the transform plugins to be able to parse certain features (the transform plugins already include the syntax plugins so you don't need both): `babel-plugin-syntax-x`. Check out our [website for more](http://babeljs.io/docs/plugins/#syntax-plugins).
 
 ### Helpers
 
