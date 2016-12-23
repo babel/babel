@@ -221,7 +221,7 @@ const logPlugin = (plugin, targets, list) => {
     a[b] = envList[b];
     return a;
   }, {});
-  const logStr = `\n  ${plugin}\n  ${JSON.stringify(filteredList)}`;
+  const logStr = `  ${plugin} ${JSON.stringify(filteredList)}`;
   console.log(logStr);
 };
 
