@@ -257,7 +257,7 @@ export default function buildPreset(context, opts = {}) {
     hasBeenLogged = true;
     console.log("babel-preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
-    console.log(JSON.stringify(opts.targets, null, 2));
+    console.log(JSON.stringify(targets, null, 2));
     console.log(`\nModules transform: ${moduleType}`);
     console.log("\nUsing plugins:");
     transformations.forEach((transform) => {
