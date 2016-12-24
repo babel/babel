@@ -113,6 +113,8 @@ export let Flow = {
       return node.importKind === "type" || node.importKind === "typeof";
     } else if (t.isExportDeclaration(node)) {
       return node.exportKind === "type";
+    } else if (t.isImportSpecifier(node)) {
+      return node.importKind === "type" || node.importKind === "typeof";
     } else {
       return false;
     }
