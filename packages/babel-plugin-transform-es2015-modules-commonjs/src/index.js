@@ -1,52 +1,50 @@
 /* eslint max-len: 0 */
 
 import { basename, extname } from "path";
-import template from "babel-template";
-import * as t from "babel-types";
-
-let buildRequire = template(`
-  require($0);
-`);
-
-let buildExportsModuleDeclaration = template(`
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-`);
-
-let buildExportsFrom = template(`
-  Object.defineProperty(exports, $0, {
-    enumerable: true,
-    get: function () {
-      return $1;
-    }
-  });
-`);
-
-let buildLooseExportsModuleDeclaration = template(`
-  exports.__esModule = true;
-`);
-
-let buildExportsAssignment = template(`
-  exports.$0 = $1;
-`);
-
-let buildExportAll = template(`
-  Object.keys(OBJECT).forEach(function (key) {
-    if (key === "default" || key === "__esModule") return;
-    Object.defineProperty(exports, key, {
-      enumerable: true,
-      get: function () {
-        return OBJECT[key];
-      }
-    });
-  });
-`);
 
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty", "ClassMethod", "ObjectMethod"];
 
-export default function () {
+export default function ({ template, types: t }) {
   let REASSIGN_REMAP_SKIP = Symbol();
+
+  let buildRequire = template(`
+    require($0);
+  `);
+
+  let buildExportsModuleDeclaration = template(`
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+  `);
+
+  let buildExportsFrom = template(`
+    Object.defineProperty(exports, $0, {
+      enumerable: true,
+      get: function () {
+        return $1;
+      }
+    });
+  `);
+
+  let buildLooseExportsModuleDeclaration = template(`
+    exports.__esModule = true;
+  `);
+
+  let buildExportsAssignment = template(`
+    exports.$0 = $1;
+  `);
+
+  let buildExportAll = template(`
+    Object.keys(OBJECT).forEach(function (key) {
+      if (key === "default" || key === "__esModule") return;
+      Object.defineProperty(exports, key, {
+        enumerable: true,
+        get: function () {
+          return OBJECT[key];
+        }
+      });
+    });
+  `);
 
   let reassignmentVisitor = {
     ReferencedIdentifier(path) {

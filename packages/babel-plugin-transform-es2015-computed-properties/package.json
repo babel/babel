@@ -10,7 +10,6 @@
   ],
   "dependencies": {
     "babel-helper-define-map": "^6.8.0",
-    "babel-template": "^6.8.0",
     "babel-runtime": "^6.0.0"
   },
   "devDependencies": {

@@ -6,7 +6,6 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-traverse": "^6.21.0",
     "babel-helper-call-delegate": "^6.18.0",
     "babel-helper-get-function-arity": "^6.18.0",
     "babel-template": "^6.16.0",

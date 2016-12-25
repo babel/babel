@@ -1,11 +1,10 @@
-import template from "babel-template";
 import explodeClass from "babel-helper-explode-class";
 
-let buildClassDecorator = template(`
-  CLASS_REF = DECORATOR(CLASS_REF) || CLASS_REF;
-`);
+export default function ({ template, types: t }) {
+  let buildClassDecorator = template(`
+    CLASS_REF = DECORATOR(CLASS_REF) || CLASS_REF;
+  `);
 
-export default function ({ types: t }) {
   function cleanDecorators(decorators) {
     return decorators.reverse().map((dec) => dec.expression);
   }

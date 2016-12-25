@@ -1,32 +1,30 @@
 /* eslint max-len: 0 */
 
 import hoistVariables from "babel-helper-hoist-variables";
-import template from "babel-template";
 
-let buildTemplate = template(`
-  SYSTEM_REGISTER(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
-    "use strict";
-    BEFORE_BODY;
-    return {
-      setters: [SETTERS],
-      execute: function () {
-        BODY;
-      }
-    };
-  });
-`);
+export default function ({ template, types: t }) {
+  const TYPE_IMPORT = "Import";
 
-let buildExportAll = template(`
-  for (var KEY in TARGET) {
-    if (KEY !== "default" && KEY !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
-  }
-`);
-
-
-const TYPE_IMPORT = "Import";
-
-export default function ({ types: t }) {
   let IGNORE_REASSIGNMENT_SYMBOL = Symbol();
+
+  let buildTemplate = template(`
+    SYSTEM_REGISTER(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
+      "use strict";
+      BEFORE_BODY;
+      return {
+        setters: [SETTERS],
+        execute: function () {
+          BODY;
+        }
+      };
+    });
+  `);
+
+  let buildExportAll = template(`
+    for (var KEY in TARGET) {
+      if (KEY !== "default" && KEY !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
+    }
+  `);
 
   let reassignmentVisitor = {
     "AssignmentExpression|UpdateExpression"(path) {

@@ -11,7 +11,6 @@
   "dependencies": {
     "babel-plugin-syntax-async-functions": "^6.8.0",
     "babel-helper-remap-async-to-generator": "^6.16.0",
-    "babel-types": "^6.16.0",
     "babel-runtime": "^6.0.0"
   },
   "devDependencies": {
