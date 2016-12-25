@@ -1,8 +1,0 @@
-machine:
-  node:
-    version:
-      0.10.46
-
-test:
-  override:
-    - make test-ci
