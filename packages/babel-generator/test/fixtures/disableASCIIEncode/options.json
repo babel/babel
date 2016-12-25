@@ -1,3 +1,4 @@
 {
-  "disableASCIIEncode": true
+  "disableASCIIEncode": true,
+  "minified": true
 }
