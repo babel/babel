@@ -21,6 +21,7 @@ export type Format = {
   minified: boolean,
   quotes: "single" | "double",
   concise: boolean,
+  disableASCIIEncode: boolean,
   indent: {
     adjustMultilineComment: boolean,
     style: string,

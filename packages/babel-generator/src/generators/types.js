@@ -125,21 +125,33 @@ export function NumericLiteral(node: Object) {
 }
 
 export function StringLiteral(node: Object, parent: Object) {
-  const raw = this.getPossibleRaw(node);
+  let raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.token(raw);
     return;
   }
 
+  let val;
+  if (this.format.disableASCIIEncode) {
+    val = JSON.stringify(node.value);
+    // escape illegal js but valid json unicode characters
+    val = val.replace(/[\u000A\u000D\u2028\u2029]/g, function (c) {
+      return "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4);
+    });
+
+    return this.token(val);
+  } else {
   // ensure the output is ASCII-safe
   const opts = {
     quotes: t.isJSX(parent) ? "double" : this.format.quotes,
-    wrap: true,
+    wrap: true
   };
   if (this.format.jsonCompatibleStrings) {
     opts.json = true;
   }
-  const val = jsesc(node.value, opts);
+
+    val = jsesc(node.value, opts);
+  }
 
   return this.token(val);
 }
