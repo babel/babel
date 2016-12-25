@@ -10,6 +10,7 @@ let existsCache = {};
 let jsonCache   = {};
 
 const BABELIGNORE_FILENAME = ".babelignore";
+const DOTFILES_PATH        = process.env.DOTFILES_PATH || "";
 const BABELRC_FILENAME     = ".babelrc";
 const PACKAGE_FILENAME     = "package.json";
 
@@ -59,7 +60,7 @@ class ConfigChainBuilder {
 
     while (loc !== (loc = path.dirname(loc))) {
       if (!foundConfig) {
-        let configLoc = path.join(loc, BABELRC_FILENAME);
+        let configLoc = path.join(loc, DOTFILES_PATH, BABELRC_FILENAME);
         if (exists(configLoc)) {
           this.addConfig(configLoc);
           foundConfig = true;
