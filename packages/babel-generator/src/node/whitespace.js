@@ -1,4 +1,3 @@
-import isBoolean from "lodash/isBoolean";
 import each from "lodash/each";
 import map from "lodash/map";
 import * as t from "babel-types";
@@ -220,7 +219,7 @@ each({
   SwitchStatement: true,
   TryStatement: true
 }, function (amounts, type) {
-  if (isBoolean(amounts)) {
+  if (typeof amounts === "boolean") {
     amounts = { after: amounts, before: amounts };
   }
 
