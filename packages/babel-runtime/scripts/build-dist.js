@@ -1,34 +1,36 @@
 var outputFile = require("output-file-sync");
 var kebabCase  = require("lodash/kebabCase");
-var each       = require("lodash/each");
 var fs         = require("fs");
 
 var coreDefinitions = require("babel-plugin-transform-runtime").definitions;
 
 var paths = ["is-iterable", "get-iterator"];
 
-each(coreDefinitions.builtins, function (path) {
+Object.keys(coreDefinitions.builtins).forEach(function (key) {
+  const path = coreDefinitions.builtins[key];
   paths.push(path);
 });
 
-each(coreDefinitions.methods, function (props) {
-  each(props, function (path) {
+Object.keys(coreDefinitions.methods).forEach(function (key) {
+  const props = coreDefinitions.methods[key];
+  Object.keys(props).forEach(function (key2) {
+    const path = props[key2];
     paths.push(path);
   });
 });
 
-each(paths, function (path) {
+paths.forEach(function (path) {
   writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
 });
 
 // Should be removed in the next major release:
-var legacy = {
-  "string/pad-left": "string/pad-start",
-  "string/pad-right": "string/pad-end"
-};
+var legacy = [
+  ["string/pad-left", "string/pad-start"],
+  ["string/pad-right", "string/pad-end"]
+];
 
-each(legacy, function (value, key) {
-  writeFile("core-js/" + key + ".js", defaultify('require("core-js/library/fn/' + value + '")'));
+legacy.forEach(function([a, b]) {
+  writeFile("core-js/" + a + ".js", defaultify('require("core-js/library/fn/' + b + '")'));
 });
 
 var helpers    = require("babel-helpers");
@@ -118,7 +120,7 @@ function buildHelper(helperName) {
   }).code;
 }
 
-each(helpers.list, function (helperName) {
+helpers.list.forEach(function (helperName) {
   writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
 
   // compat
