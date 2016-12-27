@@ -49,7 +49,7 @@ function normalizeOptions(code, opts): Format {
     concise: opts.concise,
     quotes: "double",
     jsonCompatibleStrings: opts.jsonCompatibleStrings,
-    disableASCIIEncode: opts.disableASCIIEncode,
+    asciiUnsafe: opts.asciiUnsafe,
     indent: {
       adjustMultilineComment: true,
       style: "  ",
