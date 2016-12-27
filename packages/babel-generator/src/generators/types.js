@@ -125,23 +125,23 @@ export function NumericLiteral(node: Object) {
 }
 
 export function StringLiteral(node: Object, parent: Object) {
-  let raw = this.getPossibleRaw(node);
+  const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.token(raw);
     return;
   }
 
   // ensure the output is ASCII-safe
-  let opts = {
+  const opts = {
     quotes: t.isJSX(parent) ? "double" : this.format.quotes,
     wrap: true,
-    minimal: this.format.asciiUnsafe
+    minimal: this.format.asciiUnsafe,
   };
   if (this.format.jsonCompatibleStrings) {
     opts.json = true;
   }
 
-  let val = jsesc(node.value, opts);
+  const val = jsesc(node.value, opts);
 
   return this.token(val);
 }
