@@ -7,7 +7,8 @@ import convertSourceMap from "convert-source-map";
 import OptionManager from "./options/option-manager";
 import type Pipeline from "../pipeline";
 import PluginPass from "../plugin-pass";
-import { NodePath, Hub, Scope } from "babel-traverse";
+import { NodePath, Scope } from "babel-traverse";
+import type { HubInterface } from "babel-traverse";
 import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
@@ -99,7 +100,21 @@ export default class File extends Store {
     this.code    = "";
     this.shebang = "";
 
-    this.hub = new Hub(this);
+    this.hub = {
+      // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
+      file: this,
+      mark: (type: string, message: string, loc: Object) => {
+        this.metadata.marked.push({
+          type,
+          message,
+          loc
+        });
+      },
+      addHelper: this.addHelper.bind(this),
+      getCode: () => this.code,
+      getScope: () => this.scope,
+      buildError: this.buildCodeFrameError.bind(this)
+    };
   }
 
   static helpers: Array<string>;
@@ -119,7 +134,7 @@ export default class File extends Store {
   ast: Object;
   scope: Scope;
   metadata: BabelFileMetadata;
-  hub: Hub;
+  hub: HubInterface;
   code: string;
   shebang: string;
 
