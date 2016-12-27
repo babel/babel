@@ -1,7 +1,7 @@
 // @flow
 
 import * as helpers from "@babel/helpers";
-import { NodePath, Hub, Scope } from "@babel/traverse";
+import { NodePath, Scope, type HubInterface } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
 import * as t from "@babel/types";
@@ -27,9 +27,17 @@ export default class File {
   ast: Object = {};
   scope: Scope;
   metadata: {} = {};
-  hub: Hub = new Hub(this);
   code: string = "";
   inputMap: Object | null = null;
+
+  hub: HubInterface = {
+    // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
+    file: this,
+    getCode: () => this.code,
+    getScope: () => this.scope,
+    addHelper: this.addHelper.bind(this),
+    buildError: this.buildCodeFrameError.bind(this),
+  };
 
   constructor(options: {}, { code, ast, inputMap }: NormalizedFile) {
     this.opts = options;
