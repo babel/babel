@@ -5,7 +5,7 @@ Allow parsing of do expressions.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-do-expressions
+npm install --save-dev babel-plugin-syntax-do-expressions
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-syntax-do-expressions
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-do-expressions script.js
+babel --plugins syntax-do-expressions script.js
 ```
 
 ### Via Node API

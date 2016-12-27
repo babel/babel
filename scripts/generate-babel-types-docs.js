@@ -65,7 +65,10 @@ function getType(validator) {
   throw err;
 }
 Object.keys(types.BUILDER_KEYS).sort().forEach(function (key) {
-  readme.push('### t.' + key[0].toLowerCase() + key.substr(1) + '(' + types.BUILDER_KEYS[key].join(', ') + ')');
+  readme.push('### ' + key[0].toLowerCase() + key.substr(1));
+  readme.push('```javascript');
+  readme.push('t.' + key[0].toLowerCase() + key.substr(1) + '(' + types.BUILDER_KEYS[key].join(', ') + ')');
+  readme.push('```');
   readme.push('');
   readme.push('See also `t.is' + key + '(node, opts)` and `t.assert' + key + '(node, opts)`.');
   readme.push('');
@@ -108,6 +111,9 @@ Object.keys(types.BUILDER_KEYS).sort().forEach(function (key) {
     }
     readme.push(' - ' + fieldDescription.join(''));
   });
+
+  readme.push('');
+  readme.push('---');
   readme.push('');
 });
 

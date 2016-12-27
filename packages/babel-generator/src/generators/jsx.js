@@ -35,6 +35,13 @@ export function JSXExpressionContainer(node: Object) {
   this.token("}");
 }
 
+export function JSXSpreadChild(node: Object) {
+  this.token("{");
+  this.token("...");
+  this.print(node.expression, node);
+  this.token("}");
+}
+
 export function JSXText(node: Object) {
   this.token(node.value);
 }

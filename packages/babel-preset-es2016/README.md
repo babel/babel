@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install --save-dev babel-preset-es2016
+npm install --save-dev babel-preset-es2016
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install --save-dev babel-preset-es2016
 ### Via CLI
 
 ```sh
-$ babel script.js --presets es2016
+babel script.js --presets es2016
 ```
 
 ### Via Node API

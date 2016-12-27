@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install babel-generator
+npm install --save-dev babel-generator
 ```
 
 ## Usage

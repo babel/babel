@@ -1,11 +1,25 @@
 # babel-plugin-transform-es3-member-expression-literals
 
-Ensure that reserved words are quoted in property accesses
+> Ensure that reserved words are quoted in property accesses
+
+## Example
+
+**In**
+
+```javascript
+foo.catch;
+```
+
+**Out**
+
+```javascript
+foo["catch"];
+```
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es3-member-expression-literals
+npm install --save-dev babel-plugin-transform-es3-member-expression-literals
 ```
 
 ## Usage
@@ -23,7 +37,7 @@ $ npm install babel-plugin-transform-es3-member-expression-literals
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es3-member-expression-literals script.js
+babel --plugins transform-es3-member-expression-literals script.js
 ```
 
 ### Via Node API

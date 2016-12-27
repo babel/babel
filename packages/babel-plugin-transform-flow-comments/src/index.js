@@ -30,6 +30,12 @@ export default function ({ types: t }) {
         path.addComment("trailing", ":: ?");
       },
 
+      AssignmentPattern: {
+        exit({ node }) {
+          node.left.optional = false;
+        }
+      },
+
       // strip optional property from function params - facebook/fbjs#17
       Function: {
         exit({ node }) {

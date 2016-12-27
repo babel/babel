@@ -113,6 +113,10 @@ export function CallExpression(node: Object) {
   this.token(")");
 }
 
+export function Import() {
+  this.word("import");
+}
+
 function buildYieldAwait(keyword: string) {
   return function (node: Object) {
     this.word(keyword);
@@ -144,6 +148,8 @@ export function ExpressionStatement(node: Object) {
 
 export function AssignmentPattern(node: Object) {
   this.print(node.left, node);
+  if (node.left.optional) this.token("?");
+  this.print(node.left.typeAnnotation, node);
   this.space();
   this.token("=");
   this.space();

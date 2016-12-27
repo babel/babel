@@ -305,14 +305,14 @@ class BlockScoping {
       this.remap();
     }
 
-    this.updateScopeInfo();
+    this.updateScopeInfo(needsClosure);
 
     if (this.loopLabel && !t.isLabeledStatement(this.loopParent)) {
       return t.labeledStatement(this.loopLabel, this.loop);
     }
   }
 
-  updateScopeInfo() {
+  updateScopeInfo(wrappedInClosure) {
     let scope = this.scope;
     let parentScope = scope.getFunctionParent();
     let letRefs = this.letReferences;
@@ -323,7 +323,12 @@ class BlockScoping {
       if (!binding) continue;
       if (binding.kind === "let" || binding.kind === "const") {
         binding.kind = "var";
-        scope.moveBindingTo(ref.name, parentScope);
+
+        if (wrappedInClosure) {
+          scope.removeBinding(ref.name);
+        } else {
+          scope.moveBindingTo(ref.name, parentScope);
+        }
       }
     }
   }
@@ -524,7 +529,11 @@ class BlockScoping {
     //
     for (let i = 0; i < declarators.length; i++) {
       let declar = declarators[i];
-      let keys = t.getBindingIdentifiers(declar);
+      // Passing true as the third argument causes t.getBindingIdentifiers
+      // to return only the *outer* binding identifiers of this
+      // declaration, rather than (for example) mistakenly including the
+      // parameters of a function declaration. Fixes #4880.
+      let keys = t.getBindingIdentifiers(declar, false, true);
       extend(this.letReferences, keys);
       this.hasLetReferences = true;
     }

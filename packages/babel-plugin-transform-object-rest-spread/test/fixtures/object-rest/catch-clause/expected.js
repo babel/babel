@@ -9,6 +9,10 @@ try {} catch (_ref3) {
   let { a2, b2 } = _ref3;
   let c2 = babelHelpers.objectWithoutProperties(_ref3, ["a2", "b2"]);
 }
+try {} catch (_ref4) {
+  let { a2, b2, c2: { c3 } } = _ref4;
+  let c4 = babelHelpers.objectWithoutProperties(_ref4.c2, ["c3"]);
+}
 
 // Unchanged
 try {} catch (a) {}

@@ -58,6 +58,69 @@ describe("generation", function () {
       ]
     }, "sourcemap was incorrectly generated");
 
+    chai.expect(generated.rawMappings).to.deep.equal([
+      { name: undefined,
+        generated: { line: 1, column: 0 },
+        source: "a.js",
+        original: { line: 1, column: 0 } },
+      { name: "hi",
+        generated: { line: 1, column: 9 },
+        source: "a.js",
+        original: { line: 1, column: 9 } },
+      { name: undefined,
+        generated: { line: 1, column: 11 },
+        source: "a.js",
+        original: { line: 1, column: 0 } },
+      { name: "msg",
+        generated: { line: 1, column: 12 },
+        source: "a.js",
+        original: { line: 1, column: 13 } },
+      { name: undefined,
+        generated: { line: 1, column: 15 },
+        source: "a.js",
+        original: { line: 1, column: 0 } },
+      { name: undefined,
+        generated: { line: 1, column: 17 },
+        source: "a.js",
+        original: { line: 1, column: 18 } },
+      { name: "console",
+        generated: { line: 2, column: 0 },
+        source: "a.js",
+        original: { line: 1, column: 20 } },
+      { name: "log",
+        generated: { line: 2, column: 10 },
+        source: "a.js",
+        original: { line: 1, column: 28 } },
+      { name: undefined,
+        generated: { line: 2, column: 13 },
+        source: "a.js",
+        original: { line: 1, column: 20 } },
+      { name: "msg",
+        generated: { line: 2, column: 14 },
+        source: "a.js",
+        original: { line: 1, column: 32 } },
+      { name: undefined,
+        generated: { line: 2, column: 17 },
+        source: "a.js",
+        original: { line: 1, column: 20 } },
+      { name: undefined,
+        generated: { line: 3, column: 0 },
+        source: "a.js",
+        original: { line: 1, column: 39 } },
+      { name: "hi",
+        generated: { line: 5, column: 0 },
+        source: "b.js",
+        original: { line: 1, column: 0 } },
+      { name: undefined,
+        generated: { line: 5, column: 3 },
+        source: "b.js",
+        original: { line: 1, column: 3 } },
+      { name: undefined,
+        generated: { line: 5, column: 10 },
+        source: "b.js",
+        original: { line: 1, column: 0 } },
+    ], "raw mappings were incorrectly generated");
+
     chai.expect(generated.code).to.equal(
       "function hi(msg) {\n  console.log(msg);\n}\n\nhi('hello');",
       "code was incorrectly generated"
@@ -92,10 +155,53 @@ describe("generation", function () {
       sourcesContent: [ "function foo() { bar; }\n" ]
     }, "sourcemap was incorrectly generated");
 
+    chai.expect(generated.rawMappings).to.deep.equal([
+      { name: undefined,
+        generated: { line: 1, column: 0 },
+        source: "inline",
+        original: { line: 1, column: 0 } },
+      { name: "foo",
+        generated: { line: 1, column: 9 },
+        source: "inline",
+        original: { line: 1, column: 9 } },
+      { name: undefined,
+        generated: { line: 1, column: 13 },
+        source: "inline",
+        original: { line: 1, column: 0 } },
+      { name: undefined,
+        generated: { line: 1, column: 16 },
+        source: "inline",
+        original: { line: 1, column: 15 } },
+      { name: "bar",
+        generated: { line: 2, column: 0 },
+        source: "inline",
+        original: { line: 1, column: 17 } },
+      { name: undefined,
+        generated: { line: 3, column: 0 },
+        source: "inline",
+        original: { line: 1, column: 23 } },
+    ], "raw mappings were incorrectly generated");
+
     chai.expect(generated.code).to.equal(
       "function foo2() {\n  bar2;\n}",
       "code was incorrectly generated"
     );
+  });
+
+  it("lazy source map generation", function() {
+    let code = "function hi (msg) { console.log(msg); }\n";
+
+    let ast = parse(code, { filename: "a.js" }).program;
+    let generated = generate.default(ast, {
+      sourceFileName: "a.js",
+      sourceMaps: true,
+    });
+
+    chai.expect(generated.rawMappings).to.be.an("array");
+
+    chai.expect(generated).ownPropertyDescriptor("map").not.to.have.property("value");
+
+    chai.expect(generated.map).to.be.an("object");
   });
 });
 
@@ -122,6 +228,20 @@ describe("programmatic generation", function() {
 
     let ast = parse(generate.default(ifStatement).code);
     assert.equal(ast.program.body[0].consequent.type, "BlockStatement");
+  });
+
+  it("prints directives in block with empty body", function() {
+    let blockStatement = t.blockStatement(
+      [],
+      [t.directive(t.directiveLiteral("use strict"))]
+    );
+
+    let output = generate.default(blockStatement).code;
+    assert.equal(output, [
+      "{",
+      "  \"use strict\";",
+      "}"
+    ].join("\n"));
   });
 
   it("flow object indentation", function() {

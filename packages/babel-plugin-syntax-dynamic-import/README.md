@@ -5,7 +5,7 @@ Allow parsing of `import()`.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-dynamic-import
+npm install --save-dev babel-plugin-syntax-dynamic-import
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-syntax-dynamic-import
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-dynamic-import script.js
+babel --plugins syntax-dynamic-import script.js
 ```
 
 ### Via Node API
