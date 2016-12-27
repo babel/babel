@@ -13,13 +13,11 @@ function assertConversion(
 
   const rootPath = NodePath.get({
     hub: {
-      file: {
-        addHelper(helperName) {
-          return t.memberExpression(
-            t.identifier("babelHelpers"),
-            t.identifier(helperName),
-          );
-        },
+      addHelper(helperName) {
+        return t.memberExpression(
+          t.identifier("babelHelpers"),
+          t.identifier(helperName),
+        );
       },
     },
     parentPath: null,
