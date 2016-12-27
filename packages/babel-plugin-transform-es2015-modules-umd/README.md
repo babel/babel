@@ -110,7 +110,7 @@ factory(global.fooBAR, global.fooBAR);
 because again the transform is only using the basename of the import.
 
 _Second_, the specified override will still be passed to the `toIdentifier`
-function in [babel-types/src/converters](../babel-types/src/converters.js).
+function in [babel-types/src/converters](https://github.com/babel/babel/blob/master/packages/babel-types/src/converters.js).
 This means that if you specify an override as a member expression like:
 
 ```json
