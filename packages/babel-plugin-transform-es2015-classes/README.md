@@ -79,25 +79,3 @@ class Bar extends Foo {
 When `Bar.prototype.foo` is defined it triggers the setter on `Foo`. This is a
 case that is very unlikely to appear in production code however it's something
 to keep in mind.
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```js
-// without options
-{
-  "plugins": ["transform-es2015-classes"]
-}
-
-// with options
-{
-  "plugins": [
-    ["transform-es2015-classes", {
-      "loose": true
-    }]
-  ]
-}
-```
