@@ -21,7 +21,7 @@ export default function ({ types: t }) {
 
   visitor.Program = function (path, state) {
     let { file } = state;
-    let id = state.opts.pragma || "React.createElement";
+    let id = file.opts.pragma || "React.createElement";
 
     for (let comment of (file.ast.comments: Array<Object>)) {
       let matches = JSX_ANNOTATION_REGEX.exec(comment.value);
