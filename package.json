@@ -68,6 +68,7 @@
       "test": {
         "auxiliaryCommentBefore": "istanbul ignore next",
         "plugins": [
+          "istanbul"
         ]
       }
     }
