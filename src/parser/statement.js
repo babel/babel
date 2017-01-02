@@ -149,7 +149,8 @@ pp.takeDecorators = function (node) {
 
 pp.parseDecorators = function (allowExport) {
   while (this.match(tt.at)) {
-    this.state.decorators.push(this.parseDecorator());
+    let decorator = this.parseDecorator();
+    this.state.decorators.push(decorator);
   }
 
   if (allowExport && this.match(tt._export)) {
