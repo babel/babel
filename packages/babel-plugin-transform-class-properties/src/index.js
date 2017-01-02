@@ -1,8 +1,7 @@
 /* eslint max-len: 0 */
 import nameFunction from "babel-helper-function-name";
-import template from "babel-template";
 
-export default function ({ types: t }) {
+export default function ({ template, types: t }) {
   let findBareSupers = {
     Super(path) {
       if (path.parentPath.isCallExpression({ callee: path.node })) {

@@ -1,6 +1,4 @@
-import * as t from "babel-types";
-
-export default function () {
+export default function ({ types: t }) {
   return {
     visitor: {
       Program(path, state) {

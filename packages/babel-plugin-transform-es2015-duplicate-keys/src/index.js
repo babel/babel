@@ -1,13 +1,11 @@
-import * as t from "babel-types";
-
-function getName(key) {
-  if (t.isIdentifier(key)) {
-    return key.name;
+export default function({ types: t }) {
+  function getName(key) {
+    if (t.isIdentifier(key)) {
+      return key.name;
+    }
+    return key.value.toString();
   }
-  return key.value.toString();
-}
 
-export default function() {
   return {
     visitor: {
       ObjectExpression(path) {

@@ -1,32 +1,31 @@
 /* eslint max-len: 0 */
 
 import { basename, extname } from "path";
-import template from "babel-template";
 
-let buildPrerequisiteAssignment = template(`
-  GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
-`);
+export default function ({ template, types: t }) {
+  let buildPrerequisiteAssignment = template(`
+    GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
+  `);
 
-let buildGlobalExport = template(`
-  var mod = { exports: {} };
-  factory(BROWSER_ARGUMENTS);
-  PREREQUISITE_ASSIGNMENTS
-  GLOBAL_TO_ASSIGN = mod.exports;
-`);
+  let buildGlobalExport = template(`
+    var mod = { exports: {} };
+    factory(BROWSER_ARGUMENTS);
+    PREREQUISITE_ASSIGNMENTS
+    GLOBAL_TO_ASSIGN = mod.exports;
+  `);
 
-let buildWrapper = template(`
-  (function (global, factory) {
-    if (typeof define === "function" && define.amd) {
-      define(MODULE_NAME, AMD_ARGUMENTS, factory);
-    } else if (typeof exports !== "undefined") {
-      factory(COMMON_ARGUMENTS);
-    } else {
-      GLOBAL_EXPORT
-    }
-  })(this, FUNC);
-`);
+  let buildWrapper = template(`
+    (function (global, factory) {
+      if (typeof define === "function" && define.amd) {
+        define(MODULE_NAME, AMD_ARGUMENTS, factory);
+      } else if (typeof exports !== "undefined") {
+        factory(COMMON_ARGUMENTS);
+      } else {
+        GLOBAL_EXPORT
+      }
+    })(this, FUNC);
+  `);
 
-export default function ({ types: t }) {
   function isValidDefine(path) {
     if (!path.isExpressionStatement()) return;
 

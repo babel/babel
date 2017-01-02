@@ -1,16 +1,14 @@
-import template from "babel-template";
+export default function ({ template, types: t }) {
+  let buildDefine = template(`
+    define(MODULE_NAME, [SOURCES], FACTORY);
+  `);
 
-let buildDefine = template(`
-  define(MODULE_NAME, [SOURCES], FACTORY);
-`);
+  let buildFactory = template(`
+    (function (PARAMS) {
+      BODY;
+    })
+  `);
 
-let buildFactory = template(`
-  (function (PARAMS) {
-    BODY;
-  })
-`);
-
-export default function ({ types: t }) {
   function isValidRequireCall(path) {
     if (!path.isCallExpression()) return false;
     if (!path.get("callee").isIdentifier({ name: "require" })) return false;

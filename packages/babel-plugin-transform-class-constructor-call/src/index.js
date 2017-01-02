@@ -1,21 +1,19 @@
-import template from "babel-template";
-
-let buildWrapper = template(`
-  let CLASS_REF = CLASS;
-  var CALL_REF = CALL;
-  var WRAPPER_REF = function (...args) {
-    if (this instanceof WRAPPER_REF) {
-      return Reflect.construct(CLASS_REF, args);
-    } else {
-      return CALL_REF.apply(this, args);
-    }
-  };
-  WRAPPER_REF.__proto__ = CLASS_REF;
-  WRAPPER_REF;
-`);
-
-export default function ({ types: t }) {
+export default function ({ template, types: t }) {
   let ALREADY_VISITED = Symbol();
+
+  let buildWrapper = template(`
+    let CLASS_REF = CLASS;
+    var CALL_REF = CALL;
+    var WRAPPER_REF = function (...args) {
+      if (this instanceof WRAPPER_REF) {
+        return Reflect.construct(CLASS_REF, args);
+      } else {
+        return CALL_REF.apply(this, args);
+      }
+    };
+    WRAPPER_REF.__proto__ = CLASS_REF;
+    WRAPPER_REF;
+  `);
 
   function findConstructorCall(path): ?Object {
     let methods: Array<Object> = path.get("body.body");
