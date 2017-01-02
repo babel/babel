@@ -54,19 +54,20 @@
             "end": {
               "line": 5,
               "column": 20
-            }
+            },
+            "identifierName": "DirectionVector"
           },
           "name": "DirectionVector"
         },
         "typeParameters": null,
         "right": {
           "type": "UnionTypeAnnotation",
-          "start": 45,
+          "start": 43,
           "end": 59,
           "loc": {
             "start": {
               "line": 6,
-              "column": 4
+              "column": 2
             },
             "end": {
               "line": 8,
@@ -196,7 +197,8 @@
                 "end": {
                   "line": 11,
                   "column": 21
-                }
+                },
+                "identifierName": "x"
               },
               "name": "x",
               "typeAnnotation": {
@@ -240,7 +242,8 @@
                       "end": {
                         "line": 11,
                         "column": 21
-                      }
+                      },
+                      "identifierName": "DirectionVector"
                     },
                     "name": "DirectionVector"
                   }
@@ -263,9 +266,6 @@
               },
               "operator": "-",
               "prefix": true,
-              "extra": {
-                "parenthesizedArgument": false
-              },
               "argument": {
                 "type": "NumericLiteral",
                 "start": 88,
@@ -285,6 +285,9 @@
                   "raw": "1"
                 },
                 "value": 1
+              },
+              "extra": {
+                "parenthesizedArgument": false
               }
             }
           }
@@ -345,7 +348,8 @@
                 "end": {
                   "line": 12,
                   "column": 7
-                }
+                },
+                "identifierName": "console"
               },
               "name": "console"
             },
@@ -361,7 +365,8 @@
                 "end": {
                   "line": 12,
                   "column": 11
-                }
+                },
+                "identifierName": "log"
               },
               "name": "log"
             },

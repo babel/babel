@@ -7,15 +7,11 @@ import Parser from "../parser";
 
 let pp = Parser.prototype;
 
-pp.flowParseTypeInitialiser = function (tok, allowLeadingPipeOrAnd) {
+pp.flowParseTypeInitialiser = function (tok) {
   let oldInType = this.state.inType;
   this.state.inType = true;
   this.expect(tok || tt.colon);
-  if (allowLeadingPipeOrAnd) {
-    if (this.match(tt.bitwiseAND) || this.match(tt.bitwiseOR)) {
-      this.next();
-    }
-  }
+
   let type = this.flowParseType();
   this.state.inType = oldInType;
   return type;
@@ -193,10 +189,7 @@ pp.flowParseTypeAlias = function (node) {
     node.typeParameters = null;
   }
 
-  node.right = this.flowParseTypeInitialiser(
-    tt.eq,
-    /*allowLeadingPipeOrAnd*/ true
-  );
+  node.right = this.flowParseTypeInitialiser(tt.eq);
   this.semicolon();
 
   return this.finishNode(node, "TypeAlias");
@@ -729,6 +722,7 @@ pp.flowParseAnonFunctionWithoutParens = function () {
 
 pp.flowParseIntersectionType = function () {
   let node = this.startNode();
+  this.eat(tt.bitwiseAND);
   let type = this.flowParseAnonFunctionWithoutParens();
   node.types = [type];
   while (this.eat(tt.bitwiseAND)) {
@@ -739,6 +733,7 @@ pp.flowParseIntersectionType = function () {
 
 pp.flowParseUnionType = function () {
   let node = this.startNode();
+  this.eat(tt.bitwiseOR);
   let type = this.flowParseIntersectionType();
   node.types = [type];
   while (this.eat(tt.bitwiseOR)) {
