@@ -1,5 +1,7 @@
 /* eslint indent: 0 */
 
+import fromCodePoint from "./fromCodePoint";
+
 import XHTMLEntities from "./xhtml";
 import { TokenType, types as tt } from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";
@@ -136,11 +138,11 @@ pp.jsxReadEntity = function() {
         if (str[1] === "x") {
           str = str.substr(2);
           if (HEX_NUMBER.test(str))
-            entity = String.fromCharCode(parseInt(str, 16));
+            entity = fromCodePoint(parseInt(str, 16));
         } else {
           str = str.substr(1);
           if (DECIMAL_NUMBER.test(str))
-            entity = String.fromCharCode(parseInt(str, 10));
+            entity = fromCodePoint(parseInt(str, 10));
         }
       } else {
         entity = XHTMLEntities[str];
