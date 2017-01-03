@@ -4,7 +4,7 @@
 
 ## Install
 
-```js
+```sh
 npm install --save-dev babel-helpers
 ```
 
