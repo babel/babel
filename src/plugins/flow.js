@@ -1185,6 +1185,58 @@ export default function (instance) {
     };
   });
 
+  // parse import-type/typeof shorthand
+  instance.extend("parseImportSpecifier", function () {
+    return function (node) {
+      let specifier = this.startNode();
+      const firstIdentLoc = this.state.start;
+      const firstIdent = this.parseIdentifier(true);
+
+      let specifierTypeKind = null;
+      if (firstIdent.name === "type") {
+        specifierTypeKind = "type";
+      } else if (firstIdent.name === "typeof") {
+        specifierTypeKind = "typeof";
+      }
+
+      if (this.isContextual("as")) {
+        const as_ident = this.parseIdentifier(true);
+        if (specifierTypeKind !== null && !this.match(tt.name)) {
+          // `import {type as ,` or `import {type as }`
+          specifier.imported = as_ident;
+          specifier.importKind = specifierTypeKind;
+          specifier.local = as_ident.__clone();
+        } else {
+          // `import {type as foo`
+          specifier.imported = firstIdent;
+          specifier.importKind = null;
+          specifier.local = this.parseIdentifier(false);
+        }
+      } else if (specifierTypeKind !== null && this.match(tt.name)) {
+        // `import {type foo`
+        specifier.imported = this.parseIdentifier(true);
+        specifier.importKind = specifierTypeKind;
+        specifier.local =
+          this.eatContextual("as")
+          ? this.parseIdentifier(false)
+          : specifier.imported.__clone();
+      } else {
+        if (firstIdent.name === "typeof") {
+          this.unexpected(
+            firstIdentLoc,
+            "Cannot import a variable named `typeof`"
+          );
+        }
+        specifier.imported = firstIdent;
+        specifier.importKind = null;
+        specifier.local = specifier.imported.__clone();
+      }
+
+      this.checkLVal(specifier.local, true, undefined, "import specifier");
+      node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
+    };
+  });
+
   // parse function type parameters - function foo<T>() {}
   instance.extend("parseFunctionParams", function (inner) {
     return function (node) {

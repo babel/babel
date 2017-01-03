@@ -1061,12 +1061,16 @@ pp.parseImportSpecifiers = function (node) {
       if (this.eat(tt.braceR)) break;
     }
 
-    let specifier = this.startNode();
-    specifier.imported = this.parseIdentifier(true);
-    specifier.local = this.eatContextual("as") ? this.parseIdentifier() : specifier.imported.__clone();
-    this.checkLVal(specifier.local, true, undefined, "import specifier");
-    node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
+    this.parseImportSpecifier(node);
   }
+};
+
+pp.parseImportSpecifier = function (node) {
+  let specifier = this.startNode();
+  specifier.imported = this.parseIdentifier(true);
+  specifier.local = this.eatContextual("as") ? this.parseIdentifier() : specifier.imported.__clone();
+  this.checkLVal(specifier.local, true, undefined, "import specifier");
+  node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
 };
 
 pp.parseImportSpecifierDefault = function (id, startPos, startLoc) {
