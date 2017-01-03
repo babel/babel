@@ -158,6 +158,20 @@ describe("babel-preset-env", () => {
         babelPresetEnv.isPluginRequired(targets, plugin);
       }, Error);
     });
+
+    it("will throw if target version is not a number", () => {
+      const plugin = {
+        "node": 6,
+      };
+
+      const targets = {
+        "node": "6.5",
+      };
+
+      assert.throws(() => {
+        babelPresetEnv.isPluginRequired(targets, plugin);
+      }, Error);
+    });
   });
 
   describe("validateLooseOption", () => {

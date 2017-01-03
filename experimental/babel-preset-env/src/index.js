@@ -50,11 +50,12 @@ export const isPluginRequired = (supportedEnvironments, plugin) => {
       const lowestImplementedVersion = plugin[environment];
       const lowestTargetedVersion = supportedEnvironments[environment];
 
-      if (lowestTargetedVersion < lowestImplementedVersion) {
-        return true;
+      if (typeof lowestTargetedVersion === "string") {
+        throw new Error(`Target version must be a number, 
+          '${lowestTargetedVersion}' was given for '${environment}'`);
       }
 
-      return false;
+      return lowestTargetedVersion < lowestImplementedVersion;
     });
 
   return isRequiredForEnvironments.length > 0 ? true : false;
