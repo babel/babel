@@ -20,6 +20,10 @@ describe("util", function () {
     assert.ok(util.canCompile("/test.jsx"));
     assert.ok(util.canCompile("/scripts/test.jsx"));
 
+    assert.ok(util.canCompile("test.vue"));
+    assert.ok(util.canCompile("/test.vue"));
+    assert.ok(util.canCompile("/scripts/test.vue"));
+
     assert.ok(!util.canCompile("test"));
     assert.ok(!util.canCompile("test.css"));
     assert.ok(!util.canCompile("/test.css"));
