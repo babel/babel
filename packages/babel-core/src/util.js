@@ -24,7 +24,7 @@ export function canCompile(filename: string, altExts?: Array<string>): boolean {
  * Default set of compilable extensions.
  */
 
-canCompile.EXTENSIONS = [".js", ".jsx", ".es6", ".es"];
+canCompile.EXTENSIONS = [".js", ".jsx", ".es6", ".es", ".vue"];
 
 /**
  * Create an array from any value, splitting strings by ",".
