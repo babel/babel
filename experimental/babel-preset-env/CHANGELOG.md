@@ -1,5 +1,47 @@
 # Changelog
 
+## v1.1.5 (2017-01-04)
+
+### :bug: Bug Fix
+
+- Show error if target version is not a number. ([#107](https://github.com/babel/babel-preset-env/pull/107)) (@existentialism)
+
+```js
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": "52", // will error since it's not a number,
+        "chrome": 52 // correct!
+      }
+    }]
+  ]
+}
+```
+
+- Fix targets for the `debug` option. ([#109](https://github.com/babel/babel-preset-env/pull/109)) (@yavorsky)
+
+Now it prints the transformed targets/environments rather than the browsers query.
+
+```txt
+Using targets:
+{
+  "chrome": 53,
+  "ie": 10,
+  "node": 6
+}
+
+Modules transform: false
+
+Using plugins:
+  transform-es2015-arrow-functions {"chrome":47,"node":6}
+  transform-es2015-block-scoped-functions {"chrome":41,"ie":11,"node":4}
+
+Using polyfills:
+  es6.typed.uint8-clamped-array {"chrome":5,"node":0.12}
+  es6.map {"chrome":51,"node":6.5}
+```
+
 ## v1.1.4 (2016-12-16)
 
 v1.1.2-v1.1.4
