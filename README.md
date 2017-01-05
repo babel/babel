@@ -111,7 +111,7 @@ require("babylon").parse("code", {
  - `flow`
  - `doExpressions`
  - `objectRestSpread`
- - `decorators`
+ - `decorators` (Based on an outdated version of the Decorators proposal. Will be removed in a future version of `Babylon`)
  - `classProperties`
  - `exportExtensions`
  - `asyncGenerators`
