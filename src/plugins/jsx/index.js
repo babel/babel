@@ -416,7 +416,9 @@ export default function(instance) {
 
   instance.extend("readToken", function(inner) {
     return function(code) {
-      let context = this.curContext();
+      if (this.state.inPropertyName) return inner.call(this, code);
+
+      const context = this.curContext();
 
       if (context === tc.j_expr) {
         return this.jsxReadToken();

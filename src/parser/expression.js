@@ -850,11 +850,14 @@ pp.parsePropertyName = function (prop) {
     prop.computed = true;
     prop.key = this.parseMaybeAssign();
     this.expect(tt.bracketR);
-    return prop.key;
   } else {
     prop.computed = false;
-    return prop.key = (this.match(tt.num) || this.match(tt.string)) ? this.parseExprAtom() : this.parseIdentifier(true);
+    const oldInPropertyName = this.state.inPropertyName;
+    this.state.inPropertyName = true;
+    prop.key = (this.match(tt.num) || this.match(tt.string)) ? this.parseExprAtom() : this.parseIdentifier(true);
+    this.state.inPropertyName = oldInPropertyName;
   }
+  return prop.key;
 };
 
 // Initialize empty function node.

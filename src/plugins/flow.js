@@ -949,17 +949,6 @@ export default function (instance) {
     };
   });
 
-  // ensure that inside property names, < isn't interpreted as JSX, but as a type parameter
-  instance.extend("parsePropertyName", function (inner) {
-    return function (prop) {
-      const oldInType = this.state.inType;
-      this.state.inType = true;
-      const out = inner.call(this, prop);
-      this.state.inType = oldInType;
-      return out;
-    };
-  });
-
   // ensure that inside flow types, we bypass the jsx parser plugin
   instance.extend("readToken", function (inner) {
     return function (code) {

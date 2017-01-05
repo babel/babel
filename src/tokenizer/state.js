@@ -16,6 +16,7 @@ export default class State {
       this.inFunction =
       this.inGenerator =
       this.inAsync =
+      this.inPropertyName =
       this.inType =
       this.noAnonFunctionType =
         false;
@@ -69,6 +70,7 @@ export default class State {
   inMethod: boolean;
   inAsync: boolean;
   inType: boolean;
+  inPropertyName: boolean;
 
   // Labels in scope.
   labels: Array<Object>;
