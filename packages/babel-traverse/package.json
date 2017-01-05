@@ -17,5 +17,8 @@
     "globals": "^9.0.0",
     "invariant": "^2.2.0",
     "lodash": "^4.2.0"
+  },
+  "devDependencies": {
+    "babel-generator": "^6.19.0"
   }
 }

@@ -6,7 +6,10 @@
 
 export let hooks = [
   function (self, parent) {
-    if (self.key === "body" && parent.isArrowFunctionExpression()) {
+    if (
+      parent.isConditionalExpression() ||
+      self.key === "right" && parent.isAssignmentExpression()
+    ) {
       self.replaceWith(self.scope.buildUndefinedNode());
       return true;
     }
@@ -69,7 +72,7 @@ export let hooks = [
   function (self, parent) {
     if (
       (parent.isIfStatement() && (self.key === "consequent" || self.key === "alternate")) ||
-      (parent.isLoop() && self.key === "body")
+      (self.key === "body" && (parent.isLoop() || parent.isArrowFunctionExpression()))
     ) {
       self.replaceWith({
         type: "BlockStatement",
