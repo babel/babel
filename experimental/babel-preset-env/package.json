@@ -45,7 +45,8 @@
     "babel-plugin-transform-es2015-unicode-regex": "^6.3.13",
     "babel-plugin-transform-exponentiation-operator": "^6.8.0",
     "babel-plugin-transform-regenerator": "^6.6.0",
-    "browserslist": "^1.4.0"
+    "browserslist": "^1.4.0",
+    "invariant": "^2.2.2"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
