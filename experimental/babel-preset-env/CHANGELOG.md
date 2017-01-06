@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.1.6 (2017-01-06)
+
+### :bug: Bug Fix
+
+- Explicitly resolve lowest browser version. ([#121](https://github.com/babel/babel-preset-env/pull/121)) (@brokenmass)
+
+```js
+{
+  "targets": {
+    "browsers": ["ios >= 6"] // was resolving to {ios: 10} rather than {ios: 6}
+  }
+}
+```
+
 ## v1.1.5 (2017-01-04)
 
 ### :bug: Bug Fix
