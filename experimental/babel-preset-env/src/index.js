@@ -77,8 +77,10 @@ const browserNameMap = {
 const getLowestVersions = (browsers) => {
   return browsers.reduce((all, browser) => {
     const [browserName, browserVersion] = browser.split(" ");
-    if (browserName in browserNameMap) {
-      all[browserNameMap[browserName]] = parseInt(browserVersion);
+    const normalizedBrowserName = browserNameMap[browserName];
+    const parsedBrowserVersion = parseInt(browserVersion);
+    if (normalizedBrowserName && !isNaN(parsedBrowserVersion)) {
+      all[normalizedBrowserName] = Math.min(all[normalizedBrowserName] || Infinity, parsedBrowserVersion);
     }
     return all;
   }, {});
