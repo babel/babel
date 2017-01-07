@@ -31,7 +31,7 @@
     "flow-bin": "^0.37.0",
     "nyc": "^10.0.0",
     "rimraf": "^2.5.4",
-    "rollup": "^0.40.0",
+    "rollup": "^0.41.0",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-node-resolve": "^2.0.0",
     "unicode-9.0.0": "~0.7.0"
