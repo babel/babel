@@ -120,7 +120,7 @@ const es2015 = {
 };
 
 const es2016 = {
-  "es7.array.includes.js": "Array.prototype.includes",
+  "es7.array.includes": "Array.prototype.includes",
 };
 
 const es2017 = {

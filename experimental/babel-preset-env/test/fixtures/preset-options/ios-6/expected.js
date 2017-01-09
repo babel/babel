@@ -65,7 +65,7 @@ import "core-js/modules/es6.math.sign";
 import "core-js/modules/es6.math.sinh";
 import "core-js/modules/es6.math.tanh";
 import "core-js/modules/es6.math.trunc";
-import "core-js/modules/es7.array.includes.js";
+import "core-js/modules/es7.array.includes";
 import "core-js/modules/es7.object.values";
 import "core-js/modules/es7.object.entries";
 import "core-js/modules/es7.object.get-own-property-descriptors";

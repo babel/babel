@@ -658,7 +658,7 @@
     "ios": 10,
     "opera": 25
   },
-  "es7.array.includes.js": {
+  "es7.array.includes": {
     "chrome": 47,
     "edge": 14,
     "firefox": 43,
