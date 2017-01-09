@@ -1,65 +1,54 @@
 module.exports = {
   parser: "babel-eslint",
   extends: "eslint:recommended",
-  plugins: ["flowtype", "babel"],
+  plugins: ["flowtype"],
   rules: {
-    "flowtype/define-flow-type": "warn",
-    "flowtype/use-flow-type": "warn",
-    quotes: ["error", "double"],
-    "linebreak-style": ["error", "unix"],
-    "no-var": "error",
-    "keyword-spacing": "error",
-    strict: "off",
-    "no-underscore-dangle": "off",
-    curly: "off",
-    "no-multi-spaces": "off",
-    "key-spacing": "off",
-    "no-return-assign": "off",
-    "consistent-return": "off",
-    "no-shadow": "off",
-    "comma-dangle": "off",
-    "no-use-before-define": "off",
-    "no-empty": "off",
-    "new-parens": "off",
-    "no-cond-assign": "off",
-    "no-fallthrough": "off",
-    "new-cap": "off",
-    "no-loop-func": "off",
-    "no-unreachable": "off",
-    "no-labels": "off",
-    "no-process-exit": "off",
-    "no-trailing-spaces": "error",
+    "arrow-parens": ["error", "always"],
+    "arrow-spacing": ["error", { before: true, after: true }],
     camelcase: "off",
+    "comma-dangle": "off",
+    "consistent-return": "off",
+    curly: "off",
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    "key-spacing": "off",
+    "keyword-spacing": "error",
+    "max-len": ["error", 110, 2],
+    "new-cap": "off",
+    "new-parens": "off",
+    "no-case-declarations": "off",
+    "no-cond-assign": "off",
+    "no-confusing-arrow": "error",
     "no-console": "off",
     "no-constant-condition": "off",
+    "no-empty": "off",
+    "no-fallthrough": "off",
     "no-inner-declarations": "off",
-    "no-case-declarations": "off",
-    semi: ["error", "always"],
-
-    // soft indent of 2 characters
-    "indent": ["error", 2],
-
-    // maximum length of 110 characters
-    "max-len": ["error", 110, 2],
-
-    // Enforce parens around arrow function arguments
-    "arrow-parens": ["error", "always"],
-    // Require a space on each side of arrow operator
-    "arrow-spacing": ["error", { before: true, after: true }],
-    // Require a space on each side of all infix operators
+    "no-multi-spaces": "off",
+    "no-labels": "off",
+    "no-loop-func": "off",
+    "no-process-exit": "off",
+    "no-return-assign": "off",
+    "no-shadow": "off",
+    "no-trailing-spaces": "error",
+    "no-underscore-dangle": "off",
+    "no-unreachable": "off",
+    "no-use-before-define": "off",
+    "no-var": "error",
+    "prefer-const": "error",
+    quotes: ["error", "double"],
+    "space-before-blocks": ["error", "always"],
     "space-infix-ops": "error",
-    // Prevent using => in a condition where <= is intended
-    "no-confusing-arrow": "error",
-    // prevent no space in `if (){`
-    "space-before-blocks": ["error", "always"]
+    semi: ["error", "always"],
+    strict: "off"
+    "flowtype/define-flow-type": "warn",
+    "flowtype/use-flow-type": "warn",
   },
-
   globals: {
     // Flow
     Iterator: true,
     $Keys: true
   },
-
   env: {
     node: true,
     es6: true,
