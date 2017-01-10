@@ -228,6 +228,15 @@ const logPlugin = (plugin, targets, list) => {
   console.log(logStr);
 };
 
+const filterItem = (targets, exclusions, list, item) => {
+  const isDefault = defaultInclude.indexOf(item) >= 0;
+  const notExcluded = exclusions.indexOf(item) === -1;
+
+  if (isDefault) return notExcluded;
+  const isRequired = isPluginRequired(targets, list[item]);
+  return isRequired && notExcluded;
+};
+
 export default function buildPreset(context, opts = {}) {
   const loose = validateLooseOption(opts.loose);
   const moduleType = validateModulesOption(opts.modules);
@@ -244,15 +253,18 @@ export default function buildPreset(context, opts = {}) {
   const debug = opts.debug;
   const useBuiltIns = opts.useBuiltIns;
 
+  const filterPlugins = filterItem.bind(null, targets, exclude.plugins, pluginList);
   let transformations = Object.keys(pluginList)
-    .filter((pluginName) => isPluginRequired(targets, pluginList[pluginName]));
+    .filter(filterPlugins)
+    .concat(include.plugins);
 
   let polyfills;
   if (useBuiltIns) {
+    const filterBuiltIns = filterItem.bind(null, targets, exclude.builtIns, builtInsList);
+
     polyfills = Object.keys(builtInsList)
-      .filter((builtInName) => isPluginRequired(targets, builtInsList[builtInName]))
       .concat(defaultInclude)
-      .filter((plugin) => exclude.builtIns.indexOf(plugin) === -1)
+      .filter(filterBuiltIns)
       .concat(include.builtIns);
   }
 
@@ -266,26 +278,22 @@ export default function buildPreset(context, opts = {}) {
     transformations.forEach((transform) => {
       logPlugin(transform, targets, pluginList);
     });
-    console.log("\nUsing polyfills:");
     if (useBuiltIns && polyfills.length) {
+      console.log("\nUsing polyfills:");
       polyfills.forEach((polyfill) => {
         logPlugin(polyfill, targets, builtInsList);
       });
     }
   }
 
-  const allTransformations = transformations
-  .filter((plugin) => exclude.plugins.indexOf(plugin) === -1)
-  .concat(include.plugins);
-
-  const regenerator = allTransformations.indexOf("transform-regenerator") >= 0;
+  const regenerator = transformations.indexOf("transform-regenerator") >= 0;
   const modulePlugin = moduleType !== false && MODULE_TRANSFORMATIONS[moduleType];
   const plugins = [];
 
   modulePlugin &&
     plugins.push([require(`babel-plugin-${modulePlugin}`), { loose }]);
 
-  plugins.push(...allTransformations.map((pluginName) =>
+  plugins.push(...transformations.map((pluginName) =>
     [require(`babel-plugin-${pluginName}`), { loose }]
   ));
 
