@@ -40,7 +40,7 @@ module.exports = {
     "space-before-blocks": ["error", "always"],
     "space-infix-ops": "error",
     semi: ["error", "always"],
-    strict: "off"
+    strict: "off",
     "flowtype/define-flow-type": "warn",
     "flowtype/use-flow-type": "warn",
   },
