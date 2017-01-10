@@ -4,3 +4,4 @@ node_modules
 scripts
 .eslintignore
 .travis.yml
+yarn.lock
