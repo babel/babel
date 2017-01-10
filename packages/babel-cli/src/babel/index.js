@@ -45,6 +45,7 @@ commander.option("-o, --out-file [out]", "Compile all input files into a single 
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
 commander.option("-q, --quiet", "Don't log anything");
+commander.option("--copy-dot-files", "When compiling a directory copy over dot files", false);
 
 const pkg = require("../../package.json");
 commander.version(pkg.version + " (babel-core " + require("babel-core").version + ")");

@@ -42,22 +42,27 @@ module.exports = function (commander, filenames) {
     }
   }
 
+  let filterDotFiles = function (x) {
+    return x[0] === ".";
+  };
+  let copyFilesFilter = () => false;
+
   function handle(filename) {
     if (!fs.existsSync(filename)) return;
 
-    const stat = fs.statSync(filename);
-
+    let stat = fs.statSync(filename);
     if (stat.isDirectory(filename)) {
-      const dirname = filename;
-
-      util.readdir(dirname).forEach(function (filename) {
-        const src = path.join(dirname, filename);
+      let dirname = filename;
+      if (commander.copyDotFiles) {
+        copyFilesFilter = filterDotFiles;
+      }
+      _.each(util.readdir(dirname, copyFilesFilter, function (filename) {
+        let src = path.join(dirname, filename);
         handleFile(src, filename);
-      });
+      }));
     } else {
       write(filename, filename);
     }
-  }
 
   if (!commander.skipInitialBuild) {
     filenames.forEach(handle);
