@@ -140,8 +140,8 @@ export default class State {
   }
 
   clone(skipArrays?) {
-    let state = new State;
-    for (let key in this) {
+    const state = new State;
+    for (const key in this) {
       let val = this[key];
 
       if ((!skipArrays || key === "context") && Array.isArray(val)) {

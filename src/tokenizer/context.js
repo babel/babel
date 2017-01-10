@@ -44,7 +44,7 @@ tt.parenR.updateContext = tt.braceR.updateContext = function () {
     return;
   }
 
-  let out = this.state.context.pop();
+  const out = this.state.context.pop();
   if (out === types.braceStatement && this.curContext() === types.functionExpression) {
     this.state.context.pop();
     this.state.exprAllowed = false;
@@ -76,7 +76,7 @@ tt.dollarBraceL.updateContext = function () {
 };
 
 tt.parenL.updateContext = function (prevType) {
-  let statementParens = prevType === tt._if || prevType === tt._for ||
+  const statementParens = prevType === tt._if || prevType === tt._for ||
                         prevType === tt._with || prevType === tt._while;
   this.state.context.push(statementParens ? types.parenStatement : types.parenExpression);
   this.state.exprAllowed = true;

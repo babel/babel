@@ -22,7 +22,7 @@ class Node {
 
   __clone(): Node {
     const node2 = new Node;
-    for (let key in this) {
+    for (const key in this) {
       // Do not clone comments that are already attached to the node
       if (commentKeys.indexOf(key) < 0) {
         node2[key] = this[key];

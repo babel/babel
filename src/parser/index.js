@@ -60,7 +60,7 @@ export default class Parser extends Tokenizer {
     pluginNames.push("flow");
 
     pluginNames.forEach((name) => {
-      let plugin = plugins[name];
+      const plugin = plugins[name];
       if (plugin) plugin(this);
     });
   }
@@ -73,7 +73,7 @@ export default class Parser extends Tokenizer {
       return { "*": true };
     }
 
-    let pluginMap = {};
+    const pluginMap = {};
 
     if (pluginList.indexOf("flow") >= 0) {
       // ensure flow plugin loads last
@@ -81,11 +81,11 @@ export default class Parser extends Tokenizer {
       pluginList.push("flow");
     }
 
-    for (let name of pluginList) {
+    for (const name of pluginList) {
       if (!pluginMap[name]) {
         pluginMap[name] = true;
 
-        let plugin = plugins[name];
+        const plugin = plugins[name];
         if (plugin) plugin(this);
       }
     }
@@ -100,8 +100,8 @@ export default class Parser extends Tokenizer {
       body: Array<Object>
     }
   } {
-    let file = this.startNode();
-    let program = this.startNode();
+    const file = this.startNode();
+    const program = this.startNode();
     this.nextToken();
     return this.parseTopLevel(file, program);
   }

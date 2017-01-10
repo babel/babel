@@ -10,9 +10,9 @@ const pp = Parser.prototype;
 // message.
 
 pp.raise = function (pos, message) {
-  let loc = getLineInfo(this.input, pos);
+  const loc = getLineInfo(this.input, pos);
   message += ` (${loc.line}:${loc.column})`;
-  let err = new SyntaxError(message);
+  const err = new SyntaxError(message);
   err.pos = pos;
   err.loc = loc;
   throw err;

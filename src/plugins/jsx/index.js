@@ -28,7 +28,7 @@ tt.jsxTagStart.updateContext = function() {
 };
 
 tt.jsxTagEnd.updateContext = function(prevType) {
-  let out = this.state.context.pop();
+  const out = this.state.context.pop();
   if (out === tc.j_oTag && prevType === tt.slash || out === tc.j_cTag) {
     this.state.context.pop();
     this.state.exprAllowed = this.curContext() === tc.j_expr;
@@ -37,7 +37,7 @@ tt.jsxTagEnd.updateContext = function(prevType) {
   }
 };
 
-let pp = Parser.prototype;
+const pp = Parser.prototype;
 
 // Reads inline JSX contents token.
 
@@ -49,7 +49,7 @@ pp.jsxReadToken = function() {
       this.raise(this.state.start, "Unterminated JSX contents");
     }
 
-    let ch = this.input.charCodeAt(this.state.pos);
+    const ch = this.input.charCodeAt(this.state.pos);
 
     switch (ch) {
       case 60: // "<"
@@ -83,7 +83,7 @@ pp.jsxReadToken = function() {
 };
 
 pp.jsxReadNewLine = function(normalizeCRLF) {
-  let ch = this.input.charCodeAt(this.state.pos);
+  const ch = this.input.charCodeAt(this.state.pos);
   let out;
   ++this.state.pos;
   if (ch === 13 && this.input.charCodeAt(this.state.pos) === 10) {
@@ -106,7 +106,7 @@ pp.jsxReadString = function(quote) {
       this.raise(this.state.start, "Unterminated string constant");
     }
 
-    let ch = this.input.charCodeAt(this.state.pos);
+    const ch = this.input.charCodeAt(this.state.pos);
     if (ch === quote) break;
     if (ch === 38) { // "&"
       out += this.input.slice(chunkStart, this.state.pos);
@@ -130,7 +130,7 @@ pp.jsxReadEntity = function() {
   let entity;
   let ch = this.input[this.state.pos];
 
-  let startPos = ++this.state.pos;
+  const startPos = ++this.state.pos;
   while (this.state.pos < this.input.length && count++ < 10) {
     ch = this.input[this.state.pos++];
     if (ch === ";") {
@@ -168,7 +168,7 @@ pp.jsxReadEntity = function() {
 
 pp.jsxReadWord = function() {
   let ch;
-  let start = this.state.pos;
+  const start = this.state.pos;
   do {
     ch = this.input.charCodeAt(++this.state.pos);
   } while (isIdentifierChar(ch) || ch === 45); // "-"
@@ -194,7 +194,7 @@ function getQualifiedJSXName(object) {
 // Parse next token as JSX identifier
 
 pp.jsxParseIdentifier = function() {
-  let node = this.startNode();
+  const node = this.startNode();
   if (this.match(tt.jsxName)) {
     node.name = this.state.value;
   } else if (this.state.type.keyword) {
@@ -209,11 +209,12 @@ pp.jsxParseIdentifier = function() {
 // Parse namespaced identifier.
 
 pp.jsxParseNamespacedName = function() {
-  let startPos = this.state.start, startLoc = this.state.startLoc;
-  let name = this.jsxParseIdentifier();
+  const startPos = this.state.start;
+  const startLoc = this.state.startLoc;
+  const name = this.jsxParseIdentifier();
   if (!this.eat(tt.colon)) return name;
 
-  let node = this.startNodeAt(startPos, startLoc);
+  const node = this.startNodeAt(startPos, startLoc);
   node.namespace = name;
   node.name = this.jsxParseIdentifier();
   return this.finishNode(node, "JSXNamespacedName");
@@ -223,10 +224,11 @@ pp.jsxParseNamespacedName = function() {
 // or single identifier.
 
 pp.jsxParseElementName = function() {
-  let startPos = this.state.start, startLoc = this.state.startLoc;
+  const startPos = this.state.start;
+  const startLoc = this.state.startLoc;
   let node = this.jsxParseNamespacedName();
   while (this.eat(tt.dot)) {
-    let newNode = this.startNodeAt(startPos, startLoc);
+    const newNode = this.startNodeAt(startPos, startLoc);
     newNode.object = node;
     newNode.property = this.jsxParseIdentifier();
     node = this.finishNode(newNode, "JSXMemberExpression");
@@ -263,14 +265,14 @@ pp.jsxParseAttributeValue = function() {
 // at the beginning of the next one (right brace).
 
 pp.jsxParseEmptyExpression = function() {
-  let node = this.startNodeAt(this.state.lastTokEnd, this.state.lastTokEndLoc);
+  const node = this.startNodeAt(this.state.lastTokEnd, this.state.lastTokEndLoc);
   return this.finishNodeAt(node, "JSXEmptyExpression", this.state.start, this.state.startLoc);
 };
 
 // Parse JSX spread child
 
 pp.jsxParseSpreadChild = function() {
-  let node = this.startNode();
+  const node = this.startNode();
   this.expect(tt.braceL);
   this.expect(tt.ellipsis);
   node.expression = this.parseExpression();
@@ -283,7 +285,7 @@ pp.jsxParseSpreadChild = function() {
 
 
 pp.jsxParseExpressionContainer = function() {
-  let node = this.startNode();
+  const node = this.startNode();
   this.next();
   if (this.match(tt.braceR)) {
     node.expression = this.jsxParseEmptyExpression();
@@ -297,7 +299,7 @@ pp.jsxParseExpressionContainer = function() {
 // Parses following JSX attribute name-value pair.
 
 pp.jsxParseAttribute = function() {
-  let node = this.startNode();
+  const node = this.startNode();
   if (this.eat(tt.braceL)) {
     this.expect(tt.ellipsis);
     node.argument = this.parseMaybeAssign();
@@ -312,7 +314,7 @@ pp.jsxParseAttribute = function() {
 // Parses JSX opening tag starting after "<".
 
 pp.jsxParseOpeningElementAt = function(startPos, startLoc) {
-  let node = this.startNodeAt(startPos, startLoc);
+  const node = this.startNodeAt(startPos, startLoc);
   node.attributes = [];
   node.name = this.jsxParseElementName();
   while (!this.match(tt.slash) && !this.match(tt.jsxTagEnd)) {
@@ -326,7 +328,7 @@ pp.jsxParseOpeningElementAt = function(startPos, startLoc) {
 // Parses JSX closing tag starting after "</".
 
 pp.jsxParseClosingElementAt = function(startPos, startLoc) {
-  let node = this.startNodeAt(startPos, startLoc);
+  const node = this.startNodeAt(startPos, startLoc);
   node.name = this.jsxParseElementName();
   this.expect(tt.jsxTagEnd);
   return this.finishNode(node, "JSXClosingElement");
@@ -336,9 +338,9 @@ pp.jsxParseClosingElementAt = function(startPos, startLoc) {
 // (starting after "<"), attributes, contents and closing tag.
 
 pp.jsxParseElementAt = function(startPos, startLoc) {
-  let node = this.startNodeAt(startPos, startLoc);
-  let children = [];
-  let openingElement = this.jsxParseOpeningElementAt(startPos, startLoc);
+  const node = this.startNodeAt(startPos, startLoc);
+  const children = [];
+  const openingElement = this.jsxParseOpeningElementAt(startPos, startLoc);
   let closingElement = null;
 
   if (!openingElement.selfClosing) {
@@ -393,7 +395,8 @@ pp.jsxParseElementAt = function(startPos, startLoc) {
 // Parses entire JSX element from current position.
 
 pp.jsxParseElement = function() {
-  let startPos = this.state.start, startLoc = this.state.startLoc;
+  const startPos = this.state.start;
+  const startLoc = this.state.startLoc;
   this.next();
   return this.jsxParseElementAt(startPos, startLoc);
 };
@@ -402,7 +405,7 @@ export default function(instance) {
   instance.extend("parseExprAtom", function(inner) {
     return function(refShortHandDefaultPos) {
       if (this.match(tt.jsxText)) {
-        let node = this.parseLiteral(this.state.value, "JSXText");
+        const node = this.parseLiteral(this.state.value, "JSXText");
         // https://github.com/babel/babel/issues/2078
         node.extra = null;
         return node;
@@ -451,7 +454,7 @@ export default function(instance) {
   instance.extend("updateContext", function(inner) {
     return function(prevType) {
       if (this.match(tt.braceL)) {
-        let curContext = this.curContext();
+        const curContext = this.curContext();
         if (curContext === tc.j_oTag) {
           this.state.context.push(tc.braceExpression);
         } else if (curContext === tc.j_expr) {
