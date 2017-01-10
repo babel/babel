@@ -42,7 +42,7 @@ matrix:
     - node_js: "node"
       env: FLOWTESTS=true
 
-after_success: 'if [ -z "${LINT-}" ] && [ -z "${FLOW-}" && [ -z "${FLOWTESTS-}" ]; then npm run coverage ; fi'
+after_success: 'if [ -z "${LINT-}" ] && [ -z "${FLOW-}" ] && [ -z "${FLOWTESTS-}" ]; then npm run coverage ; fi'
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK
