@@ -16,6 +16,13 @@
 // to know when parsing a label, in order to allow or disallow
 // continue jumps to that label.
 
+const beforeExpr = true;
+const startsExpr = true;
+const isLoop = true;
+const isAssign = true;
+const prefix = true;
+const postfix = true;
+
 export class TokenType {
   constructor(label, conf = {}) {
     this.label = label;
@@ -32,38 +39,47 @@ export class TokenType {
   }
 }
 
-function binop(name, prec) {
-  return new TokenType(name, {beforeExpr: true, binop: prec});
+class KeywordTokenType extends TokenType {
+  constructor(name, options = {}) {
+    options.keyword = name;
+
+    super(name, options);
+  }
 }
-const beforeExpr = {beforeExpr: true}, startsExpr = {startsExpr: true};
+
+export class BinopTokenType extends TokenType {
+  constructor(name, prec) {
+    super(name, { beforeExpr, binop: prec });
+  }
+}
 
 export const types = {
-  num: new TokenType("num", startsExpr),
-  regexp: new TokenType("regexp", startsExpr),
-  string: new TokenType("string", startsExpr),
-  name: new TokenType("name", startsExpr),
+  num: new TokenType("num", { startsExpr }),
+  regexp: new TokenType("regexp", { startsExpr }),
+  string: new TokenType("string", { startsExpr }),
+  name: new TokenType("name", { startsExpr }),
   eof: new TokenType("eof"),
 
   // Punctuation token types.
-  bracketL: new TokenType("[", {beforeExpr: true, startsExpr: true}),
+  bracketL: new TokenType("[", { beforeExpr, startsExpr }),
   bracketR: new TokenType("]"),
-  braceL: new TokenType("{", {beforeExpr: true, startsExpr: true}),
-  braceBarL: new TokenType("{|", {beforeExpr: true, startsExpr: true}),
+  braceL: new TokenType("{", { beforeExpr, startsExpr }),
+  braceBarL: new TokenType("{|", { beforeExpr, startsExpr }),
   braceR: new TokenType("}"),
   braceBarR: new TokenType("|}"),
-  parenL: new TokenType("(", {beforeExpr: true, startsExpr: true}),
+  parenL: new TokenType("(", { beforeExpr, startsExpr }),
   parenR: new TokenType(")"),
-  comma: new TokenType(",", beforeExpr),
-  semi: new TokenType(";", beforeExpr),
-  colon: new TokenType(":", beforeExpr),
-  doubleColon: new TokenType("::", beforeExpr),
+  comma: new TokenType(",", { beforeExpr }),
+  semi: new TokenType(";", { beforeExpr }),
+  colon: new TokenType(":", { beforeExpr }),
+  doubleColon: new TokenType("::", { beforeExpr }),
   dot: new TokenType("."),
-  question: new TokenType("?", beforeExpr),
-  arrow: new TokenType("=>", beforeExpr),
+  question: new TokenType("?", { beforeExpr }),
+  arrow: new TokenType("=>", { beforeExpr }),
   template: new TokenType("template"),
-  ellipsis: new TokenType("...", beforeExpr),
-  backQuote: new TokenType("`", startsExpr),
-  dollarBraceL: new TokenType("${", {beforeExpr: true, startsExpr: true}),
+  ellipsis: new TokenType("...", { beforeExpr }),
+  backQuote: new TokenType("`", { startsExpr }),
+  dollarBraceL: new TokenType("${", { beforeExpr, startsExpr }),
   at: new TokenType("@"),
 
   // Operators. These carry several kinds of properties to help the
@@ -80,69 +96,66 @@ export const types = {
   // binary operators with a very low precedence, that should result
   // in AssignmentExpression nodes.
 
-  eq: new TokenType("=", {beforeExpr: true, isAssign: true}),
-  assign: new TokenType("_=", {beforeExpr: true, isAssign: true}),
-  incDec: new TokenType("++/--", {prefix: true, postfix: true, startsExpr: true}),
-  prefix: new TokenType("prefix", {beforeExpr: true, prefix: true, startsExpr: true}),
-  logicalOR: binop("||", 1),
-  logicalAND: binop("&&", 2),
-  bitwiseOR: binop("|", 3),
-  bitwiseXOR: binop("^", 4),
-  bitwiseAND: binop("&", 5),
-  equality: binop("==/!=", 6),
-  relational: binop("</>", 7),
-  bitShift: binop("<</>>", 8),
-  plusMin: new TokenType("+/-", {beforeExpr: true, binop: 9, prefix: true, startsExpr: true}),
-  modulo: binop("%", 10),
-  star: binop("*", 10),
-  slash: binop("/", 10),
-  exponent: new TokenType("**", {beforeExpr: true, binop: 11, rightAssociative: true})
+  eq: new TokenType("=", { beforeExpr, isAssign }),
+  assign: new TokenType("_=", { beforeExpr, isAssign }),
+  incDec: new TokenType("++/--", { prefix, postfix, startsExpr }),
+  prefix: new TokenType("prefix", { beforeExpr, prefix, startsExpr }),
+  logicalOR: new BinopTokenType("||", 1),
+  logicalAND: new BinopTokenType("&&", 2),
+  bitwiseOR: new BinopTokenType("|", 3),
+  bitwiseXOR: new BinopTokenType("^", 4),
+  bitwiseAND: new BinopTokenType("&", 5),
+  equality: new BinopTokenType("==/!=", 6),
+  relational: new BinopTokenType("</>", 7),
+  bitShift: new BinopTokenType("<</>>", 8),
+  plusMin: new TokenType("+/-", { beforeExpr, binop: 9, prefix, startsExpr }),
+  modulo: new BinopTokenType("%", 10),
+  star: new BinopTokenType("*", 10),
+  slash: new BinopTokenType("/", 10),
+  exponent: new TokenType("**", { beforeExpr, binop: 11, rightAssociative: true })
+};
+
+export const keywords = {
+  "break": new KeywordTokenType("break"),
+  "case": new KeywordTokenType("case", { beforeExpr }),
+  "catch": new KeywordTokenType("catch"),
+  "continue": new KeywordTokenType("continue"),
+  "debugger": new KeywordTokenType("debugger"),
+  "default": new KeywordTokenType("default", { beforeExpr }),
+  "do": new KeywordTokenType("do", { isLoop, beforeExpr }),
+  "else": new KeywordTokenType("else", { beforeExpr }),
+  "finally": new KeywordTokenType("finally"),
+  "for": new KeywordTokenType("for", { isLoop }),
+  "function": new KeywordTokenType("function", { startsExpr }),
+  "if": new KeywordTokenType("if"),
+  "return": new KeywordTokenType("return", { beforeExpr }),
+  "switch": new KeywordTokenType("switch"),
+  "throw": new KeywordTokenType("throw", { beforeExpr }),
+  "try": new KeywordTokenType("try"),
+  "var": new KeywordTokenType("var"),
+  "let": new KeywordTokenType("let"),
+  "const": new KeywordTokenType("const"),
+  "while": new KeywordTokenType("while", { isLoop }),
+  "with": new KeywordTokenType("with"),
+  "new": new KeywordTokenType("new", { beforeExpr, startsExpr }),
+  "this": new KeywordTokenType("this", { startsExpr }),
+  "super": new KeywordTokenType("super", { startsExpr }),
+  "class": new KeywordTokenType("class"),
+  "extends": new KeywordTokenType("extends", { beforeExpr }),
+  "export": new KeywordTokenType("export"),
+  "import": new KeywordTokenType("import"),
+  "yield": new KeywordTokenType("yield", { beforeExpr, startsExpr }),
+  "null": new KeywordTokenType("null", { startsExpr }),
+  "true": new KeywordTokenType("true", { startsExpr }),
+  "false": new KeywordTokenType("false", { startsExpr }),
+  "in": new KeywordTokenType("in", { beforeExpr, binop: 7 }),
+  "instanceof": new KeywordTokenType("instanceof", { beforeExpr, binop: 7 }),
+  "typeof": new KeywordTokenType("typeof", { beforeExpr, prefix, startsExpr }),
+  "void": new KeywordTokenType("void", { beforeExpr, prefix, startsExpr }),
+  "delete": new KeywordTokenType("delete", { beforeExpr, prefix, startsExpr })
 };
 
 // Map keyword names to token types.
-
-export const keywords = {};
-
-// Succinct definitions of keyword token types
-function kw(name, options = {}) {
-  options.keyword = name;
-  keywords[name] = types["_" + name] = new TokenType(name, options);
-}
-
-kw("break");
-kw("case", beforeExpr);
-kw("catch");
-kw("continue");
-kw("debugger");
-kw("default", beforeExpr);
-kw("do", {isLoop: true, beforeExpr: true});
-kw("else", beforeExpr);
-kw("finally");
-kw("for", {isLoop: true});
-kw("function", startsExpr);
-kw("if");
-kw("return", beforeExpr);
-kw("switch");
-kw("throw", beforeExpr);
-kw("try");
-kw("var");
-kw("let");
-kw("const");
-kw("while", {isLoop: true});
-kw("with");
-kw("new", {beforeExpr: true, startsExpr: true});
-kw("this", startsExpr);
-kw("super", startsExpr);
-kw("class");
-kw("extends", beforeExpr);
-kw("export");
-kw("import");
-kw("yield", {beforeExpr: true, startsExpr: true});
-kw("null", startsExpr);
-kw("true", startsExpr);
-kw("false", startsExpr);
-kw("in", {beforeExpr: true, binop: 7});
-kw("instanceof", {beforeExpr: true, binop: 7});
-kw("typeof", {beforeExpr: true, prefix: true, startsExpr: true});
-kw("void", {beforeExpr: true, prefix: true, startsExpr: true});
-kw("delete", {beforeExpr: true, prefix: true, startsExpr: true});
+Object.keys(keywords).forEach((name) => {
+  types["_" + name] = keywords[name];
+});
