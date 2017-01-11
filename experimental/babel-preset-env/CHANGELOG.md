@@ -4,13 +4,13 @@
 
 ### :bug: Bug Fix
 
-- debug: Transformations before logs. ([#128](https://github.com/babel/babel-preset-env/pull/128)) (@yavorsky)
+- Debug: Transformations before logs. ([#128](https://github.com/babel/babel-preset-env/pull/128)) (@yavorsky)
 
-Makes sure that all transformations on `targets` (such as `exclude`/`include`) are run before logging out with the `debug` option. Fixes ([#127](https://github.com/babel/babel-preset-env/issues/127)))
+Makes sure that all transformations on `targets` (such as `exclude`/`include`) are run before logging out with the `debug` option. Fixes ([#127](https://github.com/babel/babel-preset-env/issues/127)).
 
 ### :house: Internal
 
-- remove unnecessary extension. ([#131](https://github.com/babel/babel-preset-env/pull/131)) (@roman-yakobnyuk)
+- Remove unnecessary extension. ([#131](https://github.com/babel/babel-preset-env/pull/131)) (@roman-yakobnyuk)
 - Include yarn.lock and update CI. ([#124](https://github.com/babel/babel-preset-env/pull/124)) (@existentialism)
 
 ## v1.1.7 (2017-01-09)
