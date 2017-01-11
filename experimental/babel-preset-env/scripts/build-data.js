@@ -19,9 +19,21 @@ const envs = require("compat-table/environments");
 const invertedEqualsEnv = Object.keys(envs)
   .filter((b) => envs[b].equals)
   .reduce((a, b) => {
-    a[envs[b].equals] = b;
+    if (!a[envs[b].equals]) {
+      a[envs[b].equals] = [b];
+    } else {
+      a[envs[b].equals].push(b);
+    }
     return a;
   }, {});
+
+invertedEqualsEnv.safari5 = ["ios6"];
+if (Array.isArray(invertedEqualsEnv.safari6)) {
+  invertedEqualsEnv.safari6.push("ios7");
+} else {
+  invertedEqualsEnv.safari6 = ["ios7"];
+}
+invertedEqualsEnv.safari8 = ["ios9"];
 
 const compatibilityTests = flattenDeep([
   es6Data,
@@ -49,7 +61,7 @@ const environments = [
 
 const envMap = {
   safari51: "safari5",
-  safari71_8: "safari7",
+  safari71_8: "safari8",
   firefox3_5: "firefox3",
   firefox3_6: "firefox3",
   node010: "node0.10",
@@ -103,7 +115,12 @@ const getLowestImplementedVersion = ({ features }, env) => {
 
       // `equals` in compat-table
       Object.keys(test).forEach((t) => {
-        test[invertedEqualsEnv[t]] = test[t];
+        const invertedEnvs = invertedEqualsEnv[envMap[t] || t];
+        if (invertedEnvs) {
+          invertedEnvs.forEach((inv) => {
+            test[inv] = test[t];
+          });
+        }
       });
 
       return Object.keys(test)

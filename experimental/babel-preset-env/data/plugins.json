@@ -38,9 +38,9 @@
     "chrome": 44,
     "edge": 12,
     "firefox": 34,
-    "safari": 7,
+    "safari": 8,
     "node": 4,
-    "ios": 10,
+    "ios": 9,
     "opera": 31
   },
   "check-es2015-constants": {
@@ -53,6 +53,7 @@
   },
   "transform-es2015-destructuring": {
     "chrome": 51,
+    "edge": 15,
     "safari": 10,
     "node": 6.5,
     "ios": 10,
@@ -60,6 +61,7 @@
   },
   "transform-es2015-for-of": {
     "chrome": 51,
+    "edge": 15,
     "safari": 10,
     "node": 6.5,
     "ios": 10,
@@ -67,6 +69,7 @@
   },
   "transform-es2015-function-name": {
     "chrome": 51,
+    "firefox": 53,
     "safari": 10,
     "node": 6.5,
     "ios": 10,
@@ -75,6 +78,7 @@
   "transform-es2015-literals": {
     "chrome": 44,
     "edge": 12,
+    "firefox": 53,
     "safari": 9,
     "node": 4,
     "ios": 9,
@@ -92,6 +96,7 @@
   "transform-es2015-parameters": {
     "chrome": 49,
     "edge": 14,
+    "firefox": 53,
     "safari": 10,
     "node": 6,
     "ios": 10,

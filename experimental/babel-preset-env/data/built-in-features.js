@@ -124,9 +124,9 @@ const es2016 = {
 };
 
 const es2017 = {
-  "es7.object.values": "Object.values",
-  "es7.object.entries": "Object.entries",
-  "es7.object.get-own-property-descriptors": "Object.getOwnPropertyDescriptors",
+  "es7.object.values": "Object static methods / Object.values",
+  "es7.object.entries": "Object static methods / Object.entries",
+  "es7.object.get-own-property-descriptors": "Object static methods / Object.getOwnPropertyDescriptors",
   "es7.string.pad-start": "String padding / String.prototype.padStart",
   "es7.string.pad-end": "String padding / String.prototype.padEnd",
 };

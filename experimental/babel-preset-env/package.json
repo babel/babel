@@ -54,7 +54,7 @@
     "babel-plugin-transform-flow-strip-types": "^6.8.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-register": "^6.14.0",
-    "compat-table": "kangax/compat-table#e732718eab42c6c83a364450f456474638d31f94",
+    "compat-table": "kangax/compat-table#b0cec63ea21f3a7788a8eececcb918de903b7fc5",
     "eslint": "^3.3.1",
     "eslint-config-babel": "^3.0.0",
     "eslint-plugin-babel": "^4.0.0",
