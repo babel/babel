@@ -49,6 +49,14 @@ export function load(url: string, callback: Function, opts: Object = {}, hold?: 
   xhr.send(null);
 }
 
+/**
+ * <script> tags may be children of documents other than window.document,
+ * e.g. inside imported documents via <link rel="import" ...>.
+ * currentDocument points to the document to which this script is attached.
+ */
+let currentScript = global.document._currentScript || global.document.currentScript;
+let currentDocument = currentScript ? currentScript.ownerDocument : global.document;
+
 function runScripts() {
   let scripts: Array<Array<any> | Object> = [];
   let types   = ["text/ecmascript-6", "text/6to5", "text/babel", "module"];
@@ -87,7 +95,7 @@ function runScripts() {
 
   // Collect scripts with Babel `types`.
 
-  let _scripts = global.document.getElementsByTagName("script");
+  let _scripts = currentDocument.getElementsByTagName("script");
 
   for (let i = 0; i < _scripts.length; ++i) {
     let _script = _scripts[i];
@@ -104,9 +112,20 @@ function runScripts() {
 /**
  * Register load event to transform and execute scripts.
  */
+let ifNativeHtmlImports = ("import" in global.document.createElement("link"));
+let ifInsideHtmlImport  = currentDocument !== global.document;
 
-if (global.addEventListener) {
-  global.addEventListener("DOMContentLoaded", runScripts, false);
-} else if (global.attachEvent) {
-  global.attachEvent("onload", runScripts);
+let documentLoadedEvent = "DOMContentLoaded";
+let eventSource = currentDocument;
+
+if ( ifInsideHtmlImport && !ifNativeHtmlImports ) {
+  // Assume webcomponents.js is the polyfill in use.
+  eventSource = global.document;
+  documentLoadedEvent = "HTMLImportsLoaded"; // webcomponents.js polyfill emits this event.
+}
+
+if (currentDocument.addEventListener) {
+  eventSource.addEventListener( documentLoadedEvent, runScripts, false );
+} else if (currentDocument.attachEvent) {
+  eventSource.attachEvent("onload", runScripts);
 }
