@@ -1,4 +1,4 @@
-const assign = ([...arr], index, value) => {
+const assign = function([...arr], index, value) {
   arr[index] = value;
   return arr;
 }
