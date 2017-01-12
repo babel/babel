@@ -11,6 +11,10 @@
     "bin",
     "lib"
   ],
+  "engines" : {
+    "node" : ">=4.2.0",
+    "npm": ">=2.14.7"
+  },
   "devDependencies": {
     "ava": "^0.17.0",
     "babel-cli": "^6.14.0",
