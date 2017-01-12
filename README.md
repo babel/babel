@@ -3,7 +3,7 @@
     <img alt="babel" src="https://raw.githubusercontent.com/babel/logo/master/babel.png" width="546">
   </a>
 </p>
-
+some change
 <p align="center">
   The compiler for writing next generation JavaScript.
 </p>
@@ -40,7 +40,7 @@ Try it out at our [REPL](https://babeljs.io/repl/#?babili=false&evaluate=true&li
 - [FAQ](#faq)
 - [Packages](#packages)
   - [Core Packages](#core-packages)
-  - [Other](#other) 
+  - [Other](#other)
   - [Presets](#presets)
   - [Plugins](#plugins)
     - [Transform Plugins](#transform-plugins)
@@ -180,7 +180,7 @@ These are mostly for internal use in various plugins: `babel-helper-x`.
 
 ### Core members
 
-[![Babel](https://avatars.githubusercontent.com/u/9637642?s=64)](https://github.com/babel) | [![Daniel Tschinder](https://avatars.githubusercontent.com/u/231804?s=64)](https://github.com/danez) | [![Logan Smyth](https://avatars.githubusercontent.com/u/132260?s=64)](https://github.com/loganfsmyth) | [![Henry Zhu](https://avatars.githubusercontent.com/u/588473?s=64)](https://github.com/hzoo) | 
+[![Babel](https://avatars.githubusercontent.com/u/9637642?s=64)](https://github.com/babel) | [![Daniel Tschinder](https://avatars.githubusercontent.com/u/231804?s=64)](https://github.com/danez) | [![Logan Smyth](https://avatars.githubusercontent.com/u/132260?s=64)](https://github.com/loganfsmyth) | [![Henry Zhu](https://avatars.githubusercontent.com/u/588473?s=64)](https://github.com/hzoo) |
 |---|---|---|---|---|
 Babel | Daniel Tschinder | Logan Smyth | Henry Zhu |
 :octocat: [@babel](https://github.com/babel) | [@danez](https://github.com/danez) | [@loganfsmyth](https://github.com/loganfsmyth) | [@hzoo](https://github.com/hzoo) |
@@ -196,17 +196,17 @@ Babel | Daniel Tschinder | Logan Smyth | Henry Zhu |
 
 [![Juriy Zaytsev](https://avatars.githubusercontent.com/u/383?s=64)](https://github.com/kangax) | [![Kai Cataldo](https://avatars.githubusercontent.com/u/7041728?s=64)](https://github.com/kaicataldo) | [![Moti Zilberman](https://avatars.githubusercontent.com/u/2246565?s=64)](https://github.com/motiz88) | [![Sven Sauleau](https://avatars3.githubusercontent.com/u/1493671?s=64)](https://github.com/xtuc) |
 |---|---|---|---|---|---|---|---|---|
-| Juriy Zaytsev | Kai Cataldo | Moti Zilberman | Sven Sauleau | 
+| Juriy Zaytsev | Kai Cataldo | Moti Zilberman | Sven Sauleau |
 | [@kangax](https://github.com/kangax) | [@kaicataldo](https://github.com/kaicataldo) | [@motiz88](https://github.com/motiz88) | [@xtuc](https://github.com/xtuc) |
 | [@kangax](https://twitter.com/kangax) | [@kai_cataldo](https://twitter.com/kai_cataldo) | [@motiz88](https://twitter.com/motiz88) | [@svensauleau](https://twitter.com/svensauleau) |
 
 ### Inactive members
 
-[![Amjad Masad](https://avatars.githubusercontent.com/u/587518?s=64)](https://github.com/amasad) | [![James Kyle](https://avatars.githubusercontent.com/u/952783?s=64)](https://github.com/thejameskyle) | [![Jesse McCarthy](https://avatars.githubusercontent.com/u/129203?s=64)](https://github.com/jmm) | [![Sebastian McKenzie](https://avatars.githubusercontent.com/u/853712?s=64)](https://github.com/kittens) (Creator) | 
+[![Amjad Masad](https://avatars.githubusercontent.com/u/587518?s=64)](https://github.com/amasad) | [![James Kyle](https://avatars.githubusercontent.com/u/952783?s=64)](https://github.com/thejameskyle) | [![Jesse McCarthy](https://avatars.githubusercontent.com/u/129203?s=64)](https://github.com/jmm) | [![Sebastian McKenzie](https://avatars.githubusercontent.com/u/853712?s=64)](https://github.com/kittens) (Creator) |
 |---|---|---|---|
-Amjad Masad | James Kyle | Jesse McCarthy | Sebastian McKenzie | 
+Amjad Masad | James Kyle | Jesse McCarthy | Sebastian McKenzie |
 [@amasad](https://github.com/amasad) | [@thejameskyle](https://github.com/thejameskyle) | [@jmm](https://github.com/jmm) | [@sebmck](https://twitter.com/sebmck) |
-| [@amasad](https://twitter.com/amasad) | [@thejameskyle](https://twitter.com/thejameskyle) | [@mccjm](https://twitter.com/mccjm) | [@kittens](https://github.com/kittens) 
+| [@amasad](https://twitter.com/amasad) | [@thejameskyle](https://twitter.com/thejameskyle) | [@mccjm](https://twitter.com/mccjm) | [@kittens](https://github.com/kittens)
 
 ## License
 
