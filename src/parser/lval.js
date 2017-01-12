@@ -19,7 +19,7 @@ pp.toAssignable = function (node, isBinding, contextDescription) {
 
       case "ObjectExpression":
         node.type = "ObjectPattern";
-        for (let prop of (node.properties: Array<Object>)) {
+        for (const prop of (node.properties: Array<Object>)) {
           if (prop.type === "ObjectMethod") {
             if (prop.kind === "get" || prop.kind === "set") {
               this.raise(prop.key.start, "Object pattern can't contain getter or setter");
@@ -72,12 +72,12 @@ pp.toAssignable = function (node, isBinding, contextDescription) {
 pp.toAssignableList = function (exprList, isBinding, contextDescription) {
   let end = exprList.length;
   if (end) {
-    let last = exprList[end - 1];
+    const last = exprList[end - 1];
     if (last && last.type === "RestElement") {
       --end;
     } else if (last && last.type === "SpreadElement") {
       last.type = "RestElement";
-      let arg = last.argument;
+      const arg = last.argument;
       this.toAssignable(arg, isBinding, contextDescription);
       if (arg.type !== "Identifier" && arg.type !== "MemberExpression" && arg.type !== "ArrayPattern") {
         this.unexpected(arg.start);
@@ -86,7 +86,7 @@ pp.toAssignableList = function (exprList, isBinding, contextDescription) {
     }
   }
   for (let i = 0; i < end; i++) {
-    let elt = exprList[i];
+    const elt = exprList[i];
     if (elt) this.toAssignable(elt, isBinding, contextDescription);
   }
   return exprList;
@@ -101,14 +101,14 @@ pp.toReferencedList = function (exprList) {
 // Parses spread element.
 
 pp.parseSpread = function (refShorthandDefaultPos) {
-  let node = this.startNode();
+  const node = this.startNode();
   this.next();
   node.argument = this.parseMaybeAssign(false, refShorthandDefaultPos);
   return this.finishNode(node, "SpreadElement");
 };
 
 pp.parseRest = function () {
-  let node = this.startNode();
+  const node = this.startNode();
   this.next();
   node.argument = this.parseBindingIdentifier();
   return this.finishNode(node, "RestElement");
@@ -133,7 +133,7 @@ pp.parseBindingAtom = function () {
       return this.parseIdentifier(true);
 
     case tt.bracketL:
-      let node = this.startNode();
+      const node = this.startNode();
       this.next();
       node.elements = this.parseBindingList(tt.bracketR, true);
       return this.finishNode(node, "ArrayPattern");
@@ -147,7 +147,7 @@ pp.parseBindingAtom = function () {
 };
 
 pp.parseBindingList = function (close, allowEmpty) {
-  let elts = [];
+  const elts = [];
   let first = true;
   while (!this.eat(close)) {
     if (first) {
@@ -164,11 +164,11 @@ pp.parseBindingList = function (close, allowEmpty) {
       this.expect(close);
       break;
     } else {
-      let decorators = [];
+      const decorators = [];
       while (this.match(tt.at)) {
         decorators.push(this.parseDecorator());
       }
-      let left = this.parseMaybeDefault();
+      const left = this.parseMaybeDefault();
       if (decorators.length) {
         left.decorators = decorators;
       }
@@ -191,7 +191,7 @@ pp.parseMaybeDefault = function (startPos, startLoc, left) {
   left = left || this.parseBindingAtom();
   if (!this.eat(tt.eq)) return left;
 
-  let node = this.startNodeAt(startPos, startLoc);
+  const node = this.startNodeAt(startPos, startLoc);
   node.left = left;
   node.right = this.parseMaybeAssign();
   return this.finishNode(node, "AssignmentPattern");
@@ -217,7 +217,7 @@ pp.checkLVal = function (expr, isBinding, checkClashes, contextDescription) {
         //   true
         //   > obj.__proto__
         //   null
-        let key = `_${expr.name}`;
+        const key = `_${expr.name}`;
 
         if (checkClashes[key]) {
           this.raise(expr.start, "Argument name clash in strict mode");
@@ -239,7 +239,7 @@ pp.checkLVal = function (expr, isBinding, checkClashes, contextDescription) {
       break;
 
     case "ArrayPattern":
-      for (let elem of (expr.elements: Array<Object>)) {
+      for (const elem of (expr.elements: Array<Object>)) {
         if (elem) this.checkLVal(elem, isBinding, checkClashes, "array destructuring pattern");
       }
       break;

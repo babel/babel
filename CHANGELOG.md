@@ -15,6 +15,98 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## 6.15.0 (2017-01-10)
+
+### :eyeglasses: Spec Compliancy
+
+Add support for Flow shorthand import type ([#267](https://github.com/babel/babylon/pull/267)) (Jeff Morrison)
+
+This change implements flows new shorthand import syntax
+and where previously you had to write this code:
+
+```js
+import {someValue} from "blah";
+import type {someType} from "blah";
+import typeof {someOtherValue} from "blah";
+```
+
+you can now write it like this:
+
+```js
+import {
+  someValue,
+  type someType,
+  typeof someOtherValue,
+} from "blah";
+```
+
+For more information look at [this](https://github.com/facebook/flow/pull/2890) pull request.
+
+flow: allow leading pipes in all positions ([#256](https://github.com/babel/babylon/pull/256)) (Vladimir Kurchatkin)
+
+This change now allows a leading pipe everywhere types can be used:
+```js
+var f = (x): | 1 | 2 => 1;
+```
+
+Throw error when exporting non-declaration ([#241](https://github.com/babel/babylon/pull/241)) (Kai Cataldo)
+
+Previously babylon parsed the following exports, although they are not valid:
+```js
+export typeof foo;
+export new Foo();
+export function() {};
+export for (;;);
+export while(foo);
+```
+
+### :bug: Bug Fix
+
+Don't set inType flag when parsing property names ([#266](https://github.com/babel/babylon/pull/266)) (Vladimir Kurchatkin)
+
+This fixes parsing of this case:
+
+```js
+const map = {
+  [age <= 17] : 'Too young'
+};
+```
+
+Fix source location for JSXEmptyExpression nodes (fixes #248) ([#249](https://github.com/babel/babylon/pull/249)) (James Long)
+
+The following case produced an invalid AST
+```js
+<div>{/* foo */}</div>
+```
+
+Use fromCodePoint to convert high value unicode entities ([#243](https://github.com/babel/babylon/pull/243)) (Ryan Duffy)
+
+When high value unicode entities (e.g. 💩) were used in the input source code they are now correctly encoded in the resulting AST.
+
+Rename folder to avoid Windows-illegal characters ([#281](https://github.com/babel/babylon/pull/281)) (Ryan Plant)
+
+Allow this.state.clone() when parsing decorators ([#262](https://github.com/babel/babylon/pull/262)) (Alex Rattray)
+
+### :house: Internal
+
+User external-helpers ([#254](https://github.com/babel/babylon/pull/254)) (Daniel Tschinder)
+
+Add watch script for dev ([#234](https://github.com/babel/babylon/pull/234)) (Kai Cataldo)
+
+Freeze current plugins list for "*" option, and remove from README.md ([#245](https://github.com/babel/babylon/pull/245)) (Andrew Levine)
+
+Prepare tests for multiple fixture runners. ([#240](https://github.com/babel/babylon/pull/240)) (Daniel Tschinder)
+
+Add some test coverage for decorators stage-0 plugin ([#250](https://github.com/babel/babylon/pull/250)) (Andrew Levine)
+
+Refactor tokenizer types file ([#263](https://github.com/babel/babylon/pull/263)) (Sven SAULEAU)
+
+Update eslint-config-babel to the latest version 🚀 ([#273](https://github.com/babel/babylon/pull/273)) (greenkeeper[bot])
+
+chore(package): update rollup to version 0.41.0 ([#272](https://github.com/babel/babylon/pull/272)) (greenkeeper[bot])
+
+chore(package): update flow-bin to version 0.37.0 ([#255](https://github.com/babel/babylon/pull/255)) (greenkeeper[bot])
+
 ## 6.14.1 (2016-11-17)
 
 ### :bug: Bug Fix

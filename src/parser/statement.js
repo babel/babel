@@ -31,13 +31,13 @@ const loopLabel = {kind: "loop"}, switchLabel = {kind: "switch"};
 // TODO
 
 pp.stmtToDirective = function (stmt) {
-  let expr = stmt.expression;
+  const expr = stmt.expression;
 
-  let directiveLiteral = this.startNodeAt(expr.start, expr.loc.start);
-  let directive        = this.startNodeAt(stmt.start, stmt.loc.start);
+  const directiveLiteral = this.startNodeAt(expr.start, expr.loc.start);
+  const directive        = this.startNodeAt(stmt.start, stmt.loc.start);
 
-  let raw = this.input.slice(expr.start, expr.end);
-  let val = directiveLiteral.value = raw.slice(1, -1); // remove quotes
+  const raw = this.input.slice(expr.start, expr.end);
+  const val = directiveLiteral.value = raw.slice(1, -1); // remove quotes
 
   this.addExtra(directiveLiteral, "raw", raw);
   this.addExtra(directiveLiteral, "rawValue", val);
@@ -59,7 +59,8 @@ pp.parseStatement = function (declaration, topLevel) {
     this.parseDecorators(true);
   }
 
-  let starttype = this.state.type, node = this.startNode();
+  const starttype = this.state.type;
+  const node = this.startNode();
 
   // Most types of statements are recognized by the keyword they
   // start with. Many are trivial to parse, some require a bit of
@@ -114,7 +115,7 @@ pp.parseStatement = function (declaration, topLevel) {
     case tt.name:
       if (this.state.value === "async") {
         // peek ahead and see if next token is a function
-        let state = this.state.clone();
+        const state = this.state.clone();
         this.next();
         if (this.match(tt._function) && !this.canInsertSemicolon()) {
           this.expect(tt._function);
@@ -130,8 +131,8 @@ pp.parseStatement = function (declaration, topLevel) {
   // simply start parsing an expression, and afterwards, if the
   // next token is a colon and the expression was a simple
   // Identifier node, we switch to interpreting it as a label.
-  let maybeName = this.state.value;
-  let expr = this.parseExpression();
+  const maybeName = this.state.value;
+  const expr = this.parseExpression();
 
   if (starttype === tt.name && expr.type === "Identifier" && this.eat(tt.colon)) {
     return this.parseLabeledStatement(node, maybeName, expr);
@@ -149,7 +150,7 @@ pp.takeDecorators = function (node) {
 
 pp.parseDecorators = function (allowExport) {
   while (this.match(tt.at)) {
-    let decorator = this.parseDecorator();
+    const decorator = this.parseDecorator();
     this.state.decorators.push(decorator);
   }
 
@@ -166,14 +167,14 @@ pp.parseDecorator = function () {
   if (!this.hasPlugin("decorators")) {
     this.unexpected();
   }
-  let node = this.startNode();
+  const node = this.startNode();
   this.next();
   node.expression = this.parseMaybeAssign();
   return this.finishNode(node, "Decorator");
 };
 
 pp.parseBreakContinueStatement = function (node, keyword) {
-  let isBreak = keyword === "break";
+  const isBreak = keyword === "break";
   this.next();
 
   if (this.isLineTerminator()) {
@@ -189,7 +190,7 @@ pp.parseBreakContinueStatement = function (node, keyword) {
   // continue to.
   let i;
   for (i = 0; i < this.state.labels.length; ++i) {
-    let lab = this.state.labels[i];
+    const lab = this.state.labels[i];
     if (node.label == null || lab.name === node.label.name) {
       if (lab.kind != null && (isBreak || lab.kind === "loop")) break;
       if (node.label && isBreak) break;
@@ -243,7 +244,8 @@ pp.parseForStatement = function (node) {
   }
 
   if (this.match(tt._var) || this.match(tt._let) || this.match(tt._const)) {
-    let init = this.startNode(), varKind = this.state.type;
+    const init = this.startNode();
+    const varKind = this.state.type;
     this.next();
     this.parseVar(init, true, varKind);
     this.finishNode(init, "VariableDeclaration");
@@ -259,8 +261,8 @@ pp.parseForStatement = function (node) {
     return this.parseFor(node, init);
   }
 
-  let refShorthandDefaultPos = {start: 0};
-  let init = this.parseExpression(true, refShorthandDefaultPos);
+  const refShorthandDefaultPos = {start: 0};
+  const init = this.parseExpression(true, refShorthandDefaultPos);
   if (this.match(tt._in) || this.isContextual("of")) {
     const description = this.isContextual("of") ? "for-of statement" : "for-in statement";
     this.toAssignable(init, undefined, description);
@@ -323,7 +325,7 @@ pp.parseSwitchStatement = function (node) {
   let cur;
   for (let sawDefault; !this.match(tt.braceR); ) {
     if (this.match(tt._case) || this.match(tt._default)) {
-      let isCase = this.match(tt._case);
+      const isCase = this.match(tt._case);
       if (cur) this.finishNode(cur, "SwitchCase");
       node.cases.push(cur = this.startNode());
       cur.consequent = [];
@@ -361,7 +363,7 @@ pp.parseThrowStatement = function (node) {
 
 // Reused empty array added for node fields that are always empty.
 
-let empty = [];
+const empty = [];
 
 pp.parseTryStatement = function (node) {
   this.next();
@@ -370,7 +372,7 @@ pp.parseTryStatement = function (node) {
   node.handler = null;
 
   if (this.match(tt._catch)) {
-    let clause = this.startNode();
+    const clause = this.startNode();
     this.next();
 
     this.expect(tt.parenL);
@@ -422,15 +424,15 @@ pp.parseEmptyStatement = function (node) {
 };
 
 pp.parseLabeledStatement = function (node, maybeName, expr) {
-  for (let label of (this.state.labels: Array<Object>)) {
+  for (const label of (this.state.labels: Array<Object>)) {
     if (label.name === maybeName) {
       this.raise(expr.start, `Label '${maybeName}' is already declared`);
     }
   }
 
-  let kind = this.state.type.isLoop ? "loop" : this.match(tt._switch) ? "switch" : null;
+  const kind = this.state.type.isLoop ? "loop" : this.match(tt._switch) ? "switch" : null;
   for (let i = this.state.labels.length - 1; i >= 0; i--) {
-    let label = this.state.labels[i];
+    const label = this.state.labels[i];
     if (label.statementStart === node.start) {
       label.statementStart = this.state.start;
       label.kind = kind;
@@ -457,7 +459,7 @@ pp.parseExpressionStatement = function (node, expr) {
 // function bodies).
 
 pp.parseBlock = function (allowDirectives?) {
-  let node = this.startNode();
+  const node = this.startNode();
   this.expect(tt.braceL);
   this.parseBlockBody(node, allowDirectives, false, tt.braceR);
   return this.finishNode(node, "BlockStatement");
@@ -478,12 +480,12 @@ pp.parseBlockBody = function (node, allowDirectives, topLevel, end) {
       octalPosition = this.state.octalPosition;
     }
 
-    let stmt = this.parseStatement(true, topLevel);
+    const stmt = this.parseStatement(true, topLevel);
 
     if (allowDirectives && !parsedNonDirective &&
         stmt.type === "ExpressionStatement" && stmt.expression.type === "StringLiteral" &&
         !stmt.expression.extra.parenthesized) {
-      let directive = this.stmtToDirective(stmt);
+      const directive = this.stmtToDirective(stmt);
       node.directives.push(directive);
 
       if (oldStrict === undefined && directive.value.value === "use strict") {
@@ -549,7 +551,7 @@ pp.parseVar = function (node, isFor, kind) {
   node.declarations = [];
   node.kind = kind.keyword;
   for (;;) {
-    let decl = this.startNode();
+    const decl = this.startNode();
     this.parseVarHead(decl);
     if (this.eat(tt.eq)) {
       decl.init = this.parseMaybeAssign(isFor);
@@ -575,7 +577,7 @@ pp.parseVarHead = function (decl) {
 // `isStatement` parameter).
 
 pp.parseFunction = function (node, isStatement, allowExpressionBody, isAsync, optionalId) {
-  let oldInMethod = this.state.inMethod;
+  const oldInMethod = this.state.inMethod;
   this.state.inMethod = false;
 
   this.initFunction(node, isAsync);
@@ -631,13 +633,13 @@ pp.isClassMutatorStarter = function () {
 
 pp.parseClassBody = function (node) {
   // class bodies are implicitly strict
-  let oldStrict = this.state.strict;
+  const oldStrict = this.state.strict;
   this.state.strict = true;
 
   let hadConstructorCall = false;
   let hadConstructor = false;
   let decorators = [];
-  let classBody = this.startNode();
+  const classBody = this.startNode();
 
   classBody.body = [];
 
@@ -653,7 +655,7 @@ pp.parseClassBody = function (node) {
       continue;
     }
 
-    let method = this.startNode();
+    const method = this.startNode();
 
     // steal the decorators if there are any
     if (decorators.length) {
@@ -662,7 +664,7 @@ pp.parseClassBody = function (node) {
     }
 
     let isConstructorCall = false;
-    let isMaybeStatic = this.match(tt.name) && this.state.value === "static";
+    const isMaybeStatic = this.match(tt.name) && this.state.value === "static";
     let isGenerator = this.eat(tt.star);
     let isGetSet = false;
     let isAsync = false;
@@ -687,7 +689,7 @@ pp.parseClassBody = function (node) {
       }
     }
 
-    let isAsyncMethod = !this.match(tt.parenL) && !method.computed && method.key.type === "Identifier" && method.key.name === "async";
+    const isAsyncMethod = !this.match(tt.parenL) && !method.computed && method.key.type === "Identifier" && method.key.name === "async";
     if (isAsyncMethod) {
       if (this.hasPlugin("asyncGenerators") && this.eat(tt.star)) isGenerator = true;
       isAsync = true;
@@ -708,7 +710,7 @@ pp.parseClassBody = function (node) {
       }
 
       // disallow invalid constructors
-      let isConstructor = !isConstructorCall && !method.static && (
+      const isConstructor = !isConstructorCall && !method.static && (
         (key.type === "Identifier" && key.name === "constructor") ||
         (key.type === "StringLiteral" && key.value === "constructor")
       );
@@ -722,7 +724,7 @@ pp.parseClassBody = function (node) {
       }
 
       // disallow static prototype method
-      let isStaticPrototype = method.static && (
+      const isStaticPrototype = method.static && (
         (key.type === "Identifier" && key.name === "prototype") ||
         (key.type === "StringLiteral" && key.value === "prototype")
       );
@@ -748,9 +750,9 @@ pp.parseClassBody = function (node) {
     // get methods aren't allowed to have any parameters
     // set methods must have exactly 1 parameter
     if (isGetSet) {
-      let paramCount = method.kind === "get" ? 0 : 1;
+      const paramCount = method.kind === "get" ? 0 : 1;
       if (method.params.length !== paramCount) {
-        let start = method.start;
+        const start = method.start;
         if (method.kind === "get") {
           this.raise(start, "getter should have no params");
         } else {
@@ -808,7 +810,7 @@ pp.parseExport = function (node) {
   this.next();
   // export * from '...'
   if (this.match(tt.star)) {
-    let specifier = this.startNode();
+    const specifier = this.startNode();
     this.next();
     if (this.hasPlugin("exportExtensions") && this.eatContextual("as")) {
       specifier.exported = this.parseIdentifier();
@@ -820,12 +822,12 @@ pp.parseExport = function (node) {
       return this.finishNode(node, "ExportAllDeclaration");
     }
   } else if (this.hasPlugin("exportExtensions") && this.isExportDefaultSpecifier()) {
-    let specifier = this.startNode();
+    const specifier = this.startNode();
     specifier.exported = this.parseIdentifier(true);
     node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
     if (this.match(tt.comma) && this.lookahead().type === tt.star) {
       this.expect(tt.comma);
-      let specifier = this.startNode();
+      const specifier = this.startNode();
       this.expect(tt.star);
       this.expectContextual("as");
       specifier.exported = this.parseIdentifier();
@@ -877,7 +879,7 @@ pp.isExportDefaultSpecifier = function () {
     return false;
   }
 
-  let lookahead = this.lookahead();
+  const lookahead = this.lookahead();
   return lookahead.type === tt.comma || (lookahead.type === tt.name && lookahead.value === "from");
 };
 
@@ -919,7 +921,7 @@ pp.checkExport = function (node, checkNames, isDefault) {
       this.checkDuplicateExports(node, "default");
     } else if (node.specifiers && node.specifiers.length) {
       // Named exports
-      for (let specifier of node.specifiers) {
+      for (const specifier of node.specifiers) {
         this.checkDuplicateExports(specifier, specifier.exported.name);
       }
     } else if (node.declaration) {
@@ -927,7 +929,7 @@ pp.checkExport = function (node, checkNames, isDefault) {
       if (node.declaration.type === "FunctionDeclaration" || node.declaration.type === "ClassDeclaration") {
         this.checkDuplicateExports(node, node.declaration.id.name);
       } else if (node.declaration.type === "VariableDeclaration") {
-        for (let declaration of node.declaration.declarations) {
+        for (const declaration of node.declaration.declarations) {
           this.checkDeclaration(declaration.id);
         }
       }
@@ -935,7 +937,7 @@ pp.checkExport = function (node, checkNames, isDefault) {
   }
 
   if (this.state.decorators.length) {
-    let isClass = node.declaration && (node.declaration.type === "ClassDeclaration" || node.declaration.type === "ClassExpression");
+    const isClass = node.declaration && (node.declaration.type === "ClassDeclaration" || node.declaration.type === "ClassExpression");
     if (!node.declaration || !isClass) {
       this.raise(node.start, "You can only use decorators on an export when exporting a class");
     }
@@ -945,11 +947,11 @@ pp.checkExport = function (node, checkNames, isDefault) {
 
 pp.checkDeclaration = function(node) {
   if (node.type === "ObjectPattern") {
-    for (let prop of node.properties) {
+    for (const prop of node.properties) {
       this.checkDeclaration(prop);
     }
   } else if (node.type === "ArrayPattern") {
-    for (let elem of node.elements) {
+    for (const elem of node.elements) {
       if (elem) {
         this.checkDeclaration(elem);
       }
@@ -980,7 +982,7 @@ pp.raiseDuplicateExportError = function(node, name) {
 // Parses a comma-separated list of module exports.
 
 pp.parseExportSpecifiers = function () {
-  let nodes = [];
+  const nodes = [];
   let first = true;
   let needsFrom;
 
@@ -995,10 +997,10 @@ pp.parseExportSpecifiers = function () {
       if (this.eat(tt.braceR)) break;
     }
 
-    let isDefault = this.match(tt._default);
+    const isDefault = this.match(tt._default);
     if (isDefault && !needsFrom) needsFrom = true;
 
-    let node = this.startNode();
+    const node = this.startNode();
     node.local = this.parseIdentifier(isDefault);
     node.exported = this.eatContextual("as") ? this.parseIdentifier(true) : node.local.__clone();
     nodes.push(this.finishNode(node, "ExportSpecifier"));
@@ -1037,13 +1039,14 @@ pp.parseImportSpecifiers = function (node) {
   let first = true;
   if (this.match(tt.name)) {
     // import defaultObj, { x, y as z } from '...'
-    let startPos = this.state.start, startLoc = this.state.startLoc;
+    const startPos = this.state.start;
+    const startLoc = this.state.startLoc;
     node.specifiers.push(this.parseImportSpecifierDefault(this.parseIdentifier(), startPos, startLoc));
     if (!this.eat(tt.comma)) return;
   }
 
   if (this.match(tt.star)) {
-    let specifier = this.startNode();
+    const specifier = this.startNode();
     this.next();
     this.expectContextual("as");
     specifier.local = this.parseIdentifier();
@@ -1066,7 +1069,7 @@ pp.parseImportSpecifiers = function (node) {
 };
 
 pp.parseImportSpecifier = function (node) {
-  let specifier = this.startNode();
+  const specifier = this.startNode();
   specifier.imported = this.parseIdentifier(true);
   specifier.local = this.eatContextual("as") ? this.parseIdentifier() : specifier.imported.__clone();
   this.checkLVal(specifier.local, true, undefined, "import specifier");
@@ -1074,7 +1077,7 @@ pp.parseImportSpecifier = function (node) {
 };
 
 pp.parseImportSpecifierDefault = function (id, startPos, startLoc) {
-  let node = this.startNodeAt(startPos, startLoc);
+  const node = this.startNodeAt(startPos, startLoc);
   node.local = id;
   this.checkLVal(node.local, true, undefined, "default import specifier");
   return this.finishNode(node, "ImportDefaultSpecifier");

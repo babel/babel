@@ -41,7 +41,7 @@ pp.addComment = function (comment) {
 pp.processComment = function (node) {
   if (node.type === "Program" && node.body.length > 0) return;
 
-  let stack = this.state.commentStack;
+  const stack = this.state.commentStack;
 
   let lastChild, trailingComments, i, j;
 
@@ -63,7 +63,7 @@ pp.processComment = function (node) {
       this.state.trailingComments.length = 0;
     }
   } else {
-    let lastInStack = last(stack);
+    const lastInStack = last(stack);
     if (stack.length > 0 && lastInStack.trailingComments && lastInStack.trailingComments[0].start >= node.end) {
       trailingComments = lastInStack.trailingComments;
       lastInStack.trailingComments = null;

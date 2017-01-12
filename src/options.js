@@ -31,8 +31,8 @@ export const defaultOptions: {
 // Interpret and default an options object
 
 export function getOptions(opts?: Object): Object {
-  let options = {};
-  for (let key in defaultOptions) {
+  const options = {};
+  for (const key in defaultOptions) {
     options[key] = opts && key in opts ? opts[key] : defaultOptions[key];
   }
   return options;

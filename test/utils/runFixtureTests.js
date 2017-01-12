@@ -13,7 +13,7 @@ module.exports = function runFixtureTests(fixturesPath, parseFunction) {
             try {
               return runTest(task, parseFunction);
             } catch (err) {
-              err.message = task.actual.loc + ": " + err.message;
+              err.message = name + "/" + task.actual.filename + ": " + err.message;
               throw err;
             }
           });
@@ -32,6 +32,10 @@ function runTest(test, parseFunction) {
   var opts = test.options;
   opts.locations = true;
   opts.ranges = true;
+
+  if (opts.throws && test.expect.code) {
+    throw new Error("File expected.json exists although options specify throws. Remove expected.json.");
+  }
 
   try {
     var ast = parseFunction(test.actual.code, opts);
