@@ -11,8 +11,8 @@
     "bin",
     "lib"
   ],
-  "engines" : {
-    "node" : ">=4.2.0"
+  "engines": {
+    "node": ">=4.2.0"
   },
   "devDependencies": {
     "ava": "^0.17.0",
