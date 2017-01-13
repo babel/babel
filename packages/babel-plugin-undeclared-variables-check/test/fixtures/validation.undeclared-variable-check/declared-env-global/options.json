@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["undeclared-variables-check", {
+      "cacheGlobals": false,
+      "env": "node"
+    }]
+  ]
+}
