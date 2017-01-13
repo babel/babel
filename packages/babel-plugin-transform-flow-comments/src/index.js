@@ -4,8 +4,21 @@ export default function ({ types: t }) {
     path.replaceWith(t.noop());
   }
 
+  // https://github.com/babel-plugins/babel-plugin-flow-comments/pull/6#issuecomment-122709012
+  function escapeSource(source) {
+    return source.replace(/\*-\//g, "*-ESCAPED/").replace(/\*\//g, "*-/");
+  }
+
+  function getSource(path) {
+    if (path.isClassProperty()) {
+      return (path.node.static ? "static " : "") + path.get("key").getSource() + path.get("typeAnnotation").getSource();
+    } else {
+      return path.getSource();
+    }
+  }
+
   function generateComment(path, parent) {
-    let comment = path.getSource().replace(/\*-\//g, "*-ESCAPED/").replace(/\*\//g, "*-/");
+    let comment = escapeSource(getSource(path));
     if (parent && parent.optional) comment = "?" + comment;
     if (comment[0] !== ":") comment = ":: " + comment;
     return comment;
@@ -44,9 +57,27 @@ export default function ({ types: t }) {
       },
 
       // support for `class X { foo: string }` - #4622
-      ClassProperty(path) {
-        let { node, parent } = path;
-        if (!node.value) wrapInFlowComment(path, parent);
+      Class(path) {
+        path.get("body.body").forEach((child) => {
+          if (!child.isClassProperty()) return;
+
+          // class X { a }
+          if (!child.node.typeAnnotation && !child.node.value) {
+            child.replaceWith(t.noop());
+            return;
+          }
+
+          if (child.node.typeAnnotation) {
+            if (child.node.value) {
+              // class X { a: number = 2 }
+              child.addComment("trailing", generateComment(child));
+            } else {
+              // class X { a: number }
+              wrapInFlowComment(child);
+            }
+            child.node.typeAnnotation = null;
+          }
+        });
       },
 
       // support `export type a = {}` - #8 Error: You passed path.replaceWith() a falsy node
