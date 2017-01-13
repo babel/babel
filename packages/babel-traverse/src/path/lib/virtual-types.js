@@ -105,7 +105,7 @@ export let Pure = {
 };
 
 export let Flow = {
-  types: ["Flow", "ImportDeclaration", "ExportDeclaration"],
+  types: ["Flow", "ImportDeclaration", "ImportSpecifier", "ExportDeclaration"],
   checkPath({ node }: NodePath): boolean {
     if (t.isFlow(node)) {
       return true;
