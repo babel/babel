@@ -10,7 +10,6 @@ export default function ({ types: t }) {
           node.type = "FunctionExpression";
 
           let boundThis = t.thisExpression();
-          boundThis._forceShadow = path;
 
           // make sure that arrow function won't be instantiated
           path.ensureBlock();
@@ -26,6 +25,9 @@ export default function ({ types: t }) {
             t.memberExpression(node, t.identifier("bind")),
             [t.thisExpression()]
           ));
+
+          // ensure that boundThis is hoisted up although this should not be hoisted
+          boundThis._forceShadow = path.get("callee.object");
         } else {
           path.arrowFunctionToShadowed();
         }
