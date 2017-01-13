@@ -27,7 +27,7 @@ Check out the many options (especially `useBuiltIns` to polyfill less)!
 - [Examples](#examples)
 - [Caveats](#caveats)
 - [Other Cool Projects](#other-cool-projects)
-  
+
 ## How it Works
 
 ### Determine environment support for ECMAScript features
@@ -117,7 +117,7 @@ Note, browsers' results are overridden by explicit items from `targets`.
 ### `loose`
 
 `boolean`, defaults to `false`.
-    
+
 Enable "loose" transformations for any plugins in this preset that allow them.
 
 ### `modules`
@@ -125,13 +125,13 @@ Enable "loose" transformations for any plugins in this preset that allow them.
 `"amd" | "umd" | "systemjs" | "commonjs" | false`, defaults to `"commonjs"`.
 
 Enable transformation of ES6 module syntax to another module type.
-    
+
 Setting this to `false` will not transform modules.
 
 ### `debug`
 
 `boolean`, defaults to `false`.
-    
+
 Outputs the targets/plugins used and the version specified in [plugin data version](https://github.com/babel/babel-preset-env/blob/master/data/plugins.json) to `console.log`.
 
 ### `include`
@@ -151,7 +151,7 @@ For example, Node 4 supports native classes but not spread. If `super` is used w
 ### `exclude`
 
 `Array<string>`, defaults to `[]`.
-    
+
 An array of plugins to always exclude/remove.
 
 The possible options are the same as the `include` option.
@@ -286,16 +286,24 @@ exports.A = A;
 ### Example with `debug: true`
 
 ```js
-Using targets: {
-  "node": 6.5
+Using targets:
+{
+  "safari": 10
 }
 
-Using plugins:
+Modules transform: false
 
-module: false
-transform-exponentiation-operator {}
-transform-async-to-generator {}
-syntax-trailing-function-commas {}
+Using plugins:
+  transform-exponentiation-operator {}
+  transform-async-to-generator {}
+
+Using polyfills:
+  es7.object.values {}
+  es7.object.entries {}
+  es7.object.get-own-property-descriptors {}
+  web.timers {}
+  web.immediate {}
+  web.dom.iterable {}
 ```
 
 ### Example with `include`/`exclude`
