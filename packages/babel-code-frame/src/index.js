@@ -1,4 +1,4 @@
-import jsTokens from "js-tokens";
+import jsTokens, {matchToToken} from "js-tokens";
 import esutils from "esutils";
 import Chalk from "chalk";
 
@@ -47,7 +47,7 @@ const BRACKET = /^[()\[\]{}]$/;
 
 function getTokenType(match) {
   let [offset, text] = match.slice(-2);
-  let token = jsTokens.matchToToken(match);
+  let token = matchToToken(match);
 
   if (token.type === "name") {
     if (esutils.keyword.isReservedWordES6(token.value)) {
