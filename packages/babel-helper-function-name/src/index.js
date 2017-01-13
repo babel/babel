@@ -47,7 +47,7 @@ let visitor = {
   }
 };
 
-function wrap(state, method, id, scope) {
+function wrap(state, method, id, scope, isClassMethod) {
   if (state.selfReference) {
     if (scope.hasBinding(id.name) && !scope.hasGlobal(id.name)) {
       // we can just munge the local binding
@@ -77,8 +77,12 @@ function wrap(state, method, id, scope) {
     }
   }
 
-  method.id = id;
-  scope.getProgramParent().references[id.name] = true;
+  if (isClassMethod) {
+    return template(`Object.defineProperty(FUNCTION, 'name', { value: '${id.name}' })`)({ FUNCTION: method }).expression;
+  } else {
+    method.id = id;
+    scope.getProgramParent().references[id.name] = true;
+  }
 }
 
 function visit(node, name, scope) {
@@ -127,7 +131,7 @@ function visit(node, name, scope) {
   return state;
 }
 
-export default function ({ node, parent, scope, id }) {
+export default function ({ node, parent, scope, id, isClassMethod }) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
@@ -172,5 +176,5 @@ export default function ({ node, parent, scope, id }) {
   id[t.NOT_LOCAL_BINDING] = true;
 
   let state = visit(node, name, scope);
-  return wrap(state, node, id, scope) || node;
+  return wrap(state, node, id, scope, isClassMethod) || node;
 }

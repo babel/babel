@@ -65,7 +65,7 @@ export function push(mutatorMap: Object, node: Object, kind: string, file, scope
 
   // infer function name
   if (scope && t.isStringLiteral(key) && (kind === "value" || kind === "initializer") && t.isFunctionExpression(value)) {
-    value = nameFunction({ id: key, node: value, scope });
+    value = nameFunction({ id: key, node: value, scope, isClassMethod: t.isClassMethod(node) });
   }
 
   if (value) {
