@@ -1,1 +1,1 @@
-React.createElement(Foo, bar);
+React.createElement(Foo, babelHelpers.extends({}, bar));
