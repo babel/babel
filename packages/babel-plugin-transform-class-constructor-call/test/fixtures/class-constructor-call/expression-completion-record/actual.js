@@ -1,5 +1,0 @@
-(class {
-  call constructor() {
-    foo();
-  }
-});
