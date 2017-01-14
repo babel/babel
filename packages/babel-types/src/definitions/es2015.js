@@ -227,6 +227,10 @@ defineType("ImportSpecifier", {
     },
     imported: {
       validate: assertNodeType("Identifier")
+    },
+    importKind: {
+      // Handle Flowtype's extension "import {typeof foo} from"
+      validate: assertOneOf(null, "type", "typeof")
     }
   }
 });
