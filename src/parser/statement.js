@@ -1059,6 +1059,11 @@ pp.parseImportSpecifiers = function (node) {
     if (first) {
       first = false;
     } else {
+      // Detect an attempt to deep destructure
+      if (this.eat(tt.colon)) {
+        this.unexpected(null, "ES2015 named imports do not destructure. Use another statement for destructuring after the import.");
+      }
+
       this.expect(tt.comma);
       if (this.eat(tt.braceR)) break;
     }
