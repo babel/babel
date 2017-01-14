@@ -17,8 +17,8 @@ export function _params(node: Object) {
 }
 
 export function _method(node: Object) {
-  let kind = node.kind;
-  let key  = node.key;
+  const kind = node.kind;
+  const key  = node.key;
 
   if (kind === "method" || kind === "init") {
     if (node.generator) {

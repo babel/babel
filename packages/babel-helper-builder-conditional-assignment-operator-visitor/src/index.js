@@ -8,7 +8,7 @@ export default function (
     is: Function;
   },
 ) {
-  let buildAssignment = function (left, right) {
+  const buildAssignment = function (left, right) {
     return t.assignmentExpression("=", left, right);
   };
 
@@ -16,12 +16,12 @@ export default function (
     // hit the `AssignmentExpression` one below
     if (path.isCompletionRecord()) return;
 
-    let expr = path.node.expression;
+    const expr = path.node.expression;
     if (!opts.is(expr, file)) return;
 
-    let nodes = [];
+    const nodes = [];
 
-    let exploded = explode(expr.left, nodes, file, path.scope);
+    const exploded = explode(expr.left, nodes, file, path.scope);
 
     nodes.push(t.ifStatement(
       opts.build(exploded.uid, file),
@@ -32,11 +32,11 @@ export default function (
   };
 
   exports.AssignmentExpression = function (path, file) {
-    let node = path.node;
+    const node = path.node;
     if (!opts.is(node, file)) return;
 
-    let nodes    = [];
-    let exploded = explode(node.left, nodes, file, path.scope);
+    const nodes    = [];
+    const exploded = explode(node.left, nodes, file, path.scope);
 
     nodes.push(t.logicalExpression(
       "&&",

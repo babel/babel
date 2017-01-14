@@ -2,7 +2,7 @@ import type NodePath from "../index";
 import { react } from "babel-types";
 import * as t from "babel-types";
 
-export let ReferencedIdentifier = {
+export const ReferencedIdentifier = {
   types: ["Identifier", "JSXIdentifier"],
   checkPath({ node, parent }: NodePath, opts?: Object): boolean {
     if (!t.isIdentifier(node, opts) && !t.isJSXMemberExpression(parent, opts)) {
@@ -19,21 +19,21 @@ export let ReferencedIdentifier = {
   }
 };
 
-export let ReferencedMemberExpression = {
+export const ReferencedMemberExpression = {
   types: ["MemberExpression"],
   checkPath({ node, parent }) {
     return t.isMemberExpression(node) && t.isReferenced(node, parent);
   }
 };
 
-export let BindingIdentifier = {
+export const BindingIdentifier = {
   types: ["Identifier"],
   checkPath({ node, parent }: NodePath): boolean {
     return t.isIdentifier(node) && t.isBinding(node, parent);
   }
 };
 
-export let Statement = {
+export const Statement = {
   types: ["Statement"],
   checkPath({ node, parent }: NodePath): boolean {
     if (t.isStatement(node)) {
@@ -49,7 +49,7 @@ export let Statement = {
   }
 };
 
-export let Expression = {
+export const Expression = {
   types: ["Expression"],
   checkPath(path: NodePath): boolean {
     if (path.isIdentifier()) {
@@ -60,51 +60,51 @@ export let Expression = {
   }
 };
 
-export let Scope = {
+export const Scope = {
   types: ["Scopable"],
   checkPath(path) {
     return t.isScope(path.node, path.parent);
   }
 };
 
-export let Referenced = {
+export const Referenced = {
   checkPath(path: NodePath): boolean {
     return t.isReferenced(path.node, path.parent);
   }
 };
 
-export let BlockScoped = {
+export const BlockScoped = {
   checkPath(path: NodePath): boolean {
     return t.isBlockScoped(path.node);
   }
 };
 
-export let Var = {
+export const Var = {
   types: ["VariableDeclaration"],
   checkPath(path: NodePath): boolean {
     return t.isVar(path.node);
   }
 };
 
-export let User = {
+export const User = {
   checkPath(path: NodePath): boolean {
     return path.node && !!path.node.loc;
   }
 };
 
-export let Generated = {
+export const Generated = {
   checkPath(path: NodePath): boolean {
     return !path.isUser();
   }
 };
 
-export let Pure = {
+export const Pure = {
   checkPath(path: NodePath, opts?): boolean {
     return path.scope.isPure(path.node, opts);
   }
 };
 
-export let Flow = {
+export const Flow = {
   types: ["Flow", "ImportDeclaration", "ExportDeclaration"],
   checkPath({ node }: NodePath): boolean {
     if (t.isFlow(node)) {

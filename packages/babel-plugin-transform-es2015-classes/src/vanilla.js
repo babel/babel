@@ -8,13 +8,13 @@ import * as defineMap from "babel-helper-define-map";
 import template from "babel-template";
 import * as t from "babel-types";
 
-let buildDerivedConstructor = template(`
+const buildDerivedConstructor = template(`
   (function () {
     super(...arguments);
   })
 `);
 
-let noMethodVisitor = {
+const noMethodVisitor = {
   "FunctionExpression|FunctionDeclaration"(path) {
     if (!path.is("shadow")) {
       path.skip();
@@ -26,7 +26,7 @@ let noMethodVisitor = {
   }
 };
 
-let verifyConstructorVisitor = visitors.merge([noMethodVisitor, {
+const verifyConstructorVisitor = visitors.merge([noMethodVisitor, {
   Super(path) {
     if (this.isDerived && !this.hasBareSuper && !path.parentPath.isCallExpression({ callee: path.node })) {
       throw path.buildCodeFrameError("'super.*' is not allowed before super()");
@@ -54,7 +54,7 @@ let verifyConstructorVisitor = visitors.merge([noMethodVisitor, {
   }
 }]);
 
-let findThisesVisitor = visitors.merge([noMethodVisitor, {
+const findThisesVisitor = visitors.merge([noMethodVisitor, {
   ThisExpression(path) {
     this.superThises.push(path);
   }
@@ -96,18 +96,18 @@ export default class ClassTransformer {
 
   run() {
     let superName = this.superName;
-    let file      = this.file;
+    const file      = this.file;
     let body      = this.body;
 
     //
 
-    let constructorBody = this.constructorBody = t.blockStatement([]);
+    const constructorBody = this.constructorBody = t.blockStatement([]);
     this.constructor    = this.buildConstructor();
 
     //
 
-    let closureParams = [];
-    let closureArgs = [];
+    const closureParams = [];
+    const closureArgs = [];
 
     //
     if (this.isDerived) {
@@ -138,13 +138,13 @@ export default class ClassTransformer {
     //
     body.push(t.returnStatement(this.classRef));
 
-    let container = t.functionExpression(null, closureParams, t.blockStatement(body));
+    const container = t.functionExpression(null, closureParams, t.blockStatement(body));
     container.shadow = true;
     return t.callExpression(container, closureArgs);
   }
 
   buildConstructor() {
-    let func = t.functionDeclaration(this.classRef, [], this.constructorBody);
+    const func = t.functionDeclaration(this.classRef, [], this.constructorBody);
     t.inherits(func, this.node);
     return func;
   }
@@ -159,7 +159,7 @@ export default class ClassTransformer {
       mutatorMap = this.instanceMutatorMap;
     }
 
-    let map = defineMap.push(mutatorMap, node, kind, this.file, scope);
+    const map = defineMap.push(mutatorMap, node, kind, this.file, scope);
 
     if (enumerable) {
       map.enumerable = t.booleanLiteral(true);
@@ -175,8 +175,8 @@ export default class ClassTransformer {
 
   constructorMeMaybe() {
     let hasConstructor = false;
-    let paths = this.path.get("body.body");
-    for (let path of (paths: Array)) {
+    const paths = this.path.get("body.body");
+    for (const path of (paths: Array)) {
       hasConstructor = path.equals("kind", "constructor");
       if (hasConstructor) break;
     }
@@ -185,7 +185,7 @@ export default class ClassTransformer {
     let params, body;
 
     if (this.isDerived) {
-      let constructor = buildDerivedConstructor().expression;
+      const constructor = buildDerivedConstructor().expression;
       params = constructor.params;
       body = constructor.body;
     } else {
@@ -207,7 +207,7 @@ export default class ClassTransformer {
     this.verifyConstructor();
 
     if (this.userConstructor) {
-      let constructorBody = this.constructorBody;
+      const constructorBody = this.constructorBody;
       constructorBody.body = constructorBody.body.concat(this.userConstructor.body.body);
       t.inherits(this.constructor, this.userConstructor);
       t.inherits(constructorBody, this.userConstructor.body);
@@ -217,10 +217,10 @@ export default class ClassTransformer {
   }
 
   pushBody() {
-    let classBodyPaths: Array<Object> = this.path.get("body.body");
+    const classBodyPaths: Array<Object> = this.path.get("body.body");
 
-    for (let path of classBodyPaths) {
-      let node = path.node;
+    for (const path of classBodyPaths) {
+      const node = path.node;
 
       if (path.isClassProperty()) {
         throw path.buildCodeFrameError("Missing class properties transform.");
@@ -231,7 +231,7 @@ export default class ClassTransformer {
       }
 
       if (t.isClassMethod(node)) {
-        let isConstructor = node.kind === "constructor";
+        const isConstructor = node.kind === "constructor";
 
         if (isConstructor) {
           path.traverse(verifyConstructorVisitor, this);
@@ -241,7 +241,7 @@ export default class ClassTransformer {
           }
         }
 
-        let replaceSupers = new ReplaceSupers({
+        const replaceSupers = new ReplaceSupers({
           forceSuperMemoisation: isConstructor,
           methodPath:            path,
           methodNode:            node,
@@ -275,7 +275,7 @@ export default class ClassTransformer {
   pushDescriptors() {
     this.pushInherits();
 
-    let body = this.body;
+    const body = this.body;
 
     let instanceProps;
     let staticProps;
@@ -292,7 +292,7 @@ export default class ClassTransformer {
       if (instanceProps) instanceProps = defineMap.toComputedObjectFromClass(instanceProps);
       if (staticProps) staticProps = defineMap.toComputedObjectFromClass(staticProps);
 
-      let nullNode = t.nullLiteral();
+      const nullNode = t.nullLiteral();
 
       // (Constructor, instanceDescriptors, staticDescriptors, instanceInitializers, staticInitializers)
       let args = [this.classRef, nullNode, nullNode, nullNode, nullNode];
@@ -363,7 +363,7 @@ export default class ClassTransformer {
       [t.thisExpression(), bareSuperNode]
     );
 
-    let bareSuperAfter = this.bareSuperAfter.map((fn) => fn(thisRef));
+    const bareSuperAfter = this.bareSuperAfter.map((fn) => fn(thisRef));
 
     if (bareSuper.parentPath.isExpressionStatement() && bareSuper.parentPath.container === body.node.body && body.node.body.length - 1 === bareSuper.parentPath.key) {
       // this super call is the last statement in the body so we can just straight up
@@ -394,17 +394,17 @@ export default class ClassTransformer {
   verifyConstructor() {
     if (!this.isDerived) return;
 
-    let path = this.userConstructorPath;
-    let body = path.get("body");
+    const path = this.userConstructorPath;
+    const body = path.get("body");
 
     path.traverse(findThisesVisitor, this);
 
     let guaranteedSuperBeforeFinish = !!this.bareSupers.length;
 
-    let superRef = this.superName || t.identifier("Function");
-    let thisRef = path.scope.generateUidIdentifier("this");
+    const superRef = this.superName || t.identifier("Function");
+    const thisRef = path.scope.generateUidIdentifier("this");
 
-    for (let bareSuper of this.bareSupers) {
+    for (const bareSuper of this.bareSupers) {
       this.wrapSuperCall(bareSuper, superRef, thisRef, body);
 
       if (guaranteedSuperBeforeFinish) {
@@ -422,25 +422,25 @@ export default class ClassTransformer {
       }
     }
 
-    for (let thisPath of this.superThises) {
+    for (const thisPath of this.superThises) {
       thisPath.replaceWith(thisRef);
     }
 
-    let wrapReturn = (returnArg) => t.callExpression(
+    const wrapReturn = (returnArg) => t.callExpression(
       this.file.addHelper("possibleConstructorReturn"),
       [thisRef].concat(returnArg || [])
     );
 
     // if we have a return as the last node in the body then we've already caught that
     // return
-    let bodyPaths = body.get("body");
+    const bodyPaths = body.get("body");
     if (bodyPaths.length && !bodyPaths.pop().isReturnStatement()) {
       body.pushContainer("body", t.returnStatement(guaranteedSuperBeforeFinish ? thisRef : wrapReturn()));
     }
 
-    for (let returnPath of this.superReturns) {
+    for (const returnPath of this.superReturns) {
       if (returnPath.node.argument) {
-        let ref = returnPath.scope.generateDeclaredUidIdentifier("ret");
+        const ref = returnPath.scope.generateDeclaredUidIdentifier("ret");
         returnPath.get("argument").replaceWithMultiple([
           t.assignmentExpression("=", ref, returnPath.node.argument),
           wrapReturn(ref)
@@ -456,7 +456,7 @@ export default class ClassTransformer {
    */
 
   pushMethod(node: { type: "ClassMethod" }, path?: NodePath) {
-    let scope = path ? path.scope : this.scope;
+    const scope = path ? path.scope : this.scope;
 
     if (node.kind === "method") {
       if (this._processMethod(node, scope)) return;
@@ -482,7 +482,7 @@ export default class ClassTransformer {
       path.scope.rename(this.classRef.name);
     }
 
-    let construct = this.constructor;
+    const construct = this.constructor;
 
     this.userConstructorPath = path;
     this.userConstructor     = method;

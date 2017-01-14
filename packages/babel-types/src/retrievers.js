@@ -10,17 +10,17 @@ export function getBindingIdentifiers(
   outerOnly?: boolean
 ): Object {
   let search = [].concat(node);
-  let ids    = Object.create(null);
+  const ids    = Object.create(null);
 
   while (search.length) {
-    let id = search.shift();
+    const id = search.shift();
     if (!id) continue;
 
-    let keys = t.getBindingIdentifiers.keys[id.type];
+    const keys = t.getBindingIdentifiers.keys[id.type];
 
     if (t.isIdentifier(id)) {
       if (duplicates) {
-        let _ids = ids[id.name] = ids[id.name] || [];
+        const _ids = ids[id.name] = ids[id.name] || [];
         _ids.push(id);
       } else {
         ids[id.name] = id;
@@ -48,7 +48,7 @@ export function getBindingIdentifiers(
 
     if (keys) {
       for (let i = 0; i < keys.length; i++) {
-        let key = keys[i];
+        const key = keys[i];
         if (id[key]) {
           search = search.concat(id[key]);
         }

@@ -1,9 +1,9 @@
-let traverse = require("../lib").default;
-let assert = require("assert");
-let parse = require("babylon").parse;
+const traverse = require("../lib").default;
+const assert = require("assert");
+const parse = require("babylon").parse;
 
 function getPath(code) {
-  let ast = parse(code);
+  const ast = parse(code);
   let path;
   traverse(ast, {
     Program: function (_path) {

@@ -60,11 +60,11 @@ export function Binary(node: Object, parent: Object): boolean {
   }
 
   if (t.isBinary(parent)) {
-    let parentOp  = parent.operator;
-    let parentPos = PRECEDENCE[parentOp];
+    const parentOp  = parent.operator;
+    const parentPos = PRECEDENCE[parentOp];
 
-    let nodeOp = node.operator;
-    let nodePos = PRECEDENCE[nodeOp];
+    const nodeOp = node.operator;
+    const nodePos = PRECEDENCE[nodeOp];
 
     if (parentPos > nodePos) {
       return true;

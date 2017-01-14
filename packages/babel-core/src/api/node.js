@@ -31,10 +31,10 @@ export function Plugin(alias) {
 import Pipeline from "../transformation/pipeline";
 export { Pipeline };
 
-let pipeline = new Pipeline;
-export let analyse = pipeline.analyse.bind(pipeline);
-export let transform = pipeline.transform.bind(pipeline);
-export let transformFromAst = pipeline.transformFromAst.bind(pipeline);
+const pipeline = new Pipeline;
+export const analyse = pipeline.analyse.bind(pipeline);
+export const transform = pipeline.transform.bind(pipeline);
+export const transformFromAst = pipeline.transformFromAst.bind(pipeline);
 
 export function transformFile(filename: string, opts?: Object, callback: Function) {
   if (isFunction(opts)) {

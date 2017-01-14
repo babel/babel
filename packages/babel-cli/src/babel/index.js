@@ -3,14 +3,14 @@
 
 require("babel-core");
 
-let fs         = require("fs");
-let commander  = require("commander");
-let kebabCase  = require("lodash/kebabCase");
-let options    = require("babel-core").options;
-let util       = require("babel-core").util;
-let uniq       = require("lodash/uniq");
-let each       = require("lodash/each");
-let glob       = require("glob");
+const fs         = require("fs");
+const commander  = require("commander");
+const kebabCase  = require("lodash/kebabCase");
+const options    = require("babel-core").options;
+const util       = require("babel-core").util;
+const uniq       = require("lodash/uniq");
+const each       = require("lodash/each");
+const glob       = require("glob");
 
 each(options, function (option, key) {
   if (option.hidden) return;
@@ -31,7 +31,7 @@ each(options, function (option, key) {
     arg = "-" + option.shorthand + ", " + arg;
   }
 
-  let desc = [];
+  const desc = [];
   if (option.deprecated) desc.push("[DEPRECATED] " + option.deprecated);
   if (option.description) desc.push(option.description);
 
@@ -46,7 +46,7 @@ commander.option("-d, --out-dir [out]", "Compile an input directory of modules i
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
 commander.option("-q, --quiet", "Don't log anything");
 
-let pkg = require("../../package.json");
+const pkg = require("../../package.json");
 commander.version(pkg.version + " (babel-core " + require("babel-core").version + ")");
 commander.usage("[options] <files ...>");
 commander.parse(process.argv);
@@ -59,7 +59,7 @@ if (commander.extensions) {
 
 //
 
-let errors = [];
+const errors = [];
 
 let filenames = commander.args.reduce(function (globbed, input) {
   let files = glob.sync(input);
@@ -104,7 +104,7 @@ if (errors.length) {
 
 //
 
-let opts = exports.opts = {};
+const opts = exports.opts = {};
 
 each(options, function (opt, key) {
   if (commander[key] !== undefined && commander[key] !== opt.default) {

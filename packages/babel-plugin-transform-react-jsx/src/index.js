@@ -1,12 +1,12 @@
 /* eslint max-len: 0 */
 
 export default function ({ types: t }) {
-  let JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
+  const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
 
-  let visitor = require("babel-helper-builder-react-jsx")({
+  const visitor = require("babel-helper-builder-react-jsx")({
     pre(state) {
-      let tagName = state.tagName;
-      let args    = state.args;
+      const tagName = state.tagName;
+      const args    = state.args;
       if (t.react.isCompatTag(tagName)) {
         args.push(t.stringLiteral(tagName));
       } else {
@@ -20,11 +20,11 @@ export default function ({ types: t }) {
   });
 
   visitor.Program = function (path, state) {
-    let { file } = state;
+    const { file } = state;
     let id = state.opts.pragma || "React.createElement";
 
-    for (let comment of (file.ast.comments: Array<Object>)) {
-      let matches = JSX_ANNOTATION_REGEX.exec(comment.value);
+    for (const comment of (file.ast.comments: Array<Object>)) {
+      const matches = JSX_ANNOTATION_REGEX.exec(comment.value);
       if (matches) {
         id = matches[1];
         if (id === "React.DOM") {

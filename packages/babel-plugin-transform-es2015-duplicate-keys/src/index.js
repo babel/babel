@@ -26,7 +26,7 @@ export default function() {
         const alreadySeenGetters = Object.create(null);
         const alreadySeenSetters = Object.create(null);
 
-        for (let prop of plainProps) {
+        for (const prop of plainProps) {
           const name = getName(prop.key);
           let isDuplicate = false;
           switch (prop.kind) {
