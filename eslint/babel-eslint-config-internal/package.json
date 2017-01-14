@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-babel",
-  "version": "4.0.1",
+  "version": "5.0.0",
   "description": "ESLint config for babel",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
