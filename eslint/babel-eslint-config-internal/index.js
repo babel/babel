@@ -7,6 +7,7 @@ module.exports = {
     "arrow-spacing": ["error", { before: true, after: true }],
     camelcase: "off",
     "comma-dangle": "off",
+    "comma-spacing": "error",
     "consistent-return": "off",
     curly: "off",
     "indent": ["error", 2],
