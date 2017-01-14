@@ -117,3 +117,4 @@ Following is a table of the options you can use:
 | `env`                    | `{}`                 | This is an object of keys that represent different environments. For example, you may have: `{ env: { production: { /* specific options */ } } }` which will use those options when the enviroment variable `BABEL_ENV` is set to `"production"`. If `BABEL_ENV` isn't set then `NODE_ENV` will be used, if it's not set then it defaults to `"development"` |
 | `retainLines`            | `false`              | Retain line numbers. This will lead to wacky code but is handy for scenarios where you can't use source maps. (**NOTE:** This will not retain the columns) |
 | `extends`                | `null`               | A path to an `.babelrc` file to extend |
+| `wrapPluginVisitorMethod`| `null`               | An optional callback that can be used to wrap visitor methods. Called as `wrapPluginVisitorMethod(pluginAlias, visitorType, callback)`.
