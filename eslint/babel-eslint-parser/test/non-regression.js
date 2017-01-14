@@ -6,7 +6,7 @@ var unpad = require("../utils/unpad");
 function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, overrideConfig) {
   var config = {
     parser: require.resolve(".."),
-    rules: rules,
+    rules,
     env: {
       node: true,
       es6: true
@@ -18,7 +18,7 @@ function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, over
         experimentalObjectRestSpread: true,
         globalReturn: true
       },
-      sourceType: sourceType
+      sourceType
     }
   };
 
@@ -34,7 +34,7 @@ function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, over
     throw new Error(`Expected ${expectedMessages.length} message(s), got ${messages.length} ${JSON.stringify(messages)}`);
   }
 
-  messages.forEach(function (message, i) {
+  messages.forEach((message, i) => {
     var formatedMessage = `${message.line}:${message.column} ${message.message}${(message.ruleId ? ` ${message.ruleId}` : "")}`;
     if (formatedMessage !== expectedMessages[i]) {
       throw new Error(
@@ -48,8 +48,8 @@ function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, over
   });
 }
 
-describe("verify", function () {
-  it("arrow function support (issue #1)", function () {
+describe("verify", () => {
+  it("arrow function support (issue #1)", () => {
     verifyAndAssertMessages(
       "describe('stuff', () => {});",
       {},
@@ -57,7 +57,7 @@ describe("verify", function () {
     );
   });
 
-  it("EOL validation (issue #2)", function () {
+  it("EOL validation (issue #2)", () => {
     verifyAndAssertMessages(
       "module.exports = \"something\";",
       { "eol-last": 1, "semi": 1 },
@@ -65,7 +65,7 @@ describe("verify", function () {
     );
   });
 
-  xit("Readable error messages (issue #3)", function () {
+  xit("Readable error messages (issue #3)", () => {
     verifyAndAssertMessages(
       "{ , res }",
       {},
@@ -73,7 +73,7 @@ describe("verify", function () {
     );
   });
 
-  it("Modules support (issue #5)", function () {
+  it("Modules support (issue #5)", () => {
     verifyAndAssertMessages(
       unpad(`
         import Foo from 'foo';
@@ -86,7 +86,7 @@ describe("verify", function () {
     );
   });
 
-  it("Rest parameters (issue #7)", function () {
+  it("Rest parameters (issue #7)", () => {
     verifyAndAssertMessages(
       "function foo(...args) { return args; }",
       { "no-undef": 1 },
@@ -94,7 +94,7 @@ describe("verify", function () {
     );
   });
 
-  it("Exported classes should be used (issue #8)", function () {
+  it("Exported classes should be used (issue #8)", () => {
     verifyAndAssertMessages(
       "class Foo {} module.exports = Foo;",
       { "no-unused-vars": 1 },
@@ -102,7 +102,7 @@ describe("verify", function () {
     );
   });
 
-  it("super keyword in class (issue #10)", function () {
+  it("super keyword in class (issue #10)", () => {
     verifyAndAssertMessages(
       "class Foo { constructor() { super() } }",
       { "no-undef": 1 },
@@ -110,7 +110,7 @@ describe("verify", function () {
     );
   });
 
-  it("Rest parameter in destructuring assignment (issue #11)", function () {
+  it("Rest parameter in destructuring assignment (issue #11)", () => {
     verifyAndAssertMessages(
       "const [a, ...rest] = ['1', '2', '3']; module.exports = rest;",
       { "no-undef": 1 },
@@ -118,7 +118,7 @@ describe("verify", function () {
     );
   });
 
-  it("JSX attribute names marked as variables (issue #12)", function () {
+  it("JSX attribute names marked as variables (issue #12)", () => {
     verifyAndAssertMessages(
       "module.exports = <div className=\"foo\" />",
       { "no-undef": 1 },
@@ -126,7 +126,7 @@ describe("verify", function () {
     );
   });
 
-  it("Multiple destructured assignment with compound properties (issue #16)", function () {
+  it("Multiple destructured assignment with compound properties (issue #16)", () => {
     verifyAndAssertMessages(
       "module.exports = { ...a.a, ...a.b };",
       { "no-dupe-keys": 1 },
@@ -134,7 +134,7 @@ describe("verify", function () {
     );
   });
 
-  it("Arrow function with non-block bodies (issue #20)", function () {
+  it("Arrow function with non-block bodies (issue #20)", () => {
     verifyAndAssertMessages(
       "\"use strict\"; () => 1",
       { "strict": [1, "global"] },
@@ -143,7 +143,7 @@ describe("verify", function () {
     );
   });
 
-  it("#242", function () {
+  it("#242", () => {
     verifyAndAssertMessages(
       "\"use strict\"; asdf;",
       { "no-irregular-whitespace": 1 },
@@ -152,7 +152,7 @@ describe("verify", function () {
     );
   });
 
-  it("await keyword (issue #22)", function () {
+  it("await keyword (issue #22)", () => {
     verifyAndAssertMessages(
       "async function foo() { await bar(); }",
       { "no-unused-expressions": 1 },
@@ -160,7 +160,7 @@ describe("verify", function () {
     );
   });
 
-  it("arrow functions (issue #27)", function () {
+  it("arrow functions (issue #27)", () => {
     verifyAndAssertMessages(
       "[1, 2, 3].map(i => i * 2);",
       { "func-names": 1, "space-before-blocks": 1 },
@@ -168,7 +168,7 @@ describe("verify", function () {
     );
   });
 
-  it("comment with padded-blocks (issue #33)", function () {
+  it("comment with padded-blocks (issue #33)", () => {
     verifyAndAssertMessages(
       unpad(`
         if (a) {
@@ -181,8 +181,8 @@ describe("verify", function () {
     );
   });
 
-  describe("flow", function () {
-    it("check regular function", function () {
+  describe("flow", () => {
+    it("check regular function", () => {
       verifyAndAssertMessages(
         "function a(b, c) { b += 1; c += 1; return b + c; } a;",
         { "no-unused-vars": 1, "no-undef": 1 },
@@ -190,7 +190,7 @@ describe("verify", function () {
       );
     });
 
-    it("type alias", function () {
+    it("type alias", () => {
       verifyAndAssertMessages(
         "type SomeNewType = any;",
         { "no-undef": 1 },
@@ -198,7 +198,7 @@ describe("verify", function () {
       );
     });
 
-    it("type cast expression #102", function () {
+    it("type cast expression #102", () => {
       verifyAndAssertMessages(
         "for (let a of (a: Array)) {}",
         {},
@@ -206,7 +206,7 @@ describe("verify", function () {
       );
     });
 
-    it("multiple nullable type annotations and return #108", function () {
+    it("multiple nullable type annotations and return #108", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -222,7 +222,7 @@ describe("verify", function () {
       );
     });
 
-    it("type parameters", function () {
+    it("type parameters", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -235,7 +235,7 @@ describe("verify", function () {
       );
     });
 
-    it("nested type annotations", function () {
+    it("nested type annotations", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -249,7 +249,7 @@ describe("verify", function () {
       );
     });
 
-    it("type in var declaration", function () {
+    it("type in var declaration", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -261,7 +261,7 @@ describe("verify", function () {
       );
     });
 
-    it("object type annotation", function () {
+    it("object type annotation", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -273,7 +273,7 @@ describe("verify", function () {
       );
     });
 
-    it("object property types", function () {
+    it("object property types", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -288,7 +288,7 @@ describe("verify", function () {
       );
     });
 
-    it("namespaced types", function () {
+    it("namespaced types", () => {
       verifyAndAssertMessages(
         unpad(`
           var React = require('react-native');
@@ -306,7 +306,7 @@ describe("verify", function () {
       );
     });
 
-    it("ArrayTypeAnnotation", function () {
+    it("ArrayTypeAnnotation", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -317,7 +317,7 @@ describe("verify", function () {
       );
     });
 
-    it("ClassImplements", function () {
+    it("ClassImplements", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Bar from 'foo';
@@ -328,7 +328,7 @@ describe("verify", function () {
       );
     });
 
-    it("type alias creates declaration + usage", function () {
+    it("type alias creates declaration + usage", () => {
       verifyAndAssertMessages(
         unpad(`
           type Foo = any;
@@ -339,7 +339,7 @@ describe("verify", function () {
       );
     });
 
-    it("type alias with type parameters", function () {
+    it("type alias with type parameters", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Bar from 'foo';
@@ -352,7 +352,7 @@ describe("verify", function () {
       );
     });
 
-    it("export type alias", function () {
+    it("export type alias", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo2 from 'foo';
@@ -363,7 +363,7 @@ describe("verify", function () {
       );
     });
 
-    it("polymorphpic types #109", function () {
+    it("polymorphpic types #109", () => {
       verifyAndAssertMessages(
         "export default function groupByEveryN<T>(array: Array<T>, n: number): Array<Array<?T>> { n; }",
         { "no-unused-vars": 1, "no-undef": 1 },
@@ -371,7 +371,7 @@ describe("verify", function () {
       );
     });
 
-    it("types definition from import", function () {
+    it("types definition from import", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Promise from 'bluebird';
@@ -383,7 +383,7 @@ describe("verify", function () {
       );
     });
 
-    it("polymorphpic/generic types for class #123", function () {
+    it("polymorphpic/generic types for class #123", () => {
       verifyAndAssertMessages(
         unpad(`
           class Box<T> {
@@ -397,7 +397,7 @@ describe("verify", function () {
       );
     });
 
-    it("polymorphpic/generic types for function #123", function () {
+    it("polymorphpic/generic types for function #123", () => {
       verifyAndAssertMessages(
         unpad(`
           export function identity<T>(value) {
@@ -409,7 +409,7 @@ describe("verify", function () {
       );
     });
 
-    it("polymorphpic/generic types for type alias #123", function () {
+    it("polymorphpic/generic types for type alias #123", () => {
       verifyAndAssertMessages(
         unpad(`
           import Bar from './Bar';
@@ -420,7 +420,7 @@ describe("verify", function () {
       );
     });
 
-    it("polymorphpic/generic types - outside of fn scope #123", function () {
+    it("polymorphpic/generic types - outside of fn scope #123", () => {
       verifyAndAssertMessages(
         unpad(`
           export function foo<T>(value) { value; };
@@ -432,7 +432,7 @@ describe("verify", function () {
       );
     });
 
-    it("polymorphpic/generic types - extending unknown #123", function () {
+    it("polymorphpic/generic types - extending unknown #123", () => {
       verifyAndAssertMessages(
         unpad(`
           import Bar from 'bar';
@@ -443,7 +443,7 @@ describe("verify", function () {
       );
     });
 
-    it("support declarations #132", function () {
+    it("support declarations #132", () => {
       verifyAndAssertMessages(
         unpad(`
           declare class A { static () : number }
@@ -457,7 +457,7 @@ describe("verify", function () {
       );
     });
 
-    it("1", function () {
+    it("1", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -469,7 +469,7 @@ describe("verify", function () {
       );
     });
 
-    it("2", function () {
+    it("2", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -480,7 +480,7 @@ describe("verify", function () {
       );
     });
 
-    it("3", function () {
+    it("3", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -492,7 +492,7 @@ describe("verify", function () {
       );
     });
 
-    it("4", function () {
+    it("4", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -505,7 +505,7 @@ describe("verify", function () {
       );
     });
 
-    it("5", function () {
+    it("5", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -517,7 +517,7 @@ describe("verify", function () {
       );
     });
 
-    it("6", function () {
+    it("6", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -528,7 +528,7 @@ describe("verify", function () {
       );
     });
 
-    it("7", function () {
+    it("7", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -539,7 +539,7 @@ describe("verify", function () {
       );
     });
 
-    it("8", function () {
+    it("8", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -551,7 +551,7 @@ describe("verify", function () {
       );
     });
 
-    it("9", function () {
+    it("9", () => {
       verifyAndAssertMessages(
         "export default function <T1, T2>(a: T1, b: T2) { b; }",
         { "no-unused-vars": 1, "no-undef": 1 },
@@ -559,7 +559,7 @@ describe("verify", function () {
       );
     });
 
-    it("10", function () {
+    it("10", () => {
       verifyAndAssertMessages(
         "var a=function<T1,T2>(a: T1, b: T2) {return a + b;}; a;",
         { "no-unused-vars": 1, "no-undef": 1 },
@@ -567,7 +567,7 @@ describe("verify", function () {
       );
     });
 
-    it("11", function () {
+    it("11", () => {
       verifyAndAssertMessages(
         "var a={*id<T>(x: T): T { x; }}; a;",
         { "no-unused-vars": 1, "no-undef": 1 },
@@ -575,7 +575,7 @@ describe("verify", function () {
       );
     });
 
-    it("12", function () {
+    it("12", () => {
       verifyAndAssertMessages(
         "var a={async id<T>(x: T): T { x; }}; a;",
         { "no-unused-vars": 1, "no-undef": 1 },
@@ -583,7 +583,7 @@ describe("verify", function () {
       );
     });
 
-    it("13", function () {
+    it("13", () => {
       verifyAndAssertMessages(
         "var a={123<T>(x: T): T { x; }}; a;",
         { "no-unused-vars": 1, "no-undef": 1 },
@@ -591,7 +591,7 @@ describe("verify", function () {
       );
     });
 
-    it("14", function () {
+    it("14", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -603,7 +603,7 @@ describe("verify", function () {
       );
     });
 
-    it("15", function () {
+    it("15", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo2 from 'foo';
@@ -614,7 +614,7 @@ describe("verify", function () {
       );
     });
 
-    it("16", function () {
+    it("16", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -625,7 +625,7 @@ describe("verify", function () {
       );
     });
 
-    it("17", function () {
+    it("17", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -636,7 +636,7 @@ describe("verify", function () {
       );
     });
 
-    it("18", function () {
+    it("18", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -649,7 +649,7 @@ describe("verify", function () {
       );
     });
 
-    it("19", function () {
+    it("19", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -661,7 +661,7 @@ describe("verify", function () {
       );
     });
 
-    it("20", function () {
+    it("20", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -675,7 +675,7 @@ describe("verify", function () {
       );
     });
 
-    it("21", function () {
+    it("21", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -688,7 +688,7 @@ describe("verify", function () {
       );
     });
 
-    it("22", function () {
+    it("22", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -701,7 +701,7 @@ describe("verify", function () {
       );
     });
 
-    it("23", function () {
+    it("23", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -712,7 +712,7 @@ describe("verify", function () {
       );
     });
 
-    it("24", function () {
+    it("24", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Baz from 'baz';
@@ -723,7 +723,7 @@ describe("verify", function () {
       );
     });
 
-    it("25", function () {
+    it("25", () => {
       verifyAndAssertMessages(
         "export default class Bar<T> { bar(): T { return 42; }}",
         { "no-unused-vars": 1, "no-undef": 1 },
@@ -731,7 +731,7 @@ describe("verify", function () {
       );
     });
 
-    it("26", function () {
+    it("26", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -743,7 +743,7 @@ describe("verify", function () {
       );
     });
 
-    it("27", function () {
+    it("27", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -755,7 +755,7 @@ describe("verify", function () {
       );
     });
 
-    it("28", function () {
+    it("28", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -767,7 +767,7 @@ describe("verify", function () {
       );
     });
 
-    it("29", function () {
+    it("29", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -779,7 +779,7 @@ describe("verify", function () {
       );
     });
 
-    it("30", function () {
+    it("30", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -790,7 +790,7 @@ describe("verify", function () {
       );
     });
 
-    it("31", function () {
+    it("31", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -801,7 +801,7 @@ describe("verify", function () {
       );
     });
 
-    it("32", function () {
+    it("32", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -812,7 +812,7 @@ describe("verify", function () {
       );
     });
 
-    it("33", function () {
+    it("33", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -823,7 +823,7 @@ describe("verify", function () {
       );
     });
 
-    it("34", function () {
+    it("34", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -835,7 +835,7 @@ describe("verify", function () {
       );
     });
 
-    it("35", function () {
+    it("35", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -846,7 +846,7 @@ describe("verify", function () {
       );
     });
 
-    it("36", function () {
+    it("36", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -858,7 +858,7 @@ describe("verify", function () {
       );
     });
 
-    it("37", function () {
+    it("37", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -872,7 +872,7 @@ describe("verify", function () {
       );
     });
 
-    it("38", function () {
+    it("38", () => {
       verifyAndAssertMessages(
         unpad(`
           import type {foo, bar} from 'baz';
@@ -883,7 +883,7 @@ describe("verify", function () {
       );
     });
 
-    it("39", function () {
+    it("39", () => {
       verifyAndAssertMessages(
         unpad(`
           import type {foo as bar} from 'baz';
@@ -894,7 +894,7 @@ describe("verify", function () {
       );
     });
 
-    it("40", function () {
+    it("40", () => {
       verifyAndAssertMessages(
         unpad(`
           import type from 'foo';
@@ -905,7 +905,7 @@ describe("verify", function () {
       );
     });
 
-    it("41", function () {
+    it("41", () => {
       verifyAndAssertMessages(
         unpad(`
           import type, {foo} from 'bar';
@@ -916,7 +916,7 @@ describe("verify", function () {
       );
     });
 
-    it("42", function () {
+    it("42", () => {
       verifyAndAssertMessages(
         unpad(`
           import type * as namespace from 'bar';
@@ -927,7 +927,7 @@ describe("verify", function () {
       );
     });
 
-    it("43", function () {
+    it("43", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -938,7 +938,7 @@ describe("verify", function () {
       );
     });
 
-    it("44", function () {
+    it("44", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -949,7 +949,7 @@ describe("verify", function () {
       );
     });
 
-    it("45", function () {
+    it("45", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -960,7 +960,7 @@ describe("verify", function () {
       );
     });
 
-    it("46", function () {
+    it("46", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -971,7 +971,7 @@ describe("verify", function () {
       );
     });
 
-    it("47", function () {
+    it("47", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -982,7 +982,7 @@ describe("verify", function () {
       );
     });
 
-    it("48", function () {
+    it("48", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -993,7 +993,7 @@ describe("verify", function () {
       );
     });
 
-    it("49", function () {
+    it("49", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
@@ -1007,7 +1007,7 @@ describe("verify", function () {
     });
   });
 
-  it("class usage", function () {
+  it("class usage", () => {
     verifyAndAssertMessages(
       "class Lol {} module.exports = Lol;",
       { "no-unused-vars": 1 },
@@ -1015,7 +1015,7 @@ describe("verify", function () {
     );
   });
 
-  it("class definition: gaearon/redux#24", function () {
+  it("class definition: gaearon/redux#24", () => {
     verifyAndAssertMessages(
       unpad(`
         export default function root(stores) {
@@ -1029,7 +1029,7 @@ describe("verify", function () {
     );
   });
 
-  it("class properties #71", function () {
+  it("class properties #71", () => {
     verifyAndAssertMessages(
       "class Lol { foo = 'bar'; }",
       { "no-undef": 1 },
@@ -1037,7 +1037,7 @@ describe("verify", function () {
     );
   });
 
-  it("template strings #31", function () {
+  it("template strings #31", () => {
     verifyAndAssertMessages(
       "console.log(`${a}, b`);",
       { "comma-spacing": 1 },
@@ -1045,7 +1045,7 @@ describe("verify", function () {
     );
   });
 
-  it("template with destructuring #31", function () {
+  it("template with destructuring #31", () => {
     verifyAndAssertMessages(
       unpad(`
         module.exports = {
@@ -1060,8 +1060,8 @@ describe("verify", function () {
     );
   });
 
-  describe("decorators #72", function () {
-    it("class declaration", function () {
+  describe("decorators #72", () => {
+    it("class declaration", () => {
       verifyAndAssertMessages(
         unpad(`
           import classDeclaration from 'decorator';
@@ -1076,7 +1076,7 @@ describe("verify", function () {
       );
     });
 
-    it("method definition", function () {
+    it("method definition", () => {
       verifyAndAssertMessages(
         unpad(`
           import classMethodDeclarationA from 'decorator';
@@ -1095,7 +1095,7 @@ describe("verify", function () {
       );
     });
 
-    it("method definition get/set", function () {
+    it("method definition get/set", () => {
       verifyAndAssertMessages(
         unpad(`
           import classMethodDeclarationA from 'decorator';
@@ -1116,7 +1116,7 @@ describe("verify", function () {
       );
     });
 
-    it("object property", function () {
+    it("object property", () => {
       verifyAndAssertMessages(
         unpad(`
           import classMethodDeclarationA from 'decorator';
@@ -1136,7 +1136,7 @@ describe("verify", function () {
       );
     });
 
-    it("object property get/set", function () {
+    it("object property get/set", () => {
       verifyAndAssertMessages(
         unpad(`
           import classMethodDeclarationA from 'decorator';
@@ -1159,7 +1159,7 @@ describe("verify", function () {
     });
   });
 
-  it("detects minimal no-unused-vars case #120", function () {
+  it("detects minimal no-unused-vars case #120", () => {
     verifyAndAssertMessages(
       "var unused;",
       { "no-unused-vars": 1 },
@@ -1170,7 +1170,7 @@ describe("verify", function () {
   // This two tests are disabled, as the feature to visit properties when
   // there is a spread/rest operator has been removed as it caused problems
   // with other rules #249
-  it.skip("visits excluded properties left of spread #95", function () {
+  it.skip("visits excluded properties left of spread #95", () => {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
       { "no-unused-vars": 1 },
@@ -1178,7 +1178,7 @@ describe("verify", function () {
     );
   });
 
-  it.skip("visits excluded properties left of spread #210", function () {
+  it.skip("visits excluded properties left of spread #210", () => {
     verifyAndAssertMessages(
       "const props = { yo: 'yo' }; const { ...otherProps } = props;",
       { "no-unused-vars": 1 },
@@ -1186,7 +1186,7 @@ describe("verify", function () {
     );
   });
 
-  it("does not mark spread variables false-positive", function () {
+  it("does not mark spread variables false-positive", () => {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
       { "no-undef": 1, "no-redeclare": 1 },
@@ -1194,7 +1194,7 @@ describe("verify", function () {
     );
   });
 
-  it("does not mark spread variables false-positive", function () {
+  it("does not mark spread variables false-positive", () => {
     verifyAndAssertMessages(
       "const props = { yo: 'yo' }; const { ...otherProps } = props;",
       { "no-undef": 1, "no-redeclare": 1 },
@@ -1202,7 +1202,7 @@ describe("verify", function () {
     );
   });
 
-  it("does not mark spread variables as use-before-define #249", function () {
+  it("does not mark spread variables as use-before-define #249", () => {
     verifyAndAssertMessages(
       "var originalObject = {}; var {field1, field2, ...clone} = originalObject;",
       { "no-use-before-define": 1 },
@@ -1210,7 +1210,7 @@ describe("verify", function () {
     );
   });
 
-  it("detects no-unused-vars with object destructuring #142", function () {
+  it("detects no-unused-vars with object destructuring #142", () => {
     verifyAndAssertMessages(
       "const {Bacona} = require('baconjs')",
       { "no-undef": 1, "no-unused-vars": 1 },
@@ -1218,7 +1218,7 @@ describe("verify", function () {
     );
   });
 
-  it("don't warn no-unused-vars with spread #142", function () {
+  it("don't warn no-unused-vars with spread #142", () => {
     verifyAndAssertMessages(
       unpad(`
         export default function test(data) {
@@ -1233,7 +1233,7 @@ describe("verify", function () {
     );
   });
 
-  it("excludes comment tokens #153", function () {
+  it("excludes comment tokens #153", () => {
     verifyAndAssertMessages(
       unpad(`
         var a = [
@@ -1258,7 +1258,7 @@ describe("verify", function () {
     );
   });
 
-  it("ternary and parens #149", function () {
+  it("ternary and parens #149", () => {
     verifyAndAssertMessages(
     "true ? (true) : false;",
       { "space-infix-ops": 1 },
@@ -1266,7 +1266,7 @@ describe("verify", function () {
     );
   });
 
-  it("line comment space-in-parens #124", function () {
+  it("line comment space-in-parens #124", () => {
     verifyAndAssertMessages(
       unpad(`
         React.createClass({
@@ -1282,7 +1282,7 @@ describe("verify", function () {
     );
   });
 
-  it("block comment space-in-parens #124", function () {
+  it("block comment space-in-parens #124", () => {
     verifyAndAssertMessages(
       unpad(`
         React.createClass({
@@ -1300,21 +1300,21 @@ describe("verify", function () {
     );
   });
 
-  it("no no-undef error with rest #11", function () {
+  it("no no-undef error with rest #11", () => {
     verifyAndAssertMessages("const [a, ...rest] = ['1', '2', '3']; a; rest;",
       { "no-undef": 1, "no-unused-vars": 1 },
       [ ]
     );
   });
 
-  it("async function with space-before-function-paren #168", function () {
+  it("async function with space-before-function-paren #168", () => {
     verifyAndAssertMessages("it('handles updates', async function() {});",
       { "space-before-function-paren": [1, "never"] },
       [ ]
     );
   });
 
-  it("default param flow type no-unused-vars #184", function () {
+  it("default param flow type no-unused-vars #184", () => {
     verifyAndAssertMessages(
       unpad(`
         type ResolveOptionType = {
@@ -1333,7 +1333,7 @@ describe("verify", function () {
     );
   });
 
-  it("no-use-before-define #192", function () {
+  it("no-use-before-define #192", () => {
     verifyAndAssertMessages(
       unpad(`
         console.log(x);
@@ -1344,7 +1344,7 @@ describe("verify", function () {
     );
   });
 
-  it("jsx and stringliteral #216", function () {
+  it("jsx and stringliteral #216", () => {
     verifyAndAssertMessages(
       "<div className=''></div>",
       {},
@@ -1352,7 +1352,7 @@ describe("verify", function () {
     );
   });
 
-  it("getter/setter #218", function () {
+  it("getter/setter #218", () => {
     verifyAndAssertMessages(
       unpad(`
         class Person {
@@ -1364,7 +1364,7 @@ describe("verify", function () {
     );
   });
 
-  it("getter/setter #220", function () {
+  it("getter/setter #220", () => {
     verifyAndAssertMessages(
       unpad(`
         var B = {
@@ -1381,7 +1381,7 @@ describe("verify", function () {
     );
   });
 
-  it("fixes issues with flow types and ObjectPattern", function () {
+  it("fixes issues with flow types and ObjectPattern", () => {
     verifyAndAssertMessages(
       unpad(`
         import type Foo from 'bar';
@@ -1395,7 +1395,7 @@ describe("verify", function () {
     );
   });
 
-  it("correctly detects redeclares if in script mode #217", function () {
+  it("correctly detects redeclares if in script mode #217", () => {
     verifyAndAssertMessages(
       unpad(`
         var a = 321;
@@ -1407,7 +1407,7 @@ describe("verify", function () {
     );
   });
 
-  it("correctly detects redeclares if in module mode #217", function () {
+  it("correctly detects redeclares if in module mode #217", () => {
     verifyAndAssertMessages(
       unpad(`
         var a = 321;
@@ -1419,7 +1419,7 @@ describe("verify", function () {
     );
   });
 
-  it("no-implicit-globals in script", function () {
+  it("no-implicit-globals in script", () => {
     verifyAndAssertMessages(
       "var leakedGlobal = 1;",
       { "no-implicit-globals": 1 },
@@ -1432,7 +1432,7 @@ describe("verify", function () {
     );
   });
 
-  it("no-implicit-globals in module", function () {
+  it("no-implicit-globals in module", () => {
     verifyAndAssertMessages(
       "var leakedGlobal = 1;",
       { "no-implicit-globals": 1 },
@@ -1445,7 +1445,7 @@ describe("verify", function () {
     );
   });
 
-  it("no-implicit-globals in default", function () {
+  it("no-implicit-globals in default", () => {
     verifyAndAssertMessages(
       "var leakedGlobal = 1;",
       { "no-implicit-globals": 1 },
@@ -1458,7 +1458,7 @@ describe("verify", function () {
     );
   });
 
-  it("allowImportExportEverywhere option (#327)", function () {
+  it("allowImportExportEverywhere option (#327)", () => {
     verifyAndAssertMessages(
       unpad(`
         if (true) { import Foo from 'foo'; }
@@ -1475,7 +1475,7 @@ describe("verify", function () {
     );
   });
 
-  it("with does not crash parsing in script mode (strict off) #171", function () {
+  it("with does not crash parsing in script mode (strict off) #171", () => {
     verifyAndAssertMessages(
       "with (arguments) { length; }",
       {},
@@ -1484,7 +1484,7 @@ describe("verify", function () {
     );
   });
 
-  xit("with does crash parsing in module mode (strict on) #171", function () {
+  xit("with does crash parsing in module mode (strict on) #171", () => {
     verifyAndAssertMessages(
       "with (arguments) { length; }",
       {},
@@ -1492,7 +1492,7 @@ describe("verify", function () {
     );
   });
 
-  it("new.target is not reported as undef #235", function () {
+  it("new.target is not reported as undef #235", () => {
     verifyAndAssertMessages(
       "function foo () { return new.target }",
       { "no-undef": 1 },
@@ -1500,7 +1500,7 @@ describe("verify", function () {
     );
   });
 
-  it("decorator does not create TypeError #229", function () {
+  it("decorator does not create TypeError #229", () => {
     verifyAndAssertMessages(
       unpad(`
         class A {
@@ -1513,7 +1513,7 @@ describe("verify", function () {
     );
   });
 
-  it("Flow definition does not trigger warnings #223", function () {
+  it("Flow definition does not trigger warnings #223", () => {
     verifyAndAssertMessages(
       unpad(`
         import { Map as $Map } from 'immutable';
@@ -1524,7 +1524,7 @@ describe("verify", function () {
     );
   });
 
-  it("newline-before-return with comments #289", function () {
+  it("newline-before-return with comments #289", () => {
     verifyAndAssertMessages(
       unpad(`
         function a() {
@@ -1542,7 +1542,7 @@ describe("verify", function () {
     );
   });
 
-  it("spaced-comment with shebang #163", function () {
+  it("spaced-comment with shebang #163", () => {
     verifyAndAssertMessages(
       unpad(`
         #!/usr/bin/env babel-node
@@ -1553,8 +1553,8 @@ describe("verify", function () {
     );
   });
 
-  describe("Class Property Declarations", function() {
-    it("no-redeclare false positive 1", function() {
+  describe("Class Property Declarations", () => {
+    it("no-redeclare false positive 1", () => {
       verifyAndAssertMessages(
         unpad(`
           class Group {
@@ -1569,7 +1569,7 @@ describe("verify", function () {
       );
     });
 
-    it("no-redeclare false positive 2", function() {
+    it("no-redeclare false positive 2", () => {
       verifyAndAssertMessages(
         unpad(`
           function validate() {}
@@ -1582,7 +1582,7 @@ describe("verify", function () {
       );
     });
 
-    it("check references", function() {
+    it("check references", () => {
       verifyAndAssertMessages(
         unpad(`
           var a;
@@ -1601,7 +1601,7 @@ describe("verify", function () {
     });
   });
 
-  it("dynamic import support", function () {
+  it("dynamic import support", () => {
     verifyAndAssertMessages(
       "import('test-module').then(() => {})",
       {},

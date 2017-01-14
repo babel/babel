@@ -44,7 +44,7 @@ function monkeypatch() {
   estraverses.push(estraverseOfEslint);
   Object.assign(estraverseOfEslint.VisitorKeys, t.VISITOR_KEYS);
 
-  estraverses.forEach(function (estraverse) {
+  estraverses.forEach((estraverse) => {
     estraverse.VisitorKeys.MethodDefinition.push("decorators");
     estraverse.VisitorKeys.Property.push("decorators");
   });
@@ -100,7 +100,7 @@ function monkeypatch() {
   }
 
   // iterate through part of t.VISITOR_KEYS
-  var visitorKeysMap = pick(t.VISITOR_KEYS, function(k) {
+  var visitorKeysMap = pick(t.VISITOR_KEYS, (k) => {
     return t.FLIPPED_ALIAS_KEYS.Flow.concat([
       "ArrayPattern",
       "ClassDeclaration",
@@ -268,13 +268,13 @@ function monkeypatch() {
     }
     // set ArrayPattern/ObjectPattern visitor keys back to their original. otherwise
     // escope will traverse into them and include the identifiers within as declarations
-    estraverses.forEach(function (estraverse) {
+    estraverses.forEach((estraverse) => {
       estraverse.VisitorKeys.ObjectPattern = ["properties"];
       estraverse.VisitorKeys.ArrayPattern = ["elements"];
     });
     visitFunction.call(this, node);
     // set them back to normal...
-    estraverses.forEach(function (estraverse) {
+    estraverses.forEach((estraverse) => {
       estraverse.VisitorKeys.ObjectPattern = t.VISITOR_KEYS.ObjectPattern;
       estraverse.VisitorKeys.ArrayPattern = t.VISITOR_KEYS.ArrayPattern;
     });
