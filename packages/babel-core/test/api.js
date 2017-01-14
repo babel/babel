@@ -621,5 +621,17 @@ describe("api", function () {
       let script = buildExternalHelpers(["typeof"]);
       assert.ok(script.indexOf("typeof") >= 0);
     });
+
+    test("output export", function () {
+      var script = buildExternalHelpers(["extends"], "export");
+      assert.ok(script.indexOf("var _extends = ") >= 0);
+      assert.ok(script.indexOf("export { _extends as extends };") >= 0);
+    });
+
+    test("output var", function () {
+      var script = buildExternalHelpers(["extends"], "var");
+      assert.ok(script.indexOf("var babelHelpers = {};") >= 0);
+      assert.ok(script.indexOf("babelHelpers.extends = ") >= 0);
+    });
   });
 });
