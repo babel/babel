@@ -1,4 +1,3 @@
-/* eslint indent: 0 */
 /* eslint max-len: 0 */
 
 import { types as tt } from "../tokenizer/types";
@@ -231,8 +230,8 @@ pp.parseForStatement = function (node) {
 
   let forAwait = false;
   if (this.hasPlugin("asyncGenerators") && this.state.inAsync && this.isContextual("await")) {
-      forAwait = true;
-      this.next();
+    forAwait = true;
+    this.next();
   }
   this.expect(tt.parenL);
 

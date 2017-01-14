@@ -1,5 +1,3 @@
-/* eslint indent: 0 */
-
 import fromCodePoint from "./fromCodePoint";
 
 import XHTMLEntities from "./xhtml";

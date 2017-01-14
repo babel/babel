@@ -1,4 +1,3 @@
-/* eslint indent: 0 */
 /* eslint max-len: 0 */
 
 // A recursive descent parser operates by defining functions for all

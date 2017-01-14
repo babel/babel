@@ -1,4 +1,3 @@
-/* eslint indent: 0 */
 /* eslint max-len: 0 */
 
 import { types as tt } from "../tokenizer/types";
@@ -1081,9 +1080,9 @@ export default function (instance) {
           const node = this.startNode();
           node.id = this.parseIdentifier();
           if (this.isRelational("<")) {
-              node.typeParameters = this.flowParseTypeParameterInstantiation();
+            node.typeParameters = this.flowParseTypeParameterInstantiation();
           } else {
-              node.typeParameters = null;
+            node.typeParameters = null;
           }
           implemented.push(this.finishNode(node, "ClassImplements"));
         } while (this.eat(tt.comma));
