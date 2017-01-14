@@ -104,15 +104,15 @@ if (program.eval || program.print) {
 
     let i = 0;
     let ignoreNext = false;
-    _.each(args, function (arg, i2) {
+    _.each(program.normalize(args), function (arg, i2) {
       if (ignoreNext) {
         ignoreNext = false;
         return;
       }
 
-      if (arg[0] === "-") {
-        let parsedArg = program[arg.slice(2)];
-        if (parsedArg && parsedArg !== true) {
+      let option = program.optionFor(arg);
+      if (option) {
+        if ((option.optional && !(args[i2 + 1] && args[i2 + 1][0] === "-")) || option.required) {
           ignoreNext = true;
         }
       } else {
