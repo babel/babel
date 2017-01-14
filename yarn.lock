@@ -1549,9 +1549,9 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-babel@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/eslint-config-babel/-/eslint-config-babel-4.0.1.tgz#79647e62d82aff64872e5013d6b24f8cfe9b503b"
+eslint-config-babel@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-babel/-/eslint-config-babel-5.0.0.tgz#2f1ac1d58104fc0b50a2964ddb08f8901bbbbd8a"
 
 eslint-plugin-flowtype@^2.20.0:
   version "2.29.2"
