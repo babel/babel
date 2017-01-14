@@ -259,7 +259,7 @@ describe("programmatic generation", function() {
     const output = generate.default(objectStatement).code;
     assert.equal(output, [
       "{",
-      "  bar: string;",
+      "  bar: string,",
       "}",
     ].join("\n"));
   });
@@ -280,7 +280,7 @@ describe("programmatic generation", function() {
 
     assert.equal(output, [
       "{",
-      "  [key: any]: Test;",
+      "  [key: any]: Test,",
       "}",
     ].join("\n"));
   });

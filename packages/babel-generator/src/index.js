@@ -64,8 +64,7 @@ function normalizeOptions(code, opts, tokens): Format {
       adjustMultilineComment: true,
       style: style,
       base: 0
-    },
-    flowCommaSeparator: opts.flowCommaSeparator,
+    }
   };
 
   if (format.minified) {
