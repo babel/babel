@@ -12,10 +12,19 @@ module.exports = function (commander, filenames) {
 
     let dest = path.join(commander.outDir, relative);
 
-    let data = util.compile(src, {
-      sourceFileName: slash(path.relative(dest + "/..", src)),
-      sourceMapTarget: path.basename(relative)
-    });
+    let sourceFilePath = path.relative(dest + "/..", src);
+    let sourceMapPath = src + ".map";
+
+    let options = {
+      sourceFileName: slash(sourceFilePath),
+      sourceMapTarget: path.basename(relative),
+    };
+
+    if (fs.existsSync(sourceMapPath)) {
+      options.inputSourceMap = JSON.parse(fs.readFileSync(sourceMapPath).toString());
+    }
+
+    let data = util.compile(src, options);
     if (!commander.copyFiles && data.ignored) return;
 
     // we've requested explicit sourcemaps to be written to disk
