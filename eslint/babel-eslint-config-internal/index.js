@@ -50,6 +50,7 @@ module.exports = {
     "no-unreachable": "off",
     "no-use-before-define": "off",
     "no-var": "error",
+    "object-curly-spacing": ["error", "always"],
     "prefer-const": "error",
     quotes: ["error", "double"],
     "space-before-blocks": ["error", "always"],
