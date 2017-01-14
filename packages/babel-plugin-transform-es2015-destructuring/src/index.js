@@ -146,6 +146,7 @@ export default function ({ types: t }) {
 
         let key = prop.key;
         if (t.isIdentifier(key) && !prop.computed) key = t.stringLiteral(prop.key.name);
+
         keys.push(key);
       }
 
@@ -189,13 +190,32 @@ export default function ({ types: t }) {
         objRef = temp;
       }
 
-      //
+      // if we have a rest object in this pattern, computed properties
+      // are extracted into temporary vars so they are only evaluated
+      // once
+
+      let lastProp = pattern.properties.length - 1;
+      let hasRestProperty = t.isRestProperty(pattern.properties[lastProp]);
 
       for (let i = 0; i < pattern.properties.length; i++) {
         let prop = pattern.properties[i];
-        if (t.isRestProperty(prop)) {
+        if (i === lastProp && t.isRestProperty(prop)) {
           this.pushObjectRest(pattern, objRef, prop, i);
         } else {
+          // extract key to temp var to avoid multiple evaluation
+          if (hasRestProperty && prop.computed) {
+            const key = prop.key;
+
+            if (!this.scope.isStatic(key)) {
+              const temp = this.scope.generateUidIdentifierBasedOnNode(key);
+              this.nodes.push(
+                t.variableDeclaration("const", [
+                  t.variableDeclarator(temp, key)
+                ])
+              );
+              prop.key = temp;
+            }
+          }
           this.pushObjectProperty(prop, objRef);
         }
       }
