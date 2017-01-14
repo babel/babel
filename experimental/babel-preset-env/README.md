@@ -286,6 +286,21 @@ exports.A = A;
 ### Example with `debug: true`
 
 ```js
+{
+  "presets": [
+    [ "env", {
+      "targets": {
+        "safari": 10
+      },
+      "modules": false,
+      "useBuiltIns": true,
+      "debug": true
+    }]
+  ]
+}
+```
+*stdin*:
+```
 Using targets:
 {
   "safari": 10
