@@ -108,7 +108,7 @@ export default function ({ types: t }) {
               ).remove();
             }
           }
-        },{
+        }, {
           originalPath: path
         });
 
