@@ -69,7 +69,7 @@ export function ExportDefaultDeclaration() {
 
 function ExportDeclaration(node: Object) {
   if (node.declaration) {
-    let declar = node.declaration;
+    const declar = node.declaration;
     this.print(declar, node);
     if (!t.isStatement(declar)) this.semicolon();
   } else {
@@ -78,12 +78,12 @@ function ExportDeclaration(node: Object) {
       this.space();
     }
 
-    let specifiers = node.specifiers.slice(0);
+    const specifiers = node.specifiers.slice(0);
 
     // print "special" specifiers first
     let hasSpecial = false;
     while (true) {
-      let first = specifiers[0];
+      const first = specifiers[0];
       if (t.isExportDefaultSpecifier(first) || t.isExportNamespaceSpecifier(first)) {
         hasSpecial = true;
         this.print(specifiers.shift(), node);
@@ -126,11 +126,11 @@ export function ImportDeclaration(node: Object) {
     this.space();
   }
 
-  let specifiers = node.specifiers.slice(0);
+  const specifiers = node.specifiers.slice(0);
   if (specifiers && specifiers.length) {
     // print "special" specifiers first
     while (true) {
-      let first = specifiers[0];
+      const first = specifiers[0];
       if (t.isImportDefaultSpecifier(first) || t.isImportNamespaceSpecifier(first)) {
         this.print(specifiers.shift(), node);
         if (specifiers.length) {

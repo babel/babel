@@ -1,5 +1,5 @@
-let assert                 = require("assert");
-let getPossiblePresetNames = require("../lib/helpers/get-possible-preset-names");
+const assert                 = require("assert");
+const getPossiblePresetNames = require("../lib/helpers/get-possible-preset-names");
 
 describe("getPossiblePresetNames", function () {
   it("adds the babel-preset prefix", function() {

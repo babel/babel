@@ -2,15 +2,15 @@ import type { NodePath } from "babel-traverse";
 import * as t from "babel-types";
 
 export default function bindifyDecorators(decorators: Array<NodePath>): Array<NodePath> {
-  for (let decoratorPath of decorators) {
-    let decorator = decoratorPath.node;
-    let expression = decorator.expression;
+  for (const decoratorPath of decorators) {
+    const decorator = decoratorPath.node;
+    const expression = decorator.expression;
     if (!t.isMemberExpression(expression)) continue;
 
-    let temp = decoratorPath.scope.maybeGenerateMemoised(expression.object);
+    const temp = decoratorPath.scope.maybeGenerateMemoised(expression.object);
     let ref;
 
-    let nodes = [];
+    const nodes = [];
 
     if (temp) {
       ref = temp;

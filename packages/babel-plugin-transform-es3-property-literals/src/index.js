@@ -3,7 +3,7 @@ export default function ({ types: t }) {
     visitor: {
       ObjectProperty: {
         exit({node}) {
-          let key = node.key;
+          const key = node.key;
           if (!node.computed && t.isIdentifier(key) && !t.isValidIdentifier(key.name)) {
             // default: "bar" -> "default": "bar"
             node.key = t.stringLiteral(key.name);

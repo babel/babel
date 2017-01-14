@@ -1,23 +1,23 @@
-let traverse = require("../lib").default;
-let assert   = require("assert");
-let _        = require("lodash");
-let parse = require("babylon").parse;
+const traverse = require("../lib").default;
+const assert   = require("assert");
+const _        = require("lodash");
+const parse = require("babylon").parse;
 
 describe("traverse", function () {
-  let code = `
+  const code = `
     var foo = "bar";
     this.test = "wow";
   `;
-  let ast = parse(code);
-  let program = ast.program;
-  let body = program.body;
+  const ast = parse(code);
+  const program = ast.program;
+  const body = program.body;
 
   it("traverse replace", function () {
-    let replacement = {
+    const replacement = {
       type: "StringLiteral",
       value: "foo"
     };
-    let ast2 = _.cloneDeep(program);
+    const ast2 = _.cloneDeep(program);
 
     traverse(ast2, {
       enter: function (path) {
@@ -29,12 +29,12 @@ describe("traverse", function () {
   });
 
   it("traverse", function () {
-    let expect = [
+    const expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
       body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object, body[1].expression.left.property, body[1].expression.right
     ];
 
-    let actual = [];
+    const actual = [];
 
     traverse(program, {
       enter: function (path) {
@@ -54,12 +54,12 @@ describe("traverse", function () {
   });
 
   it("traverse blacklistTypes", function () {
-    let expect = [
+    const expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
       body[1], body[1].expression, body[1].expression.right
     ];
 
-    let actual = [];
+    const actual = [];
 
     traverse(program, {
       blacklist: ["MemberExpression"],
@@ -85,8 +85,8 @@ describe("traverse", function () {
   });
 
   it("clearCache", function () {
-    let paths = [];
-    let scopes = [];
+    const paths = [];
+    const scopes = [];
     traverse(ast, {
       enter(path) {
         scopes.push(path.scope);
@@ -97,8 +97,8 @@ describe("traverse", function () {
 
     traverse.clearCache();
 
-    let paths2 = [];
-    let scopes2 = [];
+    const paths2 = [];
+    const scopes2 = [];
     traverse(ast, {
       enter(path) {
         scopes2.push(path.scope);
@@ -114,7 +114,7 @@ describe("traverse", function () {
   });
 
   it("clearPath", function () {
-    let paths = [];
+    const paths = [];
     traverse(ast, {
       enter(path) {
         paths.push(path);
@@ -123,7 +123,7 @@ describe("traverse", function () {
 
     traverse.clearCache.clearPath();
 
-    let paths2 = [];
+    const paths2 = [];
     traverse(ast, {
       enter(path) {
         paths2.push(path);
@@ -136,7 +136,7 @@ describe("traverse", function () {
   });
 
   it("clearScope", function () {
-    let scopes = [];
+    const scopes = [];
     traverse(ast, {
       enter(path) {
         scopes.push(path.scope);
@@ -146,7 +146,7 @@ describe("traverse", function () {
 
     traverse.clearCache.clearScope();
 
-    let scopes2 = [];
+    const scopes2 = [];
     traverse(ast, {
       enter(path) {
         scopes2.push(path.scope);

@@ -4,7 +4,7 @@
  * Pre hooks should be used for either rejecting removal or delegating removal
  */
 
-export let hooks = [
+export const hooks = [
   function (self, parent) {
     let removeParent = false;
 

@@ -7,7 +7,7 @@ import NodePath from "./index";
 import { parse } from "babylon";
 import * as t from "babel-types";
 
-let hoistVariablesVisitor = {
+const hoistVariablesVisitor = {
   Function(path) {
     path.skip();
   },
@@ -15,14 +15,14 @@ let hoistVariablesVisitor = {
   VariableDeclaration(path) {
     if (path.node.kind !== "var") return;
 
-    let bindings = path.getBindingIdentifiers();
-    for (let key in bindings) {
+    const bindings = path.getBindingIdentifiers();
+    for (const key in bindings) {
       path.scope.push({ id: bindings[key] });
     }
 
-    let exprs = [];
+    const exprs = [];
 
-    for (let declar of (path.node.declarations: Array<Object>)) {
+    for (const declar of (path.node.declarations: Array<Object>)) {
       if (declar.init) {
         exprs.push(t.expressionStatement(
           t.assignmentExpression("=", declar.id, declar.init)
@@ -73,7 +73,7 @@ export function replaceWithSourceString(replacement) {
     replacement = `(${replacement})`;
     replacement = parse(replacement);
   } catch (err) {
-    let loc = err.loc;
+    const loc = err.loc;
     if (loc) {
       err.message += " - make sure this is an expression.";
       err.message += "\n" + codeFrame(replacement, loc.line, loc.column + 1);
@@ -135,7 +135,7 @@ export function replaceWith(replacement) {
     }
   }
 
-  let oldNode = this.node;
+  const oldNode = this.node;
   if (oldNode) {
     t.inheritsComments(replacement, oldNode);
     t.removeComments(oldNode);
@@ -181,10 +181,10 @@ export function _replaceWith(node) {
 export function replaceExpressionWithStatements(nodes: Array<Object>) {
   this.resync();
 
-  let toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
+  const toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
 
   if (t.isSequenceExpression(toSequenceExpression)) {
-    let exprs = toSequenceExpression.expressions;
+    const exprs = toSequenceExpression.expressions;
 
     if (exprs.length >= 2 && this.parentPath.isExpressionStatement()) {
       this._maybePopFromStatements(exprs);
@@ -199,22 +199,22 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
   } else if (toSequenceExpression) {
     this.replaceWith(toSequenceExpression);
   } else {
-    let container = t.functionExpression(null, [], t.blockStatement(nodes));
+    const container = t.functionExpression(null, [], t.blockStatement(nodes));
     container.shadow = true;
 
     this.replaceWith(t.callExpression(container, []));
     this.traverse(hoistVariablesVisitor);
 
     // add implicit returns to all ending expression statements
-    let completionRecords: Array<NodePath> = this.get("callee").getCompletionRecords();
-    for (let path of completionRecords) {
+    const completionRecords: Array<NodePath> = this.get("callee").getCompletionRecords();
+    for (const path of completionRecords) {
       if (!path.isExpressionStatement()) continue;
 
-      let loop = path.findParent((path) => path.isLoop());
+      const loop = path.findParent((path) => path.isLoop());
       if (loop) {
-        let callee = this.get("callee");
+        const callee = this.get("callee");
 
-        let uid = callee.scope.generateDeclaredUidIdentifier("ret");
+        const uid = callee.scope.generateDeclaredUidIdentifier("ret");
         callee.get("body").pushContainer("body", t.returnStatement(uid));
 
         path.get("expression").replaceWith(
