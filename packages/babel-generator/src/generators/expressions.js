@@ -94,7 +94,7 @@ export function CallExpression(node: Object) {
 
   this.token("(");
 
-  let isPrettyCall = node._prettyCall;
+  const isPrettyCall = node._prettyCall;
 
   let separator;
   if (isPrettyCall) {
@@ -127,15 +127,15 @@ function buildYieldAwait(keyword: string) {
 
     if (node.argument) {
       this.space();
-      let terminatorState = this.startTerminatorless();
+      const terminatorState = this.startTerminatorless();
       this.print(node.argument, node);
       this.endTerminatorless(terminatorState);
     }
   };
 }
 
-export let YieldExpression = buildYieldAwait("yield");
-export let AwaitExpression = buildYieldAwait("await");
+export const YieldExpression = buildYieldAwait("yield");
+export const AwaitExpression = buildYieldAwait("await");
 
 export function EmptyStatement() {
   this.semicolon(true /* force */);
@@ -159,7 +159,7 @@ export function AssignmentPattern(node: Object) {
 export function AssignmentExpression(node: Object, parent: Object) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
-  let parens = this.inForStatementInitCounter && node.operator === "in" &&
+  const parens = this.inForStatementInitCounter && node.operator === "in" &&
                !n.needsParens(node, parent);
 
   if (parens) {

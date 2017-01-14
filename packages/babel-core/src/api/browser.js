@@ -29,16 +29,16 @@ export function run(code: string, opts: Object = {}): any {
 export function load(url: string, callback: Function, opts: Object = {}, hold?: boolean) {
   opts.filename = opts.filename || url;
 
-  let xhr = global.ActiveXObject ? new global.ActiveXObject("Microsoft.XMLHTTP") : new global.XMLHttpRequest();
+  const xhr = global.ActiveXObject ? new global.ActiveXObject("Microsoft.XMLHTTP") : new global.XMLHttpRequest();
   xhr.open("GET", url, true);
   if ("overrideMimeType" in xhr) xhr.overrideMimeType("text/plain");
 
   xhr.onreadystatechange = function () {
     if (xhr.readyState !== 4) return;
 
-    let status = xhr.status;
+    const status = xhr.status;
     if (status === 0 || status === 200) {
-      let param = [xhr.responseText, opts];
+      const param = [xhr.responseText, opts];
       if (!hold) run(param);
       if (callback) callback(param);
     } else {
@@ -50,8 +50,8 @@ export function load(url: string, callback: Function, opts: Object = {}, hold?: 
 }
 
 function runScripts() {
-  let scripts: Array<Array<any> | Object> = [];
-  let types   = ["text/ecmascript-6", "text/6to5", "text/babel", "module"];
+  const scripts: Array<Array<any> | Object> = [];
+  const types   = ["text/ecmascript-6", "text/6to5", "text/babel", "module"];
   let index   = 0;
 
   /**
@@ -59,7 +59,7 @@ function runScripts() {
    */
 
   function exec() {
-    let param = scripts[index];
+    const param = scripts[index];
     if (param instanceof Array) {
       run(param, index);
       index++;
@@ -72,7 +72,7 @@ function runScripts() {
    */
 
   function run(script: Object, i: number) {
-    let opts = {};
+    const opts = {};
 
     if (script.src) {
       load(script.src, function (param) {
@@ -87,10 +87,10 @@ function runScripts() {
 
   // Collect scripts with Babel `types`.
 
-  let _scripts = global.document.getElementsByTagName("script");
+  const _scripts = global.document.getElementsByTagName("script");
 
   for (let i = 0; i < _scripts.length; ++i) {
-    let _script = _scripts[i];
+    const _script = _scripts[i];
     if (types.indexOf(_script.type) >= 0) scripts.push(_script);
   }
 

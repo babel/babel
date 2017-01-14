@@ -69,7 +69,7 @@ exports.nodes = {
    */
 
   AssignmentExpression(node: Object): ?WhitespaceObject {
-    let state = crawl(node.right);
+    const state = crawl(node.right);
     if ((state.hasCall && state.hasHelper) || state.hasFunction) {
       return {
         before: state.hasFunction,
@@ -131,11 +131,11 @@ exports.nodes = {
 
   VariableDeclaration(node: Object): ?WhitespaceObject {
     for (let i = 0; i < node.declarations.length; i++) {
-      let declar = node.declarations[i];
+      const declar = node.declarations[i];
 
       let enabled = isHelper(declar.id) && !isType(declar.init);
       if (!enabled) {
-        let state = crawl(declar.init);
+        const state = crawl(declar.init);
         enabled = (isHelper(declar.init) && state.hasCall) || state.hasFunction;
       }
 

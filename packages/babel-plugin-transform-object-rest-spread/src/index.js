@@ -11,7 +11,7 @@ export default function ({ types: t }) {
   }
 
   function hasSpread(node) {
-    for (let prop of (node.properties)) {
+    for (const prop of (node.properties)) {
       if (t.isSpreadProperty(prop)) {
         return true;
       }
@@ -22,8 +22,8 @@ export default function ({ types: t }) {
   function createObjectSpread(file, props, objRef) {
     const restProperty = props.pop();
 
-    let keys = [];
-    for (let prop of props) {
+    const keys = [];
+    for (const prop of props) {
       let key = prop.key;
       if (t.isIdentifier(key) && !prop.computed) {
         key = t.stringLiteral(prop.key.name);
@@ -44,10 +44,10 @@ export default function ({ types: t }) {
 
   function replaceRestProperty(paramsPath, i, numParams) {
     if (paramsPath.isObjectPattern() && hasRestProperty(paramsPath)) {
-      let parentPath = paramsPath.parentPath;
-      let uid = parentPath.scope.generateUidIdentifier("ref");
+      const parentPath = paramsPath.parentPath;
+      const uid = parentPath.scope.generateUidIdentifier("ref");
 
-      let declar = t.variableDeclaration("let", [
+      const declar = t.variableDeclaration("let", [
         t.variableDeclarator(paramsPath.node, uid)
       ]);
       declar._blockHoist = i ? numParams - i : 1;
@@ -65,7 +65,7 @@ export default function ({ types: t }) {
       // taken from transform-es2015-parameters/src/destructuring.js
       // function a({ b, ...c }) {}
       Function(path) {
-        let params = path.get("params");
+        const params = path.get("params");
         for (let i = 0; i < params.length; i++) {
           replaceRestProperty(params[i], i, params.length);
         }
@@ -75,7 +75,7 @@ export default function ({ types: t }) {
       VariableDeclarator(path, file) {
         if (!path.get("id").isObjectPattern()) { return; }
         const kind = path.parentPath.node.kind;
-        let nodes = [];
+        const nodes = [];
 
         path.traverse({
           RestProperty(path) {
@@ -89,7 +89,7 @@ export default function ({ types: t }) {
               }
             });
 
-            let [ argument, callExpression ] = createObjectSpread(
+            const [ argument, callExpression ] = createObjectSpread(
               file,
               path.parentPath.node.properties,
               ref
@@ -122,14 +122,14 @@ export default function ({ types: t }) {
       // taken from transform-es2015-destructuring/src/index.js#visitor
       // export var { a, ...b } = c;
       ExportNamedDeclaration(path) {
-        let declaration = path.get("declaration");
+        const declaration = path.get("declaration");
         if (!declaration.isVariableDeclaration()) return;
         if (!hasRestProperty(declaration)) return;
 
-        let specifiers = [];
+        const specifiers = [];
 
-        for (let name in path.getOuterBindingIdentifiers(path)) {
-          let id = t.identifier(name);
+        for (const name in path.getOuterBindingIdentifiers(path)) {
+          const id = t.identifier(name);
           specifiers.push(t.exportSpecifier(id, id));
         }
 
@@ -145,9 +145,9 @@ export default function ({ types: t }) {
       },
       // ({a, ...b} = c);
       AssignmentExpression(path, file) {
-        let leftPath = path.get("left");
+        const leftPath = path.get("left");
         if (leftPath.isObjectPattern() && hasRestProperty(leftPath)) {
-          let nodes = [];
+          const nodes = [];
 
           let ref;
           if (path.isCompletionRecord() || path.parentPath.isExpressionStatement()) {
@@ -158,13 +158,13 @@ export default function ({ types: t }) {
             ]));
           }
 
-          let [ argument, callExpression ] = createObjectSpread(
+          const [ argument, callExpression ] = createObjectSpread(
             file,
             path.node.left.properties,
             ref
           );
 
-          let nodeWithoutSpread = t.clone(path.node);
+          const nodeWithoutSpread = t.clone(path.node);
           nodeWithoutSpread.right = ref;
           nodes.push(t.expressionStatement(nodeWithoutSpread));
           nodes.push(t.toStatement(t.assignmentExpression(
@@ -182,13 +182,13 @@ export default function ({ types: t }) {
       },
       // taken from transform-es2015-destructuring/src/index.js#visitor
       ForXStatement(path) {
-        let { node, scope } = path;
-        let leftPath = path.get("left");
-        let left = node.left;
+        const { node, scope } = path;
+        const leftPath = path.get("left");
+        const left = node.left;
 
         // for ({a, ...b} of []) {}
         if (t.isObjectPattern(left) && hasRestProperty(leftPath)) {
-          let temp = scope.generateUidIdentifier("ref");
+          const temp = scope.generateUidIdentifier("ref");
 
           node.left = t.variableDeclaration("var", [
             t.variableDeclarator(temp)
@@ -205,10 +205,10 @@ export default function ({ types: t }) {
 
         if (!t.isVariableDeclaration(left)) return;
 
-        let pattern = left.declarations[0].id;
+        const pattern = left.declarations[0].id;
         if (!t.isObjectPattern(pattern)) return;
 
-        let key = scope.generateUidIdentifier("ref");
+        const key = scope.generateUidIdentifier("ref");
         node.left = t.variableDeclaration(left.kind, [
           t.variableDeclarator(key, null)
         ]);
@@ -225,12 +225,12 @@ export default function ({ types: t }) {
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
 
-        let useBuiltIns = file.opts.useBuiltIns || false;
+        const useBuiltIns = file.opts.useBuiltIns || false;
         if (typeof useBuiltIns !== "boolean") {
           throw new Error("transform-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)");
         }
 
-        let args = [];
+        const args = [];
         let props = [];
 
         function push() {
@@ -239,7 +239,7 @@ export default function ({ types: t }) {
           props = [];
         }
 
-        for (let prop of (path.node.properties: Array)) {
+        for (const prop of (path.node.properties: Array)) {
           if (t.isSpreadProperty(prop)) {
             push();
             args.push(prop.argument);

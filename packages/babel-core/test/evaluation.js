@@ -1,14 +1,14 @@
-let traverse = require("babel-traverse").default;
-let assert   = require("assert");
-let parse    = require("babylon").parse;
+const traverse = require("babel-traverse").default;
+const assert   = require("assert");
+const parse    = require("babylon").parse;
 
 describe("evaluation", function () {
   function addTest(code, type, value, notConfident) {
     it(type + ": " + code, function () {
-      let visitor = {};
+      const visitor = {};
 
       visitor[type] = function (path) {
-        let evaluate = path.evaluate();
+        const evaluate = path.evaluate();
         assert.equal(evaluate.confident, !notConfident);
         assert.deepEqual(evaluate.value, value);
       };

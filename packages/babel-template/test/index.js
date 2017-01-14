@@ -1,8 +1,8 @@
-let generator = require("../../babel-generator").default;
-let template  = require("../lib");
-let chai      = require("chai");
+const generator = require("../../babel-generator").default;
+const template  = require("../lib");
+const chai      = require("chai");
 
-let comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
+const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 
 describe("templating", function () {
   it("import statement will cause parser to throw by default", function () {
@@ -18,13 +18,13 @@ describe("templating", function () {
   });
 
   it("should strip comments by default", function () {
-    let code = "const add = (a, b) => a + b;";
-    let output = template(comments)();
+    const code = "const add = (a, b) => a + b;";
+    const output = template(comments)();
     chai.expect(generator(output).code).to.be.equal(code);
   });
 
   it("should preserve comments with a flag", function () {
-    let output = template(comments, {preserveComments: true})();
+    const output = template(comments, {preserveComments: true})();
     chai.expect(generator(output).code).to.be.equal(comments);
   });
 });

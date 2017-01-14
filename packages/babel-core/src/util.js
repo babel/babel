@@ -15,8 +15,8 @@ export { inherits, inspect } from "util";
  */
 
 export function canCompile(filename: string, altExts?: Array<string>): boolean {
-  let exts = altExts || canCompile.EXTENSIONS;
-  let ext = path.extname(filename);
+  const exts = altExts || canCompile.EXTENSIONS;
+  const ext = path.extname(filename);
   return includes(exts, ext);
 }
 
@@ -63,7 +63,7 @@ export function regexify(val: any): RegExp {
     if (startsWith(val, "./") || startsWith(val, "*/")) val = val.slice(2);
     if (startsWith(val, "**/")) val = val.slice(3);
 
-    let regex = minimatch.makeRe(val, { nocase: true });
+    const regex = minimatch.makeRe(val, { nocase: true });
     return new RegExp(regex.source.slice(1, -1), "i");
   }
 
@@ -119,12 +119,12 @@ export function shouldIgnore(
   filename = filename.replace(/\\/g, "/");
 
   if (only) {
-    for (let pattern of only) {
+    for (const pattern of only) {
       if (_shouldIgnore(pattern, filename)) return false;
     }
     return true;
   } else if (ignore.length) {
-    for (let pattern of ignore) {
+    for (const pattern of ignore) {
       if (_shouldIgnore(pattern, filename)) return true;
     }
   }

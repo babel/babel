@@ -1,4 +1,4 @@
-let _  = require("lodash");
+const _  = require("lodash");
 
 require("babel-helper-transform-fixture-test-runner")(__dirname + "/fixtures/traceur", "traceur", {
   ignoreSuites: [

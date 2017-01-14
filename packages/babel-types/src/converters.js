@@ -24,10 +24,10 @@ export function toComputedKey(node: Object, key: Object = node.key || node.prope
 export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Object {
   if (!nodes || !nodes.length) return;
 
-  let declars = [];
+  const declars = [];
   let bailed  = false;
 
-  let result = convert(nodes);
+  const result = convert(nodes);
   if (bailed) return;
 
   for (let i = 0; i < declars.length; i++) {
@@ -38,9 +38,9 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
 
   function convert(nodes) {
     let ensureLastUndefined = false;
-    let exprs   = [];
+    const exprs   = [];
 
-    for (let node of (nodes: Array)) {
+    for (const node of (nodes: Array)) {
       if (t.isExpression(node)) {
         exprs.push(node);
       } else if (t.isExpressionStatement(node)) {
@@ -48,9 +48,9 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
       } else if (t.isVariableDeclaration(node)) {
         if (node.kind !== "var") return bailed = true; // bailed
 
-        for (let declar of (node.declarations: Array)) {
-          let bindings = t.getBindingIdentifiers(declar);
-          for (let key in bindings) {
+        for (const declar of (node.declarations: Array)) {
+          const bindings = t.getBindingIdentifiers(declar);
+          for (const key in bindings) {
             declars.push({
               kind: node.kind,
               id: bindings[key]
@@ -65,8 +65,8 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
         ensureLastUndefined = true;
         continue;
       } else if (t.isIfStatement(node)) {
-        let consequent = node.consequent ? convert([node.consequent]) : scope.buildUndefinedNode();
-        let alternate = node.alternate ? convert([node.alternate]) : scope.buildUndefinedNode();
+        const consequent = node.consequent ? convert([node.consequent]) : scope.buildUndefinedNode();
+        const alternate = node.alternate ? convert([node.alternate]) : scope.buildUndefinedNode();
         if (!consequent || !alternate) return bailed = true;
 
         exprs.push(t.conditionalExpression(node.test, consequent, alternate));
@@ -283,8 +283,8 @@ export function valueToNode(value: any): Object {
 
   // regexes
   if (isRegExp(value)) {
-    let pattern = value.source;
-    let flags = value.toString().match(/\/([a-z]+|)$/)[1];
+    const pattern = value.source;
+    const flags = value.toString().match(/\/([a-z]+|)$/)[1];
     return t.regExpLiteral(pattern, flags);
   }
 
@@ -295,8 +295,8 @@ export function valueToNode(value: any): Object {
 
   // object
   if (isPlainObject(value)) {
-    let props = [];
-    for (let key in value) {
+    const props = [];
+    for (const key in value) {
       let nodeKey;
       if (t.isValidIdentifier(key)) {
         nodeKey = t.identifier(key);

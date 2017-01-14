@@ -1,6 +1,6 @@
-let assert = require("assert");
-let util   = require("../lib/util");
-let t      = require("babel-types");
+const assert = require("assert");
+const util   = require("../lib/util");
+const t      = require("babel-types");
 
 describe("util", function () {
   it("canCompile", function () {
@@ -36,7 +36,7 @@ describe("util", function () {
     assert.deepEqual(util.list(["foo", "bar"]), ["foo", "bar"]);
     assert.deepEqual(util.list(/foo/), [/foo/]);
 
-    let date = new Date;
+    const date = new Date;
     assert.deepEqual(util.list(date), [date]);
   });
 
@@ -84,8 +84,8 @@ describe("util", function () {
   });
 
   it("shouldIgnore", function () {
-    let reIgnore = /\-reIgnore\.js/;
-    let fnIgnore = function (src) {
+    const reIgnore = /\-reIgnore\.js/;
+    const fnIgnore = function (src) {
       if (src.indexOf("fnIgnore") > 0) {
         return true;
       }

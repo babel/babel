@@ -41,10 +41,10 @@ function shouldShadow(path, shadowPath) {
 
 function remap(path, key) {
   // ensure that we're shadowed
-  let shadowPath = path.inShadow(key);
+  const shadowPath = path.inShadow(key);
   if (!shouldShadow(path, shadowPath)) return;
 
-  let shadowFunction = path.node._shadowedFunctionLiteral;
+  const shadowFunction = path.node._shadowedFunctionLiteral;
 
   let currentFunction;
   let passedShadowFunction = false;
@@ -91,15 +91,15 @@ function remap(path, key) {
   // binding since arrow function syntax already does that.
   if (!passedShadowFunction) return;
 
-  let cached = fnPath.getData(key);
+  const cached = fnPath.getData(key);
   if (cached) return path.replaceWith(cached);
 
-  let id   = path.scope.generateUidIdentifier(key);
+  const id   = path.scope.generateUidIdentifier(key);
 
   fnPath.setData(key, id);
 
-  let classPath = fnPath.findParent((p) => p.isClass());
-  let hasSuperClass = !!(classPath && classPath.node && classPath.node.superClass);
+  const classPath = fnPath.findParent((p) => p.isClass());
+  const hasSuperClass = !!(classPath && classPath.node && classPath.node.superClass);
 
   if (key === "this" && fnPath.isMethod({kind: "constructor"}) && hasSuperClass) {
     fnPath.scope.push({ id });

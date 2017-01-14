@@ -1,10 +1,10 @@
-let traverse = require("../lib").default;
-let assert = require("assert");
-let parse = require("babylon").parse;
+const traverse = require("../lib").default;
+const assert = require("assert");
+const parse = require("babylon").parse;
 
 describe("path/family", function () {
   describe("getBindingIdentifiers", function () {
-    let ast = parse("var a = 1, {b} = c, [d] = e; function f() {}");
+    const ast = parse("var a = 1, {b} = c, [d] = e; function f() {}");
     let nodes = {}, paths = {}, outerNodes = {}, outerPaths = {};
     traverse(ast, {
       VariableDeclaration(path) {

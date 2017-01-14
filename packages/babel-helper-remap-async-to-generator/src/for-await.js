@@ -2,7 +2,7 @@ import * as t from "babel-types";
 import template from "babel-template";
 import traverse from "babel-traverse";
 
-let buildForAwait = template(`
+const buildForAwait = template(`
   function* wrapper() {
     var ITERATOR_COMPLETION = true;
     var ITERATOR_HAD_ERROR_KEY = false;
@@ -35,7 +35,7 @@ let buildForAwait = template(`
   }
 `);
 
-let forAwaitVisitor = {
+const forAwaitVisitor = {
   noScope: true,
 
   Identifier(path, replacements) {
@@ -45,7 +45,7 @@ let forAwaitVisitor = {
   },
 
   CallExpression(path, replacements) {
-    let callee = path.node.callee;
+    const callee = path.node.callee;
 
     // if no await wrapping is being applied, unwrap the call expression
     if (t.isIdentifier(callee) && callee.name === "AWAIT" && !replacements.AWAIT) {
@@ -55,11 +55,11 @@ let forAwaitVisitor = {
 };
 
 export default function (path, helpers) {
-  let { node, scope, parent } = path;
+  const { node, scope, parent } = path;
 
-  let stepKey = scope.generateUidIdentifier("step");
-  let stepValue = scope.generateUidIdentifier("value");
-  let left = node.left;
+  const stepKey = scope.generateUidIdentifier("step");
+  const stepValue = scope.generateUidIdentifier("value");
+  const left = node.left;
   let declar;
 
   if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
@@ -89,9 +89,9 @@ export default function (path, helpers) {
   // remove generator function wrapper
   template = template.body.body;
 
-  let isLabeledParent = t.isLabeledStatement(parent);
-  let tryBody = template[3].block.body;
-  let loop = tryBody[0];
+  const isLabeledParent = t.isLabeledStatement(parent);
+  const tryBody = template[3].block.body;
+  const loop = tryBody[0];
 
   if (isLabeledParent) {
     tryBody[0] = t.labeledStatement(parent.label, loop);
