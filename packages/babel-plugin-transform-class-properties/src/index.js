@@ -76,16 +76,16 @@ export default function ({ types: t }) {
           const propNode = prop.node;
           if (propNode.decorators && propNode.decorators.length > 0) continue;
 
-          // In non-spec mode, all properties without values are ignored.
-          // In spec mode, *static* properties without values are still defined (see below).
-          if (!state.opts.spec && !propNode.value) continue;
-
           const isStatic = propNode.static;
 
           if (isStatic) {
+            //In non-spec mode, static properties without values are ignored.
+            if (!state.opts.spec && !propNode.value) continue;
             nodes.push(buildClassProperty(ref, propNode));
           } else {
-            if (!propNode.value) continue; // Ignore instance property with no value in spec mode
+            if (!propNode.value) {
+              propNode.value = t.identifier("undefined");
+            }
             instanceBody.push(buildClassProperty(t.thisExpression(), propNode));
           }
         }
