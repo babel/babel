@@ -43,11 +43,10 @@ let memberExpressionOptimisationVisitor = {
   "Function|ClassProperty": function (path, state) {
     // Detect whether any reference to rest is contained in nested functions to
     // determine if deopt is necessary.
-    let oldNoOptimise = state.noOptimise;
-    state.noOptimise = true;
+    let nested = state.nested;
+    state.nested = true;
     path.traverse(memberExpressionOptimisationVisitor, state);
-    state.noOptimise = oldNoOptimise;
-
+    state.nested = nested;
     // Skip because optimizing references to rest would refer to the `arguments`
     // of the nested function.
     path.skip();
@@ -58,14 +57,16 @@ let memberExpressionOptimisationVisitor = {
 
     // we can't guarantee the purity of arguments
     if (node.name === "arguments") {
-      state.deopted = true;
+      state.optEligible = false;
     }
 
     // is this a referenced identifier and is it referencing the rest parameter?
     if (node.name !== state.name) return;
 
-    if (state.noOptimise) {
-      state.deopted = true;
+    // A ref in a nested function makes the top-level function ineligible for
+    // optimization.
+    if (state.nested) {
+      state.optEligible = false;
     } else {
       let {parentPath} = path;
 
@@ -153,7 +154,7 @@ let memberExpressionOptimisationVisitor = {
 
   BindingIdentifier({ node }, state) {
     if (node.name === state.name) {
-      state.deopted = true;
+      state.optEligible = false;
     }
   }
 };
@@ -234,18 +235,21 @@ export let visitor = {
       corresponding rest parameter property) or positioning the initialization
       code so that it may not have to execute depending on runtime conditions.
 
-      This property tracks eligibility for optimization. "deopted" means give up
-      and don't perform optimization. For example, when any of rest's elements /
-      properties is assigned to at the top level, or referenced at all in a
-      nested function.
+      This property tracks eligibility for optimization. "deopted" refers to
+      optEligible: false and means give up and don't perform optimization. For
+      example, when any of rest's elements / properties is assigned to at the
+      top level, or referenced at all in a nested function.
       */
-      deopted: false,
+      optEligible: true,
+
+      // Is the node being visited in a function descendant of this node.
+      nested: false,
     };
 
     path.traverse(memberExpressionOptimisationVisitor, state);
 
     // There are only "shorthand" references
-    if (!state.deopted && !state.references.length) {
+    if (state.optEligible && !state.references.length) {
       for (let {path, cause} of (state.candidates: Array)) {
         switch (cause) {
           case "indexGetter":
@@ -266,7 +270,7 @@ export let visitor = {
     );
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
-    state.deopted = state.deopted || !!node.shadow;
+    if (node.shadow) state.optEligible = false;
 
     let start = t.numericLiteral(node.params.length);
     let key = scope.generateUidIdentifier("key");
@@ -303,7 +307,7 @@ export let visitor = {
       LEN:       len,
     });
 
-    if (state.deopted) {
+    if (!state.optEligible) {
       loop._blockHoist = node.params.length + 1;
       node.body.body.unshift(loop);
     } else {
