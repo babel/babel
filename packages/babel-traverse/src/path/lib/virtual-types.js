@@ -105,7 +105,7 @@ export const Pure = {
 };
 
 export const Flow = {
-  types: ["Flow", "ImportDeclaration", "ExportDeclaration"],
+  types: ["Flow", "ImportDeclaration", "ExportDeclaration", "ImportSpecifier"],
   checkPath({ node }: NodePath): boolean {
     if (t.isFlow(node)) {
       return true;
@@ -113,6 +113,8 @@ export const Flow = {
       return node.importKind === "type" || node.importKind === "typeof";
     } else if (t.isExportDeclaration(node)) {
       return node.exportKind === "type";
+    } else if (t.isImportSpecifier(node)) {
+      return node.importKind === "type" || node.importKind === "typeof";
     } else {
       return false;
     }

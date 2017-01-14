@@ -1,0 +1,6 @@
+{
+  "userBlacklist": [ "amasad", "thejameskyle", "jmm", "kittens" ],
+  "fileBlacklist": ["*.md"], // mention-bot will ignore any files that match these file globs
+  "skipAlreadyAssignedPR": true, // mention-bot will ignore already assigned PR's,
+  "createReviewRequest": true
+}
