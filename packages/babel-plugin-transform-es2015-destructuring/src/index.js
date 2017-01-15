@@ -294,10 +294,7 @@ export default function ({ types: t }) {
 
         if (t.isRestElement(elem)) {
           elemRef = this.toArray(arrayRef);
-
-          if (i > 0) {
-            elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.numericLiteral(i)]);
-          }
+          elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.numericLiteral(i)]);
 
           // set the element to the rest element argument since we've dealt with it
           // being a rest already
