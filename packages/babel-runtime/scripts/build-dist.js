@@ -29,7 +29,9 @@ var legacy = [
   ["string/pad-right", "string/pad-end"]
 ];
 
-legacy.forEach(function([a, b]) {
+legacy.forEach(function(pair) {
+  const a = pair[0];
+  const b = pair[1];
   writeFile("core-js/" + a + ".js", defaultify('require("core-js/library/fn/' + b + '")'));
 });
 
