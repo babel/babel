@@ -67,6 +67,14 @@ describe("option-manager", () => {
   });
 
   describe("presets", function () {
+
+    it("throws on suppling options to non-options preset", function () {
+      const opt = new OptionManager(new Logger(null, "unknown"));
+      assert.throws(() => opt.init({
+        "presets": [[path.join(__dirname, "fixtures/option-manager/presets/es5"), {}]]
+      }), /Options {} passed to the preset but it does not accept options/);
+    });
+
     function presetTest(name) {
       it(name, function () {
         const opt = new OptionManager(new Logger(null, "unknown"));
@@ -79,9 +87,21 @@ describe("option-manager", () => {
       });
     }
 
+    function presetThrowsTest(name, msg) {
+      it(name, function () {
+        const opt = new OptionManager(new Logger(null, "unknown"));
+        assert.throws(() => opt.init({
+          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)]
+        }), msg);
+      });
+    }
+
     presetTest("es5");
     presetTest("es2015_default");
     presetTest("es2015_default_function");
+
+    presetThrowsTest("es2015_named", /Preset must export a default export when using ES6 modules/);
+    presetThrowsTest("es5_invalid", /Unsupported preset format: invalid/);
 
   });
 });
