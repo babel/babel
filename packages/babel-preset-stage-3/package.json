@@ -10,7 +10,6 @@
   "dependencies": {
     "babel-plugin-transform-async-generator-functions": "^6.17.0",
     "babel-plugin-transform-async-to-generator": "^6.16.0",
-    "babel-plugin-transform-exponentiation-operator": "^6.3.13",
     "babel-plugin-transform-object-rest-spread": "^6.16.0"
   }
 }
