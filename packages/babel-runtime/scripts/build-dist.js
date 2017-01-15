@@ -1,7 +1,7 @@
 var outputFile = require("output-file-sync");
+var kebabCase  = require("lodash/kebabCase");
 var each       = require("lodash/each");
 var fs         = require("fs");
-var _          = require("lodash");
 
 var coreDefinitions = require("babel-plugin-transform-runtime").definitions;
 
@@ -122,7 +122,7 @@ each(helpers.list, function (helperName) {
   writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
 
   // compat
-  var helperAlias = _.kebabCase(helperName);
+  var helperAlias = kebabCase(helperName);
   var content = "module.exports = require(\"./" + helperName + ".js\");";
   writeFile("helpers/_" + helperAlias + ".js", content);
   if (helperAlias !== helperName) writeFile("helpers/" + helperAlias + ".js", content);
