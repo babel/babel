@@ -25,7 +25,7 @@
     "codecov": "^1.0.1",
     "cross-env": "^2.0.0",
     "eslint": "^3.7.1",
-    "eslint-config-babel": "^5.0.0",
+    "eslint-config-babel": "^6.0.0",
     "eslint-plugin-flowtype": "^2.20.0",
     "flow-bin": "^0.37.0",
     "nyc": "^10.0.0",

@@ -25,7 +25,7 @@ pp.parseTopLevel = function (file, program) {
   return this.finishNode(file, "File");
 };
 
-const loopLabel = {kind: "loop"}, switchLabel = {kind: "switch"};
+const loopLabel = { kind: "loop" }, switchLabel = { kind: "switch" };
 
 // TODO
 
@@ -260,7 +260,7 @@ pp.parseForStatement = function (node) {
     return this.parseFor(node, init);
   }
 
-  const refShorthandDefaultPos = {start: 0};
+  const refShorthandDefaultPos = { start: 0 };
   const init = this.parseExpression(true, refShorthandDefaultPos);
   if (this.match(tt._in) || this.isContextual("of")) {
     const description = this.isContextual("of") ? "for-of statement" : "for-in statement";
@@ -440,7 +440,7 @@ pp.parseLabeledStatement = function (node, maybeName, expr) {
     }
   }
 
-  this.state.labels.push({name: maybeName, kind: kind, statementStart: this.state.start});
+  this.state.labels.push({ name: maybeName, kind: kind, statementStart: this.state.start });
   node.body = this.parseStatement(true);
   this.state.labels.pop();
   node.label = expr;

@@ -50,7 +50,7 @@ function generate(chars) {
       at = to;
     }
   }
-  return {nonASCII: re, astral: astral};
+  return { nonASCII: re, astral: astral };
 }
 
 const startData = generate(start);
