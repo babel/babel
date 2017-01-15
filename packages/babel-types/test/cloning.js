@@ -1,6 +1,6 @@
-const t = require("../lib");
-const assert = require("assert");
-const parse = require("babylon").parse;
+import * as t from "../lib";
+import assert from "assert";
+import { parse } from "babylon";
 
 suite("cloning", function () {
   suite("clone", function () {

@@ -1,6 +1,6 @@
-const traverse = require("babel-traverse").default;
-const assert   = require("assert");
-const parse    = require("babylon").parse;
+import traverse from "babel-traverse";
+import assert from "assert";
+import { parse } from "babylon";
 
 describe("evaluation", function () {
   function addTest(code, type, value, notConfident) {

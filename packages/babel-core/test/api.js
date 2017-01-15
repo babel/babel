@@ -1,9 +1,9 @@
-const babel                = require("../lib/api/node");
-const buildExternalHelpers = require("../lib/tools/build-external-helpers");
-const sourceMap            = require("source-map");
-const assert               = require("assert");
-const Plugin               = require("../lib/transformation/plugin");
-const generator            = require("babel-generator").default;
+import * as babel from "../lib/api/node";
+import buildExternalHelpers from "../lib/tools/build-external-helpers";
+import sourceMap from "source-map";
+import assert from "assert";
+import Plugin from "../lib/transformation/plugin";
+import generator from "babel-generator";
 
 function assertIgnored(result) {
   assert.ok(result.ignored);

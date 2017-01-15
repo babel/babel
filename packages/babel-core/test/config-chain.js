@@ -1,6 +1,6 @@
-const assert = require("assert");
-const path = require("path");
-const buildConfigChain = require("../lib/transformation/file/options/build-config-chain");
+import assert from "assert";
+import path from "path";
+import buildConfigChain from "../lib/transformation/file/options/build-config-chain";
 
 function fixture() {
   const args = [__dirname, "fixtures", "config"];
