@@ -1359,7 +1359,7 @@ describe("verify", () => {
             set a (v) { }
         }
       `),
-      { "space-before-function-paren": 1, "keyword-spacing": [1, {"before": true}], "indent": 1 },
+      { "space-before-function-paren": 1, "keyword-spacing": [1, { "before": true }], "indent": 1 },
       []
     );
   });

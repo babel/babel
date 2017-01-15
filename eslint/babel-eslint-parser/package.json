@@ -40,7 +40,7 @@
   "devDependencies": {
     "babel-eslint": "^7.0.0",
     "eslint": "^3.9.1",
-    "eslint-config-babel": "^4.0.0",
+    "eslint-config-babel": "^6.0.0",
     "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-flowtype": "^2.4.0",
     "espree": "^3.3.1",

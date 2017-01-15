@@ -73,9 +73,9 @@ function parseAndAssertSame(code) {
     }
     err.message += unpad(`
       espree:
-      ${util.inspect(lookup(esAST, traversal, 2), {depth: err.depth, colors: true})}
+      ${util.inspect(lookup(esAST, traversal, 2), { depth: err.depth, colors: true })}
       babel-eslint:
-      ${util.inspect(lookup(babylonAST, traversal, 2), {depth: err.depth, colors: true})}
+      ${util.inspect(lookup(babylonAST, traversal, 2), { depth: err.depth, colors: true })}
     `);
     throw err;
   }
