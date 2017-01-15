@@ -70,7 +70,8 @@ module.exports = function (commander, filenames) {
     _.each(filenames, function (dirname) {
       const watcher = chokidar.watch(dirname, {
         persistent: true,
-        ignoreInitial: true
+        ignoreInitial: true,
+        awaitWriteFinish: true
       });
 
       _.each(["add", "change"], function (type) {
