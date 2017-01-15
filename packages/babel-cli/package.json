@@ -23,7 +23,7 @@
     "v8flags": "^2.0.10"
   },
   "optionalDependencies": {
-    "chokidar": "^1.0.0"
+    "chokidar": "^1.6.1"
   },
   "devDependencies": {
     "babel-helper-fixtures": "^6.18.0"
