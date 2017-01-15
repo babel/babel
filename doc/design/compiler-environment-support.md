@@ -7,7 +7,7 @@
 The Babel compiler is **only** supported in these environments:
 
  - Modern browsers such as Chrome, Firefox, Safari, Edge etc.
- - Node 4
+ - Node.js 4 and upper versions
 
 ## Unsupported environments
 
@@ -17,7 +17,6 @@ to:
  - Rhino
  - Nashorn
  - Internet Explorer
- - ...
 
 **NOTE:** If Babel works in any of the unsupported environments, it is purely
 coincidental and has no bearing on future compatibility. Use at your own risk.
