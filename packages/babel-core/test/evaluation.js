@@ -64,6 +64,6 @@ describe("evaluation", function () {
   addTest("'abc' === 'xyz' || (1 === 1 && 'four' === 'four')", "LogicalExpression", true);
   addTest("'abc' === 'abc' && (1 === 1 && 'four' === 'four')", "LogicalExpression", true);
   addTest("({})", "ObjectExpression", {});
-  addTest("({a: '1'})", "ObjectExpression", {a: "1"});
-  addTest("({['a' + 'b']: 10 * 20, 'z': [1, 2, 3]})", "ObjectExpression", {ab: 200, z: [1, 2, 3]});
+  addTest("({a: '1'})", "ObjectExpression", { a: "1" });
+  addTest("({['a' + 'b']: 10 * 20, 'z': [1, 2, 3]})", "ObjectExpression", { ab: 200, z: [1, 2, 3] });
 });
