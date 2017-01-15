@@ -80,13 +80,8 @@ describe("option-manager", () => {
     }
 
     presetTest("es5");
-    presetTest("es5_function");
     presetTest("es2015_default");
     presetTest("es2015_default_function");
-    presetTest("es2015_default_object_function");
-    presetTest("es2015_function");
-    presetTest("es2015_function_fallback");
-    presetTest("es2015_named");
 
   });
 });
