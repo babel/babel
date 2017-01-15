@@ -1,9 +1,7 @@
 import escapeRegExp from "lodash/escapeRegExp";
 import startsWith from "lodash/startsWith";
-import isBoolean from "lodash/isBoolean";
 import minimatch from "minimatch";
 import includes from "lodash/includes";
-import isString from "lodash/isString";
 import isRegExp from "lodash/isRegExp";
 import path from "path";
 import slash from "slash";
@@ -80,8 +78,8 @@ export function regexify(val: any): RegExp {
 
 export function arrayify(val: any, mapFn?: Function): Array<any> {
   if (!val) return [];
-  if (isBoolean(val)) return arrayify([val], mapFn);
-  if (isString(val)) return arrayify(list(val), mapFn);
+  if (typeof val === "boolean") return arrayify([val], mapFn);
+  if (typeof val === "string") return arrayify(list(val), mapFn);
 
   if (Array.isArray(val)) {
     if (mapFn) val = val.map(mapFn);

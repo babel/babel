@@ -1,4 +1,3 @@
-import isFunction from "lodash/isFunction";
 import fs from "fs";
 
 export { default as File } from "../transformation/file";
@@ -37,7 +36,7 @@ export const transform = pipeline.transform.bind(pipeline);
 export const transformFromAst = pipeline.transformFromAst.bind(pipeline);
 
 export function transformFile(filename: string, opts?: Object, callback: Function) {
-  if (isFunction(opts)) {
+  if (typeof opts === "function") {
     callback = opts;
     opts = {};
   }
