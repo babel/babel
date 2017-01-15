@@ -69,7 +69,11 @@ module.exports = function (commander, filenames) {
     filenames.forEach(function (dirname) {
       const watcher = chokidar.watch(dirname, {
         persistent: true,
-        ignoreInitial: true
+        ignoreInitial: true,
+        awaitWriteFinish: {
+          stabilityThreshold: 50,
+          pollInterval: 10,
+        }
       });
 
       ["add", "change"].forEach(function (type) {
