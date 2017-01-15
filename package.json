@@ -58,7 +58,6 @@
       "stage-0"
     ],
     "plugins": [
-      "./scripts/add-module-exports",
       "transform-runtime",
       "transform-class-properties",
       "transform-flow-strip-types"
