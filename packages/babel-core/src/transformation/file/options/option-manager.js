@@ -181,12 +181,10 @@ export default class OptionManager {
           this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`,
             ReferenceError);
         } else {
-          /* eslint-disable max-len */
+          /* eslint-disable-next-line max-len */
           const unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
-          const presetConfigErr = "A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:\n\nInvalid:\n  `{ presets: [{option: value}] }`\nValid:\n  `{ presets: [['presetName', {option: value}]] }`\n\nFor more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.";
-          /* eslint-enable max-len */
 
-          this.log.error(`${unknownOptErr}\n\n${presetConfigErr}`, ReferenceError);
+          this.log.error(unknownOptErr, ReferenceError);
         }
       }
     }
@@ -250,57 +248,62 @@ export default class OptionManager {
    * or a module name to require.
    */
   resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
-    return presets.map((val) => {
+    return presets.map((preset) => {
       let options;
-      if (Array.isArray(val)) {
-        if (val.length > 2) {
-          throw new Error(`Unexpected extra options ${JSON.stringify(val.slice(2))} passed to preset.`);
+      if (Array.isArray(preset)) {
+        if (preset.length > 2) {
+          throw new Error(`Unexpected extra options ${JSON.stringify(preset.slice(2))} passed to preset.`);
         }
 
-        [val, options] = val;
+        [preset, options] = preset;
       }
 
       let presetLoc;
       try {
-        if (typeof val === "string") {
-          presetLoc = resolvePreset(val, dirname);
+        if (typeof preset === "string") {
+          presetLoc = resolvePreset(preset, dirname);
 
           if (!presetLoc) {
-            throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ` +
+            throw new Error(`Couldn't find preset ${JSON.stringify(preset)} relative to directory ` +
               JSON.stringify(dirname));
           }
-
-          val = require(presetLoc);
         }
+        const presetFactory = this.getPresetFactoryForPreset(presetLoc || preset);
 
-        // If the imported preset is a transpiled ES2015 module
-        if (typeof val === "object" && val.__esModule) {
-          if (val.default) {
-            val = val.default;
-          } else {
-            throw new Error("Preset must export a default export when using ES6 modules.");
-          }
-        }
+        preset = presetFactory(context, options);
 
-        if (typeof val === "function") {
-          val = val(context, options);
-        } else if (options !== undefined) {
-          throw new Error(`Options ${JSON.stringify(options)} passed to the preset but it does not accept options.`);
-        }
-
-        if (typeof val !== "object") {
-          throw new Error(`Unsupported preset format: ${val}.`);
-        }
-
-        if (onResolve) onResolve(val, presetLoc);
+        if (onResolve) onResolve(preset, presetLoc);
       } catch (e) {
         if (presetLoc) {
           e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
         }
         throw e;
       }
-      return val;
+
+      return preset;
     });
+  }
+
+  getPresetFactoryForPreset(preset) {
+    let presetFactory = preset;
+    if (typeof presetFactory === "string") {
+      presetFactory = require(presetFactory);
+    }
+
+    // If the imported preset is a transpiled ES2015 module
+    if (typeof presetFactory === "object" && presetFactory.__esModule) {
+      if (presetFactory.default) {
+        presetFactory = presetFactory.default;
+      } else {
+        throw new Error("Preset must export a default export when using ES6 modules.");
+      }
+    }
+
+    if (typeof presetFactory !== "function") {
+      throw new Error(`Unsupported preset format: ${typeof presetFactory}. Expected preset to return a function.`);
+    }
+
+    return presetFactory;
   }
 
   normaliseOptions() {
