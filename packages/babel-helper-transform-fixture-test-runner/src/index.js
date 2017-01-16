@@ -3,10 +3,13 @@ import { buildExternalHelpers } from "babel-core";
 import getFixtures from "babel-helper-fixtures";
 import sourceMap from "source-map";
 import codeFrame from "babel-code-frame";
+import defaults from "lodash/defaults";
+import includes from "lodash/includes";
 import * as helpers from "./helpers";
+import extend from "lodash/extend";
+import merge from "lodash/merge";
 import assert from "assert";
 import chai from "chai";
-import _ from "lodash";
 import "babel-polyfill";
 import fs from "fs";
 import path from "path";
@@ -43,7 +46,7 @@ function run(task) {
   const optionsDir = task.optionsDir;
 
   function getOpts(self) {
-    const newOpts = _.merge({
+    const newOpts = merge({
       filename: self.loc,
     }, opts);
 
@@ -98,7 +101,7 @@ function run(task) {
   if (task.sourceMappings) {
     const consumer = new sourceMap.SourceMapConsumer(result.map);
 
-    _.each(task.sourceMappings, function (mapping) {
+    task.sourceMappings.forEach(function (mapping) {
       const actual = mapping.original;
 
       const expect = consumer.originalPositionFor(mapping.generated);
@@ -138,19 +141,19 @@ export default function (
   const suites = getFixtures(fixturesLoc);
 
   for (const testSuite of suites) {
-    if (_.includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
+    if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
       for (const task of testSuite.tests) {
-        if (_.includes(suiteOpts.ignoreTasks, task.title) ||
-            _.includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
+        if (includes(suiteOpts.ignoreTasks, task.title) ||
+            includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
 
         it(task.title, !task.disabled && function () {
           function runTask() {
             run(task);
           }
 
-          _.defaults(task.options, {
+          defaults(task.options, {
             filenameRelative: task.expect.filename,
             sourceFileName:   task.actual.filename,
             sourceMapTarget:  task.expect.filename,
@@ -159,7 +162,7 @@ export default function (
             sourceMap: !!(task.sourceMappings || task.sourceMap),
           });
 
-          _.extend(task.options, taskOpts);
+          extend(task.options, taskOpts);
 
           if (dynamicOpts) dynamicOpts(task.options, task);
 

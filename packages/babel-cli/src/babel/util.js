@@ -1,11 +1,11 @@
 const commander = require("commander");
+const defaults  = require("lodash/defaults");
 const readdir   = require("fs-readdir-recursive");
 const index     = require("./index");
 const babel     = require("babel-core");
 const util      = require("babel-core").util;
 const path      = require("path");
 const fs        = require("fs");
-const _         = require("lodash");
 
 export function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
@@ -34,7 +34,7 @@ export function log(msg) {
 }
 
 export function transform(filename, code, opts) {
-  opts = _.defaults(opts || {}, index.opts);
+  opts = defaults(opts || {}, index.opts);
   opts.filename = filename;
 
   const result = babel.transform(code, opts);

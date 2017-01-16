@@ -42,19 +42,23 @@ export default function ({ types: t }) {
     ];
   }
 
-  function replaceRestProperty(paramsPath, i, numParams) {
-    if (paramsPath.isObjectPattern() && hasRestProperty(paramsPath)) {
-      const parentPath = paramsPath.parentPath;
+  function replaceRestProperty(parentPath, paramPath, i, numParams) {
+    if (paramPath.isAssignmentPattern()) {
+      replaceRestProperty(parentPath, paramPath.get("left"), i, numParams);
+      return;
+    }
+
+    if (paramPath.isObjectPattern() && hasRestProperty(paramPath)) {
       const uid = parentPath.scope.generateUidIdentifier("ref");
 
       const declar = t.variableDeclaration("let", [
-        t.variableDeclarator(paramsPath.node, uid)
+        t.variableDeclarator(paramPath.node, uid)
       ]);
       declar._blockHoist = i ? numParams - i : 1;
 
       parentPath.ensureBlock();
       parentPath.get("body").unshiftContainer("body", declar);
-      paramsPath.replaceWith(uid);
+      paramPath.replaceWith(uid);
     }
   }
 
@@ -67,7 +71,7 @@ export default function ({ types: t }) {
       Function(path) {
         const params = path.get("params");
         for (let i = 0; i < params.length; i++) {
-          replaceRestProperty(params[i], i, params.length);
+          replaceRestProperty(params[i].parentPath, params[i], i, params.length);
         }
       },
       // adapted from transform-es2015-destructuring/src/index.js#pushObjectRest
@@ -141,7 +145,8 @@ export default function ({ types: t }) {
       },
       // try {} catch ({a, ...b}) {}
       CatchClause(path) {
-        replaceRestProperty(path.get("param"));
+        const paramPath = path.get("param");
+        replaceRestProperty(paramPath.parentPath, paramPath);
       },
       // ({a, ...b} = c);
       AssignmentExpression(path, file) {

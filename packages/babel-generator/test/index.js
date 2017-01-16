@@ -5,17 +5,16 @@ const assert     = require("assert");
 const parse      = require("babylon").parse;
 const chai       = require("chai");
 const t          = require("babel-types");
-const _          = require("lodash");
 const fs         = require("fs");
 const path       = require("path");
 
 describe("generation", function () {
   it("completeness", function () {
-    _.each(t.VISITOR_KEYS, function (keys, type) {
+    Object.keys(t.VISITOR_KEYS).forEach(function (type) {
       assert.ok(!!Printer.prototype[type], type + " should exist");
     });
 
-    _.each(Printer.prototype, function (fn, type) {
+    Object.keys(Printer.prototype).forEach(function (type) {
       if (!/[A-Z]/.test(type[0])) return;
       assert.ok(t.VISITOR_KEYS[type], type + " should not exist");
     });
@@ -26,7 +25,7 @@ describe("generation", function () {
       "a.js": "function hi (msg) { console.log(msg); }\n",
       "b.js": "hi('hello');\n"
     };
-    const parsed = _.keys(sources).reduce(function (_parsed, filename) {
+    const parsed = Object.keys(sources).reduce(function (_parsed, filename) {
       _parsed[filename] = parse(sources[filename], { sourceFilename: filename });
       return _parsed;
     }, {});
@@ -297,7 +296,7 @@ const suites = require("babel-helper-fixtures").default(__dirname + "/fixtures")
 
 suites.forEach(function (testSuite) {
   describe("generation/" + testSuite.title, function () {
-    _.each(testSuite.tests, function (task) {
+    testSuite.tests.forEach(function (task) {
       it(task.title, !task.disabled && function () {
         const expect = task.expect;
         const actual = task.actual;

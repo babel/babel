@@ -2,8 +2,6 @@
 
 > Proposal Withdrawn: can be solved with decorators.
 
-Allow parsing of call constructors.
-
 ## Installation
 
 ```sh

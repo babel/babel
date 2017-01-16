@@ -1,7 +1,5 @@
 import isPlainObject from "lodash/isPlainObject";
-import isNumber from "lodash/isNumber";
 import isRegExp from "lodash/isRegExp";
-import isString from "lodash/isString";
 import type { Scope } from "babel-traverse";
 import * as t from "./index";
 
@@ -272,12 +270,12 @@ export function valueToNode(value: any): Object {
   }
 
   // strings
-  if (isString(value)) {
+  if (typeof value === "string") {
     return t.stringLiteral(value);
   }
 
   // numbers
-  if (isNumber(value)) {
+  if (typeof value === "number") {
     return t.numericLiteral(value);
   }
 
