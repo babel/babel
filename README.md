@@ -124,8 +124,8 @@ Check out the [`babel-handbook`](https://github.com/thejameskyle/babel-handbook/
 - [`babel-cli`](/packages/babel-cli) is the CLI tool that runs `babel-core` and helps with outputting to a directory, a file, stdout and more (also includes `babel-node`). Check out the [docs](https://babeljs.io/docs/usage/cli/).
 - [`babel-types`](/packages/babel-types) is used to validate, build, change AST nodes.
 - [`babel-polyfill`](/packages/babel-polyfill) is [literally a wrapper](https://github.com/babel/babel/blob/master/packages/babel-polyfill/src/index.js) around [`core-js`](https://github.com/zloirock/core-js) and [regenerator-runtime](https://github.com/facebook/regenerator/tree/master/packages/regenerator-runtime). Check out the [docs](https://babeljs.io/docs/usage/polyfill/).
-- [`babel-runtime`](/packages/babel-runtime) is similar to the polyfill except that it doesn't modify the global scope and is to be used with [`babel-plugin-transform-runtime`](/packages/babel-plugin-transform-runtime) (usually in library/plugin code). Check out the [docs](https://babeljs.io/docs/plugins/transform-runtime/)
-- [`babel-register`](/packages/babel-register) is a way to automatically compile files with babel on the fly by binding to node's require. Check out the [docs](http://babeljs.io/docs/usage/require/)
+- [`babel-runtime`](/packages/babel-runtime) is similar to the polyfill except that it doesn't modify the global scope and is to be used with [`babel-plugin-transform-runtime`](/packages/babel-plugin-transform-runtime) (usually in library/plugin code). Check out the [docs](https://babeljs.io/docs/plugins/transform-runtime/).
+- [`babel-register`](/packages/babel-register) is a way to automatically compile files with babel on the fly by binding to node's require. Check out the [docs](http://babeljs.io/docs/usage/require/).
 - [`babel-template`](/packages/babel-template) is a helper function to make AST nodes. Instead you can pass a string representing the code you want to create rather than tediously building them using `babel-types`.
 - [`babel-helpers`](/packages/babel-helpers) is a set of premade `babel-template` functions that are used in some babel plugins.
 - [`babel-code-frame`](/packages/babel-code-frame) is a standalone package used to generate errors that prints the source code and points to error locations.
@@ -149,12 +149,14 @@ There are a few presets that we maintain officially.
 | [`babel-preset-stage-2`](/packages/babel-preset-stage-2) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-2.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-2) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-2)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-2) |
 | [`babel-preset-stage-3`](/packages/babel-preset-stage-3) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-3.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-3) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-3)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-3) |
 | [`babel-preset-react`](/packages/babel-preset-react) | [![npm](https://img.shields.io/npm/v/babel-preset-react.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-react) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-react)](https://david-dm.org/babel/babel?path=packages/babel-preset-react) |
+| [`babel-preset-env`](https://github.com/babel/babel-preset-env) | [![npm](https://img.shields.io/npm/v/babel-preset-env.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-env) | [![Dependency Status](https://david-dm.org/babel/babel-preset-env)](https://david-dm.org/babel/babel-preset-env) |
 
 We maintain:
 
-- a preset for each yearly release of ECMAScript (Javascript) starting from ES6/ES2015
-- a preset for react (JSX/Flow)
+- a preset for each yearly release of ECMAScript (Javascript) starting from ES6/ES2015.
+- a preset for react (JSX/Flow).
 - a preset for each [stage (0-3)](http://babeljs.io/docs/plugins/#stage-x-experimental-presets) of the [TC-39 Process](https://tc39.github.io/process-document/) for ECMAScript proposals.
+- a preset that can automatically determine plugins and polyfills you need based on your supported environments.
 
 > You can find community maintained presets on [npm](https://www.npmjs.com/search?q=babel-preset)
 
