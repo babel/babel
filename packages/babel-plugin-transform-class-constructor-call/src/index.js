@@ -1,6 +1,6 @@
 import template from "babel-template";
 
-let buildWrapper = template(`
+const buildWrapper = template(`
   let CLASS_REF = CLASS;
   var CALL_REF = CALL;
   var WRAPPER_REF = function (...args) {
@@ -15,12 +15,12 @@ let buildWrapper = template(`
 `);
 
 export default function ({ types: t }) {
-  let ALREADY_VISITED = Symbol();
+  const ALREADY_VISITED = Symbol();
 
   function findConstructorCall(path): ?Object {
-    let methods: Array<Object> = path.get("body.body");
+    const methods: Array<Object> = path.get("body.body");
 
-    for (let method of methods) {
+    for (const method of methods) {
       if (method.node.kind === "constructorCall") {
         return method;
       }
@@ -30,8 +30,8 @@ export default function ({ types: t }) {
   }
 
   function handleClassWithCall(constructorCall, classPath) {
-    let { node } = classPath;
-    let ref = node.id || classPath.scope.generateUidIdentifier("class");
+    const { node } = classPath;
+    const ref = node.id || classPath.scope.generateUidIdentifier("class");
 
     if (classPath.parentPath.isExportDefaultDeclaration()) {
       classPath = classPath.parentPath;
@@ -57,7 +57,7 @@ export default function ({ types: t }) {
         if (path.node[ALREADY_VISITED]) return;
         path.node[ALREADY_VISITED] = true;
 
-        let constructorCall = findConstructorCall(path);
+        const constructorCall = findConstructorCall(path);
 
         if (constructorCall) {
           handleClassWithCall(constructorCall, path);

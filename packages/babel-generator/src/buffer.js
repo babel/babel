@@ -153,7 +153,7 @@ export default class Buffer {
   source(prop: string, loc: Location): void {
     if (prop && !loc) return;
 
-    let pos = loc ? loc[prop] : null;
+    const pos = loc ? loc[prop] : null;
 
     this._sourcePosition.identifierName = loc && loc.identifierName || null;
     this._sourcePosition.line = pos ? pos.line : null;
@@ -169,10 +169,10 @@ export default class Buffer {
     if (!this._map) return cb();
 
     // Use the call stack to manage a stack of "source location" data.
-    let originalLine = this._sourcePosition.line;
-    let originalColumn = this._sourcePosition.column;
-    let originalFilename = this._sourcePosition.filename;
-    let originalIdentifierName = this._sourcePosition.identifierName;
+    const originalLine = this._sourcePosition.line;
+    const originalColumn = this._sourcePosition.column;
+    const originalFilename = this._sourcePosition.filename;
+    const originalIdentifierName = this._sourcePosition.identifierName;
 
     this.source(prop, loc);
 

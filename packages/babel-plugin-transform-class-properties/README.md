@@ -15,7 +15,7 @@ Below is a class with four class properties which will be transformed.
     }
 
     //Static class properties
-    static staticProperty = "babeliscool";
+    static staticProperty = "babelIsCool";
     static staticFunction = function() {
       return Bork.staticProperty;
     }

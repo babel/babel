@@ -38,15 +38,15 @@ export function insertBefore(nodes) {
 export function _containerInsert(from, nodes) {
   this.updateSiblingKeys(from, nodes.length);
 
-  let paths = [];
+  const paths = [];
 
   for (let i = 0; i < nodes.length; i++) {
-    let to = from + i;
-    let node = nodes[i];
+    const to = from + i;
+    const node = nodes[i];
     this.container.splice(to, 0, node);
 
     if (this.context) {
-      let path = this.context.create(this.parent, this.container, to, this.listKey);
+      const path = this.context.create(this.parent, this.container, to, this.listKey);
 
       // While this path may have a context, there is currently no guarantee that the context
       // will be the active context, because `popContext` may leave a final context in place.
@@ -64,13 +64,13 @@ export function _containerInsert(from, nodes) {
     }
   }
 
-  let contexts = this._getQueueContexts();
+  const contexts = this._getQueueContexts();
 
-  for (let path of paths) {
+  for (const path of paths) {
     path.setScope();
     path.debug(() => "Inserted.");
 
-    for (let context of contexts) {
+    for (const context of contexts) {
       context.maybeQueue(path, true);
     }
   }
@@ -87,8 +87,8 @@ export function _containerInsertAfter(nodes) {
 }
 
 export function _maybePopFromStatements(nodes) {
-  let last = nodes[nodes.length - 1];
-  let isIdentifier = t.isIdentifier(last) || (t.isExpressionStatement(last) && t.isIdentifier(last.expression));
+  const last = nodes[nodes.length - 1];
+  const isIdentifier = t.isIdentifier(last) || (t.isExpressionStatement(last) && t.isIdentifier(last.expression));
 
   if (isIdentifier && !this.isCompletionRecord()) {
     nodes.pop();
@@ -109,7 +109,7 @@ export function insertAfter(nodes) {
     return this.parentPath.insertAfter(nodes);
   } else if (this.isNodeType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
     if (this.node) {
-      let temp = this.scope.generateDeclaredUidIdentifier();
+      const temp = this.scope.generateDeclaredUidIdentifier();
       nodes.unshift(t.expressionStatement(t.assignmentExpression("=", temp, this.node)));
       nodes.push(t.expressionStatement(temp));
     }
@@ -136,9 +136,9 @@ export function insertAfter(nodes) {
 export function updateSiblingKeys(fromIndex, incrementBy) {
   if (!this.parent) return;
 
-  let paths = pathCache.get(this.parent);
+  const paths = pathCache.get(this.parent);
   for (let i = 0; i < paths.length; i++) {
-    let path = paths[i];
+    const path = paths[i];
     if (path.key >= fromIndex) {
       path.key += incrementBy;
     }
@@ -155,7 +155,7 @@ export function _verifyNodeList(nodes) {
   }
 
   for (let i = 0; i < nodes.length; i++) {
-    let node = nodes[i];
+    const node = nodes[i];
     let msg;
 
     if (!node) {
@@ -169,7 +169,7 @@ export function _verifyNodeList(nodes) {
     }
 
     if (msg) {
-      let type = Array.isArray(node) ? "array" : typeof node;
+      const type = Array.isArray(node) ? "array" : typeof node;
       throw new Error(`Node list ${msg} with the index of ${i} and type of ${type}`);
     }
   }
@@ -184,7 +184,7 @@ export function unshiftContainer(listKey, nodes) {
 
   // get the first path and insert our nodes before it, if it doesn't exist then it
   // doesn't matter, our nodes will be inserted anyway
-  let path = NodePath.get({
+  const path = NodePath.get({
     parentPath: this,
     parent: this.node,
     container: this.node[listKey],
@@ -203,8 +203,8 @@ export function pushContainer(listKey, nodes) {
   // get an invisible path that represents the last node + 1 and replace it with our
   // nodes, effectively inlining it
 
-  let container = this.node[listKey];
-  let path = NodePath.get({
+  const container = this.node[listKey];
+  const path = NodePath.get({
     parentPath: this,
     parent: this.node,
     container: container,
@@ -221,6 +221,6 @@ export function pushContainer(listKey, nodes) {
  */
 
 export function hoist(scope = this.scope) {
-  let hoister = new PathHoister(this, scope);
+  const hoister = new PathHoister(this, scope);
   return hoister.run();
 }

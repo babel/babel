@@ -6,7 +6,7 @@ import * as messages from "babel-messages";
 import * as t from "babel-types";
 
 // ✌️
-let HARDCORE_THIS_REF = Symbol();
+const HARDCORE_THIS_REF = Symbol();
 
 function isIllegalBareSuper(node, parent) {
   if (!t.isSuper(node)) return false;
@@ -46,7 +46,7 @@ function getPrototypeOfExpression(objectRef, isStatic) {
   );
 }
 
-let visitor = {
+const visitor = {
   Function(path) {
     if (!path.inShadow("this")) {
       path.skip();
@@ -69,9 +69,9 @@ let visitor = {
     let callback = state.specHandle;
     if (state.isLoose) callback = state.looseHandle;
 
-    let isBareSuper = path.isCallExpression() && path.get("callee").isSuper();
+    const isBareSuper = path.isCallExpression() && path.get("callee").isSuper();
 
-    let result = callback.call(state, path);
+    const result = callback.call(state, path);
 
     if (result) {
       state.hasSuper = true;
@@ -185,8 +185,8 @@ export default class ReplaceSupers {
   }
 
   getLooseSuperProperty(id: Object, parent: Object) {
-    let methodNode = this.methodNode;
-    let superRef   = this.superRef || t.identifier("Function");
+    const methodNode = this.methodNode;
+    const superRef   = this.superRef || t.identifier("Function");
 
     if (parent.property === id) {
       return;
@@ -201,11 +201,11 @@ export default class ReplaceSupers {
   }
 
   looseHandle(path: NodePath) {
-    let node = path.node;
+    const node = path.node;
     if (path.isSuper()) {
       return this.getLooseSuperProperty(node, path.parent);
     } else if (path.isCallExpression()) {
-      let callee = node.callee;
+      const callee = node.callee;
       if (!t.isMemberExpression(callee)) return;
       if (!t.isSuper(callee.object)) return;
 
@@ -239,15 +239,15 @@ export default class ReplaceSupers {
     let computed;
     let args;
 
-    let parent = path.parent;
-    let node = path.node;
+    const parent = path.parent;
+    const node = path.node;
 
     if (isIllegalBareSuper(node, parent)) {
       throw path.buildCodeFrameError(messages.get("classesIllegalBareSuper"));
     }
 
     if (t.isCallExpression(node)) {
-      let callee = node.callee;
+      const callee = node.callee;
       if (t.isSuper(callee)) {
         return;
       } else if (isMemberExpressionSuper(callee)) {
@@ -261,13 +261,13 @@ export default class ReplaceSupers {
       property = node.property;
       computed = node.computed;
     } else if (t.isUpdateExpression(node) && isMemberExpressionSuper(node.argument)) {
-      let binary = t.binaryExpression(node.operator[0], node.argument, t.numericLiteral(1));
+      const binary = t.binaryExpression(node.operator[0], node.argument, t.numericLiteral(1));
       if (node.prefix) {
         // ++super.foo; -> super.foo += 1;
         return this.specHandleAssignmentExpression(null, path, binary);
       } else {
         // super.foo++; -> let _ref = super.foo; super.foo = _ref + 1;
-        let ref = path.scope.generateUidIdentifier("ref");
+        const ref = path.scope.generateUidIdentifier("ref");
         return this.specHandleAssignmentExpression(ref, path, binary).concat(t.expressionStatement(ref));
       }
     } else if (t.isAssignmentExpression(node) && isMemberExpressionSuper(node.left)) {
@@ -276,7 +276,7 @@ export default class ReplaceSupers {
 
     if (!property) return;
 
-    let superProperty = this.getSuperProperty(property, computed);
+    const superProperty = this.getSuperProperty(property, computed);
 
     if (args) {
       return this.optimiseCall(superProperty, args);
@@ -286,7 +286,7 @@ export default class ReplaceSupers {
   }
 
   optimiseCall(callee, args) {
-    let thisNode = t.thisExpression();
+    const thisNode = t.thisExpression();
     thisNode[HARDCORE_THIS_REF] = true;
     return optimiseCall(callee, thisNode, args);
   }

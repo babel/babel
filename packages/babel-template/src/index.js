@@ -7,8 +7,8 @@ import traverse from "babel-traverse";
 import * as babylon from "babylon";
 import * as t from "babel-types";
 
-let FROM_TEMPLATE = "_fromTemplate"; //Symbol(); // todo: probably wont get copied over
-let TEMPLATE_SKIP = Symbol();
+const FROM_TEMPLATE = "_fromTemplate"; //Symbol(); // todo: probably wont get copied over
+const TEMPLATE_SKIP = Symbol();
 
 export default function (code: string, opts?: Object): Function {
   // since we lazy parse the template, we get the current stack so we have the
@@ -60,7 +60,7 @@ export default function (code: string, opts?: Object): Function {
 
 function useTemplate(ast, nodes?: Array<Object>) {
   ast = cloneDeep(ast);
-  let { program } = ast;
+  const { program } = ast;
 
   if (nodes.length) {
     traverse(ast, templateVisitor, null, nodes);
@@ -73,7 +73,7 @@ function useTemplate(ast, nodes?: Array<Object>) {
   }
 }
 
-let templateVisitor = {
+const templateVisitor = {
   // 360
   noScope: true,
 
@@ -91,7 +91,7 @@ let templateVisitor = {
       if (has(args[0], node.name)) {
         replacement = args[0][node.name];
       } else if (node.name[0] === "$") {
-        let i = +node.name.slice(1);
+        const i = +node.name.slice(1);
         if (args[i]) replacement = args[i];
       }
     }

@@ -26,7 +26,7 @@ export default function ({ types: t }) {
     return t.objectExpression([fileNameProperty, lineNumberProperty]);
   }
 
-  let visitor = {
+  const visitor = {
     JSXOpeningElement(path, state) {
       const id = t.jSXIdentifier(TRACE_ID);
       const location = path.container.openingElement.loc;

@@ -71,7 +71,7 @@ https://phabricator.babeljs.io/T2168 mostly corresponds to https://github.com/ba
 
 ## Want to report an issue with [babeljs.io](https://babeljs.io) (the website)?
 
-For documentation and website issues please visit the [babel/babel.github.io](https://github.com/babel/babel.github.io)repo.
+For documentation and website issues please visit the [babel/babel.github.io](https://github.com/babel/babel.github.io) repo.
 
 ## Want to contribute to Babel?
 

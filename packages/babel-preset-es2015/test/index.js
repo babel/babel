@@ -1,5 +1,5 @@
-let es2015 = require("../lib");
-let expect = require("chai").expect;
+const es2015 = require("../lib");
+const expect = require("chai").expect;
 
 describe("es2015 preset", function () {
   it("exposes an object", function () {

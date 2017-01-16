@@ -3,7 +3,7 @@
 import template from "babel-template";
 import * as t from "babel-types";
 
-let buildRest = template(`
+const buildRest = template(`
   for (var LEN = ARGUMENTS.length,
            ARRAY = Array(ARRAY_LEN),
            KEY = START;
@@ -13,19 +13,19 @@ let buildRest = template(`
   }
 `);
 
-let restIndex = template(`
+const restIndex = template(`
   ARGUMENTS.length <= INDEX ? undefined : ARGUMENTS[INDEX]
 `);
 
-let restIndexImpure = template(`
+const restIndexImpure = template(`
   REF = INDEX, ARGUMENTS.length <= REF ? undefined : ARGUMENTS[REF]
 `);
 
-let restLength = template(`
+const restLength = template(`
   ARGUMENTS.length <= OFFSET ? 0 : ARGUMENTS.length - OFFSET
 `);
 
-let memberExpressionOptimisationVisitor = {
+const memberExpressionOptimisationVisitor = {
   Scope(path, state) {
     // check if this scope has a local binding that will shadow the rest parameter
     if (!path.scope.bindingIdentifierEquals(state.name, state.outerBinding)) {
@@ -43,7 +43,7 @@ let memberExpressionOptimisationVisitor = {
   "Function|ClassProperty": function (path, state) {
     // Detect whether any reference to rest is contained in nested functions to
     // determine if deopt is necessary.
-    let oldNoOptimise = state.noOptimise;
+    const oldNoOptimise = state.noOptimise;
     state.noOptimise = true;
     path.traverse(memberExpressionOptimisationVisitor, state);
     state.noOptimise = oldNoOptimise;
@@ -54,7 +54,7 @@ let memberExpressionOptimisationVisitor = {
   },
 
   ReferencedIdentifier(path, state) {
-    let { node } = path;
+    const { node } = path;
 
     // we can't guarantee the purity of arguments
     if (node.name === "arguments") {
@@ -67,7 +67,7 @@ let memberExpressionOptimisationVisitor = {
     if (state.noOptimise) {
       state.deopted = true;
     } else {
-      let {parentPath} = path;
+      const {parentPath} = path;
 
       // Is this identifier the right hand side of a default parameter?
       if (parentPath.listKey === "params" && parentPath.key < state.offset) {
@@ -77,9 +77,9 @@ let memberExpressionOptimisationVisitor = {
       // ex: `args[0]`
       // ex: `args.whatever`
       if (parentPath.isMemberExpression({ object: node })) {
-        let grandparentPath = parentPath.parentPath;
+        const grandparentPath = parentPath.parentPath;
 
-        let argsOptEligible = !state.deopted && !(
+        const argsOptEligible = !state.deopted && !(
           // ex: `args[0] = "whatever"`
           (
             grandparentPath.isAssignmentExpression() &&
@@ -134,7 +134,7 @@ let memberExpressionOptimisationVisitor = {
       // optimise single spread args in calls
       // ex: fn(...args)
       if (state.offset === 0 && parentPath.isSpreadElement()) {
-        let call = parentPath.parentPath;
+        const call = parentPath.parentPath;
         if (call.isCallExpression() && call.node.arguments.length === 1) {
           state.candidates.push({cause: "argSpread", path});
           return;
@@ -175,7 +175,7 @@ function optimiseIndexGetter(path, argsId, offset) {
 
   const { scope } = path;
   if (!scope.isPure(index)) {
-    let temp = scope.generateUidIdentifierBasedOnNode(index);
+    const temp = scope.generateUidIdentifierBasedOnNode(index);
     scope.push({id: temp, kind: "var"});
     path.parentPath.replaceWith(restIndexImpure({
       ARGUMENTS: argsId,
@@ -201,20 +201,20 @@ function optimiseLengthGetter(path, argsId, offset) {
   }
 }
 
-export let visitor = {
+export const visitor = {
   Function(path) {
-    let { node, scope } = path;
+    const { node, scope } = path;
     if (!hasRest(node)) return;
 
-    let rest = node.params.pop().argument;
+    const rest = node.params.pop().argument;
 
-    let argsId = t.identifier("arguments");
+    const argsId = t.identifier("arguments");
 
     // otherwise `arguments` will be remapped in arrow functions
     argsId._shadowedFunctionLiteral = path;
 
     // check and optimise for extremely common cases
-    let state = {
+    const state = {
       references: [],
       offset:     node.params.length,
 
@@ -246,7 +246,7 @@ export let visitor = {
 
     // There are only "shorthand" references
     if (!state.deopted && !state.references.length) {
-      for (let {path, cause} of (state.candidates: Array)) {
+      for (const {path, cause} of (state.candidates: Array)) {
         switch (cause) {
           case "indexGetter":
             optimiseIndexGetter(path, argsId, state.offset);
@@ -268,9 +268,9 @@ export let visitor = {
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
     state.deopted = state.deopted || !!node.shadow;
 
-    let start = t.numericLiteral(node.params.length);
-    let key = scope.generateUidIdentifier("key");
-    let len = scope.generateUidIdentifier("len");
+    const start = t.numericLiteral(node.params.length);
+    const key = scope.generateUidIdentifier("key");
+    const len = scope.generateUidIdentifier("len");
 
     let arrKey = key;
     let arrLen = len;
@@ -293,7 +293,7 @@ export let visitor = {
       );
     }
 
-    let loop = buildRest({
+    const loop = buildRest({
       ARGUMENTS: argsId,
       ARRAY_KEY: arrKey,
       ARRAY_LEN: arrLen,

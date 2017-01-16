@@ -12,7 +12,7 @@ import "regenerator-runtime/runtime";
 
 import "core-js/fn/regexp/escape";
 
-let DEFINE_PROPERTY = "defineProperty";
+const DEFINE_PROPERTY = "defineProperty";
 function define(O, key, value) {
   O[key] || Object[DEFINE_PROPERTY](O, key, {
     writable:     true,

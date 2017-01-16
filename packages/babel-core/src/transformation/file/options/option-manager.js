@@ -53,7 +53,7 @@ export default class OptionManager {
   }>;
 
   static memoisePluginContainer(fn, loc, i, alias) {
-    for (let cache of (OptionManager.memoisedPlugins: Array<Object>)) {
+    for (const cache of (OptionManager.memoisedPlugins: Array<Object>)) {
       if (cache.container === fn) return cache.plugin;
     }
 
@@ -66,7 +66,7 @@ export default class OptionManager {
     }
 
     if (typeof obj === "object") {
-      let plugin = new Plugin(obj, alias);
+      const plugin = new Plugin(obj, alias);
       OptionManager.memoisedPlugins.push({
         container: fn,
         plugin: plugin
@@ -78,10 +78,10 @@ export default class OptionManager {
   }
 
   static createBareOptions() {
-    let opts = {};
+    const opts = {};
 
-    for (let key in config) {
-      let opt = config[key];
+    for (const key in config) {
+      const opt = config[key];
       opts[key] = clone(opt.default);
     }
 
@@ -120,11 +120,11 @@ export default class OptionManager {
         plugin = val;
       }
 
-      let alias = typeof plugin === "string" ? plugin : `${loc}$${i}`;
+      const alias = typeof plugin === "string" ? plugin : `${loc}$${i}`;
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        let pluginLoc = resolvePlugin(plugin, dirname);
+        const pluginLoc = resolvePlugin(plugin, dirname);
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
@@ -164,7 +164,7 @@ export default class OptionManager {
     }
 
     //
-    let opts = cloneDeepWith(rawOpts, (val) => {
+    const opts = cloneDeepWith(rawOpts, (val) => {
       if (val instanceof Plugin) {
         return val;
       }
@@ -174,16 +174,16 @@ export default class OptionManager {
     dirname = dirname || process.cwd();
     loc = loc || alias;
 
-    for (let key in opts) {
-      let option = config[key];
+    for (const key in opts) {
+      const option = config[key];
 
       // check for an unknown option
       if (!option && this.log) {
         if (removed[key]) {
           this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`, ReferenceError);
         } else {
-          let unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
-          let presetConfigErr = "A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:\n\nInvalid:\n  `{ presets: [{option: value}] }`\nValid:\n  `{ presets: [['presetName', {option: value}]] }`\n\nFor more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.";
+          const unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
+          const presetConfigErr = "A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:\n\nInvalid:\n  `{ presets: [{option: value}] }`\nValid:\n  `{ presets: [['presetName', {option: value}]] }`\n\nFor more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.";
 
           this.log.error(`${unknownOptErr}\n\n${presetConfigErr}`, ReferenceError);
         }
@@ -316,11 +316,11 @@ export default class OptionManager {
   }
 
   normaliseOptions() {
-    let opts = this.options;
+    const opts = this.options;
 
-    for (let key in config) {
-      let option = config[key];
-      let val    = opts[key];
+    for (const key in config) {
+      const option = config[key];
+      const val    = opts[key];
 
       // optional
       if (!val && option.optional) continue;
@@ -335,7 +335,7 @@ export default class OptionManager {
   }
 
   init(opts: Object = {}): Object {
-    for (let config of buildConfigChain(opts, this.log)) {
+    for (const config of buildConfigChain(opts, this.log)) {
       this.mergeOptions(config);
     }
 

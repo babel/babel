@@ -10,7 +10,6 @@
   ],
   "dependencies": {
     "babel-types": "^6.13.0",
-    "babel-helper-define-map": "^6.8.0",
     "babel-plugin-syntax-decorators": "^6.13.0",
     "babel-helper-explode-class": "^6.8.0",
     "babel-template": "^6.8.0",
