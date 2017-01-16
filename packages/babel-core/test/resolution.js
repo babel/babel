@@ -1,6 +1,6 @@
 const assert = require("assert");
 const async = require("async");
-const babel = require("../lib/api/node");
+const babel = require("../lib/index");
 const fs = require("fs");
 const path = require("path");
 

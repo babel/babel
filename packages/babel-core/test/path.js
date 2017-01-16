@@ -1,4 +1,4 @@
-const transform = require("../lib/api/node").transform;
+const transform = require("../lib/index").transform;
 const Plugin    = require("../lib/transformation/plugin");
 const chai      = require("chai");
 

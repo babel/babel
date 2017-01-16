@@ -1,4 +1,4 @@
-const babel                = require("../lib/api/node");
+const babel                = require("../lib/index");
 const buildExternalHelpers = require("../lib/tools/build-external-helpers");
 const sourceMap            = require("source-map");
 const assert               = require("assert");
