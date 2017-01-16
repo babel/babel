@@ -149,7 +149,7 @@ There are a few presets that we maintain officially.
 | [`babel-preset-stage-2`](/packages/babel-preset-stage-2) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-2.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-2) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-2)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-2) |
 | [`babel-preset-stage-3`](/packages/babel-preset-stage-3) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-3.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-3) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-3)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-3) |
 | [`babel-preset-react`](/packages/babel-preset-react) | [![npm](https://img.shields.io/npm/v/babel-preset-react.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-react) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-react)](https://david-dm.org/babel/babel?path=packages/babel-preset-react) |
-| [`babel-preset-env`](https://github.com/babel/babel-preset-env) | [![npm](https://img.shields.io/npm/v/babel-preset-env.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-env) | [![Dependency Status](https://david-dm.org/babel/babel-preset-env)](https://david-dm.org/babel/babel-preset-env) |
+| [`babel-preset-env`](https://github.com/babel/babel-preset-env) | [![npm](https://img.shields.io/npm/v/babel-preset-env.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-env) | [![Dependency Status](https://david-dm.org/babel/babel-preset-env.svg)](https://david-dm.org/babel/babel-preset-env) |
 
 We maintain:
 
