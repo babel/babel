@@ -2,9 +2,21 @@ import { react } from "babel-types";
 import * as t from "babel-types";
 
 const referenceVisitor = {
+  // This visitor looks for bindings to establish a topmost scope for hoisting.
   ReferencedIdentifier(path, state) {
-    if (path.isJSXIdentifier() && react.isCompatTag(path.node.name)) {
+    // Don't hoist regular JSX identifiers ('div', 'span', etc).
+    // We do have to consider member expressions for hoisting (e.g. `this.component`)
+    if (path.isJSXIdentifier() && react.isCompatTag(path.node.name) && !path.parentPath.isJSXMemberExpression()) {
       return;
+    }
+
+    // If the identifier refers to `this`, we need to break on the closest non-arrow scope.
+    if (path.node.name === "this") {
+      let scope = path.scope;
+      do {
+        if (scope.path.isFunction() && !scope.path.isArrowFunctionExpression()) break;
+      } while (scope = scope.parent);
+      if (scope) state.breakOnScopePaths.push(scope.path);
     }
 
     // direct references that we need to track to hoist this to the highest scope we can
