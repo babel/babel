@@ -636,7 +636,6 @@ pp.parseClassBody = function (node) {
   const oldStrict = this.state.strict;
   this.state.strict = true;
 
-  let hadConstructorCall = false;
   let hadConstructor = false;
   let decorators = [];
   const classBody = this.startNode();
@@ -663,7 +662,6 @@ pp.parseClassBody = function (node) {
       decorators = [];
     }
 
-    let isConstructorCall = false;
     const isMaybeStatic = this.match(tt.name) && this.state.value === "static";
     let isGenerator = this.eat(tt.star);
     let isGetSet = false;
@@ -681,11 +679,6 @@ pp.parseClassBody = function (node) {
       if (this.isClassProperty()) {
         classBody.body.push(this.parseClassProperty(method));
         continue;
-      }
-
-      if (method.key.type === "Identifier" && !method.computed && this.hasPlugin("classConstructorCall") && method.key.name === "call" && this.match(tt.name) && this.state.value === "constructor") {
-        isConstructorCall = true;
-        this.parsePropertyName(method);
       }
     }
 
@@ -710,7 +703,7 @@ pp.parseClassBody = function (node) {
       }
 
       // disallow invalid constructors
-      const isConstructor = !isConstructorCall && !method.static && (
+      const isConstructor = !method.static && (
         (key.type === "Identifier" && key.name === "constructor") ||
         (key.type === "StringLiteral" && key.value === "constructor")
       );
@@ -733,15 +726,8 @@ pp.parseClassBody = function (node) {
       }
     }
 
-    // convert constructor to a constructor call
-    if (isConstructorCall) {
-      if (hadConstructorCall) this.raise(method.start, "Duplicate constructor call in the same class");
-      method.kind = "constructorCall";
-      hadConstructorCall = true;
-    }
-
-      // disallow decorators on class constructors
-    if ((method.kind === "constructor" || method.kind === "constructorCall") && method.decorators) {
+    // disallow decorators on class constructors
+    if (method.kind === "constructor" && method.decorators) {
       this.raise(method.start, "You can't attach decorators to a class constructor");
     }
 
