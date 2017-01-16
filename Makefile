@@ -5,7 +5,7 @@ export NODE_ENV = test
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-cov test-ci publish bootstrap
 
 build: clean
-	./node_modules/.bin/gulp build
+	BABEL_ENV=development ./node_modules/.bin/gulp build
 
 build-dist: build
 	cd packages/babel-polyfill; \
