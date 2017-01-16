@@ -375,7 +375,7 @@ pp.flowParseObjectType = function (allowStatic, allowExact) {
       if (variance) {
         this.unexpected(variancePos);
       }
-      nodeStart.callProperties.push(this.flowParseObjectTypeCallProperty(node, allowStatic));
+      nodeStart.callProperties.push(this.flowParseObjectTypeCallProperty(node, isStatic));
     } else {
       propertyKey = this.flowParseObjectPropertyKey();
       if (this.isRelational("<") || this.match(tt.parenL)) {
