@@ -1,6 +1,6 @@
-const generator = require("../../babel-generator").default;
-const template  = require("../lib");
-const chai      = require("chai");
+import generator from "../../babel-generator";
+import template from "../lib";
+import chai from "chai";
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 

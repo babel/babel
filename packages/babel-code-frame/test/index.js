@@ -1,6 +1,6 @@
-const assert = require("assert");
-const chalk = require("chalk");
-const codeFrame = require("..");
+import assert from "assert";
+import chalk from "chalk";
+import codeFrame from "..";
 
 describe("babel-code-frame", function () {
   it("basic usage", function () {
