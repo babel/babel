@@ -749,9 +749,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
         } else if (this.eat(tt.braceR)) {
           break;
         } else if (this.match(tt.comma) && this.lookahead().type === tt.braceR) {
-          // TODO: temporary rollback
-          // this.unexpected(position, "A trailing comma is not permitted after the rest element");
-          continue;
+          this.unexpected(position, "A trailing comma is not permitted after the rest element");
         } else {
           firstRestLocation = position;
           continue;
