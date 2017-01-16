@@ -80,7 +80,7 @@ const envMap = {
 };
 
 const getLowestImplementedVersion = ({ features }, env) => {
-  let tests = flatten(compatibilityTests
+  const tests = flatten(compatibilityTests
     .filter((test) => {
       return features.indexOf(test.name) >= 0 ||
       // for features === ["DataView"]
@@ -104,7 +104,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
     })
   );
 
-  let envTests = tests
+  const envTests = tests
     .map(({ res: test, name, isBuiltIn }, i) => {
       // Babel itself doesn't implement the feature correctly,
       // don't count against it
@@ -133,7 +133,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
       .shift();
     });
 
-  let envFiltered = envTests.filter((t) => t);
+  const envFiltered = envTests.filter((t) => t);
   if (envTests.length > envFiltered.length || envTests.length === 0) {
     // envTests.forEach((test, i) => {
     //   if (!test) {

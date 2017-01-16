@@ -145,12 +145,11 @@ describe("babel-preset-env", () => {
     });
 
     it("doesn't throw when specifiying a decimal for node", () => {
-      let targets;
       const plugin = {
         node: 6
       };
 
-      targets = {
+      const targets = {
         "node": 6.5
       };
 

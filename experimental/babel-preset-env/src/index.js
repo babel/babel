@@ -111,7 +111,7 @@ export const electronVersionToChromeVersion = (semverVer) => {
     throw new Error("Electron version must be a semver version");
   }
 
-  let result = electronToChromium[m[1]];
+  const result = electronToChromium[m[1]];
   if (!result) {
     throw new Error(`Electron version ${m[1]} is either too old or too new`);
   }
@@ -122,7 +122,7 @@ export const electronVersionToChromeVersion = (semverVer) => {
 const _extends = Object.assign || function (target) {
   for (let i = 1; i < arguments.length; i++) {
     const source = arguments[i];
-    for (let key in source) {
+    for (const key in source) {
       if (Object.prototype.hasOwnProperty.call(source, key)) {
         target[key] = source[key];
       }
@@ -178,7 +178,7 @@ export function validatePluginsOption(opts = [], type) {
     throw new Error(`The '${type}' option must be an Array<string> of plugins/built-ins`);
   }
 
-  let unknownOpts = [];
+  const unknownOpts = [];
   opts.forEach((opt) => {
     if (validIncludesAndExcludes.indexOf(opt) === -1) {
       unknownOpts.push(opt);
@@ -201,7 +201,7 @@ const validateIncludeOption = (opts) => validatePluginsOption(opts, "include");
 const validateExcludeOption = (opts) => validatePluginsOption(opts, "exclude");
 
 export function checkDuplicateIncludeExcludes(include, exclude) {
-  let duplicates = [];
+  const duplicates = [];
   include.forEach((opt) => {
     if (exclude.indexOf(opt) >= 0) {
       duplicates.push(opt);
@@ -254,7 +254,7 @@ export default function buildPreset(context, opts = {}) {
   const useBuiltIns = opts.useBuiltIns;
 
   const filterPlugins = filterItem.bind(null, targets, exclude.plugins, pluginList);
-  let transformations = Object.keys(pluginList)
+  const transformations = Object.keys(pluginList)
     .filter(filterPlugins)
     .concat(include.plugins);
 

@@ -4,7 +4,7 @@ function isPolyfillSource(value) {
 
 export default function ({ types: t }) {
   function createImportDeclaration(polyfill) {
-    let declar = t.importDeclaration([], t.stringLiteral(polyfill));
+    const declar = t.importDeclaration([], t.stringLiteral(polyfill));
     declar._blockHoist = 3;
     return declar;
   }
@@ -43,7 +43,7 @@ export default function ({ types: t }) {
   }
 
   function createImports(polyfills, requireType, regenerator) {
-    let imports = polyfills
+    const imports = polyfills
     .filter((el, i, arr) => arr.indexOf(el) === i)
     .map((polyfill) => createImport(polyfill, requireType, true));
 
