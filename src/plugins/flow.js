@@ -1223,6 +1223,10 @@ export default function (instance) {
         specifier.local = specifier.imported.__clone();
       }
 
+      if (node.importKind !== "value" && specifier.importKind !== null) {
+        this.raise(firstIdentLoc, "`The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements`");
+      }
+
       this.checkLVal(specifier.local, true, undefined, "import specifier");
       node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
     };

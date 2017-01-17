@@ -1,6 +1,7 @@
 [ignore]
 .*/lib/.*
 .*/test/.*
+.*/build/.*
 
 [include]
 
