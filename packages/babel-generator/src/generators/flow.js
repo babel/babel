@@ -37,6 +37,10 @@ export function DeclareFunction(node: Object) {
   this.space();
   this.print(node.id, node);
   this.print(node.id.typeAnnotation.typeAnnotation, node);
+  if (node.id.typeAnnotation.predicate) {
+    this.space();
+    this.print(node.id.typeAnnotation.predicate, node);
+  }
   this.semicolon();
 }
 
@@ -230,6 +234,10 @@ export function TypeAnnotation(node: Object) {
   this.space();
   if (node.optional) this.token("?");
   this.print(node.typeAnnotation, node);
+  if (node.predicate) {
+    this.space();
+    this.print(node.predicate, node);
+  }
 }
 
 export function TypeParameter(node: Object) {
