@@ -37,12 +37,6 @@ const Hr = () => {
   <div ref={node => this.node = node} />
   ```
 
-- **Composite Components**
-
-  ```js
-  const ComponentA = () => <div><MyCustomComponent /></div>;
-  ```
-
 ## Installation
 
 ```sh
