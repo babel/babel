@@ -50,7 +50,7 @@ export default function ({ types: t }) {
           : null;
 
         const fileNameIdentifier = path.scope.generateUidIdentifier(FILE_NAME_VAR);
-        path.hub.file.scope.push({id: fileNameIdentifier, init: t.stringLiteral(fileName)});
+        path.hub.file.scope.push({ id: fileNameIdentifier, init: t.stringLiteral(fileName) });
         state.fileNameIdentifier = fileNameIdentifier;
       }
 

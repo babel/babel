@@ -506,7 +506,7 @@ export default function ({ types: t }) {
         for (const nodeOut of nodesOut) {
           if (!nodeOut.declarations) continue;
           for (const declaration of nodeOut.declarations) {
-            const {name} = declaration.id;
+            const { name } = declaration.id;
             if (scope.bindings[name]) {
               scope.bindings[name].kind = nodeOut.kind;
             }

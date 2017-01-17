@@ -55,7 +55,7 @@ export default class Buffer {
           return this.map = map.get();
         },
         set(value) {
-          Object.defineProperty(this, "map", {value, writable: true});
+          Object.defineProperty(this, "map", { value, writable: true });
         },
       });
     }

@@ -355,7 +355,7 @@ export default function () {
           }
 
           for (const source in imports) {
-            const {specifiers, maxBlockHoist} = imports[source];
+            const { specifiers, maxBlockHoist } = imports[source];
             if (specifiers.length) {
               const uid = addRequire(source, maxBlockHoist);
 

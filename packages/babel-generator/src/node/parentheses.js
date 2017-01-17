@@ -43,7 +43,7 @@ export function UpdateExpression(node: Object, parent: Object): boolean {
 }
 
 export function ObjectExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
-  return isFirstInStatement(printStack, {considerArrow: true});
+  return isFirstInStatement(printStack, { considerArrow: true });
 }
 
 export function Binary(node: Object, parent: Object): boolean {
@@ -150,7 +150,7 @@ export function YieldExpression(node: Object, parent: Object): boolean {
 export { YieldExpression as AwaitExpression };
 
 export function ClassExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
-  return isFirstInStatement(printStack, {considerDefaultExports: true});
+  return isFirstInStatement(printStack, { considerDefaultExports: true });
 }
 
 export function UnaryLike(node: Object, parent: Object): boolean {
@@ -166,7 +166,7 @@ export function UnaryLike(node: Object, parent: Object): boolean {
 }
 
 export function FunctionExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
-  return isFirstInStatement(printStack, {considerDefaultExports: true});
+  return isFirstInStatement(printStack, { considerDefaultExports: true });
 }
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {

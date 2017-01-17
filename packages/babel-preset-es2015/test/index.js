@@ -21,7 +21,7 @@ describe("es2015 preset", function () {
     describe("loose", function () {
       it("throws on non-boolean value", function () {
         expect(function () {
-          es2015.buildPreset(null, { loose: 1});
+          es2015.buildPreset(null, { loose: 1 });
         }).to.throw(/must be a boolean/);
       });
     });
