@@ -81,8 +81,30 @@ export default function ({ types: t }) {
         const kind = path.parentPath.node.kind;
         const nodes = [];
 
-        path.traverse({
+        path.get("id").traverse({
           RestProperty(path) {
+            if (
+              // skip single-property case, e.g.
+              // const { ...x } = foo();
+              // since the RHS will not be duplicated
+              this.originalPath.node.id.properties.length > 1 &&
+              !t.isIdentifier(this.originalPath.node.init)
+            ) {
+              // const { a, ...b } = foo();
+              // to avoid calling foo() twice, as a first step convert it to:
+              // const _foo = foo();
+              // const { a, ...b } = _foo;
+              const initRef = path.scope.generateUidIdentifierBasedOnNode(this.originalPath.node.init, "ref");
+              // insert const _foo = foo()
+              this.originalPath.parentPath.insertBefore(t.variableDeclaration(kind, [
+                t.variableDeclarator(initRef, this.originalPath.node.init)
+              ]));
+              // replace foo() with _foo
+              this.originalPath.replaceWith(t.variableDeclarator(this.originalPath.node.id, initRef));
+
+              return;
+            }
+
             let ref = this.originalPath.node.init;
 
             path.findParent((path) => {
