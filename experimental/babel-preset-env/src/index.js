@@ -1,29 +1,12 @@
-import pluginList from "../data/plugins.json";
-import pluginFeatures from "../data/plugin-features";
-import builtInsList from "../data/built-ins.json";
 import browserslist from "browserslist";
-import transformPolyfillRequirePlugin from "./transform-polyfill-require-plugin";
+
+import builtInsList from "../data/built-ins.json";
+import defaultInclude from "./default-includes";
 import electronToChromium from "../data/electron-to-chromium";
-
-export const MODULE_TRANSFORMATIONS = {
-  "amd": "transform-es2015-modules-amd",
-  "commonjs": "transform-es2015-modules-commonjs",
-  "systemjs": "transform-es2015-modules-systemjs",
-  "umd": "transform-es2015-modules-umd"
-};
-
-const defaultInclude = [
-  "web.timers",
-  "web.immediate",
-  "web.dom.iterable"
-];
-
-export const validIncludesAndExcludes = [
-  ...Object.keys(pluginFeatures),
-  ...Object.keys(MODULE_TRANSFORMATIONS).map((m) => MODULE_TRANSFORMATIONS[m]),
-  ...Object.keys(builtInsList),
-  ...defaultInclude
-];
+import moduleTransformations from "./module-transformations";
+import normalizeOptions from "./normalize-options.js";
+import pluginList from "../data/plugins.json";
+import transformPolyfillRequirePlugin from "./transform-polyfill-require-plugin";
 
 /**
  * Determine if a transformation is required
@@ -51,7 +34,7 @@ export const isPluginRequired = (supportedEnvironments, plugin) => {
       const lowestTargetedVersion = supportedEnvironments[environment];
 
       if (typeof lowestTargetedVersion === "string") {
-        throw new Error(`Target version must be a number, 
+        throw new Error(`Target version must be a number,
           '${lowestTargetedVersion}' was given for '${environment}'`);
       }
 
@@ -153,69 +136,7 @@ export const getTargets = (targets = {}) => {
   return targetOps;
 };
 
-// TODO: Allow specifying plugins as either shortened or full name
-// babel-plugin-transform-es2015-classes
-// transform-es2015-classes
-export const validateLooseOption = (looseOpt = false) => {
-  if (typeof looseOpt !== "boolean") {
-    throw new Error("Preset env: 'loose' option must be a boolean.");
-  }
-
-  return looseOpt;
-};
-
-export const validateModulesOption = (modulesOpt = "commonjs") => {
-  if (modulesOpt !== false && Object.keys(MODULE_TRANSFORMATIONS).indexOf(modulesOpt) === -1) {
-    throw new Error("The 'modules' option must be 'false' to indicate no modules\n" +
-      "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
-  }
-
-  return modulesOpt;
-};
-
-export function validatePluginsOption(opts = [], type) {
-  if (!Array.isArray(opts)) {
-    throw new Error(`The '${type}' option must be an Array<string> of plugins/built-ins`);
-  }
-
-  const unknownOpts = [];
-  opts.forEach((opt) => {
-    if (validIncludesAndExcludes.indexOf(opt) === -1) {
-      unknownOpts.push(opt);
-    }
-  });
-
-  if (unknownOpts.length > 0) {
-    throw new Error(`Invalid plugins/built-ins '${unknownOpts}' passed to '${type}' option.
-      Check data/[plugin-features|built-in-features].js in babel-preset-env`);
-  }
-
-  return {
-    all: opts,
-    plugins: opts.filter((opt) => !opt.match(/^(es\d+|web)\./)),
-    builtIns: opts.filter((opt) => opt.match(/^(es\d+|web)\./))
-  };
-}
-
-const validateIncludeOption = (opts) => validatePluginsOption(opts, "include");
-const validateExcludeOption = (opts) => validatePluginsOption(opts, "exclude");
-
-export function checkDuplicateIncludeExcludes(include, exclude) {
-  const duplicates = [];
-  include.forEach((opt) => {
-    if (exclude.indexOf(opt) >= 0) {
-      duplicates.push(opt);
-    }
-  });
-
-  if (duplicates.length > 0) {
-    throw new Error(`Duplicate plugins/built-ins: '${duplicates}' found
-      in both the "include" and "exclude" options.`);
-  }
-}
-
 let hasBeenLogged = false;
-let hasBeenWarned = false;
 
 const logPlugin = (plugin, targets, list) => {
   const envList = list[plugin] || {};
@@ -237,21 +158,19 @@ const filterItem = (targets, exclusions, list, item) => {
   return isRequired && notExcluded;
 };
 
+export const transformIncludesAndExculdes = (opts) => ({
+  all: opts,
+  plugins: opts.filter((opt) => !opt.match(/^(es\d+|web)\./)),
+  builtIns: opts.filter((opt) => opt.match(/^(es\d+|web)\./))
+});
+
 export default function buildPreset(context, opts = {}) {
-  const loose = validateLooseOption(opts.loose);
-  const moduleType = validateModulesOption(opts.modules);
-  // TODO: remove whitelist in favor of include in next major
-  if (opts.whitelist && !hasBeenWarned) {
-    hasBeenWarned = true;
-    console.warn(`The "whitelist" option has been deprecated
-    in favor of "include" to match the newly added "exclude" option (instead of "blacklist").`);
-  }
-  const include = validateIncludeOption(opts.whitelist || opts.include);
-  const exclude = validateExcludeOption(opts.exclude);
-  checkDuplicateIncludeExcludes(include.all, exclude.all);
-  const targets = getTargets(opts.targets);
-  const debug = opts.debug;
-  const useBuiltIns = opts.useBuiltIns;
+  const validatedOptions = normalizeOptions(opts);
+  const {debug, loose, moduleType, useBuiltIns} = validatedOptions;
+
+  const targets = getTargets(validatedOptions.targets);
+  const include = transformIncludesAndExculdes(validatedOptions.include);
+  const exclude = transformIncludesAndExculdes(validatedOptions.exclude);
 
   const filterPlugins = filterItem.bind(null, targets, exclude.plugins, pluginList);
   const transformations = Object.keys(pluginList)
@@ -287,7 +206,7 @@ export default function buildPreset(context, opts = {}) {
   }
 
   const regenerator = transformations.indexOf("transform-regenerator") >= 0;
-  const modulePlugin = moduleType !== false && MODULE_TRANSFORMATIONS[moduleType];
+  const modulePlugin = moduleType !== false && moduleTransformations[moduleType];
   const plugins = [];
 
   modulePlugin &&

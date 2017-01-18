@@ -4,13 +4,6 @@ const babelPresetEnv = require("../lib/index.js");
 const assert = require("assert");
 const electronToChromiumData = require("../data/electron-to-chromium");
 
-const {
-  validateModulesOption,
-  validateLooseOption,
-  validatePluginsOption,
-  checkDuplicateIncludeExcludes
-} = babelPresetEnv;
-
 describe("babel-preset-env", () => {
   describe("getTargets", () => {
     it("should return the current node version with option 'current'", function() {
@@ -173,115 +166,27 @@ describe("babel-preset-env", () => {
     });
   });
 
-  describe("validateLooseOption", () => {
-    it("`undefined` option returns false", () => {
-      assert(validateLooseOption() === false);
+  describe("transformIncludesAndExculdes", function() {
+    it("should return in transforms array", function() {
+      assert.deepEqual(
+        babelPresetEnv.transformIncludesAndExculdes(["transform-es2015-arrow-functions"]),
+        {
+          all: ["transform-es2015-arrow-functions"],
+          plugins: ["transform-es2015-arrow-functions"],
+          builtIns: []
+        }
+      );
     });
 
-    it("`false` option returns false", () => {
-      assert(validateLooseOption(false) === false);
-    });
-
-    it("`true` option returns true", () => {
-      assert(validateLooseOption(true) === true);
-    });
-
-    it("array option is invalid", () => {
-      assert.throws(() => {
-        validateModulesOption([]);
-      }, Error);
-    });
-  });
-
-  describe("validateModulesOption", () => {
-    it("`undefined` option returns commonjs", () => {
-      assert(validateModulesOption() === "commonjs");
-    });
-
-    it("`false` option returns commonjs", () => {
-      assert(validateModulesOption(false) === false);
-    });
-
-    it("commonjs option is valid", () => {
-      assert(validateModulesOption("commonjs") === "commonjs");
-    });
-
-    it("systemjs option is valid", () => {
-      assert(validateModulesOption("systemjs") === "systemjs");
-    });
-
-    it("amd option is valid", () => {
-      assert(validateModulesOption("amd") === "amd");
-    });
-
-    it("umd option is valid", () => {
-      assert(validateModulesOption("umd") === "umd");
-    });
-
-    it("`true` option is invalid", () => {
-      assert.throws(() => {
-        validateModulesOption(true);
-      }, Error);
-    });
-
-    it("array option is invalid", () => {
-      assert.throws(() => {
-        assert(validateModulesOption([]));
-      }, Error);
-    });
-
-    describe("validatePluginsOption", function() {
-      it("should return empty arrays if undefined", function() {
-        assert.deepEqual(validatePluginsOption(), { all: [], plugins: [], builtIns: [] });
-      });
-
-      it("should return in transforms array", function() {
-        assert.deepEqual(
-          validatePluginsOption(["transform-es2015-arrow-functions"]),
-          {
-            all: ["transform-es2015-arrow-functions"],
-            plugins: ["transform-es2015-arrow-functions"],
-            builtIns: []
-          }
-        );
-      });
-
-      it("should return in built-ins array", function() {
-        assert.deepEqual(
-          validatePluginsOption(["es6.map"]),
-          {
-            all: ["es6.map"],
-            plugins: [],
-            builtIns: ["es6.map"]
-          }
-        );
-      });
-
-      it("should throw if not in features", function() {
-        assert.throws(() => {
-          validatePluginsOption(["asdf"]);
-        }, Error);
-      });
-    });
-
-    describe("checkDuplicateIncludeExcludes", function() {
-      it("should throw if duplicate names in both", function() {
-        assert.throws(() => {
-          checkDuplicateIncludeExcludes(
-            ["transform-regenerator", "map"],
-            ["transform-regenerator", "map"]
-          );
-        }, Error);
-      });
-
-      it("should not throw if no duplicate names in both", function() {
-        assert.doesNotThrow(() => {
-          checkDuplicateIncludeExcludes(
-            ["transform-regenerator"],
-            ["map"]
-          );
-        }, Error);
-      });
+    it("should return in built-ins array", function() {
+      assert.deepEqual(
+        babelPresetEnv.transformIncludesAndExculdes(["es6.map"]),
+        {
+          all: ["es6.map"],
+          plugins: [],
+          builtIns: ["es6.map"]
+        }
+      );
     });
   });
 });
