@@ -35,7 +35,6 @@ comments               | boolean  | `true`          | Should comments be include
 compact                | boolean or `'auto'` | `opts.minified` | Set to `true` to avoid adding whitespace for formatting
 minified               | boolean  | `false`         | Should the output be minified
 concise                | boolean  | `false`         | Set to `true` to reduce whitespace (but not as much as `opts.compact`)
-quotes                 | `'single'` or `'double'` | autodetect based on `ast.tokens` | The type of quote to use in the output
 filename               | string   |                 | Used in warning messages
 jsonCompatibleStrings  | boolean  | `false`         | Set to true to run `jsesc` with "json": true to print "\u00A9" vs. "©";
 Options for source maps:
