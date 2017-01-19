@@ -104,7 +104,7 @@ export default function () {
     ReferencedIdentifier(path, state) {
       const spec = isSpec(state);
       const name = path.node.name;
-      const remap = this.remaps[name];
+      let remap = this.remaps[name];
       if (!spec && !remap) return;
 
       if (spec) {
