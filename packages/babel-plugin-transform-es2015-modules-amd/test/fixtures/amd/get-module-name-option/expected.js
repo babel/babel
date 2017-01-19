@@ -1,1 +1,3 @@
-define("my custom module name", [], function () {});
+define("my custom module name", [], function () {
+  "use strict";
+});

@@ -1,1 +1,3 @@
-require("babel-helper-transform-fixture-test-runner")(__dirname + "/fixtures/transformation", "transformation");
+import runner from "babel-helper-transform-fixture-test-runner";
+
+runner(`${__dirname}/fixtures/transformation`, "transformation");

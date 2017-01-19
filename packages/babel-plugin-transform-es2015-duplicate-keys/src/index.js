@@ -26,27 +26,27 @@ export default function() {
         const alreadySeenGetters = Object.create(null);
         const alreadySeenSetters = Object.create(null);
 
-        for (let prop of plainProps) {
+        for (const prop of plainProps) {
           const name = getName(prop.key);
           let isDuplicate = false;
           switch (prop.kind) {
-          case "get":
-            if (alreadySeenData[name] || alreadySeenGetters[name]) {
-              isDuplicate = true;
-            }
-            alreadySeenGetters[name] = true;
-            break;
-          case "set":
-            if (alreadySeenData[name] || alreadySeenSetters[name]) {
-              isDuplicate = true;
-            }
-            alreadySeenSetters[name] = true;
-            break;
-          default:
-            if (alreadySeenData[name] || alreadySeenGetters[name] || alreadySeenSetters[name]) {
-              isDuplicate = true;
-            }
-            alreadySeenData[name] = true;
+            case "get":
+              if (alreadySeenData[name] || alreadySeenGetters[name]) {
+                isDuplicate = true;
+              }
+              alreadySeenGetters[name] = true;
+              break;
+            case "set":
+              if (alreadySeenData[name] || alreadySeenSetters[name]) {
+                isDuplicate = true;
+              }
+              alreadySeenSetters[name] = true;
+              break;
+            default:
+              if (alreadySeenData[name] || alreadySeenGetters[name] || alreadySeenSetters[name]) {
+                isDuplicate = true;
+              }
+              alreadySeenData[name] = true;
           }
 
           if (isDuplicate) {

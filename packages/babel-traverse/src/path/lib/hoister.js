@@ -1,14 +1,14 @@
 import { react } from "babel-types";
 import * as t from "babel-types";
 
-let referenceVisitor = {
+const referenceVisitor = {
   ReferencedIdentifier(path, state) {
     if (path.isJSXIdentifier() && react.isCompatTag(path.node.name)) {
       return;
     }
 
     // direct references that we need to track to hoist this to the highest scope we can
-    let binding = path.scope.getBinding(path.node.name);
+    const binding = path.scope.getBinding(path.node.name);
     if (!binding) return;
 
     // this binding isn't accessible from the parent scope so we can safely ignore it
@@ -18,7 +18,7 @@ let referenceVisitor = {
     if (binding.constant) {
       state.bindings[path.node.name] = binding;
     } else {
-      for (let violationPath of (binding.constantViolations: Array)) {
+      for (const violationPath of (binding.constantViolations: Array)) {
         state.breakOnScopePaths = state.breakOnScopePaths.concat(violationPath.getAncestry());
       }
     }
@@ -35,8 +35,8 @@ export default class PathHoister {
   }
 
   isCompatibleScope(scope) {
-    for (let key in this.bindings) {
-      let binding = this.bindings[key];
+    for (const key in this.bindings) {
+      const binding = this.bindings[key];
       if (!scope.bindingIdentifierEquals(key, binding.identifier)) {
         return false;
       }
@@ -61,7 +61,7 @@ export default class PathHoister {
   }
 
   getAttachmentPath() {
-    let path = this._getAttachmentPath();
+    const path = this._getAttachmentPath();
     if (!path) return;
 
     let targetScope = path.scope;
@@ -73,17 +73,17 @@ export default class PathHoister {
 
     // avoid hoisting to a scope that contains bindings that are executed after our attachment path
     if (targetScope.path.isProgram() || targetScope.path.isFunction()) {
-      for (let name in this.bindings) {
+      for (const name in this.bindings) {
         // check binding is a direct child of this paths scope
         if (!targetScope.hasOwnBinding(name)) continue;
 
-        let binding = this.bindings[name];
+        const binding = this.bindings[name];
 
         // allow parameter references
         if (binding.kind === "param") continue;
 
         // if this binding appears after our attachment point then don't hoist it
-        if (binding.path.getStatementParent().key > path.key) return;
+        if (this.getAttachmentParentForPath(binding.path).key > path.key) return;
       }
     }
 
@@ -91,9 +91,9 @@ export default class PathHoister {
   }
 
   _getAttachmentPath() {
-    let scopes = this.scopes;
+    const scopes = this.scopes;
 
-    let scope = scopes.pop();
+    const scope = scopes.pop();
     if (!scope) return;
 
     if (scope.path.isFunction()) {
@@ -105,30 +105,39 @@ export default class PathHoister {
         return scope.path.get("body").get("body")[0];
       } else {
         // doesn't need to be be attached to this scope
-        return this.getNextScopeStatementParent();
+        return this.getNextScopeAttachmentParent();
       }
     } else if (scope.path.isProgram()) {
-      return this.getNextScopeStatementParent();
+      return this.getNextScopeAttachmentParent();
     }
   }
 
-  getNextScopeStatementParent() {
-    let scope = this.scopes.pop();
-    if (scope) return scope.path.getStatementParent();
+  getNextScopeAttachmentParent() {
+    const scope = this.scopes.pop();
+    if (scope) return this.getAttachmentParentForPath(scope.path);
+  }
+
+  getAttachmentParentForPath(path) {
+    do {
+      if (!path.parentPath ||
+          (Array.isArray(path.container) && path.isStatement()) ||
+          (path.isVariableDeclarator() && path.parentPath.node.declarations.length > 1))
+        return path;
+    } while ((path = path.parentPath));
   }
 
   hasOwnParamBindings(scope) {
-    for (let name in this.bindings) {
+    for (const name in this.bindings) {
       if (!scope.hasOwnBinding(name)) continue;
 
-      let binding = this.bindings[name];
+      const binding = this.bindings[name];
       if (binding.kind === "param") return true;
     }
     return false;
   }
 
   run() {
-    let node = this.path.node;
+    const node = this.path.node;
     if (node._hoisted) return;
     node._hoisted = true;
 
@@ -136,7 +145,7 @@ export default class PathHoister {
 
     this.getCompatibleScopes();
 
-    let attachTo = this.getAttachmentPath();
+    const attachTo = this.getAttachmentPath();
     if (!attachTo) return;
 
     // don't bother hoisting to the same function as this will cause multiple branches to be evaluated more than once leading to a bad optimisation
@@ -144,13 +153,13 @@ export default class PathHoister {
 
     // generate declaration and insert it to our point
     let uid = attachTo.scope.generateUidIdentifier("ref");
+    const declarator = t.variableDeclarator(uid, this.path.node);
+
     attachTo.insertBefore([
-      t.variableDeclaration("var", [
-        t.variableDeclarator(uid, this.path.node)
-      ])
+      attachTo.isVariableDeclarator() ? declarator : t.variableDeclaration("var", [declarator])
     ]);
 
-    let parent = this.path.parentPath;
+    const parent = this.path.parentPath;
     if (parent.isJSXElement() && this.path.container === parent.node.children) {
       // turning the `span` in `<div><span /></div>` to an expression so we need to wrap it with
       // an expression container

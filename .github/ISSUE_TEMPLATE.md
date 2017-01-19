@@ -1,6 +1,8 @@
 <!---
 BEFORE YOU SUBMIT please read the following:
 
+Please search open/closed issues before submitting since someone might have asked the same thing before!
+
 If you have a support request or question please submit them to one of this resources:
 
 * Discussion Forum: https://discuss.babeljs.io/
@@ -17,6 +19,7 @@ support questions here.
 
 ### Input Code
 <!--- If you're describing a bug, please let us know which sample code reproduces your problem -->
+<!--- If you have link to our REPL or a standalone repo please link that! -->
 
 ```js
 var your => (code) => here;

@@ -1,11 +1,11 @@
 /* eslint max-len: 0 */
 
 export default function ({ messages, template, types: t }) {
-  let buildForOfArray = template(`
+  const buildForOfArray = template(`
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
   `);
 
-  let buildForOfLoose = template(`
+  const buildForOfLoose = template(`
     for (var LOOP_OBJECT = OBJECT,
              IS_ARRAY = Array.isArray(LOOP_OBJECT),
              INDEX = 0,
@@ -22,7 +22,7 @@ export default function ({ messages, template, types: t }) {
     }
   `);
 
-  let buildForOf = template(`
+  const buildForOf = template(`
     var ITERATOR_COMPLETION = true;
     var ITERATOR_HAD_ERROR_KEY = false;
     var ITERATOR_ERROR_KEY = undefined;
@@ -46,19 +46,19 @@ export default function ({ messages, template, types: t }) {
   `);
 
   function _ForOfStatementArray(path) {
-    let { node, scope } = path;
-    let nodes = [];
+    const { node, scope } = path;
+    const nodes = [];
     let right = node.right;
 
     if (!t.isIdentifier(right) || !scope.hasBinding(right.name)) {
-      let uid = scope.generateUidIdentifier("arr");
+      const uid = scope.generateUidIdentifier("arr");
       nodes.push(t.variableDeclaration("var", [
         t.variableDeclarator(uid, right)
       ]));
       right = uid;
     }
 
-    let iterationKey = scope.generateUidIdentifier("i");
+    const iterationKey = scope.generateUidIdentifier("i");
 
     let loop = buildForOfArray({
       BODY: node.body,
@@ -69,9 +69,9 @@ export default function ({ messages, template, types: t }) {
     t.inherits(loop, node);
     t.ensureBlock(loop);
 
-    let iterationValue = t.memberExpression(right, iterationKey, true);
+    const iterationValue = t.memberExpression(right, iterationKey, true);
 
-    let left = node.left;
+    const left = node.left;
     if (t.isVariableDeclaration(left)) {
       left.declarations[0].init = iterationValue;
       loop.body.body.unshift(left);
@@ -103,11 +103,11 @@ export default function ({ messages, template, types: t }) {
         let callback = spec;
         if (state.opts.loose) callback = loose;
 
-        let { node } = path;
-        let build  = callback(path, state);
-        let declar = build.declar;
-        let loop   = build.loop;
-        let block  = loop.body;
+        const { node } = path;
+        const build  = callback(path, state);
+        const declar = build.declar;
+        const loop   = build.loop;
+        const block  = loop.body;
 
         // ensure that it's a block so we can take all its statements
         path.ensureBlock();
@@ -134,9 +134,9 @@ export default function ({ messages, template, types: t }) {
   };
 
   function loose(path, file) {
-    let { node, scope } = path;
+    const { node, scope } = path;
 
-    let left = node.left;
+    const left = node.left;
     let declar, id;
 
     if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
@@ -152,10 +152,10 @@ export default function ({ messages, template, types: t }) {
       throw file.buildCodeFrameError(left, messages.get("unknownForHead", left.type));
     }
 
-    let iteratorKey = scope.generateUidIdentifier("iterator");
-    let isArrayKey  = scope.generateUidIdentifier("isArray");
+    const iteratorKey = scope.generateUidIdentifier("iterator");
+    const isArrayKey  = scope.generateUidIdentifier("isArray");
 
-    let loop = buildForOfLoose({
+    const loop = buildForOfLoose({
       LOOP_OBJECT:  iteratorKey,
       IS_ARRAY:     isArrayKey,
       OBJECT:       node.right,
@@ -179,12 +179,12 @@ export default function ({ messages, template, types: t }) {
   }
 
   function spec(path, file) {
-    let { node, scope, parent } = path;
-    let left = node.left;
+    const { node, scope, parent } = path;
+    const left = node.left;
     let declar;
 
-    let stepKey   = scope.generateUidIdentifier("step");
-    let stepValue = t.memberExpression(stepKey, t.identifier("value"));
+    const stepKey   = scope.generateUidIdentifier("step");
+    const stepValue = t.memberExpression(stepKey, t.identifier("value"));
 
     if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
       // for (i of test), for ({ i } of test)
@@ -200,9 +200,9 @@ export default function ({ messages, template, types: t }) {
 
     //
 
-    let iteratorKey = scope.generateUidIdentifier("iterator");
+    const iteratorKey = scope.generateUidIdentifier("iterator");
 
-    let template = buildForOf({
+    const template = buildForOf({
       ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
       ITERATOR_COMPLETION:    scope.generateUidIdentifier("iteratorNormalCompletion"),
       ITERATOR_ERROR_KEY:     scope.generateUidIdentifier("iteratorError"),
@@ -212,10 +212,10 @@ export default function ({ messages, template, types: t }) {
       BODY:                   null
     });
 
-    let isLabeledParent = t.isLabeledStatement(parent);
+    const isLabeledParent = t.isLabeledStatement(parent);
 
-    let tryBody = template[3].block.body;
-    let loop = tryBody[0];
+    const tryBody = template[3].block.body;
+    const loop = tryBody[0];
 
     if (isLabeledParent) {
       tryBody[0] = t.labeledStatement(parent.label, loop);

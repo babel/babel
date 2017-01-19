@@ -4,6 +4,7 @@ function a3({a2, b2, ...c2}) {}
 function a4({a3, ...c3}, {a5, ...c5}) {}
 function a5({a3, b2: { ba1, ...ba2 }, ...c3}) {}
 function a6({a3, b2: { ba1, ...ba2 } }) {}
+function a7({a1 = 1, ...b1} = {}) {}
 // Unchanged
 function b(a) {}
 function b2(a, ...b) {}

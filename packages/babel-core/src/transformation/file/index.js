@@ -32,9 +32,9 @@ const INTERNAL_PLUGINS = [
   [shadowFunctionsPlugin]
 ];
 
-let errorVisitor = {
+const errorVisitor = {
   enter(path, state) {
-    let loc = path.node.loc;
+    const loc = path.node.loc;
     if (loc) {
       state.loc = loc;
       path.stop();
@@ -69,7 +69,7 @@ export default class File extends Store {
       // All the "per preset" options are inherited from the main options.
       this.perPresetOpts = [];
       this.opts.presets.forEach((presetOpts) => {
-        let perPresetOpts = Object.assign(Object.create(this.opts), presetOpts);
+        const perPresetOpts = Object.assign(Object.create(this.opts), presetOpts);
         this.perPresetOpts.push(perPresetOpts);
         this.buildPluginsForOptions(perPresetOpts);
       });
@@ -125,7 +125,7 @@ export default class File extends Store {
 
   getMetadata() {
     let has = false;
-    for (let node of (this.ast.program.body: Array<Object>)) {
+    for (const node of (this.ast.program.body: Array<Object>)) {
       if (t.isModuleDeclaration(node)) {
         has = true;
         break;
@@ -165,7 +165,7 @@ export default class File extends Store {
       filenameRelative: opts.filename
     });
 
-    let basenameRelative = path.basename(opts.filenameRelative);
+    const basenameRelative = path.basename(opts.filenameRelative);
 
     defaults(opts, {
       sourceFileName:   basenameRelative,
@@ -180,13 +180,13 @@ export default class File extends Store {
       return;
     }
 
-    let plugins: Array<[PluginPass, Object]> = opts.plugins.concat(INTERNAL_PLUGINS);
-    let currentPluginVisitors = [];
-    let currentPluginPasses = [];
+    const plugins: Array<[PluginPass, Object]> = opts.plugins.concat(INTERNAL_PLUGINS);
+    const currentPluginVisitors = [];
+    const currentPluginPasses = [];
 
     // init plugins!
-    for (let ref of plugins) {
-      let [plugin, pluginOpts] = ref; // todo: fix - can't embed in loop head because of flow bug
+    for (const ref of plugins) {
+      const [plugin, pluginOpts] = ref; // todo: fix - can't embed in loop head because of flow bug
 
       currentPluginVisitors.push(plugin.visitor);
       currentPluginPasses.push(new PluginPass(this, plugin, pluginOpts));
@@ -201,7 +201,7 @@ export default class File extends Store {
   }
 
   getModuleName(): ?string {
-    let opts = this.opts;
+    const opts = this.opts;
     if (!opts.moduleIds) {
       return null;
     }
@@ -224,7 +224,7 @@ export default class File extends Store {
 
     if (opts.sourceRoot != null) {
       // remove sourceRoot from filename
-      let sourceRootRegEx = new RegExp("^" + opts.sourceRoot + "\/?");
+      const sourceRootRegEx = new RegExp("^" + opts.sourceRoot + "\/?");
       filenameRelative = filenameRelative.replace(sourceRootRegEx, "");
     }
 
@@ -245,20 +245,20 @@ export default class File extends Store {
   }
 
   resolveModuleSource(source: string): string {
-    let resolveModuleSource = this.opts.resolveModuleSource;
+    const resolveModuleSource = this.opts.resolveModuleSource;
     if (resolveModuleSource) source = resolveModuleSource(source, this.opts.filename);
     return source;
   }
 
   addImport(source: string, imported: string, name?: string = imported): Object {
-    let alias = `${source}:${imported}`;
+    const alias = `${source}:${imported}`;
     let id = this.dynamicImportIds[alias];
 
     if (!id) {
       source = this.resolveModuleSource(source);
       id = this.dynamicImportIds[alias] = this.scope.generateUidIdentifier(name);
 
-      let specifiers = [];
+      const specifiers = [];
 
       if (imported === "*") {
         specifiers.push(t.importNamespaceSpecifier(id));
@@ -268,7 +268,7 @@ export default class File extends Store {
         specifiers.push(t.importSpecifier(id, t.identifier(imported)));
       }
 
-      let declar = t.importDeclaration(specifiers, t.stringLiteral(source));
+      const declar = t.importDeclaration(specifiers, t.stringLiteral(source));
       declar._blockHoist = 3;
 
       this.path.unshiftContainer("body", declar);
@@ -278,7 +278,7 @@ export default class File extends Store {
   }
 
   addHelper(name: string): Object {
-    let declar = this.declarations[name];
+    const declar = this.declarations[name];
     if (declar) return declar;
 
     if (!this.usedHelpers[name]) {
@@ -286,18 +286,17 @@ export default class File extends Store {
       this.usedHelpers[name] = true;
     }
 
-    let generator = this.get("helperGenerator");
-    let runtime   = this.get("helpersNamespace");
-    let res = null;
+    const generator = this.get("helperGenerator");
+    const runtime   = this.get("helpersNamespace");
+    const res = generator && generator(name);
     if (generator) {
-      res = generator(name);
       if (res && t.isIdentifier(res)) return res;
     } else if (runtime) {
       return t.memberExpression(runtime, t.identifier(name));
     }
 
-    let ref = res || getHelper(name);
-    let uid = this.declarations[name] = this.scope.generateUidIdentifier(name);
+    const ref = res || getHelper(name);
+    const uid = this.declarations[name] = this.scope.generateUidIdentifier(name);
 
     if (t.isFunctionExpression(ref) && !ref.id) {
       ref.body._compact = true;
@@ -324,18 +323,18 @@ export default class File extends Store {
   ): Object {
     // Generate a unique name based on the string literals so we dedupe
     // identical strings used in the program.
-    let stringIds = raw.elements.map(function(string) {
+    const stringIds = raw.elements.map(function(string) {
       return string.value;
     });
-    let name = `${helperName}_${raw.elements.length}_${stringIds.join(",")}`;
+    const name = `${helperName}_${raw.elements.length}_${stringIds.join(",")}`;
 
-    let declar = this.declarations[name];
+    const declar = this.declarations[name];
     if (declar) return declar;
 
-    let uid = this.declarations[name] = this.scope.generateUidIdentifier("templateObject");
+    const uid = this.declarations[name] = this.scope.generateUidIdentifier("templateObject");
 
-    let helperId = this.addHelper(helperName);
-    let init = t.callExpression(helperId, [strings, raw]);
+    const helperId = this.addHelper(helperName);
+    const init = t.callExpression(helperId, [strings, raw]);
     init._compact = true;
     this.scope.push({
       id: uid,
@@ -346,9 +345,9 @@ export default class File extends Store {
   }
 
   buildCodeFrameError(node: Object, msg: string, Error: typeof Error = SyntaxError): Error {
-    let loc = node && (node.loc || node._loc);
+    const loc = node && (node.loc || node._loc);
 
-    let err = new Error(msg);
+    const err = new Error(msg);
 
     if (loc) {
       err.loc = loc.start;
@@ -368,13 +367,13 @@ export default class File extends Store {
   }
 
   mergeSourceMap(map: Object) {
-    let inputMap = this.opts.inputSourceMap;
+    const inputMap = this.opts.inputSourceMap;
 
     if (inputMap) {
-      let inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
-      let outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
+      const inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
+      const outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
 
-      let mergedGenerator = new sourceMap.SourceMapGenerator({
+      const mergedGenerator = new sourceMap.SourceMapGenerator({
         file: inputMapConsumer.file,
         sourceRoot: inputMapConsumer.sourceRoot
       });
@@ -403,7 +402,7 @@ export default class File extends Store {
         }
       });
 
-      let mergedMap = mergedGenerator.toJSON();
+      const mergedMap = mergedGenerator.toJSON();
       inputMap.mappings = mergedMap.mappings;
       return inputMap;
     } else {
@@ -420,8 +419,8 @@ export default class File extends Store {
 
       if (parserOpts.parser) {
         if (typeof parserOpts.parser === "string") {
-          let dirname = path.dirname(this.opts.filename) || process.cwd();
-          let parser = resolve(parserOpts.parser, dirname);
+          const dirname = path.dirname(this.opts.filename) || process.cwd();
+          const parser = resolve(parserOpts.parser, dirname);
           if (parser) {
             parseCode = require(parser).parse;
           } else {
@@ -440,7 +439,7 @@ export default class File extends Store {
     }
 
     this.log.debug("Parse start");
-    let ast = parseCode(code, parserOpts || this.parserOpts);
+    const ast = parseCode(code, parserOpts || this.parserOpts);
     this.log.debug("Parse stop");
     return ast;
   }
@@ -473,7 +472,7 @@ export default class File extends Store {
       this.log.debug("Start transform traverse");
 
       // merge all plugin visitors into a single visitor
-      let visitor = traverse.visitors.merge(this.pluginVisitors[i], pluginPasses, this.opts.wrapPluginVisitorMethod);
+      const visitor = traverse.visitors.merge(this.pluginVisitors[i], pluginPasses, this.opts.wrapPluginVisitorMethod);
       traverse(this.ast, visitor, this.scope);
 
       this.log.debug("End transform traverse");
@@ -501,7 +500,7 @@ export default class File extends Store {
 
       let message = err.message = `${this.opts.filename}: ${err.message}`;
 
-      let loc = err.loc;
+      const loc = err.loc;
       if (loc) {
         err.codeFrame = codeFrame(code, loc.line, loc.column + 1, this.opts);
         message += "\n" + err.codeFrame;
@@ -514,7 +513,7 @@ export default class File extends Store {
       }
 
       if (err.stack) {
-        let newStack = err.stack.replace(err.message, message);
+        const newStack = err.stack.replace(err.message, message);
         err.stack = newStack;
       }
 
@@ -530,28 +529,28 @@ export default class File extends Store {
 
   parseCode() {
     this.parseShebang();
-    let ast = this.parse(this.code);
+    const ast = this.parse(this.code);
     this.addAst(ast);
   }
 
   shouldIgnore() {
-    let opts = this.opts;
+    const opts = this.opts;
     return util.shouldIgnore(opts.filename, opts.ignore, opts.only);
   }
 
   call(key: "pre" | "post", pluginPasses: Array<PluginPass>) {
-    for (let pass of pluginPasses) {
-      let plugin = pass.plugin;
-      let fn = plugin[key];
+    for (const pass of pluginPasses) {
+      const plugin = pass.plugin;
+      const fn = plugin[key];
       if (fn) fn.call(pass, this);
     }
   }
 
   parseInputSourceMap(code: string): string {
-    let opts = this.opts;
+    const opts = this.opts;
 
     if (opts.inputSourceMap !== false) {
-      let inputMap = convertSourceMap.fromSource(code);
+      const inputMap = convertSourceMap.fromSource(code);
       if (inputMap) {
         opts.inputSourceMap = inputMap.toObject();
         code = convertSourceMap.removeComments(code);
@@ -562,7 +561,7 @@ export default class File extends Store {
   }
 
   parseShebang() {
-    let shebangMatch = shebangRegex.exec(this.code);
+    const shebangMatch = shebangRegex.exec(this.code);
     if (shebangMatch) {
       this.shebang = shebangMatch[0];
       this.code = this.code.replace(shebangRegex, "");
@@ -570,7 +569,7 @@ export default class File extends Store {
   }
 
   makeResult({ code, map, ast, ignored }: BabelFileResult): BabelFileResult {
-    let result = {
+    const result = {
       metadata: null,
       options:  this.opts,
       ignored:  !!ignored,
@@ -595,10 +594,10 @@ export default class File extends Store {
   }
 
   generate(): BabelFileResult {
-    let opts = this.opts;
-    let ast  = this.ast;
+    const opts = this.opts;
+    const ast  = this.ast;
 
-    let result: BabelFileResult = { ast };
+    const result: BabelFileResult = { ast };
     if (!opts.code) return this.makeResult(result);
 
     let gen = generate;
@@ -606,8 +605,8 @@ export default class File extends Store {
       gen = opts.generatorOpts.generator;
 
       if (typeof gen === "string") {
-        let dirname = path.dirname(this.opts.filename) || process.cwd();
-        let generator = resolve(gen, dirname);
+        const dirname = path.dirname(this.opts.filename) || process.cwd();
+        const generator = resolve(gen, dirname);
         if (generator) {
           gen = require(generator).print;
         } else {
@@ -618,7 +617,7 @@ export default class File extends Store {
 
     this.log.debug("Generation start");
 
-    let _result = gen(ast, opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts, this.code);
+    const _result = gen(ast, opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts, this.code);
     result.code = _result.code;
     result.map  = _result.map;
 

@@ -39,7 +39,7 @@ defineType("JSXElement", {
     children: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("JSXText", "JSXExpressionContainer", "JSXElement"))
+        assertEach(assertNodeType("JSXText", "JSXExpressionContainer", "JSXSpreadChild", "JSXElement"))
       )
     }
   }
@@ -50,6 +50,16 @@ defineType("JSXEmptyExpression", {
 });
 
 defineType("JSXExpressionContainer", {
+  visitor: ["expression"],
+  aliases: ["JSX", "Immutable"],
+  fields: {
+    expression: {
+      validate: assertNodeType("Expression")
+    }
+  }
+});
+
+defineType("JSXSpreadChild", {
   visitor: ["expression"],
   aliases: ["JSX", "Immutable"],
   fields: {

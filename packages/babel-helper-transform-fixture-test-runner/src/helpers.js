@@ -16,4 +16,4 @@ export function multiline(arr) {
   return arr.join("\n");
 }
 
-export let assertArrayEquals = assert.deepEqual;
+export const assertArrayEquals = assert.deepEqual;

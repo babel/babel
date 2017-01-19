@@ -5,7 +5,7 @@
 <p align="center">
    <strong><a href="#setup">Setup</a></strong>
    |
-   <strong><a href="#running-tests">Running tests</a></strong>
+   <strong><a href="#running-lintingtests">Running linting/tests</a></strong>
    |
    <strong><a href="#writing-tests">Writing tests</a></strong>
    |
@@ -195,3 +195,10 @@ For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js
             - actual.js
             - expected.json (will be generated if not created)
 ```
+
+#### Internals
+- AST spec ([babylon/ast/spec.md](https://github.com/babel/babylon/blob/master/ast/spec.md))
+- Versionning ([doc/design/versioning.md](./doc/design/versioning.md))
+- Monorepo ([doc/design/monorepo.md](./doc/design/monorepo.md))
+- Compiler environment support ([doc/design/compiler-environment-support.md](./doc/design/compiler-environment-support.md))
+- Compiler assumptions ([doc/design/compiler-assumptions.md](./doc/design/compiler-assumptions.md))

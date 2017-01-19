@@ -3,15 +3,104 @@ import { buildExternalHelpers } from "babel-core";
 import getFixtures from "babel-helper-fixtures";
 import sourceMap from "source-map";
 import codeFrame from "babel-code-frame";
+import defaults from "lodash/defaults";
+import includes from "lodash/includes";
 import * as helpers from "./helpers";
+import extend from "lodash/extend";
+import merge from "lodash/merge";
 import assert from "assert";
 import chai from "chai";
-import _ from "lodash";
-import "babel-polyfill";
 import fs from "fs";
 import path from "path";
+import vm from "vm";
+import Module from "module";
 
-let babelHelpers = eval(buildExternalHelpers(null, "var"));
+const moduleCache = {};
+const testContext = {
+  ...helpers,
+  babelHelpers: null,
+  assert: chai.assert,
+  transform: babel.transform,
+  global: null,
+};
+testContext.global = testContext;
+vm.createContext(testContext);
+
+// Initialize the test context with the polyfill, and then freeze the global to prevent implicit
+// global creation in tests, which could cause things to bleed between tests.
+runModuleInTestContext("babel-polyfill", __filename);
+
+// Populate the "babelHelpers" global with Babel's helper utilities.
+runCodeInTestContext(buildExternalHelpers());
+
+/**
+ * A basic implementation of CommonJS so we can execute `babel-polyfill` inside our test context.
+ * This allows us to run our unittests
+ */
+function runModuleInTestContext(id: string, relativeFilename: string) {
+  let filename;
+  if (id[0] === ".") {
+    filename = require.resolve(path.resolve(path.dirname(relativeFilename), id));
+  } else {
+    // This code is a gross hack using internal APIs, but we also have the same logic in babel-core
+    // to resolve presets and plugins, so if this breaks, we'll have even worse issues to deal with.
+    const relativeMod = new Module();
+    relativeMod.id = relativeFilename;
+    relativeMod.filename = relativeFilename;
+    relativeMod.paths = Module._nodeModulePaths(path.dirname(relativeFilename));
+    try {
+      filename = Module._resolveFilename(id, relativeMod);
+    } catch (err) {
+      filename = null;
+    }
+
+    // Expose Node-internal modules if the tests want them. Note, this will not execute inside
+    // the context's global scope.
+    if (filename === id) return require(id);
+  }
+
+  if (moduleCache[filename]) return moduleCache[filename].exports;
+
+  const module = moduleCache[filename] = {
+    id: filename,
+    exports: {},
+  };
+  const dirname = path.dirname(filename);
+  const req = (id) => runModuleInTestContext(id, filename);
+
+  const src = fs.readFileSync(filename, "utf8");
+  const code = `(function (exports, require, module, __filename, __dirname) {${src}\n});`;
+
+  vm.runInContext(code, testContext, {
+    filename,
+    displayErrors: true,
+  }).call(module.exports, module.exports, req, module, filename, dirname);
+
+  return module.exports;
+}
+
+/**
+ * Run the given snippet of code inside a CommonJS module
+ */
+function runCodeInTestContext(code: string, opts: {filename?: string} = {}) {
+  const filename = opts.filename || null;
+  const dirname = filename ? path.dirname(filename) : null;
+  const req = filename ? ((id) => runModuleInTestContext(id, filename)) : null;
+
+  const module = {
+    id: filename,
+    exports: {},
+  };
+
+  // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
+  // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
+  // rely on 'this === global'.
+  const src = `(function(exports, require, module, __filename, __dirname, opts) {${code}\n});`;
+  return vm.runInContext(src, testContext, {
+    filename,
+    displayErrors: true,
+  })(module.exports, req, module, filename, dirname, opts);
+}
 
 function wrapPackagesArray(type, names, optionsDir) {
   return (names || []).map(function (val) {
@@ -36,14 +125,14 @@ function wrapPackagesArray(type, names, optionsDir) {
 }
 
 function run(task) {
-  let actual = task.actual;
-  let expect = task.expect;
-  let exec   = task.exec;
-  let opts   = task.options;
-  let optionsDir = task.optionsDir;
+  const actual = task.actual;
+  const expect = task.expect;
+  const exec   = task.exec;
+  const opts   = task.options;
+  const optionsDir = task.optionsDir;
 
   function getOpts(self) {
-    let newOpts = _.merge({
+    const newOpts = merge({
       filename: self.loc,
     }, opts);
 
@@ -64,12 +153,12 @@ function run(task) {
   let resultExec;
 
   if (execCode) {
-    let execOpts = getOpts(exec);
+    const execOpts = getOpts(exec);
     result = babel.transform(execCode, execOpts);
     execCode = result.code;
 
     try {
-      resultExec = runExec(execOpts, execCode);
+      resultExec = runCodeInTestContext(execCode, execOpts);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);
@@ -78,7 +167,7 @@ function run(task) {
   }
 
   let actualCode = actual.code;
-  let expectCode = expect.code;
+  const expectCode = expect.code;
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
     if (!expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
@@ -95,12 +184,12 @@ function run(task) {
   }
 
   if (task.sourceMappings) {
-    let consumer = new sourceMap.SourceMapConsumer(result.map);
+    const consumer = new sourceMap.SourceMapConsumer(result.map);
 
-    _.each(task.sourceMappings, function (mapping) {
-      let actual = mapping.original;
+    task.sourceMappings.forEach(function (mapping) {
+      const actual = mapping.original;
 
-      let expect = consumer.originalPositionFor(mapping.generated);
+      const expect = consumer.originalPositionFor(mapping.generated);
       chai.expect({ line: expect.line, column: expect.column }).to.deep.equal(actual);
     });
   }
@@ -110,20 +199,6 @@ function run(task) {
   }
 }
 
-function runExec(opts, execCode) {
-  let sandbox = {
-    ...helpers,
-    babelHelpers,
-    assert: chai.assert,
-    transform: babel.transform,
-    opts,
-    exports: {},
-  };
-
-  let fn = new Function(...Object.keys(sandbox), execCode);
-  return fn.apply(null, Object.values(sandbox));
-}
-
 export default function (
   fixturesLoc: string,
   name: string,
@@ -131,22 +206,22 @@ export default function (
   taskOpts = {},
   dynamicOpts?: Function,
 ) {
-  let suites = getFixtures(fixturesLoc);
+  const suites = getFixtures(fixturesLoc);
 
-  for (let testSuite of suites) {
-    if (_.includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
+  for (const testSuite of suites) {
+    if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
-      for (let task of testSuite.tests) {
-        if (_.includes(suiteOpts.ignoreTasks, task.title) ||
-            _.includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
+      for (const task of testSuite.tests) {
+        if (includes(suiteOpts.ignoreTasks, task.title) ||
+            includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
 
         it(task.title, !task.disabled && function () {
           function runTask() {
             run(task);
           }
 
-          _.defaults(task.options, {
+          defaults(task.options, {
             filenameRelative: task.expect.filename,
             sourceFileName:   task.actual.filename,
             sourceMapTarget:  task.expect.filename,
@@ -155,11 +230,11 @@ export default function (
             sourceMap: !!(task.sourceMappings || task.sourceMap),
           });
 
-          _.extend(task.options, taskOpts);
+          extend(task.options, taskOpts);
 
           if (dynamicOpts) dynamicOpts(task.options, task);
 
-          let throwMsg = task.options.throws;
+          const throwMsg = task.options.throws;
           if (throwMsg) {
             // internal api doesn't have this option but it's best not to pollute
             // the options object with useless options
@@ -170,7 +245,7 @@ export default function (
             });
           } else {
             if (task.exec.code) {
-              let result = run(task);
+              const result = run(task);
               if (result && typeof result.then === "function") {
                 return result;
               }

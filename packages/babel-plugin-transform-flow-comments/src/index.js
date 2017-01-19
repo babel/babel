@@ -16,18 +16,24 @@ export default function ({ types: t }) {
 
     visitor: {
       TypeCastExpression(path) {
-        let { node } = path;
+        const { node } = path;
         path.get("expression").addComment("trailing", generateComment(path.get("typeAnnotation")));
         path.replaceWith(t.parenthesizedExpression(node.expression));
       },
 
       // support function a(b?) {}
       Identifier(path) {
-        let { node } = path;
+        const { node } = path;
         if (!node.optional || node.typeAnnotation) {
           return;
         }
         path.addComment("trailing", ":: ?");
+      },
+
+      AssignmentPattern: {
+        exit({ node }) {
+          node.left.optional = false;
+        }
       },
 
       // strip optional property from function params - facebook/fbjs#17
@@ -39,13 +45,13 @@ export default function ({ types: t }) {
 
       // support for `class X { foo: string }` - #4622
       ClassProperty(path) {
-        let { node, parent } = path;
+        const { node, parent } = path;
         if (!node.value) wrapInFlowComment(path, parent);
       },
 
       // support `export type a = {}` - #8 Error: You passed path.replaceWith() a falsy node
       "ExportNamedDeclaration|Flow"(path) {
-        let { node, parent } = path;
+        const { node, parent } = path;
         if (t.isExportNamedDeclaration(node) && !t.isFlow(node.declaration)) {
           return;
         }
@@ -54,7 +60,7 @@ export default function ({ types: t }) {
 
       // support `import type A` and `import typeof A` #10
       ImportDeclaration(path) {
-        let { node, parent } = path;
+        const { node, parent } = path;
         if (t.isImportDeclaration(node) && node.importKind !== "type" && node.importKind !== "typeof") {
           return;
         }

@@ -4,14 +4,7 @@
  * Pre hooks should be used for either rejecting removal or delegating removal
  */
 
-export let hooks = [
-  function (self, parent) {
-    if (self.key === "body" && parent.isArrowFunctionExpression()) {
-      self.replaceWith(self.scope.buildUndefinedNode());
-      return true;
-    }
-  },
-
+export const hooks = [
   function (self, parent) {
     let removeParent = false;
 
@@ -69,7 +62,7 @@ export let hooks = [
   function (self, parent) {
     if (
       (parent.isIfStatement() && (self.key === "consequent" || self.key === "alternate")) ||
-      (parent.isLoop() && self.key === "body")
+      (self.key === "body" && (parent.isLoop() || parent.isArrowFunctionExpression()))
     ) {
       self.replaceWith({
         type: "BlockStatement",
