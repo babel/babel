@@ -10,97 +10,11 @@ import extend from "lodash/extend";
 import merge from "lodash/merge";
 import assert from "assert";
 import chai from "chai";
+import "babel-polyfill";
 import fs from "fs";
 import path from "path";
-import vm from "vm";
-import Module from "module";
 
-const moduleCache = {};
-const testContext = {
-  ...helpers,
-  babelHelpers: null,
-  assert: chai.assert,
-  transform: babel.transform,
-  global: null,
-};
-testContext.global = testContext;
-vm.createContext(testContext);
-
-// Initialize the test context with the polyfill, and then freeze the global to prevent implicit
-// global creation in tests, which could cause things to bleed between tests.
-runModuleInTestContext("babel-polyfill", __filename);
-
-// Populate the "babelHelpers" global with Babel's helper utilities.
-runCodeInTestContext(buildExternalHelpers());
-
-/**
- * A basic implementation of CommonJS so we can execute `babel-polyfill` inside our test context.
- * This allows us to run our unittests
- */
-function runModuleInTestContext(id: string, relativeFilename: string) {
-  let filename;
-  if (id[0] === ".") {
-    filename = require.resolve(path.resolve(path.dirname(relativeFilename), id));
-  } else {
-    // This code is a gross hack using internal APIs, but we also have the same logic in babel-core
-    // to resolve presets and plugins, so if this breaks, we'll have even worse issues to deal with.
-    const relativeMod = new Module();
-    relativeMod.id = relativeFilename;
-    relativeMod.filename = relativeFilename;
-    relativeMod.paths = Module._nodeModulePaths(path.dirname(relativeFilename));
-    try {
-      filename = Module._resolveFilename(id, relativeMod);
-    } catch (err) {
-      filename = null;
-    }
-
-    // Expose Node-internal modules if the tests want them. Note, this will not execute inside
-    // the context's global scope.
-    if (filename === id) return require(id);
-  }
-
-  if (moduleCache[filename]) return moduleCache[filename].exports;
-
-  const module = moduleCache[filename] = {
-    id: filename,
-    exports: {},
-  };
-  const dirname = path.dirname(filename);
-  const req = (id) => runModuleInTestContext(id, filename);
-
-  const src = fs.readFileSync(filename, "utf8");
-  const code = `(function (exports, require, module, __filename, __dirname) {${src}\n});`;
-
-  vm.runInContext(code, testContext, {
-    filename,
-    displayErrors: true,
-  }).call(module.exports, module.exports, req, module, filename, dirname);
-
-  return module.exports;
-}
-
-/**
- * Run the given snippet of code inside a CommonJS module
- */
-function runCodeInTestContext(code: string, opts: {filename?: string} = {}) {
-  const filename = opts.filename || null;
-  const dirname = filename ? path.dirname(filename) : null;
-  const req = filename ? ((id) => runModuleInTestContext(id, filename)) : null;
-
-  const module = {
-    id: filename,
-    exports: {},
-  };
-
-  // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
-  // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
-  // rely on 'this === global'.
-  const src = `(function(exports, require, module, __filename, __dirname, opts) {${code}\n});`;
-  return vm.runInContext(src, testContext, {
-    filename,
-    displayErrors: true,
-  })(module.exports, req, module, filename, dirname, opts);
-}
+const babelHelpers = eval(buildExternalHelpers(null, "var"));
 
 function wrapPackagesArray(type, names, optionsDir) {
   return (names || []).map(function (val) {
@@ -154,11 +68,12 @@ function run(task) {
 
   if (execCode) {
     const execOpts = getOpts(exec);
+    const execDirName = path.dirname(exec.loc);
     result = babel.transform(execCode, execOpts);
     execCode = result.code;
 
     try {
-      resultExec = runCodeInTestContext(execCode, execOpts);
+      resultExec = runExec(execOpts, execCode, execDirName);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);
@@ -197,6 +112,23 @@ function run(task) {
   if (execCode && resultExec) {
     return resultExec;
   }
+}
+
+function runExec(opts, execCode, execDirname) {
+  const sandbox = {
+    ...helpers,
+    babelHelpers,
+    assert: chai.assert,
+    transform: babel.transform,
+    opts,
+    exports: {},
+    require(id) {
+      return require(id[0] === "." ? path.resolve(execDirname, id) : id);
+    }
+  };
+
+  const fn = new Function(...Object.keys(sandbox), execCode);
+  return fn.apply(null, Object.values(sandbox));
 }
 
 export default function (
