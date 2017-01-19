@@ -137,7 +137,7 @@ describe("babel-preset-env", () => {
       assert(babelPresetEnv.isPluginRequired(targets, plugin) === true);
     });
 
-    it("doesn't throw when specifiying a decimal for node", () => {
+    it("doesn't throw when specifying a decimal for node", () => {
       const plugin = {
         node: 6
       };
@@ -166,10 +166,10 @@ describe("babel-preset-env", () => {
     });
   });
 
-  describe("transformIncludesAndExculdes", function() {
+  describe("transformIncludesAndExcludes", function() {
     it("should return in transforms array", function() {
       assert.deepEqual(
-        babelPresetEnv.transformIncludesAndExculdes(["transform-es2015-arrow-functions"]),
+        babelPresetEnv.transformIncludesAndExcludes(["transform-es2015-arrow-functions"]),
         {
           all: ["transform-es2015-arrow-functions"],
           plugins: ["transform-es2015-arrow-functions"],
@@ -180,7 +180,7 @@ describe("babel-preset-env", () => {
 
     it("should return in built-ins array", function() {
       assert.deepEqual(
-        babelPresetEnv.transformIncludesAndExculdes(["es6.map"]),
+        babelPresetEnv.transformIncludesAndExcludes(["es6.map"]),
         {
           all: ["es6.map"],
           plugins: [],
