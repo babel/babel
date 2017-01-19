@@ -1,7 +1,7 @@
 // ExportNamedDeclaration
-var { b } = asdf2;
+var { b } = asdf2,
+    c = babelHelpers.objectWithoutProperties(asdf2, ["b"]);
 // Skip
-var c = babelHelpers.objectWithoutProperties(asdf2, ["b"]);
 export { b, c };
 export var { bb, cc } = ads;
 export var [dd, ee] = ads;
