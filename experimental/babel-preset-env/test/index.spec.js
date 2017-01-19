@@ -2,7 +2,7 @@
 
 const babelPresetEnv = require("../lib/index.js");
 const assert = require("assert");
-const electronToChromiumData = require("../data/electron-to-chromium");
+const { versions: electronToChromiumData } = require("electron-to-chromium");
 
 describe("babel-preset-env", () => {
   describe("getTargets", () => {
@@ -26,7 +26,7 @@ describe("babel-preset-env", () => {
       assert.deepEqual(babelPresetEnv.getTargets({
         electron: "1.0"
       }), {
-        chrome: 50
+        chrome: 49
       });
     });
 
@@ -34,7 +34,26 @@ describe("babel-preset-env", () => {
       assert.deepEqual(babelPresetEnv.getTargets({
         electron: 1.0
       }), {
+        chrome: 49
+      });
+    });
+
+
+    it("should preserve lower Chrome number if Electron version is more recent", function() {
+      assert.deepEqual(babelPresetEnv.getTargets({
+        electron: 1.4,
         chrome: 50
+      }), {
+        chrome: 50
+      });
+    });
+
+    it("should overwrite Chrome number if Electron version is older", function() {
+      assert.deepEqual(babelPresetEnv.getTargets({
+        electron: 1.0,
+        chrome: 50
+      }), {
+        chrome: 49
       });
     });
 

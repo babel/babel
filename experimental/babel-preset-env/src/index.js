@@ -1,8 +1,7 @@
 import browserslist from "browserslist";
-
 import builtInsList from "../data/built-ins.json";
 import defaultInclude from "./default-includes";
-import electronToChromium from "../data/electron-to-chromium";
+import { electronToChromium } from "electron-to-chromium";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
@@ -82,26 +81,6 @@ export const getCurrentNodeVersion = () => {
   return parseFloat(process.versions.node);
 };
 
-export const electronVersionToChromeVersion = (semverVer) => {
-  semverVer = String(semverVer);
-
-  if (semverVer === "1") {
-    semverVer = "1.0";
-  }
-
-  const m = semverVer.match(/^(\d+\.\d+)/);
-  if (!m) {
-    throw new Error("Electron version must be a semver version");
-  }
-
-  const result = electronToChromium[m[1]];
-  if (!result) {
-    throw new Error(`Electron version ${m[1]} is either too old or too new`);
-  }
-
-  return result;
-};
-
 const _extends = Object.assign || function (target) {
   for (let i = 1; i < arguments.length; i++) {
     const source = arguments[i];
@@ -124,7 +103,18 @@ export const getTargets = (targets = {}) => {
 
   // Rewrite Electron versions to their Chrome equivalents
   if (targetOps.electron) {
-    targetOps.chrome = electronVersionToChromeVersion(targetOps.electron);
+    const electronChromeVersion = parseInt(electronToChromium(targetOps.electron), 10);
+
+    if (!electronChromeVersion) {
+      throw new Error(`Electron version ${targetOps.electron} is either too old or too new`);
+    }
+
+    if (targetOps.chrome) {
+      targetOps.chrome = Math.min(targetOps.chrome, electronChromeVersion);
+    } else {
+      targetOps.chrome = electronChromeVersion;
+    }
+
     delete targetOps.electron;
   }
 
