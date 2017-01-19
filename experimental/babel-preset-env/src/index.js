@@ -13,7 +13,7 @@ import transformPolyfillRequirePlugin from "./transform-polyfill-require-plugin"
  * @param  {Object}  supportedEnvironments  An Object containing environment keys and the lowest
  *                                          supported version as a value
  * @param  {Object}  plugin                 An Object containing environment keys and the lowest
- *                                          version the feature was implmented in as a value
+ *                                          version the feature was implemented in as a value
  * @return {Boolean}  Whether or not the transformation is required
  */
 export const isPluginRequired = (supportedEnvironments, plugin) => {
@@ -158,7 +158,7 @@ const filterItem = (targets, exclusions, list, item) => {
   return isRequired && notExcluded;
 };
 
-export const transformIncludesAndExculdes = (opts) => ({
+export const transformIncludesAndExcludes = (opts) => ({
   all: opts,
   plugins: opts.filter((opt) => !opt.match(/^(es\d+|web)\./)),
   builtIns: opts.filter((opt) => opt.match(/^(es\d+|web)\./))
@@ -169,8 +169,8 @@ export default function buildPreset(context, opts = {}) {
   const {debug, loose, moduleType, useBuiltIns} = validatedOptions;
 
   const targets = getTargets(validatedOptions.targets);
-  const include = transformIncludesAndExculdes(validatedOptions.include);
-  const exclude = transformIncludesAndExculdes(validatedOptions.exclude);
+  const include = transformIncludesAndExcludes(validatedOptions.include);
+  const exclude = transformIncludesAndExcludes(validatedOptions.exclude);
 
   const filterPlugins = filterItem.bind(null, targets, exclude.plugins, pluginList);
   const transformations = Object.keys(pluginList)
