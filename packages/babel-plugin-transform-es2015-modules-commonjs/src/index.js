@@ -599,7 +599,7 @@ export default function () {
             const varDecl = t.variableDeclaration(specImport ? "const" : "var", [
               t.variableDeclarator(ref,
                 specImport
-                ? t.callExpression(this.addHelper("specRequireInterop"), [req])
+                ? t.callExpression(state.addHelper("specRequireInterop"), [req])
                 : req
               )
             ]);
