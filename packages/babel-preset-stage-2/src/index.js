@@ -1,8 +1,9 @@
 import presetStage3 from "babel-preset-stage-3";
 
+import syntaxDynamicImport from "babel-plugin-syntax-dynamic-import";
 import transformClassProperties from "babel-plugin-transform-class-properties";
 import transformDecorators from "babel-plugin-transform-decorators";
-import syntaxDynamicImport from "babel-plugin-syntax-dynamic-import";
+import transformUnicodePropertyRegex from "babel-plugin-transform-unicode-property-regex";
 
 export default {
   presets: [
@@ -11,6 +12,7 @@ export default {
   plugins: [
     syntaxDynamicImport,
     transformClassProperties,
-    transformDecorators
+    transformDecorators,
+    transformUnicodePropertyRegex
   ]
 };
