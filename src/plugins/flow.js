@@ -4,6 +4,18 @@ import { types as tt } from "../tokenizer/types";
 import { types as ct } from "../tokenizer/context";
 import Parser from "../parser";
 
+const primitiveTypes = [
+  "any",
+  "mixed",
+  "empty",
+  "bool",
+  "boolean",
+  "number",
+  "string",
+  "void",
+  "null"
+];
+
 const pp = Parser.prototype;
 
 pp.flowParseTypeInitialiser = function (tok) {
@@ -188,10 +200,18 @@ pp.flowParseInterface = function (node) {
   return this.finishNode(node, "InterfaceDeclaration");
 };
 
+pp.flowParseRestrictedIdentifier = function(liberal) {
+  if (primitiveTypes.indexOf(this.state.value) > -1) {
+    this.raise(this.state.start, `Cannot overwrite primitive type ${this.state.value}`);
+  }
+
+  return this.parseIdentifier(liberal);
+};
+
 // Type aliases
 
 pp.flowParseTypeAlias = function (node) {
-  node.id = this.parseIdentifier();
+  node.id = this.flowParseRestrictedIdentifier();
 
   if (this.isRelational("<")) {
     node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -219,7 +239,7 @@ pp.flowParseTypeParameter = function () {
 
   if (this.match(tt.eq)) {
     this.eat(tt.eq);
-    node.default = this.flowParseType ();
+    node.default = this.flowParseType();
   }
 
   return this.finishNode(node, "TypeParameter");
@@ -770,7 +790,7 @@ pp.flowParseTypeAnnotation = function () {
 };
 
 pp.flowParseTypeAnnotatableIdentifier = function () {
-  const ident = this.parseIdentifier();
+  const ident = this.flowParseRestrictedIdentifier();
   if (this.match(tt.colon)) {
     ident.typeAnnotation = this.flowParseTypeAnnotation();
     this.finishNode(ident, ident.type);
