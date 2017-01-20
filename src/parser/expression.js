@@ -30,26 +30,13 @@ const pp = Parser.prototype;
 // strict mode, init properties are also not allowed to be repeated.
 
 pp.checkPropClash = function (prop, propHash) {
-  if (prop.computed) return;
+  if (prop.computed || prop.kind) return;
 
   const key = prop.key;
-  let name;
-  switch (key.type) {
-    case "Identifier":
-      name = key.name;
-      break;
+  // It is either an Identifier or a String/NumericLiteral
+  const name = key.type === "Identifier" ? key.name : String(key.value);
 
-    case "StringLiteral":
-    case "NumericLiteral":
-      name = String(key.value);
-      break;
-
-    // istanbul ignore next: non-computed property keys are always one of the above
-    default:
-      return;
-  }
-
-  if (name === "__proto__" && !prop.kind) {
+  if (name === "__proto__") {
     if (propHash.proto) this.raise(key.start, "Redefinition of __proto__ property");
     propHash.proto = true;
   }
@@ -808,41 +795,60 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
   return this.finishNode(node, isPattern ? "ObjectPattern" : "ObjectExpression");
 };
 
-pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync, isPattern, refShorthandDefaultPos) {
+pp.isGetterOrSetterMethod = function (prop, isPattern) {
+  return !isPattern &&
+    !prop.computed &&
+    prop.key.type === "Identifier" &&
+    (prop.key.name === "get" || prop.key.name === "set") &&
+    (
+      this.match(tt.string) || // get "string"() {}
+      this.match(tt.num) || // get 1() {}
+      this.match(tt.bracketL) || // get ["string"]() {}
+      this.match(tt.name) || // get foo() {}
+      this.state.type.keyword // get debugger() {}
+    );
+};
+
+// get methods aren't allowed to have any parameters
+// set methods must have exactly 1 parameter
+pp.checkGetterSetterParamCount = function (method) {
+  const paramCount = method.kind === "get" ? 0 : 1;
+  if (method.params.length !== paramCount) {
+    const start = method.start;
+    if (method.kind === "get") {
+      this.raise(start, "getter should have no params");
+    } else {
+      this.raise(start, "setter should have exactly one param");
+    }
+  }
+};
+
+pp.parseObjectMethod = function (prop, isGenerator, isAsync, isPattern) {
   if (isAsync || isGenerator || this.match(tt.parenL)) {
     if (isPattern) this.unexpected();
     prop.kind = "method";
     prop.method = true;
     this.parseMethod(prop, isGenerator, isAsync);
+
     return this.finishNode(prop, "ObjectMethod");
   }
 
-  if (this.eat(tt.colon)) {
-    prop.value = isPattern ? this.parseMaybeDefault(this.state.start, this.state.startLoc) : this.parseMaybeAssign(false, refShorthandDefaultPos);
-    return this.finishNode(prop, "ObjectProperty");
-  }
-
-  if (
-    !isPattern &&
-    !prop.computed &&
-    prop.key.type === "Identifier" &&
-    (prop.key.name === "get" || prop.key.name === "set") &&
-    (!this.match(tt.comma) && !this.match(tt.braceR) && !this.match(tt.eq))
-  ) {
+  if (this.isGetterOrSetterMethod(prop, isPattern)) {
     if (isGenerator || isAsync) this.unexpected();
     prop.kind = prop.key.name;
     this.parsePropertyName(prop);
-    this.parseMethod(prop, false);
-    const paramCount = prop.kind === "get" ? 0 : 1;
-    if (prop.params.length !== paramCount) {
-      const start = prop.start;
-      if (prop.kind === "get") {
-        this.raise(start, "getter should have no params");
-      } else {
-        this.raise(start, "setter should have exactly one param");
-      }
-    }
+    this.parseMethod(prop);
+    this.checkGetterSetterParamCount(prop);
+
     return this.finishNode(prop, "ObjectMethod");
+  }
+};
+
+pp.parseObjectProperty = function (prop, startPos, startLoc, isPattern, refShorthandDefaultPos) {
+  if (this.eat(tt.colon)) {
+    prop.value = isPattern ? this.parseMaybeDefault(this.state.start, this.state.startLoc) : this.parseMaybeAssign(false, refShorthandDefaultPos);
+
+    return this.finishNode(prop, "ObjectProperty");
   }
 
   if (!prop.computed && prop.key.type === "Identifier") {
@@ -857,12 +863,20 @@ pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync,
     } else {
       prop.value = prop.key.__clone();
     }
-
     prop.shorthand = true;
+
     return this.finishNode(prop, "ObjectProperty");
   }
+};
 
-  this.unexpected();
+pp.parseObjPropValue = function (prop, startPos, startLoc, isGenerator, isAsync, isPattern, refShorthandDefaultPos) {
+  const node =
+    this.parseObjectMethod(prop, isGenerator, isAsync, isPattern) ||
+    this.parseObjectProperty(prop, startPos, startLoc, isPattern, refShorthandDefaultPos);
+
+  if (!node) this.unexpected();
+
+  return node;
 };
 
 pp.parsePropertyName = function (prop) {
@@ -897,7 +911,7 @@ pp.parseMethod = function (node, isGenerator, isAsync) {
   this.initFunction(node, isAsync);
   this.expect(tt.parenL);
   node.params = this.parseBindingList(tt.parenR);
-  node.generator = isGenerator;
+  node.generator = !!isGenerator;
   this.parseFunctionBody(node);
   this.state.inMethod = oldInMethod;
   return node;
@@ -912,8 +926,19 @@ pp.parseArrowExpression = function (node, params, isAsync) {
   return this.finishNode(node, "ArrowFunctionExpression");
 };
 
-// Parse function body and check parameters.
+pp.isStrictBody = function (node, isExpression) {
+  if (!isExpression && node.body.directives.length) {
+    for (const directive of (node.body.directives: Array<Object>)) {
+      if (directive.value.value === "use strict") {
+        return true;
+      }
+    }
+  }
 
+  return false;
+};
+
+// Parse function body and check parameters.
 pp.parseFunctionBody = function (node, allowExpression) {
   const isExpression = allowExpression && !this.match(tt.braceL);
 
@@ -938,24 +963,10 @@ pp.parseFunctionBody = function (node, allowExpression) {
   // If this is a strict mode function, verify that argument names
   // are not repeated, and it does not try to bind the words `eval`
   // or `arguments`.
-  let checkLVal = this.state.strict;
-  let isStrict = false;
+  const isStrict = this.isStrictBody(node, isExpression);
+  // Also check when allowExpression === true for arrow functions
+  const checkLVal = this.state.strict || allowExpression || isStrict;
 
-  // arrow function
-  if (allowExpression) checkLVal = true;
-
-  // normal function
-  if (!isExpression && node.body.directives.length) {
-    for (const directive of (node.body.directives: Array<Object>)) {
-      if (directive.value.value === "use strict") {
-        isStrict = true;
-        checkLVal = true;
-        break;
-      }
-    }
-  }
-
-  //
   if (isStrict && node.id && node.id.type === "Identifier" && node.id.name === "yield") {
     this.raise(node.id.start, "Binding yield in strict mode");
   }

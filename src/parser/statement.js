@@ -464,7 +464,11 @@ pp.parseBlock = function (allowDirectives?) {
   return this.finishNode(node, "BlockStatement");
 };
 
-// TODO
+pp.isValidDirective = function (stmt) {
+  return stmt.type === "ExpressionStatement" &&
+    stmt.expression.type === "StringLiteral" &&
+    !stmt.expression.extra.parenthesized;
+};
 
 pp.parseBlockBody = function (node, allowDirectives, topLevel, end) {
   node.body = [];
@@ -481,9 +485,7 @@ pp.parseBlockBody = function (node, allowDirectives, topLevel, end) {
 
     const stmt = this.parseStatement(true, topLevel);
 
-    if (allowDirectives && !parsedNonDirective &&
-        stmt.type === "ExpressionStatement" && stmt.expression.type === "StringLiteral" &&
-        !stmt.expression.extra.parenthesized) {
+    if (allowDirectives && !parsedNonDirective && this.isValidDirective(stmt)) {
       const directive = this.stmtToDirective(stmt);
       node.directives.push(directive);
 
@@ -710,8 +712,8 @@ pp.parseClassBody = function (node) {
 
       // disallow invalid constructors
       const isConstructor = !isConstructorCall && !method.static && (
-        (key.type === "Identifier" && key.name === "constructor") ||
-        (key.type === "StringLiteral" && key.value === "constructor")
+        (key.name === "constructor") || // Identifier
+        (key.value === "constructor")   // Literal
       );
       if (isConstructor) {
         if (hadConstructor) this.raise(key.start, "Duplicate constructor in the same class");
@@ -724,8 +726,8 @@ pp.parseClassBody = function (node) {
 
       // disallow static prototype method
       const isStaticPrototype = method.static && (
-        (key.type === "Identifier" && key.name === "prototype") ||
-        (key.type === "StringLiteral" && key.value === "prototype")
+        (key.name === "prototype") || // Identifier
+        (key.value === "prototype")   // Literal
       );
       if (isStaticPrototype) {
         this.raise(key.start, "Classes may not have static property named prototype");
@@ -746,18 +748,8 @@ pp.parseClassBody = function (node) {
 
     this.parseClassMethod(classBody, method, isGenerator, isAsync);
 
-    // get methods aren't allowed to have any parameters
-    // set methods must have exactly 1 parameter
     if (isGetSet) {
-      const paramCount = method.kind === "get" ? 0 : 1;
-      if (method.params.length !== paramCount) {
-        const start = method.start;
-        if (method.kind === "get") {
-          this.raise(start, "getter should have no params");
-        } else {
-          this.raise(start, "setter should have exactly one param");
-        }
-      }
+      this.checkGetterSetterParamCount(method);
     }
   }
 
