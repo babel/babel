@@ -21,7 +21,7 @@ test("Re-export doesn't overwrite __esModule flag", function () {
 
   code = babel.transform(code, {
     "plugins": [
-      [require("../"), {loose: true}],
+      [require("../"), { loose: true }],
     ],
     "ast": false,
   }).code;

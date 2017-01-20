@@ -36,7 +36,7 @@ export default function (code: string, opts?: Object): Function {
     try {
       ast = babylon.parse(code, opts);
 
-      ast = traverse.removeProperties(ast, {preserveComments: opts.preserveComments});
+      ast = traverse.removeProperties(ast, { preserveComments: opts.preserveComments });
 
       traverse.cheap(ast, function (node) {
         node[FROM_TEMPLATE] = true;

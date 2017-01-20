@@ -1,4 +1,4 @@
-import * as babel from "../lib/api/node";
+import * as babel from "../lib/index";
 import buildExternalHelpers from "../lib/tools/build-external-helpers";
 import sourceMap from "source-map";
 import assert from "assert";

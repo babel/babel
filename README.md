@@ -9,11 +9,11 @@
 </p>
 
 <p align="center">
-  <a href="https://travis-ci.org/babel/babel"><img alt="Travis Status" src="https://img.shields.io/travis/babel/babel/master.svg?style=flat&label=travis"></a>
-  <a href="https://circleci.com/gh/babel/babel"><img alt="CircleCI Status" src="https://img.shields.io/circleci/project/babel/babel/master.svg?style=flat&label=circle"></a>
-  <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/master.svg?style=flat"></a>
+  <a href="https://travis-ci.org/babel/babel"><img alt="Travis Status" src="https://img.shields.io/travis/babel/babel/master.svg?label=travis&maxAge=43200"></a>
+  <a href="https://circleci.com/gh/babel/babel"><img alt="CircleCI Status" src="https://img.shields.io/circleci/project/github/babel/babel/master.svg?label=circle&maxAge=43200"></a>
+  <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/master.svg?maxAge=43200"></a>
   <a href="https://slack.babeljs.io/"><img alt="Slack Status" src="https://slack.babeljs.io/badge.svg"></a>
-  <a href="https://www.npmjs.com/package/babel-core"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/babel-core.svg"></a>
+  <a href="https://www.npmjs.com/package/babel-core"><img alt="NPM Downloads" src="https://img.shields.io/npm/dm/babel-core.svg?maxAge=43200"></a>
 </p>
 
 Babel is a community-driven tool that helps you write the latest version of JavaScript.
@@ -149,7 +149,7 @@ There are a few presets that we maintain officially.
 | [`babel-preset-stage-2`](/packages/babel-preset-stage-2) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-2.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-2) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-2)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-2) |
 | [`babel-preset-stage-3`](/packages/babel-preset-stage-3) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-3.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-3) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-3)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-3) |
 | [`babel-preset-react`](/packages/babel-preset-react) | [![npm](https://img.shields.io/npm/v/babel-preset-react.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-react) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-react)](https://david-dm.org/babel/babel?path=packages/babel-preset-react) |
-| [`babel-preset-env`](https://github.com/babel/babel-preset-env) | [![npm](https://img.shields.io/npm/v/babel-preset-env.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-env) | [![Dependency Status](https://david-dm.org/babel/babel-preset-env)](https://david-dm.org/babel/babel-preset-env) |
+| [`babel-preset-env`](https://github.com/babel/babel-preset-env) | [![npm](https://img.shields.io/npm/v/babel-preset-env.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-env) | [![Dependency Status](https://david-dm.org/babel/babel-preset-env.svg)](https://david-dm.org/babel/babel-preset-env) |
 
 We maintain:
 

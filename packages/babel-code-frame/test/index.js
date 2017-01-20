@@ -109,7 +109,7 @@ describe("babel-code-frame", function () {
 
   it("opts.highlightCode", function () {
     const rawLines = "console.log('babel')";
-    const result = codeFrame(rawLines, 1, 9, {highlightCode: true});
+    const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
     const stripped = chalk.stripColor(result);
     assert.ok(result.length > stripped.length);
     assert.equal(stripped, [
