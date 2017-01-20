@@ -95,11 +95,22 @@ pp.flowParseDeclareModule = function (node) {
   const body = bodyNode.body = [];
   this.expect(tt.braceL);
   while (!this.match(tt.braceR)) {
-    const node2 = this.startNode();
+    let bodyNode = this.startNode();
 
-    this.expectContextual("declare", "Unexpected token. Only declares are allowed inside declare module");
+    if (this.match(tt._import)) {
+      const lookahead = this.lookahead();
+      if (lookahead.value !== "type" && lookahead.value !== "typeof") {
+        this.unexpected(null, "Imports within a `declare module` body must always be `import type` or `import typeof`");
+      }
 
-    body.push(this.flowParseDeclare(node2));
+      this.parseImport(bodyNode);
+    } else {
+      this.expectContextual("declare", "Only declares and type imports are allowed inside declare module");
+
+      bodyNode = this.flowParseDeclare(bodyNode, true);
+    }
+
+    body.push(bodyNode);
   }
   this.expect(tt.braceR);
 

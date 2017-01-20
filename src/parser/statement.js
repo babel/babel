@@ -1016,7 +1016,7 @@ pp.parseExportSpecifiers = function () {
 // Parses import declaration.
 
 pp.parseImport = function (node) {
-  this.next();
+  this.eat(tt._import);
 
   // import '...'
   if (this.match(tt.string)) {
