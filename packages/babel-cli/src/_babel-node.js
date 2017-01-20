@@ -103,7 +103,7 @@ if (program.eval || program.print) {
 
     let i = 0;
     let ignoreNext = false;
-    args.forEach(function (arg, i2) {
+    args.some(function (arg, i2) {
       if (ignoreNext) {
         ignoreNext = false;
         return;
@@ -116,7 +116,7 @@ if (program.eval || program.print) {
         }
       } else {
         i = i2;
-        return false;
+        return true;
       }
     });
     args = args.slice(i);
