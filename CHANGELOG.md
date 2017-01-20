@@ -19,6 +19,8 @@ A quick update since it's been over a month already: adds support for shorthand 
 
 We'll be merging in our current 7.0 PRs on a 7.0 branch soon and I'l be making some more issues (most should be beginner-friendly).
 
+To follow our progress check out our [7.0 milestone](https://github.com/babel/babel/milestone/9), the [wiki](https://github.com/babel/babel/wiki/Babel-7) and upcoming announcements on [twitter](https://twitter.com/babeljs)!
+
 We support stripping out and generating the new shorthand import syntax in Flow (parser support was added in [babylon@6.15.0](https://github.com/babel/babylon/releases/tag/v6.15.0).
 
 ```js
