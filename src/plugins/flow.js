@@ -1234,7 +1234,10 @@ export default function (instance) {
         specifier.local = specifier.imported.__clone();
       }
 
-      if (node.importKind !== "value" && specifier.importKind !== null) {
+      if (
+        (node.importKind === "type" || node.importKind === "typeof") &&
+        (specifier.importKind === "type" || specifier.importKind === "typeof")
+      ) {
         this.raise(firstIdentLoc, "`The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements`");
       }
 
