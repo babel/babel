@@ -117,7 +117,13 @@ class ConfigChainBuilder {
     } catch (err) {
       const code = codeFrame(content, err.lineNumber, err.columnNumber);
 
-      err.message = `${loc}: Error while parsing JSON - ${err.message}\n\n${code}`;
+      err.message = `
+${loc}:
+${code}
+Error while parsing JSON - ${err.message}
+      `;
+
+      err.stack = err.stack.replace(/^\s*at\s.*:\d+:\d+[\s\)]*\n/gm, "");
 
       throw err;
     }
