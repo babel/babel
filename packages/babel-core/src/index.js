@@ -1,15 +1,14 @@
-import isFunction from "lodash/isFunction";
 import fs from "fs";
 
-export { default as File } from "../transformation/file";
-export { default as options } from "../transformation/file/options/config";
-export { default as buildExternalHelpers } from "../tools/build-external-helpers";
+export { default as File } from "./transformation/file";
+export { default as options } from "./transformation/file/options/config";
+export { default as buildExternalHelpers } from "./tools/build-external-helpers";
 export { default as template } from "babel-template";
-export { default as resolvePlugin } from "../helpers/resolve-plugin";
-export { default as resolvePreset } from "../helpers/resolve-preset";
-export { version } from "../../package";
+export { default as resolvePlugin } from "./helpers/resolve-plugin";
+export { default as resolvePreset } from "./helpers/resolve-preset";
+export { version } from "../package";
 
-import * as util from "../util";
+import * as util from "./util";
 export { util };
 
 import * as messages from "babel-messages";
@@ -21,14 +20,14 @@ export { t as types };
 import traverse from "babel-traverse";
 export { traverse };
 
-import OptionManager from "../transformation/file/options/option-manager";
+import OptionManager from "./transformation/file/options/option-manager";
 export { OptionManager };
 
 export function Plugin(alias) {
   throw new Error(`The (${alias}) Babel 5 plugin is being run with Babel 6.`);
 }
 
-import Pipeline from "../transformation/pipeline";
+import Pipeline from "./transformation/pipeline";
 export { Pipeline };
 
 const pipeline = new Pipeline;
@@ -37,7 +36,7 @@ export const transform = pipeline.transform.bind(pipeline);
 export const transformFromAst = pipeline.transformFromAst.bind(pipeline);
 
 export function transformFile(filename: string, opts?: Object, callback: Function) {
-  if (isFunction(opts)) {
+  if (typeof opts === "function") {
     callback = opts;
     opts = {};
   }

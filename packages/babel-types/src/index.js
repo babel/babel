@@ -1,7 +1,6 @@
 import toFastProperties from "to-fast-properties";
 import compact from "lodash/compact";
 import loClone from "lodash/clone";
-import each from "lodash/each";
 import uniq from "lodash/uniq";
 
 const t = exports;
@@ -72,8 +71,8 @@ for (const type in t.VISITOR_KEYS) {
 
 t.FLIPPED_ALIAS_KEYS = {};
 
-each(t.ALIAS_KEYS, function (aliases, type) {
-  each(aliases, function (alias) {
+Object.keys(t.ALIAS_KEYS).forEach(function (type) {
+  t.ALIAS_KEYS[type].forEach(function (alias) {
     const types = t.FLIPPED_ALIAS_KEYS[alias] = t.FLIPPED_ALIAS_KEYS[alias] || [];
     types.push(type);
   });
@@ -83,8 +82,8 @@ each(t.ALIAS_KEYS, function (aliases, type) {
  * Registers `is[Alias]` and `assert[Alias]` functions for all aliases.
  */
 
-each(t.FLIPPED_ALIAS_KEYS, function (types, type) {
-  t[type.toUpperCase() + "_TYPES"] = types;
+Object.keys(t.FLIPPED_ALIAS_KEYS).forEach(function (type) {
+  t[type.toUpperCase() + "_TYPES"] = t.FLIPPED_ALIAS_KEYS[type];
   registerType(type);
 });
 
@@ -139,7 +138,9 @@ export function isType(nodeType: string, targetType: string): boolean {
  * Description
  */
 
-each(t.BUILDER_KEYS, function (keys, type) {
+Object.keys(t.BUILDER_KEYS).forEach(function (type) {
+  const keys = t.BUILDER_KEYS[type];
+
   function builder() {
     if (arguments.length > keys.length) {
       throw new Error(

@@ -1,8 +1,8 @@
-const assert = require("assert");
-const async = require("async");
-const babel = require("../lib/api/node");
-const fs = require("fs");
-const path = require("path");
+import assert from "assert";
+import async from "async";
+import * as babel from "../lib/index";
+import fs from "fs";
+import path from "path";
 
 // Test that plugins & presets are resolved relative to `filename`.
 describe("addon resolution", function () {

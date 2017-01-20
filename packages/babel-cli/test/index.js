@@ -1,13 +1,14 @@
+const includes       = require("lodash/includes");
 const readdir        = require("fs-readdir-recursive");
 const helper         = require("babel-helper-fixtures");
 const assert         = require("assert");
 const rimraf         = require("rimraf");
 const outputFileSync = require("output-file-sync");
 const child          = require("child_process");
+const merge          = require("lodash/merge");
 const path           = require("path");
 const chai           = require("chai");
 const fs             = require("fs");
-const _              = require("lodash");
 
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
@@ -25,7 +26,7 @@ const pluginLocs = [
 const readDir = function (loc) {
   const files = {};
   if (fs.existsSync(loc)) {
-    _.each(readdir(loc), function (filename) {
+    readdir(loc).forEach(function (filename) {
       files[filename] = helper.readFile(path.join(loc, filename));
     });
   }
@@ -33,7 +34,8 @@ const readDir = function (loc) {
 };
 
 const saveInFiles = function (files) {
-  _.each(files, function (content, filename) {
+  Object.keys(files).forEach(function (filename) {
+    const content = files[filename];
     outputFileSync(filename, content);
   });
 };
@@ -44,7 +46,7 @@ const assertTest = function (stdout, stderr, opts) {
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      assert.ok(_.includes(stderr, expectStderr), "stderr " + JSON.stringify(stderr) + " didn't contain " + JSON.stringify(expectStderr));
+      assert.ok(includes(stderr, expectStderr), "stderr " + JSON.stringify(stderr) + " didn't contain " + JSON.stringify(expectStderr));
     } else {
       chai.expect(stderr).to.equal(expectStderr, "stderr didn't match");
     }
@@ -58,7 +60,7 @@ const assertTest = function (stdout, stderr, opts) {
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      assert.ok(_.includes(stdout, expectStdout), "stdout " + JSON.stringify(stdout) + " didn't contain " + JSON.stringify(expectStdout));
+      assert.ok(includes(stdout, expectStdout), "stdout " + JSON.stringify(stdout) + " didn't contain " + JSON.stringify(expectStdout));
     } else {
       chai.expect(stdout).to.equal(expectStdout, "stdout didn't match");
     }
@@ -66,7 +68,8 @@ const assertTest = function (stdout, stderr, opts) {
     throw new Error("stdout:\n" + stdout);
   }
 
-  _.each(opts.outFiles, function (expect, filename) {
+  Object.keys(opts.outFiles, function (filename) {
+    const expect = opts.outFiles[filename];
     const actual = helper.readFile(filename);
     chai.expect(actual).to.equal(expect, "out-file " + filename);
   });
@@ -134,12 +137,12 @@ const clear = function () {
   process.chdir(tmpLoc);
 };
 
-_.each(fs.readdirSync(fixtureLoc), function (binName) {
+fs.readdirSync(fixtureLoc).forEach(function (binName) {
   if (binName[0] === ".") return;
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function () {
-    _.each(fs.readdirSync(suiteLoc), function (testName) {
+    fs.readdirSync(suiteLoc).forEach(function (testName) {
       if (testName[0] === ".") return;
 
       const testLoc = path.join(suiteLoc, testName);
@@ -149,9 +152,9 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
       };
 
       const optionsLoc = path.join(testLoc, "options.json");
-      if (fs.existsSync(optionsLoc)) _.merge(opts, require(optionsLoc));
+      if (fs.existsSync(optionsLoc)) merge(opts, require(optionsLoc));
 
-      _.each(["stdout", "stdin", "stderr"], function (key) {
+      ["stdout", "stdin", "stderr"].forEach(function (key) {
         const loc = path.join(testLoc, key + ".txt");
         if (fs.existsSync(loc)) {
           opts[key] = helper.readFile(loc);

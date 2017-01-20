@@ -1,5 +1,3 @@
-import isBoolean from "lodash/isBoolean";
-import each from "lodash/each";
 import map from "lodash/map";
 import * as t from "babel-types";
 
@@ -212,19 +210,18 @@ exports.list = {
  * Add whitespace tests for nodes and their aliases.
  */
 
-each({
-  Function: true,
-  Class: true,
-  Loop: true,
-  LabeledStatement: true,
-  SwitchStatement: true,
-  TryStatement: true
-}, function (amounts, type) {
-  if (isBoolean(amounts)) {
+[
+  ["Function", true],
+  ["Class", true],
+  ["Loop", true],
+  ["LabeledStatement", true],
+  ["SwitchStatement", true],
+  ["TryStatement", true]
+].forEach(function ([type, amounts]) {
+  if (typeof amounts === "boolean") {
     amounts = { after: amounts, before: amounts };
   }
-
-  each([type].concat(t.FLIPPED_ALIAS_KEYS[type] || []), function (type) {
+  [type].concat(t.FLIPPED_ALIAS_KEYS[type] || []).forEach(function (type) {
     exports.nodes[type] = function () {
       return amounts;
     };

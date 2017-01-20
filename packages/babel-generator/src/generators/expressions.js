@@ -1,6 +1,5 @@
 /* eslint max-len: 0 */
 
-import isNumber from "lodash/isNumber";
 import * as t from "babel-types";
 import * as n from "../node";
 
@@ -202,7 +201,7 @@ export function MemberExpression(node: Object) {
   }
 
   let computed = node.computed;
-  if (t.isLiteral(node.property) && isNumber(node.property.value)) {
+  if (t.isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }
 

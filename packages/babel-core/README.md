@@ -89,6 +89,7 @@ Following is a table of the options you can use:
 | `ast`                    | `true`               | Include the AST in the returned object |
 | `auxiliaryCommentAfter`  | `null`               | Attach a comment after all non-user injected code. |
 | `auxiliaryCommentBefore` | `null`               | Attach a comment before all non-user injected code. |
+| `babelrc`                | `true`               | Specify whether or not to use .babelrc and .babelignore files. Not available when using the CLI, [use `--no-babelrc` instead](https://babeljs.io/docs/usage/cli/#babel-ignoring-babelrc). |
 | `code`                   | `true`               | Enable code generation |
 | `comments`               | `true`               | Output comments in generated output. |
 | `compact`                | `"auto"`             | Do not include superfluous whitespace characters and line terminators. When set to `"auto"` compact is set to `true` on input sizes of >500KB. |
@@ -105,7 +106,6 @@ Following is a table of the options you can use:
 | `moduleId`               | `null`               | Specify a custom name for module ids. |
 | `moduleIds`              | `false`              | If truthy, insert an explicit id for modules. By default, all modules are anonymous. (Not available for `common` modules) |
 | `moduleRoot`             | `(sourceRoot)`       | Optional prefix for the AMD module formatter that will be prepend to the filename on module definitions. |
-| `no-babelrc`             | [CLI flag](http://babeljs.io/docs/usage/cli/#ignoring-babelrc) | Specify whether or not to use .babelrc and .babelignore files. Only available when using the CLI. |
 | `only`                   | `null`               | A [glob](https://github.com/isaacs/minimatch), regex, or mixed array of both, matching paths to **only** compile. Can also be an array of arrays containing paths to explicitly match. When attempting to compile a non-matching file it's returned verbatim. |
 | `parserOpts`             | `{}`                 | An object containing the options to be passed down to the babel parser, babylon |
 | `plugins`                | `[]`                 | List of [plugins](/docs/plugins/) to load and use. |

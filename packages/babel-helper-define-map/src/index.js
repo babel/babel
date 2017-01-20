@@ -1,7 +1,6 @@
 /* eslint max-len: 0 */
 
 import nameFunction from "babel-helper-function-name";
-import each from "lodash/each";
 import has from "lodash/has";
 import * as t from "babel-types";
 
@@ -101,12 +100,14 @@ export function toComputedObjectFromClass(obj: Object): Object {
 export function toClassObject(mutatorMap: Object): Object {
   const objExpr = t.objectExpression([]);
 
-  each(mutatorMap, function (map) {
+  Object.keys(mutatorMap).forEach(function (mutatorMapKey) {
+    const map = mutatorMap[mutatorMapKey];
     const mapNode = t.objectExpression([]);
 
     const propNode = t.objectProperty(map._key, mapNode, map._computed);
 
-    each(map, function (node, key) {
+    Object.keys(map).forEach(function (key) {
+      let node = map[key];
       if (key[0] === "_") return;
 
       const inheritNode = node;
@@ -126,7 +127,8 @@ export function toClassObject(mutatorMap: Object): Object {
 }
 
 export function toDefineObject(mutatorMap: Object): Object {
-  each(mutatorMap, function (map) {
+  Object.keys(mutatorMap).forEach(function (key) {
+    const map = mutatorMap[key];
     if (map.value) map.writable = t.booleanLiteral(true);
     map.configurable = t.booleanLiteral(true);
     map.enumerable = t.booleanLiteral(true);
