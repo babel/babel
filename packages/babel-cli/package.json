@@ -6,6 +6,15 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-cli",
+  "keywords": [
+    "6to5",
+    "babel",
+    "es6",
+    "transpile",
+    "transpiler",
+    "babel-cli",
+    "compiler"
+  ],
   "dependencies": {
     "babel-core": "^6.22.0",
     "babel-register": "^6.22.0",
