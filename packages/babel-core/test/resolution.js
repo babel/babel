@@ -1,6 +1,6 @@
 import assert from "assert";
 import async from "async";
-import * as babel from "../lib/api/node";
+import * as babel from "../lib/index";
 import fs from "fs";
 import path from "path";
 

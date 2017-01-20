@@ -1,4 +1,4 @@
-import { transform } from "../lib/api/node";
+import { transform } from "../lib/index";
 import Plugin from "../lib/transformation/plugin";
 import chai from "chai";
 
