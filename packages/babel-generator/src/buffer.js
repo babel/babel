@@ -1,5 +1,4 @@
 import type SourceMap from "./source-map";
-import trimEnd from "lodash/trimEnd";
 
 const SPACES_RE = /^[ \t]+$/;
 
@@ -40,7 +39,7 @@ export default class Buffer {
 
     const map = this._map;
     const result = {
-      code: trimEnd(this._buf.join("")),
+      code: this._trimEnd(this._buf.join("")),
       map: null,
       rawMappings: map && map.getRawMappings(),
     };
@@ -83,6 +82,15 @@ export default class Buffer {
 
     const { line, column, filename, identifierName } = this._sourcePosition;
     this._queue.unshift([str, line, column, identifierName, filename]);
+  }
+
+  _trimEnd(str: string): string {
+    let trimTarget = str.length;
+    const whitespace = /\s/;
+    while (trimTarget > 0 && str[trimTarget - 1].match(whitespace)) {
+      trimTarget--;
+    }
+    return str.slice(0, trimTarget);
   }
 
   _flush(): void {
