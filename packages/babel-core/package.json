@@ -46,7 +46,6 @@
     "source-map": "^0.5.0"
   },
   "devDependencies": {
-    "babel-code-frame": "^6.20.0",
     "babel-helper-fixtures": "^6.20.0",
     "babel-helper-transform-fixture-test-runner": "^6.21.0",
     "babel-polyfill": "^6.20.0"
