@@ -1,4 +1,5 @@
 import definitions from "./definitions";
+import getHelper from "babel-helpers";
 
 export default function ({ types: t }) {
   function getRuntimeModuleName(opts) {
@@ -9,7 +10,14 @@ export default function ({ types: t }) {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
-  const HELPER_BLACKLIST = ["interopRequireWildcard", "interopRequireDefault"];
+  const HELPER_BLACKLIST = [
+    "interopRequireWildcard", "interopRequireDefault",
+    "specRequireInterop", "specImportCheck"
+  ];
+
+  function shouldSkipTransform(path) {
+    return !!path.find((p) => p.node._noTransform);
+  }
 
   return {
     pre(file) {
@@ -19,6 +27,10 @@ export default function ({ types: t }) {
         file.set("helperGenerator", function (name) {
           if (HELPER_BLACKLIST.indexOf(name) < 0) {
             return file.addImport(`${moduleName}/helpers/${name}`, "default", name);
+          } else {
+            const node = getHelper(name);
+            node._noTransform = true;
+            return node;
           }
         });
       }
@@ -42,6 +54,8 @@ export default function ({ types: t }) {
         if (t.isMemberExpression(parent)) return;
         if (!has(definitions.builtins, node.name)) return;
         if (scope.getBindingIdentifier(node.name)) return;
+        if (
+          (path)) return;
 
         // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
         const moduleName = getRuntimeModuleName(state.opts);
@@ -63,6 +77,7 @@ export default function ({ types: t }) {
         if (!t.isMemberExpression(callee)) return;
         if (!callee.computed) return;
         if (!path.get("callee.property").matchesPattern("Symbol.iterator")) return;
+        if (shouldSkipTransform(path)) return;
 
         const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(t.callExpression(
@@ -81,6 +96,7 @@ export default function ({ types: t }) {
 
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
+        if (shouldSkipTransform(path)) return;
 
         const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(t.callExpression(
@@ -118,6 +134,7 @@ export default function ({ types: t }) {
             const call = path.parentPath.node;
             if (call.arguments.length === 3 && t.isLiteral(call.arguments[1])) return;
           }
+          if (shouldSkipTransform(path)) return;
 
           const moduleName = getRuntimeModuleName(state.opts);
           path.replaceWith(state.addImport(
@@ -136,6 +153,7 @@ export default function ({ types: t }) {
 
           if (!has(definitions.builtins, obj.name)) return;
           if (path.scope.getBindingIdentifier(obj.name)) return;
+          if (shouldSkipTransform(path)) return;
 
           const moduleName = getRuntimeModuleName(state.opts);
           path.replaceWith(t.memberExpression(

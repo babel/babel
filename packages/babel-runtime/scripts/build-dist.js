@@ -35,7 +35,7 @@ legacy.forEach(function(pair) {
   writeFile("core-js/" + a + ".js", defaultify('require("core-js/library/fn/' + b + '")'));
 });
 
-var helpers    = require("babel-helpers");
+var helpers    = require("../../babel-helpers");
 var babel      = require("../../babel-core");
 var util       = require("../../babel-core/lib/util");
 var t          = require("../../babel-types");

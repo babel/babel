@@ -288,14 +288,14 @@ export default class File extends Store {
 
     const generator = this.get("helperGenerator");
     const runtime   = this.get("helpersNamespace");
+    const res = generator && generator(name);
     if (generator) {
-      const res = generator(name);
-      if (res) return res;
+      if (res && t.isIdentifier(res)) return res;
     } else if (runtime) {
       return t.memberExpression(runtime, t.identifier(name));
     }
 
-    const ref = getHelper(name);
+    const ref = res || getHelper(name);
     const uid = this.declarations[name] = this.scope.generateUidIdentifier(name);
 
     if (t.isFunctionExpression(ref) && !ref.id) {
