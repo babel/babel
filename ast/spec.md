@@ -3,7 +3,7 @@ These are the core Babylon AST node types.
 - [Node objects](#node-objects)
 - [Identifier](#identifier)
 - [Literals](#literals)
-  - [RegexpLiteral](#regexpliteral)
+  - [RegExpLiteral](#regexpliteral)
   - [NullLiteral](#nullliteral)
   - [StringLiteral](#stringliteral)
   - [BooleanLiteral](#booleanliteral)
