@@ -1,6 +1,6 @@
-const transform = require("../lib/index").transform;
-const Plugin    = require("../lib/transformation/plugin");
-const chai      = require("chai");
+import { transform } from "../lib/index";
+import Plugin from "../lib/transformation/plugin";
+import chai from "chai";
 
 describe("traversal path", function () {
   it("replaceWithSourceString", function () {

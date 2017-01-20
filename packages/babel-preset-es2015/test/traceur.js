@@ -1,6 +1,7 @@
-const includes = require("lodash/includes");
+import includes from "lodash/includes";
+import runner from "babel-helper-transform-fixture-test-runner";
 
-require("babel-helper-transform-fixture-test-runner")(__dirname + "/fixtures/traceur", "traceur", {
+runner(`${__dirname}/fixtures/traceur`, "traceur", {
   ignoreSuites: [
     // weird environmental issue make these hard to test
     "Modules",

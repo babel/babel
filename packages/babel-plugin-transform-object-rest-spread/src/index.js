@@ -78,11 +78,31 @@ export default function ({ types: t }) {
       // const { a, ...b } = c;
       VariableDeclarator(path, file) {
         if (!path.get("id").isObjectPattern()) { return; }
-        const kind = path.parentPath.node.kind;
-        const nodes = [];
 
-        path.traverse({
+        let insertionPath = path;
+
+        path.get("id").traverse({
           RestProperty(path) {
+            if (
+              // skip single-property case, e.g.
+              // const { ...x } = foo();
+              // since the RHS will not be duplicated
+              this.originalPath.node.id.properties.length > 1 &&
+              !t.isIdentifier(this.originalPath.node.init)
+            ) {
+              // const { a, ...b } = foo();
+              // to avoid calling foo() twice, as a first step convert it to:
+              // const _foo = foo(),
+              //       { a, ...b } = _foo;
+              const initRef = path.scope.generateUidIdentifierBasedOnNode(this.originalPath.node.init, "ref");
+              // insert _foo = foo()
+              this.originalPath.insertBefore(t.variableDeclarator(initRef, this.originalPath.node.init));
+              // replace foo() with _foo
+              this.originalPath.replaceWith(t.variableDeclarator(this.originalPath.node.id, initRef));
+
+              return;
+            }
+
             let ref = this.originalPath.node.init;
 
             path.findParent((path) => {
@@ -99,29 +119,24 @@ export default function ({ types: t }) {
               ref
             );
 
-            nodes.push(
+            insertionPath.insertAfter(
               t.variableDeclarator(
                 argument,
                 callExpression
               )
             );
 
+            insertionPath = insertionPath.getSibling(insertionPath.key + 1);
+
             if (path.parentPath.node.properties.length === 0) {
               path.findParent(
-                (path) => path.isObjectProperty() || path.isVariableDeclaration()
+                (path) => path.isObjectProperty() || path.isVariableDeclarator()
               ).remove();
             }
           }
         }, {
           originalPath: path
         });
-
-        if (nodes.length > 0) {
-          path.parentPath.getSibling(path.parentPath.key + 1)
-            .insertBefore(
-            t.variableDeclaration(kind, nodes)
-          );
-        }
       },
       // taken from transform-es2015-destructuring/src/index.js#visitor
       // export var { a, ...b } = c;
