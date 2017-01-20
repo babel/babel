@@ -264,7 +264,7 @@ export function ObjectTypeAnnotation(node: Object) {
     this.token("{");
   }
 
-  let props = node.properties.concat(node.callProperties, node.indexers);
+  const props = node.properties.concat(node.callProperties, node.indexers);
 
   if (props.length) {
     this.space();
@@ -277,11 +277,7 @@ export function ObjectTypeAnnotation(node: Object) {
       statement: true,
       iterator: () => {
         if (props.length !== 1) {
-          if (this.format.flowCommaSeparator) {
-            this.token(",");
-          } else {
-            this.semicolon();
-          }
+          this.token(",");
           this.space();
         }
       }

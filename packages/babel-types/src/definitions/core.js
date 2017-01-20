@@ -425,7 +425,7 @@ defineType("MemberExpression", {
     },
     property: {
       validate(node, key, val) {
-        let expectedType = node.computed ? "Expression" : "Identifier";
+        const expectedType = node.computed ? "Expression" : "Identifier";
         assertNodeType(expectedType)(node, key, val);
       }
     },
@@ -489,7 +489,7 @@ defineType("ObjectMethod", {
     },
     key: {
       validate(node, key, val) {
-        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
+        const expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
         assertNodeType(...expectedTypes)(node, key, val);
       }
     },
@@ -521,7 +521,7 @@ defineType("ObjectProperty", {
     },
     key: {
       validate(node, key, val) {
-        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
+        const expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
         assertNodeType(...expectedTypes)(node, key, val);
       }
     },

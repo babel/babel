@@ -2,6 +2,12 @@
 
 > Compile ES2015 default and rest parameters to ES5
 
+This plugin transforms ES2015 parameters to ES5, this includes:
+
+- Destructuring parameters
+- Default parameters
+- Rest parameters
+
 ## Installation
 
 ```sh

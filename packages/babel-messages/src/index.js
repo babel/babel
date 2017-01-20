@@ -48,7 +48,7 @@ export const MESSAGES = {
  */
 
 export function get(key: string, ...args: Array<any>): string {
-  let msg = MESSAGES[key];
+  const msg = MESSAGES[key];
   if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 
   // stringify args

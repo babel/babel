@@ -3,7 +3,7 @@ export default function ({ types: t }) {
     visitor: {
       FunctionExpression: {
         exit(path) {
-          let { node } = path;
+          const { node } = path;
           if (!node.id) return;
           node._ignoreUserWhitespace = true;
 

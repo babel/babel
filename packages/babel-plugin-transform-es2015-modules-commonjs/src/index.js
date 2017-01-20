@@ -4,17 +4,17 @@ import { basename, extname } from "path";
 import template from "babel-template";
 import * as t from "babel-types";
 
-let buildRequire = template(`
+const buildRequire = template(`
   require($0);
 `);
 
-let buildExportsModuleDeclaration = template(`
+const buildExportsModuleDeclaration = template(`
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
 `);
 
-let buildExportsFrom = template(`
+const buildExportsFrom = template(`
   Object.defineProperty(exports, $0, {
     enumerable: true,
     get: function () {
@@ -23,15 +23,15 @@ let buildExportsFrom = template(`
   });
 `);
 
-let buildLooseExportsModuleDeclaration = template(`
+const buildLooseExportsModuleDeclaration = template(`
   exports.__esModule = true;
 `);
 
-let buildExportsAssignment = template(`
+const buildExportsAssignment = template(`
   exports.$0 = $1;
 `);
 
-let buildExportAll = template(`
+const buildExportAll = template(`
   Object.keys(OBJECT).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
     Object.defineProperty(exports, key, {
@@ -46,12 +46,12 @@ let buildExportAll = template(`
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty", "ClassMethod", "ObjectMethod"];
 
 export default function () {
-  let REASSIGN_REMAP_SKIP = Symbol();
+  const REASSIGN_REMAP_SKIP = Symbol();
 
-  let reassignmentVisitor = {
+  const reassignmentVisitor = {
     ReferencedIdentifier(path) {
-      let name = path.node.name;
-      let remap = this.remaps[name];
+      const name = path.node.name;
+      const remap = this.remaps[name];
       if (!remap) return;
 
       // redeclared in this scope
@@ -72,11 +72,11 @@ export default function () {
       let node = path.node;
       if (node[REASSIGN_REMAP_SKIP]) return;
 
-      let left = path.get("left");
+      const left = path.get("left");
       if (!left.isIdentifier()) return;
 
-      let name = left.node.name;
-      let exports = this.exports[name];
+      const name = left.node.name;
+      const exports = this.exports[name];
       if (!exports) return;
 
       // redeclared in this scope
@@ -84,7 +84,7 @@ export default function () {
 
       node[REASSIGN_REMAP_SKIP] = true;
 
-      for (let reid of exports) {
+      for (const reid of exports) {
         node = buildExportsAssignment(reid, node).expression;
       }
 
@@ -93,17 +93,17 @@ export default function () {
     },
 
     UpdateExpression(path) {
-      let arg = path.get("argument");
+      const arg = path.get("argument");
       if (!arg.isIdentifier()) return;
 
-      let name = arg.node.name;
-      let exports = this.exports[name];
+      const name = arg.node.name;
+      const exports = this.exports[name];
       if (!exports) return;
 
       // redeclared in this scope
       if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
-      let node = t.assignmentExpression(path.node.operator[0] + "=", arg.node, t.numericLiteral(1));
+      const node = t.assignmentExpression(path.node.operator[0] + "=", arg.node, t.numericLiteral(1));
 
       if ((path.parentPath.isExpressionStatement() && !path.isCompletionRecord()) || path.node.prefix) {
         path.replaceWith(node);
@@ -111,7 +111,7 @@ export default function () {
         return;
       }
 
-      let nodes = [];
+      const nodes = [];
       nodes.push(node);
 
       let operator;
@@ -149,9 +149,9 @@ export default function () {
         exit(path) {
           this.ranCommonJS = true;
 
-          let strict = !!this.opts.strict;
+          const strict = !!this.opts.strict;
 
-          let { scope } = path;
+          const { scope } = path;
 
           // rename these commonjs variables if they're declared in the file
           scope.rename("module");
@@ -161,24 +161,24 @@ export default function () {
           let hasExports = false;
           let hasImports = false;
 
-          let body: Array<Object> = path.get("body");
-          let imports = Object.create(null);
-          let exports = Object.create(null);
+          const body: Array<Object> = path.get("body");
+          const imports = Object.create(null);
+          const exports = Object.create(null);
 
-          let nonHoistedExportNames = Object.create(null);
+          const nonHoistedExportNames = Object.create(null);
 
-          let topNodes = [];
-          let remaps = Object.create(null);
+          const topNodes = [];
+          const remaps = Object.create(null);
 
-          let requires = Object.create(null);
+          const requires = Object.create(null);
 
           function addRequire(source, blockHoist) {
-            let cached = requires[source];
+            const cached = requires[source];
             if (cached) return cached;
 
-            let ref = path.scope.generateUidIdentifier(basename(source, extname(source)));
+            const ref = path.scope.generateUidIdentifier(basename(source, extname(source)));
 
-            let varDecl = t.variableDeclaration("var", [
+            const varDecl = t.variableDeclaration("var", [
               t.variableDeclarator(ref, buildRequire(
                 t.stringLiteral(source)
               ).expression)
@@ -200,17 +200,17 @@ export default function () {
           }
 
           function addTo(obj, key, arr) {
-            let existing = obj[key] || [];
+            const existing = obj[key] || [];
             obj[key] = existing.concat(arr);
           }
 
-          for (let path of body) {
+          for (const path of body) {
             if (path.isExportDeclaration()) {
               hasExports = true;
 
-              let specifiers = [].concat(path.get("declaration"), path.get("specifiers"));
-              for (let specifier of specifiers) {
-                let ids = specifier.getBindingIdentifiers();
+              const specifiers = [].concat(path.get("declaration"), path.get("specifiers"));
+              for (const specifier of specifiers) {
+                const ids = specifier.getBindingIdentifiers();
                 if (ids.__esModule) {
                   throw specifier.buildCodeFrameError("Illegal export \"__esModule\"");
                 }
@@ -220,8 +220,8 @@ export default function () {
             if (path.isImportDeclaration()) {
               hasImports = true;
 
-              let key = path.node.source.value;
-              let importsEntry = imports[key] || {
+              const key = path.node.source.value;
+              const importsEntry = imports[key] || {
                 specifiers: [],
                 maxBlockHoist: 0,
                 loc: path.node.loc,
@@ -240,10 +240,10 @@ export default function () {
 
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
-              let declaration = path.get("declaration");
+              const declaration = path.get("declaration");
               if (declaration.isFunctionDeclaration()) {
-                let id = declaration.node.id;
-                let defNode = t.identifier("default");
+                const id = declaration.node.id;
+                const defNode = t.identifier("default");
                 if (id) {
                   addTo(exports, id.name, defNode);
                   topNodes.push(buildExportsAssignment(defNode, id));
@@ -253,8 +253,8 @@ export default function () {
                   path.remove();
                 }
               } else if (declaration.isClassDeclaration()) {
-                let id = declaration.node.id;
-                let defNode = t.identifier("default");
+                const id = declaration.node.id;
+                const defNode = t.identifier("default");
                 if (id) {
                   addTo(exports, id.name, defNode);
                   path.replaceWithMultiple([
@@ -278,15 +278,15 @@ export default function () {
                 path.parentPath.requeue(path.get("expression.left"));
               }
             } else if (path.isExportNamedDeclaration()) {
-              let declaration = path.get("declaration");
+              const declaration = path.get("declaration");
               if (declaration.node) {
                 if (declaration.isFunctionDeclaration()) {
-                  let id = declaration.node.id;
+                  const id = declaration.node.id;
                   addTo(exports, id.name, id);
                   topNodes.push(buildExportsAssignment(id, id));
                   path.replaceWith(declaration.node);
                 } else if (declaration.isClassDeclaration()) {
-                  let id = declaration.node.id;
+                  const id = declaration.node.id;
                   addTo(exports, id.name, id);
                   path.replaceWithMultiple([
                     declaration.node,
@@ -294,11 +294,11 @@ export default function () {
                   ]);
                   nonHoistedExportNames[id.name] = true;
                 } else if (declaration.isVariableDeclaration()) {
-                  let declarators = declaration.get("declarations");
-                  for (let decl of declarators) {
-                    let id = decl.get("id");
+                  const declarators = declaration.get("declarations");
+                  for (const decl of declarators) {
+                    const id = decl.get("id");
 
-                    let init = decl.get("init");
+                    const init = decl.get("init");
                     if (!init.node) init.replaceWith(t.identifier("undefined"));
 
                     if (id.isIdentifier()) {
@@ -314,13 +314,13 @@ export default function () {
                 continue;
               }
 
-              let specifiers = path.get("specifiers");
-              let nodes = [];
-              let source = path.node.source;
+              const specifiers = path.get("specifiers");
+              const nodes = [];
+              const source = path.node.source;
               if (source) {
-                let ref = addRequire(source.value, path.node._blockHoist);
+                const ref = addRequire(source.value, path.node._blockHoist);
 
-                for (let specifier of specifiers) {
+                for (const specifier of specifiers) {
                   if (specifier.isExportNamespaceSpecifier()) {
                     // todo
                   } else if (specifier.isExportDefaultSpecifier()) {
@@ -335,7 +335,7 @@ export default function () {
                   }
                 }
               } else {
-                for (let specifier of specifiers) {
+                for (const specifier of specifiers) {
                   if (specifier.isExportSpecifier()) {
                     addTo(exports, specifier.node.local.name, specifier.node.exported);
                     nonHoistedExportNames[specifier.node.exported.name] = true;
@@ -345,7 +345,7 @@ export default function () {
               }
               path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
-              let exportNode = buildExportAll({
+              const exportNode = buildExportAll({
                 OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
               });
               exportNode.loc = path.node.loc;
@@ -354,15 +354,15 @@ export default function () {
             }
           }
 
-          for (let source in imports) {
-            let {specifiers, maxBlockHoist} = imports[source];
+          for (const source in imports) {
+            const { specifiers, maxBlockHoist } = imports[source];
             if (specifiers.length) {
-              let uid = addRequire(source, maxBlockHoist);
+              const uid = addRequire(source, maxBlockHoist);
 
               let wildcard;
 
               for (let i = 0; i < specifiers.length; i++) {
-                let specifier = specifiers[i];
+                const specifier = specifiers[i];
                 if (t.isImportNamespaceSpecifier(specifier)) {
                   if (strict) {
                     remaps[specifier.local.name] = uid;
@@ -389,7 +389,7 @@ export default function () {
                 }
               }
 
-              for (let specifier of specifiers) {
+              for (const specifier of specifiers) {
                 if (t.isImportSpecifier(specifier)) {
                   let target = uid;
                   if (specifier.imported.name === "default") {
@@ -419,7 +419,7 @@ export default function () {
               }
             } else {
               // bare import
-              let requireNode = buildRequire(t.stringLiteral(source));
+              const requireNode = buildRequire(t.stringLiteral(source));
               requireNode.loc = imports[source].loc;
               topNodes.push(requireNode);
             }
@@ -428,7 +428,7 @@ export default function () {
           if (hasImports && Object.keys(nonHoistedExportNames).length) {
             let hoistedExportsNode = t.identifier("undefined");
 
-            for (let name in nonHoistedExportNames) {
+            for (const name in nonHoistedExportNames) {
               hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode).expression;
             }
 
