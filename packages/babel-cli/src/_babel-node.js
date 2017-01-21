@@ -1,4 +1,3 @@
-import pathIsAbsolute from "path-is-absolute";
 import commander from "commander";
 import Module from "module";
 import { inspect } from "util";
@@ -123,7 +122,7 @@ if (program.eval || program.print) {
 
     // make the filename absolute
     const filename = args[0];
-    if (!pathIsAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
+    if (!path.isAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
 
     // add back on node and concat the sliced args
     process.argv = ["node"].concat(args);

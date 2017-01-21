@@ -2,7 +2,6 @@
 import type Logger from "../logger";
 import resolve from "../../../helpers/resolve";
 import json5 from "json5";
-import isAbsolute from "path-is-absolute";
 import path from "path";
 import fs from "fs";
 
@@ -50,7 +49,7 @@ class ConfigChainBuilder {
   findConfigs(loc) {
     if (!loc) return;
 
-    if (!isAbsolute(loc)) {
+    if (!path.isAbsolute(loc)) {
       loc = path.join(process.cwd(), loc);
     }
 
