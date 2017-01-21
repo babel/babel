@@ -1,6 +1,6 @@
-const generator = require("../../babel-generator").default;
-const template  = require("../lib");
-const chai      = require("chai");
+import generator from "../../babel-generator";
+import template from "../lib";
+import chai from "chai";
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 
@@ -13,7 +13,7 @@ describe("templating", function () {
 
   it("import statements are allowed with sourceType: module", function () {
     chai.expect(function () {
-      template("import foo from 'foo'", {sourceType: "module"})({});
+      template("import foo from 'foo'", { sourceType: "module" })({});
     }).not.to.throw();
   });
 
@@ -24,7 +24,7 @@ describe("templating", function () {
   });
 
   it("should preserve comments with a flag", function () {
-    const output = template(comments, {preserveComments: true})();
+    const output = template(comments, { preserveComments: true })();
     chai.expect(generator(output).code).to.be.equal(comments);
   });
 });

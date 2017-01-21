@@ -1,4 +1,3 @@
-import pathIsAbsolute from "path-is-absolute";
 import commander from "commander";
 import Module from "module";
 import { inspect } from "util";
@@ -7,7 +6,6 @@ import repl from "repl";
 import { util } from "babel-core";
 import * as babel from "babel-core";
 import vm from "vm";
-import _ from "lodash";
 import "babel-polyfill";
 import register from "babel-register";
 
@@ -94,7 +92,7 @@ if (program.eval || program.print) {
 
   const result = _eval(code, global.__filename);
   if (program.print) {
-    const output = _.isString(result) ? result : inspect(result);
+    const output = typeof result === "string" ? result : inspect(result);
     process.stdout.write(output + "\n");
   }
 } else {
@@ -104,7 +102,7 @@ if (program.eval || program.print) {
 
     let i = 0;
     let ignoreNext = false;
-    _.each(args, function (arg, i2) {
+    args.some(function (arg, i2) {
       if (ignoreNext) {
         ignoreNext = false;
         return;
@@ -117,14 +115,14 @@ if (program.eval || program.print) {
         }
       } else {
         i = i2;
-        return false;
+        return true;
       }
     });
     args = args.slice(i);
 
     // make the filename absolute
     const filename = args[0];
-    if (!pathIsAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
+    if (!path.isAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
 
     // add back on node and concat the sliced args
     process.argv = ["node"].concat(args);

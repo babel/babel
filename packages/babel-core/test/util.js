@@ -1,6 +1,6 @@
-const assert = require("assert");
-const util   = require("../lib/util");
-const t      = require("babel-types");
+import assert from "assert";
+import * as util from "../lib/util";
+import * as t from "babel-types";
 
 describe("util", function () {
   it("canCompile", function () {

@@ -16,7 +16,6 @@ module.exports = {
 
   methods: {
     Array: {
-      concat: "array/concat", // deprecated
       copyWithin: "array/copy-within",
       entries: "array/entries",
       every: "array/every",
@@ -34,17 +33,11 @@ module.exports = {
       lastIndexOf: "array/last-index-of",
       map: "array/map",
       of: "array/of",
-      pop: "array/pop", // deprecated
-      push: "array/push", // deprecated
       reduceRight: "array/reduce-right",
       reduce: "array/reduce",
-      reverse: "array/reverse", // deprecated
-      shift: "array/shift", // deprecated
-      slice: "array/slice", // deprecated
       some: "array/some",
       sort: "array/sort",
       splice: "array/splice",
-      unshift: "array/unshift", // deprecated
       values: "array/values"
     },
 
@@ -73,10 +66,6 @@ module.exports = {
       seal: "object/seal",
       setPrototypeOf: "object/set-prototype-of",
       values: "object/values"
-    },
-
-    RegExp: {
-      escape: "regexp/escape" // deprecated
     },
 
     Math: {
@@ -128,8 +117,6 @@ module.exports = {
       fromCodePoint: "string/from-code-point",
       includes: "string/includes",
       matchAll: "string/match-all",
-      padLeft: "string/pad-left", // deprecated
-      padRight: "string/pad-right", // deprecated
       padStart: "string/pad-start",
       padEnd: "string/pad-end",
       raw: "string/raw",
@@ -159,7 +146,6 @@ module.exports = {
       construct: "reflect/construct",
       defineProperty: "reflect/define-property",
       deleteProperty: "reflect/delete-property",
-      enumerate: "reflect/enumerate", // deprecated
       getOwnPropertyDescriptor: "reflect/get-own-property-descriptor",
       getPrototypeOf: "reflect/get-prototype-of",
       get: "reflect/get",
@@ -182,10 +168,6 @@ module.exports = {
 
     System: {
       global: "system/global"
-    },
-
-    Error: {
-      isError: "error/is-error" // deprecated
     },
 
     Date: {

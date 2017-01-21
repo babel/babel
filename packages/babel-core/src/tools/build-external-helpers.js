@@ -4,7 +4,6 @@ import * as helpers from "babel-helpers";
 import generator from "babel-generator";
 import * as messages from "babel-messages";
 import template from "babel-template";
-import each from "lodash/each";
 import * as t from "babel-types";
 
 const buildUmdWrapper = template(`
@@ -73,7 +72,7 @@ function buildVar(namespace, builder) {
 }
 
 function buildHelpers(body, namespace, whitelist) {
-  each(helpers.list, function (name) {
+  helpers.list.forEach(function (name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
 
     const key = t.identifier(name);

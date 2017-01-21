@@ -81,10 +81,5 @@ export function ClassMethod(node: Object) {
     this.space();
   }
 
-  if (node.kind === "constructorCall") {
-    this.word("call");
-    this.space();
-  }
-
   this._method(node);
 }

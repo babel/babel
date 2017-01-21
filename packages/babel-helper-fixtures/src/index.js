@@ -1,7 +1,10 @@
+import cloneDeep from "lodash/cloneDeep";
+import trimEnd from "lodash/trimEnd";
 import resolve from "try-resolve";
+import clone from "lodash/clone";
+import merge from "lodash/merge";
 import path from "path";
 import fs from "fs";
-import _ from "lodash";
 
 function humanize(val, noext) {
   if (noext) val = path.basename(val, path.extname(val));
@@ -58,7 +61,7 @@ export default function get(entryLoc): Array<Suite> {
     if (shouldIgnore(suiteName)) continue;
 
     const suite = {
-      options: _.clone(rootOpts),
+      options: clone(rootOpts),
       tests: [],
       title: humanize(suiteName),
       filename: entryLoc + "/" + suiteName
@@ -95,10 +98,10 @@ export default function get(entryLoc): Array<Suite> {
         expectLocAlias += "on";
       }
 
-      const taskOpts = _.cloneDeep(suite.options);
+      const taskOpts = cloneDeep(suite.options);
 
       const taskOptsLoc = resolve(taskDir + "/options");
-      if (taskOptsLoc) _.merge(taskOpts, require(taskOptsLoc));
+      if (taskOptsLoc) merge(taskOpts, require(taskOptsLoc));
 
       const test = {
         optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
@@ -162,7 +165,7 @@ export function multiple(entryLoc, ignore?: Array<string>) {
 
 export function readFile(filename) {
   if (fs.existsSync(filename)) {
-    let file = _.trimEnd(fs.readFileSync(filename, "utf8"));
+    let file = trimEnd(fs.readFileSync(filename, "utf8"));
     file = file.replace(/\r\n/g, "\n");
     return file;
   } else {

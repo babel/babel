@@ -3,7 +3,6 @@ import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import extend from "lodash/extend";
 import * as babel from "babel-core";
-import each from "lodash/each";
 import { util, OptionManager } from "babel-core";
 import fs from "fs";
 import path from "path";
@@ -112,7 +111,8 @@ function registerExtension(ext) {
 }
 
 function hookExtensions(_exts) {
-  each(oldHandlers, function (old, ext) {
+  Object.keys(oldHandlers).forEach(function (ext) {
+    const old = oldHandlers[ext];
     if (old === undefined) {
       delete require.extensions[ext];
     } else {
@@ -122,7 +122,7 @@ function hookExtensions(_exts) {
 
   oldHandlers = {};
 
-  each(_exts, function (ext) {
+  _exts.forEach(function (ext) {
     oldHandlers[ext] = require.extensions[ext];
     registerExtension(ext);
   });

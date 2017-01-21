@@ -1,4 +1,4 @@
-import jsTokens, {matchToToken} from "js-tokens";
+import jsTokens, { matchToToken } from "js-tokens";
 import esutils from "esutils";
 import Chalk from "chalk";
 

@@ -2,7 +2,7 @@ import detectIndent from "detect-indent";
 import SourceMap from "./source-map";
 import * as messages from "babel-messages";
 import Printer from "./printer";
-import type {Format} from "./printer";
+import type { Format } from "./printer";
 
 /**
  * Babel's code generator, turns an ast into code, maintaining sourcemaps,
@@ -64,8 +64,7 @@ function normalizeOptions(code, opts, tokens): Format {
       adjustMultilineComment: true,
       style: style,
       base: 0
-    },
-    flowCommaSeparator: opts.flowCommaSeparator,
+    }
   };
 
   if (format.minified) {
