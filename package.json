@@ -63,7 +63,7 @@
       "transform-flow-strip-types"
     ],
     "env": {
-      "test": {
+      "cov": {
         "auxiliaryCommentBefore": "istanbul ignore next",
         "plugins": [
           "istanbul"
