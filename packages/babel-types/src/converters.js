@@ -1,5 +1,4 @@
 import isPlainObject from "lodash/isPlainObject";
-import isRegExp from "lodash/isRegExp";
 import type { Scope } from "babel-traverse";
 import * as t from "./index";
 
@@ -280,7 +279,7 @@ export function valueToNode(value: any): Object {
   }
 
   // regexes
-  if (isRegExp(value)) {
+  if (_isRegExp(value)) {
     const pattern = value.source;
     const flags = value.toString().match(/\/([a-z]+|)$/)[1];
     return t.regExpLiteral(pattern, flags);
@@ -307,4 +306,8 @@ export function valueToNode(value: any): Object {
   }
 
   throw new Error("don't know how to turn this value into a node");
+}
+
+function _isRegExp(value: mixed): boolean {
+  return Object.prototype.toString.call(value) === "[object RegExp]";
 }
