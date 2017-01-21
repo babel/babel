@@ -72,5 +72,5 @@ bootstrap:
 	./node_modules/.bin/lerna bootstrap
 	make build
 	cd packages/babel-runtime; \
-	yarn; \
+	npm install; \
 	node scripts/build-dist.js
