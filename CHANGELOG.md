@@ -13,11 +13,19 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.22.2 (2017-01-19)
+
+#### :bug: Bug Fix
+
+* `babel-cli`
+  * Fix issue with `babel-node` throwing errors when passed non-"-" args [#5162](https://github.com/babel/babel/pull/5162).
+
 ## 6.22.1 (2017-01-19)
 
 #### :bug: Bug Fix
 
-Temporary fix with `babel-traverse` via [#5019](https://github.com/babel/babel/pull/5019) for transform-react-constant-elements.
+* `babel-traverse`
+  * Temporary fix with `babel-traverse` via [#5019](https://github.com/babel/babel/pull/5019) for transform-react-constant-elements.
 
 ## 6.22.0 (2017-01-19)
 
