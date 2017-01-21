@@ -23,18 +23,6 @@ paths.forEach(function (path) {
   writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
 });
 
-// Should be removed in the next major release:
-var legacy = [
-  ["string/pad-left", "string/pad-start"],
-  ["string/pad-right", "string/pad-end"]
-];
-
-legacy.forEach(function(pair) {
-  const a = pair[0];
-  const b = pair[1];
-  writeFile("core-js/" + a + ".js", defaultify('require("core-js/library/fn/' + b + '")'));
-});
-
 var helpers    = require("babel-helpers");
 var babel      = require("../../babel-core");
 var util       = require("../../babel-core/lib/util");
