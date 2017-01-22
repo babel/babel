@@ -4,7 +4,7 @@ import { parse } from "babylon";
 import * as t from "babel-types";
 
 function getPath(code) {
-  const ast = parse(code, {plugins: ["flow", "asyncGenerators"]});
+  const ast = parse(code, { plugins: ["flow", "asyncGenerators"] });
   let path;
   traverse(ast, {
     Program: function (_path) {

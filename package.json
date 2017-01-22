@@ -26,8 +26,7 @@
     "codecov": "^1.0.1",
     "derequire": "^2.0.2",
     "eslint": "^3.9.0",
-    "eslint-config-babel": "^2.0.1",
-    "eslint-plugin-babel": "^3.3.0",
+    "eslint-config-babel": "^6.0.0",
     "eslint-plugin-flowtype": "^2.20.0",
     "flow-bin": "^0.34.0",
     "gulp": "^3.9.0",
@@ -65,7 +64,7 @@
       "transform-flow-strip-types"
     ],
     "env": {
-      "test": {
+      "cov": {
         "auxiliaryCommentBefore": "istanbul ignore next",
         "plugins": [
           "istanbul"

@@ -3,13 +3,13 @@ export default function ({ types: t }) {
     visitor: {
       ArrowFunctionExpression(path, state) {
         if (state.opts.spec) {
-          let { node } = path;
+          const { node } = path;
           if (node.shadow) return;
 
           node.shadow = { this: false };
           node.type = "FunctionExpression";
 
-          let boundThis = t.thisExpression();
+          const boundThis = t.thisExpression();
           boundThis._forceShadow = path;
 
           // make sure that arrow function won't be instantiated

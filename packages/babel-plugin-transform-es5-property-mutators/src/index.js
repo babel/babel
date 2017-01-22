@@ -4,9 +4,9 @@ export default function ({ types: t }) {
   return {
     visitor: {
       ObjectExpression(path, file) {
-        let { node } = path;
+        const { node } = path;
         let hasAny = false;
-        for (let prop of (node.properties: Array)) {
+        for (const prop of (node.properties: Array)) {
           if (prop.kind === "get" || prop.kind === "set") {
             hasAny = true;
             break;
@@ -14,7 +14,7 @@ export default function ({ types: t }) {
         }
         if (!hasAny) return;
 
-        let mutatorMap = {};
+        const mutatorMap = {};
 
         node.properties = node.properties.filter(function (prop) {
           if (!prop.computed && (prop.kind === "get" || prop.kind === "set")) {

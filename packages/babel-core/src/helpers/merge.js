@@ -5,9 +5,9 @@ export default function (dest?: Object, src?: Object): ?Object {
 
   return mergeWith(dest, src, function (a, b) {
     if (b && Array.isArray(a)) {
-      let newArray = b.slice(0);
+      const newArray = b.slice(0);
 
-      for (let item of a) {
+      for (const item of a) {
         if (newArray.indexOf(item) < 0) {
           newArray.push(item);
         }

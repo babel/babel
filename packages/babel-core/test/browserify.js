@@ -1,11 +1,11 @@
-let browserify = require("browserify");
-let assert = require("assert");
-let path = require("path");
-let vm = require("vm");
+import browserify from "browserify";
+import assert from "assert";
+import path from "path";
+import vm from "vm";
 
 describe("browserify", function() {
   it("babel/register may be used without breaking browserify", function(done) {
-    let bundler = browserify(path.join(__dirname, "fixtures/browserify/register.js"));
+    const bundler = browserify(path.join(__dirname, "fixtures/browserify/register.js"));
 
     bundler.bundle(function(err, bundle) {
       if (err) return done(err);
