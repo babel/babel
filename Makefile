@@ -68,7 +68,7 @@ publish:
 
 bootstrap:
 	make clean-all
-	npm install
+	yarn
 	./node_modules/.bin/lerna bootstrap
 	make build
 	cd packages/babel-runtime; \
