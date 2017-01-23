@@ -166,10 +166,6 @@ export function UnaryLike(node: Object, parent: Object): boolean {
 }
 
 export function FunctionExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
-  if (t.isTaggedTemplateExpression(parent)) {
-    return true;
-  }
-
   return isFirstInStatement(printStack, { considerDefaultExports: true });
 }
 
@@ -224,6 +220,10 @@ function isFirstInStatement(printStack: Array<Object>, {
   let parent = printStack[i];
   while (i > 0) {
     if (t.isExpressionStatement(parent, { expression: node })) {
+      return true;
+    }
+
+    if (t.isTaggedTemplateExpression(parent)) {
       return true;
     }
 
