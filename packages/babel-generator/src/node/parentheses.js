@@ -166,20 +166,22 @@ export function UnaryLike(node: Object, parent: Object): boolean {
 }
 
 export function FunctionExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
+  if (t.isTaggedTemplateExpression(parent)) {
+    return true;
+  }
+
   return isFirstInStatement(printStack, { considerDefaultExports: true });
 }
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
-  // export default (function () {});
-  if (t.isExportDeclaration(parent)) {
-    return true;
-  }
-
-  if (t.isBinaryExpression(parent) || t.isLogicalExpression(parent)) {
-    return true;
-  }
-
-  if (t.isUnaryExpression(parent)) {
+  if (
+    // export default (function () {});
+    t.isExportDeclaration(parent) ||
+    t.isBinaryExpression(parent) ||
+    t.isLogicalExpression(parent) ||
+    t.isUnaryExpression(parent) ||
+    t.isTaggedTemplateExpression(parent)
+  ) {
     return true;
   }
 
