@@ -170,16 +170,14 @@ export function FunctionExpression(node: Object, parent: Object, printStack: Arr
 }
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
-  // export default (function () {});
-  if (t.isExportDeclaration(parent)) {
-    return true;
-  }
-
-  if (t.isBinaryExpression(parent) || t.isLogicalExpression(parent)) {
-    return true;
-  }
-
-  if (t.isUnaryExpression(parent)) {
+  if (
+    // export default (function () {});
+    t.isExportDeclaration(parent) ||
+    t.isBinaryExpression(parent) ||
+    t.isLogicalExpression(parent) ||
+    t.isUnaryExpression(parent) ||
+    t.isTaggedTemplateExpression(parent)
+  ) {
     return true;
   }
 
@@ -222,6 +220,10 @@ function isFirstInStatement(printStack: Array<Object>, {
   let parent = printStack[i];
   while (i > 0) {
     if (t.isExpressionStatement(parent, { expression: node })) {
+      return true;
+    }
+
+    if (t.isTaggedTemplateExpression(parent)) {
       return true;
     }
 
