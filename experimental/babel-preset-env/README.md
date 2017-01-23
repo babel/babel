@@ -6,7 +6,7 @@
 npm install babel-preset-env --save-dev
 ```
 
-```js
+```json
 {
   "presets": [
     ["env", {
@@ -78,7 +78,7 @@ npm install --save-dev babel-preset-env
 
 The default behavior without options runs all transforms (behaves the same as [babel-preset-latest](https://babeljs.io/docs/plugins/preset-latest/)).
 
-```js
+```json
 {
   "presets": ["env"]
 }
@@ -201,13 +201,17 @@ npm install core-js --save
 
 ## Examples
 
+### Export with various targets
+
 ```js
-// src
 export class A {}
 ```
 
-```js
-// target chrome 52
+#### Target only Chrome 52
+
+**.babelrc**
+
+```json
 {
   "presets": [
     ["env", {
@@ -217,15 +221,20 @@ export class A {}
     }]
   ]
 }
+```
 
-// ...
+**Out**
 
+```js
 class A {}
 exports.A = A;
 ```
 
-```js
-// target chrome 52 with webpack 2/rollup and loose mode
+#### Target Chrome 52 with webpack 2/rollup and loose mode
+
+**.babelrc**
+
+```json
 {
   "presets": [
     ["env", {
@@ -237,14 +246,19 @@ exports.A = A;
     }]
   ]
 }
+```
 
-// ...
+**Out**
 
+```js
 export class A {}
 ```
 
-```js
-// using browserslist
+#### Target specific browsers via browserslist
+
+**.babelrc**
+
+```json
 {
   "presets": [
     ["env", {
@@ -255,18 +269,21 @@ export class A {}
     }]
   ]
 }
+```
 
-// ...
+**Out**
 
+```js
 export var A = function A() {
   _classCallCheck(this, A);
 };
 ```
 
-### Example with `node: true` or `node: "current"`
+#### Target latest node via `node: true` or `node: "current"`
 
-```js
-// process.versions.node -> 6.9.0
+**.babelrc**
+
+```json
 {
   "presets": [
     ["env", {
@@ -276,16 +293,20 @@ export var A = function A() {
     }]
   ]
 }
+```
 
-// ...
+**Out**
 
+```js
 class A {}
 exports.A = A;
 ```
 
-### Example with `debug: true`
+### Show debug output
 
-```js
+**.babelrc**
+
+```json
 {
   "presets": [
     [ "env", {
@@ -299,8 +320,10 @@ exports.A = A;
   ]
 }
 ```
-*stdin*:
-```
+
+**stdin**
+
+```sh
 Using targets:
 {
   "safari": 10
@@ -321,11 +344,11 @@ Using polyfills:
   web.dom.iterable {}
 ```
 
-### Example with `include`/`exclude`
+### Include and exclude specific plugins/built-ins
 
 > always include arrow functions, explicitly exclude generators
 
-```js
+```json
 {
   "presets": [
     ["env", {
