@@ -64,13 +64,15 @@ npm install --save-dev babel-plugin-transform-es2015-arrow-functions
 **.babelrc**
 
 Without options:
+
 ```json
 {
   "plugins": ["transform-es2015-arrow-functions"]
 }
 ```
 
-With options
+With options:
+
 ```json 
 {
   "plugins": [
