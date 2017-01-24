@@ -181,11 +181,11 @@ export function evaluate(): { confident: boolean; value: any } {
         return binding.value;
       } else {
         if (node.name === "undefined") {
-          return undefined;
+          return binding ? deopt(binding.path) : undefined;
         } else if (node.name === "Infinity") {
-          return Infinity;
+          return binding ? deopt(binding.path) : Infinity;
         } else if (node.name === "NaN") {
-          return NaN;
+          return binding ? deopt(binding.path) : NaN;
         }
 
         const resolved = path.resolve();

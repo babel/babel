@@ -98,4 +98,22 @@ describe("evaluation", function () {
       false
     );
   });
+
+  it("should evaluate undefined, NaN and Infinity", () => {
+    assert.strictEqual(getPath("undefined").get("body.0.expression").evaluate().confident, true);
+    assert.strictEqual(getPath("NaN").get("body.0.expression").evaluate().confident, true);
+    assert.strictEqual(getPath("Infinity").get("body.0.expression").evaluate().confident, true);
+  });
+
+  it("should deopt redefined primitives - undefined, NaN and Infinity", () => {
+    const eval_undef = getPath("let undefined; undefined;").get("body.1.expression").evaluate();
+    const eval_nan = getPath("let NaN; NaN;").get("body.1.expression").evaluate();
+    const eval_inf = getPath("let Infinity; Infinity;").get("body.1.expression").evaluate();
+    assert.strictEqual(eval_undef.confident, false);
+    assert.strictEqual(eval_nan.confident, false);
+    assert.strictEqual(eval_inf.confident, false);
+
+    assert.strictEqual(eval_undef.deopt.type, "VariableDeclarator");
+    assert.strictEqual(eval_undef.deopt.parentPath.node.kind, "let");
+  });
 });
