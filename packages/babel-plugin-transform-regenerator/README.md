@@ -44,8 +44,6 @@ npm install --save-dev babel-plugin-transform-regenerator
 
 ### Via `.babelrc` (Recommended)
 
-**.babelrc**
-
 Without options:
 
 ```json
@@ -56,13 +54,19 @@ Without options:
 
 With options:
 
+|name|default value|
+|---|---|
+|asyncGenerators|true|
+|generators|true|
+|async|true|
+
 ````json
 {
   "plugins": [
     ["transform-regenerator", {
-      asyncGenerators: false, // true by default
-      generators: false, // true by default
-      async: false // true by default
+      asyncGenerators: false,
+      generators: false,
+      async: false
     }]
   ]
 }
