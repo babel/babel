@@ -44,8 +44,6 @@ npm install --save-dev babel-plugin-transform-regenerator
 
 ### Via `.babelrc` (Recommended)
 
-**.babelrc**
-
 Without options:
 
 ```json
