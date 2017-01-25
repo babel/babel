@@ -81,7 +81,7 @@ export function DeclareVariable(node: Object) {
   this.semicolon();
 }
 
-export function ExistentialTypeParam() {
+export function ExistsTypeAnnotation() {
   this.token("*");
 }
 
