@@ -149,14 +149,6 @@ const collectorVisitor = {
     scope.getBlockParent().registerDeclaration(path);
   },
 
-  ClassDeclaration(path) {
-    const id = path.node.id;
-    if (!id) return;
-
-    const name = id.name;
-    path.scope.bindings[name] = path.scope.getBinding(name);
-  },
-
   Block(path) {
     const paths = path.get("body");
     for (const bodyPath of (paths: Array)) {

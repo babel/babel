@@ -60,5 +60,16 @@ describe("scope", function () {
         _foo2: { }
       `).scope.generateUid("foo"), "_foo3");
     });
+
+    test("class declarations should have only one binding - fix issue #5156", () => {
+      assert.strictEqual(
+        !!getPath("class A {}").scope.bindings.A,
+        true
+      );
+      assert.strictEqual(
+        getPath("class A {}").get("body.0").scope.bindings.A,
+        undefined
+      );
+    });
   });
 });
