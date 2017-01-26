@@ -47,8 +47,6 @@ let a = do {
 };
 ```
 
-[Try in REPL](http://babeljs.io/repl/#?evaluate=true&presets=es2015%2Cstage-0&code=let%20x%20%3D%20100%3B%0Alet%20y%20%3D%2020%3B%0A%0Alet%20a%20%3D%20do%20%7B%0A%20%20if(x%20%3E%2010)%20%7B%0A%20%20%20%20if(y%20%3E%2020)%20%7B%0A%20%20%20%20%20%20'big%20x%2C%20big%20y'%3B%0A%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20'big%20x%2C%20small%20y'%3B%0A%20%20%20%20%7D%0A%20%20%7D%20else%20%7B%0A%20%20%20%20if(y%20%3E%2010)%20%7B%0A%20%20%20%20%20%20'small%20x%2C%20big%20y'%3B%0A%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20'small%20x%2C%20small%20y'%3B%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%3B%0A%0Aconsole.log(a)%3B)
-
 ## Example
 
 ### In JSX
