@@ -75,8 +75,8 @@ const Component = props =>
   <div className='myComponent'>
     {do {
       if(color === 'blue') { <BlueComponent/>; }
-      if(color === 'red') { <RedComponent/>; }
-      if(color === 'green') { <GreenComponent/>; }
+      else if(color === 'red') { <RedComponent/>; }
+      else if(color === 'green') { <GreenComponent/>; }
     }}
   </div>
 ;
