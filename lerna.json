@@ -13,9 +13,6 @@
       "tag: internal": ":house: Internal"
     }
   },
-  "bootstrapConfig": {
-    "ignore": "babel-runtime"
-  },
   "publishConfig": {
     "ignore": [
       "*.md",
