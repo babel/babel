@@ -14,7 +14,6 @@ clownPuppiesEverywhere(
   'bar',
 );
 ```
-[Try in REPL](http://babeljs.io/repl/#?evaluate=true&presets=es2015%2Cstage-0&code=function%20clownPuppiesEverywhere(%0A%20%20param1%2C%0A%20%20param2%2C%0A)%20%7B%20%2F*%20...%20*%2F%20%7D%0A%0AclownPuppiesEverywhere(%0A%20%20'foo'%2C%0A%20%20'bar'%2C%0A)%3B)
 
 ## Example
 
