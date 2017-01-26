@@ -6,8 +6,5 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-messages",
-  "main": "lib/index.js",
-  "dependencies": {
-    "babel-runtime": "^6.22.0"
-  }
+  "main": "lib/index.js"
 }

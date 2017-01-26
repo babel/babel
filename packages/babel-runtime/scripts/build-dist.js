@@ -32,16 +32,6 @@ function relative(filename) {
   return __dirname + "/../" + filename;
 }
 
-function readFile(filename, shouldDefaultify) {
-  var file = fs.readFileSync(require.resolve(filename), "utf8");
-
-  if (shouldDefaultify) {
-    file += "\n" + defaultify("module.exports") + "\n";
-  }
-
-  return file;
-}
-
 function defaultify(name) {
   return 'module.exports = { "default": ' + name + ', __esModule: true };';
 }
@@ -63,15 +53,15 @@ var transformOpts = {
 
   plugins: [
     require("../../babel-plugin-transform-runtime"),
-    [require("../../babel-plugin-transform-es2015-modules-commonjs"), {loose: true, strict: false}]
+    [require("../../babel-plugin-transform-es2015-modules-commonjs"), { loose: true, strict: false }]
   ]
 };
 
 function buildRuntimeRewritePlugin(relativePath, helperName) {
   return {
-    pre: function (file){
+    pre: function (file) {
       var original = file.get("helperGenerator");
-      file.set("helperGenerator", function(name){
+      file.set("helperGenerator", function(name) {
         // make sure that helpers won't insert circular references to themselves
         if (name === helperName) return;
 
@@ -90,13 +80,6 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
       }
     }
   };
-}
-
-function selfContainify(path, code) {
-  return babel.transform(code, {
-    presets: transformOpts.presets,
-    plugins: transformOpts.plugins.concat([buildRuntimeRewritePlugin(path, null)])
-  }).code;
 }
 
 function buildHelper(helperName) {

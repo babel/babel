@@ -1,22 +1,24 @@
-export default class Store extends Map {
+export default class Store {
   constructor() {
-    super();
-    this.dynamicData = {};
+    this._map = new Map();
+    this._map.dynamicData = {};
   }
 
-  dynamicData: Object;
-
   setDynamic(key, fn) {
-    this.dynamicData[key] = fn;
+    this._map.dynamicData[key] = fn;
+  }
+
+  set(key: string, val) {
+    this._map.set(key, val);
   }
 
   get(key: string): any {
-    if (this.has(key)) {
-      return super.get(key);
+    if (this._map.has(key)) {
+      return this._map.get(key);
     } else {
-      if (Object.prototype.hasOwnProperty.call(this.dynamicData, key)) {
-        const val =  this.dynamicData[key]();
-        this.set(key, val);
+      if (Object.prototype.hasOwnProperty.call(this._map.dynamicData, key)) {
+        const val =  this._map.dynamicData[key]();
+        this._map.set(key, val);
         return val;
       }
     }

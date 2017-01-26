@@ -9,7 +9,6 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-runtime": "^6.22.0",
     "babel-helper-builder-react-jsx": "^6.22.0"
   },
   "devDependencies": {
