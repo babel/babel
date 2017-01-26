@@ -8,7 +8,7 @@ Example:
 
 In you were going to add `**` which is in ES2016:
 
-Find the relevant entries on [compat-table](kangax.github.io/compat-table/):
+Find the relevant entries on [compat-table](https://kangax.github.io/compat-table/):
 
 `exponentiation (**) operator`
 
