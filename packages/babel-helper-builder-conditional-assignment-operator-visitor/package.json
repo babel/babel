@@ -7,7 +7,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-helper-explode-assignable-expression": "^6.22.0",
-    "babel-runtime": "^6.22.0",
     "babel-types": "^6.22.0"
   }
 }

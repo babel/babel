@@ -14,9 +14,6 @@
     }
   },
   "cacheDir": ".changelog",
-  "bootstrapConfig": {
-    "ignore": "babel-runtime"
-  },
   "publishConfig": {
     "ignore": [
       "*.md",

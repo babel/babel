@@ -7,7 +7,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-helper-optimise-call-expression": "^6.22.0",
-    "babel-runtime": "^6.22.0",
     "babel-traverse": "^6.22.0",
     "babel-messages": "^6.22.0",
     "babel-template": "^6.22.0",
