@@ -5,6 +5,12 @@
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
+  "keywords": [
+    "babel",
+    "javascript",
+    "parser",
+    "babylon"
+  ],
   "repository": "https://github.com/babel/babylon",
   "main": "lib/index.js",
   "files": [
