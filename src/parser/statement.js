@@ -837,6 +837,8 @@ pp.parseExport = function (node) {
     let needsSemi = false;
     if (this.eat(tt._function)) {
       expr = this.parseFunction(expr, true, false, false, true);
+    } else if (this.eatContextual("async") && this.eat(tt._function)) {
+      expr = this.parseFunction(expr, true, false, true, true);
     } else if (this.match(tt._class)) {
       expr = this.parseClass(expr, true, true);
     } else {
