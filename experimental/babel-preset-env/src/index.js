@@ -132,7 +132,9 @@ const logPlugin = (plugin, targets, list) => {
   const envList = list[plugin] || {};
   const filteredList = Object.keys(targets)
   .reduce((a, b) => {
-    a[b] = envList[b];
+    if (!envList[b] || targets[b] < envList[b]) {
+      a[b] = targets[b];
+    }
     return a;
   }, {});
   const logStr = `  ${plugin} ${JSON.stringify(filteredList)}`;
