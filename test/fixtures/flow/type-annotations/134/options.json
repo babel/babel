@@ -1,0 +1,3 @@
+{
+  "throws": "Cannot overwrite primitive type bool (1:13)"
+}

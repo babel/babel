@@ -24,7 +24,7 @@ module.exports = function runFixtureTests(fixturesPath, parseFunction) {
 
 function save(test, ast) {
   delete ast.tokens;
-  if (!ast.comments.length) delete ast.comments;
+  if (ast.comments && !ast.comments.length) delete ast.comments;
   require("fs").writeFileSync(test.expect.loc, JSON.stringify(ast, null, "  "));
 }
 

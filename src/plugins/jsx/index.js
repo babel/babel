@@ -1,5 +1,3 @@
-/* eslint indent: 0 */
-
 import XHTMLEntities from "./xhtml";
 import { TokenType, types as tt } from "../../tokenizer/types";
 import { TokContext, types as tc } from "../../tokenizer/context";

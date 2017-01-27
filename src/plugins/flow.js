@@ -1,9 +1,20 @@
-/* eslint indent: 0 */
 /* eslint max-len: 0 */
 
 import { types as tt } from "../tokenizer/types";
 import { types as ct } from "../tokenizer/context";
 import Parser from "../parser";
+
+const primitiveTypes = [
+  "any",
+  "mixed",
+  "empty",
+  "bool",
+  "boolean",
+  "number",
+  "string",
+  "void",
+  "null"
+];
 
 const pp = Parser.prototype;
 
@@ -96,11 +107,22 @@ pp.flowParseDeclareModule = function (node) {
   const body = bodyNode.body = [];
   this.expect(tt.braceL);
   while (!this.match(tt.braceR)) {
-    const node2 = this.startNode();
+    let bodyNode = this.startNode();
 
-    this.expectContextual("declare", "Unexpected token. Only declares are allowed inside declare module");
+    if (this.match(tt._import)) {
+      const lookahead = this.lookahead();
+      if (lookahead.value !== "type" && lookahead.value !== "typeof") {
+        this.unexpected(null, "Imports within a `declare module` body must always be `import type` or `import typeof`");
+      }
 
-    body.push(this.flowParseDeclare(node2));
+      this.parseImport(bodyNode);
+    } else {
+      this.expectContextual("declare", "Only declares and type imports are allowed inside declare module");
+
+      bodyNode = this.flowParseDeclare(bodyNode, true);
+    }
+
+    body.push(bodyNode);
   }
   this.expect(tt.braceR);
 
@@ -178,10 +200,18 @@ pp.flowParseInterface = function (node) {
   return this.finishNode(node, "InterfaceDeclaration");
 };
 
+pp.flowParseRestrictedIdentifier = function(liberal) {
+  if (primitiveTypes.indexOf(this.state.value) > -1) {
+    this.raise(this.state.start, `Cannot overwrite primitive type ${this.state.value}`);
+  }
+
+  return this.parseIdentifier(liberal);
+};
+
 // Type aliases
 
 pp.flowParseTypeAlias = function (node) {
-  node.id = this.parseIdentifier();
+  node.id = this.flowParseRestrictedIdentifier();
 
   if (this.isRelational("<")) {
     node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -209,7 +239,7 @@ pp.flowParseTypeParameter = function () {
 
   if (this.match(tt.eq)) {
     this.eat(tt.eq);
-    node.default = this.flowParseType ();
+    node.default = this.flowParseType();
   }
 
   return this.finishNode(node, "TypeParameter");
@@ -379,7 +409,7 @@ pp.flowParseObjectType = function (allowStatic, allowExact) {
       if (variance) {
         this.unexpected(variancePos);
       }
-      nodeStart.callProperties.push(this.flowParseObjectTypeCallProperty(node, allowStatic));
+      nodeStart.callProperties.push(this.flowParseObjectTypeCallProperty(node, isStatic));
     } else {
       propertyKey = this.flowParseObjectPropertyKey();
       if (this.isRelational("<") || this.match(tt.parenL)) {
@@ -763,7 +793,7 @@ pp.flowParseTypeAnnotation = function () {
 };
 
 pp.flowParseTypeAnnotatableIdentifier = function () {
-  const ident = this.parseIdentifier();
+  const ident = this.flowParseRestrictedIdentifier();
   if (this.match(tt.colon)) {
     ident.typeAnnotation = this.flowParseTypeAnnotation();
     this.finishNode(ident, ident.type);
@@ -1055,8 +1085,8 @@ export default function (instance) {
   });
 
   // parse type parameters for class methods
-  instance.extend("parseClassMethod", function () {
-    return function (classBody, method, isGenerator, isAsync) {
+  instance.extend("parseClassMethod", function (inner) {
+    return function (classBody, method, ...args) {
       if (method.variance) {
         this.unexpected(method.variancePos);
       }
@@ -1065,8 +1095,8 @@ export default function (instance) {
       if (this.isRelational("<")) {
         method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
-      this.parseMethod(method, isGenerator, isAsync);
-      classBody.body.push(this.finishNode(method, "ClassMethod"));
+
+      inner.call(this, classBody, method, ...args);
     };
   });
 
@@ -1084,9 +1114,9 @@ export default function (instance) {
           const node = this.startNode();
           node.id = this.parseIdentifier();
           if (this.isRelational("<")) {
-              node.typeParameters = this.flowParseTypeParameterInstantiation();
+            node.typeParameters = this.flowParseTypeParameterInstantiation();
           } else {
-              node.typeParameters = null;
+            node.typeParameters = null;
           }
           implemented.push(this.finishNode(node, "ClassImplements"));
         } while (this.eat(tt.comma));
@@ -1225,6 +1255,13 @@ export default function (instance) {
         specifier.imported = firstIdent;
         specifier.importKind = null;
         specifier.local = specifier.imported.__clone();
+      }
+
+      if (
+        (node.importKind === "type" || node.importKind === "typeof") &&
+        (specifier.importKind === "type" || specifier.importKind === "typeof")
+      ) {
+        this.raise(firstIdentLoc, "`The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements`");
       }
 
       this.checkLVal(specifier.local, true, undefined, "import specifier");

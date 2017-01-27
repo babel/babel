@@ -1,4 +1,3 @@
-/* eslint indent: 0 */
 /* eslint max-len: 0 */
 
 import { types as tt } from "../tokenizer/types";
@@ -26,7 +25,7 @@ pp.parseTopLevel = function (file, program) {
   return this.finishNode(file, "File");
 };
 
-const loopLabel = {kind: "loop"}, switchLabel = {kind: "switch"};
+const loopLabel = { kind: "loop" }, switchLabel = { kind: "switch" };
 
 // TODO
 
@@ -231,8 +230,8 @@ pp.parseForStatement = function (node) {
 
   let forAwait = false;
   if (this.hasPlugin("asyncGenerators") && this.state.inAsync && this.isContextual("await")) {
-      forAwait = true;
-      this.next();
+    forAwait = true;
+    this.next();
   }
   this.expect(tt.parenL);
 
@@ -261,7 +260,7 @@ pp.parseForStatement = function (node) {
     return this.parseFor(node, init);
   }
 
-  const refShorthandDefaultPos = {start: 0};
+  const refShorthandDefaultPos = { start: 0 };
   const init = this.parseExpression(true, refShorthandDefaultPos);
   if (this.match(tt._in) || this.isContextual("of")) {
     const description = this.isContextual("of") ? "for-of statement" : "for-in statement";
@@ -441,7 +440,7 @@ pp.parseLabeledStatement = function (node, maybeName, expr) {
     }
   }
 
-  this.state.labels.push({name: maybeName, kind: kind, statementStart: this.state.start});
+  this.state.labels.push({ name: maybeName, kind: kind, statementStart: this.state.start });
   node.body = this.parseStatement(true);
   this.state.labels.pop();
   node.label = expr;
@@ -465,7 +464,11 @@ pp.parseBlock = function (allowDirectives?) {
   return this.finishNode(node, "BlockStatement");
 };
 
-// TODO
+pp.isValidDirective = function (stmt) {
+  return stmt.type === "ExpressionStatement" &&
+    stmt.expression.type === "StringLiteral" &&
+    !stmt.expression.extra.parenthesized;
+};
 
 pp.parseBlockBody = function (node, allowDirectives, topLevel, end) {
   node.body = [];
@@ -482,9 +485,7 @@ pp.parseBlockBody = function (node, allowDirectives, topLevel, end) {
 
     const stmt = this.parseStatement(true, topLevel);
 
-    if (allowDirectives && !parsedNonDirective &&
-        stmt.type === "ExpressionStatement" && stmt.expression.type === "StringLiteral" &&
-        !stmt.expression.extra.parenthesized) {
+    if (allowDirectives && !parsedNonDirective && this.isValidDirective(stmt)) {
       const directive = this.stmtToDirective(stmt);
       node.directives.push(directive);
 
@@ -704,8 +705,8 @@ pp.parseClassBody = function (node) {
 
       // disallow invalid constructors
       const isConstructor = !method.static && (
-        (key.type === "Identifier" && key.name === "constructor") ||
-        (key.type === "StringLiteral" && key.value === "constructor")
+        (key.name === "constructor") || // Identifier
+        (key.value === "constructor")   // Literal
       );
       if (isConstructor) {
         if (hadConstructor) this.raise(key.start, "Duplicate constructor in the same class");
@@ -718,8 +719,8 @@ pp.parseClassBody = function (node) {
 
       // disallow static prototype method
       const isStaticPrototype = method.static && (
-        (key.type === "Identifier" && key.name === "prototype") ||
-        (key.type === "StringLiteral" && key.value === "prototype")
+        (key.name === "prototype") || // Identifier
+        (key.value === "prototype")   // Literal
       );
       if (isStaticPrototype) {
         this.raise(key.start, "Classes may not have static property named prototype");
@@ -733,18 +734,8 @@ pp.parseClassBody = function (node) {
 
     this.parseClassMethod(classBody, method, isGenerator, isAsync);
 
-    // get methods aren't allowed to have any parameters
-    // set methods must have exactly 1 parameter
     if (isGetSet) {
-      const paramCount = method.kind === "get" ? 0 : 1;
-      if (method.params.length !== paramCount) {
-        const start = method.start;
-        if (method.kind === "get") {
-          this.raise(start, "getter should have no params");
-        } else {
-          this.raise(start, "setter should have exactly one param");
-        }
-      }
+      this.checkGetterSetterParamCount(method);
     }
   }
 
@@ -758,8 +749,13 @@ pp.parseClassBody = function (node) {
 };
 
 pp.parseClassProperty = function (node) {
+  const noPluginMsg = "You can only use Class Properties when the 'classProperties' plugin is enabled.";
+  if (!node.typeAnnotation && !this.hasPlugin("classProperties")) {
+    this.raise(node.start, noPluginMsg);
+  }
+
   if (this.match(tt.eq)) {
-    if (!this.hasPlugin("classProperties")) this.unexpected();
+    if (!this.hasPlugin("classProperties")) this.raise(this.state.start, noPluginMsg);
     this.next();
     node.value = this.parseMaybeAssign();
   } else {
@@ -827,6 +823,8 @@ pp.parseExport = function (node) {
     let needsSemi = false;
     if (this.eat(tt._function)) {
       expr = this.parseFunction(expr, true, false, false, true);
+    } else if (this.eatContextual("async") && this.eat(tt._function)) {
+      expr = this.parseFunction(expr, true, false, true, true);
     } else if (this.match(tt._class)) {
       expr = this.parseClass(expr, true, true);
     } else {
@@ -1003,7 +1001,7 @@ pp.parseExportSpecifiers = function () {
 // Parses import declaration.
 
 pp.parseImport = function (node) {
-  this.next();
+  this.eat(tt._import);
 
   // import '...'
   if (this.match(tt.string)) {
@@ -1046,6 +1044,11 @@ pp.parseImportSpecifiers = function (node) {
     if (first) {
       first = false;
     } else {
+      // Detect an attempt to deep destructure
+      if (this.eat(tt.colon)) {
+        this.unexpected(null, "ES2015 named imports do not destructure. Use another statement for destructuring after the import.");
+      }
+
       this.expect(tt.comma);
       if (this.eat(tt.braceR)) break;
     }

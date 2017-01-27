@@ -1,5 +1,4 @@
 /* eslint max-len: 0 */
-/* eslint indent: 0 */
 
 import type { TokenType } from "./types";
 import { isIdentifierStart, isIdentifierChar, isKeyword } from "../util/identifier";
