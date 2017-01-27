@@ -185,7 +185,7 @@ export function NullableTypeAnnotation(node: Object) {
 }
 
 export {
-  NumericLiteral as NumericLiteralTypeAnnotation,
+  NumericLiteral as NumberLiteralTypeAnnotation,
   StringLiteral as StringLiteralTypeAnnotation,
 } from "./types";
 
