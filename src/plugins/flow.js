@@ -676,7 +676,7 @@ pp.flowParsePrimaryType = function () {
 
     case tt.star:
       this.next();
-      return this.finishNode(node, "ExistentialTypeParam");
+      return this.finishNode(node, "ExistsTypeAnnotation");
 
     default:
       if (this.state.type.keyword === "typeof") {

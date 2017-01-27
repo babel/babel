@@ -200,7 +200,7 @@
               },
               "name": "T",
               "default": {
-                "type": "ExistentialTypeParam",
+                "type": "ExistsTypeAnnotation",
                 "start": 34,
                 "end": 35,
                 "loc": {
