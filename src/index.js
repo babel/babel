@@ -20,4 +20,13 @@ export function parse(input, options) {
   return new Parser(options, input).parse();
 }
 
+export function parseExpression(input, options) {
+  const parser = new Parser(options, input);
+  if (parser.options.strictMode) {
+    parser.state.strict = true;
+  }
+  return parser.getExpression();
+}
+
+
 export { tokTypes };

@@ -42,6 +42,16 @@ pp.checkPropClash = function (prop, propHash) {
   }
 };
 
+// Convenience method to parse an Expression only
+pp.getExpression = function() {
+  this.nextToken();
+  const expr = this.parseExpression();
+  if (!this.match(tt.eof)) {
+    this.unexpected();
+  }
+  return expr;
+};
+
 // ### Expression parsing
 
 // These nest, from the most general expression type at the top to
