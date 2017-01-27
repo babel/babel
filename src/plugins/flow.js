@@ -282,8 +282,11 @@ pp.flowParseObjectTypeIndexer = function (node, isStatic, variance) {
   node.value = this.flowParseTypeInitialiser();
   node.variance = variance;
 
+  // Finish node first to not include a possible semicolon in the locations
+  const indexer = this.finishNode(node, "ObjectTypeIndexer");
   this.flowObjectTypeSemicolon();
-  return this.finishNode(node, "ObjectTypeIndexer");
+
+  return indexer;
 };
 
 pp.flowParseObjectTypeMethodish = function (node) {

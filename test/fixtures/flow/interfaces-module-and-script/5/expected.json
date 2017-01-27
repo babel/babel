@@ -129,7 +129,7 @@
             {
               "type": "ObjectTypeIndexer",
               "start": 23,
-              "end": 47,
+              "end": 46,
               "loc": {
                 "start": {
                   "line": 1,
@@ -137,7 +137,7 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 47
+                  "column": 46
                 }
               },
               "id": {
