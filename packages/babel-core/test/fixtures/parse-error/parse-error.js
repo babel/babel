@@ -6,9 +6,7 @@ describe("parse error", function () {
   it("should show a code frame if parse error", () => {
 
     try {
-      new buildConfigChain({
-        filename: "./parse-error/babelrc"
-      });
+      new buildConfigChain();
 
       throw new Error("Config parse error doesn\'t throw an error");
     } catch (e) {
