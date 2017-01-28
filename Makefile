@@ -2,7 +2,7 @@ MAKEFLAGS = -j1
 
 export NODE_ENV = test
 
-.PHONY: build build-dist watch lint fix clean test-clean test-only test test-cov test-ci publish bootstrap
+.PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: clean
 	./node_modules/.bin/gulp build
@@ -16,7 +16,7 @@ build-dist: build
 
 watch: clean
 	rm -rf packages/*/lib
-	BABEL_ENV=development ./node_modules/.bin/gulp watch
+	./node_modules/.bin/gulp watch
 
 lint:
 	./node_modules/.bin/eslint packages/ --format=codeframe
@@ -42,22 +42,19 @@ clean-all:
 	rm -rf packages/*/node_modules
 	make clean
 
-# without lint
 test-only:
 	./scripts/test.sh
 	make test-clean
 
 test: lint test-only
 
-test-cov: clean
-	# rebuild with test
-	rm -rf packages/*/lib
-	BABEL_ENV=test ./node_modules/.bin/gulp build
-	./scripts/test-cov.sh
-
 test-ci:
 	NODE_ENV=test make bootstrap
-	make test-cov
+	make test-only
+
+test-ci-coverage:
+	NODE_ENV=test BABEL_ENV=cov make bootstrap
+	./scripts/test-cov.sh
 	./node_modules/.bin/codecov -f coverage/coverage-final.json
 
 publish:
@@ -68,7 +65,6 @@ publish:
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	./node_modules/.bin/lerna publish --only-explicit-updates
 	make clean
-	#./scripts/build-website.sh
 
 bootstrap:
 	make clean-all

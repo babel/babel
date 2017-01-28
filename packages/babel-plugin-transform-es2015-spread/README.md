@@ -2,6 +2,40 @@
 
 > Compile ES2015 spread to ES5
 
+## Example
+
+**In**
+
+```js
+var a = ['a', 'b', 'c'];
+var b = [...a, 'foo'];
+
+var c = { foo: 'bar', baz: 42 };
+var d = {...o, a: 2};
+```
+
+**Out**
+
+```js
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+  return target;
+}
+
+var a = [ 'a', 'b', 'c' ];
+var b = [].concat(a, [ 'foo' ]);
+
+var c = { foo: 'bar', baz: 42 };
+var d = _extends({}, o, { a: 2 });
+```
+
 ## Installation
 
 ```sh

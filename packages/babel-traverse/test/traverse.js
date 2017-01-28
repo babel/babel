@@ -1,7 +1,7 @@
-const traverse = require("../lib").default;
-const assert   = require("assert");
-const _        = require("lodash");
-const parse = require("babylon").parse;
+const cloneDeep = require("lodash/cloneDeep");
+const traverse  = require("../lib").default;
+const assert    = require("assert");
+const parse     = require("babylon").parse;
 
 describe("traverse", function () {
   const code = `
@@ -17,7 +17,7 @@ describe("traverse", function () {
       type: "StringLiteral",
       value: "foo"
     };
-    const ast2 = _.cloneDeep(program);
+    const ast2 = cloneDeep(program);
 
     traverse(ast2, {
       enter: function (path) {

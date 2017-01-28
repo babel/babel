@@ -3,7 +3,7 @@ import assert from "assert";
 import { parse } from "babylon";
 
 function getBody(program) {
-  return parse(program, {sourceType: "module"}).program.body;
+  return parse(program, { sourceType: "module" }).program.body;
 }
 
 describe("retrievers", function () {

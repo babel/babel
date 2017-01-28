@@ -1,21 +1,21 @@
-const Whitespace = require("../lib/whitespace");
-const Printer    = require("../lib/printer");
-const generate   = require("../lib");
-const assert     = require("assert");
-const parse      = require("babylon").parse;
-const chai       = require("chai");
-const t          = require("babel-types");
-const _          = require("lodash");
-const fs         = require("fs");
-const path       = require("path");
+import Whitespace from "../lib/whitespace";
+import Printer from "../lib/printer";
+import generate from "../lib";
+import assert from "assert";
+import { parse } from "babylon";
+import chai from "chai";
+import * as t from "babel-types";
+import fs from "fs";
+import path from "path";
+import fixtures from "babel-helper-fixtures";
 
 describe("generation", function () {
   it("completeness", function () {
-    _.each(t.VISITOR_KEYS, function (keys, type) {
+    Object.keys(t.VISITOR_KEYS).forEach(function (type) {
       assert.ok(!!Printer.prototype[type], type + " should exist");
     });
 
-    _.each(Printer.prototype, function (fn, type) {
+    Object.keys(Printer.prototype).forEach(function (type) {
       if (!/[A-Z]/.test(type[0])) return;
       assert.ok(t.VISITOR_KEYS[type], type + " should not exist");
     });
@@ -26,7 +26,7 @@ describe("generation", function () {
       "a.js": "function hi (msg) { console.log(msg); }\n",
       "b.js": "hi('hello');\n"
     };
-    const parsed = _.keys(sources).reduce(function (_parsed, filename) {
+    const parsed = Object.keys(sources).reduce(function (_parsed, filename) {
       _parsed[filename] = parse(sources[filename], { sourceFilename: filename });
       return _parsed;
     }, {});
@@ -40,7 +40,7 @@ describe("generation", function () {
       }
     };
 
-    const generated = generate.default(combinedAst, { sourceMaps: true }, sources);
+    const generated = generate(combinedAst, { sourceMaps: true }, sources);
 
     chai.expect(generated.map).to.deep.equal({
       version: 3,
@@ -141,7 +141,7 @@ describe("generation", function () {
     id2.name += "2";
     id2.loc.identiferName = "bar";
 
-    const generated = generate.default(ast, {
+    const generated = generate(ast, {
       filename: "inline",
       sourceFileName: "inline",
       sourceMaps: true
@@ -192,7 +192,7 @@ describe("generation", function () {
     const code = "function hi (msg) { console.log(msg); }\n";
 
     const ast = parse(code, { filename: "a.js" }).program;
-    const generated = generate.default(ast, {
+    const generated = generate(ast, {
       sourceFileName: "a.js",
       sourceMaps: true,
     });
@@ -210,7 +210,7 @@ describe("programmatic generation", function() {
   it("numeric member expression", function() {
     // Should not generate `0.foo`
     const mem = t.memberExpression(t.numericLiteral(60702), t.identifier("foo"));
-    new Function(generate.default(mem).code);
+    new Function(generate(mem).code);
   });
 
   it("nested if statements needs block", function() {
@@ -226,7 +226,7 @@ describe("programmatic generation", function() {
       t.expressionStatement(t.stringLiteral("alt"))
     );
 
-    const ast = parse(generate.default(ifStatement).code);
+    const ast = parse(generate(ifStatement).code);
     assert.equal(ast.program.body[0].consequent.type, "BlockStatement");
   });
 
@@ -236,7 +236,7 @@ describe("programmatic generation", function() {
       [t.directive(t.directiveLiteral("use strict"))]
     );
 
-    const output = generate.default(blockStatement).code;
+    const output = generate(blockStatement).code;
     assert.equal(output, [
       "{",
       "  \"use strict\";",
@@ -256,7 +256,7 @@ describe("programmatic generation", function() {
       null
     );
 
-    const output = generate.default(objectStatement).code;
+    const output = generate(objectStatement).code;
     assert.equal(output, [
       "{",
       "  bar: string;",
@@ -276,7 +276,7 @@ describe("programmatic generation", function() {
       ]
     );
 
-    const output = generate.default(objectStatement).code;
+    const output = generate(objectStatement).code;
 
     assert.equal(output, [
       "{",
@@ -293,11 +293,11 @@ describe("whitespace", function () {
   });
 });
 
-const suites = require("babel-helper-fixtures").default(__dirname + "/fixtures");
+const suites = fixtures(`${__dirname}/fixtures`);
 
 suites.forEach(function (testSuite) {
   describe("generation/" + testSuite.title, function () {
-    _.each(testSuite.tests, function (task) {
+    testSuite.tests.forEach(function (task) {
       it(task.title, !task.disabled && function () {
         const expect = task.expect;
         const actual = task.actual;
@@ -310,7 +310,7 @@ suites.forEach(function (testSuite) {
             strictMode: false,
             sourceType: "module",
           });
-          const result = generate.default(actualAst, task.options, actualCode);
+          const result = generate(actualAst, task.options, actualCode);
 
           if (!expect.code && result.code && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
             console.log(`New test file created: ${expect.loc}`);

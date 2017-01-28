@@ -29,13 +29,13 @@ export default function ({ types: t }) {
     });
   `);
 
-  const buildClassPropertySpec = (ref, {key, value, computed}) => buildObjectDefineProperty({
+  const buildClassPropertySpec = (ref, { key, value, computed }) => buildObjectDefineProperty({
     REF: ref,
     KEY: (t.isIdentifier(key) && !computed) ? t.stringLiteral(key.name) : key,
     VALUE: value ? value : t.identifier("undefined")
   });
 
-  const buildClassPropertyNonSpec = (ref, {key, value, computed}) => t.expressionStatement(
+  const buildClassPropertyNonSpec = (ref, { key, value, computed }) => t.expressionStatement(
     t.assignmentExpression("=", t.memberExpression(ref, key, computed || t.isLiteral(key)), value)
   );
 

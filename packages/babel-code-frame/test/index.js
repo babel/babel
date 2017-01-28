@@ -1,6 +1,6 @@
-const assert = require("assert");
-const chalk = require("chalk");
-const codeFrame = require("..");
+import assert from "assert";
+import chalk from "chalk";
+import codeFrame from "..";
 
 describe("babel-code-frame", function () {
   it("basic usage", function () {
@@ -109,7 +109,7 @@ describe("babel-code-frame", function () {
 
   it("opts.highlightCode", function () {
     const rawLines = "console.log('babel')";
-    const result = codeFrame(rawLines, 1, 9, {highlightCode: true});
+    const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
     const stripped = chalk.stripColor(result);
     assert.ok(result.length > stripped.length);
     assert.equal(stripped, [

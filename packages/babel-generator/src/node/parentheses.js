@@ -43,7 +43,7 @@ export function UpdateExpression(node: Object, parent: Object): boolean {
 }
 
 export function ObjectExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
-  return isFirstInStatement(printStack, {considerArrow: true});
+  return isFirstInStatement(printStack, { considerArrow: true });
 }
 
 export function Binary(node: Object, parent: Object): boolean {
@@ -150,7 +150,7 @@ export function YieldExpression(node: Object, parent: Object): boolean {
 export { YieldExpression as AwaitExpression };
 
 export function ClassExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
-  return isFirstInStatement(printStack, {considerDefaultExports: true});
+  return isFirstInStatement(printStack, { considerDefaultExports: true });
 }
 
 export function UnaryLike(node: Object, parent: Object): boolean {
@@ -166,20 +166,18 @@ export function UnaryLike(node: Object, parent: Object): boolean {
 }
 
 export function FunctionExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
-  return isFirstInStatement(printStack, {considerDefaultExports: true});
+  return isFirstInStatement(printStack, { considerDefaultExports: true });
 }
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
-  // export default (function () {});
-  if (t.isExportDeclaration(parent)) {
-    return true;
-  }
-
-  if (t.isBinaryExpression(parent) || t.isLogicalExpression(parent)) {
-    return true;
-  }
-
-  if (t.isUnaryExpression(parent)) {
+  if (
+    // export default (function () {});
+    t.isExportDeclaration(parent) ||
+    t.isBinaryExpression(parent) ||
+    t.isLogicalExpression(parent) ||
+    t.isUnaryExpression(parent) ||
+    t.isTaggedTemplateExpression(parent)
+  ) {
     return true;
   }
 
@@ -222,6 +220,10 @@ function isFirstInStatement(printStack: Array<Object>, {
   let parent = printStack[i];
   while (i > 0) {
     if (t.isExpressionStatement(parent, { expression: node })) {
+      return true;
+    }
+
+    if (t.isTaggedTemplateExpression(parent)) {
       return true;
     }
 

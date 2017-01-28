@@ -7,7 +7,7 @@ const superVisitor = {
   CallExpression(path) {
     if (!path.get("callee").isSuper()) return;
 
-    const {node} = path;
+    const { node } = path;
     if (node[SUPER_THIS_BOUND]) return;
     node[SUPER_THIS_BOUND] = true;
 
@@ -101,7 +101,7 @@ function remap(path, key) {
   const classPath = fnPath.findParent((p) => p.isClass());
   const hasSuperClass = !!(classPath && classPath.node && classPath.node.superClass);
 
-  if (key === "this" && fnPath.isMethod({kind: "constructor"}) && hasSuperClass) {
+  if (key === "this" && fnPath.isMethod({ kind: "constructor" }) && hasSuperClass) {
     fnPath.scope.push({ id });
 
     fnPath.traverse(superVisitor, { id });

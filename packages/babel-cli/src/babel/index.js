@@ -9,10 +9,10 @@ const kebabCase  = require("lodash/kebabCase");
 const options    = require("babel-core").options;
 const util       = require("babel-core").util;
 const uniq       = require("lodash/uniq");
-const each       = require("lodash/each");
 const glob       = require("glob");
 
-each(options, function (option, key) {
+Object.keys(options).forEach(function (key) {
+  const option = options[key];
   if (option.hidden) return;
 
   let arg = kebabCase(key);
@@ -69,7 +69,7 @@ let filenames = commander.args.reduce(function (globbed, input) {
 
 filenames = uniq(filenames);
 
-each(filenames, function (filename) {
+filenames.forEach(function (filename) {
   if (!fs.existsSync(filename)) {
     errors.push(filename + " doesn't exist");
   }
@@ -106,7 +106,8 @@ if (errors.length) {
 
 const opts = exports.opts = {};
 
-each(options, function (opt, key) {
+Object.keys(options).forEach(function (key) {
+  const opt = options[key];
   if (commander[key] !== undefined && commander[key] !== opt.default) {
     opts[key] = commander[key];
   }
