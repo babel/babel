@@ -426,16 +426,25 @@ export default function () {
           }
 
           if (hasImports && Object.keys(nonHoistedExportNames).length) {
-            let hoistedExportsNode = t.identifier("undefined");
 
-            for (const name in nonHoistedExportNames) {
-              hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode).expression;
+            // avoid creating too long of export assignment to prevent stack overflow
+            const maxHoistedExportsNodeAssignmentLength = 100;
+            const nonHoistedExportNamesArr = Object.keys(nonHoistedExportNames);
+
+            for (let currentExportsNodeAssignmentLength = 0; currentExportsNodeAssignmentLength < nonHoistedExportNamesArr.length; currentExportsNodeAssignmentLength += maxHoistedExportsNodeAssignmentLength ) {
+              const nonHoistedExportNamesChunk = nonHoistedExportNamesArr.slice(currentExportsNodeAssignmentLength, currentExportsNodeAssignmentLength + maxHoistedExportsNodeAssignmentLength);
+
+              let hoistedExportsNode = t.identifier("undefined");
+
+              nonHoistedExportNamesChunk.forEach(function (name) {
+                hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode).expression;
+              });
+
+              const node = t.expressionStatement(hoistedExportsNode);
+              node._blockHoist = 3;
+
+              topNodes.unshift(node);
             }
-
-            const node = t.expressionStatement(hoistedExportsNode);
-            node._blockHoist = 3;
-
-            topNodes.unshift(node);
           }
 
           // add __esModule declaration if this file has any exports
