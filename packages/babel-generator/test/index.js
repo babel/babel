@@ -306,7 +306,19 @@ suites.forEach(function (testSuite) {
         if (actualCode) {
           const actualAst = parse(actualCode, {
             filename: actual.loc,
-            plugins: ["*"],
+            plugins: [
+              "asyncGenerators",
+              "classProperties",
+              "decorators",
+              "doExpressions",
+              "dynamicImport",
+              "exportExtensions",
+              "flow",
+              "functionBind",
+              "functionSent",
+              "jsx",
+              "objectRestSpread",
+            ],
             strictMode: false,
             sourceType: "module",
           });
