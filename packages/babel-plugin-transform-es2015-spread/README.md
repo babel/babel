@@ -80,4 +80,8 @@ require("babel-core").transform("code", {
 
 ## Options
 
-* `loose` - All iterables are assumed to be arrays.
+### `loose`
+
+`boolean`, defaults to `false`.
+
+In loose mode, **all** iterables are assumed to be arrays.

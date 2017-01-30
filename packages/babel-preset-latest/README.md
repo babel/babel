@@ -36,9 +36,11 @@ require("babel-core").transform("code", {
 
 ### Options
 
-- `es2015`: Optionally not run any plugins from this preset (defaults to true)
-- `es2016`: Optionally not run any plugins from this preset (defaults to true)
-- `es2017`: Optionally not run any plugins from this preset (defaults to true)
+### `es2015`
+
+`boolean`, defaults to `false`.
+
+Toggles including plugins from the [es2015 preset](/docs/plugins/preset-es2015/).
 
 ```js
 {
@@ -50,16 +52,28 @@ require("babel-core").transform("code", {
 }
 ```
 
-You can also pass options down to the `es2015` preset.
+You can also pass options down to the `es2015` preset. This also works for the other preset options.
 
 ```js
 {
   "presets": [
     ["latest", {
       "es2015": {
-        "modules": false 
+        "modules": false
       }
     }]
   ]
 }
 ```
+
+### `es2016`
+
+`boolean`, defaults to `false`.
+
+Toggles including from the [es2016 preset](/docs/plugins/preset-es2016/).
+
+### `es2017`
+
+`boolean`, defaults to `false`.
+
+Toggles including plugins from the [es2017 preset](/docs/plugins/preset-es2017/).
