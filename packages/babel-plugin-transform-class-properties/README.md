@@ -76,7 +76,11 @@ require("babel-core").transform("code", {
 
 ## Options
 
-* `spec` -  Class properties are compiled to use `Object.defineProperty. Static fields are now defined even if they are not initialized
+### `spec`
+
+`boolean`, defaults to `false`.
+
+Class properties are compiled to use `Object.defineProperty`. Static fields are now defined even if they are not initialized.
 
 ## References
 

@@ -95,6 +95,16 @@ require("babel-core").transform("code", {
 
 ## Options
 
-* `pragma` - Replace the function used when compiling JSX expressions (Defaults to `React.createElement`).
-  - Note that the `@jsx React.DOM` pragma has been deprecated as of React v0.12
-* `useBuiltIns` - When spreading props, use Object.assign instead of Babel's extend helper (Disabled by default).
+### `pragma`
+
+`string`, defaults to `React.createElement`.
+
+Replace the function used when compiling JSX expressions.
+
+Note that the `@jsx React.DOM` pragma has been deprecated as of React v0.12
+
+### `useBuiltIns`
+
+`boolean`, defaults to `false`.
+
+When spreading props, use `Object.assign` directly instead of Babel's extend helper.

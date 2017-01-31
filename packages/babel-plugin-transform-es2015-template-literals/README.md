@@ -62,10 +62,15 @@ require("babel-core").transform("code", {
 ## Options
 
 ### `loose`
+
+`boolean`, defaults to `false`.
+
 In loose mode, tagged template literal objects aren't frozen.
 
-
 ### `spec`
+
+`boolean`, defaults to `false`.
+
 This option wraps all template literal expressions with `String`. See [babel/babel#1065](https://github.com/babel/babel/issues/1065) for more info.
 
 **In**

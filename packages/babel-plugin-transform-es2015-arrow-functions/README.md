@@ -73,7 +73,7 @@ Without options:
 
 With options:
 
-```json 
+```json
 {
   "plugins": [
     ["transform-es2015-arrow-functions", { "spec": true }]
@@ -97,4 +97,8 @@ require("babel-core").transform("code", {
 
 ## Options
 
-* `spec` - This option wraps the generated function in `.bind(this)` and keeps uses of `this` inside the function as-is, instead of using a renamed `this`. It also adds a runtime check to ensure the functions are not instantiated.
+### `spec`
+
+`boolean`, defaults to `false`.
+
+This option wraps the generated function in `.bind(this)` and keeps uses of `this` inside the function as-is, instead of using a renamed `this`. It also adds a runtime check to ensure the functions are not instantiated.
