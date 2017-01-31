@@ -390,8 +390,6 @@ export default class Scope {
   }
 
   toArray(node: Object, i?: number) {
-    const file = this.hub.file;
-
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding && binding.constant && binding.path.isGenericType("Array")) return node;
