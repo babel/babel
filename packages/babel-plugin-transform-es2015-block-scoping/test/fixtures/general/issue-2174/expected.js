@@ -1,11 +1,9 @@
 if (true) {
-  var x;
+  var foo = function () {};
 
-  (function () {
-    function foo() {}
-    function bar() {
-      return foo;
-    }
-    for (x in {}) {}
-  })();
+  var bar = function () {
+    return foo;
+  };
+
+  for (var x in {}) {}
 }
