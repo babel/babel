@@ -344,7 +344,8 @@ export default class Scope {
     let duplicate = false;
 
     // don't allow duplicate bindings to exist alongside
-    if (!duplicate) duplicate = kind === "let" || local.kind === "let" || local.kind === "const" || local.kind === "module";
+    // unless binding is let and inside a class method of the same identifier
+    if (!duplicate) duplicate = (kind === "let" && local.kind !== "local") || local.kind === "let" || local.kind === "const" || local.kind === "module";
 
     // don't allow a local of param with a kind of let
     if (!duplicate) duplicate = local.kind === "param" && (kind === "let" || kind === "const");
@@ -506,6 +507,8 @@ export default class Scope {
           if (local.identifier === id) continue;
 
           this.checkBlockScopedCollisions(local, kind, name, id);
+          // if no duplicates were found, set existing binding to null
+          local = null
         }
 
         // It's erroneous that we currently consider flow a binding, however, we can't
