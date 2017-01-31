@@ -1,7 +1,7 @@
 import Module from "module";
 import path from "path";
 
-let relativeModules = {};
+const relativeModules = {};
 
 export default function (loc: string, relative: string = process.cwd()): ?string {
   // we're in the browser, probably
@@ -18,7 +18,7 @@ export default function (loc: string, relative: string = process.cwd()): ?string
     // Node presumes "." is process.cwd(), not our relative path.
     // Since this fake module is never "loaded", we don't have to worry about mutating
     // any global Node module cache state here.
-    let filename = path.join(relative, ".babelrc");
+    const filename = path.join(relative, ".babelrc");
     relativeMod.id = filename;
     relativeMod.filename = filename;
 

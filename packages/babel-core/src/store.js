@@ -15,7 +15,7 @@ export default class Store extends Map {
       return super.get(key);
     } else {
       if (Object.prototype.hasOwnProperty.call(this.dynamicData, key)) {
-        let val =  this.dynamicData[key]();
+        const val =  this.dynamicData[key]();
         this.set(key, val);
         return val;
       }

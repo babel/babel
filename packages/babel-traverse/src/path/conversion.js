@@ -3,7 +3,7 @@
 import * as t from "babel-types";
 
 export function toComputedKey(): Object {
-  let node = this.node;
+  const node = this.node;
 
   let key;
   if (this.isMemberExpression()) {
@@ -31,7 +31,7 @@ export function arrowFunctionToShadowed() {
 
   this.ensureBlock();
 
-  let { node } = this;
+  const { node } = this;
   node.expression = false;
   node.type = "FunctionExpression";
   node.shadow = node.shadow || true;

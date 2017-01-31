@@ -36,15 +36,17 @@ require("babel-core").transform("code", {
 
 ### Options
 
-- `es2015`: Optionally not run any plugins from this preset (defaults to true)
-- `es2016`: Optionally not run any plugins from this preset (defaults to true)
-- `es2017`: Optionally not run any plugins from this preset (defaults to true)
+### `es2015`
+
+`boolean`, defaults to `true`.
+
+Toggles including plugins from the [es2015 preset](https://babeljs.io/docs/plugins/preset-es2015/).
 
 ```js
 {
   "presets": [
     ["latest", {
-      "es2015": false // defaults to true
+      "es2015": false
     }]
   ]
 }
@@ -57,9 +59,23 @@ You can also pass options down to the `es2015` preset.
   "presets": [
     ["latest", {
       "es2015": {
-        "modules": false 
+        "modules": false
       }
     }]
   ]
 }
 ```
+
+**Note:** This also works for the other preset-year options below.
+
+### `es2016`
+
+`boolean`, defaults to `true`.
+
+Toggles including plugins from the [es2016 preset](https://babeljs.io/docs/plugins/preset-es2016/).
+
+### `es2017`
+
+`boolean`, defaults to `true`.
+
+Toggles including plugins from the [es2017 preset](https://babeljs.io/docs/plugins/preset-es2017/).

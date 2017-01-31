@@ -90,3 +90,8 @@ var identity;
 
 import type from "foo";
 import type2, { foo3 } from "bar";
+
+import "foo";
+import { V1 } from "foo";
+import "foo";
+import { V4 } from "foo";

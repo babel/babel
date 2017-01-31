@@ -62,7 +62,11 @@ require("babel-core").transform("code", {
 });
 ```
 
-## Options `loose`
+## Options
+
+### `loose`
+
+`boolean`, defaults to `false`.
 
 As per the spec, `import` and `export` are only allowed to be used at the top
 level. When in loose mode these are allowed to be used anywhere.

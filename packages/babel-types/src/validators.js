@@ -10,11 +10,11 @@ import { BLOCK_SCOPED_SYMBOL } from "./constants";
  */
 
 export function isBinding(node: Object, parent: Object): boolean {
-  let keys = getBindingIdentifiers.keys[parent.type];
+  const keys = getBindingIdentifiers.keys[parent.type];
   if (keys) {
     for (let i = 0; i < keys.length; i++) {
-      let key = keys[i];
-      let val = parent[key];
+      const key = keys[i];
+      const val = parent[key];
       if (Array.isArray(val)) {
         if (val.indexOf(node) >= 0) return true;
       } else {
@@ -73,7 +73,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
     case "ArrowFunctionExpression":
     case "FunctionDeclaration":
     case "FunctionExpression":
-      for (let param of (parent.params: Array<any>)) {
+      for (const param of (parent.params: Array<any>)) {
         if (param === node) return false;
       }
 
@@ -254,7 +254,7 @@ export function isNodesEquivalent(a, b) {
 
   const fields = Object.keys(t.NODE_FIELDS[a.type] || a.type);
 
-  for (let field of fields) {
+  for (const field of fields) {
     if (typeof a[field] !== typeof b[field]) {
       return false;
     }

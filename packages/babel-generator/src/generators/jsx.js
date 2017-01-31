@@ -47,12 +47,12 @@ export function JSXText(node: Object) {
 }
 
 export function JSXElement(node: Object) {
-  let open = node.openingElement;
+  const open = node.openingElement;
   this.print(open, node);
   if (open.selfClosing) return;
 
   this.indent();
-  for (let child of (node.children: Array<Object>)) {
+  for (const child of (node.children: Array<Object>)) {
     this.print(child, node);
   }
   this.dedent();

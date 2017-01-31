@@ -26,7 +26,7 @@ export default function ({ types: t }) {
     return t.objectExpression([fileNameProperty, lineNumberProperty]);
   }
 
-  let visitor = {
+  const visitor = {
     JSXOpeningElement(path, state) {
       const id = t.jSXIdentifier(TRACE_ID);
       const location = path.container.openingElement.loc;
@@ -50,10 +50,7 @@ export default function ({ types: t }) {
           : null;
 
         const fileNameIdentifier = path.scope.generateUidIdentifier(FILE_NAME_VAR);
-        const scope = path.hub.getScope();
-        if (scope) {
-          scope.push({id: fileNameIdentifier, init: t.stringLiteral(fileName)});
-        }
+        path.hub.file.scope.push({ id: fileNameIdentifier, init: t.stringLiteral(fileName) });
         state.fileNameIdentifier = fileNameIdentifier;
       }
 

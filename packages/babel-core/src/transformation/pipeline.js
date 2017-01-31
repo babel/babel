@@ -11,7 +11,7 @@ export default class Pipeline {
   }
 
   pretransform(code: string, opts?: Object): BabelFileResult {
-    let file = new File(opts, this);
+    const file = new File(opts, this);
     return file.wrap(code, function () {
       file.addCode(code);
       file.parseCode(code);
@@ -20,7 +20,7 @@ export default class Pipeline {
   }
 
   transform(code: string, opts?: Object): BabelFileResult {
-    let file = new File(opts, this);
+    const file = new File(opts, this);
     return file.wrap(code, function () {
       file.addCode(code);
       file.parseCode(code);
@@ -40,7 +40,7 @@ export default class Pipeline {
   transformFromAst(ast: Object, code: string, opts: Object): BabelFileResult {
     ast = normalizeAst(ast);
 
-    let file = new File(opts, this);
+    const file = new File(opts, this);
     return file.wrap(code, function () {
       file.addCode(code);
       file.addAst(ast);

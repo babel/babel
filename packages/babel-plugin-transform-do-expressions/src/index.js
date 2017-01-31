@@ -4,7 +4,7 @@ export default function () {
 
     visitor: {
       DoExpression(path) {
-        let body = path.node.body.body;
+        const body = path.node.body.body;
         if (body.length) {
           path.replaceWithMultiple(body);
         } else {
