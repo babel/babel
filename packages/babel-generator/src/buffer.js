@@ -87,7 +87,7 @@ export default class Buffer {
   _trimEnd(str: string): string {
     let trimTarget = str.length;
     const whitespace = /\s/;
-    while (trimTarget > 0 && str[trimTarget - 1].match(whitespace)) {
+    while (trimTarget > 0 && whitespace.test(str[trimTarget - 1])) {
       trimTarget--;
     }
     return str.slice(0, trimTarget);
