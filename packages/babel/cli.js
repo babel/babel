@@ -1,7 +1,5 @@
 #!/usr/bin/env node
-const isGlobal = require("is-global");
-
-const globalMessage = isGlobal() ? " -g" : "";
+const globalMessage = process.env._.includes(process.cwd()) ? "" : " -g";
 
 console.error("You have mistakenly installed the `babel` package, which is a no-op in Babel 6.\n" +
   "Babel's CLI commands have been moved from the `babel` package to the `babel-cli` package.\n" +

@@ -11,7 +11,6 @@
     "babel-node": "./cli.js",
     "babel-external-helpers": "./cli.js"
   },
-  "dependencies": {
-    "is-global": "^0.1.0"
-  }
+  "dependencies": {},
+  "devDependencies": {}
 }
