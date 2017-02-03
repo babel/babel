@@ -33,7 +33,8 @@ describe("evaluation", function () {
 
   it("should bail out on recursive evaluation", function () {
     assert.strictEqual(
-      getPath("function fn(a) { var g = a ? 1 : 2, a = g * this.foo; }").get("body.0.body.body.0.declarations.1.init").evaluate().confident,
+      getPath("function fn(a) { var g = a ? 1 : 2, a = g * this.foo; }")
+        .get("body.0.body.body.0.declarations.1.init").evaluate().confident,
       false
     );
   });
@@ -54,7 +55,8 @@ describe("evaluation", function () {
 
   it("should deopt when var is redeclared in the same scope", function () {
     assert.strictEqual(
-      getPath("var x = 2; var y = x + 2; { var x = 3 }").get("body.1.declarations.0.init").evaluate().confident,
+      getPath("var x = 2; var y = x + 2; { var x = 3 }")
+        .get("body.1.declarations.0.init").evaluate().confident,
       false
     );
   });
@@ -73,7 +75,8 @@ describe("evaluation", function () {
 
   it("it should not deopt let/const inside blocks", function () {
     assert.strictEqual(
-      getPath("let x = 5; { let x = 1; } let y = x + 5").get("body.2.declarations.0.init").evaluate().value,
+      getPath("let x = 5; { let x = 1; } let y = x + 5")
+        .get("body.2.declarations.0.init").evaluate().value,
       10
     );
     const constExample = "const d = true; if (d && true || false) { const d = false; d && 5; }";

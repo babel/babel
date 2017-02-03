@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import { basename, extname } from "path";
 import template from "babel-template";
 

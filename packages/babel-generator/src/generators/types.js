@@ -1,6 +1,3 @@
-/* eslint max-len: 0 */
-/* eslint quotes: 0 */
-
 import * as t from "babel-types";
 import jsesc from "jsesc";
 
@@ -62,7 +59,8 @@ export function ObjectProperty(node: Object) {
     this.token("]");
   } else {
     // print `({ foo: foo = 5 } = {})` as `({ foo = 5 } = {});`
-    if (t.isAssignmentPattern(node.value) && t.isIdentifier(node.key) && node.key.name === node.value.left.name) {
+    if (t.isAssignmentPattern(node.value) && t.isIdentifier(node.key) &&
+      node.key.name === node.value.left.name) {
       this.print(node.value, node);
       return;
     }

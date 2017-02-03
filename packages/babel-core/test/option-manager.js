@@ -35,6 +35,7 @@ describe("option-manager", () => {
             "blacklist": true
           });
         },
+        // eslint-disable-next-line max-len
         /Using removed Babel 5 option: base.auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/
       );
     });
@@ -59,6 +60,7 @@ describe("option-manager", () => {
             "presets": [{ option: "value" }]
           });
         },
+        // eslint-disable-next-line max-len
         /Unknown option: foreign.option\.(?:.|\n)+A common cause of this error is the presence of a configuration options object without the corresponding preset name/
       );
     });

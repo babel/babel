@@ -46,7 +46,8 @@ const assertTest = function (stdout, stderr, opts) {
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      assert.ok(includes(stderr, expectStderr), "stderr " + JSON.stringify(stderr) + " didn't contain " + JSON.stringify(expectStderr));
+      assert.ok(includes(stderr, expectStderr), "stderr " + JSON.stringify(stderr) +
+        " didn't contain " + JSON.stringify(expectStderr));
     } else {
       chai.expect(stderr).to.equal(expectStderr, "stderr didn't match");
     }
@@ -60,7 +61,8 @@ const assertTest = function (stdout, stderr, opts) {
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      assert.ok(includes(stdout, expectStdout), "stdout " + JSON.stringify(stdout) + " didn't contain " + JSON.stringify(expectStdout));
+      assert.ok(includes(stdout, expectStdout), "stdout " + JSON.stringify(stdout) +
+        " didn't contain " + JSON.stringify(expectStdout));
     } else {
       chai.expect(stdout).to.equal(expectStdout, "stdout didn't match");
     }

@@ -1,5 +1,4 @@
 /* global BabelFileResult, BabelParserOptions, BabelFileMetadata */
-/* eslint max-len: 0 */
 
 import getHelper from "babel-helpers";
 import * as metadataVisitor from "./metadata";
@@ -339,7 +338,7 @@ export default class File extends Store {
     this.scope.push({
       id: uid,
       init: init,
-      _blockHoist: 1.9    // This ensures that we don't fail if not using function expression helpers
+      _blockHoist: 1.9 // This ensures that we don't fail if not using function expression helpers
     });
     return uid;
   }
@@ -378,8 +377,8 @@ export default class File extends Store {
         sourceRoot: inputMapConsumer.sourceRoot
       });
 
-      // This assumes the output map always has a single source, since Babel always compiles a single source file to a
-      // single output file.
+      // This assumes the output map always has a single source, since Babel always compiles a
+      // single source file to a single output file.
       const source = outputMapConsumer.sources[0];
 
       inputMapConsumer.eachMapping(function (mapping) {
@@ -424,7 +423,8 @@ export default class File extends Store {
           if (parser) {
             parseCode = require(parser).parse;
           } else {
-            throw new Error(`Couldn't find parser ${parserOpts.parser} with "parse" method relative to directory ${dirname}`);
+            throw new Error(`Couldn't find parser ${parserOpts.parser} with "parse" method ` +
+              `relative to directory ${dirname}`);
           }
         } else {
           parseCode = parserOpts.parser;
@@ -472,7 +472,8 @@ export default class File extends Store {
       this.log.debug("Start transform traverse");
 
       // merge all plugin visitors into a single visitor
-      const visitor = traverse.visitors.merge(this.pluginVisitors[i], pluginPasses, this.opts.wrapPluginVisitorMethod);
+      const visitor = traverse.visitors.merge(this.pluginVisitors[i], pluginPasses,
+        this.opts.wrapPluginVisitorMethod);
       traverse(this.ast, visitor, this.scope);
 
       this.log.debug("End transform traverse");
@@ -610,14 +611,16 @@ export default class File extends Store {
         if (generator) {
           gen = require(generator).print;
         } else {
-          throw new Error(`Couldn't find generator ${gen} with "print" method relative to directory ${dirname}`);
+          throw new Error(`Couldn't find generator ${gen} with "print" method relative ` +
+            `to directory ${dirname}`);
         }
       }
     }
 
     this.log.debug("Generation start");
 
-    const _result = gen(ast, opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts, this.code);
+    const _result = gen(ast, opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts,
+      this.code);
     result.code = _result.code;
     result.map  = _result.map;
 

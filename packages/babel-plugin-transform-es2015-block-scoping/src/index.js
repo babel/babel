@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import type NodePath from "babel-traverse";
 import type Scope from "babel-traverse";
 import type File from "../../../file";
@@ -397,7 +395,8 @@ class BlockScoping {
     const isSwitch = this.blockPath.isSwitchStatement();
 
     // build the closure that we're going to wrap the block with, possible wrapping switch(){}
-    const fn = t.functionExpression(null, params, t.blockStatement(isSwitch ? [block] : block.body));
+    const fn = t.functionExpression(null, params,
+      t.blockStatement(isSwitch ? [block] : block.body));
     fn.shadow = true;
 
     // continuation
@@ -654,7 +653,8 @@ class BlockScoping {
           for (let i = 0; i < cases.length; i++) {
             const caseConsequent = cases[i].consequent[0];
             if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {
-              caseConsequent.label = this.loopLabel = this.loopLabel || this.scope.generateUidIdentifier("loop");
+              caseConsequent.label = this.loopLabel = this.loopLabel ||
+                this.scope.generateUidIdentifier("loop");
             }
           }
         }

@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import cloneDeep from "lodash/cloneDeep";
 import assign from "lodash/assign";
 import has from "lodash/has";
@@ -15,7 +13,8 @@ export default function (code: string, opts?: Object): Function {
   // original stack to append if it errors when parsing
   let stack;
   try {
-    // error stack gets populated in IE only on throw (https://msdn.microsoft.com/en-us/library/hh699850(v=vs.94).aspx)
+    // error stack gets populated in IE only on throw
+    // (https://msdn.microsoft.com/en-us/library/hh699850(v=vs.94).aspx)
     throw new Error();
   } catch (error) {
     if (error.stack) {

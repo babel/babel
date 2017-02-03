@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import { basename, extname } from "path";
 import template from "babel-template";
 import * as t from "babel-types";
@@ -43,7 +41,8 @@ const buildExportAll = template(`
   });
 `);
 
-const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty", "ClassMethod", "ObjectMethod"];
+const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty",
+  "ClassMethod", "ObjectMethod"];
 
 export default function () {
   const REASSIGN_REMAP_SKIP = Symbol();
@@ -61,7 +60,8 @@ export default function () {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), remap]));
       } else if (path.isJSXIdentifier() && t.isMemberExpression(remap)) {
         const { object, property } = remap;
-        path.replaceWith(t.JSXMemberExpression(t.JSXIdentifier(object.name), t.JSXIdentifier(property.name)));
+        path.replaceWith(t.JSXMemberExpression(t.JSXIdentifier(object.name),
+          t.JSXIdentifier(property.name)));
       } else {
         path.replaceWith(remap);
       }
@@ -327,9 +327,15 @@ export default function () {
                     // todo
                   } else if (specifier.isExportSpecifier()) {
                     if (specifier.node.local.name === "default") {
-                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(t.callExpression(this.addHelper("interopRequireDefault"), [ref]), specifier.node.local)));
+                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name),
+                        t.memberExpression(
+                          t.callExpression(this.addHelper("interopRequireDefault"), [ref]),
+                          specifier.node.local
+                        )
+                      ));
                     } else {
-                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name), t.memberExpression(ref, specifier.node.local)));
+                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name),
+                        t.memberExpression(ref, specifier.node.local)));
                     }
                     nonHoistedExportNames[specifier.node.exported.name] = true;
                   }
@@ -414,7 +420,8 @@ export default function () {
                       topNodes.push(varDecl);
                     }
                   }
-                  remaps[specifier.local.name] = t.memberExpression(target, t.cloneWithoutLoc(specifier.imported));
+                  remaps[specifier.local.name] = t.memberExpression(target,
+                    t.cloneWithoutLoc(specifier.imported));
                 }
               }
             } else {
@@ -431,13 +438,20 @@ export default function () {
             const maxHoistedExportsNodeAssignmentLength = 100;
             const nonHoistedExportNamesArr = Object.keys(nonHoistedExportNames);
 
-            for (let currentExportsNodeAssignmentLength = 0; currentExportsNodeAssignmentLength < nonHoistedExportNamesArr.length; currentExportsNodeAssignmentLength += maxHoistedExportsNodeAssignmentLength ) {
-              const nonHoistedExportNamesChunk = nonHoistedExportNamesArr.slice(currentExportsNodeAssignmentLength, currentExportsNodeAssignmentLength + maxHoistedExportsNodeAssignmentLength);
+            for (
+              let currentExportsNodeAssignmentLength = 0;
+              currentExportsNodeAssignmentLength < nonHoistedExportNamesArr.length;
+              currentExportsNodeAssignmentLength += maxHoistedExportsNodeAssignmentLength
+            ) {
+              const nonHoistedExportNamesChunk = nonHoistedExportNamesArr.slice(
+                currentExportsNodeAssignmentLength,
+                currentExportsNodeAssignmentLength + maxHoistedExportsNodeAssignmentLength);
 
               let hoistedExportsNode = t.identifier("undefined");
 
               nonHoistedExportNamesChunk.forEach(function (name) {
-                hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode).expression;
+                hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode)
+                  .expression;
               });
 
               const node = t.expressionStatement(hoistedExportsNode);
