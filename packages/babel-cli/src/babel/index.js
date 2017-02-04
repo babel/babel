@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-/* eslint max-len: 0 */
-
-require("babel-core");
 
 const fs         = require("fs");
 const commander  = require("commander");
@@ -38,6 +35,7 @@ Object.keys(options).forEach(function (key) {
   commander.option(arg, desc.join(" "));
 });
 
+/* eslint-disable max-len */
 commander.option("-x, --extensions [extensions]", "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx]");
 commander.option("-w, --watch", "Recompile files on changes");
 commander.option("--skip-initial-build", "Do not compile files before watching");
@@ -45,6 +43,7 @@ commander.option("-o, --out-file [out]", "Compile all input files into a single 
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
 commander.option("-q, --quiet", "Don't log anything");
+/* eslint-enable max-len */
 
 const pkg = require("../../package.json");
 commander.version(pkg.version + " (babel-core " + require("babel-core").version + ")");

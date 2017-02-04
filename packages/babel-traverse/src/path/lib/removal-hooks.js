@@ -6,28 +6,29 @@
 
 export const hooks = [
   function (self, parent) {
-    let removeParent = false;
+    const removeParent =
+      // while (NODE);
+      // removing the test of a while/switch, we can either just remove it entirely *or* turn the
+      // `test` into `true` unlikely that the latter will ever be what's wanted so we just remove
+      // the loop to avoid infinite recursion
+      (self.key === "test" && (parent.isWhile() || parent.isSwitchCase())) ||
 
-    // while (NODE);
-    // removing the test of a while/switch, we can either just remove it entirely *or* turn the `test` into `true`
-    // unlikely that the latter will ever be what's wanted so we just remove the loop to avoid infinite recursion
-    removeParent = removeParent || (self.key === "test" && (parent.isWhile() || parent.isSwitchCase()));
+      // export NODE;
+      // just remove a declaration for an export as this is no longer valid
+      (self.key === "declaration" && parent.isExportDeclaration()) ||
 
-    // export NODE;
-    // just remove a declaration for an export as this is no longer valid
-    removeParent = removeParent || (self.key === "declaration" && parent.isExportDeclaration());
+      // label: NODE
+      // stray labeled statement with no body
+      (self.key === "body" && parent.isLabeledStatement()) ||
 
-    // label: NODE
-    // stray labeled statement with no body
-    removeParent = removeParent || (self.key === "body" && parent.isLabeledStatement());
+      // let NODE;
+      // remove an entire declaration if there are no declarators left
+      (self.listKey === "declarations" && parent.isVariableDeclaration() &&
+        parent.node.declarations.length === 1) ||
 
-    // let NODE;
-    // remove an entire declaration if there are no declarators left
-    removeParent = removeParent || (self.listKey === "declarations" && parent.isVariableDeclaration() && parent.node.declarations.length === 1);
-
-    // NODE;
-    // remove the entire expression statement if there's no expression
-    removeParent = removeParent || (self.key === "expression" && parent.isExpressionStatement());
+      // NODE;
+      // remove the entire expression statement if there's no expression
+      (self.key === "expression" && parent.isExpressionStatement());
 
     if (removeParent) {
       parent.remove();

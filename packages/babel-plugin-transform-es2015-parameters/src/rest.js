@@ -1,5 +1,3 @@
-/* eslint indent: 0 */
-
 import template from "babel-template";
 import * as t from "babel-types";
 

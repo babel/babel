@@ -31,7 +31,8 @@ describe("traverse", function () {
   it("traverse", function () {
     const expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
-      body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object, body[1].expression.left.property, body[1].expression.right
+      body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object,
+      body[1].expression.left.property, body[1].expression.right
     ];
 
     const actual = [];

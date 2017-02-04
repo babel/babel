@@ -36,7 +36,8 @@ describe("inference", function () {
     });
 
     it("it should bail when type changes", function () {
-      const path = getPath("var x = 1; if (foo) x = null;else x = 3; x === 2").get("body")[2].get("expression");
+      const path = getPath("var x = 1; if (foo) x = null;else x = 3; x === 2")
+        .get("body")[2].get("expression");
       const left = path.get("left");
       const right = path.get("right");
 
@@ -144,7 +145,8 @@ describe("inference", function () {
     it("should infer call return type using async generator function", function () {
       const path = getPath("(async function * (): string {})()").get("body")[0].get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isGenericTypeAnnotation(type) && type.id.name === "AsyncIterator", "should be AsyncIterator");
+      assert.ok(t.isGenericTypeAnnotation(type) && type.id.name === "AsyncIterator",
+        "should be AsyncIterator");
     });
     it("should infer number from x/y", function () {
       const path = getPath("x/y").get("body")[0].get("expression");

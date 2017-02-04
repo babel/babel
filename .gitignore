@@ -3,6 +3,7 @@ node_modules
 test/tmp
 *.log
 *.cache
+/.eslintcache
 /templates.json
 /tests.json
 /browser.js
