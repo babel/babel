@@ -68,9 +68,11 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
 }
 
 /**
- * Run the given snippet of code inside a CommonJS module
+ * Run the given snippet of code inside a CommonJS module.
+ *
+ * Exposed for unit tests, not for use as an API.
  */
-function runCodeInTestContext(code: string, opts: {filename?: string} = {}) {
+export function runCodeInTestContext(code: string, opts: {filename?: string} = {}) {
   const filename = opts.filename || null;
   const dirname = filename ? path.dirname(filename) : null;
   const req = filename ? ((id) => runModuleInTestContext(id, filename)) : null;
