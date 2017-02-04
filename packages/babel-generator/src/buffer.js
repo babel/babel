@@ -39,7 +39,9 @@ export default class Buffer {
 
     const map = this._map;
     const result = {
-      code: this._trimEnd(this._buf.join("")),
+      // Whatever trim is used here should not execute a regex against the
+      // source string since it may be arbitrarily large after all transformations
+      code: this._buf.join("").trimRight(),
       map: null,
       rawMappings: map && map.getRawMappings(),
     };
@@ -82,15 +84,6 @@ export default class Buffer {
 
     const { line, column, filename, identifierName } = this._sourcePosition;
     this._queue.unshift([str, line, column, identifierName, filename]);
-  }
-
-  _trimEnd(str: string): string {
-    let trimTarget = str.length;
-    const whitespace = /\s/;
-    while (trimTarget > 0 && whitespace.test(str[trimTarget - 1])) {
-      trimTarget--;
-    }
-    return str.slice(0, trimTarget);
   }
 
   _flush(): void {
