@@ -18,7 +18,7 @@ function cleanCache() {
   try {
     fs.unlinkSync(testCacheFilename);
   } catch (e) {
-    // It is convinient to always try to clear
+    // It is convenient to always try to clear
   }
 }
 
