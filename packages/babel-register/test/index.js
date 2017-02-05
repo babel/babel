@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import fs from "fs";
 import path from "path";
+import decache from "decache";
 
 const testCacheFilename = path.join(__dirname, ".babel");
 process.env.BABEL_CACHE_PATH = testCacheFilename;
@@ -29,7 +30,7 @@ describe("babel register", () => {
 
     beforeEach(() => {
       // Since lib/cache is a singleton we need to fully reload it
-      delete require.cache[require.resolve("../lib/cache")];
+      decache("../lib/cache");
       const cache = require("../lib/cache");
 
       load = cache.load;
@@ -63,7 +64,6 @@ describe("babel register", () => {
       expect(get()).to.be.an("object");
       expect(get()).to.deep.equal({});
     });
-
 
     it("should create the cache on save", () => {
       save();
