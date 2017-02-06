@@ -197,6 +197,10 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     return true;
   }
 
+  if (t.isAwaitExpression(parent)) {
+    return true;
+  }
+
   return UnaryLike(node, parent);
 }
 
