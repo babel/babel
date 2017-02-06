@@ -7,10 +7,8 @@
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel",
   "bin": {
-    "babel": "./cli.js",
-    "babel-node": "./cli.js",
-    "babel-external-helpers": "./cli.js"
-  },
-  "dependencies": {},
-  "devDependencies": {}
+    "babel": "./lib/cli.js",
+    "babel-node": "./lib/cli.js",
+    "babel-external-helpers": "./lib/cli.js"
+  }
 }

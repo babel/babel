@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-const path = require("path");
+import path from "path";
+
 const globalMessage = path.dirname(process.execPath) === path.dirname(process.env._ || "") ? " -g" : "";
 
 console.error("You have mistakenly installed the `babel` package, which is a no-op in Babel 6.\n" +
