@@ -360,6 +360,12 @@ class BlockScoping {
   }
 
   wrapClosure() {
+    if (this.file.opts.throwIfClosureRequired) {
+      throw this.blockPath.buildCodeFrameError(
+        "Compiling let/const in this block would add a closure " +
+        "(throwIfClosureRequired)."
+      );
+    }
     const block = this.block;
 
     const outsideRefs = this.outsideLetReferences;
