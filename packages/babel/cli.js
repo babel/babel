@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-const globalMessage = process.env._.includes("/node_modules/.bin/babel") ? "" : " -g";
+const path = require("path");
+const globalMessage = path.dirname(process.execPath) === path.dirname(process.env._ || "") ? " -g" : "";
 
 console.error("You have mistakenly installed the `babel` package, which is a no-op in Babel 6.\n" +
   "Babel's CLI commands have been moved from the `babel` package to the `babel-cli` package.\n" +
