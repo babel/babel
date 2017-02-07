@@ -76,7 +76,7 @@ const collectorVisitor = {
   },
 
   Declaration(path) {
-    // delegate block scope handling to the `blockVariableVisitor`
+    // delegate block scope handling to the `BlockScoped` method
     if (path.isBlockScoped()) return;
 
     // this will be hit again once we traverse into it after this iteration
