@@ -4,7 +4,10 @@ import path from "path";
 import decache from "decache";
 
 const testCacheFilename = path.join(__dirname, ".babel");
+const oldBabelDisableCacheValue = process.env.BABEL_DISABLE_CACHE;
+
 process.env.BABEL_CACHE_PATH = testCacheFilename;
+delete process.env.BABEL_DISABLE_CACHE;
 
 function writeCache(data) {
   if (typeof data === "object") {
@@ -23,6 +26,11 @@ function cleanCache() {
   }
 }
 
+function resetCache() {
+  process.env.BABEL_CACHE_PATH = null;
+  process.env.BABEL_DISABLE_CACHE = oldBabelDisableCacheValue;
+}
+
 describe("babel register", () => {
 
   describe("cache", () => {
@@ -39,6 +47,7 @@ describe("babel register", () => {
     });
 
     afterEach(cleanCache);
+    after(resetCache);
 
     it("should load and get cached data", () => {
       writeCache({ foo: "bar" });
