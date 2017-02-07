@@ -2,7 +2,7 @@
 
 > Babel preset for stage 1 plugins.
 
-You can read more about the stages @ http://www.2ality.com/2015/11/tc39-process.html but the gist of stage 1 is:
+You can read more about the TC39 process [here](http://www.2ality.com/2015/11/tc39-process.html), but the gist of Stage 1 is:
 
 > **Stage 1**: proposal
 >
