@@ -43,3 +43,7 @@ require("babel-core").transform("code", {
   presets: ["stage-1"]
 });
 ```
+
+## References
+
+- Chapter "[The TC39 process for ECMAScript features](http://exploringjs.com/es2016-es2017/ch_tc39-process.html)" in "Exploring ES2016 and ES2017" by Axel Rauschmayer
