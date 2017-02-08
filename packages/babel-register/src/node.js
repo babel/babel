@@ -94,8 +94,19 @@ function shouldIgnore(filename) {
   }
 }
 
-function loader(m, filename) {
-  m._compile(compile(filename), filename);
+function loader(m, filename, old) {
+  let content = compile(filename);
+
+  /*
+  allow instrumentation logic that overrides
+  require.extensions['.js'] to modify code
+  compiled by babel.
+  */
+  if (old.instrument) {
+    content = old.instrument(filename, content);
+  }
+
+  m._compile(content, filename);
 }
 
 function registerExtension(ext) {
