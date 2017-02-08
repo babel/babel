@@ -2,7 +2,7 @@
 
 > Babel preset for stage 3 plugins.
 
-You can read more about the stages @ http://www.2ality.com/2015/11/tc39-process.html but in general stage 3 is:
+The gist of Stage 3 is:
 
 > **Stage 3**: candidate
 >
@@ -45,3 +45,7 @@ require("babel-core").transform("code", {
   presets: ["stage-3"]
 });
 ```
+
+## References
+
+- Chapter "[The TC39 process for ECMAScript features](http://exploringjs.com/es2016-es2017/ch_tc39-process.html)" in "Exploring ES2016 and ES2017" by Axel Rauschmayer
