@@ -2,53 +2,36 @@ import path from "path";
 import fs from "fs";
 import { sync as mkdirpSync } from "mkdirp";
 import homeOrTmp from "home-or-tmp";
+import crypto from "crypto";
 
-const FILENAME = process.env.BABEL_CACHE_PATH || path.join(homeOrTmp, ".babel.json");
-let data = {};
+const DIRNAME = process.env.BABEL_CACHE_PATH || path.join(homeOrTmp, ".babel");
+mkdirpSync(DIRNAME);
 
-/**
- * Write stringified cache to disk.
- */
-
-export function save() {
-  let serialised = {};
-  try {
-    serialised = JSON.stringify(data, null, "  ");
-  } catch (err) {
-    if (err.message === "Invalid string length") {
-      err.message = "Cache too large so it's been cleared.";
-      console.error(err.stack);
-    } else {
-      throw err;
-    }
-  }
-  mkdirpSync(path.dirname(FILENAME));
-  fs.writeFileSync(FILENAME, serialised);
+function getCacheFile(key) {
+  return path.join(DIRNAME, crypto.createHash("md5").update(key).digest("hex") + ".json");
 }
 
-/**
- * Load cache from disk and parse.
- */
+const cache = {};
 
-export function load() {
-  if (process.env.BABEL_DISABLE_CACHE) return;
+export function get(key) {
+  if (!cache.hasOwnProperty(key)) {
+    const filename = getCacheFile(key);
+    try {
+      cache[key] = JSON.parse(fs.readFileSync(filename));
+    } catch (err) {
+      return;
+    }
+  }
 
-  process.on("exit", save);
-  process.nextTick(save);
+  return cache[key];
+}
 
-  if (!fs.existsSync(FILENAME)) return;
-
+export function set(key, value) {
+  cache[key] = value;
+  const filename = getCacheFile(key);
   try {
-    data = JSON.parse(fs.readFileSync(FILENAME));
+    fs.writeFile(filename, JSON.stringify(value));
   } catch (err) {
     return;
   }
-}
-
-/**
- * Retrieve data from cache.
- */
-
-export function get() {
-  return data;
 }

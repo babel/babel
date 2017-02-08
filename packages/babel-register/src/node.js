@@ -1,6 +1,6 @@
 import deepClone from "lodash/cloneDeep";
 import sourceMapSupport from "source-map-support";
-import * as registerCache from "./cache";
+import * as cache from "./cache";
 import extend from "lodash/extend";
 import * as babel from "babel-core";
 import { util, OptionManager } from "babel-core";
@@ -23,9 +23,6 @@ sourceMapSupport.install({
   }
 });
 
-registerCache.load();
-let cache = registerCache.get();
-
 const transformOpts = {};
 
 let ignore;
@@ -35,6 +32,8 @@ let oldHandlers   = {};
 const maps          = {};
 
 const cwd = process.cwd();
+
+let disableCache = !!process.env.BABEL_DISABLE_CACHE;
 
 function getRelativePath(filename) {
   return path.relative(cwd, filename);
@@ -59,11 +58,9 @@ function compile(filename) {
   const env = process.env.BABEL_ENV || process.env.NODE_ENV;
   if (env) cacheKey += `:${env}`;
 
-  if (cache) {
-    const cached = cache[cacheKey];
-    if (cached && cached.mtime === mtime(filename)) {
-      result = cached;
-    }
+  const cached = cache.get(cacheKey);
+  if (!disableCache && cached && cached.mtime === mtime(filename)) {
+    result = cached;
   }
 
   if (!result) {
@@ -74,11 +71,10 @@ function compile(filename) {
       sourceMaps: "both",
       ast: false
     }));
-  }
-
-  if (cache) {
-    cache[cacheKey] = result;
     result.mtime = mtime(filename);
+    if (!disableCache) {
+      cache.set(cacheKey, result);
+    }
   }
 
   maps[filename] = result.map;
@@ -136,7 +132,7 @@ export default function (opts?: Object = {}) {
 
   if (opts.extensions) hookExtensions(util.arrayify(opts.extensions));
 
-  if (opts.cache === false) cache = null;
+  if (opts.cache === false) disableCache = true;
 
   delete opts.extensions;
   delete opts.ignore;
