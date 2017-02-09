@@ -21,7 +21,7 @@
     "node": ">=4.2.0"
   },
   "devDependencies": {
-    "ava": "^0.17.0",
+    "ava": "^0.18.0",
     "babel-cli": "^6.14.0",
     "babel-eslint": "^7.0.0",
     "babel-helper-fixtures": "^6.9.0",
