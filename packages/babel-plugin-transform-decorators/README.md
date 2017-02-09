@@ -46,22 +46,33 @@ function enumerable(value) {
 }
 ```
 
-## Installation
+## Installation & Usage
 
-```sh
-npm install --save-dev babel-plugin-transform-decorators
-```
+    $ npm install --save-dev babel-plugin-transform-decorators
+    
+Add the following line to your .babelrc file:
 
-## Usage
+    {
+        "plugins": ["transform-decorators"]
+    }
+    
+#### NOTE: Order of Plugins Matters!
+If you are including your plugins manually and using `transform-class-properties`, make sure that `transform-decorators` comes *before* `transform-class-properties`.
 
-### Via `.babelrc` (Recommended)
+```js
+/// WRONG
 
-**.babelrc**
+"plugins": [
+  "transform-class-properties",
+  "transform-decorators"
+]
 
-```json
-{
-  "plugins": ["transform-decorators"]
-}
+// RIGHT
+
+"plugins": [
+  "transform-decorators",
+  "transform-class-properties"
+]
 ```
 
 ### Via CLI
