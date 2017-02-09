@@ -1,17 +1,20 @@
 {
   "name": "babel-plugin-transform-decorators",
-  "version": "6.22.0",
+  "version": "1.3.4",
+  "author": "Logan Smyth <loganfsmyth@gmail.com>",
+  "license": "MIT",
   "description": "Compile class and object decorators to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-decorators",
-  "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
-    "babel-plugin"
+    "babel",
+    "babel-plugin",
+    "es7",
+    "decorators"
   ],
   "dependencies": {
-    "babel-types": "^6.22.0",
     "babel-plugin-syntax-decorators": "^6.13.0",
-    "babel-helper-explode-class": "^6.22.0",
+    "babel-runtime": "^6.2.0",
     "babel-template": "^6.22.0"
   },
   "devDependencies": {

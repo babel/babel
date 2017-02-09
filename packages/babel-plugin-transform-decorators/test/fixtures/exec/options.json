@@ -1,3 +1,4 @@
 {
-  "plugins": ["external-helpers", "transform-es2015-destructuring", "transform-es2015-block-scoping", "transform-decorators", "transform-es2015-classes", "transform-class-properties"]
+  "presets": ["es2015"],
+  "plugins": ["transform-decorators", "transform-class-properties"]
 }
