@@ -1,7 +1,6 @@
 {
   "lerna": "2.0.0-beta.37",
   "version": "independent",
-  "hoist": true,
   "changelog": {
     "repo": "babel/babel",
     "labels": {
