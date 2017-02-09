@@ -2,11 +2,10 @@
 
 > Babel preset for all React plugins.
 
-This preset includes the following plugins:
+This preset includes the following plugins/presets:
 
-- [syntax-flow](https://babeljs.io/docs/plugins/syntax-flow/)
+- [preset-flow](https://babeljs.io/docs/plugins/preset-flow/)
 - [syntax-jsx](https://babeljs.io/docs/plugins/syntax-jsx/)
-- [transform-flow-strip-types](https://babeljs.io/docs/plugins/transform-flow-strip-types/)
 - [transform-react-jsx](https://babeljs.io/docs/plugins/transform-react-jsx/)
 - [transform-react-display-name](https://babeljs.io/docs/plugins/transform-react-display-name/)
 
