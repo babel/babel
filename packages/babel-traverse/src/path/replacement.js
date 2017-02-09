@@ -219,10 +219,16 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
       const loop = path.findParent((path) => path.isLoop());
       if (loop) {
-        const callee = this.get("callee");
+        let uid = loop.getData("expressionReplacementReturnUid");
 
-        const uid = callee.scope.generateDeclaredUidIdentifier("ret");
-        callee.get("body").pushContainer("body", t.returnStatement(uid));
+        if (!uid) {
+          const callee = this.get("callee");
+          uid = callee.scope.generateDeclaredUidIdentifier("ret");
+          callee.get("body").pushContainer("body", t.returnStatement(uid));
+          loop.setData("expressionReplacementReturnUid", uid);
+        } else {
+          uid = t.identifier(uid.name);
+        }
 
         path.get("expression").replaceWith(
           t.assignmentExpression("=", uid, path.node.expression)
