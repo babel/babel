@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 if (global._babelPolyfill) {
   throw new Error("only one instance of babel-polyfill is allowed");
 }

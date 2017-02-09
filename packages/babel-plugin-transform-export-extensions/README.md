@@ -8,7 +8,6 @@
 export * as ns from 'mod';
 export v from 'mod';
 ```
-[Try in REPL](http://babeljs.io/repl/#?evaluate=true&presets=es2015%2Cstage-0&code=export%20*%20as%20ns%20from%20'mod'%3B%0Aexport%20v%20from%20'mod'%3B)
 
 ## Installation
 

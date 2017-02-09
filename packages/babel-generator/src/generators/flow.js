@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 export function AnyTypeAnnotation() {
   this.word("any");
 }

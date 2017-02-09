@@ -1,5 +1,3 @@
-/* eslint indent: 0 */
-
 import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";
 import * as t from "./index";
@@ -276,7 +274,7 @@ export function isNodesEquivalent(a, b) {
     }
 
     if (!isNodesEquivalent(a[field], b[field])) {
-     return false;
+      return false;
     }
   }
 

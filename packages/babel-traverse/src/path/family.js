@@ -57,7 +57,7 @@ export function getCompletionRecords(): Array {
   return paths;
 }
 
-export function getSibling(key) {
+export function getSibling(key): NodePath {
   return NodePath.get({
     parentPath: this.parentPath,
     parent: this.parent,
@@ -65,6 +65,36 @@ export function getSibling(key) {
     listKey: this.listKey,
     key: key
   });
+}
+
+export function getPrevSibling(): NodePath {
+  return this.getSibling(this.key - 1);
+}
+
+export function getNextSibling(): NodePath {
+  return this.getSibling(this.key + 1);
+}
+
+export function getAllNextSiblings(): Array<NodePath> {
+  let _key = this.key;
+  let sibling:NodePath = this.getSibling(++_key);
+  const siblings:Array<NodePath> = [];
+  while (sibling.node) {
+    siblings.push(sibling);
+    sibling = this.getSibling(++_key);
+  }
+  return siblings;
+}
+
+export function getAllPrevSiblings(): Array<NodePath> {
+  let _key = this.key;
+  let sibling:NodePath = this.getSibling(--_key);
+  const siblings:Array<NodePath> = [];
+  while (sibling.node) {
+    siblings.push(sibling);
+    sibling = this.getSibling(--_key);
+  }
+  return siblings;
 }
 
 export function get(key: string, context?: boolean | TraversalContext): NodePath {

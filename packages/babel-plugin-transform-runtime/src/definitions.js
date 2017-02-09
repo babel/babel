@@ -93,14 +93,12 @@ module.exports = {
     },
 
     Symbol: {
-      asyncIterator: "symbol/async-iterator",
       for: "symbol/for",
       hasInstance: "symbol/has-instance",
       isConcatSpreadable: "symbol/is-concat-spreadable",
       iterator: "symbol/iterator",
       keyFor: "symbol/key-for",
       match: "symbol/match",
-      observable: "symbol/observable",
       replace: "symbol/replace",
       search: "symbol/search",
       species: "symbol/species",

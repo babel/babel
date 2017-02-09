@@ -265,6 +265,7 @@ describe("api", function () {
 
   it("source map merging", function () {
     const result = babel.transform([
+      /* eslint-disable max-len */
       "function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }",
       "",
       "let Foo = function Foo() {",
@@ -272,6 +273,7 @@ describe("api", function () {
       "};",
       "",
       "//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0ZG91dCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztJQUFNLEdBQUcsWUFBSCxHQUFHO3dCQUFILEdBQUciLCJmaWxlIjoidW5kZWZpbmVkIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgRm9vIHt9XG4iXX0="
+      /* eslint-enable max-len */
     ].join("\n"), {
       sourceMap: true
     });
@@ -329,12 +331,14 @@ describe("api", function () {
         };
       }]
     }).then(function (result) {
-      assert.equal(result.code, "/*before*/start;\n/*after*/class Foo {}\n/*before*/end;\n/*after*/");
+      assert.equal(result.code,
+        "/*before*/start;\n/*after*/class Foo {}\n/*before*/end;\n/*after*/");
     });
   });
 
   it("modules metadata", function () {
     return Promise.all([
+      // eslint-disable-next-line max-len
       transformAsync("import { externalName as localName } from \"external\";").then(function (result) {
         assert.deepEqual(result.metadata.modules.imports[0], {
           source: "external",
@@ -586,8 +590,10 @@ describe("api", function () {
   });
 
   it("resolveModuleSource option", function () {
+    /* eslint-disable max-len */
     const actual = "import foo from \"foo-import-default\";\nimport \"foo-import-bare\";\nexport { foo } from \"foo-export-named\";";
     const expected = "import foo from \"resolved/foo-import-default\";\nimport \"resolved/foo-import-bare\";\nexport { foo } from \"resolved/foo-export-named\";";
+    /* eslint-enable max-len */
 
     return transformAsync(actual, {
       resolveModuleSource: function (originalSource) {

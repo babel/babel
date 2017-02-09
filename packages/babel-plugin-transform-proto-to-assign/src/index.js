@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import pull from "lodash/pull";
 
 export default function ({ types: t }) {
@@ -9,7 +7,8 @@ export default function ({ types: t }) {
 
   function isProtoAssignmentExpression(node) {
     const left = node.left;
-    return t.isMemberExpression(left) && t.isLiteral(t.toComputedKey(left, left.property), { value: "__proto__" });
+    return t.isMemberExpression(left) &&
+      t.isLiteral(t.toComputedKey(left, left.property), { value: "__proto__" });
   }
 
   function buildDefaultsCallExpression(expr, ref, file) {

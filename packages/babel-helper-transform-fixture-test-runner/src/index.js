@@ -100,7 +100,8 @@ function wrapPackagesArray(type, names, optionsDir) {
     if (val[0][0] === ".") {
 
       if (!optionsDir) {
-        throw new Error("Please provide an options.json in test dir when using a relative plugin path.");
+        throw new Error("Please provide an options.json in test dir when using a " +
+          "relative plugin path.");
       }
 
       val[0] = path.resolve(optionsDir, val[0]);
@@ -129,7 +130,8 @@ function run(task) {
     newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins, optionsDir);
     newOpts.presets = wrapPackagesArray("preset", newOpts.presets, optionsDir).map(function (val) {
       if (val.length > 2) {
-        throw new Error(`Unexpected extra options ${JSON.stringify(val.slice(2))} passed to preset.`);
+        throw new Error("Unexpected extra options " + JSON.stringify(val.slice(2)) +
+          " passed to preset.");
       }
 
       return val;
@@ -160,7 +162,10 @@ function run(task) {
   const expectCode = expect.code;
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
-    if (!expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
+    if (
+      !expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() &&
+      !process.env.CI
+    ) {
       console.log(`New test file created: ${expect.loc}`);
       fs.writeFileSync(expect.loc, result.code);
     } else {

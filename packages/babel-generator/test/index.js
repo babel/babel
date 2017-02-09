@@ -324,7 +324,10 @@ suites.forEach(function (testSuite) {
           });
           const result = generate(actualAst, task.options, actualCode);
 
-          if (!expect.code && result.code && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
+          if (
+            !expect.code && result.code && fs.statSync(path.dirname(expect.loc)).isDirectory() &&
+            !process.env.CI
+          ) {
             console.log(`New test file created: ${expect.loc}`);
             fs.writeFileSync(expect.loc, result.code);
           } else {

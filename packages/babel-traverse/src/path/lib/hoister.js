@@ -153,7 +153,8 @@ export default class PathHoister {
     const attachTo = this.getAttachmentPath();
     if (!attachTo) return;
 
-    // don't bother hoisting to the same function as this will cause multiple branches to be evaluated more than once leading to a bad optimisation
+    // don't bother hoisting to the same function as this will cause multiple branches to be
+    // evaluated more than once leading to a bad optimisation
     if (attachTo.getFunctionParent() === this.path.getFunctionParent()) return;
 
     // generate declaration and insert it to our point

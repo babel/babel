@@ -36,30 +36,22 @@ require("babel-core").transform("code", {
 
 ## Options
 
-* `loose` - Enable "loose" transformations for any plugins in this preset that allow them (Disabled by default).
-* `modules` - Enable transformation of ES6 module syntax to another module type (Enabled by default to `"commonjs"`).
-  * Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]`
-* `spec` - Enable "spec" transformations for any plugins in this preset that allow them (Disabled by default)
+### `loose`
 
-```js
-{
-  presets: [
-    ["es2015", { "loose": true }]
-  ]
-}
-{
-  presets: [
-    ["es2015", { "modules": false }]
-  ]
-}
-{
-  presets: [
-    ["es2015", { "loose": true, "modules": false }]
-  ]
-}
-{
-  presets: [
-    ["es2015", { "spec": true }]
-  ]
-}
-```
+`boolean`, defaults to `false`.
+
+Enable "loose" transformations for any plugins in this preset that allow them.
+
+### `modules`
+
+`"amd" | "umd" | "systemjs" | "commonjs" | false`, defaults to `"commonjs"`.
+
+Enable transformation of ES6 module syntax to another module type.
+
+Setting this to `false` will not transform modules.
+
+### `spec`
+
+`boolean`, defaults to `false`.
+
+Enable "spec" transformations for any plugins in this preset that allow them.

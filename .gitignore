@@ -3,6 +3,7 @@ node_modules
 test/tmp
 *.log
 *.cache
+/.eslintcache
 /templates.json
 /tests.json
 /browser.js
@@ -17,3 +18,4 @@ dist
 _babel.github.io
 /tests/.browser-build.js
 .nyc_output
+/babel.sublime-workspace

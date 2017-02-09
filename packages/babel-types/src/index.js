@@ -1,5 +1,4 @@
 import toFastProperties from "to-fast-properties";
-import compact from "lodash/compact";
 import loClone from "lodash/clone";
 import uniq from "lodash/uniq";
 
@@ -398,7 +397,10 @@ export function inheritInnerComments(child: Object, parent: Object) {
 
 function _inheritComments(key, child, parent) {
   if (child && parent) {
-    child[key] = uniq(compact([].concat(child[key], parent[key])));
+    child[key] = uniq(
+      [].concat(child[key], parent[key])
+        .filter(Boolean)
+    );
   }
 }
 
