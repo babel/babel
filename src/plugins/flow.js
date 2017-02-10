@@ -1087,9 +1087,9 @@ export default function (instance) {
   // parse an item inside a expression list eg. `(NODE, NODE)` where NODE represents
   // the position where this function is called
   instance.extend("parseExprListItem", function (inner) {
-    return function (allowEmpty, refShorthandDefaultPos) {
+    return function (...args) {
       const container = this.startNode();
-      const node = inner.call(this, allowEmpty, refShorthandDefaultPos);
+      const node = inner.call(this, ...args);
       if (this.match(tt.colon)) {
         container._exprListItem = true;
         container.expression = node;

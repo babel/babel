@@ -343,7 +343,7 @@ pp.parseCallExpressionArguments = function (close, possibleAsyncArrow) {
       innerParenStart = this.state.start;
     }
 
-    elts.push(this.parseExprListItem(undefined, possibleAsyncArrow ? { start: 0 } : undefined));
+    elts.push(this.parseExprListItem(false, possibleAsyncArrow ? { start: 0 } : undefined, possibleAsyncArrow ? { start: 0 } : undefined));
   }
 
   // we found an async arrow function so let's not allow any inner parens
@@ -1021,14 +1021,14 @@ pp.parseExprList = function (close, allowEmpty, refShorthandDefaultPos) {
   return elts;
 };
 
-pp.parseExprListItem = function (allowEmpty, refShorthandDefaultPos) {
+pp.parseExprListItem = function (allowEmpty, refShorthandDefaultPos, refNeedsArrowPos) {
   let elt;
   if (allowEmpty && this.match(tt.comma)) {
     elt = null;
   } else if (this.match(tt.ellipsis)) {
     elt = this.parseSpread(refShorthandDefaultPos);
   } else {
-    elt = this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem);
+    elt = this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem, refNeedsArrowPos);
   }
   return elt;
 };
