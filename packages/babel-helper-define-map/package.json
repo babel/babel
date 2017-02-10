@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-define-map",
+  "name": "@babel/helper-define-map",
   "version": "6.22.0",
   "description": "Helper function to define a map",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-define-map",
@@ -7,7 +7,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "lodash": "^4.2.0",
-    "babel-types": "^6.22.0",
-    "babel-helper-function-name": "^6.22.0"
+    "@babel/types": "^6.22.0",
+    "@babel/helper-function-name": "^6.22.0"
   }
 }

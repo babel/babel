@@ -1,17 +1,17 @@
 {
-  "name": "babel-plugin-transform-react-jsx-source",
+  "name": "@babel/plugin-transform-react-jsx-source",
   "version": "6.22.0",
   "description": "Add a __source prop to all JSX Elements",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-source",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
-    "babel-plugin"
+    "@babel/plugin"
   ],
   "dependencies": {
-    "babel-plugin-syntax-jsx": "^6.8.0"
+    "@babel/plugin-syntax-jsx": "^6.8.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.22.0"
+    "@babel/helper-plugin-test-runner": "^6.22.0"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-regex",
+  "name": "@babel/helper-regex",
   "version": "6.22.0",
   "description": "Helper function to check for literal RegEx",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-regex",
@@ -7,6 +7,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "lodash": "^4.2.0",
-    "babel-types": "^6.22.0"
+    "@babel/types": "^6.22.0"
   }
 }

@@ -1,17 +1,17 @@
 {
-  "name": "babel-plugin-transform-strict-mode",
+  "name": "@babel/plugin-transform-strict-mode",
   "version": "6.22.0",
   "description": "This plugin places a 'use strict'; directive at the top of all files to enable strict mode",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-strict-mode",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
-    "babel-plugin"
+    "@babel/plugin"
   ],
   "dependencies": {
-    "babel-types": "^6.22.0"
+    "@babel/types": "^6.22.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.22.0"
+    "@babel/helper-plugin-test-runner": "^6.22.0"
   }
 }

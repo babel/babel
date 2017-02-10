@@ -1,11 +1,11 @@
 {
-  "name": "babel-helper-plugin-test-runner",
+  "name": "@babel/helper-plugin-test-runner",
   "version": "6.22.0",
   "description": "Helper function to support test runner",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-plugin-test-runner",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-transform-fixture-test-runner": "^6.22.0"
+    "@babel/helper-transform-fixture-test-runner": "^6.22.0"
   }
 }

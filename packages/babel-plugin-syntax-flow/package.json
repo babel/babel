@@ -1,12 +1,12 @@
 {
-  "name": "babel-plugin-syntax-flow",
+  "name": "@babel/plugin-syntax-flow",
   "version": "6.18.0",
   "description": "Allow parsing of the flow syntax",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-flow",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
-    "babel-plugin"
+    "@babel/plugin"
   ],
   "dependencies": {},
   "devDependencies": {}

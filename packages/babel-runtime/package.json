@@ -1,5 +1,5 @@
 {
-  "name": "babel-runtime",
+  "name": "@babel/runtime",
   "version": "6.22.0",
   "description": "babel selfContained runtime",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "regenerator-runtime": "^0.10.0"
   },
   "devDependencies": {
-    "babel-helpers": "^6.22.0",
-    "babel-plugin-transform-runtime": "^6.22.0"
+    "@babel/helpers": "^6.22.0",
+    "@babel/plugin-transform-runtime": "^6.22.0"
   }
 }
