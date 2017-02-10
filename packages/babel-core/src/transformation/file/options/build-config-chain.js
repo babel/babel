@@ -8,6 +8,7 @@ import fs from "fs";
 
 const existsCache = {};
 const configCache = {};
+const ignoreCache = {};
 
 const BABELIGNORE_FILENAME = ".babelignore";
 const BABELRC_FILENAME     = ".babelrc";
@@ -84,12 +85,14 @@ class ConfigChainBuilder {
   }
 
   addIgnoreConfig(loc) {
-    const file  = fs.readFileSync(loc, "utf8");
-    let lines = file.split("\n");
-
-    lines = lines
-      .map((line) => line.replace(/#(.*?)$/, "").trim())
-      .filter((line) => !!line);
+    let lines = ignoreCache[loc];
+    if (!lines) {
+      const file  = fs.readFileSync(loc, "utf8");
+      lines = file.split("\n")
+        .map((line) => line.replace(/#(.*?)$/, "").trim())
+        .filter((line) => !!line);
+      ignoreCache[loc] = lines;
+    }
 
     if (lines.length) {
       this.mergeConfig({
