@@ -569,7 +569,7 @@ pp.reinterpretTypeAsFunctionTypeParam = function (type) {
 
 pp.flowParseFunctionTypeParams = function (params = []) {
   const ret = { params, rest: null };
-  while (this.match(tt.name)) {
+  while (!this.match(tt.parenR) && !this.match(tt.ellipsis)) {
     ret.params.push(this.flowParseFunctionTypeParam());
     if (!this.match(tt.parenR)) {
       this.expect(tt.comma);
