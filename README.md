@@ -50,6 +50,8 @@ mind. When in doubt, use `.parse()`.
 
 - **sourceFilename**: Correlate output AST nodes with their source filename.  Useful when generating code and source maps from the ASTs of multiple input files.
 
+- **startLine**: By default, the first line of code parsed is treated as line 1. You can provide a line number to alternatively start with. Useful for integration with other source tools.
+
 - **plugins**: Array containing the plugins that you want to enable.
 
 - **strictMode**: TODO
