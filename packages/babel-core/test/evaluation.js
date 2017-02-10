@@ -1,4 +1,4 @@
-import traverse from "babel-traverse";
+import traverse from "@babel/traverse";
 import assert from "assert";
 import { parse } from "babylon";
 

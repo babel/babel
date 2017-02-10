@@ -3,7 +3,7 @@ import buildExternalHelpers from "../lib/tools/build-external-helpers";
 import sourceMap from "source-map";
 import assert from "assert";
 import Plugin from "../lib/transformation/plugin";
-import generator from "babel-generator";
+import generator from "@babel/generator";
 
 function assertIgnored(result) {
   assert.ok(result.ignored);

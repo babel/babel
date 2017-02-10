@@ -1,1 +1,1 @@
-import "babel-template";
+import "@babel/template";

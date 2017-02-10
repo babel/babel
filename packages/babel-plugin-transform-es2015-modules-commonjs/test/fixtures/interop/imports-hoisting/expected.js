@@ -1,6 +1,6 @@
 "use strict";
 
-var _taggedTemplateLiteral2 = require("babel-runtime/helpers/taggedTemplateLiteral");
+var _taggedTemplateLiteral2 = require("@babel/runtime/helpers/taggedTemplateLiteral");
 
 var _taggedTemplateLiteral3 = _interopRequireDefault(_taggedTemplateLiteral2);
 

@@ -4,10 +4,10 @@ import generate from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
 import chai from "chai";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
-import fixtures from "babel-helper-fixtures";
+import fixtures from "@babel/helper-fixtures";
 
 describe("generation", function () {
   it("completeness", function () {

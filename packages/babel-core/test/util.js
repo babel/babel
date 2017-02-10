@@ -1,6 +1,6 @@
 import assert from "assert";
 import * as util from "../lib/util";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 describe("util", function () {
   it("canCompile", function () {

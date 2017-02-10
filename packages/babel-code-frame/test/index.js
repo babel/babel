@@ -2,7 +2,7 @@ import assert from "assert";
 import chalk from "chalk";
 import codeFrame from "..";
 
-describe("babel-code-frame", function () {
+describe("@babel/code-frame", function () {
   it("basic usage", function () {
     const rawLines = [
       "class Foo {",

@@ -1,10 +1,10 @@
 "use strict";
 
-var _regenerator = require("babel-runtime/regenerator");
+var _regenerator = require("@babel/runtime/regenerator");
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
-var _keys = require("babel-runtime/core-js/object/keys");
+var _keys = require("@babel/runtime/core-js/object/keys");
 
 var _keys2 = _interopRequireDefault(_keys);
 

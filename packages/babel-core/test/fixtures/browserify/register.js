@@ -1,3 +1,3 @@
-require("babel-register").default({
+require("@babel/register").default({
   ignore: false
 });
