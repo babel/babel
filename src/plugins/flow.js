@@ -1267,9 +1267,10 @@ export default function (instance) {
         specifierTypeKind = "typeof";
       }
 
+      let isBinding = false;
       if (this.isContextual("as")) {
         const as_ident = this.parseIdentifier(true);
-        if (specifierTypeKind !== null && !this.match(tt.name)) {
+        if (specifierTypeKind !== null && !this.match(tt.name) && !this.state.type.keyword) {
           // `import {type as ,` or `import {type as }`
           specifier.imported = as_ident;
           specifier.importKind = specifierTypeKind;
@@ -1278,23 +1279,20 @@ export default function (instance) {
           // `import {type as foo`
           specifier.imported = firstIdent;
           specifier.importKind = null;
-          specifier.local = this.parseIdentifier(false);
+          specifier.local = this.parseIdentifier();
         }
-      } else if (specifierTypeKind !== null && this.match(tt.name)) {
+      } else if (specifierTypeKind !== null && (this.match(tt.name) || this.state.type.keyword)) {
         // `import {type foo`
         specifier.imported = this.parseIdentifier(true);
         specifier.importKind = specifierTypeKind;
-        specifier.local =
-          this.eatContextual("as")
-          ? this.parseIdentifier(false)
-          : specifier.imported.__clone();
-      } else {
-        if (firstIdent.name === "typeof") {
-          this.unexpected(
-            firstIdentLoc,
-            "Cannot import a variable named `typeof`"
-          );
+        if (this.eatContextual("as")) {
+          specifier.local = this.parseIdentifier();
+        } else {
+          isBinding = true;
+          specifier.local = specifier.imported.__clone();
         }
+      } else {
+        isBinding = true;
         specifier.imported = firstIdent;
         specifier.importKind = null;
         specifier.local = specifier.imported.__clone();
@@ -1306,6 +1304,8 @@ export default function (instance) {
       ) {
         this.raise(firstIdentLoc, "`The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements`");
       }
+
+      if (isBinding) this.checkReservedWord(specifier.local.name, specifier.start, true, true);
 
       this.checkLVal(specifier.local, true, undefined, "import specifier");
       node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));

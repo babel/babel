@@ -1,0 +1,4 @@
+{
+  "plugins": ["flow"],
+  "throws": "default is a reserved word (1:9)"
+}
