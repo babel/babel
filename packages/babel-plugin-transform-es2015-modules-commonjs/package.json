@@ -14,6 +14,7 @@
     "@babel/plugin"
   ],
   "devDependencies": {
+    "@babel/core": "^6.22.0",
     "@babel/helper-plugin-test-runner": "^6.22.0"
   }
 }
