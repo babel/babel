@@ -7,7 +7,7 @@ import path from "path";
 import fs from "fs";
 
 const existsCache = {};
-const jsonCache   = {};
+const configCache = {};
 
 const BABELIGNORE_FILENAME = ".babelignore";
 const BABELRC_FILENAME     = ".babelrc";
@@ -107,16 +107,17 @@ class ConfigChainBuilder {
 
     this.resolvedConfigs.push(loc);
 
-    const content = fs.readFileSync(loc, "utf8");
-    let options;
-
-    try {
-      options = jsonCache[content] = jsonCache[content] || json.parse(content);
-      if (key) options = options[key];
-    } catch (err) {
-      err.message = `${loc}: Error while parsing JSON - ${err.message}`;
-      throw err;
+    let options = configCache[loc];
+    if (!options) {
+      try {
+        configCache[loc] = options = json.parse(fs.readFileSync(loc, "utf8"));
+      } catch (err) {
+        err.message = `${loc}: Error while parsing JSON - ${err.message}`;
+        throw err;
+      }
     }
+
+    if (key) options = options[key];
 
     this.mergeConfig({
       options,
