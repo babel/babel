@@ -1,6 +1,6 @@
 export default function () {
   return {
-    inherits: require("babel-plugin-syntax-do-expressions"),
+    inherits: require("@babel/plugin-syntax-do-expressions"),
 
     visitor: {
       DoExpression(path) {

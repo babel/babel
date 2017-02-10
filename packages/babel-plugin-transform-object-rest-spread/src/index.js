@@ -63,7 +63,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-object-rest-spread"),
+    inherits: require("@babel/plugin-syntax-object-rest-spread"),
 
     visitor: {
       // taken from transform-es2015-parameters/src/destructuring.js

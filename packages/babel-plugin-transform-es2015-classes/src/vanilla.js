@@ -1,10 +1,10 @@
-import type { NodePath } from "babel-traverse";
-import { visitors } from "babel-traverse";
-import ReplaceSupers from "babel-helper-replace-supers";
-import optimiseCall from "babel-helper-optimise-call-expression";
-import * as defineMap from "babel-helper-define-map";
-import template from "babel-template";
-import * as t from "babel-types";
+import type { NodePath } from "@babel/traverse";
+import { visitors } from "@babel/traverse";
+import ReplaceSupers from "@babel/helper-replace-supers";
+import optimiseCall from "@babel/helper-optimise-call-expression";
+import * as defineMap from "@babel/helper-define-map";
+import template from "@babel/template";
+import * as t from "@babel/types";
 
 const buildDerivedConstructor = template(`
   (function () {

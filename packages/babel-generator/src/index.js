@@ -1,6 +1,6 @@
 import detectIndent from "detect-indent";
 import SourceMap from "./source-map";
-import * as messages from "babel-messages";
+import * as messages from "@babel/messages";
 import Printer from "./printer";
 import type { Format } from "./printer";
 

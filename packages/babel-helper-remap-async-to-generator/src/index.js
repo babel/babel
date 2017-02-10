@@ -1,9 +1,9 @@
 /* @noflow */
 
-import type { NodePath } from "babel-traverse";
-import nameFunction from "babel-helper-function-name";
-import template from "babel-template";
-import * as t from "babel-types";
+import type { NodePath } from "@babel/traverse";
+import nameFunction from "@babel/helper-function-name";
+import template from "@babel/template";
+import * as t from "@babel/types";
 import rewriteForAwait from "./for-await";
 
 const buildWrapper = template(`

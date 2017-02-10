@@ -29,7 +29,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-function-bind"),
+    inherits: require("@babel/plugin-syntax-function-bind"),
 
     visitor: {
       CallExpression({ node, scope }) {

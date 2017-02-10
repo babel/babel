@@ -1,5 +1,5 @@
-import type { NodePath } from "babel-traverse";
-import { visitors } from "babel-traverse";
+import type { NodePath } from "@babel/traverse";
+import { visitors } from "@babel/traverse";
 
 import * as destructuring from "./destructuring";
 import * as def from "./default";

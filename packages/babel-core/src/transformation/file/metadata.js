@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export const ModuleDeclaration = {
   enter(path, file) {

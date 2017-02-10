@@ -1,6 +1,6 @@
 // This file contains that retrieve or validate anything related to the current paths ancestry.
 
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import NodePath from "./index";
 
 /**

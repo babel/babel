@@ -1,6 +1,6 @@
 /* eslint max-len: "off" */
 
-import template from "babel-template";
+import template from "@babel/template";
 
 const helpers = {};
 export default helpers;

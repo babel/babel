@@ -12,7 +12,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-flow"),
+    inherits: require("@babel/plugin-syntax-flow"),
 
     visitor: {
       TypeCastExpression(path) {

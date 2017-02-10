@@ -1,6 +1,6 @@
 import whitespace from "./whitespace";
 import * as parens from "./parentheses";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 function expandAliases(obj) {
   const newObj = {};

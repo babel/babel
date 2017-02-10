@@ -1,6 +1,6 @@
-import presetES2015 from "babel-preset-es2015";
-import presetES2016 from "babel-preset-es2016";
-import presetES2017 from "babel-preset-es2017";
+import presetES2015 from "@babel/preset-es2015";
+import presetES2016 from "@babel/preset-es2016";
+import presetES2017 from "@babel/preset-es2017";
 
 // Rather than exporting a default object to represent the preset, we can
 // also export a default function instead, as this preset demonstrates.

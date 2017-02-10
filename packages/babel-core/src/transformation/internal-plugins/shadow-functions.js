@@ -1,5 +1,5 @@
 import Plugin from "../plugin";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 const SUPER_THIS_BOUND = Symbol("super this bound");
 

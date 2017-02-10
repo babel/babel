@@ -3,7 +3,7 @@ import fs from "fs";
 export { default as File } from "./transformation/file";
 export { default as options } from "./transformation/file/options/config";
 export { default as buildExternalHelpers } from "./tools/build-external-helpers";
-export { default as template } from "babel-template";
+export { default as template } from "@babel/template";
 export { default as resolvePlugin } from "./helpers/resolve-plugin";
 export { default as resolvePreset } from "./helpers/resolve-preset";
 export { version } from "../package";
@@ -11,13 +11,13 @@ export { version } from "../package";
 import * as util from "./util";
 export { util };
 
-import * as messages from "babel-messages";
+import * as messages from "@babel/messages";
 export { messages };
 
-import * as t from "babel-types";
+import * as t from "@babel/types";
 export { t as types };
 
-import traverse from "babel-traverse";
+import traverse from "@babel/traverse";
 export { traverse };
 
 import OptionManager from "./transformation/file/options/option-manager";

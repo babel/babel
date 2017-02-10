@@ -1,5 +1,5 @@
-import template from "babel-template";
-import explodeClass from "babel-helper-explode-class";
+import template from "@babel/template";
+import explodeClass from "@babel/helper-explode-class";
 
 const buildClassDecorator = template(`
   CLASS_REF = DECORATOR(CLASS_REF) || CLASS_REF;
@@ -88,7 +88,7 @@ The repo url is: https://github.com/loganfsmyth/babel-plugin-transform-decorator
   }
 
   return {
-    inherits: require("babel-plugin-syntax-decorators"),
+    inherits: require("@babel/plugin-syntax-decorators"),
 
     visitor: {
       ClassExpression(path) {

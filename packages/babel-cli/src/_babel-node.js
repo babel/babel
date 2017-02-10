@@ -3,13 +3,13 @@ import Module from "module";
 import { inspect } from "util";
 import path from "path";
 import repl from "repl";
-import { util } from "babel-core";
-import * as babel from "babel-core";
+import { util } from "@babel/core";
+import * as babel from "@babel/core";
 import vm from "vm";
-import "babel-polyfill";
-import register from "babel-register";
+import "@babel/polyfill";
+import register from "@babel/register";
 
-const program = new commander.Command("babel-node");
+const program = new commander.Command("@babel/node");
 
 program.option("-e, --eval [script]", "Evaluate script");
 program.option("-p, --print [code]", "Evaluate script and print result");

@@ -1,7 +1,7 @@
-import type { NodePath, Scope } from "babel-traverse";
-import optimiseCall from "babel-helper-optimise-call-expression";
-import * as messages from "babel-messages";
-import * as t from "babel-types";
+import type { NodePath, Scope } from "@babel/traverse";
+import optimiseCall from "@babel/helper-optimise-call-expression";
+import * as messages from "@babel/messages";
+import * as t from "@babel/types";
 
 // ✌️
 const HARDCORE_THIS_REF = Symbol();

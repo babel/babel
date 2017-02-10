@@ -1,9 +1,9 @@
 import cloneDeep from "lodash/cloneDeep";
 import assign from "lodash/assign";
 import has from "lodash/has";
-import traverse from "babel-traverse";
+import traverse from "@babel/traverse";
 import * as babylon from "babylon";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 const FROM_TEMPLATE = "_fromTemplate"; //Symbol(); // todo: probably wont get copied over
 const TEMPLATE_SKIP = Symbol();

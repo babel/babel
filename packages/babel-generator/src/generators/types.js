@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import jsesc from "jsesc";
 
 export function Identifier(node: Object) {

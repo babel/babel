@@ -5,7 +5,7 @@ import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
 import Whitespace from "./whitespace";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;

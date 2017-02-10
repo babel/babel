@@ -1,23 +1,23 @@
 /* global BabelFileResult, BabelParserOptions, BabelFileMetadata */
 
-import getHelper from "babel-helpers";
+import getHelper from "@babel/helpers";
 import * as metadataVisitor from "./metadata";
 import convertSourceMap from "convert-source-map";
 import OptionManager from "./options/option-manager";
 import type Pipeline from "../pipeline";
 import PluginPass from "../plugin-pass";
-import { NodePath, Hub, Scope } from "babel-traverse";
+import { NodePath, Hub, Scope } from "@babel/traverse";
 import sourceMap from "source-map";
-import generate from "babel-generator";
-import codeFrame from "babel-code-frame";
+import generate from "@babel/generator";
+import codeFrame from "@babel/code-frame";
 import defaults from "lodash/defaults";
-import traverse from "babel-traverse";
+import traverse from "@babel/traverse";
 import Logger from "./logger";
 import Store from "../../store";
 import { parse } from "babylon";
 import * as util from  "../../util";
 import path from "path";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 import resolve from "../../helpers/resolve";
 

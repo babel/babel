@@ -1,4 +1,4 @@
-import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
+import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 
 export default function ({ types: t }) {
   const yieldStarVisitor = {
@@ -17,7 +17,7 @@ export default function ({ types: t }) {
   };
 
   return {
-    inherits: require("babel-plugin-syntax-async-generators"),
+    inherits: require("@babel/plugin-syntax-async-generators"),
     visitor: {
       Function(path, state) {
         if (!path.node.async || !path.node.generator) return;

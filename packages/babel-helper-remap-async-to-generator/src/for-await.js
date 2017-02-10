@@ -1,6 +1,6 @@
-import * as t from "babel-types";
-import template from "babel-template";
-import traverse from "babel-traverse";
+import * as t from "@babel/types";
+import template from "@babel/template";
+import traverse from "@babel/traverse";
 
 const buildForAwait = template(`
   function* wrapper() {

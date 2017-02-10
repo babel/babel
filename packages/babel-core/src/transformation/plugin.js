@@ -1,7 +1,7 @@
 import OptionManager from "./file/options/option-manager";
-import * as messages from "babel-messages";
+import * as messages from "@babel/messages";
 import Store from "../store";
-import traverse from "babel-traverse";
+import traverse from "@babel/traverse";
 import assign from "lodash/assign";
 import clone from "lodash/clone";
 

@@ -1,7 +1,7 @@
 import * as context from "../../../index";
 import type Logger from "../logger";
 import Plugin from "../../plugin";
-import * as messages from "babel-messages";
+import * as messages from "@babel/messages";
 import { normaliseOptions } from "./index";
 import resolvePlugin from "../../../helpers/resolve-plugin";
 import resolvePreset from "../../../helpers/resolve-preset";

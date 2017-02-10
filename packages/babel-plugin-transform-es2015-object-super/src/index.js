@@ -1,4 +1,4 @@
-import ReplaceSupers from "babel-helper-replace-supers";
+import ReplaceSupers from "@babel/helper-replace-supers";
 
 export default function ({ types: t }) {
   function Property(path, node, scope, getObjectRef, file) {

@@ -2,7 +2,7 @@ export default function ({ types: t }) {
   const FLOW_DIRECTIVE = "@flow";
 
   return {
-    inherits: require("babel-plugin-syntax-flow"),
+    inherits: require("@babel/plugin-syntax-flow"),
 
     visitor: {
       Program(path, { file: { ast: { comments } } }) {

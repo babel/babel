@@ -1,6 +1,6 @@
 import isPlainObject from "lodash/isPlainObject";
 import isRegExp from "lodash/isRegExp";
-import type { Scope } from "babel-traverse";
+import type { Scope } from "@babel/traverse";
 import * as t from "./index";
 
 export function toComputedKey(node: Object, key: Object = node.key || node.property): Object {

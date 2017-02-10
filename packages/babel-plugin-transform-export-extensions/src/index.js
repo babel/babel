@@ -20,7 +20,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-export-extensions"),
+    inherits: require("@babel/plugin-syntax-export-extensions"),
 
     visitor: {
       ExportNamedDeclaration(path) {

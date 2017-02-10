@@ -2,8 +2,8 @@ const commander = require("commander");
 const defaults  = require("lodash/defaults");
 const readdir   = require("fs-readdir-recursive");
 const index     = require("./index");
-const babel     = require("babel-core");
-const util      = require("babel-core").util;
+const babel     = require("@babel/core");
+const util      = require("@babel/core").util;
 const path      = require("path");
 const fs        = require("fs");
 

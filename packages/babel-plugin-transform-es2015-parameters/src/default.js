@@ -1,7 +1,7 @@
-import getFunctionArity from "babel-helper-get-function-arity";
-import callDelegate from "babel-helper-call-delegate";
-import template from "babel-template";
-import * as t from "babel-types";
+import getFunctionArity from "@babel/helper-get-function-arity";
+import callDelegate from "@babel/helper-call-delegate";
+import template from "@babel/template";
+import * as t from "@babel/types";
 
 const buildDefaultParam = template(`
   let VARIABLE_NAME =

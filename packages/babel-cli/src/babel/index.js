@@ -3,8 +3,8 @@
 const fs         = require("fs");
 const commander  = require("commander");
 const kebabCase  = require("lodash/kebabCase");
-const options    = require("babel-core").options;
-const util       = require("babel-core").util;
+const options    = require("@babel/core").options;
+const util       = require("@babel/core").util;
 const uniq       = require("lodash/uniq");
 const glob       = require("glob");
 
@@ -46,7 +46,7 @@ commander.option("-q, --quiet", "Don't log anything");
 /* eslint-enable max-len */
 
 const pkg = require("../../package.json");
-commander.version(pkg.version + " (babel-core " + require("babel-core").version + ")");
+commander.version(pkg.version + " (babel-core " + require("@babel/core").version + ")");
 commander.usage("[options] <files ...>");
 commander.parse(process.argv);
 

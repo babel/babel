@@ -6,7 +6,7 @@ import invariant from "invariant";
 import traverse from "../index";
 import assign from "lodash/assign";
 import Scope from "../scope";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import { path as pathCache } from "../cache";
 
 const debug = buildDebug("babel");

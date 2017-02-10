@@ -2,7 +2,7 @@ import definitions from "./definitions";
 
 export default function ({ types: t }) {
   function getRuntimeModuleName(opts) {
-    return opts.moduleName || "babel-runtime";
+    return opts.moduleName || "@babel/runtime";
   }
 
   function has(obj, key) {

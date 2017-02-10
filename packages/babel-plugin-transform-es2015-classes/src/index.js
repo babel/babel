@@ -1,6 +1,6 @@
 import LooseTransformer from "./loose";
 import VanillaTransformer from "./vanilla";
-import nameFunction from "babel-helper-function-name";
+import nameFunction from "@babel/helper-function-name";
 
 export default function ({ types: t }) {
   // todo: investigate traversal requeueing
