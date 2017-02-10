@@ -14,6 +14,7 @@ dist
 /.package.json
 /packages/babel-runtime/core-js
 /packages/babel-runtime/helpers/*.js
+/packages/babel-register/test/.babel
 /packages/*/lib
 _babel.github.io
 /tests/.browser-build.js
