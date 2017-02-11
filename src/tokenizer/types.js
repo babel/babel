@@ -75,6 +75,8 @@ export const types = {
   doubleColon: new TokenType("::", { beforeExpr }),
   dot: new TokenType("."),
   question: new TokenType("?", { beforeExpr }),
+  questionBracketL: new TokenType("?[", { beforeExpr, startsExpr }),
+  questionBracketL: new TokenType("?."),
   arrow: new TokenType("=>", { beforeExpr }),
   template: new TokenType("template"),
   ellipsis: new TokenType("...", { beforeExpr }),

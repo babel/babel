@@ -391,6 +391,22 @@ export default class Tokenizer {
     return this.finishOp(code === 61 ? tt.eq : tt.prefix, 1);
   }
 
+  readToken_question() { // '?'
+     let next = this.input.charCodeAt(this.state.pos + 1);
+     if(next === 46){ // 46 = question '.'
+       this.state.pos += 2;
+       return this.finishToken(tt.questionDot);
+     }
+     else if(next === 91){ // 91 = question '['
+       this.state.pos += 2;
+       return this.finishToken(tt.questionBracketL);
+     } 
+     else {
+       ++this.state.pos;
+       return this.finishToken(tt.question);
+     }
+   }
+
   getTokenFromCode(code) {
     switch (code) {
       // The interpretation of a dot depends on whether it is followed
@@ -425,7 +441,7 @@ export default class Tokenizer {
           return this.finishToken(tt.colon);
         }
 
-      case 63: ++this.state.pos; return this.finishToken(tt.question);
+      case 63: return this.readToken_question();
       case 64: ++this.state.pos; return this.finishToken(tt.at);
 
       case 96: // '`'
