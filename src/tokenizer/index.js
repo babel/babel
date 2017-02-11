@@ -392,20 +392,16 @@ export default class Tokenizer {
   }
 
   readToken_question() { // '?'
-     let next = this.input.charCodeAt(this.state.pos + 1);
-     if(next === 46){ // 46 = question '.'
-       this.state.pos += 2;
-       return this.finishToken(tt.questionDot);
-     }
-     else if(next === 91){ // 91 = question '['
-       this.state.pos += 2;
-       return this.finishToken(tt.questionBracketL);
-     } 
-     else {
-       ++this.state.pos;
-       return this.finishToken(tt.question);
-     }
-   }
+    const next = this.input.charCodeAt(this.state.pos + 1);
+    if (next === 46) { // 46 = question '.'
+      this.state.pos += 2;
+      return this.finishToken(tt.questionDot);
+    }
+    else {
+      ++this.state.pos;
+      return this.finishToken(tt.question);
+    }
+  }
 
   getTokenFromCode(code) {
     switch (code) {
@@ -825,7 +821,7 @@ export default class Tokenizer {
     const type = this.state.type;
     let update;
 
-    if (type.keyword && prevType === tt.dot) {
+    if (type.keyword && (prevType === tt.dot || prevType === tt.questionDot)) {
       this.state.exprAllowed = false;
     } else if (update = type.updateContext) {
       update.call(this, prevType);

@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 50,
+  "end": 54,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 5,
-      "column": 12
+      "column": 16
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 50,
+    "end": 54,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 5,
-        "column": 12
+        "column": 16
       }
     },
     "sourceType": "script",
@@ -85,7 +85,7 @@
                 }
               },
               "name": "o",
-              "existentialOperator": true
+              "nullPropagation": true
             },
             "property": {
               "type": "Identifier",
@@ -104,7 +104,7 @@
               "name": "x"
             },
             "computed": false,
-            "existentialOperator": true
+            "nullPropagation": true
           },
           "property": {
             "type": "Identifier",
@@ -182,7 +182,7 @@
                 }
               },
               "name": "o",
-              "existentialOperator": true
+              "nullPropagation": true
             },
             "property": {
               "type": "Identifier",
@@ -295,7 +295,7 @@
                 "name": "z"
               },
               "computed": false,
-              "existentialOperator": true
+              "nullPropagation": true
             },
             "property": {
               "type": "Identifier",
@@ -390,7 +390,7 @@
                   "name": "y"
                 },
                 "computed": false,
-                "existentialOperator": true
+                "nullPropagation": true
               },
               "property": {
                 "type": "Identifier",
@@ -409,7 +409,7 @@
                 "name": "z"
               },
               "computed": false,
-              "existentialOperator": true
+              "nullPropagation": true
             },
             "property": {
               "type": "Identifier",
@@ -434,7 +434,7 @@
       {
         "type": "ExpressionStatement",
         "start": 38,
-        "end": 50,
+        "end": 54,
         "loc": {
           "start": {
             "line": 5,
@@ -442,13 +442,13 @@
           },
           "end": {
             "line": 5,
-            "column": 12
+            "column": 16
           }
         },
         "expression": {
           "type": "MemberExpression",
           "start": 38,
-          "end": 50,
+          "end": 54,
           "loc": {
             "start": {
               "line": 5,
@@ -456,13 +456,13 @@
             },
             "end": {
               "line": 5,
-              "column": 12
+              "column": 16
             }
           },
           "object": {
             "type": "MemberExpression",
             "start": 38,
-            "end": 47,
+            "end": 51,
             "loc": {
               "start": {
                 "line": 5,
@@ -470,13 +470,13 @@
               },
               "end": {
                 "line": 5,
-                "column": 9
+                "column": 13
               }
             },
             "object": {
               "type": "MemberExpression",
               "start": 38,
-              "end": 43,
+              "end": 44,
               "loc": {
                 "start": {
                   "line": 5,
@@ -484,7 +484,7 @@
                 },
                 "end": {
                   "line": 5,
-                  "column": 5
+                  "column": 6
                 }
               },
               "object": {
@@ -502,62 +502,58 @@
                   }
                 },
                 "name": "o",
-                "existentialOperator": true
+                "nullPropagation": true
               },
               "property": {
-                "type": "Literal",
-                "start": 41,
-                "end": 42,
+                "type": "NumericLiteral",
+                "start": 42,
+                "end": 43,
                 "loc": {
                   "start": {
                     "line": 5,
-                    "column": 3
+                    "column": 4
                   },
                   "end": {
                     "line": 5,
-                    "column": 4
+                    "column": 5
                   }
                 },
-                "value": 0,
-                "rawValue": 0,
-                "raw": "0"
+                "value": 0
               },
               "computed": true,
-              "existentialOperator": true
+              "nullPropagation": true
             },
             "property": {
-              "type": "Literal",
-              "start": 45,
-              "end": 46,
+              "type": "StringLiteral",
+              "start": 47,
+              "end": 50,
               "loc": {
                 "start": {
                   "line": 5,
-                  "column": 7
+                  "column": 9
                 },
                 "end": {
                   "line": 5,
-                  "column": 8
+                  "column": 12
                 }
               },
-              "value": 1,
-              "rawValue": 1,
-              "raw": "1"
+              "value": "1"
             },
             "computed": true,
-            "existentialOperator": true
+            "nullPropagation": true
           },
           "property": {
             "type": "Identifier",
-            "start": 49,
-            "end": 50,
+            "start": 53,
+            "end": 54,
             "loc": {
               "start": {
                 "line": 5,
-                "column": 11
+                "column": 15
               },
               "end": {
                 "line": 5,
-                "column": 12
+                "column": 16
               }
             },
             "name": "x"

@@ -857,7 +857,7 @@ interface MemberExpression <: Expression, Pattern {
   object: Expression | Super;
   property: Expression;
   computed: boolean;
-  nullPropagation: boolean;
+  nullPropagation: boolean | null;
 }
 ```
 

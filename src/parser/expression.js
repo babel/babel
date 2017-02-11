@@ -284,27 +284,29 @@ pp.parseSubscripts = function (base, startPos, startLoc, noCalls) {
       node.object = base;
       node.callee = this.parseNoCallExpr();
       return this.parseSubscripts(this.finishNode(node, "BindExpression"), startPos, startLoc, noCalls);
-   } else if (this.eat(tt.questionDot)) {
-       let node = this.startNodeAt(startPos, startLoc);
-       node.object = base;
-       node.property = this.parseIdentifier(true);
-       node.computed = false;
-       node.nullPropagation = true;
-       base = this.finishNode(node, "MemberExpression");
+    } else if (this.eat(tt.questionDot)) {
+      base.nullPropagation = true;
+      if (this.eat(tt.bracketL)) {
+        const node = this.startNodeAt(startPos, startLoc);
+        node.object = base;
+        node.property = this.parseExpression();
+        node.computed = true;
+        this.expect(tt.bracketR);
+        base = this.finishNode(node, "MemberExpression");
+      }
+      else {
+        const node = this.startNodeAt(startPos, startLoc);
+        node.object = base;
+        node.property = this.parseIdentifier(true);
+        node.computed = false;
+        base = this.finishNode(node, "MemberExpression");
+      }
     } else if (this.eat(tt.dot)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.object = base;
       node.property = this.parseIdentifier(true);
       node.computed = false;
-      node.nullPropagation = false;
       base = this.finishNode(node, "MemberExpression");
-    } else if (this.eat(tt.questionBracketL)) {
-       let node = this.startNodeAt(startPos, startLoc);
-       node.object = base;
-       node.property = this.parseExpression();
-       node.computed = true;
-       node.nullPropagation = true;
-       this.expect(tt.bracketR);
     } else if (this.eat(tt.bracketL)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.object = base;
