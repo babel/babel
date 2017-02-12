@@ -46,6 +46,12 @@ export default class Parser extends Tokenizer {
       pluginList.push("flow");
     }
 
+    if (pluginList.indexOf("estree") >= 0) {
+      // ensure estree plugin loads first
+      pluginList = pluginList.filter((plugin) => plugin !== "estree");
+      pluginList.unshift("estree");
+    }
+
     for (const name of pluginList) {
       if (!pluginMap[name]) {
         pluginMap[name] = true;

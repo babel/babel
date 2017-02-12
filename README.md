@@ -27,6 +27,12 @@ Significant diversions are expected to occur in the future such as streaming, EB
 
 ### `babylon.parse(code, [options])`
 
+### `babylon.parseExpression(code, [options])`
+
+`parse()` parses the provided `code` as an entire ECMAScript program, while
+`parseExpression()` tries to parse a single Expression with performance in
+mind. When in doubt, use `.parse()`.
+
 ### Options
 
 - **allowImportExportEverywhere**: By default, `import` and `export`
@@ -37,14 +43,18 @@ Significant diversions are expected to occur in the future such as streaming, EB
   the top level raises an error. Set this to `true` to accept such
   code.
 
-- **allowSuperOutsideMethod** TODO
+- **allowSuperOutsideMethod**: TODO
 
 - **sourceType**: Indicate the mode the code should be parsed in. Can be
   either `"script"` or `"module"`.
 
 - **sourceFilename**: Correlate output AST nodes with their source filename.  Useful when generating code and source maps from the ASTs of multiple input files.
 
+- **startLine**: By default, the first line of code parsed is treated as line 1. You can provide a line number to alternatively start with. Useful for integration with other source tools.
+
 - **plugins**: Array containing the plugins that you want to enable.
+
+- **strictMode**: TODO
 
 ### Output
 

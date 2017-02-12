@@ -343,7 +343,7 @@ pp.parseCallExpressionArguments = function (close, possibleAsyncArrow) {
       innerParenStart = this.state.start;
     }
 
-    elts.push(this.parseExprListItem(undefined, possibleAsyncArrow ? { start: 0 } : undefined));
+    elts.push(this.parseExprListItem(false, possibleAsyncArrow ? { start: 0 } : undefined, possibleAsyncArrow ? { start: 0 } : undefined));
   }
 
   // we found an async arrow function so let's not allow any inner parens
@@ -735,8 +735,9 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
     }
 
     if (this.hasPlugin("objectRestSpread") && this.match(tt.ellipsis)) {
-      prop = this.parseSpread();
+      prop = this.parseSpread(isPattern ? { start: 0 } : undefined);
       prop.type = isPattern ? "RestProperty" : "SpreadProperty";
+      if (isPattern) this.toAssignable(prop.argument, true, "object pattern");
       node.properties.push(prop);
       if (isPattern) {
         const position = this.state.start;
@@ -773,6 +774,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
       const asyncId = this.parseIdentifier();
       if (this.match(tt.colon) || this.match(tt.parenL) || this.match(tt.braceR) || this.match(tt.eq) || this.match(tt.comma)) {
         prop.key = asyncId;
+        prop.computed = false;
       } else {
         isAsync = true;
         if (this.hasPlugin("asyncGenerators")) isGenerator = this.eat(tt.star);
@@ -1019,14 +1021,14 @@ pp.parseExprList = function (close, allowEmpty, refShorthandDefaultPos) {
   return elts;
 };
 
-pp.parseExprListItem = function (allowEmpty, refShorthandDefaultPos) {
+pp.parseExprListItem = function (allowEmpty, refShorthandDefaultPos, refNeedsArrowPos) {
   let elt;
   if (allowEmpty && this.match(tt.comma)) {
     elt = null;
   } else if (this.match(tt.ellipsis)) {
     elt = this.parseSpread(refShorthandDefaultPos);
   } else {
-    elt = this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem);
+    elt = this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem, refNeedsArrowPos);
   }
   return elt;
 };
@@ -1037,14 +1039,13 @@ pp.parseExprListItem = function (allowEmpty, refShorthandDefaultPos) {
 
 pp.parseIdentifier = function (liberal) {
   const node = this.startNode();
+  if (!liberal) {
+    this.checkReservedWord(this.state.value, this.state.start, !!this.state.type.keyword, false);
+  }
 
   if (this.match(tt.name)) {
-    if (!liberal) {
-      this.checkReservedWord(this.state.value, this.state.start, false, false);
-    }
-
     node.name = this.state.value;
-  } else if (liberal && this.state.type.keyword) {
+  } else if (this.state.type.keyword) {
     node.name = this.state.type.keyword;
   } else {
     this.unexpected();

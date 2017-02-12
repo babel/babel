@@ -1059,7 +1059,12 @@ pp.parseImportSpecifiers = function (node) {
 pp.parseImportSpecifier = function (node) {
   const specifier = this.startNode();
   specifier.imported = this.parseIdentifier(true);
-  specifier.local = this.eatContextual("as") ? this.parseIdentifier() : specifier.imported.__clone();
+  if (this.eatContextual("as")) {
+    specifier.local = this.parseIdentifier();
+  } else {
+    this.checkReservedWord(specifier.imported.name, specifier.start, true, true);
+    specifier.local = specifier.imported.__clone();
+  }
   this.checkLVal(specifier.local, true, undefined, "import specifier");
   node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
 };

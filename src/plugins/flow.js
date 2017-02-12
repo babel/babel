@@ -28,6 +28,45 @@ pp.flowParseTypeInitialiser = function (tok) {
   return type;
 };
 
+pp.flowParsePredicate = function() {
+  const node = this.startNode();
+  const moduloLoc = this.state.startLoc;
+  const moduloPos = this.state.start;
+  this.expect(tt.modulo);
+  const checksLoc = this.state.startLoc;
+  this.expectContextual("checks");
+  // Force '%' and 'checks' to be adjacent
+  if (moduloLoc.line !== checksLoc.line || moduloLoc.column !== checksLoc.column - 1) {
+    this.raise(moduloPos, "Spaces between ´%´ and ´checks´ are not allowed here.");
+  }
+  if (this.eat(tt.parenL)) {
+    node.expression = this.parseExpression();
+    this.expect(tt.parenR);
+    return this.finishNode(node, "DeclaredPredicate");
+  } else {
+    return this.finishNode(node, "InferredPredicate");
+  }
+};
+
+pp.flowParseTypeAndPredicateInitialiser = function () {
+  const oldInType = this.state.inType;
+  this.state.inType = true;
+  this.expect(tt.colon);
+  let type = null;
+  let predicate = null;
+  if (this.match(tt.modulo)) {
+    this.state.inType = oldInType;
+    predicate = this.flowParsePredicate();
+  } else {
+    type = this.flowParseType();
+    this.state.inType = oldInType;
+    if (this.match(tt.modulo)) {
+      predicate = this.flowParsePredicate();
+    }
+  }
+  return [type, predicate];
+};
+
 pp.flowParseDeclareClass = function (node) {
   this.next();
   this.flowParseInterfaceish(node, true);
@@ -53,9 +92,10 @@ pp.flowParseDeclareFunction = function (node) {
   typeNode.params = tmp.params;
   typeNode.rest = tmp.rest;
   this.expect(tt.parenR);
-  typeNode.returnType = this.flowParseTypeInitialiser();
-
+  let predicate = null;
+  [typeNode.returnType, predicate] = this.flowParseTypeAndPredicateInitialiser();
   typeContainer.typeAnnotation = this.finishNode(typeNode, "FunctionTypeAnnotation");
+  typeContainer.predicate = predicate;
   id.typeAnnotation = this.finishNode(typeContainer, "TypeAnnotation");
 
   this.finishNode(id, id.type);
@@ -531,7 +571,7 @@ pp.reinterpretTypeAsFunctionTypeParam = function (type) {
 
 pp.flowParseFunctionTypeParams = function (params = []) {
   const ret = { params, rest: null };
-  while (this.match(tt.name)) {
+  while (!this.match(tt.parenR) && !this.match(tt.ellipsis)) {
     ret.params.push(this.flowParseFunctionTypeParam());
     if (!this.match(tt.parenR)) {
       this.expect(tt.comma);
@@ -791,6 +831,12 @@ pp.flowParseTypeAnnotation = function () {
   return this.finishNode(node, "TypeAnnotation");
 };
 
+pp.flowParseTypeAndPredicateAnnotation = function () {
+  const node = this.startNode();
+  [node.typeAnnotation, node.predicate] = this.flowParseTypeAndPredicateInitialiser();
+  return this.finishNode(node, "TypeAnnotation");
+};
+
 pp.flowParseTypeAnnotatableIdentifier = function () {
   const ident = this.flowParseRestrictedIdentifier();
   if (this.match(tt.colon)) {
@@ -833,7 +879,7 @@ export default function (instance) {
       if (this.match(tt.colon) && !allowExpression) {
         // if allowExpression is true then we're parsing an arrow function and if
         // there's a return type then it's been handled elsewhere
-        node.returnType = this.flowParseTypeAnnotation();
+        node.returnType = this.flowParseTypeAndPredicateAnnotation();
       }
 
       return inner.call(this, node, allowExpression);
@@ -1045,9 +1091,9 @@ export default function (instance) {
   // parse an item inside a expression list eg. `(NODE, NODE)` where NODE represents
   // the position where this function is called
   instance.extend("parseExprListItem", function (inner) {
-    return function (allowEmpty, refShorthandDefaultPos) {
+    return function (...args) {
       const container = this.startNode();
-      const node = inner.call(this, allowEmpty, refShorthandDefaultPos);
+      const node = inner.call(this, ...args);
       if (this.match(tt.colon)) {
         container._exprListItem = true;
         container.expression = node;
@@ -1220,9 +1266,10 @@ export default function (instance) {
         specifierTypeKind = "typeof";
       }
 
+      let isBinding = false;
       if (this.isContextual("as")) {
         const as_ident = this.parseIdentifier(true);
-        if (specifierTypeKind !== null && !this.match(tt.name)) {
+        if (specifierTypeKind !== null && !this.match(tt.name) && !this.state.type.keyword) {
           // `import {type as ,` or `import {type as }`
           specifier.imported = as_ident;
           specifier.importKind = specifierTypeKind;
@@ -1231,23 +1278,20 @@ export default function (instance) {
           // `import {type as foo`
           specifier.imported = firstIdent;
           specifier.importKind = null;
-          specifier.local = this.parseIdentifier(false);
+          specifier.local = this.parseIdentifier();
         }
-      } else if (specifierTypeKind !== null && this.match(tt.name)) {
+      } else if (specifierTypeKind !== null && (this.match(tt.name) || this.state.type.keyword)) {
         // `import {type foo`
         specifier.imported = this.parseIdentifier(true);
         specifier.importKind = specifierTypeKind;
-        specifier.local =
-          this.eatContextual("as")
-          ? this.parseIdentifier(false)
-          : specifier.imported.__clone();
-      } else {
-        if (firstIdent.name === "typeof") {
-          this.unexpected(
-            firstIdentLoc,
-            "Cannot import a variable named `typeof`"
-          );
+        if (this.eatContextual("as")) {
+          specifier.local = this.parseIdentifier();
+        } else {
+          isBinding = true;
+          specifier.local = specifier.imported.__clone();
         }
+      } else {
+        isBinding = true;
         specifier.imported = firstIdent;
         specifier.importKind = null;
         specifier.local = specifier.imported.__clone();
@@ -1259,6 +1303,8 @@ export default function (instance) {
       ) {
         this.raise(firstIdentLoc, "`The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements`");
       }
+
+      if (isBinding) this.checkReservedWord(specifier.local.name, specifier.start, true, true);
 
       this.checkLVal(specifier.local, true, undefined, "import specifier");
       node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
@@ -1377,7 +1423,7 @@ export default function (instance) {
         try {
           const oldNoAnonFunctionType = this.state.noAnonFunctionType;
           this.state.noAnonFunctionType = true;
-          const returnType = this.flowParseTypeAnnotation();
+          const returnType = this.flowParseTypeAndPredicateAnnotation();
           this.state.noAnonFunctionType = oldNoAnonFunctionType;
 
           if (this.canInsertSemicolon()) this.unexpected();

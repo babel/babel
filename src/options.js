@@ -4,6 +4,7 @@
 export const defaultOptions: {
   sourceType: string,
   sourceFilename: any,
+  startLine: number,
   allowReturnOutsideFunction: boolean,
   allowImportExportEverywhere: boolean,
   allowSuperOutsideMethod: boolean,
@@ -14,6 +15,9 @@ export const defaultOptions: {
   sourceType: "script",
   // Source filename.
   sourceFilename: undefined,
+  // Line from which to start counting source. Useful for
+  // integration with other tools.
+  startLine: 1,
   // When enabled, a return at the top level is not considered an
   // error.
   allowReturnOutsideFunction: false,

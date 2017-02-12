@@ -34,7 +34,7 @@ export default class State {
     this.commentStack     = [];
 
     this.pos = this.lineStart = 0;
-    this.curLine = 1;
+    this.curLine = options.startLine;
 
     this.type = tt.eof;
     this.value = null;
