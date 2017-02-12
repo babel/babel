@@ -76,7 +76,7 @@
           },
           "types": [
             {
-              "type": "NumericLiteralTypeAnnotation",
+              "type": "NumberLiteralTypeAnnotation",
               "start": 45,
               "end": 47,
               "loc": {
@@ -96,7 +96,7 @@
               }
             },
             {
-              "type": "NumericLiteralTypeAnnotation",
+              "type": "NumberLiteralTypeAnnotation",
               "start": 52,
               "end": 53,
               "loc": {
@@ -116,7 +116,7 @@
               }
             },
             {
-              "type": "NumericLiteralTypeAnnotation",
+              "type": "NumberLiteralTypeAnnotation",
               "start": 58,
               "end": 59,
               "loc": {

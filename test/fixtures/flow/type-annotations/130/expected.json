@@ -109,7 +109,7 @@
                 },
                 "types": [
                   {
-                    "type": "NumericLiteralTypeAnnotation",
+                    "type": "NumberLiteralTypeAnnotation",
                     "start": 16,
                     "end": 17,
                     "loc": {
@@ -129,7 +129,7 @@
                     }
                   },
                   {
-                    "type": "NumericLiteralTypeAnnotation",
+                    "type": "NumberLiteralTypeAnnotation",
                     "start": 20,
                     "end": 21,
                     "loc": {
@@ -198,7 +198,7 @@
                 },
                 "types": [
                   {
-                    "type": "NumericLiteralTypeAnnotation",
+                    "type": "NumberLiteralTypeAnnotation",
                     "start": 28,
                     "end": 29,
                     "loc": {
@@ -218,7 +218,7 @@
                     }
                   },
                   {
-                    "type": "NumericLiteralTypeAnnotation",
+                    "type": "NumberLiteralTypeAnnotation",
                     "start": 32,
                     "end": 33,
                     "loc": {

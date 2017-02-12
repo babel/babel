@@ -164,7 +164,7 @@
                   ],
                   "rest": null,
                   "returnType": {
-                    "type": "NumericLiteralTypeAnnotation",
+                    "type": "NumberLiteralTypeAnnotation",
                     "start": 24,
                     "end": 27,
                     "loc": {

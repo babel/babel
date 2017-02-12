@@ -687,7 +687,7 @@ pp.flowParsePrimaryType = function () {
         this.addExtra(node, "rawValue", node.value);
         this.addExtra(node, "raw", this.input.slice(this.state.start, this.state.end));
         this.next();
-        return this.finishNode(node, "NumericLiteralTypeAnnotation");
+        return this.finishNode(node, "NumberLiteralTypeAnnotation");
       }
 
     case tt.num:
@@ -695,7 +695,7 @@ pp.flowParsePrimaryType = function () {
       this.addExtra(node, "rawValue", node.value);
       this.addExtra(node, "raw", this.input.slice(this.state.start, this.state.end));
       this.next();
-      return this.finishNode(node, "NumericLiteralTypeAnnotation");
+      return this.finishNode(node, "NumberLiteralTypeAnnotation");
 
     case tt._null:
       node.value = this.match(tt._null);
