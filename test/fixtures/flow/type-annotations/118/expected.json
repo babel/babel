@@ -107,7 +107,22 @@
                 },
                 "name": "p"
               },
-              "variance": "plus",
+              "variance": {
+                "type": "Variance",
+                "start": 9,
+                "end": 10,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 10
+                  }
+                },
+                "kind": "plus"
+              },
               "static": false,
               "typeAnnotation": {
                 "type": "TypeAnnotation",
