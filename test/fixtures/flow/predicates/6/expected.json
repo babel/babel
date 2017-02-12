@@ -530,7 +530,7 @@
                             }
                           },
                           {
-                            "type": "NumericLiteralTypeAnnotation",
+                            "type": "NumberLiteralTypeAnnotation",
                             "start": 82,
                             "end": 83,
                             "loc": {
