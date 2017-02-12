@@ -65,6 +65,7 @@ Add the following line to your .babelrc file:
 If you are including your plugins manually and using `transform-class-properties`, make sure that `transform-decorators` comes *before* `transform-class-properties`.
 
 Wrong:
+
 ```js
 "plugins": [
   "transform-class-properties",
@@ -73,6 +74,7 @@ Wrong:
 ```
 
 Right:
+
 ```js
 "plugins": [
   "transform-decorators",
