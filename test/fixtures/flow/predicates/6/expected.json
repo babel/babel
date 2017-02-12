@@ -178,7 +178,7 @@
                           },
                           "params": [
                             {
-                              "type": "NumericLiteralTypeAnnotation",
+                              "type": "NumberLiteralTypeAnnotation",
                               "start": 39,
                               "end": 40,
                               "loc": {
