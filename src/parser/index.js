@@ -55,8 +55,8 @@ export default class Parser extends Tokenizer {
   }
 
   loadAllPlugins() {
-    // ensure flow plugin loads last
-    const pluginNames = Object.keys(plugins).filter((name) => name !== "flow");
+    // ensure flow plugin loads last, also ensure estree is not loaded with *
+    const pluginNames = Object.keys(plugins).filter((name) => name !== "flow" && name !== "estree");
     pluginNames.push("flow");
 
     pluginNames.forEach((name) => {
@@ -79,6 +79,12 @@ export default class Parser extends Tokenizer {
       // ensure flow plugin loads last
       pluginList = pluginList.filter((plugin) => plugin !== "flow");
       pluginList.push("flow");
+    }
+
+    if (pluginList.indexOf("estree") >= 0) {
+      // ensure estree plugin loads first
+      pluginList = pluginList.filter((plugin) => plugin !== "estree");
+      pluginList.unshift("estree");
     }
 
     for (const name of pluginList) {
