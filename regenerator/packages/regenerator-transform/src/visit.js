@@ -12,56 +12,10 @@ import assert from "assert";
 import * as t from "babel-types";
 import { hoist } from "./hoist";
 import { Emitter } from "./emit";
+import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod";
 import * as util from "./util";
 
 let getMarkInfo = require("private").makeAccessor();
-
-// we want to convert this shorthand object method into a normal object property
-// which is a function expression. for example, this:
-//  var foo = {
-//    *bar(baz) { return 5; }
-//  }
-// should be replaced with:
-//  var foo = {
-//    bar: function*(baz) { return 5; }
-//  }
-// to do this, we will clone the parameter array and the body of the function
-// into a new FunctionExpression.
-function replaceShorthandObjectMethod(path) {
-  if (!t.isObjectMethod(path.node)) {
-    return path;
-  }
-
-  // if it's not a generator method, we don't need to do anything.
-  if (!path.node.generator) {
-    return path;
-  }
-
-  const parameters = path.node.params.map(function (param) {
-    return t.cloneDeep(param);
-  })
-
-  if (!(path.node.key.name || path.node.key.value)) throw path.node.key;
-  const functionExpression = t.functionExpression(
-    null, // id
-    parameters, // params
-    t.cloneDeep(path.node.body), // body
-    path.node.generator,
-    path.node.async
-  );
-
-  path.replaceWith(
-    t.objectProperty(
-      t.cloneDeep(path.node.key), // key
-      functionExpression, //value
-      path.node.computed, // computed
-      false // shorthand
-    )
-  );
-
-  // return the function expression path.
-  return path.get("value");
-}
 
 exports.visitor = {
   Function: {
