@@ -15,17 +15,17 @@ Is the order a rabbit?
 `;
 
 var middles = `
-Is the order ${ order }?
+Is the order ${order}?
 `;
 
 var middles = `
-Is the order ${ order }?
+Is the order ${order}?
 `;
 
 var middles = `
-1. ${ cocoa }
-2. ${ chino }
-3. ${ rize }
-4. ${ syaro }
-5. ${ chiya }
+1. ${cocoa}
+2. ${chino}
+3. ${rize}
+4. ${syaro}
+5. ${chiya}
 `;

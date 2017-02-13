@@ -1,7 +1,7 @@
 import slash from "slash";
 import * as util from "../../../util";
 
-export let filename = slash;
+export const filename = slash;
 
 export function boolean(val: any): boolean {
   return !!val;

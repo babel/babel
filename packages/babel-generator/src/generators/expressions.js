@@ -1,6 +1,3 @@
-/* eslint max-len: 0 */
-
-import isNumber from "lodash/isNumber";
 import * as t from "babel-types";
 import * as n from "../node";
 
@@ -94,7 +91,7 @@ export function CallExpression(node: Object) {
 
   this.token("(");
 
-  let isPrettyCall = node._prettyCall;
+  const isPrettyCall = node._prettyCall;
 
   let separator;
   if (isPrettyCall) {
@@ -113,6 +110,10 @@ export function CallExpression(node: Object) {
   this.token(")");
 }
 
+export function Import() {
+  this.word("import");
+}
+
 function buildYieldAwait(keyword: string) {
   return function (node: Object) {
     this.word(keyword);
@@ -123,15 +124,15 @@ function buildYieldAwait(keyword: string) {
 
     if (node.argument) {
       this.space();
-      let terminatorState = this.startTerminatorless();
+      const terminatorState = this.startTerminatorless();
       this.print(node.argument, node);
       this.endTerminatorless(terminatorState);
     }
   };
 }
 
-export let YieldExpression = buildYieldAwait("yield");
-export let AwaitExpression = buildYieldAwait("await");
+export const YieldExpression = buildYieldAwait("yield");
+export const AwaitExpression = buildYieldAwait("await");
 
 export function EmptyStatement() {
   this.semicolon(true /* force */);
@@ -144,6 +145,8 @@ export function ExpressionStatement(node: Object) {
 
 export function AssignmentPattern(node: Object) {
   this.print(node.left, node);
+  if (node.left.optional) this.token("?");
+  this.print(node.left.typeAnnotation, node);
   this.space();
   this.token("=");
   this.space();
@@ -153,7 +156,7 @@ export function AssignmentPattern(node: Object) {
 export function AssignmentExpression(node: Object, parent: Object) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
-  let parens = this.inForStatementInitCounter && node.operator === "in" &&
+  const parens = this.inForStatementInitCounter && node.operator === "in" &&
                !n.needsParens(node, parent);
 
   if (parens) {
@@ -196,7 +199,7 @@ export function MemberExpression(node: Object) {
   }
 
   let computed = node.computed;
-  if (t.isLiteral(node.property) && isNumber(node.property.value)) {
+  if (t.isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }
 

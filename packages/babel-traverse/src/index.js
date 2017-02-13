@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
 import * as messages from "babel-messages";
@@ -45,12 +43,19 @@ traverse.cheap = function (node, enter) {
   return t.traverseFast(node, enter);
 };
 
-traverse.node = function (node: Object, opts: Object, scope: Object, state: Object, parentPath: Object, skipKeys?) {
-  let keys: Array = t.VISITOR_KEYS[node.type];
+traverse.node = function (
+  node: Object,
+  opts: Object,
+  scope: Object,
+  state: Object,
+  parentPath: Object,
+  skipKeys?
+) {
+  const keys: Array = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
-  let context = new TraversalContext(scope, opts, state, parentPath);
-  for (let key of keys) {
+  const context = new TraversalContext(scope, opts, state, parentPath);
+  for (const key of keys) {
     if (skipKeys && skipKeys[key]) continue;
     if (context.visit(node, key)) return;
   }
@@ -74,14 +79,19 @@ function hasBlacklistedType(path, state) {
   }
 }
 
-traverse.hasType = function (tree: Object, scope: Object, type: Object, blacklistTypes: Array<string>): boolean {
+traverse.hasType = function (
+  tree: Object,
+  scope: Object,
+  type: Object,
+  blacklistTypes: Array<string>
+): boolean {
   // the node we're searching in is blacklisted
   if (includes(blacklistTypes, tree.type)) return false;
 
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;
 
-  let state = {
+  const state = {
     has:  false,
     type: type
   };
@@ -97,6 +107,9 @@ traverse.hasType = function (tree: Object, scope: Object, type: Object, blacklis
 traverse.clearCache = function() {
   cache.clear();
 };
+
+traverse.clearCache.clearPath = cache.clearPath;
+traverse.clearCache.clearScope = cache.clearScope;
 
 traverse.copyCache = function(source, destination) {
   if (cache.path.has(source)) {

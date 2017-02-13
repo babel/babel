@@ -1,63 +1,23 @@
-let traverse = require("../lib").default;
-let assert   = require("assert");
-let _        = require("lodash");
+const cloneDeep = require("lodash/cloneDeep");
+const traverse  = require("../lib").default;
+const assert    = require("assert");
+const parse     = require("babylon").parse;
 
 describe("traverse", function () {
-  let ast = {
-    type: "Program",
-    body: [
-      {
-        "type": "VariableDeclaration",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "id": {
-              "type": "Identifier",
-              "name": "foo",
-            },
-            "init": {
-              "type": "StringLiteral",
-              "value": "bar",
-              "raw": "\'bar\'"
-            }
-          }
-        ],
-        "kind": "var"
-      },
-      {
-        "type": "ExpressionStatement",
-        "expression": {
-          "type": "AssignmentExpression",
-          "operator": "=",
-          "left": {
-            "type": "MemberExpression",
-            "computed": false,
-            "object": {
-              "type": "ThisExpression"
-            },
-            "property": {
-              "type": "Identifier",
-              "name": "test"
-            }
-          },
-          "right": {
-            "type": "StringLiteral",
-            "value": "wow",
-            "raw": "\'wow\'"
-          }
-        }
-      }
-    ]
-  };
-
-  let body = ast.body;
+  const code = `
+    var foo = "bar";
+    this.test = "wow";
+  `;
+  const ast = parse(code);
+  const program = ast.program;
+  const body = program.body;
 
   it("traverse replace", function () {
-    let replacement = {
+    const replacement = {
       type: "StringLiteral",
       value: "foo"
     };
-    let ast2 = _.cloneDeep(ast);
+    const ast2 = cloneDeep(program);
 
     traverse(ast2, {
       enter: function (path) {
@@ -69,14 +29,15 @@ describe("traverse", function () {
   });
 
   it("traverse", function () {
-    let expect = [
+    const expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
-      body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object, body[1].expression.left.property, body[1].expression.right
+      body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object,
+      body[1].expression.left.property, body[1].expression.right
     ];
 
-    let actual = [];
+    const actual = [];
 
-    traverse(ast, {
+    traverse(program, {
       enter: function (path) {
         actual.push(path.node);
       }
@@ -94,14 +55,14 @@ describe("traverse", function () {
   });
 
   it("traverse blacklistTypes", function () {
-    let expect = [
+    const expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
       body[1], body[1].expression, body[1].expression.right
     ];
 
-    let actual = [];
+    const actual = [];
 
-    traverse(ast, {
+    traverse(program, {
       blacklist: ["MemberExpression"],
       enter: function (path) {
         actual.push(path.node);
@@ -125,24 +86,77 @@ describe("traverse", function () {
   });
 
   it("clearCache", function () {
-    let paths = [];
+    const paths = [];
+    const scopes = [];
     traverse(ast, {
-      enter: function (path) {
+      enter(path) {
+        scopes.push(path.scope);
         paths.push(path);
+        path.stop();
       }
     });
 
     traverse.clearCache();
 
-    let paths2 = [];
+    const paths2 = [];
+    const scopes2 = [];
     traverse(ast, {
-      enter: function (path) {
+      enter(path) {
+        scopes2.push(path.scope);
+        paths2.push(path);
+        path.stop();
+      }
+    });
+
+    scopes2.forEach(function (_, i) {
+      assert.notStrictEqual(scopes[i], scopes2[i]);
+      assert.notStrictEqual(paths[i], paths2[i]);
+    });
+  });
+
+  it("clearPath", function () {
+    const paths = [];
+    traverse(ast, {
+      enter(path) {
+        paths.push(path);
+      }
+    });
+
+    traverse.clearCache.clearPath();
+
+    const paths2 = [];
+    traverse(ast, {
+      enter(path) {
         paths2.push(path);
       }
     });
 
     paths2.forEach(function (p, i) {
       assert.notStrictEqual(p, paths[i]);
+    });
+  });
+
+  it("clearScope", function () {
+    const scopes = [];
+    traverse(ast, {
+      enter(path) {
+        scopes.push(path.scope);
+        path.stop();
+      }
+    });
+
+    traverse.clearCache.clearScope();
+
+    const scopes2 = [];
+    traverse(ast, {
+      enter(path) {
+        scopes2.push(path.scope);
+        path.stop();
+      }
+    });
+
+    scopes2.forEach(function (p, i) {
+      assert.notStrictEqual(p, scopes[i]);
     });
   });
 });

@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import cloneDeep from "lodash/cloneDeep";
 import assign from "lodash/assign";
 import has from "lodash/has";
@@ -7,15 +5,16 @@ import traverse from "babel-traverse";
 import * as babylon from "babylon";
 import * as t from "babel-types";
 
-let FROM_TEMPLATE = "_fromTemplate"; //Symbol(); // todo: probably wont get copied over
-let TEMPLATE_SKIP = Symbol();
+const FROM_TEMPLATE = "_fromTemplate"; //Symbol(); // todo: probably wont get copied over
+const TEMPLATE_SKIP = Symbol();
 
 export default function (code: string, opts?: Object): Function {
   // since we lazy parse the template, we get the current stack so we have the
   // original stack to append if it errors when parsing
   let stack;
   try {
-    // error stack gets populated in IE only on throw (https://msdn.microsoft.com/en-us/library/hh699850(v=vs.94).aspx)
+    // error stack gets populated in IE only on throw
+    // (https://msdn.microsoft.com/en-us/library/hh699850(v=vs.94).aspx)
     throw new Error();
   } catch (error) {
     if (error.stack) {
@@ -36,7 +35,7 @@ export default function (code: string, opts?: Object): Function {
     try {
       ast = babylon.parse(code, opts);
 
-      ast = traverse.removeProperties(ast, {preserveComments: opts.preserveComments});
+      ast = traverse.removeProperties(ast, { preserveComments: opts.preserveComments });
 
       traverse.cheap(ast, function (node) {
         node[FROM_TEMPLATE] = true;
@@ -60,7 +59,7 @@ export default function (code: string, opts?: Object): Function {
 
 function useTemplate(ast, nodes?: Array<Object>) {
   ast = cloneDeep(ast);
-  let { program } = ast;
+  const { program } = ast;
 
   if (nodes.length) {
     traverse(ast, templateVisitor, null, nodes);
@@ -73,7 +72,7 @@ function useTemplate(ast, nodes?: Array<Object>) {
   }
 }
 
-let templateVisitor = {
+const templateVisitor = {
   // 360
   noScope: true,
 
@@ -91,7 +90,7 @@ let templateVisitor = {
       if (has(args[0], node.name)) {
         replacement = args[0][node.name];
       } else if (node.name[0] === "$") {
-        let i = +node.name.slice(1);
+        const i = +node.name.slice(1);
         if (args[i]) replacement = args[i];
       }
     }

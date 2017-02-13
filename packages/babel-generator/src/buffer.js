@@ -1,5 +1,5 @@
 import type SourceMap from "./source-map";
-import trimEnd from "lodash/trimEnd";
+import trimRight from "trim-right";
 
 const SPACES_RE = /^[ \t]+$/;
 
@@ -38,10 +38,31 @@ export default class Buffer {
   get(): Object {
     this._flush();
 
-    return {
-      code: trimEnd(this._buf.join("")),
-      map: this._map ? this._map.get() : null,
+    const map = this._map;
+    const result = {
+      // Whatever trim is used here should not execute a regex against the
+      // source string since it may be arbitrarily large after all transformations
+      code: trimRight(this._buf.join("")),
+      map: null,
+      rawMappings: map && map.getRawMappings(),
     };
+
+    if (map) {
+      // The `.map` property is lazy to allow callers to use the raw mappings
+      // without any overhead
+      Object.defineProperty(result, "map", {
+        configurable: true,
+        enumerable: true,
+        get() {
+          return this.map = map.get();
+        },
+        set(value) {
+          Object.defineProperty(this, "map", { value, writable: true });
+        },
+      });
+    }
+
+    return result;
   }
 
   /**
@@ -134,7 +155,7 @@ export default class Buffer {
   source(prop: string, loc: Location): void {
     if (prop && !loc) return;
 
-    let pos = loc ? loc[prop] : null;
+    const pos = loc ? loc[prop] : null;
 
     this._sourcePosition.identifierName = loc && loc.identifierName || null;
     this._sourcePosition.line = pos ? pos.line : null;
@@ -150,10 +171,10 @@ export default class Buffer {
     if (!this._map) return cb();
 
     // Use the call stack to manage a stack of "source location" data.
-    let originalLine = this._sourcePosition.line;
-    let originalColumn = this._sourcePosition.column;
-    let originalFilename = this._sourcePosition.filename;
-    let originalIdentifierName = this._sourcePosition.identifierName;
+    const originalLine = this._sourcePosition.line;
+    const originalColumn = this._sourcePosition.column;
+    const originalFilename = this._sourcePosition.filename;
+    const originalIdentifierName = this._sourcePosition.identifierName;
 
     this.source(prop, loc);
 

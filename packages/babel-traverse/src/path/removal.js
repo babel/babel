@@ -18,7 +18,7 @@ export function remove() {
 }
 
 export function _callRemovalHooks() {
-  for (let fn of (hooks: Array<Function>)) {
+  for (const fn of (hooks: Array<Function>)) {
     if (fn(this, this.parentPath)) return true;
   }
 }

@@ -1,0 +1,3 @@
+{
+  "throws": "Compiling let/const in this block would add a closure (throwIfClosureRequired)."
+}

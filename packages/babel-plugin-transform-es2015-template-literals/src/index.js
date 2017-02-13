@@ -10,14 +10,14 @@ export default function ({ types: t }) {
   return {
     visitor: {
       TaggedTemplateExpression(path, state) {
-        let { node } = path;
-        let quasi = node.quasi;
+        const { node } = path;
+        const quasi = node.quasi;
         let args  = [];
 
         let strings = [];
         let raw     = [];
 
-        for (let elem of (quasi.quasis: Array)) {
+        for (const elem of (quasi.quasis: Array)) {
           strings.push(t.stringLiteral(elem.value.cooked));
           raw.push(t.stringLiteral(elem.value.raw));
         }
@@ -28,7 +28,7 @@ export default function ({ types: t }) {
         let templateName = "taggedTemplateLiteral";
         if (state.opts.loose) templateName += "Loose";
 
-        let templateObject = state.file.addTemplateObject(templateName, strings, raw);
+        const templateObject = state.file.addTemplateObject(templateName, strings, raw);
         args.push(templateObject);
 
         args = args.concat(quasi.expressions);
@@ -39,12 +39,12 @@ export default function ({ types: t }) {
       TemplateLiteral(path, state) {
         let nodes: Array<Object> = [];
 
-        let expressions = path.get("expressions");
+        const expressions = path.get("expressions");
 
-        for (let elem of (path.node.quasis: Array)) {
+        for (const elem of (path.node.quasis: Array)) {
           nodes.push(t.stringLiteral(elem.value.cooked));
 
-          let expr = expressions.shift();
+          const expr = expressions.shift();
           if (expr) {
             if (state.opts.spec && !expr.isBaseType("string") && !expr.isBaseType("number"))  {
               nodes.push(t.callExpression(t.identifier("String"), [expr.node]));
@@ -66,7 +66,7 @@ export default function ({ types: t }) {
         if (nodes.length > 1) {
           let root = buildBinaryExpression(nodes.shift(), nodes.shift());
 
-          for (let node of nodes) {
+          for (const node of nodes) {
             root = buildBinaryExpression(root, node);
           }
 

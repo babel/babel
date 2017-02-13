@@ -1,9 +1,9 @@
-let assert = require("assert");
-let path = require("path");
-let buildConfigChain = require("../lib/transformation/file/options/build-config-chain");
+import assert from "assert";
+import path from "path";
+import buildConfigChain from "../lib/transformation/file/options/build-config-chain";
 
 function fixture() {
-  let args = [__dirname, "fixtures", "config"];
+  const args = [__dirname, "fixtures", "config"];
   for (let i = 0; i < arguments.length; i ++) {
     args.push(arguments[i]);
   }
@@ -28,11 +28,11 @@ describe("buildConfigChain", function () {
   });
 
   it("dir1", function () {
-    let chain = buildConfigChain({
+    const chain = buildConfigChain({
       filename: fixture("dir1", "src.js")
     });
 
-    let expected = [
+    const expected = [
       {
         options: {
           plugins: [
@@ -77,11 +77,11 @@ describe("buildConfigChain", function () {
   });
 
   it("dir2", function () {
-    let chain = buildConfigChain({
+    const chain = buildConfigChain({
       filename: fixture("dir2", "src.js")
     });
 
-    let expected = [
+    const expected = [
       {
         options: {
           plugins: [
@@ -116,11 +116,11 @@ describe("buildConfigChain", function () {
   });
 
   it("env - base", function () {
-    let chain = buildConfigChain({
+    const chain = buildConfigChain({
       filename: fixture("env", "src.js")
     });
 
-    let expected = [
+    const expected = [
       {
         options: {
           plugins: [
@@ -157,11 +157,11 @@ describe("buildConfigChain", function () {
   it("env - foo", function () {
     process.env.NODE_ENV = "foo";
 
-    let chain = buildConfigChain({
+    const chain = buildConfigChain({
       filename: fixture("env", "src.js")
     });
 
-    let expected = [
+    const expected = [
       {
         options: {
           plugins: [
@@ -209,11 +209,11 @@ describe("buildConfigChain", function () {
     process.env.NODE_ENV = "foo"; // overridden
     process.env.NODE_ENV = "bar";
 
-    let chain = buildConfigChain({
+    const chain = buildConfigChain({
       filename: fixture("env", "src.js")
     });
 
-    let expected = [
+    const expected = [
       {
         options: {
           plugins: [
@@ -261,11 +261,11 @@ describe("buildConfigChain", function () {
   it("env - foo", function () {
     process.env.NODE_ENV = "foo";
 
-    let chain = buildConfigChain({
+    const chain = buildConfigChain({
       filename: fixture("pkg", "src.js")
     });
 
-    let expected = [
+    const expected = [
       {
         options: {
           plugins: ["pkg-plugin"]

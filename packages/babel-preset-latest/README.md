@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install --save-dev babel-preset-latest
+npm install --save-dev babel-preset-latest
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install --save-dev babel-preset-latest
 ### Via CLI
 
 ```sh
-$ babel script.js --presets latest
+babel script.js --presets latest
 ```
 
 ### Via Node API
@@ -33,3 +33,49 @@ require("babel-core").transform("code", {
   presets: ["latest"]
 });
 ```
+
+### Options
+
+### `es2015`
+
+`boolean`, defaults to `true`.
+
+Toggles including plugins from the [es2015 preset](https://babeljs.io/docs/plugins/preset-es2015/).
+
+```js
+{
+  "presets": [
+    ["latest", {
+      "es2015": false
+    }]
+  ]
+}
+```
+
+You can also pass options down to the `es2015` preset.
+
+```js
+{
+  "presets": [
+    ["latest", {
+      "es2015": {
+        "modules": false
+      }
+    }]
+  ]
+}
+```
+
+**Note:** This also works for the other preset-year options below.
+
+### `es2016`
+
+`boolean`, defaults to `true`.
+
+Toggles including plugins from the [es2016 preset](https://babeljs.io/docs/plugins/preset-es2016/).
+
+### `es2017`
+
+`boolean`, defaults to `true`.
+
+Toggles including plugins from the [es2017 preset](https://babeljs.io/docs/plugins/preset-es2017/).

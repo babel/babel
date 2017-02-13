@@ -6,7 +6,7 @@ export default function (node: Object) {
 
   // check if a binding exists of this value and if so then return a union type of all
   // possible types that the binding could be
-  let binding = this.scope.getBinding(node.name);
+  const binding = this.scope.getBinding(node.name);
   if (binding) {
     if (binding.identifier.typeAnnotation) {
       return binding.identifier.typeAnnotation;
@@ -26,17 +26,17 @@ export default function (node: Object) {
 }
 
 function getTypeAnnotationBindingConstantViolations(path, name) {
-  let binding = path.scope.getBinding(name);
+  const binding = path.scope.getBinding(name);
 
-  let types = [];
+  const types = [];
   path.typeAnnotation = t.unionTypeAnnotation(types);
 
-  let functionConstantViolations = [];
+  const functionConstantViolations = [];
   let constantViolations = getConstantViolationsBefore(binding, path, functionConstantViolations);
 
-  let testType = getConditionalAnnotation(path, name);
+  const testType = getConditionalAnnotation(path, name);
   if (testType) {
-    let testConstantViolations = getConstantViolationsBefore(binding, testType.ifStatement);
+    const testConstantViolations = getConstantViolationsBefore(binding, testType.ifStatement);
 
     // remove constant violations observed before the IfStatement
     constantViolations = constantViolations.filter((path) => testConstantViolations.indexOf(path) < 0);
@@ -76,7 +76,7 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
     constantViolations = constantViolations.concat(functionConstantViolations);
 
     // push on inferred types of violated paths
-    for (let violation of (constantViolations: Array<NodePath>)) {
+    for (const violation of (constantViolations: Array<NodePath>)) {
       types.push(violation.getTypeAnnotation());
     }
   }
@@ -87,21 +87,21 @@ function getTypeAnnotationBindingConstantViolations(path, name) {
 }
 
 function getConstantViolationsBefore(binding, path, functions) {
-  let violations = binding.constantViolations.slice();
+  const violations = binding.constantViolations.slice();
   violations.unshift(binding.path);
   return violations.filter((violation) => {
     violation = violation.resolve();
-    let status = violation._guessExecutionStatusRelativeTo(path);
+    const status = violation._guessExecutionStatusRelativeTo(path);
     if (functions && status === "function") functions.push(violation);
     return status === "before";
   });
 }
 
 function inferAnnotationFromBinaryExpression(name, path) {
-  let operator = path.node.operator;
+  const operator = path.node.operator;
 
-  let right = path.get("right").resolve();
-  let left  = path.get("left").resolve();
+  const right = path.get("right").resolve();
+  const left  = path.get("left").resolve();
 
   let target;
   if (left.isIdentifier({ name })) {
@@ -138,7 +138,7 @@ function inferAnnotationFromBinaryExpression(name, path) {
   if (!typePath.isLiteral()) return;
 
   // and that it's a string so we can infer it
-  let typeValue = typePath.node.value;
+  const typeValue = typePath.node.value;
   if (typeof typeValue !== "string") return;
 
   // and that the argument of the typeof path references us!
@@ -164,15 +164,15 @@ function getParentConditionalPath(path) {
 }
 
 function getConditionalAnnotation(path, name) {
-  let ifStatement = getParentConditionalPath(path);
+  const ifStatement = getParentConditionalPath(path);
   if (!ifStatement) return;
 
-  let test  = ifStatement.get("test");
-  let paths = [test];
-  let types = [];
+  const test  = ifStatement.get("test");
+  const paths = [test];
+  const types = [];
 
   do {
-    let path = paths.shift().resolve();
+    const path = paths.shift().resolve();
 
     if (path.isLogicalExpression()) {
       paths.push(path.get("left"));
@@ -180,7 +180,7 @@ function getConditionalAnnotation(path, name) {
     }
 
     if (path.isBinaryExpression()) {
-      let type = inferAnnotationFromBinaryExpression(name, path);
+      const type = inferAnnotationFromBinaryExpression(name, path);
       if (type) types.push(type);
     }
   } while (paths.length);

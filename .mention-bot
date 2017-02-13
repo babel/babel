@@ -1,0 +1,6 @@
+{
+  "userBlacklist": [ "amasad", "thejameskyle", "jmm", "kittens" ],
+  "fileBlacklist": ["*.md"],
+  "skipAlreadyAssignedPR": true,
+  "createReviewRequest": true
+}

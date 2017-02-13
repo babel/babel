@@ -1,5 +1,3 @@
-/* eslint indent: 0 */
-
 import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";
 import * as t from "./index";
@@ -10,11 +8,11 @@ import { BLOCK_SCOPED_SYMBOL } from "./constants";
  */
 
 export function isBinding(node: Object, parent: Object): boolean {
-  let keys = getBindingIdentifiers.keys[parent.type];
+  const keys = getBindingIdentifiers.keys[parent.type];
   if (keys) {
     for (let i = 0; i < keys.length; i++) {
-      let key = keys[i];
-      let val = parent[key];
+      const key = keys[i];
+      const val = parent[key];
       if (Array.isArray(val)) {
         if (val.indexOf(node) >= 0) return true;
       } else {
@@ -73,7 +71,7 @@ export function isReferenced(node: Object, parent: Object): boolean {
     case "ArrowFunctionExpression":
     case "FunctionDeclaration":
     case "FunctionExpression":
-      for (let param of (parent.params: Array<any>)) {
+      for (const param of (parent.params: Array<any>)) {
         if (param === node) return false;
       }
 
@@ -237,4 +235,48 @@ export function isImmutable(node: Object): boolean {
   }
 
   return false;
+}
+
+/**
+ * Check if two nodes are equivalent
+ */
+
+export function isNodesEquivalent(a, b) {
+  if (typeof a !== "object" || typeof a !== "object" || a == null || b == null) {
+    return a === b;
+  }
+
+  if (a.type !== b.type) {
+    return false;
+  }
+
+  const fields = Object.keys(t.NODE_FIELDS[a.type] || a.type);
+
+  for (const field of fields) {
+    if (typeof a[field] !== typeof b[field]) {
+      return false;
+    }
+
+    if (Array.isArray(a[field])) {
+      if (!Array.isArray(b[field])) {
+        return false;
+      }
+      if (a[field].length !== b[field].length) {
+        return false;
+      }
+
+      for (let i = 0; i < a[field].length; i++) {
+        if (!isNodesEquivalent(a[field][i], b[field][i])) {
+          return false;
+        }
+      }
+      continue;
+    }
+
+    if (!isNodesEquivalent(a[field], b[field])) {
+      return false;
+    }
+  }
+
+  return true;
 }

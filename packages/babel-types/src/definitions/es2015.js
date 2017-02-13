@@ -1,4 +1,4 @@
-/* eslint max-len: 0 */
+/* eslint max-len: "off" */
 
 import defineType, {
   assertNodeType,
@@ -227,6 +227,10 @@ defineType("ImportSpecifier", {
     },
     imported: {
       validate: assertNodeType("Identifier")
+    },
+    importKind: {
+      // Handle Flowtype's extension "import {typeof foo} from"
+      validate: assertOneOf(null, "type", "typeof")
     }
   }
 });
@@ -264,7 +268,7 @@ defineType("ClassMethod", {
     },
     key: {
       validate(node, key, val) {
-        let expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
+        const expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
         assertNodeType(...expectedTypes)(node, key, val);
       }
     },
