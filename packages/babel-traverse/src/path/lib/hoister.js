@@ -6,7 +6,11 @@ const referenceVisitor = {
   ReferencedIdentifier(path, state) {
     // Don't hoist regular JSX identifiers ('div', 'span', etc).
     // We do have to consider member expressions for hoisting (e.g. `this.component`)
-    if (path.isJSXIdentifier() && react.isCompatTag(path.node.name) && !path.parentPath.isJSXMemberExpression()) {
+    if (
+      path.isJSXIdentifier() &&
+      react.isCompatTag(path.node.name) &&
+      !path.parentPath.isJSXMemberExpression()
+    ) {
       return;
     }
 
