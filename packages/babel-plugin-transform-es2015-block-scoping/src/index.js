@@ -112,8 +112,21 @@ function isVar(node) {
 }
 
 const letReferenceBlockVisitor = traverse.visitors.merge([{
+  Loop: {
+    enter(path, state) {
+      state.loopDepth++;
+    },
+    exit(path, state) {
+      state.loopDepth--;
+    },
+  },
   Function(path, state) {
-    path.traverse(letReferenceFunctionVisitor, state);
+    // References to block-scoped variables only require added closures if it's
+    // possible for the code to run more than once -- otherwise it is safe to
+    // simply rename the variables.
+    if (state.loopDepth > 0) {
+      path.traverse(letReferenceFunctionVisitor, state);
+    }
     return path.skip();
   }
 }, tdzVisitor]);
@@ -549,8 +562,18 @@ class BlockScoping {
     const state = {
       letReferences: this.letReferences,
       closurify:     false,
-      file:          this.file
+      file:          this.file,
+      loopDepth:     0,
     };
+
+    const loopOrFunctionParent = this.blockPath.find(
+      (path) => path.isLoop() || path.isFunction()
+    );
+    if (loopOrFunctionParent && loopOrFunctionParent.isLoop()) {
+      // There is a loop ancestor closer than the closest function, so we
+      // consider ourselves to be in a loop.
+      state.loopDepth++;
+    }
 
     // traverse through this block, stopping on functions and checking if they
     // contain any local let references
