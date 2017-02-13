@@ -1,5 +1,11 @@
 import definitions from "./definitions";
 
+function isModule(path) {
+  const program = path.find((p) => p.isProgram());
+
+  return program.node.sourceType === "module";
+}
+
 export default function ({ types: t }) {
   function getRuntimeModuleName(opts) {
     return opts.moduleName || "babel-runtime";
@@ -13,17 +19,25 @@ export default function ({ types: t }) {
 
   return {
     pre(file) {
+      if (!isModule(file.path)) {
+        throw new Error("transform-runtime only supports files parsed with sourceType: \"module\"");
+      }
+
       const moduleName = getRuntimeModuleName(this.opts);
 
       if (this.opts.helpers !== false) {
         file.set("helperGenerator", function (name) {
-          if (HELPER_BLACKLIST.indexOf(name) < 0) {
+          if (isModule(file.path) && HELPER_BLACKLIST.indexOf(name) < 0) {
             return file.addImport(`${moduleName}/helpers/${name}`, "default", name);
           }
         });
       }
 
       this.setDynamic("regeneratorIdentifier", function () {
+        if (!isModule(file.path)) {
+          throw new Error("Attempted to insert generator runtime after module transform.");
+        }
+
         return file.addImport(`${moduleName}/regenerator`, "default", "regeneratorRuntime");
       });
     },
@@ -36,6 +50,8 @@ export default function ({ types: t }) {
           path.replaceWith(state.get("regeneratorIdentifier"));
           return;
         }
+
+        if (!isModule(path)) return;
 
         if (state.opts.polyfill === false) return;
 
@@ -54,6 +70,7 @@ export default function ({ types: t }) {
 
       // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
       CallExpression(path, state) {
+        if (!isModule(path)) return;
         if (state.opts.polyfill === false) return;
 
         // we can't compile this
@@ -77,6 +94,7 @@ export default function ({ types: t }) {
 
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
       BinaryExpression(path, state) {
+        if (!isModule(path)) return;
         if (state.opts.polyfill === false) return;
 
         if (path.node.operator !== "in") return;
@@ -96,6 +114,8 @@ export default function ({ types: t }) {
       // Array.from -> _core.Array.from
       MemberExpression: {
         enter(path, state) {
+          if (!isModule(path)) return;
+
           if (state.opts.polyfill === false) return;
           if (!path.isReferenced()) return;
 
@@ -128,6 +148,7 @@ export default function ({ types: t }) {
         },
 
         exit(path, state) {
+          if (!isModule(path)) return;
           if (state.opts.polyfill === false) return;
           if (!path.isReferenced()) return;
 

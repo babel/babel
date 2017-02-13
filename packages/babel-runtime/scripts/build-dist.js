@@ -86,6 +86,7 @@ function buildHelper(helperName) {
   var tree = t.program([
     t.exportDefaultDeclaration(helpers.get(helperName))
   ]);
+  tree.sourceType = "module";
 
   return babel.transformFromAst(tree, null, {
     presets: transformOpts.presets,
