@@ -27,25 +27,27 @@ const referenceVisitor = {
     // eg. it's in a closure etc
     if (binding !== state.scope.getBinding(path.node.name)) return;
 
-    if (binding.constant) {
-      state.bindings[path.node.name] = binding;
-    } else {
-      for (const violationPath of (binding.constantViolations: Array)) {
-        state.breakOnScopePaths = state.breakOnScopePaths.concat(violationPath.getAncestry());
-      }
-    }
+    state.bindings[path.node.name] = binding;
   }
 };
 
 export default class PathHoister {
   constructor(path, scope) {
+    // Storage for scopes we can't hoist above.
     this.breakOnScopePaths = [];
+    // Storage for bindings that may affect what path we can hoist to.
     this.bindings          = {};
+    // Storage for eligible scopes.
     this.scopes            = [];
+    // Our original scope and path.
     this.scope             = scope;
     this.path              = path;
+    // By default, we attach as far up as we can; but if we're trying
+    // to avoid referencing a binding, we may have to go after.
+    this.attachAfter       = false;
   }
 
+  // A scope is compatible if all required bindings are reachable.
   isCompatibleScope(scope) {
     for (const key in this.bindings) {
       const binding = this.bindings[key];
@@ -57,6 +59,7 @@ export default class PathHoister {
     return true;
   }
 
+  // Look through all scopes and push compatible ones.
   getCompatibleScopes() {
     let scope = this.path.scope;
     do {
@@ -66,6 +69,7 @@ export default class PathHoister {
         break;
       }
 
+      // deopt: These scopes are set in the visitor on const violations
       if (this.breakOnScopePaths.indexOf(scope.path) >= 0) {
         break;
       }
@@ -73,7 +77,7 @@ export default class PathHoister {
   }
 
   getAttachmentPath() {
-    const path = this._getAttachmentPath();
+    let path = this._getAttachmentPath();
     if (!path) return;
 
     let targetScope = path.scope;
@@ -94,8 +98,18 @@ export default class PathHoister {
         // allow parameter references
         if (binding.kind === "param") continue;
 
-        // if this binding appears after our attachment point then don't hoist it
-        if (this.getAttachmentParentForPath(binding.path).key > path.key) return;
+        // if this binding appears after our attachment point, then we move after it.
+        if (this.getAttachmentParentForPath(binding.path).key > path.key) {
+          this.attachAfter = true;
+          path = binding.path;
+
+          // We also move past any constant violations.
+          for (const violationPath of (binding.constantViolations: Array)) {
+            if (this.getAttachmentParentForPath(violationPath).key > path.key) {
+              path = violationPath;
+            }
+          }
+        }
       }
     }
 
@@ -106,11 +120,12 @@ export default class PathHoister {
     const scopes = this.scopes;
 
     const scope = scopes.pop();
+    // deopt: no compatible scopes
     if (!scope) return;
 
     if (scope.path.isFunction()) {
       if (this.hasOwnParamBindings(scope)) {
-        // should ignore this scope since it's ourselves
+        // deopt: should ignore this scope since it's ourselves
         if (this.scope === scope) return;
 
         // needs to be attached to the body
@@ -129,26 +144,30 @@ export default class PathHoister {
     if (scope) return this.getAttachmentParentForPath(scope.path);
   }
 
+  // Find an attachment for this path.
   getAttachmentParentForPath(path) {
     do {
-      if (!path.parentPath ||
-          (Array.isArray(path.container) && path.isStatement()) ||
-          (
-            path.isVariableDeclarator() &&
-            path.parentPath.node !== null &&
-            path.parentPath.node.declarations.length > 1
-          )
-      )
+      if (
+        // Beginning of the scope
+        !path.parentPath ||
+        // Has siblings and is a statement
+        (Array.isArray(path.container) && path.isStatement()) ||
+        // Is part of multiple var declarations
+        (path.isVariableDeclarator() &&
+          path.parentPath.node !== null &&
+          path.parentPath.node.declarations.length > 1))
         return path;
     } while ((path = path.parentPath));
   }
 
+  // Returns true if a scope has param bindings.
   hasOwnParamBindings(scope) {
     for (const name in this.bindings) {
       if (!scope.hasOwnBinding(name)) continue;
 
       const binding = this.bindings[name];
-      if (binding.kind === "param") return true;
+      // Ensure constant; without it we could place behind a reassignment
+      if (binding.kind === "param" && binding.constant) return true;
     }
     return false;
   }
@@ -173,7 +192,8 @@ export default class PathHoister {
     let uid = attachTo.scope.generateUidIdentifier("ref");
     const declarator = t.variableDeclarator(uid, this.path.node);
 
-    attachTo.insertBefore([
+    const insertFn = this.attachAfter ? "insertAfter" : "insertBefore";
+    attachTo[insertFn]([
       attachTo.isVariableDeclarator() ? declarator : t.variableDeclaration("var", [declarator])
     ]);
 
