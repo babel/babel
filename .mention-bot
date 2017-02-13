@@ -1,5 +1,11 @@
 {
-  "userBlacklist": [ "amasad", "thejameskyle", "jmm", "kittens" ],
+  "userBlacklist": [
+    "amasad",
+    "greenkeeperio-bot",
+    "jmm",
+    "kittens",
+    "thejameskyle"
+   ],
   "fileBlacklist": ["*.md"],
   "skipAlreadyAssignedPR": true,
   "createReviewRequest": true
