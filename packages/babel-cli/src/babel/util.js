@@ -85,25 +85,28 @@ export function requireChokidar() {
 }
 
 export function getSettings(filenames) {
-  let File = require("babel-core").File;
-  let generalOptions = new File( { filename: "unknown" } ).opts;
-  let allOptions = [];
+  const File = require("babel-core").File;
+  const generalOptions = new File( { filename: "unknown" } ).opts;
+  const allOptions = [];
 
   allOptions.push(generalOptions);
 
   _.each(filenames, function (file) {
-    let fileOptions = new File( { filename: file } ).opts,
-        thisFileOptions = {};
+    const fileOptions = new File( { filename: file } ).opts,
+      thisFileOptions = {};
 
     _.each(fileOptions, function (fileOption, key) {
-      if (!generalOptions.hasOwnProperty(key) || JSON.stringify(generalOptions[key]) != JSON.stringify(fileOption)) {
+      if (
+        !generalOptions.hasOwnProperty(key) ||
+        JSON.stringify(generalOptions[key]) !== JSON.stringify(fileOption)
+      ) {
         thisFileOptions[key] = fileOption;
       }
     });
     allOptions.push(thisFileOptions);
   });
 
-  let printObject = function (filename, opts) {
+  const printObject = function (filename, opts) {
     console.log(`--- ${filename} options ---`);
     _.each(opts, function (option, key) {
       console.log(key, ": ", option);
@@ -111,15 +114,15 @@ export function getSettings(filenames) {
     console.log();
   };
 
-  process.stdout.write(`node version: `);
-  child.execSync("node -v", {stdio:[0, 1]});
-  process.stdout.write(`npm version: `);
-  child.execSync("npm -v", {stdio:[0, 1]});
-  console.log(`Babel packages:`);
+  process.stdout.write("node version: ");
+  child.execSync("node -v", { stdio:[0, 1] });
+  process.stdout.write("npm version: ");
+  child.execSync("npm -v", { stdio:[0, 1] });
+  console.log("Babel packages:");
 
-  let packages = child.execSync("npm list").toString().split("\n");
+  const packages = child.execSync("npm list").toString().split("\n");
   _.each(packages, function(p) {
-    let babelIndex = p.indexOf("babel");
+    const babelIndex = p.indexOf("babel");
     if (babelIndex >= 0) console.log(p.slice(babelIndex));
   });
 
@@ -129,7 +132,7 @@ export function getSettings(filenames) {
     if (index !== 0) {
       printObject(fileOptions.filename, fileOptions);
     } else {
-      let header = `General ${process.cwd()}`;
+      const header = `General ${process.cwd()}`;
       printObject(header, fileOptions);
     }
   });
