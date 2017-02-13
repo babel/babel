@@ -135,9 +135,8 @@ export default function ({ messages, template, types: t }) {
   };
 
   function loose(path, file) {
-    const { node, scope } = path;
-
-    const left = node.left;
+    const { node, scope, parent } = path;
+    const { left } = node;
     let declar, id;
 
     if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
@@ -171,11 +170,18 @@ export default function ({ messages, template, types: t }) {
     }
 
     //
+    const isLabeledParent = t.isLabeledStatement(parent);
+    let labeled;
+
+    if (isLabeledParent) {
+      labeled = t.labeledStatement(parent.label, loop);
+    }
 
     return {
-      declar: declar,
-      node:   loop,
-      loop:   loop
+      replaceParent: isLabeledParent,
+      declar:        declar,
+      node:          labeled || loop,
+      loop:          loop
     };
   }
 
