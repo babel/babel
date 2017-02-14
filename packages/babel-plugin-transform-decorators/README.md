@@ -46,11 +46,13 @@ function enumerable(value) {
 }
 ```
 
-## Installation & Usage
+## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-decorators`
+npm install --save-dev babel-plugin-transform-decorators
 ```
+
+## Usage
 
 Add the following line to your .babelrc file:
 
