@@ -5,12 +5,10 @@ import includes from "lodash/includes";
 import * as t from "babel-types";
 import * as cache from "./cache";
 
-import NodePath from "./path";
-import Scope from "./scope";
-import Hub from "./hub";
-
-export { visitors, NodePath, Scope, Hub };
-export type { HubInterface } from "./hub";
+export { default as NodePath } from "./path";
+export { default as Scope } from "./scope";
+export { default as Hub } from "./hub";
+export { visitors };
 
 export default function traverse(
   parent: Object | Array<Object>,
@@ -37,9 +35,9 @@ traverse.visitors = visitors;
 traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
-traverse.NodePath = NodePath;
-traverse.Scope    = Scope;
-traverse.Hub      = Hub;
+traverse.NodePath = require("./path");
+traverse.Scope    = require("./scope");
+traverse.Hub      = require("./hub");
 
 traverse.cheap = function (node, enter) {
   return t.traverseFast(node, enter);

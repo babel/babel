@@ -114,7 +114,7 @@ export default class NodePath {
   }
 
   buildCodeFrameError(msg: string, Error: typeof Error = SyntaxError): Error {
-    return this.hub.buildError(this.node, msg, Error);
+    return this.hub.file.buildCodeFrameError(this.node, msg, Error);
   }
 
   traverse(visitor: Object, state?: any) {
@@ -122,9 +122,11 @@ export default class NodePath {
   }
 
   mark(type: string, message: string) {
-    if (this.hub.mark) {
-      this.hub.mark(type, message, this.node.loc);
-    }
+    this.hub.file.metadata.marked.push({
+      type,
+      message,
+      loc: this.node.loc
+    });
   }
 
   set(key: string, node: Object) {

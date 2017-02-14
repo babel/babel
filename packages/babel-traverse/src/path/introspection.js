@@ -235,12 +235,10 @@ export function referencesImport(moduleSource, importName) {
 export function getSource() {
   const node = this.node;
   if (node.end) {
-    const code = this.hub.getCode();
-    if (code) {
-      return code.slice(node.start, node.end);
-    }
+    return this.hub.file.code.slice(node.start, node.end);
+  } else {
+    return "";
   }
-  return "";
 }
 
 export function willIMaybeExecuteBefore(target) {

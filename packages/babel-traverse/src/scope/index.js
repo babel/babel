@@ -346,8 +346,7 @@ export default class Scope {
       local.kind === "param" && (kind === "let" || kind === "const");
 
     if (duplicate) {
-      const errorMsg = messages.get("scopeDuplicateDeclaration", name);
-      throw this.hub.buildError ? this.hub.buildError(id, errorMsg, TypeError) : new TypeError(errorMsg);
+      throw this.hub.file.buildCodeFrameError(id, messages.get("scopeDuplicateDeclaration", name), TypeError);
     }
   }
 
@@ -386,6 +385,8 @@ export default class Scope {
   }
 
   toArray(node: Object, i?: number) {
+    const file = this.hub.file;
+
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding && binding.constant && binding.path.isGenericType("Array")) return node;
@@ -418,9 +419,9 @@ export default class Scope {
     } else if (i) {
       args.push(t.numericLiteral(i));
       helperName = "slicedToArray";
-      // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
+      // TODO if (this.hub.file.isLoose("es6.forOf")) helperName += "-loose";
     }
-    return t.callExpression(this.hub.addHelper(helperName), args);
+    return t.callExpression(file.addHelper(helperName), args);
   }
 
   hasLabel(name: string) {
