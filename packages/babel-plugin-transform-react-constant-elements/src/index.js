@@ -31,9 +31,11 @@ export default function ({ types: t }) {
           if (expressionResult.confident) {
             // We know the result; check its mutability.
             const { value } = expressionResult;
-            const isMutable = (value && typeof value === "object") || (typeof value === "function");
+            const isMutable = !state.mutablePropsAllowed &&
+                              (value && typeof value === "object") || (typeof value === "function");
             if (!isMutable) {
               // It evaluated to an immutable value, so we can hoist it.
+              path.skip();
               return;
             }
           } else if (t.isIdentifier(expressionResult.deopt)) {
@@ -53,6 +55,19 @@ export default function ({ types: t }) {
         if (path.node._hoisted) return;
 
         const state = { isImmutable: true };
+
+        // This transform takes the option `allowMutablePropsOnTags`, which is an array
+        // of JSX tags to allow mutable props (such as objects, functions) on. Use sparingly
+        // and only on tags you know will never modify their own props.
+        if (this.opts.allowMutablePropsOnTags != null) {
+          if (!Array.isArray(this.opts.allowMutablePropsOnTags)) {
+            throw new Error(".allowMutablePropsOnTags must be an array, null, or undefined.");
+          }
+          const elementName = path.node.openingElement.name.name;
+          state.mutablePropsAllowed = this.opts.allowMutablePropsOnTags.includes(elementName);
+        }
+
+        // Traverse all props passed to this element for immutability.
         path.traverse(immutabilityVisitor, state);
 
         if (state.isImmutable) {
