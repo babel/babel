@@ -28,7 +28,10 @@ const buildGetObjectInitializer = template(`
 
 const buildInitializerWarningHelper = template(`
     function NAME(descriptor, context){
-        throw new Error('Decorating class property failed. Please ensure that transform-class-properties is enabled.');
+        throw new Error(
+          'Decorating class property failed. Please ensure that ' +
+          'transform-class-properties is enabled.'
+        );
     }
 `);
 
@@ -227,18 +230,22 @@ export default function({ types: t }) {
         const initializer = node.value ?
                         t.functionExpression(null, [], t.blockStatement([t.returnStatement(node.value)])) :
                         t.nullLiteral();
-        node.value = t.callExpression(ensureInitializerWarning(path, state), [descriptor, t.thisExpression()]);
+        node.value = t.callExpression(
+          ensureInitializerWarning(path, state), [descriptor, t.thisExpression()]
+        );
 
         acc = acc.concat([
-          t.assignmentExpression("=", descriptor, t.callExpression(ensureApplyDecoratedDescriptorHelper(path, state), [
-            target,
-            property,
-            t.arrayExpression(decorators.map((dec) => dec.expression)),
-            t.objectExpression([
-              t.objectProperty(t.identifier("enumerable"), t.booleanLiteral(true)),
-              t.objectProperty(t.identifier("initializer"), initializer),
-            ]),
-          ])),
+          t.assignmentExpression(
+            "=", descriptor, t.callExpression(ensureApplyDecoratedDescriptorHelper(path, state), [
+              target,
+              property,
+              t.arrayExpression(decorators.map((dec) => dec.expression)),
+              t.objectExpression([
+                t.objectProperty(t.identifier("enumerable"), t.booleanLiteral(true)),
+                t.objectProperty(t.identifier("initializer"), initializer),
+              ]),
+            ])
+          ),
         ]);
       } else {
         acc = acc.concat(
@@ -246,14 +253,18 @@ export default function({ types: t }) {
               target,
               property,
               t.arrayExpression(decorators.map((dec) => dec.expression)),
-              (t.isObjectProperty(node) || t.isClassProperty(node, { static: true })) ? buildGetObjectInitializer({
-                TEMP: path.scope.generateDeclaredUidIdentifier("init"),
-                TARGET: target,
-                PROPERTY: property,
-              }).expression : buildGetDescriptor({
-                TARGET: target,
-                PROPERTY: property,
-              }).expression,
+              (
+                t.isObjectProperty(node) ||
+                t.isClassProperty(node, { static: true })) ?
+                buildGetObjectInitializer({
+                  TEMP: path.scope.generateDeclaredUidIdentifier("init"),
+                  TARGET: target,
+                  PROPERTY: property,
+                }).expression : buildGetDescriptor({
+                  TARGET: target,
+                  PROPERTY: property,
+                }
+              ).expression,
               target,
             ])
         );
@@ -296,7 +307,11 @@ export default function({ types: t }) {
       ClassExpression(path, state) {
         // Create a replacement for the class node if there is one. We do one pass to replace classes with
         // class decorators, and a second pass to process method decorators.
-        const decoratedClass = applyEnsureOrdering(path) || applyClassDecorators(path, state) || applyMethodDecorators(path, state);
+        const decoratedClass = (
+          applyEnsureOrdering(path) ||
+          applyClassDecorators(path, state) ||
+          applyMethodDecorators(path, state)
+        );
 
         if (decoratedClass) path.replaceWith(decoratedClass);
       },
