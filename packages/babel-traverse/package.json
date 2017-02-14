@@ -1,6 +1,6 @@
 {
   "name": "babel-traverse",
-  "version": "6.23.0",
+  "version": "6.23.1",
   "description": "The Babel Traverse module maintains the overall tree state, and is responsible for replacing, removing, and adding nodes",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
