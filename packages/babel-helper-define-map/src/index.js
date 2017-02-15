@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import nameFunction from "babel-helper-function-name";
 import has from "lodash/has";
 import * as t from "babel-types";
@@ -36,7 +34,8 @@ export function push(mutatorMap: Object, node: Object, kind: string, file, scope
 
   if (node.decorators) {
     const decorators = map.decorators = map.decorators || t.arrayExpression([]);
-    decorators.elements = decorators.elements.concat(node.decorators.map((dec) => dec.expression).reverse());
+    decorators.elements = decorators.elements.concat(
+      node.decorators.map((dec) => dec.expression).reverse());
   }
 
   if (map.value || map.initializer) {
@@ -63,7 +62,8 @@ export function push(mutatorMap: Object, node: Object, kind: string, file, scope
   }
 
   // infer function name
-  if (scope && t.isStringLiteral(key) && (kind === "value" || kind === "initializer") && t.isFunctionExpression(value)) {
+  if (scope && t.isStringLiteral(key) && (kind === "value" || kind === "initializer") &&
+    t.isFunctionExpression(value)) {
     value = nameFunction({ id: key, node: value, scope });
   }
 

@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import * as helpers from "babel-helpers";
 import generator from "babel-generator";
 import * as messages from "babel-messages";
@@ -23,12 +21,14 @@ const buildUmdWrapper = template(`
 function buildGlobal(namespace, builder) {
   const body      = [];
   const container = t.functionExpression(null, [t.identifier("global")], t.blockStatement(body));
-  const tree      = t.program([t.expressionStatement(t.callExpression(container, [helpers.get("selfGlobal")]))]);
+  const tree      = t.program([
+    t.expressionStatement(t.callExpression(container, [helpers.get("selfGlobal")]))]);
 
   body.push(t.variableDeclaration("var", [
     t.variableDeclarator(
       namespace,
-      t.assignmentExpression("=", t.memberExpression(t.identifier("global"), namespace), t.objectExpression([]))
+      t.assignmentExpression("=", t.memberExpression(t.identifier("global"), namespace),
+        t.objectExpression([]))
     )
   ]));
 

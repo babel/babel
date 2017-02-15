@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import hoistVariables from "babel-helper-hoist-variables";
 import template from "babel-template";
 
@@ -76,7 +74,8 @@ export default function ({ types: t }) {
       CallExpression(path, state) {
         if (path.node.callee.type === TYPE_IMPORT) {
           const contextIdent = state.contextIdent;
-          path.replaceWith(t.callExpression(t.memberExpression(contextIdent, t.identifier("import")), path.node.arguments));
+          path.replaceWith(t.callExpression(t.memberExpression(contextIdent, t.identifier("import")),
+            path.node.arguments));
         }
       },
 
@@ -236,7 +235,8 @@ export default function ({ types: t }) {
               }
 
               if (t.isImportSpecifier(specifier)) {
-                setterBody.push(t.expressionStatement(t.assignmentExpression("=", specifier.local, t.memberExpression(target, specifier.imported))));
+                setterBody.push(t.expressionStatement(t.assignmentExpression("=", specifier.local,
+                  t.memberExpression(target, specifier.imported))));
               }
             }
 
@@ -256,7 +256,8 @@ export default function ({ types: t }) {
                   }));
                 } else if (t.isExportSpecifier(node)) {
                   setterBody.push(t.expressionStatement(
-                    t.assignmentExpression("=", t.memberExpression(exportObjRef, node.exported), t.memberExpression(target, node.local))
+                    t.assignmentExpression("=", t.memberExpression(exportObjRef, node.exported),
+                      t.memberExpression(target, node.local))
                   ));
                 } else {
                   // todo
@@ -279,7 +280,8 @@ export default function ({ types: t }) {
           }
 
           if (variableIds.length) {
-            beforeBody.unshift(t.variableDeclaration("var", variableIds.map((id) => t.variableDeclarator(id))));
+            beforeBody.unshift(t.variableDeclaration("var",
+              variableIds.map((id) => t.variableDeclarator(id))));
           }
 
           path.traverse(reassignmentVisitor, {
@@ -294,7 +296,8 @@ export default function ({ types: t }) {
 
           path.node.body = [
             buildTemplate({
-              SYSTEM_REGISTER: t.memberExpression(t.identifier(state.opts.systemGlobal || "System"), t.identifier("register")),
+              SYSTEM_REGISTER: t.memberExpression(
+                t.identifier(state.opts.systemGlobal || "System"), t.identifier("register")),
               BEFORE_BODY: beforeBody,
               MODULE_NAME: moduleName,
               SETTERS: setters,

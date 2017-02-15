@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import type { NodePath } from "babel-traverse";
 import { visitors } from "babel-traverse";
 import ReplaceSupers from "babel-helper-replace-supers";
@@ -28,7 +26,10 @@ const noMethodVisitor = {
 
 const verifyConstructorVisitor = visitors.merge([noMethodVisitor, {
   Super(path) {
-    if (this.isDerived && !this.hasBareSuper && !path.parentPath.isCallExpression({ callee: path.node })) {
+    if (
+      this.isDerived && !this.hasBareSuper &&
+      !path.parentPath.isCallExpression({ callee: path.node })
+    ) {
       throw path.buildCodeFrameError("'super.*' is not allowed before super()");
     }
   },
@@ -88,7 +89,8 @@ export default class ClassTransformer {
     this.classId = this.node.id;
 
     // this is the name of the binding that will **always** reference the class we've constructed
-    this.classRef = this.node.id ? t.identifier(this.node.id.name) : this.scope.generateUidIdentifier("class");
+    this.classRef = this.node.id ? t.identifier(this.node.id.name) :
+      this.scope.generateUidIdentifier("class");
 
     this.superName = this.node.superClass || t.identifier("Function");
     this.isDerived = !!this.node.superClass;
@@ -123,10 +125,12 @@ export default class ClassTransformer {
     this.buildBody();
 
     // make sure this class isn't directly called
-    constructorBody.body.unshift(t.expressionStatement(t.callExpression(file.addHelper("classCallCheck"), [
-      t.thisExpression(),
-      this.classRef
-    ])));
+    constructorBody.body.unshift(t.expressionStatement(t.callExpression(
+      file.addHelper("classCallCheck"), [
+        t.thisExpression(),
+        this.classRef
+      ]
+    )));
 
     body = body.concat(this.staticPropBody.map((fn) => fn(this.classRef)));
 
@@ -227,7 +231,8 @@ export default class ClassTransformer {
       }
 
       if (node.decorators) {
-        throw path.buildCodeFrameError("Method has decorators, put the decorator plugin before the classes one.");
+        throw path.buildCodeFrameError(
+          "Method has decorators, put the decorator plugin before the classes one.");
       }
 
       if (t.isClassMethod(node)) {
@@ -294,8 +299,13 @@ export default class ClassTransformer {
 
       const nullNode = t.nullLiteral();
 
-      // (Constructor, instanceDescriptors, staticDescriptors, instanceInitializers, staticInitializers)
-      let args = [this.classRef, nullNode, nullNode, nullNode, nullNode];
+      let args = [
+        this.classRef, // Constructor
+        nullNode, // instanceDescriptors
+        nullNode, // staticDescriptors
+        nullNode, // instanceInitializers
+        nullNode, // staticInitializers
+      ];
 
       if (instanceProps) args[1] = instanceProps;
       if (staticProps) args[2] = staticProps;
@@ -336,7 +346,11 @@ export default class ClassTransformer {
 
     if (this.isLoose) {
       bareSuperNode.arguments.unshift(t.thisExpression());
-      if (bareSuperNode.arguments.length === 2 && t.isSpreadElement(bareSuperNode.arguments[1]) && t.isIdentifier(bareSuperNode.arguments[1].argument, { name: "arguments" })) {
+      if (
+        bareSuperNode.arguments.length === 2 &&
+        t.isSpreadElement(bareSuperNode.arguments[1]) &&
+        t.isIdentifier(bareSuperNode.arguments[1].argument, { name: "arguments" })
+      ) {
         // special case single arguments spread
         bareSuperNode.arguments[1] = bareSuperNode.arguments[1].argument;
         bareSuperNode.callee = t.memberExpression(superRef, t.identifier("apply"));
@@ -365,7 +379,11 @@ export default class ClassTransformer {
 
     const bareSuperAfter = this.bareSuperAfter.map((fn) => fn(thisRef));
 
-    if (bareSuper.parentPath.isExpressionStatement() && bareSuper.parentPath.container === body.node.body && body.node.body.length - 1 === bareSuper.parentPath.key) {
+    if (
+      bareSuper.parentPath.isExpressionStatement() &&
+      bareSuper.parentPath.container === body.node.body &&
+      body.node.body.length - 1 === bareSuper.parentPath.key
+    ) {
       // this super call is the last statement in the body so we can just straight up
       // turn it into a return
 
@@ -435,7 +453,8 @@ export default class ClassTransformer {
     // return
     const bodyPaths = body.get("body");
     if (bodyPaths.length && !bodyPaths.pop().isReturnStatement()) {
-      body.pushContainer("body", t.returnStatement(guaranteedSuperBeforeFinish ? thisRef : wrapReturn()));
+      body.pushContainer("body", t.returnStatement(
+        guaranteedSuperBeforeFinish ? thisRef : wrapReturn()));
     }
 
     for (const returnPath of this.superReturns) {

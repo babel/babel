@@ -1,4 +1,3 @@
-/* eslint max-len: 0 */
 import nameFunction from "babel-helper-function-name";
 import template from "babel-template";
 
@@ -44,7 +43,8 @@ export default function ({ types: t }) {
 
     visitor: {
       Class(path, state) {
-        const buildClassProperty = state.opts.spec ? buildClassPropertySpec : buildClassPropertyNonSpec;
+        const buildClassProperty = state.opts.spec ? buildClassPropertySpec :
+          buildClassPropertyNonSpec;
         const isDerived = !!path.node.superClass;
         let constructor;
         const props = [];
@@ -92,7 +92,8 @@ export default function ({ types: t }) {
 
         if (instanceBody.length) {
           if (!constructor) {
-            const newConstructor = t.classMethod("constructor", t.identifier("constructor"), [], t.blockStatement([]));
+            const newConstructor = t.classMethod("constructor", t.identifier("constructor"), [],
+              t.blockStatement([]));
             if (isDerived) {
               newConstructor.params = [t.restElement(t.identifier("args"))];
               newConstructor.body.body.push(
@@ -129,7 +130,8 @@ export default function ({ types: t }) {
 
             instanceBody = [
               t.expressionStatement(
-                t.callExpression(t.memberExpression(initialisePropsRef, t.identifier("call")), [t.thisExpression()])
+                t.callExpression(t.memberExpression(initialisePropsRef, t.identifier("call")), [
+                  t.thisExpression()])
               )
             ];
           }

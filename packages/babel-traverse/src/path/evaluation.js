@@ -1,11 +1,6 @@
-/* eslint indent: 0 */
-/* eslint max-len: 0 */
-
 import type NodePath from "./index";
 
 // This file contains Babels metainterpreter that can evaluate static code.
-
-/* eslint eqeqeq: 0 */
 
 const VALID_CALLEES = ["String", "Number", "Math"];
 const INVALID_METHODS = ["random"];
@@ -181,11 +176,11 @@ export function evaluate(): { confident: boolean; value: any } {
         return binding.value;
       } else {
         if (node.name === "undefined") {
-          return undefined;
+          return binding ? deopt(binding.path) : undefined;
         } else if (node.name === "Infinity") {
-          return Infinity;
+          return binding ? deopt(binding.path) : Infinity;
         } else if (node.name === "NaN") {
-          return NaN;
+          return binding ? deopt(binding.path) : NaN;
         }
 
         const resolved = path.resolve();
@@ -316,7 +311,7 @@ export function evaluate(): { confident: boolean; value: any } {
         case ">": return left > right;
         case "<=": return left <= right;
         case ">=": return left >= right;
-        case "==": return left == right;
+        case "==": return left == right; // eslint-disable-line eqeqeq
         case "!=": return left != right;
         case "===": return left === right;
         case "!==": return left !== right;
@@ -335,7 +330,10 @@ export function evaluate(): { confident: boolean; value: any } {
       let func;
 
       // Number(1);
-      if (callee.isIdentifier() && !path.scope.getBinding(callee.node.name, true) && VALID_CALLEES.indexOf(callee.node.name) >= 0) {
+      if (
+        callee.isIdentifier() && !path.scope.getBinding(callee.node.name, true) &&
+        VALID_CALLEES.indexOf(callee.node.name) >= 0
+      ) {
         func = global[node.callee.name];
       }
 
@@ -344,7 +342,11 @@ export function evaluate(): { confident: boolean; value: any } {
         const property = callee.get("property");
 
         // Math.min(1, 2)
-        if (object.isIdentifier() && property.isIdentifier() && VALID_CALLEES.indexOf(object.node.name) >= 0 && INVALID_METHODS.indexOf(property.node.name) < 0) {
+        if (
+          object.isIdentifier() && property.isIdentifier() &&
+          VALID_CALLEES.indexOf(object.node.name) >= 0 &&
+          INVALID_METHODS.indexOf(property.node.name) < 0
+        ) {
           context = global[object.node.name];
           func = context[property.node.name];
         }

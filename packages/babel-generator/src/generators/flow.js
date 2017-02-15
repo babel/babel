@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 export function AnyTypeAnnotation() {
   this.word("any");
 }
@@ -185,7 +183,7 @@ export function NullableTypeAnnotation(node: Object) {
 }
 
 export {
-  NumericLiteral as NumericLiteralTypeAnnotation,
+  NumericLiteral as NumberLiteralTypeAnnotation,
   StringLiteral as StringLiteralTypeAnnotation,
 } from "./types";
 

@@ -20,7 +20,6 @@ repl: "a" is read-only
     | ^
 ```
 
-[Try in REPL](http://babeljs.io/repl/#?babili=false&evaluate=true&lineWrap=false&presets=es2015&experimental=false&loose=false&spec=false&code=const%20a%20%3D%201%3B%0Aa%20%3D%202%3B&playground=true)
 
 ## Installation
 

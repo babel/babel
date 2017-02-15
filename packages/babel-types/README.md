@@ -930,6 +930,7 @@ Aliases: `ModuleSpecifier`
 
  - `local`: `Identifier` (required)
  - `imported`: `Identifier` (required)
+ - `importKind`: `null | 'type' | 'typeof'` (default: `null`)
 
 ---
 
@@ -1295,12 +1296,12 @@ Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
 ---
 
-### numericLiteralTypeAnnotation
+### numberLiteralTypeAnnotation
 ```javascript
-t.numericLiteralTypeAnnotation()
+t.numberLiteralTypeAnnotation()
 ```
 
-See also `t.isNumericLiteralTypeAnnotation(node, opts)` and `t.assertNumericLiteralTypeAnnotation(node, opts)`.
+See also `t.isNumberLiteralTypeAnnotation(node, opts)` and `t.assertNumberLiteralTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`
 

@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import includes from "lodash/includes";
 import repeat from "lodash/repeat";
 import Renamer from "./lib/renamer";
@@ -78,7 +76,7 @@ const collectorVisitor = {
   },
 
   Declaration(path) {
-    // delegate block scope handling to the `blockVariableVisitor`
+    // delegate block scope handling to the `BlockScoped` method
     if (path.isBlockScoped()) return;
 
     // this will be hit again once we traverse into it after this iteration
@@ -341,13 +339,11 @@ export default class Scope {
     // ignore hoisted functions if there's also a local let
     if (kind === "hoisted" && local.kind === "let") return;
 
-    let duplicate = false;
-
-    // don't allow duplicate bindings to exist alongside
-    if (!duplicate) duplicate = kind === "let" || local.kind === "let" || local.kind === "const" || local.kind === "module";
-
-    // don't allow a local of param with a kind of let
-    if (!duplicate) duplicate = local.kind === "param" && (kind === "let" || kind === "const");
+    const duplicate =
+      // don't allow duplicate bindings to exist alongside
+      kind === "let" || local.kind === "let" || local.kind === "const" || local.kind === "module" ||
+      // don't allow a local of param with a kind of let
+      local.kind === "param" && (kind === "let" || kind === "const");
 
     if (duplicate) {
       throw this.hub.file.buildCodeFrameError(id, messages.get("scopeDuplicateDeclaration", name), TypeError);

@@ -94,11 +94,14 @@ export default function ({ types: t }) {
               // to avoid calling foo() twice, as a first step convert it to:
               // const _foo = foo(),
               //       { a, ...b } = _foo;
-              const initRef = path.scope.generateUidIdentifierBasedOnNode(this.originalPath.node.init, "ref");
+              const initRef = path.scope.generateUidIdentifierBasedOnNode(
+                this.originalPath.node.init, "ref");
               // insert _foo = foo()
-              this.originalPath.insertBefore(t.variableDeclarator(initRef, this.originalPath.node.init));
+              this.originalPath.insertBefore(t.variableDeclarator(initRef,
+                this.originalPath.node.init));
               // replace foo() with _foo
-              this.originalPath.replaceWith(t.variableDeclarator(this.originalPath.node.id, initRef));
+              this.originalPath.replaceWith(t.variableDeclarator(
+                this.originalPath.node.id, initRef));
 
               return;
             }
@@ -247,7 +250,8 @@ export default function ({ types: t }) {
 
         const useBuiltIns = file.opts.useBuiltIns || false;
         if (typeof useBuiltIns !== "boolean") {
-          throw new Error("transform-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)");
+          throw new Error("transform-object-rest-spread currently only accepts a boolean " +
+            "option for useBuiltIns (defaults to false)");
         }
 
         const args = [];

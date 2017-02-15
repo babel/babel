@@ -14,9 +14,23 @@ npm install --save-dev babel-plugin-transform-es2015-block-scoping
 
 **.babelrc**
 
+Without options:
+
 ```json
 {
   "plugins": ["transform-es2015-block-scoping"]
+}
+```
+
+With options:
+
+```json
+{
+  "plugins": [
+    ["transform-es2015-block-scoping", {
+      "throwIfClosureRequired": true
+    }]
+  ]
 }
 ```
 
@@ -33,3 +47,15 @@ require("babel-core").transform("code", {
   plugins: ["transform-es2015-block-scoping"]
 });
 ```
+
+## Options `throwIfClosureRequired`
+
+In cases such as the following it's impossible to rewrite let/const without adding an additional function and closure while transforming:
+
+```javascript
+for (let i = 0; i < 5; i++) {
+  setTimeout(() => console.log(i), 1);
+}
+```
+
+In extremely performance-sensitive code, this can be undesirable. If `"throwIfClosureRequired": true` is set, Babel throws when transforming these patterns instead of automatically adding an additional function.

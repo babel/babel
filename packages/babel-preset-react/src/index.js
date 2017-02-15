@@ -1,6 +1,5 @@
+import presetFlow from "babel-preset-flow";
 import transformReactJSX from "babel-plugin-transform-react-jsx";
-import transformFlowStripTypes from "babel-plugin-transform-flow-strip-types";
-import transformSyntaxFlow from "babel-plugin-syntax-flow";
 import transformSyntaxJSX from "babel-plugin-syntax-jsx";
 import transformReactDisplayName from "babel-plugin-transform-react-display-name";
 
@@ -9,10 +8,11 @@ import transformReactDisplayName from "babel-plugin-transform-react-display-name
 // import transformReactJSXSelf from "babel-plugin-transform-react-jsx-self";
 
 export default {
+  presets: [
+    presetFlow
+  ],
   plugins: [
     transformReactJSX,
-    transformFlowStripTypes,
-    transformSyntaxFlow,
     transformSyntaxJSX,
     transformReactDisplayName
   ],

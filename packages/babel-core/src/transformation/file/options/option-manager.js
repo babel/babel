@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import * as context from "../../../index";
 import type Logger from "../logger";
 import Plugin from "../../plugin";
@@ -180,10 +178,13 @@ export default class OptionManager {
       // check for an unknown option
       if (!option && this.log) {
         if (removed[key]) {
-          this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`, ReferenceError);
+          this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`,
+            ReferenceError);
         } else {
+          /* eslint-disable max-len */
           const unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
           const presetConfigErr = "A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:\n\nInvalid:\n  `{ presets: [{option: value}] }`\nValid:\n  `{ presets: [['presetName', {option: value}]] }`\n\nFor more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.";
+          /* eslint-enable max-len */
 
           this.log.error(`${unknownOptErr}\n\n${presetConfigErr}`, ReferenceError);
         }
