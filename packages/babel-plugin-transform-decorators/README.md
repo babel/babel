@@ -68,20 +68,24 @@ If you are including your plugins manually and using `transform-class-properties
 
 Wrong:
 
-```js
-"plugins": [
-  "transform-class-properties",
-  "transform-decorators"
-]
+```json
+{
+  "plugins": [
+    "transform-class-properties",
+    "transform-decorators"
+  ]
+}
 ```
 
 Right:
 
-```js
-"plugins": [
-  "transform-decorators",
-  "transform-class-properties"
-]
+```json
+{
+  "plugins": [
+    "transform-decorators",
+    "transform-class-properties"
+  ]
+}
 ```
 
 ### Via CLI
