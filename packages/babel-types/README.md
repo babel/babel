@@ -1296,12 +1296,12 @@ Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
 ---
 
-### numericLiteralTypeAnnotation
+### numberLiteralTypeAnnotation
 ```javascript
-t.numericLiteralTypeAnnotation()
+t.numberLiteralTypeAnnotation()
 ```
 
-See also `t.isNumericLiteralTypeAnnotation(node, opts)` and `t.assertNumericLiteralTypeAnnotation(node, opts)`.
+See also `t.isNumberLiteralTypeAnnotation(node, opts)` and `t.assertNumberLiteralTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`
 

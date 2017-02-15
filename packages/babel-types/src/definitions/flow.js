@@ -179,7 +179,7 @@ defineType("NullableTypeAnnotation", {
   }
 });
 
-defineType("NumericLiteralTypeAnnotation", {
+defineType("NumberLiteralTypeAnnotation", {
   aliases: ["Flow"],
   fields: {
     // todo
