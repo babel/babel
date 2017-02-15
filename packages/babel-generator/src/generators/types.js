@@ -2,14 +2,10 @@ import * as t from "babel-types";
 import jsesc from "jsesc";
 
 export function Identifier(node: Object) {
-  // FIXME: We hang variance off Identifer to support Flow's def-site variance.
-  // This is a terrible hack, but changing type annotations to use a new,
-  // dedicated node would be a breaking change. This should be cleaned up in
-  // the next major.
   if (node.variance) {
-    if (node.variance === "plus") {
+    if (node.variance.kind === "plus") {
       this.token("+");
-    } else if (node.variance === "minus") {
+    } else if (node.variance.kind === "minus") {
       this.token("-");
     }
   }

@@ -146,10 +146,12 @@ export function _interfaceish(node: Object) {
 }
 
 export function _variance(node) {
-  if (node.variance === "plus") {
-    this.token("+");
-  } else if (node.variance === "minus") {
-    this.token("-");
+  if (node.variance) {
+    if (node.variance.kind === "plus") {
+      this.token("+");
+    } else if (node.variance.kind === "minus") {
+      this.token("-");
+    }
   }
 }
 
