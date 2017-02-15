@@ -9,7 +9,6 @@
   "keywords": [
     "babel",
     "babel-plugin",
-    "es7",
     "decorators"
   ],
   "dependencies": {
