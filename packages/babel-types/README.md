@@ -694,21 +694,6 @@ See also `t.isFile(node, opts)` and `t.assertFile(node, opts)`.
 
 ---
 
-### forAwaitStatement
-```javascript
-t.forAwaitStatement(left, right, body)
-```
-
-See also `t.isForAwaitStatement(node, opts)` and `t.assertForAwaitStatement(node, opts)`.
-
-Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
-
- - `left`: `VariableDeclaration | LVal` (required)
- - `right`: `Expression` (required)
- - `body`: `Statement` (required)
-
----
-
 ### forInStatement
 ```javascript
 t.forInStatement(left, right, body)
@@ -726,7 +711,7 @@ Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
 
 ### forOfStatement
 ```javascript
-t.forOfStatement(left, right, body)
+t.forOfStatement(left, right, body, await)
 ```
 
 See also `t.isForOfStatement(node, opts)` and `t.assertForOfStatement(node, opts)`.
@@ -736,6 +721,7 @@ Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
  - `left`: `VariableDeclaration | LVal` (required)
  - `right`: `Expression` (required)
  - `body`: `Statement` (required)
+ - `await`: `boolean` (default: `false`)
 
 ---
 

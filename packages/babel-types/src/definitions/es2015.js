@@ -178,6 +178,10 @@ defineType("ForOfStatement", {
     },
     body: {
       validate: assertNodeType("Statement")
+    },
+    await: {
+      default: false,
+      validate: assertValueType("boolean")
     }
   }
 });
