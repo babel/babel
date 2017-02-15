@@ -1,4 +1,5 @@
 {
+  "name": "babel",
   "private": true,
   "license": "MIT",
   "scripts": {
