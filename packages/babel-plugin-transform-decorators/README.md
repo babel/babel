@@ -54,37 +54,13 @@ npm install --save-dev babel-plugin-transform-decorators
 
 ## Usage
 
-Add the following line to your .babelrc file:
+### Via `.babelrc` (Recommended)
+
+**.babelrc**
 
 ```json
 {
   "plugins": ["transform-decorators"]
-}
-```
-
-#### NOTE: Order of Plugins Matters!
-
-If you are including your plugins manually and using `transform-class-properties`, make sure that `transform-decorators` comes *before* `transform-class-properties`.
-
-Wrong:
-
-```json
-{
-  "plugins": [
-    "transform-class-properties",
-    "transform-decorators"
-  ]
-}
-```
-
-Right:
-
-```json
-{
-  "plugins": [
-    "transform-decorators",
-    "transform-class-properties"
-  ]
 }
 ```
 
