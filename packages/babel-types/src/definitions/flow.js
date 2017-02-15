@@ -111,7 +111,7 @@ defineType("DeclareVariable", {
   }
 });
 
-defineType("ExistentialTypeParam", {
+defineType("ExistsTypeAnnotation", {
   aliases: ["Flow"]
 });
 

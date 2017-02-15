@@ -575,12 +575,12 @@ Aliases: `Flow`, `FlowBaseAnnotation`
 
 ---
 
-### existentialTypeParam
+### existsTypeAnnotation
 ```javascript
-t.existentialTypeParam()
+t.existsTypeAnnotation()
 ```
 
-See also `t.isExistentialTypeParam(node, opts)` and `t.assertExistentialTypeParam(node, opts)`.
+See also `t.isExistsTypeAnnotation(node, opts)` and `t.assertExistsTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`
 
