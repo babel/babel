@@ -46,6 +46,20 @@ export function ObjectExpression(node: Object, parent: Object, printStack: Array
   return isFirstInStatement(printStack, { considerArrow: true });
 }
 
+const isMultiLine = (n) => {
+  const { loc:{ start, end } } = n;
+  return start.line < end.line;
+};
+
+
+export function JSXElement(node: Object, parent: Object): boolean {
+
+  return (
+    t.isReturnStatement(parent) ||
+    t.isArrowFunctionExpression(parent)
+  ) && isMultiLine(node);
+}
+
 export function Binary(node: Object, parent: Object): boolean {
   if ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) {
     return true;
