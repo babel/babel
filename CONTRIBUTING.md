@@ -124,7 +124,7 @@ $ TEST_DEBUG=true make test
 To test the code coverage, use:
 
 ```sh
-$ make test-cov
+$ make test-ci-coverage
 ```
 
 #### Writing tests
