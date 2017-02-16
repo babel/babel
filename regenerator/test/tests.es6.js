@@ -389,6 +389,20 @@ describe("try-finally generator", function() {
 
     check(gen(), [0, 1, 2, 3]);
   });
+
+  it("should return the correct value when overriden by finally", function() {
+    function* gen() {
+      try {
+        yield 1
+      } finally {
+        return 3
+      }
+    }
+
+    var g = gen()
+    assert.deepEqual(g.next(), { value: 1, done: false})
+    assert.deepEqual(g.return(5), { value: 3, done: true})
+  })
 });
 
 describe("try-catch-finally generator", function() {
