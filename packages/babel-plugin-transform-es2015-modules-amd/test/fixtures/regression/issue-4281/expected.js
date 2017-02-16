@@ -1,10 +1,10 @@
-define(["foo", "module"], function (_foo, _module2) {
+define(["require", "foo"], function (require, _foo) {
   "use strict";
 
   const _module = "test";
+  let _module1 = _foo.bar;
 
   function foo() {
-    let _module1 = _foo.bar;
-    _module2.test();
+    require("module").test();
   }
 });
