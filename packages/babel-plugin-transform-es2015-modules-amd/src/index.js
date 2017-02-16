@@ -42,6 +42,19 @@ export default function ({ types: t }) {
       path.remove();
     },
 
+    MemberExpression(path) {
+      const object = path.get("object");
+
+      if (!isValidRequireCall(object)) return;
+
+      const source = object.node.arguments[0];
+      const id = path.scope.generateUidIdentifier(source.value);
+      this.sourceNames[source.value] = true;
+      this.sources.push([id, source]);
+
+      object.replaceWith(id);
+    },
+
     VariableDeclarator(path) {
       const id = path.get("id");
       if (!id.isIdentifier()) return;
