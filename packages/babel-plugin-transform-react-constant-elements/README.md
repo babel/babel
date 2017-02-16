@@ -6,7 +6,7 @@
 
 **In**
 
-```js
+```jsx
 const Hr = () => {
   return <hr className="hr" />;
 };
@@ -14,7 +14,7 @@ const Hr = () => {
 
 **Out**
 
-```js
+```jsx
 const _ref = <hr className="hr" />;
 
 const Hr = () => {
@@ -26,13 +26,13 @@ const Hr = () => {
 
 - **Spread Operator**
 
-  ```js
+  ```jsx
   <div {...foobar} />
   ```
 
 - **Refs**
 
-  ```js
+  ```jsx
   <div ref="foobar" />
   <div ref={node => this.node = node} />
   ```
