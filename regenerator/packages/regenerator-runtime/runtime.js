@@ -268,12 +268,13 @@
       context.arg = arg;
 
       while (true) {
-        var delegateResult = maybeInvokeDelegate(context);
-        if (delegateResult) {
-          if (delegateResult === ContinueSentinel) {
-            continue;
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
           }
-          return delegateResult;
         }
 
         if (context.method === "next") {
@@ -323,122 +324,85 @@
     };
   }
 
-  function maybeInvokeDelegate(context) {
-    var delegate = context.delegate;
-    if (delegate) {
-      if (context.method === "next") {
-        var record = tryCatch(
-          delegate.iterator.next,
-          delegate.iterator,
-          context.arg
-        );
-
-        if (record.type === "throw") {
-          context.method = "throw";
-          context.arg = record.arg;
-        } else {
-          var info = record.arg;
-          if (info.done) {
-            context[delegate.resultName] = info.value;
-            context.next = delegate.nextLoc;
-            context.method = "next";
-            context.arg = undefined;
-          } else {
-            return info;
-          }
-        }
-
-        context.delegate = null;
-        return ContinueSentinel;
-      }
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg and
+  // returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
 
       if (context.method === "throw") {
-        var throwMethod = delegate.iterator.throw;
-        if (throwMethod !== undefined) {
-          var record = tryCatch(
-            throwMethod,
-            delegate.iterator,
-            context.arg
-          );
+        if (delegate.iterator.return) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
 
-          if (record.type === "throw") {
-            context.method = "throw";
-            context.arg = record.arg;
-          } else {
-            var info = record.arg;
-            if (info.done) {
-              context[delegate.resultName] = info.value;
-              context.next = delegate.nextLoc;
-              context.method = "next";
-              context.arg = undefined;
-            } else {
-              return info;
-            }
-          }
-
-          context.delegate = null;
-          return ContinueSentinel;
-        }
-
-        // A throw when the delegate iterator has no .throw method
-        // always terminates the yield* loop.
-        context.delegate = null;
-
-        // If the delegate iterator has a return method, give it a
-        // chance to clean up.
-        var returnMethod = delegate.iterator["return"];
-        if (returnMethod) {
-          var record = tryCatch(
-            returnMethod,
-            delegate.iterator,
-            context.arg
-          );
-
-          if (record.type === "throw") {
-            // If the return method threw an exception, let that
-            // exception prevail over the original return or throw.
-            context.method = "throw";
-            context.arg = record.arg;
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
             return ContinueSentinel;
           }
         }
 
+        context.method = "throw";
         context.arg = new TypeError(
           "The iterator does not provide a 'throw' method");
-
-        return ContinueSentinel;
       }
 
-      if (context.method === "return") {
-        var returnMethod = delegate.iterator["return"];
-        if (returnMethod === undefined) {
-          context.delegate = null
-          return ContinueSentinel;
-        }
-
-        var record = tryCatch(
-          returnMethod,
-          delegate.iterator,
-          context.arg
-        );
-
-        if (record.type === "throw") {
-          context.method = "throw";
-          context.arg = record.arg;
-        } else {
-          var info = record.arg;
-          if (info.done) {
-            context[delegate.resultName] = info.value;
-            context.next = delegate.nextLoc;
-          } else {
-            return info;
-          }
-        }
-
-        context.delegate = null
-        return ContinueSentinel;
-      }
+      return ContinueSentinel;
     }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info || typeof info !== "object") {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
   }
 
   // Define Generator.prototype.{next,throw,return} in terms of the
