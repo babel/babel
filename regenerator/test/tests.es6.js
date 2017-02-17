@@ -14,6 +14,8 @@ var shared = require("./shared.js");
 var Symbol = shared.Symbol;
 var check = shared.check;
 var assertAlreadyFinished = shared.assertAlreadyFinished;
+var fullCompatibility = runningInTranslation ||
+  require("semver").gte(process.version, "7.0.0");
 
 // A version of `throw` whose behavior can't be statically analyzed.
 // Useful for testing dynamic exception dispatching.
@@ -1230,7 +1232,7 @@ describe("delegated yield", function() {
     var checkResult = check(undefined, function() {
       throw thrownFromReturn;
     });
-    if (runningInTranslation) {
+    if (fullCompatibility) {
       // BUG: Nodes <v6 neglect to call .return here.
       assert.strictEqual(checkResult.throwResult.value, thrownFromReturn);
       assert.strictEqual(checkResult.returnCalled, true);
@@ -1251,7 +1253,7 @@ describe("delegated yield", function() {
     assert.ok(checkResult.throwResult.value instanceof TypeError);
     assert.strictEqual(checkResult.throwResult.done, true);
     assert.strictEqual(checkResult.throwCalled, false);
-    if (runningInTranslation) {
+    if (fullCompatibility) {
       // BUG: Nodes <v6 neglect to call .return here.
       assert.strictEqual(checkResult.returnCalled, true);
     }
@@ -1277,7 +1279,7 @@ describe("delegated yield", function() {
     assert.strictEqual(checkResult.returnCalled, false);
 
     var checkResult = check(undefined, undefined);
-    if (runningInTranslation) {
+    if (fullCompatibility) {
       assert.notStrictEqual(checkResult.throwResult.value, throwee);
       // This is the TypeError that results from trying to call the
       // undefined .throw method of the iterator.
@@ -1306,7 +1308,7 @@ describe("delegated yield", function() {
 
     if (typeof g.return === "function") {
       var returnResult = g.return(-1);
-      if (runningInTranslation) {
+      if (fullCompatibility) {
         assert.deepEqual(returnResult, { value: -1, done: true });
       }
       assert.deepEqual(g.next(), { value: void 0, done: true });
@@ -1326,22 +1328,26 @@ describe("delegated yield", function() {
     check(outer(inner()), [1], 2);
 
     var arrayDelegate = [3, 4];
-    if (!runningInTranslation) {
+    if (!fullCompatibility) {
       // Node v0.11 doesn't know how to turn arrays into iterators over
       // their elements without a little help.
       arrayDelegate = regeneratorRuntime.values(arrayDelegate);
     }
     check(outer(arrayDelegate), [3, 4], void 0); // See issue #143.
 
-    if (!runningInTranslation) {
+    if (!fullCompatibility) {
       return;
     }
 
-    check(outer({
+    var iterator = {
       next: function() {
         return { value: "oyez", done: true };
       }
-    }), [], "oyez");
+    };
+
+    iterator[Symbol.iterator] = function () { return this };
+
+    check(outer(iterator), [], "oyez");
   });
 
   it("should work as a subexpression", function() {
@@ -1357,15 +1363,121 @@ describe("delegated yield", function() {
     check(gen(inner(2)), [], 3);
     check(gen(inner(3)), [], 4);
 
-    if (!runningInTranslation) {
+    if (!fullCompatibility) {
       return;
     }
 
-    check(gen({
+    var iterator = {
       next: function() {
         return { value: "foo", done: true };
       }
-    }), [], "1foo");
+    };
+
+    iterator[Symbol.iterator] = function () { return this };
+
+    check(gen(iterator), [], "1foo");
+  });
+});
+
+(fullCompatibility
+ ? describe // run these tests
+ : xdescribe // skip running these tests
+)("generator return method", function() {
+  it("should work with newborn generators", function() {
+    function *gen() {
+      yield 0;
+    }
+
+    var g = gen();
+
+    assert.deepEqual(g.return("argument"), {
+      value: "argument",
+      done: true
+    });
+
+    assertAlreadyFinished(g);
+  });
+
+  it("should behave as if generator actually returned", function() {
+    var executedFinally = false;
+
+    function *gen() {
+      try {
+        yield 0;
+      } catch (err) {
+        assert.ok(false, "should not have executed the catch handler");
+      } finally {
+        executedFinally = true;
+      }
+    }
+
+    var g = gen();
+    assert.deepEqual(g.next(), { value: 0, done: false });
+
+    assert.deepEqual(g.return("argument"), {
+      value: "argument",
+      done: true
+    });
+
+    assert.strictEqual(executedFinally, true);
+    assertAlreadyFinished(g);
+  });
+
+  it("should return both delegate and delegator", function() {
+    var checkpoints = [];
+
+    function* callee(errorToThrow) {
+      try {
+        yield 1;
+        yield 2;
+      } finally {
+        checkpoints.push("callee finally");
+        if (errorToThrow) {
+          throw errorToThrow;
+        }
+      }
+    }
+
+    function* caller(errorToThrow) {
+      try {
+        yield 0;
+        yield* callee(errorToThrow);
+        yield 3;
+      } finally {
+        checkpoints.push("caller finally");
+      }
+    }
+
+    var g1 = caller();
+
+    assert.deepEqual(g1.next(), { value: 0, done: false });
+    assert.deepEqual(g1.next(), { value: 1, done: false });
+
+    assert.deepEqual(g1.return(-1), { value: -1, done: true });
+    assert.deepEqual(checkpoints, [
+      "callee finally",
+      "caller finally"
+    ]);
+
+    var error = new Error("thrown from callee");
+    var g2 = caller(error);
+
+    assert.deepEqual(g2.next(), { value: 0, done: false });
+    assert.deepEqual(g2.next(), { value: 1, done: false });
+
+    try {
+      g2.return(-1);
+      assert.ok(false, "should have thrown an exception");
+    } catch (thrown) {
+      assert.strictEqual(thrown, error);
+    }
+
+    assert.deepEqual(checkpoints, [
+      "callee finally",
+      "caller finally",
+      "callee finally",
+      "caller finally"
+    ]);
   });
 });
 
@@ -1598,7 +1710,7 @@ describe("catch parameter shadowing", function() {
   });
 
   // This test will be fixed by https://github.com/babel/babel/pull/4880.
-  (runningInTranslation ? xit : it)(
+  (fullCompatibility ? xit : it)(
     "should not replace variables defined in inner scopes", function() {
     function *gen(x) {
       try {
@@ -2362,7 +2474,7 @@ describe("for-of loops", function() {
   var arraysAreIterable =
     typeof Array.prototype[Symbol.iterator] === "function";
 
-  (runningInTranslation && arraysAreIterable ? it : xit)
+  (fullCompatibility && arraysAreIterable ? it : xit)
   ("should work for Arrays", function() {
     var sum = 0;
     for (var x of [1, 2].concat(3)) {
