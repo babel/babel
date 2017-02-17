@@ -13,7 +13,7 @@ var o = { a, b, c };
 **Out**
 
 ```js
-var o = { a: a, b: b, c:c };
+var o = { a: a, b: b, c: c };
 ```
 
 **In**
@@ -30,7 +30,7 @@ var cat = {
 
 ```js
 var cat = {
-  getName: function () {
+  getName: function getName() {
     return name;
   }
 };
