@@ -348,12 +348,7 @@
             throw context.arg;
           }
 
-          if (context.dispatchException(context.arg)) {
-            // If the dispatched exception was caught by a catch block,
-            // then let that catch block handle the exception normally.
-            context.method = "next";
-            context.arg = undefined;
-          }
+          context.dispatchException(context.arg);
 
         } else if (context.method === "return") {
           context.abrupt("return", context.arg);
@@ -369,21 +364,14 @@
             ? GenStateCompleted
             : GenStateSuspendedYield;
 
-          var info = {
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
             value: record.arg,
             done: context.done
           };
-
-          if (record.arg === ContinueSentinel) {
-            if (context.delegate &&
-                context.method === "next") {
-              // Deliberately forget the last sent value so that we don't
-              // accidentally pass it on to the delegate.
-              context.arg = undefined;
-            }
-          } else {
-            return info;
-          }
 
         } else if (record.type === "throw") {
           state = GenStateCompleted;
@@ -555,7 +543,15 @@
         record.type = "throw";
         record.arg = exception;
         context.next = loc;
-        return !!caught;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
       }
 
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
@@ -685,6 +681,12 @@
         resultName: resultName,
         nextLoc: nextLoc
       };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
 
       return ContinueSentinel;
     }
