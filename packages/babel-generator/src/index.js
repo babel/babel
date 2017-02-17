@@ -10,8 +10,7 @@ import type { Format } from "./printer";
  */
 
 class Generator extends Printer {
-  constructor(ast, opts, code) {
-    opts = opts || {};
+  constructor(ast, opts = {}, code) {
 
     const tokens = ast.tokens || [];
     const format = normalizeOptions(code, opts, tokens);
