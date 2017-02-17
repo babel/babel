@@ -369,7 +369,7 @@
 
     var info = record.arg;
 
-    if (! info || typeof info !== "object") {
+    if (! info) {
       context.method = "throw";
       context.arg = new TypeError("iterator result is not an object");
       context.delegate = null;
