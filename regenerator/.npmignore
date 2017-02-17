@@ -2,3 +2,5 @@
 /test
 # Don't publish the helper packages as part of the parent package.
 /packages
+# Don't publish docs directory to npm (it's very large).
+/docs
