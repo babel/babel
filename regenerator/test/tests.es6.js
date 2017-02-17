@@ -1315,6 +1315,49 @@ describe("delegated yield", function() {
     }
   });
 
+  it("should execute finally blocks of delegate generators", function() {
+    var markers = [];
+
+    function* parent() {
+      try {
+        return yield* child();
+      } finally {
+        markers.push("parent");
+      }
+    }
+
+    function* child() {
+      try {
+        return yield 1;
+      } finally {
+        yield 2;
+        markers.push("child");
+      }
+    }
+
+    var g = parent();
+
+    assert.deepEqual(g.next(), {
+      value: 1,
+      done: false
+    });
+
+    // The generator function has been carefully constructed so that .next
+    // and .return have the same effect, so that these tests should pass
+    // in versions of Node that do not support .return.
+    assert.deepEqual((g.return || g.next).call(g, 3), {
+      value: 2,
+      done: false
+    });
+
+    assert.deepEqual(g.next(), {
+      value: 3,
+      done: true
+    });
+
+    assert.deepEqual(markers, ["child", "parent"]);
+  });
+
   it("should evaluate to the return value of the delegate", function() {
     function *inner() {
       yield 1;
