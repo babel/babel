@@ -418,6 +418,114 @@ describe("try-finally generator", function() {
       });
     }
   });
+
+  it("should let the last finally block override all others", function() {
+    function* gen(condition) {
+      try {
+        try {
+          return yield 1;
+        } finally {
+          return 2;
+        }
+      } finally {
+        try {
+          return 3;
+        } finally {
+          if (condition) {
+            return 4;
+          }
+        }
+      }
+    }
+
+    var g1 = gen(true);
+
+    assert.deepEqual(g1.next(), {
+      value: 1,
+      done: false
+    });
+
+    // The generator function has been carefully constructed so that .next
+    // and .return have the same effect, so that these tests should pass
+    // in versions of Node that do not support .return.
+    var method = g1.return || g1.next;
+
+    assert.deepEqual(method.call(g1, 5), {
+      value: 4,
+      done: true
+    });
+
+    var g2 = gen(false);
+
+    assert.deepEqual(g2.next(), {
+      value: 1,
+      done: false
+    });
+
+    assert.deepEqual(method.call(g2, 5), {
+      value: 3,
+      done: true
+    });
+  });
+
+  it("should allow additional yields during finally propagation", function() {
+    function* gen(condition) {
+      try {
+        try {
+          return yield 1;
+        } finally {
+          return 2;
+        }
+      } finally {
+        try {
+          return yield "oyez";
+        } finally {
+          if (condition) {
+            return 4;
+          }
+        }
+      }
+    }
+
+    var g1 = gen(true);
+
+    assert.deepEqual(g1.next(), {
+      value: 1,
+      done: false
+    });
+
+    // The generator function has been carefully constructed so that .next
+    // and .return have the same effect, so that these tests should pass
+    // in versions of Node that do not support .return.
+    var method = g1.return || g1.next;
+
+    assert.deepEqual(method.call(g1, 5), {
+      value: "oyez",
+      done: false
+    });
+
+    assert.deepEqual(method.call(g1, 5), {
+      value: 4,
+      done: true
+    });
+
+    var g2 = gen(false);
+
+    assert.deepEqual(g2.next(), {
+      value: 1,
+      done: false
+    });
+
+    assert.deepEqual(method.call(g2, 5), {
+      value: "oyez",
+      done: false
+    });
+
+    assert.deepEqual(method.call(g2, 5), {
+      value: 5,
+      done: true
+    });
+  });
 });
 
 describe("try-catch-finally generator", function() {
