@@ -326,8 +326,8 @@
 
   // Call delegate.iterator[context.method](context.arg) and handle the
   // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg and
-  // returning the ContinueSentinel.
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
   function maybeInvokeDelegate(delegate, context) {
     var method = delegate.iterator[context.method];
     if (method === undefined) {
@@ -372,6 +372,7 @@
     if (! info || typeof info !== "object") {
       context.method = "throw";
       context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
       return ContinueSentinel;
     }
 
