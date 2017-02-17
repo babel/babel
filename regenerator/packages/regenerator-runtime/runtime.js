@@ -264,11 +264,15 @@
         return doneResult();
       }
 
+      context.method = method;
+      context.arg = arg;
+
       while (true) {
         var delegate = context.delegate;
         if (delegate) {
-          if (method === "return" ||
-              (method === "throw" && delegate.iterator[method] === undefined)) {
+          if (context.method === "return" ||
+              (context.method === "throw" &&
+               delegate.iterator[context.method] === undefined)) {
             // A return or throw (when the delegate iterator has no throw
             // method) always terminates the yield* loop.
             context.delegate = null;
@@ -277,17 +281,22 @@
             // chance to clean up.
             var returnMethod = delegate.iterator["return"];
             if (returnMethod) {
-              var record = tryCatch(returnMethod, delegate.iterator, arg);
+              var record = tryCatch(
+                returnMethod,
+                delegate.iterator,
+                context.arg
+              );
+
               if (record.type === "throw") {
                 // If the return method threw an exception, let that
                 // exception prevail over the original return or throw.
-                method = "throw";
-                arg = record.arg;
+                context.method = "throw";
+                context.arg = record.arg;
                 continue;
               }
             }
 
-            if (method === "return") {
+            if (context.method === "return") {
               // Continue with the outer return, now that the delegate
               // iterator has been terminated.
               continue;
@@ -295,9 +304,9 @@
           }
 
           var record = tryCatch(
-            delegate.iterator[method],
+            delegate.iterator[context.method],
             delegate.iterator,
-            arg
+            context.arg
           );
 
           if (record.type === "throw") {
@@ -305,16 +314,16 @@
 
             // Like returning generator.throw(uncaught), but without the
             // overhead of an extra function call.
-            method = "throw";
-            arg = record.arg;
+            context.method = "throw";
+            context.arg = record.arg;
             continue;
           }
 
           // Delegate generator ran and handled its own exceptions so
           // regardless of what the method was, we continue as if it is
           // "next" with an undefined arg.
-          method = "next";
-          arg = undefined;
+          context.method = "next";
+          context.arg = undefined;
 
           var info = record.arg;
           if (info.done) {
@@ -328,26 +337,26 @@
           context.delegate = null;
         }
 
-        if (method === "next") {
+        if (context.method === "next") {
           // Setting context._sent for legacy support of Babel's
           // function.sent implementation.
-          context.sent = context._sent = arg;
+          context.sent = context._sent = context.arg;
 
-        } else if (method === "throw") {
+        } else if (context.method === "throw") {
           if (state === GenStateSuspendedStart) {
             state = GenStateCompleted;
-            throw arg;
+            throw context.arg;
           }
 
-          if (context.dispatchException(arg)) {
+          if (context.dispatchException(context.arg)) {
             // If the dispatched exception was caught by a catch block,
             // then let that catch block handle the exception normally.
-            method = "next";
-            arg = undefined;
+            context.method = "next";
+            context.arg = undefined;
           }
 
-        } else if (method === "return") {
-          context.abrupt("return", arg);
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
         }
 
         state = GenStateExecuting;
@@ -366,10 +375,11 @@
           };
 
           if (record.arg === ContinueSentinel) {
-            if (context.delegate && method === "next") {
+            if (context.delegate &&
+                context.method === "next") {
               // Deliberately forget the last sent value so that we don't
               // accidentally pass it on to the delegate.
-              arg = undefined;
+              context.arg = undefined;
             }
           } else {
             return info;
@@ -378,9 +388,9 @@
         } else if (record.type === "throw") {
           state = GenStateCompleted;
           // Dispatch the exception by looping back around to the
-          // context.dispatchException(arg) call above.
-          method = "throw";
-          arg = record.arg;
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
         }
       }
     };
@@ -505,6 +515,9 @@
       this.sent = this._sent = undefined;
       this.done = false;
       this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
 
       this.tryEntries.forEach(resetTryEntry);
 
