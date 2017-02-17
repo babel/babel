@@ -30,7 +30,7 @@ var cat = {
 
 ```js
 var cat = {
-  getName: function getName() {
+  getName: function () {
     return name;
   }
 };
