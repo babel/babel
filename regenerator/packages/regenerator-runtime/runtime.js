@@ -268,73 +268,12 @@
       context.arg = arg;
 
       while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          if (context.method === "return" ||
-              (context.method === "throw" &&
-               delegate.iterator[context.method] === undefined)) {
-            // A return or throw (when the delegate iterator has no throw
-            // method) always terminates the yield* loop.
-            context.delegate = null;
-
-            // If the delegate iterator has a return method, give it a
-            // chance to clean up.
-            var returnMethod = delegate.iterator["return"];
-            if (returnMethod) {
-              var record = tryCatch(
-                returnMethod,
-                delegate.iterator,
-                context.arg
-              );
-
-              if (record.type === "throw") {
-                // If the return method threw an exception, let that
-                // exception prevail over the original return or throw.
-                context.method = "throw";
-                context.arg = record.arg;
-                continue;
-              }
-            }
-
-            if (context.method === "return") {
-              // Continue with the outer return, now that the delegate
-              // iterator has been terminated.
-              continue;
-            }
-          }
-
-          var record = tryCatch(
-            delegate.iterator[context.method],
-            delegate.iterator,
-            context.arg
-          );
-
-          if (record.type === "throw") {
-            context.delegate = null;
-
-            // Like returning generator.throw(uncaught), but without the
-            // overhead of an extra function call.
-            context.method = "throw";
-            context.arg = record.arg;
+        var delegateResult = maybeInvokeDelegate(context);
+        if (delegateResult) {
+          if (delegateResult === ContinueSentinel) {
             continue;
           }
-
-          // Delegate generator ran and handled its own exceptions so
-          // regardless of what the method was, we continue as if it is
-          // "next" with an undefined arg.
-          context.method = "next";
-          context.arg = undefined;
-
-          var info = record.arg;
-          if (info.done) {
-            context[delegate.resultName] = info.value;
-            context.next = delegate.nextLoc;
-          } else {
-            state = GenStateSuspendedYield;
-            return info;
-          }
-
-          context.delegate = null;
+          return delegateResult;
         }
 
         if (context.method === "next") {
@@ -382,6 +321,124 @@
         }
       }
     };
+  }
+
+  function maybeInvokeDelegate(context) {
+    var delegate = context.delegate;
+    if (delegate) {
+      if (context.method === "next") {
+        var record = tryCatch(
+          delegate.iterator.next,
+          delegate.iterator,
+          context.arg
+        );
+
+        if (record.type === "throw") {
+          context.method = "throw";
+          context.arg = record.arg;
+        } else {
+          var info = record.arg;
+          if (info.done) {
+            context[delegate.resultName] = info.value;
+            context.next = delegate.nextLoc;
+            context.method = "next";
+            context.arg = undefined;
+          } else {
+            return info;
+          }
+        }
+
+        context.delegate = null;
+        return ContinueSentinel;
+      }
+
+      if (context.method === "throw") {
+        var throwMethod = delegate.iterator.throw;
+        if (throwMethod !== undefined) {
+          var record = tryCatch(
+            throwMethod,
+            delegate.iterator,
+            context.arg
+          );
+
+          if (record.type === "throw") {
+            context.method = "throw";
+            context.arg = record.arg;
+          } else {
+            var info = record.arg;
+            if (info.done) {
+              context[delegate.resultName] = info.value;
+              context.next = delegate.nextLoc;
+              context.method = "next";
+              context.arg = undefined;
+            } else {
+              return info;
+            }
+          }
+
+          context.delegate = null;
+          return ContinueSentinel;
+        }
+
+        // A throw when the delegate iterator has no .throw method
+        // always terminates the yield* loop.
+        context.delegate = null;
+
+        // If the delegate iterator has a return method, give it a
+        // chance to clean up.
+        var returnMethod = delegate.iterator["return"];
+        if (returnMethod) {
+          var record = tryCatch(
+            returnMethod,
+            delegate.iterator,
+            context.arg
+          );
+
+          if (record.type === "throw") {
+            // If the return method threw an exception, let that
+            // exception prevail over the original return or throw.
+            context.method = "throw";
+            context.arg = record.arg;
+            return ContinueSentinel;
+          }
+        }
+
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+
+        return ContinueSentinel;
+      }
+
+      if (context.method === "return") {
+        var returnMethod = delegate.iterator["return"];
+        if (returnMethod === undefined) {
+          context.delegate = null
+          return ContinueSentinel;
+        }
+
+        var record = tryCatch(
+          returnMethod,
+          delegate.iterator,
+          context.arg
+        );
+
+        if (record.type === "throw") {
+          context.method = "throw";
+          context.arg = record.arg;
+        } else {
+          var info = record.arg;
+          if (info.done) {
+            context[delegate.resultName] = info.value;
+            context.next = delegate.nextLoc;
+          } else {
+            return info;
+          }
+        }
+
+        context.delegate = null
+        return ContinueSentinel;
+      }
+    }
   }
 
   // Define Generator.prototype.{next,throw,return} in terms of the
