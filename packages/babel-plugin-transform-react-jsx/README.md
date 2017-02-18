@@ -64,12 +64,17 @@ npm install --save-dev babel-plugin-transform-react-jsx
 
 **.babelrc**
 
-```js
-// without options
+Without options:
+
+```json
 {
   "plugins": ["transform-react-jsx"]
 }
-// with options
+```
+
+With options:
+
+```json
 {
   "plugins": [
     ["transform-react-jsx", {

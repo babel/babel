@@ -42,7 +42,7 @@ require("babel-core").transform("code", {
 
 Toggles including plugins from the [es2015 preset](https://babeljs.io/docs/plugins/preset-es2015/).
 
-```js
+```json
 {
   "presets": [
     ["latest", {
@@ -54,7 +54,7 @@ Toggles including plugins from the [es2015 preset](https://babeljs.io/docs/plugi
 
 You can also pass options down to the `es2015` preset.
 
-```js
+```json
 {
   "presets": [
     ["latest", {
