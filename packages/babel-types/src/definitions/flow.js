@@ -111,7 +111,7 @@ defineType("DeclareVariable", {
   }
 });
 
-defineType("ExistentialTypeParam", {
+defineType("ExistsTypeAnnotation", {
   aliases: ["Flow"]
 });
 
@@ -179,7 +179,7 @@ defineType("NullableTypeAnnotation", {
   }
 });
 
-defineType("NumericLiteralTypeAnnotation", {
+defineType("NumberLiteralTypeAnnotation", {
   aliases: ["Flow"],
   fields: {
     // todo

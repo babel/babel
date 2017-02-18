@@ -11,7 +11,7 @@
     "babel-code-frame": "^6.22.0",
     "babel-messages": "^6.23.0",
     "babel-types": "^6.23.0",
-    "babylon": "^6.15.0",
+    "babylon": "7.0.0-beta.0",
     "debug": "^2.2.0",
     "globals": "^9.0.0",
     "invariant": "^2.2.0",

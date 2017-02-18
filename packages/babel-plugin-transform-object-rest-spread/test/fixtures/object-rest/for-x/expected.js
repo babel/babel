@@ -18,11 +18,11 @@ async function a() {
 for ({ a } in {}) {}
 for ({ a } of []) {}
 async function a() {
-  for ({ a } of []) {}
+  for await ({ a } of []) {}
 }
 
 for (a in {}) {}
 for (a of []) {}
 async function a() {
-  for (a of []) {}
+  for await (a of []) {}
 }

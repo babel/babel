@@ -41,8 +41,9 @@ const awaitVisitor = {
     }
   },
 
-  ForAwaitStatement(path, { file, wrapAwait }) {
+  ForOfStatement(path, { file, wrapAwait }) {
     const { node } = path;
+    if (!node.await) return;
 
     const build = rewriteForAwait(path, {
       getAsyncIterator: file.addHelper("asyncIterator"),

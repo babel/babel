@@ -575,12 +575,12 @@ Aliases: `Flow`, `FlowBaseAnnotation`
 
 ---
 
-### existentialTypeParam
+### existsTypeAnnotation
 ```javascript
-t.existentialTypeParam()
+t.existsTypeAnnotation()
 ```
 
-See also `t.isExistentialTypeParam(node, opts)` and `t.assertExistentialTypeParam(node, opts)`.
+See also `t.isExistsTypeAnnotation(node, opts)` and `t.assertExistsTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`
 
@@ -694,21 +694,6 @@ See also `t.isFile(node, opts)` and `t.assertFile(node, opts)`.
 
 ---
 
-### forAwaitStatement
-```javascript
-t.forAwaitStatement(left, right, body)
-```
-
-See also `t.isForAwaitStatement(node, opts)` and `t.assertForAwaitStatement(node, opts)`.
-
-Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
-
- - `left`: `VariableDeclaration | LVal` (required)
- - `right`: `Expression` (required)
- - `body`: `Statement` (required)
-
----
-
 ### forInStatement
 ```javascript
 t.forInStatement(left, right, body)
@@ -726,7 +711,7 @@ Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
 
 ### forOfStatement
 ```javascript
-t.forOfStatement(left, right, body)
+t.forOfStatement(left, right, body, await)
 ```
 
 See also `t.isForOfStatement(node, opts)` and `t.assertForOfStatement(node, opts)`.
@@ -736,6 +721,7 @@ Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
  - `left`: `VariableDeclaration | LVal` (required)
  - `right`: `Expression` (required)
  - `body`: `Statement` (required)
+ - `await`: `boolean` (default: `false`)
 
 ---
 
@@ -1296,12 +1282,12 @@ Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
 ---
 
-### numericLiteralTypeAnnotation
+### numberLiteralTypeAnnotation
 ```javascript
-t.numericLiteralTypeAnnotation()
+t.numberLiteralTypeAnnotation()
 ```
 
-See also `t.isNumericLiteralTypeAnnotation(node, opts)` and `t.assertNumericLiteralTypeAnnotation(node, opts)`.
+See also `t.isNumberLiteralTypeAnnotation(node, opts)` and `t.assertNumberLiteralTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`
 
