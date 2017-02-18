@@ -27,8 +27,8 @@ matrix:
       env: JOB=test-coverage
     - node_js: "node"
       env: JOB=lint
-  allow_failures:
-    - env: JOB=lint-md
+    - node_js: "node"
+      env: JOB=lint-md
 
 notifications:
   slack:
