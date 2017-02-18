@@ -2,14 +2,6 @@ import * as t from "babel-types";
 import jsesc from "jsesc";
 
 export function Identifier(node: Object) {
-  if (node.variance) {
-    if (node.variance.kind === "plus") {
-      this.token("+");
-    } else if (node.variance.kind === "minus") {
-      this.token("-");
-    }
-  }
-
   this.word(node.name);
 }
 
