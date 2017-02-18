@@ -18,6 +18,7 @@ script:
   - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
   - 'if [ "$JOB" = "test-coverage" ]; then make test-ci-coverage; fi'
   - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
+  - 'if [ "$JOB" = "lint-md" ]; then ./script/lint.sh; fi'
 
 matrix:
   fast_finish: true
@@ -26,6 +27,8 @@ matrix:
       env: JOB=test-coverage
     - node_js: "node"
       env: JOB=lint
+  allow_failures:
+    - env: JOB=lint-md
 
 notifications:
   slack:
