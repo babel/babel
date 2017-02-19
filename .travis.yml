@@ -6,27 +6,31 @@ cache:
   directories:
   - node_modules
 node_js:
-- '6'
-- '5'
-- '4'
-- '0.12'
-script: 
-  - 'if [ -n "${LINT-}" ]; then make lint ; fi'
-  - 'if [ -z "${LINT-}" ]; then make test-ci ; fi'
-  - 'if [ -n "${FLOW-}" ]; then make flow ; fi'
+  - '6'
+  - '5'
+  - '4'
+  - '0.12'
+
+env:
+  - JOB=test
+
+script:
+  - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
+  - 'if [ "$JOB" = "test-coverage" ]; then make test-ci-coverage; fi'
+  - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
 
 matrix:
   fast_finish: true
   include:
+    - node_js: "7"
+      env: JOB=test-coverage
     - node_js: "node"
-      env:
-        - LINT: true
-        - FLOW: true
-      
+      env: JOB=lint
+
 notifications:
-  on_success: change
-  on_failure: always
   slack:
+    on_success: change
+    on_failure: always
     rooms:
       # Generate with
       #     travis encrypt "babeljs:<token>#activity" --add notifications.slack.rooms

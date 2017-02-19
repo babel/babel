@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import type NodePath from "babel-traverse";
 import type Scope from "babel-traverse";
 import type File from "../../../file";
@@ -114,8 +112,21 @@ function isVar(node) {
 }
 
 const letReferenceBlockVisitor = traverse.visitors.merge([{
+  Loop: {
+    enter(path, state) {
+      state.loopDepth++;
+    },
+    exit(path, state) {
+      state.loopDepth--;
+    },
+  },
   Function(path, state) {
-    path.traverse(letReferenceFunctionVisitor, state);
+    // References to block-scoped variables only require added closures if it's
+    // possible for the code to run more than once -- otherwise it is safe to
+    // simply rename the variables.
+    if (state.loopDepth > 0) {
+      path.traverse(letReferenceFunctionVisitor, state);
+    }
     return path.skip();
   }
 }, tdzVisitor]);
@@ -362,6 +373,12 @@ class BlockScoping {
   }
 
   wrapClosure() {
+    if (this.file.opts.throwIfClosureRequired) {
+      throw this.blockPath.buildCodeFrameError(
+        "Compiling let/const in this block would add a closure " +
+        "(throwIfClosureRequired)."
+      );
+    }
     const block = this.block;
 
     const outsideRefs = this.outsideLetReferences;
@@ -397,7 +414,8 @@ class BlockScoping {
     const isSwitch = this.blockPath.isSwitchStatement();
 
     // build the closure that we're going to wrap the block with, possible wrapping switch(){}
-    const fn = t.functionExpression(null, params, t.blockStatement(isSwitch ? [block] : block.body));
+    const fn = t.functionExpression(null, params,
+      t.blockStatement(isSwitch ? [block] : block.body));
     fn.shadow = true;
 
     // continuation
@@ -544,8 +562,18 @@ class BlockScoping {
     const state = {
       letReferences: this.letReferences,
       closurify:     false,
-      file:          this.file
+      file:          this.file,
+      loopDepth:     0,
     };
+
+    const loopOrFunctionParent = this.blockPath.find(
+      (path) => path.isLoop() || path.isFunction()
+    );
+    if (loopOrFunctionParent && loopOrFunctionParent.isLoop()) {
+      // There is a loop ancestor closer than the closest function, so we
+      // consider ourselves to be in a loop.
+      state.loopDepth++;
+    }
 
     // traverse through this block, stopping on functions and checking if they
     // contain any local let references
@@ -654,7 +682,8 @@ class BlockScoping {
           for (let i = 0; i < cases.length; i++) {
             const caseConsequent = cases[i].consequent[0];
             if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {
-              caseConsequent.label = this.loopLabel = this.loopLabel || this.scope.generateUidIdentifier("loop");
+              caseConsequent.label = this.loopLabel = this.loopLabel ||
+                this.scope.generateUidIdentifier("loop");
             }
           }
         }

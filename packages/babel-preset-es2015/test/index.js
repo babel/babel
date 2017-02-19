@@ -1,5 +1,5 @@
-const es2015 = require("../lib");
-const expect = require("chai").expect;
+import es2015 from "../lib";
+import { expect } from "chai";
 
 describe("es2015 preset", function () {
   it("exposes an object", function () {
@@ -21,7 +21,7 @@ describe("es2015 preset", function () {
     describe("loose", function () {
       it("throws on non-boolean value", function () {
         expect(function () {
-          es2015.buildPreset(null, { loose: 1});
+          es2015.buildPreset(null, { loose: 1 });
         }).to.throw(/must be a boolean/);
       });
     });

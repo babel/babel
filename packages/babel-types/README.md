@@ -930,6 +930,7 @@ Aliases: `ModuleSpecifier`
 
  - `local`: `Identifier` (required)
  - `imported`: `Identifier` (required)
+ - `importKind`: `null | 'type' | 'typeof'` (default: `null`)
 
 ---
 

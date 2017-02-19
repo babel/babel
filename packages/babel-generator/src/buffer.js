@@ -1,5 +1,5 @@
 import type SourceMap from "./source-map";
-import trimEnd from "lodash/trimEnd";
+import trimRight from "trim-right";
 
 const SPACES_RE = /^[ \t]+$/;
 
@@ -40,7 +40,9 @@ export default class Buffer {
 
     const map = this._map;
     const result = {
-      code: trimEnd(this._buf.join("")),
+      // Whatever trim is used here should not execute a regex against the
+      // source string since it may be arbitrarily large after all transformations
+      code: trimRight(this._buf.join("")),
       map: null,
       rawMappings: map && map.getRawMappings(),
     };
@@ -55,7 +57,7 @@ export default class Buffer {
           return this.map = map.get();
         },
         set(value) {
-          Object.defineProperty(this, "map", {value, writable: true});
+          Object.defineProperty(this, "map", { value, writable: true });
         },
       });
     }

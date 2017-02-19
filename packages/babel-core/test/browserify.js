@@ -1,7 +1,7 @@
-const browserify = require("browserify");
-const assert = require("assert");
-const path = require("path");
-const vm = require("vm");
+import browserify from "browserify";
+import assert from "assert";
+import path from "path";
+import vm from "vm";
 
 describe("browserify", function() {
   it("babel/register may be used without breaking browserify", function(done) {

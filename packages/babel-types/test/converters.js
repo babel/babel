@@ -25,7 +25,8 @@ describe("converters", function () {
       assert.deepEqual(t.valueToNode(/abc.+/gm), t.regExpLiteral("abc.+", "gm"));
     });
     it("array", function () {
-      assert.deepEqual(t.valueToNode([1, "a"]), t.arrayExpression([t.numericLiteral(1), t.stringLiteral("a")]));
+      assert.deepEqual(t.valueToNode([1, "a"]),
+        t.arrayExpression([t.numericLiteral(1), t.stringLiteral("a")]));
     });
     it("object", function () {
       assert.deepEqual(t.valueToNode({

@@ -1,5 +1,3 @@
-/* eslint indent: 0 */
-
 import template from "babel-template";
 import * as t from "babel-types";
 
@@ -67,7 +65,7 @@ const memberExpressionOptimisationVisitor = {
     if (state.noOptimise) {
       state.deopted = true;
     } else {
-      const {parentPath} = path;
+      const { parentPath } = path;
 
       // Is this identifier the right hand side of a default parameter?
       if (parentPath.listKey === "params" && parentPath.key < state.offset) {
@@ -117,13 +115,13 @@ const memberExpressionOptimisationVisitor = {
             // if we know that this member expression is referencing a number then
             // we can safely optimise it
             if (parentPath.get("property").isBaseType("number")) {
-              state.candidates.push({cause: "indexGetter", path});
+              state.candidates.push({ cause: "indexGetter", path });
               return;
             }
           }
           // args.length
           else if (parentPath.node.property.name === "length") {
-            state.candidates.push({cause: "lengthGetter", path});
+            state.candidates.push({ cause: "lengthGetter", path });
             return;
           }
         }
@@ -136,7 +134,7 @@ const memberExpressionOptimisationVisitor = {
       if (state.offset === 0 && parentPath.isSpreadElement()) {
         const call = parentPath.parentPath;
         if (call.isCallExpression() && call.node.arguments.length === 1) {
-          state.candidates.push({cause: "argSpread", path});
+          state.candidates.push({ cause: "argSpread", path });
           return;
         }
       }
@@ -176,7 +174,7 @@ function optimiseIndexGetter(path, argsId, offset) {
   const { scope } = path;
   if (!scope.isPure(index)) {
     const temp = scope.generateUidIdentifierBasedOnNode(index);
-    scope.push({id: temp, kind: "var"});
+    scope.push({ id: temp, kind: "var" });
     path.parentPath.replaceWith(restIndexImpure({
       ARGUMENTS: argsId,
       INDEX: index,
@@ -246,7 +244,7 @@ export const visitor = {
 
     // There are only "shorthand" references
     if (!state.deopted && !state.references.length) {
-      for (const {path, cause} of (state.candidates: Array)) {
+      for (const { path, cause } of (state.candidates: Array)) {
         switch (cause) {
           case "indexGetter":
             optimiseIndexGetter(path, argsId, state.offset);

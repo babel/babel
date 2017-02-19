@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
 import * as messages from "babel-messages";
@@ -45,7 +43,14 @@ traverse.cheap = function (node, enter) {
   return t.traverseFast(node, enter);
 };
 
-traverse.node = function (node: Object, opts: Object, scope: Object, state: Object, parentPath: Object, skipKeys?) {
+traverse.node = function (
+  node: Object,
+  opts: Object,
+  scope: Object,
+  state: Object,
+  parentPath: Object,
+  skipKeys?
+) {
   const keys: Array = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
@@ -74,7 +79,12 @@ function hasBlacklistedType(path, state) {
   }
 }
 
-traverse.hasType = function (tree: Object, scope: Object, type: Object, blacklistTypes: Array<string>): boolean {
+traverse.hasType = function (
+  tree: Object,
+  scope: Object,
+  type: Object,
+  blacklistTypes: Array<string>
+): boolean {
   // the node we're searching in is blacklisted
   if (includes(blacklistTypes, tree.type)) return false;
 

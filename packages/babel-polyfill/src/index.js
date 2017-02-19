@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 if (global._babelPolyfill) {
   throw new Error("only one instance of babel-polyfill is allowed");
 }
@@ -24,6 +22,7 @@ function define(O, key, value) {
 define(String.prototype, "padLeft", "".padStart);
 define(String.prototype, "padRight", "".padEnd);
 
+// eslint-disable-next-line max-len
 "pop,reverse,shift,keys,values,entries,indexOf,every,some,forEach,map,filter,find,findIndex,includes,join,slice,concat,push,splice,unshift,sort,lastIndexOf,reduce,reduceRight,copyWithin,fill".split(",").forEach(function(key) {
   [][key] && define(Array, key, Function.call.bind([][key]));
 });

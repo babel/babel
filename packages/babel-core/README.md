@@ -117,4 +117,5 @@ Following is a table of the options you can use:
 | `sourceMaps`             | `false`              | If truthy, adds a `map` property to returned output. If set to `"inline"`, a comment with a sourceMappingURL directive is added to the bottom of the returned code. If set to `"both"` then a `map` property is returned as well as a source map comment appended. **This does not emit sourcemap files by itself!** To have sourcemaps emitted using the CLI, you must pass it the `--source-maps` option. |
 | `sourceMapTarget`        | `(filenameRelative)` | Set `file` on returned source map. |
 | `sourceRoot`             | `(moduleRoot)`       | The root from which all sources are relative. |
+| `sourceType`             | `"module"`           | Indicate the mode the code should be parsed in. Can be either "script" or "module". |
 | `wrapPluginVisitorMethod`| `null`               | An optional callback that can be used to wrap visitor methods. **NOTE:** This is useful for things like introspection, and not really needed for implementing anything. Called as `wrapPluginVisitorMethod(pluginAlias, visitorType, callback)`.
