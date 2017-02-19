@@ -299,7 +299,7 @@ export default class OptionManager {
             (presetLoc || "a preset") + " which does not accept options.");
         }
 
-        if (typeof val === "function") val = val(context, options, {dirname});
+        if (typeof val === "function") val = val(context, options, { dirname });
 
         if (typeof val !== "object") {
           throw new Error(`Unsupported preset format: ${val}.`);
