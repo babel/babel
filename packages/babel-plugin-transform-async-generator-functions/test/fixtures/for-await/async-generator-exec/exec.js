@@ -14,6 +14,8 @@ function forEach(ai, fn) {
     if (!r.done) {
       fn(r);
       return forEach(ai, fn);
+    } else {
+      throw new Error("done");
     }
   });
 }
@@ -22,5 +24,7 @@ var output = 0;
 return forEach(genAnswers(), function(val) { output += val.value })
 .then(function () {
   assert.equal(output, 42);
+})
+.catch(function (error) {
+  assert.equal(error.message, "done");
 });
-
