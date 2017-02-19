@@ -27,6 +27,7 @@
     "lodash": "^4.2.0",
     "output-file-sync": "^1.1.0",
     "path-is-absolute": "^1.0.0",
+    "resolve-cwd": "^1.0.0",
     "slash": "^1.0.0",
     "source-map": "^0.5.0",
     "v8flags": "^2.0.10"
