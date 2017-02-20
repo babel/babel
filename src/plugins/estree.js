@@ -18,11 +18,7 @@ pp.estreeParseRegExpLiteral = function ({ pattern, flags }) {
 };
 
 pp.estreeParseLiteral = function (value) {
-  const node = this.parseLiteral(value, "Literal");
-  node.raw = node.extra.raw;
-  delete node.extra;
-
-  return node;
+  return this.parseLiteral(value, "Literal");
 };
 
 pp.directiveToStmt = function (directive) {
@@ -174,6 +170,16 @@ export default function (instance) {
         default:
           return inner.call(this, ...args);
       }
+    };
+  });
+
+  instance.extend("parseLiteral", function(inner) {
+    return function (...args) {
+      const node = inner.call(this, ...args);
+      node.raw = node.extra.raw;
+      delete node.extra;
+
+      return node;
     };
   });
 
