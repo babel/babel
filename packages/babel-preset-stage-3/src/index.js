@@ -7,7 +7,9 @@ import transformAsyncGeneratorFunctions from "babel-plugin-transform-async-gener
 function preset(context, opts = {}) {
   let useBuiltIns = false;
   if (opts.useBuiltIns !== undefined) useBuiltIns = opts.useBuiltIns;
-  if (typeof useBuiltIns !== "boolean") throw new Error("Preset stage3 'useBuiltIns' option must be a boolean.");
+  if (typeof useBuiltIns !== "boolean") {
+    throw new Error("Preset stage-3 'useBuiltIns' option must be a boolean.");
+  }
 
   return {
     plugins: [

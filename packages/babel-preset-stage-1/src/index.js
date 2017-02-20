@@ -4,9 +4,22 @@ import transformClassConstructorCall from "babel-plugin-transform-class-construc
 import transformExportExtensions from "babel-plugin-transform-export-extensions";
 
 function preset(context, opts = {}) {
+  let spec = false;
+  let useBuiltIns = false;
+
+  if (opts.spec !== undefined) spec = opts.spec;
+  if (typeof spec !== "boolean") {
+    throw new Error("Preset stage-1 'spec' option must be a boolean.");
+  }
+
+  if (opts.useBuiltIns !== undefined) useBuiltIns = opts.useBuiltIns;
+  if (typeof useBuiltIns !== "boolean") {
+    throw new Error("Preset stage-1 'useBuiltIns' option must be a boolean.");
+  }
+
   return {
     presets: [
-      [presetStage2.buildPreset, opts]
+      [presetStage2.buildPreset, { spec, useBuiltIns }]
     ],
     plugins: [
       transformClassConstructorCall,

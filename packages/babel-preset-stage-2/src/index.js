@@ -6,12 +6,21 @@ import syntaxDynamicImport from "babel-plugin-syntax-dynamic-import";
 
 function preset(context, opts = {}) {
   let spec = false;
+  let useBuiltIns = false;
+
   if (opts.spec !== undefined) spec = opts.spec;
-  if (typeof spec !== "boolean") throw new Error("Preset stage2 'spec' option must be a boolean.");
+  if (typeof spec !== "boolean") {
+    throw new Error("Preset stage-2 'spec' option must be a boolean.");
+  }
+
+  if (opts.useBuiltIns !== undefined) useBuiltIns = opts.useBuiltIns;
+  if (typeof useBuiltIns !== "boolean") {
+    throw new Error("Preset stage-2 'useBuiltIns' option must be a boolean.");
+  }
 
   return {
     presets: [
-      [presetStage3.buildPreset, opts]
+      [presetStage3.buildPreset, { useBuiltIns }]
     ],
     plugins: [
       syntaxDynamicImport,
