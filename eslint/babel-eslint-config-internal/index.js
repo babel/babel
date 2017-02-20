@@ -27,7 +27,7 @@ module.exports = {
       }
     }],
     "linebreak-style": ["error", "unix"],
-    "key-spacing": "off",
+    "key-spacing": "error",
     "keyword-spacing": "error",
     "max-len": ["error", 110, 2],
     "new-cap": "off",
@@ -40,7 +40,7 @@ module.exports = {
     "no-empty": "off",
     "no-fallthrough": "off",
     "no-inner-declarations": "off",
-    "no-multi-spaces": "off",
+    "no-multi-spaces": "error",
     "no-labels": "off",
     "no-loop-func": "off",
     "no-process-exit": "off",
