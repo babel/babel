@@ -181,7 +181,7 @@ export default class OptionManager {
           this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`,
             ReferenceError);
         } else {
-          /* eslint-disable-next-line max-len */
+          // eslint-disable-next-line max-len
           const unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
 
           this.log.error(unknownOptErr, ReferenceError);
@@ -300,6 +300,7 @@ export default class OptionManager {
     }
 
     if (typeof presetFactory !== "function") {
+      // eslint-disable-next-line max-len
       throw new Error(`Unsupported preset format: ${typeof presetFactory}. Expected preset to return a function.`);
     }
 
