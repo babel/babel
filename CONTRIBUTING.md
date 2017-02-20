@@ -198,7 +198,7 @@ For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js
 
 #### Internals
 - AST spec ([babylon/ast/spec.md](https://github.com/babel/babylon/blob/master/ast/spec.md))
-- Versionning ([doc/design/versioning.md](./doc/design/versioning.md))
+- Versioning ([doc/design/versioning.md](./doc/design/versioning.md))
 - Monorepo ([doc/design/monorepo.md](./doc/design/monorepo.md))
 - Compiler environment support ([doc/design/compiler-environment-support.md](./doc/design/compiler-environment-support.md))
 - Compiler assumptions ([doc/design/compiler-assumptions.md](./doc/design/compiler-assumptions.md))
