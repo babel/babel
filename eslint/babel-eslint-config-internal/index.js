@@ -6,7 +6,7 @@ module.exports = {
     "arrow-parens": ["error", "always"],
     "arrow-spacing": ["error", { before: true, after: true }],
     camelcase: "off",
-    "comma-dangle": "off",
+    "comma-dangle": ["error", "always-multiline"],
     "comma-spacing": "error",
     "consistent-return": "off",
     curly: "off",
