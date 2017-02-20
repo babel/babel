@@ -6,21 +6,58 @@ contributing, please read the
 
 ## Setup local env
 
-To start developing on babylon you only need to install its dependencies:
+To start developing on Babylon you only need to install its dependencies:
 
 ```bash
 npm install
 ```
 
-After this step you can now start and run the tests:
+## Tests
+
+### Running tests locally
+
+To run a build, tests and perform lint/flow checks:
 
 ```bash
 npm test
 ```
 
+If you only want to run the tests:
+
+```bash
+npm run test-only
+```
+
+Note, this does not actually run a build, so you may have to call `npm run build` after
+performing any changes.
+
+### Checking code coverage locally
+
+To generate code coverage, be sure to set `BABEL_ENV=test` so that code is instrumented during
+the rollup build.
+
+```bash
+BABEL_ENV=test npm run build && npm run test-ci
+```
+
+### Writing tests
+
+Writing tests for Babylon is very
+[similar to Babel](https://github.com/babel/babel/blob/master/CONTRIBUTING.md#writing-tests).
+Inside the `tests/fixtures` folder are categories/groupings of test fixtures (es2015, flow,
+etc.). To add a test, create a folder under one of these groupings (or create a new one) with a
+descriptive name, and add the following:
+
+* Create an `actual.js` file that contains the code you want Babylon to parse.
+
+* Add an `expected.json` file with the expected parser output. For added convenience, if
+  there is no `expected.json` present, the test runner will generate one for you.
+
 ## Cross repository changes
 
-If you are making changes to babylon which make it necessary to also change things in babel you will want to link both repositories together. This can be done by doing the following (assuming you have both babel and babylon already checked out):
+If you are making changes to Babylon which make it necessary to also change things in Babel
+you will want to link both repositories together. This can be done by doing the following
+(assuming you have both Babel and Babylon already checked out):
 
 ```bash
 cd babylon/
@@ -42,4 +79,4 @@ make build
 make test
 ```
 
-From now on babel will use your local checkout of babylon for its tests.
+From now on Babel will use your local checkout of Babylon for its tests.

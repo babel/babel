@@ -545,10 +545,13 @@ pp.parseMetaProperty = function (node, meta, propertyName) {
   return this.finishNode(node, "MetaProperty");
 };
 
-pp.parseLiteral = function (value, type) {
-  const node = this.startNode();
+pp.parseLiteral = function (value, type, startPos, startLoc) {
+  startPos = startPos || this.state.start;
+  startLoc = startLoc || this.state.startLoc;
+
+  const node = this.startNodeAt(startPos, startLoc);
   this.addExtra(node, "rawValue", value);
-  this.addExtra(node, "raw", this.input.slice(this.state.start, this.state.end));
+  this.addExtra(node, "raw", this.input.slice(startPos, this.state.end));
   node.value = value;
   this.next();
   return this.finishNode(node, type);

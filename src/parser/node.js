@@ -7,7 +7,7 @@ const pp = Parser.prototype;
 const commentKeys = ["leadingComments", "trailingComments", "innerComments"];
 
 class Node {
-  constructor(pos?: number, loc?: SourceLocation, filename?: string) {
+  constructor(pos?: number, loc?: number, filename?: string) {
     this.type = "";
     this.start = pos;
     this.end = 0;
