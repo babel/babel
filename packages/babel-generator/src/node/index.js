@@ -1,4 +1,4 @@
-import whitespace from "./whitespace";
+import * as whitespace from "./whitespace";
 import * as parens from "./parentheses";
 import * as t from "babel-types";
 

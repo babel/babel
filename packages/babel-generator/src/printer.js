@@ -7,6 +7,8 @@ import * as n from "./node";
 import Whitespace from "./whitespace";
 import * as t from "babel-types";
 
+import * as generatorFunctions from "./generators";
+
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
@@ -572,22 +574,10 @@ export default class Printer {
   }
 }
 
+// Expose the node type functions and helpers on the prototype for easy usage.
+Object.assign(Printer.prototype, generatorFunctions);
+
 function commaSeparator() {
   this.token(",");
   this.space();
-}
-
-for (const generator of [
-  require("./generators/template-literals"),
-  require("./generators/expressions"),
-  require("./generators/statements"),
-  require("./generators/classes"),
-  require("./generators/methods"),
-  require("./generators/modules"),
-  require("./generators/types"),
-  require("./generators/flow"),
-  require("./generators/base"),
-  require("./generators/jsx")
-]) {
-  Object.assign(Printer.prototype, generator);
 }

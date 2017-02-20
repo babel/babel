@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   builtins: {
     Symbol: "symbol",
     Promise: "promise",

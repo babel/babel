@@ -1,6 +1,7 @@
 import { basename, extname } from "path";
 import template from "babel-template";
 import * as t from "babel-types";
+import transformStrictMode from "babel-plugin-transform-strict-mode";
 
 const buildRequire = template(`
   require($0);
@@ -127,7 +128,7 @@ export default function () {
   };
 
   return {
-    inherits: require("babel-plugin-transform-strict-mode"),
+    inherits: transformStrictMode,
 
     visitor: {
       ThisExpression(path, state) {

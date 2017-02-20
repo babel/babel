@@ -60,7 +60,7 @@ function isType(node) {
  * Tests for node types that need whitespace.
  */
 
-exports.nodes = {
+export const nodes = {
 
   /**
    * Test if AssignmentExpression needs whitespace.
@@ -164,10 +164,10 @@ exports.nodes = {
  * Test if Property or SpreadProperty needs whitespace.
  */
 
-exports.nodes.ObjectProperty =
-exports.nodes.ObjectTypeProperty =
-exports.nodes.ObjectMethod =
-exports.nodes.SpreadProperty = function (node: Object, parent): ?WhitespaceObject {
+nodes.ObjectProperty =
+nodes.ObjectTypeProperty =
+nodes.ObjectMethod =
+nodes.SpreadProperty = function (node: Object, parent): ?WhitespaceObject {
   if (parent.properties[0] === node) {
     return {
       before: true
@@ -179,7 +179,7 @@ exports.nodes.SpreadProperty = function (node: Object, parent): ?WhitespaceObjec
  * Returns lists from node types that need whitespace.
  */
 
-exports.list = {
+export const list = {
 
   /**
    * Return VariableDeclaration declarations init properties.
@@ -222,7 +222,7 @@ exports.list = {
     amounts = { after: amounts, before: amounts };
   }
   [type].concat(t.FLIPPED_ALIAS_KEYS[type] || []).forEach(function (type) {
-    exports.nodes[type] = function () {
+    nodes[type] = function () {
       return amounts;
     };
   });

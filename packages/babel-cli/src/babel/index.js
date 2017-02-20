@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 
-const fs         = require("fs");
-const commander  = require("commander");
-const kebabCase  = require("lodash/kebabCase");
-const options    = require("babel-core").options;
-const util       = require("babel-core").util;
-const uniq       = require("lodash/uniq");
-const glob       = require("glob");
+import fs        from "fs";
+import commander from "commander";
+import kebabCase from "lodash/kebabCase";
+import { options, util, version } from "babel-core";
+import uniq      from "lodash/uniq";
+import glob      from "glob";
+
+import dirCommand from "./dir";
+import fileCommand from "./file";
+
+import pkg from "../../package.json";
 
 Object.keys(options).forEach(function (key) {
   const option = options[key];
@@ -45,8 +49,7 @@ commander.option("-D, --copy-files", "When compiling a directory copy over non-c
 commander.option("-q, --quiet", "Don't log anything");
 /* eslint-enable max-len */
 
-const pkg = require("../../package.json");
-commander.version(pkg.version + " (babel-core " + require("babel-core").version + ")");
+commander.version(pkg.version + " (babel-core " + version + ")");
 commander.usage("[options] <files ...>");
 commander.parse(process.argv);
 
@@ -103,7 +106,7 @@ if (errors.length) {
 
 //
 
-const opts = exports.opts = {};
+export const opts = {};
 
 Object.keys(options).forEach(function (key) {
   const opt = options[key];
@@ -118,12 +121,5 @@ if (opts.only) {
   opts.only = util.arrayify(opts.only, util.regexify);
 }
 
-let fn;
-
-if (commander.outDir) {
-  fn = require("./dir");
-} else {
-  fn = require("./file");
-}
-
-fn(commander, filenames, exports.opts);
+const fn = commander.outDir ? dirCommand : fileCommand;
+fn(commander, filenames, opts);

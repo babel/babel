@@ -1,3 +1,5 @@
+import syntaxExportExtensions from "babel-plugin-syntax-export-extensions";
+
 export default function ({ types: t }) {
   function build(node, nodes, scope) {
     const first = node.specifiers[0];
@@ -20,7 +22,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-export-extensions"),
+    inherits: syntaxExportExtensions,
 
     visitor: {
       ExportNamedDeclaration(path) {
