@@ -103,7 +103,7 @@
                   "value": -123,
                   "extra": {
                     "rawValue": -123,
-                    "raw": "0x7B"
+                    "raw": "-0x7B"
                   }
                 }
               }

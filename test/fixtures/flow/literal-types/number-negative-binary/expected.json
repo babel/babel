@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 16,
+  "end": 17,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 16
+      "column": 17
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 16,
+    "end": 17,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 16
+        "column": 17
       }
     },
     "sourceType": "module",
@@ -31,7 +31,7 @@
       {
         "type": "VariableDeclaration",
         "start": 0,
-        "end": 16,
+        "end": 17,
         "loc": {
           "start": {
             "line": 1,
@@ -39,14 +39,14 @@
           },
           "end": {
             "line": 1,
-            "column": 16
+            "column": 17
           }
         },
         "declarations": [
           {
             "type": "VariableDeclarator",
             "start": 4,
-            "end": 16,
+            "end": 17,
             "loc": {
               "start": {
                 "line": 1,
@@ -54,13 +54,13 @@
               },
               "end": {
                 "line": 1,
-                "column": 16
+                "column": 17
               }
             },
             "id": {
               "type": "Identifier",
               "start": 4,
-              "end": 16,
+              "end": 17,
               "loc": {
                 "start": {
                   "line": 1,
@@ -68,14 +68,14 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 16
+                  "column": 17
                 }
               },
               "name": "a",
               "typeAnnotation": {
                 "type": "TypeAnnotation",
                 "start": 5,
-                "end": 16,
+                "end": 17,
                 "loc": {
                   "start": {
                     "line": 1,
@@ -83,13 +83,13 @@
                   },
                   "end": {
                     "line": 1,
-                    "column": 16
+                    "column": 17
                   }
                 },
                 "typeAnnotation": {
                   "type": "NumericLiteralTypeAnnotation",
                   "start": 7,
-                  "end": 16,
+                  "end": 17,
                   "loc": {
                     "start": {
                       "line": 1,
@@ -97,13 +97,13 @@
                     },
                     "end": {
                       "line": 1,
-                      "column": 16
+                      "column": 17
                     }
                   },
-                  "value": 123,
+                  "value": -123,
                   "extra": {
-                    "rawValue": 123,
-                    "raw": "0b1111011"
+                    "rawValue": -123,
+                    "raw": "-0b1111011"
                   }
                 }
               }
