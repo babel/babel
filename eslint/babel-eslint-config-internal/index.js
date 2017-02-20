@@ -10,6 +10,7 @@ module.exports = {
     "comma-spacing": "error",
     "consistent-return": "off",
     curly: "off",
+    "func-call-spacing": "error",
     indent: ["error", 2, {
       SwitchCase: 1,
       outerIIFEBody: 1,
