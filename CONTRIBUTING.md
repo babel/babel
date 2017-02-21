@@ -124,6 +124,7 @@ $ TEST_DEBUG=true make test
 To test the code coverage, use:
 
 ```sh
+$ BABEL_ENV=cov make build
 $ ./scripts/test-cov.sh
 ```
 
