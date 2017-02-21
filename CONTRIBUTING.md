@@ -201,7 +201,7 @@ For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js
 #### Debugging code
 
 A common approach to debugging JavaScript code is to walk through the code using the [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/) debugger.
-For illustration purposes, we are going to assume that we need to get a better understanding of [`Generator.generate()`](https://github.com/babel/babel/blob/master/packages/babel-generator/src/index.js#L32), which is responsible for generating code for a given AST.
+For illustration purposes, we are going to assume that we need to get a better understanding of [`Generator.generate()`](https://github.com/babel/babel/blob/b5246994b57f06af871be6a63dcc4c6fd41d94d6/packages/babel-generator/src/index.js#L32), which is responsible for generating code for a given AST.
 To get a better understanding of what is actually going on for this particular piece of code, we are going to make use of breakpoints.
 
 ```diff
