@@ -1,5 +1,4 @@
 import cloneDeep from "lodash/cloneDeep";
-import assign from "lodash/assign";
 import has from "lodash/has";
 import traverse from "babel-traverse";
 import * as babylon from "babylon";
@@ -23,7 +22,7 @@ export default function (code: string, opts?: Object): Function {
     }
   }
 
-  opts = assign({
+  opts = Object.assign({
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
     preserveComments: false,
