@@ -1,3 +1,5 @@
+import syntaxObjectRestSpread from "babel-plugin-syntax-object-rest-spread";
+
 export default function ({ types: t }) {
   function hasRestProperty(path) {
     let foundRestProperty = false;
@@ -63,7 +65,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-object-rest-spread"),
+    inherits: syntaxObjectRestSpread,
 
     visitor: {
       // taken from transform-es2015-parameters/src/destructuring.js

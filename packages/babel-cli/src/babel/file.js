@@ -1,11 +1,12 @@
-const convertSourceMap = require("convert-source-map");
-const sourceMap        = require("source-map");
-const slash            = require("slash");
-const path             = require("path");
-const util             = require("./util");
-const fs               = require("fs");
+import convertSourceMap from "convert-source-map";
+import sourceMap  from "source-map";
+import slash from "slash";
+import path from "path";
+import fs from "fs";
 
-module.exports = function (commander, filenames, opts) {
+import * as util from "./util";
+
+export default function (commander, filenames, opts) {
   if (commander.sourceMaps === "inline") {
     opts.sourceMaps = true;
   }
@@ -176,4 +177,4 @@ module.exports = function (commander, filenames, opts) {
   } else {
     stdin();
   }
-};
+}

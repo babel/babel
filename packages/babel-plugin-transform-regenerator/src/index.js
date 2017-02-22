@@ -1,1 +1,1 @@
-module.exports = require("regenerator-transform");
+export { default } from "regenerator-transform";

@@ -1,6 +1,7 @@
 // Fork of https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy
 
 import template from "babel-template";
+import syntaxDecorators from "babel-plugin-syntax-decorators";
 
 const buildClassDecorator = template(`
   DECORATOR(CLASS_REF = INNER) || CLASS_REF;
@@ -281,7 +282,7 @@ export default function({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-decorators"),
+    inherits: syntaxDecorators,
 
     visitor: {
       ExportDefaultDeclaration(path) {

@@ -1,6 +1,6 @@
 /* eslint max-len: "off" */
 
-module.exports = {
+export default {
   "auxiliaryComment": {
     "message": "Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`"
   },

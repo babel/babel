@@ -9,6 +9,8 @@ import vm from "vm";
 import "babel-polyfill";
 import register from "babel-register";
 
+import pkg from "../package.json";
+
 const program = new commander.Command("babel-node");
 
 program.option("-e, --eval [script]", "Evaluate script");
@@ -19,7 +21,6 @@ program.option("-x, --extensions [extensions]", "List of extensions to hook into
 program.option("-w, --plugins [string]", "", util.list);
 program.option("-b, --presets [string]", "", util.list);
 
-const pkg = require("../package.json");
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);

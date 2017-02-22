@@ -1,5 +1,6 @@
 import nameFunction from "babel-helper-function-name";
 import template from "babel-template";
+import syntaxClassProperties from "babel-plugin-syntax-class-properties";
 
 export default function ({ types: t }) {
   const findBareSupers = {
@@ -39,7 +40,7 @@ export default function ({ types: t }) {
   );
 
   return {
-    inherits: require("babel-plugin-syntax-class-properties"),
+    inherits: syntaxClassProperties,
 
     visitor: {
       Class(path, state) {

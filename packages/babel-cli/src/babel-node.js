@@ -3,8 +3,8 @@
  * when found, before invoking the "real" _babel-node(1) executable.
  */
 
-const getV8Flags = require("v8flags");
-const path = require("path");
+import getV8Flags from "v8flags";
+import path from "path";
 
 let args = [path.join(__dirname, "_babel-node")];
 

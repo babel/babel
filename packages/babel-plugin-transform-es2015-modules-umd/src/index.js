@@ -1,5 +1,6 @@
 import { basename, extname } from "path";
 import template from "babel-template";
+import transformAMD from "babel-plugin-transform-es2015-modules-amd";
 
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
@@ -42,7 +43,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-transform-es2015-modules-amd"),
+    inherits: transformAMD,
 
     visitor: {
       Program: {

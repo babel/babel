@@ -1,6 +1,6 @@
 /* eslint max-len: "off" */
 
-module.exports = {
+export default {
   filename: {
     type: "filename",
     description: "filename to use when reading from stdin - this will be used in source-maps, errors etc",

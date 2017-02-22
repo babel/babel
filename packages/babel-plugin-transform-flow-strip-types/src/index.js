@@ -1,8 +1,10 @@
+import syntaxFlow from "babel-plugin-syntax-flow";
+
 export default function ({ types: t }) {
   const FLOW_DIRECTIVE = "@flow";
 
   return {
-    inherits: require("babel-plugin-syntax-flow"),
+    inherits: syntaxFlow,
 
     visitor: {
       Program(path, { file: { ast: { comments } } }) {

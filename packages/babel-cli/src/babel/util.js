@@ -1,11 +1,11 @@
-const commander = require("commander");
-const defaults  = require("lodash/defaults");
-const readdir   = require("fs-readdir-recursive");
-const index     = require("./index");
-const babel     = require("babel-core");
-const util      = require("babel-core").util;
-const path      = require("path");
-const fs        = require("fs");
+import commander from "commander";
+import defaults from "lodash/defaults";
+import readdir from "fs-readdir-recursive";
+import * as babel from "babel-core";
+import path from "path";
+import fs from "fs";
+
+import * as index from "./index";
 
 export function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
@@ -13,16 +13,16 @@ export function chmod(src, dest) {
 
 export function readdirFilter(filename) {
   return readdir(filename).filter(function (filename) {
-    return util.canCompile(filename);
+    return babel.util.canCompile(filename);
   });
 }
 
 export { readdir };
 
-export const canCompile = util.canCompile;
+export const canCompile = babel.util.canCompile;
 
 export function shouldIgnore(loc) {
-  return util.shouldIgnore(loc, index.opts.ignore, index.opts.only);
+  return babel.util.shouldIgnore(loc, index.opts.ignore, index.opts.only);
 }
 
 export function addSourceMappingUrl(code, loc) {

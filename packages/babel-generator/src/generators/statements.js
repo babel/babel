@@ -219,14 +219,14 @@ export function DebuggerStatement() {
   this.semicolon();
 }
 
-function variableDeclarationIdent() {
+function variableDeclarationIndent() {
   // "let " or "var " indentation.
   this.token(",");
   this.newline();
   if (this.endsWith("\n")) for (let i = 0; i < 4; i++) this.space(true);
 }
 
-function constDeclarationIdent() {
+function constDeclarationIndent() {
   // "const " indentation.
   this.token(",");
   this.newline();
@@ -262,7 +262,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
 
   let separator;
   if (hasInits) {
-    separator = node.kind === "const" ? constDeclarationIdent : variableDeclarationIdent;
+    separator = node.kind === "const" ? constDeclarationIndent : variableDeclarationIndent;
   }
 
   //

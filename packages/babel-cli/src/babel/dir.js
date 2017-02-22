@@ -1,10 +1,11 @@
-const outputFileSync = require("output-file-sync");
-const slash          = require("slash");
-const path           = require("path");
-const util           = require("./util");
-const fs             = require("fs");
+import outputFileSync from "output-file-sync";
+import slash from "slash";
+import path from "path";
+import fs from "fs";
 
-module.exports = function (commander, filenames) {
+import * as util from "./util";
+
+export default function (commander, filenames) {
   function write(src, relative) {
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
@@ -88,4 +89,4 @@ module.exports = function (commander, filenames) {
       });
     });
   }
-};
+}
