@@ -49,11 +49,11 @@ test-only:
 test: lint test-only
 
 test-ci:
-	NODE_ENV=test make bootstrap
+	make bootstrap
 	make test-only
 
 test-ci-coverage:
-	NODE_ENV=test BABEL_ENV=cov make bootstrap
+	BABEL_ENV=cov make bootstrap
 	./scripts/test-cov.sh
 	./node_modules/.bin/codecov -f coverage/coverage-final.json
 
