@@ -4,6 +4,7 @@
   },
   "env": {
     "node": true,
-    "mocha": true
+    "jest": true,
+    "jasmine": true
   }
 }
