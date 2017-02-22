@@ -76,7 +76,6 @@ pp.parseStatement = function (declaration, topLevel) {
 
     case tt._class:
       if (!declaration) this.unexpected();
-      this.takeDecorators(node);
       return this.parseClass(node, true);
 
     case tt._if: return this.parseIfStatement(node);
@@ -618,6 +617,7 @@ pp.parseFunctionParams = function (node) {
 
 pp.parseClass = function (node, isStatement, optionalId) {
   this.next();
+  this.takeDecorators(node);
   this.parseClassId(node, isStatement, optionalId);
   this.parseClassSuper(node);
   this.parseClassBody(node);
