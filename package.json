@@ -79,7 +79,7 @@
     "instrument": false
   },
  "jest": {
-    "testRegex": "./test/.*/*.js$",
+    "testRegex": "./packages/*.*/test/.*/*.js$",
     "testPathIgnorePatterns": [
       "fixtures",
       "<rootDir>/test/warning.js",
