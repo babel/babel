@@ -144,7 +144,6 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function () {
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
     fs.readdirSync(suiteLoc).forEach(function (testName) {
       if (testName[0] === ".") return;
 
