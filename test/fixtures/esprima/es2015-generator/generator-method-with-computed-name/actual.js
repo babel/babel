@@ -1,3 +1,3 @@
 (function*() {
-    { *[yield iter]() {} }
+    return { *[yield iter]() {} }
 })
