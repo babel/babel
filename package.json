@@ -86,6 +86,7 @@
       "_browser.js"
     ],
     "testEnvironment": "node",
+    "setupTestFrameworkScriptFile": "<rootDir>/test/testSetupFile.js",
     "transform": {
       "^.+\\.js$": "<rootDir>/scripts/babel-register.js"
     }
