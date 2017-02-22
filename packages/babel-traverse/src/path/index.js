@@ -4,7 +4,6 @@ import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
 import invariant from "invariant";
 import traverse from "../index";
-import assign from "lodash/assign";
 import Scope from "../scope";
 import * as t from "babel-types";
 import { path as pathCache } from "../cache";
@@ -164,7 +163,7 @@ export default class NodePath {
   }
 }
 
-assign(NodePath.prototype,
+Object.assign(NodePath.prototype,
   NodePath_ancestry,
   NodePath_inference,
   NodePath_replacement,
