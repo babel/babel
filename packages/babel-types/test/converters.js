@@ -1,49 +1,47 @@
 import * as t from "../lib";
-import { assert } from "chai";
 
 describe("converters", function () {
   describe("valueToNode", function () {
     it("number", function () {
-      assert.deepEqual(t.valueToNode(Math.PI), t.numericLiteral(Math.PI));
-      assert.deepEqual(t.valueToNode(-Infinity), t.numericLiteral(-Infinity));
-      assert.deepEqual(t.valueToNode(NaN), t.numericLiteral(NaN));
+      expect(t.valueToNode(Math.PI)).toEqual(t.numericLiteral(Math.PI));
+      expect(t.valueToNode(-Infinity)).toEqual(t.numericLiteral(-Infinity));
+      expect(t.valueToNode(NaN)).toEqual(t.numericLiteral(NaN));
     });
     it("string", function () {
-      assert.deepEqual(t.valueToNode("This is a \"string\""), t.stringLiteral("This is a \"string\""));
+      expect(t.valueToNode("This is a \"string\"")).toEqual(t.stringLiteral("This is a \"string\""));
     });
     it("boolean", function () {
-      assert.deepEqual(t.valueToNode(true), t.booleanLiteral(true));
-      assert.deepEqual(t.valueToNode(false), t.booleanLiteral(false));
+      expect(t.valueToNode(true)).toEqual(t.booleanLiteral(true));
+      expect(t.valueToNode(false)).toEqual(t.booleanLiteral(false));
     });
     it("null", function () {
-      assert.deepEqual(t.valueToNode(null), t.nullLiteral());
+      expect(t.valueToNode(null)).toEqual(t.nullLiteral());
     });
     it("undefined", function () {
-      assert.deepEqual(t.valueToNode(undefined), t.identifier("undefined"));
+      expect(t.valueToNode(undefined)).toEqual(t.identifier("undefined"));
     });
     it("RegExp", function () {
-      assert.deepEqual(t.valueToNode(/abc.+/gm), t.regExpLiteral("abc.+", "gm"));
+      expect(t.valueToNode(/abc.+/gm)).toEqual(t.regExpLiteral("abc.+", "gm"));
     });
     it("array", function () {
-      assert.deepEqual(t.valueToNode([1, "a"]),
-        t.arrayExpression([t.numericLiteral(1), t.stringLiteral("a")]));
+      expect(t.valueToNode([1, "a"])).toEqual(t.arrayExpression([t.numericLiteral(1), t.stringLiteral("a")]));
     });
     it("object", function () {
-      assert.deepEqual(t.valueToNode({
+      expect(t.valueToNode({
         a: 1,
         "b c": 2,
-      }), t.objectExpression([
+      })).toEqual(t.objectExpression([
         t.objectProperty(t.identifier("a"), t.numericLiteral(1)),
         t.objectProperty(t.stringLiteral("b c"), t.numericLiteral(2)),
       ]));
     });
     it("throws if cannot convert", function () {
-      assert.throws(function () {
+      expect(function () {
         t.valueToNode(Object);
-      });
-      assert.throws(function () {
+      }).toThrow();
+      expect(function () {
         t.valueToNode(Symbol());
-      });
+      }).toThrow();
     });
   });
   describe("toKeyAlias", function () {
@@ -52,16 +50,18 @@ describe("converters", function () {
       t.toKeyAlias.uid = 0;
     });
     it("doesn't change string literals", function () {
-      assert.equal(t.toKeyAlias(t.objectProperty(t.stringLiteral("a"), t.nullLiteral())), "\"a\"");
+      expect(t.toKeyAlias(t.objectProperty(t.stringLiteral("a"), t.nullLiteral()))).toEqual("\"a\"");
     });
     it("wraps around at Number.MAX_SAFE_INTEGER", function () {
-      assert.equal(t.toKeyAlias(t.objectMethod("method", t.identifier("a"), [], t.blockStatement([]))), "0");
+      expect(
+        t.toKeyAlias(t.objectMethod("method", t.identifier("a"), [], t.blockStatement([])))
+      ).toEqual("0");
     });
   });
   describe("toStatement", function () {
     it("noop on statements", function () {
       const node = t.emptyStatement();
-      assert.equal(t.toStatement(node), node);
+      expect(t.toStatement(node)).toEqual(node);
       t.assertEmptyStatement(node);
     });
     it("mutate class expression to declaration", function () {
@@ -71,10 +71,10 @@ describe("converters", function () {
     });
     it("fail if class expression has no id", function () {
       const node = t.classExpression(null, null, t.classBody([]), []);
-      assert.throws(function() {
+      expect(function() {
         t.toStatement(node);
-      });
-      assert.strictEqual(t.toStatement(node, /* ignore = */ true), false);
+      }).toThrow();
+      expect(t.toStatement(node, /* ignore = */ true)).toBe(false);
       t.assertClassExpression(node);
     });
     it("mutate function expression to declaration", function () {
@@ -84,10 +84,10 @@ describe("converters", function () {
     });
     it("fail if function expression has no id", function () {
       const node = t.functionExpression(null, [], t.blockStatement([]));
-      assert.throws(function() {
+      expect(function() {
         t.toStatement(node);
-      });
-      assert.strictEqual(t.toStatement(node, /* ignore = */ true), false);
+      }).toThrow();
+      expect(t.toStatement(node, /* ignore = */ true)).toBe(false);
       t.assertFunctionExpression(node);
     });
     it("assignment expression", function () {
@@ -97,17 +97,17 @@ describe("converters", function () {
     });
     it("fail if cannot convert node type", function () {
       const node = t.yieldExpression(t.identifier("foo"));
-      assert.throws(function() {
+      expect(function() {
         t.toStatement(node);
-      });
-      assert.strictEqual(t.toStatement(node, /* ignore = */ true), false);
+      }).toThrow();
+      expect(t.toStatement(node, /* ignore = */ true)).toBe(false);
       t.assertYieldExpression(node);
     });
   });
   describe("toExpression", function () {
     it("noop on expressions", function () {
       const node = t.identifier("a");
-      assert.equal(t.toExpression(node), node);
+      expect(t.toExpression(node)).toEqual(node);
       t.assertIdentifier(node);
     });
     it("mutate class declaration to expression", function () {
@@ -134,14 +134,14 @@ describe("converters", function () {
       const inner = t.yieldExpression(t.identifier("foo"));
       const node = t.expressionStatement(inner);
       t.assertYieldExpression(t.toExpression(node));
-      assert.equal(t.toExpression(node), inner);
+      expect(t.toExpression(node)).toEqual(inner);
       t.assertExpressionStatement(node);
     });
     it("fail if cannot convert node type", function () {
       const node = t.program([]);
-      assert.throws(function() {
+      expect(function() {
         t.toExpression(node);
-      });
+      }).toThrow();
       t.assertProgram(node);
     });
   });

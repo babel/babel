@@ -23,6 +23,9 @@ const testContext = vm.createContext({
 });
 testContext.global = testContext;
 
+const jest = {};
+jest.expect = global.expect;
+
 // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
 // global creation in tests, which could cause things to bleed between tests.
 runModuleInTestContext("babel-polyfill", __filename);
@@ -164,12 +167,12 @@ function run(task) {
       fs.writeFileSync(expect.loc, result.code);
     } else {
       actualCode = result.code.trim();
-      chai.expect(actualCode).to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
+      jest.expect(actualCode).toEqual(expectCode);
     }
   }
 
   if (task.sourceMap) {
-    chai.expect(result.map).to.deep.equal(task.sourceMap);
+    jest.expect(result.map).toEqual(task.sourceMap);
   }
 
   if (task.sourceMappings) {
@@ -179,7 +182,7 @@ function run(task) {
       const actual = mapping.original;
 
       const expect = consumer.originalPositionFor(mapping.generated);
-      chai.expect({ line: expect.line, column: expect.column }).to.deep.equal(actual);
+      jest.expect({ line: expect.line, column: expect.column }).toEqual(actual);
     });
   }
 
