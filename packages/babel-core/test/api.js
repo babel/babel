@@ -194,38 +194,42 @@ describe("api", function () {
         passPerPreset: passPerPreset,
         presets: [
           // First preset with our plugin, "before"
-          {
-            plugins: [
-              new Plugin({
-                visitor: {
-                  Function: function(path) {
-                    const alias = path.scope.getProgramParent().path.get("body")[0].node;
-                    if (!babel.types.isTypeAlias(alias)) return;
+          function () {
+            return {
+              plugins: [
+                new Plugin({
+                  visitor: {
+                    Function: function (path) {
+                      const alias = path.scope.getProgramParent().path.get("body")[0].node;
+                      if (!babel.types.isTypeAlias(alias)) return;
 
-                    // In case of `passPerPreset` being `false`, the
-                    // alias node is already removed by Flow plugin.
-                    if (!alias) {
-                      return;
+                      // In case of `passPerPreset` being `false`, the
+                      // alias node is already removed by Flow plugin.
+                      if (!alias) {
+                        return;
+                      }
+
+                      // In case of `passPerPreset` being `true`, the
+                      // alias node should still exist.
+                      aliasBaseType = alias.right.type; // NumberTypeAnnotation
                     }
-
-                    // In case of `passPerPreset` being `true`, the
-                    // alias node should still exist.
-                    aliasBaseType = alias.right.type; // NumberTypeAnnotation
                   }
-                }
-              })
-            ]
+                })
+              ]
+            };
           },
 
           // ES2015 preset
           require(__dirname + "/../../babel-preset-es2015"),
 
           // Third preset for Flow.
-          {
-            plugins: [
-              require(__dirname + "/../../babel-plugin-syntax-flow"),
-              require(__dirname + "/../../babel-plugin-transform-flow-strip-types"),
-            ]
+          function () {
+            return {
+              plugins: [
+                require(__dirname + "/../../babel-plugin-syntax-flow"),
+                require(__dirname + "/../../babel-plugin-transform-flow-strip-types"),
+              ]
+            };
           }
         ],
       });
