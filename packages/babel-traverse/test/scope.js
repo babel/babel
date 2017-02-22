@@ -46,7 +46,7 @@ describe("scope", function () {
       assert.ok(getPath("({ x: 1 })").get("body")[0].get("expression").isPure());
     });
 
-    test("label", function () {
+    it("label", function () {
       assert.strictEqual(getPath("foo: { }").scope.getBinding("foo"), undefined);
       assert.strictEqual(getPath("foo: { }").scope.getLabel("foo").type, "LabeledStatement");
       assert.strictEqual(getPath("foo: { }").scope.getLabel("toString"), undefined);
@@ -56,7 +56,7 @@ describe("scope", function () {
       `).scope.generateUid("foo"), "_foo");
     });
 
-    test("generateUid collision check with labels", function () {
+    it("generateUid collision check with labels", function () {
       assert.strictEqual(getPath(`
         _foo: { }
       `).scope.generateUid("foo"), "_foo2");

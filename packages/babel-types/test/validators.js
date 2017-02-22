@@ -2,8 +2,8 @@ import * as t from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
 
-suite("validators", function () {
-  suite("isNodesEquivalent", function () {
+describe("validators", function () {
+  describe("isNodesEquivalent", function () {
     it("should handle simple cases", function () {
       const mem = t.memberExpression(t.identifier("a"), t.identifier("b"));
       assert(t.isNodesEquivalent(mem, mem) === true);
