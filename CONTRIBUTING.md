@@ -42,6 +42,9 @@ Babel is built for node 4 and up but we develop using node 6. Make sure you are 
 
 You can check this with `node -v` and `npm -v`.
 
+In addition, make sure that Yarn is installed.
+Installation instructions can be found here: https://yarnpkg.com/en/docs/install.
+
 #### Setup
 
 ```sh
