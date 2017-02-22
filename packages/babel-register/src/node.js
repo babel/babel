@@ -23,13 +23,11 @@ sourceMapSupport.install({
   }
 });
 
-registerCache.load();
-let cache = registerCache.get();
-
 const transformOpts = {};
 
 let ignore;
 let only;
+let cache;
 
 let oldHandlers   = {};
 const maps          = {};
@@ -54,20 +52,14 @@ function compile(filename) {
     { filename }
   ));
 
-  let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
+  const cached = cache.get(opts);
 
-  const env = process.env.BABEL_ENV || process.env.NODE_ENV;
-  if (env) cacheKey += `:${env}`;
-
-  if (cache) {
-    const cached = cache[cacheKey];
-    if (cached && cached.mtime === mtime(filename)) {
-      result = cached;
-    }
+  if (cached && cached.mtime === mtime(filename)) {
+    result = cached;
   }
 
   if (!result) {
-    result = babel.transformFileSync(filename, extend(opts, {
+    result = babel.transformFileSync(filename, extend({}, opts, {
       // Do not process config files since has already been done with the OptionManager
       // calls above and would introduce duplicates.
       babelrc: false,
@@ -76,10 +68,8 @@ function compile(filename) {
     }));
   }
 
-  if (cache) {
-    cache[cacheKey] = result;
-    result.mtime = mtime(filename);
-  }
+  result.mtime = mtime(filename);
+  cache.set(opts, result);
 
   maps[filename] = result.map;
 
@@ -136,7 +126,15 @@ export default function (opts?: Object = {}) {
 
   if (opts.extensions) hookExtensions(util.arrayify(opts.extensions));
 
-  if (opts.cache === false) cache = null;
+  if (opts.cache === false || process.env.BABEL_DISABLE_CACHE) {
+    cache = {
+      get: () => {},
+      set: () => {},
+    };
+  } else {
+    registerCache.load();
+    cache = registerCache;
+  }
 
   delete opts.extensions;
   delete opts.ignore;
