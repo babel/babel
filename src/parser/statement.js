@@ -648,6 +648,9 @@ pp.parseClassBody = function (node) {
 
   while (!this.eat(tt.braceR)) {
     if (this.eat(tt.semi)) {
+      if (decorators.length > 0) {
+        this.raise(this.state.lastTokEnd, "Decorators must not be followed by a semicolon");
+      }
       continue;
     }
 
