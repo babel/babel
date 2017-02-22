@@ -234,7 +234,6 @@ To start the debugging in Chrome DevTools, open the given URL.
 The debugger starts at the first executed line of code, which is Mocha's first line by default.
 Click _Resume script execution_ <img src="https://i.imgur.com/TmYBn9d.png" alt="Resume script execution button." width="16"> to jump to the set breakpoint.
 Note that the code shown in Chrome DevTools is compiled code and therefore differs.
-However, this approach should still be useful for debugging and understanding code.
 
 #### Internals
 - AST spec ([babylon/ast/spec.md](https://github.com/babel/babylon/blob/master/ast/spec.md))
