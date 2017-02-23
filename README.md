@@ -61,6 +61,8 @@ mind. When in doubt, use `.parse()`.
 Babylon generates AST according to [Babel AST format][].
 It is based on [ESTree spec][] with the following deviations:
 
+> There is now an `estree` plugin which reverts these deviations
+
 - [Literal][] token is replaced with [StringLiteral][], [NumericLiteral][], [BooleanLiteral][], [NullLiteral][], [RegExpLiteral][]
 - [Property][] token is replaced with [ObjectProperty][] and [ObjectMethod][]
 - [MethodDefinition][] is replaced with [ClassMethod][]
@@ -117,6 +119,7 @@ require("babylon").parse("code", {
 
 ### Plugins
 
+ - `estree`
  - `jsx`
  - `flow`
  - `doExpressions`
