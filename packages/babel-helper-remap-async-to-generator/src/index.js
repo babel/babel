@@ -145,6 +145,15 @@ function plainFunction(path: NodePath, callId: Object) {
     ]);
     declar._blockHoist = true;
 
+    if (path.parentPath.isExportDefaultDeclaration()) {
+      // change the path type so that replaceWith() does not wrap
+      // the identifier into an expressionStatement
+      path.type = "FunctionExpression";
+      path.parentPath.insertBefore(declar);
+      path.replaceWith(t.identifier(asyncFnId.name));
+      return;
+    }
+
     path.replaceWith(declar);
   } else {
     const retFunction = container.body.body[1].argument;
