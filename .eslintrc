@@ -9,7 +9,6 @@
   },
   "env": {
     "node": true,
-    "jest": true,
-    "jasmine": true
+    "jest": true
   }
 }
