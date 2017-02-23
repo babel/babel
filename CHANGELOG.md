@@ -44,7 +44,7 @@ import { parseExpression } from 'babylon';
 const ast = parseExpression('x || y && z', options);
 ```
 
-The returned AST will only consist of the expression. The options are the same as for `parse()`;
+The returned AST will only consist of the expression. The options are the same as for `parse()`
 
 Add startLine option ([#346](https://github.com/babel/babylon/pull/346)) (Raphael Mu)
 
