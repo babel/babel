@@ -11,4 +11,4 @@ if [ "$TEST_DEBUG" ]; then
    node="node --inspect --debug-brk"
 fi
 
-$node node_modules/.bin/jest "$TEST_GREP"
+$node node_modules/.bin/jest "$TEST_GREP" --i
