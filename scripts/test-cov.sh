@@ -1,4 +1,10 @@
 #!/bin/sh
 set -e
 
-node_modules/.bin/jest --coverage --i
+runParallel=""
+
+if [ "$CI" ]; then
+  runParallel="--i"
+fi
+
+node_modules/.bin/jest --coverage $runParallel
