@@ -766,13 +766,8 @@ pp.parseClassBody = function (node) {
 };
 
 pp.parseClassProperty = function (node) {
-  const noPluginMsg = "You can only use Class Properties when the 'classProperties' plugin is enabled.";
-  if (!node.typeAnnotation && !this.hasPlugin("classProperties")) {
-    this.raise(node.start, noPluginMsg);
-  }
-
   if (this.match(tt.eq)) {
-    if (!this.hasPlugin("classProperties")) this.raise(this.state.start, noPluginMsg);
+    if (!this.hasPlugin("classProperties")) this.unexpected();
     this.next();
     node.value = this.parseMaybeAssign();
   } else {
