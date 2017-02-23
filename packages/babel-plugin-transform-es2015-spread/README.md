@@ -11,7 +11,7 @@ var a = ['a', 'b', 'c'];
 var b = [...a, 'foo'];
 
 var c = { foo: 'bar', baz: 42 };
-var d = {...o, a: 2};
+var d = {...c, a: 2};
 ```
 
 **Out**
@@ -33,7 +33,7 @@ var a = [ 'a', 'b', 'c' ];
 var b = [].concat(a, [ 'foo' ]);
 
 var c = { foo: 'bar', baz: 42 };
-var d = _extends({}, o, { a: 2 });
+var d = _extends({}, c, { a: 2 });
 ```
 
 ## Installation

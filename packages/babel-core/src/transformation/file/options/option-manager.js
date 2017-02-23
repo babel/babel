@@ -270,7 +270,7 @@ export default class OptionManager {
         }
         const presetFactory = this.getPresetFactoryForPreset(presetLoc || preset);
 
-        preset = presetFactory(context, options);
+        preset = presetFactory(context, options, { dirname });
 
         if (onResolve) onResolve(preset, presetLoc);
       } catch (e) {

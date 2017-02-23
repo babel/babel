@@ -46,6 +46,10 @@ export function ObjectExpression(node: Object, parent: Object, printStack: Array
   return isFirstInStatement(printStack, { considerArrow: true });
 }
 
+export function DoExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
+  return isFirstInStatement(printStack);
+}
+
 export function Binary(node: Object, parent: Object): boolean {
   if ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) {
     return true;

@@ -9,6 +9,8 @@
    |
    <strong><a href="#writing-tests">Writing tests</a></strong>
    |
+   <strong><a href="#debugging-code">Debugging code</a></strong>
+   |
    <strong><a href="#internals">Internals</a></strong>
 </p>
 
@@ -127,7 +129,8 @@ $ TEST_DEBUG=true make test
 To test the code coverage, use:
 
 ```sh
-$ make test-cov
+$ BABEL_ENV=cov make build
+$ ./scripts/test-cov.sh
 ```
 
 #### Writing tests
@@ -199,9 +202,46 @@ For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js
             - expected.json (will be generated if not created)
 ```
 
+#### Debugging code
+
+A common approach to debugging JavaScript code is to walk through the code using the [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/) debugger.
+For illustration purposes, we are going to assume that we need to get a better understanding of [`Generator.generate()`](https://github.com/babel/babel/blob/b5246994b57f06af871be6a63dcc4c6fd41d94d6/packages/babel-generator/src/index.js#L32), which is responsible for generating code for a given AST.
+To get a better understanding of what is actually going on for this particular piece of code, we are going to make use of breakpoints.
+
+```diff
+generate() {
++ debugger; // breakpoint
+  return super.generate(this.ast);
+}
+```
+
+To include the changes, we have to make sure to build Babel:
+
+```bash
+$ make build
+```
+
+Next, we need to execute `Generator.generate()`, which can be achieved by running a test case in the `babel-generator` package.
+For example, we can run the test case that tests the generation of class declarations:
+
+```bash
+$ TEST_DEBUG=true TEST_GREP=ClassDeclaration make test-only
+
+./scripts/test.sh
+Debugger listening on port 9229.
+Warning: This is an experimental feature and could change at any time.
+To start debugging, open the following URL in Chrome:
+    chrome-devtools://devtools/remote/serve_file/@60cd6e859b9f557d2312f5bf532f6aec5f284980/inspector.html?experiments=true&v8only=true&ws=127.0.0.1:9229/3cdaebd2-be88-4e7b-a94b-432950ab72d0
+```
+
+To start the debugging in Chrome DevTools, open the given URL.
+The debugger starts at the first executed line of code, which is Mocha's first line by default.
+Click _Resume script execution_ <img src="https://i.imgur.com/TmYBn9d.png" alt="Resume script execution button." width="16"> to jump to the set breakpoint.
+Note that the code shown in Chrome DevTools is compiled code and therefore differs.
+
 #### Internals
 - AST spec ([babylon/ast/spec.md](https://github.com/babel/babylon/blob/master/ast/spec.md))
-- Versionning ([doc/design/versioning.md](./doc/design/versioning.md))
+- Versioning ([doc/design/versioning.md](./doc/design/versioning.md))
 - Monorepo ([doc/design/monorepo.md](./doc/design/monorepo.md))
 - Compiler environment support ([doc/design/compiler-environment-support.md](./doc/design/compiler-environment-support.md))
 - Compiler assumptions ([doc/design/compiler-assumptions.md](./doc/design/compiler-assumptions.md))
