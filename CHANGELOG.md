@@ -171,7 +171,7 @@ Update API documentation ([#330](https://github.com/babel/babylon/pull/330)) (Ti
 
 Added keywords to package.json ([#323](https://github.com/babel/babylon/pull/323)) (Dmytro)
 
-AST spec: fix casing of `RegExpLiteral` ([#318](https://github.com/babel/babylon/pull/318)) [skip ci] (Mathias Bynens)
+AST spec: fix casing of `RegExpLiteral` ([#318](https://github.com/babel/babylon/pull/318)) (Mathias Bynens)
  
 ## 6.15.0 (2017-01-10)
 
