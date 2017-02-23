@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
-## 6.16.0 (2017-02-22)
+## 6.16.0 (2017-02-23)
 
 ### :rocket: New Feature
 
