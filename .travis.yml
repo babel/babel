@@ -15,8 +15,8 @@ env:
   - JOB=test
 
 script:
-  - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
-  - 'if [ "$JOB" = "test-coverage" ]; then make test-ci-coverage; fi'
+  - 'if [ "$JOB" = "test" ]; then CI=true make test-ci; fi'
+  - 'if [ "$JOB" = "test-coverage" ]; then CI=true make test-ci-coverage; fi'
   - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
 
 matrix:

@@ -6,9 +6,14 @@ if [ -z "$TEST_GREP" ]; then
 fi
 
 node="node"
+runParallel=""
 
 if [ "$TEST_DEBUG" ]; then
    node="node --inspect --debug-brk"
 fi
 
-$node node_modules/.bin/jest "$TEST_GREP" --i
+if [ "$CI" ]; then
+  runParallel="--i"
+fi
+
+$node node_modules/.bin/jest "$TEST_GREP" $runParallel
