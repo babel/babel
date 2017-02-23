@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
 
-node_modules/.bin/jest --coverage
+node_modules/.bin/jest --coverage --i
