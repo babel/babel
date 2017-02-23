@@ -75,10 +75,9 @@ describe("evaluation", function () {
         .get("body.0.declarations.0.init").evaluate().value,
       3
     );
-    let member_expr = getPath("var x = Math.min(2,Math.max(3,4));var y = Math.random();");
+    const member_expr = getPath("var x = Math.min(2,Math.max(3,4));var y = Math.random();");
     const eval_member_expr = member_expr.get("body.0.declarations.0.init").evaluate();
     const eval_invalid_call = member_expr.get("body.1.declarations.0.init").evaluate();
-      
     assert.strictEqual(eval_member_expr.value, 2);
     assert.strictEqual(eval_invalid_call.confident, false);
   });
