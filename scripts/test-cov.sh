@@ -1,10 +1,10 @@
 #!/bin/sh
 set -e
 
-runParallel=""
+runSequentially=""
 
 if [ "$CI" ]; then
-  runParallel="--i"
+  runSequentially="--i"
 fi
 
-node_modules/.bin/jest --coverage $runParallel
+node_modules/.bin/jest --coverage $runSequentially
