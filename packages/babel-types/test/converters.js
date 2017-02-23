@@ -73,7 +73,7 @@ describe("converters", function () {
       const node = t.classExpression(null, null, t.classBody([]), []);
       expect(function() {
         t.toStatement(node);
-      }).toThrow();
+      }).toThrow(Error);
       expect(t.toStatement(node, /* ignore = */ true)).toBe(false);
       t.assertClassExpression(node);
     });
@@ -86,7 +86,7 @@ describe("converters", function () {
       const node = t.functionExpression(null, [], t.blockStatement([]));
       expect(function() {
         t.toStatement(node);
-      }).toThrow();
+      }).toThrow(Error);
       expect(t.toStatement(node, /* ignore = */ true)).toBe(false);
       t.assertFunctionExpression(node);
     });
@@ -99,7 +99,7 @@ describe("converters", function () {
       const node = t.yieldExpression(t.identifier("foo"));
       expect(function() {
         t.toStatement(node);
-      }).toThrow();
+      }).toThrow(Error);
       expect(t.toStatement(node, /* ignore = */ true)).toBe(false);
       t.assertYieldExpression(node);
     });
@@ -141,7 +141,7 @@ describe("converters", function () {
       const node = t.program([]);
       expect(function() {
         t.toExpression(node);
-      }).toThrow();
+      }).toThrow(Error);
       t.assertProgram(node);
     });
   });
