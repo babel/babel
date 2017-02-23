@@ -223,16 +223,10 @@ For example, we can run the test case that tests the generation of class declara
 
 ```bash
 $ TEST_DEBUG=true TEST_GREP=ClassDeclaration make test-only
-
-./scripts/test.sh
-Debugger listening on port 9229.
-Warning: This is an experimental feature and could change at any time.
-To start debugging, open the following URL in Chrome:
-    chrome-devtools://devtools/remote/serve_file/@60cd6e859b9f557d2312f5bf532f6aec5f284980/inspector.html?experiments=true&v8only=true&ws=127.0.0.1:9229/3cdaebd2-be88-4e7b-a94b-432950ab72d0
 ```
 
-To start the debugging in Chrome DevTools, open the given URL.
-The debugger starts at the first executed line of code, which is Mocha's first line by default.
+Running this command will automatically open Chrome DevTools.
+The debugger starts at the first executed line of code, which is [Mocha's first line by default](https://github.com/jaridmargolin/inspect-process#child-processes).
 Click _Resume script execution_ <img src="https://i.imgur.com/TmYBn9d.png" alt="Resume script execution button." width="16"> to jump to the set breakpoint.
 Note that the code shown in Chrome DevTools is compiled code and therefore differs.
 
