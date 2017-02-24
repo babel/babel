@@ -13,7 +13,7 @@ if [ "$TEST_DEBUG" ]; then
 fi
 
 if [ "$CI" ]; then
-  runSequentially="--i"
+  runSequentially="--runInBand"
 fi
 
 $node node_modules/.bin/jest "$TEST_GREP" $runSequentially
