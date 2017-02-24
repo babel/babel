@@ -4,7 +4,6 @@ import getHelper from "babel-helpers";
 import * as metadataVisitor from "./metadata";
 import convertSourceMap from "convert-source-map";
 import OptionManager from "./options/option-manager";
-import type Pipeline from "../pipeline";
 import PluginPass from "../plugin-pass";
 import { NodePath, Hub, Scope } from "babel-traverse";
 import sourceMap from "source-map";
@@ -42,10 +41,8 @@ const errorVisitor = {
 };
 
 export default class File extends Store {
-  constructor(opts: Object = {}, pipeline: Pipeline) {
+  constructor(opts: Object = {}) {
     super();
-
-    this.pipeline = pipeline;
 
     this.log  = new Logger(this, opts.filename || "unknown");
     this.opts = this.initOptions(opts);
@@ -105,7 +102,6 @@ export default class File extends Store {
 
   pluginVisitors: Array<Object>;
   pluginPasses: Array<PluginPass>;
-  pipeline: Pipeline;
   parserOpts: BabelParserOptions;
   log: Logger;
   opts: Object;
@@ -136,7 +132,7 @@ export default class File extends Store {
   }
 
   initOptions(opts) {
-    opts = new OptionManager(this.log, this.pipeline).init(opts);
+    opts = new OptionManager(this.log).init(opts);
 
     if (opts.inputSourceMap) {
       opts.sourceMaps = true;
