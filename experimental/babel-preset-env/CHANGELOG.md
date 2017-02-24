@@ -1,5 +1,31 @@
 # Changelog
 
+## v1.1.9 (2017-02-24)
+
+### :bug: Bug Fix
+
+- Add tests for debug output (#156) (Brian Ng)
+- Fixes #143. Log correct targets. (#155) (Artem Yavorsky)
+
+### :memo: Documentation
+
+- Fix compat-table link in contributing.md (Brian Ng)
+- Update README examples to fix website [skip ci] (#151) (Brian Ng)
+- Fix few typos (Brian Ng)
+- Add configuration example to clarify `debug: true` (Artem Yavorsky)
+- Fix CHANGELOG’s v1.1.8 updates typo. (Artem Yavorsky)
+- README: Update `debug: true` example. (Artem Yavorsky)
+
+### :house: Internal
+
+- update compat (#169) (Henry Zhu)
+- Use external Electron to Chromium library (#144) (Kilian Valkhof)
+- Update yarn lockfile (#152) (Brian Ng)
+- Extract option normalization into independant file (Eric Baer)
+- Update yarnfile (Eric Baer)
+- devDeps: eslint-config-babel v5.0.0 (#139) (Kai Cataldo)
+- Update compat-table, build data (#135) (Henry Zhu)
+ 
 ## v1.1.8 (2017-01-10)
 
 ### :bug: Bug Fix
