@@ -1,0 +1,18 @@
+babel-preset-env: `DEBUG` option
+
+Using targets:
+{
+  "firefox": 52,
+  "node": 7.4
+}
+
+Modules transform: commonjs
+
+Using plugins:
+  transform-es2015-destructuring {"firefox":52}
+  transform-es2015-for-of {"firefox":52}
+  transform-es2015-function-name {"firefox":52}
+  transform-es2015-literals {"firefox":52}
+  transform-exponentiation-operator {"node":7.4}
+  syntax-trailing-function-commas {"node":7.4}
+src/in.js -> lib/in.js

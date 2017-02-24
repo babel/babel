@@ -1,5 +1,6 @@
 node_modules
 lib
+test/tmp
 .DS_Store
 *.log
 .vscode

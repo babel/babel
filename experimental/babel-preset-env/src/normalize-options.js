@@ -21,7 +21,12 @@ export const validateIncludesAndExcludes = (opts = [], type) => {
     `Invalid Option: The '${type}' option must be an Array<String> of plugins/built-ins`
   );
 
-  const unknownOpts = opts.filter((opt) => !validIncludesAndExcludes.includes(opt));
+  const unknownOpts = [];
+  opts.forEach((opt) => {
+    if (validIncludesAndExcludes.indexOf(opt) === -1) {
+      unknownOpts.push(opt);
+    }
+  });
 
   invariant(
     unknownOpts.length === 0,
@@ -56,7 +61,7 @@ export const validateLooseOption = (looseOpt = false) => {
 
 export const validateModulesOption = (modulesOpt = "commonjs") => {
   invariant(
-    modulesOpt === false || Object.keys(moduleTransformations).includes(modulesOpt),
+    modulesOpt === false || Object.keys(moduleTransformations).indexOf(modulesOpt) > -1,
     `Invalid Option: The 'modules' option must be either 'false' to indicate no modules, or a
     module type which can be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'.`
   );
