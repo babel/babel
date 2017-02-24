@@ -4,27 +4,27 @@
 
 ### :bug: Bug Fix
 
-- Add tests for debug output (#156) (Brian Ng)
-- Fixes #143. Log correct targets. (#155) (Artem Yavorsky)
+- Add tests for debug output ([#156](https://github.com/babel/babel-preset-env/pull/156)) (@existentialism)
+- Fixes #143. Log correct targets. ([#155](https://github.com/babel/babel-preset-env/pull/155)) (@yavorsky)
 
 ### :memo: Documentation
 
-- Fix compat-table link in contributing.md (Brian Ng)
-- Update README examples to fix website [skip ci] (#151) (Brian Ng)
-- Fix few typos (Brian Ng)
-- Add configuration example to clarify `debug: true` (Artem Yavorsky)
-- Fix CHANGELOG’s v1.1.8 updates typo. (Artem Yavorsky)
-- README: Update `debug: true` example. (Artem Yavorsky)
+- Fix compat-table link in contributing.md (@existentialism)
+- Update README examples to fix website ([#151](https://github.com/babel/babel-preset-env/pull/)) (@existentialism)
+- Fix few typos ([#146](https://github.com/babel/babel-preset-env/pull/146)) (@existentialism)
+- Add configuration example to clarify `debug: true` ([#138](https://github.com/babel/babel-preset-env/pull/138)) (@yavorsky)
+- Fix CHANGELOG’s v1.1.8 updates typo. ([#136](https://github.com/babel/babel-preset-env/pull/136)) (@yavorsky)
+- README: Update `debug: true` example. ([#138](https://github.com/babel/babel-preset-env/pull/138)) (@yavorsky)
 
 ### :house: Internal
 
-- update compat (#169) (Henry Zhu)
-- Use external Electron to Chromium library (#144) (Kilian Valkhof)
-- Update yarn lockfile (#152) (Brian Ng)
-- Extract option normalization into independant file (Eric Baer)
-- Update yarnfile (Eric Baer)
-- devDeps: eslint-config-babel v5.0.0 (#139) (Kai Cataldo)
-- Update compat-table, build data (#135) (Henry Zhu)
+- update compat ([#169](https://github.com/babel/babel-preset-env/pull/169)) (@hzoo)
+- Use external Electron to Chromium library ([#144](https://github.com/babel/babel-preset-env/pull/144)) (@Kilian)
+- Update yarn lockfile ([#152](https://github.com/babel/babel-preset-env/pull/152)) (@existentialism)
+- Extract option normalization into independant file ([#125](https://github.com/babel/babel-preset-env/pull/125)) (@baer)
+- Update yarnfile ([#145](https://github.com/babel/babel-preset-env/pull/145)) (@baer)
+- devDeps: eslint-config-babel v5.0.0 ([#139](https://github.com/babel/babel-preset-env/pull/139)) (@kaicataldo)
+- Update compat-table, build data ([#135](https://github.com/babel/babel-preset-env/pull/135)) (@hzoo)
  
 ## v1.1.8 (2017-01-10)
 
