@@ -1,5 +1,69 @@
 # Changelog
 
+## v1.1.9 (2017-02-24)
+
+### :bug: Bug Fix
+
+- Add tests for debug output ([#156](https://github.com/babel/babel-preset-env/pull/156)) (@existentialism)
+
+Since we've (mostly @yavorsky) have fixed a number of bugs recently with the `debug` option output, we added the ability to assert stdout matches what we expect. Read the updated [CONTRIBUTING.md](https://github.com/babel/babel-preset-env/blob/master/CONTRIBUTING.md#testing-the-debug-option) for more info.
+
+- Fixes #143. Log correct targets. ([#155](https://github.com/babel/babel-preset-env/pull/155)) (@yavorsky)
+
+This fixes a bug in the `debug` output where incorrect target(s) were being displayed for why a particular plugin/preset was being included.
+
+Given targets:
+
+```txt
+{
+  "firefox": 52,
+  "node": 7.4 
+}
+```
+
+Before:
+
+```txt
+Using plugins:
+  transform-es2015-destructuring {"node":6.5}
+  transform-es2015-for-of {"node":6.5}
+  transform-es2015-function-name {"node":6.5}
+  transform-es2015-literals {"node":4}
+  transform-exponentiation-operator {"firefox":52}
+  syntax-trailing-function-commas {"firefox":52}
+```
+
+After:
+
+```txt
+Using plugins:
+  transform-es2015-destructuring {"firefox":52}
+  transform-es2015-for-of {"firefox":52}
+  transform-es2015-function-name {"firefox":52}
+  transform-es2015-literals {"firefox":52}
+  transform-exponentiation-operator {"node":7.4}
+  syntax-trailing-function-commas {"node":7.4}
+```
+
+### :memo: Documentation
+
+- Fix compat-table link in contributing.md (@existentialism)
+- Update README examples to fix website ([#151](https://github.com/babel/babel-preset-env/pull/)) (@existentialism)
+- Fix few typos ([#146](https://github.com/babel/babel-preset-env/pull/146)) (@existentialism)
+- Add configuration example to clarify `debug: true` ([#138](https://github.com/babel/babel-preset-env/pull/138)) (@yavorsky)
+- Fix CHANGELOG’s v1.1.8 updates typo. ([#136](https://github.com/babel/babel-preset-env/pull/136)) (@yavorsky)
+- README: Update `debug: true` example. ([#138](https://github.com/babel/babel-preset-env/pull/138)) (@yavorsky)
+
+### :house: Internal
+
+- update compat ([#169](https://github.com/babel/babel-preset-env/pull/169)) (@hzoo)
+- Use external Electron to Chromium library ([#144](https://github.com/babel/babel-preset-env/pull/144)) (@Kilian)
+- Update yarn lockfile ([#152](https://github.com/babel/babel-preset-env/pull/152)) (@existentialism)
+- Extract option normalization into independant file ([#125](https://github.com/babel/babel-preset-env/pull/125)) (@baer)
+- Update yarnfile ([#145](https://github.com/babel/babel-preset-env/pull/145)) (@baer)
+- devDeps: eslint-config-babel v5.0.0 ([#139](https://github.com/babel/babel-preset-env/pull/139)) (@kaicataldo)
+- Update compat-table, build data ([#135](https://github.com/babel/babel-preset-env/pull/135)) (@hzoo)
+ 
 ## v1.1.8 (2017-01-10)
 
 ### :bug: Bug Fix
