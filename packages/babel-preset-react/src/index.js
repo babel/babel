@@ -7,23 +7,21 @@ import transformReactDisplayName from "babel-plugin-transform-react-display-name
 // import transformReactJSXSource from "babel-plugin-transform-react-jsx-source";
 // import transformReactJSXSelf from "babel-plugin-transform-react-jsx-self";
 
-export default function () {
-  return {
-    presets: [
-      presetFlow
-    ],
-    plugins: [
-      transformReactJSX,
-      transformSyntaxJSX,
-      transformReactDisplayName
-    ],
-    env: {
-      development: {
-        plugins: [
-          // transformReactJSXSource,
-          // transformReactJSXSelf
-        ]
-      }
+export default {
+  presets: [
+    presetFlow
+  ],
+  plugins: [
+    transformReactJSX,
+    transformSyntaxJSX,
+    transformReactDisplayName
+  ],
+  env: {
+    development: {
+      plugins: [
+        // transformReactJSXSource,
+        // transformReactJSXSelf
+      ]
     }
-  };
-}
+  }
+};

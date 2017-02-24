@@ -181,10 +181,12 @@ export default class OptionManager {
           this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`,
             ReferenceError);
         } else {
-          // eslint-disable-next-line max-len
+          /* eslint-disable max-len */
           const unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
+          const presetConfigErr = "A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:\n\nInvalid:\n  `{ presets: [{option: value}] }`\nValid:\n  `{ presets: [['presetName', {option: value}]] }`\n\nFor more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.";
+          /* eslint-enable max-len */
 
-          this.log.error(unknownOptErr, ReferenceError);
+          this.log.error(`${unknownOptErr}\n\n${presetConfigErr}`, ReferenceError);
         }
       }
     }
@@ -248,63 +250,70 @@ export default class OptionManager {
    * or a module name to require.
    */
   resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
-    return presets.map((preset) => {
+    return presets.map((val) => {
       let options;
-      if (Array.isArray(preset)) {
-        if (preset.length > 2) {
-          throw new Error(`Unexpected extra options ${JSON.stringify(preset.slice(2))} passed to preset.`);
+      if (Array.isArray(val)) {
+        if (val.length > 2) {
+          throw new Error(`Unexpected extra options ${JSON.stringify(val.slice(2))} passed to preset.`);
         }
 
-        [preset, options] = preset;
+        [val, options] = val;
       }
 
       let presetLoc;
       try {
-        if (typeof preset === "string") {
-          presetLoc = resolvePreset(preset, dirname);
+        if (typeof val === "string") {
+          presetLoc = resolvePreset(val, dirname);
 
           if (!presetLoc) {
-            throw new Error(`Couldn't find preset ${JSON.stringify(preset)} relative to directory ` +
+            throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ` +
               JSON.stringify(dirname));
           }
+
+          val = require(presetLoc);
         }
-        const presetFactory = this.getPresetFactoryForPreset(presetLoc || preset);
 
-        preset = presetFactory(context, options);
+        // If the imported preset is a transpiled ES2015 module
+        if (typeof val === "object" && val.__esModule) {
+          // Try to grab the default export.
+          if (val.default) {
+            val = val.default;
+          } else {
+            // If there is no default export we treat all named exports as options
+            // and just remove the __esModule. This is to support presets that have been
+            // exporting named exports in the past, although we definitely want presets to
+            // only use the default export (with either an object or a function)
+            const { __esModule, ...rest } = val; // eslint-disable-line no-unused-vars
+            val = rest;
+          }
+        }
 
-        if (onResolve) onResolve(preset, presetLoc);
+        // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
+        // a 'buildPreset' function that will return the preset itself, while still exporting a
+        // simple object (rather than a function), for supporting old Babel versions.
+        if (typeof val === "object" && val.buildPreset) val = val.buildPreset;
+
+
+        if (typeof val !== "function" && options !== undefined) {
+          throw new Error(`Options ${JSON.stringify(options)} passed to ` +
+            (presetLoc || "a preset") + " which does not accept options.");
+        }
+
+        if (typeof val === "function") val = val(context, options);
+
+        if (typeof val !== "object") {
+          throw new Error(`Unsupported preset format: ${val}.`);
+        }
+
+        onResolve && onResolve(val, presetLoc);
       } catch (e) {
         if (presetLoc) {
           e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
         }
         throw e;
       }
-
-      return preset;
+      return val;
     });
-  }
-
-  getPresetFactoryForPreset(preset) {
-    let presetFactory = preset;
-    if (typeof presetFactory === "string") {
-      presetFactory = require(presetFactory);
-    }
-
-    // If the imported preset is a transpiled ES2015 module
-    if (typeof presetFactory === "object" && presetFactory.__esModule) {
-      if (presetFactory.default) {
-        presetFactory = presetFactory.default;
-      } else {
-        throw new Error("Preset must export a default export when using ES6 modules.");
-      }
-    }
-
-    if (typeof presetFactory !== "function") {
-      // eslint-disable-next-line max-len
-      throw new Error(`Unsupported preset format: ${typeof presetFactory}. Expected preset to return a function.`);
-    }
-
-    return presetFactory;
   }
 
   normaliseOptions() {
