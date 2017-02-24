@@ -1,6 +1,4 @@
-import intersection from "lodash/intersection";
 import invariant from "invariant";
-
 import builtInsList from "../data/built-ins.json";
 import defaultInclude from "./default-includes";
 import moduleTransformations from "./module-transformations";
@@ -38,7 +36,9 @@ export const validateIncludesAndExcludes = (opts = [], type) => {
 };
 
 export const checkDuplicateIncludeExcludes = (include = [], exclude = []) => {
-  const duplicates = intersection(include, exclude);
+  const duplicates = include.filter(
+    (opt) => exclude.indexOf(opt) >= 0
+  );
 
   invariant(
     duplicates.length === 0,
