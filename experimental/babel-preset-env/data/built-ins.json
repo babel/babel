@@ -692,6 +692,7 @@
     "chrome": 54,
     "edge": 15,
     "firefox": 50,
+    "safari": 10,
     "node": 7,
     "opera": 41
   },

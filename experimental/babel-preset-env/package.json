@@ -46,8 +46,8 @@
     "babel-plugin-transform-exponentiation-operator": "^6.8.0",
     "babel-plugin-transform-regenerator": "^6.6.0",
     "browserslist": "^1.4.0",
-    "invariant": "^2.2.2",
-    "electron-to-chromium": "^1.1.0"
+    "electron-to-chromium": "^1.1.0",
+    "invariant": "^2.2.2"
   },
   "devDependencies": {
     "babel-cli": "^6.11.4",
@@ -58,7 +58,7 @@
     "babel-preset-es2015": "^6.14.0",
     "babel-register": "^6.14.0",
     "chai": "^3.0.0",
-    "compat-table": "kangax/compat-table#b0cec63ea21f3a7788a8eececcb918de903b7fc5",
+    "compat-table": "kangax/compat-table#688097f1ce623cb113640cc9108fe04fc418b823",
     "eslint": "^3.13.1",
     "eslint-config-babel": "^5.0.0",
     "eslint-plugin-flowtype": "^2.29.1",
