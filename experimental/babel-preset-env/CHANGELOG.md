@@ -5,7 +5,45 @@
 ### :bug: Bug Fix
 
 - Add tests for debug output ([#156](https://github.com/babel/babel-preset-env/pull/156)) (@existentialism)
+
+Since we've (mostly @yavorsky) have fixed a number of bugs recently with the `debug` option output, we added the ability to assert stdout matches what we expect. Read the updated [CONTRIBUTING.md](https://github.com/babel/babel-preset-env/blob/master/CONTRIBUTING.md#testing-the-debug-option) for more info.
+
 - Fixes #143. Log correct targets. ([#155](https://github.com/babel/babel-preset-env/pull/155)) (@yavorsky)
+
+This fixes a bug in the `debug` output where incorrect target(s) were being displayed for why a particular plugin/preset was being included.
+
+Given targets:
+
+```txt
+{
+  "firefox": 52,
+  "node": 7.4 
+}
+```
+
+Before:
+
+```txt
+Using plugins:
+  transform-es2015-destructuring {"node":6.5}
+  transform-es2015-for-of {"node":6.5}
+  transform-es2015-function-name {"node":6.5}
+  transform-es2015-literals {"node":4}
+  transform-exponentiation-operator {"firefox":52}
+  syntax-trailing-function-commas {"firefox":52}
+```
+
+After:
+
+```txt
+Using plugins:
+  transform-es2015-destructuring {"firefox":52}
+  transform-es2015-for-of {"firefox":52}
+  transform-es2015-function-name {"firefox":52}
+  transform-es2015-literals {"firefox":52}
+  transform-exponentiation-operator {"node":7.4}
+  syntax-trailing-function-commas {"node":7.4}
+```
 
 ### :memo: Documentation
 
