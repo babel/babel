@@ -53,7 +53,7 @@ require("babel-register")({
 
   // Ignore can also be specified as a function.
   ignore: function(filename) {
-    if (filename === '/path/to/es6-file.js') {
+    if (filename === "/path/to/es6-file.js") {
       return false;
     } else {
       return true;

@@ -41,13 +41,15 @@ This plugin will use babel's `extends` helper, which will polyfill `Object.assig
 
 * `useBuiltIns` - Do not use Babel's helper's and just transform to use the built-in method (Disabled by default).
 
-```js
+```json
 {
   "plugins": [
     ["transform-object-rest-spread", { "useBuiltIns": true }]
   ]
 }
+```
 
+```js
 // source
 z = { x, ...y };
 // compiled

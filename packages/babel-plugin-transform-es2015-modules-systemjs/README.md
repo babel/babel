@@ -35,13 +35,17 @@ npm install --save-dev babel-plugin-transform-es2015-modules-systemjs
 
 **.babelrc**
 
-```javascript
-// without options
+Without options:
+
+```json
 {
   "plugins": ["transform-es2015-modules-systemjs"]
 }
+```
 
-// with options
+With options:
+
+```json
 {
   "plugins": [
     ["transform-es2015-modules-systemjs", {
