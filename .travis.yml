@@ -18,7 +18,7 @@ script:
   - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
   - 'if [ "$JOB" = "test-coverage" ]; then make test-ci-coverage; fi'
   - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
-  - 'if [ "$JOB" = "lint-md" ]; then ./scripts/lint.sh; fi'
+  - 'if [ "$JOB" = "lint-md" ]; then ./scripts/lint-md.sh; fi'
 
 matrix:
   fast_finish: true
