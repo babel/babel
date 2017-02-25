@@ -14,6 +14,19 @@ function getPath(code) {
   return path;
 }
 
+function getIdentifierPath(code) {
+  const ast = parse(code);
+  let nodePath;
+  traverse(ast, {
+    Identifier: function(path) {
+      nodePath = path;
+      path.stop();
+    }
+  });
+
+  return nodePath;
+}
+
 describe("scope", function () {
   describe("binding paths", function () {
     it("function declaration id", function () {
@@ -66,6 +79,14 @@ describe("scope", function () {
         _foo1: { }
         _foo2: { }
       `).scope.generateUid("foo"), "_foo3");
+    });
+
+    it("reference paths", function() {
+      const path = getIdentifierPath("function square(n) { return n * n}");
+      const referencePaths = path.context.scope.bindings.n.referencePaths;
+      assert.equal(referencePaths.length, 2);
+      assert.deepEqual(referencePaths[0].node.loc.start, { line: 1, column:28 });
+      assert.deepEqual(referencePaths[1].node.loc.start, { line: 1, column:32 });
     });
   });
 });

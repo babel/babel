@@ -89,7 +89,6 @@ const buildForXStatement = function (op) {
       this.space();
     }
     this.token("(");
-
     this.print(node.left, node);
     this.space();
     this.word(op);

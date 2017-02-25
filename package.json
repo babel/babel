@@ -1,4 +1,5 @@
 {
+  "name": "babel",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -43,6 +44,10 @@
     "semver": "^5.0.0",
     "through2": "^2.0.0",
     "uglify-js": "^2.4.16"
+  },
+  "devEngines": {
+    "node": ">= 0.10 <= 7.x",
+    "npm": "2.x || 3.x || 4.x"
   },
   "babel": {
     "comments": false,

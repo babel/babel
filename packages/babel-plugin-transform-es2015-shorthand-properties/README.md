@@ -13,7 +13,7 @@ var o = { a, b, c };
 **Out**
 
 ```js
-var o = { a: a, b: b, c:c };
+var o = { a: a, b: b, c: c };
 ```
 
 **In**

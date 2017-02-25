@@ -203,6 +203,14 @@ Babel | Daniel Tschinder | Logan Smyth | Henry Zhu |
 | [@kangax](https://github.com/kangax) | [@kaicataldo](https://github.com/kaicataldo) | [@motiz88](https://github.com/motiz88) | [@xtuc](https://github.com/xtuc) |
 | [@kangax](https://twitter.com/kangax) | [@kai_cataldo](https://twitter.com/kai_cataldo) | [@motiz88](https://twitter.com/motiz88) | [@svensauleau](https://twitter.com/svensauleau) |
 
+### Non-Human Members
+
+[<img src="https://github.com/babel/babel-bot/raw/master/babel-bot.png" height="64">](https://github.com/babel-bot) | 
+|---|
+| Babel Bot |
+| [@babel-bot](https://github.com/babel-bot) |
+| [@babeljs](https://twitter.com/babeljs) |
+
 ### Inactive members
 
 [![Amjad Masad](https://avatars.githubusercontent.com/u/587518?s=64)](https://github.com/amasad) | [![James Kyle](https://avatars.githubusercontent.com/u/952783?s=64)](https://github.com/thejameskyle) | [![Jesse McCarthy](https://avatars.githubusercontent.com/u/129203?s=64)](https://github.com/jmm) | [![Sebastian McKenzie](https://avatars.githubusercontent.com/u/853712?s=64)](https://github.com/kittens) (Creator) | 
