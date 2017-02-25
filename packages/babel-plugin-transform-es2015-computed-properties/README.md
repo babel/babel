@@ -57,13 +57,17 @@ npm install --save-dev babel-plugin-transform-es2015-computed-properties
 
 **.babelrc**
 
-```js
-// without options
+Without options:
+
+```json
 {
   "plugins": ["transform-es2015-computed-properties"]
 }
+```
 
-// with options
+With options:
+
+```json
 {
   "plugins": [
     ["transform-es2015-computed-properties", {

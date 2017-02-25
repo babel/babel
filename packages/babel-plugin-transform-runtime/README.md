@@ -40,13 +40,17 @@ The transformation plugin is typically used only in development, but the runtime
 
 Add the following line to your `.babelrc` file:
 
-```js
-// without options
+Without options:
+
+```json
 {
   "plugins": ["transform-runtime"]
 }
+```
 
-// with options
+With options:
+
+```json
 {
   "plugins": [
     ["transform-runtime", {
