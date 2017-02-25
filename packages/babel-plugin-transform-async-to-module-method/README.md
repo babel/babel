@@ -34,13 +34,17 @@ npm install --save-dev babel-plugin-transform-async-to-module-method
 
 **.babelrc**
 
-```js
-// without options
+Without options:
+
+```json
 {
   "plugins": ["transform-async-to-module-method"]
 }
+```
 
-// with options
+With options:
+
+```json
 {
   "plugins": [
     ["transform-async-to-module-method", {
