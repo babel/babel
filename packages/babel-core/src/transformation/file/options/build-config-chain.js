@@ -27,7 +27,11 @@ export default function buildConfigChain(opts: Object = {}, log?: Logger) {
 
   // resolve all .babelrc files
   if (opts.babelrc !== false) {
-    builder.findConfigs(filename);
+    if (filename) {
+      builder.findConfigs(path.dirname(filename));
+    } else {
+      builder.findConfigs(process.cwd());
+    }
   }
 
   builder.mergeConfig({
@@ -47,8 +51,6 @@ class ConfigChainBuilder {
   }
 
   findConfigs(loc) {
-    if (!loc) return;
-
     if (!path.isAbsolute(loc)) {
       loc = path.join(process.cwd(), loc);
     }
@@ -56,7 +58,7 @@ class ConfigChainBuilder {
     let foundConfig = false;
     let foundIgnore = false;
 
-    while (loc !== (loc = path.dirname(loc))) {
+    while (loc) {
       if (!foundConfig) {
         const configLoc = path.join(loc, BABELRC_FILENAME);
         if (exists(configLoc)) {
@@ -79,6 +81,7 @@ class ConfigChainBuilder {
       }
 
       if (foundIgnore && foundConfig) return;
+      if (loc == (loc = path.dirname(loc))) break;
     }
   }
 
@@ -174,4 +177,3 @@ class ConfigChainBuilder {
     });
   }
 }
-
