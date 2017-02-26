@@ -39,6 +39,7 @@ module.exports = function (commander, filenames) {
       const dest = path.join(commander.outDir, filename);
       outputFileSync(dest, fs.readFileSync(src));
       util.chmod(src, dest);
+      util.log(src + " -> " + dest);
     }
   }
 
