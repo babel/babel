@@ -1,0 +1,3 @@
+src/bar/bar.js -> lib/bar/bar.js
+src/foo.js -> lib/foo.js
+src/index.html -> lib/index.html
