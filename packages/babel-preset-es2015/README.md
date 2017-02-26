@@ -42,6 +42,12 @@ require("babel-core").transform("code", {
 
 Enable "loose" transformations for any plugins in this preset that allow them.
 
+### `strict`
+
+`boolean`, defaults to `false`.
+
+Enable "strict" transformations for any plugins in this preset that allow them.
+
 ### `modules`
 
 `"amd" | "umd" | "systemjs" | "commonjs" | false`, defaults to `"commonjs"`.

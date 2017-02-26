@@ -28,15 +28,18 @@ export default function (context, opts = {}) {
   let loose = false;
   let modules = "commonjs";
   let spec = false;
+  let strict = false;
 
   if (opts !== undefined) {
     if (opts.loose !== undefined) loose = opts.loose;
     if (opts.modules !== undefined) modules = opts.modules;
     if (opts.spec !== undefined) spec = opts.spec;
+    if (opts.strict !== undefined) strict = opts.strict;
   }
 
   if (typeof loose !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
   if (typeof spec !== "boolean") throw new Error("Preset es2015 'spec' option must be a boolean.");
+  if (typeof strict !== "boolean") throw new Error("Preset es2015 'strict' option must be a boolean.");
   if (modules !== false && moduleTypes.indexOf(modules) === -1) {
     throw new Error("Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
       "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
@@ -64,9 +67,9 @@ export default function (context, opts = {}) {
       [transformES2015Spread, optsLoose],
       transformES2015Parameters,
       [transformES2015Destructuring, optsLoose],
-      transformES2015BlockScoping,
+      [transformES2015BlockScoping, { "throwIfClosureRequired": strict }],
       transformES2015TypeofSymbol,
-      modules === "commonjs" && [transformES2015ModulesCommonJS, optsLoose],
+      modules === "commonjs" && [transformES2015ModulesCommonJS, { loose, strict: strict || undefined }],
       modules === "systemjs" && [transformES2015ModulesSystemJS, optsLoose],
       modules === "amd" && [transformES2015ModulesAMD, optsLoose],
       modules === "umd" && [transformES2015ModulesUMD, optsLoose],
