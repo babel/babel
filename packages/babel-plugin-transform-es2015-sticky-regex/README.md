@@ -2,6 +2,20 @@
 
 > Compile ES2015 sticky regex to an ES5 RegExp constructor
 
+## Example
+
+**In**
+
+```javascript
+/ab+c/i;
+```
+
+**Out**
+
+```javascript
+new RegExp('ab+c', 'i');
+```
+
 ## Installation
 
 ```sh
