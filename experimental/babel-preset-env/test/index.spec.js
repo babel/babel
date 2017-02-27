@@ -66,6 +66,23 @@ describe("babel-preset-env", () => {
         });
       });
     });
+
+    it("should error if electron version is invalid", () => {
+      const fixtures = [
+        "0.19",
+        0.19,
+        999,
+        "999",
+      ];
+
+      fixtures.forEach((electronVersion) => {
+        assert.throws(() => {
+          babelPresetEnv.getTargets({
+            electron: electronVersion,
+          });
+        }, Error);
+      });
+    });
   });
 
   describe("isPluginRequired", () => {
