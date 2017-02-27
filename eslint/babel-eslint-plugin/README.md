@@ -32,7 +32,8 @@ original ones as well!).
     "babel/object-curly-spacing": 1,
     "babel/no-await-in-loop": 1,
     "babel/flow-object-type": 1,
-    "babel/no-invalid-this": 1
+    "babel/no-invalid-this": 1,
+    "babel/semi": 1
   }
 }
 ```
@@ -45,6 +46,7 @@ Each rule corresponds to a core `eslint` rule, and has the same options.
 - `babel/new-cap`: Ignores capitalized decorators (`@Decorator`)
 - `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";` (🛠 )
 - `babel/no-invalid-this`: doesn't fail when inside class properties (`class A { a = this.b; }`)
+- `babel/semi`: Includes class properties (🛠 )
 
 The following rules are not in `eslint`, but are relevant only to syntax that is not specified by
 the current JavaScript standard or supported by `eslint`.
