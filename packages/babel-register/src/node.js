@@ -44,7 +44,7 @@ function mtime(filename) {
   return +fs.statSync(filename).mtime;
 }
 
-function compile(filename) {
+function compile(code, filename) {
   let result;
 
   // merge in base options and resolve all the plugins and presets relative to this file
@@ -67,7 +67,7 @@ function compile(filename) {
   }
 
   if (!result) {
-    result = babel.transformFileSync(filename, extend(opts, {
+    result = babel.transform(code, extend(opts, {
       // Do not process config files since has already been done with the OptionManager
       // calls above and would introduce duplicates.
       babelrc: false,
@@ -94,8 +94,14 @@ function shouldIgnore(filename) {
   }
 }
 
-function loader(m, filename) {
-  m._compile(compile(filename), filename);
+function loader(m, filename, old) {
+  const _compile = m._compile;
+
+  m._compile = function (code, filename) {
+    return _compile.call(m, compile(code, filename), filename);
+  };
+
+  old(m, filename);
 }
 
 function registerExtension(ext) {
