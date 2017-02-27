@@ -70,8 +70,16 @@ Ref: [#19](https://github.com/babel/babel-preset-env/pull/19)
 
 ## Install
 
+With [npm](https://www.npmjs.com):
+
 ```sh
 npm install --save-dev babel-preset-env
+```
+
+Or [yarn](https://yarnpkg.com):
+
+```sh
+yarn add babel-preset-env --dev
 ```
 
 ## Usage
