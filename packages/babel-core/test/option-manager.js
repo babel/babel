@@ -76,11 +76,12 @@ describe("option-manager", () => {
     }
 
     presetTest("es5_function");
+    presetTest("es5_object");
     presetTest("es2015_default_function");
+    presetTest("es2015_default_object");
 
-    presetThrowsTest("es5", /Expected preset to return a function./);
-    presetThrowsTest("es2015_default", /Expected preset to return a function./);
     presetThrowsTest("es2015_named", /Preset must export a default export when using ES6 modules/);
+    presetThrowsTest("es2015_invalid", /Unsupported preset format: string/);
     presetThrowsTest("es5_invalid", /Unsupported preset format: string/);
   });
 });

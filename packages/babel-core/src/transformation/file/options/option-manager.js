@@ -299,6 +299,11 @@ export default class OptionManager {
       }
     }
 
+    // Allow simple object exports
+    if (typeof presetFactory === "object") {
+      return () => presetFactory;
+    }
+
     if (typeof presetFactory !== "function") {
       // eslint-disable-next-line max-len
       throw new Error(`Unsupported preset format: ${typeof presetFactory}. Expected preset to return a function.`);
