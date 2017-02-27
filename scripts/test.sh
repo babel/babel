@@ -12,7 +12,7 @@ if [ "$TEST_DEBUG" ]; then
    node="node --inspect --debug-brk"
 fi
 
-if [ "$CI" ]; then
+if [ -n "$CI" ]; then
   runSequentially="--runInBand"
 fi
 

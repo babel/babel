@@ -3,7 +3,7 @@ set -e
 
 runSequentially=""
 
-if [ "$CI" ]; then
+if [ -n "$CI" ]; then
   runSequentially="--runInBand"
 fi
 
