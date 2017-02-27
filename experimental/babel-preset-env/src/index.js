@@ -1,4 +1,5 @@
 import browserslist from "browserslist";
+import invariant from "invariant";
 import builtInsList from "../data/built-ins.json";
 import defaultInclude from "./default-includes";
 import { electronToChromium } from "electron-to-chromium";
@@ -101,19 +102,18 @@ export const getTargets = (targets = {}) => {
     targetOps.node = getCurrentNodeVersion();
   }
 
-  // Rewrite Electron versions to their Chrome equivalents
+  // Replace Electron versions with their Chrome equivalent
   if (targetOps.electron) {
     const electronChromeVersion = parseInt(electronToChromium(targetOps.electron), 10);
 
-    if (!electronChromeVersion) {
-      throw new Error(`Electron version ${targetOps.electron} is either too old or too new`);
-    }
+    invariant(
+      !!electronChromeVersion,
+      `Electron version ${targetOps.electron} is either too old or too new`
+    );
 
-    if (targetOps.chrome) {
-      targetOps.chrome = Math.min(targetOps.chrome, electronChromeVersion);
-    } else {
-      targetOps.chrome = electronChromeVersion;
-    }
+    targetOps.chrome = targetOps.chrome
+      ? Math.min(targetOps.chrome, electronChromeVersion)
+      : electronChromeVersion;
 
     delete targetOps.electron;
   }
