@@ -27,13 +27,8 @@ export function Plugin(alias) {
   throw new Error(`The (${alias}) Babel 5 plugin is being run with Babel 6.`);
 }
 
-import Pipeline from "./transformation/pipeline";
-export { Pipeline };
-
-const pipeline = new Pipeline;
-export const analyse = pipeline.analyse.bind(pipeline);
-export const transform = pipeline.transform.bind(pipeline);
-export const transformFromAst = pipeline.transformFromAst.bind(pipeline);
+import { transform, analyse, transformFromAst } from "./transformation/pipeline";
+export { transform, analyse, transformFromAst };
 
 export function transformFile(filename: string, opts?: Object, callback: Function) {
   if (typeof opts === "function") {
