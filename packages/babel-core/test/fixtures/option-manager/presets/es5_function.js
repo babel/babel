@@ -1,7 +1,9 @@
-module.exports = function () {
-  return {
-    plugins: [
-      require('../../../../../babel-plugin-syntax-decorators'),
-    ]
-  };
+module.exports = {
+  buildPreset: function () {
+    return {
+      plugins: [
+        require('../../../../../babel-plugin-syntax-decorators'),
+      ]
+    };
+  }
 };

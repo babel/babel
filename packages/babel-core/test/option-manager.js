@@ -51,6 +51,19 @@ describe("option-manager", () => {
         /While processing preset: .*option-manager(?:\/|\\\\)not-a-preset\.js/
       );
     });
+
+    it("throws for invalid preset configuration", function() {
+      return assert.throws(
+        function () {
+          const opt = new OptionManager(new Logger(null, "unknown"));
+          opt.init({
+            "presets": [{ option: "value" }]
+          });
+        },
+        // eslint-disable-next-line max-len
+        /Unknown option: foreign.option\.(?:.|\n)+A common cause of this error is the presence of a configuration options object without the corresponding preset name/
+      );
+    });
   });
 
   describe("presets", function () {
@@ -66,21 +79,14 @@ describe("option-manager", () => {
       });
     }
 
-    function presetThrowsTest(name, msg) {
-      it(name, function () {
-        const opt = new OptionManager(new Logger(null, "unknown"));
-        assert.throws(() => opt.init({
-          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)]
-        }), msg);
-      });
-    }
-
+    presetTest("es5");
     presetTest("es5_function");
+    presetTest("es2015_default");
     presetTest("es2015_default_function");
+    presetTest("es2015_default_object_function");
+    presetTest("es2015_function");
+    presetTest("es2015_function_fallback");
+    presetTest("es2015_named");
 
-    presetThrowsTest("es5", /Expected preset to return a function./);
-    presetThrowsTest("es2015_default", /Expected preset to return a function./);
-    presetThrowsTest("es2015_named", /Preset must export a default export when using ES6 modules/);
-    presetThrowsTest("es5_invalid", /Unsupported preset format: string/);
   });
 });
