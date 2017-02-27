@@ -7,13 +7,13 @@
 **In**
 
 ```javascript
-/ab+c/i;
+/o+/y
 ```
 
 **Out**
 
 ```javascript
-new RegExp('ab+c', 'i');
+new RegExp("o+", "y");
 ```
 
 ## Installation
