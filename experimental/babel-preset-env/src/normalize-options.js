@@ -4,14 +4,14 @@ import defaultInclude from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import pluginFeatures from "../data/plugin-features";
 
-const hasBeenWarned = false;
-
 const validIncludesAndExcludes = [
   ...Object.keys(pluginFeatures),
   ...Object.keys(moduleTransformations).map((m) => moduleTransformations[m]),
   ...Object.keys(builtInsList),
   ...defaultInclude
 ];
+
+let hasBeenWarned = false;
 
 export const validateIncludesAndExcludes = (opts = [], type) => {
   invariant(
@@ -76,6 +76,7 @@ export default function normalizeOptions(opts) {
       `Deprecation Warning: The "whitelist" option has been deprecated in favor of "include" to
       match the newly added "exclude" option (instead of "blacklist").`
     );
+    hasBeenWarned = true;
   }
 
   invariant(
