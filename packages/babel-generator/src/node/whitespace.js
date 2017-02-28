@@ -161,13 +161,12 @@ export const nodes = {
 };
 
 /**
- * Test if Property or SpreadProperty needs whitespace.
+ * Test if Property needs whitespace.
  */
 
 nodes.ObjectProperty =
 nodes.ObjectTypeProperty =
-nodes.ObjectMethod =
-nodes.SpreadProperty = function (node: Object, parent): ?WhitespaceObject {
+nodes.ObjectMethod = function (node: Object, parent): ?WhitespaceObject {
   if (parent.properties[0] === node) {
     return {
       before: true

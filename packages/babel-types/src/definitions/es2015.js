@@ -298,7 +298,7 @@ defineType("ObjectPattern", {
   aliases: ["Pattern", "LVal"],
   fields: {
     properties: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("RestProperty", "Property")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("RestElement", "Property")))
     },
     decorators: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))

@@ -1,20 +1,20 @@
 import syntaxObjectRestSpread from "babel-plugin-syntax-object-rest-spread";
 
 export default function ({ types: t }) {
-  function hasRestProperty(path) {
-    let foundRestProperty = false;
+  function hasRestElement(path) {
+    let foundRestElement = false;
     path.traverse({
-      RestProperty() {
-        foundRestProperty = true;
+      RestElement() {
+        foundRestElement = true;
         path.stop();
       }
     });
-    return foundRestProperty;
+    return foundRestElement;
   }
 
   function hasSpread(node) {
     for (const prop of (node.properties)) {
-      if (t.isSpreadProperty(prop)) {
+      if (t.isSpreadElement(prop)) {
         return true;
       }
     }
@@ -22,7 +22,7 @@ export default function ({ types: t }) {
   }
 
   function createObjectSpread(file, props, objRef) {
-    const restProperty = props.pop();
+    const restElement = props.pop();
 
     const keys = [];
     for (const prop of props) {
@@ -34,7 +34,7 @@ export default function ({ types: t }) {
     }
 
     return [
-      restProperty.argument,
+      restElement.argument,
       t.callExpression(
         file.addHelper("objectWithoutProperties"), [
           objRef,
@@ -44,13 +44,13 @@ export default function ({ types: t }) {
     ];
   }
 
-  function replaceRestProperty(parentPath, paramPath, i, numParams) {
+  function replaceRestElement(parentPath, paramPath, i, numParams) {
     if (paramPath.isAssignmentPattern()) {
-      replaceRestProperty(parentPath, paramPath.get("left"), i, numParams);
+      replaceRestElement(parentPath, paramPath.get("left"), i, numParams);
       return;
     }
 
-    if (paramPath.isObjectPattern() && hasRestProperty(paramPath)) {
+    if (paramPath.isObjectPattern() && hasRestElement(paramPath)) {
       const uid = parentPath.scope.generateUidIdentifier("ref");
 
       const declar = t.variableDeclaration("let", [
@@ -73,7 +73,7 @@ export default function ({ types: t }) {
       Function(path) {
         const params = path.get("params");
         for (let i = 0; i < params.length; i++) {
-          replaceRestProperty(params[i].parentPath, params[i], i, params.length);
+          replaceRestElement(params[i].parentPath, params[i], i, params.length);
         }
       },
       // adapted from transform-es2015-destructuring/src/index.js#pushObjectRest
@@ -84,7 +84,7 @@ export default function ({ types: t }) {
         let insertionPath = path;
 
         path.get("id").traverse({
-          RestProperty(path) {
+          RestElement(path) {
             if (
               // skip single-property case, e.g.
               // const { ...x } = foo();
@@ -148,7 +148,7 @@ export default function ({ types: t }) {
       ExportNamedDeclaration(path) {
         const declaration = path.get("declaration");
         if (!declaration.isVariableDeclaration()) return;
-        if (!hasRestProperty(declaration)) return;
+        if (!hasRestElement(declaration)) return;
 
         const specifiers = [];
 
@@ -166,12 +166,12 @@ export default function ({ types: t }) {
       // try {} catch ({a, ...b}) {}
       CatchClause(path) {
         const paramPath = path.get("param");
-        replaceRestProperty(paramPath.parentPath, paramPath);
+        replaceRestElement(paramPath.parentPath, paramPath);
       },
       // ({a, ...b} = c);
       AssignmentExpression(path, file) {
         const leftPath = path.get("left");
-        if (leftPath.isObjectPattern() && hasRestProperty(leftPath)) {
+        if (leftPath.isObjectPattern() && hasRestElement(leftPath)) {
           const nodes = [];
 
           let ref;
@@ -212,7 +212,7 @@ export default function ({ types: t }) {
         const left = node.left;
 
         // for ({a, ...b} of []) {}
-        if (t.isObjectPattern(left) && hasRestProperty(leftPath)) {
+        if (t.isObjectPattern(left) && hasRestElement(leftPath)) {
           const temp = scope.generateUidIdentifier("ref");
 
           node.left = t.variableDeclaration("var", [
@@ -266,7 +266,7 @@ export default function ({ types: t }) {
         }
 
         for (const prop of (path.node.properties: Array)) {
-          if (t.isSpreadProperty(prop)) {
+          if (t.isSpreadElement(prop)) {
             push();
             args.push(prop.argument);
           } else {

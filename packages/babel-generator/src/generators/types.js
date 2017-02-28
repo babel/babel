@@ -12,8 +12,6 @@ export function RestElement(node: Object) {
 
 export {
   RestElement as SpreadElement,
-  RestElement as SpreadProperty,
-  RestElement as RestProperty,
 };
 
 export function ObjectExpression(node: Object) {

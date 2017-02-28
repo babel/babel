@@ -470,7 +470,7 @@ defineType("ObjectExpression", {
     properties: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("ObjectMethod", "ObjectProperty", "SpreadProperty"))
+        assertEach(assertNodeType("ObjectMethod", "ObjectProperty", "SpreadElement"))
       )
     }
   }
