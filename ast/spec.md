@@ -1152,7 +1152,7 @@ interface ExportNamedDeclaration <: ModuleDeclaration {
 }
 ```
 
-An export named declaration, e.g., `export {foo, bar};`, `export {foo} from "mod";` or `export var foo = 1;`.
+An export named declaration, e.g., `export {foo, bar};`, `export {foo} from "mod";`, `export var foo = 1;` or `export * as foo from "bar";`.
 
 _Note: Having `declaration` populated with non-empty `specifiers` or non-null `source` results in an invalid state._
 
