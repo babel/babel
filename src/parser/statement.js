@@ -941,7 +941,7 @@ pp.checkDeclaration = function(node) {
     }
   } else if (node.type === "ObjectProperty") {
     this.checkDeclaration(node.value);
-  } else if (node.type === "RestElement" || node.type === "RestProperty") {
+  } else if (node.type === "RestElement") {
     this.checkDeclaration(node.argument);
   } else if (node.type === "Identifier") {
     this.checkDuplicateExports(node, node.name);

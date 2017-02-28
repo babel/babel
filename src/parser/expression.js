@@ -739,7 +739,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
 
     if (this.hasPlugin("objectRestSpread") && this.match(tt.ellipsis)) {
       prop = this.parseSpread(isPattern ? { start: 0 } : undefined);
-      prop.type = isPattern ? "RestProperty" : "SpreadProperty";
+      prop.type = isPattern ? "RestElement" : "SpreadElement";
       if (isPattern) this.toAssignable(prop.argument, true, "object pattern");
       node.properties.push(prop);
       if (isPattern) {

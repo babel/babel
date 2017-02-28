@@ -160,7 +160,7 @@
                       }
                     },
                     {
-                      "type": "RestProperty",
+                      "type": "RestElement",
                       "start": 21,
                       "end": 29,
                       "loc": {

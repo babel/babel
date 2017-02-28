@@ -123,7 +123,7 @@
                   }
                 },
                 {
-                  "type": "RestProperty",
+                  "type": "RestElement",
                   "start": 8,
                   "end": 12,
                   "loc": {
