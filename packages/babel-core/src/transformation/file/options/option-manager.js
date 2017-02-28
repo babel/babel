@@ -268,29 +268,30 @@ export default class OptionManager {
               JSON.stringify(dirname));
           }
         }
-        const presetFactory = this.getPresetFactoryForPreset(presetLoc || preset);
+        const resolvedPreset = this.loadPreset(presetLoc || preset, options, { dirname });
 
-        preset = presetFactory(context, options, { dirname });
+        if (onResolve) onResolve(resolvedPreset, presetLoc);
 
-        if (onResolve) onResolve(preset, presetLoc);
+        return resolvedPreset;
       } catch (e) {
         if (presetLoc) {
           e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
         }
         throw e;
       }
-
-      return preset;
     });
   }
 
-  getPresetFactoryForPreset(preset) {
+  /**
+   * Tries to load one preset. The input is either the module name of the preset,
+   * a function, or an object
+   */
+  loadPreset(preset, options, meta) {
     let presetFactory = preset;
     if (typeof presetFactory === "string") {
       presetFactory = require(presetFactory);
     }
 
-    // If the imported preset is a transpiled ES2015 module
     if (typeof presetFactory === "object" && presetFactory.__esModule) {
       if (presetFactory.default) {
         presetFactory = presetFactory.default;
@@ -299,12 +300,17 @@ export default class OptionManager {
       }
     }
 
+    // Allow simple object exports
+    if (typeof presetFactory === "object") {
+      return presetFactory;
+    }
+
     if (typeof presetFactory !== "function") {
       // eslint-disable-next-line max-len
       throw new Error(`Unsupported preset format: ${typeof presetFactory}. Expected preset to return a function.`);
     }
 
-    return presetFactory;
+    return presetFactory(context, options, meta);
   }
 
   normaliseOptions() {
