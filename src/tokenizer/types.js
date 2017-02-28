@@ -143,7 +143,7 @@ export const keywords = {
   "class": new KeywordTokenType("class"),
   "extends": new KeywordTokenType("extends", { beforeExpr }),
   "export": new KeywordTokenType("export"),
-  "import": new KeywordTokenType("import"),
+  "import": new KeywordTokenType("import", { startsExpr }),
   "yield": new KeywordTokenType("yield", { beforeExpr, startsExpr }),
   "null": new KeywordTokenType("null", { startsExpr }),
   "true": new KeywordTokenType("true", { startsExpr }),

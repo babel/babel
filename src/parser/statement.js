@@ -76,7 +76,6 @@ pp.parseStatement = function (declaration, topLevel) {
 
     case tt._class:
       if (!declaration) this.unexpected();
-      this.takeDecorators(node);
       return this.parseClass(node, true);
 
     case tt._if: return this.parseIfStatement(node);
@@ -617,6 +616,7 @@ pp.parseFunctionParams = function (node) {
 
 pp.parseClass = function (node, isStatement, optionalId) {
   this.next();
+  this.takeDecorators(node);
   this.parseClassId(node, isStatement, optionalId);
   this.parseClassSuper(node);
   this.parseClassBody(node);
@@ -646,6 +646,9 @@ pp.parseClassBody = function (node) {
 
   while (!this.eat(tt.braceR)) {
     if (this.eat(tt.semi)) {
+      if (decorators.length > 0) {
+        this.raise(this.state.lastTokEnd, "Decorators must not be followed by a semicolon");
+      }
       continue;
     }
 
@@ -748,13 +751,8 @@ pp.parseClassBody = function (node) {
 };
 
 pp.parseClassProperty = function (node) {
-  const noPluginMsg = "You can only use Class Properties when the 'classProperties' plugin is enabled.";
-  if (!node.typeAnnotation && !this.hasPlugin("classProperties")) {
-    this.raise(node.start, noPluginMsg);
-  }
-
   if (this.match(tt.eq)) {
-    if (!this.hasPlugin("classProperties")) this.raise(this.state.start, noPluginMsg);
+    if (!this.hasPlugin("classProperties")) this.unexpected();
     this.next();
     node.value = this.parseMaybeAssign();
   } else {
@@ -822,8 +820,6 @@ pp.parseExport = function (node) {
     let needsSemi = false;
     if (this.eat(tt._function)) {
       expr = this.parseFunction(expr, true, false, false, true);
-    } else if (this.eatContextual("async") && this.eat(tt._function)) {
-      expr = this.parseFunction(expr, true, false, true, true);
     } else if (this.match(tt._class)) {
       expr = this.parseClass(expr, true, true);
     } else {

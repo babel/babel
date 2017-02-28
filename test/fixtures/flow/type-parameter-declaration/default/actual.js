@@ -7,10 +7,10 @@ class A<T = string> {}
 class A<T: ?string = string> {}
 class A<S, T: ?string = string> {}
 class A<S = number, T: ?string = string> {}
-(class A<T = string> {})
-(class A<T: ?string = string> {})
-(class A<S, T: ?string = string> {})
-(class A<S = number, T: ?string = string> {})
+;(class A<T = string> {})
+;(class A<T: ?string = string> {})
+;(class A<S, T: ?string = string> {})
+;(class A<S = number, T: ?string = string> {})
 declare class A<T = string> {}
 declare class A<T: ?string = string> {}
 declare class A<S, T: ?string = string> {}

@@ -15,6 +15,164 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## 6.16.0 (2017-02-23)
+
+### :rocket: New Feature
+
+***ESTree*** compatibility as plugin ([#277](https://github.com/babel/babylon/pull/277)) (Daniel Tschinder)
+
+We finally introduce a new compatibility layer for ESTree. To put babylon into ESTree-compatible mode the new plugin `estree` can be enabled. In this mode the parser will output an AST that is compliant to the specs of [ESTree](https://github.com/estree/estree/)
+
+We highly recommend everyone who uses babylon outside of babel to use this plugin. This will make it much easier for users to switch between different ESTree-compatible parsers. We so far tested several projects with different parsers and exchanged their parser to babylon and in nearly all cases it worked out of the box. Some other estree-compatible parsers include `acorn`, `esprima`, `espree`, `flow-parser`, etc.
+
+To enable `estree` mode simply add the plugin in the config:
+```json
+{
+  "plugins": [ "estree" ]
+}
+```
+
+If you want to migrate your project from non-ESTree mode to ESTree, have a look at our [Readme](https://github.com/babel/babylon/#output), where all deviations are mentioned.
+
+Add a parseExpression public method ([#213](https://github.com/babel/babylon/pull/213)) (jeromew)
+
+Babylon exports a new function to parse a single expression
+
+```js
+import { parseExpression } from 'babylon';
+
+const ast = parseExpression('x || y && z', options);
+```
+
+The returned AST will only consist of the expression. The options are the same as for `parse()`
+
+Add startLine option ([#346](https://github.com/babel/babylon/pull/346)) (Raphael Mu)
+
+A new option was added to babylon allowing to change the intial linenumber for the first line which is usually `1`.
+Changing this for example to `100` will make line `1` of the input source to be marked as line `100`, line `2` as `101`, line `3` as `102`, ...
+
+Function predicate declaration ([#103](https://github.com/babel/babylon/pull/103)) (Panagiotis Vekris)
+
+Added support for function predicates which flow introduced in version 0.33.0
+
+```js
+declare function is_number(x: mixed): boolean %checks(typeof x === "number");
+```
+
+Allow imports in declare module ([#315](https://github.com/babel/babylon/pull/315)) (Daniel Tschinder)
+
+Added support for imports within module declarations which flow introduced in version 0.37.0
+
+```js
+declare module "C" {
+  import type { DT } from "D";
+  declare export type CT = { D: DT };
+}
+```
+
+### :eyeglasses: Spec Compliancy
+
+Forbid semicolons after decorators in classes ([#352](https://github.com/babel/babylon/pull/352)) (Kevin Gibbons)
+
+This example now correctly throws an error when there is a semicolon after the decorator:
+
+```js
+class A {
+@a;
+foo(){}
+}
+```
+
+Keywords are not allowed as local specifier ([#307](https://github.com/babel/babylon/pull/307)) (Daniel Tschinder)
+
+Using keywords in imports is not allowed anymore:
+
+```js
+import { default } from "foo";
+import { a as debugger } from "foo";
+```
+
+Do not allow overwritting of primitive types ([#314](https://github.com/babel/babylon/pull/314)) (Daniel Tschinder)
+
+In flow it is now forbidden to overwrite the primitve types `"any"`, `"mixed"`, `"empty"`, `"bool"`, `"boolean"`, `"number"`, `"string"`, `"void"` and `"null"` with your own type declaration.
+
+Disallow import type { type a } from … ([#305](https://github.com/babel/babylon/pull/305)) (Daniel Tschinder)
+
+The following code now correctly throws an error
+
+```js
+import type { type a } from "foo";
+```
+
+Don't parse class properties without initializers when classProperties is disabled and Flow is enabled ([#300](https://github.com/babel/babylon/pull/300)) (Andrew Levine)
+
+Ensure that you enable the `classProperties` plugin in order to enable correct parsing of class properties. Prior to this version it was possible to parse them by enabling the `flow` plugin but this was not intended the behaviour.
+
+If you enable the flow plugin you can only define the type of the class properties, but not initialize them.
+
+Fix export default async function to be FunctionDeclaration ([#324](https://github.com/babel/babylon/pull/324)) (Daniel Tschinder)
+
+Parsing the following code now returns a `FunctionDeclaration` AST node instead of `FunctionExpression`.
+
+```js
+export default async function bar() {};
+```
+
+### :nail_care: Polish
+
+Improve error message on attempt to destructure named import ([#288](https://github.com/babel/babylon/pull/288)) (Brian Ng)
+
+### :bug: Bug Fix
+
+Fix negative number literal typeannotations ([#366](https://github.com/babel/babylon/pull/366)) (Daniel Tschinder)
+
+Ensure takeDecorators is called on exported class ([#358](https://github.com/babel/babylon/pull/358)) (Brian Ng)
+
+ESTree: correctly change literals in all cases ([#368](https://github.com/babel/babylon/pull/368)) (Daniel Tschinder)
+
+Correctly convert RestProperty to Assignable ([#339](https://github.com/babel/babylon/pull/339)) (Daniel Tschinder)
+
+Fix #321 by allowing question marks in type params ([#338](https://github.com/babel/babylon/pull/338)) (Daniel Tschinder)
+
+Fix #336 by correctly setting arrow-param ([#337](https://github.com/babel/babylon/pull/337)) (Daniel Tschinder)
+
+Fix parse error when destructuring `set` with default value ([#317](https://github.com/babel/babylon/pull/317)) (Brian Ng)
+
+Fix ObjectTypeCallProperty static ([#298](https://github.com/babel/babylon/pull/298)) (Dan Harper)
+
+
+### :house: Internal
+
+Fix generator-method-with-computed-name spec ([#360](https://github.com/babel/babylon/pull/360)) (Alex Rattray)
+
+Fix flow type-parameter-declaration test with unintended semantic ([#361](https://github.com/babel/babylon/pull/361)) (Alex Rattray)
+
+Cleanup and splitup parser functions ([#295](https://github.com/babel/babylon/pull/295)) (Daniel Tschinder)
+
+chore(package): update flow-bin to version 0.38.0 ([#313](https://github.com/babel/babylon/pull/313)) (greenkeeper[bot])
+
+Call inner function instead of 1:1 copy to plugin ([#294](https://github.com/babel/babylon/pull/294)) (Daniel Tschinder)
+
+Update eslint-config-babel to the latest version 🚀 ([#299](https://github.com/babel/babylon/pull/299)) (greenkeeper[bot])
+
+Update eslint-config-babel to the latest version 🚀 ([#293](https://github.com/babel/babylon/pull/293)) (greenkeeper[bot])
+
+devDeps: remove eslint-plugin-babel ([#292](https://github.com/babel/babylon/pull/292)) (Kai Cataldo)
+
+Correct indent eslint rule config ([#276](https://github.com/babel/babylon/pull/276)) (Daniel Tschinder)
+
+Fail tests that have expected.json and throws-option ([#285](https://github.com/babel/babylon/pull/285)) (Daniel Tschinder)
+
+### :memo: Documentation
+
+Update contributing with more test info [skip ci] ([#355](https://github.com/babel/babylon/pull/355)) (Brian Ng)
+
+Update API documentation ([#330](https://github.com/babel/babylon/pull/330)) (Timothy Gu)
+
+Added keywords to package.json ([#323](https://github.com/babel/babylon/pull/323)) (Dmytro)
+
+AST spec: fix casing of `RegExpLiteral` ([#318](https://github.com/babel/babylon/pull/318)) (Mathias Bynens)
+ 
 ## 6.15.0 (2017-01-10)
 
 ### :eyeglasses: Spec Compliancy
