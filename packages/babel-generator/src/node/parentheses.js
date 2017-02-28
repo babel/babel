@@ -34,12 +34,8 @@ export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
 export { NullableTypeAnnotation as FunctionTypeAnnotation };
 
 export function UpdateExpression(node: Object, parent: Object): boolean {
-  if (t.isMemberExpression(parent) && parent.object === node) {
-    // (foo++).test()
-    return true;
-  }
-
-  return false;
+  // (foo++).test()
+  return t.isMemberExpression(parent) && parent.object === node;
 }
 
 export function ObjectExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
@@ -48,9 +44,9 @@ export function ObjectExpression(node: Object, parent: Object, printStack: Array
 
 export function Binary(node: Object, parent: Object): boolean {
   if (
-    (t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node ||
+    ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) ||
     t.isUnaryLike(parent) ||
-    t.isMemberExpression(parent) && parent.object === node
+    (t.isMemberExpression(parent) && parent.object === node)
   ) {
     return true;
   }
@@ -64,7 +60,7 @@ export function Binary(node: Object, parent: Object): boolean {
 
     if (
       // Logical expressions with the same precedence don't need parens.
-      parentPos === nodePos && parent.right === node && !t.isLogicalExpression(parent) ||
+      (parentPos === nodePos && parent.right === node && !t.isLogicalExpression(parent)) ||
       parentPos > nodePos
     ) {
       return true;
@@ -75,17 +71,9 @@ export function Binary(node: Object, parent: Object): boolean {
 }
 
 export function BinaryExpression(node: Object, parent: Object): boolean {
-  if (
-    node.operator === "in" &&
-    // let i = (1 in []);
-    (t.isVariableDeclarator(parent) ||
-    // for ((1 in []);;);
-    t.isFor(parent))
-  ) {
-    return true;
-  }
-
-  return false;
+  // let i = (1 in []);
+  // for ((1 in []);;);
+  return node.operator === "in" && (t.isVariableDeclarator(parent) || t.isFor(parent));
 }
 
 export function SequenceExpression(node: Object, parent: Object): boolean {
@@ -96,13 +84,13 @@ export function SequenceExpression(node: Object, parent: Object): boolean {
     // dictates that e.g. i++, j++ should not be wrapped with
     // parentheses.
     t.isForStatement(parent) ||
-    t.isExpressionStatement(parent) && parent.expression === node ||
-    t.isReturnStatement(parent) ||
     t.isThrowStatement(parent) ||
-    t.isSwitchStatement(parent) && parent.discriminant === node ||
-    t.isWhileStatement(parent) && parent.test === node ||
-    t.isIfStatement(parent) && parent.test === node ||
-    t.isForInStatement(parent) && parent.right === node
+    t.isReturnStatement(parent) ||
+    (t.isIfStatement(parent) && parent.test === node) ||
+    (t.isWhileStatement(parent) && parent.test === node) ||
+    (t.isForInStatement(parent) && parent.right === node) ||
+    (t.isSwitchStatement(parent) && parent.discriminant === node) ||
+    (t.isExpressionStatement(parent) && parent.expression === node)
   ) {
     return false;
   }
@@ -129,15 +117,9 @@ export function ClassExpression(node: Object, parent: Object, printStack: Array<
 }
 
 export function UnaryLike(node: Object, parent: Object): boolean {
-  if (
-    t.isMemberExpression(parent, { object: node }) ||
-    t.isCallExpression(parent, { callee: node }) ||
-    t.isNewExpression(parent, { callee: node })
-  ) {
-    return true;
-  }
-
-  return false;
+  return t.isMemberExpression(parent, { object: node }) ||
+         t.isCallExpression(parent, { callee: node }) ||
+         t.isNewExpression(parent, { callee: node });
 }
 
 export function FunctionExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
@@ -202,7 +184,7 @@ function isFirstInStatement(printStack: Array<Object>, {
 
     if (
       t.isCallExpression(parent, { callee: node }) ||
-      t.isSequenceExpression(parent) && parent.expressions[0] === node ||
+      (t.isSequenceExpression(parent) && parent.expressions[0] === node) ||
       t.isMemberExpression(parent, { object: node }) ||
       t.isConditional(parent, { test: node }) ||
       t.isBinary(parent, { left: node }) ||
