@@ -61,23 +61,3 @@ defineType("ExportNamespaceSpecifier", {
     }
   }
 });
-
-defineType("RestProperty", {
-  visitor: ["argument"],
-  aliases: ["UnaryLike"],
-  fields: {
-    argument: {
-      validate: assertNodeType("LVal")
-    }
-  }
-});
-
-defineType("SpreadProperty", {
-  visitor: ["argument"],
-  aliases: ["UnaryLike"],
-  fields: {
-    argument: {
-      validate: assertNodeType("Expression")
-    }
-  }
-});

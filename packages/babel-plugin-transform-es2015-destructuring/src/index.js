@@ -140,7 +140,7 @@ export default function ({ types: t }) {
         if (i >= spreadPropIndex) break;
 
         // ignore other spread properties
-        if (t.isRestProperty(prop)) continue;
+        if (t.isRestElement(prop)) continue;
 
         let key = prop.key;
         if (t.isIdentifier(key) && !prop.computed) key = t.stringLiteral(prop.key.name);
@@ -192,7 +192,7 @@ export default function ({ types: t }) {
 
       for (let i = 0; i < pattern.properties.length; i++) {
         const prop = pattern.properties[i];
-        if (t.isRestProperty(prop)) {
+        if (t.isRestElement(prop)) {
           this.pushObjectRest(pattern, objRef, prop, i);
         } else {
           this.pushObjectProperty(prop, objRef);

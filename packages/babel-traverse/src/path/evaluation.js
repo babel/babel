@@ -233,7 +233,7 @@ export function evaluate(): { confident: boolean; value: any } {
       const obj = {};
       const props: Array<NodePath> = path.get("properties");
       for (const prop of props) {
-        if (prop.isObjectMethod() || prop.isSpreadProperty()) {
+        if (prop.isObjectMethod() || prop.isSpreadElement()) {
           return deopt(prop);
         }
         const keyPath = prop.get("key");
