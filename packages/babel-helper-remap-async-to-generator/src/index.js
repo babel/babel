@@ -148,9 +148,17 @@ function plainFunction(path: NodePath, callId: Object) {
     if (path.parentPath.isExportDefaultDeclaration()) {
       // change the path type so that replaceWith() does not wrap
       // the identifier into an expressionStatement
-      path.type = "FunctionExpression";
       path.parentPath.insertBefore(declar);
-      path.replaceWith(t.identifier(asyncFnId.name));
+      path.parentPath.replaceWith(
+        t.exportNamedDeclaration(null,
+          [
+            t.exportSpecifier(
+              t.identifier(asyncFnId.name),
+              t.identifier("default")
+            )
+          ]
+        )
+      );
       return;
     }
 
