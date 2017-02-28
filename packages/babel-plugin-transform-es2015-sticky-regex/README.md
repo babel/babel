@@ -2,6 +2,20 @@
 
 > Compile ES2015 sticky regex to an ES5 RegExp constructor
 
+## Examples
+
+**In**
+```javascript
+const a = /o+/y;
+```
+
+**Out**
+```javascript
+"use strict";
+
+var a = new RegExp("o+", "y");
+```
+
 ## Installation
 
 ```sh

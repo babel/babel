@@ -8,6 +8,42 @@ Built-in classes such as `Date`, `Array`, `DOM` etc cannot be properly subclasse
 due to limitations in ES5 (for the [es2015-classes](http://babeljs.io/docs/plugins/transform-es2015-classes) plugin).
 You can try to use [babel-plugin-transform-builtin-extend](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) based on `Object.setPrototypeOf` and `Reflect.construct`, but it also has some limitations.
 
+## Examples
+
+**In**
+```javascript
+class Test {
+  constructor(name) {
+    this.name = name;
+  }
+  
+  logger () {
+    console.log("Hello", this.name);
+  }
+}
+```
+
+**Out**
+```javascript
+"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Test = function () {
+  function Test(name) {
+    _classCallCheck(this, Test);
+
+    this.name = name;
+  }
+
+  Test.prototype.logger = function logger() {
+    console.log("Hello", this.name);
+  };
+
+  return Test;
+}();
+```
+
 ## Installation
 
 ```sh
