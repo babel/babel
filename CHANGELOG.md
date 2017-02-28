@@ -15,6 +15,48 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## 7.0.0-beta.3 (2017-02-28)
+
+- [7.0] Change RestProperty/SpreadProperty to RestElement/SpreadElement (#384)
+- Merge changes from 6.x
+
+## 7.0.0-beta.2 (2017-02-20)
+
+- estree: correctly change literals in all cases (#368) (Daniel Tschinder)
+
+## 7.0.0-beta.1 (2017-02-20)
+
+- Fix negative number literal typeannotations (#366) (Daniel Tschinder)
+- Update contributing with more test info [skip ci] (#355) (Brian Ng)
+
+## 7.0.0-beta.0 (2017-02-15)
+
+- Reintroduce Variance node (#333) (Daniel Tschinder)
+- Rename NumericLiteralTypeAnnotation to NumberLiteralTypeAnnotation (#332) (Charles Pick)
+- [7.0] Remove ForAwaitStatement, add await flag to ForOfStatement (#349) (Brandon Dail)
+- chore(package): update ava to version 0.18.0 (#345) (greenkeeper[bot])
+- chore(package): update babel-plugin-istanbul to version 4.0.0 (#350) (greenkeeper[bot])
+- Change location of ObjectTypeIndexer to match flow (#228) (Daniel Tschinder)
+- Rename flow AST Type ExistentialTypeParam to ExistsTypeAnnotation (#322) (Toru Kobayashi)
+- Revert "Temporary rollback for erroring on trailing comma with spread (#154)" (#290) (Daniel Tschinder)
+- Remove classConstructorCall plugin (#291) (Brian Ng)
+- Update yarn.lock (Daniel Tschinder)
+- Update cross-env to 3.x (Daniel Tschinder)
+- [7.0] Remove node 0.10, 0.12 and 5 from Travis (#284) (Sergey Rubanov)
+- Remove `String.fromCodePoint` shim (#279) (Mathias Bynens)
+
+## 6.16.1 (2017-02-23)
+
+### :bug: Regression
+
+- Revert "Fix export default async function to be FunctionDeclaration" ([#375](https://github.com/babel/babylon/pull/375))
+
+Need to modify Babel for this AST node change, so moving to 7.0.
+
+- Revert "Don't parse class properties without initializers when classProperties plugin is disabled, and Flow is enabled" ([#376](https://github.com/babel/babylon/pull/376))
+
+[react-native](https://github.com/facebook/react-native/issues/12542) broke with this so we reverted.
+
 ## 6.16.0 (2017-02-23)
 
 ### :rocket: New Feature
