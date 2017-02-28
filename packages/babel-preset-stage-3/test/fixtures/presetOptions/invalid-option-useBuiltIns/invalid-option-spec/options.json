@@ -1,0 +1,4 @@
+{
+  "presets": [["stage-0", { "spec": "invalidOption" }]],
+  "throws": "Preset stage-0 'spec' option must be a boolean."
+}
