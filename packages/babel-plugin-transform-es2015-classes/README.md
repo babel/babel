@@ -11,6 +11,7 @@ You can try to use [babel-plugin-transform-builtin-extend](https://github.com/lo
 ## Examples
 
 **In**
+
 ```javascript
 class Test {
   constructor(name) {
@@ -24,9 +25,8 @@ class Test {
 ```
 
 **Out**
-```javascript
-"use strict";
 
+```javascript
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Test = function () {

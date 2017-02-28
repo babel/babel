@@ -5,6 +5,7 @@
 ## Examples
 
 **In**
+
 ```javascript
 {
   function name (n) {
@@ -16,6 +17,7 @@ name("Steve");
 ```
 
 **Out**
+
 ```javascript
 repl: name is not defined
 ```
