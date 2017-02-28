@@ -5,14 +5,14 @@
 ## Examples
 
 **In**
+
 ```javascript
 const a = /o+/y;
 ```
 
 **Out**
-```javascript
-"use strict";
 
+```javascript
 var a = new RegExp("o+", "y");
 ```
 

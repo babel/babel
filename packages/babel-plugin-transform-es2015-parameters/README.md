@@ -11,6 +11,7 @@ This plugin transforms ES2015 parameters to ES5, this includes:
 ## Examples
 
 **In**
+
 ```javascript
 function test(x = "hello", { a, b }, ...args) {
   console.log(x, a, b, args);
@@ -18,9 +19,8 @@ function test(x = "hello", { a, b }, ...args) {
 ```
 
 **Out**
-```javascript
-"use strict";
 
+```javascript
 function test() {
   var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "hello";
   var _ref = arguments[1];

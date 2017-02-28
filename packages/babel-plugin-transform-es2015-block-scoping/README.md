@@ -5,13 +5,27 @@
 ## Examples
 
 **In**
+
 ```javascript
-let msg = "Hello World!";
+for (let i=1; i<=10; i++) {
+    setTimeout( function logger(){
+        console.log( i ); // block scope for closure
+    }, i*1000 );
+}
 ```
 
 **Out**
+
 ```javascript
-var msg = "Hello World!";
+var _loop = function _loop(i) {
+    setTimeout(function logger() {
+        console.log(i);
+    }, i * 1000);
+};
+
+for (var i = 1; i <= 10; i++) {
+    _loop(i);
+}
 ```
 
 ## Installation
