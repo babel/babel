@@ -120,3 +120,33 @@ export const Flow = {
     }
   }
 };
+
+// TODO: 7.0 Backwards Compat
+export const RestProperty = {
+  types: ["RestElement"],
+  checkPath(path: NodePath): boolean {
+    return path.parentPath && path.parentPath.isObjectPattern();
+  },
+};
+
+export const SpreadProperty = {
+  types: ["RestElement"],
+  checkPath(path: NodePath): boolean {
+    return path.parentPath && path.parentPath.isObjectExpression();
+  },
+};
+
+export const ExistentialTypeParam = {
+  types: ["ExistsTypeAnnotation"]
+};
+
+export const NumericLiteralTypeAnnotation = {
+  types: ["NumberLiteralTypeAnnotation"]
+};
+
+export const ForAwaitStatement = {
+  types: ["ForOfStatement"],
+  checkPath({ node }: NodePath): boolean {
+    return node.await === true;
+  }
+};
