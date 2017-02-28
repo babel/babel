@@ -61,7 +61,7 @@ pp.getExpression = function() {
 // the AST node that the inner parser gave them in another node.
 
 // Parse a full expression. The optional arguments are used to
-// forbid the `in` operator (in for loops initalization expressions)
+// forbid the `in` operator (in for loops initialization expressions)
 // and provide reference for storing '=' operator inside shorthand
 // property assignment in contexts where both object expression
 // and object pattern might appear (so it's possible to raise
@@ -1095,7 +1095,11 @@ pp.parseAwait = function (node) {
 pp.parseYield = function () {
   const node = this.startNode();
   this.next();
-  if (this.match(tt.semi) || this.canInsertSemicolon() || (!this.match(tt.star) && !this.state.type.startsExpr)) {
+  if (
+    this.match(tt.semi) ||
+    this.canInsertSemicolon() ||
+    (!this.match(tt.star) && !this.state.type.startsExpr)
+  ) {
     node.delegate = false;
     node.argument = null;
   } else {
