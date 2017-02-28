@@ -1,10 +1,8 @@
 import browserslist from "browserslist";
-import invariant from "invariant";
 import builtInsList from "../data/built-ins.json";
 import defaultInclude from "./default-includes";
-import { electronToChromium } from "electron-to-chromium";
 import moduleTransformations from "./module-transformations";
-import normalizeOptions from "./normalize-options.js";
+import normalizeOptions, { getElectronChromeVersion } from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
 import transformPolyfillRequirePlugin from "./transform-polyfill-require-plugin";
 
@@ -102,14 +100,9 @@ export const getTargets = (targets = {}) => {
     targetOps.node = getCurrentNodeVersion();
   }
 
-  // Replace Electron versions with their Chrome equivalent
+  // Replace Electron target with its Chrome equivalent
   if (targetOps.electron) {
-    const electronChromeVersion = parseInt(electronToChromium(targetOps.electron), 10);
-
-    invariant(
-      !!electronChromeVersion,
-      `Electron version ${targetOps.electron} is either too old or too new`
-    );
+    const electronChromeVersion = getElectronChromeVersion(targetOps.electron);
 
     targetOps.chrome = targetOps.chrome
       ? Math.min(targetOps.chrome, electronChromeVersion)

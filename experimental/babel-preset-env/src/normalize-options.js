@@ -1,4 +1,5 @@
 import invariant from "invariant";
+import { electronToChromium } from "electron-to-chromium";
 import builtInsList from "../data/built-ins.json";
 import defaultInclude from "./default-includes";
 import moduleTransformations from "./module-transformations";
@@ -67,6 +68,17 @@ export const validateModulesOption = (modulesOpt = "commonjs") => {
   );
 
   return modulesOpt;
+};
+
+export const getElectronChromeVersion = (electronVersion) => {
+  const electronChromeVersion = parseInt(electronToChromium(electronVersion), 10);
+
+  invariant(
+    !!electronChromeVersion,
+    `Electron version ${electronVersion} is either too old or too new`
+  );
+
+  return electronChromeVersion;
 };
 
 export default function normalizeOptions(opts) {
