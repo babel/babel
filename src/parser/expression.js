@@ -595,7 +595,7 @@ pp.parseParenAndDistinguishExpression = function (startPos, startLoc, canBeArrow
       const spreadNodeStartPos = this.state.start;
       const spreadNodeStartLoc = this.state.startLoc;
       spreadStart = this.state.start;
-      exprList.push(this.parseParenItem(this.parseRest(), spreadNodeStartLoc, spreadNodeStartPos));
+      exprList.push(this.parseParenItem(this.parseRest(), spreadNodeStartPos, spreadNodeStartLoc));
       break;
     } else {
       exprList.push(this.parseMaybeAssign(false, refShorthandDefaultPos, this.parseParenItem, refNeedsArrowPos));

@@ -940,14 +940,14 @@ export default function (instance) {
   });
 
   instance.extend("parseParenItem", function (inner) {
-    return function (node, startLoc, startPos) {
-      node = inner.call(this, node, startLoc, startPos);
+    return function (node, startPos, startLoc) {
+      node = inner.call(this, node, startPos, startLoc);
       if (this.eat(tt.question)) {
         node.optional = true;
       }
 
       if (this.match(tt.colon)) {
-        const typeCastNode = this.startNodeAt(startLoc, startPos);
+        const typeCastNode = this.startNodeAt(startPos, startLoc);
         typeCastNode.expression = node;
         typeCastNode.typeAnnotation = this.flowParseTypeAnnotation();
 
