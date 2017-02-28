@@ -1,2 +1,5 @@
 scripts
-node_modules
+src
+test
+*.log
+yarn.lock

@@ -70,7 +70,7 @@ publish:
 bootstrap:
 	make clean-all
 	yarn
-	./node_modules/.bin/lerna bootstrap
+	./node_modules/.bin/lerna bootstrap --npm-client=yarn
 	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js

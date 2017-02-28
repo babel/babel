@@ -21,10 +21,6 @@
     "babel-core",
     "compiler"
   ],
-  "scripts": {
-    "bench": "make bench",
-    "test": "make test"
-  },
   "dependencies": {
     "babel-code-frame": "^6.22.0",
     "babel-generator": "^6.23.0",
