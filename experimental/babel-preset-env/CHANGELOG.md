@@ -2,6 +2,8 @@
 
 ## v.1.1.11 (2017-03-01)
 
+This release primarily upgrades `compat-table`, which adds support for async on Node 7.6!
+
 ### :bug: Bug Fix
 
 - Fix hasBeenWarned condition. ([#175](https://github.com/babel/babel-preset-env/pull/175)) (@yavorsky)
