@@ -29,9 +29,7 @@ Modules/strict mode
 Please check out [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) for React/JSX issues
 - `no-unused-vars` with jsx
 
-Please check out [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel) for other issues such as (and more):
-- `generator-star` with async/await functions [#78](https://github.com/babel/babel-eslint/issues/78)
-- `object-shorthand` with spread operator [#131](https://github.com/babel/babel-eslint/issues/131)
+Please check out [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel) for other issues
 
 ## How does it work?
 
