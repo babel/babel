@@ -1,5 +1,26 @@
 # Changelog
 
+## v.1.1.11 (2017-03-01)
+
+### :bug: Bug Fix
+
+- Fix hasBeenWarned condition. ([#175](https://github.com/babel/babel-preset-env/pull/175)) (@yavorsky)
+
+### :memo: Documentation
+
+- Add yarn example. ([#174](https://github.com/babel/babel-preset-env/pull/174)) (@yavorsky)
+
+### :house: Internal
+
+- Bump compat-table ([#177](https://github.com/babel/babel-preset-env/pull/177)) (@existentialism)
+- Add electron version exception test ([#176](https://github.com/babel/babel-preset-env/pull/176)) (@existentialism)
+
+## v1.1.10 (2017-02-24)
+
+### :bug: Bug Fix
+
+- Drop use of lodash/intersection from checkDuplicateIncludeExcludes ([#173](https://github.com/babel/babel-preset-env/pull/173)) (@existentialism)
+
 ## v1.1.9 (2017-02-24)
 
 ### :bug: Bug Fix
