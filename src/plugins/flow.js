@@ -1381,8 +1381,7 @@ export default function (instance) {
 
           arrowExpression = inner.apply(this, args);
           arrowExpression.typeParameters = typeParameters;
-          arrowExpression.start = typeParameters.start;
-          arrowExpression.loc.start = typeParameters.loc.start;
+          this.resetStartLocationFromNode(arrowExpression, typeParameters);
         } catch (err) {
           throw jsxError || err;
         }

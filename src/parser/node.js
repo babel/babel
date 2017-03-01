@@ -1,5 +1,5 @@
 import Parser from "./index";
-import { SourceLocation } from "../util/location";
+import { SourceLocation, type Position } from "../util/location";
 
 // Start an AST node, attaching a start offset.
 
@@ -7,12 +7,13 @@ const pp = Parser.prototype;
 const commentKeys = ["leadingComments", "trailingComments", "innerComments"];
 
 class Node {
-  constructor(pos?: number, loc?: number, filename?: string) {
+  constructor(parser?: Parser, pos?: number, loc?: Position) {
     this.type = "";
     this.start = pos;
     this.end = 0;
     this.loc = new SourceLocation(loc);
-    if (filename) this.loc.filename = filename;
+    if (parser && parser.options.ranges) this.range = [pos, 0];
+    if (parser && parser.filename) this.loc.filename = parser.filename;
   }
 
   type: string;
@@ -34,17 +35,18 @@ class Node {
 }
 
 pp.startNode = function () {
-  return new Node(this.state.start, this.state.startLoc, this.filename);
+  return new Node(this, this.state.start, this.state.startLoc);
 };
 
 pp.startNodeAt = function (pos, loc) {
-  return new Node(pos, loc, this.filename);
+  return new Node(this, pos, loc);
 };
 
 function finishNodeAt(node, type, pos, loc) {
   node.type = type;
   node.end = pos;
   node.loc.end = loc;
+  if (this.options.ranges) node.range[1] = pos;
   this.processComment(node);
   return node;
 }
@@ -59,4 +61,16 @@ pp.finishNode = function (node, type) {
 
 pp.finishNodeAt = function (node, type, pos, loc) {
   return finishNodeAt.call(this, node, type, pos, loc);
+};
+
+
+/**
+ * Reset the start location of node to the start location of locationNode
+ */
+pp.resetStartLocationFromNode = function (node, locationNode) {
+  node.start = locationNode.start;
+  node.loc.start = locationNode.loc.start;
+  if (this.options.ranges) node.range[0] = locationNode.range[0];
+
+  return node;
 };

@@ -4,14 +4,14 @@ import { lineBreakG } from "./whitespace";
 // `startLoc` and `endLoc` properties.
 
 export class Position {
-  constructor(line, col) {
+  constructor(line: number, col: number) {
     this.line = line;
     this.column = col;
   }
 }
 
 export class SourceLocation {
-  constructor(start, end) {
+  constructor(start: Position, end?: Position) {
     this.start = start;
     this.end = end;
   }

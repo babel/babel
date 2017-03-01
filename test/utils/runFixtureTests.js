@@ -61,8 +61,6 @@ function save(test, ast) {
 
 function runTest(test, parseFunction) {
   var opts = test.options;
-  opts.locations = true;
-  opts.ranges = true;
 
   if (opts.throws && test.expect.code) {
     throw new Error("File expected.json exists although options specify throws. Remove expected.json.");
