@@ -176,6 +176,7 @@
   "transform-async-to-generator": {
     "chrome": 55,
     "firefox": 52,
+    "node": 7.6,
     "opera": 42
   },
   "syntax-trailing-function-commas": {

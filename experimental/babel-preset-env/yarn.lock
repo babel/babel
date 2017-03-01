@@ -292,15 +292,7 @@ babel-helper-explode-class@^6.8.0:
     babel-traverse "^6.18.0"
     babel-types "^6.18.0"
 
-babel-helper-fixtures@^6.20.0:
-  version "6.20.0"
-  resolved "https://registry.yarnpkg.com/babel-helper-fixtures/-/babel-helper-fixtures-6.20.0.tgz#b794c55077e4d5b969604a98cecad0068a7f16e8"
-  dependencies:
-    babel-runtime "^6.20.0"
-    lodash "^4.2.0"
-    try-resolve "^1.0.0"
-
-babel-helper-fixtures@^6.22.0:
+babel-helper-fixtures@^6.20.0, babel-helper-fixtures@^6.22.0:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-helper-fixtures/-/babel-helper-fixtures-6.22.0.tgz#3cb9eaf5feae29f001d2754ab43b14a9dfa304ff"
   dependencies:
@@ -825,14 +817,14 @@ babel-register@^6.14.0, babel-register@^6.18.0:
     mkdirp "^0.5.1"
     source-map-support "^0.4.2"
 
-babel-runtime@^6.0.0, babel-runtime@^6.11.6, babel-runtime@^6.18.0, babel-runtime@^6.20.0, babel-runtime@^6.9.0, babel-runtime@^6.9.1:
+babel-runtime@^6.0.0, babel-runtime@^6.11.6, babel-runtime@^6.20.0, babel-runtime@^6.9.0:
   version "6.20.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.20.0.tgz#87300bdcf4cd770f09bf0048c64204e17806d16f"
   dependencies:
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
 
-babel-runtime@^6.22.0:
+babel-runtime@^6.18.0, babel-runtime@^6.22.0, babel-runtime@^6.9.1:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.22.0.tgz#1cf8b4ac67c77a4ddb0db2ae1f74de52ac4ca611"
   dependencies:
@@ -1075,37 +1067,9 @@ commoner@^0.10.1:
     q "^1.1.2"
     recast "^0.11.17"
 
-compat-table@kangax/compat-table#688097f1ce623cb113640cc9108fe04fc418b823:
+compat-table@kangax/compat-table#291c758ac618fff6bf5bb2113a5aa046189f93e2:
   version "0.0.0"
-  resolved "https://codeload.github.com/kangax/compat-table/tar.gz/688097f1ce623cb113640cc9108fe04fc418b823"
-  dependencies:
-    babel-core latest
-    babel-polyfill latest
-    babel-preset-es2015 latest
-    babel-preset-es2016 latest
-    babel-preset-es2017 latest
-    babel-preset-stage-0 latest
-    chalk "^1.1.3"
-    cheerio "^0.20.0"
-    closurecompiler latest
-    core-js latest
-    es5-shim latest
-    es6-shim latest
-    es6-transpiler latest
-    es7-shim latest
-    esdown latest
-    espree latest
-    esprima latest
-    jshint latest
-    jstransform latest
-    lodash.pickby "^4.6.0"
-    object.assign "^4.0.4"
-    traceur latest
-    typescript latest
-
-compat-table@kangax/compat-table#b0cec63ea21f3a7788a8eececcb918de903b7fc5:
-  version "0.0.0"
-  resolved "https://codeload.github.com/kangax/compat-table/tar.gz/b0cec63ea21f3a7788a8eececcb918de903b7fc5"
+  resolved "https://codeload.github.com/kangax/compat-table/tar.gz/291c758ac618fff6bf5bb2113a5aa046189f93e2"
   dependencies:
     babel-core latest
     babel-polyfill latest

@@ -69,6 +69,7 @@ const envMap = {
   iojs: "node3.3",
   node64: "node6",
   node65: "node6.5",
+  node76: "node7.6",
   android40: "android4.0",
   android41: "android4.1",
   android42: "android4.2",
