@@ -3,9 +3,11 @@
 **babel-eslint** allows you to lint **ALL** valid Babel code with the fantastic
 [ESLint](https://github.com/eslint/eslint).
 
-#### Note: You don't need to use babel-eslint if you are using ES2015 (ES6), ES2016 (ES7) or ES2017 (ES8). ESLint actually supports ES2015/ES2016/ES2017, JSX, and object rest/spread by default now.
+### Why Use babel-eslint
 
-##### At the moment, you'll need it if you use stuff like class properties, decorators, types.
+You only need to use babel-eslint if you are using types (Flow) or experimental features not supported in ESLint itself yet. Otherwise try the default parser (you don't have to use it just because you are using Babel).
+
+---
 
 > If there is an issue, first check if it can be reproduced with the regular parser or with the latest versions of `eslint` and `babel-eslint`!
 
@@ -43,21 +45,19 @@ It just needs to export a `parse` method that takes in a string of code and outp
 
 ## Usage
 
+> ESLint 1.x | Use <= 5.x
+
+> ESLint 2.x | Use >= 6.x
+
 ### Supported ESLint versions
 
 ESLint | babel-eslint
 ------------ | -------------
-1.x | <= 5.x
-2.x | >= 6.x
 3.x | >= 6.x
 
 ### Install
 
 ```sh
-$ npm install eslint@1.x babel-eslint@5 --save-dev
-
-$ npm install eslint@2.x babel-eslint@6 --save-dev
-
 $ npm install eslint@3.x babel-eslint@6 --save-dev
 ```
 
