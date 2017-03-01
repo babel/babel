@@ -8,7 +8,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-template",
   "main": "lib/index.js",
   "dependencies": {
-    "babylon": "7.0.0-beta.3",
+    "babylon": "7.0.0-beta.4",
     "babel-traverse": "^6.23.0",
     "babel-types": "^6.23.0",
     "lodash": "^4.2.0"

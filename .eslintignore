@@ -6,6 +6,7 @@ packages/*/node_modules
 packages/*/lib
 packages/*/dist
 packages/*/test/fixtures
+packages/*/test/tmp
 vendor
 _babel.github.io
 Gulpfile.js
