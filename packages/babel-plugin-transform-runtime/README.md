@@ -50,14 +50,14 @@ Without options:
 
 With options:
 
-```js
+```json
 {
   "plugins": [
     ["transform-runtime", {
-      "helpers": false, // defaults to true
-      "polyfill": false, // defaults to true
-      "regenerator": true, // defaults to true
-      "moduleName": "babel-runtime" // defaults to "babel-runtime"
+      "helpers": false,
+      "polyfill": false,
+      "regenerator": true,
+      "moduleName": "babel-runtime"
     }]
   ]
 }
@@ -76,6 +76,24 @@ require("babel-core").transform("code", {
   plugins: ["transform-runtime"]
 });
 ```
+
+## Options
+
+### `helpers`
+
+`boolean`, defaults to `true`.
+
+### `polyfill`
+
+`boolean`, defaults to `true`.
+
+### `regenerator`
+
+`boolean`, defaults to `true`.
+
+### `moduleName`
+
+`string`, defaults to `"babel-runtime"`.
 
 ## Technical details
 
