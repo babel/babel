@@ -1,6 +1,6 @@
-let assert = require("assert");
-let chalk = require("chalk");
-let codeFrame = require("..");
+import assert from "assert";
+import chalk from "chalk";
+import codeFrame from "..";
 
 describe("babel-code-frame", function () {
   it("basic usage", function () {
@@ -109,7 +109,7 @@ describe("babel-code-frame", function () {
 
   it("opts.highlightCode", function () {
     const rawLines = "console.log('babel')";
-    const result = codeFrame(rawLines, 1, 9, {highlightCode: true});
+    const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
     const stripped = chalk.stripColor(result);
     assert.ok(result.length > stripped.length);
     assert.equal(stripped, [
@@ -119,7 +119,7 @@ describe("babel-code-frame", function () {
   });
 
   it("opts.linesAbove", function () {
-    let rawLines = [
+    const rawLines = [
       "/**",
       " * Sums two numbers.",
       " *",
@@ -143,7 +143,7 @@ describe("babel-code-frame", function () {
   });
 
   it("opts.linesBelow", function () {
-    let rawLines = [
+    const rawLines = [
       "/**",
       " * Sums two numbers.",
       " *",
@@ -166,7 +166,7 @@ describe("babel-code-frame", function () {
   });
 
   it("opts.linesAbove and opts.linesBelow", function () {
-    let rawLines = [
+    const rawLines = [
       "/**",
       " * Sums two numbers.",
       " *",
@@ -188,19 +188,21 @@ describe("babel-code-frame", function () {
   });
 
   it("opts.forceColor", function() {
-    let marker = chalk.red.bold;
-    let gutter = chalk.grey;
+    const marker = chalk.red.bold;
+    const gutter = chalk.grey;
 
-    let rawLines = [
+    const rawLines = [
       "",
       "",
       "",
       ""
     ].join("\n");
-    assert.equal(codeFrame(rawLines, 3, null, { linesAbove: 1, linesBelow: 1, forceColor: true }), chalk.reset([
-      " " + gutter(" 2 | "),
-      marker(">") + gutter(" 3 | "),
-      " " + gutter(" 4 | ")
-    ].join("\n")));
+    assert.equal(codeFrame(rawLines, 3, null, { linesAbove: 1, linesBelow: 1, forceColor: true }),
+      chalk.reset([
+        " " + gutter(" 2 | "),
+        marker(">") + gutter(" 3 | "),
+        " " + gutter(" 4 | ")
+      ].join("\n"))
+    );
   });
 });

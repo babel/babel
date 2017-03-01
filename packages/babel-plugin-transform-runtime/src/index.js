@@ -9,7 +9,7 @@ export default function ({ types: t }) {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
-  let HELPER_BLACKLIST = ["interopRequireWildcard", "interopRequireDefault"];
+  const HELPER_BLACKLIST = ["interopRequireWildcard", "interopRequireDefault"];
 
   return {
     pre(file) {
@@ -30,7 +30,7 @@ export default function ({ types: t }) {
 
     visitor: {
       ReferencedIdentifier(path, state) {
-        let { node, parent, scope } = path;
+        const { node, parent, scope } = path;
 
         if (node.name === "regeneratorRuntime" && state.opts.regenerator !== false) {
           path.replaceWith(state.get("regeneratorIdentifier"));
@@ -59,7 +59,7 @@ export default function ({ types: t }) {
         // we can't compile this
         if (path.node.arguments.length) return;
 
-        let callee = path.node.callee;
+        const callee = path.node.callee;
         if (!t.isMemberExpression(callee)) return;
         if (!callee.computed) return;
         if (!path.get("callee.property").matchesPattern("Symbol.iterator")) return;
@@ -99,15 +99,15 @@ export default function ({ types: t }) {
           if (state.opts.polyfill === false) return;
           if (!path.isReferenced()) return;
 
-          let { node } = path;
-          let obj = node.object;
-          let prop = node.property;
+          const { node } = path;
+          const obj = node.object;
+          const prop = node.property;
 
           if (!t.isReferenced(obj, node)) return;
           if (node.computed) return;
           if (!has(definitions.methods, obj.name)) return;
 
-          let methods = definitions.methods[obj.name];
+          const methods = definitions.methods[obj.name];
           if (!has(methods, prop.name)) return;
 
           // doesn't reference the global
@@ -115,7 +115,7 @@ export default function ({ types: t }) {
 
           // special case Object.defineProperty to not use core-js when using string keys
           if (obj.name === "Object" && prop.name === "defineProperty" && path.parentPath.isCallExpression()) {
-            let call = path.parentPath.node;
+            const call = path.parentPath.node;
             if (call.arguments.length === 3 && t.isLiteral(call.arguments[1])) return;
           }
 
@@ -131,8 +131,8 @@ export default function ({ types: t }) {
           if (state.opts.polyfill === false) return;
           if (!path.isReferenced()) return;
 
-          let { node } = path;
-          let obj = node.object;
+          const { node } = path;
+          const obj = node.object;
 
           if (!has(definitions.builtins, obj.name)) return;
           if (path.scope.getBindingIdentifier(obj.name)) return;

@@ -8,8 +8,9 @@ function render() {
 
 function render() {
   const bar = "bar",
-        renderFoo = () => <foo bar={bar} baz={baz} />,
-        baz = "baz";
+        renderFoo = () => _ref2,
+        baz = "baz",
+        _ref2 = <foo bar={bar} baz={baz} />;
 
   return renderFoo();
 }

@@ -20,7 +20,7 @@ export default new Plugin({
       exit({ node }) {
         let hasChange = false;
         for (let i = 0; i < node.body.length; i++) {
-          let bodyNode = node.body[i];
+          const bodyNode = node.body[i];
           if (bodyNode && bodyNode._blockHoist != null) {
             hasChange = true;
             break;

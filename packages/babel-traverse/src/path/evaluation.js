@@ -1,11 +1,6 @@
-/* eslint indent: 0 */
-/* eslint max-len: 0 */
-
 import type NodePath from "./index";
 
 // This file contains Babels metainterpreter that can evaluate static code.
-
-/* eslint eqeqeq: 0 */
 
 const VALID_CALLEES = ["String", "Number", "Math"];
 const INVALID_METHODS = ["random"];
@@ -29,7 +24,7 @@ const INVALID_METHODS = ["random"];
  */
 
 export function evaluateTruthy(): boolean {
-  let res = this.evaluate();
+  const res = this.evaluate();
   if (res.confident) return !!res.value;
 }
 
@@ -51,7 +46,7 @@ export function evaluateTruthy(): boolean {
 export function evaluate(): { confident: boolean; value: any } {
   let confident = true;
   let deoptPath: ?NodePath;
-  let seen = new Map;
+  const seen = new Map;
 
   function deopt(path) {
     if (!confident) return;
@@ -75,10 +70,10 @@ export function evaluate(): { confident: boolean; value: any } {
   //       a = g * this.foo
   //
   function evaluate(path) {
-    let { node } = path;
+    const { node } = path;
 
     if (seen.has(node)) {
-      let existing = seen.get(node);
+      const existing = seen.get(node);
       if (existing.resolved) {
         return existing.value;
       } else {
@@ -86,10 +81,10 @@ export function evaluate(): { confident: boolean; value: any } {
         return;
       }
     } else {
-      let item = { resolved: false };
+      const item = { resolved: false };
       seen.set(node, item);
 
-      let val = _evaluate(path);
+      const val = _evaluate(path);
       if (confident) {
         item.resolved = true;
         item.value = val;
@@ -101,10 +96,10 @@ export function evaluate(): { confident: boolean; value: any } {
   function _evaluate(path) {
     if (!confident) return;
 
-    let { node } = path;
+    const { node } = path;
 
     if (path.isSequenceExpression()) {
-      let exprs = path.get("expressions");
+      const exprs = path.get("expressions");
       return evaluate(exprs[exprs.length - 1]);
     }
 
@@ -120,9 +115,9 @@ export function evaluate(): { confident: boolean; value: any } {
       let str = "";
 
       let i = 0;
-      let exprs = path.get("expressions");
+      const exprs = path.get("expressions");
 
-      for (let elem of (node.quasis: Array<Object>)) {
+      for (const elem of (node.quasis: Array<Object>)) {
         // not confident, evaluated an expression we don't like
         if (!confident) break;
 
@@ -130,7 +125,7 @@ export function evaluate(): { confident: boolean; value: any } {
         str += elem.value.cooked;
 
         // add on interpolated expression if it's present
-        let expr = exprs[i++];
+        const expr = exprs[i++];
         if (expr) str += String(evaluate(expr));
       }
 
@@ -139,7 +134,7 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isConditionalExpression()) {
-      let testResult = evaluate(path.get("test"));
+      const testResult = evaluate(path.get("test"));
       if (!confident) return;
       if (testResult) {
         return evaluate(path.get("consequent"));
@@ -154,12 +149,12 @@ export function evaluate(): { confident: boolean; value: any } {
 
     // "foo".length
     if (path.isMemberExpression() && !path.parentPath.isCallExpression({ callee: node })) {
-      let property = path.get("property");
-      let object = path.get("object");
+      const property = path.get("property");
+      const object = path.get("object");
 
       if (object.isLiteral() && property.isIdentifier()) {
-        let value = object.node.value;
-        let type = typeof value;
+        const value = object.node.value;
+        const type = typeof value;
         if (type === "number" || type === "string") {
           return value[property.node.name];
         }
@@ -167,7 +162,7 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isReferencedIdentifier()) {
-      let binding = path.scope.getBinding(node.name);
+      const binding = path.scope.getBinding(node.name);
 
       if (binding && binding.constantViolations.length > 0) {
         return deopt(binding.path);
@@ -181,14 +176,14 @@ export function evaluate(): { confident: boolean; value: any } {
         return binding.value;
       } else {
         if (node.name === "undefined") {
-          return undefined;
+          return binding ? deopt(binding.path) : undefined;
         } else if (node.name === "Infinity") {
-          return Infinity;
+          return binding ? deopt(binding.path) : Infinity;
         } else if (node.name === "NaN") {
-          return NaN;
+          return binding ? deopt(binding.path) : NaN;
         }
 
-        let resolved = path.resolve();
+        const resolved = path.resolve();
         if (resolved === path) {
           return deopt(path);
         } else {
@@ -203,12 +198,12 @@ export function evaluate(): { confident: boolean; value: any } {
         return undefined;
       }
 
-      let argument = path.get("argument");
+      const argument = path.get("argument");
       if (node.operator === "typeof" && (argument.isFunction() || argument.isClass())) {
         return "function";
       }
 
-      let arg = evaluate(argument);
+      const arg = evaluate(argument);
       if (!confident) return;
       switch (node.operator) {
         case "!": return !arg;
@@ -220,8 +215,8 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isArrayExpression()) {
-      let arr = [];
-      let elems: Array<NodePath> = path.get("elements");
+      const arr = [];
+      const elems: Array<NodePath> = path.get("elements");
       for (let elem of elems) {
         elem = elem.evaluate();
 
@@ -235,9 +230,9 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isObjectExpression()) {
-      let obj = {};
-      let props: Array<NodePath> = path.get("properties");
-      for (let prop of props) {
+      const obj = {};
+      const props: Array<NodePath> = path.get("properties");
+      for (const prop of props) {
         if (prop.isObjectMethod() || prop.isSpreadProperty()) {
           return deopt(prop);
         }
@@ -268,12 +263,12 @@ export function evaluate(): { confident: boolean; value: any } {
     if (path.isLogicalExpression()) {
       // If we are confident that one side of an && is false, or the left
       // side of an || is true, we can be confident about the entire expression
-      let wasConfident = confident;
-      let left = evaluate(path.get("left"));
-      let leftConfident = confident;
+      const wasConfident = confident;
+      const left = evaluate(path.get("left"));
+      const leftConfident = confident;
       confident = wasConfident;
-      let right = evaluate(path.get("right"));
-      let rightConfident = confident;
+      const right = evaluate(path.get("right"));
+      const rightConfident = confident;
       confident = leftConfident && rightConfident;
 
       switch (node.operator) {
@@ -300,9 +295,9 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isBinaryExpression()) {
-      let left = evaluate(path.get("left"));
+      const left = evaluate(path.get("left"));
       if (!confident) return;
-      let right = evaluate(path.get("right"));
+      const right = evaluate(path.get("right"));
       if (!confident) return;
 
       switch (node.operator) {
@@ -316,7 +311,7 @@ export function evaluate(): { confident: boolean; value: any } {
         case ">": return left > right;
         case "<=": return left <= right;
         case ">=": return left >= right;
-        case "==": return left == right;
+        case "==": return left == right; // eslint-disable-line eqeqeq
         case "!=": return left != right;
         case "===": return left === right;
         case "!==": return left !== right;
@@ -330,28 +325,35 @@ export function evaluate(): { confident: boolean; value: any } {
     }
 
     if (path.isCallExpression()) {
-      let callee = path.get("callee");
+      const callee = path.get("callee");
       let context;
       let func;
 
       // Number(1);
-      if (callee.isIdentifier() && !path.scope.getBinding(callee.node.name, true) && VALID_CALLEES.indexOf(callee.node.name) >= 0) {
+      if (
+        callee.isIdentifier() && !path.scope.getBinding(callee.node.name, true) &&
+        VALID_CALLEES.indexOf(callee.node.name) >= 0
+      ) {
         func = global[node.callee.name];
       }
 
       if (callee.isMemberExpression()) {
-        let object = callee.get("object");
-        let property = callee.get("property");
+        const object = callee.get("object");
+        const property = callee.get("property");
 
         // Math.min(1, 2)
-        if (object.isIdentifier() && property.isIdentifier() && VALID_CALLEES.indexOf(object.node.name) >= 0 && INVALID_METHODS.indexOf(property.node.name) < 0) {
+        if (
+          object.isIdentifier() && property.isIdentifier() &&
+          VALID_CALLEES.indexOf(object.node.name) >= 0 &&
+          INVALID_METHODS.indexOf(property.node.name) < 0
+        ) {
           context = global[object.node.name];
           func = context[property.node.name];
         }
 
         // "abc".charCodeAt(4)
         if (object.isLiteral() && property.isIdentifier()) {
-          let type = typeof object.node.value;
+          const type = typeof object.node.value;
           if (type === "string" || type === "number") {
             context = object.node.value;
             func = context[property.node.name];
@@ -360,7 +362,7 @@ export function evaluate(): { confident: boolean; value: any } {
       }
 
       if (func) {
-        let args = path.get("arguments").map(evaluate);
+        const args = path.get("arguments").map(evaluate);
         if (!confident) return;
 
         return func.apply(context, args);

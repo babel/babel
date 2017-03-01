@@ -3,22 +3,22 @@ import * as parens from "./parentheses";
 import * as t from "babel-types";
 
 function expandAliases(obj) {
-  let newObj = {};
+  const newObj = {};
 
   function add(type, func) {
-    let fn = newObj[type];
+    const fn = newObj[type];
     newObj[type] = fn ? function(node, parent, stack) {
-      let result = fn(node, parent, stack);
+      const result = fn(node, parent, stack);
 
       return result == null ? func(node, parent, stack) : result;
     } : func;
   }
 
-  for (let type of Object.keys(obj)) {
+  for (const type of Object.keys(obj)) {
 
-    let aliases = t.FLIPPED_ALIAS_KEYS[type];
+    const aliases = t.FLIPPED_ALIAS_KEYS[type];
     if (aliases) {
-      for (let alias of aliases) {
+      for (const alias of aliases) {
         add(alias, obj[type]);
       }
     } else {
@@ -31,12 +31,12 @@ function expandAliases(obj) {
 
 // Rather than using `t.is` on each object property, we pre-expand any type aliases
 // into concrete types so that the 'find' call below can be as fast as possible.
-let expandedParens = expandAliases(parens);
-let expandedWhitespaceNodes = expandAliases(whitespace.nodes);
-let expandedWhitespaceList = expandAliases(whitespace.list);
+const expandedParens = expandAliases(parens);
+const expandedWhitespaceNodes = expandAliases(whitespace.nodes);
+const expandedWhitespaceList = expandAliases(whitespace.list);
 
 function find(obj, node, parent, printStack) {
-  let fn = obj[node.type];
+  const fn = obj[node.type];
   return fn ? fn(node, parent, printStack) : null;
 }
 
@@ -63,7 +63,7 @@ export function needsWhitespace(node, parent, type) {
   let linesInfo = find(expandedWhitespaceNodes, node, parent);
 
   if (!linesInfo) {
-    let items = find(expandedWhitespaceList, node, parent);
+    const items = find(expandedWhitespaceList, node, parent);
     if (items) {
       for (let i = 0; i < items.length; i++) {
         linesInfo = needsWhitespace(items[i], node, type);

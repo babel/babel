@@ -16,7 +16,6 @@ let n = { x, y, ...z };
 console.log(n); // { x: 1, y: 2, a: 3, b: 4 }
 ```
 
-[Try in REPL](https://babeljs.io/repl/#?evaluate=true&presets=es2015%2Cstage-0&code=%2F%2F%20Rest%20properties%0Alet%20%7B%20x%2C%20y%2C%20...z%20%7D%20%3D%20%7B%20x%3A%201%2C%20y%3A%202%2C%20a%3A%203%2C%20b%3A%204%20%7D%3B%0Aconsole.log(x)%3B%20%2F%2F%201%0Aconsole.log(y)%3B%20%2F%2F%202%0Aconsole.log(z)%3B%20%2F%2F%20%7B%20a%3A%203%2C%20b%3A%204%20%7D%0A%0A%2F%2F%20Spread%20properties%0Alet%20n%20%3D%20%7B%20x%2C%20y%2C%20...z%20%7D%3B%0Aconsole.log(n)%3B%20%2F%2F%20%7B%20x%3A%201%2C%20y%3A%202%2C%20a%3A%203%2C%20b%3A%204%20%7D)
 
 ## Installation
 
@@ -42,13 +41,15 @@ This plugin will use babel's `extends` helper, which will polyfill `Object.assig
 
 * `useBuiltIns` - Do not use Babel's helper's and just transform to use the built-in method (Disabled by default).
 
-```js
+```json
 {
   "plugins": [
     ["transform-object-rest-spread", { "useBuiltIns": true }]
   ]
 }
+```
 
+```js
 // source
 z = { x, ...y };
 // compiled

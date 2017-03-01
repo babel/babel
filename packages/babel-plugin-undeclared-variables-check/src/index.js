@@ -4,9 +4,9 @@ export default function ({ messages }) {
   return {
     visitor: {
       ReferencedIdentifier(path) {
-        let { node, scope } = path;
+        const { node, scope } = path;
 
-        let binding = scope.getBinding(node.name);
+        const binding = scope.getBinding(node.name);
         if (binding && binding.kind === "type" && !path.parentPath.isFlow()) {
           throw path.buildCodeFrameError(messages.get("undeclaredVariableType", node.name), ReferenceError);
         }
@@ -16,13 +16,13 @@ export default function ({ messages }) {
         // get the closest declaration to offer as a suggestion
         // the variable name may have just been mistyped
 
-        let bindings = scope.getAllBindings();
+        const bindings = scope.getAllBindings();
 
         let closest;
         let shortest = -1;
 
-        for (let name in bindings) {
-          let distance = leven(node.name, name);
+        for (const name in bindings) {
+          const distance = leven(node.name, name);
           if (distance <= 0 || distance > 3) continue;
           if (distance <= shortest) continue;
 

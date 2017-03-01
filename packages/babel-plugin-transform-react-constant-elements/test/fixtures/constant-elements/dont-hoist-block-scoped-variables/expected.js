@@ -1,16 +1,10 @@
 function render(flag) {
   if (flag) {
-    var _ret = function () {
-      var bar = "bar";
+    var bar = "bar";
 
-      [].map(() => bar);
+    [].map(() => bar);
 
-      return {
-        v: <foo bar={bar} />
-      };
-    }();
-
-    if (typeof _ret === "object") return _ret.v;
+    return <foo bar={bar} />;
   }
 
   return null;

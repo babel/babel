@@ -1,4 +1,4 @@
-import jsTokens from "js-tokens";
+import jsTokens, { matchToToken } from "js-tokens";
 import esutils from "esutils";
 import Chalk from "chalk";
 
@@ -46,8 +46,8 @@ const BRACKET = /^[()\[\]{}]$/;
  */
 
 function getTokenType(match) {
-  let [offset, text] = match.slice(-2);
-  let token = jsTokens.matchToToken(match);
+  const [offset, text] = match.slice(-2);
+  const token = matchToToken(match);
 
   if (token.type === "name") {
     if (esutils.keyword.isReservedWordES6(token.value)) {
@@ -79,8 +79,8 @@ function getTokenType(match) {
 
 function highlight(defs: Object, text: string) {
   return text.replace(jsTokens, function (...args) {
-    let type = getTokenType(args);
-    let colorize = defs[type];
+    const type = getTokenType(args);
+    const colorize = defs[type];
     if (colorize) {
       return args[0].split(NEWLINE).map((str) => colorize(str)).join("\n");
     } else {
@@ -101,21 +101,21 @@ export default function (
 ): string {
   colNumber = Math.max(colNumber, 0);
 
-  let highlighted = (opts.highlightCode && Chalk.supportsColor) || opts.forceColor;
+  const highlighted = (opts.highlightCode && Chalk.supportsColor) || opts.forceColor;
   let chalk = Chalk;
   if (opts.forceColor) {
     chalk = new Chalk.constructor({ enabled: true });
   }
-  let maybeHighlight = (chalkFn, string) => {
+  const maybeHighlight = (chalkFn, string) => {
     return highlighted ? chalkFn(string) : string;
   };
-  let defs = getDefs(chalk);
+  const defs = getDefs(chalk);
   if (highlighted) rawLines = highlight(defs, rawLines);
 
-  let linesAbove = opts.linesAbove || 2;
-  let linesBelow = opts.linesBelow || 3;
+  const linesAbove = opts.linesAbove || 2;
+  const linesBelow = opts.linesBelow || 3;
 
-  let lines = rawLines.split(NEWLINE);
+  const lines = rawLines.split(NEWLINE);
   let start = Math.max(lineNumber - (linesAbove + 1), 0);
   let end   = Math.min(lines.length, lineNumber + linesBelow);
 
@@ -124,16 +124,16 @@ export default function (
     end = lines.length;
   }
 
-  let numberMaxWidth = String(end).length;
+  const numberMaxWidth = String(end).length;
 
-  let frame = lines.slice(start, end).map((line, index) => {
-    let number = start + 1 + index;
-    let paddedNumber = ` ${number}`.slice(-numberMaxWidth);
-    let gutter = ` ${paddedNumber} | `;
+  const frame = lines.slice(start, end).map((line, index) => {
+    const number = start + 1 + index;
+    const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
+    const gutter = ` ${paddedNumber} | `;
     if (number === lineNumber) {
       let markerLine = "";
       if (colNumber) {
-        let markerSpacing = line.slice(0, colNumber - 1).replace(/[^\t]/g, " ");
+        const markerSpacing = line.slice(0, colNumber - 1).replace(/[^\t]/g, " ");
         markerLine = [
           "\n ",
           maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")),

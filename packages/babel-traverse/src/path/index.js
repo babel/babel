@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import type Hub from "../hub";
 import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
@@ -11,7 +9,7 @@ import Scope from "../scope";
 import * as t from "babel-types";
 import { path as pathCache } from "../cache";
 
-let debug = buildDebug("babel");
+const debug = buildDebug("babel");
 
 export default class NodePath {
   constructor(hub: Hub, parent: Object) {
@@ -67,9 +65,9 @@ export default class NodePath {
 
     invariant(parent, "To get a node path the parent needs to exist");
 
-    let targetNode = container[key];
+    const targetNode = container[key];
 
-    let paths = pathCache.get(parent) || [];
+    const paths = pathCache.get(parent) || [];
     if (!pathCache.has(parent)) {
       pathCache.set(parent, paths);
     }
@@ -77,7 +75,7 @@ export default class NodePath {
     let path;
 
     for (let i = 0; i < paths.length; i++) {
-      let pathCheck = paths[i];
+      const pathCheck = paths[i];
       if (pathCheck.node === targetNode) {
         path = pathCheck;
         break;
@@ -137,7 +135,7 @@ export default class NodePath {
   }
 
   getPathLocation(): string {
-    let parts = [];
+    const parts = [];
     let path = this;
     do {
       let key = path.key;
@@ -165,8 +163,8 @@ assign(NodePath.prototype, require("./modification"));
 assign(NodePath.prototype, require("./family"));
 assign(NodePath.prototype, require("./comments"));
 
-for (let type of (t.TYPES: Array<string>)) {
-  let typeKey = `is${type}`;
+for (const type of (t.TYPES: Array<string>)) {
+  const typeKey = `is${type}`;
   NodePath.prototype[typeKey] = function (opts) {
     return t[typeKey](this.node, opts);
   };
@@ -178,11 +176,11 @@ for (let type of (t.TYPES: Array<string>)) {
   };
 }
 
-for (let type in virtualTypes) {
+for (const type in virtualTypes) {
   if (type[0] === "_") continue;
   if (t.TYPES.indexOf(type) < 0) t.TYPES.push(type);
 
-  let virtualType = virtualTypes[type];
+  const virtualType = virtualTypes[type];
 
   NodePath.prototype[`is${type}`] = function (opts) {
     return virtualType.checkPath(this, opts);
