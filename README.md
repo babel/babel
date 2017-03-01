@@ -56,6 +56,8 @@ mind. When in doubt, use `.parse()`.
 
 - **strictMode**: TODO
 
+- **ranges**: Adds a `ranges` property to each node: `[node.start, node.end]`
+
 ### Output
 
 Babylon generates AST according to [Babel AST format][].
