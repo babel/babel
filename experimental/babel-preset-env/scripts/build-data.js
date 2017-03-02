@@ -85,8 +85,6 @@ const compatibilityTests = flattenDeep([
   })
 ));
 
-console.log(invertedEqualsEnv);
-
 const getLowestImplementedVersion = ({ features }, env) => {
   const tests = flatten(compatibilityTests
     .filter((test) => {
