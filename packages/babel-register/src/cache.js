@@ -4,9 +4,8 @@ import { sync as mkdirpSync } from "mkdirp";
 import homeOrTmp from "home-or-tmp";
 import * as babel from "babel-core";
 
-const env = process.env.BABEL_ENV || process.env.NODE_ENV;
-
-const FILENAME: string = process.env.BABEL_CACHE_PATH || path.join(homeOrTmp, `.babel.${babel.version}${env ? `.${env}` : ""}.json`);
+const DEFAULT_FILENAME = path.join(homeOrTmp, `.babel.${babel.version}.${babel.getEnv()}.json`);
+const FILENAME: string = process.env.BABEL_CACHE_PATH || DEFAULT_FILENAME;
 let data: Object = {};
 
 /**
