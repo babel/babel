@@ -64,7 +64,7 @@ publish:
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish
+	./node_modules/.bin/lerna publish --npm-tag=next
 	make clean
 
 bootstrap:
