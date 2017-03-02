@@ -711,7 +711,7 @@ Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
 
 ### forOfStatement
 ```javascript
-t.forOfStatement(left, right, body, await)
+t.forOfStatement(left, right, body)
 ```
 
 See also `t.isForOfStatement(node, opts)` and `t.assertForOfStatement(node, opts)`.
@@ -1257,6 +1257,18 @@ Aliases: `Flow`
 
 ---
 
+### numberLiteralTypeAnnotation
+```javascript
+t.numberLiteralTypeAnnotation()
+```
+
+See also `t.isNumberLiteralTypeAnnotation(node, opts)` and `t.assertNumberLiteralTypeAnnotation(node, opts)`.
+
+Aliases: `Flow`
+
+
+---
+
 ### numberTypeAnnotation
 ```javascript
 t.numberTypeAnnotation()
@@ -1282,18 +1294,6 @@ Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
 ---
 
-### numberLiteralTypeAnnotation
-```javascript
-t.numberLiteralTypeAnnotation()
-```
-
-See also `t.isNumberLiteralTypeAnnotation(node, opts)` and `t.assertNumberLiteralTypeAnnotation(node, opts)`.
-
-Aliases: `Flow`
-
-
----
-
 ### objectExpression
 ```javascript
 t.objectExpression(properties)
@@ -1303,7 +1303,7 @@ See also `t.isObjectExpression(node, opts)` and `t.assertObjectExpression(node, 
 
 Aliases: `Expression`
 
- - `properties`: `Array<ObjectMethod | ObjectProperty | SpreadProperty>` (required)
+ - `properties`: `Array<ObjectMethod | ObjectProperty | SpreadElement>` (required)
 
 ---
 
@@ -1338,7 +1338,7 @@ See also `t.isObjectPattern(node, opts)` and `t.assertObjectPattern(node, opts)`
 
 Aliases: `Pattern`, `LVal`
 
- - `properties`: `Array<RestProperty | Property>` (required)
+ - `properties`: `Array<RestElement | Property>` (required)
  - `typeAnnotation` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
 
@@ -1488,19 +1488,6 @@ Aliases: `LVal`
 
 ---
 
-### restProperty
-```javascript
-t.restProperty(argument)
-```
-
-See also `t.isRestProperty(node, opts)` and `t.assertRestProperty(node, opts)`.
-
-Aliases: `UnaryLike`
-
- - `argument`: `LVal` (required)
-
----
-
 ### returnStatement
 ```javascript
 t.returnStatement(argument)
@@ -1533,19 +1520,6 @@ t.spreadElement(argument)
 ```
 
 See also `t.isSpreadElement(node, opts)` and `t.assertSpreadElement(node, opts)`.
-
-Aliases: `UnaryLike`
-
- - `argument`: `Expression` (required)
-
----
-
-### spreadProperty
-```javascript
-t.spreadProperty(argument)
-```
-
-See also `t.isSpreadProperty(node, opts)` and `t.assertSpreadProperty(node, opts)`.
 
 Aliases: `UnaryLike`
 
