@@ -39,19 +39,19 @@ Using polyfills:
   es6.set {"ie":10,"node":6}
   es6.weak-map {"ie":10,"node":6}
   es6.weak-set {"ie":10,"node":6}
-  es6.reflect.apply {"ie":10,"node":6}
-  es6.reflect.construct {"ie":10,"node":6}
-  es6.reflect.define-property {"ie":10,"node":6}
-  es6.reflect.delete-property {"ie":10,"node":6}
-  es6.reflect.get {"ie":10,"node":6}
-  es6.reflect.get-own-property-descriptor {"ie":10,"node":6}
-  es6.reflect.get-prototype-of {"ie":10,"node":6}
-  es6.reflect.has {"ie":10,"node":6}
-  es6.reflect.is-extensible {"ie":10,"node":6}
-  es6.reflect.own-keys {"ie":10,"node":6}
-  es6.reflect.prevent-extensions {"ie":10,"node":6}
-  es6.reflect.set {"ie":10,"node":6}
-  es6.reflect.set-prototype-of {"ie":10,"node":6}
+  es6.reflect.apply {"ie":10}
+  es6.reflect.construct {"ie":10}
+  es6.reflect.define-property {"ie":10}
+  es6.reflect.delete-property {"ie":10}
+  es6.reflect.get {"ie":10}
+  es6.reflect.get-own-property-descriptor {"ie":10}
+  es6.reflect.get-prototype-of {"ie":10}
+  es6.reflect.has {"ie":10}
+  es6.reflect.is-extensible {"ie":10}
+  es6.reflect.own-keys {"ie":10}
+  es6.reflect.prevent-extensions {"ie":10}
+  es6.reflect.set {"ie":10}
+  es6.reflect.set-prototype-of {"ie":10}
   es6.promise {"ie":10,"node":6}
   es6.symbol {"ie":10,"node":6}
   es6.object.assign {"ie":10}
@@ -65,7 +65,7 @@ Using polyfills:
   es6.string.starts-with {"ie":10}
   es6.string.ends-with {"ie":10}
   es6.string.includes {"ie":10}
-  es6.regexp.flags {"ie":10,"node":6}
+  es6.regexp.flags {"ie":10}
   es6.regexp.match {"ie":10}
   es6.regexp.replace {"ie":10}
   es6.regexp.split {"ie":10}
@@ -101,7 +101,7 @@ Using polyfills:
   es6.math.sinh {"ie":10}
   es6.math.tanh {"ie":10}
   es6.math.trunc {"ie":10}
-  es7.array.includes {"ie":10,"node":6}
+  es7.array.includes {"ie":10}
   es7.object.values {"ie":10,"node":6}
   es7.object.entries {"ie":10,"node":6}
   es7.object.get-own-property-descriptors {"ie":10,"node":6}
