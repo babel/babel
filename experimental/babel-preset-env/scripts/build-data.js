@@ -56,10 +56,16 @@ const invertedEqualsEnv = Object.keys(envs)
   .reduce((a, b) => {
     const checkEnv = envMap[envs[b].equals] || envs[b].equals;
     environments.some((env) => {
+      // go through all environment names to find the the current one
+      // and try to get the version as integer
       const version = parseInt(checkEnv.replace(env, ""), 10);
       if (!isNaN(version)) {
         Object.keys(envs).forEach((equals) => {
+          // Go through all envs from compat-table and get int version
           const equalsVersion = parseInt(equals.replace(env, ""), 10);
+          // If the current version is smaller than the version that was mentioned
+          // in `equals` we can add an entry, as older versions should include features
+          // that newer ones have
           if (!isNaN(equalsVersion) && equalsVersion <= version) {
             if (!a[equals]) a[equals] = [];
             a[equals].push(b);
