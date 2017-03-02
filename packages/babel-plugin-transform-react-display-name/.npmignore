@@ -1,4 +1,4 @@
-node_modules
-*.log
 src
 test
+*.log
+yarn.lock
