@@ -60,7 +60,7 @@ const invertedEqualsEnv = Object.keys(envs)
       if (!isNaN(version)) {
         Object.keys(envs).forEach((equals) => {
           const equalsVersion = parseInt(equals.replace(env, ""), 10);
-          if (equalsVersion <= version) {
+          if (!isNaN(equalsVersion) && equalsVersion <= version) {
             if (!a[equals]) a[equals] = [];
             a[equals].push(b);
           }
