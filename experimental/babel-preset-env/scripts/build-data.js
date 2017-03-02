@@ -16,36 +16,6 @@ const es6Data = require("compat-table/data-es6");
 const es6PlusData = require("compat-table/data-es2016plus");
 const envs = require("compat-table/environments");
 
-const invertedEqualsEnv = Object.keys(envs)
-  .filter((b) => envs[b].equals)
-  .reduce((a, b) => {
-    if (!a[envs[b].equals]) {
-      a[envs[b].equals] = [b];
-    } else {
-      a[envs[b].equals].push(b);
-    }
-    return a;
-  }, {});
-
-invertedEqualsEnv.safari5 = ["ios6"];
-if (Array.isArray(invertedEqualsEnv.safari6)) {
-  invertedEqualsEnv.safari6.push("ios7");
-} else {
-  invertedEqualsEnv.safari6 = ["ios7"];
-}
-invertedEqualsEnv.safari8 = ["ios9"];
-
-const compatibilityTests = flattenDeep([
-  es6Data,
-  es6PlusData,
-].map((data) =>
-  data.tests.map((test) => {
-    return test.subtests ?
-      [test, renameTests(test.subtests, (name) => test.name + " / " + name)] :
-      test;
-  })
-));
-
 const environments = [
   "chrome",
   "opera",
@@ -62,6 +32,7 @@ const environments = [
 const envMap = {
   safari51: "safari5",
   safari71_8: "safari8",
+  safari10_1: "safari10.1",
   firefox3_5: "firefox3",
   firefox3_6: "firefox3",
   node010: "node0.10",
@@ -79,6 +50,42 @@ const envMap = {
   android51: "android5.1",
   ios51: "ios5.1",
 };
+
+const invertedEqualsEnv = Object.keys(envs)
+  .filter((b) => envs[b].equals)
+  .reduce((a, b) => {
+    const checkEnv = envMap[envs[b].equals] || envs[b].equals;
+    environments.some((env) => {
+      const version = parseInt(checkEnv.replace(env, ""), 10);
+      if (!isNaN(version)) {
+        Object.keys(envs).forEach((equals) => {
+          const equalsVersion = parseInt(equals.replace(env, ""), 10);
+          if (equalsVersion <= version) {
+            if (!a[equals]) a[equals] = [];
+            a[equals].push(b);
+          }
+        });
+        return true;
+      }
+    });
+
+    return a;
+  }, {});
+
+invertedEqualsEnv.safari8 = ["ios9"];
+
+const compatibilityTests = flattenDeep([
+  es6Data,
+  es6PlusData,
+].map((data) =>
+  data.tests.map((test) => {
+    return test.subtests ?
+      [test, renameTests(test.subtests, (name) => test.name + " / " + name)] :
+      test;
+  })
+));
+
+console.log(invertedEqualsEnv);
 
 const getLowestImplementedVersion = ({ features }, env) => {
   const tests = flatten(compatibilityTests
