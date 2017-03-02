@@ -6,10 +6,14 @@ contributing, please read the
 
 ## Setup local env
 
+> Install yarn beforehand: https://yarnpkg.com/en/docs/install
+
 To start developing on Babylon you only need to install its dependencies:
 
 ```bash
-npm install
+git clone https://github.com/babel/babylon
+cd babylon
+yarn
 ```
 
 ## Tests
@@ -48,7 +52,7 @@ Add `"only": true` to its `options.json`:
 Then, run the tests using the same command as before:
 
 ```bash
-$ npm run test-only
+npm run test-only
 ```
 
 ### Checking code coverage locally
