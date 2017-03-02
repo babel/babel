@@ -15,7 +15,7 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
-## 7.0.0-beta.3 (2017-03-01)
+## 7.0.0-beta.4 (2017-03-01)
 
 * Don't consume async when checking for async func decl (#377) (Brian Ng)
 * add `ranges` option [skip ci] (Henry Zhu)
