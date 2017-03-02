@@ -31,6 +31,26 @@ npm run test-only
 Note, this does not actually run a build, so you may have to call `npm run build` after
 performing any changes.
 
+### Running one test
+
+To run only a single test, add `"only": true` to the `options.json` inside any test fixture folder (you may have to create the file if it doesn't exist).
+For example, let's say we want to only run the test for the [`test/fixtures/comments/basic/shebang-import`](https://github.com/babel/babylon/tree/7.0/test/fixtures/comments/basic/shebang-import) fixture.
+
+Add `"only": true` to its `options.json`:
+
+```json
+{
+  "sourceType": "module",
+  "only": true
+}
+```
+
+Then, run the tests using the same command as before:
+
+```bash
+$ npm run test-only
+```
+
 ### Checking code coverage locally
 
 To generate code coverage, be sure to set `BABEL_ENV=test` so that code is instrumented during
