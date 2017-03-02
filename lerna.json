@@ -14,10 +14,12 @@
     }
   },
   "cacheDir": ".changelog",
-  "publishConfig": {
-    "ignore": [
-      "*.md",
-      "test/**"
-    ]
+  "commands": {
+    "publish": {
+      "ignore": [
+        "*.md",
+        "test/**"
+      ]
+    }
   }
 }
