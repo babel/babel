@@ -419,7 +419,7 @@
     "edge": 12,
     "firefox": 25,
     "safari": 9,
-    "node": 6,
+    "node": 4,
     "ios": 9,
     "opera": 32
   },
@@ -437,7 +437,7 @@
     "edge": 12,
     "firefox": 25,
     "safari": 8,
-    "node": 6,
+    "node": 4,
     "ios": 9,
     "opera": 32
   },
@@ -446,7 +446,7 @@
     "edge": 12,
     "firefox": 25,
     "safari": 8,
-    "node": 6,
+    "node": 4,
     "ios": 9,
     "opera": 32
   },
@@ -455,7 +455,7 @@
     "edge": 12,
     "firefox": 31,
     "safari": 8,
-    "node": 6,
+    "node": 4,
     "ios": 9,
     "opera": 32
   },
