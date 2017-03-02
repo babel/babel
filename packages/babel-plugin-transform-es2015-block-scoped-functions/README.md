@@ -19,7 +19,13 @@ name("Steve");
 **Out**
 
 ```javascript
-repl: name is not defined
+{
+  var _name = function _name(n) {
+    return n;
+  };
+}
+
+name("Steve");
 ```
 
 ## Installation
