@@ -19,6 +19,7 @@ const moduleCache = {};
 const testContext = vm.createContext({
   ...helpers,
   assert: chai.assert,
+  process: process,
   transform: babel.transform,
 });
 testContext.global = testContext;
