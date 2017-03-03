@@ -16,9 +16,12 @@
     "dev": "babel -w src -d lib",
     "fix": "eslint . --fix",
     "lint": "eslint .",
+    "precommit": "lint-staged",
+    "prettify": "prettier --trailing-comma all --write \"src/*.js\" \"scripts/*.js\" \"test/*.js\"",
     "test": "npm run build && npm run test-only",
     "test-ci": "nyc npm run test",
     "test-only": "mocha ./test --compilers js:babel-register -t 10000"
+    
   },
   "dependencies": {
     "babel-plugin-check-es2015-constants": "7.0.0-alpha.1",
@@ -68,9 +71,12 @@
     "eslint-config-babel": "^6.0.0",
     "eslint-plugin-flowtype": "^2.29.1",
     "fs-extra": "^2.0.0",
+    "husky": "^0.13.2",
+    "lint-staged": "^3.3.1",
     "lodash": "^4.17.4",
     "mocha": "^3.2.0",
     "nyc": "^10.1.2",
+    "prettier": "^0.22.0",
     "rimraf": "^2.6.1"
   },
   "babel": {
@@ -98,5 +104,15 @@
     "include": ["src/*.js"],
     "instrument": false,
     "sourceMap": false
+  },
+  "lint-staged": {
+    "{src,scripts}/**/*.js": [
+      "prettier --trailing-comma all --write",
+      "git add"
+    ],
+    "test/*.js": [
+      "prettier --trailing-comma all --write",
+      "git add"
+    ]
   }
 }

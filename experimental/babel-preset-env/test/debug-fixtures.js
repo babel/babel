@@ -14,8 +14,8 @@ const clear = () => {
   process.chdir(tmpLoc);
 };
 
-const saveInFiles = (files) => {
-  Object.keys(files).forEach((filename) => {
+const saveInFiles = files => {
+  Object.keys(files).forEach(filename => {
     const content = files[filename];
     fs.outputFileSync(filename, content);
   });
@@ -41,10 +41,10 @@ const assertTest = (stdout, stderr, opts) => {
   }
 };
 
-const buildTest = (opts) => {
+const buildTest = opts => {
   const binLoc = path.join(process.cwd(), "node_modules/.bin/babel");
 
-  return (callback) => {
+  return callback => {
     clear();
     saveInFiles(opts.inFiles);
 
@@ -56,8 +56,8 @@ const buildTest = (opts) => {
     let stdout = "";
     let stderr = "";
 
-    spawn.stdout.on("data", (chunk) => stdout += chunk);
-    spawn.stderr.on("data", (chunk) => stderr += chunk);
+    spawn.stdout.on("data", chunk => stdout += chunk);
+    spawn.stderr.on("data", chunk => stderr += chunk);
 
     spawn.on("close", () => {
       let err;
@@ -74,7 +74,7 @@ const buildTest = (opts) => {
 };
 
 describe("debug output", () => {
-  fs.readdirSync(fixtureLoc).forEach((testName) => {
+  fs.readdirSync(fixtureLoc).forEach(testName => {
     const testLoc = path.join(fixtureLoc, testName);
 
     const opts = {
@@ -91,7 +91,9 @@ describe("debug output", () => {
     const optionsLoc = path.join(testLoc, "options.json");
 
     if (!fs.existsSync(optionsLoc)) {
-      throw new Error(`Debug test '${testName}' is missing an options.json file`);
+      throw new Error(
+        `Debug test '${testName}' is missing an options.json file`,
+      );
     }
 
     opts.inFiles = {
