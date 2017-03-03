@@ -83,19 +83,25 @@ require("babel-core").transform("code", {
 
 `boolean`, defaults to `true`.
 
-Enables the generation of helpers in `moduleName`.
+Toggles whether or not inlined Babel helpers (`classCallCheck`, `extends`, etc.) are replaced with calls to `moduleName`.
+
+For more information, see [Helper aliasing](#helper-aliasing).
 
 ### `polyfill`
 
 `boolean`, defaults to `true`.
 
-Transforms any `core-js` polyfill import with the runtime's polyfill.
+Toggles whether or not new built-ins (`Promise`, `Set`, `Map`, etc.) are transformed to use a non-global polluting polyfill.
+
+For more information, see [`core-js` aliasing](#core-js-aliasing).
 
 ### `regenerator`
 
 `boolean`, defaults to `true`.
 
-Transforms any regenerator import with the runtime's regenerator.
+Toggles whether or not generator functions are transformed to use a regenerator runtime that does not pollute the global scope.
+
+For more information, see [Regenerator aliasing](#regenerator-aliasing).
 
 ### `moduleName`
 
@@ -123,7 +129,7 @@ The `runtime` transformer plugin does three things:
 * Automatically requires `babel-runtime/core-js` and maps ES6 static methods and built-ins.
 * Removes the inline Babel helpers and uses the module `babel-runtime/helpers` instead.
 
-What does this actually mean though? Basically, you can use built-ins such as `Promise`, `Set`, `Symbol`, etc. as well use all the Babel features that require a polyfill seamlessly, without global pollution, making it extremely suitable for libraries.
+What does this actually mean though? Basically, you can use built-ins such as `Promise`, `Set`, `Symbol`, etc., as well use all the Babel features that require a polyfill seamlessly, without global pollution, making it extremely suitable for libraries.
 
 Make sure you include `babel-runtime` as a dependency.
 
