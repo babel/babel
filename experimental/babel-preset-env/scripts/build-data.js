@@ -58,11 +58,12 @@ const invertedEqualsEnv = Object.keys(envs)
     environments.some((env) => {
       // go through all environment names to find the the current one
       // and try to get the version as integer
-      const version = parseInt(checkEnv.replace(env, ""), 10);
+      const version = parseFloat(checkEnv.replace(env, ""));
       if (!isNaN(version)) {
         Object.keys(envs).forEach((equals) => {
+          equals = envMap[equals] || equals;
           // Go through all envs from compat-table and get int version
-          const equalsVersion = parseInt(equals.replace(env, ""), 10);
+          const equalsVersion = parseFloat(equals.replace(env, ""));
           // If the current version is smaller than the version that was mentioned
           // in `equals` we can add an entry, as older versions should include features
           // that newer ones have
@@ -77,8 +78,6 @@ const invertedEqualsEnv = Object.keys(envs)
 
     return a;
   }, {});
-
-invertedEqualsEnv.safari8 = ["ios9"];
 
 const compatibilityTests = flattenDeep([
   es6Data,
@@ -141,7 +140,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
       .filter((test) => tests[i].res[test] === true || tests[i].res[test] === "strict")
       // normalize some keys
       .map((test) => envMap[test] || test)
-      .filter((test) => !isNaN(parseInt(test.replace(env, ""))))
+      .filter((test) => !isNaN(parseFloat(test.replace(env, ""))))
       .shift();
     });
 
