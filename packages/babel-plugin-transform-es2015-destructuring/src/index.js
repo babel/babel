@@ -1,5 +1,4 @@
-export default function ({ types: t }) {
-
+export default function({ types: t }) {
   /**
    * Test if a VariableDeclaration's declarations contains any Patterns.
    */
@@ -32,18 +31,18 @@ export default function ({ types: t }) {
         state.deopt = true;
         path.stop();
       }
-    }
+    },
   };
 
   class DestructuringTransformer {
     constructor(opts) {
       this.blockHoist = opts.blockHoist;
-      this.operator   = opts.operator;
-      this.arrays     = {};
-      this.nodes      = opts.nodes || [];
-      this.scope      = opts.scope;
-      this.file       = opts.file;
-      this.kind       = opts.kind;
+      this.operator = opts.operator;
+      this.arrays = {};
+      this.nodes = opts.nodes || [];
+      this.scope = opts.scope;
+      this.file = opts.file;
+      this.kind = opts.kind;
     }
 
     buildVariableAssignment(id, init) {
@@ -56,7 +55,7 @@ export default function ({ types: t }) {
         node = t.expressionStatement(t.assignmentExpression(op, id, init));
       } else {
         node = t.variableDeclaration(this.kind, [
-          t.variableDeclarator(id, init)
+          t.variableDeclarator(id, init),
         ]);
       }
 
@@ -67,7 +66,7 @@ export default function ({ types: t }) {
 
     buildVariableDeclaration(id, init) {
       const declar = t.variableDeclaration("var", [
-        t.variableDeclarator(id, init)
+        t.variableDeclarator(id, init),
       ]);
       declar._blockHoist = this.blockHoist;
       return declar;
@@ -86,7 +85,9 @@ export default function ({ types: t }) {
     }
 
     toArray(node, count) {
-      if (this.file.opts.loose || (t.isIdentifier(node) && this.arrays[node.name])) {
+      if (
+        this.file.opts.loose || (t.isIdentifier(node) && this.arrays[node.name])
+      ) {
         return node;
       } else {
         return this.scope.toArray(node, count);
@@ -97,10 +98,12 @@ export default function ({ types: t }) {
       // we need to assign the current value of the assignment to avoid evaluating
       // it more than once
 
-      const tempValueRef = this.scope.generateUidIdentifierBasedOnNode(valueRef);
+      const tempValueRef = this.scope.generateUidIdentifierBasedOnNode(
+        valueRef
+      );
 
       const declar = t.variableDeclaration("var", [
-        t.variableDeclarator(tempValueRef, valueRef)
+        t.variableDeclarator(tempValueRef, valueRef),
       ]);
       declar._blockHoist = this.blockHoist;
       this.nodes.push(declar);
@@ -143,7 +146,8 @@ export default function ({ types: t }) {
         if (t.isRestElement(prop)) continue;
 
         let key = prop.key;
-        if (t.isIdentifier(key) && !prop.computed) key = t.stringLiteral(prop.key.name);
+        if (t.isIdentifier(key) && !prop.computed)
+          key = t.stringLiteral(prop.key.name);
         keys.push(key);
       }
 
@@ -152,7 +156,9 @@ export default function ({ types: t }) {
       //
 
       const value = t.callExpression(
-        this.file.addHelper("objectWithoutProperties"), [objRef, keys]);
+        this.file.addHelper("objectWithoutProperties"),
+        [objRef, keys]
+      );
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
     }
 
@@ -160,7 +166,7 @@ export default function ({ types: t }) {
       if (t.isLiteral(prop.key)) prop.computed = true;
 
       const pattern = prop.value;
-      const objRef  = t.memberExpression(propRef, prop.key, prop.computed);
+      const objRef = t.memberExpression(propRef, prop.key, prop.computed);
 
       if (t.isPattern(pattern)) {
         this.push(pattern, objRef);
@@ -173,9 +179,13 @@ export default function ({ types: t }) {
       // https://github.com/babel/babel/issues/681
 
       if (!pattern.properties.length) {
-        this.nodes.push(t.expressionStatement(
-          t.callExpression(this.file.addHelper("objectDestructuringEmpty"), [objRef])
-        ));
+        this.nodes.push(
+          t.expressionStatement(
+            t.callExpression(this.file.addHelper("objectDestructuringEmpty"), [
+              objRef,
+            ])
+          )
+        );
       }
 
       // if we have more than one properties in this pattern and the objectRef is a
@@ -207,7 +217,8 @@ export default function ({ types: t }) {
       // pattern has less elements than the array and doesn't have a rest so some
       // elements wont be evaluated
       if (pattern.elements.length > arr.elements.length) return;
-      if (pattern.elements.length < arr.elements.length && !hasRest(pattern)) return false;
+      if (pattern.elements.length < arr.elements.length && !hasRest(pattern))
+        return false;
 
       for (const elem of (pattern.elements: Array)) {
         // deopt on holes
@@ -293,8 +304,10 @@ export default function ({ types: t }) {
 
         if (t.isRestElement(elem)) {
           elemRef = this.toArray(arrayRef);
-          elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")),
-            [t.numericLiteral(i)]);
+          elemRef = t.callExpression(
+            t.memberExpression(elemRef, t.identifier("slice")),
+            [t.numericLiteral(i)]
+          );
 
           // set the element to the rest element argument since we've dealt with it
           // being a rest already
@@ -327,7 +340,6 @@ export default function ({ types: t }) {
     }
   }
 
-
   return {
     visitor: {
       ExportNamedDeclaration(path) {
@@ -359,14 +371,14 @@ export default function ({ types: t }) {
           const temp = scope.generateUidIdentifier("ref");
 
           node.left = t.variableDeclaration("var", [
-            t.variableDeclarator(temp)
+            t.variableDeclarator(temp),
           ]);
 
           path.ensureBlock();
 
-          node.body.body.unshift(t.variableDeclaration("var", [
-            t.variableDeclarator(left, temp)
-          ]));
+          node.body.body.unshift(
+            t.variableDeclaration("var", [t.variableDeclarator(left, temp)])
+          );
 
           return;
         }
@@ -378,7 +390,7 @@ export default function ({ types: t }) {
 
         const key = scope.generateUidIdentifier("ref");
         node.left = t.variableDeclaration(left.kind, [
-          t.variableDeclarator(key, null)
+          t.variableDeclarator(key, null),
         ]);
 
         const nodes = [];
@@ -387,7 +399,7 @@ export default function ({ types: t }) {
           kind: left.kind,
           file: file,
           scope: scope,
-          nodes: nodes
+          nodes: nodes,
         });
 
         destructuring.init(pattern, key);
@@ -411,7 +423,7 @@ export default function ({ types: t }) {
           kind: "let",
           file: file,
           scope: scope,
-          nodes: nodes
+          nodes: nodes,
         });
         destructuring.init(pattern, ref);
 
@@ -428,16 +440,20 @@ export default function ({ types: t }) {
           operator: node.operator,
           file: file,
           scope: scope,
-          nodes: nodes
+          nodes: nodes,
         });
 
         let ref;
-        if (path.isCompletionRecord() || !path.parentPath.isExpressionStatement()) {
+        if (
+          path.isCompletionRecord() || !path.parentPath.isExpressionStatement()
+        ) {
           ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
 
-          nodes.push(t.variableDeclaration("var", [
-            t.variableDeclarator(ref, node.right)
-          ]));
+          nodes.push(
+            t.variableDeclaration("var", [
+              t.variableDeclarator(ref, node.right),
+            ])
+          );
 
           if (t.isArrayExpression(node.right)) {
             destructuring.arrays[ref.name] = true;
@@ -466,14 +482,14 @@ export default function ({ types: t }) {
           declar = node.declarations[i];
 
           const patternId = declar.init;
-          const pattern   = declar.id;
+          const pattern = declar.id;
 
           const destructuring = new DestructuringTransformer({
             blockHoist: node._blockHoist,
-            nodes:      nodes,
-            scope:      scope,
-            kind:       node.kind,
-            file:       file
+            nodes: nodes,
+            scope: scope,
+            kind: node.kind,
+            file: file,
           });
 
           if (t.isPattern(pattern)) {
@@ -485,8 +501,12 @@ export default function ({ types: t }) {
               t.inherits(nodes[nodes.length - 1], declar);
             }
           } else {
-            nodes.push(t.inherits(
-              destructuring.buildVariableAssignment(declar.id, declar.init), declar));
+            nodes.push(
+              t.inherits(
+                destructuring.buildVariableAssignment(declar.id, declar.init),
+                declar
+              )
+            );
           }
         }
 
@@ -494,7 +514,9 @@ export default function ({ types: t }) {
         for (const node of nodes) {
           const tail = nodesOut[nodesOut.length - 1];
           if (
-            tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) &&
+            tail &&
+            t.isVariableDeclaration(tail) &&
+            t.isVariableDeclaration(node) &&
             tail.kind === node.kind
           ) {
             // Create a single compound let/var rather than many.
@@ -522,7 +544,7 @@ export default function ({ types: t }) {
         } else {
           path.replaceWithMultiple(nodesOut);
         }
-      }
-    }
+      },
+    },
   };
 }

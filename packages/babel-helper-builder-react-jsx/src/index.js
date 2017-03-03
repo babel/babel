@@ -2,19 +2,21 @@ import esutils from "esutils";
 import * as t from "babel-types";
 
 type ElementState = {
-  tagExpr: Object; // tag node
-  tagName: string; // raw string tag name
-  args: Array<Object>; // array of call arguments
-  call?: Object; // optional call property that can be set to override the call expression returned
-  pre?: Function; // function called with (state: ElementState) before building attribs
-  post?: Function; // function called with (state: ElementState) after building attribs
+  tagExpr: Object, // tag node
+  tagName: string, // raw string tag name
+  args: Array<Object>, // array of call arguments
+  call?: Object, // optional call property that can be set to override the call expression returned
+  pre?: Function, // function called with (state: ElementState) before building attribs
+  post?: Function, // function called with (state: ElementState) after building attribs
 };
 
-export default function (opts) {
+export default function(opts) {
   const visitor = {};
 
-  visitor.JSXNamespacedName = function (path) {
-    throw path.buildCodeFrameError("Namespace tags are not supported. ReactJSX is not XML.");
+  visitor.JSXNamespacedName = function(path) {
+    throw path.buildCodeFrameError(
+      "Namespace tags are not supported. ReactJSX is not XML."
+    );
   };
 
   visitor.JSXElement = {
@@ -28,7 +30,7 @@ export default function (opts) {
       }
 
       path.replaceWith(t.inherits(callExpr, path.node));
-    }
+    },
   };
 
   return visitor;
@@ -92,7 +94,7 @@ export default function (opts) {
     const state: ElementState = {
       tagExpr: tagExpr,
       tagName: tagName,
-      args:    args
+      args: args,
     };
 
     if (opts.pre) {
@@ -128,8 +130,10 @@ export default function (opts) {
 
     const useBuiltIns = file.opts.useBuiltIns || false;
     if (typeof useBuiltIns !== "boolean") {
-      throw new Error("transform-react-jsx currently only accepts a boolean option for " +
-        "useBuiltIns (defaults to false)");
+      throw new Error(
+        "transform-react-jsx currently only accepts a boolean option for " +
+          "useBuiltIns (defaults to false)"
+      );
     }
 
     function pushProps() {
@@ -160,9 +164,9 @@ export default function (opts) {
         objs.unshift(t.objectExpression([]));
       }
 
-      const helper = useBuiltIns ?
-        t.memberExpression(t.identifier("Object"), t.identifier("assign")) :
-        file.addHelper("extends");
+      const helper = useBuiltIns
+        ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+        : file.addHelper("extends");
 
       // spread it
       attribs = t.callExpression(helper, objs);

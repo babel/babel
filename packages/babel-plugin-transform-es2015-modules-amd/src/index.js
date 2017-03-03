@@ -1,17 +1,21 @@
 import template from "babel-template";
 import transformCommonjs from "babel-plugin-transform-es2015-modules-commonjs";
 
-const buildDefine = template(`
+const buildDefine = template(
+  `
   define(MODULE_NAME, [SOURCES], FACTORY);
-`);
+`
+);
 
-const buildFactory = template(`
+const buildFactory = template(
+  `
   (function (PARAMS) {
     BODY;
   })
-`);
+`
+);
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function isValidRequireCall(path) {
     if (!path.isCallExpression()) return false;
     if (!path.get("callee").isIdentifier({ name: "require" })) return false;
@@ -55,7 +59,7 @@ export default function ({ types: t }) {
       this.sources.push([id.node, source]);
 
       path.remove();
-    }
+    },
   };
 
   return {
@@ -81,12 +85,14 @@ export default function ({ types: t }) {
 
           path.traverse(amdVisitor, this);
 
-          const params = this.sources.map((source) => source[0]);
-          let sources = this.sources.map((source) => source[1]);
+          const params = this.sources.map(source => source[0]);
+          let sources = this.sources.map(source => source[1]);
 
-          sources = sources.concat(this.bareSources.filter((str) => {
-            return !this.sourceNames[str.value];
-          }));
+          sources = sources.concat(
+            this.bareSources.filter(str => {
+              return !this.sourceNames[str.value];
+            })
+          );
 
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
@@ -104,18 +110,20 @@ export default function ({ types: t }) {
           const { node } = path;
           const factory = buildFactory({
             PARAMS: params,
-            BODY: node.body
+            BODY: node.body,
           });
           factory.expression.body.directives = node.directives;
           node.directives = [];
 
-          node.body = [buildDefine({
-            MODULE_NAME: moduleName,
-            SOURCES: sources,
-            FACTORY: factory
-          })];
-        }
-      }
-    }
+          node.body = [
+            buildDefine({
+              MODULE_NAME: moduleName,
+              SOURCES: sources,
+              FACTORY: factory,
+            }),
+          ];
+        },
+      },
+    },
   };
 }

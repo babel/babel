@@ -2,13 +2,13 @@ import nameFunction from "babel-helper-function-name";
 import template from "babel-template";
 import syntaxClassProperties from "babel-plugin-syntax-class-properties";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   const findBareSupers = {
     Super(path) {
       if (path.parentPath.isCallExpression({ callee: path.node })) {
         this.push(path.parentPath);
       }
-    }
+    },
   };
 
   const referenceVisitor = {
@@ -17,35 +17,44 @@ export default function ({ types: t }) {
         this.collision = true;
         path.skip();
       }
-    }
+    },
   };
 
-  const buildObjectDefineProperty = template(`
+  const buildObjectDefineProperty = template(
+    `
     Object.defineProperty(REF, KEY, {
       // configurable is false by default
       enumerable: true,
       writable: true,
       value: VALUE
     });
-  `);
-
-  const buildClassPropertySpec = (ref, { key, value, computed }) => buildObjectDefineProperty({
-    REF: ref,
-    KEY: (t.isIdentifier(key) && !computed) ? t.stringLiteral(key.name) : key,
-    VALUE: value ? value : t.identifier("undefined")
-  });
-
-  const buildClassPropertyNonSpec = (ref, { key, value, computed }) => t.expressionStatement(
-    t.assignmentExpression("=", t.memberExpression(ref, key, computed || t.isLiteral(key)), value)
+  `
   );
+
+  const buildClassPropertySpec = (ref, { key, value, computed }) =>
+    buildObjectDefineProperty({
+      REF: ref,
+      KEY: t.isIdentifier(key) && !computed ? t.stringLiteral(key.name) : key,
+      VALUE: value ? value : t.identifier("undefined"),
+    });
+
+  const buildClassPropertyNonSpec = (ref, { key, value, computed }) =>
+    t.expressionStatement(
+      t.assignmentExpression(
+        "=",
+        t.memberExpression(ref, key, computed || t.isLiteral(key)),
+        value
+      )
+    );
 
   return {
     inherits: syntaxClassProperties,
 
     visitor: {
       Class(path, state) {
-        const buildClassProperty = state.opts.spec ? buildClassPropertySpec :
-          buildClassPropertyNonSpec;
+        const buildClassProperty = state.opts.spec
+          ? buildClassPropertySpec
+          : buildClassPropertyNonSpec;
         const isDerived = !!path.node.superClass;
         let constructor;
         const props = [];
@@ -67,7 +76,8 @@ export default function ({ types: t }) {
         if (path.isClassExpression() || !path.node.id) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
-        } else { // path.isClassDeclaration() && path.node.id
+        } else {
+          // path.isClassDeclaration() && path.node.id
           ref = path.node.id;
         }
 
@@ -93,16 +103,19 @@ export default function ({ types: t }) {
 
         if (instanceBody.length) {
           if (!constructor) {
-            const newConstructor = t.classMethod("constructor", t.identifier("constructor"), [],
-              t.blockStatement([]));
+            const newConstructor = t.classMethod(
+              "constructor",
+              t.identifier("constructor"),
+              [],
+              t.blockStatement([])
+            );
             if (isDerived) {
               newConstructor.params = [t.restElement(t.identifier("args"))];
               newConstructor.body.body.push(
                 t.returnStatement(
-                  t.callExpression(
-                    t.super(),
-                    [t.spreadElement(t.identifier("args"))]
-                  )
+                  t.callExpression(t.super(), [
+                    t.spreadElement(t.identifier("args")),
+                  ])
                 )
               );
             }
@@ -111,7 +124,7 @@ export default function ({ types: t }) {
 
           const collisionState = {
             collision: false,
-            scope: constructor.scope
+            scope: constructor.scope,
           };
 
           for (const prop of props) {
@@ -120,20 +133,26 @@ export default function ({ types: t }) {
           }
 
           if (collisionState.collision) {
-            const initialisePropsRef = path.scope.generateUidIdentifier("initialiseProps");
+            const initialisePropsRef = path.scope.generateUidIdentifier(
+              "initialiseProps"
+            );
 
-            nodes.push(t.variableDeclaration("var", [
-              t.variableDeclarator(
-                initialisePropsRef,
-                t.functionExpression(null, [], t.blockStatement(instanceBody))
-              )
-            ]));
+            nodes.push(
+              t.variableDeclaration("var", [
+                t.variableDeclarator(
+                  initialisePropsRef,
+                  t.functionExpression(null, [], t.blockStatement(instanceBody))
+                ),
+              ])
+            );
 
             instanceBody = [
               t.expressionStatement(
-                t.callExpression(t.memberExpression(initialisePropsRef, t.identifier("call")), [
-                  t.thisExpression()])
-              )
+                t.callExpression(
+                  t.memberExpression(initialisePropsRef, t.identifier("call")),
+                  [t.thisExpression()]
+                )
+              ),
             ];
           }
 
@@ -159,7 +178,8 @@ export default function ({ types: t }) {
         if (path.isClassExpression()) {
           path.scope.push({ id: ref });
           path.replaceWith(t.assignmentExpression("=", ref, path.node));
-        } else { // path.isClassDeclaration()
+        } else {
+          // path.isClassDeclaration()
           if (!path.node.id) {
             path.node.id = ref;
           }
@@ -177,10 +197,10 @@ export default function ({ types: t }) {
 
         const body = classExp.get("body");
         const members = body.get("body");
-        if (members.some((member) => member.isClassProperty())) {
+        if (members.some(member => member.isClassProperty())) {
           path.ensureBlock();
         }
-      }
-    }
+      },
+    },
   };
 }

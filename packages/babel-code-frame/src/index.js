@@ -8,18 +8,18 @@ import Chalk from "chalk";
 
 function getDefs(chalk) {
   return {
-    keyword:     chalk.cyan,
+    keyword: chalk.cyan,
     capitalized: chalk.yellow,
-    jsx_tag:     chalk.yellow,
-    punctuator:  chalk.yellow,
+    jsx_tag: chalk.yellow,
+    punctuator: chalk.yellow,
     // bracket:  intentionally omitted.
-    number:      chalk.magenta,
-    string:      chalk.green,
-    regex:       chalk.magenta,
-    comment:     chalk.grey,
-    invalid:     chalk.white.bgRed.bold,
-    gutter:      chalk.grey,
-    marker:      chalk.red.bold,
+    number: chalk.magenta,
+    string: chalk.green,
+    regex: chalk.magenta,
+    comment: chalk.grey,
+    invalid: chalk.white.bgRed.bold,
+    gutter: chalk.grey,
+    marker: chalk.red.bold,
   };
 }
 
@@ -78,11 +78,11 @@ function getTokenType(match) {
  */
 
 function highlight(defs: Object, text: string) {
-  return text.replace(jsTokens, function (...args) {
+  return text.replace(jsTokens, function(...args) {
     const type = getTokenType(args);
     const colorize = defs[type];
     if (colorize) {
-      return args[0].split(NEWLINE).map((str) => colorize(str)).join("\n");
+      return args[0].split(NEWLINE).map(str => colorize(str)).join("\n");
     } else {
       return args[0];
     }
@@ -93,15 +93,16 @@ function highlight(defs: Object, text: string) {
  * Create a code frame, adding line numbers, code highlighting, and pointing to a given position.
  */
 
-export default function (
+export default function(
   rawLines: string,
   lineNumber: number,
   colNumber: ?number,
-  opts: Object = {},
+  opts: Object = {}
 ): string {
   colNumber = Math.max(colNumber, 0);
 
-  const highlighted = (opts.highlightCode && Chalk.supportsColor) || opts.forceColor;
+  const highlighted = (opts.highlightCode && Chalk.supportsColor) ||
+    opts.forceColor;
   let chalk = Chalk;
   if (opts.forceColor) {
     chalk = new Chalk.constructor({ enabled: true });
@@ -117,7 +118,7 @@ export default function (
 
   const lines = rawLines.split(NEWLINE);
   let start = Math.max(lineNumber - (linesAbove + 1), 0);
-  let end   = Math.min(lines.length, lineNumber + linesBelow);
+  let end = Math.min(lines.length, lineNumber + linesBelow);
 
   if (!lineNumber && !colNumber) {
     start = 0;
@@ -126,31 +127,36 @@ export default function (
 
   const numberMaxWidth = String(end).length;
 
-  const frame = lines.slice(start, end).map((line, index) => {
-    const number = start + 1 + index;
-    const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
-    const gutter = ` ${paddedNumber} | `;
-    if (number === lineNumber) {
-      let markerLine = "";
-      if (colNumber) {
-        const markerSpacing = line.slice(0, colNumber - 1).replace(/[^\t]/g, " ");
-        markerLine = [
-          "\n ",
-          maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")),
-          markerSpacing,
-          maybeHighlight(defs.marker, "^")
+  const frame = lines
+    .slice(start, end)
+    .map((line, index) => {
+      const number = start + 1 + index;
+      const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
+      const gutter = ` ${paddedNumber} | `;
+      if (number === lineNumber) {
+        let markerLine = "";
+        if (colNumber) {
+          const markerSpacing = line
+            .slice(0, colNumber - 1)
+            .replace(/[^\t]/g, " ");
+          markerLine = [
+            "\n ",
+            maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")),
+            markerSpacing,
+            maybeHighlight(defs.marker, "^"),
+          ].join("");
+        }
+        return [
+          maybeHighlight(defs.marker, ">"),
+          maybeHighlight(defs.gutter, gutter),
+          line,
+          markerLine,
         ].join("");
+      } else {
+        return ` ${maybeHighlight(defs.gutter, gutter)}${line}`;
       }
-      return [
-        maybeHighlight(defs.marker, ">"),
-        maybeHighlight(defs.gutter, gutter),
-        line,
-        markerLine
-      ].join("");
-    } else {
-      return ` ${maybeHighlight(defs.gutter, gutter)}${line}`;
-    }
-  }).join("\n");
+    })
+    .join("\n");
 
   if (highlighted) {
     return chalk.reset(frame);

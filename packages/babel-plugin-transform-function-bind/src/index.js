@@ -1,6 +1,6 @@
 import syntaxFunctionBind from "babel-plugin-syntax-function-bind";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function getTempId(scope) {
     let id = scope.path.getData("functionBind");
     if (id) return id;
@@ -22,10 +22,14 @@ export default function ({ types: t }) {
     if (bind.object) {
       bind.callee = t.sequenceExpression([
         t.assignmentExpression("=", tempId, bind.object),
-        bind.callee
+        bind.callee,
       ]);
     } else {
-      bind.callee.object = t.assignmentExpression("=", tempId, bind.callee.object);
+      bind.callee.object = t.assignmentExpression(
+        "=",
+        tempId,
+        bind.callee.object
+      );
     }
     return tempId;
   }
@@ -46,8 +50,13 @@ export default function ({ types: t }) {
       BindExpression(path) {
         const { node, scope } = path;
         const context = inferBindContext(node, scope);
-        path.replaceWith(t.callExpression(t.memberExpression(node.callee, t.identifier("bind")), [context]));
-      }
-    }
+        path.replaceWith(
+          t.callExpression(
+            t.memberExpression(node.callee, t.identifier("bind")),
+            [context]
+          )
+        );
+      },
+    },
   };
 }

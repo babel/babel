@@ -1,6 +1,6 @@
 import helper from "babel-helper-builder-react-jsx";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   return {
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push("jsx");
@@ -22,7 +22,7 @@ export default function ({ types: t }) {
             state.args
           );
         }
-      }
-    })
+      },
+    }),
   };
 }

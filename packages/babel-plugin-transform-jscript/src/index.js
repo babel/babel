@@ -1,4 +1,4 @@
-export default function ({ types: t }) {
+export default function({ types: t }) {
   return {
     visitor: {
       FunctionExpression: {
@@ -7,15 +7,21 @@ export default function ({ types: t }) {
           if (!node.id) return;
           node._ignoreUserWhitespace = true;
 
-          path.replaceWith(t.callExpression(
-            t.functionExpression(null, [], t.blockStatement([
-              t.toStatement(node),
-              t.returnStatement(node.id)
-            ])),
-            []
-          ));
-        }
-      }
-    }
+          path.replaceWith(
+            t.callExpression(
+              t.functionExpression(
+                null,
+                [],
+                t.blockStatement([
+                  t.toStatement(node),
+                  t.returnStatement(node.id),
+                ])
+              ),
+              []
+            )
+          );
+        },
+      },
+    },
   };
 }

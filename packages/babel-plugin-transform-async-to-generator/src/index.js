@@ -1,7 +1,7 @@
 import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
 import syntaxAsyncFunctions from "babel-plugin-syntax-async-functions";
 
-export default function () {
+export default function() {
   return {
     inherits: syntaxAsyncFunctions,
 
@@ -10,9 +10,9 @@ export default function () {
         if (!path.node.async || path.node.generator) return;
 
         remapAsyncToGenerator(path, state.file, {
-          wrapAsync: state.addHelper("asyncToGenerator")
+          wrapAsync: state.addHelper("asyncToGenerator"),
         });
-      }
-    }
+      },
+    },
   };
 }

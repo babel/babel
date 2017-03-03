@@ -21,9 +21,11 @@ const visitor = {
       firstId = declar.node.id;
 
       if (declar.node.init) {
-        nodes.push(t.expressionStatement(
-          t.assignmentExpression("=", declar.node.id, declar.node.init)
-        ));
+        nodes.push(
+          t.expressionStatement(
+            t.assignmentExpression("=", declar.node.id, declar.node.init)
+          )
+        );
       }
 
       for (const name in declar.getBindingIdentifiers()) {
@@ -37,9 +39,9 @@ const visitor = {
     } else {
       path.replaceWithMultiple(nodes);
     }
-  }
+  },
 };
 
-export default function (path, emit: Function, kind: "var" | "let" = "var") {
+export default function(path, emit: Function, kind: "var" | "let" = "var") {
   path.traverse(visitor, { kind, emit });
 }

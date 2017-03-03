@@ -5,7 +5,8 @@ import template from "babel-template";
 const helpers = {};
 export default helpers;
 
-helpers.typeof = template(`
+helpers.typeof = template(
+  `
   (typeof Symbol === "function" && typeof Symbol.iterator === "symbol")
     ? function (obj) { return typeof obj; }
     : function (obj) {
@@ -13,9 +14,11 @@ helpers.typeof = template(`
           ? "symbol"
           : typeof obj;
       };
-`);
+`
+);
 
-helpers.jsx = template(`
+helpers.jsx = template(
+  `
   (function () {
     var REACT_ELEMENT_TYPE = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
 
@@ -59,9 +62,11 @@ helpers.jsx = template(`
     };
 
   })()
-`);
+`
+);
 
-helpers.asyncIterator = template(`
+helpers.asyncIterator = template(
+  `
   (function (iterable) {
     if (typeof Symbol === "function") {
       if (Symbol.asyncIterator) {
@@ -74,9 +79,11 @@ helpers.asyncIterator = template(`
     }
     throw new TypeError("Object is not async iterable");
   })
-`);
+`
+);
 
-helpers.asyncGenerator = template(`
+helpers.asyncGenerator = template(
+  `
   (function () {
     function AwaitValue(value) {
       this.value = value;
@@ -169,9 +176,11 @@ helpers.asyncGenerator = template(`
     };
 
   })()
-`);
+`
+);
 
-helpers.asyncGeneratorDelegate = template(`
+helpers.asyncGeneratorDelegate = template(
+  `
   (function (inner, awaitWrap) {
     var iter = {}, waiting = false;
 
@@ -211,9 +220,11 @@ helpers.asyncGeneratorDelegate = template(`
 
     return iter;
   })
-`);
+`
+);
 
-helpers.asyncToGenerator = template(`
+helpers.asyncToGenerator = template(
+  `
   (function (fn) {
     return function () {
       var gen = fn.apply(this, arguments);
@@ -242,17 +253,21 @@ helpers.asyncToGenerator = template(`
       });
     };
   })
-`);
+`
+);
 
-helpers.classCallCheck = template(`
+helpers.classCallCheck = template(
+  `
   (function (instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
     }
   });
-`);
+`
+);
 
-helpers.createClass = template(`
+helpers.createClass = template(
+  `
   (function() {
     function defineProperties(target, props) {
       for (var i = 0; i < props.length; i ++) {
@@ -270,9 +285,11 @@ helpers.createClass = template(`
       return Constructor;
     };
   })()
-`);
+`
+);
 
-helpers.defineEnumerableProperties = template(`
+helpers.defineEnumerableProperties = template(
+  `
   (function (obj, descs) {
     for (var key in descs) {
       var desc = descs[key];
@@ -282,9 +299,11 @@ helpers.defineEnumerableProperties = template(`
     }
     return obj;
   })
-`);
+`
+);
 
-helpers.defaults = template(`
+helpers.defaults = template(
+  `
   (function (obj, defaults) {
     var keys = Object.getOwnPropertyNames(defaults);
     for (var i = 0; i < keys.length; i++) {
@@ -296,9 +315,11 @@ helpers.defaults = template(`
     }
     return obj;
   })
-`);
+`
+);
 
-helpers.defineProperty = template(`
+helpers.defineProperty = template(
+  `
   (function (obj, key, value) {
     // Shortcircuit the slow defineProperty path when possible.
     // We are trying to avoid issues where setters defined on the
@@ -317,9 +338,11 @@ helpers.defineProperty = template(`
     }
     return obj;
   });
-`);
+`
+);
 
-helpers.extends = template(`
+helpers.extends = template(
+  `
   Object.assign || (function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
@@ -331,9 +354,11 @@ helpers.extends = template(`
     }
     return target;
   })
-`);
+`
+);
 
-helpers.get = template(`
+helpers.get = template(
+  `
   (function get(object, property, receiver) {
     if (object === null) object = Function.prototype;
 
@@ -359,10 +384,11 @@ helpers.get = template(`
       return getter.call(receiver);
     }
   });
-`);
+`
+);
 
-
-helpers.inherits = template(`
+helpers.inherits = template(
+  `
   (function (subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
@@ -377,9 +403,11 @@ helpers.inherits = template(`
     });
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   })
-`);
+`
+);
 
-helpers.instanceof = template(`
+helpers.instanceof = template(
+  `
   (function (left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
       return right[Symbol.hasInstance](left);
@@ -387,16 +415,19 @@ helpers.instanceof = template(`
       return left instanceof right;
     }
   });
-`);
+`
+);
 
-
-helpers.interopRequireDefault = template(`
+helpers.interopRequireDefault = template(
+  `
   (function (obj) {
     return obj && obj.__esModule ? obj : { default: obj };
   })
-`);
+`
+);
 
-helpers.interopRequireWildcard = template(`
+helpers.interopRequireWildcard = template(
+  `
   (function (obj) {
     if (obj && obj.__esModule) {
       return obj;
@@ -411,23 +442,29 @@ helpers.interopRequireWildcard = template(`
       return newObj;
     }
   })
-`);
+`
+);
 
-helpers.newArrowCheck = template(`
+helpers.newArrowCheck = template(
+  `
   (function (innerThis, boundThis) {
     if (innerThis !== boundThis) {
       throw new TypeError("Cannot instantiate an arrow function");
     }
   });
-`);
+`
+);
 
-helpers.objectDestructuringEmpty = template(`
+helpers.objectDestructuringEmpty = template(
+  `
   (function (obj) {
     if (obj == null) throw new TypeError("Cannot destructure undefined");
   });
-`);
+`
+);
 
-helpers.objectWithoutProperties = template(`
+helpers.objectWithoutProperties = template(
+  `
   (function (obj, keys) {
     var target = {};
     for (var i in obj) {
@@ -437,22 +474,28 @@ helpers.objectWithoutProperties = template(`
     }
     return target;
   })
-`);
+`
+);
 
-helpers.possibleConstructorReturn = template(`
+helpers.possibleConstructorReturn = template(
+  `
   (function (self, call) {
     if (!self) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
     return call && (typeof call === "object" || typeof call === "function") ? call : self;
   });
-`);
+`
+);
 
-helpers.selfGlobal = template(`
+helpers.selfGlobal = template(
+  `
   typeof global === "undefined" ? self : global
-`);
+`
+);
 
-helpers.set = template(`
+helpers.set = template(
+  `
   (function set(object, property, value, receiver) {
     var desc = Object.getOwnPropertyDescriptor(object, property);
 
@@ -474,9 +517,11 @@ helpers.set = template(`
 
     return value;
   });
-`);
+`
+);
 
-helpers.slicedToArray = template(`
+helpers.slicedToArray = template(
+  `
   (function () {
     // Broken out into a separate function to avoid deoptimizations due to the try/catch for the
     // array iterator case.
@@ -523,9 +568,11 @@ helpers.slicedToArray = template(`
       }
     };
   })();
-`);
+`
+);
 
-helpers.slicedToArrayLoose = template(`
+helpers.slicedToArrayLoose = template(
+  `
   (function (arr, i) {
     if (Array.isArray(arr)) {
       return arr;
@@ -540,24 +587,30 @@ helpers.slicedToArrayLoose = template(`
       throw new TypeError("Invalid attempt to destructure non-iterable instance");
     }
   });
-`);
+`
+);
 
-helpers.taggedTemplateLiteral = template(`
+helpers.taggedTemplateLiteral = template(
+  `
   (function (strings, raw) {
     return Object.freeze(Object.defineProperties(strings, {
         raw: { value: Object.freeze(raw) }
     }));
   });
-`);
+`
+);
 
-helpers.taggedTemplateLiteralLoose = template(`
+helpers.taggedTemplateLiteralLoose = template(
+  `
   (function (strings, raw) {
     strings.raw = raw;
     return strings;
   });
-`);
+`
+);
 
-helpers.temporalRef = template(`
+helpers.temporalRef = template(
+  `
   (function (val, name, undef) {
     if (val === undef) {
       throw new ReferenceError(name + " is not defined - temporal dead zone");
@@ -565,19 +618,25 @@ helpers.temporalRef = template(`
       return val;
     }
   })
-`);
+`
+);
 
-helpers.temporalUndefined = template(`
+helpers.temporalUndefined = template(
+  `
   ({})
-`);
+`
+);
 
-helpers.toArray = template(`
+helpers.toArray = template(
+  `
   (function (arr) {
     return Array.isArray(arr) ? arr : Array.from(arr);
   });
-`);
+`
+);
 
-helpers.toConsumableArray = template(`
+helpers.toConsumableArray = template(
+  `
   (function (arr) {
     if (Array.isArray(arr)) {
       for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
@@ -586,4 +645,5 @@ helpers.toConsumableArray = template(`
       return Array.from(arr);
     }
   });
-`);
+`
+);

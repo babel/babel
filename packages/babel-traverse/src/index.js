@@ -15,7 +15,7 @@ export default function traverse(
   opts?: Object,
   scope?: Object,
   state: Object,
-  parentPath: Object,
+  parentPath: Object
 ) {
   if (!parent) return;
   if (!opts) opts = {};
@@ -36,14 +36,14 @@ traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
 traverse.NodePath = require("./path");
-traverse.Scope    = require("./scope");
-traverse.Hub      = require("./hub");
+traverse.Scope = require("./scope");
+traverse.Hub = require("./hub");
 
-traverse.cheap = function (node, enter) {
+traverse.cheap = function(node, enter) {
   return t.traverseFast(node, enter);
 };
 
-traverse.node = function (
+traverse.node = function(
   node: Object,
   opts: Object,
   scope: Object,
@@ -61,13 +61,13 @@ traverse.node = function (
   }
 };
 
-traverse.clearNode = function (node, opts) {
+traverse.clearNode = function(node, opts) {
   t.removeProperties(node, opts);
 
   cache.path.delete(node);
 };
 
-traverse.removeProperties = function (tree, opts) {
+traverse.removeProperties = function(tree, opts) {
   t.traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
@@ -79,7 +79,7 @@ function hasBlacklistedType(path, state) {
   }
 }
 
-traverse.hasType = function (
+traverse.hasType = function(
   tree: Object,
   scope: Object,
   type: Object,
@@ -92,14 +92,19 @@ traverse.hasType = function (
   if (tree.type === type) return true;
 
   const state = {
-    has:  false,
-    type: type
+    has: false,
+    type: type,
   };
 
-  traverse(tree, {
-    blacklist: blacklistTypes,
-    enter: hasBlacklistedType
-  }, scope, state);
+  traverse(
+    tree,
+    {
+      blacklist: blacklistTypes,
+      enter: hasBlacklistedType,
+    },
+    scope,
+    state
+  );
 
   return state.has;
 };

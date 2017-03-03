@@ -3,17 +3,21 @@ import callDelegate from "babel-helper-call-delegate";
 import template from "babel-template";
 import * as t from "babel-types";
 
-const buildDefaultParam = template(`
+const buildDefaultParam = template(
+  `
   let VARIABLE_NAME =
     ARGUMENTS.length > ARGUMENT_KEY && ARGUMENTS[ARGUMENT_KEY] !== undefined ?
       ARGUMENTS[ARGUMENT_KEY]
     :
       DEFAULT_VALUE;
-`);
+`
+);
 
-const buildCutOff = template(`
+const buildCutOff = template(
+  `
   let $0 = $1[$2];
-`);
+`
+);
 
 function hasDefaults(node) {
   for (const param of (node.params: Array<Object>)) {
@@ -40,7 +44,7 @@ const iifeVisitor = {
   Scope(path) {
     // different bindings
     path.skip();
-  }
+  },
 };
 
 export const visitor = {
@@ -53,7 +57,7 @@ export const visitor = {
 
     const state = {
       iife: false,
-      scope: scope
+      scope: scope,
     };
 
     const body = [];
@@ -67,8 +71,8 @@ export const visitor = {
       const defNode = buildDefaultParam({
         VARIABLE_NAME: left,
         DEFAULT_VALUE: right,
-        ARGUMENT_KEY:  t.numericLiteral(i),
-        ARGUMENTS:     argsIdentifier
+        ARGUMENT_KEY: t.numericLiteral(i),
+        ARGUMENTS: argsIdentifier,
       });
       defNode._blockHoist = node.params.length - i;
       body.push(defNode);
@@ -90,7 +94,7 @@ export const visitor = {
         continue;
       }
 
-      const left  = param.get("left");
+      const left = param.get("left");
       const right = param.get("right");
 
       //
@@ -134,5 +138,5 @@ export const visitor = {
     } else {
       path.get("body").unshiftContainer("body", body);
     }
-  }
+  },
 };

@@ -27,7 +27,7 @@ export default class SourceMap {
       if (typeof code === "string") {
         map.setSourceContent(this._opts.sourceFileName, code);
       } else if (typeof code === "object") {
-        Object.keys(code).forEach((sourceFileName) => {
+        Object.keys(code).forEach(sourceFileName => {
           map.setSourceContent(sourceFileName, code[sourceFileName]);
         });
       }
@@ -53,15 +53,18 @@ export default class SourceMap {
     line: number,
     column: number,
     identifierName: ?string,
-    filename: ?string,
+    filename: ?string
   ) {
     // Adding an empty mapping at the start of a generated line just clutters the map.
     if (this._lastGenLine !== generatedLine && line === null) return;
 
     // If this mapping points to the same source location as the last one, we can ignore it since
     // the previous one covers it.
-    if (this._lastGenLine === generatedLine && this._lastSourceLine === line &&
-      this._lastSourceColumn === column) {
+    if (
+      this._lastGenLine === generatedLine &&
+      this._lastSourceLine === line &&
+      this._lastSourceColumn === column
+    ) {
       return;
     }
 
@@ -80,10 +83,12 @@ export default class SourceMap {
         column: generatedColumn,
       },
       source: line == null ? undefined : filename || this._opts.sourceFileName,
-      original: line == null ? undefined : {
-        line: line,
-        column: column,
-      },
+      original: line == null
+        ? undefined
+        : {
+            line: line,
+            column: column,
+          },
     });
   }
 }

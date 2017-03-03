@@ -1,4 +1,4 @@
-export default function ({ messages }) {
+export default function({ messages }) {
   return {
     visitor: {
       Scope({ scope }) {
@@ -11,6 +11,6 @@ export default function ({ messages }) {
           }
         }
       },
-    }
+    },
   };
 }

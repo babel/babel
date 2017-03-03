@@ -1,9 +1,12 @@
 import syntaxExportExtensions from "babel-plugin-syntax-export-extensions";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function build(node, nodes, scope) {
     const first = node.specifiers[0];
-    if (!t.isExportNamespaceSpecifier(first) && !t.isExportDefaultSpecifier(first)) return;
+    if (
+      !t.isExportNamespaceSpecifier(first) && !t.isExportDefaultSpecifier(first)
+    )
+      return;
 
     const specifier = node.specifiers.shift();
     const uid = scope.generateUidIdentifier(specifier.exported.name);
@@ -16,7 +19,11 @@ export default function ({ types: t }) {
     }
 
     nodes.push(t.importDeclaration([newSpecifier], node.source));
-    nodes.push(t.exportNamedDeclaration(null, [t.exportSpecifier(uid, specifier.exported)]));
+    nodes.push(
+      t.exportNamedDeclaration(null, [
+        t.exportSpecifier(uid, specifier.exported),
+      ])
+    );
 
     build(node, nodes, scope);
   }
@@ -35,7 +42,7 @@ export default function ({ types: t }) {
           nodes.push(node);
         }
         path.replaceWithMultiple(nodes);
-      }
-    }
+      },
+    },
   };
 }

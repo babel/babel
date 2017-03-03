@@ -1,9 +1,8 @@
-import transformExponentiationOperator from "babel-plugin-transform-exponentiation-operator";
+import transformExponentiationOperator
+  from "babel-plugin-transform-exponentiation-operator";
 
-export default function () {
+export default function() {
   return {
-    plugins: [
-      transformExponentiationOperator
-    ]
+    plugins: [transformExponentiationOperator],
   };
 }

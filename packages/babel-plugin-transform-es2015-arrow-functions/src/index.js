@@ -1,4 +1,4 @@
-export default function ({ types: t }) {
+export default function({ types: t }) {
   return {
     visitor: {
       ArrowFunctionExpression(path, state) {
@@ -14,22 +14,27 @@ export default function ({ types: t }) {
 
           // make sure that arrow function won't be instantiated
           path.ensureBlock();
-          path.get("body").unshiftContainer(
-            "body",
-            t.expressionStatement(t.callExpression(state.addHelper("newArrowCheck"), [
-              t.thisExpression(),
-              boundThis
-            ]))
-          );
+          path
+            .get("body")
+            .unshiftContainer(
+              "body",
+              t.expressionStatement(
+                t.callExpression(state.addHelper("newArrowCheck"), [
+                  t.thisExpression(),
+                  boundThis,
+                ])
+              )
+            );
 
-          path.replaceWith(t.callExpression(
-            t.memberExpression(node, t.identifier("bind")),
-            [t.thisExpression()]
-          ));
+          path.replaceWith(
+            t.callExpression(t.memberExpression(node, t.identifier("bind")), [
+              t.thisExpression(),
+            ])
+          );
         } else {
           path.arrowFunctionToShadowed();
         }
-      }
-    }
+      },
+    },
   };
 }

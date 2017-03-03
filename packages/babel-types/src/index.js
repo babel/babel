@@ -12,15 +12,17 @@ const t = exports;
 function registerType(type: string) {
   let is = t[`is${type}`];
   if (!is) {
-    is = t[`is${type}`] = function (node, opts) {
+    is = t[`is${type}`] = function(node, opts) {
       return t.is(type, node, opts);
     };
   }
 
-  t[`assert${type}`] = function (node, opts) {
+  t[`assert${type}`] = function(node, opts) {
     opts = opts || {};
     if (!is(node, opts)) {
-      throw new Error(`Expected type ${JSON.stringify(type)} with option ${JSON.stringify(opts)}`);
+      throw new Error(
+        `Expected type ${JSON.stringify(type)} with option ${JSON.stringify(opts)}`
+      );
     }
   };
 }
@@ -46,11 +48,17 @@ export {
   UNARY_OPERATORS,
   INHERIT_KEYS,
   BLOCK_SCOPED_SYMBOL,
-  NOT_LOCAL_BINDING
+  NOT_LOCAL_BINDING,
 } from "./constants";
 
 import "./definitions/init";
-import { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS } from "./definitions";
+import {
+  VISITOR_KEYS,
+  ALIAS_KEYS,
+  NODE_FIELDS,
+  BUILDER_KEYS,
+  DEPRECATED_KEYS,
+} from "./definitions";
 export { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS };
 
 import * as _react from "./react";
@@ -70,9 +78,10 @@ for (const type in t.VISITOR_KEYS) {
 
 t.FLIPPED_ALIAS_KEYS = {};
 
-Object.keys(t.ALIAS_KEYS).forEach(function (type) {
-  t.ALIAS_KEYS[type].forEach(function (alias) {
-    const types = t.FLIPPED_ALIAS_KEYS[alias] = t.FLIPPED_ALIAS_KEYS[alias] || [];
+Object.keys(t.ALIAS_KEYS).forEach(function(type) {
+  t.ALIAS_KEYS[type].forEach(function(alias) {
+    const types = t.FLIPPED_ALIAS_KEYS[alias] = t.FLIPPED_ALIAS_KEYS[alias] || [
+    ];
     types.push(type);
   });
 });
@@ -81,7 +90,7 @@ Object.keys(t.ALIAS_KEYS).forEach(function (type) {
  * Registers `is[Alias]` and `assert[Alias]` functions for all aliases.
  */
 
-Object.keys(t.FLIPPED_ALIAS_KEYS).forEach(function (type) {
+Object.keys(t.FLIPPED_ALIAS_KEYS).forEach(function(type) {
   t[type.toUpperCase() + "_TYPES"] = t.FLIPPED_ALIAS_KEYS[type];
   registerType(type);
 });
@@ -137,14 +146,14 @@ export function isType(nodeType: string, targetType: string): boolean {
  * Description
  */
 
-Object.keys(t.BUILDER_KEYS).forEach(function (type) {
+Object.keys(t.BUILDER_KEYS).forEach(function(type) {
   const keys = t.BUILDER_KEYS[type];
 
   function builder() {
     if (arguments.length > keys.length) {
       throw new Error(
         `t.${type}: Too many arguments passed. Received ${arguments.length} but can receive ` +
-        `no more than ${keys.length}`
+          `no more than ${keys.length}`
       );
     }
 
@@ -181,7 +190,7 @@ for (const type in t.DEPRECATED_KEYS) {
   const newType = t.DEPRECATED_KEYS[type];
 
   function proxy(fn) {
-    return function () {
+    return function() {
       console.trace(`The node type ${type} has been renamed to ${newType}`);
       return fn.apply(this, arguments);
     };
@@ -229,8 +238,16 @@ export function shallowEqual(actual: Object, expected: Object): boolean {
  * Append a node to a member expression.
  */
 
-export function appendToMemberExpression(member: Object, append: Object, computed?: boolean): Object {
-  member.object   = t.memberExpression(member.object, member.property, member.computed);
+export function appendToMemberExpression(
+  member: Object,
+  append: Object,
+  computed?: boolean
+): Object {
+  member.object = t.memberExpression(
+    member.object,
+    member.property,
+    member.computed
+  );
   member.property = append;
   member.computed = !!computed;
   return member;
@@ -240,7 +257,10 @@ export function appendToMemberExpression(member: Object, append: Object, compute
  * Prepend a node to a member expression.
  */
 
-export function prependToMemberExpression(member: Object, prepend: Object): Object {
+export function prependToMemberExpression(
+  member: Object,
+  prepend: Object
+): Object {
   member.object = t.memberExpression(prepend, member.object);
   return member;
 }
@@ -314,10 +334,13 @@ export function cloneDeep(node: Object): Object {
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 
-export function buildMatchMemberExpression(match:string, allowPartial?: boolean): Function {
+export function buildMatchMemberExpression(
+  match: string,
+  allowPartial?: boolean
+): Function {
   const parts = match.split(".");
 
-  return function (member) {
+  return function(member) {
     // not a member expression
     if (!t.isMemberExpression(member)) return false;
 
@@ -397,10 +420,7 @@ export function inheritInnerComments(child: Object, parent: Object) {
 
 function _inheritComments(key, child, parent) {
   if (child && parent) {
-    child[key] = uniq(
-      [].concat(child[key], parent[key])
-        .filter(Boolean)
-    );
+    child[key] = uniq([].concat(child[key], parent[key]).filter(Boolean));
   }
 }
 
@@ -460,7 +480,11 @@ toFastProperties(t.VISITOR_KEYS);
  * A prefix AST traversal implementation implementation.
  */
 
-export function traverseFast(node: Node, enter: (node: Node) => void, opts?: Object) {
+export function traverseFast(
+  node: Node,
+  enter: (node: Node) => void,
+  opts?: Object
+) {
   if (!node) return;
 
   const keys = t.VISITOR_KEYS[node.type];
@@ -482,15 +506,11 @@ export function traverseFast(node: Node, enter: (node: Node) => void, opts?: Obj
   }
 }
 
-const CLEAR_KEYS: Array = [
-  "tokens",
-  "start", "end", "loc",
-  "raw", "rawValue"
-];
+const CLEAR_KEYS: Array = ["tokens", "start", "end", "loc", "raw", "rawValue"];
 
-const CLEAR_KEYS_PLUS_COMMENTS: Array = t.COMMENT_KEYS.concat([
-  "comments"
-]).concat(CLEAR_KEYS);
+const CLEAR_KEYS_PLUS_COMMENTS: Array = t.COMMENT_KEYS
+  .concat(["comments"])
+  .concat(CLEAR_KEYS);
 
 /**
  * Remove all of the _* properties from a node along with the additional metadata
@@ -522,7 +542,7 @@ export function removePropertiesDeep(tree: Node, opts?: Object): Node {
 //
 export {
   getBindingIdentifiers,
-  getOuterBindingIdentifiers
+  getOuterBindingIdentifiers,
 } from "./retrievers";
 
 export {
@@ -535,7 +555,7 @@ export {
   isSpecifierDefault,
   isScope,
   isImmutable,
-  isNodesEquivalent
+  isNodesEquivalent,
 } from "./validators";
 
 export {
@@ -547,11 +567,11 @@ export {
   toStatement,
   toExpression,
   toBlock,
-  valueToNode
+  valueToNode,
 } from "./converters";
 
 export {
   createUnionTypeAnnotation,
   removeTypeDuplicates,
-  createTypeAnnotationBasedOnTypeof
+  createTypeAnnotationBasedOnTypeof,
 } from "./flow";

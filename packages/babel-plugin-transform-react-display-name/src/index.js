@@ -1,6 +1,6 @@
 import path from "path";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function addDisplayName(id, call) {
     const props = call.arguments[0].properties;
     let safe = true;
@@ -15,11 +15,15 @@ export default function ({ types: t }) {
     }
 
     if (safe) {
-      props.unshift(t.objectProperty(t.identifier("displayName"), t.stringLiteral(id)));
+      props.unshift(
+        t.objectProperty(t.identifier("displayName"), t.stringLiteral(id))
+      );
     }
   }
 
-  const isCreateClassCallExpression = t.buildMatchMemberExpression("React.createClass");
+  const isCreateClassCallExpression = t.buildMatchMemberExpression(
+    "React.createClass"
+  );
 
   function isCreateClass(node) {
     if (!node || !t.isCallExpression(node)) return false;
@@ -60,7 +64,7 @@ export default function ({ types: t }) {
         let id;
 
         // crawl up the ancestry looking for possible candidates for displayName inference
-        path.find(function (path) {
+        path.find(function(path) {
           if (path.isAssignmentExpression()) {
             id = path.node.left;
           } else if (path.isObjectProperty()) {
@@ -88,7 +92,7 @@ export default function ({ types: t }) {
         if (t.isIdentifier(id)) {
           addDisplayName(id.name, node);
         }
-      }
-    }
+      },
+    },
   };
 }

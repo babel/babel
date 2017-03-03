@@ -2,7 +2,9 @@ import fs from "fs";
 
 export { default as File } from "./transformation/file";
 export { default as options } from "./transformation/file/options/config";
-export { default as buildExternalHelpers } from "./tools/build-external-helpers";
+export {
+  default as buildExternalHelpers,
+} from "./tools/build-external-helpers";
 export { default as template } from "babel-template";
 export { default as resolvePlugin } from "./helpers/resolve-plugin";
 export { default as resolvePreset } from "./helpers/resolve-preset";
@@ -27,10 +29,18 @@ export function Plugin(alias) {
   throw new Error(`The (${alias}) Babel 5 plugin is being run with Babel 6.`);
 }
 
-import { transform, analyse, transformFromAst } from "./transformation/pipeline";
+import {
+  transform,
+  analyse,
+  transformFromAst,
+} from "./transformation/pipeline";
 export { transform, analyse, transformFromAst };
 
-export function transformFile(filename: string, opts?: Object, callback: Function) {
+export function transformFile(
+  filename: string,
+  opts?: Object,
+  callback: Function
+) {
   if (typeof opts === "function") {
     callback = opts;
     opts = {};
@@ -38,7 +48,7 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
 
   opts.filename = filename;
 
-  fs.readFile(filename, function (err, code) {
+  fs.readFile(filename, function(err, code) {
     let result;
 
     if (!err) {
@@ -57,7 +67,10 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
   });
 }
 
-export function transformFileSync(filename: string, opts?: Object = {}): string {
+export function transformFileSync(
+  filename: string,
+  opts?: Object = {}
+): string {
   opts.filename = filename;
   return transform(fs.readFileSync(filename, "utf8"), opts);
 }

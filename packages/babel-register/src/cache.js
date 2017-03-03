@@ -3,7 +3,8 @@ import fs from "fs";
 import { sync as mkdirpSync } from "mkdirp";
 import homeOrTmp from "home-or-tmp";
 
-const FILENAME: string = process.env.BABEL_CACHE_PATH || path.join(homeOrTmp, ".babel.json");
+const FILENAME: string = process.env.BABEL_CACHE_PATH ||
+  path.join(homeOrTmp, ".babel.json");
 let data: Object = {};
 
 /**
@@ -16,7 +17,6 @@ export function save() {
   try {
     serialised = JSON.stringify(data, null, "  ");
   } catch (err) {
-
     if (err.message === "Invalid string length") {
       err.message = "Cache too large so it's been cleared.";
       console.error(err.stack);

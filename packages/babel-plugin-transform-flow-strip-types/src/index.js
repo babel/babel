@@ -1,6 +1,6 @@
 import syntaxFlow from "babel-plugin-syntax-flow";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   const FLOW_DIRECTIVE = "@flow";
 
   return {
@@ -34,7 +34,7 @@ export default function ({ types: t }) {
 
         // We do this here instead of in a `ClassProperty` visitor because the class transform
         // would transform the class before we reached the class property.
-        path.get("body.body").forEach((child) => {
+        path.get("body.body").forEach(child => {
           if (child.isClassProperty()) {
             child.node.typeAnnotation = null;
             if (!child.node.value) child.remove();
@@ -59,7 +59,7 @@ export default function ({ types: t }) {
           node = node.expression;
         } while (t.isTypeCastExpression(node));
         path.replaceWith(node);
-      }
-    }
+      },
+    },
   };
 }

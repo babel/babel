@@ -1,4 +1,4 @@
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function hasRefOrSpread(attrs) {
     for (let i = 0; i < attrs.length; i++) {
       const attr = attrs[i];
@@ -9,7 +9,8 @@ export default function ({ types: t }) {
   }
 
   function isJSXAttributeOfName(attr, name) {
-    return t.isJSXAttribute(attr) && t.isJSXIdentifier(attr.name, { name: name });
+    return t.isJSXAttribute(attr) &&
+      t.isJSXIdentifier(attr.name, { name: name });
   }
 
   function getAttributeValue(attr) {
@@ -29,9 +30,9 @@ export default function ({ types: t }) {
         if (hasRefOrSpread(open.attributes)) return;
 
         // init
-        const props       = t.objectExpression([]);
-        let key         = null;
-        let type        = open.name;
+        const props = t.objectExpression([]);
+        let key = null;
+        let type = open.name;
 
         if (t.isJSXIdentifier(type) && t.react.isCompatTag(type.name)) {
           type = t.stringLiteral(type.name);
@@ -47,7 +48,9 @@ export default function ({ types: t }) {
             key = getAttributeValue(attr);
           } else {
             const name = attr.name.name;
-            const propertyKey = t.isValidIdentifier(name) ? t.identifier(name) : t.stringLiteral(name);
+            const propertyKey = t.isValidIdentifier(name)
+              ? t.identifier(name)
+              : t.stringLiteral(name);
             pushProp(props.properties, propertyKey, getAttributeValue(attr));
           }
         }
@@ -63,7 +66,7 @@ export default function ({ types: t }) {
 
         const el = t.callExpression(file.addHelper("jsx"), args);
         path.replaceWith(el);
-      }
-    }
+      },
+    },
   };
 }

@@ -2,18 +2,23 @@ import { basename, extname } from "path";
 import template from "babel-template";
 import transformAMD from "babel-plugin-transform-es2015-modules-amd";
 
-const buildPrerequisiteAssignment = template(`
+const buildPrerequisiteAssignment = template(
+  `
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
-`);
+`
+);
 
-const buildGlobalExport = template(`
+const buildGlobalExport = template(
+  `
   var mod = { exports: {} };
   factory(BROWSER_ARGUMENTS);
   PREREQUISITE_ASSIGNMENTS
   GLOBAL_TO_ASSIGN = mod.exports;
-`);
+`
+);
 
-const buildWrapper = template(`
+const buildWrapper = template(
+  `
   (function (global, factory) {
     if (typeof define === "function" && define.amd) {
       define(MODULE_NAME, AMD_ARGUMENTS, factory);
@@ -23,9 +28,10 @@ const buildWrapper = template(`
       GLOBAL_EXPORT
     }
   })(this, FUNC);
-`);
+`
+);
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function isValidDefine(path) {
     if (!path.isExpressionStatement()) return;
 
@@ -59,7 +65,7 @@ export default function ({ types: t }) {
           const func = call.arguments[1];
           const browserGlobals = state.opts.globals || {};
 
-          const commonArgs = amdArgs.elements.map((arg) => {
+          const commonArgs = amdArgs.elements.map(arg => {
             if (arg.value === "module" || arg.value === "exports") {
               return t.identifier(arg.value);
             } else {
@@ -67,30 +73,39 @@ export default function ({ types: t }) {
             }
           });
 
-          const browserArgs = amdArgs.elements.map((arg) => {
+          const browserArgs = amdArgs.elements.map(arg => {
             if (arg.value === "module") {
               return t.identifier("mod");
             } else if (arg.value === "exports") {
-              return t.memberExpression(t.identifier("mod"), t.identifier("exports"));
+              return t.memberExpression(
+                t.identifier("mod"),
+                t.identifier("exports")
+              );
             } else {
               let memberExpression;
 
               if (state.opts.exactGlobals) {
                 const globalRef = browserGlobals[arg.value];
                 if (globalRef) {
-                  memberExpression = globalRef.split(".").reduce(
-                    (accum, curr) => t.memberExpression(accum, t.identifier(curr)), t.identifier("global")
-                  );
+                  memberExpression = globalRef
+                    .split(".")
+                    .reduce(
+                      (accum, curr) =>
+                        t.memberExpression(accum, t.identifier(curr)),
+                      t.identifier("global")
+                    );
                 } else {
                   memberExpression = t.memberExpression(
-                    t.identifier("global"), t.identifier(t.toIdentifier(arg.value))
+                    t.identifier("global"),
+                    t.identifier(t.toIdentifier(arg.value))
                   );
                 }
               } else {
                 const requireName = basename(arg.value, extname(arg.value));
                 const globalName = browserGlobals[requireName] || requireName;
                 memberExpression = t.memberExpression(
-                  t.identifier("global"), t.identifier(t.toIdentifier(globalName))
+                  t.identifier("global"),
+                  t.identifier(t.toIdentifier(globalName))
                 );
               }
 
@@ -98,9 +113,12 @@ export default function ({ types: t }) {
             }
           });
 
-          const moduleNameOrBasename = moduleName ? moduleName.value : this.file.opts.basename;
+          const moduleNameOrBasename = moduleName
+            ? moduleName.value
+            : this.file.opts.basename;
           let globalToAssign = t.memberExpression(
-            t.identifier("global"), t.identifier(t.toIdentifier(moduleNameOrBasename))
+            t.identifier("global"),
+            t.identifier(t.toIdentifier(moduleNameOrBasename))
           );
           let prerequisiteAssignments = null;
 
@@ -111,28 +129,38 @@ export default function ({ types: t }) {
               prerequisiteAssignments = [];
 
               const members = globalName.split(".");
-              globalToAssign = members.slice(1).reduce((accum, curr) => {
-                prerequisiteAssignments.push(buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum }));
-                return t.memberExpression(accum, t.identifier(curr));
-              }, t.memberExpression(t.identifier("global"), t.identifier(members[0])));
+              globalToAssign = members.slice(1).reduce(
+                (accum, curr) => {
+                  prerequisiteAssignments.push(
+                    buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum })
+                  );
+                  return t.memberExpression(accum, t.identifier(curr));
+                },
+                t.memberExpression(
+                  t.identifier("global"),
+                  t.identifier(members[0])
+                )
+              );
             }
           }
 
           const globalExport = buildGlobalExport({
             BROWSER_ARGUMENTS: browserArgs,
             PREREQUISITE_ASSIGNMENTS: prerequisiteAssignments,
-            GLOBAL_TO_ASSIGN: globalToAssign
+            GLOBAL_TO_ASSIGN: globalToAssign,
           });
 
-          last.replaceWith(buildWrapper({
-            MODULE_NAME: moduleName,
-            AMD_ARGUMENTS: amdArgs,
-            COMMON_ARGUMENTS: commonArgs,
-            GLOBAL_EXPORT: globalExport,
-            FUNC: func
-          }));
-        }
-      }
-    }
+          last.replaceWith(
+            buildWrapper({
+              MODULE_NAME: moduleName,
+              AMD_ARGUMENTS: amdArgs,
+              COMMON_ARGUMENTS: commonArgs,
+              GLOBAL_EXPORT: globalExport,
+              FUNC: func,
+            })
+          );
+        },
+      },
+    },
   };
 }

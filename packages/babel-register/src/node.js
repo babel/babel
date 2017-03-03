@@ -9,18 +9,18 @@ import path from "path";
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
-  environment : "node",
+  environment: "node",
   retrieveSourceMap(source) {
     const map = maps && maps[source];
     if (map) {
       return {
         url: null,
-        map: map
+        map: map,
       };
     } else {
       return null;
     }
-  }
+  },
 });
 
 registerCache.load();
@@ -31,8 +31,8 @@ const transformOpts = {};
 let ignore;
 let only;
 
-let oldHandlers   = {};
-const maps          = {};
+let oldHandlers = {};
+const maps = {};
 
 const cwd = process.cwd();
 
@@ -48,11 +48,11 @@ function compile(filename) {
   let result;
 
   // merge in base options and resolve all the plugins and presets relative to this file
-  const opts = new OptionManager().init(extend(
-    { sourceRoot: path.dirname(filename) }, // sourceRoot can be overwritten
-    deepClone(transformOpts),
-    { filename }
-  ));
+  const opts = new OptionManager().init(
+    extend({ sourceRoot: path.dirname(filename) }, deepClone(transformOpts), {
+      filename,
+    }) // sourceRoot can be overwritten
+  );
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
@@ -67,13 +67,16 @@ function compile(filename) {
   }
 
   if (!result) {
-    result = babel.transformFileSync(filename, extend(opts, {
-      // Do not process config files since has already been done with the OptionManager
-      // calls above and would introduce duplicates.
-      babelrc: false,
-      sourceMaps: "both",
-      ast: false
-    }));
+    result = babel.transformFileSync(
+      filename,
+      extend(opts, {
+        // Do not process config files since has already been done with the OptionManager
+        // calls above and would introduce duplicates.
+        babelrc: false,
+        sourceMaps: "both",
+        ast: false,
+      })
+    );
   }
 
   if (cache) {
@@ -88,7 +91,8 @@ function compile(filename) {
 
 function shouldIgnore(filename) {
   if (!ignore && !only) {
-    return getRelativePath(filename).split(path.sep).indexOf("node_modules") >= 0;
+    return getRelativePath(filename).split(path.sep).indexOf("node_modules") >=
+      0;
   } else {
     return util.shouldIgnore(filename, ignore || [], only);
   }
@@ -99,9 +103,11 @@ function loader(m, filename) {
 }
 
 function registerExtension(ext) {
-  const old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
+  const old = oldHandlers[ext] ||
+    oldHandlers[".js"] ||
+    require.extensions[".js"];
 
-  require.extensions[ext] = function (m, filename) {
+  require.extensions[ext] = function(m, filename) {
     if (shouldIgnore(filename)) {
       old(m, filename);
     } else {
@@ -111,7 +117,7 @@ function registerExtension(ext) {
 }
 
 function hookExtensions(_exts) {
-  Object.keys(oldHandlers).forEach(function (ext) {
+  Object.keys(oldHandlers).forEach(function(ext) {
     const old = oldHandlers[ext];
     if (old === undefined) {
       delete require.extensions[ext];
@@ -122,7 +128,7 @@ function hookExtensions(_exts) {
 
   oldHandlers = {};
 
-  _exts.forEach(function (ext) {
+  _exts.forEach(function(ext) {
     oldHandlers[ext] = require.extensions[ext];
     registerExtension(ext);
   });
@@ -130,7 +136,7 @@ function hookExtensions(_exts) {
 
 hookExtensions(util.canCompile.EXTENSIONS);
 
-export default function (opts?: Object = {}) {
+export default function(opts?: Object = {}) {
   if (opts.only != null) only = util.arrayify(opts.only, util.regexify);
   if (opts.ignore != null) ignore = util.arrayify(opts.ignore, util.regexify);
 
