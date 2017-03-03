@@ -94,29 +94,33 @@ const _extends = Object.assign || function (target) {
 
 
 export const getTargets = (targets = {}) => {
-  const targetOps = _extends({}, targets);
+  const targetOpts = _extends({}, targets);
 
-  if (targetOps.node === true || targetOps.node === "current") {
-    targetOps.node = getCurrentNodeVersion();
+  if (targetOpts.node === true || targetOpts.node === "current") {
+    targetOpts.node = getCurrentNodeVersion();
+  }
+
+  if (targetOpts.hasOwnProperty("uglify") && !targetOpts.uglify) {
+    delete targetOpts.uglify;
   }
 
   // Replace Electron target with its Chrome equivalent
-  if (targetOps.electron) {
-    const electronChromeVersion = getElectronChromeVersion(targetOps.electron);
+  if (targetOpts.electron) {
+    const electronChromeVersion = getElectronChromeVersion(targetOpts.electron);
 
-    targetOps.chrome = targetOps.chrome
-      ? Math.min(targetOps.chrome, electronChromeVersion)
+    targetOpts.chrome = targetOpts.chrome
+      ? Math.min(targetOpts.chrome, electronChromeVersion)
       : electronChromeVersion;
 
-    delete targetOps.electron;
+    delete targetOpts.electron;
   }
 
-  const browserOpts = targetOps.browsers;
+  const browserOpts = targetOpts.browsers;
   if (isBrowsersQueryValid(browserOpts)) {
     const queryBrowsers = getLowestVersions(browserslist(browserOpts));
-    return mergeBrowsers(queryBrowsers, targetOps);
+    return mergeBrowsers(queryBrowsers, targetOpts);
   }
-  return targetOps;
+  return targetOpts;
 };
 
 let hasBeenLogged = false;
@@ -143,6 +147,14 @@ const filterItem = (targets, exclusions, list, item) => {
   return isRequired && notExcluded;
 };
 
+const getBuiltInTargets = (targets) => {
+  const builtInTargets = _extends({}, targets);
+  if (builtInTargets.uglify != null) {
+    delete builtInTargets.uglify;
+  }
+  return builtInTargets;
+};
+
 export const transformIncludesAndExcludes = (opts) => ({
   all: opts,
   plugins: opts.filter((opt) => !opt.match(/^(es\d+|web)\./)),
@@ -157,15 +169,17 @@ export default function buildPreset(context, opts = {}) {
   const include = transformIncludesAndExcludes(validatedOptions.include);
   const exclude = transformIncludesAndExcludes(validatedOptions.exclude);
 
+
   const filterPlugins = filterItem.bind(null, targets, exclude.plugins, pluginList);
   const transformations = Object.keys(pluginList)
     .filter(filterPlugins)
     .concat(include.plugins);
 
   let polyfills;
+  let polyfillTargets;
   if (useBuiltIns) {
-    const filterBuiltIns = filterItem.bind(null, targets, exclude.builtIns, builtInsList);
-
+    polyfillTargets = getBuiltInTargets(targets);
+    const filterBuiltIns = filterItem.bind(null, polyfillTargets, exclude.builtIns, builtInsList);
     polyfills = Object.keys(builtInsList)
       .concat(defaultInclude)
       .filter(filterBuiltIns)
@@ -185,7 +199,7 @@ export default function buildPreset(context, opts = {}) {
     if (useBuiltIns && polyfills.length) {
       console.log("\nUsing polyfills:");
       polyfills.forEach((polyfill) => {
-        logPlugin(polyfill, targets, builtInsList);
+        logPlugin(polyfill, polyfillTargets, builtInsList);
       });
     }
   }

@@ -85,6 +85,28 @@ describe("babel-preset-env", () => {
     });
   });
 
+  describe("getTargets + uglify", () => {
+    it("should work with `true`", function() {
+      assert.deepEqual(babelPresetEnv.getTargets({
+        uglify: true
+      }), {
+        uglify: true
+      });
+    });
+
+    it("should ignore `false`", function() {
+      assert.deepEqual(babelPresetEnv.getTargets({
+        uglify: false
+      }), {});
+    });
+
+    it("should ignore `null`", function() {
+      assert.deepEqual(babelPresetEnv.getTargets({
+        uglify: null
+      }), {});
+    });
+  });
+
   describe("isPluginRequired", () => {
     it("returns true if no targets are specified", () => {
       const isRequired = babelPresetEnv.isPluginRequired({}, {});
@@ -168,6 +190,18 @@ describe("babel-preset-env", () => {
       const targets = {
         browsers: "last 2 Chrome versions",
         chrome: 44
+      };
+
+      assert(babelPresetEnv.isPluginRequired(targets, plugin) === true);
+    });
+
+    it("returns true if uglify is specified as a target", () => {
+      const plugin = {
+        chrome: 50
+      };
+      const targets = {
+        chrome: 55,
+        uglify: true
       };
 
       assert(babelPresetEnv.isPluginRequired(targets, plugin) === true);
