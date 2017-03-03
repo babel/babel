@@ -14,7 +14,7 @@ import traverse from "babel-traverse";
 import Logger from "./logger";
 import Store from "../../store";
 import { parse } from "babylon";
-import * as util from  "../../util";
+import * as util from "../../util";
 import path from "path";
 import * as t from "babel-types";
 
@@ -27,7 +27,7 @@ const shebangRegex = /^#!.*/;
 
 const INTERNAL_PLUGINS = [
   [blockHoistPlugin],
-  [shadowFunctionsPlugin]
+  [shadowFunctionsPlugin],
 ];
 
 const errorVisitor = {
@@ -37,20 +37,20 @@ const errorVisitor = {
       state.loc = loc;
       path.stop();
     }
-  }
+  },
 };
 
 export default class File extends Store {
   constructor(opts: Object = {}) {
     super();
 
-    this.log  = new Logger(this, opts.filename || "unknown");
+    this.log = new Logger(this, opts.filename || "unknown");
     this.opts = this.initOptions(opts);
 
     this.parserOpts = {
-      sourceType:     this.opts.sourceType,
+      sourceType: this.opts.sourceType,
       sourceFileName: this.opts.filename,
-      plugins:        []
+      plugins: [],
     };
 
     this.pluginVisitors = [];
@@ -78,21 +78,21 @@ export default class File extends Store {
         imports: [],
         exports: {
           exported: [],
-          specifiers: []
-        }
-      }
+          specifiers: [],
+        },
+      },
     };
 
     this.dynamicImportTypes = {};
-    this.dynamicImportIds   = {};
-    this.dynamicImports     = [];
-    this.declarations       = {};
-    this.usedHelpers        = {};
+    this.dynamicImportIds = {};
+    this.dynamicImports = [];
+    this.declarations = {};
+    this.usedHelpers = {};
 
     this.path = null;
-    this.ast  = {};
+    this.ast = {};
 
-    this.code    = "";
+    this.code = "";
     this.shebang = "";
 
     this.hub = new Hub(this);
@@ -149,22 +149,22 @@ export default class File extends Store {
     if (opts.only) opts.only = util.arrayify(opts.only, util.regexify);
 
     defaults(opts, {
-      moduleRoot: opts.sourceRoot
+      moduleRoot: opts.sourceRoot,
     });
 
     defaults(opts, {
-      sourceRoot: opts.moduleRoot
+      sourceRoot: opts.moduleRoot,
     });
 
     defaults(opts, {
-      filenameRelative: opts.filename
+      filenameRelative: opts.filename,
     });
 
     const basenameRelative = path.basename(opts.filenameRelative);
 
     defaults(opts, {
-      sourceFileName:   basenameRelative,
-      sourceMapTarget:  basenameRelative
+      sourceFileName: basenameRelative,
+      sourceMapTarget: basenameRelative,
     });
 
     return opts;
@@ -282,7 +282,7 @@ export default class File extends Store {
     }
 
     const generator = this.get("helperGenerator");
-    const runtime   = this.get("helpersNamespace");
+    const runtime = this.get("helpersNamespace");
     if (generator) {
       const res = generator(name);
       if (res) return res;
@@ -304,7 +304,7 @@ export default class File extends Store {
       this.scope.push({
         id: uid,
         init: ref,
-        unique: true
+        unique: true,
       });
     }
 
@@ -334,7 +334,7 @@ export default class File extends Store {
     this.scope.push({
       id: uid,
       init: init,
-      _blockHoist: 1.9 // This ensures that we don't fail if not using function expression helpers
+      _blockHoist: 1.9, // This ensures that we don't fail if not using function expression helpers
     });
     return uid;
   }
@@ -365,12 +365,12 @@ export default class File extends Store {
     const inputMap = this.opts.inputSourceMap;
 
     if (inputMap) {
-      const inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
-      const outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
+      const inputMapConsumer = new sourceMap.SourceMapConsumer(inputMap);
+      const outputMapConsumer = new sourceMap.SourceMapConsumer(map);
 
       const mergedGenerator = new sourceMap.SourceMapGenerator({
         file: inputMapConsumer.file,
-        sourceRoot: inputMapConsumer.sourceRoot
+        sourceRoot: inputMapConsumer.sourceRoot,
       });
 
       // This assumes the output map always has a single source, since Babel always compiles a
@@ -381,7 +381,7 @@ export default class File extends Store {
         const generatedPosition = outputMapConsumer.generatedPositionFor({
           line: mapping.generatedLine,
           column: mapping.generatedColumn,
-          source: source
+          source: source,
         });
         if (generatedPosition.column != null) {
           mergedGenerator.addMapping({
@@ -389,10 +389,10 @@ export default class File extends Store {
 
             original: mapping.source == null ? null : {
               line: mapping.originalLine,
-              column: mapping.originalColumn
+              column: mapping.originalColumn,
             },
 
-            generated: generatedPosition
+            generated: generatedPosition,
           });
         }
       });
@@ -429,7 +429,7 @@ export default class File extends Store {
         parserOpts.parser = {
           parse(source) {
             return parse(source, parserOpts);
-          }
+          },
         };
       }
     }
@@ -446,10 +446,10 @@ export default class File extends Store {
       parentPath: null,
       parent: ast,
       container: ast,
-      key: "program"
+      key: "program",
     }).setContext();
     this.scope = this.path.scope;
-    this.ast   = ast;
+    this.ast = ast;
     this.getMetadata();
   }
 
@@ -568,11 +568,11 @@ export default class File extends Store {
   makeResult({ code, map, ast, ignored }: BabelFileResult): BabelFileResult {
     const result = {
       metadata: null,
-      options:  this.opts,
-      ignored:  !!ignored,
-      code:     null,
-      ast:      null,
-      map:      map || null
+      options: this.opts,
+      ignored: !!ignored,
+      code: null,
+      ast: null,
+      map: map || null,
     };
 
     if (this.opts.code) {
@@ -592,7 +592,7 @@ export default class File extends Store {
 
   generate(): BabelFileResult {
     const opts = this.opts;
-    const ast  = this.ast;
+    const ast = this.ast;
 
     const result: BabelFileResult = { ast };
     if (!opts.code) return this.makeResult(result);
@@ -618,7 +618,7 @@ export default class File extends Store {
     const _result = gen(ast, opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts,
       this.code);
     result.code = _result.code;
-    result.map  = _result.map;
+    result.map = _result.map;
 
     this.log.debug("Generation end");
 

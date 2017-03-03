@@ -137,7 +137,7 @@ export default class NodePath {
     this.hub.file.metadata.marked.push({
       type,
       message,
-      loc: this.node.loc
+      loc: this.node.loc,
     });
   }
 

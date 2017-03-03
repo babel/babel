@@ -6,11 +6,11 @@ import transformFunctionBind from "babel-plugin-transform-function-bind";
 export default function () {
   return {
     presets: [
-      presetStage1
+      presetStage1,
     ],
     plugins: [
       transformDoExpressions,
-      transformFunctionBind
-    ]
+      transformFunctionBind,
+    ],
   };
 }

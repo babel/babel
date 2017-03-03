@@ -5,7 +5,7 @@
 export default class Whitespace {
   constructor(tokens) {
     this.tokens = tokens;
-    this.used   = {};
+    this.used = {};
   }
 
   /**
@@ -59,7 +59,7 @@ export default class Whitespace {
     if (!endToken || !endToken.loc) return 0;
 
     const start = startToken ? startToken.loc.end.line : 1;
-    const end   = endToken.loc.start.line;
+    const end = endToken.loc.start.line;
     let lines = 0;
 
     for (let line = start; line < end; line++) {

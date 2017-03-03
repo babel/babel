@@ -70,7 +70,7 @@ export default function (context, opts = {}) {
       modules === "systemjs" && [transformES2015ModulesSystemJS, optsLoose],
       modules === "amd" && [transformES2015ModulesAMD, optsLoose],
       modules === "umd" && [transformES2015ModulesUMD, optsLoose],
-      [transformRegenerator, { async: false, asyncGenerators: false }]
-    ].filter(Boolean) // filter out falsy values
+      [transformRegenerator, { async: false, asyncGenerators: false }],
+    ].filter(Boolean), // filter out falsy values
   };
 }

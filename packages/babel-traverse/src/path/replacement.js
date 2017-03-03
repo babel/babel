@@ -30,7 +30,7 @@ const hoistVariablesVisitor = {
     }
 
     path.replaceWithMultiple(exprs);
-  }
+  },
 };
 
 /**

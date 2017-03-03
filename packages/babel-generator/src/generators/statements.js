@@ -133,9 +133,9 @@ function buildLabelStatement(prefix, key = "label") {
 }
 
 export const ContinueStatement = buildLabelStatement("continue");
-export const ReturnStatement   = buildLabelStatement("return", "argument");
-export const BreakStatement    = buildLabelStatement("break");
-export const ThrowStatement    = buildLabelStatement("throw", "argument");
+export const ReturnStatement = buildLabelStatement("return", "argument");
+export const BreakStatement = buildLabelStatement("break");
+export const ThrowStatement = buildLabelStatement("throw", "argument");
 
 export function LabeledStatement(node: Object) {
   this.print(node.label, node);
@@ -190,7 +190,7 @@ export function SwitchStatement(node: Object) {
     indent: true,
     addNewlines(leading, cas) {
       if (!leading && node.cases[node.cases.length - 1] === cas) return -1;
-    }
+    },
   });
 
   this.token("}");

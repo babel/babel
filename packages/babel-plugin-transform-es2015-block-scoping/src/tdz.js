@@ -58,7 +58,7 @@ export const visitor = {
     } else if (status === "outside") {
       path.replaceWith(t.throwStatement(t.inherits(
         t.newExpression(t.identifier("ReferenceError"), [
-          t.stringLiteral(`${node.name} is not defined - temporal dead zone`)
+          t.stringLiteral(`${node.name} is not defined - temporal dead zone`),
         ]),
         node
       )));
@@ -88,6 +88,6 @@ export const visitor = {
         nodes.push(node);
         path.replaceWithMultiple(nodes.map(t.expressionStatement));
       }
-    }
-  }
+    },
+  },
 };

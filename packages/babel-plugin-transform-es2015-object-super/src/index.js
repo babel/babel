@@ -4,11 +4,11 @@ export default function ({ types: t }) {
   function Property(path, node, scope, getObjectRef, file) {
     const replaceSupers = new ReplaceSupers({
       getObjectRef: getObjectRef,
-      methodNode:   node,
-      methodPath:   path,
-      isStatic:     true,
-      scope:        scope,
-      file:         file
+      methodNode: node,
+      methodPath: path,
+      isStatic: true,
+      scope: scope,
+      file: file,
     });
 
     replaceSupers.replace();
@@ -40,8 +40,8 @@ export default function ({ types: t }) {
             path.scope.push({ id: objectRef });
             path.replaceWith(t.assignmentExpression("=", objectRef, path.node));
           }
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

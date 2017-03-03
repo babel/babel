@@ -55,7 +55,7 @@ describe("babel-code-frame", function () {
       "",
       "function sum(a, b) {",
       "  return a + b",
-      "}"
+      "}",
     ].join("\n");
     assert.equal(codeFrame(rawLines, 7, 2), [
       "   5 |  * @param b Number",
@@ -80,7 +80,7 @@ describe("babel-code-frame", function () {
       "",
       "function sum(a, b) {",
       "  return a + b",
-      "}"
+      "}",
     ].join("\n");
     assert.equal(codeFrame(rawLines, 6, 2), [
       "  4 |  * @param a Number",
@@ -130,7 +130,7 @@ describe("babel-code-frame", function () {
       "",
       "function sum(a, b) {",
       "  return a + b",
-      "}"
+      "}",
     ].join("\n");
     assert.equal(codeFrame(rawLines, 7, 2, { linesAbove: 1 }), [
       "   6 |  * @returns Number",
@@ -154,14 +154,14 @@ describe("babel-code-frame", function () {
       "",
       "function sum(a, b) {",
       "  return a + b",
-      "}"
+      "}",
     ].join("\n");
     assert.equal(codeFrame(rawLines, 7, 2, { linesBelow: 1 }), [
       "  5 |  * @param b Number",
       "  6 |  * @returns Number",
       "> 7 |  */",
       "    |  ^",
-      "  8 | "
+      "  8 | ",
     ].join("\n"));
   });
 
@@ -177,13 +177,13 @@ describe("babel-code-frame", function () {
       "",
       "function sum(a, b) {",
       "  return a + b",
-      "}"
+      "}",
     ].join("\n");
     assert.equal(codeFrame(rawLines, 7, 2, { linesAbove: 1, linesBelow: 1 }), [
       "  6 |  * @returns Number",
       "> 7 |  */",
       "    |  ^",
-      "  8 | "
+      "  8 | ",
     ].join("\n"));
   });
 
@@ -195,13 +195,13 @@ describe("babel-code-frame", function () {
       "",
       "",
       "",
-      ""
+      "",
     ].join("\n");
     assert.equal(codeFrame(rawLines, 3, null, { linesAbove: 1, linesBelow: 1, forceColor: true }),
       chalk.reset([
         " " + gutter(" 2 | "),
         marker(">") + gutter(" 3 | "),
-        " " + gutter(" 4 | ")
+        " " + gutter(" 4 | "),
       ].join("\n"))
     );
   });

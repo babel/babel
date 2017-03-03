@@ -14,7 +14,7 @@ let userArgs;
 // separate node arguments from script arguments
 const argSeparator = babelArgs.indexOf("--");
 if (argSeparator > -1) {
-  userArgs  = babelArgs.slice(argSeparator); // including the  --
+  userArgs = babelArgs.slice(argSeparator); // including the  --
   babelArgs = babelArgs.slice(0, argSeparator);
 }
 

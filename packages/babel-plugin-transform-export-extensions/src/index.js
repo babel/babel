@@ -35,7 +35,7 @@ export default function ({ types: t }) {
           nodes.push(node);
         }
         path.replaceWithMultiple(nodes);
-      }
-    }
+      },
+    },
   };
 }

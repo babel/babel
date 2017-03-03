@@ -1,21 +1,21 @@
-const includes       = require("lodash/includes");
-const readdir        = require("fs-readdir-recursive");
-const helper         = require("babel-helper-fixtures");
-const assert         = require("assert");
-const rimraf         = require("rimraf");
+const includes = require("lodash/includes");
+const readdir = require("fs-readdir-recursive");
+const helper = require("babel-helper-fixtures");
+const assert = require("assert");
+const rimraf = require("rimraf");
 const outputFileSync = require("output-file-sync");
-const child          = require("child_process");
-const merge          = require("lodash/merge");
-const path           = require("path");
-const chai           = require("chai");
-const fs             = require("fs");
+const child = require("child_process");
+const merge = require("lodash/merge");
+const path = require("path");
+const chai = require("chai");
+const fs = require("fs");
 
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
 
 const presetLocs = [
   path.join(__dirname, "../../babel-preset-es2015"),
-  path.join(__dirname, "../../babel-preset-react")
+  path.join(__dirname, "../../babel-preset-react"),
 ].join(",");
 
 const pluginLocs = [
@@ -150,7 +150,7 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       const testLoc = path.join(suiteLoc, testName);
 
       const opts = {
-        args: []
+        args: [],
       };
 
       const optionsLoc = path.join(testLoc, "options.json");
@@ -166,7 +166,7 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       });
 
       opts.outFiles = readDir(path.join(testLoc, "out-files"));
-      opts.inFiles  = readDir(path.join(testLoc, "in-files"));
+      opts.inFiles = readDir(path.join(testLoc, "in-files"));
 
       const babelrcLoc = path.join(testLoc, ".babelrc");
       if (fs.existsSync(babelrcLoc)) {

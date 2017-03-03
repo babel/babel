@@ -38,7 +38,7 @@ function getPrototypeOfExpression(objectRef, isStatic) {
     t.callExpression(
       t.memberExpression(t.identifier("Object"), t.identifier("getPrototypeOf")),
       [
-        targetRef
+        targetRef,
       ]
     ),
   );
@@ -90,26 +90,26 @@ const visitor = {
         path.replaceWith(result);
       }
     }
-  }
+  },
 };
 
 export default class ReplaceSupers {
   constructor(opts: Object, inClass?: boolean = false) {
     this.forceSuperMemoisation = opts.forceSuperMemoisation;
-    this.methodPath            = opts.methodPath;
-    this.methodNode            = opts.methodNode;
-    this.superRef              = opts.superRef;
-    this.isStatic              = opts.isStatic;
-    this.hasSuper              = false;
-    this.inClass               = inClass;
-    this.isLoose               = opts.isLoose;
-    this.scope                 = this.methodPath.scope;
-    this.file                  = opts.file;
-    this.opts                  = opts;
+    this.methodPath = opts.methodPath;
+    this.methodNode = opts.methodNode;
+    this.superRef = opts.superRef;
+    this.isStatic = opts.isStatic;
+    this.hasSuper = false;
+    this.inClass = inClass;
+    this.isLoose = opts.isLoose;
+    this.scope = this.methodPath.scope;
+    this.file = opts.file;
+    this.opts = opts;
 
     this.bareSupers = [];
-    this.returns    = [];
-    this.thises     = [];
+    this.returns = [];
+    this.thises = [];
   }
 
   forceSuperMemoisation: boolean;
@@ -154,7 +154,7 @@ export default class ReplaceSupers {
         getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
         isComputed ? property : t.stringLiteral(property.name),
         value,
-        t.thisExpression()
+        t.thisExpression(),
       ]
     );
   }
@@ -174,7 +174,7 @@ export default class ReplaceSupers {
       [
         getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
         isComputed ? property : t.stringLiteral(property.name),
-        t.thisExpression()
+        t.thisExpression(),
       ]
     );
   }
@@ -185,7 +185,7 @@ export default class ReplaceSupers {
 
   getLooseSuperProperty(id: Object, parent: Object) {
     const methodNode = this.methodNode;
-    const superRef   = this.superRef || t.identifier("Function");
+    const superRef = this.superRef || t.identifier("Function");
 
     if (parent.property === id) {
       return;
@@ -224,10 +224,10 @@ export default class ReplaceSupers {
       ref = ref || path.scope.generateUidIdentifier("ref");
       return [
         t.variableDeclaration("var", [
-          t.variableDeclarator(ref, node.left)
+          t.variableDeclarator(ref, node.left),
         ]),
         t.expressionStatement(t.assignmentExpression("=", node.left,
-          t.binaryExpression(node.operator[0], ref, node.right)))
+          t.binaryExpression(node.operator[0], ref, node.right))),
       ];
     }
   }

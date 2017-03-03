@@ -147,9 +147,9 @@ export default function ({ types: t }) {
             node.property,
             node.computed
           ));
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }
 

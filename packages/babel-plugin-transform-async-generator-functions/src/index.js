@@ -12,9 +12,9 @@ export default function ({ types: t }) {
       const callee = state.addHelper("asyncGeneratorDelegate");
       node.argument = t.callExpression(callee, [
         t.callExpression(state.addHelper("asyncIterator"), [node.argument]),
-        t.memberExpression(state.addHelper("asyncGenerator"), t.identifier("await"))
+        t.memberExpression(state.addHelper("asyncGenerator"), t.identifier("await")),
       ]);
-    }
+    },
   };
 
   return {
@@ -29,9 +29,9 @@ export default function ({ types: t }) {
           wrapAsync: t.memberExpression(
             state.addHelper("asyncGenerator"), t.identifier("wrap")),
           wrapAwait: t.memberExpression(
-            state.addHelper("asyncGenerator"), t.identifier("await"))
+            state.addHelper("asyncGenerator"), t.identifier("await")),
         });
-      }
-    }
+      },
+    },
   };
 }

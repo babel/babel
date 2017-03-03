@@ -88,7 +88,7 @@ export default function ({ types: t }) {
         if (t.isIdentifier(id)) {
           addDisplayName(id.name, node);
         }
-      }
-    }
+      },
+    },
   };
 }

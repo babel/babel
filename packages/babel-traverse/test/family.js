@@ -14,7 +14,7 @@ describe("path/family", function () {
       FunctionDeclaration(path) {
         outerNodes = path.getOuterBindingIdentifiers();
         outerPaths = path.getOuterBindingIdentifierPaths();
-      }
+      },
     });
 
     it("should contain keys of nodes in paths", function () {
@@ -61,7 +61,7 @@ describe("path/family", function () {
       VariableDeclaration(path) {
         sibling = path.getSibling(path.key);
         lastSibling = sibling.getNextSibling().getNextSibling();
-      }
+      },
     });
 
     it("should return traverse sibling nodes", function () {

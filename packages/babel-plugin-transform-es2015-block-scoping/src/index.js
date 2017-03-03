@@ -60,8 +60,8 @@ export default function () {
           const blockScoping = new BlockScoping(null, path, path.parent, path.scope, file);
           blockScoping.run();
         }
-      }
-    }
+      },
+    },
   };
 }
 
@@ -128,7 +128,7 @@ const letReferenceBlockVisitor = traverse.visitors.merge([{
       path.traverse(letReferenceFunctionVisitor, state);
     }
     return path.skip();
-  }
+  },
 }, tdzVisitor]);
 
 const letReferenceFunctionVisitor = traverse.visitors.merge([{
@@ -144,7 +144,7 @@ const letReferenceFunctionVisitor = traverse.visitors.merge([{
     if (localBinding && localBinding !== ref) return;
 
     state.closurify = true;
-  }
+  },
 }, tdzVisitor]);
 
 const hoistVarDeclarationsVisitor = {
@@ -170,13 +170,13 @@ const hoistVarDeclarationsVisitor = {
     } else if (path.isFunction()) {
       return path.skip();
     }
-  }
+  },
 };
 
 const loopLabelVisitor = {
   LabeledStatement({ node }, state) {
     state.innerLabels.push(node.label.name);
-  }
+  },
 };
 
 const continuationVisitor = {
@@ -188,7 +188,7 @@ const continuationVisitor = {
         state.reassignments[name] = true;
       }
     }
-  }
+  },
 };
 
 function loopNodeTo(node) {
@@ -255,7 +255,7 @@ const loopVisitor = {
     if (path.isReturnStatement()) {
       state.hasReturn = true;
       replace = t.objectExpression([
-        t.objectProperty(t.identifier("v"), node.argument || scope.buildUndefinedNode())
+        t.objectProperty(t.identifier("v"), node.argument || scope.buildUndefinedNode()),
       ]);
     }
 
@@ -265,28 +265,28 @@ const loopVisitor = {
       path.skip();
       path.replaceWith(t.inherits(replace, node));
     }
-  }
+  },
 };
 
 class BlockScoping {
   constructor(loopPath?: NodePath, blockPath: NodePath, parent: Object, scope: Scope, file: File) {
     this.parent = parent;
-    this.scope  = scope;
-    this.file   = file;
+    this.scope = scope;
+    this.file = file;
 
     this.blockPath = blockPath;
-    this.block     = blockPath.node;
+    this.block = blockPath.node;
 
     this.outsideLetReferences = Object.create(null);
-    this.hasLetReferences     = false;
-    this.letReferences        = Object.create(null);
-    this.body                 = [];
+    this.hasLetReferences = false;
+    this.letReferences = Object.create(null);
+    this.body = [];
 
     if (loopPath) {
       this.loopParent = loopPath.parent;
-      this.loopLabel  = t.isLabeledStatement(this.loopParent) && this.loopParent.label;
-      this.loopPath   = loopPath;
-      this.loop       = loopPath.node;
+      this.loopLabel = t.isLabeledStatement(this.loopParent) && this.loopParent.label;
+      this.loopPath = loopPath;
+      this.loop = loopPath.node;
     }
   }
 
@@ -345,8 +345,8 @@ class BlockScoping {
   }
 
   remap() {
-    const letRefs   = this.letReferences;
-    const scope     = this.scope;
+    const letRefs = this.letReferences;
+    const scope = this.scope;
 
     // alright, so since we aren't wrapping this block in a closure
     // we have to check if any of our let variables collide with
@@ -364,10 +364,10 @@ class BlockScoping {
         // the enclosing scope (e.g. loop or catch statement), so we should handle both
         // individually
         if (scope.hasOwnBinding(key))
-          scope.rename(ref.name);
+          {scope.rename(ref.name);}
 
         if (this.blockPath.scope.hasOwnBinding(key))
-          this.blockPath.scope.rename(ref.name);
+          {this.blockPath.scope.rename(ref.name);}
       }
     }
   }
@@ -409,7 +409,7 @@ class BlockScoping {
 
     // turn outsideLetReferences into an array
     const params = values(outsideRefs);
-    const args   = values(outsideRefs);
+    const args = values(outsideRefs);
 
     const isSwitch = this.blockPath.isSwitchStatement();
 
@@ -426,13 +426,13 @@ class BlockScoping {
     if (this.loop) {
       ref = this.scope.generateUidIdentifier("loop");
       this.loopPath.insertBefore(t.variableDeclaration("var", [
-        t.variableDeclarator(ref, fn)
+        t.variableDeclarator(ref, fn),
       ]));
     }
 
     // build a call and a unique id that we can assign the return value to
     let call = t.callExpression(ref, args);
-    const ret  = this.scope.generateUidIdentifier("ret");
+    const ret = this.scope.generateUidIdentifier("ret");
 
     // handle generators
     const hasYield = traverse.hasType(fn.body, this.scope, "YieldExpression", t.FUNCTION_TYPES);
@@ -479,7 +479,7 @@ class BlockScoping {
   addContinuations(fn) {
     const state = {
       reassignments: {},
-      outsideReferences: this.outsideLetReferences
+      outsideReferences: this.outsideLetReferences,
     };
 
     this.scope.traverse(fn, continuationVisitor, state);
@@ -561,9 +561,9 @@ class BlockScoping {
 
     const state = {
       letReferences: this.letReferences,
-      closurify:     false,
-      file:          this.file,
-      loopDepth:     0,
+      closurify: false,
+      file: this.file,
+      loopDepth: 0,
     };
 
     const loopOrFunctionParent = this.blockPath.find(
@@ -592,13 +592,13 @@ class BlockScoping {
   checkLoop(): Object {
     const state = {
       hasBreakContinue: false,
-      ignoreLabeless:   false,
-      inSwitchCase:     false,
-      innerLabels:      [],
-      hasReturn:        false,
-      isLoop:           !!this.loop,
-      map:              {},
-      LOOP_IGNORE:      Symbol()
+      ignoreLabeless: false,
+      inSwitchCase: false,
+      innerLabels: [],
+      hasReturn: false,
+      isLoop: !!this.loop,
+      map: {},
+      LOOP_IGNORE: Symbol(),
     };
 
     this.blockPath.traverse(loopLabelVisitor, state);
@@ -647,7 +647,7 @@ class BlockScoping {
     const body = this.body;
 
     body.push(t.variableDeclaration("var", [
-      t.variableDeclarator(ret, call)
+      t.variableDeclarator(ret, call),
     ]));
 
     let retCheck;
@@ -657,7 +657,7 @@ class BlockScoping {
     if (has.hasReturn) {
       // typeof ret === "object"
       retCheck = buildRetCheck({
-        RETURN: ret
+        RETURN: ret,
       });
     }
 

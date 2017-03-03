@@ -12,7 +12,7 @@ export default function () {
         } else {
           path.replaceWith(path.scope.buildUndefinedNode());
         }
-      }
-    }
+      },
+    },
   };
 }

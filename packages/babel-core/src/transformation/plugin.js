@@ -11,13 +11,13 @@ export default class Plugin extends Store {
     super();
 
     this.initialized = false;
-    this.raw         = Object.assign({}, plugin);
-    this.key         = this.take("name") || key;
+    this.raw = Object.assign({}, plugin);
+    this.key = this.take("name") || key;
 
     this.manipulateOptions = this.take("manipulateOptions");
-    this.post              = this.take("post");
-    this.pre               = this.take("pre");
-    this.visitor           = this.normaliseVisitor(clone(this.take("visitor")) || {});
+    this.post = this.take("post");
+    this.pre = this.take("pre");
+    this.visitor = this.normaliseVisitor(clone(this.take("visitor")) || {});
   }
 
   initialized: boolean;

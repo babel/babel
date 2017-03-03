@@ -56,10 +56,10 @@ export default function ({ types: t }) {
 
       const trace = makeTrace(state.fileNameIdentifier, location.start.line);
       attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
-    }
+    },
   };
 
   return {
-    visitor
+    visitor,
   };
 }

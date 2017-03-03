@@ -40,7 +40,7 @@ const iifeVisitor = {
   Scope(path) {
     // different bindings
     path.skip();
-  }
+  },
 };
 
 export const visitor = {
@@ -53,7 +53,7 @@ export const visitor = {
 
     const state = {
       iife: false,
-      scope: scope
+      scope: scope,
     };
 
     const body = [];
@@ -67,8 +67,8 @@ export const visitor = {
       const defNode = buildDefaultParam({
         VARIABLE_NAME: left,
         DEFAULT_VALUE: right,
-        ARGUMENT_KEY:  t.numericLiteral(i),
-        ARGUMENTS:     argsIdentifier
+        ARGUMENT_KEY: t.numericLiteral(i),
+        ARGUMENTS: argsIdentifier,
       });
       defNode._blockHoist = node.params.length - i;
       body.push(defNode);
@@ -90,7 +90,7 @@ export const visitor = {
         continue;
       }
 
-      const left  = param.get("left");
+      const left = param.get("left");
       const right = param.get("right");
 
       //
@@ -134,5 +134,5 @@ export const visitor = {
     } else {
       path.get("body").unshiftContainer("body", body);
     }
-  }
+  },
 };

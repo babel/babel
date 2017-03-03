@@ -58,8 +58,8 @@ export function evaluate(): { confident: boolean; value: any } {
   if (!confident) value = undefined;
   return {
     confident: confident,
-    deopt:     deoptPath,
-    value:     value
+    deopt: deoptPath,
+    value: value,
   };
 
   // we wrap the _evaluate method so we can track `seen` nodes, we push an item

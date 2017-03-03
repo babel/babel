@@ -44,7 +44,7 @@ export default function ({ types: t }) {
         }
         stop();
       }
-    }
+    },
   };
 
   return {
@@ -60,7 +60,7 @@ export default function ({ types: t }) {
         } else {
           path.node._hoisted = true;
         }
-      }
-    }
+      },
+    },
   };
 }
