@@ -40,7 +40,7 @@
     "firefox": 34,
     "safari": 8,
     "node": 4,
-    "ios": 9,
+    "ios": 8,
     "opera": 31
   },
   "check-es2015-constants": {
@@ -146,6 +146,7 @@
     "firefox": 36,
     "safari": 9,
     "node": 0.12,
+    "android": 5.1,
     "ios": 9,
     "opera": 25
   },
@@ -171,11 +172,14 @@
     "chrome": 52,
     "edge": 14,
     "firefox": 52,
+    "safari": 10.1,
+    "node": 7,
     "opera": 39
   },
   "transform-async-to-generator": {
     "chrome": 55,
     "firefox": 52,
+    "safari": 10.1,
     "node": 7.6,
     "opera": 42
   },

@@ -58,7 +58,7 @@
     "babel-preset-es2015": "^6.14.0",
     "babel-register": "^6.14.0",
     "chai": "^3.0.0",
-    "compat-table": "kangax/compat-table#291c758ac618fff6bf5bb2113a5aa046189f93e2",
+    "compat-table": "kangax/compat-table#c38f039b8ea7fadf347d3e300fec3611645e31e9",
     "eslint": "^3.13.1",
     "eslint-config-babel": "^5.0.0",
     "eslint-plugin-flowtype": "^2.29.1",
