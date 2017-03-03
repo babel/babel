@@ -69,6 +69,7 @@ const invertedEqualsEnv = Object.keys(envs)
           // that newer ones have
           if (!isNaN(equalsVersion) && equalsVersion <= version) {
             if (!a[equals]) a[equals] = [];
+            if (a[equals].indexOf(b) >= 0) return;
             a[equals].push(b);
           }
         });
