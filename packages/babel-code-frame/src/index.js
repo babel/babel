@@ -97,7 +97,7 @@ export default function(
   rawLines: string,
   lineNumber: number,
   colNumber: ?number,
-  opts: Object = {}
+  opts: Object = {},
 ): string {
   colNumber = Math.max(colNumber, 0);
 

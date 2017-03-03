@@ -22,14 +22,14 @@ export default function({ types: t }) {
                 t.callExpression(state.addHelper("newArrowCheck"), [
                   t.thisExpression(),
                   boundThis,
-                ])
-              )
+                ]),
+              ),
             );
 
           path.replaceWith(
             t.callExpression(t.memberExpression(node, t.identifier("bind")), [
               t.thisExpression(),
-            ])
+            ]),
           );
         } else {
           path.arrowFunctionToShadowed();

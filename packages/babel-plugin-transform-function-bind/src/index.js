@@ -28,7 +28,7 @@ export default function({ types: t }) {
       bind.callee.object = t.assignmentExpression(
         "=",
         tempId,
-        bind.callee.object
+        bind.callee.object,
       );
     }
     return tempId;
@@ -53,8 +53,8 @@ export default function({ types: t }) {
         path.replaceWith(
           t.callExpression(
             t.memberExpression(node.callee, t.identifier("bind")),
-            [context]
-          )
+            [context],
+          ),
         );
       },
     },

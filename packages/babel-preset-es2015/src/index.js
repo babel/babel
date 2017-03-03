@@ -60,7 +60,7 @@ export default function(context, opts = {}) {
   if (modules !== false && moduleTypes.indexOf(modules) === -1) {
     throw new Error(
       "Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
-        "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'"
+        "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'",
     );
   }
 

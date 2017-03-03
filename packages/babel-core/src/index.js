@@ -39,7 +39,7 @@ export { transform, analyse, transformFromAst };
 export function transformFile(
   filename: string,
   opts?: Object,
-  callback: Function
+  callback: Function,
 ) {
   if (typeof opts === "function") {
     callback = opts;
@@ -69,7 +69,7 @@ export function transformFile(
 
 export function transformFileSync(
   filename: string,
-  opts?: Object = {}
+  opts?: Object = {},
 ): string {
   opts.filename = filename;
   return transform(fs.readFileSync(filename, "utf8"), opts);

@@ -99,15 +99,15 @@ export default function({ types: t }) {
                 //       { a, ...b } = _foo;
                 const initRef = path.scope.generateUidIdentifierBasedOnNode(
                   this.originalPath.node.init,
-                  "ref"
+                  "ref",
                 );
                 // insert _foo = foo()
                 this.originalPath.insertBefore(
-                  t.variableDeclarator(initRef, this.originalPath.node.init)
+                  t.variableDeclarator(initRef, this.originalPath.node.init),
                 );
                 // replace foo() with _foo
                 this.originalPath.replaceWith(
-                  t.variableDeclarator(this.originalPath.node.id, initRef)
+                  t.variableDeclarator(this.originalPath.node.id, initRef),
                 );
 
                 return;
@@ -119,7 +119,7 @@ export default function({ types: t }) {
                 if (path.isObjectProperty()) {
                   ref = t.memberExpression(
                     ref,
-                    t.identifier(path.node.key.name)
+                    t.identifier(path.node.key.name),
                   );
                 } else if (path.isVariableDeclarator()) {
                   return true;
@@ -129,11 +129,11 @@ export default function({ types: t }) {
               const [argument, callExpression] = createObjectSpread(
                 file,
                 path.parentPath.node.properties,
-                ref
+                ref,
               );
 
               insertionPath.insertAfter(
-                t.variableDeclarator(argument, callExpression)
+                t.variableDeclarator(argument, callExpression),
               );
 
               insertionPath = insertionPath.getSibling(insertionPath.key + 1);
@@ -142,7 +142,7 @@ export default function({ types: t }) {
                 path
                   .findParent(
                     path =>
-                      path.isObjectProperty() || path.isVariableDeclarator()
+                      path.isObjectProperty() || path.isVariableDeclarator(),
                   )
                   .remove();
               }
@@ -150,7 +150,7 @@ export default function({ types: t }) {
           },
           {
             originalPath: path,
-          }
+          },
         );
       },
       // taken from transform-es2015-destructuring/src/index.js#visitor
@@ -190,27 +190,29 @@ export default function({ types: t }) {
           ) {
             ref = path.scope.generateUidIdentifierBasedOnNode(
               path.node.right,
-              "ref"
+              "ref",
             );
 
             nodes.push(
               t.variableDeclaration("var", [
                 t.variableDeclarator(ref, path.node.right),
-              ])
+              ]),
             );
           }
 
           const [argument, callExpression] = createObjectSpread(
             file,
             path.node.left.properties,
-            ref
+            ref,
           );
 
           const nodeWithoutSpread = t.clone(path.node);
           nodeWithoutSpread.right = ref;
           nodes.push(t.expressionStatement(nodeWithoutSpread));
           nodes.push(
-            t.toStatement(t.assignmentExpression("=", argument, callExpression))
+            t.toStatement(
+              t.assignmentExpression("=", argument, callExpression),
+            ),
           );
 
           if (ref) {
@@ -237,7 +239,7 @@ export default function({ types: t }) {
           path.ensureBlock();
 
           node.body.body.unshift(
-            t.variableDeclaration("var", [t.variableDeclarator(left, temp)])
+            t.variableDeclaration("var", [t.variableDeclarator(left, temp)]),
           );
 
           return;
@@ -258,7 +260,7 @@ export default function({ types: t }) {
         node.body.body.unshift(
           t.variableDeclaration(node.left.kind, [
             t.variableDeclarator(pattern, key),
-          ])
+          ]),
         );
       },
       // var a = { ...b, ...c }
@@ -269,7 +271,7 @@ export default function({ types: t }) {
         if (typeof useBuiltIns !== "boolean") {
           throw new Error(
             "transform-object-rest-spread currently only accepts a boolean " +
-              "option for useBuiltIns (defaults to false)"
+              "option for useBuiltIns (defaults to false)",
           );
         }
 

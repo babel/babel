@@ -4,7 +4,7 @@ import transformCommonjs from "babel-plugin-transform-es2015-modules-commonjs";
 const buildDefine = template(
   `
   define(MODULE_NAME, [SOURCES], FACTORY);
-`
+`,
 );
 
 const buildFactory = template(
@@ -12,7 +12,7 @@ const buildFactory = template(
   (function (PARAMS) {
     BODY;
   })
-`
+`,
 );
 
 export default function({ types: t }) {
@@ -91,7 +91,7 @@ export default function({ types: t }) {
           sources = sources.concat(
             this.bareSources.filter(str => {
               return !this.sourceNames[str.value];
-            })
+            }),
           );
 
           let moduleName = this.getModuleName();

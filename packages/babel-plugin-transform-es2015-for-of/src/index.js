@@ -2,7 +2,7 @@ export default function({ messages, template, types: t }) {
   const buildForOfArray = template(
     `
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
-  `
+  `,
   );
 
   const buildForOfLoose = template(
@@ -21,7 +21,7 @@ export default function({ messages, template, types: t }) {
         ID = INDEX.value;
       }
     }
-  `
+  `,
   );
 
   /* eslint-disable max-len */
@@ -47,7 +47,7 @@ export default function({ messages, template, types: t }) {
         }
       }
     }
-  `
+  `,
   );
   /* eslint-enable max-len */
 
@@ -59,7 +59,7 @@ export default function({ messages, template, types: t }) {
     if (!t.isIdentifier(right) || !scope.hasBinding(right.name)) {
       const uid = scope.generateUidIdentifier("arr");
       nodes.push(
-        t.variableDeclaration("var", [t.variableDeclarator(uid, right)])
+        t.variableDeclaration("var", [t.variableDeclarator(uid, right)]),
       );
       right = uid;
     }
@@ -83,7 +83,9 @@ export default function({ messages, template, types: t }) {
       loop.body.body.unshift(left);
     } else {
       loop.body.body.unshift(
-        t.expressionStatement(t.assignmentExpression("=", left, iterationValue))
+        t.expressionStatement(
+          t.assignmentExpression("=", left, iterationValue),
+        ),
       );
     }
 
@@ -102,7 +104,7 @@ export default function({ messages, template, types: t }) {
         if (path.get("right").isArrayExpression()) {
           if (path.parentPath.isLabeledStatement()) {
             return path.parentPath.replaceWithMultiple(
-              _ForOfStatementArray(path)
+              _ForOfStatementArray(path),
             );
           } else {
             return path.replaceWithMultiple(_ForOfStatementArray(path));
@@ -161,7 +163,7 @@ export default function({ messages, template, types: t }) {
     } else {
       throw file.buildCodeFrameError(
         left,
-        messages.get("unknownForHead", left.type)
+        messages.get("unknownForHead", left.type),
       );
     }
 
@@ -211,7 +213,7 @@ export default function({ messages, template, types: t }) {
     ) {
       // for (i of test), for ({ i } of test)
       declar = t.expressionStatement(
-        t.assignmentExpression("=", left, stepValue)
+        t.assignmentExpression("=", left, stepValue),
       );
     } else if (t.isVariableDeclaration(left)) {
       // for (let i of test)
@@ -221,7 +223,7 @@ export default function({ messages, template, types: t }) {
     } else {
       throw file.buildCodeFrameError(
         left,
-        messages.get("unknownForHead", left.type)
+        messages.get("unknownForHead", left.type),
       );
     }
 
@@ -232,7 +234,7 @@ export default function({ messages, template, types: t }) {
     const template = buildForOf({
       ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
       ITERATOR_COMPLETION: scope.generateUidIdentifier(
-        "iteratorNormalCompletion"
+        "iteratorNormalCompletion",
       ),
       ITERATOR_ERROR_KEY: scope.generateUidIdentifier("iteratorError"),
       ITERATOR_KEY: iteratorKey,

@@ -92,7 +92,7 @@ export function explode(visitor) {
     const deprecratedKey = t.DEPRECATED_KEYS[nodeType];
     if (deprecratedKey) {
       console.trace(
-        `Visitor defined for ${nodeType} but it has been renamed to ${deprecratedKey}`
+        `Visitor defined for ${nodeType} but it has been renamed to ${deprecratedKey}`,
       );
       aliases = [deprecratedKey];
     }
@@ -146,11 +146,11 @@ export function verify(visitor) {
           // verify that it just contains functions
           validateVisitorMethods(
             `${nodeType}.${visitorKey}`,
-            visitors[visitorKey]
+            visitors[visitorKey],
           );
         } else {
           throw new Error(
-            messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey)
+            messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey),
           );
         }
       }
@@ -165,7 +165,7 @@ function validateVisitorMethods(path, val) {
   for (const fn of fns) {
     if (typeof fn !== "function") {
       throw new TypeError(
-        `Non-function found defined in ${path} with type ${typeof fn}`
+        `Non-function found defined in ${path} with type ${typeof fn}`,
       );
     }
   }
@@ -174,7 +174,7 @@ function validateVisitorMethods(path, val) {
 export function merge(
   visitors: Array,
   states: Array = [],
-  wrapper?: ?Function
+  wrapper?: ?Function,
 ) {
   const rootVisitor = {};
 

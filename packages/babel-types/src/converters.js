@@ -5,7 +5,7 @@ import * as t from "./index";
 
 export function toComputedKey(
   node: Object,
-  key: Object = node.key || node.property
+  key: Object = node.key || node.property,
 ): Object {
   if (!node.computed) {
     if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
@@ -24,7 +24,7 @@ export function toComputedKey(
 
 export function toSequenceExpression(
   nodes: Array<Object>,
-  scope: Scope
+  scope: Scope,
 ): ?Object {
   if (!nodes || !nodes.length) return;
 

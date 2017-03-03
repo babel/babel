@@ -6,7 +6,7 @@ import transformStrictMode from "babel-plugin-transform-strict-mode";
 const buildRequire = template(
   `
   require($0);
-`
+`,
 );
 
 const buildExportsModuleDeclaration = template(
@@ -14,7 +14,7 @@ const buildExportsModuleDeclaration = template(
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-`
+`,
 );
 
 const buildExportsFrom = template(
@@ -25,19 +25,19 @@ const buildExportsFrom = template(
       return $1;
     }
   });
-`
+`,
 );
 
 const buildLooseExportsModuleDeclaration = template(
   `
   exports.__esModule = true;
-`
+`,
 );
 
 const buildExportsAssignment = template(
   `
   exports.$0 = $1;
-`
+`,
 );
 
 const buildExportAll = template(
@@ -51,7 +51,7 @@ const buildExportAll = template(
       }
     });
   });
-`
+`,
 );
 
 const THIS_BREAK_KEYS = [
@@ -81,8 +81,8 @@ export default function() {
         path.replaceWith(
           t.JSXMemberExpression(
             t.JSXIdentifier(object.name),
-            t.JSXIdentifier(property.name)
-          )
+            t.JSXIdentifier(property.name),
+          ),
         );
       } else {
         path.replaceWith(remap);
@@ -128,7 +128,7 @@ export default function() {
       const node = t.assignmentExpression(
         path.node.operator[0] + "=",
         arg.node,
-        t.numericLiteral(1)
+        t.numericLiteral(1),
       );
 
       if (
@@ -171,7 +171,7 @@ export default function() {
           state.opts.allowTopLevelThis !== true &&
           !path.findParent(
             path =>
-              !path.is("shadow") && THIS_BREAK_KEYS.indexOf(path.type) >= 0
+              !path.is("shadow") && THIS_BREAK_KEYS.indexOf(path.type) >= 0,
           )
         ) {
           path.replaceWith(t.identifier("undefined"));
@@ -210,13 +210,13 @@ export default function() {
             if (cached) return cached;
 
             const ref = path.scope.generateUidIdentifier(
-              basename(source, extname(source))
+              basename(source, extname(source)),
             );
 
             const varDecl = t.variableDeclaration("var", [
               t.variableDeclarator(
                 ref,
-                buildRequire(t.stringLiteral(source)).expression
+                buildRequire(t.stringLiteral(source)).expression,
               ),
             ]);
 
@@ -246,13 +246,13 @@ export default function() {
 
               const specifiers = [].concat(
                 path.get("declaration"),
-                path.get("specifiers")
+                path.get("specifiers"),
               );
               for (const specifier of specifiers) {
                 const ids = specifier.getBindingIdentifiers();
                 if (ids.__esModule) {
                   throw specifier.buildCodeFrameError(
-                    'Illegal export "__esModule"'
+                    'Illegal export "__esModule"',
                   );
                 }
               }
@@ -273,7 +273,7 @@ export default function() {
               if (typeof path.node._blockHoist === "number") {
                 importsEntry.maxBlockHoist = Math.max(
                   path.node._blockHoist,
-                  importsEntry.maxBlockHoist
+                  importsEntry.maxBlockHoist,
                 );
               }
 
@@ -293,8 +293,8 @@ export default function() {
                   topNodes.push(
                     buildExportsAssignment(
                       defNode,
-                      t.toExpression(declaration.node)
-                    )
+                      t.toExpression(declaration.node),
+                    ),
                   );
                   path.remove();
                 }
@@ -311,8 +311,8 @@ export default function() {
                   path.replaceWith(
                     buildExportsAssignment(
                       defNode,
-                      t.toExpression(declaration.node)
-                    )
+                      t.toExpression(declaration.node),
+                    ),
                   );
 
                   // Manualy re-queue `export default class {}` expressions so that the ES3 transform
@@ -324,8 +324,8 @@ export default function() {
                 path.replaceWith(
                   buildExportsAssignment(
                     t.identifier("default"),
-                    declaration.node
-                  )
+                    declaration.node,
+                  ),
                 );
 
                 // Manualy re-queue `export default foo;` expressions so that the ES3 transform
@@ -360,7 +360,7 @@ export default function() {
                     if (id.isIdentifier()) {
                       addTo(exports, id.node.name, id.node);
                       init.replaceWith(
-                        buildExportsAssignment(id.node, init.node).expression
+                        buildExportsAssignment(id.node, init.node).expression,
                       );
                       nonHoistedExportNames[id.node.name] = true;
                     } else {
@@ -391,18 +391,18 @@ export default function() {
                           t.memberExpression(
                             t.callExpression(
                               this.addHelper("interopRequireDefault"),
-                              [ref]
+                              [ref],
                             ),
-                            specifier.node.local
-                          )
-                        )
+                            specifier.node.local,
+                          ),
+                        ),
                       );
                     } else {
                       topNodes.push(
                         buildExportsFrom(
                           t.stringLiteral(specifier.node.exported.name),
-                          t.memberExpression(ref, specifier.node.local)
-                        )
+                          t.memberExpression(ref, specifier.node.local),
+                        ),
                       );
                     }
                     nonHoistedExportNames[specifier.node.exported.name] = true;
@@ -414,14 +414,14 @@ export default function() {
                     addTo(
                       exports,
                       specifier.node.local.name,
-                      specifier.node.exported
+                      specifier.node.exported,
                     );
                     nonHoistedExportNames[specifier.node.exported.name] = true;
                     nodes.push(
                       buildExportsAssignment(
                         specifier.node.exported,
-                        specifier.node.local
-                      )
+                        specifier.node.local,
+                      ),
                     );
                   }
                 }
@@ -431,7 +431,7 @@ export default function() {
               const exportNode = buildExportAll({
                 OBJECT: addRequire(
                   path.node.source.value,
-                  path.node._blockHoist
+                  path.node._blockHoist,
                 ),
               });
               exportNode.loc = path.node.loc;
@@ -458,8 +458,8 @@ export default function() {
                         specifier.local,
                         t.callExpression(
                           this.addHelper("interopRequireWildcard"),
-                          [uid]
-                        )
+                          [uid],
+                        ),
                       ),
                     ]);
 
@@ -473,7 +473,7 @@ export default function() {
                 } else if (t.isImportDefaultSpecifier(specifier)) {
                   specifiers[i] = t.importSpecifier(
                     specifier.local,
-                    t.identifier("default")
+                    t.identifier("default"),
                   );
                 }
               }
@@ -486,15 +486,15 @@ export default function() {
                       target = wildcard;
                     } else {
                       target = wildcard = path.scope.generateUidIdentifier(
-                        uid.name
+                        uid.name,
                       );
                       const varDecl = t.variableDeclaration("var", [
                         t.variableDeclarator(
                           target,
                           t.callExpression(
                             this.addHelper("interopRequireDefault"),
-                            [uid]
-                          )
+                            [uid],
+                          ),
                         ),
                       ]);
 
@@ -507,7 +507,7 @@ export default function() {
                   }
                   remaps[specifier.local.name] = t.memberExpression(
                     target,
-                    t.cloneWithoutLoc(specifier.imported)
+                    t.cloneWithoutLoc(specifier.imported),
                   );
                 }
               }
@@ -533,7 +533,7 @@ export default function() {
               const nonHoistedExportNamesChunk = nonHoistedExportNamesArr.slice(
                 currentExportsNodeAssignmentLength,
                 currentExportsNodeAssignmentLength +
-                  maxHoistedExportsNodeAssignmentLength
+                  maxHoistedExportsNodeAssignmentLength,
               );
 
               let hoistedExportsNode = t.identifier("undefined");
@@ -541,7 +541,7 @@ export default function() {
               nonHoistedExportNamesChunk.forEach(function(name) {
                 hoistedExportsNode = buildExportsAssignment(
                   t.identifier(name),
-                  hoistedExportsNode
+                  hoistedExportsNode,
                 ).expression;
               });
 

@@ -15,7 +15,7 @@ export default function() {
 
         path.unshiftContainer(
           "directives",
-          t.directive(t.directiveLiteral("use strict"))
+          t.directive(t.directiveLiteral("use strict")),
         );
       },
     },

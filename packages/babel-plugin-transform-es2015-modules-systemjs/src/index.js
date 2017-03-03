@@ -13,7 +13,7 @@ const buildTemplate = template(
       }
     };
   });
-`
+`,
 );
 
 const buildExportAll = template(
@@ -21,7 +21,7 @@ const buildExportAll = template(
   for (var KEY in TARGET) {
     if (KEY !== "default" && KEY !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
   }
-`
+`,
 );
 
 const TYPE_IMPORT = "Import";
@@ -79,8 +79,8 @@ export default function({ types: t }) {
           path.replaceWith(
             t.callExpression(
               t.memberExpression(contextIdent, t.identifier("import")),
-              path.node.arguments
-            )
+              path.node.arguments,
+            ),
           );
         }
       },
@@ -91,7 +91,7 @@ export default function({ types: t }) {
           !path.scope.hasBinding("__moduleName")
         ) {
           path.replaceWith(
-            t.memberExpression(state.contextIdent, t.identifier("id"))
+            t.memberExpression(state.contextIdent, t.identifier("id")),
           );
         }
       },
@@ -133,7 +133,7 @@ export default function({ types: t }) {
 
           function buildExportCall(name, val) {
             return t.expressionStatement(
-              t.callExpression(exportIdent, [t.stringLiteral(name), val])
+              t.callExpression(exportIdent, [t.stringLiteral(name), val]),
             );
           }
 
@@ -177,7 +177,7 @@ export default function({ types: t }) {
                   addExportName(id.name, "default");
                 } else {
                   nodes.push(
-                    buildExportCall("default", t.toExpression(declar.node))
+                    buildExportCall("default", t.toExpression(declar.node)),
                   );
                 }
 
@@ -230,12 +230,12 @@ export default function({ types: t }) {
                       nodes.push(
                         buildExportCall(
                           specifier.exported.name,
-                          specifier.local
-                        )
+                          specifier.local,
+                        ),
                       );
                       addExportName(
                         specifier.local.name,
-                        specifier.exported.name
+                        specifier.exported.name,
                       );
                     }
 
@@ -254,13 +254,13 @@ export default function({ types: t }) {
               if (t.isImportNamespaceSpecifier(specifier)) {
                 setterBody.push(
                   t.expressionStatement(
-                    t.assignmentExpression("=", specifier.local, target)
-                  )
+                    t.assignmentExpression("=", specifier.local, target),
+                  ),
                 );
               } else if (t.isImportDefaultSpecifier(specifier)) {
                 specifier = t.importSpecifier(
                   specifier.local,
-                  t.identifier("default")
+                  t.identifier("default"),
                 );
               }
 
@@ -270,22 +270,22 @@ export default function({ types: t }) {
                     t.assignmentExpression(
                       "=",
                       specifier.local,
-                      t.memberExpression(target, specifier.imported)
-                    )
-                  )
+                      t.memberExpression(target, specifier.imported),
+                    ),
+                  ),
                 );
               }
             }
 
             if (specifiers.exports.length) {
               const exportObjRef = path.scope.generateUidIdentifier(
-                "exportObj"
+                "exportObj",
               );
 
               setterBody.push(
                 t.variableDeclaration("var", [
                   t.variableDeclarator(exportObjRef, t.objectExpression([])),
-                ])
+                ]),
               );
 
               for (const node of specifiers.exports) {
@@ -295,7 +295,7 @@ export default function({ types: t }) {
                       KEY: path.scope.generateUidIdentifier("key"),
                       EXPORT_OBJ: exportObjRef,
                       TARGET: target,
-                    })
+                    }),
                   );
                 } else if (t.isExportSpecifier(node)) {
                   setterBody.push(
@@ -303,9 +303,9 @@ export default function({ types: t }) {
                       t.assignmentExpression(
                         "=",
                         t.memberExpression(exportObjRef, node.exported),
-                        t.memberExpression(target, node.local)
-                      )
-                    )
+                        t.memberExpression(target, node.local),
+                      ),
+                    ),
                   );
                 } else {
                   // todo
@@ -314,14 +314,18 @@ export default function({ types: t }) {
 
               setterBody.push(
                 t.expressionStatement(
-                  t.callExpression(exportIdent, [exportObjRef])
-                )
+                  t.callExpression(exportIdent, [exportObjRef]),
+                ),
               );
             }
 
             sources.push(t.stringLiteral(specifiers.key));
             setters.push(
-              t.functionExpression(null, [target], t.blockStatement(setterBody))
+              t.functionExpression(
+                null,
+                [target],
+                t.blockStatement(setterBody),
+              ),
             );
           });
 
@@ -336,8 +340,8 @@ export default function({ types: t }) {
             beforeBody.unshift(
               t.variableDeclaration(
                 "var",
-                variableIds.map(id => t.variableDeclarator(id))
-              )
+                variableIds.map(id => t.variableDeclarator(id)),
+              ),
             );
           }
 
@@ -355,7 +359,7 @@ export default function({ types: t }) {
             buildTemplate({
               SYSTEM_REGISTER: t.memberExpression(
                 t.identifier(state.opts.systemGlobal || "System"),
-                t.identifier("register")
+                t.identifier("register"),
               ),
               BEFORE_BODY: beforeBody,
               MODULE_NAME: moduleName,

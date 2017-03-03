@@ -112,7 +112,7 @@ export function booleanify(val: any): boolean | any {
 export function shouldIgnore(
   filename: string,
   ignore: Array<RegExp | Function> = [],
-  only?: Array<RegExp | Function>
+  only?: Array<RegExp | Function>,
 ): boolean {
   filename = filename.replace(/\\/g, "/");
 

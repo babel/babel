@@ -29,7 +29,7 @@ export default function({ types: t }) {
         path.replaceWith(
           t.variableDeclaration("let", [
             t.variableDeclarator(ref, t.toExpression(node)),
-          ])
+          ]),
         );
       },
 

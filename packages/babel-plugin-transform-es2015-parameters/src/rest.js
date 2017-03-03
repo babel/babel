@@ -10,25 +10,25 @@ const buildRest = template(
        KEY++) {
     ARRAY[ARRAY_KEY] = ARGUMENTS[KEY];
   }
-`
+`,
 );
 
 const restIndex = template(
   `
   ARGUMENTS.length <= INDEX ? undefined : ARGUMENTS[INDEX]
-`
+`,
 );
 
 const restIndexImpure = template(
   `
   REF = INDEX, ARGUMENTS.length <= REF ? undefined : ARGUMENTS[REF]
-`
+`,
 );
 
 const restLength = template(
   `
   ARGUMENTS.length <= OFFSET ? 0 : ARGUMENTS.length - OFFSET
-`
+`,
 );
 
 const memberExpressionOptimisationVisitor = {
@@ -166,7 +166,7 @@ function optimiseIndexGetter(path, argsId, offset) {
     index = t.binaryExpression(
       "+",
       path.parent.property,
-      t.numericLiteral(offset)
+      t.numericLiteral(offset),
     );
   }
 
@@ -179,14 +179,14 @@ function optimiseIndexGetter(path, argsId, offset) {
         ARGUMENTS: argsId,
         INDEX: index,
         REF: temp,
-      })
+      }),
     );
   } else {
     path.parentPath.replaceWith(
       restIndex({
         ARGUMENTS: argsId,
         INDEX: index,
-      })
+      }),
     );
   }
 }
@@ -197,7 +197,7 @@ function optimiseLengthGetter(path, argsId, offset) {
       restLength({
         ARGUMENTS: argsId,
         OFFSET: t.numericLiteral(offset),
-      })
+      }),
     );
   } else {
     path.replaceWith(argsId);
@@ -265,7 +265,7 @@ export const visitor = {
     }
 
     state.references = state.references.concat(
-      state.candidates.map(({ path }) => path)
+      state.candidates.map(({ path }) => path),
     );
 
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
@@ -292,7 +292,7 @@ export const visitor = {
       arrLen = t.conditionalExpression(
         t.binaryExpression(">", len, start),
         t.binaryExpression("-", len, start),
-        t.numericLiteral(0)
+        t.numericLiteral(0),
       );
     }
 

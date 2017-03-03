@@ -21,7 +21,7 @@ export default function({ types: t }) {
             return file.addImport(
               `${moduleName}/helpers/${name}`,
               "default",
-              name
+              name,
             );
           }
         });
@@ -31,7 +31,7 @@ export default function({ types: t }) {
         return file.addImport(
           `${moduleName}/regenerator`,
           "default",
-          "regeneratorRuntime"
+          "regeneratorRuntime",
         );
       });
     },
@@ -59,8 +59,8 @@ export default function({ types: t }) {
           state.addImport(
             `${moduleName}/core-js/${definitions.builtins[node.name]}`,
             "default",
-            node.name
-          )
+            node.name,
+          ),
         );
       },
 
@@ -83,10 +83,10 @@ export default function({ types: t }) {
             state.addImport(
               `${moduleName}/core-js/get-iterator`,
               "default",
-              "getIterator"
+              "getIterator",
             ),
-            [callee.object]
-          )
+            [callee.object],
+          ),
         );
       },
 
@@ -103,10 +103,10 @@ export default function({ types: t }) {
             state.addImport(
               `${moduleName}/core-js/is-iterable`,
               "default",
-              "isIterable"
+              "isIterable",
             ),
-            [path.node.right]
-          )
+            [path.node.right],
+          ),
         );
       },
 
@@ -146,8 +146,8 @@ export default function({ types: t }) {
             state.addImport(
               `${moduleName}/core-js/${methods[prop.name]}`,
               "default",
-              `${obj.name}$${prop.name}`
-            )
+              `${obj.name}$${prop.name}`,
+            ),
           );
         },
 
@@ -167,11 +167,11 @@ export default function({ types: t }) {
               state.addImport(
                 `${moduleName}/core-js/${definitions.builtins[obj.name]}`,
                 "default",
-                obj.name
+                obj.name,
               ),
               node.property,
-              node.computed
-            )
+              node.computed,
+            ),
           );
         },
       },

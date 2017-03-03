@@ -10,13 +10,13 @@ const buildDefaultParam = template(
       ARGUMENTS[ARGUMENT_KEY]
     :
       DEFAULT_VALUE;
-`
+`,
 );
 
 const buildCutOff = template(
   `
   let $0 = $1[$2];
-`
+`,
 );
 
 function hasDefaults(node) {

@@ -29,10 +29,10 @@ export default function({ types: t }) {
           t.callExpression(
             t.memberExpression(
               t.identifier("Object"),
-              t.identifier("defineProperties")
+              t.identifier("defineProperties"),
             ),
-            [node, defineMap.toDefineObject(mutatorMap)]
-          )
+            [node, defineMap.toDefineObject(mutatorMap)],
+          ),
         );
       },
     },

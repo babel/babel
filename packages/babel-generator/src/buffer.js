@@ -100,7 +100,7 @@ export default class Buffer {
     line: number,
     column: number,
     identifierName: ?string,
-    filename: ?string
+    filename: ?string,
   ): void {
     // If there the line is ending, adding a new mapping marker is redundant
     if (this._map && str[0] !== "\n") {
@@ -110,7 +110,7 @@ export default class Buffer {
         line,
         column,
         identifierName,
-        filename
+        filename,
       );
     }
 

@@ -18,7 +18,7 @@ export default class LooseClassTransformer extends VanillaTransformer {
       const methodName = t.memberExpression(
         classRef,
         node.key,
-        node.computed || t.isLiteral(node.key)
+        node.computed || t.isLiteral(node.key),
       );
 
       let func = t.functionExpression(
@@ -26,7 +26,7 @@ export default class LooseClassTransformer extends VanillaTransformer {
         node.params,
         node.body,
         node.generator,
-        node.async
+        node.async,
       );
       func.returnType = node.returnType;
       const key = t.toComputedKey(node, node.key);
@@ -39,7 +39,7 @@ export default class LooseClassTransformer extends VanillaTransformer {
       }
 
       const expr = t.expressionStatement(
-        t.assignmentExpression("=", methodName, func)
+        t.assignmentExpression("=", methodName, func),
       );
       t.inheritsComments(expr, node);
       this.body.push(expr);

@@ -62,12 +62,12 @@ export const visitor = {
           t.inherits(
             t.newExpression(t.identifier("ReferenceError"), [
               t.stringLiteral(
-                `${node.name} is not defined - temporal dead zone`
+                `${node.name} is not defined - temporal dead zone`,
               ),
             ]),
-            node
-          )
-        )
+            node,
+          ),
+        ),
       );
     }
   },

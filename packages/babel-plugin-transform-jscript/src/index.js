@@ -15,10 +15,10 @@ export default function({ types: t }) {
                 t.blockStatement([
                   t.toStatement(node),
                   t.returnStatement(node.id),
-                ])
+                ]),
               ),
-              []
-            )
+              [],
+            ),
           );
         },
       },

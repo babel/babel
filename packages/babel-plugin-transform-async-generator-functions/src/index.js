@@ -14,7 +14,7 @@ export default function({ types: t }) {
         t.callExpression(state.addHelper("asyncIterator"), [node.argument]),
         t.memberExpression(
           state.addHelper("asyncGenerator"),
-          t.identifier("await")
+          t.identifier("await"),
         ),
       ]);
     },
@@ -31,11 +31,11 @@ export default function({ types: t }) {
         remapAsyncToGenerator(path, state.file, {
           wrapAsync: t.memberExpression(
             state.addHelper("asyncGenerator"),
-            t.identifier("wrap")
+            t.identifier("wrap"),
           ),
           wrapAwait: t.memberExpression(
             state.addHelper("asyncGenerator"),
-            t.identifier("await")
+            t.identifier("await"),
           ),
         });
       },

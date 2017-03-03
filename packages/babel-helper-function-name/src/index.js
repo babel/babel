@@ -15,7 +15,7 @@ const buildPropertyMethodAssignmentWrapper = template(
 
     return FUNCTION_ID;
   })(FUNCTION)
-`
+`,
 );
 
 const buildGeneratorPropertyMethodAssignmentWrapper = template(
@@ -31,7 +31,7 @@ const buildGeneratorPropertyMethodAssignmentWrapper = template(
 
     return FUNCTION_ID;
   })(FUNCTION)
-`
+`,
 );
 
 const visitor = {

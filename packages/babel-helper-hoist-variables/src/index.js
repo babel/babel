@@ -23,8 +23,8 @@ const visitor = {
       if (declar.node.init) {
         nodes.push(
           t.expressionStatement(
-            t.assignmentExpression("=", declar.node.id, declar.node.init)
-          )
+            t.assignmentExpression("=", declar.node.id, declar.node.init),
+          ),
         );
       }
 

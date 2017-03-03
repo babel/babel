@@ -62,8 +62,8 @@ export default function({ types: t }) {
         path.replaceWith(
           t.callExpression(
             t.memberExpression(first, t.identifier("concat")),
-            nodes
-          )
+            nodes,
+          ),
         );
       },
 
@@ -92,8 +92,8 @@ export default function({ types: t }) {
           node.arguments.push(
             t.callExpression(
               t.memberExpression(first, t.identifier("concat")),
-              nodes
-            )
+              nodes,
+            ),
           );
         } else {
           node.arguments.push(first);
@@ -132,7 +132,7 @@ export default function({ types: t }) {
 
         args = t.callExpression(
           t.memberExpression(context, t.identifier("concat")),
-          nodes
+          nodes,
         );
 
         path.replaceWith(
@@ -142,16 +142,16 @@ export default function({ types: t }) {
                 t.memberExpression(
                   t.memberExpression(
                     t.identifier("Function"),
-                    t.identifier("prototype")
+                    t.identifier("prototype"),
                   ),
-                  t.identifier("bind")
+                  t.identifier("bind"),
                 ),
-                t.identifier("apply")
+                t.identifier("apply"),
               ),
-              [node.callee, args]
+              [node.callee, args],
             ),
-            []
-          )
+            [],
+          ),
         );
       },
     },

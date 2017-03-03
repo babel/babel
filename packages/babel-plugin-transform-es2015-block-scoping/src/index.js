@@ -49,7 +49,7 @@ export default function() {
           path.get("body"),
           parent,
           scope,
-          file
+          file,
         );
         const replace = blockScoping.run();
         if (replace) path.replaceWith(replace);
@@ -62,7 +62,7 @@ export default function() {
           path.get("body"),
           parent,
           scope,
-          file
+          file,
         );
         blockScoping.run();
       },
@@ -74,7 +74,7 @@ export default function() {
             path,
             path.parent,
             path.scope,
-            file
+            file,
           );
           blockScoping.run();
         }
@@ -90,7 +90,7 @@ function ignoreBlock(path) {
 const buildRetCheck = template(
   `
   if (typeof RETURN === "object") return RETURN.v;
-`
+`,
 );
 
 function isBlockScoped(node) {
@@ -105,7 +105,7 @@ function convertBlockScopedToVar(
   node,
   parent,
   scope,
-  moveBindingsToParent = false
+  moveBindingsToParent = false,
 ) {
   if (!node) {
     node = path.node;
@@ -199,7 +199,7 @@ const hoistVarDeclarationsVisitor = {
       }
     } else if (isVar(node, parent)) {
       path.replaceWithMultiple(
-        self.pushDeclar(node).map(expr => t.expressionStatement(expr))
+        self.pushDeclar(node).map(expr => t.expressionStatement(expr)),
       );
     } else if (path.isFunction()) {
       return path.skip();
@@ -295,7 +295,7 @@ const loopVisitor = {
       replace = t.objectExpression([
         t.objectProperty(
           t.identifier("v"),
-          node.argument || scope.buildUndefinedNode()
+          node.argument || scope.buildUndefinedNode(),
         ),
       ]);
     }
@@ -315,7 +315,7 @@ class BlockScoping {
     blockPath: NodePath,
     parent: Object,
     scope: Scope,
-    file: File
+    file: File,
   ) {
     this.parent = parent;
     this.scope = scope;
@@ -423,7 +423,7 @@ class BlockScoping {
     if (this.file.opts.throwIfClosureRequired) {
       throw this.blockPath.buildCodeFrameError(
         "Compiling let/const in this block would add a closure " +
-          "(throwIfClosureRequired)."
+          "(throwIfClosureRequired).",
       );
     }
     const block = this.block;
@@ -466,7 +466,7 @@ class BlockScoping {
     const fn = t.functionExpression(
       null,
       params,
-      t.blockStatement(isSwitch ? [block] : block.body)
+      t.blockStatement(isSwitch ? [block] : block.body),
     );
     fn.shadow = true;
 
@@ -478,7 +478,7 @@ class BlockScoping {
     if (this.loop) {
       ref = this.scope.generateUidIdentifier("loop");
       this.loopPath.insertBefore(
-        t.variableDeclaration("var", [t.variableDeclarator(ref, fn)])
+        t.variableDeclaration("var", [t.variableDeclarator(ref, fn)]),
       );
     }
 
@@ -491,7 +491,7 @@ class BlockScoping {
       fn.body,
       this.scope,
       "YieldExpression",
-      t.FUNCTION_TYPES
+      t.FUNCTION_TYPES,
     );
     if (hasYield) {
       fn.generator = true;
@@ -503,7 +503,7 @@ class BlockScoping {
       fn.body,
       this.scope,
       "AwaitExpression",
-      t.FUNCTION_TYPES
+      t.FUNCTION_TYPES,
     );
     if (hasAsync) {
       fn.async = true;
@@ -557,7 +557,7 @@ class BlockScoping {
 
       // assign outer reference as it's been modified internally and needs to be retained
       fn.body.body.push(
-        t.expressionStatement(t.assignmentExpression("=", param, newParam))
+        t.expressionStatement(t.assignmentExpression("=", param, newParam)),
       );
     }
   }
@@ -635,7 +635,7 @@ class BlockScoping {
     };
 
     const loopOrFunctionParent = this.blockPath.find(
-      path => path.isLoop() || path.isFunction()
+      path => path.isLoop() || path.isFunction(),
     );
     if (loopOrFunctionParent && loopOrFunctionParent.isLoop()) {
       // There is a loop ancestor closer than the closest function, so we
@@ -741,8 +741,8 @@ class BlockScoping {
         body.push(
           t.ifStatement(
             t.binaryExpression("===", ret, single.test),
-            single.consequent[0]
-          )
+            single.consequent[0],
+          ),
         );
       } else {
         if (this.loop) {

@@ -31,7 +31,7 @@ export default function({ types: t }) {
         const templateObject = state.file.addTemplateObject(
           templateName,
           strings,
-          raw
+          raw,
         );
         args.push(templateObject);
 

@@ -22,7 +22,7 @@ export default function({ types: t }) {
     nodes.push(
       t.exportNamedDeclaration(null, [
         t.exportSpecifier(uid, specifier.exported),
-      ])
+      ]),
     );
 
     build(node, nodes, scope);

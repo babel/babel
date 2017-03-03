@@ -59,5 +59,5 @@ export const INHERIT_KEYS = {
 
 export const BLOCK_SCOPED_SYMBOL = Symbol.for("var used to be block scoped");
 export const NOT_LOCAL_BINDING = Symbol.for(
-  "should not be considered a local binding"
+  "should not be considered a local binding",
 );

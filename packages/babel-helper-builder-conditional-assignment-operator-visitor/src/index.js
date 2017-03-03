@@ -6,7 +6,7 @@ export default function(
   opts: {
     build: Function,
     is: Function,
-  }
+  },
 ) {
   const buildAssignment = function(left, right) {
     return t.assignmentExpression("=", left, right);
@@ -26,8 +26,8 @@ export default function(
     nodes.push(
       t.ifStatement(
         opts.build(exploded.uid, file),
-        t.expressionStatement(buildAssignment(exploded.ref, expr.right))
-      )
+        t.expressionStatement(buildAssignment(exploded.ref, expr.right)),
+      ),
     );
 
     return nodes;
@@ -44,8 +44,8 @@ export default function(
       t.logicalExpression(
         "&&",
         opts.build(exploded.uid, file),
-        buildAssignment(exploded.ref, node.right)
-      )
+        buildAssignment(exploded.ref, node.right),
+      ),
     );
 
     // todo: duplicate expression node

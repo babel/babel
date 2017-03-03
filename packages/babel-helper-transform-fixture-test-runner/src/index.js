@@ -76,7 +76,7 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
  */
 export function runCodeInTestContext(
   code: string,
-  opts: { filename?: string } = {}
+  opts: { filename?: string } = {},
 ) {
   const filename = opts.filename || null;
   const dirname = filename ? path.dirname(filename) : null;
@@ -106,7 +106,7 @@ function wrapPackagesArray(type, names, optionsDir) {
       if (!optionsDir) {
         throw new Error(
           "Please provide an options.json in test dir when using a " +
-            "relative plugin path."
+            "relative plugin path.",
         );
       }
 
@@ -132,20 +132,20 @@ function run(task) {
       {
         filename: self.loc,
       },
-      opts
+      opts,
     );
 
     newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins, optionsDir);
     newOpts.presets = wrapPackagesArray(
       "preset",
       newOpts.presets,
-      optionsDir
+      optionsDir,
     ).map(function(val) {
       if (val.length > 2) {
         throw new Error(
           "Unexpected extra options " +
             JSON.stringify(val.slice(2)) +
-            " passed to preset."
+            " passed to preset.",
         );
       }
 
@@ -221,7 +221,7 @@ export default function(
   name: string,
   suiteOpts = {},
   taskOpts = {},
-  dynamicOpts?: Function
+  dynamicOpts?: Function,
 ) {
   const suites = getFixtures(fixturesLoc);
 
@@ -277,7 +277,7 @@ export default function(
                   runTask();
                 }
               }
-            }
+            },
         );
       }
     });

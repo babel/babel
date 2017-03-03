@@ -12,7 +12,7 @@ export default function({ types: t }) {
       build(left, right) {
         return t.callExpression(
           t.memberExpression(t.identifier("Math"), t.identifier("pow")),
-          [left, right]
+          [left, right],
         );
       },
     }),

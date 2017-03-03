@@ -44,8 +44,8 @@ export default function({ types: t }) {
               t.conditionalExpression(
                 t.binaryExpression("===", unary, undefLiteral),
                 undefLiteral,
-                call
-              )
+                call,
+              ),
             );
           } else {
             path.replaceWith(call);

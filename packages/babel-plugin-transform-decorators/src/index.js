@@ -6,19 +6,19 @@ import syntaxDecorators from "babel-plugin-syntax-decorators";
 const buildClassDecorator = template(
   `
   DECORATOR(CLASS_REF = INNER) || CLASS_REF;
-`
+`,
 );
 
 const buildClassPrototype = template(
   `
   CLASS_REF.prototype;
-`
+`,
 );
 
 const buildGetDescriptor = template(
   `
     Object.getOwnPropertyDescriptor(TARGET, PROPERTY);
-`
+`,
 );
 
 const buildGetObjectInitializer = template(
@@ -31,7 +31,7 @@ const buildGetObjectInitializer = template(
             return TEMP;
         }
     })
-`
+`,
 );
 
 const buildInitializerWarningHelper = template(
@@ -42,7 +42,7 @@ const buildInitializerWarningHelper = template(
           'transform-class-properties is enabled.'
         );
     }
-`
+`,
 );
 
 const buildInitializerDefineProperty = template(
@@ -57,7 +57,7 @@ const buildInitializerDefineProperty = template(
             value: descriptor.initializer ? descriptor.initializer.call(context) : void 0,
         });
     }
-`
+`,
 );
 
 const buildApplyDecoratedDescriptor = template(
@@ -91,7 +91,7 @@ const buildApplyDecoratedDescriptor = template(
 
         return desc;
     }
-`
+`,
 );
 
 export default function({ types: t }) {
@@ -102,7 +102,7 @@ export default function({ types: t }) {
   function ensureApplyDecoratedDescriptorHelper(path, state) {
     if (!state.applyDecoratedDescriptor) {
       state.applyDecoratedDescriptor = path.scope.generateUidIdentifier(
-        "applyDecoratedDescriptor"
+        "applyDecoratedDescriptor",
       );
       const helper = buildApplyDecoratedDescriptor({
         NAME: state.applyDecoratedDescriptor,
@@ -119,7 +119,7 @@ export default function({ types: t }) {
   function ensureInitializerDefineProp(path, state) {
     if (!state.initializerDefineProp) {
       state.initializerDefineProp = path.scope.generateUidIdentifier(
-        "initDefineProp"
+        "initDefineProp",
       );
       const helper = buildInitializerDefineProperty({
         NAME: state.initializerDefineProp,
@@ -137,7 +137,7 @@ export default function({ types: t }) {
   function ensureInitializerWarning(path, state) {
     if (!state.initializerWarningHelper) {
       state.initializerWarningHelper = path.scope.generateUidIdentifier(
-        "initializerWarningHelper"
+        "initializerWarningHelper",
       );
       const helper = buildInitializerWarningHelper({
         NAME: state.initializerWarningHelper,
@@ -158,11 +158,11 @@ export default function({ types: t }) {
       ? [path].concat(path.get("body.body"))
       : path.get("properties")).reduce(
       (acc, prop) => acc.concat(prop.node.decorators || []),
-      []
+      [],
     );
 
     const identDecorators = decorators.filter(
-      decorator => !t.isIdentifier(decorator.expression)
+      decorator => !t.isIdentifier(decorator.expression),
     );
     if (identDecorators.length === 0) return;
 
@@ -171,11 +171,11 @@ export default function({ types: t }) {
         .map(decorator => {
           const expression = decorator.expression;
           const id = decorator.expression = path.scope.generateDeclaredUidIdentifier(
-            "dec"
+            "dec",
           );
           return t.assignmentExpression("=", id, expression);
         })
-        .concat([path.node])
+        .concat([path.node]),
     );
   }
 
@@ -199,7 +199,7 @@ export default function({ types: t }) {
           INNER: acc,
         }).expression;
       },
-      classPath.node
+      classPath.node,
     );
   }
 
@@ -236,7 +236,7 @@ export default function({ types: t }) {
    */
   function applyTargetDecorators(path, state, decoratedProps) {
     const name = path.scope.generateDeclaredUidIdentifier(
-      path.isClass() ? "class" : "obj"
+      path.isClass() ? "class" : "obj",
     );
 
     const exprs = decoratedProps.reduce(
@@ -248,7 +248,7 @@ export default function({ types: t }) {
 
         if (node.computed) {
           throw path.buildCodeFrameError(
-            "Computed method/property decorators are not yet supported."
+            "Computed method/property decorators are not yet supported.",
           );
         }
 
@@ -264,14 +264,14 @@ export default function({ types: t }) {
 
         if (t.isClassProperty(node, { static: false })) {
           const descriptor = path.scope.generateDeclaredUidIdentifier(
-            "descriptor"
+            "descriptor",
           );
 
           const initializer = node.value
             ? t.functionExpression(
                 null,
                 [],
-                t.blockStatement([t.returnStatement(node.value)])
+                t.blockStatement([t.returnStatement(node.value)]),
               )
             : t.nullLiteral();
           node.value = t.callExpression(ensureInitializerWarning(path, state), [
@@ -292,12 +292,12 @@ export default function({ types: t }) {
                   t.objectExpression([
                     t.objectProperty(
                       t.identifier("enumerable"),
-                      t.booleanLiteral(true)
+                      t.booleanLiteral(true),
                     ),
                     t.objectProperty(t.identifier("initializer"), initializer),
                   ]),
-                ]
-              )
+                ],
+              ),
             ),
           ]);
         } else {
@@ -320,14 +320,14 @@ export default function({ types: t }) {
                       PROPERTY: property,
                     }).expression,
                 target,
-              ]
-            )
+              ],
+            ),
           );
         }
 
         return acc;
       },
-      []
+      [],
     );
 
     return t.sequenceExpression([
@@ -354,7 +354,7 @@ export default function({ types: t }) {
         path.insertAfter(
           t.exportNamedDeclaration(null, [
             t.exportSpecifier(ref, t.identifier("default")),
-          ])
+          ]),
         );
       },
       ClassDeclaration(path) {
@@ -365,7 +365,7 @@ export default function({ types: t }) {
         path.replaceWith(
           t.variableDeclaration("let", [
             t.variableDeclarator(ref, t.toExpression(node)),
-          ])
+          ]),
         );
       },
       ClassExpression(path, state) {
@@ -403,7 +403,7 @@ export default function({ types: t }) {
             t.stringLiteral(path.get("left.property").node.name),
             path.get("right.arguments")[0].node,
             path.get("right.arguments")[1].node,
-          ])
+          ]),
         );
       },
     },

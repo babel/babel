@@ -16,13 +16,13 @@ export default function({ types: t }) {
 
     if (safe) {
       props.unshift(
-        t.objectProperty(t.identifier("displayName"), t.stringLiteral(id))
+        t.objectProperty(t.identifier("displayName"), t.stringLiteral(id)),
       );
     }
   }
 
   const isCreateClassCallExpression = t.buildMatchMemberExpression(
-    "React.createClass"
+    "React.createClass",
   );
 
   function isCreateClass(node) {

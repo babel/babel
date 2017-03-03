@@ -25,7 +25,7 @@ export default function(path: NodePath, scope = path.scope) {
     [],
     node.body,
     node.generator,
-    node.async
+    node.async,
   );
 
   let callee = container;

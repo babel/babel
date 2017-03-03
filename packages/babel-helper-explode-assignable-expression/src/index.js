@@ -51,7 +51,7 @@ export default function(
   nodes: Array<Object>,
   file,
   scope: Scope,
-  allowedSingleIdent?: boolean
+  allowedSingleIdent?: boolean,
 ): {
   uid: Object,
   ref: Object,

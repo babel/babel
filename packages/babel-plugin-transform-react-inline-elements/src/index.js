@@ -60,7 +60,7 @@ export default function({ types: t }) {
           const children = t.react.buildChildren(node);
           args.push(
             key || t.unaryExpression("void", t.numericLiteral(0), true),
-            ...children
+            ...children,
           );
         }
 

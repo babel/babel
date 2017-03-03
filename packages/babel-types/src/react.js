@@ -8,7 +8,7 @@ export function isCompatTag(tagName?: string): boolean {
 
 function cleanJSXElementLiteralChild(
   child: { value: string },
-  args: Array<Object>
+  args: Array<Object>,
 ) {
   const lines = child.value.split(/\r\n|\n|\r/);
 

@@ -12,7 +12,7 @@ export default function() {
           t.newExpression(t.identifier("RegExp"), [
             t.stringLiteral(node.pattern),
             t.stringLiteral(node.flags),
-          ])
+          ]),
         );
       },
     },

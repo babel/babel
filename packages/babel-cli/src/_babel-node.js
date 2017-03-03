@@ -19,7 +19,7 @@ program.option("-o, --only [globs]", "");
 program.option("-i, --ignore [globs]", "");
 program.option(
   "-x, --extensions [extensions]",
-  "List of extensions to hook into [.es6,.js,.es,.jsx]"
+  "List of extensions to hook into [.es6,.js,.es,.jsx]",
 );
 program.option("-w, --plugins [string]", "", util.list);
 program.option("-b, --presets [string]", "", util.list);
@@ -49,7 +49,7 @@ const replPlugin = ({ types: t }) => ({
     VariableDeclaration(path) {
       if (path.node.kind !== "var") {
         throw path.buildCodeFrameError(
-          "Only `var` variables are supported in the REPL"
+          "Only `var` variables are supported in the REPL",
         );
       }
     },
@@ -61,7 +61,7 @@ const replPlugin = ({ types: t }) => ({
       // prevent implicit strict mode from printing 'use strict'.
       path.pushContainer(
         "body",
-        t.expressionStatement(t.identifier("undefined"))
+        t.expressionStatement(t.identifier("undefined")),
       );
     },
   },

@@ -17,7 +17,7 @@ export function push(
   node: Object,
   kind: string,
   file,
-  scope?
+  scope?,
 ): Object {
   const alias = t.toKeyAlias(node);
 
@@ -41,7 +41,7 @@ export function push(
   if (node.decorators) {
     const decorators = map.decorators = map.decorators || t.arrayExpression([]);
     decorators.elements = decorators.elements.concat(
-      node.decorators.map(dec => dec.expression).reverse()
+      node.decorators.map(dec => dec.expression).reverse(),
     );
   }
 
@@ -66,7 +66,7 @@ export function push(
       node.params,
       node.body,
       node.generator,
-      node.async
+      node.async,
     );
     value.returnType = node.returnType;
   }
@@ -110,7 +110,7 @@ export function toComputedObjectFromClass(obj: Object): Object {
     const prop = obj.properties[i];
     const val = prop.value;
     val.properties.unshift(
-      t.objectProperty(t.identifier("key"), t.toComputedKey(prop))
+      t.objectProperty(t.identifier("key"), t.toComputedKey(prop)),
     );
     objExpr.elements.push(val);
   }

@@ -15,7 +15,7 @@ export default function(opts) {
 
   visitor.JSXNamespacedName = function(path) {
     throw path.buildCodeFrameError(
-      "Namespace tags are not supported. ReactJSX is not XML."
+      "Namespace tags are not supported. ReactJSX is not XML.",
     );
   };
 
@@ -47,7 +47,7 @@ export default function(opts) {
     } else if (t.isJSXMemberExpression(node)) {
       return t.memberExpression(
         convertJSXIdentifier(node.object, node),
-        convertJSXIdentifier(node.property, node)
+        convertJSXIdentifier(node.property, node),
       );
     }
 
@@ -132,7 +132,7 @@ export default function(opts) {
     if (typeof useBuiltIns !== "boolean") {
       throw new Error(
         "transform-react-jsx currently only accepts a boolean option for " +
-          "useBuiltIns (defaults to false)"
+          "useBuiltIns (defaults to false)",
       );
     }
 

@@ -11,7 +11,7 @@ export default function() {
             node.params,
             node.body,
             node.generator,
-            node.async
+            node.async,
           );
           func.returnType = node.returnType;
 

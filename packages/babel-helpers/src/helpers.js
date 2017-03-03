@@ -14,7 +14,7 @@ helpers.typeof = template(
           ? "symbol"
           : typeof obj;
       };
-`
+`,
 );
 
 helpers.jsx = template(
@@ -62,7 +62,7 @@ helpers.jsx = template(
     };
 
   })()
-`
+`,
 );
 
 helpers.asyncIterator = template(
@@ -79,7 +79,7 @@ helpers.asyncIterator = template(
     }
     throw new TypeError("Object is not async iterable");
   })
-`
+`,
 );
 
 helpers.asyncGenerator = template(
@@ -176,7 +176,7 @@ helpers.asyncGenerator = template(
     };
 
   })()
-`
+`,
 );
 
 helpers.asyncGeneratorDelegate = template(
@@ -220,7 +220,7 @@ helpers.asyncGeneratorDelegate = template(
 
     return iter;
   })
-`
+`,
 );
 
 helpers.asyncToGenerator = template(
@@ -253,7 +253,7 @@ helpers.asyncToGenerator = template(
       });
     };
   })
-`
+`,
 );
 
 helpers.classCallCheck = template(
@@ -263,7 +263,7 @@ helpers.classCallCheck = template(
       throw new TypeError("Cannot call a class as a function");
     }
   });
-`
+`,
 );
 
 helpers.createClass = template(
@@ -285,7 +285,7 @@ helpers.createClass = template(
       return Constructor;
     };
   })()
-`
+`,
 );
 
 helpers.defineEnumerableProperties = template(
@@ -299,7 +299,7 @@ helpers.defineEnumerableProperties = template(
     }
     return obj;
   })
-`
+`,
 );
 
 helpers.defaults = template(
@@ -315,7 +315,7 @@ helpers.defaults = template(
     }
     return obj;
   })
-`
+`,
 );
 
 helpers.defineProperty = template(
@@ -338,7 +338,7 @@ helpers.defineProperty = template(
     }
     return obj;
   });
-`
+`,
 );
 
 helpers.extends = template(
@@ -354,7 +354,7 @@ helpers.extends = template(
     }
     return target;
   })
-`
+`,
 );
 
 helpers.get = template(
@@ -384,7 +384,7 @@ helpers.get = template(
       return getter.call(receiver);
     }
   });
-`
+`,
 );
 
 helpers.inherits = template(
@@ -403,7 +403,7 @@ helpers.inherits = template(
     });
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   })
-`
+`,
 );
 
 helpers.instanceof = template(
@@ -415,7 +415,7 @@ helpers.instanceof = template(
       return left instanceof right;
     }
   });
-`
+`,
 );
 
 helpers.interopRequireDefault = template(
@@ -423,7 +423,7 @@ helpers.interopRequireDefault = template(
   (function (obj) {
     return obj && obj.__esModule ? obj : { default: obj };
   })
-`
+`,
 );
 
 helpers.interopRequireWildcard = template(
@@ -442,7 +442,7 @@ helpers.interopRequireWildcard = template(
       return newObj;
     }
   })
-`
+`,
 );
 
 helpers.newArrowCheck = template(
@@ -452,7 +452,7 @@ helpers.newArrowCheck = template(
       throw new TypeError("Cannot instantiate an arrow function");
     }
   });
-`
+`,
 );
 
 helpers.objectDestructuringEmpty = template(
@@ -460,7 +460,7 @@ helpers.objectDestructuringEmpty = template(
   (function (obj) {
     if (obj == null) throw new TypeError("Cannot destructure undefined");
   });
-`
+`,
 );
 
 helpers.objectWithoutProperties = template(
@@ -474,7 +474,7 @@ helpers.objectWithoutProperties = template(
     }
     return target;
   })
-`
+`,
 );
 
 helpers.possibleConstructorReturn = template(
@@ -485,13 +485,13 @@ helpers.possibleConstructorReturn = template(
     }
     return call && (typeof call === "object" || typeof call === "function") ? call : self;
   });
-`
+`,
 );
 
 helpers.selfGlobal = template(
   `
   typeof global === "undefined" ? self : global
-`
+`,
 );
 
 helpers.set = template(
@@ -517,7 +517,7 @@ helpers.set = template(
 
     return value;
   });
-`
+`,
 );
 
 helpers.slicedToArray = template(
@@ -568,7 +568,7 @@ helpers.slicedToArray = template(
       }
     };
   })();
-`
+`,
 );
 
 helpers.slicedToArrayLoose = template(
@@ -587,7 +587,7 @@ helpers.slicedToArrayLoose = template(
       throw new TypeError("Invalid attempt to destructure non-iterable instance");
     }
   });
-`
+`,
 );
 
 helpers.taggedTemplateLiteral = template(
@@ -597,7 +597,7 @@ helpers.taggedTemplateLiteral = template(
         raw: { value: Object.freeze(raw) }
     }));
   });
-`
+`,
 );
 
 helpers.taggedTemplateLiteralLoose = template(
@@ -606,7 +606,7 @@ helpers.taggedTemplateLiteralLoose = template(
     strings.raw = raw;
     return strings;
   });
-`
+`,
 );
 
 helpers.temporalRef = template(
@@ -618,13 +618,13 @@ helpers.temporalRef = template(
       return val;
     }
   })
-`
+`,
 );
 
 helpers.temporalUndefined = template(
   `
   ({})
-`
+`,
 );
 
 helpers.toArray = template(
@@ -632,7 +632,7 @@ helpers.toArray = template(
   (function (arr) {
     return Array.isArray(arr) ? arr : Array.from(arr);
   });
-`
+`,
 );
 
 helpers.toConsumableArray = template(
@@ -645,5 +645,5 @@ helpers.toConsumableArray = template(
       return Array.from(arr);
     }
   });
-`
+`,
 );

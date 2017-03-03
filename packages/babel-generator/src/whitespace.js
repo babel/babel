@@ -20,7 +20,7 @@ export default class Whitespace {
     let index = this._findToken(
       token => token.start - node.start,
       0,
-      tokens.length
+      tokens.length,
     );
     if (index >= 0) {
       while (index && node.start === tokens[index - 1].start)
@@ -44,7 +44,7 @@ export default class Whitespace {
     let index = this._findToken(
       token => token.end - node.end,
       0,
-      tokens.length
+      tokens.length,
     );
     if (index >= 0) {
       while (index && node.end === tokens[index - 1].end)

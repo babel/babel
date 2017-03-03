@@ -34,7 +34,7 @@ const buildForAwait = template(
       }
     }
   }
-`
+`,
 );
 
 const forAwaitVisitor = {
@@ -69,7 +69,7 @@ export default function(path, helpers) {
   if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
     // for await (i of test), for await ({ i } of test)
     declar = t.expressionStatement(
-      t.assignmentExpression("=", left, stepValue)
+      t.assignmentExpression("=", left, stepValue),
     );
   } else if (t.isVariableDeclaration(left)) {
     // for await (let i of test)
@@ -83,7 +83,7 @@ export default function(path, helpers) {
   traverse(template, forAwaitVisitor, null, {
     ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
     ITERATOR_COMPLETION: scope.generateUidIdentifier(
-      "iteratorNormalCompletion"
+      "iteratorNormalCompletion",
     ),
     ITERATOR_ERROR_KEY: scope.generateUidIdentifier("iteratorError"),
     ITERATOR_KEY: scope.generateUidIdentifier("iterator"),

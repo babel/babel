@@ -31,7 +31,7 @@ export default function({ types: t }) {
         if (id === "React.DOM") {
           throw file.buildCodeFrameError(
             comment,
-            "The @jsx React.DOM pragma has been deprecated as of React 0.12"
+            "The @jsx React.DOM pragma has been deprecated as of React 0.12",
           );
         } else {
           break;

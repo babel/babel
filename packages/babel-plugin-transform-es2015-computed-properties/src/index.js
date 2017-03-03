@@ -3,7 +3,7 @@ export default function({ types: t, template }) {
     `
     MUTATOR_MAP_REF[KEY] = MUTATOR_MAP_REF[KEY] || {};
     MUTATOR_MAP_REF[KEY].KIND = VALUE;
-  `
+  `,
   );
 
   function getValue(prop) {
@@ -15,7 +15,7 @@ export default function({ types: t, template }) {
         prop.params,
         prop.body,
         prop.generator,
-        prop.async
+        prop.async,
       );
     }
   }
@@ -31,11 +31,11 @@ export default function({ types: t, template }) {
             t.memberExpression(
               objId,
               prop.key,
-              prop.computed || t.isLiteral(prop.key)
+              prop.computed || t.isLiteral(prop.key),
             ),
-            getValue(prop)
-          )
-        )
+            getValue(prop),
+          ),
+        ),
       );
     }
   }
@@ -48,7 +48,7 @@ export default function({ types: t, template }) {
     const maybeMemoise = scope.maybeGenerateMemoised(key);
     if (maybeMemoise) {
       body.push(
-        t.expressionStatement(t.assignmentExpression("=", maybeMemoise, key))
+        t.expressionStatement(t.assignmentExpression("=", maybeMemoise, key)),
       );
       key = maybeMemoise;
     }
@@ -59,7 +59,7 @@ export default function({ types: t, template }) {
         KEY: key,
         VALUE: getValue(prop),
         KIND: t.identifier(prop.kind),
-      })
+      }),
     );
   }
 
@@ -97,8 +97,8 @@ export default function({ types: t, template }) {
                 objId,
                 key,
                 getValue(prop),
-              ])
-            )
+              ]),
+            ),
           );
         }
       }
@@ -143,7 +143,7 @@ export default function({ types: t, template }) {
           body.push(
             t.variableDeclaration("var", [
               t.variableDeclarator(objId, initPropExpression),
-            ])
+            ]),
           );
 
           let callback = spec;
@@ -158,7 +158,7 @@ export default function({ types: t, template }) {
               body.push(
                 t.variableDeclaration("var", [
                   t.variableDeclarator(mutatorRef, t.objectExpression([])),
-                ])
+                ]),
               );
             }
 
@@ -180,9 +180,9 @@ export default function({ types: t, template }) {
               t.expressionStatement(
                 t.callExpression(
                   state.addHelper("defineEnumerableProperties"),
-                  [objId, mutatorRef]
-                )
-              )
+                  [objId, mutatorRef],
+                ),
+              ),
             );
           }
 

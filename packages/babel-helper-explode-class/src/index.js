@@ -45,7 +45,7 @@ export default function(classPath) {
 
   if (memoisedExpressions) {
     classPath.insertBefore(
-      memoisedExpressions.map(expr => t.expressionStatement(expr))
+      memoisedExpressions.map(expr => t.expressionStatement(expr)),
     );
   }
 }

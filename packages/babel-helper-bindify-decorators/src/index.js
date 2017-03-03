@@ -2,7 +2,7 @@ import type { NodePath } from "babel-traverse";
 import * as t from "babel-types";
 
 export default function bindifyDecorators(
-  decorators: Array<NodePath>
+  decorators: Array<NodePath>,
 ): Array<NodePath> {
   for (const decoratorPath of decorators) {
     const decorator = decoratorPath.node;
@@ -25,10 +25,10 @@ export default function bindifyDecorators(
       t.callExpression(
         t.memberExpression(
           t.memberExpression(ref, expression.property, expression.computed),
-          t.identifier("bind")
+          t.identifier("bind"),
         ),
-        [ref]
-      )
+        [ref],
+      ),
     );
 
     if (nodes.length === 1) {

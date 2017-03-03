@@ -8,7 +8,7 @@ export default function({ types: t }) {
             t.callExpression(this.addHelper("instanceof"), [
               node.left,
               node.right,
-            ])
+            ]),
           );
         }
       },

@@ -99,7 +99,7 @@ export default function({ types: t }) {
       // it more than once
 
       const tempValueRef = this.scope.generateUidIdentifierBasedOnNode(
-        valueRef
+        valueRef,
       );
 
       const declar = t.variableDeclaration("var", [
@@ -113,13 +113,13 @@ export default function({ types: t }) {
       const tempConditional = t.conditionalExpression(
         t.binaryExpression("===", tempValueRef, t.identifier("undefined")),
         pattern.right,
-        tempValueRef
+        tempValueRef,
       );
 
       const left = pattern.left;
       if (t.isPattern(left)) {
         const tempValueDefault = t.expressionStatement(
-          t.assignmentExpression("=", tempValueRef, tempConditional)
+          t.assignmentExpression("=", tempValueRef, tempConditional),
         );
         tempValueDefault._blockHoist = this.blockHoist;
 
@@ -157,7 +157,7 @@ export default function({ types: t }) {
 
       const value = t.callExpression(
         this.file.addHelper("objectWithoutProperties"),
-        [objRef, keys]
+        [objRef, keys],
       );
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
     }
@@ -183,8 +183,8 @@ export default function({ types: t }) {
           t.expressionStatement(
             t.callExpression(this.file.addHelper("objectDestructuringEmpty"), [
               objRef,
-            ])
-          )
+            ]),
+          ),
         );
       }
 
@@ -306,7 +306,7 @@ export default function({ types: t }) {
           elemRef = this.toArray(arrayRef);
           elemRef = t.callExpression(
             t.memberExpression(elemRef, t.identifier("slice")),
-            [t.numericLiteral(i)]
+            [t.numericLiteral(i)],
           );
 
           // set the element to the rest element argument since we've dealt with it
@@ -377,7 +377,7 @@ export default function({ types: t }) {
           path.ensureBlock();
 
           node.body.body.unshift(
-            t.variableDeclaration("var", [t.variableDeclarator(left, temp)])
+            t.variableDeclaration("var", [t.variableDeclarator(left, temp)]),
           );
 
           return;
@@ -452,7 +452,7 @@ export default function({ types: t }) {
           nodes.push(
             t.variableDeclaration("var", [
               t.variableDeclarator(ref, node.right),
-            ])
+            ]),
           );
 
           if (t.isArrayExpression(node.right)) {
@@ -504,8 +504,8 @@ export default function({ types: t }) {
             nodes.push(
               t.inherits(
                 destructuring.buildVariableAssignment(declar.id, declar.init),
-                declar
-              )
+                declar,
+              ),
             );
           }
         }

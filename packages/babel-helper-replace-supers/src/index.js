@@ -40,10 +40,10 @@ function getPrototypeOfExpression(objectRef, isStatic) {
     t.callExpression(
       t.memberExpression(
         t.identifier("Object"),
-        t.identifier("getPrototypeOf")
+        t.identifier("getPrototypeOf"),
       ),
-      [targetRef]
-    )
+      [targetRef],
+    ),
   );
 }
 
@@ -153,7 +153,7 @@ export default class ReplaceSupers {
   setSuperProperty(
     property: Object,
     value: Object,
-    isComputed: boolean
+    isComputed: boolean,
   ): Object {
     return t.callExpression(this.file.addHelper("set"), [
       getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
@@ -222,7 +222,7 @@ export default class ReplaceSupers {
       return this.setSuperProperty(
         node.left.property,
         node.right,
-        node.left.computed
+        node.left.computed,
       );
     } else {
       // super.age += 2; -> let _ref = super.age; super.age = _ref + 2;
@@ -233,8 +233,8 @@ export default class ReplaceSupers {
           t.assignmentExpression(
             "=",
             node.left,
-            t.binaryExpression(node.operator[0], ref, node.right)
-          )
+            t.binaryExpression(node.operator[0], ref, node.right),
+          ),
         ),
       ];
     }
@@ -276,7 +276,7 @@ export default class ReplaceSupers {
       const binary = t.binaryExpression(
         node.operator[0],
         node.argument,
-        t.numericLiteral(1)
+        t.numericLiteral(1),
       );
       if (node.prefix) {
         // ++super.foo;
@@ -289,7 +289,7 @@ export default class ReplaceSupers {
         // let _ref = super.foo; super.foo = _ref + 1;
         const ref = path.scope.generateUidIdentifier("ref");
         return this.specHandleAssignmentExpression(ref, path, binary).concat(
-          t.expressionStatement(ref)
+          t.expressionStatement(ref),
         );
       }
     } else if (

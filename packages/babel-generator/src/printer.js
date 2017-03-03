@@ -326,7 +326,7 @@ export default class Printer {
     if (!printMethod) {
       // eslint-disable-next-line max-len
       throw new ReferenceError(
-        `unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`
+        `unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`,
       );
     }
 
@@ -505,7 +505,7 @@ export default class Printer {
           find(
             comments,
             comment =>
-              !!comment.loc && this.format.shouldPrintComment(comment.value)
+              !!comment.loc && this.format.shouldPrintComment(comment.value),
           );
 
         lines = this._whitespace.getNewlinesBefore(comment || node);
@@ -515,7 +515,7 @@ export default class Printer {
           findLast(
             comments,
             comment =>
-              !!comment.loc && this.format.shouldPrintComment(comment.value)
+              !!comment.loc && this.format.shouldPrintComment(comment.value),
           );
 
         lines = this._whitespace.getNewlinesAfter(comment || node);
@@ -560,7 +560,7 @@ export default class Printer {
 
     // whitespace before
     this.newline(
-      this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0
+      this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0,
     );
 
     if (!this.endsWith("[") && !this.endsWith("{")) this.space();
@@ -582,7 +582,7 @@ export default class Printer {
 
       const indentSize = Math.max(
         this._getIndent().length,
-        this._buf.getCurrentColumn()
+        this._buf.getCurrentColumn(),
       );
       val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
     }
@@ -595,7 +595,7 @@ export default class Printer {
     this.newline(
       (this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) +
         // Subtract one to account for the line force-added above.
-        (comment.type === "CommentLine" ? -1 : 0)
+        (comment.type === "CommentLine" ? -1 : 0),
     );
   }
 

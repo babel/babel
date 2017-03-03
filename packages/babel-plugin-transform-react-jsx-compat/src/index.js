@@ -17,9 +17,9 @@ export default function({ types: t }) {
             t.memberExpression(
               t.memberExpression(t.identifier("React"), t.identifier("DOM")),
               state.tagExpr,
-              t.isLiteral(state.tagExpr)
+              t.isLiteral(state.tagExpr),
             ),
-            state.args
+            state.args,
           );
         }
       },

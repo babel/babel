@@ -51,7 +51,7 @@ function compile(filename) {
   const opts = new OptionManager().init(
     extend({ sourceRoot: path.dirname(filename) }, deepClone(transformOpts), {
       filename,
-    }) // sourceRoot can be overwritten
+    }), // sourceRoot can be overwritten
   );
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
@@ -75,7 +75,7 @@ function compile(filename) {
         babelrc: false,
         sourceMaps: "both",
         ast: false,
-      })
+      }),
     );
   }
 

@@ -23,11 +23,11 @@ export default function({ types: t }) {
       : t.nullLiteral();
     const fileNameProperty = t.objectProperty(
       t.identifier("fileName"),
-      fileNameIdentifier
+      fileNameIdentifier,
     );
     const lineNumberProperty = t.objectProperty(
       t.identifier("lineNumber"),
-      fileLineLiteral
+      fileLineLiteral,
     );
     return t.objectExpression([fileNameProperty, lineNumberProperty]);
   }
@@ -56,7 +56,7 @@ export default function({ types: t }) {
           : null;
 
         const fileNameIdentifier = path.scope.generateUidIdentifier(
-          FILE_NAME_VAR
+          FILE_NAME_VAR,
         );
         path.hub.file.scope.push({
           id: fileNameIdentifier,

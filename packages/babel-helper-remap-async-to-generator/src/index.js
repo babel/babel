@@ -14,7 +14,7 @@ const buildWrapper = template(
       return REF.apply(this, arguments);
     };
   })
-`
+`,
 );
 
 const namedBuildWrapper = template(
@@ -26,7 +26,7 @@ const namedBuildWrapper = template(
     }
     return NAME;
   })
-`
+`,
 );
 
 const awaitVisitor = {
@@ -90,12 +90,12 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
     null,
     [],
     t.blockStatement(body.body),
-    true
+    true,
   );
   container.shadow = true;
   body.body = [
     t.returnStatement(
-      t.callExpression(t.callExpression(callId, [container]), [])
+      t.callExpression(t.callExpression(callId, [container]), []),
     ),
   ];
 
@@ -145,7 +145,7 @@ function plainFunction(path: NodePath, callId: Object) {
       {
         params: [],
         done: false,
-      }
+      },
     ).params,
   }).expression;
 
@@ -153,7 +153,7 @@ function plainFunction(path: NodePath, callId: Object) {
     const declar = t.variableDeclaration("let", [
       t.variableDeclarator(
         t.identifier(asyncFnId.name),
-        t.callExpression(container, [])
+        t.callExpression(container, []),
       ),
     ]);
     declar._blockHoist = true;
@@ -166,9 +166,9 @@ function plainFunction(path: NodePath, callId: Object) {
         t.exportNamedDeclaration(null, [
           t.exportSpecifier(
             t.identifier(asyncFnId.name),
-            t.identifier("default")
+            t.identifier("default"),
           ),
-        ])
+        ]),
       );
       return;
     }

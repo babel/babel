@@ -13,7 +13,7 @@ export default function() {
       ObjectExpression(path) {
         const { node } = path;
         const plainProps = node.properties.filter(
-          prop => !t.isSpreadElement(prop) && !prop.computed
+          prop => !t.isSpreadElement(prop) && !prop.computed,
         );
 
         // A property is a duplicate key if:

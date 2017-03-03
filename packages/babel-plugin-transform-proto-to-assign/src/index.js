@@ -13,7 +13,7 @@ export default function({ types: t }) {
 
   function buildDefaultsCallExpression(expr, ref, file) {
     return t.expressionStatement(
-      t.callExpression(file.addHelper("defaults"), [ref, expr.right])
+      t.callExpression(file.addHelper("defaults"), [ref, expr.right]),
     );
   }
 
@@ -28,7 +28,7 @@ export default function({ types: t }) {
 
         if (temp)
           nodes.push(
-            t.expressionStatement(t.assignmentExpression("=", temp, left))
+            t.expressionStatement(t.assignmentExpression("=", temp, left)),
           );
         nodes.push(buildDefaultsCallExpression(path.node, temp || left, file));
         if (temp) nodes.push(temp);
@@ -42,7 +42,7 @@ export default function({ types: t }) {
 
         if (isProtoAssignmentExpression(expr)) {
           path.replaceWith(
-            buildDefaultsCallExpression(expr, expr.left.object, file)
+            buildDefaultsCallExpression(expr, expr.left.object, file),
           );
         }
       },

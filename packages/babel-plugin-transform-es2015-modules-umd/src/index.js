@@ -5,7 +5,7 @@ import transformAMD from "babel-plugin-transform-es2015-modules-amd";
 const buildPrerequisiteAssignment = template(
   `
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
-`
+`,
 );
 
 const buildGlobalExport = template(
@@ -14,7 +14,7 @@ const buildGlobalExport = template(
   factory(BROWSER_ARGUMENTS);
   PREREQUISITE_ASSIGNMENTS
   GLOBAL_TO_ASSIGN = mod.exports;
-`
+`,
 );
 
 const buildWrapper = template(
@@ -28,7 +28,7 @@ const buildWrapper = template(
       GLOBAL_EXPORT
     }
   })(this, FUNC);
-`
+`,
 );
 
 export default function({ types: t }) {
@@ -79,7 +79,7 @@ export default function({ types: t }) {
             } else if (arg.value === "exports") {
               return t.memberExpression(
                 t.identifier("mod"),
-                t.identifier("exports")
+                t.identifier("exports"),
               );
             } else {
               let memberExpression;
@@ -92,12 +92,12 @@ export default function({ types: t }) {
                     .reduce(
                       (accum, curr) =>
                         t.memberExpression(accum, t.identifier(curr)),
-                      t.identifier("global")
+                      t.identifier("global"),
                     );
                 } else {
                   memberExpression = t.memberExpression(
                     t.identifier("global"),
-                    t.identifier(t.toIdentifier(arg.value))
+                    t.identifier(t.toIdentifier(arg.value)),
                   );
                 }
               } else {
@@ -105,7 +105,7 @@ export default function({ types: t }) {
                 const globalName = browserGlobals[requireName] || requireName;
                 memberExpression = t.memberExpression(
                   t.identifier("global"),
-                  t.identifier(t.toIdentifier(globalName))
+                  t.identifier(t.toIdentifier(globalName)),
                 );
               }
 
@@ -118,7 +118,7 @@ export default function({ types: t }) {
             : this.file.opts.basename;
           let globalToAssign = t.memberExpression(
             t.identifier("global"),
-            t.identifier(t.toIdentifier(moduleNameOrBasename))
+            t.identifier(t.toIdentifier(moduleNameOrBasename)),
           );
           let prerequisiteAssignments = null;
 
@@ -132,14 +132,14 @@ export default function({ types: t }) {
               globalToAssign = members.slice(1).reduce(
                 (accum, curr) => {
                   prerequisiteAssignments.push(
-                    buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum })
+                    buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum }),
                   );
                   return t.memberExpression(accum, t.identifier(curr));
                 },
                 t.memberExpression(
                   t.identifier("global"),
-                  t.identifier(members[0])
-                )
+                  t.identifier(members[0]),
+                ),
               );
             }
           }
@@ -157,7 +157,7 @@ export default function({ types: t }) {
               COMMON_ARGUMENTS: commonArgs,
               GLOBAL_EXPORT: globalExport,
               FUNC: func,
-            })
+            }),
           );
         },
       },

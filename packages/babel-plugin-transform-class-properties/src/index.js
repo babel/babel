@@ -28,7 +28,7 @@ export default function({ types: t }) {
       writable: true,
       value: VALUE
     });
-  `
+  `,
   );
 
   const buildClassPropertySpec = (ref, { key, value, computed }) =>
@@ -43,8 +43,8 @@ export default function({ types: t }) {
       t.assignmentExpression(
         "=",
         t.memberExpression(ref, key, computed || t.isLiteral(key)),
-        value
-      )
+        value,
+      ),
     );
 
   return {
@@ -107,7 +107,7 @@ export default function({ types: t }) {
               "constructor",
               t.identifier("constructor"),
               [],
-              t.blockStatement([])
+              t.blockStatement([]),
             );
             if (isDerived) {
               newConstructor.params = [t.restElement(t.identifier("args"))];
@@ -115,8 +115,8 @@ export default function({ types: t }) {
                 t.returnStatement(
                   t.callExpression(t.super(), [
                     t.spreadElement(t.identifier("args")),
-                  ])
-                )
+                  ]),
+                ),
               );
             }
             [constructor] = body.unshiftContainer("body", newConstructor);
@@ -134,24 +134,28 @@ export default function({ types: t }) {
 
           if (collisionState.collision) {
             const initialisePropsRef = path.scope.generateUidIdentifier(
-              "initialiseProps"
+              "initialiseProps",
             );
 
             nodes.push(
               t.variableDeclaration("var", [
                 t.variableDeclarator(
                   initialisePropsRef,
-                  t.functionExpression(null, [], t.blockStatement(instanceBody))
+                  t.functionExpression(
+                    null,
+                    [],
+                    t.blockStatement(instanceBody),
+                  ),
                 ),
-              ])
+              ]),
             );
 
             instanceBody = [
               t.expressionStatement(
                 t.callExpression(
                   t.memberExpression(initialisePropsRef, t.identifier("call")),
-                  [t.thisExpression()]
-                )
+                  [t.thisExpression()],
+                ),
               ),
             ];
           }

@@ -28,7 +28,7 @@ export default function(code: string, opts?: Object): Function {
       allowSuperOutsideMethod: true,
       preserveComments: false,
     },
-    opts
+    opts,
   );
 
   let getAst = function() {

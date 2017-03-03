@@ -21,7 +21,7 @@ function registerType(type: string) {
     opts = opts || {};
     if (!is(node, opts)) {
       throw new Error(
-        `Expected type ${JSON.stringify(type)} with option ${JSON.stringify(opts)}`
+        `Expected type ${JSON.stringify(type)} with option ${JSON.stringify(opts)}`,
       );
     }
   };
@@ -153,7 +153,7 @@ Object.keys(t.BUILDER_KEYS).forEach(function(type) {
     if (arguments.length > keys.length) {
       throw new Error(
         `t.${type}: Too many arguments passed. Received ${arguments.length} but can receive ` +
-          `no more than ${keys.length}`
+          `no more than ${keys.length}`,
       );
     }
 
@@ -241,12 +241,12 @@ export function shallowEqual(actual: Object, expected: Object): boolean {
 export function appendToMemberExpression(
   member: Object,
   append: Object,
-  computed?: boolean
+  computed?: boolean,
 ): Object {
   member.object = t.memberExpression(
     member.object,
     member.property,
-    member.computed
+    member.computed,
   );
   member.property = append;
   member.computed = !!computed;
@@ -259,7 +259,7 @@ export function appendToMemberExpression(
 
 export function prependToMemberExpression(
   member: Object,
-  prepend: Object
+  prepend: Object,
 ): Object {
   member.object = t.memberExpression(prepend, member.object);
   return member;
@@ -336,7 +336,7 @@ export function cloneDeep(node: Object): Object {
 
 export function buildMatchMemberExpression(
   match: string,
-  allowPartial?: boolean
+  allowPartial?: boolean,
 ): Function {
   const parts = match.split(".");
 
@@ -483,7 +483,7 @@ toFastProperties(t.VISITOR_KEYS);
 export function traverseFast(
   node: Node,
   enter: (node: Node) => void,
-  opts?: Object
+  opts?: Object,
 ) {
   if (!node) return;
 
