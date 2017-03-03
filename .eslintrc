@@ -1,0 +1,9 @@
+{
+  "extends": "babel",
+  "rules": {
+  },
+  "env": {
+    "node": true,
+    "mocha": true
+  }
+}

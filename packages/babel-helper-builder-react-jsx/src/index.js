@@ -11,7 +11,7 @@ type ElementState = {
 };
 
 export default function (opts) {
-  let visitor = {};
+  const visitor = {};
 
   visitor.JSXNamespacedName = function (path) {
     throw path.buildCodeFrameError("Namespace tags are not supported. ReactJSX is not XML.");
@@ -19,7 +19,7 @@ export default function (opts) {
 
   visitor.JSXElement = {
     exit(path, file) {
-      let callExpr = buildElementCall(path.get("openingElement"), file);
+      const callExpr = buildElementCall(path.get("openingElement"), file);
 
       callExpr.arguments = callExpr.arguments.concat(path.node.children);
 
@@ -61,7 +61,7 @@ export default function (opts) {
   }
 
   function convertAttribute(node) {
-    let value = convertAttributeValue(node.value || t.booleanLiteral(true));
+    const value = convertAttributeValue(node.value || t.booleanLiteral(true));
 
     if (t.isStringLiteral(value) && !t.isJSXExpressionContainer(node.value)) {
       value.value = value.value.replace(/\n\s+/g, " ");
@@ -79,8 +79,8 @@ export default function (opts) {
   function buildElementCall(path, file) {
     path.parent.children = t.react.buildChildren(path.parent);
 
-    let tagExpr = convertJSXIdentifier(path.node.name, path.node);
-    let args = [];
+    const tagExpr = convertJSXIdentifier(path.node.name, path.node);
+    const args = [];
 
     let tagName;
     if (t.isIdentifier(tagExpr)) {
@@ -89,7 +89,7 @@ export default function (opts) {
       tagName = tagExpr.value;
     }
 
-    let state: ElementState = {
+    const state: ElementState = {
       tagExpr: tagExpr,
       tagName: tagName,
       args:    args
@@ -118,13 +118,19 @@ export default function (opts) {
   /**
    * The logic for this is quite terse. It's because we need to
    * support spread elements. We loop over all attributes,
-   * breaking on spreads, we then push a new object containg
+   * breaking on spreads, we then push a new object containing
    * all prior attributes to an array for later processing.
    */
 
   function buildOpeningElementAttributes(attribs, file) {
     let _props = [];
-    let objs = [];
+    const objs = [];
+
+    const useBuiltIns = file.opts.useBuiltIns || false;
+    if (typeof useBuiltIns !== "boolean") {
+      throw new Error("transform-react-jsx currently only accepts a boolean option for " +
+        "useBuiltIns (defaults to false)");
+    }
 
     function pushProps() {
       if (!_props.length) return;
@@ -134,7 +140,7 @@ export default function (opts) {
     }
 
     while (attribs.length) {
-      let prop = attribs.shift();
+      const prop = attribs.shift();
       if (t.isJSXSpreadAttribute(prop)) {
         pushProps();
         objs.push(prop.argument);
@@ -154,11 +160,12 @@ export default function (opts) {
         objs.unshift(t.objectExpression([]));
       }
 
+      const helper = useBuiltIns ?
+        t.memberExpression(t.identifier("Object"), t.identifier("assign")) :
+        file.addHelper("extends");
+
       // spread it
-      attribs = t.callExpression(
-        file.addHelper("extends"),
-        objs
-      );
+      attribs = t.callExpression(helper, objs);
     }
 
     return attribs;

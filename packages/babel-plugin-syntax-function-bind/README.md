@@ -5,7 +5,7 @@ Allow parsing of function bind.
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-function-bind
+npm install --save-dev babel-plugin-syntax-function-bind
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-syntax-function-bind
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-function-bind script.js
+babel --plugins syntax-function-bind script.js
 ```
 
 ### Via Node API

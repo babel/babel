@@ -6,13 +6,13 @@ function foo(untypedVal, numVal: number) {}
 function foo(nullableNum: ?number) {}
 function foo(callback: () => void) {}
 function foo(callback: () => number) {}
-function foo(callback: (_: bool) => number) {}
-function foo(callback: (_1: bool, _2: string) => number) {}
-function foo(callback: (_1: bool, ...foo: Array<number>) => number) {}
+function foo(callback: (_: boolean) => number) {}
+function foo(callback: (_1: boolean, _2: string) => number) {}
+function foo(callback: (_1: boolean, ...foo: Array<number>) => number) {}
 function foo(): number {}
 function foo(): () => void {}
-function foo(): (_: bool) => number {}
-function foo(): (_?: bool) => number {}
+function foo(): (_: boolean) => number {}
+function foo(): (_?: boolean) => number {}
 function foo(): {} {}
 function foo<T>() {}
 function foo<T, S>() {}
@@ -91,7 +91,7 @@ var a: Map<string, Array<string>>;
 var a: Map<string, Array<string>>;
 var a: number[];
 var a: ?string[];
-var a: Promise<bool>[];
+var a: Promise<boolean>[];
 var a: (...rest: Array<number>) => number;
 var identity: <T>(x: T) => T;
 var identity: <T>(x: T, ...y: T[]) => T;
@@ -101,8 +101,27 @@ import type { foo as bar } from "baz";
 import type from "foo";
 import type, { foo } from "bar";
 import type * as namespace from "bar";
+import { type Foo } from "bar";
+import { typeof Foo } from "bar";
+import { type Foo as Bar } from "bar";
+import { typeof Foo as Bar } from "bar";
 export type { foo };
-export type { foo } from "bar";
-export interface foo { p: number };
-export interface foo<T> { p: T };
+export type { bar } from "bar";
+export interface baz { p: number };
+export interface qux<T> { p: T };
 var a: ?Array<?string>;
+var a: {| numVal: number |};
+var a: {| numVal: number |};
+var a: {| numVal: number; [indexer: string]: number; |};
+var a: ?{| numVal: number |};
+var a: {| numVal: number; strVal: string; |};
+var a: {| subObj: { strVal: string } |};
+var a: {| subObj: ?{ strVal: string } |};
+var a: {| param1: number; param2: string; |};
+var a: {| param1: number; param2?: string; |};
+var a: {| [a: number]: string; [b: number]: string; |};
+var a: {| add: (x: number, ...y: Array<string>) => void |};
+var a: {| subtract: (x: number, ...y: Array<string>) => void |};
+var a: {| id: <T>(x: T) => T |};
+function foo(numVal: number = 2) {}
+function foo(numVal?: number = 2) {}

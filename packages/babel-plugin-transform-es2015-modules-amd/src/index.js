@@ -1,10 +1,10 @@
 import template from "babel-template";
 
-let buildDefine = template(`
+const buildDefine = template(`
   define(MODULE_NAME, [SOURCES], FACTORY);
 `);
 
-let buildFactory = template(`
+const buildFactory = template(`
   (function (PARAMS) {
     BODY;
   })
@@ -16,16 +16,16 @@ export default function ({ types: t }) {
     if (!path.get("callee").isIdentifier({ name: "require" })) return false;
     if (path.scope.getBinding("require")) return false;
 
-    let args = path.get("arguments");
+    const args = path.get("arguments");
     if (args.length !== 1) return false;
 
-    let arg = args[0];
+    const arg = args[0];
     if (!arg.isStringLiteral()) return false;
 
     return true;
   }
 
-  let amdVisitor = {
+  const amdVisitor = {
     ReferencedIdentifier({ node, scope }) {
       if (node.name === "exports" && !scope.getBinding("exports")) {
         this.hasExports = true;
@@ -43,13 +43,13 @@ export default function ({ types: t }) {
     },
 
     VariableDeclarator(path) {
-      let id = path.get("id");
+      const id = path.get("id");
       if (!id.isIdentifier()) return;
 
-      let init = path.get("init");
+      const init = path.get("init");
       if (!isValidRequireCall(init)) return;
 
-      let source = init.node.arguments[0];
+      const source = init.node.arguments[0];
       this.sourceNames[source.value] = true;
       this.sources.push([id.node, source]);
 
@@ -80,7 +80,7 @@ export default function ({ types: t }) {
 
           path.traverse(amdVisitor, this);
 
-          let params = this.sources.map((source) => source[0]);
+          const params = this.sources.map((source) => source[0]);
           let sources = this.sources.map((source) => source[1]);
 
           params = params.concat(this.bareSources.map(() => {
@@ -104,8 +104,8 @@ export default function ({ types: t }) {
             params.unshift(t.identifier("module"));
           }
 
-          let { node } = path;
-          let factory = buildFactory({
+          const { node } = path;
+          const factory = buildFactory({
             PARAMS: params,
             BODY: node.body
           });

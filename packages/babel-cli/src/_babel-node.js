@@ -7,11 +7,10 @@ import repl from "repl";
 import { util } from "babel-core";
 import * as babel from "babel-core";
 import vm from "vm";
-import _ from "lodash";
 import "babel-polyfill";
 import register from "babel-register";
 
-let program = new commander.Command("babel-node");
+const program = new commander.Command("babel-node");
 
 program.option("-e, --eval [script]", "Evaluate script");
 program.option("-p, --print [code]", "Evaluate script and print result");
@@ -21,7 +20,7 @@ program.option("-x, --extensions [extensions]", "List of extensions to hook into
 program.option("-w, --plugins [string]", "", util.list);
 program.option("-b, --presets [string]", "", util.list);
 
-let pkg = require("../package.json");
+const pkg = require("../package.json");
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
@@ -38,7 +37,7 @@ register({
 
 //
 
-let replPlugin = () => ({
+const replPlugin = ({ types: t }) => ({
   visitor: {
     ModuleDeclaration(path) {
       throw path.buildCodeFrameError("Modules aren't supported in the REPL");
@@ -48,13 +47,21 @@ let replPlugin = () => ({
       if (path.node.kind !== "var") {
         throw path.buildCodeFrameError("Only `var` variables are supported in the REPL");
       }
+    },
+
+    Program(path) {
+      if (path.get("body").some((child) => child.isExpressionStatement())) return;
+
+      // If the executed code doesn't evaluate to a value,
+      // prevent implicit strict mode from printing 'use strict'.
+      path.pushContainer("body", t.expressionStatement(t.identifier("undefined")));
     }
   }
 });
 
 //
 
-let _eval = function (code, filename) {
+const _eval = function (code, filename) {
   code = code.trim();
   if (!code) return undefined;
 
@@ -76,7 +83,7 @@ if (program.eval || program.print) {
   global.__filename = "[eval]";
   global.__dirname = process.cwd();
 
-  let module = new Module(global.__filename);
+  const module = new Module(global.__filename);
   module.filename = global.__filename;
   module.paths    = Module._nodeModulePaths(global.__dirname);
 
@@ -84,9 +91,9 @@ if (program.eval || program.print) {
   global.module  = module;
   global.require = module.require.bind(module);
 
-  let result = _eval(code, global.__filename);
+  const result = _eval(code, global.__filename);
   if (program.print) {
-    let output = _.isString(result) ? result : inspect(result);
+    const output = typeof result === "string" ? result : inspect(result);
     process.stdout.write(output + "\n");
   }
 } else {
@@ -96,26 +103,26 @@ if (program.eval || program.print) {
 
     let i = 0;
     let ignoreNext = false;
-    _.each(args, function (arg, i2) {
+    args.some(function (arg, i2) {
       if (ignoreNext) {
         ignoreNext = false;
         return;
       }
 
       if (arg[0] === "-") {
-        let parsedArg = program[arg.slice(2)];
+        const parsedArg = program[arg.slice(2)];
         if (parsedArg && parsedArg !== true) {
           ignoreNext = true;
         }
       } else {
         i = i2;
-        return false;
+        return true;
       }
     });
     args = args.slice(i);
 
     // make the filename absolute
-    let filename = args[0];
+    const filename = args[0];
     if (!pathIsAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
 
     // add back on node and concat the sliced args

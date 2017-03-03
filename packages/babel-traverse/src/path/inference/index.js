@@ -19,13 +19,13 @@ export function getTypeAnnotation(): Object {
  */
 
 export function _getTypeAnnotation(): ?Object {
-  let node = this.node;
+  const node = this.node;
 
   if (!node) {
     // handle initializerless variables, add in checks for loop initializers too
     if (this.key === "init" && this.parentPath.isVariableDeclarator()) {
-      let declar       = this.parentPath.parentPath;
-      let declarParent = declar.parentPath;
+      const declar       = this.parentPath.parentPath;
+      const declarParent = declar.parentPath;
 
       // for (let NODE in bar) {}
       if (declar.key === "left" && declarParent.isForInStatement()) {
@@ -73,6 +73,8 @@ function _isBaseType(baseName: string, type?, soft?): boolean {
     return t.isAnyTypeAnnotation(type);
   } else if (baseName === "mixed") {
     return t.isMixedTypeAnnotation(type);
+  } else if (baseName === "empty") {
+    return t.isEmptyTypeAnnotation(type);
   } else if (baseName === "void") {
     return t.isVoidTypeAnnotation(type);
   } else {
@@ -85,11 +87,11 @@ function _isBaseType(baseName: string, type?, soft?): boolean {
 }
 
 export function couldBeBaseType(name: string): boolean {
-  let type = this.getTypeAnnotation();
+  const type = this.getTypeAnnotation();
   if (t.isAnyTypeAnnotation(type)) return true;
 
   if (t.isUnionTypeAnnotation(type)) {
-    for (let type2 of (type.types: Array<Object>)) {
+    for (const type2 of (type.types: Array<Object>)) {
       if (t.isAnyTypeAnnotation(type2) || _isBaseType(name, type2, true)) {
         return true;
       }
@@ -101,7 +103,7 @@ export function couldBeBaseType(name: string): boolean {
 }
 
 export function baseTypeStrictlyMatches(right: NodePath) {
-  let left = this.getTypeAnnotation();
+  const left = this.getTypeAnnotation();
   right = right.getTypeAnnotation();
 
   if (!t.isAnyTypeAnnotation(left) && t.isFlowBaseAnnotation(left)) {
@@ -110,6 +112,6 @@ export function baseTypeStrictlyMatches(right: NodePath) {
 }
 
 export function isGenericType(genericName: string): boolean {
-  let type = this.getTypeAnnotation();
+  const type = this.getTypeAnnotation();
   return t.isGenericTypeAnnotation(type) && t.isIdentifier(type.id, { name: genericName });
 }

@@ -1,7 +1,8 @@
-require("shelljs/global");
+var fs = require("fs");
+var path = require("path");
 
 function relative(loc) {
-  return __dirname + "/../" + loc;
+  return path.join(__dirname, "..", loc);
 }
 
-cp(relative("dist/polyfill.min.js"), relative("browser.js"));
+fs.writeFileSync(relative("browser.js"), fs.readFileSync(relative("dist/polyfill.min.js")));

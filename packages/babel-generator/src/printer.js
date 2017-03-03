@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import find from "lodash/find";
 import findLast from "lodash/findLast";
 import isInteger from "lodash/isInteger";
@@ -16,6 +14,7 @@ const NON_DECIMAL_LITERAL = /^0[box]/;
 export type Format = {
   shouldPrintComment: (comment: string) => boolean;
   retainLines: boolean;
+  retainFunctionParens: boolean;
   comments: boolean;
   auxiliaryCommentBefore: string;
   auxiliaryCommentAfter: string;
@@ -237,7 +236,7 @@ export default class Printer {
 
   _maybeAddParen(str: string): void {
     // see startTerminatorless() instance method
-    let parenPushNewlineState = this._parenPushNewlineState;
+    const parenPushNewlineState = this._parenPushNewlineState;
     if (!parenPushNewlineState) return;
     this._parenPushNewlineState = null;
 
@@ -313,28 +312,36 @@ export default class Printer {
   print(node, parent) {
     if (!node) return;
 
-    let oldConcise = this.format.concise;
+    const oldConcise = this.format.concise;
     if (node._compact) {
       this.format.concise = true;
     }
 
-    let printMethod = this[node.type];
+    const printMethod = this[node.type];
     if (!printMethod) {
+      // eslint-disable-next-line max-len
       throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
 
     this._printStack.push(node);
 
-    let oldInAux = this._insideAux;
+    const oldInAux = this._insideAux;
     this._insideAux = !node.loc;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
+    if (
+      this.format.retainFunctionParens &&
+      node.type === "FunctionExpression" &&
+      node.extra && node.extra.parenthesized
+    ) {
+      needsParens = true;
+    }
     if (needsParens) this.token("(");
 
     this._printLeadingComments(node, parent);
 
-    let loc = (t.isProgram(node) || t.isFile(node)) ? null : node.loc;
+    const loc = (t.isProgram(node) || t.isFile(node)) ? null : node.loc;
     this.withSource("start", loc, () => {
       this[node.type](node, parent);
     });
@@ -382,9 +389,7 @@ export default class Printer {
   }
 
   getPossibleRaw(node) {
-    if (this.format.minified) return;
-
-    let extra = node.extra;
+    const extra = node.extra;
     if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
       return extra.raw;
     }
@@ -422,14 +427,14 @@ export default class Printer {
   }
 
   printAndIndentOnComments(node, parent) {
-    let indent = !!node.leadingComments;
+    const indent = !!node.leadingComments;
     if (indent) this.indent();
     this.print(node, parent);
     if (indent) this.dedent();
   }
 
   printBlock(parent) {
-    let node = parent.body;
+    const node = parent.body;
 
     if (!t.isEmptyStatement(node)) {
       this.space();
@@ -540,13 +545,13 @@ export default class Printer {
 
     //
     if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
-      let offset = comment.loc && comment.loc.start.column;
+      const offset = comment.loc && comment.loc.start.column;
       if (offset) {
-        let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
+        const newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
         val = val.replace(newlineRegex, "\n");
       }
 
-      let indentSize = Math.max(this._getIndent().length, this._buf.getCurrentColumn());
+      const indentSize = Math.max(this._getIndent().length, this._buf.getCurrentColumn());
       val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
     }
 
@@ -563,7 +568,7 @@ export default class Printer {
   _printComments(comments?: Array<Object>) {
     if (!comments || !comments.length) return;
 
-    for (let comment of comments) {
+    for (const comment of comments) {
       this._printComment(comment);
     }
   }
@@ -574,7 +579,7 @@ function commaSeparator() {
   this.space();
 }
 
-for (let generator of [
+for (const generator of [
   require("./generators/template-literals"),
   require("./generators/expressions"),
   require("./generators/statements"),

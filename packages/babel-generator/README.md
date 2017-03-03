@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install babel-generator
+npm install --save-dev babel-generator
 ```
 
 ## Usage
@@ -30,13 +30,15 @@ auxiliaryCommentBefore | string   |                 | Optional string to add as 
 auxiliaryCommentAfter  | string   |                 | Optional string to add as a block comment at the end of the output file
 shouldPrintComment     | function | `opts.comments` | Function that takes a comment (as a string) and returns `true` if the comment should be included in the output.  By default, comments are included if `opts.comments` is `true` or if `opts.minifed` is `false` and the comment contains `@preserve` or `@license`
 retainLines            | boolean  | `false`         | Attempt to use the same line numbers in the output code as in the source code (helps preserve stack traces)
+retainFunctionParens   | boolean  | `false`         | Retain parens around function expressions (could be used to change engine parsing behavior)
 comments               | boolean  | `true`          | Should comments be included in output
 compact                | boolean or `'auto'` | `opts.minified` | Set to `true` to avoid adding whitespace for formatting
 minified               | boolean  | `false`         | Should the output be minified
 concise                | boolean  | `false`         | Set to `true` to reduce whitespace (but not as much as `opts.compact`)
 quotes                 | `'single'` or `'double'` | autodetect based on `ast.tokens` | The type of quote to use in the output
 filename               | string   |                 | Used in warning messages
-
+flowCommaSeparator     | boolean  | `false`         | Set to `true` to use commas instead of semicolons as Flow property separators
+jsonCompatibleStrings  | boolean  | `false`         | Set to true to run `jsesc` with "json": true to print "\u00A9" vs. "©";
 Options for source maps:
 
 name                   | type     | default         | description

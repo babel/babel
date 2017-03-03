@@ -1,10 +1,11 @@
-import isFunction from "lodash/isFunction";
 import fs from "fs";
 
 export { default as File } from "../transformation/file";
 export { default as options } from "../transformation/file/options/config";
 export { default as buildExternalHelpers } from "../tools/build-external-helpers";
 export { default as template } from "babel-template";
+export { default as resolvePlugin } from "../helpers/resolve-plugin";
+export { default as resolvePreset } from "../helpers/resolve-preset";
 export { version } from "../../package";
 
 import * as util from "../util";
@@ -29,13 +30,13 @@ export function Plugin(alias) {
 import Pipeline from "../transformation/pipeline";
 export { Pipeline };
 
-let pipeline = new Pipeline;
-export let analyse = pipeline.analyse.bind(pipeline);
-export let transform = pipeline.transform.bind(pipeline);
-export let transformFromAst = pipeline.transformFromAst.bind(pipeline);
+const pipeline = new Pipeline;
+export const analyse = pipeline.analyse.bind(pipeline);
+export const transform = pipeline.transform.bind(pipeline);
+export const transformFromAst = pipeline.transformFromAst.bind(pipeline);
 
 export function transformFile(filename: string, opts?: Object, callback: Function) {
-  if (isFunction(opts)) {
+  if (typeof opts === "function") {
     callback = opts;
     opts = {};
   }

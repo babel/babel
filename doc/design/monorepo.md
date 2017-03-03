@@ -1,6 +1,6 @@
 # Why is Babel a monorepo?
 
-> The tool for managing the monorepo in Babel has been extracted out as [lerna](https://github.com/kittens/lerna)
+> The tool for managing the monorepo in Babel has been extracted out as [Lerna](https://github.com/lerna/lerna)
 
 Juggling a multimodule project over multiple repos is like trying to teach a newborn baby how to
 ride a bike.
@@ -21,6 +21,7 @@ This is quite taboo but let's look at the pros and cons:
 
  * Codebase looks more intimidating.
  * Repo is bigger in size.
+ * Lower ranking in [npms](https://npms.io/) results. At least until [npms-io/npms-analyzer#83](https://github.com/npms-io/npms-analyzer/issues/83) is fixed.
  * ???
 
 ## This is dumb! Nobody in open source does this!

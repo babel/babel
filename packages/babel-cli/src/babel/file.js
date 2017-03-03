@@ -1,11 +1,9 @@
-let convertSourceMap = require("convert-source-map");
-let pathExists       = require("path-exists");
-let sourceMap        = require("source-map");
-let slash            = require("slash");
-let path             = require("path");
-let util             = require("./util");
-let fs               = require("fs");
-let _                = require("lodash");
+const convertSourceMap = require("convert-source-map");
+const sourceMap        = require("source-map");
+const slash            = require("slash");
+const path             = require("path");
+const util             = require("./util");
+const fs               = require("fs");
 
 module.exports = function (commander, filenames, opts) {
   if (commander.sourceMaps === "inline") {
@@ -14,8 +12,8 @@ module.exports = function (commander, filenames, opts) {
 
   let results = [];
 
-  let buildResult = function () {
-    let map = new sourceMap.SourceMapGenerator({
+  const buildResult = function () {
+    const map = new sourceMap.SourceMapGenerator({
       file: path.basename(commander.outFile || "") || "stdout",
       sourceRoot: opts.sourceRoot
     });
@@ -23,33 +21,37 @@ module.exports = function (commander, filenames, opts) {
     let code = "";
     let offset = 0;
 
-    _.each(results, function (result) {
-      let filename = result.filename || "stdout";
+    results.forEach(function (result) {
       code += result.code + "\n";
 
       if (result.map) {
-        let consumer = new sourceMap.SourceMapConsumer(result.map);
-
-        let sourceFilename = filename;
-        if (commander.outFile) {
-          sourceFilename = path.relative(path.dirname(commander.outFile), sourceFilename);
-        }
-        sourceFilename = slash(sourceFilename);
-
-        map._sources.add(sourceFilename);
-        map.setSourceContent(sourceFilename, result.actual);
+        const consumer = new sourceMap.SourceMapConsumer(result.map);
+        const sources = new Set();
 
         consumer.eachMapping(function (mapping) {
-          map._mappings.add({
-            generatedLine: mapping.generatedLine + offset,
-            generatedColumn: mapping.generatedColumn,
-            originalLine: mapping.source == null ? null : mapping.originalLine,
-            originalColumn: mapping.source == null ? null : mapping.originalColumn,
-            source: mapping.source == null ? null : sourceFilename
+          if (mapping.source != null) sources.add(mapping.source);
+
+          map.addMapping({
+            generated: {
+              line: mapping.generatedLine + offset,
+              column: mapping.generatedColumn,
+            },
+            source: mapping.source,
+            original: mapping.source == null ? null : {
+              line: mapping.originalLine,
+              column: mapping.originalColumn,
+            },
           });
         });
 
-        offset = code.split("\n").length;
+        sources.forEach((source) => {
+          const content = consumer.sourceContentFor(source, true);
+          if (content !== null) {
+            map.setSourceContent(source, content);
+          }
+        });
+
+        offset = code.split("\n").length - 1;
       }
     });
 
@@ -65,13 +67,13 @@ module.exports = function (commander, filenames, opts) {
     };
   };
 
-  let output = function () {
-    let result = buildResult();
+  const output = function () {
+    const result = buildResult();
 
     if (commander.outFile) {
       // we've requested for a sourcemap to be written to disk
       if (commander.sourceMaps && commander.sourceMaps !== "inline") {
-        let mapLoc = commander.outFile + ".map";
+        const mapLoc = commander.outFile + ".map";
         result.code = util.addSourceMappingUrl(result.code, mapLoc);
         fs.writeFileSync(mapLoc, JSON.stringify(result.map));
       }
@@ -82,34 +84,36 @@ module.exports = function (commander, filenames, opts) {
     }
   };
 
-  let stdin = function () {
+  const stdin = function () {
     let code = "";
 
     process.stdin.setEncoding("utf8");
 
     process.stdin.on("readable", function () {
-      let chunk = process.stdin.read();
+      const chunk = process.stdin.read();
       if (chunk !== null) code += chunk;
     });
 
     process.stdin.on("end", function () {
-      results.push(util.transform(commander.filename, code));
+      results.push(util.transform(commander.filename, code, {
+        sourceFileName: "stdin",
+      }));
       output();
     });
   };
 
-  let walk = function () {
-    let _filenames = [];
+  const walk = function () {
+    const _filenames = [];
     results = [];
 
-    _.each(filenames, function (filename) {
-      if (!pathExists.sync(filename)) return;
+    filenames.forEach(function (filename) {
+      if (!fs.existsSync(filename)) return;
 
-      let stat = fs.statSync(filename);
+      const stat = fs.statSync(filename);
       if (stat.isDirectory()) {
-        let dirname = filename;
+        const dirname = filename;
 
-        _.each(util.readdirFilter(filename), function (filename) {
+        util.readdirFilter(filename).forEach(function (filename) {
           _filenames.push(path.join(dirname, filename));
         });
       } else {
@@ -117,10 +121,19 @@ module.exports = function (commander, filenames, opts) {
       }
     });
 
-    _.each(_filenames, function (filename) {
+    _filenames.forEach(function (filename) {
       if (util.shouldIgnore(filename)) return;
 
-      let data = util.compile(filename);
+      let sourceFilename = filename;
+      if (commander.outFile) {
+        sourceFilename = path.relative(path.dirname(commander.outFile), sourceFilename);
+      }
+      sourceFilename = slash(sourceFilename);
+
+      const data = util.compile(filename, {
+        sourceFileName: sourceFilename,
+      });
+
       if (data.ignored) return;
       results.push(data);
     });
@@ -128,17 +141,21 @@ module.exports = function (commander, filenames, opts) {
     output();
   };
 
-  let files = function () {
+  const files = function () {
 
     if (!commander.skipInitialBuild) {
       walk();
     }
 
     if (commander.watch) {
-      let chokidar = util.requireChokidar();
+      const chokidar = util.requireChokidar();
       chokidar.watch(filenames, {
         persistent: true,
-        ignoreInitial: true
+        ignoreInitial: true,
+        awaitWriteFinish: {
+          stabilityThreshold: 50,
+          pollInterval: 10,
+        }
       }).on("all", function (type, filename) {
         if (util.shouldIgnore(filename) || !util.canCompile(filename, commander.extensions)) return;
 

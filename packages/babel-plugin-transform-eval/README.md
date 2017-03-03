@@ -1,6 +1,6 @@
 # babel-plugin-transform-eval
 
-Compile eval calls with string literals
+> This plugin allows Babel to compile eval calls with string literals.
 
 ## Example
 
@@ -19,7 +19,7 @@ eval("(function () { return 'foo'; })");
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-eval
+npm install --save-dev babel-plugin-transform-eval
 ```
 
 ## Usage
@@ -37,7 +37,7 @@ $ npm install babel-plugin-transform-eval
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-eval script.js
+babel --plugins transform-eval script.js
 ```
 
 ### Via Node API

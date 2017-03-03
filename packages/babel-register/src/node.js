@@ -3,15 +3,15 @@ import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import extend from "lodash/extend";
 import * as babel from "babel-core";
-import each from "lodash/each";
 import { util, OptionManager } from "babel-core";
 import fs from "fs";
 import path from "path";
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
+  environment : "node",
   retrieveSourceMap(source) {
-    let map = maps && maps[source];
+    const map = maps && maps[source];
     if (map) {
       return {
         url: null,
@@ -26,15 +26,15 @@ sourceMapSupport.install({
 registerCache.load();
 let cache = registerCache.get();
 
-let transformOpts = {};
+const transformOpts = {};
 
 let ignore;
 let only;
 
 let oldHandlers   = {};
-let maps          = {};
+const maps          = {};
 
-let cwd = process.cwd();
+const cwd = process.cwd();
 
 function getRelativePath(filename) {
   return path.relative(cwd, filename);
@@ -48,18 +48,19 @@ function compile(filename) {
   let result;
 
   // merge in base options and resolve all the plugins and presets relative to this file
-  let opts = new OptionManager().init(extend(deepClone(transformOpts), {
-    filename,
-    sourceRoot: path.dirname(filename)
-  }));
+  const opts = new OptionManager().init(extend(
+    { sourceRoot: path.dirname(filename) }, // sourceRoot can be overwritten
+    deepClone(transformOpts),
+    { filename }
+  ));
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
-  let env = process.env.BABEL_ENV || process.env.NODE_ENV;
+  const env = process.env.BABEL_ENV || process.env.NODE_ENV;
   if (env) cacheKey += `:${env}`;
 
   if (cache) {
-    let cached = cache[cacheKey];
+    const cached = cache[cacheKey];
     if (cached && cached.mtime === mtime(filename)) {
       result = cached;
     }
@@ -98,7 +99,7 @@ function loader(m, filename) {
 }
 
 function registerExtension(ext) {
-  let old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
+  const old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
 
   require.extensions[ext] = function (m, filename) {
     if (shouldIgnore(filename)) {
@@ -110,7 +111,8 @@ function registerExtension(ext) {
 }
 
 function hookExtensions(_exts) {
-  each(oldHandlers, function (old, ext) {
+  Object.keys(oldHandlers).forEach(function (ext) {
+    const old = oldHandlers[ext];
     if (old === undefined) {
       delete require.extensions[ext];
     } else {
@@ -120,7 +122,7 @@ function hookExtensions(_exts) {
 
   oldHandlers = {};
 
-  each(_exts, function (ext) {
+  _exts.forEach(function (ext) {
     oldHandlers[ext] = require.extensions[ext];
     registerExtension(ext);
   });

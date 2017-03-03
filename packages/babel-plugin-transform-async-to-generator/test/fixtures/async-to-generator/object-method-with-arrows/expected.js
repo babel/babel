@@ -16,9 +16,9 @@ class Class {
           var _this2 = this;
 
           this;
-          (function () {
-            _this2;
-          });
+          () => {
+            this;
+          };
           babelHelpers.asyncToGenerator(function* () {
             _this2;
           });
@@ -28,9 +28,9 @@ class Class {
         var _this3 = this;
 
         this;
-        (function () {
-          _this3;
-        });
+        () => {
+          this;
+        };
         babelHelpers.asyncToGenerator(function* () {
           _this3;
         });

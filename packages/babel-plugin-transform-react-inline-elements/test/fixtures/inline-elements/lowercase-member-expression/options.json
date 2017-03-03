@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "external-helpers",
+    "syntax-jsx",
+    "transform-react-inline-elements",
+    "transform-react-jsx",
+    "transform-es2015-modules-commonjs"
+  ]
+}

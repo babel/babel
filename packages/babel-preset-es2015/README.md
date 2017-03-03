@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install --save-dev babel-preset-es2015
+npm install --save-dev babel-preset-es2015
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install --save-dev babel-preset-es2015
 ### Via CLI
 
 ```sh
-$ babel script.js --presets es2015
+babel script.js --presets es2015
 ```
 
 ### Via Node API
@@ -36,19 +36,22 @@ require("babel-core").transform("code", {
 
 ## Options
 
-* `loose` - Enable "loose" transformations for any plugins in this preset that allow them (Disabled by default).
-* `modules` - Enable transformation of ES6 module syntax to another module type (Enabled by default to "commonjs").
-  * Can be `false` to not transform modules, or one of `["amd", "umd", "systemjs", "commonjs"]`
+### `loose`
 
-```
-{
-  presets: [
-    ["es2015", {"loose": true, "modules": "amd"}]
-  ]
-}
-{
-  presets: [
-    ["es2015", {"loose": true, "modules": false}]
-  ]
-}
-```
+`boolean`, defaults to `false`.
+
+Enable "loose" transformations for any plugins in this preset that allow them.
+
+### `modules`
+
+`"amd" | "umd" | "systemjs" | "commonjs" | false`, defaults to `"commonjs"`.
+
+Enable transformation of ES6 module syntax to another module type.
+
+Setting this to `false` will not transform modules.
+
+### `spec`
+
+`boolean`, defaults to `false`.
+
+Enable "spec" transformations for any plugins in this preset that allow them.

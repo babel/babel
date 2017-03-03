@@ -1,14 +1,14 @@
-var assert = require("assert");
-var babel = require("babel-core");
-var vm = require("vm");
+const assert = require("assert");
+const babel = require("babel-core");
+const vm = require("vm");
 
 test("Re-export doesn't overwrite __esModule flag", function () {
-  var code = 'export * from "./dep";';
-  var depStub = {
+  let code = "export * from \"./dep\";";
+  const depStub = {
     __esModule: false,
   };
 
-  var context = {
+  const context = {
     module: {
       exports: {}
     },
@@ -21,7 +21,7 @@ test("Re-export doesn't overwrite __esModule flag", function () {
 
   code = babel.transform(code, {
     "plugins": [
-      [require("../"), {loose: true}],
+      [require("../"), { loose: true }],
     ],
     "ast": false,
   }).code;

@@ -1,7 +1,4 @@
-/* eslint max-len: 0 */
-
 import nameFunction from "babel-helper-function-name";
-import each from "lodash/each";
 import has from "lodash/has";
 import * as t from "babel-types";
 
@@ -16,7 +13,7 @@ function toKind(node: Object) {
 }
 
 export function push(mutatorMap: Object, node: Object, kind: string, file, scope?): Object {
-  let alias = t.toKeyAlias(node);
+  const alias = t.toKeyAlias(node);
 
   //
 
@@ -36,8 +33,9 @@ export function push(mutatorMap: Object, node: Object, kind: string, file, scope
   }
 
   if (node.decorators) {
-    let decorators = map.decorators = map.decorators || t.arrayExpression([]);
-    decorators.elements = decorators.elements.concat(node.decorators.map((dec) => dec.expression).reverse());
+    const decorators = map.decorators = map.decorators || t.arrayExpression([]);
+    decorators.elements = decorators.elements.concat(
+      node.decorators.map((dec) => dec.expression).reverse());
   }
 
   if (map.value || map.initializer) {
@@ -55,15 +53,17 @@ export function push(mutatorMap: Object, node: Object, kind: string, file, scope
     value = node.value;
   } else if (t.isObjectMethod(node) || t.isClassMethod(node)) {
     value = t.functionExpression(null, node.params, node.body, node.generator, node.async);
+    value.returnType = node.returnType;
   }
 
-  let inheritedKind = toKind(node);
+  const inheritedKind = toKind(node);
   if (!kind || inheritedKind !== "value") {
     kind = inheritedKind;
   }
 
   // infer function name
-  if (scope && t.isStringLiteral(key) && (kind === "value" || kind === "initializer") && t.isFunctionExpression(value)) {
+  if (scope && t.isStringLiteral(key) && (kind === "value" || kind === "initializer") &&
+    t.isFunctionExpression(value)) {
     value = nameFunction({ id: key, node: value, scope });
   }
 
@@ -76,7 +76,7 @@ export function push(mutatorMap: Object, node: Object, kind: string, file, scope
 }
 
 export function hasComputed(mutatorMap: Object): boolean {
-  for (let key in mutatorMap) {
+  for (const key in mutatorMap) {
     if (mutatorMap[key]._computed) {
       return true;
     }
@@ -85,11 +85,11 @@ export function hasComputed(mutatorMap: Object): boolean {
 }
 
 export function toComputedObjectFromClass(obj: Object): Object {
-  let objExpr = t.arrayExpression([]);
+  const objExpr = t.arrayExpression([]);
 
   for (let i = 0; i < obj.properties.length; i++) {
-    let prop = obj.properties[i];
-    let val = prop.value;
+    const prop = obj.properties[i];
+    const val = prop.value;
     val.properties.unshift(t.objectProperty(t.identifier("key"), t.toComputedKey(prop)));
     objExpr.elements.push(val);
   }
@@ -98,20 +98,22 @@ export function toComputedObjectFromClass(obj: Object): Object {
 }
 
 export function toClassObject(mutatorMap: Object): Object {
-  let objExpr = t.objectExpression([]);
+  const objExpr = t.objectExpression([]);
 
-  each(mutatorMap, function (map) {
-    let mapNode = t.objectExpression([]);
+  Object.keys(mutatorMap).forEach(function (mutatorMapKey) {
+    const map = mutatorMap[mutatorMapKey];
+    const mapNode = t.objectExpression([]);
 
-    let propNode = t.objectProperty(map._key, mapNode, map._computed);
+    const propNode = t.objectProperty(map._key, mapNode, map._computed);
 
-    each(map, function (node, key) {
+    Object.keys(map).forEach(function (key) {
+      let node = map[key];
       if (key[0] === "_") return;
 
-      let inheritNode = node;
+      const inheritNode = node;
       if (t.isClassMethod(node) || t.isClassProperty(node)) node = node.value;
 
-      let prop = t.objectProperty(t.identifier(key), node);
+      const prop = t.objectProperty(t.identifier(key), node);
       t.inheritsComments(prop, inheritNode);
       t.removeComments(inheritNode);
 
@@ -125,7 +127,8 @@ export function toClassObject(mutatorMap: Object): Object {
 }
 
 export function toDefineObject(mutatorMap: Object): Object {
-  each(mutatorMap, function (map) {
+  Object.keys(mutatorMap).forEach(function (key) {
+    const map = mutatorMap[key];
     if (map.value) map.writable = t.booleanLiteral(true);
     map.configurable = t.booleanLiteral(true);
     map.enumerable = t.booleanLiteral(true);

@@ -1,9 +1,7 @@
 import escapeRegExp from "lodash/escapeRegExp";
 import startsWith from "lodash/startsWith";
-import isBoolean from "lodash/isBoolean";
 import minimatch from "minimatch";
 import includes from "lodash/includes";
-import isString from "lodash/isString";
 import isRegExp from "lodash/isRegExp";
 import path from "path";
 import slash from "slash";
@@ -15,8 +13,8 @@ export { inherits, inspect } from "util";
  */
 
 export function canCompile(filename: string, altExts?: Array<string>): boolean {
-  let exts = altExts || canCompile.EXTENSIONS;
-  let ext = path.extname(filename);
+  const exts = altExts || canCompile.EXTENSIONS;
+  const ext = path.extname(filename);
   return includes(exts, ext);
 }
 
@@ -63,7 +61,7 @@ export function regexify(val: any): RegExp {
     if (startsWith(val, "./") || startsWith(val, "*/")) val = val.slice(2);
     if (startsWith(val, "**/")) val = val.slice(3);
 
-    let regex = minimatch.makeRe(val, { nocase: true });
+    const regex = minimatch.makeRe(val, { nocase: true });
     return new RegExp(regex.source.slice(1, -1), "i");
   }
 
@@ -80,8 +78,8 @@ export function regexify(val: any): RegExp {
 
 export function arrayify(val: any, mapFn?: Function): Array<any> {
   if (!val) return [];
-  if (isBoolean(val)) return arrayify([val], mapFn);
-  if (isString(val)) return arrayify(list(val), mapFn);
+  if (typeof val === "boolean") return arrayify([val], mapFn);
+  if (typeof val === "string") return arrayify(list(val), mapFn);
 
   if (Array.isArray(val)) {
     if (mapFn) val = val.map(mapFn);
@@ -116,15 +114,15 @@ export function shouldIgnore(
   ignore: Array<RegExp | Function> = [],
   only?: Array<RegExp | Function>,
 ): boolean {
-  filename = slash(filename);
+  filename = filename.replace(/\\/g, "/");
 
   if (only) {
-    for (let pattern of only) {
+    for (const pattern of only) {
       if (_shouldIgnore(pattern, filename)) return false;
     }
     return true;
   } else if (ignore.length) {
-    for (let pattern of ignore) {
+    for (const pattern of ignore) {
       if (_shouldIgnore(pattern, filename)) return true;
     }
   }

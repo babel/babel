@@ -1,63 +1,23 @@
-var traverse = require("../lib").default;
-var assert   = require("assert");
-var _        = require("lodash");
+const cloneDeep = require("lodash/cloneDeep");
+const traverse  = require("../lib").default;
+const assert    = require("assert");
+const parse     = require("babylon").parse;
 
-suite("traverse", function () {
-  var ast = {
-    type: "Program",
-    body: [
-      {
-        "type": "VariableDeclaration",
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "id": {
-              "type": "Identifier",
-              "name": "foo",
-            },
-            "init": {
-              "type": "StringLiteral",
-              "value": "bar",
-              "raw": "\'bar\'"
-            }
-          }
-        ],
-        "kind": "var"
-      },
-      {
-        "type": "ExpressionStatement",
-        "expression": {
-          "type": "AssignmentExpression",
-          "operator": "=",
-          "left": {
-            "type": "MemberExpression",
-            "computed": false,
-            "object": {
-              "type": "ThisExpression"
-            },
-            "property": {
-              "type": "Identifier",
-              "name": "test"
-            }
-          },
-          "right": {
-            "type": "StringLiteral",
-            "value": "wow",
-            "raw": "\'wow\'"
-          }
-        }
-      }
-    ]
-  };
+describe("traverse", function () {
+  const code = `
+    var foo = "bar";
+    this.test = "wow";
+  `;
+  const ast = parse(code);
+  const program = ast.program;
+  const body = program.body;
 
-  var body = ast.body;
-
-  test("traverse replace", function () {
-    var replacement = {
+  it("traverse replace", function () {
+    const replacement = {
       type: "StringLiteral",
       value: "foo"
     };
-    var ast2 = _.cloneDeep(ast);
+    const ast2 = cloneDeep(program);
 
     traverse(ast2, {
       enter: function (path) {
@@ -68,15 +28,16 @@ suite("traverse", function () {
     assert.equal(ast2.body[1].expression.left.object, replacement);
   });
 
-  test("traverse", function () {
-    var expect = [
+  it("traverse", function () {
+    const expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
-      body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object, body[1].expression.left.property, body[1].expression.right
+      body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object,
+      body[1].expression.left.property, body[1].expression.right
     ];
 
-    var actual = [];
+    const actual = [];
 
-    traverse(ast, {
+    traverse(program, {
       enter: function (path) {
         actual.push(path.node);
       }
@@ -85,7 +46,7 @@ suite("traverse", function () {
     assert.deepEqual(actual, expect);
   });
 
-  test("traverse falsy parent", function () {
+  it("traverse falsy parent", function () {
     traverse(null, {
       enter: function () {
         throw new Error("should not be ran");
@@ -93,15 +54,15 @@ suite("traverse", function () {
     });
   });
 
-  test("traverse blacklistTypes", function () {
-    var expect = [
+  it("traverse blacklistTypes", function () {
+    const expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
       body[1], body[1].expression, body[1].expression.right
     ];
 
-    var actual = [];
+    const actual = [];
 
-    traverse(ast, {
+    traverse(program, {
       blacklist: ["MemberExpression"],
       enter: function (path) {
         actual.push(path.node);
@@ -111,7 +72,7 @@ suite("traverse", function () {
     assert.deepEqual(actual, expect);
   });
 
-  test("hasType", function () {
+  it("hasType", function () {
     assert.ok(traverse.hasType(ast, null, "ThisExpression"));
     assert.ok(!traverse.hasType(ast, null, "ThisExpression", ["AssignmentExpression"]));
 
@@ -124,25 +85,78 @@ suite("traverse", function () {
     assert.ok(!traverse.hasType(ast, null, "ArrowFunctionExpression"));
   });
 
-  test("clearCache", function () {
-    var paths = [];
+  it("clearCache", function () {
+    const paths = [];
+    const scopes = [];
     traverse(ast, {
-      enter: function (path) {
+      enter(path) {
+        scopes.push(path.scope);
         paths.push(path);
+        path.stop();
       }
     });
 
     traverse.clearCache();
 
-    var paths2 = [];
+    const paths2 = [];
+    const scopes2 = [];
     traverse(ast, {
-      enter: function (path) {
+      enter(path) {
+        scopes2.push(path.scope);
+        paths2.push(path);
+        path.stop();
+      }
+    });
+
+    scopes2.forEach(function (_, i) {
+      assert.notStrictEqual(scopes[i], scopes2[i]);
+      assert.notStrictEqual(paths[i], paths2[i]);
+    });
+  });
+
+  it("clearPath", function () {
+    const paths = [];
+    traverse(ast, {
+      enter(path) {
+        paths.push(path);
+      }
+    });
+
+    traverse.clearCache.clearPath();
+
+    const paths2 = [];
+    traverse(ast, {
+      enter(path) {
         paths2.push(path);
       }
     });
 
     paths2.forEach(function (p, i) {
       assert.notStrictEqual(p, paths[i]);
+    });
+  });
+
+  it("clearScope", function () {
+    const scopes = [];
+    traverse(ast, {
+      enter(path) {
+        scopes.push(path.scope);
+        path.stop();
+      }
+    });
+
+    traverse.clearCache.clearScope();
+
+    const scopes2 = [];
+    traverse(ast, {
+      enter(path) {
+        scopes2.push(path.scope);
+        path.stop();
+      }
+    });
+
+    scopes2.forEach(function (p, i) {
+      assert.notStrictEqual(p, scopes[i]);
     });
   });
 });

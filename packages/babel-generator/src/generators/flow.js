@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 export function AnyTypeAnnotation() {
   this.word("any");
 }
@@ -11,7 +9,7 @@ export function ArrayTypeAnnotation(node: Object) {
 }
 
 export function BooleanTypeAnnotation() {
-  this.word("bool");
+  this.word("boolean");
 }
 
 export function BooleanLiteralTypeAnnotation(node: Object) {
@@ -147,6 +145,14 @@ export function _interfaceish(node: Object) {
   this.print(node.body, node);
 }
 
+export function _variance(node) {
+  if (node.variance === "plus") {
+    this.token("+");
+  } else if (node.variance === "minus") {
+    this.token("-");
+  }
+}
+
 export function InterfaceDeclaration(node: Object) {
   this.word("interface");
   this.space();
@@ -165,6 +171,10 @@ export function IntersectionTypeAnnotation(node: Object) {
 
 export function MixedTypeAnnotation() {
   this.word("mixed");
+}
+
+export function EmptyTypeAnnotation() {
+  this.word("empty");
 }
 
 export function NullableTypeAnnotation(node: Object) {
@@ -221,11 +231,7 @@ export function TypeAnnotation(node: Object) {
 }
 
 export function TypeParameter(node: Object) {
-  if (node.variance === "plus") {
-    this.token("+");
-  } else if (node.variance === "minus") {
-    this.token("-");
-  }
+  this._variance(node);
 
   this.word(node.name);
 
@@ -250,18 +256,30 @@ export function TypeParameterInstantiation(node: Object) {
 export { TypeParameterInstantiation as TypeParameterDeclaration };
 
 export function ObjectTypeAnnotation(node: Object) {
-  this.token("{");
-  let props = node.properties.concat(node.callProperties, node.indexers);
+  if (node.exact) {
+    this.token("{|");
+  } else {
+    this.token("{");
+  }
+
+  const props = node.properties.concat(node.callProperties, node.indexers);
 
   if (props.length) {
     this.space();
 
     this.printJoin(props, node, {
+      addNewlines(leading) {
+        if (leading && !props[0]) return 1;
+      },
       indent: true,
       statement: true,
       iterator: () => {
         if (props.length !== 1) {
-          this.semicolon();
+          if (this.format.flowCommaSeparator) {
+            this.token(",");
+          } else {
+            this.semicolon();
+          }
           this.space();
         }
       }
@@ -270,7 +288,11 @@ export function ObjectTypeAnnotation(node: Object) {
     this.space();
   }
 
-  this.token("}");
+  if (node.exact) {
+    this.token("|}");
+  } else {
+    this.token("}");
+  }
 }
 
 export function ObjectTypeCallProperty(node: Object) {
@@ -286,6 +308,7 @@ export function ObjectTypeIndexer(node: Object) {
     this.word("static");
     this.space();
   }
+  this._variance(node);
   this.token("[");
   this.print(node.id, node);
   this.token(":");
@@ -302,6 +325,7 @@ export function ObjectTypeProperty(node: Object) {
     this.word("static");
     this.space();
   }
+  this._variance(node);
   this.print(node.key, node);
   if (node.optional) this.token("?");
   this.token(":");

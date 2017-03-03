@@ -1,4 +1,4 @@
-/* eslint max-len: 0 */
+/* eslint max-len: "off" */
 
 module.exports = {
   filename: {
@@ -198,4 +198,16 @@ module.exports = {
     default: false,
     hidden: true,
   },
+
+  // Deprecate top level parserOpts
+  parserOpts: {
+    description: "Options to pass into the parser, or to change parsers (parserOpts.parser)",
+    default: false
+  },
+
+  // Deprecate top level generatorOpts
+  generatorOpts: {
+    description: "Options to pass into the generator, or to change generators (generatorOpts.generator)",
+    default: false
+  }
 };
