@@ -106,6 +106,6 @@ const templateVisitor = {
 
   exit({ node }) {
     if (!node.loc)
-      traverse.clearNode(node);
-  }
+      {traverse.clearNode(node);}
+  },
 };

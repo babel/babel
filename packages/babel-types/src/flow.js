@@ -6,7 +6,7 @@ import * as t from "./index";
  */
 
 export function createUnionTypeAnnotation(types: Array<Object>) {
-  const flattened  = removeTypeDuplicates(types);
+  const flattened = removeTypeDuplicates(types);
 
   if (flattened.length === 1) {
     return flattened[0];

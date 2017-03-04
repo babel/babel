@@ -9,7 +9,7 @@ const seenDeprecatedMessages = [];
 export default class Logger {
   constructor(file: File, filename: string) {
     this.filename = filename;
-    this.file     = file;
+    this.file = file;
   }
 
   filename: string;

@@ -7,7 +7,7 @@ export default function ({ types: t }) {
       RestElement() {
         foundRestElement = true;
         path.stop();
-      }
+      },
     });
     return foundRestElement;
   }
@@ -38,9 +38,9 @@ export default function ({ types: t }) {
       t.callExpression(
         file.addHelper("objectWithoutProperties"), [
           objRef,
-          t.arrayExpression(keys)
+          t.arrayExpression(keys),
         ]
-      )
+      ),
     ];
   }
 
@@ -54,7 +54,7 @@ export default function ({ types: t }) {
       const uid = parentPath.scope.generateUidIdentifier("ref");
 
       const declar = t.variableDeclaration("let", [
-        t.variableDeclarator(paramPath.node, uid)
+        t.variableDeclarator(paramPath.node, uid),
       ]);
       declar._blockHoist = i ? numParams - i : 1;
 
@@ -138,9 +138,9 @@ export default function ({ types: t }) {
                 (path) => path.isObjectProperty() || path.isVariableDeclarator()
               ).remove();
             }
-          }
+          },
         }, {
-          originalPath: path
+          originalPath: path,
         });
       },
       // taken from transform-es2015-destructuring/src/index.js#visitor
@@ -179,7 +179,7 @@ export default function ({ types: t }) {
             ref = path.scope.generateUidIdentifierBasedOnNode(path.node.right, "ref");
 
             nodes.push(t.variableDeclaration("var", [
-              t.variableDeclarator(ref, path.node.right)
+              t.variableDeclarator(ref, path.node.right),
             ]));
           }
 
@@ -216,13 +216,13 @@ export default function ({ types: t }) {
           const temp = scope.generateUidIdentifier("ref");
 
           node.left = t.variableDeclaration("var", [
-            t.variableDeclarator(temp)
+            t.variableDeclarator(temp),
           ]);
 
           path.ensureBlock();
 
           node.body.body.unshift(t.variableDeclaration("var", [
-            t.variableDeclarator(left, temp)
+            t.variableDeclarator(left, temp),
           ]));
 
           return;
@@ -235,14 +235,14 @@ export default function ({ types: t }) {
 
         const key = scope.generateUidIdentifier("ref");
         node.left = t.variableDeclaration(left.kind, [
-          t.variableDeclarator(key, null)
+          t.variableDeclarator(key, null),
         ]);
 
         path.ensureBlock();
 
         node.body.body.unshift(
           t.variableDeclaration(node.left.kind, [
-            t.variableDeclarator(pattern, key)
+            t.variableDeclarator(pattern, key),
           ])
         );
       },
@@ -285,7 +285,7 @@ export default function ({ types: t }) {
           file.addHelper("extends");
 
         path.replaceWith(t.callExpression(helper, args));
-      }
-    }
+      },
+    },
   };
 }

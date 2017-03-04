@@ -5,7 +5,7 @@ export default function () {
         if (path.get("callee").matchesPattern("Object.setPrototypeOf")) {
           path.node.callee = file.addHelper("defaults");
         }
-      }
-    }
+      },
+    },
   };
 }

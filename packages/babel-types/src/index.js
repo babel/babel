@@ -46,7 +46,7 @@ export {
   UNARY_OPERATORS,
   INHERIT_KEYS,
   BLOCK_SCOPED_SYMBOL,
-  NOT_LOCAL_BINDING
+  NOT_LOCAL_BINDING,
 } from "./constants";
 
 import "./definitions/init";
@@ -230,7 +230,7 @@ export function shallowEqual(actual: Object, expected: Object): boolean {
  */
 
 export function appendToMemberExpression(member: Object, append: Object, computed?: boolean): Object {
-  member.object   = t.memberExpression(member.object, member.property, member.computed);
+  member.object = t.memberExpression(member.object, member.property, member.computed);
   member.property = append;
   member.computed = !!computed;
   return member;
@@ -485,11 +485,11 @@ export function traverseFast(node: Node, enter: (node: Node) => void, opts?: Obj
 const CLEAR_KEYS: Array = [
   "tokens",
   "start", "end", "loc",
-  "raw", "rawValue"
+  "raw", "rawValue",
 ];
 
 const CLEAR_KEYS_PLUS_COMMENTS: Array = t.COMMENT_KEYS.concat([
-  "comments"
+  "comments",
 ]).concat(CLEAR_KEYS);
 
 /**
@@ -522,7 +522,7 @@ export function removePropertiesDeep(tree: Node, opts?: Object): Node {
 //
 export {
   getBindingIdentifiers,
-  getOuterBindingIdentifiers
+  getOuterBindingIdentifiers,
 } from "./retrievers";
 
 export {
@@ -535,7 +535,7 @@ export {
   isSpecifierDefault,
   isScope,
   isImmutable,
-  isNodesEquivalent
+  isNodesEquivalent,
 } from "./validators";
 
 export {
@@ -547,11 +547,11 @@ export {
   toStatement,
   toExpression,
   toBlock,
-  valueToNode
+  valueToNode,
 } from "./converters";
 
 export {
   createUnionTypeAnnotation,
   removeTypeDuplicates,
-  createTypeAnnotationBasedOnTypeof
+  createTypeAnnotationBasedOnTypeof,
 } from "./flow";

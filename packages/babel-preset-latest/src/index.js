@@ -7,7 +7,7 @@ export default function (context, opts = {}) {
     presets: [
       opts.es2015 !== false && [presetES2015, opts.es2015],
       opts.es2016 !== false && presetES2016,
-      opts.es2017 !== false && presetES2017
-    ].filter(Boolean) // filter out falsy values
+      opts.es2017 !== false && presetES2017,
+    ].filter(Boolean), // filter out falsy values
   };
 }

@@ -67,7 +67,7 @@ export default class OptionManager {
       const plugin = new Plugin(obj, alias);
       OptionManager.memoisedPlugins.push({
         container: fn,
-        plugin: plugin
+        plugin: plugin,
       });
       return plugin;
     } else {
@@ -151,7 +151,7 @@ export default class OptionManager {
     extending: extendingOpts,
     alias,
     loc,
-    dirname
+    dirname,
   }: MergeOptions) {
     alias = alias || "foreign";
     if (!rawOpts) return;
@@ -208,7 +208,7 @@ export default class OptionManager {
             extending: preset,
             alias: presetLoc,
             loc: presetLoc,
-            dirname: dirname
+            dirname: dirname,
           });
         });
       } else {
@@ -238,7 +238,7 @@ export default class OptionManager {
         options: presetOpts,
         alias: presetLoc,
         loc: presetLoc,
-        dirname: path.dirname(presetLoc || "")
+        dirname: path.dirname(presetLoc || ""),
       });
     });
   }
@@ -318,7 +318,7 @@ export default class OptionManager {
 
     for (const key in config) {
       const option = config[key];
-      const val    = opts[key];
+      const val = opts[key];
 
       // optional
       if (!val && option.optional) continue;

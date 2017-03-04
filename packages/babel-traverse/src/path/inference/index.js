@@ -24,7 +24,7 @@ export function _getTypeAnnotation(): ?Object {
   if (!node) {
     // handle initializerless variables, add in checks for loop initializers too
     if (this.key === "init" && this.parentPath.isVariableDeclarator()) {
-      const declar       = this.parentPath.parentPath;
+      const declar = this.parentPath.parentPath;
       const declarParent = declar.parentPath;
 
       // for (let NODE in bar) {}

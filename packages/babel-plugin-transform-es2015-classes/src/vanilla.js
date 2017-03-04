@@ -21,7 +21,7 @@ const noMethodVisitor = {
 
   Method(path) {
     path.skip();
-  }
+  },
 };
 
 const verifyConstructorVisitor = visitors.merge([noMethodVisitor, {
@@ -43,7 +43,7 @@ const verifyConstructorVisitor = visitors.merge([noMethodVisitor, {
           throw path.buildCodeFrameError("super() is only allowed in a derived constructor");
         }
       }
-    }
+    },
   },
 
   ThisExpression(path) {
@@ -52,36 +52,36 @@ const verifyConstructorVisitor = visitors.merge([noMethodVisitor, {
         throw path.buildCodeFrameError("'this' is not allowed before super()");
       }
     }
-  }
+  },
 }]);
 
 const findThisesVisitor = visitors.merge([noMethodVisitor, {
   ThisExpression(path) {
     this.superThises.push(path);
-  }
+  },
 }]);
 
 export default class ClassTransformer {
   constructor(path: NodePath, file) {
     this.parent = path.parent;
-    this.scope  = path.scope;
-    this.node   = path.node;
-    this.path   = path;
-    this.file   = file;
+    this.scope = path.scope;
+    this.node = path.node;
+    this.path = path;
+    this.file = file;
 
     this.clearDescriptors();
 
     this.instancePropBody = [];
     this.instancePropRefs = {};
-    this.staticPropBody   = [];
-    this.body             = [];
+    this.staticPropBody = [];
+    this.body = [];
 
-    this.bareSuperAfter   = [];
-    this.bareSupers       = [];
+    this.bareSuperAfter = [];
+    this.bareSupers = [];
 
     this.pushedConstructor = false;
-    this.pushedInherits    = false;
-    this.isLoose           = false;
+    this.pushedInherits = false;
+    this.isLoose = false;
 
     this.superThises = [];
 
@@ -98,13 +98,13 @@ export default class ClassTransformer {
 
   run() {
     let superName = this.superName;
-    const file      = this.file;
-    let body      = this.body;
+    const file = this.file;
+    let body = this.body;
 
     //
 
     const constructorBody = this.constructorBody = t.blockStatement([]);
-    this.constructor    = this.buildConstructor();
+    this.constructor = this.buildConstructor();
 
     //
 
@@ -128,7 +128,7 @@ export default class ClassTransformer {
     constructorBody.body.unshift(t.expressionStatement(t.callExpression(
       file.addHelper("classCallCheck"), [
         t.thisExpression(),
-        this.classRef
+        this.classRef,
       ]
     )));
 
@@ -248,14 +248,14 @@ export default class ClassTransformer {
 
         const replaceSupers = new ReplaceSupers({
           forceSuperMemoisation: isConstructor,
-          methodPath:            path,
-          methodNode:            node,
-          objectRef:             this.classRef,
-          superRef:              this.superName,
-          isStatic:              node.static,
-          isLoose:               this.isLoose,
-          scope:                 this.scope,
-          file:                  this.file
+          methodPath: path,
+          methodNode: node,
+          objectRef: this.classRef,
+          superRef: this.superName,
+          isStatic: node.static,
+          isLoose: this.isLoose,
+          scope: this.scope,
+          file: this.file,
         }, true);
 
         replaceSupers.replace();
@@ -271,10 +271,10 @@ export default class ClassTransformer {
 
   clearDescriptors() {
     this.hasInstanceDescriptors = false;
-    this.hasStaticDescriptors   = false;
+    this.hasStaticDescriptors = false;
 
     this.instanceMutatorMap = {};
-    this.staticMutatorMap   = {};
+    this.staticMutatorMap = {};
   }
 
   pushDescriptors() {
@@ -337,7 +337,7 @@ export default class ClassTransformer {
 
   buildObjectAssignment(id) {
     return t.variableDeclaration("var", [
-      t.variableDeclarator(id, t.objectExpression([]))
+      t.variableDeclarator(id, t.objectExpression([])),
     ]);
   }
 
@@ -400,10 +400,10 @@ export default class ClassTransformer {
     } else {
       bareSuper.replaceWithMultiple([
         t.variableDeclaration("var", [
-          t.variableDeclarator(thisRef, call)
+          t.variableDeclarator(thisRef, call),
         ]),
         ...bareSuperAfter,
-        t.expressionStatement(thisRef)
+        t.expressionStatement(thisRef),
       ]);
     }
 
@@ -462,7 +462,7 @@ export default class ClassTransformer {
         const ref = returnPath.scope.generateDeclaredUidIdentifier("ret");
         returnPath.get("argument").replaceWithMultiple([
           t.assignmentExpression("=", ref, returnPath.node.argument),
-          wrapReturn(ref)
+          wrapReturn(ref),
         ]);
       } else {
         returnPath.get("argument").replaceWith(wrapReturn());
@@ -504,13 +504,13 @@ export default class ClassTransformer {
     const construct = this.constructor;
 
     this.userConstructorPath = path;
-    this.userConstructor     = method;
-    this.hasConstructor      = true;
+    this.userConstructor = method;
+    this.hasConstructor = true;
 
     t.inheritsComments(construct, method);
 
     construct._ignoreUserWhitespace = true;
-    construct.params                = method.params;
+    construct.params = method.params;
 
     t.inherits(construct.body, method.body);
     construct.body.directives = method.body.directives;

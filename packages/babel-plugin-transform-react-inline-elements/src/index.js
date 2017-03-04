@@ -29,9 +29,9 @@ export default function ({ types: t }) {
         if (hasRefOrSpread(open.attributes)) return;
 
         // init
-        const props       = t.objectExpression([]);
-        let key         = null;
-        let type        = open.name;
+        const props = t.objectExpression([]);
+        let key = null;
+        let type = open.name;
 
         if (t.isJSXIdentifier(type) && t.react.isCompatTag(type.name)) {
           type = t.stringLiteral(type.name);
@@ -63,7 +63,7 @@ export default function ({ types: t }) {
 
         const el = t.callExpression(file.addHelper("jsx"), args);
         path.replaceWith(el);
-      }
-    }
+      },
+    },
   };
 }

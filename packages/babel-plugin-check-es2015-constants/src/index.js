@@ -11,6 +11,6 @@ export default function ({ messages }) {
           }
         }
       },
-    }
+    },
   };
 }

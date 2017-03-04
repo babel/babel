@@ -63,7 +63,7 @@ export function getSibling(key): NodePath {
     parent: this.parent,
     container: this.container,
     listKey: this.listKey,
-    key: key
+    key: key,
   });
 }
 
@@ -108,7 +108,7 @@ export function get(key: string, context?: boolean | TraversalContext): NodePath
 }
 
 export function _getKey(key, context?) {
-  const node      = this.node;
+  const node = this.node;
   const container = node[key];
 
   if (Array.isArray(container)) {
@@ -119,7 +119,7 @@ export function _getKey(key, context?) {
         parentPath: this,
         parent: node,
         container: container,
-        key: i
+        key: i,
       }).setContext(context);
     });
   } else {
@@ -127,7 +127,7 @@ export function _getKey(key, context?) {
       parentPath: this,
       parent: node,
       container: node,
-      key: key
+      key: key,
     }).setContext(context);
   }
 }

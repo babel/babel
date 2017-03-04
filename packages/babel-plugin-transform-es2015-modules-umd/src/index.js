@@ -121,7 +121,7 @@ export default function ({ types: t }) {
           const globalExport = buildGlobalExport({
             BROWSER_ARGUMENTS: browserArgs,
             PREREQUISITE_ASSIGNMENTS: prerequisiteAssignments,
-            GLOBAL_TO_ASSIGN: globalToAssign
+            GLOBAL_TO_ASSIGN: globalToAssign,
           });
 
           last.replaceWith(buildWrapper({
@@ -129,10 +129,10 @@ export default function ({ types: t }) {
             AMD_ARGUMENTS: amdArgs,
             COMMON_ARGUMENTS: commonArgs,
             GLOBAL_EXPORT: globalExport,
-            FUNC: func
+            FUNC: func,
           }));
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

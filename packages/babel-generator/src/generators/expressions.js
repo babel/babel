@@ -188,7 +188,7 @@ export function BindExpression(node: Object) {
 
 export {
   AssignmentExpression as BinaryExpression,
-  AssignmentExpression as LogicalExpression
+  AssignmentExpression as LogicalExpression,
 };
 
 export function MemberExpression(node: Object) {

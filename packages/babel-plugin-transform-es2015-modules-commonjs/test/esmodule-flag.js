@@ -10,7 +10,7 @@ test("Re-export doesn't overwrite __esModule flag", function () {
 
   const context = {
     module: {
-      exports: {}
+      exports: {},
     },
     require: function (id) {
       if (id === "./dep") return depStub;

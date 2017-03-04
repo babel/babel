@@ -124,7 +124,7 @@ export default function () {
       nodes.push(t.binaryExpression(operator, arg.node, t.numericLiteral(1)));
 
       path.replaceWithMultiple(t.sequenceExpression(nodes));
-    }
+    },
   };
 
   return {
@@ -182,7 +182,7 @@ export default function () {
             const varDecl = t.variableDeclaration("var", [
               t.variableDeclarator(ref, buildRequire(
                 t.stringLiteral(source)
-              ).expression)
+              ).expression),
             ]);
 
             // Copy location from the original import statement for sourcemap
@@ -260,7 +260,7 @@ export default function () {
                   addTo(exports, id.name, defNode);
                   path.replaceWithMultiple([
                     declaration.node,
-                    buildExportsAssignment(defNode, id)
+                    buildExportsAssignment(defNode, id),
                   ]);
                 } else {
                   path.replaceWith(buildExportsAssignment(defNode, t.toExpression(declaration.node)));
@@ -291,7 +291,7 @@ export default function () {
                   addTo(exports, id.name, id);
                   path.replaceWithMultiple([
                     declaration.node,
-                    buildExportsAssignment(id, id)
+                    buildExportsAssignment(id, id),
                   ]);
                   nonHoistedExportNames[id.name] = true;
                 } else if (declaration.isVariableDeclaration()) {
@@ -353,7 +353,7 @@ export default function () {
               path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
               const exportNode = buildExportAll({
-                OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
+                OBJECT: addRequire(path.node.source.value, path.node._blockHoist),
               });
               exportNode.loc = path.node.loc;
               topNodes.push(exportNode);
@@ -381,7 +381,7 @@ export default function () {
                           this.addHelper("interopRequireWildcard"),
                           [uid]
                         )
-                      )
+                      ),
                     ]);
 
                     if (maxBlockHoist > 0) {
@@ -411,7 +411,7 @@ export default function () {
                             this.addHelper("interopRequireDefault"),
                             [uid]
                           )
-                        )
+                        ),
                       ]);
 
                       if (maxBlockHoist > 0) {
@@ -480,8 +480,8 @@ export default function () {
             exports,
             requeueInParent: (newPath) => path.requeue(newPath),
           });
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

@@ -6,11 +6,11 @@ import path from "path";
 import fs from "fs";
 
 const existsCache = {};
-const jsonCache   = {};
+const jsonCache = {};
 
 const BABELIGNORE_FILENAME = ".babelignore";
-const BABELRC_FILENAME     = ".babelrc";
-const PACKAGE_FILENAME     = "package.json";
+const BABELRC_FILENAME = ".babelrc";
+const PACKAGE_FILENAME = "package.json";
 
 function exists(filename) {
   const cached = existsCache[filename];
@@ -33,7 +33,7 @@ export default function buildConfigChain(opts: Object = {}, log?: Logger) {
   builder.mergeConfig({
     options: opts,
     alias: "base",
-    dirname: filename && path.dirname(filename)
+    dirname: filename && path.dirname(filename),
   });
 
   return builder.configs;
@@ -83,7 +83,7 @@ class ConfigChainBuilder {
   }
 
   addIgnoreConfig(loc) {
-    const file  = fs.readFileSync(loc, "utf8");
+    const file = fs.readFileSync(loc, "utf8");
     let lines = file.split("\n");
 
     lines = lines
@@ -94,7 +94,7 @@ class ConfigChainBuilder {
       this.mergeConfig({
         options: { ignore: lines },
         alias: loc,
-        dirname: path.dirname(loc)
+        dirname: path.dirname(loc),
       });
     }
   }
@@ -120,7 +120,7 @@ class ConfigChainBuilder {
     this.mergeConfig({
       options,
       alias: loc,
-      dirname: path.dirname(loc)
+      dirname: path.dirname(loc),
     });
 
     return !!options;
@@ -130,7 +130,7 @@ class ConfigChainBuilder {
     options,
     alias,
     loc,
-    dirname
+    dirname,
   }) {
     if (!options) {
       return false;
@@ -156,7 +156,7 @@ class ConfigChainBuilder {
       options,
       alias,
       loc,
-      dirname
+      dirname,
     });
 
     // env
@@ -170,7 +170,7 @@ class ConfigChainBuilder {
     this.mergeConfig({
       options: envOpts,
       alias: `${alias}.env.${envKey}`,
-      dirname: dirname
+      dirname: dirname,
     });
   }
 }

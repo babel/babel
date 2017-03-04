@@ -19,7 +19,7 @@ describe("option-manager", () => {
         () => {
           const opt = new OptionManager(new Logger(null, "unknown"));
           opt.init({
-            "randomOption": true
+            "randomOption": true,
           });
         },
         /Unknown option: base.randomOption/
@@ -32,7 +32,7 @@ describe("option-manager", () => {
           const opt = new OptionManager(new Logger(null, "unknown"));
           opt.init({
             "auxiliaryComment": true,
-            "blacklist": true
+            "blacklist": true,
           });
         },
         // eslint-disable-next-line max-len
@@ -45,7 +45,7 @@ describe("option-manager", () => {
         () => {
           const opt = new OptionManager(new Logger(null, "unknown"));
           opt.init({
-            "presets": [path.join(__dirname, "fixtures/option-manager/not-a-preset")]
+            "presets": [path.join(__dirname, "fixtures/option-manager/not-a-preset")],
           });
         },
         /While processing preset: .*option-manager(?:\/|\\\\)not-a-preset\.js/
@@ -58,7 +58,7 @@ describe("option-manager", () => {
       it(name, function () {
         const opt = new OptionManager(new Logger(null, "unknown"));
         const options = opt.init({
-          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)]
+          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
         });
 
         assert.equal(true, Array.isArray(options.plugins));
@@ -70,7 +70,7 @@ describe("option-manager", () => {
       it(name, function () {
         const opt = new OptionManager(new Logger(null, "unknown"));
         assert.throws(() => opt.init({
-          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)]
+          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
         }), msg);
       });
     }

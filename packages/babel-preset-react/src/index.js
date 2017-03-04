@@ -10,20 +10,20 @@ import transformReactDisplayName from "babel-plugin-transform-react-display-name
 export default function () {
   return {
     presets: [
-      presetFlow
+      presetFlow,
     ],
     plugins: [
       transformReactJSX,
       transformSyntaxJSX,
-      transformReactDisplayName
+      transformReactDisplayName,
     ],
     env: {
       development: {
         plugins: [
           // transformReactJSXSource,
           // transformReactJSXSelf
-        ]
-      }
-    }
+        ],
+      },
+    },
   };
 }

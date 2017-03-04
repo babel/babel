@@ -14,7 +14,7 @@ describe("evaluation", function () {
       };
 
       traverse(parse(code, {
-        plugins: ["*"]
+        plugins: ["*"],
       }), visitor);
     });
   }

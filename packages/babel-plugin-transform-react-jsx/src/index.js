@@ -7,7 +7,7 @@ export default function ({ types: t }) {
   const visitor = helper({
     pre(state) {
       const tagName = state.tagName;
-      const args    = state.args;
+      const args = state.args;
       if (t.react.isCompatTag(tagName)) {
         args.push(t.stringLiteral(tagName));
       } else {
@@ -17,7 +17,7 @@ export default function ({ types: t }) {
 
     post(state, pass) {
       state.callee = pass.get("jsxIdentifier")();
-    }
+    },
   });
 
   visitor.Program = function (path, state) {
@@ -47,6 +47,6 @@ export default function ({ types: t }) {
 
   return {
     inherits: jsx,
-    visitor
+    visitor,
   };
 }

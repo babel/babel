@@ -76,7 +76,7 @@ runner(`${__dirname}/fixtures/traceur`, "traceur", {
 
     // TODO
     "Syntax/StrictKeywordsInPattern",
-  ]
+  ],
 }, {
 
 }, function (opts, task) {

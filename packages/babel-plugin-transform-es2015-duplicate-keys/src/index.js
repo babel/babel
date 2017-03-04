@@ -56,7 +56,7 @@ export default function() {
             prop.key = t.stringLiteral(name);
           }
         }
-      }
-    }
+      },
+    },
   };
 }

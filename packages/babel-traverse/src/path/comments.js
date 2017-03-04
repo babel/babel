@@ -12,7 +12,7 @@ export function shareCommentsWithSiblings() {
   if (!node) return;
 
   const trailing = node.trailingComments;
-  const leading  = node.leadingComments;
+  const leading = node.leadingComments;
   if (!trailing && !leading) return;
 
   let prev = this.getSibling(this.key - 1);
@@ -28,7 +28,7 @@ export function shareCommentsWithSiblings() {
 export function addComment(type, content, line?) {
   this.addComments(type, [{
     type: line ? "CommentLine" : "CommentBlock",
-    value: content
+    value: content,
   }]);
 }
 

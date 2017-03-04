@@ -8,7 +8,7 @@ export default function () {
         if (!regex.is(node, "u")) return;
         node.pattern = rewritePattern(node.pattern, node.flags);
         regex.pullFlag(node, "u");
-      }
-    }
+      },
+    },
   };
 }

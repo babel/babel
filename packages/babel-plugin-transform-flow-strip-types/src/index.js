@@ -59,7 +59,7 @@ export default function ({ types: t }) {
           node = node.expression;
         } while (t.isTypeCastExpression(node));
         path.replaceWith(node);
-      }
-    }
+      },
+    },
   };
 }

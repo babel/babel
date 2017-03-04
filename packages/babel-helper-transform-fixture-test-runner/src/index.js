@@ -118,8 +118,8 @@ function wrapPackagesArray(type, names, optionsDir) {
 function run(task) {
   const actual = task.actual;
   const expect = task.expect;
-  const exec   = task.exec;
-  const opts   = task.options;
+  const exec = task.exec;
+  const opts = task.options;
   const optionsDir = task.optionsDir;
 
   function getOpts(self) {
@@ -218,8 +218,8 @@ export default function (
 
           defaults(task.options, {
             filenameRelative: task.expect.filename,
-            sourceFileName:   task.actual.filename,
-            sourceMapTarget:  task.expect.filename,
+            sourceFileName: task.actual.filename,
+            sourceMapTarget: task.expect.filename,
             suppressDeprecationMessages: true,
             babelrc: false,
             sourceMap: !!(task.sourceMappings || task.sourceMap),

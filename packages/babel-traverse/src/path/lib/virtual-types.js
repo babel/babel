@@ -16,21 +16,21 @@ export const ReferencedIdentifier = {
 
     // check if node is referenced
     return t.isReferenced(node, parent);
-  }
+  },
 };
 
 export const ReferencedMemberExpression = {
   types: ["MemberExpression"],
   checkPath({ node, parent }) {
     return t.isMemberExpression(node) && t.isReferenced(node, parent);
-  }
+  },
 };
 
 export const BindingIdentifier = {
   types: ["Identifier"],
   checkPath({ node, parent }: NodePath): boolean {
     return t.isIdentifier(node) && t.isBinding(node, parent);
-  }
+  },
 };
 
 export const Statement = {
@@ -46,7 +46,7 @@ export const Statement = {
     } else {
       return false;
     }
-  }
+  },
 };
 
 export const Expression = {
@@ -57,51 +57,51 @@ export const Expression = {
     } else {
       return t.isExpression(path.node);
     }
-  }
+  },
 };
 
 export const Scope = {
   types: ["Scopable"],
   checkPath(path) {
     return t.isScope(path.node, path.parent);
-  }
+  },
 };
 
 export const Referenced = {
   checkPath(path: NodePath): boolean {
     return t.isReferenced(path.node, path.parent);
-  }
+  },
 };
 
 export const BlockScoped = {
   checkPath(path: NodePath): boolean {
     return t.isBlockScoped(path.node);
-  }
+  },
 };
 
 export const Var = {
   types: ["VariableDeclaration"],
   checkPath(path: NodePath): boolean {
     return t.isVar(path.node);
-  }
+  },
 };
 
 export const User = {
   checkPath(path: NodePath): boolean {
     return path.node && !!path.node.loc;
-  }
+  },
 };
 
 export const Generated = {
   checkPath(path: NodePath): boolean {
     return !path.isUser();
-  }
+  },
 };
 
 export const Pure = {
   checkPath(path: NodePath, opts?): boolean {
     return path.scope.isPure(path.node, opts);
-  }
+  },
 };
 
 export const Flow = {
@@ -118,7 +118,7 @@ export const Flow = {
     } else {
       return false;
     }
-  }
+  },
 };
 
 // TODO: 7.0 Backwards Compat
@@ -137,16 +137,16 @@ export const SpreadProperty = {
 };
 
 export const ExistentialTypeParam = {
-  types: ["ExistsTypeAnnotation"]
+  types: ["ExistsTypeAnnotation"],
 };
 
 export const NumericLiteralTypeAnnotation = {
-  types: ["NumberLiteralTypeAnnotation"]
+  types: ["NumberLiteralTypeAnnotation"],
 };
 
 export const ForAwaitStatement = {
   types: ["ForOfStatement"],
   checkPath({ node }: NodePath): boolean {
     return node.await === true;
-  }
+  },
 };

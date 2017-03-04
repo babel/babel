@@ -51,7 +51,7 @@ const forAwaitVisitor = {
     if (t.isIdentifier(callee) && callee.name === "AWAIT" && !replacements.AWAIT) {
       path.replaceWith(path.node.arguments[0]);
     }
-  }
+  },
 };
 
 export default function (path, helpers) {
@@ -68,7 +68,7 @@ export default function (path, helpers) {
   } else if (t.isVariableDeclaration(left)) {
     // for await (let i of test)
     declar = t.variableDeclaration(left.kind, [
-      t.variableDeclarator(left.declarations[0].id, stepValue)
+      t.variableDeclarator(left.declarations[0].id, stepValue),
     ]);
   }
 
@@ -83,7 +83,7 @@ export default function (path, helpers) {
     OBJECT: node.right,
     STEP_VALUE: stepValue,
     STEP_KEY: stepKey,
-    AWAIT: helpers.wrapAwait
+    AWAIT: helpers.wrapAwait,
   });
 
   // remove generator function wrapper
@@ -101,6 +101,6 @@ export default function (path, helpers) {
     replaceParent: isLabeledParent,
     node: template,
     declar,
-    loop
+    loop,
   };
 }

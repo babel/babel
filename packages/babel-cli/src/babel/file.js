@@ -1,5 +1,5 @@
 import convertSourceMap from "convert-source-map";
-import sourceMap  from "source-map";
+import sourceMap from "source-map";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
@@ -16,7 +16,7 @@ export default function (commander, filenames, opts) {
   const buildResult = function () {
     const map = new sourceMap.SourceMapGenerator({
       file: path.basename(commander.outFile || "") || "stdout",
-      sourceRoot: opts.sourceRoot
+      sourceRoot: opts.sourceRoot,
     });
 
     let code = "";
@@ -64,7 +64,7 @@ export default function (commander, filenames, opts) {
 
     return {
       map: map,
-      code: code
+      code: code,
     };
   };
 
@@ -156,7 +156,7 @@ export default function (commander, filenames, opts) {
         awaitWriteFinish: {
           stabilityThreshold: 50,
           pollInterval: 10,
-        }
+        },
       }).on("all", function (type, filename) {
         if (util.shouldIgnore(filename) || !util.canCompile(filename, commander.extensions)) return;
 

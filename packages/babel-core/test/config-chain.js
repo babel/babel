@@ -29,48 +29,48 @@ describe("buildConfigChain", function () {
 
   it("dir1", function () {
     const chain = buildConfigChain({
-      filename: fixture("dir1", "src.js")
+      filename: fixture("dir1", "src.js"),
     });
 
     const expected = [
       {
         options: {
           plugins: [
-            "extended"
-          ]
+            "extended",
+          ],
         },
         alias: fixture("extended.babelrc.json"),
         loc: fixture("extended.babelrc.json"),
-        dirname: fixture()
+        dirname: fixture(),
       },
       {
         options: {
           plugins: [
-            "root"
-          ]
+            "root",
+          ],
         },
         alias: fixture(".babelrc"),
         loc: fixture(".babelrc"),
-        dirname: fixture()
+        dirname: fixture(),
       },
       {
         options: {
           ignore: [
-            "root-ignore"
-          ]
+            "root-ignore",
+          ],
         },
         alias: fixture(".babelignore"),
         loc: fixture(".babelignore"),
-        dirname: fixture()
+        dirname: fixture(),
       },
       {
         options: {
-          filename: fixture("dir1", "src.js")
+          filename: fixture("dir1", "src.js"),
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("dir1")
-      }
+        dirname: fixture("dir1"),
+      },
     ];
 
     assert.deepEqual(chain, expected);
@@ -78,38 +78,38 @@ describe("buildConfigChain", function () {
 
   it("dir2", function () {
     const chain = buildConfigChain({
-      filename: fixture("dir2", "src.js")
+      filename: fixture("dir2", "src.js"),
     });
 
     const expected = [
       {
         options: {
           plugins: [
-            "dir2"
-          ]
+            "dir2",
+          ],
         },
         alias: fixture("dir2", ".babelrc"),
         loc: fixture("dir2", ".babelrc"),
-        dirname: fixture("dir2")
+        dirname: fixture("dir2"),
       },
       {
         options: {
           ignore: [
-            "root-ignore"
-          ]
+            "root-ignore",
+          ],
         },
         alias: fixture(".babelignore"),
         loc: fixture(".babelignore"),
-        dirname: fixture()
+        dirname: fixture(),
       },
       {
         options: {
-          filename: fixture("dir2", "src.js")
+          filename: fixture("dir2", "src.js"),
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("dir2")
-      }
+        dirname: fixture("dir2"),
+      },
     ];
 
     assert.deepEqual(chain, expected);
@@ -117,38 +117,38 @@ describe("buildConfigChain", function () {
 
   it("env - base", function () {
     const chain = buildConfigChain({
-      filename: fixture("env", "src.js")
+      filename: fixture("env", "src.js"),
     });
 
     const expected = [
       {
         options: {
           plugins: [
-            "env-base"
-          ]
+            "env-base",
+          ],
         },
         alias: fixture("env", ".babelrc"),
         loc: fixture("env", ".babelrc"),
-        dirname: fixture("env")
+        dirname: fixture("env"),
       },
       {
         options: {
           ignore: [
-            "root-ignore"
-          ]
+            "root-ignore",
+          ],
         },
         alias: fixture(".babelignore"),
         loc: fixture(".babelignore"),
-        dirname: fixture()
+        dirname: fixture(),
       },
       {
         options: {
-          filename: fixture("env", "src.js")
+          filename: fixture("env", "src.js"),
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("env")
-      }
+        dirname: fixture("env"),
+      },
     ];
 
     assert.deepEqual(chain, expected);
@@ -158,48 +158,48 @@ describe("buildConfigChain", function () {
     process.env.NODE_ENV = "foo";
 
     const chain = buildConfigChain({
-      filename: fixture("env", "src.js")
+      filename: fixture("env", "src.js"),
     });
 
     const expected = [
       {
         options: {
           plugins: [
-            "env-base"
-          ]
+            "env-base",
+          ],
         },
         alias: fixture("env", ".babelrc"),
         loc: fixture("env", ".babelrc"),
-        dirname: fixture("env")
+        dirname: fixture("env"),
       },
       {
         options: {
           plugins: [
-            "env-foo"
-          ]
+            "env-foo",
+          ],
         },
         alias: fixture("env", ".babelrc.env.foo"),
         loc: fixture("env", ".babelrc.env.foo"),
-        dirname: fixture("env")
+        dirname: fixture("env"),
       },
       {
         options: {
           ignore: [
-            "root-ignore"
-          ]
+            "root-ignore",
+          ],
         },
         alias: fixture(".babelignore"),
         loc: fixture(".babelignore"),
-        dirname: fixture()
+        dirname: fixture(),
       },
       {
         options: {
-          filename: fixture("env", "src.js")
+          filename: fixture("env", "src.js"),
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("env")
-      }
+        dirname: fixture("env"),
+      },
     ];
 
     assert.deepEqual(chain, expected);
@@ -210,48 +210,48 @@ describe("buildConfigChain", function () {
     process.env.NODE_ENV = "bar";
 
     const chain = buildConfigChain({
-      filename: fixture("env", "src.js")
+      filename: fixture("env", "src.js"),
     });
 
     const expected = [
       {
         options: {
           plugins: [
-            "env-base"
-          ]
+            "env-base",
+          ],
         },
         alias: fixture("env", ".babelrc"),
         loc: fixture("env", ".babelrc"),
-        dirname: fixture("env")
+        dirname: fixture("env"),
       },
       {
         options: {
           plugins: [
-            "env-bar"
-          ]
+            "env-bar",
+          ],
         },
         alias: fixture("env", ".babelrc.env.bar"),
         loc: fixture("env", ".babelrc.env.bar"),
-        dirname: fixture("env")
+        dirname: fixture("env"),
       },
       {
         options: {
           ignore: [
-            "root-ignore"
-          ]
+            "root-ignore",
+          ],
         },
         alias: fixture(".babelignore"),
         loc: fixture(".babelignore"),
-        dirname: fixture()
+        dirname: fixture(),
       },
       {
         options: {
-          filename: fixture("env", "src.js")
+          filename: fixture("env", "src.js"),
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("env")
-      }
+        dirname: fixture("env"),
+      },
     ];
 
     assert.deepEqual(chain, expected);
@@ -262,34 +262,34 @@ describe("buildConfigChain", function () {
     process.env.NODE_ENV = "foo";
 
     const chain = buildConfigChain({
-      filename: fixture("pkg", "src.js")
+      filename: fixture("pkg", "src.js"),
     });
 
     const expected = [
       {
         options: {
-          plugins: ["pkg-plugin"]
+          plugins: ["pkg-plugin"],
         },
         alias: fixture("pkg", "package.json"),
         loc: fixture("pkg", "package.json"),
-        dirname: fixture("pkg")
+        dirname: fixture("pkg"),
       },
       {
         options: {
-          ignore: ["pkg-ignore"]
+          ignore: ["pkg-ignore"],
         },
         alias: fixture("pkg", ".babelignore"),
         loc: fixture("pkg", ".babelignore"),
-        dirname: fixture("pkg")
+        dirname: fixture("pkg"),
       },
       {
         options: {
-          filename: fixture("pkg", "src.js")
+          filename: fixture("pkg", "src.js"),
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("pkg")
-      }
+        dirname: fixture("pkg"),
+      },
     ];
 
     assert.deepEqual(chain, expected);

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import fs        from "fs";
+import fs from "fs";
 import commander from "commander";
 import kebabCase from "lodash/kebabCase";
 import { options, util, version } from "babel-core";
-import uniq      from "lodash/uniq";
-import glob      from "glob";
+import uniq from "lodash/uniq";
+import glob from "glob";
 
 import dirCommand from "./dir";
 import fileCommand from "./file";

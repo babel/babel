@@ -14,9 +14,9 @@ import type NodePath from "../path";
 export default class Binding {
   constructor({ existing, identifier, scope, path, kind }) {
     this.identifier = identifier;
-    this.scope      = scope;
-    this.path       = path;
-    this.kind       = kind;
+    this.scope = scope;
+    this.path = path;
+    this.kind = kind;
 
     this.constantViolations = [];
     this.constant = true;
@@ -56,13 +56,13 @@ export default class Binding {
   setValue(value: any) {
     if (this.hasDeoptedValue) return;
     this.hasValue = true;
-    this.value    = value;
+    this.value = value;
   }
 
   clearValue() {
     this.hasDeoptedValue = false;
-    this.hasValue        = false;
-    this.value           = null;
+    this.hasValue = false;
+    this.value = null;
   }
 
   /**
