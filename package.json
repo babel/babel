@@ -40,6 +40,7 @@
     "mocha": "^3.0.0",
     "nyc": "^10.0.0",
     "output-file-sync": "^1.1.1",
+    "prettier": "^0.21.0",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
     "through2": "^2.0.0",
