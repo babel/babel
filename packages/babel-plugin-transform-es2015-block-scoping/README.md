@@ -7,25 +7,21 @@
 **In**
 
 ```javascript
-for (let i=1; i<=10; i++) {
-    setTimeout( function logger(){
-        console.log( i ); // block scope for closure
-    }, i*1000 );
+{
+  let a = 3
 }
+
+let a = 3
 ```
 
 **Out**
 
 ```javascript
-var _loop = function _loop(i) {
-    setTimeout(function logger() {
-        console.log(i);
-    }, i * 1000);
-};
-
-for (var i = 1; i <= 10; i++) {
-    _loop(i);
+{
+  var _a = 3;
 }
+
+var a = 3;
 ```
 
 ## Installation
