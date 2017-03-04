@@ -191,17 +191,17 @@ Babel | Daniel Tschinder | Logan Smyth | Henry Zhu |
 
 ### Members
 
-[![Andrew Levine](https://avatars.githubusercontent.com/u/5233399?s=64)](https://github.com/drewml) | [![Boopathi Rajaa](https://avatars.githubusercontent.com/u/294474?s=64)](https://github.com/boopathi) | [![Brian Ng](https://avatars.githubusercontent.com/u/56288?s=64)](https://github.com/existentialism) | [![Dan Harper](https://avatars.githubusercontent.com/u/510740?s=64)](https://github.com/danharper) | [![Diogo Franco](https://avatars.githubusercontent.com/u/73085?s=64)](https://github.com/kovensky) |
-|---|---|---|---|---|---|---|---|---|
-| Andrew Levine | Boopathi Rajaa | Brian Ng | Dan Harper | Diogo Franco |
-| [@drewml](https://github.com/drewml) | [@boopathi](https://github.com/boopathi) | [@existentialism](https://github.com/existentialism) | [@danharper](https://github.com/danharper) | [@kovensky](https://github.com/kovensky) |
-| [@drewml](https://twitter.com/drewml) | [@heisenbugger](https://twitter.com/heisenbugger) | [@existentialism](https://twitter.com/existentialism) | [@DanHarper7](https://twitter.com/DanHarper7) | [@kovnsk](https://twitter.com/kovnsk) |
+[![Andrew Levine](https://avatars.githubusercontent.com/u/5233399?s=64)](https://github.com/drewml) | [![Boopathi Rajaa](https://avatars.githubusercontent.com/u/294474?s=64)](https://github.com/boopathi) | [![Brian Ng](https://avatars.githubusercontent.com/u/56288?s=64)](https://github.com/existentialism) | [![Dan Harper](https://avatars.githubusercontent.com/u/510740?s=64)](https://github.com/danharper) | [![diogo franco](https://avatars.githubusercontent.com/u/73085?s=64)](https://github.com/kovensky) | [![Aaron Ang](https://avatars1.githubusercontent.com/u/7579804?s=64)](https://github.com/aaronang) | [![Artem Yavorsky](https://avatars2.githubusercontent.com/u/1521229?s=64)](https://github.com/yavorsky) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Andrew Levine | Boopathi Rajaa | Brian Ng | Dan Harper | Diogo Franco | Aaron Ang | Artem Yavorsky |
+| [@drewml](https://github.com/drewml) | [@boopathi](https://github.com/boopathi) | [@existentialism](https://github.com/existentialism) | [@danharper](https://github.com/danharper) | [@kovensky](https://github.com/kovensky) | [@aaronang](https://github.com/aaronang) | [@yavorsky](https://github.com/yavorsky) |
+| [@drewml](https://twitter.com/drewml) | [@heisenbugger](https://twitter.com/heisenbugger) | [@existentialism](https://twitter.com/existentialism) | [@DanHarper7](https://twitter.com/DanHarper7) | [@kovnsk](https://twitter.com/kovnsk) | [@_aaronang](https://twitter.com/_aaronang) | [@yavorsky_](https://twitter.com/yavorsky_) |
 
-[![Juriy Zaytsev](https://avatars.githubusercontent.com/u/383?s=64)](https://github.com/kangax) | [![Kai Cataldo](https://avatars.githubusercontent.com/u/7041728?s=64)](https://github.com/kaicataldo) | [![Moti Zilberman](https://avatars.githubusercontent.com/u/2246565?s=64)](https://github.com/motiz88) | [![Sven Sauleau](https://avatars3.githubusercontent.com/u/1493671?s=64)](https://github.com/xtuc) |
-|---|---|---|---|---|---|---|---|---|
-| Juriy Zaytsev | Kai Cataldo | Moti Zilberman | Sven Sauleau | 
-| [@kangax](https://github.com/kangax) | [@kaicataldo](https://github.com/kaicataldo) | [@motiz88](https://github.com/motiz88) | [@xtuc](https://github.com/xtuc) |
-| [@kangax](https://twitter.com/kangax) | [@kai_cataldo](https://twitter.com/kai_cataldo) | [@motiz88](https://twitter.com/motiz88) | [@svensauleau](https://twitter.com/svensauleau) |
+[![Juriy Zaytsev](https://avatars.githubusercontent.com/u/383?s=64)](https://github.com/kangax) | [![Kai Cataldo](https://avatars.githubusercontent.com/u/7041728?s=64)](https://github.com/kaicataldo) | [![Moti Zilberman](https://avatars.githubusercontent.com/u/2246565?s=64)](https://github.com/motiz88) | [![Sven Sauleau](https://avatars3.githubusercontent.com/u/1493671?s=64)](https://github.com/xtuc) | [![Samuel Reed](https://avatars3.githubusercontent.com/u/1197375?s=64)](https://github.com/STRML) | [![Sergey Rubanov](https://avatars1.githubusercontent.com/u/1507086?s=64)](https://github.com/chicoxyzzy) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Juriy Zaytsev | Kai Cataldo | Moti Zilberman | Sven Sauleau | Samuel Reed | Sergey Rubanov |
+| [@kangax](https://github.com/kangax) | [@kaicataldo](https://github.com/kaicataldo) | [@motiz88](https://github.com/motiz88) | [@xtuc](https://github.com/xtuc) | [@STRML](https://github.com/STRML) | [@chicoxyzzy](https://github.com/chicoxyzzy) |
+| [@kangax](https://twitter.com/kangax) | [@kai_cataldo](https://twitter.com/kai_cataldo) | [@motiz88](https://twitter.com/motiz88) | [@svensauleau](https://twitter.com/svensauleau) | [@STRML_](https://twitter.com/STRML_) | [@chicoxyzzy](https://twitter.com/chicoxyzzy) |
 
 ### Non-Human Members
 
@@ -222,3 +222,4 @@ Amjad Masad | James Kyle | Jesse McCarthy | Sebastian McKenzie |
 ## License
 
 [MIT](https://github.com/babel/babel/blob/master/LICENSE)
+
