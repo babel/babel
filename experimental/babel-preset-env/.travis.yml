@@ -10,8 +10,6 @@ node_js:
 - '7'
 - '6'
 - '4'
-- '0.12'
-- '0.10'
 env:
   - PKG_CMD="npm"
   - PKG_CMD="yarn"
@@ -19,7 +17,7 @@ before_install:
   - nvm use $TRAVIS_NODE_VERSION
   - npm set loglevel error
   - npm set progress false
-  - 'if [ $PKG_CMD = "yarn" ]; then npm i -g yarn@0.18.2 ; fi'
+  - 'if [ $PKG_CMD = "yarn" ]; then npm i -g yarn@0.21.3 ; fi'
 install:
   - $PKG_CMD install
 script:
@@ -27,11 +25,6 @@ script:
   - 'if [ -z "${LINT-}" ]; then $PKG_CMD run ci ; fi'
 matrix:
   fast_finish: true
-  exclude:
-    - node_js: "0.10"
-      env: PKG_CMD="yarn"
-    - node_js: "0.12"
-      env: PKG_CMD="yarn"
   include:
     - node_js: "node"
       env: LINT=true PKG_CMD="npm"
