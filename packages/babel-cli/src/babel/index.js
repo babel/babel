@@ -188,7 +188,7 @@ if (commander.outFile && commander.outDir) {
 }
 
 if (commander.relative && !commander.outDir) {
-  errors.push("Output directory required for --relative");
+  errors.push("output directory required for --relative");
 }
 
 if (commander.watch) {
