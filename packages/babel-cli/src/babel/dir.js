@@ -71,7 +71,7 @@ export default function(commander, filenames, opts) {
         handleFile(src, filename);
       });
     } else {
-      write(filename, filename);
+      write(filename, path.basename(filename));
     }
   }
 
