@@ -143,6 +143,10 @@ commander.option(
   "Compile an input directory of modules into an output directory",
 );
 commander.option(
+  "--relative",
+  "Compile into an output directory relative to input directory or file. Requires --out-dir [out]",
+);
+commander.option(
   "-D, --copy-files",
   "When compiling a directory copy over non-compilable files",
 );
@@ -181,6 +185,10 @@ if (commander.outDir && !filenames.length) {
 
 if (commander.outFile && commander.outDir) {
   errors.push("cannot have --out-file and --out-dir");
+}
+
+if (commander.relative && !commander.outDir) {
+  errors.push("Output directory required for --relative");
 }
 
 if (commander.watch) {
