@@ -151,6 +151,7 @@ export default function () {
           this.ranCommonJS = true;
 
           const strict = !!this.opts.strict;
+          const noInterop = !!this.opts.noInterop;
 
           const { scope } = path;
 
@@ -327,7 +328,7 @@ export default function () {
                   } else if (specifier.isExportDefaultSpecifier()) {
                     // todo
                   } else if (specifier.isExportSpecifier()) {
-                    if (specifier.node.local.name === "default") {
+                    if (!noInterop && specifier.node.local.name === "default") {
                       topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name),
                         t.memberExpression(
                           t.callExpression(this.addHelper("interopRequireDefault"), [ref]),
@@ -371,7 +372,7 @@ export default function () {
               for (let i = 0; i < specifiers.length; i++) {
                 const specifier = specifiers[i];
                 if (t.isImportNamespaceSpecifier(specifier)) {
-                  if (strict) {
+                  if (strict || noInterop) {
                     remaps[specifier.local.name] = uid;
                   } else {
                     const varDecl = t.variableDeclaration("var", [
@@ -402,7 +403,7 @@ export default function () {
                   if (specifier.imported.name === "default") {
                     if (wildcard) {
                       target = wildcard;
-                    } else {
+                    } else if (!noInterop) {
                       target = wildcard = path.scope.generateUidIdentifier(uid.name);
                       const varDecl = t.variableDeclaration("var", [
                         t.variableDeclarator(
