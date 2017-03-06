@@ -34,6 +34,15 @@
     "ios": 10,
     "opera": 33
   },
+  "transform-es2015-duplicate-keys": {
+    "chrome": 42,
+    "edge": 12,
+    "firefox": 34,
+    "safari": 9,
+    "node": 4,
+    "ios": 9,
+    "opera": 29
+  },
   "transform-es2015-computed-properties": {
     "chrome": 44,
     "edge": 12,
