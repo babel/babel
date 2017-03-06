@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.2.1 (2017-03-06)
+
+### :bug: Bug Fix
+
+- Add transform-duplicate-keys mapping ([#192](https://github.com/babel/babel-preset-env/pull/192)) (@existentialism)
+
+Our plugin data was missing a mapping for the `transform-duplicate-keys` plugin which caused it to never be included. (s/o to @Timer for the report!)
+
+### :memo: Documentation
+
+- Clarify reasons for the uglify option in README.md ([#188](https://github.com/babel/babel-preset-env/pull/188)) (@mikegreiling)
+
 ## v1.2.0 (2017-03-03)
 
 ### :rocket: New Feature
