@@ -126,9 +126,11 @@ Note, browsers' results are overridden by explicit items from `targets`.
 
 `number | true`
 
-If you are using UglifyJS to minify your code, then targeting later browsers will throw a syntax error.
+UglifyJS does not currently support any ES6 syntax, so if you are using Uglify to minify your code, targeting later browsers may cause Uglify to throw syntax errors.
 
-To prevent this - specify the uglify option, which will enable all plugins and, as a result, fully compile your code to ES5. Note, that useBuiltIns will work as before, and only include the polyfills that your target(s) need.
+To prevent these errors - specify the uglify option, which will enable all plugins and, as a result, fully compile your code to ES5. However, the `useBuiltIns` option will still work as before, and only include the polyfills that your target(s) need.
+
+> NOTE: Uglify has a work-in-progress "Harmony" branch to address the lack of ES6 support, but it is not yet stable.  You can follow its progress in [UglifyJS2 issue #448](https://github.com/mishoo/UglifyJS2/issues/448).  If you require an alternative minifier which _does_ support ES6 syntax, we recommend using [Babili](https://github.com/babel/babili).
 
 ### `loose`
 
