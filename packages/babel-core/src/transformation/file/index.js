@@ -132,7 +132,7 @@ export default class File extends Store {
   }
 
   initOptions(opts) {
-    opts = new OptionManager(this.log).init(opts);
+    opts = this.log.wrap(() => new OptionManager().init(opts));
 
     if (opts.inputSourceMap) {
       opts.sourceMaps = true;

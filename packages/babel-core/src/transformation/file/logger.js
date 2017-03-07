@@ -21,6 +21,15 @@ export default class Logger {
     return parts;
   }
 
+  wrap<T>(callback: () => T): T {
+    try {
+      return callback();
+    } catch (e) {
+      e.message = this._buildMessage(e.message);
+      throw e;
+    }
+  }
+
   warn(msg: string) {
     console.warn(this._buildMessage(msg));
   }
