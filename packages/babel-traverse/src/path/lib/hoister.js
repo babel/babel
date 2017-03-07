@@ -140,7 +140,7 @@ export default class PathHoister {
           if (bodies[i].node._blockHoist) continue;
           return bodies[i];
         }
-        // deopt: If here, no attachmen path found
+        // deopt: If here, no attachment path found
       } else {
         // doesn't need to be be attached to this scope
         return this.getNextScopeAttachmentParent();
