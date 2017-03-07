@@ -2,5 +2,8 @@
 
 var _foo = require('foo');
 
-_foo.bar();
-_foo.baz();
+var foo = babelHelpers.interopRequireWildcard(_foo);
+
+
+foo.bar();
+foo.baz();

@@ -372,7 +372,7 @@ export default function () {
               for (let i = 0; i < specifiers.length; i++) {
                 const specifier = specifiers[i];
                 if (t.isImportNamespaceSpecifier(specifier)) {
-                  if (strict || noInterop) {
+                  if (noInterop) {
                     remaps[specifier.local.name] = uid;
                   } else {
                     const varDecl = t.variableDeclaration("var", [
