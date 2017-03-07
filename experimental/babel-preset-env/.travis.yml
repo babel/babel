@@ -28,3 +28,6 @@ matrix:
   include:
     - node_js: "node"
       env: LINT=true PKG_CMD="npm"
+  exclude:
+    - node_js: "4"
+      env: PKG_CMD="yarn"
