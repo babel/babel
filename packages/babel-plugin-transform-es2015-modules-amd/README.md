@@ -55,3 +55,7 @@ require("babel-core").transform("code", {
   plugins: ["transform-es2015-modules-amd"]
 });
 ```
+
+### Options
+
+See options for `babel-plugin-transform-es2015-commonjs`.
