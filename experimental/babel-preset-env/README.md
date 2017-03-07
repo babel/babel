@@ -146,8 +146,6 @@ Outputs the targets/plugins used and the version specified in [plugin data versi
 
 `Array<string>`, defaults to `[]`.
 
-> NOTE: `whitelist` is deprecated and will be removed in the next major in favor of this.
-
 An array of plugins to always include.
 
 Valid options include any of the [babel plugins](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) or [built-ins](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js), such as `transform-es2015-arrow-functions`, `map`, `set`, or `object.assign`.

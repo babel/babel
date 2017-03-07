@@ -12,8 +12,6 @@ const validIncludesAndExcludes = [
   ...defaultInclude
 ];
 
-let hasBeenWarned = false;
-
 export const validateIncludesAndExcludes = (opts = [], type) => {
   invariant(
     Array.isArray(opts),
@@ -82,27 +80,12 @@ export const getElectronChromeVersion = (electronVersion) => {
 };
 
 export default function normalizeOptions(opts) {
-  // TODO: remove whitelist in favor of include in next major
-  if (opts.whitelist && !hasBeenWarned) {
-    console.warn(
-      `Deprecation Warning: The "whitelist" option has been deprecated in favor of "include" to
-      match the newly added "exclude" option (instead of "blacklist").`
-    );
-    hasBeenWarned = true;
-  }
-
-  invariant(
-    !(opts.whitelist && opts.include),
-    `Invalid Option: The "whitelist" and the "include" option are the same and one can be used at
-    a time`
-  );
-
-  checkDuplicateIncludeExcludes(opts.whitelist || opts.include, opts.exclude);
+  checkDuplicateIncludeExcludes(opts.include, opts.exclude);
 
   return {
     debug: opts.debug,
     exclude: validateIncludesAndExcludes(opts.exclude, "exclude"),
-    include: validateIncludesAndExcludes(opts.whitelist || opts.include, "include"),
+    include: validateIncludesAndExcludes(opts.include, "include"),
     loose: validateLooseOption(opts.loose),
     moduleType: validateModulesOption(opts.modules),
     targets: opts.targets,
