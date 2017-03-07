@@ -82,10 +82,53 @@ Object.defineProperty(exports, "__esModule", {
 });
 ```
 
-In environments that don't support this you can enable loose mode on `es6.modules`
+In environments that don't support this you can enable loose mode on `babel-plugin-transform-es20150-modules-commonjs`
 and instead of using `Object.defineProperty` an assignment will be used instead.
 
 ```javascript
 var foo = exports.foo = 5;
 exports.__esModule = true;
 ```
+
+### `strict`
+
+`boolean`, defaults to `false`
+
+By default, when using exports with babel a non-enumerable `__esModule` property
+is exported. In some cases this property is used to determine if the import _is_ the
+default export or if it _contains_ the default export.
+
+```javascript
+var foo = exports.foo = 5;
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+```
+
+In order to prevent the `__esModule` property from being exported, you can set
+the `strict` option to `true`.
+
+### `noInterop`
+
+`boolean`, defaults to `false`
+
+By default, when using exports with babel a non-enumerable `__esModule` property
+is exported. This property is then used to determine if the import _is_ the default
+export or if it _contains_ the default export.
+
+```javascript
+"use strict";
+
+var _foo = require("foo");
+
+var _foo2 = _interopRequireDefault(_foo);
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
+```
+
+In cases where the auto-unwrapping of `default` is not needed, you can set the
+`noInterop` option to `true` to avoid the usage of the `interopRequireDefault`
+helper (shown in inline form above).
