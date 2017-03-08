@@ -2,7 +2,7 @@
 
 ### Adding a new plugin to support (when approved in the next ECMAScript version)
 
-#### Update [`pluginFeatures.js`](/data/plugin-features.js)
+#### Update [`pluginFeatures.js`](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js)
 
 Example:
 
@@ -12,7 +12,7 @@ Find the relevant entries on [compat-table](https://kangax.github.io/compat-tabl
 
 `exponentiation (**) operator`
 
-Find the corresponding babel plugin: 
+Find the corresponding babel plugin:
 
 `transform-exponentiation-operator`
 
@@ -26,8 +26,8 @@ Add add them in this structure:
   ],
 },
 ```
- 
-#### Update [`plugins.json`](/data/plugins.json)
+
+#### Update [`plugins.json`](https://github.com/babel/babel-preset-env/blob/master/data/plugins.json)
 
 Until `compat-table` is a standalone npm module for data we are using the git url
 
@@ -45,11 +45,11 @@ please read our [documentation on writing tests](https://github.com/babel/babel/
 
 #### Testing the `debug` option
 
-Testing debug output to `stdout` is similar. Under the `test/debug-fixtures`, 
+Testing debug output to `stdout` is similar. Under the `test/debug-fixtures`,
 create a folder with a descriptive name of your test, and add the following:
 
-* Add a `options.json` file (just as the other tests, this is essentially a 
+* Add a `options.json` file (just as the other tests, this is essentially a
 `.babelrc`) with the desired test configuration (required)
-* Add a `stdout.txt` file with the expected debug output. For added 
-convenience, if there is no `stdout.txt` present, the test runner will 
+* Add a `stdout.txt` file with the expected debug output. For added
+convenience, if there is no `stdout.txt` present, the test runner will
 generate one for you.
