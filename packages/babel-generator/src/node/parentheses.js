@@ -50,7 +50,8 @@ export function Binary(node: Object, parent: Object): boolean {
   if (
     ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) ||
     t.isUnaryLike(parent) ||
-    (t.isMemberExpression(parent) && parent.object === node)
+    (t.isMemberExpression(parent) && parent.object === node) ||
+    t.isAwaitExpression(parent)
   ) {
     return true;
   }
