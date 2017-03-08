@@ -2,13 +2,13 @@
 
 ### Adding a new plugin to support (when approved in the next ECMAScript version)
 
-#### Update [`pluginFeatures.js`](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js)
+#### Update [`plugin-features.js`](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js)
 
-Example:
+*Example:*
 
-In you were going to add `**` which is in ES2016:
+If you were going to add `**` which is in ES2016:
 
-Find the relevant entries on [compat-table](https://kangax.github.io/compat-table/):
+Find the relevant entries on [compat-table](https://kangax.github.io/compat-table/es2016plus/#test-exponentiation_(**)_operator):
 
 `exponentiation (**) operator`
 
@@ -16,7 +16,7 @@ Find the corresponding babel plugin:
 
 `transform-exponentiation-operator`
 
-Add add them in this structure:
+And add them in this structure:
 
 ```js
 // es2016
@@ -27,11 +27,35 @@ Add add them in this structure:
 },
 ```
 
+#### Update [`built-in-features.js`](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js)
+
+*Example:*
+
+In case you want to add `Object.values` which is in ES2017:
+
+Find the relevant feature and subfeature on [compat-table](https://kangax.github.io/compat-table/es2016plus/#test-Object_static_methods_Object.values)
+and split it with `/`:
+
+`Object static methods / Object.values`
+
+Find the corresponding module on [core-js](https://github.com/zloirock/core-js/tree/master/modules):
+
+`es7.object.values.js`
+
+Find required ES version in [`built-in-features.js`](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js) and add the new feature:
+
+```js
+const es2017 = {
+  //...
+  "es7.object.values": "Object static methods / Object.values"
+}
+```
+
 #### Update [`plugins.json`](https://github.com/babel/babel-preset-env/blob/master/data/plugins.json)
 
 Until `compat-table` is a standalone npm module for data we are using the git url
 
-`"compat-table": "github:kangax/compat-table#gh-pages",`
+`"compat-table": "kangax/compat-table#[latest-commit-hash]"`,
 
 So we update and then run `npm run build-data`. If there are no changes, then `plugins.json` will be the same.
 
