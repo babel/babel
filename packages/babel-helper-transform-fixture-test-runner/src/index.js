@@ -105,7 +105,7 @@ function wrapPackagesArray(type, names, optionsDir) {
     }
     // check node_modules/babel-x-y
     else {
-      val[0] = __dirname + "/../../babel-" + type + "-" + val[0];
+      val[0] = require.resolve("babel-" + type + "-" + val[0]);
     }
 
     return val;
