@@ -107,7 +107,6 @@ function wrapPackagesArray(type, names, optionsDir) {
     else {
       val[0] = require.resolve("babel-" + type + "-" + val[0]);
     }
-
     return val;
   });
 }
