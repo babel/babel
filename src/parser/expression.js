@@ -662,7 +662,13 @@ pp.parseNew = function () {
   const meta = this.parseIdentifier(true);
 
   if (this.eat(tt.dot)) {
-    return this.parseMetaProperty(node, meta, "target");
+    const metaProp = this.parseMetaProperty(node, meta, "target");
+
+    if (!this.state.inFunction) {
+      this.raise(metaProp.property.start, "new.target can only be used in functions");
+    }
+
+    return metaProp;
   }
 
   node.callee = this.parseNoCallExpr();
