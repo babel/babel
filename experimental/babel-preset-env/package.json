@@ -55,7 +55,7 @@
     "babel-helper-fixtures": "7.0.0-alpha.1",
     "babel-helper-plugin-test-runner": "7.0.0-alpha.1",
     "babel-plugin-transform-flow-strip-types": "7.0.0-alpha.1",
-    "babel-preset-es2015": "7.0.0-alpha.1",
+    "babel-preset-env": "2.0.0-alpha.1",
     "babel-register": "7.0.0-alpha.1",
     "chai": "^3.0.0",
     "compat-table": "kangax/compat-table#291c758ac618fff6bf5bb2113a5aa046189f93e2",
@@ -70,8 +70,10 @@
   "babel": {
     "presets": [
       [
-        "es2015",
-        {
+        "env", {
+          "targets":{
+            "node": 4
+          },
           "loose": true
         }
       ]
