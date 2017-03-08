@@ -3,15 +3,15 @@
 ----
 
 <p align="center">
-   <strong><a href="#setup">Setup</a></strong>
+   <strong>[Setup](#setup)</strong>
    |
-   <strong><a href="#running-lintingtests">Running linting/tests</a></strong>
+   <strong>[Running linting/tests](#running-lintingtests)</a></strong>
    |
-   <strong><a href="#writing-tests">Writing tests</a></strong>
+   <strong>[Writing tests](#writing-tests)</strong>
    |
-   <strong><a href="#debugging-code">Debugging code</a></strong>
+   <strong>[Debugging code](#debugging-code)</strong>
    |
-   <strong><a href="#internals">Internals</a></strong>
+   <strong>[Internals](#internals)</strong>
 </p>
 
 ----
@@ -27,7 +27,7 @@ Contributions are always welcome, no matter how large or small.
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
  - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babylon/blob/master/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babylon#output).
- - This repository's [`/doc`](/doc) directory for notes on Babel's internals
+ - This repository's [`/doc`](https://github.com/babel/babel/tree/master/doc) directory for notes on Babel's internals
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
 - When you feel ready to finally jump into the babel source code a good start is to look out for issues which are labeled with [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [beginner-friendly](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22beginner-friendly%22).
@@ -108,7 +108,7 @@ $ make test-only
 
 Most likely you'll want to focus in on a specific issue.
 
-To run tests for a specific package in [packages](/packages), you can use the `TEST_ONLY` environment variable:
+To run tests for a specific package in [packages](https://github.com/babel/babel/tree/master/packages), you can use the `TEST_ONLY` environment variable:
 
 ```sh
 $ TEST_ONLY=babel-cli make test
@@ -135,25 +135,25 @@ $ ./scripts/test-cov.sh
 
 #### Writing tests
 
-Most packages in [`/packages`](/packages) have a `test` folder, however some tests might be in other packages or in [`/packages/babel-core`](/packages/babel-core/test/fixtures).
+Most packages in [`/packages`](https://github.com/babel/babel/tree/master/packages) have a `test` folder, however some tests might be in other packages or in [`/packages/babel-core`](https://github.com/babel/babel/tree/master/packages/babel-core/test/fixtures).
 
 ##### `babel-plugin-x`
 
 All the Babel plugins (and other packages) that have a `/test/fixtures` are written in a similar way.
 
-For example, in [`babel-plugin-transform-exponentiation-operator/test`](/packages/babel-plugin-transform-exponentiation-operator/test):
+For example, in [`babel-plugin-transform-exponentiation-operator/test`](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test):
 
-- There is an `index.js` file. It imports our [test helper](/packages/babel-helper-plugin-test-runner). (You don't have to worry about this).
-- There can be multiple folders under [`/fixtures`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures)
-   - There is an [`options.json`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) file whose function is similar to a `.babelrc` file, allowing you to pass in the plugins and settings you need for your tests.
+- There is an `index.js` file. It imports our [test helper](https://github.com/babel/babel/tree/master/packages/babel-helper-plugin-test-runner). (You don't have to worry about this).
+- There can be multiple folders under [`/fixtures`](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures)
+   - There is an [`options.json`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) file whose function is similar to a `.babelrc` file, allowing you to pass in the plugins and settings you need for your tests.
    - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["transform-exponentiation-operator"] }`.
    - If necessary, you can have an `options.json` with different options in each subfolder.
 
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
 - Generally, there are two kinds of tests for plugins
-   - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`actual.js`](packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/actual.js) file and an [`expected.js`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/expected.js) file.
+   - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`actual.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/actual.js) file and an [`expected.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/expected.js) file.
    - If you need to expect an error, you can ignore creating the `expected.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
-   - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
+   - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
 
 In an actual/expected test, you simply write out the code you want transformed in `actual.js`.
 
@@ -241,7 +241,7 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 
 #### Internals
 - AST spec ([babylon/ast/spec.md](https://github.com/babel/babylon/blob/master/ast/spec.md))
-- Versioning ([doc/design/versioning.md](./doc/design/versioning.md))
-- Monorepo ([doc/design/monorepo.md](./doc/design/monorepo.md))
-- Compiler environment support ([doc/design/compiler-environment-support.md](./doc/design/compiler-environment-support.md))
-- Compiler assumptions ([doc/design/compiler-assumptions.md](./doc/design/compiler-assumptions.md))
+- Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md)
+- Monorepo ([doc/design/monorepo.md](https://github.com/babel/babel/blob/master/doc/design/monorepo.md))
+- Compiler environment support ([doc/design/compiler-environment-support.md](https://github.com/babel/babel/blob/master/doc/design/compiler-environment-support.md))
+- Compiler assumptions ([doc/design/compiler-assumptions.md](https://github.com/babel/babel/blob/master/doc/design/compiler-assumptions.md))
