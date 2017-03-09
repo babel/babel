@@ -137,23 +137,9 @@ After Babel 6, the default transforms were removed; if you don't specify any plu
 
 The transformer[s] used in Babel are the independent pieces of code that transform specific things. For example: the [`es2015-arrow-functions`](/packages/babel-plugin-transform-es2015-arrow-functions) transform specifically changes arrow functions into a regular function. Presets are just simply an array of plugins that make it easier to run a whole a set of transforms without specifying each one manually.
 
-Some presets that we maintain officially.
-
-| Package | Version | Dependencies |
-|--------|-------|------------|
-| [`babel-preset-env`](https://github.com/babel/babel-preset-env) | [![npm](https://img.shields.io/npm/v/babel-preset-env.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-env) | [![Dependency Status](https://david-dm.org/babel/babel-preset-env.svg)](https://david-dm.org/babel/babel-preset-env) |
-| [`babel-preset-stage-0`](/packages/babel-preset-stage-0) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-0.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-0) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-0)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-0) |
-| [`babel-preset-stage-1`](/packages/babel-preset-stage-1) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-1.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-1) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-1)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-1) |
-| [`babel-preset-stage-2`](/packages/babel-preset-stage-2) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-2.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-2) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-2)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-2) |
-| [`babel-preset-stage-3`](/packages/babel-preset-stage-3) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-3.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-3) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-3)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-3) |
-| [`babel-preset-react`](/packages/babel-preset-react) | [![npm](https://img.shields.io/npm/v/babel-preset-react.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-react) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-react)](https://david-dm.org/babel/babel?path=packages/babel-preset-react) |
-
-We maintain:
-
-- a preset for each yearly release of ECMAScript (Javascript) starting from ES6/ES2015.
-- a preset for react (JSX/Flow).
-- a preset for each [stage (0-3)](http://babeljs.io/docs/plugins/#stage-x-experimental-presets) of the [TC-39 Process](https://tc39.github.io/process-document/) for ECMAScript proposals.
-- a preset that can automatically determine plugins and polyfills you need based on your supported environments.
+| Package | Version | Dependencies | Description |
+|--------|-------|------------|---|
+| [`babel-preset-env`](https://github.com/babel/babel-preset-env) | [![npm](https://img.shields.io/npm/v/babel-preset-env.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-env) | [![Dependency Status](https://david-dm.org/babel/babel-preset-env.svg)](https://david-dm.org/babel/babel-preset-env) | automatically determines plugins and polyfills you need based on your supported environments |
 
 > You can find community maintained presets on [npm](https://www.npmjs.com/search?q=babel-preset)
 
