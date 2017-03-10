@@ -2,16 +2,16 @@
 
 ----
 
-<p align="center">
-   <strong>[Setup](#setup)</strong>
+<p align="center" class="toc">
+   <strong><a href="#setup">Setup</a></strong>
    |
-   <strong>[Running linting/tests](#running-lintingtests)</a></strong>
+   <strong><a href="#running-lintingtests">Running linting/tests</a></strong>
    |
-   <strong>[Writing tests](#writing-tests)</strong>
+   <strong><a href="#writing-tests">Writing tests</a></strong>
    |
-   <strong>[Debugging code](#debugging-code)</strong>
+   <strong><a href="#debugging-code">Debugging code</a></strong>
    |
-   <strong>[Internals](#internals)</strong>
+   <strong><a href="#internals">Internals</a></strong>
 </p>
 
 ----
@@ -47,7 +47,7 @@ You can check this with `node -v` and `npm -v`.
 In addition, make sure that Yarn is installed.
 Installation instructions can be found here: https://yarnpkg.com/en/docs/install.
 
-#### Setup
+### Setup
 
 ```sh
 $ git clone https://github.com/babel/babel
@@ -77,7 +77,7 @@ If you wish to build a copy of Babel for distribution, then run:
 $ make build-dist
 ```
 
-#### Running linting/tests
+### Running linting/tests
 
 You can run lint via:
 
@@ -133,11 +133,11 @@ $ BABEL_ENV=cov make build
 $ ./scripts/test-cov.sh
 ```
 
-#### Writing tests
+### Writing tests
 
 Most packages in [`/packages`](https://github.com/babel/babel/tree/master/packages) have a `test` folder, however some tests might be in other packages or in [`/packages/babel-core`](https://github.com/babel/babel/tree/master/packages/babel-core/test/fixtures).
 
-##### `babel-plugin-x`
+#### `babel-plugin-x`
 
 All the Babel plugins (and other packages) that have a `/test/fixtures` are written in a similar way.
 
@@ -186,7 +186,7 @@ If you need to check for an error that is thrown you can add to the `options.jso
 }
 ```
 
-##### Bootstrapping expected output
+#### Bootstrapping expected output
 
 For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
 
@@ -202,7 +202,7 @@ For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js
             - expected.json (will be generated if not created)
 ```
 
-#### Debugging code
+### Debugging code
 
 A common approach to debugging JavaScript code is to walk through the code using the [Chrome DevTools](https://developers.google.com/web/tools/chrome-devtools/) debugger.
 For illustration purposes, we are going to assume that we need to get a better understanding of [`Generator.generate()`](https://github.com/babel/babel/blob/b5246994b57f06af871be6a63dcc4c6fd41d94d6/packages/babel-generator/src/index.js#L32), which is responsible for generating code for a given AST.
@@ -239,7 +239,7 @@ The debugger starts at the first executed line of code, which is Mocha's first l
 Click _Resume script execution_ <img src="https://i.imgur.com/TmYBn9d.png" alt="Resume script execution button." width="16"> to jump to the set breakpoint.
 Note that the code shown in Chrome DevTools is compiled code and therefore differs.
 
-#### Internals
+## Internals
 - AST spec ([babylon/ast/spec.md](https://github.com/babel/babylon/blob/master/ast/spec.md))
 - Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md)
 - Monorepo ([doc/design/monorepo.md](https://github.com/babel/babel/blob/master/doc/design/monorepo.md))
