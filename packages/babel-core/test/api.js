@@ -4,6 +4,7 @@ import sourceMap from "source-map";
 import assert from "assert";
 import Plugin from "../lib/transformation/plugin";
 import generator from "babel-generator";
+import sinon from "sinon";
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
@@ -549,12 +550,20 @@ describe("api", function () {
   describe("env option", function () {
     const oldBabelEnv = process.env.BABEL_ENV;
     const oldNodeEnv = process.env.NODE_ENV;
+    let sandbox;
 
     setup(function () {
       // Tests need to run with the default and specific values for these. They
       // need to be cleared for each test.
       delete process.env.BABEL_ENV;
       delete process.env.NODE_ENV;
+
+      sandbox = sinon.sandbox.create();
+      sandbox.stub(console, "log");
+    });
+
+    teardown(function () {
+      sandbox.restore();
     });
 
     suiteTeardown(function () {

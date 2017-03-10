@@ -1,0 +1,10 @@
+{
+  "env": {
+    "foo": {
+      "plugins": ["env-foo"]
+    },
+    "bar": {
+      "plugins": ["env-bar"]
+    }
+  }
+}

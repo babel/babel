@@ -17,13 +17,5 @@ export default function () {
       transformSyntaxJSX,
       transformReactDisplayName,
     ],
-    env: {
-      development: {
-        plugins: [
-          // transformReactJSXSource,
-          // transformReactJSXSelf
-        ],
-      },
-    },
   };
 }

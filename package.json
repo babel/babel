@@ -42,6 +42,7 @@
     "output-file-sync": "^1.1.1",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
+    "sinon": "^1.17.7",
     "through2": "^2.0.0",
     "uglify-js": "^2.4.16"
   },
