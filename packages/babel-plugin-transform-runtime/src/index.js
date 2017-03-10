@@ -16,11 +16,17 @@ export default function ({ types: t }) {
       const moduleName = getRuntimeModuleName(this.opts);
 
       if (this.opts.helpers !== false) {
+        const baseHelpersDir = this.opts.useBuiltIns ? "helpers/builtin" : "helpers";
+        const helpersDir = this.opts.useESModules ? `${baseHelpersDir}/es6` : baseHelpersDir;
         file.set("helperGenerator", function (name) {
           if (HELPER_BLACKLIST.indexOf(name) < 0) {
-            return file.addImport(`${moduleName}/helpers/${name}`, "default", name);
+            return file.addImport(`${moduleName}/${helpersDir}/${name}`, "default", name);
           }
         });
+      }
+
+      if (this.opts.polyfill && this.opts.useBuiltIns) {
+        throw new Error("The polyfill option conflicts with useBuiltIns; use one or the other");
       }
 
       this.setDynamic("regeneratorIdentifier", function () {
@@ -37,7 +43,7 @@ export default function ({ types: t }) {
           return;
         }
 
-        if (state.opts.polyfill === false) return;
+        if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
 
         if (t.isMemberExpression(parent)) return;
         if (!has(definitions.builtins, node.name)) return;
@@ -54,7 +60,7 @@ export default function ({ types: t }) {
 
       // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
       CallExpression(path, state) {
-        if (state.opts.polyfill === false) return;
+        if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
 
         // we can't compile this
         if (path.node.arguments.length) return;
@@ -77,7 +83,7 @@ export default function ({ types: t }) {
 
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
       BinaryExpression(path, state) {
-        if (state.opts.polyfill === false) return;
+        if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
 
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
@@ -96,7 +102,7 @@ export default function ({ types: t }) {
       // Array.from -> _core.Array.from
       MemberExpression: {
         enter(path, state) {
-          if (state.opts.polyfill === false) return;
+          if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
@@ -128,7 +134,7 @@ export default function ({ types: t }) {
         },
 
         exit(path, state) {
-          if (state.opts.polyfill === false) return;
+          if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
