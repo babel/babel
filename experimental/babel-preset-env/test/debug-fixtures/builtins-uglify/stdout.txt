@@ -13,10 +13,10 @@ Using plugins:
   transform-es2015-block-scoped-functions {"uglify":true}
   transform-es2015-block-scoping {"uglify":true}
   transform-es2015-classes {"uglify":true}
-  transform-es2015-duplicate-keys {"uglify":true}
   transform-es2015-computed-properties {"uglify":true}
   check-es2015-constants {"uglify":true}
   transform-es2015-destructuring {"uglify":true}
+  transform-es2015-duplicate-keys {"uglify":true}
   transform-es2015-for-of {"uglify":true}
   transform-es2015-function-name {"uglify":true}
   transform-es2015-literals {"uglify":true}
