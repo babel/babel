@@ -3265,6 +3265,10 @@ require-precompiled@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/require-precompiled/-/require-precompiled-0.1.0.tgz#5a1b52eb70ebed43eb982e974c85ab59571e56fa"
 
+require-relative@0.8.7:
+  version "0.8.7"
+  resolved "https://registry.yarnpkg.com/require-relative/-/require-relative-0.8.7.tgz#7999539fc9e047a37928fa196f8e1563dabd36de"
+
 require-uncached@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/require-uncached/-/require-uncached-1.0.3.tgz#4e0d56d6c9662fd31e43011c4b95aa49955421d3"
@@ -3342,6 +3346,12 @@ rollup-pluginutils@^1.5.0:
   dependencies:
     estree-walker "^0.2.1"
     minimatch "^3.0.2"
+
+rollup-watch@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/rollup-watch/-/rollup-watch-3.2.2.tgz#5e574232e9ef36da9177f46946d8080cb267354b"
+  dependencies:
+    require-relative "0.8.7"
 
 rollup@^0.41.0:
   version "0.41.4"
