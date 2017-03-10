@@ -44,7 +44,7 @@ Ref: [#7](https://github.com/babel/babel-preset-env/issues/7)
 
 > Currently located at [plugin-features.js](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js).
 
-This should be straightforward to do in most cases. There might be cases were plugins should be split up more or certain plugins aren't standalone enough (or impossible to do).
+This should be straightforward to do in most cases. There might be cases where plugins should be split up more or certain plugins aren't standalone enough (or impossible to do).
 
 ### Support all plugins in Babel that are considered `latest`
 
@@ -118,7 +118,7 @@ If you want to compile against the current node version, you can specify `"node"
 
 `Array<string> | string`
 
-A query to select browsers (ex: last 2 versions, > 5%) using [browserslist](https://github.com/ai/browserslist).  
+A query to select browsers (ex: last 2 versions, > 5%) using [browserslist](https://github.com/ai/browserslist).
 
 Note, browsers' results are overridden by explicit items from `targets`.
 
