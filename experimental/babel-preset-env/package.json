@@ -13,8 +13,8 @@
     "dev": "babel -w src -d lib",
     "lint": "eslint .",
     "fix": "eslint . --fix",
-    "cov": "nyc npm run test",
-    "ci": "nyc npm run test && nyc report --reporter=json && codecov -f coverage/coverage-final.json",
+    "cov": "BABEL_ENV=test nyc npm run test",
+    "ci": "npm run cov && nyc report --reporter=json && codecov -f coverage/coverage-final.json",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
     "test": "npm run build && mocha ./test --compilers js:babel-register -t 10000"
   },
@@ -55,6 +55,7 @@
     "babel-eslint": "^7.1.1",
     "babel-helper-fixtures": "^6.22.0",
     "babel-helper-plugin-test-runner": "^6.18.0",
+    "babel-plugin-istanbul": "^4.0.0",
     "babel-plugin-transform-flow-strip-types": "^6.8.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-register": "^6.14.0",
@@ -81,6 +82,15 @@
     ],
     "plugins": [
       "transform-flow-strip-types"
-    ]
+    ],
+    "env": {
+      "test": {
+        "plugins": ["istanbul"]
+      }
+    }
+  },
+  "nyc": {
+    "all": true,
+    "include": ["src/*.js"]
   }
 }
