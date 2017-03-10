@@ -46,7 +46,7 @@ function writeFile(filename, content) {
   return writeRootFile(filename, content);
 }
 
-function makeTransformOpts(modules = "commonjs", useBuiltIns = false) {
+function makeTransformOpts(modules, useBuiltIns) {
   const opts = {
     presets: [
       [require("../../babel-preset-es2015"), { modules: false }]
@@ -93,7 +93,7 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
   };
 }
 
-function buildHelper(helperName, modules = "commonjs", useBuiltIns = false) {
+function buildHelper(helperName, modules, useBuiltIns) {
   const helper = helpers.get(helperName)
   // avoid an unneccessary TDZ in the easy case
   if (helper.type === "FunctionExpression") {
