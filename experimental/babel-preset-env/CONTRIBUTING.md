@@ -1,8 +1,8 @@
-## Contributing
+# Contributing
 
-### Adding a new plugin to support (when approved in the next ECMAScript version)
+## Adding a new plugin to support (when approved in the next ECMAScript version)
 
-#### Update [`plugin-features.js`](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js)
+### Update [`plugin-features.js`](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js)
 
 *Example:*
 
@@ -27,7 +27,7 @@ And add them in this structure:
 },
 ```
 
-#### Update [`built-in-features.js`](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js)
+### Update [`built-in-features.js`](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js)
 
 *Example:*
 
@@ -51,7 +51,7 @@ const es2017 = {
 }
 ```
 
-#### Update [`plugins.json`](https://github.com/babel/babel-preset-env/blob/master/data/plugins.json)
+### Update [`plugins.json`](https://github.com/babel/babel-preset-env/blob/master/data/plugins.json)
 
 Until `compat-table` is a standalone npm module for data we are using the git url
 
@@ -59,7 +59,21 @@ Until `compat-table` is a standalone npm module for data we are using the git ur
 
 So we update and then run `npm run build-data`. If there are no changes, then `plugins.json` will be the same.
 
-### Writing Tests
+## Tests
+
+### Running tests locally
+
+```bash
+npm test
+```
+
+### Checking code coverage locally
+
+```bash
+npm run coverage
+```
+
+### Writing tests
 
 #### General
 

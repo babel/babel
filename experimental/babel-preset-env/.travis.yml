@@ -13,8 +13,11 @@ node_js:
 - '0.12'
 - '0.10'
 env:
-  - PKG_CMD="npm"
-  - PKG_CMD="yarn"
+  global:
+    - BABEL_ENV=test
+  matrix:
+    - PKG_CMD="npm"
+    - PKG_CMD="yarn"
 before_install:
   - nvm use $TRAVIS_NODE_VERSION
   - npm set loglevel error
@@ -24,7 +27,7 @@ install:
   - $PKG_CMD install
 script:
   - 'if [ -n "${LINT-}" ]; then $PKG_CMD run lint ; fi'
-  - 'if [ -z "${LINT-}" ]; then $PKG_CMD run ci ; fi'
+  - 'if [ -z "${LINT-}" ]; then $PKG_CMD run test-ci ; fi'
 matrix:
   fast_finish: true
   exclude:
@@ -35,3 +38,5 @@ matrix:
   include:
     - node_js: "node"
       env: LINT=true PKG_CMD="npm"
+
+after_success: 'if [ -z "${LINT-}" ]; then npm run coverage-ci ; fi'
