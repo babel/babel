@@ -42,6 +42,7 @@
     "rollup": "^0.41.0",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-watch": "^3.2.2",
     "unicode-9.0.0": "~0.7.0"
   },
   "bin": {
@@ -59,7 +60,7 @@
     "test-only": "ava",
     "test-ci": "nyc npm run test-only",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
-    "watch": "npm run clean && cross-env BABEL_ENV=watch babel src --out-dir lib --watch"
+    "watch": "npm run clean && rollup -c --watch"
   },
   "nyc": {
     "include": [
