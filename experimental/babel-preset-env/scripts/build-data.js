@@ -16,36 +16,6 @@ const es6Data = require("compat-table/data-es6");
 const es6PlusData = require("compat-table/data-es2016plus");
 const envs = require("compat-table/environments");
 
-const invertedEqualsEnv = Object.keys(envs)
-  .filter((b) => envs[b].equals)
-  .reduce((a, b) => {
-    if (!a[envs[b].equals]) {
-      a[envs[b].equals] = [b];
-    } else {
-      a[envs[b].equals].push(b);
-    }
-    return a;
-  }, {});
-
-invertedEqualsEnv.safari5 = ["ios6"];
-if (Array.isArray(invertedEqualsEnv.safari6)) {
-  invertedEqualsEnv.safari6.push("ios7");
-} else {
-  invertedEqualsEnv.safari6 = ["ios7"];
-}
-invertedEqualsEnv.safari8 = ["ios9"];
-
-const compatibilityTests = flattenDeep([
-  es6Data,
-  es6PlusData,
-].map((data) =>
-  data.tests.map((test) => {
-    return test.subtests ?
-      [test, renameTests(test.subtests, (name) => test.name + " / " + name)] :
-      test;
-  })
-));
-
 const environments = [
   "chrome",
   "opera",
@@ -62,6 +32,7 @@ const environments = [
 const envMap = {
   safari51: "safari5",
   safari71_8: "safari8",
+  safari10_1: "safari10.1",
   firefox3_5: "firefox3",
   firefox3_6: "firefox3",
   node010: "node0.10",
@@ -79,6 +50,46 @@ const envMap = {
   android51: "android5.1",
   ios51: "ios5.1",
 };
+
+const invertedEqualsEnv = Object.keys(envs)
+  .filter((b) => envs[b].equals)
+  .reduce((a, b) => {
+    const checkEnv = envMap[envs[b].equals] || envs[b].equals;
+    environments.some((env) => {
+      // go through all environment names to find the the current one
+      // and try to get the version as integer
+      const version = parseFloat(checkEnv.replace(env, ""));
+      if (!isNaN(version)) {
+        Object.keys(envs).forEach((equals) => {
+          equals = envMap[equals] || equals;
+          // Go through all envs from compat-table and get int version
+          const equalsVersion = parseFloat(equals.replace(env, ""));
+          // If the current version is smaller than the version that was mentioned
+          // in `equals` we can add an entry, as older versions should include features
+          // that newer ones have
+          if (!isNaN(equalsVersion) && equalsVersion <= version) {
+            if (!a[equals]) a[equals] = [];
+            if (a[equals].indexOf(b) >= 0) return;
+            a[equals].push(b);
+          }
+        });
+        return true;
+      }
+    });
+
+    return a;
+  }, {});
+
+const compatibilityTests = flattenDeep([
+  es6Data,
+  es6PlusData,
+].map((data) =>
+  data.tests.map((test) => {
+    return test.subtests ?
+      [test, renameTests(test.subtests, (name) => test.name + " / " + name)] :
+      test;
+  })
+));
 
 const getLowestImplementedVersion = ({ features }, env) => {
   const tests = flatten(compatibilityTests
@@ -130,7 +141,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
       .filter((test) => tests[i].res[test] === true || tests[i].res[test] === "strict")
       // normalize some keys
       .map((test) => envMap[test] || test)
-      .filter((test) => !isNaN(parseInt(test.replace(env, ""))))
+      .filter((test) => !isNaN(parseFloat(test.replace(env, ""))))
       .shift();
     });
 

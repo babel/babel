@@ -39,6 +39,11 @@ module.exports = {
       "destructuring, parameters",
     ],
   },
+  "transform-es2015-duplicate-keys": {
+    features: [
+      "miscellaneous / duplicate property names in strict mode",
+    ],
+  },
   "transform-es2015-for-of": {
     features: [
       "for..of loops",

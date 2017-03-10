@@ -36,6 +36,7 @@
     "firefox": 4,
     "safari": 6,
     "node": 0.12,
+    "android": 4.4,
     "ios": 7
   },
   "es6.typed.int16-array": {
@@ -118,6 +119,7 @@
     "chrome": 51,
     "firefox": 53,
     "safari": 9,
+    "node": 6.5,
     "ios": 9,
     "opera": 38
   },
@@ -126,6 +128,7 @@
     "edge": 15,
     "firefox": 53,
     "safari": 9,
+    "node": 6.5,
     "ios": 9,
     "opera": 38
   },
@@ -134,6 +137,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -142,6 +146,7 @@
     "edge": 13,
     "firefox": 45,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -150,6 +155,7 @@
     "edge": 13,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -158,6 +164,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -166,6 +173,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -174,6 +182,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -182,6 +191,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -190,6 +200,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -198,6 +209,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -206,6 +218,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -214,6 +227,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -222,6 +236,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -230,6 +245,7 @@
     "edge": 12,
     "firefox": 42,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 36
   },
@@ -246,6 +262,7 @@
     "chrome": 51,
     "firefox": 51,
     "safari": 10,
+    "node": 6.5,
     "ios": 10,
     "opera": 38
   },
@@ -273,6 +290,7 @@
     "safari": 9,
     "node": 0.12,
     "ie": 11,
+    "android": 5,
     "ios": 9,
     "opera": 21
   },
@@ -351,6 +369,7 @@
     "chrome": 49,
     "firefox": 37,
     "safari": 9,
+    "node": 6,
     "ios": 9,
     "opera": 36
   },
@@ -419,7 +438,7 @@
     "firefox": 25,
     "safari": 8,
     "node": 4,
-    "ios": 9,
+    "ios": 8,
     "opera": 32
   },
   "es6.array.find-index": {
@@ -428,7 +447,7 @@
     "firefox": 25,
     "safari": 8,
     "node": 4,
-    "ios": 9,
+    "ios": 8,
     "opera": 32
   },
   "es6.array.fill": {
@@ -437,7 +456,7 @@
     "firefox": 31,
     "safari": 8,
     "node": 4,
-    "ios": 9,
+    "ios": 8,
     "opera": 32
   },
   "es6.array.iterator": {
@@ -446,7 +465,8 @@
     "firefox": 28,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.number.is-finite": {
@@ -464,6 +484,7 @@
     "firefox": 16,
     "safari": 9,
     "node": 0.12,
+    "android": 5,
     "ios": 9,
     "opera": 21
   },
@@ -473,6 +494,7 @@
     "firefox": 32,
     "safari": 9,
     "node": 0.12,
+    "android": 5,
     "ios": 9,
     "opera": 21
   },
@@ -491,6 +513,7 @@
     "firefox": 25,
     "safari": 9,
     "node": 0.12,
+    "android": 5,
     "ios": 9,
     "opera": 21
   },
@@ -500,6 +523,7 @@
     "firefox": 31,
     "safari": 9,
     "node": 0.12,
+    "android": 5,
     "ios": 9,
     "opera": 21
   },
@@ -509,6 +533,7 @@
     "firefox": 31,
     "safari": 9,
     "node": 0.12,
+    "android": 5,
     "ios": 9,
     "opera": 21
   },
@@ -518,7 +543,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.asinh": {
@@ -527,7 +553,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.atanh": {
@@ -536,7 +563,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.cbrt": {
@@ -545,7 +573,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.clz32": {
@@ -554,6 +583,7 @@
     "firefox": 31,
     "safari": 9,
     "node": 0.12,
+    "android": 5.1,
     "ios": 9,
     "opera": 25
   },
@@ -563,7 +593,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.expm1": {
@@ -572,7 +603,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.fround": {
@@ -581,7 +613,8 @@
     "firefox": 26,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.hypot": {
@@ -590,7 +623,8 @@
     "firefox": 27,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.imul": {
@@ -609,7 +643,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.log10": {
@@ -618,7 +653,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.log2": {
@@ -627,7 +663,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.sign": {
@@ -636,6 +673,7 @@
     "firefox": 25,
     "safari": 9,
     "node": 0.12,
+    "android": 5.1,
     "ios": 9,
     "opera": 25
   },
@@ -645,7 +683,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.tanh": {
@@ -654,7 +693,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es6.math.trunc": {
@@ -663,7 +703,8 @@
     "firefox": 25,
     "safari": 8,
     "node": 0.12,
-    "ios": 9,
+    "android": 5.1,
+    "ios": 8,
     "opera": 25
   },
   "es7.array.includes": {
@@ -671,6 +712,7 @@
     "edge": 14,
     "firefox": 43,
     "safari": 10,
+    "node": 6,
     "ios": 10,
     "opera": 34
   },
@@ -678,6 +720,7 @@
     "chrome": 54,
     "edge": 14,
     "firefox": 47,
+    "safari": 10.1,
     "node": 7,
     "opera": 41
   },
@@ -685,6 +728,7 @@
     "chrome": 54,
     "edge": 14,
     "firefox": 47,
+    "safari": 10.1,
     "node": 7,
     "opera": 41
   },
@@ -692,7 +736,7 @@
     "chrome": 54,
     "edge": 15,
     "firefox": 50,
-    "safari": 10,
+    "safari": 10.1,
     "node": 7,
     "opera": 41
   },

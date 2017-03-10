@@ -1,6 +1,47 @@
 # Changelog
 
-## v.1.1.11 (2017-03-01)
+## v1.2.1 (2017-03-06)
+
+### :bug: Bug Fix
+
+- Add transform-duplicate-keys mapping ([#192](https://github.com/babel/babel-preset-env/pull/192)) (@existentialism)
+
+Our plugin data was missing a mapping for the `transform-duplicate-keys` plugin which caused it to never be included. (s/o to @Timer for the report!)
+
+### :memo: Documentation
+
+- Clarify reasons for the uglify option in README.md ([#188](https://github.com/babel/babel-preset-env/pull/188)) (@mikegreiling)
+
+## v1.2.0 (2017-03-03)
+
+### :rocket: New Feature
+
+- Add uglify as a target ([#178](https://github.com/babel/babel-preset-env/pull/178)) (@yavorsky)
+
+Support for `uglify` as a target is now available! This will enable all plugins and, as a result, fully compiles your code to ES5. Note, that useBuiltIns will work as before, and only the polyfills that your other target(s) need will be included.
+
+```json
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "chrome": 55,
+        "uglify": true
+      },
+      "useBuiltIns": true,
+      "modules": false
+    }]
+  ]
+}
+```
+
+### :bug: Bug Fix
+
+- Respect older versions in invert equals map ([#180](https://github.com/babel/babel-preset-env/pull/180)) (@danez)
+
+Fixes a number of bugs that caused some incorrect and/or missing environment data when parsing `compat-table`.
+
+## v1.1.11 (2017-03-01)
 
 This release primarily upgrades `compat-table`, which adds support for async on Node 7.6!
 
