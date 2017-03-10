@@ -1112,6 +1112,13 @@ export default function (instance) {
     };
   });
 
+  // determine whether or not we're currently in the position where a class method would appear
+  instance.extend("isClassMethod", function (inner) {
+    return function () {
+      return this.isRelational("<") || inner.call(this);
+    };
+  });
+
   // determine whether or not we're currently in the position where a class property would appear
   instance.extend("isClassProperty", function (inner) {
     return function () {
@@ -1435,16 +1442,6 @@ export default function (instance) {
   instance.extend("shouldParseArrow", function (inner) {
     return function () {
       return this.match(tt.colon) || inner.call(this);
-    };
-  });
-
-  instance.extend("isClassMutatorStarter", function (inner) {
-    return function () {
-      if (this.isRelational("<")) {
-        return true;
-      } else {
-        return inner.call(this);
-      }
     };
   });
 }
