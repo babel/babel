@@ -1,10 +1,7 @@
-/* eslint max-len: 0 */
-
 import OptionManager from "./file/options/option-manager";
 import * as messages from "babel-messages";
 import Store from "../store";
 import traverse from "babel-traverse";
-import assign from "lodash/assign";
 import clone from "lodash/clone";
 
 const GLOBAL_VISITOR_PROPS = ["enter", "exit"];
@@ -14,13 +11,13 @@ export default class Plugin extends Store {
     super();
 
     this.initialized = false;
-    this.raw         = assign({}, plugin);
-    this.key         = this.take("name") || key;
+    this.raw = Object.assign({}, plugin);
+    this.key = this.take("name") || key;
 
     this.manipulateOptions = this.take("manipulateOptions");
-    this.post              = this.take("post");
-    this.pre               = this.take("pre");
-    this.visitor           = this.normaliseVisitor(clone(this.take("visitor")) || {});
+    this.post = this.take("post");
+    this.pre = this.take("pre");
+    this.visitor = this.normaliseVisitor(clone(this.take("visitor")) || {});
   }
 
   initialized: boolean;
@@ -31,7 +28,7 @@ export default class Plugin extends Store {
   visitor: Object;
 
   take(key) {
-    let val = this.raw[key];
+    const val = this.raw[key];
     delete this.raw[key];
     return val;
   }
@@ -40,13 +37,13 @@ export default class Plugin extends Store {
     if (!target[key]) return this[key];
     if (!this[key]) return target[key];
 
-    let fns: Array<?Function> = [target[key], this[key]];
+    const fns: Array<?Function> = [target[key], this[key]];
 
     return function (...args) {
       let val;
-      for (let fn of fns) {
+      for (const fn of fns) {
         if (fn) {
-          let ret = fn.apply(this, args);
+          const ret = fn.apply(this, args);
           if (ret != null) val = ret;
         }
       }
@@ -77,15 +74,16 @@ export default class Plugin extends Store {
 
     this.maybeInherit(loc);
 
-    for (let key in this.raw) {
+    for (const key in this.raw) {
       throw new Error(messages.get("pluginInvalidProperty", loc, i, key));
     }
   }
 
   normaliseVisitor(visitor: Object): Object {
-    for (let key of GLOBAL_VISITOR_PROPS) {
+    for (const key of GLOBAL_VISITOR_PROPS) {
       if (visitor[key]) {
-        throw new Error("Plugins aren't allowed to specify catch-all enter/exit handlers. Please target individual nodes.");
+        throw new Error("Plugins aren't allowed to specify catch-all enter/exit handlers. " +
+          "Please target individual nodes.");
       }
     }
 

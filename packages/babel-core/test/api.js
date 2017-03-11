@@ -1,9 +1,9 @@
-let babel                = require("../lib/api/node");
-let buildExternalHelpers = require("../lib/tools/build-external-helpers");
-let sourceMap            = require("source-map");
-let assert               = require("assert");
-let Plugin               = require("../lib/transformation/plugin");
-let generator            = require("babel-generator").default;
+import * as babel from "../lib/index";
+import buildExternalHelpers from "../lib/tools/build-external-helpers";
+import sourceMap from "source-map";
+import assert from "assert";
+import Plugin from "../lib/transformation/plugin";
+import generator from "babel-generator";
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
@@ -18,18 +18,18 @@ function transformAsync(code, opts) {
   return {
     then: function (resolve) {
       resolve(babel.transform(code, opts));
-    }
+    },
   };
 }
 
 describe("parser and generator options", function() {
-  let recast = {
+  const recast = {
     parse: function(code, opts) {
       return opts.parser.parse(code);
     },
     print: function(ast) {
       return generator(ast);
-    }
+    },
   };
 
   function newTransform(string) {
@@ -37,27 +37,27 @@ describe("parser and generator options", function() {
       parserOpts: {
         parser: recast.parse,
         plugins: ["flow"],
-        allowImportExportEverywhere: true
+        allowImportExportEverywhere: true,
       },
       generatorOpts: {
-        generator: recast.print
-      }
+        generator: recast.print,
+      },
     });
   }
 
   it("options", function() {
-    let string = "original;";
+    const string = "original;";
     assert.deepEqual(newTransform(string).ast, babel.transform(string).ast);
     assert.equal(newTransform(string).code, string);
   });
 
   it("experimental syntax", function() {
-    let experimental = "var a: number = 1;";
+    const experimental = "var a: number = 1;";
 
     assert.deepEqual(newTransform(experimental).ast, babel.transform(experimental, {
       parserOpts: {
-        plugins: ["flow"]
-      }
+        plugins: ["flow"],
+      },
     }).ast);
     assert.equal(newTransform(experimental).code, experimental);
 
@@ -65,29 +65,29 @@ describe("parser and generator options", function() {
       return babel.transform(string, {
         plugins: [__dirname + "/../../babel-plugin-syntax-flow"],
         parserOpts: {
-          parser: recast.parse
+          parser: recast.parse,
         },
         generatorOpts: {
-          generator: recast.print
-        }
+          generator: recast.print,
+        },
       });
     }
 
     assert.deepEqual(newTransformWithPlugins(experimental).ast, babel.transform(experimental, {
       parserOpts: {
-        plugins: ["flow"]
-      }
+        plugins: ["flow"],
+      },
     }).ast);
     assert.equal(newTransformWithPlugins(experimental).code, experimental);
   });
 
   it("other options", function() {
-    let experimental = "if (true) {\n  import a from 'a';\n}";
+    const experimental = "if (true) {\n  import a from 'a';\n}";
 
     assert.notEqual(newTransform(experimental).ast, babel.transform(experimental, {
       parserOpts: {
-        allowImportExportEverywhere: true
-      }
+        allowImportExportEverywhere: true,
+      },
     }).ast);
     assert.equal(newTransform(experimental).code, experimental);
   });
@@ -102,16 +102,24 @@ describe("api", function () {
         visitor: {
           Program: function (path) {
             path.mark("category", "foobar");
-          }
-        }
-      })]
+          },
+        },
+      })],
     }).marked[0].message, "foobar");
 
     assert.equal(babel.analyse("foobar;", {}, {
       Program: function (path) {
         path.mark("category", "foobar");
-      }
+      },
     }).marked[0].message, "foobar");
+  });
+
+  it("exposes the resolvePlugin method", function() {
+    assert.equal(babel.resolvePlugin("nonexistent-plugin"), null);
+  });
+
+  it("exposes the resolvePreset method", function() {
+    assert.equal(babel.resolvePreset("nonexistent-preset"), null);
   });
 
   it("transformFile", function (done) {
@@ -130,17 +138,17 @@ describe("api", function () {
     return assert.throws(
       function () {
         babel.transform("", {
-          plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false]
+          plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false],
         });
       },
-      /TypeError: Falsy value found in plugins/
+      /TypeError: \[BABEL\] unknown: Falsy value found in plugins/
     );
   });
 
   it("options merge backwards", function () {
     return transformAsync("", {
       presets: [__dirname + "/../../babel-preset-es2015"],
-      plugins: [__dirname + "/../../babel-plugin-syntax-jsx"]
+      plugins: [__dirname + "/../../babel-plugin-syntax-jsx"],
     }).then(function (result) {
       assert.ok(result.options.plugins[0][0].manipulateOptions.toString().indexOf("jsx") >= 0);
     });
@@ -169,9 +177,9 @@ describe("api", function () {
         visitor: {
           "Program|Identifier": function () {
             calledRaw++;
-          }
-        }
-      })]
+          },
+        },
+      })],
     });
 
     assert.equal(calledRaw, 4);
@@ -186,39 +194,43 @@ describe("api", function () {
         passPerPreset: passPerPreset,
         presets: [
           // First preset with our plugin, "before"
-          {
-            plugins: [
-              new Plugin({
-                visitor: {
-                  Function: function(path) {
-                    let alias = path.scope.getProgramParent().path.get("body")[0].node;
-                    if (!babel.types.isTypeAlias(alias)) return;
+          function () {
+            return {
+              plugins: [
+                new Plugin({
+                  visitor: {
+                    Function: function (path) {
+                      const alias = path.scope.getProgramParent().path.get("body")[0].node;
+                      if (!babel.types.isTypeAlias(alias)) return;
 
-                    // In case of `passPerPreset` being `false`, the
-                    // alias node is already removed by Flow plugin.
-                    if (!alias) {
-                      return;
-                    }
+                      // In case of `passPerPreset` being `false`, the
+                      // alias node is already removed by Flow plugin.
+                      if (!alias) {
+                        return;
+                      }
 
-                    // In case of `passPerPreset` being `true`, the
-                    // alias node should still exist.
-                    aliasBaseType = alias.right.type; // NumberTypeAnnotation
-                  }
-                }
-              })
-            ]
+                      // In case of `passPerPreset` being `true`, the
+                      // alias node should still exist.
+                      aliasBaseType = alias.right.type; // NumberTypeAnnotation
+                    },
+                  },
+                }),
+              ],
+            };
           },
 
           // ES2015 preset
           require(__dirname + "/../../babel-preset-es2015"),
 
           // Third preset for Flow.
-          {
-            plugins: [
-              require(__dirname + "/../../babel-plugin-syntax-flow"),
-              require(__dirname + "/../../babel-plugin-transform-flow-strip-types"),
-            ]
-          }
+          function () {
+            return {
+              plugins: [
+                require(__dirname + "/../../babel-plugin-syntax-flow"),
+                require(__dirname + "/../../babel-plugin-transform-flow-strip-types"),
+              ],
+            };
+          },
         ],
       });
     }
@@ -234,7 +246,7 @@ describe("api", function () {
       "",
       "var x = function x(y) {",
       "  return y;",
-      "};"
+      "};",
     ].join("\n"), result.code);
 
     // 2. passPerPreset: false
@@ -250,44 +262,24 @@ describe("api", function () {
       "",
       "var x = function x(y) {",
       "  return y;",
-      "};"
+      "};",
     ].join("\n"), result.code);
 
   });
 
-  it("handles preset shortcuts (adds babel-preset-)", function () {
-    return assert.throws(
-      function () {
-        babel.transform("", {
-          presets: ["@babel/es2015"]
-        });
-      },
-      /Couldn\'t find preset \"\@babel\/babel\-preset\-es2015\" relative to directory/
-    );
-  });
-
-  it("handles preset shortcuts 2 (adds babel-preset-)", function () {
-    return assert.throws(
-      function () {
-        babel.transform("", {
-          presets: ["@babel/react/optimizations"]
-        });
-      },
-      /Couldn\'t find preset \"\@babel\/babel\-preset\-react\/optimizations\" relative to directory/
-    );
-  });
-
   it("source map merging", function () {
-    let result = babel.transform([
+    const result = babel.transform([
+      /* eslint-disable max-len */
       "function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }",
       "",
       "let Foo = function Foo() {",
       "  _classCallCheck(this, Foo);",
       "};",
       "",
-      "//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0ZG91dCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztJQUFNLEdBQUcsWUFBSCxHQUFHO3dCQUFILEdBQUciLCJmaWxlIjoidW5kZWZpbmVkIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgRm9vIHt9XG4iXX0="
+      "//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0ZG91dCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztJQUFNLEdBQUcsWUFBSCxHQUFHO3dCQUFILEdBQUciLCJmaWxlIjoidW5kZWZpbmVkIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgRm9vIHt9XG4iXX0=",
+      /* eslint-enable max-len */
     ].join("\n"), {
-      sourceMap: true
+      sourceMap: true,
     });
 
     assert.deepEqual([
@@ -299,19 +291,19 @@ describe("api", function () {
       "",
       "let Foo = function Foo() {",
       "  _classCallCheck(this, Foo);",
-      "};"
+      "};",
     ].join("\n"), result.code);
 
-    let consumer = new sourceMap.SourceMapConsumer(result.map);
+    const consumer = new sourceMap.SourceMapConsumer(result.map);
 
     assert.deepEqual(consumer.originalPositionFor({
       line: 7,
-      column: 4
+      column: 4,
     }), {
       name: null,
       source: "stdout",
       line: 1,
-      column: 6
+      column: 6,
     });
   });
 
@@ -332,23 +324,25 @@ describe("api", function () {
       auxiliaryCommentBefore: "before",
       auxiliaryCommentAfter: "after",
       plugins: [function (babel) {
-        let t = babel.types;
+        const t = babel.types;
         return {
           visitor: {
             Program: function (path) {
               path.unshiftContainer("body", t.expressionStatement(t.identifier("start")));
               path.pushContainer("body", t.expressionStatement(t.identifier("end")));
-            }
-          }
+            },
+          },
         };
-      }]
+      }],
     }).then(function (result) {
-      assert.equal(result.code, "/*before*/start;\n/*after*/class Foo {}\n/*before*/end;\n/*after*/");
+      assert.equal(result.code,
+        "/*before*/start;\n/*after*/class Foo {}\n/*before*/end;\n/*after*/");
     });
   });
 
   it("modules metadata", function () {
     return Promise.all([
+      // eslint-disable-next-line max-len
       transformAsync("import { externalName as localName } from \"external\";").then(function (result) {
         assert.deepEqual(result.metadata.modules.imports[0], {
           source: "external",
@@ -356,8 +350,8 @@ describe("api", function () {
           specifiers: [{
             kind: "named",
             imported: "externalName",
-            local: "localName"
-          }]
+            local: "localName",
+          }],
         });
       }),
 
@@ -367,8 +361,8 @@ describe("api", function () {
           imported: ["*"],
           specifiers: [{
             kind: "namespace",
-            local: "localName2"
-          }]
+            local: "localName2",
+          }],
         });
       }),
 
@@ -379,15 +373,15 @@ describe("api", function () {
           specifiers: [{
             kind: "named",
             imported: "default",
-            local: "localName3"
-          }]
+            local: "localName3",
+          }],
         });
       }),
 
       transformAsync("import localName from \"./array\";", {
         resolveModuleSource: function() {
           return "override-source";
-        }
+        },
       }).then(function (result) {
         assert.deepEqual(result.metadata.modules.imports, [
           {
@@ -397,15 +391,15 @@ describe("api", function () {
               {
                 "kind": "named",
                 "imported": "default",
-                "local": "localName"
-              }
-            ]
-          }
+                "local": "localName",
+              },
+            ],
+          },
         ]);
       }),
 
       transformAsync("export * as externalName1 from \"external\";", {
-        plugins: [require("../../babel-plugin-syntax-export-extensions")]
+        plugins: [require("../../babel-plugin-syntax-export-extensions")],
       }).then(function (result) {
         assert.deepEqual(result.metadata.modules.exports, {
           exported: ["externalName1"],
@@ -413,12 +407,12 @@ describe("api", function () {
             kind: "external-namespace",
             exported: "externalName1",
             source: "external",
-          }]
+          }],
         });
       }),
 
       transformAsync("export externalName2 from \"external\";", {
-        plugins: [require("../../babel-plugin-syntax-export-extensions")]
+        plugins: [require("../../babel-plugin-syntax-export-extensions")],
       }).then(function (result) {
         assert.deepEqual(result.metadata.modules.exports, {
           exported: ["externalName2"],
@@ -426,8 +420,8 @@ describe("api", function () {
             kind: "external",
             local: "externalName2",
             exported: "externalName2",
-            source: "external"
-          }]
+            source: "external",
+          }],
         });
       }),
 
@@ -437,8 +431,8 @@ describe("api", function () {
           specifiers: [{
             kind: "local",
             local: "namedFunction",
-            exported: "namedFunction"
-          }]
+            exported: "namedFunction",
+          }],
         });
       }),
 
@@ -448,8 +442,8 @@ describe("api", function () {
           specifiers: [{
             kind: "local",
             local: "foo",
-            exported: "foo"
-          }]
+            exported: "foo",
+          }],
         });
       }),
 
@@ -459,8 +453,8 @@ describe("api", function () {
           specifiers: [{
             kind: "local",
             local: "localName",
-            exported: "externalName3"
-          }]
+            exported: "externalName3",
+          }],
         });
       }),
 
@@ -471,8 +465,8 @@ describe("api", function () {
             kind: "external",
             local: "externalName4",
             exported: "externalName4",
-            source: "external"
-          }]
+            source: "external",
+          }],
         });
       }),
 
@@ -481,8 +475,8 @@ describe("api", function () {
           exported: [],
           specifiers: [{
             kind: "external-all",
-            source: "external"
-          }]
+            source: "external",
+          }],
         });
       }),
 
@@ -492,10 +486,10 @@ describe("api", function () {
           specifiers: [{
             kind: "local",
             local: "defaultFunction",
-            exported: "default"
-          }]
+            exported: "default",
+          }],
         });
-      })
+      }),
     ]);
   });
 
@@ -503,18 +497,18 @@ describe("api", function () {
     return Promise.all([
       transformAsync("", {
         ignore: "node_modules",
-        filename: "/foo/node_modules/bar"
+        filename: "/foo/node_modules/bar",
       }).then(assertIgnored),
 
       transformAsync("", {
         ignore: "foo/node_modules",
-        filename: "/foo/node_modules/bar"
+        filename: "/foo/node_modules/bar",
       }).then(assertIgnored),
 
       transformAsync("", {
         ignore: "foo/node_modules/*.bar",
-        filename: "/foo/node_modules/foo.bar"
-      }).then(assertIgnored)
+        filename: "/foo/node_modules/foo.bar",
+      }).then(assertIgnored),
     ]);
   });
 
@@ -522,39 +516,39 @@ describe("api", function () {
     return Promise.all([
       transformAsync("", {
         only: "node_modules",
-        filename: "/foo/node_modules/bar"
+        filename: "/foo/node_modules/bar",
       }).then(assertNotIgnored),
 
       transformAsync("", {
         only: "foo/node_modules",
-        filename: "/foo/node_modules/bar"
+        filename: "/foo/node_modules/bar",
       }).then(assertNotIgnored),
 
       transformAsync("", {
         only: "foo/node_modules/*.bar",
-        filename: "/foo/node_modules/foo.bar"
+        filename: "/foo/node_modules/foo.bar",
       }).then(assertNotIgnored),
 
       transformAsync("", {
         only: "node_modules",
-        filename: "/foo/node_module/bar"
+        filename: "/foo/node_module/bar",
       }).then(assertIgnored),
 
       transformAsync("", {
         only: "foo/node_modules",
-        filename: "/bar/node_modules/foo"
+        filename: "/bar/node_modules/foo",
       }).then(assertIgnored),
 
       transformAsync("", {
         only: "foo/node_modules/*.bar",
-        filename: "/foo/node_modules/bar.foo"
-      }).then(assertIgnored)
+        filename: "/foo/node_modules/bar.foo",
+      }).then(assertIgnored),
     ]);
   });
 
   describe("env option", function () {
-    let oldBabelEnv = process.env.BABEL_ENV;
-    let oldNodeEnv = process.env.NODE_ENV;
+    const oldBabelEnv = process.env.BABEL_ENV;
+    const oldNodeEnv = process.env.NODE_ENV;
 
     setup(function () {
       // Tests need to run with the default and specific values for these. They
@@ -569,10 +563,10 @@ describe("api", function () {
     });
 
     it("default", function () {
-      let result = babel.transform("foo;", {
+      const result = babel.transform("foo;", {
         env: {
-          development: { code: false }
-        }
+          development: { code: false },
+        },
       });
 
       assert.equal(result.code, undefined);
@@ -580,33 +574,35 @@ describe("api", function () {
 
     it("BABEL_ENV", function () {
       process.env.BABEL_ENV = "foo";
-      let result = babel.transform("foo;", {
+      const result = babel.transform("foo;", {
         env: {
-          foo: { code: false }
-        }
+          foo: { code: false },
+        },
       });
       assert.equal(result.code, undefined);
     });
 
     it("NODE_ENV", function () {
       process.env.NODE_ENV = "foo";
-      let result = babel.transform("foo;", {
+      const result = babel.transform("foo;", {
         env: {
-          foo: { code: false }
-        }
+          foo: { code: false },
+        },
       });
       assert.equal(result.code, undefined);
     });
   });
 
   it("resolveModuleSource option", function () {
-    let actual = "import foo from \"foo-import-default\";\nimport \"foo-import-bare\";\nexport { foo } from \"foo-export-named\";";
-    let expected = "import foo from \"resolved/foo-import-default\";\nimport \"resolved/foo-import-bare\";\nexport { foo } from \"resolved/foo-export-named\";";
+    /* eslint-disable max-len */
+    const actual = "import foo from \"foo-import-default\";\nimport \"foo-import-bare\";\nexport { foo } from \"foo-export-named\";";
+    const expected = "import foo from \"resolved/foo-import-default\";\nimport \"resolved/foo-import-bare\";\nexport { foo } from \"resolved/foo-export-named\";";
+    /* eslint-enable max-len */
 
     return transformAsync(actual, {
       resolveModuleSource: function (originalSource) {
         return "resolved/" + originalSource;
-      }
+      },
     }).then(function (result) {
       assert.equal(result.code.trim(), expected);
     });
@@ -614,25 +610,25 @@ describe("api", function () {
 
   describe("buildExternalHelpers", function () {
     it("all", function () {
-      let script = buildExternalHelpers();
+      const script = buildExternalHelpers();
       assert.ok(script.indexOf("classCallCheck") >= -1);
       assert.ok(script.indexOf("inherits") >= 0);
     });
 
     it("whitelist", function () {
-      let script = buildExternalHelpers(["inherits"]);
+      const script = buildExternalHelpers(["inherits"]);
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") >= 0);
     });
 
     it("empty whitelist", function () {
-      let script = buildExternalHelpers([]);
+      const script = buildExternalHelpers([]);
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") === -1);
     });
 
     it("underscored", function () {
-      let script = buildExternalHelpers(["typeof"]);
+      const script = buildExternalHelpers(["typeof"]);
       assert.ok(script.indexOf("typeof") >= 0);
     });
   });

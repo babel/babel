@@ -1,11 +1,9 @@
-/* eslint max-len: 0 */
-
 import getFunctionArity from "babel-helper-get-function-arity";
 import callDelegate from "babel-helper-call-delegate";
 import template from "babel-template";
 import * as t from "babel-types";
 
-let buildDefaultParam = template(`
+const buildDefaultParam = template(`
   let VARIABLE_NAME =
     ARGUMENTS.length > ARGUMENT_KEY && ARGUMENTS[ARGUMENT_KEY] !== undefined ?
       ARGUMENTS[ARGUMENT_KEY]
@@ -13,12 +11,12 @@ let buildDefaultParam = template(`
       DEFAULT_VALUE;
 `);
 
-let buildCutOff = template(`
+const buildCutOff = template(`
   let $0 = $1[$2];
 `);
 
 function hasDefaults(node) {
-  for (let param of (node.params: Array<Object>)) {
+  for (const param of (node.params: Array<Object>)) {
     if (!t.isIdentifier(param)) return true;
   }
   return false;
@@ -30,7 +28,7 @@ function isSafeBinding(scope, node) {
   return kind === "param" || kind === "local";
 }
 
-let iifeVisitor = {
+const iifeVisitor = {
   ReferencedIdentifier(path, state) {
     const { scope, node } = path;
     if (node.name === "eval" || !isSafeBinding(scope, node)) {
@@ -42,26 +40,26 @@ let iifeVisitor = {
   Scope(path) {
     // different bindings
     path.skip();
-  }
+  },
 };
 
-export let visitor = {
+export const visitor = {
   Function(path) {
-    let { node, scope } = path;
+    const { node, scope } = path;
     if (!hasDefaults(node)) return;
 
     // ensure it's a block, useful for arrow functions
     path.ensureBlock();
 
-    let state = {
+    const state = {
       iife: false,
-      scope: scope
+      scope: scope,
     };
 
-    let body = [];
+    const body = [];
 
     //
-    let argsIdentifier = t.identifier("arguments");
+    const argsIdentifier = t.identifier("arguments");
     argsIdentifier._shadowedFunctionLiteral = path;
 
     // push a default parameter definition
@@ -69,20 +67,20 @@ export let visitor = {
       const defNode = buildDefaultParam({
         VARIABLE_NAME: left,
         DEFAULT_VALUE: right,
-        ARGUMENT_KEY:  t.numericLiteral(i),
-        ARGUMENTS:     argsIdentifier
+        ARGUMENT_KEY: t.numericLiteral(i),
+        ARGUMENTS: argsIdentifier,
       });
       defNode._blockHoist = node.params.length - i;
       body.push(defNode);
     }
 
     //
-    let lastNonDefaultParam = getFunctionArity(node);
+    const lastNonDefaultParam = getFunctionArity(node);
 
     //
-    let params = path.get("params");
+    const params = path.get("params");
     for (let i = 0; i < params.length; i++) {
-      let param = params[i];
+      const param = params[i];
 
       if (!param.isAssignmentPattern()) {
         if (!state.iife && !param.isIdentifier()) {
@@ -92,12 +90,12 @@ export let visitor = {
         continue;
       }
 
-      let left  = param.get("left");
-      let right = param.get("right");
+      const left = param.get("left");
+      const right = param.get("right");
 
       //
       if (i >= lastNonDefaultParam || left.isPattern()) {
-        let placeholder = scope.generateUidIdentifier("x");
+        const placeholder = scope.generateUidIdentifier("x");
         placeholder._isDefaultPlaceholder = true;
         node.params[i] = placeholder;
       } else {
@@ -119,10 +117,10 @@ export let visitor = {
 
     // add declarations for trailing parameters
     for (let i = lastNonDefaultParam + 1; i < node.params.length; i++) {
-      let param = node.params[i];
+      const param = node.params[i];
       if (param._isDefaultPlaceholder) continue;
 
-      let declar = buildCutOff(param, argsIdentifier, t.numericLiteral(i));
+      const declar = buildCutOff(param, argsIdentifier, t.numericLiteral(i));
       declar._blockHoist = node.params.length - i;
       body.push(declar);
     }
@@ -136,5 +134,5 @@ export let visitor = {
     } else {
       path.get("body").unshiftContainer("body", body);
     }
-  }
+  },
 };

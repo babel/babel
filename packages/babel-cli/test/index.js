@@ -1,50 +1,53 @@
-let readdir        = require("fs-readdir-recursive");
-let helper         = require("babel-helper-fixtures");
-let assert         = require("assert");
-let rimraf         = require("rimraf");
-let outputFileSync = require("output-file-sync");
-let child          = require("child_process");
-let path           = require("path");
-let chai           = require("chai");
-let fs             = require("fs");
-let _              = require("lodash");
+const includes = require("lodash/includes");
+const readdir = require("fs-readdir-recursive");
+const helper = require("babel-helper-fixtures");
+const assert = require("assert");
+const rimraf = require("rimraf");
+const outputFileSync = require("output-file-sync");
+const child = require("child_process");
+const merge = require("lodash/merge");
+const path = require("path");
+const chai = require("chai");
+const fs = require("fs");
 
-let fixtureLoc = path.join(__dirname, "fixtures");
-let tmpLoc = path.join(__dirname, "tmp");
+const fixtureLoc = path.join(__dirname, "fixtures");
+const tmpLoc = path.join(__dirname, "tmp");
 
-let presetLocs = [
+const presetLocs = [
   path.join(__dirname, "../../babel-preset-es2015"),
-  path.join(__dirname, "../../babel-preset-react")
+  path.join(__dirname, "../../babel-preset-react"),
 ].join(",");
 
-let pluginLocs = [
+const pluginLocs = [
   path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
   path.join(__dirname, "/../../babel-plugin-transform-es2015-modules-commonjs"),
 ].join(",");
 
-let readDir = function (loc) {
-  let files = {};
+const readDir = function (loc) {
+  const files = {};
   if (fs.existsSync(loc)) {
-    _.each(readdir(loc), function (filename) {
+    readdir(loc).forEach(function (filename) {
       files[filename] = helper.readFile(path.join(loc, filename));
     });
   }
   return files;
 };
 
-let saveInFiles = function (files) {
-  _.each(files, function (content, filename) {
+const saveInFiles = function (files) {
+  Object.keys(files).forEach(function (filename) {
+    const content = files[filename];
     outputFileSync(filename, content);
   });
 };
 
-let assertTest = function (stdout, stderr, opts) {
-  let expectStderr = opts.stderr.trim();
+const assertTest = function (stdout, stderr, opts) {
+  const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      assert.ok(_.includes(stderr, expectStderr), "stderr " + JSON.stringify(stderr) + " didn't contain " + JSON.stringify(expectStderr));
+      assert.ok(includes(stderr, expectStderr), "stderr " + JSON.stringify(stderr) +
+        " didn't contain " + JSON.stringify(expectStderr));
     } else {
       chai.expect(stderr).to.equal(expectStderr, "stderr didn't match");
     }
@@ -52,13 +55,14 @@ let assertTest = function (stdout, stderr, opts) {
     throw new Error("stderr:\n" + stderr);
   }
 
-  let expectStdout = opts.stdout.trim();
+  const expectStdout = opts.stdout.trim();
   stdout = stdout.trim();
   stdout = stdout.replace(/\\/g, "/");
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      assert.ok(_.includes(stdout, expectStdout), "stdout " + JSON.stringify(stdout) + " didn't contain " + JSON.stringify(expectStdout));
+      assert.ok(includes(stdout, expectStdout), "stdout " + JSON.stringify(stdout) +
+        " didn't contain " + JSON.stringify(expectStdout));
     } else {
       chai.expect(stdout).to.equal(expectStdout, "stdout didn't match");
     }
@@ -66,14 +70,15 @@ let assertTest = function (stdout, stderr, opts) {
     throw new Error("stdout:\n" + stdout);
   }
 
-  _.each(opts.outFiles, function (expect, filename) {
-    let actual = helper.readFile(filename);
+  Object.keys(opts.outFiles, function (filename) {
+    const expect = opts.outFiles[filename];
+    const actual = helper.readFile(filename);
     chai.expect(actual).to.equal(expect, "out-file " + filename);
   });
 };
 
-let buildTest = function (binName, testName, opts) {
-  let binLoc = path.join(__dirname, "../lib", binName);
+const buildTest = function (binName, testName, opts) {
+  const binLoc = path.join(__dirname, "../lib", binName);
 
   return function (callback) {
     clear();
@@ -91,7 +96,7 @@ let buildTest = function (binName, testName, opts) {
 
     args = args.concat(opts.args);
 
-    let spawn = child.spawn(process.execPath, args);
+    const spawn = child.spawn(process.execPath, args);
 
     let stderr = "";
     let stdout = "";
@@ -127,32 +132,32 @@ let buildTest = function (binName, testName, opts) {
   };
 };
 
-let clear = function () {
+const clear = function () {
   process.chdir(__dirname);
   if (fs.existsSync(tmpLoc)) rimraf.sync(tmpLoc);
   fs.mkdirSync(tmpLoc);
   process.chdir(tmpLoc);
 };
 
-_.each(fs.readdirSync(fixtureLoc), function (binName) {
+fs.readdirSync(fixtureLoc).forEach(function (binName) {
   if (binName[0] === ".") return;
 
-  let suiteLoc = path.join(fixtureLoc, binName);
+  const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function () {
-    _.each(fs.readdirSync(suiteLoc), function (testName) {
+    fs.readdirSync(suiteLoc).forEach(function (testName) {
       if (testName[0] === ".") return;
 
-      let testLoc = path.join(suiteLoc, testName);
+      const testLoc = path.join(suiteLoc, testName);
 
-      let opts = {
-        args: []
+      const opts = {
+        args: [],
       };
 
-      let optionsLoc = path.join(testLoc, "options.json");
-      if (fs.existsSync(optionsLoc)) _.merge(opts, require(optionsLoc));
+      const optionsLoc = path.join(testLoc, "options.json");
+      if (fs.existsSync(optionsLoc)) merge(opts, require(optionsLoc));
 
-      _.each(["stdout", "stdin", "stderr"], function (key) {
-        let loc = path.join(testLoc, key + ".txt");
+      ["stdout", "stdin", "stderr"].forEach(function (key) {
+        const loc = path.join(testLoc, key + ".txt");
         if (fs.existsSync(loc)) {
           opts[key] = helper.readFile(loc);
         } else {
@@ -161,9 +166,9 @@ _.each(fs.readdirSync(fixtureLoc), function (binName) {
       });
 
       opts.outFiles = readDir(path.join(testLoc, "out-files"));
-      opts.inFiles  = readDir(path.join(testLoc, "in-files"));
+      opts.inFiles = readDir(path.join(testLoc, "in-files"));
 
-      let babelrcLoc = path.join(testLoc, ".babelrc");
+      const babelrcLoc = path.join(testLoc, ".babelrc");
       if (fs.existsSync(babelrcLoc)) {
         // copy .babelrc file to tmp directory
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);

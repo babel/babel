@@ -8,11 +8,11 @@ export function shareCommentsWithSiblings() {
   // NOTE: this assumes numbered keys
   if (typeof this.key === "string") return;
 
-  let node = this.node;
+  const node = this.node;
   if (!node) return;
 
-  let trailing = node.trailingComments;
-  let leading  = node.leadingComments;
+  const trailing = node.trailingComments;
+  const leading = node.leadingComments;
   if (!trailing && !leading) return;
 
   let prev = this.getSibling(this.key - 1);
@@ -28,7 +28,7 @@ export function shareCommentsWithSiblings() {
 export function addComment(type, content, line?) {
   this.addComments(type, [{
     type: line ? "CommentLine" : "CommentBlock",
-    value: content
+    value: content,
   }]);
 }
 
@@ -39,10 +39,10 @@ export function addComment(type, content, line?) {
 export function addComments(type: string, comments: Array) {
   if (!comments) return;
 
-  let node = this.node;
+  const node = this.node;
   if (!node) return;
 
-  let key = `${type}Comments`;
+  const key = `${type}Comments`;
 
   if (node[key]) {
     node[key] = node[key].concat(comments);

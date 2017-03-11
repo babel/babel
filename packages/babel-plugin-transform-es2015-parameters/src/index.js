@@ -10,14 +10,14 @@ export default function () {
     visitor: visitors.merge([{
       ArrowFunctionExpression(path) {
         // default/rest visitors require access to `arguments`
-        let params: Array<NodePath> = path.get("params");
-        for (let param of params) {
+        const params: Array<NodePath> = path.get("params");
+        for (const param of params) {
           if (param.isRestElement() || param.isAssignmentPattern()) {
             path.arrowFunctionToShadowed();
             break;
           }
         }
-      }
-    }, destructuring.visitor, rest.visitor, def.visitor])
+      },
+    }, destructuring.visitor, rest.visitor, def.visitor]),
   };
 }

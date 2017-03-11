@@ -5,7 +5,7 @@
 export default class Whitespace {
   constructor(tokens) {
     this.tokens = tokens;
-    this.used   = {};
+    this.used = {};
   }
 
   /**
@@ -15,7 +15,7 @@ export default class Whitespace {
   getNewlinesBefore(node) {
     let startToken;
     let endToken;
-    let tokens = this.tokens;
+    const tokens = this.tokens;
 
     let index = this._findToken((token) => token.start - node.start, 0, tokens.length);
     if (index >= 0) {
@@ -34,7 +34,7 @@ export default class Whitespace {
   getNewlinesAfter(node) {
     let startToken;
     let endToken;
-    let tokens = this.tokens;
+    const tokens = this.tokens;
 
     let index = this._findToken((token) => token.end - node.end, 0, tokens.length);
     if (index >= 0) {
@@ -58,8 +58,8 @@ export default class Whitespace {
   _getNewlinesBetween(startToken, endToken) {
     if (!endToken || !endToken.loc) return 0;
 
-    let start = startToken ? startToken.loc.end.line : 1;
-    let end   = endToken.loc.start.line;
+    const start = startToken ? startToken.loc.end.line : 1;
+    const end = endToken.loc.start.line;
     let lines = 0;
 
     for (let line = start; line < end; line++) {

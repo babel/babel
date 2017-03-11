@@ -1,3 +1,5 @@
+import syntaxFlow from "babel-plugin-syntax-flow";
+
 export default function ({ types: t }) {
   function wrapInFlowComment(path, parent) {
     path.addComment("trailing", generateComment(path, parent));
@@ -12,18 +14,18 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-flow"),
+    inherits: syntaxFlow,
 
     visitor: {
       TypeCastExpression(path) {
-        let { node } = path;
+        const { node } = path;
         path.get("expression").addComment("trailing", generateComment(path.get("typeAnnotation")));
         path.replaceWith(t.parenthesizedExpression(node.expression));
       },
 
       // support function a(b?) {}
       Identifier(path) {
-        let { node } = path;
+        const { node } = path;
         if (!node.optional || node.typeAnnotation) {
           return;
         }
@@ -33,25 +35,25 @@ export default function ({ types: t }) {
       AssignmentPattern: {
         exit({ node }) {
           node.left.optional = false;
-        }
+        },
       },
 
       // strip optional property from function params - facebook/fbjs#17
       Function: {
         exit({ node }) {
           node.params.forEach((param) => param.optional = false);
-        }
+        },
       },
 
       // support for `class X { foo: string }` - #4622
       ClassProperty(path) {
-        let { node, parent } = path;
+        const { node, parent } = path;
         if (!node.value) wrapInFlowComment(path, parent);
       },
 
       // support `export type a = {}` - #8 Error: You passed path.replaceWith() a falsy node
       "ExportNamedDeclaration|Flow"(path) {
-        let { node, parent } = path;
+        const { node, parent } = path;
         if (t.isExportNamedDeclaration(node) && !t.isFlow(node.declaration)) {
           return;
         }
@@ -60,12 +62,12 @@ export default function ({ types: t }) {
 
       // support `import type A` and `import typeof A` #10
       ImportDeclaration(path) {
-        let { node, parent } = path;
+        const { node, parent } = path;
         if (t.isImportDeclaration(node) && node.importKind !== "type" && node.importKind !== "typeof") {
           return;
         }
         wrapInFlowComment(path, parent);
-      }
-    }
+      },
+    },
   };
 }

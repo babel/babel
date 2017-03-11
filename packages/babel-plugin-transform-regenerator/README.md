@@ -34,8 +34,6 @@ function a() {
 }
 ```
 
-[Try in REPL](http://babeljs.io/repl/#?evaluate=true&lineWrap=true&presets=es2015%2Ces2015-loose%2Creact&experimental=false&loose=false&spec=false&code=function%20*range(max%2C%20step)%20%7B%0A%20%20var%20count%20%3D%200%3B%0A%20%20step%20%3D%20step%20%7C%7C%201%3B%0A%20%0A%20%20for%20(var%20i%20%3D%200%3B%20i%20%3C%20max%3B%20i%20%2B%3D%20step)%20%7B%0A%20%20%20%20count%2B%2B%3B%0A%20%20%20%20yield%20i%3B%0A%20%20%7D%0A%20%0A%20%20return%20count%3B%0A%7D%0A%20%0Avar%20gen%20%3D%20range(20%2C%203)%2C%20info%3B%0A%20%0Awhile%20(!(info%20%3D%20gen.next()).done)%20%7B%0A%20%20console.log(info.value)%3B%0A%7D%0A%20%0Aconsole.log(%22steps%20taken%3A%20%22%20%2B%20info.value)%3B&playground=true)
-
 ## Installation
 
 ```sh
@@ -46,20 +44,29 @@ npm install --save-dev babel-plugin-transform-regenerator
 
 ### Via `.babelrc` (Recommended)
 
-**.babelrc**
+Without options:
 
-```js
-// without options
+```json
 {
   "plugins": ["transform-regenerator"]
 }
-// with options
+```
+
+With options:
+
+|name|default value|
+|---|---|
+|asyncGenerators|true|
+|generators|true|
+|async|true|
+
+````json
 {
   "plugins": [
     ["transform-regenerator", {
-      asyncGenerators: false, // true by default
-      generators: false, // true by default
-      async: false // true by default
+      asyncGenerators: false,
+      generators: false,
+      async: false
     }]
   ]
 }

@@ -2,12 +2,12 @@ import path from "path";
 
 export default function ({ types: t }) {
   function addDisplayName(id, call) {
-    let props = call.arguments[0].properties;
+    const props = call.arguments[0].properties;
     let safe = true;
 
     for (let i = 0; i < props.length; i++) {
-      let prop = props[i];
-      let key = t.toComputedKey(prop);
+      const prop = props[i];
+      const key = t.toComputedKey(prop);
       if (t.isLiteral(key, { value: "displayName" })) {
         safe = false;
         break;
@@ -19,7 +19,7 @@ export default function ({ types: t }) {
     }
   }
 
-  let isCreateClassCallExpression = t.buildMatchMemberExpression("React.createClass");
+  const isCreateClassCallExpression = t.buildMatchMemberExpression("React.createClass");
 
   function isCreateClass(node) {
     if (!node || !t.isCallExpression(node)) return false;
@@ -28,11 +28,11 @@ export default function ({ types: t }) {
     if (!isCreateClassCallExpression(node.callee)) return false;
 
     // no call arguments
-    let args = node.arguments;
+    const args = node.arguments;
     if (args.length !== 1) return false;
 
     // first node arg is not an object
-    let first = args[0];
+    const first = args[0];
     if (!t.isObjectExpression(first)) return false;
 
     return true;
@@ -54,7 +54,7 @@ export default function ({ types: t }) {
       },
 
       CallExpression(path) {
-        let { node } = path;
+        const { node } = path;
         if (!isCreateClass(node)) return;
 
         let id;
@@ -88,7 +88,7 @@ export default function ({ types: t }) {
         if (t.isIdentifier(id)) {
           addDisplayName(id.name, node);
         }
-      }
-    }
+      },
+    },
   };
 }

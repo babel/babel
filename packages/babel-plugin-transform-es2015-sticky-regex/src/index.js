@@ -5,14 +5,14 @@ export default function () {
   return {
     visitor: {
       RegExpLiteral(path) {
-        let { node } = path;
+        const { node } = path;
         if (!regex.is(node, "y")) return;
 
         path.replaceWith(t.newExpression(t.identifier("RegExp"), [
           t.stringLiteral(node.pattern),
-          t.stringLiteral(node.flags)
+          t.stringLiteral(node.flags),
         ]));
-      }
-    }
+      },
+    },
   };
 }

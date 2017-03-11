@@ -1,12 +1,14 @@
+import syntaxFlow from "babel-plugin-syntax-flow";
+
 export default function ({ types: t }) {
   const FLOW_DIRECTIVE = "@flow";
 
   return {
-    inherits: require("babel-plugin-syntax-flow"),
+    inherits: syntaxFlow,
 
     visitor: {
       Program(path, { file: { ast: { comments } } }) {
-        for (let comment of (comments: Array<Object>)) {
+        for (const comment of (comments: Array<Object>)) {
           if (comment.value.indexOf(FLOW_DIRECTIVE) >= 0) {
             // remove flow directive
             comment.value = comment.value.replace(FLOW_DIRECTIVE, "");
@@ -46,7 +48,7 @@ export default function ({ types: t }) {
 
       Function({ node }) {
         for (let i = 0; i < node.params.length; i++) {
-          let param = node.params[i];
+          const param = node.params[i];
           param.optional = false;
         }
       },
@@ -57,7 +59,7 @@ export default function ({ types: t }) {
           node = node.expression;
         } while (t.isTypeCastExpression(node));
         path.replaceWith(node);
-      }
-    }
+      },
+    },
   };
 }

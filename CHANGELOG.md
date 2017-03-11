@@ -13,6 +13,298 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.23.0 (2017-02-13)
+
+#### :rocket: New Feature
+* `babel-plugin-transform-react-constant-elements`
+  * [#4812](https://github.com/babel/babel/pull/4812) feature: Support pure expressions in transform-react-constant-elements. ([@STRML](https://github.com/STRML))
+* `babel-preset-flow`, `babel-preset-react`
+  * [#5288](https://github.com/babel/babel/pull/5288) Add new flow preset. ([@thejameskyle](https://github.com/thejameskyle))
+* `babel-traverse`
+  * [#5230](https://github.com/babel/babel/pull/5230) Add path/family sibling traversal methods. ([@chitchu](https://github.com/chitchu))
+* `babel-plugin-transform-es2015-block-scoping`
+  * [#5236](https://github.com/babel/babel/pull/5236) Add option to block-scoping to throw on slow code. ([@spicyj](https://github.com/spicyj))
+
+#### :bug: Bug Fix
+* `babel-core`, `babel-traverse`
+  * [#5050](https://github.com/babel/babel/pull/5050) Rewrite Hub as interface #5047. ([@yongxu](https://github.com/yongxu))
+* `babel-plugin-transform-es2015-for-of`
+  * [#5298](https://github.com/babel/babel/pull/5298) Fix loose for-of with label. ([@jridgewell](https://github.com/jridgewell))
+* `babel-plugin-transform-react-constant-elements`, `babel-traverse`
+  * [#5153](https://github.com/babel/babel/pull/5153) Fix react constant elements bindings. ([@STRML](https://github.com/STRML))
+  * [#5143](https://github.com/babel/babel/pull/5143) Fix PathHoister hoisting JSX member expressions on "this".. ([@STRML](https://github.com/STRML))
+* `babel-plugin-transform-do-expressions`, `babel-traverse`
+  * [#5030](https://github.com/babel/babel/pull/5030) Prevent multiple return statements in a loop when replacing expressions. ([@existentialism](https://github.com/existentialism))
+* `babel-register`
+  * [#5260](https://github.com/babel/babel/pull/5260) Fix TypeError with babel-register's cache. ([@xtuc](https://github.com/xtuc))
+* `babel-traverse`
+  * [#5206](https://github.com/babel/babel/pull/5206) Deopt evaluation of undefined with a local binding. Closes [#5204](https://github.com/babel/babel/issues/5204). ([@boopathi](https://github.com/boopathi))
+* `babel-plugin-transform-runtime`
+  * [#5195](https://github.com/babel/babel/pull/5195) Don't transpile ES7 symbol properties. ([@taion](https://github.com/taion))
+* `babel`
+  * [#5258](https://github.com/babel/babel/pull/5258) checks if babel is installed globally and displays correct cli message. ([@xtina-starr](https://github.com/xtina-starr))
+* `babel-generator`
+  * [#5270](https://github.com/babel/babel/pull/5270) Emit parens for await of ternary expressions. ([@erikdesjardins](https://github.com/erikdesjardins))
+  * [#5193](https://github.com/babel/babel/pull/5193) Fix missing parens when function expressions is tag. ([@existentialism](https://github.com/existentialism))
+* `babel-plugin-transform-es2015-modules-commonjs`
+  * [#5235](https://github.com/babel/babel/pull/5235) Limit export node default assignment stack size #4323. ([@mattste](https://github.com/mattste))
+
+#### :memo: Documentation
+* `babel-*`
+  * [#5244](https://github.com/babel/babel/pull/5244) Normalize options sections in docs [skip ci]. ([@existentialism](https://github.com/existentialism))
+  * [#5216](https://github.com/babel/babel/pull/5216) Remove link to REPL. ([@xtuc](https://github.com/xtuc))
+* Other
+  * [#5242](https://github.com/babel/babel/pull/5242) Add our business model [skip ci]. ([@hzoo](https://github.com/hzoo))
+* `babel-plugin-transform-es2015-spread`
+  * [#5227](https://github.com/babel/babel/pull/5227) Add example to spread README [skip ci]. ([@finkef](https://github.com/finkef))
+* `babel-plugin-transform-flow-strip-types`
+  * [#5212](https://github.com/babel/babel/pull/5212) Remove REPL link transform-flow-strip-types doc. ([@xtuc](https://github.com/xtuc))
+* `babel-plugin-transform-regenerator`
+  * [#5202](https://github.com/babel/babel/pull/5202) Fix transform-regenerator README. ([@xtuc](https://github.com/xtuc))
+* `babel-plugin-transform-es2015-arrow-functions`
+  * [#5200](https://github.com/babel/babel/pull/5200) Fix transform-es2015-arrow-functions code blocks on the website. ([@xtuc](https://github.com/xtuc))
+  * [#5194](https://github.com/babel/babel/pull/5194) Fix transform-es2015-arrow-functions README. ([@xtuc](https://github.com/xtuc))
+
+#### :house: Internal
+* `babel-core`
+  * [#5302](https://github.com/babel/babel/pull/5302) Add charset so tests work with convert-source-map@>1.4. ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babel-core`, `babel-traverse`
+  * [#5050](https://github.com/babel/babel/pull/5050) Rewrite Hub as interface #5047. ([@yongxu](https://github.com/yongxu))
+* `babel-generator`
+  * [#5255](https://github.com/babel/babel/pull/5255) codegen performance: use trim instead of lodash/trimEnd. ([@jwbay](https://github.com/jwbay))
+* `babel-types`
+  * [#5181](https://github.com/babel/babel/pull/5181) Remove uses of lodash/compact. ([@zertosh](https://github.com/zertosh))
+* `babel-*`
+  * [#5265](https://github.com/babel/babel/pull/5265) Re-enable the max-len ESLint rule.. ([@loganfsmyth](https://github.com/loganfsmyth))
+* Other
+  * [#5264](https://github.com/babel/babel/pull/5264) Add a sublime project file. ([@loganfsmyth](https://github.com/loganfsmyth))
+  * [#5182](https://github.com/babel/babel/pull/5182) Run coverage only once. ([@existentialism](https://github.com/existentialism))
+  * [#5165](https://github.com/babel/babel/pull/5165) Add Node 7 to CI. ([@chicoxyzzy](https://github.com/chicoxyzzy))
+
+#### Committers: 20
+- Andres Suarez ([zertosh](https://github.com/zertosh))
+- Ben Alpert ([spicyj](https://github.com/spicyj))
+- Boopathi Rajaa ([boopathi](https://github.com/boopathi))
+- Brian Ng ([existentialism](https://github.com/existentialism))
+- Christina ([xtina-starr](https://github.com/xtina-starr))
+- Erik Desjardins ([erikdesjardins](https://github.com/erikdesjardins))
+- Fabian Finke ([finkef](https://github.com/finkef))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- Jimmy Jia ([taion](https://github.com/taion))
+- Justin Ridgewell ([jridgewell](https://github.com/jridgewell))
+- Logan Smyth ([loganfsmyth](https://github.com/loganfsmyth))
+- Matt Stewart ([mattste](https://github.com/mattste))
+- Samuel Reed ([STRML](https://github.com/STRML))
+- Sergey Rubanov ([chicoxyzzy](https://github.com/chicoxyzzy))
+- Sven SAULEAU ([xtuc](https://github.com/xtuc))
+- Vicente Jr Yuchitcho ([chitchu](https://github.com/chitchu))
+- Yongxu Ren ([yongxu](https://github.com/yongxu))
+- [jwbay](https://github.com/jwbay)
+- james kyle ([thejameskyle](https://github.com/thejameskyle))
+- Łukasz Lityński ([hex13](https://github.com/hex13))
+
+## 6.22.2 (2017-01-19)
+
+#### :bug: Bug Fix
+
+* `babel-cli`
+  * Fix issue with `babel-node` throwing errors when passed non-"-" args [#5162](https://github.com/babel/babel/pull/5162).
+
+## 6.22.1 (2017-01-19)
+
+#### :bug: Bug Fix
+
+* `babel-traverse`
+  * Temporary fix with `babel-traverse` via [#5019](https://github.com/babel/babel/pull/5019) for transform-react-constant-elements.
+
+## 6.22.0 (2017-01-19)
+
+A quick update since it's been over a month already: adds support for shorthand import syntax in Flow + some fixes!
+
+We'll be merging in our current 7.0 PRs on a 7.0 branch soon and I'l be making some more issues (most should be beginner-friendly).
+
+To follow our progress check out our [7.0 milestone](https://github.com/babel/babel/milestone/9), the [wiki](https://github.com/babel/babel/wiki/Babel-7) and upcoming announcements on [twitter](https://twitter.com/babeljs)!
+
+We support stripping out and generating the new shorthand import syntax in Flow (parser support was added in [babylon@6.15.0](https://github.com/babel/babylon/releases/tag/v6.15.0).
+
+```js
+import {
+  someValue,
+  type someType,
+  typeof someOtherValue,
+} from "blah";
+```
+
+#### :rocket: New Feature
+* `babel-generator`, `babel-types`
+  * [#5110](https://github.com/babel/babel/pull/5110) Validate importKind and ensure code generation exists.. ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babel-plugin-transform-flow-strip-types`, `babel-traverse`
+  * [#5035](https://github.com/babel/babel/pull/5035) Strip Flow's new shorthand import-type specifiers. ([@jeffmo](https://github.com/jeffmo))
+* `babel-core`
+  * [#4729](https://github.com/babel/babel/pull/4729) Add resolvePlugin and resolvePreset methods to babel-core API. ([@rmacklin](https://github.com/rmacklin))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-object-rest-spread`
+  * [#5151](https://github.com/babel/babel/pull/5151) Avoid duplicating impure expressions in object rest destructuring. ([@erikdesjardins](https://github.com/erikdesjardins))
+
+```js
+const { x, ...y } = foo();
+```
+
+Old Behavior
+
+```js
+const { x } = foo();
+const y = _objectWithoutProperties(foo(), ["x"]);
+```
+
+New/Expected Behavior
+
+```js
+const _ref = foo(); // should only be called once
+const { x } = _ref; 
+const y = _objectWithoutProperties(_ref, ["x"]);
+```
+
+* `babel-cli`
+  * [#4790](https://github.com/babel/babel/pull/4790) fixes invalid line offsets in merged sourcemaps. ([@peterm0x](https://github.com/peterm0x))
+* `babel-plugin-transform-object-rest-spread`
+  * [#5088](https://github.com/babel/babel/pull/5088) fix: plugin-transform-object-rest-spread param with default value. ([@christophehurpeau](https://github.com/christophehurpeau))
+
+Accounts for default values in object rest params
+
+```js
+function fn({a = 1, ...b} = {}) {
+  return {a, b};
+}
+```
+  
+* `babel-plugin-transform-es2015-destructuring`
+  * [#5093](https://github.com/babel/babel/pull/5093) Ensure array is always copied during destructure. ([@existentialism](https://github.com/existentialism))
+
+```js
+const assign = ([...arr], index, value) => {
+  arr[index] = value
+  return arr
+}
+
+const arr = [1, 2, 3]
+assign(arr, 1, 42)
+console.log(arr) // [1, 2, 3]
+```
+  
+* `babel-plugin-transform-es2015-function-name`
+  * [#5008](https://github.com/babel/babel/pull/5008) Don't try to visit ArrowFunctionExpression, they cannot be named. ([@Kovensky](https://github.com/Kovensky))
+
+Input
+
+```js
+export const x = ({ x }) => x;
+export const y = function () {};
+```
+
+Output
+
+```js
+export const x = ({ x }) => x;
+export const y = function y() {}; 
+```
+ 
+* `babel-types`
+  * [#5068](https://github.com/babel/babel/pull/5068) Fix getBindingIdentifiers in babel-types. ([@rtsao](https://github.com/rtsao))
+* `babel-cli`
+  * [#3698](https://github.com/babel/babel/pull/3698) Watch mode should wait for file write. (T7411) ([@hayeah](https://github.com/hayeah))
+
+#### :nail_care: Polish
+* `babel-traverse`
+  * [#5076](https://github.com/babel/babel/pull/5076) Optimize removal-hooks for ArrowFunctions. ([@danez](https://github.com/danez))
+* `babel-generator`, `babel-plugin-transform-exponentiation-operator`
+  * [#5026](https://github.com/babel/babel/pull/5026) Remove unnecessary spaces around template element. ([@chicoxyzzy](https://github.com/chicoxyzzy))
+
+#### :memo: Documentation
+* Other
+  * [#5144](https://github.com/babel/babel/pull/5144) Fix dependency status extension.. ([@yavorsky](https://github.com/yavorsky))
+  * [#5136](https://github.com/babel/babel/pull/5136) Add babel-preset-env to maintained list.. ([@yavorsky](https://github.com/yavorsky))
+* `babel-core`
+  * [#5101](https://github.com/babel/babel/pull/5101) Document babelrc option. ([@novemberborn](https://github.com/novemberborn))
+  * [#5114](https://github.com/babel/babel/pull/5114) Update babel-core options in README. ([@existentialism](https://github.com/existentialism))
+* `babel-plugin-syntax-class-constructor-call`
+  * [#5130](https://github.com/babel/babel/pull/5130) update syntax-class-constructor-call documentation. ([@xtuc](https://github.com/xtuc))
+* `babel-plugin-transform-es2015-duplicate-keys`, `babel-plugin-transform-es2015-parameters`
+  * [#5111](https://github.com/babel/babel/pull/5111) Fixes some inconsistent documentation. ([@xtuc](https://github.com/xtuc))
+* `babel-plugin-transform-es2015-computed-properties`, `babel-plugin-transform-es2015-for-of`
+  * [#5096](https://github.com/babel/babel/pull/5096) Add examples to computed-props and for-of READMEs [skip ci]. ([@existentialism](https://github.com/existentialism))
+* `babel-plugin-transform-class-properties`
+  * [#5077](https://github.com/babel/babel/pull/5077) Static function call result comment does not match variable content [skip ci]. ([@kasn](https://github.com/kasn))
+* Other
+  * [#5070](https://github.com/babel/babel/pull/5070) Fix typo in README.md. ([@nomicos](https://github.com/nomicos))
+  * [#5031](https://github.com/babel/babel/pull/5031) remove plugin links, just use the website [skip ci]. ([@hzoo](https://github.com/hzoo))
+  * [#5011](https://github.com/babel/babel/pull/5011) Add Team section [skip ci]. ([@hzoo](https://github.com/hzoo))
+* `babel-plugin-transform-es2015-classes`, `babel-plugin-transform-function-bind`
+  * [#5061](https://github.com/babel/babel/pull/5061) Fix some doc lint issues. ([@existentialism](https://github.com/existentialism))
+* `babel-helpers`
+  * [#5059](https://github.com/babel/babel/pull/5059) Fix incorrect snippet language in babel-helpers. ([@xtuc](https://github.com/xtuc))
+* `babel-preset-react`
+  * [#5051](https://github.com/babel/babel/pull/5051) Adding more info to the Install section. ([@gitanupam](https://github.com/gitanupam))
+* `babel-plugin-check-es2015-constants`, `babel-plugin-transform-es2015-modules-umd`, `babel-plugin-transform-es2015-typeof-symbol`, `babel-register`
+  * [#5045](https://github.com/babel/babel/pull/5045) Fix some README links. ([@existentialism](https://github.com/existentialism))
+* `babel-core`
+  * [#5014](https://github.com/babel/babel/pull/5014) Update babel-core's README. ([@xtuc](https://github.com/xtuc))
+
+#### :house: Internal
+* `babel-*`
+  * [#5129](https://github.com/babel/babel/pull/5129) Bump eslint-config-babel and fix lint. ([@existentialism](https://github.com/existentialism))
+  * [#5138](https://github.com/babel/babel/pull/5138) Refactor packages to use ES modules instead of CJS. ([@chicoxyzzy](https://github.com/chicoxyzzy))
+  * [#5113](https://github.com/babel/babel/pull/5113) Kaicataldo enable prefer const. ([@hzoo](https://github.com/hzoo))
+* `babel-helper-transform-fixture-test-runner`
+  * [#5135](https://github.com/babel/babel/pull/5135) Run Babel's unittests in a custom sandbox.. ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babel-cli`, `babel-core`, `babel-generator`, `babel-helper-define-map`, `babel-register`, `babel-runtime`, `babel-types`
+  * [#5043](https://github.com/babel/babel/pull/5043) Replace "lodash/is*" and "lodash/each" with native equivalents. ([@zertosh](https://github.com/zertosh))
+* `babel-cli`, `babel-generator`, `babel-helper-fixtures`, `babel-helper-transform-fixture-test-runner`, `babel-preset-es2015`, `babel-runtime`, `babel-traverse`
+  * [#5042](https://github.com/babel/babel/pull/5042) Use native or lodash util module where full "lodash" is required. ([@zertosh](https://github.com/zertosh))
+* `babel-code-frame`
+  * [#5094](https://github.com/babel/babel/pull/5094) babel-code-frame: Upgrade to js-tokens@3. ([@lydell](https://github.com/lydell))
+* `babel-plugin-transform-react-jsx`
+  * [#5100](https://github.com/babel/babel/pull/5100) Fix broken repository url. ([@batista](https://github.com/batista))
+* `babel-plugin-transform-decorators`
+  * [#5038](https://github.com/babel/babel/pull/5038) Remove unused dependency. ([@zertosh](https://github.com/zertosh))
+* `babel-plugin-transform-es2015-computed-properties`
+  * [#5053](https://github.com/babel/babel/pull/5053) Remove unused define-map helper from computed-properties. ([@existentialism](https://github.com/existentialism))
+* `babel-cli`
+  * [#5027](https://github.com/babel/babel/pull/5027) Dependencies: Upgrade glob to v7. ([@ysangkok](https://github.com/ysangkok))
+
+#### Committers: 23, First PRs: 10
+- Andres Suarez ([zertosh](https://github.com/zertosh))
+- Andrii Bida ([nomicos](https://github.com/nomicos)) First PR!
+- Anthony Zotti ([amZotti](https://github.com/amZotti)) First PR!
+- Anupam ([gitanupam](https://github.com/gitanupam)) First PR!
+- Artem Yavorsky ([yavorsky](https://github.com/yavorsky)) First PR!
+- Brian Ng ([existentialism](https://github.com/existentialism))
+- Christophe Hurpeau ([christophehurpeau](https://github.com/christophehurpeau))
+- Daniel Tschinder ([danez](https://github.com/danez))
+- Diogo Franco ([Kovensky](https://github.com/Kovensky))
+- Erik Desjardins ([erikdesjardins](https://github.com/erikdesjardins))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- Howard Yeh ([hayeah](https://github.com/hayeah)) First PR!
+- Janus Troelsen ([ysangkok](https://github.com/ysangkok)) First PR!
+- Jeff Morrison ([jeffmo](https://github.com/jeffmo))
+- Karsten Gohm ([kasn](https://github.com/kasn)) First PR!
+- Logan Smyth ([loganfsmyth](https://github.com/loganfsmyth))
+- Mark Wubben ([novemberborn](https://github.com/novemberborn)) First PR!
+- Peter Mikula ([peterm0x](https://github.com/peterm0x))
+- Ryan Tsao ([rtsao](https://github.com/rtsao)) First PR!
+- Sergey Rubanov ([chicoxyzzy](https://github.com/chicoxyzzy))
+- Simon Lydell ([lydell](https://github.com/lydell))
+- Sven SAULEAU ([xtuc](https://github.com/xtuc))
+- Sérgio Batista ([batista](https://github.com/batista)) First PR!
+- [rmacklin](https://github.com/rmacklin)
+
+## 6.21.1 (2016-12-17)
+
+#### :bug: Bug Fix
+* `babel-helper-builder-react-jsx`, `babel-plugin-transform-react-jsx`
+  * [#5015](https://github.com/babel/babel/pull/5015) Revert the introduction of a new error message that ended up introducing its own error ([@loganfsmyth](https://github.com/loganfsmyth))
+
 ## 6.21.0 (2016-12-16)
 
 #### :rocket: New Feature

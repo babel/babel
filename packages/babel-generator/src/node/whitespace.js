@@ -1,5 +1,3 @@
-import isBoolean from "lodash/isBoolean";
-import each from "lodash/each";
 import map from "lodash/map";
 import * as t from "babel-types";
 
@@ -62,18 +60,18 @@ function isType(node) {
  * Tests for node types that need whitespace.
  */
 
-exports.nodes = {
+export const nodes = {
 
   /**
    * Test if AssignmentExpression needs whitespace.
    */
 
   AssignmentExpression(node: Object): ?WhitespaceObject {
-    let state = crawl(node.right);
+    const state = crawl(node.right);
     if ((state.hasCall && state.hasHelper) || state.hasFunction) {
       return {
         before: state.hasFunction,
-        after: true
+        after: true,
       };
     }
   },
@@ -84,7 +82,7 @@ exports.nodes = {
 
   SwitchCase(node: Object, parent: Object): ?WhitespaceObject {
     return {
-      before: node.consequent.length || parent.cases[0] === node
+      before: node.consequent.length || parent.cases[0] === node,
     };
   },
 
@@ -95,7 +93,7 @@ exports.nodes = {
   LogicalExpression(node: Object): ?WhitespaceObject {
     if (t.isFunction(node.left) || t.isFunction(node.right)) {
       return {
-        after: true
+        after: true,
       };
     }
   },
@@ -107,7 +105,7 @@ exports.nodes = {
   Literal(node: Object): ?WhitespaceObject {
     if (node.value === "use strict") {
       return {
-        after: true
+        after: true,
       };
     }
   },
@@ -120,7 +118,7 @@ exports.nodes = {
     if (t.isFunction(node.callee) || isHelper(node)) {
       return {
         before: true,
-        after: true
+        after: true,
       };
     }
   },
@@ -131,18 +129,18 @@ exports.nodes = {
 
   VariableDeclaration(node: Object): ?WhitespaceObject {
     for (let i = 0; i < node.declarations.length; i++) {
-      let declar = node.declarations[i];
+      const declar = node.declarations[i];
 
       let enabled = isHelper(declar.id) && !isType(declar.init);
       if (!enabled) {
-        let state = crawl(declar.init);
+        const state = crawl(declar.init);
         enabled = (isHelper(declar.init) && state.hasCall) || state.hasFunction;
       }
 
       if (enabled) {
         return {
           before: true,
-          after: true
+          after: true,
         };
       }
     }
@@ -156,23 +154,22 @@ exports.nodes = {
     if (t.isBlockStatement(node.consequent)) {
       return {
         before: true,
-        after: true
+        after: true,
       };
     }
-  }
+  },
 };
 
 /**
- * Test if Property or SpreadProperty needs whitespace.
+ * Test if Property needs whitespace.
  */
 
-exports.nodes.ObjectProperty =
-exports.nodes.ObjectTypeProperty =
-exports.nodes.ObjectMethod =
-exports.nodes.SpreadProperty = function (node: Object, parent): ?WhitespaceObject {
+nodes.ObjectProperty =
+nodes.ObjectTypeProperty =
+nodes.ObjectMethod = function (node: Object, parent): ?WhitespaceObject {
   if (parent.properties[0] === node) {
     return {
-      before: true
+      before: true,
     };
   }
 };
@@ -181,7 +178,7 @@ exports.nodes.SpreadProperty = function (node: Object, parent): ?WhitespaceObjec
  * Returns lists from node types that need whitespace.
  */
 
-exports.list = {
+export const list = {
 
   /**
    * Return VariableDeclaration declarations init properties.
@@ -205,27 +202,26 @@ exports.list = {
 
   ObjectExpression(node: Object): Array<Object> {
     return node.properties;
-  }
+  },
 };
 
 /**
  * Add whitespace tests for nodes and their aliases.
  */
 
-each({
-  Function: true,
-  Class: true,
-  Loop: true,
-  LabeledStatement: true,
-  SwitchStatement: true,
-  TryStatement: true
-}, function (amounts, type) {
-  if (isBoolean(amounts)) {
+[
+  ["Function", true],
+  ["Class", true],
+  ["Loop", true],
+  ["LabeledStatement", true],
+  ["SwitchStatement", true],
+  ["TryStatement", true],
+].forEach(function ([type, amounts]) {
+  if (typeof amounts === "boolean") {
     amounts = { after: amounts, before: amounts };
   }
-
-  each([type].concat(t.FLIPPED_ALIAS_KEYS[type] || []), function (type) {
-    exports.nodes[type] = function () {
+  [type].concat(t.FLIPPED_ALIAS_KEYS[type] || []).forEach(function (type) {
+    nodes[type] = function () {
       return amounts;
     };
   });

@@ -3,15 +3,88 @@ import { buildExternalHelpers } from "babel-core";
 import getFixtures from "babel-helper-fixtures";
 import sourceMap from "source-map";
 import codeFrame from "babel-code-frame";
+import defaults from "lodash/defaults";
+import includes from "lodash/includes";
 import * as helpers from "./helpers";
+import extend from "lodash/extend";
+import merge from "lodash/merge";
+import resolve from "resolve";
 import assert from "assert";
 import chai from "chai";
-import _ from "lodash";
-import "babel-polyfill";
 import fs from "fs";
 import path from "path";
+import vm from "vm";
 
-let babelHelpers = eval(buildExternalHelpers(null, "var"));
+const moduleCache = {};
+const testContext = vm.createContext({
+  ...helpers,
+  assert: chai.assert,
+  transform: babel.transform,
+});
+testContext.global = testContext;
+
+// Initialize the test context with the polyfill, and then freeze the global to prevent implicit
+// global creation in tests, which could cause things to bleed between tests.
+runModuleInTestContext("babel-polyfill", __filename);
+
+// Populate the "babelHelpers" global with Babel's helper utilities.
+runCodeInTestContext(buildExternalHelpers());
+
+/**
+ * A basic implementation of CommonJS so we can execute `babel-polyfill` inside our test context.
+ * This allows us to run our unittests
+ */
+function runModuleInTestContext(id: string, relativeFilename: string) {
+  const filename = resolve.sync(id, { basedir: path.dirname(relativeFilename) });
+
+  // Expose Node-internal modules if the tests want them. Note, this will not execute inside
+  // the context's global scope.
+  if (filename === id) return require(id);
+
+  if (moduleCache[filename]) return moduleCache[filename].exports;
+
+  const module = moduleCache[filename] = {
+    id: filename,
+    exports: {},
+  };
+  const dirname = path.dirname(filename);
+  const req = (id) => runModuleInTestContext(id, filename);
+
+  const src = fs.readFileSync(filename, "utf8");
+  const code = `(function (exports, require, module, __filename, __dirname) {${src}\n});`;
+
+  vm.runInContext(code, testContext, {
+    filename,
+    displayErrors: true,
+  }).call(module.exports, module.exports, req, module, filename, dirname);
+
+  return module.exports;
+}
+
+/**
+ * Run the given snippet of code inside a CommonJS module.
+ *
+ * Exposed for unit tests, not for use as an API.
+ */
+export function runCodeInTestContext(code: string, opts: {filename?: string} = {}) {
+  const filename = opts.filename || null;
+  const dirname = filename ? path.dirname(filename) : null;
+  const req = filename ? ((id) => runModuleInTestContext(id, filename)) : null;
+
+  const module = {
+    id: filename,
+    exports: {},
+  };
+
+  // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
+  // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
+  // rely on 'this === global'.
+  const src = `(function(exports, require, module, __filename, __dirname, opts) {${code}\n});`;
+  return vm.runInContext(src, testContext, {
+    filename,
+    displayErrors: true,
+  })(module.exports, req, module, filename, dirname, opts);
+}
 
 function wrapPackagesArray(type, names, optionsDir) {
   return (names || []).map(function (val) {
@@ -21,7 +94,8 @@ function wrapPackagesArray(type, names, optionsDir) {
     if (val[0][0] === ".") {
 
       if (!optionsDir) {
-        throw new Error("Please provide an options.json in test dir when using a relative plugin path.");
+        throw new Error("Please provide an options.json in test dir when using a " +
+          "relative plugin path.");
       }
 
       val[0] = path.resolve(optionsDir, val[0]);
@@ -36,21 +110,22 @@ function wrapPackagesArray(type, names, optionsDir) {
 }
 
 function run(task) {
-  let actual = task.actual;
-  let expect = task.expect;
-  let exec   = task.exec;
-  let opts   = task.options;
-  let optionsDir = task.optionsDir;
+  const actual = task.actual;
+  const expect = task.expect;
+  const exec = task.exec;
+  const opts = task.options;
+  const optionsDir = task.optionsDir;
 
   function getOpts(self) {
-    let newOpts = _.merge({
+    const newOpts = merge({
       filename: self.loc,
     }, opts);
 
     newOpts.plugins = wrapPackagesArray("plugin", newOpts.plugins, optionsDir);
     newOpts.presets = wrapPackagesArray("preset", newOpts.presets, optionsDir).map(function (val) {
       if (val.length > 2) {
-        throw new Error(`Unexpected extra options ${JSON.stringify(val.slice(2))} passed to preset.`);
+        throw new Error("Unexpected extra options " + JSON.stringify(val.slice(2)) +
+          " passed to preset.");
       }
 
       return val;
@@ -64,13 +139,12 @@ function run(task) {
   let resultExec;
 
   if (execCode) {
-    let execOpts = getOpts(exec);
-    let execDirName = path.dirname(exec.loc);
+    const execOpts = getOpts(exec);
     result = babel.transform(execCode, execOpts);
     execCode = result.code;
 
     try {
-      resultExec = runExec(execOpts, execCode, execDirName);
+      resultExec = runCodeInTestContext(execCode, execOpts);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);
@@ -79,10 +153,13 @@ function run(task) {
   }
 
   let actualCode = actual.code;
-  let expectCode = expect.code;
+  const expectCode = expect.code;
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
-    if (!expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() && !process.env.CI) {
+    if (
+      !expect.code && result.code && !opts.throws && fs.statSync(path.dirname(expect.loc)).isDirectory() &&
+      !process.env.CI
+    ) {
       console.log(`New test file created: ${expect.loc}`);
       fs.writeFileSync(expect.loc, result.code);
     } else {
@@ -96,12 +173,12 @@ function run(task) {
   }
 
   if (task.sourceMappings) {
-    let consumer = new sourceMap.SourceMapConsumer(result.map);
+    const consumer = new sourceMap.SourceMapConsumer(result.map);
 
-    _.each(task.sourceMappings, function (mapping) {
-      let actual = mapping.original;
+    task.sourceMappings.forEach(function (mapping) {
+      const actual = mapping.original;
 
-      let expect = consumer.originalPositionFor(mapping.generated);
+      const expect = consumer.originalPositionFor(mapping.generated);
       chai.expect({ line: expect.line, column: expect.column }).to.deep.equal(actual);
     });
   }
@@ -111,23 +188,6 @@ function run(task) {
   }
 }
 
-function runExec(opts, execCode, execDirname) {
-  let sandbox = {
-    ...helpers,
-    babelHelpers,
-    assert: chai.assert,
-    transform: babel.transform,
-    opts,
-    exports: {},
-    require(id) {
-      return require(id[0] === "." ? path.resolve(execDirname, id) : id);
-    }
-  };
-
-  let fn = new Function(...Object.keys(sandbox), execCode);
-  return fn.apply(null, Object.values(sandbox));
-}
-
 export default function (
   fixturesLoc: string,
   name: string,
@@ -135,35 +195,35 @@ export default function (
   taskOpts = {},
   dynamicOpts?: Function,
 ) {
-  let suites = getFixtures(fixturesLoc);
+  const suites = getFixtures(fixturesLoc);
 
-  for (let testSuite of suites) {
-    if (_.includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
+  for (const testSuite of suites) {
+    if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function () {
-      for (let task of testSuite.tests) {
-        if (_.includes(suiteOpts.ignoreTasks, task.title) ||
-            _.includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
+      for (const task of testSuite.tests) {
+        if (includes(suiteOpts.ignoreTasks, task.title) ||
+            includes(suiteOpts.ignoreTasks, testSuite.title + "/" + task.title)) continue;
 
         it(task.title, !task.disabled && function () {
           function runTask() {
             run(task);
           }
 
-          _.defaults(task.options, {
+          defaults(task.options, {
             filenameRelative: task.expect.filename,
-            sourceFileName:   task.actual.filename,
-            sourceMapTarget:  task.expect.filename,
+            sourceFileName: task.actual.filename,
+            sourceMapTarget: task.expect.filename,
             suppressDeprecationMessages: true,
             babelrc: false,
             sourceMap: !!(task.sourceMappings || task.sourceMap),
           });
 
-          _.extend(task.options, taskOpts);
+          extend(task.options, taskOpts);
 
           if (dynamicOpts) dynamicOpts(task.options, task);
 
-          let throwMsg = task.options.throws;
+          const throwMsg = task.options.throws;
           if (throwMsg) {
             // internal api doesn't have this option but it's best not to pollute
             // the options object with useless options
@@ -174,7 +234,7 @@ export default function (
             });
           } else {
             if (task.exec.code) {
-              let result = run(task);
+              const result = run(task);
               if (result && typeof result.then === "function") {
                 return result;
               }

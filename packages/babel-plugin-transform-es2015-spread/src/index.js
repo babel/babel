@@ -17,7 +17,7 @@ export default function ({ types: t }) {
   }
 
   function build(props: Array, scope, state) {
-    let nodes = [];
+    const nodes = [];
 
     let _props = [];
 
@@ -27,7 +27,7 @@ export default function ({ types: t }) {
       _props = [];
     }
 
-    for (let prop of props) {
+    for (const prop of props) {
       if (t.isSpreadElement(prop)) {
         push();
         nodes.push(getSpreadLiteral(prop, scope, state));
@@ -44,11 +44,11 @@ export default function ({ types: t }) {
   return {
     visitor: {
       ArrayExpression(path, state) {
-        let { node, scope } = path;
-        let elements = node.elements;
+        const { node, scope } = path;
+        const elements = node.elements;
         if (!hasSpread(elements)) return;
 
-        let nodes = build(elements, scope, state);
+        const nodes = build(elements, scope, state);
         let first = nodes.shift();
 
         if (!t.isArrayExpression(first)) {
@@ -60,12 +60,12 @@ export default function ({ types: t }) {
       },
 
       CallExpression(path, state) {
-        let { node, scope } = path;
+        const { node, scope } = path;
 
-        let args = node.arguments;
+        const args = node.arguments;
         if (!hasSpread(args)) return;
 
-        let calleePath = path.get("callee");
+        const calleePath = path.get("callee");
         if (calleePath.isSuper()) return;
 
         let contextLiteral = t.identifier("undefined");
@@ -79,17 +79,17 @@ export default function ({ types: t }) {
           nodes = build(args, scope, state);
         }
 
-        let first = nodes.shift();
+        const first = nodes.shift();
         if (nodes.length) {
           node.arguments.push(t.callExpression(t.memberExpression(first, t.identifier("concat")), nodes));
         } else {
           node.arguments.push(first);
         }
 
-        let callee = node.callee;
+        const callee = node.callee;
 
         if (calleePath.isMemberExpression()) {
-          let temp = scope.maybeGenerateMemoised(callee.object);
+          const temp = scope.maybeGenerateMemoised(callee.object);
           if (temp) {
             callee.object = t.assignmentExpression("=", temp, callee.object);
             contextLiteral = temp;
@@ -109,13 +109,13 @@ export default function ({ types: t }) {
       },
 
       NewExpression(path, state) {
-        let { node, scope } = path;
+        const { node, scope } = path;
         let args = node.arguments;
         if (!hasSpread(args)) return;
 
-        let nodes = build(args, scope, state);
+        const nodes = build(args, scope, state);
 
-        let context = t.arrayExpression([t.nullLiteral()]);
+        const context = t.arrayExpression([t.nullLiteral()]);
 
 
         args = t.callExpression(t.memberExpression(context, t.identifier("concat")), nodes);
@@ -136,7 +136,7 @@ export default function ({ types: t }) {
           ),
           []
         ));
-      }
-    }
+      },
+    },
   };
 }

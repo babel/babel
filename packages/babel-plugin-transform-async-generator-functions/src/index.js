@@ -1,23 +1,24 @@
 import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
+import syntaxAsyncGenerators from "babel-plugin-syntax-async-generators";
 
 export default function ({ types: t }) {
-  let yieldStarVisitor = {
+  const yieldStarVisitor = {
     Function(path) {
       path.skip();
     },
 
     YieldExpression({ node }, state) {
       if (!node.delegate) return;
-      let callee = state.addHelper("asyncGeneratorDelegate");
+      const callee = state.addHelper("asyncGeneratorDelegate");
       node.argument = t.callExpression(callee, [
         t.callExpression(state.addHelper("asyncIterator"), [node.argument]),
-        t.memberExpression(state.addHelper("asyncGenerator"), t.identifier("await"))
+        t.memberExpression(state.addHelper("asyncGenerator"), t.identifier("await")),
       ]);
-    }
+    },
   };
 
   return {
-    inherits: require("babel-plugin-syntax-async-generators"),
+    inherits: syntaxAsyncGenerators,
     visitor: {
       Function(path, state) {
         if (!path.node.async || !path.node.generator) return;
@@ -28,9 +29,9 @@ export default function ({ types: t }) {
           wrapAsync: t.memberExpression(
             state.addHelper("asyncGenerator"), t.identifier("wrap")),
           wrapAwait: t.memberExpression(
-            state.addHelper("asyncGenerator"), t.identifier("await"))
+            state.addHelper("asyncGenerator"), t.identifier("await")),
         });
-      }
-    }
+      },
+    },
   };
 }

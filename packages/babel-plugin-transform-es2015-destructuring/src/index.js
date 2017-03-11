@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 export default function ({ types: t }) {
 
   /**
@@ -7,7 +5,7 @@ export default function ({ types: t }) {
    */
 
   function variableDeclarationHasPattern(node) {
-    for (let declar of (node.declarations: Array)) {
+    for (const declar of (node.declarations: Array)) {
       if (t.isPattern(declar.id)) {
         return true;
       }
@@ -20,7 +18,7 @@ export default function ({ types: t }) {
    */
 
   function hasRest(pattern) {
-    for (let elem of (pattern.elements: Array)) {
+    for (const elem of (pattern.elements: Array)) {
       if (t.isRestElement(elem)) {
         return true;
       }
@@ -28,24 +26,24 @@ export default function ({ types: t }) {
     return false;
   }
 
-  let arrayUnpackVisitor = {
+  const arrayUnpackVisitor = {
     ReferencedIdentifier(path, state) {
       if (state.bindings[path.node.name]) {
         state.deopt = true;
         path.stop();
       }
-    }
+    },
   };
 
   class DestructuringTransformer {
     constructor(opts) {
       this.blockHoist = opts.blockHoist;
-      this.operator   = opts.operator;
-      this.arrays     = {};
-      this.nodes      = opts.nodes || [];
-      this.scope      = opts.scope;
-      this.file       = opts.file;
-      this.kind       = opts.kind;
+      this.operator = opts.operator;
+      this.arrays = {};
+      this.nodes = opts.nodes || [];
+      this.scope = opts.scope;
+      this.file = opts.file;
+      this.kind = opts.kind;
     }
 
     buildVariableAssignment(id, init) {
@@ -58,7 +56,7 @@ export default function ({ types: t }) {
         node = t.expressionStatement(t.assignmentExpression(op, id, init));
       } else {
         node = t.variableDeclaration(this.kind, [
-          t.variableDeclarator(id, init)
+          t.variableDeclarator(id, init),
         ]);
       }
 
@@ -68,8 +66,8 @@ export default function ({ types: t }) {
     }
 
     buildVariableDeclaration(id, init) {
-      let declar = t.variableDeclaration("var", [
-        t.variableDeclarator(id, init)
+      const declar = t.variableDeclaration("var", [
+        t.variableDeclarator(id, init),
       ]);
       declar._blockHoist = this.blockHoist;
       return declar;
@@ -99,25 +97,25 @@ export default function ({ types: t }) {
       // we need to assign the current value of the assignment to avoid evaluating
       // it more than once
 
-      let tempValueRef = this.scope.generateUidIdentifierBasedOnNode(valueRef);
+      const tempValueRef = this.scope.generateUidIdentifierBasedOnNode(valueRef);
 
-      let declar = t.variableDeclaration("var", [
-        t.variableDeclarator(tempValueRef, valueRef)
+      const declar = t.variableDeclaration("var", [
+        t.variableDeclarator(tempValueRef, valueRef),
       ]);
       declar._blockHoist = this.blockHoist;
       this.nodes.push(declar);
 
       //
 
-      let tempConditional = t.conditionalExpression(
+      const tempConditional = t.conditionalExpression(
         t.binaryExpression("===", tempValueRef, t.identifier("undefined")),
         pattern.right,
         tempValueRef
       );
 
-      let left = pattern.left;
+      const left = pattern.left;
       if (t.isPattern(left)) {
-        let tempValueDefault = t.expressionStatement(
+        const tempValueDefault = t.expressionStatement(
           t.assignmentExpression("=", tempValueRef, tempConditional)
         );
         tempValueDefault._blockHoist = this.blockHoist;
@@ -135,14 +133,14 @@ export default function ({ types: t }) {
       let keys = [];
 
       for (let i = 0; i < pattern.properties.length; i++) {
-        let prop = pattern.properties[i];
+        const prop = pattern.properties[i];
 
         // we've exceeded the index of the spread property to all properties to the
         // right need to be ignored
         if (i >= spreadPropIndex) break;
 
         // ignore other spread properties
-        if (t.isRestProperty(prop)) continue;
+        if (t.isRestElement(prop)) continue;
 
         let key = prop.key;
         if (t.isIdentifier(key) && !prop.computed) key = t.stringLiteral(prop.key.name);
@@ -153,15 +151,16 @@ export default function ({ types: t }) {
 
       //
 
-      let value = t.callExpression(this.file.addHelper("objectWithoutProperties"), [objRef, keys]);
+      const value = t.callExpression(
+        this.file.addHelper("objectWithoutProperties"), [objRef, keys]);
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
     }
 
     pushObjectProperty(prop, propRef) {
       if (t.isLiteral(prop.key)) prop.computed = true;
 
-      let pattern = prop.value;
-      let objRef  = t.memberExpression(propRef, prop.key, prop.computed);
+      const pattern = prop.value;
+      const objRef = t.memberExpression(propRef, prop.key, prop.computed);
 
       if (t.isPattern(pattern)) {
         this.push(pattern, objRef);
@@ -184,7 +183,7 @@ export default function ({ types: t }) {
       // only evaluated once
 
       if (pattern.properties.length > 1 && !this.scope.isStatic(objRef)) {
-        let temp = this.scope.generateUidIdentifierBasedOnNode(objRef);
+        const temp = this.scope.generateUidIdentifierBasedOnNode(objRef);
         this.nodes.push(this.buildVariableDeclaration(temp, objRef));
         objRef = temp;
       }
@@ -192,8 +191,8 @@ export default function ({ types: t }) {
       //
 
       for (let i = 0; i < pattern.properties.length; i++) {
-        let prop = pattern.properties[i];
-        if (t.isRestProperty(prop)) {
+        const prop = pattern.properties[i];
+        if (t.isRestElement(prop)) {
           this.pushObjectRest(pattern, objRef, prop, i);
         } else {
           this.pushObjectProperty(prop, objRef);
@@ -210,7 +209,7 @@ export default function ({ types: t }) {
       if (pattern.elements.length > arr.elements.length) return;
       if (pattern.elements.length < arr.elements.length && !hasRest(pattern)) return false;
 
-      for (let elem of (pattern.elements: Array)) {
+      for (const elem of (pattern.elements: Array)) {
         // deopt on holes
         if (!elem) return false;
 
@@ -218,7 +217,7 @@ export default function ({ types: t }) {
         if (t.isMemberExpression(elem)) return false;
       }
 
-      for (let elem of (arr.elements: Array)) {
+      for (const elem of (arr.elements: Array)) {
         // deopt on spread elements
         if (t.isSpreadElement(elem)) return false;
 
@@ -230,15 +229,15 @@ export default function ({ types: t }) {
       }
 
       // deopt on reference to left side identifiers
-      let bindings = t.getBindingIdentifiers(pattern);
-      let state = { deopt: false, bindings };
+      const bindings = t.getBindingIdentifiers(pattern);
+      const state = { deopt: false, bindings };
       this.scope.traverse(arr, arrayUnpackVisitor, state);
       return !state.deopt;
     }
 
     pushUnpackedArrayPattern(pattern, arr) {
       for (let i = 0; i < pattern.elements.length; i++) {
-        let elem = pattern.elements[i];
+        const elem = pattern.elements[i];
         if (t.isRestElement(elem)) {
           this.push(elem.argument, t.arrayExpression(arr.elements.slice(i)));
         } else {
@@ -264,13 +263,13 @@ export default function ({ types: t }) {
       // if we have a rest then we need all the elements so don't tell
       // `scope.toArray` to only get a certain amount
 
-      let count = !hasRest(pattern) && pattern.elements.length;
+      const count = !hasRest(pattern) && pattern.elements.length;
 
       // so we need to ensure that the `arrayRef` is an array, `scope.toArray` will
       // return a locally bound identifier if it's been inferred to be an array,
       // otherwise it'll be a call to a helper that will ensure it's one
 
-      let toArray = this.toArray(arrayRef, count);
+      const toArray = this.toArray(arrayRef, count);
 
       if (t.isIdentifier(toArray)) {
         // we've been given an identifier so it must have been inferred to be an
@@ -294,10 +293,8 @@ export default function ({ types: t }) {
 
         if (t.isRestElement(elem)) {
           elemRef = this.toArray(arrayRef);
-
-          if (i > 0) {
-            elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.numericLiteral(i)]);
-          }
+          elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")),
+            [t.numericLiteral(i)]);
 
           // set the element to the rest element argument since we've dealt with it
           // being a rest already
@@ -315,7 +312,7 @@ export default function ({ types: t }) {
       // need to save it to a variable
 
       if (!t.isArrayExpression(ref) && !t.isMemberExpression(ref)) {
-        let memo = this.scope.maybeGenerateMemoised(ref, true);
+        const memo = this.scope.maybeGenerateMemoised(ref, true);
         if (memo) {
           this.nodes.push(this.buildVariableDeclaration(memo, ref));
           ref = memo;
@@ -334,14 +331,14 @@ export default function ({ types: t }) {
   return {
     visitor: {
       ExportNamedDeclaration(path) {
-        let declaration = path.get("declaration");
+        const declaration = path.get("declaration");
         if (!declaration.isVariableDeclaration()) return;
         if (!variableDeclarationHasPattern(declaration.node)) return;
 
-        let specifiers = [];
+        const specifiers = [];
 
-        for (let name in path.getOuterBindingIdentifiers(path)) {
-          let id = t.identifier(name);
+        for (const name in path.getOuterBindingIdentifiers(path)) {
+          const id = t.identifier(name);
           specifiers.push(t.exportSpecifier(id, id));
         }
 
@@ -353,22 +350,22 @@ export default function ({ types: t }) {
       },
 
       ForXStatement(path, file) {
-        let { node, scope } = path;
-        let left = node.left;
+        const { node, scope } = path;
+        const left = node.left;
 
         if (t.isPattern(left)) {
           // for ({ length: k } in { abc: 3 });
 
-          let temp = scope.generateUidIdentifier("ref");
+          const temp = scope.generateUidIdentifier("ref");
 
           node.left = t.variableDeclaration("var", [
-            t.variableDeclarator(temp)
+            t.variableDeclarator(temp),
           ]);
 
           path.ensureBlock();
 
           node.body.body.unshift(t.variableDeclaration("var", [
-            t.variableDeclarator(left, temp)
+            t.variableDeclarator(left, temp),
           ]));
 
           return;
@@ -376,45 +373,45 @@ export default function ({ types: t }) {
 
         if (!t.isVariableDeclaration(left)) return;
 
-        let pattern = left.declarations[0].id;
+        const pattern = left.declarations[0].id;
         if (!t.isPattern(pattern)) return;
 
-        let key = scope.generateUidIdentifier("ref");
+        const key = scope.generateUidIdentifier("ref");
         node.left = t.variableDeclaration(left.kind, [
-          t.variableDeclarator(key, null)
+          t.variableDeclarator(key, null),
         ]);
 
-        let nodes = [];
+        const nodes = [];
 
-        let destructuring = new DestructuringTransformer({
+        const destructuring = new DestructuringTransformer({
           kind: left.kind,
           file: file,
           scope: scope,
-          nodes: nodes
+          nodes: nodes,
         });
 
         destructuring.init(pattern, key);
 
         path.ensureBlock();
 
-        let block = node.body;
+        const block = node.body;
         block.body = nodes.concat(block.body);
       },
 
       CatchClause({ node, scope }, file) {
-        let pattern = node.param;
+        const pattern = node.param;
         if (!t.isPattern(pattern)) return;
 
-        let ref = scope.generateUidIdentifier("ref");
+        const ref = scope.generateUidIdentifier("ref");
         node.param = ref;
 
-        let nodes = [];
+        const nodes = [];
 
-        let destructuring = new DestructuringTransformer({
+        const destructuring = new DestructuringTransformer({
           kind: "let",
           file: file,
           scope: scope,
-          nodes: nodes
+          nodes: nodes,
         });
         destructuring.init(pattern, ref);
 
@@ -422,16 +419,16 @@ export default function ({ types: t }) {
       },
 
       AssignmentExpression(path, file) {
-        let { node, scope } = path;
+        const { node, scope } = path;
         if (!t.isPattern(node.left)) return;
 
-        let nodes = [];
+        const nodes = [];
 
-        let destructuring = new DestructuringTransformer({
+        const destructuring = new DestructuringTransformer({
           operator: node.operator,
           file: file,
           scope: scope,
-          nodes: nodes
+          nodes: nodes,
         });
 
         let ref;
@@ -439,7 +436,7 @@ export default function ({ types: t }) {
           ref = scope.generateUidIdentifierBasedOnNode(node.right, "ref");
 
           nodes.push(t.variableDeclaration("var", [
-            t.variableDeclarator(ref, node.right)
+            t.variableDeclarator(ref, node.right),
           ]));
 
           if (t.isArrayExpression(node.right)) {
@@ -457,26 +454,26 @@ export default function ({ types: t }) {
       },
 
       VariableDeclaration(path, file) {
-        let { node, scope, parent } = path;
+        const { node, scope, parent } = path;
         if (t.isForXStatement(parent)) return;
         if (!parent || !path.container) return; // i don't know why this is necessary - TODO
         if (!variableDeclarationHasPattern(node)) return;
 
-        let nodes = [];
+        const nodes = [];
         let declar;
 
         for (let i = 0; i < node.declarations.length; i++) {
           declar = node.declarations[i];
 
-          let patternId = declar.init;
-          let pattern   = declar.id;
+          const patternId = declar.init;
+          const pattern = declar.id;
 
-          let destructuring = new DestructuringTransformer({
+          const destructuring = new DestructuringTransformer({
             blockHoist: node._blockHoist,
-            nodes:      nodes,
-            scope:      scope,
-            kind:       node.kind,
-            file:       file
+            nodes: nodes,
+            scope: scope,
+            kind: node.kind,
+            file: file,
           });
 
           if (t.isPattern(pattern)) {
@@ -488,14 +485,18 @@ export default function ({ types: t }) {
               t.inherits(nodes[nodes.length - 1], declar);
             }
           } else {
-            nodes.push(t.inherits(destructuring.buildVariableAssignment(declar.id, declar.init), declar));
+            nodes.push(t.inherits(
+              destructuring.buildVariableAssignment(declar.id, declar.init), declar));
           }
         }
 
         const nodesOut = [];
         for (const node of nodes) {
           const tail = nodesOut[nodesOut.length - 1];
-          if (tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) && tail.kind === node.kind) {
+          if (
+            tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) &&
+            tail.kind === node.kind
+          ) {
             // Create a single compound let/var rather than many.
             tail.declarations.push(...node.declarations);
           } else {
@@ -509,7 +510,7 @@ export default function ({ types: t }) {
         for (const nodeOut of nodesOut) {
           if (!nodeOut.declarations) continue;
           for (const declaration of nodeOut.declarations) {
-            const {name} = declaration.id;
+            const { name } = declaration.id;
             if (scope.bindings[name]) {
               scope.bindings[name].kind = nodeOut.kind;
             }
@@ -521,7 +522,7 @@ export default function ({ types: t }) {
         } else {
           path.replaceWithMultiple(nodesOut);
         }
-      }
-    }
+      },
+    },
   };
 }

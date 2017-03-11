@@ -1,6 +1,5 @@
 import assert from "assert";
 import OptionManager from "../lib/transformation/file/options/option-manager";
-import Logger from "../lib/transformation/file/logger";
 import path from "path";
 
 describe("option-manager", () => {
@@ -17,9 +16,9 @@ describe("option-manager", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          let opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager();
           opt.init({
-            "randomOption": true
+            "randomOption": true,
           });
         },
         /Unknown option: base.randomOption/
@@ -29,12 +28,13 @@ describe("option-manager", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          let opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager();
           opt.init({
             "auxiliaryComment": true,
-            "blacklist": true
+            "blacklist": true,
           });
         },
+        // eslint-disable-next-line max-len
         /Using removed Babel 5 option: base.auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/
       );
     });
@@ -42,24 +42,12 @@ describe("option-manager", () => {
     it("throws for resolved but erroring preset", () => {
       return assert.throws(
         () => {
-          let opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager();
           opt.init({
-            "presets": [path.join(__dirname, "fixtures/option-manager/not-a-preset")]
+            "presets": [path.join(__dirname, "fixtures/option-manager/not-a-preset")],
           });
         },
         /While processing preset: .*option-manager(?:\/|\\\\)not-a-preset\.js/
-      );
-    });
-
-    it("throws for invalid preset configuration", function() {
-      return assert.throws(
-        function () {
-          let opt = new OptionManager(new Logger(null, "unknown"));
-          opt.init({
-            "presets": [{ option: "value" }]
-          });
-        },
-        /Unknown option: foreign.option\.(?:.|\n)+A common cause of this error is the presence of a configuration options object without the corresponding preset name/
       );
     });
   });
@@ -67,9 +55,9 @@ describe("option-manager", () => {
   describe("presets", function () {
     function presetTest(name) {
       it(name, function () {
-        let opt = new OptionManager(new Logger(null, "unknown"));
-        let options = opt.init({
-          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)]
+        const opt = new OptionManager();
+        const options = opt.init({
+          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
         });
 
         assert.equal(true, Array.isArray(options.plugins));
@@ -77,14 +65,22 @@ describe("option-manager", () => {
       });
     }
 
-    presetTest("es5");
-    presetTest("es5_function");
-    presetTest("es2015_default");
-    presetTest("es2015_default_function");
-    presetTest("es2015_default_object_function");
-    presetTest("es2015_function");
-    presetTest("es2015_function_fallback");
-    presetTest("es2015_named");
+    function presetThrowsTest(name, msg) {
+      it(name, function () {
+        const opt = new OptionManager();
+        assert.throws(() => opt.init({
+          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
+        }), msg);
+      });
+    }
 
+    presetTest("es5_function");
+    presetTest("es5_object");
+    presetTest("es2015_default_function");
+    presetTest("es2015_default_object");
+
+    presetThrowsTest("es2015_named", /Preset must export a default export when using ES6 modules/);
+    presetThrowsTest("es2015_invalid", /Unsupported preset format: string/);
+    presetThrowsTest("es5_invalid", /Unsupported preset format: string/);
   });
 });

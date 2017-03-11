@@ -1,4 +1,3 @@
-import pathIsAbsolute from "path-is-absolute";
 import commander from "commander";
 import Module from "module";
 import { inspect } from "util";
@@ -7,11 +6,12 @@ import repl from "repl";
 import { util } from "babel-core";
 import * as babel from "babel-core";
 import vm from "vm";
-import _ from "lodash";
 import "babel-polyfill";
 import register from "babel-register";
 
-let program = new commander.Command("babel-node");
+import pkg from "../package.json";
+
+const program = new commander.Command("babel-node");
 
 program.option("-e, --eval [script]", "Evaluate script");
 program.option("-p, --print [code]", "Evaluate script and print result");
@@ -21,7 +21,6 @@ program.option("-x, --extensions [extensions]", "List of extensions to hook into
 program.option("-w, --plugins [string]", "", util.list);
 program.option("-b, --presets [string]", "", util.list);
 
-let pkg = require("../package.json");
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
@@ -30,15 +29,15 @@ program.parse(process.argv);
 
 register({
   extensions: program.extensions,
-  ignore:     program.ignore,
-  only:       program.only,
-  plugins:    program.plugins,
-  presets:    program.presets,
+  ignore: program.ignore,
+  only: program.only,
+  plugins: program.plugins,
+  presets: program.presets,
 });
 
 //
 
-let replPlugin = ({ types: t }) => ({
+const replPlugin = ({ types: t }) => ({
   visitor: {
     ModuleDeclaration(path) {
       throw path.buildCodeFrameError("Modules aren't supported in the REPL");
@@ -56,24 +55,24 @@ let replPlugin = ({ types: t }) => ({
       // If the executed code doesn't evaluate to a value,
       // prevent implicit strict mode from printing 'use strict'.
       path.pushContainer("body", t.expressionStatement(t.identifier("undefined")));
-    }
-  }
+    },
+  },
 });
 
 //
 
-let _eval = function (code, filename) {
+const _eval = function (code, filename) {
   code = code.trim();
   if (!code) return undefined;
 
   code = babel.transform(code, {
     filename: filename,
     presets: program.presets,
-    plugins: (program.plugins || []).concat([replPlugin])
+    plugins: (program.plugins || []).concat([replPlugin]),
   }).code;
 
   return vm.runInThisContext(code, {
-    filename: filename
+    filename: filename,
   });
 };
 
@@ -84,17 +83,17 @@ if (program.eval || program.print) {
   global.__filename = "[eval]";
   global.__dirname = process.cwd();
 
-  let module = new Module(global.__filename);
+  const module = new Module(global.__filename);
   module.filename = global.__filename;
-  module.paths    = Module._nodeModulePaths(global.__dirname);
+  module.paths = Module._nodeModulePaths(global.__dirname);
 
   global.exports = module.exports;
-  global.module  = module;
+  global.module = module;
   global.require = module.require.bind(module);
 
-  let result = _eval(code, global.__filename);
+  const result = _eval(code, global.__filename);
   if (program.print) {
-    let output = _.isString(result) ? result : inspect(result);
+    const output = typeof result === "string" ? result : inspect(result);
     process.stdout.write(output + "\n");
   }
 } else {
@@ -104,27 +103,27 @@ if (program.eval || program.print) {
 
     let i = 0;
     let ignoreNext = false;
-    _.each(args, function (arg, i2) {
+    args.some(function (arg, i2) {
       if (ignoreNext) {
         ignoreNext = false;
         return;
       }
 
       if (arg[0] === "-") {
-        let parsedArg = program[arg.slice(2)];
+        const parsedArg = program[arg.slice(2)];
         if (parsedArg && parsedArg !== true) {
           ignoreNext = true;
         }
       } else {
         i = i2;
-        return false;
+        return true;
       }
     });
     args = args.slice(i);
 
     // make the filename absolute
-    let filename = args[0];
-    if (!pathIsAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
+    const filename = args[0];
+    if (!path.isAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
 
     // add back on node and concat the sliced args
     process.argv = ["node"].concat(args);
@@ -142,7 +141,7 @@ function replStart() {
     input: process.stdin,
     output: process.stdout,
     eval: replEval,
-    useGlobal: true
+    useGlobal: true,
   });
 }
 

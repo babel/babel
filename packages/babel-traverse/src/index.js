@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
 import * as messages from "babel-messages";
@@ -38,19 +36,26 @@ traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
 traverse.NodePath = require("./path");
-traverse.Scope    = require("./scope");
-traverse.Hub      = require("./hub");
+traverse.Scope = require("./scope");
+traverse.Hub = require("./hub");
 
 traverse.cheap = function (node, enter) {
   return t.traverseFast(node, enter);
 };
 
-traverse.node = function (node: Object, opts: Object, scope: Object, state: Object, parentPath: Object, skipKeys?) {
-  let keys: Array = t.VISITOR_KEYS[node.type];
+traverse.node = function (
+  node: Object,
+  opts: Object,
+  scope: Object,
+  state: Object,
+  parentPath: Object,
+  skipKeys?
+) {
+  const keys: Array = t.VISITOR_KEYS[node.type];
   if (!keys) return;
 
-  let context = new TraversalContext(scope, opts, state, parentPath);
-  for (let key of keys) {
+  const context = new TraversalContext(scope, opts, state, parentPath);
+  for (const key of keys) {
     if (skipKeys && skipKeys[key]) continue;
     if (context.visit(node, key)) return;
   }
@@ -74,21 +79,26 @@ function hasBlacklistedType(path, state) {
   }
 }
 
-traverse.hasType = function (tree: Object, scope: Object, type: Object, blacklistTypes: Array<string>): boolean {
+traverse.hasType = function (
+  tree: Object,
+  scope: Object,
+  type: Object,
+  blacklistTypes: Array<string>
+): boolean {
   // the node we're searching in is blacklisted
   if (includes(blacklistTypes, tree.type)) return false;
 
   // the type we're looking for is the same as the passed node
   if (tree.type === type) return true;
 
-  let state = {
-    has:  false,
-    type: type
+  const state = {
+    has: false,
+    type: type,
   };
 
   traverse(tree, {
     blacklist: blacklistTypes,
-    enter: hasBlacklistedType
+    enter: hasBlacklistedType,
   }, scope, state);
 
   return state.has;

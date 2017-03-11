@@ -1,15 +1,15 @@
 import type File from "./index";
 import buildDebug from "debug";
 
-let verboseDebug = buildDebug("babel:verbose");
-let generalDebug = buildDebug("babel");
+const verboseDebug = buildDebug("babel:verbose");
+const generalDebug = buildDebug("babel");
 
-let seenDeprecatedMessages = [];
+const seenDeprecatedMessages = [];
 
 export default class Logger {
   constructor(file: File, filename: string) {
     this.filename = filename;
-    this.file     = file;
+    this.file = file;
   }
 
   filename: string;
@@ -19,6 +19,15 @@ export default class Logger {
     let parts = `[BABEL] ${this.filename}`;
     if (msg) parts += `: ${msg}`;
     return parts;
+  }
+
+  wrap<T>(callback: () => T): T {
+    try {
+      return callback();
+    } catch (e) {
+      e.message = this._buildMessage(e.message);
+      throw e;
+    }
   }
 
   warn(msg: string) {

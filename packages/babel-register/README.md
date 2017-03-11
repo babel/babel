@@ -25,7 +25,8 @@ and `.js` will be transformed by Babel.
 <blockquote class="babel-callout babel-callout-info">
   <h4>Polyfill not included</h4>
   <p>
-    You must include the <a href="/docs/usage/polyfill">polyfill</a> separately when using features that require it, like generators.
+    You must include the <a href="https://babeljs.io/docs/usage/polyfill/">polyfill</a> separately
+    when using features that require it, like generators.
   </p>
 </blockquote>
 
@@ -52,7 +53,7 @@ require("babel-register")({
 
   // Ignore can also be specified as a function.
   ignore: function(filename) {
-    if (filename === '/path/to/es6-file.js') {
+    if (filename === "/path/to/es6-file.js") {
       return false;
     } else {
       return true;
@@ -69,7 +70,9 @@ require("babel-register")({
 });
 ```
 
-You can pass in all other [options](/docs/usage/options/#options) as well, including `plugins` and `presets`. But note that the closest [`.babelrc`](/docs/usage/babelrc/) to each file still applies, and takes precedence over any options you pass in here.
+You can pass in all other [options](https://babeljs.io/docs/usage/api/#options) as well,
+including `plugins` and `presets`. But note that the closest [`.babelrc`](https://babeljs.io/docs/usage/babelrc/)
+to each file still applies, and takes precedence over any options you pass in here.
 
 ## Environment variables
 

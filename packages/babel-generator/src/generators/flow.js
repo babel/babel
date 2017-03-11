@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 export function AnyTypeAnnotation() {
   this.word("any");
 }
@@ -81,7 +79,7 @@ export function DeclareVariable(node: Object) {
   this.semicolon();
 }
 
-export function ExistentialTypeParam() {
+export function ExistsTypeAnnotation() {
   this.token("*");
 }
 
@@ -148,10 +146,12 @@ export function _interfaceish(node: Object) {
 }
 
 export function _variance(node) {
-  if (node.variance === "plus") {
-    this.token("+");
-  } else if (node.variance === "minus") {
-    this.token("-");
+  if (node.variance) {
+    if (node.variance.kind === "plus") {
+      this.token("+");
+    } else if (node.variance.kind === "minus") {
+      this.token("-");
+    }
   }
 }
 
@@ -185,7 +185,7 @@ export function NullableTypeAnnotation(node: Object) {
 }
 
 export {
-  NumericLiteral as NumericLiteralTypeAnnotation,
+  NumericLiteral as NumberLiteralTypeAnnotation,
   StringLiteral as StringLiteralTypeAnnotation,
 } from "./types";
 
@@ -264,7 +264,7 @@ export function ObjectTypeAnnotation(node: Object) {
     this.token("{");
   }
 
-  let props = node.properties.concat(node.callProperties, node.indexers);
+  const props = node.properties.concat(node.callProperties, node.indexers);
 
   if (props.length) {
     this.space();
@@ -277,14 +277,10 @@ export function ObjectTypeAnnotation(node: Object) {
       statement: true,
       iterator: () => {
         if (props.length !== 1) {
-          if (this.format.flowCommaSeparator) {
-            this.token(",");
-          } else {
-            this.semicolon();
-          }
+          this.token(",");
           this.space();
         }
-      }
+      },
     });
 
     this.space();

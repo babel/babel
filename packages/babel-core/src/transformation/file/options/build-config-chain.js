@@ -1,20 +1,18 @@
-
-import type Logger from "../logger";
 import resolve from "../../../helpers/resolve";
 import json5 from "json5";
-import isAbsolute from "path-is-absolute";
 import path from "path";
 import fs from "fs";
 
-let existsCache = {};
-let jsonCache   = {};
+const existsCache = {};
+const jsonCache = {};
 
+const BABELRC_FILENAME = ".babelrc";
+const BABELRC_JS_FILENAME = ".babelrc.js";
+const PACKAGE_FILENAME = "package.json";
 const BABELIGNORE_FILENAME = ".babelignore";
-const BABELRC_FILENAME     = ".babelrc";
-const PACKAGE_FILENAME     = "package.json";
 
 function exists(filename) {
-  let cached = existsCache[filename];
+  const cached = existsCache[filename];
   if (cached == null) {
     return existsCache[filename] = fs.existsSync(filename);
   } else {
@@ -22,9 +20,9 @@ function exists(filename) {
   }
 }
 
-export default function buildConfigChain(opts: Object = {}, log?: Logger) {
-  let filename = opts.filename;
-  let builder = new ConfigChainBuilder(log);
+export default function buildConfigChain(opts: Object = {}) {
+  const filename = opts.filename;
+  const builder = new ConfigChainBuilder();
 
   // resolve all .babelrc files
   if (opts.babelrc !== false) {
@@ -34,23 +32,27 @@ export default function buildConfigChain(opts: Object = {}, log?: Logger) {
   builder.mergeConfig({
     options: opts,
     alias: "base",
-    dirname: filename && path.dirname(filename)
+    dirname: filename && path.dirname(filename),
   });
 
   return builder.configs;
 }
 
 class ConfigChainBuilder {
-  constructor(log?: Logger) {
+  constructor() {
     this.resolvedConfigs = [];
     this.configs = [];
-    this.log = log;
   }
 
-  findConfigs(loc) {
+  errorMultipleConfigs(loc1: string, loc2: string) {
+    throw new Error(`Multiple configuration files found. Please remove one:\n- ${
+      loc1}\n- ${loc2}`);
+  }
+
+  findConfigs(loc: string) {
     if (!loc) return;
 
-    if (!isAbsolute(loc)) {
+    if (!path.isAbsolute(loc)) {
       loc = path.join(process.cwd(), loc);
     }
 
@@ -59,20 +61,31 @@ class ConfigChainBuilder {
 
     while (loc !== (loc = path.dirname(loc))) {
       if (!foundConfig) {
-        let configLoc = path.join(loc, BABELRC_FILENAME);
-        if (exists(configLoc)) {
-          this.addConfig(configLoc);
-          foundConfig = true;
-        }
+        const configLoc = path.join(loc, BABELRC_FILENAME);
+        const configJSLoc = path.join(loc, BABELRC_JS_FILENAME);
+        const pkgLoc = path.join(loc, PACKAGE_FILENAME);
+        const configLocs = [configLoc, configJSLoc, pkgLoc];
+        const foundConfigs = configLocs.reduce((arr, config) => {
+          if (exists(config)) {
+            const configAdded = config === pkgLoc
+              ? this.addConfig(config, "babel", JSON)
+              : this.addConfig(config);
 
-        let pkgLoc = path.join(loc, PACKAGE_FILENAME);
-        if (!foundConfig && exists(pkgLoc)) {
-          foundConfig = this.addConfig(pkgLoc, "babel", JSON);
-        }
+            if (configAdded && arr.length) {
+              this.errorMultipleConfigs(arr.pop(), config);
+            }
+
+            arr.push(config);
+          }
+
+          return arr;
+        }, []);
+
+        foundConfig = !!foundConfigs.length;
       }
 
       if (!foundIgnore) {
-        let ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
+        const ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
         if (exists(ignoreLoc)) {
           this.addIgnoreConfig(ignoreLoc);
           foundIgnore = true;
@@ -83,8 +96,8 @@ class ConfigChainBuilder {
     }
   }
 
-  addIgnoreConfig(loc) {
-    let file  = fs.readFileSync(loc, "utf8");
+  addIgnoreConfig(loc: string) {
+    const file = fs.readFileSync(loc, "utf8");
     let lines = file.split("\n");
 
     lines = lines
@@ -95,7 +108,7 @@ class ConfigChainBuilder {
       this.mergeConfig({
         options: { ignore: lines },
         alias: loc,
-        dirname: path.dirname(loc)
+        dirname: path.dirname(loc),
       });
     }
   }
@@ -107,21 +120,41 @@ class ConfigChainBuilder {
 
     this.resolvedConfigs.push(loc);
 
-    let content = fs.readFileSync(loc, "utf8");
     let options;
+    if (path.extname(loc) === ".js") {
+      try {
+        const configModule = require(loc);
+        options = configModule && configModule.__esModule ? configModule.default : configModule;
+      } catch (err) {
+        err.message = `${loc}: Error while loading config - ${err.message}`;
+        throw err;
+      }
 
-    try {
-      options = jsonCache[content] = jsonCache[content] || json.parse(content);
-      if (key) options = options[key];
-    } catch (err) {
-      err.message = `${loc}: Error while parsing JSON - ${err.message}`;
-      throw err;
+      if (!options || typeof options !== "object") {
+        throw new Error("Configuration should be an exported JavaScript object.");
+      }
+    } else {
+      const content = fs.readFileSync(loc, "utf8");
+      try {
+        options = jsonCache[content] = jsonCache[content] || json.parse(content);
+      } catch (err) {
+        err.message = `${loc}: Error while parsing JSON - ${err.message}`;
+        throw err;
+      }
+    }
+
+    if (key) {
+      if (!options[key]) {
+        return false;
+      }
+
+      options = options[key];
     }
 
     this.mergeConfig({
       options,
       alias: loc,
-      dirname: path.dirname(loc)
+      dirname: path.dirname(loc),
     });
 
     return !!options;
@@ -131,7 +164,7 @@ class ConfigChainBuilder {
     options,
     alias,
     loc,
-    dirname
+    dirname,
   }) {
     if (!options) {
       return false;
@@ -144,11 +177,11 @@ class ConfigChainBuilder {
 
     // add extends clause
     if (options.extends) {
-      let extendsLoc = resolve(options.extends, dirname);
+      const extendsLoc = resolve(options.extends, dirname);
       if (extendsLoc) {
         this.addConfig(extendsLoc);
       } else {
-        if (this.log) this.log.error(`Couldn't resolve extends clause of ${options.extends} in ${alias}`);
+        throw new Error(`Couldn't resolve extends clause of ${options.extends} in ${alias}`);
       }
       delete options.extends;
     }
@@ -157,12 +190,12 @@ class ConfigChainBuilder {
       options,
       alias,
       loc,
-      dirname
+      dirname,
     });
 
     // env
     let envOpts;
-    let envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
+    const envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
     if (options.env) {
       envOpts = options.env[envKey];
       delete options.env;
@@ -171,7 +204,7 @@ class ConfigChainBuilder {
     this.mergeConfig({
       options: envOpts,
       alias: `${alias}.env.${envKey}`,
-      dirname: dirname
+      dirname: dirname,
     });
   }
 }

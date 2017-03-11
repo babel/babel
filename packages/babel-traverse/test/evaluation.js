@@ -1,15 +1,15 @@
-let traverse = require("../lib").default;
-let assert = require("assert");
-let parse = require("babylon").parse;
+const traverse = require("../lib").default;
+const assert = require("assert");
+const parse = require("babylon").parse;
 
 function getPath(code) {
-  let ast = parse(code);
+  const ast = parse(code);
   let path;
   traverse(ast, {
     Program: function (_path) {
       path = _path;
       _path.stop();
-    }
+    },
   });
   return path;
 }
@@ -33,7 +33,8 @@ describe("evaluation", function () {
 
   it("should bail out on recursive evaluation", function () {
     assert.strictEqual(
-      getPath("function fn(a) { var g = a ? 1 : 2, a = g * this.foo; }").get("body.0.body.body.0.declarations.1.init").evaluate().confident,
+      getPath("function fn(a) { var g = a ? 1 : 2, a = g * this.foo; }")
+        .get("body.0.body.body.0.declarations.1.init").evaluate().confident,
       false
     );
   });
@@ -54,7 +55,8 @@ describe("evaluation", function () {
 
   it("should deopt when var is redeclared in the same scope", function () {
     assert.strictEqual(
-      getPath("var x = 2; var y = x + 2; { var x = 3 }").get("body.1.declarations.0.init").evaluate().confident,
+      getPath("var x = 2; var y = x + 2; { var x = 3 }")
+        .get("body.1.declarations.0.init").evaluate().confident,
       false
     );
   });
@@ -73,7 +75,8 @@ describe("evaluation", function () {
 
   it("it should not deopt let/const inside blocks", function () {
     assert.strictEqual(
-      getPath("let x = 5; { let x = 1; } let y = x + 5").get("body.2.declarations.0.init").evaluate().value,
+      getPath("let x = 5; { let x = 1; } let y = x + 5")
+        .get("body.2.declarations.0.init").evaluate().value,
       10
     );
     const constExample = "const d = true; if (d && true || false) { const d = false; d && 5; }";
@@ -97,5 +100,23 @@ describe("evaluation", function () {
         .get("body.0.test").evaluate().confident,
       false
     );
+  });
+
+  it("should evaluate undefined, NaN and Infinity", () => {
+    assert.strictEqual(getPath("undefined").get("body.0.expression").evaluate().confident, true);
+    assert.strictEqual(getPath("NaN").get("body.0.expression").evaluate().confident, true);
+    assert.strictEqual(getPath("Infinity").get("body.0.expression").evaluate().confident, true);
+  });
+
+  it("should deopt redefined primitives - undefined, NaN and Infinity", () => {
+    const eval_undef = getPath("let undefined; undefined;").get("body.1.expression").evaluate();
+    const eval_nan = getPath("let NaN; NaN;").get("body.1.expression").evaluate();
+    const eval_inf = getPath("let Infinity; Infinity;").get("body.1.expression").evaluate();
+    assert.strictEqual(eval_undef.confident, false);
+    assert.strictEqual(eval_nan.confident, false);
+    assert.strictEqual(eval_inf.confident, false);
+
+    assert.strictEqual(eval_undef.deopt.type, "VariableDeclarator");
+    assert.strictEqual(eval_undef.deopt.parentPath.node.kind, "let");
   });
 });

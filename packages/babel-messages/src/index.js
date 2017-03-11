@@ -1,4 +1,4 @@
-/* eslint max-len: 0 */
+/* eslint max-len: "off" */
 
 import * as util from "util";
 
@@ -40,7 +40,7 @@ export const MESSAGES = {
   pluginNotObject: "Plugin $2 specified in $1 was expected to return an object when invoked but returned $3",
   pluginNotFunction: "Plugin $2 specified in $1 was expected to return a function but returned $3",
   pluginUnknown: "Unknown plugin $1 specified in $2 at $3, attempted to resolve relative to $4",
-  pluginInvalidProperty: "Plugin $2 specified in $1 provided an invalid property of $3"
+  pluginInvalidProperty: "Plugin $2 specified in $1 provided an invalid property of $3",
 };
 
 /**
@@ -48,7 +48,7 @@ export const MESSAGES = {
  */
 
 export function get(key: string, ...args: Array<any>): string {
-  let msg = MESSAGES[key];
+  const msg = MESSAGES[key];
   if (!msg) throw new ReferenceError(`Unknown message ${JSON.stringify(key)}`);
 
   // stringify args

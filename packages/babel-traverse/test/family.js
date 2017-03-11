@@ -1,10 +1,10 @@
-let traverse = require("../lib").default;
-let assert = require("assert");
-let parse = require("babylon").parse;
+const traverse = require("../lib").default;
+const assert = require("assert");
+const parse = require("babylon").parse;
 
 describe("path/family", function () {
   describe("getBindingIdentifiers", function () {
-    let ast = parse("var a = 1, {b} = c, [d] = e; function f() {}");
+    const ast = parse("var a = 1, {b} = c, [d] = e; function f() {}");
     let nodes = {}, paths = {}, outerNodes = {}, outerPaths = {};
     traverse(ast, {
       VariableDeclaration(path) {
@@ -14,7 +14,7 @@ describe("path/family", function () {
       FunctionDeclaration(path) {
         outerNodes = path.getOuterBindingIdentifiers();
         outerPaths = path.getOuterBindingIdentifierPaths();
-      }
+      },
     });
 
     it("should contain keys of nodes in paths", function () {
@@ -51,6 +51,31 @@ describe("path/family", function () {
       Object.keys(outerNodes).forEach((id) => {
         assert.strictEqual(outerNodes[id], outerPaths[id].node, "nodes match");
       });
+    });
+
+  });
+  describe("getSibling", function () {
+    const ast = parse("var a = 1, {b} = c, [d] = e; function f() {} function g() {}");
+    let sibling = {}, lastSibling = {};
+    traverse(ast, {
+      VariableDeclaration(path) {
+        sibling = path.getSibling(path.key);
+        lastSibling = sibling.getNextSibling().getNextSibling();
+      },
+    });
+
+    it("should return traverse sibling nodes", function () {
+      assert.ok(sibling.getNextSibling().node, "has property node");
+      assert.ok(lastSibling.getPrevSibling().node, "has property node");
+      assert.equal(!!sibling.getPrevSibling().node, false, "out of scope");
+      assert.equal(!!lastSibling.getNextSibling().node, false, "out of scope");
+    });
+
+    it("should return all preceding and succeeding sibling nodes", function () {
+      assert.ok(sibling.getAllNextSiblings().length, "Has next sibling");
+      assert.ok(lastSibling.getAllPrevSiblings().length, "Has prev sibling");
+      assert.equal(sibling.getAllNextSiblings().length, 2, "Has 2 succeeding sibling");
+      assert.equal(lastSibling.getAllPrevSiblings().length, 2, "Has 2 preceeding sibling");
     });
   });
 });

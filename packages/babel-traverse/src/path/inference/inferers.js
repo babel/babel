@@ -3,7 +3,7 @@ import * as t from "babel-types";
 export { default as Identifier } from "./inferer-reference";
 
 export function VariableDeclarator() {
-  let id = this.get("id");
+  const id = this.get("id");
 
   if (id.isIdentifier()) {
     return this.get("init").getTypeAnnotation();
@@ -30,7 +30,7 @@ export function TemplateLiteral() {
 }
 
 export function UnaryExpression(node) {
-  let operator = node.operator;
+  const operator = node.operator;
 
   if (operator === "void") {
     return t.voidTypeAnnotation();
@@ -44,15 +44,15 @@ export function UnaryExpression(node) {
 }
 
 export function BinaryExpression(node) {
-  let operator = node.operator;
+  const operator = node.operator;
 
   if (t.NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
     return t.numberTypeAnnotation();
   } else if (t.BOOLEAN_BINARY_OPERATORS.indexOf(operator) >= 0) {
     return t.booleanTypeAnnotation();
   } else if (operator === "+") {
-    let right = this.get("right");
-    let left  = this.get("left");
+    const right = this.get("right");
+    const left = this.get("left");
 
     if (left.isBaseType("number") && right.isBaseType("number")) {
       // both numbers so this will be a number
@@ -65,7 +65,7 @@ export function BinaryExpression(node) {
     // unsure if left and right are strings or numbers so stay on the safe side
     return t.unionTypeAnnotation([
       t.stringTypeAnnotation(),
-      t.numberTypeAnnotation()
+      t.numberTypeAnnotation(),
     ]);
   }
 }
@@ -73,14 +73,14 @@ export function BinaryExpression(node) {
 export function LogicalExpression() {
   return t.createUnionTypeAnnotation([
     this.get("left").getTypeAnnotation(),
-    this.get("right").getTypeAnnotation()
+    this.get("right").getTypeAnnotation(),
   ]);
 }
 
 export function ConditionalExpression() {
   return t.createUnionTypeAnnotation([
     this.get("consequent").getTypeAnnotation(),
-    this.get("alternate").getTypeAnnotation()
+    this.get("alternate").getTypeAnnotation(),
   ]);
 }
 
@@ -93,7 +93,7 @@ export function AssignmentExpression() {
 }
 
 export function UpdateExpression(node) {
-  let operator = node.operator;
+  const operator = node.operator;
   if (operator === "++" || operator === "--") {
     return t.numberTypeAnnotation();
   }
@@ -142,7 +142,7 @@ export {
   Func as ArrowFunctionExpression,
   Func as FunctionDeclaration,
   Func as ClassExpression,
-  Func as ClassDeclaration
+  Func as ClassDeclaration,
 };
 
 export function CallExpression() {

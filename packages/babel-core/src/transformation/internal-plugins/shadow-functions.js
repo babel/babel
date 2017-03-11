@@ -7,12 +7,12 @@ const superVisitor = {
   CallExpression(path) {
     if (!path.get("callee").isSuper()) return;
 
-    const {node} = path;
+    const { node } = path;
     if (node[SUPER_THIS_BOUND]) return;
     node[SUPER_THIS_BOUND] = true;
 
     path.replaceWith(t.assignmentExpression("=", this.id, node));
-  }
+  },
 };
 
 export default new Plugin({
@@ -27,8 +27,8 @@ export default new Plugin({
       if (path.node.name === "arguments") {
         remap(path, "arguments");
       }
-    }
-  }
+    },
+  },
 });
 
 function shouldShadow(path, shadowPath) {
@@ -41,10 +41,10 @@ function shouldShadow(path, shadowPath) {
 
 function remap(path, key) {
   // ensure that we're shadowed
-  let shadowPath = path.inShadow(key);
+  const shadowPath = path.inShadow(key);
   if (!shouldShadow(path, shadowPath)) return;
 
-  let shadowFunction = path.node._shadowedFunctionLiteral;
+  const shadowFunction = path.node._shadowedFunctionLiteral;
 
   let currentFunction;
   let passedShadowFunction = false;
@@ -91,17 +91,17 @@ function remap(path, key) {
   // binding since arrow function syntax already does that.
   if (!passedShadowFunction) return;
 
-  let cached = fnPath.getData(key);
+  const cached = fnPath.getData(key);
   if (cached) return path.replaceWith(cached);
 
-  let id   = path.scope.generateUidIdentifier(key);
+  const id = path.scope.generateUidIdentifier(key);
 
   fnPath.setData(key, id);
 
-  let classPath = fnPath.findParent((p) => p.isClass());
-  let hasSuperClass = !!(classPath && classPath.node && classPath.node.superClass);
+  const classPath = fnPath.findParent((p) => p.isClass());
+  const hasSuperClass = !!(classPath && classPath.node && classPath.node.superClass);
 
-  if (key === "this" && fnPath.isMethod({kind: "constructor"}) && hasSuperClass) {
+  if (key === "this" && fnPath.isMethod({ kind: "constructor" }) && hasSuperClass) {
     fnPath.scope.push({ id });
 
     fnPath.traverse(superVisitor, { id });

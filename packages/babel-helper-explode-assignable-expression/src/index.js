@@ -31,21 +31,21 @@ function getObjRef(node, nodes, file, scope) {
     throw new Error(`We can't explode this node type ${node.type}`);
   }
 
-  let temp = scope.generateUidIdentifierBasedOnNode(ref);
+  const temp = scope.generateUidIdentifierBasedOnNode(ref);
   nodes.push(t.variableDeclaration("var", [
-    t.variableDeclarator(temp, ref)
+    t.variableDeclarator(temp, ref),
   ]));
   return temp;
 }
 
 function getPropRef(node, nodes, file, scope) {
-  let prop = node.property;
-  let key = t.toComputedKey(node, prop);
+  const prop = node.property;
+  const key = t.toComputedKey(node, prop);
   if (t.isLiteral(key) && t.isPureish(key)) return key;
 
-  let temp = scope.generateUidIdentifierBasedOnNode(prop);
+  const temp = scope.generateUidIdentifierBasedOnNode(prop);
   nodes.push(t.variableDeclaration("var", [
-    t.variableDeclarator(temp, prop)
+    t.variableDeclarator(temp, prop),
   ]));
   return temp;
 }
@@ -73,13 +73,13 @@ export default function (
     ref = node;
     uid = obj;
   } else {
-    let prop = getPropRef(node, nodes, file, scope);
-    let computed = node.computed || t.isLiteral(prop);
+    const prop = getPropRef(node, nodes, file, scope);
+    const computed = node.computed || t.isLiteral(prop);
     uid = ref = t.memberExpression(obj, prop, computed);
   }
 
   return {
     uid: uid,
-    ref: ref
+    ref: ref,
   };
 }

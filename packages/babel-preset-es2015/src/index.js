@@ -1,11 +1,3 @@
-/**
- * This file is not the canonical way of writing a Babel preset since it strives for
- * backward compatibility with babel-core < v6.13.x.  If you're looking at it as a
- * reference for how to write a preset, it's probably best to look at the other presets
- * such as babel-preset-es2016 & babel-preset-latest noting that the former example
- * exports via a default object and the latter via a default function.
- */
-
 import transformES2015TemplateLiterals from "babel-plugin-transform-es2015-template-literals";
 import transformES2015Literals from "babel-plugin-transform-es2015-literals";
 import transformES2015FunctionName from "babel-plugin-transform-es2015-function-name";
@@ -31,7 +23,7 @@ import transformES2015ModulesAMD from "babel-plugin-transform-es2015-modules-amd
 import transformES2015ModulesUMD from "babel-plugin-transform-es2015-modules-umd";
 import transformRegenerator from "babel-plugin-transform-regenerator";
 
-function preset(context, opts = {}) {
+export default function (context, opts = {}) {
   const moduleTypes = ["commonjs", "amd", "umd", "systemjs"];
   let loose = false;
   let modules = "commonjs";
@@ -78,28 +70,7 @@ function preset(context, opts = {}) {
       modules === "systemjs" && [transformES2015ModulesSystemJS, optsLoose],
       modules === "amd" && [transformES2015ModulesAMD, optsLoose],
       modules === "umd" && [transformES2015ModulesUMD, optsLoose],
-      [transformRegenerator, { async: false, asyncGenerators: false }]
-    ].filter(Boolean) // filter out falsy values
+      [transformRegenerator, { async: false, asyncGenerators: false }],
+    ].filter(Boolean), // filter out falsy values
   };
 }
-
-/**
- * This preset was originally an object, before function-based configurable presets were introduced.
- * For backward-compatibility with anything that may have been loading this preset and expecting
- * it to be a simple Babel config object, we export the old config here via default object.
- */
-const oldConfig = preset({});
-
-export default oldConfig;
-
-// However, for backward compatibility with babel-core < v6.13.x, we use the 'buildPreset'
-// property of the preset object for the preset creation function with the enumerability
-// caveat mentioned below.
-Object.defineProperty(oldConfig, "buildPreset", {
-  configurable: true,
-  writable: true,
-  // We make this non-enumerable so old versions of babel-core won't see it as an unknown property,
-  // while allowing new versions to see it as a preset builder function.
-  enumerable: false,
-  value: preset,
-});

@@ -6,7 +6,7 @@ import template from "babel-template";
 import * as t from "babel-types";
 import rewriteForAwait from "./for-await";
 
-let buildWrapper = template(`
+const buildWrapper = template(`
   (() => {
     var REF = FUNCTION;
     return function NAME(PARAMS) {
@@ -15,7 +15,7 @@ let buildWrapper = template(`
   })
 `);
 
-let namedBuildWrapper = template(`
+const namedBuildWrapper = template(`
   (() => {
     var REF = FUNCTION;
     function NAME(PARAMS) {
@@ -25,7 +25,7 @@ let namedBuildWrapper = template(`
   })
 `);
 
-let awaitVisitor = {
+const awaitVisitor = {
   Function(path) {
     if (path.isArrowFunctionExpression() && !path.node.async) {
       path.arrowFunctionToShadowed();
@@ -41,16 +41,17 @@ let awaitVisitor = {
     }
   },
 
-  ForAwaitStatement(path, { file, wrapAwait }) {
-    let { node } = path;
+  ForOfStatement(path, { file, wrapAwait }) {
+    const { node } = path;
+    if (!node.await) return;
 
-    let build = rewriteForAwait(path, {
+    const build = rewriteForAwait(path, {
       getAsyncIterator: file.addHelper("asyncIterator"),
-      wrapAwait
+      wrapAwait,
     });
 
-    let { declar, loop } = build;
-    let block = loop.body;
+    const { declar, loop } = build;
+    const block = loop.body;
 
     // ensure that it's a block so we can take all its statements
     path.ensureBlock();
@@ -72,23 +73,23 @@ let awaitVisitor = {
     } else {
       path.replaceWithMultiple(build.node);
     }
-  }
+  },
 
 };
 
 function classOrObjectMethod(path: NodePath, callId: Object) {
-  let node = path.node;
-  let body = node.body;
+  const node = path.node;
+  const body = node.body;
 
   node.async = false;
 
-  let container = t.functionExpression(null, [], t.blockStatement(body.body), true);
+  const container = t.functionExpression(null, [], t.blockStatement(body.body), true);
   container.shadow = true;
   body.body = [
     t.returnStatement(t.callExpression(
       t.callExpression(callId, [container]),
       []
-    ))
+    )),
   ];
 
   // Regardless of whether or not the wrapped function is a an async method
@@ -97,9 +98,9 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
 }
 
 function plainFunction(path: NodePath, callId: Object) {
-  let node = path.node;
-  let isDeclaration = path.isFunctionDeclaration();
-  let asyncFnId = node.id;
+  const node = path.node;
+  const isDeclaration = path.isFunctionDeclaration();
+  const asyncFnId = node.id;
   let wrapper = buildWrapper;
 
   if (path.isArrowFunctionExpression()) {
@@ -117,8 +118,8 @@ function plainFunction(path: NodePath, callId: Object) {
     node.type = "FunctionExpression";
   }
 
-  let built = t.callExpression(callId, [node]);
-  let container = wrapper({
+  const built = t.callExpression(callId, [node]);
+  const container = wrapper({
     NAME: asyncFnId,
     REF: path.scope.generateUidIdentifier("ref"),
     FUNCTION: built,
@@ -137,22 +138,39 @@ function plainFunction(path: NodePath, callId: Object) {
   }).expression;
 
   if (isDeclaration) {
-    let declar = t.variableDeclaration("let", [
+    const declar = t.variableDeclaration("let", [
       t.variableDeclarator(
         t.identifier(asyncFnId.name),
         t.callExpression(container, [])
-      )
+      ),
     ]);
     declar._blockHoist = true;
 
+    if (path.parentPath.isExportDefaultDeclaration()) {
+      // change the path type so that replaceWith() does not wrap
+      // the identifier into an expressionStatement
+      path.parentPath.insertBefore(declar);
+      path.parentPath.replaceWith(
+        t.exportNamedDeclaration(null,
+          [
+            t.exportSpecifier(
+              t.identifier(asyncFnId.name),
+              t.identifier("default")
+            ),
+          ]
+        )
+      );
+      return;
+    }
+
     path.replaceWith(declar);
   } else {
-    let retFunction = container.body.body[1].argument;
+    const retFunction = container.body.body[1].argument;
     if (!asyncFnId) {
       nameFunction({
         node: retFunction,
         parent: path.parent,
-        scope: path.scope
+        scope: path.scope,
       });
     }
 
@@ -174,7 +192,7 @@ export default function (path: NodePath, file: Object, helpers: Object) {
   }
   path.traverse(awaitVisitor, {
     file,
-    wrapAwait: helpers.wrapAwait
+    wrapAwait: helpers.wrapAwait,
   });
 
   if (path.isClassMethod() || path.isObjectMethod()) {

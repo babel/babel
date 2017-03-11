@@ -1,12 +1,10 @@
-/* eslint indent: 0 */
-
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _babel-node(1) executable.
  */
 
-let getV8Flags = require("v8flags");
-let path = require("path");
+import getV8Flags from "v8flags";
+import path from "path";
 
 let args = [path.join(__dirname, "_babel-node")];
 
@@ -14,9 +12,9 @@ let babelArgs = process.argv.slice(2);
 let userArgs;
 
 // separate node arguments from script arguments
-let argSeparator = babelArgs.indexOf("--");
+const argSeparator = babelArgs.indexOf("--");
 if (argSeparator > -1) {
-  userArgs  = babelArgs.slice(argSeparator); // including the  --
+  userArgs = babelArgs.slice(argSeparator); // including the  --
   babelArgs = babelArgs.slice(0, argSeparator);
 }
 
@@ -75,13 +73,13 @@ getV8Flags(function (err, v8Flags) {
   }
 
   try {
-    let kexec = require("kexec");
+    const kexec = require("kexec");
     kexec(process.argv[0], args);
   } catch (err) {
     if (err.code !== "MODULE_NOT_FOUND") throw err;
 
-    let child_process = require("child_process");
-    let proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
+    const child_process = require("child_process");
+    const proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
     proc.on("exit", function (code, signal) {
       process.on("exit", function () {
         if (signal) {
