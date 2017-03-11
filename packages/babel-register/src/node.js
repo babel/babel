@@ -56,7 +56,8 @@ function compile(filename) {
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
-  const env = process.env.BABEL_ENV || process.env.NODE_ENV;
+  const env = babel.getEnv(false);
+
   if (env) cacheKey += `:${env}`;
 
   if (cache) {
