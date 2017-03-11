@@ -14,6 +14,6 @@
     "babel-template": "7.0.0-alpha.1"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-alpha.1"
+    "babel-helper-plugin-test-runner": "^7.0.0-alpha.1"
   }
 }

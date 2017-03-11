@@ -1,5 +1,4 @@
 import * as context from "../../../index";
-import type Logger from "../logger";
 import Plugin from "../../plugin";
 import * as messages from "babel-messages";
 import { normaliseOptions } from "./index";
@@ -35,15 +34,13 @@ type MergeOptions = {
 };
 
 export default class OptionManager {
-  constructor(log?: Logger) {
+  constructor() {
     this.resolvedConfigs = [];
     this.options = OptionManager.createBareOptions();
-    this.log = log;
   }
 
   resolvedConfigs: Array<string>;
   options: Object;
-  log: ?Logger;
 
   static memoisedPlugins: Array<{
     container: Function;
@@ -158,7 +155,7 @@ export default class OptionManager {
 
     //
     if (typeof rawOpts !== "object" || Array.isArray(rawOpts)) {
-      this.log.error(`Invalid options type for ${alias}`, TypeError);
+      throw new TypeError(`Invalid options type for ${alias}`);
     }
 
     //
@@ -176,15 +173,14 @@ export default class OptionManager {
       const option = config[key];
 
       // check for an unknown option
-      if (!option && this.log) {
+      if (!option) {
         if (removed[key]) {
-          this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`,
-            ReferenceError);
+          throw new ReferenceError(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`);
         } else {
           // eslint-disable-next-line max-len
           const unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
 
-          this.log.error(unknownOptErr, ReferenceError);
+          throw new ReferenceError(unknownOptErr);
         }
       }
     }
@@ -333,7 +329,7 @@ export default class OptionManager {
   }
 
   init(opts: Object = {}): Object {
-    for (const config of buildConfigChain(opts, this.log)) {
+    for (const config of buildConfigChain(opts)) {
       this.mergeOptions(config);
     }
 

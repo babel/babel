@@ -1,6 +1,5 @@
 import assert from "assert";
 import OptionManager from "../lib/transformation/file/options/option-manager";
-import Logger from "../lib/transformation/file/logger";
 import path from "path";
 
 describe("option-manager", () => {
@@ -17,7 +16,7 @@ describe("option-manager", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          const opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager();
           opt.init({
             "randomOption": true,
           });
@@ -29,7 +28,7 @@ describe("option-manager", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          const opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager();
           opt.init({
             "auxiliaryComment": true,
             "blacklist": true,
@@ -43,7 +42,7 @@ describe("option-manager", () => {
     it("throws for resolved but erroring preset", () => {
       return assert.throws(
         () => {
-          const opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager();
           opt.init({
             "presets": [path.join(__dirname, "fixtures/option-manager/not-a-preset")],
           });
@@ -56,7 +55,7 @@ describe("option-manager", () => {
   describe("presets", function () {
     function presetTest(name) {
       it(name, function () {
-        const opt = new OptionManager(new Logger(null, "unknown"));
+        const opt = new OptionManager();
         const options = opt.init({
           "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
         });
@@ -68,7 +67,7 @@ describe("option-manager", () => {
 
     function presetThrowsTest(name, msg) {
       it(name, function () {
-        const opt = new OptionManager(new Logger(null, "unknown"));
+        const opt = new OptionManager();
         assert.throws(() => opt.init({
           "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
         }), msg);

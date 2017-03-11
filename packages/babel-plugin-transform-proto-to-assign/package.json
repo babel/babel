@@ -12,6 +12,6 @@
     "lodash": "^4.2.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-alpha.1"
+    "babel-helper-plugin-test-runner": "^7.0.0-alpha.1"
   }
 }

@@ -1,4 +1,3 @@
-import type Logger from "../logger";
 import resolve from "../../../helpers/resolve";
 import json5 from "json5";
 import path from "path";
@@ -21,9 +20,9 @@ function exists(filename) {
   }
 }
 
-export default function buildConfigChain(opts: Object = {}, log?: Logger) {
+export default function buildConfigChain(opts: Object = {}) {
   const filename = opts.filename;
-  const builder = new ConfigChainBuilder(log);
+  const builder = new ConfigChainBuilder();
 
   // resolve all .babelrc files
   if (opts.babelrc !== false) {
@@ -40,10 +39,9 @@ export default function buildConfigChain(opts: Object = {}, log?: Logger) {
 }
 
 class ConfigChainBuilder {
-  constructor(log?: Logger) {
+  constructor() {
     this.resolvedConfigs = [];
     this.configs = [];
-    this.log = log;
   }
 
   errorMultipleConfigs(loc1: string, loc2: string) {
@@ -183,7 +181,7 @@ class ConfigChainBuilder {
       if (extendsLoc) {
         this.addConfig(extendsLoc);
       } else {
-        if (this.log) this.log.error(`Couldn't resolve extends clause of ${options.extends} in ${alias}`);
+        throw new Error(`Couldn't resolve extends clause of ${options.extends} in ${alias}`);
       }
       delete options.extends;
     }
