@@ -109,7 +109,7 @@ Following is a table of the options you can use:
 | `only`                   | `null`               | A [glob](https://github.com/isaacs/minimatch), regex, or mixed array of both, matching paths to **only** compile. Can also be an array of arrays containing paths to explicitly match. When attempting to compile a non-matching file it's returned verbatim. |
 | `parserOpts`             | `{}`                 | An object containing the options to be passed down to the babel parser, babylon |
 | `plugins`                | `[]`                 | List of [plugins](https://babeljs.io/docs/plugins/) to load and use. |
-| `presets`                | `[]`                 | List of [presets](https://babeljs.io/docs/plugins/preset-latest/) (a set of plugins) to load and use. |
+| `presets`                | `[]`                 | List of [presets](https://babeljs.io/docs/plugins/#presets) (a set of plugins) to load and use. |
 | `retainLines`            | `false`              | Retain line numbers. This will lead to wacky code but is handy for scenarios where you can't use source maps. (**NOTE:** This will not retain the columns) |
 | `resolveModuleSource`    | `null`               | Resolve a module source ie. `import "SOURCE";` to a custom value. Called as `resolveModuleSource(source, filename)`. |
 | `shouldPrintComment`     | `null`               | An optional callback that controls whether a comment should be output or not. Called as `shouldPrintComment(commentContents)`. **NOTE:** This overrides the `comment` option when used. |
