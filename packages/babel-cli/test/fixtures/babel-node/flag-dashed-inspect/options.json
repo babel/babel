@@ -1,0 +1,7 @@
+{
+  "args": ["--inspect", "--eval", "console.log('foo');"],
+  "stderr": "Debugger listening on",
+  "stderrContains": true,
+  "stdout": "foo",
+  "minNodeVersion": "6.0.0"
+}
