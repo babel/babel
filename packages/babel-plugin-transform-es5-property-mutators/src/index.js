@@ -29,7 +29,7 @@ export default function ({ types: t }) {
           t.memberExpression(t.identifier("Object"), t.identifier("defineProperties")),
           [node, defineMap.toDefineObject(mutatorMap)]
         ));
-      }
-    }
+      },
+    },
   };
 }

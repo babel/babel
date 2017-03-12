@@ -21,7 +21,7 @@ export default function () {
         if (node.shorthand) {
           node.shorthand = false;
         }
-      }
-    }
+      },
+    },
   };
 }

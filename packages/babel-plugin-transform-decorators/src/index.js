@@ -302,7 +302,7 @@ export default function({ types: t }) {
         const ref = node.id || path.scope.generateUidIdentifier("class");
 
         path.replaceWith(t.variableDeclaration("let", [
-          t.variableDeclarator(ref, t.toExpression(node))
+          t.variableDeclarator(ref, t.toExpression(node)),
         ]));
       },
       ClassExpression(path, state) {
@@ -337,6 +337,6 @@ export default function({ types: t }) {
           path.get("right.arguments")[1].node,
         ]));
       },
-    }
+    },
   };
 }

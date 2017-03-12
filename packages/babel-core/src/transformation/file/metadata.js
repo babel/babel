@@ -6,7 +6,7 @@ export const ModuleDeclaration = {
     if (node.source) {
       node.source.value = file.resolveModuleSource(node.source.value);
     }
-  }
+  },
 };
 
 export const ImportDeclaration = {
@@ -18,7 +18,7 @@ export const ImportDeclaration = {
     file.metadata.modules.imports.push({
       source: node.source.value,
       imported,
-      specifiers
+      specifiers,
     });
 
     for (const specifier of (path.get("specifiers"): Array<Object>)) {
@@ -29,7 +29,7 @@ export const ImportDeclaration = {
         specifiers.push({
           kind: "named",
           imported: "default",
-          local
+          local,
         });
       }
 
@@ -39,7 +39,7 @@ export const ImportDeclaration = {
         specifiers.push({
           kind: "named",
           imported: importedName,
-          local
+          local,
         });
       }
 
@@ -47,11 +47,11 @@ export const ImportDeclaration = {
         imported.push("*");
         specifiers.push({
           kind: "namespace",
-          local
+          local,
         });
       }
     }
-  }
+  },
 };
 
 export function ExportDeclaration(path, file) {
@@ -71,7 +71,7 @@ export function ExportDeclaration(path, file) {
       exports.specifiers.push({
         kind: "local",
         local: name,
-        exported: path.isExportDefaultDeclaration() ? "default" : name
+        exported: path.isExportDefaultDeclaration() ? "default" : name,
       });
     }
   }
@@ -87,7 +87,7 @@ export function ExportDeclaration(path, file) {
           kind: "external",
           local: exported,
           exported,
-          source
+          source,
         });
       }
 
@@ -96,7 +96,7 @@ export function ExportDeclaration(path, file) {
         exports.specifiers.push({
           kind: "external-namespace",
           exported,
-          source
+          source,
         });
       }
 
@@ -110,7 +110,7 @@ export function ExportDeclaration(path, file) {
           kind: "external",
           local: local.name,
           exported,
-          source
+          source,
         });
       }
 
@@ -120,7 +120,7 @@ export function ExportDeclaration(path, file) {
         exports.specifiers.push({
           kind: "local",
           local: local.name,
-          exported
+          exported,
         });
       }
     }
@@ -130,7 +130,7 @@ export function ExportDeclaration(path, file) {
   if (path.isExportAllDeclaration()) {
     exports.specifiers.push({
       kind: "external-all",
-      source
+      source,
     });
   }
 }

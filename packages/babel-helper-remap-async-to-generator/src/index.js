@@ -47,7 +47,7 @@ const awaitVisitor = {
 
     const build = rewriteForAwait(path, {
       getAsyncIterator: file.addHelper("asyncIterator"),
-      wrapAwait
+      wrapAwait,
     });
 
     const { declar, loop } = build;
@@ -73,7 +73,7 @@ const awaitVisitor = {
     } else {
       path.replaceWithMultiple(build.node);
     }
-  }
+  },
 
 };
 
@@ -89,7 +89,7 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
     t.returnStatement(t.callExpression(
       t.callExpression(callId, [container]),
       []
-    ))
+    )),
   ];
 
   // Regardless of whether or not the wrapped function is a an async method
@@ -142,9 +142,26 @@ function plainFunction(path: NodePath, callId: Object) {
       t.variableDeclarator(
         t.identifier(asyncFnId.name),
         t.callExpression(container, [])
-      )
+      ),
     ]);
     declar._blockHoist = true;
+
+    if (path.parentPath.isExportDefaultDeclaration()) {
+      // change the path type so that replaceWith() does not wrap
+      // the identifier into an expressionStatement
+      path.parentPath.insertBefore(declar);
+      path.parentPath.replaceWith(
+        t.exportNamedDeclaration(null,
+          [
+            t.exportSpecifier(
+              t.identifier(asyncFnId.name),
+              t.identifier("default")
+            ),
+          ]
+        )
+      );
+      return;
+    }
 
     path.replaceWith(declar);
   } else {
@@ -153,7 +170,7 @@ function plainFunction(path: NodePath, callId: Object) {
       nameFunction({
         node: retFunction,
         parent: path.parent,
-        scope: path.scope
+        scope: path.scope,
       });
     }
 
@@ -175,7 +192,7 @@ export default function (path: NodePath, file: Object, helpers: Object) {
   }
   path.traverse(awaitVisitor, {
     file,
-    wrapAwait: helpers.wrapAwait
+    wrapAwait: helpers.wrapAwait,
   });
 
   if (path.isClassMethod() || path.isObjectMethod()) {

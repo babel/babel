@@ -63,7 +63,8 @@ publish:
 	BABEL_ENV=production make build-dist
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
-	./node_modules/.bin/lerna publish --only-explicit-updates
+	# --only-explicit-updates
+	./node_modules/.bin/lerna publish --npm-tag=next --exact --skip-temp-tag
 	make clean
 
 bootstrap:

@@ -39,7 +39,7 @@ export default function ({ types: t, template }) {
       MUTATOR_MAP_REF: getMutatorId(),
       KEY: key,
       VALUE: getValue(prop),
-      KIND: t.identifier(prop.kind)
+      KIND: t.identifier(prop.kind),
     }));
   }
 
@@ -68,14 +68,14 @@ export default function ({ types: t, template }) {
           return t.callExpression(state.addHelper("defineProperty"), [
             info.initPropExpression,
             key,
-            getValue(prop)
+            getValue(prop),
           ]);
         } else {
           body.push(t.expressionStatement(
             t.callExpression(state.addHelper("defineProperty"), [
               objId,
               key,
-              getValue(prop)
+              getValue(prop),
             ])
           ));
         }
@@ -119,7 +119,7 @@ export default function ({ types: t, template }) {
           const body = [];
 
           body.push(t.variableDeclaration("var", [
-            t.variableDeclarator(objId, initPropExpression)
+            t.variableDeclarator(objId, initPropExpression),
           ]));
 
           let callback = spec;
@@ -132,7 +132,7 @@ export default function ({ types: t, template }) {
               mutatorRef = scope.generateUidIdentifier("mutatorMap");
 
               body.push(t.variableDeclaration("var", [
-                t.variableDeclarator(mutatorRef, t.objectExpression([]))
+                t.variableDeclarator(mutatorRef, t.objectExpression([])),
               ]));
             }
 
@@ -162,8 +162,8 @@ export default function ({ types: t, template }) {
             body.push(t.expressionStatement(objId));
             path.replaceWithMultiple(body);
           }
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

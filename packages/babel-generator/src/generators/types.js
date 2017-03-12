@@ -12,8 +12,6 @@ export function RestElement(node: Object) {
 
 export {
   RestElement as SpreadElement,
-  RestElement as SpreadProperty,
-  RestElement as RestProperty,
 };
 
 export function ObjectExpression(node: Object) {
@@ -71,7 +69,7 @@ export function ObjectProperty(node: Object) {
 
 export function ArrayExpression(node: Object) {
   const elems = node.elements;
-  const len   = elems.length;
+  const len = elems.length;
 
   this.token("[");
   this.printInnerComments(node);
@@ -131,7 +129,7 @@ export function StringLiteral(node: Object, parent: Object) {
   // ensure the output is ASCII-safe
   const opts = {
     quotes: t.isJSX(parent) ? "double" : this.format.quotes,
-    wrap: true
+    wrap: true,
   };
   if (this.format.jsonCompatibleStrings) {
     opts.json = true;

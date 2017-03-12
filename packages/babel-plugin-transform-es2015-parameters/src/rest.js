@@ -153,7 +153,7 @@ const memberExpressionOptimisationVisitor = {
     if (node.name === state.name) {
       state.deopted = true;
     }
-  }
+  },
 };
 function hasRest(node) {
   return t.isRestElement(node.params[node.params.length - 1]);
@@ -178,7 +178,7 @@ function optimiseIndexGetter(path, argsId, offset) {
     path.parentPath.replaceWith(restIndexImpure({
       ARGUMENTS: argsId,
       INDEX: index,
-      REF: temp
+      REF: temp,
     }));
   } else {
     path.parentPath.replaceWith(restIndex({
@@ -214,10 +214,10 @@ export const visitor = {
     // check and optimise for extremely common cases
     const state = {
       references: [],
-      offset:     node.params.length,
+      offset: node.params.length,
 
       argumentsNode: argsId,
-      outerBinding:  scope.getBindingIdentifier(rest.name),
+      outerBinding: scope.getBindingIdentifier(rest.name),
 
       // candidate member expressions we could optimise if there are no other references
       candidates: [],
@@ -295,10 +295,10 @@ export const visitor = {
       ARGUMENTS: argsId,
       ARRAY_KEY: arrKey,
       ARRAY_LEN: arrLen,
-      START:     start,
-      ARRAY:     rest,
-      KEY:       key,
-      LEN:       len,
+      START: start,
+      ARRAY: rest,
+      KEY: key,
+      LEN: len,
     });
 
     if (state.deopted) {
@@ -322,5 +322,5 @@ export const visitor = {
 
       target.insertBefore(loop);
     }
-  }
+  },
 };

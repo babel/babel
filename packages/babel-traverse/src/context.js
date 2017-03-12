@@ -6,9 +6,9 @@ const testing = process.env.NODE_ENV === "test";
 export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {
     this.parentPath = parentPath;
-    this.scope      = scope;
-    this.state      = state;
-    this.opts       = opts;
+    this.scope = scope;
+    this.state = state;
+    this.opts = opts;
   }
 
   parentPath: NodePath;
@@ -47,7 +47,7 @@ export default class TraversalContext {
       parent: node,
       container: obj,
       key: key,
-      listKey
+      listKey,
     });
   }
 
@@ -85,7 +85,7 @@ export default class TraversalContext {
   visitSingle(node, key): boolean {
     if (this.shouldVisit(node[key])) {
       return this.visitQueue([
-        this.create(node, node, key)
+        this.create(node, node, key),
       ]);
     } else {
       return false;

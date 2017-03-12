@@ -19,9 +19,9 @@ const buildUmdWrapper = template(`
 `);
 
 function buildGlobal(namespace, builder) {
-  const body      = [];
+  const body = [];
   const container = t.functionExpression(null, [t.identifier("global")], t.blockStatement(body));
-  const tree      = t.program([
+  const tree = t.program([
     t.expressionStatement(t.callExpression(container, [helpers.get("selfGlobal")]))]);
 
   body.push(t.variableDeclaration("var", [
@@ -29,7 +29,7 @@ function buildGlobal(namespace, builder) {
       namespace,
       t.assignmentExpression("=", t.memberExpression(t.identifier("global"), namespace),
         t.objectExpression([]))
-    )
+    ),
   ]));
 
   builder(body);
@@ -40,7 +40,7 @@ function buildGlobal(namespace, builder) {
 function buildUmd(namespace, builder) {
   const body = [];
   body.push(t.variableDeclaration("var", [
-    t.variableDeclarator(namespace, t.identifier("global"))
+    t.variableDeclarator(namespace, t.identifier("global")),
   ]));
 
   builder(body);
@@ -48,23 +48,23 @@ function buildUmd(namespace, builder) {
   return t.program([
     buildUmdWrapper({
       FACTORY_PARAMETERS: t.identifier("global"),
-      BROWSER_ARGUMENTS:  t.assignmentExpression(
+      BROWSER_ARGUMENTS: t.assignmentExpression(
         "=",
         t.memberExpression(t.identifier("root"), namespace),
         t.objectExpression([])
       ),
-      COMMON_ARGUMENTS:   t.identifier("exports"),
-      AMD_ARGUMENTS:      t.arrayExpression([t.stringLiteral("exports")]),
-      FACTORY_BODY:       body,
-      UMD_ROOT:           t.identifier("this")
-    })
+      COMMON_ARGUMENTS: t.identifier("exports"),
+      AMD_ARGUMENTS: t.arrayExpression([t.stringLiteral("exports")]),
+      FACTORY_BODY: body,
+      UMD_ROOT: t.identifier("this"),
+    }),
   ]);
 }
 
 function buildVar(namespace, builder) {
   const body = [];
   body.push(t.variableDeclaration("var", [
-    t.variableDeclarator(namespace, t.objectExpression([]))
+    t.variableDeclarator(namespace, t.objectExpression([])),
   ]));
   builder(body);
   body.push(t.expressionStatement(namespace));
@@ -95,8 +95,8 @@ export default function (
 
   const build = {
     global: buildGlobal,
-    umd:    buildUmd,
-    var:    buildVar,
+    umd: buildUmd,
+    var: buildVar,
   }[outputType];
 
   if (build) {

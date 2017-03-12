@@ -17,7 +17,7 @@ export default class Store {
       return this._map.get(key);
     } else {
       if (Object.prototype.hasOwnProperty.call(this._map.dynamicData, key)) {
-        const val =  this._map.dynamicData[key]();
+        const val = this._map.dynamicData[key]();
         this._map.set(key, val);
         return val;
       }

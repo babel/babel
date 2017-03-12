@@ -21,10 +21,10 @@ export default function ({ types: t }) {
       const trace = t.thisExpression();
 
       node.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
-    }
+    },
   };
 
   return {
-    visitor
+    visitor,
   };
 }

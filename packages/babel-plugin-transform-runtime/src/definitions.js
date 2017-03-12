@@ -9,7 +9,7 @@ export default {
     Observable: "observable",
     setImmediate: "set-immediate",
     clearImmediate: "clear-immediate",
-    asap: "asap"
+    asap: "asap",
     //parseFloat: "parse-float", // temporary disabled
     //parseInt: "parse-int" // temporary disabled
   },
@@ -38,11 +38,11 @@ export default {
       some: "array/some",
       sort: "array/sort",
       splice: "array/splice",
-      values: "array/values"
+      values: "array/values",
     },
 
     JSON: {
-      stringify: "json/stringify"
+      stringify: "json/stringify",
     },
 
     Object: {
@@ -65,7 +65,7 @@ export default {
       preventExtensions: "object/prevent-extensions",
       seal: "object/seal",
       setPrototypeOf: "object/set-prototype-of",
-      values: "object/values"
+      values: "object/values",
     },
 
     Math: {
@@ -89,7 +89,7 @@ export default {
       iaddh: "math/iaddh",
       isubh: "math/isubh",
       imulh: "math/imulh",
-      umulh: "math/umulh"
+      umulh: "math/umulh",
     },
 
     Symbol: {
@@ -105,7 +105,7 @@ export default {
       split: "symbol/split",
       toPrimitive: "symbol/to-primitive",
       toStringTag: "symbol/to-string-tag",
-      unscopables: "symbol/unscopables"
+      unscopables: "symbol/unscopables",
     },
 
     String: {
@@ -124,7 +124,7 @@ export default {
       trimLeft: "string/trim-left",
       trimRight: "string/trim-right",
       trimStart: "string/trim-start",
-      trimEnd: "string/trim-end"
+      trimEnd: "string/trim-end",
     },
 
     Number: {
@@ -136,7 +136,7 @@ export default {
       MAX_SAFE_INTEGER: "number/max-safe-integer",
       MIN_SAFE_INTEGER: "number/min-safe-integer",
       parseFloat: "number/parse-float",
-      parseInt: "number/parse-int"
+      parseInt: "number/parse-int",
     },
 
     Reflect: {
@@ -161,11 +161,11 @@ export default {
       getOwnMetadataKeys: "reflect/get-own-metadata-keys",
       hasMetadata: "reflect/has-metadata",
       hasOwnMetadata: "reflect/has-own-metadata",
-      metadata: "reflect/metadata"
+      metadata: "reflect/metadata",
     },
 
     System: {
-      global: "system/global"
+      global: "system/global",
     },
 
     Date: {
@@ -175,6 +175,6 @@ export default {
     Function: {
       // Warning: /virtual/ method - prototype, not static, version
       //bind: "function/virtual/bind" // temporary disabled
-    }
-  }
+    },
+  },
 };

@@ -10,13 +10,13 @@ describe("getPossiblePresetNames", function () {
     assert.deepEqual(getPossiblePresetNames("@babel/es2015"), [
       "babel-preset-@babel/es2015",
       "@babel/es2015",
-      "@babel/babel-preset-es2015"
+      "@babel/babel-preset-es2015",
     ]);
 
     assert.deepEqual(getPossiblePresetNames("@babel/react/optimizations"), [
       "babel-preset-@babel/react/optimizations",
       "@babel/react/optimizations",
-      "@babel/babel-preset-react/optimizations"
+      "@babel/babel-preset-react/optimizations",
     ]);
   });
 });

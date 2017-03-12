@@ -32,7 +32,7 @@ const referenceVisitor = {
     if (binding !== state.scope.getBinding(path.node.name)) return;
 
     state.bindings[path.node.name] = binding;
-  }
+  },
 };
 
 export default class PathHoister {
@@ -40,15 +40,15 @@ export default class PathHoister {
     // Storage for scopes we can't hoist above.
     this.breakOnScopePaths = [];
     // Storage for bindings that may affect what path we can hoist to.
-    this.bindings          = {};
+    this.bindings = {};
     // Storage for eligible scopes.
-    this.scopes            = [];
+    this.scopes = [];
     // Our original scope and path.
-    this.scope             = scope;
-    this.path              = path;
+    this.scope = scope;
+    this.path = path;
     // By default, we attach as far up as we can; but if we're trying
     // to avoid referencing a binding, we may have to go after.
-    this.attachAfter       = false;
+    this.attachAfter = false;
   }
 
   // A scope is compatible if all required bindings are reachable.
@@ -160,7 +160,7 @@ export default class PathHoister {
         (path.isVariableDeclarator() &&
           path.parentPath.node !== null &&
           path.parentPath.node.declarations.length > 1))
-        return path;
+        {return path;}
     } while ((path = path.parentPath));
   }
 
@@ -198,7 +198,7 @@ export default class PathHoister {
 
     const insertFn = this.attachAfter ? "insertAfter" : "insertBefore";
     attachTo[insertFn]([
-      attachTo.isVariableDeclarator() ? declarator : t.variableDeclaration("var", [declarator])
+      attachTo.isVariableDeclarator() ? declarator : t.variableDeclaration("var", [declarator]),
     ]);
 
     const parent = this.path.parentPath;

@@ -22,7 +22,7 @@ export default function ({ types: t }) {
             state.args
           );
         }
-      }
-    })
+      },
+    }),
   };
 }

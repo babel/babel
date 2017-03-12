@@ -28,7 +28,7 @@ export default function (opts) {
       }
 
       path.replaceWith(t.inherits(callExpr, path.node));
-    }
+    },
   };
 
   return visitor;
@@ -92,7 +92,7 @@ export default function (opts) {
     const state: ElementState = {
       tagExpr: tagExpr,
       tagName: tagName,
-      args:    args
+      args: args,
     };
 
     if (opts.pre) {

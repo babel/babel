@@ -14,7 +14,7 @@ export default function (commander, filenames) {
 
     const data = util.compile(src, {
       sourceFileName: slash(path.relative(dest + "/..", src)),
-      sourceMapTarget: path.basename(relative)
+      sourceMapTarget: path.basename(relative),
     });
     if (!commander.copyFiles && data.ignored) return;
 
@@ -74,7 +74,7 @@ export default function (commander, filenames) {
         awaitWriteFinish: {
           stabilityThreshold: 50,
           pollInterval: 10,
-        }
+        },
       });
 
       ["add", "change"].forEach(function (type) {

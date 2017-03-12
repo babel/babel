@@ -10,9 +10,7 @@ import type { Format } from "./printer";
  */
 
 class Generator extends Printer {
-  constructor(ast, opts, code) {
-    opts = opts || {};
-
+  constructor(ast, opts = {}, code) {
     const tokens = ast.tokens || [];
     const format = normalizeOptions(code, opts, tokens);
     const map = opts.sourceMaps ? new SourceMap(opts, code) : null;
@@ -63,8 +61,8 @@ function normalizeOptions(code, opts, tokens): Format {
     indent: {
       adjustMultilineComment: true,
       style: style,
-      base: 0
-    }
+      base: 0,
+    },
   };
 
   if (format.minified) {
@@ -102,7 +100,7 @@ function findCommonStringDelimiter(code, tokens) {
 
   const occurences = {
     single: 0,
-    double: 0
+    double: 0,
   };
 
   let checked = 0;

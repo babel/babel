@@ -18,7 +18,7 @@ export default function ({ types: t }) {
             "body",
             t.expressionStatement(t.callExpression(state.addHelper("newArrowCheck"), [
               t.thisExpression(),
-              boundThis
+              boundThis,
             ]))
           );
 
@@ -29,7 +29,7 @@ export default function ({ types: t }) {
         } else {
           path.arrowFunctionToShadowed();
         }
-      }
-    }
+      },
+    },
   };
 }

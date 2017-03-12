@@ -50,7 +50,7 @@ Without options:
 
 With options:
 
-```json
+```js
 {
   "plugins": [
     ["transform-runtime", {

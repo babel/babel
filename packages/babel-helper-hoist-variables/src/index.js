@@ -37,7 +37,7 @@ const visitor = {
     } else {
       path.replaceWithMultiple(nodes);
     }
-  }
+  },
 };
 
 export default function (path, emit: Function, kind: "var" | "let" = "var") {

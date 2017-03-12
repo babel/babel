@@ -26,7 +26,7 @@ export default function ({ types: t }) {
         const ref = node.id || path.scope.generateUidIdentifier("class");
 
         path.replaceWith(t.variableDeclaration("let", [
-          t.variableDeclarator(ref, t.toExpression(node))
+          t.variableDeclarator(ref, t.toExpression(node)),
         ]));
       },
 
@@ -43,7 +43,7 @@ export default function ({ types: t }) {
         if (state.opts.loose) Constructor = LooseTransformer;
 
         path.replaceWith(new Constructor(path, state.file).run());
-      }
-    }
+      },
+    },
   };
 }

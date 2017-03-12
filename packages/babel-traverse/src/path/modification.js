@@ -62,7 +62,7 @@ export function _containerInsert(from, nodes) {
         parent: this.parent,
         container: this.container,
         listKey: this.listKey,
-        key: to
+        key: to,
       }));
     }
   }
@@ -197,7 +197,7 @@ export function unshiftContainer(listKey, nodes) {
     parent: this.node,
     container: this.node[listKey],
     listKey,
-    key: 0
+    key: 0,
   });
 
   return path.insertBefore(nodes);
@@ -217,7 +217,7 @@ export function pushContainer(listKey, nodes) {
     parent: this.node,
     container: container,
     listKey,
-    key: container.length
+    key: container.length,
   });
 
   return path.replaceWithMultiple(nodes);

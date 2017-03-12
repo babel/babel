@@ -295,7 +295,7 @@ export default class Printer {
 
   startTerminatorless(): Object {
     return this._parenPushNewlineState = {
-      printed: false
+      printed: false,
     };
   }
 
@@ -332,9 +332,11 @@ export default class Printer {
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
-    if (this.format.retainFunctionParens &&
-        node.type === "FunctionExpression" &&
-        node.extra && node.extra.parenthesized) {
+    if (
+      this.format.retainFunctionParens &&
+      node.type === "FunctionExpression" &&
+      node.extra && node.extra.parenthesized
+    ) {
       needsParens = true;
     }
     if (needsParens) this.token("(");
@@ -370,7 +372,7 @@ export default class Printer {
     if (comment) {
       this._printComment({
         type: "CommentBlock",
-        value: comment
+        value: comment,
       });
     }
   }
@@ -383,7 +385,7 @@ export default class Printer {
     if (comment) {
       this._printComment({
         type: "CommentBlock",
-        value: comment
+        value: comment,
       });
     }
   }

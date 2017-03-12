@@ -21,8 +21,8 @@ export default function ({ types: t }) {
         if (!isProtoAssignmentExpression(path.node)) return;
 
         const nodes = [];
-        const left  = path.node.left.object;
-        const temp  = path.scope.maybeGenerateMemoised(left);
+        const left = path.node.left.object;
+        const temp = path.scope.maybeGenerateMemoised(left);
 
         if (temp) nodes.push(t.expressionStatement(t.assignmentExpression("=", temp, left)));
         nodes.push(buildDefaultsCallExpression(path.node, temp || left, file));
@@ -56,7 +56,7 @@ export default function ({ types: t }) {
           if (node.properties.length) args.push(node);
           path.replaceWith(t.callExpression(file.addHelper("extends"), args));
         }
-      }
-    }
+      },
+    },
   };
 }

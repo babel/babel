@@ -33,7 +33,7 @@ function getObjRef(node, nodes, file, scope) {
 
   const temp = scope.generateUidIdentifierBasedOnNode(ref);
   nodes.push(t.variableDeclaration("var", [
-    t.variableDeclarator(temp, ref)
+    t.variableDeclarator(temp, ref),
   ]));
   return temp;
 }
@@ -45,7 +45,7 @@ function getPropRef(node, nodes, file, scope) {
 
   const temp = scope.generateUidIdentifierBasedOnNode(prop);
   nodes.push(t.variableDeclaration("var", [
-    t.variableDeclarator(temp, prop)
+    t.variableDeclarator(temp, prop),
   ]));
   return temp;
 }
@@ -80,6 +80,6 @@ export default function (
 
   return {
     uid: uid,
-    ref: ref
+    ref: ref,
   };
 }

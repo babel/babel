@@ -6,9 +6,9 @@ export default class PluginPass extends Store {
   constructor(file: File, plugin: Plugin, options: Object = {}) {
     super();
     this.plugin = plugin;
-    this.key    = plugin.key;
-    this.file   = file;
-    this.opts   = options;
+    this.key = plugin.key;
+    this.file = file;
+    this.opts = options;
   }
 
   key: string;

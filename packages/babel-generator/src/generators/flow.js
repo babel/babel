@@ -280,7 +280,7 @@ export function ObjectTypeAnnotation(node: Object) {
           this.token(",");
           this.space();
         }
-      }
+      },
     });
 
     this.space();

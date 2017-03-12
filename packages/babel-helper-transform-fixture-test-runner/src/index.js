@@ -8,12 +8,12 @@ import includes from "lodash/includes";
 import * as helpers from "./helpers";
 import extend from "lodash/extend";
 import merge from "lodash/merge";
+import resolve from "resolve";
 import assert from "assert";
 import chai from "chai";
 import fs from "fs";
 import path from "path";
 import vm from "vm";
-import Module from "module";
 
 const moduleCache = {};
 const testContext = vm.createContext({
@@ -35,13 +35,7 @@ runCodeInTestContext(buildExternalHelpers());
  * This allows us to run our unittests
  */
 function runModuleInTestContext(id: string, relativeFilename: string) {
-  // This code is a gross hack using internal APIs, but we also have the same logic in babel-core
-  // to resolve presets and plugins, so if this breaks, we'll have even worse issues to deal with.
-  const relativeMod = new Module();
-  relativeMod.id = relativeFilename;
-  relativeMod.filename = relativeFilename;
-  relativeMod.paths = Module._nodeModulePaths(path.dirname(relativeFilename));
-  const filename = Module._resolveFilename(id, relativeMod);
+  const filename = resolve.sync(id, { basedir: path.dirname(relativeFilename) });
 
   // Expose Node-internal modules if the tests want them. Note, this will not execute inside
   // the context's global scope.
@@ -118,8 +112,8 @@ function wrapPackagesArray(type, names, optionsDir) {
 function run(task) {
   const actual = task.actual;
   const expect = task.expect;
-  const exec   = task.exec;
-  const opts   = task.options;
+  const exec = task.exec;
+  const opts = task.options;
   const optionsDir = task.optionsDir;
 
   function getOpts(self) {
@@ -218,8 +212,8 @@ export default function (
 
           defaults(task.options, {
             filenameRelative: task.expect.filename,
-            sourceFileName:   task.actual.filename,
-            sourceMapTarget:  task.expect.filename,
+            sourceFileName: task.actual.filename,
+            sourceMapTarget: task.expect.filename,
             suppressDeprecationMessages: true,
             babelrc: false,
             sourceMap: !!(task.sourceMappings || task.sourceMap),
