@@ -54,7 +54,7 @@ const envMap = {
 
 const invertedEqualsEnv = Object.keys(envs).filter(b => envs[b].equals).reduce((
   a,
-  b,
+  b
 ) => {
   const checkEnv = envMap[envs[b].equals] || envs[b].equals;
   environments.some(env => {
@@ -88,7 +88,7 @@ const compatibilityTests = flattenDeep(
       return test.subtests
         ? [test, renameTests(test.subtests, name => test.name + " / " + name)]
         : test;
-    })),
+    }))
 );
 
 const getLowestImplementedVersion = ({ features }, env) => {
@@ -115,7 +115,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
               res: test.res,
               isBuiltIn,
             };
-      }),
+      })
   );
 
   const envTests = tests.map(({ res: test, name, isBuiltIn }, i) => {
@@ -141,8 +141,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
         .filter(t => t.startsWith(env))
         // Babel assumes strict mode
         .filter(
-          test =>
-            tests[i].res[test] === true || tests[i].res[test] === "strict",
+          test => tests[i].res[test] === true || tests[i].res[test] === "strict"
         )
         // normalize some keys
         .map(test => envMap[test] || test)
@@ -214,7 +213,7 @@ if (process.argv[2] === "--check") {
   ) {
     console.error(
       "The newly generated plugin/built-in data does not match the current " +
-        "files. Re-run `npm run build-data`.",
+        "files. Re-run `npm run build-data`."
     );
     process.exit(1);
   }
@@ -224,10 +223,10 @@ if (process.argv[2] === "--check") {
 
 fs.writeFileSync(
   pluginsDataPath,
-  JSON.stringify(newPluginData, null, 2) + "\n",
+  JSON.stringify(newPluginData, null, 2) + "\n"
 );
 
 fs.writeFileSync(
   builtInsDataPath,
-  JSON.stringify(newBuiltInsData, null, 2) + "\n",
+  JSON.stringify(newBuiltInsData, null, 2) + "\n"
 );
