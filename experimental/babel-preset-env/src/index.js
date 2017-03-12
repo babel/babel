@@ -163,7 +163,7 @@ export const transformIncludesAndExcludes = (opts) => ({
 
 export default function buildPreset(context, opts = {}) {
   const validatedOptions = normalizeOptions(opts);
-  const {debug, loose, moduleType, useBuiltIns} = validatedOptions;
+  const { debug, loose, moduleType, useBuiltIns } = validatedOptions;
 
   const targets = getTargets(validatedOptions.targets);
   const include = transformIncludesAndExcludes(validatedOptions.include);
