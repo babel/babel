@@ -5,6 +5,7 @@ const path = require("path");
 
 const flatten = require("lodash/flatten");
 const flattenDeep = require("lodash/flattenDeep");
+const isEqual = require("lodash/isEqual");
 const mapValues = require("lodash/mapValues");
 const pluginFeatures = require("../data/plugin-features");
 const builtInFeatures = require("../data/built-in-features");
@@ -197,12 +198,36 @@ const generateData = (environments, features) => {
   });
 };
 
+const pluginsDataPath = path.join(__dirname, "../data/plugins.json");
+const builtInsDataPath = path.join(__dirname, "../data/built-ins.json");
+
+const newPluginData = generateData(environments, pluginFeatures);
+const newBuiltInsData = generateData(environments, builtInFeatures);
+
+if (process.argv[2] === "--check") {
+  const currentPluginData = require(pluginsDataPath);
+  const currentBuiltInsData = require(builtInsDataPath);
+
+  if (
+    !isEqual(currentPluginData, newPluginData) ||
+    !isEqual(currentBuiltInsData, newBuiltInsData)
+  ) {
+    console.error(
+      "The newly generated plugin/built-in data does not match the current " +
+        "files. Re-run `npm run build-data`.",
+    );
+    process.exit(1);
+  }
+
+  process.exit(0);
+}
+
 fs.writeFileSync(
-  path.join(__dirname, "../data/plugins.json"),
-  JSON.stringify(generateData(environments, pluginFeatures), null, 2) + "\n",
+  pluginsDataPath,
+  JSON.stringify(newPluginData, null, 2) + "\n",
 );
 
 fs.writeFileSync(
-  path.join(__dirname, "../data/built-ins.json"),
-  JSON.stringify(generateData(environments, builtInFeatures), null, 2) + "\n",
+  builtInsDataPath,
+  JSON.stringify(newBuiltInsData, null, 2) + "\n",
 );
