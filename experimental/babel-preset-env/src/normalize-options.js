@@ -7,19 +7,19 @@ import pluginFeatures from "../data/plugin-features";
 
 const validIncludesAndExcludes = [
   ...Object.keys(pluginFeatures),
-  ...Object.keys(moduleTransformations).map((m) => moduleTransformations[m]),
+  ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
   ...Object.keys(builtInsList),
-  ...defaultInclude
+  ...defaultInclude,
 ];
 
 export const validateIncludesAndExcludes = (opts = [], type) => {
   invariant(
     Array.isArray(opts),
-    `Invalid Option: The '${type}' option must be an Array<String> of plugins/built-ins`
+    `Invalid Option: The '${type}' option must be an Array<String> of plugins/built-ins`,
   );
 
   const unknownOpts = [];
-  opts.forEach((opt) => {
+  opts.forEach(opt => {
     if (validIncludesAndExcludes.indexOf(opt) === -1) {
       unknownOpts.push(opt);
     }
@@ -28,21 +28,19 @@ export const validateIncludesAndExcludes = (opts = [], type) => {
   invariant(
     unknownOpts.length === 0,
     `Invalid Option: The plugins/built-ins '${unknownOpts}' passed to the '${type}' option are not
-    valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`
+    valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
   );
 
   return opts;
 };
 
 export const checkDuplicateIncludeExcludes = (include = [], exclude = []) => {
-  const duplicates = include.filter(
-    (opt) => exclude.indexOf(opt) >= 0
-  );
+  const duplicates = include.filter(opt => exclude.indexOf(opt) >= 0);
 
   invariant(
     duplicates.length === 0,
     `Invalid Option: The plugins/built-ins '${duplicates}' were found in both the "include" and
-    "exclude" options.`
+    "exclude" options.`,
   );
 };
 
@@ -52,7 +50,7 @@ export const checkDuplicateIncludeExcludes = (include = [], exclude = []) => {
 export const validateLooseOption = (looseOpt = false) => {
   invariant(
     typeof looseOpt === "boolean",
-    "Invalid Option: The 'loose' option must be a boolean."
+    "Invalid Option: The 'loose' option must be a boolean.",
   );
 
   return looseOpt;
@@ -60,20 +58,24 @@ export const validateLooseOption = (looseOpt = false) => {
 
 export const validateModulesOption = (modulesOpt = "commonjs") => {
   invariant(
-    modulesOpt === false || Object.keys(moduleTransformations).indexOf(modulesOpt) > -1,
+    modulesOpt === false ||
+      Object.keys(moduleTransformations).indexOf(modulesOpt) > -1,
     `Invalid Option: The 'modules' option must be either 'false' to indicate no modules, or a
-    module type which can be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'.`
+    module type which can be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'.`,
   );
 
   return modulesOpt;
 };
 
-export const getElectronChromeVersion = (electronVersion) => {
-  const electronChromeVersion = parseInt(electronToChromium(electronVersion), 10);
+export const getElectronChromeVersion = electronVersion => {
+  const electronChromeVersion = parseInt(
+    electronToChromium(electronVersion),
+    10,
+  );
 
   invariant(
     !!electronChromeVersion,
-    `Electron version ${electronVersion} is either too old or too new`
+    `Electron version ${electronVersion} is either too old or too new`,
   );
 
   return electronChromeVersion;
@@ -89,6 +91,6 @@ export default function normalizeOptions(opts) {
     loose: validateLooseOption(opts.loose),
     moduleType: validateModulesOption(opts.modules),
     targets: opts.targets,
-    useBuiltIns: opts.useBuiltIns
+    useBuiltIns: opts.useBuiltIns,
   };
 }

@@ -2,7 +2,7 @@ function isPolyfillSource(value) {
   return value === "babel-polyfill" || value === "core-js";
 }
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function createImportDeclaration(polyfill) {
     const declar = t.importDeclaration([], t.stringLiteral(polyfill));
     declar._blockHoist = 3;
@@ -11,12 +11,7 @@ export default function ({ types: t }) {
 
   function createRequireStatement(polyfill) {
     return t.expressionStatement(
-      t.callExpression(
-        t.identifier("require"),
-        [
-          t.stringLiteral(polyfill)
-        ]
-      )
+      t.callExpression(t.identifier("require"), [t.stringLiteral(polyfill)]),
     );
   }
 
@@ -44,19 +39,21 @@ export default function ({ types: t }) {
 
   function createImports(polyfills, requireType, regenerator) {
     const imports = polyfills
-    .filter((el, i, arr) => arr.indexOf(el) === i)
-    .map((polyfill) => createImport(polyfill, requireType, true));
+      .filter((el, i, arr) => arr.indexOf(el) === i)
+      .map(polyfill => createImport(polyfill, requireType, true));
 
     return [
       ...imports,
-      regenerator && createImport("regenerator-runtime/runtime", requireType)
+      regenerator && createImport("regenerator-runtime/runtime", requireType),
     ].filter(Boolean);
   }
 
   const isPolyfillImport = {
     ImportDeclaration(path, state) {
-      if (path.node.specifiers.length === 0 &&
-          isPolyfillSource(path.node.source.value)) {
+      if (
+        path.node.specifiers.length === 0 &&
+        isPolyfillSource(path.node.source.value)
+      ) {
         this.numPolyfillImports++;
         if (this.numPolyfillImports > 1) {
           path.remove();
@@ -64,19 +61,21 @@ export default function ({ types: t }) {
         }
 
         path.replaceWithMultiple(
-          createImports(state.opts.polyfills, "import", state.opts.regenerator)
+          createImports(state.opts.polyfills, "import", state.opts.regenerator),
         );
       }
     },
     Program(path, state) {
       if (!state.opts.polyfills) {
-        throw path.buildCodeFrameError(`
+        throw path.buildCodeFrameError(
+          `
 There was an issue in "babel-preset-env" such that
 the "polyfills" option was not correctly passed
 to the "transform-polyfill-require" plugin
-`);
+`,
+        );
       }
-      path.get("body").forEach((bodyPath) => {
+      path.get("body").forEach(bodyPath => {
         if (isRequire(bodyPath)) {
           this.numPolyfillImports++;
           if (this.numPolyfillImports > 1) {
@@ -85,11 +84,15 @@ to the "transform-polyfill-require" plugin
           }
 
           bodyPath.replaceWithMultiple(
-            createImports(state.opts.polyfills, "require", state.opts.regenerator)
+            createImports(
+              state.opts.polyfills,
+              "require",
+              state.opts.regenerator,
+            ),
           );
         }
       });
-    }
+    },
   };
 
   return {
@@ -97,6 +100,6 @@ to the "transform-polyfill-require" plugin
     visitor: isPolyfillImport,
     pre() {
       this.numPolyfillImports = 0;
-    }
+    },
   };
 }
