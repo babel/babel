@@ -106,7 +106,7 @@ if (errors.length) {
 
 //
 
-export const opts = {};
+const opts = {};
 
 Object.keys(options).forEach(function (key) {
   const opt = options[key];

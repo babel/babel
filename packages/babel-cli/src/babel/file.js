@@ -1,4 +1,5 @@
 import convertSourceMap from "convert-source-map";
+import defaults from "lodash/defaults";
 import sourceMap from "source-map";
 import slash from "slash";
 import path from "path";
@@ -96,9 +97,9 @@ export default function (commander, filenames, opts) {
     });
 
     process.stdin.on("end", function () {
-      results.push(util.transform(commander.filename, code, {
+      results.push(util.transform(commander.filename, code, defaults({
         sourceFileName: "stdin",
-      }));
+      }, opts)));
       output();
     });
   };
@@ -123,7 +124,7 @@ export default function (commander, filenames, opts) {
     });
 
     _filenames.forEach(function (filename) {
-      if (util.shouldIgnore(filename)) return;
+      if (util.shouldIgnore(filename, opts)) return;
 
       let sourceFilename = filename;
       if (commander.outFile) {
@@ -131,9 +132,9 @@ export default function (commander, filenames, opts) {
       }
       sourceFilename = slash(sourceFilename);
 
-      const data = util.compile(filename, {
+      const data = util.compile(filename, defaults({
         sourceFileName: sourceFilename,
-      });
+      }, opts));
 
       if (data.ignored) return;
       results.push(data);
@@ -158,7 +159,7 @@ export default function (commander, filenames, opts) {
           pollInterval: 10,
         },
       }).on("all", function (type, filename) {
-        if (util.shouldIgnore(filename) || !util.canCompile(filename, commander.extensions)) return;
+        if (util.shouldIgnore(filename, opts) || !util.canCompile(filename, commander.extensions)) return;
 
         if (type === "add" || type === "change") {
           util.log(type + " " + filename);

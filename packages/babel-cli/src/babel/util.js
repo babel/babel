@@ -1,11 +1,8 @@
 import commander from "commander";
-import defaults from "lodash/defaults";
 import readdir from "fs-readdir-recursive";
 import * as babel from "babel-core";
 import path from "path";
 import fs from "fs";
-
-import * as index from "./index";
 
 export function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
@@ -21,8 +18,8 @@ export { readdir };
 
 export const canCompile = babel.util.canCompile;
 
-export function shouldIgnore(loc) {
-  return babel.util.shouldIgnore(loc, index.opts.ignore, index.opts.only);
+export function shouldIgnore(loc, opts) {
+  return babel.util.shouldIgnore(loc, opts.ignore, opts.only);
 }
 
 export function addSourceMappingUrl(code, loc) {
@@ -34,8 +31,9 @@ export function log(msg) {
 }
 
 export function transform(filename, code, opts) {
-  opts = defaults(opts || {}, index.opts);
-  opts.filename = filename;
+  opts = Object.assign({}, opts, {
+    filename,
+  });
 
   const result = babel.transform(code, opts);
   result.filename = filename;
