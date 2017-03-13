@@ -13,6 +13,65 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.24.0 (2017-03-13)
+
+A quick release for 2 features:
+
+- `noInterop` option to our es2015-modules transforms to remove the `interopRequireDefault` helper.
+
+This also helps [ember-cli migrate to Babel 6](https://github.com/ember-cli/ember-cli/pull/6828).
+
+- Passing `dirname` to the preset constructor so that presets can resolve relative to files
+
+This will help out with reusing a [`browserslist` file for babel-preset-env](https://github.com/babel/babel-preset-env/issues/26) and for plugins like https://github.com/tleunen/babel-plugin-module-resolver.
+
+#### :rocket: New Feature
+* `babel-plugin-transform-es2015-modules-amd`, `babel-plugin-transform-es2015-modules-commonjs`
+  * [#5427](https://github.com/babel/babel/pull/5427) Backport `noInterop` flag for modules to 6.x. ([@rwjblue](https://github.com/rwjblue))
+* `babel-core`
+  * [#4834](https://github.com/babel/babel/pull/4834) Pass `dirname` as extra metadata to preset constructor. ([@izaakschroeder](https://github.com/izaakschroeder))
+
+#### :bug: Bug Fix
+* `babel-generator`
+  * [#5339](https://github.com/babel/babel/pull/5339) Wrap some generated do expressions in parens. ([@zjmiller](https://github.com/zjmiller))
+* `babel-generator`, `babel-plugin-transform-object-rest-spread`
+  * [#5322](https://github.com/babel/babel/pull/5322) Fix for-await printing. ([@danez](https://github.com/danez))
+
+#### :memo: Documentation
+
+* [#5449](https://github.com/babel/babel/pull/5449) Fixed broken links in README.md [skip-ci]. ([@sethbergman](https://github.com/sethbergman))
+* [#5409](https://github.com/babel/babel/pull/5409) Fix transform-object-rest-spread README. ([@existentialism](https://github.com/existentialism))
+* [#5379](https://github.com/babel/babel/pull/5379) Lint code snippets in READMEs. ([@xtuc](https://github.com/xtuc))
+* [#5334](https://github.com/babel/babel/pull/5334) Shorthand properties examples. ([@bhoule](https://github.com/bhoule))
+* [#5329](https://github.com/babel/babel/pull/5329) Update CONTRIBUTING.md with respect to coverage check [skip ci]. ([@zjmiller](https://github.com/zjmiller))
+
+#### :house: Internal
+* Other
+  * [#5338](https://github.com/babel/babel/pull/5338) Improve babel-generator's code coverage. ([@alxpy](https://github.com/alxpy))
+  * [#5336](https://github.com/babel/babel/pull/5336) Enable codecov partial coverage. ([@danez](https://github.com/danez))
+  * [#5350](https://github.com/babel/babel/pull/5350) Remove redundant NODE_ENV=test in Makefile. ([@aaronang](https://github.com/aaronang))
+  * [#5312](https://github.com/babel/babel/pull/5312) [skip ci] Add devEngines to package.json. ([@yavorsky](https://github.com/yavorsky))
+* `babel-cli`
+  * [#5342](https://github.com/babel/babel/pull/5342) Add test for passing arguments to babel-node (#5163). ([@outsideris](https://github.com/outsideris))
+* `babel-traverse`
+  * [#5296](https://github.com/babel/babel/pull/5296) Add test for reference paths. ([@jasonLaster](https://github.com/jasonLaster))
+
+#### Committers: 14
+- Aaron Ang ([aaronang](https://github.com/aaronang))
+- Alex Kuzmenko ([alxpy](https://github.com/alxpy))
+- Artem Gurzhii ([artemgurzhii](https://github.com/artemgurzhii))
+- Artem Yavorsky ([yavorsky](https://github.com/yavorsky))
+- Brendan Houle ([bhoule](https://github.com/bhoule))
+- Brian Ng ([existentialism](https://github.com/existentialism))
+- Daniel Tschinder ([danez](https://github.com/danez))
+- Izaak Schroeder ([izaakschroeder](https://github.com/izaakschroeder))
+- Jason Laster ([jasonLaster](https://github.com/jasonLaster))
+- JeongHoon Byun (aka Outsider) ([outsideris](https://github.com/outsideris))
+- Robert Jackson ([rwjblue](https://github.com/rwjblue))
+- Seth Bergman ([sethbergman](https://github.com/sethbergman))
+- Sven SAULEAU ([xtuc](https://github.com/xtuc))
+- Zachary Miller ([zjmiller](https://github.com/zjmiller))
+
 ## 6.23.0 (2017-02-13)
 
 #### :rocket: New Feature
