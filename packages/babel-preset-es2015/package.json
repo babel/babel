@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-es2015",
-  "version": "6.22.0",
+  "version": "6.24.0",
   "description": "Babel preset for all es2015 plugins.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -19,10 +19,10 @@
     "babel-plugin-transform-es2015-for-of": "^6.22.0",
     "babel-plugin-transform-es2015-function-name": "^6.22.0",
     "babel-plugin-transform-es2015-literals": "^6.22.0",
-    "babel-plugin-transform-es2015-modules-amd": "^6.22.0",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.22.0",
+    "babel-plugin-transform-es2015-modules-amd": "^6.24.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.0",
     "babel-plugin-transform-es2015-modules-systemjs": "^6.22.0",
-    "babel-plugin-transform-es2015-modules-umd": "^6.22.0",
+    "babel-plugin-transform-es2015-modules-umd": "^6.24.0",
     "babel-plugin-transform-es2015-object-super": "^6.22.0",
     "babel-plugin-transform-es2015-parameters": "^6.22.0",
     "babel-plugin-transform-es2015-shorthand-properties": "^6.22.0",
@@ -34,7 +34,7 @@
     "babel-plugin-transform-regenerator": "^6.22.0"
   },
   "devDependencies": {
-    "babel-helper-transform-fixture-test-runner": "^6.22.0",
-    "babel-helper-plugin-test-runner": "^6.22.0"
+    "babel-helper-transform-fixture-test-runner": "^6.24.0",
+    "babel-helper-plugin-test-runner": "^6.24.0"
   }
 }
