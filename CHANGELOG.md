@@ -17,11 +17,11 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 A quick release for 2 features:
 
-- `noInterop` option to our es2015-modules transforms to remove the `interopRequireDefault` helper.
+- Thanks to @rwjblue, there is a `noInterop` option for our `es2015-modules` transforms to remove the `interopRequireDefault` helper.
 
 This also helps [ember-cli migrate to Babel 6](https://github.com/ember-cli/ember-cli/pull/6828).
 
-- Passing `dirname` to the preset constructor so that presets can resolve relative to files
+- @izaakschroeder has adding `dirname` to the preset constructor which presets can use to resolve things relative to files.
 
 This will help out with reusing a [`browserslist` file for babel-preset-env](https://github.com/babel/babel-preset-env/issues/26) and for plugins like https://github.com/tleunen/babel-plugin-module-resolver.
 
