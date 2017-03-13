@@ -17,13 +17,50 @@ See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
 A quick release for 2 features:
 
-- Thanks to @rwjblue, there is a `noInterop` option for our `es2015-modules` transforms to remove the `interopRequireDefault` helper.
+- Thanks to @rwjblue, there is now a `noInterop` option for our `es2015-modules` transform to remove the `interopRequireDefault` and `interopRequireWildcard` helpers.
 
-This also helps [ember-cli migrate to Babel 6](https://github.com/ember-cli/ember-cli/pull/6828).
+Input
 
-- @izaakschroeder has adding `dirname` to the preset constructor which presets can use to resolve things relative to files.
+```js
+import foo from "foo";
+foo;
+```
 
-This will help out with reusing a [`browserslist` file for babel-preset-env](https://github.com/babel/babel-preset-env/issues/26) and for plugins like https://github.com/tleunen/babel-plugin-module-resolver.
+Regular Output
+
+```js
+var _foo = require("foo");
+var _foo2 = _interopRequireDefault(_foo);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+_foo2.default;
+```
+
+Output with option `noInterop`
+
+```js
+"use strict";
+var _foo = require("foo");
+(0, _foo.default)();
+```
+
+> This also helps [ember-cli migrate to Babel 6](https://github.com/ember-cli/ember-cli/pull/6828).
+
+- @izaakschroeder has added `dirname` to the preset constructor which presets can use to resolve things relative to files.
+
+Example usage of `fileContext.dirname` in a preset
+
+```js
+module.exports = function preset (context, options, fileContext) {
+  if (/resolve-addons-relative-to-file$/.test(fileContext.dirname)) {
+    return {
+      plugins: ['plugin-here'],
+    };
+  }
+  return {};
+};
+```
+
+> This will help out with reusing a [`browserslist` file for babel-preset-env](https://github.com/babel/babel-preset-env/issues/26) and for plugins like https://github.com/tleunen/babel-plugin-module-resolver.
 
 #### :rocket: New Feature
 * `babel-plugin-transform-es2015-modules-amd`, `babel-plugin-transform-es2015-modules-commonjs`
@@ -33,6 +70,7 @@ This will help out with reusing a [`browserslist` file for babel-preset-env](htt
 
 #### :bug: Bug Fix
 * `babel-generator`
+  * [#5453](https://github.com/babel/babel/pull/5453) Keep parentheses for logical expression when in await expression. ([@aaronang](https://github.com/aaronang))
   * [#5339](https://github.com/babel/babel/pull/5339) Wrap some generated do expressions in parens. ([@zjmiller](https://github.com/zjmiller))
 * `babel-generator`, `babel-plugin-transform-object-rest-spread`
   * [#5322](https://github.com/babel/babel/pull/5322) Fix for-await printing. ([@danez](https://github.com/danez))
