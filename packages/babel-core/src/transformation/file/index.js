@@ -573,7 +573,7 @@ export default class File extends Store {
     if (!opts.code) return this.makeResult(result);
 
     let gen = generate;
-    if (opts.generatorOpts.generator) {
+    if (opts.generatorOpts && opts.generatorOpts.generator) {
       gen = opts.generatorOpts.generator;
 
       if (typeof gen === "string") {
