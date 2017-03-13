@@ -126,20 +126,22 @@ export function booleanify(val: any): boolean | any {
 
 export function shouldIgnore(
   filename: string,
-  ignore: Array<RegExp | Function> = [],
+  ignore: Array<RegExp | Function>,
   only?: Array<RegExp | Function>,
 ): boolean {
   filename = filename.replace(/\\/g, "/");
 
+  if (ignore && ignore.length) {
+    for (const pattern of ignore) {
+      if (matchesPattern(pattern, filename)) return true;
+    }
+  }
+
   if (only) {
     for (const pattern of only) {
-      if (_shouldIgnore(pattern, filename)) return false;
+      if (matchesPattern(pattern, filename)) return false;
     }
     return true;
-  } else if (ignore.length) {
-    for (const pattern of ignore) {
-      if (_shouldIgnore(pattern, filename)) return true;
-    }
   }
 
   return false;
@@ -150,7 +152,7 @@ export function shouldIgnore(
  * Otherwise returns result of matching pattern Regex with filename.
  */
 
-function _shouldIgnore(pattern: Function | RegExp, filename: string) {
+function matchesPattern(pattern: Function | RegExp, filename: string) {
   if (typeof pattern === "function") {
     return pattern(filename);
   } else {
