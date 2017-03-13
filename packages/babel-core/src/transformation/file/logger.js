@@ -1,5 +1,5 @@
 import type File from "./index";
-import buildDebug from "debug/node";
+import buildDebug from "debug";
 
 const verboseDebug = buildDebug("babel:verbose");
 const generalDebug = buildDebug("babel");
