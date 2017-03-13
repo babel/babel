@@ -2,7 +2,7 @@
 
 import fs from "fs";
 import commander from "commander";
-import { options, util, version } from "babel-core";
+import { util, version } from "babel-core";
 import uniq from "lodash/uniq";
 import glob from "glob";
 
@@ -14,11 +14,11 @@ import pkg from "../../package.json";
 /* eslint-disable max-len */
 // Standard Babel input configs.
 commander.option("-f, --filename [filename]", "filename to use when reading from stdin - this will be used in source-maps, errors etc");
-commander.option("--presets [list]", "");
-commander.option("--plugins [list]", "");
+commander.option("--presets [list]", "comma-separated list of preset names");
+commander.option("--plugins [list]", "comma-separated list of plugin names");
 
 // Basic file input configuration.
-commander.option("--source-type [string]", "");
+commander.option("--source-type [script|module]", "");
 commander.option("--no-babelrc", "Whether or not to look up .babelrc and .babelignore files");
 commander.option("--ignore [list]", "list of glob paths to **not** compile");
 commander.option("--only [list]", "list of glob paths to **only** compile");
@@ -29,13 +29,13 @@ commander.option("--no-highlight-code", "enable/disable ANSI syntax highlighting
 // General output formatting.
 commander.option("--no-comments", "write comments to generated output (true by default)");
 commander.option("--retain-lines", "retain line numbers - will result in really ugly code");
-commander.option("--compact [booleanString]", "do not include superfluous whitespace characters and line terminators [true|false|auto]");
+commander.option("--compact [true|false|auto]", "do not include superfluous whitespace characters and line terminators");
 commander.option("--minified", "save as much bytes when printing [true|false]");
 commander.option("--auxiliary-comment-before [string]", "print a comment before any injected non-user code");
 commander.option("--auxiliary-comment-after [string]", "print a comment after any injected non-user code");
 
 // General soucemap formatting.
-commander.option("-s, --source-maps [booleanString]", "[true|false|inline]");
+commander.option("-s, --source-maps [true|false|inline|both]", "");
 commander.option("--source-map-target [string]", "set `file` on returned source map");
 commander.option("--source-file-name [string]", "set `sources[0]` on returned source map");
 commander.option("--source-root [filename]", "the root from which all sources are relative");
@@ -112,20 +112,34 @@ if (errors.length) {
 
 //
 
-const opts = {};
+const opts = commander.opts();
 
-Object.keys(options).forEach(function (key) {
-  const opt = options[key];
-  if (commander[key] !== undefined && commander[key] !== opt.default) {
-    opts[key] = commander[key];
-  }
-});
+// Delete options that are specific to babel-cli and shouldn't be passed to babel-core.
+delete opts.version;
+delete opts.extensions;
+delete opts.watch;
+delete opts.skipInitialBuild;
+delete opts.outFile;
+delete opts.outDir;
+delete opts.copyFiles;
+delete opts.quiet;
+
+// Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
+// babel-core can handle the default-assignment logic on its own.
+if (opts.babelrc === true) opts.babelrc = undefined;
+if (opts.comments === true) opts.comments = undefined;
+if (opts.highlightCode === true) opts.highlightCode = undefined;
 
 opts.ignore = util.arrayify(opts.ignore, util.regexify);
 
 if (opts.only) {
   opts.only = util.arrayify(opts.only, util.regexify);
 }
+
+if (opts.sourceMaps) opts.sourceMaps = util.booleanify(opts.sourceMaps);
+if (opts.compact) opts.compact = util.booleanify(opts.compact);
+if (opts.presets) opts.presets = util.list(opts.presets);
+if (opts.plugins) opts.plugins = util.list(opts.plugins);
 
 const fn = commander.outDir ? dirCommand : fileCommand;
 fn(commander, filenames, opts);

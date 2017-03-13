@@ -44,14 +44,16 @@ var code = (function() {
 }).toString().split('\n').slice(1, -1).join('\n');
 
 transform(code, {
-  plugins: function (b) {
-    var t = b.types;
-    return {
-      visitor: {
-        BinaryExpression: function(path) {
-          path.get("left").baseTypeStrictlyMatches(path.get("right"));
+  plugins: [
+    function (b) {
+      var t = b.types;
+      return {
+        visitor: {
+          BinaryExpression: function(path) {
+            path.get("left").baseTypeStrictlyMatches(path.get("right"));
+          }
         }
       }
     }
-  }
+  ]
 });

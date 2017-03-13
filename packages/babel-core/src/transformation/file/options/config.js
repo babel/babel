@@ -2,13 +2,10 @@
 
 export default {
   filename: {
-    type: "filename",
     default: "unknown",
   },
 
-  filenameRelative: {
-    type: "string",
-  },
+  filenameRelative: {},
 
   inputSourceMap: {},
 
@@ -19,60 +16,46 @@ export default {
   mode: {},
 
   retainLines: {
-    type: "boolean",
     default: false,
   },
 
   highlightCode: {
-    type: "boolean",
     default: true,
   },
 
   suppressDeprecationMessages: {
-    type: "boolean",
     default: false,
   },
 
   presets: {
-    type: "list",
     default: [],
   },
 
   plugins: {
-    type: "list",
     default: [],
   },
 
   ignore: {
-    type: "list",
     default: [],
   },
 
-  only: {
-    type: "list",
-  },
+  only: {},
 
   code: {
     default: true,
-    type: "boolean",
   },
 
   metadata: {
     default: true,
-    type: "boolean",
   },
 
   ast: {
     default: true,
-    type: "boolean",
   },
 
-  extends: {
-    type: "string",
-  },
+  extends: {},
 
   comments: {
-    type: "boolean",
     default: true,
   },
 
@@ -81,12 +64,10 @@ export default {
   wrapPluginVisitorMethod: {},
 
   compact: {
-    type: "booleanString",
     default: "auto",
   },
 
   minified: {
-    type: "boolean",
     default: false,
   },
 
@@ -95,24 +76,16 @@ export default {
   },
 
   sourceMaps: {
-    type: "booleanString",
     default: false,
   },
 
-  sourceMapTarget: {
-    type: "string",
-  },
+  sourceMapTarget: {},
 
-  sourceFileName: {
-    type: "string",
-  },
+  sourceFileName: {},
 
-  sourceRoot: {
-    type: "filename",
-  },
+  sourceRoot: {},
 
   babelrc: {
-    type: "boolean",
     default: true,
   },
 
@@ -120,33 +93,23 @@ export default {
     default: "module",
   },
 
-  auxiliaryCommentBefore: {
-    type: "string",
-  },
+  auxiliaryCommentBefore: {},
 
-  auxiliaryCommentAfter: {
-    type: "string",
-  },
+  auxiliaryCommentAfter: {},
 
   resolveModuleSource: {},
 
   getModuleId: {},
 
-  moduleRoot: {
-    type: "filename",
-  },
+  moduleRoot: {},
 
   moduleIds: {
-    type: "boolean",
     default: false,
   },
 
-  moduleId: {
-    type: "string",
-  },
+  moduleId: {},
 
   passPerPreset: {
-    type: "boolean",
     default: false,
   },
 

@@ -1,7 +1,6 @@
 import * as context from "../../../index";
 import Plugin from "../../plugin";
 import * as messages from "babel-messages";
-import { normaliseOptions } from "./index";
 import resolvePlugin from "../../../helpers/resolve-plugin";
 import resolvePreset from "../../../helpers/resolve-preset";
 import cloneDeepWith from "lodash/cloneDeepWith";
@@ -11,6 +10,7 @@ import config from "./config";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
 import path from "path";
+import * as util from "../../../util";
 
 type PluginObject = {
   pre?: Function;
@@ -185,16 +185,28 @@ export default class OptionManager {
       }
     }
 
-    // normalise options
-    normaliseOptions(opts);
+    if (opts.ignore) {
+      if (!Array.isArray(rawOpts.ignore)) throw new Error(`${alias}.ignore should be an array`);
+
+      opts.ignore = opts.ignore.map(util.regexify);
+    }
+    if (opts.only) {
+      if (!Array.isArray(rawOpts.only)) throw new Error(`${alias}.only should be an array`);
+
+      opts.only = opts.only.map(util.regexify);
+    }
 
     // resolve plugins
     if (opts.plugins) {
+      if (!Array.isArray(rawOpts.plugins)) throw new Error(`${alias}.plugins should be an array`);
+
       opts.plugins = OptionManager.normalisePlugins(loc, dirname, opts.plugins);
     }
 
     // resolve presets
     if (opts.presets) {
+      if (!Array.isArray(rawOpts.presets)) throw new Error(`${alias}.presets should be an array`);
+
       // If we're in the "pass per preset" mode, we resolve the presets
       // and keep them for further execution to calculate the options.
       if (opts.passPerPreset) {
