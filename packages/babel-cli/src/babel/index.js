@@ -2,7 +2,6 @@
 
 import fs from "fs";
 import commander from "commander";
-import kebabCase from "lodash/kebabCase";
 import { options, util, version } from "babel-core";
 import uniq from "lodash/uniq";
 import glob from "glob";
@@ -12,34 +11,41 @@ import fileCommand from "./file";
 
 import pkg from "../../package.json";
 
-Object.keys(options).forEach(function (key) {
-  const option = options[key];
-  if (option.hidden) return;
-
-  let arg = kebabCase(key);
-
-  if (option.type !== "boolean") {
-    arg += " [" + (option.type || "string") + "]";
-  }
-
-  if (option.type === "boolean" && option.default === true) {
-    arg = "no-" + arg;
-  }
-
-  arg = "--" + arg;
-
-  if (option.shorthand) {
-    arg = "-" + option.shorthand + ", " + arg;
-  }
-
-  const desc = [];
-  if (option.deprecated) desc.push("[DEPRECATED] " + option.deprecated);
-  if (option.description) desc.push(option.description);
-
-  commander.option(arg, desc.join(" "));
-});
-
 /* eslint-disable max-len */
+// Standard Babel input configs.
+commander.option("-f, --filename [filename]", "filename to use when reading from stdin - this will be used in source-maps, errors etc");
+commander.option("--presets [list]", "");
+commander.option("--plugins [list]", "");
+
+// Basic file input configuration.
+commander.option("--source-type [string]", "");
+commander.option("--no-babelrc", "Whether or not to look up .babelrc and .babelignore files");
+commander.option("--ignore [list]", "list of glob paths to **not** compile");
+commander.option("--only [list]", "list of glob paths to **only** compile");
+
+// Misc babel config.
+commander.option("--no-highlight-code", "enable/disable ANSI syntax highlighting of code frames (on by default)");
+
+// General output formatting.
+commander.option("--no-comments", "write comments to generated output (true by default)");
+commander.option("--retain-lines", "retain line numbers - will result in really ugly code");
+commander.option("--compact [booleanString]", "do not include superfluous whitespace characters and line terminators [true|false|auto]");
+commander.option("--minified", "save as much bytes when printing [true|false]");
+commander.option("--auxiliary-comment-before [string]", "print a comment before any injected non-user code");
+commander.option("--auxiliary-comment-after [string]", "print a comment after any injected non-user code");
+
+// General soucemap formatting.
+commander.option("-s, --source-maps [booleanString]", "[true|false|inline]");
+commander.option("--source-map-target [string]", "set `file` on returned source map");
+commander.option("--source-file-name [string]", "set `sources[0]` on returned source map");
+commander.option("--source-root [filename]", "the root from which all sources are relative");
+
+// Config params for certain module output formats.
+commander.option("--module-root [filename]", "optional prefix for the AMD module formatter that will be prepend to the filename on module definitions");
+commander.option("-M, --module-ids", "insert an explicit id for modules");
+commander.option("--module-id [string]", "specify a custom name for module ids");
+
+// "babel" command specific arguments that are not passed to babel-core.
 commander.option("-x, --extensions [extensions]", "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx]");
 commander.option("-w, --watch", "Recompile files on changes");
 commander.option("--skip-initial-build", "Do not compile files before watching");
