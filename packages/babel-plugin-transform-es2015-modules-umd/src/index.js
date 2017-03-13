@@ -98,7 +98,8 @@ export default function ({ types: t }) {
             }
           });
 
-          const moduleNameOrBasename = moduleName ? moduleName.value : this.file.opts.basename;
+          const moduleNameOrBasename = moduleName ? moduleName.value :
+            basename(this.file.opts.filename, extname(this.file.opts.filename));
           let globalToAssign = t.memberExpression(
             t.identifier("global"), t.identifier(t.toIdentifier(moduleNameOrBasename))
           );

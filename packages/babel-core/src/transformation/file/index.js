@@ -141,8 +141,6 @@ export default class File extends Store {
       opts.moduleIds = true;
     }
 
-    opts.basename = path.basename(opts.filename, path.extname(opts.filename));
-
     defaults(opts, {
       moduleRoot: opts.sourceRoot,
     });
