@@ -967,7 +967,7 @@ interface AssignmentProperty <: ObjectProperty {
 
 interface ObjectPattern <: Pattern {
   type: "ObjectPattern";
-  properties: [ AssignmentProperty | RestPattern ];
+  properties: [ AssignmentProperty | RestElement ];
 }
 ```
 
