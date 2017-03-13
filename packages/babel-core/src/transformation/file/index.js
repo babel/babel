@@ -397,7 +397,7 @@ export default class File extends Store {
             },
 
             generated: generatedPosition,
-            
+
             name: mapping.name
           });
         }
