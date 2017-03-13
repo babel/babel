@@ -3,6 +3,7 @@ import Plugin from "../../plugin";
 import * as messages from "babel-messages";
 import resolvePlugin from "../../../helpers/resolve-plugin";
 import resolvePreset from "../../../helpers/resolve-preset";
+import defaults from "lodash/defaults";
 import cloneDeepWith from "lodash/cloneDeepWith";
 import merge from "../../../helpers/merge";
 import removed from "./removed";
@@ -376,7 +377,36 @@ export default class OptionManager {
       this.mergeOptions(config);
     }
 
-    return this.options;
+    opts = this.options;
+
+    if (opts.inputSourceMap) {
+      opts.sourceMaps = true;
+    }
+
+    if (opts.moduleId) {
+      opts.moduleIds = true;
+    }
+
+    defaults(opts, {
+      moduleRoot: opts.sourceRoot,
+    });
+
+    defaults(opts, {
+      sourceRoot: opts.moduleRoot,
+    });
+
+    defaults(opts, {
+      filenameRelative: opts.filename,
+    });
+
+    const basenameRelative = path.basename(opts.filenameRelative);
+
+    defaults(opts, {
+      sourceFileName: basenameRelative,
+      sourceMapTarget: basenameRelative,
+    });
+
+    return opts;
   }
 }
 

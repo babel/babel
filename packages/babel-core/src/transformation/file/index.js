@@ -9,7 +9,6 @@ import { NodePath, Hub, Scope } from "babel-traverse";
 import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
-import defaults from "lodash/defaults";
 import traverse from "babel-traverse";
 import Logger from "./logger";
 import Store from "../../store";
@@ -46,7 +45,7 @@ export default class File extends Store {
 
     this.log = new Logger(this, opts.filename || "unknown");
 
-    opts = this.initOptions(opts);
+    opts = this.log.wrap(() => new OptionManager().init(opts));
 
     let passes = [];
     if (opts.plugins) passes.push(opts.plugins);
@@ -128,39 +127,6 @@ export default class File extends Store {
     if (has) {
       this.path.traverse(metadataVisitor, this);
     }
-  }
-
-  initOptions(opts) {
-    opts = this.log.wrap(() => new OptionManager().init(opts));
-
-    if (opts.inputSourceMap) {
-      opts.sourceMaps = true;
-    }
-
-    if (opts.moduleId) {
-      opts.moduleIds = true;
-    }
-
-    defaults(opts, {
-      moduleRoot: opts.sourceRoot,
-    });
-
-    defaults(opts, {
-      sourceRoot: opts.moduleRoot,
-    });
-
-    defaults(opts, {
-      filenameRelative: opts.filename,
-    });
-
-    const basenameRelative = path.basename(opts.filenameRelative);
-
-    defaults(opts, {
-      sourceFileName: basenameRelative,
-      sourceMapTarget: basenameRelative,
-    });
-
-    return opts;
   }
 
   getModuleName(): ?string {
