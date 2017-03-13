@@ -10,7 +10,6 @@ import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
 import traverse from "babel-traverse";
-import Logger from "./logger";
 import Store from "../../store";
 import { parse } from "babylon";
 import * as util from "../../util";
@@ -43,9 +42,7 @@ export default class File extends Store {
   constructor(opts: Object = {}) {
     super();
 
-    this.log = new Logger(this, opts.filename || "unknown");
-
-    opts = this.log.wrap(() => new OptionManager().init(opts));
+    opts = new OptionManager().init(opts);
 
     let passes = [];
     if (opts.plugins) passes.push(opts.plugins);
@@ -101,7 +98,6 @@ export default class File extends Store {
 
   pluginPasses: Array<Array<[Plugin, Object]>>;
   parserOpts: BabelParserOptions;
-  log: Logger;
   opts: Object;
   dynamicImportTypes: Object;
   dynamicImportIds: Object;
@@ -368,9 +364,9 @@ export default class File extends Store {
       }
     }
 
-    this.log.debug("Parse start");
+    util.debug(this.opts, "Parse start");
     const ast = parseCode(code, parserOpts || this.parserOpts);
-    this.log.debug("Parse stop");
+    util.debug(this.opts, "Parse stop");
     return ast;
   }
 
@@ -388,9 +384,9 @@ export default class File extends Store {
   }
 
   addAst(ast) {
-    this.log.debug("Start set AST");
+    util.debug(this.opts, "Start set AST");
     this._addAst(ast);
-    this.log.debug("End set AST");
+    util.debug(this.opts, "End set AST");
   }
 
   transform(): BabelFileResult {
@@ -405,13 +401,13 @@ export default class File extends Store {
       }
 
       this.call("pre", passes);
-      this.log.debug("Start transform traverse");
+      util.debug(this.opts, "Start transform traverse");
 
       // merge all plugin visitors into a single visitor
       const visitor = traverse.visitors.merge(visitors, passes, this.opts.wrapPluginVisitorMethod);
       traverse(this.ast, visitor, this.scope);
 
-      this.log.debug("End transform traverse");
+      util.debug(this.opts, "End transform traverse");
       this.call("post", passes);
     }
 
@@ -552,14 +548,14 @@ export default class File extends Store {
       }
     }
 
-    this.log.debug("Generation start");
+    util.debug(this.opts, "Generation start");
 
     const _result = gen(ast, opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts,
       this.code);
     result.code = _result.code;
     result.map = _result.map;
 
-    this.log.debug("Generation end");
+    util.debug(this.opts, "Generation end");
 
     if (this.shebang) {
       // add back shebang

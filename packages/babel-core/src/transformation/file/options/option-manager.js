@@ -373,8 +373,13 @@ export default class OptionManager {
   }
 
   init(opts: Object = {}): Object {
-    for (const config of buildConfigChain(opts)) {
-      this.mergeOptions(config);
+    try {
+      for (const config of buildConfigChain(opts)) {
+        this.mergeOptions(config);
+      }
+    } catch (e) {
+      e.message = util.message(opts, e.message);
+      throw e;
     }
 
     opts = this.options;
