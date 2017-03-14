@@ -33,7 +33,7 @@ export default function buildConfigChain(opts: Object = {}) {
   builder.mergeConfig({
     options: opts,
     alias: "base",
-    dirname: filename && path.dirname(filename),
+    dirname: process.cwd(),
   });
 
   return builder.configs;
@@ -173,7 +173,6 @@ class ConfigChainBuilder {
 
     options = Object.assign({}, options);
 
-    dirname = dirname || process.cwd();
     loc = loc || alias;
 
     // add extends clause

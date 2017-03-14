@@ -33,13 +33,21 @@ describe("addon resolution", function () {
     function fixturesReady (err) {
       if (err) return done(err);
 
-      const actual = babel.transform(fixtures.actual, {
-        filename: paths.actual,
-        plugins: ["addons/plugin"],
-        presets: ["addons/preset"],
-      }).code;
+      const orignalCwd = process.cwd();
+      try {
+        process.chdir(paths.fixtures);
 
-      assert.equal(actual, fixtures.expected);
+        const actual = babel.transform(fixtures.actual, {
+          filename: paths.actual,
+          plugins: ["addons/plugin"],
+          presets: ["addons/preset"],
+        }).code;
+
+        assert.equal(actual, fixtures.expected);
+      } finally {
+        process.chdir(orignalCwd);
+      }
+
       done();
     }
     // fixturesReady
