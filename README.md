@@ -25,13 +25,13 @@ When your supported environments don't support certain features natively, it wil
 
 ```js
 // ES2015 arrow function
-[1,2,3].map(n => n + 1);
+[1, 2, 3].map((n) => n + 1);
 ```
 
 **Out**
 
 ```js
-[1,2,3].map(function(n) {
+[1, 2, 3].map(function(n) {
   return n + 1;
 });
 ```

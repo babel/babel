@@ -48,13 +48,17 @@ npm install --save-dev babel-plugin-transform-es2015-spread
 
 **.babelrc**
 
-```js
-// without options
+Without options:
+
+```json
 {
   "plugins": ["transform-es2015-spread"]
 }
+```
 
-// with options
+With options:
+
+```json
 {
   "plugins": [
     ["transform-es2015-spread", {

@@ -4,18 +4,21 @@
 
 ## Example
 
+### Rest Properties
+
 ```js
-// Rest properties
 let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
 console.log(x); // 1
 console.log(y); // 2
 console.log(z); // { a: 3, b: 4 }
+```
 
-// Spread properties
+### Spread Properties
+
+```js
 let n = { x, y, ...z };
 console.log(n); // { x: 1, y: 2, a: 3, b: 4 }
 ```
-
 
 ## Installation
 
@@ -35,25 +38,6 @@ npm install --save-dev babel-plugin-transform-object-rest-spread
 }
 ```
 
-## Options
-
-This plugin will use babel's `extends` helper, which will polyfill `Object.assign` by default.
-
-* `useBuiltIns` - Do not use Babel's helper's and just transform to use the built-in method (Disabled by default).
-
-```js
-{
-  "plugins": [
-    ["transform-object-rest-spread", { "useBuiltIns": true }]
-  ]
-}
-
-// source
-z = { x, ...y };
-// compiled
-z = Object.assign({ x }, y);
-```
-
 ### Via CLI
 
 ```sh
@@ -66,6 +50,36 @@ babel --plugins transform-object-rest-spread script.js
 require("babel-core").transform("code", {
   plugins: ["transform-object-rest-spread"]
 });
+```
+
+## Options
+
+### `useBuiltIns`
+
+`boolean`, defaults to `false`.
+
+By default, this plugin uses Babel's `extends` helper which polyfills `Object.assign`. Enabling this option will use `Object.assign` directly.
+
+**.babelrc**
+
+```json
+{
+  "plugins": [
+    ["transform-object-rest-spread", { "useBuiltIns": true }]
+  ]
+}
+```
+
+**In**
+
+```js
+z = { x, ...y };
+```
+
+**Out**
+
+```js
+z = Object.assign({ x }, y);
 ```
 
 ## References

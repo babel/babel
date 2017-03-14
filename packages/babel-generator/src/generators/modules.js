@@ -45,12 +45,6 @@ export function ExportAllDeclaration(node: Object) {
   this.word("export");
   this.space();
   this.token("*");
-  if (node.exported) {
-    this.space();
-    this.word("as");
-    this.space();
-    this.print(node.exported, node);
-  }
   this.space();
   this.word("from");
   this.space();
