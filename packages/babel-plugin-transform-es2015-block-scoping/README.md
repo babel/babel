@@ -2,6 +2,28 @@
 
 > Compile ES2015 block scoping (const and let) to ES5
 
+## Examples
+
+**In**
+
+```javascript
+{
+  let a = 3
+}
+
+let a = 3
+```
+
+**Out**
+
+```javascript
+{
+  var _a = 3;
+}
+
+var a = 3;
+```
+
 ## Installation
 
 ```sh

@@ -2,6 +2,32 @@
 
 > Babel plugin to ensure function declarations at the block level are block scoped.
 
+## Examples
+
+**In**
+
+```javascript
+{
+  function name (n) {
+    return n;
+  }
+}
+
+name("Steve");
+```
+
+**Out**
+
+```javascript
+{
+  var _name = function _name(n) {
+    return n;
+  };
+}
+
+name("Steve");
+```
+
 ## Installation
 
 ```sh
