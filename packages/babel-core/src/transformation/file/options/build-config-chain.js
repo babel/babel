@@ -25,18 +25,18 @@ export default function buildConfigChain(opts: Object = {}) {
   const filename = opts.filename;
   const builder = new ConfigChainBuilder();
 
-  // resolve all .babelrc files
-  if (opts.babelrc !== false) {
-    builder.findConfigs(filename);
-  }
-
   builder.mergeConfig({
     options: opts,
     alias: "base",
     dirname: filename && path.dirname(filename),
   });
 
-  return builder.configs;
+  // resolve all .babelrc files
+  if (opts.babelrc !== false) {
+    builder.findConfigs(filename);
+  }
+
+  return builder.configs.reverse();
 }
 
 class ConfigChainBuilder {
@@ -61,6 +61,14 @@ class ConfigChainBuilder {
     let foundIgnore = false;
 
     while (loc !== (loc = path.dirname(loc))) {
+      if (!foundIgnore) {
+        const ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
+        if (exists(ignoreLoc)) {
+          this.addIgnoreConfig(ignoreLoc);
+          foundIgnore = true;
+        }
+      }
+
       if (!foundConfig) {
         const configLoc = path.join(loc, BABELRC_FILENAME);
         const configJSLoc = path.join(loc, BABELRC_JS_FILENAME);
@@ -83,14 +91,6 @@ class ConfigChainBuilder {
         }, []);
 
         foundConfig = !!foundConfigs.length;
-      }
-
-      if (!foundIgnore) {
-        const ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
-        if (exists(ignoreLoc)) {
-          this.addIgnoreConfig(ignoreLoc);
-          foundIgnore = true;
-        }
       }
 
       if (foundIgnore && foundConfig) return;
@@ -176,6 +176,26 @@ class ConfigChainBuilder {
     dirname = dirname || process.cwd();
     loc = loc || alias;
 
+    // env
+    const envKey = babel.getEnv();
+    if (options.env) {
+      const envOpts = options.env[envKey];
+      delete options.env;
+
+      this.mergeConfig({
+        options: envOpts,
+        alias: `${alias}.env.${envKey}`,
+        dirname: dirname,
+      });
+    }
+
+    this.configs.push({
+      options,
+      alias,
+      loc,
+      dirname,
+    });
+
     // add extends clause
     if (options.extends) {
       const extendsLoc = resolve(options.extends, dirname);
@@ -186,28 +206,6 @@ class ConfigChainBuilder {
       }
       delete options.extends;
     }
-
-    this.configs.push({
-      options,
-      alias,
-      loc,
-      dirname,
-    });
-
-    // env
-    let envOpts;
-
-    const envKey = babel.getEnv();
-    if (options.env) {
-      envOpts = options.env[envKey];
-      delete options.env;
-    }
-
-    this.mergeConfig({
-      options: envOpts,
-      alias: `${alias}.env.${envKey}`,
-      dirname: dirname,
-    });
   }
 }
 
