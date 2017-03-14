@@ -1,3 +1,4 @@
+import * as babel from "../../../index";
 import resolve from "../../../helpers/resolve";
 import json5 from "json5";
 import path from "path";
@@ -195,7 +196,8 @@ class ConfigChainBuilder {
 
     // env
     let envOpts;
-    const envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
+
+    const envKey = babel.getEnv();
     if (options.env) {
       envOpts = options.env[envKey];
       delete options.env;
