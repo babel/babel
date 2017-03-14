@@ -10,6 +10,10 @@ function fixture() {
   return path.join.apply(path, args);
 }
 
+function base() {
+  return process.cwd();
+}
+
 describe("buildConfigChain", function () {
   let oldBabelEnv;
   let oldNodeEnv;
@@ -69,7 +73,7 @@ describe("buildConfigChain", function () {
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("dir1"),
+        dirname: base(),
       },
     ];
 
@@ -108,7 +112,7 @@ describe("buildConfigChain", function () {
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("dir2"),
+        dirname: base(),
       },
     ];
 
@@ -147,7 +151,7 @@ describe("buildConfigChain", function () {
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("env"),
+        dirname: base(),
       },
     ];
 
@@ -198,7 +202,7 @@ describe("buildConfigChain", function () {
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("env"),
+        dirname: base(),
       },
     ];
 
@@ -250,7 +254,7 @@ describe("buildConfigChain", function () {
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("env"),
+        dirname: base(),
       },
     ];
 
@@ -288,7 +292,7 @@ describe("buildConfigChain", function () {
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("pkg"),
+        dirname: base(),
       },
     ];
 
@@ -328,7 +332,7 @@ describe("buildConfigChain", function () {
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("js-config"),
+        dirname: base(),
       },
     ];
 
@@ -368,7 +372,7 @@ describe("buildConfigChain", function () {
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("js-config-default"),
+        dirname: base(),
       },
     ];
 
@@ -417,7 +421,7 @@ describe("buildConfigChain", function () {
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("js-config-extended"),
+        dirname: base(),
       },
     ];
 
@@ -457,7 +461,7 @@ describe("buildConfigChain", function () {
         },
         alias: "base",
         loc: "base",
-        dirname: fixture("json-pkg-config-no-babel"),
+        dirname: base(),
       },
     ];
 
