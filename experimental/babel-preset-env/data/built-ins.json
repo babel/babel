@@ -2,6 +2,7 @@
   "es6.typed.data-view": {
     "chrome": 5,
     "opera": 12,
+    "edge": 12,
     "firefox": 15,
     "safari": 5,
     "node": 0.12,
@@ -12,6 +13,7 @@
   "es6.typed.int8-array": {
     "chrome": 5,
     "opera": 12,
+    "edge": 12,
     "firefox": 4,
     "safari": 5,
     "node": 0.12,
@@ -22,6 +24,7 @@
   "es6.typed.uint8-array": {
     "chrome": 5,
     "opera": 12,
+    "edge": 12,
     "firefox": 4,
     "safari": 5,
     "node": 0.12,
@@ -42,6 +45,7 @@
   "es6.typed.int16-array": {
     "chrome": 5,
     "opera": 12,
+    "edge": 12,
     "firefox": 4,
     "safari": 5,
     "node": 0.12,
@@ -52,6 +56,7 @@
   "es6.typed.uint16-array": {
     "chrome": 5,
     "opera": 12,
+    "edge": 12,
     "firefox": 4,
     "safari": 5,
     "node": 0.12,
@@ -62,6 +67,7 @@
   "es6.typed.int32-array": {
     "chrome": 5,
     "opera": 12,
+    "edge": 12,
     "firefox": 4,
     "safari": 5,
     "node": 0.12,
@@ -72,6 +78,7 @@
   "es6.typed.uint32-array": {
     "chrome": 5,
     "opera": 12,
+    "edge": 12,
     "firefox": 4,
     "safari": 5,
     "node": 0.12,
@@ -82,6 +89,7 @@
   "es6.typed.float32-array": {
     "chrome": 5,
     "opera": 12,
+    "edge": 12,
     "firefox": 4,
     "safari": 5,
     "node": 0.12,
@@ -92,6 +100,7 @@
   "es6.typed.float64-array": {
     "chrome": 5,
     "opera": 12,
+    "edge": 12,
     "firefox": 4,
     "safari": 5,
     "node": 0.12,
@@ -101,6 +110,7 @@
   },
   "es6.map": {
     "chrome": 51,
+    "edge": 15,
     "firefox": 53,
     "safari": 10,
     "node": 6.5,
@@ -109,6 +119,7 @@
   },
   "es6.set": {
     "chrome": 51,
+    "edge": 15,
     "firefox": 53,
     "safari": 10,
     "node": 6.5,
@@ -117,6 +128,7 @@
   },
   "es6.weak-map": {
     "chrome": 51,
+    "edge": 15,
     "firefox": 53,
     "safari": 9,
     "node": 6.5,
@@ -286,6 +298,7 @@
   },
   "es6.object.set-prototype-of": {
     "chrome": 34,
+    "edge": 12,
     "firefox": 31,
     "safari": 9,
     "node": 0.12,

@@ -10,6 +10,7 @@
   },
   "transform-es2015-block-scoped-functions": {
     "chrome": 41,
+    "edge": 12,
     "firefox": 46,
     "safari": 10,
     "node": 4,
@@ -19,6 +20,7 @@
   },
   "transform-es2015-block-scoping": {
     "chrome": 49,
+    "edge": 14,
     "firefox": 51,
     "safari": 10,
     "node": 6,
@@ -45,6 +47,7 @@
   },
   "check-es2015-constants": {
     "chrome": 49,
+    "edge": 14,
     "firefox": 51,
     "safari": 10,
     "node": 6,
