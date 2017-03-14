@@ -40,10 +40,9 @@ const interpolateAllResults = (rawBrowsers, tests) => {
     let prevBrowser;
     let result;
     let prevResult;
-    let bid;
     let prevBid;
 
-    for (bid in rawBrowsers) {
+    for (const bid in rawBrowsers) {
       // For browsers that are essentially equal to other browsers,
       // copy over the results.
       browser = rawBrowsers[bid];
@@ -161,11 +160,6 @@ const getLowestImplementedVersion = ({ features }, env) => {
 
   const envTests = tests
     .map(({ res: test, name, isBuiltIn }, i) => {
-
-      if (name === "const/basic support") {
-        console.log(test);
-      }
-
       // Babel itself doesn't implement the feature correctly,
       // don't count against it
       // only doing this for built-ins atm
