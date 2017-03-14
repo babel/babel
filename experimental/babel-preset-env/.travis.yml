@@ -25,13 +25,16 @@ install:
   - $PKG_CMD install
 script:
   - 'if [ -n "${LINT-}" ]; then $PKG_CMD run lint ; fi'
-  - 'if [ -z "${LINT-}" ]; then $PKG_CMD run test-ci ; fi'
+  - 'if [ -n "${DATA_CHECK-}" ]; then $PKG_CMD run build-data -- --check ; fi'
+  - 'if [ -z "${LINT-}" ] && [ -z "${DATA_CHECK-}" ]; then $PKG_CMD run test-ci ; fi'
 matrix:
   fast_finish: true
   include:
     - node_js: "node"
       env: LINT=true PKG_CMD="npm"
+    - node_js: "node"
+      env: DATA_CHECK=true PKG_CMD="npm"
   exclude:
     - node_js: "4"
       env: PKG_CMD="yarn"
-after_success: 'if [ -z "${LINT-}" ]; then npm run coverage-ci ; fi'
+after_success: 'if [ -z "${LINT-}" ] && [ -z "${DATA_CHECK-}" ]; then npm run coverage-ci ; fi'

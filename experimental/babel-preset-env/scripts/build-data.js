@@ -5,6 +5,7 @@ const path = require("path");
 
 const flatten = require("lodash/flatten");
 const flattenDeep = require("lodash/flattenDeep");
+const isEqual = require("lodash/isEqual");
 const mapValues = require("lodash/mapValues");
 const pluginFeatures = require("../data/plugin-features");
 const builtInFeatures = require("../data/built-in-features");
@@ -53,7 +54,7 @@ const envMap = {
 
 const invertedEqualsEnv = Object.keys(envs).filter(b => envs[b].equals).reduce((
   a,
-  b,
+  b
 ) => {
   const checkEnv = envMap[envs[b].equals] || envs[b].equals;
   environments.some(env => {
@@ -87,7 +88,7 @@ const compatibilityTests = flattenDeep(
       return test.subtests
         ? [test, renameTests(test.subtests, name => test.name + " / " + name)]
         : test;
-    })),
+    }))
 );
 
 const getLowestImplementedVersion = ({ features }, env) => {
@@ -114,7 +115,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
               res: test.res,
               isBuiltIn,
             };
-      }),
+      })
   );
 
   const envTests = tests.map(({ res: test, name, isBuiltIn }, i) => {
@@ -140,8 +141,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
         .filter(t => t.startsWith(env))
         // Babel assumes strict mode
         .filter(
-          test =>
-            tests[i].res[test] === true || tests[i].res[test] === "strict",
+          test => tests[i].res[test] === true || tests[i].res[test] === "strict"
         )
         // normalize some keys
         .map(test => envMap[test] || test)
@@ -197,12 +197,36 @@ const generateData = (environments, features) => {
   });
 };
 
+const pluginsDataPath = path.join(__dirname, "../data/plugins.json");
+const builtInsDataPath = path.join(__dirname, "../data/built-ins.json");
+
+const newPluginData = generateData(environments, pluginFeatures);
+const newBuiltInsData = generateData(environments, builtInFeatures);
+
+if (process.argv[2] === "--check") {
+  const currentPluginData = require(pluginsDataPath);
+  const currentBuiltInsData = require(builtInsDataPath);
+
+  if (
+    !isEqual(currentPluginData, newPluginData) ||
+    !isEqual(currentBuiltInsData, newBuiltInsData)
+  ) {
+    console.error(
+      "The newly generated plugin/built-in data does not match the current " +
+        "files. Re-run `npm run build-data`."
+    );
+    process.exit(1);
+  }
+
+  process.exit(0);
+}
+
 fs.writeFileSync(
-  path.join(__dirname, "../data/plugins.json"),
-  JSON.stringify(generateData(environments, pluginFeatures), null, 2) + "\n",
+  pluginsDataPath,
+  JSON.stringify(newPluginData, null, 2) + "\n"
 );
 
 fs.writeFileSync(
-  path.join(__dirname, "../data/built-ins.json"),
-  JSON.stringify(generateData(environments, builtInFeatures), null, 2) + "\n",
+  builtInsDataPath,
+  JSON.stringify(newBuiltInsData, null, 2) + "\n"
 );

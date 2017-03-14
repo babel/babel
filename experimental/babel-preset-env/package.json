@@ -15,9 +15,9 @@
     "coverage-ci": "nyc report --reporter=json && codecov -f coverage/coverage-final.json",
     "dev": "babel -w src -d lib",
     "fix": "eslint . --fix",
+    "format": "prettier --trailing-comma all --write \"src/*.js\" \"test/*.js\" && prettier --trailing-comma es5 --write \"scripts/*.js\"",
     "lint": "eslint .",
     "precommit": "lint-staged",
-    "prettify": "prettier --trailing-comma all --write \"src/*.js\" \"scripts/*.js\" \"test/*.js\"",
     "test": "npm run build && npm run test-only",
     "test-ci": "nyc npm run test",
     "test-only": "mocha ./test --compilers js:babel-register -t 10000"
@@ -106,8 +106,12 @@
     "sourceMap": false
   },
   "lint-staged": {
-    "{src,scripts}/**/*.js": [
+    "src/**/*.js": [
       "prettier --trailing-comma all --write",
+      "git add"
+    ],
+    "scripts/*.js": [
+      "prettier --trailing-comma es5 --write",
       "git add"
     ],
     "test/*.js": [
