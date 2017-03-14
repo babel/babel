@@ -28,7 +28,6 @@ import "core-js/modules/es6.promise";
 import "core-js/modules/es6.symbol";
 import "core-js/modules/es6.object.assign";
 import "core-js/modules/es6.object.is";
-import "core-js/modules/es6.object.set-prototype-of";
 import "core-js/modules/es6.function.name";
 import "core-js/modules/es6.string.raw";
 import "core-js/modules/es6.string.from-code-point";

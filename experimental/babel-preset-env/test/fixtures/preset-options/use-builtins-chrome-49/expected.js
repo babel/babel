@@ -1,3 +1,12 @@
+import "core-js/modules/es6.typed.int8-array";
+import "core-js/modules/es6.typed.uint8-array";
+import "core-js/modules/es6.typed.uint8-clamped-array";
+import "core-js/modules/es6.typed.int16-array";
+import "core-js/modules/es6.typed.uint16-array";
+import "core-js/modules/es6.typed.int32-array";
+import "core-js/modules/es6.typed.uint32-array";
+import "core-js/modules/es6.typed.float32-array";
+import "core-js/modules/es6.typed.float64-array";
 import "core-js/modules/es6.map";
 import "core-js/modules/es6.set";
 import "core-js/modules/es6.weak-map";
