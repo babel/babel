@@ -1,5 +1,5 @@
 import type File from "./index";
-import buildDebug from "debug/node";
+import buildDebug from "debug";
 
 const verboseDebug = buildDebug("babel:verbose");
 const generalDebug = buildDebug("babel");
@@ -19,6 +19,15 @@ export default class Logger {
     let parts = `[BABEL] ${this.filename}`;
     if (msg) parts += `: ${msg}`;
     return parts;
+  }
+
+  wrap<T>(callback: () => T): T {
+    try {
+      return callback();
+    } catch (e) {
+      e.message = this._buildMessage(e.message);
+      throw e;
+    }
   }
 
   warn(msg: string) {

@@ -45,7 +45,17 @@ export default class File extends Store {
     super();
 
     this.log = new Logger(this, opts.filename || "unknown");
-    this.opts = this.initOptions(opts);
+
+    opts = this.initOptions(opts);
+
+    let passes = [];
+    if (opts.plugins) passes.push(opts.plugins);
+
+    // With "passPerPreset" enabled there may still be presets in the options.
+    if (opts.presets) passes = passes.concat(opts.presets.map((preset) => preset.plugins).filter(Boolean));
+
+    this.pluginPasses = passes;
+    this.opts = opts;
 
     this.parserOpts = {
       sourceType: this.opts.sourceType,
@@ -53,22 +63,12 @@ export default class File extends Store {
       plugins: [],
     };
 
-    this.pluginVisitors = [];
-    this.pluginPasses = [];
-
-    // Plugins for top-level options.
-    this.buildPluginsForOptions(this.opts);
-
-    // If we are in the "pass per preset" mode, build
-    // also plugins for each preset.
-    if (this.opts.passPerPreset) {
-      // All the "per preset" options are inherited from the main options.
-      this.perPresetOpts = [];
-      this.opts.presets.forEach((presetOpts) => {
-        const perPresetOpts = Object.assign(Object.create(this.opts), presetOpts);
-        this.perPresetOpts.push(perPresetOpts);
-        this.buildPluginsForOptions(perPresetOpts);
-      });
+    for (const pluginPairs of passes) {
+      for (const [ plugin ] of pluginPairs) {
+        if (plugin.manipulateOptions) {
+          plugin.manipulateOptions(opts, this.parserOpts, this);
+        }
+      }
     }
 
     this.metadata = {
@@ -100,8 +100,7 @@ export default class File extends Store {
 
   static helpers: Array<string>;
 
-  pluginVisitors: Array<Object>;
-  pluginPasses: Array<PluginPass>;
+  pluginPasses: Array<Array<[Plugin, Object]>>;
   parserOpts: BabelParserOptions;
   log: Logger;
   opts: Object;
@@ -132,7 +131,7 @@ export default class File extends Store {
   }
 
   initOptions(opts) {
-    opts = new OptionManager(this.log).init(opts);
+    opts = this.log.wrap(() => new OptionManager().init(opts));
 
     if (opts.inputSourceMap) {
       opts.sourceMaps = true;
@@ -168,31 +167,6 @@ export default class File extends Store {
     });
 
     return opts;
-  }
-
-  buildPluginsForOptions(opts) {
-    if (!Array.isArray(opts.plugins)) {
-      return;
-    }
-
-    const plugins: Array<[PluginPass, Object]> = opts.plugins.concat(INTERNAL_PLUGINS);
-    const currentPluginVisitors = [];
-    const currentPluginPasses = [];
-
-    // init plugins!
-    for (const ref of plugins) {
-      const [plugin, pluginOpts] = ref; // todo: fix - can't embed in loop head because of flow bug
-
-      currentPluginVisitors.push(plugin.visitor);
-      currentPluginPasses.push(new PluginPass(this, plugin, pluginOpts));
-
-      if (plugin.manipulateOptions) {
-        plugin.manipulateOptions(opts, this.parserOpts, this);
-      }
-    }
-
-    this.pluginVisitors.push(currentPluginVisitors);
-    this.pluginPasses.push(currentPluginPasses);
   }
 
   getModuleName(): ?string {
@@ -460,20 +434,25 @@ export default class File extends Store {
   }
 
   transform(): BabelFileResult {
-    // In the "pass per preset" mode, we have grouped passes.
-    // Otherwise, there is only one plain pluginPasses array.
-    for (let i = 0; i < this.pluginPasses.length; i++) {
-      const pluginPasses = this.pluginPasses[i];
-      this.call("pre", pluginPasses);
+    for (const pluginPairs of this.pluginPasses) {
+      const passes = [];
+      const visitors = [];
+
+      for (const [ plugin, pluginOpts ] of pluginPairs.concat(INTERNAL_PLUGINS)) {
+        const pass = new PluginPass(this, plugin, pluginOpts);
+        passes.push(pass);
+        visitors.push(plugin.visitor);
+      }
+
+      this.call("pre", passes);
       this.log.debug("Start transform traverse");
 
       // merge all plugin visitors into a single visitor
-      const visitor = traverse.visitors.merge(this.pluginVisitors[i], pluginPasses,
-        this.opts.wrapPluginVisitorMethod);
+      const visitor = traverse.visitors.merge(visitors, passes, this.opts.wrapPluginVisitorMethod);
       traverse(this.ast, visitor, this.scope);
 
       this.log.debug("End transform traverse");
-      this.call("post", pluginPasses);
+      this.call("post", passes);
     }
 
     return this.generate();

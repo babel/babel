@@ -137,27 +137,9 @@ After Babel 6, the default transforms were removed; if you don't specify any plu
 
 The transformer[s] used in Babel are the independent pieces of code that transform specific things. For example: the [`es2015-arrow-functions`](/packages/babel-plugin-transform-es2015-arrow-functions) transform specifically changes arrow functions into a regular function. Presets are just simply an array of plugins that make it easier to run a whole a set of transforms without specifying each one manually.
 
-There are a few presets that we maintain officially.
-
-| Package | Version | Dependencies |
-|--------|-------|------------|
-| [`babel-preset-es2015`](/packages/babel-preset-es2015) | [![npm](https://img.shields.io/npm/v/babel-preset-es2015.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-es2015) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-es2015)](https://david-dm.org/babel/babel?path=packages/babel-preset-es2015) |
-| [`babel-preset-es2016`](/packages/babel-preset-es2016) | [![npm](https://img.shields.io/npm/v/babel-preset-es2016.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-es2016) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-es2016)](https://david-dm.org/babel/babel?path=packages/babel-preset-es2016) |
-| [`babel-preset-es2017`](/packages/babel-preset-es2017) | [![npm](https://img.shields.io/npm/v/babel-preset-es2017.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-es2017) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-es2017)](https://david-dm.org/babel/babel?path=packages/babel-preset-es2017) |
-| [`babel-preset-latest`](/packages/babel-preset-latest) | [![npm](https://img.shields.io/npm/v/babel-preset-latest.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-latest) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-latest)](https://david-dm.org/babel/babel?path=packages/babel-preset-latest) |
-| [`babel-preset-stage-0`](/packages/babel-preset-stage-0) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-0.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-0) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-0)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-0) |
-| [`babel-preset-stage-1`](/packages/babel-preset-stage-1) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-1.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-1) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-1)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-1) |
-| [`babel-preset-stage-2`](/packages/babel-preset-stage-2) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-2.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-2) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-2)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-2) |
-| [`babel-preset-stage-3`](/packages/babel-preset-stage-3) | [![npm](https://img.shields.io/npm/v/babel-preset-stage-3.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-stage-3) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-stage-3)](https://david-dm.org/babel/babel?path=packages/babel-preset-stage-3) |
-| [`babel-preset-react`](/packages/babel-preset-react) | [![npm](https://img.shields.io/npm/v/babel-preset-react.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-react) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-preset-react)](https://david-dm.org/babel/babel?path=packages/babel-preset-react) |
-| [`babel-preset-env`](https://github.com/babel/babel-preset-env) | [![npm](https://img.shields.io/npm/v/babel-preset-env.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-env) | [![Dependency Status](https://david-dm.org/babel/babel-preset-env.svg)](https://david-dm.org/babel/babel-preset-env) |
-
-We maintain:
-
-- a preset for each yearly release of ECMAScript (Javascript) starting from ES6/ES2015.
-- a preset for react (JSX/Flow).
-- a preset for each [stage (0-3)](http://babeljs.io/docs/plugins/#stage-x-experimental-presets) of the [TC-39 Process](https://tc39.github.io/process-document/) for ECMAScript proposals.
-- a preset that can automatically determine plugins and polyfills you need based on your supported environments.
+| Package | Version | Dependencies | Description |
+|--------|-------|------------|---|
+| [`babel-preset-env`](https://github.com/babel/babel-preset-env) | [![npm](https://img.shields.io/npm/v/babel-preset-env.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-preset-env) | [![Dependency Status](https://david-dm.org/babel/babel-preset-env.svg)](https://david-dm.org/babel/babel-preset-env) | automatically determines plugins and polyfills you need based on your supported environments |
 
 > You can find community maintained presets on [npm](https://www.npmjs.com/search?q=babel-preset)
 
@@ -191,17 +173,17 @@ Babel | Daniel Tschinder | Logan Smyth | Henry Zhu |
 
 ### Members
 
-[![Andrew Levine](https://avatars.githubusercontent.com/u/5233399?s=64)](https://github.com/drewml) | [![Boopathi Rajaa](https://avatars.githubusercontent.com/u/294474?s=64)](https://github.com/boopathi) | [![Brian Ng](https://avatars.githubusercontent.com/u/56288?s=64)](https://github.com/existentialism) | [![Dan Harper](https://avatars.githubusercontent.com/u/510740?s=64)](https://github.com/danharper) | [![Diogo Franco](https://avatars.githubusercontent.com/u/73085?s=64)](https://github.com/kovensky) |
-|---|---|---|---|---|---|---|---|---|
-| Andrew Levine | Boopathi Rajaa | Brian Ng | Dan Harper | Diogo Franco |
-| [@drewml](https://github.com/drewml) | [@boopathi](https://github.com/boopathi) | [@existentialism](https://github.com/existentialism) | [@danharper](https://github.com/danharper) | [@kovensky](https://github.com/kovensky) |
-| [@drewml](https://twitter.com/drewml) | [@heisenbugger](https://twitter.com/heisenbugger) | [@existentialism](https://twitter.com/existentialism) | [@DanHarper7](https://twitter.com/DanHarper7) | [@kovnsk](https://twitter.com/kovnsk) |
+[![Andrew Levine](https://avatars.githubusercontent.com/u/5233399?s=64)](https://github.com/drewml) | [![Boopathi Rajaa](https://avatars.githubusercontent.com/u/294474?s=64)](https://github.com/boopathi) | [![Brian Ng](https://avatars.githubusercontent.com/u/56288?s=64)](https://github.com/existentialism) | [![Dan Harper](https://avatars.githubusercontent.com/u/510740?s=64)](https://github.com/danharper) | [![diogo franco](https://avatars.githubusercontent.com/u/73085?s=64)](https://github.com/kovensky) | [![Aaron Ang](https://avatars1.githubusercontent.com/u/7579804?s=64)](https://github.com/aaronang) | [![Artem Yavorsky](https://avatars2.githubusercontent.com/u/1521229?s=64)](https://github.com/yavorsky) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Andrew Levine | Boopathi Rajaa | Brian Ng | Dan Harper | Diogo Franco | Aaron Ang | Artem Yavorsky |
+| [@drewml](https://github.com/drewml) | [@boopathi](https://github.com/boopathi) | [@existentialism](https://github.com/existentialism) | [@danharper](https://github.com/danharper) | [@kovensky](https://github.com/kovensky) | [@aaronang](https://github.com/aaronang) | [@yavorsky](https://github.com/yavorsky) |
+| [@drewml](https://twitter.com/drewml) | [@heisenbugger](https://twitter.com/heisenbugger) | [@existentialism](https://twitter.com/existentialism) | [@DanHarper7](https://twitter.com/DanHarper7) | [@kovnsk](https://twitter.com/kovnsk) | [@_aaronang](https://twitter.com/_aaronang) | [@yavorsky_](https://twitter.com/yavorsky_) |
 
-[![Juriy Zaytsev](https://avatars.githubusercontent.com/u/383?s=64)](https://github.com/kangax) | [![Kai Cataldo](https://avatars.githubusercontent.com/u/7041728?s=64)](https://github.com/kaicataldo) | [![Moti Zilberman](https://avatars.githubusercontent.com/u/2246565?s=64)](https://github.com/motiz88) | [![Sven Sauleau](https://avatars3.githubusercontent.com/u/1493671?s=64)](https://github.com/xtuc) |
-|---|---|---|---|---|---|---|---|---|
-| Juriy Zaytsev | Kai Cataldo | Moti Zilberman | Sven Sauleau | 
-| [@kangax](https://github.com/kangax) | [@kaicataldo](https://github.com/kaicataldo) | [@motiz88](https://github.com/motiz88) | [@xtuc](https://github.com/xtuc) |
-| [@kangax](https://twitter.com/kangax) | [@kai_cataldo](https://twitter.com/kai_cataldo) | [@motiz88](https://twitter.com/motiz88) | [@svensauleau](https://twitter.com/svensauleau) |
+[![Juriy Zaytsev](https://avatars.githubusercontent.com/u/383?s=64)](https://github.com/kangax) | [![Kai Cataldo](https://avatars.githubusercontent.com/u/7041728?s=64)](https://github.com/kaicataldo) | [![Moti Zilberman](https://avatars.githubusercontent.com/u/2246565?s=64)](https://github.com/motiz88) | [![Sven Sauleau](https://avatars3.githubusercontent.com/u/1493671?s=64)](https://github.com/xtuc) | [![Samuel Reed](https://avatars3.githubusercontent.com/u/1197375?s=64)](https://github.com/STRML) | [![Sergey Rubanov](https://avatars1.githubusercontent.com/u/1507086?s=64)](https://github.com/chicoxyzzy) |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Juriy Zaytsev | Kai Cataldo | Moti Zilberman | Sven Sauleau | Samuel Reed | Sergey Rubanov |
+| [@kangax](https://github.com/kangax) | [@kaicataldo](https://github.com/kaicataldo) | [@motiz88](https://github.com/motiz88) | [@xtuc](https://github.com/xtuc) | [@STRML](https://github.com/STRML) | [@chicoxyzzy](https://github.com/chicoxyzzy) |
+| [@kangax](https://twitter.com/kangax) | [@kai_cataldo](https://twitter.com/kai_cataldo) | [@motiz88](https://twitter.com/motiz88) | [@svensauleau](https://twitter.com/svensauleau) | [@STRML_](https://twitter.com/STRML_) | [@chicoxyzzy](https://twitter.com/chicoxyzzy) |
 
 ### Non-Human Members
 
@@ -222,3 +204,4 @@ Amjad Masad | James Kyle | Jesse McCarthy | Sebastian McKenzie |
 ## License
 
 [MIT](https://github.com/babel/babel/blob/master/LICENSE)
+

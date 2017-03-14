@@ -6,7 +6,9 @@ export { default as buildExternalHelpers } from "./tools/build-external-helpers"
 export { default as template } from "babel-template";
 export { default as resolvePlugin } from "./helpers/resolve-plugin";
 export { default as resolvePreset } from "./helpers/resolve-preset";
+
 export { version } from "../package";
+export { getEnv } from "./helpers/environment";
 
 import * as util from "./util";
 export { util };
