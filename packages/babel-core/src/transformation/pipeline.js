@@ -4,6 +4,7 @@ import fs from "fs";
 import normalizeAst from "../helpers/normalize-ast";
 import Plugin from "./plugin";
 import File from "./file";
+import OptionManager from "./file/options/option-manager";
 
 export function analyse(code: string, opts: Object = {}, visitor?: Object): ?BabelFileMetadata {
   opts.code = false;
@@ -15,6 +16,8 @@ export function analyse(code: string, opts: Object = {}, visitor?: Object): ?Bab
 }
 
 export function transform(code: string, opts?: Object): BabelFileResult {
+  opts = new OptionManager().init(opts);
+
   const file = new File(opts);
   return file.wrap(code, function () {
     file.addCode(code);
@@ -24,6 +27,8 @@ export function transform(code: string, opts?: Object): BabelFileResult {
 }
 
 export function transformFromAst(ast: Object, code: string, opts: Object): BabelFileResult {
+  opts = new OptionManager().init(opts);
+
   ast = normalizeAst(ast);
 
   const file = new File(opts);
@@ -41,6 +46,7 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
   }
 
   opts.filename = filename;
+  opts = new OptionManager().init(opts);
 
   fs.readFile(filename, function (err, code) {
     let result;
@@ -68,6 +74,7 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
 
 export function transformFileSync(filename: string, opts?: Object = {}): string {
   opts.filename = filename;
+  opts = new OptionManager().init(opts);
 
   const code = fs.readFileSync(filename, "utf8");
   const file = new File(opts);

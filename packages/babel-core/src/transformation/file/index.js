@@ -3,7 +3,6 @@
 import getHelper from "babel-helpers";
 import * as metadataVisitor from "./metadata";
 import convertSourceMap from "convert-source-map";
-import OptionManager from "./options/option-manager";
 import PluginPass from "../plugin-pass";
 import { NodePath, Hub, Scope } from "babel-traverse";
 import sourceMap from "source-map";
@@ -41,8 +40,6 @@ const errorVisitor = {
 export default class File extends Store {
   constructor(opts: Object = {}) {
     super();
-
-    opts = new OptionManager().init(opts);
 
     let passes = [];
     if (opts.plugins) passes.push(opts.plugins);
