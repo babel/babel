@@ -6,7 +6,7 @@ import Plugin from "../lib/transformation/plugin";
 import generator from "babel-generator";
 
 function assertIgnored(result) {
-  assert.ok(result.ignored);
+  assert.ok(!result);
 }
 
 function assertNotIgnored(result) {
@@ -496,51 +496,76 @@ describe("api", function () {
   it("ignore option", function () {
     return Promise.all([
       transformAsync("", {
-        ignore: ["node_modules"],
+        ignore: ["/foo"],
         filename: "/foo/node_modules/bar",
       }).then(assertIgnored),
 
       transformAsync("", {
-        ignore: ["foo/node_modules"],
+        ignore: ["/foo/node_modules"],
         filename: "/foo/node_modules/bar",
       }).then(assertIgnored),
 
       transformAsync("", {
-        ignore: ["foo/node_modules/*.bar"],
+        ignore: ["/foo/node_modules/*"],
+        filename: "/foo/node_modules/bar",
+      }).then(assertIgnored),
+
+      transformAsync("", {
+        ignore: ["/foo/**/*"],
+        filename: "/foo/node_modules/bar",
+      }).then(assertIgnored),
+
+      transformAsync("", {
+        ignore: ["/foo/node_modules/*.bar"],
         filename: "/foo/node_modules/foo.bar",
       }).then(assertIgnored),
+
+      transformAsync("", {
+        ignore: ["/foo/node_modules/*.foo"],
+        filename: "/foo/node_modules/foo.bar",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        ignore: ["/bar/**/*"],
+        filename: "/foo/node_modules/foo.bar",
+      }).then(assertNotIgnored),
     ]);
   });
 
   it("only option", function () {
     return Promise.all([
       transformAsync("", {
-        only: ["node_modules"],
+        only: ["/foo"],
         filename: "/foo/node_modules/bar",
       }).then(assertNotIgnored),
 
       transformAsync("", {
-        only: ["foo/node_modules"],
+        only: ["/foo/*"],
         filename: "/foo/node_modules/bar",
       }).then(assertNotIgnored),
 
       transformAsync("", {
-        only: ["foo/node_modules/*.bar"],
+        only: ["/foo/node_modules"],
+        filename: "/foo/node_modules/bar",
+      }).then(assertNotIgnored),
+
+      transformAsync("", {
+        only: ["/foo/node_modules/*.bar"],
         filename: "/foo/node_modules/foo.bar",
       }).then(assertNotIgnored),
 
       transformAsync("", {
-        only: ["node_modules"],
+        only: ["/foo/node_modules"],
         filename: "/foo/node_module/bar",
       }).then(assertIgnored),
 
       transformAsync("", {
-        only: ["foo/node_modules"],
+        only: ["/foo/node_modules"],
         filename: "/bar/node_modules/foo",
       }).then(assertIgnored),
 
       transformAsync("", {
-        only: ["foo/node_modules/*.bar"],
+        only: ["/foo/node_modules/*.bar"],
         filename: "/foo/node_modules/bar.foo",
       }).then(assertIgnored),
     ]);

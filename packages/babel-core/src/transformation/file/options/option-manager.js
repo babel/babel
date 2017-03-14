@@ -236,17 +236,6 @@ export default class OptionManager {
       }
     }
 
-    if (opts.ignore) {
-      if (!Array.isArray(rawOpts.ignore)) throw new Error(`${alias}.ignore should be an array`);
-
-      opts.ignore = opts.ignore.map(util.regexify);
-    }
-    if (opts.only) {
-      if (!Array.isArray(rawOpts.only)) throw new Error(`${alias}.only should be an array`);
-
-      opts.only = opts.only.map(util.regexify);
-    }
-
     // resolve plugins
     if (opts.plugins) {
       if (!Array.isArray(rawOpts.plugins)) throw new Error(`${alias}.plugins should be an array`);
@@ -373,8 +362,11 @@ export default class OptionManager {
   }
 
   init(opts: Object = {}): Object {
+    const configChain = buildConfigChain(opts);
+    if (!configChain) return null;
+
     try {
-      for (const config of buildConfigChain(opts)) {
+      for (const config of configChain) {
         this.mergeOptions(config);
       }
     } catch (e) {

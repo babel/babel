@@ -17,6 +17,7 @@ export function analyse(code: string, opts: Object = {}, visitor?: Object): ?Bab
 
 export function transform(code: string, opts?: Object): BabelFileResult {
   opts = new OptionManager().init(opts);
+  if (opts === null) return null;
 
   const file = new File(opts);
   return file.wrap(code, function () {
@@ -28,6 +29,7 @@ export function transform(code: string, opts?: Object): BabelFileResult {
 
 export function transformFromAst(ast: Object, code: string, opts: Object): BabelFileResult {
   opts = new OptionManager().init(opts);
+  if (opts === null) return null;
 
   ast = normalizeAst(ast);
 
@@ -47,6 +49,7 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
 
   opts.filename = filename;
   opts = new OptionManager().init(opts);
+  if (opts === null) return callback(null, null);
 
   fs.readFile(filename, function (err, code) {
     let result;
@@ -75,6 +78,7 @@ export function transformFile(filename: string, opts?: Object, callback: Functio
 export function transformFileSync(filename: string, opts?: Object = {}): string {
   opts.filename = filename;
   opts = new OptionManager().init(opts);
+  if (opts === null) return null;
 
   const code = fs.readFileSync(filename, "utf8");
   const file = new File(opts);

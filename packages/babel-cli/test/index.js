@@ -91,7 +91,7 @@ const buildTest = function (binName, testName, opts) {
     }
 
     if (binName === "babel-node") {
-      args.push("--only", "packages/*/test");
+      args.push("--only", "../../../../packages/*/test");
     }
 
     args = args.concat(opts.args);
@@ -119,7 +119,7 @@ const buildTest = function (binName, testName, opts) {
       }
 
       if (err) {
-        err.message = args.join(" ") + ": " + err.message;
+        err.message = args.map((arg) => `"${ arg }"`).join(" ") + ": " + err.message;
       }
 
       callback(err);

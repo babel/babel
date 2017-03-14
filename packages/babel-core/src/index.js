@@ -6,8 +6,6 @@ export resolvePreset from "./helpers/resolve-preset";
 export { version } from "../package";
 export { getEnv } from "./helpers/environment";
 
-export * as util from "./util";
-
 export * as messages from "babel-messages";
 export * as types from "babel-types";
 export traverse from "babel-traverse";

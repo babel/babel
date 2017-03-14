@@ -124,8 +124,6 @@ export default function (commander, filenames, opts) {
     });
 
     _filenames.forEach(function (filename) {
-      if (util.shouldIgnore(filename, opts)) return;
-
       let sourceFilename = filename;
       if (commander.outFile) {
         sourceFilename = path.relative(path.dirname(commander.outFile), sourceFilename);
@@ -136,7 +134,8 @@ export default function (commander, filenames, opts) {
         sourceFileName: sourceFilename,
       }, opts));
 
-      if (data.ignored) return;
+      if (!data) return;
+
       results.push(data);
     });
 
@@ -159,7 +158,7 @@ export default function (commander, filenames, opts) {
           pollInterval: 10,
         },
       }).on("all", function (type, filename) {
-        if (util.shouldIgnore(filename, opts) || !util.canCompile(filename, commander.extensions)) return;
+        if (!util.canCompile(filename, commander.extensions)) return;
 
         if (type === "add" || type === "change") {
           util.log(type + " " + filename);
