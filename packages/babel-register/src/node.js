@@ -9,18 +9,18 @@ import path from "path";
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
-  environment : "node",
+  environment: "node",
   retrieveSourceMap(source) {
     const map = maps && maps[source];
     if (map) {
       return {
         url: null,
-        map: map
+        map: map,
       };
     } else {
       return null;
     }
-  }
+  },
 });
 
 registerCache.load();
@@ -31,8 +31,8 @@ const transformOpts = {};
 let ignore;
 let only;
 
-let oldHandlers   = {};
-const maps          = {};
+let oldHandlers = {};
+const maps = {};
 
 const cwd = process.cwd();
 
@@ -56,7 +56,8 @@ function compile(filename) {
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
-  const env = process.env.BABEL_ENV || process.env.NODE_ENV;
+  const env = babel.getEnv(false);
+
   if (env) cacheKey += `:${env}`;
 
   if (cache) {
@@ -72,7 +73,7 @@ function compile(filename) {
       // calls above and would introduce duplicates.
       babelrc: false,
       sourceMaps: "both",
-      ast: false
+      ast: false,
     }));
   }
 

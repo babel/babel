@@ -5,7 +5,7 @@ export default function () {
   return {
     plugins: [
       transformAsyncGeneratorFunctions,
-      transformObjectRestSpread
-    ]
+      transformObjectRestSpread,
+    ],
   };
 }

@@ -5,7 +5,7 @@ export default function () {
   return {
     plugins: [
       syntaxTrailingFunctionCommas,
-      transformAsyncToGenerator
-    ]
+      transformAsyncToGenerator,
+    ],
   };
 }

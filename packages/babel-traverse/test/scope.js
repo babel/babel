@@ -9,7 +9,7 @@ function getPath(code) {
     Program: function (_path) {
       path = _path;
       _path.stop();
-    }
+    },
   });
   return path;
 }
@@ -21,7 +21,7 @@ function getIdentifierPath(code) {
     Identifier: function(path) {
       nodePath = path;
       path.stop();
-    }
+    },
   });
 
   return nodePath;
@@ -85,8 +85,8 @@ describe("scope", function () {
       const path = getIdentifierPath("function square(n) { return n * n}");
       const referencePaths = path.context.scope.bindings.n.referencePaths;
       assert.equal(referencePaths.length, 2);
-      assert.deepEqual(referencePaths[0].node.loc.start, { line: 1, column:28 });
-      assert.deepEqual(referencePaths[1].node.loc.start, { line: 1, column:32 });
+      assert.deepEqual(referencePaths[0].node.loc.start, { line: 1, column: 28 });
+      assert.deepEqual(referencePaths[1].node.loc.start, { line: 1, column: 32 });
     });
   });
 });

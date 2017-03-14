@@ -9,7 +9,7 @@ export default function () {
             const replacement = nameFunction(path);
             if (replacement) path.replaceWith(replacement);
           }
-        }
+        },
       },
 
       ObjectProperty(path) {
@@ -18,7 +18,7 @@ export default function () {
           const newNode = nameFunction(value);
           if (newNode) value.replaceWith(newNode);
         }
-      }
-    }
+      },
+    },
   };
 }

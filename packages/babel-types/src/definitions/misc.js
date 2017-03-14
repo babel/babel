@@ -1,7 +1,7 @@
 import defineType, { assertNodeType } from "./index";
 
 defineType("Noop", {
-  visitor: []
+  visitor: [],
 });
 
 defineType("ParenthesizedExpression", {
@@ -9,7 +9,7 @@ defineType("ParenthesizedExpression", {
   aliases: ["Expression", "ExpressionWrapper"],
   fields: {
     expression: {
-      validate: assertNodeType("Expression")
-    }
-  }
+      validate: assertNodeType("Expression"),
+    },
+  },
 });

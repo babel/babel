@@ -129,7 +129,7 @@ export default function defineType(
 ) {
   const inherits = (opts.inherits && store[opts.inherits]) || {};
 
-  opts.fields  = opts.fields || inherits.fields || {};
+  opts.fields = opts.fields || inherits.fields || {};
   opts.visitor = opts.visitor || inherits.visitor || [];
   opts.aliases = opts.aliases || inherits.aliases || [];
   opts.builder = opts.builder || inherits.builder || opts.visitor || [];
@@ -158,8 +158,8 @@ export default function defineType(
 
   VISITOR_KEYS[type] = opts.visitor;
   BUILDER_KEYS[type] = opts.builder;
-  NODE_FIELDS[type]  = opts.fields;
-  ALIAS_KEYS[type]   = opts.aliases;
+  NODE_FIELDS[type] = opts.fields;
+  ALIAS_KEYS[type] = opts.aliases;
 
   store[type] = opts;
 }

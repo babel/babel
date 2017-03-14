@@ -15,7 +15,7 @@ export const visitor = {
         const uid = path.scope.generateUidIdentifier("ref");
 
         const declar = t.variableDeclaration("let", [
-          t.variableDeclarator(param.node, uid)
+          t.variableDeclarator(param.node, uid),
         ]);
         declar._blockHoist = outputParamsLength - i;
 
@@ -25,5 +25,5 @@ export const visitor = {
         param.replaceWith(uid);
       }
     }
-  }
+  },
 };

@@ -1,12 +1,13 @@
 import fs from "fs";
 
 export { default as File } from "./transformation/file";
-export { default as options } from "./transformation/file/options/config";
 export { default as buildExternalHelpers } from "./tools/build-external-helpers";
 export { default as template } from "babel-template";
 export { default as resolvePlugin } from "./helpers/resolve-plugin";
 export { default as resolvePreset } from "./helpers/resolve-preset";
+
 export { version } from "../package";
+export { getEnv } from "./helpers/environment";
 
 import * as util from "./util";
 export { util };
@@ -27,13 +28,8 @@ export function Plugin(alias) {
   throw new Error(`The (${alias}) Babel 5 plugin is being run with Babel 6.`);
 }
 
-import Pipeline from "./transformation/pipeline";
-export { Pipeline };
-
-const pipeline = new Pipeline;
-export const analyse = pipeline.analyse.bind(pipeline);
-export const transform = pipeline.transform.bind(pipeline);
-export const transformFromAst = pipeline.transformFromAst.bind(pipeline);
+import { transform, analyse, transformFromAst } from "./transformation/pipeline";
+export { transform, analyse, transformFromAst };
 
 export function transformFile(filename: string, opts?: Object, callback: Function) {
   if (typeof opts === "function") {

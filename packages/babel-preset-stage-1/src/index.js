@@ -6,11 +6,11 @@ import transformExportExtensions from "babel-plugin-transform-export-extensions"
 export default function () {
   return {
     presets: [
-      presetStage2
+      presetStage2,
     ],
     plugins: [
       transformDecorators,
-      transformExportExtensions
-    ]
+      transformExportExtensions,
+    ],
   };
 }

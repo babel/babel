@@ -36,8 +36,8 @@ traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
 traverse.NodePath = require("./path");
-traverse.Scope    = require("./scope");
-traverse.Hub      = require("./hub");
+traverse.Scope = require("./scope");
+traverse.Hub = require("./hub");
 
 traverse.cheap = function (node, enter) {
   return t.traverseFast(node, enter);
@@ -92,13 +92,13 @@ traverse.hasType = function (
   if (tree.type === type) return true;
 
   const state = {
-    has:  false,
-    type: type
+    has: false,
+    type: type,
   };
 
   traverse(tree, {
     blacklist: blacklistTypes,
-    enter: hasBlacklistedType
+    enter: hasBlacklistedType,
   }, scope, state);
 
   return state.has;

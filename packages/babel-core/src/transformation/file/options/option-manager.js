@@ -1,17 +1,14 @@
 import * as context from "../../../index";
-import type Logger from "../logger";
 import Plugin from "../../plugin";
 import * as messages from "babel-messages";
-import { normaliseOptions } from "./index";
 import resolvePlugin from "../../../helpers/resolve-plugin";
 import resolvePreset from "../../../helpers/resolve-preset";
 import cloneDeepWith from "lodash/cloneDeepWith";
-import clone from "lodash/clone";
 import merge from "../../../helpers/merge";
-import config from "./config";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
 import path from "path";
+import * as util from "../../../util";
 
 type PluginObject = {
   pre?: Function;
@@ -34,16 +31,56 @@ type MergeOptions = {
   dirname?: string
 };
 
+const optionNames = new Set([
+  "filename",
+  "filenameRelative",
+  "inputSourceMap",
+  "env",
+  "mode",
+  "retainLines",
+  "highlightCode",
+  "suppressDeprecationMessages",
+  "presets",
+  "plugins",
+  "ignore",
+  "only",
+  "code",
+  "metadata",
+  "ast",
+  "extends",
+  "comments",
+  "shouldPrintComment",
+  "wrapPluginVisitorMethod",
+  "compact",
+  "minified",
+  "sourceMaps",
+  "sourceMapTarget",
+  "sourceFileName",
+  "sourceRoot",
+  "babelrc",
+  "sourceType",
+  "auxiliaryCommentBefore",
+  "auxiliaryCommentAfter",
+  "resolveModuleSource",
+  "getModuleId",
+  "moduleRoot",
+  "moduleIds",
+  "moduleId",
+  "passPerPreset",
+  // Deprecate top level parserOpts
+  "parserOpts",
+  // Deprecate top level generatorOpts
+  "generatorOpts",
+]);
+
 export default class OptionManager {
-  constructor(log?: Logger) {
+  constructor() {
     this.resolvedConfigs = [];
     this.options = OptionManager.createBareOptions();
-    this.log = log;
   }
 
   resolvedConfigs: Array<string>;
   options: Object;
-  log: ?Logger;
 
   static memoisedPlugins: Array<{
     container: Function;
@@ -67,7 +104,7 @@ export default class OptionManager {
       const plugin = new Plugin(obj, alias);
       OptionManager.memoisedPlugins.push({
         container: fn,
-        plugin: plugin
+        plugin: plugin,
       });
       return plugin;
     } else {
@@ -76,14 +113,17 @@ export default class OptionManager {
   }
 
   static createBareOptions() {
-    const opts = {};
-
-    for (const key in config) {
-      const opt = config[key];
-      opts[key] = clone(opt.default);
-    }
-
-    return opts;
+    return {
+      sourceType: "module",
+      babelrc: true,
+      filename: "unknown",
+      code: true,
+      metadata: true,
+      ast: true,
+      comments: true,
+      compact: "auto",
+      highlightCode: true,
+    };
   }
 
   static normalisePlugin(plugin, loc, i, alias) {
@@ -151,14 +191,14 @@ export default class OptionManager {
     extending: extendingOpts,
     alias,
     loc,
-    dirname
+    dirname,
   }: MergeOptions) {
     alias = alias || "foreign";
     if (!rawOpts) return;
 
     //
     if (typeof rawOpts !== "object" || Array.isArray(rawOpts)) {
-      this.log.error(`Invalid options type for ${alias}`, TypeError);
+      throw new TypeError(`Invalid options type for ${alias}`);
     }
 
     //
@@ -172,33 +212,51 @@ export default class OptionManager {
     dirname = dirname || process.cwd();
     loc = loc || alias;
 
-    for (const key in opts) {
-      const option = config[key];
+    if (opts.sourceMap !== undefined) {
+      if (opts.sourceMaps !== undefined) {
+        throw new Error(`Both ${alias}.sourceMap and .sourceMaps have been set`);
+      }
 
+      opts.sourceMaps = opts.sourceMap;
+      delete opts.sourceMap;
+    }
+
+    for (const key in opts) {
       // check for an unknown option
-      if (!option && this.log) {
+      if (!optionNames.has(key)) {
         if (removed[key]) {
-          this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`,
-            ReferenceError);
+          throw new ReferenceError(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`);
         } else {
           // eslint-disable-next-line max-len
           const unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
 
-          this.log.error(unknownOptErr, ReferenceError);
+          throw new ReferenceError(unknownOptErr);
         }
       }
     }
 
-    // normalise options
-    normaliseOptions(opts);
+    if (opts.ignore) {
+      if (!Array.isArray(rawOpts.ignore)) throw new Error(`${alias}.ignore should be an array`);
+
+      opts.ignore = opts.ignore.map(util.regexify);
+    }
+    if (opts.only) {
+      if (!Array.isArray(rawOpts.only)) throw new Error(`${alias}.only should be an array`);
+
+      opts.only = opts.only.map(util.regexify);
+    }
 
     // resolve plugins
     if (opts.plugins) {
+      if (!Array.isArray(rawOpts.plugins)) throw new Error(`${alias}.plugins should be an array`);
+
       opts.plugins = OptionManager.normalisePlugins(loc, dirname, opts.plugins);
     }
 
     // resolve presets
     if (opts.presets) {
+      if (!Array.isArray(rawOpts.presets)) throw new Error(`${alias}.presets should be an array`);
+
       // If we're in the "pass per preset" mode, we resolve the presets
       // and keep them for further execution to calculate the options.
       if (opts.passPerPreset) {
@@ -208,7 +266,7 @@ export default class OptionManager {
             extending: preset,
             alias: presetLoc,
             loc: presetLoc,
-            dirname: dirname
+            dirname: dirname,
           });
         });
       } else {
@@ -238,7 +296,7 @@ export default class OptionManager {
         options: presetOpts,
         alias: presetLoc,
         loc: presetLoc,
-        dirname: path.dirname(presetLoc || "")
+        dirname: path.dirname(presetLoc || ""),
       });
     });
   }
@@ -268,29 +326,30 @@ export default class OptionManager {
               JSON.stringify(dirname));
           }
         }
-        const presetFactory = this.getPresetFactoryForPreset(presetLoc || preset);
+        const resolvedPreset = this.loadPreset(presetLoc || preset, options, { dirname });
 
-        preset = presetFactory(context, options, { dirname });
+        if (onResolve) onResolve(resolvedPreset, presetLoc);
 
-        if (onResolve) onResolve(preset, presetLoc);
+        return resolvedPreset;
       } catch (e) {
         if (presetLoc) {
           e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
         }
         throw e;
       }
-
-      return preset;
     });
   }
 
-  getPresetFactoryForPreset(preset) {
+  /**
+   * Tries to load one preset. The input is either the module name of the preset,
+   * a function, or an object
+   */
+  loadPreset(preset, options, meta) {
     let presetFactory = preset;
     if (typeof presetFactory === "string") {
       presetFactory = require(presetFactory);
     }
 
-    // If the imported preset is a transpiled ES2015 module
     if (typeof presetFactory === "object" && presetFactory.__esModule) {
       if (presetFactory.default) {
         presetFactory = presetFactory.default;
@@ -299,40 +358,23 @@ export default class OptionManager {
       }
     }
 
+    // Allow simple object exports
+    if (typeof presetFactory === "object") {
+      return presetFactory;
+    }
+
     if (typeof presetFactory !== "function") {
       // eslint-disable-next-line max-len
       throw new Error(`Unsupported preset format: ${typeof presetFactory}. Expected preset to return a function.`);
     }
 
-    return presetFactory;
-  }
-
-  normaliseOptions() {
-    const opts = this.options;
-
-    for (const key in config) {
-      const option = config[key];
-      const val    = opts[key];
-
-      // optional
-      if (!val && option.optional) continue;
-
-      // aliases
-      if (option.alias) {
-        opts[option.alias] = opts[option.alias] || val;
-      } else {
-        opts[key] = val;
-      }
-    }
+    return presetFactory(context, options, meta);
   }
 
   init(opts: Object = {}): Object {
-    for (const config of buildConfigChain(opts, this.log)) {
+    for (const config of buildConfigChain(opts)) {
       this.mergeOptions(config);
     }
-
-    // normalise
-    this.normaliseOptions(opts);
 
     return this.options;
   }

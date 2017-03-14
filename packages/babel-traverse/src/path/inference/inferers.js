@@ -52,7 +52,7 @@ export function BinaryExpression(node) {
     return t.booleanTypeAnnotation();
   } else if (operator === "+") {
     const right = this.get("right");
-    const left  = this.get("left");
+    const left = this.get("left");
 
     if (left.isBaseType("number") && right.isBaseType("number")) {
       // both numbers so this will be a number
@@ -65,7 +65,7 @@ export function BinaryExpression(node) {
     // unsure if left and right are strings or numbers so stay on the safe side
     return t.unionTypeAnnotation([
       t.stringTypeAnnotation(),
-      t.numberTypeAnnotation()
+      t.numberTypeAnnotation(),
     ]);
   }
 }
@@ -73,14 +73,14 @@ export function BinaryExpression(node) {
 export function LogicalExpression() {
   return t.createUnionTypeAnnotation([
     this.get("left").getTypeAnnotation(),
-    this.get("right").getTypeAnnotation()
+    this.get("right").getTypeAnnotation(),
   ]);
 }
 
 export function ConditionalExpression() {
   return t.createUnionTypeAnnotation([
     this.get("consequent").getTypeAnnotation(),
-    this.get("alternate").getTypeAnnotation()
+    this.get("alternate").getTypeAnnotation(),
   ]);
 }
 
@@ -142,7 +142,7 @@ export {
   Func as ArrowFunctionExpression,
   Func as FunctionDeclaration,
   Func as ClassExpression,
-  Func as ClassDeclaration
+  Func as ClassDeclaration,
 };
 
 export function CallExpression() {

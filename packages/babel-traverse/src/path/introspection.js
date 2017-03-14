@@ -271,7 +271,7 @@ export function _guessExecutionStatusRelativeTo(target) {
   const targetPaths = target.getAncestry();
   if (targetPaths.indexOf(this) >= 0) return "after";
 
-  const selfPaths   = this.getAncestry();
+  const selfPaths = this.getAncestry();
 
   // get ancestor where the branches intersect
   let commonPath;
@@ -291,7 +291,7 @@ export function _guessExecutionStatusRelativeTo(target) {
 
   // get the relationship paths that associate these nodes to their common ancestor
   const targetRelationship = targetPaths[targetIndex - 1];
-  const selfRelationship   = selfPaths[selfIndex - 1];
+  const selfRelationship = selfPaths[selfIndex - 1];
   if (!targetRelationship || !selfRelationship) {
     return "before";
   }
@@ -303,7 +303,7 @@ export function _guessExecutionStatusRelativeTo(target) {
 
   // otherwise we're associated by a parent node, check which key comes before the other
   const targetKeyPosition = t.VISITOR_KEYS[targetRelationship.type].indexOf(targetRelationship.key);
-  const selfKeyPosition   = t.VISITOR_KEYS[selfRelationship.type].indexOf(selfRelationship.key);
+  const selfKeyPosition = t.VISITOR_KEYS[selfRelationship.type].indexOf(selfRelationship.key);
   return targetKeyPosition > selfKeyPosition ? "before" : "after";
 }
 

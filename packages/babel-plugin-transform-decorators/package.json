@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-decorators",
-  "version": "1.3.4",
+  "version": "7.0.0-alpha.1",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "license": "MIT",
   "description": "Compile class and object decorators to ES5",
@@ -12,11 +12,11 @@
     "decorators"
   ],
   "dependencies": {
-    "babel-plugin-syntax-decorators": "^6.13.0",
-    "babel-runtime": "^6.2.0",
-    "babel-template": "^6.22.0"
+    "babel-plugin-syntax-decorators": "7.0.0-alpha.1",
+    "babel-runtime": "7.0.0-alpha.1",
+    "babel-template": "7.0.0-alpha.1"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.22.0"
+    "babel-helper-plugin-test-runner": "^7.0.0-alpha.1"
   }
 }

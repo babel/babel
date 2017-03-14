@@ -35,14 +35,14 @@ export default function ({ types: t }) {
       AssignmentPattern: {
         exit({ node }) {
           node.left.optional = false;
-        }
+        },
       },
 
       // strip optional property from function params - facebook/fbjs#17
       Function: {
         exit({ node }) {
           node.params.forEach((param) => param.optional = false);
-        }
+        },
       },
 
       // support for `class X { foo: string }` - #4622
@@ -67,7 +67,7 @@ export default function ({ types: t }) {
           return;
         }
         wrapInFlowComment(path, parent);
-      }
-    }
+      },
+    },
   };
 }

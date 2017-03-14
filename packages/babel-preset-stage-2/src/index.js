@@ -7,12 +7,12 @@ import transformUnicodePropertyRegex from "babel-plugin-transform-unicode-proper
 export default function () {
   return {
     presets: [
-      presetStage3
+      presetStage3,
     ],
     plugins: [
       syntaxDynamicImport,
       transformClassProperties,
-      transformUnicodePropertyRegex
-    ]
+      transformUnicodePropertyRegex,
+    ],
   };
 }

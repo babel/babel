@@ -7,7 +7,7 @@ export function _params(node: Object) {
     iterator: (node) => {
       if (node.optional) this.token("?");
       this.print(node.typeAnnotation, node);
-    }
+    },
   });
   this.token(")");
 
@@ -18,7 +18,7 @@ export function _params(node: Object) {
 
 export function _method(node: Object) {
   const kind = node.kind;
-  const key  = node.key;
+  const key = node.key;
 
   if (kind === "method" || kind === "init") {
     if (node.generator) {

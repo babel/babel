@@ -10,9 +10,9 @@ export default function () {
         if (!path.node.async || path.node.generator) return;
 
         remapAsyncToGenerator(path, state.file, {
-          wrapAsync: state.addImport(state.opts.module, state.opts.method)
+          wrapAsync: state.addImport(state.opts.module, state.opts.method),
         });
-      }
-    }
+      },
+    },
   };
 }

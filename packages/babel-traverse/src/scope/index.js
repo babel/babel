@@ -119,7 +119,7 @@ const collectorVisitor = {
           }
         }
       }
-    }
+    },
   },
 
   LabeledStatement(path) {
@@ -162,7 +162,7 @@ const collectorVisitor = {
         path.scope.getBlockParent().registerDeclaration(bodyPath);
       }
     }
-  }
+  },
 };
 
 let uid = 0;
@@ -184,13 +184,13 @@ export default class Scope {
 
     this.uid = uid++;
     this.parent = parentScope;
-    this.hub    = path.hub;
+    this.hub = path.hub;
 
     this.parentBlock = path.parent;
-    this.block       = path.node;
-    this.path        = path;
+    this.block = path.node;
+    this.path = path;
 
-    this.labels      = new Map();
+    this.labels = new Map();
   }
 
   /**
@@ -207,7 +207,7 @@ export default class Scope {
     "arguments",
     "undefined",
     "Infinity",
-    "NaN"
+    "NaN",
   ];
 
   /**
@@ -271,7 +271,7 @@ export default class Scope {
    * Generate a unique identifier based on a node.
    */
 
-  generateUidIdentifierBasedOnNode(parent: Object, defaultName?: String):  Object {
+  generateUidIdentifierBasedOnNode(parent: Object, defaultName?: String): Object {
     let node = parent;
 
     if (t.isAssignmentExpression(parent)) {
@@ -377,7 +377,7 @@ export default class Scope {
           constant: binding.constant,
           references: binding.references,
           violations: binding.constantViolations.length,
-          kind: binding.kind
+          kind: binding.kind,
         });
       }
     } while (scope = scope.parent);
@@ -513,10 +513,10 @@ export default class Scope {
 
         this.bindings[name] = new Binding({
           identifier: id,
-          existing:   local,
-          scope:      this,
-          path:       bindingPath,
-          kind:       kind
+          existing: local,
+          scope: this,
+          path: bindingPath,
+          kind: kind,
         });
       }
     }
@@ -645,10 +645,10 @@ export default class Scope {
     //
 
     this.references = Object.create(null);
-    this.bindings   = Object.create(null);
-    this.globals    = Object.create(null);
-    this.uids       = Object.create(null);
-    this.data       = Object.create(null);
+    this.bindings = Object.create(null);
+    this.globals = Object.create(null);
+    this.uids = Object.create(null);
+    this.data = Object.create(null);
 
     // ForStatement - left, init
 
@@ -713,7 +713,7 @@ export default class Scope {
       for (const name in ids) {
         if (path.scope.getBinding(name)) continue;
 
-        programParent = programParent ||  path.scope.getProgramParent();
+        programParent = programParent || path.scope.getProgramParent();
         programParent.addGlobal(ids[name]);
       }
 
@@ -760,11 +760,11 @@ export default class Scope {
     }
 
     const unique = opts.unique;
-    const kind   = opts.kind || "var";
+    const kind = opts.kind || "var";
     const blockHoist = opts._blockHoist == null ? 2 : opts._blockHoist;
 
     const dataKey = `declaration:${kind}:${blockHoist}`;
-    let declarPath  = !unique && path.getData(dataKey);
+    let declarPath = !unique && path.getData(dataKey);
 
     if (!declarPath) {
       const declar = t.variableDeclaration(kind, []);

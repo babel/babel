@@ -35,7 +35,7 @@ export default function (
     const node = path.node;
     if (!opts.is(node, file)) return;
 
-    const nodes    = [];
+    const nodes = [];
     const exploded = explode(node.left, nodes, file, path.scope);
 
     nodes.push(t.logicalExpression(

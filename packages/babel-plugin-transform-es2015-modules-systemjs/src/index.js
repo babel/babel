@@ -50,11 +50,11 @@ export default function ({ types: t }) {
       let isPostUpdateExpression = path.isUpdateExpression() && !node.prefix;
       if (isPostUpdateExpression) {
         if (node.operator === "++")
-          node = t.binaryExpression("+", node.argument, t.numericLiteral(1));
+          {node = t.binaryExpression("+", node.argument, t.numericLiteral(1));}
         else if (node.operator === "--")
-          node = t.binaryExpression("-", node.argument, t.numericLiteral(1));
+          {node = t.binaryExpression("-", node.argument, t.numericLiteral(1));}
         else
-          isPostUpdateExpression = false;
+          {isPostUpdateExpression = false;}
       }
 
       for (const exportedName of exportedNames) {
@@ -62,10 +62,10 @@ export default function ({ types: t }) {
       }
 
       if (isPostUpdateExpression)
-        node = t.sequenceExpression([node, path.node]);
+        {node = t.sequenceExpression([node, path.node]);}
 
       path.replaceWith(node);
-    }
+    },
   };
 
   return {
@@ -244,7 +244,7 @@ export default function ({ types: t }) {
               const exportObjRef = path.scope.generateUidIdentifier("exportObj");
 
               setterBody.push(t.variableDeclaration("var", [
-                t.variableDeclarator(exportObjRef, t.objectExpression([]))
+                t.variableDeclarator(exportObjRef, t.objectExpression([])),
               ]));
 
               for (const node of specifiers.exports) {
@@ -252,7 +252,7 @@ export default function ({ types: t }) {
                   setterBody.push(buildExportAll({
                     KEY: path.scope.generateUidIdentifier("key"),
                     EXPORT_OBJ: exportObjRef,
-                    TARGET: target
+                    TARGET: target,
                   }));
                 } else if (t.isExportSpecifier(node)) {
                   setterBody.push(t.expressionStatement(
@@ -287,7 +287,7 @@ export default function ({ types: t }) {
           path.traverse(reassignmentVisitor, {
             exports: exportNames,
             buildCall: buildExportCall,
-            scope: path.scope
+            scope: path.scope,
           });
 
           for (const path of removedPaths) {
@@ -304,11 +304,11 @@ export default function ({ types: t }) {
               SOURCES: sources,
               BODY: path.node.body,
               EXPORT_IDENTIFIER: exportIdent,
-              CONTEXT_IDENTIFIER: contextIdent
-            })
+              CONTEXT_IDENTIFIER: contextIdent,
+            }),
           ];
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

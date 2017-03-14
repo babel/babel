@@ -1255,6 +1255,13 @@ codecov@^1.0.1:
     request ">=2.42.0"
     urlgrey ">=0.4.0"
 
+columnify@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/columnify/-/columnify-1.5.4.tgz#4737ddf1c7b69a8a7c340570782e947eec8e78bb"
+  dependencies:
+    strip-ansi "^3.0.0"
+    wcwidth "^1.0.0"
+
 combine-source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/combine-source-map/-/combine-source-map-0.6.1.tgz#9b4a09c316033d768e0f11e029fa2730e079ad96"
@@ -1452,7 +1459,7 @@ default-require-extensions@^1.0.0:
   dependencies:
     strip-bom "^2.0.0"
 
-defaults@^1.0.0:
+defaults@^1.0.0, defaults@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/defaults/-/defaults-1.0.3.tgz#c656051e9817d9ff08ed881477f3fe4019f3ef7d"
   dependencies:
@@ -2826,13 +2833,14 @@ lerna-changelog@^0.2.0:
     chalk "^1.1.3"
     mkdirp "^0.5.1"
 
-lerna@2.0.0-beta.37:
-  version "2.0.0-beta.37"
-  resolved "https://registry.yarnpkg.com/lerna/-/lerna-2.0.0-beta.37.tgz#d8e1d25a75102658b12565e4aa12e0423e969aad"
+lerna@^2.0.0-beta.38:
+  version "2.0.0-beta.38"
+  resolved "https://registry.yarnpkg.com/lerna/-/lerna-2.0.0-beta.38.tgz#99236416a6699707336dcbdeef83c315d1f71833"
   dependencies:
     async "^1.5.0"
     chalk "^1.1.1"
     cmd-shim "^2.0.2"
+    columnify "^1.5.4"
     command-join "^2.0.0"
     cross-spawn "^4.0.0"
     glob "^7.0.6"
@@ -2849,7 +2857,6 @@ lerna@2.0.0-beta.37:
     rimraf "^2.4.4"
     semver "^5.1.0"
     signal-exit "^3.0.2"
-    sync-exec "^0.6.2"
 
 levn@^0.3.0, levn@~0.3.0:
   version "0.3.0"
@@ -4193,10 +4200,6 @@ supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
 
-sync-exec@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/sync-exec/-/sync-exec-0.6.2.tgz#717d22cc53f0ce1def5594362f3a89a2ebb91105"
-
 syntax-error@^1.1.1:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/syntax-error/-/syntax-error-1.1.6.tgz#b4549706d386cc1c1dc7c2423f18579b6cade710"
@@ -4505,6 +4508,12 @@ vm-browserify@~0.0.1:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
   dependencies:
     indexof "0.0.1"
+
+wcwidth@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/wcwidth/-/wcwidth-1.0.1.tgz#f0b0dcf915bc5ff1528afadb2c0e17b532da2fe8"
+  dependencies:
+    defaults "^1.0.3"
 
 which-module@^1.0.0:
   version "1.0.0"

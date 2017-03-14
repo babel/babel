@@ -24,7 +24,7 @@ describe("path/ancestry", function () {
       traverse(ast, {
         "Program|NumericLiteral|StringLiteral"(path) {
           paths.push(path);
-        }
+        },
       });
 
       const [ , numberPath, stringPath ] = paths;
@@ -54,7 +54,7 @@ describe("path/ancestry", function () {
       traverse(ast, {
         "Program|NumericLiteral|StringLiteral"(path) {
           paths.push(path);
-        }
+        },
       });
 
       const [ , numberPath, stringPath ] = paths;

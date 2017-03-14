@@ -34,8 +34,8 @@ export function _remove() {
 
 export function _markRemoved() {
   this.shouldSkip = true;
-  this.removed    = true;
-  this.node       = null;
+  this.removed = true;
+  this.node = null;
 }
 
 export function _assertUnremoved() {

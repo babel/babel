@@ -1,6 +1,5 @@
 import assert from "assert";
 import OptionManager from "../lib/transformation/file/options/option-manager";
-import Logger from "../lib/transformation/file/logger";
 import path from "path";
 
 describe("option-manager", () => {
@@ -17,9 +16,9 @@ describe("option-manager", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          const opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager();
           opt.init({
-            "randomOption": true
+            "randomOption": true,
           });
         },
         /Unknown option: base.randomOption/
@@ -29,10 +28,10 @@ describe("option-manager", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          const opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager();
           opt.init({
             "auxiliaryComment": true,
-            "blacklist": true
+            "blacklist": true,
           });
         },
         // eslint-disable-next-line max-len
@@ -43,9 +42,9 @@ describe("option-manager", () => {
     it("throws for resolved but erroring preset", () => {
       return assert.throws(
         () => {
-          const opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager();
           opt.init({
-            "presets": [path.join(__dirname, "fixtures/option-manager/not-a-preset")]
+            "presets": [path.join(__dirname, "fixtures/option-manager/not-a-preset")],
           });
         },
         /While processing preset: .*option-manager(?:\/|\\\\)not-a-preset\.js/
@@ -56,9 +55,9 @@ describe("option-manager", () => {
   describe("presets", function () {
     function presetTest(name) {
       it(name, function () {
-        const opt = new OptionManager(new Logger(null, "unknown"));
+        const opt = new OptionManager();
         const options = opt.init({
-          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)]
+          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
         });
 
         assert.equal(true, Array.isArray(options.plugins));
@@ -68,19 +67,20 @@ describe("option-manager", () => {
 
     function presetThrowsTest(name, msg) {
       it(name, function () {
-        const opt = new OptionManager(new Logger(null, "unknown"));
+        const opt = new OptionManager();
         assert.throws(() => opt.init({
-          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)]
+          "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
         }), msg);
       });
     }
 
     presetTest("es5_function");
+    presetTest("es5_object");
     presetTest("es2015_default_function");
+    presetTest("es2015_default_object");
 
-    presetThrowsTest("es5", /Expected preset to return a function./);
-    presetThrowsTest("es2015_default", /Expected preset to return a function./);
     presetThrowsTest("es2015_named", /Preset must export a default export when using ES6 modules/);
+    presetThrowsTest("es2015_invalid", /Unsupported preset format: string/);
     presetThrowsTest("es5_invalid", /Unsupported preset format: string/);
   });
 });

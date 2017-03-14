@@ -3,7 +3,7 @@ import transformExponentiationOperator from "babel-plugin-transform-exponentiati
 export default function () {
   return {
     plugins: [
-      transformExponentiationOperator
-    ]
+      transformExponentiationOperator,
+    ],
   };
 }

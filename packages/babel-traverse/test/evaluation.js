@@ -9,7 +9,7 @@ function getPath(code) {
     Program: function (_path) {
       path = _path;
       _path.stop();
-    }
+    },
   });
   return path;
 }

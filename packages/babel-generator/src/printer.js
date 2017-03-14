@@ -295,7 +295,7 @@ export default class Printer {
 
   startTerminatorless(): Object {
     return this._parenPushNewlineState = {
-      printed: false
+      printed: false,
     };
   }
 
@@ -372,7 +372,7 @@ export default class Printer {
     if (comment) {
       this._printComment({
         type: "CommentBlock",
-        value: comment
+        value: comment,
       });
     }
   }
@@ -385,7 +385,7 @@ export default class Printer {
     if (comment) {
       this._printComment({
         type: "CommentBlock",
-        value: comment
+        value: comment,
       });
     }
   }

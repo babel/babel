@@ -10,9 +10,9 @@ export default function () {
         if (!path.node.async || path.node.generator) return;
 
         remapAsyncToGenerator(path, state.file, {
-          wrapAsync: state.addHelper("asyncToGenerator")
+          wrapAsync: state.addHelper("asyncToGenerator"),
         });
-      }
-    }
+      },
+    },
   };
 }
