@@ -1,3 +1,4 @@
+import defaults from "lodash/defaults";
 import outputFileSync from "output-file-sync";
 import slash from "slash";
 import path from "path";
@@ -5,17 +6,17 @@ import fs from "fs";
 
 import * as util from "./util";
 
-export default function (commander, filenames) {
+export default function (commander, filenames, opts) {
   function write(src, relative) {
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
 
     const dest = path.join(commander.outDir, relative);
 
-    const data = util.compile(src, {
+    const data = util.compile(src, defaults({
       sourceFileName: slash(path.relative(dest + "/..", src)),
       sourceMapTarget: path.basename(relative),
-    });
+    }, opts));
     if (!commander.copyFiles && data.ignored) return;
 
     // we've requested explicit sourcemaps to be written to disk
@@ -32,7 +33,7 @@ export default function (commander, filenames) {
   }
 
   function handleFile(src, filename) {
-    if (util.shouldIgnore(src)) return;
+    if (util.shouldIgnore(src, opts)) return;
 
     if (util.canCompile(filename, commander.extensions)) {
       write(src, filename);
