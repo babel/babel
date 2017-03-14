@@ -1022,10 +1022,9 @@ interface ClassBody <: Node {
 ## ClassMethod
 
 ```js
-interface ClassMethod <: Node {
+interface ClassMethod <: Function {
   type: "ClassMethod";
   key: Expression;
-  value: FunctionExpression;
   kind: "constructor" | "method" | "get" | "set";
   computed: boolean;
   static: boolean;
