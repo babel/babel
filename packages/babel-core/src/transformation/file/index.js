@@ -216,6 +216,8 @@ export default class File extends Store {
   }
 
   addImport(source: string, imported: string, name?: string = imported): Object {
+    if (this.path.node.sourceType !== "module") throw new Error("Cannot insert an import into a script.");
+
     const alias = `${source}:${imported}`;
     let id = this.dynamicImportIds[alias];
 

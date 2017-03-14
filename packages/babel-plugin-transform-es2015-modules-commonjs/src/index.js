@@ -132,23 +132,20 @@ export default function () {
 
     visitor: {
       ThisExpression(path, state) {
-        // If other plugins run after this plugin's Program#exit handler, we allow them to
-        // insert top-level `this` values. This allows the AMD and UMD plugins to
-        // function properly.
-        if (this.ranCommonJS) return;
+        if (state.opts.allowTopLevelThis === true) return;
 
-        if (
-          state.opts.allowTopLevelThis !== true &&
-          !path.findParent((path) => !path.is("shadow") &&
-          THIS_BREAK_KEYS.indexOf(path.type) >= 0)
-        ) {
+        const program = path.findParent((p) => p.isProgram());
+        if (program.node.sourceType !== "module") return;
+
+        if (!path.findParent((path) => !path.is("shadow") && THIS_BREAK_KEYS.indexOf(path.type) >= 0)) {
           path.replaceWith(t.identifier("undefined"));
         }
       },
 
       Program: {
         exit(path) {
-          this.ranCommonJS = true;
+          if (path.node.sourceType !== "module") return;
+          path.node.sourceType = "script";
 
           const strict = !!this.opts.strict;
           const noInterop = !!this.opts.noInterop;
