@@ -261,7 +261,15 @@ export default class OptionManager {
         });
       } else {
         // Otherwise, just merge presets options into the main options.
-        this.mergePresets(opts.presets, dirname);
+        this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
+          this.mergeOptions({
+            options: preset,
+            alias: presetLoc,
+            loc: presetLoc,
+            dirname: dirname,
+          });
+        });
+
         delete opts.presets;
       }
     }
@@ -274,21 +282,6 @@ export default class OptionManager {
     } else {
       merge(extendingOpts || this.options, opts);
     }
-  }
-
-  /**
-   * Merges all presets into the main options in case we are not in the
-   * "pass per preset" mode. Otherwise, options are calculated per preset.
-   */
-  mergePresets(presets: Array<string | Object>, dirname: string) {
-    this.resolvePresets(presets, dirname, (presetOpts, presetLoc) => {
-      this.mergeOptions({
-        options: presetOpts,
-        alias: presetLoc,
-        loc: presetLoc,
-        dirname: path.dirname(presetLoc || ""),
-      });
-    });
   }
 
   /**
