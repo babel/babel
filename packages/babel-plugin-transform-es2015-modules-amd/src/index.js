@@ -1,3 +1,4 @@
+import { basename, extname } from "path";
 import template from "babel-template";
 import transformCommonjs from "babel-plugin-transform-es2015-modules-commonjs";
 
@@ -26,6 +27,28 @@ export default function ({ types: t }) {
     return true;
   }
 
+  function buildParamsAndSource(sourcesFound) {
+    const params = [];
+    const sources = [];
+
+    let hasSeenNonBareRequire = false;
+    for (let i = sourcesFound.length - 1; i > -1; i--) {
+      const source = sourcesFound[i];
+
+      sources.unshift(source[1]);
+
+      // bare import at end, no need for param
+      if (!hasSeenNonBareRequire && source[2] === true) {
+        continue;
+      }
+
+      hasSeenNonBareRequire = true;
+      params.unshift(source[0]);
+    }
+
+    return [ params, sources];
+  }
+
   const amdVisitor = {
     ReferencedIdentifier({ node, scope }) {
       if (node.name === "exports" && !scope.getBinding("exports")) {
@@ -39,7 +62,9 @@ export default function ({ types: t }) {
 
     CallExpression(path) {
       if (!isValidRequireCall(path)) return;
-      this.bareSources.push(path.node.arguments[0]);
+      const source = path.node.arguments[0];
+      const ref = path.scope.generateUidIdentifier(basename(source.value, extname(source.value)));
+      this.sources.push([ref, source, true]);
       path.remove();
     },
 
@@ -66,9 +91,6 @@ export default function ({ types: t }) {
       this.sources = [];
       this.sourceNames = Object.create(null);
 
-      // bare sources
-      this.bareSources = [];
-
       this.hasExports = false;
       this.hasModule = false;
     },
@@ -81,12 +103,7 @@ export default function ({ types: t }) {
 
           path.traverse(amdVisitor, this);
 
-          const params = this.sources.map((source) => source[0]);
-          let sources = this.sources.map((source) => source[1]);
-
-          sources = sources.concat(this.bareSources.filter((str) => {
-            return !this.sourceNames[str.value];
-          }));
+          const [params, sources ] = buildParamsAndSource(this.sources);
 
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
