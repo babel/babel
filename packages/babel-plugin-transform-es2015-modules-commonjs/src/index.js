@@ -306,6 +306,15 @@ export default function () {
                       addTo(exports, id.node.name, id.node);
                       init.replaceWith(buildExportsAssignment(id.node, init.node).expression);
                       nonHoistedExportNames[id.node.name] = true;
+                    } else if (id.isObjectPattern()) {
+                      for (let i = 0; i < id.node.properties.length; i++) {
+                        const prop = id.node.properties[i];
+                        if (!t.isRestProperty(prop)) {
+                          addTo(exports, prop.value.name, prop.value);
+                          path.insertAfter(buildExportsAssignment(prop.value, prop.value));
+                          nonHoistedExportNames[prop.value.name] = true;
+                        }
+                      }
                     } else {
                       // todo
                     }
