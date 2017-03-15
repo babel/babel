@@ -25,6 +25,7 @@ type PluginObject = {
 };
 
 type MergeOptions = {
+  type: "arguments"|"options"|"preset",
   options?: Object,
   extending?: Object,
   alias: string,
@@ -188,6 +189,7 @@ export default class OptionManager {
    */
 
   mergeOptions({
+    type,
     options: rawOpts,
     extending: extendingOpts,
     alias,
@@ -212,6 +214,23 @@ export default class OptionManager {
     //
     dirname = dirname || process.cwd();
     loc = loc || alias;
+
+    if (type !== "arguments") {
+      if (opts.filename !== undefined) {
+        throw new Error(`${alias}.filename is only allowed as a root argument`);
+      }
+
+      if (opts.babelrc !== undefined) {
+        throw new Error(`${alias}.babelrc is only allowed as a root argument`);
+      }
+    }
+
+    if (type === "preset") {
+      if (opts.only !== undefined) throw new Error(`${alias}.only is not supported in a preset`);
+      if (opts.ignore !== undefined) throw new Error(`${alias}.ignore is not supported in a preset`);
+      if (opts.extends !== undefined) throw new Error(`${alias}.extends is not supported in a preset`);
+      if (opts.env !== undefined) throw new Error(`${alias}.env is not supported in a preset`);
+    }
 
     if (opts.sourceMap !== undefined) {
       if (opts.sourceMaps !== undefined) {
@@ -249,6 +268,7 @@ export default class OptionManager {
 
       opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
         this.mergeOptions({
+          type: "preset",
           options: preset,
 
           // For `passPerPreset` we merge child options back into the preset object instead of the root.
