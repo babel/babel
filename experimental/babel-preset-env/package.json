@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-env",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
@@ -87,13 +87,17 @@
     ],
     "env": {
       "test": {
-        "plugins": ["istanbul"]
+        "plugins": [
+          "istanbul"
+        ]
       }
     }
   },
   "nyc": {
     "all": true,
-    "include": ["src/*.js"],
+    "include": [
+      "src/*.js"
+    ],
     "instrument": false,
     "sourceMap": false
   }
