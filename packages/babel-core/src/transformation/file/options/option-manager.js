@@ -247,31 +247,21 @@ export default class OptionManager {
     if (opts.presets) {
       if (!Array.isArray(rawOpts.presets)) throw new Error(`${alias}.presets should be an array`);
 
-      // If we're in the "pass per preset" mode, we resolve the presets
-      // and keep them for further execution to calculate the options.
-      if (opts.passPerPreset) {
-        opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
-          this.mergeOptions({
-            options: preset,
-            extending: preset,
-            alias: presetLoc,
-            loc: presetLoc,
-            dirname: dirname,
-          });
-        });
-      } else {
-        // Otherwise, just merge presets options into the main options.
-        this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
-          this.mergeOptions({
-            options: preset,
-            alias: presetLoc,
-            loc: presetLoc,
-            dirname: dirname,
-          });
-        });
+      opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
+        this.mergeOptions({
+          options: preset,
 
-        delete opts.presets;
-      }
+          // For `passPerPreset` we merge child options back into the preset object instead of the root.
+          extending: opts.passPerPreset ? preset : null,
+          alias: presetLoc,
+          loc: presetLoc,
+          dirname: dirname,
+        });
+      });
+
+      // If not passPerPreset, the plugins have all been merged into the parent config so the presets
+      // list is not needed.
+      if (!opts.passPerPreset) delete opts.presets;
     }
 
     // Merge them into current extending options in case of top-level
