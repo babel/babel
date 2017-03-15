@@ -46,16 +46,23 @@ function writeFile(filename, content) {
   return writeRootFile(filename, content);
 }
 
-var transformOpts = {
-  presets: [
-    require("../../babel-preset-es2015")
-  ],
+function makeTransformOpts(modules, useBuiltIns) {
+  const opts = {
+    presets: [
+      [require("../../babel-preset-es2015"), { modules: false }]
+    ],
 
-  plugins: [
-    require("../../babel-plugin-transform-runtime"),
-    [require("../../babel-plugin-transform-es2015-modules-commonjs"), { loose: true, strict: false }]
-  ]
-};
+    plugins: [
+      [require("../../babel-plugin-transform-runtime"), { useBuiltIns: useBuiltIns, useESModules: modules === false }]
+    ]
+  }
+  if (modules === 'commonjs') {
+    opts.plugins.push([require("../../babel-plugin-transform-es2015-modules-commonjs"), { loose: true, strict: false }])
+  } else if (modules !== false) {
+    throw new Error('Unsupported module type')
+  }
+  return opts
+}
 
 function buildRuntimeRewritePlugin(relativePath, helperName) {
   return {
@@ -63,12 +70,16 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
       var original = file.get("helperGenerator");
       file.set("helperGenerator", function(name) {
         // make sure that helpers won't insert circular references to themselves
-        if (name === helperName) return;
+        if (name === helperName) return false;
 
         return original(name);
       });
     },
     visitor: {
+      ImportDeclaration: function(path){
+        path.get("source").node.value = path.get("source").node.value
+          .replace(/^babel-runtime/, relativePath);
+      },
       CallExpression: function(path){
         if (!path.get("callee").isIdentifier({name: "require"}) ||
           path.get("arguments").length !== 1 ||
@@ -82,23 +93,40 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
   };
 }
 
-function buildHelper(helperName) {
+function buildHelper(helperName, modules, useBuiltIns) {
+  const helper = helpers.get(helperName)
+  // avoid an unneccessary TDZ in the easy case
+  if (helper.type === "FunctionExpression") {
+    helper.type = "FunctionDeclaration"
+  }
   var tree = t.program([
-    t.exportDefaultDeclaration(helpers.get(helperName))
+    t.exportDefaultDeclaration(helper)
   ]);
+
+  const transformOpts = makeTransformOpts(modules, useBuiltIns)
+
+  const relative = useBuiltIns ? "../.." : ".."
 
   return babel.transformFromAst(tree, null, {
     presets: transformOpts.presets,
-    plugins: transformOpts.plugins.concat([buildRuntimeRewritePlugin("..", helperName)])
+    plugins: transformOpts.plugins.concat([buildRuntimeRewritePlugin(modules === false ? `../${relative}` : relative, helperName)])
   }).code;
 }
 
-helpers.list.forEach(function (helperName) {
-  writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
+for (const modules of ["commonjs", false]) {
+  for (const builtin of [false, true]) {
+    const dirname = `helpers/${builtin ? 'builtin/' : ''}${!modules ? 'es6/' : ''}`
 
-  // compat
-  var helperAlias = kebabCase(helperName);
-  var content = "module.exports = require(\"./" + helperName + ".js\");";
-  writeFile("helpers/_" + helperAlias + ".js", content);
-  if (helperAlias !== helperName) writeFile("helpers/" + helperAlias + ".js", content);
-});
+    for (const helperName of helpers.list) {
+      writeFile(`${dirname}${helperName}.js`, buildHelper(helperName, modules, builtin));
+
+      // compat
+      var helperAlias = kebabCase(helperName);
+      var content = !modules
+        ? `export { default } from \"./${helperName}.js\";`
+        : "module.exports = require(\"./" + helperName + ".js\");";
+      writeFile(`${dirname}_${helperAlias}.js`, content);
+      if (helperAlias !== helperName) writeFile(`${dirname}${helperAlias}.js`, content);
+    }
+  }
+}
