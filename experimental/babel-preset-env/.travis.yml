@@ -20,7 +20,7 @@ before_install:
   - nvm use $TRAVIS_NODE_VERSION
   - npm set loglevel error
   - npm set progress false
-  - 'if [ $PKG_CMD = "yarn" ]; then npm i -g yarn@0.22.0 ; fi'
+  - 'if [ $PKG_CMD = "yarn" ]; then curl -o- -L https://yarnpkg.com/install.sh | bash && PATH=$HOME/.yarn/bin:$PATH ; fi'
 install:
   - $PKG_CMD install
 script:

@@ -7,15 +7,91 @@ const flatten = require("lodash/flatten");
 const flattenDeep = require("lodash/flattenDeep");
 const isEqual = require("lodash/isEqual");
 const mapValues = require("lodash/mapValues");
+const pickBy = require("lodash/pickBy");
 const pluginFeatures = require("../data/plugin-features");
 const builtInFeatures = require("../data/built-in-features");
 
 const renameTests = (tests, getName) =>
   tests.map(test => Object.assign({}, test, { name: getName(test.name) }));
 
-const es6Data = require("compat-table/data-es6");
-const es6PlusData = require("compat-table/data-es2016plus");
+// The following is adapted from compat-table:
+// https://github.com/kangax/compat-table/blob/gh-pages/build.js
+//
+// It parses and interpolates data so environments that "equal" other
+// environments (node4 and chrome45), as well as familial relationships (edge
+// and ie11) can be handled properly.
+
 const envs = require("compat-table/environments");
+
+const byTestSuite = suite =>
+  browser => {
+    return Array.isArray(browser.test_suites)
+      ? browser.test_suites.indexOf(suite) > -1
+      : true;
+  };
+
+const es6 = require("compat-table/data-es6");
+es6.browsers = pickBy(envs, byTestSuite("es6"));
+
+const es2016plus = require("compat-table/data-es2016plus");
+es2016plus.browsers = pickBy(envs, byTestSuite("es2016plus"));
+
+const interpolateAllResults = (rawBrowsers, tests) => {
+  const interpolateResults = res => {
+    let browser;
+    let prevBrowser;
+    let result;
+    let prevResult;
+    let prevBid;
+
+    for (const bid in rawBrowsers) {
+      // For browsers that are essentially equal to other browsers,
+      // copy over the results.
+      browser = rawBrowsers[bid];
+      if (browser.equals && res[bid] === undefined) {
+        result = res[browser.equals];
+        res[bid] = browser.ignore_flagged && result === "flagged"
+          ? false
+          : result;
+        // For each browser, check if the previous browser has the same
+        // browser full name (e.g. Firefox) or family name (e.g. Chakra) as this one.
+      } else if (
+        prevBrowser &&
+        (prevBrowser.full.replace(/,.+$/, "") ===
+          browser.full.replace(/,.+$/, "") ||
+          (browser.family !== undefined &&
+            prevBrowser.family === browser.family))
+      ) {
+        // For each test, check if the previous browser has a result
+        // that this browser lacks.
+        result = res[bid];
+        prevResult = res[prevBid];
+        if (prevResult !== undefined && result === undefined) {
+          res[bid] = prevResult;
+        }
+      }
+      prevBrowser = browser;
+      prevBid = bid;
+    }
+  };
+
+  // Now print the results.
+  tests.forEach(function(t) {
+    // Calculate the result totals for tests which consist solely of subtests.
+    if ("subtests" in t) {
+      t.subtests.forEach(function(e) {
+        interpolateResults(e.res);
+      });
+    } else {
+      interpolateResults(t.res);
+    }
+  });
+};
+
+interpolateAllResults(es6.browsers, es6.tests);
+interpolateAllResults(es2016plus.browsers, es2016plus.tests);
+
+// End of compat-table code adaptation
 
 const environments = [
   "chrome",
@@ -52,38 +128,8 @@ const envMap = {
   ios51: "ios5.1",
 };
 
-const invertedEqualsEnv = Object.keys(envs).filter(b => envs[b].equals).reduce((
-  a,
-  b
-) => {
-  const checkEnv = envMap[envs[b].equals] || envs[b].equals;
-  environments.some(env => {
-    // go through all environment names to find the the current one
-    // and try to get the version as integer
-    const version = parseFloat(checkEnv.replace(env, ""));
-    if (!isNaN(version)) {
-      Object.keys(envs).forEach(equals => {
-        equals = envMap[equals] || equals;
-        // Go through all envs from compat-table and get int version
-        const equalsVersion = parseFloat(equals.replace(env, ""));
-        // If the current version is smaller than the version that was mentioned
-        // in `equals` we can add an entry, as older versions should include features
-        // that newer ones have
-        if (!isNaN(equalsVersion) && equalsVersion <= version) {
-          if (!a[equals]) a[equals] = [];
-          if (a[equals].indexOf(b) >= 0) return;
-          a[equals].push(b);
-        }
-      });
-      return true;
-    }
-  });
-
-  return a;
-}, {});
-
 const compatibilityTests = flattenDeep(
-  [es6Data, es6PlusData].map(data =>
+  [es6, es2016plus].map(data =>
     data.tests.map(test => {
       return test.subtests
         ? [test, renameTests(test.subtests, name => test.name + " / " + name)]
@@ -126,16 +172,6 @@ const getLowestImplementedVersion = ({ features }, env) => {
       return "-1";
     }
 
-    // `equals` in compat-table
-    Object.keys(test).forEach(t => {
-      const invertedEnvs = invertedEqualsEnv[envMap[t] || t];
-      if (invertedEnvs) {
-        invertedEnvs.forEach(inv => {
-          test[inv] = test[t];
-        });
-      }
-    });
-
     return (
       Object.keys(test)
         .filter(t => t.startsWith(env))
@@ -177,6 +213,7 @@ const generateData = (environments, features) => {
     }
 
     const plugin = {};
+
     environments.forEach(env => {
       const version = getLowestImplementedVersion(options, env);
       if (version !== null) {

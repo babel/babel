@@ -95,13 +95,17 @@
     ],
     "env": {
       "test": {
-        "plugins": ["istanbul"]
+        "plugins": [
+          "istanbul"
+        ]
       }
     }
   },
   "nyc": {
     "all": true,
-    "include": ["src/*.js"],
+    "include": [
+      "src/*.js"
+    ],
     "instrument": false,
     "sourceMap": false
   },
