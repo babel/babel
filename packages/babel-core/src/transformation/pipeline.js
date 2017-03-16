@@ -3,7 +3,7 @@ import fs from "fs";
 
 import normalizeAst from "../helpers/normalize-ast";
 import File from "./file";
-import OptionManager from "./file/options/option-manager";
+import OptionManager from "../config/option-manager";
 
 export function analyse(code: string, opts: Object = {}, visitor?: Object): ?BabelFileMetadata {
   opts.code = false;

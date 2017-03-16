@@ -1,6 +1,6 @@
 import assert from "assert";
 import path from "path";
-import buildConfigChain from "../lib/transformation/file/options/build-config-chain";
+import buildConfigChain from "../lib/config/build-config-chain";
 
 function fixture() {
   const args = [__dirname, "fixtures", "config"];

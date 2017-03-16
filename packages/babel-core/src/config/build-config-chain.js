@@ -1,5 +1,5 @@
-import * as babel from "../../../index";
-import resolve from "../../../helpers/resolve";
+import * as babel from "../index";
+import resolve from "../helpers/resolve";
 import json5 from "json5";
 import path from "path";
 import fs from "fs";

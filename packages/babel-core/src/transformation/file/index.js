@@ -16,7 +16,7 @@ import path from "path";
 import * as t from "babel-types";
 
 import resolve from "../../helpers/resolve";
-import OptionManager from "./options/option-manager";
+import OptionManager from "../../config/option-manager";
 
 import blockHoistPlugin from "../internal-plugins/block-hoist";
 import shadowFunctionsPlugin from "../internal-plugins/shadow-functions";

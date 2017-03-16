@@ -11,7 +11,7 @@ export * as types from "babel-types";
 export traverse from "babel-traverse";
 export template from "babel-template";
 
-export OptionManager from "./transformation/file/options/option-manager";
+export OptionManager from "./config/option-manager";
 
 export function Plugin(alias) {
   throw new Error(`The (${alias}) Babel 5 plugin is being run with Babel 6.`);
