@@ -1,15 +1,12 @@
 import OptionManager from "./file/options/option-manager";
 import * as messages from "babel-messages";
-import Store from "../store";
 import traverse from "babel-traverse";
 import clone from "lodash/clone";
 
 const GLOBAL_VISITOR_PROPS = ["enter", "exit"];
 
-export default class Plugin extends Store {
+export default class Plugin {
   constructor(plugin: Object, key?: string) {
-    super();
-
     this.initialized = false;
     this.raw = Object.assign({}, plugin);
     this.key = this.take("name") || key;
