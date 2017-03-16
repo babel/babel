@@ -7,7 +7,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-types": "7.0.0-alpha.1",
-    "esutils": "^2.0.0",
-    "lodash": "^4.2.0"
+    "esutils": "^2.0.0"
   }
 }
