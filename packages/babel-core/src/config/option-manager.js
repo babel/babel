@@ -9,7 +9,6 @@ import merge from "../helpers/merge";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
 import path from "path";
-import * as util from "../util";
 
 type PluginObject = {
   pre?: Function;
@@ -373,7 +372,12 @@ export default class OptionManager {
         this.mergeOptions(config);
       }
     } catch (e) {
-      e.message = util.message(opts, e.message);
+      // There are a few case where thrown errors will try to annotate themselves multiple times, so
+      // to keep things simple we just bail out if re-wrapping the message.
+      if (!/^\[BABEL\]/.test(e.message)) {
+        e.message = `[BABEL] ${opts.filename || "unknown"}: ${e.message}`;
+      }
+
       throw e;
     }
 

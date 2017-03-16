@@ -11,15 +11,21 @@ import codeFrame from "babel-code-frame";
 import traverse from "babel-traverse";
 import Store from "../store";
 import { parse } from "babylon";
-import * as util from "../../util";
 import path from "path";
 import * as t from "babel-types";
+import buildDebug from "debug";
 
 import resolve from "../../helpers/resolve";
 import OptionManager from "../../config/option-manager";
 
 import blockHoistPlugin from "../internal-plugins/block-hoist";
 import shadowFunctionsPlugin from "../internal-plugins/shadow-functions";
+
+const babelDebug = buildDebug("babel:file");
+
+export function debug(opts: Object, msg: string) {
+  babelDebug(`${opts.filename || "unknown"}: ${msg}`);
+}
 
 const shebangRegex = /^#!.*/;
 
@@ -362,9 +368,9 @@ export default class File extends Store {
       }
     }
 
-    util.debug(this.opts, "Parse start");
+    debug(this.opts, "Parse start");
     const ast = parseCode(code, parserOpts || this.parserOpts);
-    util.debug(this.opts, "Parse stop");
+    debug(this.opts, "Parse stop");
     return ast;
   }
 
@@ -382,9 +388,9 @@ export default class File extends Store {
   }
 
   addAst(ast) {
-    util.debug(this.opts, "Start set AST");
+    debug(this.opts, "Start set AST");
     this._addAst(ast);
-    util.debug(this.opts, "End set AST");
+    debug(this.opts, "End set AST");
   }
 
   transform(): BabelFileResult {
@@ -408,13 +414,13 @@ export default class File extends Store {
         if (fn) fn.call(pass, this);
       }
 
-      util.debug(this.opts, "Start transform traverse");
+      debug(this.opts, "Start transform traverse");
 
       // merge all plugin visitors into a single visitor
       const visitor = traverse.visitors.merge(visitors, passes, this.opts.wrapPluginVisitorMethod);
       traverse(this.ast, visitor, this.scope);
 
-      util.debug(this.opts, "End transform traverse");
+      debug(this.opts, "End transform traverse");
 
       for (const [ plugin, pass ] of passPairs) {
         const fn = plugin.post;
@@ -543,14 +549,14 @@ export default class File extends Store {
       }
     }
 
-    util.debug(this.opts, "Generation start");
+    debug(this.opts, "Generation start");
 
     const _result = gen(ast, opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts,
       this.code);
     result.code = _result.code;
     result.map = _result.map;
 
-    util.debug(this.opts, "Generation end");
+    debug(this.opts, "Generation end");
 
     if (this.shebang) {
       // add back shebang
