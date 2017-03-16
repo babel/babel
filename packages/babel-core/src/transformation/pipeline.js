@@ -1,7 +1,7 @@
 /* global BabelFileResult, BabelFileMetadata */
 import fs from "fs";
 
-import normalizeAst from "../helpers/normalize-ast";
+import * as t from "babel-types";
 import File from "./file";
 import OptionManager from "../config/option-manager";
 
@@ -30,7 +30,11 @@ export function transformFromAst(ast: Object, code: string, opts: Object): Babel
   opts = new OptionManager().init(opts);
   if (opts === null) return null;
 
-  ast = normalizeAst(ast);
+  if (ast && ast.type === "Program") {
+    return t.file(ast, [], []);
+  } else if (!ast || ast.type !== "File") {
+    throw new Error("Not a valid ast?");
+  }
 
   const file = new File(opts);
   return file.wrap(code, function () {
