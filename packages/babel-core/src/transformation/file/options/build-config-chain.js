@@ -12,6 +12,13 @@ const BABELRC_JS_FILENAME = ".babelrc.js";
 const PACKAGE_FILENAME = "package.json";
 const BABELIGNORE_FILENAME = ".babelignore";
 
+// TODO: Remove in Babel v8
+let warnedDeprecatedEnv = false;
+// This function is for testing purposes only.
+export function resetWarnedDeprecatedEnv() {
+  warnedDeprecatedEnv = false;
+}
+
 function exists(filename) {
   const cached = existsCache[filename];
   if (cached == null) {
@@ -198,6 +205,14 @@ class ConfigChainBuilder {
 
     const envKey = babel.getEnv();
     if (options.env) {
+      // TODO: Remove in Babel v8
+      if (!warnedDeprecatedEnv) {
+        console.log(`The "env" option has been deprecated and will be removed in a future version of Babel.
+A .babelrc.js file is recommended for environment aware configuration.
+Please see https://babeljs.io/docs/usage/babelrc for more information.`);
+        warnedDeprecatedEnv = true;
+      }
+
       envOpts = options.env[envKey];
       delete options.env;
     }
@@ -209,4 +224,3 @@ class ConfigChainBuilder {
     });
   }
 }
-

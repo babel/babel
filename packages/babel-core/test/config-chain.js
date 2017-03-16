@@ -1,6 +1,7 @@
 import assert from "assert";
 import path from "path";
-import buildConfigChain from "../lib/transformation/file/options/build-config-chain";
+import buildConfigChain,
+  { resetWarnedDeprecatedEnv } from "../lib/transformation/file/options/build-config-chain";
 
 function fixture() {
   const args = [__dirname, "fixtures", "config"];
@@ -18,7 +19,7 @@ describe("buildConfigChain", function () {
   let oldBabelEnv;
   let oldNodeEnv;
 
-  beforeEach(function () {
+  beforeEach(function() {
     oldBabelEnv = process.env.BABEL_ENV;
     oldNodeEnv = process.env.NODE_ENV;
 
@@ -26,12 +27,14 @@ describe("buildConfigChain", function () {
     delete process.env.NODE_ENV;
   });
 
-  afterEach(function () {
+  afterEach(function() {
     process.env.BABEL_ENV = oldBabelEnv;
     process.env.NODE_ENV = oldNodeEnv;
+
+    resetWarnedDeprecatedEnv();
   });
 
-  it("dir1", function () {
+  it("dir1", function() {
     const chain = buildConfigChain({
       filename: fixture("dir1", "src.js"),
     });
@@ -80,7 +83,7 @@ describe("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
-  it("dir2", function () {
+  it("dir2", function() {
     const chain = buildConfigChain({
       filename: fixture("dir2", "src.js"),
     });
@@ -119,7 +122,7 @@ describe("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
-  it("env - base", function () {
+  it("env - base", function() {
     const chain = buildConfigChain({
       filename: fixture("env", "src.js"),
     });
@@ -158,7 +161,7 @@ describe("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
-  it("env - foo", function () {
+  it("env - foo", function() {
     process.env.NODE_ENV = "foo";
 
     const chain = buildConfigChain({
@@ -209,7 +212,7 @@ describe("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
-  it("env - bar", function () {
+  it("env - bar", function() {
     process.env.NODE_ENV = "foo"; // overridden
     process.env.NODE_ENV = "bar";
 
@@ -262,7 +265,7 @@ describe("buildConfigChain", function () {
   });
 
 
-  it("env - foo", function () {
+  it("env - foo", function() {
     process.env.NODE_ENV = "foo";
 
     const chain = buildConfigChain({
@@ -299,7 +302,7 @@ describe("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
-  it("js-config", function () {
+  it("js-config", function() {
     const chain = buildConfigChain({
       filename: fixture("js-config", "src.js"),
     });
@@ -339,7 +342,7 @@ describe("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
-  it("js-config-default - should read transpiled export default", function () {
+  it("js-config-default - should read transpiled export default", function() {
     const chain = buildConfigChain({
       filename: fixture("js-config-default", "src.js"),
     });
@@ -378,7 +381,7 @@ describe("buildConfigChain", function () {
 
     assert.deepEqual(chain, expected);
   });
-  it("js-config-extended", function () {
+  it("js-config-extended", function() {
     const chain = buildConfigChain({
       filename: fixture("js-config-extended", "src.js"),
     });
@@ -429,7 +432,7 @@ describe("buildConfigChain", function () {
   });
 
   it("json-pkg-config-no-babel - should not throw if" +
-    " package.json doesn't contain a `babel` field", function () {
+    " package.json doesn't contain a `babel` field", function() {
     const chain = buildConfigChain({
       filename: fixture("json-pkg-config-no-babel", "src.js"),
     });
@@ -469,9 +472,9 @@ describe("buildConfigChain", function () {
   });
 
   it("js-json-config - should throw an error if both a .babelrc" +
-    " and a .babelrc.js are present", function () {
+    " and a .babelrc.js are present", function() {
     assert.throws(
-      function () {
+      function() {
         buildConfigChain({
           filename: fixture("js-json-config", "src.js"),
         });
@@ -481,9 +484,9 @@ describe("buildConfigChain", function () {
   });
 
   it("js-pkg-config - should throw an error if both a .babelrc.js" +
-    " and a package.json with a babel field are present", function () {
+    " and a package.json with a babel field are present", function() {
     assert.throws(
-      function () {
+      function() {
         buildConfigChain({
           filename: fixture("js-pkg-config", "src.js"),
         });
@@ -493,9 +496,9 @@ describe("buildConfigChain", function () {
   });
 
   it("json-pkg-config - should throw an error if both a .babelrc" +
-    " and a package.json with a babel field are present", function () {
+    " and a package.json with a babel field are present", function() {
     assert.throws(
-      function () {
+      function() {
         buildConfigChain({
           filename: fixture("json-pkg-config", "src.js"),
         });
@@ -504,9 +507,9 @@ describe("buildConfigChain", function () {
     );
   });
 
-  it("js-config-error", function () {
+  it("js-config-error", function() {
     assert.throws(
-      function () {
+      function() {
         buildConfigChain({
           filename: fixture("js-config-error", "src.js"),
         });
@@ -515,9 +518,9 @@ describe("buildConfigChain", function () {
     );
   });
 
-  it("js-config-error2", function () {
+  it("js-config-error2", function() {
     assert.throws(
-      function () {
+      function() {
         buildConfigChain({
           filename: fixture("js-config-error2", "src.js"),
         });
@@ -526,9 +529,9 @@ describe("buildConfigChain", function () {
     );
   });
 
-  it("js-config-error3", function () {
+  it("js-config-error3", function() {
     assert.throws(
-      function () {
+      function() {
         buildConfigChain({
           filename: fixture("js-config-error3", "src.js"),
         });
@@ -537,14 +540,22 @@ describe("buildConfigChain", function () {
     );
   });
 
-  it("json-config-error", function () {
+  it("json-config-error", function() {
     assert.throws(
-      function () {
+      function() {
         buildConfigChain({
           filename: fixture("json-config-error", "src.js"),
         });
       },
       /Error while parsing JSON/
     );
+  });
+
+  it("env-deprecated", function() {
+    buildConfigChain({
+      filename: fixture("env-deprecated", "src.js"),
+    });
+
+    assert(console.log.calledWithMatch(/^The "env" option has been deprecated/));
   });
 });
