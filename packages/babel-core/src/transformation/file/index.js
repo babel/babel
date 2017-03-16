@@ -14,7 +14,7 @@ import { parse } from "babylon";
 import * as t from "babel-types";
 import buildDebug from "debug";
 
-import OptionManager from "../../config/option-manager";
+import loadConfig, { type ResolvedConfig } from "../../config";
 
 import blockHoistPlugin from "../internal-plugins/block-hoist";
 import shadowFunctionsPlugin from "../internal-plugins/shadow-functions";
@@ -27,10 +27,10 @@ export function debug(opts: Object, msg: string) {
 
 const shebangRegex = /^#!.*/;
 
-const INTERNAL_PLUGINS = new OptionManager().init({
+const INTERNAL_PLUGINS = loadConfig({
   babelrc: false,
   plugins: [ blockHoistPlugin, shadowFunctionsPlugin ],
-}).plugins;
+}).passes[0];
 
 const errorVisitor = {
   enter(path, state) {
@@ -43,17 +43,11 @@ const errorVisitor = {
 };
 
 export default class File extends Store {
-  constructor(opts: Object = {}) {
+  constructor({ options, passes }: ResolvedConfig) {
     super();
 
-    let passes = [];
-    if (opts.plugins) passes.push(opts.plugins);
-
-    // With "passPerPreset" enabled there may still be presets in the options.
-    if (opts.presets) passes = passes.concat(opts.presets.map((preset) => preset.plugins).filter(Boolean));
-
     this.pluginPasses = passes;
-    this.opts = opts;
+    this.opts = options;
 
     this.parserOpts = {
       sourceType: this.opts.sourceType,
@@ -64,7 +58,7 @@ export default class File extends Store {
     for (const pluginPairs of passes) {
       for (const [ plugin ] of pluginPairs) {
         if (plugin.manipulateOptions) {
-          plugin.manipulateOptions(opts, this.parserOpts, this);
+          plugin.manipulateOptions(this.opts, this.parserOpts, this);
         }
       }
     }

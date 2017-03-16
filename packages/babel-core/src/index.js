@@ -11,7 +11,20 @@ export * as types from "babel-types";
 export traverse from "babel-traverse";
 export template from "babel-template";
 
-export OptionManager from "./config/option-manager";
+import loadConfig from "./config";
+
+export function loadOptions(opts): Object|null {
+  const config = loadConfig(opts);
+
+  return config ? config.options : null;
+}
+
+// For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
+export class OptionManager {
+  init(opts) {
+    return loadOptions(opts);
+  }
+}
 
 export function Plugin(alias) {
   throw new Error(`The (${alias}) Babel 5 plugin is being run with Babel 6.`);
