@@ -1,10 +1,10 @@
 export File from "./transformation/file";
 export buildExternalHelpers from "./tools/build-external-helpers";
-export resolvePlugin from "./helpers/resolve-plugin";
-export resolvePreset from "./helpers/resolve-preset";
+export resolvePlugin from "./config/helpers/resolve-plugin";
+export resolvePreset from "./config/helpers/resolve-preset";
 
 export { version } from "../package";
-export { getEnv } from "./helpers/environment";
+export { getEnv } from "./config/helpers/environment";
 
 export * as messages from "babel-messages";
 export * as types from "babel-types";

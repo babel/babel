@@ -1,12 +1,12 @@
 import * as context from "../index";
 import Plugin from "./plugin";
 import * as messages from "babel-messages";
-import resolve from "../helpers/resolve";
-import resolvePlugin from "../helpers/resolve-plugin";
-import resolvePreset from "../helpers/resolve-preset";
+import resolve from "./helpers/resolve";
+import resolvePlugin from "./helpers/resolve-plugin";
+import resolvePreset from "./helpers/resolve-preset";
 import defaults from "lodash/defaults";
 import cloneDeepWith from "lodash/cloneDeepWith";
-import merge from "../helpers/merge";
+import merge from "./helpers/merge";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
 import path from "path";
