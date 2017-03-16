@@ -1,6 +1,7 @@
 import * as context from "../index";
 import Plugin from "./plugin";
 import * as messages from "babel-messages";
+import resolve from "../helpers/resolve";
 import resolvePlugin from "../helpers/resolve-plugin";
 import resolvePreset from "../helpers/resolve-preset";
 import defaults from "lodash/defaults";
@@ -251,6 +252,26 @@ export default class OptionManager {
 
           throw new ReferenceError(unknownOptErr);
         }
+      }
+    }
+
+    if (opts.parserOpts && typeof opts.parserOpts.parser === "string") {
+      const parser = resolve(opts.parserOpts.parser, dirname);
+      if (parser) {
+        opts.parserOpts.parser = require(parser).parse;
+      } else {
+        throw new Error(`Couldn't find parser ${opts.parserOpts.parser} with "parse" method ` +
+          `relative to directory ${dirname}`);
+      }
+    }
+
+    if (opts.generatorOpts && typeof opts.generatorOpts.generator === "string") {
+      const generator = resolve(opts.generatorOpts.generator, dirname);
+      if (generator) {
+        opts.generatorOpts.generator = require(generator).print;
+      } else {
+        throw new Error(`Couldn't find generator ${opts.generatorOpts.generator} with "print" method ` +
+          `relative to directory ${dirname}`);
       }
     }
 

@@ -11,11 +11,9 @@ import codeFrame from "babel-code-frame";
 import traverse from "babel-traverse";
 import Store from "../store";
 import { parse } from "babylon";
-import path from "path";
 import * as t from "babel-types";
 import buildDebug from "debug";
 
-import resolve from "../../helpers/resolve";
 import OptionManager from "../../config/option-manager";
 
 import blockHoistPlugin from "../internal-plugins/block-hoist";
@@ -347,18 +345,7 @@ export default class File extends Store {
       parserOpts = Object.assign({}, this.parserOpts, parserOpts);
 
       if (parserOpts.parser) {
-        if (typeof parserOpts.parser === "string") {
-          const dirname = path.dirname(this.opts.filename) || process.cwd();
-          const parser = resolve(parserOpts.parser, dirname);
-          if (parser) {
-            parseCode = require(parser).parse;
-          } else {
-            throw new Error(`Couldn't find parser ${parserOpts.parser} with "parse" method ` +
-              `relative to directory ${dirname}`);
-          }
-        } else {
-          parseCode = parserOpts.parser;
-        }
+        parseCode = parserOpts.parser;
 
         parserOpts.parser = {
           parse(source) {
@@ -536,17 +523,6 @@ export default class File extends Store {
     let gen = generate;
     if (opts.generatorOpts && opts.generatorOpts.generator) {
       gen = opts.generatorOpts.generator;
-
-      if (typeof gen === "string") {
-        const dirname = path.dirname(this.opts.filename) || process.cwd();
-        const generator = resolve(gen, dirname);
-        if (generator) {
-          gen = require(generator).print;
-        } else {
-          throw new Error(`Couldn't find generator ${gen} with "print" method relative ` +
-            `to directory ${dirname}`);
-        }
-      }
     }
 
     debug(this.opts, "Generation start");
