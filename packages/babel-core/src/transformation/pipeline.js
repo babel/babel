@@ -2,7 +2,6 @@
 import fs from "fs";
 
 import normalizeAst from "../helpers/normalize-ast";
-import Plugin from "./plugin";
 import File from "./file";
 import OptionManager from "./file/options/option-manager";
 
@@ -10,7 +9,7 @@ export function analyse(code: string, opts: Object = {}, visitor?: Object): ?Bab
   opts.code = false;
   if (visitor) {
     opts.plugins = opts.plugins || [];
-    opts.plugins.push(new Plugin({ visitor }));
+    opts.plugins.push({ visitor });
   }
   return transform(code, opts).metadata;
 }

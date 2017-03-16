@@ -389,16 +389,25 @@ export default class File extends Store {
 
   transform(): BabelFileResult {
     for (const pluginPairs of this.pluginPasses) {
+      const passPairs = [];
       const passes = [];
       const visitors = [];
 
       for (const [ plugin, pluginOpts ] of pluginPairs.concat(INTERNAL_PLUGINS)) {
-        const pass = new PluginPass(this, plugin, pluginOpts);
+        const pass = new PluginPass(this, plugin.key, pluginOpts);
+
+        passPairs.push([ plugin, pass ]);
         passes.push(pass);
         visitors.push(plugin.visitor);
+
+        if (plugin.pre) plugin.pre.call(pass, this);
       }
 
-      this.call("pre", passes);
+      for (const [ plugin, pass ] of passPairs) {
+        const fn = plugin.pre;
+        if (fn) fn.call(pass, this);
+      }
+
       util.debug(this.opts, "Start transform traverse");
 
       // merge all plugin visitors into a single visitor
@@ -406,7 +415,12 @@ export default class File extends Store {
       traverse(this.ast, visitor, this.scope);
 
       util.debug(this.opts, "End transform traverse");
-      this.call("post", passes);
+
+      for (const [ plugin, pass ] of passPairs) {
+        const fn = plugin.post;
+        if (fn) fn.call(pass, this);
+      }
+
     }
 
     return this.generate();
@@ -457,14 +471,6 @@ export default class File extends Store {
     this.parseShebang();
     const ast = this.parse(this.code);
     this.addAst(ast);
-  }
-
-  call(key: "pre" | "post", pluginPasses: Array<PluginPass>) {
-    for (const pass of pluginPasses) {
-      const plugin = pass.plugin;
-      const fn = plugin[key];
-      if (fn) fn.call(pass, this);
-    }
   }
 
   parseInputSourceMap(code: string): string {

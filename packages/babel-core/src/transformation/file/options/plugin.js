@@ -1,4 +1,4 @@
-import OptionManager from "./file/options/option-manager";
+import OptionManager from "./option-manager";
 import * as messages from "babel-messages";
 import traverse from "babel-traverse";
 import clone from "lodash/clone";
