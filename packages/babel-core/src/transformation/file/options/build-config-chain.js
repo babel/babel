@@ -13,12 +13,18 @@ const PACKAGE_FILENAME = "package.json";
 const BABELIGNORE_FILENAME = ".babelignore";
 
 function exists(filename) {
-  const cached = existsCache[filename];
-  if (cached == null) {
-    return existsCache[filename] = fs.existsSync(filename);
-  } else {
-    return cached;
+  if (existsCache[filename] == null) {
+    if (typeof fs.existsSync !== "function") {
+      throw new Error(
+        "You are using babel in an environment that does not include filesystem access. " +
+        "You can disable .babelrc lookup by setting `babelrc: false` in your config."
+      );
+    }
+
+    existsCache[filename] = fs.existsSync(filename);
   }
+
+  return existsCache[filename];
 }
 
 export default function buildConfigChain(opts: Object = {}) {
