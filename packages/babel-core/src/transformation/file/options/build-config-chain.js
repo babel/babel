@@ -4,6 +4,7 @@ import json5 from "json5";
 import path from "path";
 import fs from "fs";
 
+const isFsAvailable = typeof fs.existsSync === "function";
 const existsCache = {};
 const jsonCache = {};
 
@@ -14,7 +15,7 @@ const BABELIGNORE_FILENAME = ".babelignore";
 
 function exists(filename) {
   if (existsCache[filename] == null) {
-    if (typeof fs.existsSync !== "function") {
+    if (!isFsAvailable) {
       throw new Error(
         "You are using babel in an environment that does not include filesystem access. " +
         "You can disable .babelrc lookup by setting `babelrc: false` in your config."
