@@ -96,8 +96,11 @@ exports.visitor = {
       let didRenameArguments = renameArguments(path, argsId);
       if (didRenameArguments) {
         vars = vars || t.variableDeclaration("var", []);
+        const argumentIdentifier = t.identifier("arguments");
+        // we need to do this as otherwise arguments in arrow functions gets hoisted
+        argumentIdentifier._shadowedFunctionLiteral = path;
         vars.declarations.push(t.variableDeclarator(
-          argsId, t.identifier("arguments")
+          argsId, argumentIdentifier
         ));
       }
 
