@@ -34,7 +34,7 @@ require("babel-core").transform("code", {
 });
 ```
 
-### Options
+## Options
 
 ### `es2015`
 
