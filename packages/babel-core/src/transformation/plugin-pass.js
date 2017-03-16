@@ -1,4 +1,4 @@
-import Store from "../store";
+import Store from "./store";
 import File from "./file";
 
 export default class PluginPass extends Store {

@@ -9,7 +9,7 @@ import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
 import traverse from "babel-traverse";
-import Store from "../../store";
+import Store from "../store";
 import { parse } from "babylon";
 import * as util from "../../util";
 import path from "path";
