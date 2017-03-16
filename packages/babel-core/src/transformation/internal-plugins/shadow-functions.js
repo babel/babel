@@ -1,4 +1,3 @@
-import Plugin from "../plugin";
 import * as t from "babel-types";
 
 const SUPER_THIS_BOUND = Symbol("super this bound");
@@ -15,7 +14,7 @@ const superVisitor = {
   },
 };
 
-export default new Plugin({
+export default {
   name: "internal.shadowFunctions",
 
   visitor: {
@@ -29,7 +28,7 @@ export default new Plugin({
       }
     },
   },
-});
+};
 
 function shouldShadow(path, shadowPath) {
   if (path.is("_forceShadow")) {
