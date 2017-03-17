@@ -31,6 +31,8 @@ describe("buildConfigChain", function () {
     process.env.NODE_ENV = oldNodeEnv;
   });
 
+  // TODO: Tests for ignore and only
+
   it("dir1", function () {
     const chain = buildConfigChain({
       filename: fixture("dir1", "src.js"),

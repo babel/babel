@@ -3,7 +3,6 @@ import Module from "module";
 import { inspect } from "util";
 import path from "path";
 import repl from "repl";
-import { util } from "babel-core";
 import * as babel from "babel-core";
 import vm from "vm";
 import "babel-polyfill";
@@ -13,13 +12,24 @@ import pkg from "../package.json";
 
 const program = new commander.Command("babel-node");
 
+function collect(value, previousValue): Array<string> {
+  // If the user passed the option with no value, like "babel-node file.js --presets", do nothing.
+  if (typeof value !== "string") return previousValue;
+
+  const values = value.split(",");
+
+  return previousValue ? previousValue.concat(values) : values;
+}
+
+/* eslint-disable max-len */
 program.option("-e, --eval [script]", "Evaluate script");
 program.option("-p, --print [code]", "Evaluate script and print result");
-program.option("-o, --only [globs]", "");
-program.option("-i, --ignore [globs]", "");
-program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]");
-program.option("-w, --plugins [string]", "", util.list);
-program.option("-b, --presets [string]", "", util.list);
+program.option("-o, --only [globs]", "A comma-separated list of glob patterns to compile", collect);
+program.option("-i, --ignore [globs]", "A comma-separated list of glob patterns to skip compiling", collect);
+program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]", collect);
+program.option("-w, --plugins [string]", "", collect);
+program.option("-b, --presets [string]", "", collect);
+/* eslint-enable max-len */
 
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");

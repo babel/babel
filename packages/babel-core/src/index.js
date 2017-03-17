@@ -6,8 +6,6 @@ export resolvePreset from "./helpers/resolve-preset";
 export { version } from "../package";
 export { getEnv } from "./helpers/environment";
 
-export * as util from "./util";
-
 export * as messages from "babel-messages";
 export * as types from "babel-types";
 export traverse from "babel-traverse";
@@ -27,3 +25,8 @@ export {
   transformFileSync,
 } from "./transformation/pipeline";
 
+/**
+ * Recommended set of compilable extensions. Not used in babel-core directly, but meant as
+ * as an easy source for tooling making use of babel-core.
+ */
+export const DEFAULT_EXTENSIONS = Object.freeze([".js", ".jsx", ".es6", ".es"]);

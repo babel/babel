@@ -415,11 +415,7 @@ export default class File extends Store {
     code = code + "";
 
     try {
-      if (this.shouldIgnore()) {
-        return this.makeResult({ code, ignored: true });
-      } else {
-        return callback();
-      }
+      return callback();
     } catch (err) {
       if (err._babel) {
         throw err;
@@ -460,11 +456,6 @@ export default class File extends Store {
     this.parseShebang();
     const ast = this.parse(this.code);
     this.addAst(ast);
-  }
-
-  shouldIgnore() {
-    const opts = this.opts;
-    return util.shouldIgnore(opts.filename, opts.ignore, opts.only);
   }
 
   call(key: "pre" | "post", pluginPasses: Array<PluginPass>) {

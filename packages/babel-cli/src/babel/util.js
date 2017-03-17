@@ -1,6 +1,7 @@
 import commander from "commander";
 import readdir from "fs-readdir-recursive";
 import * as babel from "babel-core";
+import includes from "lodash/includes";
 import path from "path";
 import fs from "fs";
 
@@ -10,16 +11,19 @@ export function chmod(src, dest) {
 
 export function readdirFilter(filename) {
   return readdir(filename).filter(function (filename) {
-    return babel.util.canCompile(filename);
+    return babel.util.isCompilableExtension(filename);
   });
 }
 
 export { readdir };
 
-export const canCompile = babel.util.canCompile;
-
-export function shouldIgnore(loc, opts) {
-  return babel.util.shouldIgnore(loc, opts.ignore, opts.only);
+/**
+ * Test if a filename ends with a compilable extension.
+ */
+export function isCompilableExtension(filename: string, altExts?: Array<string>): boolean {
+  const exts = altExts || babel.DEFAULT_EXTENSIONS;
+  const ext = path.extname(filename);
+  return includes(exts, ext);
 }
 
 export function addSourceMappingUrl(code, loc) {
@@ -35,16 +39,12 @@ export function transform(filename, code, opts) {
     filename,
   });
 
-  const result = babel.transform(code, opts);
-  result.filename = filename;
-  result.actual = code;
-  return result;
+  return babel.transform(code, opts);
 }
 
 export function compile(filename, opts) {
   try {
-    const code = fs.readFileSync(filename, "utf8");
-    return transform(filename, code, opts);
+    return babel.transformFileSync(filename, opts);
   } catch (err) {
     if (commander.watch) {
       console.error(toErrorStack(err));

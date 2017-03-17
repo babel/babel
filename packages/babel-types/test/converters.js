@@ -2,6 +2,10 @@ import * as t from "../lib";
 import { assert } from "chai";
 
 describe("converters", function () {
+  it("toIdentifier", function () {
+    assert.equal(t.toIdentifier("swag-lord"), "swagLord");
+  });
+
   describe("valueToNode", function () {
     it("number", function () {
       assert.deepEqual(t.valueToNode(Math.PI), t.numericLiteral(Math.PI));

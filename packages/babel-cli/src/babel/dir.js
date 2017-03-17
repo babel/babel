@@ -8,6 +8,8 @@ import * as util from "./util";
 
 export default function (commander, filenames, opts) {
   function write(src, relative) {
+    if (!util.isCompilableExtension(relative, commander.extensions)) return false;
+
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
 
@@ -17,7 +19,8 @@ export default function (commander, filenames, opts) {
       sourceFileName: slash(path.relative(dest + "/..", src)),
       sourceMapTarget: path.basename(relative),
     }, opts));
-    if (!commander.copyFiles && data.ignored) return;
+
+    if (!data) return false;
 
     // we've requested explicit sourcemaps to be written to disk
     if (data.map && commander.sourceMaps && commander.sourceMaps !== "inline") {
@@ -30,14 +33,14 @@ export default function (commander, filenames, opts) {
     util.chmod(src, dest);
 
     util.log(src + " -> " + dest);
+
+    return true;
   }
 
   function handleFile(src, filename) {
-    if (util.shouldIgnore(src, opts)) return;
+    const didWrite = write(src, filename);
 
-    if (util.canCompile(filename, commander.extensions)) {
-      write(src, filename);
-    } else if (commander.copyFiles) {
+    if (!didWrite && commander.copyFiles) {
       const dest = path.join(commander.outDir, filename);
       outputFileSync(dest, fs.readFileSync(src));
       util.chmod(src, dest);
