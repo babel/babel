@@ -88,16 +88,6 @@ describe("buildConfigChain", function () {
     const expected = [
       {
         options: {
-          plugins: [
-            "dir2",
-          ],
-        },
-        alias: fixture("dir2", ".babelrc"),
-        loc: fixture("dir2", ".babelrc"),
-        dirname: fixture("dir2"),
-      },
-      {
-        options: {
           ignore: [
             "root-ignore",
           ],
@@ -105,6 +95,16 @@ describe("buildConfigChain", function () {
         alias: fixture(".babelignore"),
         loc: fixture(".babelignore"),
         dirname: fixture(),
+      },
+      {
+        options: {
+          plugins: [
+            "dir2",
+          ],
+        },
+        alias: fixture("dir2", ".babelrc"),
+        loc: fixture("dir2", ".babelrc"),
+        dirname: fixture("dir2"),
       },
       {
         options: {
@@ -127,16 +127,6 @@ describe("buildConfigChain", function () {
     const expected = [
       {
         options: {
-          plugins: [
-            "env-base",
-          ],
-        },
-        alias: fixture("env", ".babelrc"),
-        loc: fixture("env", ".babelrc"),
-        dirname: fixture("env"),
-      },
-      {
-        options: {
           ignore: [
             "root-ignore",
           ],
@@ -144,6 +134,16 @@ describe("buildConfigChain", function () {
         alias: fixture(".babelignore"),
         loc: fixture(".babelignore"),
         dirname: fixture(),
+      },
+      {
+        options: {
+          plugins: [
+            "env-base",
+          ],
+        },
+        alias: fixture("env", ".babelrc"),
+        loc: fixture("env", ".babelrc"),
+        dirname: fixture("env"),
       },
       {
         options: {
@@ -168,6 +168,16 @@ describe("buildConfigChain", function () {
     const expected = [
       {
         options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        options: {
           plugins: [
             "env-base",
           ],
@@ -185,16 +195,6 @@ describe("buildConfigChain", function () {
         alias: fixture("env", ".babelrc.env.foo"),
         loc: fixture("env", ".babelrc.env.foo"),
         dirname: fixture("env"),
-      },
-      {
-        options: {
-          ignore: [
-            "root-ignore",
-          ],
-        },
-        alias: fixture(".babelignore"),
-        loc: fixture(".babelignore"),
-        dirname: fixture(),
       },
       {
         options: {
@@ -220,6 +220,16 @@ describe("buildConfigChain", function () {
     const expected = [
       {
         options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        options: {
           plugins: [
             "env-base",
           ],
@@ -237,16 +247,6 @@ describe("buildConfigChain", function () {
         alias: fixture("env", ".babelrc.env.bar"),
         loc: fixture("env", ".babelrc.env.bar"),
         dirname: fixture("env"),
-      },
-      {
-        options: {
-          ignore: [
-            "root-ignore",
-          ],
-        },
-        alias: fixture(".babelignore"),
-        loc: fixture(".babelignore"),
-        dirname: fixture(),
       },
       {
         options: {
@@ -307,6 +307,16 @@ describe("buildConfigChain", function () {
     const expected = [
       {
         options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        options: {
           plugins: [
             "foo",
             "bar",
@@ -315,16 +325,6 @@ describe("buildConfigChain", function () {
         alias: fixture("js-config", ".babelrc.js"),
         loc: fixture("js-config", ".babelrc.js"),
         dirname: fixture("js-config"),
-      },
-      {
-        options: {
-          ignore: [
-            "root-ignore",
-          ],
-        },
-        alias: fixture(".babelignore"),
-        loc: fixture(".babelignore"),
-        dirname: fixture(),
       },
       {
         options: {
@@ -347,6 +347,16 @@ describe("buildConfigChain", function () {
     const expected = [
       {
         options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        options: {
           plugins: [
             "foo",
             "bar",
@@ -355,16 +365,6 @@ describe("buildConfigChain", function () {
         alias: fixture("js-config-default", ".babelrc.js"),
         loc: fixture("js-config-default", ".babelrc.js"),
         dirname: fixture("js-config-default"),
-      },
-      {
-        options: {
-          ignore: [
-            "root-ignore",
-          ],
-        },
-        alias: fixture(".babelignore"),
-        loc: fixture(".babelignore"),
-        dirname: fixture(),
       },
       {
         options: {
@@ -384,6 +384,16 @@ describe("buildConfigChain", function () {
     });
 
     const expected = [
+      {
+        options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
       {
         options: {
           plugins: [
@@ -407,16 +417,6 @@ describe("buildConfigChain", function () {
       },
       {
         options: {
-          ignore: [
-            "root-ignore",
-          ],
-        },
-        alias: fixture(".babelignore"),
-        loc: fixture(".babelignore"),
-        dirname: fixture(),
-      },
-      {
-        options: {
           filename: fixture("js-config-extended", "src.js"),
         },
         alias: "base",
@@ -437,16 +437,6 @@ describe("buildConfigChain", function () {
     const expected = [
       {
         options: {
-          plugins: [
-            "json",
-          ],
-        },
-        alias: fixture("json-pkg-config-no-babel", ".babelrc"),
-        loc: fixture("json-pkg-config-no-babel", ".babelrc"),
-        dirname: fixture("json-pkg-config-no-babel"),
-      },
-      {
-        options: {
           ignore: [
             "root-ignore",
           ],
@@ -454,6 +444,16 @@ describe("buildConfigChain", function () {
         alias: fixture(".babelignore"),
         loc: fixture(".babelignore"),
         dirname: fixture(),
+      },
+      {
+        options: {
+          plugins: [
+            "json",
+          ],
+        },
+        alias: fixture("json-pkg-config-no-babel", ".babelrc"),
+        loc: fixture("json-pkg-config-no-babel", ".babelrc"),
+        dirname: fixture("json-pkg-config-no-babel"),
       },
       {
         options: {

@@ -5,8 +5,23 @@ import includes from "lodash/includes";
 import isRegExp from "lodash/isRegExp";
 import path from "path";
 import slash from "slash";
+import buildDebug from "debug";
 
 export { inherits, inspect } from "util";
+
+const debugBabel = buildDebug("babel");
+
+export function debug(opts: Object, msg: string) {
+  debugBabel(message(opts, msg));
+}
+
+export function message(opts: Object, msg: string) {
+  // There are a few case where throws errors will try to annotate themselves multiple times, so
+  // to keep things simple we just bail out if re-wrapping the message.
+  if (/^\[BABEL\]/.test(msg)) return msg;
+
+  return `[BABEL] ${opts.filename || "unknown"}: ${msg}`;
+}
 
 /**
  * Test if a filename ends with a compilable extension.
@@ -111,20 +126,22 @@ export function booleanify(val: any): boolean | any {
 
 export function shouldIgnore(
   filename: string,
-  ignore: Array<RegExp | Function> = [],
+  ignore: Array<RegExp | Function>,
   only?: Array<RegExp | Function>,
 ): boolean {
   filename = filename.replace(/\\/g, "/");
 
+  if (ignore && ignore.length) {
+    for (const pattern of ignore) {
+      if (matchesPattern(pattern, filename)) return true;
+    }
+  }
+
   if (only) {
     for (const pattern of only) {
-      if (_shouldIgnore(pattern, filename)) return false;
+      if (matchesPattern(pattern, filename)) return false;
     }
     return true;
-  } else if (ignore.length) {
-    for (const pattern of ignore) {
-      if (_shouldIgnore(pattern, filename)) return true;
-    }
   }
 
   return false;
@@ -135,7 +152,7 @@ export function shouldIgnore(
  * Otherwise returns result of matching pattern Regex with filename.
  */
 
-function _shouldIgnore(pattern: Function | RegExp, filename: string) {
+function matchesPattern(pattern: Function | RegExp, filename: string) {
   if (typeof pattern === "function") {
     return pattern(filename);
   } else {
