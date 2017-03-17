@@ -8,7 +8,7 @@ import * as util from "./util";
 
 export default function (commander, filenames, opts) {
   function write(src, relative) {
-    if (!util.canCompile(relative, commander.extensions)) return false;
+    if (!util.isCompilableExtension(relative, commander.extensions)) return false;
 
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
@@ -38,9 +38,9 @@ export default function (commander, filenames, opts) {
   }
 
   function handleFile(src, filename) {
-    const wrote = write(src, filename);
+    const didWrite = write(src, filename);
 
-    if (!wrote && commander.copyFiles) {
+    if (!didWrite && commander.copyFiles) {
       const dest = path.join(commander.outDir, filename);
       outputFileSync(dest, fs.readFileSync(src));
       util.chmod(src, dest);

@@ -158,7 +158,7 @@ export default function (commander, filenames, opts) {
           pollInterval: 10,
         },
       }).on("all", function (type, filename) {
-        if (!util.canCompile(filename, commander.extensions)) return;
+        if (!util.isCompilableExtension(filename, commander.extensions)) return;
 
         if (type === "add" || type === "change") {
           util.log(type + " " + filename);

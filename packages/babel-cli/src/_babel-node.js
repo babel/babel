@@ -24,8 +24,8 @@ function collect(value, previousValue): Array<string> {
 /* eslint-disable max-len */
 program.option("-e, --eval [script]", "Evaluate script");
 program.option("-p, --print [code]", "Evaluate script and print result");
-program.option("-o, --only [globs]", "", collect);
-program.option("-i, --ignore [globs]", "", collect);
+program.option("-o, --only [globs]", "A comma-separated list of glob patterns to compile", collect);
+program.option("-i, --ignore [globs]", "A comma-separated list of glob patterns to skip compiling", collect);
 program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]", collect);
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);

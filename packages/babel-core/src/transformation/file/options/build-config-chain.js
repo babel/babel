@@ -65,7 +65,9 @@ class ConfigChainBuilder {
     if (!this.filename) return false;
 
     if (ignore) {
-      if (!Array.isArray(ignore)) throw new Error(".ignore should be an array.");
+      if (!Array.isArray(ignore)) {
+        throw new Error(`.ignore should be an array, was ${JSON.stringify(ignore)}`);
+      }
 
       for (const pattern of ignore) {
         if (this.matchesPattern(pattern, dirname)) return true;
@@ -73,7 +75,9 @@ class ConfigChainBuilder {
     }
 
     if (only) {
-      if (!Array.isArray(only)) throw new Error(".only should be an array.");
+      if (!Array.isArray(only)) {
+        throw new Error(`.only should be an array, was ${JSON.stringify(only)}`);
+      }
 
       for (const pattern of only) {
         if (this.matchesPattern(pattern, dirname)) return false;
@@ -247,6 +251,7 @@ class ConfigChainBuilder {
 
     // Bail out ASAP if this file is ignored so that we run as little logic as possible on ignored files.
     if (this.filename && this.shouldIgnore(options.ignore, options.only, dirname)) {
+      // TODO(logan): This is a really cross way to bail out. Avoid this in rewrite.
       throw Object.assign(new Error("This file has been ignored."), { code: "BABEL_IGNORED_FILE" });
     }
 

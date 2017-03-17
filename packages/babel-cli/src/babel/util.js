@@ -11,7 +11,7 @@ export function chmod(src, dest) {
 
 export function readdirFilter(filename) {
   return readdir(filename).filter(function (filename) {
-    return babel.util.canCompile(filename);
+    return babel.util.isCompilableExtension(filename);
   });
 }
 
@@ -20,7 +20,7 @@ export { readdir };
 /**
  * Test if a filename ends with a compilable extension.
  */
-export function canCompile(filename: string, altExts?: Array<string>): boolean {
+export function isCompilableExtension(filename: string, altExts?: Array<string>): boolean {
   const exts = altExts || babel.DEFAULT_EXTENSIONS;
   const ext = path.extname(filename);
   return includes(exts, ext);
