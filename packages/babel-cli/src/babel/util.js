@@ -21,15 +21,10 @@ export { readdir };
  * Test if a filename ends with a compilable extension.
  */
 export function canCompile(filename: string, altExts?: Array<string>): boolean {
-  const exts = altExts || EXTENSIONS;
+  const exts = altExts || babel.DEFAULT_EXTENSIONS;
   const ext = path.extname(filename);
   return includes(exts, ext);
 }
-
-/**
- * Default set of compilable extensions.
- */
-const EXTENSIONS = [".js", ".jsx", ".es6", ".es"];
 
 export function addSourceMappingUrl(code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);

@@ -4,7 +4,7 @@ import * as registerCache from "./cache";
 import escapeRegExp from "lodash/escapeRegExp";
 import extend from "lodash/extend";
 import * as babel from "babel-core";
-import { OptionManager } from "babel-core";
+import { OptionManager, DEFAULT_EXTENSIONS } from "babel-core";
 import fs from "fs";
 import path from "path";
 
@@ -111,7 +111,7 @@ function hookExtensions(_exts) {
   });
 }
 
-hookExtensions([".js", ".jsx", ".es6", ".es"]);
+hookExtensions(DEFAULT_EXTENSIONS);
 
 export default function (opts?: Object = {}) {
   if (opts.extensions) hookExtensions(opts.extensions);
