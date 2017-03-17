@@ -17,7 +17,10 @@ export default function ({ types: t }) {
 
         // Split the class declaration and the export into two separate statements.
         path.replaceWith(node.declaration);
-        path.insertAfter(t.exportDefaultDeclaration(ref));
+        path.insertAfter(t.exportNamedDeclaration(
+          null,
+          [t.exportSpecifier(ref, t.identifier("default"))]
+        ));
       },
 
       ClassDeclaration(path) {

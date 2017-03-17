@@ -17,4 +17,4 @@ Object.defineProperty(MyClass2, "property", {
   writable: true,
   value: value
 });
-export default MyClass2;
+export { MyClass2 as default };
