@@ -16,4 +16,4 @@ if [ -n "$CI" ]; then
   runSequentially="--runInBand"
 fi
 
-$node node_modules/.bin/jest "$TEST_GREP" $runSequentially
+$node node_modules/.bin/jest "$TEST_GREP"
