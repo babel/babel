@@ -34,7 +34,4 @@ matrix:
       env: LINT=true PKG_CMD="npm"
     - node_js: "node"
       env: DATA_CHECK=true PKG_CMD="npm"
-  exclude:
-    - node_js: "4"
-      env: PKG_CMD="yarn"
 after_success: 'if [ -z "${LINT-}" ] && [ -z "${DATA_CHECK-}" ]; then npm run coverage-ci ; fi'
