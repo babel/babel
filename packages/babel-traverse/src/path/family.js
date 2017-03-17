@@ -2,6 +2,7 @@
 
 import type TraversalContext from "../index";
 import NodePath from "./index";
+import util from "util";
 import * as t from "babel-types";
 
 export function getStatementParent(): ?NodePath {
@@ -148,18 +149,24 @@ export function _getPattern(parts, context) {
   return path;
 }
 
-export function getBindingIdentifiers(duplicates?) {
-  return t.getBindingIdentifiers(this.node, duplicates);
-}
+export const getBindingIdentifierPaths = util.deprecate(
+  function getBindingIdentifierPaths(duplicates = false, outerOnly = false) {
+    return this.getBindingIdentifiers(duplicates, outerOnly);
+  },
+  "path.getBindingIdentifierPaths is replaced with path.getBindingIdentifiers"
+);
 
-export function getOuterBindingIdentifiers(duplicates?) {
-  return t.getOuterBindingIdentifiers(this.node, duplicates);
-}
+export const getOuterBindingIdentifierPaths = util.deprecate(
+  function getOuterBindingIdentifierPaths(duplicates?) {
+    return this.getOuterBindingIdentifiers(duplicates);
+  },
+  "path.getOuterBindingIdentifierPaths is replaced with path.getOuterBindingIdentifiers"
+);
 
 // original source - https://github.com/babel/babel/blob/master/packages/babel-types/src/retrievers.js
 // path.getBindingIdentifiers returns nodes where the following re-implementation
 // returns paths
-export function getBindingIdentifierPaths(duplicates = false, outerOnly = false) {
+export function getBindingIdentifiers(duplicates = false, outerOnly = false) {
   const path = this;
   let search = [].concat(path);
   const ids = Object.create(null);
@@ -213,6 +220,6 @@ export function getBindingIdentifierPaths(duplicates = false, outerOnly = false)
   return ids;
 }
 
-export function getOuterBindingIdentifierPaths(duplicates?) {
-  return this.getBindingIdentifierPaths(duplicates, true);
+export function getOuterBindingIdentifiers(duplicates?) {
+  return this.getBindingIdentifiers(duplicates, true);
 }
