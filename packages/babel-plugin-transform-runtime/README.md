@@ -121,6 +121,81 @@ Example:
 import extends from 'flavortown/runtime/helpers/extends';
 ```
 
+### `useBuiltIns`
+
+`boolean`, defaults to `false`.
+
+When enabled, the transform will use helpers that do not use _any_ polyfills
+from `core-js`.
+
+For example, here is the `instance` helper with `useBuiltIns` disabled:
+
+```js
+exports.__esModule = true;
+
+var _hasInstance = require("../core-js/symbol/has-instance");
+
+var _hasInstance2 = _interopRequireDefault(_hasInstance);
+
+var _symbol = require("../core-js/symbol");
+
+var _symbol2 = _interopRequireDefault(_symbol);
+
+exports.default = function (left, right) {
+  if (right != null && typeof _symbol2.default !== "undefined" && right[_hasInstance2.default]) {
+    return right[_hasInstance2.default](left);
+  } else {
+    return left instanceof right;
+  }
+};
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+```
+
+And, with it enabled:
+
+```js
+exports.__esModule = true;
+
+exports.default = function (left, right) {
+  if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
+    return right[Symbol.hasInstance](left);
+  } else {
+    return left instanceof right;
+  }
+};
+```
+
+### `useESModules`
+
+`boolean`, defaults to `false`.
+
+When enabled, the transform will use helpers that do not get run through
+`transform-es2015-modules-commonjs`. This allows for smaller builds in module
+systems like webpack, since it doesn't need to preserve commonjs semantics.
+
+For example, here is the `classCallCheck` helper with `useESModules` disabled:
+
+```js
+exports.__esModule = true;
+
+exports.default = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+```
+
+And, with it enabled:
+
+```js
+export default function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+```
+
 ## Technical details
 
 The `runtime` transformer plugin does three things:
