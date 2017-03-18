@@ -135,6 +135,9 @@ export default function({ types: t }) {
               FACTORY: factory,
             }),
           ];
+
+          // requeue the CallExpression
+          path.requeue(path.get("body.0.expression"));
         },
       },
     },
