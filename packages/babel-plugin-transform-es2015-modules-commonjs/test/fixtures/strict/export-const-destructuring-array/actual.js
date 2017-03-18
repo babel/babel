@@ -1,1 +1,1 @@
-export const [ foo, bar ] = [];
+export const [foo, bar = 2] = [1];

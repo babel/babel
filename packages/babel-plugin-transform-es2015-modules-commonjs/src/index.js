@@ -319,9 +319,12 @@ export default function () {
                       }
                     } else if (id.isArrayPattern() && id.node.elements) {
                       for (let i = 0; i < id.node.elements.length; i++) {
-                        const elem = id.node.elements[i];
+                        let elem = id.node.elements[i];
                         if (!elem) continue;
                         if (!t.isRestElement(elem)) {
+                          if (t.isAssignmentPattern(elem)) {
+                            elem = elem.left;
+                          }
                           const name = elem.name;
                           addTo(exports, name, elem);
                           exportsToInsert.push(buildExportsAssignment(elem, elem));
