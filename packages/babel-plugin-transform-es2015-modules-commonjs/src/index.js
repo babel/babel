@@ -300,6 +300,7 @@ export default function () {
                     const id = decl.get("id");
 
                     const init = decl.get("init");
+                    const exportsToInsert = [];
                     if (!init.node) init.replaceWith(t.identifier("undefined"));
 
                     if (id.isIdentifier()) {
@@ -310,14 +311,25 @@ export default function () {
                       for (let i = 0; i < id.node.properties.length; i++) {
                         const prop = id.node.properties[i];
                         if (!t.isRestProperty(prop)) {
-                          addTo(exports, prop.value.name, prop.value);
-                          path.insertAfter(buildExportsAssignment(prop.value, prop.value));
-                          nonHoistedExportNames[prop.value.name] = true;
+                          const propValue = prop.value;
+                          addTo(exports, propValue.name, propValue);
+                          exportsToInsert.push(buildExportsAssignment(propValue, propValue));
+                          nonHoistedExportNames[propValue.name] = true;
                         }
                       }
-                    } else {
-                      // todo
+                    } else if (id.isArrayPattern() && id.node.elements) {
+                      for (let i = 0; i < id.node.elements.length; i++) {
+                        const elem = id.node.elements[i];
+                        if (!elem) continue;
+                        if (!t.isRestElement(elem)) {
+                          const name = elem.name;
+                          addTo(exports, name, elem);
+                          exportsToInsert.push(buildExportsAssignment(elem, elem));
+                          nonHoistedExportNames[name] = true;
+                        }
+                      }
                     }
+                    path.insertAfter(exportsToInsert);
                   }
                   path.replaceWith(declaration.node);
                 }
