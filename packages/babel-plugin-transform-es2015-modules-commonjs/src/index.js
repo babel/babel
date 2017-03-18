@@ -310,8 +310,11 @@ export default function () {
                     } else if (id.isObjectPattern()) {
                       for (let i = 0; i < id.node.properties.length; i++) {
                         const prop = id.node.properties[i];
+                        let propValue = prop.value;
                         if (!t.isRestProperty(prop)) {
-                          const propValue = prop.value;
+                          if (t.isAssignmentPattern(propValue)) {
+                            propValue = propValue.left;
+                          }
                           addTo(exports, propValue.name, propValue);
                           exportsToInsert.push(buildExportsAssignment(propValue, propValue));
                           nonHoistedExportNames[propValue.name] = true;
