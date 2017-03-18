@@ -128,6 +128,31 @@ enqueue(convert, [
   "./test/async.es5.js"
 ]);
 
+function convertWithSpread(es6File, es5File, callback) {
+  var transformOptions = {
+    presets:[require("regenerator-preset")],
+    plugins: [
+      require("babel-plugin-transform-es2015-spread"),
+      require("babel-plugin-transform-es2015-parameters")
+    ]
+  };
+
+  fs.readFile(es6File, "utf-8", function(err, es6) {
+    if (err) {
+      return callback(err);
+    }
+
+    var es5 = require("babel-core").transform(es6, transformOptions).code;
+
+    fs.writeFile(es5File, es5, callback);
+  });
+}
+
+enqueue(convertWithSpread, [
+  "./test/regression.js",
+  "./test/regression.es5.js"
+]);
+
 enqueue(makeMochaCopyFunction("mocha.js"));
 enqueue(makeMochaCopyFunction("mocha.css"));
 
@@ -137,11 +162,14 @@ if (!semver.eq(process.version, "0.11.7")) {
   try {
     require.resolve("browserify"); // Throws if missing.
     enqueue(bundle, [
-      ["./test/runtime.js",
-       "./test/tests.es5.js",
-       "./test/tests-node4.es5.js",
-       "./test/non-native.es5.js",
-       "./test/async.es5.js"],
+      [
+        "./test/runtime.js",
+        "./test/tests.es5.js",
+        "./test/tests-node4.es5.js",
+        "./test/non-native.es5.js",
+        "./test/async.es5.js",
+        "./test/regression.es5.js"
+      ],
       "./test/tests.browser.js"
     ]);
   } catch (ignored) {
@@ -156,6 +184,7 @@ enqueue("mocha", [
   "./test/tests-node4.es5.js",
   "./test/non-native.es5.js",
   "./test/async.es5.js",
+  "./test/regression.es5.js",
   "./test/tests.transform.js"
 ]);
 
