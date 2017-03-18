@@ -65,7 +65,10 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
       } else if (t.isIfStatement(node)) {
         const consequent = node.consequent ? convert([node.consequent]) : scope.buildUndefinedNode();
         const alternate = node.alternate ? convert([node.alternate]) : scope.buildUndefinedNode();
-        if (!consequent || !alternate) return bailed = true;
+
+        if (consequent === true || alternate === true) {
+          return bailed = true;
+        }
 
         exprs.push(t.conditionalExpression(node.test, consequent, alternate));
       } else if (t.isBlockStatement(node)) {
