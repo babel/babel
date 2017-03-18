@@ -129,6 +129,10 @@ export default function () {
   return {
     inherits: require("babel-plugin-transform-strict-mode"),
 
+    manipulateOptions(opts, parserOpts) {
+      parserOpts.plugins.push("objectRestSpread");
+    },
+
     visitor: {
       ThisExpression(path, state) {
         // If other plugins run after this plugin's Program#exit handler, we allow them to
@@ -311,14 +315,14 @@ export default function () {
                       for (let i = 0; i < id.node.properties.length; i++) {
                         const prop = id.node.properties[i];
                         let propValue = prop.value;
-                        if (!t.isRestProperty(prop)) {
-                          if (t.isAssignmentPattern(propValue)) {
-                            propValue = propValue.left;
-                          }
-                          addTo(exports, propValue.name, propValue);
-                          exportsToInsert.push(buildExportsAssignment(propValue, propValue));
-                          nonHoistedExportNames[propValue.name] = true;
+                        if (t.isAssignmentPattern(propValue)) {
+                          propValue = propValue.left;
+                        } else if (t.isRestProperty(prop)) {
+                          propValue = prop.argument;
                         }
+                        addTo(exports, propValue.name, propValue);
+                        exportsToInsert.push(buildExportsAssignment(propValue, propValue));
+                        nonHoistedExportNames[propValue.name] = true;
                       }
                     } else if (id.isArrayPattern() && id.node.elements) {
                       for (let i = 0; i < id.node.elements.length; i++) {
