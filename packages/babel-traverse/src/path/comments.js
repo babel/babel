@@ -17,12 +17,25 @@ export function shareCommentsWithSiblings(willBeRemoved) {
 
   let prev = this.getSibling(this.key - 1);
   let next = this.getSibling(this.key + 1);
+  
+  if (willBeRemoved) {
+    if (prev.node) {
+      prev.addComments("trailing", leading);
+    } else if (next.node) {
+      next.addComments("leading", leading);
+    }
+    if (next.node) {
+      next.addComments("leading", trailing);
+    } else if (prev.node) {
+      prev.addComments("trailing", trailing);
+    }
+  } else {
+    if (!prev.node) prev = next;
+    if (!next.node) next = prev;
 
-  if (!prev.node) prev = next;
-  if (!next.node) next = prev;
-
-  prev.addComments(willBeRemoved ? "leading" : "trailing", leading);
-  next.addComments(willBeRemoved ? "trailing" : "leading", trailing);
+    prev.addComments("trailing", leading);
+    next.addComments("leading", trailing);
+  }
 }
 
 export function addComment(type, content, line?) {
