@@ -4,7 +4,7 @@
  * Share comments amongst siblings.
  */
 
-export function shareCommentsWithSiblings() {
+export function shareCommentsWithSiblings(willBeRemoved) {
   // NOTE: this assumes numbered keys
   if (typeof this.key === "string") return;
 
@@ -21,8 +21,8 @@ export function shareCommentsWithSiblings() {
   if (!prev.node) prev = next;
   if (!next.node) next = prev;
 
-  prev.addComments("trailing", leading);
-  next.addComments("leading", trailing);
+  prev.addComments(willBeRemoved ? "leading" : "trailing", leading);
+  next.addComments(willBeRemoved ? "trailing" : "leading", trailing);
 }
 
 export function addComment(type, content, line?) {
