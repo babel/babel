@@ -4,7 +4,7 @@
  * Share comments amongst siblings.
  */
 
-export function shareCommentsWithSiblings(willBeRemoved) {
+export function shareCommentsWithSiblings() {
   // NOTE: this assumes numbered keys
   if (typeof this.key === "string") return;
 
