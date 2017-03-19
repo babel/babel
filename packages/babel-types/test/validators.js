@@ -26,5 +26,9 @@ suite("validators", function () {
 
       assert(t.isNodesEquivalent(parse(program), parse(program2)) === false);
     });
+
+    it("rejects 'await' as an identifier", function () {
+      assert(t.isValidIdentifier("await") === false);
+    });
   });
 });
