@@ -12,7 +12,7 @@ export function remove() {
     return;
   }
 
-  this.shareCommentsWithSiblings();
+  this.shareCommentsWithSiblings(true);
   this._remove();
   this._markRemoved();
 }
