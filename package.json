@@ -31,7 +31,6 @@
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-stage-0": "^6.5.0",
     "chalk": "^1.1.3",
-    "codecov": "^2.0.1",
     "cross-env": "^3.1.4",
     "eslint": "^3.7.1",
     "eslint-config-babel": "^6.0.0",
@@ -49,18 +48,17 @@
     "babylon": "./bin/babylon.js"
   },
   "scripts": {
-    "build": "npm run clean && rollup -c",
-    "coverage": "nyc report --reporter=json && codecov -f coverage/coverage-final.json",
-    "lint": "eslint src bin",
+    "build": "yarn run clean && rollup -c",
+    "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
     "clean": "rimraf lib",
     "flow": "flow",
-    "prepublish": "cross-env BABEL_ENV=production npm run build",
-    "preversion": "npm run test && npm run changelog",
-    "test": "npm run lint && npm run flow && npm run build -- -m && npm run test-only",
+    "lint": "eslint src bin",
+    "prepublish": "cross-env BABEL_ENV=production yarn run build",
+    "preversion": "yarn run test && npm run changelog",
+    "test": "yarn run lint && yarn run flow && yarn run build -- -m && yarn run test-only",
     "test-only": "ava",
-    "test-ci": "nyc npm run test-only",
-    "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
-    "watch": "npm run clean && rollup -c --watch"
+    "test-coverage": "cross-env BABEL_ENV=test yarn run build && nyc --reporter=json --reporter=text yarn run test-only",
+    "watch": "yarn run clean && rollup -c --watch"
   },
   "nyc": {
     "include": [
@@ -77,11 +75,6 @@
     "source": [
       "src/**/*.js",
       "bin/**/*.js"
-    ]
-  },
-  "greenkeeper": {
-    "ignore": [
-      "cross-env"
     ]
   }
 }
