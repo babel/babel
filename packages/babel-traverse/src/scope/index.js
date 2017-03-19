@@ -532,6 +532,8 @@ export default class Scope {
         // in `warnOnFlowBinding`.
         if (local && local.path.isFlow()) local = null;
 
+        if (local && local.kind === "local") local = null;
+
         parent.references[name] = true;
 
         this.bindings[name] = new Binding({
