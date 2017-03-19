@@ -15,25 +15,17 @@ export function shareCommentsWithSiblings(willBeRemoved) {
   const leading = node.leadingComments;
   if (!trailing && !leading) return;
 
-  let prev = this.getSibling(this.key - 1);
-  let next = this.getSibling(this.key + 1);
-  if (willBeRemoved) {
-    if (prev.node) {
-      prev.addComments("trailing", leading);
-    } else if (next.node) {
-      next.addComments("leading", leading);
-    }
-    if (next.node) {
-      next.addComments("leading", trailing);
-    } else if (prev.node) {
-      prev.addComments("trailing", trailing);
-    }
-  } else {
-    if (!prev.node) prev = next;
-    if (!next.node) next = prev;
-
+  const prev = this.getSibling(this.key - 1);
+  const next = this.getSibling(this.key + 1);
+  if (prev.node) {
     prev.addComments("trailing", leading);
+  } else if (next.node) {
+    next.addComments("leading", leading);
+  }
+  if (next.node) {
     next.addComments("leading", trailing);
+  } else if (prev.node) {
+    prev.addComments("trailing", trailing);
   }
 }
 
