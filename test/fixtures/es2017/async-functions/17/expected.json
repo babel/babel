@@ -68,7 +68,8 @@
               "end": {
                 "line": 1,
                 "column": 1
-              }
+              },
+              "identifierName": "f"
             },
             "name": "f"
           },
@@ -85,7 +86,8 @@
                 "end": {
                   "line": 1,
                   "column": 3
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a"
             },
@@ -120,7 +122,8 @@
                     "end": {
                       "line": 1,
                       "column": 18
-                    }
+                    },
+                    "identifierName": "promise"
                   },
                   "name": "promise"
                 }
@@ -151,7 +154,8 @@
                     "end": {
                       "line": 1,
                       "column": 35
-                    }
+                    },
+                    "identifierName": "promise"
                   },
                   "name": "promise"
                 }
@@ -160,6 +164,7 @@
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

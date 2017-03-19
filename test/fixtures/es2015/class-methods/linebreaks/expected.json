@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "kind": "get",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -109,6 +108,7 @@
                 },
                 "name": "a"
               },
+              "kind": "get",
               "id": null,
               "generator": false,
               "expression": false,
@@ -147,7 +147,6 @@
                 }
               },
               "static": false,
-              "kind": "set",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -166,6 +165,7 @@
                 },
                 "name": "a"
               },
+              "kind": "set",
               "id": null,
               "generator": false,
               "expression": false,
@@ -393,7 +393,6 @@
                 }
               },
               "static": true,
-              "kind": "get",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -412,6 +411,7 @@
                 },
                 "name": "a"
               },
+              "kind": "get",
               "id": null,
               "generator": false,
               "expression": false,
@@ -450,7 +450,6 @@
                 }
               },
               "static": true,
-              "kind": "set",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -469,6 +468,7 @@
                 },
                 "name": "a"
               },
+              "kind": "set",
               "id": null,
               "generator": false,
               "expression": false,

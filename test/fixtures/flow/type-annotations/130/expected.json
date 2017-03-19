@@ -122,11 +122,11 @@
                         "column": 17
                       }
                     },
-                    "value": 1,
                     "extra": {
                       "rawValue": 1,
                       "raw": "1"
-                    }
+                    },
+                    "value": 1
                   },
                   {
                     "type": "NumberLiteralTypeAnnotation",
@@ -142,11 +142,11 @@
                         "column": 21
                       }
                     },
-                    "value": 2,
                     "extra": {
                       "rawValue": 2,
                       "raw": "2"
-                    }
+                    },
+                    "value": 2
                   }
                 ]
               }
@@ -211,11 +211,11 @@
                         "column": 29
                       }
                     },
-                    "value": 3,
                     "extra": {
                       "rawValue": 3,
                       "raw": "3"
-                    }
+                    },
+                    "value": 3
                   },
                   {
                     "type": "NumberLiteralTypeAnnotation",
@@ -231,11 +231,11 @@
                         "column": 33
                       }
                     },
-                    "value": 4,
                     "extra": {
                       "rawValue": 4,
                       "raw": "4"
-                    }
+                    },
+                    "value": 4
                   }
                 ]
               }
@@ -270,7 +270,8 @@
                 "column": 42
               }
             }
-          }
+          },
+          "predicate": null
         },
         "body": {
           "type": "BlockStatement",

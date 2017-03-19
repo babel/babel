@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [
             {
               "type": "AssignmentPattern",
@@ -118,7 +119,8 @@
                         "end": {
                           "line": 1,
                           "column": 4
-                        }
+                        },
+                        "identifierName": "x"
                       },
                       "name": "x"
                     },
@@ -134,9 +136,13 @@
                         "end": {
                           "line": 1,
                           "column": 4
-                        }
+                        },
+                        "identifierName": "x"
                       },
                       "name": "x"
+                    },
+                    "extra": {
+                      "shorthand": true
                     }
                   }
                 ]
@@ -185,7 +191,8 @@
                         "end": {
                           "line": 1,
                           "column": 10
-                        }
+                        },
+                        "identifierName": "x"
                       },
                       "name": "x"
                     },
@@ -232,7 +239,8 @@
             "directives": []
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

@@ -68,12 +68,14 @@
               "end": {
                 "line": 1,
                 "column": 11
-              }
+              },
+              "identifierName": "x"
             },
             "name": "x"
           },
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [
             {
               "type": "ObjectPattern",
@@ -119,7 +121,8 @@
                       "end": {
                         "line": 1,
                         "column": 15
-                      }
+                      },
+                      "identifierName": "a"
                     },
                     "name": "a"
                   },
@@ -135,9 +138,13 @@
                       "end": {
                         "line": 1,
                         "column": 15
-                      }
+                      },
+                      "identifierName": "a"
                     },
                     "name": "a"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 },
                 {
@@ -169,7 +176,8 @@
                       "end": {
                         "line": 1,
                         "column": 18
-                      }
+                      },
+                      "identifierName": "b"
                     },
                     "name": "b"
                   },
@@ -185,9 +193,13 @@
                       "end": {
                         "line": 1,
                         "column": 18
-                      }
+                      },
+                      "identifierName": "b"
                     },
                     "name": "b"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 }
               ]
@@ -211,7 +223,8 @@
             "directives": []
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

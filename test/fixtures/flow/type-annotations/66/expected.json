@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [
             {
               "type": "RestElement",
@@ -86,7 +87,8 @@
                   "end": {
                     "line": 1,
                     "column": 18
-                  }
+                  },
+                  "identifierName": "rest"
                 },
                 "name": "rest"
               },
@@ -162,7 +164,8 @@
                       "end": {
                         "line": 1,
                         "column": 25
-                      }
+                      },
+                      "identifierName": "Array"
                     },
                     "name": "Array"
                   }
@@ -188,7 +191,8 @@
             "directives": []
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

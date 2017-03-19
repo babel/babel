@@ -42,6 +42,8 @@
             "column": 19
           }
         },
+        "specifiers": [],
+        "source": null,
         "declaration": {
           "type": "VariableDeclaration",
           "start": 7,
@@ -83,7 +85,8 @@
                   "end": {
                     "line": 1,
                     "column": 19
-                  }
+                  },
+                  "identifierName": "document"
                 },
                 "name": "document"
               },
@@ -91,11 +94,9 @@
             }
           ],
           "kind": "let"
-        },
-        "specifiers": [],
-        "source": null
+        }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

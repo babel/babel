@@ -42,6 +42,8 @@
             "column": 27
           }
         },
+        "specifiers": [],
+        "source": null,
         "declaration": {
           "type": "FunctionDeclaration",
           "start": 7,
@@ -68,12 +70,14 @@
               "end": {
                 "line": 1,
                 "column": 21
-              }
+              },
+              "identifierName": "parse"
             },
             "name": "parse"
           },
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [],
           "body": {
             "type": "BlockStatement",
@@ -89,13 +93,12 @@
                 "column": 27
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           }
-        },
-        "specifiers": [],
-        "source": null
+        }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 11
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -86,13 +87,15 @@
                 "end": {
                   "line": 1,
                   "column": 21
-                }
+                },
+                "identifierName": "B"
               },
               "name": "B"
             },
             "typeParameters": null
           }
         ],
+        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start": 22,
@@ -109,10 +112,11 @@
           },
           "callProperties": [],
           "properties": [],
-          "indexers": []
+          "indexers": [],
+          "exact": false
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

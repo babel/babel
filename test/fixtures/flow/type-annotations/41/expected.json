@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 52
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -117,6 +118,7 @@
                           "column": 28
                         }
                       },
+                      "static": false,
                       "id": {
                         "type": "Identifier",
                         "start": 10,
@@ -129,7 +131,8 @@
                           "end": {
                             "line": 1,
                             "column": 11
-                          }
+                          },
+                          "identifierName": "a"
                         },
                         "name": "a"
                       },
@@ -162,7 +165,8 @@
                             "column": 28
                           }
                         }
-                      }
+                      },
+                      "variance": null
                     },
                     {
                       "type": "ObjectTypeIndexer",
@@ -178,6 +182,7 @@
                           "column": 49
                         }
                       },
+                      "static": false,
                       "id": {
                         "type": "Identifier",
                         "start": 31,
@@ -190,7 +195,8 @@
                           "end": {
                             "line": 1,
                             "column": 32
-                          }
+                          },
+                          "identifierName": "b"
                         },
                         "name": "b"
                       },
@@ -226,7 +232,8 @@
                       },
                       "variance": null
                     }
-                  ]
+                  ],
+                  "exact": false
                 }
               }
             },
@@ -235,7 +242,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

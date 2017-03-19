@@ -89,6 +89,7 @@
                   "column": 5
                 }
               },
+              "static": false,
               "computed": true,
               "key": {
                 "type": "Identifier",
@@ -107,7 +108,6 @@
                 },
                 "name": "x"
               },
-              "static": false,
               "value": null
             },
             {
@@ -124,6 +124,7 @@
                   "column": 7
                 }
               },
+              "static": false,
               "computed": true,
               "key": {
                 "type": "StringLiteral",
@@ -145,7 +146,6 @@
                 },
                 "value": "y"
               },
-              "static": false,
               "value": null
             }
           ]
@@ -212,6 +212,7 @@
                   "column": 5
                 }
               },
+              "static": false,
               "computed": true,
               "key": {
                 "type": "Identifier",
@@ -230,7 +231,6 @@
                 },
                 "name": "p"
               },
-              "static": false,
               "value": null
             },
             {
@@ -247,6 +247,7 @@
                   "column": 11
                 }
               },
+              "static": false,
               "computed": true,
               "key": {
                 "type": "Identifier",
@@ -265,7 +266,6 @@
                 },
                 "name": "m"
               },
-              "static": false,
               "kind": "method",
               "id": null,
               "generator": false,

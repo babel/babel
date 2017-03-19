@@ -181,14 +181,15 @@
                         "column": 31
                       }
                     },
-                    "value": 123,
                     "extra": {
                       "rawValue": 123,
                       "raw": "123"
-                    }
+                    },
+                    "value": 123
                   },
                   "typeParameters": null
-                }
+                },
+                "predicate": null
               },
               "id": null,
               "generator": false,

@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 9
-            }
+            },
+            "identifierName": "Foo"
           },
           "name": "Foo"
         },
@@ -88,6 +89,7 @@
                   "column": 38
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -101,11 +103,11 @@
                   "end": {
                     "line": 1,
                     "column": 22
-                  }
+                  },
+                  "identifierName": "fooProp"
                 },
                 "name": "fooProp"
               },
-              "static": false,
               "kind": "set",
               "id": null,
               "generator": false,
@@ -124,7 +126,8 @@
                     "end": {
                       "line": 1,
                       "column": 35
-                    }
+                    },
+                    "identifierName": "value"
                   },
                   "name": "value",
                   "typeAnnotation": {

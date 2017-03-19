@@ -56,6 +56,55 @@
               "column": 42
             }
           },
+          "returnType": {
+            "type": "TypeAnnotation",
+            "start": 21,
+            "end": 33,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 21
+              },
+              "end": {
+                "line": 1,
+                "column": 33
+              }
+            },
+            "typeAnnotation": {
+              "type": "GenericTypeAnnotation",
+              "start": 23,
+              "end": 33,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 23
+                },
+                "end": {
+                  "line": 1,
+                  "column": 33
+                }
+              },
+              "typeParameters": null,
+              "id": {
+                "type": "Identifier",
+                "start": 23,
+                "end": 33,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 33
+                  },
+                  "identifierName": "ReturnType"
+                },
+                "name": "ReturnType"
+              }
+            },
+            "predicate": null
+          },
           "id": null,
           "generator": false,
           "expression": true,
@@ -73,7 +122,8 @@
                 "end": {
                   "line": 1,
                   "column": 17
-                }
+                },
+                "identifierName": "props"
               },
               "name": "props",
               "typeAnnotation": {
@@ -117,7 +167,8 @@
                       "end": {
                         "line": 1,
                         "column": 17
-                      }
+                      },
+                      "identifierName": "SomeType"
                     },
                     "name": "SomeType"
                   }
@@ -146,53 +197,6 @@
               "parenStart": 37
             },
             "value": 3
-          },
-          "returnType": {
-            "type": "TypeAnnotation",
-            "start": 21,
-            "end": 33,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 21
-              },
-              "end": {
-                "line": 1,
-                "column": 33
-              }
-            },
-            "typeAnnotation": {
-              "type": "GenericTypeAnnotation",
-              "start": 23,
-              "end": 33,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 23
-                },
-                "end": {
-                  "line": 1,
-                  "column": 33
-                }
-              },
-              "typeParameters": null,
-              "id": {
-                "type": "Identifier",
-                "start": 23,
-                "end": 33,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 23
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 33
-                  }
-                },
-                "name": "ReturnType"
-              }
-            }
           }
         }
       }

@@ -116,7 +116,8 @@
                       "column": 19
                     }
                   }
-                }
+                },
+                "predicate": null
               },
               "id": null,
               "generator": false,

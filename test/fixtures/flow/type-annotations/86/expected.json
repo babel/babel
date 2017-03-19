@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 39
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -127,7 +128,8 @@
                         "end": {
                           "line": 1,
                           "column": 14
-                        }
+                        },
+                        "identifierName": "rest"
                       },
                       "name": "rest"
                     },
@@ -190,7 +192,8 @@
                           "end": {
                             "line": 1,
                             "column": 20
-                          }
+                          },
+                          "identifierName": "Array"
                         },
                         "name": "Array"
                       }
@@ -220,7 +223,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

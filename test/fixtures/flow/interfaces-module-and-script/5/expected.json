@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 20
-            }
+            },
+            "identifierName": "Dictionary"
           },
           "name": "Dictionary"
         },
         "typeParameters": null,
         "extends": [],
+        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start": 21,
@@ -102,7 +104,8 @@
                   "end": {
                     "line": 1,
                     "column": 54
-                  }
+                  },
+                  "identifierName": "length"
                 },
                 "name": "length"
               },
@@ -122,6 +125,7 @@
                 }
               },
               "optional": false,
+              "static": false,
               "variance": null
             }
           ],
@@ -140,6 +144,7 @@
                   "column": 46
                 }
               },
+              "static": false,
               "id": {
                 "type": "Identifier",
                 "start": 24,
@@ -152,7 +157,8 @@
                   "end": {
                     "line": 1,
                     "column": 29
-                  }
+                  },
+                  "identifierName": "index"
                 },
                 "name": "index"
               },
@@ -188,10 +194,11 @@
               },
               "variance": null
             }
-          ]
+          ],
+          "exact": false
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

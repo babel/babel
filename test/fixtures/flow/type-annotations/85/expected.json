@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 22
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -158,7 +159,8 @@
                         "end": {
                           "line": 1,
                           "column": 14
-                        }
+                        },
+                        "identifierName": "Promise"
                       },
                       "name": "Promise"
                     }
@@ -171,7 +173,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 7
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             },
@@ -101,43 +102,6 @@
                     "column": 32
                   }
                 },
-                "id": null,
-                "generator": false,
-                "expression": true,
-                "params": [
-                  {
-                    "type": "Identifier",
-                    "start": 13,
-                    "end": 16,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 13
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 16
-                      }
-                    },
-                    "name": "bar"
-                  }
-                ],
-                "body": {
-                  "type": "Identifier",
-                  "start": 29,
-                  "end": 32,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 29
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 32
-                    }
-                  },
-                  "name": "bar"
-                },
                 "returnType": {
                   "type": "TypeAnnotation",
                   "start": 17,
@@ -166,10 +130,52 @@
                         "column": 25
                       }
                     }
+                  },
+                  "predicate": null
+                },
+                "id": null,
+                "generator": false,
+                "expression": true,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 13,
+                    "end": 16,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 16
+                      },
+                      "identifierName": "bar"
+                    },
+                    "name": "bar"
                   }
+                ],
+                "body": {
+                  "type": "Identifier",
+                  "start": 29,
+                  "end": 32,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 29
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 32
+                    },
+                    "identifierName": "bar"
+                  },
+                  "name": "bar"
                 },
                 "extra": {
-                  "parenthesized": true
+                  "parenthesized": true,
+                  "parenStart": 11
                 }
               },
               "typeAnnotation": {
@@ -203,7 +209,8 @@
                 }
               },
               "extra": {
-                "parenthesized": true
+                "parenthesized": true,
+                "parenStart": 10
               }
             }
           }

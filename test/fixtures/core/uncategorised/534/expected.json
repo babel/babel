@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 10
-                }
+                },
+                "identifierName": "eval"
               },
               "name": "eval"
             },
@@ -120,7 +121,8 @@
                 "end": {
                   "line": 1,
                   "column": 26
-                }
+                },
+                "identifierName": "arguments"
               },
               "name": "arguments"
             },

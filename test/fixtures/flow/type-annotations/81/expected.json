@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 34
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -188,7 +189,8 @@
                             "end": {
                               "line": 1,
                               "column": 24
-                            }
+                            },
+                            "identifierName": "Array"
                           },
                           "name": "Array"
                         }
@@ -207,7 +209,8 @@
                       "end": {
                         "line": 1,
                         "column": 10
-                      }
+                      },
+                      "identifierName": "Map"
                     },
                     "name": "Map"
                   }
@@ -219,7 +222,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

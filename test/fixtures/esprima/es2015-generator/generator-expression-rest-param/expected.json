@@ -59,6 +59,7 @@
           "id": null,
           "generator": true,
           "expression": false,
+          "async": false,
           "params": [
             {
               "type": "RestElement",
@@ -86,7 +87,8 @@
                   "end": {
                     "line": 1,
                     "column": 15
-                  }
+                  },
+                  "identifierName": "x"
                 },
                 "name": "x"
               }
@@ -110,7 +112,8 @@
             "directives": []
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 9
-                }
+                },
+                "identifierName": "f"
               },
               "name": "f",
               "typeAnnotation": {
@@ -145,7 +146,8 @@
                       "column": 31
                     }
                   }
-                }
+                },
+                "predicate": null
               },
               "id": null,
               "generator": false,
@@ -164,7 +166,8 @@
                     "end": {
                       "line": 1,
                       "column": 25
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x",
                   "typeAnnotation": {

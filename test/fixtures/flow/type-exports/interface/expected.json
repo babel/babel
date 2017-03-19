@@ -71,7 +71,8 @@
               "end": {
                 "line": 1,
                 "column": 20
-              }
+              },
+              "identifierName": "foo"
             },
             "name": "foo"
           },
@@ -120,7 +121,8 @@
                     "end": {
                       "line": 1,
                       "column": 24
-                    }
+                    },
+                    "identifierName": "p"
                   },
                   "name": "p"
                 },
@@ -140,10 +142,12 @@
                   }
                 },
                 "optional": false,
+                "static": false,
                 "variance": null
               }
             ],
-            "indexers": []
+            "indexers": [],
+            "exact": false
           }
         }
       },
@@ -205,7 +209,8 @@
               "end": {
                 "line": 2,
                 "column": 20
-              }
+              },
+              "identifierName": "bar"
             },
             "name": "bar"
           },
@@ -238,7 +243,8 @@
                     "column": 22
                   }
                 },
-                "name": "T"
+                "name": "T",
+                "variance": null
               }
             ]
           },
@@ -286,7 +292,8 @@
                     "end": {
                       "line": 2,
                       "column": 27
-                    }
+                    },
+                    "identifierName": "p"
                   },
                   "name": "p"
                 },
@@ -317,16 +324,19 @@
                       "end": {
                         "line": 2,
                         "column": 30
-                      }
+                      },
+                      "identifierName": "T"
                     },
                     "name": "T"
                   }
                 },
                 "optional": false,
+                "static": false,
                 "variance": null
               }
             ],
-            "indexers": []
+            "indexers": [],
+            "exact": false
           }
         }
       },

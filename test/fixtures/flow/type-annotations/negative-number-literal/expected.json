@@ -89,11 +89,11 @@
                   "column": 6
                 }
               },
-              "value": -1,
               "extra": {
                 "rawValue": -1,
                 "raw": "-1"
-              }
+              },
+              "value": -1
             },
             {
               "type": "NumberLiteralTypeAnnotation",
@@ -109,11 +109,11 @@
                   "column": 5
                 }
               },
-              "value": 0,
               "extra": {
                 "rawValue": 0,
                 "raw": "0"
-              }
+              },
+              "value": 0
             },
             {
               "type": "NumberLiteralTypeAnnotation",
@@ -129,11 +129,11 @@
                   "column": 5
                 }
               },
-              "value": 1,
               "extra": {
                 "rawValue": 1,
                 "raw": "1"
-              }
+              },
+              "value": 1
             }
           ]
         },

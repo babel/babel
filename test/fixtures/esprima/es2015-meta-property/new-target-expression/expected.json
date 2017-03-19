@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 5
-                }
+                },
+                "identifierName": "f"
               },
               "name": "f"
             },
@@ -90,6 +91,7 @@
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",
@@ -146,7 +148,8 @@
                           "end": {
                             "line": 1,
                             "column": 24
-                          }
+                          },
+                          "identifierName": "new"
                         },
                         "name": "new"
                       },
@@ -162,19 +165,22 @@
                           "end": {
                             "line": 1,
                             "column": 31
-                          }
+                          },
+                          "identifierName": "target"
                         },
                         "name": "target"
                       }
                     }
                   }
-                ]
+                ],
+                "directives": []
               }
             }
           }
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

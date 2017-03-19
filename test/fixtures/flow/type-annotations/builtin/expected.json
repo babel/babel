@@ -597,11 +597,11 @@
               "column": 11
             }
           },
-          "value": "",
           "extra": {
             "rawValue": "",
             "raw": "\"\""
-          }
+          },
+          "value": ""
         }
       },
       {
@@ -650,11 +650,11 @@
               "column": 10
             }
           },
-          "value": 0,
           "extra": {
             "rawValue": 0,
             "raw": "0"
-          }
+          },
+          "value": 0
         }
       },
       {

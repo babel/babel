@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 7
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -88,6 +89,7 @@
                   "column": 23
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -101,15 +103,16 @@
                   "end": {
                     "line": 1,
                     "column": 17
-                  }
+                  },
+                  "identifierName": "foo"
                 },
                 "name": "foo"
               },
-              "static": false,
               "kind": "set",
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [
                 {
                   "type": "Identifier",
@@ -123,7 +126,8 @@
                     "end": {
                       "line": 1,
                       "column": 19
-                    }
+                    },
+                    "identifierName": "v"
                   },
                   "name": "v"
                 }
@@ -160,6 +164,7 @@
                   "column": 36
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -173,15 +178,16 @@
                   "end": {
                     "line": 1,
                     "column": 31
-                  }
+                  },
+                  "identifierName": "foo"
                 },
                 "name": "foo"
               },
-              "static": false,
               "kind": "get",
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",

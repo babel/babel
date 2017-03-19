@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 11
-            }
+            },
+            "identifierName": "Query"
           },
           "name": "Query"
         },
@@ -88,6 +89,7 @@
                   "column": 5
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -101,11 +103,11 @@
                   "end": {
                     "line": 2,
                     "column": 19
-                  }
+                  },
+                  "identifierName": "queryAll"
                 },
                 "name": "queryAll"
               },
-              "static": false,
               "kind": "method",
               "id": null,
               "generator": true,
@@ -124,7 +126,8 @@
                     "end": {
                       "line": 2,
                       "column": 23
-                    }
+                    },
+                    "identifierName": "ids"
                   },
                   "name": "ids"
                 }
@@ -158,6 +161,7 @@
                         "column": 9
                       }
                     },
+                    "await": false,
                     "left": {
                       "type": "VariableDeclaration",
                       "start": 54,
@@ -199,7 +203,8 @@
                               "end": {
                                 "line": 3,
                                 "column": 21
-                              }
+                              },
+                              "identifierName": "id"
                             },
                             "name": "id"
                           },
@@ -220,7 +225,8 @@
                         "end": {
                           "line": 3,
                           "column": 28
-                        }
+                        },
+                        "identifierName": "ids"
                       },
                       "name": "ids"
                     },
@@ -337,7 +343,8 @@
                                       "end": {
                                         "line": 4,
                                         "column": 34
-                                      }
+                                      },
+                                      "identifierName": "query"
                                     },
                                     "name": "query"
                                   },
@@ -356,7 +363,8 @@
                                       "end": {
                                         "line": 4,
                                         "column": 37
-                                      }
+                                      },
+                                      "identifierName": "id"
                                     },
                                     "name": "id"
                                   }

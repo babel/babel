@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 11
-            }
+            },
+            "identifierName": "g"
           },
           "name": "g"
         },
         "generator": true,
         "expression": false,
+        "async": false,
         "params": [
           {
             "type": "ObjectPattern",
@@ -105,7 +107,8 @@
                     "end": {
                       "line": 1,
                       "column": 18
-                    }
+                    },
+                    "identifierName": "yield"
                   },
                   "name": "yield"
                 },
@@ -121,7 +124,8 @@
                     "end": {
                       "line": 1,
                       "column": 21
-                    }
+                    },
+                    "identifierName": "y"
                   },
                   "name": "y"
                 }

@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 30
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -115,6 +116,7 @@
                           "column": 28
                         }
                       },
+                      "static": false,
                       "value": {
                         "type": "FunctionTypeAnnotation",
                         "start": 10,
@@ -156,7 +158,8 @@
                                 "end": {
                                   "line": 1,
                                   "column": 15
-                                }
+                                },
+                                "identifierName": "x"
                               },
                               "name": "x"
                             },
@@ -188,7 +191,8 @@
                                   "end": {
                                     "line": 1,
                                     "column": 18
-                                  }
+                                  },
+                                  "identifierName": "T"
                                 },
                                 "name": "T"
                               }
@@ -225,7 +229,8 @@
                                   "column": 12
                                 }
                               },
-                              "name": "T"
+                              "name": "T",
+                              "variance": null
                             }
                           ]
                         },
@@ -248,7 +253,8 @@
                     }
                   ],
                   "properties": [],
-                  "indexers": []
+                  "indexers": [],
+                  "exact": false
                 }
               }
             },

@@ -42,7 +42,6 @@
             "column": 20
           }
         },
-        "exportKind": "type",
         "specifiers": [
           {
             "type": "ExportSpecifier",
@@ -70,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 17
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             },
@@ -86,15 +86,18 @@
                 "end": {
                   "line": 1,
                   "column": 17
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             }
           }
         ],
         "source": null,
+        "exportKind": "type",
         "declaration": null
       }
-    ]
+    ],
+    "directives": []
   }
 }

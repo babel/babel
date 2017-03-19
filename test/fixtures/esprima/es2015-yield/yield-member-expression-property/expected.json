@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 11
-            }
+            },
+            "identifierName": "g"
           },
           "name": "g"
         },
         "generator": true,
         "expression": false,
+        "async": false,
         "params": [],
         "body": {
           "type": "BlockStatement",
@@ -131,7 +133,8 @@
                       "end": {
                         "line": 1,
                         "column": 25
-                      }
+                      },
+                      "identifierName": "obj"
                     },
                     "name": "obj"
                   },
@@ -147,7 +150,8 @@
                       "end": {
                         "line": 1,
                         "column": 31
-                      }
+                      },
+                      "identifierName": "yield"
                     },
                     "name": "yield"
                   },
@@ -155,9 +159,11 @@
                 }
               }
             }
-          ]
+          ],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

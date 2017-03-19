@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 21
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -141,7 +142,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

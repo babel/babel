@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 12
-            }
+            },
+            "identifierName": "bar"
           },
           "name": "bar"
         },
         "generator": false,
         "expression": false,
+        "async": false,
         "params": [
           {
             "type": "Identifier",
@@ -73,7 +75,8 @@
               "end": {
                 "line": 1,
                 "column": 16
-              }
+              },
+              "identifierName": "foo"
             },
             "name": "foo"
           }
@@ -119,7 +122,8 @@
                   "end": {
                     "line": 2,
                     "column": 14
-                  }
+                  },
+                  "identifierName": "foo"
                 },
                 "name": "foo"
               },
@@ -252,7 +256,8 @@
                             "end": {
                               "line": 7,
                               "column": 16
-                            }
+                            },
+                            "identifierName": "doIt"
                           },
                           "name": "doIt"
                         },

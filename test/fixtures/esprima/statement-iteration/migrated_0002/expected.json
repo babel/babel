@@ -99,7 +99,8 @@
                     "end": {
                       "line": 1,
                       "column": 6
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x"
                 }
@@ -147,7 +148,8 @@
                     "end": {
                       "line": 1,
                       "column": 11
-                    }
+                    },
+                    "identifierName": "y"
                   },
                   "name": "y"
                 }
@@ -182,7 +184,8 @@
               "end": {
                 "line": 1,
                 "column": 25
-              }
+              },
+              "identifierName": "x"
             },
             "name": "x"
           },

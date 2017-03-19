@@ -82,7 +82,8 @@
                 "end": {
                   "line": 1,
                   "column": 7
-                }
+                },
+                "identifierName": "raw"
               },
               "name": "raw"
             },
@@ -128,7 +129,7 @@
           "arguments": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

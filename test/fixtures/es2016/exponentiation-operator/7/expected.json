@@ -126,10 +126,14 @@
                   "raw": "1"
                 },
                 "value": 1
+              },
+              "extra": {
+                "parenthesizedArgument": false
               }
             },
             "extra": {
-              "parenthesized": true
+              "parenthesized": true,
+              "parenStart": 0
             }
           },
           "operator": "*",

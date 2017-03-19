@@ -131,11 +131,11 @@
                           "column": 16
                         }
                       },
-                      "value": 1,
                       "extra": {
                         "rawValue": 1,
                         "raw": "1"
-                      }
+                      },
+                      "value": 1
                     },
                     {
                       "type": "NumberLiteralTypeAnnotation",
@@ -151,14 +151,15 @@
                           "column": 20
                         }
                       },
-                      "value": 2,
                       "extra": {
                         "rawValue": 2,
                         "raw": "2"
-                      }
+                      },
+                      "value": 2
                     }
                   ]
-                }
+                },
+                "predicate": null
               },
               "id": null,
               "generator": false,

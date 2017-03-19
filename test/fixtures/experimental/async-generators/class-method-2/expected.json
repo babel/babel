@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "kind": "method",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -109,6 +108,7 @@
                 },
                 "name": "a"
               },
+              "kind": "method",
               "id": null,
               "generator": true,
               "expression": false,

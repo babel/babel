@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 7
-                }
+                },
+                "identifierName": "obj"
               },
               "name": "obj"
             },
@@ -117,7 +118,8 @@
                       "end": {
                         "line": 2,
                         "column": 8
-                      }
+                      },
+                      "identifierName": "method"
                     },
                     "name": "method"
                   },
@@ -125,6 +127,7 @@
                   "id": null,
                   "generator": false,
                   "expression": false,
+                  "async": false,
                   "params": [
                     {
                       "type": "Identifier",
@@ -138,7 +141,8 @@
                         "end": {
                           "line": 2,
                           "column": 17
-                        }
+                        },
+                        "identifierName": "x"
                       },
                       "name": "x",
                       "decorators": [
@@ -182,7 +186,8 @@
                                 "end": {
                                   "line": 2,
                                   "column": 13
-                                }
+                                },
+                                "identifierName": "foo"
                               },
                               "name": "foo"
                             },
@@ -203,7 +208,8 @@
                         "end": {
                           "line": 2,
                           "column": 44
-                        }
+                        },
+                        "identifierName": "y"
                       },
                       "name": "y",
                       "decorators": [
@@ -247,7 +253,8 @@
                                 "end": {
                                   "line": 2,
                                   "column": 23
-                                }
+                                },
+                                "identifierName": "bar"
                               },
                               "name": "bar"
                             },
@@ -296,7 +303,8 @@
                                         "end": {
                                           "line": 2,
                                           "column": 27
-                                        }
+                                        },
+                                        "identifierName": "a"
                                       },
                                       "name": "a"
                                     },
@@ -366,7 +374,8 @@
                                 "end": {
                                   "line": 2,
                                   "column": 40
-                                }
+                                },
+                                "identifierName": "baz"
                               },
                               "name": "baz"
                             },

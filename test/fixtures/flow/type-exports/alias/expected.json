@@ -42,9 +42,9 @@
             "column": 23
           }
         },
-        "exportKind": "type",
         "specifiers": [],
         "source": null,
+        "exportKind": "type",
         "declaration": {
           "type": "TypeAlias",
           "start": 7,
@@ -71,7 +71,8 @@
               "end": {
                 "line": 1,
                 "column": 13
-              }
+              },
+              "identifierName": "a"
             },
             "name": "a"
           },
@@ -93,6 +94,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

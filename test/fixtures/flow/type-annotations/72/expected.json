@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 7
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             },
@@ -115,11 +116,13 @@
                       "column": 21
                     }
                   }
-                }
+                },
+                "predicate": null
               },
               "id": null,
               "generator": false,
               "expression": true,
+              "async": false,
               "params": [],
               "body": {
                 "type": "Identifier",
@@ -133,12 +136,14 @@
                   "end": {
                     "line": 1,
                     "column": 28
-                  }
+                  },
+                  "identifierName": "bar"
                 },
                 "name": "bar"
               },
               "extra": {
-                "parenthesized": true
+                "parenthesized": true,
+                "parenStart": 10
               }
             }
           }

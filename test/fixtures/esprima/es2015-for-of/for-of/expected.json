@@ -32,7 +32,6 @@
         "type": "ForOfStatement",
         "start": 0,
         "end": 13,
-        "await": false,
         "loc": {
           "start": {
             "line": 1,
@@ -43,6 +42,7 @@
             "column": 13
           }
         },
+        "await": false,
         "left": {
           "type": "Identifier",
           "start": 5,
@@ -55,7 +55,8 @@
             "end": {
               "line": 1,
               "column": 6
-            }
+            },
+            "identifierName": "p"
           },
           "name": "p"
         },
@@ -71,7 +72,8 @@
             "end": {
               "line": 1,
               "column": 11
-            }
+            },
+            "identifierName": "q"
           },
           "name": "q"
         },
@@ -91,6 +93,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

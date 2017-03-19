@@ -136,11 +136,11 @@
                         "column": 13
                       }
                     },
-                    "value": "A",
                     "extra": {
                       "rawValue": "A",
                       "raw": "\"A\""
-                    }
+                    },
+                    "value": "A"
                   },
                   "optional": false,
                   "static": false,
@@ -211,11 +211,11 @@
                         "column": 13
                       }
                     },
-                    "value": "B",
                     "extra": {
                       "rawValue": "B",
                       "raw": "\"B\""
-                    }
+                    },
+                    "value": "B"
                   },
                   "optional": false,
                   "static": false,
@@ -597,11 +597,11 @@
                               "column": 16
                             }
                           },
-                          "value": "A",
                           "extra": {
                             "rawValue": "A",
                             "raw": "\"A\""
-                          }
+                          },
+                          "value": "A"
                         },
                         "optional": false,
                         "static": false,
@@ -672,11 +672,11 @@
                               "column": 16
                             }
                           },
-                          "value": "B",
                           "extra": {
                             "rawValue": "B",
                             "raw": "\"B\""
-                          }
+                          },
+                          "value": "B"
                         },
                         "optional": false,
                         "static": false,
@@ -852,11 +852,11 @@
                               "column": 16
                             }
                           },
-                          "value": "A",
                           "extra": {
                             "rawValue": "A",
                             "raw": "\"A\""
-                          }
+                          },
+                          "value": "A"
                         },
                         "optional": false,
                         "static": false,
@@ -927,11 +927,11 @@
                               "column": 16
                             }
                           },
-                          "value": "B",
                           "extra": {
                             "rawValue": "B",
                             "raw": "\"B\""
-                          }
+                          },
+                          "value": "B"
                         },
                         "optional": false,
                         "static": false,

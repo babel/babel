@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 6
-                }
+                },
+                "identifierName": "hi"
               },
               "name": "hi"
             },
@@ -90,6 +91,7 @@
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [
                 {
                   "type": "RestElement",
@@ -117,7 +119,8 @@
                       "end": {
                         "line": 1,
                         "column": 23
-                      }
+                      },
+                      "identifierName": "r"
                     },
                     "name": "r"
                   }
@@ -178,20 +181,23 @@
                           "end": {
                             "line": 1,
                             "column": 32
-                          }
+                          },
+                          "identifierName": "sayHi"
                         },
                         "name": "sayHi"
                       },
                       "arguments": []
                     }
                   }
-                ]
+                ],
+                "directives": []
               }
             }
           }
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

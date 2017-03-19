@@ -56,24 +56,6 @@
               "column": 23
             }
           },
-          "id": null,
-          "superClass": null,
-          "body": {
-            "type": "ClassBody",
-            "start": 26,
-            "end": 28,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 21
-              },
-              "end": {
-                "line": 2,
-                "column": 23
-              }
-            },
-            "body": []
-          },
           "decorators": [
             {
               "type": "Decorator",
@@ -107,7 +89,25 @@
                 "name": "foo"
               }
             }
-          ]
+          ],
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 26,
+            "end": 28,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 21
+              },
+              "end": {
+                "line": 2,
+                "column": 23
+              }
+            },
+            "body": []
+          }
         }
       }
     ],

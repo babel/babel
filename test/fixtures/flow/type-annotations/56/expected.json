@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 11
-            }
+            },
+            "identifierName": "Array"
           },
           "name": "Array"
         },
@@ -88,6 +89,7 @@
                   "column": 46
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -101,11 +103,11 @@
                   "end": {
                     "line": 1,
                     "column": 20
-                  }
+                  },
+                  "identifierName": "concat"
                 },
                 "name": "concat"
               },
-              "static": false,
               "kind": "method",
               "id": null,
               "generator": false,
@@ -124,7 +126,8 @@
                     "end": {
                       "line": 1,
                       "column": 42
-                    }
+                    },
+                    "identifierName": "items"
                   },
                   "name": "items",
                   "typeAnnotation": {

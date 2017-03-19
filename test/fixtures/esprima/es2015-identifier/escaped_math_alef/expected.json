@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 13
-                }
+                },
+                "identifierName": "𞸀"
               },
               "name": "𞸀"
             },
@@ -78,6 +79,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

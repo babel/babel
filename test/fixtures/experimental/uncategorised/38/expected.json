@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 9
-            }
+            },
+            "identifierName": "Foo"
           },
           "name": "Foo"
         },
@@ -115,7 +116,8 @@
                       "end": {
                         "line": 1,
                         "column": 16
-                      }
+                      },
+                      "identifierName": "foo"
                     },
                     "name": "foo"
                   }
@@ -146,12 +148,14 @@
                       "end": {
                         "line": 1,
                         "column": 21
-                      }
+                      },
+                      "identifierName": "bar"
                     },
                     "name": "bar"
                   }
                 }
               ],
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -165,15 +169,16 @@
                   "end": {
                     "line": 1,
                     "column": 25
-                  }
+                  },
+                  "identifierName": "bar"
                 },
                 "name": "bar"
               },
-              "static": false,
               "kind": "method",
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",

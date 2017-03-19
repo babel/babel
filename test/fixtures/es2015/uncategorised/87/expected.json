@@ -70,7 +70,8 @@
                 "end": {
                   "line": 1,
                   "column": 16
-                }
+                },
+                "identifierName": "encrypt"
               },
               "name": "encrypt"
             },
@@ -86,7 +87,8 @@
                 "end": {
                   "line": 1,
                   "column": 16
-                }
+                },
+                "identifierName": "encrypt"
               },
               "name": "encrypt"
             }
@@ -117,7 +119,8 @@
                 "end": {
                   "line": 1,
                   "column": 25
-                }
+                },
+                "identifierName": "decrypt"
               },
               "name": "decrypt"
             },
@@ -133,7 +136,8 @@
                 "end": {
                   "line": 1,
                   "column": 25
-                }
+                },
+                "identifierName": "decrypt"
               },
               "name": "decrypt"
             }
@@ -141,7 +145,7 @@
         ],
         "source": null
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

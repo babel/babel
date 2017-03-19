@@ -148,7 +148,8 @@
                       }
                     }
                   ]
-                }
+                },
+                "predicate": null
               },
               "id": null,
               "generator": false,

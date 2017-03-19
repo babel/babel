@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 6
-                }
+                },
+                "identifierName": "hi"
               },
               "name": "hi"
             },
@@ -90,6 +91,7 @@
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",
@@ -146,20 +148,23 @@
                           "end": {
                             "line": 1,
                             "column": 27
-                          }
+                          },
+                          "identifierName": "sayHi"
                         },
                         "name": "sayHi"
                       },
                       "arguments": []
                     }
                   }
-                ]
+                ],
+                "directives": []
               }
             }
           }
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

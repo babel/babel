@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 15
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
         "typeParameters": null,
         "extends": [],
+        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start": 16,
@@ -136,7 +138,8 @@
                   "end": {
                     "line": 1,
                     "column": 28
-                  }
+                  },
+                  "identifierName": "foo"
                 },
                 "name": "foo"
               },
@@ -168,7 +171,8 @@
                   "end": {
                     "line": 1,
                     "column": 48
-                  }
+                  },
+                  "identifierName": "x"
                 },
                 "name": "x"
               },
@@ -192,10 +196,11 @@
               "variance": null
             }
           ],
-          "indexers": []
+          "indexers": [],
+          "exact": false
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

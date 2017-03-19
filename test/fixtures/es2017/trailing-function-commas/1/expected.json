@@ -68,7 +68,8 @@
               "end": {
                 "line": 1,
                 "column": 3
-              }
+              },
+              "identifierName": "log"
             },
             "name": "log"
           },
@@ -85,7 +86,8 @@
                 "end": {
                   "line": 1,
                   "column": 5
-                }
+                },
+                "identifierName": "n"
               },
               "name": "n"
             },

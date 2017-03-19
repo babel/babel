@@ -150,6 +150,7 @@
                         }
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     },
                     {
@@ -199,6 +200,7 @@
                         }
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     }
                   ],
@@ -460,6 +462,7 @@
                         }
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     },
                     {
@@ -509,6 +512,7 @@
                         }
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     }
                   ],
@@ -917,6 +921,7 @@
                               }
                             },
                             "optional": false,
+                            "static": false,
                             "variance": null
                           },
                           {
@@ -966,6 +971,7 @@
                               }
                             },
                             "optional": false,
+                            "static": false,
                             "variance": null
                           }
                         ],
@@ -973,6 +979,7 @@
                         "exact": true
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     },
                     {
@@ -1022,6 +1029,7 @@
                         }
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     }
                   ],
@@ -1433,6 +1441,7 @@
                               }
                             },
                             "optional": false,
+                            "static": false,
                             "variance": null
                           },
                           {
@@ -1482,6 +1491,7 @@
                               }
                             },
                             "optional": false,
+                            "static": false,
                             "variance": null
                           }
                         ],
@@ -1489,6 +1499,7 @@
                         "exact": false
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     },
                     {
@@ -1538,6 +1549,7 @@
                         }
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     }
                   ],

@@ -401,7 +401,8 @@
                                                                                                     "end": {
                                                                                                       "line": 1,
                                                                                                       "column": 22
-                                                                                                    }
+                                                                                                    },
+                                                                                                    "identifierName": "a"
                                                                                                   },
                                                                                                   "name": "a"
                                                                                                 },
@@ -431,7 +432,8 @@
                                                                                                       "end": {
                                                                                                         "line": 1,
                                                                                                         "column": 22
-                                                                                                      }
+                                                                                                      },
+                                                                                                      "identifierName": "a"
                                                                                                     },
                                                                                                     "name": "a"
                                                                                                   },
@@ -461,7 +463,8 @@
                                                                                                         "end": {
                                                                                                           "line": 1,
                                                                                                           "column": 24
-                                                                                                        }
+                                                                                                        },
+                                                                                                        "identifierName": "b"
                                                                                                       },
                                                                                                       "name": "b"
                                                                                                     },
@@ -487,6 +490,9 @@
                                                                                                     },
                                                                                                     "computed": true
                                                                                                   }
+                                                                                                },
+                                                                                                "extra": {
+                                                                                                  "shorthand": true
                                                                                                 }
                                                                                               }
                                                                                             ]

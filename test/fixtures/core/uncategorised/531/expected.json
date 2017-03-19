@@ -83,7 +83,8 @@
                   "end": {
                     "line": 1,
                     "column": 9
-                  }
+                  },
+                  "identifierName": "x"
                 },
                 "name": "x"
               },
@@ -134,7 +135,8 @@
                   "end": {
                     "line": 1,
                     "column": 16
-                  }
+                  },
+                  "identifierName": "y"
                 },
                 "name": "y"
               },

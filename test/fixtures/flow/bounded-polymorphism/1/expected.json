@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 7
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -88,6 +89,7 @@
                 }
               },
               "name": "T",
+              "variance": null,
               "bound": {
                 "type": "TypeAnnotation",
                 "start": 9,
@@ -129,7 +131,8 @@
                       "end": {
                         "line": 1,
                         "column": 14
-                      }
+                      },
+                      "identifierName": "Foo"
                     },
                     "name": "Foo"
                   }

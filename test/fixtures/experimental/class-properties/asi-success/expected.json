@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 9
-            }
+            },
+            "identifierName": "Foo"
           },
           "name": "Foo"
         },
@@ -88,6 +89,7 @@
                   "column": 3
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -101,11 +103,11 @@
                   "end": {
                     "line": 2,
                     "column": 3
-                  }
+                  },
+                  "identifierName": "x"
                 },
                 "name": "x"
               },
-              "static": false,
               "value": null
             },
             {
@@ -122,6 +124,7 @@
                   "column": 3
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -135,11 +138,11 @@
                   "end": {
                     "line": 3,
                     "column": 3
-                  }
+                  },
+                  "identifierName": "y"
                 },
                 "name": "y"
               },
-              "static": false,
               "value": null
             }
           ]
@@ -171,7 +174,8 @@
             "end": {
               "line": 6,
               "column": 9
-            }
+            },
+            "identifierName": "Foo"
           },
           "name": "Foo"
         },
@@ -205,6 +209,7 @@
                   "column": 3
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -218,11 +223,11 @@
                   "end": {
                     "line": 7,
                     "column": 3
-                  }
+                  },
+                  "identifierName": "p"
                 },
                 "name": "p"
               },
-              "static": false,
               "value": null
             },
             {
@@ -239,6 +244,7 @@
                   "column": 11
                 }
               },
+              "static": false,
               "computed": true,
               "key": {
                 "type": "Identifier",
@@ -252,15 +258,16 @@
                   "end": {
                     "line": 8,
                     "column": 4
-                  }
+                  },
+                  "identifierName": "m"
                 },
                 "name": "m"
               },
-              "static": false,
               "kind": "method",
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",

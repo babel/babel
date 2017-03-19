@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [],
           "body": {
             "type": "BlockStatement",
@@ -136,7 +137,8 @@
                     "end": {
                       "line": 2,
                       "column": 1
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x",
                   "leadingComments": null
@@ -164,7 +166,8 @@
             "directives": []
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

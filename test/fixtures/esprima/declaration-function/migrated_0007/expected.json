@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 14
-            }
+            },
+            "identifierName": "hello"
           },
           "name": "hello"
         },
         "generator": false,
         "expression": false,
+        "async": false,
         "params": [
           {
             "type": "Identifier",
@@ -73,7 +75,8 @@
               "end": {
                 "line": 1,
                 "column": 16
-              }
+              },
+              "identifierName": "a"
             },
             "name": "a"
           },
@@ -89,7 +92,8 @@
               "end": {
                 "line": 1,
                 "column": 19
-              }
+              },
+              "identifierName": "b"
             },
             "name": "b"
           }
@@ -149,16 +153,19 @@
                     "end": {
                       "line": 1,
                       "column": 28
-                    }
+                    },
+                    "identifierName": "sayHi"
                   },
                   "name": "sayHi"
                 },
                 "arguments": []
               }
             }
-          ]
+          ],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

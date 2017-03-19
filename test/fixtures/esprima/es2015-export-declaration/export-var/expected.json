@@ -85,7 +85,8 @@
                   "end": {
                     "line": 1,
                     "column": 14
-                  }
+                  },
+                  "identifierName": "bar"
                 },
                 "name": "bar"
               },
@@ -95,6 +96,7 @@
           "kind": "var"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

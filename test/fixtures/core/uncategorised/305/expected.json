@@ -134,7 +134,8 @@
                   "end": {
                     "line": 2,
                     "column": 5
-                  }
+                  },
+                  "identifierName": "there"
                 },
                 "name": "there",
                 "leadingComments": null

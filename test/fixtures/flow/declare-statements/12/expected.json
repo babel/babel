@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 15
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
         "typeParameters": null,
         "extends": [],
+        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start": 16,
@@ -126,10 +128,11 @@
             }
           ],
           "properties": [],
-          "indexers": []
+          "indexers": [],
+          "exact": false
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

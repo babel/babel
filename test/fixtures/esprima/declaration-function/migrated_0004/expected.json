@@ -68,12 +68,14 @@
               "end": {
                 "line": 1,
                 "column": 14
-              }
+              },
+              "identifierName": "test"
             },
             "name": "test"
           },
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [
             {
               "type": "Identifier",
@@ -87,7 +89,8 @@
                 "end": {
                   "line": 1,
                   "column": 16
-                }
+                },
+                "identifierName": "t"
               },
               "name": "t"
             },
@@ -103,7 +106,8 @@
                 "end": {
                   "line": 1,
                   "column": 19
-                }
+                },
+                "identifierName": "t"
               },
               "name": "t"
             }
@@ -126,7 +130,8 @@
             "directives": []
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

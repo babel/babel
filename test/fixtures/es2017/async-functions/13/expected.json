@@ -73,7 +73,8 @@
                 "end": {
                   "line": 1,
                   "column": 11
-                }
+                },
+                "identifierName": "x"
               },
               "name": "x"
             }
@@ -119,7 +120,8 @@
                     "end": {
                       "line": 1,
                       "column": 35
-                    }
+                    },
+                    "identifierName": "inner"
                   },
                   "name": "inner"
                 },
@@ -182,7 +184,8 @@
                             "end": {
                               "line": 1,
                               "column": 47
-                            }
+                            },
+                            "identifierName": "x"
                           },
                           "name": "x"
                         }
@@ -196,7 +199,8 @@
             "directives": []
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

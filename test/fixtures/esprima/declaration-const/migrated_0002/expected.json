@@ -84,7 +84,8 @@
                     "end": {
                       "line": 1,
                       "column": 9
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x"
                 },
@@ -135,7 +136,8 @@
                     "end": {
                       "line": 1,
                       "column": 17
-                    }
+                    },
+                    "identifierName": "y"
                   },
                   "name": "y"
                 },
@@ -186,7 +188,8 @@
                     "end": {
                       "line": 1,
                       "column": 24
-                    }
+                    },
+                    "identifierName": "z"
                   },
                   "name": "z"
                 },

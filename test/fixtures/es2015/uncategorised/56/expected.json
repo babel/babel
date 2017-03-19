@@ -69,7 +69,8 @@
               "end": {
                 "line": 1,
                 "column": 1
-              }
+              },
+              "identifierName": "x"
             },
             "name": "x"
           },
@@ -117,7 +118,8 @@
                     "end": {
                       "line": 1,
                       "column": 9
-                    }
+                    },
+                    "identifierName": "set"
                   },
                   "name": "set"
                 },
@@ -125,6 +127,7 @@
                 "id": null,
                 "generator": false,
                 "expression": false,
+                "async": false,
                 "params": [],
                 "body": {
                   "type": "BlockStatement",

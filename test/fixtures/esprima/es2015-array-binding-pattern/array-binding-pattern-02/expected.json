@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": true,
+          "async": false,
           "params": [
             {
               "type": "ArrayPattern",
@@ -87,7 +88,8 @@
                     "end": {
                       "line": 1,
                       "column": 3
-                    }
+                    },
+                    "identifierName": "a"
                   },
                   "name": "a"
                 },
@@ -103,7 +105,8 @@
                     "end": {
                       "line": 1,
                       "column": 5
-                    }
+                    },
+                    "identifierName": "b"
                   },
                   "name": "b"
                 }

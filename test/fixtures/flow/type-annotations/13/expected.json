@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 12
-            }
+            },
+            "identifierName": "foo"
           },
           "name": "foo"
         },
         "generator": false,
         "expression": false,
+        "async": false,
         "params": [],
         "returnType": {
           "type": "TypeAnnotation",
@@ -107,7 +109,8 @@
               }
             },
             "typeParameters": null
-          }
+          },
+          "predicate": null
         },
         "body": {
           "type": "BlockStatement",

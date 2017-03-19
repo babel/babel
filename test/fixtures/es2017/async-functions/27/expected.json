@@ -141,6 +141,7 @@
                         },
                         "name": "async"
                       },
+                      "computed": false,
                       "value": {
                         "type": "AssignmentPattern",
                         "start": 15,

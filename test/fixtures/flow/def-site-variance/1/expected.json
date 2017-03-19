@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 7
-            }
+            },
+            "identifierName": "C"
           },
           "name": "C"
         },
@@ -87,6 +88,7 @@
                   "column": 10
                 }
               },
+              "name": "T",
               "variance": {
                 "type": "Variance",
                 "start": 8,
@@ -102,8 +104,7 @@
                   }
                 },
                 "kind": "plus"
-              },
-              "name": "T"
+              }
             },
             {
               "type": "TypeParameter",
@@ -119,6 +120,7 @@
                   "column": 13
                 }
               },
+              "name": "U",
               "variance": {
                 "type": "Variance",
                 "start": 11,
@@ -134,8 +136,7 @@
                   }
                 },
                 "kind": "minus"
-              },
-              "name": "U"
+              }
             }
           ]
         },
@@ -183,7 +184,8 @@
             "end": {
               "line": 2,
               "column": 10
-            }
+            },
+            "identifierName": "f"
           },
           "name": "f"
         },
@@ -219,6 +221,7 @@
                   "column": 13
                 }
               },
+              "name": "T",
               "variance": {
                 "type": "Variance",
                 "start": 29,
@@ -234,8 +237,7 @@
                   }
                 },
                 "kind": "plus"
-              },
-              "name": "T"
+              }
             },
             {
               "type": "TypeParameter",
@@ -251,6 +253,7 @@
                   "column": 16
                 }
               },
+              "name": "U",
               "variance": {
                 "type": "Variance",
                 "start": 32,
@@ -266,8 +269,7 @@
                   }
                 },
                 "kind": "minus"
-              },
-              "name": "U"
+              }
             }
           ]
         },
@@ -316,7 +318,8 @@
             "end": {
               "line": 3,
               "column": 6
-            }
+            },
+            "identifierName": "T"
           },
           "name": "T"
         },
@@ -349,6 +352,7 @@
                   "column": 9
                 }
               },
+              "name": "T",
               "variance": {
                 "type": "Variance",
                 "start": 48,
@@ -364,8 +368,7 @@
                   }
                 },
                 "kind": "plus"
-              },
-              "name": "T"
+              }
             },
             {
               "type": "TypeParameter",
@@ -381,6 +384,7 @@
                   "column": 12
                 }
               },
+              "name": "U",
               "variance": {
                 "type": "Variance",
                 "start": 51,
@@ -396,8 +400,7 @@
                   }
                 },
                 "kind": "minus"
-              },
-              "name": "U"
+              }
             }
           ]
         },
@@ -417,7 +420,8 @@
           },
           "callProperties": [],
           "properties": [],
-          "indexers": []
+          "indexers": [],
+          "exact": false
         }
       }
     ],

@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 5
-                }
+                },
+                "identifierName": "A"
               },
               "name": "A"
             },
@@ -100,7 +101,8 @@
                   "end": {
                     "line": 1,
                     "column": 23
-                  }
+                  },
+                  "identifierName": "B"
                 },
                 "name": "B"
               },
@@ -125,7 +127,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

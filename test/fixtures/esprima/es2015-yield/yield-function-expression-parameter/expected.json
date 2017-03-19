@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [
             {
               "type": "Identifier",
@@ -72,7 +73,8 @@
                 "end": {
                   "line": 1,
                   "column": 15
-                }
+                },
+                "identifierName": "yield"
               },
               "name": "yield"
             }
@@ -95,7 +97,8 @@
             "directives": []
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

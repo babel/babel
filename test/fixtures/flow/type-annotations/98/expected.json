@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 57
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -128,7 +129,8 @@
                           "end": {
                             "line": 1,
                             "column": 14
-                          }
+                          },
+                          "identifierName": "param1"
                         },
                         "name": "param1"
                       },
@@ -148,6 +150,7 @@
                         }
                       },
                       "optional": true,
+                      "static": false,
                       "variance": null
                     },
                     {
@@ -176,7 +179,8 @@
                           "end": {
                             "line": 1,
                             "column": 31
-                          }
+                          },
+                          "identifierName": "param2"
                         },
                         "name": "param2"
                       },
@@ -196,6 +200,7 @@
                         }
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     },
                     {
@@ -224,7 +229,8 @@
                           "end": {
                             "line": 1,
                             "column": 47
-                          }
+                          },
+                          "identifierName": "param3"
                         },
                         "name": "param3"
                       },
@@ -244,10 +250,12 @@
                         }
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     }
                   ],
-                  "indexers": []
+                  "indexers": [],
+                  "exact": false
                 }
               }
             },
@@ -256,7 +264,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -68,12 +68,14 @@
               "end": {
                 "line": 1,
                 "column": 28
-              }
+              },
+              "identifierName": "func"
             },
             "name": "func"
           },
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [
             {
               "type": "Identifier",
@@ -87,7 +89,8 @@
                 "end": {
                   "line": 1,
                   "column": 37
-                }
+                },
+                "identifierName": "x"
               },
               "name": "x",
               "decorators": [
@@ -131,7 +134,8 @@
                         "end": {
                           "line": 1,
                           "column": 33
-                        }
+                        },
+                        "identifierName": "foo"
                       },
                       "name": "foo"
                     },
@@ -152,7 +156,8 @@
                 "end": {
                   "line": 1,
                   "column": 64
-                }
+                },
+                "identifierName": "y"
               },
               "name": "y",
               "decorators": [
@@ -196,7 +201,8 @@
                         "end": {
                           "line": 1,
                           "column": 43
-                        }
+                        },
+                        "identifierName": "bar"
                       },
                       "name": "bar"
                     },
@@ -245,7 +251,8 @@
                                 "end": {
                                   "line": 1,
                                   "column": 47
-                                }
+                                },
+                                "identifierName": "a"
                               },
                               "name": "a"
                             },
@@ -315,7 +322,8 @@
                         "end": {
                           "line": 1,
                           "column": 60
-                        }
+                        },
+                        "identifierName": "baz"
                       },
                       "name": "baz"
                     },

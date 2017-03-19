@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 12
-            }
+            },
+            "identifierName": "foo"
           },
           "name": "foo"
         },
@@ -90,7 +91,8 @@
                   "column": 14
                 }
               },
-              "name": "T"
+              "name": "T",
+              "variance": null
             },
             {
               "type": "TypeParameter",
@@ -106,7 +108,8 @@
                   "column": 16
                 }
               },
-              "name": "S"
+              "name": "S",
+              "variance": null
             }
           ]
         },

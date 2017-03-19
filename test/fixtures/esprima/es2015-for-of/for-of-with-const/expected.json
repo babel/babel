@@ -42,6 +42,7 @@
             "column": 22
           }
         },
+        "await": false,
         "left": {
           "type": "VariableDeclaration",
           "start": 5,
@@ -83,7 +84,8 @@
                   "end": {
                     "line": 1,
                     "column": 12
-                  }
+                  },
+                  "identifierName": "y"
                 },
                 "name": "y"
               },
@@ -104,7 +106,8 @@
             "end": {
               "line": 1,
               "column": 20
-            }
+            },
+            "identifierName": "list"
           },
           "name": "list"
         },
@@ -124,6 +127,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

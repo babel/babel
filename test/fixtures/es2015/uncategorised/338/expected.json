@@ -68,12 +68,14 @@
               "end": {
                 "line": 1,
                 "column": 27
-              }
+              },
+              "identifierName": "foo"
             },
             "name": "foo"
           },
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [],
           "body": {
             "type": "BlockStatement",

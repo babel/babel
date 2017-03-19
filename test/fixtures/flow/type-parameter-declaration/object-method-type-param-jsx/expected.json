@@ -258,7 +258,8 @@
                             "column": 10
                           }
                         },
-                        "name": "T"
+                        "name": "T",
+                        "variance": null
                       }
                     ]
                   }

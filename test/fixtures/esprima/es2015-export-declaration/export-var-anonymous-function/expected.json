@@ -85,7 +85,8 @@
                   "end": {
                     "line": 1,
                     "column": 14
-                  }
+                  },
+                  "identifierName": "foo"
                 },
                 "name": "foo"
               },
@@ -106,6 +107,7 @@
                 "id": null,
                 "generator": false,
                 "expression": false,
+                "async": false,
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
@@ -121,7 +123,8 @@
                       "column": 31
                     }
                   },
-                  "body": []
+                  "body": [],
+                  "directives": []
                 }
               }
             }
@@ -129,6 +132,7 @@
           "kind": "var"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

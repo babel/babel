@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 7
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -88,6 +89,7 @@
                   "column": 26
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "StringLiteral",
@@ -109,11 +111,11 @@
                 },
                 "value": "constructor"
               },
-              "static": false,
               "kind": "constructor",
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",
@@ -147,6 +149,7 @@
                   "column": 46
                 }
               },
+              "static": false,
               "computed": true,
               "key": {
                 "type": "StringLiteral",
@@ -168,11 +171,11 @@
                 },
                 "value": "constructor"
               },
-              "static": false,
               "kind": "method",
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",

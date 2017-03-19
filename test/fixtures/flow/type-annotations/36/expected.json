@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 39
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -128,7 +129,8 @@
                           "end": {
                             "line": 1,
                             "column": 14
-                          }
+                          },
+                          "identifierName": "numVal"
                         },
                         "name": "numVal"
                       },
@@ -148,6 +150,7 @@
                         }
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     },
                     {
@@ -176,7 +179,8 @@
                           "end": {
                             "line": 1,
                             "column": 30
-                          }
+                          },
+                          "identifierName": "strVal"
                         },
                         "name": "strVal"
                       },
@@ -196,10 +200,12 @@
                         }
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     }
                   ],
-                  "indexers": []
+                  "indexers": [],
+                  "exact": false
                 }
               }
             },
@@ -208,7 +214,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

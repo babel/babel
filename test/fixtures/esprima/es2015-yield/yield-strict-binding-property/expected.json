@@ -101,7 +101,8 @@
                       "end": {
                         "line": 1,
                         "column": 25
-                      }
+                      },
+                      "identifierName": "yield"
                     },
                     "name": "yield"
                   },
@@ -117,7 +118,8 @@
                       "end": {
                         "line": 1,
                         "column": 28
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
                   }
@@ -136,7 +138,8 @@
                 "end": {
                   "line": 1,
                   "column": 36
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             }

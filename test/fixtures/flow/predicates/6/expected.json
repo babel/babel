@@ -191,11 +191,11 @@
                                   "column": 40
                                 }
                               },
-                              "value": 1,
                               "extra": {
                                 "rawValue": 1,
                                 "raw": "1"
-                              }
+                              },
+                              "value": 1
                             }
                           ]
                         },
@@ -543,11 +543,11 @@
                                 "column": 83
                               }
                             },
-                            "value": 1,
                             "extra": {
                               "rawValue": 1,
                               "raw": "1"
-                            }
+                            },
+                            "value": 1
                           }
                         ]
                       },
@@ -589,7 +589,8 @@
                   "name": "Array"
                 }
               }
-            }
+            },
+            "predicate": null
           }
         }
       }

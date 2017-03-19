@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [
             {
               "type": "Identifier",
@@ -72,7 +73,8 @@
                 "end": {
                   "line": 1,
                   "column": 2
-                }
+                },
+                "identifierName": "z"
               },
               "name": "z"
             }
@@ -132,7 +134,8 @@
                       "end": {
                         "line": 1,
                         "column": 14
-                      }
+                      },
+                      "identifierName": "yield"
                     },
                     "name": "yield"
                   },
@@ -149,16 +152,19 @@
                       "end": {
                         "line": 1,
                         "column": 18
-                      }
+                      },
+                      "identifierName": "z"
                     },
                     "name": "z"
                   }
                 }
               }
-            ]
+            ],
+            "directives": []
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

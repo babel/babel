@@ -82,7 +82,8 @@
                 "end": {
                   "line": 2,
                   "column": 6
-                }
+                },
+                "identifierName": "object"
               },
               "name": "object"
             },
@@ -98,7 +99,8 @@
                 "end": {
                   "line": 2,
                   "column": 13
-                }
+                },
+                "identifierName": "static"
               },
               "name": "static"
             },

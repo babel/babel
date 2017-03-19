@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [
             {
               "type": "ObjectPattern",
@@ -104,7 +105,8 @@
                       "end": {
                         "line": 1,
                         "column": 4
-                      }
+                      },
+                      "identifierName": "a"
                     },
                     "name": "a"
                   },
@@ -120,7 +122,8 @@
                       "end": {
                         "line": 1,
                         "column": 7
-                      }
+                      },
+                      "identifierName": "b"
                     },
                     "name": "b"
                   }
@@ -154,7 +157,8 @@
                       "end": {
                         "line": 1,
                         "column": 10
-                      }
+                      },
+                      "identifierName": "c"
                     },
                     "name": "c"
                   },
@@ -170,9 +174,13 @@
                       "end": {
                         "line": 1,
                         "column": 10
-                      }
+                      },
+                      "identifierName": "c"
                     },
                     "name": "c"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 }
               ]
@@ -204,7 +212,8 @@
                     "end": {
                       "line": 1,
                       "column": 16
-                    }
+                    },
+                    "identifierName": "d"
                   },
                   "name": "d"
                 },
@@ -220,7 +229,8 @@
                     "end": {
                       "line": 1,
                       "column": 19
-                    }
+                    },
+                    "identifierName": "e"
                   },
                   "name": "e"
                 }
@@ -252,7 +262,8 @@
                   "end": {
                     "line": 1,
                     "column": 26
-                  }
+                  },
+                  "identifierName": "f"
                 },
                 "name": "f"
               }

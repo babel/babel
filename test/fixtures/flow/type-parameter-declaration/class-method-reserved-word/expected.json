@@ -89,6 +89,7 @@
                   "column": 16
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -107,7 +108,6 @@
                 },
                 "name": "foobar"
               },
-              "static": false,
               "kind": "method",
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
@@ -138,7 +138,8 @@
                         "column": 10
                       }
                     },
-                    "name": "T"
+                    "name": "T",
+                    "variance": null
                   }
                 ]
               },
@@ -179,6 +180,7 @@
                   "column": 16
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -197,7 +199,6 @@
                 },
                 "name": "delete"
               },
-              "static": false,
               "kind": "method",
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
@@ -228,7 +229,8 @@
                         "column": 10
                       }
                     },
-                    "name": "T"
+                    "name": "T",
+                    "variance": null
                   }
                 ]
               },
@@ -269,6 +271,7 @@
                   "column": 15
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -287,7 +290,6 @@
                 },
                 "name": "yield"
               },
-              "static": false,
               "kind": "method",
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
@@ -318,7 +320,8 @@
                         "column": 9
                       }
                     },
-                    "name": "T"
+                    "name": "T",
+                    "variance": null
                   }
                 ]
               },
@@ -359,6 +362,7 @@
                   "column": 12
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -377,7 +381,6 @@
                 },
                 "name": "do"
               },
-              "static": false,
               "kind": "method",
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
@@ -408,7 +411,8 @@
                         "column": 6
                       }
                     },
-                    "name": "T"
+                    "name": "T",
+                    "variance": null
                   }
                 ]
               },
@@ -449,6 +453,7 @@
                   "column": 23
                 }
               },
+              "static": true,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -467,7 +472,6 @@
                 },
                 "name": "foobar"
               },
-              "static": true,
               "kind": "method",
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
@@ -498,7 +502,8 @@
                         "column": 17
                       }
                     },
-                    "name": "T"
+                    "name": "T",
+                    "variance": null
                   }
                 ]
               },
@@ -539,6 +544,7 @@
                   "column": 23
                 }
               },
+              "static": true,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -557,7 +563,6 @@
                 },
                 "name": "delete"
               },
-              "static": true,
               "kind": "method",
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
@@ -588,7 +593,8 @@
                         "column": 17
                       }
                     },
-                    "name": "T"
+                    "name": "T",
+                    "variance": null
                   }
                 ]
               },
@@ -629,6 +635,7 @@
                   "column": 22
                 }
               },
+              "static": true,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -647,7 +654,6 @@
                 },
                 "name": "yield"
               },
-              "static": true,
               "kind": "method",
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
@@ -678,7 +684,8 @@
                         "column": 16
                       }
                     },
-                    "name": "T"
+                    "name": "T",
+                    "variance": null
                   }
                 ]
               },
@@ -719,6 +726,7 @@
                   "column": 19
                 }
               },
+              "static": true,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -737,7 +745,6 @@
                 },
                 "name": "do"
               },
-              "static": true,
               "kind": "method",
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
@@ -768,7 +775,8 @@
                         "column": 13
                       }
                     },
-                    "name": "T"
+                    "name": "T",
+                    "variance": null
                   }
                 ]
               },

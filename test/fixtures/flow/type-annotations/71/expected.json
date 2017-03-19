@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 7
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             },
@@ -134,7 +135,8 @@
                     "end": {
                       "line": 1,
                       "column": 20
-                    }
+                    },
+                    "identifierName": "bar"
                   },
                   "name": "bar"
                 }
@@ -151,7 +153,8 @@
                   "end": {
                     "line": 1,
                     "column": 36
-                  }
+                  },
+                  "identifierName": "bar"
                 },
                 "name": "bar"
               }

@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 13
-                }
+                },
+                "identifierName": "crypto"
               },
               "name": "crypto"
             }
@@ -100,7 +101,8 @@
                 "end": {
                   "line": 1,
                   "column": 24
-                }
+                },
+                "identifierName": "decrypt"
               },
               "name": "decrypt"
             },
@@ -116,7 +118,8 @@
                 "end": {
                   "line": 1,
                   "column": 24
-                }
+                },
+                "identifierName": "decrypt"
               },
               "name": "decrypt"
             }
@@ -147,7 +150,8 @@
                 "end": {
                   "line": 1,
                   "column": 33
-                }
+                },
+                "identifierName": "encrypt"
               },
               "name": "encrypt"
             },
@@ -163,7 +167,8 @@
                 "end": {
                   "line": 1,
                   "column": 40
-                }
+                },
+                "identifierName": "enc"
               },
               "name": "enc"
             }
