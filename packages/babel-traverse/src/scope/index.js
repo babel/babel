@@ -496,6 +496,11 @@ export default class Scope {
     for (const name in ids) {
       for (const id of (ids[name]: Array<Object>)) {
         let local = this.getOwnBinding(name);
+
+        // Ignore existing binding if it's the name of the current function or class
+        // expression
+        if (local && local.kind === "local") local = null;
+
         if (local) {
           // same identifier so continue safely as we're likely trying to register it
           // multiple times
@@ -508,8 +513,6 @@ export default class Scope {
         // remove it because people might be depending on it. See warning section
         // in `warnOnFlowBinding`.
         if (local && local.path.isFlow()) local = null;
-
-        if (local && local.kind === "local") local = null;
 
         parent.references[name] = true;
 
