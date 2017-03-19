@@ -130,9 +130,9 @@ export default function () {
   };
 
   return Object.assign(
-    babelPluginSyntaxObjectRestSpread(),
-    babelPluginTransformStrictMode(),
     {
+      inherits: babelPluginTransformStrictMode,
+
       visitor: {
         ThisExpression(path, state) {
           // If other plugins run after this plugin's Program#exit handler, we allow them to
@@ -514,6 +514,7 @@ export default function () {
           }
         }
       }
-    }
+    },
+    babelPluginSyntaxObjectRestSpread()
   );
 }
