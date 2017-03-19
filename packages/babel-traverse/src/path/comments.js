@@ -17,7 +17,6 @@ export function shareCommentsWithSiblings(willBeRemoved) {
 
   let prev = this.getSibling(this.key - 1);
   let next = this.getSibling(this.key + 1);
-  
   if (willBeRemoved) {
     if (prev.node) {
       prev.addComments("trailing", leading);
