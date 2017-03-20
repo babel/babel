@@ -48,7 +48,7 @@ export function addComments(type: string, comments: Array) {
   const key = `${type}Comments`;
 
   if (node[key]) {
-    if (type === 'leading') {
+    if (type === "leading") {
       node[key] = comments.concat(node[key]);
     } else {
       node[key] = node[key].concat(comments);

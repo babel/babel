@@ -51,7 +51,7 @@ describe("removal", function () {
       const code = `/* top */
 /* left */removeme;/* right */
 /* bottom */`;
-      const expected = ``;
+      const expected = "";
       const actual = transpile(code);
       assert.equal(actual, expected);
     });
@@ -60,7 +60,7 @@ describe("removal", function () {
 /* top */
 /* left */removeme;/* right */
 /* bottom */`;
-      const expected = `previous; /* top */ /* left */ /* right */ /* bottom */`;
+      const expected = "previous; /* top */ /* left */ /* right */ /* bottom */";
       const actual = transpile(code);
       assert.equal(actual, expected);
     });
@@ -69,7 +69,7 @@ describe("removal", function () {
 /* left */removeme;/* right */
 /* bottom */
 next;`;
-      const expected = `/* top */ /* left */ /* right */ /* bottom */next;`;
+      const expected = "/* top */ /* left */ /* right */ /* bottom */next;";
       const actual = transpile(code);
       assert.equal(actual, expected);
     });
