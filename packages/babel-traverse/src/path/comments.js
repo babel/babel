@@ -17,15 +17,20 @@ export function shareCommentsWithSiblings() {
 
   const prev = this.getSibling(this.key - 1);
   const next = this.getSibling(this.key + 1);
+  const parent = this.parentPath;
   if (prev.node) {
     prev.addComments("trailing", leading);
   } else if (next.node) {
     next.addComments("leading", leading);
+  } else if (parent && parent.node) {
+    parent.addComments("leading", leading);
   }
   if (next.node) {
     next.addComments("leading", trailing);
   } else if (prev.node) {
     prev.addComments("trailing", trailing);
+  } else if (parent && parent.node) {
+    parent.addComments("trailing", trailing);
   }
 }
 
