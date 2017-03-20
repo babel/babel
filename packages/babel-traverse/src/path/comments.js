@@ -15,14 +15,17 @@ export function shareCommentsWithSiblings() {
   const leading = node.leadingComments;
   if (!trailing && !leading) return;
 
-  let prev = this.getSibling(this.key - 1);
-  let next = this.getSibling(this.key + 1);
+  const prev = this.getSibling(this.key - 1);
+  const next = this.getSibling(this.key + 1);
+  const hasPrev = Boolean(prev.node);
+  const hasNext = Boolean(next.node);
+  if (hasPrev && hasNext) {
 
-  if (!prev.node) prev = next;
-  if (!next.node) next = prev;
-
-  prev.addComments("trailing", leading);
-  next.addComments("leading", trailing);
+  } else if (hasPrev) {
+    prev.addComments("trailing", trailing);
+  } else if (hasNext) {
+    next.addComments("leading", leading);
+  }
 }
 
 export function addComment(type, content, line?) {
