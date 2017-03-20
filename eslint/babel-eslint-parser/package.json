@@ -12,15 +12,13 @@
     "url": "https://github.com/babel/babel-eslint.git"
   },
   "dependencies": {
-    "babel-code-frame": "^6.16.0",
-    "babel-traverse": "^6.15.0",
-    "babel-types": "^6.15.0",
-    "babylon": "^6.13.0",
+    "babel-code-frame": "^6.22.0",
+    "babel-traverse": "^6.23.1",
+    "babel-types": "^6.23.0",
+    "babylon": "^6.16.1",
     "lodash.pickby": "^4.6.0"
   },
   "scripts": {
-    "bootstrap": "git submodule update --init && cd eslint && npm install",
-    "eslint": "cd eslint && mocha -c tests/lib/rules/*.js -r ../eslint-tester.js",
     "test": "npm run lint && npm run test-only",
     "test-only": "mocha",
     "lint": "eslint index.js babylon-to-espree test",
@@ -39,11 +37,10 @@
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
     "babel-eslint": "^7.0.0",
-    "eslint": "^3.9.1",
+    "eslint": "^3.18.0",
     "eslint-config-babel": "^6.0.0",
-    "eslint-plugin-babel": "^4.0.0",
-    "eslint-plugin-flowtype": "^2.4.0",
-    "espree": "^3.3.1",
+    "eslint-plugin-flowtype": "^2.30.3",
+    "espree": "^3.4.0",
     "mocha": "^3.0.0"
   }
 }
