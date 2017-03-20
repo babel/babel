@@ -16,7 +16,7 @@
     "babel-traverse": "^6.23.1",
     "babel-types": "^6.23.0",
     "babylon": "^6.16.1",
-    "lodash.pickby": "^4.6.0"
+    "lodash": "^4.17.4"
   },
   "scripts": {
     "test": "npm run lint && npm run test-only",

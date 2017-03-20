@@ -1,5 +1,5 @@
 var babylonToEspree = require("./babylon-to-espree");
-var pick            = require("lodash.pickby");
+var pick            = require("lodash").pickBy;
 var Module          = require("module");
 var path            = require("path");
 var parse           = require("babylon").parse;
