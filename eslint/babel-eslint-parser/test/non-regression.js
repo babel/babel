@@ -222,13 +222,13 @@ describe("verify", () => {
       );
     });
 
-    it("type parameters", () => {
+    it("type parameter bounds", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
           import type Foo2 from 'foo';
-          function log<T1, T2>(a: T1, b: T2) { return a + b; }
-          log<Foo, Foo2>(1, 2);
+          function log<T1: Foo, T2: Foo2>(a: T1, b: T2) { return a + b; }
+          log(1, 2);
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
         []
