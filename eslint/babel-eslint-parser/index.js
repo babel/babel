@@ -366,6 +366,7 @@ exports.parse = function (code, options) {
 
 exports.parseNoPatch = function (code, options) {
   var opts = {
+    codeFrame: options.hasOwnProperty("codeFrame") ? options.codeFrame : true,
     sourceType: options.sourceType,
     allowImportExportEverywhere: options.allowImportExportEverywhere, // consistent with espree
     allowReturnOutsideFunction: true,
@@ -394,14 +395,20 @@ exports.parseNoPatch = function (code, options) {
     ast = parse(code, opts);
   } catch (err) {
     if (err instanceof SyntaxError) {
-      err.lineNumber = err.loc.line;
-      err.column = err.loc.column + 1;
 
-      // remove trailing "(LINE:COLUMN)" acorn message and add in esprima syntax error message start
-      err.message = "Line " + err.lineNumber + ": " + err.message.replace(/ \((\d+):(\d+)\)$/, "") +
-      // add codeframe
-      "\n\n" +
-      codeFrame(code, err.lineNumber, err.column, { highlightCode: true });
+      err.lineNumber = err.loc.line;
+      err.column = err.loc.column;
+
+      if (opts.codeFrame) {
+        err.lineNumber = err.loc.line;
+        err.column = err.loc.column + 1;
+
+        // remove trailing "(LINE:COLUMN)" acorn message and add in esprima syntax error message start
+        err.message = "Line " + err.lineNumber + ": " + err.message.replace(/ \((\d+):(\d+)\)$/, "") +
+        // add codeframe
+        "\n\n" +
+        codeFrame(code, err.lineNumber, err.column, { highlightCode: true });
+      }
     }
 
     throw err;
