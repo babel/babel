@@ -68,14 +68,14 @@ import generate from 'babel-generator';
 
 const a = 'var a = 1;';
 const b = 'var b = 2;';
-const astA = parse(a, { filename: 'a.js' });
-const astB = parse(b, { filename: 'b.js' });
+const astA = parse(a, { sourceFilename: 'a.js' });
+const astB = parse(b, { sourceFilename: 'b.js' });
 const ast = {
   type: 'Program',
-  body: [].concat(astA.body, ast2.body)
+  body: [].concat(astA.program.body, astB.program.body)
 };
 
-const { code, map } = generate(ast, { /* options */ }, {
+const { code, map } = generate(ast, { sourceMaps: true }, {
   'a.js': a,
   'b.js': b
 });
