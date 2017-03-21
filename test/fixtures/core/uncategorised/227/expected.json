@@ -54,11 +54,13 @@
             "end": {
               "line": 1,
               "column": 7
-            }
+            },
+            "identifierName": "aa"
           },
           "name": "aa"
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 14
-                }
+                },
+                "identifierName": "_፩፪፫፬፭፮፯፰፱"
               },
               "name": "_፩፪፫፬፭፮፯፰፱"
             },
@@ -78,6 +79,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

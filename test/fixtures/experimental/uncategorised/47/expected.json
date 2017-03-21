@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 9
-            }
+            },
+            "identifierName": "Foo"
           },
           "name": "Foo"
         },
@@ -115,12 +116,14 @@
                       "end": {
                         "line": 1,
                         "column": 16
-                      }
+                      },
+                      "identifierName": "bar"
                     },
                     "name": "bar"
                   }
                 }
               ],
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -134,11 +137,11 @@
                   "end": {
                     "line": 1,
                     "column": 20
-                  }
+                  },
+                  "identifierName": "foo"
                 },
                 "name": "foo"
               },
-              "static": false,
               "value": {
                 "type": "StringLiteral",
                 "start": 23,

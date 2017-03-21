@@ -1,4 +1,0 @@
-{
-  "throws": "You can't attach decorators to a class constructor (3:2)",
-  "plugins": ["classConstructorCall", "decorators"]
-}

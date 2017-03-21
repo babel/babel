@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 8
-                }
+                },
+                "identifierName": "𞸆_$"
               },
               "name": "𞸆_$"
             },
@@ -78,6 +79,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 5
-                }
+                },
+                "identifierName": "x"
               },
               "name": "x"
             },
@@ -101,7 +102,8 @@
                 "end": {
                   "line": 1,
                   "column": 8
-                }
+                },
+                "identifierName": "y"
               },
               "name": "y"
             },
@@ -110,6 +112,7 @@
         ],
         "kind": "let"
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -74,7 +74,8 @@
                   "line": 2,
                   "column": 8
                 },
-                "filename": "path/to/input-file.js"
+                "filename": "path/to/input-file.js",
+                "identifierName": "node"
               },
               "name": "node",
               "leadingComments": null

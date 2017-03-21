@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 13
-            }
+            },
+            "identifierName": "foo"
           },
           "name": "foo"
         },
         "generator": true,
         "expression": false,
+        "async": false,
         "params": [
           {
             "type": "Identifier",
@@ -73,7 +75,8 @@
               "end": {
                 "line": 1,
                 "column": 15
-              }
+              },
+              "identifierName": "x"
             },
             "name": "x"
           },
@@ -89,7 +92,8 @@
               "end": {
                 "line": 1,
                 "column": 18
-              }
+              },
+              "identifierName": "y"
             },
             "name": "y"
           },
@@ -105,7 +109,8 @@
               "end": {
                 "line": 1,
                 "column": 21
-              }
+              },
+              "identifierName": "z"
             },
             "name": "z"
           }
@@ -124,9 +129,11 @@
               "column": 25
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

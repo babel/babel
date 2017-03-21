@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 7
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -76,6 +77,7 @@
           "body": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

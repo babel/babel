@@ -1,48 +1,43 @@
 sudo: false
 language: node_js
 node_js:
-  - "0.10"
-  - "0.12"
   - "4"
-  - "5"
   - "6"
   - "7"
 
-before_install:
-    # Rollup doesn't support node < 4.x. Switch to latest for build
-  - . $HOME/.nvm/nvm.sh
-  - nvm install stable && nvm use stable
+env:
+  - JOB=test
 
 before_script:
-  - 'if [ -n "${BABEL-}" ]; then make bootstrap-babel ; fi'
-  - 'if [ -n "${FLOWTESTS-}" ]; then make bootstrap-flow ; fi'
-  - 'BABEL_ENV=test npm run build'
-    # Switch back to node version currently being tested prior to test run
-  - 'nvm use $TRAVIS_NODE_VERSION;'
+  - 'if [ "$JOB" = "babel-test" ]; then make bootstrap-babel ; fi'
+  - 'if [ "$JOB" = "flow-test" ]; then make bootstrap-flow ; fi'
+  - 'if [ "$JOB" = "test" ]; then yarn run build; fi'
 
 script:
-  - 'if [ -n "${LINT-}" ]; then npm run lint ; fi'
-  - 'if [ -n "${FLOW-}" ]; then npm run flow ; fi'
-  - 'if [ -n "${FLOWTESTS-}" ]; then make test-flow ; fi'
-  - 'if [ -n "${BABEL-}" ]; then make test-babel ; fi'
-  - 'if [ -z "${LINT-}" ] && [ -z "${FLOW-}" ] && [ -z "${BABEL-}" ] && [ -z "${FLOWTESTS-}" ]; then npm run test-ci ; fi'
+  - 'if [ "$JOB" = "test" ]; then yarn test-only; fi'
+  - 'if [ "$JOB" = "lint" ]; then yarn run lint && yarn run flow; fi'
+  - 'if [ "$JOB" = "flow-test" ]; then make test-flow; fi'
+  - 'if [ "$JOB" = "babel-test" ]; then make test-babel; fi'
+  - 'if [ "$JOB" = "test-coverage" ]; then yarn run test-coverage; fi'
 
 matrix:
   fast_finish: true
   include:
-    - node_js: "node"
-      env: LINT=true
-    - node_js: "node"
-      env: FLOW=true
-    - node_js: "node"
-      env: BABEL=true
-    - node_js: "node"
-      env: FLOWTESTS=true
+    - node_js: "lts/*"
+      env: JOB=test-coverage
+    - node_js: "lts/*"
+      env: JOB=lint
+    - node_js: "lts/*"
+      env: JOB=babel-test
+    - node_js: "lts/*"
+      env: JOB=flow-test
   allow_failures:
-    - node_js: "node"
-      env: FLOWTESTS=true
+    - node_js: "lts/*"
+      env: JOB=flow-test
 
-after_success: 'if [ -z "${LINT-}" ] && [ -z "${FLOW-}" ] && [ -z "${FLOWTESTS-}" ]; then npm run coverage ; fi'
+after_success:
+  - 'if [ "$JOB" = "babel-test" ]; then bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json -F babel ; fi'
+  - 'if [ "$JOB" = "test-coverage" ]; then bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json -F babylon ; fi'
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK

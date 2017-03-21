@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 5
-                }
+                },
+                "identifierName": "o"
               },
               "name": "o"
             },
@@ -117,7 +118,8 @@
                       "end": {
                         "line": 1,
                         "column": 11
-                      }
+                      },
+                      "identifierName": "a"
                     },
                     "name": "a"
                   },
@@ -171,7 +173,8 @@
                       "end": {
                         "line": 1,
                         "column": 25
-                      }
+                      },
+                      "identifierName": "foo"
                     },
                     "name": "foo"
                   },
@@ -193,7 +196,8 @@
                         "end": {
                           "line": 1,
                           "column": 33
-                        }
+                        },
+                        "identifierName": "promise"
                       },
                       "name": "promise"
                     }
@@ -253,7 +257,8 @@
                               "end": {
                                 "line": 1,
                                 "column": 50
-                              }
+                              },
+                              "identifierName": "promise"
                             },
                             "name": "promise"
                           }

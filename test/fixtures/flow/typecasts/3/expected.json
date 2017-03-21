@@ -73,6 +73,7 @@
             "id": null,
             "generator": false,
             "expression": true,
+            "async": false,
             "params": [
               {
                 "type": "Identifier",
@@ -86,7 +87,8 @@
                   "end": {
                     "line": 1,
                     "column": 5
-                  }
+                  },
+                  "identifierName": "xxx"
                 },
                 "name": "xxx"
               }
@@ -117,7 +119,8 @@
                   "end": {
                     "line": 1,
                     "column": 13
-                  }
+                  },
+                  "identifierName": "xxx"
                 },
                 "name": "xxx"
               },
@@ -199,7 +202,8 @@
                       "end": {
                         "line": 1,
                         "column": 23
-                      }
+                      },
+                      "identifierName": "xxx"
                     },
                     "name": "xxx"
                   },
@@ -241,7 +245,8 @@
             }
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

@@ -34,8 +34,8 @@ pp.toAssignable = function (node, isBinding, contextDescription) {
         this.toAssignable(node.value, isBinding, contextDescription);
         break;
 
-      case "SpreadProperty":
-        node.type = "RestProperty";
+      case "SpreadElement":
+        node.type = "RestElement";
         break;
 
       case "ArrayExpression":
@@ -85,6 +85,8 @@ pp.toAssignableList = function (exprList, isBinding, contextDescription) {
   }
   for (let i = 0; i < end; i++) {
     const elt = exprList[i];
+    if (elt && elt.type === "SpreadElement")
+      this.raise(elt.start, "The rest element has to be the last element when destructuring");
     if (elt) this.toAssignable(elt, isBinding, contextDescription);
   }
   return exprList;
@@ -244,10 +246,6 @@ pp.checkLVal = function (expr, isBinding, checkClashes, contextDescription) {
 
     case "AssignmentPattern":
       this.checkLVal(expr.left, isBinding, checkClashes, "assignment pattern");
-      break;
-
-    case "RestProperty":
-      this.checkLVal(expr.argument, isBinding, checkClashes, "rest property");
       break;
 
     case "RestElement":

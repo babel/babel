@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 16
-            }
+            },
+            "identifierName": "f"
           },
           "name": "f"
         },
@@ -78,7 +79,7 @@
           },
           "body": [
             {
-              "type": "ForAwaitStatement",
+              "type": "ForOfStatement",
               "start": 23,
               "end": 46,
               "loc": {
@@ -91,6 +92,7 @@
                   "column": 25
                 }
               },
+              "await": true,
               "left": {
                 "type": "VariableDeclaration",
                 "start": 34,
@@ -132,7 +134,8 @@
                         "end": {
                           "line": 2,
                           "column": 18
-                        }
+                        },
+                        "identifierName": "x"
                       },
                       "name": "x"
                     },
@@ -153,7 +156,8 @@
                   "end": {
                     "line": 2,
                     "column": 23
-                  }
+                  },
+                  "identifierName": "y"
                 },
                 "name": "y"
               },

@@ -42,6 +42,7 @@
             "column": 21
           }
         },
+        "await": false,
         "left": {
           "type": "ObjectPattern",
           "start": 5,
@@ -86,7 +87,8 @@
                   "end": {
                     "line": 1,
                     "column": 7
-                  }
+                  },
+                  "identifierName": "x"
                 },
                 "name": "x"
               },
@@ -116,7 +118,8 @@
                     "end": {
                       "line": 1,
                       "column": 7
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x"
                 },
@@ -140,6 +143,9 @@
                   },
                   "value": 0
                 }
+              },
+              "extra": {
+                "shorthand": true
               }
             }
           ]
@@ -156,7 +162,8 @@
             "end": {
               "line": 1,
               "column": 19
-            }
+            },
+            "identifierName": "arr"
           },
           "name": "arr"
         },

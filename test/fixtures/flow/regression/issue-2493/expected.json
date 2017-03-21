@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 9
-                }
+                },
+                "identifierName": "hello"
               },
               "name": "hello"
             },
@@ -86,6 +87,37 @@
                   "line": 3,
                   "column": 1
                 }
+              },
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 41,
+                "end": 49,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 41
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 49
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "StringTypeAnnotation",
+                  "start": 43,
+                  "end": 49,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 43
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 49
+                    }
+                  }
+                },
+                "predicate": null
               },
               "id": null,
               "generator": false,
@@ -118,7 +150,8 @@
                       "end": {
                         "line": 1,
                         "column": 28
-                      }
+                      },
+                      "identifierName": "greeting"
                     },
                     "name": "greeting",
                     "typeAnnotation": {
@@ -243,7 +276,8 @@
                             "end": {
                               "line": 2,
                               "column": 9
-                            }
+                            },
+                            "identifierName": "console"
                           },
                           "name": "console"
                         },
@@ -259,7 +293,8 @@
                             "end": {
                               "line": 2,
                               "column": 13
-                            }
+                            },
+                            "identifierName": "log"
                           },
                           "name": "log"
                         },
@@ -313,7 +348,8 @@
                               "end": {
                                 "line": 2,
                                 "column": 32
-                              }
+                              },
+                              "identifierName": "greeting"
                             },
                             "name": "greeting"
                           }
@@ -323,36 +359,6 @@
                   }
                 ],
                 "directives": []
-              },
-              "returnType": {
-                "type": "TypeAnnotation",
-                "start": 41,
-                "end": 49,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 41
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 49
-                  }
-                },
-                "typeAnnotation": {
-                  "type": "StringTypeAnnotation",
-                  "start": 43,
-                  "end": 49,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 43
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 49
-                    }
-                  }
-                }
               }
             }
           }
@@ -399,7 +405,8 @@
               "end": {
                 "line": 5,
                 "column": 5
-              }
+              },
+              "identifierName": "hello"
             },
             "name": "hello"
           },

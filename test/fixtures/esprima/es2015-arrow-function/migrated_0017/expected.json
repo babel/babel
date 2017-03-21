@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": true,
+          "async": false,
           "params": [
             {
               "type": "Identifier",
@@ -72,7 +73,8 @@
                 "end": {
                   "line": 1,
                   "column": 2
-                }
+                },
+                "identifierName": "x"
               },
               "name": "x"
             }
@@ -94,6 +96,7 @@
             "id": null,
             "generator": false,
             "expression": true,
+            "async": false,
             "params": [
               {
                 "type": "Identifier",
@@ -107,7 +110,8 @@
                   "end": {
                     "line": 1,
                     "column": 10
-                  }
+                  },
+                  "identifierName": "y"
                 },
                 "name": "y"
               },
@@ -123,7 +127,8 @@
                   "end": {
                     "line": 1,
                     "column": 13
-                  }
+                  },
+                  "identifierName": "z"
                 },
                 "name": "z"
               }
@@ -155,7 +160,8 @@
                     "end": {
                       "line": 1,
                       "column": 20
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x"
                 },
@@ -171,7 +177,8 @@
                     "end": {
                       "line": 1,
                       "column": 23
-                    }
+                    },
+                    "identifierName": "y"
                   },
                   "name": "y"
                 },
@@ -187,17 +194,20 @@
                     "end": {
                       "line": 1,
                       "column": 26
-                    }
+                    },
+                    "identifierName": "z"
                   },
                   "name": "z"
                 }
               ],
               "extra": {
-                "parenthesized": true
+                "parenthesized": true,
+                "parenStart": 18
               }
             },
             "extra": {
-              "parenthesized": true
+              "parenthesized": true,
+              "parenStart": 7
             }
           }
         }

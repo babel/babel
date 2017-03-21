@@ -69,10 +69,12 @@
                 "end": {
                   "line": 1,
                   "column": 16
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             },
+            "importKind": null,
             "local": {
               "type": "Identifier",
               "start": 13,
@@ -85,7 +87,8 @@
                 "end": {
                   "line": 1,
                   "column": 16
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             }
@@ -116,10 +119,12 @@
                 "end": {
                   "line": 1,
                   "column": 21
-                }
+                },
+                "identifierName": "bar"
               },
               "name": "bar"
             },
+            "importKind": null,
             "local": {
               "type": "Identifier",
               "start": 18,
@@ -132,7 +137,8 @@
                 "end": {
                   "line": 1,
                   "column": 21
-                }
+                },
+                "identifierName": "bar"
               },
               "name": "bar"
             }

@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 26
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -157,7 +158,8 @@
                                 "end": {
                                   "line": 1,
                                   "column": 16
-                                }
+                                },
+                                "identifierName": "x"
                               },
                               "name": "x"
                             },
@@ -189,7 +191,8 @@
                                   "end": {
                                     "line": 1,
                                     "column": 19
-                                  }
+                                  },
+                                  "identifierName": "T"
                                 },
                                 "name": "T"
                               }
@@ -226,7 +229,8 @@
                                   "column": 13
                                 }
                               },
-                              "name": "T"
+                              "name": "T",
+                              "variance": null
                             }
                           ]
                         },
@@ -257,12 +261,14 @@
                               "end": {
                                 "line": 1,
                                 "column": 23
-                              }
+                              },
+                              "identifierName": "T"
                             },
                             "name": "T"
                           }
                         }
                       },
+                      "static": false,
                       "key": {
                         "type": "Identifier",
                         "start": 9,
@@ -275,14 +281,16 @@
                           "end": {
                             "line": 1,
                             "column": 11
-                          }
+                          },
+                          "identifierName": "id"
                         },
                         "name": "id"
                       },
                       "optional": false
                     }
                   ],
-                  "indexers": []
+                  "indexers": [],
+                  "exact": false
                 }
               }
             },

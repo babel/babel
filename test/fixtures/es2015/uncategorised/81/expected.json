@@ -68,12 +68,14 @@
               "end": {
                 "line": 1,
                 "column": 25
-              }
+              },
+              "identifierName": "f"
             },
             "name": "f"
           },
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [],
           "body": {
             "type": "BlockStatement",
@@ -89,11 +91,12 @@
                 "column": 30
               }
             },
-            "body": []
+            "body": [],
+            "directives": []
           }
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

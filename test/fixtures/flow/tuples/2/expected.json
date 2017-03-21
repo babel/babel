@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 16
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -157,7 +158,8 @@
                                 "end": {
                                   "line": 1,
                                   "column": 14
-                                }
+                                },
+                                "identifierName": "T"
                               },
                               "name": "T"
                             }
@@ -176,7 +178,8 @@
                           "end": {
                             "line": 1,
                             "column": 12
-                          }
+                          },
+                          "identifierName": "Foo"
                         },
                         "name": "Foo"
                       }
@@ -212,7 +215,8 @@
                     "end": {
                       "line": 1,
                       "column": 23
-                    }
+                    },
+                    "identifierName": "foo"
                   },
                   "name": "foo"
                 }
@@ -222,7 +226,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 10
-            }
+            },
+            "identifierName": "f"
           },
           "name": "f"
         },
         "generator": false,
         "expression": false,
+        "async": false,
         "params": [
           {
             "type": "AssignmentPattern",
@@ -119,7 +121,8 @@
                       "end": {
                         "line": 1,
                         "column": 13
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
                   },
@@ -135,9 +138,13 @@
                       "end": {
                         "line": 1,
                         "column": 13
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 }
               ]
@@ -186,7 +193,8 @@
                       "end": {
                         "line": 1,
                         "column": 19
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
                   },

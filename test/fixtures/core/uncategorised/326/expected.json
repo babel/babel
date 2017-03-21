@@ -82,7 +82,8 @@
                 "end": {
                   "line": 1,
                   "column": 1
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a"
             },
@@ -98,7 +99,8 @@
                 "end": {
                   "line": 1,
                   "column": 4
-                }
+                },
+                "identifierName": "in"
               },
               "name": "in"
             },
@@ -117,12 +119,14 @@
               "end": {
                 "line": 1,
                 "column": 8
-              }
+              },
+              "identifierName": "b"
             },
             "name": "b"
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": true,
+          "async": false,
           "params": [
             {
               "type": "Identifier",
@@ -72,7 +73,8 @@
                 "end": {
                   "line": 1,
                   "column": 2
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a"
             },
@@ -88,7 +90,8 @@
                 "end": {
                   "line": 1,
                   "column": 4
-                }
+                },
+                "identifierName": "b"
               },
               "name": "b"
             },
@@ -118,7 +121,8 @@
                   "end": {
                     "line": 1,
                     "column": 9
-                  }
+                  },
+                  "identifierName": "c"
                 },
                 "name": "c"
               }

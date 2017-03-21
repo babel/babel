@@ -69,7 +69,8 @@
               "end": {
                 "line": 1,
                 "column": 1
-              }
+              },
+              "identifierName": "o"
             },
             "name": "o"
           },
@@ -117,7 +118,8 @@
                     "end": {
                       "line": 1,
                       "column": 7
-                    }
+                    },
+                    "identifierName": "f"
                   },
                   "name": "f"
                 },
@@ -138,6 +140,7 @@
                   "id": null,
                   "generator": false,
                   "expression": false,
+                  "async": false,
                   "params": [
                     {
                       "type": "Identifier",
@@ -151,7 +154,8 @@
                         "end": {
                           "line": 1,
                           "column": 19
-                        }
+                        },
+                        "identifierName": "a"
                       },
                       "name": "a"
                     },
@@ -181,7 +185,8 @@
                           "end": {
                             "line": 1,
                             "column": 25
-                          }
+                          },
+                          "identifierName": "b"
                         },
                         "name": "b"
                       }

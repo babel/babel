@@ -69,9 +69,11 @@
                 "end": {
                   "line": 3,
                   "column": 13
-                }
+                },
+                "identifierName": "spawn"
               },
-              "name": "spawn"
+              "name": "spawn",
+              "leadingComments": null
             },
             "local": {
               "type": "Identifier",
@@ -85,10 +87,12 @@
                 "end": {
                   "line": 3,
                   "column": 13
-                }
+                },
+                "identifierName": "spawn"
               },
               "name": "spawn"
-            }
+            },
+            "leadingComments": null
           }
         ],
         "source": {

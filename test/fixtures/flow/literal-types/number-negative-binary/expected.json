@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 17
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -87,7 +88,7 @@
                   }
                 },
                 "typeAnnotation": {
-                  "type": "NumericLiteralTypeAnnotation",
+                  "type": "NumberLiteralTypeAnnotation",
                   "start": 7,
                   "end": 17,
                   "loc": {
@@ -100,11 +101,11 @@
                       "column": 17
                     }
                   },
-                  "value": -123,
                   "extra": {
                     "rawValue": -123,
                     "raw": "-0b1111011"
-                  }
+                  },
+                  "value": -123
                 }
               }
             },

@@ -101,7 +101,8 @@
                       "end": {
                         "line": 1,
                         "column": 6
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
                   },
@@ -117,13 +118,17 @@
                       "end": {
                         "line": 1,
                         "column": 6
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 },
                 {
-                  "type": "RestProperty",
+                  "type": "RestElement",
                   "start": 8,
                   "end": 12,
                   "loc": {
@@ -148,7 +153,8 @@
                       "end": {
                         "line": 1,
                         "column": 12
-                      }
+                      },
+                      "identifierName": "y"
                     },
                     "name": "y"
                   }
@@ -167,7 +173,8 @@
                 "end": {
                   "line": 1,
                   "column": 17
-                }
+                },
+                "identifierName": "z"
               },
               "name": "z"
             }

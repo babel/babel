@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 11
-                }
+                },
+                "identifierName": "private"
               },
               "name": "private"
             },
@@ -101,7 +102,8 @@
                 "end": {
                   "line": 1,
                   "column": 22
-                }
+                },
+                "identifierName": "protected"
               },
               "name": "protected"
             },
@@ -133,7 +135,8 @@
                 "end": {
                   "line": 1,
                   "column": 30
-                }
+                },
+                "identifierName": "public"
               },
               "name": "public"
             },
@@ -165,7 +168,8 @@
                 "end": {
                   "line": 1,
                   "column": 38
-                }
+                },
+                "identifierName": "static"
               },
               "name": "static"
             },
@@ -174,6 +178,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

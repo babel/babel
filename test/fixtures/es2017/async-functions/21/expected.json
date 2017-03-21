@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [],
           "body": {
             "type": "BlockStatement",
@@ -116,7 +117,8 @@
                         "end": {
                           "line": 1,
                           "column": 23
-                        }
+                        },
+                        "identifierName": "async"
                       },
                       "name": "async"
                     },
@@ -166,7 +168,8 @@
                       "end": {
                         "line": 1,
                         "column": 30
-                      }
+                      },
+                      "identifierName": "async"
                     },
                     "name": "async"
                   },
@@ -196,7 +199,8 @@
             "directives": []
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

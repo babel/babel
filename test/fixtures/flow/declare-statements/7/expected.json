@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 26
-            }
+            },
+            "identifierName": "IViewFactory"
           },
           "name": "IViewFactory"
         },
         "typeParameters": null,
         "extends": [],
+        "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
           "start": 27,
@@ -131,7 +133,8 @@
                         "end": {
                           "line": 1,
                           "column": 44
-                        }
+                        },
+                        "identifierName": "view"
                       },
                       "name": "view"
                     },
@@ -163,7 +166,8 @@
                           "end": {
                             "line": 1,
                             "column": 51
-                          }
+                          },
+                          "identifierName": "Object"
                         },
                         "name": "Object"
                       }
@@ -195,7 +199,8 @@
                         "end": {
                           "line": 1,
                           "column": 57
-                        }
+                        },
+                        "identifierName": "prop"
                       },
                       "name": "prop"
                     },
@@ -235,6 +240,7 @@
                   }
                 }
               },
+              "static": false,
               "key": {
                 "type": "Identifier",
                 "start": 29,
@@ -247,17 +253,19 @@
                   "end": {
                     "line": 1,
                     "column": 39
-                  }
+                  },
+                  "identifierName": "didAnimate"
                 },
                 "name": "didAnimate"
               },
               "optional": false
             }
           ],
-          "indexers": []
+          "indexers": [],
+          "exact": false
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

@@ -100,7 +100,8 @@
                   "end": {
                     "line": 1,
                     "column": 16
-                  }
+                  },
+                  "identifierName": "a"
                 },
                 "name": "a"
               },
@@ -116,7 +117,8 @@
                   "end": {
                     "line": 1,
                     "column": 18
-                  }
+                  },
+                  "identifierName": "b"
                 },
                 "name": "b"
               },
@@ -164,7 +166,8 @@
                         "end": {
                           "line": 1,
                           "column": 22
-                        }
+                        },
+                        "identifierName": "c"
                       },
                       "name": "c"
                     },
@@ -180,9 +183,13 @@
                         "end": {
                           "line": 1,
                           "column": 22
-                        }
+                        },
+                        "identifierName": "c"
                       },
                       "name": "c"
+                    },
+                    "extra": {
+                      "shorthand": true
                     }
                   },
                   {
@@ -214,7 +221,8 @@
                         "end": {
                           "line": 1,
                           "column": 25
-                        }
+                        },
+                        "identifierName": "d"
                       },
                       "name": "d"
                     },
@@ -244,7 +252,8 @@
                           "end": {
                             "line": 1,
                             "column": 27
-                          }
+                          },
+                          "identifierName": "e"
                         },
                         "name": "e"
                       },
@@ -299,7 +308,8 @@
                         "end": {
                           "line": 1,
                           "column": 33
-                        }
+                        },
+                        "identifierName": "f"
                       },
                       "name": "f"
                     },
@@ -329,7 +339,8 @@
                           "end": {
                             "line": 1,
                             "column": 36
-                          }
+                          },
+                          "identifierName": "g"
                         },
                         "name": "g"
                       },
@@ -384,7 +395,8 @@
                         "end": {
                           "line": 1,
                           "column": 41
-                        }
+                        },
+                        "identifierName": "h"
                       },
                       "name": "h"
                     },
@@ -414,7 +426,8 @@
                           "end": {
                             "line": 1,
                             "column": 41
-                          }
+                          },
+                          "identifierName": "h"
                         },
                         "name": "h"
                       },
@@ -430,10 +443,14 @@
                           "end": {
                             "line": 1,
                             "column": 43
-                          }
+                          },
+                          "identifierName": "i"
                         },
                         "name": "i"
                       }
+                    },
+                    "extra": {
+                      "shorthand": true
                     }
                   }
                 ]

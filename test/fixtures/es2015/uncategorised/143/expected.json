@@ -86,7 +86,8 @@
                   "end": {
                     "line": 1,
                     "column": 4
-                  }
+                  },
+                  "identifierName": "x"
                 },
                 "name": "x"
               },
@@ -107,6 +108,7 @@
                 "id": null,
                 "generator": false,
                 "expression": false,
+                "async": false,
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
@@ -129,7 +131,8 @@
             }
           ],
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

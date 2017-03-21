@@ -84,7 +84,8 @@
                   "end": {
                     "line": 1,
                     "column": 7
-                  }
+                  },
+                  "identifierName": "yield"
                 },
                 "name": "yield"
               }
@@ -102,12 +103,14 @@
               "end": {
                 "line": 1,
                 "column": 12
-              }
+              },
+              "identifierName": "x"
             },
             "name": "x"
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

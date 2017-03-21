@@ -68,13 +68,15 @@
               "end": {
                 "line": 1,
                 "column": 10
-              }
+              },
+              "identifierName": "Button"
             },
             "name": "Button"
           },
           "arguments": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

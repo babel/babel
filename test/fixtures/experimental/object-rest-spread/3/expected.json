@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": false,
+          "async": false,
           "params": [
             {
               "type": "ObjectPattern",
@@ -104,7 +105,8 @@
                       "end": {
                         "line": 1,
                         "column": 12
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
                   },
@@ -120,13 +122,17 @@
                       "end": {
                         "line": 1,
                         "column": 12
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 },
                 {
-                  "type": "RestProperty",
+                  "type": "RestElement",
                   "start": 14,
                   "end": 18,
                   "loc": {
@@ -151,7 +157,8 @@
                       "end": {
                         "line": 1,
                         "column": 18
-                      }
+                      },
+                      "identifierName": "y"
                     },
                     "name": "y"
                   }
@@ -177,7 +184,8 @@
             "directives": []
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

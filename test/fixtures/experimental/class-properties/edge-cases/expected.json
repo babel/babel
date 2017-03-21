@@ -1335,7 +1335,6 @@
                 }
               },
               "static": false,
-              "kind": "get",
               "computed": true,
               "key": {
                 "type": "StringLiteral",
@@ -1357,6 +1356,7 @@
                 },
                 "value": "a"
               },
+              "kind": "get",
               "id": null,
               "generator": false,
               "expression": false,
@@ -1445,7 +1445,6 @@
                 }
               },
               "static": true,
-              "kind": "get",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -1464,6 +1463,7 @@
                 },
                 "name": "static"
               },
+              "kind": "get",
               "id": null,
               "generator": false,
               "expression": false,

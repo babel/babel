@@ -111,12 +111,14 @@
                     "end": {
                       "line": 1,
                       "column": 36
-                    }
+                    },
+                    "identifierName": "ReturnType"
                   },
                   "name": "ReturnType"
                 }
               }
-            }
+            },
+            "predicate": null
           },
           "id": null,
           "generator": false,
@@ -149,7 +151,8 @@
                   "end": {
                     "line": 1,
                     "column": 10
-                  }
+                  },
+                  "identifierName": "props"
                 },
                 "name": "props"
               },
@@ -194,7 +197,8 @@
                       "end": {
                         "line": 1,
                         "column": 20
-                      }
+                      },
+                      "identifierName": "SomeType"
                     },
                     "name": "SomeType"
                   }

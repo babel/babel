@@ -597,11 +597,11 @@
               "column": 11
             }
           },
-          "value": "",
           "extra": {
             "rawValue": "",
             "raw": "\"\""
-          }
+          },
+          "value": ""
         }
       },
       {
@@ -637,7 +637,7 @@
         },
         "typeParameters": null,
         "right": {
-          "type": "NumericLiteralTypeAnnotation",
+          "type": "NumberLiteralTypeAnnotation",
           "start": 215,
           "end": 216,
           "loc": {
@@ -650,11 +650,11 @@
               "column": 10
             }
           },
-          "value": 0,
           "extra": {
             "rawValue": 0,
             "raw": "0"
-          }
+          },
+          "value": 0
         }
       },
       {

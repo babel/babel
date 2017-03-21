@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 9
-            }
+            },
+            "identifierName": "Foo"
           },
           "name": "Foo"
         },
@@ -88,6 +89,7 @@
                   "column": 3
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -101,11 +103,11 @@
                   "end": {
                     "line": 2,
                     "column": 5
-                  }
+                  },
+                  "identifierName": "foo"
                 },
                 "name": "foo"
               },
-              "static": false,
               "kind": "method",
               "id": null,
               "generator": false,
@@ -217,7 +219,8 @@
                                 "end": {
                                   "line": 4,
                                   "column": 22
-                                }
+                                },
+                                "identifierName": "MatrixType"
                               },
                               "name": "MatrixType"
                             },
@@ -233,7 +236,8 @@
                                 "end": {
                                   "line": 4,
                                   "column": 32
-                                }
+                                },
+                                "identifierName": "IsScaling"
                               },
                               "name": "IsScaling"
                             },
@@ -266,7 +270,8 @@
                                 "end": {
                                   "line": 4,
                                   "column": 45
-                                }
+                                },
+                                "identifierName": "MatrixType"
                               },
                               "name": "MatrixType"
                             },
@@ -282,14 +287,16 @@
                                 "end": {
                                   "line": 4,
                                   "column": 59
-                                }
+                                },
+                                "identifierName": "IsTranslation"
                               },
                               "name": "IsTranslation"
                             },
                             "computed": false
                           },
                           "extra": {
-                            "parenthesized": true
+                            "parenthesized": true,
+                            "parenStart": 50
                           }
                         }
                       }
@@ -313,6 +320,7 @@
                   "column": 3
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -326,11 +334,11 @@
                   "end": {
                     "line": 8,
                     "column": 5
-                  }
+                  },
+                  "identifierName": "bar"
                 },
                 "name": "bar"
               },
-              "static": false,
               "kind": "method",
               "id": null,
               "generator": false,
@@ -406,7 +414,8 @@
                             "end": {
                               "line": 9,
                               "column": 18
-                            }
+                            },
+                            "identifierName": "typeA"
                           },
                           "name": "typeA"
                         },
@@ -432,7 +441,8 @@
                           "value": 4
                         },
                         "extra": {
-                          "parenthesized": true
+                          "parenthesized": true,
+                          "parenStart": 134
                         }
                       },
                       "operator": "|",
@@ -448,7 +458,8 @@
                           "end": {
                             "line": 9,
                             "column": 32
-                          }
+                          },
+                          "identifierName": "typeB"
                         },
                         "name": "typeB"
                       }

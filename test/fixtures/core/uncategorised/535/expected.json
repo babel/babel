@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 7
-                }
+                },
+                "identifierName": "x"
               },
               "name": "x"
             },
@@ -120,7 +121,8 @@
                 "end": {
                   "line": 1,
                   "column": 15
-                }
+                },
+                "identifierName": "y"
               },
               "name": "y"
             },
@@ -171,7 +173,8 @@
                 "end": {
                   "line": 1,
                   "column": 22
-                }
+                },
+                "identifierName": "z"
               },
               "name": "z"
             },

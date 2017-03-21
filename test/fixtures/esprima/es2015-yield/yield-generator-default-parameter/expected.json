@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 11
-            }
+            },
+            "identifierName": "g"
           },
           "name": "g"
         },
         "generator": true,
         "expression": false,
+        "async": false,
         "params": [
           {
             "type": "AssignmentPattern",
@@ -87,7 +89,8 @@
                 "end": {
                   "line": 1,
                   "column": 13
-                }
+                },
+                "identifierName": "x"
               },
               "name": "x"
             },
@@ -103,7 +106,8 @@
                 "end": {
                   "line": 1,
                   "column": 21
-                }
+                },
+                "identifierName": "yield"
               },
               "name": "yield"
             }
@@ -123,9 +127,11 @@
               "column": 24
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

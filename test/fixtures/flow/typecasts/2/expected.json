@@ -100,7 +100,8 @@
                     "end": {
                       "line": 1,
                       "column": 5
-                    }
+                    },
+                    "identifierName": "xxx"
                   },
                   "name": "xxx"
                 },
@@ -154,7 +155,8 @@
                     "end": {
                       "line": 1,
                       "column": 13
-                    }
+                    },
+                    "identifierName": "yyy"
                   },
                   "name": "yyy"
                 },
@@ -237,7 +239,8 @@
                       "end": {
                         "line": 1,
                         "column": 27
-                      }
+                      },
+                      "identifierName": "xxx"
                     },
                     "name": "xxx"
                   },
@@ -257,6 +260,7 @@
                     }
                   },
                   "optional": false,
+                  "static": false,
                   "variance": null
                 },
                 {
@@ -285,7 +289,8 @@
                       "end": {
                         "line": 1,
                         "column": 40
-                      }
+                      },
+                      "identifierName": "yyy"
                     },
                     "name": "yyy"
                   },
@@ -305,14 +310,17 @@
                     }
                   },
                   "optional": false,
+                  "static": false,
                   "variance": null
                 }
               ],
-              "indexers": []
+              "indexers": [],
+              "exact": false
             }
           },
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

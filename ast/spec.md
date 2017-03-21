@@ -1,6 +1,7 @@
 These are the core Babylon AST node types.
 
 - [Node objects](#node-objects)
+- [Changes](#changes)
 - [Identifier](#identifier)
 - [Literals](#literals)
   - [RegExpLiteral](#regexpliteral)
@@ -35,7 +36,6 @@ These are the core Babylon AST node types.
     - [ForStatement](#forstatement)
     - [ForInStatement](#forinstatement)
     - [ForOfStatement](#forofstatement)
-    - [ForAwaitStatement](#forawaitstatement)
 - [Declarations](#declarations)
   - [FunctionDeclaration](#functiondeclaration)
   - [VariableDeclaration](#variabledeclaration)
@@ -56,8 +56,6 @@ These are the core Babylon AST node types.
     - [ObjectMember](#objectmember)
       - [ObjectProperty](#objectproperty)
       - [ObjectMethod](#objectmethod)
-  - [RestProperty](#restproperty)
-  - [SpreadProperty](#spreadproperty)
   - [FunctionExpression](#functionexpression)
   - [Unary operations](#unary-operations)
     - [UnaryExpression](#unaryexpression)
@@ -140,6 +138,22 @@ interface Position {
   column: number; // >= 0
 }
 ```
+
+# Changes
+
+### Babylon 7
+
+Flow: Node renamed from `ExistentialTypeParam` to `ExistsTypeAnnotation` [#322](https://github.com/babel/babylon/pull/322)
+  
+Flow: Node renamed from `NumericLiteralTypeAnnotation` to `NumberLiteralTypeAnnotation` [babel/babylon#332](https://github.com/babel/babylon/pull/332)
+  
+Flow: Node `Variance` which replaces the string value of the `variance` field on several nodes [babel/babylon#333](https://github.com/babel/babylon/pull/333)
+
+Flow: `ObjectTypeIndexer` location info matches Flow's better [babel/babylon#228](https://github.com/babel/babylon/pull/228)
+  
+Node `ForAwaitStatement` has been removed [#349](https://github.com/babel/babylon/pull/349) in favor of modifying `ForOfStatement`
+
+`RestProperty` and `SpreadProperty` have been dropped in favor of `RestElement` and `SpreadElement`.
 
 # Identifier
 
@@ -479,16 +493,7 @@ A `for`/`in` statement.
 ```js
 interface ForOfStatement <: ForInStatement {
   type: "ForOfStatement";
-}
-```
-
-A `for`/`await` statement.
-
-## ForAwaitStatement
-
-```js
-interface ForAwaitStatement <: ForInStatement {
-  type: "ForAwaitStatement";
+  await: boolean;
 }
 ```
 
@@ -652,7 +657,7 @@ An array expression.
 ```js
 interface ObjectExpression <: Expression {
   type: "ObjectExpression";
-  properties: [ ObjectProperty | ObjectMethod | SpreadProperty ];
+  properties: [ ObjectProperty | ObjectMethod | SpreadElement ];
 }
 ```
 
@@ -664,7 +669,6 @@ An object expression.
 interface ObjectMember <: Node {
   key: Expression;
   computed: boolean;
-  value: Expression;
   decorators: [ Decorator ];
 }
 ```
@@ -675,6 +679,7 @@ interface ObjectMember <: Node {
 interface ObjectProperty <: ObjectMember {
   type: "ObjectProperty";
   shorthand: boolean;
+  value: Expression;
 }
 ```
 
@@ -684,24 +689,6 @@ interface ObjectProperty <: ObjectMember {
 interface ObjectMethod <: ObjectMember, Function {
   type: "ObjectMethod";
   kind: "get" | "set" | "method";
-}
-```
-
-## RestProperty
-
-```js
-interface RestProperty <: Node {
-    type: "RestProperty";
-    argument: Expression;
-}
-```
-
-## SpreadProperty
-
-```js
-interface SpreadProperty <: Node {
-    type: "SpreadProperty";
-    argument: Expression;
 }
 ```
 
@@ -980,7 +967,7 @@ interface AssignmentProperty <: ObjectProperty {
 
 interface ObjectPattern <: Pattern {
   type: "ObjectPattern";
-  properties: [ AssignmentProperty | RestProperty ];
+  properties: [ AssignmentProperty | RestElement ];
 }
 ```
 
@@ -1035,10 +1022,9 @@ interface ClassBody <: Node {
 ## ClassMethod
 
 ```js
-interface ClassMethod <: Node {
+interface ClassMethod <: Function {
   type: "ClassMethod";
   key: Expression;
-  value: FunctionExpression;
   kind: "constructor" | "method" | "get" | "set";
   computed: boolean;
   static: boolean;

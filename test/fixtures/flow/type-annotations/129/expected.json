@@ -103,7 +103,7 @@
                   },
                   "types": [
                     {
-                      "type": "NumericLiteralTypeAnnotation",
+                      "type": "NumberLiteralTypeAnnotation",
                       "start": 10,
                       "end": 11,
                       "loc": {
@@ -116,14 +116,14 @@
                           "column": 4
                         }
                       },
-                      "value": 1,
                       "extra": {
                         "rawValue": 1,
                         "raw": "1"
-                      }
+                      },
+                      "value": 1
                     },
                     {
-                      "type": "NumericLiteralTypeAnnotation",
+                      "type": "NumberLiteralTypeAnnotation",
                       "start": 15,
                       "end": 16,
                       "loc": {
@@ -136,11 +136,11 @@
                           "column": 4
                         }
                       },
-                      "value": 2,
                       "extra": {
                         "rawValue": 2,
                         "raw": "2"
-                      }
+                      },
+                      "value": 2
                     }
                   ]
                 }

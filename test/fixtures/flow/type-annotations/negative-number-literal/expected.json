@@ -76,7 +76,7 @@
           },
           "types": [
             {
-              "type": "NumericLiteralTypeAnnotation",
+              "type": "NumberLiteralTypeAnnotation",
               "start": 45,
               "end": 47,
               "loc": {
@@ -89,14 +89,14 @@
                   "column": 6
                 }
               },
-              "value": -1,
               "extra": {
                 "rawValue": -1,
                 "raw": "-1"
-              }
+              },
+              "value": -1
             },
             {
-              "type": "NumericLiteralTypeAnnotation",
+              "type": "NumberLiteralTypeAnnotation",
               "start": 52,
               "end": 53,
               "loc": {
@@ -109,14 +109,14 @@
                   "column": 5
                 }
               },
-              "value": 0,
               "extra": {
                 "rawValue": 0,
                 "raw": "0"
-              }
+              },
+              "value": 0
             },
             {
-              "type": "NumericLiteralTypeAnnotation",
+              "type": "NumberLiteralTypeAnnotation",
               "start": 58,
               "end": 59,
               "loc": {
@@ -129,11 +129,11 @@
                   "column": 5
                 }
               },
-              "value": 1,
               "extra": {
                 "rawValue": 1,
                 "raw": "1"
-              }
+              },
+              "value": 1
             }
           ]
         },

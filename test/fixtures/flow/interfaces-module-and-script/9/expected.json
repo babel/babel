@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 9
-            }
+            },
+            "identifierName": "Foo"
           },
           "name": "Foo"
         },
@@ -84,7 +85,8 @@
               "end": {
                 "line": 1,
                 "column": 27
-              }
+              },
+              "identifierName": "Bar"
             },
             "name": "Bar"
           },
@@ -116,7 +118,8 @@
                   "end": {
                     "line": 1,
                     "column": 42
-                  }
+                  },
+                  "identifierName": "Bat"
                 },
                 "name": "Bat"
               },
@@ -167,7 +170,8 @@
                 "end": {
                   "line": 1,
                   "column": 60
-                }
+                },
+                "identifierName": "Man"
               },
               "name": "Man"
             },
@@ -191,7 +195,7 @@
           "body": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

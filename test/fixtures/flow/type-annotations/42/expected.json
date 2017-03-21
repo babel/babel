@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 48
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -157,7 +158,8 @@
                                 "end": {
                                   "line": 1,
                                   "column": 13
-                                }
+                                },
+                                "identifierName": "x"
                               },
                               "name": "x"
                             },
@@ -205,7 +207,8 @@
                               "end": {
                                 "line": 1,
                                 "column": 26
-                              }
+                              },
+                              "identifierName": "y"
                             },
                             "name": "y"
                           },
@@ -268,7 +271,8 @@
                                 "end": {
                                   "line": 1,
                                   "column": 32
-                                }
+                                },
+                                "identifierName": "Array"
                               },
                               "name": "Array"
                             }
@@ -291,6 +295,7 @@
                           }
                         }
                       },
+                      "static": false,
                       "key": {
                         "type": "Identifier",
                         "start": 8,
@@ -303,14 +308,16 @@
                           "end": {
                             "line": 1,
                             "column": 11
-                          }
+                          },
+                          "identifierName": "add"
                         },
                         "name": "add"
                       },
                       "optional": false
                     }
                   ],
-                  "indexers": []
+                  "indexers": [],
+                  "exact": false
                 }
               }
             },
@@ -319,7 +326,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

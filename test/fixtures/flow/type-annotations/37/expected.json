@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 33
-                }
+                },
+                "identifierName": "a"
               },
               "name": "a",
               "typeAnnotation": {
@@ -128,7 +129,8 @@
                           "end": {
                             "line": 1,
                             "column": 14
-                          }
+                          },
+                          "identifierName": "subObj"
                         },
                         "name": "subObj"
                       },
@@ -174,7 +176,8 @@
                                 "end": {
                                   "line": 1,
                                   "column": 23
-                                }
+                                },
+                                "identifierName": "strVal"
                               },
                               "name": "strVal"
                             },
@@ -194,16 +197,20 @@
                               }
                             },
                             "optional": false,
+                            "static": false,
                             "variance": null
                           }
                         ],
-                        "indexers": []
+                        "indexers": [],
+                        "exact": false
                       },
                       "optional": false,
+                      "static": false,
                       "variance": null
                     }
                   ],
-                  "indexers": []
+                  "indexers": [],
+                  "exact": false
                 }
               }
             },
@@ -212,7 +219,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

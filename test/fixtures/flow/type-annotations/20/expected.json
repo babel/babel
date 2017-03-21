@@ -69,7 +69,8 @@
               "end": {
                 "line": 1,
                 "column": 1
-              }
+              },
+              "identifierName": "a"
             },
             "name": "a"
           },
@@ -117,11 +118,13 @@
                     "end": {
                       "line": 1,
                       "column": 14
-                    }
+                    },
+                    "identifierName": "fooProp"
                   },
                   "name": "fooProp"
                 },
                 "kind": "set",
+                "variance": null,
                 "id": null,
                 "generator": false,
                 "expression": false,
@@ -139,7 +142,8 @@
                       "end": {
                         "line": 1,
                         "column": 27
-                      }
+                      },
+                      "identifierName": "value"
                     },
                     "name": "value",
                     "typeAnnotation": {

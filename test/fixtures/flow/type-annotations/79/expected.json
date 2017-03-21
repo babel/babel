@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 7
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             },
@@ -99,7 +100,8 @@
                   "end": {
                     "line": 1,
                     "column": 13
-                  }
+                  },
+                  "identifierName": "bar"
                 },
                 "name": "bar"
               },
@@ -116,44 +118,6 @@
                     "line": 1,
                     "column": 36
                   }
-                },
-                "id": null,
-                "generator": false,
-                "expression": false,
-                "params": [
-                  {
-                    "type": "Identifier",
-                    "start": 17,
-                    "end": 20,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 17
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 20
-                      }
-                    },
-                    "name": "foo"
-                  }
-                ],
-                "body": {
-                  "type": "BlockStatement",
-                  "start": 34,
-                  "end": 36,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 34
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 36
-                    }
-                  },
-                  "body": [],
-                  "directives": []
                 },
                 "returnType": {
                   "type": "TypeAnnotation",
@@ -183,7 +147,48 @@
                         "column": 30
                       }
                     }
+                  },
+                  "predicate": null
+                },
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 17,
+                    "end": 20,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 17
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 20
+                      },
+                      "identifierName": "foo"
+                    },
+                    "name": "foo"
                   }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 34,
+                  "end": 36,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 34
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 36
+                    }
+                  },
+                  "body": [],
+                  "directives": []
                 }
               },
               "alternate": {
@@ -198,7 +203,8 @@
                   "end": {
                     "line": 1,
                     "column": 42
-                  }
+                  },
+                  "identifierName": "baz"
                 },
                 "name": "baz"
               }

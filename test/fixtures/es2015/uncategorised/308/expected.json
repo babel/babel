@@ -59,6 +59,7 @@
           "id": null,
           "generator": false,
           "expression": true,
+          "async": false,
           "params": [
             {
               "type": "ObjectPattern",
@@ -104,7 +105,8 @@
                       "end": {
                         "line": 1,
                         "column": 3
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
                   },
@@ -134,7 +136,8 @@
                         "end": {
                           "line": 1,
                           "column": 3
-                        }
+                        },
+                        "identifierName": "x"
                       },
                       "name": "x"
                     },
@@ -158,6 +161,9 @@
                       },
                       "value": 0
                     }
+                  },
+                  "extra": {
+                    "shorthand": true
                   }
                 }
               ]
@@ -175,7 +181,8 @@
               "end": {
                 "line": 1,
                 "column": 14
-              }
+              },
+              "identifierName": "x"
             },
             "name": "x"
           }

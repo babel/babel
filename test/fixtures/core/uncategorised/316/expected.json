@@ -27,6 +27,7 @@
       }
     },
     "sourceType": "script",
-    "body": []
+    "body": [],
+    "directives": []
   }
 }

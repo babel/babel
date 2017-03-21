@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 11
-                }
+                },
+                "identifierName": "type"
               },
               "name": "type"
             }
@@ -100,10 +101,12 @@
                 "end": {
                   "line": 1,
                   "column": 17
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             },
+            "importKind": null,
             "local": {
               "type": "Identifier",
               "start": 14,
@@ -116,7 +119,8 @@
                 "end": {
                   "line": 1,
                   "column": 17
-                }
+                },
+                "identifierName": "foo"
               },
               "name": "foo"
             }

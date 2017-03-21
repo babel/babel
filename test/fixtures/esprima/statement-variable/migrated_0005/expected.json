@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 14
-                }
+                },
+                "identifierName": "implements"
               },
               "name": "implements"
             },
@@ -101,7 +102,8 @@
                 "end": {
                   "line": 1,
                   "column": 25
-                }
+                },
+                "identifierName": "interface"
               },
               "name": "interface"
             },
@@ -133,7 +135,8 @@
                 "end": {
                   "line": 1,
                   "column": 34
-                }
+                },
+                "identifierName": "package"
               },
               "name": "package"
             },
@@ -142,6 +145,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

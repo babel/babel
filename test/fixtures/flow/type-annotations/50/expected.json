@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 9
-            }
+            },
+            "identifierName": "Foo"
           },
           "name": "Foo"
         },
@@ -87,7 +88,8 @@
                   "column": 11
                 }
               },
-              "name": "T"
+              "name": "T",
+              "variance": null
             }
           ]
         },
@@ -121,6 +123,7 @@
                   "column": 45
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -134,11 +137,11 @@
                   "end": {
                     "line": 1,
                     "column": 18
-                  }
+                  },
+                  "identifierName": "bar"
                 },
                 "name": "bar"
               },
-              "static": false,
               "kind": "method",
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
@@ -169,7 +172,8 @@
                         "column": 20
                       }
                     },
-                    "name": "U"
+                    "name": "U",
+                    "variance": null
                   }
                 ]
               },
@@ -206,7 +210,8 @@
                       "column": 30
                     }
                   }
-                }
+                },
+                "predicate": null
               },
               "body": {
                 "type": "BlockStatement",

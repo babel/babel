@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 7
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -88,6 +89,7 @@
                   "column": 26
                 }
               },
+              "static": true,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -101,15 +103,16 @@
                   "end": {
                     "line": 1,
                     "column": 22
-                  }
+                  },
+                  "identifierName": "static"
                 },
                 "name": "static"
               },
-              "static": true,
               "kind": "method",
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",

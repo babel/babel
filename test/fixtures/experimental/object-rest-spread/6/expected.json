@@ -113,7 +113,7 @@
               }
             },
             {
-              "type": "SpreadProperty",
+              "type": "SpreadElement",
               "start": 5,
               "end": 9,
               "loc": {
@@ -200,7 +200,7 @@
               }
             },
             {
-              "type": "SpreadProperty",
+              "type": "SpreadElement",
               "start": 14,
               "end": 18,
               "loc": {

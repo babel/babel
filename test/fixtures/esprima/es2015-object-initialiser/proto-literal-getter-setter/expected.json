@@ -139,7 +139,8 @@
                   "end": {
                     "line": 1,
                     "column": 35
-                  }
+                  },
+                  "identifierName": "__proto__"
                 },
                 "name": "__proto__"
               },
@@ -147,6 +148,7 @@
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",
@@ -195,7 +197,8 @@
                   "end": {
                     "line": 1,
                     "column": 54
-                  }
+                  },
+                  "identifierName": "__proto__"
                 },
                 "name": "__proto__"
               },
@@ -203,6 +206,7 @@
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [
                 {
                   "type": "Identifier",
@@ -216,7 +220,8 @@
                     "end": {
                       "line": 1,
                       "column": 56
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x"
                 }
@@ -241,7 +246,8 @@
             }
           ],
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

@@ -156,6 +156,7 @@
                   }
                 }
               ],
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -174,7 +175,6 @@
                 },
                 "name": "a"
               },
-              "static": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 28,

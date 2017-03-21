@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 5
-                }
+                },
+                "identifierName": "z"
               },
               "name": "z"
             },
@@ -89,7 +90,7 @@
               },
               "properties": [
                 {
-                  "type": "SpreadProperty",
+                  "type": "SpreadElement",
                   "start": 9,
                   "end": 13,
                   "loc": {
@@ -114,7 +115,8 @@
                       "end": {
                         "line": 1,
                         "column": 13
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
                   }
@@ -125,6 +127,7 @@
         ],
         "kind": "let"
       }
-    ]
+    ],
+    "directives": []
   }
 }

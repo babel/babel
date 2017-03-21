@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 9
-                }
+                },
+                "identifierName": "yield"
               },
               "name": "yield"
             },
@@ -78,6 +79,7 @@
         ],
         "kind": "var"
       }
-    ]
+    ],
+    "directives": []
   }
 }

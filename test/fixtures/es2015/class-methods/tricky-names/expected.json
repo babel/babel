@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "kind": "method",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -109,6 +108,7 @@
                 },
                 "name": "get"
               },
+              "kind": "method",
               "id": null,
               "generator": false,
               "expression": false,
@@ -147,7 +147,6 @@
                 }
               },
               "static": false,
-              "kind": "method",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -166,6 +165,7 @@
                 },
                 "name": "set"
               },
+              "kind": "method",
               "id": null,
               "generator": false,
               "expression": false,
@@ -261,7 +261,6 @@
                 }
               },
               "static": false,
-              "kind": "method",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -280,6 +279,7 @@
                 },
                 "name": "async"
               },
+              "kind": "method",
               "id": null,
               "generator": false,
               "expression": false,
@@ -318,7 +318,6 @@
                 }
               },
               "static": true,
-              "kind": "method",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -337,6 +336,7 @@
                 },
                 "name": "get"
               },
+              "kind": "method",
               "id": null,
               "generator": false,
               "expression": false,
@@ -375,7 +375,6 @@
                 }
               },
               "static": true,
-              "kind": "method",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -394,6 +393,7 @@
                 },
                 "name": "set"
               },
+              "kind": "method",
               "id": null,
               "generator": false,
               "expression": false,
@@ -489,7 +489,6 @@
                 }
               },
               "static": true,
-              "kind": "method",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -508,6 +507,7 @@
                 },
                 "name": "async"
               },
+              "kind": "method",
               "id": null,
               "generator": false,
               "expression": false,
@@ -603,7 +603,6 @@
                 }
               },
               "static": false,
-              "kind": "get",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -622,6 +621,7 @@
                 },
                 "name": "async"
               },
+              "kind": "get",
               "id": null,
               "generator": false,
               "expression": false,
@@ -660,7 +660,6 @@
                 }
               },
               "static": true,
-              "kind": "get",
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -679,6 +678,7 @@
                 },
                 "name": "static"
               },
+              "kind": "get",
               "id": null,
               "generator": false,
               "expression": false,

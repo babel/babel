@@ -106,7 +106,8 @@
             "closingElement": null,
             "children": [],
             "extra": {
-              "parenthesized": true
+              "parenthesized": true,
+              "parenStart": 0
             }
           },
           "operator": "<",
@@ -122,7 +123,8 @@
               "end": {
                 "line": 1,
                 "column": 13
-              }
+              },
+              "identifierName": "x"
             },
             "name": "x"
           }

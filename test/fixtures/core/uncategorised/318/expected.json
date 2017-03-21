@@ -73,6 +73,7 @@
             "id": null,
             "generator": false,
             "expression": false,
+            "async": false,
             "params": [],
             "body": {
               "type": "BlockStatement",
@@ -165,7 +166,8 @@
           },
           "arguments": [],
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

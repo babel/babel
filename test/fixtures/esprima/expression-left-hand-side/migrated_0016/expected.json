@@ -82,7 +82,8 @@
                 "end": {
                   "line": 1,
                   "column": 8
-                }
+                },
+                "identifierName": "universe"
               },
               "name": "universe"
             },
@@ -121,7 +122,8 @@
               "end": {
                 "line": 1,
                 "column": 21
-              }
+              },
+              "identifierName": "galaxies"
             },
             "name": "galaxies"
           },

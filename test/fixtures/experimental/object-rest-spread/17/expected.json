@@ -73,7 +73,7 @@
               },
               "properties": [
                 {
-                  "type": "RestProperty",
+                  "type": "RestElement",
                   "start": 6,
                   "end": 18,
                   "loc": {

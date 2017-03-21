@@ -84,7 +84,8 @@
                     "end": {
                       "line": 1,
                       "column": 5
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x"
                 }
@@ -173,6 +174,7 @@
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

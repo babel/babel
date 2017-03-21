@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 24
-                }
+                },
+                "identifierName": "x"
               },
               "name": "x",
               "typeAnnotation": {
@@ -142,7 +143,8 @@
                             "end": {
                               "line": 1,
                               "column": 15
-                            }
+                            },
+                            "identifierName": "Y"
                           },
                           "name": "Y"
                         }
@@ -179,7 +181,8 @@
                 "end": {
                   "line": 1,
                   "column": 28
-                }
+                },
+                "identifierName": "Y"
               },
               "name": "Y"
             }
@@ -187,7 +190,7 @@
         ],
         "kind": "var"
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

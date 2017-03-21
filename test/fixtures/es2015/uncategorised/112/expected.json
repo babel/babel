@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 7
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -84,7 +85,8 @@
               "end": {
                 "line": 1,
                 "column": 23
-              }
+              },
+              "identifierName": "B"
             },
             "name": "B"
           },
@@ -100,7 +102,8 @@
               "end": {
                 "line": 1,
                 "column": 33
-              }
+              },
+              "identifierName": "C"
             },
             "name": "C"
           },
@@ -138,7 +141,7 @@
           "body": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

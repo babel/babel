@@ -752,7 +752,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
 
     if (this.hasPlugin("objectRestSpread") && this.match(tt.ellipsis)) {
       prop = this.parseSpread(isPattern ? { start: 0 } : undefined);
-      prop.type = isPattern ? "RestProperty" : "SpreadProperty";
+      prop.type = isPattern ? "RestElement" : "SpreadElement";
       if (isPattern) this.toAssignable(prop.argument, true, "object pattern");
       node.properties.push(prop);
       if (isPattern) {
@@ -762,9 +762,7 @@ pp.parseObj = function (isPattern, refShorthandDefaultPos) {
         } else if (this.eat(tt.braceR)) {
           break;
         } else if (this.match(tt.comma) && this.lookahead().type === tt.braceR) {
-          // TODO: temporary rollback
-          // this.unexpected(position, "A trailing comma is not permitted after the rest element");
-          continue;
+          this.unexpected(position, "A trailing comma is not permitted after the rest element");
         } else {
           firstRestLocation = position;
           continue;

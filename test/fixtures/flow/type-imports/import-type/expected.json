@@ -144,6 +144,7 @@
               },
               "name": "named"
             },
+            "importKind": null,
             "local": {
               "type": "Identifier",
               "start": 39,
@@ -263,6 +264,7 @@
               },
               "name": "named"
             },
+            "importKind": null,
             "local": {
               "type": "Identifier",
               "start": 74,

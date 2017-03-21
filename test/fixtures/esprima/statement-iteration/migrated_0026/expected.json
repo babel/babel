@@ -42,6 +42,7 @@
             "column": 16
           }
         },
+        "await": false,
         "left": {
           "type": "MemberExpression",
           "start": 5,
@@ -68,7 +69,8 @@
               "end": {
                 "line": 1,
                 "column": 6
-              }
+              },
+              "identifierName": "a"
             },
             "name": "a"
           },
@@ -84,7 +86,8 @@
               "end": {
                 "line": 1,
                 "column": 9
-              }
+              },
+              "identifierName": "in"
             },
             "name": "in"
           },
@@ -102,7 +105,8 @@
             "end": {
               "line": 1,
               "column": 14
-            }
+            },
+            "identifierName": "a"
           },
           "name": "a"
         },
@@ -122,6 +126,7 @@
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

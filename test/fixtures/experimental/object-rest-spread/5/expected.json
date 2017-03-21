@@ -69,7 +69,8 @@
               "end": {
                 "line": 1,
                 "column": 1
-              }
+              },
+              "identifierName": "z"
             },
             "name": "z"
           },
@@ -117,7 +118,8 @@
                     "end": {
                       "line": 1,
                       "column": 6
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x"
                 },
@@ -133,13 +135,17 @@
                     "end": {
                       "line": 1,
                       "column": 6
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x"
+                },
+                "extra": {
+                  "shorthand": true
                 }
               },
               {
-                "type": "SpreadProperty",
+                "type": "SpreadElement",
                 "start": 8,
                 "end": 12,
                 "loc": {
@@ -164,7 +170,8 @@
                     "end": {
                       "line": 1,
                       "column": 12
-                    }
+                    },
+                    "identifierName": "y"
                   },
                   "name": "y"
                 }

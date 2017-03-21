@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 9
-            }
+            },
+            "identifierName": "Foo"
           },
           "name": "Foo"
         },
@@ -88,6 +89,7 @@
                   "column": 53
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -101,15 +103,16 @@
                   "end": {
                     "line": 2,
                     "column": 13
-                  }
+                  },
+                  "identifierName": "constructor"
                 },
                 "name": "constructor"
               },
-              "static": false,
               "kind": "constructor",
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [
                 {
                   "type": "Identifier",
@@ -123,7 +126,8 @@
                     "end": {
                       "line": 2,
                       "column": 22
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x",
                   "decorators": [
@@ -167,7 +171,8 @@
                             "end": {
                               "line": 2,
                               "column": 18
-                            }
+                            },
+                            "identifierName": "foo"
                           },
                           "name": "foo"
                         },
@@ -188,7 +193,8 @@
                     "end": {
                       "line": 2,
                       "column": 49
-                    }
+                    },
+                    "identifierName": "y"
                   },
                   "name": "y",
                   "decorators": [
@@ -232,7 +238,8 @@
                             "end": {
                               "line": 2,
                               "column": 28
-                            }
+                            },
+                            "identifierName": "bar"
                           },
                           "name": "bar"
                         },
@@ -281,7 +288,8 @@
                                     "end": {
                                       "line": 2,
                                       "column": 32
-                                    }
+                                    },
+                                    "identifierName": "a"
                                   },
                                   "name": "a"
                                 },
@@ -351,7 +359,8 @@
                             "end": {
                               "line": 2,
                               "column": 45
-                            }
+                            },
+                            "identifierName": "baz"
                           },
                           "name": "baz"
                         },

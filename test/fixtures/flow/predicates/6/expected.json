@@ -178,7 +178,7 @@
                           },
                           "params": [
                             {
-                              "type": "NumericLiteralTypeAnnotation",
+                              "type": "NumberLiteralTypeAnnotation",
                               "start": 39,
                               "end": 40,
                               "loc": {
@@ -191,11 +191,11 @@
                                   "column": 40
                                 }
                               },
-                              "value": 1,
                               "extra": {
                                 "rawValue": 1,
                                 "raw": "1"
-                              }
+                              },
+                              "value": 1
                             }
                           ]
                         },
@@ -530,7 +530,7 @@
                             }
                           },
                           {
-                            "type": "NumericLiteralTypeAnnotation",
+                            "type": "NumberLiteralTypeAnnotation",
                             "start": 82,
                             "end": 83,
                             "loc": {
@@ -543,11 +543,11 @@
                                 "column": 83
                               }
                             },
-                            "value": 1,
                             "extra": {
                               "rawValue": 1,
                               "raw": "1"
-                            }
+                            },
+                            "value": 1
                           }
                         ]
                       },
@@ -589,7 +589,8 @@
                   "name": "Array"
                 }
               }
-            }
+            },
+            "predicate": null
           }
         }
       }

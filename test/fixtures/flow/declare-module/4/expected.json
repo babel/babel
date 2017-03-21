@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 16
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -99,7 +100,8 @@
                   "end": {
                     "line": 1,
                     "column": 49
-                  }
+                  },
+                  "identifierName": "foo"
                 },
                 "name": "foo",
                 "typeAnnotation": {
@@ -148,14 +150,15 @@
                         }
                       }
                     }
-                  }
+                  },
+                  "predicate": null
                 }
               }
             }
           ]
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

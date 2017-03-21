@@ -70,12 +70,14 @@
               "end": {
                 "line": 1,
                 "column": 4
-              }
+              },
+              "identifierName": "eval"
             },
             "name": "eval"
           }
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

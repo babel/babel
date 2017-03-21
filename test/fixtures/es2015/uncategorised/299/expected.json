@@ -68,7 +68,8 @@
               "end": {
                 "line": 1,
                 "column": 6
-              }
+              },
+              "identifierName": "doSmth"
             },
             "name": "doSmth"
           },
@@ -100,7 +101,8 @@
                     "end": {
                       "line": 1,
                       "column": 11
-                    }
+                    },
+                    "identifierName": "x"
                   },
                   "name": "x"
                 },
@@ -116,7 +118,8 @@
                     "end": {
                       "line": 1,
                       "column": 18
-                    }
+                    },
+                    "identifierName": "y"
                   },
                   "name": "y"
                 },
@@ -146,7 +149,8 @@
                       "end": {
                         "line": 1,
                         "column": 25
-                      }
+                      },
+                      "identifierName": "x"
                     },
                     "name": "x"
                   },
@@ -163,7 +167,8 @@
                       "end": {
                         "line": 1,
                         "column": 29
-                      }
+                      },
+                      "identifierName": "y"
                     },
                     "name": "y"
                   }
@@ -255,6 +260,7 @@
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

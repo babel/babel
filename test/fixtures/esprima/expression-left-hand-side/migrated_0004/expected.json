@@ -96,7 +96,8 @@
                   "end": {
                     "line": 1,
                     "column": 7
-                  }
+                  },
+                  "identifierName": "foo"
                 },
                 "name": "foo"
               },
@@ -114,7 +115,8 @@
                 "end": {
                   "line": 1,
                   "column": 13
-                }
+                },
+                "identifierName": "bar"
               },
               "name": "bar"
             },
@@ -123,6 +125,7 @@
           "arguments": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

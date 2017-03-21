@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 15
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -87,7 +88,8 @@
                   "column": 17
                 }
               },
-              "name": "T"
+              "name": "T",
+              "variance": null
             }
           ]
         },
@@ -118,7 +120,8 @@
                 "end": {
                   "line": 1,
                   "column": 28
-                }
+                },
+                "identifierName": "B"
               },
               "name": "B"
             },
@@ -164,7 +167,8 @@
                       "end": {
                         "line": 1,
                         "column": 30
-                      }
+                      },
+                      "identifierName": "T"
                     },
                     "name": "T"
                   }
@@ -216,7 +220,8 @@
                   "end": {
                     "line": 1,
                     "column": 35
-                  }
+                  },
+                  "identifierName": "x"
                 },
                 "name": "x"
               },
@@ -236,10 +241,12 @@
                 }
               },
               "optional": false,
+              "static": false,
               "variance": null
             }
           ],
-          "indexers": []
+          "indexers": [],
+          "exact": false
         }
       }
     ],

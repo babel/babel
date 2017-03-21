@@ -101,9 +101,11 @@
                       "end": {
                         "line": 3,
                         "column": 11
-                      }
+                      },
+                      "identifierName": "spawn"
                     },
-                    "name": "spawn"
+                    "name": "spawn",
+                    "leadingComments": null
                   },
                   "value": {
                     "type": "Identifier",
@@ -117,15 +119,18 @@
                       "end": {
                         "line": 3,
                         "column": 11
-                      }
+                      },
+                      "identifierName": "spawn"
                     },
                     "name": "spawn"
                   },
+                  "leadingComments": null,
                   "extra": {
                     "shorthand": true
                   }
                 }
-              ]
+              ],
+              "leadingComments": null
             },
             "init": {
               "type": "Identifier",
@@ -139,10 +144,12 @@
                 "end": {
                   "line": 3,
                   "column": 17
-                }
+                },
+                "identifierName": "x"
               },
               "name": "x"
-            }
+            },
+            "leadingComments": null
           }
         ],
         "kind": "var",

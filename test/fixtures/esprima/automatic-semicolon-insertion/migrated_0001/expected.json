@@ -69,7 +69,8 @@
                 "end": {
                   "line": 1,
                   "column": 3
-                }
+                },
+                "identifierName": "x"
               },
               "name": "x"
             }
@@ -116,14 +117,20 @@
                   "end": {
                     "line": 2,
                     "column": 3
-                  }
+                  },
+                  "identifierName": "y"
                 },
                 "name": "y"
+              },
+              "extra": {
+                "parenthesizedArgument": false
               }
             }
           }
-        ]
+        ],
+        "directives": []
       }
-    ]
+    ],
+    "directives": []
   }
 }

@@ -142,7 +142,22 @@
               },
               "optional": false,
               "static": false,
-              "variance": "plus"
+              "variance": {
+                "type": "Variance",
+                "start": 10,
+                "end": 11,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 11
+                  }
+                },
+                "kind": "plus"
+              }
             }
           ],
           "indexers": [],

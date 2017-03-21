@@ -86,7 +86,8 @@
                   "end": {
                     "line": 1,
                     "column": 12
-                  }
+                  },
+                  "identifierName": "__proto__"
                 },
                 "name": "__proto__"
               },
@@ -135,7 +136,8 @@
                   "end": {
                     "line": 1,
                     "column": 33
-                  }
+                  },
+                  "identifierName": "__proto__"
                 },
                 "name": "__proto__"
               },
@@ -143,6 +145,7 @@
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",
@@ -164,7 +167,8 @@
             }
           ],
           "extra": {
-            "parenthesized": true
+            "parenthesized": true,
+            "parenStart": 0
           }
         }
       }

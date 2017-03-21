@@ -352,8 +352,11 @@ pp.flowParseObjectTypeIndexer = function (node, isStatic, variance) {
   node.value = this.flowParseTypeInitialiser();
   node.variance = variance;
 
+  // Finish node first to not include a possible semicolon in the locations
+  const indexer = this.finishNode(node, "ObjectTypeIndexer");
   this.flowObjectTypeSemicolon();
-  return this.finishNode(node, "ObjectTypeIndexer");
+
+  return indexer;
 };
 
 pp.flowParseObjectTypeMethodish = function (node) {
@@ -437,14 +440,13 @@ pp.flowParseObjectType = function (allowStatic, allowExact) {
       isStatic = true;
     }
 
-    const variancePos = this.state.start;
     const variance = this.flowParseVariance();
 
     if (this.match(tt.bracketL)) {
       nodeStart.indexers.push(this.flowParseObjectTypeIndexer(node, isStatic, variance));
     } else if (this.match(tt.parenL) || this.isRelational("<")) {
       if (variance) {
-        this.unexpected(variancePos);
+        this.unexpected(variance.start);
       }
       nodeStart.callProperties.push(this.flowParseObjectTypeCallProperty(node, isStatic));
     } else {
@@ -452,7 +454,7 @@ pp.flowParseObjectType = function (allowStatic, allowExact) {
       if (this.isRelational("<") || this.match(tt.parenL)) {
         // This is a method property
         if (variance) {
-          this.unexpected(variancePos);
+          this.unexpected(variance.start);
         }
         nodeStart.properties.push(this.flowParseObjectTypeMethod(startPos, startLoc, isStatic, propertyKey));
       } else {
@@ -716,12 +718,12 @@ pp.flowParsePrimaryType = function () {
         this.next();
         if (!this.match(tt.num)) this.unexpected(null, "Unexpected token, expected number");
 
-        return this.parseLiteral(-this.state.value, "NumericLiteralTypeAnnotation", node.start, node.loc.start);
+        return this.parseLiteral(-this.state.value, "NumberLiteralTypeAnnotation", node.start, node.loc.start);
       }
 
       this.unexpected();
     case tt.num:
-      return this.parseLiteral(this.state.value, "NumericLiteralTypeAnnotation");
+      return this.parseLiteral(this.state.value, "NumberLiteralTypeAnnotation");
 
     case tt._null:
       node.value = this.match(tt._null);
@@ -735,7 +737,7 @@ pp.flowParsePrimaryType = function () {
 
     case tt.star:
       this.next();
-      return this.finishNode(node, "ExistentialTypeParam");
+      return this.finishNode(node, "ExistsTypeAnnotation");
 
     default:
       if (this.state.type.keyword === "typeof") {
@@ -847,12 +849,14 @@ pp.typeCastToParameter = function (node) {
 pp.flowParseVariance = function() {
   let variance = null;
   if (this.match(tt.plusMin)) {
+    variance = this.startNode();
     if (this.state.value === "+") {
-      variance = "plus";
-    } else if (this.state.value === "-") {
-      variance = "minus";
+      variance.kind = "plus";
+    } else {
+      variance.kind = "minus";
     }
     this.next();
+    this.finishNode(variance, "Variance");
   }
   return variance;
 };
@@ -1101,7 +1105,6 @@ export default function (instance) {
   // parse class property type annotations
   instance.extend("parseClassProperty", function (inner) {
     return function (node) {
-      delete node.variancePos;
       if (this.match(tt.colon)) {
         node.typeAnnotation = this.flowParseTypeAnnotation();
       }
@@ -1127,10 +1130,9 @@ export default function (instance) {
   instance.extend("parseClassMethod", function (inner) {
     return function (classBody, method, ...args) {
       if (method.variance) {
-        this.unexpected(method.variancePos);
+        this.unexpected(method.variance.start);
       }
       delete method.variance;
-      delete method.variancePos;
       if (this.isRelational("<")) {
         method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
@@ -1165,11 +1167,9 @@ export default function (instance) {
 
   instance.extend("parsePropertyName", function (inner) {
     return function (node) {
-      const variancePos = this.state.start;
       const variance = this.flowParseVariance();
       const key = inner.call(this, node);
       node.variance = variance;
-      node.variancePos = variancePos;
       return key;
     };
   });
@@ -1178,10 +1178,9 @@ export default function (instance) {
   instance.extend("parseObjPropValue", function (inner) {
     return function (prop) {
       if (prop.variance) {
-        this.unexpected(prop.variancePos);
+        this.unexpected(prop.variance.start);
       }
       delete prop.variance;
-      delete prop.variancePos;
 
       let typeParameters;
 
@@ -1389,8 +1388,7 @@ export default function (instance) {
 
           arrowExpression = inner.apply(this, args);
           arrowExpression.typeParameters = typeParameters;
-          arrowExpression.start = typeParameters.start;
-          arrowExpression.loc.start = typeParameters.loc.start;
+          this.resetStartLocationFromNode(arrowExpression, typeParameters);
         } catch (err) {
           throw jsxError || err;
         }

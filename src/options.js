@@ -9,7 +9,8 @@ export const defaultOptions: {
   allowImportExportEverywhere: boolean,
   allowSuperOutsideMethod: boolean,
   plugins: Array<string>,
-  strictMode: any
+  strictMode: any,
+  ranges: boolean,
 } = {
   // Source type ("script" or "module") for different semantics
   sourceType: "script",
@@ -30,6 +31,15 @@ export const defaultOptions: {
   plugins: [],
   // TODO
   strictMode: null,
+  // Nodes have their start and end characters offsets recorded in
+  // `start` and `end` properties (directly on the node, rather than
+  // the `loc` object, which holds line/column data. To also add a
+  // [semi-standardized][range] `range` property holding a `[start,
+  // end]` array with the same numbers, set the `ranges` option to
+  // `true`.
+  //
+  // [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
+  ranges: false,
 };
 
 // Interpret and default an options object

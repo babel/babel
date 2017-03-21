@@ -42,8 +42,10 @@
             "column": 2
           }
         },
-        "body": []
+        "body": [],
+        "directives": []
       }
-    ]
+    ],
+    "directives": []
   }
 }

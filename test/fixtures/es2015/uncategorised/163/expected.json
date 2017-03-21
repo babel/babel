@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 10
-            }
+            },
+            "identifierName": "f"
           },
           "name": "f"
         },
         "generator": false,
         "expression": false,
+        "async": false,
         "params": [
           {
             "type": "Identifier",
@@ -73,7 +75,8 @@
               "end": {
                 "line": 1,
                 "column": 12
-              }
+              },
+              "identifierName": "a"
             },
             "name": "a"
           },
@@ -103,7 +106,8 @@
                 "end": {
                   "line": 1,
                   "column": 18
-                }
+                },
+                "identifierName": "b"
               },
               "name": "b"
             }
@@ -123,10 +127,11 @@
               "column": 22
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

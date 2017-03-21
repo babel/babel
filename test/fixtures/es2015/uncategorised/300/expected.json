@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 15
-            }
+            },
+            "identifierName": "normal"
           },
           "name": "normal"
         },
         "generator": false,
         "expression": false,
+        "async": false,
         "params": [
           {
             "type": "Identifier",
@@ -73,7 +75,8 @@
               "end": {
                 "line": 1,
                 "column": 17
-              }
+              },
+              "identifierName": "x"
             },
             "name": "x"
           },
@@ -103,7 +106,8 @@
                 "end": {
                   "line": 1,
                   "column": 20
-                }
+                },
+                "identifierName": "y"
               },
               "name": "y"
             },

@@ -244,7 +244,8 @@
                   "end": {
                     "line": 1,
                     "column": 22
-                  }
+                  },
+                  "identifierName": "value"
                 },
                 "name": "value"
               }

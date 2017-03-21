@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 7
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -88,6 +89,7 @@
                   "column": 20
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -101,15 +103,16 @@
                   "end": {
                     "line": 1,
                     "column": 14
-                  }
+                  },
+                  "identifierName": "a"
                 },
                 "name": "a"
               },
-              "static": false,
               "kind": "set",
               "id": null,
               "generator": false,
               "expression": false,
+              "async": false,
               "params": [
                 {
                   "type": "Identifier",
@@ -123,7 +126,8 @@
                     "end": {
                       "line": 1,
                       "column": 16
-                    }
+                    },
+                    "identifierName": "v"
                   },
                   "name": "v"
                 }

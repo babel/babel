@@ -42,6 +42,8 @@
             "column": 21
           }
         },
+        "specifiers": [],
+        "source": null,
         "declaration": {
           "type": "ClassDeclaration",
           "start": 7,
@@ -68,7 +70,8 @@
               "end": {
                 "line": 1,
                 "column": 18
-              }
+              },
+              "identifierName": "Class"
             },
             "name": "Class"
           },
@@ -89,11 +92,9 @@
             },
             "body": []
           }
-        },
-        "specifiers": [],
-        "source": null
+        }
       }
-    ]
-  },
-  "comments": []
+    ],
+    "directives": []
+  }
 }

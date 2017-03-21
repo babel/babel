@@ -89,6 +89,7 @@
                   "column": 13
                 }
               },
+              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -107,8 +108,22 @@
                 },
                 "name": "p"
               },
-              "variance": "minus",
-              "static": false,
+              "variance": {
+                "type": "Variance",
+                "start": 9,
+                "end": 10,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 10
+                  }
+                },
+                "kind": "minus"
+              },
               "typeAnnotation": {
                 "type": "TypeAnnotation",
                 "start": 11,

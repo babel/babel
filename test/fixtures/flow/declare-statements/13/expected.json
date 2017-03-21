@@ -54,7 +54,8 @@
             "end": {
               "line": 1,
               "column": 15
-            }
+            },
+            "identifierName": "A"
           },
           "name": "A"
         },
@@ -87,7 +88,8 @@
                 "end": {
                   "line": 1,
                   "column": 24
-                }
+                },
+                "identifierName": "B"
               },
               "name": "B"
             },
@@ -133,7 +135,8 @@
                       "end": {
                         "line": 1,
                         "column": 26
-                      }
+                      },
+                      "identifierName": "T"
                     },
                     "name": "T"
                   }
@@ -167,7 +170,8 @@
                 "end": {
                   "line": 1,
                   "column": 30
-                }
+                },
+                "identifierName": "C"
               },
               "name": "C"
             },
@@ -190,7 +194,8 @@
           },
           "callProperties": [],
           "properties": [],
-          "indexers": []
+          "indexers": [],
+          "exact": false
         }
       }
     ],

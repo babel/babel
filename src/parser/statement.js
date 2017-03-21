@@ -529,14 +529,13 @@ pp.parseFor = function (node, init) {
 // same from parser's perspective.
 
 pp.parseForIn = function (node, init, forAwait) {
-  let type;
+  const type = this.match(tt._in) ? "ForInStatement" : "ForOfStatement";
   if (forAwait) {
     this.eatContextual("of");
-    type = "ForAwaitStatement";
   } else {
-    type = this.match(tt._in) ? "ForInStatement" : "ForOfStatement";
     this.next();
   }
+  node.await = !!forAwait;
   node.left = init;
   node.right = this.parseExpression();
   this.expect(tt.parenR);
@@ -644,7 +643,6 @@ pp.parseClassBody = function (node) {
   const oldStrict = this.state.strict;
   this.state.strict = true;
 
-  let hadConstructorCall = false;
   let hadConstructor = false;
   let decorators = [];
   const classBody = this.startNode();
@@ -750,17 +748,6 @@ pp.parseClassBody = function (node) {
         }
         this.parseClassMethod(classBody, method, false, false);
         this.checkGetterSetterParamCount(method);
-      } else if (this.hasPlugin("classConstructorCall") && isSimple && key.name === "call" && this.match(tt.name) && this.state.value === "constructor") {
-        // a (deprecated) call constructor
-        if (hadConstructorCall) {
-          this.raise(method.start, "Duplicate constructor call in the same class");
-        } else if (method.decorators) {
-          this.raise(method.start, "You can't attach decorators to a class constructor");
-        }
-        hadConstructorCall = true;
-        method.kind = "constructorCall";
-        this.parsePropertyName(method); // consume "constructor" and make it the method's name
-        this.parseClassMethod(classBody, method, false, false);
       } else if (this.isLineTerminator()) {
         // an uninitialized class property (due to ASI, since we don't otherwise recognize the next token)
         if (this.isNonstaticConstructor(method)) {
@@ -783,8 +770,13 @@ pp.parseClassBody = function (node) {
 };
 
 pp.parseClassProperty = function (node) {
+  const noPluginMsg = "You can only use Class Properties when the 'classProperties' plugin is enabled.";
+  if (!node.typeAnnotation && !this.hasPlugin("classProperties")) {
+    this.raise(node.start, noPluginMsg);
+  }
+
   if (this.match(tt.eq)) {
-    if (!this.hasPlugin("classProperties")) this.unexpected();
+    if (!this.hasPlugin("classProperties")) this.raise(this.state.start, noPluginMsg);
     this.next();
     node.value = this.parseMaybeAssign();
   } else {
@@ -852,6 +844,13 @@ pp.parseExport = function (node) {
     let needsSemi = false;
     if (this.eat(tt._function)) {
       expr = this.parseFunction(expr, true, false, false, true);
+    } else if (
+      this.isContextual("async") &&
+      this.lookahead().type === tt._function
+    ) { // async function declaration
+      this.eatContextual("async");
+      this.eat(tt._function);
+      expr = this.parseFunction(expr, true, false, true, true);
     } else if (this.match(tt._class)) {
       expr = this.parseClass(expr, true, true);
     } else {
@@ -969,7 +968,7 @@ pp.checkDeclaration = function(node) {
     }
   } else if (node.type === "ObjectProperty") {
     this.checkDeclaration(node.value);
-  } else if (node.type === "RestElement" || node.type === "RestProperty") {
+  } else if (node.type === "RestElement") {
     this.checkDeclaration(node.argument);
   } else if (node.type === "Identifier") {
     this.checkDuplicateExports(node, node.name);

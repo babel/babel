@@ -49,9 +49,6 @@ exports.runThrowTestsWithEstree = function runThrowTestsWithEstree(fixturesPath,
 };
 
 function save(test, ast) {
-  delete ast.tokens;
-  if (ast.comments && !ast.comments.length) delete ast.comments;
-
   // Ensure that RegExp are serialized as strings
   const toJSON = RegExp.prototype.toJSON;
   RegExp.prototype.toJSON = RegExp.prototype.toString;
@@ -61,8 +58,6 @@ function save(test, ast) {
 
 function runTest(test, parseFunction) {
   var opts = test.options;
-  opts.locations = true;
-  opts.ranges = true;
 
   if (opts.throws && test.expect.code) {
     throw new Error("File expected.json exists although options specify throws. Remove expected.json.");
@@ -82,6 +77,9 @@ function runTest(test, parseFunction) {
 
     throw err;
   }
+
+  delete ast.tokens;
+  if (ast.comments && !ast.comments.length) delete ast.comments;
 
   if (!test.expect.code && !opts.throws && !process.env.CI) {
     test.expect.loc += "on";
@@ -130,6 +128,16 @@ function misMatch(exp, act) {
     for (var prop in exp) {
       var mis = misMatch(exp[prop], act[prop]);
       if (mis) return addPath(mis, prop);
+    }
+
+    for (var prop in act) {
+      if (prop === "__clone") {
+        continue;
+      }
+
+      if (!(prop in exp) && act[prop] !== undefined) {
+        return `Did not expect a property '${prop}'`;
+      }
     }
   }
 }

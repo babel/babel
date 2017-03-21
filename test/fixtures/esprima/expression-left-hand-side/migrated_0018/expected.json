@@ -110,7 +110,8 @@
                     "end": {
                       "line": 1,
                       "column": 5
-                    }
+                    },
+                    "identifierName": "earth"
                   },
                   "name": "earth"
                 },
@@ -126,7 +127,8 @@
                     "end": {
                       "line": 1,
                       "column": 10
-                    }
+                    },
+                    "identifierName": "asia"
                   },
                   "name": "asia"
                 },
@@ -144,7 +146,8 @@
                   "end": {
                     "line": 1,
                     "column": 20
-                  }
+                  },
+                  "identifierName": "Indonesia"
                 },
                 "name": "Indonesia"
               },
@@ -162,7 +165,8 @@
                 "end": {
                   "line": 1,
                   "column": 39
-                }
+                },
+                "identifierName": "prepareForElection"
               },
               "name": "prepareForElection"
             },

@@ -130,7 +130,8 @@
             "extra": {
               "rawValue": 6,
               "raw": "6",
-              "parenthesized": true
+              "parenthesized": true,
+              "parenStart": 9
             },
             "value": 6
           }

@@ -68,7 +68,8 @@
               "end": {
                 "line": 1,
                 "column": 3
-              }
+              },
+              "identifierName": "foo"
             },
             "name": "foo"
           },
@@ -85,7 +86,8 @@
                 "end": {
                   "line": 1,
                   "column": 7
-                }
+                },
+                "identifierName": "bar"
               },
               "name": "bar"
             },
@@ -101,13 +103,15 @@
                 "end": {
                   "line": 1,
                   "column": 12
-                }
+                },
+                "identifierName": "baz"
               },
               "name": "baz"
             }
           ]
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

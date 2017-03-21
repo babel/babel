@@ -54,12 +54,14 @@
             "end": {
               "line": 1,
               "column": 12
-            }
+            },
+            "identifierName": "foo"
           },
           "name": "foo"
         },
         "generator": false,
         "expression": false,
+        "async": false,
         "params": [
           {
             "type": "Identifier",
@@ -73,7 +75,8 @@
               "end": {
                 "line": 1,
                 "column": 26
-              }
+              },
+              "identifierName": "requiredParam"
             },
             "name": "requiredParam"
           },
@@ -89,7 +92,8 @@
               "end": {
                 "line": 1,
                 "column": 37
-              }
+              },
+              "identifierName": "optParam"
             },
             "name": "optParam",
             "optional": true

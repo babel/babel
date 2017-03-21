@@ -42,6 +42,7 @@
             "column": 33
           }
         },
+        "await": false,
         "left": {
           "type": "VariableDeclaration",
           "start": 5,
@@ -98,7 +99,8 @@
                       "end": {
                         "line": 1,
                         "column": 14
-                      }
+                      },
+                      "identifierName": "name"
                     },
                     "name": "name"
                   },
@@ -114,7 +116,8 @@
                       "end": {
                         "line": 1,
                         "column": 21
-                      }
+                      },
+                      "identifierName": "value"
                     },
                     "name": "value"
                   }
@@ -137,7 +140,8 @@
             "end": {
               "line": 1,
               "column": 29
-            }
+            },
+            "identifierName": "obj"
           },
           "name": "obj"
         },
@@ -155,9 +159,11 @@
               "column": 33
             }
           },
-          "body": []
+          "body": [],
+          "directives": []
         }
       }
-    ]
+    ],
+    "directives": []
   }
 }

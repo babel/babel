@@ -109,7 +109,7 @@
                 },
                 "types": [
                   {
-                    "type": "NumericLiteralTypeAnnotation",
+                    "type": "NumberLiteralTypeAnnotation",
                     "start": 16,
                     "end": 17,
                     "loc": {
@@ -122,14 +122,14 @@
                         "column": 17
                       }
                     },
-                    "value": 1,
                     "extra": {
                       "rawValue": 1,
                       "raw": "1"
-                    }
+                    },
+                    "value": 1
                   },
                   {
-                    "type": "NumericLiteralTypeAnnotation",
+                    "type": "NumberLiteralTypeAnnotation",
                     "start": 20,
                     "end": 21,
                     "loc": {
@@ -142,11 +142,11 @@
                         "column": 21
                       }
                     },
-                    "value": 2,
                     "extra": {
                       "rawValue": 2,
                       "raw": "2"
-                    }
+                    },
+                    "value": 2
                   }
                 ]
               }
@@ -198,7 +198,7 @@
                 },
                 "types": [
                   {
-                    "type": "NumericLiteralTypeAnnotation",
+                    "type": "NumberLiteralTypeAnnotation",
                     "start": 28,
                     "end": 29,
                     "loc": {
@@ -211,14 +211,14 @@
                         "column": 29
                       }
                     },
-                    "value": 3,
                     "extra": {
                       "rawValue": 3,
                       "raw": "3"
-                    }
+                    },
+                    "value": 3
                   },
                   {
-                    "type": "NumericLiteralTypeAnnotation",
+                    "type": "NumberLiteralTypeAnnotation",
                     "start": 32,
                     "end": 33,
                     "loc": {
@@ -231,11 +231,11 @@
                         "column": 33
                       }
                     },
-                    "value": 4,
                     "extra": {
                       "rawValue": 4,
                       "raw": "4"
-                    }
+                    },
+                    "value": 4
                   }
                 ]
               }
@@ -270,7 +270,8 @@
                 "column": 42
               }
             }
-          }
+          },
+          "predicate": null
         },
         "body": {
           "type": "BlockStatement",
