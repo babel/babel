@@ -100,10 +100,10 @@ type Position = {
 declare function codeFrame(rawLines: string, start: Position, end: ?Position, opts: Object = {}): string;
 declare function codeFrame(rawLines: string, lineNumber: number, colNumber: ?number, opts: Object = {}): string;
 export default function codeFrame(rawLines, startOrLineNumber, endOrColNumber, opts) {
-  let startLineNumber = undefined;
-  let startColNumber = undefined;
-  let endLineNumber = undefined;
-  let endOrColNumber = undefined;
+  let startLineNumber;
+  let startColNumber;
+  let endLineNumber;
+  let endOrColNumber;
   let markRange = false;
   if (typeof startOrLineNumber === 'number') {
     startLineNumber = startOrLineNumber;
