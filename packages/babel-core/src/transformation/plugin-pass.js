@@ -1,18 +1,16 @@
-import type Plugin from "./plugin";
-import Store from "../store";
+import Store from "./store";
 import File from "./file";
 
 export default class PluginPass extends Store {
-  constructor(file: File, plugin: Plugin, options: Object = {}) {
+  constructor(file: File, key: string, options: Object = {}) {
     super();
-    this.plugin = plugin;
-    this.key = plugin.key;
+
+    this.key = key;
     this.file = file;
     this.opts = options;
   }
 
   key: string;
-  plugin: Plugin;
   file: File;
   opts: Object;
 

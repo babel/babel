@@ -1,6 +1,6 @@
 import assert from "assert";
 import path from "path";
-import buildConfigChain from "../lib/transformation/file/options/build-config-chain";
+import buildConfigChain from "../lib/config/build-config-chain";
 
 function fixture() {
   const args = [__dirname, "fixtures", "config"];
@@ -40,6 +40,7 @@ describe("buildConfigChain", function () {
 
     const expected = [
       {
+        type: "options",
         options: {
           plugins: [
             "extended",
@@ -50,6 +51,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "root",
@@ -60,6 +62,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           ignore: [
             "root-ignore",
@@ -70,6 +73,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "arguments",
         options: {
           filename: fixture("dir1", "src.js"),
         },
@@ -89,6 +93,7 @@ describe("buildConfigChain", function () {
 
     const expected = [
       {
+        type: "options",
         options: {
           ignore: [
             "root-ignore",
@@ -99,6 +104,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "dir2",
@@ -109,6 +115,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("dir2"),
       },
       {
+        type: "arguments",
         options: {
           filename: fixture("dir2", "src.js"),
         },
@@ -128,6 +135,7 @@ describe("buildConfigChain", function () {
 
     const expected = [
       {
+        type: "options",
         options: {
           ignore: [
             "root-ignore",
@@ -138,6 +146,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "env-base",
@@ -148,6 +157,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("env"),
       },
       {
+        type: "arguments",
         options: {
           filename: fixture("env", "src.js"),
         },
@@ -169,6 +179,7 @@ describe("buildConfigChain", function () {
 
     const expected = [
       {
+        type: "options",
         options: {
           ignore: [
             "root-ignore",
@@ -179,6 +190,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "env-base",
@@ -189,6 +201,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("env"),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "env-foo",
@@ -199,6 +212,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("env"),
       },
       {
+        type: "arguments",
         options: {
           filename: fixture("env", "src.js"),
         },
@@ -221,6 +235,7 @@ describe("buildConfigChain", function () {
 
     const expected = [
       {
+        type: "options",
         options: {
           ignore: [
             "root-ignore",
@@ -231,6 +246,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "env-base",
@@ -241,6 +257,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("env"),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "env-bar",
@@ -251,6 +268,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("env"),
       },
       {
+        type: "arguments",
         options: {
           filename: fixture("env", "src.js"),
         },
@@ -273,6 +291,7 @@ describe("buildConfigChain", function () {
 
     const expected = [
       {
+        type: "options",
         options: {
           plugins: ["pkg-plugin"],
         },
@@ -281,6 +300,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("pkg"),
       },
       {
+        type: "options",
         options: {
           ignore: ["pkg-ignore"],
         },
@@ -289,6 +309,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("pkg"),
       },
       {
+        type: "arguments",
         options: {
           filename: fixture("pkg", "src.js"),
         },
@@ -308,6 +329,7 @@ describe("buildConfigChain", function () {
 
     const expected = [
       {
+        type: "options",
         options: {
           ignore: [
             "root-ignore",
@@ -318,6 +340,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "foo",
@@ -329,6 +352,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("js-config"),
       },
       {
+        type: "arguments",
         options: {
           filename: fixture("js-config", "src.js"),
         },
@@ -348,6 +372,7 @@ describe("buildConfigChain", function () {
 
     const expected = [
       {
+        type: "options",
         options: {
           ignore: [
             "root-ignore",
@@ -358,6 +383,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "foo",
@@ -369,6 +395,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("js-config-default"),
       },
       {
+        type: "arguments",
         options: {
           filename: fixture("js-config-default", "src.js"),
         },
@@ -387,6 +414,7 @@ describe("buildConfigChain", function () {
 
     const expected = [
       {
+        type: "options",
         options: {
           ignore: [
             "root-ignore",
@@ -397,6 +425,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "extended",
@@ -407,6 +436,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "foo",
@@ -418,6 +448,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("js-config-extended"),
       },
       {
+        type: "arguments",
         options: {
           filename: fixture("js-config-extended", "src.js"),
         },
@@ -438,6 +469,7 @@ describe("buildConfigChain", function () {
 
     const expected = [
       {
+        type: "options",
         options: {
           ignore: [
             "root-ignore",
@@ -448,6 +480,7 @@ describe("buildConfigChain", function () {
         dirname: fixture(),
       },
       {
+        type: "options",
         options: {
           plugins: [
             "json",
@@ -458,6 +491,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("json-pkg-config-no-babel"),
       },
       {
+        type: "arguments",
         options: {
           filename: fixture("json-pkg-config-no-babel", "src.js"),
         },

@@ -1,5 +1,5 @@
 import assert from "assert";
-import getPossiblePresetNames from "../lib/helpers/get-possible-preset-names";
+import getPossiblePresetNames from "../lib/config/helpers/get-possible-preset-names";
 
 describe("getPossiblePresetNames", function () {
   it("adds the babel-preset prefix", function() {

@@ -9,23 +9,28 @@ import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
 import traverse from "babel-traverse";
-import Store from "../../store";
+import Store from "../store";
 import { parse } from "babylon";
-import * as util from "../../util";
-import path from "path";
 import * as t from "babel-types";
+import buildDebug from "debug";
 
-import resolve from "../../helpers/resolve";
+import loadConfig, { type ResolvedConfig } from "../../config";
 
 import blockHoistPlugin from "../internal-plugins/block-hoist";
 import shadowFunctionsPlugin from "../internal-plugins/shadow-functions";
 
+const babelDebug = buildDebug("babel:file");
+
+export function debug(opts: Object, msg: string) {
+  babelDebug(`${opts.filename || "unknown"}: ${msg}`);
+}
+
 const shebangRegex = /^#!.*/;
 
-const INTERNAL_PLUGINS = [
-  [blockHoistPlugin],
-  [shadowFunctionsPlugin],
-];
+const INTERNAL_PLUGINS = loadConfig({
+  babelrc: false,
+  plugins: [ blockHoistPlugin, shadowFunctionsPlugin ],
+}).passes[0];
 
 const errorVisitor = {
   enter(path, state) {
@@ -38,17 +43,11 @@ const errorVisitor = {
 };
 
 export default class File extends Store {
-  constructor(opts: Object = {}) {
+  constructor({ options, passes }: ResolvedConfig) {
     super();
 
-    let passes = [];
-    if (opts.plugins) passes.push(opts.plugins);
-
-    // With "passPerPreset" enabled there may still be presets in the options.
-    if (opts.presets) passes = passes.concat(opts.presets.map((preset) => preset.plugins).filter(Boolean));
-
     this.pluginPasses = passes;
-    this.opts = opts;
+    this.opts = options;
 
     this.parserOpts = {
       sourceType: this.opts.sourceType,
@@ -59,7 +58,7 @@ export default class File extends Store {
     for (const pluginPairs of passes) {
       for (const [ plugin ] of pluginPairs) {
         if (plugin.manipulateOptions) {
-          plugin.manipulateOptions(opts, this.parserOpts, this);
+          plugin.manipulateOptions(this.opts, this.parserOpts, this);
         }
       }
     }
@@ -340,18 +339,7 @@ export default class File extends Store {
       parserOpts = Object.assign({}, this.parserOpts, parserOpts);
 
       if (parserOpts.parser) {
-        if (typeof parserOpts.parser === "string") {
-          const dirname = path.dirname(this.opts.filename) || process.cwd();
-          const parser = resolve(parserOpts.parser, dirname);
-          if (parser) {
-            parseCode = require(parser).parse;
-          } else {
-            throw new Error(`Couldn't find parser ${parserOpts.parser} with "parse" method ` +
-              `relative to directory ${dirname}`);
-          }
-        } else {
-          parseCode = parserOpts.parser;
-        }
+        parseCode = parserOpts.parser;
 
         parserOpts.parser = {
           parse(source) {
@@ -361,9 +349,9 @@ export default class File extends Store {
       }
     }
 
-    util.debug(this.opts, "Parse start");
+    debug(this.opts, "Parse start");
     const ast = parseCode(code, parserOpts || this.parserOpts);
-    util.debug(this.opts, "Parse stop");
+    debug(this.opts, "Parse stop");
     return ast;
   }
 
@@ -381,31 +369,43 @@ export default class File extends Store {
   }
 
   addAst(ast) {
-    util.debug(this.opts, "Start set AST");
+    debug(this.opts, "Start set AST");
     this._addAst(ast);
-    util.debug(this.opts, "End set AST");
+    debug(this.opts, "End set AST");
   }
 
   transform(): BabelFileResult {
     for (const pluginPairs of this.pluginPasses) {
+      const passPairs = [];
       const passes = [];
       const visitors = [];
 
       for (const [ plugin, pluginOpts ] of pluginPairs.concat(INTERNAL_PLUGINS)) {
-        const pass = new PluginPass(this, plugin, pluginOpts);
+        const pass = new PluginPass(this, plugin.key, pluginOpts);
+
+        passPairs.push([ plugin, pass ]);
         passes.push(pass);
         visitors.push(plugin.visitor);
       }
 
-      this.call("pre", passes);
-      util.debug(this.opts, "Start transform traverse");
+      for (const [ plugin, pass ] of passPairs) {
+        const fn = plugin.pre;
+        if (fn) fn.call(pass, this);
+      }
+
+      debug(this.opts, "Start transform traverse");
 
       // merge all plugin visitors into a single visitor
       const visitor = traverse.visitors.merge(visitors, passes, this.opts.wrapPluginVisitorMethod);
       traverse(this.ast, visitor, this.scope);
 
-      util.debug(this.opts, "End transform traverse");
-      this.call("post", passes);
+      debug(this.opts, "End transform traverse");
+
+      for (const [ plugin, pass ] of passPairs) {
+        const fn = plugin.post;
+        if (fn) fn.call(pass, this);
+      }
+
     }
 
     return this.generate();
@@ -456,14 +456,6 @@ export default class File extends Store {
     this.parseShebang();
     const ast = this.parse(this.code);
     this.addAst(ast);
-  }
-
-  call(key: "pre" | "post", pluginPasses: Array<PluginPass>) {
-    for (const pass of pluginPasses) {
-      const plugin = pass.plugin;
-      const fn = plugin[key];
-      if (fn) fn.call(pass, this);
-    }
   }
 
   parseInputSourceMap(code: string): string {
@@ -523,27 +515,16 @@ export default class File extends Store {
     let gen = generate;
     if (opts.generatorOpts && opts.generatorOpts.generator) {
       gen = opts.generatorOpts.generator;
-
-      if (typeof gen === "string") {
-        const dirname = path.dirname(this.opts.filename) || process.cwd();
-        const generator = resolve(gen, dirname);
-        if (generator) {
-          gen = require(generator).print;
-        } else {
-          throw new Error(`Couldn't find generator ${gen} with "print" method relative ` +
-            `to directory ${dirname}`);
-        }
-      }
     }
 
-    util.debug(this.opts, "Generation start");
+    debug(this.opts, "Generation start");
 
     const _result = gen(ast, opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts,
       this.code);
     result.code = _result.code;
     result.map = _result.map;
 
-    util.debug(this.opts, "Generation end");
+    debug(this.opts, "Generation end");
 
     if (this.shebang) {
       // add back shebang
