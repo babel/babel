@@ -946,7 +946,7 @@ interface TemplateElement <: Node {
   type: "TemplateElement";
   tail: boolean;
   value: {
-    cooked: string;
+    cooked: string | null;
     raw: string;
   };
 }

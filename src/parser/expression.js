@@ -317,7 +317,7 @@ pp.parseSubscripts = function (base, startPos, startLoc, noCalls) {
     } else if (this.match(tt.backQuote)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.tag = base;
-      node.quasi = this.parseTemplate();
+      node.quasi = this.parseTemplate(true);
       base = this.finishNode(node, "TaggedTemplateExpression");
     } else {
       return base;
@@ -506,7 +506,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
       return this.parseNew();
 
     case tt.backQuote:
-      return this.parseTemplate();
+      return this.parseTemplate(false);
 
     case tt.doubleColon:
       node = this.startNode();
@@ -685,8 +685,15 @@ pp.parseNew = function () {
 
 // Parse template expression.
 
-pp.parseTemplateElement = function () {
+pp.parseTemplateElement = function (isTagged) {
   const elem = this.startNode();
+  if (this.state.value === null) {
+    if (!isTagged || !this.hasPlugin("templateInvalidEscapes")) {
+      this.raise(this.state.invalidTemplateEscapePosition, "Invalid escape sequence in template");
+    } else {
+      this.state.invalidTemplateEscapePosition = null;
+    }
+  }
   elem.value = {
     raw: this.input.slice(this.state.start, this.state.end).replace(/\r\n?/g, "\n"),
     cooked: this.state.value
@@ -696,17 +703,17 @@ pp.parseTemplateElement = function () {
   return this.finishNode(elem, "TemplateElement");
 };
 
-pp.parseTemplate = function () {
+pp.parseTemplate = function (isTagged) {
   const node = this.startNode();
   this.next();
   node.expressions = [];
-  let curElt = this.parseTemplateElement();
+  let curElt = this.parseTemplateElement(isTagged);
   node.quasis = [curElt];
   while (!curElt.tail) {
     this.expect(tt.dollarBraceL);
     node.expressions.push(this.parseExpression());
     this.expect(tt.braceR);
-    node.quasis.push(curElt = this.parseTemplateElement());
+    node.quasis.push(curElt = this.parseTemplateElement(isTagged));
   }
   this.next();
   return this.finishNode(node, "TemplateLiteral");
