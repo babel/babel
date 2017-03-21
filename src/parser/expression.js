@@ -392,7 +392,7 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
         this.unexpected();
       }
       if (this.match(tt.parenL) && this.state.inMethod !== "constructor" && !this.options.allowSuperOutsideMethod) {
-        this.raise(node.start, "super() outside of class constructor");
+        this.raise(node.start, "super() is only valid inside a class constructor. Make sure the method name is spelled exactly as 'constructor'.");
       }
       return this.finishNode(node, "Super");
 
