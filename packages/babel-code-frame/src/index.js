@@ -89,17 +89,45 @@ function highlight(defs: Object, text: string) {
   });
 }
 
+type Position = {
+  lineNumber: number,
+  colNumber: ?number,
+}
+
 /**
  * Create a code frame, adding line numbers, code highlighting, and pointing to a given position.
  */
+declare function codeFrame(rawLines: string, start: Position, end: ?Position, opts: Object = {}): string;
+declare function codeFrame(rawLines: string, lineNumber: number, colNumber: ?number, opts: Object = {}): string;
+export default function codeFrame(rawLines, startOrLineNumber, endOrColNumber, opts) {
+  let startLineNumber = undefined;
+  let startColNumber = undefined;
+  let endLineNumber = undefined;
+  let endOrColNumber = undefined;
+  let markRange = false;
+  if (typeof startOrLineNumber === 'number') {
+    startLineNumber = startOrLineNumber;
+    if (typeof endOrColNumber === 'number') {
+      startColNumber = endOrColNumber;
+    }
+    console.warn('Passing lineNumber and colNumber is deprecated to babel-code-frame. Pass start position object.');
+  } else if (typeof startOrLineNumber === 'object') {
+    startLineNumber = startOrLineNumber.lineNumber;
+    startColNumber = startOrLineNumber.colNumber;
+    if (endOrColNumber !== undefined) {
+      if (typeof endOrColNumber === 'object') {
+        endLineNumber = endOrColNumber.lineNumber;
+        endOrColNumber = endOrColNumber.colNumber;
+        markRange = true;
+      } else {
+        throw new TypeError('end must be an object with lineNumber and colNumber properties');
+      }
+    }
+  } else {
+    throw new TypeError('start and end should be objects with lineNumber and colNumber properties');
+  }
 
-export default function (
-  rawLines: string,
-  lineNumber: number,
-  colNumber: ?number,
-  opts: Object = {},
-): string {
-  colNumber = Math.max(colNumber, 0);
+  startColNumber = Math.max(startColNumber, 0);
 
   const highlighted = (opts.highlightCode && Chalk.supportsColor) || opts.forceColor;
   let chalk = Chalk;
@@ -116,10 +144,10 @@ export default function (
   const linesBelow = opts.linesBelow || 3;
 
   const lines = rawLines.split(NEWLINE);
-  let start = Math.max(lineNumber - (linesAbove + 1), 0);
-  let end   = Math.min(lines.length, lineNumber + linesBelow);
+  let start = Math.max(startLineNumber - (linesAbove + 1), 0);
+  let end   = Math.min(lines.length, startLineNumber + linesBelow);
 
-  if (!lineNumber && !colNumber) {
+  if (!startLineNumber && !startColNumber) {
     start = 0;
     end = lines.length;
   }
@@ -130,10 +158,10 @@ export default function (
     const number = start + 1 + index;
     const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
     const gutter = ` ${paddedNumber} | `;
-    if (number === lineNumber) {
+    if (number === startLineNumber) {
       let markerLine = "";
-      if (colNumber) {
-        const markerSpacing = line.slice(0, colNumber - 1).replace(/[^\t]/g, " ");
+      if (startColNumber) {
+        const markerSpacing = line.slice(0, startColNumber - 1).replace(/[^\t]/g, " ");
         markerLine = [
           "\n ",
           maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")),
