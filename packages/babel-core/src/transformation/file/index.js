@@ -386,8 +386,6 @@ export default class File extends Store {
         passPairs.push([ plugin, pass ]);
         passes.push(pass);
         visitors.push(plugin.visitor);
-
-        if (plugin.pre) plugin.pre.call(pass, this);
       }
 
       for (const [ plugin, pass ] of passPairs) {
