@@ -50,6 +50,8 @@ export default class State {
     this.containsEsc = this.containsOctal = false;
     this.octalPosition = null;
 
+    this.invalidTemplateEscapePosition = null;
+
     this.exportedIdentifiers = [];
 
     return this;

@@ -131,3 +131,4 @@ require("babylon").parse("code", {
  - `functionBind`
  - `functionSent`
  - `dynamicImport`
+ - `templateInvalidEscapes`
