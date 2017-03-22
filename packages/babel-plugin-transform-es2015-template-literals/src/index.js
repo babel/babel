@@ -18,7 +18,9 @@ export default function ({ types: t }) {
         let raw = [];
 
         for (const elem of (quasi.quasis: Array)) {
-          strings.push(t.stringLiteral(elem.value.cooked));
+          if (elem.value.cooked !== null) {
+            strings.push(t.stringLiteral(elem.value.cooked));
+          }
           raw.push(t.stringLiteral(elem.value.raw));
         }
 

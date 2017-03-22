@@ -10,3 +10,5 @@ html`<b></b>`;
   asdf
 awer
     erqer`;
+
+tag`\unicode and \u{55}`;

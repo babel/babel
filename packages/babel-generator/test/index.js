@@ -318,6 +318,7 @@ suites.forEach(function (testSuite) {
               "functionSent",
               "jsx",
               "objectRestSpread",
+              "templateInvalidEscapes",
             ],
             strictMode: false,
             sourceType: "module",
