@@ -1377,10 +1377,10 @@ export default function (instance) {
         }
       }
 
-      // Need to push something onto the context to stop
-      // the JSX plugin from messing with the tokens
-      this.state.context.push(ct.parenExpression);
       if (jsxError != null || this.isRelational("<")) {
+        // Need to push something onto the context to stop
+        // the JSX plugin from messing with the tokens
+        this.state.context.push(ct.parenExpression);
         let arrowExpression;
         let typeParameters;
         try {
@@ -1390,8 +1390,12 @@ export default function (instance) {
           arrowExpression.typeParameters = typeParameters;
           this.resetStartLocationFromNode(arrowExpression, typeParameters);
         } catch (err) {
+          this.state.context.pop();
+
           throw jsxError || err;
         }
+
+        this.state.context.pop();
 
         if (arrowExpression.type === "ArrowFunctionExpression") {
           return arrowExpression;
@@ -1404,7 +1408,6 @@ export default function (instance) {
           );
         }
       }
-      this.state.context.pop();
 
       return inner.apply(this, args);
     };
