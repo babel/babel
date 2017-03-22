@@ -1,5 +1,10 @@
 const outputFile = require("output-file-sync");
+const kebabCase = require("lodash/kebabCase");
 const coreDefinitions = require("babel-plugin-transform-runtime").definitions;
+const helpers = require("babel-helpers");
+const babel = require("../../babel-core");
+const t = require("../../babel-types");
+
 const paths = ["is-iterable", "get-iterator"];
 
 Object.keys(coreDefinitions.builtins).forEach((key) => {
@@ -21,11 +26,6 @@ paths.forEach(function(path) {
     defaultify(`require("core-js/library/fn/${path}")`)
   );
 });
-
-const helpers = require("babel-helpers");
-const babel = require("../../babel-core");
-const t = require("../../babel-types");
-
 
 function relative(filename) {
   return `${__dirname}/../${filename}`;
@@ -135,13 +135,13 @@ for (const modules of ["commonjs", false]) {
         buildHelper(helperName, modules, builtin)
       );
 
-      // // compat
-      // var helperAlias = kebabCase(helperName);
-      // var content = !modules
-      //   ? `export { default } from \"./${helperName}.js\";`
-      //   : "module.exports = require(\"./" + helperName + ".js\");";
-      // writeFile(`${dirname}_${helperAlias}.js`, content);
-      // if (helperAlias !== helperName) writeFile(`${dirname}${helperAlias}.js`, content);
+      // compat
+      var helperAlias = kebabCase(helperName);
+      var content = !modules
+        ? `export { default } from \"./${helperName}.js\";`
+        : "module.exports = require(\"./" + helperName + ".js\");";
+      writeFile(`${dirname}_${helperAlias}.js`, content);
+      if (helperAlias !== helperName) writeFile(`${dirname}${helperAlias}.js`, content);
     }
   }
 }
