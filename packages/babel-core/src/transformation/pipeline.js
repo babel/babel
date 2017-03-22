@@ -31,7 +31,7 @@ export function transformFromAst(ast: Object, code: string, opts: Object): Babel
   if (config === null) return null;
 
   if (ast && ast.type === "Program") {
-    return t.file(ast, [], []);
+    ast = t.file(ast, [], []);
   } else if (!ast || ast.type !== "File") {
     throw new Error("Not a valid ast?");
   }
