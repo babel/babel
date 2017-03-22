@@ -1,7 +1,6 @@
-import Plugin from "../plugin";
 import sortBy from "lodash/sortBy";
 
-export default new Plugin({
+export default {
   /**
    * [Please add a description.]
    *
@@ -36,7 +35,7 @@ export default new Plugin({
           // Higher priorities should move toward the top.
           return -1 * priority;
         });
-      }
-    }
-  }
-});
+      },
+    },
+  },
+};

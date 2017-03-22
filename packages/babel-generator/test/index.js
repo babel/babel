@@ -24,7 +24,7 @@ describe("generation", function () {
   it("multiple sources", function () {
     const sources = {
       "a.js": "function hi (msg) { console.log(msg); }\n",
-      "b.js": "hi('hello');\n"
+      "b.js": "hi('hello');\n",
     };
     const parsed = Object.keys(sources).reduce(function (_parsed, filename) {
       _parsed[filename] = parse(sources[filename], { sourceFilename: filename });
@@ -36,8 +36,8 @@ describe("generation", function () {
       "program": {
         "type": "Program",
         "sourceType": "module",
-        "body": [].concat(parsed["a.js"].program.body, parsed["b.js"].program.body)
-      }
+        "body": [].concat(parsed["a.js"].program.body, parsed["b.js"].program.body),
+      },
     };
 
     const generated = generate(combinedAst, { sourceMaps: true }, sources);
@@ -54,8 +54,8 @@ describe("generation", function () {
       ],
       sourcesContent: [
         "function hi (msg) { console.log(msg); }\n",
-        "hi('hello');\n"
-      ]
+        "hi('hello');\n",
+      ],
     }, "sourcemap was incorrectly generated");
 
     chai.expect(generated.rawMappings).to.deep.equal([
@@ -144,7 +144,7 @@ describe("generation", function () {
     const generated = generate(ast, {
       filename: "inline",
       sourceFileName: "inline",
-      sourceMaps: true
+      sourceMaps: true,
     }, code);
 
     chai.expect(generated.map).to.deep.equal({
@@ -152,7 +152,7 @@ describe("generation", function () {
       sources: ["inline"],
       names: ["foo", "bar" ],
       mappings: "AAAA,SAASA,IAAT,GAAe;AAAEC;AAAM",
-      sourcesContent: [ "function foo() { bar; }\n" ]
+      sourcesContent: [ "function foo() { bar; }\n" ],
     }, "sourcemap was incorrectly generated");
 
     chai.expect(generated.rawMappings).to.deep.equal([
@@ -240,7 +240,7 @@ describe("programmatic generation", function() {
     assert.equal(output, [
       "{",
       "  \"use strict\";",
-      "}"
+      "}",
     ].join("\n"));
   });
 
@@ -259,7 +259,7 @@ describe("programmatic generation", function() {
     const output = generate(objectStatement).code;
     assert.equal(output, [
       "{",
-      "  bar: string;",
+      "  bar: string,",
       "}",
     ].join("\n"));
   });
@@ -280,7 +280,7 @@ describe("programmatic generation", function() {
 
     assert.equal(output, [
       "{",
-      "  [key: any]: Test;",
+      "  [key: any]: Test,",
       "}",
     ].join("\n"));
   });
@@ -306,7 +306,19 @@ suites.forEach(function (testSuite) {
         if (actualCode) {
           const actualAst = parse(actualCode, {
             filename: actual.loc,
-            plugins: ["*"],
+            plugins: [
+              "asyncGenerators",
+              "classProperties",
+              "decorators",
+              "doExpressions",
+              "dynamicImport",
+              "exportExtensions",
+              "flow",
+              "functionBind",
+              "functionSent",
+              "jsx",
+              "objectRestSpread",
+            ],
             strictMode: false,
             sourceType: "module",
           });

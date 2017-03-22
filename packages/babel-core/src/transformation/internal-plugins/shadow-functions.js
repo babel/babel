@@ -1,4 +1,3 @@
-import Plugin from "../plugin";
 import * as t from "babel-types";
 
 const SUPER_THIS_BOUND = Symbol("super this bound");
@@ -12,10 +11,10 @@ const superVisitor = {
     node[SUPER_THIS_BOUND] = true;
 
     path.replaceWith(t.assignmentExpression("=", this.id, node));
-  }
+  },
 };
 
-export default new Plugin({
+export default {
   name: "internal.shadowFunctions",
 
   visitor: {
@@ -27,9 +26,9 @@ export default new Plugin({
       if (path.node.name === "arguments") {
         remap(path, "arguments");
       }
-    }
-  }
-});
+    },
+  },
+};
 
 function shouldShadow(path, shadowPath) {
   if (path.is("_forceShadow")) {
@@ -94,7 +93,7 @@ function remap(path, key) {
   const cached = fnPath.getData(key);
   if (cached) return path.replaceWith(cached);
 
-  const id   = path.scope.generateUidIdentifier(key);
+  const id = path.scope.generateUidIdentifier(key);
 
   fnPath.setData(key, id);
 

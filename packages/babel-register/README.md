@@ -5,7 +5,7 @@
 One of the ways you can use Babel is through the require hook. The require hook
 will bind itself to node's `require` and automatically compile files on the
 fly. This is equivalent to CoffeeScript's
-[coffee-script/register](http://coffeescript.org/documentation/docs/register.html).
+[coffee-script/register](http://coffeescript.org/v2/annotated-source/register.html).
 
 ## Install
 

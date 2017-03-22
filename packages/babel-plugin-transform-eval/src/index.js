@@ -13,7 +13,7 @@ export default function ({ parse, traverse }) {
           traverse.removeProperties(ast);
           return ast.program;
         }
-      }
-    }
+      },
+    },
   };
 }

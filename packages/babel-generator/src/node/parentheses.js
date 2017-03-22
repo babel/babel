@@ -24,7 +24,7 @@ const PRECEDENCE = {
   "*": 9,
   "/": 9,
   "%": 9,
-  "**": 10
+  "**": 10,
 };
 
 export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
@@ -57,7 +57,7 @@ export function Binary(node: Object, parent: Object): boolean {
   }
 
   if (t.isBinary(parent)) {
-    const parentOp  = parent.operator;
+    const parentOp = parent.operator;
     const parentPos = PRECEDENCE[parentOp];
 
     const nodeOp = node.operator;
@@ -171,7 +171,7 @@ export function AssignmentExpression(node: Object): boolean {
 // in statement.
 function isFirstInStatement(printStack: Array<Object>, {
     considerArrow = false,
-    considerDefaultExports = false
+    considerDefaultExports = false,
   } = {}): boolean {
   let i = printStack.length - 1;
   let node = printStack[i];

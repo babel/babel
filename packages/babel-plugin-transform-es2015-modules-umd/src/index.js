@@ -1,5 +1,6 @@
 import { basename, extname } from "path";
 import template from "babel-template";
+import transformAMD from "babel-plugin-transform-es2015-modules-amd";
 
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
@@ -42,7 +43,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-transform-es2015-modules-amd"),
+    inherits: transformAMD,
 
     visitor: {
       Program: {
@@ -97,7 +98,8 @@ export default function ({ types: t }) {
             }
           });
 
-          const moduleNameOrBasename = moduleName ? moduleName.value : this.file.opts.basename;
+          const moduleNameOrBasename = moduleName ? moduleName.value :
+            basename(this.file.opts.filename, extname(this.file.opts.filename));
           let globalToAssign = t.memberExpression(
             t.identifier("global"), t.identifier(t.toIdentifier(moduleNameOrBasename))
           );
@@ -120,7 +122,7 @@ export default function ({ types: t }) {
           const globalExport = buildGlobalExport({
             BROWSER_ARGUMENTS: browserArgs,
             PREREQUISITE_ASSIGNMENTS: prerequisiteAssignments,
-            GLOBAL_TO_ASSIGN: globalToAssign
+            GLOBAL_TO_ASSIGN: globalToAssign,
           });
 
           last.replaceWith(buildWrapper({
@@ -128,10 +130,10 @@ export default function ({ types: t }) {
             AMD_ARGUMENTS: amdArgs,
             COMMON_ARGUMENTS: commonArgs,
             GLOBAL_EXPORT: globalExport,
-            FUNC: func
+            FUNC: func,
           }));
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

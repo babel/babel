@@ -105,13 +105,13 @@ export function setScope() {
 export function setContext(context) {
   this.shouldSkip = false;
   this.shouldStop = false;
-  this.removed    = false;
-  this.skipKeys   = {};
+  this.removed = false;
+  this.skipKeys = {};
 
   if (context) {
     this.context = context;
-    this.state   = context.state;
-    this.opts    = context.opts;
+    this.state = context.state;
+    this.opts = context.opts;
   }
 
   this.setScope();
@@ -193,8 +193,8 @@ export function pushContext(context) {
 }
 
 export function setup(parentPath, container, listKey, key) {
-  this.inList    = !!listKey;
-  this.listKey   = listKey;
+  this.inList = !!listKey;
+  this.listKey = listKey;
   this.parentKey = listKey || key;
   this.container = container;
 
@@ -203,7 +203,7 @@ export function setup(parentPath, container, listKey, key) {
 }
 
 export function setKey(key) {
-  this.key  = key;
+  this.key = key;
   this.node = this.container[this.key];
   this.type = this.node && this.node.type;
 }

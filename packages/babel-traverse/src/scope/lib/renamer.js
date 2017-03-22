@@ -20,7 +20,7 @@ const renameVisitor = {
     for (const name in ids) {
       if (name === state.oldName) ids[name].name = state.newName;
     }
-  }
+  },
 };
 
 export default class Renamer {
@@ -82,7 +82,7 @@ export default class Renamer {
     path.node._blockHoist = 3;
 
     path.replaceWith(t.variableDeclaration("let", [
-      t.variableDeclarator(t.identifier(this.newName), t.toExpression(path.node))
+      t.variableDeclarator(t.identifier(this.newName), t.toExpression(path.node)),
     ]));
   }
 
@@ -97,7 +97,7 @@ export default class Renamer {
     path.node.id = t.identifier(this.oldName);
 
     this.binding.scope.parent.push({
-      id: t.identifier(this.newName)
+      id: t.identifier(this.newName),
     });
 
     path.replaceWith(t.assignmentExpression("=", t.identifier(this.newName), path.node));

@@ -110,6 +110,10 @@ module.exports = function preset (context, options, fileContext) {
 - Sven SAULEAU ([xtuc](https://github.com/xtuc))
 - Zachary Miller ([zjmiller](https://github.com/zjmiller))
 
+## 6.23.1 (2017-02-13)
+
+Regression: Revert https://github.com/babel/babel/pull/5306 since it made a backwards-incompatible change.
+
 ## 6.23.0 (2017-02-13)
 
 #### :rocket: New Feature

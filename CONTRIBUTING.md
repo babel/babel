@@ -40,9 +40,12 @@ Feel free to check out the `#discussion`/`#development` channels on our [slack](
 
 **Note:** Versions `< 5.1.10` can't be built.
 
-Babel is built for node 0.10 and up but we develop using node 6. Make sure you are on npm 3.
+Babel is built for node 4 and up but we develop using node 6. Make sure you are on npm 3.
 
 You can check this with `node -v` and `npm -v`.
+
+In addition, make sure that Yarn is installed.
+Installation instructions can be found here: https://yarnpkg.com/en/docs/install.
 
 ### Setup
 

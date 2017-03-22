@@ -2,18 +2,6 @@ import * as t from "babel-types";
 import jsesc from "jsesc";
 
 export function Identifier(node: Object) {
-  // FIXME: We hang variance off Identifer to support Flow's def-site variance.
-  // This is a terrible hack, but changing type annotations to use a new,
-  // dedicated node would be a breaking change. This should be cleaned up in
-  // the next major.
-  if (node.variance) {
-    if (node.variance === "plus") {
-      this.token("+");
-    } else if (node.variance === "minus") {
-      this.token("-");
-    }
-  }
-
   this.word(node.name);
 }
 
@@ -24,8 +12,6 @@ export function RestElement(node: Object) {
 
 export {
   RestElement as SpreadElement,
-  RestElement as SpreadProperty,
-  RestElement as RestProperty,
 };
 
 export function ObjectExpression(node: Object) {
@@ -83,7 +69,7 @@ export function ObjectProperty(node: Object) {
 
 export function ArrayExpression(node: Object) {
   const elems = node.elements;
-  const len   = elems.length;
+  const len = elems.length;
 
   this.token("[");
   this.printInnerComments(node);
@@ -143,7 +129,7 @@ export function StringLiteral(node: Object, parent: Object) {
   // ensure the output is ASCII-safe
   const opts = {
     quotes: t.isJSX(parent) ? "double" : this.format.quotes,
-    wrap: true
+    wrap: true,
   };
   if (this.format.jsonCompatibleStrings) {
     opts.json = true;

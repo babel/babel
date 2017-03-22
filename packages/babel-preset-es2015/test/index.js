@@ -2,18 +2,10 @@ import es2015 from "../lib";
 import { expect } from "chai";
 
 describe("es2015 preset", function () {
-  it("exposes an object", function () {
-    // Changing this will break compatibility with babel-core < 6.13.x.
-    expect(typeof es2015).to.equal("object");
-  });
-
-  it("exposes a separate list of plugins", function () {
-    expect(Array.isArray(es2015.plugins)).to.equal(true);
-  });
 
   it("doesn't throw with no options passed", function () {
     expect(function () {
-      es2015.buildPreset(null);
+      es2015(null);
     }).not.to.throw();
   });
 
@@ -21,7 +13,7 @@ describe("es2015 preset", function () {
     describe("loose", function () {
       it("throws on non-boolean value", function () {
         expect(function () {
-          es2015.buildPreset(null, { loose: 1 });
+          es2015(null, { loose: 1 });
         }).to.throw(/must be a boolean/);
       });
     });
@@ -29,25 +21,25 @@ describe("es2015 preset", function () {
     describe("modules", function () {
       it("doesn't throw when passing one false", function () {
         expect(function () {
-          es2015.buildPreset(null, { modules: false });
+          es2015(null, { modules: false });
         }).not.to.throw();
       });
 
       it("doesn't throw when passing one of: 'commonjs', 'amd', 'umd', 'systemjs", function () {
         expect(function () {
-          es2015.buildPreset(null, { modules: "commonjs" });
+          es2015(null, { modules: "commonjs" });
         }).not.to.throw();
 
         expect(function () {
-          es2015.buildPreset(null, { modules: "amd" });
+          es2015(null, { modules: "amd" });
         }).not.to.throw();
 
         expect(function () {
-          es2015.buildPreset(null, { modules: "umd" });
+          es2015(null, { modules: "umd" });
         }).not.to.throw();
 
         expect(function () {
-          es2015.buildPreset(null, { modules: "systemjs" });
+          es2015(null, { modules: "systemjs" });
         }).not.to.throw();
       });
     });

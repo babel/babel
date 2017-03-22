@@ -4,10 +4,22 @@ import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
 import invariant from "invariant";
 import traverse from "../index";
-import assign from "lodash/assign";
 import Scope from "../scope";
 import * as t from "babel-types";
 import { path as pathCache } from "../cache";
+
+// NodePath is split across many files.
+import * as NodePath_ancestry from "./ancestry";
+import * as NodePath_inference from "./inference";
+import * as NodePath_replacement from "./replacement";
+import * as NodePath_evaluation from "./evaluation";
+import * as NodePath_conversion from "./conversion";
+import * as NodePath_introspection from "./introspection";
+import * as NodePath_context from "./context";
+import * as NodePath_removal from "./removal";
+import * as NodePath_modification from "./modification";
+import * as NodePath_family from "./family";
+import * as NodePath_comments from "./comments";
 
 const debug = buildDebug("babel");
 
@@ -125,7 +137,7 @@ export default class NodePath {
     this.hub.file.metadata.marked.push({
       type,
       message,
-      loc: this.node.loc
+      loc: this.node.loc,
     });
   }
 
@@ -151,17 +163,18 @@ export default class NodePath {
   }
 }
 
-assign(NodePath.prototype, require("./ancestry"));
-assign(NodePath.prototype, require("./inference"));
-assign(NodePath.prototype, require("./replacement"));
-assign(NodePath.prototype, require("./evaluation"));
-assign(NodePath.prototype, require("./conversion"));
-assign(NodePath.prototype, require("./introspection"));
-assign(NodePath.prototype, require("./context"));
-assign(NodePath.prototype, require("./removal"));
-assign(NodePath.prototype, require("./modification"));
-assign(NodePath.prototype, require("./family"));
-assign(NodePath.prototype, require("./comments"));
+Object.assign(NodePath.prototype,
+  NodePath_ancestry,
+  NodePath_inference,
+  NodePath_replacement,
+  NodePath_evaluation,
+  NodePath_conversion,
+  NodePath_introspection,
+  NodePath_context,
+  NodePath_removal,
+  NodePath_modification,
+  NodePath_family,
+  NodePath_comments);
 
 for (const type of (t.TYPES: Array<string>)) {
   const typeKey = `is${type}`;

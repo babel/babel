@@ -1,3 +1,5 @@
+import syntaxFlow from "babel-plugin-syntax-flow";
+
 export default function ({ types: t }) {
   function wrapInFlowComment(path, parent) {
     path.addComment("trailing", generateComment(path, parent));
@@ -12,7 +14,7 @@ export default function ({ types: t }) {
   }
 
   return {
-    inherits: require("babel-plugin-syntax-flow"),
+    inherits: syntaxFlow,
 
     visitor: {
       TypeCastExpression(path) {
@@ -33,14 +35,14 @@ export default function ({ types: t }) {
       AssignmentPattern: {
         exit({ node }) {
           node.left.optional = false;
-        }
+        },
       },
 
       // strip optional property from function params - facebook/fbjs#17
       Function: {
         exit({ node }) {
           node.params.forEach((param) => param.optional = false);
-        }
+        },
       },
 
       // support for `class X { foo: string }` - #4622
@@ -65,7 +67,7 @@ export default function ({ types: t }) {
           return;
         }
         wrapInFlowComment(path, parent);
-      }
-    }
+      },
+    },
   };
 }

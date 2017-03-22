@@ -2,6 +2,10 @@ import * as t from "../lib";
 import { assert } from "chai";
 
 describe("converters", function () {
+  it("toIdentifier", function () {
+    assert.equal(t.toIdentifier("swag-lord"), "swagLord");
+  });
+
   describe("valueToNode", function () {
     it("number", function () {
       assert.deepEqual(t.valueToNode(Math.PI), t.numericLiteral(Math.PI));
@@ -31,10 +35,10 @@ describe("converters", function () {
     it("object", function () {
       assert.deepEqual(t.valueToNode({
         a: 1,
-        "b c": 2
+        "b c": 2,
       }), t.objectExpression([
         t.objectProperty(t.identifier("a"), t.numericLiteral(1)),
-        t.objectProperty(t.stringLiteral("b c"), t.numericLiteral(2))
+        t.objectProperty(t.stringLiteral("b c"), t.numericLiteral(2)),
       ]));
     });
     it("throws if cannot convert", function () {

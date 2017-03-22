@@ -7,7 +7,7 @@ export default function ({ types: t }) {
       if (!path.isFunctionDeclaration()) continue;
 
       const declar = t.variableDeclaration("let", [
-        t.variableDeclarator(func.id, t.toExpression(func))
+        t.variableDeclarator(func.id, t.toExpression(func)),
       ]);
 
       // hoist it up above everything else
@@ -24,7 +24,7 @@ export default function ({ types: t }) {
     visitor: {
       BlockStatement(path) {
         const { node, parent } = path;
-        if (t.isFunction(parent, { body: node })  || t.isExportDeclaration(parent)) {
+        if (t.isFunction(parent, { body: node }) || t.isExportDeclaration(parent)) {
           return;
         }
 
@@ -33,7 +33,7 @@ export default function ({ types: t }) {
 
       SwitchCase(path) {
         statementList("consequent", path);
-      }
-    }
+      },
+    },
   };
 }

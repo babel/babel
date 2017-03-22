@@ -5,14 +5,16 @@ var code = multiline([
 ]);
 
 transform(code, {
-  plugins: function (b) {
-    var t = b.types;
-    return {
-      visitor: {
-        ConditionalExpression: function(path) {
-          path.get("test").evaluateTruthy();
+  plugins: [
+    function (b) {
+      var t = b.types;
+      return {
+        visitor: {
+          ConditionalExpression: function(path) {
+            path.get("test").evaluateTruthy();
+          }
         }
       }
-    }
-  }
+    },
+  ],
 });

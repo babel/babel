@@ -1,4 +1,5 @@
 import template from "babel-template";
+import transformCommonjs from "babel-plugin-transform-es2015-modules-commonjs";
 
 const buildDefine = template(`
   define(MODULE_NAME, [SOURCES], FACTORY);
@@ -54,11 +55,11 @@ export default function ({ types: t }) {
       this.sources.push([id.node, source]);
 
       path.remove();
-    }
+    },
   };
 
   return {
-    inherits: require("babel-plugin-transform-es2015-modules-commonjs"),
+    inherits: transformCommonjs,
 
     pre() {
       // source strings
@@ -103,7 +104,7 @@ export default function ({ types: t }) {
           const { node } = path;
           const factory = buildFactory({
             PARAMS: params,
-            BODY: node.body
+            BODY: node.body,
           });
           factory.expression.body.directives = node.directives;
           node.directives = [];
@@ -111,10 +112,10 @@ export default function ({ types: t }) {
           node.body = [buildDefine({
             MODULE_NAME: moduleName,
             SOURCES: sources,
-            FACTORY: factory
+            FACTORY: factory,
           })];
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

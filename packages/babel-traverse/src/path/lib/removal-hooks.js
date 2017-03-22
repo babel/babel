@@ -67,9 +67,9 @@ export const hooks = [
     ) {
       self.replaceWith({
         type: "BlockStatement",
-        body: []
+        body: [],
       });
       return true;
     }
-  }
+  },
 ];

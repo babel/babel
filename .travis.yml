@@ -3,13 +3,13 @@ git:
 sudo: false
 language: node_js
 cache:
+  yarn: true
   directories:
   - node_modules
 node_js:
+  - '7'
   - '6'
-  - '5'
   - '4'
-  - '0.12'
 
 env:
   - JOB=test

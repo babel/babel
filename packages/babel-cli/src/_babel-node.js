@@ -1,26 +1,36 @@
-import pathIsAbsolute from "path-is-absolute";
 import commander from "commander";
 import Module from "module";
 import { inspect } from "util";
 import path from "path";
 import repl from "repl";
-import { util } from "babel-core";
 import * as babel from "babel-core";
 import vm from "vm";
 import "babel-polyfill";
 import register from "babel-register";
 
+import pkg from "../package.json";
+
 const program = new commander.Command("babel-node");
 
+function collect(value, previousValue): Array<string> {
+  // If the user passed the option with no value, like "babel-node file.js --presets", do nothing.
+  if (typeof value !== "string") return previousValue;
+
+  const values = value.split(",");
+
+  return previousValue ? previousValue.concat(values) : values;
+}
+
+/* eslint-disable max-len */
 program.option("-e, --eval [script]", "Evaluate script");
 program.option("-p, --print [code]", "Evaluate script and print result");
-program.option("-o, --only [globs]", "");
-program.option("-i, --ignore [globs]", "");
-program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]");
-program.option("-w, --plugins [string]", "", util.list);
-program.option("-b, --presets [string]", "", util.list);
+program.option("-o, --only [globs]", "A comma-separated list of glob patterns to compile", collect);
+program.option("-i, --ignore [globs]", "A comma-separated list of glob patterns to skip compiling", collect);
+program.option("-x, --extensions [extensions]", "List of extensions to hook into [.es6,.js,.es,.jsx]", collect);
+program.option("-w, --plugins [string]", "", collect);
+program.option("-b, --presets [string]", "", collect);
+/* eslint-enable max-len */
 
-const pkg = require("../package.json");
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
@@ -29,10 +39,10 @@ program.parse(process.argv);
 
 register({
   extensions: program.extensions,
-  ignore:     program.ignore,
-  only:       program.only,
-  plugins:    program.plugins,
-  presets:    program.presets,
+  ignore: program.ignore,
+  only: program.only,
+  plugins: program.plugins,
+  presets: program.presets,
 });
 
 //
@@ -55,8 +65,8 @@ const replPlugin = ({ types: t }) => ({
       // If the executed code doesn't evaluate to a value,
       // prevent implicit strict mode from printing 'use strict'.
       path.pushContainer("body", t.expressionStatement(t.identifier("undefined")));
-    }
-  }
+    },
+  },
 });
 
 //
@@ -68,11 +78,11 @@ const _eval = function (code, filename) {
   code = babel.transform(code, {
     filename: filename,
     presets: program.presets,
-    plugins: (program.plugins || []).concat([replPlugin])
+    plugins: (program.plugins || []).concat([replPlugin]),
   }).code;
 
   return vm.runInThisContext(code, {
-    filename: filename
+    filename: filename,
   });
 };
 
@@ -85,10 +95,10 @@ if (program.eval || program.print) {
 
   const module = new Module(global.__filename);
   module.filename = global.__filename;
-  module.paths    = Module._nodeModulePaths(global.__dirname);
+  module.paths = Module._nodeModulePaths(global.__dirname);
 
   global.exports = module.exports;
-  global.module  = module;
+  global.module = module;
   global.require = module.require.bind(module);
 
   const result = _eval(code, global.__filename);
@@ -123,7 +133,7 @@ if (program.eval || program.print) {
 
     // make the filename absolute
     const filename = args[0];
-    if (!pathIsAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
+    if (!path.isAbsolute(filename)) args[0] = path.join(process.cwd(), filename);
 
     // add back on node and concat the sliced args
     process.argv = ["node"].concat(args);
@@ -141,7 +151,7 @@ function replStart() {
     input: process.stdin,
     output: process.stdout,
     eval: replEval,
-    useGlobal: true
+    useGlobal: true,
   });
 }
 

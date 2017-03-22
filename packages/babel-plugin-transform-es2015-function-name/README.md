@@ -2,6 +2,22 @@
 
 > Apply ES2015 function.name semantics to all functions
 
+## Examples
+
+**In**
+
+```javascript
+let number = (x) => x
+```
+
+**Out**
+
+```javascript
+var number = function number(x) {
+  return x;
+};
+```
+
 ## Installation
 
 ```sh

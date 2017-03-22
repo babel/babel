@@ -575,12 +575,12 @@ Aliases: `Flow`, `FlowBaseAnnotation`
 
 ---
 
-### existentialTypeParam
+### existsTypeAnnotation
 ```javascript
-t.existentialTypeParam()
+t.existsTypeAnnotation()
 ```
 
-See also `t.isExistentialTypeParam(node, opts)` and `t.assertExistentialTypeParam(node, opts)`.
+See also `t.isExistsTypeAnnotation(node, opts)` and `t.assertExistsTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`
 
@@ -694,21 +694,6 @@ See also `t.isFile(node, opts)` and `t.assertFile(node, opts)`.
 
 ---
 
-### forAwaitStatement
-```javascript
-t.forAwaitStatement(left, right, body)
-```
-
-See also `t.isForAwaitStatement(node, opts)` and `t.assertForAwaitStatement(node, opts)`.
-
-Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
-
- - `left`: `VariableDeclaration | LVal` (required)
- - `right`: `Expression` (required)
- - `body`: `Statement` (required)
-
----
-
 ### forInStatement
 ```javascript
 t.forInStatement(left, right, body)
@@ -736,6 +721,7 @@ Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
  - `left`: `VariableDeclaration | LVal` (required)
  - `right`: `Expression` (required)
  - `body`: `Statement` (required)
+ - `await`: `boolean` (default: `false`)
 
 ---
 
@@ -1271,6 +1257,18 @@ Aliases: `Flow`
 
 ---
 
+### numberLiteralTypeAnnotation
+```javascript
+t.numberLiteralTypeAnnotation()
+```
+
+See also `t.isNumberLiteralTypeAnnotation(node, opts)` and `t.assertNumberLiteralTypeAnnotation(node, opts)`.
+
+Aliases: `Flow`
+
+
+---
+
 ### numberTypeAnnotation
 ```javascript
 t.numberTypeAnnotation()
@@ -1296,18 +1294,6 @@ Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
 ---
 
-### numericLiteralTypeAnnotation
-```javascript
-t.numericLiteralTypeAnnotation()
-```
-
-See also `t.isNumericLiteralTypeAnnotation(node, opts)` and `t.assertNumericLiteralTypeAnnotation(node, opts)`.
-
-Aliases: `Flow`
-
-
----
-
 ### objectExpression
 ```javascript
 t.objectExpression(properties)
@@ -1317,7 +1303,7 @@ See also `t.isObjectExpression(node, opts)` and `t.assertObjectExpression(node, 
 
 Aliases: `Expression`
 
- - `properties`: `Array<ObjectMethod | ObjectProperty | SpreadProperty>` (required)
+ - `properties`: `Array<ObjectMethod | ObjectProperty | SpreadElement>` (required)
 
 ---
 
@@ -1352,7 +1338,7 @@ See also `t.isObjectPattern(node, opts)` and `t.assertObjectPattern(node, opts)`
 
 Aliases: `Pattern`, `LVal`
 
- - `properties`: `Array<RestProperty | Property>` (required)
+ - `properties`: `Array<RestElement | Property>` (required)
  - `typeAnnotation` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
 
@@ -1502,19 +1488,6 @@ Aliases: `LVal`
 
 ---
 
-### restProperty
-```javascript
-t.restProperty(argument)
-```
-
-See also `t.isRestProperty(node, opts)` and `t.assertRestProperty(node, opts)`.
-
-Aliases: `UnaryLike`
-
- - `argument`: `LVal` (required)
-
----
-
 ### returnStatement
 ```javascript
 t.returnStatement(argument)
@@ -1547,19 +1520,6 @@ t.spreadElement(argument)
 ```
 
 See also `t.isSpreadElement(node, opts)` and `t.assertSpreadElement(node, opts)`.
-
-Aliases: `UnaryLike`
-
- - `argument`: `Expression` (required)
-
----
-
-### spreadProperty
-```javascript
-t.spreadProperty(argument)
-```
-
-See also `t.isSpreadProperty(node, opts)` and `t.assertSpreadProperty(node, opts)`.
 
 Aliases: `UnaryLike`
 

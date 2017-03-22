@@ -63,14 +63,14 @@ publish:
 	BABEL_ENV=production make build-dist
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
-	./node_modules/.bin/lerna publish --only-explicit-updates
+	# --only-explicit-updates
+	./node_modules/.bin/lerna publish --npm-tag=next --exact --skip-temp-tag
 	make clean
 
 bootstrap:
 	make clean-all
-	npm install
+	yarn
 	./node_modules/.bin/lerna bootstrap
 	make build
 	cd packages/babel-runtime; \
-	npm install; \
 	node scripts/build-dist.js

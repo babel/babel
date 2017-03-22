@@ -8,8 +8,8 @@ export default function ({ types: t }) {
             // default: "bar" -> "default": "bar"
             node.key = t.stringLiteral(key.name);
           }
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

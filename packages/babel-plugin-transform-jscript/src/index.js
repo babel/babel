@@ -10,12 +10,12 @@ export default function ({ types: t }) {
           path.replaceWith(t.callExpression(
             t.functionExpression(null, [], t.blockStatement([
               t.toStatement(node),
-              t.returnStatement(node.id)
+              t.returnStatement(node.id),
             ])),
             []
           ));
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

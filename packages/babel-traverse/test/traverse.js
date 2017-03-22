@@ -1,7 +1,7 @@
 const cloneDeep = require("lodash/cloneDeep");
-const traverse  = require("../lib").default;
-const assert    = require("assert");
-const parse     = require("babylon").parse;
+const traverse = require("../lib").default;
+const assert = require("assert");
+const parse = require("babylon").parse;
 
 describe("traverse", function () {
   const code = `
@@ -15,14 +15,14 @@ describe("traverse", function () {
   it("traverse replace", function () {
     const replacement = {
       type: "StringLiteral",
-      value: "foo"
+      value: "foo",
     };
     const ast2 = cloneDeep(program);
 
     traverse(ast2, {
       enter: function (path) {
         if (path.node.type === "ThisExpression") path.replaceWith(replacement);
-      }
+      },
     });
 
     assert.equal(ast2.body[1].expression.left.object, replacement);
@@ -32,7 +32,7 @@ describe("traverse", function () {
     const expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
       body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object,
-      body[1].expression.left.property, body[1].expression.right
+      body[1].expression.left.property, body[1].expression.right,
     ];
 
     const actual = [];
@@ -40,7 +40,7 @@ describe("traverse", function () {
     traverse(program, {
       enter: function (path) {
         actual.push(path.node);
-      }
+      },
     });
 
     assert.deepEqual(actual, expect);
@@ -50,14 +50,14 @@ describe("traverse", function () {
     traverse(null, {
       enter: function () {
         throw new Error("should not be ran");
-      }
+      },
     });
   });
 
   it("traverse blacklistTypes", function () {
     const expect = [
       body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
-      body[1], body[1].expression, body[1].expression.right
+      body[1], body[1].expression, body[1].expression.right,
     ];
 
     const actual = [];
@@ -66,7 +66,7 @@ describe("traverse", function () {
       blacklist: ["MemberExpression"],
       enter: function (path) {
         actual.push(path.node);
-      }
+      },
     });
 
     assert.deepEqual(actual, expect);
@@ -93,7 +93,7 @@ describe("traverse", function () {
         scopes.push(path.scope);
         paths.push(path);
         path.stop();
-      }
+      },
     });
 
     traverse.clearCache();
@@ -105,7 +105,7 @@ describe("traverse", function () {
         scopes2.push(path.scope);
         paths2.push(path);
         path.stop();
-      }
+      },
     });
 
     scopes2.forEach(function (_, i) {
@@ -119,7 +119,7 @@ describe("traverse", function () {
     traverse(ast, {
       enter(path) {
         paths.push(path);
-      }
+      },
     });
 
     traverse.clearCache.clearPath();
@@ -128,7 +128,7 @@ describe("traverse", function () {
     traverse(ast, {
       enter(path) {
         paths2.push(path);
-      }
+      },
     });
 
     paths2.forEach(function (p, i) {
@@ -142,7 +142,7 @@ describe("traverse", function () {
       enter(path) {
         scopes.push(path.scope);
         path.stop();
-      }
+      },
     });
 
     traverse.clearCache.clearScope();
@@ -152,7 +152,7 @@ describe("traverse", function () {
       enter(path) {
         scopes2.push(path.scope);
         path.stop();
-      }
+      },
     });
 
     scopes2.forEach(function (p, i) {

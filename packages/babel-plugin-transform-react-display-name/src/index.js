@@ -42,7 +42,7 @@ export default function ({ types: t }) {
     visitor: {
       ExportDefaultDeclaration({ node }, state) {
         if (isCreateClass(node.declaration)) {
-          let displayName = state.file.opts.basename;
+          let displayName = path.basename(state.file.opts.filename, path.extname(state.file.opts.filename));
 
           // ./{module name}/index.js
           if (displayName === "index") {
@@ -88,7 +88,7 @@ export default function ({ types: t }) {
         if (t.isIdentifier(id)) {
           addDisplayName(id.name, node);
         }
-      }
-    }
+      },
+    },
   };
 }

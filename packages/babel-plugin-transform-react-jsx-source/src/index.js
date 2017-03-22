@@ -45,9 +45,7 @@ export default function ({ types: t }) {
       }
 
       if (!state.fileNameIdentifier) {
-        const fileName = state.file.log.filename !== "unknown"
-          ? state.file.log.filename
-          : null;
+        const fileName = state.file.opts.filename;
 
         const fileNameIdentifier = path.scope.generateUidIdentifier(FILE_NAME_VAR);
         path.hub.file.scope.push({ id: fileNameIdentifier, init: t.stringLiteral(fileName) });
@@ -56,10 +54,10 @@ export default function ({ types: t }) {
 
       const trace = makeTrace(state.fileNameIdentifier, location.start.line);
       attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
-    }
+    },
   };
 
   return {
-    visitor
+    visitor,
   };
 }

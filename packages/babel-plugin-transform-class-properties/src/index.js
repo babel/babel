@@ -1,5 +1,6 @@
 import nameFunction from "babel-helper-function-name";
 import template from "babel-template";
+import syntaxClassProperties from "babel-plugin-syntax-class-properties";
 
 export default function ({ types: t }) {
   const findBareSupers = {
@@ -7,7 +8,7 @@ export default function ({ types: t }) {
       if (path.parentPath.isCallExpression({ callee: path.node })) {
         this.push(path.parentPath);
       }
-    }
+    },
   };
 
   const referenceVisitor = {
@@ -16,7 +17,7 @@ export default function ({ types: t }) {
         this.collision = true;
         path.skip();
       }
-    }
+    },
   };
 
   const buildObjectDefineProperty = template(`
@@ -31,7 +32,7 @@ export default function ({ types: t }) {
   const buildClassPropertySpec = (ref, { key, value, computed }) => buildObjectDefineProperty({
     REF: ref,
     KEY: (t.isIdentifier(key) && !computed) ? t.stringLiteral(key.name) : key,
-    VALUE: value ? value : t.identifier("undefined")
+    VALUE: value ? value : t.identifier("undefined"),
   });
 
   const buildClassPropertyNonSpec = (ref, { key, value, computed }) => t.expressionStatement(
@@ -39,7 +40,7 @@ export default function ({ types: t }) {
   );
 
   return {
-    inherits: require("babel-plugin-syntax-class-properties"),
+    inherits: syntaxClassProperties,
 
     visitor: {
       Class(path, state) {
@@ -110,7 +111,7 @@ export default function ({ types: t }) {
 
           const collisionState = {
             collision: false,
-            scope: constructor.scope
+            scope: constructor.scope,
           };
 
           for (const prop of props) {
@@ -125,14 +126,14 @@ export default function ({ types: t }) {
               t.variableDeclarator(
                 initialisePropsRef,
                 t.functionExpression(null, [], t.blockStatement(instanceBody))
-              )
+              ),
             ]));
 
             instanceBody = [
               t.expressionStatement(
                 t.callExpression(t.memberExpression(initialisePropsRef, t.identifier("call")), [
                   t.thisExpression()])
-              )
+              ),
             ];
           }
 
@@ -179,7 +180,7 @@ export default function ({ types: t }) {
         if (members.some((member) => member.isClassProperty())) {
           path.ensureBlock();
         }
-      }
-    }
+      },
+    },
   };
 }

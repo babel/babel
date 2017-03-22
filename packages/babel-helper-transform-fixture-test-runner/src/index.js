@@ -8,13 +8,83 @@ import includes from "lodash/includes";
 import * as helpers from "./helpers";
 import extend from "lodash/extend";
 import merge from "lodash/merge";
+import resolve from "resolve";
 import assert from "assert";
 import chai from "chai";
-import "babel-polyfill";
 import fs from "fs";
 import path from "path";
+import vm from "vm";
 
-const babelHelpers = eval(buildExternalHelpers(null, "var"));
+const moduleCache = {};
+const testContext = vm.createContext({
+  ...helpers,
+  assert: chai.assert,
+  transform: babel.transform,
+});
+testContext.global = testContext;
+
+// Initialize the test context with the polyfill, and then freeze the global to prevent implicit
+// global creation in tests, which could cause things to bleed between tests.
+runModuleInTestContext("babel-polyfill", __filename);
+
+// Populate the "babelHelpers" global with Babel's helper utilities.
+runCodeInTestContext(buildExternalHelpers());
+
+/**
+ * A basic implementation of CommonJS so we can execute `babel-polyfill` inside our test context.
+ * This allows us to run our unittests
+ */
+function runModuleInTestContext(id: string, relativeFilename: string) {
+  const filename = resolve.sync(id, { basedir: path.dirname(relativeFilename) });
+
+  // Expose Node-internal modules if the tests want them. Note, this will not execute inside
+  // the context's global scope.
+  if (filename === id) return require(id);
+
+  if (moduleCache[filename]) return moduleCache[filename].exports;
+
+  const module = moduleCache[filename] = {
+    id: filename,
+    exports: {},
+  };
+  const dirname = path.dirname(filename);
+  const req = (id) => runModuleInTestContext(id, filename);
+
+  const src = fs.readFileSync(filename, "utf8");
+  const code = `(function (exports, require, module, __filename, __dirname) {${src}\n});`;
+
+  vm.runInContext(code, testContext, {
+    filename,
+    displayErrors: true,
+  }).call(module.exports, module.exports, req, module, filename, dirname);
+
+  return module.exports;
+}
+
+/**
+ * Run the given snippet of code inside a CommonJS module.
+ *
+ * Exposed for unit tests, not for use as an API.
+ */
+export function runCodeInTestContext(code: string, opts: {filename?: string} = {}) {
+  const filename = opts.filename || null;
+  const dirname = filename ? path.dirname(filename) : null;
+  const req = filename ? ((id) => runModuleInTestContext(id, filename)) : null;
+
+  const module = {
+    id: filename,
+    exports: {},
+  };
+
+  // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
+  // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
+  // rely on 'this === global'.
+  const src = `(function(exports, require, module, __filename, __dirname, opts) {${code}\n});`;
+  return vm.runInContext(src, testContext, {
+    filename,
+    displayErrors: true,
+  })(module.exports, req, module, filename, dirname, opts);
+}
 
 function wrapPackagesArray(type, names, optionsDir) {
   return (names || []).map(function (val) {
@@ -42,8 +112,8 @@ function wrapPackagesArray(type, names, optionsDir) {
 function run(task) {
   const actual = task.actual;
   const expect = task.expect;
-  const exec   = task.exec;
-  const opts   = task.options;
+  const exec = task.exec;
+  const opts = task.options;
   const optionsDir = task.optionsDir;
 
   function getOpts(self) {
@@ -70,12 +140,11 @@ function run(task) {
 
   if (execCode) {
     const execOpts = getOpts(exec);
-    const execDirName = path.dirname(exec.loc);
     result = babel.transform(execCode, execOpts);
     execCode = result.code;
 
     try {
-      resultExec = runExec(execOpts, execCode, execDirName);
+      resultExec = runCodeInTestContext(execCode, execOpts);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
       err.message += codeFrame(execCode);
@@ -119,23 +188,6 @@ function run(task) {
   }
 }
 
-function runExec(opts, execCode, execDirname) {
-  const sandbox = {
-    ...helpers,
-    babelHelpers,
-    assert: chai.assert,
-    transform: babel.transform,
-    opts,
-    exports: {},
-    require(id) {
-      return require(id[0] === "." ? path.resolve(execDirname, id) : id);
-    }
-  };
-
-  const fn = new Function(...Object.keys(sandbox), execCode);
-  return fn.apply(null, Object.values(sandbox));
-}
-
 export default function (
   fixturesLoc: string,
   name: string,
@@ -160,8 +212,8 @@ export default function (
 
           defaults(task.options, {
             filenameRelative: task.expect.filename,
-            sourceFileName:   task.actual.filename,
-            sourceMapTarget:  task.expect.filename,
+            sourceFileName: task.actual.filename,
+            sourceMapTarget: task.expect.filename,
             suppressDeprecationMessages: true,
             babelrc: false,
             sourceMap: !!(task.sourceMappings || task.sourceMap),

@@ -8,18 +8,18 @@ import Chalk from "chalk";
 
 function getDefs(chalk) {
   return {
-    keyword:     chalk.cyan,
+    keyword: chalk.cyan,
     capitalized: chalk.yellow,
-    jsx_tag:     chalk.yellow,
-    punctuator:  chalk.yellow,
+    jsx_tag: chalk.yellow,
+    punctuator: chalk.yellow,
     // bracket:  intentionally omitted.
-    number:      chalk.magenta,
-    string:      chalk.green,
-    regex:       chalk.magenta,
-    comment:     chalk.grey,
-    invalid:     chalk.white.bgRed.bold,
-    gutter:      chalk.grey,
-    marker:      chalk.red.bold,
+    number: chalk.magenta,
+    string: chalk.green,
+    regex: chalk.magenta,
+    comment: chalk.grey,
+    invalid: chalk.white.bgRed.bold,
+    gutter: chalk.grey,
+    marker: chalk.red.bold,
   };
 }
 
@@ -117,7 +117,7 @@ export default function (
 
   const lines = rawLines.split(NEWLINE);
   let start = Math.max(lineNumber - (linesAbove + 1), 0);
-  let end   = Math.min(lines.length, lineNumber + linesBelow);
+  let end = Math.min(lines.length, lineNumber + linesBelow);
 
   if (!lineNumber && !colNumber) {
     start = 0;
@@ -138,14 +138,14 @@ export default function (
           "\n ",
           maybeHighlight(defs.gutter, gutter.replace(/\d/g, " ")),
           markerSpacing,
-          maybeHighlight(defs.marker, "^")
+          maybeHighlight(defs.marker, "^"),
         ].join("");
       }
       return [
         maybeHighlight(defs.marker, ">"),
         maybeHighlight(defs.gutter, gutter),
         line,
-        markerLine
+        markerLine,
       ].join("");
     } else {
       return ` ${maybeHighlight(defs.gutter, gutter)}${line}`;

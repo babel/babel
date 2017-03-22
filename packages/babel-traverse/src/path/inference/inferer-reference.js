@@ -101,7 +101,7 @@ function inferAnnotationFromBinaryExpression(name, path) {
   const operator = path.node.operator;
 
   const right = path.get("right").resolve();
-  const left  = path.get("left").resolve();
+  const left = path.get("left").resolve();
 
   let target;
   if (left.isIdentifier({ name })) {
@@ -167,7 +167,7 @@ function getConditionalAnnotation(path, name) {
   const ifStatement = getParentConditionalPath(path);
   if (!ifStatement) return;
 
-  const test  = ifStatement.get("test");
+  const test = ifStatement.get("test");
   const paths = [test];
   const types = [];
 
@@ -188,7 +188,7 @@ function getConditionalAnnotation(path, name) {
   if (types.length) {
     return {
       typeAnnotation: t.createUnionTypeAnnotation(types),
-      ifStatement
+      ifStatement,
     };
   } else {
     return getConditionalAnnotation(ifStatement, name);

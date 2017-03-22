@@ -1,5 +1,5 @@
-import { transform } from "../lib/api/node";
-import Plugin from "../lib/transformation/plugin";
+import { transform } from "../lib/index";
+import Plugin from "../lib/config/plugin";
 import chai from "chai";
 
 describe("traversal path", function () {
@@ -11,9 +11,9 @@ describe("traversal path", function () {
         visitor: {
           FunctionDeclaration: function (path) {
             path.replaceWithSourceString("console.whatever()");
-          }
-        }
-      })]
+          },
+        },
+      })],
     }).code;
 
     chai.expect(actualCode).to.be.equal("console.whatever();");
@@ -32,13 +32,13 @@ describe("traversal path", function () {
                 type: "ReturnStatement",
                 argument: {
                   type: "BooleanLiteral",
-                  value: true
-                }
-              }]
+                  value: true,
+                },
+              }],
             });
-          }
-        }
-      })]
+          },
+        },
+      })],
     }).code;
 
     chai.expect(actualCode).to.be.equal("var fn = () => {\n  return true;\n};");
@@ -53,11 +53,11 @@ describe("traversal path", function () {
           ArrowFunctionExpression: function (path) {
             path.get("body").replaceWith({
               type: "BooleanLiteral",
-              value: true
+              value: true,
             });
-          }
-        }
-      })]
+          },
+        },
+      })],
     }).code;
 
     chai.expect(actualCode).to.be.equal("var fn = () => true;");
@@ -77,13 +77,13 @@ describe("traversal path", function () {
                 type: "VariableDeclarator",
                 id: {
                   type: "Identifier",
-                  name: "KEY"
-                }
-              }]
+                  name: "KEY",
+                },
+              }],
             });
-          }
-        }
-      })]
+          },
+        },
+      })],
     }).code;
 
     chai.expect(actualCode).to.be.equal("for (var KEY in right);");
@@ -98,11 +98,11 @@ describe("traversal path", function () {
           ForInStatement: function (path) {
             path.get("left").replaceWith({
               type: "Identifier",
-              name: "KEY"
+              name: "KEY",
             });
-          }
-        }
-      })]
+          },
+        },
+      })],
     }).code;
 
     chai.expect(actualCode).to.be.equal("for (KEY in right);");
@@ -122,13 +122,13 @@ describe("traversal path", function () {
                 type: "VariableDeclarator",
                 id: {
                   type: "Identifier",
-                  name: "KEY"
-                }
-              }]
+                  name: "KEY",
+                },
+              }],
             });
-          }
-        }
-      })]
+          },
+        },
+      })],
     }).code;
 
     chai.expect(actualCode).to.be.equal("for (var KEY;;);");
@@ -143,11 +143,11 @@ describe("traversal path", function () {
           ForStatement: function (path) {
             path.get("init").replaceWith({
               type: "Identifier",
-              name: "KEY"
+              name: "KEY",
             });
-          }
-        }
-      })]
+          },
+        },
+      })],
     }).code;
 
     chai.expect(actualCode).to.be.equal("for (KEY;;);");

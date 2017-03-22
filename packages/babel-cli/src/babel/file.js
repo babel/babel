@@ -1,11 +1,13 @@
-const convertSourceMap = require("convert-source-map");
-const sourceMap        = require("source-map");
-const slash            = require("slash");
-const path             = require("path");
-const util             = require("./util");
-const fs               = require("fs");
+import convertSourceMap from "convert-source-map";
+import defaults from "lodash/defaults";
+import sourceMap from "source-map";
+import slash from "slash";
+import path from "path";
+import fs from "fs";
 
-module.exports = function (commander, filenames, opts) {
+import * as util from "./util";
+
+export default function (commander, filenames, opts) {
   if (commander.sourceMaps === "inline") {
     opts.sourceMaps = true;
   }
@@ -15,7 +17,7 @@ module.exports = function (commander, filenames, opts) {
   const buildResult = function () {
     const map = new sourceMap.SourceMapGenerator({
       file: path.basename(commander.outFile || "") || "stdout",
-      sourceRoot: opts.sourceRoot
+      sourceRoot: opts.sourceRoot,
     });
 
     let code = "";
@@ -63,7 +65,7 @@ module.exports = function (commander, filenames, opts) {
 
     return {
       map: map,
-      code: code
+      code: code,
     };
   };
 
@@ -95,9 +97,9 @@ module.exports = function (commander, filenames, opts) {
     });
 
     process.stdin.on("end", function () {
-      results.push(util.transform(commander.filename, code, {
+      results.push(util.transform(commander.filename, code, defaults({
         sourceFileName: "stdin",
-      }));
+      }, opts)));
       output();
     });
   };
@@ -122,19 +124,18 @@ module.exports = function (commander, filenames, opts) {
     });
 
     _filenames.forEach(function (filename) {
-      if (util.shouldIgnore(filename)) return;
-
       let sourceFilename = filename;
       if (commander.outFile) {
         sourceFilename = path.relative(path.dirname(commander.outFile), sourceFilename);
       }
       sourceFilename = slash(sourceFilename);
 
-      const data = util.compile(filename, {
+      const data = util.compile(filename, defaults({
         sourceFileName: sourceFilename,
-      });
+      }, opts));
 
-      if (data.ignored) return;
+      if (!data) return;
+
       results.push(data);
     });
 
@@ -155,9 +156,9 @@ module.exports = function (commander, filenames, opts) {
         awaitWriteFinish: {
           stabilityThreshold: 50,
           pollInterval: 10,
-        }
+        },
       }).on("all", function (type, filename) {
-        if (util.shouldIgnore(filename) || !util.canCompile(filename, commander.extensions)) return;
+        if (!util.isCompilableExtension(filename, commander.extensions)) return;
 
         if (type === "add" || type === "change") {
           util.log(type + " " + filename);
@@ -176,4 +177,4 @@ module.exports = function (commander, filenames, opts) {
   } else {
     stdin();
   }
-};
+}

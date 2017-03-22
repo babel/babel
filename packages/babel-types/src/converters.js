@@ -23,7 +23,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
   if (!nodes || !nodes.length) return;
 
   const declars = [];
-  let bailed  = false;
+  let bailed = false;
 
   const result = convert(nodes);
   if (bailed) return;
@@ -36,7 +36,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
 
   function convert(nodes) {
     let ensureLastUndefined = false;
-    const exprs   = [];
+    const exprs = [];
 
     for (const node of (nodes: Array)) {
       if (t.isExpression(node)) {
@@ -51,7 +51,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
           for (const key in bindings) {
             declars.push({
               kind: node.kind,
-              id: bindings[key]
+              id: bindings[key],
             });
           }
 

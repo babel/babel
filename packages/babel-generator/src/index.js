@@ -56,14 +56,13 @@ function normalizeOptions(code, opts, tokens): Format {
     compact: opts.compact,
     minified: opts.minified,
     concise: opts.concise,
-    quotes: opts.quotes || findCommonStringDelimiter(code, tokens),
+    quotes: findCommonStringDelimiter(code, tokens),
     jsonCompatibleStrings: opts.jsonCompatibleStrings,
     indent: {
       adjustMultilineComment: true,
       style: style,
-      base: 0
+      base: 0,
     },
-    flowCommaSeparator: opts.flowCommaSeparator,
   };
 
   if (format.minified) {
@@ -101,7 +100,7 @@ function findCommonStringDelimiter(code, tokens) {
 
   const occurences = {
     single: 0,
-    double: 0
+    double: 0,
   };
 
   let checked = 0;

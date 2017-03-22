@@ -8,6 +8,33 @@ This plugin transforms ES2015 parameters to ES5, this includes:
 - Default parameters
 - Rest parameters
 
+## Examples
+
+**In**
+
+```javascript
+function test(x = "hello", { a, b }, ...args) {
+  console.log(x, a, b, args);
+}
+```
+
+**Out**
+
+```javascript
+function test() {
+  var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "hello";
+  var _ref = arguments[1];
+  var a = _ref.a,
+      b = _ref.b;
+
+  for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  console.log(x, a, b, args);
+}
+```
+
 ## Installation
 
 ```sh

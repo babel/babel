@@ -9,8 +9,8 @@ export default function ({ types: t }) {
             node.property = t.stringLiteral(prop.name);
             node.computed = true;
           }
-        }
-      }
-    }
+        },
+      },
+    },
   };
 }

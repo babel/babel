@@ -1,8 +1,8 @@
 # babel-plugin-transform-runtime
 
-> Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals. (This plugin is recommended in a library/tool)
+> Externalise references to helpers and built-ins, automatically polyfilling your code without polluting globals. (This plugin is recommended in a library/tool)
 
-NOTE: Instance methods such as `"foobar".includes("foo")` will not work since that would require modification of existing builtins (Use [`babel-polyfill`](http://babeljs.io/docs/usage/polyfill) for that).
+NOTE: Instance methods such as `"foobar".includes("foo")` will not work since that would require modification of existing built-ins (Use [`babel-polyfill`](http://babeljs.io/docs/usage/polyfill) for that).
 
 ## Why?
 
@@ -54,10 +54,10 @@ With options:
 {
   "plugins": [
     ["transform-runtime", {
-      "helpers": false, // defaults to true
-      "polyfill": false, // defaults to true
-      "regenerator": true, // defaults to true
-      "moduleName": "babel-runtime" // defaults to "babel-runtime"
+      "helpers": false,
+      "polyfill": false,
+      "regenerator": true,
+      "moduleName": "babel-runtime"
     }]
   ]
 }
@@ -77,15 +77,134 @@ require("babel-core").transform("code", {
 });
 ```
 
+## Options
+
+### `helpers`
+
+`boolean`, defaults to `true`.
+
+Toggles whether or not inlined Babel helpers (`classCallCheck`, `extends`, etc.) are replaced with calls to `moduleName`.
+
+For more information, see [Helper aliasing](#helper-aliasing).
+
+### `polyfill`
+
+`boolean`, defaults to `true`.
+
+Toggles whether or not new built-ins (`Promise`, `Set`, `Map`, etc.) are transformed to use a non-global polluting polyfill.
+
+For more information, see [`core-js` aliasing](#core-js-aliasing).
+
+### `regenerator`
+
+`boolean`, defaults to `true`.
+
+Toggles whether or not generator functions are transformed to use a regenerator runtime that does not pollute the global scope.
+
+For more information, see [Regenerator aliasing](#regenerator-aliasing).
+
+### `moduleName`
+
+`string`, defaults to `"babel-runtime"`.
+
+Sets the name/path of the module used when importing helpers.
+
+Example:
+
+```json
+{
+  "moduleName": "flavortown/runtime"
+}
+```
+
+```js
+import extends from 'flavortown/runtime/helpers/extends';
+```
+
+### `useBuiltIns`
+
+`boolean`, defaults to `false`.
+
+When enabled, the transform will use helpers that do not use _any_ polyfills
+from `core-js`.
+
+For example, here is the `instance` helper with `useBuiltIns` disabled:
+
+```js
+exports.__esModule = true;
+
+var _hasInstance = require("../core-js/symbol/has-instance");
+
+var _hasInstance2 = _interopRequireDefault(_hasInstance);
+
+var _symbol = require("../core-js/symbol");
+
+var _symbol2 = _interopRequireDefault(_symbol);
+
+exports.default = function (left, right) {
+  if (right != null && typeof _symbol2.default !== "undefined" && right[_hasInstance2.default]) {
+    return right[_hasInstance2.default](left);
+  } else {
+    return left instanceof right;
+  }
+};
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+```
+
+And, with it enabled:
+
+```js
+exports.__esModule = true;
+
+exports.default = function (left, right) {
+  if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
+    return right[Symbol.hasInstance](left);
+  } else {
+    return left instanceof right;
+  }
+};
+```
+
+### `useESModules`
+
+`boolean`, defaults to `false`.
+
+When enabled, the transform will use helpers that do not get run through
+`transform-es2015-modules-commonjs`. This allows for smaller builds in module
+systems like webpack, since it doesn't need to preserve commonjs semantics.
+
+For example, here is the `classCallCheck` helper with `useESModules` disabled:
+
+```js
+exports.__esModule = true;
+
+exports.default = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+```
+
+And, with it enabled:
+
+```js
+export default function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+```
+
 ## Technical details
 
 The `runtime` transformer plugin does three things:
 
 * Automatically requires `babel-runtime/regenerator` when you use generators/async functions.
 * Automatically requires `babel-runtime/core-js` and maps ES6 static methods and built-ins.
-* Removes the inline babel helpers and uses the module `babel-runtime/helpers` instead.
+* Removes the inline Babel helpers and uses the module `babel-runtime/helpers` instead.
 
-What does this actually mean though? Basically, you can use built-ins such as `Promise`, `Set`, `Symbol` etc as well use all the Babel features that require a polyfill seamlessly, without global pollution, making it extremely suitable for libraries.
+What does this actually mean though? Basically, you can use built-ins such as `Promise`, `Set`, `Symbol`, etc., as well use all the Babel features that require a polyfill seamlessly, without global pollution, making it extremely suitable for libraries.
 
 Make sure you include `babel-runtime` as a dependency.
 
@@ -194,7 +313,7 @@ without worrying about where they come from.
 
 ### Helper aliasing
 
-Usually babel will place helpers at the top of your file to do common tasks to avoid
+Usually Babel will place helpers at the top of your file to do common tasks to avoid
 duplicating the code around in the current file. Sometimes these helpers can get a
 little bulky and add unnecessary duplication across files. The `runtime`
 transformer replaces all the helper calls to a module.

@@ -3,8 +3,8 @@
  * when found, before invoking the "real" _babel-node(1) executable.
  */
 
-const getV8Flags = require("v8flags");
-const path = require("path");
+import getV8Flags from "v8flags";
+import path from "path";
 
 let args = [path.join(__dirname, "_babel-node")];
 
@@ -14,7 +14,7 @@ let userArgs;
 // separate node arguments from script arguments
 const argSeparator = babelArgs.indexOf("--");
 if (argSeparator > -1) {
-  userArgs  = babelArgs.slice(argSeparator); // including the  --
+  userArgs = babelArgs.slice(argSeparator); // including the  --
   babelArgs = babelArgs.slice(0, argSeparator);
 }
 
