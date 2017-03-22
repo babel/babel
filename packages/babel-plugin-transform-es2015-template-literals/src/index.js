@@ -18,9 +18,10 @@ export default function ({ types: t }) {
         let raw = [];
 
         for (const elem of (quasi.quasis: Array)) {
-          if (elem.value.cooked !== null) {
-            strings.push(t.stringLiteral(elem.value.cooked));
-          }
+          const value = elem.value.cooked == null
+            ? path.scope.buildUndefinedNode()
+            : t.stringLiteral(elem.value.cooked);
+          strings.push(value);
           raw.push(t.stringLiteral(elem.value.raw));
         }
 
