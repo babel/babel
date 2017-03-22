@@ -1,6 +1,3 @@
 {
-  "throws": "Invalid escape sequence in template (1:10)",
-  "plugins": [
-    "templateInvalidEscapes"
-  ]
+  "throws": "Invalid escape sequence in template (1:10)"
 }

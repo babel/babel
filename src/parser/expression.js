@@ -688,7 +688,7 @@ pp.parseNew = function () {
 pp.parseTemplateElement = function (isTagged) {
   const elem = this.startNode();
   if (this.state.value === null) {
-    if (!isTagged || !this.hasPlugin("templateInvalidEscapes")) {
+    if (!isTagged) {
       this.raise(this.state.invalidTemplateEscapePosition, "Invalid escape sequence in template");
     } else {
       this.state.invalidTemplateEscapePosition = null;
