@@ -34,7 +34,7 @@
     "babel-register": "7.0.0-alpha.2",
     "babel-traverse": "7.0.0-alpha.1",
     "babel-types": "7.0.0-alpha.1",
-    "babylon": "7.0.0-beta.4",
+    "babylon": "7.0.0-beta.6",
     "convert-source-map": "^1.1.0",
     "debug": "^2.1.1",
     "json5": "^0.5.0",
