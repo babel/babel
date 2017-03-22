@@ -1,6 +1,3 @@
 {
-  "plugins": ["transform-es2015-template-literals"],
-  "parserOpts": {
-    "plugins": ["templateInvalidEscapes"]
-  }
+  "plugins": ["transform-es2015-template-literals"]
 }
