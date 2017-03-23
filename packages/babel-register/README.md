@@ -69,7 +69,7 @@ require("babel-register")({
   extensions: [".es6", ".es", ".jsx", ".js"],
 
   // Setting this to false will disable the cache.
-  cache: false
+  cache: true
 });
 ```
 
