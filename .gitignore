@@ -14,9 +14,13 @@ dist
 /.package.json
 /packages/babel-runtime/core-js
 /packages/babel-runtime/helpers/*.js
+!/packages/babel-runtime/helpers/toArray.js
 /packages/babel-runtime/helpers/builtin/*.js
+!/packages/babel-runtime/helpers/builtin/toArray.js
 /packages/babel-runtime/helpers/builtin/es6/*.js
+!/packages/babel-runtime/helpers/builtin/es6/toArray.js
 /packages/babel-runtime/helpers/es6/*.js
+!/packages/babel-runtime/helpers/es6/toArray.js
 /packages/babel-register/test/.babel
 /packages/*/lib
 _babel.github.io

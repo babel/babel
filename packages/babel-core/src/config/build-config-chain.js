@@ -1,5 +1,5 @@
-import * as babel from "../../../index";
-import resolve from "../../../helpers/resolve";
+import * as babel from "../index";
+import resolve from "./helpers/resolve";
 import json5 from "json5";
 import path from "path";
 import fs from "fs";
@@ -28,6 +28,7 @@ export default function buildConfigChain(opts: Object = {}) {
 
   try {
     builder.mergeConfig({
+      type: "arguments",
       options: opts,
       alias: "base",
       dirname: process.cwd(),
@@ -185,6 +186,7 @@ class ConfigChainBuilder {
 
     if (lines.length) {
       this.mergeConfig({
+        type: "options",
         options: { ignore: lines },
         alias: loc,
         dirname: path.dirname(loc),
@@ -231,6 +233,7 @@ class ConfigChainBuilder {
     }
 
     this.mergeConfig({
+      type: "options",
       options,
       alias: loc,
       dirname: path.dirname(loc),
@@ -240,6 +243,7 @@ class ConfigChainBuilder {
   }
 
   mergeConfig({
+    type,
     options,
     alias,
     loc,
@@ -266,6 +270,7 @@ class ConfigChainBuilder {
       delete options.env;
 
       this.mergeConfig({
+        type,
         options: envOpts,
         alias: `${alias}.env.${envKey}`,
         dirname: dirname,
@@ -273,6 +278,7 @@ class ConfigChainBuilder {
     }
 
     this.configs.push({
+      type,
       options,
       alias,
       loc,

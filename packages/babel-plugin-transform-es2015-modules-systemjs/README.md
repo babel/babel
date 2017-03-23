@@ -23,6 +23,8 @@ System.register([], function (_export, _context) {
 });
 ```
 
+For dynamic import support (`import('./lazy.js').then(m => ...)`), enable the [syntax-dynamic-import](https://babeljs.io/docs/plugins/syntax-dynamic-import/) plugin before this one.
+
 ## Installation
 
 ```sh

@@ -1,15 +1,15 @@
-import * as context from "../../../index";
-import Plugin from "../../plugin";
+import * as context from "../index";
+import Plugin from "./plugin";
 import * as messages from "babel-messages";
-import resolvePlugin from "../../../helpers/resolve-plugin";
-import resolvePreset from "../../../helpers/resolve-preset";
+import resolve from "./helpers/resolve";
+import resolvePlugin from "./helpers/resolve-plugin";
+import resolvePreset from "./helpers/resolve-preset";
 import defaults from "lodash/defaults";
 import cloneDeepWith from "lodash/cloneDeepWith";
-import merge from "../../../helpers/merge";
+import merge from "./helpers/merge";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
 import path from "path";
-import * as util from "../../../util";
 
 type PluginObject = {
   pre?: Function;
@@ -25,6 +25,7 @@ type PluginObject = {
 };
 
 type MergeOptions = {
+  type: "arguments"|"options"|"preset",
   options?: Object,
   extending?: Object,
   alias: string,
@@ -188,6 +189,7 @@ export default class OptionManager {
    */
 
   mergeOptions({
+    type,
     options: rawOpts,
     extending: extendingOpts,
     alias,
@@ -213,6 +215,23 @@ export default class OptionManager {
     dirname = dirname || process.cwd();
     loc = loc || alias;
 
+    if (type !== "arguments") {
+      if (opts.filename !== undefined) {
+        throw new Error(`${alias}.filename is only allowed as a root argument`);
+      }
+
+      if (opts.babelrc !== undefined) {
+        throw new Error(`${alias}.babelrc is only allowed as a root argument`);
+      }
+    }
+
+    if (type === "preset") {
+      if (opts.only !== undefined) throw new Error(`${alias}.only is not supported in a preset`);
+      if (opts.ignore !== undefined) throw new Error(`${alias}.ignore is not supported in a preset`);
+      if (opts.extends !== undefined) throw new Error(`${alias}.extends is not supported in a preset`);
+      if (opts.env !== undefined) throw new Error(`${alias}.env is not supported in a preset`);
+    }
+
     if (opts.sourceMap !== undefined) {
       if (opts.sourceMaps !== undefined) {
         throw new Error(`Both ${alias}.sourceMap and .sourceMaps have been set`);
@@ -236,6 +255,26 @@ export default class OptionManager {
       }
     }
 
+    if (opts.parserOpts && typeof opts.parserOpts.parser === "string") {
+      const parser = resolve(opts.parserOpts.parser, dirname);
+      if (parser) {
+        opts.parserOpts.parser = require(parser).parse;
+      } else {
+        throw new Error(`Couldn't find parser ${opts.parserOpts.parser} with "parse" method ` +
+          `relative to directory ${dirname}`);
+      }
+    }
+
+    if (opts.generatorOpts && typeof opts.generatorOpts.generator === "string") {
+      const generator = resolve(opts.generatorOpts.generator, dirname);
+      if (generator) {
+        opts.generatorOpts.generator = require(generator).print;
+      } else {
+        throw new Error(`Couldn't find generator ${opts.generatorOpts.generator} with "print" method ` +
+          `relative to directory ${dirname}`);
+      }
+    }
+
     // resolve plugins
     if (opts.plugins) {
       if (!Array.isArray(rawOpts.plugins)) throw new Error(`${alias}.plugins should be an array`);
@@ -247,23 +286,22 @@ export default class OptionManager {
     if (opts.presets) {
       if (!Array.isArray(rawOpts.presets)) throw new Error(`${alias}.presets should be an array`);
 
-      // If we're in the "pass per preset" mode, we resolve the presets
-      // and keep them for further execution to calculate the options.
-      if (opts.passPerPreset) {
-        opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
-          this.mergeOptions({
-            options: preset,
-            extending: preset,
-            alias: presetLoc,
-            loc: presetLoc,
-            dirname: dirname,
-          });
+      opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
+        this.mergeOptions({
+          type: "preset",
+          options: preset,
+
+          // For `passPerPreset` we merge child options back into the preset object instead of the root.
+          extending: opts.passPerPreset ? preset : null,
+          alias: presetLoc,
+          loc: presetLoc,
+          dirname: dirname,
         });
-      } else {
-        // Otherwise, just merge presets options into the main options.
-        this.mergePresets(opts.presets, dirname);
-        delete opts.presets;
-      }
+      });
+
+      // If not passPerPreset, the plugins have all been merged into the parent config so the presets
+      // list is not needed.
+      if (!opts.passPerPreset) delete opts.presets;
     }
 
     // Merge them into current extending options in case of top-level
@@ -274,21 +312,6 @@ export default class OptionManager {
     } else {
       merge(extendingOpts || this.options, opts);
     }
-  }
-
-  /**
-   * Merges all presets into the main options in case we are not in the
-   * "pass per preset" mode. Otherwise, options are calculated per preset.
-   */
-  mergePresets(presets: Array<string | Object>, dirname: string) {
-    this.resolvePresets(presets, dirname, (presetOpts, presetLoc) => {
-      this.mergeOptions({
-        options: presetOpts,
-        alias: presetLoc,
-        loc: presetLoc,
-        dirname: path.dirname(presetLoc || ""),
-      });
-    });
   }
 
   /**
@@ -370,7 +393,12 @@ export default class OptionManager {
         this.mergeOptions(config);
       }
     } catch (e) {
-      e.message = util.message(opts, e.message);
+      // There are a few case where thrown errors will try to annotate themselves multiple times, so
+      // to keep things simple we just bail out if re-wrapping the message.
+      if (!/^\[BABEL\]/.test(e.message)) {
+        e.message = `[BABEL] ${opts.filename || "unknown"}: ${e.message}`;
+      }
+
       throw e;
     }
 

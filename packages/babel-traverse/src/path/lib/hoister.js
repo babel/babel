@@ -133,7 +133,14 @@ export default class PathHoister {
         if (this.scope === scope) return;
 
         // needs to be attached to the body
-        return scope.path.get("body").get("body")[0];
+        const bodies = scope.path.get("body").get("body");
+        for (let i = 0; i < bodies.length; i++) {
+          // Don't attach to something that's going to get hoisted,
+          // like a default parameter
+          if (bodies[i].node._blockHoist) continue;
+          return bodies[i];
+        }
+        // deopt: If here, no attachment path found
       } else {
         // doesn't need to be be attached to this scope
         return this.getNextScopeAttachmentParent();

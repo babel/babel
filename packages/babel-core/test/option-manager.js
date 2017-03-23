@@ -1,5 +1,5 @@
 import assert from "assert";
-import OptionManager from "../lib/transformation/file/options/option-manager";
+import OptionManager from "../lib/config/option-manager";
 import path from "path";
 
 describe("option-manager", () => {

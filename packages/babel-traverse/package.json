@@ -11,7 +11,7 @@
     "babel-code-frame": "7.0.0-alpha.1",
     "babel-messages": "7.0.0-alpha.1",
     "babel-types": "7.0.0-alpha.1",
-    "babylon": "7.0.0-beta.4",
+    "babylon": "7.0.0-beta.7",
     "debug": "^2.2.0",
     "globals": "^9.0.0",
     "invariant": "^2.2.0",
