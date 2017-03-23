@@ -250,6 +250,21 @@ describe("verify", () => {
       );
     });
 
+    it("type parameter scope (classes)", () => {
+      verifyAndAssertMessages(
+        unpad(`
+          T;
+          class Foo<T> {}
+          T;
+          new Foo();
+        `),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        [ "1:1 'T' is not defined. no-undef",
+          "2:11 'T' is defined but never used. no-unused-vars",
+          "3:1 'T' is not defined. no-undef" ]
+      );
+    });
+
     it("type parameter bounds (interfaces)", () => {
       verifyAndAssertMessages(
         unpad(`
@@ -261,6 +276,21 @@ describe("verify", () => {
         { "no-unused-vars": 1, "no-undef": 1 },
         [ "2:11 'Log' is defined but never used. no-unused-vars",
           "2:38 'T4' is defined but never used. no-unused-vars" ]
+      );
+    });
+
+    it("type parameter scope (interfaces)", () => {
+      verifyAndAssertMessages(
+        unpad(`
+          T;
+          interface Foo<T> {};
+          T;
+          Foo;
+        `),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        [ "1:1 'T' is not defined. no-undef",
+          "2:15 'T' is defined but never used. no-unused-vars",
+          "3:1 'T' is not defined. no-undef" ]
       );
     });
 
@@ -279,6 +309,21 @@ describe("verify", () => {
       );
     });
 
+    it("type parameter scope (type aliases)", () => {
+      verifyAndAssertMessages(
+        unpad(`
+          T;
+          type Foo<T> = {};
+          T;
+          Foo;
+        `),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        [ "1:1 'T' is not defined. no-undef",
+          "2:10 'T' is defined but never used. no-unused-vars",
+          "3:1 'T' is not defined. no-undef" ]
+      );
+    });
+
     it("type parameter bounds (functions)", () => {
       verifyAndAssertMessages(
         unpad(`
@@ -289,6 +334,21 @@ describe("verify", () => {
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
         [ "3:37 'T4' is defined but never used. no-unused-vars" ]
+      );
+    });
+
+    it("type parameter scope (functions)", () => {
+      verifyAndAssertMessages(
+        unpad(`
+          T;
+          function log<T>() {}
+          T;
+          log;
+        `),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        [ "1:1 'T' is not defined. no-undef",
+          "2:14 'T' is defined but never used. no-unused-vars",
+          "3:1 'T' is not defined. no-undef" ]
       );
     });
 
