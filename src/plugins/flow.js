@@ -69,7 +69,7 @@ pp.flowParseTypeAndPredicateInitialiser = function () {
 
 pp.flowParseDeclareClass = function (node) {
   this.next();
-  this.flowParseInterfaceish(node, true);
+  this.flowParseInterfaceish(node);
   return this.finishNode(node, "DeclareClass");
 };
 
@@ -194,7 +194,7 @@ pp.flowParseDeclareInterface = function (node) {
 
 // Interfaces
 
-pp.flowParseInterfaceish = function (node, allowStatic) {
+pp.flowParseInterfaceish = function (node) {
   node.id = this.parseIdentifier();
 
   if (this.isRelational("<")) {
@@ -219,7 +219,7 @@ pp.flowParseInterfaceish = function (node, allowStatic) {
     } while (this.eat(tt.comma));
   }
 
-  node.body = this.flowParseObjectType(allowStatic);
+  node.body = this.flowParseObjectType(true);
 };
 
 pp.flowParseInterfaceExtends = function () {
@@ -236,7 +236,7 @@ pp.flowParseInterfaceExtends = function () {
 };
 
 pp.flowParseInterface = function (node) {
-  this.flowParseInterfaceish(node, false);
+  this.flowParseInterfaceish(node);
   return this.finishNode(node, "InterfaceDeclaration");
 };
 
