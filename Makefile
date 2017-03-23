@@ -30,6 +30,8 @@ fix:
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
 	rm -rf packages/babel-polyfill/dist
+	# rm -rf packages/babel-runtime/helpers
+	rm -rf packages/babel-runtime/core-js
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 
@@ -64,7 +66,7 @@ publish:
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --npm-tag=next --exact --skip-temp-tag
+	./node_modules/.bin/lerna publish --force-publish=* --npm-tag=next --exact --skip-temp-tag
 	make clean
 
 bootstrap:
