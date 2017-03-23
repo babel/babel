@@ -96,7 +96,7 @@ describe("traverse", function () {
       },
     });
 
-    traverse.clearCache();
+    traverse.cache.clear();
 
     const paths2 = [];
     const scopes2 = [];
@@ -122,7 +122,7 @@ describe("traverse", function () {
       },
     });
 
-    traverse.clearCache.clearPath();
+    traverse.cache.clearPath();
 
     const paths2 = [];
     traverse(ast, {
@@ -145,7 +145,7 @@ describe("traverse", function () {
       },
     });
 
-    traverse.clearCache.clearScope();
+    traverse.cache.clearScope();
 
     const scopes2 = [];
     traverse(ast, {
