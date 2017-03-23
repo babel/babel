@@ -134,14 +134,6 @@ for (const modules of ["commonjs", false]) {
         `${dirname}${helperName}.js`,
         buildHelper(helperName, modules, builtin)
       );
-
-      // compat
-      var helperAlias = kebabCase(helperName);
-      var content = !modules
-        ? `export { default } from \"./${helperName}.js\";`
-        : "module.exports = require(\"./" + helperName + ".js\");";
-      writeFile(`${dirname}_${helperAlias}.js`, content);
-      if (helperAlias !== helperName) writeFile(`${dirname}${helperAlias}.js`, content);
     }
   }
 }
