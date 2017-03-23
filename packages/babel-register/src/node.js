@@ -111,9 +111,11 @@ function hookExtensions(_exts) {
   });
 }
 
-hookExtensions(DEFAULT_EXTENSIONS);
+register({
+  extensions: DEFAULT_EXTENSIONS,
+});
 
-export default function (opts?: Object = {}) {
+export default function register(opts?: Object = {}) {
   if (opts.extensions) hookExtensions(opts.extensions);
 
   if (opts.cache === false) cache = null;
@@ -128,8 +130,8 @@ export default function (opts?: Object = {}) {
     transformOpts.ignore = [
       new RegExp(
         "^" +
-        escapeRegExp(process.cwd() + path.sep) +
-        ".*" +
+        escapeRegExp(process.cwd()) +
+        "(?:" + path.sep + ".*)?" +
         escapeRegExp(path.sep + "node_modules" + path.sep)
       , "i"),
     ];
