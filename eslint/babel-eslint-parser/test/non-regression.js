@@ -222,16 +222,73 @@ describe("verify", () => {
       );
     });
 
-    it("type parameter bounds", () => {
+    it("interface declaration", () => {
+      verifyAndAssertMessages(
+        unpad(`
+          interface Foo {};
+          interface Bar {
+            foo: Foo,
+          };
+        `),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        [ "2:11 'Bar' is defined but never used. no-unused-vars" ]
+      );
+    });
+
+    it("type parameter bounds (classes)", () => {
+      verifyAndAssertMessages(
+        unpad(`
+          import type {Foo, Foo2} from 'foo';
+          import Base from 'base';
+          class Log<T1: Foo, T2: Foo2, T3, T4> extends Base<T3> {
+            messages: {[T1]: T2};
+          }
+          new Log();
+        `),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        [ "3:34 'T4' is defined but never used. no-unused-vars" ]
+      );
+    });
+
+    it("type parameter bounds (interfaces)", () => {
+      verifyAndAssertMessages(
+        unpad(`
+          import type {Foo, Foo2, Bar} from '';
+          interface Log<T1: Foo, T2: Foo2, T3, T4> extends Bar<T3> {
+            messages: {[T1]: T2};
+          }
+        `),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        [ "2:11 'Log' is defined but never used. no-unused-vars",
+          "2:38 'T4' is defined but never used. no-unused-vars" ]
+      );
+    });
+
+    it("type parameter bounds (type aliases)", () => {
+      verifyAndAssertMessages(
+        unpad(`
+          import type {Foo, Foo2, Foo3} from 'foo';
+          type Log<T1: Foo, T2: Foo2, T3> = {
+            messages: {[T1]: T2};
+            delay: Foo3;
+          };
+        `),
+        { "no-unused-vars": 1, "no-undef": 1 },
+        [ "2:6 'Log' is defined but never used. no-unused-vars",
+          "2:29 'T3' is defined but never used. no-unused-vars" ]
+      );
+    });
+
+    it("type parameter bounds (functions)", () => {
       verifyAndAssertMessages(
         unpad(`
           import type Foo from 'foo';
           import type Foo2 from 'foo';
-          function log<T1: Foo, T2: Foo2>(a: T1, b: T2) { return a + b; }
+          function log<T1: Foo, T2: Foo2, T3, T4>(a: T1, b: T2): T3 { return a + b; }
           log(1, 2);
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        []
+        [ "3:37 'T4' is defined but never used. no-unused-vars" ]
       );
     });
 

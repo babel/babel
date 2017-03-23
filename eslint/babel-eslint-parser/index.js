@@ -180,18 +180,6 @@ function monkeypatch() {
     }
   }
 
-  function visitTypeParameters(typeParameters) {
-    var params = typeParameters.params;
-
-    // visit bounds on polymorphpic types, eg; `Foo` in `fn<T: Foo>(a: T): T`
-    for (var i = 0; i < params.length; i++) {
-      var param = params[i];
-      if (param.typeAnnotation) {
-        visitTypeAnnotation.call(this, param.typeAnnotation);
-      }
-    }
-  }
-
   function checkIdentifierOrVisit(node) {
     if (node.typeAnnotation) {
       visitTypeAnnotation.call(this, node.typeAnnotation);
@@ -209,6 +197,9 @@ function monkeypatch() {
     for (var j = 0; j < node.typeParameters.params.length; j++) {
       var name = node.typeParameters.params[j];
       scope.__define(name, new Definition("TypeParameter", name, name));
+      if (name.typeAnnotation) {
+        checkIdentifierOrVisit.call(this, name);
+      }
     }
     scope.__define = function() {
       return parentScope.__define.apply(parentScope, arguments);
@@ -222,7 +213,7 @@ function monkeypatch() {
     visitDecorators.call(this, node);
     var typeParamScope;
     if (node.typeParameters) {
-      typeParamScope = nestTypeParamScope(this.scopeManager, node);
+      typeParamScope = nestTypeParamScope.call(this, this.scopeManager, node);
     }
     // visit flow type: ClassImplements
     if (node.implements) {
@@ -264,8 +255,7 @@ function monkeypatch() {
   referencer.prototype.visitFunction = function(node) {
     var typeParamScope;
     if (node.typeParameters) {
-      typeParamScope = nestTypeParamScope(this.scopeManager, node);
-      visitTypeParameters.call(this, node.typeParameters);
+      typeParamScope = nestTypeParamScope.call(this, this.scopeManager, node);
     }
     if (node.returnType) {
       checkIdentifierOrVisit.call(this, node.returnType);
@@ -328,11 +318,27 @@ function monkeypatch() {
     );
   }
 
+  referencer.prototype.InterfaceDeclaration = function(node) {
+    createScopeVariable.call(this, node, node.id);
+    var typeParamScope;
+    if (node.typeParameters) {
+      typeParamScope = nestTypeParamScope.call(this, this.scopeManager, node);
+    }
+    // TODO: Handle mixins
+    for (var i = 0; i < node.extends.length; i++) {
+      visitTypeAnnotation.call(this, node.extends[i]);
+    }
+    visitTypeAnnotation.call(this, node.body);
+    if (typeParamScope) {
+      this.close(node);
+    }
+  };
+
   referencer.prototype.TypeAlias = function(node) {
     createScopeVariable.call(this, node, node.id);
     var typeParamScope;
     if (node.typeParameters) {
-      typeParamScope = nestTypeParamScope(this.scopeManager, node);
+      typeParamScope = nestTypeParamScope.call(this, this.scopeManager, node);
     }
     if (node.right) {
       visitTypeAnnotation.call(this, node.right);
@@ -352,7 +358,7 @@ function monkeypatch() {
 
     var typeParamScope;
     if (node.typeParameters) {
-      typeParamScope = nestTypeParamScope(this.scopeManager, node);
+      typeParamScope = nestTypeParamScope.call(this, this.scopeManager, node);
     }
     if (typeParamScope) {
       this.close(node);
