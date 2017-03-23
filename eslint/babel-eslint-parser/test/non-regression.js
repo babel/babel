@@ -31,7 +31,7 @@ function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, over
   var messages = eslint.linter.verify(code, config);
 
   if (messages.length !== expectedMessages.length) {
-    throw new Error(`Expected ${expectedMessages.length} message(s), got ${messages.length} ${JSON.stringify(messages)}`);
+    throw new Error(`Expected ${expectedMessages.length} message(s), got ${messages.length}\n${JSON.stringify(messages, null, 2)}`);
   }
 
   messages.forEach((message, i) => {
