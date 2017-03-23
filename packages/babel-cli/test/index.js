@@ -13,6 +13,10 @@ const fs = require("fs");
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
 
+const fileFilter = function(x) {
+  return x !== ".DS_Store";
+};
+
 const presetLocs = [
   path.join(__dirname, "../../babel-preset-es2015"),
   path.join(__dirname, "../../babel-preset-react"),
@@ -23,10 +27,10 @@ const pluginLocs = [
   path.join(__dirname, "/../../babel-plugin-transform-es2015-modules-commonjs"),
 ].join(",");
 
-const readDir = function (loc) {
+const readDir = function (loc, filter) {
   const files = {};
   if (fs.existsSync(loc)) {
-    readdir(loc).forEach(function (filename) {
+    readdir(loc, filter).forEach(function (filename) {
       files[filename] = helper.readFile(path.join(loc, filename));
     });
   }
@@ -70,11 +74,27 @@ const assertTest = function (stdout, stderr, opts) {
     throw new Error("stdout:\n" + stdout);
   }
 
-  Object.keys(opts.outFiles, function (filename) {
-    const expect = opts.outFiles[filename];
-    const actual = helper.readFile(filename);
-    chai.expect(actual).to.equal(expect, "out-file " + filename);
-  });
+  if (opts.outFiles) {
+    const actualFiles = readDir(path.join(tmpLoc));
+
+    Object.keys(actualFiles).forEach(function (filename) {
+      if (!opts.inFiles.hasOwnProperty(filename)) {
+        const expect = opts.outFiles[filename];
+        const actual = actualFiles[filename];
+
+        chai.expect(expect, "Output is missing: " + filename).to.not.be.undefined;
+
+        if (expect) {
+          chai.expect(actual).to.equal(expect, "Compiled output does not match: " + filename);
+        }
+      }
+    });
+
+    Object.keys(opts.outFiles).forEach(function(filename) {
+      chai.expect(actualFiles, "Extraneous file in output: " + filename)
+        .to.contain.key(filename);
+    });
+  }
 };
 
 const buildTest = function (binName, testName, opts) {
@@ -165,8 +185,8 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
         }
       });
 
-      opts.outFiles = readDir(path.join(testLoc, "out-files"));
-      opts.inFiles = readDir(path.join(testLoc, "in-files"));
+      opts.outFiles = readDir(path.join(testLoc, "out-files"), fileFilter);
+      opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
 
       const babelrcLoc = path.join(testLoc, ".babelrc");
       if (fs.existsSync(babelrcLoc)) {
