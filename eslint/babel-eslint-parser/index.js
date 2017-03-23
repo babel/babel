@@ -36,17 +36,12 @@ function monkeypatch() {
 
   // get modules relative to what eslint will load
   var eslintMod = createModule(eslintLoc);
-  // contains all the instances of estraverse so we can modify them if necessary
-  var estraverses = [];
   // ESLint v1.9.0 uses estraverse directly to work around https://github.com/npm/npm/issues/9663
-  var estraverseOfEslint = eslintMod.require("estraverse");
-  estraverses.push(estraverseOfEslint);
-  Object.assign(estraverseOfEslint.VisitorKeys, t.VISITOR_KEYS);
+  var estraverse = eslintMod.require("estraverse");
 
-  estraverses.forEach((estraverse) => {
-    estraverse.VisitorKeys.MethodDefinition.push("decorators");
-    estraverse.VisitorKeys.Property.push("decorators");
-  });
+  Object.assign(estraverse.VisitorKeys, t.VISITOR_KEYS);
+  estraverse.VisitorKeys.MethodDefinition.push("decorators");
+  estraverse.VisitorKeys.Property.push("decorators");
 
   // monkeypatch escope
   var escopeLoc = Module._resolveFilename("escope", eslintMod);
@@ -275,16 +270,12 @@ function monkeypatch() {
     }
     // set ArrayPattern/ObjectPattern visitor keys back to their original. otherwise
     // escope will traverse into them and include the identifiers within as declarations
-    estraverses.forEach((estraverse) => {
-      estraverse.VisitorKeys.ObjectPattern = ["properties"];
-      estraverse.VisitorKeys.ArrayPattern = ["elements"];
-    });
+    estraverse.VisitorKeys.ObjectPattern = ["properties"];
+    estraverse.VisitorKeys.ArrayPattern = ["elements"];
     visitFunction.call(this, node);
     // set them back to normal...
-    estraverses.forEach((estraverse) => {
-      estraverse.VisitorKeys.ObjectPattern = t.VISITOR_KEYS.ObjectPattern;
-      estraverse.VisitorKeys.ArrayPattern = t.VISITOR_KEYS.ArrayPattern;
-    });
+    estraverse.VisitorKeys.ObjectPattern = t.VISITOR_KEYS.ObjectPattern;
+    estraverse.VisitorKeys.ArrayPattern = t.VISITOR_KEYS.ArrayPattern;
     if (typeParamScope) {
       this.close(node);
     }
