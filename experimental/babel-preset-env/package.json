@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-env",
-  "version": "2.0.0-alpha.1",
+  "version": "2.0.0-alpha.3",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
@@ -21,7 +21,6 @@
     "test": "npm run build && npm run test-only",
     "test-ci": "nyc npm run test",
     "test-only": "mocha ./test --compilers js:babel-register -t 10000"
-
   },
   "dependencies": {
     "babel-plugin-check-es2015-constants": "7.0.0-alpha.3",
@@ -82,8 +81,9 @@
   "babel": {
     "presets": [
       [
-        "env", {
-          "targets":{
+        "env",
+        {
+          "targets": {
             "node": 4
           },
           "loose": true
