@@ -1,5 +1,4 @@
 var babylonToEspree = require("./babylon-to-espree");
-var pick            = require("lodash").pickBy;
 var Module          = require("module");
 var path            = require("path");
 var parse           = require("babylon").parse;
@@ -100,18 +99,23 @@ function monkeypatch() {
   }
 
   // iterate through part of t.VISITOR_KEYS
-  var visitorKeysMap = pick(t.VISITOR_KEYS, (k) => {
-    return t.FLIPPED_ALIAS_KEYS.Flow.concat([
-      "ArrayPattern",
-      "ClassDeclaration",
-      "ClassExpression",
-      "FunctionDeclaration",
-      "FunctionExpression",
-      "Identifier",
-      "ObjectPattern",
-      "RestElement"
-    ]).indexOf(k) === -1;
-  });
+  var flowFlippedAliasKeys = t.FLIPPED_ALIAS_KEYS.Flow.concat([
+    "ArrayPattern",
+    "ClassDeclaration",
+    "ClassExpression",
+    "FunctionDeclaration",
+    "FunctionExpression",
+    "Identifier",
+    "ObjectPattern",
+    "RestElement"
+  ]);
+  var visitorKeysMap = Object.keys(t.VISITOR_KEYS).reduce(function(acc, key) {
+    var value = t.VISITOR_KEYS[key];
+    if (flowFlippedAliasKeys.indexOf(value) === -1) {
+      acc[key] = value;
+    }
+    return acc;
+  }, {});
 
   var propertyTypes = {
     // loops
