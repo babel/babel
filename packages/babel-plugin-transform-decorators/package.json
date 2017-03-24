@@ -13,7 +13,6 @@
   ],
   "dependencies": {
     "babel-plugin-syntax-decorators": "7.0.0-alpha.3",
-    "babel-runtime": "7.0.0-alpha.3",
     "babel-template": "7.0.0-alpha.3"
   },
   "devDependencies": {
