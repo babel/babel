@@ -121,6 +121,10 @@
     "test/*.js": [
       "prettier --trailing-comma all --write",
       "git add"
+    ],
+    "package.json": [
+      "node ./scripts/yarn-install.js",
+      "git add yarn.lock"
     ]
   }
 }
