@@ -32,7 +32,7 @@ function relative(filename) {
 }
 
 function defaultify(name) {
-  return `module.exports = { "default": '${name}", __esModule: true };`;
+  return `module.exports = { "default": ${name}, __esModule: true };`;
 }
 
 function writeRootFile(filename, content) {
