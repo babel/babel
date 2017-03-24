@@ -23,16 +23,16 @@ yarn
 To run a build, tests and perform lint/flow checks:
 
 ```bash
-npm test
+yarn test
 ```
 
 If you only want to run the tests:
 
 ```bash
-npm run test-only
+yarn run test-only
 ```
 
-Note, this does not actually run a build, so you may have to call `npm run build` after
+Note, this does not actually run a build, so you may have to call `yarn run build` after
 performing any changes.
 
 ### Running one test
@@ -52,7 +52,7 @@ Add `"only": true` to its `options.json`:
 Then, run the tests using the same command as before:
 
 ```bash
-npm run test-only
+yarn run test-only
 ```
 
 ### Checking code coverage locally
@@ -61,7 +61,7 @@ To generate code coverage, be sure to set `BABEL_ENV=test` so that code is instr
 the rollup build.
 
 ```bash
-BABEL_ENV=test npm run build && npm run test-ci
+BABEL_ENV=test yarn run build && yarn run test-coverage
 ```
 
 ### Writing tests
@@ -85,19 +85,19 @@ you will want to link both repositories together. This can be done by doing the 
 
 ```bash
 cd babylon/
-npm link
-npm run build
+yarn link
+yarn run build
 cd ../babel/
 make bootstrap
-npm link babylon
+yarn link babylon
 cd packages/babel-core/
-npm link babylon
+yarn link babylon
 cd ../../packages/babel-template/
-npm link babylon
+yarn link babylon
 cd ../../packages/babel-traverse/
-npm link babylon
+yarn link babylon
 cd ../../packages/babel-generator/
-npm link babylon
+yarn link babylon
 cd ../..
 make build
 make test
