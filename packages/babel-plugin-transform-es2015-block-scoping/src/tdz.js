@@ -76,7 +76,7 @@ export const visitor = {
       const ids = path.getBindingIdentifiers();
 
       for (const name in ids) {
-        const id = ids[name];
+        const id = ids[name].node;
 
         if (isReference(id, path.scope, state)) {
           nodes.push(buildTDZAssert(id, state.file));

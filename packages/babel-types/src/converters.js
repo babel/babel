@@ -51,7 +51,7 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
           for (const key in bindings) {
             declars.push({
               kind: node.kind,
-              id: bindings[key],
+              id: bindings[key].node,
             });
           }
 

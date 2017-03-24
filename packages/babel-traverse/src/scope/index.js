@@ -499,9 +499,9 @@ export default class Scope {
         if (local) {
           // same identifier so continue safely as we're likely trying to register it
           // multiple times
-          if (local.identifier === id) continue;
+          if (local.identifier === id.node) continue;
 
-          this.checkBlockScopedCollisions(local, kind, name, id);
+          this.checkBlockScopedCollisions(local, kind, name, id.node);
         }
 
         // It's erroneous that we currently consider flow a binding, however, we can't
@@ -512,7 +512,7 @@ export default class Scope {
         parent.references[name] = true;
 
         this.bindings[name] = new Binding({
-          identifier: id,
+          identifier: id.node,
           existing: local,
           scope: this,
           path: bindingPath,
@@ -714,7 +714,7 @@ export default class Scope {
         if (path.scope.getBinding(name)) continue;
 
         programParent = programParent || path.scope.getProgramParent();
-        programParent.addGlobal(ids[name]);
+        programParent.addGlobal(ids[name].node);
       }
 
       // register as constant violation

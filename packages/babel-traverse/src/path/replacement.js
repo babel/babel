@@ -16,7 +16,7 @@ const hoistVariablesVisitor = {
 
     const bindings = path.getBindingIdentifiers();
     for (const key in bindings) {
-      path.scope.push({ id: bindings[key] });
+      path.scope.push({ id: bindings[key].node });
     }
 
     const exprs = [];
