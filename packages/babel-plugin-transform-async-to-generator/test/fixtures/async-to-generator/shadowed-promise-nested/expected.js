@@ -2,7 +2,7 @@ let foo = (() => {
   var _ref = _asyncToGenerator(function* () {
     let bar = (() => {
       var _ref2 = _asyncToGenerator(function* () {
-        return _Promise2.resolve();
+        return Promise.resolve();
       });
 
       return function bar() {
@@ -10,7 +10,7 @@ let foo = (() => {
       };
     })();
 
-    let _Promise2;
+    let Promise;
 
     yield bar();
   });

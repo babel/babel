@@ -9,15 +9,11 @@ export default function () {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
 
-        // Ensure any bindings at the Program level are renamed first
-        // so any further renames cannot accidentally rename the Promise
-        // binding used by the inline helper
+        // Ensure any Promise bindings at the Program level are renamed
+        // so the asyncToGenerator helper only sees the native Promise
         const programScope = path.scope.getProgramParent();
         if (programScope.hasBinding("Promise", true)) {
           programScope.rename("Promise");
-        }
-        if (path.scope.hasBinding("Promise", true)) {
-          path.scope.rename("Promise");
         }
 
         remapAsyncToGenerator(path, state.file, {
