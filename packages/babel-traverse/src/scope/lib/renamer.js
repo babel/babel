@@ -18,7 +18,7 @@ const renameVisitor = {
     const ids = path.getOuterBindingIdentifiers();
 
     for (const name in ids) {
-      if (name === state.oldName) ids[name].name = state.newName;
+      if (name === state.oldName) ids[name].node.name = state.newName;
     }
   },
 };
