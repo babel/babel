@@ -47,6 +47,7 @@ var a;
 var a;
 var a;
 var a;
+var a;
 var a = [1, 2, 3];
 a = class Foo {};
 a = class Foo extends Bar {};

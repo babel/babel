@@ -334,7 +334,6 @@ export function ObjectTypeProperty(node: Object) {
 }
 
 export function ObjectTypeSpreadProperty(node: Object) {
-  this._variance(node);
   this.token("...");
   this.print(node.argument, node);
 }
