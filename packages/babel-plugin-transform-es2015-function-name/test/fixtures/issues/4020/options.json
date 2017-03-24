@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-es2015-block-scoped-functions",
+    "transform-es2015-block-scoping",
+    "transform-es2015-function-name"
+  ]
+}
