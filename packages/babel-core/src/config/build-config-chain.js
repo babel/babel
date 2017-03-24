@@ -16,7 +16,7 @@ const BABELIGNORE_FILENAME = ".babelignore";
 function exists(filename) {
   const cached = existsCache[filename];
   if (cached == null) {
-    return existsCache[filename] = fs.existsSync(filename);
+    return existsCache[filename] = fs.existsSync(filename) && fs.statSync(filename).isFile();
   } else {
     return cached;
   }
