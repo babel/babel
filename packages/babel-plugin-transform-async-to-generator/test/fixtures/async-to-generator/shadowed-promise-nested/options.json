@@ -1,0 +1,6 @@
+{
+  "babelrc": false,
+  "plugins": [
+    "transform-async-to-generator"
+  ]
+}
