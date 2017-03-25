@@ -1,3 +1,5 @@
+"use strict";
+
 // comment fixes
 module.exports = function (ast, comments, tokens) {
   if (comments.length) {

@@ -1,20 +1,36 @@
-exports.attachComments = require("./attachComments");
+"use strict";
 
-exports.toTokens       = require("./toTokens");
-exports.toAST          = require("./toAST");
+var attachComments  = require("./attachComments");
+var convertComments = require("./convertComments");
+var toTokens        = require("./toTokens");
+var toAST           = require("./toAST");
 
-exports.convertComments = function (comments) {
-  for (var i = 0; i < comments.length; i++) {
-    var comment = comments[i];
-    if (comment.type === "CommentBlock") {
-      comment.type = "Block";
-    } else if (comment.type === "CommentLine") {
-      comment.type = "Line";
-    }
-    // sometimes comments don't get ranges computed,
-    // even with options.ranges === true
-    if (!comment.range) {
-      comment.range = [comment.start, comment.end];
-    }
-  }
+module.exports = function (ast, traverse, tt, code) {
+  // remove EOF token, eslint doesn't use this for anything and it interferes
+  // with some rules see https://github.com/babel/babel-eslint/issues/2
+  // todo: find a more elegant way to do this
+  ast.tokens.pop();
+
+  // convert tokens
+  ast.tokens = toTokens(ast.tokens, tt, code);
+
+  // add comments
+  convertComments(ast.comments);
+
+  // transform esprima and acorn divergent nodes
+  toAST(ast, traverse, code);
+
+  // ast.program.tokens = ast.tokens;
+  // ast.program.comments = ast.comments;
+  // ast = ast.program;
+
+  // remove File
+  ast.type = "Program";
+  ast.sourceType = ast.program.sourceType;
+  ast.directives = ast.program.directives;
+  ast.body = ast.program.body;
+  delete ast.program;
+  delete ast._paths;
+
+  attachComments(ast, ast.comments, ast.tokens);
 };

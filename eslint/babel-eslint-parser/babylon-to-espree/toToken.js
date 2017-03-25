@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function (token, tt, source) {
   var type = token.type;
   token.range = [token.start, token.end];

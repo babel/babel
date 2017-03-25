@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = function (tokens, tt) {
   var startingToken    = 0;
   var currentToken     = 0;
