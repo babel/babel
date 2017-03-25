@@ -25,7 +25,7 @@ type PluginObject = {
 };
 
 type MergeOptions = {
-  type: "arguments"|"options"|"preset",
+  type: "arguments"|"options"|"env"|"preset",
   options?: Object,
   extending?: Object,
   alias: string,
