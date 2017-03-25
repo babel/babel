@@ -1,7 +1,7 @@
 /*eslint-env mocha*/
 "use strict";
 var eslint = require("eslint");
-var unpad = require("../utils/unpad");
+var unpad = require("dedent");
 
 function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, overrideConfig) {
   var config = {

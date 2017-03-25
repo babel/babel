@@ -2,7 +2,7 @@ var assert      = require("assert");
 var babelEslint = require("..");
 var espree      = require("espree");
 var util        = require("util");
-var unpad       = require("../utils/unpad");
+var unpad       = require("dedent");
 
 // Checks if the source ast implements the target ast. Ignores extra keys on source ast
 function assertImplementsAST(target, source, path) {
