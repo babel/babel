@@ -39,6 +39,22 @@ describe("option-manager", () => {
       );
     });
 
+    it("throws for options in presets", () => {
+      return assert.throws(
+        () => {
+          const opt = new OptionManager();
+          opt.init({
+            presets: [
+              {
+                compact: true,
+              },
+            ],
+          });
+        },
+        /Babel 7 has disallowed options inside presets/
+      );
+    });
+
     it("throws for resolved but erroring preset", () => {
       return assert.throws(
         () => {
