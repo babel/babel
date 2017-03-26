@@ -1,12 +1,9 @@
 /lib
-scripts
-packages/babel-core/src/transformation/templates
 packages/babel-runtime
+!packages/babel-runtime/scripts
+!packages/babel-runtime/core-js.js
 packages/*/node_modules
 packages/*/lib
 packages/*/dist
 packages/*/test/fixtures
 packages/*/test/tmp
-vendor
-_babel.github.io
-Gulpfile.js

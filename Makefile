@@ -19,13 +19,13 @@ watch: clean
 	./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/eslint packages/ --format=codeframe
+	./node_modules/.bin/eslint scripts packages Gulpfile.js --format=codeframe
 
 flow:
 	./node_modules/.bin/flow check
 
 fix:
-	./node_modules/.bin/eslint packages/ --format=codeframe --fix
+	./node_modules/.bin/eslint scripts packages Gulpfile.js --format=codeframe --fix
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
