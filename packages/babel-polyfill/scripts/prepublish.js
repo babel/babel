@@ -1,5 +1,5 @@
-var fs = require("fs");
-var path = require("path");
+const fs = require("fs");
+const path = require("path");
 
 function relative(loc) {
   return path.join(__dirname, "..", loc);
