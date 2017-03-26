@@ -116,11 +116,13 @@ describe("api", function () {
   });
 
   it("exposes the resolvePlugin method", function() {
-    assert.equal(babel.resolvePlugin("nonexistent-plugin"), null);
+    assert.throws(() => babel.resolvePlugin("nonexistent-plugin"),
+      /Cannot find module 'babel-plugin-nonexistent-plugin'/);
   });
 
   it("exposes the resolvePreset method", function() {
-    assert.equal(babel.resolvePreset("nonexistent-preset"), null);
+    assert.throws(() => babel.resolvePreset("nonexistent-preset"),
+      /Cannot find module 'babel-preset-nonexistent-preset'/);
   });
 
   it("transformFile", function (done) {
