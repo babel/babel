@@ -230,7 +230,7 @@ helpers.asyncToGenerator = template(`
           if (info.done) {
             resolve(value);
           } else {
-            return Promise.resolve(value).then(function (value) {
+            Promise.resolve(value).then(function (value) {
               step("next", value);
             }, function (err) {
               step("throw", err);
@@ -238,7 +238,7 @@ helpers.asyncToGenerator = template(`
           }
         }
 
-        return step("next");
+        step("next");
       });
     };
   })
