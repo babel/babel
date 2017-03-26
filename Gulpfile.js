@@ -1,16 +1,18 @@
-var plumber = require("gulp-plumber");
-var through = require("through2");
-var chalk   = require("chalk");
-var newer   = require("gulp-newer");
-var babel   = require("gulp-babel");
-var watch   = require("gulp-watch");
-var gutil   = require("gulp-util");
-var gulp    = require("gulp");
-var path    = require("path");
+"use strict";
 
-var scripts = "./packages/*/src/**/*.js";
+const plumber = require("gulp-plumber");
+const through = require("through2");
+const chalk = require("chalk");
+const newer = require("gulp-newer");
+const babel = require("gulp-babel");
+const watch = require("gulp-watch");
+const gutil = require("gulp-util");
+const gulp = require("gulp");
+const path = require("path");
 
-var srcEx, libFragment;
+const scripts = "./packages/*/src/**/*.js";
+
+let srcEx, libFragment;
 
 if (path.win32 === path) {
   srcEx = /(packages\\[^\\]+)\\src\\/;
@@ -20,8 +22,8 @@ if (path.win32 === path) {
   libFragment = "$1/lib/";
 }
 
-var mapToDest = function (path) { return path.replace(srcEx, libFragment); };
-var dest = "packages";
+const mapToDest = function (path) { return path.replace(srcEx, libFragment); };
+const dest = "packages";
 
 gulp.task("default", ["build"]);
 
@@ -30,9 +32,9 @@ gulp.task("build", function () {
     .pipe(plumber({
       errorHandler: function (err) {
         gutil.log(err.stack);
-      }
+      },
     }))
-    .pipe(newer({map: mapToDest}))
+    .pipe(newer({ map: mapToDest }))
     .pipe(through.obj(function (file, enc, callback) {
       gutil.log("Compiling", "'" + chalk.cyan(file.path) + "'...");
       callback(null, file);
@@ -48,13 +50,12 @@ gulp.task("build", function () {
 
 // TODO: remove this section
 // temporarily just copying the old code since watch isn't working
-var dest = "packages";
 gulp.task("build-watch", function () {
   return gulp.src(scripts)
     .pipe(plumber({
       errorHandler: function (err) {
         gutil.log(err.stack);
-      }
+      },
     }))
     .pipe(through.obj(function (file, enc, callback) {
       file._path = file.path;
@@ -70,8 +71,8 @@ gulp.task("build-watch", function () {
     .pipe(gulp.dest(dest));
 });
 
-gulp.task("watch", ["build-watch"], function (callback) {
-  watch(scripts, {debounceDelay: 200}, function () {
+gulp.task("watch", ["build-watch"], function () {
+  watch(scripts, { debounceDelay: 200 }, function () {
     gulp.start("build-watch");
   });
 });

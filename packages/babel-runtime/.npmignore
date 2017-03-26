@@ -1,2 +1,4 @@
 scripts
-node_modules
+src
+test
+*.log

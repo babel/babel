@@ -1,5 +1,6 @@
+"use strict";
+
 const outputFile = require("output-file-sync");
-const kebabCase = require("lodash/kebabCase");
 const coreDefinitions = require("babel-plugin-transform-runtime").definitions;
 const helpers = require("babel-helpers");
 const babel = require("../../babel-core");

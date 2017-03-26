@@ -1,11 +1,8 @@
 .DS_Store
 node_modules
-test/tmp
 *.log
 *.cache
 /.eslintcache
-/templates.json
-/tests.json
 /browser.js
 /browser-polyfill.js
 /runtime.js
@@ -24,7 +21,5 @@ dist
 !/packages/babel-runtime/helpers/es6/toArray.js
 /packages/babel-register/test/.babel
 /packages/*/lib
-_babel.github.io
-/tests/.browser-build.js
 .nyc_output
 /babel.sublime-workspace
