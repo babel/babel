@@ -270,7 +270,7 @@ class ConfigChainBuilder {
       delete options.env;
 
       this.mergeConfig({
-        type,
+        type: "env",
         options: envOpts,
         alias: `${alias}.env.${envKey}`,
         dirname: dirname,
@@ -287,6 +287,10 @@ class ConfigChainBuilder {
 
     // add extends clause
     if (options.extends) {
+      if (type === "env") {
+        throw new Error(`.extends blocks are not allowed in .env subconfigs in ${alias}.`);
+      }
+
       const extendsLoc = resolve(options.extends, dirname);
       if (extendsLoc) {
         this.addConfig(extendsLoc);

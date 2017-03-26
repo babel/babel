@@ -128,6 +128,19 @@ describe("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
+  it("env - extends throw", function () {
+    assert.throws(() => {
+      buildConfigChain({
+        filename: fixture("env", "src.js"),
+        env: {
+          development: {
+            extends: "./foo.js",
+          },
+        },
+      });
+    }, /\.extends blocks are not allowed in \.env subconfigs/);
+  });
+
   it("env - base", function () {
     const chain = buildConfigChain({
       filename: fixture("env", "src.js"),
@@ -201,7 +214,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("env"),
       },
       {
-        type: "options",
+        type: "env",
         options: {
           plugins: [
             "env-foo",
@@ -257,7 +270,7 @@ describe("buildConfigChain", function () {
         dirname: fixture("env"),
       },
       {
-        type: "options",
+        type: "env",
         options: {
           plugins: [
             "env-bar",

@@ -25,7 +25,7 @@ type PluginObject = {
 };
 
 type MergeOptions = {
-  type: "arguments"|"options"|"preset",
+  type: "arguments"|"options"|"env"|"preset",
   options?: Object,
   extending?: Object,
   alias: string,
@@ -226,10 +226,12 @@ export default class OptionManager {
     }
 
     if (type === "preset") {
-      if (opts.only !== undefined) throw new Error(`${alias}.only is not supported in a preset`);
-      if (opts.ignore !== undefined) throw new Error(`${alias}.ignore is not supported in a preset`);
-      if (opts.extends !== undefined) throw new Error(`${alias}.extends is not supported in a preset`);
-      if (opts.env !== undefined) throw new Error(`${alias}.env is not supported in a preset`);
+      const disallowedProps = Object.keys(opts).filter((name) => name !== "plugins" && name !== "presets");
+
+      if (disallowedProps.length > 0) {
+        const names = disallowedProps.map((prop) => `"${prop}"`).join(",");
+        throw new Error(`Babel 7 has disallowed options inside presets. ${alias} uses ${names}`);
+      }
     }
 
     if (opts.sourceMap !== undefined) {
