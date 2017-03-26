@@ -1,3 +1,5 @@
+"use strict";
+
 const babel = require("../package.json").babel;
 const register = require("babel-register");
 const path = require("path");

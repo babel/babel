@@ -1,3 +1,5 @@
+"use strict";
+
 const plumber = require("gulp-plumber");
 const through = require("through2");
 const chalk = require("chalk");
