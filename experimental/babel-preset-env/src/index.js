@@ -1,6 +1,6 @@
 import browserslist from "browserslist";
 import builtInsList from "../data/built-ins.json";
-import defaultInclude from "./default-includes";
+import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions, { getElectronChromeVersion } from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
@@ -139,7 +139,7 @@ const logPlugin = (plugin, targets, list) => {
 };
 
 const filterItem = (targets, exclusions, list, item) => {
-  const isDefault = defaultInclude.indexOf(item) >= 0;
+  const isDefault = defaultWebIncludes.indexOf(item) >= 0;
   const notExcluded = exclusions.indexOf(item) === -1;
 
   if (isDefault) return notExcluded;
@@ -161,6 +161,14 @@ export const transformIncludesAndExcludes = (opts) => ({
   builtIns: opts.filter((opt) => opt.match(/^(es\d+|web)\./))
 });
 
+function getPlatformSpecificDefaultFor(targets) {
+  const targetNames = Object.keys(targets);
+  const isAnyTarget = !targetNames.length;
+  const isWebTarget = targetNames.some((name) => name !== "node");
+
+  return (isAnyTarget || isWebTarget) ? defaultWebIncludes : [];
+}
+
 export default function buildPreset(context, opts = {}) {
   const validatedOptions = normalizeOptions(opts);
   const { debug, loose, moduleType, useBuiltIns } = validatedOptions;
@@ -181,7 +189,7 @@ export default function buildPreset(context, opts = {}) {
     polyfillTargets = getBuiltInTargets(targets);
     const filterBuiltIns = filterItem.bind(null, polyfillTargets, exclude.builtIns, builtInsList);
     polyfills = Object.keys(builtInsList)
-      .concat(defaultInclude)
+      .concat(getPlatformSpecificDefaultFor(polyfillTargets))
       .filter(filterBuiltIns)
       .concat(include.builtIns);
   }
