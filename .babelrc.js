@@ -1,21 +1,29 @@
+"use strict";
+
+let envOpts = {
+  loose: true
+};
+
 module.exports = {
-  "comments": false,
-  "presets": [
+  comments: false,
+  presets: [
     [
-      "env",
-      {
-        "loose": true
-      }
+      "env", envOpts
     ],
     "stage-0",
-    "flow"
+    "flow",
   ],
-  "env": {
-    "cov": {
-      "auxiliaryCommentBefore": "istanbul ignore next",
-      "plugins": [
-        "istanbul"
-      ]
+  env: {
+    cov: {
+      auxiliaryCommentBefore: "istanbul ignore next",
+      plugins: ["istanbul"]
     }
   }
+};
+
+if (process.env.BABEL_ENV === 'development') {
+  envOpts.targets = {
+    node: "current"
+  };
+  envOpts.debug = true;
 };
