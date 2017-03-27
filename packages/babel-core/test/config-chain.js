@@ -128,6 +128,59 @@ describe("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
+  it("dir3", function () {
+    const chain = buildConfigChain({
+      filename: fixture("dir3", "src.js"),
+    });
+
+    const expected = [
+      {
+        type: "options",
+        options: {
+          plugins: [
+            "extended",
+          ],
+        },
+        alias: fixture("extended.babelrc.json"),
+        loc: fixture("extended.babelrc.json"),
+        dirname: fixture(),
+      },
+      {
+        type: "options",
+        options: {
+          plugins: [
+            "root",
+          ],
+        },
+        alias: fixture(".babelrc"),
+        loc: fixture(".babelrc"),
+        dirname: fixture(),
+      },
+      {
+        type: "options",
+        options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        type: "arguments",
+        options: {
+          filename: fixture("dir3", "src.js"),
+        },
+        alias: "base",
+        loc: "base",
+        dirname: base(),
+      },
+    ];
+
+    assert.deepEqual(chain, expected);
+  });
+
   it("env - base", function () {
     const chain = buildConfigChain({
       filename: fixture("env", "src.js"),
