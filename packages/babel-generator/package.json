@@ -20,7 +20,7 @@
     "trim-right": "^1.0.1"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "7.0.0-alpha.3",
-    "babylon": "7.0.0-beta.7"
+    "babel-helper-fixtures": "^7.0.0-alpha.3",
+    "babylon": "^7.0.0-beta.7"
   }
 }

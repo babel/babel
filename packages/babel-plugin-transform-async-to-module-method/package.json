@@ -14,6 +14,6 @@
     "babel-types": "7.0.0-alpha.3"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-alpha.3"
+    "babel-helper-plugin-test-runner": "^7.0.0-alpha.3"
   }
 }

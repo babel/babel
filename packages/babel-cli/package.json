@@ -33,7 +33,7 @@
     "chokidar": "^1.6.1"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "7.0.0-alpha.3"
+    "babel-helper-fixtures": "^7.0.0-alpha.3"
   },
   "bin": {
     "babel-doctor": "./bin/babel-doctor.js",
