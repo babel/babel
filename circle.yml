@@ -13,4 +13,4 @@ dependencies:
 
 test:
   override:
-    - make test-ci
+    - make test-ci-coverage
