@@ -1,3 +1,5 @@
+"use strict";
+
 const includes = require("lodash/includes");
 const readdir = require("fs-readdir-recursive");
 const helper = require("babel-helper-fixtures");
