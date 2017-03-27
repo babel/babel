@@ -230,15 +230,13 @@ helpers.asyncToGenerator = template(`
           if (info.done) {
             resolve(value);
           } else {
-            Promise.resolve(value).then(function (value) {
-              step("next", value);
-            }, function (err) {
-              step("throw", err);
-            });
+            Promise.resolve(value).then(_next, _throw);
           }
         }
+        function _next(value) { step("next", value); }
+        function _throw(err) { step("throw", err); }
 
-        step("next");
+        _next();
       });
     };
   })
