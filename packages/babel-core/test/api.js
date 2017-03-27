@@ -123,7 +123,9 @@ describe("api", function () {
   });
 
   it("transformFile", function (done) {
-    babel.transformFile(__dirname + "/fixtures/api/file.js", {}, function (err, res) {
+    babel.transformFile(__dirname + "/fixtures/api/file.js", {
+      babelrc: false,
+    }, function (err, res) {
       if (err) return done(err);
       assert.equal(res.code, "foo();");
       done();
@@ -131,7 +133,9 @@ describe("api", function () {
   });
 
   it("transformFileSync", function () {
-    assert.equal(babel.transformFileSync(__dirname + "/fixtures/api/file.js", {}).code, "foo();");
+    assert.equal(babel.transformFileSync(__dirname + "/fixtures/api/file.js", {
+      babelrc: false,
+    }).code, "foo();");
   });
 
   it("options throw on falsy true", function () {

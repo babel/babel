@@ -38,6 +38,9 @@ const readDir = function (loc, filter) {
 };
 
 const saveInFiles = function (files) {
+  // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
+  outputFileSync(".babelrc", "{}");
+
   Object.keys(files).forEach(function (filename) {
     const content = files[filename];
     outputFileSync(filename, content);

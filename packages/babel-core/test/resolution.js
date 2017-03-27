@@ -38,6 +38,7 @@ describe("addon resolution", function () {
         process.chdir(paths.fixtures);
 
         const actual = babel.transform(fixtures.actual, {
+          babelrc: false,
           filename: paths.actual,
           plugins: ["addons/plugin"],
           presets: ["addons/preset"],

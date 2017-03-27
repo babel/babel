@@ -232,15 +232,14 @@ babel-code-frame@^6.16.0, babel-code-frame@^6.22.0:
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-babel-core@7.0.0-alpha.3, babel-core@^7.0.0-alpha.3:
-  version "7.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-7.0.0-alpha.3.tgz#423e9998c2d96c88f107e3e81cbef0c27bf2b4f2"
+babel-core@7.0.0-alpha.6, babel-core@^7.0.0-alpha.6:
+  version "7.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-7.0.0-alpha.6.tgz#a4c59f5cd5ef0374365a37937e5c585510eed718"
   dependencies:
     babel-code-frame "7.0.0-alpha.3"
     babel-generator "7.0.0-alpha.3"
     babel-helpers "7.0.0-alpha.3"
     babel-messages "7.0.0-alpha.3"
-    babel-register "7.0.0-alpha.3"
     babel-template "7.0.0-alpha.3"
     babel-traverse "7.0.0-alpha.3"
     babel-types "7.0.0-alpha.3"
@@ -682,7 +681,7 @@ babel-plugin-transform-unicode-property-regex@^2.0.0:
     babel-runtime "^6.23.0"
     regexpu-core "^4.0.4"
 
-babel-preset-env@2.0.0-alpha.3:
+babel-preset-env@^2.0.0-alpha.3:
   version "2.0.0-alpha.3"
   resolved "https://registry.yarnpkg.com/babel-preset-env/-/babel-preset-env-2.0.0-alpha.3.tgz#49a19552ed932af51faeb22ecb5b9c6dfad6bdbb"
   dependencies:
@@ -717,13 +716,13 @@ babel-preset-env@2.0.0-alpha.3:
     electron-to-chromium "^1.2.6"
     invariant "^2.2.2"
 
-babel-preset-flow@7.0.0-alpha.3:
+babel-preset-flow@^7.0.0-alpha.3:
   version "7.0.0-alpha.3"
   resolved "https://registry.yarnpkg.com/babel-preset-flow/-/babel-preset-flow-7.0.0-alpha.3.tgz#d868dc35d8b038d19473c79c4e813a0e68e2b6bc"
   dependencies:
     babel-plugin-transform-flow-strip-types "7.0.0-alpha.3"
 
-babel-preset-stage-0@7.0.0-alpha.3:
+babel-preset-stage-0@^7.0.0-alpha.3:
   version "7.0.0-alpha.3"
   resolved "https://registry.yarnpkg.com/babel-preset-stage-0/-/babel-preset-stage-0-7.0.0-alpha.3.tgz#f2db6c2ec82975ca99b77c867d95d821d61e3731"
   dependencies:
@@ -755,22 +754,11 @@ babel-preset-stage-3@7.0.0-alpha.3:
     babel-plugin-transform-async-generator-functions "7.0.0-alpha.3"
     babel-plugin-transform-object-rest-spread "7.0.0-alpha.3"
 
-babel-register@7.0.0-alpha.3:
-  version "7.0.0-alpha.3"
-  resolved "https://registry.yarnpkg.com/babel-register/-/babel-register-7.0.0-alpha.3.tgz#ecdb4abcf3cfe318984f202db3cab0fb2fb0c362"
+babel-register@^7.0.0-alpha.6:
+  version "7.0.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/babel-register/-/babel-register-7.0.0-alpha.6.tgz#adb337fdfca6d74c90d51232b5b3d8f532ca91bc"
   dependencies:
-    babel-core "7.0.0-alpha.3"
-    core-js "^2.4.0"
-    home-or-tmp "^3.0.0"
-    lodash "^4.2.0"
-    mkdirp "^0.5.1"
-    source-map-support "^0.4.2"
-
-babel-register@7.0.0-alpha.4:
-  version "7.0.0-alpha.4"
-  resolved "https://registry.yarnpkg.com/babel-register/-/babel-register-7.0.0-alpha.4.tgz#854226be7b64e13bb5cf070decc66c064ead70bf"
-  dependencies:
-    babel-core "7.0.0-alpha.3"
+    babel-core "7.0.0-alpha.6"
     core-js "^2.4.0"
     home-or-tmp "^3.0.0"
     lodash "^4.2.0"
@@ -784,16 +772,16 @@ babel-runtime@7.0.0-alpha.3:
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
 
-babel-runtime@^6.18.0, babel-runtime@^6.22.0:
-  version "6.22.0"
-  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.22.0.tgz#1cf8b4ac67c77a4ddb0db2ae1f74de52ac4ca611"
+babel-runtime@^6.18.0, babel-runtime@^6.23.0:
+  version "6.23.0"
+  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
   dependencies:
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
 
-babel-runtime@^6.23.0:
-  version "6.23.0"
-  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
+babel-runtime@^6.22.0:
+  version "6.22.0"
+  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.22.0.tgz#1cf8b4ac67c77a4ddb0db2ae1f74de52ac4ca611"
   dependencies:
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
@@ -2230,7 +2218,7 @@ growl@1.9.2:
 
 gulp-babel@babel/gulp-babel#b7-alpha:
   version "6.1.2"
-  resolved "https://codeload.github.com/babel/gulp-babel/tar.gz/acac269c10e0f6d6e57be3b45f3c07e8d3a84c9a"
+  resolved "https://codeload.github.com/babel/gulp-babel/tar.gz/40804d9d3f02e5147802a9e8d4bd8100ddb9c3ae"
   dependencies:
     babel-core "^7.0.0-alpha.3"
     gulp-util "^3.0.0"
@@ -3911,11 +3899,7 @@ resolve@1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
 
-resolve@^1.1.3, resolve@^1.1.4, resolve@^1.1.6, resolve@^1.1.7:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.2.0.tgz#9589c3f2f6149d1417a40becc1663db6ec6bc26c"
-
-resolve@^1.3.2:
+resolve@^1.1.3, resolve@^1.1.4, resolve@^1.1.6, resolve@^1.1.7, resolve@^1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.3.2.tgz#1f0442c9e0cbb8136e87b9305f932f46c7f28235"
   dependencies:
