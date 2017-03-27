@@ -1,1 +1,2 @@
-var foo = React.createClass({});
+var foo = ReactCreateClass({});
+var bar = React.createClass({});

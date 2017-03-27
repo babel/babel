@@ -1,5 +1,10 @@
 ({
-  foo: React.createClass({
+  foo: ReactCreateClass({
     displayName: "foo"
+  })
+});
+({
+  bar: React.createClass({
+    displayName: "bar"
   })
 });

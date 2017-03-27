@@ -7,7 +7,8 @@
 **In**
 
 ```js
-var foo = React.createClass({});
+var foo = React.createClass({}); // React <= 15
+var bar = ReactCreateClass({});  // React 16+
 ```
 
 **Out**
@@ -15,7 +16,10 @@ var foo = React.createClass({});
 ```js
 var foo = React.createClass({
   displayName: "foo"
-});
+}); // React <= 15
+var bar = ReactCreateClass({
+  displayName: "bar"
+}); // React 16+
 ```
 
 ## Installation

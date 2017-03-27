@@ -1,1 +1,2 @@
-var foo = bar(React.createClass({}));
+var foo = qux(ReactCreateClass({}));
+var bar = qux(React.createClass({}));
