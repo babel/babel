@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "async": "^1.5.0",
-    "babel-core": "7.0.0-alpha.3",
+    "babel-core": "7.0.0-alpha.6",
     "babel-eslint": "^7.0.0",
     "babel-plugin-istanbul": "^2.0.1",
     "babel-preset-env": "2.0.0-alpha.3",

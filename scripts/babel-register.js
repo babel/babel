@@ -1,9 +1,7 @@
 "use strict";
 
-const babel = require("../.babelrc");
 const register = require("babel-register").default;
-
-register(babel);
+register();
 register({
   extensions: [".js"],
   // Only js files in the test folder but not in the subfolder fixtures.
