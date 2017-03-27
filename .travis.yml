@@ -16,14 +16,11 @@ env:
 
 script:
   - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
-  - 'if [ "$JOB" = "test-coverage" ]; then make test-ci-coverage; fi'
   - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
 
 matrix:
   fast_finish: true
   include:
-    - node_js: "7"
-      env: JOB=test-coverage
     - node_js: "node"
       env: JOB=lint
 
