@@ -163,7 +163,7 @@ class ConfigChainBuilder {
               this.errorMultipleConfigs(arr.pop(), config);
             }
 
-            arr.push(config);
+            if (configAdded) arr.push(config);
           }
 
           return arr;
