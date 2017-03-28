@@ -1,19 +1,20 @@
 <!---
-BEFORE YOU SUBMIT please read the following:
+Thanks for filing an issue 😄 ! Before you submit, please read the following:
 
-Please search open/closed issues before submitting since someone might have asked the same thing before!
+Search open/closed issues before submitting since someone might have asked the same thing before!
 
 If you have a support request or question please submit them to one of this resources:
 
-* Discussion Forum: https://discuss.babeljs.io/
+* Slack Community: https://slack.babeljs.io/
 * StackOverflow: http://stackoverflow.com/questions/tagged/babeljs using the tag `babeljs`
-* Slack community: https://slack.babeljs.io/
-* Also have a look at the Readme for more information on how to get support:
+* Also have a look at the readme for more information on how to get support:
   https://github.com/babel/babel/blob/master/README.md
 
-Issues on GitHub are only related to problems of babel itself and we cannot answer 
+Issues on GitHub are only related to problems of Babel itself and we cannot answer 
 support questions here.
 -->
+
+Choose one: is this a bug report or feature request?:
 
 <!--- Provide a general summary of the issue in the title above -->
 
@@ -53,7 +54,7 @@ var your => (code) => here;
 ### Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 
-| software         | version
+| software         | version(s)
 | ---------------- | -------
 | Babel            |  
 | node             | 
