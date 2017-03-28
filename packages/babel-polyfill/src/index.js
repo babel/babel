@@ -1,5 +1,8 @@
 if (global._babelPolyfill) {
-  throw new Error("only one instance of babel-polyfill is allowed");
+  // silently fail at runtime instead of throwing an error.
+  // enables multiple scripts that may be outside of a developer's control to include babel-polyfill.
+  // https://github.com/babel/babel/issues/5556
+  return;
 }
 global._babelPolyfill = true;
 
