@@ -10,41 +10,39 @@ const gutil = require("gulp-util");
 const gulp = require("gulp");
 const path = require("path");
 
+const base = path.join(__dirname, "packages");
 const scripts = "./packages/*/src/**/*.js";
-let srcEx, libFragment;
 
-if (path.win32 === path) {
-  srcEx = /(packages\\[^\\]+)\\src\\/;
-  libFragment = "$1\\lib\\";
-} else {
-  srcEx = new RegExp("(packages/[^/]+)/src/");
-  libFragment = "$1/lib/";
+function swapSrcWithLib(srcPath) {
+  const parts = srcPath.split(path.sep);
+  parts[1] = "lib";
+  return parts.join(path.sep);
 }
-
-const mapToDest = function (path) { return path.replace(srcEx, libFragment); };
-const dest = "packages";
 
 gulp.task("default", ["build"]);
 
 gulp.task("build", function () {
-  return gulp.src(scripts)
+  return gulp.src(scripts, { base: base })
     .pipe(plumber({
       errorHandler: function (err) {
         gutil.log(err.stack);
       },
     }))
-    .pipe(newer({ map: mapToDest }))
+    .pipe(newer({
+      dest: base,
+      map: swapSrcWithLib,
+    }))
     .pipe(through.obj(function (file, enc, callback) {
-      gutil.log("Compiling", "'" + chalk.cyan(file.path) + "'...");
+      gutil.log("Compiling", "'" + chalk.cyan(file.relative) + "'...");
       callback(null, file);
     }))
     .pipe(babel())
     .pipe(through.obj(function (file, enc, callback) {
-      file._path = file.path;
-      file.path = mapToDest(file.path);
+      // Passing 'file.relative' because newer() above uses a relative path and this keeps it consistent.
+      file.path = path.resolve(file.base, swapSrcWithLib(file.relative));
       callback(null, file);
     }))
-    .pipe(gulp.dest(dest));
+    .pipe(gulp.dest(base));
 });
 
 gulp.task("watch", ["build"], function () {
