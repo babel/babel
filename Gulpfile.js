@@ -47,31 +47,8 @@ gulp.task("build", function () {
     .pipe(gulp.dest(dest));
 });
 
-// TODO: remove this section
-// temporarily just copying the old code since watch isn't working
-gulp.task("build-watch", function () {
-  return gulp.src(scripts)
-    .pipe(plumber({
-      errorHandler: function (err) {
-        gutil.log(err.stack);
-      },
-    }))
-    .pipe(through.obj(function (file, enc, callback) {
-      file._path = file.path;
-      file.path = file.path.replace(srcEx, libFragment);
-      callback(null, file);
-    }))
-    .pipe(newer(dest))
-    .pipe(through.obj(function (file, enc, callback) {
-      gutil.log("Compiling", "'" + chalk.cyan(file._path) + "'...");
-      callback(null, file);
-    }))
-    .pipe(babel())
-    .pipe(gulp.dest(dest));
-});
-
-gulp.task("watch", ["build-watch"], function () {
+gulp.task("watch", ["build"], function () {
   watch(scripts, { debounceDelay: 200 }, function () {
-    gulp.start("build-watch");
+    gulp.start("build");
   });
 });
