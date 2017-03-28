@@ -1,7 +1,7 @@
 import invariant from "invariant";
 import { electronToChromium } from "electron-to-chromium";
 import builtInsList from "../data/built-ins.json";
-import defaultInclude from "./default-includes";
+import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import pluginFeatures from "../data/plugin-features";
 
@@ -9,7 +9,7 @@ const validIncludesAndExcludes = [
   ...Object.keys(pluginFeatures),
   ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
   ...Object.keys(builtInsList),
-  ...defaultInclude,
+  ...defaultWebIncludes,
 ];
 
 export const validateIncludesAndExcludes = (opts = [], type) => {

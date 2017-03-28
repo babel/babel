@@ -1,1 +1,5 @@
-export default ["web.timers", "web.immediate", "web.dom.iterable"];
+export const defaultWebIncludes = [
+  "web.timers",
+  "web.immediate",
+  "web.dom.iterable",
+];

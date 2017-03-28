@@ -384,8 +384,5 @@ If you get a `SyntaxError: Unexpected token ...` error when using the [object-re
 
 ## Other Cool Projects
 
-- [auto-babel](https://github.com/jakepusateri/auto-babel)
-- [babel-preset-target](https://github.com/sdkennedy/babel-preset-target)
-- [babel-preset-modern-node](https://github.com/michaelcontento/babel-preset-modern-node)
 - [babel-preset-modern-browsers](https://github.com/christophehurpeau/babel-preset-modern-browsers)
 - ?
