@@ -27,10 +27,7 @@ export function debug(opts: Object, msg: string) {
 
 const shebangRegex = /^#!.*/;
 
-const INTERNAL_PLUGINS = loadConfig({
-  babelrc: false,
-  plugins: [ blockHoistPlugin, shadowFunctionsPlugin ],
-}).passes[0];
+let INTERNAL_PLUGINS;
 
 const errorVisitor = {
   enter(path, state) {
@@ -44,6 +41,15 @@ const errorVisitor = {
 
 export default class File extends Store {
   constructor({ options, passes }: ResolvedConfig) {
+    if (!INTERNAL_PLUGINS) {
+      // Lazy-init the internal plugins to remove the init-time circular dependency between plugins being
+      // passed babel-core's export object, which loads this file, and this 'loadConfig' loading plugins.
+      INTERNAL_PLUGINS = loadConfig({
+        babelrc: false,
+        plugins: [ blockHoistPlugin, shadowFunctionsPlugin ],
+      }).passes[0];
+    }
+
     super();
 
     this.pluginPasses = passes;

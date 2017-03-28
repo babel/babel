@@ -1,26 +1,8 @@
 import * as babel from "../index";
-import resolve from "./helpers/resolve";
-import json5 from "json5";
 import path from "path";
-import fs from "fs";
 import micromatch from "micromatch";
 
-const existsCache = {};
-const jsonCache = {};
-
-const BABELRC_FILENAME = ".babelrc";
-const BABELRC_JS_FILENAME = ".babelrc.js";
-const PACKAGE_FILENAME = "package.json";
-const BABELIGNORE_FILENAME = ".babelignore";
-
-function exists(filename) {
-  const cached = existsCache[filename];
-  if (cached == null) {
-    return existsCache[filename] = fs.existsSync(filename);
-  } else {
-    return cached;
-  }
-}
+import { findConfigs, loadConfig } from "./loading/files";
 
 export default function buildConfigChain(opts: Object = {}) {
   const filename = opts.filename ? path.resolve(opts.filename) : null;
@@ -49,7 +31,6 @@ export default function buildConfigChain(opts: Object = {}) {
 
 class ConfigChainBuilder {
   constructor(filename) {
-    this.resolvedConfigs = [];
     this.configs = [];
     this.filename = filename;
     this.possibleDirs = null;
@@ -124,11 +105,6 @@ class ConfigChainBuilder {
     }
   }
 
-  errorMultipleConfigs(loc1: string, loc2: string) {
-    throw new Error(`Multiple configuration files found. Please remove one:\n- ${
-      loc1}\n- ${loc2}`);
-  }
-
   findConfigs(loc: string) {
     if (!loc) return;
 
@@ -136,110 +112,14 @@ class ConfigChainBuilder {
       loc = path.join(process.cwd(), loc);
     }
 
-    let foundConfig = false;
-    let foundIgnore = false;
-
-    while (loc !== (loc = path.dirname(loc))) {
-      if (!foundIgnore) {
-        const ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
-        if (exists(ignoreLoc)) {
-          this.addIgnoreConfig(ignoreLoc);
-          foundIgnore = true;
-        }
-      }
-
-      if (!foundConfig) {
-        const configLoc = path.join(loc, BABELRC_FILENAME);
-        const configJSLoc = path.join(loc, BABELRC_JS_FILENAME);
-        const pkgLoc = path.join(loc, PACKAGE_FILENAME);
-        const configLocs = [configLoc, configJSLoc, pkgLoc];
-        const foundConfigs = configLocs.reduce((arr, config) => {
-          if (exists(config)) {
-            const configAdded = config === pkgLoc
-              ? this.addConfig(config, "babel", JSON)
-              : this.addConfig(config);
-
-            if (configAdded && arr.length) {
-              this.errorMultipleConfigs(arr.pop(), config);
-            }
-
-            if (configAdded) arr.push(config);
-          }
-
-          return arr;
-        }, []);
-
-        foundConfig = !!foundConfigs.length;
-      }
-
-      if (foundIgnore && foundConfig) return;
-    }
-  }
-
-  addIgnoreConfig(loc: string) {
-    const file = fs.readFileSync(loc, "utf8");
-    let lines = file.split("\n");
-
-    lines = lines
-      .map((line) => line.replace(/#(.*?)$/, "").trim())
-      .filter((line) => !!line);
-
-    if (lines.length) {
+    findConfigs(path.dirname(loc)).forEach(({ filepath, dirname, options }) => {
       this.mergeConfig({
         type: "options",
-        options: { ignore: lines },
-        alias: loc,
-        dirname: path.dirname(loc),
+        options,
+        alias: filepath,
+        dirname,
       });
-    }
-  }
-
-  addConfig(loc: string, key?: string, json = json5): boolean {
-    if (this.resolvedConfigs.indexOf(loc) >= 0) {
-      return false;
-    }
-
-    this.resolvedConfigs.push(loc);
-
-    let options;
-    if (path.extname(loc) === ".js") {
-      try {
-        const configModule = require(loc);
-        options = configModule && configModule.__esModule ? configModule.default : configModule;
-      } catch (err) {
-        err.message = `${loc}: Error while loading config - ${err.message}`;
-        throw err;
-      }
-
-      if (!options || typeof options !== "object") {
-        throw new Error("Configuration should be an exported JavaScript object.");
-      }
-    } else {
-      const content = fs.readFileSync(loc, "utf8");
-      try {
-        options = jsonCache[content] = jsonCache[content] || json.parse(content);
-      } catch (err) {
-        err.message = `${loc}: Error while parsing JSON - ${err.message}`;
-        throw err;
-      }
-    }
-
-    if (key) {
-      if (!options[key]) {
-        return false;
-      }
-
-      options = options[key];
-    }
-
-    this.mergeConfig({
-      type: "options",
-      options,
-      alias: loc,
-      dirname: path.dirname(loc),
     });
-
-    return !!options;
   }
 
   mergeConfig({
@@ -287,11 +167,18 @@ class ConfigChainBuilder {
 
     // add extends clause
     if (options.extends) {
-      const extendsLoc = resolve(options.extends, dirname);
-      if (extendsLoc) {
-        this.addConfig(extendsLoc);
-      } else {
-        throw new Error(`Couldn't resolve extends clause of ${options.extends} in ${alias}`);
+      const extendsConfig = loadConfig(options.extends, dirname);
+
+      const existingConfig = this.configs.some((config) => {
+        return config.alias === extendsConfig.filepath;
+      });
+      if (!existingConfig) {
+        this.mergeConfig({
+          type: "options",
+          alias: extendsConfig.filepath,
+          options: extendsConfig.options,
+          dirname: extendsConfig.dirname,
+        });
       }
       delete options.extends;
     }
