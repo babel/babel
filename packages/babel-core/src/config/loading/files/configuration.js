@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
+import { makeStrongCache } from "../../caching";
 
 type ConfigFile = {
   filepath: string,
@@ -11,22 +12,10 @@ type ConfigFile = {
   options: Object,
 };
 
-const existsCache = {};
-const jsonCache = {};
-
 const BABELRC_FILENAME = ".babelrc";
 const BABELRC_JS_FILENAME = ".babelrc.js";
 const PACKAGE_FILENAME = "package.json";
 const BABELIGNORE_FILENAME = ".babelignore";
-
-function exists(filename) {
-  const cached = existsCache[filename];
-  if (cached == null) {
-    return existsCache[filename] = fs.existsSync(filename);
-  } else {
-    return cached;
-  }
-}
 
 export function findConfigs(dirname: string): Array<ConfigFile> {
   let foundConfig = false;
@@ -96,8 +85,11 @@ function readConfig(filepath) {
   return (path.extname(filepath) === ".js") ? readConfigJS(filepath) : readConfigFile(filepath);
 }
 
-function readConfigJS(filepath) {
-  if (!exists(filepath)) return null;
+const readConfigJS = makeStrongCache((filepath, cache) => {
+  if (!fs.existsSync(filepath)) {
+    cache.forever();
+    return null;
+  }
 
   let options;
   try {
@@ -118,15 +110,13 @@ function readConfigJS(filepath) {
     dirname: path.dirname(filepath),
     options,
   };
-}
+});
 
-const readConfigFile = makeStaticFileHandler((filepath, content) => {
+const readConfigFile = makeStaticFileCache((filepath, content) => {
   let options;
   if (path.basename(filepath) === PACKAGE_FILENAME) {
     try {
-      const json = jsonCache[content] = jsonCache[content] || JSON.parse(content);
-
-      options = json.babel;
+      options = JSON.parse(content).babel;
     } catch (err) {
       err.message = `${filepath}: Error while parsing JSON - ${err.message}`;
       throw err;
@@ -134,7 +124,7 @@ const readConfigFile = makeStaticFileHandler((filepath, content) => {
     if (!options) return null;
   } else {
     try {
-      options = jsonCache[content] = jsonCache[content] || json5.parse(content);
+      options = json5.parse(content);
     } catch (err) {
       err.message = `${filepath}: Error while parsing config - ${err.message}`;
       throw err;
@@ -153,7 +143,7 @@ const readConfigFile = makeStaticFileHandler((filepath, content) => {
   };
 });
 
-const readIgnoreConfig = makeStaticFileHandler((filepath, content) => {
+const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   const ignore = content
     .split("\n")
     .map((line) => line.replace(/#(.*?)$/, "").trim())
@@ -166,10 +156,23 @@ const readIgnoreConfig = makeStaticFileHandler((filepath, content) => {
   };
 });
 
-function makeStaticFileHandler<T>(fn: (string, string) => T): (string) => T|null {
-  return (filepath) => {
-    if (!exists(filepath)) return null;
+function makeStaticFileCache<T>(fn: (string, string) => T): (string) => T|null {
+  return makeStrongCache((filepath, cache) => {
+    if (cache.invalidate(() => fileMtime(filepath)) === null) {
+      cache.forever();
+      return null;
+    }
 
     return fn(filepath, fs.readFileSync(filepath, "utf8"));
-  };
+  });
+}
+
+function fileMtime(filepath: string): number|null {
+  try {
+    return +fs.statSync(filepath).mtime;
+  } catch (e) {
+    if (e.code !== "ENOENT") throw e;
+  }
+
+  return null;
 }
