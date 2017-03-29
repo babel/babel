@@ -8,7 +8,8 @@
     "node": 0.12,
     "ie": 10,
     "android": 4,
-    "ios": 6
+    "ios": 6,
+    "electron": 0.2
   },
   "es6.typed.int8-array": {
     "chrome": 51,
@@ -17,7 +18,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.typed.uint8-array": {
     "chrome": 51,
@@ -26,7 +28,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.typed.uint8-clamped-array": {
     "chrome": 51,
@@ -35,7 +38,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.typed.int16-array": {
     "chrome": 51,
@@ -44,7 +48,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.typed.uint16-array": {
     "chrome": 51,
@@ -53,7 +58,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.typed.int32-array": {
     "chrome": 51,
@@ -62,7 +68,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.typed.uint32-array": {
     "chrome": 51,
@@ -71,7 +78,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.typed.float32-array": {
     "chrome": 51,
@@ -80,7 +88,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.typed.float64-array": {
     "chrome": 51,
@@ -89,7 +98,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.map": {
     "chrome": 51,
@@ -98,7 +108,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.set": {
     "chrome": 51,
@@ -107,7 +118,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.weak-map": {
     "chrome": 51,
@@ -116,7 +128,8 @@
     "safari": 9,
     "node": 6.5,
     "ios": 9,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.weak-set": {
     "chrome": 51,
@@ -125,7 +138,8 @@
     "safari": 9,
     "node": 6.5,
     "ios": 9,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.reflect.apply": {
     "chrome": 49,
@@ -134,7 +148,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.construct": {
     "chrome": 49,
@@ -143,7 +158,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.define-property": {
     "chrome": 49,
@@ -152,7 +168,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.delete-property": {
     "chrome": 49,
@@ -161,7 +178,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.get": {
     "chrome": 49,
@@ -170,7 +188,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.get-own-property-descriptor": {
     "chrome": 49,
@@ -179,7 +198,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.get-prototype-of": {
     "chrome": 49,
@@ -188,7 +208,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.has": {
     "chrome": 49,
@@ -197,7 +218,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.is-extensible": {
     "chrome": 49,
@@ -206,7 +228,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.own-keys": {
     "chrome": 49,
@@ -215,7 +238,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.prevent-extensions": {
     "chrome": 49,
@@ -224,7 +248,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.set": {
     "chrome": 49,
@@ -233,7 +258,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.reflect.set-prototype-of": {
     "chrome": 49,
@@ -242,7 +268,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.promise": {
     "chrome": 51,
@@ -251,7 +278,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.symbol": {
     "chrome": 51,
@@ -259,7 +287,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.object.assign": {
     "chrome": 45,
@@ -268,7 +297,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 32
+    "opera": 32,
+    "electron": 0.35
   },
   "es6.object.is": {
     "chrome": 19,
@@ -277,7 +307,8 @@
     "safari": 9,
     "node": 0.12,
     "android": 4.1,
-    "ios": 9
+    "ios": 9,
+    "electron": 0.2
   },
   "es6.object.set-prototype-of": {
     "chrome": 34,
@@ -288,7 +319,8 @@
     "ie": 11,
     "android": 5,
     "ios": 9,
-    "opera": 21
+    "opera": 21,
+    "electron": 0.2
   },
   "es6.function.name": {
     "chrome": 51,
@@ -296,7 +328,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.string.raw": {
     "chrome": 41,
@@ -305,7 +338,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 28
+    "opera": 28,
+    "electron": 0.24
   },
   "es6.string.from-code-point": {
     "chrome": 41,
@@ -314,7 +348,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 28
+    "opera": 28,
+    "electron": 0.24
   },
   "es6.string.code-point-at": {
     "chrome": 41,
@@ -323,7 +358,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 28
+    "opera": 28,
+    "electron": 0.24
   },
   "es6.string.repeat": {
     "chrome": 41,
@@ -332,7 +368,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 28
+    "opera": 28,
+    "electron": 0.24
   },
   "es6.string.starts-with": {
     "chrome": 41,
@@ -341,7 +378,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 28
+    "opera": 28,
+    "electron": 0.24
   },
   "es6.string.ends-with": {
     "chrome": 41,
@@ -350,7 +388,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 28
+    "opera": 28,
+    "electron": 0.24
   },
   "es6.string.includes": {
     "chrome": 41,
@@ -359,7 +398,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 28
+    "opera": 28,
+    "electron": 0.24
   },
   "es6.regexp.flags": {
     "chrome": 49,
@@ -367,7 +407,8 @@
     "safari": 9,
     "node": 6,
     "ios": 9,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "es6.regexp.match": {
     "chrome": 50,
@@ -375,7 +416,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 37
+    "opera": 37,
+    "electron": 1.1
   },
   "es6.regexp.replace": {
     "chrome": 50,
@@ -383,7 +425,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 37
+    "opera": 37,
+    "electron": 1.1
   },
   "es6.regexp.split": {
     "chrome": 50,
@@ -391,7 +434,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 37
+    "opera": 37,
+    "electron": 1.1
   },
   "es6.regexp.search": {
     "chrome": 50,
@@ -399,7 +443,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 37
+    "opera": 37,
+    "electron": 1.1
   },
   "es6.array.from": {
     "chrome": 51,
@@ -408,7 +453,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "es6.array.of": {
     "chrome": 45,
@@ -417,7 +463,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 32
+    "opera": 32,
+    "electron": 0.35
   },
   "es6.array.copy-within": {
     "chrome": 45,
@@ -426,7 +473,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 32
+    "opera": 32,
+    "electron": 0.35
   },
   "es6.array.find": {
     "chrome": 45,
@@ -435,7 +483,8 @@
     "safari": 8,
     "node": 4,
     "ios": 8,
-    "opera": 32
+    "opera": 32,
+    "electron": 0.35
   },
   "es6.array.find-index": {
     "chrome": 45,
@@ -444,7 +493,8 @@
     "safari": 8,
     "node": 4,
     "ios": 8,
-    "opera": 32
+    "opera": 32,
+    "electron": 0.35
   },
   "es6.array.fill": {
     "chrome": 45,
@@ -453,7 +503,8 @@
     "safari": 8,
     "node": 4,
     "ios": 8,
-    "opera": 32
+    "opera": 32,
+    "electron": 0.35
   },
   "es6.array.iterator": {
     "chrome": 38,
@@ -463,7 +514,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.number.is-finite": {
     "chrome": 19,
@@ -472,7 +524,8 @@
     "safari": 9,
     "node": 0.12,
     "android": 4.1,
-    "ios": 9
+    "ios": 9,
+    "electron": 0.2
   },
   "es6.number.is-integer": {
     "chrome": 34,
@@ -482,7 +535,8 @@
     "node": 0.12,
     "android": 5,
     "ios": 9,
-    "opera": 21
+    "opera": 21,
+    "electron": 0.2
   },
   "es6.number.is-safe-integer": {
     "chrome": 34,
@@ -492,7 +546,8 @@
     "node": 0.12,
     "android": 5,
     "ios": 9,
-    "opera": 21
+    "opera": 21,
+    "electron": 0.2
   },
   "es6.number.is-nan": {
     "chrome": 19,
@@ -501,7 +556,8 @@
     "safari": 9,
     "node": 0.12,
     "android": 4.1,
-    "ios": 9
+    "ios": 9,
+    "electron": 0.2
   },
   "es6.number.epsilon": {
     "chrome": 34,
@@ -511,7 +567,8 @@
     "node": 0.12,
     "android": 5,
     "ios": 9,
-    "opera": 21
+    "opera": 21,
+    "electron": 0.2
   },
   "es6.number.min-safe-integer": {
     "chrome": 34,
@@ -521,7 +578,8 @@
     "node": 0.12,
     "android": 5,
     "ios": 9,
-    "opera": 21
+    "opera": 21,
+    "electron": 0.2
   },
   "es6.number.max-safe-integer": {
     "chrome": 34,
@@ -531,7 +589,8 @@
     "node": 0.12,
     "android": 5,
     "ios": 9,
-    "opera": 21
+    "opera": 21,
+    "electron": 0.2
   },
   "es6.math.acosh": {
     "chrome": 38,
@@ -541,7 +600,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.asinh": {
     "chrome": 38,
@@ -551,7 +611,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.atanh": {
     "chrome": 38,
@@ -561,7 +622,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.cbrt": {
     "chrome": 38,
@@ -571,7 +633,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.clz32": {
     "chrome": 38,
@@ -581,7 +644,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 9,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.cosh": {
     "chrome": 38,
@@ -591,7 +655,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.expm1": {
     "chrome": 38,
@@ -601,7 +666,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.fround": {
     "chrome": 38,
@@ -611,7 +677,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.hypot": {
     "chrome": 38,
@@ -621,7 +688,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.imul": {
     "chrome": 30,
@@ -631,7 +699,8 @@
     "node": 0.12,
     "android": 4.4,
     "ios": 7,
-    "opera": 17
+    "opera": 17,
+    "electron": 0.2
   },
   "es6.math.log1p": {
     "chrome": 38,
@@ -641,7 +710,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.log10": {
     "chrome": 38,
@@ -651,7 +721,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.log2": {
     "chrome": 38,
@@ -661,7 +732,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.sign": {
     "chrome": 38,
@@ -671,7 +743,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 9,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.sinh": {
     "chrome": 38,
@@ -681,7 +754,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.tanh": {
     "chrome": 38,
@@ -691,7 +765,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es6.math.trunc": {
     "chrome": 38,
@@ -701,7 +776,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 8,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "es7.array.includes": {
     "chrome": 47,
@@ -710,7 +786,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 34
+    "opera": 34,
+    "electron": 0.36
   },
   "es7.object.values": {
     "chrome": 54,
@@ -718,7 +795,8 @@
     "firefox": 47,
     "safari": 10.1,
     "node": 7,
-    "opera": 41
+    "opera": 41,
+    "electron": 1.5
   },
   "es7.object.entries": {
     "chrome": 54,
@@ -726,7 +804,8 @@
     "firefox": 47,
     "safari": 10.1,
     "node": 7,
-    "opera": 41
+    "opera": 41,
+    "electron": 1.5
   },
   "es7.object.get-own-property-descriptors": {
     "chrome": 54,
@@ -734,7 +813,8 @@
     "firefox": 50,
     "safari": 10.1,
     "node": 7,
-    "opera": 41
+    "opera": 41,
+    "electron": 1.5
   },
   "es7.string.pad-start": {
     "chrome": 57,

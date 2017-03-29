@@ -7,8 +7,33 @@ const flatten = require("lodash/flatten");
 const flattenDeep = require("lodash/flattenDeep");
 const mapValues = require("lodash/mapValues");
 const pickBy = require("lodash/pickBy");
+const electronToChromiumVersions = require("electron-to-chromium").versions;
 const pluginFeatures = require("../data/plugin-features");
 const builtInFeatures = require("../data/built-in-features");
+
+const electronToChromiumKeys = Object.keys(electronToChromiumVersions).reverse();
+
+const chromiumToElectronMap = electronToChromiumKeys.reduce(
+  (all, electron) => {
+    all[electronToChromiumVersions[electron]] = +electron;
+    return all;
+  }
+, {});
+const chromiumToElectronVersions = Object.keys(chromiumToElectronMap);
+
+const findClosestElectronVersion = (targetVersion) => {
+  const chromiumVersionsLength = chromiumToElectronVersions.length;
+  const maxChromium = +chromiumToElectronVersions[chromiumVersionsLength - 1];
+  if (targetVersion > maxChromium) return null;
+
+  const closestChrome = chromiumToElectronVersions.find(
+    (version) => targetVersion <= version
+  );
+  return chromiumToElectronMap[closestChrome];
+};
+
+const chromiumToElectron = (chromium) =>
+  chromiumToElectronMap[chromium] || findClosestElectronVersion(chromium);
 
 const renameTests = (tests, getName) =>
   tests.map((test) => Object.assign({}, test, { name: getName(test.name) }));
@@ -218,6 +243,10 @@ const generateData = (environments, features) => {
         plugin.opera = plugin.chrome - 13;
       } else if (plugin.chrome === 5) {
         plugin.opera = 12;
+      }
+      const electronVersion = chromiumToElectron(plugin.chrome);
+      if (electronVersion) {
+        plugin.electron = electronVersion;
       }
     }
 

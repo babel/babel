@@ -6,7 +6,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 34
+    "opera": 34,
+    "electron": 0.36
   },
   "transform-es2015-block-scoped-functions": {
     "chrome": 41,
@@ -16,7 +17,8 @@
     "node": 4,
     "ie": 11,
     "ios": 10,
-    "opera": 28
+    "opera": 28,
+    "electron": 0.24
   },
   "transform-es2015-block-scoping": {
     "chrome": 49,
@@ -25,7 +27,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "transform-es2015-classes": {
     "chrome": 46,
@@ -34,7 +37,8 @@
     "safari": 10,
     "node": 5,
     "ios": 10,
-    "opera": 33
+    "opera": 33,
+    "electron": 0.36
   },
   "transform-es2015-computed-properties": {
     "chrome": 44,
@@ -43,7 +47,8 @@
     "safari": 8,
     "node": 4,
     "ios": 8,
-    "opera": 31
+    "opera": 31,
+    "electron": 0.31
   },
   "check-es2015-constants": {
     "chrome": 49,
@@ -52,7 +57,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "transform-es2015-destructuring": {
     "chrome": 51,
@@ -61,7 +67,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "transform-es2015-duplicate-keys": {
     "chrome": 42,
@@ -70,7 +77,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 29
+    "opera": 29,
+    "electron": 0.27
   },
   "transform-es2015-for-of": {
     "chrome": 51,
@@ -79,7 +87,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "transform-es2015-function-name": {
     "chrome": 51,
@@ -87,7 +96,8 @@
     "safari": 10,
     "node": 6.5,
     "ios": 10,
-    "opera": 38
+    "opera": 38,
+    "electron": 1.2
   },
   "transform-es2015-literals": {
     "chrome": 44,
@@ -96,7 +106,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 31
+    "opera": 31,
+    "electron": 0.31
   },
   "transform-es2015-object-super": {
     "chrome": 46,
@@ -105,7 +116,8 @@
     "safari": 10,
     "node": 5,
     "ios": 10,
-    "opera": 33
+    "opera": 33,
+    "electron": 0.36
   },
   "transform-es2015-parameters": {
     "chrome": 49,
@@ -114,7 +126,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "transform-es2015-shorthand-properties": {
     "chrome": 43,
@@ -123,7 +136,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 30
+    "opera": 30,
+    "electron": 0.29
   },
   "transform-es2015-spread": {
     "chrome": 46,
@@ -132,7 +146,8 @@
     "safari": 10,
     "node": 5,
     "ios": 10,
-    "opera": 33
+    "opera": 33,
+    "electron": 0.36
   },
   "transform-es2015-sticky-regex": {
     "chrome": 49,
@@ -141,7 +156,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 36
+    "opera": 36,
+    "electron": 1
   },
   "transform-es2015-template-literals": {
     "chrome": 41,
@@ -150,7 +166,8 @@
     "safari": 9,
     "node": 4,
     "ios": 9,
-    "opera": 28
+    "opera": 28,
+    "electron": 0.24
   },
   "transform-es2015-typeof-symbol": {
     "chrome": 38,
@@ -160,7 +177,8 @@
     "node": 0.12,
     "android": 5.1,
     "ios": 9,
-    "opera": 25
+    "opera": 25,
+    "electron": 0.2
   },
   "transform-es2015-unicode-regex": {
     "chrome": 50,
@@ -169,7 +187,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 37
+    "opera": 37,
+    "electron": 1.1
   },
   "transform-regenerator": {
     "chrome": 50,
@@ -178,7 +197,8 @@
     "safari": 10,
     "node": 6,
     "ios": 10,
-    "opera": 37
+    "opera": 37,
+    "electron": 1.1
   },
   "transform-exponentiation-operator": {
     "chrome": 52,
@@ -186,14 +206,16 @@
     "firefox": 52,
     "safari": 10.1,
     "node": 7,
-    "opera": 39
+    "opera": 39,
+    "electron": 1.3
   },
   "transform-async-to-generator": {
     "chrome": 55,
     "firefox": 52,
     "safari": 10.1,
     "node": 7.6,
-    "opera": 42
+    "opera": 42,
+    "electron": 1.6
   },
   "syntax-trailing-function-commas": {
     "chrome": 58,

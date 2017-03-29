@@ -49,7 +49,6 @@
     "babel-plugin-transform-exponentiation-operator": "^6.22.0",
     "babel-plugin-transform-regenerator": "^6.22.0",
     "browserslist": "^1.4.0",
-    "electron-to-chromium": "^1.2.6",
     "invariant": "^2.2.2"
   },
   "devDependencies": {
@@ -71,6 +70,7 @@
     "lodash": "^4.17.4",
     "mocha": "^3.2.0",
     "nyc": "^10.1.2",
+    "electron-to-chromium": "^1.3.2",
     "rimraf": "^2.6.1"
   },
   "babel": {
