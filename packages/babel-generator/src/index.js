@@ -55,6 +55,7 @@ function normalizeOptions(code, opts, tokens): Format {
     comments: opts.comments == null || opts.comments,
     compact: opts.compact,
     minified: opts.minified,
+    maxLineLength: opts.maxLineLength,
     concise: opts.concise,
     quotes: findCommonStringDelimiter(code, tokens),
     jsonCompatibleStrings: opts.jsonCompatibleStrings,

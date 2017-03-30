@@ -32,6 +32,7 @@ export { ClassDeclaration as ClassExpression };
 
 export function ClassBody(node: Object) {
   this.token("{");
+  this.ensureLineLength();
   this.printInnerComments(node);
   if (node.body.length === 0) {
     this.token("}");
