@@ -2,7 +2,6 @@
 
 const babelPresetEnv = require("../lib/index.js");
 const assert = require("assert");
-const { versions: electronToChromiumData } = require("electron-to-chromium");
 
 describe("babel-preset-env", () => {
   describe("getTargets", () => {
@@ -24,82 +23,6 @@ describe("babel-preset-env", () => {
           node: parseFloat(process.versions.node),
         },
       );
-    });
-  });
-
-  describe("getTargets + electron", () => {
-    it("should work with a string", () => {
-      assert.deepEqual(
-        babelPresetEnv.getTargets({
-          electron: "1.0",
-        }),
-        {
-          chrome: 49,
-        },
-      );
-    });
-
-    it("should work with a number", () => {
-      assert.deepEqual(
-        babelPresetEnv.getTargets({
-          electron: 1.0,
-        }),
-        {
-          chrome: 49,
-        },
-      );
-    });
-
-    it("should preserve lower Chrome number if Electron version is more recent", () => {
-      assert.deepEqual(
-        babelPresetEnv.getTargets({
-          electron: 1.4,
-          chrome: 50,
-        }),
-        {
-          chrome: 50,
-        },
-      );
-    });
-
-    it("should overwrite Chrome number if Electron version is older", () => {
-      assert.deepEqual(
-        babelPresetEnv.getTargets({
-          electron: 1.0,
-          chrome: 50,
-        }),
-        {
-          chrome: 49,
-        },
-      );
-    });
-
-    Object.keys(electronToChromiumData).forEach(electronVersion => {
-      it(`"should work for Electron: ${electronVersion}`, () => {
-        assert.deepEqual(
-          babelPresetEnv.getTargets({
-            electron: electronVersion,
-          }),
-          {
-            chrome: electronToChromiumData[electronVersion],
-          },
-        );
-      });
-    });
-
-    it("should error if electron version is invalid", () => {
-      const fixtures = ["0.19", 0.19, 999, "999"];
-
-      fixtures.forEach(electronVersion => {
-        assert.throws(
-          () => {
-            babelPresetEnv.getTargets({
-              electron: electronVersion,
-            });
-          },
-          Error,
-        );
-      });
     });
   });
 

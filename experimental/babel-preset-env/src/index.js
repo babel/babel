@@ -2,9 +2,7 @@ import browserslist from "browserslist";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
-import normalizeOptions, {
-  getElectronChromeVersion,
-} from "./normalize-options.js";
+import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
 import transformPolyfillRequirePlugin
   from "./transform-polyfill-require-plugin";
@@ -119,17 +117,6 @@ export const getTargets = (targets = {}) => {
 
   if (targetOpts.hasOwnProperty("uglify") && !targetOpts.uglify) {
     delete targetOpts.uglify;
-  }
-
-  // Replace Electron target with its Chrome equivalent
-  if (targetOpts.electron) {
-    const electronChromeVersion = getElectronChromeVersion(targetOpts.electron);
-
-    targetOpts.chrome = targetOpts.chrome
-      ? Math.min(targetOpts.chrome, electronChromeVersion)
-      : electronChromeVersion;
-
-    delete targetOpts.electron;
   }
 
   const browserOpts = targetOpts.browsers;
