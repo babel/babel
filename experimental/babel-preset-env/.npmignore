@@ -5,5 +5,4 @@ scripts
 .eslintignore
 .travis.yml
 codecov.yml
-data/*.js
 yarn.lock
