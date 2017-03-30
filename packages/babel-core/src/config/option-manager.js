@@ -55,6 +55,7 @@ const optionNames = new Set([
   "wrapPluginVisitorMethod",
   "compact",
   "minified",
+  "maxLineLength",
   "sourceMaps",
   "sourceMapTarget",
   "sourceFileName",

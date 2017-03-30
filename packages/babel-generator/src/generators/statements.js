@@ -185,7 +185,6 @@ export function SwitchStatement(node: Object) {
   this.token(")");
   this.space();
   this.token("{");
-  this.ensureLineLength();
 
   this.printSequence(node.cases, node, {
     indent: true,
@@ -222,7 +221,6 @@ export function DebuggerStatement() {
 function variableDeclarationIndent() {
   // "let " or "var " indentation.
   this.token(",");
-  this.ensureLineLength();
   this.newline();
   if (this.endsWith("\n")) for (let i = 0; i < 4; i++) this.space(true);
 }
@@ -230,7 +228,6 @@ function variableDeclarationIndent() {
 function constDeclarationIndent() {
   // "const " indentation.
   this.token(",");
-  this.ensureLineLength();
   this.newline();
   if (this.endsWith("\n")) for (let i = 0; i < 6; i++) this.space(true);
 }

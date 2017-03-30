@@ -88,7 +88,7 @@ export default class Printer {
   semicolon(force: boolean = false): void {
     this._maybeAddAuxComment();
     this._append(";", !force /* queue */);
-    this.ensureLineLength();
+    this._ensureLineLength();
   }
 
   /**
@@ -168,20 +168,10 @@ export default class Printer {
 
   /**
    * Inserts a new line when format.maxLineLength is set
-   *
-   * Currently considered places:
-   *
-   * BlockStatement {\n
-   * SwitchStatement {\n
-   * ClassBody {\n
-   * Semicolons ;\n
-   * commaSeparator ,\n
-   * VariableDeclarationSeparator ,\n
    */
 
-  ensureLineLength() {
-    if (!this.format.compact || !this.format.minified || this.format.retainLines) return;
-    if (this.format.maxLineLength && this._buf.getCurrentColumn() > this.format.maxLineLength) {
+  _ensureLineLength() {
+    if (this.format.maxLineLength && this._buf.getCurrentColumn() >= this.format.maxLineLength) {
       this._newline();
     }
   }
@@ -191,7 +181,12 @@ export default class Printer {
    */
 
   newline(i?: number): void {
-    if (this.format.retainLines || this.format.compact) return;
+    if (this.format.retainLines) return;
+
+    if (this.format.compact) {
+      this._ensureLineLength();
+      return;
+    }
 
     if (this.format.concise) {
       this.space();
@@ -603,6 +598,6 @@ Object.assign(Printer.prototype, generatorFunctions);
 
 function commaSeparator() {
   this.token(",");
-  this.ensureLineLength();
+  this._ensureLineLength();
   this.space();
 }

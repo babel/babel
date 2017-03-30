@@ -13,7 +13,6 @@ export function Program(node: Object) {
 
 export function BlockStatement(node: Object) {
   this.token("{");
-  this.ensureLineLength();
   this.printInnerComments(node);
 
   const hasDirectives = node.directives && node.directives.length;
