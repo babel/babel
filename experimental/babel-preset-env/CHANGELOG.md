@@ -1,5 +1,35 @@
 # Changelog
 
+## v1.3.0 (2017-03-30)
+
+### :bug: Bug Fix
+
+- Add check for ArrayBuffer[Symbol.species] ([#233](https://github.com/babel/babel-preset-env/pull/233)) (@existentialism)
+
+We now properly check for `Symbol.species` support in ArrayBuffer and include the
+polyfill if necessary. This should, as a side effect, fix ArrayBuffer-related 
+errors on IE9.
+
+### :nail_care: Polish
+
+- Fill data with electron as a target. ([#229](https://github.com/babel/babel-preset-env/pull/229)) (@yavorsky)
+
+We've simplified things by adding `electron` as a target instead of doing a bunch of 
+things at runtime. Electron targets should now also be displayed in the debug output.
+
+- separate default builtins for platforms ([#226](https://github.com/babel/babel-preset-env/pull/226)) (@restrry)
+
+If you are targeting the `node` environment exclusively, the always-included web polyfills
+(like `dom.iterable`, and a few others) will now no longer be included.
+
+### :memo: Documentation 
+
+ * remove deprecated projects ([#223](https://github.com/babel/babel-preset-env/pull/223)) [skip ci] (@stevemao)
+
+### :house: Internal
+
+ * npmignore: Add related to build data and codecov. ([#216](https://github.com/babel/babel-preset-env/pull/216)) (@yavorsky)
+
 ## v1.2.2 (2017-03-14)
 
 ### :bug: Bug Fix
