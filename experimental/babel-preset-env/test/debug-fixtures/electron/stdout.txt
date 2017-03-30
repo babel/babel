@@ -22,6 +22,7 @@ Using plugins:
   syntax-trailing-function-commas {"electron":0.36}
 
 Using polyfills:
+  es6.typed.array-buffer {"electron":0.36}
   es6.typed.int8-array {"electron":0.36}
   es6.typed.uint8-array {"electron":0.36}
   es6.typed.uint8-clamped-array {"electron":0.36}

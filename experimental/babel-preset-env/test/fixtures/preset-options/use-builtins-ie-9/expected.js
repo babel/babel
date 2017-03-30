@@ -1,4 +1,5 @@
 import "core-js/modules/es6.typed.array-buffer";
+import "core-js/modules/es6.typed.data-view";
 import "core-js/modules/es6.typed.int8-array";
 import "core-js/modules/es6.typed.uint8-array";
 import "core-js/modules/es6.typed.uint8-clamped-array";

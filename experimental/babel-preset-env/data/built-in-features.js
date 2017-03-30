@@ -25,11 +25,11 @@ const typedArrayMethods = [
   "typed arrays / %TypedArray%.prototype.values",
   "typed arrays / %TypedArray%.prototype.entries",
   "typed arrays / %TypedArray%.prototype[Symbol.iterator]",
-  "typed arrays / %TypedArray%[Symbol.species]"
+  "typed arrays / %TypedArray%[Symbol.species]",
 ];
 
 const es2015 = {
-  // "es6.typed/array-buffer": "typed arrays / ",
+  "es6.typed.array-buffer": "typed arrays / ArrayBuffer[Symbol.species]",
   "es6.typed.data-view": "typed arrays / DataView",
   "es6.typed.int8-array": {
     features: ["typed arrays / Int8Array"].concat(typedArrayMethods)

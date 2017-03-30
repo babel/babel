@@ -35,6 +35,7 @@ Using plugins:
   syntax-trailing-function-commas {"chrome":54,"ie":10,"node":6}
 
 Using polyfills:
+  es6.typed.array-buffer {"ie":10,"node":6}
   es6.typed.int8-array {"ie":10,"node":6}
   es6.typed.uint8-array {"ie":10,"node":6}
   es6.typed.uint8-clamped-array {"ie":10,"node":6}
