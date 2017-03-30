@@ -16,6 +16,7 @@
     "dev": "babel -w src -d lib",
     "fix": "eslint . --fix",
     "lint": "eslint .",
+    "prepublish": "npm run build",
     "test": "npm run build && npm run test-only",
     "test-ci": "nyc npm run test",
     "test-only": "mocha ./test --compilers js:babel-register -t 10000"
