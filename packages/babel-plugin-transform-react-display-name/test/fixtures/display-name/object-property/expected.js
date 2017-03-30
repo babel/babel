@@ -1,5 +1,5 @@
 ({
-  foo: ReactCreateClass({
+  foo: createReactClass({
     displayName: "foo"
   })
 });

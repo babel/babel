@@ -1,6 +1,6 @@
 # babel-plugin-transform-react-display-name
 
-> Add displayName to `ReactCreateClass` (and `React.createClass`) calls
+> Add displayName to `createReactClass` (and `React.createClass`) calls
 
 ## Example
 
@@ -8,7 +8,7 @@
 
 ```js
 var foo = React.createClass({}); // React <= 15
-var bar = ReactCreateClass({});  // React 16+
+var bar = createReactClass({});  // React 16+
 ```
 
 **Out**
@@ -17,7 +17,7 @@ var bar = ReactCreateClass({});  // React 16+
 var foo = React.createClass({
   displayName: "foo"
 }); // React <= 15
-var bar = ReactCreateClass({
+var bar = createReactClass({
   displayName: "bar"
 }); // React 16+
 ```

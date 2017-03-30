@@ -20,12 +20,12 @@ export default function ({ types: t }) {
   }
 
   const isCreateClassCallExpression = t.buildMatchMemberExpression("React.createClass");
-  const isCreateClassAddon = (callee) => callee.name === "ReactCreateClass";
+  const isCreateClassAddon = (callee) => callee.name === "createReactClass";
 
   function isCreateClass(node) {
     if (!node || !t.isCallExpression(node)) return false;
 
-    // not ReactCreateClass nor React.createClass call member object
+    // not createReactClass nor React.createClass call member object
     if (
       !isCreateClassCallExpression(node.callee) &&
       !isCreateClassAddon(node.callee)

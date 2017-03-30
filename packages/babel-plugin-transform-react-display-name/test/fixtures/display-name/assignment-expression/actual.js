@@ -1,2 +1,2 @@
-foo = ReactCreateClass({});
+foo = createReactClass({});
 bar = React.createClass({});

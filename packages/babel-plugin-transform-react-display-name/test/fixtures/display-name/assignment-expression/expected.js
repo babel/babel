@@ -1,4 +1,4 @@
-foo = ReactCreateClass({
+foo = createReactClass({
   displayName: "foo"
 });
 bar = React.createClass({
