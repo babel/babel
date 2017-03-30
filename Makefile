@@ -19,7 +19,7 @@ test-babel:
 	cd ./build/babel; \
 	jq "del(.nyc)" package.json > package.nonyc.json; \
 	mv -f package.nonyc.json package.json; \
-	../../node_modules/.bin/nyc --no-instrument --no-source-map --reporter=json --report-dir ../../coverage node_modules/mocha/bin/_mocha `scripts/_get-test-directories.sh` --opts test/mocha.opts; \
+	../../node_modules/.bin/nyc --no-instrument --no-source-map --reporter=json --report-dir ../../coverage node_modules/mocha/bin/_mocha `scripts/_get-test-directories.sh` --opts test/mocha.opts --compilers js:../../scripts/test-babel-register.js; \
 
 bootstrap-flow: clean
 	mkdir ./build
