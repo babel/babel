@@ -10,21 +10,10 @@ var codeFrame       = require("babel-code-frame");
 var hasPatched = false;
 var eslintOptions = {};
 
-function createModule(filename) {
-  var mod = new Module(filename);
-  mod.filename = filename;
-  mod.paths = Module._nodeModulePaths(path.dirname(filename));
-  return mod;
-}
-
-function monkeypatch() {
-  if (hasPatched) return;
-  hasPatched = true;
-
-  var eslintLoc;
+function getModules() {
   try {
     // avoid importing a local copy of eslint, try to find a peer dependency
-    eslintLoc = Module._resolveFilename("eslint", module.parent);
+    var eslintLoc = Module._resolveFilename("eslint", module.parent);
   } catch (err) {
     try {
       // avoids breaking in jest where module.parent is undefined
@@ -35,18 +24,35 @@ function monkeypatch() {
   }
 
   // get modules relative to what eslint will load
-  var eslintMod = createModule(eslintLoc);
-  // ESLint v1.9.0 uses estraverse directly to work around https://github.com/npm/npm/issues/9663
+  var eslintMod = new Module(eslintLoc);
+  eslintMod.filename = eslintLoc;
+  eslintMod.paths = Module._nodeModulePaths(path.dirname(eslintLoc));
+
+  var Definition = eslintMod.require("escope/lib/definition").Definition;
+  var escope  = eslintMod.require("escope");
   var estraverse = eslintMod.require("estraverse");
+  var referencer = eslintMod.require("escope/lib/referencer");
+
+  if (referencer.__esModule) referencer = referencer.default;
+
+  return {
+    Definition,
+    escope,
+    estraverse,
+    referencer,
+  };
+}
+
+function monkeypatch(modules) {
+  var Definition = modules.Definition;
+  var escope = modules.escope;
+  var estraverse = modules.estraverse;
+  var referencer = modules.referencer;
 
   Object.assign(estraverse.VisitorKeys, t.VISITOR_KEYS);
   estraverse.VisitorKeys.MethodDefinition.push("decorators");
   estraverse.VisitorKeys.Property.push("decorators");
 
-  // monkeypatch escope
-  var escopeLoc = Module._resolveFilename("escope", eslintMod);
-  var escopeMod = createModule(escopeLoc);
-  var escope  = require(escopeLoc);
   var analyze = escope.analyze;
   escope.analyze = function (ast, opts) {
     opts.ecmaVersion = eslintOptions.ecmaVersion;
@@ -58,28 +64,6 @@ function monkeypatch() {
     var results = analyze.call(this, ast, opts);
     return results;
   };
-
-  // monkeypatch escope/referencer
-  var referencerLoc;
-  try {
-    referencerLoc = Module._resolveFilename("./referencer", escopeMod);
-  } catch (err) {
-    throw new ReferenceError("couldn't resolve escope/referencer");
-  }
-  var referencerMod = createModule(referencerLoc);
-  var referencer = require(referencerLoc);
-  if (referencer.__esModule) {
-    referencer = referencer.default;
-  }
-
-  // reference Definition
-  var definitionLoc;
-  try {
-    definitionLoc = Module._resolveFilename("./definition", referencerMod);
-  } catch (err) {
-    throw new ReferenceError("couldn't resolve escope/definition");
-  }
-  var Definition = require(definitionLoc).Definition;
 
   // if there are decorators, then visit each
   function visitDecorators(node) {
@@ -368,11 +352,14 @@ exports.parse = function (code, options) {
     delete eslintOptions.globalReturn;
   }
 
-  try {
-    monkeypatch();
-  } catch (err) {
-    console.error(err.stack);
-    process.exit(1);
+  if (!hasPatched) {
+    hasPatched = true;
+    try {
+      monkeypatch(getModules());
+    } catch (err) {
+      console.error(err.stack);
+      process.exit(1);
+    }
   }
 
   return exports.parseNoPatch(code, options);
