@@ -77,5 +77,6 @@ export default function normalizeOptions(opts) {
     moduleType: validateModulesOption(opts.modules),
     targets: opts.targets,
     useBuiltIns: opts.useBuiltIns,
+    addUsedBuiltIns: opts.addUsedBuiltIns,
   };
 }

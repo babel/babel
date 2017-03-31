@@ -6,6 +6,7 @@ import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
 import transformPolyfillRequirePlugin
   from "./transform-polyfill-require-plugin";
+import addUsedBuiltInsPlugin from "./add-used-built-ins-plugin";
 
 /**
  * Determine if a transformation is required
@@ -177,7 +178,7 @@ function getPlatformSpecificDefaultFor(targets) {
 
 export default function buildPreset(context, opts = {}) {
   const validatedOptions = normalizeOptions(opts);
-  const { debug, loose, moduleType, useBuiltIns } = validatedOptions;
+  const { debug, loose, moduleType, useBuiltIns, addUsedBuiltIns } = validatedOptions;
 
   const targets = getTargets(validatedOptions.targets);
   const include = transformIncludesAndExcludes(validatedOptions.include);
@@ -195,7 +196,7 @@ export default function buildPreset(context, opts = {}) {
 
   let polyfills;
   let polyfillTargets;
-  if (useBuiltIns) {
+  if (useBuiltIns || addUsedBuiltIns) {
     polyfillTargets = getBuiltInTargets(targets);
     const filterBuiltIns = filterItem.bind(
       null,
@@ -219,7 +220,7 @@ export default function buildPreset(context, opts = {}) {
     transformations.forEach(transform => {
       logPlugin(transform, targets, pluginList);
     });
-    if (useBuiltIns && polyfills.length) {
+    if ((useBuiltIns || addUsedBuiltIns) && polyfills.length) {
       console.log("\nUsing polyfills:");
       polyfills.forEach(polyfill => {
         logPlugin(polyfill, polyfillTargets, builtInsList);
@@ -242,8 +243,11 @@ export default function buildPreset(context, opts = {}) {
     ]),
   );
 
-  useBuiltIns &&
+  if (useBuiltIns) {
     plugins.push([transformPolyfillRequirePlugin, { polyfills, regenerator }]);
+  } else if (addUsedBuiltIns) {
+    plugins.push([addUsedBuiltInsPlugin, { polyfills, regenerator }]);
+  }
 
   return {
     plugins,

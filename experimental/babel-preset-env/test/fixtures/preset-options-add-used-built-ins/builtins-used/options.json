@@ -1,0 +1,9 @@
+{
+  "presets": [
+    ["../../../../lib", {
+      "addUsedBuiltIns": true,
+      "modules": false,
+      "debug": true
+    }]
+  ]
+}

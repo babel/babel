@@ -213,6 +213,55 @@ This will also work for `core-js` directly (`import "core-js";`)
 npm install core-js --save
 ```
 
+### `addUsedBuiltIns`
+
+`boolean`, defaults to `false`.
+
+Adds imports for polyfills when they are used in each file. You need to have core-js as a dependency (and regeneratorRuntime if necessary).
+
+> This option is different than `useBuiltIns` in that instead of only adding polyfills at the entry point, the plugin adds a specific import for each polyfill that is used in each file. We take advantage of the fact that the bundler will load the same polyfill only once.
+
+```sh
+npm install core-js regenerator-runtime --save
+```
+
+**In**
+
+a.js
+
+```js
+var a = new Promise();
+```
+
+b.js
+
+```js
+var b = new Map();
+```
+
+**Out (if environment doesn't support it)**
+
+```js
+import "core-js/modules/es6.promise";
+var a = new Promise();
+```
+
+```js
+import "core-js/modules/es6.map";
+var b = new Map();
+```
+
+**Out (if environment supports it)**
+
+```js
+var a = new Promise();
+```
+
+```js
+import "core-js/modules/es6.map";
+var b = new Map();
+```
+
 ---
 
 ## Examples
