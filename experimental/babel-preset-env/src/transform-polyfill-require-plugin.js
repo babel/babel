@@ -50,16 +50,8 @@ export default function({ types: t }) {
 
   const isPolyfillImport = {
     ImportDeclaration(path, state) {
-      if (
-        path.node.specifiers.length === 0 &&
-        isPolyfillSource(path.node.source.value)
-      ) {
-        this.numPolyfillImports++;
-        if (this.numPolyfillImports > 1) {
-          path.remove();
-          return;
-        }
-
+      if (path.node.specifiers.length === 0 &&
+          isPolyfillSource(path.node.source.value)) {
         path.replaceWithMultiple(
           createImports(state.opts.polyfills, "import", state.opts.regenerator),
         );
@@ -77,12 +69,6 @@ to the "transform-polyfill-require" plugin
       }
       path.get("body").forEach(bodyPath => {
         if (isRequire(bodyPath)) {
-          this.numPolyfillImports++;
-          if (this.numPolyfillImports > 1) {
-            path.remove();
-            return;
-          }
-
           bodyPath.replaceWithMultiple(
             createImports(
               state.opts.polyfills,
