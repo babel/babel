@@ -337,7 +337,7 @@ exports.A = A;
 }
 ```
 
-**stdin**
+**stdout**
 
 ```sh
 Using targets:

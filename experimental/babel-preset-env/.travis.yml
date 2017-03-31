@@ -26,7 +26,8 @@ install:
 script:
   - 'if [ -n "${LINT-}" ]; then $PKG_CMD run lint ; fi'
   - 'if [ -n "${DATA_CHECK-}" ]; then $PKG_CMD run build-data -- --check ; fi'
-  - 'if [ -z "${LINT-}" ] && [ -z "${DATA_CHECK-}" ]; then $PKG_CMD run test-ci ; fi'
+  - 'if [ -n "${SMOKE_TEST-}" ]; then node scripts/smoke-test.js ; fi'
+  - 'if [ -z "${LINT-}" ] && [ -z "${DATA_CHECK-}" ] && [ -z "${SMOKE_TEST-}" ]; then $PKG_CMD run test-ci ; fi'
 matrix:
   fast_finish: true
   include:
@@ -34,4 +35,7 @@ matrix:
       env: LINT=true PKG_CMD="npm"
     - node_js: "node"
       env: DATA_CHECK=true PKG_CMD="npm"
-after_success: 'if [ -z "${LINT-}" ] && [ -z "${DATA_CHECK-}" ]; then npm run coverage-ci ; fi'
+    - node_js: "node"
+      env: SMOKE_TEST=true PKG_CMD="npm"
+
+after_success: 'if [ -z "${LINT-}" ] && [ -z "${DATA_CHECK-}" && [ -z "${SMOKE_TEST-}" ]; then npm run coverage-ci ; fi'

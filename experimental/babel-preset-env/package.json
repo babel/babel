@@ -18,6 +18,7 @@
     "format": "prettier --trailing-comma all --write \"src/*.js\" \"test/*.js\" && prettier --trailing-comma es5 --write \"scripts/*.js\"",
     "lint": "eslint .",
     "precommit": "lint-staged",
+    "prepublish": "npm run build",
     "test": "npm run build && npm run test-only",
     "test-ci": "nyc npm run test",
     "test-only": "mocha ./test --compilers js:babel-register -t 10000"

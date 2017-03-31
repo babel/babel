@@ -5,5 +5,7 @@ scripts
 .eslintignore
 .travis.yml
 codecov.yml
-data/*.js
 yarn.lock
+.nyc_output
+.vscode
+babel-preset-env-*.tgz

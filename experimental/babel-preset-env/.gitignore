@@ -6,3 +6,5 @@ test/tmp
 *.log
 .vscode
 .nyc_output
+tmp
+babel-preset-env-*.tgz
