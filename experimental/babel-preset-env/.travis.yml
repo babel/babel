@@ -27,7 +27,8 @@ install:
   - $PKG_CMD install
 script:
   - 'if [ -n "${LINT-}" ]; then $PKG_CMD run lint ; fi'
-  - 'if [ -z "${LINT-}" ]; then $PKG_CMD run test-ci ; fi'
+  - 'if [ -n "${SMOKE_TEST-}" ]; then node scripts/smoke-test.js ; fi'
+  - 'if [ -z "${LINT-}" ] && [ -z "${SMOKE_TEST-}" ]; then $PKG_CMD run test-ci ; fi'
 matrix:
   fast_finish: true
   exclude:
@@ -38,5 +39,7 @@ matrix:
   include:
     - node_js: "node"
       env: LINT=true PKG_CMD="npm"
+    - node_js: "node"
+      env: SMOKE_TEST=true PKG_CMD="npm"
 
-after_success: 'if [ -z "${LINT-}" ]; then npm run coverage-ci ; fi'
+after_success: 'if [ -z "${LINT-}" ] && [ -z "${SMOKE_TEST-}" ]; then npm run coverage-ci ; fi'

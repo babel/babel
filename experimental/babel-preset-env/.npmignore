@@ -6,3 +6,6 @@ scripts
 .travis.yml
 codecov.yml
 yarn.lock
+.nyc_output
+.vscode
+babel-preset-env-*.tgz
