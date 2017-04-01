@@ -6,8 +6,7 @@
     "test": "make test",
     "build": "make build",
     "lint": "make lint",
-    "fix": "make fix",
-    "postinstall": "./node_modules/.bin/opencollective-postinstall || exit 0"
+    "fix": "make fix"
   },
   "devDependencies": {
     "async": "^1.5.0",
@@ -39,7 +38,6 @@
     "lodash": "^4.2.0",
     "mocha": "^3.0.0",
     "nyc": "^10.0.0",
-    "opencollective-postinstall": "^1.0.14",
     "output-file-sync": "^1.1.1",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
@@ -58,10 +56,5 @@
     ],
     "sourceMap": false,
     "instrument": false
-  },
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/babel",
-    "logo": "https://opencollective.com/babel/logo.txt?reverse=true&variant=variant1&width=50"
   }
 }
