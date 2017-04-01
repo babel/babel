@@ -2,6 +2,7 @@ import * as babel from "../lib/index";
 import buildExternalHelpers from "../lib/tools/build-external-helpers";
 import sourceMap from "source-map";
 import assert from "assert";
+import path from "path";
 import Plugin from "../lib/config/plugin";
 import generator from "babel-generator";
 
@@ -269,6 +270,77 @@ describe("api", function () {
       "};",
     ].join("\n"), result.code);
 
+  });
+
+  it("complex plugin and preset ordering", function() {
+    function pushPlugin(str) {
+      return {
+        visitor: {
+          Program(path) {
+            path.pushContainer("body", babel.types.expressionStatement(babel.types.identifier(str)));
+          },
+        },
+      };
+    }
+
+    function pushPreset(str) {
+      return { plugins: [pushPlugin(str)] };
+    }
+
+    const result = babel.transform("", {
+      filename: path.join(__dirname, "fixtures", "config", "complex-plugin-config", "file.js"),
+      presets: [
+        pushPreset("argone"),
+        pushPreset("argtwo"),
+      ],
+      env: {
+        development: {
+          passPerPreset: true,
+          presets: [
+            pushPreset("argthree"),
+            pushPreset("argfour"),
+          ],
+          env: {
+            development: {
+              passPerPreset: true,
+              presets: [
+                pushPreset("argfive"),
+                pushPreset("argsix"),
+              ],
+            },
+          },
+        },
+      },
+    });
+
+    assert.equal(result.code, [
+      "argtwo;",
+      "argone;",
+      "eleven;",
+      "twelve;",
+      "one;",
+      "two;",
+      "five;",
+      "six;",
+      "three;",
+      "four;",
+      "seventeen;",
+      "eighteen;",
+      "nineteen;",
+      "twenty;",
+      "thirteen;",
+      "fourteen;",
+      "fifteen;",
+      "sixteen;",
+      "argfive;",
+      "argsix;",
+      "argthree;",
+      "argfour;",
+      "seven;",
+      "eight;",
+      "nine;",
+      "ten;",
+    ].join("\n"));
   });
 
   it("source map merging", function () {

@@ -1,0 +1,39 @@
+{
+  extends: "./extended.babelrc",
+  plugins: [
+    "./one",
+    "./two",
+  ],
+  presets: [{
+    plugins: [
+      "./three",
+      "./four",
+    ],
+  }, {
+    plugins: [
+      "./five",
+      "./six",
+    ],
+  }, {
+    passPerPreset: true,
+    presets: [{
+      plugins: [
+        "./seven",
+        "./eight",
+      ],
+    }, {
+      plugins: [
+        "./nine",
+        "./ten",
+      ],
+    }],
+  }],
+  env: {
+    development: {
+      plugins: [
+        "./eleven",
+        "./twelve",
+      ]
+    },
+  },
+}
