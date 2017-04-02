@@ -27,8 +27,8 @@ console.log(bob.printFriends());
 **Out**
 
 ```javascript
-var a = function a() {};
-var a = function a(b) {
+var a = function () {};
+var a = function (b) {
   return b;
 };
 
