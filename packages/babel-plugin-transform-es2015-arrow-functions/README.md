@@ -40,7 +40,7 @@ console.log(double); // [2,4,6]
 var bob = {
   _name: "Bob",
   _friends: ["Sally", "Tom"],
-  printFriends: function printFriends() {
+  printFriends() {
     var _this = this;
 
     this._friends.forEach(function (f) {
