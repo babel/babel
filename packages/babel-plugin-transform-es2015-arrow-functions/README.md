@@ -32,7 +32,7 @@ var a = function (b) {
   return b;
 };
 
-var double = [1, 2, 3].map(function (num) {
+const double = [1, 2, 3].map(function (num) {
   return num * 2;
 });
 console.log(double); // [2,4,6]
