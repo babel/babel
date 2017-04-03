@@ -110,7 +110,7 @@ pp.parseSpread = function (refShorthandDefaultPos) {
 pp.parseRest = function () {
   const node = this.startNode();
   this.next();
-  node.argument = this.parseBindingIdentifier();
+  node.argument = this.parseBindingAtom();
   return this.finishNode(node, "RestElement");
 };
 
@@ -123,14 +123,11 @@ pp.parseBindingIdentifier = function () {
 };
 
 // Parses lvalue (assignable) atom.
-
 pp.parseBindingAtom = function () {
   switch (this.state.type) {
     case tt._yield:
-      if (this.state.strict || this.state.inGenerator) this.unexpected();
-      // fall-through
     case tt.name:
-      return this.parseIdentifier(true);
+      return this.parseBindingIdentifier();
 
     case tt.bracketL:
       const node = this.startNode();
