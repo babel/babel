@@ -3,13 +3,15 @@ import OptionManager from "../lib/config/option-manager";
 import path from "path";
 
 describe("option-manager", () => {
-  describe("memoisePluginContainer", () => {
-    it("throws for babel 5 plugin", () => {
-      return assert.throws(
-        () => OptionManager.memoisePluginContainer(({ Plugin }) => new Plugin("object-assign", {})),
-        /Babel 5 plugin is being run with Babel 6/
-      );
-    });
+  it("throws for babel 5 plugin", () => {
+    return assert.throws(() => {
+      const opt = new OptionManager();
+      opt.init({
+        plugins: [
+          ({ Plugin }) => new Plugin("object-assign", {}),
+        ],
+      });
+    }, /Babel 5 plugin is being run with Babel 6/);
   });
 
   describe("mergeOptions", () => {
