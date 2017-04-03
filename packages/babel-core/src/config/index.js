@@ -1,5 +1,5 @@
 import type Plugin from "./plugin";
-import OptionManager from "./option-manager";
+import manageOptions from "./option-manager";
 
 export type ResolvedConfig = {
   options: Object,
@@ -10,7 +10,7 @@ export type ResolvedConfig = {
  * Standard API for loading Babel configuration data. Not for public consumption.
  */
 export default function loadConfig(opts: Object): ResolvedConfig|null {
-  const mergedOpts = new OptionManager().init(opts);
+  const mergedOpts = manageOptions(opts);
   if (!mergedOpts) return null;
 
   let passes = [];

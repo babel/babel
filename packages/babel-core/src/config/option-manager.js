@@ -85,7 +85,11 @@ const ALLOWED_PLUGIN_KEYS = new Set([
   "inherits",
 ]);
 
-export default class OptionManager {
+export default function manageOptions(opts?: Object) {
+  return new OptionManager().init(opts);
+}
+
+class OptionManager {
   constructor() {
     this.options = OptionManager.createBareOptions();
   }
