@@ -7,6 +7,8 @@ import merge from "./helpers/merge";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
 import path from "path";
+import traverse from "babel-traverse";
+import clone from "lodash/clone";
 
 import { loadPlugin, loadPreset, loadParser, loadGenerator } from "./loading/files";
 
@@ -74,6 +76,15 @@ const optionNames = new Set([
   "generatorOpts",
 ]);
 
+const ALLOWED_PLUGIN_KEYS = new Set([
+  "name",
+  "manipulateOptions",
+  "pre",
+  "post",
+  "visitor",
+  "inherits",
+]);
+
 export default class OptionManager {
   constructor() {
     this.options = OptionManager.createBareOptions();
@@ -99,16 +110,51 @@ export default class OptionManager {
       obj = fn;
     }
 
-    if (typeof obj === "object") {
-      const plugin = new Plugin(obj, alias);
-      OptionManager.memoisedPlugins.push({
-        container: fn,
-        plugin: plugin,
-      });
-      return plugin;
-    } else {
+    if (typeof obj !== "object") {
       throw new TypeError(messages.get("pluginNotObject", loc, i, typeof obj) + loc + i);
     }
+    Object.keys(obj).forEach((key) => {
+      if (!ALLOWED_PLUGIN_KEYS.has(key)) {
+        throw new Error(messages.get("pluginInvalidProperty", loc, i, key));
+      }
+    });
+    if (obj.visitor && (obj.visitor.enter || obj.visitor.exit)) {
+      throw new Error("Plugins aren't allowed to specify catch-all enter/exit handlers. " +
+        "Please target individual nodes.");
+    }
+
+    obj = Object.assign({}, obj, {
+      visitor: clone(obj.visitor || {}),
+    });
+
+    traverse.explode(obj.visitor);
+
+    if (obj.inherits) {
+      const inherited = OptionManager.normalisePlugin(obj.inherits, loc, "inherits");
+
+      obj.pre = OptionManager.chain(inherited.pre, obj.pre);
+      obj.post = OptionManager.chain(inherited.post, obj.post);
+      obj.manipulateOptions = OptionManager.chain(inherited.manipulateOptions, obj.manipulateOptions);
+      obj.visitor = traverse.visitors.merge([inherited.visitor, obj.visitor]);
+    }
+
+    const plugin = new Plugin(obj, alias);
+    OptionManager.memoisedPlugins.push({
+      container: fn,
+      plugin: plugin,
+    });
+    return plugin;
+  }
+
+  static chain(a, b) {
+    const fns = [a, b].filter(Boolean);
+    if (fns.length <= 1) return fns[0];
+
+    return function(...args) {
+      for (const fn of fns) {
+        fn.apply(this, args);
+      }
+    };
   }
 
   static createBareOptions() {
@@ -136,8 +182,6 @@ export default class OptionManager {
         throw new TypeError(messages.get("pluginNotFunction", loc, i, typeof plugin));
       }
     }
-
-    plugin.init(loc, i);
 
     return plugin;
   }
