@@ -135,6 +135,8 @@ export function StringLiteral(node: Object, parent: Object) {
   const opts = {
     quotes: t.isJSX(parent) ? "double" : this.format.quotes,
     wrap: true,
+    compact: true,
+    isScriptContext: this.format.isScriptContext,
   };
   if (this.format.jsonCompatibleStrings) {
     opts.json = true;
