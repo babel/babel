@@ -8,12 +8,11 @@ describe("babel-register", function () {
   let babelRegister;
   let oldCompiler;
 
-  function setupRegister(config) {
+  function setupRegister(config = {}) {
     babelRegister = require("../lib/node");
     babelRegister.default(Object.assign({
       presets: [path.join(__dirname, "../../babel-preset-es2015")],
       babelrc: false,
-      only: ["__data__"],
     }, config));
   }
 
@@ -47,6 +46,10 @@ describe("babel-register", function () {
 
   it("reverts correctly", () => {
     setupRegister();
+
+    chai.expect(require(DATA_ES2015)).to.be.ok;
+    decache(DATA_ES2015);
+
     revertRegister();
 
     chai.expect(() => { require(DATA_ES2015); }).to.throw(SyntaxError);
