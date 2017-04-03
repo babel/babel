@@ -1065,7 +1065,7 @@ babel-preset-stage-3@7.0.0-alpha.3:
     babel-plugin-transform-async-generator-functions "7.0.0-alpha.3"
     babel-plugin-transform-object-rest-spread "7.0.0-alpha.3"
 
-babel-register@7.0.0-alpha.6, babel-register@^7.0.0-alpha.6:
+babel-register@7.0.0-alpha.6:
   version "7.0.0-alpha.6"
   resolved "https://registry.yarnpkg.com/babel-register/-/babel-register-7.0.0-alpha.6.tgz#adb337fdfca6d74c90d51232b5b3d8f532ca91bc"
   dependencies:
@@ -2393,6 +2393,10 @@ is-glob@^2.0.0, is-glob@^2.0.1:
   dependencies:
     is-extglob "^1.0.0"
 
+is-module@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/is-module/-/is-module-1.0.0.tgz#3258fb69f78c14d5b815d664336b4cffb6441591"
+
 is-my-json-valid@^2.10.0:
   version "2.16.0"
   resolved "https://registry.yarnpkg.com/is-my-json-valid/-/is-my-json-valid-2.16.0.tgz#f079dd9bfdae65ee2038aae8acbc86ab109e3693"
@@ -3625,12 +3629,13 @@ rollup-plugin-babel@^2.6.1:
     object-assign "^4.1.0"
     rollup-pluginutils "^1.5.0"
 
-rollup-plugin-node-resolve@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-2.0.0.tgz#07e0ae94ac002a3ea36e8f33ca121d9f836b1309"
+rollup-plugin-node-resolve@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-3.0.0.tgz#8b897c4c3030d5001277b0514b25d2ca09683ee0"
   dependencies:
     browser-resolve "^1.11.0"
     builtin-modules "^1.1.0"
+    is-module "^1.0.0"
     resolve "^1.1.6"
 
 rollup-pluginutils@^1.5.0:
