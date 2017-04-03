@@ -564,7 +564,7 @@ export default class Tokenizer {
 
   readNumber(startsWithDot) {
     const start = this.state.pos;
-    const octal = this.input.charCodeAt(this.state.pos) === 48;
+    const firstIsZero = this.input.charCodeAt(start) === 48; // '0'
     let isFloat = false;
 
     if (!startsWithDot && this.readInt(10) === null) this.raise(start, "Invalid number");
@@ -587,10 +587,12 @@ export default class Tokenizer {
     let val;
     if (isFloat) {
       val = parseFloat(str);
-    } else if (!octal || str.length === 1) {
+    } else if (!firstIsZero || str.length === 1) {
       val = parseInt(str, 10);
-    } else if (/[89]/.test(str) || this.state.strict) {
+    } else if (this.state.strict) {
       this.raise(start, "Invalid number");
+    } else if (/[89]/.test(str)) {
+      val = parseInt(str, 10);
     } else {
       val = parseInt(str, 8);
     }
