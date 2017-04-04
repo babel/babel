@@ -13,6 +13,6 @@
     "to-fast-properties": "^1.0.1"
   },
   "devDependencies": {
-    "babylon": "^7.0.0-beta.7"
+    "babylon": "^7.0.0-beta.8"
   }
 }
