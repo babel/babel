@@ -126,8 +126,14 @@ export default function register(opts?: Object = {}) {
   extend(transformOpts, opts);
 
   if (!transformOpts.ignore && !transformOpts.only) {
-    // By default, ignore files inside the node_modules relative to the current working directory.
     transformOpts.ignore = [
+      // Ignore any node_modules content outside the current working directory.
+      new RegExp(
+        "^(?!" + escapeRegExp(process.cwd()) + ").*" +
+        escapeRegExp(path.sep + "node_modules" + path.sep)
+      , "i"),
+
+      // Ignore any node_modules inside the current working directory.
       new RegExp(
         "^" +
         escapeRegExp(process.cwd()) +
