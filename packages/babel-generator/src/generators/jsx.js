@@ -43,7 +43,13 @@ export function JSXSpreadChild(node: Object) {
 }
 
 export function JSXText(node: Object) {
-  this.token(node.value);
+  const raw = this.getPossibleRaw(node);
+
+  if (raw != null) {
+    this.token(raw);
+  } else {
+    this.token(node.value);
+  }
 }
 
 export function JSXElement(node: Object) {
