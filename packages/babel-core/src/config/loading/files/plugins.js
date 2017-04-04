@@ -35,7 +35,7 @@ export function loadPlugin(
     throw new Error(`Plugin ${name} not found relative to ${dirname}`);
   }
 
-  const value = requireModule(filepath);
+  const value = requireModule("plugin", filepath);
   debug("Loaded plugin %o from %o.", name, dirname);
 
   return { filepath, value };
@@ -50,7 +50,7 @@ export function loadPreset(
     throw new Error(`Preset ${name} not found relative to ${dirname}`);
   }
 
-  const value = requireModule(filepath);
+  const value = requireModule("preset", filepath);
 
   debug("Loaded preset %o from %o.", name, dirname);
 
@@ -63,7 +63,7 @@ export function loadParser(
 ): { filepath: string, value: Function } {
   const filepath = resolve.sync(name, { basedir: dirname });
 
-  const mod = requireModule(filepath);
+  const mod = requireModule("parser", filepath);
 
   if (!mod) {
     throw new Error(
@@ -91,7 +91,7 @@ export function loadGenerator(
 ): { filepath: string, value: Function } {
   const filepath = resolve.sync(name, { basedir: dirname });
 
-  const mod = requireModule(filepath);
+  const mod = requireModule("generator", filepath);
 
   if (!mod) {
     throw new Error(
@@ -195,7 +195,20 @@ function resolveStandardizedName(
   }
 }
 
-function requireModule(name: string): mixed {
-  // $FlowIssue
-  return require(name);
+const LOADING_MODULES = new Set();
+function requireModule(type: string, name: string): mixed {
+  if (LOADING_MODULES.has(name)) {
+    throw new Error(
+      // eslint-disable-next-line max-len
+      `Reentrant ${type} detected trying to load "${name}". This module is not ignored and is trying to load itself while compiling itself, leading to a dependency cycle. We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.`,
+    );
+  }
+
+  try {
+    LOADING_MODULES.add(name);
+    // $FlowIssue
+    return require(name);
+  } finally {
+    LOADING_MODULES.delete(name);
+  }
 }
