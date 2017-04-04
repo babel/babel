@@ -16,7 +16,18 @@ const BABELIGNORE_FILENAME = ".babelignore";
 function exists(filename) {
   const cached = existsCache[filename];
   if (cached == null) {
-    return existsCache[filename] = fs.existsSync(filename);
+    existsCache[filename] = fs.existsSync(filename);
+
+    if (existsCache[filename]) {
+
+      existsCache[filename] = fs.statSync(filename).isFile();
+
+      if (!existsCache[filename]) {
+        console.warn(`Found ${filename}, but is not a file.`);
+      }
+    }
+
+    return existsCache[filename];
   } else {
     return cached;
   }
