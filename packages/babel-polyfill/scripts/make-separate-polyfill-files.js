@@ -97,7 +97,7 @@ const polyfills = [
 ];
 
 polyfills.forEach((polyfill) => {
-  fs.writeFileSync(relative(`src/${polyfill}.js`), `require("core-js/modules/${polyfill}");`);
+  fs.writeFileSync(relative(`src/core-js/modules/${polyfill}.js`), `require("core-js/modules/${polyfill}");`);
 });
 
-fs.writeFileSync(relative("src/regenerator-runtime.js"), "require(\"regenerator-runtime/runtime\");");
+fs.writeFileSync(relative("src/regenerator-runtime/runtime.js"), "require(\"regenerator-runtime/runtime\");");
