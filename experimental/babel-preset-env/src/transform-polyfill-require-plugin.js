@@ -1,5 +1,5 @@
 function isPolyfillSource(value) {
-  return value === "babel-polyfill" || value === "core-js";
+  return value === "babel-polyfill";
 }
 
 export default function({ types: t }) {
@@ -27,7 +27,7 @@ export default function({ types: t }) {
 
   function createImport(polyfill, requireType, core) {
     if (core) {
-      polyfill = `core-js/modules/${polyfill}`;
+      polyfill = `babel-polyfill/core-js/modules/${polyfill}`;
     }
 
     if (requireType === "import") {
@@ -50,8 +50,10 @@ export default function({ types: t }) {
 
   const isPolyfillImport = {
     ImportDeclaration(path, state) {
-      if (path.node.specifiers.length === 0 &&
-          isPolyfillSource(path.node.source.value)) {
+      if (
+        path.node.specifiers.length === 0 &&
+        isPolyfillSource(path.node.source.value)
+      ) {
         path.replaceWithMultiple(
           createImports(state.opts.polyfills, "import", state.opts.regenerator),
         );

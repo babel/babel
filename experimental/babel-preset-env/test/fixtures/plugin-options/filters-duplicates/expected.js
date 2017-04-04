@@ -1,2 +1,2 @@
-import "core-js/modules/es6.typed.data-view";
-import "core-js/modules/es6.reflect.apply";
+import "babel-polyfill/core-js/modules/es6.typed.data-view";
+import "babel-polyfill/core-js/modules/es6.reflect.apply";

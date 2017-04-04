@@ -1,11 +1,13 @@
 import { definitions } from "./built-in-definitions";
 
 function isPolyfillSource(value) {
-  return value === "babel-polyfill" || value === "core-js";
+  return value === "babel-polyfill";
 }
 
 function warnOnInstanceMethod(details) {
-  console.warn(`Adding a polyfill: An instance method may have been used: ${details}`);
+  console.warn(
+    `Adding a polyfill: An instance method may have been used: ${details}`,
+  );
 }
 
 function getRuntimeModuleName(opts) {
@@ -28,12 +30,10 @@ function getObjectString(node) {
 
 const HELPER_BLACKLIST = ["interopRequireWildcard", "interopRequireDefault"];
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function addImport(path, builtIn) {
     if (builtIn) {
-      const importDec = t.importDeclaration([],
-        t.stringLiteral(builtIn)
-      );
+      const importDec = t.importDeclaration([], t.stringLiteral(builtIn));
       importDec._blockHoist = 3;
       path.unshiftContainer("body", importDec);
     }
@@ -51,29 +51,40 @@ export default function ({ types: t }) {
 
   const addAndRemovePolyfillImports = {
     ImportDeclaration(path, state) {
-      if (path.node.specifiers.length === 0 && isPolyfillSource(path.node.source.value)) {
-        state.opts.addUsedBuiltIns && console.warn(`
-Adding "import 'babel-polyfill' (or 'core-js')" isn't necessary with the addUsedBuiltIns option anymore.
+      if (
+        path.node.specifiers.length === 0 &&
+        isPolyfillSource(path.node.source.value)
+      ) {
+        state.opts.addUsedBuiltIns &&
+          console.warn(
+            `
+Adding "import 'babel-polyfill'" isn't necessary with the addUsedBuiltIns option anymore.
 Please remove the call.
-`);
+`,
+          );
         path.remove();
       }
     },
     Program: {
       enter(path, state) {
         if (!state.opts.polyfills) {
-          throw path.buildCodeFrameError(`
+          throw path.buildCodeFrameError(
+            `
 There was an issue in "babel-preset-env" such that
 the "polyfills" option was not correctly passed
 to the "transform-polyfill-require" plugin
-`);
+`,
+          );
         }
-        path.get("body").forEach((bodyPath) => {
+        path.get("body").forEach(bodyPath => {
           if (isRequire(bodyPath)) {
-            state.opts.addUsedBuiltIns && console.warn(`
-Adding "require('babel-polyfill') (or 'core-js')" isn't necessary with the addUsedBuiltIns option anymore.
+            state.opts.addUsedBuiltIns &&
+              console.warn(
+                `
+Adding "require('babel-polyfill')" isn't necessary with the addUsedBuiltIns option anymore.
 Please remove the call.
-`);
+`,
+              );
             path.remove();
           }
         });
@@ -98,7 +109,7 @@ Please remove the call.
         if (state.opts.regenerator && this.usesRegenerator) {
           addImport(path, "regenerator-runtime/runtime");
         }
-      }
+      },
     },
 
     // Symbol() -> _core.Symbol();
@@ -134,10 +145,18 @@ Please remove the call.
           }
         }
 
-        if (!node.computed && t.isIdentifier(prop) && has(definitions.instanceMethods, prop.name)) {
+        if (
+          !node.computed &&
+          t.isIdentifier(prop) &&
+          has(definitions.instanceMethods, prop.name)
+        ) {
           warnOnInstanceMethod(getObjectString(node));
           this.builtIns.add(definitions.instanceMethods[prop.name]);
-        } else if (node.computed && t.isStringLiteral(prop) && has(definitions.instanceMethods, prop.value)) {
+        } else if (
+          node.computed &&
+          t.isStringLiteral(prop) &&
+          has(definitions.instanceMethods, prop.value)
+        ) {
           warnOnInstanceMethod(`${obj.name}['${prop.value}']`);
           this.builtIns.add(definitions.instanceMethods[prop.value]);
         }
@@ -154,7 +173,7 @@ Please remove the call.
         if (path.scope.getBindingIdentifier(obj.name)) return;
 
         this.builtIns.add(definitions.builtins[obj.name]);
-      }
+      },
     },
 
     // var { repeat, startsWith } = String
@@ -174,8 +193,14 @@ Please remove the call.
 
       for (let prop of props) {
         prop = prop.key;
-        if (!node.computed && t.isIdentifier(prop) && has(definitions.instanceMethods, prop.name)) {
-          warnOnInstanceMethod(`${path.parentPath.node.kind} { ${prop.name} } = ${obj.name}`);
+        if (
+          !node.computed &&
+          t.isIdentifier(prop) &&
+          has(definitions.instanceMethods, prop.name)
+        ) {
+          warnOnInstanceMethod(
+            `${path.parentPath.node.kind} { ${prop.name} } = ${obj.name}`,
+          );
 
           this.builtIns.add(definitions.instanceMethods[prop.name]);
         }
@@ -186,7 +211,7 @@ Please remove the call.
       if (path.node.generator || path.node.async) {
         this.usesRegenerator = true;
       }
-    }
+    },
   };
 
   return {
@@ -195,11 +220,19 @@ Please remove the call.
       const moduleName = getRuntimeModuleName(this.opts);
 
       if (this.opts.helpers !== false) {
-        const baseHelpersDir = this.opts.useBuiltIns ? "helpers/builtin" : "helpers";
-        const helpersDir = this.opts.useESModules ? `${baseHelpersDir}/es6` : baseHelpersDir;
-        file.set("helperGenerator", function (name) {
+        const baseHelpersDir = this.opts.useBuiltIns
+          ? "helpers/builtin"
+          : "helpers";
+        const helpersDir = this.opts.useESModules
+          ? `${baseHelpersDir}/es6`
+          : baseHelpersDir;
+        file.set("helperGenerator", function(name) {
           if (HELPER_BLACKLIST.indexOf(name) < 0) {
-            return file.addImport(`${moduleName}/${helpersDir}/${name}`, "default", name);
+            return file.addImport(
+              `${moduleName}/${helpersDir}/${name}`,
+              "default",
+              name,
+            );
           }
         });
       }

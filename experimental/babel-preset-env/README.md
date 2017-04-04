@@ -18,8 +18,6 @@ npm install babel-preset-env --save-dev
 }
 ```
 
-Check out the many options (especially `useBuiltIns` to polyfill less)!
-
 - [How it Works](#how-it-works)
 - [Install](#install)
 - [Usage](#usage)
@@ -176,54 +174,17 @@ This option is useful for "blacklisting" a transform like `transform-regenerator
 
 ### `useBuiltIns`
 
-`boolean`, defaults to `false`.
+`boolean`, defaults to `true`.
 
-A way to apply `babel-preset-env` for polyfills (via "babel-polyfill").
+A way to apply `babel-preset-env` for polyfills (via `babel-polyfill`).
 
-> NOTE: This does not currently polyfill experimental/stage-x built-ins like the regular "babel-polyfill" does.
-> This will only work with npm >= 3 (which should be used with Babel 6 anyway)
-
-```
+```sh
 npm install babel-polyfill --save
 ```
 
-This option enables a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
+#### `useBuiltIns: true`
 
-> NOTE: Only use `require("babel-polyfill");` once in your whole app. One option is to create a single entry file that only contains the require statement.
-
-**In**
-
-```js
-import "babel-polyfill";
-```
-
-**Out (different based on environment)**
-
-```js
-import "core-js/modules/es7.string.pad-start";
-import "core-js/modules/es7.string.pad-end";
-import "core-js/modules/web.timers";
-import "core-js/modules/web.immediate";
-import "core-js/modules/web.dom.iterable";
-```
-
-This will also work for `core-js` directly (`import "core-js";`)
-
-```
-npm install core-js --save
-```
-
-### `addUsedBuiltIns`
-
-`boolean`, defaults to `false`.
-
-Adds imports for polyfills when they are used in each file. You need to have core-js as a dependency (and regeneratorRuntime if necessary).
-
-> This option is different than `useBuiltIns` in that instead of only adding polyfills at the entry point, the plugin adds a specific import for each polyfill that is used in each file. We take advantage of the fact that the bundler will load the same polyfill only once.
-
-```sh
-npm install core-js regenerator-runtime --save
-```
+Adds specific imports for polyfills when they are used in each file. We take advantage of the fact that a bundler will load the same polyfill only once.
 
 **In**
 
@@ -242,12 +203,12 @@ var b = new Map();
 **Out (if environment doesn't support it)**
 
 ```js
-import "core-js/modules/es6.promise";
+import "babel-polyfill/core-js/modules/es6.promise";
 var a = new Promise();
 ```
 
 ```js
-import "core-js/modules/es6.map";
+import "babel-polyfill/core-js/modules/es6.map";
 var b = new Map();
 ```
 
@@ -258,8 +219,26 @@ var a = new Promise();
 ```
 
 ```js
-import "core-js/modules/es6.map";
 var b = new Map();
+```
+
+#### `useBuiltIns: 'entry'`
+
+> NOTE: Only use `require("babel-polyfill");` once in your whole app. One option is to create a single entry file that only contains the require statement.
+
+This option enables a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
+
+**In**
+
+```js
+import "babel-polyfill";
+```
+
+**Out (different based on environment)**
+
+```js
+import "babel-polyfill/core-js/modules/es7.string.pad-start";
+import "babel-polyfill/core-js/modules/es7.string.pad-end";
 ```
 
 ---
