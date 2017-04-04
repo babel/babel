@@ -633,7 +633,7 @@ describe("buildConfigChain", function () {
           filename: fixture("json-config-error", "src.js"),
         });
       },
-      /Error while parsing JSON/
+      /Error while parsing config/
     );
   });
 });

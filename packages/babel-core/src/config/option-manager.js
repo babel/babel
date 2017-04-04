@@ -1,15 +1,14 @@
 import * as context from "../index";
 import Plugin from "./plugin";
 import * as messages from "babel-messages";
-import resolve from "./helpers/resolve";
-import resolvePlugin from "./helpers/resolve-plugin";
-import resolvePreset from "./helpers/resolve-preset";
 import defaults from "lodash/defaults";
 import cloneDeepWith from "lodash/cloneDeepWith";
 import merge from "./helpers/merge";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
 import path from "path";
+
+import { loadPlugin, loadPreset, loadParser, loadGenerator } from "./loading/files";
 
 type PluginObject = {
   pre?: Function;
@@ -77,11 +76,9 @@ const optionNames = new Set([
 
 export default class OptionManager {
   constructor() {
-    this.resolvedConfigs = [];
     this.options = OptionManager.createBareOptions();
   }
 
-  resolvedConfigs: Array<string>;
   options: Object;
 
   static memoisedPlugins: Array<{
@@ -164,12 +161,7 @@ export default class OptionManager {
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        const pluginLoc = resolvePlugin(plugin, dirname);
-        if (pluginLoc) {
-          plugin = require(pluginLoc);
-        } else {
-          throw new ReferenceError(messages.get("pluginUnknown", plugin, loc, i, dirname));
-        }
+        plugin = loadPlugin(plugin, dirname).plugin;
       }
 
       plugin = OptionManager.normalisePlugin(plugin, loc, i, alias);
@@ -256,23 +248,11 @@ export default class OptionManager {
     }
 
     if (opts.parserOpts && typeof opts.parserOpts.parser === "string") {
-      const parser = resolve(opts.parserOpts.parser, dirname);
-      if (parser) {
-        opts.parserOpts.parser = require(parser).parse;
-      } else {
-        throw new Error(`Couldn't find parser ${opts.parserOpts.parser} with "parse" method ` +
-          `relative to directory ${dirname}`);
-      }
+      opts.parserOpts.parser = loadParser(opts.parserOpts.parser, dirname).parser;
     }
 
     if (opts.generatorOpts && typeof opts.generatorOpts.generator === "string") {
-      const generator = resolve(opts.generatorOpts.generator, dirname);
-      if (generator) {
-        opts.generatorOpts.generator = require(generator).print;
-      } else {
-        throw new Error(`Couldn't find generator ${opts.generatorOpts.generator} with "print" method ` +
-          `relative to directory ${dirname}`);
-      }
+      opts.generatorOpts.generator = loadGenerator(opts.generatorOpts.generator, dirname).generator;
     }
 
     // resolve plugins
@@ -332,14 +312,12 @@ export default class OptionManager {
       let presetLoc;
       try {
         if (typeof preset === "string") {
-          presetLoc = resolvePreset(preset, dirname);
-
-          if (!presetLoc) {
-            throw new Error(`Couldn't find preset ${JSON.stringify(preset)} relative to directory ` +
-              JSON.stringify(dirname));
-          }
+          ({
+            filepath: presetLoc,
+            preset,
+          } = loadPreset(preset, dirname));
         }
-        const resolvedPreset = this.loadPreset(presetLoc || preset, options, { dirname });
+        const resolvedPreset = this.loadPreset(preset, options, { dirname });
 
         if (onResolve) onResolve(resolvedPreset, presetLoc);
 
@@ -359,9 +337,6 @@ export default class OptionManager {
    */
   loadPreset(preset, options, meta) {
     let presetFactory = preset;
-    if (typeof presetFactory === "string") {
-      presetFactory = require(presetFactory);
-    }
 
     if (typeof presetFactory === "object" && presetFactory.__esModule) {
       if (presetFactory.default) {
