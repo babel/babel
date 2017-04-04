@@ -76,7 +76,6 @@ export default function normalizeOptions(opts) {
     loose: validateLooseOption(opts.loose),
     moduleType: validateModulesOption(opts.modules),
     targets: opts.targets,
-    useBuiltIns: opts.useBuiltIns,
-    addUsedBuiltIns: opts.addUsedBuiltIns,
+    useBuiltIns: opts.useBuiltIns === undefined ? true : opts.useBuiltIns,
   };
 }

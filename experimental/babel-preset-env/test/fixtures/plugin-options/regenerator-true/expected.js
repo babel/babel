@@ -1,1 +1,1 @@
-import "regenerator-runtime/runtime";
+import "babel-polyfill/regenerator-runtime/runtime";

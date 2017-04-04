@@ -1,5 +1,5 @@
-import "regenerator-runtime/runtime";
-import _asyncToGenerator from "babel-runtime/helpers/asyncToGenerator";
+import "babel-polyfill/regenerator-runtime/runtime";
+import "core-js/modules/es6.promise";
 
 var a = function () {
   var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
@@ -18,3 +18,5 @@ var a = function () {
     return _ref.apply(this, arguments);
   };
 }();
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }

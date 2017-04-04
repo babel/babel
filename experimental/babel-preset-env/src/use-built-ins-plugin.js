@@ -10,10 +10,6 @@ function warnOnInstanceMethod(details) {
   );
 }
 
-function getRuntimeModuleName(opts) {
-  return opts.moduleName || "babel-runtime";
-}
-
 function has(obj, key) {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
@@ -27,8 +23,6 @@ function getObjectString(node) {
     return "";
   }
 }
-
-const HELPER_BLACKLIST = ["interopRequireWildcard", "interopRequireDefault"];
 
 export default function({ types: t }) {
   function addImport(path, builtIn) {
@@ -94,20 +88,20 @@ Please remove the call.
         for (const builtIn of Array.from(this.builtIns.keys()).reverse()) {
           if (Array.isArray(builtIn)) {
             for (const i of builtIn) {
-              console.warn(i);
+              // console.warn(i);
               if (state.opts.polyfills.indexOf(i) !== -1) {
                 addImport(path, `core-js/modules/${i}`);
               }
             }
           } else {
-            console.warn(builtIn);
+            // console.warn(builtIn);
             if (state.opts.polyfills.indexOf(builtIn) !== -1) {
               addImport(path, `core-js/modules/${builtIn}`);
             }
           }
         }
         if (state.opts.regenerator && this.usesRegenerator) {
-          addImport(path, "regenerator-runtime/runtime");
+          addImport(path, "babel-polyfill/regenerator-runtime/runtime");
         }
       },
     },
@@ -215,28 +209,8 @@ Please remove the call.
   };
 
   return {
-    name: "add-used-built-ins",
-    pre(file) {
-      const moduleName = getRuntimeModuleName(this.opts);
-
-      if (this.opts.helpers !== false) {
-        const baseHelpersDir = this.opts.useBuiltIns
-          ? "helpers/builtin"
-          : "helpers";
-        const helpersDir = this.opts.useESModules
-          ? `${baseHelpersDir}/es6`
-          : baseHelpersDir;
-        file.set("helperGenerator", function(name) {
-          if (HELPER_BLACKLIST.indexOf(name) < 0) {
-            return file.addImport(
-              `${moduleName}/${helpersDir}/${name}`,
-              "default",
-              name,
-            );
-          }
-        });
-      }
-
+    name: "use-built-ins",
+    pre() {
       this.builtIns = new Set();
       this.usesRegenerator = false;
     },

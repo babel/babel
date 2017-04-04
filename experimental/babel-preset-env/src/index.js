@@ -4,9 +4,8 @@ import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
-import transformPolyfillRequirePlugin
-  from "./transform-polyfill-require-plugin";
-import addUsedBuiltInsPlugin from "./add-used-built-ins-plugin";
+import useBuiltInsEntryPlugin from "./use-built-ins-entry-plugin";
+import addUsedBuiltInsPlugin from "./use-built-ins-plugin";
 
 /**
  * Determine if a transformation is required
@@ -178,7 +177,7 @@ function getPlatformSpecificDefaultFor(targets) {
 
 export default function buildPreset(context, opts = {}) {
   const validatedOptions = normalizeOptions(opts);
-  const { debug, loose, moduleType, useBuiltIns, addUsedBuiltIns } = validatedOptions;
+  const { debug, loose, moduleType, useBuiltIns } = validatedOptions;
 
   const targets = getTargets(validatedOptions.targets);
   const include = transformIncludesAndExcludes(validatedOptions.include);
@@ -196,7 +195,7 @@ export default function buildPreset(context, opts = {}) {
 
   let polyfills;
   let polyfillTargets;
-  if (useBuiltIns || addUsedBuiltIns) {
+  if (useBuiltIns) {
     polyfillTargets = getBuiltInTargets(targets);
     const filterBuiltIns = filterItem.bind(
       null,
@@ -220,7 +219,7 @@ export default function buildPreset(context, opts = {}) {
     transformations.forEach(transform => {
       logPlugin(transform, targets, pluginList);
     });
-    if ((useBuiltIns || addUsedBuiltIns) && polyfills.length) {
+    if (useBuiltIns && polyfills.length) {
       console.log("\nUsing polyfills:");
       polyfills.forEach(polyfill => {
         logPlugin(polyfill, polyfillTargets, builtInsList);
@@ -243,10 +242,10 @@ export default function buildPreset(context, opts = {}) {
     ]),
   );
 
-  if (useBuiltIns) {
-    plugins.push([transformPolyfillRequirePlugin, { polyfills, regenerator }]);
-  } else if (addUsedBuiltIns) {
+  if (useBuiltIns === true) {
     plugins.push([addUsedBuiltInsPlugin, { polyfills, regenerator }]);
+  } else if (useBuiltIns === "entry") {
+    plugins.push([useBuiltInsEntryPlugin, { polyfills, regenerator }]);
   }
 
   return {

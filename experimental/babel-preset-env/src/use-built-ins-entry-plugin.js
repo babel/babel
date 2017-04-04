@@ -44,7 +44,8 @@ export default function({ types: t }) {
 
     return [
       ...imports,
-      regenerator && createImport("regenerator-runtime/runtime", requireType),
+      regenerator &&
+        createImport("babel-polyfill/regenerator-runtime/runtime", requireType),
     ].filter(Boolean);
   }
 

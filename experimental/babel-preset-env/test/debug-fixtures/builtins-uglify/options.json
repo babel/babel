@@ -6,7 +6,7 @@
         "chrome": 55,
         "uglify": true
       },
-      "useBuiltIns": true,
+      "useBuiltIns": "entry",
       "modules": false
     }]
   ]
