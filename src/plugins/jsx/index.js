@@ -247,9 +247,7 @@ pp.jsxParseAttributeValue = function() {
 
     case tt.jsxTagStart:
     case tt.string:
-      node = this.parseExprAtom();
-      node.extra = null;
-      return node;
+      return this.parseExprAtom();
 
     default:
       this.raise(this.state.start, "JSX value should be either an expression or a quoted JSX text");
@@ -401,10 +399,7 @@ export default function(instance) {
   instance.extend("parseExprAtom", function(inner) {
     return function(refShortHandDefaultPos) {
       if (this.match(tt.jsxText)) {
-        const node = this.parseLiteral(this.state.value, "JSXText");
-        // https://github.com/babel/babel/issues/2078
-        node.extra = null;
-        return node;
+        return this.parseLiteral(this.state.value, "JSXText");
       } else if (this.match(tt.jsxTagStart)) {
         return this.jsxParseElement();
       } else {

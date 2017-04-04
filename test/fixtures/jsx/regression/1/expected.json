@@ -135,7 +135,10 @@
                   "column": 7
                 }
               },
-              "extra": null,
+              "extra": {
+                "rawValue": "foo ",
+                "raw": "foo "
+              },
               "value": "foo "
             },
             {
@@ -211,7 +214,10 @@
                           "column": 21
                         }
                       },
-                      "extra": null,
+                      "extra": {
+                        "rawValue": "test",
+                        "raw": "\"test\""
+                      },
                       "value": "test"
                     }
                   }
@@ -280,7 +286,10 @@
                       "column": 26
                     }
                   },
-                  "extra": null,
+                  "extra": {
+                    "rawValue": " bar",
+                    "raw": " bar"
+                  },
                   "value": " bar"
                 }
               ]
@@ -299,7 +308,10 @@
                   "column": 34
                 }
               },
-              "extra": null,
+              "extra": {
+                "rawValue": " baz",
+                "raw": " baz"
+              },
               "value": " baz"
             }
           ]

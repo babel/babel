@@ -115,7 +115,10 @@
                       "column": 22
                     }
                   },
-                  "extra": null,
+                  "extra": {
+                    "rawValue": "&&",
+                    "raw": "\"&#x0026;&#38;\""
+                  },
                   "value": "&&"
                 }
               }
@@ -184,7 +187,10 @@
                   "column": 0
                 }
               },
-              "extra": null,
+              "extra": {
+                "rawValue": "\nbar\nbaz\n",
+                "raw": "\nbar\nbaz\n"
+              },
               "value": "\nbar\nbaz\n"
             }
           ]

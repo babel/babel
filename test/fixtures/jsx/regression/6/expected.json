@@ -115,7 +115,10 @@
                       "column": 18
                     }
                   },
-                  "extra": null,
+                  "extra": {
+                    "rawValue": "leading",
+                    "raw": "\"leading\""
+                  },
                   "value": "leading"
                 }
               },

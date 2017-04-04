@@ -147,7 +147,10 @@
                       "column": 32
                     }
                   },
-                  "extra": null,
+                  "extra": {
+                    "rawValue": "attribute",
+                    "raw": "\"attribute\""
+                  },
                   "value": "attribute"
                 }
               }

@@ -168,7 +168,10 @@
                   "column": 13
                 }
               },
-              "extra": null,
+              "extra": {
+                "rawValue": " ",
+                "raw": " "
+              },
               "value": " "
             },
             {
