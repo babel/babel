@@ -1,11 +1,14 @@
 // @flow
 
+import buildDebug from "debug";
 import path from "path";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
 import { getEnv } from "../../helpers/environment";
 import { makeStrongCache } from "../../caching";
+
+const debug = buildDebug("babel:config:loading:files:configuration");
 
 type ConfigFile = {
   filepath: string,
@@ -31,6 +34,7 @@ export function findConfigs(dirname: string): Array<ConfigFile> {
       const ignore = readIgnoreConfig(ignoreLoc);
 
       if (ignore) {
+        debug("Found ignore %o from %o.", ignore.filepath, dirname);
         confs.push(ignore);
         foundIgnore = true;
       }
@@ -57,6 +61,7 @@ export function findConfigs(dirname: string): Array<ConfigFile> {
       }, null);
 
       if (conf) {
+        debug("Found configuration %o from %o.", conf.filepath, dirname);
         confs.push(conf);
         foundConfig = true;
       }
@@ -80,6 +85,7 @@ export function loadConfig(name: string, dirname: string): ConfigFile {
     throw new Error(`Config file ${filepath} contains no configuration data`);
   }
 
+  debug("Loaded config %o from $o.", name, dirname);
   return conf;
 }
 

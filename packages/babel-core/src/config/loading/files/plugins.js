@@ -4,8 +4,11 @@
  * This file handles all logic for converting string-based configuration references into loaded objects.
  */
 
+import buildDebug from "debug";
 import resolve from "resolve";
 import path from "path";
+
+const debug = buildDebug("babel:config:loading:files:plugins");
 
 const EXACT_RE = /^module:/;
 const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|[^/\/]+[/\/]|babel-plugin-)/;
@@ -32,10 +35,10 @@ export function loadPlugin(
     throw new Error(`Plugin ${name} not found relative to ${dirname}`);
   }
 
-  return {
-    filepath,
-    value: requireModule(filepath),
-  };
+  const value = requireModule(filepath);
+  debug("Loaded plugin %o from %o.", name, dirname);
+
+  return { filepath, value };
 }
 
 export function loadPreset(
@@ -47,10 +50,11 @@ export function loadPreset(
     throw new Error(`Preset ${name} not found relative to ${dirname}`);
   }
 
-  return {
-    filepath,
-    value: requireModule(filepath),
-  };
+  const value = requireModule(filepath);
+
+  debug("Loaded preset %o from %o.", name, dirname);
+
+  return { filepath, value };
 }
 
 export function loadParser(
@@ -71,10 +75,13 @@ export function loadParser(
       `Parser ${name} relative to ${dirname} does not export a .parse function`,
     );
   }
+  const value = mod.parse;
+
+  debug("Loaded parser %o from %o.", name, dirname);
 
   return {
     filepath,
-    value: mod.parse,
+    value,
   };
 }
 
@@ -96,10 +103,13 @@ export function loadGenerator(
       `Generator ${name} relative to ${dirname} does not export a .print function`,
     );
   }
+  const value = mod.print;
+
+  debug("Loaded generator %o from %o.", name, dirname);
 
   return {
     filepath,
-    value: mod.print,
+    value,
   };
 }
 
