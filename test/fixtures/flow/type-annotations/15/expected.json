@@ -158,9 +158,9 @@
               }
             },
             "typeParameters": null
-          },
-          "predicate": null
+          }
         },
+        "predicate": null,
         "body": {
           "type": "BlockStatement",
           "start": 34,

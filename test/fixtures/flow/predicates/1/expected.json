@@ -153,67 +153,67 @@
                   }
                 }
               }
+            }
+          }
+        },
+        "predicate": {
+          "type": "DeclaredPredicate",
+          "start": 40,
+          "end": 59,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 40
             },
-            "predicate": {
-              "type": "DeclaredPredicate",
-              "start": 40,
-              "end": 59,
+            "end": {
+              "line": 1,
+              "column": 59
+            }
+          },
+          "value": {
+            "type": "BinaryExpression",
+            "start": 48,
+            "end": 58,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 48
+              },
+              "end": {
+                "line": 1,
+                "column": 58
+              }
+            },
+            "left": {
+              "type": "Identifier",
+              "start": 48,
+              "end": 49,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 40
+                  "column": 48
                 },
                 "end": {
                   "line": 1,
-                  "column": 59
-                }
+                  "column": 49
+                },
+                "identifierName": "x"
               },
-              "expression": {
-                "type": "BinaryExpression",
-                "start": 48,
-                "end": 58,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 48
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 58
-                  }
+              "name": "x"
+            },
+            "operator": "!==",
+            "right": {
+              "type": "NullLiteral",
+              "start": 54,
+              "end": 58,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 54
                 },
-                "left": {
-                  "type": "Identifier",
-                  "start": 48,
-                  "end": 49,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 48
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 49
-                    },
-                    "identifierName": "x"
-                  },
-                  "name": "x"
-                },
-                "operator": "!==",
-                "right": {
-                  "type": "NullLiteral",
-                  "start": 54,
-                  "end": 58,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 54
-                    },
-                    "end": {
-                      "line": 1,
-                      "column": 58
-                    }
-                  }
+                "end": {
+                  "line": 1,
+                  "column": 58
                 }
               }
             }

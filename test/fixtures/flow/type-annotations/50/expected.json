@@ -210,9 +210,9 @@
                       "column": 30
                     }
                   }
-                },
-                "predicate": null
+                }
               },
+              "predicate": null,
               "body": {
                 "type": "BlockStatement",
                 "start": 31,

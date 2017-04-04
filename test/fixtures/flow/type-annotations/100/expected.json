@@ -143,9 +143,9 @@
                     }
                   },
                   "value": true
-                },
-                "predicate": null
+                }
               },
+              "predicate": null,
               "body": {
                 "type": "BlockStatement",
                 "start": 23,

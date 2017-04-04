@@ -104,10 +104,10 @@
                   }
                 }
               }
-            },
-            "predicate": null
+            }
           }
-        }
+        },
+        "predicate": null
       }
     ],
     "directives": []

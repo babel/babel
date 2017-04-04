@@ -56,6 +56,7 @@
               "column": 50
             }
           },
+          "predicate": null,
           "returnType": {
             "type": "TypeAnnotation",
             "start": 29,
@@ -133,8 +134,7 @@
                 },
                 "name": "Array"
               }
-            },
-            "predicate": null
+            }
           },
           "id": null,
           "generator": false,

@@ -244,9 +244,9 @@
                       },
                       "name": "T"
                     }
-                  },
-                  "predicate": null
+                  }
                 },
+                "predicate": null,
                 "body": {
                   "type": "BlockStatement",
                   "start": 19,

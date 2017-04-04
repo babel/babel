@@ -102,6 +102,7 @@
                     "column": 32
                   }
                 },
+                "predicate": null,
                 "returnType": {
                   "type": "TypeAnnotation",
                   "start": 17,
@@ -130,8 +131,7 @@
                         "column": 25
                       }
                     }
-                  },
-                  "predicate": null
+                  }
                 },
                 "id": null,
                 "generator": false,

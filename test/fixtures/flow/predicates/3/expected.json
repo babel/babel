@@ -111,37 +111,22 @@
             }
           }
         ],
-        "returnType": {
-          "type": "TypeAnnotation",
-          "start": 22,
+        "predicate": {
+          "type": "InferredPredicate",
+          "start": 24,
           "end": 31,
           "loc": {
             "start": {
               "line": 1,
-              "column": 22
+              "column": 24
             },
             "end": {
               "line": 1,
               "column": 31
             }
-          },
-          "typeAnnotation": null,
-          "predicate": {
-            "type": "InferredPredicate",
-            "start": 24,
-            "end": 31,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 24
-              },
-              "end": {
-                "line": 1,
-                "column": 31
-              }
-            }
           }
         },
+        "returnType": null,
         "body": {
           "type": "BlockStatement",
           "start": 32,

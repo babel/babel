@@ -589,10 +589,10 @@
                   "name": "Array"
                 }
               }
-            },
-            "predicate": null
+            }
           }
-        }
+        },
+        "predicate": null
       }
     ],
     "directives": []

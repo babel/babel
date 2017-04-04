@@ -190,9 +190,9 @@
                       "column": 41
                     }
                   }
-                },
-                "predicate": null
+                }
               },
+              "predicate": null,
               "body": {
                 "type": "BlockStatement",
                 "start": 41,

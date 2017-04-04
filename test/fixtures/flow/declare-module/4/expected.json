@@ -150,10 +150,10 @@
                         }
                       }
                     }
-                  },
-                  "predicate": null
+                  }
                 }
-              }
+              },
+              "predicate": null
             }
           ]
         }
