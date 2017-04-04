@@ -98,6 +98,8 @@ cd ../../packages/babel-traverse/
 yarn link babylon
 cd ../../packages/babel-generator/
 yarn link babylon
+cd ../../packages/babel-types/
+yarn link babylon
 cd ../..
 make build
 make test
