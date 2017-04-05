@@ -44,18 +44,17 @@ export default function({ types: t }) {
   }
 
   const addAndRemovePolyfillImports = {
-    ImportDeclaration(path, state) {
+    ImportDeclaration(path) {
       if (
         path.node.specifiers.length === 0 &&
         isPolyfillSource(path.node.source.value)
       ) {
-        state.opts.addUsedBuiltIns &&
-          console.warn(
-            `
-Adding "import 'babel-polyfill'" isn't necessary with the addUsedBuiltIns option anymore.
+        console.warn(
+          `
+Adding "import 'babel-polyfill'" isn't necessary with the useBuiltIns option anymore.
 Please remove the call.
 `,
-          );
+        );
         path.remove();
       }
     },
@@ -72,13 +71,12 @@ to the "transform-polyfill-require" plugin
         }
         path.get("body").forEach(bodyPath => {
           if (isRequire(bodyPath)) {
-            state.opts.addUsedBuiltIns &&
-              console.warn(
-                `
-Adding "require('babel-polyfill')" isn't necessary with the addUsedBuiltIns option anymore.
+            console.warn(
+              `
+Adding "require('babel-polyfill')" isn't necessary with the useBuiltIns option anymore.
 Please remove the call.
 `,
-              );
+            );
             path.remove();
           }
         });
@@ -120,7 +118,7 @@ Please remove the call.
 
     // Array.from -> _core.Array.from
     MemberExpression: {
-      enter(path) {
+      enter(path, state) {
         if (!path.isReferenced()) return;
 
         const { node } = path;
@@ -144,14 +142,15 @@ Please remove the call.
           t.isIdentifier(prop) &&
           has(definitions.instanceMethods, prop.name)
         ) {
-          warnOnInstanceMethod(getObjectString(node));
+          state.opts.debug && warnOnInstanceMethod(getObjectString(node));
           this.builtIns.add(definitions.instanceMethods[prop.name]);
         } else if (
           node.computed &&
           t.isStringLiteral(prop) &&
           has(definitions.instanceMethods, prop.value)
         ) {
-          warnOnInstanceMethod(`${obj.name}['${prop.value}']`);
+          state.opts.debug &&
+            warnOnInstanceMethod(`${obj.name}['${prop.value}']`);
           this.builtIns.add(definitions.instanceMethods[prop.value]);
         }
       },
@@ -171,7 +170,7 @@ Please remove the call.
     },
 
     // var { repeat, startsWith } = String
-    VariableDeclarator(path) {
+    VariableDeclarator(path, state) {
       if (!path.isReferenced()) return;
 
       const { node } = path;
@@ -192,9 +191,10 @@ Please remove the call.
           t.isIdentifier(prop) &&
           has(definitions.instanceMethods, prop.name)
         ) {
-          warnOnInstanceMethod(
-            `${path.parentPath.node.kind} { ${prop.name} } = ${obj.name}`,
-          );
+          state.opts.debug &&
+            warnOnInstanceMethod(
+              `${path.parentPath.node.kind} { ${prop.name} } = ${obj.name}`,
+            );
 
           this.builtIns.add(definitions.instanceMethods[prop.name]);
         }
