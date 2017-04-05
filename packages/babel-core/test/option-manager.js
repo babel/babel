@@ -53,12 +53,14 @@ describe("option-manager", () => {
   describe("presets", function () {
     function presetTest(name) {
       it(name, function () {
-        const options = manageOptions({
+        const { options, passes } = manageOptions({
           "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
         });
 
         assert.equal(true, Array.isArray(options.plugins));
         assert.equal(1, options.plugins.length);
+        assert.equal(1, passes.length);
+        assert.equal(1, passes[0].length);
       });
     }
 

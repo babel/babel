@@ -92,14 +92,15 @@ export default function manageOptions(opts?: Object) {
 class OptionManager {
   constructor() {
     this.options = createBareOptions();
+    this.passes = [[]];
   }
 
   options: Object;
+  passes: Array<Array<Plugin>>;
 
   /**
    * This is called when we want to merge the input `opts` into the
-   * base options (passed as the `extendingOpts`: at top-level it's the
-   * main options, at presets level it's presets options).
+   * base options.
    *
    *  - `alias` is used to output pretty traces back to the original source.
    *  - `loc` is used to point to the original config.
@@ -109,12 +110,13 @@ class OptionManager {
   mergeOptions({
     type,
     options: rawOpts,
-    extending: extendingOpts,
     alias,
     loc,
     dirname,
-  }: MergeOptions) {
+  }: MergeOptions, pass?: Array<Plugin>) {
     alias = alias || "foreign";
+
+    if (!pass) pass = this.passes[0];
 
     //
     if (typeof rawOpts !== "object" || Array.isArray(rawOpts)) {
@@ -176,45 +178,43 @@ class OptionManager {
       opts.generatorOpts.generator = loadGenerator(opts.generatorOpts.generator, dirname).generator;
     }
 
-    // resolve plugins
-    if (opts.plugins) {
-      if (!Array.isArray(rawOpts.plugins)) throw new Error(`${alias}.plugins should be an array`);
-
-      opts.plugins = normalisePlugins(loc, dirname, opts.plugins);
-    }
-
     // resolve presets
     if (opts.presets) {
       if (!Array.isArray(rawOpts.presets)) throw new Error(`${alias}.presets should be an array`);
 
-      opts.presets = resolvePresets(opts.presets, dirname).map(([preset, presetLoc]) => {
+      const presets = resolvePresets(opts.presets, dirname);
+
+      let presetPasses = null;
+      if (opts.passPerPreset) {
+        presetPasses = presets.map(() => []);
+        // The passes are created in the same order as the preset list, but are inserted before any
+        // existing additional passes.
+        this.passes.splice(1, 0, ...presetPasses);
+      }
+
+      presets.forEach(([preset, presetLoc], i) => {
         this.mergeOptions({
           type: "preset",
           options: preset,
-
-          // For `passPerPreset` we merge child options back into the preset object instead of the root.
-          extending: opts.passPerPreset ? preset : null,
           alias: presetLoc,
           loc: presetLoc,
           dirname: dirname,
-        });
-
-        return preset;
+        }, presetPasses ? presetPasses[i] : pass);
       });
-
-      // If not passPerPreset, the plugins have all been merged into the parent config so the presets
-      // list is not needed.
-      if (!opts.passPerPreset) delete opts.presets;
     }
 
-    // Merge them into current extending options in case of top-level
-    // options. In case of presets, just re-assign options which are got
-    // normalized during the `mergeOptions`.
-    if (rawOpts === extendingOpts) {
-      Object.assign(extendingOpts, opts);
-    } else {
-      merge(extendingOpts || this.options, opts);
+    // resolve plugins
+    if (opts.plugins) {
+      if (!Array.isArray(rawOpts.plugins)) throw new Error(`${alias}.plugins should be an array`);
+
+      pass.unshift(...normalisePlugins(loc, dirname, opts.plugins));
     }
+
+    delete opts.passPerPreset;
+    delete opts.plugins;
+    delete opts.presets;
+
+    merge(this.options, opts);
   }
 
   init(opts: Object = {}): Object {
@@ -236,6 +236,13 @@ class OptionManager {
     }
 
     opts = this.options;
+
+    // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
+    // it will be in the right structure to not change behavior.
+    opts.plugins = this.passes[0];
+    opts.presets = this.passes.slice(1)
+      .filter((plugins) => plugins.length > 0)
+      .map((plugins) => ({ plugins }));
 
     if (opts.inputSourceMap) {
       opts.sourceMaps = true;
@@ -264,7 +271,10 @@ class OptionManager {
       sourceMapTarget: basenameRelative,
     });
 
-    return opts;
+    return {
+      options: opts,
+      passes: this.passes,
+    };
   }
 }
 
