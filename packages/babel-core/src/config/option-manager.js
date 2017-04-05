@@ -171,12 +171,14 @@ class OptionManager {
     }
 
     if (opts.parserOpts && typeof opts.parserOpts.parser === "string") {
-      opts.parserOpts.parser = loadParser(opts.parserOpts.parser, dirname).parser;
+      opts.parserOpts.parser = loadParser(opts.parserOpts.parser, dirname).value;
     }
 
     if (opts.generatorOpts && typeof opts.generatorOpts.generator === "string") {
-      opts.generatorOpts.generator = loadGenerator(opts.generatorOpts.generator, dirname).generator;
+      opts.generatorOpts.generator = loadGenerator(opts.generatorOpts.generator, dirname).value;
     }
+
+    // const plugins =
 
     // resolve presets
     if (opts.presets) {
@@ -298,7 +300,7 @@ function resolvePresets(presets: Array<string | Object>, dirname: string) {
       if (typeof preset === "string") {
         ({
           filepath: presetLoc,
-          preset,
+          value: preset,
         } = loadPreset(preset, dirname));
       }
       const resolvedPreset = loadPresetObject(preset, options, { dirname });
@@ -455,7 +457,7 @@ function normalisePlugins(loc, dirname, plugins) {
 
     // allow plugins to be specified as strings
     if (typeof plugin === "string") {
-      plugin = loadPlugin(plugin, dirname).plugin;
+      plugin = loadPlugin(plugin, dirname).value;
     }
 
     plugin = normalisePlugin(plugin, loc, i, alias);

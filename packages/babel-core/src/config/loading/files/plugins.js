@@ -26,27 +26,27 @@ export function resolvePreset(presetName: string, dirname: string): string|null 
   return resolveFromPossibleNames(possibleNames, dirname);
 }
 
-export function loadPlugin(name: string, dirname: string): { filepath: string, plugin: mixed } {
+export function loadPlugin(name: string, dirname: string): { filepath: string, value: mixed } {
   const filepath = resolvePlugin(name, dirname);
   if (!filepath) throw new Error(`Plugin ${name} not found relative to ${dirname}`);
 
   return {
     filepath,
-    plugin: requireModule(filepath),
+    value: requireModule(filepath),
   };
 }
 
-export function loadPreset(name: string, dirname: string): { filepath: string, preset: mixed } {
+export function loadPreset(name: string, dirname: string): { filepath: string, value: mixed } {
   const filepath = resolvePreset(name, dirname);
   if (!filepath) throw new Error(`Preset ${name} not found relative to ${dirname}`);
 
   return {
     filepath,
-    preset: requireModule(filepath),
+    value: requireModule(filepath),
   };
 }
 
-export function loadParser(name: string, dirname: string): { filepath: string, parser: Function } {
+export function loadParser(name: string, dirname: string): { filepath: string, value: Function } {
   const filepath = resolveQuiet(name, dirname);
   if (!filepath) throw new Error(`Parser ${name} not found relative to ${dirname}`);
 
@@ -61,11 +61,11 @@ export function loadParser(name: string, dirname: string): { filepath: string, p
 
   return {
     filepath,
-    parser: mod.parse,
+    value: mod.parse,
   };
 }
 
-export function loadGenerator(name: string, dirname: string): { filepath: string, generator: Function } {
+export function loadGenerator(name: string, dirname: string): { filepath: string, value: Function } {
   const filepath = resolveQuiet(name, dirname);
   if (!filepath) throw new Error(`Generator ${name} not found relative to ${dirname}`);
 
@@ -80,7 +80,7 @@ export function loadGenerator(name: string, dirname: string): { filepath: string
 
   return {
     filepath,
-    generator: mod.print,
+    value: mod.print,
   };
 }
 
