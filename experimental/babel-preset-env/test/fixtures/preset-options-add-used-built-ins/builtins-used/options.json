@@ -2,8 +2,7 @@
   "presets": [
     ["../../../../lib", {
       "useBuiltIns": true,
-      "modules": false,
-      "debug": true
+      "modules": false
     }]
   ]
 }

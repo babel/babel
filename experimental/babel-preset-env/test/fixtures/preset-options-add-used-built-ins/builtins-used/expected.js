@@ -1,8 +1,8 @@
-import 'core-js/modules/es6.array.from';
-import 'core-js/modules/es6.map';
-import 'core-js/modules/es6.promise';
-import 'core-js/modules/es6.regexp.match';
 import 'core-js/modules/es6.symbol';
+import 'core-js/modules/es6.regexp.match';
+import 'core-js/modules/es6.promise';
+import 'core-js/modules/es6.map';
+import 'core-js/modules/es6.array.from';
 Array.from; // static method
 Map; // built-in
 new Promise(); // new builtin

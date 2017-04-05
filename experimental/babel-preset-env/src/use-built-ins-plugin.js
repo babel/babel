@@ -25,11 +25,27 @@ function getObjectString(node) {
 }
 
 export default function({ types: t }) {
-  function addImport(path, builtIn) {
-    if (builtIn) {
+  function addImport(path, builtIn, builtIns) {
+    if (builtIn && !builtIns.has(builtIn)) {
+      builtIns.add(builtIn);
       const importDec = t.importDeclaration([], t.stringLiteral(builtIn));
       importDec._blockHoist = 3;
-      path.unshiftContainer("body", importDec);
+      const programPath = path.find(path => path.isProgram());
+      programPath.unshiftContainer("body", importDec);
+    }
+  }
+
+  function addUnsupported(path, polyfills, builtIn, builtIns) {
+    if (Array.isArray(builtIn)) {
+      for (const i of builtIn) {
+        if (polyfills.indexOf(i) !== -1) {
+          addImport(path, `core-js/modules/${i}`, builtIns);
+        }
+      }
+    } else {
+      if (polyfills.indexOf(builtIn) !== -1) {
+        addImport(path, `core-js/modules/${builtIn}`, builtIns);
+      }
     }
   }
 
@@ -81,39 +97,19 @@ Please remove the call.
           }
         });
       },
-      // add polyfills
-      exit(path, state) {
-        for (const builtIn of Array.from(this.builtIns.keys()).reverse()) {
-          if (Array.isArray(builtIn)) {
-            for (const i of builtIn) {
-              // console.warn(i);
-              if (state.opts.polyfills.indexOf(i) !== -1) {
-                addImport(path, `core-js/modules/${i}`);
-              }
-            }
-          } else {
-            // console.warn(builtIn);
-            if (state.opts.polyfills.indexOf(builtIn) !== -1) {
-              addImport(path, `core-js/modules/${builtIn}`);
-            }
-          }
-        }
-        if (state.opts.regenerator && this.usesRegenerator) {
-          addImport(path, "babel-polyfill/regenerator-runtime/runtime");
-        }
-      },
     },
 
     // Symbol() -> _core.Symbol();
     // new Promise -> new _core.Promise
-    ReferencedIdentifier(path) {
+    ReferencedIdentifier(path, state) {
       const { node, parent, scope } = path;
 
       if (t.isMemberExpression(parent)) return;
       if (!has(definitions.builtins, node.name)) return;
       if (scope.getBindingIdentifier(node.name)) return;
 
-      this.builtIns.add(definitions.builtins[node.name]);
+      const builtIn = definitions.builtins[node.name];
+      addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
     },
 
     // Array.from -> _core.Array.from
@@ -133,7 +129,8 @@ Please remove the call.
         if (has(definitions.staticMethods, obj.name)) {
           const staticMethods = definitions.staticMethods[obj.name];
           if (has(staticMethods, prop.name)) {
-            this.builtIns.add(`${staticMethods[prop.name]}`);
+            const builtIn = staticMethods[prop.name];
+            addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
           }
         }
 
@@ -143,7 +140,8 @@ Please remove the call.
           has(definitions.instanceMethods, prop.name)
         ) {
           state.opts.debug && warnOnInstanceMethod(getObjectString(node));
-          this.builtIns.add(definitions.instanceMethods[prop.name]);
+          const builtIn = definitions.instanceMethods[prop.name];
+          addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
         } else if (
           node.computed &&
           t.isStringLiteral(prop) &&
@@ -151,12 +149,13 @@ Please remove the call.
         ) {
           state.opts.debug &&
             warnOnInstanceMethod(`${obj.name}['${prop.value}']`);
-          this.builtIns.add(definitions.instanceMethods[prop.value]);
+          const builtIn = definitions.instanceMethods[prop.value];
+          addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
         }
       },
 
       // Symbol.match
-      exit(path) {
+      exit(path, state) {
         if (!path.isReferenced()) return;
 
         const { node } = path;
@@ -165,7 +164,8 @@ Please remove the call.
         if (!has(definitions.builtins, obj.name)) return;
         if (path.scope.getBindingIdentifier(obj.name)) return;
 
-        this.builtIns.add(definitions.builtins[obj.name]);
+        const builtIn = definitions.builtins[obj.name];
+        addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
       },
     },
 
@@ -196,14 +196,22 @@ Please remove the call.
               `${path.parentPath.node.kind} { ${prop.name} } = ${obj.name}`,
             );
 
-          this.builtIns.add(definitions.instanceMethods[prop.name]);
+          const builtIn = definitions.instanceMethods[prop.name];
+          addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
         }
       }
     },
 
-    Function(path) {
-      if (path.node.generator || path.node.async) {
+    Function(path, state) {
+      if (!this.usesRegenerator && (path.node.generator || path.node.async)) {
         this.usesRegenerator = true;
+        if (state.opts.regenerator) {
+          addImport(
+            path,
+            "babel-polyfill/regenerator-runtime/runtime",
+            this.builtIns,
+          );
+        }
       }
     },
   };

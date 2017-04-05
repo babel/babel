@@ -1,5 +1,5 @@
-import "babel-polyfill/regenerator-runtime/runtime";
 import "core-js/modules/es6.promise";
+import "babel-polyfill/regenerator-runtime/runtime";
 
 var a = function () {
   var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
