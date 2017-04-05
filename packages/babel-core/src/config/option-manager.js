@@ -115,7 +115,6 @@ class OptionManager {
     dirname,
   }: MergeOptions) {
     alias = alias || "foreign";
-    if (!rawOpts) return;
 
     //
     if (typeof rawOpts !== "object" || Array.isArray(rawOpts)) {
@@ -128,10 +127,6 @@ class OptionManager {
         return val;
       }
     });
-
-    //
-    dirname = dirname || process.cwd();
-    loc = loc || alias;
 
     if (type !== "arguments") {
       if (opts.filename !== undefined) {
@@ -192,7 +187,7 @@ class OptionManager {
     if (opts.presets) {
       if (!Array.isArray(rawOpts.presets)) throw new Error(`${alias}.presets should be an array`);
 
-      opts.presets = resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
+      opts.presets = resolvePresets(opts.presets, dirname).map(([preset, presetLoc]) => {
         this.mergeOptions({
           type: "preset",
           options: preset,
@@ -203,6 +198,8 @@ class OptionManager {
           loc: presetLoc,
           dirname: dirname,
         });
+
+        return preset;
       });
 
       // If not passPerPreset, the plugins have all been merged into the parent config so the presets
@@ -275,7 +272,7 @@ class OptionManager {
  * Resolves presets options which can be either direct object data,
  * or a module name to require.
  */
-function resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
+function resolvePresets(presets: Array<string | Object>, dirname: string) {
   return presets.map((preset) => {
     let options;
     if (Array.isArray(preset)) {
@@ -296,9 +293,7 @@ function resolvePresets(presets: Array<string | Object>, dirname: string, onReso
       }
       const resolvedPreset = loadPresetObject(preset, options, { dirname });
 
-      if (onResolve) onResolve(resolvedPreset, presetLoc);
-
-      return resolvedPreset;
+      return [ resolvedPreset, presetLoc ];
     } catch (e) {
       if (presetLoc) {
         e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
