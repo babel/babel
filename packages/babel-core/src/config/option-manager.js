@@ -91,132 +91,10 @@ export default function manageOptions(opts?: Object) {
 
 class OptionManager {
   constructor() {
-    this.options = OptionManager.createBareOptions();
+    this.options = createBareOptions();
   }
 
   options: Object;
-
-  static memoisedPlugins: Array<{
-    container: Function;
-    plugin: Plugin;
-  }>;
-
-  static memoisePluginContainer(fn, loc, i, alias) {
-    for (const cache of (OptionManager.memoisedPlugins: Array<Object>)) {
-      if (cache.container === fn) return cache.plugin;
-    }
-
-    let obj: ?PluginObject;
-
-    if (typeof fn === "function") {
-      obj = fn(context);
-    } else {
-      obj = fn;
-    }
-
-    if (typeof obj !== "object") {
-      throw new TypeError(messages.get("pluginNotObject", loc, i, typeof obj) + loc + i);
-    }
-    Object.keys(obj).forEach((key) => {
-      if (!ALLOWED_PLUGIN_KEYS.has(key)) {
-        throw new Error(messages.get("pluginInvalidProperty", loc, i, key));
-      }
-    });
-    if (obj.visitor && (obj.visitor.enter || obj.visitor.exit)) {
-      throw new Error("Plugins aren't allowed to specify catch-all enter/exit handlers. " +
-        "Please target individual nodes.");
-    }
-
-    obj = Object.assign({}, obj, {
-      visitor: clone(obj.visitor || {}),
-    });
-
-    traverse.explode(obj.visitor);
-
-    if (obj.inherits) {
-      const inherited = OptionManager.normalisePlugin(obj.inherits, loc, "inherits");
-
-      obj.pre = OptionManager.chain(inherited.pre, obj.pre);
-      obj.post = OptionManager.chain(inherited.post, obj.post);
-      obj.manipulateOptions = OptionManager.chain(inherited.manipulateOptions, obj.manipulateOptions);
-      obj.visitor = traverse.visitors.merge([inherited.visitor, obj.visitor]);
-    }
-
-    const plugin = new Plugin(obj, alias);
-    OptionManager.memoisedPlugins.push({
-      container: fn,
-      plugin: plugin,
-    });
-    return plugin;
-  }
-
-  static chain(a, b) {
-    const fns = [a, b].filter(Boolean);
-    if (fns.length <= 1) return fns[0];
-
-    return function(...args) {
-      for (const fn of fns) {
-        fn.apply(this, args);
-      }
-    };
-  }
-
-  static createBareOptions() {
-    return {
-      sourceType: "module",
-      babelrc: true,
-      filename: "unknown",
-      code: true,
-      metadata: true,
-      ast: true,
-      comments: true,
-      compact: "auto",
-      highlightCode: true,
-    };
-  }
-
-  static normalisePlugin(plugin, loc, i, alias) {
-    plugin = plugin.__esModule ? plugin.default : plugin;
-
-    if (!(plugin instanceof Plugin)) {
-      // allow plugin containers to be specified so they don't have to manually require
-      if (typeof plugin === "function" || typeof plugin === "object") {
-        plugin = OptionManager.memoisePluginContainer(plugin, loc, i, alias);
-      } else {
-        throw new TypeError(messages.get("pluginNotFunction", loc, i, typeof plugin));
-      }
-    }
-
-    return plugin;
-  }
-
-  static normalisePlugins(loc, dirname, plugins) {
-    return plugins.map(function (val, i) {
-      let plugin, options;
-
-      if (!val) {
-        throw new TypeError("Falsy value found in plugins");
-      }
-
-      // destructure plugins
-      if (Array.isArray(val)) {
-        [plugin, options] = val;
-      } else {
-        plugin = val;
-      }
-
-      const alias = typeof plugin === "string" ? plugin : `${loc}$${i}`;
-
-      // allow plugins to be specified as strings
-      if (typeof plugin === "string") {
-        plugin = loadPlugin(plugin, dirname).plugin;
-      }
-
-      plugin = OptionManager.normalisePlugin(plugin, loc, i, alias);
-
-      return [plugin, options];
-    });
-  }
 
   /**
    * This is called when we want to merge the input `opts` into the
@@ -307,14 +185,14 @@ class OptionManager {
     if (opts.plugins) {
       if (!Array.isArray(rawOpts.plugins)) throw new Error(`${alias}.plugins should be an array`);
 
-      opts.plugins = OptionManager.normalisePlugins(loc, dirname, opts.plugins);
+      opts.plugins = normalisePlugins(loc, dirname, opts.plugins);
     }
 
     // resolve presets
     if (opts.presets) {
       if (!Array.isArray(rawOpts.presets)) throw new Error(`${alias}.presets should be an array`);
 
-      opts.presets = this.resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
+      opts.presets = resolvePresets(opts.presets, dirname, (preset, presetLoc) => {
         this.mergeOptions({
           type: "preset",
           options: preset,
@@ -340,71 +218,6 @@ class OptionManager {
     } else {
       merge(extendingOpts || this.options, opts);
     }
-  }
-
-  /**
-   * Resolves presets options which can be either direct object data,
-   * or a module name to require.
-   */
-  resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
-    return presets.map((preset) => {
-      let options;
-      if (Array.isArray(preset)) {
-        if (preset.length > 2) {
-          throw new Error(`Unexpected extra options ${JSON.stringify(preset.slice(2))} passed to preset.`);
-        }
-
-        [preset, options] = preset;
-      }
-
-      let presetLoc;
-      try {
-        if (typeof preset === "string") {
-          ({
-            filepath: presetLoc,
-            preset,
-          } = loadPreset(preset, dirname));
-        }
-        const resolvedPreset = this.loadPreset(preset, options, { dirname });
-
-        if (onResolve) onResolve(resolvedPreset, presetLoc);
-
-        return resolvedPreset;
-      } catch (e) {
-        if (presetLoc) {
-          e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
-        }
-        throw e;
-      }
-    });
-  }
-
-  /**
-   * Tries to load one preset. The input is either the module name of the preset,
-   * a function, or an object
-   */
-  loadPreset(preset, options, meta) {
-    let presetFactory = preset;
-
-    if (typeof presetFactory === "object" && presetFactory.__esModule) {
-      if (presetFactory.default) {
-        presetFactory = presetFactory.default;
-      } else {
-        throw new Error("Preset must export a default export when using ES6 modules.");
-      }
-    }
-
-    // Allow simple object exports
-    if (typeof presetFactory === "object") {
-      return presetFactory;
-    }
-
-    if (typeof presetFactory !== "function") {
-      // eslint-disable-next-line max-len
-      throw new Error(`Unsupported preset format: ${typeof presetFactory}. Expected preset to return a function.`);
-    }
-
-    return presetFactory(context, options, meta);
   }
 
   init(opts: Object = {}): Object {
@@ -458,4 +271,190 @@ class OptionManager {
   }
 }
 
-OptionManager.memoisedPlugins = [];
+/**
+ * Resolves presets options which can be either direct object data,
+ * or a module name to require.
+ */
+function resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
+  return presets.map((preset) => {
+    let options;
+    if (Array.isArray(preset)) {
+      if (preset.length > 2) {
+        throw new Error(`Unexpected extra options ${JSON.stringify(preset.slice(2))} passed to preset.`);
+      }
+
+      [preset, options] = preset;
+    }
+
+    let presetLoc;
+    try {
+      if (typeof preset === "string") {
+        ({
+          filepath: presetLoc,
+          preset,
+        } = loadPreset(preset, dirname));
+      }
+      const resolvedPreset = loadPresetObject(preset, options, { dirname });
+
+      if (onResolve) onResolve(resolvedPreset, presetLoc);
+
+      return resolvedPreset;
+    } catch (e) {
+      if (presetLoc) {
+        e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
+      }
+      throw e;
+    }
+  });
+}
+
+/**
+ * Tries to load one preset. The input is either the module name of the preset,
+ * a function, or an object
+ */
+function loadPresetObject(preset, options, meta) {
+  let presetFactory = preset;
+
+  if (typeof presetFactory === "object" && presetFactory.__esModule) {
+    if (presetFactory.default) {
+      presetFactory = presetFactory.default;
+    } else {
+      throw new Error("Preset must export a default export when using ES6 modules.");
+    }
+  }
+
+  // Allow simple object exports
+  if (typeof presetFactory === "object") {
+    return presetFactory;
+  }
+
+  if (typeof presetFactory !== "function") {
+    // eslint-disable-next-line max-len
+    throw new Error(`Unsupported preset format: ${typeof presetFactory}. Expected preset to return a function.`);
+  }
+
+  return presetFactory(context, options, meta);
+}
+
+
+const memoisedPlugins: Array<{
+  container: Function;
+  plugin: Plugin;
+}> = [];
+
+function memoisePluginContainer(fn, loc, i, alias) {
+  for (const cache of (memoisedPlugins: Array<Object>)) {
+    if (cache.container === fn) return cache.plugin;
+  }
+
+  let obj: ?PluginObject;
+
+  if (typeof fn === "function") {
+    obj = fn(context);
+  } else {
+    obj = fn;
+  }
+
+  if (typeof obj !== "object") {
+    throw new TypeError(messages.get("pluginNotObject", loc, i, typeof obj) + loc + i);
+  }
+  Object.keys(obj).forEach((key) => {
+    if (!ALLOWED_PLUGIN_KEYS.has(key)) {
+      throw new Error(messages.get("pluginInvalidProperty", loc, i, key));
+    }
+  });
+  if (obj.visitor && (obj.visitor.enter || obj.visitor.exit)) {
+    throw new Error("Plugins aren't allowed to specify catch-all enter/exit handlers. " +
+      "Please target individual nodes.");
+  }
+
+  obj = Object.assign({}, obj, {
+    visitor: clone(obj.visitor || {}),
+  });
+
+  traverse.explode(obj.visitor);
+
+  if (obj.inherits) {
+    const inherited = normalisePlugin(obj.inherits, loc, "inherits");
+
+    obj.pre = chain(inherited.pre, obj.pre);
+    obj.post = chain(inherited.post, obj.post);
+    obj.manipulateOptions = chain(inherited.manipulateOptions, obj.manipulateOptions);
+    obj.visitor = traverse.visitors.merge([inherited.visitor, obj.visitor]);
+  }
+
+  const plugin = new Plugin(obj, alias);
+  memoisedPlugins.push({
+    container: fn,
+    plugin: plugin,
+  });
+  return plugin;
+}
+
+function chain(a, b) {
+  const fns = [a, b].filter(Boolean);
+  if (fns.length <= 1) return fns[0];
+
+  return function(...args) {
+    for (const fn of fns) {
+      fn.apply(this, args);
+    }
+  };
+}
+
+function createBareOptions() {
+  return {
+    sourceType: "module",
+    babelrc: true,
+    filename: "unknown",
+    code: true,
+    metadata: true,
+    ast: true,
+    comments: true,
+    compact: "auto",
+    highlightCode: true,
+  };
+}
+
+function normalisePlugin(plugin, loc, i, alias) {
+  plugin = plugin.__esModule ? plugin.default : plugin;
+
+  if (!(plugin instanceof Plugin)) {
+    // allow plugin containers to be specified so they don't have to manually require
+    if (typeof plugin === "function" || typeof plugin === "object") {
+      plugin = memoisePluginContainer(plugin, loc, i, alias);
+    } else {
+      throw new TypeError(messages.get("pluginNotFunction", loc, i, typeof plugin));
+    }
+  }
+
+  return plugin;
+}
+
+function normalisePlugins(loc, dirname, plugins) {
+  return plugins.map(function (val, i) {
+    let plugin, options;
+
+    if (!val) {
+      throw new TypeError("Falsy value found in plugins");
+    }
+
+    // destructure plugins
+    if (Array.isArray(val)) {
+      [plugin, options] = val;
+    } else {
+      plugin = val;
+    }
+
+    const alias = typeof plugin === "string" ? plugin : `${loc}$${i}`;
+
+    // allow plugins to be specified as strings
+    if (typeof plugin === "string") {
+      plugin = loadPlugin(plugin, dirname).plugin;
+    }
+
+    plugin = normalisePlugin(plugin, loc, i, alias);
+
+    return [plugin, options];
+  });
+}
