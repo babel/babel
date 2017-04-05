@@ -14,7 +14,7 @@ Issues on GitHub are only related to problems of Babel itself and we cannot answ
 support questions here.
 -->
 
-Choose one: is this a bug report or feature request?:
+Choose one: is this a bug report or feature request?
 
 <!--- Provide a general summary of the issue in the title above -->
 
