@@ -5,10 +5,10 @@ function isPolyfillSource(value) {
 }
 
 function warnOnInstanceMethod(state, details) {
-  state.opts.debug &&
-    console.warn(
-      `Adding a polyfill: An instance method may have been used: ${details}`,
-    );
+  // state.opts.debug &&
+  //   console.warn(
+  //     `Adding a polyfill: An instance method may have been used: ${details}`,
+  //   );
 }
 
 function has(obj, key) {
@@ -68,8 +68,8 @@ export default function({ types: t }) {
       ) {
         console.warn(
           `
-When setting 'useBuiltIns: true', polyfills are automatically imported when needed.
-Please remove the call or use 'useBuiltIns: "entry"' instead.
+When setting "useBuiltIns: true", polyfills are automatically imported when needed.
+Please remove the "import 'babel-polyfill'" call or use "useBuiltIns: 'entry'" instead.
 `,
         );
         path.remove();
@@ -90,8 +90,8 @@ to the "transform-polyfill-require" plugin
           if (isRequire(bodyPath)) {
             console.warn(
               `
-When setting 'useBuiltIns: true', polyfills are automatically imported when needed.
-Please remove the call or use 'useBuiltIns: "entry"' instead.
+When setting "useBuiltIns: true", polyfills are automatically imported when needed.
+Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'" instead.
 `,
             );
             path.remove();

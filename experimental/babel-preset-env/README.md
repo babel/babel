@@ -174,7 +174,7 @@ This option is useful for "blacklisting" a transform like `transform-regenerator
 
 ### `useBuiltIns`
 
-`boolean`, defaults to `true`.
+`boolean` | `"entry"`, defaults to `true`.
 
 A way to apply `babel-preset-env` for polyfills (via `babel-polyfill`).
 
