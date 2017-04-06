@@ -27,7 +27,6 @@ type PluginObject = {
 type MergeOptions = {
   type: "arguments"|"options"|"preset",
   options?: Object,
-  extending?: Object,
   alias: string,
   loc?: string,
   dirname?: string
@@ -106,24 +105,17 @@ class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions({
-    type,
-    options: rawOpts,
-    alias,
-    loc,
-    dirname,
-  }: MergeOptions, pass?: Array<Plugin>) {
-    alias = alias || "foreign";
-
-    if (!pass) pass = this.passes[0];
+  mergeOptions(config: MergeOptions, pass?: Array<Plugin>) {
+    const alias = config.alias || "foreign";
+    const type = config.type;
 
     //
-    if (typeof rawOpts !== "object" || Array.isArray(rawOpts)) {
+    if (typeof config.options !== "object" || Array.isArray(config.options)) {
       throw new TypeError(`Invalid options type for ${alias}`);
     }
 
     //
-    const opts = Object.assign({}, rawOpts);
+    const opts = Object.assign({}, config.options);
 
     if (type !== "arguments") {
       if (opts.filename !== undefined) {
@@ -167,18 +159,18 @@ class OptionManager {
 
     if (opts.parserOpts && typeof opts.parserOpts.parser === "string") {
       opts.parserOpts = Object.assign({}, opts.parserOpts);
-      opts.parserOpts.parser = loadParser(opts.parserOpts.parser, dirname).value;
+      opts.parserOpts.parser = loadParser(opts.parserOpts.parser, config.dirname).value;
     }
 
     if (opts.generatorOpts && typeof opts.generatorOpts.generator === "string") {
       opts.generatorOpts = Object.assign({}, opts.generatorOpts);
-      opts.generatorOpts.generator = loadGenerator(opts.generatorOpts.generator, dirname).value;
+      opts.generatorOpts.generator = loadGenerator(opts.generatorOpts.generator, config.dirname).value;
     }
 
-    if (rawOpts.presets && !Array.isArray(rawOpts.presets)) {
+    if (config.options.presets && !Array.isArray(config.options.presets)) {
       throw new Error(`${alias}.presets should be an array`);
     }
-    if (rawOpts.plugins && !Array.isArray(rawOpts.plugins)) {
+    if (config.options.plugins && !Array.isArray(config.options.plugins)) {
       throw new Error(`${alias}.plugins should be an array`);
     }
 
@@ -186,29 +178,36 @@ class OptionManager {
     delete opts.plugins;
     delete opts.presets;
 
-    const passPerPreset = rawOpts.passPerPreset;
-    const plugins = normalizePlugins(rawOpts.plugins, dirname);
-    const presets = normalizePresets(rawOpts.presets, dirname);
+    const passPerPreset = config.options.passPerPreset;
+    const plugins = normalizePlugins(config);
+    const presets = normalizePresets(config);
+    pass = pass || this.passes[0];
 
     // resolve presets
     if (presets.length > 0) {
-      const presetsObjects = resolvePresets(presets, dirname);
-
       let presetPasses = null;
       if (passPerPreset) {
-        presetPasses = presetsObjects.map(() => []);
+        presetPasses = presets.map(() => []);
         // The passes are created in the same order as the preset list, but are inserted before any
         // existing additional passes.
         this.passes.splice(1, 0, ...presetPasses);
       }
 
-      presetsObjects.forEach(([preset, presetLoc], i) => {
+      presets.forEach(({ filepath, preset, options }, i) => {
+        let resolvedPreset;
+        try {
+          resolvedPreset = loadPresetObject(preset, options, { dirname: config.dirname });
+        } catch (e) {
+          if (filepath) e.message += ` (While processing preset: ${JSON.stringify(filepath)})`;
+          throw e;
+        }
+
         this.mergeOptions({
           type: "preset",
-          options: preset,
-          alias: presetLoc,
-          loc: presetLoc,
-          dirname: dirname,
+          options: resolvedPreset,
+          alias: filepath,
+          loc: filepath,
+          dirname: config.dirname,
         }, presetPasses ? presetPasses[i] : pass);
       });
     }
@@ -216,7 +215,7 @@ class OptionManager {
     // resolve plugins
     if (plugins.length > 0) {
       pass.unshift(...plugins.map(function ({ filepath, plugin, options }, i) {
-        return [ normalisePlugin(plugin, loc, i, filepath || `${loc}$${i}`), options ];
+        return [ normalisePlugin(plugin, config.loc, i, filepath || `${config.loc}$${i}`), options ];
       }));
     }
 
@@ -284,10 +283,10 @@ class OptionManager {
   }
 }
 
-function normalizePlugins(plugins, dirname) {
-  if (!plugins) return [];
+function normalizePlugins(config) {
+  if (!config.options.plugins) return [];
 
-  return plugins.map((plugin) => {
+  return config.options.plugins.map((plugin) => {
 
     let options;
     if (Array.isArray(plugin)) {
@@ -307,7 +306,7 @@ function normalizePlugins(plugins, dirname) {
       ({
         filepath,
         value: plugin,
-      } = loadPlugin(plugin, dirname));
+      } = loadPlugin(plugin, config.dirname));
     }
 
     return {
@@ -318,10 +317,10 @@ function normalizePlugins(plugins, dirname) {
   });
 }
 
-function normalizePresets(presets, dirname) {
-  if (!presets) return [];
+function normalizePresets(config) {
+  if (!config.options.presets) return [];
 
-  return presets.map((preset) => {
+  return config.options.presets.map((preset) => {
     let options;
     if (Array.isArray(preset)) {
       if (preset.length > 2) {
@@ -340,7 +339,7 @@ function normalizePresets(presets, dirname) {
       ({
         filepath,
         value: preset,
-      } = loadPreset(preset, dirname));
+      } = loadPreset(preset, config.dirname));
     }
 
     return {
@@ -348,25 +347,6 @@ function normalizePresets(presets, dirname) {
       preset,
       options,
     };
-  });
-}
-
-/**
- * Resolves presets options which can be either direct object data,
- * or a module name to require.
- */
-function resolvePresets(presets: Array<string | Object>, dirname: string) {
-  return presets.map(({ filepath, preset, options }) => {
-    try {
-      const resolvedPreset = loadPresetObject(preset, options, { dirname });
-
-      return [ resolvedPreset, filepath ];
-    } catch (e) {
-      if (filepath) {
-        e.message += ` (While processing preset: ${JSON.stringify(filepath)})`;
-      }
-      throw e;
-    }
   });
 }
 
