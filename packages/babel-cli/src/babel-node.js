@@ -46,6 +46,18 @@ getV8Flags(function (err, v8Flags) {
       case "--debug":
       case "--debug-brk":
       case "--inspect":
+      case "--no-deprecation":
+      case "--throw-deprecation":
+      case "--no-warnings":
+      case "--track-heap-objects":
+      case "--prof-process":
+      case "--zero-fill-buffers":
+      case "--tls-cipher-list":
+      case "--use-bundled-ca":
+      case "--use-openssl-ca":
+      case "--openssl-config":
+      case "--icu-data-dir":
+      case "--preserve-symlinks":
         args.unshift(arg);
         break;
 
