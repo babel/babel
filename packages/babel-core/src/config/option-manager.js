@@ -2,7 +2,6 @@ import * as context from "../index";
 import Plugin from "./plugin";
 import * as messages from "babel-messages";
 import defaults from "lodash/defaults";
-import cloneDeepWith from "lodash/cloneDeepWith";
 import merge from "./helpers/merge";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
@@ -124,11 +123,7 @@ class OptionManager {
     }
 
     //
-    const opts = cloneDeepWith(rawOpts, (val) => {
-      if (val instanceof Plugin) {
-        return val;
-      }
-    });
+    const opts = Object.assign({}, rawOpts);
 
     if (type !== "arguments") {
       if (opts.filename !== undefined) {
@@ -171,30 +166,43 @@ class OptionManager {
     }
 
     if (opts.parserOpts && typeof opts.parserOpts.parser === "string") {
+      opts.parserOpts = Object.assign({}, opts.parserOpts);
       opts.parserOpts.parser = loadParser(opts.parserOpts.parser, dirname).value;
     }
 
     if (opts.generatorOpts && typeof opts.generatorOpts.generator === "string") {
+      opts.generatorOpts = Object.assign({}, opts.generatorOpts);
       opts.generatorOpts.generator = loadGenerator(opts.generatorOpts.generator, dirname).value;
     }
 
-    // const plugins =
+    if (rawOpts.presets && !Array.isArray(rawOpts.presets)) {
+      throw new Error(`${alias}.presets should be an array`);
+    }
+    if (rawOpts.plugins && !Array.isArray(rawOpts.plugins)) {
+      throw new Error(`${alias}.plugins should be an array`);
+    }
+
+    delete opts.passPerPreset;
+    delete opts.plugins;
+    delete opts.presets;
+
+    const passPerPreset = rawOpts.passPerPreset;
+    const plugins = normalizePlugins(rawOpts.plugins, dirname);
+    const presets = normalizePresets(rawOpts.presets, dirname);
 
     // resolve presets
-    if (opts.presets) {
-      if (!Array.isArray(rawOpts.presets)) throw new Error(`${alias}.presets should be an array`);
-
-      const presets = resolvePresets(opts.presets, dirname);
+    if (presets.length > 0) {
+      const presetsObjects = resolvePresets(presets, dirname);
 
       let presetPasses = null;
-      if (opts.passPerPreset) {
-        presetPasses = presets.map(() => []);
+      if (passPerPreset) {
+        presetPasses = presetsObjects.map(() => []);
         // The passes are created in the same order as the preset list, but are inserted before any
         // existing additional passes.
         this.passes.splice(1, 0, ...presetPasses);
       }
 
-      presets.forEach(([preset, presetLoc], i) => {
+      presetsObjects.forEach(([preset, presetLoc], i) => {
         this.mergeOptions({
           type: "preset",
           options: preset,
@@ -206,15 +214,11 @@ class OptionManager {
     }
 
     // resolve plugins
-    if (opts.plugins) {
-      if (!Array.isArray(rawOpts.plugins)) throw new Error(`${alias}.plugins should be an array`);
-
-      pass.unshift(...normalisePlugins(loc, dirname, opts.plugins));
+    if (plugins.length > 0) {
+      pass.unshift(...plugins.map(function ({ filepath, plugin, options }, i) {
+        return [ normalisePlugin(plugin, loc, i, filepath || `${loc}$${i}`), options ];
+      }));
     }
-
-    delete opts.passPerPreset;
-    delete opts.plugins;
-    delete opts.presets;
 
     merge(this.options, opts);
   }
@@ -280,11 +284,43 @@ class OptionManager {
   }
 }
 
-/**
- * Resolves presets options which can be either direct object data,
- * or a module name to require.
- */
-function resolvePresets(presets: Array<string | Object>, dirname: string) {
+function normalizePlugins(plugins, dirname) {
+  if (!plugins) return [];
+
+  return plugins.map((plugin) => {
+
+    let options;
+    if (Array.isArray(plugin)) {
+      if (plugin.length > 2) {
+        throw new Error(`Unexpected extra options ${JSON.stringify(plugin.slice(2))} passed to plugin.`);
+      }
+
+      [plugin, options] = plugin;
+    }
+
+    if (!plugin) {
+      throw new TypeError("Falsy value found in plugins");
+    }
+
+    let filepath = null;
+    if (typeof plugin === "string") {
+      ({
+        filepath,
+        value: plugin,
+      } = loadPlugin(plugin, dirname));
+    }
+
+    return {
+      filepath,
+      plugin,
+      options,
+    };
+  });
+}
+
+function normalizePresets(presets, dirname) {
+  if (!presets) return [];
+
   return presets.map((preset) => {
     let options;
     if (Array.isArray(preset)) {
@@ -295,20 +331,39 @@ function resolvePresets(presets: Array<string | Object>, dirname: string) {
       [preset, options] = preset;
     }
 
-    let presetLoc;
+    if (!preset) {
+      throw new TypeError("Falsy value found in presets");
+    }
+
+    let filepath = null;
+    if (typeof preset === "string") {
+      ({
+        filepath,
+        value: preset,
+      } = loadPreset(preset, dirname));
+    }
+
+    return {
+      filepath,
+      preset,
+      options,
+    };
+  });
+}
+
+/**
+ * Resolves presets options which can be either direct object data,
+ * or a module name to require.
+ */
+function resolvePresets(presets: Array<string | Object>, dirname: string) {
+  return presets.map(({ filepath, preset, options }) => {
     try {
-      if (typeof preset === "string") {
-        ({
-          filepath: presetLoc,
-          value: preset,
-        } = loadPreset(preset, dirname));
-      }
       const resolvedPreset = loadPresetObject(preset, options, { dirname });
 
-      return [ resolvedPreset, presetLoc ];
+      return [ resolvedPreset, filepath ];
     } catch (e) {
-      if (presetLoc) {
-        e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
+      if (filepath) {
+        e.message += ` (While processing preset: ${JSON.stringify(filepath)})`;
       }
       throw e;
     }
@@ -436,32 +491,4 @@ function normalisePlugin(plugin, loc, i, alias) {
   }
 
   return plugin;
-}
-
-function normalisePlugins(loc, dirname, plugins) {
-  return plugins.map(function (val, i) {
-    let plugin, options;
-
-    if (!val) {
-      throw new TypeError("Falsy value found in plugins");
-    }
-
-    // destructure plugins
-    if (Array.isArray(val)) {
-      [plugin, options] = val;
-    } else {
-      plugin = val;
-    }
-
-    const alias = typeof plugin === "string" ? plugin : `${loc}$${i}`;
-
-    // allow plugins to be specified as strings
-    if (typeof plugin === "string") {
-      plugin = loadPlugin(plugin, dirname).value;
-    }
-
-    plugin = normalisePlugin(plugin, loc, i, alias);
-
-    return [plugin, options];
-  });
 }
