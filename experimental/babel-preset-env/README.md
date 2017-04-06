@@ -241,6 +241,10 @@ import "babel-polyfill/core-js/modules/es7.string.pad-start";
 import "babel-polyfill/core-js/modules/es7.string.pad-end";
 ```
 
+#### `useBuiltIns: false`
+
+Don't add polyfills automatically per file, or transform `import "babel-polyfill"` to individual polyfills.
+
 ---
 
 ## Examples

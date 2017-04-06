@@ -67,8 +67,8 @@ export default function({ types: t }) {
       ) {
         console.warn(
           `
-Adding "import 'babel-polyfill'" isn't necessary with the useBuiltIns option anymore.
-Please remove the call.
+When setting 'useBuiltIns: true', polyfills are automatically imported when needed.
+Please remove the call or use 'useBuiltIns: "entry"' instead.
 `,
         );
         path.remove();
@@ -89,8 +89,8 @@ to the "transform-polyfill-require" plugin
           if (isRequire(bodyPath)) {
             console.warn(
               `
-Adding "require('babel-polyfill')" isn't necessary with the useBuiltIns option anymore.
-Please remove the call.
+When setting 'useBuiltIns: true', polyfills are automatically imported when needed.
+Please remove the call or use 'useBuiltIns: "entry"' instead.
 `,
             );
             path.remove();
