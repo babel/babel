@@ -66,6 +66,18 @@ export const validateModulesOption = (modulesOpt = "commonjs") => {
   return modulesOpt;
 };
 
+export const validateUseBuiltInsOption = (builtInsOpt = true) => {
+  invariant(
+    builtInsOpt === true || builtInsOpt === false || builtInsOpt === "entry",
+    `Invalid Option: The 'useBuiltIns' option must be either
+    'false' to indicate no polyfill,
+    '"entry"' to indicate replacing the entry polyfill, or
+    'true' (default) to import only used polyfills per file`,
+  );
+
+  return builtInsOpt;
+};
+
 export default function normalizeOptions(opts) {
   checkDuplicateIncludeExcludes(opts.include, opts.exclude);
 
@@ -76,6 +88,6 @@ export default function normalizeOptions(opts) {
     loose: validateLooseOption(opts.loose),
     moduleType: validateModulesOption(opts.modules),
     targets: opts.targets,
-    useBuiltIns: opts.useBuiltIns === undefined ? true : opts.useBuiltIns,
+    useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
   };
 }
