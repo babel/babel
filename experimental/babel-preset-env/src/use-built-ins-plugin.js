@@ -4,10 +4,11 @@ function isPolyfillSource(value) {
   return value === "babel-polyfill";
 }
 
-function warnOnInstanceMethod(details) {
-  console.warn(
-    `Adding a polyfill: An instance method may have been used: ${details}`,
-  );
+function warnOnInstanceMethod(state, details) {
+  state.opts.debug &&
+    console.warn(
+      `Adding a polyfill: An instance method may have been used: ${details}`,
+    );
 }
 
 function has(obj, key) {
@@ -139,7 +140,7 @@ Please remove the call or use 'useBuiltIns: "entry"' instead.
           t.isIdentifier(prop) &&
           has(definitions.instanceMethods, prop.name)
         ) {
-          state.opts.debug && warnOnInstanceMethod(getObjectString(node));
+          warnOnInstanceMethod(state, getObjectString(node));
           const builtIn = definitions.instanceMethods[prop.name];
           addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
         } else if (
@@ -147,8 +148,7 @@ Please remove the call or use 'useBuiltIns: "entry"' instead.
           t.isStringLiteral(prop) &&
           has(definitions.instanceMethods, prop.value)
         ) {
-          state.opts.debug &&
-            warnOnInstanceMethod(`${obj.name}['${prop.value}']`);
+          warnOnInstanceMethod(state, `${obj.name}['${prop.value}']`);
           const builtIn = definitions.instanceMethods[prop.value];
           addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
         }
@@ -191,10 +191,10 @@ Please remove the call or use 'useBuiltIns: "entry"' instead.
           t.isIdentifier(prop) &&
           has(definitions.instanceMethods, prop.name)
         ) {
-          state.opts.debug &&
-            warnOnInstanceMethod(
-              `${path.parentPath.node.kind} { ${prop.name} } = ${obj.name}`,
-            );
+          warnOnInstanceMethod(
+            state,
+            `${path.parentPath.node.kind} { ${prop.name} } = ${obj.name}`,
+          );
 
           const builtIn = definitions.instanceMethods[prop.name];
           addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
