@@ -1,7 +1,7 @@
 class Foo {
   foo() {
-    return babelHelpers.asyncToGenerator(function* () {
+    return babelHelpers.asyncToGenerator(function* foo() {
       var wat = yield bar();
-    })();
+    }).call(this);
   }
 }

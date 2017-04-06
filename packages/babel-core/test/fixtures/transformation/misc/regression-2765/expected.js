@@ -16,7 +16,7 @@ class Class {
   m() {
     var _this2 = this;
 
-    return babelHelpers.asyncToGenerator(function* () {
+    return babelHelpers.asyncToGenerator(function* m() {
       var c = function () {
         var _ref2 = babelHelpers.asyncToGenerator(function* (b) {
           _this2;
@@ -26,6 +26,6 @@ class Class {
           return _ref2.apply(this, arguments);
         };
       }();
-    })();
+    }).call(this);
   }
 }

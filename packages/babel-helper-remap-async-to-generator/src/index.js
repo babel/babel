@@ -83,12 +83,15 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
 
   node.async = false;
 
-  const container = t.functionExpression(null, [], t.blockStatement(body.body), true);
+  const container = t.functionExpression(node.key, [], t.blockStatement(body.body), true);
   container.shadow = true;
   body.body = [
     t.returnStatement(t.callExpression(
-      t.callExpression(callId, [container]),
-      []
+      t.memberExpression(
+        t.callExpression(callId, [container]),
+        t.identifier("call")
+      ),
+      [t.identifier("this")]
     )),
   ];
 
