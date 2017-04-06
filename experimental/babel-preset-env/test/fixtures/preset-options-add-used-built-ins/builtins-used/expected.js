@@ -1,8 +1,8 @@
-import 'core-js/modules/es6.symbol';
-import 'core-js/modules/es6.regexp.match';
-import 'core-js/modules/es6.promise';
-import 'core-js/modules/es6.map';
-import 'core-js/modules/es6.array.from';
+import "core-js/modules/es6.symbol";
+import "core-js/modules/es6.regexp.match";
+import "core-js/modules/es6.promise";
+import "core-js/modules/es6.map";
+import "core-js/modules/es6.array.from";
 Array.from; // static method
 Map; // built-in
 new Promise(); // new builtin
@@ -23,10 +23,3 @@ G.assign; // static method
 function H(WeakMap) {
   var blah = new WeakMap();
 } // shadowed
-
-// not covered by this plugin
-var asdf = 'copyWithin';
-i[asdf]; // computed with identifier
-j['copyWithin']; // computed with template
-var _k = k,
-    _a = _k[asdf]; // computed

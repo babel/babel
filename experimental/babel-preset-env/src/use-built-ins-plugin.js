@@ -143,14 +143,27 @@ Please remove the call or use 'useBuiltIns: "entry"' instead.
           warnOnInstanceMethod(state, getObjectString(node));
           const builtIn = definitions.instanceMethods[prop.name];
           addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
-        } else if (
-          node.computed &&
-          t.isStringLiteral(prop) &&
-          has(definitions.instanceMethods, prop.value)
-        ) {
-          warnOnInstanceMethod(state, `${obj.name}['${prop.value}']`);
-          const builtIn = definitions.instanceMethods[prop.value];
-          addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+        } else if (node.computed) {
+          if (
+            t.isStringLiteral(prop) &&
+            has(definitions.instanceMethods, prop.value)
+          ) {
+            const builtIn = definitions.instanceMethods[prop.value];
+            warnOnInstanceMethod(state, `${obj.name}['${prop.value}']`);
+            addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+          } else {
+            const res = path.get("property").evaluate();
+            if (res.confident) {
+              const builtIn = definitions.instanceMethods[res.value];
+              warnOnInstanceMethod(state, `${obj.name}['${res.value}']`);
+              addUnsupported(
+                path.get("property"),
+                state.opts.polyfills,
+                builtIn,
+                this.builtIns,
+              );
+            }
+          }
         }
       },
 
