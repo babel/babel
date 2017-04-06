@@ -38,12 +38,12 @@ export default function({ types: t }) {
   function addUnsupported(path, polyfills, builtIn, builtIns) {
     if (Array.isArray(builtIn)) {
       for (const i of builtIn) {
-        if (polyfills.indexOf(i) !== -1) {
+        if (polyfills.has(i)) {
           addImport(path, `core-js/modules/${i}`, builtIns);
         }
       }
     } else {
-      if (polyfills.indexOf(builtIn) !== -1) {
+      if (polyfills.has(builtIn)) {
         addImport(path, `core-js/modules/${builtIn}`, builtIns);
       }
     }

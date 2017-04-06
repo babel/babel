@@ -243,7 +243,10 @@ export default function buildPreset(context, opts = {}) {
   );
 
   if (useBuiltIns === true) {
-    plugins.push([addUsedBuiltInsPlugin, { polyfills, regenerator, debug }]);
+    plugins.push([
+      addUsedBuiltInsPlugin,
+      { polyfills: new Set(polyfills), regenerator, debug },
+    ]);
   } else if (useBuiltIns === "entry") {
     plugins.push([useBuiltInsEntryPlugin, { polyfills, regenerator }]);
   }
