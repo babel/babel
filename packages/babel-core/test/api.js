@@ -1,9 +1,9 @@
-let babel                = require("../lib/api/node");
-let buildExternalHelpers = require("../lib/tools/build-external-helpers");
-let sourceMap            = require("source-map");
-let assert               = require("assert");
-let Plugin               = require("../lib/transformation/plugin");
-let generator            = require("babel-generator").default;
+import * as babel from "../lib/api/node";
+import buildExternalHelpers from "../lib/tools/build-external-helpers";
+import sourceMap from "source-map";
+import assert from "assert";
+import Plugin from "../lib/transformation/plugin";
+import generator from "babel-generator";
 
 function assertIgnored(result) {
   assert.ok(result.ignored);
@@ -23,7 +23,7 @@ function transformAsync(code, opts) {
 }
 
 describe("parser and generator options", function() {
-  let recast = {
+  const recast = {
     parse: function(code, opts) {
       return opts.parser.parse(code);
     },
@@ -46,13 +46,13 @@ describe("parser and generator options", function() {
   }
 
   it("options", function() {
-    let string = "original;";
+    const string = "original;";
     assert.deepEqual(newTransform(string).ast, babel.transform(string).ast);
     assert.equal(newTransform(string).code, string);
   });
 
   it("experimental syntax", function() {
-    let experimental = "var a: number = 1;";
+    const experimental = "var a: number = 1;";
 
     assert.deepEqual(newTransform(experimental).ast, babel.transform(experimental, {
       parserOpts: {
@@ -82,7 +82,7 @@ describe("parser and generator options", function() {
   });
 
   it("other options", function() {
-    let experimental = "if (true) {\n  import a from 'a';\n}";
+    const experimental = "if (true) {\n  import a from 'a';\n}";
 
     assert.notEqual(newTransform(experimental).ast, babel.transform(experimental, {
       parserOpts: {
@@ -112,6 +112,14 @@ describe("api", function () {
         path.mark("category", "foobar");
       }
     }).marked[0].message, "foobar");
+  });
+
+  it("exposes the resolvePlugin method", function() {
+    assert.equal(babel.resolvePlugin("nonexistent-plugin"), null);
+  });
+
+  it("exposes the resolvePreset method", function() {
+    assert.equal(babel.resolvePreset("nonexistent-preset"), null);
   });
 
   it("transformFile", function (done) {
@@ -191,7 +199,7 @@ describe("api", function () {
               new Plugin({
                 visitor: {
                   Function: function(path) {
-                    let alias = path.scope.getProgramParent().path.get("body")[0].node;
+                    const alias = path.scope.getProgramParent().path.get("body")[0].node;
                     if (!babel.types.isTypeAlias(alias)) return;
 
                     // In case of `passPerPreset` being `false`, the
@@ -255,30 +263,9 @@ describe("api", function () {
 
   });
 
-  it("handles preset shortcuts (adds babel-preset-)", function () {
-    return assert.throws(
-      function () {
-        babel.transform("", {
-          presets: ["@babel/es2015"]
-        });
-      },
-      /Couldn\'t find preset \"\@babel\/babel\-preset\-es2015\" relative to directory/
-    );
-  });
-
-  it("handles preset shortcuts 2 (adds babel-preset-)", function () {
-    return assert.throws(
-      function () {
-        babel.transform("", {
-          presets: ["@babel/react/optimizations"]
-        });
-      },
-      /Couldn\'t find preset \"\@babel\/babel\-preset\-react\/optimizations\" relative to directory/
-    );
-  });
-
   it("source map merging", function () {
-    let result = babel.transform([
+    const result = babel.transform([
+      /* eslint-disable max-len */
       "function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }",
       "",
       "let Foo = function Foo() {",
@@ -286,6 +273,7 @@ describe("api", function () {
       "};",
       "",
       "//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0ZG91dCJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOztJQUFNLEdBQUcsWUFBSCxHQUFHO3dCQUFILEdBQUciLCJmaWxlIjoidW5kZWZpbmVkIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgRm9vIHt9XG4iXX0="
+      /* eslint-enable max-len */
     ].join("\n"), {
       sourceMap: true
     });
@@ -302,7 +290,7 @@ describe("api", function () {
       "};"
     ].join("\n"), result.code);
 
-    let consumer = new sourceMap.SourceMapConsumer(result.map);
+    const consumer = new sourceMap.SourceMapConsumer(result.map);
 
     assert.deepEqual(consumer.originalPositionFor({
       line: 7,
@@ -332,7 +320,7 @@ describe("api", function () {
       auxiliaryCommentBefore: "before",
       auxiliaryCommentAfter: "after",
       plugins: [function (babel) {
-        let t = babel.types;
+        const t = babel.types;
         return {
           visitor: {
             Program: function (path) {
@@ -343,12 +331,14 @@ describe("api", function () {
         };
       }]
     }).then(function (result) {
-      assert.equal(result.code, "/*before*/start;\n/*after*/class Foo {}\n/*before*/end;\n/*after*/");
+      assert.equal(result.code,
+        "/*before*/start;\n/*after*/class Foo {}\n/*before*/end;\n/*after*/");
     });
   });
 
   it("modules metadata", function () {
     return Promise.all([
+      // eslint-disable-next-line max-len
       transformAsync("import { externalName as localName } from \"external\";").then(function (result) {
         assert.deepEqual(result.metadata.modules.imports[0], {
           source: "external",
@@ -553,8 +543,8 @@ describe("api", function () {
   });
 
   describe("env option", function () {
-    let oldBabelEnv = process.env.BABEL_ENV;
-    let oldNodeEnv = process.env.NODE_ENV;
+    const oldBabelEnv = process.env.BABEL_ENV;
+    const oldNodeEnv = process.env.NODE_ENV;
 
     setup(function () {
       // Tests need to run with the default and specific values for these. They
@@ -570,7 +560,7 @@ describe("api", function () {
 
     it("BABEL_ENV", function () {
       process.env.BABEL_ENV = "foo";
-      let result = babel.transform("foo;", {
+      const result = babel.transform("foo;", {
         env: {
           foo: { code: false }
         }
@@ -580,7 +570,7 @@ describe("api", function () {
 
     it("NODE_ENV", function () {
       process.env.NODE_ENV = "foo";
-      let result = babel.transform("foo;", {
+      const result = babel.transform("foo;", {
         env: {
           foo: { code: false }
         }
@@ -590,8 +580,10 @@ describe("api", function () {
   });
 
   it("resolveModuleSource option", function () {
-    let actual = "import foo from \"foo-import-default\";\nimport \"foo-import-bare\";\nexport { foo } from \"foo-export-named\";";
-    let expected = "import foo from \"resolved/foo-import-default\";\nimport \"resolved/foo-import-bare\";\nexport { foo } from \"resolved/foo-export-named\";";
+    /* eslint-disable max-len */
+    const actual = "import foo from \"foo-import-default\";\nimport \"foo-import-bare\";\nexport { foo } from \"foo-export-named\";";
+    const expected = "import foo from \"resolved/foo-import-default\";\nimport \"resolved/foo-import-bare\";\nexport { foo } from \"resolved/foo-export-named\";";
+    /* eslint-enable max-len */
 
     return transformAsync(actual, {
       resolveModuleSource: function (originalSource) {
@@ -604,25 +596,25 @@ describe("api", function () {
 
   describe("buildExternalHelpers", function () {
     it("all", function () {
-      let script = buildExternalHelpers();
+      const script = buildExternalHelpers();
       assert.ok(script.indexOf("classCallCheck") >= -1);
       assert.ok(script.indexOf("inherits") >= 0);
     });
 
     it("whitelist", function () {
-      let script = buildExternalHelpers(["inherits"]);
+      const script = buildExternalHelpers(["inherits"]);
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") >= 0);
     });
 
     it("empty whitelist", function () {
-      let script = buildExternalHelpers([]);
+      const script = buildExternalHelpers([]);
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") === -1);
     });
 
     it("underscored", function () {
-      let script = buildExternalHelpers(["typeof"]);
+      const script = buildExternalHelpers(["typeof"]);
       assert.ok(script.indexOf("typeof") >= 0);
     });
   });

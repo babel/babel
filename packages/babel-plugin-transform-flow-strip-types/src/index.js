@@ -6,7 +6,7 @@ export default function ({ types: t }) {
 
     visitor: {
       Program(path, { file: { ast: { comments } } }) {
-        for (let comment of (comments: Array<Object>)) {
+        for (const comment of (comments: Array<Object>)) {
           if (comment.value.indexOf(FLOW_DIRECTIVE) >= 0) {
             // remove flow directive
             comment.value = comment.value.replace(FLOW_DIRECTIVE, "");
@@ -40,9 +40,13 @@ export default function ({ types: t }) {
         });
       },
 
+      AssignmentPattern({ node }) {
+        node.left.optional = false;
+      },
+
       Function({ node }) {
         for (let i = 0; i < node.params.length; i++) {
-          let param = node.params[i];
+          const param = node.params[i];
           param.optional = false;
         }
       },

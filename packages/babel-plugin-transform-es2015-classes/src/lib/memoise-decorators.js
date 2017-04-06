@@ -2,14 +2,14 @@ import type { Scope } from "babel-traverse";
 import * as t from "babel-types";
 
 export default function (decorators: Array<Object>, scope: Scope): Array<Object> {
-  for (let decorator of decorators) {
-    let expression = decorator.expression;
+  for (const decorator of decorators) {
+    const expression = decorator.expression;
     if (!t.isMemberExpression(expression)) continue;
 
-    let temp = scope.maybeGenerateMemoised(expression.object);
+    const temp = scope.maybeGenerateMemoised(expression.object);
     let ref;
 
-    let nodes = [];
+    const nodes = [];
 
     if (temp) {
       ref = temp;

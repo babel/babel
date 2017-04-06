@@ -1,8 +1,8 @@
-/* eslint max-len: 0 */
+/* eslint max-len: "off" */
 
 import template from "babel-template";
 
-let helpers = {};
+const helpers = {};
 export default helpers;
 
 helpers.typeof = template(`

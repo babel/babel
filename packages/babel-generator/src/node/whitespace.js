@@ -1,5 +1,3 @@
-import isBoolean from "lodash/isBoolean";
-import each from "lodash/each";
 import map from "lodash/map";
 import * as t from "babel-types";
 
@@ -69,7 +67,7 @@ exports.nodes = {
    */
 
   AssignmentExpression(node: Object): ?WhitespaceObject {
-    let state = crawl(node.right);
+    const state = crawl(node.right);
     if ((state.hasCall && state.hasHelper) || state.hasFunction) {
       return {
         before: state.hasFunction,
@@ -131,11 +129,11 @@ exports.nodes = {
 
   VariableDeclaration(node: Object): ?WhitespaceObject {
     for (let i = 0; i < node.declarations.length; i++) {
-      let declar = node.declarations[i];
+      const declar = node.declarations[i];
 
       let enabled = isHelper(declar.id) && !isType(declar.init);
       if (!enabled) {
-        let state = crawl(declar.init);
+        const state = crawl(declar.init);
         enabled = (isHelper(declar.init) && state.hasCall) || state.hasFunction;
       }
 
@@ -212,19 +210,18 @@ exports.list = {
  * Add whitespace tests for nodes and their aliases.
  */
 
-each({
-  Function: true,
-  Class: true,
-  Loop: true,
-  LabeledStatement: true,
-  SwitchStatement: true,
-  TryStatement: true
-}, function (amounts, type) {
-  if (isBoolean(amounts)) {
+[
+  ["Function", true],
+  ["Class", true],
+  ["Loop", true],
+  ["LabeledStatement", true],
+  ["SwitchStatement", true],
+  ["TryStatement", true]
+].forEach(function ([type, amounts]) {
+  if (typeof amounts === "boolean") {
     amounts = { after: amounts, before: amounts };
   }
-
-  each([type].concat(t.FLIPPED_ALIAS_KEYS[type] || []), function (type) {
+  [type].concat(t.FLIPPED_ALIAS_KEYS[type] || []).forEach(function (type) {
     exports.nodes[type] = function () {
       return amounts;
     };

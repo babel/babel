@@ -1,2 +1,4 @@
-/node_modules
-/test
+node_modules
+*.log
+src
+test

@@ -1,20 +1,18 @@
-/* eslint max-len: 0 */
-
 import { basename, extname } from "path";
 import template from "babel-template";
 
-let buildPrerequisiteAssignment = template(`
+const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
 `);
 
-let buildGlobalExport = template(`
+const buildGlobalExport = template(`
   var mod = { exports: {} };
   factory(BROWSER_ARGUMENTS);
   PREREQUISITE_ASSIGNMENTS
   GLOBAL_TO_ASSIGN = mod.exports;
 `);
 
-let buildWrapper = template(`
+const buildWrapper = template(`
   (function (global, factory) {
     if (typeof define === "function" && define.amd) {
       define(MODULE_NAME, AMD_ARGUMENTS, factory);
@@ -30,11 +28,11 @@ export default function ({ types: t }) {
   function isValidDefine(path) {
     if (!path.isExpressionStatement()) return;
 
-    let expr = path.get("expression");
+    const expr = path.get("expression");
     if (!expr.isCallExpression()) return false;
     if (!expr.get("callee").isIdentifier({ name: "define" })) return false;
 
-    let args = expr.get("arguments");
+    const args = expr.get("arguments");
     if (args.length === 3 && !args.shift().isStringLiteral()) return false;
     if (args.length !== 2) return false;
     if (!args.shift().isArrayExpression()) return false;
@@ -49,18 +47,18 @@ export default function ({ types: t }) {
     visitor: {
       Program: {
         exit(path, state) {
-          let last = path.get("body").pop();
+          const last = path.get("body").pop();
           if (!isValidDefine(last)) return;
 
-          let call = last.node.expression;
-          let args = call.arguments;
+          const call = last.node.expression;
+          const args = call.arguments;
 
-          let moduleName = args.length === 3 ? args.shift() : null;
-          let amdArgs = call.arguments[0];
-          let func = call.arguments[1];
-          let browserGlobals = state.opts.globals || {};
+          const moduleName = args.length === 3 ? args.shift() : null;
+          const amdArgs = call.arguments[0];
+          const func = call.arguments[1];
+          const browserGlobals = state.opts.globals || {};
 
-          let commonArgs = amdArgs.elements.map((arg) => {
+          const commonArgs = amdArgs.elements.map((arg) => {
             if (arg.value === "module" || arg.value === "exports") {
               return t.identifier(arg.value);
             } else {
@@ -68,7 +66,7 @@ export default function ({ types: t }) {
             }
           });
 
-          let browserArgs = amdArgs.elements.map((arg) => {
+          const browserArgs = amdArgs.elements.map((arg) => {
             if (arg.value === "module") {
               return t.identifier("mod");
             } else if (arg.value === "exports") {
@@ -77,7 +75,7 @@ export default function ({ types: t }) {
               let memberExpression;
 
               if (state.opts.exactGlobals) {
-                let globalRef = browserGlobals[arg.value];
+                const globalRef = browserGlobals[arg.value];
                 if (globalRef) {
                   memberExpression = globalRef.split(".").reduce(
                     (accum, curr) => t.memberExpression(accum, t.identifier(curr)), t.identifier("global")
@@ -88,8 +86,8 @@ export default function ({ types: t }) {
                   );
                 }
               } else {
-                let requireName = basename(arg.value, extname(arg.value));
-                let globalName = browserGlobals[requireName] || requireName;
+                const requireName = basename(arg.value, extname(arg.value));
+                const globalName = browserGlobals[requireName] || requireName;
                 memberExpression = t.memberExpression(
                   t.identifier("global"), t.identifier(t.toIdentifier(globalName))
                 );
@@ -99,19 +97,19 @@ export default function ({ types: t }) {
             }
           });
 
-          let moduleNameOrBasename = moduleName ? moduleName.value : this.file.opts.basename;
+          const moduleNameOrBasename = moduleName ? moduleName.value : this.file.opts.basename;
           let globalToAssign = t.memberExpression(
             t.identifier("global"), t.identifier(t.toIdentifier(moduleNameOrBasename))
           );
           let prerequisiteAssignments = null;
 
           if (state.opts.exactGlobals) {
-            let globalName = browserGlobals[moduleNameOrBasename];
+            const globalName = browserGlobals[moduleNameOrBasename];
 
             if (globalName) {
               prerequisiteAssignments = [];
 
-              let members = globalName.split(".");
+              const members = globalName.split(".");
               globalToAssign = members.slice(1).reduce((accum, curr) => {
                 prerequisiteAssignments.push(buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum }));
                 return t.memberExpression(accum, t.identifier(curr));
@@ -119,7 +117,7 @@ export default function ({ types: t }) {
             }
           }
 
-          let globalExport = buildGlobalExport({
+          const globalExport = buildGlobalExport({
             BROWSER_ARGUMENTS: browserArgs,
             PREREQUISITE_ASSIGNMENTS: prerequisiteAssignments,
             GLOBAL_TO_ASSIGN: globalToAssign

@@ -1,7 +1,5 @@
-/* eslint max-len: 0 */
-
 export default function ({ types: t }) {
-  let IGNORE = Symbol();
+  const IGNORE = Symbol();
 
   return {
     visitor: {
@@ -14,23 +12,30 @@ export default function ({ types: t }) {
       },
 
       UnaryExpression(path) {
-        let { node, parent } = path;
+        const { node, parent } = path;
         if (node[IGNORE]) return;
         if (path.find((path) => path.node && !!path.node._generated)) return;
 
-        if (path.parentPath.isBinaryExpression() && t.EQUALITY_BINARY_OPERATORS.indexOf(parent.operator) >= 0) {
-          // optimise `typeof foo === "string"` since we can determine that they'll never need to handle symbols
-          let opposite = path.getOpposite();
-          if (opposite.isLiteral() && opposite.node.value !== "symbol" && opposite.node.value !== "object") {
+        if (
+          path.parentPath.isBinaryExpression() &&
+          t.EQUALITY_BINARY_OPERATORS.indexOf(parent.operator) >= 0
+        ) {
+          // optimise `typeof foo === "string"` since we can determine that they'll never
+          // need to handle symbols
+          const opposite = path.getOpposite();
+          if (
+            opposite.isLiteral() && opposite.node.value !== "symbol" &&
+            opposite.node.value !== "object"
+          ) {
             return;
           }
         }
 
         if (node.operator === "typeof") {
-          let call = t.callExpression(this.addHelper("typeof"), [node.argument]);
+          const call = t.callExpression(this.addHelper("typeof"), [node.argument]);
           if (path.get("argument").isIdentifier()) {
-            let undefLiteral = t.stringLiteral("undefined");
-            let unary = t.unaryExpression("typeof", node.argument);
+            const undefLiteral = t.stringLiteral("undefined");
+            const unary = t.unaryExpression("typeof", node.argument);
             unary[IGNORE] = true;
             path.replaceWith(t.conditionalExpression(
               t.binaryExpression("===", unary, undefLiteral),

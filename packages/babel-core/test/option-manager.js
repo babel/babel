@@ -17,7 +17,7 @@ describe("option-manager", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          let opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager(new Logger(null, "unknown"));
           opt.init({
             "randomOption": true
           });
@@ -29,12 +29,13 @@ describe("option-manager", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          let opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager(new Logger(null, "unknown"));
           opt.init({
             "auxiliaryComment": true,
             "blacklist": true
           });
         },
+        // eslint-disable-next-line max-len
         /Using removed Babel 5 option: base.auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/
       );
     });
@@ -42,7 +43,7 @@ describe("option-manager", () => {
     it("throws for resolved but erroring preset", () => {
       return assert.throws(
         () => {
-          let opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager(new Logger(null, "unknown"));
           opt.init({
             "presets": [path.join(__dirname, "fixtures/option-manager/not-a-preset")]
           });
@@ -54,11 +55,12 @@ describe("option-manager", () => {
     it("throws for invalid preset configuration", function() {
       return assert.throws(
         function () {
-          let opt = new OptionManager(new Logger(null, "unknown"));
+          const opt = new OptionManager(new Logger(null, "unknown"));
           opt.init({
             "presets": [{ option: "value" }]
           });
         },
+        // eslint-disable-next-line max-len
         /Unknown option: foreign.option\.(?:.|\n)+A common cause of this error is the presence of a configuration options object without the corresponding preset name/
       );
     });
@@ -67,8 +69,8 @@ describe("option-manager", () => {
   describe("presets", function () {
     function presetTest(name) {
       it(name, function () {
-        let opt = new OptionManager(new Logger(null, "unknown"));
-        let options = opt.init({
+        const opt = new OptionManager(new Logger(null, "unknown"));
+        const options = opt.init({
           "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)]
         });
 

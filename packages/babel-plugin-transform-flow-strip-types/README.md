@@ -1,6 +1,20 @@
 # babel-plugin-transform-flow-strip-types
 
-Strip flow type annotations from your output code.
+> Strip all [flow](http://flowtype.org) type annotations and declarations from your output code.
+
+## Example
+
+**In**
+
+```javascript
+function foo(one: any, two: number, three?): string {}
+```
+
+**Out**
+
+```javascript
+function foo(one, two, three) {}
+```
 
 ## Installation
 

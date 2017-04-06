@@ -1,7 +1,7 @@
 export default function ({ types: t }) {
   function hasRefOrSpread(attrs) {
     for (let i = 0; i < attrs.length; i++) {
-      let attr = attrs[i];
+      const attr = attrs[i];
       if (t.isJSXSpreadAttribute(attr)) return true;
       if (isJSXAttributeOfName(attr, "ref")) return true;
     }
@@ -22,14 +22,14 @@ export default function ({ types: t }) {
   return {
     visitor: {
       JSXElement(path, file) {
-        let { node } = path;
+        const { node } = path;
 
         // filter
-        let open = node.openingElement;
+        const open = node.openingElement;
         if (hasRefOrSpread(open.attributes)) return;
 
         // init
-        let props       = t.objectExpression([]);
+        const props       = t.objectExpression([]);
         let key         = null;
         let type        = open.name;
 
@@ -42,26 +42,26 @@ export default function ({ types: t }) {
         }
 
         // props
-        for (let attr of (open.attributes: Array<Object>)) {
+        for (const attr of (open.attributes: Array<Object>)) {
           if (isJSXAttributeOfName(attr, "key")) {
             key = getAttributeValue(attr);
           } else {
-            let name = attr.name.name;
-            let propertyKey = t.isValidIdentifier(name) ? t.identifier(name) : t.stringLiteral(name);
+            const name = attr.name.name;
+            const propertyKey = t.isValidIdentifier(name) ? t.identifier(name) : t.stringLiteral(name);
             pushProp(props.properties, propertyKey, getAttributeValue(attr));
           }
         }
 
-        let args = [type, props];
+        const args = [type, props];
         if (key || node.children.length) {
-          let children = t.react.buildChildren(node);
+          const children = t.react.buildChildren(node);
           args.push(
             key || t.unaryExpression("void", t.numericLiteral(0), true),
             ...children
           );
         }
 
-        let el = t.callExpression(file.addHelper("jsx"), args);
+        const el = t.callExpression(file.addHelper("jsx"), args);
         path.replaceWith(el);
       }
     }

@@ -1,6 +1,6 @@
 # babel-plugin-transform-es2015-destructuring
 
-Compile ES2015 destructuring to ES5
+> Compile ES2015 destructuring to ES5
 
 ## Installation
 

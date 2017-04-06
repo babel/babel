@@ -97,6 +97,10 @@ import type { foo as bar } from "baz";
 import type from "foo";
 import type, { foo } from "bar";
 import type * as namespace from "bar";
+import { type Foo } from "bar";
+import { typeof Foo } from "bar";
+import { type Foo as Bar } from "bar";
+import { typeof Foo as Bar } from "bar";
 export type { foo };
 export type { bar } from "bar";
 export interface baz { p: number };
@@ -115,3 +119,5 @@ var a: {| [a: number]: string; [b: number]: string; |};
 var a: {| add(x: number, ...y: Array<string>): void |};
 var a: {| subtract: (x: number, ...y: Array<string>) => void |};
 var a: {| id<T>(x: T): T; |};
+function foo(numVal: number = 2) {}
+function foo(numVal?: number = 2) {}

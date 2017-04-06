@@ -10,4 +10,6 @@
     factory();
     global.myCustomModuleName = mod.exports;
   }
-})(this, function () {});
+})(this, function () {
+  "use strict";
+});

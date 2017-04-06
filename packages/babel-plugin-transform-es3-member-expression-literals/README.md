@@ -1,6 +1,20 @@
 # babel-plugin-transform-es3-member-expression-literals
 
-Ensure that reserved words are quoted in property accesses
+> Ensure that reserved words are quoted in property accesses
+
+## Example
+
+**In**
+
+```javascript
+foo.catch;
+```
+
+**Out**
+
+```javascript
+foo["catch"];
+```
 
 ## Installation
 

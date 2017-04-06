@@ -867,6 +867,18 @@ Aliases: `Statement`, `Conditional`
 
 ---
 
+### import
+```javascript
+t.import()
+```
+
+See also `t.isImport(node, opts)` and `t.assertImport(node, opts)`.
+
+Aliases: `Expression`
+
+
+---
+
 ### importDeclaration
 ```javascript
 t.importDeclaration(specifiers, source)
@@ -918,6 +930,7 @@ Aliases: `ModuleSpecifier`
 
  - `local`: `Identifier` (required)
  - `imported`: `Identifier` (required)
+ - `importKind`: `null | 'type' | 'typeof'` (default: `null`)
 
 ---
 
@@ -1002,7 +1015,7 @@ Aliases: `JSX`, `Immutable`, `Expression`
 
  - `openingElement`: `JSXOpeningElement` (required)
  - `closingElement`: `JSXClosingElement` (default: `null`)
- - `children`: `Array<JSXText | JSXExpressionContainer | JSXElement>` (required)
+ - `children`: `Array<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement>` (required)
  - `selfClosing` (required)
 
 ---
@@ -1098,6 +1111,19 @@ See also `t.isJSXSpreadAttribute(node, opts)` and `t.assertJSXSpreadAttribute(no
 Aliases: `JSX`
 
  - `argument`: `Expression` (required)
+
+---
+
+### jSXSpreadChild
+```javascript
+t.jSXSpreadChild(expression)
+```
+
+See also `t.isJSXSpreadChild(node, opts)` and `t.assertJSXSpreadChild(node, opts)`.
+
+Aliases: `JSX`, `Immutable`
+
+ - `expression`: `Expression` (required)
 
 ---
 

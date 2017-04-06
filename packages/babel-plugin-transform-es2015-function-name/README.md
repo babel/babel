@@ -1,6 +1,6 @@
 # babel-plugin-transform-es2015-function-name
 
-Apply ES2015 function.name semantics to all functions
+> Apply ES2015 function.name semantics to all functions
 
 ## Installation
 

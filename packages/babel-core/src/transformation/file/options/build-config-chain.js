@@ -6,15 +6,15 @@ import isAbsolute from "path-is-absolute";
 import path from "path";
 import fs from "fs";
 
-let existsCache = {};
-let jsonCache   = {};
+const existsCache = {};
+const jsonCache   = {};
 
 const BABELIGNORE_FILENAME = ".babelignore";
 const BABELRC_FILENAME     = ".babelrc";
 const PACKAGE_FILENAME     = "package.json";
 
 function exists(filename) {
-  let cached = existsCache[filename];
+  const cached = existsCache[filename];
   if (cached == null) {
     return existsCache[filename] = fs.existsSync(filename);
   } else {
@@ -23,8 +23,8 @@ function exists(filename) {
 }
 
 export default function buildConfigChain(opts: Object = {}, log?: Logger) {
-  let filename = opts.filename;
-  let builder = new ConfigChainBuilder(log);
+  const filename = opts.filename;
+  const builder = new ConfigChainBuilder(log);
 
   // resolve all .babelrc files
   if (opts.babelrc !== false) {
@@ -59,20 +59,20 @@ class ConfigChainBuilder {
 
     while (loc !== (loc = path.dirname(loc))) {
       if (!foundConfig) {
-        let configLoc = path.join(loc, BABELRC_FILENAME);
+        const configLoc = path.join(loc, BABELRC_FILENAME);
         if (exists(configLoc)) {
           this.addConfig(configLoc);
           foundConfig = true;
         }
 
-        let pkgLoc = path.join(loc, PACKAGE_FILENAME);
+        const pkgLoc = path.join(loc, PACKAGE_FILENAME);
         if (!foundConfig && exists(pkgLoc)) {
           foundConfig = this.addConfig(pkgLoc, "babel", JSON);
         }
       }
 
       if (!foundIgnore) {
-        let ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
+        const ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
         if (exists(ignoreLoc)) {
           this.addIgnoreConfig(ignoreLoc);
           foundIgnore = true;
@@ -84,7 +84,7 @@ class ConfigChainBuilder {
   }
 
   addIgnoreConfig(loc) {
-    let file  = fs.readFileSync(loc, "utf8");
+    const file  = fs.readFileSync(loc, "utf8");
     let lines = file.split("\n");
 
     lines = lines
@@ -107,7 +107,7 @@ class ConfigChainBuilder {
 
     this.resolvedConfigs.push(loc);
 
-    let content = fs.readFileSync(loc, "utf8");
+    const content = fs.readFileSync(loc, "utf8");
     let options;
 
     try {
@@ -144,7 +144,7 @@ class ConfigChainBuilder {
 
     // add extends clause
     if (options.extends) {
-      let extendsLoc = resolve(options.extends, dirname);
+      const extendsLoc = resolve(options.extends, dirname);
       if (extendsLoc) {
         this.addConfig(extendsLoc);
       } else {
@@ -162,7 +162,7 @@ class ConfigChainBuilder {
 
     // env
     let envOpts;
-    let envKey = process.env.BABEL_ENV || process.env.NODE_ENV;
+    const envKey = process.env.BABEL_ENV || process.env.NODE_ENV;
     if (options.env) {
       envOpts = options.env[envKey];
       delete options.env;
