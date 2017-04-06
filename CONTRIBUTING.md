@@ -92,13 +92,13 @@ make bootstrap
 yarn link babylon
 cd packages/babel-core/
 yarn link babylon
-cd ../../packages/babel-template/
+cd ../babel-template/
 yarn link babylon
-cd ../../packages/babel-traverse/
+cd ../babel-traverse/
 yarn link babylon
-cd ../../packages/babel-generator/
+cd ../babel-generator/
 yarn link babylon
-cd ../../packages/babel-types/
+cd ../babel-types/
 yarn link babylon
 cd ../..
 make build
