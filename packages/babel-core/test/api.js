@@ -146,7 +146,7 @@ describe("api", function () {
           plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false],
         });
       },
-      /TypeError: \[BABEL\] unknown: Falsy value found in plugins/
+      /Error: \[BABEL\] unknown: Unexpected falsy value: false/
     );
   });
 

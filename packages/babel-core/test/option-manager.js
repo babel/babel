@@ -45,7 +45,7 @@ describe("option-manager", () => {
             "presets": [path.join(__dirname, "fixtures/option-manager/not-a-preset")],
           });
         },
-        /While processing preset: .*option-manager(?:\/|\\\\)not-a-preset\.js/
+        /While processing: .*option-manager(?:\/|\\\\)not-a-preset\.js/
       );
     });
   });
@@ -77,8 +77,8 @@ describe("option-manager", () => {
     presetTest("es2015_default_function");
     presetTest("es2015_default_object");
 
-    presetThrowsTest("es2015_named", /Preset must export a default export when using ES6 modules/);
-    presetThrowsTest("es2015_invalid", /Unsupported preset format: string/);
-    presetThrowsTest("es5_invalid", /Unsupported preset format: string/);
+    presetThrowsTest("es2015_named", /Must export a default export when using ES6 modules/);
+    presetThrowsTest("es2015_invalid", /Unsupported format: string/);
+    presetThrowsTest("es5_invalid", /Unsupported format: string/);
   });
 });

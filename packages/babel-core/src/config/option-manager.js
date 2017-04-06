@@ -11,19 +11,6 @@ import clone from "lodash/clone";
 
 import { loadPlugin, loadPreset, loadParser, loadGenerator } from "./loading/files";
 
-type PluginObject = {
-  pre?: Function;
-  post?: Function;
-  manipulateOptions?: Function;
-
-  visitor: ?{
-    [key: string]: Function | {
-      enter?: Function | Array<Function>;
-      exit?: Function | Array<Function>;
-    }
-  };
-};
-
 type MergeOptions = {
   type: "arguments"|"options"|"preset",
   options?: Object,
@@ -106,81 +93,12 @@ class OptionManager {
    */
 
   mergeOptions(config: MergeOptions, pass?: Array<Plugin>) {
-    const alias = config.alias || "foreign";
-    const type = config.type;
+    const result = loadConfig(config);
 
-    //
-    if (typeof config.options !== "object" || Array.isArray(config.options)) {
-      throw new TypeError(`Invalid options type for ${alias}`);
-    }
-
-    //
-    const opts = Object.assign({}, config.options);
-
-    if (type !== "arguments") {
-      if (opts.filename !== undefined) {
-        throw new Error(`${alias}.filename is only allowed as a root argument`);
-      }
-
-      if (opts.babelrc !== undefined) {
-        throw new Error(`${alias}.babelrc is only allowed as a root argument`);
-      }
-    }
-
-    if (type === "preset") {
-      if (opts.only !== undefined) throw new Error(`${alias}.only is not supported in a preset`);
-      if (opts.ignore !== undefined) throw new Error(`${alias}.ignore is not supported in a preset`);
-      if (opts.extends !== undefined) throw new Error(`${alias}.extends is not supported in a preset`);
-      if (opts.env !== undefined) throw new Error(`${alias}.env is not supported in a preset`);
-    }
-
-    if (opts.sourceMap !== undefined) {
-      if (opts.sourceMaps !== undefined) {
-        throw new Error(`Both ${alias}.sourceMap and .sourceMaps have been set`);
-      }
-
-      opts.sourceMaps = opts.sourceMap;
-      delete opts.sourceMap;
-    }
-
-    for (const key in opts) {
-      // check for an unknown option
-      if (!optionNames.has(key)) {
-        if (removed[key]) {
-          throw new ReferenceError(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`);
-        } else {
-          // eslint-disable-next-line max-len
-          const unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
-
-          throw new ReferenceError(unknownOptErr);
-        }
-      }
-    }
-
-    if (opts.parserOpts && typeof opts.parserOpts.parser === "string") {
-      opts.parserOpts = Object.assign({}, opts.parserOpts);
-      opts.parserOpts.parser = loadParser(opts.parserOpts.parser, config.dirname).value;
-    }
-
-    if (opts.generatorOpts && typeof opts.generatorOpts.generator === "string") {
-      opts.generatorOpts = Object.assign({}, opts.generatorOpts);
-      opts.generatorOpts.generator = loadGenerator(opts.generatorOpts.generator, config.dirname).value;
-    }
-
-    if (config.options.presets && !Array.isArray(config.options.presets)) {
-      throw new Error(`${alias}.presets should be an array`);
-    }
-    if (config.options.plugins && !Array.isArray(config.options.plugins)) {
-      throw new Error(`${alias}.plugins should be an array`);
-    }
-
-    delete opts.passPerPreset;
-    delete opts.plugins;
-    delete opts.presets;
+    const plugins = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
+    const presets = result.presets.map((descriptor) => loadPresetDescriptor(descriptor));
 
     const passPerPreset = config.options.passPerPreset;
-    const plugins = normalizePlugins(config);
-    const presets = normalizePresets(config);
     pass = pass || this.passes[0];
 
     // resolve presets
@@ -193,33 +111,17 @@ class OptionManager {
         this.passes.splice(1, 0, ...presetPasses);
       }
 
-      presets.forEach(({ filepath, preset, options }, i) => {
-        let resolvedPreset;
-        try {
-          resolvedPreset = loadPresetObject(preset, options, { dirname: config.dirname });
-        } catch (e) {
-          if (filepath) e.message += ` (While processing preset: ${JSON.stringify(filepath)})`;
-          throw e;
-        }
-
-        this.mergeOptions({
-          type: "preset",
-          options: resolvedPreset,
-          alias: filepath,
-          loc: filepath,
-          dirname: config.dirname,
-        }, presetPasses ? presetPasses[i] : pass);
+      presets.forEach((presetConfig, i) => {
+        this.mergeOptions(presetConfig, presetPasses ? presetPasses[i] : pass);
       });
     }
 
     // resolve plugins
     if (plugins.length > 0) {
-      pass.unshift(...plugins.map(function ({ filepath, plugin, options }, i) {
-        return [ normalisePlugin(plugin, config.loc, i, filepath || `${config.loc}$${i}`), options ];
-      }));
+      pass.unshift(...plugins);
     }
 
-    merge(this.options, opts);
+    merge(this.options, result.options);
   }
 
   init(opts: Object = {}): Object {
@@ -283,154 +185,250 @@ class OptionManager {
   }
 }
 
-function normalizePlugins(config) {
-  if (!config.options.plugins) return [];
+/**
+ * Load and validate the given config into a set of options, plugins, and presets.
+ */
+function loadConfig(config) {
+  const options = normalizeOptions(config);
 
-  return config.options.plugins.map((plugin) => {
-
-    let options;
-    if (Array.isArray(plugin)) {
-      if (plugin.length > 2) {
-        throw new Error(`Unexpected extra options ${JSON.stringify(plugin.slice(2))} passed to plugin.`);
-      }
-
-      [plugin, options] = plugin;
-    }
-
-    if (!plugin) {
-      throw new TypeError("Falsy value found in plugins");
-    }
-
-    let filepath = null;
-    if (typeof plugin === "string") {
-      ({
-        filepath,
-        value: plugin,
-      } = loadPlugin(plugin, config.dirname));
-    }
+  const plugins = (config.options.plugins || []).map((plugin, index) => {
+    const { filepath, value, options } = normalizePair(plugin, loadPlugin, config.dirname);
 
     return {
-      filepath,
-      plugin,
+      alias: filepath || `${config.loc}$${index}`,
+      loc: filepath || config.loc,
+      value,
       options,
+      dirname: config.dirname,
     };
   });
-}
-
-function normalizePresets(config) {
-  if (!config.options.presets) return [];
-
-  return config.options.presets.map((preset) => {
-    let options;
-    if (Array.isArray(preset)) {
-      if (preset.length > 2) {
-        throw new Error(`Unexpected extra options ${JSON.stringify(preset.slice(2))} passed to preset.`);
-      }
-
-      [preset, options] = preset;
-    }
-
-    if (!preset) {
-      throw new TypeError("Falsy value found in presets");
-    }
-
-    let filepath = null;
-    if (typeof preset === "string") {
-      ({
-        filepath,
-        value: preset,
-      } = loadPreset(preset, config.dirname));
-    }
+  const presets = (config.options.presets || []).map((preset, index) => {
+    const { filepath, value, options } = normalizePair(preset, loadPreset, config.dirname);
 
     return {
-      filepath,
-      preset,
+      alias: filepath || `${config.loc}$${index}`,
+      loc: filepath || config.loc,
+      value,
       options,
+      dirname: config.dirname,
     };
   });
+
+  return { options, plugins, presets };
 }
 
 /**
- * Tries to load one preset. The input is either the module name of the preset,
- * a function, or an object
+ * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
-function loadPresetObject(preset, options, meta) {
-  let presetFactory = preset;
+function loadDescriptor(descriptor, skipOptions) {
+  if (typeof descriptor.value !== "function") return { value: descriptor.value, descriptor };
 
-  if (typeof presetFactory === "object" && presetFactory.__esModule) {
-    if (presetFactory.default) {
-      presetFactory = presetFactory.default;
+  const { value, options } = descriptor;
+  let item;
+  try {
+    if (skipOptions) {
+      item = value(context);
     } else {
-      throw new Error("Preset must export a default export when using ES6 modules.");
+      item = value(context, options, { dirname: descriptor.dirname });
     }
+  } catch (e) {
+    if (descriptor.alias) e.message += ` (While processing: ${JSON.stringify(descriptor.alias)})`;
+    throw e;
   }
 
-  // Allow simple object exports
-  if (typeof presetFactory === "object") {
-    return presetFactory;
+  if (!item || typeof item !== "object") {
+    throw new Error("Plugin/Preset did not return an object.");
   }
 
-  if (typeof presetFactory !== "function") {
-    // eslint-disable-next-line max-len
-    throw new Error(`Unsupported preset format: ${typeof presetFactory}. Expected preset to return a function.`);
-  }
-
-  return presetFactory(context, options, meta);
+  return { value: item, descriptor };
 }
 
+/**
+ * Instantiate a plugin for the given descriptor, returning the plugin/options pair.
+ */
+const PLUGIN_CACHE = new WeakMap();
+function loadPluginDescriptor(descriptor) {
+  if (descriptor.value instanceof Plugin) return [ descriptor.value, descriptor.options ];
 
-const memoisedPlugins: Array<{
-  container: Function;
-  plugin: Plugin;
-}> = [];
-
-function memoisePluginContainer(fn, loc, i, alias) {
-  for (const cache of (memoisedPlugins: Array<Object>)) {
-    if (cache.container === fn) return cache.plugin;
+  let result = PLUGIN_CACHE.get(descriptor.value);
+  if (!result) {
+    result = instantiatePlugin(loadDescriptor(descriptor, true /* skipOptions */));
+    PLUGIN_CACHE.set(descriptor.value, result);
   }
 
-  let obj: ?PluginObject;
+  return [ result, descriptor.options];
+}
 
-  if (typeof fn === "function") {
-    obj = fn(context);
-  } else {
-    obj = fn;
-  }
-
-  if (typeof obj !== "object") {
-    throw new TypeError(messages.get("pluginNotObject", loc, i, typeof obj) + loc + i);
-  }
-  Object.keys(obj).forEach((key) => {
+function instantiatePlugin({ value: pluginObject, descriptor }) {
+  Object.keys(pluginObject).forEach((key) => {
     if (!ALLOWED_PLUGIN_KEYS.has(key)) {
-      throw new Error(messages.get("pluginInvalidProperty", loc, i, key));
+      throw new Error(messages.get("pluginInvalidProperty", descriptor.alias, key));
     }
   });
-  if (obj.visitor && (obj.visitor.enter || obj.visitor.exit)) {
+  if (pluginObject.visitor && (pluginObject.visitor.enter || pluginObject.visitor.exit)) {
     throw new Error("Plugins aren't allowed to specify catch-all enter/exit handlers. " +
       "Please target individual nodes.");
   }
 
-  obj = Object.assign({}, obj, {
-    visitor: clone(obj.visitor || {}),
+  const plugin = Object.assign({}, pluginObject, {
+    visitor: clone(pluginObject.visitor || {}),
   });
 
-  traverse.explode(obj.visitor);
+  traverse.explode(plugin.visitor);
 
-  if (obj.inherits) {
-    const inherited = normalisePlugin(obj.inherits, loc, "inherits");
+  let inheritsDescriptor;
+  let inherits;
+  if (plugin.inherits) {
+    inheritsDescriptor = {
+      alias: `${descriptor.loc}$inherits`,
+      loc: descriptor.loc,
+      value: plugin.inherits,
+      options: descriptor.options,
+    };
 
-    obj.pre = chain(inherited.pre, obj.pre);
-    obj.post = chain(inherited.post, obj.post);
-    obj.manipulateOptions = chain(inherited.manipulateOptions, obj.manipulateOptions);
-    obj.visitor = traverse.visitors.merge([inherited.visitor, obj.visitor]);
+    inherits = loadPluginDescriptor(inheritsDescriptor)[0];
+
+    plugin.pre = chain(inherits.pre, plugin.pre);
+    plugin.post = chain(inherits.post, plugin.post);
+    plugin.manipulateOptions = chain(inherits.manipulateOptions, plugin.manipulateOptions);
+    plugin.visitor = traverse.visitors.merge([inherits.visitor, plugin.visitor]);
   }
 
-  const plugin = new Plugin(obj, alias);
-  memoisedPlugins.push({
-    container: fn,
-    plugin: plugin,
-  });
-  return plugin;
+  return new Plugin(plugin, descriptor.alias);
+}
+
+/**
+ * Generate a config object that will act as the root of a new nested config.
+ */
+function loadPresetDescriptor(descriptor) {
+  return {
+    type: "preset",
+    options: loadDescriptor(descriptor).value,
+    alias: descriptor.alias,
+    loc: descriptor.loc,
+    dirname: descriptor.dirname,
+  };
+}
+
+/**
+ * Validate and return the options object for the config.
+ */
+function normalizeOptions(config) {
+  const alias = config.alias || "foreign";
+  const type = config.type;
+
+  //
+  if (typeof config.options !== "object" || Array.isArray(config.options)) {
+    throw new TypeError(`Invalid options type for ${alias}`);
+  }
+
+  //
+  const options = Object.assign({}, config.options);
+
+  if (type !== "arguments") {
+    if (options.filename !== undefined) {
+      throw new Error(`${alias}.filename is only allowed as a root argument`);
+    }
+
+    if (options.babelrc !== undefined) {
+      throw new Error(`${alias}.babelrc is only allowed as a root argument`);
+    }
+  }
+
+  if (type === "preset") {
+    if (options.only !== undefined) throw new Error(`${alias}.only is not supported in a preset`);
+    if (options.ignore !== undefined) throw new Error(`${alias}.ignore is not supported in a preset`);
+    if (options.extends !== undefined) throw new Error(`${alias}.extends is not supported in a preset`);
+    if (options.env !== undefined) throw new Error(`${alias}.env is not supported in a preset`);
+  }
+
+  if (options.sourceMap !== undefined) {
+    if (options.sourceMaps !== undefined) {
+      throw new Error(`Both ${alias}.sourceMap and .sourceMaps have been set`);
+    }
+
+    options.sourceMaps = options.sourceMap;
+    delete options.sourceMap;
+  }
+
+  for (const key in options) {
+    // check for an unknown option
+    if (!optionNames.has(key)) {
+      if (removed[key]) {
+        throw new ReferenceError(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`);
+      } else {
+        // eslint-disable-next-line max-len
+        const unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
+
+        throw new ReferenceError(unknownOptErr);
+      }
+    }
+  }
+
+  if (options.parserOpts && typeof options.parserOpts.parser === "string") {
+    options.parserOpts = Object.assign({}, options.parserOpts);
+    options.parserOpts.parser = loadParser(options.parserOpts.parser, config.dirname).value;
+  }
+
+  if (options.generatorOpts && typeof options.generatorOpts.generator === "string") {
+    options.generatorOpts = Object.assign({}, options.generatorOpts);
+    options.generatorOpts.generator = loadGenerator(options.generatorOpts.generator, config.dirname).value;
+  }
+
+  if (config.options.presets && !Array.isArray(config.options.presets)) {
+    throw new Error(`${alias}.presets should be an array`);
+  }
+  if (config.options.plugins && !Array.isArray(config.options.plugins)) {
+    throw new Error(`${alias}.plugins should be an array`);
+  }
+
+  delete options.passPerPreset;
+  delete options.plugins;
+  delete options.presets;
+
+  return options;
+}
+
+/**
+ * Given a plugin/preset item, resolve it into a standard format.
+ */
+function normalizePair(pair, resolver, dirname) {
+  let options;
+  let value = pair;
+  if (Array.isArray(value)) {
+    if (value.length > 2) {
+      throw new Error(`Unexpected extra options ${JSON.stringify(value.slice(2))}.`);
+    }
+
+    [value, options] = value;
+  }
+
+  let filepath = null;
+  if (typeof value === "string") {
+    ({
+      filepath,
+      value,
+    } = resolver(value, dirname));
+  }
+
+  if (typeof value === "object" && value.__esModule) {
+    if (value.default) {
+      value = value.default;
+    } else {
+      throw new Error("Must export a default export when using ES6 modules.");
+    }
+  }
+
+  if (!value) {
+    throw new Error(`Unexpected falsy value: ${value}`);
+  }
+
+  const type = typeof value;
+  if (type !== "object" && type !== "function") {
+    throw new Error(`Unsupported format: ${type}. Expected an object or a function.`);
+  }
+
+  return { filepath, value, options };
 }
 
 function chain(a, b) {
@@ -456,19 +454,4 @@ function createBareOptions() {
     compact: "auto",
     highlightCode: true,
   };
-}
-
-function normalisePlugin(plugin, loc, i, alias) {
-  plugin = plugin.__esModule ? plugin.default : plugin;
-
-  if (!(plugin instanceof Plugin)) {
-    // allow plugin containers to be specified so they don't have to manually require
-    if (typeof plugin === "function" || typeof plugin === "object") {
-      plugin = memoisePluginContainer(plugin, loc, i, alias);
-    } else {
-      throw new TypeError(messages.get("pluginNotFunction", loc, i, typeof plugin));
-    }
-  }
-
-  return plugin;
 }
