@@ -162,7 +162,7 @@ class ConfigChainBuilder {
 
     // env
     let envOpts;
-    const envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
+    const envKey = process.env.BABEL_ENV || process.env.NODE_ENV;
     if (options.env) {
       envOpts = options.env[envKey];
       delete options.env;
