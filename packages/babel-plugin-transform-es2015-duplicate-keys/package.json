@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es2015-duplicate-keys",
-  "version": "6.22.0",
+  "version": "6.24.1",
   "description": "Compile objects with duplicate keys to valid strict ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-duplicate-keys",
   "license": "MIT",
@@ -10,9 +10,9 @@
   ],
   "dependencies": {
     "babel-runtime": "^6.22.0",
-    "babel-types": "^6.22.0"
+    "babel-types": "^6.24.1"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.22.0"
+    "babel-helper-plugin-test-runner": "^6.24.1"
   }
 }
