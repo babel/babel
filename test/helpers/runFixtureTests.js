@@ -1,7 +1,7 @@
-var test = require("ava");
-var getFixtures = require("babel-helper-fixtures").multiple;
+import test from "ava";
+import { multiple as getFixtures } from "babel-helper-fixtures";
 
-exports.runFixtureTests = function runFixtureTests(fixturesPath, parseFunction) {
+export function runFixtureTests(fixturesPath, parseFunction) {
   var fixtures = getFixtures(fixturesPath);
 
   Object.keys(fixtures).forEach(function (name) {
@@ -9,12 +9,13 @@ exports.runFixtureTests = function runFixtureTests(fixturesPath, parseFunction) 
       testSuite.tests.forEach(function (task) {
         var testFn = task.disabled ? test.skip : task.options.only ? test.only : test;
 
-        testFn(name + "/" + testSuite.title + "/" + task.title, function () {
+        testFn(name + "/" + testSuite.title + "/" + task.title, function (t) {
             try {
-              return runTest(task, parseFunction);
+              runTest(task, parseFunction);
+              t.pass();
             } catch (err) {
-              err.message = name + "/" + task.actual.filename + ": " + err.message;
-              throw err;
+              const message = name + "/" + task.actual.filename + ": " + err.message;
+              t.fail(message);
             }
           });
       });
@@ -22,7 +23,7 @@ exports.runFixtureTests = function runFixtureTests(fixturesPath, parseFunction) 
   });
 };
 
-exports.runThrowTestsWithEstree = function runThrowTestsWithEstree(fixturesPath, parseFunction) {
+export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
   var fixtures = getFixtures(fixturesPath);
 
   Object.keys(fixtures).forEach(function (name) {
@@ -35,12 +36,13 @@ exports.runThrowTestsWithEstree = function runThrowTestsWithEstree(fixturesPath,
 
         var testFn = task.disabled ? test.skip : task.options.only ? test.only : test;
 
-        testFn(name + "/" + testSuite.title + "/" + task.title, function () {
+        testFn(name + "/" + testSuite.title + "/" + task.title, function (t) {
           try {
-            return runTest(task, parseFunction);
+            runTest(task, parseFunction);
+            t.pass();
           } catch (err) {
-            err.message = task.actual.loc + ": " + err.message;
-            throw err;
+            const message = name + "/" + task.actual.filename + ": " + err.message;
+            t.fail(message);
           }
         });
       });
@@ -90,8 +92,8 @@ function runTest(test, parseFunction) {
     throw new Error("Expected error message: " + opts.throws + ". But parsing succeeded.");
   } else {
     var mis = misMatch(JSON.parse(test.expect.code), ast);
+
     if (mis) {
-      //save(test, ast);
       throw new Error(mis);
     }
   }
