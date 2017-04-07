@@ -18,8 +18,6 @@ npm install babel-preset-env --save-dev
 }
 ```
 
-Check out the many options (especially `useBuiltIns` to polyfill less)!
-
 - [How it Works](#how-it-works)
 - [Install](#install)
 - [Usage](#usage)
@@ -176,20 +174,59 @@ This option is useful for "blacklisting" a transform like `transform-regenerator
 
 ### `useBuiltIns`
 
-`boolean`, defaults to `false`.
+`boolean` | `"entry"`, defaults to `true`.
 
-A way to apply `babel-preset-env` for polyfills (via "babel-polyfill").
+A way to apply `babel-preset-env` for polyfills (via `babel-polyfill`).
 
-> NOTE: This does not currently polyfill experimental/stage-x built-ins like the regular "babel-polyfill" does.
-> This will only work with npm >= 3 (which should be used with Babel 6 anyway)
-
-```
+```sh
 npm install babel-polyfill --save
 ```
 
-This option enables a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
+#### `useBuiltIns: true`
+
+Adds specific imports for polyfills when they are used in each file. We take advantage of the fact that a bundler will load the same polyfill only once.
+
+**In**
+
+a.js
+
+```js
+var a = new Promise();
+```
+
+b.js
+
+```js
+var b = new Map();
+```
+
+**Out (if environment doesn't support it)**
+
+```js
+import "babel-polyfill/core-js/modules/es6.promise";
+var a = new Promise();
+```
+
+```js
+import "babel-polyfill/core-js/modules/es6.map";
+var b = new Map();
+```
+
+**Out (if environment supports it)**
+
+```js
+var a = new Promise();
+```
+
+```js
+var b = new Map();
+```
+
+#### `useBuiltIns: 'entry'`
 
 > NOTE: Only use `require("babel-polyfill");` once in your whole app. One option is to create a single entry file that only contains the require statement.
+
+This option enables a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
 
 **In**
 
@@ -200,18 +237,13 @@ import "babel-polyfill";
 **Out (different based on environment)**
 
 ```js
-import "core-js/modules/es7.string.pad-start";
-import "core-js/modules/es7.string.pad-end";
-import "core-js/modules/web.timers";
-import "core-js/modules/web.immediate";
-import "core-js/modules/web.dom.iterable";
+import "babel-polyfill/core-js/modules/es7.string.pad-start";
+import "babel-polyfill/core-js/modules/es7.string.pad-end";
 ```
 
-This will also work for `core-js` directly (`import "core-js";`)
+#### `useBuiltIns: false`
 
-```
-npm install core-js --save
-```
+Don't add polyfills automatically per file, or transform `import "babel-polyfill"` to individual polyfills.
 
 ---
 

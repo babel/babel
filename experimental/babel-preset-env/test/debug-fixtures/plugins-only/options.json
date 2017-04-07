@@ -9,7 +9,8 @@
       "targets": {
         "firefox": 52,
         "node": 7.4
-      }
+      },
+      "useBuiltIns": false
     }]
   ]
 }

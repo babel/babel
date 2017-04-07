@@ -4,8 +4,8 @@ import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
-import transformPolyfillRequirePlugin
-  from "./transform-polyfill-require-plugin";
+import useBuiltInsEntryPlugin from "./use-built-ins-entry-plugin";
+import addUsedBuiltInsPlugin from "./use-built-ins-plugin";
 
 /**
  * Determine if a transformation is required
@@ -242,8 +242,14 @@ export default function buildPreset(context, opts = {}) {
     ]),
   );
 
-  useBuiltIns &&
-    plugins.push([transformPolyfillRequirePlugin, { polyfills, regenerator }]);
+  if (useBuiltIns === true) {
+    plugins.push([
+      addUsedBuiltInsPlugin,
+      { polyfills: new Set(polyfills), regenerator, debug },
+    ]);
+  } else if (useBuiltIns === "entry") {
+    plugins.push([useBuiltInsEntryPlugin, { polyfills, regenerator }]);
+  }
 
   return {
     plugins,

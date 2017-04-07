@@ -2,7 +2,7 @@
   "presets": [
     ["../../../../lib", {
       "modules": false,
-      "useBuiltIns": true,
+      "useBuiltIns": "entry",
       "exclude": ["transform-regenerator"]
     }]
   ]

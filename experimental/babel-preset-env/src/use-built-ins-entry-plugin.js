@@ -1,5 +1,5 @@
 function isPolyfillSource(value) {
-  return value === "babel-polyfill" || value === "core-js";
+  return value === "babel-polyfill";
 }
 
 export default function({ types: t }) {
@@ -27,7 +27,7 @@ export default function({ types: t }) {
 
   function createImport(polyfill, requireType, core) {
     if (core) {
-      polyfill = `core-js/modules/${polyfill}`;
+      polyfill = `babel-polyfill/core-js/modules/${polyfill}`;
     }
 
     if (requireType === "import") {
@@ -44,7 +44,8 @@ export default function({ types: t }) {
 
     return [
       ...imports,
-      regenerator && createImport("regenerator-runtime/runtime", requireType),
+      regenerator &&
+        createImport("babel-polyfill/regenerator-runtime/runtime", requireType),
     ].filter(Boolean);
   }
 
@@ -54,12 +55,6 @@ export default function({ types: t }) {
         path.node.specifiers.length === 0 &&
         isPolyfillSource(path.node.source.value)
       ) {
-        this.numPolyfillImports++;
-        if (this.numPolyfillImports > 1) {
-          path.remove();
-          return;
-        }
-
         path.replaceWithMultiple(
           createImports(state.opts.polyfills, "import", state.opts.regenerator),
         );
@@ -77,12 +72,6 @@ to the "transform-polyfill-require" plugin
       }
       path.get("body").forEach(bodyPath => {
         if (isRequire(bodyPath)) {
-          this.numPolyfillImports++;
-          if (this.numPolyfillImports > 1) {
-            path.remove();
-            return;
-          }
-
           bodyPath.replaceWithMultiple(
             createImports(
               state.opts.polyfills,
