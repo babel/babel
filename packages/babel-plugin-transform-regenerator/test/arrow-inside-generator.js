@@ -7,8 +7,8 @@ test("Doesn't throw with arrow function inside generator", function () {
   const transform = function () {
     babel.transform(code, {
       "plugins": [
-        require("../")
-      ]
+        require("../"),
+      ],
     });
   };
 
