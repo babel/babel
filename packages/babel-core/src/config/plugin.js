@@ -7,7 +7,9 @@ export default class Plugin {
   pre: ?Function;
   visitor: ?{};
 
-  constructor(plugin: {}, key?: string) {
+  options: {} | void;
+
+  constructor(plugin: {}, options: ?{}, key?: string) {
     if (plugin.name != null && typeof plugin.name !== "string") {
       throw new Error("Plugin .name must be a string, null, or undefined");
     }
@@ -35,5 +37,6 @@ export default class Plugin {
     this.post = plugin.post;
     this.pre = plugin.pre;
     this.visitor = plugin.visitor;
+    this.options = options || undefined;
   }
 }

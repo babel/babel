@@ -79,7 +79,7 @@ const ALLOWED_PLUGIN_KEYS = new Set([
 
 export default function manageOptions(opts: {}): {
   options: Object,
-  passes: Array<Array<[Plugin, ?{}]>>,
+  passes: Array<Array<Plugin>>,
 } | null {
   return new OptionManager().init(opts);
 }
@@ -91,7 +91,7 @@ class OptionManager {
   }
 
   options: Object;
-  passes: Array<Array<[Plugin, ?{}]>>;
+  passes: Array<Array<Plugin>>;
 
   /**
    * This is called when we want to merge the input `opts` into the
@@ -102,7 +102,7 @@ class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(config: MergeOptions, pass?: Array<[Plugin, ?{}]>) {
+  mergeOptions(config: MergeOptions, pass?: Array<Plugin>) {
     const result = loadConfig(config);
 
     const plugins = result.plugins.map(descriptor =>
@@ -315,12 +315,16 @@ const loadDescriptor = makeWeakCache((descriptor, cache) => {
  */
 function loadPluginDescriptor(descriptor: BasicDescriptor) {
   if (descriptor.value instanceof Plugin) {
-    return [descriptor.value, descriptor.options];
+    if (descriptor.options) {
+      throw new Error(
+        "Passed options to an existing Plugin instance will not work.",
+      );
+    }
+
+    return descriptor.value;
   }
 
-  const result = instantiatePlugin(loadDescriptor(descriptor));
-
-  return [result, descriptor.options];
+  return instantiatePlugin(loadDescriptor(descriptor));
 }
 
 const instantiatePlugin = makeWeakCache(
@@ -360,8 +364,8 @@ const instantiatePlugin = makeWeakCache(
       };
 
       // If the inherited plugin changes, reinstantiate this plugin.
-      inherits = cache.invalidate(
-        () => loadPluginDescriptor(inheritsDescriptor)[0],
+      inherits = cache.invalidate(() =>
+        loadPluginDescriptor(inheritsDescriptor),
       );
 
       plugin.pre = chain(inherits.pre, plugin.pre);
@@ -376,7 +380,7 @@ const instantiatePlugin = makeWeakCache(
       ]);
     }
 
-    return new Plugin(plugin, descriptor.alias);
+    return new Plugin(plugin, descriptor.options, descriptor.alias);
   },
 );
 
