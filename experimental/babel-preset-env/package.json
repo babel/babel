@@ -52,7 +52,8 @@
     "babel-plugin-transform-exponentiation-operator": "7.0.0-alpha.7",
     "babel-plugin-transform-regenerator": "7.0.0-alpha.7",
     "browserslist": "^1.4.0",
-    "invariant": "^2.2.2"
+    "invariant": "^2.2.2",
+    "semver": "^5.3.0"
   },
   "devDependencies": {
     "babel-cli": "7.0.0-alpha.6",

@@ -245,20 +245,22 @@ const generateData = (environments, features) => {
     environments.forEach(env => {
       const version = getLowestImplementedVersion(options, env);
       if (version !== null) {
-        plugin[env] = version;
+        plugin[env] = version.toString();
       }
     });
 
-    // add opera
     if (plugin.chrome) {
+      // add opera
       if (plugin.chrome >= 28) {
-        plugin.opera = plugin.chrome - 13;
+        plugin.opera = (plugin.chrome - 13).toString();
       } else if (plugin.chrome === 5) {
-        plugin.opera = 12;
+        plugin.opera = "12";
       }
+
+      // add electron
       const electronVersion = chromiumToElectron(plugin.chrome);
       if (electronVersion) {
-        plugin.electron = electronVersion;
+        plugin.electron = electronVersion.toString();
       }
     }
 
