@@ -7,7 +7,7 @@ import pluginList from "../data/plugins.json";
 import useBuiltInsEntryPlugin from "./use-built-ins-entry-plugin";
 import addUsedBuiltInsPlugin from "./use-built-ins-plugin";
 import getTargets from "./targets-parser";
-import { _extends, prettifyTargets, prettifyVersion, semverify } from "./utils";
+import { prettifyTargets, prettifyVersion, semverify } from "./utils";
 
 /**
  * Determine if a transformation is required
@@ -79,7 +79,7 @@ const filterItem = (targets, exclusions, list, item) => {
 };
 
 const getBuiltInTargets = targets => {
-  const builtInTargets = _extends({}, targets);
+  const builtInTargets = Object.assign({}, targets);
   if (builtInTargets.uglify != null) {
     delete builtInTargets.uglify;
   }
