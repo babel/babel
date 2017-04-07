@@ -2,7 +2,7 @@
   "presets": [
     ["../../../../lib", {
       "targets": {
-        "chrome": 55
+        "chrome": "55"
       },
       "modules": false,
       "useBuiltIns": true

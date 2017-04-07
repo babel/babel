@@ -1,0 +1,45 @@
+Warning, the following targets are using a decimal version:
+
+  electron: 0.36
+  node: 6.1
+
+We recommend using a string for minor/patch versions to avoid numbers like 6.10
+getting parsed as 6.1, which can lead to unexpected behavior.
+
+babel-preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "54",
+  "electron": "0.36",
+  "node": "6.1",
+  "ie": "10"
+}
+
+Modules transform: commonjs
+
+Using plugins:
+  check-es2015-constants {"electron":"0.36","ie":"10"}
+  transform-es2015-arrow-functions {"ie":"10"}
+  transform-es2015-block-scoped-functions {"ie":"10"}
+  transform-es2015-block-scoping {"electron":"0.36","ie":"10"}
+  transform-es2015-classes {"ie":"10"}
+  transform-es2015-computed-properties {"ie":"10"}
+  transform-es2015-destructuring {"electron":"0.36","node":"6.1","ie":"10"}
+  transform-es2015-duplicate-keys {"ie":"10"}
+  transform-es2015-for-of {"electron":"0.36","node":"6.1","ie":"10"}
+  transform-es2015-function-name {"electron":"0.36","node":"6.1","ie":"10"}
+  transform-es2015-literals {"ie":"10"}
+  transform-es2015-object-super {"ie":"10"}
+  transform-es2015-parameters {"electron":"0.36","ie":"10"}
+  transform-es2015-shorthand-properties {"ie":"10"}
+  transform-es2015-spread {"ie":"10"}
+  transform-es2015-sticky-regex {"electron":"0.36","ie":"10"}
+  transform-es2015-template-literals {"ie":"10"}
+  transform-es2015-typeof-symbol {"ie":"10"}
+  transform-es2015-unicode-regex {"electron":"0.36","ie":"10"}
+  transform-regenerator {"electron":"0.36","ie":"10"}
+  transform-exponentiation-operator {"electron":"0.36","node":"6.1","ie":"10"}
+  transform-async-to-generator {"chrome":"54","electron":"0.36","node":"6.1","ie":"10"}
+  syntax-trailing-function-commas {"chrome":"54","electron":"0.36","node":"6.1","ie":"10"}
+src/in.js -> lib/in.js

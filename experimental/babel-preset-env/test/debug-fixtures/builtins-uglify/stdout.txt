@@ -2,7 +2,7 @@ babel-preset-env: `DEBUG` option
 
 Using targets:
 {
-  "chrome": 55,
+  "chrome": "55",
   "uglify": true
 }
 
@@ -31,12 +31,12 @@ Using plugins:
   transform-regenerator {"uglify":true}
   transform-exponentiation-operator {"uglify":true}
   transform-async-to-generator {"uglify":true}
-  syntax-trailing-function-commas {"chrome":55,"uglify":true}
+  syntax-trailing-function-commas {"chrome":"55","uglify":true}
 
 Using polyfills:
-  es7.string.pad-start {"chrome":55}
-  es7.string.pad-end {"chrome":55}
-  web.timers {"chrome":55}
-  web.immediate {"chrome":55}
-  web.dom.iterable {"chrome":55}
+  es7.string.pad-start {"chrome":"55"}
+  es7.string.pad-end {"chrome":"55"}
+  web.timers {"chrome":"55"}
+  web.immediate {"chrome":"55"}
+  web.dom.iterable {"chrome":"55"}
 src/in.js -> lib/in.js
