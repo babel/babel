@@ -18,6 +18,14 @@ describe("babel-preset-env", () => {
         node: parseFloat(process.versions.node)
       });
     });
+
+    it("transforms electron version to a number", function() {
+      assert.deepEqual(babelPresetEnv.getTargets({
+        electron: "1.2"
+      }), {
+        electron: 1.2
+      });
+    });
   });
 
   describe("getTargets + uglify", () => {
