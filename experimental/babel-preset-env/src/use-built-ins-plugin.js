@@ -4,7 +4,7 @@ function isPolyfillSource(value) {
   return value === "babel-polyfill";
 }
 
-function warnOnInstanceMethod(state, details) {
+function warnOnInstanceMethod() {
   // state.opts.debug &&
   //   console.warn(
   //     `Adding a polyfill: An instance method may have been used: ${details}`,
