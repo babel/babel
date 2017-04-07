@@ -13,12 +13,12 @@ Using targets:
 Modules transform: commonjs
 
 Using plugins:
+  check-es2015-constants {"edge":13,"firefox":49,"ie":10,"ios":9,"safari":7}
   transform-es2015-arrow-functions {"ie":10,"ios":9,"safari":7}
   transform-es2015-block-scoped-functions {"ie":10,"ios":9,"safari":7}
   transform-es2015-block-scoping {"edge":13,"firefox":49,"ie":10,"ios":9,"safari":7}
   transform-es2015-classes {"ie":10,"ios":9,"safari":7}
   transform-es2015-computed-properties {"ie":10,"safari":7}
-  check-es2015-constants {"edge":13,"firefox":49,"ie":10,"ios":9,"safari":7}
   transform-es2015-destructuring {"edge":13,"firefox":49,"ie":10,"ios":9,"safari":7}
   transform-es2015-duplicate-keys {"ie":10,"safari":7}
   transform-es2015-for-of {"edge":13,"firefox":49,"ie":10,"ios":9,"safari":7}

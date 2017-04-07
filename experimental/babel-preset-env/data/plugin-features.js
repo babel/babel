@@ -1,5 +1,10 @@
 module.exports = {
   // es2015
+  "check-es2015-constants": {
+    features: [
+      "const",
+    ],
+  },
   "transform-es2015-arrow-functions": {
     features: [
       "arrow functions",
@@ -25,11 +30,6 @@ module.exports = {
   "transform-es2015-computed-properties": {
     features: [
       "object literal extensions / computed properties",
-    ],
-  },
-  "check-es2015-constants": {
-    features: [
-      "const",
     ],
   },
   "transform-es2015-destructuring": {
