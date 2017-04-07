@@ -20,8 +20,6 @@ function getObjectString(node) {
     return node.name;
   } else if (node.type === "MemberExpression") {
     return `${getObjectString(node.object)}.${getObjectString(node.property)}`;
-  } else {
-    return "";
   }
 }
 
@@ -94,7 +92,7 @@ When setting "useBuiltIns: true", polyfills are automatically imported when need
 Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'" instead.
 `,
             );
-            path.remove();
+            bodyPath.remove();
           }
         });
       },
