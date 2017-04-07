@@ -13,7 +13,7 @@ try {
   execSync("npm pack");
 
   console.log("Setting up smoke test");
-  fs.ensureDir(tempFolderPath);
+  fs.ensureDirSync(tempFolderPath);
 
   fs.writeFileSync(
     path.join(tempFolderPath, "package.json"),
@@ -30,7 +30,7 @@ try {
     "babel-preset-env": "${packPath}"
   }
 }
-  `
+`
   );
 
   fs.writeFileSync(
@@ -44,15 +44,16 @@ try {
     }]
   ]
 }
-    `
+`
   );
 
   fs.writeFileSync(
     path.join(tempFolderPath, "index.js"),
     `
-import "babel-polyfill";
-1 ** 2;
-    `
+const foo = new Promise((resolve) => {
+  resolve(new Map());
+});
+`
   );
 
   process.chdir(tempFolderPath);
@@ -60,6 +61,7 @@ import "babel-polyfill";
   console.log("Running smoke test");
   execSync("npm install && npm run build");
 } catch (e) {
+  console.log(e);
   errorOccurred = true;
 }
 
