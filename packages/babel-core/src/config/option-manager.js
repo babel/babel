@@ -76,7 +76,7 @@ export default function manageOptions(opts?: Object) {
 
 class OptionManager {
   constructor() {
-    this.options = createBareOptions();
+    this.options = createInitialOptions();
     this.passes = [[]];
   }
 
@@ -442,7 +442,7 @@ function chain(a, b) {
   };
 }
 
-function createBareOptions() {
+function createInitialOptions() {
   return {
     sourceType: "module",
     babelrc: true,
