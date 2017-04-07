@@ -38,4 +38,4 @@ matrix:
     - node_js: "node"
       env: SMOKE_TEST=true PKG_CMD="npm"
 
-after_success: 'if [ -z "${LINT-}" ] && [ -z "${DATA_CHECK-}" && [ -z "${SMOKE_TEST-}" ]; then npm run coverage-ci ; fi'
+after_success: 'if [ -z "${LINT-}" ] && [ -z "${DATA_CHECK-}" ] && [ -z "${SMOKE_TEST-}" ]; then npm run coverage-ci ; fi'
