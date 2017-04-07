@@ -100,6 +100,10 @@ export const getTargets = (targets = {}) => {
     targetOpts.node = getCurrentNodeVersion();
   }
 
+  if (typeof targetOpts.electron === "string") {
+    targetOpts.electron = parseFloat(targetOpts.electron);
+  }
+
   if (targetOpts.hasOwnProperty("uglify") && !targetOpts.uglify) {
     delete targetOpts.uglify;
   }
