@@ -27,12 +27,12 @@ console.log(bob.printFriends());
 **Out**
 
 ```javascript
-var a = function a() {};
-var a = function a(b) {
+var a = function () {};
+var a = function (b) {
   return b;
 };
 
-var double = [1, 2, 3].map(function (num) {
+const double = [1, 2, 3].map(function (num) {
   return num * 2;
 });
 console.log(double); // [2,4,6]
@@ -40,7 +40,7 @@ console.log(double); // [2,4,6]
 var bob = {
   _name: "Bob",
   _friends: ["Sally", "Tom"],
-  printFriends: function printFriends() {
+  printFriends() {
     var _this = this;
 
     this._friends.forEach(function (f) {
