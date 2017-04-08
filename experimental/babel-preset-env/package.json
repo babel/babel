@@ -103,6 +103,19 @@
       }
     }
   },
+  "changelog": {
+    "repo": "babel/babel-preset-env",
+    "labels": {
+      "Tag: Breaking Change": ":boom: Breaking Change",
+      "Tag: New Feature": ":rocket: New Feature",
+      "Tag: Bug Fix": ":bug: Bug Fix",
+      "Tag: Polish": ":nail_care: Polish",
+      "Tag: Docs": ":memo: Documentation",
+      "Tag: Internal": ":house: Internal",
+      "Tag: Chore": "Chore",
+      "Tag: Deprecation": "Deprecation"
+    }
+  },
   "nyc": {
     "all": true,
     "include": [
