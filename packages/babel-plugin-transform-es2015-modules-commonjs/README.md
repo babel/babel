@@ -82,7 +82,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 ```
 
-In environments that don't support this you can enable loose mode on `babel-plugin-transform-es20150-modules-commonjs`
+In environments that don't support this you can enable loose mode on `babel-plugin-transform-es2015-modules-commonjs`
 and instead of using `Object.defineProperty` an assignment will be used instead.
 
 ```javascript
