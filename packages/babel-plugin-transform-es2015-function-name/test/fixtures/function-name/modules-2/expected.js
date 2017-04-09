@@ -3,6 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = undefined;
 
 var _last2 = require("lodash/last");
 
