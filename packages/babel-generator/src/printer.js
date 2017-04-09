@@ -557,6 +557,9 @@ export default class Printer {
       val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
     }
 
+    // Avoid creating //* comments
+    if (this.endsWith("/")) this._space();
+
     this.withSource("start", comment.loc, () => {
       this._append(val);
     });
