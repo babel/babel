@@ -1,0 +1,3 @@
+{
+  "plugins": ["../fixtures/babel-node/--no-babelrc/logPlugin.js"]
+}

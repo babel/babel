@@ -23,6 +23,7 @@ function collect(value, previousValue): Array<string> {
 
 /* eslint-disable max-len */
 program.option("-e, --eval [script]", "Evaluate script");
+program.option("--no-babelrc", "Specify whether or not to use .babelrc and .babelignore files");
 program.option("-p, --print [code]", "Evaluate script and print result");
 program.option("-o, --only [globs]", "A comma-separated list of glob patterns to compile", collect);
 program.option("-i, --ignore [globs]", "A comma-separated list of glob patterns to skip compiling", collect);
@@ -38,6 +39,7 @@ program.parse(process.argv);
 //
 
 register({
+  babelrc: program.babelrc,
   extensions: program.extensions,
   ignore: program.ignore,
   only: program.only,
