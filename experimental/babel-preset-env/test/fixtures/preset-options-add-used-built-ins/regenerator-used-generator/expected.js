@@ -1,4 +1,4 @@
-import "babel-polyfill/regenerator-runtime/runtime";
+import "babel-polyfill/lib/regenerator-runtime/runtime";
 
 var _marked = [a].map(regeneratorRuntime.mark);
 

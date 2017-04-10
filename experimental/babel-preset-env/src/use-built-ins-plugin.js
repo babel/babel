@@ -38,12 +38,16 @@ export default function({ types: t }) {
     if (Array.isArray(builtIn)) {
       for (const i of builtIn) {
         if (polyfills.has(i)) {
-          addImport(path, `core-js/modules/${i}`, builtIns);
+          addImport(path, `babel-polyfill/lib/core-js/modules/${i}`, builtIns);
         }
       }
     } else {
       if (polyfills.has(builtIn)) {
-        addImport(path, `core-js/modules/${builtIn}`, builtIns);
+        addImport(
+          path,
+          `babel-polyfill/lib/core-js/modules/${builtIn}`,
+          builtIns,
+        );
       }
     }
   }
@@ -219,7 +223,7 @@ Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'"
         if (state.opts.regenerator) {
           addImport(
             path,
-            "babel-polyfill/regenerator-runtime/runtime",
+            "babel-polyfill/lib/regenerator-runtime/runtime",
             this.builtIns,
           );
         }
