@@ -27,7 +27,7 @@ export default function({ types: t }) {
 
   function createImport(polyfill, requireType, core) {
     if (core) {
-      polyfill = `babel-polyfill/core-js/modules/${polyfill}`;
+      polyfill = `babel-polyfill/lib/core-js/modules/${polyfill}`;
     }
 
     if (requireType === "import") {
@@ -45,7 +45,10 @@ export default function({ types: t }) {
     return [
       ...imports,
       regenerator &&
-        createImport("babel-polyfill/regenerator-runtime/runtime", requireType),
+        createImport(
+          "babel-polyfill/lib/regenerator-runtime/runtime",
+          requireType,
+        ),
     ].filter(Boolean);
   }
 
