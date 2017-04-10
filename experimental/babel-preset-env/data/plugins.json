@@ -1,4 +1,14 @@
 {
+  "check-es2015-constants": {
+    "chrome": "49",
+    "edge": "14",
+    "firefox": "51",
+    "safari": "10",
+    "node": "6",
+    "ios": "10",
+    "opera": "36",
+    "electron": "1"
+  },
   "transform-es2015-arrow-functions": {
     "chrome": "47",
     "edge": "13",
@@ -49,16 +59,6 @@
     "ios": "8",
     "opera": "31",
     "electron": "0.31"
-  },
-  "check-es2015-constants": {
-    "chrome": "49",
-    "edge": "14",
-    "firefox": "51",
-    "safari": "10",
-    "node": "6",
-    "ios": "10",
-    "opera": "36",
-    "electron": "1"
   },
   "transform-es2015-destructuring": {
     "chrome": "51",

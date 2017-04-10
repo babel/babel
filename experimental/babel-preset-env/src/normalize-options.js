@@ -33,6 +33,11 @@ export const validateIncludesAndExcludes = (opts = [], type) => {
   return opts;
 };
 
+export const normalizePluginName = plugin =>
+  plugin.replace(/^babel-plugin-/, "");
+
+export const normalizePluginNames = plugins => plugins.map(normalizePluginName);
+
 export const checkDuplicateIncludeExcludes = (include = [], exclude = []) => {
   const duplicates = include.filter(opt => exclude.indexOf(opt) >= 0);
 
@@ -79,6 +84,14 @@ export const validateUseBuiltInsOption = (builtInsOpt = true) => {
 };
 
 export default function normalizeOptions(opts) {
+  if (opts.exclude) {
+    opts.exclude = normalizePluginNames(opts.exclude);
+  }
+
+  if (opts.whitelist || opts.include) {
+    opts.include = normalizePluginNames(opts.whitelist || opts.include);
+  }
+
   checkDuplicateIncludeExcludes(opts.include, opts.exclude);
 
   return {

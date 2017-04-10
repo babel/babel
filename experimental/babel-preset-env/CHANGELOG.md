@@ -1,5 +1,46 @@
 # Changelog
 
+## v1.3.3 (2017-04-07)
+
+### :bug: Bug Fix
+
+- Support electron version in a string format ([#252](https://github.com/babel/babel-preset-env/pull/252)) (@yavorsky)
+
+Adding electron as a target was an inadvertent breaking change as it no longer
+allowed string versions. We added an exception for now, even though it is
+inconsistent with other versions. Just as a note, the upcoming version 2.x will
+allow _both_ number and string versions.
+
+- Ensure const-check plugin order ([#257](https://github.com/babel/babel-preset-env/pull/257)) (@existentialism)
+
+We now force the `const-es2015-check` plugin to run first (so that it can
+correctly report issues before they get transpiled away).
+
+### :rocket: New Feature
+
+- Allow use `babel-plugin-` prefix for include and exclude ([#242](https://github.com/babel/babel-preset-env/pull/242)) (@yavorsky)
+
+The `include` and `exclude` options now allow both prefixed (`babel-plugin-transform-es2015-spread`) 
+and prefix-less (`transform-es2015-spread`) plugin names.
+
+### :memo: Documentation 
+
+- Note babel plugin prefix handling in include/exclude ([#245](https://github.com/babel/babel-preset-env/pull/245)) (@existentialism)
+- Fix README: debug option shows info in stdout. ([#236](https://github.com/babel/babel-preset-env/pull/236)) (@Gerhut)
+
+### :house: Internal
+
+- Add simple smoke-test ([#240](https://github.com/babel/babel-preset-env/pull/240)) (@existentialism)
+- Add prepublish script (@existentialism)
+
+## v1.3.2 (2017-03-30)
+
+- Fixed an issue with a broken publish
+
+## v1.3.1 (2017-03-30)
+
+- Fixed a regression with missing files due to `.npmignore`.
+
 ## v1.3.0 (2017-03-30)
 
 ### :bug: Bug Fix

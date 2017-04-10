@@ -15,8 +15,8 @@ Using targets:
 Modules transform: commonjs
 
 Using plugins:
-  transform-es2015-block-scoping {"electron":"0.36"}
   check-es2015-constants {"electron":"0.36"}
+  transform-es2015-block-scoping {"electron":"0.36"}
   transform-es2015-destructuring {"electron":"0.36"}
   transform-es2015-for-of {"electron":"0.36"}
   transform-es2015-function-name {"electron":"0.36"}

@@ -156,7 +156,11 @@ Outputs the targets/plugins used and the version specified in [plugin data versi
 
 An array of plugins to always include.
 
-Valid options include any of the [babel plugins](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) or [built-ins](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js), such as `transform-es2015-arrow-functions`, `map`, `set`, or `object.assign`.
+Valid options include any:
+
+- [Babel plugins](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) - both with (`babel-plugin-transform-es2015-spread`) and without prefix (`transform-es2015-spread`) are supported.
+
+- [Built-ins](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js), such as `map`, `set`, or `object.assign`.
 
 This option is useful if there is a bug in a native implementation, or a combination of a non-supported feature + a supported one doesn't work.
 
