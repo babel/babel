@@ -454,7 +454,7 @@ pp.flowParseObjectType = function (allowStatic, allowExact, allowSpread) {
         if (!allowSpread) {
           this.unexpected(
             null,
-            "Spread operator cannnot appear in class or interface definitions"
+            "Spread operator cannot appear in class or interface definitions"
           );
         }
         if (variance) {
