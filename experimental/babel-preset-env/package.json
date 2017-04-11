@@ -63,7 +63,7 @@
     "babel-register": "^6.23.0",
     "chai": "^3.5.0",
     "codecov": "^1.0.1",
-    "compat-table": "kangax/compat-table#c38f039b8ea7fadf347d3e300fec3611645e31e9",
+    "compat-table": "kangax/compat-table#861954b6e13d3eaa1ba9ef1a016906c0fc1072db",
     "eslint": "^3.17.1",
     "eslint-config-babel": "^6.0.0",
     "eslint-plugin-flowtype": "^2.29.1",
