@@ -1,0 +1,10 @@
+[ignore]
+.*/lib/.*
+.*/test/.*
+.*/build/.*
+.*/node_modules/jest-validate/.*
+
+[options]
+strip_root=true
+suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
+suppress_comment= \\(.\\|\n\\)*\\$FlowIssue

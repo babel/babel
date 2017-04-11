@@ -1,9 +1,11 @@
 // @flow
+
 import semver from "semver";
+import type { Targets } from "./targets-parser";
 
 // Convert version to a semver value.
 // 2.5 -> 2.5.0; 1 -> 1.0.0;
-export const semverify = version => {
+export const semverify = (version: string | number) => {
   if (typeof version === "string" && semver.valid(version)) {
     return version;
   }
@@ -11,13 +13,13 @@ export const semverify = version => {
   const split = version.toString().split(".");
 
   while (split.length < 3) {
-    split.push(0);
+    split.push("0");
   }
 
   return split.join(".");
 };
 
-export const prettifyVersion = version => {
+export const prettifyVersion = (version: string | number) => {
   if (typeof version !== "string") {
     return version;
   }
@@ -37,7 +39,7 @@ export const prettifyVersion = version => {
   return parts.join(".");
 };
 
-export const prettifyTargets = (targets = {}) => {
+export const prettifyTargets = (targets: Targets) => {
   return Object.keys(targets).reduce(
     (results, target) => {
       let value = targets[target];
