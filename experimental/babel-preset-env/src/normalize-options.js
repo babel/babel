@@ -53,9 +53,6 @@ export const checkDuplicateIncludeExcludes = (include = [], exclude = []) => {
   );
 };
 
-// TODO: Allow specifying plugins as either shortened or full name
-// babel-plugin-transform-es2015-classes
-// transform-es2015-classes
 export const validateLooseOption = (looseOpt = false) => {
   invariant(
     typeof looseOpt === "boolean",
