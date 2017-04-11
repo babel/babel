@@ -1,6 +1,12 @@
+// @flow
+
 import browserslist from "browserslist";
 import semver from "semver";
 import { semverify } from "./utils";
+
+export type Targets = {
+  [target: string]: string,
+};
 
 const browserNameMap = {
   chrome: "chrome",
@@ -11,10 +17,10 @@ const browserNameMap = {
   safari: "safari",
 };
 
-const isBrowsersQueryValid = browsers =>
+const isBrowsersQueryValid = (browsers: string | Array<string>): boolean =>
   typeof browsers === "string" || Array.isArray(browsers);
 
-const semverMin = (first, second) => {
+const semverMin = (first: ?string, second: string): string => {
   return first && semver.lt(first, second) ? first : second;
 };
 
@@ -45,7 +51,7 @@ const getLowestVersions = browsers => {
   );
 };
 
-const outputDecimalWarning = decimalTargets => {
+const outputDecimalWarning = (decimalTargets: Array<Object>): void => {
   if (!decimalTargets || !decimalTargets.length) {
     return;
   }
@@ -78,7 +84,7 @@ const targetParserMap = {
   uglify: (target, value) => [target, value === true],
 };
 
-const getTargets = (targets = {}) => {
+const getTargets = (targets: Object = {}): Targets => {
   let targetOpts = {};
 
   // Parse browsers target via browserslist

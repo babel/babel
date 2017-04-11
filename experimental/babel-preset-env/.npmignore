@@ -9,3 +9,4 @@ yarn.lock
 .nyc_output
 .vscode
 babel-preset-env-*.tgz
+flow-typed
