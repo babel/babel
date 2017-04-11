@@ -47,6 +47,7 @@ const isBrowsersQueryValid = (browsers) => {
 };
 
 const browserNameMap = {
+  android: "android",
   chrome: "chrome",
   edge: "edge",
   firefox: "firefox",
