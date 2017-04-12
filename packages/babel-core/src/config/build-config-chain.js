@@ -46,63 +46,63 @@ class ConfigChainBuilder {
   ): boolean {
     if (!this.filename) return false;
 
-    if (ignore) {
-      if (!Array.isArray(ignore)) {
-        throw new Error(`.ignore should be an array, was ${JSON.stringify(ignore)}`);
-      }
-
-      for (const pattern of ignore) {
-        if (this.matchesPattern(pattern, dirname)) return true;
-      }
+    if (ignore && !Array.isArray(ignore)) {
+      throw new Error(`.ignore should be an array, ${JSON.stringify(ignore)} given`);
     }
 
-    if (only) {
-      if (!Array.isArray(only)) {
-        throw new Error(`.only should be an array, was ${JSON.stringify(only)}`);
-      }
-
-      for (const pattern of only) {
-        if (this.matchesPattern(pattern, dirname)) return false;
-      }
-      return true;
+    if (only && !Array.isArray(only)) {
+      throw new Error(`.only should be an array, ${JSON.stringify(only)} given`);
     }
 
-    return false;
+    return (ignore && this.matchesPatterns(ignore, dirname)) ||
+      (only && !this.matchesPatterns(only, dirname));
   }
 
   /**
    * Returns result of calling function with filename if pattern is a function.
    * Otherwise returns result of matching pattern Regex with filename.
    */
-  matchesPattern(pattern: string | Function | RegExp, dirname: string) {
-    if (typeof pattern === "string") {
-      // Lazy-init so we don't initialize this for files that have no glob patterns.
-      if (!this.possibleDirs) {
-        this.possibleDirs = [];
+  matchesPatterns(patterns: Array<string | Function | RegExp>, dirname: string) {
+    const res = [];
+    const strings = [];
+    const fns = [];
 
-        if (this.filename) {
-          this.possibleDirs.push(this.filename);
+    patterns.forEach((pattern) => {
+      const type = typeof pattern;
+      if (type === "string") strings.push(pattern);
+      else if (type === "function") fns.push(pattern);
+      else res.push(pattern);
+    });
 
-          let current = this.filename;
-          while (true) {
-            const previous = current;
-            current = path.dirname(current);
-            if (previous === current) break;
+    // Lazy-init so we don't initialize this for files that have no glob patterns.
+    if (strings.length > 0 && !this.possibleDirs) {
+      this.possibleDirs = [];
 
-            this.possibleDirs.push(current);
-          }
+      if (this.filename) {
+        this.possibleDirs.push(this.filename);
+
+        let current = this.filename;
+        while (true) {
+          const previous = current;
+          current = path.dirname(current);
+          if (previous === current) break;
+
+          this.possibleDirs.push(current);
         }
       }
-
-      return this.possibleDirs.some(micromatch.filter(path.resolve(dirname, pattern), {
-        nocase: true,
-        nonegate: true,
-      }));
-    } else if (typeof pattern === "function") {
-      return pattern(this.filename);
-    } else {
-      return pattern.test(this.filename);
     }
+
+    return res.some((re) => re.test(this.filename)) ||
+      fns.some((fn) => fn(this.filename)) ||
+      this.possibleDirs.some(micromatch.filter(strings.map((pattern) => {
+        // Preserve the "!" prefix so that micromatch can use it for negation.
+        const negate = pattern[0] === "!";
+        if (negate) pattern = pattern.slice(1);
+
+        return (negate ? "!" : "") + path.resolve(dirname, pattern);
+      }, {
+        nocase: true,
+      })));
   }
 
   findConfigs(loc: string) {
