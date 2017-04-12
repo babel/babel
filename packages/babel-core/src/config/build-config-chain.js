@@ -94,7 +94,7 @@ class ConfigChainBuilder {
 
     return res.some((re) => re.test(this.filename)) ||
       fns.some((fn) => fn(this.filename)) ||
-      this.possibleDirs.some(micromatch.filter(strings.map((pattern) => {
+      (strings.length > 0 && this.possibleDirs.some(micromatch.filter(strings.map((pattern) => {
         // Preserve the "!" prefix so that micromatch can use it for negation.
         const negate = pattern[0] === "!";
         if (negate) pattern = pattern.slice(1);
@@ -102,7 +102,7 @@ class ConfigChainBuilder {
         return (negate ? "!" : "") + path.resolve(dirname, pattern);
       }, {
         nocase: true,
-      })));
+      }))));
   }
 
   findConfigs(loc: string) {
