@@ -1,3 +1,4 @@
+coverage
 src
 test
 node_modules
@@ -8,4 +9,5 @@ codecov.yml
 yarn.lock
 .nyc_output
 .vscode
+.eslintrc
 babel-preset-env-*.tgz
