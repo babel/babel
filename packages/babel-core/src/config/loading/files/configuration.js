@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
+import { getEnv } from "../../helpers/environment";
 import { makeStrongCache } from "../../caching";
 
 type ConfigFile = {
@@ -101,6 +102,16 @@ const readConfigJS = makeStrongCache((filepath, cache) => {
     throw err;
   }
 
+  if (typeof options === "function") {
+    options = options({
+      cache,
+      // Expose ".env()" so people can easily get the same env that we expose using the "env" key.
+      env: () => cache.using(() => getEnv()),
+    });
+  } else {
+    cache.forever();
+  }
+
   if (!options || typeof options !== "object" || Array.isArray(options)) {
     throw new Error(`${filepath}: Configuration should be an exported JavaScript object.`);
   }
@@ -110,7 +121,7 @@ const readConfigJS = makeStrongCache((filepath, cache) => {
     dirname: path.dirname(filepath),
     options,
   };
-});
+}, false /* autoPermacache */);
 
 const readConfigFile = makeStaticFileCache((filepath, content) => {
   let options;
