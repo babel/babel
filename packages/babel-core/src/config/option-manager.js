@@ -9,6 +9,8 @@ import buildConfigChain from "./build-config-chain";
 import path from "path";
 import traverse from "babel-traverse";
 import clone from "lodash/clone";
+import { makeWeakCache } from "./caching";
+import { getEnv } from "./helpers/environment";
 
 import {
   loadPlugin,
@@ -221,13 +223,11 @@ type BasicDescriptor = {
 /**
  * Load and validate the given config into a set of options, plugins, and presets.
  */
-function loadConfig(
-  config,
-): {
+const loadConfig = makeWeakCache((config): {
   options: {},
   plugins: Array<BasicDescriptor>,
   presets: Array<BasicDescriptor>,
-} {
+} => {
   const options = normalizeOptions(config);
 
   if (
@@ -277,24 +277,25 @@ function loadConfig(
   });
 
   return { options, plugins, presets };
-}
+});
 
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
-function loadDescriptor(descriptor, skipOptions) {
+const loadDescriptor = makeWeakCache((descriptor, cache) => {
   if (typeof descriptor.value !== "function") {
     return { value: descriptor.value, descriptor };
   }
-
   const { value, options } = descriptor;
+
+  const api = Object.assign(Object.create(context), {
+    cache,
+    env: () => cache.using(() => getEnv()),
+  });
+
   let item;
   try {
-    if (skipOptions) {
-      item = value(context);
-    } else {
-      item = value(context, options, { dirname: descriptor.dirname });
-    }
+    item = value(api, options, { dirname: descriptor.dirname });
   } catch (e) {
     if (descriptor.alias) {
       e.message += ` (While processing: ${JSON.stringify(descriptor.alias)})`;
@@ -307,92 +308,94 @@ function loadDescriptor(descriptor, skipOptions) {
   }
 
   return { value: item, descriptor };
-}
+});
 
 /**
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.
  */
-const PLUGIN_CACHE = new WeakMap();
-function loadPluginDescriptor(descriptor) {
+function loadPluginDescriptor(descriptor: BasicDescriptor) {
   if (descriptor.value instanceof Plugin) {
     return [descriptor.value, descriptor.options];
   }
 
-  let result = PLUGIN_CACHE.get(descriptor.value);
-  if (!result) {
-    result = instantiatePlugin(
-      loadDescriptor(descriptor, true /* skipOptions */),
-    );
-    PLUGIN_CACHE.set(descriptor.value, result);
-  }
+  const result = instantiatePlugin(loadDescriptor(descriptor));
 
   return [result, descriptor.options];
 }
 
-function instantiatePlugin({ value: pluginObj, descriptor }) {
-  Object.keys(pluginObj).forEach(key => {
-    if (!ALLOWED_PLUGIN_KEYS.has(key)) {
+const instantiatePlugin = makeWeakCache(
+  ({ value: pluginObj, descriptor }, cache) => {
+    Object.keys(pluginObj).forEach(key => {
+      if (!ALLOWED_PLUGIN_KEYS.has(key)) {
+        throw new Error(
+          `Plugin ${descriptor.alias} provided an invalid property of ${key}`,
+        );
+      }
+    });
+    if (
+      pluginObj.visitor &&
+      (pluginObj.visitor.enter || pluginObj.visitor.exit)
+    ) {
       throw new Error(
-        `Plugin ${descriptor.alias} provided an invalid property of ${key}`,
+        "Plugins aren't allowed to specify catch-all enter/exit handlers. " +
+          "Please target individual nodes.",
       );
     }
-  });
-  if (
-    pluginObj.visitor &&
-    (pluginObj.visitor.enter || pluginObj.visitor.exit)
-  ) {
-    throw new Error(
-      "Plugins aren't allowed to specify catch-all enter/exit handlers. " +
-        "Please target individual nodes.",
-    );
-  }
 
-  const plugin = Object.assign({}, pluginObj, {
-    visitor: clone(pluginObj.visitor || {}),
-  });
+    const plugin = Object.assign({}, pluginObj, {
+      visitor: clone(pluginObj.visitor || {}),
+    });
 
-  traverse.explode(plugin.visitor);
+    traverse.explode(plugin.visitor);
 
-  let inheritsDescriptor;
-  let inherits;
-  if (plugin.inherits) {
-    inheritsDescriptor = {
-      alias: `${descriptor.loc}$inherits`,
-      loc: descriptor.loc,
-      value: plugin.inherits,
-      options: descriptor.options,
-      dirname: descriptor.dirname,
-    };
+    let inheritsDescriptor;
+    let inherits;
+    if (plugin.inherits) {
+      inheritsDescriptor = {
+        alias: `${descriptor.loc}$inherits`,
+        loc: descriptor.loc,
+        value: plugin.inherits,
+        options: descriptor.options,
+        dirname: descriptor.dirname,
+      };
 
-    inherits = loadPluginDescriptor(inheritsDescriptor)[0];
+      // If the inherited plugin changes, reinstantiate this plugin.
+      inherits = cache.invalidate(
+        () => loadPluginDescriptor(inheritsDescriptor)[0],
+      );
 
-    plugin.pre = chain(inherits.pre, plugin.pre);
-    plugin.post = chain(inherits.post, plugin.post);
-    plugin.manipulateOptions = chain(
-      inherits.manipulateOptions,
-      plugin.manipulateOptions,
-    );
-    plugin.visitor = traverse.visitors.merge([
-      inherits.visitor,
-      plugin.visitor,
-    ]);
-  }
+      plugin.pre = chain(inherits.pre, plugin.pre);
+      plugin.post = chain(inherits.post, plugin.post);
+      plugin.manipulateOptions = chain(
+        inherits.manipulateOptions,
+        plugin.manipulateOptions,
+      );
+      plugin.visitor = traverse.visitors.merge([
+        inherits.visitor,
+        plugin.visitor,
+      ]);
+    }
 
-  return new Plugin(plugin, descriptor.alias);
-}
+    return new Plugin(plugin, descriptor.alias);
+  },
+);
 
 /**
  * Generate a config object that will act as the root of a new nested config.
  */
-function loadPresetDescriptor(descriptor): MergeOptions {
+const loadPresetDescriptor = (descriptor: BasicDescriptor): MergeOptions => {
+  return instantiatePreset(loadDescriptor(descriptor));
+};
+
+const instantiatePreset = makeWeakCache(({ value, descriptor }) => {
   return {
     type: "preset",
-    options: loadDescriptor(descriptor).value,
+    options: value,
     alias: descriptor.alias,
     loc: descriptor.loc,
     dirname: descriptor.dirname,
   };
-}
+});
 
 /**
  * Validate and return the options object for the config.
