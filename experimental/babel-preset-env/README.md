@@ -197,7 +197,9 @@ npm install babel-polyfill --save
 
 This option enables a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
 
-> NOTE: Only use `require("babel-polyfill");` once in your whole app. One option is to create a single entry file that only contains the require statement.
+> NOTE: Only use `require("babel-polyfill");` once in your whole app.
+> Multiple imports or requires of `babel-polyfill` will throw an error since it can cause global collisions and other issues that are hard to trace.
+> We recommend creating a single entry file that only contains the `require` statement.
 
 **In**
 
