@@ -78,16 +78,7 @@ Please remove the "import 'babel-polyfill'" call or use "useBuiltIns: 'entry'" i
       }
     },
     Program: {
-      enter(path, state) {
-        if (!state.opts.polyfills) {
-          throw path.buildCodeFrameError(
-            `
-There was an issue in "babel-preset-env" such that
-the "polyfills" option was not correctly passed
-to the "transform-polyfill-require" plugin
-`,
-          );
-        }
+      enter(path) {
         path.get("body").forEach(bodyPath => {
           if (isRequire(bodyPath)) {
             console.warn(
@@ -102,8 +93,8 @@ Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'"
       },
     },
 
-    // Symbol() -> _core.Symbol();
-    // new Promise -> new _core.Promise
+    // Symbol()
+    // new Promise
     ReferencedIdentifier(path, state) {
       const { node, parent, scope } = path;
 
@@ -115,7 +106,49 @@ Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'"
       addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
     },
 
-    // Array.from -> _core.Array.from
+    // arr[Symbol.iterator]()
+    CallExpression(path) {
+      // we can't compile this
+      if (path.node.arguments.length) return;
+
+      const callee = path.node.callee;
+      if (!t.isMemberExpression(callee)) return;
+      if (!callee.computed) return;
+      if (!path.get("callee.property").matchesPattern("Symbol.iterator")) {
+        return;
+      }
+
+      addImport(
+        path,
+        "babel-polyfill/lib/core-js/modules/web.dom.iterable",
+        this.builtIns,
+      );
+    },
+
+    // Symbol.iterator in arr
+    BinaryExpression(path) {
+      if (path.node.operator !== "in") return;
+      if (!path.get("left").matchesPattern("Symbol.iterator")) return;
+
+      addImport(
+        path,
+        "babel-polyfill/lib/core-js/modules/web.dom.iterable",
+        this.builtIns,
+      );
+    },
+
+    // yield*
+    YieldExpression(path) {
+      if (!path.node.delegate) return;
+
+      addImport(
+        path,
+        "babel-polyfill/lib/core-js/modules/web.dom.iterable",
+        this.builtIns,
+      );
+    },
+
+    // Array.from
     MemberExpression: {
       enter(path, state) {
         if (!path.isReferenced()) return;
@@ -134,6 +167,13 @@ Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'"
           if (has(staticMethods, prop.name)) {
             const builtIn = staticMethods[prop.name];
             addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+            // if (obj.name === "Array" && prop.name === "from") {
+            //   addImport(
+            //     path,
+            //     "babel-polyfill/lib/core-js/modules/web.dom.iterable",
+            //     this.builtIns,
+            //   );
+            // }
           }
         }
 

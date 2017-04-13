@@ -1,0 +1,1 @@
+Symbol.iterator in arr

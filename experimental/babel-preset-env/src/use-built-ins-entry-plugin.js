@@ -64,15 +64,6 @@ export default function({ types: t }) {
       }
     },
     Program(path, state) {
-      if (!state.opts.polyfills) {
-        throw path.buildCodeFrameError(
-          `
-There was an issue in "babel-preset-env" such that
-the "polyfills" option was not correctly passed
-to the "transform-polyfill-require" plugin
-`,
-        );
-      }
       path.get("body").forEach(bodyPath => {
         if (isRequire(bodyPath)) {
           bodyPath.replaceWithMultiple(

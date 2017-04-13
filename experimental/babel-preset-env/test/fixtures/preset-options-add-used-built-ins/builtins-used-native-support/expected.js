@@ -2,7 +2,6 @@ Array.from; // static method
 Map; // built-in
 new Promise(); // new builtin
 Symbol.match; // as member expression
-_arr[Symbol.iterator](); // Symbol.iterator
 
 // no import
 Array.asdf;
