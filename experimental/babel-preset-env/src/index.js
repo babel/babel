@@ -144,12 +144,6 @@ export default function buildPreset(context, opts = {}) {
     transformations.forEach(transform => {
       logPlugin(transform, targets, pluginList);
     });
-    if (useBuiltIns && polyfills.length) {
-      console.log("\nUsing polyfills:");
-      polyfills.forEach(polyfill => {
-        logPlugin(polyfill, polyfillTargets, builtInsList);
-      });
-    }
   }
 
   const regenerator = transformations.indexOf("transform-regenerator") >= 0;
@@ -167,13 +161,30 @@ export default function buildPreset(context, opts = {}) {
     ]),
   );
 
+  if (debug) {
+    console.log("");
+    console.log("Polyfills");
+    console.log("=========");
+    console.log("");
+  }
+
   if (useBuiltIns === true) {
     plugins.push([
       addUsedBuiltInsPlugin,
       { polyfills: new Set(polyfills), regenerator, debug },
     ]);
   } else if (useBuiltIns === "entry") {
-    plugins.push([useBuiltInsEntryPlugin, { polyfills, regenerator }]);
+    plugins.push([
+      useBuiltInsEntryPlugin,
+      {
+        debug,
+        polyfills,
+        regenerator,
+        onDebug: polyfill => logPlugin(polyfill, polyfillTargets, builtInsList),
+      },
+    ]);
+  } else if (debug) {
+    console.log("None were added, since the `useBuiltIns` option was not set.");
   }
 
   return {

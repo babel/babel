@@ -21,4 +21,9 @@ Using plugins:
   transform-es2015-function-name {"firefox":"52"}
   transform-es2015-literals {"firefox":"52"}
   syntax-trailing-function-commas {"node":"7.4"}
+
+Polyfills
+=========
+
+None were added, since the `useBuiltIns` option was not set.
 src/in.js -> lib/in.js

@@ -28,7 +28,10 @@ Using plugins:
   transform-async-to-generator {"electron":"0.36"}
   syntax-trailing-function-commas {"electron":"0.36"}
 
-Using polyfills:
+Polyfills
+=========
+
+Replaced `babel-polyfill` with the following polyfills:
   es6.typed.array-buffer {"electron":"0.36"}
   es6.typed.data-view {"electron":"0.36"}
   es6.typed.int8-array {"electron":"0.36"}
