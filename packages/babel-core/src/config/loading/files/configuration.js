@@ -96,23 +96,6 @@ function readConfig(filepath) {
   return (path.extname(filepath) === ".js") ? readConfigJS(filepath) : readConfigFile(filepath);
 }
 
-function readIgnoreConfig(filepath) {
-  if (!exists(filepath)) return null;
-
-  const file = fs.readFileSync(filepath, "utf8");
-  let lines = file.split("\n");
-
-  lines = lines
-    .map((line) => line.replace(/#(.*?)$/, "").trim())
-    .filter((line) => !!line);
-
-  return {
-    filepath,
-    dirname: path.dirname(filepath),
-    options: { ignore: lines },
-  };
-}
-
 function readConfigJS(filepath) {
   if (!exists(filepath)) return null;
 
@@ -137,11 +120,7 @@ function readConfigJS(filepath) {
   };
 }
 
-function readConfigFile(filepath) {
-  if (!exists(filepath)) return null;
-
-  const content = fs.readFileSync(filepath, "utf8");
-
+const readConfigFile = makeStaticFileHandler((filepath, content) => {
   let options;
   if (path.basename(filepath) === PACKAGE_FILENAME) {
     try {
@@ -171,5 +150,26 @@ function readConfigFile(filepath) {
     filepath,
     dirname: path.dirname(filepath),
     options,
+  };
+});
+
+const readIgnoreConfig = makeStaticFileHandler((filepath, content) => {
+  const ignore = content
+    .split("\n")
+    .map((line) => line.replace(/#(.*?)$/, "").trim())
+    .filter((line) => !!line);
+
+  return {
+    filepath,
+    dirname: path.dirname(filepath),
+    options: { ignore },
+  };
+});
+
+function makeStaticFileHandler<T>(fn: (string, string) => T): (string) => T|null {
+  return (filepath) => {
+    if (!exists(filepath)) return null;
+
+    return fn(filepath, fs.readFileSync(filepath, "utf8"));
   };
 }
