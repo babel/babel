@@ -4,12 +4,12 @@ import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import pluginFeatures from "../data/plugin-features";
 
-const validIncludesAndExcludes = [
+const validIncludesAndExcludes = new Set([
   ...Object.keys(pluginFeatures),
   ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
   ...Object.keys(builtInsList),
   ...defaultWebIncludes,
-];
+]);
 
 export const validateIncludesAndExcludes = (opts = [], type) => {
   invariant(
@@ -17,12 +17,7 @@ export const validateIncludesAndExcludes = (opts = [], type) => {
     `Invalid Option: The '${type}' option must be an Array<String> of plugins/built-ins`,
   );
 
-  const unknownOpts = [];
-  opts.forEach(opt => {
-    if (validIncludesAndExcludes.indexOf(opt) === -1) {
-      unknownOpts.push(opt);
-    }
-  });
+  const unknownOpts = opts.filter(opt => !validIncludesAndExcludes.has(opt));
 
   invariant(
     unknownOpts.length === 0,

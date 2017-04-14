@@ -69,15 +69,6 @@ const logPlugin = (plugin, targets, list) => {
   console.log(logStr);
 };
 
-const filterItem = (targets, exclusions, list, item) => {
-  const isDefault = defaultWebIncludes.indexOf(item) >= 0;
-  const notExcluded = exclusions.indexOf(item) === -1;
-
-  if (isDefault) return notExcluded;
-  const isRequired = isPluginRequired(targets, list[item]);
-  return isRequired && notExcluded;
-};
-
 const getBuiltInTargets = targets => {
   const builtInTargets = Object.assign({}, targets);
   if (builtInTargets.uglify != null) {
@@ -86,19 +77,48 @@ const getBuiltInTargets = targets => {
   return builtInTargets;
 };
 
-export const transformIncludesAndExcludes = opts => ({
-  all: opts,
-  plugins: opts.filter(opt => !opt.match(/^(es\d+|web)\./)),
-  builtIns: opts.filter(opt => opt.match(/^(es\d+|web)\./)),
-});
+export const transformIncludesAndExcludes = opts => {
+  return opts.reduce(
+    (result, opt) => {
+      const target = opt.match(/^(es\d+|web)\./) ? "builtIns" : "plugins";
+      result[target].add(opt);
+      return result;
+    },
+    {
+      all: opts,
+      plugins: new Set(),
+      builtIns: new Set(),
+    },
+  );
+};
 
-function getPlatformSpecificDefaultFor(targets) {
+const getPlatformSpecificDefaultFor = targets => {
   const targetNames = Object.keys(targets);
   const isAnyTarget = !targetNames.length;
   const isWebTarget = targetNames.some(name => name !== "node");
 
-  return isAnyTarget || isWebTarget ? defaultWebIncludes : [];
-}
+  return isAnyTarget || isWebTarget ? defaultWebIncludes : null;
+};
+
+const filterItems = (list, includes, excludes, targets, defaultItems) => {
+  const result = new Set();
+
+  for (const item in list) {
+    const excluded = excludes.has(item);
+
+    if (!excluded && isPluginRequired(targets, list[item])) {
+      result.add(item);
+    }
+  }
+
+  if (defaultItems) {
+    defaultItems.forEach(item => !excludes.has(item) && result.add(item));
+  }
+
+  includes.forEach(item => result.add(item));
+
+  return result;
+};
 
 export default function buildPreset(context, opts = {}) {
   const validatedOptions = normalizeOptions(opts);
@@ -108,30 +128,26 @@ export default function buildPreset(context, opts = {}) {
   const include = transformIncludesAndExcludes(validatedOptions.include);
   const exclude = transformIncludesAndExcludes(validatedOptions.exclude);
 
-  const filterPlugins = filterItem.bind(
-    null,
-    targets,
-    exclude.plugins,
+  const transformations = filterItems(
     pluginList,
+    include.plugins,
+    exclude.plugins,
+    targets,
   );
-  const transformations = Object.keys(pluginList)
-    .filter(filterPlugins)
-    .concat(include.plugins);
 
   let polyfills;
   let polyfillTargets;
+
   if (useBuiltIns) {
     polyfillTargets = getBuiltInTargets(targets);
-    const filterBuiltIns = filterItem.bind(
-      null,
-      polyfillTargets,
-      exclude.builtIns,
+
+    polyfills = filterItems(
       builtInsList,
+      include.builtIns,
+      exclude.builtIns,
+      polyfillTargets,
+      getPlatformSpecificDefaultFor(polyfillTargets),
     );
-    polyfills = Object.keys(builtInsList)
-      .concat(getPlatformSpecificDefaultFor(polyfillTargets))
-      .filter(filterBuiltIns)
-      .concat(include.builtIns);
   }
 
   if (debug && !hasBeenLogged) {
@@ -146,20 +162,19 @@ export default function buildPreset(context, opts = {}) {
     });
   }
 
-  const regenerator = transformations.indexOf("transform-regenerator") >= 0;
-  const modulePlugin = moduleType !== false &&
-    moduleTransformations[moduleType];
   const plugins = [];
 
-  modulePlugin &&
-    plugins.push([require(`babel-plugin-${modulePlugin}`), { loose }]);
-
-  plugins.push(
-    ...transformations.map(pluginName => [
-      require(`babel-plugin-${pluginName}`),
+  if (moduleType !== false && moduleTransformations[moduleType]) {
+    plugins.push([
+      require(`babel-plugin-${moduleTransformations[moduleType]}`),
       { loose },
-    ]),
-  );
+    ]);
+  }
+
+  transformations.forEach(pluginName =>
+    plugins.push([require(`babel-plugin-${pluginName}`), { loose }]));
+
+  const regenerator = transformations.has("transform-regenerator");
 
   if (debug) {
     console.log("");
@@ -171,7 +186,11 @@ export default function buildPreset(context, opts = {}) {
   if (useBuiltIns === "usage") {
     plugins.push([
       addUsedBuiltInsPlugin,
-      { polyfills: new Set(polyfills), regenerator, debug },
+      {
+        debug,
+        polyfills,
+        regenerator,
+      },
     ]);
   } else if (useBuiltIns === "entry") {
     plugins.push([

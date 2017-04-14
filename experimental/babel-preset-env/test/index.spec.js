@@ -123,8 +123,8 @@ describe("babel-preset-env", () => {
         ]),
         {
           all: ["transform-es2015-arrow-functions"],
-          plugins: ["transform-es2015-arrow-functions"],
-          builtIns: [],
+          plugins: new Set(["transform-es2015-arrow-functions"]),
+          builtIns: new Set(),
         },
       );
     });
@@ -134,8 +134,8 @@ describe("babel-preset-env", () => {
         babelPresetEnv.transformIncludesAndExcludes(["es6.map"]),
         {
           all: ["es6.map"],
-          plugins: [],
-          builtIns: ["es6.map"],
+          plugins: new Set(),
+          builtIns: new Set(["es6.map"]),
         },
       );
     });
