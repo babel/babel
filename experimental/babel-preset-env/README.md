@@ -178,7 +178,7 @@ This option is useful for "blacklisting" a transform like `transform-regenerator
 
 ### `useBuiltIns`
 
-`boolean` | `"entry"`, defaults to `true`.
+`"usage"` | `"entry"` | `false`, defaults to `false`.
 
 A way to apply `babel-preset-env` for polyfills (via `babel-polyfill`).
 
@@ -186,7 +186,7 @@ A way to apply `babel-preset-env` for polyfills (via `babel-polyfill`).
 npm install babel-polyfill --save
 ```
 
-#### `useBuiltIns: true`
+#### `useBuiltIns: 'usage'`
 
 Adds specific imports for polyfills when they are used in each file. We take advantage of the fact that a bundler will load the same polyfill only once.
 
