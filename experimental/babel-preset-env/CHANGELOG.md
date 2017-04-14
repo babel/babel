@@ -1,5 +1,33 @@
 # Changelog
 
+## v1.4.0 (2017-04-14)
+
+### :rocket: New Feature
+
+- Support `spec` option ([#98](https://github.com/babel/babel-preset-env/pull/98)) (@Kovensky)
+
+Added an option to enable more spec compliant, but potentially slower, transformations for any plugins in this preset that support them.
+
+- Bump compat-table for Edge 15 support ([#273](https://github.com/babel/babel-preset-env/pull/273)) (@existentialism)
+
+We updated our mappings so that you can get native support for async/await and other goodies when targeting Edge 15!
+
+### :bug: Bug Fix
+
+- Add Android browser to name map ([#270](https://github.com/babel/babel-preset-env/pull/270)) (@existentialism)
+
+Fixed a bug that was ignoring Android targets in browserslist queries (for example: "Android >= 4").
+
+### :memo: Documentation
+
+- Clarify note about loading polyfills only once ([#282](https://github.com/babel/babel-preset-env/pull/282)) (@darahak)
+- Add a reminder about include/exclude options ([#275](https://github.com/babel/babel-preset-env/pull/275)) (@existentialism)
+
+### :house: Internal
+
+- Chore: reduce package size. ([#281](https://github.com/babel/babel-preset-env/pull/281)) (@evilebottnawi)
+- Remove deprecated comment ([#271](https://github.com/babel/babel-preset-env/pull/271)) (@yavorsky)
+
 ## v1.3.3 (2017-04-07)
 
 ### :bug: Bug Fix
