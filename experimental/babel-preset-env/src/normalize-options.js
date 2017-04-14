@@ -53,14 +53,20 @@ export const checkDuplicateIncludeExcludes = (include = [], exclude = []) => {
   );
 };
 
-export const validateLooseOption = (looseOpt = false) => {
-  invariant(
-    typeof looseOpt === "boolean",
-    "Invalid Option: The 'loose' option must be a boolean."
-  );
+export const validateBoolOption = (name, value, defaultValue) => {
+  if (typeof value === "undefined") {
+    value = defaultValue;
+  }
 
-  return looseOpt;
+  if (typeof value !== "boolean") {
+    throw new Error(`Preset env: '${name}' option must be a boolean.`);
+  }
+
+  return value;
 };
+
+export const validateLooseOption = (looseOpt) => validateBoolOption("loose", looseOpt, false);
+export const validateSpecOption = (specOpt) => validateBoolOption("spec", specOpt, false);
 
 export const validateModulesOption = (modulesOpt = "commonjs") => {
   invariant(
@@ -104,6 +110,7 @@ export default function normalizeOptions(opts) {
     include: validateIncludesAndExcludes(opts.include, "include"),
     loose: validateLooseOption(opts.loose),
     moduleType: validateModulesOption(opts.modules),
+    spec: validateSpecOption(opts.spec),
     targets: opts.targets,
     useBuiltIns: opts.useBuiltIns
   };

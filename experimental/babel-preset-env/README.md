@@ -132,6 +132,12 @@ To prevent these errors - specify the uglify option, which will enable all plugi
 
 > NOTE: Uglify has a work-in-progress "Harmony" branch to address the lack of ES6 support, but it is not yet stable.  You can follow its progress in [UglifyJS2 issue #448](https://github.com/mishoo/UglifyJS2/issues/448).  If you require an alternative minifier which _does_ support ES6 syntax, we recommend using [Babili](https://github.com/babel/babili).
 
+### `spec`
+
+`boolean`, defaults to `false`.
+
+Enable more spec compliant, but potentially slower, transformations for any plugins in this preset that support them.
+
 ### `loose`
 
 `boolean`, defaults to `false`.

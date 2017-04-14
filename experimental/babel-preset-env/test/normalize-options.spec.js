@@ -5,10 +5,11 @@ const assert = require("assert");
 
 const {
   checkDuplicateIncludeExcludes,
+  normalizePluginNames,
   validateIncludesAndExcludes,
   validateLooseOption,
   validateModulesOption,
-  normalizePluginNames
+  validateSpecOption,
 } = normalizeOptions;
 
 describe("normalize-options", () => {
@@ -57,6 +58,20 @@ describe("normalize-options", () => {
       assert.throws(() => {
         validateLooseOption([]);
       }, Error);
+    });
+  });
+
+  describe("validateSpecOption", () => {
+    it("`undefined` option returns false", () => {
+      assert(validateSpecOption() === false);
+    });
+
+    it("`false` option returns false", () => {
+      assert(validateSpecOption(false) === false);
+    });
+
+    it("`true` option returns true", () => {
+      assert(validateSpecOption(true) === true);
     });
   });
 

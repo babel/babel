@@ -165,12 +165,11 @@ function getPlatformSpecificDefaultFor(targets) {
 
 export default function buildPreset(context, opts = {}) {
   const validatedOptions = normalizeOptions(opts);
-  const { debug, loose, moduleType, useBuiltIns } = validatedOptions;
+  const { debug, loose, moduleType, spec, useBuiltIns } = validatedOptions;
 
   const targets = getTargets(validatedOptions.targets);
   const include = transformIncludesAndExcludes(validatedOptions.include);
   const exclude = transformIncludesAndExcludes(validatedOptions.exclude);
-
 
   const filterPlugins = filterItem.bind(null, targets, exclude.plugins, pluginList);
   const transformations = Object.keys(pluginList)
@@ -210,11 +209,13 @@ export default function buildPreset(context, opts = {}) {
   const modulePlugin = moduleType !== false && moduleTransformations[moduleType];
   const plugins = [];
 
+  // NOTE: not giving spec here yet to avoid compatibility issues when
+  // babel-plugin-transform-es2015-modules-commonjs gets its spec mode
   modulePlugin &&
     plugins.push([require(`babel-plugin-${modulePlugin}`), { loose }]);
 
   plugins.push(...transformations.map((pluginName) =>
-    [require(`babel-plugin-${pluginName}`), { loose }]
+    [require(`babel-plugin-${pluginName}`), { spec, loose }]
   ));
 
   useBuiltIns &&
