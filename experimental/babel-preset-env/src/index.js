@@ -168,7 +168,7 @@ export default function buildPreset(context, opts = {}) {
     console.log("");
   }
 
-  if (useBuiltIns === true) {
+  if (useBuiltIns === "usage") {
     plugins.push([
       addUsedBuiltInsPlugin,
       { polyfills: new Set(polyfills), regenerator, debug },

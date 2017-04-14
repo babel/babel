@@ -1,6 +1,7 @@
 {
   "presets": [
     ["../../lib", {
+      "useBuiltIns": "usage",
       "debug": true,
       "targets": {
         "chrome": 54,

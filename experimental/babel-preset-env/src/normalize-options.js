@@ -71,13 +71,13 @@ export const validateModulesOption = (modulesOpt = "commonjs") => {
   return modulesOpt;
 };
 
-export const validateUseBuiltInsOption = (builtInsOpt = true) => {
+export const validateUseBuiltInsOption = (builtInsOpt = false) => {
   invariant(
-    builtInsOpt === true || builtInsOpt === false || builtInsOpt === "entry",
+    builtInsOpt === "usage" || builtInsOpt === false || builtInsOpt === "entry",
     `Invalid Option: The 'useBuiltIns' option must be either
-    'false' to indicate no polyfill,
+    'false' (default) to indicate no polyfill,
     '"entry"' to indicate replacing the entry polyfill, or
-    'true' (default) to import only used polyfills per file`,
+    '"usage"' to import only used polyfills per file`,
   );
 
   return builtInsOpt;
