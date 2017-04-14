@@ -12,8 +12,10 @@ try {
   console.log("Creating package");
   execSync("npm pack");
 
-  console.log("Setting up smoke test");
+  console.log("Setting up smoke test dependencies");
+
   fs.ensureDirSync(tempFolderPath);
+  process.chdir(tempFolderPath);
 
   fs.writeFileSync(
     path.join(tempFolderPath, "package.json"),
@@ -33,6 +35,10 @@ try {
 `
   );
 
+  execSync("npm install");
+
+  console.log("Setting up 'usage' smoke test");
+
   fs.writeFileSync(
     path.join(tempFolderPath, ".babelrc"),
     `
@@ -40,7 +46,7 @@ try {
   "presets": [
     ["env", {
       modules: false,
-      useBuiltIns: true
+      useBuiltIns: "usage"
     }]
   ]
 }
@@ -56,10 +62,37 @@ const foo = new Promise((resolve) => {
 `
   );
 
-  process.chdir(tempFolderPath);
+  console.log("Running 'usage' smoke test");
 
-  console.log("Running smoke test");
-  execSync("npm install && npm run build");
+  execSync("npm run build");
+
+  console.log("Setting up 'entry' smoke test");
+
+  fs.writeFileSync(
+    path.join(tempFolderPath, ".babelrc"),
+    `
+{
+  "presets": [
+    ["env", {
+      modules: false,
+      useBuiltIns: "entry"
+    }]
+  ]
+}
+`
+  );
+
+  fs.writeFileSync(
+    path.join(tempFolderPath, "index.js"),
+    `
+import "babel-polyfill";
+1 ** 2;
+`
+  );
+
+  console.log("Running 'entry' smoke test");
+
+  execSync("npm run build");
 } catch (e) {
   console.log(e);
   errorOccurred = true;
