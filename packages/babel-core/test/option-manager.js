@@ -1,23 +1,23 @@
 import assert from "assert";
-import OptionManager from "../lib/config/option-manager";
+import manageOptions from "../lib/config/option-manager";
 import path from "path";
 
 describe("option-manager", () => {
-  describe("memoisePluginContainer", () => {
-    it("throws for babel 5 plugin", () => {
-      return assert.throws(
-        () => OptionManager.memoisePluginContainer(({ Plugin }) => new Plugin("object-assign", {})),
-        /Babel 5 plugin is being run with Babel 6/
-      );
-    });
+  it("throws for babel 5 plugin", () => {
+    return assert.throws(() => {
+      manageOptions({
+        plugins: [
+          ({ Plugin }) => new Plugin("object-assign", {}),
+        ],
+      });
+    }, /Babel 5 plugin is being run with Babel 6/);
   });
 
   describe("mergeOptions", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          const opt = new OptionManager();
-          opt.init({
+          manageOptions({
             "randomOption": true,
           });
         },
@@ -28,8 +28,7 @@ describe("option-manager", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          const opt = new OptionManager();
-          opt.init({
+          manageOptions({
             "auxiliaryComment": true,
             "blacklist": true,
           });
@@ -42,12 +41,11 @@ describe("option-manager", () => {
     it("throws for resolved but erroring preset", () => {
       return assert.throws(
         () => {
-          const opt = new OptionManager();
-          opt.init({
+          manageOptions({
             "presets": [path.join(__dirname, "fixtures/option-manager/not-a-preset")],
           });
         },
-        /While processing preset: .*option-manager(?:\/|\\\\)not-a-preset\.js/
+        /While processing: .*option-manager(?:\/|\\\\)not-a-preset\.js/
       );
     });
   });
@@ -55,20 +53,20 @@ describe("option-manager", () => {
   describe("presets", function () {
     function presetTest(name) {
       it(name, function () {
-        const opt = new OptionManager();
-        const options = opt.init({
+        const { options, passes } = manageOptions({
           "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
         });
 
         assert.equal(true, Array.isArray(options.plugins));
         assert.equal(1, options.plugins.length);
+        assert.equal(1, passes.length);
+        assert.equal(1, passes[0].length);
       });
     }
 
     function presetThrowsTest(name, msg) {
       it(name, function () {
-        const opt = new OptionManager();
-        assert.throws(() => opt.init({
+        assert.throws(() => manageOptions({
           "presets": [path.join(__dirname, "fixtures/option-manager/presets", name)],
         }), msg);
       });
@@ -79,8 +77,8 @@ describe("option-manager", () => {
     presetTest("es2015_default_function");
     presetTest("es2015_default_object");
 
-    presetThrowsTest("es2015_named", /Preset must export a default export when using ES6 modules/);
-    presetThrowsTest("es2015_invalid", /Unsupported preset format: string/);
-    presetThrowsTest("es5_invalid", /Unsupported preset format: string/);
+    presetThrowsTest("es2015_named", /Must export a default export when using ES6 modules/);
+    presetThrowsTest("es2015_invalid", /Unsupported format: string/);
+    presetThrowsTest("es5_invalid", /Unsupported format: string/);
   });
 });
