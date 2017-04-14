@@ -54,11 +54,13 @@ function makeCachedFunction<ArgT, ResultT, Cache: CacheMap<ArgT, ResultT>>(
       }
     }
 
-    const { cache, result } = makeCachePair();
+    const { cache, result, deactivate } = makeCacheConfig();
 
     const value = handler(arg, cache);
 
     if (autoPermacache && !result.configured) cache.forever();
+
+    deactivate();
 
     if (!result.configured) {
       // eslint-disable-next-line max-len
@@ -119,7 +121,7 @@ function makeCachedFunction<ArgT, ResultT, Cache: CacheMap<ArgT, ResultT>>(
   };
 }
 
-function makeCachePair(): { cache: CacheConfigurator, result: * } {
+function makeCacheConfig(): { cache: CacheConfigurator, result: *, deactivate: () => void } {
   const pairs = [];
 
   const result = {
@@ -128,6 +130,11 @@ function makeCachePair(): { cache: CacheConfigurator, result: * } {
     forever: false,
     invalidate: false,
     valid: () => pairs.every(([key, fn]) => key === fn()),
+  };
+
+  let active = true;
+  const deactivate = () => {
+    active = false;
   };
 
   const cache: CacheConfigurator = Object.assign((function cacheFn(val) {
@@ -140,16 +147,19 @@ function makeCachePair(): { cache: CacheConfigurator, result: * } {
     return cache.using(val);
   }: any), ({
     forever() {
+      if (!active) throw new Error("Cannot change caching after evaluation has completed.");
       if (result.never) throw new Error("Caching has already been configured with .never()");
       result.forever = true;
       result.configured = true;
     },
     never() {
+      if (!active) throw new Error("Cannot change caching after evaluation has completed.");
       if (result.forever) throw new Error("Caching has already been configured with .forever()");
       result.never = true;
       result.configured = true;
     },
     using<T>(handler: () => T): T {
+      if (!active) throw new Error("Cannot change caching after evaluation has completed.");
       if (result.never || result.forever) {
         throw new Error("Caching has already been configured with .never or .forever()");
       }
@@ -160,6 +170,7 @@ function makeCachePair(): { cache: CacheConfigurator, result: * } {
       return key;
     },
     invalidate<T>(handler: () => T): T {
+      if (!active) throw new Error("Cannot change caching after evaluation has completed.");
       if (result.never || result.forever) {
         throw new Error("Caching has already been configured with .never or .forever()");
       }
@@ -172,5 +183,5 @@ function makeCachePair(): { cache: CacheConfigurator, result: * } {
     },
   }: CacheConfiguratorObj));
 
-  return { cache, result };
+  return { cache, result, deactivate };
 }
