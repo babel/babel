@@ -284,6 +284,14 @@ pp.parseSubscripts = function (base, startPos, startLoc, noCalls) {
       node.object = base;
       node.callee = this.parseNoCallExpr();
       return this.parseSubscripts(this.finishNode(node, "BindExpression"), startPos, startLoc, noCalls);
+    } else if (this.eat(tt.question)) {
+      const node = this.startNodeAt(startPos, startLoc);
+      node.object = base;
+      node.optional = true;
+      this.next();
+      node.property = this.parseIdentifier(true);
+      node.computed = false;
+      base = this.finishNode(node, "MemberExpression");
     } else if (this.eat(tt.dot)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.object = base;
