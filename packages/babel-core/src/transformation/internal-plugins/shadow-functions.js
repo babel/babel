@@ -22,6 +22,10 @@ export default {
       remap(path, "this");
     },
 
+    Super(path) {
+      remap(path, "super");
+    },
+
     ReferencedIdentifier(path) {
       if (path.node.name === "arguments") {
         remap(path, "arguments");

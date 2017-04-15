@@ -16,31 +16,32 @@ export default function ({ types: t }) {
 
   const CONTAINS_SUPER = Symbol();
 
+  const hasSuperVisitor = {
+    Super(path) {
+      const parentObj = path.findParent((path) => path.isObjectExpression());
+      if (parentObj) parentObj.node[CONTAINS_SUPER] = true;
+    },
+  };
+
   return {
     visitor: {
-      Super(path) {
-        const parentObj = path.findParent((path) => path.isObjectExpression());
-        if (parentObj) parentObj.node[CONTAINS_SUPER] = true;
-      },
+      ObjectExpression(path, file) {
+        path.traverse(hasSuperVisitor);
+        if (!path.node[CONTAINS_SUPER]) return;
 
-      ObjectExpression: {
-        exit(path, file) {
-          if (!path.node[CONTAINS_SUPER]) return;
+        let objectRef;
+        const getObjectRef = () => objectRef = objectRef || path.scope.generateUidIdentifier("obj");
 
-          let objectRef;
-          const getObjectRef = () => objectRef = objectRef || path.scope.generateUidIdentifier("obj");
+        const propPaths: Array = path.get("properties");
+        for (let propPath of propPaths) {
+          if (propPath.isObjectProperty()) propPath = propPath.get("value");
+          Property(propPath, propPath.node, path.scope, getObjectRef, file);
+        }
 
-          const propPaths: Array = path.get("properties");
-          for (let propPath of propPaths) {
-            if (propPath.isObjectProperty()) propPath = propPath.get("value");
-            Property(propPath, propPath.node, path.scope, getObjectRef, file);
-          }
-
-          if (objectRef) {
-            path.scope.push({ id: objectRef });
-            path.replaceWith(t.assignmentExpression("=", objectRef, path.node));
-          }
-        },
+        if (objectRef) {
+          path.scope.push({ id: objectRef });
+          path.replaceWith(t.assignmentExpression("=", objectRef, path.node));
+        }
       },
     },
   };

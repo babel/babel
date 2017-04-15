@@ -227,7 +227,7 @@ export default class ReplaceSupers {
           t.variableDeclarator(ref, node.left),
         ]),
         t.expressionStatement(t.assignmentExpression("=", node.left,
-          t.binaryExpression(node.operator[0], ref, node.right))),
+          t.binaryExpression(node.operator.substring(0, node.operator.length - 1), ref, node.right))),
       ];
     }
   }
@@ -263,7 +263,7 @@ export default class ReplaceSupers {
       property = node.property;
       computed = node.computed;
     } else if (t.isUpdateExpression(node) && isMemberExpressionSuper(node.argument)) {
-      const binary = t.binaryExpression(node.operator[0], node.argument, t.numericLiteral(1));
+      const binary = t.assignmentExpression(node.operator[0] + "=", node.argument, t.numericLiteral(1));
       if (node.prefix) {
         // ++super.foo;
         // to
