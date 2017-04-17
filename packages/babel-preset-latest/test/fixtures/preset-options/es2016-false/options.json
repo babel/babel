@@ -1,5 +1,0 @@
-{
-  "presets": [
-    ["latest", { "es2016": false }]
-  ]
-}
