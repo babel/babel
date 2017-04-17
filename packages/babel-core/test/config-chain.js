@@ -418,6 +418,46 @@ describe("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
+  it("js-config-function", function () {
+    const chain = buildConfigChain({
+      filename: fixture("js-config-function", "src.js"),
+    });
+
+    const expected = [
+      {
+        type: "options",
+        options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        type: "options",
+        options: {
+          compact: true,
+        },
+        alias: fixture("js-config-function", ".babelrc.js"),
+        loc: fixture("js-config-function", ".babelrc.js"),
+        dirname: fixture("js-config-function"),
+      },
+      {
+        type: "arguments",
+        options: {
+          filename: fixture("js-config-function", "src.js"),
+        },
+        alias: "base",
+        loc: "base",
+        dirname: base(),
+      },
+    ];
+
+    assert.deepEqual(chain, expected);
+  });
+
   it("js-config-default - should read transpiled export default", function () {
     const chain = buildConfigChain({
       filename: fixture("js-config-default", "src.js"),
