@@ -5,25 +5,22 @@
  */
 
 import resolve from "resolve";
+import path from "path";
 
-export function resolvePlugin(pluginName: string, dirname: string): string|null {
-  const possibleNames = [`babel-plugin-${pluginName}`, pluginName];
+const EXACT_RE = /^module:/;
+const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|[^/\/]+[/\/]|babel-plugin-)/;
+const BABEL_PRESET_PREFIX_RE = /^(?!@|module:|[^/\/]+[/\/]|babel-preset-)/;
+const BABEL_PLUGIN_ORG_RE = /^(@babel[/\/])(?!plugin-|[^/\/]+[/\/])/;
+const BABEL_PRESET_ORG_RE = /^(@babel[/\/])(?!preset-|[^/\/]+[/\/])/;
+const OTHER_PLUGIN_ORG_RE = /^(@(?!babel[/\/])[^/\/]+[/\/])(?!babel-plugin-|[^/\/]+[/\/])/;
+const OTHER_PRESET_ORG_RE = /^(@(?!babel[/\/])[^/\/]+[/\/])(?!babel-preset-|[^/\/]+[/\/])/;
 
-  return resolveFromPossibleNames(possibleNames, dirname);
+export function resolvePlugin(name: string, dirname: string): string|null {
+  return resolveStandardizedName("plugin", name, dirname);
 }
 
-export function resolvePreset(presetName: string, dirname: string): string|null {
-  const possibleNames = [`babel-preset-${presetName}`, presetName];
-
-  // trying to resolve @organization shortcat
-  // @foo/es2015 -> @foo/babel-preset-es2015
-  const matches = presetName.match(/^(@[^/]+)\/(.+)$/);
-  if (matches) {
-    const [, orgName, presetPath] = matches;
-    possibleNames.push(`${orgName}/babel-preset-${presetPath}`);
-  }
-
-  return resolveFromPossibleNames(possibleNames, dirname);
+export function resolvePreset(name: string, dirname: string): string|null {
+  return resolveStandardizedName("preset", name, dirname);
 }
 
 export function loadPlugin(name: string, dirname: string): { filepath: string, value: mixed } {
@@ -47,8 +44,7 @@ export function loadPreset(name: string, dirname: string): { filepath: string, v
 }
 
 export function loadParser(name: string, dirname: string): { filepath: string, value: Function } {
-  const filepath = resolveQuiet(name, dirname);
-  if (!filepath) throw new Error(`Parser ${name} not found relative to ${dirname}`);
+  const filepath = resolve.sync(name, { basedir: dirname });
 
   const mod = requireModule(filepath);
 
@@ -66,8 +62,7 @@ export function loadParser(name: string, dirname: string): { filepath: string, v
 }
 
 export function loadGenerator(name: string, dirname: string): { filepath: string, value: Function } {
-  const filepath = resolveQuiet(name, dirname);
-  if (!filepath) throw new Error(`Generator ${name} not found relative to ${dirname}`);
+  const filepath = resolve.sync(name, { basedir: dirname });
 
   const mod = requireModule(filepath);
 
@@ -84,25 +79,69 @@ export function loadGenerator(name: string, dirname: string): { filepath: string
   };
 }
 
-function resolveQuiet(name: string, dirname: string): string|null {
-  try {
-    return resolve.sync(name, { basedir: dirname });
-  } catch (e) {
-    // The 'resolve' module can currently throw ENOTDIR
-    // https://github.com/substack/node-resolve/issues/121
-    if (e.code !== "MODULE_NOT_FOUND" && e.code !== "ENOTDIR") throw e;
+function standardizeName(type: "plugin"|"preset", name: string) {
+  // Let absolute and relative paths through.
+  if (path.isAbsolute(name)) return name;
 
-    // Silently fail and move to the next item.
-  }
-  return null;
+  const isPreset = type === "preset";
+
+  return name
+    // foo -> babel-preset-foo
+    .replace(isPreset ? BABEL_PRESET_PREFIX_RE : BABEL_PLUGIN_PREFIX_RE, `babel-${type}-`)
+    // @babel/es2015 -> @babel/preset-es2015
+    .replace(isPreset ? BABEL_PRESET_ORG_RE : BABEL_PLUGIN_ORG_RE, `$1${type}-`)
+    // @foo/mypreset -> @foo/babel-preset-mypreset
+    .replace(isPreset ? OTHER_PRESET_ORG_RE : OTHER_PLUGIN_ORG_RE, `$1babel-${type}-`)
+    // module:mypreset -> mypreset
+    .replace(EXACT_RE, "");
 }
 
-function resolveFromPossibleNames(possibleNames: Array<string>, dirname: string): string|null {
-  for (const name of possibleNames) {
-    const result = resolveQuiet(name, dirname);
-    if (result !== null) return result;
+function resolveStandardizedName(type: "plugin"|"preset", name: string, dirname: string = process.cwd()) {
+  const standardizedName = standardizeName(type, name);
+
+  try {
+    return resolve.sync(standardizedName, { basedir: dirname });
+  } catch (e) {
+    if (e.code !== "MODULE_NOT_FOUND") throw e;
+
+    if (standardizedName !== name) {
+      let resolvedOriginal = false;
+      try {
+        resolve.sync(name, { basedir: dirname });
+        resolvedOriginal = true;
+      } catch (e2) { }
+
+      if (resolvedOriginal) {
+        // eslint-disable-next-line max-len
+        e.message += `\n- If you want to resolve "${name}", use "module:${name}"`;
+      }
+    }
+
+    let resolvedBabel = false;
+    try {
+      resolve.sync(standardizeName(type, "@babel/" + name), { basedir: dirname });
+      resolvedBabel = true;
+    } catch (e2) { }
+
+    if (resolvedBabel) {
+      // eslint-disable-next-line max-len
+      e.message += `\n- Did you mean "@babel/${name}"?`;
+    }
+
+    let resolvedOppositeType = false;
+    const oppositeType = type === "preset" ? "plugin" : "preset";
+    try {
+      resolve.sync(standardizeName(oppositeType, name), { basedir: dirname });
+      resolvedOppositeType = true;
+    } catch (e2) { }
+
+    if (resolvedOppositeType) {
+      // eslint-disable-next-line max-len
+      e.message += `\n- Did you accidentally pass a ${type} as a ${oppositeType}?`;
+    }
+
+    throw e;
   }
-  return null;
 }
 
 function requireModule(name: string): mixed {
