@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 8,
+  "end": 11,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 8
+      "column": 11
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 8,
+    "end": 11,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 8
+        "column": 11
       }
     },
     "sourceType": "script",
@@ -31,7 +31,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 8,
+        "end": 11,
         "loc": {
           "start": {
             "line": 1,
@@ -39,13 +39,13 @@
           },
           "end": {
             "line": 1,
-            "column": 8
+            "column": 11
           }
         },
         "expression": {
           "type": "MemberExpression",
           "start": 0,
-          "end": 8,
+          "end": 11,
           "loc": {
             "start": {
               "line": 1,
@@ -53,7 +53,7 @@
             },
             "end": {
               "line": 1,
-              "column": 8
+              "column": 11
             }
           },
           "object": {
@@ -69,29 +69,29 @@
                 "line": 1,
                 "column": 3
               },
-              "identifierName": "foo"
+              "identifierName": "obj"
             },
-            "name": "foo"
+            "name": "obj"
           },
+          "optional": true,
           "property": {
             "type": "Identifier",
-            "start": 5,
-            "end": 8,
+            "start": 6,
+            "end": 10,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 5
+                "column": 6
               },
               "end": {
                 "line": 1,
-                "column": 8
+                "column": 10
               },
-              "identifierName": "bar"
+              "identifierName": "expr"
             },
-            "name": "bar"
+            "name": "expr"
           },
-          "optional": true,
-          "computed": false
+          "computed": true
         }
       }
     ],
