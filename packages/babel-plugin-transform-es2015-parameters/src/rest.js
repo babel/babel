@@ -208,9 +208,6 @@ export const visitor = {
 
     const argsId = t.identifier("arguments");
 
-    // otherwise `arguments` will be remapped in arrow functions
-    argsId._shadowedFunctionLiteral = path;
-
     // check and optimise for extremely common cases
     const state = {
       references: [],
@@ -262,9 +259,6 @@ export const visitor = {
     state.references = state.references.concat(
       state.candidates.map(({ path }) => path)
     );
-
-    // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
-    state.deopted = state.deopted || !!node.shadow;
 
     const start = t.numericLiteral(node.params.length);
     const key = scope.generateUidIdentifier("key");

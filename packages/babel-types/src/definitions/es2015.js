@@ -245,10 +245,10 @@ defineType("MetaProperty", {
   fields: {
     // todo: limit to new.target
     meta: {
-      validate: assertValueType("string"),
+      validate: assertNodeType("Identifier"),
     },
     property: {
-      validate: assertValueType("string"),
+      validate: assertNodeType("Identifier"),
     },
   },
 });

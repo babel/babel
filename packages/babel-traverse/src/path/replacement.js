@@ -207,8 +207,7 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
   } else if (toSequenceExpression) {
     this.replaceWith(toSequenceExpression);
   } else {
-    const container = t.functionExpression(null, [], t.blockStatement(nodes));
-    container.shadow = true;
+    const container = t.arrowFunctionExpression([], t.blockStatement(nodes));
 
     this.replaceWith(t.callExpression(container, []));
     this.traverse(hoistVariablesVisitor);
@@ -238,6 +237,8 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
         path.replaceWith(t.returnStatement(path.node.expression));
       }
     }
+
+    this.get("callee").arrowFunctionToExpression();
 
     return this.node;
   }

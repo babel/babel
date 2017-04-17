@@ -17,7 +17,6 @@ import buildDebug from "debug";
 import loadConfig, { type ResolvedConfig } from "../../config";
 
 import blockHoistPlugin from "../internal-plugins/block-hoist";
-import shadowFunctionsPlugin from "../internal-plugins/shadow-functions";
 
 const babelDebug = buildDebug("babel:file");
 
@@ -42,11 +41,11 @@ const errorVisitor = {
 export default class File extends Store {
   constructor({ options, passes }: ResolvedConfig) {
     if (!INTERNAL_PLUGINS) {
-      // Lazy-init the internal plugins to remove the init-time circular dependency between plugins being
+      // Lazy-init the internal plugin to remove the init-time circular dependency between plugins being
       // passed babel-core's export object, which loads this file, and this 'loadConfig' loading plugins.
       INTERNAL_PLUGINS = loadConfig({
         babelrc: false,
-        plugins: [ blockHoistPlugin, shadowFunctionsPlugin ],
+        plugins: [ blockHoistPlugin ],
       }).passes[0];
     }
 

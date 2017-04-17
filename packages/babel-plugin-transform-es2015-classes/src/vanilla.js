@@ -14,9 +14,7 @@ const buildDerivedConstructor = template(`
 
 const noMethodVisitor = {
   "FunctionExpression|FunctionDeclaration"(path) {
-    if (!path.is("shadow")) {
-      path.skip();
-    }
+    path.skip();
   },
 
   Method(path) {
@@ -48,7 +46,9 @@ const verifyConstructorVisitor = visitors.merge([noMethodVisitor, {
 
   ThisExpression(path) {
     if (this.isDerived && !this.hasBareSuper) {
-      if (!path.inShadow("this")) {
+      const fn = path.find((p) => p.isFunction());
+
+      if (!fn || !fn.isArrowFunctionExpression()) {
         throw path.buildCodeFrameError("'this' is not allowed before super()");
       }
     }
@@ -142,8 +142,7 @@ export default class ClassTransformer {
     //
     body.push(t.returnStatement(this.classRef));
 
-    const container = t.functionExpression(null, closureParams, t.blockStatement(body));
-    container.shadow = true;
+    const container = t.arrowFunctionExpression(closureParams, t.blockStatement(body));
     return t.callExpression(container, closureArgs);
   }
 

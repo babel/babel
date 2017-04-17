@@ -27,10 +27,6 @@ const namedBuildWrapper = template(`
 
 const awaitVisitor = {
   Function(path) {
-    if (path.isArrowFunctionExpression() && !path.node.async) {
-      path.arrowFunctionToShadowed();
-      return;
-    }
     path.skip();
   },
 
@@ -84,7 +80,6 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
   node.async = false;
 
   const container = t.functionExpression(null, [], t.blockStatement(body.body), true);
-  container.shadow = true;
   body.body = [
     t.returnStatement(t.callExpression(
       t.callExpression(callId, [container]),
@@ -95,6 +90,9 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
   // Regardless of whether or not the wrapped function is a an async method
   // or generator the outer function should not be
   node.generator = false;
+
+  // Unwrap the wrapper IIFE's environment so super and this and such still work.
+  path.get("body.body.0.argument.callee.arguments.0").unwrapFunctionEnvironment();
 }
 
 function plainFunction(path: NodePath, callId: Object) {
@@ -104,7 +102,7 @@ function plainFunction(path: NodePath, callId: Object) {
   let wrapper = buildWrapper;
 
   if (path.isArrowFunctionExpression()) {
-    path.arrowFunctionToShadowed();
+    path.arrowFunctionToExpression();
   } else if (!isDeclaration && asyncFnId) {
     wrapper = namedBuildWrapper;
   }
@@ -120,7 +118,7 @@ function plainFunction(path: NodePath, callId: Object) {
 
   const built = t.callExpression(callId, [node]);
   const container = wrapper({
-    NAME: asyncFnId,
+    NAME: asyncFnId || null,
     REF: path.scope.generateUidIdentifier("ref"),
     FUNCTION: built,
     PARAMS: node.params.reduce((acc, param) => {

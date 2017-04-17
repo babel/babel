@@ -46,6 +46,10 @@ export default function ({ types: t }) {
         if (state.opts.loose) Constructor = LooseTransformer;
 
         path.replaceWith(new Constructor(path, state.file).run());
+
+        if (path.isCallExpression() && path.get("callee").isArrowFunctionExpression()) {
+          path.get("callee").arrowFunctionToExpression();
+        }
       },
     },
   };
