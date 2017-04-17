@@ -31,7 +31,26 @@ describe("buildConfigChain", function () {
     process.env.NODE_ENV = oldNodeEnv;
   });
 
-  // TODO: Tests for ignore and only
+  describe("ignore/only", () => {
+    // TODO: More tests for ignore and only
+
+    it("should ignore files that match", () => {
+      const chain = buildConfigChain({
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        ignore: [
+          fixture("nonexistant-fake", "src.js"),
+
+          // We had a regression where multiple ignore patterns broke things, so
+          // we keep some extra random items in here.
+          fixture("nonexistant-fake", "other.js"),
+          fixture("nonexistant-fake", "misc.js"),
+        ],
+      });
+
+      assert.equal(chain, null);
+    });
+  });
 
   it("dir1", function () {
     const chain = buildConfigChain({
