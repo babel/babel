@@ -845,10 +845,11 @@ interface MemberExpression <: Expression, Pattern {
   object: Expression | Super;
   property: Expression;
   computed: boolean;
+  nullPropagation: boolean | null;
 }
 ```
 
-A member expression. If `computed` is `true`, the node corresponds to a computed (`a[b]`) member expression and `property` is an `Expression`. If `computed` is `false`, the node corresponds to a static (`a.b`) member expression and `property` is an `Identifier`.
+A member expression. If `computed` is `true`, the node corresponds to a computed (`a[b]`) member expression and `property` is an `Expression`. If `computed` is `false`, the node corresponds to a static (`a.b`) member expression and `property` is an `Identifier`. The `nullPropagation` flags indecates that the member expression can be called even if the object is null or undefined. If this is the object value (null/undefined) should be returned.
 
 ### BindExpression
 
