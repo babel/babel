@@ -1,6 +1,6 @@
 import assert from "assert";
 import chalk from "chalk";
-import codeFrame from "..";
+import codeFrame, { codeFrameColumns } from "..";
 
 describe("babel-code-frame", function () {
   it("basic usage", function () {
@@ -13,19 +13,6 @@ describe("babel-code-frame", function () {
       "  1 | class Foo {",
       "> 2 |   constructor()",
       "    |                ^",
-      "  3 | };",
-    ].join("\n"));
-  });
-
-  it("optional column number", function () {
-    const rawLines = [
-      "class Foo {",
-      "  constructor()",
-      "};",
-    ].join("\n");
-    assert.equal(codeFrame(rawLines, 2, null), [
-      "  1 | class Foo {",
-      "> 2 |   constructor()",
       "  3 | };",
     ].join("\n"));
   });
@@ -204,5 +191,91 @@ describe("babel-code-frame", function () {
         " " + gutter(" 4 | "),
       ].join("\n"))
     );
+  });
+
+  it("basic usage, new API", function () {
+    const rawLines = [
+      "class Foo {",
+      "  constructor()",
+      "};",
+    ].join("\n");
+    assert.equal(codeFrameColumns(rawLines, { start: { line: 2, column: 16 } }), [
+      "  1 | class Foo {",
+      "> 2 |   constructor()",
+      "    |                ^",
+      "  3 | };",
+    ].join("\n"));
+  });
+
+  it("mark multiple columns", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor()",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(rawLines, { start: { line: 2, column: 3 }, end: { line: 2, column: 16 } }), [
+        "  1 | class Foo {",
+        "> 2 |   constructor()",
+        "    |   ^^^^^^^^^^^^^",
+        "  3 | };",
+      ].join("\n"));
+  });
+
+  it("mark multiple columns across lines", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(rawLines, { start: { line: 2, column: 17 }, end: { line: 3, column: 3 } }), [
+        "  1 | class Foo {",
+        "> 2 |   constructor() {",
+        "    |                 ^",
+        "> 3 |   }",
+        "    | ^^^",
+        "  4 | };",
+      ].join("\n"));
+  });
+
+  it("mark multiple columns across multiple lines", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(rawLines, { start: { line: 2, column: 17 }, end: { line: 4, column: 3 } }), [
+        "  1 | class Foo {",
+        "> 2 |   constructor() {",
+        "    |                 ^",
+        "> 3 |     console.log(arguments);",
+        "    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "> 4 |   }",
+        "    | ^^^",
+        "  5 | };",
+      ].join("\n"));
+  });
+
+  it("mark across multiple lines without columns", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(rawLines, { start: { line: 2 }, end: { line: 4 } }), [
+        "  1 | class Foo {",
+        "> 2 |   constructor() {",
+        "> 3 |     console.log(arguments);",
+        "> 4 |   }",
+        "  5 | };",
+      ].join("\n"));
   });
 });
