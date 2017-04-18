@@ -23,11 +23,26 @@ function getObjectString(node) {
   }
 }
 
+const modulePathMap = {
+  "regenerator-runtime": "babel-polyfill/lib/regenerator-runtime/runtime",
+};
+
+const getModulePath = module => {
+  return (
+    modulePathMap[module] || `babel-polyfill/lib/core-js/modules/${module}`
+  );
+};
+
 export default function({ types: t }) {
   function addImport(path, builtIn, builtIns) {
     if (builtIn && !builtIns.has(builtIn)) {
       builtIns.add(builtIn);
-      const importDec = t.importDeclaration([], t.stringLiteral(builtIn));
+
+      const importDec = t.importDeclaration(
+        [],
+        t.stringLiteral(getModulePath(builtIn)),
+      );
+
       importDec._blockHoist = 3;
       const programPath = path.find(path => path.isProgram());
       programPath.unshiftContainer("body", importDec);
@@ -38,28 +53,26 @@ export default function({ types: t }) {
     if (Array.isArray(builtIn)) {
       for (const i of builtIn) {
         if (polyfills.has(i)) {
-          addImport(path, `babel-polyfill/lib/core-js/modules/${i}`, builtIns);
+          addImport(path, i, builtIns);
         }
       }
     } else {
       if (polyfills.has(builtIn)) {
-        addImport(
-          path,
-          `babel-polyfill/lib/core-js/modules/${builtIn}`,
-          builtIns,
-        );
+        addImport(path, builtIn, builtIns);
       }
     }
   }
 
   function isRequire(path) {
-    return t.isExpressionStatement(path.node) &&
+    return (
+      t.isExpressionStatement(path.node) &&
       t.isCallExpression(path.node.expression) &&
       t.isIdentifier(path.node.expression.callee) &&
       path.node.expression.callee.name === "require" &&
       path.node.expression.arguments.length === 1 &&
       t.isStringLiteral(path.node.expression.arguments[0]) &&
-      isPolyfillSource(path.node.expression.arguments[0].value);
+      isPolyfillSource(path.node.expression.arguments[0].value)
+    );
   }
 
   const addAndRemovePolyfillImports = {
@@ -118,11 +131,7 @@ Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'"
         return;
       }
 
-      addImport(
-        path,
-        "babel-polyfill/lib/core-js/modules/web.dom.iterable",
-        this.builtIns,
-      );
+      addImport(path, "web.dom.iterable", this.builtIns);
     },
 
     // Symbol.iterator in arr
@@ -130,22 +139,14 @@ Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'"
       if (path.node.operator !== "in") return;
       if (!path.get("left").matchesPattern("Symbol.iterator")) return;
 
-      addImport(
-        path,
-        "babel-polyfill/lib/core-js/modules/web.dom.iterable",
-        this.builtIns,
-      );
+      addImport(path, "web.dom.iterable", this.builtIns);
     },
 
     // yield*
     YieldExpression(path) {
       if (!path.node.delegate) return;
 
-      addImport(
-        path,
-        "babel-polyfill/lib/core-js/modules/web.dom.iterable",
-        this.builtIns,
-      );
+      addImport(path, "web.dom.iterable", this.builtIns);
     },
 
     // Array.from
@@ -261,11 +262,7 @@ Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'"
       if (!this.usesRegenerator && (path.node.generator || path.node.async)) {
         this.usesRegenerator = true;
         if (state.opts.regenerator) {
-          addImport(
-            path,
-            "babel-polyfill/lib/regenerator-runtime/runtime",
-            this.builtIns,
-          );
+          addImport(path, "regenerator-runtime", this.builtIns);
         }
       }
     },
@@ -276,6 +273,13 @@ Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'"
     pre() {
       this.builtIns = new Set();
       this.usesRegenerator = false;
+    },
+    post() {
+      const { debug, onDebug } = this.opts;
+
+      if (debug) {
+        onDebug(this.builtIns, this.file.opts.filename);
+      }
     },
     visitor: addAndRemovePolyfillImports,
   };

@@ -96,11 +96,21 @@ describe("debug output", () => {
       );
     }
 
+    const inFilesFolderLoc = path.join(testLoc, "in");
+
     opts.inFiles = {
-      "src/in.js": "",
       ".babelrc": helper.readFile(optionsLoc),
     };
 
+    if (!fs.existsSync(inFilesFolderLoc)) {
+      opts.inFiles["src/in.js"] = "";
+    } else {
+      fs.readdirSync(inFilesFolderLoc).forEach(filename => {
+        opts.inFiles[`src/${filename}`] = helper.readFile(
+          path.join(inFilesFolderLoc, filename),
+        );
+      });
+    }
     it(testName, buildTest(opts));
   });
 });
