@@ -9,6 +9,7 @@ packages/*/src
 lib/file.js
 lib/parser.js
 lib/types.js
+lib/third-party-libs.js.flow
 
 [options]
 strip_root=true

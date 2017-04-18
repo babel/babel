@@ -1,3 +1,5 @@
+// @flow
+
 import * as context from "../index";
 import Plugin from "./plugin";
 import * as messages from "babel-messages";
@@ -12,11 +14,11 @@ import clone from "lodash/clone";
 import { loadPlugin, loadPreset, loadParser, loadGenerator } from "./loading/files";
 
 type MergeOptions = {
-  type: "arguments"|"options"|"preset",
-  options?: Object,
+  +type: "arguments"|"options"|"preset",
+  options: {},
   alias: string,
-  loc?: string,
-  dirname?: string
+  loc: string,
+  dirname: string
 };
 
 const optionNames = new Set([
@@ -70,7 +72,10 @@ const ALLOWED_PLUGIN_KEYS = new Set([
   "inherits",
 ]);
 
-export default function manageOptions(opts?: Object) {
+export default function manageOptions(opts: {}): {
+  options: Object,
+  passes: Array<Array<[ Plugin, ?{} ]>>,
+}|null {
   return new OptionManager().init(opts);
 }
 
@@ -81,7 +86,7 @@ class OptionManager {
   }
 
   options: Object;
-  passes: Array<Array<Plugin>>;
+  passes: Array<Array<[Plugin, ?{}]>>;
 
   /**
    * This is called when we want to merge the input `opts` into the
@@ -92,12 +97,19 @@ class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(config: MergeOptions, pass?: Array<Plugin>) {
+  mergeOptions(config: MergeOptions, pass?: Array<[Plugin, ?{}]>) {
     const result = loadConfig(config);
 
     const plugins = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
     const presets = result.presets.map((descriptor) => loadPresetDescriptor(descriptor));
 
+
+    if (
+      config.options.passPerPreset != null &&
+      typeof config.options.passPerPreset !== "boolean"
+    ) {
+      throw new Error(".passPerPreset must be a boolean or undefined");
+    }
     const passPerPreset = config.options.passPerPreset;
     pass = pass || this.passes[0];
 
@@ -124,7 +136,7 @@ class OptionManager {
     merge(this.options, result.options);
   }
 
-  init(opts: Object = {}): Object {
+  init(opts: {}) {
     const configChain = buildConfigChain(opts);
     if (!configChain) return null;
 
@@ -136,7 +148,8 @@ class OptionManager {
       // There are a few case where thrown errors will try to annotate themselves multiple times, so
       // to keep things simple we just bail out if re-wrapping the message.
       if (!/^\[BABEL\]/.test(e.message)) {
-        e.message = `[BABEL] ${opts.filename || "unknown"}: ${e.message}`;
+        const filename = typeof opts.filename === "string" ? opts.filename : null;
+        e.message = `[BABEL] ${filename || "unknown"}: ${e.message}`;
       }
 
       throw e;
@@ -185,11 +198,27 @@ class OptionManager {
   }
 }
 
+type BasicDescriptor = {
+  value: {}|Function,
+  options: ?{},
+  dirname: string,
+  alias: string,
+  loc: string,
+};
+
 /**
  * Load and validate the given config into a set of options, plugins, and presets.
  */
-function loadConfig(config) {
+function loadConfig(config): {
+  options: {},
+  plugins: Array<BasicDescriptor>,
+  presets: Array<BasicDescriptor>,
+} {
   const options = normalizeOptions(config);
+
+  if (config.options.plugins != null && !Array.isArray(config.options.plugins)) {
+    throw new Error(".plugins should be an array, null, or undefined");
+  }
 
   const plugins = (config.options.plugins || []).map((plugin, index) => {
     const { filepath, value, options } = normalizePair(plugin, loadPlugin, config.dirname);
@@ -202,6 +231,11 @@ function loadConfig(config) {
       dirname: config.dirname,
     };
   });
+
+  if (config.options.presets != null && !Array.isArray(config.options.presets)) {
+    throw new Error(".presets should be an array, null, or undefined");
+  }
+
   const presets = (config.options.presets || []).map((preset, index) => {
     const { filepath, value, options } = normalizePair(preset, loadPreset, config.dirname);
 
@@ -259,19 +293,19 @@ function loadPluginDescriptor(descriptor) {
   return [ result, descriptor.options];
 }
 
-function instantiatePlugin({ value: pluginObject, descriptor }) {
-  Object.keys(pluginObject).forEach((key) => {
+function instantiatePlugin({ value: pluginObj, descriptor }) {
+  Object.keys(pluginObj).forEach((key) => {
     if (!ALLOWED_PLUGIN_KEYS.has(key)) {
       throw new Error(messages.get("pluginInvalidProperty", descriptor.alias, key));
     }
   });
-  if (pluginObject.visitor && (pluginObject.visitor.enter || pluginObject.visitor.exit)) {
+  if (pluginObj.visitor && (pluginObj.visitor.enter || pluginObj.visitor.exit)) {
     throw new Error("Plugins aren't allowed to specify catch-all enter/exit handlers. " +
       "Please target individual nodes.");
   }
 
-  const plugin = Object.assign({}, pluginObject, {
-    visitor: clone(pluginObject.visitor || {}),
+  const plugin = Object.assign({}, pluginObj, {
+    visitor: clone(pluginObj.visitor || {}),
   });
 
   traverse.explode(plugin.visitor);
@@ -284,6 +318,7 @@ function instantiatePlugin({ value: pluginObject, descriptor }) {
       loc: descriptor.loc,
       value: plugin.inherits,
       options: descriptor.options,
+      dirname: descriptor.dirname,
     };
 
     inherits = loadPluginDescriptor(inheritsDescriptor)[0];
@@ -300,7 +335,7 @@ function instantiatePlugin({ value: pluginObject, descriptor }) {
 /**
  * Generate a config object that will act as the root of a new nested config.
  */
-function loadPresetDescriptor(descriptor) {
+function loadPresetDescriptor(descriptor): MergeOptions {
   return {
     type: "preset",
     options: loadDescriptor(descriptor).value,
@@ -375,13 +410,6 @@ function normalizeOptions(config) {
     options.generatorOpts.generator = loadGenerator(options.generatorOpts.generator, config.dirname).value;
   }
 
-  if (config.options.presets && !Array.isArray(config.options.presets)) {
-    throw new Error(`${alias}.presets should be an array`);
-  }
-  if (config.options.plugins && !Array.isArray(config.options.plugins)) {
-    throw new Error(`${alias}.plugins should be an array`);
-  }
-
   delete options.passPerPreset;
   delete options.plugins;
   delete options.presets;
@@ -392,15 +420,19 @@ function normalizeOptions(config) {
 /**
  * Given a plugin/preset item, resolve it into a standard format.
  */
-function normalizePair(pair, resolver, dirname) {
+function normalizePair(pair: mixed, resolver, dirname): {
+  filepath: string|null,
+  value: {}|Function,
+  options: ?{},
+} {
   let options;
   let value = pair;
-  if (Array.isArray(value)) {
-    if (value.length > 2) {
-      throw new Error(`Unexpected extra options ${JSON.stringify(value.slice(2))}.`);
+  if (Array.isArray(pair)) {
+    if (pair.length > 2) {
+      throw new Error(`Unexpected extra options ${JSON.stringify(pair.slice(2))}.`);
     }
 
-    [value, options] = value;
+    [value, options] = pair;
   }
 
   let filepath = null;
@@ -411,6 +443,10 @@ function normalizePair(pair, resolver, dirname) {
     } = resolver(value, dirname));
   }
 
+  if (!value) {
+    throw new Error(`Unexpected falsy value: ${String(value)}`);
+  }
+
   if (typeof value === "object" && value.__esModule) {
     if (value.default) {
       value = value.default;
@@ -419,13 +455,12 @@ function normalizePair(pair, resolver, dirname) {
     }
   }
 
-  if (!value) {
-    throw new Error(`Unexpected falsy value: ${value}`);
+  if (typeof value !== "object" && typeof value !== "function") {
+    throw new Error(`Unsupported format: ${typeof value}. Expected an object or a function.`);
   }
 
-  const type = typeof value;
-  if (type !== "object" && type !== "function") {
-    throw new Error(`Unsupported format: ${type}. Expected an object or a function.`);
+  if (options != null && typeof options !== "object") {
+    throw new Error("Plugin/Preset options must be an object, null, or undefined");
   }
 
   return { filepath, value, options };

@@ -1,9 +1,11 @@
+// @flow
+
 import mergeWith from "lodash/mergeWith";
 
-export default function (dest?: Object, src?: Object): ?Object {
+export default function<T: {}>(dest?: T, src?: T) {
   if (!dest || !src) return;
 
-  return mergeWith(dest, src, function (a, b) {
+  mergeWith(dest, src, function (a, b) {
     if (b && Array.isArray(a)) {
       const newArray = b.slice(0);
 

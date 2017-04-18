@@ -1,10 +1,24 @@
-import * as babel from "../index";
+// @flow
+
+import { getEnv } from "./helpers/environment";
 import path from "path";
 import micromatch from "micromatch";
 
 import { findConfigs, loadConfig } from "./loading/files";
 
-export default function buildConfigChain(opts: Object = {}) {
+type ConfigItem = {
+  type: "options"|"arguments",
+  options: {},
+  dirname: string,
+  alias: string,
+  loc: string,
+};
+
+export default function buildConfigChain(opts: {}): Array<ConfigItem>|null {
+  if (typeof opts.filename !== "string" && opts.filename != null) {
+    throw new Error(".filename must be a string, null, or undefined");
+  }
+
   const filename = opts.filename ? path.resolve(opts.filename) : null;
   const builder = new ConfigChainBuilder(filename);
 
@@ -17,7 +31,7 @@ export default function buildConfigChain(opts: Object = {}) {
     });
 
     // resolve all .babelrc files
-    if (opts.babelrc !== false) {
+    if (opts.babelrc !== false && filename) {
       builder.findConfigs(filename);
     }
   } catch (e) {
@@ -30,6 +44,10 @@ export default function buildConfigChain(opts: Object = {}) {
 }
 
 class ConfigChainBuilder {
+  filename: string|null;
+  configs: Array<ConfigItem>;
+  possibleDirs: null|Array<string>;
+
   constructor(filename) {
     this.configs = [];
     this.filename = filename;
@@ -40,59 +58,68 @@ class ConfigChainBuilder {
    * Tests if a filename should be ignored based on "ignore" and "only" options.
    */
   shouldIgnore(
-    ignore: Array<string | RegExp | Function>,
-    only?: Array<string | RegExp | Function>,
+    ignore: mixed,
+    only: mixed,
     dirname: string,
   ): boolean {
     if (!this.filename) return false;
 
-    if (ignore && !Array.isArray(ignore)) {
-      throw new Error(`.ignore should be an array, ${JSON.stringify(ignore)} given`);
+    if (ignore) {
+      if (!Array.isArray(ignore)) {
+        throw new Error(`.ignore should be an array, ${JSON.stringify(ignore)} given`);
+      }
+
+      if (this.matchesPatterns(ignore, dirname)) return true;
     }
 
-    if (only && !Array.isArray(only)) {
-      throw new Error(`.only should be an array, ${JSON.stringify(only)} given`);
+    if (only) {
+      if (!Array.isArray(only)) {
+        throw new Error(`.only should be an array, ${JSON.stringify(only)} given`);
+      }
+
+      if (!this.matchesPatterns(only, dirname)) return true;
     }
 
-    return (ignore && this.matchesPatterns(ignore, dirname)) ||
-      (only && !this.matchesPatterns(only, dirname));
+    return false;
   }
 
   /**
    * Returns result of calling function with filename if pattern is a function.
    * Otherwise returns result of matching pattern Regex with filename.
    */
-  matchesPatterns(patterns: Array<string | Function | RegExp>, dirname: string) {
+  matchesPatterns(patterns: Array<mixed>, dirname: string) {
+    const filename = this.filename;
+    if (!filename) throw new Error("Assertion failure: .filename should always exist here");
+
     const res = [];
     const strings = [];
     const fns = [];
 
     patterns.forEach((pattern) => {
-      const type = typeof pattern;
-      if (type === "string") strings.push(pattern);
-      else if (type === "function") fns.push(pattern);
-      else res.push(pattern);
+      if (typeof pattern === "string") strings.push(pattern);
+      else if (typeof pattern === "function") fns.push(pattern);
+      else if (pattern instanceof RegExp) res.push(pattern);
+      else throw new Error("Patterns must be a string, function, or regular expression");
     });
 
-    if (res.some((re) => re.test(this.filename))) return true;
-    if (fns.some((fn) => fn(this.filename))) return true;
+    if (res.some((re) => re.test(filename))) return true;
+    if (fns.some((fn) => fn(filename))) return true;
 
     if (strings.length > 0) {
+      let possibleDirs = this.possibleDirs;
       // Lazy-init so we don't initialize this for files that have no glob patterns.
-      if (!this.possibleDirs) {
-        this.possibleDirs = [];
+      if (!possibleDirs) {
+        possibleDirs = this.possibleDirs = [];
 
-        if (this.filename) {
-          this.possibleDirs.push(this.filename);
+        possibleDirs.push(filename);
 
-          let current = this.filename;
-          while (true) {
-            const previous = current;
-            current = path.dirname(current);
-            if (previous === current) break;
+        let current = filename;
+        while (true) {
+          const previous = current;
+          current = path.dirname(current);
+          if (previous === current) break;
 
-            this.possibleDirs.push(current);
-          }
+          possibleDirs.push(current);
         }
       }
 
@@ -104,7 +131,7 @@ class ConfigChainBuilder {
         return (negate ? "!" : "") + path.resolve(dirname, pattern);
       });
 
-      if (micromatch(this.possibleDirs, absolutePatterns, { nocase: true }).length > 0) {
+      if (micromatch(possibleDirs, absolutePatterns, { nocase: true }).length > 0) {
         return true;
       }
     }
@@ -113,12 +140,6 @@ class ConfigChainBuilder {
   }
 
   findConfigs(loc: string) {
-    if (!loc) return;
-
-    if (!path.isAbsolute(loc)) {
-      loc = path.join(process.cwd(), loc);
-    }
-
     findConfigs(path.dirname(loc)).forEach(({ filepath, dirname, options }) => {
       this.mergeConfig({
         type: "options",
@@ -131,31 +152,33 @@ class ConfigChainBuilder {
 
   mergeConfig({
     type,
-    options,
+    options: rawOpts,
     alias,
-    loc,
     dirname,
   }) {
-    if (!options) {
-      return false;
-    }
-
     // Bail out ASAP if this file is ignored so that we run as little logic as possible on ignored files.
-    if (this.filename && this.shouldIgnore(options.ignore, options.only, dirname)) {
+    if (this.filename && this.shouldIgnore(rawOpts.ignore || null, rawOpts.only || null, dirname)) {
       // TODO(logan): This is a really cross way to bail out. Avoid this in rewrite.
-      throw Object.assign(new Error("This file has been ignored."), { code: "BABEL_IGNORED_FILE" });
+      throw Object.assign((new Error("This file has been ignored."): any), { code: "BABEL_IGNORED_FILE" });
     }
 
-    options = Object.assign({}, options);
+    const options = Object.assign({}, rawOpts);
+    delete options.env;
+    delete options.extends;
 
-    loc = loc || alias;
+    const envKey = getEnv();
 
-    // env
-    const envKey = babel.getEnv();
-    if (options.env) {
-      const envOpts = options.env[envKey];
-      delete options.env;
+    if (rawOpts.env != null && (typeof rawOpts.env !== "object" || Array.isArray(rawOpts.env))) {
+      throw new Error(".env block must be an object, null, or undefined");
+    }
 
+    const envOpts = rawOpts.env && rawOpts.env[envKey];
+
+    if (envOpts != null && (typeof envOpts !== "object" || Array.isArray(envOpts))) {
+      throw new Error(".env[...] block must be an object, null, or undefined");
+    }
+
+    if (envOpts) {
       this.mergeConfig({
         type,
         options: envOpts,
@@ -168,13 +191,14 @@ class ConfigChainBuilder {
       type,
       options,
       alias,
-      loc,
+      loc: alias,
       dirname,
     });
 
-    // add extends clause
-    if (options.extends) {
-      const extendsConfig = loadConfig(options.extends, dirname);
+    if (rawOpts.extends) {
+      if (typeof rawOpts.extends !== "string") throw new Error(".extends must be a string");
+
+      const extendsConfig = loadConfig(rawOpts.extends, dirname);
 
       const existingConfig = this.configs.some((config) => {
         return config.alias === extendsConfig.filepath;
@@ -187,7 +211,6 @@ class ConfigChainBuilder {
           dirname: extendsConfig.dirname,
         });
       }
-      delete options.extends;
     }
   }
 }
