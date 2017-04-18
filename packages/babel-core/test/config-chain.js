@@ -32,9 +32,7 @@ describe("buildConfigChain", function() {
     process.env.NODE_ENV = oldNodeEnv;
   });
 
-  describe("ignore/only", () => {
-    // TODO: More tests for ignore and only
-
+  describe("ignore", () => {
     it("should ignore files that match", () => {
       const chain = buildConfigChain({
         filename: fixture("nonexistant-fake", "src.js"),
@@ -47,6 +45,94 @@ describe("buildConfigChain", function() {
           fixture("nonexistant-fake", "other.js"),
           fixture("nonexistant-fake", "misc.js"),
         ],
+      });
+
+      assert.equal(chain, null);
+    });
+
+    it("should not ignore files that don't match", () => {
+      const chain = buildConfigChain({
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        ignore: [
+          fixture("nonexistant-fake", "other.js"),
+          fixture("nonexistant-fake", "misc.js"),
+        ],
+      });
+
+      const expected = [
+        {
+          type: "arguments",
+          options: {
+            filename: fixture("nonexistant-fake", "src.js"),
+            babelrc: false,
+            ignore: [
+              fixture("nonexistant-fake", "other.js"),
+              fixture("nonexistant-fake", "misc.js"),
+            ],
+          },
+          alias: "base",
+          loc: "base",
+          dirname: base(),
+        },
+      ];
+
+      assert.deepEqual(chain, expected);
+    });
+  });
+
+  describe("only", () => {
+    it("should ignore files that don't match", () => {
+      const chain = buildConfigChain({
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        only: [
+          fixture("nonexistant-fake", "other.js"),
+          fixture("nonexistant-fake", "misc.js"),
+        ],
+      });
+
+      assert.equal(chain, null);
+    });
+
+    it("should not ignore files that match", () => {
+      const chain = buildConfigChain({
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        only: [
+          fixture("nonexistant-fake", "src.js"),
+          fixture("nonexistant-fake", "misc.js"),
+        ],
+      });
+
+      const expected = [
+        {
+          type: "arguments",
+          options: {
+            filename: fixture("nonexistant-fake", "src.js"),
+            babelrc: false,
+            only: [
+              fixture("nonexistant-fake", "src.js"),
+              fixture("nonexistant-fake", "misc.js"),
+            ],
+          },
+          alias: "base",
+          loc: "base",
+          dirname: base(),
+        },
+      ];
+
+      assert.deepEqual(chain, expected);
+    });
+  });
+
+  describe("ignore/only", () => {
+    it("should ignore files that match ignore and don't match only", () => {
+      const chain = buildConfigChain({
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        ignore: [fixture("nonexistant-fake", "src.js")],
+        only: [fixture("nonexistant-fake", "src.js")],
       });
 
       assert.equal(chain, null);
