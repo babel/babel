@@ -40,6 +40,7 @@ test-clean:
 	rm -rf packages/*/test-fixtures.json
 
 clean-all:
+	rm -rf packages/*/lib
 	rm -rf node_modules
 	rm -rf packages/*/node_modules
 	make clean
