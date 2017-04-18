@@ -74,35 +74,42 @@ class ConfigChainBuilder {
       else res.push(pattern);
     });
 
-    // Lazy-init so we don't initialize this for files that have no glob patterns.
-    if (strings.length > 0 && !this.possibleDirs) {
-      this.possibleDirs = [];
+    if (res.some((re) => re.test(this.filename))) return true;
+    if (fns.some((fn) => fn(this.filename))) return true;
 
-      if (this.filename) {
-        this.possibleDirs.push(this.filename);
+    if (strings.length > 0) {
+      // Lazy-init so we don't initialize this for files that have no glob patterns.
+      if (!this.possibleDirs) {
+        this.possibleDirs = [];
 
-        let current = this.filename;
-        while (true) {
-          const previous = current;
-          current = path.dirname(current);
-          if (previous === current) break;
+        if (this.filename) {
+          this.possibleDirs.push(this.filename);
 
-          this.possibleDirs.push(current);
+          let current = this.filename;
+          while (true) {
+            const previous = current;
+            current = path.dirname(current);
+            if (previous === current) break;
+
+            this.possibleDirs.push(current);
+          }
         }
       }
-    }
 
-    return res.some((re) => re.test(this.filename)) ||
-      fns.some((fn) => fn(this.filename)) ||
-      (strings.length > 0 && this.possibleDirs.some(micromatch.filter(strings.map((pattern) => {
+      const absolutePatterns = strings.map((pattern) => {
         // Preserve the "!" prefix so that micromatch can use it for negation.
         const negate = pattern[0] === "!";
         if (negate) pattern = pattern.slice(1);
 
         return (negate ? "!" : "") + path.resolve(dirname, pattern);
-      }, {
-        nocase: true,
-      }))));
+      });
+
+      if (micromatch(this.possibleDirs, absolutePatterns, { nocase: true }).length > 0) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   findConfigs(loc: string) {
