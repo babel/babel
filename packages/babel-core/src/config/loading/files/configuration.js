@@ -10,7 +10,7 @@ import { makeStrongCache } from "../../caching";
 type ConfigFile = {
   filepath: string,
   dirname: string,
-  options: Object,
+  options: {},
 };
 
 const BABELRC_FILENAME = ".babelrc";

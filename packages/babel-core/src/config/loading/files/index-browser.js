@@ -3,7 +3,7 @@
 type ConfigFile = {
   filepath: string,
   dirname: string,
-  options: Object,
+  options: {},
 };
 
 // eslint-disable-next-line no-unused-vars

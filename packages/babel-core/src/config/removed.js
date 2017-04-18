@@ -1,3 +1,4 @@
+// @flow
 /* eslint max-len: "off" */
 
 export default {
