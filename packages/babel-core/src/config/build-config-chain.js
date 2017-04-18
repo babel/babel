@@ -166,7 +166,6 @@ class ConfigChainBuilder {
     delete options.env;
     delete options.extends;
 
-    // env
     const envKey = getEnv();
 
     if (rawOpts.env != null && (typeof rawOpts.env !== "object" || Array.isArray(rawOpts.env))) {
@@ -196,7 +195,6 @@ class ConfigChainBuilder {
       dirname,
     });
 
-    // add extends clause
     if (rawOpts.extends) {
       if (typeof rawOpts.extends !== "string") throw new Error(".extends must be a string");
 
