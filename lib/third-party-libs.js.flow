@@ -1,0 +1,9 @@
+/**
+ * Basic declarations for the npm modules we use.
+ */
+
+declare module "micromatch" {
+  declare function exports(Array<string>, Array<string>, ?{
+    nocase: boolean,
+  }): Array<string>;
+}
