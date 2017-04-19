@@ -816,7 +816,7 @@ pp.parseExport = function (node) {
     const specifier = this.startNode();
     this.next();
     if (this.hasPlugin("exportExtensions") && this.eatContextual("as")) {
-      specifier.exported = this.parseIdentifier();
+      specifier.exported = this.parseIdentifier(true);
       node.specifiers = [this.finishNode(specifier, "ExportNamespaceSpecifier")];
       this.parseExportSpecifiersMaybe(node);
       this.parseExportFrom(node, true);
