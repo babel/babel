@@ -50,6 +50,14 @@ export default function ({ types: t }) {
       return;
     }
 
+    if (paramPath.isArrayPattern() && hasRestElement(paramPath)) {
+      const elements = paramPath.get("elements");
+
+      for (let i = 0; i < elements.length; i++) {
+        replaceRestElement(parentPath, elements[i], i, elements.length);
+      }
+    }
+
     if (paramPath.isObjectPattern() && hasRestElement(paramPath)) {
       const uid = parentPath.scope.generateUidIdentifier("ref");
 
