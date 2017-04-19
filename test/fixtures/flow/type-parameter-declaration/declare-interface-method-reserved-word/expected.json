@@ -81,7 +81,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 24,
-              "end": 42,
+              "end": 41,
               "loc": {
                 "start": {
                   "line": 2,
@@ -89,7 +89,7 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 20
+                  "column": 19
                 }
               },
               "value": {
@@ -181,7 +181,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 45,
-              "end": 63,
+              "end": 62,
               "loc": {
                 "start": {
                   "line": 3,
@@ -189,7 +189,7 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 20
+                  "column": 19
                 }
               },
               "value": {
@@ -281,7 +281,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 66,
-              "end": 83,
+              "end": 82,
               "loc": {
                 "start": {
                   "line": 4,
@@ -289,7 +289,7 @@
                 },
                 "end": {
                   "line": 4,
-                  "column": 19
+                  "column": 18
                 }
               },
               "value": {
@@ -381,7 +381,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 86,
-              "end": 100,
+              "end": 99,
               "loc": {
                 "start": {
                   "line": 5,
@@ -389,7 +389,7 @@
                 },
                 "end": {
                   "line": 5,
-                  "column": 16
+                  "column": 15
                 }
               },
               "value": {

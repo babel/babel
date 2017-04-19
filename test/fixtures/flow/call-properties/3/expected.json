@@ -105,7 +105,7 @@
                     {
                       "type": "ObjectTypeCallProperty",
                       "start": 10,
-                      "end": 21,
+                      "end": 20,
                       "loc": {
                         "start": {
                           "line": 1,
@@ -113,7 +113,7 @@
                         },
                         "end": {
                           "line": 1,
-                          "column": 21
+                          "column": 20
                         }
                       },
                       "static": false,
@@ -254,7 +254,7 @@
                     {
                       "type": "ObjectTypeProperty",
                       "start": 22,
-                      "end": 32,
+                      "end": 31,
                       "loc": {
                         "start": {
                           "line": 1,
@@ -262,7 +262,7 @@
                         },
                         "end": {
                           "line": 1,
-                          "column": 32
+                          "column": 31
                         }
                       },
                       "key": {

@@ -81,7 +81,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 19,
-              "end": 29,
+              "end": 28,
               "loc": {
                 "start": {
                   "line": 2,
@@ -89,7 +89,7 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 11
+                  "column": 10
                 }
               },
               "key": {
@@ -131,7 +131,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 31,
-              "end": 48,
+              "end": 47,
               "loc": {
                 "start": {
                   "line": 3,
@@ -139,7 +139,7 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 18
+                  "column": 17
                 }
               },
               "key": {
@@ -181,7 +181,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 50,
-              "end": 60,
+              "end": 59,
               "loc": {
                 "start": {
                   "line": 4,
@@ -189,7 +189,7 @@
                 },
                 "end": {
                   "line": 4,
-                  "column": 11
+                  "column": 10
                 }
               },
               "key": {

@@ -106,7 +106,7 @@
                     {
                       "type": "ObjectTypeProperty",
                       "start": 8,
-                      "end": 23,
+                      "end": 22,
                       "loc": {
                         "start": {
                           "line": 1,
@@ -114,7 +114,7 @@
                         },
                         "end": {
                           "line": 1,
-                          "column": 23
+                          "column": 22
                         }
                       },
                       "key": {

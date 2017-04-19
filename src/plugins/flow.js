@@ -352,11 +352,7 @@ pp.flowParseObjectTypeIndexer = function (node, isStatic, variance) {
   node.value = this.flowParseTypeInitialiser();
   node.variance = variance;
 
-  // Finish node first to not include a possible semicolon in the locations
-  const indexer = this.finishNode(node, "ObjectTypeIndexer");
-  this.flowObjectTypeSemicolon();
-
-  return indexer;
+  return this.finishNode(node, "ObjectTypeIndexer");
 };
 
 pp.flowParseObjectTypeMethodish = function (node) {
@@ -391,7 +387,6 @@ pp.flowParseObjectTypeMethod = function (startPos, startLoc, isStatic, key) {
   node.static = isStatic;
   node.key = key;
   node.optional = false;
-  this.flowObjectTypeSemicolon();
   return this.finishNode(node, "ObjectTypeProperty");
 };
 
@@ -399,7 +394,6 @@ pp.flowParseObjectTypeCallProperty = function (node, isStatic) {
   const valueNode = this.startNode();
   node.static = isStatic;
   node.value = this.flowParseObjectTypeMethodish(valueNode);
-  this.flowObjectTypeSemicolon();
   return this.finishNode(node, "ObjectTypeCallProperty");
 };
 
@@ -462,7 +456,6 @@ pp.flowParseObjectType = function (allowStatic, allowExact, allowSpread) {
         }
         this.expect(tt.ellipsis);
         node.argument = this.flowParseType();
-        this.flowObjectTypeSemicolon();
         nodeStart.properties.push(this.finishNode(node, "ObjectTypeSpreadProperty"));
       } else {
         propertyKey = this.flowParseObjectPropertyKey();
@@ -481,11 +474,12 @@ pp.flowParseObjectType = function (allowStatic, allowExact, allowSpread) {
           node.optional = optional;
           node.static = isStatic;
           node.variance = variance;
-          this.flowObjectTypeSemicolon();
           nodeStart.properties.push(this.finishNode(node, "ObjectTypeProperty"));
         }
       }
     }
+
+    this.flowObjectTypeSemicolon();
 
     isStatic = false;
   }

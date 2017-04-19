@@ -79,7 +79,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 12,
-              "end": 18,
+              "end": 17,
               "loc": {
                 "start": {
                   "line": 2,
@@ -87,7 +87,7 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 7
+                  "column": 6
                 }
               },
               "key": {
@@ -133,7 +133,7 @@
             {
               "type": "ObjectTypeSpreadProperty",
               "start": 20,
-              "end": 26,
+              "end": 25,
               "loc": {
                 "start": {
                   "line": 3,
@@ -141,7 +141,7 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 7
+                  "column": 6
                 }
               },
               "argument": {

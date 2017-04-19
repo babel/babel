@@ -106,7 +106,7 @@
                     {
                       "type": "ObjectTypeProperty",
                       "start": 11,
-                      "end": 21,
+                      "end": 20,
                       "loc": {
                         "start": {
                           "line": 1,
@@ -114,7 +114,7 @@
                         },
                         "end": {
                           "line": 1,
-                          "column": 21
+                          "column": 20
                         }
                       },
                       "key": {
@@ -418,7 +418,7 @@
                     {
                       "type": "ObjectTypeProperty",
                       "start": 68,
-                      "end": 78,
+                      "end": 77,
                       "loc": {
                         "start": {
                           "line": 2,
@@ -426,7 +426,7 @@
                         },
                         "end": {
                           "line": 2,
-                          "column": 21
+                          "column": 20
                         }
                       },
                       "key": {
@@ -468,7 +468,7 @@
                     {
                       "type": "ObjectTypeProperty",
                       "start": 79,
-                      "end": 89,
+                      "end": 88,
                       "loc": {
                         "start": {
                           "line": 2,
@@ -476,7 +476,7 @@
                         },
                         "end": {
                           "line": 2,
-                          "column": 32
+                          "column": 31
                         }
                       },
                       "key": {
@@ -830,7 +830,7 @@
                     {
                       "type": "ObjectTypeProperty",
                       "start": 145,
-                      "end": 175,
+                      "end": 174,
                       "loc": {
                         "start": {
                           "line": 4,
@@ -838,7 +838,7 @@
                         },
                         "end": {
                           "line": 4,
-                          "column": 40
+                          "column": 39
                         }
                       },
                       "key": {
@@ -877,7 +877,7 @@
                           {
                             "type": "ObjectTypeProperty",
                             "start": 151,
-                            "end": 161,
+                            "end": 160,
                             "loc": {
                               "start": {
                                 "line": 4,
@@ -885,7 +885,7 @@
                               },
                               "end": {
                                 "line": 4,
-                                "column": 26
+                                "column": 25
                               }
                             },
                             "key": {
@@ -1350,7 +1350,7 @@
                     {
                       "type": "ObjectTypeProperty",
                       "start": 239,
-                      "end": 267,
+                      "end": 266,
                       "loc": {
                         "start": {
                           "line": 5,
@@ -1358,7 +1358,7 @@
                         },
                         "end": {
                           "line": 5,
-                          "column": 39
+                          "column": 38
                         }
                       },
                       "key": {
@@ -1397,7 +1397,7 @@
                           {
                             "type": "ObjectTypeProperty",
                             "start": 244,
-                            "end": 254,
+                            "end": 253,
                             "loc": {
                               "start": {
                                 "line": 5,
@@ -1405,7 +1405,7 @@
                               },
                               "end": {
                                 "line": 5,
-                                "column": 26
+                                "column": 25
                               }
                             },
                             "key": {
