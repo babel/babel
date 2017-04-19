@@ -4,7 +4,7 @@ import * as context from "../index";
 import Plugin from "./plugin";
 import * as messages from "babel-messages";
 import defaults from "lodash/defaults";
-import merge from "./helpers/merge";
+import merge from "lodash/merge";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
 import path from "path";

@@ -7,3 +7,27 @@ declare module "micromatch" {
     nocase: boolean,
   }): Array<string>;
 }
+
+declare module "resolve" {
+  declare export default {
+    sync: (string, {| basedir: string |}) => string;
+  };
+}
+
+declare module "json5" {
+  declare export default {
+    parse: (string) => mixed,
+  };
+}
+
+declare module "lodash/defaults" {
+  declare export default <T: Object>(T, Object) =>  T;
+}
+
+declare module "lodash/clone" {
+  declare export default <T>(obj: T) => T;
+ }
+
+declare module "lodash/merge" {
+  declare export default <T: Object>(T, Object) => T;
+}
