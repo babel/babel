@@ -80,8 +80,8 @@ export default function({ types: t }) {
       ) {
         console.warn(
           `
-When setting "useBuiltIns: true", polyfills are automatically imported when needed.
-Please remove the "import 'babel-polyfill'" call or use "useBuiltIns: 'entry'" instead.
+When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
+Please remove the \`import 'babel-polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.
 `,
         );
         path.remove();
@@ -93,8 +93,8 @@ Please remove the "import 'babel-polyfill'" call or use "useBuiltIns: 'entry'" i
           if (isRequire(bodyPath)) {
             console.warn(
               `
-When setting "useBuiltIns: true", polyfills are automatically imported when needed.
-Please remove the "require('babel-polyfill')" call or use "useBuiltIns: 'entry'" instead.
+When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
+Please remove the \`require('babel-polyfill')\` call or use \`useBuiltIns: 'entry'\` instead.
 `,
             );
             bodyPath.remove();
