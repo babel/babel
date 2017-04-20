@@ -21,23 +21,31 @@ const saveInFiles = files => {
   });
 };
 
-const assertTest = (stdout, stderr, opts) => {
-  stderr = stderr.trim();
+const testOutputType = (type, stdTarg, opts) => {
+  stdTarg = stdTarg.trim();
+  stdTarg = stdTarg.replace(/\\/g, "/");
+  const optsTarg = opts[type];
 
-  if (stderr) {
-    throw new Error("stderr:\n" + stderr);
-  }
-
-  stdout = stdout.trim();
-  stdout = stdout.replace(/\\/g, "/");
-
-  if (opts.stdout) {
-    const expectStdout = opts.stdout.trim();
-    chai.expect(stdout).to.equal(expectStdout, "stdout didn't match");
+  if (optsTarg) {
+    const expectStdout = optsTarg.trim();
+    chai.expect(stdTarg).to.equal(expectStdout, "stdout didn't match");
   } else {
-    const file = path.join(opts.testLoc, "stdout.txt");
+    const file = path.join(opts.testLoc, `${type}.txt`);
     console.log(`New test file created: ${file}`);
-    fs.outputFileSync(file, stdout);
+    fs.outputFileSync(file, stdTarg);
+  }
+};
+
+const assertTest = (stdout, stderr, opts) => {
+  // stderr = stderr.trim();
+
+  // if (stderr) {
+  //   throw new Error("stderr:\n" + stderr);
+  // }
+
+  testOutputType("stdout", stdout, opts);
+  if (stderr) {
+    testOutputType("stderr", stderr, opts);
   }
 };
 
@@ -56,8 +64,8 @@ const buildTest = opts => {
     let stdout = "";
     let stderr = "";
 
-    spawn.stdout.on("data", chunk => stdout += chunk);
-    spawn.stderr.on("data", chunk => stderr += chunk);
+    spawn.stdout.on("data", chunk => (stdout += chunk));
+    spawn.stderr.on("data", chunk => (stderr += chunk));
 
     spawn.on("close", () => {
       let err;
@@ -77,6 +85,7 @@ describe("debug output", () => {
   fs.readdirSync(fixtureLoc).forEach(testName => {
     if (testName.slice(0, 1) === ".") return;
     const testLoc = path.join(fixtureLoc, testName);
+    if (testName.slice(0, 1) === ".") return;
 
     const opts = {
       args: ["src", "--out-dir", "lib"],
