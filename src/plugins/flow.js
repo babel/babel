@@ -194,7 +194,7 @@ pp.flowParseDeclareInterface = function (node) {
 
 // Interfaces
 
-pp.flowParseInterfaceish = function (node, allowStatic) {
+pp.flowParseInterfaceish = function (node) {
   node.id = this.parseIdentifier();
 
   if (this.isRelational("<")) {
@@ -219,7 +219,7 @@ pp.flowParseInterfaceish = function (node, allowStatic) {
     } while (this.eat(tt.comma));
   }
 
-  node.body = this.flowParseObjectType(allowStatic);
+  node.body = this.flowParseObjectType(true, false, false);
 };
 
 pp.flowParseInterfaceExtends = function () {
@@ -400,7 +400,7 @@ pp.flowParseObjectTypeCallProperty = function (node, isStatic) {
   return this.finishNode(node, "ObjectTypeCallProperty");
 };
 
-pp.flowParseObjectType = function (allowStatic, allowExact) {
+pp.flowParseObjectType = function (allowStatic, allowExact, allowSpread) {
   const oldInType = this.state.inType;
   this.state.inType = true;
 
@@ -448,24 +448,40 @@ pp.flowParseObjectType = function (allowStatic, allowExact) {
       }
       nodeStart.callProperties.push(this.flowParseObjectTypeCallProperty(node, isStatic));
     } else {
-      propertyKey = this.flowParseObjectPropertyKey();
-      if (this.isRelational("<") || this.match(tt.parenL)) {
-        // This is a method property
+      if (this.match(tt.ellipsis)) {
+        if (!allowSpread) {
+          this.unexpected(
+            null,
+            "Spread operator cannnot appear in class or interface definitions"
+          );
+        }
         if (variance) {
-          this.unexpected(variancePos);
+          this.unexpected(variance.start, "Spread properties cannot have variance");
         }
-        nodeStart.properties.push(this.flowParseObjectTypeMethod(startPos, startLoc, isStatic, propertyKey));
-      } else {
-        if (this.eat(tt.question)) {
-          optional = true;
-        }
-        node.key = propertyKey;
-        node.value = this.flowParseTypeInitialiser();
-        node.optional = optional;
-        node.static = isStatic;
-        node.variance = variance;
+        this.expect(tt.ellipsis);
+        node.argument = this.flowParseType();
         this.flowObjectTypeSemicolon();
-        nodeStart.properties.push(this.finishNode(node, "ObjectTypeProperty"));
+        nodeStart.properties.push(this.finishNode(node, "ObjectTypeSpreadProperty"));
+      } else {
+        propertyKey = this.flowParseObjectPropertyKey();
+        if (this.isRelational("<") || this.match(tt.parenL)) {
+          // This is a method property
+          if (variance) {
+            this.unexpected(variance.start);
+          }
+          nodeStart.properties.push(this.flowParseObjectTypeMethod(startPos, startLoc, isStatic, propertyKey));
+        } else {
+          if (this.eat(tt.question)) {
+            optional = true;
+          }
+          node.key = propertyKey;
+          node.value = this.flowParseTypeInitialiser();
+          node.optional = optional;
+          node.static = isStatic;
+          node.variance = variance;
+          this.flowObjectTypeSemicolon();
+          nodeStart.properties.push(this.finishNode(node, "ObjectTypeProperty"));
+        }
       }
     }
 
@@ -627,10 +643,10 @@ pp.flowParsePrimaryType = function () {
       return this.flowIdentToTypeAnnotation(startPos, startLoc, node, this.parseIdentifier());
 
     case tt.braceL:
-      return this.flowParseObjectType(false, false);
+      return this.flowParseObjectType(false, false, true);
 
     case tt.braceBarL:
-      return this.flowParseObjectType(false, true);
+      return this.flowParseObjectType(false, true, true);
 
     case tt.bracketL:
       return this.flowParseTupleType();
