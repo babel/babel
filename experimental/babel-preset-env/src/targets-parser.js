@@ -9,6 +9,7 @@ export type Targets = {
 };
 
 const browserNameMap = {
+  android: "android",
   chrome: "chrome",
   edge: "edge",
   firefox: "firefox",

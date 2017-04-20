@@ -9,12 +9,15 @@ export const logMessage = (message, context) => {
 
 export const logPlugin = (plugin, targets, list, context) => {
   const envList = list[plugin] || {};
-  const filteredList = Object.keys(targets).reduce((a, b) => {
-    if (!envList[b] || semver.lt(targets[b], semverify(envList[b]))) {
-      a[b] = prettifyVersion(targets[b]);
-    }
-    return a;
-  }, {});
+  const filteredList = Object.keys(targets).reduce(
+    (a, b) => {
+      if (!envList[b] || semver.lt(targets[b], semverify(envList[b]))) {
+        a[b] = prettifyVersion(targets[b]);
+      }
+      return a;
+    },
+    {},
+  );
 
   logMessage(`${plugin} ${JSON.stringify(filteredList)}`, context);
 };

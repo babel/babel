@@ -3,11 +3,7 @@
 const utils = require("../lib/utils");
 const assert = require("assert");
 
-const {
-  prettifyTargets,
-  prettifyVersion,
-  semverify,
-} = utils;
+const { prettifyTargets, prettifyVersion, semverify } = utils;
 
 describe("utils", () => {
   describe("semverify", () => {

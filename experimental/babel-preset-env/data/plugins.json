@@ -211,6 +211,7 @@
   },
   "transform-async-to-generator": {
     "chrome": "55",
+    "edge": "15",
     "firefox": "52",
     "safari": "10.1",
     "node": "7.6",

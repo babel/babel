@@ -130,6 +130,12 @@ To prevent these errors - specify the uglify option, which will enable all plugi
 
 > NOTE: Uglify has a work-in-progress "Harmony" branch to address the lack of ES6 support, but it is not yet stable.  You can follow its progress in [UglifyJS2 issue #448](https://github.com/mishoo/UglifyJS2/issues/448).  If you require an alternative minifier which _does_ support ES6 syntax, we recommend using [Babili](https://github.com/babel/babili).
 
+### `spec`
+
+`boolean`, defaults to `false`.
+
+Enable more spec compliant, but potentially slower, transformations for any plugins in this preset that support them.
+
 ### `loose`
 
 `boolean`, defaults to `false`.
@@ -165,6 +171,8 @@ Valid options include any:
 This option is useful if there is a bug in a native implementation, or a combination of a non-supported feature + a supported one doesn't work.
 
 For example, Node 4 supports native classes but not spread. If `super` is used with a spread argument, then the `transform-es2015-classes` transform needs to be `include`d, as it is not possible to transpile a spread with `super` otherwise.
+
+> NOTE: The `include` and `exclude` options _only_ work with the [plugins included with this preset](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js); so, for example, including `transform-do-expressions` or excluding `transform-function-bind` will throw errors. To use a plugin _not_ included with this preset, add them to your [config](https://babeljs.io/docs/usage/babelrc/) directly.
 
 ### `exclude`
 
@@ -228,7 +236,9 @@ var b = new Map();
 
 #### `useBuiltIns: 'entry'`
 
-> NOTE: Only use `require("babel-polyfill");` once in your whole app. One option is to create a single entry file that only contains the require statement.
+> NOTE: Only use `require("babel-polyfill");` once in your whole app.
+> Multiple imports or requires of `babel-polyfill` will throw an error since it can cause global collisions and other issues that are hard to trace.
+> We recommend creating a single entry file that only contains the `require` statement.
 
 This option enables a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
 

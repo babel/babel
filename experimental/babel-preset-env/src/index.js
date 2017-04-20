@@ -108,7 +108,7 @@ const filterItems = (list, includes, excludes, targets, defaultItems) => {
 
 export default function buildPreset(context, opts = {}) {
   const validatedOptions = normalizeOptions(opts);
-  const { debug, loose, moduleType, useBuiltIns } = validatedOptions;
+  const { debug, loose, moduleType, spec, useBuiltIns } = validatedOptions;
 
   const targets = getTargets(validatedOptions.targets);
   const include = transformIncludesAndExcludes(validatedOptions.include);
@@ -145,9 +145,10 @@ export default function buildPreset(context, opts = {}) {
     ]);
   }
 
+  // NOTE: not giving spec here yet to avoid compatibility issues when
+  // babel-plugin-transform-es2015-modules-commonjs gets its spec mode
   transformations.forEach(pluginName =>
-    plugins.push([require(`babel-plugin-${pluginName}`), { loose }]),
-  );
+    plugins.push([require(`babel-plugin-${pluginName}`), { spec, loose }]));
 
   const regenerator = transformations.has("transform-regenerator");
 
@@ -180,8 +181,7 @@ export default function buildPreset(context, opts = {}) {
       regenerator,
       onDebug: (polyfills, context) => {
         polyfills.forEach(polyfill =>
-          logPlugin(polyfill, polyfillTargets, builtInsList, context),
-        );
+          logPlugin(polyfill, polyfillTargets, builtInsList, context));
       },
     };
 

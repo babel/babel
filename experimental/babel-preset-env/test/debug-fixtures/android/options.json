@@ -1,0 +1,11 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "targets": {
+        "browsers": [ "Android >= 4" ]
+      },
+      "useBuiltIns": "entry"
+    }]
+  ]
+}
