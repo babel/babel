@@ -44,6 +44,7 @@ var a: { subObj: {strVal: string} }
 var a: { subObj: ?{strVal: string} }
 var a: { param1: number; param2: string }
 var a: { param1: number; param2?: string }
+var a: { ...any; ...{}|{p: void} };
 var a: { [a: number]: string; [b: number]: string; };
 var a: { add(x: number, ...y: Array<string>): void };
 var a: { id<T>(x: T): T; };
