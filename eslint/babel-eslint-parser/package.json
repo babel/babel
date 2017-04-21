@@ -15,7 +15,7 @@
     "babel-code-frame": "^6.22.0",
     "babel-traverse": "^6.23.1",
     "babel-types": "^6.23.0",
-    "babylon": "^6.16.1"
+    "babylon": "^6.17.0"
   },
   "scripts": {
     "test": "npm run lint && npm run test-only",

@@ -574,6 +574,18 @@ describe("verify", () => {
       );
     });
 
+    it("supports type spreading", () => {
+      verifyAndAssertMessages(
+        unpad(`
+          type U = {};
+          type T = {a: number, ...U, ...V};
+        `),
+        { "no-undef": 1, "no-unused-vars": 1 },
+        [ "2:6 'T' is defined but never used. no-unused-vars",
+          "2:31 'V' is not defined. no-undef" ]
+      );
+    });
+
     it("1", () => {
       verifyAndAssertMessages(
         unpad(`

@@ -107,7 +107,7 @@ function monkeypatch(modules) {
     // loops
     callProperties: { type: "loop", values: ["value"] },
     indexers: { type: "loop", values: ["key", "value"] },
-    properties: { type: "loop", values: ["value"] },
+    properties: { type: "loop", values: ["argument", "value"] },
     types: { type: "loop" },
     params: { type: "loop" },
     // single property
@@ -142,7 +142,10 @@ function monkeypatch(modules) {
         for (var j = 0; j < nodeProperty.length; j++) {
           if (Array.isArray(propertyType.values)) {
             for (var k = 0; k < propertyType.values.length; k++) {
-              checkIdentifierOrVisit.call(this, nodeProperty[j][propertyType.values[k]]);
+              var loopPropertyNode = nodeProperty[j][propertyType.values[k]];
+              if (loopPropertyNode) {
+                checkIdentifierOrVisit.call(this, loopPropertyNode);
+              }
             }
           } else {
             checkIdentifierOrVisit.call(this, nodeProperty[j]);
