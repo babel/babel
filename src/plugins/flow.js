@@ -865,498 +865,433 @@ pp.flowParseVariance = function() {
   return variance;
 };
 
-export default function (instance) {
+export default (superClass) => class extends superClass {
   // plain function return types: function name(): string {}
-  instance.extend("parseFunctionBody", function (inner) {
-    return function (node, allowExpression) {
-      if (this.match(tt.colon) && !allowExpression) {
-        // if allowExpression is true then we're parsing an arrow function and if
-        // there's a return type then it's been handled elsewhere
-        const typeNode = this.startNode();
-        [typeNode.typeAnnotation, node.predicate] = this.flowParseTypeAndPredicateInitialiser();
+  parseFunctionBody(node, allowExpression) {
+    if (this.match(tt.colon) && !allowExpression) {
+      // if allowExpression is true then we're parsing an arrow function and if
+      // there's a return type then it's been handled elsewhere
+      const typeNode = this.startNode();
+      [typeNode.typeAnnotation, node.predicate] = this.flowParseTypeAndPredicateInitialiser();
 
-        node.returnType = typeNode.typeAnnotation
-          ? this.finishNode(typeNode, "TypeAnnotation")
-          : null;
-      }
+      node.returnType = typeNode.typeAnnotation
+        ? this.finishNode(typeNode, "TypeAnnotation")
+        : null;
+    }
 
-      return inner.call(this, node, allowExpression);
-    };
-  });
+    return super.parseFunctionBody(node, allowExpression);
+  }
 
   // interfaces
-  instance.extend("parseStatement", function (inner) {
-    return function (declaration, topLevel) {
-      // strict mode handling of `interface` since it's a reserved word
-      if (this.state.strict && this.match(tt.name) && this.state.value === "interface") {
-        const node = this.startNode();
-        this.next();
-        return this.flowParseInterface(node);
-      } else {
-        return inner.call(this, declaration, topLevel);
-      }
-    };
-  });
+  parseStatement(declaration, topLevel) {
+    // strict mode handling of `interface` since it's a reserved word
+    if (this.state.strict && this.match(tt.name) && this.state.value === "interface") {
+      const node = this.startNode();
+      this.next();
+      return this.flowParseInterface(node);
+    } else {
+      return super.parseStatement(declaration, topLevel);
+    }
+  }
 
   // declares, interfaces and type aliases
-  instance.extend("parseExpressionStatement", function (inner) {
-    return function (node, expr) {
-      if (expr.type === "Identifier") {
-        if (expr.name === "declare") {
-          if (this.match(tt._class) || this.match(tt.name) || this.match(tt._function) || this.match(tt._var)) {
-            return this.flowParseDeclare(node);
-          }
-        } else if (this.match(tt.name)) {
-          if (expr.name === "interface") {
-            return this.flowParseInterface(node);
-          } else if (expr.name === "type") {
-            return this.flowParseTypeAlias(node);
-          }
+  parseExpressionStatement(node, expr) {
+    if (expr.type === "Identifier") {
+      if (expr.name === "declare") {
+        if (this.match(tt._class) || this.match(tt.name) || this.match(tt._function) || this.match(tt._var)) {
+          return this.flowParseDeclare(node);
+        }
+      } else if (this.match(tt.name)) {
+        if (expr.name === "interface") {
+          return this.flowParseInterface(node);
+        } else if (expr.name === "type") {
+          return this.flowParseTypeAlias(node);
         }
       }
+    }
 
-      return inner.call(this, node, expr);
-    };
-  });
+    return super.parseExpressionStatement(node, expr);
+  }
 
   // export type
-  instance.extend("shouldParseExportDeclaration", function (inner) {
-    return function () {
-      return this.isContextual("type")
-          || this.isContextual("interface")
-          || inner.call(this);
-    };
-  });
+  shouldParseExportDeclaration() {
+    return this.isContextual("type")
+        || this.isContextual("interface")
+        || super.shouldParseExportDeclaration();
+  }
 
-  instance.extend("parseConditional", function (inner) {
-    return function (expr, noIn, startPos, startLoc, refNeedsArrowPos) {
-      // only do the expensive clone if there is a question mark
-      // and if we come from inside parens
-      if (refNeedsArrowPos && this.match(tt.question)) {
-        const state = this.state.clone();
-        try {
-          return inner.call(this, expr, noIn, startPos, startLoc);
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            this.state = state;
-            refNeedsArrowPos.start = err.pos || this.state.start;
-            return expr;
-          } else {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
-        }
-      }
-
-      return inner.call(this, expr, noIn, startPos, startLoc);
-    };
-  });
-
-  instance.extend("parseParenItem", function (inner) {
-    return function (node, startPos, startLoc) {
-      node = inner.call(this, node, startPos, startLoc);
-      if (this.eat(tt.question)) {
-        node.optional = true;
-      }
-
-      if (this.match(tt.colon)) {
-        const typeCastNode = this.startNodeAt(startPos, startLoc);
-        typeCastNode.expression = node;
-        typeCastNode.typeAnnotation = this.flowParseTypeAnnotation();
-
-        return this.finishNode(typeCastNode, "TypeCastExpression");
-      }
-
-      return node;
-    };
-  });
-
-  instance.extend("parseExport", function (inner) {
-    return function (node) {
-      node = inner.call(this, node);
-      if (node.type === "ExportNamedDeclaration") {
-        node.exportKind = node.exportKind || "value";
-      }
-      return node;
-    };
-  });
-
-  instance.extend("parseExportDeclaration", function (inner) {
-    return function (node) {
-      if (this.isContextual("type")) {
-        node.exportKind = "type";
-
-        const declarationNode = this.startNode();
-        this.next();
-
-        if (this.match(tt.braceL)) {
-          // export type { foo, bar };
-          node.specifiers = this.parseExportSpecifiers();
-          this.parseExportFrom(node);
-          return null;
+  parseConditional(expr, noIn, startPos, startLoc, refNeedsArrowPos) {
+    // only do the expensive clone if there is a question mark
+    // and if we come from inside parens
+    if (refNeedsArrowPos && this.match(tt.question)) {
+      const state = this.state.clone();
+      try {
+        return super.parseConditional(expr, noIn, startPos, startLoc);
+      } catch (err) {
+        if (err instanceof SyntaxError) {
+          this.state = state;
+          refNeedsArrowPos.start = err.pos || this.state.start;
+          return expr;
         } else {
-          // export type Foo = Bar;
-          return this.flowParseTypeAlias(declarationNode);
+          // istanbul ignore next: no such error is expected
+          throw err;
         }
-      } else if (this.isContextual("interface")) {
-        node.exportKind = "type";
-        const declarationNode = this.startNode();
-        this.next();
-        return this.flowParseInterface(declarationNode);
-      } else {
-        return inner.call(this, node);
       }
-    };
-  });
+    }
 
-  instance.extend("parseClassId", function (inner) {
-    return function (node) {
-      inner.apply(this, arguments);
-      if (this.isRelational("<")) {
-        node.typeParameters = this.flowParseTypeParameterDeclaration();
+    return super.parseConditional(expr, noIn, startPos, startLoc);
+  }
+
+  parseParenItem(node, startPos, startLoc) {
+    node = super.parseParenItem(node, startPos, startLoc);
+    if (this.eat(tt.question)) {
+      node.optional = true;
+    }
+
+    if (this.match(tt.colon)) {
+      const typeCastNode = this.startNodeAt(startPos, startLoc);
+      typeCastNode.expression = node;
+      typeCastNode.typeAnnotation = this.flowParseTypeAnnotation();
+
+      return this.finishNode(typeCastNode, "TypeCastExpression");
+    }
+
+    return node;
+  }
+
+  parseExport(node) {
+    node = super.parseExport(node);
+    if (node.type === "ExportNamedDeclaration") {
+      node.exportKind = node.exportKind || "value";
+    }
+    return node;
+  }
+
+  parseExportDeclaration(node) {
+    if (this.isContextual("type")) {
+      node.exportKind = "type";
+
+      const declarationNode = this.startNode();
+      this.next();
+
+      if (this.match(tt.braceL)) {
+        // export type { foo, bar };
+        node.specifiers = this.parseExportSpecifiers();
+        this.parseExportFrom(node);
+        return null;
+      } else {
+        // export type Foo = Bar;
+        return this.flowParseTypeAlias(declarationNode);
       }
-    };
-  });
+    } else if (this.isContextual("interface")) {
+      node.exportKind = "type";
+      const declarationNode = this.startNode();
+      this.next();
+      return this.flowParseInterface(declarationNode);
+    } else {
+      return super.parseExportDeclaration(node);
+    }
+  }
+
+  parseClassId(node, ...args) {
+    super.parseClassId(node, ...args);
+    if (this.isRelational("<")) {
+      node.typeParameters = this.flowParseTypeParameterDeclaration();
+    }
+  }
 
   // don't consider `void` to be a keyword as then it'll use the void token type
   // and set startExpr
-  instance.extend("isKeyword", function (inner) {
-    return function (name) {
-      if (this.state.inType && name === "void") {
-        return false;
-      } else {
-        return inner.call(this, name);
-      }
-    };
-  });
+  isKeyword(name) {
+    if (this.state.inType && name === "void") {
+      return false;
+    } else {
+      return super.isKeyword(name);
+    }
+  }
 
   // ensure that inside flow types, we bypass the jsx parser plugin
-  instance.extend("readToken", function (inner) {
-    return function (code) {
-      if (this.state.inType && (code === 62 || code === 60)) {
-        return this.finishOp(tt.relational, 1);
-      } else {
-        return inner.call(this, code);
-      }
-    };
-  });
+  readToken(code) {
+    if (this.state.inType && (code === 62 || code === 60)) {
+      return this.finishOp(tt.relational, 1);
+    } else {
+      return super.readToken(code);
+    }
+  }
 
   // don't lex any token as a jsx one inside a flow type
-  instance.extend("jsx_readToken", function (inner) {
-    return function () {
-      if (!this.state.inType) return inner.call(this);
-    };
-  });
+  jsx_readToken() {
+    if (!this.state.inType) return super.jsx_readToken();
+  }
 
-  instance.extend("toAssignable", function (inner) {
-    return function (node, isBinding, contextDescription) {
-      if (node.type === "TypeCastExpression") {
-        return inner.call(this, this.typeCastToParameter(node), isBinding, contextDescription);
-      } else {
-        return inner.call(this, node, isBinding, contextDescription);
-      }
-    };
-  });
+  toAssignable(node, isBinding, contextDescription) {
+    if (node.type === "TypeCastExpression") {
+      return super.toAssignable(this.typeCastToParameter(node), isBinding, contextDescription);
+    } else {
+      return super.toAssignable(node, isBinding, contextDescription);
+    }
+  }
 
   // turn type casts that we found in function parameter head into type annotated params
-  instance.extend("toAssignableList", function (inner) {
-    return function (exprList, isBinding, contextDescription) {
-      for (let i = 0; i < exprList.length; i++) {
-        const expr = exprList[i];
-        if (expr && expr.type === "TypeCastExpression") {
-          exprList[i] = this.typeCastToParameter(expr);
-        }
+  toAssignableList(exprList, isBinding, contextDescription) {
+    for (let i = 0; i < exprList.length; i++) {
+      const expr = exprList[i];
+      if (expr && expr.type === "TypeCastExpression") {
+        exprList[i] = this.typeCastToParameter(expr);
       }
-      return inner.call(this, exprList, isBinding, contextDescription);
-    };
-  });
+    }
+    return super.toAssignableList(exprList, isBinding, contextDescription);
+  }
 
   // this is a list of nodes, from something like a call expression, we need to filter the
   // type casts that we've found that are illegal in this context
-  instance.extend("toReferencedList", function () {
-    return function (exprList) {
-      for (let i = 0; i < exprList.length; i++) {
-        const expr = exprList[i];
-        if (expr && expr._exprListItem && expr.type === "TypeCastExpression") {
-          this.raise(expr.start, "Unexpected type cast");
-        }
+  toReferencedList(exprList) {
+    for (let i = 0; i < exprList.length; i++) {
+      const expr = exprList[i];
+      if (expr && expr._exprListItem && expr.type === "TypeCastExpression") {
+        this.raise(expr.start, "Unexpected type cast");
       }
+    }
 
-      return exprList;
-    };
-  });
+    return exprList;
+  }
 
   // parse an item inside a expression list eg. `(NODE, NODE)` where NODE represents
   // the position where this function is called
-  instance.extend("parseExprListItem", function (inner) {
-    return function (...args) {
-      const container = this.startNode();
-      const node = inner.call(this, ...args);
-      if (this.match(tt.colon)) {
-        container._exprListItem = true;
-        container.expression = node;
-        container.typeAnnotation = this.flowParseTypeAnnotation();
-        return this.finishNode(container, "TypeCastExpression");
-      } else {
-        return node;
-      }
-    };
-  });
+  parseExprListItem(...args) {
+    const container = this.startNode();
+    const node = super.parseExprListItem(...args);
+    if (this.match(tt.colon)) {
+      container._exprListItem = true;
+      container.expression = node;
+      container.typeAnnotation = this.flowParseTypeAnnotation();
+      return this.finishNode(container, "TypeCastExpression");
+    } else {
+      return node;
+    }
+  }
 
-  instance.extend("checkLVal", function (inner) {
-    return function (node) {
-      if (node.type !== "TypeCastExpression") {
-        return inner.apply(this, arguments);
-      }
-    };
-  });
+  checkLVal(node, ...args) {
+    if (node.type !== "TypeCastExpression") {
+      return super.checkLVal(node, ...args);
+    }
+  }
 
   // parse class property type annotations
-  instance.extend("parseClassProperty", function (inner) {
-    return function (node) {
-      if (this.match(tt.colon)) {
-        node.typeAnnotation = this.flowParseTypeAnnotation();
-      }
-      return inner.call(this, node);
-    };
-  });
+  parseClassProperty(node) {
+    if (this.match(tt.colon)) {
+      node.typeAnnotation = this.flowParseTypeAnnotation();
+    }
+    return super.parseClassProperty(node);
+  }
 
   // determine whether or not we're currently in the position where a class method would appear
-  instance.extend("isClassMethod", function (inner) {
-    return function () {
-      return this.isRelational("<") || inner.call(this);
-    };
-  });
+  isClassMethod() {
+    return this.isRelational("<") || super.isClassMethod();
+  }
 
   // determine whether or not we're currently in the position where a class property would appear
-  instance.extend("isClassProperty", function (inner) {
-    return function () {
-      return this.match(tt.colon) || inner.call(this);
-    };
-  });
+  isClassProperty() {
+    return this.match(tt.colon) || super.isClassProperty();
+  }
 
   // parse type parameters for class methods
-  instance.extend("parseClassMethod", function (inner) {
-    return function (classBody, method, ...args) {
-      if (method.variance) {
-        this.unexpected(method.variance.start);
-      }
-      delete method.variance;
-      if (this.isRelational("<")) {
-        method.typeParameters = this.flowParseTypeParameterDeclaration();
-      }
+  parseClassMethod(classBody, method, ...args) {
+    if (method.variance) {
+      this.unexpected(method.variance.start);
+    }
+    delete method.variance;
+    if (this.isRelational("<")) {
+      method.typeParameters = this.flowParseTypeParameterDeclaration();
+    }
 
-      inner.call(this, classBody, method, ...args);
-    };
-  });
+    super.parseClassMethod(classBody, method, ...args);
+  }
 
   // parse a the super class type parameters and implements
-  instance.extend("parseClassSuper", function (inner) {
-    return function (node, isStatement) {
-      inner.call(this, node, isStatement);
-      if (node.superClass && this.isRelational("<")) {
-        node.superTypeParameters = this.flowParseTypeParameterInstantiation();
-      }
-      if (this.isContextual("implements")) {
-        this.next();
-        const implemented = node.implements = [];
-        do {
-          const node = this.startNode();
-          node.id = this.parseIdentifier();
-          if (this.isRelational("<")) {
-            node.typeParameters = this.flowParseTypeParameterInstantiation();
-          } else {
-            node.typeParameters = null;
-          }
-          implemented.push(this.finishNode(node, "ClassImplements"));
-        } while (this.eat(tt.comma));
-      }
-    };
-  });
+  parseClassSuper(node, isStatement) {
+    super.parseClassSuper(node, isStatement);
+    if (node.superClass && this.isRelational("<")) {
+      node.superTypeParameters = this.flowParseTypeParameterInstantiation();
+    }
+    if (this.isContextual("implements")) {
+      this.next();
+      const implemented = node.implements = [];
+      do {
+        const node = this.startNode();
+        node.id = this.parseIdentifier();
+        if (this.isRelational("<")) {
+          node.typeParameters = this.flowParseTypeParameterInstantiation();
+        } else {
+          node.typeParameters = null;
+        }
+        implemented.push(this.finishNode(node, "ClassImplements"));
+      } while (this.eat(tt.comma));
+    }
+  }
 
-  instance.extend("parsePropertyName", function (inner) {
-    return function (node) {
-      const variance = this.flowParseVariance();
-      const key = inner.call(this, node);
-      node.variance = variance;
-      return key;
-    };
-  });
+  parsePropertyName(node) {
+    const variance = this.flowParseVariance();
+    const key = super.parsePropertyName(node);
+    node.variance = variance;
+    return key;
+  }
 
   // parse type parameters for object method shorthand
-  instance.extend("parseObjPropValue", function (inner) {
-    return function (prop) {
-      if (prop.variance) {
-        this.unexpected(prop.variance.start);
-      }
-      delete prop.variance;
+  parseObjPropValue(prop, ...args) {
+    if (prop.variance) {
+      this.unexpected(prop.variance.start);
+    }
+    delete prop.variance;
 
-      let typeParameters;
+    let typeParameters;
 
-      // method shorthand
-      if (this.isRelational("<")) {
-        typeParameters = this.flowParseTypeParameterDeclaration();
-        if (!this.match(tt.parenL)) this.unexpected();
-      }
+    // method shorthand
+    if (this.isRelational("<")) {
+      typeParameters = this.flowParseTypeParameterDeclaration();
+      if (!this.match(tt.parenL)) this.unexpected();
+    }
 
-      inner.apply(this, arguments);
+    super.parseObjPropValue(prop, ...args);
 
-      // add typeParameters if we found them
-      if (typeParameters) {
-        (prop.value || prop).typeParameters = typeParameters;
-      }
-    };
-  });
+    // add typeParameters if we found them
+    if (typeParameters) {
+      (prop.value || prop).typeParameters = typeParameters;
+    }
+  }
 
-  instance.extend("parseAssignableListItemTypes", function () {
-    return function (param) {
-      if (this.eat(tt.question)) {
-        param.optional = true;
-      }
-      if (this.match(tt.colon)) {
-        param.typeAnnotation = this.flowParseTypeAnnotation();
-      }
-      this.finishNode(param, param.type);
-      return param;
-    };
-  });
+  parseAssignableListItemTypes(param) {
+    if (this.eat(tt.question)) {
+      param.optional = true;
+    }
+    if (this.match(tt.colon)) {
+      param.typeAnnotation = this.flowParseTypeAnnotation();
+    }
+    this.finishNode(param, param.type);
+    return param;
+  }
 
-  instance.extend("parseMaybeDefault", function (inner) {
-    return function (...args) {
-      const node = inner.apply(this, args);
+  parseMaybeDefault(...args) {
+    const node = super.parseMaybeDefault(...args);
 
-      if (node.type === "AssignmentPattern" && node.typeAnnotation && node.right.start < node.typeAnnotation.start) {
-        this.raise(node.typeAnnotation.start, "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`");
-      }
+    if (node.type === "AssignmentPattern" && node.typeAnnotation && node.right.start < node.typeAnnotation.start) {
+      this.raise(node.typeAnnotation.start, "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`");
+    }
 
-      return node;
-    };
-  });
-
+    return node;
+  }
 
   // parse typeof and type imports
-  instance.extend("parseImportSpecifiers", function (inner) {
-    return function (node) {
-      node.importKind = "value";
+  parseImportSpecifiers(node) {
+    node.importKind = "value";
 
-      let kind = null;
-      if (this.match(tt._typeof)) {
-        kind = "typeof";
-      } else if (this.isContextual("type")) {
-        kind = "type";
+    let kind = null;
+    if (this.match(tt._typeof)) {
+      kind = "typeof";
+    } else if (this.isContextual("type")) {
+      kind = "type";
+    }
+    if (kind) {
+      const lh = this.lookahead();
+      if ((lh.type === tt.name && lh.value !== "from") || lh.type === tt.braceL || lh.type === tt.star) {
+        this.next();
+        node.importKind = kind;
       }
-      if (kind) {
-        const lh = this.lookahead();
-        if ((lh.type === tt.name && lh.value !== "from") || lh.type === tt.braceL || lh.type === tt.star) {
-          this.next();
-          node.importKind = kind;
-        }
-      }
+    }
 
-      inner.call(this, node);
-    };
-  });
+    super.parseImportSpecifiers(node);
+  }
 
   // parse import-type/typeof shorthand
-  instance.extend("parseImportSpecifier", function () {
-    return function (node) {
-      const specifier = this.startNode();
-      const firstIdentLoc = this.state.start;
-      const firstIdent = this.parseIdentifier(true);
+  parseImportSpecifier(node) {
+    const specifier = this.startNode();
+    const firstIdentLoc = this.state.start;
+    const firstIdent = this.parseIdentifier(true);
 
-      let specifierTypeKind = null;
-      if (firstIdent.name === "type") {
-        specifierTypeKind = "type";
-      } else if (firstIdent.name === "typeof") {
-        specifierTypeKind = "typeof";
-      }
+    let specifierTypeKind = null;
+    if (firstIdent.name === "type") {
+      specifierTypeKind = "type";
+    } else if (firstIdent.name === "typeof") {
+      specifierTypeKind = "typeof";
+    }
 
-      let isBinding = false;
-      if (this.isContextual("as")) {
-        const as_ident = this.parseIdentifier(true);
-        if (specifierTypeKind !== null && !this.match(tt.name) && !this.state.type.keyword) {
-          // `import {type as ,` or `import {type as }`
-          specifier.imported = as_ident;
-          specifier.importKind = specifierTypeKind;
-          specifier.local = as_ident.__clone();
-        } else {
-          // `import {type as foo`
-          specifier.imported = firstIdent;
-          specifier.importKind = null;
-          specifier.local = this.parseIdentifier();
-        }
-      } else if (specifierTypeKind !== null && (this.match(tt.name) || this.state.type.keyword)) {
-        // `import {type foo`
-        specifier.imported = this.parseIdentifier(true);
+    let isBinding = false;
+    if (this.isContextual("as")) {
+      const as_ident = this.parseIdentifier(true);
+      if (specifierTypeKind !== null && !this.match(tt.name) && !this.state.type.keyword) {
+        // `import {type as ,` or `import {type as }`
+        specifier.imported = as_ident;
         specifier.importKind = specifierTypeKind;
-        if (this.eatContextual("as")) {
-          specifier.local = this.parseIdentifier();
-        } else {
-          isBinding = true;
-          specifier.local = specifier.imported.__clone();
-        }
+        specifier.local = as_ident.__clone();
       } else {
-        isBinding = true;
+        // `import {type as foo`
         specifier.imported = firstIdent;
         specifier.importKind = null;
+        specifier.local = this.parseIdentifier();
+      }
+    } else if (specifierTypeKind !== null && (this.match(tt.name) || this.state.type.keyword)) {
+      // `import {type foo`
+      specifier.imported = this.parseIdentifier(true);
+      specifier.importKind = specifierTypeKind;
+      if (this.eatContextual("as")) {
+        specifier.local = this.parseIdentifier();
+      } else {
+        isBinding = true;
         specifier.local = specifier.imported.__clone();
       }
+    } else {
+      isBinding = true;
+      specifier.imported = firstIdent;
+      specifier.importKind = null;
+      specifier.local = specifier.imported.__clone();
+    }
 
-      if (
-        (node.importKind === "type" || node.importKind === "typeof") &&
-        (specifier.importKind === "type" || specifier.importKind === "typeof")
-      ) {
-        this.raise(firstIdentLoc, "`The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements`");
-      }
+    if (
+      (node.importKind === "type" || node.importKind === "typeof") &&
+      (specifier.importKind === "type" || specifier.importKind === "typeof")
+    ) {
+      this.raise(firstIdentLoc, "`The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements`");
+    }
 
-      if (isBinding) this.checkReservedWord(specifier.local.name, specifier.start, true, true);
+    if (isBinding) this.checkReservedWord(specifier.local.name, specifier.start, true, true);
 
-      this.checkLVal(specifier.local, true, undefined, "import specifier");
-      node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
-    };
-  });
+    this.checkLVal(specifier.local, true, undefined, "import specifier");
+    node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
+  }
 
   // parse function type parameters - function foo<T>() {}
-  instance.extend("parseFunctionParams", function (inner) {
-    return function (node) {
-      if (this.isRelational("<")) {
-        node.typeParameters = this.flowParseTypeParameterDeclaration();
-      }
-      inner.call(this, node);
-    };
-  });
+  parseFunctionParams(node) {
+    if (this.isRelational("<")) {
+      node.typeParameters = this.flowParseTypeParameterDeclaration();
+    }
+    super.parseFunctionParams(node);
+  }
 
   // parse flow type annotations on variable declarator heads - let foo: string = bar
-  instance.extend("parseVarHead", function (inner) {
-    return function (decl) {
-      inner.call(this, decl);
-      if (this.match(tt.colon)) {
-        decl.id.typeAnnotation = this.flowParseTypeAnnotation();
-        this.finishNode(decl.id, decl.id.type);
-      }
-    };
-  });
+  parseVarHead(decl) {
+    super.parseVarHead(decl);
+    if (this.match(tt.colon)) {
+      decl.id.typeAnnotation = this.flowParseTypeAnnotation();
+      this.finishNode(decl.id, decl.id.type);
+    }
+  }
 
   // parse the return type of an async arrow function - let foo = (async (): number => {});
-  instance.extend("parseAsyncArrowFromCallExpression", function (inner) {
-    return function (node, call) {
-      if (this.match(tt.colon)) {
-        const oldNoAnonFunctionType = this.state.noAnonFunctionType;
-        this.state.noAnonFunctionType = true;
-        node.returnType = this.flowParseTypeAnnotation();
-        this.state.noAnonFunctionType = oldNoAnonFunctionType;
-      }
+  parseAsyncArrowFromCallExpression(node, call) {
+    if (this.match(tt.colon)) {
+      const oldNoAnonFunctionType = this.state.noAnonFunctionType;
+      this.state.noAnonFunctionType = true;
+      node.returnType = this.flowParseTypeAnnotation();
+      this.state.noAnonFunctionType = oldNoAnonFunctionType;
+    }
 
-      return inner.call(this, node, call);
-    };
-  });
+    return super.parseAsyncArrowFromCallExpression(node, call);
+  }
 
   // todo description
-  instance.extend("shouldParseAsyncArrow", function (inner) {
-    return function () {
-      return this.match(tt.colon) || inner.call(this);
-    };
-  });
+  shouldParseAsyncArrow() {
+    return this.match(tt.colon) || super.shouldParseAsyncArrow();
+  }
 
   // We need to support type parameter declarations for arrow functions. This
   // is tricky. There are three situations we need to handle
@@ -1367,99 +1302,93 @@ export default function (instance) {
   // 2. This is an arrow function. We'll parse the type parameter declaration,
   //    parse the rest, make sure the rest is an arrow function, and go from
   //    there
-  // 3. This is neither. Just call the inner function
-  instance.extend("parseMaybeAssign", function (inner) {
-    return function (...args) {
-      let jsxError = null;
-      if (tt.jsxTagStart && this.match(tt.jsxTagStart)) {
-        const state = this.state.clone();
-        try {
-          return inner.apply(this, args);
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            this.state = state;
-            jsxError = err;
-          } else {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
+  // 3. This is neither. Just call the super method
+  parseMaybeAssign(...args) {
+    let jsxError = null;
+    if (tt.jsxTagStart && this.match(tt.jsxTagStart)) {
+      const state = this.state.clone();
+      try {
+        return super.parseMaybeAssign(...args);
+      } catch (err) {
+        if (err instanceof SyntaxError) {
+          this.state = state;
+          jsxError = err;
+        } else {
+          // istanbul ignore next: no such error is expected
+          throw err;
         }
       }
+    }
 
-      if (jsxError != null || this.isRelational("<")) {
-        // Need to push something onto the context to stop
-        // the JSX plugin from messing with the tokens
-        this.state.context.push(ct.parenExpression);
-        let arrowExpression;
-        let typeParameters;
-        try {
-          typeParameters = this.flowParseTypeParameterDeclaration();
+    if (jsxError != null || this.isRelational("<")) {
+      // Need to push something onto the context to stop
+      // the JSX plugin from messing with the tokens
+      this.state.context.push(ct.parenExpression);
+      let arrowExpression;
+      let typeParameters;
+      try {
+        typeParameters = this.flowParseTypeParameterDeclaration();
 
-          arrowExpression = inner.apply(this, args);
-          arrowExpression.typeParameters = typeParameters;
-          this.resetStartLocationFromNode(arrowExpression, typeParameters);
-        } catch (err) {
-          this.state.context.pop();
-
-          throw jsxError || err;
-        }
-
+        arrowExpression = super.parseMaybeAssign(...args);
+        arrowExpression.typeParameters = typeParameters;
+        this.resetStartLocationFromNode(arrowExpression, typeParameters);
+      } catch (err) {
         this.state.context.pop();
 
-        if (arrowExpression.type === "ArrowFunctionExpression") {
-          return arrowExpression;
-        } else if (jsxError != null) {
-          throw jsxError;
-        } else {
-          this.raise(
-            typeParameters.start,
-            "Expected an arrow function after this type parameter declaration",
-          );
-        }
+        throw jsxError || err;
       }
 
-      return inner.apply(this, args);
-    };
-  });
+      this.state.context.pop();
+
+      if (arrowExpression.type === "ArrowFunctionExpression") {
+        return arrowExpression;
+      } else if (jsxError != null) {
+        throw jsxError;
+      } else {
+        this.raise(
+          typeParameters.start,
+          "Expected an arrow function after this type parameter declaration",
+        );
+      }
+    }
+
+    return super.parseMaybeAssign(...args);
+  }
 
   // handle return types for arrow functions
-  instance.extend("parseArrow", function (inner) {
-    return function (node) {
-      if (this.match(tt.colon)) {
-        const state = this.state.clone();
-        try {
-          const oldNoAnonFunctionType = this.state.noAnonFunctionType;
-          this.state.noAnonFunctionType = true;
+  parseArrow(node) {
+    if (this.match(tt.colon)) {
+      const state = this.state.clone();
+      try {
+        const oldNoAnonFunctionType = this.state.noAnonFunctionType;
+        this.state.noAnonFunctionType = true;
 
-          const typeNode = this.startNode();
-          [typeNode.typeAnnotation, node.predicate] = this.flowParseTypeAndPredicateInitialiser();
+        const typeNode = this.startNode();
+        [typeNode.typeAnnotation, node.predicate] = this.flowParseTypeAndPredicateInitialiser();
 
-          this.state.noAnonFunctionType = oldNoAnonFunctionType;
+        this.state.noAnonFunctionType = oldNoAnonFunctionType;
 
-          if (this.canInsertSemicolon()) this.unexpected();
-          if (!this.match(tt.arrow)) this.unexpected();
+        if (this.canInsertSemicolon()) this.unexpected();
+        if (!this.match(tt.arrow)) this.unexpected();
 
-          // assign after it is clear it is an arrow
-          node.returnType = typeNode.typeAnnotation
-            ? this.finishNode(typeNode, "TypeAnnotation")
-            : null;
-        } catch (err) {
-          if (err instanceof SyntaxError) {
-            this.state = state;
-          } else {
-            // istanbul ignore next: no such error is expected
-            throw err;
-          }
+        // assign after it is clear it is an arrow
+        node.returnType = typeNode.typeAnnotation
+          ? this.finishNode(typeNode, "TypeAnnotation")
+          : null;
+      } catch (err) {
+        if (err instanceof SyntaxError) {
+          this.state = state;
+        } else {
+          // istanbul ignore next: no such error is expected
+          throw err;
         }
       }
+    }
 
-      return inner.call(this, node);
-    };
-  });
+    return super.parseArrow(node);
+  }
 
-  instance.extend("shouldParseArrow", function (inner) {
-    return function () {
-      return this.match(tt.colon) || inner.call(this);
-    };
-  });
-}
+  shouldParseArrow() {
+    return this.match(tt.colon) || super.shouldParseArrow();
+  }
+};

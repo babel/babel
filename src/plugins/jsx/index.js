@@ -395,72 +395,66 @@ pp.jsxParseElement = function() {
   return this.jsxParseElementAt(startPos, startLoc);
 };
 
-export default function(instance) {
-  instance.extend("parseExprAtom", function(inner) {
-    return function(refShortHandDefaultPos) {
-      if (this.match(tt.jsxText)) {
-        return this.parseLiteral(this.state.value, "JSXText");
-      } else if (this.match(tt.jsxTagStart)) {
-        return this.jsxParseElement();
-      } else {
-        return inner.call(this, refShortHandDefaultPos);
-      }
-    };
-  });
+export default (superClass) => class extends superClass {
+  parseExprAtom(refShortHandDefaultPos) {
+    if (this.match(tt.jsxText)) {
+      return this.parseLiteral(this.state.value, "JSXText");
+    } else if (this.match(tt.jsxTagStart)) {
+      return this.jsxParseElement();
+    } else {
+      return super.parseExprAtom(refShortHandDefaultPos);
+    }
+  }
 
-  instance.extend("readToken", function(inner) {
-    return function(code) {
-      if (this.state.inPropertyName) return inner.call(this, code);
+  readToken(code) {
+    if (this.state.inPropertyName) return super.readToken(code);
 
-      const context = this.curContext();
+    const context = this.curContext();
 
-      if (context === tc.j_expr) {
-        return this.jsxReadToken();
-      }
+    if (context === tc.j_expr) {
+      return this.jsxReadToken();
+    }
 
-      if (context === tc.j_oTag || context === tc.j_cTag) {
-        if (isIdentifierStart(code)) {
-          return this.jsxReadWord();
-        }
-
-        if (code === 62) {
-          ++this.state.pos;
-          return this.finishToken(tt.jsxTagEnd);
-        }
-
-        if ((code === 34 || code === 39) && context === tc.j_oTag) {
-          return this.jsxReadString(code);
-        }
+    if (context === tc.j_oTag || context === tc.j_cTag) {
+      if (isIdentifierStart(code)) {
+        return this.jsxReadWord();
       }
 
-      if (code === 60 && this.state.exprAllowed) {
+      if (code === 62) {
         ++this.state.pos;
-        return this.finishToken(tt.jsxTagStart);
+        return this.finishToken(tt.jsxTagEnd);
       }
 
-      return inner.call(this, code);
-    };
-  });
+      if ((code === 34 || code === 39) && context === tc.j_oTag) {
+        return this.jsxReadString(code);
+      }
+    }
 
-  instance.extend("updateContext", function(inner) {
-    return function(prevType) {
-      if (this.match(tt.braceL)) {
-        const curContext = this.curContext();
-        if (curContext === tc.j_oTag) {
-          this.state.context.push(tc.braceExpression);
-        } else if (curContext === tc.j_expr) {
-          this.state.context.push(tc.templateQuasi);
-        } else {
-          inner.call(this, prevType);
-        }
-        this.state.exprAllowed = true;
-      } else if (this.match(tt.slash) && prevType === tt.jsxTagStart) {
-        this.state.context.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore
-        this.state.context.push(tc.j_cTag); // reconsider as closing tag context
-        this.state.exprAllowed = false;
+    if (code === 60 && this.state.exprAllowed) {
+      ++this.state.pos;
+      return this.finishToken(tt.jsxTagStart);
+    }
+
+    return super.readToken(code);
+  }
+
+  updateContext(prevType) {
+    if (this.match(tt.braceL)) {
+      const curContext = this.curContext();
+      if (curContext === tc.j_oTag) {
+        this.state.context.push(tc.braceExpression);
+      } else if (curContext === tc.j_expr) {
+        this.state.context.push(tc.templateQuasi);
       } else {
-        return inner.call(this, prevType);
+        super.updateContext(prevType);
       }
-    };
-  });
-}
+      this.state.exprAllowed = true;
+    } else if (this.match(tt.slash) && prevType === tt.jsxTagStart) {
+      this.state.context.length -= 2; // do not consider JSX expr -> JSX open tag -> ... anymore
+      this.state.context.push(tc.j_cTag); // reconsider as closing tag context
+      this.state.exprAllowed = false;
+    } else {
+      return super.updateContext(prevType);
+    }
+  }
+};

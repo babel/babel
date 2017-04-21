@@ -12,7 +12,7 @@ export default class Parser extends Tokenizer {
     this.options = options;
     this.inModule = this.options.sourceType === "module";
     this.input = input;
-    this.plugins = this.loadPlugins(this.options.plugins);
+    this.plugins = pluginsMap(this.options.plugins);
     this.filename = options.sourceFilename;
 
     // If enabled, skip leading hashbang line.
@@ -33,37 +33,6 @@ export default class Parser extends Tokenizer {
     return !!this.plugins[name];
   }
 
-  extend(name: string, f: Function) {
-    this[name] = f(this[name]);
-  }
-
-  loadPlugins(pluginList: Array<string>): { [key: string]: boolean } {
-    const pluginMap = {};
-
-    if (pluginList.indexOf("flow") >= 0) {
-      // ensure flow plugin loads last
-      pluginList = pluginList.filter((plugin) => plugin !== "flow");
-      pluginList.push("flow");
-    }
-
-    if (pluginList.indexOf("estree") >= 0) {
-      // ensure estree plugin loads first
-      pluginList = pluginList.filter((plugin) => plugin !== "estree");
-      pluginList.unshift("estree");
-    }
-
-    for (const name of pluginList) {
-      if (!pluginMap[name]) {
-        pluginMap[name] = true;
-
-        const plugin = plugins[name];
-        if (plugin) plugin(this);
-      }
-    }
-
-    return pluginMap;
-  }
-
   parse(): {
     type: "File",
     program: {
@@ -76,4 +45,12 @@ export default class Parser extends Tokenizer {
     this.nextToken();
     return this.parseTopLevel(file, program);
   }
+}
+
+function pluginsMap(pluginList: $ReadOnlyArray<string>): { [key: string]: boolean } {
+  const pluginMap = {};
+  for (const name of pluginList) {
+    pluginMap[name] = true;
+  }
+  return pluginMap;
 }
