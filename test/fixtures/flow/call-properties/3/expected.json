@@ -282,6 +282,8 @@
                         },
                         "name": "y"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 25,
@@ -297,9 +299,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],

@@ -109,6 +109,8 @@
                 },
                 "name": "static"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "GenericTypeAnnotation",
                 "start": 28,
@@ -142,9 +144,8 @@
                   "name": "T"
                 }
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [],

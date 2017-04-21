@@ -137,7 +137,8 @@
               }
             }
           ]
-        }
+        },
+        "kind": "CommonJS"
       }
     ],
     "directives": []

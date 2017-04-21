@@ -134,6 +134,8 @@
                         },
                         "name": "numVal"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "NumberTypeAnnotation",
                         "start": 16,
@@ -149,9 +151,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -184,6 +185,8 @@
                         },
                         "name": "strVal"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 32,
@@ -199,9 +202,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],

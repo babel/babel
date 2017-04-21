@@ -134,6 +134,8 @@
                         },
                         "name": "x"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "NumberTypeAnnotation",
                         "start": 14,
@@ -149,9 +151,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -184,6 +185,8 @@
                         },
                         "name": "y"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 25,
@@ -199,9 +202,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],
@@ -446,6 +448,8 @@
                         },
                         "name": "x"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "NumberTypeAnnotation",
                         "start": 71,
@@ -461,9 +465,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -496,6 +499,8 @@
                         },
                         "name": "y"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 82,
@@ -511,9 +516,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],
@@ -858,6 +862,8 @@
                         },
                         "name": "a"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "ObjectTypeAnnotation",
                         "start": 148,
@@ -905,6 +911,8 @@
                               },
                               "name": "x"
                             },
+                            "static": false,
+                            "kind": "init",
                             "value": {
                               "type": "NumberTypeAnnotation",
                               "start": 154,
@@ -920,9 +928,8 @@
                                 }
                               }
                             },
-                            "optional": false,
-                            "static": false,
-                            "variance": null
+                            "variance": null,
+                            "optional": false
                           },
                           {
                             "type": "ObjectTypeProperty",
@@ -955,6 +962,8 @@
                               },
                               "name": "y"
                             },
+                            "static": false,
+                            "kind": "init",
                             "value": {
                               "type": "StringTypeAnnotation",
                               "start": 165,
@@ -970,17 +979,15 @@
                                 }
                               }
                             },
-                            "optional": false,
-                            "static": false,
-                            "variance": null
+                            "variance": null,
+                            "optional": false
                           }
                         ],
                         "indexers": [],
                         "exact": true
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -1013,6 +1020,8 @@
                         },
                         "name": "b"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "BooleanTypeAnnotation",
                         "start": 179,
@@ -1028,9 +1037,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],
@@ -1378,6 +1386,8 @@
                         },
                         "name": "a"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "ObjectTypeAnnotation",
                         "start": 242,
@@ -1425,6 +1435,8 @@
                               },
                               "name": "x"
                             },
+                            "static": false,
+                            "kind": "init",
                             "value": {
                               "type": "NumberTypeAnnotation",
                               "start": 247,
@@ -1440,9 +1452,8 @@
                                 }
                               }
                             },
-                            "optional": false,
-                            "static": false,
-                            "variance": null
+                            "variance": null,
+                            "optional": false
                           },
                           {
                             "type": "ObjectTypeProperty",
@@ -1475,6 +1486,8 @@
                               },
                               "name": "y"
                             },
+                            "static": false,
+                            "kind": "init",
                             "value": {
                               "type": "StringTypeAnnotation",
                               "start": 258,
@@ -1490,17 +1503,15 @@
                                 }
                               }
                             },
-                            "optional": false,
-                            "static": false,
-                            "variance": null
+                            "variance": null,
+                            "optional": false
                           }
                         ],
                         "indexers": [],
                         "exact": false
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -1533,6 +1544,8 @@
                         },
                         "name": "b"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "BooleanTypeAnnotation",
                         "start": 271,
@@ -1548,9 +1561,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],

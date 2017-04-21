@@ -92,6 +92,25 @@
                   "column": 38
                 }
               },
+              "key": {
+                "type": "Identifier",
+                "start": 25,
+                "end": 28,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 28
+                  },
+                  "identifierName": "foo"
+                },
+                "name": "foo"
+              },
+              "static": true,
+              "kind": "init",
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 18,
@@ -124,24 +143,6 @@
                     }
                   }
                 }
-              },
-              "static": true,
-              "key": {
-                "type": "Identifier",
-                "start": 25,
-                "end": 28,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 25
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 28
-                  },
-                  "identifierName": "foo"
-                },
-                "name": "foo"
               },
               "optional": false
             },
@@ -176,6 +177,8 @@
                 },
                 "name": "x"
               },
+              "static": true,
+              "kind": "init",
               "value": {
                 "type": "StringTypeAnnotation",
                 "start": 51,
@@ -191,9 +194,8 @@
                   }
                 }
               },
-              "optional": false,
-              "static": true,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [],

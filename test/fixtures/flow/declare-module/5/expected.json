@@ -138,6 +138,25 @@
                         "column": 50
                       }
                     },
+                    "key": {
+                      "type": "Identifier",
+                      "start": 37,
+                      "end": 40,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 37
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 40
+                        },
+                        "identifierName": "foo"
+                      },
+                      "name": "foo"
+                    },
+                    "static": false,
+                    "kind": "init",
                     "value": {
                       "type": "FunctionTypeAnnotation",
                       "start": 37,
@@ -171,24 +190,6 @@
                         }
                       }
                     },
-                    "static": false,
-                    "key": {
-                      "type": "Identifier",
-                      "start": 37,
-                      "end": 40,
-                      "loc": {
-                        "start": {
-                          "line": 1,
-                          "column": 37
-                        },
-                        "end": {
-                          "line": 1,
-                          "column": 40
-                        },
-                        "identifierName": "foo"
-                      },
-                      "name": "foo"
-                    },
                     "optional": false
                   }
                 ],
@@ -197,7 +198,8 @@
               }
             }
           ]
-        }
+        },
+        "kind": "CommonJS"
       }
     ],
     "directives": []

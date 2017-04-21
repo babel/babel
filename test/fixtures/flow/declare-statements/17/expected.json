@@ -109,6 +109,8 @@
                 },
                 "name": "a"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "NumberTypeAnnotation",
                 "start": 22,
@@ -124,9 +126,8 @@
                   }
                 }
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             },
             {
               "type": "ObjectTypeProperty",
@@ -159,6 +160,8 @@
                 },
                 "name": "b"
               },
+              "static": true,
+              "kind": "init",
               "value": {
                 "type": "NumberTypeAnnotation",
                 "start": 41,
@@ -174,9 +177,8 @@
                   }
                 }
               },
-              "optional": false,
-              "static": true,
-              "variance": null
+              "variance": null,
+              "optional": false
             },
             {
               "type": "ObjectTypeProperty",
@@ -209,6 +211,8 @@
                 },
                 "name": "c"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "NumberTypeAnnotation",
                 "start": 53,
@@ -224,9 +228,8 @@
                   }
                 }
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [],

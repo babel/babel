@@ -107,6 +107,8 @@
                 },
                 "name": "p"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "GenericTypeAnnotation",
                 "start": 13,
@@ -140,8 +142,6 @@
                   "name": "T"
                 }
               },
-              "optional": false,
-              "static": false,
               "variance": {
                 "type": "Variance",
                 "start": 10,
@@ -157,7 +157,8 @@
                   }
                 },
                 "kind": "plus"
-              }
+              },
+              "optional": false
             }
           ],
           "indexers": [],

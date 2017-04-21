@@ -117,6 +117,25 @@
                           "column": 47
                         }
                       },
+                      "key": {
+                        "type": "Identifier",
+                        "start": 8,
+                        "end": 11,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 11
+                          },
+                          "identifierName": "add"
+                        },
+                        "name": "add"
+                      },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "FunctionTypeAnnotation",
                         "start": 8,
@@ -294,24 +313,6 @@
                             }
                           }
                         }
-                      },
-                      "static": false,
-                      "key": {
-                        "type": "Identifier",
-                        "start": 8,
-                        "end": 11,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 8
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 11
-                          },
-                          "identifierName": "add"
-                        },
-                        "name": "add"
                       },
                       "optional": false
                     }

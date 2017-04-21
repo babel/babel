@@ -90,6 +90,25 @@
                   "column": 19
                 }
               },
+              "key": {
+                "type": "Identifier",
+                "start": 13,
+                "end": 19,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 8
+                  },
+                  "identifierName": "foobar"
+                },
+                "name": "foobar"
+              },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 13,
@@ -156,24 +175,6 @@
                   }
                 }
               },
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start": 13,
-                "end": 19,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 8
-                  },
-                  "identifierName": "foobar"
-                },
-                "name": "foobar"
-              },
               "optional": false
             },
             {
@@ -190,6 +191,25 @@
                   "column": 19
                 }
               },
+              "key": {
+                "type": "Identifier",
+                "start": 34,
+                "end": 40,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 8
+                  },
+                  "identifierName": "delete"
+                },
+                "name": "delete"
+              },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 34,
@@ -256,24 +276,6 @@
                   }
                 }
               },
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start": 34,
-                "end": 40,
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 3,
-                    "column": 8
-                  },
-                  "identifierName": "delete"
-                },
-                "name": "delete"
-              },
               "optional": false
             },
             {
@@ -290,6 +292,25 @@
                   "column": 18
                 }
               },
+              "key": {
+                "type": "Identifier",
+                "start": 55,
+                "end": 60,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 7
+                  },
+                  "identifierName": "yield"
+                },
+                "name": "yield"
+              },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 55,
@@ -356,24 +377,6 @@
                   }
                 }
               },
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start": 55,
-                "end": 60,
-                "loc": {
-                  "start": {
-                    "line": 4,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 4,
-                    "column": 7
-                  },
-                  "identifierName": "yield"
-                },
-                "name": "yield"
-              },
               "optional": false
             },
             {
@@ -390,6 +393,25 @@
                   "column": 15
                 }
               },
+              "key": {
+                "type": "Identifier",
+                "start": 75,
+                "end": 77,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 4
+                  },
+                  "identifierName": "do"
+                },
+                "name": "do"
+              },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 75,
@@ -455,24 +477,6 @@
                     }
                   }
                 }
-              },
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start": 75,
-                "end": 77,
-                "loc": {
-                  "start": {
-                    "line": 5,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 5,
-                    "column": 4
-                  },
-                  "identifierName": "do"
-                },
-                "name": "do"
               },
               "optional": false
             }

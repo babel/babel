@@ -109,6 +109,8 @@
                 },
                 "name": "foo"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 19,
@@ -142,9 +144,8 @@
                 },
                 "typeParameters": null
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [],

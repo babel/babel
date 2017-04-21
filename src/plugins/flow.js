@@ -105,7 +105,7 @@ pp.flowParseDeclareFunction = function (node) {
   return this.finishNode(node, "DeclareFunction");
 };
 
-pp.flowParseDeclare = function (node) {
+pp.flowParseDeclare = function (node, insideModule) {
   if (this.match(tt._class)) {
     return this.flowParseDeclareClass(node);
   } else if (this.match(tt._function)) {
@@ -116,12 +116,15 @@ pp.flowParseDeclare = function (node) {
     if (this.lookahead().type === tt.dot) {
       return this.flowParseDeclareModuleExports(node);
     } else {
+      if (insideModule) this.unexpected(null, "`declare module` cannot be used inside another `declare module`");
       return this.flowParseDeclareModule(node);
     }
   } else if (this.isContextual("type")) {
     return this.flowParseDeclareTypeAlias(node);
   } else if (this.isContextual("interface")) {
     return this.flowParseDeclareInterface(node);
+  } else if (this.match(tt._export)) {
+    return this.flowParseDeclareExportDeclaration(node, insideModule);
   } else {
     this.unexpected();
   }
@@ -133,6 +136,17 @@ pp.flowParseDeclareVariable = function (node) {
   this.semicolon();
   return this.finishNode(node, "DeclareVariable");
 };
+
+function isEsModuleType(bodyElement) {
+  return bodyElement.type === "DeclareExportAllDeclaration" ||
+    (
+      bodyElement.type === "DeclareExportDeclaration" &&
+      (
+        !bodyElement.declaration ||
+        (bodyElement.declaration.type !== "TypeAlias" && bodyElement.declaration.type !== "InterfaceDeclaration")
+      )
+    );
+}
 
 pp.flowParseDeclareModule = function (node) {
   this.next();
@@ -167,7 +181,92 @@ pp.flowParseDeclareModule = function (node) {
   this.expect(tt.braceR);
 
   this.finishNode(bodyNode, "BlockStatement");
+
+  let kind = null;
+  let hasModuleExport = false;
+  const errorMessage = "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module";
+  body.forEach((bodyElement) => {
+    if (isEsModuleType(bodyElement)) {
+      if (kind === "CommonJS") this.unexpected(bodyElement.start, errorMessage);
+      kind = "ES";
+    } else if (bodyElement.type === "DeclareModuleExports") {
+      if (hasModuleExport) this.unexpected(bodyElement.start, "Duplicate `declare module.exports` statement");
+      if (kind === "ES") this.unexpected(bodyElement.start, errorMessage);
+      kind = "CommonJS";
+      hasModuleExport = true;
+    }
+  });
+
+  node.kind = kind || "CommonJS";
   return this.finishNode(node, "DeclareModule");
+};
+
+const exportSuggestions = {
+  const: "declare export var",
+  let: "declare export var",
+  type: "export type",
+  interface: "export interface",
+};
+
+pp.flowParseDeclareExportDeclaration = function (node, insideModule) {
+  this.expect(tt._export);
+
+  if (this.eat(tt._default)) {
+    if (this.match(tt._function) || this.match(tt._class)) {
+      // declare export default class ...
+      // declare export default function ...
+      node.declaration = this.flowParseDeclare(this.startNode());
+    } else {
+      // declare export default [type];
+      node.declaration = this.flowParseType();
+      this.semicolon();
+    }
+    node.default = true;
+
+    return this.finishNode(node, "DeclareExportDeclaration");
+  } else {
+    if (
+      this.match(tt._const) || this.match(tt._let) ||
+      (
+        (this.isContextual("type") || this.isContextual("interface")) &&
+        !insideModule
+      )
+    ) {
+      const label = this.state.value;
+      const suggestion = exportSuggestions[label];
+      this.unexpected(this.state.start, `\`declare export ${label}\` is not supported. Use \`${suggestion}\` instead`);
+    }
+
+    if (
+      this.match(tt._var) || // declare export var ...
+      this.match(tt._function) || // declare export function ...
+      this.match(tt._class) // declare export class ...
+    ) {
+      node.declaration = this.flowParseDeclare(this.startNode());
+      node.default = false;
+
+      return this.finishNode(node, "DeclareExportDeclaration");
+    } else if (
+      this.match(tt.star) || // declare export * from ''
+      this.match(tt.braceL) || // declare export {} ...
+      this.isContextual("interface") || // declare export interface ...
+      this.isContextual("type") // declare export type ...
+    ) {
+      node = this.parseExport(node);
+      if (node.type === "ExportNamedDeclaration") {
+        // flow does not support the ExportNamedDeclaration
+        node.type = "ExportDeclaration";
+        node.default = false;
+        delete node.exportKind;
+      }
+
+      node.type = "Declare" + node.type;
+
+      return node;
+    }
+  }
+
+  this.unexpected();
 };
 
 pp.flowParseDeclareModuleExports = function (node) {
@@ -381,15 +480,6 @@ pp.flowParseObjectTypeMethodish = function (node) {
   return this.finishNode(node, "FunctionTypeAnnotation");
 };
 
-pp.flowParseObjectTypeMethod = function (startPos, startLoc, isStatic, key) {
-  const node = this.startNodeAt(startPos, startLoc);
-  node.value = this.flowParseObjectTypeMethodish(this.startNodeAt(startPos, startLoc));
-  node.static = isStatic;
-  node.key = key;
-  node.optional = false;
-  return this.finishNode(node, "ObjectTypeProperty");
-};
-
 pp.flowParseObjectTypeCallProperty = function (node, isStatic) {
   const valueNode = this.startNode();
   node.static = isStatic;
@@ -402,9 +492,6 @@ pp.flowParseObjectType = function (allowStatic, allowExact, allowSpread) {
   this.state.inType = true;
 
   const nodeStart = this.startNode();
-  let node;
-  let propertyKey;
-  let isStatic = false;
 
   nodeStart.callProperties = [];
   nodeStart.properties = [];
@@ -425,10 +512,8 @@ pp.flowParseObjectType = function (allowStatic, allowExact, allowSpread) {
   nodeStart.exact = exact;
 
   while (!this.match(endDelim)) {
-    let optional = false;
-    const startPos = this.state.start;
-    const startLoc = this.state.startLoc;
-    node = this.startNode();
+    let isStatic = false;
+    const node = this.startNode();
     if (allowStatic && this.isContextual("static") && this.lookahead().type !== tt.colon) {
       this.next();
       isStatic = true;
@@ -444,44 +529,24 @@ pp.flowParseObjectType = function (allowStatic, allowExact, allowSpread) {
       }
       nodeStart.callProperties.push(this.flowParseObjectTypeCallProperty(node, isStatic));
     } else {
-      if (this.match(tt.ellipsis)) {
-        if (!allowSpread) {
-          this.unexpected(
-            null,
-            "Spread operator cannot appear in class or interface definitions"
-          );
-        }
-        if (variance) {
-          this.unexpected(variance.start, "Spread properties cannot have variance");
-        }
-        this.expect(tt.ellipsis);
-        node.argument = this.flowParseType();
-        nodeStart.properties.push(this.finishNode(node, "ObjectTypeSpreadProperty"));
-      } else {
-        propertyKey = this.flowParseObjectPropertyKey();
-        if (this.isRelational("<") || this.match(tt.parenL)) {
-          // This is a method property
-          if (variance) {
-            this.unexpected(variance.start);
-          }
-          nodeStart.properties.push(this.flowParseObjectTypeMethod(startPos, startLoc, isStatic, propertyKey));
-        } else {
-          if (this.eat(tt.question)) {
-            optional = true;
-          }
-          node.key = propertyKey;
-          node.value = this.flowParseTypeInitialiser();
-          node.optional = optional;
-          node.static = isStatic;
-          node.variance = variance;
-          nodeStart.properties.push(this.finishNode(node, "ObjectTypeProperty"));
+      let kind = "init";
+
+      if (this.isContextual("get") || this.isContextual("set")) {
+        const lookahead = this.lookahead();
+        if (
+          lookahead.type === tt.name ||
+          lookahead.type === tt.string ||
+          lookahead.type === tt.num
+        ) {
+          kind = this.state.value;
+          this.next();
         }
       }
+
+      nodeStart.properties.push(this.flowParseObjectTypeProperty(node, isStatic, variance, kind, allowSpread));
     }
 
     this.flowObjectTypeSemicolon();
-
-    isStatic = false;
   }
 
   this.expect(endDelim);
@@ -491,6 +556,65 @@ pp.flowParseObjectType = function (allowStatic, allowExact, allowSpread) {
   this.state.inType = oldInType;
 
   return out;
+};
+
+pp.flowParseObjectTypeProperty = function (node, isStatic, variance, kind, allowSpread) {
+  if (this.match(tt.ellipsis)) {
+    if (!allowSpread) {
+      this.unexpected(
+        null,
+        "Spread operator cannot appear in class or interface definitions"
+      );
+    }
+    if (variance) {
+      this.unexpected(variance.start, "Spread properties cannot have variance");
+    }
+    this.expect(tt.ellipsis);
+    node.argument = this.flowParseType();
+
+    return this.finishNode(node, "ObjectTypeSpreadProperty");
+  } else {
+    node.key = this.flowParseObjectPropertyKey();
+    node.static = isStatic;
+    node.kind = kind;
+
+    let optional = false;
+    if (this.isRelational("<") || this.match(tt.parenL)) {
+      // This is a method property
+      if (variance) {
+        this.unexpected(variance.start);
+      }
+
+      node.value = this.flowParseObjectTypeMethodish(this.startNodeAt(node.start, node.loc.start));
+      if (kind === "get" || kind === "set") this.flowCheckGetterSetterParamCount(node);
+    } else {
+      if (kind !== "init") this.unexpected();
+      if (this.eat(tt.question)) {
+        optional = true;
+      }
+      node.value = this.flowParseTypeInitialiser();
+      node.variance = variance;
+
+    }
+
+    node.optional = optional;
+
+    return this.finishNode(node, "ObjectTypeProperty");
+  }
+};
+
+// This is similar to checkGetterSetterParamCount, but as
+// babylon uses non estree properties we cannot reuse it here
+pp.flowCheckGetterSetterParamCount = function (property) {
+  const paramCount = property.kind === "get" ? 0 : 1;
+  if (property.value.params.length !== paramCount) {
+    const start = property.start;
+    if (property.kind === "get") {
+      this.raise(start, "getter should have no params");
+    } else {
+      this.raise(start, "setter should have exactly one param");
+    }
+  }
 };
 
 pp.flowObjectTypeSemicolon = function () {
@@ -898,7 +1022,7 @@ export default (superClass) => class extends superClass {
   parseExpressionStatement(node, expr) {
     if (expr.type === "Identifier") {
       if (expr.name === "declare") {
-        if (this.match(tt._class) || this.match(tt.name) || this.match(tt._function) || this.match(tt._var)) {
+        if (this.match(tt._class) || this.match(tt.name) || this.match(tt._function) || this.match(tt._var) || this.match(tt._export)) {
           return this.flowParseDeclare(node);
         }
       } else if (this.match(tt.name)) {

@@ -810,7 +810,8 @@ pp.parseClassSuper = function (node) {
 // Parses module export declaration.
 
 pp.parseExport = function (node) {
-  this.next();
+  this.eat(tt._export);
+
   // export * from '...'
   if (this.match(tt.star)) {
     const specifier = this.startNode();

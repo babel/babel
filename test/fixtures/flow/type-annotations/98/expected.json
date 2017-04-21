@@ -134,6 +134,8 @@
                         },
                         "name": "param1"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "NumberTypeAnnotation",
                         "start": 17,
@@ -149,9 +151,8 @@
                           }
                         }
                       },
-                      "optional": true,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": true
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -184,6 +185,8 @@
                         },
                         "name": "param2"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 33,
@@ -199,9 +202,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     },
                     {
                       "type": "ObjectTypeProperty",
@@ -234,6 +236,8 @@
                         },
                         "name": "param3"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 49,
@@ -249,9 +253,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],

@@ -1,0 +1,165 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 54,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 54
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 54,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 54
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start": 0,
+        "end": 54,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 54
+          }
+        },
+        "id": {
+          "type": "StringLiteral",
+          "start": 15,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            }
+          },
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 21,
+          "end": 54,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 54
+            }
+          },
+          "body": [
+            {
+              "type": "DeclareExportDeclaration",
+              "start": 23,
+              "end": 52,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 23
+                },
+                "end": {
+                  "line": 1,
+                  "column": 52
+                }
+              },
+              "declaration": {
+                "type": "DeclareVariable",
+                "start": 38,
+                "end": 52,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 38
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 52
+                  }
+                },
+                "id": {
+                  "type": "Identifier",
+                  "start": 42,
+                  "end": 51,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 42
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 51
+                    },
+                    "identifierName": "a"
+                  },
+                  "name": "a",
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "start": 43,
+                    "end": 51,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 43
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 51
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start": 45,
+                      "end": 51,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 45
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 51
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "default": false
+            }
+          ]
+        },
+        "kind": "ES"
+      }
+    ],
+    "directives": []
+  }
+}

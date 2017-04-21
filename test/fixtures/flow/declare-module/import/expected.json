@@ -148,7 +148,8 @@
               }
             }
           ]
-        }
+        },
+        "kind": "CommonJS"
       }
     ],
     "directives": []

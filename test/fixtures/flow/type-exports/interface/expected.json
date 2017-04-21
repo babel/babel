@@ -126,6 +126,8 @@
                   },
                   "name": "p"
                 },
+                "static": false,
+                "kind": "init",
                 "value": {
                   "type": "NumberTypeAnnotation",
                   "start": 26,
@@ -141,9 +143,8 @@
                     }
                   }
                 },
-                "optional": false,
-                "static": false,
-                "variance": null
+                "variance": null,
+                "optional": false
               }
             ],
             "indexers": [],
@@ -297,6 +298,8 @@
                   },
                   "name": "p"
                 },
+                "static": false,
+                "kind": "init",
                 "value": {
                   "type": "GenericTypeAnnotation",
                   "start": 65,
@@ -330,9 +333,8 @@
                     "name": "T"
                   }
                 },
-                "optional": false,
-                "static": false,
-                "variance": null
+                "variance": null,
+                "optional": false
               }
             ],
             "indexers": [],

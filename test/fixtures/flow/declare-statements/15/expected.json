@@ -109,6 +109,8 @@
                 },
                 "name": "foo"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "StringTypeAnnotation",
                 "start": 27,
@@ -124,9 +126,8 @@
                   }
                 }
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [],
@@ -247,6 +248,8 @@
                 },
                 "name": "foo"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "GenericTypeAnnotation",
                 "start": 66,
@@ -280,9 +283,8 @@
                   "name": "T"
                 }
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [],

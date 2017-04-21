@@ -189,6 +189,8 @@
                         },
                         "name": "x"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 13,
@@ -204,9 +206,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],

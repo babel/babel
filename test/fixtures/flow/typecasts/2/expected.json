@@ -244,6 +244,8 @@
                     },
                     "name": "xxx"
                   },
+                  "static": false,
+                  "kind": "init",
                   "value": {
                     "type": "NumberTypeAnnotation",
                     "start": 29,
@@ -259,9 +261,8 @@
                       }
                     }
                   },
-                  "optional": false,
-                  "static": false,
-                  "variance": null
+                  "variance": null,
+                  "optional": false
                 },
                 {
                   "type": "ObjectTypeProperty",
@@ -294,6 +295,8 @@
                     },
                     "name": "yyy"
                   },
+                  "static": false,
+                  "kind": "init",
                   "value": {
                     "type": "StringTypeAnnotation",
                     "start": 42,
@@ -309,9 +312,8 @@
                       }
                     }
                   },
-                  "optional": false,
-                  "static": false,
-                  "variance": null
+                  "variance": null,
+                  "optional": false
                 }
               ],
               "indexers": [],

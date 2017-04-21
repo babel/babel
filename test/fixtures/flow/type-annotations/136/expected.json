@@ -107,6 +107,8 @@
                 },
                 "name": "p"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "ObjectTypeAnnotation",
                 "start": 15,
@@ -126,9 +128,8 @@
                 "indexers": [],
                 "exact": false
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             },
             {
               "type": "ObjectTypeSpreadProperty",
