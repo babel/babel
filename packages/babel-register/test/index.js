@@ -1,84 +1,57 @@
-import { expect } from "chai";
-import fs from "fs";
+import chai from "chai";
 import path from "path";
 import decache from "decache";
 
-const testCacheFilename = path.join(__dirname, ".babel");
-const oldBabelDisableCacheValue = process.env.BABEL_DISABLE_CACHE;
+const DATA_ES2015 = require.resolve("./__data__/es2015");
 
-process.env.BABEL_CACHE_PATH = testCacheFilename;
-delete process.env.BABEL_DISABLE_CACHE;
+describe("babel-register", function () {
+  let babelRegister;
+  let oldCompiler;
 
-function writeCache(data) {
-  if (typeof data === "object") {
-    data = JSON.stringify(data);
+  function setupRegister(config = {}) {
+    babelRegister = require("../lib/node");
+    babelRegister.default(Object.assign({
+      presets: [path.join(__dirname, "../../babel-preset-es2015")],
+      babelrc: false,
+    }, config));
   }
 
-  fs.writeFileSync(testCacheFilename, data);
-}
-
-function cleanCache() {
-
-  try {
-    fs.unlinkSync(testCacheFilename);
-  } catch (e) {
-    // It is convenient to always try to clear
+  function revertRegister() {
+    if (babelRegister) {
+      babelRegister.revert();
+      babelRegister = null;
+    }
   }
-}
 
-function resetCache() {
-  process.env.BABEL_CACHE_PATH = null;
-  process.env.BABEL_DISABLE_CACHE = oldBabelDisableCacheValue;
-}
+  before(() => {
+    const js = require("default-require-extensions/js");
+    oldCompiler = require.extensions[".js"];
+    require.extensions[".js"] = js;
+  });
 
-describe("babel register", () => {
+  after(() => {
+    require.extensions[".js"] = oldCompiler;
+  });
 
-  describe("cache", () => {
-    let load, get, save;
+  afterEach(() => {
+    revertRegister();
+    decache(DATA_ES2015);
+  });
 
-    beforeEach(() => {
-      // Since lib/cache is a singleton we need to fully reload it
-      decache("../lib/cache");
-      const cache = require("../lib/cache");
+  it("registers correctly", () => {
+    setupRegister();
 
-      load = cache.load;
-      get = cache.get;
-      save = cache.save;
-    });
+    chai.expect(require(DATA_ES2015)).to.be.ok;
+  });
 
-    afterEach(cleanCache);
-    after(resetCache);
+  it("reverts correctly", () => {
+    setupRegister();
 
-    it("should load and get cached data", () => {
-      writeCache({ foo: "bar" });
+    chai.expect(require(DATA_ES2015)).to.be.ok;
+    decache(DATA_ES2015);
 
-      load();
+    revertRegister();
 
-      expect(get()).to.be.an("object");
-      expect(get()).to.deep.equal({ foo: "bar" });
-    });
-
-    it("should load and get an object with no cached data", () => {
-      load();
-
-      expect(get()).to.be.an("object");
-      expect(get()).to.deep.equal({});
-    });
-
-    it("should load and get an object with invalid cached data", () => {
-      writeCache("foobar");
-
-      load();
-
-      expect(get()).to.be.an("object");
-      expect(get()).to.deep.equal({});
-    });
-
-    it("should create the cache on save", () => {
-      save();
-
-      expect(fs.existsSync(testCacheFilename)).to.be.true;
-      expect(get()).to.deep.equal({});
-    });
+    chai.expect(() => { require(DATA_ES2015); }).to.throw(SyntaxError);
   });
 });

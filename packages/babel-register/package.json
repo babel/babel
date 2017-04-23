@@ -13,9 +13,11 @@
     "home-or-tmp": "^3.0.0",
     "lodash": "^4.2.0",
     "mkdirp": "^0.5.1",
+    "pirates": "^3.0.1",
     "source-map-support": "^0.4.2"
   },
   "devDependencies": {
-    "decache": "^4.1.0"
+    "decache": "^4.1.0",
+    "default-require-extensions": "^1.0.0"
   }
 }

@@ -2,11 +2,15 @@ import deepClone from "lodash/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import escapeRegExp from "lodash/escapeRegExp";
-import extend from "lodash/extend";
 import * as babel from "babel-core";
 import { OptionManager, DEFAULT_EXTENSIONS } from "babel-core";
+import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
+
+const maps = {};
+const transformOpts = {};
+let piratesRevert = null;
 
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
@@ -27,27 +31,20 @@ sourceMapSupport.install({
 registerCache.load();
 let cache = registerCache.get();
 
-const transformOpts = {};
-
-let oldHandlers = {};
-const maps = {};
-
 function mtime(filename) {
   return +fs.statSync(filename).mtime;
 }
 
-function compile(filename) {
-  let result;
-
+function compile(code, filename) {
   // merge in base options and resolve all the plugins and presets relative to this file
-  const opts = new OptionManager().init(extend(
+  const opts = new OptionManager().init(Object.assign(
     { sourceRoot: path.dirname(filename) }, // sourceRoot can be overwritten
     deepClone(transformOpts),
     { filename }
   ));
 
   // Bail out ASAP if the file has been ignored.
-  if (opts === null) return null;
+  if (opts === null) return code;
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
@@ -58,19 +55,17 @@ function compile(filename) {
   if (cache) {
     const cached = cache[cacheKey];
     if (cached && cached.mtime === mtime(filename)) {
-      result = cached;
+      return cached.code;
     }
   }
 
-  if (!result) {
-    result = babel.transformFileSync(filename, extend(opts, {
-      // Do not process config files since has already been done with the OptionManager
-      // calls above and would introduce duplicates.
-      babelrc: false,
-      sourceMaps: "both",
-      ast: false,
-    }));
-  }
+  const result = babel.transform(code, Object.assign(opts, {
+    // Do not process config files since has already been done with the OptionManager
+    // calls above and would introduce duplicates.
+    babelrc: false,
+    sourceMaps: "both",
+    ast: false,
+  }));
 
   if (cache) {
     cache[cacheKey] = result;
@@ -82,33 +77,14 @@ function compile(filename) {
   return result.code;
 }
 
-function registerExtension(ext) {
-  const old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
-
-  require.extensions[ext] = function (m, filename) {
-    const result = compile(filename);
-
-    if (result === null) old(m, filename);
-    else m._compile(result, filename);
-  };
+function hookExtensions(exts) {
+  if (piratesRevert) piratesRevert();
+  piratesRevert = addHook(compile, { exts, ignoreNodeModules: false });
 }
 
-function hookExtensions(_exts) {
-  Object.keys(oldHandlers).forEach(function (ext) {
-    const old = oldHandlers[ext];
-    if (old === undefined) {
-      delete require.extensions[ext];
-    } else {
-      require.extensions[ext] = old;
-    }
-  });
-
-  oldHandlers = {};
-
-  _exts.forEach(function (ext) {
-    oldHandlers[ext] = require.extensions[ext];
-    registerExtension(ext);
-  });
+export function revert() {
+  if (piratesRevert) piratesRevert();
+  delete require.cache[require.resolve(__filename)];
 }
 
 register({
@@ -123,7 +99,7 @@ export default function register(opts?: Object = {}) {
   delete opts.extensions;
   delete opts.cache;
 
-  extend(transformOpts, opts);
+  Object.assign(transformOpts, opts);
 
   if (!transformOpts.ignore && !transformOpts.only) {
     transformOpts.ignore = [
