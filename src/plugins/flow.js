@@ -1,7 +1,6 @@
 /* eslint max-len: 0 */
 
 import { types as tt } from "../tokenizer/types";
-import { types as ct } from "../tokenizer/context";
 
 const primitiveTypes = [
   "any",
@@ -1437,6 +1436,12 @@ export default (superClass) => class extends superClass {
       } catch (err) {
         if (err instanceof SyntaxError) {
           this.state = state;
+
+          // Remove `tc.j_expr` and `tc.j_oTag` from context added
+          // by parsing `jsxTagStart` to stop the JSX plugin from
+          // messing with the tokens
+          this.state.context.length -= 2;
+
           jsxError = err;
         } else {
           // istanbul ignore next: no such error is expected
@@ -1446,9 +1451,6 @@ export default (superClass) => class extends superClass {
     }
 
     if (jsxError != null || this.isRelational("<")) {
-      // Need to push something onto the context to stop
-      // the JSX plugin from messing with the tokens
-      this.state.context.push(ct.parenExpression);
       let arrowExpression;
       let typeParameters;
       try {
@@ -1458,12 +1460,8 @@ export default (superClass) => class extends superClass {
         arrowExpression.typeParameters = typeParameters;
         this.resetStartLocationFromNode(arrowExpression, typeParameters);
       } catch (err) {
-        this.state.context.pop();
-
         throw jsxError || err;
       }
-
-      this.state.context.pop();
 
       if (arrowExpression.type === "ArrowFunctionExpression") {
         return arrowExpression;
