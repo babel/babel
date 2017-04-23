@@ -1,40 +1,4 @@
 import { types as tt } from "../tokenizer/types";
-import Parser from "../parser";
-
-const pp = Parser.prototype;
-
-pp.estreeParseRegExpLiteral = function ({ pattern, flags }) {
-  let regex = null;
-  try {
-    regex = new RegExp(pattern, flags);
-  } catch (e) {
-    // In environments that don't support these flags value will
-    // be null as the regex can't be represented natively.
-  }
-  const node = this.estreeParseLiteral(regex);
-  node.regex = { pattern, flags };
-
-  return node;
-};
-
-pp.estreeParseLiteral = function (value) {
-  return this.parseLiteral(value, "Literal");
-};
-
-pp.directiveToStmt = function (directive) {
-  const directiveLiteral = directive.value;
-
-  const stmt = this.startNodeAt(directive.start, directive.loc.start);
-  const expression = this.startNodeAt(directiveLiteral.start, directiveLiteral.loc.start);
-
-  expression.value = directiveLiteral.value;
-  expression.raw = directiveLiteral.extra.raw;
-
-  stmt.expression = this.finishNodeAt(expression, "Literal", directiveLiteral.end, directiveLiteral.loc.end);
-  stmt.directive = directiveLiteral.extra.raw.slice(1, -1);
-
-  return this.finishNodeAt(stmt, "ExpressionStatement", directive.end, directive.loc.end);
-};
 
 function isSimpleProperty(node) {
   return node &&
@@ -44,6 +8,44 @@ function isSimpleProperty(node) {
 }
 
 export default (superClass) => class extends superClass {
+  estreeParseRegExpLiteral({ pattern, flags }) {
+    let regex = null;
+    try {
+      regex = new RegExp(pattern, flags);
+    } catch (e) {
+      // In environments that don't support these flags value will
+      // be null as the regex can't be represented natively.
+    }
+    const node = this.estreeParseLiteral(regex);
+    node.regex = { pattern, flags };
+
+    return node;
+  }
+
+  estreeParseLiteral(value) {
+    return this.parseLiteral(value, "Literal");
+  }
+
+  directiveToStmt(directive) {
+    const directiveLiteral = directive.value;
+
+    const stmt = this.startNodeAt(directive.start, directive.loc.start);
+    const expression = this.startNodeAt(directiveLiteral.start, directiveLiteral.loc.start);
+
+    expression.value = directiveLiteral.value;
+    expression.raw = directiveLiteral.extra.raw;
+
+    stmt.expression = this.finishNodeAt(
+      expression, "Literal", directiveLiteral.end, directiveLiteral.loc.end);
+    stmt.directive = directiveLiteral.extra.raw.slice(1, -1);
+
+    return this.finishNodeAt(stmt, "ExpressionStatement", directive.end, directive.loc.end);
+  }
+
+  // ==================================
+  // Overrides
+  // ==================================
+
   checkDeclaration(node) {
     if (isSimpleProperty(node)) {
       this.checkDeclaration(node.value);
