@@ -8,6 +8,7 @@ import type { Position } from "../util/location";
 import { isIdentifierStart, isIdentifierChar, isKeyword } from "../util/identifier";
 import { types as tt, keywords as keywordTypes } from "./types";
 import { type TokContext, types as ct } from "./context";
+import LocationParser from "../parser/location";
 import { SourceLocation } from "../util/location";
 import { lineBreak, lineBreakG, isNewLine, nonASCIIwhitespace } from "../util/whitespace";
 import State from "./state";
@@ -43,14 +44,8 @@ function codePointToString(code: number): string {
   }
 }
 
-export default class Tokenizer {
+export default class Tokenizer extends LocationParser {
   // Forward-declarations
-  // location.js
-  +raise: (pos: number, message: string) => empty;
-  // comments.js (TODO: Better type for the parameter)
-  +addComment: (comment: Object) => void;
-  // parser/index.js
-  +hasPlugin: (name: string) => boolean;
   // parser/util.js
   +unexpected: (pos?: ?number, messageOrType?: string | TokenType) => empty;
 
@@ -59,6 +54,7 @@ export default class Tokenizer {
   input: string;
 
   constructor(options: Options, input: string) {
+    super();
     this.state = new State;
     this.state.init(options, input);
   }

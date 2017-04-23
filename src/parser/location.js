@@ -1,7 +1,5 @@
 import { getLineInfo } from "../util/location";
-import Parser from "./index";
-
-const pp = Parser.prototype;
+import CommentsParser from "./comments";
 
 // This function is used to raise exceptions on parse errors. It
 // takes an offset integer (into the current `input`) to indicate
@@ -9,11 +7,13 @@ const pp = Parser.prototype;
 // of the error message, and then raises a `SyntaxError` with that
 // message.
 
-pp.raise = function (pos, message) {
-  const loc = getLineInfo(this.input, pos);
-  message += ` (${loc.line}:${loc.column})`;
-  const err = new SyntaxError(message);
-  err.pos = pos;
-  err.loc = loc;
-  throw err;
-};
+export default class LocationParser extends CommentsParser {
+  raise(pos, message) {
+    const loc = getLineInfo(this.input, pos);
+    message += ` (${loc.line}:${loc.column})`;
+    const err = new SyntaxError(message);
+    err.pos = pos;
+    err.loc = loc;
+    throw err;
+  }
+}

@@ -1,11 +1,14 @@
-import { reservedWords } from "../util/identifier";
+// @flow
+
+import type { Options } from "../options";
+import type { File } from "../types";
 import { getOptions } from "../options";
-import Tokenizer from "../tokenizer";
+import StatementParser from "./statement";
 
 export const plugins = {};
 
-export default class Parser extends Tokenizer {
-  constructor(options: Object, input: string) {
+export default class Parser extends StatementParser {
+  constructor(options: Options, input: string) {
     options = getOptions(options);
     super(options, input);
 
@@ -21,25 +24,7 @@ export default class Parser extends Tokenizer {
     }
   }
 
-  isReservedWord(word: string): boolean {
-    if (word === "await") {
-      return this.inModule;
-    } else {
-      return reservedWords[6](word);
-    }
-  }
-
-  hasPlugin(name: string): boolean {
-    return !!this.plugins[name];
-  }
-
-  parse(): {
-    type: "File",
-    program: {
-      type: "Program",
-      body: Array<Object>
-    }
-  } {
+  parse(): File {
     const file = this.startNode();
     const program = this.startNode();
     this.nextToken();
