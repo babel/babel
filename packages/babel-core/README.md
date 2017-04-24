@@ -66,7 +66,7 @@ Given, an [AST](https://astexplorer.net/), transform it.
 
 ```js
 const string = "if (true) return;";
-const parsedAst = babel.parse(string, { allowReturnOutsideFunction: true });
+const parsedAst = babylon.parse(string, { allowReturnOutsideFunction: true });
 const { code, map, ast } = babel.transformFromAst(parsedAst, string, options);
 ```
 
