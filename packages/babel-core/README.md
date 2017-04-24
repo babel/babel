@@ -65,9 +65,9 @@ babel.transformFileSync("filename.js", options).code;
 Given, an [AST](https://astexplorer.net/), transform it.
 
 ```js
-const string = "if (true) return;";
-const parsedAst = babylon.parse(string, { allowReturnOutsideFunction: true });
-const { code, map, ast } = babel.transformFromAst(parsedAst, string, options);
+const sourceCode = "if (true) return;";
+const generatedCode = babylon.parse(sourceCode, { allowReturnOutsideFunction: true });
+const { code, map, ast } = babel.transformFromAst(generatedCode, sourceCode, options);
 ```
 
 ## Options
