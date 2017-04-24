@@ -1,0 +1,1 @@
+typeof foo !== "undefined" && foo !== null ? foo.bar : null;
