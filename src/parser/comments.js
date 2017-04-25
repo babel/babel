@@ -1,5 +1,7 @@
 /* eslint max-len: 0 */
 
+// @flow
+
 /**
  * Based on the comment attachment algorithm used in espree and estraverse.
  *
@@ -25,19 +27,20 @@
  */
 
 import BaseParser from "./base";
+import type { Comment, Node } from "../types";
 
 function last(stack) {
   return stack[stack.length - 1];
 }
 
 export default class CommentsParser extends BaseParser {
-  addComment(comment) {
+  addComment(comment: Comment): void {
     if (this.filename) comment.loc.filename = this.filename;
     this.state.trailingComments.push(comment);
     this.state.leadingComments.push(comment);
   }
 
-  processComment(node) {
+  processComment(node: Node): void {
     if (node.type === "Program" && node.body.length > 0) return;
 
     const stack = this.state.commentStack;
@@ -127,10 +130,8 @@ export default class CommentsParser extends BaseParser {
         // that comes after the node. Keep in mind that this could
         // result in an empty array, and if so, the array must be
         // deleted.
-        node.leadingComments = this.state.leadingComments.slice(0, i);
-        if ((node.leadingComments: Array<any>).length === 0) {
-          node.leadingComments = null;
-        }
+        const leadingComments = this.state.leadingComments.slice(0, i);
+        node.leadingComments = leadingComments.length === 0 ? null : leadingComments;
 
         // Similarly, trailing comments are attached later. The variable
         // must be reset to null if there are no trailing comments.

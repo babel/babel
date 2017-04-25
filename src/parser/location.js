@@ -1,3 +1,5 @@
+// @flow
+
 import { getLineInfo } from "../util/location";
 import CommentsParser from "./comments";
 
@@ -8,10 +10,11 @@ import CommentsParser from "./comments";
 // message.
 
 export default class LocationParser extends CommentsParser {
-  raise(pos, message) {
+  raise(pos: number, message: string): empty {
     const loc = getLineInfo(this.input, pos);
     message += ` (${loc.line}:${loc.column})`;
-    const err = new SyntaxError(message);
+    // $FlowIgnore
+    const err: SyntaxError & { pos: number, loc: Position } = new SyntaxError(message);
     err.pos = pos;
     err.loc = loc;
     throw err;
