@@ -7,8 +7,8 @@ const nullOrUndefinedCheck = createTemplate(`
     : null
 `);
 
-function isOptional(path) {
-  return path.node.optional === true;
+function isNodeOptional(node) {
+  return node.optional === true;
 }
 
 const nullOrUndefinedCheckVisitor = {
@@ -39,18 +39,16 @@ export default function ({ types: t }) {
     visitor: {
       MemberExpression(path) {
 
-        if (isOptional(path)) {
+        if (isNodeOptional(path.node)) {
           let { object } = path.node;
 
-          while (
-            t.isMemberExpression(object)
-            && isOptional({ node: object })
-          ) {
+          do {
             object = createCheck(
               object,
               object.object
             );
-          }
+
+          } while (t.isMemberExpression(object) && isNodeOptional(object));
 
           path.replaceWith(
             createCheck(path.node, object)
