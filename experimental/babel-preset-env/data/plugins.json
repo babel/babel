@@ -206,6 +206,7 @@
     "firefox": 52,
     "safari": 10.1,
     "node": 7,
+    "ios": 10.3,
     "opera": 39,
     "electron": 1.3
   },
@@ -215,6 +216,7 @@
     "firefox": 52,
     "safari": 10.1,
     "node": 7.6,
+    "ios": 10.3,
     "opera": 42,
     "electron": 1.6
   },
