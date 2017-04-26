@@ -3,8 +3,10 @@ import fs from "fs";
 import { sync as mkdirpSync } from "mkdirp";
 import homeOrTmp from "home-or-tmp";
 import * as babel from "babel-core";
+import findCacheDir from "find-cache-dir";
 
-const DEFAULT_FILENAME = path.join(homeOrTmp, `.babel.${babel.version}.${babel.getEnv()}.json`);
+const DEFAULT_CACHE_DIR = findCacheDir({ name: "babel-register" }) || homeOrTmp;
+const DEFAULT_FILENAME = path.join(DEFAULT_CACHE_DIR, `.babel.${babel.version}.${babel.getEnv()}.json`);
 const FILENAME: string = process.env.BABEL_CACHE_PATH || DEFAULT_FILENAME;
 let data: Object = {};
 
