@@ -1,0 +1,13 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "modules": false,
+      "targets": {
+        "chrome": 55
+      },
+      "useBuiltIns": "entry",
+      "forceAllTransforms": true
+    }]
+  ]
+}

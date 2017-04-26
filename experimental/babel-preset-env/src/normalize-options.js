@@ -57,8 +57,12 @@ export const validateBoolOption = (name, value, defaultValue) => {
 
 export const validateLooseOption = looseOpt =>
   validateBoolOption("loose", looseOpt, false);
+
 export const validateSpecOption = specOpt =>
   validateBoolOption("spec", specOpt, false);
+
+export const validateForceAllTransformsOption = forceAllTransforms =>
+  validateBoolOption("forceAllTransforms", forceAllTransforms, false);
 
 export const validateModulesOption = (modulesOpt = "commonjs") => {
   invariant(
@@ -97,6 +101,9 @@ export default function normalizeOptions(opts) {
   return {
     debug: opts.debug,
     exclude: validateIncludesAndExcludes(opts.exclude, "exclude"),
+    forceAllTransforms: validateForceAllTransformsOption(
+      opts.forceAllTransforms,
+    ),
     include: validateIncludesAndExcludes(opts.include, "include"),
     loose: validateLooseOption(opts.loose),
     moduleType: validateModulesOption(opts.modules),

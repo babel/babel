@@ -107,18 +107,42 @@ const filterItems = (list, includes, excludes, targets, defaultItems) => {
 };
 
 export default function buildPreset(context, opts = {}) {
-  const validatedOptions = normalizeOptions(opts);
-  const { debug, loose, moduleType, spec, useBuiltIns } = validatedOptions;
+  const {
+    debug,
+    exclude: optionsExclude,
+    forceAllTransforms,
+    include: optionsInclude,
+    loose,
+    moduleType,
+    spec,
+    targets: optionsTargets,
+    useBuiltIns,
+  } = normalizeOptions(opts);
 
-  const targets = getTargets(validatedOptions.targets);
-  const include = transformIncludesAndExcludes(validatedOptions.include);
-  const exclude = transformIncludesAndExcludes(validatedOptions.exclude);
+  // TODO: remove this in next major
+  let hasUglifyTarget = false;
+
+  if (optionsTargets && optionsTargets.uglify) {
+    hasUglifyTarget = true;
+    delete optionsTargets.uglify;
+
+    console.log("");
+    console.log("The uglify target has been deprecated. Set the top level");
+    console.log("option `forceAllTransforms: true` instead.");
+    console.log("");
+  }
+
+  const targets = getTargets(optionsTargets);
+  const include = transformIncludesAndExcludes(optionsInclude);
+  const exclude = transformIncludesAndExcludes(optionsExclude);
+
+  const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
 
   const transformations = filterItems(
     pluginList,
     include.plugins,
     exclude.plugins,
-    targets,
+    transformTargets,
   );
 
   let polyfills;

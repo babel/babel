@@ -1,6 +1,3 @@
-The uglify target has been deprecated. Set the top level
-option `forceAllTransforms: true` instead.
-
 babel-preset-env: `DEBUG` option
 
 Using targets:
