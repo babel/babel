@@ -5,10 +5,10 @@ import type { File } from "../types";
 import { getOptions } from "../options";
 import StatementParser from "./statement";
 
-export const plugins = {};
+export const plugins: { [name: string]: (superClass: Class<Parser>) => Class<Parser> } = {};
 
 export default class Parser extends StatementParser {
-  constructor(options: Options, input: string) {
+  constructor(options: ?Options, input: string) {
     options = getOptions(options);
     super(options, input);
 

@@ -1,3 +1,6 @@
+// @flow
+
+import type { Options } from "./options";
 import Parser, { plugins } from "./parser";
 import "./parser/util";
 import "./parser/statement";
@@ -11,6 +14,8 @@ import { types as tokTypes } from "./tokenizer/types";
 import "./tokenizer";
 import "./tokenizer/context";
 
+import type { Expression, File } from "./types";
+
 import estreePlugin from "./plugins/estree";
 import flowPlugin from "./plugins/flow";
 import jsxPlugin from "./plugins/jsx";
@@ -18,11 +23,11 @@ plugins.estree = estreePlugin;
 plugins.flow = flowPlugin;
 plugins.jsx = jsxPlugin;
 
-export function parse(input, options) {
+export function parse(input: string, options?: Options): File {
   return getParser(options, input).parse();
 }
 
-export function parseExpression(input, options) {
+export function parseExpression(input: string, options?: Options): Expression {
   const parser = getParser(options, input);
   if (parser.options.strictMode) {
     parser.state.strict = true;
@@ -33,15 +38,15 @@ export function parseExpression(input, options) {
 
 export { tokTypes };
 
-function getParser(options, input) {
+function getParser(options: ?Options, input: string): Parser {
   const cls = options && options.plugins ? getParserClass(options.plugins) : Parser;
   return new cls(options, input);
 }
 
-const parserClassCache = {};
+const parserClassCache: { [key: string]: Class<Parser> } = {};
 
 /** Get a Parser class with plugins applied. */
-function getParserClass(pluginsFromOptions) {
+function getParserClass(pluginsFromOptions: $ReadOnlyArray<string>): Class<Parser> {
   // Filter out just the plugins that have an actual mixin associated with them.
   let pluginList = pluginsFromOptions.filter((p) => p === "estree" || p === "flow" || p === "jsx");
 
