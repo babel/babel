@@ -63,6 +63,9 @@ export default function(commander, filenames, opts) {
     if (stat.isDirectory(filename)) {
       const dirname = filename;
 
+      if (commander.deleteDirOnStart) {
+        util.deleteDir(dirname);
+      }
       util.readdir(dirname).forEach(function(filename) {
         const src = path.join(dirname, filename);
         handleFile(src, filename);
