@@ -58,6 +58,20 @@ export function compile(filename, opts) {
   }
 }
 
+export function deleteDir(path) {
+  if (fs.existsSync(path) ) {
+    fs.readdirSync(path).forEach(function(file) {
+      const curPath = path + "/" + file;
+      if (fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteDir(curPath);
+      } else { // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+}
+
 function toErrorStack(err) {
   if (err._babel && err instanceof SyntaxError) {
     return `${err.name}: ${err.message}\n${err.codeFrame}`;
