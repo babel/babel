@@ -809,6 +809,7 @@ export default class Tokenizer extends LocationParser {
 
         ++this.state.pos;
         const esc = this.readCodePoint(true);
+        // $FlowFixMe (thinks esc may be null, but throwOnInvalid is true)
         if (!(first ? isIdentifierStart : isIdentifierChar)(esc, true)) {
           this.raise(escStart, "Invalid Unicode escape");
         }
