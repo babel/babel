@@ -489,6 +489,7 @@ export type TemplateElement = NodeBase & {
 
 export type PatternBase = HasDecorators & {
   // Flow only:
+  optional?: true;
   typeAnnotation?: ?FlowTypeAnnotation;
 };
 
@@ -679,6 +680,7 @@ export type FlowType = Node;
 export type FlowPredicate = Node;
 export type FlowDeclare = Node;
 export type FlowDeclareClass = Node;
+export type FlowDeclareExportDeclaration = Node;
 export type FlowDeclareFunction = Node;
 export type FlowDeclareVariable = Node;
 export type FlowDeclareModule = Node;
@@ -694,6 +696,7 @@ export type FlowTypeParameterInstantiation = Node;
 export type FlowObjectTypeIndexer = Node;
 export type FlowFunctionTypeAnnotation = Node;
 export type FlowObjectTypeProperty = Node;
+export type FlowObjectTypeSpreadProperty = Node;
 export type FlowObjectTypeCallProperty = Node;
 export type FlowObjectTypeAnnotation = Node;
 export type FlowQualifiedTypeIdentifier = Node;
