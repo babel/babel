@@ -54,7 +54,7 @@ export default function ({ types: t }) {
       // support `export type a = {}` - #8 Error: You passed path.replaceWith() a falsy node
       "ExportNamedDeclaration|Flow"(path) {
         const { node, parent } = path;
-        if (t.isExportNamedDeclaration(node) && !t.isFlow(node.declaration)) {
+        if (t.isExportNamedDeclaration(node) && node.exportKind !== "type" && !t.isFlow(node.declaration)) {
           return;
         }
         wrapInFlowComment(path, parent);
