@@ -83,7 +83,7 @@ export default class UtilParser extends Tokenizer {
   // instead of a message string.
 
   unexpected(pos: ?number, messageOrType: string | TokenType = "Unexpected token"): empty {
-    if (messageOrType && typeof messageOrType === "object" && messageOrType.label) {
+    if (typeof messageOrType !== "string") {
       messageOrType = `Unexpected token, expected ${messageOrType.label}`;
     }
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);
