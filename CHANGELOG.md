@@ -15,7 +15,78 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
-## 7.0.0-beta.4 (2017-03-01)
+## v6.17.0 (2017-04-20)
+
+### :bug: Bug Fix 
+ * Cherry-pick #418 to 6.x ([#476](https://github.com/babel/babylon/pull/476)) (Sebastian McKenzie)
+ * Add support for invalid escapes in tagged templates ([#274](https://github.com/babel/babylon/pull/274)) (Kevin Gibbons)
+ * Throw error if new.target is used outside of a function ([#402](https://github.com/babel/babylon/pull/402)) (Brian Ng)
+ * Fix parsing of class properties ([#351](https://github.com/babel/babylon/pull/351)) (Kevin Gibbons)
+ * Fix parsing yield with dynamicImport ([#383](https://github.com/babel/babylon/pull/383)) (Brian Ng)
+ * Ensure consistent start args for parseParenItem ([#386](https://github.com/babel/babylon/pull/386)) (Brian Ng)
+
+## 7.0.0-beta.8 (2017-04-04)
+
+### New Feature
+* Add support for flow type spread (#418) (Conrad Buck)
+* Allow statics in flow interfaces (#427) (Brian Ng)
+
+### Bug Fix
+* Fix predicate attachment to match flow parser (#428) (Brian Ng)
+* Add extra.raw back to JSXText and JSXAttribute (#344) (Alex Rattray)
+* Fix rest parameters with array and objects (#424) (Brian Ng)
+* Fix number parser (#433) (Alex Kuzmenko)
+
+### Docs
+* Fix CONTRIBUTING.md [skip ci] (#432) (Alex Kuzmenko)
+
+### Internal
+* Use babel-register script when running babel smoke tests (#442) (Brian Ng)
+
+## 7.0.0-beta.7 (2017-03-22)
+
+### Spec Compliancy
+* Remove babylon plugin for template revision since it's stage-4 (#426) (Henry Zhu)
+
+### Bug Fix
+
+* Fix push-pop logic in flow (#405) (Daniel Tschinder)
+
+## 7.0.0-beta.6 (2017-03-21)
+
+### New Feature
+* Add support for invalid escapes in tagged templates (#274) (Kevin Gibbons)
+
+### Polish
+* Improves error message when super is called outside of constructor (#408) (Arshabh Kumar Agarwal)
+
+### Docs
+
+* [7.0] Moved value field in spec from ObjectMember to ObjectProperty as ObjectMethod's don't have it (#415) [skip ci] (James Browning)
+
+## 7.0.0-beta.5 (2017-03-21)
+
+### Bug Fix
+* Throw error if new.target is used outside of a function (#402) (Brian Ng)
+* Fix parsing of class properties (#351) (Kevin Gibbons)
+
+### Other
+ * Test runner: Detect extra property in 'actual' but not in 'expected'. (#407) (Andy)
+ * Optimize travis builds (#419) (Daniel Tschinder)
+ * Update codecov to 2.0 (#412) (Daniel Tschinder)
+ * Fix spec for ClassMethod: It doesn't have a function, it *is* a function. (#406) [skip ci] (Andy)
+ * Changed Non-existent RestPattern to RestElement which is what is actually parsed (#409) [skip ci] (James Browning)
+ * Upgrade flow to 0.41 (Daniel Tschinder)
+ * Fix watch command (#403) (Brian Ng)
+ * Update yarn lock (Daniel Tschinder)
+ * Fix watch command (#403) (Brian Ng)
+ * chore(package): update flow-bin to version 0.41.0 (#395) (greenkeeper[bot])
+ * Add estree test for correct order of directives (Daniel Tschinder)
+ * Add DoExpression to spec (#364) (Alex Kuzmenko)
+ * Mention cloning of repository in CONTRIBUTING.md (#391) [skip ci] (Sumedh Nimkarde)
+ * Explain how to run only one test (#389) [skip ci] (Aaron Ang)
+ 
+ ## 7.0.0-beta.4 (2017-03-01)
 
 * Don't consume async when checking for async func decl (#377) (Brian Ng)
 * add `ranges` option [skip ci] (Henry Zhu)
