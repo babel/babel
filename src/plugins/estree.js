@@ -1,14 +1,18 @@
-import { types as tt } from "../tokenizer/types";
+// @flow
 
-function isSimpleProperty(node) {
-  return node &&
+import { types as tt } from "../tokenizer/types";
+import type Parser from "../parser";
+import * as N from "../types";
+
+function isSimpleProperty(node: N.Node): boolean {
+  return node != null &&
     node.type === "Property" &&
     node.kind === "init" &&
     node.method === false;
 }
 
-export default (superClass) => class extends superClass {
-  estreeParseRegExpLiteral({ pattern, flags }) {
+export default (superClass: Class<Parser>): Class<Parser> => class extends superClass {
+  estreeParseRegExpLiteral({ pattern, flags }: N.RegExpLiteral): N.Node {
     let regex = null;
     try {
       regex = new RegExp(pattern, flags);
@@ -22,11 +26,11 @@ export default (superClass) => class extends superClass {
     return node;
   }
 
-  estreeParseLiteral(value) {
+  estreeParseLiteral(value: any): N.Node {
     return this.parseLiteral(value, "Literal");
   }
 
-  directiveToStmt(directive) {
+  directiveToStmt(directive: N.Directive): N.ExpressionStatement {
     const directiveLiteral = directive.value;
 
     const stmt = this.startNodeAt(directive.start, directive.loc.start);
@@ -46,15 +50,16 @@ export default (superClass) => class extends superClass {
   // Overrides
   // ==================================
 
-  checkDeclaration(node) {
+  checkDeclaration(node: N.Pattern): void {
     if (isSimpleProperty(node)) {
+      // $FlowFixMe
       this.checkDeclaration(node.value);
     } else {
       super.checkDeclaration(node);
     }
   }
 
-  checkGetterSetterParamCount(prop) {
+  checkGetterSetterParamCount(prop: N.ObjectMethod): void {
     const paramCount = prop.kind === "get" ? 0 : 1;
     if (prop.value.params.length !== paramCount) {
       const start = prop.start;
@@ -66,7 +71,8 @@ export default (superClass) => class extends superClass {
     }
   }
 
-  checkLVal(expr, isBinding, checkClashes, ...args) {
+  checkLVal(
+    expr: N.Expression, isBinding: ?boolean, checkClashes: ?{ [key: string]: boolean }, ...args): void {
     switch (expr.type) {
       case "ObjectPattern":
         expr.properties.forEach((prop) => {
@@ -83,7 +89,7 @@ export default (superClass) => class extends superClass {
     }
   }
 
-  checkPropClash(prop, propHash) {
+  checkPropClash(prop: N.ObjectMember, propHash: { [key: string]: boolean }): void {
     if (prop.computed || !isSimpleProperty(prop)) return;
 
     const key = prop.key;
@@ -96,9 +102,9 @@ export default (superClass) => class extends superClass {
     }
   }
 
-  isStrictBody(node, isExpression) {
+  isStrictBody(node: { body: N.BlockStatement }, isExpression?: boolean): boolean {
     if (!isExpression && node.body.body.length > 0) {
-      for (const directive of (node.body.body: Array<Object>)) {
+      for (const directive of node.body.body) {
         if (directive.type === "ExpressionStatement" && directive.expression.type === "Literal") {
           if (directive.expression.value === "use strict") return true;
         } else {
@@ -111,19 +117,18 @@ export default (superClass) => class extends superClass {
     return false;
   }
 
-  isValidDirective(stmt) {
+  isValidDirective(stmt: N.Statement): boolean {
     return stmt.type === "ExpressionStatement" &&
       stmt.expression.type === "Literal" &&
       typeof stmt.expression.value === "string" &&
       (!stmt.expression.extra || !stmt.expression.extra.parenthesized);
   }
 
-  parseBlockBody(node, ...args) {
+  parseBlockBody(node: N.BlockStatementLike, ...args): void {
     super.parseBlockBody(node, ...args);
 
-    node.directives.reverse().forEach((directive) => {
-      node.body.unshift(this.directiveToStmt(directive));
-    });
+    const directiveStatements = node.directives.map((d) => this.directiveToStmt(d));
+    node.body = directiveStatements.concat(node.body);
     delete node.directives;
   }
 
@@ -134,7 +139,7 @@ export default (superClass) => class extends superClass {
     body[body.length - 1].type = "MethodDefinition";
   }
 
-  parseExprAtom(...args) {
+  parseExprAtom(...args): N.Expression {
     switch (this.state.type) {
       case tt.regexp:
         return this.estreeParseRegExpLiteral(this.state.value);
@@ -157,7 +162,7 @@ export default (superClass) => class extends superClass {
     }
   }
 
-  parseLiteral(...args) {
+  parseLiteral<T : N.Literal>(...args): T {
     const node = super.parseLiteral(...args);
     node.raw = node.extra.raw;
     delete node.extra;
@@ -165,17 +170,18 @@ export default (superClass) => class extends superClass {
     return node;
   }
 
-  parseMethod(node, ...args) {
+  parseMethod(node: N.MethodLike, ...args): N.MethodLike {
     let funcNode = this.startNode();
     funcNode.kind = node.kind; // provide kind, so super method correctly sets state
     funcNode = super.parseMethod(funcNode, ...args);
     delete funcNode.kind;
+    // $FlowIgnore
     node.value = this.finishNode(funcNode, "FunctionExpression");
 
     return node;
   }
 
-  parseObjectMethod(...args) {
+  parseObjectMethod(...args): ?N.ObjectMethod {
     const node = super.parseObjectMethod(...args);
 
     if (node) {
@@ -186,7 +192,7 @@ export default (superClass) => class extends superClass {
     return node;
   }
 
-  parseObjectProperty(...args) {
+  parseObjectProperty(...args): ?N.ObjectProperty {
     const node = super.parseObjectProperty(...args);
 
     if (node) {
@@ -197,14 +203,14 @@ export default (superClass) => class extends superClass {
     return node;
   }
 
-  toAssignable(node, isBinding, ...args) {
+  toAssignable(node: N.Node, isBinding: ?boolean, ...args): N.Node {
     if (isSimpleProperty(node)) {
       this.toAssignable(node.value, isBinding, ...args);
 
       return node;
     } else if (node.type === "ObjectExpression") {
       node.type = "ObjectPattern";
-      for (const prop of (node.properties: Array<Object>)) {
+      for (const prop of node.properties) {
         if (prop.kind === "get" || prop.kind === "set") {
           this.raise(prop.key.start, "Object pattern can't contain getter or setter");
         } else if (prop.method) {
