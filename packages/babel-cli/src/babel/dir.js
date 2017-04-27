@@ -64,7 +64,7 @@ export default function(commander, filenames, opts) {
       const dirname = filename;
 
       if (commander.deleteDirOnStart) {
-        util.deleteDir(dirname);
+        util.deleteDir(commander.outDir);
       }
       util.readdir(dirname).forEach(function(filename) {
         const src = path.join(dirname, filename);
