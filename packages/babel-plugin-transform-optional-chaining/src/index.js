@@ -22,6 +22,7 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
+
       MemberExpression(path, state) {
         if (!isNodeOptional(path.node)) {
           return;
@@ -36,12 +37,25 @@ export default function ({ types: t }) {
           path.scope.push({ id });
         }
 
-        const remplacement = createCondition(
-          state.optionalTemp,
-          object,
-          property,
-          t.identifier("undefined")
-        );
+        let remplacement;
+
+        if (t.isCallExpression(path.parent)) {
+
+          remplacement = createCondition(
+            state.optionalTemp,
+            object,
+            property,
+            t.callExpression(t.identifier("Function"), [])
+          );
+        } else {
+
+          remplacement = createCondition(
+            state.optionalTemp,
+            object,
+            property,
+            t.identifier("undefined")
+          );
+        }
 
         path.replaceWith(remplacement);
       },
