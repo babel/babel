@@ -1,6 +1,6 @@
 export default function ({ types: t }) {
 
-  function createCondition(ref, access, nextProperty) {
+  function createCondition(ref, access, nextProperty, bailout) {
 
     return t.conditionalExpression(
       createCheckAgainstNull(
@@ -8,7 +8,7 @@ export default function ({ types: t }) {
       ),
 
       t.memberExpression(ref, nextProperty),
-      t.NullLiteral()
+      bailout,
     );
   }
 
@@ -36,9 +36,14 @@ export default function ({ types: t }) {
           path.scope.push({ id });
         }
 
-        path.replaceWith(
-          createCondition(state.optionalTemp, object, property)
+        const remplacement = createCondition(
+          state.optionalTemp,
+          object,
+          property,
+          t.identifier("undefined")
         );
+
+        path.replaceWith(remplacement);
       },
     },
   };
