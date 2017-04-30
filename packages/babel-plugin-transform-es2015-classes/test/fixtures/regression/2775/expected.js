@@ -34,4 +34,5 @@ var RandomComponent = function (_Component) {
   return RandomComponent;
 }(_react.Component);
 
+RandomComponent.displayName = 'RandomComponent';
 exports.default = RandomComponent;
