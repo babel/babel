@@ -1,30 +1,20 @@
+// @flow
+
 import type Plugin from "./plugin";
-import OptionManager from "./option-manager";
+import manageOptions from "./option-manager";
 
 export type ResolvedConfig = {
   options: Object,
-  passes: Array<Array<Plugin>>,
+  passes: Array<Array<[ Plugin, ?{} ]>>,
 };
 
 /**
  * Standard API for loading Babel configuration data. Not for public consumption.
  */
-export default function loadConfig(opts: Object): ResolvedConfig|null {
-  const mergedOpts = new OptionManager().init(opts);
-  if (!mergedOpts) return null;
-
-  let passes = [];
-  if (mergedOpts.plugins) {
-    passes.push(mergedOpts.plugins);
+export default function loadConfig(opts: mixed): ResolvedConfig|null {
+  if (opts != null && typeof opts !== "object") {
+    throw new Error("Babel options must be an object, null, or undefined");
   }
 
-  // With "passPerPreset" enabled there may still be presets in the options.
-  if (mergedOpts.presets) {
-    passes = passes.concat(mergedOpts.presets.map((preset) => preset.plugins).filter(Boolean));
-  }
-
-  return {
-    options: mergedOpts,
-    passes,
-  };
+  return manageOptions(opts || {});
 }

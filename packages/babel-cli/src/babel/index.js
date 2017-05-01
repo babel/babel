@@ -67,7 +67,7 @@ commander.option("-M, --module-ids", "insert an explicit id for modules");
 commander.option("--module-id [string]", "specify a custom name for module ids");
 
 // "babel" command specific arguments that are not passed to babel-core.
-commander.option("-x, --extensions [extensions]", "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx]", collect);
+commander.option("-x, --extensions [extensions]", "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx,.mjs]", collect);
 commander.option("-w, --watch", "Recompile files on changes");
 commander.option("--skip-initial-build", "Do not compile files before watching");
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");

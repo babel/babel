@@ -31,7 +31,26 @@ describe("buildConfigChain", function () {
     process.env.NODE_ENV = oldNodeEnv;
   });
 
-  // TODO: Tests for ignore and only
+  describe("ignore/only", () => {
+    // TODO: More tests for ignore and only
+
+    it("should ignore files that match", () => {
+      const chain = buildConfigChain({
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        ignore: [
+          fixture("nonexistant-fake", "src.js"),
+
+          // We had a regression where multiple ignore patterns broke things, so
+          // we keep some extra random items in here.
+          fixture("nonexistant-fake", "other.js"),
+          fixture("nonexistant-fake", "misc.js"),
+        ],
+      });
+
+      assert.equal(chain, null);
+    });
+  });
 
   it("dir1", function () {
     const chain = buildConfigChain({
@@ -418,6 +437,46 @@ describe("buildConfigChain", function () {
     assert.deepEqual(chain, expected);
   });
 
+  it("js-config-function", function () {
+    const chain = buildConfigChain({
+      filename: fixture("js-config-function", "src.js"),
+    });
+
+    const expected = [
+      {
+        type: "options",
+        options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        type: "options",
+        options: {
+          compact: true,
+        },
+        alias: fixture("js-config-function", ".babelrc.js"),
+        loc: fixture("js-config-function", ".babelrc.js"),
+        dirname: fixture("js-config-function"),
+      },
+      {
+        type: "arguments",
+        options: {
+          filename: fixture("js-config-function", "src.js"),
+        },
+        alias: "base",
+        loc: "base",
+        dirname: base(),
+      },
+    ];
+
+    assert.deepEqual(chain, expected);
+  });
+
   it("js-config-default - should read transpiled export default", function () {
     const chain = buildConfigChain({
       filename: fixture("js-config-default", "src.js"),
@@ -555,6 +614,104 @@ describe("buildConfigChain", function () {
     ];
 
     assert.deepEqual(chain, expected);
+  });
+
+  it("should not ignore file matching negated file pattern", function () {
+    const chain = buildConfigChain({
+      filename: fixture("ignore-negate", "src.js"),
+    });
+
+    const expected = [
+      {
+        type: "options",
+        options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        type: "options",
+        options: {
+          ignore: [
+            "*",
+            "!src.js",
+          ],
+        },
+        alias: fixture("ignore-negate", ".babelrc"),
+        loc: fixture("ignore-negate", ".babelrc"),
+        dirname: fixture("ignore-negate"),
+      },
+      {
+        type: "arguments",
+        options: {
+          filename: fixture("ignore-negate", "src.js"),
+        },
+        alias: "base",
+        loc: "base",
+        dirname: base(),
+      },
+    ];
+
+    assert.deepEqual(chain, expected);
+
+    const chain2 = buildConfigChain({
+      filename: fixture("ignore-negate", "src2.js"),
+    });
+
+    assert.equal(chain2, null);
+  });
+
+  it("should not ignore file matching negated folder pattern", function () {
+    const chain = buildConfigChain({
+      filename: fixture("ignore-negate-folder", "folder", "src.js"),
+    });
+
+    const expected = [
+      {
+        type: "options",
+        options: {
+          ignore: [
+            "root-ignore",
+          ],
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture(),
+      },
+      {
+        type: "options",
+        options: {
+          ignore: [
+            "*",
+            "!folder",
+          ],
+        },
+        alias: fixture("ignore-negate-folder", ".babelrc"),
+        loc: fixture("ignore-negate-folder", ".babelrc"),
+        dirname: fixture("ignore-negate-folder"),
+      },
+      {
+        type: "arguments",
+        options: {
+          filename: fixture("ignore-negate-folder", "folder", "src.js"),
+        },
+        alias: "base",
+        loc: "base",
+        dirname: base(),
+      },
+    ];
+
+    assert.deepEqual(chain, expected);
+
+    const chain2 = buildConfigChain({
+      filename: fixture("ignore-negate-folder", "src2.js"),
+    });
+
+    assert.equal(chain2, null);
   });
 
   it("js-json-config - should throw an error if both a .babelrc" +

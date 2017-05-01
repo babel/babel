@@ -308,6 +308,14 @@ defineType("ObjectTypeProperty", {
   },
 });
 
+defineType("ObjectTypeSpreadProperty", {
+  visitor: ["argument"],
+  aliases: ["Flow", "UserWhitespacable"],
+  fields: {
+    // todo
+  },
+});
+
 defineType("QualifiedTypeIdentifier", {
   visitor: ["id", "qualification"],
   aliases: ["Flow"],

@@ -99,11 +99,15 @@ export default class PathHoister {
 
         const binding = this.bindings[name];
 
-        // allow parameter references
-        if (binding.kind === "param") continue;
+        // allow parameter references and expressions in params (like destructuring rest)
+        if (binding.kind === "param" || binding.path.parentKey === "params") continue;
 
-        // if this binding appears after our attachment point, then we move after it.
-        if (this.getAttachmentParentForPath(binding.path).key > path.key) {
+        // For each binding, get its attachment parent. This gives us an idea of where we might
+        // introduce conflicts.
+        const bindingParentPath = this.getAttachmentParentForPath(binding.path);
+
+        // If the binding's attachment appears at or after our attachment point, then we move after it.
+        if (bindingParentPath.key >= path.key) {
           this.attachAfter = true;
           path = binding.path;
 
@@ -115,6 +119,12 @@ export default class PathHoister {
           }
         }
       }
+    }
+
+    // We can't insert before/after a child of an export declaration, so move up
+    // to the declaration itself.
+    if (path.parentPath.isExportDeclaration()) {
+      path = path.parentPath;
     }
 
     return path;

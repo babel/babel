@@ -28,6 +28,16 @@ function a7(_ref8 = {}) {
   let { a1 = 1 } = _ref8,
       b1 = babelHelpers.objectWithoutProperties(_ref8, ["a1"]);
 }
+function a8([_ref9]) {
+  let a1 = babelHelpers.objectWithoutProperties(_ref9, []);
+}
+function a9([_ref10]) {
+  let { a1 } = _ref10,
+      a2 = babelHelpers.objectWithoutProperties(_ref10, ["a1"]);
+}
+function a10([a1, _ref11]) {
+  let a2 = babelHelpers.objectWithoutProperties(_ref11, []);
+}
 // Unchanged
 function b(a) {}
 function b2(a, ...b) {}

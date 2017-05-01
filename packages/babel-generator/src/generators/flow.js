@@ -331,6 +331,11 @@ export function ObjectTypeProperty(node: Object) {
   this.print(node.value, node);
 }
 
+export function ObjectTypeSpreadProperty(node: Object) {
+  this.token("...");
+  this.print(node.argument, node);
+}
+
 export function QualifiedTypeIdentifier(node: Object) {
   this.print(node.qualification, node);
   this.token(".");

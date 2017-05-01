@@ -3,7 +3,7 @@
 type ConfigFile = {
   filepath: string,
   dirname: string,
-  options: Object,
+  options: {},
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -25,18 +25,18 @@ export function resolvePreset(name: string, dirname: string): string|null {
   return null;
 }
 
-export function loadPlugin(name: string, dirname: string): { filepath: string, plugin: mixed } {
+export function loadPlugin(name: string, dirname: string): { filepath: string, value: mixed } {
   throw new Error(`Cannot load plugin ${name} relative to ${dirname} in a browser`);
 }
 
-export function loadPreset(name: string, dirname: string): { filepath: string, preset: mixed } {
+export function loadPreset(name: string, dirname: string): { filepath: string, value: mixed } {
   throw new Error(`Cannot load preset ${name} relative to ${dirname} in a browser`);
 }
 
-export function loadParser(name: string, dirname: string): { filepath: string, parser: Function } {
+export function loadParser(name: string, dirname: string): { filepath: string, value: Function } {
   throw new Error(`Cannot load parser ${name} relative to ${dirname} in a browser`);
 }
 
-export function loadGenerator(name: string, dirname: string): { filepath: string, generator: Function } {
+export function loadGenerator(name: string, dirname: string): { filepath: string, value: Function } {
   throw new Error(`Cannot load generator ${name} relative to ${dirname} in a browser`);
 }
