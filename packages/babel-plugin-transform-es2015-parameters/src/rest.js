@@ -220,124 +220,122 @@ function optimiseLengthGetter(path, argsId, offset) {
   }
 }
 
-export const visitor = {
-  Function(path) {
-    const { node, scope } = path;
-    if (!hasRest(node)) return;
+export default function convertFunctionRest(path) {
+  const { node, scope } = path;
+  if (!hasRest(node)) return;
 
-    const rest = node.params.pop().argument;
+  const rest = node.params.pop().argument;
 
-    const argsId = t.identifier("arguments");
+  const argsId = t.identifier("arguments");
 
-    // check and optimise for extremely common cases
-    const state = {
-      references: [],
-      offset: node.params.length,
+  // check and optimise for extremely common cases
+  const state = {
+    references: [],
+    offset: node.params.length,
 
-      argumentsNode: argsId,
-      outerBinding: scope.getBindingIdentifier(rest.name),
+    argumentsNode: argsId,
+    outerBinding: scope.getBindingIdentifier(rest.name),
 
-      // candidate member expressions we could optimise if there are no other references
-      candidates: [],
+    // candidate member expressions we could optimise if there are no other references
+    candidates: [],
 
-      // local rest binding name
-      name: rest.name,
+    // local rest binding name
+    name: rest.name,
 
-      /*
-      It may be possible to optimize the output code in certain ways, such as
-      not generating code to initialize an array (perhaps substituting direct
-      references to arguments[i] or arguments.length for reads of the
-      corresponding rest parameter property) or positioning the initialization
-      code so that it may not have to execute depending on runtime conditions.
+    /*
+    It may be possible to optimize the output code in certain ways, such as
+    not generating code to initialize an array (perhaps substituting direct
+    references to arguments[i] or arguments.length for reads of the
+    corresponding rest parameter property) or positioning the initialization
+    code so that it may not have to execute depending on runtime conditions.
 
-      This property tracks eligibility for optimization. "deopted" means give up
-      and don't perform optimization. For example, when any of rest's elements /
-      properties is assigned to at the top level, or referenced at all in a
-      nested function.
-      */
-      deopted: false,
-    };
+    This property tracks eligibility for optimization. "deopted" means give up
+    and don't perform optimization. For example, when any of rest's elements /
+    properties is assigned to at the top level, or referenced at all in a
+    nested function.
+    */
+    deopted: false,
+  };
 
-    path.traverse(memberExpressionOptimisationVisitor, state);
+  path.traverse(memberExpressionOptimisationVisitor, state);
 
-    // There are only "shorthand" references
-    if (!state.deopted && !state.references.length) {
-      for (const { path, cause } of (state.candidates: Array)) {
-        switch (cause) {
-          case "indexGetter":
-            optimiseIndexGetter(path, argsId, state.offset);
-            break;
-          case "lengthGetter":
-            optimiseLengthGetter(path, argsId, state.offset);
-            break;
-          default:
-            path.replaceWith(argsId);
-        }
+  // There are only "shorthand" references
+  if (!state.deopted && !state.references.length) {
+    for (const { path, cause } of (state.candidates: Array)) {
+      switch (cause) {
+        case "indexGetter":
+          optimiseIndexGetter(path, argsId, state.offset);
+          break;
+        case "lengthGetter":
+          optimiseLengthGetter(path, argsId, state.offset);
+          break;
+        default:
+          path.replaceWith(argsId);
       }
-      return;
     }
+    return;
+  }
 
-    state.references = state.references.concat(
-      state.candidates.map(({ path }) => path),
+  state.references = state.references.concat(
+    state.candidates.map(({ path }) => path),
+  );
+
+  const start = t.numericLiteral(node.params.length);
+  const key = scope.generateUidIdentifier("key");
+  const len = scope.generateUidIdentifier("len");
+
+  let arrKey = key;
+  let arrLen = len;
+  if (node.params.length) {
+    // this method has additional params, so we need to subtract
+    // the index of the current argument position from the
+    // position in the array that we want to populate
+    arrKey = t.binaryExpression("-", key, start);
+
+    // we need to work out the size of the array that we're
+    // going to store all the rest parameters
+    //
+    // we need to add a check to avoid constructing the array
+    // with <0 if there are less arguments than params as it'll
+    // cause an error
+    arrLen = t.conditionalExpression(
+      t.binaryExpression(">", len, start),
+      t.binaryExpression("-", len, start),
+      t.numericLiteral(0),
     );
+  }
 
-    const start = t.numericLiteral(node.params.length);
-    const key = scope.generateUidIdentifier("key");
-    const len = scope.generateUidIdentifier("len");
+  const loop = buildRest({
+    ARGUMENTS: argsId,
+    ARRAY_KEY: arrKey,
+    ARRAY_LEN: arrLen,
+    START: start,
+    ARRAY: rest,
+    KEY: key,
+    LEN: len,
+  });
 
-    let arrKey = key;
-    let arrLen = len;
-    if (node.params.length) {
-      // this method has additional params, so we need to subtract
-      // the index of the current argument position from the
-      // position in the array that we want to populate
-      arrKey = t.binaryExpression("-", key, start);
+  if (state.deopted) {
+    loop._blockHoist = node.params.length + 1;
+    node.body.body.unshift(loop);
+  } else {
+    // perform allocation at the lowest common ancestor of all references
+    loop._blockHoist = 1;
 
-      // we need to work out the size of the array that we're
-      // going to store all the rest parameters
-      //
-      // we need to add a check to avoid constructing the array
-      // with <0 if there are less arguments than params as it'll
-      // cause an error
-      arrLen = t.conditionalExpression(
-        t.binaryExpression(">", len, start),
-        t.binaryExpression("-", len, start),
-        t.numericLiteral(0),
-      );
-    }
+    let target = path
+      .getEarliestCommonAncestorFrom(state.references)
+      .getStatementParent();
 
-    const loop = buildRest({
-      ARGUMENTS: argsId,
-      ARRAY_KEY: arrKey,
-      ARRAY_LEN: arrLen,
-      START: start,
-      ARRAY: rest,
-      KEY: key,
-      LEN: len,
+    // don't perform the allocation inside a loop
+    target.findParent(path => {
+      if (path.isLoop()) {
+        target = path;
+      } else {
+        // Stop crawling up if this is a function.
+        return path.isFunction();
+      }
     });
 
-    if (state.deopted) {
-      loop._blockHoist = node.params.length + 1;
-      node.body.body.unshift(loop);
-    } else {
-      // perform allocation at the lowest common ancestor of all references
-      loop._blockHoist = 1;
-
-      let target = path
-        .getEarliestCommonAncestorFrom(state.references)
-        .getStatementParent();
-
-      // don't perform the allocation inside a loop
-      target.findParent(path => {
-        if (path.isLoop()) {
-          target = path;
-        } else {
-          // Stop crawling up if this is a function.
-          return path.isFunction();
-        }
-      });
-
-      target.insertBefore(loop);
-    }
-  },
-};
+    target.insertBefore(loop);
+  }
+}
