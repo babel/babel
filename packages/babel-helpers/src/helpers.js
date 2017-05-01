@@ -216,7 +216,7 @@ helpers.asyncGeneratorDelegate = template(`
 helpers.asyncToGenerator = template(`
   (function (fn) {
     return function () {
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         var gen = fn.apply(this, arguments);
         function step(key, arg) {
           try {
