@@ -772,19 +772,23 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseClassProperty(node) {
+    const hasPlugin = this.hasPlugin("classProperties");
     const noPluginMsg = "You can only use Class Properties when the 'classProperties' plugin is enabled.";
-    if (!node.typeAnnotation && !this.hasPlugin("classProperties")) {
+    if (!node.typeAnnotation && !hasPlugin) {
       this.raise(node.start, noPluginMsg);
     }
 
+    this.state.inClassProperty = true;
+
     if (this.match(tt.eq)) {
-      if (!this.hasPlugin("classProperties")) this.raise(this.state.start, noPluginMsg);
+      if (!hasPlugin) this.raise(this.state.start, noPluginMsg);
       this.next();
       node.value = this.parseMaybeAssign();
     } else {
       node.value = null;
     }
     this.semicolon();
+    this.state.inClassProperty = false;
     return this.finishNode(node, "ClassProperty");
   }
 
