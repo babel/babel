@@ -154,6 +154,7 @@ const envMap = {
   android50: "android5.0",
   android51: "android5.1",
   ios51: "ios5.1",
+  ios10_3: "ios10.3",
 };
 
 const compatibilityTests = flattenDeep(
