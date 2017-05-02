@@ -73,17 +73,14 @@ export default function convertFunctionParams(path) {
         DEFAULT_VALUE: right.node,
         ARGUMENT_KEY: t.numericLiteral(i),
       });
-      defNode._blockHoist = node.params.length - i;
       body.push(defNode);
     } else if (firstOptionalIndex !== null) {
       const defNode = buildArgumentsAccess(param.node, t.numericLiteral(i));
-      defNode._blockHoist = node.params.length - i;
       body.push(defNode);
     } else if (param.isObjectPattern() || param.isArrayPattern()) {
       const uid = path.scope.generateUidIdentifier("ref");
 
       const defNode = t.variableDeclaration("let", [t.variableDeclarator(param.node, uid)]);
-      defNode._blockHoist = node.params.length - i;
       body.push(defNode);
 
       param.replaceWith(uid);
