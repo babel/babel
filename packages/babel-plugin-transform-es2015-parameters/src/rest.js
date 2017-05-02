@@ -316,12 +316,8 @@ export default function convertFunctionRest(path) {
   });
 
   if (state.deopted) {
-    loop._blockHoist = node.params.length + 1;
     node.body.body.unshift(loop);
   } else {
-    // perform allocation at the lowest common ancestor of all references
-    loop._blockHoist = 1;
-
     let target = path
       .getEarliestCommonAncestorFrom(state.references)
       .getStatementParent();

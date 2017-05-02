@@ -113,7 +113,6 @@ export default function({ types: t }) {
       const declar = t.variableDeclaration("let", [
         t.variableDeclarator(paramPath.node, uid),
       ]);
-      declar._blockHoist = i ? numParams - i : 1;
 
       parentPath.ensureBlock();
       parentPath.get("body").unshiftContainer("body", declar);
