@@ -382,7 +382,11 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
 
   switch (this.state.type) {
     case tt._super:
-      if (!this.state.inMethod && !this.options.allowSuperOutsideMethod) {
+      if (
+          !this.state.inMethod &&
+          !this.state.inClassProperty &&
+          !this.options.allowSuperOutsideMethod
+        ) {
         this.raise(this.state.start, "'super' outside of function or class");
       }
 

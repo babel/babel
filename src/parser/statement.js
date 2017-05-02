@@ -783,6 +783,7 @@ pp.parseClassBody = function (node) {
 };
 
 pp.parseClassProperty = function (node) {
+  this.state.inClassProperty = true;
   if (this.match(tt.eq)) {
     if (!this.hasPlugin("classProperties")) this.unexpected();
     this.next();
@@ -791,6 +792,7 @@ pp.parseClassProperty = function (node) {
     node.value = null;
   }
   this.semicolon();
+  this.state.inClassProperty = false;
   return this.finishNode(node, "ClassProperty");
 };
 

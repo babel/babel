@@ -18,6 +18,7 @@ export default class State {
       this.inAsync =
       this.inPropertyName =
       this.inType =
+      this.inClassProperty =
       this.noAnonFunctionType =
         false;
 
@@ -73,6 +74,7 @@ export default class State {
   inAsync: boolean;
   inType: boolean;
   inPropertyName: boolean;
+  inClassProperty: boolean;
 
   // Labels in scope.
   labels: Array<Object>;
