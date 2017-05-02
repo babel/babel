@@ -120,7 +120,6 @@
                         }
                       },
                       "method": true,
-                      "shorthand": false,
                       "computed": true,
                       "key": {
                         "type": "YieldExpression",

@@ -103,7 +103,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": true,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -122,6 +121,7 @@
                   },
                   "name": "message"
                 },
+                "shorthand": true,
                 "value": {
                   "type": "Identifier",
                   "start": 15,

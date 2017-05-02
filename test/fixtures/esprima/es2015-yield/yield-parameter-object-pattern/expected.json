@@ -93,7 +93,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": false,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -112,6 +111,7 @@
                   },
                   "name": "yield"
                 },
+                "shorthand": false,
                 "value": {
                   "type": "Identifier",
                   "start": 19,

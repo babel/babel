@@ -104,7 +104,6 @@
                     }
                   },
                   "method": true,
-                  "shorthand": false,
                   "key": {
                     "type": "Identifier",
                     "start": 12,

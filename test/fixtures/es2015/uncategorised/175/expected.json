@@ -72,7 +72,6 @@
                 }
               },
               "method": true,
-              "shorthand": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -127,7 +126,6 @@
                         }
                       },
                       "method": false,
-                      "shorthand": false,
                       "computed": false,
                       "key": {
                         "type": "Identifier",
@@ -146,6 +144,7 @@
                         },
                         "name": "a"
                       },
+                      "shorthand": false,
                       "value": {
                         "type": "ObjectPattern",
                         "start": 10,
@@ -176,7 +175,6 @@
                               }
                             },
                             "method": false,
-                            "shorthand": true,
                             "computed": false,
                             "key": {
                               "type": "Identifier",
@@ -195,6 +193,7 @@
                               },
                               "name": "w"
                             },
+                            "shorthand": true,
                             "value": {
                               "type": "Identifier",
                               "start": 12,
@@ -231,7 +230,6 @@
                               }
                             },
                             "method": false,
-                            "shorthand": true,
                             "computed": false,
                             "key": {
                               "type": "Identifier",
@@ -250,6 +248,7 @@
                               },
                               "name": "x"
                             },
+                            "shorthand": true,
                             "value": {
                               "type": "Identifier",
                               "start": 15,
@@ -289,7 +288,6 @@
                         }
                       },
                       "method": false,
-                      "shorthand": false,
                       "computed": false,
                       "key": {
                         "type": "Identifier",
@@ -308,6 +306,7 @@
                         },
                         "name": "b"
                       },
+                      "shorthand": false,
                       "value": {
                         "type": "ArrayPattern",
                         "start": 23,

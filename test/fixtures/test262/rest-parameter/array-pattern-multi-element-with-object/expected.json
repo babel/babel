@@ -122,7 +122,6 @@
                         }
                       },
                       "method": false,
-                      "shorthand": false,
                       "computed": false,
                       "key": {
                         "type": "Identifier",
@@ -141,6 +140,7 @@
                         },
                         "name": "p"
                       },
+                      "shorthand": false,
                       "value": {
                         "type": "Identifier",
                         "start": 40,
@@ -191,7 +191,6 @@
                         }
                       },
                       "method": false,
-                      "shorthand": true,
                       "computed": false,
                       "key": {
                         "type": "Identifier",
@@ -210,6 +209,7 @@
                         },
                         "name": "r"
                       },
+                      "shorthand": true,
                       "value": {
                         "type": "Identifier",
                         "start": 45,
@@ -263,7 +263,6 @@
                         }
                       },
                       "method": false,
-                      "shorthand": true,
                       "computed": false,
                       "key": {
                         "type": "Identifier",
@@ -282,6 +281,7 @@
                         },
                         "name": "s"
                       },
+                      "shorthand": true,
                       "value": {
                         "type": "AssignmentPattern",
                         "start": 50,

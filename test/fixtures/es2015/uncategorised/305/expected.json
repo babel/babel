@@ -87,7 +87,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -106,6 +105,7 @@
                     },
                     "name": "propName"
                   },
+                  "shorthand": true,
                   "value": {
                     "type": "AssignmentPattern",
                     "start": 5,

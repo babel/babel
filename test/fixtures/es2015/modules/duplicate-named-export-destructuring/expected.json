@@ -103,7 +103,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": true,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -122,6 +121,7 @@
                       },
                       "name": "foo"
                     },
+                    "shorthand": true,
                     "value": {
                       "type": "Identifier",
                       "start": 15,
@@ -242,7 +242,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -261,6 +260,7 @@
                       },
                       "name": "foo"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "Identifier",
                       "start": 48,
@@ -378,7 +378,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -397,6 +396,7 @@
                       },
                       "name": "foo"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "ObjectPattern",
                       "start": 82,
@@ -427,7 +427,6 @@
                             }
                           },
                           "method": false,
-                          "shorthand": true,
                           "computed": false,
                           "key": {
                             "type": "Identifier",
@@ -446,6 +445,7 @@
                             },
                             "name": "baz"
                           },
+                          "shorthand": true,
                           "value": {
                             "type": "Identifier",
                             "start": 84,
@@ -569,7 +569,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -588,6 +587,7 @@
                       },
                       "name": "foo"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "ObjectPattern",
                       "start": 119,
@@ -618,7 +618,6 @@
                             }
                           },
                           "method": false,
-                          "shorthand": false,
                           "computed": false,
                           "key": {
                             "type": "Identifier",
@@ -637,6 +636,7 @@
                             },
                             "name": "baz"
                           },
+                          "shorthand": false,
                           "value": {
                             "type": "ObjectPattern",
                             "start": 127,
@@ -667,7 +667,6 @@
                                   }
                                 },
                                 "method": false,
-                                "shorthand": true,
                                 "computed": false,
                                 "key": {
                                   "type": "Identifier",
@@ -686,6 +685,7 @@
                                   },
                                   "name": "qux"
                                 },
+                                "shorthand": true,
                                 "value": {
                                   "type": "Identifier",
                                   "start": 129,
@@ -812,7 +812,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -831,6 +830,7 @@
                       },
                       "name": "foo"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "ObjectPattern",
                       "start": 166,
@@ -861,7 +861,6 @@
                             }
                           },
                           "method": false,
-                          "shorthand": false,
                           "computed": false,
                           "key": {
                             "type": "Identifier",
@@ -880,6 +879,7 @@
                             },
                             "name": "baz"
                           },
+                          "shorthand": false,
                           "value": {
                             "type": "ObjectPattern",
                             "start": 174,
@@ -910,7 +910,6 @@
                                   }
                                 },
                                 "method": false,
-                                "shorthand": true,
                                 "computed": false,
                                 "key": {
                                   "type": "Identifier",
@@ -929,6 +928,7 @@
                                   },
                                   "name": "qux2"
                                 },
+                                "shorthand": true,
                                 "value": {
                                   "type": "Identifier",
                                   "start": 176,
@@ -971,7 +971,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": true,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -990,6 +989,7 @@
                       },
                       "name": "foo3"
                     },
+                    "shorthand": true,
                     "value": {
                       "type": "Identifier",
                       "start": 186,
@@ -1344,7 +1344,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": false,
                         "computed": false,
                         "key": {
                           "type": "Identifier",
@@ -1363,6 +1362,7 @@
                           },
                           "name": "foo"
                         },
+                        "shorthand": false,
                         "value": {
                           "type": "ArrayPattern",
                           "start": 277,
@@ -1430,7 +1430,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": false,
                         "computed": false,
                         "key": {
                           "type": "Identifier",
@@ -1449,6 +1448,7 @@
                           },
                           "name": "foo2"
                         },
+                        "shorthand": false,
                         "value": {
                           "type": "ArrayPattern",
                           "start": 295,
@@ -1585,7 +1585,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -1604,6 +1603,7 @@
                       },
                       "name": "foo"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "ObjectPattern",
                       "start": 332,
@@ -1634,7 +1634,6 @@
                             }
                           },
                           "method": false,
-                          "shorthand": false,
                           "computed": false,
                           "key": {
                             "type": "Identifier",
@@ -1653,6 +1652,7 @@
                             },
                             "name": "baz"
                           },
+                          "shorthand": false,
                           "value": {
                             "type": "ObjectPattern",
                             "start": 339,
@@ -1683,7 +1683,6 @@
                                   }
                                 },
                                 "method": false,
-                                "shorthand": true,
                                 "computed": false,
                                 "key": {
                                   "type": "Identifier",
@@ -1702,6 +1701,7 @@
                                   },
                                   "name": "qux3"
                                 },
+                                "shorthand": true,
                                 "value": {
                                   "type": "Identifier",
                                   "start": 341,
@@ -1744,7 +1744,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -1763,6 +1762,7 @@
                       },
                       "name": "foo2"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "ObjectPattern",
                       "start": 357,
@@ -1793,7 +1793,6 @@
                             }
                           },
                           "method": false,
-                          "shorthand": false,
                           "computed": false,
                           "key": {
                             "type": "Identifier",
@@ -1812,6 +1811,7 @@
                             },
                             "name": "baz2"
                           },
+                          "shorthand": false,
                           "value": {
                             "type": "ArrayPattern",
                             "start": 365,
@@ -1949,7 +1949,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -1968,6 +1967,7 @@
                       },
                       "name": "foo"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "ObjectPattern",
                       "start": 402,
@@ -1998,7 +1998,6 @@
                             }
                           },
                           "method": false,
-                          "shorthand": false,
                           "computed": false,
                           "key": {
                             "type": "Identifier",
@@ -2017,6 +2016,7 @@
                             },
                             "name": "baz"
                           },
+                          "shorthand": false,
                           "value": {
                             "type": "ObjectPattern",
                             "start": 409,
@@ -2047,7 +2047,6 @@
                                   }
                                 },
                                 "method": false,
-                                "shorthand": true,
                                 "computed": false,
                                 "key": {
                                   "type": "Identifier",
@@ -2066,6 +2065,7 @@
                                   },
                                   "name": "qux5"
                                 },
+                                "shorthand": true,
                                 "value": {
                                   "type": "Identifier",
                                   "start": 411,
@@ -2108,7 +2108,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -2127,6 +2126,7 @@
                       },
                       "name": "foo2"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "ObjectPattern",
                       "start": 427,
@@ -2157,7 +2157,6 @@
                             }
                           },
                           "method": false,
-                          "shorthand": false,
                           "computed": false,
                           "key": {
                             "type": "Identifier",
@@ -2176,6 +2175,7 @@
                             },
                             "name": "baz2"
                           },
+                          "shorthand": false,
                           "value": {
                             "type": "ArrayPattern",
                             "start": 435,
@@ -2221,7 +2221,6 @@
                                       }
                                     },
                                     "method": false,
-                                    "shorthand": true,
                                     "computed": false,
                                     "key": {
                                       "type": "Identifier",
@@ -2240,6 +2239,7 @@
                                       },
                                       "name": "qux6"
                                     },
+                                    "shorthand": true,
                                     "value": {
                                       "type": "Identifier",
                                       "start": 437,
@@ -2368,7 +2368,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": true,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -2387,6 +2386,7 @@
                       },
                       "name": "Foo"
                     },
+                    "shorthand": true,
                     "value": {
                       "type": "Identifier",
                       "start": 469,
@@ -2507,7 +2507,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -2526,6 +2525,7 @@
                       },
                       "name": "foo"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "ArrayPattern",
                       "start": 502,

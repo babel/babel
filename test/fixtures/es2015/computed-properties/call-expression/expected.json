@@ -104,7 +104,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": true,
                   "key": {
                     "type": "CallExpression",
@@ -139,6 +138,7 @@
                     },
                     "arguments": []
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
                     "start": 23,

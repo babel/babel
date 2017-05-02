@@ -152,7 +152,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": true,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -171,6 +170,7 @@
                       },
                       "name": "c"
                     },
+                    "shorthand": true,
                     "value": {
                       "type": "Identifier",
                       "start": 21,
@@ -207,7 +207,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -226,6 +225,7 @@
                       },
                       "name": "d"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "AssignmentPattern",
                       "start": 26,
@@ -294,7 +294,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": true,
                     "key": {
                       "type": "Identifier",
@@ -313,6 +312,7 @@
                       },
                       "name": "f"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "AssignmentPattern",
                       "start": 35,
@@ -381,7 +381,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": true,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -400,6 +399,7 @@
                       },
                       "name": "h"
                     },
+                    "shorthand": true,
                     "value": {
                       "type": "AssignmentPattern",
                       "start": 40,

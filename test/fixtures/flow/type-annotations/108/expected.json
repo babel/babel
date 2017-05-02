@@ -241,7 +241,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -260,6 +259,7 @@
                     },
                     "name": "x"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "NumericLiteral",
                     "start": 42,
@@ -296,7 +296,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -315,6 +314,7 @@
                     },
                     "name": "y"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
                     "start": 48,
@@ -555,7 +555,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -574,6 +573,7 @@
                     },
                     "name": "x"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "NumericLiteral",
                     "start": 100,
@@ -610,7 +610,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -629,6 +628,7 @@
                     },
                     "name": "y"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
                     "start": 106,
@@ -1076,7 +1076,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -1095,6 +1094,7 @@
                     },
                     "name": "a"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "ObjectExpression",
                     "start": 196,
@@ -1125,7 +1125,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": false,
                         "computed": false,
                         "key": {
                           "type": "Identifier",
@@ -1144,6 +1143,7 @@
                           },
                           "name": "x"
                         },
+                        "shorthand": false,
                         "value": {
                           "type": "NumericLiteral",
                           "start": 201,
@@ -1180,7 +1180,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": false,
                         "computed": false,
                         "key": {
                           "type": "Identifier",
@@ -1199,6 +1198,7 @@
                           },
                           "name": "y"
                         },
+                        "shorthand": false,
                         "value": {
                           "type": "StringLiteral",
                           "start": 207,
@@ -1238,7 +1238,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -1257,6 +1256,7 @@
                     },
                     "name": "b"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "BooleanLiteral",
                     "start": 219,
@@ -1600,7 +1600,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -1619,6 +1618,7 @@
                     },
                     "name": "a"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "ObjectExpression",
                     "start": 289,
@@ -1649,7 +1649,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": false,
                         "computed": false,
                         "key": {
                           "type": "Identifier",
@@ -1668,6 +1667,7 @@
                           },
                           "name": "x"
                         },
+                        "shorthand": false,
                         "value": {
                           "type": "NumericLiteral",
                           "start": 294,
@@ -1704,7 +1704,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": false,
                         "computed": false,
                         "key": {
                           "type": "Identifier",
@@ -1723,6 +1722,7 @@
                           },
                           "name": "y"
                         },
+                        "shorthand": false,
                         "value": {
                           "type": "StringLiteral",
                           "start": 300,
@@ -1762,7 +1762,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -1781,6 +1780,7 @@
                     },
                     "name": "b"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "BooleanLiteral",
                     "start": 312,

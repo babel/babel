@@ -72,7 +72,6 @@
                 }
               },
               "method": true,
-              "shorthand": false,
               "computed": true,
               "key": {
                 "type": "Identifier",

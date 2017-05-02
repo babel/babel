@@ -772,7 +772,6 @@ export default class ExpressionParser extends LValParser {
       }
 
       prop.method = false;
-      prop.shorthand = false;
 
       if (isPattern || refShorthandDefaultPos) {
         startPos = this.state.start;
@@ -870,6 +869,8 @@ export default class ExpressionParser extends LValParser {
   }
 
   parseObjectProperty(prop, startPos, startLoc, isPattern, refShorthandDefaultPos) {
+    prop.shorthand = false;
+
     if (this.eat(tt.colon)) {
       prop.value = isPattern ? this.parseMaybeDefault(this.state.start, this.state.startLoc) : this.parseMaybeAssign(false, refShorthandDefaultPos);
 

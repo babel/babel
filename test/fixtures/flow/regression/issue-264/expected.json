@@ -104,7 +104,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": true,
                   "key": {
                     "type": "BinaryExpression",
@@ -159,6 +158,7 @@
                       "value": 17
                     }
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
                     "start": 30,

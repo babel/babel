@@ -123,7 +123,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": false,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -142,6 +141,7 @@
                       },
                       "name": "id"
                     },
+                    "shorthand": false,
                     "value": {
                       "type": "ArrowFunctionExpression",
                       "start": 55,

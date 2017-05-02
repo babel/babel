@@ -87,7 +87,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -106,6 +105,7 @@
                     },
                     "name": "x"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "ObjectExpression",
                     "start": 12,
@@ -136,7 +136,6 @@
                           }
                         },
                         "method": false,
-                        "shorthand": false,
                         "computed": false,
                         "key": {
                           "type": "Identifier",
@@ -155,6 +154,7 @@
                           },
                           "name": "y"
                         },
+                        "shorthand": false,
                         "value": {
                           "type": "NumericLiteral",
                           "start": 16,

@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "shorthand": false,
               "computed": true,
               "key": {
                 "type": "Identifier",
@@ -91,6 +90,7 @@
                 },
                 "name": "x"
               },
+              "shorthand": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 7,
@@ -127,7 +127,6 @@
                 }
               },
               "method": false,
-              "shorthand": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -146,6 +145,7 @@
                 },
                 "name": "y"
               },
+              "shorthand": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 14,

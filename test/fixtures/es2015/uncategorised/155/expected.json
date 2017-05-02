@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "shorthand": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -91,6 +90,7 @@
                 },
                 "name": "f"
               },
+              "shorthand": false,
               "value": {
                 "type": "FunctionExpression",
                 "start": 5,
@@ -154,7 +154,6 @@
                             }
                           },
                           "method": false,
-                          "shorthand": true,
                           "computed": false,
                           "key": {
                             "type": "Identifier",
@@ -173,6 +172,7 @@
                             },
                             "name": "x"
                           },
+                          "shorthand": true,
                           "value": {
                             "type": "Identifier",
                             "start": 15,
@@ -226,7 +226,6 @@
                             }
                           },
                           "method": false,
-                          "shorthand": false,
                           "computed": false,
                           "key": {
                             "type": "Identifier",
@@ -245,6 +244,7 @@
                             },
                             "name": "x"
                           },
+                          "shorthand": false,
                           "value": {
                             "type": "NumericLiteral",
                             "start": 24,

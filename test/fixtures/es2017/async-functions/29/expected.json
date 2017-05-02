@@ -123,7 +123,6 @@
                         }
                       },
                       "method": false,
-                      "shorthand": true,
                       "computed": false,
                       "key": {
                         "type": "Identifier",
@@ -142,6 +141,7 @@
                         },
                         "name": "async"
                       },
+                      "shorthand": true,
                       "value": {
                         "type": "AssignmentPattern",
                         "start": 23,
