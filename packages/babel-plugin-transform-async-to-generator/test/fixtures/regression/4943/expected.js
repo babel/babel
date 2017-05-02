@@ -24,7 +24,7 @@ var foo = function () {
   };
 }();
 
-function _asyncToGenerator(fn) { return function () { var _args = arguments; var _promiseWrapper = this; return new Promise(function (resolve, reject) { var gen = fn.apply(_promiseWrapper, _args); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+function _asyncToGenerator(fn) { return function () { var _this = this, _arguments = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(_this, _arguments); function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function mandatory(paramName) {
   throw new Error("Missing parameter: " + paramName);
