@@ -181,19 +181,20 @@ export default function buildPreset(context, opts = {}) {
     console.log("babel-preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));
-    console.log(`\nModules transform: ${moduleType}`);
+    console.log(`\nUsing modules transform: ${moduleType}`);
     console.log("\nUsing plugins:");
     transformations.forEach(transform => {
       logPlugin(transform, targets, pluginList);
     });
-    console.log("");
-    console.log("Polyfills");
-    console.log("=========");
-    console.log("");
 
     if (!useBuiltIns) {
       console.log(
-        "None were added, since the `useBuiltIns` option was not set.",
+        "\nUsing polyfills: No polyfills were added, since the `useBuiltIns` option was not set.",
+      );
+    } else {
+      console.log(
+        `
+Using polyfills with \`${useBuiltIns}\` option:`,
       );
     }
   }

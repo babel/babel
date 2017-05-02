@@ -1,4 +1,5 @@
 import { definitions } from "./built-in-definitions";
+import { logUsagePolyfills } from "./debug";
 
 function isPolyfillSource(value) {
   return value === "babel-polyfill";
@@ -80,9 +81,8 @@ export default function({ types: t }) {
       ) {
         console.warn(
           `
-When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
-Please remove the \`import 'babel-polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.
-`,
+  When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
+  Please remove the \`import 'babel-polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.`,
         );
         path.remove();
       }
@@ -93,9 +93,8 @@ Please remove the \`import 'babel-polyfill'\` call or use \`useBuiltIns: 'entry'
           if (isRequire(bodyPath)) {
             console.warn(
               `
-When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
-Please remove the \`require('babel-polyfill')\` call or use \`useBuiltIns: 'entry'\` instead.
-`,
+  When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
+  Please remove the \`require('babel-polyfill')\` call or use \`useBuiltIns: 'entry'\` instead.`,
             );
             bodyPath.remove();
           }
@@ -275,7 +274,7 @@ Please remove the \`require('babel-polyfill')\` call or use \`useBuiltIns: 'entr
       const { debug, onDebug } = this.opts;
 
       if (debug) {
-        onDebug(this.builtIns, this.file.opts.filename);
+        logUsagePolyfills(this.builtIns, this.file.opts.filename, onDebug);
       }
     },
     visitor: addAndRemovePolyfillImports,

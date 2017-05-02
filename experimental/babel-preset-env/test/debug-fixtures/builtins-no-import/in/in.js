@@ -1,0 +1,1 @@
+function hasAnyoneSeenImportBabelPolyfill() { return false };

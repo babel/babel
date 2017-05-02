@@ -1,3 +1,5 @@
+import { logEntryPolyfills } from "./debug";
+
 function isPolyfillSource(value) {
   return value === "babel-polyfill";
 }
@@ -61,6 +63,7 @@ export default function({ types: t }) {
         path.node.specifiers.length === 0 &&
         isPolyfillSource(path.node.source.value)
       ) {
+        this.importPolyfillIncluded = true;
         path.replaceWithMultiple(
           createImports(state.opts.polyfills, "import", state.opts.regenerator),
         );
@@ -86,18 +89,18 @@ export default function({ types: t }) {
     visitor: isPolyfillImport,
     pre() {
       this.numPolyfillImports = 0;
+      this.importPolyfillIncluded = false;
     },
     post() {
       const { debug, onDebug, polyfills } = this.opts;
 
       if (debug) {
-        if (!polyfills.size) {
-          console.log("Based on your targets, none were added.");
-          return;
-        }
-
-        console.log("Replaced `babel-polyfill` with the following polyfills:");
-        onDebug(polyfills);
+        logEntryPolyfills(
+          this.importPolyfillIncluded,
+          polyfills,
+          this.file.opts.filename,
+          onDebug,
+        );
       }
     },
   };
