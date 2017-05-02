@@ -1,5 +1,8 @@
 export default function ({ messages, template, types: t }) {
   const isArrayFrom = t.buildMatchMemberExpression("Array.from");
+  const isObjectKeys = t.buildMatchMemberExpression("Object.keys");
+  const isObjectValues = t.buildMatchMemberExpression("Object.values");
+  const isObjectEntries = t.buildMatchMemberExpression("Object.entries");
 
   const buildForOfArray = template(`
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
@@ -94,32 +97,45 @@ export default function ({ messages, template, types: t }) {
   function replaceWithArray(path) {
     if (path.parentPath.isLabeledStatement()) {
       path.parentPath.replaceWithMultiple(_ForOfStatementArray(path));
+      return true;
     } else {
       path.replaceWithMultiple(_ForOfStatementArray(path));
+      return true;
     }
+    return false;
+  }
+
+  function optimize(path, right) {
+    if (right.isArrayExpression() || right.isGenericType("Array")) {
+      return replaceWithArray(path);
+    } else if (right.isIdentifier() && right.isPure()) {
+      const binding = path.scope.getBinding(right.node.name);
+      return optimize(path, binding.path.get("init"));
+    } else if (right.isCallExpression() && (
+      isArrayFrom(right.get("callee").node) ||
+      isObjectKeys(right.get("callee").node) ||
+      isObjectValues(right.get("callee").node) ||
+      isObjectEntries(right.get("callee").node)
+      )
+    ) {
+      const initPath = right === path.get("right") ? path : right.find((p) => p.isStatement());
+      const uid = path.scope.generateUidIdentifierBasedOnNode(right.node);
+      initPath.insertBefore(
+        t.variableDeclaration("const", [
+          t.variableDeclarator(uid, right.node),
+        ])
+      );
+      right.replaceWith(uid);
+      return replaceWithArray(path);
+    }
+    return false;
   }
 
   return {
     visitor: {
       ForOfStatement(path, state) {
-        let right = path.get("right");
-
-        if (right.isArrayExpression() || right.isGenericType("Array")) {
-          return replaceWithArray(path);
-        } else if (right.isIdentifier() && right.isPure()) {
-          const binding = path.scope.getBinding(right.node.name);
-          if (binding.path.get("init").isArrayExpression()) {
-            return replaceWithArray(path);
-          }
-        } else if (right.isCallExpression() && isArrayFrom(right.get("callee").node)) {
-          const uid = path.scope.generateUidIdentifierBasedOnNode(right.node);
-          path.insertBefore(
-            t.variableDeclaration("const", [
-              t.variableDeclarator(uid, right.node)
-            ])
-          );
-          right.replaceWith(uid);
-          return replaceWithArray(path);
+        if (optimize(path, path.get("right"))) {
+          return;
         }
 
         let callback = spec;
