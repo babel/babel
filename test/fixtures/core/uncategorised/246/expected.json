@@ -42,7 +42,6 @@
             "column": 26
           }
         },
-        "await": false,
         "left": {
           "type": "Identifier",
           "start": 4,

@@ -535,7 +535,9 @@ export default class StatementParser extends ExpressionParser {
     } else {
       this.next();
     }
-    node.await = !!forAwait;
+    if (type === "ForOfStatement") {
+      node.await = !!forAwait;
+    }
     node.left = init;
     node.right = this.parseExpression();
     this.expect(tt.parenR);

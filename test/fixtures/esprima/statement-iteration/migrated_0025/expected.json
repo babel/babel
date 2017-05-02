@@ -42,7 +42,6 @@
             "column": 24
           }
         },
-        "await": false,
         "left": {
           "type": "MemberExpression",
           "start": 5,
