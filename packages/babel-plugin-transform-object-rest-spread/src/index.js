@@ -80,7 +80,7 @@ export default function ({ types: t }) {
       // function a({ b, ...c }) {}
       Function(path) {
         const params = path.get("params");
-        for (let i = 0; i < params.length; i++) {
+        for (let i = params.length - 1; i >= 0; i--) {
           replaceRestElement(params[i].parentPath, params[i], i, params.length);
         }
       },
