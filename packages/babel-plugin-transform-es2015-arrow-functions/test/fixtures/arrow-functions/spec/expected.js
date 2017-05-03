@@ -5,7 +5,7 @@ function foo() {
     babelHelpers.newArrowCheck(this, _this);
     return x * x;
   }.bind(this));
-  var f = function (x, y) {
+  var f = function f(x, y) {
     babelHelpers.newArrowCheck(this, _this);
     return x * y;
   }.bind(this);
@@ -17,4 +17,10 @@ function foo() {
       return this;
     }.bind(this);
   })();
+  return {
+    g: function g() {
+      babelHelpers.newArrowCheck(this, _this);
+      return this;
+    }.bind(this)
+  };
 }
