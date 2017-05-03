@@ -1,4 +1,5 @@
 {
+  "presets": ["es2015"],
   "plugins": ["transform-async-to-generator"],
   "parserOpts": {
     "allowReturnOutsideFunction": true
