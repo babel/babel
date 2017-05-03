@@ -36,11 +36,13 @@ function preset(context, opts = {}) {
   let loose = false;
   let modules = "commonjs";
   let spec = false;
+  let throwIfClosureRequired = false;
 
   if (opts !== undefined) {
     if (opts.loose !== undefined) loose = opts.loose;
     if (opts.modules !== undefined) modules = opts.modules;
     if (opts.spec !== undefined) spec = opts.spec;
+    if (opts.throwIfClosureRequired !== undefined) throwIfClosureRequired = opts.throwIfClosureRequired;
   }
 
   if (typeof loose !== "boolean") throw new Error("Preset es2015 'loose' option must be a boolean.");
@@ -48,6 +50,9 @@ function preset(context, opts = {}) {
   if (modules !== false && moduleTypes.indexOf(modules) === -1) {
     throw new Error("Preset es2015 'modules' option must be 'false' to indicate no modules\n" +
       "or a module type which be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'");
+  }
+  if (typeof throwIfClosureRequired !== "boolean") {
+    throw new Error("Preset es2015 'throwIfClosureRequired' option must be a boolean.");
   }
 
   // be DRY
@@ -72,7 +77,7 @@ function preset(context, opts = {}) {
       [transformES2015Spread, optsLoose],
       transformES2015Parameters,
       [transformES2015Destructuring, optsLoose],
-      transformES2015BlockScoping,
+      [transformES2015BlockScoping, { throwIfClosureRequired }],
       transformES2015TypeofSymbol,
       modules === "commonjs" && [transformES2015ModulesCommonJS, optsLoose],
       modules === "systemjs" && [transformES2015ModulesSystemJS, optsLoose],

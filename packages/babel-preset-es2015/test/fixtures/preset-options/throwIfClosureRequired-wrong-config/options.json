@@ -1,0 +1,6 @@
+{
+  "presets": [
+    ["es2015", { "throwIfClosureRequired": "foo" }]
+  ],
+  "throws": "Preset es2015 'throwIfClosureRequired' option must be a boolean."
+}

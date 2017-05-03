@@ -55,3 +55,9 @@ Setting this to `false` will not transform modules.
 `boolean`, defaults to `false`.
 
 Enable "spec" transformations for any plugins in this preset that allow them.
+
+### `throwIfClosureRequired`
+
+`boolean`, defaults to `false`.
+
+Sets the `throwIfClosureRequired` option on the babel-plugin-transform-es2015-block-scoping plugin.
