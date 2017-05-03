@@ -135,3 +135,22 @@ require("babylon").parse("code", {
  - `functionSent`
  - `dynamicImport`
 
+### FAQ
+
+#### Will Babylon support a plugin system?
+
+Previous issues: [babel/babel#1351](https://github.com/babel/babel/issues/1351), [#500](https://github.com/babel/babylon/issues/500).
+
+We currently aren't willing to commit to supporting the API for plugins or the resulting ecosystem (there is already enough work maintaining Babel's own plugin system). It's not clear how to make that API effective, and it would limit out ability to refactor and optimize the codebase.
+
+Our current recommendation for those that want to create their own custom syntax is for users to fork Babylon.
+
+To consume your custom parser, you can add to your `.babelrc` via its npm package name or require it if using JavaScript,
+
+```json
+{
+  "parserOpts": {
+    "parser": "custom-fork-of-babylon-on-npm-here"
+  }
+}
+```
