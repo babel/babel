@@ -1,5 +1,3 @@
-"use strict";
-
 function mandatory(paramName) {
   throw new Error(`Missing parameter: ${paramName}`);
 }
