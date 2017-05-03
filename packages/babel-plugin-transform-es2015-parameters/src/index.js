@@ -15,8 +15,13 @@ export default function() {
           path.arrowFunctionToExpression();
         }
 
-        convertFunctionRest(path);
-        convertFunctionParams(path);
+        const convertedRest = convertFunctionRest(path);
+        const convertedParams = convertFunctionParams(path);
+
+        if (convertedRest || convertedParams) {
+          // Manually reprocess this scope to ensure that the moved params are updated.
+          path.scope.crawl();
+        }
       },
     },
   };

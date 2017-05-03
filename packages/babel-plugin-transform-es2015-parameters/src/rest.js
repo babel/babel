@@ -222,7 +222,7 @@ function optimiseLengthGetter(path, argsId, offset) {
 
 export default function convertFunctionRest(path) {
   const { node, scope } = path;
-  if (!hasRest(node)) return;
+  if (!hasRest(node)) return false;
 
   const rest = node.params.pop().argument;
 
@@ -273,7 +273,7 @@ export default function convertFunctionRest(path) {
           path.replaceWith(argsId);
       }
     }
-    return;
+    return true;
   }
 
   state.references = state.references.concat(
@@ -338,4 +338,6 @@ export default function convertFunctionRest(path) {
 
     target.insertBefore(loop);
   }
+
+  return true;
 }

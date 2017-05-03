@@ -5,11 +5,23 @@ export { default as Identifier } from "./inferer-reference";
 export function VariableDeclarator() {
   const id = this.get("id");
 
-  if (id.isIdentifier()) {
-    return this.get("init").getTypeAnnotation();
-  } else {
-    return;
+  if (!id.isIdentifier()) return;
+  const init = this.get("init");
+
+  let type = init.getTypeAnnotation();
+
+  if (type && type.type === "AnyTypeAnnotation") {
+    // Detect "var foo = Array()" calls so we can optimize for arrays vs iterables.
+    if (
+      init.isCallExpression() &&
+      init.get("callee").isIdentifier({ name: "Array" }) &&
+      !init.scope.hasBinding("Array", true /* noGlobals */)
+    ) {
+      type = ArrayExpression();
+    }
   }
+
+  return type;
 }
 
 export function TypeCastExpression(node) {
