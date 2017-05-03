@@ -94,7 +94,7 @@ export default function convertFunctionParams(path) {
     }
   }
 
-  if (body.length === 0) return;
+  if (body.length === 0) return false;
 
   // we need to cut off all trailing parameters
   if (firstOptionalIndex !== null) {
@@ -110,4 +110,6 @@ export default function convertFunctionParams(path) {
   } else {
     path.get("body").unshiftContainer("body", body);
   }
+
+  return true;
 }
