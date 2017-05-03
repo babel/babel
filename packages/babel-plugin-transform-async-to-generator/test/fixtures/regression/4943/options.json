@@ -1,7 +1,8 @@
 {
   "plugins": [
     "transform-async-to-generator",
-    "transform-es2015-destructuring"
+    "transform-es2015-destructuring",
+    "transform-es2015-parameters"
   ],
   "parserOpts": {
     "allowReturnOutsideFunction": true
