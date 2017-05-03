@@ -195,8 +195,8 @@ describe("converters", function () {
     it("gathers var declarations", function () {
       const node = parseCode("var a, b = 1;");
       const sequence = t.toSequenceExpression([undefinedNode, node], scope);
-      t.assertIdentifier(scope[0].id, {name: "a"})
-      t.assertIdentifier(scope[1].id, {name: "b"})
+      t.assertIdentifier(scope[0].id, { name: "a" });
+      t.assertIdentifier(scope[1].id, { name: "b" });
       assert.equal(generateCode(sequence.expressions[1]), "b = 1");
       assert.equal(generateCode(sequence.expressions[2]), "undefined");
     });
@@ -242,13 +242,13 @@ describe("converters", function () {
       assert.equal(generateCode(sequence.expressions[1]), "a, b");
     });
     it("bails in block statements if recurse bails", function () {
-      let node = parseCode("{ return }");
-      let sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      const node = parseCode("{ return }");
+      const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       assert.isUndefined(sequence);
     });
     it("gathers empty statements", function () {
-      let node = parseCode(";");
-      let sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      const node = parseCode(";");
+      const sequence = t.toSequenceExpression([undefinedNode, node], scope);
       assert.equal(generateCode(sequence.expressions[1]), "undefined");
     });
     it("skips empty statement if expression afterwards", function () {
