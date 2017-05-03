@@ -408,6 +408,10 @@ function getScopeInformation(fnPath) {
     },
     JSXIdentifier(child) {
       if (child.node.name !== "this") return;
+      if (
+        !child.parentPath.isJSXMemberExpression({ object: child.node }) &&
+        !child.parentPath.isJSXOpeningElement({ name: child.node })
+      ) return;
 
       thisPaths.push(child);
     },

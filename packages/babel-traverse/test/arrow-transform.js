@@ -40,7 +40,7 @@ function wrapMethod(body, methodName, extend) {
     class Example ${extend ? ("extends class {}") : ""} {
       ${methodName}() {${body} }
     }
-  `);
+  `, { plugins: ["jsx"] });
 }
 
 describe("arrow function conversion", () => {
@@ -167,6 +167,24 @@ describe("arrow function conversion", () => {
       this;
       () => this;
     `, { arrowOpts: { specCompliant: true } });
+  });
+
+  it("should convert this references inside JSX in methods", () => {
+    assertConversion(`
+      () => {
+        <this.this this="" />;
+      };
+      <this.this this="" />;
+      () => <this.this this="" />;
+    `, `
+      var _this = this;
+
+      (function () {
+        <_this.this this="" />;
+      });
+      <this.this this="" />;
+      () => <this.this this="" />;
+    `);
   });
 
   it("should convert arguments references", () => {

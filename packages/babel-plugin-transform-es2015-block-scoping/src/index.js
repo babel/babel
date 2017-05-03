@@ -420,8 +420,6 @@ class BlockScoping {
     // continuation
     this.addContinuations(fn);
 
-    const has = this.has;
-
     let call = t.callExpression(t.nullLiteral(), args);
     let basePath = ".callee";
 
@@ -443,7 +441,7 @@ class BlockScoping {
 
     let placeholderPath;
     let index;
-    if (has.hasReturn || has.hasBreakContinue) {
+    if (this.has.hasReturn || this.has.hasBreakContinue) {
       const ret = this.scope.generateUidIdentifier("ret");
 
       this.body.push(t.variableDeclaration("var", [
