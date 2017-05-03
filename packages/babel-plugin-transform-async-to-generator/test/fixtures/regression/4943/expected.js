@@ -1,3 +1,5 @@
+"use strict";
+
 let foo = (() => {
   var _ref = _asyncToGenerator(function* ({ a, b = mandatory("b") }) {
     return Promise.resolve(b);
