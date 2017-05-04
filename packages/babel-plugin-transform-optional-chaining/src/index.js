@@ -37,27 +37,37 @@ export default function ({ types: t }) {
           path.scope.push({ id });
         }
 
-        let remplacement;
+        if (t.isAssignmentExpression(path.parent)) {
 
-        if (t.isCallExpression(path.parent)) {
+          const remplacement = createCondition(
+            t.identifier("temp_here_please"),
+            object,
+            property,
+            t.identifier("undefined"),
+          );
 
-          remplacement = createCondition(
+          path.parentPath.replaceWith(remplacement);
+        } else if (t.isCallExpression(path.parent)) {
+
+          const remplacement = createCondition(
             state.optionalTemp,
             object,
             property,
-            t.callExpression(t.identifier("Function"), [])
+            t.callExpression(t.identifier("Function"), []),
           );
+
+          path.replaceWith(remplacement);
         } else {
 
-          remplacement = createCondition(
+          const remplacement = createCondition(
             state.optionalTemp,
             object,
             property,
-            t.identifier("undefined")
+            t.identifier("undefined"),
           );
-        }
 
-        path.replaceWith(remplacement);
+          path.replaceWith(remplacement);
+        }
       },
     },
   };
