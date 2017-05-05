@@ -246,7 +246,13 @@ export default class File extends Store {
       name,
     ));
 
-    const { nodes } = getHelper(name, uid, ownBindingNames);
+    const { nodes, globals } = getHelper(name, uid, ownBindingNames);
+
+    globals.forEach(name => {
+      if (this.path.scope.hasBinding(name, true /* noGlobals */)) {
+        this.path.scope.rename(name);
+      }
+    });
 
     nodes.forEach(node => {
       node._compact = true;

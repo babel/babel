@@ -18,6 +18,7 @@ function makePath(path) {
  * the helper is whatever context it is needed in.
  */
 function getHelperMetadata(file) {
+  const globals = new Set();
   const localBindingNames = new Set();
 
   let exportName;
@@ -65,6 +66,12 @@ function getHelperMetadata(file) {
         localBindingNames.add(name);
       });
     },
+    ReferencedIdentifier(child) {
+      const name = child.node.name;
+      const binding = child.scope.getBinding(name);
+
+      if (!binding) globals.add(name);
+    },
     AssignmentExpression(child) {
       const left = child.get("left");
 
@@ -91,6 +98,7 @@ function getHelperMetadata(file) {
   exportBindingAssignments.reverse();
 
   return {
+    globals: Array.from(globals),
     localBindingNames: Array.from(localBindingNames),
     exportBindingAssignments,
     exportPath,
@@ -187,6 +195,7 @@ function loadHelper(name) {
 
       return {
         nodes: file.program.body,
+        globals: metadata.globals,
       };
     };
   }
