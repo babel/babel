@@ -104,12 +104,7 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
 }
 
 function buildHelper(helperName, modules, useBuiltIns) {
-  const helper = helpers.get(helperName);
-  // avoid an unneccessary TDZ in the easy case
-  if (helper.type === "FunctionExpression") {
-    helper.type = "FunctionDeclaration";
-  }
-  const tree = t.program([t.exportDefaultDeclaration(helper)]);
+  const tree = t.program(helpers.get(helperName).nodes);
 
   const transformOpts = makeTransformOpts(modules, useBuiltIns);
 

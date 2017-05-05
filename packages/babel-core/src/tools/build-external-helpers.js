@@ -29,7 +29,18 @@ function buildGlobal(namespace, builder) {
   );
   const tree = t.program([
     t.expressionStatement(
-      t.callExpression(container, [helpers.get("selfGlobal")]),
+      t.callExpression(container, [
+        // typeof global === "undefined" ? self : global
+        t.conditionalExpression(
+          t.binaryExpression(
+            "===",
+            t.unaryExpression("typeof", t.identifier("global")),
+            t.stringLiteral("undefined"),
+          ),
+          t.identifier("self"),
+          t.identifier("global"),
+        ),
+      ]),
     ),
   ]);
 
@@ -131,16 +142,12 @@ function buildHelpers(body, namespace, whitelist) {
   helpers.list.forEach(function(name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
 
-    const key = t.identifier(name);
-    body.push(
-      t.expressionStatement(
-        t.assignmentExpression(
-          "=",
-          t.memberExpression(namespace, key),
-          helpers.get(name),
-        ),
-      ),
+    const { nodes } = helpers.get(
+      name,
+      t.memberExpression(namespace, t.identifier(name)),
     );
+
+    body.push(...nodes);
   });
 }
 export default function(
