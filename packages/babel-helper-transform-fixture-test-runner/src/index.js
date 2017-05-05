@@ -20,6 +20,8 @@ const testContext = vm.createContext({
   ...helpers,
   assert: chai.assert,
   transform: babel.transform,
+  setTimeout: setTimeout,
+  setImmediate: setImmediate,
 });
 testContext.global = testContext;
 
