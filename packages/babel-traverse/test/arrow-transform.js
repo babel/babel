@@ -109,7 +109,7 @@ describe("arrow function conversion", () => {
     `, { methodName: "constructor", extend: true });
   });
 
-  it("should convert this references in constructors without extension", () => {
+  it("should convert this references in constructors with spec compliance", () => {
     assertConversion(`
       () => {
         this;
@@ -119,16 +119,57 @@ describe("arrow function conversion", () => {
       () => super();
       () => this;
     `, `
+      var _this,
+          _arrowCheckId = {};
+
+      (function () {
+        babelHelpers.newArrowCheck(this, _arrowCheckId);
+
+        _this;
+      }).bind(_arrowCheckId);
+      _this = super();
+      this;
+      () => _this = super();
+      () => this;
+    `, { methodName: "constructor", extend: true, arrowOpts: { specCompliant: true } });
+  });
+
+  it("should convert this references in constructors without extension", () => {
+    assertConversion(`
+      () => {
+        this;
+      };
+      this;
+      () => this;
+    `, `
       var _this = this;
 
       (function () {
         _this;
       });
-      super();
       this;
-      () => super();
       () => this;
     `, { methodName: "constructor" });
+  });
+
+  it("should convert this references in constructors with spec compliance without extension", () => {
+    assertConversion(`
+      () => {
+        this;
+      };
+      this;
+      () => this;
+    `, `
+      var _this = this;
+
+      (function () {
+        babelHelpers.newArrowCheck(this, _this);
+
+        this;
+      }).bind(this);
+      this;
+      () => this;
+    `, { methodName: "constructor", arrowOpts: { specCompliant: true } });
   });
 
   it("should convert this references in methods", () => {
@@ -162,7 +203,7 @@ describe("arrow function conversion", () => {
       (function () {
         babelHelpers.newArrowCheck(this, _this);
 
-        _this;
+        this;
       }).bind(this);
       this;
       () => this;

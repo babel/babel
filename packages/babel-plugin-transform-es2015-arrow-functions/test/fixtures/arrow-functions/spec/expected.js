@@ -14,13 +14,13 @@ function foo() {
 
     return function () {
       babelHelpers.newArrowCheck(this, _this2);
-      return _this2;
+      return this;
     }.bind(this);
   })();
   return {
     g: function g() {
       babelHelpers.newArrowCheck(this, _this);
-      return _this;
+      return this;
     }.bind(this)
   };
 }

@@ -60,25 +60,26 @@ export function arrowFunctionToExpression({
     throw this.buildCodeFrameError("Cannot convert non-arrow function to a function expression.");
   }
 
-  const thisBinding = hoistFunctionEnvironment(this, !!specCompliant, allowInsertArrow);
+  const thisBinding = hoistFunctionEnvironment(this, specCompliant, allowInsertArrow);
 
   this.ensureBlock();
   this.node.type = "FunctionExpression";
-
   if (specCompliant) {
-    // TODO: This approach is broken inside class constructor functions, but is fixable.
+    const checkBinding = thisBinding ? null : this.parentPath.scope.generateUidIdentifier("arrowCheckId");
+    if (checkBinding) this.parentPath.scope.push({ id: checkBinding, init: t.objectExpression([]) });
+
     this.get("body").unshiftContainer(
       "body",
       t.expressionStatement(t.callExpression(this.hub.file.addHelper("newArrowCheck"), [
         t.thisExpression(),
-        t.identifier(thisBinding),
+        checkBinding ? t.identifier(checkBinding.name) : t.identifier(thisBinding),
       ]))
     );
 
     this.replaceWith(
       t.callExpression(
         t.memberExpression(nameFunction(this) || this.node, t.identifier("bind")),
-        [t.thisExpression()]
+        [checkBinding ? t.identifier(checkBinding.name) : t.thisExpression()]
       )
     );
   }
@@ -88,7 +89,7 @@ export function arrowFunctionToExpression({
  * Given a function, traverse its contents, and if there are references to "this", "arguments", "super",
  * or "new.target", ensure that these references reference the parent environment around this function.
  */
-function hoistFunctionEnvironment(fnPath, forceThisBinding = false, allowInsertArrow = true) {
+function hoistFunctionEnvironment(fnPath, specCompliant = false, allowInsertArrow = true) {
   const thisEnvFn = fnPath.findParent(
     (p) => (p.isFunction() && !p.isArrowFunctionExpression()) || p.isProgram() || p.isClassProperty());
   const inConstructor = thisEnvFn && thisEnvFn.node.kind === "constructor";
@@ -131,12 +132,22 @@ function hoistFunctionEnvironment(fnPath, forceThisBinding = false, allowInsertA
 
   // Convert all "this" references in the arrow to point at the alias.
   let thisBinding;
-  if (thisPaths.length > 0 || forceThisBinding) {
+  if (thisPaths.length > 0 || specCompliant) {
     thisBinding = getThisBinding(thisEnvFn, inConstructor);
 
-    thisPaths.forEach((thisChild) => {
-      thisChild.replaceWith(thisChild.isJSX() ? t.jSXIdentifier(thisBinding) : t.identifier(thisBinding));
-    });
+    if (
+      !specCompliant ||
+
+      // In subclass constructors, still need to rewrite because "this" can't be bound in spec mode
+      // because it might not have been initialized yet.
+      (inConstructor && hasSuperClass(thisEnvFn))
+    ) {
+      thisPaths.forEach((thisChild) => {
+        thisChild.replaceWith(thisChild.isJSX() ? t.jSXIdentifier(thisBinding) : t.identifier(thisBinding));
+      });
+
+      if (specCompliant) thisBinding = null;
+    }
   }
 
   // Convert all "arguments" references in the arrow to point at the alias.
@@ -284,11 +295,14 @@ function standardizeSuperProperty(superProp) {
   return [ superProp ];
 }
 
+function hasSuperClass(thisEnvFn) {
+  return thisEnvFn.isClassMethod() && !!thisEnvFn.parentPath.parentPath.node.superClass;
+}
+
 // Create a binding that evaluates to the "this" of the given function.
 function getThisBinding(thisEnvFn, inConstructor) {
   return getBinding(thisEnvFn, "this", (thisBinding) => {
-    const hasSuperClass = thisEnvFn.isClassMethod() && !!thisEnvFn.parentPath.parentPath.node.superClass;
-    if (!inConstructor || !hasSuperClass) return t.thisExpression();
+    if (!inConstructor || !hasSuperClass(thisEnvFn)) return t.thisExpression();
 
     const supers = new WeakSet();
     thisEnvFn.traverse({
