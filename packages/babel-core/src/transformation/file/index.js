@@ -241,24 +241,18 @@ export default class File extends Store {
       return t.memberExpression(runtime, t.identifier(name));
     }
 
-    const ref = getHelper(name);
+    const ownBindingNames = Object.keys(this.scope.getAllBindings());
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
       name,
     ));
 
-    if (t.isFunctionExpression(ref) && !ref.id) {
-      ref.body._compact = true;
-      ref.id = uid;
-      ref.type = "FunctionDeclaration";
-      this.path.unshiftContainer("body", ref);
-    } else {
-      ref._compact = true;
-      this.scope.push({
-        id: uid,
-        init: ref,
-        unique: true,
-      });
-    }
+    const { nodes } = getHelper(name, uid, ownBindingNames);
+
+    nodes.forEach(node => {
+      node._compact = true;
+    });
+
+    this.path.unshiftContainer("body", nodes);
 
     return uid;
   }

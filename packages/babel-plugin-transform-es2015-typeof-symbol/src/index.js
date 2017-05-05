@@ -31,7 +31,10 @@ export default function({ types: t }) {
 
         const helper = this.addHelper("typeof");
         const isUnderHelper = path.findParent(path => {
-          return path.isVariableDeclarator() && path.node.id === helper;
+          return (
+            (path.isVariableDeclarator() && path.node.id === helper) ||
+            (path.isFunctionDeclaration() && path.node.id.name === helper.name)
+          );
         });
 
         if (isUnderHelper) {
