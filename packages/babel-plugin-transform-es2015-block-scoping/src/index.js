@@ -416,29 +416,19 @@ class BlockScoping {
     // build the closure that we're going to wrap the block with, possible wrapping switch(){}
     const fn = t.functionExpression(null, params,
       t.blockStatement(isSwitch ? [block] : block.body));
-    fn.shadow = true;
 
     // continuation
     this.addContinuations(fn);
 
-    let ref = fn;
-
-    if (this.loop) {
-      ref = this.scope.generateUidIdentifier("loop");
-      this.loopPath.insertBefore(t.variableDeclaration("var", [
-        t.variableDeclarator(ref, fn),
-      ]));
-    }
-
-    // build a call and a unique id that we can assign the return value to
-    let call = t.callExpression(ref, args);
-    const ret = this.scope.generateUidIdentifier("ret");
+    let call = t.callExpression(t.nullLiteral(), args);
+    let basePath = ".callee";
 
     // handle generators
     const hasYield = traverse.hasType(fn.body, this.scope, "YieldExpression", t.FUNCTION_TYPES);
     if (hasYield) {
       fn.generator = true;
       call = t.yieldExpression(call, true);
+      basePath = ".argument" + basePath;
     }
 
     // handlers async functions
@@ -446,26 +436,57 @@ class BlockScoping {
     if (hasAsync) {
       fn.async = true;
       call = t.awaitExpression(call);
+      basePath = ".argument" + basePath;
     }
 
-    this.buildClosure(ret, call);
+    let placeholderPath;
+    let index;
+    if (this.has.hasReturn || this.has.hasBreakContinue) {
+      const ret = this.scope.generateUidIdentifier("ret");
 
-    // replace the current block body with the one we're going to build
-    if (isSwitch) this.blockPath.replaceWithMultiple(this.body);
-    else block.body = this.body;
-  }
+      this.body.push(t.variableDeclaration("var", [
+        t.variableDeclarator(ret, call),
+      ]));
+      placeholderPath = "declarations.0.init" + basePath;
+      index = this.body.length - 1;
 
-  /**
-   * Push the closure to the body.
-   */
-
-  buildClosure(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {
-    const has = this.has;
-    if (has.hasReturn || has.hasBreakContinue) {
-      this.buildHas(ret, call);
+      this.buildHas(ret);
     } else {
       this.body.push(t.expressionStatement(call));
+      placeholderPath = "expression" + basePath;
+      index = this.body.length - 1;
     }
+
+    let callPath;
+    // replace the current block body with the one we're going to build
+    if (isSwitch) {
+      const { parentPath, listKey, key } = this.blockPath;
+
+      this.blockPath.replaceWithMultiple(this.body);
+      callPath = parentPath.get(listKey)[key + index];
+    } else {
+      block.body = this.body;
+      callPath = this.blockPath.get("body")[index];
+    }
+
+    const placeholder = callPath.get(placeholderPath);
+
+    let fnPath;
+    if (this.loop) {
+      const ref = this.scope.generateUidIdentifier("loop");
+      const p = this.loopPath.insertBefore(t.variableDeclaration("var", [
+        t.variableDeclarator(ref, fn),
+      ]));
+
+      placeholder.replaceWith(ref);
+      fnPath = p[0].get("declarations.0.init");
+    } else {
+      placeholder.replaceWith(fn);
+      fnPath = placeholder;
+    }
+
+    // Ensure "this", "arguments", and "super" continue to work in the wrapped function.
+    fnPath.unwrapFunctionEnvironment();
   }
 
   /**
@@ -643,12 +664,8 @@ class BlockScoping {
     return replace;
   }
 
-  buildHas(ret: { type: "Identifier" }, call: { type: "CallExpression" }) {
+  buildHas(ret: { type: "Identifier" }) {
     const body = this.body;
-
-    body.push(t.variableDeclaration("var", [
-      t.variableDeclarator(ret, call),
-    ]));
 
     let retCheck;
     const has = this.has;

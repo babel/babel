@@ -60,7 +60,6 @@ export const visitor = {
 
     //
     const argsIdentifier = t.identifier("arguments");
-    argsIdentifier._shadowedFunctionLiteral = path;
 
     // push a default parameter definition
     function pushDefNode(left, right, i) {

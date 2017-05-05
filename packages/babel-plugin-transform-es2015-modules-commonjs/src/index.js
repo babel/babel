@@ -139,8 +139,7 @@ export default function () {
 
         if (
           state.opts.allowTopLevelThis !== true &&
-          !path.findParent((path) => !path.is("shadow") &&
-          THIS_BREAK_KEYS.indexOf(path.type) >= 0)
+          !path.findParent((path) => THIS_BREAK_KEYS.indexOf(path.type) >= 0)
         ) {
           path.replaceWith(t.identifier("undefined"));
         }

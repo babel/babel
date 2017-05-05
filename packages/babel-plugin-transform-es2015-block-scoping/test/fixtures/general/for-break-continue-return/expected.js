@@ -1,5 +1,5 @@
 (function () {
-  var _loop = function (i) {
+  var _loop2 = function (i) {
     fns.push(function () {
       return i;
     });
@@ -14,15 +14,15 @@
     }
   };
 
-  _loop2: for (var i in nums) {
-    var _ret = _loop(i);
+  _loop: for (var i in nums) {
+    var _ret = _loop2(i);
 
     switch (_ret) {
       case "continue":
         continue;
 
       case "break":
-        break _loop2;
+        break _loop;
 
       default:
         if (typeof _ret === "object") return _ret.v;

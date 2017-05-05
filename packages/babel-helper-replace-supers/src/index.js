@@ -46,15 +46,11 @@ function getPrototypeOfExpression(objectRef, isStatic) {
 
 const visitor = {
   Function(path) {
-    if (!path.inShadow("this")) {
-      path.skip();
-    }
+    if (!path.isArrowFunctionExpression()) path.skip();
   },
 
   ReturnStatement(path, state) {
-    if (!path.inShadow("this")) {
-      state.returns.push(path);
-    }
+    state.returns.push(path);
   },
 
   ThisExpression(path, state) {

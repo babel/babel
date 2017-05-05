@@ -2,9 +2,7 @@ let g = (() => {
   var _ref = babelHelpers.asyncGenerator.wrap(function* () {
     var _this = this;
 
-    (function () {
-      return _this;
-    });
+    () => this;
     function f() {
       () => this;
     }

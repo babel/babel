@@ -8,9 +8,6 @@
   "keywords": [
     "babel-plugin"
   ],
-  "dependencies": {
-    "babel-helper-function-name": "7.0.0-alpha.7"
-  },
   "devDependencies": {
     "babel-helper-plugin-test-runner": "7.0.0-alpha.9",
     "babel-traverse": "7.0.0-alpha.9",
