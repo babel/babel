@@ -21,3 +21,11 @@ export function runtimeProperty(name) {
 export function isReference(path) {
   return path.isReferenced() || path.parentPath.isAssignmentExpression({ left: path.node });
 }
+
+export function replaceWithOrRemove(path, replacement) {
+  if (replacement) {
+    path.replaceWith(replacement)
+  } else {
+    path.remove();
+  }
+}

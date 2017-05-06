@@ -150,7 +150,7 @@ exports.visitor = {
       }
 
       if (wasGeneratorFunction && t.isExpression(node)) {
-        path.replaceWith(t.callExpression(util.runtimeProperty("mark"), [node]));
+        util.replaceWithOrRemove(path, t.callExpression(util.runtimeProperty("mark"), [node]))
       }
 
       // Generators are processed in 'exit' handlers so that regenerator only has to run on
@@ -253,7 +253,7 @@ let argumentsVisitor = {
 
   Identifier: function(path, state) {
     if (path.node.name === "arguments" && util.isReference(path)) {
-      path.replaceWith(state.argsId);
+      util.replaceWithOrRemove(path, state.argsId);
       state.didRenameArguments = true;
     }
   }
@@ -264,7 +264,7 @@ let functionSentVisitor = {
     let { node } = path;
 
     if (node.meta.name === "function" && node.property.name === "sent") {
-      path.replaceWith(t.memberExpression(this.context, t.identifier("_sent")));
+      util.replaceWithOrRemove(path, t.memberExpression(this.context, t.identifier("_sent")));
     }
   }
 };
@@ -281,7 +281,7 @@ let awaitVisitor = {
     // Transforming `await x` to `yield regeneratorRuntime.awrap(x)`
     // causes the argument to be wrapped in such a way that the runtime
     // can distinguish between awaited and merely yielded values.
-    path.replaceWith(t.yieldExpression(
+    util.replaceWithOrRemove(path, t.yieldExpression(
       t.callExpression(
         util.runtimeProperty("awrap"),
         [argument]
