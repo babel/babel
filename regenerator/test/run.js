@@ -233,4 +233,28 @@ enqueue("./bin/regenerator", [
   "./test/nothing-to-transform.js"
 ], true);
 
+// Make sure we run the command-line tool on a file that would trigger this error:
+//
+//     You passed `path.replaceWith()` a falsy node, use `path.remove()` instead
+
+enqueue("./bin/regenerator", [
+  "./test/replaceWith-falsy.js"
+], true);
+
+enqueue("./bin/regenerator", [
+  "--include-runtime",
+  "./test/replaceWith-falsy.js"
+], true);
+
+enqueue("./bin/regenerator", [
+  "--disable-async",
+  "./test/replaceWith-falsy.js"
+], true);
+
+enqueue("./bin/regenerator", [
+  "--include-runtime",
+  "--disable-async",
+  "./test/replaceWith-falsy.js"
+], true);
+
 flush();
