@@ -21,21 +21,19 @@ export function insertBefore(nodes) {
     (this.parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) nodes.push(this.node);
-    this.replaceExpressionWithStatements(nodes);
+    return this.replaceExpressionWithStatements(nodes);
   } else {
     this._maybePopFromStatements(nodes);
     if (Array.isArray(this.container)) {
       return this._containerInsertBefore(nodes);
     } else if (this.isStatementOrBlock()) {
       if (this.node) nodes.push(this.node);
-      this._replaceWith(t.blockStatement(nodes));
+      return this._replaceWith(t.blockStatement(nodes));
     } else {
       throw new Error("We don't know what to do with this node type. " +
         "We were previously a Statement but we can't fit in here?");
     }
   }
-
-  return [this];
 }
 
 export function _containerInsert(from, nodes) {
@@ -120,21 +118,19 @@ export function insertAfter(nodes) {
       nodes.unshift(t.expressionStatement(t.assignmentExpression("=", temp, this.node)));
       nodes.push(t.expressionStatement(temp));
     }
-    this.replaceExpressionWithStatements(nodes);
+    return this.replaceExpressionWithStatements(nodes);
   } else {
     this._maybePopFromStatements(nodes);
     if (Array.isArray(this.container)) {
       return this._containerInsertAfter(nodes);
     } else if (this.isStatementOrBlock()) {
       if (this.node) nodes.unshift(this.node);
-      this._replaceWith(t.blockStatement(nodes));
+      return this._replaceWith(t.blockStatement(nodes));
     } else {
       throw new Error("We don't know what to do with this node type. " +
         "We were previously a Statement but we can't fit in here?");
     }
   }
-
-  return [this];
 }
 
 /**

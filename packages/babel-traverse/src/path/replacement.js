@@ -48,13 +48,14 @@ export function replaceWithMultiple(nodes: Array<Object>) {
   t.inheritLeadingComments(nodes[0], this.node);
   t.inheritTrailingComments(nodes[nodes.length - 1], this.node);
   this.node = this.container[this.key] = null;
-  this.insertAfter(nodes);
+  const paths = this.insertAfter(nodes);
 
   if (this.node) {
     this.requeue();
   } else {
     this.remove();
   }
+  return paths;
 }
 
 /**
@@ -158,6 +159,8 @@ export function replaceWith(replacement) {
 
   // requeue for visiting
   this.requeue();
+
+  return [this];
 }
 
 /**
@@ -200,12 +203,12 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
     // could be just one element due to the previous maybe popping
     if (exprs.length === 1) {
-      this.replaceWith(exprs[0]);
+      return this.replaceWith(exprs[0]);
     } else {
-      this.replaceWith(toSequenceExpression);
+      return this.replaceWith(toSequenceExpression);
     }
   } else if (toSequenceExpression) {
-    this.replaceWith(toSequenceExpression);
+    return this.replaceWith(toSequenceExpression);
   } else {
     const container = t.arrowFunctionExpression([], t.blockStatement(nodes));
 
@@ -240,7 +243,7 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
     this.get("callee").arrowFunctionToExpression();
 
-    return this.node;
+    return [this];
   }
 }
 
@@ -250,8 +253,9 @@ export function replaceInline(nodes: Object | Array<Object>) {
   if (Array.isArray(nodes)) {
     if (Array.isArray(this.container)) {
       nodes = this._verifyNodeList(nodes);
-      this._containerInsertAfter(nodes);
-      return this.remove();
+      const paths = this._containerInsertAfter(nodes);
+      this.remove();
+      return paths;
     } else {
       return this.replaceWithMultiple(nodes);
     }

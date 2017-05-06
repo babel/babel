@@ -95,9 +95,11 @@ export default function ({ messages, template, types: t }) {
       ForOfStatement(path, state) {
         if (path.get("right").isArrayExpression()) {
           if (path.parentPath.isLabeledStatement()) {
-            return path.parentPath.replaceWithMultiple(_ForOfStatementArray(path));
+            path.parentPath.replaceWithMultiple(_ForOfStatementArray(path));
+            return;
           } else {
-            return path.replaceWithMultiple(_ForOfStatementArray(path));
+            path.replaceWithMultiple(_ForOfStatementArray(path));
+            return;
           }
         }
 
