@@ -42,7 +42,10 @@ export default function({ types: t }) {
         if (node[VISITED]) return;
 
         const inferred = nameFunction(path);
-        if (inferred && inferred !== node) return path.replaceWith(inferred);
+        if (inferred && inferred !== node) {
+          path.replaceWith(inferred);
+          return;
+        }
 
         node[VISITED] = true;
 
