@@ -245,7 +245,7 @@ export function isImmutable(node: Object): boolean {
  */
 
 export function isNodesEquivalent(a, b) {
-  if (typeof a !== "object" || typeof a !== "object" || a == null || b == null) {
+  if (typeof a !== "object" || typeof b !== "object" || a == null || b == null) {
     return a === b;
   }
 
