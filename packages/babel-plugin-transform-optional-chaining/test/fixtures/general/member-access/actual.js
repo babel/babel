@@ -1,1 +1,3 @@
 foo?.bar
+
+a?.b.c?.d.e
