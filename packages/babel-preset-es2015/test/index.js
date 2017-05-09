@@ -51,7 +51,7 @@ describe("es2015 preset", function () {
         }).not.to.throw();
       });
 
-      it("throws when passing neither true nor one of: 'commonjs', 'amd', 'umd', 'systemjs'", function () {
+      it("throws when passing neither false nor one of: 'commonjs', 'amd', 'umd', 'systemjs'", function () {
         expect(function () {
           es2015(null, { modules: 1 });
         }).to.throw();
