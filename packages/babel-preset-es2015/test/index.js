@@ -18,6 +18,14 @@ describe("es2015 preset", function () {
       });
     });
 
+    describe("spec", function () {
+      it("throws on non-boolean value", function () {
+        expect(function () {
+          es2015(null, { spec: 1 });
+        }).to.throw(/must be a boolean/);
+      });
+    });
+
     describe("modules", function () {
       it("doesn't throw when passing one false", function () {
         expect(function () {
@@ -41,6 +49,12 @@ describe("es2015 preset", function () {
         expect(function () {
           es2015(null, { modules: "systemjs" });
         }).not.to.throw();
+      });
+
+      it("throws when passing neither true nor one of: 'commonjs', 'amd', 'umd', 'systemjs'", function () {
+        expect(function () {
+          es2015(null, { modules: 1 });
+        }).to.throw();
       });
     });
   });
