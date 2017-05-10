@@ -102,6 +102,7 @@ ruleTester.run("semi", rule, {
         // babel
         "class Foo { bar = 'example'; }",
         "class Foo { static bar = 'example'; }",
+        { code: "async function foo() { for await (let thing of {}) { console.log(thing); } }", parserOptions: { ecmaVersion: 6 } },
 
         // babel, "never"
         { code: "class Foo { bar = 'example' }", options: ["never"] },

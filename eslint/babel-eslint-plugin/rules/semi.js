@@ -187,7 +187,7 @@ module.exports = {
                 parent = ancestors[parentIndex];
 
             if ((parent.type !== "ForStatement" || parent.init !== node) &&
-                (!/^For(?:In|Of)Statement/.test(parent.type) || parent.left !== node)
+                (!/^For(?:In|Of|Await)Statement/.test(parent.type) || parent.left !== node)
             ) {
                 checkForSemicolon(node);
             }
