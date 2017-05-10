@@ -48,6 +48,7 @@ export default class State {
     this.start = this.end = this.pos;
     this.startLoc = this.endLoc = this.curPosition();
 
+    // $FlowIgnore
     this.lastTokEndLoc = this.lastTokStartLoc = null;
     this.lastTokStart = this.lastTokEnd = this.pos;
 
@@ -60,8 +61,6 @@ export default class State {
     this.invalidTemplateEscapePosition = null;
 
     this.exportedIdentifiers = [];
-
-    return this;
   }
 
   // TODO
