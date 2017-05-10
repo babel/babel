@@ -13,7 +13,7 @@ try {
   execSync("npm pack");
 
   console.log("Setting up smoke test");
-  fs.ensureDir(tempFolderPath);
+  fs.ensureDirSync(tempFolderPath);
 
   fs.writeFileSync(
     path.join(tempFolderPath, "package.json"),
