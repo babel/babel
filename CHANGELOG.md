@@ -15,6 +15,16 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
+## 6.17.1 (2017-05-10)
+
+ * Fix typo in flow spread operator error (Brian Ng)
+ * Fixed invalid number literal parsing ([#473](https://github.com/babel/babylon/pull/473)) (Alex Kuzmenko)
+ * Fix number parser ([#433](https://github.com/babel/babylon/pull/433)) (Alex Kuzmenko)
+ * Ensure non pattern shorthand props are checked for reserved words ([#479](https://github.com/babel/babylon/pull/479)) (Brian Ng)
+ * Remove jsx context when parsing arrow functions ([#475](https://github.com/babel/babylon/pull/475)) (Brian Ng)
+ * Allow super in class properties ([#499](https://github.com/babel/babylon/pull/499)) (Brian Ng)
+ * Allow flow class field to be named constructor ([#510](https://github.com/babel/babylon/pull/510)) (Brian Ng)
+
 ## 6.17.0 (2017-04-20)
 
  * Cherry-pick #418 to 6.x ([#476](https://github.com/babel/babylon/pull/476)) (Sebastian McKenzie)
