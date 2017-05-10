@@ -266,10 +266,13 @@ export type ForOfStatement = ForInOfBase & {
 
 // Declarations
 
-export type FunctionDeclaration = FunctionBase & DeclarationBase & HasDecorators & {
+export type OptFunctionDeclaration = FunctionBase & DeclarationBase & HasDecorators & {
   type: "FunctionDeclaration";
-  id: Identifier;
 };
+
+export type FunctionDeclaration = OptFunctionDeclaration & {
+  id: Identifier;
+}
 
 export type VariableDeclaration = DeclarationBase & HasDecorators & {
   type: "VariableDeclaration";
@@ -581,11 +584,14 @@ export type ClassProperty = ClassMemberBase & {
   readonly?: true;
 };
 
-export type ClassDeclaration = ClassBase & DeclarationBase & HasDecorators & {
+export type OptClassDeclaration = ClassBase & DeclarationBase & HasDecorators & {
   type: "ClassDeclaration";
-  id: Identifier;
   // TypeScript only
   abstract?: ?true;
+};
+
+export type ClassDeclaration = OptClassDeclaration & {
+  id: Identifier;
 };
 
 export type ClassExpression = ClassBase & { type: "ClassExpression" };
@@ -653,7 +659,7 @@ export type ExportSpecifier = NodeBase & {
 
 export type ExportDefaultDeclaration = NodeBase & {
   type: "ExportDefaultDeclaration";
-  declaration: Declaration | Expression;
+  declaration: OptFunctionDeclaration | OptClassDeclaration | Expression;
 };
 
 export type ExportAllDeclaration = NodeBase & {
