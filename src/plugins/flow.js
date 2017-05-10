@@ -1139,6 +1139,12 @@ export default function (instance) {
     };
   });
 
+  instance.extend("isNonstaticConstructor", function(inner) {
+    return function (method) {
+      return !this.match(tt.colon) && inner.call(this, method);
+    };
+  });
+
   // parse type parameters for class methods
   instance.extend("parseClassMethod", function (inner) {
     return function (classBody, method, ...args) {
