@@ -1231,6 +1231,10 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return this.match(tt.colon) || super.isClassProperty();
   }
 
+  isNonstaticConstructor(method: N.ClassMethod): boolean {
+    return !this.match(tt.colon) && super.isNonstaticConstructor(method);
+  }
+
   // parse type parameters for class methods
   parseClassMethod(classBody: N.ClassBody, method: N.ClassMethod, ...args): void {
     if (method.variance) {
