@@ -29,7 +29,7 @@
 import BaseParser from "./base";
 import type { Comment, Node } from "../types";
 
-function last(stack) {
+function last<T>(stack: $ReadOnlyArray<T>): T {
   return stack[stack.length - 1];
 }
 

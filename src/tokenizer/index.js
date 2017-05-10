@@ -626,6 +626,7 @@ export default class Tokenizer extends LocationParser {
       code = this.readHexChar(this.input.indexOf("}", this.state.pos) - this.state.pos, throwOnInvalid);
       ++this.state.pos;
       if (code === null) {
+        // $FlowFixMe (is this always non-null?)
         --this.state.invalidTemplateEscapePosition; // to point to the '\'' instead of the 'u'
       } else if (code > 0x10FFFF) {
         if (throwOnInvalid) {
