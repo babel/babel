@@ -564,23 +564,27 @@ export default class Tokenizer {
 
   readNumber(startsWithDot) {
     const start = this.state.pos;
-    const octal = this.input.charCodeAt(this.state.pos) === 48;
+    let octal = this.input.charCodeAt(start) === 48; // '0'
     let isFloat = false;
 
     if (!startsWithDot && this.readInt(10) === null) this.raise(start, "Invalid number");
+    if (octal && this.state.pos == start + 1) octal = false; // number === 0
+
     let next = this.input.charCodeAt(this.state.pos);
-    if (next === 46) { // '.'
+    if (next === 46 && !octal) { // '.'
       ++this.state.pos;
       this.readInt(10);
       isFloat = true;
       next = this.input.charCodeAt(this.state.pos);
     }
-    if (next === 69 || next === 101) { // 'eE'
+
+    if ((next === 69 || next === 101) && !octal) { // 'eE'
       next = this.input.charCodeAt(++this.state.pos);
       if (next === 43 || next === 45) ++this.state.pos; // '+-'
       if (this.readInt(10) === null) this.raise(start, "Invalid number");
       isFloat = true;
     }
+
     if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.state.pos, "Identifier directly after number");
 
     const str = this.input.slice(start, this.state.pos);
@@ -589,8 +593,10 @@ export default class Tokenizer {
       val = parseFloat(str);
     } else if (!octal || str.length === 1) {
       val = parseInt(str, 10);
-    } else if (/[89]/.test(str) || this.state.strict) {
+    } else if (this.state.strict) {
       this.raise(start, "Invalid number");
+    } else if (/[89]/.test(str)) {
+      val = parseInt(str, 10);
     } else {
       val = parseInt(str, 8);
     }
