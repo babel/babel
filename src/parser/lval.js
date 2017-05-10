@@ -52,6 +52,8 @@ export default class LValParser extends NodeUtils {
 
         case "SpreadElement":
           node.type = "RestElement";
+          const arg = node.argument;
+          this.toAssignable(arg, isBinding, contextDescription);
           break;
 
         case "ArrayExpression":
@@ -94,7 +96,11 @@ export default class LValParser extends NodeUtils {
         last.type = "RestElement";
         const arg = last.argument;
         this.toAssignable(arg, isBinding, contextDescription);
-        if (arg.type !== "Identifier" && arg.type !== "MemberExpression" && arg.type !== "ArrayPattern") {
+        if (
+          arg.type !== "Identifier" &&
+          arg.type !== "MemberExpression" &&
+          arg.type !== "ArrayPattern"
+        ) {
           this.unexpected(arg.start);
         }
         --end;
