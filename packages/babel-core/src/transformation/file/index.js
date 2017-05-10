@@ -56,7 +56,7 @@ export default class File extends Store {
 
     this.parserOpts = {
       sourceType: this.opts.sourceType,
-      sourceFileName: this.opts.filename,
+      sourceFilename: this.opts.filename,
       plugins: [],
     };
 
