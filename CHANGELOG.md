@@ -15,9 +15,20 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.md) for the pre-6.8.0 version Changelog.
 
-## v6.17.0 (2017-04-20)
+## 6.17.1 (2017-05-10)
 
-### :bug: Bug Fix 
+### :bug: Bug Fix
+ * Fix typo in flow spread operator error (Brian Ng)
+ * Fixed invalid number literal parsing ([#473](https://github.com/babel/babylon/pull/473)) (Alex Kuzmenko)
+ * Fix number parser ([#433](https://github.com/babel/babylon/pull/433)) (Alex Kuzmenko)
+ * Ensure non pattern shorthand props are checked for reserved words ([#479](https://github.com/babel/babylon/pull/479)) (Brian Ng)
+ * Remove jsx context when parsing arrow functions ([#475](https://github.com/babel/babylon/pull/475)) (Brian Ng)
+ * Allow super in class properties ([#499](https://github.com/babel/babylon/pull/499)) (Brian Ng)
+ * Allow flow class field to be named constructor ([#510](https://github.com/babel/babylon/pull/510)) (Brian Ng)
+
+## 6.17.0 (2017-04-20)
+
+### :bug: Bug Fix
  * Cherry-pick #418 to 6.x ([#476](https://github.com/babel/babylon/pull/476)) (Sebastian McKenzie)
  * Add support for invalid escapes in tagged templates ([#274](https://github.com/babel/babylon/pull/274)) (Kevin Gibbons)
  * Throw error if new.target is used outside of a function ([#402](https://github.com/babel/babylon/pull/402)) (Brian Ng)
@@ -85,7 +96,7 @@ See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.m
  * Add DoExpression to spec (#364) (Alex Kuzmenko)
  * Mention cloning of repository in CONTRIBUTING.md (#391) [skip ci] (Sumedh Nimkarde)
  * Explain how to run only one test (#389) [skip ci] (Aaron Ang)
- 
+
  ## 7.0.0-beta.4 (2017-03-01)
 
 * Don't consume async when checking for async func decl (#377) (Brian Ng)
@@ -134,6 +145,8 @@ Need to modify Babel for this AST node change, so moving to 7.0.
 
 [react-native](https://github.com/facebook/react-native/issues/12542) broke with this so we reverted.
 
+=======
+>>>>>>> 6.x
 ## 6.16.0 (2017-02-23)
 
 ### :rocket: New Feature
@@ -291,7 +304,7 @@ Update API documentation ([#330](https://github.com/babel/babylon/pull/330)) (Ti
 Added keywords to package.json ([#323](https://github.com/babel/babylon/pull/323)) (Dmytro)
 
 AST spec: fix casing of `RegExpLiteral` ([#318](https://github.com/babel/babylon/pull/318)) (Mathias Bynens)
- 
+
 ## 6.15.0 (2017-01-10)
 
 ### :eyeglasses: Spec Compliancy
@@ -432,20 +445,20 @@ type C = { [string]: number };
 ```
 
 Parse flow nested array type annotations like `number[][]` ([#219](https://github.com/babel/babylon/pull/219)) (Bernhard Häussner)
- 
+
 Supports these form now of specifying array types:
 
 ```js
 var a: number[][][][];
 var b: string[][];
 ```
- 
+
 ### :bug: Bug Fix
 
 Correctly eat semicolon at the end of `DelcareModuleExports` ([#223](https://github.com/babel/babylon/pull/223))  (Daniel Tschinder)
 
 ```
-declare module "foo" { declare module.exports: number } 
+declare module "foo" { declare module.exports: number }
 declare module "foo" { declare module.exports: number; }  // also allowed now
 ```
 
@@ -533,7 +546,7 @@ Readd missin .eslinignore for IDEs (Daniel Tschinder)
 Error on missing expected.json fixture in CI ([#188](https://github.com/babel/babylon/pull/188)) (Moti Zilberman)
 
 Add .gitattributes and .editorconfig for LF line endings ([#179](https://github.com/babel/babylon/pull/179)) (Moti Zilberman)
- 
+
 Fixes two tests that are failing after the merge of #172 ([#177](https://github.com/babel/babylon/pull/177)) (Moti Zilberman)
 
 ## v6.12.0 (2016-10-14)
@@ -746,7 +759,7 @@ function something({ set = null, get = null }) {}
 ```js
 // regression with duplicate export check
 SyntaxError: ./typography.js: `undefined` has already been exported. Exported identifiers must be unique. (22:13)
-  20 | 
+  20 |
   21 | export const { rhythm } = typography;
 > 22 | export const { TypographyStyle } = typography
 ```
@@ -1051,7 +1064,7 @@ var obj = {
 
 There is also a new node type, `ForAwaitStatement`.
 
-> [Async generators and for-await](https://github.com/tc39/proposal-async-iteration) are now a [stage 2 proposal](https://github.com/tc39/ecma262#current-proposals). 
+> [Async generators and for-await](https://github.com/tc39/proposal-async-iteration) are now a [stage 2 proposal](https://github.com/tc39/ecma262#current-proposals).
 
 Example:
 
