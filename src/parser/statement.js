@@ -804,7 +804,7 @@ export default class StatementParser extends ExpressionParser {
       if (optionalId || !isStatement) {
         node.id = null;
       } else {
-        this.unexpected();
+        this.unexpected(null, "A class name is required");
       }
     }
   }
