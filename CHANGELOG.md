@@ -145,8 +145,6 @@ Need to modify Babel for this AST node change, so moving to 7.0.
 
 [react-native](https://github.com/facebook/react-native/issues/12542) broke with this so we reverted.
 
-=======
->>>>>>> 6.x
 ## 6.16.0 (2017-02-23)
 
 ### :rocket: New Feature
