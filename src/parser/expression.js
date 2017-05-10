@@ -382,7 +382,11 @@ pp.parseExprAtom = function (refShorthandDefaultPos) {
 
   switch (this.state.type) {
     case tt._super:
-      if (!this.state.inMethod && !this.options.allowSuperOutsideMethod) {
+      if (
+          !this.state.inMethod &&
+          !this.state.inClassProperty &&
+          !this.options.allowSuperOutsideMethod
+        ) {
         this.raise(this.state.start, "'super' outside of function or class");
       }
 
@@ -880,8 +884,9 @@ pp.parseObjectProperty = function (prop, startPos, startLoc, isPattern, refShort
   }
 
   if (!prop.computed && prop.key.type === "Identifier") {
+    this.checkReservedWord(prop.key.name, prop.key.start, true, true);
+
     if (isPattern) {
-      this.checkReservedWord(prop.key.name, prop.key.start, true, true);
       prop.value = this.parseMaybeDefault(startPos, startLoc, prop.key.__clone());
     } else if (this.match(tt.eq) && refShorthandDefaultPos) {
       if (!refShorthandDefaultPos.start) {

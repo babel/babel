@@ -1,7 +1,6 @@
 /* eslint max-len: 0 */
 
 import { types as tt } from "../tokenizer/types";
-import { types as ct } from "../tokenizer/context";
 import Parser from "../parser";
 
 const primitiveTypes = [
@@ -1139,6 +1138,12 @@ export default function (instance) {
     };
   });
 
+  instance.extend("isNonstaticConstructor", function(inner) {
+    return function (method) {
+      return !this.match(tt.colon) && inner.call(this, method);
+    };
+  });
+
   // parse type parameters for class methods
   instance.extend("parseClassMethod", function (inner) {
     return function (classBody, method, ...args) {
@@ -1386,6 +1391,12 @@ export default function (instance) {
         } catch (err) {
           if (err instanceof SyntaxError) {
             this.state = state;
+
+            // Remove `tc.j_expr` and `tc.j_oTag` from context added
+            // by parsing `jsxTagStart` to stop the JSX plugin from
+            // messing with the tokens
+            this.state.context.length -= 2;
+
             jsxError = err;
           } else {
             // istanbul ignore next: no such error is expected
@@ -1394,9 +1405,6 @@ export default function (instance) {
         }
       }
 
-      // Need to push something onto the context to stop
-      // the JSX plugin from messing with the tokens
-      this.state.context.push(ct.parenExpression);
       if (jsxError != null || this.isRelational("<")) {
         let arrowExpression;
         let typeParameters;
@@ -1422,7 +1430,6 @@ export default function (instance) {
           );
         }
       }
-      this.state.context.pop();
 
       return inner.apply(this, args);
     };
