@@ -646,7 +646,7 @@ export type ImportNamespaceSpecifier = ModuleSpecifier & {
 export type ExportNamedDeclaration = NodeBase & {
   type: "ExportNamedDeclaration";
   declaration: ?Declaration;
-  specifiers: Array<ExportSpecifier>; // TODO: $ReadOnlyArray
+  specifiers: $ReadOnlyArray<ExportSpecifier>;
   source: ?Literal;
 
   exportKind?: "type" | "value"; // TODO: Not in spec
