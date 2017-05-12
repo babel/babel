@@ -261,6 +261,7 @@ export default function ({ types: t }) {
           ])
         );
       },
+
       // var a = { ...b, ...c }
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
@@ -274,9 +275,15 @@ export default function ({ types: t }) {
         const args = [];
         let props = [];
 
+        // proposal-object-rest-spread 3.1 - CopyDataProperties
+        // > The target passed is in here is always a newly created object
+        args.push(t.ObjectExpression([]));
+
         function push() {
-          if (!props.length) return;
-          args.push(t.objectExpression(props));
+          if (props.length > 0) {
+            args.push(t.objectExpression(props));
+          }
+
           props = [];
         }
 
@@ -290,10 +297,6 @@ export default function ({ types: t }) {
         }
 
         push();
-
-        if (!t.isObjectExpression(args[0])) {
-          args.unshift(t.objectExpression([]));
-        }
 
         const helper = useBuiltIns ?
           t.memberExpression(t.identifier("Object"), t.identifier("assign")) :

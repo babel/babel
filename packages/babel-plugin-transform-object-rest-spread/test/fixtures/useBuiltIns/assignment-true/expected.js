@@ -1,1 +1,1 @@
-z = Object.assign({ x }, y);
+z = Object.assign({}, { x }, y);
