@@ -18,8 +18,8 @@
 
 <p align="center">
   <a href="#backers"><img alt="Backers on Open Collective" src="https://opencollective.com/babel/backers/badge.svg" /></a>
-  <a href="#sponsors"><img alt=""Sponsors on Open Collective" src="https://opencollective.com/babel/sponsors/badge.svg" /></a>
-    <a href="https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558"><img alt="Business Strategy Status" src="https://img.shields.io/badge/Business%20Model-flavortown-green.svg"></a>
+  <a href="#sponsors"><img alt="Sponsors on Open Collective" src="https://opencollective.com/babel/sponsors/badge.svg" /></a>
+    <a href="https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558"><img alt="Business Strategy Status" src="https://img.shields.io/badge/business%20model-flavortown-green.svg"></a>
 </p>
 
 Babel is a community-driven tool that helps you write the latest version of JavaScript.
