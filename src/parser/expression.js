@@ -665,7 +665,8 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
-  parseParenItem(node: N.Expression): N.Expression {
+  // eslint-disable-next-line no-unused-vars
+  parseParenItem(node: N.Expression, startPos: number, startLoc: Position): N.Expression {
     return node;
   }
 
@@ -705,6 +706,7 @@ export default class ExpressionParser extends LValParser {
     const elem = this.startNode();
     if (this.state.value === null) {
       if (!isTagged) {
+        // $FlowFixMe
         this.raise(this.state.invalidTemplateEscapePosition, "Invalid escape sequence in template");
       } else {
         this.state.invalidTemplateEscapePosition = null;
@@ -846,7 +848,7 @@ export default class ExpressionParser extends LValParser {
         this.match(tt.num) || // get 1() {}
         this.match(tt.bracketL) || // get ["string"]() {}
         this.match(tt.name) || // get foo() {}
-        this.state.type.keyword // get debugger() {}
+        !!this.state.type.keyword // get debugger() {}
       );
   }
 
@@ -1036,7 +1038,7 @@ export default class ExpressionParser extends LValParser {
   // nothing in between them to be parsed as `null` (which is needed
   // for array literals).
 
-  parseExprList(close: TokenType, allowEmpty?: boolean, refShorthandDefaultPos?: Pos): $ReadOnlyArray<?N.Expression> {
+  parseExprList(close: TokenType, allowEmpty?: boolean, refShorthandDefaultPos?: ?Pos): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let first = true;
 

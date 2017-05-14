@@ -74,6 +74,7 @@ export default class StatementParser extends ExpressionParser {
     // complexity.
 
     switch (starttype) {
+      // $FlowFixMe
       case tt._break: case tt._continue: return this.parseBreakContinueStatement(node, starttype.keyword);
       case tt._debugger: return this.parseDebuggerStatement(node);
       case tt._do: return this.parseDoStatement(node);
@@ -554,6 +555,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseVar(node: N.VariableDeclaration, isFor: boolean, kind: TokenType): N.VariableDeclaration {
     const declarations = node.declarations = [];
+    // $FlowFixMe
     node.kind = kind.keyword;
     for (;;) {
       const decl = this.startNode();
@@ -887,7 +889,8 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ExportNamedDeclaration");
   }
 
-  parseExportDeclaration(): N.Declaration {
+  // eslint-disable-next-line no-unused-vars
+  parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
     return this.parseStatement(true);
   }
 

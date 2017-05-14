@@ -132,10 +132,11 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     delete node.directives;
   }
 
-  parseClassMethod(classBody, ...args) {
+  parseClassMethod(classBody: N.ClassBody, ...args) {
     super.parseClassMethod(classBody, ...args);
 
     const body = classBody.body;
+    // $FlowIgnore
     body[body.length - 1].type = "MethodDefinition";
   }
 
@@ -185,7 +186,9 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     const node = super.parseObjectMethod(...args);
 
     if (node) {
+      // $FlowIgnore
       if (node.kind === "method") node.kind = "init";
+      // $FlowIgnore
       node.type = "Property";
     }
 
@@ -196,7 +199,9 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     const node = super.parseObjectProperty(...args);
 
     if (node) {
+      // $FlowIgnore
       node.kind = "init";
+      // $FlowIgnore
       node.type = "Property";
     }
 
