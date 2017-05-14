@@ -495,7 +495,7 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "BooleanLiteral");
 
       case tt.parenL:
-        return this.parseParenAndDistinguishExpression(null, null, canBeArrow);
+        return this.parseParenAndDistinguishExpression(canBeArrow);
 
       case tt.bracketL:
         node = this.startNode();
@@ -580,9 +580,9 @@ export default class ExpressionParser extends LValParser {
     return val;
   }
 
-  parseParenAndDistinguishExpression(startPos: ?number, startLoc: ?Position, canBeArrow: boolean): N.Expression {
-    startPos = startPos || this.state.start;
-    startLoc = startLoc || this.state.startLoc;
+  parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
+    const startPos = this.state.start;
+    const startLoc = this.state.startLoc;
 
     let val;
     this.expect(tt.parenL);
