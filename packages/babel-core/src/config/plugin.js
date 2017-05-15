@@ -17,6 +17,12 @@ export default class Plugin {
     if (plugin.visitor != null && typeof plugin.visitor !== "object") {
       throw new Error("Plugin .visitor must be an object, null, or undefined");
     }
+    if (plugin.capabilities != null && !Array.isArray(plugin.capabilities)) {
+      throw new Error("Plugin .capabilities must be an array");
+    }
+    if (plugin.dependencies != null && !Array.isArray(plugin.dependencies)) {
+      throw new Error("Plugin .dependencies must be an array");
+    }
 
     this.key = plugin.name || key;
 
@@ -24,6 +30,8 @@ export default class Plugin {
     this.post = plugin.post;
     this.pre = plugin.pre;
     this.visitor = plugin.visitor;
+    this.capabilities = plugin.capabilities;
+    this.dependencies = plugin.dependencies;
   }
 
   key: ?string;
@@ -31,4 +39,6 @@ export default class Plugin {
   post: ?Function;
   pre: ?Function;
   visitor: ?{};
+  capabilities: ?Array<any>;
+  dependencies: ?Array<any>;
 }

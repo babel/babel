@@ -70,6 +70,8 @@ const ALLOWED_PLUGIN_KEYS = new Set([
   "post",
   "visitor",
   "inherits",
+  "capabilities",
+  "dependencies",
 ]);
 
 export default function manageOptions(opts: {}): {
@@ -77,6 +79,61 @@ export default function manageOptions(opts: {}): {
   passes: Array<Array<[ Plugin, ?{} ]>>,
 }|null {
   return new OptionManager().init(opts);
+}
+
+function sortPlugins(plugins) {
+  // need to handle cycles (either error, add inherent priority)
+  // need to warn/error on duplicate capabilities
+
+  const mapped = plugins.map(([ plugin ], i) => {
+    return { index: i, value: plugin };
+  });
+
+  const capabilitiesABMap = [];
+  const capabilitiesBAMap = [];
+
+  mapped.sort(function({ value: pluginA }, { value: pluginB }) {
+    if (pluginA.dependencies) {
+      pluginA.dependencies.forEach((capability) => {
+        if (pluginB.capabilities && pluginB.capabilities.indexOf(capability) > -1) {
+          // Plugin A needs to run before Plugin B
+          // if A depends on a capability in B
+          capabilitiesABMap.push([pluginA.key, pluginB.key]);
+        }
+      });
+    }
+
+    if (pluginB.dependencies) {
+      pluginB.dependencies.forEach((capability) => {
+        if (pluginA.capabilities && pluginA.capabilities.indexOf(capability) > -1) {
+          // Plugin B needs to run before Plugin A
+          // if B depends on a capability in A
+          capabilitiesBAMap.push([pluginB.key, pluginA.key]);
+        }
+      });
+    }
+
+    if (capabilitiesABMap.length > 0 && capabilitiesBAMap.length === 0) {
+      return -1;
+    } else if (capabilitiesBAMap.length > 0 && capabilitiesABMap.length === 0) {
+      return 1;
+    }
+
+    return 0;
+  });
+
+  // if (capabilitiesABMap.length > 0) {
+  //   console.log(capabilitiesABMap.map(([a, b]) => {
+  //     return `${a} depends on ${b}`;
+  //   }));
+  // }
+  // if (capabilitiesBAMap.length > 0) {
+  //   console.log(capabilitiesBAMap.map(([a, b]) => {
+  //     return `${a} depends on ${b}`;
+  //   }));
+  // }
+
+  return mapped.map((el) => plugins[el.index]);
 }
 
 class OptionManager {
@@ -100,7 +157,9 @@ class OptionManager {
   mergeOptions(config: MergeOptions, pass?: Array<[Plugin, ?{}]>) {
     const result = loadConfig(config);
 
-    const plugins = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
+    let plugins = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
+    // sort plugins by capabilties and dependencies
+    plugins = sortPlugins(plugins);
     const presets = result.presets.map((descriptor) => loadPresetDescriptor(descriptor));
 
 

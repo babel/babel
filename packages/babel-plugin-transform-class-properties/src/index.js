@@ -42,6 +42,8 @@ export default function ({ types: t }) {
   return {
     inherits: syntaxClassProperties,
 
+    capabilities: ["classProperties"],
+
     visitor: {
       Class(path, state) {
         const buildClassProperty = state.opts.spec ? buildClassPropertySpec :
