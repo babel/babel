@@ -41,13 +41,13 @@ export default function (babel) {
         const paramsContainAFunction = checkIfParamsContainAFunction(path);
 
         // logic to find replacement identifiers for complex parameters
-        let lhs = [];
-        let rhs = [];
-        let arityLessThanParams = arity < path.get("params").length;
-        let simpleCase = true; // the case that this plugin isn't needed 
+        const lhs = [];
+        const rhs = [];
+        const arityLessThanParams = arity < path.get("params").length;
+        let simpleCase = true; // the case that this plugin isn't needed
         for (let i = 0; i < path.get("params").length; i++) {
           const paramPath = path.get("params")[i];
-          
+
           if (i >= arity) {
             lhs.push(paramPath.node);
             paramPath.remove();
@@ -60,10 +60,10 @@ export default function (babel) {
               lhs.push(paramPath.node);
               paramPath.replaceWith(sym);
               rhs.push(sym);
-            } 
+            }
           }
         }
-        
+
         if (arityLessThanParams) {
           const rest = path.scope.generateUidIdentifier("ref");
           rhs.push(t.spreadElement(rest));
@@ -100,7 +100,7 @@ export default function (babel) {
 
           // first convert existing declarations to assignments where applicable
           for (const path of fnBodyVarDeclarationPaths) {
-            let lhs = [], rhs = [];
+            const lhs = [], rhs = [];
             for (const declaration of path.node.declarations) {
               if (declaration.init !== null) {
                 lhs.push(declaration.id);
@@ -127,14 +127,14 @@ export default function (babel) {
               path.scope.rename(binding, commonBindingMap[binding]);
               // special treatment for renaming the identifiers in params. See #5734
               for (const paramPath of path.get("params")) {
-                if (paramPath.node.name == binding) paramPath.node.name = commonBindingMap[binding]; 
+                if (paramPath.node.name == binding) paramPath.node.name = commonBindingMap[binding];
               }
             }
 
             const redeclareDeclaration = t.variableDeclaration("let", fnBodyVarBindings.map(
               (x) => t.variableDeclarator(
                 t.identifier(x),
-                commonBindings.indexOf(x) > -1? t.identifier(commonBindingMap[x]): undefined
+                commonBindings.indexOf(x) > -1 ? t.identifier(commonBindingMap[x]) : undefined
               )
             ));
 
