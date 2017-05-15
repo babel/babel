@@ -1,26 +1,29 @@
-var concat = function () {
-  var _ref = babelHelpers.asyncToGenerator(function* () {
-    var x = arguments.length <= 0 ? undefined : arguments[0];
-    var y = arguments.length <= 1 ? undefined : arguments[1];
+var concat = (() => {
+  var _ref2 = babelHelpers.asyncToGenerator(function* (..._ref4) {
+    let [..._ref3] = [..._ref4];
+    let [..._ref] = [..._ref3];
+    let [...arrs] = [..._ref];
+
+    var x = arrs[0];
+    var y = arrs[1];
   });
 
   return function concat() {
-    return _ref.apply(this, arguments);
+    return _ref2.apply(this, arguments);
   };
-}();
+})();
 
-var x = function () {
-  var _ref2 = babelHelpers.asyncToGenerator(function* () {
+var x = (() => {
+  var _ref6 = babelHelpers.asyncToGenerator(function* (..._ref8) {
+    let [..._ref7] = [..._ref8];
+    let [..._ref5] = [..._ref7];
+    let [...rest] = [..._ref5];
+
     if (noNeedToWork) return 0;
-
-    for (var _len = arguments.length, rest = Array(_len), _key = 0; _key < _len; _key++) {
-      rest[_key] = arguments[_key];
-    }
-
     return rest;
   });
 
   return function x() {
-    return _ref2.apply(this, arguments);
+    return _ref6.apply(this, arguments);
   };
-}();
+})();

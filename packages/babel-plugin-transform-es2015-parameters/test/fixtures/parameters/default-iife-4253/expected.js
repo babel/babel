@@ -1,8 +1,8 @@
-var Ref = function Ref() {
-  var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ++Ref.nextID;
-  babelHelpers.classCallCheck(this, Ref);
+class Ref {
+  constructor(..._ref) {
+    let [id = ++Ref.nextID] = [..._ref];
 
-  this.id = id;
-};
-
+    this.id = id;
+  }
+}
 Ref.nextID = 0;

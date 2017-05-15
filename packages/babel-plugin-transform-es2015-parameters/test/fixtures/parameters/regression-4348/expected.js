@@ -1,6 +1,6 @@
-function first() {
-  var _ref;
+function first(..._ref) {
+  let [...values] = [..._ref];
 
   var index = 0;
-  return _ref = index++, arguments.length <= _ref ? undefined : arguments[_ref];
+  return values[index++];
 }

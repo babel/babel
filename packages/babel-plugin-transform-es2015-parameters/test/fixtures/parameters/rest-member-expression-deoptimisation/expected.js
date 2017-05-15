@@ -1,160 +1,124 @@
-var x = function (foo) {
-  for (var _len = arguments.length, bar = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    bar[_key - 1] = arguments[_key];
-  }
+var x = function (foo, ..._ref) {
+  let [, ...bar] = [, ..._ref];
 
   console.log(bar);
 };
 
-var y = function (foo) {
-  for (var _len2 = arguments.length, bar = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-    bar[_key2 - 1] = arguments[_key2];
-  }
+var y = function (foo, ..._ref2) {
+  let [, ...bar] = [, ..._ref2];
 
   var x = function z(bar) {
     bar[1] = 5;
   };
 };
 
-var b = function (x, y) {
-  for (var _len3 = arguments.length, args = Array(_len3 > 2 ? _len3 - 2 : 0), _key3 = 2; _key3 < _len3; _key3++) {
-    args[_key3 - 2] = arguments[_key3];
-  }
+var b = function (x, y, ..._ref3) {
+  let [,, ...args] = [,, ..._ref3];
 
   console.log(args[0]);
   args.pop();
   console.log(args[1]);
 };
 
-var z = function (foo) {
-  for (var _len4 = arguments.length, bar = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-    bar[_key4 - 1] = arguments[_key4];
-  }
+var z = function (foo, ..._ref4) {
+  let [, ...bar] = [, ..._ref4];
 
   var x = function () {
     bar[1] = 5;
   };
 };
 
-var a = function (foo) {
-  for (var _len5 = arguments.length, bar = Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
-    bar[_key5 - 1] = arguments[_key5];
-  }
+var a = function (foo, ..._ref5) {
+  let [, ...bar] = [, ..._ref5];
 
   return bar.join(",");
 };
 
-var b = function (foo) {
+var b = function (foo, ..._ref6) {
+  let [, ...bar] = [, ..._ref6];
+
   var join = "join";
-
-  for (var _len6 = arguments.length, bar = Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-    bar[_key6 - 1] = arguments[_key6];
-  }
-
   return bar[join];
 };
 
-var b = function () {
-  for (var _len7 = arguments.length, bar = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-    bar[_key7] = arguments[_key7];
-  }
+var b = function (..._ref7) {
+  let [...bar] = [..._ref7];
 
   return bar.len;
 };
 
-var b = function (foo) {
-  return (arguments.length <= 1 ? 0 : arguments.length - 1) * 2;
+var b = function (foo, ..._ref8) {
+  let [, ...bar] = [, ..._ref8];
+
+  return bar.length * 2;
 };
 
-var b = function (foo, baz) {
-  return arguments.length <= 2 ? 0 : arguments.length - 2;
+var b = function (foo, baz, ..._ref9) {
+  let [,, ...bar] = [,, ..._ref9];
+
+  return bar.length;
 };
 
-function x() {
-  for (var _len8 = arguments.length, rest = Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-    rest[_key8] = arguments[_key8];
-  }
+function x(..._ref10) {
+  let [...rest] = [..._ref10];
 
   rest[0] = 0;
 }
 
-function swap() {
-  for (var _len9 = arguments.length, rest = Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-    rest[_key9] = arguments[_key9];
-  }
+function swap(..._ref11) {
+  let [...rest] = [..._ref11];
 
-  var _ref = [rest[1], rest[0]];
-  rest[0] = _ref[0];
-  rest[1] = _ref[1];
+  [rest[0], rest[1]] = [rest[1], rest[0]];
 }
 
-function forIn() {
-  for (var _len10 = arguments.length, rest = Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-    rest[_key10] = arguments[_key10];
-  }
+function forIn(..._ref12) {
+  let [...rest] = [..._ref12];
 
   for (rest[0] in this) {
     foo(rest[0]);
   }
 }
 
-function inc() {
-  for (var _len11 = arguments.length, rest = Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
-    rest[_key11] = arguments[_key11];
-  }
+function inc(..._ref13) {
+  let [...rest] = [..._ref13];
 
   ++rest[0];
 }
 
-function dec() {
-  for (var _len12 = arguments.length, rest = Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
-    rest[_key12] = arguments[_key12];
-  }
+function dec(..._ref14) {
+  let [...rest] = [..._ref14];
 
   --rest[0];
 }
 
-function del() {
-  for (var _len13 = arguments.length, rest = Array(_len13), _key13 = 0; _key13 < _len13; _key13++) {
-    rest[_key13] = arguments[_key13];
-  }
+function del(..._ref15) {
+  let [...rest] = [..._ref15];
 
   delete rest[0];
 }
 
-function method() {
-  for (var _len14 = arguments.length, rest = Array(_len14), _key14 = 0; _key14 < _len14; _key14++) {
-    rest[_key14] = arguments[_key14];
-  }
+function method(..._ref16) {
+  let [...rest] = [..._ref16];
 
   rest[0]();
 }
 
-function newExp() {
-  for (var _len15 = arguments.length, rest = Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
-    rest[_key15] = arguments[_key15];
-  }
+function newExp(..._ref17) {
+  let [...rest] = [..._ref17];
 
   new rest[0]();
 }
 
 // In addition to swap() above because at some point someone tried checking
 // grandparent path for isArrayExpression() to deopt.
-function arrayDestructure() {
-  for (var _len16 = arguments.length, rest = Array(_len16), _key16 = 0; _key16 < _len16; _key16++) {
-    rest[_key16] = arguments[_key16];
-  }
+function arrayDestructure(..._ref18) {
+  let [...rest] = [..._ref18];
 
-  var _x = babelHelpers.slicedToArray(x, 1);
-
-  rest[0] = _x[0];
+  [rest[0]] = x;
 }
 
-function forOf() {
-  for (var _len17 = arguments.length, rest = Array(_len17), _key17 = 0; _key17 < _len17; _key17++) {
-    rest[_key17] = arguments[_key17];
-  }
-
+function forOf(..._ref19) {
+  let [...rest] = [..._ref19];
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
   var _iteratorError = undefined;
@@ -179,18 +143,14 @@ function forOf() {
   }
 }
 
-function postfixIncrement() {
-  for (var _len18 = arguments.length, rest = Array(_len18), _key18 = 0; _key18 < _len18; _key18++) {
-    rest[_key18] = arguments[_key18];
-  }
+function postfixIncrement(..._ref20) {
+  let [...rest] = [..._ref20];
 
   rest[0]++;
 }
 
-function postfixDecrement() {
-  for (var _len19 = arguments.length, rest = Array(_len19), _key19 = 0; _key19 < _len19; _key19++) {
-    rest[_key19] = arguments[_key19];
-  }
+function postfixDecrement(..._ref21) {
+  let [...rest] = [..._ref21];
 
   rest[0]--;
 }

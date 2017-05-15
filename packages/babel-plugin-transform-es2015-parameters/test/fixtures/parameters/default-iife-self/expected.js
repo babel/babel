@@ -1,13 +1,15 @@
-var Ref = function Ref() {
-  var ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : Ref;
-  babelHelpers.classCallCheck(this, Ref);
+class Ref {
+  constructor(..._ref) {
+    let [ref = Ref] = [..._ref];
 
-  this.ref = ref;
-};
+    this.ref = ref;
+  }
+}
 
-var X = function X() {
-  var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : foo;
-  babelHelpers.classCallCheck(this, X);
+class X {
+  constructor(..._ref2) {
+    let [x = foo] = [..._ref2];
 
-  this.x = x;
-};
+    this.x = x;
+  }
+}

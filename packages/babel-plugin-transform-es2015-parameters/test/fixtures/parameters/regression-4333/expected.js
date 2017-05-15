@@ -1,8 +1,7 @@
-var args = 'bar';
-function foo() {
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
+const args = 'bar';
+function foo(..._ref2) {
+  let [..._ref] = [..._ref2];
+  let [...args] = [..._ref];
 
   return args;
 }

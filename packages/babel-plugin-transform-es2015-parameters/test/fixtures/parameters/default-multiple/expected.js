@@ -1,12 +1,11 @@
-var t = function () {
-  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "foo";
-  var f = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
+var t = function (..._ref) {
+  let [e = "foo", f = 5] = [..._ref];
 
   return e + " bar " + f;
 };
 
-var a = function (e) {
-  var f = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
+var a = function (e, ..._ref2) {
+  let [, f = 5] = [, ..._ref2];
 
   return e + " bar " + f;
 };

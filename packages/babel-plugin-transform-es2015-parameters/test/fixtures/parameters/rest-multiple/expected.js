@@ -1,19 +1,25 @@
-var t = function (f) {
+var t = function (f, ..._ref) {
+    let [, ...items] = [, ..._ref];
+
     var x = f;
-    x = arguments.length <= 1 ? undefined : arguments[1];
-    x = arguments.length <= 2 ? undefined : arguments[2];
+    x = items[0];
+    x = items[1];
 };
 
-function t(f) {
+function t(f, ..._ref2) {
+    let [, ...items] = [, ..._ref2];
+
     var x = f;
-    x = arguments.length <= 1 ? undefined : arguments[1];
-    x = arguments.length <= 2 ? undefined : arguments[2];
+    x = items[0];
+    x = items[1];
 }
 
-function u(f, g) {
+function u(f, g, ..._ref3) {
+    let [,, ...items] = [,, ..._ref3];
+
     var x = f;
     var y = g;
-    x[12] = arguments.length <= 2 ? undefined : arguments[2];
-    y.prop = arguments.length <= 3 ? undefined : arguments[3];
-    var z = (arguments.length <= 4 ? undefined : arguments[4]) | 0 || 12;
+    x[12] = items[0];
+    y.prop = items[1];
+    var z = items[2] | 0 || 12;
 }
