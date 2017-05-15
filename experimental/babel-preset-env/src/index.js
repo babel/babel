@@ -1,3 +1,5 @@
+//@flow
+
 import semver from "semver";
 import builtInsList from "../data/built-ins.json";
 import { logPlugin } from "./debug";
@@ -9,46 +11,41 @@ import useBuiltInsEntryPlugin from "./use-built-ins-entry-plugin";
 import addUsedBuiltInsPlugin from "./use-built-ins-plugin";
 import getTargets from "./targets-parser";
 import { prettifyTargets, semverify } from "./utils";
+import type { Plugin, Targets } from "./types";
 
-/**
- * Determine if a transformation is required
- *
- * NOTE: This assumes `supportedEnvironments` has already been parsed by `getTargets`
- *
- * @param  {Object}  supportedEnvironments  An Object containing environment keys and the lowest
- *                                          supported version as a value
- * @param  {Object}  plugin                 An Object containing environment keys and the lowest
- *                                          version the feature was implemented in as a value
- * @return {Boolean} Whether or not the transformation is required
- */
-export const isPluginRequired = (supportedEnvironments, plugin) => {
-  const targetEnvironments = Object.keys(supportedEnvironments);
+export const isPluginRequired = (
+  supportedEnvironments: Targets,
+  plugin: Targets,
+): boolean => {
+  const targetEnvironments: Array<string> = Object.keys(supportedEnvironments);
 
   if (targetEnvironments.length === 0) {
     return true;
   }
 
-  const isRequiredForEnvironments = targetEnvironments.filter(environment => {
-    // Feature is not implemented in that environment
-    if (!plugin[environment]) {
-      return true;
-    }
+  const isRequiredForEnvironments: Array<string> = targetEnvironments.filter(
+    environment => {
+      // Feature is not implemented in that environment
+      if (!plugin[environment]) {
+        return true;
+      }
 
-    const lowestImplementedVersion = plugin[environment];
-    const lowestTargetedVersion = supportedEnvironments[environment];
+      const lowestImplementedVersion: string = plugin[environment];
+      const lowestTargetedVersion: string = supportedEnvironments[environment];
 
-    if (!semver.valid(lowestTargetedVersion)) {
-      throw new Error(
-        // eslint-disable-next-line max-len
-        `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". Versions must be in semver format (major.minor.patch)`,
+      if (!semver.valid(lowestTargetedVersion)) {
+        throw new Error(
+          // eslint-disable-next-line max-len
+          `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". Versions must be in semver format (major.minor.patch)`,
+        );
+      }
+
+      return semver.gt(
+        semverify(lowestImplementedVersion),
+        lowestTargetedVersion,
       );
-    }
-
-    return semver.gt(
-      semverify(lowestImplementedVersion),
-      lowestTargetedVersion,
-    );
-  });
+    },
+  );
 
   return isRequiredForEnvironments.length > 0;
 };
@@ -63,7 +60,7 @@ const getBuiltInTargets = targets => {
   return builtInTargets;
 };
 
-export const transformIncludesAndExcludes = opts => {
+export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
   return opts.reduce(
     (result, opt) => {
       const target = opt.match(/^(es\d+|web)\./) ? "builtIns" : "plugins";
@@ -78,7 +75,7 @@ export const transformIncludesAndExcludes = opts => {
   );
 };
 
-const getPlatformSpecificDefaultFor = targets => {
+const getPlatformSpecificDefaultFor = (targets: Targets): ?Array<string> => {
   const targetNames = Object.keys(targets);
   const isAnyTarget = !targetNames.length;
   const isWebTarget = targetNames.some(name => name !== "node");
@@ -106,14 +103,17 @@ const filterItems = (list, includes, excludes, targets, defaultItems) => {
   return result;
 };
 
-export default function buildPreset(context, opts = {}) {
+export default function buildPreset(
+  context: Object,
+  opts: Object = {},
+): { plugins: Array<Plugin> } {
   const {
     debug,
     exclude: optionsExclude,
     forceAllTransforms,
     include: optionsInclude,
     loose,
-    moduleType,
+    modules,
     spec,
     targets: optionsTargets,
     useBuiltIns,
@@ -162,9 +162,9 @@ export default function buildPreset(context, opts = {}) {
 
   const plugins = [];
 
-  if (moduleType !== false && moduleTransformations[moduleType]) {
+  if (modules !== false && moduleTransformations[modules]) {
     plugins.push([
-      require(`babel-plugin-${moduleTransformations[moduleType]}`),
+      require(`babel-plugin-${moduleTransformations[modules]}`),
       { loose },
     ]);
   }
@@ -181,7 +181,7 @@ export default function buildPreset(context, opts = {}) {
     console.log("babel-preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));
-    console.log(`\nUsing modules transform: ${moduleType}`);
+    console.log(`\nUsing modules transform: ${modules.toString()}`);
     console.log("\nUsing plugins:");
     transformations.forEach(transform => {
       logPlugin(transform, targets, pluginList);

@@ -1,7 +1,15 @@
+//@flow
+
 import { definitions } from "./built-in-definitions";
 import { logUsagePolyfills } from "./debug";
 
-function isPolyfillSource(value) {
+type Plugin = {
+  visitor: Object,
+  pre: Function,
+  name: string,
+};
+
+function isPolyfillSource(value: string): boolean {
   return value === "babel-polyfill";
 }
 
@@ -12,16 +20,17 @@ function warnOnInstanceMethod() {
   //   );
 }
 
-function has(obj, key) {
+function has(obj: Object, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
-function getObjectString(node) {
+function getObjectString(node: Object): string {
   if (node.type === "Identifier") {
     return node.name;
   } else if (node.type === "MemberExpression") {
     return `${getObjectString(node.object)}.${getObjectString(node.property)}`;
   }
+  return node.name;
 }
 
 const modulePathMap = {
@@ -33,8 +42,12 @@ const getModulePath = module => {
     `babel-polyfill/lib/core-js/modules/${module}`;
 };
 
-export default function({ types: t }) {
-  function addImport(path, builtIn, builtIns) {
+export default function({ types: t }: { types: Object }): Plugin {
+  function addImport(
+    path: Object,
+    builtIn: string,
+    builtIns: Set<string>,
+  ): void {
     if (builtIn && !builtIns.has(builtIn)) {
       builtIns.add(builtIn);
 
@@ -49,7 +62,12 @@ export default function({ types: t }) {
     }
   }
 
-  function addUnsupported(path, polyfills, builtIn, builtIns) {
+  function addUnsupported(
+    path: Object,
+    polyfills: Set<string>,
+    builtIn: Array<string> | string,
+    builtIns: Set<string>,
+  ): void {
     if (Array.isArray(builtIn)) {
       for (const i of builtIn) {
         if (polyfills.has(i)) {
@@ -63,7 +81,7 @@ export default function({ types: t }) {
     }
   }
 
-  function isRequire(path) {
+  function isRequire(path: Object): boolean {
     return t.isExpressionStatement(path.node) &&
       t.isCallExpression(path.node.expression) &&
       t.isIdentifier(path.node.expression.callee) &&

@@ -83,35 +83,4 @@ describe("getTargets", () => {
       );
     });
   });
-
-  describe("uglify", () => {
-    it("should work with `true`", function() {
-      assert.deepEqual(
-        getTargets({
-          uglify: true,
-        }),
-        {
-          uglify: true,
-        },
-      );
-    });
-
-    it("should ignore `false`", function() {
-      assert.deepEqual(
-        getTargets({
-          uglify: false,
-        }),
-        {},
-      );
-    });
-
-    it("should ignore `null`", function() {
-      assert.deepEqual(
-        getTargets({
-          uglify: null,
-        }),
-        {},
-      );
-    });
-  });
 });

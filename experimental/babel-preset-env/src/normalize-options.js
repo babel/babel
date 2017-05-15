@@ -1,8 +1,11 @@
+//@flow
+
 import invariant from "invariant";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import pluginFeatures from "../data/plugin-features";
+import type { Options, ModuleOption, BuiltInsOption } from "./types";
 
 const validIncludesAndExcludes = new Set([
   ...Object.keys(pluginFeatures),
@@ -11,7 +14,10 @@ const validIncludesAndExcludes = new Set([
   ...defaultWebIncludes,
 ]);
 
-export const validateIncludesAndExcludes = (opts = [], type) => {
+export const validateIncludesAndExcludes = (
+  opts: Array<string> = [],
+  type: string,
+): Array<string> => {
   invariant(
     Array.isArray(opts),
     `Invalid Option: The '${type}' option must be an Array<String> of plugins/built-ins`,
@@ -21,29 +27,39 @@ export const validateIncludesAndExcludes = (opts = [], type) => {
 
   invariant(
     unknownOpts.length === 0,
-    `Invalid Option: The plugins/built-ins '${unknownOpts}' passed to the '${type}' option are not
+    `Invalid Option: The plugins/built-ins '${unknownOpts.join(", ")}' passed to the '${type}' option are not
     valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
   );
 
   return opts;
 };
 
-export const normalizePluginName = plugin =>
+export const normalizePluginName = (plugin: string): string =>
   plugin.replace(/^babel-plugin-/, "");
 
-export const normalizePluginNames = plugins => plugins.map(normalizePluginName);
+export const normalizePluginNames = (plugins: Array<string>): Array<string> =>
+  plugins.map(normalizePluginName);
 
-export const checkDuplicateIncludeExcludes = (include = [], exclude = []) => {
-  const duplicates = include.filter(opt => exclude.indexOf(opt) >= 0);
+export const checkDuplicateIncludeExcludes = (
+  include: Array<string> = [],
+  exclude: Array<string> = [],
+): void => {
+  const duplicates: Array<string> = include.filter(
+    opt => exclude.indexOf(opt) >= 0,
+  );
 
   invariant(
     duplicates.length === 0,
-    `Invalid Option: The plugins/built-ins '${duplicates}' were found in both the "include" and
+    `Invalid Option: The plugins/built-ins '${duplicates.join(", ")}' were found in both the "include" and
     "exclude" options.`,
   );
 };
 
-export const validateBoolOption = (name, value, defaultValue) => {
+export const validateBoolOption = (
+  name: string,
+  value: ?boolean,
+  defaultValue: boolean,
+) => {
   if (typeof value === "undefined") {
     value = defaultValue;
   }
@@ -55,16 +71,18 @@ export const validateBoolOption = (name, value, defaultValue) => {
   return value;
 };
 
-export const validateLooseOption = looseOpt =>
+export const validateLooseOption = (looseOpt: boolean) =>
   validateBoolOption("loose", looseOpt, false);
 
-export const validateSpecOption = specOpt =>
+export const validateSpecOption = (specOpt: boolean) =>
   validateBoolOption("spec", specOpt, false);
 
-export const validateForceAllTransformsOption = forceAllTransforms =>
+export const validateForceAllTransformsOption = (forceAllTransforms: boolean) =>
   validateBoolOption("forceAllTransforms", forceAllTransforms, false);
 
-export const validateModulesOption = (modulesOpt = "commonjs") => {
+export const validateModulesOption = (
+  modulesOpt: ModuleOption = "commonjs",
+) => {
   invariant(
     modulesOpt === false ||
       Object.keys(moduleTransformations).indexOf(modulesOpt) > -1,
@@ -75,7 +93,9 @@ export const validateModulesOption = (modulesOpt = "commonjs") => {
   return modulesOpt;
 };
 
-export const validateUseBuiltInsOption = (builtInsOpt = false) => {
+export const validateUseBuiltInsOption = (
+  builtInsOpt: BuiltInsOption = false,
+): BuiltInsOption => {
   invariant(
     builtInsOpt === "usage" || builtInsOpt === false || builtInsOpt === "entry",
     `Invalid Option: The 'useBuiltIns' option must be either
@@ -87,13 +107,13 @@ export const validateUseBuiltInsOption = (builtInsOpt = false) => {
   return builtInsOpt;
 };
 
-export default function normalizeOptions(opts) {
+export default function normalizeOptions(opts: Options) {
   if (opts.exclude) {
     opts.exclude = normalizePluginNames(opts.exclude);
   }
 
-  if (opts.whitelist || opts.include) {
-    opts.include = normalizePluginNames(opts.whitelist || opts.include);
+  if (opts.include) {
+    opts.include = normalizePluginNames(opts.include);
   }
 
   checkDuplicateIncludeExcludes(opts.include, opts.exclude);
@@ -106,7 +126,7 @@ export default function normalizeOptions(opts) {
     ),
     include: validateIncludesAndExcludes(opts.include, "include"),
     loose: validateLooseOption(opts.loose),
-    moduleType: validateModulesOption(opts.modules),
+    modules: validateModulesOption(opts.modules),
     spec: validateSpecOption(opts.spec),
     targets: opts.targets,
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),

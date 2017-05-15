@@ -3,10 +3,7 @@
 import browserslist from "browserslist";
 import semver from "semver";
 import { semverify } from "./utils";
-
-export type Targets = {
-  [target: string]: string,
-};
+import type { Targets } from "./types";
 
 const browserNameMap = {
   android: "android",
@@ -25,9 +22,9 @@ const semverMin = (first: ?string, second: string): string => {
   return first && semver.lt(first, second) ? first : second;
 };
 
-const getLowestVersions = browsers => {
+const getLowestVersions = (browsers: Array<string>): Targets => {
   return browsers.reduce(
-    (all, browser) => {
+    (all: Object, browser: string): Object => {
       const [browserName, browserVersion] = browser.split(" ");
       const normalizedBrowserName = browserNameMap[browserName];
 
@@ -80,14 +77,10 @@ const targetParserMap = {
 
     return [target, parsed];
   },
-
-  // TODO: Remove in next version.
-  // Only valid value for Uglify is `true`
-  uglify: (target, value) => [target, value === true],
 };
 
 const getTargets = (targets: Object = {}): Targets => {
-  let targetOpts = {};
+  let targetOpts: Targets = {};
 
   // Parse browsers target via browserslist
   if (isBrowsersQueryValid(targets.browsers)) {
@@ -95,8 +88,12 @@ const getTargets = (targets: Object = {}): Targets => {
   }
 
   // Parse remaining targets
+  type ParsedResult = {
+    targets: Targets,
+    decimalWarnings: Array<Object>,
+  };
   const parsed = Object.keys(targets).reduce(
-    (results, target) => {
+    (results: ParsedResult, target: string): ParsedResult => {
       if (target !== "browsers") {
         const value = targets[target];
 
@@ -111,16 +108,10 @@ const getTargets = (targets: Object = {}): Targets => {
 
         if (parsedValue) {
           // Merge (lowest wins)
-          if (typeof parsedValue === "string") {
-            results.targets[parsedTarget] = semverMin(
-              results.targets[parsedTarget],
-              parsedValue,
-            );
-          } else {
-            // We can remove this block if/when we replace Uglify target
-            // with top level option
-            results.targets[parsedTarget] = parsedValue;
-          }
+          results.targets[parsedTarget] = semverMin(
+            results.targets[parsedTarget],
+            parsedValue,
+          );
         }
       }
 

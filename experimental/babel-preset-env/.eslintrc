@@ -1,9 +1,15 @@
 {
-  "extends": "babel",
+  "extends": [
+    "babel",
+    "plugin:flowtype/recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": 7,
     "sourceType": "module"
   },
+  "plugins": [
+    "flowtype"
+  ],
   "rules": {
     "arrow-parens": "off",
     "indent": "off",
