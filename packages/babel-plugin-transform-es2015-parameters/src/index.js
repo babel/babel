@@ -34,8 +34,8 @@ export default function (babel) {
       "Function": function(path) {
         path.ensureBlock(); // so that we work correctly with arrow functions
         const arity = getFunctionArity(path.node);
-        
-        let paramReplacements = []; // of length = arity
+
+        const paramReplacements = []; // of length = arity
         // decide if the function is a simpleCase or not, find replacement identifiers for complex parameters
         // truncated to arity
         let simpleCase = true; // the case that we don't need to bring the args to function body
@@ -67,9 +67,9 @@ export default function (babel) {
           paramReplacements.push(t.restElement(rest));
         }
 
-        // arguments are supposed to throw on a TDZ reference, 
+        // arguments are supposed to throw on a TDZ reference,
         // hence a let declaration is the best way to mimic that
-        const parameterDeclaration = t.variableDeclaration("let", 
+        const parameterDeclaration = t.variableDeclaration("let",
           [t.variableDeclarator(lhs, t.arrayExpression(rhs))]
         );
 
