@@ -7,16 +7,16 @@ var concat = (..._ref) => {
 
 var somefun = function () {
   let get2ndArg = (a, b, ..._ref2) => {
-    let [,, ...args1] = [,, ..._ref2];
+    let [...args1] = [..._ref2];
 
     var _b = args1[0];
     let somef = (x, y, z, ..._ref3) => {
-      let [,,, ...args2] = [,,, ..._ref3];
+      let [...args2] = [..._ref3];
 
       var _a = args2[0];
     };
     let somefg = (c, d, e, f, ..._ref4) => {
-      let [,,,, ...args3] = [,,,, ..._ref4];
+      let [...args3] = [..._ref4];
 
       var _a = args3[0];
     };

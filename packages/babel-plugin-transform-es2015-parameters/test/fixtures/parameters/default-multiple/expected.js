@@ -5,7 +5,7 @@ var t = function (..._ref) {
 };
 
 var a = function (e, ..._ref2) {
-  let [, f = 5] = [, ..._ref2];
+  let [f = 5] = [..._ref2];
 
   return e + " bar " + f;
 };

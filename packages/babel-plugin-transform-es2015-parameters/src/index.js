@@ -7,7 +7,6 @@ export default function (babel) {
 
   function extractDeclaredVariables(declaration, fnPath) {
     const fn = t.functionExpression(null, [], t.blockStatement([declaration]));
-    //for some reason I can't push to function's "body" directly
     fnPath.get("body").unshiftContainer("body", t.expressionStatement(fn));
     const bindings = Object.keys(fnPath.get("body.body.0.expression").scope.bindings);
     fnPath.get("body").get("body.0").remove();
@@ -35,87 +34,108 @@ export default function (babel) {
         path.ensureBlock(); // so that we work correctly with arrow functions
         const arity = getFunctionArity(path.node);
 
-        const paramReplacements = []; // of length = arity
-        // decide if the function is a simpleCase or not, find replacement identifiers for complex parameters
-        // truncated to arity
-        let simpleCase = true; // the case that we don't need to bring the args to function body
+        const parameterBindings = extractDeclaredVariables(
+          t.variableDeclaration("var", [t.variableDeclarator(t.arrayPattern(path.node.params))]),
+          path
+        );
+        const paramsContainAFunction = checkIfParamsContainAFunction(path);
+
+        // logic to find replacement identifiers for complex parameters
+        let lhs = [];
+        let rhs = [];
+        let arityLessThanParams = arity < path.get("params").length;
+        let simpleCase = true; // the case that this plugin isn't needed 
         for (let i = 0; i < path.get("params").length; i++) {
-          const param = path.get("params")[i].node;
-          if (param.type == "Identifier") {
-            paramReplacements.push(param);
-          } else {
+          const paramPath = path.get("params")[i];
+          
+          if (i >= arity) {
+            lhs.push(paramPath.node);
+            paramPath.remove();
             simpleCase = false;
-            if (paramReplacements.length < arity) {
+            i--; // since we removed this one, the next one will be shifted to this index
+          } else {
+            if (paramPath.node.type != "Identifier") {
+              simpleCase = false;
               const sym = path.scope.generateUidIdentifier("ref");
-              paramReplacements.push(sym); // to maintain arity
-            }
+              lhs.push(paramPath.node);
+              paramPath.replaceWith(sym);
+              rhs.push(sym);
+            } 
           }
+        }
+        
+        if (arityLessThanParams) {
+          const rest = path.scope.generateUidIdentifier("ref");
+          rhs.push(t.spreadElement(rest));
+          path.pushContainer("params", t.restElement(rest));
         }
 
         if (simpleCase) return; // early exit
 
-        // prepare lhs and rhs for the parameterDelcaration
-        const lhs = t.arrayPattern([]);
-        lhs.elements = path.get("params").map(
-          (x, ix) => {return x.type == "Identifier" && ix < arity ? null : x.node;}
-        ); //hack, not using the constructor directly since it's throwing a nonsensical error
-        const rhs = paramReplacements.map((x, ix) => {return lhs.elements[ix] == null ? null : x;});
-
-        if (path.get("params").length > arity) {
-          const rest = path.scope.generateUidIdentifier("ref");
-          rhs.push(t.spreadElement(rest));
-          paramReplacements.push(t.restElement(rest));
-        }
-
         // arguments are supposed to throw on a TDZ reference,
         // hence a let declaration is the best way to mimic that
         const parameterDeclaration = t.variableDeclaration("let",
-          [t.variableDeclarator(lhs, t.arrayExpression(rhs))]
+          [t.variableDeclarator(t.arrayPattern(lhs), t.arrayExpression(rhs))]
         );
 
-        if (checkIfParamsContainAFunction(path)) {
-          // if yes, then we'll put the original function body in a block scope and convert vars to lets so
-          // that functions don't have access to the variables declared in the function body
-          let fnBodyVarBindings = [];
-          const functionParent = path;
+        let fnBodyVarBindings = [];
+        const fnBodyVarDeclarationPaths = []; // lookup array just to avoid traversing again later
+        const functionParent = path;
 
-          path.traverse({
-            VariableDeclaration: function (path) {
-              if (path.node.kind == "var" && path.getFunctionParent() == functionParent) {
-                fnBodyVarBindings = fnBodyVarBindings.concat(
-                  extractDeclaredVariables(t.clone(path.node), path.getFunctionParent())
-                );
+        path.traverse({
+          VariableDeclaration: function (path) {
+            if (path.node.kind == "var" && path.getFunctionParent() == functionParent) {
+              fnBodyVarBindings = fnBodyVarBindings.concat(
+                extractDeclaredVariables(t.clone(path.node), path.getFunctionParent())
+              );
+              fnBodyVarDeclarationPaths.push(path);
+            }
+          },
+        });
 
-                let lhs, rhs;
-                if (path.node.declarations.length > 1) {
-                  lhs = t.arrayPattern([path.node.declarations.map((x) => x.id)]);
-                  rhs = t.arrayPattern([path.node.declarations.map((x) => x.init)]);
-                } else {
-                  lhs = path.node.declarations[0].id;
-                  rhs = path.node.declarations[0].init;
-                }
+        fnBodyVarBindings = unique(fnBodyVarBindings);
+        const commonBindings = intersection(fnBodyVarBindings, parameterBindings);
 
-                path.replaceWith(t.assignmentExpression("=", lhs, rhs));
+        if (paramsContainAFunction || commonBindings.length > 0) { // put body in a block
+
+          // first convert existing declarations to assignments where applicable
+          for (const path of fnBodyVarDeclarationPaths) {
+            let lhs = [], rhs = [];
+            for (const declaration of path.node.declarations) {
+              if (declaration.init !== null) {
+                lhs.push(declaration.id);
+                rhs.push(declaration.init);
               }
-            },
-          });
+            }
 
-          fnBodyVarBindings = unique(fnBodyVarBindings);
+            if (lhs.length == 0) {
+              path.remove();
+            } else if (lhs.length == 1) {
+              path.replaceWith(t.assignmentExpression("=", lhs[0], rhs[0]));
+            } else {
+              path.replaceWith(t.assignmentExpression("=", t.arrayPattern(lhs), t.arrayExpression(rhs)));
+            }
+          }
 
           const bodyClone = t.cloneDeep(path.get("body").node);
           path.get("body").replaceWith(t.blockStatement([parameterDeclaration]));
 
           if (fnBodyVarBindings.length > 0) { // convert these var declarations, initialize and hoist them
-            const parameterBindings = extractDeclaredVariables(parameterDeclaration, path);
-            const commonBindings = intersection(fnBodyVarBindings, parameterBindings);
             const commonBindingMap = {};
             for (const binding of commonBindings) {
               commonBindingMap[binding] = path.scope.generateUidIdentifier(binding).name;
               path.scope.rename(binding, commonBindingMap[binding]);
+              // special treatment for renaming the identifiers in params. See #5734
+              for (const paramPath of path.get("params")) {
+                if (paramPath.node.name == binding) paramPath.node.name = commonBindingMap[binding]; 
+              }
             }
 
             const redeclareDeclaration = t.variableDeclaration("let", fnBodyVarBindings.map(
-              (x) => t.variableDeclarator(t.identifier(x), t.identifier(commonBindingMap[x]))
+              (x) => t.variableDeclarator(
+                t.identifier(x),
+                commonBindings.indexOf(x) > -1? t.identifier(commonBindingMap[x]): undefined
+              )
             ));
 
             bodyClone.body.unshift(redeclareDeclaration);
@@ -125,8 +145,6 @@ export default function (babel) {
         } else {
           path.get("body").unshiftContainer("body", parameterDeclaration);
         }
-
-        path.node.params = paramReplacements; // there doesn't seem to be a path.replace way to do this
       },
     },
   };

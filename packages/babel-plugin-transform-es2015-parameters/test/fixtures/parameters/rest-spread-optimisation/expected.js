@@ -9,7 +9,7 @@ function foo(..._ref) {
 // deoptimisation
 
 function foo(a, ..._ref2) {
-  let [, ...b] = [, ..._ref2];
+  let [...b] = [..._ref2];
 
   foo(...b);
 }

@@ -65,7 +65,7 @@ function a(..._ref6) {
 
 // loop
 function runQueue(queue, ..._ref7) {
-  let [, ...args] = [, ..._ref7];
+  let [...args] = [..._ref7];
 
   for (let i = 0; i < queue.length; i++) {
     queue[i](...args);
@@ -74,7 +74,7 @@ function runQueue(queue, ..._ref7) {
 
 // nested loop
 function runQueue(queue, ..._ref8) {
-  let [, ...args] = [, ..._ref8];
+  let [...args] = [..._ref8];
 
   if (foo) {
     for (let i = 0; i < queue.length; i++) {

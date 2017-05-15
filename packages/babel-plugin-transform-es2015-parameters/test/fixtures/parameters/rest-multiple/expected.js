@@ -1,5 +1,5 @@
 var t = function (f, ..._ref) {
-    let [, ...items] = [, ..._ref];
+    let [...items] = [..._ref];
 
     var x = f;
     x = items[0];
@@ -7,7 +7,7 @@ var t = function (f, ..._ref) {
 };
 
 function t(f, ..._ref2) {
-    let [, ...items] = [, ..._ref2];
+    let [...items] = [..._ref2];
 
     var x = f;
     x = items[0];
@@ -15,7 +15,7 @@ function t(f, ..._ref2) {
 }
 
 function u(f, g, ..._ref3) {
-    let [,, ...items] = [,, ..._ref3];
+    let [...items] = [..._ref3];
 
     var x = f;
     var y = g;

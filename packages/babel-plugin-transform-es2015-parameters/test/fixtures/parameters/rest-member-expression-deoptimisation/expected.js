@@ -1,11 +1,11 @@
 var x = function (foo, ..._ref) {
-  let [, ...bar] = [, ..._ref];
+  let [...bar] = [..._ref];
 
   console.log(bar);
 };
 
 var y = function (foo, ..._ref2) {
-  let [, ...bar] = [, ..._ref2];
+  let [...bar] = [..._ref2];
 
   var x = function z(bar) {
     bar[1] = 5;
@@ -13,7 +13,7 @@ var y = function (foo, ..._ref2) {
 };
 
 var b = function (x, y, ..._ref3) {
-  let [,, ...args] = [,, ..._ref3];
+  let [...args] = [..._ref3];
 
   console.log(args[0]);
   args.pop();
@@ -21,7 +21,7 @@ var b = function (x, y, ..._ref3) {
 };
 
 var z = function (foo, ..._ref4) {
-  let [, ...bar] = [, ..._ref4];
+  let [...bar] = [..._ref4];
 
   var x = function () {
     bar[1] = 5;
@@ -29,13 +29,13 @@ var z = function (foo, ..._ref4) {
 };
 
 var a = function (foo, ..._ref5) {
-  let [, ...bar] = [, ..._ref5];
+  let [...bar] = [..._ref5];
 
   return bar.join(",");
 };
 
 var b = function (foo, ..._ref6) {
-  let [, ...bar] = [, ..._ref6];
+  let [...bar] = [..._ref6];
 
   var join = "join";
   return bar[join];
@@ -48,13 +48,13 @@ var b = function (..._ref7) {
 };
 
 var b = function (foo, ..._ref8) {
-  let [, ...bar] = [, ..._ref8];
+  let [...bar] = [..._ref8];
 
   return bar.length * 2;
 };
 
 var b = function (foo, baz, ..._ref9) {
-  let [,, ...bar] = [,, ..._ref9];
+  let [...bar] = [..._ref9];
 
   return bar.length;
 };

@@ -1,3 +1,3 @@
-function foo(b, ..._ref) {
-  let [a = "foo", b] = [b, ..._ref];
+function foo(..._ref) {
+  let [a = "foo", b] = [..._ref];
 }
