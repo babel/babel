@@ -8,7 +8,7 @@ import NodePath from "./index";
  * When the `callback` returns a truthy value, we return that node path.
  */
 
-export function findParent(callback) {
+export function findParent(callback) : ?NodePath {
   let path = this;
   while (path = path.parentPath) {
     if (callback(path)) return path;
@@ -20,7 +20,7 @@ export function findParent(callback) {
  * Description
  */
 
-export function find(callback) {
+export function find(callback) : ?NodePath {
   let path = this;
   do {
     if (callback(path)) return path;
@@ -32,7 +32,7 @@ export function find(callback) {
  * Get the parent function of the current path.
  */
 
-export function getFunctionParent() {
+export function getFunctionParent() : ?NodePath {
   return this.findParent((path) => path.isFunction() || path.isProgram());
 }
 
@@ -40,7 +40,7 @@ export function getFunctionParent() {
  * Walk up the tree until we hit a parent node path in a list.
  */
 
-export function getStatementParent() {
+export function getStatementParent() : NodePath {
   let path = this;
   do {
     if (Array.isArray(path.container)) {
@@ -166,7 +166,7 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
  * NOTE: The current node path is included in this.
  */
 
-export function getAncestry() {
+export function getAncestry() : Array<NodePath> {
   let path = this;
   const paths = [];
   do {
@@ -178,18 +178,18 @@ export function getAncestry() {
 /**
  * A helper to find if `this` path is an ancestor of @param maybeDescendant
  */
-export function isAncestor(maybeDescendant) {
+export function isAncestor(maybeDescendant : NodePath) : boolean {
   return maybeDescendant.isDescendant(this);
 }
 
 /**
  * A helper to find if `this` path is a descendant of @param maybeAncestor
  */
-export function isDescendant(maybeAncestor) {
+export function isDescendant(maybeAncestor : NodePath) : boolean {
   return !!this.findParent((parent) => parent === maybeAncestor);
 }
 
-export function inType() {
+export function inType() : boolean {
   let path = this;
   while (path) {
     for (const type of (arguments: Array)) {
