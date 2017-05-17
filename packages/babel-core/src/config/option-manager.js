@@ -10,6 +10,7 @@ import buildConfigChain from "./build-config-chain";
 import path from "path";
 import traverse from "babel-traverse";
 import clone from "lodash/clone";
+import DagMap from "dag-map";
 
 import { loadPlugin, loadPreset, loadParser, loadGenerator } from "./loading/files";
 
@@ -72,6 +73,7 @@ const ALLOWED_PLUGIN_KEYS = new Set([
   "inherits",
   "capabilities",
   "dependencies",
+  "optionalDependencies",
 ]);
 
 export default function manageOptions(opts: {}): {
@@ -82,58 +84,54 @@ export default function manageOptions(opts: {}): {
 }
 
 function sortPlugins(plugins) {
-  // need to handle cycles (either error, add inherent priority)
-  // need to warn/error on duplicate capabilities
+  const graph = new DagMap();
+  const capabilitiesToPluginIdMap = Object.create(null);
 
-  const mapped = plugins.map(([ plugin ], i) => {
-    return { index: i, value: plugin };
-  });
+  console.log("plugins");
+  console.log(plugins);
 
-  const capabilitiesABMap = [];
-  const capabilitiesBAMap = [];
-
-  mapped.sort(function({ value: pluginA }, { value: pluginB }) {
-    if (pluginA.dependencies) {
-      pluginA.dependencies.forEach((capability) => {
-        if (pluginB.capabilities && pluginB.capabilities.indexOf(capability) > -1) {
-          // Plugin A needs to run before Plugin B
-          // if A depends on a capability in B
-          capabilitiesABMap.push([pluginA.key, pluginB.key]);
+  plugins.forEach((descriptor) => {
+    const [plugin] = descriptor;
+    if (plugin.capabilities) {
+      plugin.capabilities.forEach((capability) => {
+        const existingPlugin = capabilitiesToPluginIdMap[capability];
+        if (existingPlugin !== undefined) {
+          throw new Error(`cannot have two plugins with same capability,
+            both ${plugin.key} and ${existingPlugin.key} provide capability: ${capability}`
+          );
         }
+        capabilitiesToPluginIdMap[capability] = plugin.key;
       });
     }
-
-    if (pluginB.dependencies) {
-      pluginB.dependencies.forEach((capability) => {
-        if (pluginA.capabilities && pluginA.capabilities.indexOf(capability) > -1) {
-          // Plugin B needs to run before Plugin A
-          // if B depends on a capability in A
-          capabilitiesBAMap.push([pluginB.key, pluginA.key]);
-        }
-      });
-    }
-
-    if (capabilitiesABMap.length > 0 && capabilitiesBAMap.length === 0) {
-      return -1;
-    } else if (capabilitiesBAMap.length > 0 && capabilitiesABMap.length === 0) {
-      return 1;
-    }
-
-    return 0;
   });
 
-  // if (capabilitiesABMap.length > 0) {
-  //   console.log(capabilitiesABMap.map(([a, b]) => {
-  //     return `${a} depends on ${b}`;
-  //   }));
-  // }
-  // if (capabilitiesBAMap.length > 0) {
-  //   console.log(capabilitiesBAMap.map(([a, b]) => {
-  //     return `${a} depends on ${b}`;
-  //   }));
-  // }
+  plugins.forEach((descriptor) => {
+    const [plugin] = descriptor;
+    const mappedDependencies = (plugin.dependencies || []).map((dependency) => {
+      const idForDependency = capabilitiesToPluginIdMap[dependency];
+      if (idForDependency === undefined) {
+        throw new Error(`${plugin.key} requires ${dependency} but it was not provided`);
+      }
 
-  return mapped.map((el) => plugins[el.index]);
+      return idForDependency;
+    });
+
+    const mappedOptionalDependencies = (plugin.optionalDependencies || [])
+    .map((dependency) => capabilitiesToPluginIdMap[dependency])
+    .filter(Boolean);
+
+    graph.add(plugin.key, descriptor, [...mappedDependencies, ...mappedOptionalDependencies]);
+  });
+
+  const sortedPlugins = [];
+  graph.each((key, value) => {
+    sortedPlugins.push(value);
+  });
+
+  console.log("sortedPlugins");
+  console.log(sortedPlugins);
+
+  return sortedPlugins;
 }
 
 class OptionManager {
@@ -157,11 +155,8 @@ class OptionManager {
   mergeOptions(config: MergeOptions, pass?: Array<[Plugin, ?{}]>) {
     const result = loadConfig(config);
 
-    let plugins = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
-    // sort plugins by capabilties and dependencies
-    plugins = sortPlugins(plugins);
+    const plugins = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
     const presets = result.presets.map((descriptor) => loadPresetDescriptor(descriptor));
-
 
     if (
       config.options.passPerPreset != null &&
@@ -215,6 +210,9 @@ class OptionManager {
     }
 
     opts = this.options;
+
+    // sort plugins by capabilities and dependencies
+    this.passes[0] = sortPlugins(this.passes[0]);
 
     // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
     // it will be in the right structure to not change behavior.

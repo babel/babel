@@ -284,8 +284,8 @@ export default function({ types: t }) {
   return {
     inherits: syntaxDecorators,
 
-    dependencies: ["classProperties"],
     capabilities: ["decorators"],
+    optionalDependencies: ["classProperties"],
 
     visitor: {
       ExportDefaultDeclaration(path) {

@@ -8,6 +8,7 @@ describe("traversal path", function () {
 
     const actualCode = transform(expectCode, {
       plugins: [new Plugin({
+        name: "test",
         visitor: {
           FunctionDeclaration: function (path) {
             path.replaceWithSourceString("console.whatever()");
@@ -24,6 +25,7 @@ describe("traversal path", function () {
 
     const actualCode = transform(expectCode, {
       plugins: [new Plugin({
+        name: "test",
         visitor: {
           ArrowFunctionExpression: function (path) {
             path.get("body").replaceWith({
@@ -49,6 +51,7 @@ describe("traversal path", function () {
 
     const actualCode = transform(expectCode, {
       plugins: [new Plugin({
+        name: "test",
         visitor: {
           ArrowFunctionExpression: function (path) {
             path.get("body").replaceWith({
@@ -68,6 +71,7 @@ describe("traversal path", function () {
 
     const actualCode = transform(expectCode, {
       plugins: [new Plugin({
+        name: "test",
         visitor: {
           ForInStatement: function (path) {
             path.get("left").replaceWith({
@@ -94,6 +98,7 @@ describe("traversal path", function () {
 
     const actualCode = transform(expectCode, {
       plugins: [new Plugin({
+        name: "test",
         visitor: {
           ForInStatement: function (path) {
             path.get("left").replaceWith({
@@ -113,6 +118,7 @@ describe("traversal path", function () {
 
     const actualCode = transform(expectCode, {
       plugins: [new Plugin({
+        name: "test",
         visitor: {
           ForStatement: function (path) {
             path.get("init").replaceWith({
@@ -139,6 +145,7 @@ describe("traversal path", function () {
 
     const actualCode = transform(expectCode, {
       plugins: [new Plugin({
+        name: "test",
         visitor: {
           ForStatement: function (path) {
             path.get("init").replaceWith({

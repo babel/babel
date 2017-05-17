@@ -100,6 +100,7 @@ describe("api", function () {
 
     assert.equal(babel.analyse("foobar;", {
       plugins: [new Plugin({
+        name: "foobar",
         visitor: {
           Program: function (path) {
             path.mark("category", "foobar");
@@ -205,6 +206,7 @@ describe("api", function () {
             return {
               plugins: [
                 new Plugin({
+                  name: "test",
                   visitor: {
                     Function: function (path) {
                       const alias = path.scope.getProgramParent().path.get("body")[0].node;
