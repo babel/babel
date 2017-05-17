@@ -855,8 +855,8 @@ A member expression. If `computed` is `true`, the node corresponds to a computed
 ```js
 interface BindExpression <: Expression {
     type: "BindExpression";
-    object: [ Expression | null ];
-    callee: [ Expression ]
+    object: Expression | null;
+    callee: Expression;
 }
 ```
 
