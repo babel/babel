@@ -314,8 +314,15 @@ export default class ExpressionParser extends LValParser {
         const node = this.startNodeAt(startPos, startLoc);
         node.callee = base;
         node.arguments = this.parseCallExpressionArguments(tt.parenR, possibleAsync);
-        if (node.callee.type === "Import" && node.arguments.length !== 1) {
-          this.raise(node.start, "import() requires exactly one argument");
+        if (node.callee.type === "Import") {
+          if (node.arguments.length !== 1) {
+            this.raise(node.start, "import() requires exactly one argument");
+          }
+
+          const importArg = node.arguments[0];
+          if (importArg && importArg.type === "SpreadElement") {
+            this.raise(importArg.start, "... is not allowed in import()");
+          }
         }
         base = this.finishNode(node, "CallExpression");
 
