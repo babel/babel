@@ -13,6 +13,12 @@ import type NodePath from "../path";
 
 export default class Binding {
   constructor({ existing, identifier, scope, path, kind }) {
+    // if the re-binding is var, maintain the original binding but update constantViolations
+    if (existing && kind == "var") {
+      existing.constantViolations = existing.constantViolations.concat(path);
+      return existing;
+    }
+
     this.identifier = identifier;
     this.scope = scope;
     this.path = path;
