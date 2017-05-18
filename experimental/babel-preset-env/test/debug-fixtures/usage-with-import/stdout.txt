@@ -12,8 +12,5 @@ Using plugins:
 
 Using polyfills with `usage` option:
 
-  When setting `useBuiltIns: 'usage'`, polyfills are automatically imported when needed.
-  Please remove the `import 'babel-polyfill'` call or use `useBuiltIns: 'entry'` instead.
-
-[index.js] Based on your code and targets, none were added.
+[src/in.js] Based on your code and targets, none were added.
 src/in.js -> lib/in.js
