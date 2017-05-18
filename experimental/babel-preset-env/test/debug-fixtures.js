@@ -28,7 +28,7 @@ const testOutputType = (type, stdTarg, opts) => {
 
   if (optsTarg) {
     const expectStdout = optsTarg.trim();
-    chai.expect(stdTarg).to.equal(expectStdout, "stdout didn't match");
+    chai.expect(stdTarg).to.equal(expectStdout, `${type} didn't match`);
   } else {
     const file = path.join(opts.testLoc, `${type}.txt`);
     console.log(`New test file created: ${file}`);
@@ -64,8 +64,8 @@ const buildTest = opts => {
     let stdout = "";
     let stderr = "";
 
-    spawn.stdout.on("data", chunk => (stdout += chunk));
-    spawn.stderr.on("data", chunk => (stderr += chunk));
+    spawn.stdout.on("data", chunk => stdout += chunk);
+    spawn.stderr.on("data", chunk => stderr += chunk);
 
     spawn.on("close", () => {
       let err;
@@ -93,9 +93,14 @@ describe("debug output", () => {
     };
 
     const stdoutLoc = path.join(testLoc, "stdout.txt");
+    const stderrLoc = path.join(testLoc, "stderr.txt");
 
     if (fs.existsSync(stdoutLoc)) {
       opts.stdout = helper.readFile(stdoutLoc);
+    }
+
+    if (fs.existsSync(stderrLoc)) {
+      opts.stderr = helper.readFile(stderrLoc);
     }
 
     const optionsLoc = path.join(testLoc, "options.json");
