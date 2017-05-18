@@ -37,12 +37,6 @@ const testOutputType = (type, stdTarg, opts) => {
 };
 
 const assertTest = (stdout, stderr, opts) => {
-  // stderr = stderr.trim();
-
-  // if (stderr) {
-  //   throw new Error("stderr:\n" + stderr);
-  // }
-
   testOutputType("stdout", stdout, opts);
   if (stderr) {
     testOutputType("stderr", stderr, opts);
