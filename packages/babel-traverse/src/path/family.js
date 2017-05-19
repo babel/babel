@@ -4,24 +4,6 @@ import type TraversalContext from "../index";
 import NodePath from "./index";
 import * as t from "babel-types";
 
-export function getStatementParent(): ?NodePath {
-  let path = this;
-
-  do {
-    if (!path.parentPath || (Array.isArray(path.container) && path.isStatement())) {
-      break;
-    } else {
-      path = path.parentPath;
-    }
-  } while (path);
-
-  if (path && (path.isProgram() || path.isFile())) {
-    throw new Error("File/Program node, we can't possibly find a statement parent to this");
-  }
-
-  return path;
-}
-
 export function getOpposite() {
   if (this.key === "left") {
     return this.getSibling("right");

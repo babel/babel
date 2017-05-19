@@ -1,6 +1,5 @@
 import traverse from "../lib";
 import assert from "assert";
-import { expect } from "chai";
 import { parse } from "babylon";
 
 describe("path/family", function () {
@@ -77,18 +76,6 @@ describe("path/family", function () {
       assert.ok(lastSibling.getAllPrevSiblings().length, "Has prev sibling");
       assert.equal(sibling.getAllNextSiblings().length, 2, "Has 2 succeeding sibling");
       assert.equal(lastSibling.getAllPrevSiblings().length, 2, "Has 2 preceeding sibling");
-    });
-  });
-  describe("getStatementParent", function () {
-    const ast = parse("var a = 1;");
-    it("should throw", function () {
-      expect(function () {
-        traverse(ast, {
-          Program(path) {
-            path.getStatementParent();
-          },
-        });
-      }).to.throw(/File\/Program node/);
     });
   });
 });

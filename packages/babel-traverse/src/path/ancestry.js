@@ -40,13 +40,22 @@ export function getFunctionParent() {
  * Walk up the tree until we hit a parent node path in a list.
  */
 
-export function getStatementParent() {
+export function getStatementParent(): ?NodePath {
   let path = this;
+
   do {
-    if (Array.isArray(path.container)) {
-      return path;
+    if (!path.parentPath || (Array.isArray(path.container) && path.isStatement())) {
+      break;
+    } else {
+      path = path.parentPath;
     }
-  } while (path = path.parentPath);
+  } while (path);
+
+  if (path && (path.isProgram() || path.isFile())) {
+    throw new Error("File/Program node, we can't possibly find a statement parent to this");
+  }
+
+  return path;
 }
 
 /**
