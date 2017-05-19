@@ -17,14 +17,11 @@ var A = function (_B) {
     _classCallCheck(this, A);
 
     if (track !== undefined) {
-      ;
-
       var _this = _possibleConstructorReturn(this, (A.__proto__ || Object.getPrototypeOf(A)).call(this, track));
     } else {
-      ;
-
       var _this = _possibleConstructorReturn(this, (A.__proto__ || Object.getPrototypeOf(A)).call(this));
-    }return _possibleConstructorReturn(_this);
+    }
+    return _possibleConstructorReturn(_this);
   }
 
   return A;

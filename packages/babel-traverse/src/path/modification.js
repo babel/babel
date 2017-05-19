@@ -126,7 +126,10 @@ export function insertAfter(nodes) {
     if (Array.isArray(this.container)) {
       return this._containerInsertAfter(nodes);
     } else if (this.isStatementOrBlock()) {
-      if (this.node) nodes.unshift(this.node);
+      // Unshift current node if it's not an empty expression
+      if (this.node && (!this.isNodeType("ExpressionStatement") || this.node.expression != null)) {
+        nodes.unshift(this.node);
+      }
       this._replaceWith(t.blockStatement(nodes));
     } else {
       throw new Error("We don't know what to do with this node type. " +
