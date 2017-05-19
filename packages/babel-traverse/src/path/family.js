@@ -216,3 +216,20 @@ export function getBindingIdentifierPaths(duplicates = false, outerOnly = false)
 export function getOuterBindingIdentifierPaths(duplicates?) {
   return this.getBindingIdentifierPaths(duplicates, true);
 }
+
+// Traverses all children and returns the first child for which the filter returns true.
+export function findChild(type, predicate) {
+  let result = null;
+  predicate = predicate || (() => true);
+
+  this.traverse({
+    [type]: function (path) {
+      if (predicate(path)) {
+        result = path;
+        path.stop();
+      }
+    },
+  });
+
+  return result;
+}

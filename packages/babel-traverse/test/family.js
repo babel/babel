@@ -78,6 +78,30 @@ describe("path/family", function () {
       assert.equal(lastSibling.getAllPrevSiblings().length, 2, "Has 2 preceeding sibling");
     });
   });
+
+  describe("findChild", function () {
+    const ast = parse("function f(a) {var b = a + 1; return b;}");
+    let path;
+    traverse(ast, {
+      Function(p) {
+        path = p;
+      },
+    });
+
+    it("should return child of given type", function () {
+      assert.notEqual(path.findChild('Identifier').node.name, null);
+      assert.equal(path.findChild('Identifier', (x) => x.node.name == 'b').node.name, 'b');
+    });
+
+    it("should return null if the child could not be found", function () {
+      assert.equal(path.findChild('ArrayExpression'), null);
+      assert.equal(path.findChild('Identifier', (x) => x.node.name == 'x'), null);
+    });
+
+    it("should not match itself", function () {
+      assert.equal(path.findChild('Function'), null);
+    });
+  });
 });
 
 function hop(o, key) {
