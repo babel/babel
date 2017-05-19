@@ -1,3 +1,5 @@
+if (parseInt(process.version.slice(1)) < 6) process.exit();
+
 const val = (function f(a, b = (() => a)) {
   var a;
   assert.equal(a, 1);

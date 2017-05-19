@@ -1,3 +1,5 @@
+if (parseInt(process.version.slice(1)) < 6) process.exit();
+
 function single ({a}, b) {
   var a = 3;
   assert.equal(a, 3);

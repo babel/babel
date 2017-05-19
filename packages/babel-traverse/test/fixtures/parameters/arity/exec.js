@@ -1,3 +1,5 @@
+if (parseInt(process.version.slice(1)) < 6) process.exit();
+
 function f({a}, {b}, {c = ""}) { return [a, b, c] }
 function g({a}, {b} = {b: 2}) { return [a, b] }
 function h({a}, {b} = {b: 2}, c) { return [a, b, c] }
