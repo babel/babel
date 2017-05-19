@@ -20,6 +20,7 @@ import * as NodePath_removal from "./removal";
 import * as NodePath_modification from "./modification";
 import * as NodePath_family from "./family";
 import * as NodePath_comments from "./comments";
+import * as NodePath_parameters from "./parameters";
 
 const debug = buildDebug("babel");
 
@@ -174,7 +175,8 @@ Object.assign(NodePath.prototype,
   NodePath_removal,
   NodePath_modification,
   NodePath_family,
-  NodePath_comments);
+  NodePath_comments,
+  NodePath_parameters);
 
 for (const type of (t.TYPES: Array<string>)) {
   const typeKey = `is${type}`;
