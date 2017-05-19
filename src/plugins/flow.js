@@ -1061,6 +1061,17 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
         || super.shouldParseExportDeclaration();
   }
 
+  isExportDefaultSpecifier(): boolean {
+    if (
+      this.match(tt.name) &&
+      (this.state.value === "type" || this.state.value === "interface")
+    ) {
+      return false;
+    }
+
+    return super.isExportDefaultSpecifier();
+  }
+
   parseConditional(expr: N.Expression, noIn: ?boolean, startPos: number, startLoc: Position, refNeedsArrowPos?: Pos): N.Expression {
     // only do the expensive clone if there is a question mark
     // and if we come from inside parens
