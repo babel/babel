@@ -89,17 +89,17 @@ describe("path/family", function () {
     });
 
     it("should return child of given type", function () {
-      assert.notEqual(path.findChild('Identifier').node.name, null);
-      assert.equal(path.findChild('Identifier', (x) => x.node.name == 'b').node.name, 'b');
+      assert.notEqual(path.findChild("Identifier").node.name, null);
+      assert.equal(path.findChild("Identifier", (x) => x.node.name == "b").node.name, "b");
     });
 
     it("should return null if the child could not be found", function () {
-      assert.equal(path.findChild('ArrayExpression'), null);
-      assert.equal(path.findChild('Identifier', (x) => x.node.name == 'x'), null);
+      assert.equal(path.findChild("ArrayExpression"), null);
+      assert.equal(path.findChild("Identifier", (x) => x.node.name == "x"), null);
     });
 
     it("should not match itself", function () {
-      assert.equal(path.findChild('Function'), null);
+      assert.equal(path.findChild("Function"), null);
     });
   });
 });

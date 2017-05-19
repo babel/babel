@@ -80,8 +80,8 @@ export function inlineParameters() {
   fnBodyVarBindingSymbols = unique(fnBodyVarBindingSymbols);
   const commonSymbols = intersection(fnBodyVarBindingSymbols, parameterBindings);
 
-  if (!paramsContainAFunction && commonSymbols.length == 0) { 
-    this.get("body").unshiftContainer("body", parameterDeclaration)
+  if (!paramsContainAFunction && commonSymbols.length == 0) {
+    this.get("body").unshiftContainer("body", parameterDeclaration);
   } else { // put body in a block
 
     // first convert existing declarations to assignments where applicable
@@ -129,4 +129,4 @@ export function inlineParameters() {
 
     this.get("body").pushContainer("body", bodyClone);
   }
-};
+}
