@@ -23,30 +23,27 @@ const semverMin = (first: ?string, second: string): string => {
 };
 
 const getLowestVersions = (browsers: Array<string>): Targets => {
-  return browsers.reduce(
-    (all: Object, browser: string): Object => {
-      const [browserName, browserVersion] = browser.split(" ");
-      const normalizedBrowserName = browserNameMap[browserName];
+  return browsers.reduce((all: Object, browser: string): Object => {
+    const [browserName, browserVersion] = browser.split(" ");
+    const normalizedBrowserName = browserNameMap[browserName];
 
-      if (!normalizedBrowserName) {
-        return all;
-      }
-
-      try {
-        // Browser version can return as "10.0-10.2"
-        const splitVersion = browserVersion.split("-")[0];
-        const parsedBrowserVersion = semverify(splitVersion);
-
-        all[normalizedBrowserName] = semverMin(
-          all[normalizedBrowserName],
-          parsedBrowserVersion,
-        );
-      } catch (e) {}
-
+    if (!normalizedBrowserName) {
       return all;
-    },
-    {},
-  );
+    }
+
+    try {
+      // Browser version can return as "10.0-10.2"
+      const splitVersion = browserVersion.split("-")[0];
+      const parsedBrowserVersion = semverify(splitVersion);
+
+      all[normalizedBrowserName] = semverMin(
+        all[normalizedBrowserName],
+        parsedBrowserVersion,
+      );
+    } catch (e) {}
+
+    return all;
+  }, {});
 };
 
 const outputDecimalWarning = (decimalTargets: Array<Object>): void => {
@@ -57,7 +54,8 @@ const outputDecimalWarning = (decimalTargets: Array<Object>): void => {
   console.log("Warning, the following targets are using a decimal version:");
   console.log("");
   decimalTargets.forEach(({ target, value }) =>
-    console.log(`  ${target}: ${value}`));
+    console.log(`  ${target}: ${value}`),
+  );
   console.log("");
   console.log(
     "We recommend using a string for minor/patch versions to avoid numbers like 6.10",

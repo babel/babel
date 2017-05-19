@@ -56,8 +56,8 @@ const buildTest = opts => {
     let stdout = "";
     let stderr = "";
 
-    spawn.stdout.on("data", chunk => stdout += chunk);
-    spawn.stderr.on("data", chunk => stderr += chunk);
+    spawn.stdout.on("data", chunk => (stdout += chunk));
+    spawn.stderr.on("data", chunk => (stderr += chunk));
 
     spawn.on("close", () => {
       let err;

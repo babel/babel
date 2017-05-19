@@ -38,8 +38,9 @@ const modulePathMap = {
 };
 
 const getModulePath = module => {
-  return modulePathMap[module] ||
-    `babel-polyfill/lib/core-js/modules/${module}`;
+  return (
+    modulePathMap[module] || `babel-polyfill/lib/core-js/modules/${module}`
+  );
 };
 
 export default function({ types: t }: { types: Object }): Plugin {
@@ -82,13 +83,15 @@ export default function({ types: t }: { types: Object }): Plugin {
   }
 
   function isRequire(path: Object): boolean {
-    return t.isExpressionStatement(path.node) &&
+    return (
+      t.isExpressionStatement(path.node) &&
       t.isCallExpression(path.node.expression) &&
       t.isIdentifier(path.node.expression.callee) &&
       path.node.expression.callee.name === "require" &&
       path.node.expression.arguments.length === 1 &&
       t.isStringLiteral(path.node.expression.arguments[0]) &&
-      isPolyfillSource(path.node.expression.arguments[0].value);
+      isPolyfillSource(path.node.expression.arguments[0].value)
+    );
   }
 
   const addAndRemovePolyfillImports = {

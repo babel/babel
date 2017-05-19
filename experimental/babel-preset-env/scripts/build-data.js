@@ -16,13 +16,10 @@ const electronToChromiumKeys = Object.keys(
   electronToChromiumVersions
 ).reverse();
 
-const chromiumToElectronMap = electronToChromiumKeys.reduce(
-  (all, electron) => {
-    all[electronToChromiumVersions[electron]] = +electron;
-    return all;
-  },
-  {}
-);
+const chromiumToElectronMap = electronToChromiumKeys.reduce((all, electron) => {
+  all[electronToChromiumVersions[electron]] = +electron;
+  return all;
+}, {});
 const chromiumToElectronVersions = Object.keys(chromiumToElectronMap);
 
 const findClosestElectronVersion = targetVersion => {
@@ -51,12 +48,11 @@ const renameTests = (tests, getName) =>
 
 const envs = require("compat-table/environments");
 
-const byTestSuite = suite =>
-  browser => {
-    return Array.isArray(browser.test_suites)
-      ? browser.test_suites.indexOf(suite) > -1
-      : true;
-  };
+const byTestSuite = suite => browser => {
+  return Array.isArray(browser.test_suites)
+    ? browser.test_suites.indexOf(suite) > -1
+    : true;
+};
 
 const es6 = require("compat-table/data-es6");
 es6.browsers = pickBy(envs, byTestSuite("es6"));
@@ -163,20 +159,24 @@ const compatibilityTests = flattenDeep(
       return test.subtests
         ? [test, renameTests(test.subtests, name => test.name + " / " + name)]
         : test;
-    }))
+    })
+  )
 );
 
 const getLowestImplementedVersion = ({ features }, env) => {
   const tests = flatten(
     compatibilityTests
       .filter(test => {
-        return features.indexOf(test.name) >= 0 ||
+        return (
+          features.indexOf(test.name) >= 0 ||
           // for features === ["DataView"]
           // it covers "DataView (Int8)" and "DataView (UInt8)"
-          (features.length === 1 && test.name.indexOf(features[0]) === 0);
+          (features.length === 1 && test.name.indexOf(features[0]) === 0)
+        );
       })
       .map(test => {
-        const isBuiltIn = test.category === "built-ins" ||
+        const isBuiltIn =
+          test.category === "built-ins" ||
           test.category === "built-in extensions";
 
         return test.subtests
