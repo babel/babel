@@ -226,6 +226,7 @@
     "firefox": 52,
     "safari": 10,
     "ios": 10,
-    "opera": 45
+    "opera": 45,
+    "electron": 1.7
   }
 }

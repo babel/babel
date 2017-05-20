@@ -835,7 +835,8 @@
     "firefox": 48,
     "safari": 10,
     "ios": 10,
-    "opera": 44
+    "opera": 44,
+    "electron": 1.7
   },
   "es7.string.pad-end": {
     "chrome": 57,
@@ -843,6 +844,7 @@
     "firefox": 48,
     "safari": 10,
     "ios": 10,
-    "opera": 44
+    "opera": 44,
+    "electron": 1.7
   }
 }
