@@ -1,24 +1,25 @@
-import browserslist from "browserslist";
+import semver from "semver";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
 import transformPolyfillRequirePlugin from "./transform-polyfill-require-plugin";
+import getTargets from "./targets-parser";
+import { _extends, prettifyTargets, prettifyVersion, semverify } from "./utils";
 
 /**
  * Determine if a transformation is required
+ *
+ * NOTE: This assumes `supportedEnvironments` has already been parsed by `getTargets`
+ *
  * @param  {Object}  supportedEnvironments  An Object containing environment keys and the lowest
  *                                          supported version as a value
  * @param  {Object}  plugin                 An Object containing environment keys and the lowest
  *                                          version the feature was implemented in as a value
- * @return {Boolean}  Whether or not the transformation is required
+ * @return {Boolean} Whether or not the transformation is required
  */
 export const isPluginRequired = (supportedEnvironments, plugin) => {
-  if (supportedEnvironments.browsers) {
-    supportedEnvironments = getTargets(supportedEnvironments);
-  }
-
   const targetEnvironments = Object.keys(supportedEnvironments);
 
   if (targetEnvironments.length === 0) { return true; }
@@ -31,90 +32,20 @@ export const isPluginRequired = (supportedEnvironments, plugin) => {
       const lowestImplementedVersion = plugin[environment];
       const lowestTargetedVersion = supportedEnvironments[environment];
 
-      if (typeof lowestTargetedVersion === "string") {
-        throw new Error(`Target version must be a number,
-          '${lowestTargetedVersion}' was given for '${environment}'`);
+      if (!semver.valid(lowestTargetedVersion)) {
+        throw new Error(
+          // eslint-disable-next-line max-len
+          `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". Versions must be in semver format (major.minor.patch)`,
+        );
       }
 
-      return lowestTargetedVersion < lowestImplementedVersion;
+      return semver.gt(
+        semverify(lowestImplementedVersion),
+        lowestTargetedVersion,
+      );
     });
 
-  return isRequiredForEnvironments.length > 0 ? true : false;
-};
-
-const isBrowsersQueryValid = (browsers) => {
-  return typeof browsers === "string" || Array.isArray(browsers);
-};
-
-const browserNameMap = {
-  android: "android",
-  chrome: "chrome",
-  edge: "edge",
-  firefox: "firefox",
-  ie: "ie",
-  ios_saf: "ios",
-  safari: "safari"
-};
-
-const getLowestVersions = (browsers) => {
-  return browsers.reduce((all, browser) => {
-    const [browserName, browserVersion] = browser.split(" ");
-    const normalizedBrowserName = browserNameMap[browserName];
-    const parsedBrowserVersion = parseInt(browserVersion);
-    if (normalizedBrowserName && !isNaN(parsedBrowserVersion)) {
-      all[normalizedBrowserName] = Math.min(all[normalizedBrowserName] || Infinity, parsedBrowserVersion);
-    }
-    return all;
-  }, {});
-};
-
-const mergeBrowsers = (fromQuery, fromTarget) => {
-  return Object.keys(fromTarget).reduce((queryObj, targKey) => {
-    if (targKey !== "browsers") {
-      queryObj[targKey] = fromTarget[targKey];
-    }
-    return queryObj;
-  }, fromQuery);
-};
-
-export const getCurrentNodeVersion = () => {
-  return parseFloat(process.versions.node);
-};
-
-const _extends = Object.assign || function (target) {
-  for (let i = 1; i < arguments.length; i++) {
-    const source = arguments[i];
-    for (const key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-  return target;
-};
-
-
-export const getTargets = (targets = {}) => {
-  const targetOpts = _extends({}, targets);
-
-  if (targetOpts.node === true || targetOpts.node === "current") {
-    targetOpts.node = getCurrentNodeVersion();
-  }
-
-  if (typeof targetOpts.electron === "string") {
-    targetOpts.electron = parseFloat(targetOpts.electron);
-  }
-
-  if (targetOpts.hasOwnProperty("uglify") && !targetOpts.uglify) {
-    delete targetOpts.uglify;
-  }
-
-  const browserOpts = targetOpts.browsers;
-  if (isBrowsersQueryValid(browserOpts)) {
-    const queryBrowsers = getLowestVersions(browserslist(browserOpts));
-    return mergeBrowsers(queryBrowsers, targetOpts);
-  }
-  return targetOpts;
+  return isRequiredForEnvironments.length > 0;
 };
 
 let hasBeenLogged = false;
@@ -123,8 +54,8 @@ const logPlugin = (plugin, targets, list) => {
   const envList = list[plugin] || {};
   const filteredList = Object.keys(targets)
   .reduce((a, b) => {
-    if (!envList[b] || targets[b] < envList[b]) {
-      a[b] = targets[b];
+    if (!envList[b] || semver.lt(targets[b], semverify(envList[b]))) {
+      a[b] = prettifyVersion(targets[b]);
     }
     return a;
   }, {});
@@ -191,7 +122,7 @@ export default function buildPreset(context, opts = {}) {
     hasBeenLogged = true;
     console.log("babel-preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
-    console.log(JSON.stringify(targets, null, 2));
+    console.log(JSON.stringify(prettifyTargets(targets), null, 2));
     console.log(`\nModules transform: ${moduleType}`);
     console.log("\nUsing plugins:");
     transformations.forEach((transform) => {

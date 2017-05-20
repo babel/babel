@@ -1,0 +1,36 @@
+babel-preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "54",
+  "node": "6.10",
+  "ie": "10"
+}
+
+Modules transform: commonjs
+
+Using plugins:
+  check-es2015-constants {"ie":"10"}
+  transform-es2015-arrow-functions {"ie":"10"}
+  transform-es2015-block-scoped-functions {"ie":"10"}
+  transform-es2015-block-scoping {"ie":"10"}
+  transform-es2015-classes {"ie":"10"}
+  transform-es2015-computed-properties {"ie":"10"}
+  transform-es2015-destructuring {"ie":"10"}
+  transform-es2015-duplicate-keys {"ie":"10"}
+  transform-es2015-for-of {"ie":"10"}
+  transform-es2015-function-name {"ie":"10"}
+  transform-es2015-literals {"ie":"10"}
+  transform-es2015-object-super {"ie":"10"}
+  transform-es2015-parameters {"ie":"10"}
+  transform-es2015-shorthand-properties {"ie":"10"}
+  transform-es2015-spread {"ie":"10"}
+  transform-es2015-sticky-regex {"ie":"10"}
+  transform-es2015-template-literals {"ie":"10"}
+  transform-es2015-typeof-symbol {"ie":"10"}
+  transform-es2015-unicode-regex {"ie":"10"}
+  transform-regenerator {"ie":"10"}
+  transform-exponentiation-operator {"node":"6.10","ie":"10"}
+  transform-async-to-generator {"chrome":"54","node":"6.10","ie":"10"}
+  syntax-trailing-function-commas {"chrome":"54","node":"6.10","ie":"10"}
+src/in.js -> lib/in.js
