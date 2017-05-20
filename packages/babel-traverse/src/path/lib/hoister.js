@@ -172,12 +172,10 @@ export default class PathHoister {
         // Beginning of the scope
         !path.parentPath ||
         // Has siblings and is a statement
-        (Array.isArray(path.container) && path.isStatement()) ||
-        // Is part of multiple var declarations
-        (path.isVariableDeclarator() &&
-          path.parentPath.node !== null &&
-          path.parentPath.node.declarations.length > 1))
-        {return path;}
+        (Array.isArray(path.container) && path.isStatement())
+      ) {
+        return path;
+      }
     } while ((path = path.parentPath));
   }
 
