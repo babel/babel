@@ -2,6 +2,6 @@
 
 var _values = values;
 value = _values[fieldName];
-rest = babelHelpers.objectWithoutProperties(_values, [fieldName]);
+rest = babelHelpers.objectWithoutProperties(_values, [fieldName].map(babelHelpers.toPropertyKey));
 
 var error = void 0;

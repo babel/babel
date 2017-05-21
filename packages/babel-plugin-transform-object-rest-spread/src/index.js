@@ -33,11 +33,11 @@ export default function ({ types: t }) {
       }
       keys.push(key);
     }
-    
-    const someComputed = props.some(prop => prop.computed);
+
+    const someComputed = props.some((prop) => prop.computed);
 
     let keyExpression;
-    
+
     if (someComputed) {
       // map to toPropertyKey to handle the possible non-string values of the computed keys
       keyExpression = t.callExpression(
@@ -53,7 +53,7 @@ export default function ({ types: t }) {
       t.callExpression(
         file.addHelper("objectWithoutProperties"), [
           objRef,
-          keyExpression
+          keyExpression,
         ]
       ),
     ];
