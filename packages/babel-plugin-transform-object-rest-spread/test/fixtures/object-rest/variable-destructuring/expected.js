@@ -7,7 +7,7 @@ var { x1 } = z,
     y1 = babelHelpers.objectWithoutProperties(z, ["x1"]);
 x1++;
 var { [a]: b } = z,
-    c = babelHelpers.objectWithoutProperties(z, [a]);
+    c = babelHelpers.objectWithoutProperties(z, [a].map(babelHelpers.toPropertyKey));
 var { x1 } = z,
     y1 = babelHelpers.objectWithoutProperties(z, ["x1"]);
 let { x2, y2 } = z,
@@ -18,7 +18,7 @@ const { w3, x3, y3 } = z,
 let {
   x: { a: xa, [d]: f }
 } = complex,
-    asdf = babelHelpers.objectWithoutProperties(complex.x, ["a", d]),
+    asdf = babelHelpers.objectWithoutProperties(complex.x, ["a", d].map(babelHelpers.toPropertyKey)),
     d = babelHelpers.objectWithoutProperties(complex.y, []),
     g = babelHelpers.objectWithoutProperties(complex, ["x"]);
 

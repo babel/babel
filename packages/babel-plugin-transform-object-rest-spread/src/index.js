@@ -25,6 +25,7 @@ export default function ({ types: t }) {
     const restElement = props.pop();
 
     const keys = [];
+
     for (const prop of props) {
       let key = prop.key;
       if (t.isIdentifier(key) && !prop.computed) {
@@ -32,13 +33,27 @@ export default function ({ types: t }) {
       }
       keys.push(key);
     }
+    
+    const someComputed = props.some(prop => prop.computed);
+
+    let keyExpression;
+    
+    if (someComputed) {
+      // map to toPropertyKey to handle the possible non-string values of the computed keys
+      keyExpression = t.callExpression(
+        t.memberExpression(t.arrayExpression(keys), t.identifier("map")),
+        [file.addHelper("toPropertyKey")]
+      );
+    } else {
+      keyExpression = t.arrayExpression(keys);
+    }
 
     return [
       restElement.argument,
       t.callExpression(
         file.addHelper("objectWithoutProperties"), [
           objRef,
-          t.arrayExpression(keys),
+          keyExpression
         ]
       ),
     ];
