@@ -585,3 +585,13 @@ helpers.toConsumableArray = template(`
     }
   });
 `);
+
+helpers.toPropertyKey = template(`
+  (function (key) {
+    if (typeof key === "symbol") {
+      return key;
+    } else {
+      return String(key);
+    }
+  });
+`);
