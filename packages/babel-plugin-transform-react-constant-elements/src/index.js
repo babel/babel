@@ -63,7 +63,12 @@ export default function ({ types: t }) {
           if (!Array.isArray(this.opts.allowMutablePropsOnTags)) {
             throw new Error(".allowMutablePropsOnTags must be an array, null, or undefined.");
           }
-          const elementName = path.node.openingElement.name.name;
+          // Get the element's name. If it's a member expression, we use the last part of the path.
+          // So the option ["FormattedMessage"] would match "Intl.FormattedMessage".
+          let namePath = path.get("openingElement.name");
+          while (namePath.isJSXMemberExpression()) namePath = namePath.get("property");
+
+          const elementName = namePath.node.name;
           state.mutablePropsAllowed = this.opts.allowMutablePropsOnTags.includes(elementName);
         }
 
