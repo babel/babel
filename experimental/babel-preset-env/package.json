@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-env",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
@@ -76,9 +76,12 @@
   },
   "babel": {
     "presets": [
-      ["env", {
-        "loose": true
-      }]
+      [
+        "env",
+        {
+          "loose": true
+        }
+      ]
     ],
     "env": {
       "test": {
