@@ -84,6 +84,7 @@ export default function ({ types: t, template }) {
   }
 
   return {
+    capabilities: ["computedProperties"],
     visitor: {
       ObjectExpression: {
         exit(path, state) {

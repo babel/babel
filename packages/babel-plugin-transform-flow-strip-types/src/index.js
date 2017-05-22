@@ -4,8 +4,8 @@ export default function ({ types: t }) {
   const FLOW_DIRECTIVE = "@flow";
 
   return {
+    capabilities: ["flow"],
     inherits: syntaxFlow,
-
     visitor: {
       Program(path, { file: { ast: { comments } } }) {
         for (const comment of (comments: Array<Object>)) {

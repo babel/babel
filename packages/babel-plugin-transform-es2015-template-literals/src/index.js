@@ -8,6 +8,7 @@ export default function ({ types: t }) {
   }
 
   return {
+    capabilities: ["templateLiterals"],
     visitor: {
       TaggedTemplateExpression(path, state) {
         const { node } = path;

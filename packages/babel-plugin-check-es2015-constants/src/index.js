@@ -1,5 +1,6 @@
 export default function ({ messages }) {
   return {
+    capabilities: ["constants"],
     visitor: {
       Scope({ scope }) {
         for (const name in scope.bindings) {

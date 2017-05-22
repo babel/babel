@@ -73,7 +73,6 @@ const ALLOWED_PLUGIN_KEYS = new Set([
   "inherits",
   "capabilities",
   "dependencies",
-  "optionalDependencies",
 ]);
 
 export default function manageOptions(opts: {}): {
@@ -87,19 +86,16 @@ function sortPlugins(plugins) {
   const graph = new DagMap();
   const capabilitiesToPluginIdMap = Object.create(null);
 
-  console.log("plugins");
-  console.log(plugins);
-
   plugins.forEach((descriptor) => {
     const [plugin] = descriptor;
     if (plugin.capabilities) {
       plugin.capabilities.forEach((capability) => {
-        const existingPlugin = capabilitiesToPluginIdMap[capability];
-        if (existingPlugin !== undefined) {
-          throw new Error(`cannot have two plugins with same capability,
-            both ${plugin.key} and ${existingPlugin.key} provide capability: ${capability}`
-          );
-        }
+        // const existingPlugin = capabilitiesToPluginIdMap[capability];
+        // if (existingPlugin !== undefined) {
+        //   throw new Error(`cannot have two plugins with same capability,
+        //     both ${plugin.key} and ${existingPlugin.key} provide capability: ${capability}`
+        //   );
+        // }
         capabilitiesToPluginIdMap[capability] = plugin.key;
       });
     }
@@ -107,29 +103,17 @@ function sortPlugins(plugins) {
 
   plugins.forEach((descriptor) => {
     const [plugin] = descriptor;
-    const mappedDependencies = (plugin.dependencies || []).map((dependency) => {
-      const idForDependency = capabilitiesToPluginIdMap[dependency];
-      if (idForDependency === undefined) {
-        throw new Error(`${plugin.key} requires ${dependency} but it was not provided`);
-      }
-
-      return idForDependency;
-    });
-
-    const mappedOptionalDependencies = (plugin.optionalDependencies || [])
+    const mappedDependencies = (plugin.dependencies || [])
     .map((dependency) => capabilitiesToPluginIdMap[dependency])
     .filter(Boolean);
 
-    graph.add(plugin.key, descriptor, [...mappedDependencies, ...mappedOptionalDependencies]);
+    graph.add(plugin.key, descriptor, mappedDependencies);
   });
 
   const sortedPlugins = [];
   graph.each((key, value) => {
     sortedPlugins.push(value);
   });
-
-  console.log("sortedPlugins");
-  console.log(sortedPlugins);
 
   return sortedPlugins;
 }

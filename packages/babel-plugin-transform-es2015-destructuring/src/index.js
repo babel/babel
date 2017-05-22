@@ -329,6 +329,7 @@ export default function ({ types: t }) {
 
 
   return {
+    capabilities: ["destructuring"],
     visitor: {
       ExportNamedDeclaration(path) {
         const declaration = path.get("declaration");

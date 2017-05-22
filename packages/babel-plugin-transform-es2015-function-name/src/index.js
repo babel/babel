@@ -2,6 +2,7 @@ import nameFunction from "babel-helper-function-name";
 
 export default function () {
   return {
+    capabilities: ["functionName"],
     visitor: {
       FunctionExpression: {
         exit(path) {

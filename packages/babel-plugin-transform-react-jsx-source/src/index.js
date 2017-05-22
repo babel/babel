@@ -58,6 +58,7 @@ export default function ({ types: t }) {
   };
 
   return {
+    dependencies: ["jsx"],
     visitor,
   };
 }

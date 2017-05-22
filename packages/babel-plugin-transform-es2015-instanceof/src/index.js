@@ -1,5 +1,6 @@
 export default function ({ types: t }) {
   return {
+    capabilities: ["instanceof"],
     visitor: {
       BinaryExpression(path) {
         const { node } = path;

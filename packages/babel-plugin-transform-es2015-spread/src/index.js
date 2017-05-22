@@ -42,6 +42,7 @@ export default function ({ types: t }) {
   }
 
   return {
+    capabilities: ["arraySpread"],
     visitor: {
       ArrayExpression(path, state) {
         const { node, scope } = path;

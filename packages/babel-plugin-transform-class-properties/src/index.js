@@ -40,9 +40,8 @@ export default function ({ types: t }) {
   );
 
   return {
-    inherits: syntaxClassProperties,
-
     capabilities: ["classProperties"],
+    inherits: syntaxClassProperties,
 
     visitor: {
       Class(path, state) {

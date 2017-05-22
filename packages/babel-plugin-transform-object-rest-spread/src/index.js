@@ -73,6 +73,7 @@ export default function ({ types: t }) {
   }
 
   return {
+    capabilities: ["objectRestSpread"],
     inherits: syntaxObjectRestSpread,
 
     visitor: {

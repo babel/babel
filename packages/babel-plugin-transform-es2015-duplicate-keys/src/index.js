@@ -9,6 +9,7 @@ function getName(key) {
 
 export default function() {
   return {
+    capabilities: ["duplicateKeys"],
     visitor: {
       ObjectExpression(path) {
         const { node } = path;

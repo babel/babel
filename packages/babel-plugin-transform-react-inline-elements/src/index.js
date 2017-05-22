@@ -20,6 +20,7 @@ export default function ({ types: t }) {
   }
 
   return {
+    dependencies: ["jsx"],
     visitor: {
       JSXElement(path, file) {
         const { node } = path;

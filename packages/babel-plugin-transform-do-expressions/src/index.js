@@ -2,6 +2,7 @@ import syntaxDoExpressions from "babel-plugin-syntax-do-expressions";
 
 export default function () {
   return {
+    capabilities: ["doExpressions"],
     inherits: syntaxDoExpressions,
 
     visitor: {

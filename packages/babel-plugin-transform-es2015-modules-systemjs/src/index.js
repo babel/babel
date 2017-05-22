@@ -69,6 +69,7 @@ export default function ({ types: t }) {
   };
 
   return {
+    capabilities: ["modules"],
     visitor: {
 
       CallExpression(path, state) {

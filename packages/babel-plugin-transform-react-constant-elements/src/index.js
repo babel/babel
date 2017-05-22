@@ -48,6 +48,7 @@ export default function ({ types: t }) {
   };
 
   return {
+    dependencies: ["jsx"],
     visitor: {
       JSXElement(path) {
         if (path.node._hoisted) return;

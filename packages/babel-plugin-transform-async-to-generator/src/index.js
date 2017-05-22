@@ -3,6 +3,7 @@ import syntaxAsyncFunctions from "babel-plugin-syntax-async-functions";
 
 export default function () {
   return {
+    capabilities: ["asyncFunctions"],
     inherits: syntaxAsyncFunctions,
 
     visitor: {

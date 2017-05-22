@@ -22,8 +22,8 @@ export default function ({ types: t }) {
   }
 
   return {
+    capabilities: ["exportExtensions"],
     inherits: syntaxExportExtensions,
-
     visitor: {
       ExportNamedDeclaration(path) {
         const { node, scope } = path;

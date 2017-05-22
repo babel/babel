@@ -4,6 +4,7 @@ import { type NodePath } from "babel-traverse";
 
 export default function () {
   return {
+    capabilities: ["arrowFunctions"],
     visitor: {
       ArrowFunctionExpression(path: NodePath<BabelNodeArrowFunctionExpression>, state: Object) {
         // In some conversion cases, it may have already been converted to a function while this callback

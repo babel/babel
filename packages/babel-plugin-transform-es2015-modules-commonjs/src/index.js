@@ -128,6 +128,7 @@ export default function () {
   };
 
   return {
+    capabilities: ["modules"],
     inherits: transformStrictMode,
 
     visitor: {

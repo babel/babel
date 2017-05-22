@@ -7,6 +7,7 @@ export default function ({ types: t }) {
   const VISITED = Symbol();
 
   return {
+    capabilities: ["classes"],
     visitor: {
       ExportDefaultDeclaration(path) {
         if (!path.get("declaration").isClassDeclaration()) return;

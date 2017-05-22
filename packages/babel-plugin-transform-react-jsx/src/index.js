@@ -46,6 +46,7 @@ export default function ({ types: t }) {
   };
 
   return {
+    capabilities: ["jsx"],
     inherits: jsx,
     visitor,
   };

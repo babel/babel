@@ -43,6 +43,7 @@ export default function ({ types: t }) {
   }
 
   return {
+    capabilities: ["modules"],
     inherits: transformAMD,
 
     visitor: {

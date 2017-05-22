@@ -2,6 +2,7 @@ import * as t from "babel-types";
 
 export default function () {
   return {
+    capabilities: ["shorthandProperties"],
     visitor: {
       ObjectMethod(path) {
         const { node } = path;

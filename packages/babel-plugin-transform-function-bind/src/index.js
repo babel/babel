@@ -31,8 +31,8 @@ export default function ({ types: t }) {
   }
 
   return {
+    capabilities: ["functionBind"],
     inherits: syntaxFunctionBind,
-
     visitor: {
       CallExpression({ node, scope }) {
         const bind = node.callee;

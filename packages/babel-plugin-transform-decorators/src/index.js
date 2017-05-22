@@ -282,10 +282,9 @@ export default function({ types: t }) {
   }
 
   return {
-    inherits: syntaxDecorators,
-
     capabilities: ["decorators"],
-    optionalDependencies: ["classProperties"],
+    dependencies: ["classProperties"],
+    inherits: syntaxDecorators,
 
     visitor: {
       ExportDefaultDeclaration(path) {

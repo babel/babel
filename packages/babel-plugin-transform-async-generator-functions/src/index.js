@@ -18,6 +18,7 @@ export default function ({ types: t }) {
   };
 
   return {
+    capabilities: ["asyncGenerators"],
     inherits: syntaxAsyncGenerators,
     visitor: {
       Function(path, state) {

@@ -2,6 +2,7 @@ export default function ({ types: t }) {
   const IGNORE = Symbol();
 
   return {
+    capabilities: ["typeofSymbol"],
     visitor: {
       Scope({ scope }) {
         if (!scope.getBinding("Symbol")) {

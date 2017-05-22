@@ -91,6 +91,7 @@ export default function ({ messages, template, types: t }) {
 
 
   return {
+    capabilities: ["forOf"],
     visitor: {
       ForOfStatement(path, state) {
         if (path.get("right").isArrayExpression()) {

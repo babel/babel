@@ -14,6 +14,7 @@ export default function ({ types: t }) {
   }
 
   return {
+    capabilities: ["flow"],
     inherits: syntaxFlow,
 
     visitor: {

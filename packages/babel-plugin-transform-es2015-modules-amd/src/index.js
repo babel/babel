@@ -84,6 +84,7 @@ export default function ({ types: t }) {
   };
 
   return {
+    capabilities: ["modules"],
     inherits: transformCommonjs,
 
     pre() {

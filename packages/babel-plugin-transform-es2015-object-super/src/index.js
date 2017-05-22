@@ -15,6 +15,7 @@ function replacePropertySuper(path, node, scope, getObjectRef, file) {
 
 export default function ({ types: t }) {
   return {
+    capabilities: ["objectSuper"],
     visitor: {
       ObjectExpression(path, state) {
         let objectRef;
