@@ -76,5 +76,16 @@
       "src/**/*.js",
       "bin/**/*.js"
     ]
+  },
+  "changelog": {
+    "repo": "babel/babylon",
+    "labels": {
+      "Tag: Breaking Change": ":boom: Breaking Change",
+      "Tag: Bug Fix": ":bug: Bug Fix",
+      "Tag: Docs": ":memo: Documentation",
+      "Tag: Internal": ":house: Internal",
+      "Tag: New Feature": ":rocket: New Feature",
+      "Tag: Polish": ":nail_care: Polish"
+    }
   }
 }
