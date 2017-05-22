@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.5.1 (2017-05-22)
+
+### :bug: Bug Fix
+
+- Compile with loose mode ([#322](https://github.com/babel/babel-preset-env/pull/332)) (@existentialism)
+
 ## v1.5.0 (2017-05-19)
 
 ### :rocket: New Feature
