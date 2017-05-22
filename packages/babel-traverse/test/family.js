@@ -15,8 +15,8 @@ describe("path/family", function () {
         Object.assign(paths, path.getBindingIdentifierPaths());
       },
       FunctionDeclaration(path) {
-        Object.assign(outerNodes, path.getBindingIdentifiers());
-        Object.assign(outerPaths, path.getBindingIdentifierPaths());
+        Object.assign(outerNodes, path.getOuterBindingIdentifiers());
+        Object.assign(outerPaths, path.getOuterBindingIdentifierPaths());
       },
     });
 
