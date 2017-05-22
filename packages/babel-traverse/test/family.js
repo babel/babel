@@ -4,12 +4,15 @@ const parse = require("babylon").parse;
 
 describe("path/family", function () {
   describe("getBindingIdentifiers", function () {
-    const ast = parse("var a = 1, {b} = c, [d] = e; function f() {}");
+    const ast = parse(
+      "var a = 1, {b} = c, [d] = e; function f() {}; export class Y {}",
+      { sourceType: "module" }
+    );
     let nodes = {}, paths = {}, outerNodes = {}, outerPaths = {};
     traverse(ast, {
-      VariableDeclaration(path) {
-        nodes = path.getBindingIdentifiers();
-        paths = path.getBindingIdentifierPaths();
+      "VariableDeclaration|ExportDeclaration"(path) {
+        nodes = Object.assign(nodes, path.getBindingIdentifiers());
+        paths = Object.assign(paths, path.getBindingIdentifierPaths());
       },
       FunctionDeclaration(path) {
         outerNodes = path.getOuterBindingIdentifiers();
