@@ -8,15 +8,15 @@ describe("path/family", function () {
       "var a = 1, {b} = c, [d] = e; function f() {}; export class Y {}",
       { sourceType: "module" }
     );
-    let nodes = {}, paths = {}, outerNodes = {}, outerPaths = {};
+    const nodes = {}, paths = {}, outerNodes = {}, outerPaths = {};
     traverse(ast, {
       "VariableDeclaration|ExportDeclaration"(path) {
-        nodes = Object.assign(nodes, path.getBindingIdentifiers());
-        paths = Object.assign(paths, path.getBindingIdentifierPaths());
+        Object.assign(nodes, path.getBindingIdentifiers());
+        Object.assign(paths, path.getBindingIdentifierPaths());
       },
       FunctionDeclaration(path) {
-        outerNodes = path.getOuterBindingIdentifiers();
-        outerPaths = path.getOuterBindingIdentifierPaths();
+        Object.assign(outerNodes, path.getBindingIdentifiers());
+        Object.assign(outerPaths, path.getBindingIdentifierPaths());
       },
     });
 
