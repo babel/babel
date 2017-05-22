@@ -76,9 +76,9 @@
   },
   "babel": {
     "presets": [
-      [
-        "env"
-      ]
+      ["env", {
+        "loose": true
+      }]
     ],
     "env": {
       "test": {
