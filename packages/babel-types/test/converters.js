@@ -1,5 +1,16 @@
 import * as t from "../lib";
 import { assert } from "chai";
+import { parse } from "babylon";
+import generate from "babel-generator";
+
+function parseCode(string) {
+  return parse(string, {
+    allowReturnOutsideFunction: true,
+  }).program.body[0];
+}
+function generateCode(node) {
+  return generate(node).code;
+}
 
 describe("converters", function () {
   it("toIdentifier", function () {
@@ -147,6 +158,107 @@ describe("converters", function () {
         t.toExpression(node);
       });
       t.assertProgram(node);
+    });
+  });
+  describe("toSequenceExpression", function () {
+    let scope;
+    const undefinedNode = t.identifier("undefined");
+    beforeEach(function () {
+      scope = [];
+      scope.buildUndefinedNode = function () {
+        return undefinedNode;
+      };
+    });
+    it("gathers nodes into sequence", function () {
+      const node = t.identifier("a");
+      const sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      t.assertSequenceExpression(sequence);
+      assert.equal(sequence.expressions[0], undefinedNode);
+      assert.equal(sequence.expressions[1], node);
+      t.assertIdentifier(node);
+    });
+    it("avoids sequence for single node", function () {
+      const node = t.identifier("a");
+      let sequence = t.toSequenceExpression([node], scope);
+      assert.equal(sequence, node);
+
+      const block = t.blockStatement([t.expressionStatement(node)]);
+      sequence = t.toSequenceExpression([block], scope);
+      assert.equal(sequence, node);
+    });
+    it("gathers expression", function () {
+      const node = t.identifier("a");
+      const sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.equal(sequence.expressions[1], node);
+    });
+    it("gathers expression statement", function () {
+      const node = t.expressionStatement(t.identifier("a"));
+      const sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.equal(sequence.expressions[1], node.expression);
+    });
+    it("gathers var declarations", function () {
+      const node = parseCode("var a, b = 1;");
+      const sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      t.assertIdentifier(scope[0].id, { name: "a" });
+      t.assertIdentifier(scope[1].id, { name: "b" });
+      assert.equal(generateCode(sequence.expressions[1]), "b = 1");
+      assert.equal(generateCode(sequence.expressions[2]), "undefined");
+    });
+    it("skips undefined if expression after var declaration", function () {
+      const node = parseCode("{ var a, b = 1; true }");
+      const sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.equal(generateCode(sequence.expressions[1]), "b = 1, true");
+    });
+    it("bails on let and const declarations", function () {
+      let node = parseCode("let a, b = 1;");
+      let sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.isUndefined(sequence);
+
+      node = parseCode("const b = 1;");
+      sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.isUndefined(sequence);
+    });
+    it("gathers if statements", function () {
+      let node = parseCode("if (true) { true }");
+      let sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.equal(generateCode(sequence.expressions[1]), "true ? true : undefined");
+
+      node = parseCode("if (true) { true } else { b }");
+      sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.equal(generateCode(sequence.expressions[1]), "true ? true : b");
+    });
+    it("bails in if statements if recurse bails", function () {
+      let node = parseCode("if (true) { return }");
+      let sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.isUndefined(sequence);
+
+      node = parseCode("if (true) { true } else { return }");
+      sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.isUndefined(sequence);
+    });
+    it("gathers block statements", function () {
+      let node = parseCode("{ a }");
+      let sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.equal(generateCode(sequence.expressions[1]), "a");
+
+      node = parseCode("{ a; b; }");
+      sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.equal(generateCode(sequence.expressions[1]), "a, b");
+    });
+    it("bails in block statements if recurse bails", function () {
+      const node = parseCode("{ return }");
+      const sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.isUndefined(sequence);
+    });
+    it("gathers empty statements", function () {
+      const node = parseCode(";");
+      const sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.equal(generateCode(sequence.expressions[1]), "undefined");
+    });
+    it("skips empty statement if expression afterwards", function () {
+      const node = parseCode("{ ; true }");
+      const sequence = t.toSequenceExpression([undefinedNode, node], scope);
+      assert.equal(generateCode(sequence.expressions[1]), "true");
     });
   });
 });
