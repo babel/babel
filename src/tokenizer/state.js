@@ -24,6 +24,7 @@ export default class State {
       this.inAsync =
       this.inPropertyName =
       this.inType =
+      this.inClass =
       this.inClassProperty =
       this.noAnonFunctionType =
         false;
@@ -81,6 +82,7 @@ export default class State {
   noAnonFunctionType: boolean;
   inPropertyName: boolean;
   inClassProperty: boolean;
+  inClass: boolean;
 
   // Labels in scope.
   labels: Array<{ kind: ?("loop" | "switch"), statementStart?: number }>;

@@ -62,6 +62,13 @@ export type Identifier = PatternBase & {
   __clone(): Identifier;
 };
 
+export type PrivateName = PatternBase & {
+  type: "PrivateName";
+  name: string;
+
+  __clone(): Identifier;
+};
+
 // Literals
 
 export type Literal = RegExpLiteral | NullLiteral | StringLiteral | BooleanLiteral | NumericLiteral;
@@ -334,7 +341,7 @@ export type ObjectExpression = NodeBase & {
   properties: $ReadOnlyArray<ObjectProperty | ObjectMethod | SpreadElement>;
 };
 
-export type ObjectOrClassMember = ClassMethod | ClassProperty | ObjectMember;
+export type ObjectOrClassMember = ClassMethod | ClassProperty | ClassPrivateProperty | ObjectMember;
 
 export type ObjectMember = ObjectProperty | ObjectMethod;
 
@@ -552,7 +559,7 @@ export type ClassMemberBase = NodeBase & HasDecorators & {
 
 export type Accessibility = "public" | "protected" | "private";
 
-export type ClassMember = ClassMethod | ClassProperty;
+export type ClassMember = ClassMethod | ClassProperty | ClassPrivateProperty;
 
 export type MethodLike = ObjectMethod | FunctionExpression | ClassMethod;
 
@@ -574,6 +581,18 @@ export type ClassMethod = MethodBase & ClassMemberBase & {
 
 export type ClassProperty = ClassMemberBase & {
   type: "ClassProperty";
+  key: Identifier;
+  value: ?Expression; // TODO: Not in spec that this is nullable.
+
+  typeAnnotation?: ?FlowTypeAnnotation; // TODO: Not in spec
+  variance?: ?FlowVariance; // TODO: Not in spec
+
+  // TypeScript only: (TODO: Not in spec)
+  readonly?: true;
+};
+
+export type ClassPrivateProperty = ClassMemberBase & {
+  type: "ClassPrivateProperty";
   key: Identifier;
   value: ?Expression; // TODO: Not in spec that this is nullable.
 

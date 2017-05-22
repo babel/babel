@@ -99,7 +99,6 @@ export default class ExpressionParser extends LValParser {
   parseMaybeAssign(noIn?: ?boolean, refShorthandDefaultPos?: ?Pos, afterLeftParse?: Function, refNeedsArrowPos?: ?Pos): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
-
     if (this.match(tt._yield) && this.state.inGenerator) {
       let left = this.parseYield();
       if (afterLeftParse) left = afterLeftParse.call(this, left, startPos, startLoc);
@@ -297,7 +296,7 @@ export default class ExpressionParser extends LValParser {
       } else if (this.eat(tt.dot)) {
         const node = this.startNodeAt(startPos, startLoc);
         node.object = base;
-        node.property = this.parseIdentifier(true);
+        node.property = this.hasPlugin("classPrivateProperties") ? this.parseMaybePrivateName() : this.parseIdentifier(true);
         node.computed = false;
         base = this.finishNode(node, "MemberExpression");
       } else if (this.eat(tt.bracketL)) {
@@ -525,6 +524,13 @@ export default class ExpressionParser extends LValParser {
         this.takeDecorators(node);
         return this.parseClass(node, false);
 
+      case tt.hash:
+        if (this.hasPlugin("classPrivateProperties")) {
+          return this.parseMaybePrivateName();
+        } else {
+          this.unexpected();
+        }
+
       case tt._new:
         return this.parseNew();
 
@@ -544,6 +550,18 @@ export default class ExpressionParser extends LValParser {
 
       default:
         throw this.unexpected();
+    }
+  }
+
+  parseMaybePrivateName(): N.PrivateName | N.Identifier {
+    const isPrivate = this.eat(tt.hash);
+
+    if (isPrivate) {
+      const node = this.startNode();
+      node.name = this.parseIdentifier(true);
+      return this.finishNode(node, "PrivateName");
+    } else {
+      return this.parseIdentifier(true);
     }
   }
 

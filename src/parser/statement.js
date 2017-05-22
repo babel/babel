@@ -650,6 +650,7 @@ export default class StatementParser extends ExpressionParser {
     // class bodies are implicitly strict
     const oldStrict = this.state.strict;
     this.state.strict = true;
+    this.state.inClass = true;
 
     let hadConstructor = false;
     let decorators = [];
@@ -678,6 +679,13 @@ export default class StatementParser extends ExpressionParser {
       if (decorators.length) {
         method.decorators = decorators;
         decorators = [];
+      }
+
+      if (this.hasPlugin("classPrivateProperties") && this.match(tt.hash)) { // Private property
+        this.next();
+        this.parsePropertyName(method);
+        classBody.body.push(this.parsePrivateClassProperty(method));
+        continue;
       }
 
       method.static = false;
@@ -774,8 +782,25 @@ export default class StatementParser extends ExpressionParser {
 
     node.body = this.finishNode(classBody, "ClassBody");
 
+    this.state.inClass = false;
     this.state.strict = oldStrict;
+
   }
+
+  parsePrivateClassProperty(node: N.ClassPrivateProperty): N.ClassPrivateProperty {
+    this.state.inClassProperty = true;
+
+    if (this.match(tt.eq)) {
+      this.next();
+      node.value = this.parseMaybeAssign();
+    } else {
+      node.value = null;
+    }
+    this.semicolon();
+    this.state.inClassProperty = false;
+    return this.finishNode(node, "ClassPrivateProperty");
+  }
+
 
   parseClassProperty(node: N.ClassProperty): N.ClassProperty {
     const hasPlugin = this.hasPlugin("classProperties");
