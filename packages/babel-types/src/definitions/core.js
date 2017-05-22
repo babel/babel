@@ -526,7 +526,7 @@ defineType("ObjectProperty", {
       },
     },
     value: {
-      validate: assertNodeType("Expression", "Pattern"),
+      validate: assertNodeType("Expression", "Pattern", "RestElement"),
     },
     shorthand: {
       validate: assertValueType("boolean"),
