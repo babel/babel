@@ -62,11 +62,9 @@ export type Identifier = PatternBase & {
   __clone(): Identifier;
 };
 
-export type PrivateName = PatternBase & {
+export type PrivateName = NodeBase & {
   type: "PrivateName";
   name: string;
-
-  __clone(): Identifier;
 };
 
 // Literals
@@ -591,16 +589,10 @@ export type ClassProperty = ClassMemberBase & {
   readonly?: true;
 };
 
-export type ClassPrivateProperty = ClassMemberBase & {
+export type ClassPrivateProperty = NodeBase & {
   type: "ClassPrivateProperty";
   key: Identifier;
   value: ?Expression; // TODO: Not in spec that this is nullable.
-
-  typeAnnotation?: ?FlowTypeAnnotation; // TODO: Not in spec
-  variance?: ?FlowVariance; // TODO: Not in spec
-
-  // TypeScript only: (TODO: Not in spec)
-  readonly?: true;
 };
 
 export type OptClassDeclaration = ClassBase & DeclarationBase & HasDecorators & {
