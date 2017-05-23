@@ -8,6 +8,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "lodash": "^4.2.0",
-    "try-resolve": "^1.0.0"
+    "try-resolve": "^1.0.0",
+    "semver": "^5.3.0"
   }
 }
