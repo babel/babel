@@ -30,8 +30,15 @@ class Foo {
   set bar(foo) {}
 }
 
-export default @foo
-class Foo {
+@foo
+export default class Foo {
+  bar() {
+    class Baz {}
+  }
+}
+
+@foo
+export class Foo {
   bar() {
     class Baz {}
   }

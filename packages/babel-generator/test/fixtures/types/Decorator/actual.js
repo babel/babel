@@ -36,3 +36,10 @@ export default class Foo {
     class Baz {}
   }
 }
+
+@foo
+export class Foo {
+  bar() {
+    class Baz {}
+  }
+}
