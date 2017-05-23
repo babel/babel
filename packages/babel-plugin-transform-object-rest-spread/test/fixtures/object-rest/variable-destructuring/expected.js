@@ -24,3 +24,6 @@ let {
 
 let {} = z,
     y4 = babelHelpers.objectWithoutProperties(z.x4, []);
+
+var { z } = babelHelpers.objectWithoutProperties({ z: 1 }, []);
+var { x = 5 } = babelHelpers.objectWithoutProperties({ x: 1 }, []);
