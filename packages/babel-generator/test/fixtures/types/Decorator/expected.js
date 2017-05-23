@@ -29,3 +29,10 @@ class Foo {
   @bar
   set bar(foo) {}
 }
+
+export default @foo
+class Foo {
+  bar() {
+    class Baz {}
+  }
+}
