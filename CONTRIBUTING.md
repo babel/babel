@@ -27,10 +27,10 @@ Contributions are always welcome, no matter how large or small.
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
  - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babylon/blob/master/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babylon#output).
- - This repository [`/doc`](https://github.com/babel/babel/tree/master/doc) contains the notes on Babel's internals
+ - Check out [`/doc`](https://github.com/babel/babel/tree/master/doc) for information about Babel's internals
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
-- When you feel ready to finally jump into the Babel source code, a good start is to look out for issues which are labeled with [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [beginner-friendly](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22beginner-friendly%22).
+- When you feel ready to jump into the Babel source code, a good place to start is to look for issues tagged with [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [beginner-friendly](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22beginner-friendly%22).
 
 ## Chat
 
@@ -40,7 +40,7 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 **Note:** Versions `< 5.1.10` can't be built.
 
-Babel is built for Node 4 and up but we develop using Node 6. Make sure you are on NPM 3.
+Babel is built for Node.js 4 and up but we develop using Node.js 6. Make sure you are on npm 3.
 
 You can check this with `node -v` and `npm -v`.
 
@@ -120,7 +120,7 @@ Use the `TEST_GREP` variable to run a subset of tests by name:
 $ TEST_GREP=transformation make test
 ```
 
-To enable the Node debugger added in v6.3.0, set the `TEST_DEBUG` environment variable:
+To enable the Node.js debugger added in v6.3.0, set the `TEST_DEBUG` environment variable:
 
 ```sh
 $ TEST_DEBUG=true make test
