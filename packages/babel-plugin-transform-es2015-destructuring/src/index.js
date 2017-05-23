@@ -491,16 +491,27 @@ export default function ({ types: t }) {
         }
 
         const nodesOut = [];
-        for (const node of nodes) {
-          const tail = nodesOut[nodesOut.length - 1];
-          if (
-            tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) &&
-            tail.kind === node.kind
-          ) {
-            // Create a single compound let/var rather than many.
-            tail.declarations.push(...node.declarations);
-          } else {
-            nodesOut.push(node);
+
+        // Group all declarations to a single node to avoid
+        // wrong transformation in the `for` initialization.
+        // See https://github.com/babel/babel/issues/4893
+        if (t.isForStatement(parent)) {
+          const [node, ...rest] = nodes;
+          node.declarations = node.declarations.concat(...rest.map((n) => n.declarations));
+          nodesOut.push(node);
+        }
+        else {
+          for (const node of nodes) {
+            const tail = nodesOut[nodesOut.length - 1];
+            if (
+              tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) &&
+              tail.kind === node.kind
+            ) {
+              // Create a single compound let/var rather than many.
+              tail.declarations.push(...node.declarations);
+            } else {
+              nodesOut.push(node);
+            }
           }
         }
 
