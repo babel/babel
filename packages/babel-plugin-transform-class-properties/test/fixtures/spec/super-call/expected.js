@@ -4,9 +4,9 @@ var A = function () {
   }
 
   babelHelpers.createClass(A, [{
-    key: 'foo',
+    key: "foo",
     value: function foo() {
-      return 'bar';
+      return "bar";
     }
   }]);
   return A;
@@ -19,10 +19,10 @@ var B = function (_A) {
     var _temp, _this, _ret;
 
     babelHelpers.classCallCheck(this, B);
-    return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (B.__proto__ || Object.getPrototypeOf(B)).call(this, ...args)), _this), Object.defineProperty(_this, 'foo', {
+    return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (B.__proto__ || Object.getPrototypeOf(B)).call(this, ...args)), _this), Object.defineProperty(_this, "foo", {
       enumerable: true,
       writable: true,
-      value: babelHelpers.get(B.prototype.__proto__ || Object.getPrototypeOf(B.prototype), 'foo', _this).call(_this)
+      value: babelHelpers.get(B.prototype.__proto__ || Object.getPrototypeOf(B.prototype), "foo", _this).call(_this)
     }), _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
   }
 
