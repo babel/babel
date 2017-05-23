@@ -22,9 +22,9 @@
     <a href="https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558"><img alt="Business Strategy Status" src="https://img.shields.io/badge/business%20model-flavortown-green.svg"></a>
 </p>
 
-Babel is a community-driven tool that helps you write the latest version of JavaScript.
+Babel is a community-driven tool that helps you write code in the latest version of JavaScript.
 
-When your supported environments don't support certain features natively, it will help you compile it down to a supported version.
+When your supported environments don't support certain features natively, Babel will help you compile those features down to a supported version.
 
 **In**
 
@@ -71,7 +71,7 @@ Bugs and feature requests can be posted at https://github.com/babel/babel/issues
 
 > We've moved our issues from phabricator back to github issues!
 
-Former phabricator issue urls now automatically redirect to their corresponding Github issue:
+Former phabricator issue URLs now automatically redirect to their corresponding Github issue:
 
 https://phabricator.babeljs.io/T2168 mostly corresponds to https://github.com/babel/babel/issues/2168.
 
@@ -81,7 +81,7 @@ For documentation and website issues please visit the [babel/babel.github.io](ht
 
 ## Want to contribute to Babel?
 
-Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md). If you have already joined slack, join our [#development](https://babeljs.slack.com/messages/development) channel!
+Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md). If you have already joined Slack, join our [#development](https://babeljs.slack.com/messages/development) channel!
 
 You can also start by checking out the issues with the [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
 
@@ -89,7 +89,7 @@ Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
 
 ## Packages
 
-The Babel repo is managed as a [monorepo](https://github.com/babel/babel/blob/master/doc/design/monorepo.md); it's composed of many npm packages.
+The Babel repo is managed as a [monorepo](https://github.com/babel/babel/blob/master/doc/design/monorepo.md) that is composed of many NPM packages.
 
 ### Core Packages
 
@@ -128,19 +128,19 @@ Check out the [`babel-handbook`](https://github.com/thejameskyle/babel-handbook/
 | [`babel-code-frame`](/packages/babel-code-frame) | [![npm](https://img.shields.io/npm/v/babel-code-frame.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-code-frame) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-code-frame)](https://david-dm.org/babel/babel?path=packages/babel-code-frame) |
 
 - [`babel-cli`](/packages/babel-cli) is the CLI tool that runs `babel-core` and helps with outputting to a directory, a file, stdout and more (also includes `babel-node`). Check out the [docs](https://babeljs.io/docs/usage/cli/).
-- [`babel-types`](/packages/babel-types) is used to validate, build, change AST nodes.
+- [`babel-types`](/packages/babel-types) is used to validate, build and change AST nodes.
 - [`babel-polyfill`](/packages/babel-polyfill) is [literally a wrapper](https://github.com/babel/babel/blob/master/packages/babel-polyfill/src/index.js) around [`core-js`](https://github.com/zloirock/core-js) and [regenerator-runtime](https://github.com/facebook/regenerator/tree/master/packages/regenerator-runtime). Check out the [docs](https://babeljs.io/docs/usage/polyfill/).
 - [`babel-runtime`](/packages/babel-runtime) is similar to the polyfill except that it doesn't modify the global scope and is to be used with [`babel-plugin-transform-runtime`](/packages/babel-plugin-transform-runtime) (usually in library/plugin code). Check out the [docs](https://babeljs.io/docs/plugins/transform-runtime/).
-- [`babel-register`](/packages/babel-register) is a way to automatically compile files with babel on the fly by binding to node's require. Check out the [docs](http://babeljs.io/docs/usage/require/).
-- [`babel-template`](/packages/babel-template) is a helper function to make AST nodes. Instead you can pass a string representing the code you want to create rather than tediously building them using `babel-types`.
-- [`babel-helpers`](/packages/babel-helpers) is a set of premade `babel-template` functions that are used in some babel plugins.
-- [`babel-code-frame`](/packages/babel-code-frame) is a standalone package used to generate errors that prints the source code and points to error locations.
+- [`babel-register`](/packages/babel-register) is a way to automatically compile files with babel on the fly by binding to NodeJS's `require`. Check out the [docs](http://babeljs.io/docs/usage/require/).
+- [`babel-template`](/packages/babel-template) is a helper function to create AST nodes by passing a string representing the code instead of tediously building them using `babel-types`.
+- [`babel-helpers`](/packages/babel-helpers) is a set of pre-made `babel-template` functions that are used in some babel plugins.
+- [`babel-code-frame`](/packages/babel-code-frame) is a standalone package used to generate errors that print the source code and point to error locations.
 
 ### [Presets](http://babeljs.io/docs/plugins/#presets)
 
-After Babel 6, the default transforms were removed; if you don't specify any plugins/presets it will just return the original source code.
+After Babel 6, the default transforms were removed; if you don't specify any plugins/presets, Babel will just return the original source code.
 
-The transformer[s] used in Babel are the independent pieces of code that transform specific things. For example: the [`es2015-arrow-functions`](/packages/babel-plugin-transform-es2015-arrow-functions) transform specifically changes arrow functions into a regular function. Presets are just simply an array of plugins that make it easier to run a whole a set of transforms without specifying each one manually.
+The transformer[s] used in Babel are the independent pieces of code that transform specific things. For example: the [`es2015-arrow-functions`](/packages/babel-plugin-transform-es2015-arrow-functions) transform specifically changes arrow functions into regular functions. A preset is simply an array of plugins that make it easier to run a whole a set of transforms without specifying each one manually.
 
 | Package | Version | Dependencies | Description |
 |--------|-------|------------|---|
