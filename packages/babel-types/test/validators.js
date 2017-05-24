@@ -51,7 +51,7 @@ suite("validators", function () {
           ])
         ),
       ]);
-  
+
       assert(t.isNodesEquivalent(pattern, pattern) === true);
     });
   });
