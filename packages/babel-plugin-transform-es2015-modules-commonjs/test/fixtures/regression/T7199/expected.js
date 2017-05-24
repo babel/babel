@@ -8,7 +8,6 @@ var _foo2 = _interopRequireDefault(_foo);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-var _bar = bar,
-    _bar2 = _slicedToArray(_bar, 1);
-
-const x = _bar2[0];
+const _bar = bar,
+      _bar2 = _slicedToArray(_bar, 1),
+      x = _bar2[0];

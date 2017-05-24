@@ -459,6 +459,7 @@ export default function ({ types: t }) {
         if (!parent || !path.container) return; // i don't know why this is necessary - TODO
         if (!variableDeclarationHasPattern(node)) return;
 
+        const nodeKind = node.kind;
         const nodes = [];
         let declar;
 
@@ -491,27 +492,15 @@ export default function ({ types: t }) {
         }
 
         const nodesOut = [];
-
-        // Group all declarations to a single node to avoid
-        // wrong transformation in the `for` initialization.
-        // See https://github.com/babel/babel/issues/4893
-        if (t.isForStatement(parent)) {
-          const [node, ...rest] = nodes;
-          node.declarations = node.declarations.concat(...rest.map((n) => n.declarations));
-          nodesOut.push(node);
-        }
-        else {
-          for (const node of nodes) {
-            const tail = nodesOut[nodesOut.length - 1];
-            if (
-              tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) &&
-              tail.kind === node.kind
-            ) {
-              // Create a single compound let/var rather than many.
-              tail.declarations.push(...node.declarations);
-            } else {
-              nodesOut.push(node);
-            }
+        for (const node of nodes) {
+          const tail = nodesOut[nodesOut.length - 1];
+          if (tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node)) {
+            // Create a single compound declarations
+            tail.declarations.push(...node.declarations);
+          } else {
+            // Make sure the original node kind is used for each compound declaration
+            node.kind = nodeKind;
+            nodesOut.push(node);
           }
         }
 
