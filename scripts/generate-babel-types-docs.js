@@ -37,6 +37,10 @@ function getType(validator) {
     return validator.type;
   } else if (validator.oneOfNodeTypes) {
     return validator.oneOfNodeTypes.join(' | ');
+  } else if (validator.oneOfNodeOrValueTypes) {
+    return validator.oneOfNodeOrValueTypes.join(' | ');
+  } else if (validator.oneOf) {
+    return validator.oneOf.map(val => util.inspect(val)).join(' | ');
   } else if (validator.chainOf) {
     if (
       validator.chainOf.length === 2 &&
@@ -56,11 +60,15 @@ function getType(validator) {
     }
   }
   var err = new Error('Unrecognised validator type');
+  err.code = 'UNEXPECTED_VALIDATOR_TYPE';
   err.validator = validator;
   throw err;
 }
 Object.keys(types.BUILDER_KEYS).sort().forEach(function (key) {
-  readme.push('### t.' + key[0].toLowerCase() + key.substr(1) + '(' + types.BUILDER_KEYS[key].join(', ') + ')');
+  readme.push('### ' + key[0].toLowerCase() + key.substr(1));
+  readme.push('```javascript');
+  readme.push('t.' + key[0].toLowerCase() + key.substr(1) + '(' + types.BUILDER_KEYS[key].join(', ') + ')');
+  readme.push('```');
   readme.push('');
   readme.push('See also `t.is' + key + '(node, opts)` and `t.assert' + key + '(node, opts)`.');
   readme.push('');
@@ -70,7 +78,15 @@ Object.keys(types.BUILDER_KEYS).sort().forEach(function (key) {
     }).join(', '));
     readme.push('');
   }
-  types.BUILDER_KEYS[key].forEach(function (field) {
+  Object.keys(types.NODE_FIELDS[key]).sort(function (fieldA, fieldB) {
+    var indexA = types.BUILDER_KEYS[key].indexOf(fieldA);
+    var indexB = types.BUILDER_KEYS[key].indexOf(fieldB);
+    if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
+    if (indexA === -1) return 1;
+    if (indexB === -1) return -1;
+    return indexA - indexB;
+  })
+  .forEach(function (field) {
     var defaultValue = types.NODE_FIELDS[key][field].default;
     var fieldDescription = ['`' + field + '`'];
     var validator = types.NODE_FIELDS[key][field].validate;
@@ -80,9 +96,9 @@ Object.keys(types.BUILDER_KEYS).sort().forEach(function (key) {
       try {
         fieldDescription.push(': `' + getType(validator) + '`');
       } catch (ex) {
-        console.log(key);
-        console.log(field);
-        console.dir(validator, {depth: 10, colors: true});
+        if (ex.code !== UNEXPECTED_VALIDATOR_TYPE);
+        console.log('Unrecognised validator type for ' + key + '.' + field);
+        console.dir(ex.validator, {depth: 10, colors: true});
       }
     }
     if (
@@ -95,6 +111,9 @@ Object.keys(types.BUILDER_KEYS).sort().forEach(function (key) {
     }
     readme.push(' - ' + fieldDescription.join(''));
   });
+
+  readme.push('');
+  readme.push('---');
   readme.push('');
 });
 

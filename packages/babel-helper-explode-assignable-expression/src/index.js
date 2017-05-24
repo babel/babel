@@ -3,7 +3,10 @@ import * as t from "babel-types";
 
 function getObjRef(node, nodes, file, scope) {
   let ref;
-  if (t.isIdentifier(node)) {
+  if (t.isSuper(node)) {
+    // Super cannot be directly assigned so lets return it directly
+    return node;
+  } else if (t.isIdentifier(node)) {
     if (scope.hasBinding(node.name)) {
       // this variable is declared in scope so we can be 100% sure
       // that evaluating it multiple times wont trigger a getter
@@ -17,17 +20,18 @@ function getObjRef(node, nodes, file, scope) {
   } else if (t.isMemberExpression(node)) {
     ref = node.object;
 
-    if (t.isIdentifier(ref) && scope.hasBinding(ref.name)) {
+    if (t.isSuper(ref) || t.isIdentifier(ref) && scope.hasBinding(ref.name)) {
       // the object reference that we need to save is locally declared
       // so as per the previous comment we can be 100% sure evaluating
       // it multiple times will be safe
+      // Super cannot be directly assigned so lets return it also
       return ref;
     }
   } else {
     throw new Error(`We can't explode this node type ${node.type}`);
   }
 
-  let temp = scope.generateUidIdentifierBasedOnNode(ref);
+  const temp = scope.generateUidIdentifierBasedOnNode(ref);
   nodes.push(t.variableDeclaration("var", [
     t.variableDeclarator(temp, ref)
   ]));
@@ -35,11 +39,11 @@ function getObjRef(node, nodes, file, scope) {
 }
 
 function getPropRef(node, nodes, file, scope) {
-  let prop = node.property;
-  let key = t.toComputedKey(node, prop);
-  if (t.isLiteral(key)) return key;
+  const prop = node.property;
+  const key = t.toComputedKey(node, prop);
+  if (t.isLiteral(key) && t.isPureish(key)) return key;
 
-  let temp = scope.generateUidIdentifierBasedOnNode(prop);
+  const temp = scope.generateUidIdentifierBasedOnNode(prop);
   nodes.push(t.variableDeclaration("var", [
     t.variableDeclarator(temp, prop)
   ]));
@@ -69,8 +73,8 @@ export default function (
     ref = node;
     uid = obj;
   } else {
-    let prop = getPropRef(node, nodes, file, scope);
-    let computed = node.computed || t.isLiteral(prop);
+    const prop = getPropRef(node, nodes, file, scope);
+    const computed = node.computed || t.isLiteral(prop);
     uid = ref = t.memberExpression(obj, prop, computed);
   }
 

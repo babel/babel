@@ -13,7 +13,7 @@ var RandomComponent = function (_Component) {
 
   function RandomComponent() {
     babelHelpers.classCallCheck(this, RandomComponent);
-    return babelHelpers.possibleConstructorReturn(this, Object.getPrototypeOf(RandomComponent).call(this));
+    return babelHelpers.possibleConstructorReturn(this, (RandomComponent.__proto__ || Object.getPrototypeOf(RandomComponent)).call(this));
   }
 
   babelHelpers.createClass(RandomComponent, [{

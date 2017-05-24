@@ -1,4 +1,4 @@
-/* eslint max-len: 0 */
+/* eslint max-len: "off" */
 
 module.exports = {
   filename: {
@@ -102,6 +102,11 @@ module.exports = {
     description: "optional callback to control whether a comment should be inserted, when this is used the comments option is ignored"
   },
 
+  wrapPluginVisitorMethod: {
+    hidden: true,
+    description: "optional callback to wrap all visitor methods"
+  },
+
   compact: {
     type: "booleanString",
     default: "auto",
@@ -193,4 +198,16 @@ module.exports = {
     default: false,
     hidden: true,
   },
+
+  // Deprecate top level parserOpts
+  parserOpts: {
+    description: "Options to pass into the parser, or to change parsers (parserOpts.parser)",
+    default: false
+  },
+
+  // Deprecate top level generatorOpts
+  generatorOpts: {
+    description: "Options to pass into the generator, or to change generators (generatorOpts.generator)",
+    default: false
+  }
 };

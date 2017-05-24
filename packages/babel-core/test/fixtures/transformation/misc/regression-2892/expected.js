@@ -7,9 +7,9 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var foo = function () {
-  var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+  var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
     var bar = function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+      var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
         var baz;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
@@ -26,7 +26,7 @@ var foo = function () {
       }));
 
       return function bar() {
-        return ref.apply(this, arguments);
+        return _ref3.apply(this, arguments);
       };
     }();
 
@@ -42,11 +42,11 @@ var foo = function () {
   }));
 
   return function foo() {
-    return ref.apply(this, arguments);
+    return _ref2.apply(this, arguments);
   };
 }();
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { return step("next", value); }, function (err) { return step("throw", err); }); } } return step("next"); }); }; }
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -58,7 +58,7 @@ var Foo = function () {
   _createClass(Foo, [{
     key: "bar",
     value: function () {
-      var ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
         var baz;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
@@ -75,7 +75,7 @@ var Foo = function () {
       }));
 
       function bar() {
-        return ref.apply(this, arguments);
+        return _ref.apply(this, arguments);
       }
 
       return bar;

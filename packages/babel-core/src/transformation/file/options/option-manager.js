@@ -1,37 +1,17 @@
-/* eslint max-len: 0 */
-
 import * as context from "../../../api/node";
 import type Logger from "../logger";
 import Plugin from "../../plugin";
 import * as messages from "babel-messages";
 import { normaliseOptions } from "./index";
-import resolve from "../../../helpers/resolve";
-import json5 from "json5";
-import isAbsolute from "path-is-absolute";
-import pathExists from "path-exists";
+import resolvePlugin from "../../../helpers/resolve-plugin";
+import resolvePreset from "../../../helpers/resolve-preset";
 import cloneDeepWith from "lodash/cloneDeepWith";
 import clone from "lodash/clone";
 import merge from "../../../helpers/merge";
 import config from "./config";
 import removed from "./removed";
+import buildConfigChain from "./build-config-chain";
 import path from "path";
-import fs from "fs";
-
-let existsCache = {};
-let jsonCache   = {};
-
-const BABELIGNORE_FILENAME = ".babelignore";
-const BABELRC_FILENAME     = ".babelrc";
-const PACKAGE_FILENAME     = "package.json";
-
-function exists(filename) {
-  let cached = existsCache[filename];
-  if (cached == null) {
-    return existsCache[filename] = pathExists.sync(filename);
-  } else {
-    return cached;
-  }
-}
 
 type PluginObject = {
   pre?: Function;
@@ -71,7 +51,7 @@ export default class OptionManager {
   }>;
 
   static memoisePluginContainer(fn, loc, i, alias) {
-    for (let cache of (OptionManager.memoisedPlugins: Array<Object>)) {
+    for (const cache of (OptionManager.memoisedPlugins: Array<Object>)) {
       if (cache.container === fn) return cache.plugin;
     }
 
@@ -84,7 +64,7 @@ export default class OptionManager {
     }
 
     if (typeof obj === "object") {
-      let plugin = new Plugin(obj, alias);
+      const plugin = new Plugin(obj, alias);
       OptionManager.memoisedPlugins.push({
         container: fn,
         plugin: plugin
@@ -96,10 +76,10 @@ export default class OptionManager {
   }
 
   static createBareOptions() {
-    let opts = {};
+    const opts = {};
 
-    for (let key in config) {
-      let opt = config[key];
+    for (const key in config) {
+      const opt = config[key];
       opts[key] = clone(opt.default);
     }
 
@@ -138,11 +118,11 @@ export default class OptionManager {
         plugin = val;
       }
 
-      let alias = typeof plugin === "string" ? plugin : `${loc}$${i}`;
+      const alias = typeof plugin === "string" ? plugin : `${loc}$${i}`;
 
       // allow plugins to be specified as strings
       if (typeof plugin === "string") {
-        let pluginLoc = resolve(`babel-plugin-${plugin}`, dirname) || resolve(plugin, dirname);
+        const pluginLoc = resolvePlugin(plugin, dirname);
         if (pluginLoc) {
           plugin = require(pluginLoc);
         } else {
@@ -154,32 +134,6 @@ export default class OptionManager {
 
       return [plugin, options];
     });
-  }
-
-  addConfig(loc: string, key?: string, json = json5): boolean {
-    if (this.resolvedConfigs.indexOf(loc) >= 0) {
-      return false;
-    }
-
-    let content = fs.readFileSync(loc, "utf8");
-    let opts;
-
-    try {
-      opts = jsonCache[content] = jsonCache[content] || json.parse(content);
-      if (key) opts = opts[key];
-    } catch (err) {
-      err.message = `${loc}: Error while parsing JSON - ${err.message}`;
-      throw err;
-    }
-
-    this.mergeOptions({
-      options: opts,
-      alias: loc,
-      dirname: path.dirname(loc)
-    });
-    this.resolvedConfigs.push(loc);
-
-    return !!opts;
   }
 
   /**
@@ -208,7 +162,7 @@ export default class OptionManager {
     }
 
     //
-    let opts = cloneDeepWith(rawOpts, (val) => {
+    const opts = cloneDeepWith(rawOpts, (val) => {
       if (val instanceof Plugin) {
         return val;
       }
@@ -218,17 +172,21 @@ export default class OptionManager {
     dirname = dirname || process.cwd();
     loc = loc || alias;
 
-    for (let key in opts) {
-      let option = config[key];
+    for (const key in opts) {
+      const option = config[key];
 
       // check for an unknown option
       if (!option && this.log) {
-        let pluginOptsInfo = "Check out http://babeljs.io/docs/usage/options/ for more info";
-
         if (removed[key]) {
-          this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`, ReferenceError);
+          this.log.error(`Using removed Babel 5 option: ${alias}.${key} - ${removed[key].message}`,
+            ReferenceError);
         } else {
-          this.log.error(`Unknown option: ${alias}.${key}. ${pluginOptsInfo}`, ReferenceError);
+          /* eslint-disable max-len */
+          const unknownOptErr = `Unknown option: ${alias}.${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
+          const presetConfigErr = "A common cause of this error is the presence of a configuration options object without the corresponding preset name. Example:\n\nInvalid:\n  `{ presets: [{option: value}] }`\nValid:\n  `{ presets: [['presetName', {option: value}]] }`\n\nFor more detailed information on preset configuration, please see http://babeljs.io/docs/plugins/#pluginpresets-options.";
+          /* eslint-enable max-len */
+
+          this.log.error(`${unknownOptErr}\n\n${presetConfigErr}`, ReferenceError);
         }
       }
     }
@@ -239,17 +197,6 @@ export default class OptionManager {
     // resolve plugins
     if (opts.plugins) {
       opts.plugins = OptionManager.normalisePlugins(loc, dirname, opts.plugins);
-    }
-
-    // add extends clause
-    if (opts.extends) {
-      let extendsLoc = resolve(opts.extends, dirname);
-      if (extendsLoc) {
-        this.addConfig(extendsLoc);
-      } else {
-        if (this.log) this.log.error(`Couldn't resolve extends clause of ${opts.extends} in ${alias}`);
-      }
-      delete opts.extends;
     }
 
     // resolve presets
@@ -273,14 +220,6 @@ export default class OptionManager {
       }
     }
 
-    // env
-    let envOpts;
-    let envKey = process.env.BABEL_ENV || process.env.NODE_ENV || "development";
-    if (opts.env) {
-      envOpts = opts.env[envKey];
-      delete opts.env;
-    }
-
     // Merge them into current extending options in case of top-level
     // options. In case of presets, just re-assign options which are got
     // normalized during the `mergeOptions`.
@@ -289,14 +228,6 @@ export default class OptionManager {
     } else {
       merge(extendingOpts || this.options, opts);
     }
-
-    // merge in env options
-    this.mergeOptions({
-      options: envOpts,
-      extending: extendingOpts,
-      alias: `${alias}.env.${envKey}`,
-      dirname: dirname
-    });
   }
 
   /**
@@ -320,80 +251,77 @@ export default class OptionManager {
    */
   resolvePresets(presets: Array<string | Object>, dirname: string, onResolve?) {
     return presets.map((val) => {
-      if (typeof val === "string") {
-        let presetLoc = resolve(`babel-preset-${val}`, dirname) || resolve(val, dirname);
+      let options;
+      if (Array.isArray(val)) {
+        if (val.length > 2) {
+          throw new Error(`Unexpected extra options ${JSON.stringify(val.slice(2))} passed to preset.`);
+        }
+
+        [val, options] = val;
+      }
+
+      let presetLoc;
+      try {
+        if (typeof val === "string") {
+          presetLoc = resolvePreset(val, dirname);
+
+          if (!presetLoc) {
+            throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ` +
+              JSON.stringify(dirname));
+          }
+
+          val = require(presetLoc);
+        }
+
+        // If the imported preset is a transpiled ES2015 module
+        if (typeof val === "object" && val.__esModule) {
+          // Try to grab the default export.
+          if (val.default) {
+            val = val.default;
+          } else {
+            // If there is no default export we treat all named exports as options
+            // and just remove the __esModule. This is to support presets that have been
+            // exporting named exports in the past, although we definitely want presets to
+            // only use the default export (with either an object or a function)
+            const { __esModule, ...rest } = val; // eslint-disable-line no-unused-vars
+            val = rest;
+          }
+        }
+
+        // For compatibility with babel-core < 6.13.x, allow presets to export an object with a
+        // a 'buildPreset' function that will return the preset itself, while still exporting a
+        // simple object (rather than a function), for supporting old Babel versions.
+        if (typeof val === "object" && val.buildPreset) val = val.buildPreset;
+
+
+        if (typeof val !== "function" && options !== undefined) {
+          throw new Error(`Options ${JSON.stringify(options)} passed to ` +
+            (presetLoc || "a preset") + " which does not accept options.");
+        }
+
+        if (typeof val === "function") val = val(context, options, { dirname });
+
+        if (typeof val !== "object") {
+          throw new Error(`Unsupported preset format: ${val}.`);
+        }
+
+        onResolve && onResolve(val, presetLoc);
+      } catch (e) {
         if (presetLoc) {
-          let val = require(presetLoc);
-          onResolve && onResolve(val, presetLoc);
-          return val;
-        } else {
-          throw new Error(`Couldn't find preset ${JSON.stringify(val)} relative to directory ${JSON.stringify(dirname)}`);
+          e.message += ` (While processing preset: ${JSON.stringify(presetLoc)})`;
         }
-      } else if (typeof val === "object") {
-        onResolve && onResolve(val);
-        return val;
-      } else {
-        throw new Error(`Unsupported preset format: ${val}.`);
+        throw e;
       }
+      return val;
     });
-  }
-
-  addIgnoreConfig(loc) {
-    let file  = fs.readFileSync(loc, "utf8");
-    let lines = file.split("\n");
-
-    lines = lines
-      .map((line) => line.replace(/#(.*?)$/, "").trim())
-      .filter((line) => !!line);
-
-    this.mergeOptions({
-      options: { ignore: lines },
-      loc
-    });
-  }
-
-  findConfigs(loc) {
-    if (!loc) return;
-
-    if (!isAbsolute(loc)) {
-      loc = path.join(process.cwd(), loc);
-    }
-
-    let foundConfig = false;
-    let foundIgnore = false;
-
-    while (loc !== (loc = path.dirname(loc))) {
-      if (!foundConfig) {
-        let configLoc = path.join(loc, BABELRC_FILENAME);
-        if (exists(configLoc)) {
-          this.addConfig(configLoc);
-          foundConfig = true;
-        }
-
-        let pkgLoc = path.join(loc, PACKAGE_FILENAME);
-        if (!foundConfig && exists(pkgLoc)) {
-          foundConfig = this.addConfig(pkgLoc, "babel", JSON);
-        }
-      }
-
-      if (!foundIgnore) {
-        let ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
-        if (exists(ignoreLoc)) {
-          this.addIgnoreConfig(ignoreLoc);
-          foundIgnore = true;
-        }
-      }
-
-      if (foundIgnore && foundConfig) return;
-    }
   }
 
   normaliseOptions() {
-    let opts = this.options;
+    const opts = this.options;
 
-    for (let key in config) {
-      let option = config[key];
-      let val    = opts[key];
+    for (const key in config) {
+      const option = config[key];
+      const val    = opts[key];
 
       // optional
       if (!val && option.optional) continue;
@@ -408,19 +336,9 @@ export default class OptionManager {
   }
 
   init(opts: Object = {}): Object {
-    let filename = opts.filename;
-
-    // resolve all .babelrc files
-    if (opts.babelrc !== false) {
-      this.findConfigs(filename);
+    for (const config of buildConfigChain(opts, this.log)) {
+      this.mergeOptions(config);
     }
-
-    // merge in base options
-    this.mergeOptions({
-      options: opts,
-      alias: "base",
-      dirname: filename && path.dirname(filename)
-    });
 
     // normalise
     this.normaliseOptions(opts);

@@ -5,12 +5,13 @@ let TestClass = {
     var _this = this;
 
     return new Promise((() => {
-      var ref = babelHelpers.asyncToGenerator(function* (resolve) {
+      var _ref = babelHelpers.asyncToGenerator(function* (resolve) {
         console.log(_this);
         setTimeout(resolve, 1000);
       });
+
       return function (_x) {
-        return ref.apply(this, arguments);
+        return _ref.apply(this, arguments);
       };
     })());
   }

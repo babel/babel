@@ -1,3 +1,0 @@
-instrumentation:
-  root: .
-  excludes: "**/node_modules/**"

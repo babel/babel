@@ -12,5 +12,9 @@ declare class A { static () : number }
 declare class A mixins B<T>, C {}
 declare type A = string
 declare type T<U> = { [k:string]: U }
+declare type B = {
+  fn?: (foo: string) => void,
+}
 declare interface I { foo: string }
 declare interface I<T> { foo: T }
+declare module.exports: { foo: string }

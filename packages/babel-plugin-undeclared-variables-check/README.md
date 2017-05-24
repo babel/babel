@@ -1,11 +1,32 @@
 # babel-plugin-undeclared-variables-check
 
-Throw a compile-time error on references to undeclared variables
+> This plugin throws a compile-time error on references to undeclared variables.
+
+## Example
+
+**In**
+
+```javascript
+function foo() {}
+foo();
+bar();
+```
+
+**Out**
+
+```
+ReferenceError: stdin: Line 3: Reference to undeclared variable "bar" - did you mean "foo"?
+  1 | function foo() {}
+  2 | foo();
+> 3 | bar();
+    | ^
+  4 |
+```
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-undeclared-variables-check
+npm install --save-dev babel-plugin-undeclared-variables-check
 ```
 
 ## Usage
@@ -23,7 +44,7 @@ $ npm install babel-plugin-undeclared-variables-check
 ### Via CLI
 
 ```sh
-$ babel --plugins undeclared-variables-check script.js
+babel --plugins undeclared-variables-check script.js
 ```
 
 ### Via Node API

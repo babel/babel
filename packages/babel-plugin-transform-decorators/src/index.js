@@ -1,7 +1,7 @@
 import template from "babel-template";
 import explodeClass from "babel-helper-explode-class";
 
-let buildClassDecorator = template(`
+const buildClassDecorator = template(`
   CLASS_REF = DECORATOR(CLASS_REF) || CLASS_REF;
 `);
 
@@ -11,7 +11,7 @@ export default function ({ types: t }) {
   }
 
   function transformClass(path, ref, state) {
-    let nodes = [];
+    const nodes = [];
 
     state;
 
@@ -20,7 +20,7 @@ export default function ({ types: t }) {
       path.node.decorators = null;
       classDecorators = cleanDecorators(classDecorators);
 
-      for (let decorator of classDecorators) {
+      for (const decorator of classDecorators) {
         nodes.push(buildClassDecorator({
           CLASS_REF: ref,
           DECORATOR: decorator
@@ -28,21 +28,21 @@ export default function ({ types: t }) {
       }
     }
 
-    let map = Object.create(null);
+    const map = Object.create(null);
 
-    for (let method of path.get("body.body")) {
-      let decorators = method.node.decorators;
+    for (const method of path.get("body.body")) {
+      const decorators = method.node.decorators;
       if (!decorators) continue;
 
-      let alias = t.toKeyAlias(method.node);
+      const alias = t.toKeyAlias(method.node);
       map[alias] = map[alias] || [];
       map[alias].push(method.node);
 
       method.remove();
     }
 
-    for (let alias in map) {
-      let items = map[alias];
+    for (const alias in map) {
+      const items = map[alias];
 
       items;
     }
@@ -54,13 +54,13 @@ export default function ({ types: t }) {
     if (path.isClass()) {
       if (path.node.decorators) return true;
 
-      for (let method of (path.node.body.body: Array<Object>)) {
+      for (const method of (path.node.body.body: Array<Object>)) {
         if (method.decorators) {
           return true;
         }
       }
     } else if (path.isObjectExpression()) {
-      for (let prop of (path.node.properties: Array<Object>)) {
+      for (const prop of (path.node.properties: Array<Object>)) {
         if (prop.decorators) {
           return true;
         }
@@ -71,7 +71,20 @@ export default function ({ types: t }) {
   }
 
   function doError(path) {
-    throw path.buildCodeFrameError("Decorators are not supported yet in 6.x pending proposal update.");
+    throw path.buildCodeFrameError(
+`Decorators are not officially supported yet in 6.x pending a proposal update.
+However, if you need to use them you can install the legacy decorators transform with:
+
+npm install babel-plugin-transform-decorators-legacy --save-dev
+
+and add the following line to your .babelrc file:
+
+{
+  "plugins": ["transform-decorators-legacy"]
+}
+
+The repo url is: https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy.
+    `);
   }
 
   return {
@@ -84,7 +97,7 @@ export default function ({ types: t }) {
 
         explodeClass(path);
 
-        let ref = path.scope.generateDeclaredUidIdentifier("ref");
+        const ref = path.scope.generateDeclaredUidIdentifier("ref");
         let nodes = [];
 
         nodes.push(t.assignmentExpression("=", ref, path.node));
@@ -101,7 +114,7 @@ export default function ({ types: t }) {
         doError(path);
         explodeClass(path);
 
-        let ref = path.node.id;
+        const ref = path.node.id;
         let nodes = [];
 
         nodes = nodes.concat(transformClass(path, ref, this).map((expr) => t.expressionStatement(expr)));

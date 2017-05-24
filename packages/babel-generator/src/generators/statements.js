@@ -1,7 +1,8 @@
 import * as t from "babel-types";
 
 export function WithStatement(node: Object) {
-  this.keyword("with");
+  this.word("with");
+  this.space();
   this.token("(");
   this.print(node.object, node);
   this.token(")");
@@ -9,13 +10,14 @@ export function WithStatement(node: Object) {
 }
 
 export function IfStatement(node: Object) {
-  this.keyword("if");
+  this.word("if");
+  this.space();
   this.token("(");
   this.print(node.test, node);
   this.token(")");
   this.space();
 
-  let needsBlock = node.alternate && t.isIfStatement(getLastStatement(node.consequent));
+  const needsBlock = node.alternate && t.isIfStatement(getLastStatement(node.consequent));
   if (needsBlock) {
     this.token("{");
     this.newline();
@@ -45,12 +47,13 @@ function getLastStatement(statement) {
 }
 
 export function ForStatement(node: Object) {
-  this.keyword("for");
+  this.word("for");
+  this.space();
   this.token("(");
 
-  this._inForStatementInitCounter++;
+  this.inForStatementInitCounter++;
   this.print(node.init, node);
-  this._inForStatementInitCounter--;
+  this.inForStatementInitCounter--;
   this.token(";");
 
   if (node.test) {
@@ -69,20 +72,28 @@ export function ForStatement(node: Object) {
 }
 
 export function WhileStatement(node: Object) {
-  this.keyword("while");
+  this.word("while");
+  this.space();
   this.token("(");
   this.print(node.test, node);
   this.token(")");
   this.printBlock(node);
 }
 
-let buildForXStatement = function (op) {
+const buildForXStatement = function (op) {
   return function (node: Object) {
-    this.keyword("for");
+    this.word("for");
+    this.space();
+    if (op === "await") {
+      this.word("await");
+      this.space();
+      // do not attempt to change op here, as it will break subsequent for-await statements
+    }
     this.token("(");
+
     this.print(node.left, node);
     this.space();
-    this.word(op);
+    this.word(op === "await" ? "of" : op);
     this.space();
     this.print(node.right, node);
     this.token(")");
@@ -90,15 +101,17 @@ let buildForXStatement = function (op) {
   };
 };
 
-export let ForInStatement = buildForXStatement("in");
-export let ForOfStatement = buildForXStatement("of");
+export const ForInStatement = buildForXStatement("in");
+export const ForOfStatement = buildForXStatement("of");
+export const ForAwaitStatement = buildForXStatement("await");
 
 export function DoWhileStatement(node: Object) {
   this.word("do");
   this.space();
   this.print(node.body, node);
   this.space();
-  this.keyword("while");
+  this.word("while");
+  this.space();
   this.token("(");
   this.print(node.test, node);
   this.token(")");
@@ -109,11 +122,11 @@ function buildLabelStatement(prefix, key = "label") {
   return function (node: Object) {
     this.word(prefix);
 
-    let label = node[key];
+    const label = node[key];
     if (label) {
       this.space();
 
-      let terminatorState = this.startTerminatorless();
+      const terminatorState = this.startTerminatorless();
       this.print(label, node);
       this.endTerminatorless(terminatorState);
     }
@@ -122,10 +135,10 @@ function buildLabelStatement(prefix, key = "label") {
   };
 }
 
-export let ContinueStatement = buildLabelStatement("continue");
-export let ReturnStatement   = buildLabelStatement("return", "argument");
-export let BreakStatement    = buildLabelStatement("break");
-export let ThrowStatement    = buildLabelStatement("throw", "argument");
+export const ContinueStatement = buildLabelStatement("continue");
+export const ReturnStatement   = buildLabelStatement("return", "argument");
+export const BreakStatement    = buildLabelStatement("break");
+export const ThrowStatement    = buildLabelStatement("throw", "argument");
 
 export function LabeledStatement(node: Object) {
   this.print(node.label, node);
@@ -135,7 +148,8 @@ export function LabeledStatement(node: Object) {
 }
 
 export function TryStatement(node: Object) {
-  this.keyword("try");
+  this.word("try");
+  this.space();
   this.print(node.block, node);
   this.space();
 
@@ -157,7 +171,8 @@ export function TryStatement(node: Object) {
 }
 
 export function CatchClause(node: Object) {
-  this.keyword("catch");
+  this.word("catch");
+  this.space();
   this.token("(");
   this.print(node.param, node);
   this.token(")");
@@ -166,7 +181,8 @@ export function CatchClause(node: Object) {
 }
 
 export function SwitchStatement(node: Object) {
-  this.keyword("switch");
+  this.word("switch");
+  this.space();
   this.token("(");
   this.print(node.discriminant, node);
   this.token(")");
@@ -208,15 +224,15 @@ export function DebuggerStatement() {
 function variableDeclarationIdent() {
   // "let " or "var " indentation.
   this.token(",");
-  this.push("\n");
-  for (let i = 0; i < 4; i++) this.push(" ");
+  this.newline();
+  if (this.endsWith("\n")) for (let i = 0; i < 4; i++) this.space(true);
 }
 
 function constDeclarationIdent() {
   // "const " indentation.
   this.token(",");
-  this.push("\n");
-  for (let i = 0; i < 6; i++) this.push(" ");
+  this.newline();
+  if (this.endsWith("\n")) for (let i = 0; i < 6; i++) this.space(true);
 }
 
 export function VariableDeclaration(node: Object, parent: Object) {
@@ -226,7 +242,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
   let hasInits = false;
   // don't add whitespace to loop heads
   if (!t.isFor(parent)) {
-    for (let declar of (node.declarations: Array<Object>)) {
+    for (const declar of (node.declarations: Array<Object>)) {
       if (declar.init) {
         // has an init so let's split it up over multiple lines
         hasInits = true;
@@ -247,7 +263,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
   //
 
   let separator;
-  if (!this.format.compact && !this.format.concise && hasInits && !this.format.retainLines) {
+  if (hasInits) {
     separator = node.kind === "const" ? constDeclarationIdent : variableDeclarationIdent;
   }
 

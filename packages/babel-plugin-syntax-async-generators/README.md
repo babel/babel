@@ -2,10 +2,28 @@
 
 Allow parsing of async generator functions.
 
+## Example
+
+**Syntax**
+
+```javascript
+async function* agf() {
+  await 1;
+}
+```
+
+```js
+async function f() {
+  for await (let x of y) {
+    g(x);
+  }
+}
+```
+
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-async-generators
+npm install --save-dev babel-plugin-syntax-async-generators
 ```
 
 ## Usage
@@ -23,7 +41,7 @@ $ npm install babel-plugin-syntax-async-generators
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-async-generators script.js
+babel --plugins syntax-async-generators script.js
 ```
 
 ### Via Node API
@@ -33,3 +51,7 @@ require("babel-core").transform("code", {
   plugins: ["syntax-async-generators"]
 });
 ```
+
+## References
+
+* [Proposal: Asynchronous iteration for ECMAScript](https://github.com/tc39/proposal-async-iteration)

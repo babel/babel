@@ -1,10 +1,10 @@
 import * as t from "../index";
 
-export let VISITOR_KEYS = {};
-export let ALIAS_KEYS = {};
-export let NODE_FIELDS = {};
-export let BUILDER_KEYS = {};
-export let DEPRECATED_KEYS = {};
+export const VISITOR_KEYS = {};
+export const ALIAS_KEYS = {};
+export const NODE_FIELDS = {};
+export const BUILDER_KEYS = {};
+export const DEPRECATED_KEYS = {};
 
 function getType(val) {
   if (Array.isArray(val)) {
@@ -48,7 +48,7 @@ export function assertNodeType(...types: Array<string>): Function {
   function validate(node, key, val) {
     let valid = false;
 
-    for (let type of types) {
+    for (const type of types) {
       if (t.is(type, val)) {
         valid = true;
         break;
@@ -72,7 +72,7 @@ export function assertNodeOrValueType(...types: Array<string>): Function {
   function validate(node, key, val) {
     let valid = false;
 
-    for (let type of types) {
+    for (const type of types) {
       if (getType(val) === type || t.is(type, val)) {
         valid = true;
         break;
@@ -94,7 +94,7 @@ export function assertNodeOrValueType(...types: Array<string>): Function {
 
 export function assertValueType(type: string): Function {
   function validate(node, key, val) {
-    let valid = getType(val) === type;
+    const valid = getType(val) === type;
 
     if (!valid) {
       throw new TypeError(`Property ${key} expected type of ${type} but got ${getType(val)}`);
@@ -108,7 +108,7 @@ export function assertValueType(type: string): Function {
 
 export function chain(...fns: Array<Function>): Function {
   function validate(...args) {
-    for (let fn of fns) {
+    for (const fn of fns) {
       fn(...args);
     }
   }
@@ -124,9 +124,10 @@ export default function defineType(
     aliases?: Array<string>;
     builder?: Array<string>;
     inherits?: string;
+    deprecatedAlias?: string;
   } = {},
 ) {
-  let inherits = (opts.inherits && store[opts.inherits]) || {};
+  const inherits = (opts.inherits && store[opts.inherits]) || {};
 
   opts.fields  = opts.fields || inherits.fields || {};
   opts.visitor = opts.visitor || inherits.visitor || [];
@@ -138,13 +139,16 @@ export default function defineType(
   }
 
   // ensure all field keys are represented in `fields`
-  for (let key of (opts.visitor.concat(opts.builder): Array<string>)) {
+  for (const key of (opts.visitor.concat(opts.builder): Array<string>)) {
     opts.fields[key] = opts.fields[key] || {};
   }
 
-  for (let key in opts.fields) {
-    let field = opts.fields[key];
+  for (const key in opts.fields) {
+    const field = opts.fields[key];
 
+    if (opts.builder.indexOf(key) === -1) {
+      field.optional = true;
+    }
     if (field.default === undefined) {
       field.default = null;
     } else if (!field.validate) {
@@ -160,4 +164,4 @@ export default function defineType(
   store[type] = opts;
 }
 
-let store = {};
+const store = {};

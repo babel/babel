@@ -2,7 +2,7 @@ import hoistVariables from "babel-helper-hoist-variables";
 import type { NodePath } from "babel-traverse";
 import * as t from "babel-types";
 
-let visitor = {
+const visitor = {
   enter(path, state) {
     if (path.isThisExpression()) {
       state.foundThis = true;
@@ -19,8 +19,8 @@ let visitor = {
 };
 
 export default function (path: NodePath, scope = path.scope) {
-  let { node } = path;
-  let container = t.functionExpression(null, [], node.body, node.generator, node.async);
+  const { node } = path;
+  const container = t.functionExpression(null, [], node.body, node.generator, node.async);
 
   let callee = container;
   let args   = [];
@@ -28,7 +28,7 @@ export default function (path: NodePath, scope = path.scope) {
   // todo: only hoist if necessary
   hoistVariables(path, (id) => scope.push({ id }));
 
-  let state = {
+  const state = {
     foundThis: false,
     foundArguments: false
   };

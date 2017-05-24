@@ -1,10 +1,11 @@
 function foo(l) {
   return (
-    l);}
+    l);
 
-
+}
 
 function foo() {
   return (
-    1 && 2 || 
-    3);}
+    1 && 2 ||
+    3);
+}

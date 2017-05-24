@@ -1,10 +1,11 @@
-packages/babel-core/src/transformation/templates
+/lib
 scripts
-lib
+packages/babel-core/src/transformation/templates
 packages/babel-runtime
 packages/*/node_modules
-packages/*/test
+packages/*/lib
 packages/*/dist
+packages/*/test/fixtures
 vendor
 _babel.github.io
 Gulpfile.js

@@ -1,4 +1,4 @@
-/* eslint max-len: 0 */
+/* eslint max-len: "off" */
 
 export const STATEMENT_OR_BLOCK_KEYS = ["consequent", "body", "alternate"];
 export const FLATTENABLE_KEYS        = ["body", "expressions"];

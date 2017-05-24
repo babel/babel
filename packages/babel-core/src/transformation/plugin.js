@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import OptionManager from "./file/options/option-manager";
 import * as messages from "babel-messages";
 import Store from "../store";
@@ -15,7 +13,7 @@ export default class Plugin extends Store {
 
     this.initialized = false;
     this.raw         = assign({}, plugin);
-    this.key         = key;
+    this.key         = this.take("name") || key;
 
     this.manipulateOptions = this.take("manipulateOptions");
     this.post              = this.take("post");
@@ -31,7 +29,7 @@ export default class Plugin extends Store {
   visitor: Object;
 
   take(key) {
-    let val = this.raw[key];
+    const val = this.raw[key];
     delete this.raw[key];
     return val;
   }
@@ -40,13 +38,13 @@ export default class Plugin extends Store {
     if (!target[key]) return this[key];
     if (!this[key]) return target[key];
 
-    let fns: Array<?Function> = [target[key], this[key]];
+    const fns: Array<?Function> = [target[key], this[key]];
 
     return function (...args) {
       let val;
-      for (let fn of fns) {
+      for (const fn of fns) {
         if (fn) {
-          let ret = fn.apply(this, args);
+          const ret = fn.apply(this, args);
           if (ret != null) val = ret;
         }
       }
@@ -77,15 +75,16 @@ export default class Plugin extends Store {
 
     this.maybeInherit(loc);
 
-    for (let key in this.raw) {
+    for (const key in this.raw) {
       throw new Error(messages.get("pluginInvalidProperty", loc, i, key));
     }
   }
 
   normaliseVisitor(visitor: Object): Object {
-    for (let key of GLOBAL_VISITOR_PROPS) {
+    for (const key of GLOBAL_VISITOR_PROPS) {
       if (visitor[key]) {
-        throw new Error("Plugins aren't allowed to specify catch-all enter/exit handlers. Please target individual nodes.");
+        throw new Error("Plugins aren't allowed to specify catch-all enter/exit handlers. " +
+          "Please target individual nodes.");
       }
     }
 

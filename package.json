@@ -1,50 +1,67 @@
 {
+  "name": "babel",
   "private": true,
   "license": "MIT",
+  "scripts": {
+    "test": "make test",
+    "build": "make build",
+    "lint": "make lint",
+    "fix": "make fix"
+  },
   "devDependencies": {
     "async": "^1.5.0",
-    "babel-core": "^6.3.17",
-    "babel-plugin-transform-runtime": "^6.3.13",
+    "babel-core": "^6.13.2",
+    "babel-eslint": "^7.0.0",
+    "babel-plugin-istanbul": "^2.0.1",
     "babel-plugin-transform-class-properties": "^6.6.0",
     "babel-plugin-transform-flow-strip-types": "^6.3.13",
-    "babel-runtime": "^6.0.0",
-    "babel-preset-es2015": "^6.6.0",
-    "babel-preset-es2015-loose": "^7.0.0",
+    "babel-plugin-transform-runtime": "^6.3.13",
+    "babel-preset-es2015": "^6.13.2",
     "babel-preset-stage-0": "^6.0.0",
-    "browserify": "^11.2.0",
+    "babel-register": "^6.14.0",
+    "babel-runtime": "^6.0.0",
+    "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
-    "chai": "^2.2.0",
+    "chai": "^3.5.0",
     "chalk": "1.1.1",
-    "codecov.io": "^0.1.6",
+    "codecov": "^1.0.1",
     "derequire": "^2.0.2",
-    "es5-shim": "^4.1.7",
-    "kcheck": "^2.0.0",
-    "fs-readdir-recursive": "^0.1.2",
+    "eslint": "^3.9.0",
+    "eslint-config-babel": "^6.0.0",
+    "eslint-plugin-flowtype": "^2.20.0",
+    "flow-bin": "^0.34.0",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.0.0",
     "gulp-newer": "^1.0.0",
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
-    "istanbul": "^0.3.5",
-    "lerna": "^1.0.0",
+    "lerna": "2.0.0-beta.23",
+    "lerna-changelog": "^0.2.0",
     "lodash": "^4.2.0",
-    "matcha": "^0.6.0",
-    "mkdirp": "^0.5.1",
-    "mocha": "2.2.0",
+    "mocha": "^3.0.0",
+    "nyc": "^10.0.0",
     "output-file-sync": "^1.1.1",
-    "pad": "^1.0.0",
-    "path-exists": "^1.0.0",
-    "progress": "^1.1.8",
-    "readline-sync": "^1.2.19",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
-    "shelljs": "^0.5.1",
     "through2": "^2.0.0",
     "uglify-js": "^2.4.16"
   },
+  "devEngines": {
+    "node": ">= 0.10 <= 7.x",
+    "npm": "2.x || 3.x || 4.x"
+  },
   "babel": {
-    "presets": ["stage-0", "es2015-loose"],
+    "comments": false,
+    "presets": [
+      [
+        "es2015",
+        {
+          "loose": true
+        }
+      ],
+      "stage-0"
+    ],
     "plugins": [
       "./scripts/add-module-exports",
       "transform-runtime",
@@ -52,9 +69,21 @@
       "transform-flow-strip-types"
     ],
     "env": {
-      "test": {
-        "auxiliaryCommentBefore": "istanbul ignore next"
+      "cov": {
+        "auxiliaryCommentBefore": "istanbul ignore next",
+        "plugins": [
+          "istanbul"
+        ]
       }
     }
+  },
+  "nyc": {
+    "all": true,
+    "exclude": [
+      "scripts/*.js",
+      "packages/*/test/**"
+    ],
+    "sourceMap": false,
+    "instrument": false
   }
 }

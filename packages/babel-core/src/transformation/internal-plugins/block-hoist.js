@@ -13,12 +13,14 @@ export default new Plugin({
    *  - 3 We want this to be at the **very** top
    */
 
+  name: "internal.blockHoist",
+
   visitor: {
     Block: {
       exit({ node }) {
         let hasChange = false;
         for (let i = 0; i < node.body.length; i++) {
-          let bodyNode = node.body[i];
+          const bodyNode = node.body[i];
           if (bodyNode && bodyNode._blockHoist != null) {
             hasChange = true;
             break;

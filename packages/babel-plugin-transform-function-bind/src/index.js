@@ -8,15 +8,15 @@ export default function ({ types: t }) {
   }
 
   function getStaticContext(bind, scope) {
-    let object = bind.object || bind.callee.object;
+    const object = bind.object || bind.callee.object;
     return scope.isStatic(object) && object;
   }
 
   function inferBindContext(bind, scope) {
-    let staticContext = getStaticContext(bind, scope);
+    const staticContext = getStaticContext(bind, scope);
     if (staticContext) return staticContext;
 
-    let tempId = getTempId(scope);
+    const tempId = getTempId(scope);
     if (bind.object) {
       bind.callee = t.sequenceExpression([
         t.assignmentExpression("=", tempId, bind.object),
@@ -33,17 +33,17 @@ export default function ({ types: t }) {
 
     visitor: {
       CallExpression({ node, scope }) {
-        let bind = node.callee;
+        const bind = node.callee;
         if (!t.isBindExpression(bind)) return;
 
-        let context = inferBindContext(bind, scope);
+        const context = inferBindContext(bind, scope);
         node.callee = t.memberExpression(bind.callee, t.identifier("call"));
         node.arguments.unshift(context);
       },
 
       BindExpression(path) {
-        let { node, scope } = path;
-        let context = inferBindContext(node, scope);
+        const { node, scope } = path;
+        const context = inferBindContext(node, scope);
         path.replaceWith(t.callExpression(t.memberExpression(node.callee, t.identifier("bind")), [context]));
       }
     }

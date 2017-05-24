@@ -2,7 +2,7 @@ MAKEFLAGS = -j1
 
 export NODE_ENV = test
 
-.PHONY: clean test test-only test-cov test-clean test-travis publish build bootstrap publish-core publish-runtime build-website build-core watch-core build-core-test clean-core prepublish
+.PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: clean
 	./node_modules/.bin/gulp build
@@ -12,16 +12,24 @@ build-dist: build
 	scripts/build-dist.sh
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
+	node scripts/generate-babel-types-docs.js
 
 watch: clean
+	rm -rf packages/*/lib
 	./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/kcheck
+	./node_modules/.bin/eslint packages/ --format=codeframe
+
+flow:
+	./node_modules/.bin/flow check
+
+fix:
+	./node_modules/.bin/eslint packages/ --format=codeframe --fix
 
 clean: test-clean
-	rm -rf packages/*/lib
 	rm -rf packages/babel-polyfill/browser*
+	rm -rf packages/babel-polyfill/dist
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 
@@ -29,38 +37,40 @@ test-clean:
 	rm -rf packages/*/test/tmp
 	rm -rf packages/*/test-fixtures.json
 
+clean-all:
+	rm -rf node_modules
+	rm -rf packages/*/node_modules
+	make clean
+
 test-only:
 	./scripts/test.sh
 	make test-clean
 
 test: lint test-only
 
-test-cov: clean
-	# rebuild with test
-	rm -rf packages/*/lib
-	BABEL_ENV=test; ./node_modules/.bin/gulp build
-	./scripts/test-cov.sh
-
 test-ci:
-	make lint
-	NODE_ENV=test make bootstrap
+	make bootstrap
+	make test-only
+
+test-ci-coverage:
+	BABEL_ENV=cov make bootstrap
 	./scripts/test-cov.sh
-	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
+	./node_modules/.bin/codecov -f coverage/coverage-final.json
 
 publish:
 	git pull --rebase
 	rm -rf packages/*/lib
 	BABEL_ENV=production make build-dist
 	make test
-	./node_modules/.bin/lerna publish
+	# not using lerna independent mode atm, so only update packages that have changed since we use ^
+	./node_modules/.bin/lerna publish --only-explicit-updates
 	make clean
-	#./scripts/build-website.sh
 
 bootstrap:
+	make clean-all
 	npm install
 	./node_modules/.bin/lerna bootstrap
-	# remove all existing babel-runtimes and use the top-level babel-runtime
-	rm -rf packages/*/node_modules/babel-runtime
 	make build
 	cd packages/babel-runtime; \
+	npm install; \
 	node scripts/build-dist.js

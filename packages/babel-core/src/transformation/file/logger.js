@@ -1,10 +1,10 @@
 import type File from "./index";
 import buildDebug from "debug/node";
 
-let verboseDebug = buildDebug("babel:verbose");
-let generalDebug = buildDebug("babel");
+const verboseDebug = buildDebug("babel:verbose");
+const generalDebug = buildDebug("babel");
 
-let seenDeprecatedMessages = [];
+const seenDeprecatedMessages = [];
 
 export default class Logger {
   constructor(file: File, filename: string) {

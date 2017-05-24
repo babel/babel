@@ -1,7 +1,5 @@
 import isPlainObject from "lodash/isPlainObject";
-import isNumber from "lodash/isNumber";
 import isRegExp from "lodash/isRegExp";
-import isString from "lodash/isString";
 import type { Scope } from "babel-traverse";
 import * as t from "./index";
 
@@ -10,6 +8,71 @@ export function toComputedKey(node: Object, key: Object = node.key || node.prope
     if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
   }
   return key;
+}
+
+
+function gatherSequenceExpressions(nodes: Array<Object>, scope: Scope, declars: Array<Object>): ?Object {
+  const exprs   = [];
+  let ensureLastUndefined = true;
+
+  for (const node of nodes) {
+    ensureLastUndefined = false;
+
+    if (t.isExpression(node)) {
+      exprs.push(node);
+    } else if (t.isExpressionStatement(node)) {
+      exprs.push(node.expression);
+    } else if (t.isVariableDeclaration(node)) {
+      if (node.kind !== "var") return; // bailed
+
+      for (const declar of (node.declarations: Array)) {
+        const bindings = t.getBindingIdentifiers(declar);
+        for (const key in bindings) {
+          declars.push({
+            kind: node.kind,
+            id: bindings[key]
+          });
+        }
+
+        if (declar.init) {
+          exprs.push(t.assignmentExpression("=", declar.id, declar.init));
+        }
+      }
+
+      ensureLastUndefined = true;
+    } else if (t.isIfStatement(node)) {
+      const consequent = node.consequent ?
+        gatherSequenceExpressions([node.consequent], scope, declars) :
+        scope.buildUndefinedNode();
+      const alternate = node.alternate ?
+        gatherSequenceExpressions([node.alternate], scope, declars) :
+        scope.buildUndefinedNode();
+      if (!consequent || !alternate) return; // bailed
+
+      exprs.push(t.conditionalExpression(node.test, consequent, alternate));
+    } else if (t.isBlockStatement(node)) {
+      const body = gatherSequenceExpressions(node.body, scope, declars);
+      if (!body) return; // bailed
+
+      exprs.push(body);
+    } else if (t.isEmptyStatement(node)) {
+      // empty statement so ensure the last item is undefined if we're last
+      ensureLastUndefined = true;
+    } else {
+      // bailed, we can't turn this statement into an expression
+      return;
+    }
+  }
+
+  if (ensureLastUndefined) {
+    exprs.push(scope.buildUndefinedNode());
+  }
+
+  if (exprs.length === 1) {
+    return exprs[0];
+  } else {
+    return t.sequenceExpression(exprs);
+  }
 }
 
 /**
@@ -24,88 +87,18 @@ export function toComputedKey(node: Object, key: Object = node.key || node.prope
 export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Object {
   if (!nodes || !nodes.length) return;
 
-  let declars = [];
-  let bailed  = false;
+  const declars = [];
+  const result = gatherSequenceExpressions(nodes, scope, declars);
+  if (!result) return;
 
-  let result = convert(nodes);
-  if (bailed) return;
-
-  for (let i = 0; i < declars.length; i++) {
-    scope.push(declars[i]);
+  for (const declar of (declars: Array)) {
+    scope.push(declar);
   }
 
   return result;
-
-  function convert(nodes) {
-    let ensureLastUndefined = false;
-    let exprs   = [];
-
-    for (let node of (nodes: Array)) {
-      if (t.isExpression(node)) {
-        exprs.push(node);
-      } else if (t.isExpressionStatement(node)) {
-        exprs.push(node.expression);
-      } else if (t.isVariableDeclaration(node)) {
-        if (node.kind !== "var") return bailed = true; // bailed
-
-        for (let declar of (node.declarations: Array)) {
-          let bindings = t.getBindingIdentifiers(declar);
-          for (let key in bindings) {
-            declars.push({
-              kind: node.kind,
-              id: bindings[key]
-            });
-          }
-
-          if (declar.init) {
-            exprs.push(t.assignmentExpression("=", declar.id, declar.init));
-          }
-        }
-
-        ensureLastUndefined = true;
-        continue;
-      } else if (t.isIfStatement(node)) {
-        let consequent = node.consequent ? convert([node.consequent]) : scope.buildUndefinedNode();
-        let alternate = node.alternate ? convert([node.alternate]) : scope.buildUndefinedNode();
-        if (!consequent || !alternate) return bailed = true;
-
-        exprs.push(t.conditionalExpression(node.test, consequent, alternate));
-      } else if (t.isBlockStatement(node)) {
-        exprs.push(convert(node.body));
-      } else if (t.isEmptyStatement(node)) {
-        // empty statement so ensure the last item is undefined if we're last
-        ensureLastUndefined = true;
-        continue;
-      } else {
-        // bailed, we can't turn this statement into an expression
-        return bailed = true;
-      }
-
-      ensureLastUndefined = false;
-    }
-
-    if (ensureLastUndefined || exprs.length === 0) {
-      exprs.push(scope.buildUndefinedNode());
-    }
-
-    //
-
-    if (exprs.length === 1) {
-      return exprs[0];
-    } else {
-      return t.sequenceExpression(exprs);
-    }
-  }
 }
 
-// Can't use import because of cyclic dependency between babel-traverse
-// and this module (babel-types). This require needs to appear after
-// we export the TYPES constant, so we lazy-initialize it before use.
-let traverse;
-
 export function toKeyAlias(node: Object, key: Object = node.key): string {
-  if (!traverse) traverse = require("babel-traverse").default;
-
   let alias;
 
   if (node.kind === "method") {
@@ -115,7 +108,7 @@ export function toKeyAlias(node: Object, key: Object = node.key): string {
   } else if (t.isStringLiteral(key)) {
     alias = JSON.stringify(key.value);
   } else {
-    alias = JSON.stringify(traverse.removeProperties(t.cloneDeep(key)));
+    alias = JSON.stringify(t.removePropertiesDeep(t.cloneDeep(key)));
   }
 
   if (node.computed) {
@@ -211,17 +204,31 @@ export function toExpression(node: Object): Object {
     node = node.expression;
   }
 
+  // return unmodified node
+  // important for things like ArrowFunctions where
+  // type change from ArrowFunction to FunctionExpression
+  // produces bugs like -> `()=>a` to `function () a`
+  // without generating a BlockStatement for it
+  // ref: https://github.com/babel/babili/issues/130
+  if (t.isExpression(node)) {
+    return node;
+  }
+
+  // convert all classes and functions
+  // ClassDeclaration -> ClassExpression
+  // FunctionDeclaration, ObjectMethod, ClassMethod -> FunctionExpression
   if (t.isClass(node)) {
     node.type = "ClassExpression";
   } else if (t.isFunction(node)) {
     node.type = "FunctionExpression";
   }
 
-  if (t.isExpression(node)) {
-    return node;
-  } else {
+  // if it's still not an expression
+  if (!t.isExpression(node)) {
     throw new Error(`cannot turn ${node.type} to an expression`);
   }
+
+  return node;
 }
 
 export function toBlock(node: Object, parent: Object): Object {
@@ -265,19 +272,19 @@ export function valueToNode(value: any): Object {
   }
 
   // strings
-  if (isString(value)) {
+  if (typeof value === "string") {
     return t.stringLiteral(value);
   }
 
   // numbers
-  if (isNumber(value)) {
+  if (typeof value === "number") {
     return t.numericLiteral(value);
   }
 
   // regexes
   if (isRegExp(value)) {
-    let pattern = value.source;
-    let flags = value.toString().match(/\/([a-z]+|)$/)[1];
+    const pattern = value.source;
+    const flags = value.toString().match(/\/([a-z]+|)$/)[1];
     return t.regExpLiteral(pattern, flags);
   }
 
@@ -288,8 +295,8 @@ export function valueToNode(value: any): Object {
 
   // object
   if (isPlainObject(value)) {
-    let props = [];
-    for (let key in value) {
+    const props = [];
+    for (const key in value) {
       let nodeKey;
       if (t.isValidIdentifier(key)) {
         nodeKey = t.identifier(key);

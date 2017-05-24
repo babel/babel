@@ -6,7 +6,7 @@ export default function ({ types: t }) {
 
     visitor: {
       Program(path, { file: { ast: { comments } } }) {
-        for (let comment of (comments: Array<Object>)) {
+        for (const comment of (comments: Array<Object>)) {
           if (comment.value.indexOf(FLOW_DIRECTIVE) >= 0) {
             // remove flow directive
             comment.value = comment.value.replace(FLOW_DIRECTIVE, "");
@@ -22,17 +22,31 @@ export default function ({ types: t }) {
       },
 
       ClassProperty(path) {
+        path.node.variance = null;
         path.node.typeAnnotation = null;
         if (!path.node.value) path.remove();
       },
 
-      Class({ node }) {
-        node.implements = null;
+      Class(path) {
+        path.node.implements = null;
+
+        // We do this here instead of in a `ClassProperty` visitor because the class transform
+        // would transform the class before we reached the class property.
+        path.get("body.body").forEach((child) => {
+          if (child.isClassProperty()) {
+            child.node.typeAnnotation = null;
+            if (!child.node.value) child.remove();
+          }
+        });
+      },
+
+      AssignmentPattern({ node }) {
+        node.left.optional = false;
       },
 
       Function({ node }) {
         for (let i = 0; i < node.params.length; i++) {
-          let param = node.params[i];
+          const param = node.params[i];
           param.optional = false;
         }
       },

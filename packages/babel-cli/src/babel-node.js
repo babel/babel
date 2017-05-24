@@ -1,12 +1,10 @@
-/* eslint indent: 0 */
-
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _babel-node(1) executable.
  */
 
-let getV8Flags = require("v8flags");
-let path = require("path");
+const getV8Flags = require("v8flags");
+const path = require("path");
 
 let args = [path.join(__dirname, "_babel-node")];
 
@@ -14,15 +12,30 @@ let babelArgs = process.argv.slice(2);
 let userArgs;
 
 // separate node arguments from script arguments
-let argSeparator = babelArgs.indexOf("--");
+const argSeparator = babelArgs.indexOf("--");
 if (argSeparator > -1) {
   userArgs  = babelArgs.slice(argSeparator); // including the  --
   babelArgs = babelArgs.slice(0, argSeparator);
 }
 
+/**
+ * Replace dashes with underscores in the v8Flag name
+ * Also ensure that if the arg contains a value (e.g. --arg=true)
+ * that only the flag is returned.
+ */
+function getNormalizedV8Flag(arg) {
+  const matches = arg.match(/--(.+)/);
+
+  if (matches) {
+    return `--${matches[1].replace(/-/g, "_")}`;
+  }
+
+  return arg;
+}
+
 getV8Flags(function (err, v8Flags) {
   babelArgs.forEach(function(arg) {
-    let flag = arg.split("=")[0];
+    const flag = arg.split("=")[0];
 
     switch (flag) {
       case "-d":
@@ -32,20 +45,20 @@ getV8Flags(function (err, v8Flags) {
       case "debug":
       case "--debug":
       case "--debug-brk":
+      case "--inspect":
         args.unshift(arg);
         break;
 
       case "-gc":
-      case "--expose-gc":
         args.unshift("--expose-gc");
         break;
 
       case "--nolazy":
-        args.unshift("--nolazy");
+        args.unshift(flag);
         break;
 
       default:
-        if (v8Flags.indexOf(arg) >= 0 || arg.indexOf("--trace") === 0) {
+        if (v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0 || arg.indexOf("--trace") === 0) {
           args.unshift(arg);
         } else {
           args.push(arg);
@@ -60,13 +73,13 @@ getV8Flags(function (err, v8Flags) {
   }
 
   try {
-    let kexec = require("kexec");
+    const kexec = require("kexec");
     kexec(process.argv[0], args);
   } catch (err) {
     if (err.code !== "MODULE_NOT_FOUND") throw err;
 
-    let child_process = require("child_process");
-    let proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
+    const child_process = require("child_process");
+    const proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
     proc.on("exit", function (code, signal) {
       process.on("exit", function () {
         if (signal) {

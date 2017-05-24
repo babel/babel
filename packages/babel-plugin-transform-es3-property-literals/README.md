@@ -1,11 +1,29 @@
 # babel-plugin-transform-es3-property-literals
 
-Ensure that reserved words are quoted in object property keys
+> Ensure that reserved words are quoted in object property keys
+
+## Example
+
+**In**
+
+```javascript
+var foo = {
+  catch: function () {}
+};
+```
+
+**Out**
+
+```javascript
+var foo = {
+  "catch": function () {}
+};
+```
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es3-property-literals
+npm install --save-dev babel-plugin-transform-es3-property-literals
 ```
 
 ## Usage
@@ -23,7 +41,7 @@ $ npm install babel-plugin-transform-es3-property-literals
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es3-property-literals script.js
+babel --plugins transform-es3-property-literals script.js
 ```
 
 ### Via Node API

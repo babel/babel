@@ -1,11 +1,11 @@
 # babel-plugin-transform-es2015-block-scoped-functions
 
-Babel plugin to ensure function declarations at the block level are block scoped.
+> Babel plugin to ensure function declarations at the block level are block scoped.
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-block-scoped-functions
+npm install --save-dev babel-plugin-transform-es2015-block-scoped-functions
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ $ npm install babel-plugin-transform-es2015-block-scoped-functions
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-block-scoped-functions script.js
+babel --plugins transform-es2015-block-scoped-functions script.js
 ```
 
 ### Via Node API

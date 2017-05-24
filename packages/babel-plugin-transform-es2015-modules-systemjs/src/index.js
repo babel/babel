@@ -1,9 +1,7 @@
-/* eslint max-len: 0 */
-
 import hoistVariables from "babel-helper-hoist-variables";
 import template from "babel-template";
 
-let buildTemplate = template(`
+const buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
     "use strict";
     BEFORE_BODY;
@@ -16,36 +14,55 @@ let buildTemplate = template(`
   });
 `);
 
-let buildExportAll = template(`
+const buildExportAll = template(`
   for (var KEY in TARGET) {
-    if (KEY !== "default") EXPORT_OBJ[KEY] = TARGET[KEY];
+    if (KEY !== "default" && KEY !== "__esModule") EXPORT_OBJ[KEY] = TARGET[KEY];
   }
 `);
 
-export default function ({ types: t }) {
-  let IGNORE_REASSIGNMENT_SYMBOL = Symbol();
 
-  let reassignmentVisitor = {
+const TYPE_IMPORT = "Import";
+
+export default function ({ types: t }) {
+  const IGNORE_REASSIGNMENT_SYMBOL = Symbol();
+
+  const reassignmentVisitor = {
     "AssignmentExpression|UpdateExpression"(path) {
       if (path.node[IGNORE_REASSIGNMENT_SYMBOL]) return;
       path.node[IGNORE_REASSIGNMENT_SYMBOL] = true;
 
-      let arg = path.get(path.isAssignmentExpression() ? "left" : "argument");
+      const arg = path.get(path.isAssignmentExpression() ? "left" : "argument");
       if (!arg.isIdentifier()) return;
 
-      let name = arg.node.name;
+      const name = arg.node.name;
 
       // redeclared in this scope
       if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
-      let exportedNames = this.exports[name];
+      const exportedNames = this.exports[name];
       if (!exportedNames) return;
 
       let node = path.node;
 
-      for (let exportedName of exportedNames) {
+      // if it is a non-prefix update expression (x++ etc)
+      // then we must replace with the expression (_export('x', x + 1), x++)
+      // in order to ensure the same update expression value
+      let isPostUpdateExpression = path.isUpdateExpression() && !node.prefix;
+      if (isPostUpdateExpression) {
+        if (node.operator === "++")
+          node = t.binaryExpression("+", node.argument, t.numericLiteral(1));
+        else if (node.operator === "--")
+          node = t.binaryExpression("-", node.argument, t.numericLiteral(1));
+        else
+          isPostUpdateExpression = false;
+      }
+
+      for (const exportedName of exportedNames) {
         node = this.buildCall(exportedName, node).expression;
       }
+
+      if (isPostUpdateExpression)
+        node = t.sequenceExpression([node, path.node]);
 
       path.replaceWith(node);
     }
@@ -53,6 +70,15 @@ export default function ({ types: t }) {
 
   return {
     visitor: {
+
+      CallExpression(path, state) {
+        if (path.node.callee.type === TYPE_IMPORT) {
+          const contextIdent = state.contextIdent;
+          path.replaceWith(t.callExpression(t.memberExpression(contextIdent, t.identifier("import")),
+            path.node.arguments));
+        }
+      },
+
       ReferencedIdentifier(path, state) {
         if (path.node.name == "__moduleName" && !path.scope.hasBinding("__moduleName")) {
           path.replaceWith(t.memberExpression(state.contextIdent, t.identifier("id")));
@@ -64,16 +90,17 @@ export default function ({ types: t }) {
           state.contextIdent = path.scope.generateUidIdentifier("context");
         },
         exit(path, state) {
-          let exportIdent = path.scope.generateUidIdentifier("export");
-          let contextIdent = state.contextIdent;
+          const exportIdent = path.scope.generateUidIdentifier("export");
+          const contextIdent = state.contextIdent;
 
-          let exportNames = Object.create(null);
-          let modules = Object.create(null);
+          const exportNames = Object.create(null);
+          const modules = [];
 
           let beforeBody = [];
-          let setters = [];
-          let sources = [];
-          let variableIds = [];
+          const setters = [];
+          const sources = [];
+          const variableIds = [];
+          const removedPaths = [];
 
           function addExportName(key, val) {
             exportNames[key] = exportNames[key] || [];
@@ -81,8 +108,16 @@ export default function ({ types: t }) {
           }
 
           function pushModule(source, key, specifiers) {
-            let _modules = modules[source] = modules[source] || { imports: [], exports: [] };
-            _modules[key] = _modules[key].concat(specifiers);
+            let module;
+            modules.forEach(function (m) {
+              if (m.key === source) {
+                module = m;
+              }
+            });
+            if (!module) {
+              modules.push(module = { key: source, imports: [], exports: [] });
+            }
+            module[key] = module[key].concat(specifiers);
           }
 
           function buildExportCall(name, val) {
@@ -91,7 +126,7 @@ export default function ({ types: t }) {
             );
           }
 
-          let body: Array<Object> = path.get("body");
+          const body: Array<Object> = path.get("body");
 
           let canHoist = true;
           for (let path of body) {
@@ -102,14 +137,14 @@ export default function ({ types: t }) {
             }
           }
 
-          for (let path of body) {
+          for (const path of body) {
             if (canHoist && path.isFunctionDeclaration()) {
               beforeBody.push(path.node);
-              path.remove();
+              removedPaths.push(path);
             } else if (path.isImportDeclaration()) {
-              let source = path.node.source.value;
+              const source = path.node.source.value;
               pushModule(source, "imports", path.node.specifiers);
-              for (let name in path.getBindingIdentifiers()) {
+              for (const name in path.getBindingIdentifiers()) {
                 path.scope.removeBinding(name);
                 variableIds.push(t.identifier(name));
               }
@@ -118,10 +153,10 @@ export default function ({ types: t }) {
               pushModule(path.node.source.value, "exports", path.node);
               path.remove();
             } else if (path.isExportDefaultDeclaration()) {
-              let declar = path.get("declaration");
+              const declar = path.get("declaration");
               if (declar.isClassDeclaration() || declar.isFunctionDeclaration()) {
-                let id = declar.node.id;
-                let nodes = [];
+                const id = declar.node.id;
+                const nodes = [];
 
                 if (id) {
                   nodes.push(declar.node);
@@ -135,55 +170,62 @@ export default function ({ types: t }) {
                   path.replaceWithMultiple(nodes);
                 } else {
                   beforeBody = beforeBody.concat(nodes);
-                  path.remove();
+                  removedPaths.push(path);
                 }
               } else {
                 path.replaceWith(buildExportCall("default", declar.node));
               }
             } else if (path.isExportNamedDeclaration()) {
-              let declar = path.get("declaration");
+              const declar = path.get("declaration");
 
               if (declar.node) {
                 path.replaceWith(declar);
 
-                let nodes = [];
+                const nodes = [];
                 let bindingIdentifiers;
                 if (path.isFunction()) {
-                  bindingIdentifiers = { [declar.node.id.name]: declar.node.id };
+                  const node = declar.node;
+                  const name = node.id.name;
+                  if (canHoist) {
+                    addExportName(name, name);
+                    beforeBody.push(node);
+                    beforeBody.push(buildExportCall(name, node.id));
+                    removedPaths.push(path);
+                  } else {
+                    bindingIdentifiers = { [name]: node.id };
+                  }
                 } else {
                   bindingIdentifiers = declar.getBindingIdentifiers();
                 }
-                for (let name in bindingIdentifiers) {
+                for (const name in bindingIdentifiers) {
                   addExportName(name, name);
                   nodes.push(buildExportCall(name, t.identifier(name)));
                 }
                 path.insertAfter(nodes);
-              }
+              } else {
+                const specifiers = path.node.specifiers;
+                if (specifiers && specifiers.length) {
+                  if (path.node.source) {
+                    pushModule(path.node.source.value, "exports", specifiers);
+                    path.remove();
+                  } else {
+                    const nodes = [];
 
-              let specifiers = path.node.specifiers;
-              if (specifiers && specifiers.length) {
-                if (path.node.source) {
-                  pushModule(path.node.source.value, "exports", specifiers);
-                  path.remove();
-                } else {
-                  let nodes = [];
+                    for (const specifier of specifiers) {
+                      nodes.push(buildExportCall(specifier.exported.name, specifier.local));
+                      addExportName(specifier.local.name, specifier.exported.name);
+                    }
 
-                  for (let specifier of specifiers) {
-                    nodes.push(buildExportCall(specifier.exported.name, specifier.local));
-                    addExportName(specifier.local.name, specifier.exported.name);
+                    path.replaceWithMultiple(nodes);
                   }
-
-                  path.replaceWithMultiple(nodes);
                 }
               }
             }
           }
 
-          for (let source in modules) {
-            let specifiers = modules[source];
-
-            let setterBody = [];
-            let target = path.scope.generateUidIdentifier(source);
+          modules.forEach(function (specifiers) {
+            const setterBody = [];
+            const target = path.scope.generateUidIdentifier(specifiers.key);
 
             for (let specifier of specifiers.imports) {
               if (t.isImportNamespaceSpecifier(specifier)) {
@@ -193,18 +235,19 @@ export default function ({ types: t }) {
               }
 
               if (t.isImportSpecifier(specifier)) {
-                setterBody.push(t.expressionStatement(t.assignmentExpression("=", specifier.local, t.memberExpression(target, specifier.imported))));
+                setterBody.push(t.expressionStatement(t.assignmentExpression("=", specifier.local,
+                  t.memberExpression(target, specifier.imported))));
               }
             }
 
             if (specifiers.exports.length) {
-              let exportObjRef = path.scope.generateUidIdentifier("exportObj");
+              const exportObjRef = path.scope.generateUidIdentifier("exportObj");
 
               setterBody.push(t.variableDeclaration("var", [
                 t.variableDeclarator(exportObjRef, t.objectExpression([]))
               ]));
 
-              for (let node of specifiers.exports) {
+              for (const node of specifiers.exports) {
                 if (t.isExportAllDeclaration(node)) {
                   setterBody.push(buildExportAll({
                     KEY: path.scope.generateUidIdentifier("key"),
@@ -213,7 +256,8 @@ export default function ({ types: t }) {
                   }));
                 } else if (t.isExportSpecifier(node)) {
                   setterBody.push(t.expressionStatement(
-                    t.assignmentExpression("=", t.memberExpression(exportObjRef, node.exported), t.memberExpression(target, node.local))
+                    t.assignmentExpression("=", t.memberExpression(exportObjRef, node.exported),
+                      t.memberExpression(target, node.local))
                   ));
                 } else {
                   // todo
@@ -223,9 +267,9 @@ export default function ({ types: t }) {
               setterBody.push(t.expressionStatement(t.callExpression(exportIdent, [exportObjRef])));
             }
 
-            sources.push(t.stringLiteral(source));
+            sources.push(t.stringLiteral(specifiers.key));
             setters.push(t.functionExpression(null, [target], t.blockStatement(setterBody)));
-          }
+          });
 
 
           let moduleName = this.getModuleName();
@@ -236,7 +280,8 @@ export default function ({ types: t }) {
           }
 
           if (variableIds.length) {
-            beforeBody.unshift(t.variableDeclaration("var", variableIds.map((id) => t.variableDeclarator(id))));
+            beforeBody.unshift(t.variableDeclaration("var",
+              variableIds.map((id) => t.variableDeclarator(id))));
           }
 
           path.traverse(reassignmentVisitor, {
@@ -245,9 +290,14 @@ export default function ({ types: t }) {
             scope: path.scope
           });
 
+          for (const path of removedPaths) {
+            path.remove();
+          }
+
           path.node.body = [
             buildTemplate({
-              SYSTEM_REGISTER: t.memberExpression(t.identifier(state.opts.systemGlobal || "System"), t.identifier("register")),
+              SYSTEM_REGISTER: t.memberExpression(
+                t.identifier(state.opts.systemGlobal || "System"), t.identifier("register")),
               BEFORE_BODY: beforeBody,
               MODULE_NAME: moduleName,
               SETTERS: setters,

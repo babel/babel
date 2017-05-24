@@ -1,0 +1,25 @@
+{
+    "settings": {
+        "rulers": [
+            110
+        ],
+
+        // Set to false to disable detection of tabs vs. spaces on load
+        "detect_indentation": false,
+
+        "translate_tabs_to_spaces": true,
+
+        "tab_size": 2
+    },
+
+    "folders": [{
+        "path": ".",
+        "folder_exclude_patterns": [
+            "packages/*/lib",
+            "node_modules"
+        ],
+        "file_exclude_patterns": [
+
+        ]
+    }]
+}

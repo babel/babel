@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.test = undefined;
+exports.test2 = exports.test = undefined;
 
 require("foo");
 
@@ -24,7 +24,7 @@ var _foo4 = require("foo4");
 var _foo5 = require("foo5");
 
 exports.test = test;
-var test = exports.test = 5;
+var test2 = exports.test2 = 5;
 
 _foo4.bar;
 _foo5.foo;

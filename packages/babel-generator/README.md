@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install babel-generator
+npm install --save-dev babel-generator
 ```
 
 ## Usage
@@ -30,12 +30,15 @@ auxiliaryCommentBefore | string   |                 | Optional string to add as 
 auxiliaryCommentAfter  | string   |                 | Optional string to add as a block comment at the end of the output file
 shouldPrintComment     | function | `opts.comments` | Function that takes a comment (as a string) and returns `true` if the comment should be included in the output.  By default, comments are included if `opts.comments` is `true` or if `opts.minifed` is `false` and the comment contains `@preserve` or `@license`
 retainLines            | boolean  | `false`         | Attempt to use the same line numbers in the output code as in the source code (helps preserve stack traces)
+retainFunctionParens   | boolean  | `false`         | Retain parens around function expressions (could be used to change engine parsing behavior)
 comments               | boolean  | `true`          | Should comments be included in output
 compact                | boolean or `'auto'` | `opts.minified` | Set to `true` to avoid adding whitespace for formatting
 minified               | boolean  | `false`         | Should the output be minified
 concise                | boolean  | `false`         | Set to `true` to reduce whitespace (but not as much as `opts.compact`)
 quotes                 | `'single'` or `'double'` | autodetect based on `ast.tokens` | The type of quote to use in the output
 filename               | string   |                 | Used in warning messages
+flowCommaSeparator     | boolean  | `false`         | Set to `true` to use commas instead of semicolons as Flow property separators
+jsonCompatibleStrings  | boolean  | `false`         | Set to true to run `jsesc` with "json": true to print "\u00A9" vs. "©";
 
 Options for source maps:
 
@@ -51,12 +54,7 @@ sourceFileName         | string   |                 | The filename for the sourc
 In most cases, Babel does a 1:1 transformation of input-file to output-file.  However,
 you may be dealing with AST constructed from multiple sources - JS files, templates, etc.
 If this is the case, and you want the sourcemaps to reflect the correct sources, you'll need
-to make some changes to your code.
-
-First, each node with a `loc` property (which indicates that node's original placement in the
-source document) must also include a `loc.filename` property, set to the source filename.
-
-Second, you should pass an object to `generate` as the `code` parameter.  Keys
+to pass an object to `generate` as the `code` parameter.  Keys
 should be the source filenames, and values should be the source content.
 
 Here's an example of what that might look like:
@@ -67,14 +65,14 @@ import generate from 'babel-generator';
 
 const a = 'var a = 1;';
 const b = 'var b = 2;';
-const astA = parse(a, { filename: 'a.js' });
-const astB = parse(b, { filename: 'b.js' });
+const astA = parse(a, { sourceFilename: 'a.js' });
+const astB = parse(b, { sourceFilename: 'b.js' });
 const ast = {
   type: 'Program',
-  body: [].concat(astA.body, ast2.body)
+  body: [].concat(astA.program.body, astB.program.body)
 };
 
-const { code, map } = generate(ast, { /* options */ }, {
+const { code, map } = generate(ast, { sourceMaps: true }, {
   'a.js': a,
   'b.js': b
 });

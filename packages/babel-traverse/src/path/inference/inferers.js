@@ -3,7 +3,7 @@ import * as t from "babel-types";
 export { default as Identifier } from "./inferer-reference";
 
 export function VariableDeclarator() {
-  let id = this.get("id");
+  const id = this.get("id");
 
   if (id.isIdentifier()) {
     return this.get("init").getTypeAnnotation();
@@ -30,7 +30,7 @@ export function TemplateLiteral() {
 }
 
 export function UnaryExpression(node) {
-  let operator = node.operator;
+  const operator = node.operator;
 
   if (operator === "void") {
     return t.voidTypeAnnotation();
@@ -44,15 +44,15 @@ export function UnaryExpression(node) {
 }
 
 export function BinaryExpression(node) {
-  let operator = node.operator;
+  const operator = node.operator;
 
   if (t.NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
     return t.numberTypeAnnotation();
   } else if (t.BOOLEAN_BINARY_OPERATORS.indexOf(operator) >= 0) {
     return t.booleanTypeAnnotation();
   } else if (operator === "+") {
-    let right = this.get("right");
-    let left  = this.get("left");
+    const right = this.get("right");
+    const left  = this.get("left");
 
     if (left.isBaseType("number") && right.isBaseType("number")) {
       // both numbers so this will be a number
@@ -93,7 +93,7 @@ export function AssignmentExpression() {
 }
 
 export function UpdateExpression(node) {
-  let operator = node.operator;
+  const operator = node.operator;
   if (operator === "++" || operator === "--") {
     return t.numberTypeAnnotation();
   }
@@ -137,7 +137,13 @@ function Func() {
   return t.genericTypeAnnotation(t.identifier("Function"));
 }
 
-export { Func as Function, Func as Class };
+export {
+  Func as FunctionExpression,
+  Func as ArrowFunctionExpression,
+  Func as FunctionDeclaration,
+  Func as ClassExpression,
+  Func as ClassDeclaration
+};
 
 export function CallExpression() {
   return resolveCall(this.get("callee"));

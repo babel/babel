@@ -1,13 +1,12 @@
-var transform = require("../lib/api/node").transform;
-var Plugin    = require("../lib/transformation/plugin");
-var babel     = require("../lib/api/node");
-var chai      = require("chai");
+import { transform } from "../lib/api/node";
+import Plugin from "../lib/transformation/plugin";
+import chai from "chai";
 
-suite("traversal path", function () {
-  test("replaceWithSourceString", function () {
-    var expectCode = "function foo() {}";
+describe("traversal path", function () {
+  it("replaceWithSourceString", function () {
+    const expectCode = "function foo() {}";
 
-    var actualCode = transform(expectCode, {
+    const actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           FunctionDeclaration: function (path) {
@@ -20,10 +19,10 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("console.whatever();");
   });
 
-  test("replaceWith (arrow expression body to block statement body)", function () {
-    var expectCode = "var fn = () => true;";
+  it("replaceWith (arrow expression body to block statement body)", function () {
+    const expectCode = "var fn = () => true;";
 
-    var actualCode = transform(expectCode, {
+    const actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ArrowFunctionExpression: function (path) {
@@ -45,10 +44,10 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("var fn = () => {\n  return true;\n};");
   });
 
-  test("replaceWith (arrow block statement body to expression body)", function () {
-    var expectCode = "var fn = () => { return true; }";
+  it("replaceWith (arrow block statement body to expression body)", function () {
+    const expectCode = "var fn = () => { return true; }";
 
-    var actualCode = transform(expectCode, {
+    const actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ArrowFunctionExpression: function (path) {
@@ -64,10 +63,10 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("var fn = () => true;");
   });
 
-  test("replaceWith (for-in left expression to variable declaration)", function () {
-    var expectCode = "for (KEY in right);";
+  it("replaceWith (for-in left expression to variable declaration)", function () {
+    const expectCode = "for (KEY in right);";
 
-    var actualCode = transform(expectCode, {
+    const actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ForInStatement: function (path) {
@@ -90,10 +89,10 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("for (var KEY in right);");
   });
 
-  test("replaceWith (for-in left variable declaration to expression)", function () {
-    var expectCode = "for (var KEY in right);";
+  it("replaceWith (for-in left variable declaration to expression)", function () {
+    const expectCode = "for (var KEY in right);";
 
-    var actualCode = transform(expectCode, {
+    const actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ForInStatement: function (path) {
@@ -109,10 +108,10 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("for (KEY in right);");
   });
 
-  test("replaceWith (for-loop left expression to variable declaration)", function () {
-    var expectCode = "for (KEY;;);";
+  it("replaceWith (for-loop left expression to variable declaration)", function () {
+    const expectCode = "for (KEY;;);";
 
-    var actualCode = transform(expectCode, {
+    const actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ForStatement: function (path) {
@@ -135,10 +134,10 @@ suite("traversal path", function () {
     chai.expect(actualCode).to.be.equal("for (var KEY;;);");
   });
 
-  test("replaceWith (for-loop left variable declaration to expression)", function () {
-    var expectCode = "for (var KEY;;);";
+  it("replaceWith (for-loop left variable declaration to expression)", function () {
+    const expectCode = "for (var KEY;;);";
 
-    var actualCode = transform(expectCode, {
+    const actualCode = transform(expectCode, {
       plugins: [new Plugin({
         visitor: {
           ForStatement: function (path) {

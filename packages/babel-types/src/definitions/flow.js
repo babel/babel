@@ -1,4 +1,6 @@
-import defineType from "./index";
+import defineType, {
+  assertValueType
+} from "./index";
 
 defineType("AnyTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],
@@ -42,8 +44,13 @@ defineType("ClassImplements", {
 
 defineType("ClassProperty", {
   visitor: ["key", "value", "typeAnnotation", "decorators"],
-  aliases: ["Flow", "Property"],
+  builder: ["key", "value", "typeAnnotation", "decorators", "computed"],
+  aliases: ["Property"],
   fields: {
+    computed: {
+      validate: assertValueType("boolean"),
+      default: false
+    }
     // todo
   }
 });
@@ -74,6 +81,14 @@ defineType("DeclareInterface", {
 
 defineType("DeclareModule", {
   visitor: ["id", "body"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  }
+});
+
+defineType("DeclareModuleExports", {
+  visitor: ["typeAnnotation"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     // todo
@@ -149,6 +164,10 @@ defineType("IntersectionTypeAnnotation", {
 });
 
 defineType("MixedTypeAnnotation", {
+  aliases: ["Flow", "FlowBaseAnnotation"]
+});
+
+defineType("EmptyTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"]
 });
 

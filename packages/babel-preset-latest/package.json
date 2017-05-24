@@ -1,0 +1,18 @@
+{
+  "name": "babel-preset-latest",
+  "version": "6.24.0",
+  "description": "Babel preset including es2015+",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-latest",
+  "main": "lib/index.js",
+  "dependencies": {
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-es2016": "^6.22.0",
+    "babel-preset-es2017": "^6.22.0"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.24.0"
+  }
+}

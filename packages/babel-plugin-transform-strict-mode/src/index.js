@@ -4,11 +4,11 @@ export default function () {
   return {
     visitor: {
       Program(path, state) {
-        if (state.opts.strict === false) return;
-        
-        let { node } = path;
+        if (state.opts.strict === false || state.opts.strictMode === false) return;
 
-        for (let directive of (node.directives: Array<Object>)) {
+        const { node } = path;
+
+        for (const directive of (node.directives: Array<Object>)) {
           if (directive.value.value === "use strict") return;
         }
 

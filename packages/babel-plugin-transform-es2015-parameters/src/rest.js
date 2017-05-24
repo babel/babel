@@ -1,9 +1,7 @@
-/* eslint indent: 0 */
-
 import template from "babel-template";
 import * as t from "babel-types";
 
-let buildRest = template(`
+const buildRest = template(`
   for (var LEN = ARGUMENTS.length,
            ARRAY = Array(ARRAY_LEN),
            KEY = START;
@@ -13,11 +11,19 @@ let buildRest = template(`
   }
 `);
 
-let loadRest = template(`
+const restIndex = template(`
   ARGUMENTS.length <= INDEX ? undefined : ARGUMENTS[INDEX]
 `);
 
-let memberExpressionOptimisationVisitor = {
+const restIndexImpure = template(`
+  REF = INDEX, ARGUMENTS.length <= REF ? undefined : ARGUMENTS[REF]
+`);
+
+const restLength = template(`
+  ARGUMENTS.length <= OFFSET ? 0 : ARGUMENTS.length - OFFSET
+`);
+
+const memberExpressionOptimisationVisitor = {
   Scope(path, state) {
     // check if this scope has a local binding that will shadow the rest parameter
     if (!path.scope.bindingIdentifierEquals(state.name, state.outerBinding)) {
@@ -26,6 +32,8 @@ let memberExpressionOptimisationVisitor = {
   },
 
   Flow(path) {
+    // Do not skip TypeCastExpressions as the contain valid non flow code
+    if (path.isTypeCastExpression()) return;
     // don't touch reference in type annotations
     path.skip();
   },
@@ -33,7 +41,7 @@ let memberExpressionOptimisationVisitor = {
   "Function|ClassProperty": function (path, state) {
     // Detect whether any reference to rest is contained in nested functions to
     // determine if deopt is necessary.
-    let oldNoOptimise = state.noOptimise;
+    const oldNoOptimise = state.noOptimise;
     state.noOptimise = true;
     path.traverse(memberExpressionOptimisationVisitor, state);
     state.noOptimise = oldNoOptimise;
@@ -44,7 +52,7 @@ let memberExpressionOptimisationVisitor = {
   },
 
   ReferencedIdentifier(path, state) {
-    let { node } = path;
+    const { node } = path;
 
     // we can't guarantee the purity of arguments
     if (node.name === "arguments") {
@@ -57,14 +65,19 @@ let memberExpressionOptimisationVisitor = {
     if (state.noOptimise) {
       state.deopted = true;
     } else {
-      let {parentPath} = path;
+      const { parentPath } = path;
+
+      // Is this identifier the right hand side of a default parameter?
+      if (parentPath.listKey === "params" && parentPath.key < state.offset) {
+        return;
+      }
 
       // ex: `args[0]`
       // ex: `args.whatever`
       if (parentPath.isMemberExpression({ object: node })) {
-        let grandparentPath = parentPath.parentPath;
+        const grandparentPath = parentPath.parentPath;
 
-        let argsOptEligible = !state.deopted && !(
+        const argsOptEligible = !state.deopted && !(
           // ex: `args[0] = "whatever"`
           (
             grandparentPath.isAssignmentExpression() &&
@@ -102,13 +115,13 @@ let memberExpressionOptimisationVisitor = {
             // if we know that this member expression is referencing a number then
             // we can safely optimise it
             if (parentPath.get("property").isBaseType("number")) {
-              state.candidates.push({cause: "indexGetter", path});
+              state.candidates.push({ cause: "indexGetter", path });
               return;
             }
           }
           // args.length
           else if (parentPath.node.property.name === "length") {
-            state.candidates.push({cause: "lengthGetter", path});
+            state.candidates.push({ cause: "lengthGetter", path });
             return;
           }
         }
@@ -119,9 +132,9 @@ let memberExpressionOptimisationVisitor = {
       // optimise single spread args in calls
       // ex: fn(...args)
       if (state.offset === 0 && parentPath.isSpreadElement()) {
-        let call = parentPath.parentPath;
+        const call = parentPath.parentPath;
         if (call.isCallExpression() && call.node.arguments.length === 1) {
-          state.candidates.push({cause: "argSpread", path});
+          state.candidates.push({ cause: "argSpread", path });
           return;
         }
       }
@@ -151,48 +164,55 @@ function optimiseIndexGetter(path, argsId, offset) {
 
   if (t.isNumericLiteral(path.parent.property)) {
     index = t.numericLiteral(path.parent.property.value + offset);
+  } else if (offset === 0) {
+    // Avoid unnecessary '+ 0'
+    index = path.parent.property;
   } else {
     index = t.binaryExpression("+", path.parent.property, t.numericLiteral(offset));
   }
 
-  path.parentPath.replaceWith(loadRest({
-    ARGUMENTS: argsId,
-    INDEX: index,
-  }));
+  const { scope } = path;
+  if (!scope.isPure(index)) {
+    const temp = scope.generateUidIdentifierBasedOnNode(index);
+    scope.push({ id: temp, kind: "var" });
+    path.parentPath.replaceWith(restIndexImpure({
+      ARGUMENTS: argsId,
+      INDEX: index,
+      REF: temp
+    }));
+  } else {
+    path.parentPath.replaceWith(restIndex({
+      ARGUMENTS: argsId,
+      INDEX: index,
+    }));
+  }
 }
 
-function optimiseLengthGetter(path, argsLengthExpression, argsId, offset) {
+function optimiseLengthGetter(path, argsId, offset) {
   if (offset) {
-    path.parentPath.replaceWith(
-      t.binaryExpression(
-        "-",
-        argsLengthExpression,
-        t.numericLiteral(offset),
-      )
-    );
+    path.parentPath.replaceWith(restLength({
+      ARGUMENTS: argsId,
+      OFFSET: t.numericLiteral(offset),
+    }));
   } else {
     path.replaceWith(argsId);
   }
 }
 
-export let visitor = {
+export const visitor = {
   Function(path) {
-    let { node, scope } = path;
+    const { node, scope } = path;
     if (!hasRest(node)) return;
 
-    let rest = node.params.pop().argument;
+    const rest = node.params.pop().argument;
 
-    let argsId = t.identifier("arguments");
-    let argsLengthExpression = t.memberExpression(
-      argsId,
-      t.identifier("length"),
-    );
+    const argsId = t.identifier("arguments");
 
     // otherwise `arguments` will be remapped in arrow functions
     argsId._shadowedFunctionLiteral = path;
 
     // check and optimise for extremely common cases
-    let state = {
+    const state = {
       references: [],
       offset:     node.params.length,
 
@@ -224,13 +244,13 @@ export let visitor = {
 
     // There are only "shorthand" references
     if (!state.deopted && !state.references.length) {
-      for (let {path, cause} of (state.candidates: Array)) {
+      for (const { path, cause } of (state.candidates: Array)) {
         switch (cause) {
           case "indexGetter":
             optimiseIndexGetter(path, argsId, state.offset);
             break;
           case "lengthGetter":
-            optimiseLengthGetter(path, argsLengthExpression, argsId, state.offset);
+            optimiseLengthGetter(path, argsId, state.offset);
             break;
           default:
             path.replaceWith(argsId);
@@ -246,9 +266,9 @@ export let visitor = {
     // deopt shadowed functions as transforms like regenerator may try touch the allocation loop
     state.deopted = state.deopted || !!node.shadow;
 
-    let start = t.numericLiteral(node.params.length);
-    let key = scope.generateUidIdentifier("key");
-    let len = scope.generateUidIdentifier("len");
+    const start = t.numericLiteral(node.params.length);
+    const key = scope.generateUidIdentifier("key");
+    const len = scope.generateUidIdentifier("len");
 
     let arrKey = key;
     let arrLen = len;
@@ -271,7 +291,7 @@ export let visitor = {
       );
     }
 
-    let loop = buildRest({
+    const loop = buildRest({
       ARGUMENTS: argsId,
       ARRAY_KEY: arrKey,
       ARRAY_LEN: arrLen,

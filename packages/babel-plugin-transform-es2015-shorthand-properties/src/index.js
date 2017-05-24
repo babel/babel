@@ -4,11 +4,14 @@ export default function () {
   return {
     visitor: {
       ObjectMethod(path) {
-        let { node } = path;
+        const { node } = path;
         if (node.kind === "method") {
+          const func = t.functionExpression(null, node.params, node.body, node.generator, node.async);
+          func.returnType = node.returnType;
+
           path.replaceWith(t.objectProperty(
             node.key,
-            t.functionExpression(null, node.params, node.body, node.generator, node.async),
+            func,
             node.computed
           ));
         }
