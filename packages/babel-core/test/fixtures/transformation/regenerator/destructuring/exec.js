@@ -22,21 +22,22 @@ function* foo3() {
         case "one":
           // Removing these 5 lines makes the tests pass.
           if(value === 1) {
-            break;
+            break loop;
           } else if(value === 2) {
-            break;
+            break loop;
           }
-
+          break;
         case "two":
           // Removing these 3 lines makes the tests pass.
           ["a", "b"].map(function(v) {
             return value + v;
           });
 
+          break loop;
           break;
-
         case "three":
           break loop;
+          break;
       }
     }
 }
@@ -45,7 +46,12 @@ var gen3 = foo3();
 
 assert.equal(gen3.next().value, "iteration");
 assert.equal(gen3.next({what: "one", value: 3}).done, false);
-assert.equal(gen3.next({what: "one", value: 2}).done, false);
-assert.equal(gen3.next({what: "one", value: 1}).done, false);
-assert.equal(gen3.next({what: "two", value: "sometext"}).done, false);
-assert.equal(gen3.next({what: "three"}).done, true);
+assert.equal(gen3.next({what: "one", value: 2}).done, true);
+
+var gen4 = foo3();
+assert.equal(gen4.next().value, "iteration");
+assert.equal(gen4.next({what: "two", value: "sometext"}).done, true);
+
+var gen5 = foo3();
+assert.equal(gen5.next().value, "iteration");
+assert.equal(gen5.next({what: "three"}).done, true);
