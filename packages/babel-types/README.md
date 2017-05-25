@@ -46,7 +46,7 @@ See also `t.isArrayPattern(node, opts)` and `t.assertArrayPattern(node, opts)`.
 
 Aliases: `Pattern`, `LVal`
 
- - `elements`: `Array<Expression>` (required)
+ - `elements`: `Array<Identifier | Pattern | RestElement>` (required)
  - `typeAnnotation` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
 
@@ -1179,8 +1179,8 @@ See also `t.isMetaProperty(node, opts)` and `t.assertMetaProperty(node, opts)`.
 
 Aliases: `Expression`
 
- - `meta`: `string` (required)
- - `property`: `string` (required)
+ - `meta`: `Identifier` (required)
+ - `property`: `Identifier` (required)
 
 ---
 
@@ -1354,7 +1354,7 @@ See also `t.isObjectProperty(node, opts)` and `t.assertObjectProperty(node, opts
 Aliases: `UserWhitespacable`, `Property`, `ObjectMember`
 
  - `key`if computed then `Expression` else `Identifier | Literal` (required)
- - `value`: `Expression` (required)
+ - `value`: `Expression | Pattern | RestElement` (required)
  - `computed`: `boolean` (default: `false`)
  - `shorthand`: `boolean` (default: `false`)
  - `decorators`: `Array<Decorator>` (default: `null`)
@@ -1415,6 +1415,19 @@ Aliases: `Flow`, `UserWhitespacable`
 
  - `key` (required)
  - `value` (required)
+
+---
+
+### objectTypeSpreadProperty
+```javascript
+t.objectTypeSpreadProperty(argument)
+```
+
+See also `t.isObjectTypeSpreadProperty(node, opts)` and `t.assertObjectTypeSpreadProperty(node, opts)`.
+
+Aliases: `Flow`, `UserWhitespacable`
+
+ - `argument` (required)
 
 ---
 
