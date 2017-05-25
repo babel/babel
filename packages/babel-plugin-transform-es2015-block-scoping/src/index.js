@@ -127,9 +127,22 @@ const letReferenceBlockVisitor = traverse.visitors.merge([{
     if (state.loopDepth > 0) {
       path.traverse(letReferenceFunctionVisitor, state);
     }
-    return path.skip();
+    path.skip();
   },
 }, tdzVisitor]);
+
+const constantReferencesVisitor = {
+  ReferencedIdentifier(path, state) {
+    const { name } = path.node;
+    if (state.outsideReferences[name] || state.constants[name]) return;
+
+    const binding = state.bindings[name];
+
+    if (binding && binding.constant && binding === path.scope.getBinding(name)) {
+      state.constants[name] = binding.identifier;
+    }
+  },
+};
 
 const letReferenceFunctionVisitor = traverse.visitors.merge([{
   ReferencedIdentifier(path, state) {
@@ -148,27 +161,34 @@ const letReferenceFunctionVisitor = traverse.visitors.merge([{
 }, tdzVisitor]);
 
 const hoistVarDeclarationsVisitor = {
-  enter(path, self) {
-    const { node, parent } = path;
+  ForStatement(path) {
+    const { node } = path;
+    if (isVar(node.init, node)) {
+      const nodes = this.pushDeclar(node.init);
+      if (nodes.length === 1) {
+        node.init = nodes[0];
+      } else {
+        node.init = t.sequenceExpression(nodes);
+      }
+    }
+  },
 
-    if (path.isForStatement()) {
-      if (isVar(node.init, node)) {
-        const nodes = self.pushDeclar(node.init);
-        if (nodes.length === 1) {
-          node.init = nodes[0];
-        } else {
-          node.init = t.sequenceExpression(nodes);
-        }
-      }
-    } else if (path.isFor()) {
-      if (isVar(node.left, node)) {
-        self.pushDeclar(node.left);
-        node.left = node.left.declarations[0].id;
-      }
-    } else if (isVar(node, parent)) {
-      path.replaceWithMultiple(self.pushDeclar(node).map((expr) => t.expressionStatement(expr)));
-    } else if (path.isFunction()) {
-      return path.skip();
+  For(path) {
+    const { node } = path;
+    if (isVar(node.left, node)) {
+      this.pushDeclar(node.left);
+      node.left = node.left.declarations[0].id;
+    }
+  },
+
+  Function(path) {
+    path.skip();
+  },
+
+  VariableDeclaration(path) {
+    const { node, parent } = path;
+    if (isVar(node, parent)) {
+      path.replaceWithMultiple(this.pushDeclar(node).map((expr) => t.expressionStatement(expr)));
     }
   },
 };
@@ -180,13 +200,11 @@ const loopLabelVisitor = {
 };
 
 const continuationVisitor = {
-  enter(path, state) {
-    if (path.isAssignmentExpression() || path.isUpdateExpression()) {
-      const bindings = path.getBindingIdentifiers();
-      for (const name in bindings) {
-        if (state.outsideReferences[name] !== path.scope.getBindingIdentifier(name)) continue;
-        state.reassignments[name] = true;
-      }
+  "AssignmentExpression|UpdateExpression"(path, state) {
+    const bindings = path.getBindingIdentifiers();
+    for (const name in bindings) {
+      if (state.outsideReferences[name] !== path.scope.getBindingIdentifier(name)) continue;
+      state.reassignments[name] = true;
     }
   },
 };
@@ -406,7 +424,8 @@ class BlockScoping {
 
     // turn outsideLetReferences into an array
     const params = values(outsideRefs);
-    const args = values(outsideRefs);
+    const args = params.slice();
+
 
     const isSwitch = this.blockPath.isSwitchStatement();
 
@@ -484,6 +503,21 @@ class BlockScoping {
 
     // Ensure "this", "arguments", and "super" continue to work in the wrapped function.
     fnPath.unwrapFunctionEnvironment();
+
+    const state = {
+      bindings: fnPath.scope.parent.getAllBindings(),
+      constants: Object.create(null),
+      outsideReferences: outsideRefs,
+    };
+    fnPath.traverse(constantReferencesVisitor, state);
+    const constants: Array = values(state.constants);
+    for (const id of constants) {
+      const l = params.push(id);
+      args.push(id);
+      fnPath.scope.registerBinding("param", fnPath.get(`params.${l - 1}`));
+    }
+
+    fnPath.hoist();
   }
 
   /**

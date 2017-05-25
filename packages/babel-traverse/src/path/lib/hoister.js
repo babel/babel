@@ -3,7 +3,7 @@ import * as t from "babel-types";
 
 const referenceVisitor = {
   // This visitor looks for bindings to establish a topmost scope for hoisting.
-  ReferencedIdentifier(path, state) {
+  "BindingIdentifier|ReferencedIdentifier"(path, state) {
     // Don't hoist regular JSX identifiers ('div', 'span', etc).
     // We do have to consider member expressions for hoisting (e.g. `this.component`)
     if (
@@ -55,6 +55,9 @@ export default class PathHoister {
   isCompatibleScope(scope) {
     for (const key in this.bindings) {
       const binding = this.bindings[key];
+      if (binding.scope.path === this.path) {
+        continue;
+      }
       if (!scope.bindingIdentifierEquals(key, binding.identifier)) {
         return false;
       }
@@ -65,7 +68,7 @@ export default class PathHoister {
 
   // Look through all scopes and push compatible ones.
   getCompatibleScopes() {
-    let scope = this.path.scope;
+    let scope = this.scope;
     do {
       if (this.isCompatibleScope(scope)) {
         this.scopes.push(scope);
@@ -84,11 +87,14 @@ export default class PathHoister {
     let path = this._getAttachmentPath();
     if (!path) return;
 
-    let targetScope = path.scope;
-
     // don't allow paths that have their own lexical environments to pollute
-    if (targetScope.path === path) {
-      targetScope = path.scope.parent;
+    const oldScope = this.scope.path === this.path ? this.scope.parent : this.scope;
+    const targetScope = path.isFunction() ? path.scope.parent : path.scope;
+
+    // don't bother hoisting to the same function as this will cause multiple branches to be
+    // evaluated more than once leading to a bad optimisation
+    if (oldScope === targetScope) {
+      return;
     }
 
     // avoid hoisting to a scope that contains bindings that are executed after our attachment path
@@ -202,10 +208,6 @@ export default class PathHoister {
 
     const attachTo = this.getAttachmentPath();
     if (!attachTo) return;
-
-    // don't bother hoisting to the same function as this will cause multiple branches to be
-    // evaluated more than once leading to a bad optimisation
-    if (attachTo.getFunctionParent() === this.path.getFunctionParent()) return;
 
     // generate declaration and insert it to our point
     let uid = attachTo.scope.generateUidIdentifier("ref");
