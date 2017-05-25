@@ -3,8 +3,11 @@ import trimEnd from "lodash/trimEnd";
 import resolve from "try-resolve";
 import clone from "lodash/clone";
 import merge from "lodash/merge";
+import semver from "semver";
 import path from "path";
 import fs from "fs";
+
+const nodeVersion = semver.clean(process.version.slice(1));
 
 function humanize(val, noext) {
   if (noext) val = path.basename(val, path.extname(val));
@@ -124,6 +127,22 @@ export default function get(entryLoc): Array<Suite> {
           filename: expectLocAlias
         }
       };
+
+      // If there's node requirement, check it before pushing task
+      if (taskOpts.minNodeVersion) {
+        const minimumVersion = semver.clean(taskOpts.minNodeVersion);
+
+        if (minimumVersion == null) {
+          throw new Error(`'minNodeVersion' has invalid semver format: ${taskOpts.minNodeVersion}`);
+        }
+
+        if (semver.lt(nodeVersion, minimumVersion)) {
+          return;
+        }
+
+        // Delete to avoid option validation error
+        delete taskOpts.minNodeVersion;
+      }
 
       // traceur checks
 
