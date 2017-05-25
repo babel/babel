@@ -1,0 +1,30 @@
+var A = function () {
+  function A() {
+    babelHelpers.classCallCheck(this, A);
+  }
+
+  babelHelpers.createClass(A, [{
+    key: "foo",
+    value: function foo() {
+      return "bar";
+    }
+  }]);
+  return A;
+}();
+
+var B = function (_A) {
+  babelHelpers.inherits(B, _A);
+
+  function B(...args) {
+    var _temp, _this, _ret;
+
+    babelHelpers.classCallCheck(this, B);
+    return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (B.__proto__ || Object.getPrototypeOf(B)).call(this, ...args)), _this), Object.defineProperty(_this, "foo", {
+      enumerable: true,
+      writable: true,
+      value: babelHelpers.get(B.prototype.__proto__ || Object.getPrototypeOf(B.prototype), "foo", _this).call(_this)
+    }), _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+  }
+
+  return B;
+}(A);
