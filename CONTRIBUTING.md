@@ -117,3 +117,4 @@ From now on Babel will use your local checkout of Babylon for its tests.
   - [ ] If any new nodes or modifications need to be added to the AST, update [ast/spec.md](https://github.com/babel/babylon/blob/master/ast/spec.md)
   - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check so that your new plugin code only runs when that flag is turned on (not default behavior)
   - [ ] Add failing/passing tests according to spec behavior
+- [ ] Start working about the Babel transform itself!
