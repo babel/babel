@@ -11,6 +11,12 @@ const buildDefaultParam = template(`
       DEFAULT_VALUE;
 `);
 
+const buildLooseDefaultParam = template(`
+  if (VARIABLE_NAME === undefined) {
+    VARIABLE_NAME = DEFAULT_VALUE;
+  }
+`);
+
 const buildCutOff = template(`
   let $0 = $1[$2];
 `);
@@ -44,17 +50,33 @@ const iifeVisitor = {
 };
 
 export const visitor = {
-  Function(path) {
+  Function(path, state) {
     const { node, scope } = path;
     if (!hasDefaults(node)) return;
 
     // ensure it's a block, useful for arrow functions
     path.ensureBlock();
 
-    const state = {
-      iife: false,
-      scope: scope,
-    };
+    const params = path.get("params");
+
+    if (state.opts.loose) {
+      const body = [];
+      for (let i = 0; i < params.length; ++i) {
+        const param = params[i];
+        if (param.isAssignmentPattern()) {
+          body.push(buildLooseDefaultParam({
+            VARIABLE_NAME: param.get("left"),
+            DEFAULT_VALUE: param.get("right"),
+          }));
+          param.replaceWith(t.identifier(param.get("left").node.name));
+        }
+      }
+      path.get("body").unshiftContainer("body", body);
+      return;
+    }
+
+    state.iife = false;
+    state.scope = scope;
 
     const body = [];
 
@@ -77,7 +99,6 @@ export const visitor = {
     const lastNonDefaultParam = getFunctionArity(node);
 
     //
-    const params = path.get("params");
     for (let i = 0; i < params.length; i++) {
       const param = params[i];
 
