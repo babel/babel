@@ -130,14 +130,14 @@ require("babylon").parse("code", {
  - `jsx`
  - `flow`
  - `doExpressions`
- - `objectRestSpread`
+ - `objectRestSpread` ([proposal](https://github.com/tc39/proposal-object-rest-spread))
  - `decorators` (Based on an outdated version of the Decorators proposal. Will be removed in a future version of `Babylon`)
- - `classProperties`
- - `exportExtensions`
- - `asyncGenerators`
- - `functionBind`
+ - `classProperties` ([proposal](https://github.com/zenparsing/es-function-bind))
+ - `exportExtensions` ([proposal 1](https://github.com/leebyron/ecmascript-export-default-from)), ([proposal 2](https://github.com/leebyron/ecmascript-export-ns-from))
+ - `asyncGenerators` ([proposal](https://github.com/tc39/proposal-async-iteration))
+ - `functionBind` ([proposal](https://github.com/zenparsing/es-function-bind))
  - `functionSent`
- - `dynamicImport`
+ - `dynamicImport` ([proposal](https://github.com/tc39/proposal-dynamic-import))
  - `numericSeparator` ([proposal](https://github.com/samuelgoto/proposal-numeric-separator))
 
 ### FAQ
