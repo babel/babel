@@ -1072,7 +1072,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return super.isExportDefaultSpecifier();
   }
 
-  parseConditional(expr: N.Expression, noIn: ?boolean, startPos: number, startLoc: Position, refNeedsArrowPos?: Pos): N.Expression {
+  parseConditional(expr: N.Expression, noIn: ?boolean, startPos: number, startLoc: Position, refNeedsArrowPos?: ?Pos): N.Expression {
     // only do the expensive clone if there is a question mark
     // and if we come from inside parens
     if (refNeedsArrowPos && this.match(tt.question)) {
@@ -1260,8 +1260,8 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
   }
 
   // parse a the super class type parameters and implements
-  parseClassSuper(node: N.Class, isStatement?: boolean): void {
-    super.parseClassSuper(node, isStatement);
+  parseClassSuper(node: N.Class): void {
+    super.parseClassSuper(node);
     if (node.superClass && this.isRelational("<")) {
       node.superTypeParameters = this.flowParseTypeParameterInstantiation();
     }

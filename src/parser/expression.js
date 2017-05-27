@@ -151,7 +151,7 @@ export default class ExpressionParser extends LValParser {
 
   // Parse a ternary conditional (`?:`) operator.
 
-  parseMaybeConditional(noIn: ?boolean, refShorthandDefaultPos: Pos, refNeedsArrowPos: ?Pos): N.Expression {
+  parseMaybeConditional(noIn: ?boolean, refShorthandDefaultPos: Pos, refNeedsArrowPos?: ?Pos): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     const expr = this.parseExprOps(noIn, refShorthandDefaultPos);
@@ -160,7 +160,15 @@ export default class ExpressionParser extends LValParser {
     return this.parseConditional(expr, noIn, startPos, startLoc, refNeedsArrowPos);
   }
 
-  parseConditional(expr: N.Expression, noIn: ?boolean, startPos: number, startLoc: Position): N.Expression {
+  parseConditional(
+    expr: N.Expression,
+    noIn: ?boolean,
+    startPos: number,
+    startLoc: Position,
+    // FIXME: Disabling this for now since can't seem to get it to play nicely
+    // eslint-disable-next-line no-unused-vars
+    refNeedsArrowPos?: ?Pos
+  ): N.Expression {
     if (this.eat(tt.question)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.test = expr;
@@ -470,7 +478,7 @@ export default class ExpressionParser extends LValParser {
           const oldLabels = this.state.labels;
           this.state.labels = [];
           this.state.inFunction = false;
-          node.body = this.parseBlock(false, true);
+          node.body = this.parseBlock(false);
           this.state.inFunction = oldInFunction;
           this.state.labels = oldLabels;
           return this.finishNode(node, "DoExpression");
