@@ -18,9 +18,7 @@ const buildLooseDefaultParam = template(`
 `);
 
 const buildLooseDestructuredDefaultParam = template(`
-  if (PARAMETER_NAME === UNDEFINED) {
-    var ASSIGMENT_IDENTIFIER = DEFAULT_VALUE;
-  }
+  let ASSIGMENT_IDENTIFIER = PARAMETER_NAME === UNDEFINED ? DEFAULT_VALUE : PARAMETER_NAME ;
 `);
 
 const buildCutOff = template(`
