@@ -72,3 +72,21 @@ require("babel-core").transform("code", {
   plugins: ["transform-es2015-parameters"]
 });
 ```
+
+## Options
+
+### `loose`
+
+`boolean`, defaults to `false`.
+
+In loose mode, parameters with default values will be counted into the arity of the function. This is not spec behavior where these parameters do not add to function arity:
+
+```javascript
+// Spec behavior
+function bar1 (arg1 = 1) {}
+bar1.length // 0
+
+// Loose mode
+function bar1 (arg1 = 1) {}
+bar1.length // 1
+```
