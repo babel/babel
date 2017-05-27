@@ -1,5 +1,3 @@
 function test(_temp) {
-  if (_temp === void 0) {
-    var { a: b } = {};
-  }
+  let { a: b } = _temp === void 0 ? {} : _temp;
 }
