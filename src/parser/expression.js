@@ -887,7 +887,7 @@ export default class ExpressionParser extends LValParser {
 
   // get methods aren't allowed to have any parameters
   // set methods must have exactly 1 parameter
-  checkGetterSetterParamCount(method: N.ObjectMethod): void {
+  checkGetterSetterParamCount(method: N.ObjectMethod | N.ClassMethod): void {
     const paramCount = method.kind === "get" ? 0 : 1;
     if (method.params.length !== paramCount) {
       const start = method.start;
@@ -956,12 +956,14 @@ export default class ExpressionParser extends LValParser {
     if (!node) this.unexpected();
   }
 
-  parsePropertyName(prop: N.ObjectMember): N.Identifier {
+  parsePropertyName(prop: N.ObjectOrClassMember): N.Identifier {
     if (this.eat(tt.bracketL)) {
+      // $FlowFixMe (ClassPrivateMember shouldn't be allowed to be computed!)
       prop.computed = true;
       prop.key = this.parseMaybeAssign();
       this.expect(tt.bracketR);
     } else {
+      // $FlowFixMe (ClassPrivateMember shouldn't be allowed to be computed!)
       prop.computed = false;
       const oldInPropertyName = this.state.inPropertyName;
       this.state.inPropertyName = true;

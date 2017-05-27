@@ -639,9 +639,11 @@ export default class StatementParser extends ExpressionParser {
     return this.match(tt.parenL);
   }
 
-  isNonstaticConstructor(method: N.ClassMethod): boolean {
+  isNonstaticConstructor(method: N.ClassMethod | N.ClassProperty): boolean {
     return !method.computed && !method.static && (
+      // $FlowFixMe ('key' downcasting)
       (method.key.name === "constructor") || // Identifier
+      // $FlowFixMe ('key' downcasting)
       (method.key.value === "constructor")   // Literal
     );
   }
@@ -652,7 +654,7 @@ export default class StatementParser extends ExpressionParser {
     this.state.strict = true;
     this.state.inClass = true;
 
-    let hadConstructor = false;
+    const state = { hadConstructor: false };
     let decorators = [];
     const classBody = this.startNode();
 
@@ -673,107 +675,15 @@ export default class StatementParser extends ExpressionParser {
         continue;
       }
 
-      const method = this.startNode();
+      const member = this.startNode();
 
       // steal the decorators if there are any
       if (decorators.length) {
-        method.decorators = decorators;
+        member.decorators = decorators;
         decorators = [];
       }
 
-      if (this.hasPlugin("classPrivateProperties") && this.match(tt.hash)) { // Private property
-        this.next();
-        this.parsePropertyName(method);
-        classBody.body.push(this.parsePrivateClassProperty(method));
-        continue;
-      }
-
-      method.static = false;
-      if (this.match(tt.name) && this.state.value === "static") {
-        const key = this.parseIdentifier(true); // eats 'static'
-        if (this.isClassMethod()) {
-          // a method named 'static'
-          method.kind = "method";
-          method.computed = false;
-          method.key = key;
-          this.parseClassMethod(classBody, method, false, false);
-          continue;
-        } else if (this.isClassProperty()) {
-          // a property named 'static'
-          method.computed = false;
-          method.key = key;
-          classBody.body.push(this.parseClassProperty(method));
-          continue;
-        }
-        // otherwise something static
-        method.static = true;
-      }
-
-      if (this.eat(tt.star)) {
-        // a generator
-        method.kind = "method";
-        this.parsePropertyName(method);
-        if (this.isNonstaticConstructor(method)) {
-          this.raise(method.key.start, "Constructor can't be a generator");
-        }
-        if (!method.computed && method.static && (method.key.name === "prototype" || method.key.value === "prototype")) {
-          this.raise(method.key.start, "Classes may not have static property named prototype");
-        }
-        this.parseClassMethod(classBody, method, true, false);
-      } else {
-        const isSimple = this.match(tt.name);
-        const key = this.parsePropertyName(method);
-        if (!method.computed && method.static && (method.key.name === "prototype" || method.key.value === "prototype")) {
-          this.raise(method.key.start, "Classes may not have static property named prototype");
-        }
-        if (this.isClassMethod()) {
-          // a normal method
-          if (this.isNonstaticConstructor(method)) {
-            if (hadConstructor) {
-              this.raise(key.start, "Duplicate constructor in the same class");
-            } else if (method.decorators) {
-              this.raise(method.start, "You can't attach decorators to a class constructor");
-            }
-            hadConstructor = true;
-            method.kind = "constructor";
-          } else {
-            method.kind = "method";
-          }
-          this.parseClassMethod(classBody, method, false, false);
-        } else if (this.isClassProperty()) {
-          // a normal property
-          if (this.isNonstaticConstructor(method)) {
-            this.raise(method.key.start, "Classes may not have a non-static field named 'constructor'");
-          }
-          classBody.body.push(this.parseClassProperty(method));
-        } else if (isSimple && key.name === "async" && !this.isLineTerminator()) {
-          // an async method
-          const isGenerator = this.hasPlugin("asyncGenerators") && this.eat(tt.star);
-          method.kind = "method";
-          this.parsePropertyName(method);
-          if (this.isNonstaticConstructor(method)) {
-            this.raise(method.key.start, "Constructor can't be an async function");
-          }
-          this.parseClassMethod(classBody, method, isGenerator, true);
-        } else if (isSimple && (key.name === "get" || key.name === "set") && !(this.isLineTerminator() && this.match(tt.star))) { // `get\n*` is an uninitialized property named 'get' followed by a generator.
-          // a getter or setter
-          method.kind = key.name;
-          this.parsePropertyName(method);
-          if (this.isNonstaticConstructor(method)) {
-            this.raise(method.key.start, "Constructor can't have get/set modifier");
-          }
-          this.parseClassMethod(classBody, method, false, false);
-          this.checkGetterSetterParamCount(method);
-        } else if (this.isLineTerminator()) {
-          // an uninitialized class property (due to ASI, since we don't otherwise recognize the next token)
-          if (this.isNonstaticConstructor(method)) {
-            this.raise(method.key.start, "Classes may not have a non-static field named 'constructor'");
-          }
-          classBody.body.push(this.parseClassProperty(method));
-        } else {
-          this.unexpected();
-        }
-      }
+      this.parseClassMember(classBody, member, state);
     }
 
     if (decorators.length) {
@@ -784,7 +694,111 @@ export default class StatementParser extends ExpressionParser {
 
     this.state.inClass = false;
     this.state.strict = oldStrict;
+  }
 
+  parseClassMember(classBody: N.ClassBody, member: N.ClassMember, state: { hadConstructor: boolean }): void {
+    // Use the appropriate variable to represent `member` once a more specific type is known.
+    const memberAny: any = member;
+    const methodOrProp: N.ClassMethod | N.ClassProperty = memberAny;
+    const method: N.ClassMethod = memberAny;
+    const prop: N.ClassProperty = memberAny;
+
+    if (this.hasPlugin("classPrivateProperties") && this.match(tt.hash)) { // Private property
+      this.next();
+      const privateProp: N.ClassPrivateProperty = memberAny;
+      this.parsePropertyName(privateProp);
+      classBody.body.push(this.parsePrivateClassProperty(privateProp));
+      return;
+    }
+
+    methodOrProp.static = false;
+    if (this.match(tt.name) && this.state.value === "static") {
+      const key = this.parseIdentifier(true); // eats 'static'
+      if (this.isClassMethod()) {
+        // a method named 'static'
+        method.kind = "method";
+        method.computed = false;
+        method.key = key;
+        this.parseClassMethod(classBody, method, false, false);
+        return;
+      } else if (this.isClassProperty()) {
+        // a property named 'static'
+        prop.computed = false;
+        prop.key = key;
+        classBody.body.push(this.parseClassProperty(prop));
+        return;
+      }
+      // otherwise something static
+      methodOrProp.static = true;
+    }
+
+    if (this.eat(tt.star)) {
+      // a generator
+      method.kind = "method";
+      this.parsePropertyName(method);
+      if (this.isNonstaticConstructor(method)) {
+        this.raise(method.key.start, "Constructor can't be a generator");
+      }
+      if (!method.computed && method.static && (method.key.name === "prototype" || method.key.value === "prototype")) {
+        this.raise(method.key.start, "Classes may not have static property named prototype");
+      }
+      this.parseClassMethod(classBody, method, true, false);
+      return;
+    }
+
+    const isSimple = this.match(tt.name);
+    const key = this.parsePropertyName(methodOrProp);
+    // $FlowFixMe ('key' downcasting)
+    if (!methodOrProp.computed && methodOrProp.static && (methodOrProp.key.name === "prototype" || methodOrProp.key.value === "prototype")) {
+      this.raise(methodOrProp.key.start, "Classes may not have static property named prototype");
+    }
+    if (this.isClassMethod()) {
+      // a normal method
+      if (this.isNonstaticConstructor(method)) {
+        if (state.hadConstructor) {
+          this.raise(key.start, "Duplicate constructor in the same class");
+        } else if (method.decorators) {
+          this.raise(method.start, "You can't attach decorators to a class constructor");
+        }
+        state.hadConstructor = true;
+        method.kind = "constructor";
+      } else {
+        method.kind = "method";
+      }
+      this.parseClassMethod(classBody, method, false, false);
+    } else if (this.isClassProperty()) {
+      // a normal property
+      if (this.isNonstaticConstructor(prop)) {
+        this.raise(prop.key.start, "Classes may not have a non-static field named 'constructor'");
+      }
+      classBody.body.push(this.parseClassProperty(prop));
+    } else if (isSimple && key.name === "async" && !this.isLineTerminator()) {
+      // an async method
+      const isGenerator = this.hasPlugin("asyncGenerators") && this.eat(tt.star);
+      method.kind = "method";
+      this.parsePropertyName(method);
+      if (this.isNonstaticConstructor(method)) {
+        this.raise(method.key.start, "Constructor can't be an async function");
+      }
+      this.parseClassMethod(classBody, method, isGenerator, true);
+    } else if (isSimple && (key.name === "get" || key.name === "set") && !(this.isLineTerminator() && this.match(tt.star))) { // `get\n*` is an uninitialized property named 'get' followed by a generator.
+      // a getter or setter
+      method.kind = key.name;
+      this.parsePropertyName(method);
+      if (this.isNonstaticConstructor(method)) {
+        this.raise(method.key.start, "Constructor can't have get/set modifier");
+      }
+      this.parseClassMethod(classBody, method, false, false);
+      this.checkGetterSetterParamCount(method);
+    } else if (this.isLineTerminator()) {
+      // an uninitialized class property (due to ASI, since we don't otherwise recognize the next token)
+      if (this.isNonstaticConstructor(prop)) {
+        this.raise(prop.key.start, "Classes may not have a non-static field named 'constructor'");
+      }
+      classBody.body.push(this.parseClassProperty(prop));
+    } else {
+      this.unexpected();
+    }
   }
 
   parsePrivateClassProperty(node: N.ClassPrivateProperty): N.ClassPrivateProperty {

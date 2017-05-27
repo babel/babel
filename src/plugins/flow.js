@@ -1242,7 +1242,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return this.match(tt.colon) || super.isClassProperty();
   }
 
-  isNonstaticConstructor(method: N.ClassMethod): boolean {
+  isNonstaticConstructor(method: N.ClassMethod | N.ClassProperty): boolean {
     return !this.match(tt.colon) && super.isNonstaticConstructor(method);
   }
 
@@ -1281,9 +1281,10 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     }
   }
 
-  parsePropertyName(node: N.ObjectMember): N.Identifier {
+  parsePropertyName(node: N.ObjectOrClassMember): N.Identifier {
     const variance = this.flowParseVariance();
     const key = super.parsePropertyName(node);
+    // $FlowFixMe (variance not defined on ClassPrivateProperty)
     node.variance = variance;
     return key;
   }

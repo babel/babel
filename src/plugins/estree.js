@@ -59,8 +59,9 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     }
   }
 
-  checkGetterSetterParamCount(prop: N.ObjectMethod): void {
+  checkGetterSetterParamCount(prop: N.ObjectMethod | N.ClassMethod): void {
     const paramCount = prop.kind === "get" ? 0 : 1;
+    // $FlowFixMe (prop.value present for ObjectMethod, but for ClassMethod should use prop.params?)
     if (prop.value.params.length !== paramCount) {
       const start = prop.start;
       if (prop.kind === "get") {
