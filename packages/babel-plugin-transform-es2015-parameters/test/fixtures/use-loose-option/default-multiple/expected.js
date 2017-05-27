@@ -1,9 +1,9 @@
 var t = function (e, f) {
-  if (e === undefined) {
+  if (e === void 0) {
     e = "foo";
   }
 
-  if (f === undefined) {
+  if (f === void 0) {
     f = 5;
   }
 
@@ -11,7 +11,7 @@ var t = function (e, f) {
 };
 
 var a = function (e, f) {
-  if (f === undefined) {
+  if (f === void 0) {
     f = 5;
   }
 
