@@ -69,22 +69,25 @@ export const visitor = {
         const param = params[i];
         if (param.isAssignmentPattern()) {
 
+          const left = param.get("left");
+          const right = param.get("right");
+
           const undefinedNode = scope.buildUndefinedNode();
 
-          if ( param.get("left").isIdentifier() ) {
+          if ( left.isIdentifier() ) {
             body.push(buildLooseDefaultParam({
-              ASSIGMENT_IDENTIFIER: param.get("left").node,
-              DEFAULT_VALUE: param.get("right").node,
+              ASSIGMENT_IDENTIFIER: left.node,
+              DEFAULT_VALUE: right.node,
               UNDEFINED: undefinedNode,
             }));
-            param.replaceWith(param.get("left").node);
+            param.replaceWith(left.node);
           }
 
-          if ( param.get("left").isObjectPattern() ) {
+          if ( left.isObjectPattern() || left.isArrayPattern() ) {
             const paramName = scope.generateUidIdentifier();
             body.push(buildLooseDestructuredDefaultParam({
-              ASSIGMENT_IDENTIFIER: param.get("left").node,
-              DEFAULT_VALUE: param.get("right").node,
+              ASSIGMENT_IDENTIFIER: left.node,
+              DEFAULT_VALUE: right.node,
               PARAMETER_NAME: paramName,
               UNDEFINED: undefinedNode,
             }));
