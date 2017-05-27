@@ -1,5 +1,5 @@
 var t = function (f) {
-  if (f === undefined) {
+  if (f === void 0) {
     f = "foo";
   }
 

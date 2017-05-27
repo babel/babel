@@ -12,13 +12,13 @@ const buildDefaultParam = template(`
 `);
 
 const buildLooseDefaultParam = template(`
-  if (ASSIGMENT_IDENTIFIER === undefined) {
+  if (ASSIGMENT_IDENTIFIER === UNDEFINED) {
     ASSIGMENT_IDENTIFIER = DEFAULT_VALUE;
   }
 `);
 
 const buildLooseDestructuredDefaultParam = template(`
-  if (PARAMETER_NAME === undefined) {
+  if (PARAMETER_NAME === UNDEFINED) {
     var ASSIGMENT_IDENTIFIER = DEFAULT_VALUE;
   }
 `);
@@ -70,10 +70,14 @@ export const visitor = {
       for (let i = 0; i < params.length; ++i) {
         const param = params[i];
         if (param.isAssignmentPattern()) {
+
+          const undefinedNode = scope.buildUndefinedNode();
+
           if ( param.get("left").isIdentifier() ) {
             body.push(buildLooseDefaultParam({
               ASSIGMENT_IDENTIFIER: param.get("left").node,
               DEFAULT_VALUE: param.get("right").node,
+              UNDEFINED: undefinedNode,
             }));
             param.replaceWith(param.get("left").node);
           }
@@ -84,6 +88,7 @@ export const visitor = {
               ASSIGMENT_IDENTIFIER: param.get("left").node,
               DEFAULT_VALUE: param.get("right").node,
               PARAMETER_NAME: paramName,
+              UNDEFINED: undefinedNode,
             }));
             param.replaceWith(paramName);
           }
