@@ -12,8 +12,14 @@ const buildDefaultParam = template(`
 `);
 
 const buildLooseDefaultParam = template(`
-  if (VARIABLE_NAME === undefined) {
-    VARIABLE_NAME = DEFAULT_VALUE;
+  if (ASSIGMENT_IDENTIFIER === undefined) {
+    ASSIGMENT_IDENTIFIER = DEFAULT_VALUE;
+  }
+`);
+
+const buildLooseDestructuredDefaultParam = template(`
+  if (PARAMETER_NAME === undefined) {
+    var ASSIGMENT_IDENTIFIER = DEFAULT_VALUE;
   }
 `);
 
@@ -64,11 +70,23 @@ export const visitor = {
       for (let i = 0; i < params.length; ++i) {
         const param = params[i];
         if (param.isAssignmentPattern()) {
-          body.push(buildLooseDefaultParam({
-            VARIABLE_NAME: param.get("left"),
-            DEFAULT_VALUE: param.get("right"),
-          }));
-          param.replaceWith(t.identifier(param.get("left").node.name));
+          if ( param.get("left").isIdentifier() ) {
+            body.push(buildLooseDefaultParam({
+              ASSIGMENT_IDENTIFIER: param.get("left").node,
+              DEFAULT_VALUE: param.get("right").node,
+            }));
+            param.replaceWith(param.get("left").node);
+          }
+
+          if ( param.get("left").isObjectPattern() ) {
+            const paramName = scope.generateUidIdentifier();
+            body.push(buildLooseDestructuredDefaultParam({
+              ASSIGMENT_IDENTIFIER: param.get("left").node,
+              DEFAULT_VALUE: param.get("right").node,
+              PARAMETER_NAME: paramName,
+            }));
+            param.replaceWith(paramName);
+          }
         }
       }
       path.get("body").unshiftContainer("body", body);
