@@ -1,6 +1,6 @@
 {
   "name": "babel-core",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.10",
   "description": "Babel compiler core.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -26,13 +26,13 @@
   },
   "dependencies": {
     "babel-code-frame": "7.0.0-alpha.9",
-    "babel-generator": "7.0.0-alpha.9",
-    "babel-helpers": "7.0.0-alpha.9",
-    "babel-messages": "7.0.0-alpha.9",
-    "babel-template": "7.0.0-alpha.9",
-    "babel-traverse": "7.0.0-alpha.9",
-    "babel-types": "7.0.0-alpha.9",
-    "babylon": "7.0.0-beta.8",
+    "babel-generator": "7.0.0-alpha.10",
+    "babel-helpers": "7.0.0-alpha.10",
+    "babel-messages": "7.0.0-alpha.10",
+    "babel-template": "7.0.0-alpha.10",
+    "babel-traverse": "7.0.0-alpha.10",
+    "babel-types": "7.0.0-alpha.10",
+    "babylon": "7.0.0-beta.11",
     "convert-source-map": "^1.1.0",
     "debug": "^2.1.1",
     "json5": "^0.5.0",
@@ -44,9 +44,9 @@
     "source-map": "^0.5.0"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "7.0.0-alpha.9",
-    "babel-helper-transform-fixture-test-runner": "7.0.0-alpha.9",
+    "babel-helper-fixtures": "7.0.0-alpha.10",
+    "babel-helper-transform-fixture-test-runner": "7.0.0-alpha.10",
     "babel-polyfill": "7.0.0-alpha.9",
-    "babel-register": "7.0.0-alpha.9"
+    "babel-register": "7.0.0-alpha.10"
   }
 }

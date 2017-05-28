@@ -19,6 +19,22 @@ export default function ({ types: t }) {
         }
       },
 
+      ImportDeclaration(path) {
+        if (!path.node.specifiers.length) return;
+
+        let typeCount = 0;
+
+        path.node.specifiers.forEach(({ importKind }) => {
+          if (importKind === "type" || importKind === "typeof") {
+            typeCount++;
+          }
+        });
+
+        if (typeCount === path.node.specifiers.length) {
+          path.remove();
+        }
+      },
+
       Flow(path) {
         path.remove();
       },

@@ -1,6 +1,6 @@
 {
   "name": "babel-runtime",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.10",
   "description": "babel selfContained runtime",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime",
@@ -10,7 +10,7 @@
     "regenerator-runtime": "^0.10.0"
   },
   "devDependencies": {
-    "babel-helpers": "7.0.0-alpha.9",
-    "babel-plugin-transform-runtime": "7.0.0-alpha.9"
+    "babel-helpers": "7.0.0-alpha.10",
+    "babel-plugin-transform-runtime": "7.0.0-alpha.10"
   }
 }
