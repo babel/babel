@@ -250,6 +250,17 @@ The debugger starts at the first executed line of code, which is Mocha's first l
 Click _Resume script execution_ <img src="https://i.imgur.com/TmYBn9d.png" alt="Resume script execution button." width="16"> to jump to the set breakpoint.
 Note that the code shown in Chrome DevTools is compiled code and therefore differs.
 
+## Troubleshooting
+
+In case you're not able to reproduce an error on CI locally, it may be due to 
+
+ - Node Version: Travis CI runs the tests against all major node versions. If your tests use JavaScript features unsupported by lower versions of node, then use [minNodeVersion option](#writing-tests) in options.json.
+ - Timeout: Check the CI log and if the only errors are timeout errors and you are sure that it's not related to the changes you made, ask someone in the slack channel to trigger rebuild on the CI build and it might be resolved
+ 
+In case you're locally getting errors which are not on the CI, it may be due to
+
+ - Updates in Dependencies: Make sure you run make bootstrap before you run `make build` or `make watch` before you run the tests.
+ 
 ## Internals
 - AST spec ([babylon/ast/spec.md](https://github.com/babel/babylon/blob/master/ast/spec.md))
 - Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md)
