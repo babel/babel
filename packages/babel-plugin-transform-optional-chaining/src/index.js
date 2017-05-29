@@ -62,7 +62,7 @@ export default function ({ types: t }) {
         );
 
         // FIXME(sven): if will be a ConditionalExpression for childs, only top level will be ifStatement
-        const remplacement = t.ifStatement(isChainNil, t.blockStatement([t.expressionStatement(path.node)]));
+        const replacement = t.ifStatement(isChainNil, t.blockStatement([t.expressionStatement(path.node)]));
 
         setOptionalTransformed(left);
 
@@ -72,7 +72,7 @@ export default function ({ types: t }) {
           },
         });
 
-        path.parentPath.replaceWith(remplacement);
+        path.parentPath.replaceWith(replacement);
       },
 
       UnaryExpression(path, state) {
@@ -106,11 +106,11 @@ export default function ({ types: t }) {
           nilIdentifier,
         );
 
-        const remplacement = t.ifStatement(isChainNil, t.blockStatement([t.expressionStatement(path.node)]));
+        const replacement = t.ifStatement(isChainNil, t.blockStatement([t.expressionStatement(path.node)]));
 
         setOptionalTransformed(argument);
 
-        path.parentPath.replaceWith(remplacement);
+        path.parentPath.replaceWith(replacement);
       },
 
       MemberExpression(path, state) {
@@ -133,7 +133,7 @@ export default function ({ types: t }) {
           return;
         } else if (t.isCallExpression(path.parent)) {
 
-          const remplacement = createCondition(
+          const replacement = createCondition(
             state.optionalTemp,
             object,
             property,
@@ -141,10 +141,10 @@ export default function ({ types: t }) {
           );
 
           setOptionalTransformed(path.node);
-          path.replaceWith(remplacement);
+          path.replaceWith(replacement);
         } else {
 
-          const remplacement = createCondition(
+          const replacement = createCondition(
             state.optionalTemp,
             object,
             property,
@@ -152,7 +152,7 @@ export default function ({ types: t }) {
           );
 
           setOptionalTransformed(path.node);
-          path.replaceWith(remplacement);
+          path.replaceWith(replacement);
         }
       },
     },
