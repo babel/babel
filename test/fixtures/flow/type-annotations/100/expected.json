@@ -114,6 +114,7 @@
               "expression": false,
               "async": false,
               "params": [],
+              "predicate": null,
               "returnType": {
                 "type": "TypeAnnotation",
                 "start": 17,
@@ -145,7 +146,6 @@
                   "value": true
                 }
               },
-              "predicate": null,
               "body": {
                 "type": "BlockStatement",
                 "start": 23,

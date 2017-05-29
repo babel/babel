@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "shorthand": false,
               "computed": true,
               "key": {
                 "type": "Identifier",
@@ -130,7 +129,6 @@
                 }
               },
               "method": false,
-              "shorthand": false,
               "computed": true,
               "key": {
                 "type": "Identifier",

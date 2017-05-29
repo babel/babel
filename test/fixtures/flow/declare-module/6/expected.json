@@ -121,7 +121,7 @@
                     {
                       "type": "ObjectTypeProperty",
                       "start": 45,
-                      "end": 59,
+                      "end": 58,
                       "loc": {
                         "start": {
                           "line": 1,
@@ -129,9 +129,28 @@
                         },
                         "end": {
                           "line": 1,
-                          "column": 59
+                          "column": 58
                         }
                       },
+                      "key": {
+                        "type": "Identifier",
+                        "start": 45,
+                        "end": 48,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 45
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 48
+                          },
+                          "identifierName": "foo"
+                        },
+                        "name": "foo"
+                      },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "FunctionTypeAnnotation",
                         "start": 45,
@@ -165,24 +184,6 @@
                           }
                         }
                       },
-                      "static": false,
-                      "key": {
-                        "type": "Identifier",
-                        "start": 45,
-                        "end": 48,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 45
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 48
-                          },
-                          "identifierName": "foo"
-                        },
-                        "name": "foo"
-                      },
                       "optional": false
                     }
                   ],
@@ -192,7 +193,8 @@
               }
             }
           ]
-        }
+        },
+        "kind": "CommonJS"
       }
     ],
     "directives": []

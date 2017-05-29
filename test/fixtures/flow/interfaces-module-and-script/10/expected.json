@@ -80,7 +80,7 @@
             {
               "type": "ObjectTypeCallProperty",
               "start": 33,
-              "end": 49,
+              "end": 48,
               "loc": {
                 "start": {
                   "line": 3,
@@ -88,7 +88,7 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 18
+                  "column": 17
                 }
               },
               "static": true,
@@ -131,7 +131,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 19,
-              "end": 30,
+              "end": 29,
               "loc": {
                 "start": {
                   "line": 2,
@@ -139,7 +139,7 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 13
+                  "column": 12
                 }
               },
               "key": {
@@ -159,6 +159,8 @@
                 },
                 "name": "x"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "BooleanTypeAnnotation",
                 "start": 22,
@@ -174,14 +176,13 @@
                   }
                 }
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             },
             {
               "type": "ObjectTypeProperty",
               "start": 52,
-              "end": 70,
+              "end": 69,
               "loc": {
                 "start": {
                   "line": 4,
@@ -189,7 +190,7 @@
                 },
                 "end": {
                   "line": 4,
-                  "column": 20
+                  "column": 19
                 }
               },
               "key": {
@@ -209,6 +210,8 @@
                 },
                 "name": "y"
               },
+              "static": true,
+              "kind": "init",
               "value": {
                 "type": "BooleanTypeAnnotation",
                 "start": 62,
@@ -224,9 +227,8 @@
                   }
                 }
               },
-              "optional": false,
-              "static": true,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [],

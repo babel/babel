@@ -138,7 +138,6 @@
                     }
                   ],
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -157,6 +156,7 @@
                     },
                     "name": "bar"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
                     "start": 22,

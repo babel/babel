@@ -122,6 +122,8 @@
                     },
                     "name": "type"
                   },
+                  "static": false,
+                  "kind": "init",
                   "value": {
                     "type": "StringLiteralTypeAnnotation",
                     "start": 23,
@@ -142,9 +144,8 @@
                     },
                     "value": "A"
                   },
-                  "optional": false,
-                  "static": false,
-                  "variance": null
+                  "variance": null,
+                  "optional": false
                 }
               ],
               "indexers": [],
@@ -197,6 +198,8 @@
                     },
                     "name": "type"
                   },
+                  "static": false,
+                  "kind": "init",
                   "value": {
                     "type": "StringLiteralTypeAnnotation",
                     "start": 38,
@@ -217,9 +220,8 @@
                     },
                     "value": "B"
                   },
-                  "optional": false,
-                  "static": false,
-                  "variance": null
+                  "variance": null,
+                  "optional": false
                 }
               ],
               "indexers": [],
@@ -521,6 +523,8 @@
                 },
                 "name": "x"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "UnionTypeAnnotation",
                 "start": 147,
@@ -583,6 +587,8 @@
                           },
                           "name": "type"
                         },
+                        "static": false,
+                        "kind": "init",
                         "value": {
                           "type": "StringLiteralTypeAnnotation",
                           "start": 156,
@@ -603,9 +609,8 @@
                           },
                           "value": "A"
                         },
-                        "optional": false,
-                        "static": false,
-                        "variance": null
+                        "variance": null,
+                        "optional": false
                       }
                     ],
                     "indexers": [],
@@ -658,6 +663,8 @@
                           },
                           "name": "type"
                         },
+                        "static": false,
+                        "kind": "init",
                         "value": {
                           "type": "StringLiteralTypeAnnotation",
                           "start": 174,
@@ -678,9 +685,8 @@
                           },
                           "value": "B"
                         },
-                        "optional": false,
-                        "static": false,
-                        "variance": null
+                        "variance": null,
+                        "optional": false
                       }
                     ],
                     "indexers": [],
@@ -688,9 +694,8 @@
                   }
                 ]
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [],
@@ -776,6 +781,8 @@
                 },
                 "name": "x"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "IntersectionTypeAnnotation",
                 "start": 212,
@@ -838,6 +845,8 @@
                           },
                           "name": "type"
                         },
+                        "static": false,
+                        "kind": "init",
                         "value": {
                           "type": "StringLiteralTypeAnnotation",
                           "start": 221,
@@ -858,9 +867,8 @@
                           },
                           "value": "A"
                         },
-                        "optional": false,
-                        "static": false,
-                        "variance": null
+                        "variance": null,
+                        "optional": false
                       }
                     ],
                     "indexers": [],
@@ -913,6 +921,8 @@
                           },
                           "name": "type"
                         },
+                        "static": false,
+                        "kind": "init",
                         "value": {
                           "type": "StringLiteralTypeAnnotation",
                           "start": 239,
@@ -933,9 +943,8 @@
                           },
                           "value": "B"
                         },
-                        "optional": false,
-                        "static": false,
-                        "variance": null
+                        "variance": null,
+                        "optional": false
                       }
                     ],
                     "indexers": [],
@@ -943,9 +952,8 @@
                   }
                 ]
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [],

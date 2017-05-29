@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "shorthand": false,
               "computed": true,
               "key": {
                 "type": "StringLiteral",
@@ -94,6 +93,7 @@
                 },
                 "value": "__proto__"
               },
+              "shorthand": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 18,
@@ -130,7 +130,6 @@
                 }
               },
               "method": false,
-              "shorthand": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -149,6 +148,7 @@
                 },
                 "name": "__proto__"
               },
+              "shorthand": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 32,

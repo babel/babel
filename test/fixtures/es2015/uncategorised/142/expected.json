@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "shorthand": false,
               "computed": true,
               "key": {
                 "type": "BinaryExpression",
@@ -130,6 +129,7 @@
                   "value": "y"
                 }
               },
+              "shorthand": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 15,

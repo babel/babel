@@ -87,7 +87,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -107,6 +106,7 @@
                     "name": "spawn",
                     "leadingComments": null
                   },
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 33,

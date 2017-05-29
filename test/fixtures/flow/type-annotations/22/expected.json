@@ -104,7 +104,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": false,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -130,6 +129,7 @@
                 "expression": false,
                 "async": false,
                 "params": [],
+                "predicate": null,
                 "returnType": {
                   "type": "TypeAnnotation",
                   "start": 16,
@@ -160,7 +160,6 @@
                     }
                   }
                 },
-                "predicate": null,
                 "body": {
                   "type": "BlockStatement",
                   "start": 23,

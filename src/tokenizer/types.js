@@ -1,3 +1,5 @@
+// @flow
+
 // ## Token types
 
 // The assignment of fine-grained, information-carrying type objects
@@ -23,8 +25,33 @@ const isAssign = true;
 const prefix = true;
 const postfix = true;
 
+type TokenOptions = {
+  keyword?: string;
+
+  beforeExpr?: boolean;
+  startsExpr?: boolean;
+  rightAssociative?: boolean;
+  isLoop?: boolean;
+  isAssign?: boolean;
+  prefix?: boolean;
+  postfix?: boolean;
+  binop?: ?number;
+};
+
 export class TokenType {
-  constructor(label, conf = {}) {
+  label: string;
+  keyword: ?string;
+  beforeExpr: boolean;
+  startsExpr: boolean;
+  rightAssociative: boolean;
+  isLoop: boolean;
+  isAssign: boolean;
+  prefix: boolean;
+  postfix: boolean;
+  binop: ?number;
+  updateContext: ?((prevType: TokenType) => void);
+
+  constructor(label: string, conf: TokenOptions = {}) {
     this.label = label;
     this.keyword = conf.keyword;
     this.beforeExpr = !!conf.beforeExpr;
@@ -40,7 +67,7 @@ export class TokenType {
 }
 
 class KeywordTokenType extends TokenType {
-  constructor(name, options = {}) {
+  constructor(name: string, options: TokenOptions = {}) {
     options.keyword = name;
 
     super(name, options);
@@ -48,12 +75,12 @@ class KeywordTokenType extends TokenType {
 }
 
 export class BinopTokenType extends TokenType {
-  constructor(name, prec) {
+  constructor(name: string, prec: number) {
     super(name, { beforeExpr, binop: prec });
   }
 }
 
-export const types = {
+export const types: { [name: string]: TokenType } = {
   num: new TokenType("num", { startsExpr }),
   regexp: new TokenType("regexp", { startsExpr }),
   string: new TokenType("string", { startsExpr }),
@@ -82,6 +109,7 @@ export const types = {
   backQuote: new TokenType("`", { startsExpr }),
   dollarBraceL: new TokenType("${", { beforeExpr, startsExpr }),
   at: new TokenType("@"),
+  hash: new TokenType("#"),
 
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is

@@ -1,5 +1,7 @@
 /* eslint max-len: 0 */
 
+// @flow
+
 // This is a trick taken from Esprima. It turns out that, on
 // non-Chrome browsers, to check whether a string is in a set, a
 // predicate containing a big ugly `switch` statement is faster than
@@ -9,17 +11,17 @@
 //
 // It starts by sorting the words by length.
 
-function makePredicate(words) {
-  words = words.split(" ");
+function makePredicate(words: string): (str: string) => boolean {
+  const wordsArr = words.split(" ");
   return function (str) {
-    return words.indexOf(str) >= 0;
+    return wordsArr.indexOf(str) >= 0;
   };
 }
 
 // Reserved word lists for various dialects of the language
 
 export const reservedWords = {
-  6: makePredicate("enum await"),
+  "6": makePredicate("enum await"),
   strict: makePredicate("implements interface let package private protected public static yield"),
   strictBind: makePredicate("eval arguments")
 };
@@ -57,7 +59,7 @@ const astralIdentifierCodes = [509,0,227,0,150,4,294,9,1368,2,2,1,6,3,41,2,5,0,1
 // This has a complexity linear to the value of the code. The
 // assumption is that looking up astral identifier characters is
 // rare.
-function isInAstralSet(code, set) {
+function isInAstralSet(code: number, set: $ReadOnlyArray<number>): boolean {
   let pos = 0x10000;
   for (let i = 0; i < set.length; i += 2) {
     pos += set[i];
@@ -66,11 +68,12 @@ function isInAstralSet(code, set) {
     pos += set[i + 1];
     if (pos >= code) return true;
   }
+  return false;
 }
 
 // Test whether a given character code starts an identifier.
 
-export function isIdentifierStart(code) {
+export function isIdentifierStart(code: number): boolean {
   if (code < 65) return code === 36;
   if (code < 91) return true;
   if (code < 97) return code === 95;
@@ -81,7 +84,7 @@ export function isIdentifierStart(code) {
 
 // Test whether a given character is part of an identifier.
 
-export function isIdentifierChar(code) {
+export function isIdentifierChar(code: number): boolean {
   if (code < 48) return code === 36;
   if (code < 58) return true;
   if (code < 65) return false;

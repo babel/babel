@@ -87,7 +87,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": true,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -106,6 +105,7 @@
                   },
                   "name": "a"
                 },
+                "shorthand": true,
                 "value": {
                   "type": "Identifier",
                   "start": 7,
@@ -142,7 +142,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": false,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -161,6 +160,7 @@
                   },
                   "name": "a"
                 },
+                "shorthand": false,
                 "value": {
                   "type": "Identifier",
                   "start": 16,
@@ -194,7 +194,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": false,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -213,6 +212,7 @@
                   },
                   "name": "a"
                 },
+                "shorthand": false,
                 "value": {
                   "type": "AssignmentPattern",
                   "start": 25,
@@ -278,7 +278,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": false,
                 "computed": true,
                 "key": {
                   "type": "Identifier",
@@ -297,6 +296,7 @@
                   },
                   "name": "a"
                 },
+                "shorthand": false,
                 "value": {
                   "type": "ObjectPattern",
                   "start": 38,
@@ -327,7 +327,6 @@
                         }
                       },
                       "method": false,
-                      "shorthand": true,
                       "computed": false,
                       "key": {
                         "type": "Identifier",
@@ -346,6 +345,7 @@
                         },
                         "name": "a"
                       },
+                      "shorthand": true,
                       "value": {
                         "type": "Identifier",
                         "start": 39,
@@ -385,7 +385,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": false,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -404,6 +403,7 @@
                   },
                   "name": "a"
                 },
+                "shorthand": false,
                 "value": {
                   "type": "MemberExpression",
                   "start": 49,
@@ -486,7 +486,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": false,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -505,6 +504,7 @@
                   },
                   "name": "a"
                 },
+                "shorthand": false,
                 "value": {
                   "type": "MemberExpression",
                   "start": 71,

@@ -1,11 +1,17 @@
+// @flow
+
+import type { Options } from "../options";
+import * as N from "../types";
+
 import type { TokContext } from "./context";
+import type { Token } from "./index";
 import type { TokenType } from "./types";
 import { Position } from "../util/location";
 import { types as ct } from "./context";
 import { types as tt } from "./types";
 
 export default class State {
-  init(options: Object, input: string) {
+  init(options: Options, input: string): void {
     this.strict = options.strictMode === false ? false : options.sourceType === "module";
 
     this.input = input;
@@ -18,6 +24,8 @@ export default class State {
       this.inAsync =
       this.inPropertyName =
       this.inType =
+      this.inClass =
+      this.inClassProperty =
       this.noAnonFunctionType =
         false;
 
@@ -41,6 +49,7 @@ export default class State {
     this.start = this.end = this.pos;
     this.startLoc = this.endLoc = this.curPosition();
 
+    // $FlowIgnore
     this.lastTokEndLoc = this.lastTokStartLoc = null;
     this.lastTokStart = this.lastTokEnd = this.pos;
 
@@ -53,8 +62,6 @@ export default class State {
     this.invalidTemplateEscapePosition = null;
 
     this.exportedIdentifiers = [];
-
-    return this;
   }
 
   // TODO
@@ -69,27 +76,35 @@ export default class State {
   // Flags to track whether we are in a function, a generator.
   inFunction: boolean;
   inGenerator: boolean;
-  inMethod: boolean;
+  inMethod: boolean | N.MethodKind;
   inAsync: boolean;
   inType: boolean;
+  noAnonFunctionType: boolean;
   inPropertyName: boolean;
+  inClassProperty: boolean;
+  inClass: boolean;
 
   // Labels in scope.
-  labels: Array<Object>;
+  labels: Array<{ kind: ?("loop" | "switch"), statementStart?: number }>;
 
   // Leading decorators.
-  decorators: Array<Object>;
+  decorators: Array<N.Decorator>;
 
   // Token store.
-  tokens: Array<Object>;
+  tokens: Array<Token | N.Comment>;
 
   // Comment store.
-  comments: Array<Object>;
+  comments: Array<N.Comment>;
 
   // Comment attachment store
-  trailingComments: Array<Object>;
-  leadingComments: Array<Object>;
-  commentStack: Array<Object>;
+  trailingComments: Array<N.Comment>;
+  leadingComments: Array<N.Comment>;
+  commentStack: Array<{
+    start: number;
+    leadingComments: ?Array<N.Comment>;
+    trailingComments: ?Array<N.Comment>;
+  }>;
+  commentPreviousNode: N.Node;
 
   // The current position of the tokenizer in the input.
   pos: number;
@@ -113,8 +128,8 @@ export default class State {
   endLoc: Position;
 
   // Position information for the previous token
-  lastTokEndLoc: ?Position;
-  lastTokStartLoc: ?Position;
+  lastTokEndLoc: Position;
+  lastTokStartLoc: Position;
   lastTokStart: number;
   lastTokEnd: number;
 
@@ -137,19 +152,23 @@ export default class State {
   // `export default foo;` and `export { foo as default };`.
   exportedIdentifiers: Array<string>;
 
-  curPosition() {
+  invalidTemplateEscapePosition: ?number;
+
+  curPosition(): Position {
     return new Position(this.curLine, this.pos - this.lineStart);
   }
 
-  clone(skipArrays?) {
+  clone(skipArrays?: boolean): State {
     const state = new State;
     for (const key in this) {
+      // $FlowIgnore
       let val = this[key];
 
       if ((!skipArrays || key === "context") && Array.isArray(val)) {
         val = val.slice();
       }
 
+      // $FlowIgnore
       state[key] = val;
     }
     return state;

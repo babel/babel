@@ -87,7 +87,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": true,
                   "key": {
                     "type": "Identifier",
@@ -106,6 +105,7 @@
                     },
                     "name": "x"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "Identifier",
                     "start": 10,
@@ -156,7 +156,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -175,6 +174,7 @@
                     },
                     "name": "y"
                   },
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 16,

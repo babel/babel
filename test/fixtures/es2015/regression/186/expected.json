@@ -104,7 +104,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
                   "key": {
                     "type": "Identifier",
                     "start": 11,
@@ -123,6 +122,7 @@
                     "name": "async"
                   },
                   "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 11,
@@ -159,7 +159,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -178,6 +177,7 @@
                     },
                     "name": "bar"
                   },
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 18,

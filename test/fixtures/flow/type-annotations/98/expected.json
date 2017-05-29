@@ -106,7 +106,7 @@
                     {
                       "type": "ObjectTypeProperty",
                       "start": 8,
-                      "end": 24,
+                      "end": 23,
                       "loc": {
                         "start": {
                           "line": 1,
@@ -114,7 +114,7 @@
                         },
                         "end": {
                           "line": 1,
-                          "column": 24
+                          "column": 23
                         }
                       },
                       "key": {
@@ -134,6 +134,8 @@
                         },
                         "name": "param1"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "NumberTypeAnnotation",
                         "start": 17,
@@ -149,14 +151,13 @@
                           }
                         }
                       },
-                      "optional": true,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": true
                     },
                     {
                       "type": "ObjectTypeProperty",
                       "start": 25,
-                      "end": 40,
+                      "end": 39,
                       "loc": {
                         "start": {
                           "line": 1,
@@ -164,7 +165,7 @@
                         },
                         "end": {
                           "line": 1,
-                          "column": 40
+                          "column": 39
                         }
                       },
                       "key": {
@@ -184,6 +185,8 @@
                         },
                         "name": "param2"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 33,
@@ -199,14 +202,13 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     },
                     {
                       "type": "ObjectTypeProperty",
                       "start": 41,
-                      "end": 56,
+                      "end": 55,
                       "loc": {
                         "start": {
                           "line": 1,
@@ -214,7 +216,7 @@
                         },
                         "end": {
                           "line": 1,
-                          "column": 56
+                          "column": 55
                         }
                       },
                       "key": {
@@ -234,6 +236,8 @@
                         },
                         "name": "param3"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 49,
@@ -249,9 +253,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],

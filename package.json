@@ -1,6 +1,6 @@
 {
   "name": "babylon",
-  "version": "7.0.0-beta.8",
+  "version": "7.0.0-beta.11",
   "description": "A JavaScript parser",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -22,20 +22,20 @@
   },
   "devDependencies": {
     "ava": "^0.19.0",
-    "babel-cli": "^7.0.0-alpha.6",
+    "babel-cli": "7.0.0-alpha.9",
     "babel-eslint": "^7.0.0",
-    "babel-helper-fixtures": "^7.0.0-alpha.3",
-    "babel-plugin-external-helpers": "^7.0.0-alpha.3",
+    "babel-helper-fixtures": "7.0.0-alpha.9",
+    "babel-plugin-external-helpers": "7.0.0-alpha.9",
     "babel-plugin-istanbul": "^4.0.0",
-    "babel-plugin-transform-flow-strip-types": "^7.0.0-alpha.3",
-    "babel-preset-es2015": "^7.0.0-alpha.3",
-    "babel-preset-stage-0": "^7.0.0-alpha.3",
+    "babel-plugin-transform-flow-strip-types": "7.0.0-alpha.9",
+    "babel-preset-es2015": "7.0.0-alpha.9",
+    "babel-preset-stage-0": "7.0.0-alpha.9",
     "chalk": "^1.1.3",
-    "cross-env": "^4.0.0",
+    "cross-env": "^5.0.0",
     "eslint": "^3.7.1",
     "eslint-config-babel": "^6.0.0",
     "eslint-plugin-flowtype": "^2.20.0",
-    "flow-bin": "^0.43.0",
+    "flow-bin": "^0.47.0",
     "nyc": "^10.0.0",
     "rimraf": "^2.5.4",
     "rollup": "^0.41.0",
@@ -76,5 +76,16 @@
       "src/**/*.js",
       "bin/**/*.js"
     ]
+  },
+  "changelog": {
+    "repo": "babel/babylon",
+    "labels": {
+      "Tag: Breaking Change": ":boom: Breaking Change",
+      "Tag: Bug Fix": ":bug: Bug Fix",
+      "Tag: Docs": ":memo: Documentation",
+      "Tag: Internal": ":house: Internal",
+      "Tag: New Feature": ":rocket: New Feature",
+      "Tag: Polish": ":nail_care: Polish"
+    }
   }
 }

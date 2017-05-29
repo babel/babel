@@ -93,7 +93,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": true,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -112,6 +111,7 @@
                   },
                   "name": "x"
                 },
+                "shorthand": true,
                 "value": {
                   "type": "Identifier",
                   "start": 14,
@@ -167,7 +167,7 @@
                   {
                     "type": "ObjectTypeProperty",
                     "start": 20,
-                    "end": 30,
+                    "end": 29,
                     "loc": {
                       "start": {
                         "line": 1,
@@ -175,7 +175,7 @@
                       },
                       "end": {
                         "line": 1,
-                        "column": 30
+                        "column": 29
                       }
                     },
                     "key": {
@@ -195,6 +195,8 @@
                       },
                       "name": "x"
                     },
+                    "static": false,
+                    "kind": "init",
                     "value": {
                       "type": "StringTypeAnnotation",
                       "start": 23,
@@ -210,9 +212,8 @@
                         }
                       }
                     },
-                    "optional": false,
-                    "static": false,
-                    "variance": null
+                    "variance": null,
+                    "optional": false
                   }
                 ],
                 "indexers": [],

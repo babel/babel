@@ -156,7 +156,8 @@
               "predicate": null
             }
           ]
-        }
+        },
+        "kind": "CommonJS"
       }
     ],
     "directives": []

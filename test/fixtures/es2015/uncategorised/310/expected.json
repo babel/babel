@@ -42,7 +42,6 @@
             "column": 21
           }
         },
-        "await": false,
         "left": {
           "type": "ObjectPattern",
           "start": 5,
@@ -73,7 +72,6 @@
                 }
               },
               "method": false,
-              "shorthand": true,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -92,6 +90,7 @@
                 },
                 "name": "x"
               },
+              "shorthand": true,
               "value": {
                 "type": "AssignmentPattern",
                 "start": 6,

@@ -87,7 +87,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -106,6 +105,7 @@
                     },
                     "name": "x"
                   },
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 5,
@@ -189,6 +189,8 @@
                         },
                         "name": "x"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 13,
@@ -204,9 +206,8 @@
                           }
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],
@@ -244,7 +245,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -263,6 +263,7 @@
                     },
                     "name": "x"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
                     "start": 29,

@@ -104,7 +104,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
                   "key": {
                     "type": "Identifier",
                     "start": 6,
@@ -123,6 +122,7 @@
                     "name": "async"
                   },
                   "computed": false,
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 6,

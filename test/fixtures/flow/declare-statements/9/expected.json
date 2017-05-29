@@ -225,6 +225,8 @@
                 },
                 "name": "x"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "NumberTypeAnnotation",
                 "start": 37,
@@ -240,9 +242,8 @@
                   }
                 }
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [],

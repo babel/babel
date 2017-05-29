@@ -148,6 +148,8 @@
                           },
                           "name": "numVal"
                         },
+                        "static": false,
+                        "kind": "init",
                         "value": {
                           "type": "NumberTypeAnnotation",
                           "start": 17,
@@ -163,9 +165,8 @@
                             }
                           }
                         },
-                        "optional": false,
-                        "static": false,
-                        "variance": null
+                        "variance": null,
+                        "optional": false
                       }
                     ],
                     "indexers": [],

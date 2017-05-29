@@ -1,18 +1,21 @@
-import { reservedWords } from "../util/identifier";
+// @flow
+
+import type { Options } from "../options";
+import type { File } from "../types";
 import { getOptions } from "../options";
-import Tokenizer from "../tokenizer";
+import StatementParser from "./statement";
 
-export const plugins = {};
+export const plugins: { [name: string]: (superClass: Class<Parser>) => Class<Parser> } = {};
 
-export default class Parser extends Tokenizer {
-  constructor(options: Object, input: string) {
+export default class Parser extends StatementParser {
+  constructor(options: ?Options, input: string) {
     options = getOptions(options);
     super(options, input);
 
     this.options = options;
     this.inModule = this.options.sourceType === "module";
     this.input = input;
-    this.plugins = this.loadPlugins(this.options.plugins);
+    this.plugins = pluginsMap(this.options.plugins);
     this.filename = options.sourceFilename;
 
     // If enabled, skip leading hashbang line.
@@ -21,59 +24,18 @@ export default class Parser extends Tokenizer {
     }
   }
 
-  isReservedWord(word: string): boolean {
-    if (word === "await") {
-      return this.inModule;
-    } else {
-      return reservedWords[6](word);
-    }
-  }
-
-  hasPlugin(name: string): boolean {
-    return !!this.plugins[name];
-  }
-
-  extend(name: string, f: Function) {
-    this[name] = f(this[name]);
-  }
-
-  loadPlugins(pluginList: Array<string>): { [key: string]: boolean } {
-    const pluginMap = {};
-
-    if (pluginList.indexOf("flow") >= 0) {
-      // ensure flow plugin loads last
-      pluginList = pluginList.filter((plugin) => plugin !== "flow");
-      pluginList.push("flow");
-    }
-
-    if (pluginList.indexOf("estree") >= 0) {
-      // ensure estree plugin loads first
-      pluginList = pluginList.filter((plugin) => plugin !== "estree");
-      pluginList.unshift("estree");
-    }
-
-    for (const name of pluginList) {
-      if (!pluginMap[name]) {
-        pluginMap[name] = true;
-
-        const plugin = plugins[name];
-        if (plugin) plugin(this);
-      }
-    }
-
-    return pluginMap;
-  }
-
-  parse(): {
-    type: "File",
-    program: {
-      type: "Program",
-      body: Array<Object>
-    }
-  } {
+  parse(): File {
     const file = this.startNode();
     const program = this.startNode();
     this.nextToken();
     return this.parseTopLevel(file, program);
   }
+}
+
+function pluginsMap(pluginList: $ReadOnlyArray<string>): { [key: string]: boolean } {
+  const pluginMap = {};
+  for (const name of pluginList) {
+    pluginMap[name] = true;
+  }
+  return pluginMap;
 }

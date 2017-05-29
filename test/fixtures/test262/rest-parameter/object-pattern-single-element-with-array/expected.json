@@ -107,7 +107,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -126,6 +125,7 @@
                     },
                     "name": "p"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "ArrayPattern",
                     "start": 39,

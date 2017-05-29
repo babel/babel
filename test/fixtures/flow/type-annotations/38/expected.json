@@ -134,6 +134,8 @@
                         },
                         "name": "subObj"
                       },
+                      "static": false,
+                      "kind": "init",
                       "value": {
                         "type": "NullableTypeAnnotation",
                         "start": 16,
@@ -195,6 +197,8 @@
                                 },
                                 "name": "strVal"
                               },
+                              "static": false,
+                              "kind": "init",
                               "value": {
                                 "type": "StringTypeAnnotation",
                                 "start": 26,
@@ -210,18 +214,16 @@
                                   }
                                 }
                               },
-                              "optional": false,
-                              "static": false,
-                              "variance": null
+                              "variance": null,
+                              "optional": false
                             }
                           ],
                           "indexers": [],
                           "exact": false
                         }
                       },
-                      "optional": false,
-                      "static": false,
-                      "variance": null
+                      "variance": null,
+                      "optional": false
                     }
                   ],
                   "indexers": [],

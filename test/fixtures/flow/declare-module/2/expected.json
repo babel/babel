@@ -77,7 +77,8 @@
             }
           },
           "body": []
-        }
+        },
+        "kind": "CommonJS"
       }
     ],
     "directives": []

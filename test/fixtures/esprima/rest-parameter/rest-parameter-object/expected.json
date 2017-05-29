@@ -107,7 +107,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -126,6 +125,7 @@
                     },
                     "name": "a"
                   },
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 15,

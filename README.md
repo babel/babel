@@ -14,8 +14,12 @@
 
  - The latest ECMAScript version enabled by default (ES2017).
  - Comment attachment.
- - Support for JSX and Flow.
+ - Support for JSX, Flow, Typescript (WIP).
  - Support for experimental language proposals (accepting PRs for anything at least [stage-0](https://github.com/tc39/proposals/blob/master/stage-0-proposals.md)).
+
+## Contributing
+
+Check out [contributing.md](https://github.com/babel/babylon/blob/master/CONTRIBUTING.md)
 
 ## Credits
 
@@ -126,12 +130,32 @@ require("babylon").parse("code", {
  - `jsx`
  - `flow`
  - `doExpressions`
- - `objectRestSpread`
+ - `objectRestSpread` ([proposal](https://github.com/tc39/proposal-object-rest-spread))
  - `decorators` (Based on an outdated version of the Decorators proposal. Will be removed in a future version of `Babylon`)
- - `classProperties`
- - `exportExtensions`
- - `asyncGenerators`
- - `functionBind`
+ - `classProperties` ([proposal](https://github.com/zenparsing/es-function-bind))
+ - `exportExtensions` ([proposal 1](https://github.com/leebyron/ecmascript-export-default-from)), ([proposal 2](https://github.com/leebyron/ecmascript-export-ns-from))
+ - `asyncGenerators` ([proposal](https://github.com/tc39/proposal-async-iteration))
+ - `functionBind` ([proposal](https://github.com/zenparsing/es-function-bind))
  - `functionSent`
- - `dynamicImport`
+ - `dynamicImport` ([proposal](https://github.com/tc39/proposal-dynamic-import))
+ - `numericSeparator` ([proposal](https://github.com/samuelgoto/proposal-numeric-separator))
 
+### FAQ
+
+#### Will Babylon support a plugin system?
+
+Previous issues: [babel/babel#1351](https://github.com/babel/babel/issues/1351), [#500](https://github.com/babel/babylon/issues/500).
+
+We currently aren't willing to commit to supporting the API for plugins or the resulting ecosystem (there is already enough work maintaining Babel's own plugin system). It's not clear how to make that API effective, and it would limit out ability to refactor and optimize the codebase.
+
+Our current recommendation for those that want to create their own custom syntax is for users to fork Babylon.
+
+To consume your custom parser, you can add to your `.babelrc` via its npm package name or require it if using JavaScript,
+
+```json
+{
+  "parserOpts": {
+    "parser": "custom-fork-of-babylon-on-npm-here"
+  }
+}
+```

@@ -93,7 +93,6 @@
                   }
                 },
                 "method": false,
-                "shorthand": true,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
@@ -112,6 +111,7 @@
                   },
                   "name": "set"
                 },
+                "shorthand": true,
                 "value": {
                   "type": "AssignmentPattern",
                   "start": 13,

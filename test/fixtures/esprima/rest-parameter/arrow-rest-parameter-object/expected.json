@@ -122,7 +122,6 @@
                       }
                     },
                     "method": false,
-                    "shorthand": true,
                     "computed": false,
                     "key": {
                       "type": "Identifier",
@@ -141,6 +140,7 @@
                       },
                       "name": "b"
                     },
+                    "shorthand": true,
                     "value": {
                       "type": "Identifier",
                       "start": 8,

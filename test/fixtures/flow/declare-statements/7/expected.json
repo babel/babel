@@ -81,7 +81,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 29,
-              "end": 72,
+              "end": 71,
               "loc": {
                 "start": {
                   "line": 1,
@@ -89,9 +89,28 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 72
+                  "column": 71
                 }
               },
+              "key": {
+                "type": "Identifier",
+                "start": 29,
+                "end": 39,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 29
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 39
+                  },
+                  "identifierName": "didAnimate"
+                },
+                "name": "didAnimate"
+              },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 29,
@@ -239,24 +258,6 @@
                     }
                   }
                 }
-              },
-              "static": false,
-              "key": {
-                "type": "Identifier",
-                "start": 29,
-                "end": 39,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 29
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 39
-                  },
-                  "identifierName": "didAnimate"
-                },
-                "name": "didAnimate"
               },
               "optional": false
             }

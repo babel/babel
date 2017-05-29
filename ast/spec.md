@@ -3,6 +3,7 @@ These are the core Babylon AST node types.
 - [Node objects](#node-objects)
 - [Changes](#changes)
 - [Identifier](#identifier)
+- [PrivateName](#privatename)
 - [Literals](#literals)
   - [RegExpLiteral](#regexpliteral)
   - [NullLiteral](#nullliteral)
@@ -90,6 +91,7 @@ These are the core Babylon AST node types.
   - [ClassBody](#classbody)
   - [ClassMethod](#classmethod)
   - [ClassProperty](#classproperty)
+  - [ClassPrivateProperty](#classprivateproperty)
   - [ClassDeclaration](#classdeclaration)
   - [ClassExpression](#classexpression)
   - [MetaProperty](#metaproperty)
@@ -144,13 +146,13 @@ interface Position {
 ### Babylon 7
 
 Flow: Node renamed from `ExistentialTypeParam` to `ExistsTypeAnnotation` [#322](https://github.com/babel/babylon/pull/322)
-  
+
 Flow: Node renamed from `NumericLiteralTypeAnnotation` to `NumberLiteralTypeAnnotation` [babel/babylon#332](https://github.com/babel/babylon/pull/332)
-  
+
 Flow: Node `Variance` which replaces the string value of the `variance` field on several nodes [babel/babylon#333](https://github.com/babel/babylon/pull/333)
 
 Flow: `ObjectTypeIndexer` location info matches Flow's better [babel/babylon#228](https://github.com/babel/babylon/pull/228)
-  
+
 Node `ForAwaitStatement` has been removed [#349](https://github.com/babel/babylon/pull/349) in favor of modifying `ForOfStatement`
 
 `RestProperty` and `SpreadProperty` have been dropped in favor of `RestElement` and `SpreadElement`.
@@ -165,6 +167,18 @@ interface Identifier <: Expression, Pattern {
 ```
 
 An identifier. Note that an identifier may be an expression or a destructuring pattern.
+
+
+# PrivateName
+
+```js
+interface PrivateName <: Expression, Pattern {
+  type: "PrivateName";
+  name: Identifier;
+}
+```
+A Private Name Identifier.
+
 
 # Literals
 
@@ -514,7 +528,7 @@ interface FunctionDeclaration <: Function, Declaration {
 }
 ```
 
-A function declaration. Note that unlike in the parent interface `Function`, the `id` cannot be `null`.
+A function declaration. Note that unlike in the parent interface `Function`, the `id` cannot be `null`, except when this is the child of an `ExportDefaultDeclaration`.
 
 ## VariableDeclaration
 
@@ -856,8 +870,8 @@ A member expression. If `computed` is `true`, the node corresponds to a computed
 ```js
 interface BindExpression <: Expression {
     type: "BindExpression";
-    object: [ Expression | null ];
-    callee: [ Expression ]
+    object: Expression | null;
+    callee: Expression;
 }
 ```
 
@@ -1016,7 +1030,7 @@ interface Class <: Node {
 ```js
 interface ClassBody <: Node {
   type: "ClassBody";
-  body: [ ClassMethod | ClassProperty ];
+  body: [ ClassMethod | ClassProperty | ClassPrivateProperty ];
 }
 ```
 
@@ -1041,6 +1055,16 @@ interface ClassProperty <: Node {
   key: Identifier;
   value: Expression;
   computed: boolean;
+}
+```
+
+## ClassPrivateProperty
+
+```js
+interface ClassPrivateProperty <: Node {
+  type: "ClassPrivateProperty";
+  key: Identifier;
+  value: Expression;
 }
 ```
 
@@ -1167,9 +1191,17 @@ An exported variable binding, e.g., `{foo}` in `export {foo}` or `{bar as foo}` 
 ### ExportDefaultDeclaration
 
 ```js
+interface OptFunctionDeclaration <: FunctionDeclaration {
+  id: Identifier | null;
+}
+
+interface OptClasDeclaration <: ClassDeclaration {
+  id: Identifier | null;
+}
+
 interface ExportDefaultDeclaration <: ModuleDeclaration {
   type: "ExportDefaultDeclaration";
-  declaration: Declaration | Expression;
+  declaration: OptFunctionDeclaration | OptClassDeclaration | Expression;
 }
 ```
 

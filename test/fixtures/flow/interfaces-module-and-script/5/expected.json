@@ -81,7 +81,7 @@
             {
               "type": "ObjectTypeProperty",
               "start": 48,
-              "end": 63,
+              "end": 62,
               "loc": {
                 "start": {
                   "line": 1,
@@ -89,7 +89,7 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 63
+                  "column": 62
                 }
               },
               "key": {
@@ -109,6 +109,8 @@
                 },
                 "name": "length"
               },
+              "static": false,
+              "kind": "init",
               "value": {
                 "type": "NumberTypeAnnotation",
                 "start": 56,
@@ -124,9 +126,8 @@
                   }
                 }
               },
-              "optional": false,
-              "static": false,
-              "variance": null
+              "variance": null,
+              "optional": false
             }
           ],
           "indexers": [

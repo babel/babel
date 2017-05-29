@@ -87,7 +87,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -106,6 +105,7 @@
                     },
                     "name": "a"
                   },
+                  "shorthand": true,
                   "value": {
                     "type": "Identifier",
                     "start": 5,
@@ -142,7 +142,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": true,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -161,6 +160,7 @@
                     },
                     "name": "b"
                   },
+                  "shorthand": true,
                   "value": {
                     "type": "AssignmentPattern",
                     "start": 7,
@@ -232,7 +232,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -251,6 +250,7 @@
                     },
                     "name": "c"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "Identifier",
                     "start": 13,
@@ -284,7 +284,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -303,6 +302,7 @@
                     },
                     "name": "e"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "AssignmentPattern",
                     "start": 17,
@@ -371,7 +371,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": true,
                   "key": {
                     "type": "Identifier",
@@ -390,6 +389,7 @@
                     },
                     "name": "g"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "ArrayPattern",
                     "start": 25,

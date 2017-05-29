@@ -141,7 +141,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -160,6 +159,7 @@
                     },
                     "name": "a"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "Identifier",
                     "start": 46,
@@ -193,7 +193,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -212,6 +211,7 @@
                     },
                     "name": "b"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "Identifier",
                     "start": 52,
@@ -245,7 +245,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
                   "computed": false,
                   "key": {
                     "type": "Identifier",
@@ -264,6 +263,7 @@
                     },
                     "name": "c"
                   },
+                  "shorthand": false,
                   "value": {
                     "type": "Identifier",
                     "start": 58,
