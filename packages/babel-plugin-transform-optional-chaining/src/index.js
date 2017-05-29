@@ -1,14 +1,15 @@
 export default function ({ types: t }) {
+  const optionalNodesTransformed = new WeakSet();
   const nilIdentifier = t.unaryExpression("void", t.numericLiteral(0));
 
   function setOptionalTransformed(node) {
     t.assertMemberExpression(node); // Dev
-    node._optionalTransformed = true;
+    optionalNodesTransformed.add(node);
   }
 
   function isOptionalTransformed(node) {
     t.assertMemberExpression(node); // Dev
-    return node._optionalTransformed === true;
+    return optionalNodesTransformed.has(node);
   }
 
   function createCondition(ref, access, nextProperty, bailout) {
