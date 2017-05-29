@@ -145,7 +145,7 @@ In case you're not able to reproduce an error on CI locally, it may be due to
  
 In case you're locally getting errors which are not on the CI, it may be due to
 
- - Updates in Dependencies: Make sure you run make bootstrap before you run `make build` or `make watch` before you run the tests.
+ - Updates in Dependencies: Make sure you run `make bootstrap` before you run `make build` or `make watch` before you run the tests.
  
 ### Writing tests
 
