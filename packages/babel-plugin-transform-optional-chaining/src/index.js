@@ -1,5 +1,5 @@
 export default function ({ types: t }) {
-  const nilIdentifier = t.identifier("undefined");
+  const nilIdentifier = t.unaryExpression("void", t.numericLiteral(0));
 
   function setOptionalTransformed(node) {
     t.assertMemberExpression(node); // Dev
