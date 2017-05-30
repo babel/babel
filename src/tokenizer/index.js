@@ -422,7 +422,7 @@ export default class Tokenizer extends LocationParser {
 
   readToken_question() { // '?'
     const next = this.input.charCodeAt(this.state.pos + 1);
-    if (next === 46) { // 46 = question '.'
+    if (next === 46) { // '.'
       this.state.pos += 2;
       return this.finishToken(tt.questionDot);
     }
