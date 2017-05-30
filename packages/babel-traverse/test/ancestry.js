@@ -62,4 +62,22 @@ describe("path/ancestry", function () {
       assert(!numberPath.isDescendant(stringPath));
     });
   });
+
+  describe("getStatementParent", function () {
+    const ast = parse("function a(){ var x = 3; }");
+
+    it("returns closest parent Statement", function() {
+      const paths = [];
+      traverse(ast, {
+        "VariableDeclaration|NumericLiteral"(path) {
+          paths.push(path);
+        },
+      });
+
+      const [ varDeclarationPath, numberPath ] = paths;
+
+      assert.strictEqual(numberPath.getStatementParent(), varDeclarationPath);
+    });
+
+  });
 });
