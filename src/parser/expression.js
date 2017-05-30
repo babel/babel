@@ -427,6 +427,10 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "Super");
 
       case tt._import:
+        if (this.hasPlugin("importMeta") && this.lookahead().type === tt.dot) {
+          return this.parseImportMetaProperty();
+        }
+
         if (!this.hasPlugin("dynamicImport")) this.unexpected();
 
         node = this.startNode();
@@ -588,10 +592,20 @@ export default class ExpressionParser extends LValParser {
     node.property = this.parseIdentifier(true);
 
     if (node.property.name !== propertyName) {
-      this.raise(node.property.start, `The only valid meta property for new is ${meta.name}.${propertyName}`);
+      this.raise(node.property.start, `The only valid meta property for ${meta.name} is ${meta.name}.${propertyName}`);
     }
 
     return this.finishNode(node, "MetaProperty");
+  }
+
+  parseImportMetaProperty(): N.MetaProperty {
+    const node = this.startNode();
+    const id = this.parseIdentifier(true);
+    this.expect(tt.dot);
+    if (!this.inModule) {
+      this.raise(id.start, "import.meta may appear only with 'sourceType: module'");
+    }
+    return this.parseMetaProperty(node, id, "meta");
   }
 
   parseLiteral<T : N.Literal>(value: any, type: /*T["kind"]*/string, startPos?: number, startLoc?: Position): T {

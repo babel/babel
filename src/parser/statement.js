@@ -106,7 +106,8 @@ export default class StatementParser extends ExpressionParser {
       case tt.semi: return this.parseEmptyStatement(node);
       case tt._export:
       case tt._import:
-        if (this.hasPlugin("dynamicImport") && this.lookahead().type === tt.parenL) break;
+        if ((this.hasPlugin("dynamicImport") && this.lookahead().type === tt.parenL) ||
+            (this.hasPlugin("importMeta") && this.lookahead().type === tt.dot)) break;
 
         if (!this.options.allowImportExportEverywhere) {
           if (!topLevel) {

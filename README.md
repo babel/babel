@@ -139,6 +139,7 @@ require("babylon").parse("code", {
  - `functionSent`
  - `dynamicImport` ([proposal](https://github.com/tc39/proposal-dynamic-import))
  - `numericSeparator` ([proposal](https://github.com/samuelgoto/proposal-numeric-separator))
+ - `importMeta` ([proposal](https://github.com/tc39/proposal-import-meta))
 
 ### FAQ
 
