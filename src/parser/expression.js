@@ -316,7 +316,7 @@ export default class ExpressionParser extends LValParser {
           node.computed = true;
           this.expect(tt.bracketR);
           base = this.finishNode(node, "MemberExpression");
-        } if (this.eat(tt.parenL)) {
+        } else if (this.eat(tt.parenL)) {
           const possibleAsync = this.state.potentialArrowAt === base.start &&
             base.type === "Identifier" &&
             base.name === "async" &&
