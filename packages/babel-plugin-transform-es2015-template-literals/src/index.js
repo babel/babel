@@ -65,7 +65,7 @@ export default function ({ types: t }) {
         let root = nodes[0];
 
         if (state.opts.spec) {
-          if (nodes.length) {
+          if (nodes.length > 1) {
             root = buildConcatCallExression(root, nodes.slice(1));
           }
         } else {
