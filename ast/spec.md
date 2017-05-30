@@ -897,6 +897,7 @@ interface CallExpression <: Expression {
   type: "CallExpression";
   callee: Expression | Super | Import;
   arguments: [ Expression | SpreadElement ];
+  optional: boolean | null;
 }
 ```
 
