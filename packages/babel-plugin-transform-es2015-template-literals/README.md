@@ -75,7 +75,7 @@ In loose mode, tagged template literal objects aren't frozen.
 
 `boolean`, defaults to `false`.
 
-This option wraps all template literal expressions with `String`. See [babel/babel#1065](https://github.com/babel/babel/issues/1065) for more info.
+This option combines all template literal expressions and quasis with `String.prototype.concat`.
 
 **In**
 
@@ -86,5 +86,5 @@ This option wraps all template literal expressions with `String`. See [babel/bab
 **Out**
 
 ```javascript
-"foo" + String(bar);
+"foo".concat(bar);
 ```

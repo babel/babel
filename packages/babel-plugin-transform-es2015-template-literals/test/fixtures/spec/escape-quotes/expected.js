@@ -1,1 +1,1 @@
-var t = "'" + String(foo) + "' \"" + String(bar) + "\"";
+var t = "'".concat(foo, "' \"", bar, "\"");
