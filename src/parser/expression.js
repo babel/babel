@@ -303,8 +303,13 @@ export default class ExpressionParser extends LValParser {
         return this.parseSubscripts(this.finishNode(node, "BindExpression"), startPos, startLoc, noCalls);
 
       } else if (this.eat(tt.questionDot)) {
+        const node = this.startNodeAt(startPos, startLoc);
+
+        if (!this.hasPlugin("optionalChaining")) {
+          this.raise(node.start, "You can only use optional-chaining when the 'optionalChaining' plugin is enabled.");
+        }
+
         if (this.eat(tt.bracketL)) {
-          const node = this.startNodeAt(startPos, startLoc);
           node.object = base;
           node.optional = true;
           node.property = this.parseExpression();
@@ -312,7 +317,6 @@ export default class ExpressionParser extends LValParser {
           this.expect(tt.bracketR);
           base = this.finishNode(node, "MemberExpression");
         } else {
-          const node = this.startNodeAt(startPos, startLoc);
           node.object = base;
           node.property = this.parseIdentifier(true);
           node.optional = true;
