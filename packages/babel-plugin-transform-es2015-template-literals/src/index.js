@@ -62,14 +62,14 @@ export default function ({ types: t }) {
         if (!t.isStringLiteral(nodes[0]) && (state.opts.spec || !t.isStringLiteral(nodes[1]))) {
           nodes.unshift(t.stringLiteral(""));
         }
-        let root = nodes.shift();
+        let root = nodes[0];
 
         if (state.opts.spec) {
           if (nodes.length) {
-            root = buildConcatCallExression(root, nodes);
+            root = buildConcatCallExression(root, nodes.slice(1));
           }
         } else {
-          for (let i = 0; i < nodes.length; i++) {
+          for (let i = 1; i < nodes.length; i++) {
             root = t.binaryExpression("+", root, nodes[i]);
           }
         }
