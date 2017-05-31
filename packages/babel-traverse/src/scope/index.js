@@ -869,7 +869,7 @@ export default class Scope {
     if (_crawlCallsCount === 0 && binding && binding.path.isFlow()) {
       console.warn(`
         You or one of the Babel plugins you are using are using Flow declarations as bindings.
-        Support for this will be removed in version 6.8. To find out the caller, grep for this
+        Support for this will be removed in version 7. To find out the caller, grep for this
         message and change it to a \`console.trace()\`.
       `);
     }

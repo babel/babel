@@ -2,15 +2,15 @@
   "name": "babel-plugin-transform-regenerator",
   "author": "Ben Newman <bn@cs.stanford.edu>",
   "description": "Explode async and generator functions into a state machine.",
-  "version": "6.22.0",
+  "version": "6.24.1",
   "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-regenerator",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-regenerator",
   "main": "lib/index.js",
   "dependencies": {
-    "regenerator-transform": "0.9.8"
+    "regenerator-transform": "0.9.11"
   },
   "license": "MIT",
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "^6.22.0"
+    "babel-helper-plugin-test-runner": "^6.24.1"
   }
 }
