@@ -45,7 +45,7 @@
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
     "through2": "^2.0.0",
-    "uglify-js": "^2.4.16"
+    "uglify-js": "^2.7.3"
   },
   "devEngines": {
     "node": ">= 0.10 <= 7.x",
