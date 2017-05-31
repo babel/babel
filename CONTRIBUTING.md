@@ -3,15 +3,15 @@
 ----
 
 <p align="center" class="toc">
-   <strong><a href="#setup">Setup</a></strong>
+   <strong>[Setup](#setup)</strong>
    |
-   <strong><a href="#running-lintingtests">Running linting/tests</a></strong>
+   <strong>[Running linting/tests](#running-lintingtests)</strong>
    |
-   <strong><a href="#writing-tests">Writing tests</a></strong>
+   <strong>[Writing tests](#writing-tests)</strong>
    |
-   <strong><a href="#debugging-code">Debugging code</a></strong>
+   <strong>[Debugging code](#debugging-code)</strong>
    |
-   <strong><a href="#internals">Internals</a></strong>
+   <strong>[Internals](#internals)</strong>
 </p>
 
 ----
