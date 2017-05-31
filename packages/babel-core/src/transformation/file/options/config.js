@@ -199,6 +199,11 @@ module.exports = {
     hidden: true,
   },
 
+  pluginResolutionDir: {
+    type: "filename",
+    description: "The directory from which plugins and presets should be resolved"
+  },
+
   // Deprecate top level parserOpts
   parserOpts: {
     description: "Options to pass into the parser, or to change parsers (parserOpts.parser)",
