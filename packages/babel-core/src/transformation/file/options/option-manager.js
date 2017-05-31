@@ -112,10 +112,14 @@ export default class OptionManager {
       }
 
       // destructure plugins
-      if (Array.isArray(val)) {
-        [plugin, options] = val;
+      if (val) {
+        if (Array.isArray(val)) {
+          [plugin, options] = val;
+        } else {
+          plugin = val;
+        }
       } else {
-        plugin = val;
+        throw ReferenceError(messages.get("pluginUnknown", val, loc, i, dirname));
       }
 
       const alias = typeof plugin === "string" ? plugin : `${loc}$${i}`;
