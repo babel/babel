@@ -41,10 +41,9 @@ const buildExportAll = template(`
   });
 `);
 
-const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty",
-  "ClassMethod", "ObjectMethod"];
-
 export default function () {
+  const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty",
+    "ClassMethod", "ObjectMethod"];
   const REASSIGN_REMAP_SKIP = Symbol();
 
   const reassignmentVisitor = {
