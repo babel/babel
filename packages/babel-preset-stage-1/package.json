@@ -8,7 +8,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-1",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-plugin-syntax-numeric-separator": "7.0.0-alpha.12",
+    "babel-plugin-transform-numeric-separator": "7.0.0-alpha.12",
     "babel-plugin-transform-decorators": "7.0.0-alpha.10",
     "babel-plugin-transform-export-extensions": "7.0.0-alpha.10",
     "babel-preset-stage-2": "7.0.0-alpha.10"
