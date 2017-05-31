@@ -37,7 +37,7 @@
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
     "lerna": "2.0.0-beta.23",
-    "lerna-changelog": "^0.2.0",
+    "lerna-changelog": "^0.2.1",
     "lodash": "^4.2.0",
     "mocha": "^3.0.0",
     "nyc": "^10.0.0",
