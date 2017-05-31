@@ -220,6 +220,12 @@ export default function ({ types: t }) {
                   }
                 }
               }
+            } else if (path.isClassDeclaration()) {
+              const id = path.node.id;
+              variableIds.push(id);
+              path.node.type = "ClassExpression";
+              const classAssignment = t.assignmentExpression("=", id, path.node);
+              path.replaceWith(classAssignment);
             }
           }
 
