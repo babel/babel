@@ -396,7 +396,9 @@ export default class File extends Store {
               column: mapping.originalColumn
             },
 
-            generated: generatedPosition
+            generated: generatedPosition,
+            
+            name: mapping.name
           });
         }
       });
