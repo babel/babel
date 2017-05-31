@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/foo.js"],"names":[],"mappings":";;AAAA,GAAG,CAAC,GAAG,CAAC,UAAA,CAAC;SAAI,CAAC,GAAG,UAAU;CAAA,CAAC,CAAC","file":"foo.js","sourcesContent":["arr.map(x => x * MULTIPLIER);"]}

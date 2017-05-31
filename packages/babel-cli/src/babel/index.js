@@ -42,6 +42,7 @@ commander.option("--skip-initial-build", "Do not compile files before watching")
 commander.option("-o, --out-file [out]", "Compile all input files into a single file");
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
+commander.option("-F, --flatten", "When compiling a directory flatten the output file paths");
 commander.option("-q, --quiet", "Don't log anything");
 /* eslint-enable max-len */
 

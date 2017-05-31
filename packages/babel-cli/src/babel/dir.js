@@ -32,7 +32,9 @@ module.exports = function (commander, filenames) {
 
   function handleFile(src, filename) {
     if (util.shouldIgnore(src)) return;
-
+    if (commander.flatten) {
+      filename = path.basename(filename);
+    }
     if (util.canCompile(filename, commander.extensions)) {
       write(src, filename);
     } else if (commander.copyFiles) {
