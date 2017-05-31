@@ -9,7 +9,9 @@ async function* genAnswers() {
 
 function forEach(ai, fn) {
   return ai.next().then(function (r) {
-    if (!r.done) {
+    if (r.done) {
+      throw Error("done");
+    } else {
       fn(r);
       return forEach(ai, fn);
     }
@@ -18,6 +20,7 @@ function forEach(ai, fn) {
 
 let output = 0;
 return forEach(genAnswers(), function(val) { output += val.value })
-.then(function () {
+.catch((error) => {
+  assert.equal(error.message, "done");
   assert.equal(output, 42);
 });

@@ -183,7 +183,13 @@ export default function (
           } else {
             if (task.exec.code) {
               const result = run(task);
-              if (result && typeof result.then === "function") {
+              if (
+                result &&
+                (
+                  typeof result.then === "function" ||
+                  typeof result.catch === "function"
+                )
+              ) {
                 return result;
               }
             } else {
