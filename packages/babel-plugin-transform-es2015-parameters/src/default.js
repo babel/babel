@@ -81,9 +81,7 @@ export const visitor = {
               UNDEFINED: undefinedNode,
             }));
             param.replaceWith(left.node);
-          }
-
-          if ( left.isObjectPattern() || left.isArrayPattern() ) {
+          } else if ( left.isObjectPattern() || left.isArrayPattern() ) {
             const paramName = scope.generateUidIdentifier();
             body.push(buildLooseDestructuredDefaultParam({
               ASSIGMENT_IDENTIFIER: left.node,
