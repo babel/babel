@@ -56,7 +56,7 @@ module.exports = {
       assign: "object/assign",
       create: "object/create",
       defineProperties: "object/define-properties",
-      defineProperty: "object/define-property",
+      //defineProperty: "object/define-property", // temporary disabled
       entries: "object/entries",
       freeze: "object/freeze",
       getOwnPropertyDescriptor: "object/get-own-property-descriptor",
