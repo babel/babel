@@ -1,0 +1,4 @@
+[submodule "core-js"]
+	path = core-js
+	url = https://github.com/zloirock/core-js.git
+	branch = master
