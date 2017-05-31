@@ -1,5 +1,20 @@
 import leven from "leven";
 
+const _global = new Function("return this")();
+
+function isGlobalVar(name) {
+  if (name in _global) {
+    return true;
+  }
+  try {
+    eval(name);
+  } catch (err) {
+    return false;
+  }
+  return true;
+}
+
+
 export default function ({ messages }) {
   return {
     visitor: {
@@ -11,7 +26,7 @@ export default function ({ messages }) {
           throw path.buildCodeFrameError(messages.get("undeclaredVariableType", node.name), ReferenceError);
         }
 
-        if (scope.hasBinding(node.name)) return;
+        if (scope.hasBinding(node.name) || isGlobalVar(node.name)) return;
 
         // get the closest declaration to offer as a suggestion
         // the variable name may have just been mistyped
