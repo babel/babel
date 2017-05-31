@@ -66,6 +66,9 @@ function compile(filename) {
     }
   }
 
+  if (!only && opts.only != null) only = util.arrayify(opts.only, util.regexify);
+  if (!ignore && opts.ignore != null) ignore = util.arrayify(opts.ignore, util.regexify);
+
   if (!result) {
     result = babel.transformFileSync(filename, extend(opts, {
       // Do not process config files since has already been done with the OptionManager
