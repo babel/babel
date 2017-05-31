@@ -1,6 +1,6 @@
 # babel-plugin-syntax-object-rest-spread
 
-Allow parsing of object rest/spread.
+> Allow parsing of object rest/spread.
 
 ## Installation
 
