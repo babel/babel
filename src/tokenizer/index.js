@@ -17,18 +17,24 @@ import State from "./state";
 // The following character codes are forbidden from being
 // an immediate sibling of NumericLiteralSeparator _
 
-const forbiddenNumericLiteralSeparatorSiblings = [
-  46,  // .
-  66,  // B
-  69,  // E
-  79,  // O
-  88,  // X
-  95,  // _ (multiple separators are not allowed)
-  98,  // b
-  101, // e
-  111, // o
-  120, // x
-];
+const forbiddenNumericSeparatorSiblings = {
+  decBinOct: [
+    46,  // .
+    66,  // B
+    69,  // E
+    79,  // O
+    95,  // _ (multiple separators are not allowed)
+    98,  // b
+    101, // e
+    111, // o
+  ],
+  hex: [
+    46,  // .
+    88,  // X
+    95,  // _ (multiple separators are not allowed)
+    120, // x
+  ],
+};
 
 // Object type used to represent tokens. Note that normally, tokens
 // simply exist as properties on the parser object. This is only
@@ -579,6 +585,9 @@ export default class Tokenizer extends LocationParser {
 
   readInt(radix: number, len?: number): number | null {
     const start = this.state.pos;
+    const forbiddenSiblings = radix === 16 ?
+      forbiddenNumericSeparatorSiblings.hex :
+      forbiddenNumericSeparatorSiblings.decBinOct;
     let total = 0;
 
     for (let i = 0, e = len == null ? Infinity : len; i < e; ++i) {
@@ -589,8 +598,8 @@ export default class Tokenizer extends LocationParser {
         const prev = this.input.charCodeAt(this.state.pos - 1);
         const next = this.input.charCodeAt(this.state.pos + 1);
         if (code === 95) {
-          if ((forbiddenNumericLiteralSeparatorSiblings.indexOf(prev) > -1) ||
-              (forbiddenNumericLiteralSeparatorSiblings.indexOf(next) > -1) ||
+          if ((forbiddenSiblings.indexOf(prev) > -1) ||
+              (forbiddenSiblings.indexOf(next) > -1) ||
               Number.isNaN(next)) {
             this.raise(this.state.pos, "Invalid NumericLiteralSeparator");
           }
