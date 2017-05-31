@@ -1,0 +1,5 @@
+class Foo{
+  [Symbol.iterator](){
+    return this;
+  }
+}
