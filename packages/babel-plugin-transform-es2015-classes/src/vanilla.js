@@ -23,13 +23,15 @@ const noMethodVisitor = {
 };
 
 const verifyConstructorVisitor = visitors.merge([noMethodVisitor, {
-  Super(path) {
-    if (
-      this.isDerived && !this.hasBareSuper &&
-      !path.parentPath.isCallExpression({ callee: path.node })
-    ) {
-      throw path.buildCodeFrameError("'super.*' is not allowed before super()");
-    }
+  MemberExpression: {
+    exit(path) {
+      if (this.isDerived && !this.hasBareSuper) {
+        const objectPath = path.get("object");
+        if (objectPath.isSuper()) {
+          throw objectPath.buildCodeFrameError("'super.*' is not allowed before super()");
+        }
+      }
+    },
   },
 
   CallExpression: {
