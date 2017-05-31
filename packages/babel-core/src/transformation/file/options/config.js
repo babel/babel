@@ -88,7 +88,7 @@ module.exports = {
 
   extends: {
     type: "string",
-    hidden: true
+    description: "a path to an .babelrc file to extend"
   },
 
   comments: {
