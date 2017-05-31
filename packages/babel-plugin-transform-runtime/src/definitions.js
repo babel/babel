@@ -10,8 +10,6 @@ module.exports = {
     setImmediate: "set-immediate",
     clearImmediate: "clear-immediate",
     asap: "asap"
-    //parseFloat: "parse-float", // temporary disabled
-    //parseInt: "parse-int" // temporary disabled
   },
 
   methods: {
