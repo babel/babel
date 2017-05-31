@@ -21,6 +21,11 @@
     "babel-core",
     "compiler"
   ],
+  "files": [
+    "index.js",
+    "register.js",
+    "src/"
+  ],
   "scripts": {
     "bench": "make bench",
     "test": "make test"
