@@ -1,0 +1,19 @@
+{
+  "name": "babel-plugin-transform-jsx",
+  "version": "1.0.0",
+  "description": "Turn JSX into static objects.",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "jsx",
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "babel-plugin-syntax-jsx": "^6.3.13",
+    "babel-runtime": "^5.0.0",
+    "esutils": "^2.0.2"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.3.13"
+  }
+}
