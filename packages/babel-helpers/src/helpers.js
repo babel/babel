@@ -398,7 +398,7 @@ helpers.interopRequireDefault = template(`
 
 helpers.interopRequireWildcard = template(`
   (function (obj) {
-    if (obj && obj.__esModule) {
+    if (obj && (obj.__esModule || typeof obj === 'function')) {
       return obj;
     } else {
       var newObj = {};
