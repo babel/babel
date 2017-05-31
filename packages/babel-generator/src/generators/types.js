@@ -140,15 +140,28 @@ export function StringLiteral(node: Object, parent: Object) {
     return;
   }
 
-  // ensure the output is ASCII-safe
-  const opts = {
-    quotes: t.isJSX(parent) ? "double" : this.format.quotes,
-    wrap: true
-  };
-  if (this.format.jsonCompatibleStrings) {
-    opts.json = true;
+  let val;
+  // TODO use jsesc@2.4 minimal option after drop support node 0.12
+  if (this.format.asciiUnsafe) {
+    val = JSON.stringify(node.value);
+    // escape illegal js but valid json unicode characters
+    val = val.replace(/[\u000A\u000D\u2028\u2029]/g, function (c) {
+      return "\\u" + ("0000" + c.charCodeAt(0).toString(16)).slice(-4);
+    });
+
+    return this.token(val);
+  } else {
+    // ensure the output is ASCII-safe
+    const opts = {
+      quotes: t.isJSX(parent) ? "double" : this.format.quotes,
+      wrap: true
+    };
+    if (this.format.jsonCompatibleStrings) {
+      opts.json = true;
+    }
+
+    val = jsesc(node.value, opts);
   }
-  const val = jsesc(node.value, opts);
 
   return this.token(val);
 }

@@ -58,6 +58,7 @@ function normalizeOptions(code, opts, tokens): Format {
     concise: opts.concise,
     quotes: opts.quotes || findCommonStringDelimiter(code, tokens),
     jsonCompatibleStrings: opts.jsonCompatibleStrings,
+    asciiUnsafe: opts.asciiUnsafe,
     indent: {
       adjustMultilineComment: true,
       style: style,
