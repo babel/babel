@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="140.52744mm"
+   height="124.2997mm"
+   viewBox="0 0 398.34599 352.34653"
+   version="1.2"
+   id="svg2">
+  <defs
+     id="defs8" />
+  <g
+     id="g10"
+     style="fill:none"
+     transform="translate(-312.82705,-0.82673381)">
+    <g
+       font-size="12"
+       font-weight="400"
+       font-style="normal"
+       id="g18"
+       style="font-style:normal;font-weight:400;font-size:12px;font-family:Helvetica;fill:#0068c3;fill-opacity:1;stroke:none">
+      <path
+         vector-effect="non-scaling-stroke"
+         d="m 327,15 370,0 0,98 -370,0 0,-98"
+         id="path20"
+         style="fill-rule:evenodd" />
+    </g>
+    <g
+       font-size="12"
+       font-weight="400"
+       font-style="normal"
+       id="g22"
+       style="font-style:normal;font-weight:400;font-size:12px;font-family:Helvetica;fill:#b22d25;fill-opacity:1;stroke:none">
+      <path
+         vector-effect="non-scaling-stroke"
+         d="m 327,128 370,0 0,98 -370,0 0,-98"
+         id="path24"
+         style="fill-rule:evenodd" />
+    </g>
+    <g
+       font-size="12"
+       font-weight="400"
+       font-style="normal"
+       id="g26"
+       style="font-style:normal;font-weight:400;font-size:12px;font-family:Helvetica;fill:#208e2c;fill-opacity:1;stroke:none">
+      <path
+         vector-effect="non-scaling-stroke"
+         d="m 327,241 370,0 0,98 -370,0 0,-98"
+         id="path28"
+         style="fill-rule:evenodd" />
+    </g>
+    <g
+       font-size="21"
+       font-weight="700"
+       font-style="normal"
+       id="g30"
+       style="font-style:normal;font-weight:700;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-opacity:1">
+      <text
+         xml:space="preserve"
+         x="479"
+         y="59"
+         font-size="21"
+         font-weight="700"
+         font-style="normal"
+         id="text32"
+         style="font-style:normal;font-weight:700;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:none">Parser</text>
+    </g>
+    <g
+       font-size="21"
+       font-weight="400"
+       font-style="normal"
+       id="g34"
+       style="font-style:normal;font-weight:400;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-opacity:1">
+      <text
+         xml:space="preserve"
+         x="417.5"
+         y="83"
+         font-size="21"
+         font-weight="400"
+         font-style="normal"
+         id="text36"
+         style="font-style:normal;font-weight:400;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:none">Turns code into AST</text>
+    </g>
+    <g
+       font-size="21"
+       font-weight="700"
+       font-style="normal"
+       id="g38"
+       style="font-style:normal;font-weight:700;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-opacity:1">
+      <text
+         xml:space="preserve"
+         x="449.5"
+         y="172"
+         font-size="21"
+         font-weight="700"
+         font-style="normal"
+         id="text40"
+         style="font-style:normal;font-weight:700;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:none">Transformer</text>
+    </g>
+    <g
+       font-size="21"
+       font-weight="400"
+       font-style="normal"
+       id="g42"
+       style="font-style:normal;font-weight:400;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-opacity:1">
+      <text
+         xml:space="preserve"
+         x="433.5"
+         y="196"
+         font-size="21"
+         font-weight="400"
+         font-style="normal"
+         id="text44"
+         style="font-style:normal;font-weight:400;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:none">Manipulates AST</text>
+    </g>
+    <g
+       font-size="21"
+       font-weight="700"
+       font-style="normal"
+       id="g46"
+       style="font-style:normal;font-weight:700;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-opacity:1">
+      <text
+         xml:space="preserve"
+         x="461.5"
+         y="285"
+         font-size="21"
+         font-weight="700"
+         font-style="normal"
+         id="text48"
+         style="font-style:normal;font-weight:700;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:none">Generator</text>
+    </g>
+    <g
+       font-size="21"
+       font-weight="400"
+       font-style="normal"
+       id="g50"
+       style="font-style:normal;font-weight:400;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-linecap:square;stroke-linejoin:bevel;stroke-opacity:1">
+      <text
+         xml:space="preserve"
+         x="392.5"
+         y="309"
+         font-size="21"
+         font-weight="400"
+         font-style="normal"
+         id="text52"
+         style="font-style:normal;font-weight:400;font-size:21px;font-family:Helvetica;fill:#ffffff;fill-opacity:1;stroke:none">Turns AST back into code</text>
+    </g>
+  </g>
+</svg>
