@@ -11,10 +11,77 @@ export default function ({ types: t }) {
     return comment;
   }
 
+  function locToSource(path, {start, end}){
+    const pathStart = start - path.node.start;
+    const pathEnd = pathStart + (end - start);
+
+    return path.getSource().slice(pathStart, pathEnd);
+  }
+
+  function bodyParser(path){
+    return function(node){
+      if (node.type === "ClassMethod"){
+        let retVal = (node.static ? "static " : "") + locToSource(path, node.key) + "(";
+        retVal += node.params.map(locToSource.bind(null, path)).join(", ") + ")";
+        if (node.returnType){
+          retVal += locToSource(path, node.returnType);
+        } else {
+          retVal += ": any";
+        }
+        return retVal + ";";
+      }
+      if (node.type === "ClassProperty"){
+        let retVal = (node.static ? "static " : "") + locToSource(path, node.key);
+        if (node.typeAnnotation){
+          retVal += locToSource(path, node.typeAnnotation);
+        } else {
+          retVal += ": any";
+        }
+        return retVal + ";";
+      }
+      return null;
+    }
+  }
+
+  function classDeclaration(path){
+    const {node} = path;
+    //node.typeParameters
+    let retVal = `declare class ${node.id.name}`;
+
+    const hasParams = node.typeParameters && node.typeParameters.params && node.typeParameters.params.length;
+    if (hasParams) {
+      retVal += locToSource(path, node.typeParameters);
+    }
+    if (node.superClass) {
+      retVal += ` extends ${locToSource(path, node.superClass)}`;
+    }
+    if (node.superClass && node.superTypeParameters) {
+      retVal += locToSource(path, node.superTypeParameters);
+    }
+    retVal += " {";
+    if (node.body && node.body.type === "ClassBody"){
+      retVal += "\n" + node.body.body.map(bodyParser(path)).filter(Boolean).map(str => "  " + str).join("\n") + "\n";
+    }
+    return retVal + "}";
+  }
+
   return {
-    inherits: require("babel-plugin-syntax-flow"),
+    //inherits: require("babel-plugin-syntax-flow"),
 
     visitor: {
+      // currently only supports named class declarations that are not being exported.
+      ClassDeclaration(path){
+        console.log(t.variableDeclarator);
+        path.addComment("leading", "::\n" + classDeclaration(path).split("\n").map(str => "  " + str).join("\n") + "\n");
+        const origName = path.node.id.name;
+        path.node.id.name += "__orig";
+        let constName = t.Identifier(origName);
+    constName.trailingComments = [{value: `: Class<${origName}>`}];
+        path.insertAfter([t.VariableDeclaration("const", [
+          t.VariableDeclarator(constName, t.Identifier(origName + "__orig"))
+        ])]);
+      },
+
       TypeCastExpression(path) {
         const { node } = path;
         path.get("expression").addComment("trailing", generateComment(path.get("typeAnnotation")));
