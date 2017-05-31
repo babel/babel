@@ -169,7 +169,7 @@ export default class OptionManager {
     });
 
     //
-    dirname = dirname || process.cwd();
+    dirname = dirname || opts.dirname || process.cwd();
     loc = loc || alias;
 
     for (const key in opts) {

@@ -45,6 +45,11 @@ module.exports = {
     hidden: true
   },
 
+  dirname: {
+    type: "string",
+    default: false
+  },
+
   presets: {
     type: "list",
     description: "",
