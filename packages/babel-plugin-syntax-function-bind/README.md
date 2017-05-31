@@ -1,6 +1,6 @@
 # babel-plugin-syntax-function-bind
 
-Allow parsing of function bind.
+> Allow parsing of function bind.
 
 ## Installation
 

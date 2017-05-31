@@ -1,6 +1,6 @@
 # babel-plugin-transform-async-functions
 
-Compile async functions to ES5
+> Compile async functions to ES5
 
 ## Installation
 
