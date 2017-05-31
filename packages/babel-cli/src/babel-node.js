@@ -50,6 +50,11 @@ getV8Flags(function (err, v8Flags) {
         args.unshift(arg);
         break;
 
+      case "--expose_debug_as":
+      case "--expose-debug-as":
+        args.unshift(arg);
+        break;
+
       case "-gc":
         args.unshift("--expose-gc");
         break;
