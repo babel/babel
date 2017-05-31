@@ -47,7 +47,7 @@ You can check this with `node -v` and `npm -v`.
 ### Setup
 
 ```sh
-$ git clone https://github.com/babel/babel
+$ git clone git@github.com:babel/babel.git
 $ cd babel
 $ make bootstrap
 ```
