@@ -459,6 +459,7 @@ export default function ({ types: t }) {
         if (!parent || !path.container) return; // i don't know why this is necessary - TODO
         if (!variableDeclarationHasPattern(node)) return;
 
+        const nodeKind = node.kind;
         const nodes = [];
         let declar;
 
@@ -493,13 +494,12 @@ export default function ({ types: t }) {
         const nodesOut = [];
         for (const node of nodes) {
           const tail = nodesOut[nodesOut.length - 1];
-          if (
-            tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) &&
-            tail.kind === node.kind
-          ) {
-            // Create a single compound let/var rather than many.
+          if (tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node)) {
+            // Create a single compound declarations
             tail.declarations.push(...node.declarations);
           } else {
+            // Make sure the original node kind is used for each compound declaration
+            node.kind = nodeKind;
             nodesOut.push(node);
           }
         }
