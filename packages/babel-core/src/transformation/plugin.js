@@ -28,13 +28,13 @@ export default class Plugin extends Store {
   pre: ?Function;
   visitor: Object;
 
-  take(key) {
+  take(key: string) {
     const val = this.raw[key];
     delete this.raw[key];
     return val;
   }
 
-  chain(target, key) {
+  chain(target: Object, key: string) {
     if (!target[key]) return this[key];
     if (!this[key]) return target[key];
 
@@ -52,16 +52,24 @@ export default class Plugin extends Store {
     };
   }
 
-  maybeInherit(loc: string) {
-    let inherits = this.take("inherits");
-    if (!inherits) return;
-
-    inherits = OptionManager.normalisePlugin(inherits, loc, "inherits");
+  mergeFields(target: Object, loc: string) {
+    const inherits = OptionManager.normalisePlugin(target, loc, "inherits");
 
     this.manipulateOptions = this.chain(inherits, "manipulateOptions");
     this.post = this.chain(inherits, "post");
     this.pre = this.chain(inherits, "pre");
     this.visitor = traverse.visitors.merge([inherits.visitor, this.visitor]);
+  }
+
+  maybeInherit(loc: string) {
+    const inherits = this.take("inherits");
+    if (!inherits) return;
+
+    if (Array.isArray(inherits)) {
+      inherits.forEach((target) => this.mergeFields(target, loc));
+    } else {
+      this.mergeFields(inherits, loc);
+    }
   }
 
   /**
