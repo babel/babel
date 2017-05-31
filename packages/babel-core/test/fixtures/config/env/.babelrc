@@ -1,11 +1,16 @@
 {
+  "presets": ["env-base-preset"],
   "plugins": ["env-base"],
   "env": {
     "foo": {
       "plugins": ["env-foo"]
     },
     "bar": {
+      "presets": ["env-bar-preset"],
       "plugins": ["env-bar"]
+    },
+    "baz": {
+      "presets": ["env-baz-preset"]
     }
   }
 }

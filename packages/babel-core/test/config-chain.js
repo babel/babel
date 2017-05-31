@@ -123,6 +123,9 @@ describe("buildConfigChain", function () {
     const expected = [
       {
         options: {
+          presets: [
+            "env-base-preset"
+          ],
           plugins: [
             "env-base"
           ]
@@ -164,6 +167,9 @@ describe("buildConfigChain", function () {
     const expected = [
       {
         options: {
+          presets: [
+            "env-base-preset"
+          ],
           plugins: [
             "env-base"
           ]
@@ -174,6 +180,9 @@ describe("buildConfigChain", function () {
       },
       {
         options: {
+          presets: [
+            "env-base-preset"
+          ],
           plugins: [
             "env-foo"
           ]
@@ -216,6 +225,9 @@ describe("buildConfigChain", function () {
     const expected = [
       {
         options: {
+          presets: [
+            "env-base-preset"
+          ],
           plugins: [
             "env-base"
           ]
@@ -226,12 +238,72 @@ describe("buildConfigChain", function () {
       },
       {
         options: {
+          presets: [
+            "env-bar-preset"
+          ],
           plugins: [
             "env-bar"
           ]
         },
         alias: fixture("env", ".babelrc.env.bar"),
         loc: fixture("env", ".babelrc.env.bar"),
+        dirname: fixture("env")
+      },
+      {
+        options: {
+          ignore: [
+            "root-ignore"
+          ]
+        },
+        alias: fixture(".babelignore"),
+        loc: fixture(".babelignore"),
+        dirname: fixture()
+      },
+      {
+        options: {
+          filename: fixture("env", "src.js")
+        },
+        alias: "base",
+        loc: "base",
+        dirname: fixture("env")
+      }
+    ];
+
+    assert.deepEqual(chain, expected);
+  });
+
+  it("env - baz", function () {
+    process.env.NODE_ENV = "baz";
+
+    const chain = buildConfigChain({
+      filename: fixture("env", "src.js")
+    });
+
+    const expected = [
+      {
+        options: {
+          presets: [
+            "env-base-preset"
+          ],
+          plugins: [
+            "env-base"
+          ]
+        },
+        alias: fixture("env", ".babelrc"),
+        loc: fixture("env", ".babelrc"),
+        dirname: fixture("env")
+      },
+      {
+        options: {
+          presets: [
+            "env-baz-preset"
+          ],
+          plugins: [
+            "env-base"
+          ]
+        },
+        alias: fixture("env", ".babelrc.env.baz"),
+        loc: fixture("env", ".babelrc.env.baz"),
         dirname: fixture("env")
       },
       {

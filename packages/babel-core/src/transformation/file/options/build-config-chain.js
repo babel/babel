@@ -166,6 +166,10 @@ class ConfigChainBuilder {
     if (options.env) {
       envOpts = options.env[envKey];
       delete options.env;
+      if (envOpts) {
+        // make env options inherit options from base config
+        envOpts = Object.assign({}, options, envOpts);
+      }
     }
 
     this.mergeConfig({
