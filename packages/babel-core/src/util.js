@@ -2,7 +2,6 @@ import escapeRegExp from "lodash/escapeRegExp";
 import startsWith from "lodash/startsWith";
 import minimatch from "minimatch";
 import includes from "lodash/includes";
-import isRegExp from "lodash/isRegExp";
 import path from "path";
 import slash from "slash";
 
@@ -65,7 +64,7 @@ export function regexify(val: any): RegExp {
     return new RegExp(regex.source.slice(1, -1), "i");
   }
 
-  if (isRegExp(val)) {
+  if (_isRegExp(val)) {
     return val;
   }
 
@@ -141,4 +140,8 @@ function _shouldIgnore(pattern: Function | RegExp, filename: string) {
   } else {
     return pattern.test(filename);
   }
+}
+
+function _isRegExp(value: mixed): boolean {
+  return Object.prototype.toString.call(value) === "[object RegExp]";
 }
