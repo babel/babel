@@ -125,7 +125,8 @@ export function replaceWith(replacement) {
   if (this.isNodeType("Statement") && t.isExpression(replacement)) {
     if (
       !this.canHaveVariableDeclarationOrExpression() &&
-      !this.canSwapBetweenExpressionAndStatement(replacement)
+      !this.canSwapBetweenExpressionAndStatement(replacement) &&
+      !this.parentPath.isExportDefaultDeclaration()
     ) {
       // replacing a statement with an expression so wrap it in an expression statement
       replacement = t.expressionStatement(replacement);
