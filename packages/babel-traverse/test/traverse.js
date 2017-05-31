@@ -1,7 +1,7 @@
-const cloneDeep = require("lodash/cloneDeep");
-const traverse = require("../lib").default;
-const assert = require("assert");
-const parse = require("babylon").parse;
+import cloneDeep from "lodash/cloneDeep";
+import traverse from "../lib";
+import assert from "assert";
+import { parse } from "babylon";
 
 describe("traverse", function () {
   const code = `
