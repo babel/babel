@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.5.1 (2017-05-22)
+
+### :bug: Bug Fix
+
+- Compile with loose mode ([#322](https://github.com/babel/babel-preset-env/pull/332)) (@existentialism)
+
+## v1.5.0 (2017-05-19)
+
+### :rocket: New Feature
+
+- Support target versions as strings ([#321](https://github.com/babel/babel-preset-env/pull/321)) (@existentialism)
+
+We were originally waiting on 2.x for a breaking change, but since node v7.10
+and other targets are causing some pain, we decided to land a backwards
+compatible version.
+
+### :house: Internal
+
+- Backport: use preset-env and remove flow-strip-types ([#324](https://github.com/babel/babel-preset-env/pull/324)) (@yavorsky)
+- Bump electron-to-chromium ([#329](https://github.com/babel/babel-preset-env/pull/329)) (@existentialism)
+- Tweak version mappings to match compat-table updates ([#323](https://github.com/babel/babel-preset-env/pull/323)) (@existentialism)
+- Bump browserslist ([#319](https://github.com/babel/babel-preset-env/pull/319)) (@existentialism)
+- Bump compat-table ([#307](https://github.com/babel/babel-preset-env/pull/307)) (@existentialism)
+- Add debug-fixtures and test/tmp to .eslintignore ([#305](https://github.com/babel/babel-preset-env/pull/305)) (@yavorsky)
+
 ## v1.4.0 (2017-04-14)
 
 ### :rocket: New Feature

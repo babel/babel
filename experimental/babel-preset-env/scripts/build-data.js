@@ -130,29 +130,6 @@ const environments = [
   "phantom",
 ];
 
-const envMap = {
-  safari51: "safari5",
-  safari71_8: "safari8",
-  safari10_1: "safari10.1",
-  firefox3_5: "firefox3",
-  firefox3_6: "firefox3",
-  node010: "node0.10",
-  node012: "node0.12",
-  iojs: "node3.3",
-  node64: "node6",
-  node65: "node6.5",
-  node76: "node7.6",
-  android40: "android4.0",
-  android41: "android4.1",
-  android42: "android4.2",
-  android43: "android4.3",
-  android44: "android4.4",
-  android50: "android5.0",
-  android51: "android5.1",
-  ios51: "ios5.1",
-  ios10_3: "ios10.3",
-};
-
 const compatibilityTests = flattenDeep(
   [es6, es2016plus].map(data =>
     data.tests.map(test => {
@@ -209,7 +186,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
           test => tests[i].res[test] === true || tests[i].res[test] === "strict"
         )
         // normalize some keys
-        .map(test => envMap[test] || test)
+        .map(test => test.replace("_", "."))
         .filter(test => !isNaN(parseFloat(test.replace(env, ""))))
         .shift()
     );
