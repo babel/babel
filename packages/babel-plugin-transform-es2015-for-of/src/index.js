@@ -33,8 +33,8 @@ export default function ({ messages, template, types: t }) {
       ITERATOR_ERROR_KEY = err;
     } finally {
       try {
-        if (!ITERATOR_COMPLETION && ITERATOR_KEY.return) {
-          ITERATOR_KEY.return();
+        if (!ITERATOR_COMPLETION && ITERATOR_KEY["return"]) {
+          ITERATOR_KEY["return"]();
         }
       } finally {
         if (ITERATOR_HAD_ERROR_KEY) {
