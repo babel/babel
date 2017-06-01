@@ -8,6 +8,7 @@ cache:
   - node_modules
 node_js:
   - '8'
+  - '7'
   - '6'
   - '4'
 
