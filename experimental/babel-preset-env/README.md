@@ -455,11 +455,6 @@ Using polyfills:
 }
 ```
 
-## Caveats
+## Issues
 
 If you get a `SyntaxError: Unexpected token ...` error when using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-rest-spread) transform then make sure the plugin has been updated to, at least, `v6.19.0`.
-
-## Other Cool Projects
-
-- [babel-preset-modern-browsers](https://github.com/christophehurpeau/babel-preset-modern-browsers)
-- ?
