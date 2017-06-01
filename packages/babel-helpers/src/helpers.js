@@ -426,20 +426,21 @@ helpers.objectDestructuringEmpty = template(`
 `);
 
 helpers.objectWithoutProperties = template(`
-  (function (obj, keys) {
+  (function (source, excluded) {
     var target = {};
-    var objKeys = Object.keys(obj);
+    var sourceKeys = source == null? [] : Object.keys(source);
     
     if (Object.getOwnPropertySymbols) {
-      objKeys = objKeys.concat(Object.getOwnPropertySymbols(obj));
+      sourceKeys = sourceKeys.concat(Object.getOwnPropertySymbols(source));
     }
 
-    for (var i = 0; i < objKeys.length; i++) {
-      key = objKeys[i];
-      if (!Object.prototype.propertyIsEnumerable.call(obj, key)) continue;
-      if (keys.indexOf(key) >= 0) continue;
-      if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
-      target[key] = obj[key];
+    var key;
+    for (var i = 0; i < sourceKeys.length; i++) {
+      key = sourceKeys[i];
+      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+      if (excluded.indexOf(key) >= 0) continue;
+      if (!Object.prototype.hasOwnProperty.call(source, key)) continue;
+      target[key] = source[key];
     }
     return target;
   })
