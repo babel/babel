@@ -17,6 +17,12 @@ try {
   fs.ensureDirSync(tempFolderPath);
   process.chdir(tempFolderPath);
 
+  const babelCliVersion = pkg.devDependencies["babel-cli"];
+
+  if (!babelCliVersion) {
+    throw new Error("Could not read version of babel-cli from package.json");
+  }
+
   fs.writeFileSync(
     path.join(tempFolderPath, "package.json"),
     `
@@ -28,7 +34,7 @@ try {
     "build": "babel index.js --out-file index.es6"
   },
   "dependencies": {
-    "babel-cli": "*",
+    "babel-cli": "${babelCliVersion}",
     "babel-preset-env": "${packPath}"
   }
 }
