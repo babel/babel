@@ -432,7 +432,13 @@ export default class File extends Store {
 
       const loc = err.loc;
       if (loc) {
-        err.codeFrame = codeFrame(code, loc.line, loc.column + 1, this.opts);
+        const location = {
+          start: {
+            line: loc.line,
+            column: loc.column + 1,
+          },
+        };
+        err.codeFrame = codeFrame(code, location, this.opts);
         message += "\n" + err.codeFrame;
       }
 
