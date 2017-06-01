@@ -16,7 +16,7 @@ const restIndex = template(`
 `);
 
 const restIndexImpure = template(`
-  REF = INDEX, ARGUMENTS.length <= REF ? undefined : ARGUMENTS[REF]
+  REF = INDEX, (ARGUMENTS.length <= REF || REF < OFFSET) ? undefined : ARGUMENTS[REF]
 `);
 
 const restLength = template(`
@@ -177,6 +177,7 @@ function optimiseIndexGetter(path, argsId, offset) {
     scope.push({ id: temp, kind: "var" });
     path.parentPath.replaceWith(restIndexImpure({
       ARGUMENTS: argsId,
+      OFFSET: t.numericLiteral(offset),
       INDEX: index,
       REF: temp,
     }));
