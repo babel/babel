@@ -21,25 +21,47 @@ export default function ({ types: t }) {
     return false;
   }
 
-  function createObjectSpread(file, props, objRef) {
-    const restElement = props.pop();
-
+  // extracts ["a", "b"] from {a: "hi", b}
+  function extractKeys(path) {
+    const propPaths = path.get("properties");
     const keys = [];
-
-    for (const prop of props) {
-      let key = prop.key;
-      if (t.isIdentifier(key) && !prop.computed) {
-        key = t.stringLiteral(prop.key.name);
+    for (const propPath of propPaths) {
+      let key = propPath.get("key").node;
+      if (t.isIdentifier(key) && !propPath.node.computed) {
+        key = t.stringLiteral(key.name);
       }
       keys.push(key);
     }
+    return keys;
+  }
 
-    const someComputed = props.some((prop) => prop.computed);
+  function replaceImpureComputedKeys(path) {
+    const impureComputedPropertyDeclarators = [];
+    for (const propPath of path.get("properties")) {
+      const key = propPath.get("key");
+      if (propPath.node.computed && !key.isPure()) {
+        const identifier = path.scope.generateUidIdentifierBasedOnNode(key.node);
+        const declarator = t.variableDeclarator(identifier, key.node);
+        impureComputedPropertyDeclarators.push(declarator);
+        key.replaceWith(identifier);
+      }
+    }
+    return impureComputedPropertyDeclarators;
+  }
 
+  //expects path to an object pattern
+  function createObjectSpread(path, file, objRef) {
+    const last = path.get("properties")[path.get("properties").length - 1];
+    const restElement = t.clone(last.node);
+    last.remove();
+
+    const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
+    const keys = extractKeys(path); // without the restElement
+
+    const someComputed = path.get("properties").some((prop) => prop.node.computed);
     let keyExpression;
-
     if (someComputed) {
-      // map to toPropertyKey to handle the possible non-string values of the computed keys
+      // map to toPropertyKey to handle the possible non-string values of the computed props
       keyExpression = t.callExpression(
         t.memberExpression(t.arrayExpression(keys), t.identifier("map")),
         [file.addHelper("toPropertyKey")]
@@ -49,6 +71,7 @@ export default function ({ types: t }) {
     }
 
     return [
+      impureComputedPropertyDeclarators,
       restElement.argument,
       t.callExpression(
         file.addHelper("objectWithoutProperties"), [
@@ -148,11 +171,15 @@ export default function ({ types: t }) {
               });
             }
 
-            const [ argument, callExpression ] = createObjectSpread(
-              file,
-              path.parentPath.node.properties,
-              ref
-            );
+            const objectPatternPath = path.findParent((path) => path.isObjectPattern);
+            const [
+              impureComputedPropertyDeclarators,
+              argument,
+              callExpression ] = createObjectSpread(objectPatternPath, file, ref);
+
+            for (let i = impureComputedPropertyDeclarators.length - 1; i >= 0; i--) {
+              insertionPath.insertBefore(impureComputedPropertyDeclarators[i]);
+            }
 
             insertionPath.insertAfter(
               t.variableDeclarator(
@@ -213,14 +240,17 @@ export default function ({ types: t }) {
             ]));
           }
 
-          const [ argument, callExpression ] = createObjectSpread(
-            file,
-            path.node.left.properties,
-            ref
-          );
+          const [
+            impureComputedPropertyDeclarators,
+            argument,
+            callExpression ] = createObjectSpread(leftPath, file, ref);
+
+          if (impureComputedPropertyDeclarators.length > 0) {
+            nodes.push(t.variableDeclaration("var", impureComputedPropertyDeclarators));
+          }
 
           const nodeWithoutSpread = t.clone(path.node);
-          nodeWithoutSpread.right = ref;
+          nodeWithoutSpread.right = ref; //todo: shouldn't the if statement always execute for this to work
           nodes.push(t.expressionStatement(nodeWithoutSpread));
           nodes.push(t.toStatement(t.assignmentExpression(
             "=",
