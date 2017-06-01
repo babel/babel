@@ -102,11 +102,7 @@ export default function () {
 
           node[REASSIGN_REMAP_SKIP] = true;
 
-          path.insertAfter(t.expressionStatement(t.assignmentExpression(
-            "=",
-            t.memberExpression(t.identifier("exports"), t.identifier(name)),
-            t.identifier(name)
-          )));
+          path.insertAfter(buildExportsAssignment(t.identifier(name), t.identifier(name)));
         }
       }
       else if (left.isArrayPattern()) {
@@ -121,11 +117,7 @@ export default function () {
 
           node[REASSIGN_REMAP_SKIP] = true;
 
-          path.insertAfter(t.expressionStatement(t.assignmentExpression(
-            "=",
-            t.memberExpression(t.identifier("exports"), t.identifier(name)),
-            t.identifier(name)
-          )));
+          path.insertAfter(buildExportsAssignment(t.identifier(name), t.identifier(name)));
         }
       }
     },
