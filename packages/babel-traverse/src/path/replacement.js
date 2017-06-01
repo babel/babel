@@ -74,8 +74,14 @@ export function replaceWithSourceString(replacement) {
   } catch (err) {
     const loc = err.loc;
     if (loc) {
+      const location = {
+        start: {
+          line: loc.line,
+          column: loc.column + 1,
+        },
+      };
       err.message += " - make sure this is an expression.";
-      err.message += "\n" + codeFrame(replacement, loc.line, loc.column + 1);
+      err.message += "\n" + codeFrame(replacement, location);
     }
     throw err;
   }
