@@ -7,7 +7,7 @@ import PluginPass from "../plugin-pass";
 import { NodePath, Hub, Scope } from "babel-traverse";
 import sourceMap from "source-map";
 import generate from "babel-generator";
-import codeFrame from "babel-code-frame";
+import { codeFrameColumns } from "babel-code-frame";
 import traverse from "babel-traverse";
 import Store from "../store";
 import { parse } from "babylon";
@@ -438,7 +438,7 @@ export default class File extends Store {
             column: loc.column + 1,
           },
         };
-        err.codeFrame = codeFrame(code, location, this.opts);
+        err.codeFrame = codeFrameColumns(code, location, this.opts);
         message += "\n" + err.codeFrame;
       }
 
