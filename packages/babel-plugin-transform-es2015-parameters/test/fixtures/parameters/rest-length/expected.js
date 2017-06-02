@@ -1,14 +1,12 @@
-var t = function (f) {
-  var _ref;
+var t = function (f, ..._ref) {
+  let [...items] = [..._ref];
 
-  arguments.length <= 1 ? undefined : arguments[1];
-  _ref = (arguments.length <= 1 ? 0 : arguments.length - 1) - 1 + 1, arguments.length <= _ref ? undefined : arguments[_ref];
+  items[0];
+  items[items.length - 1];
 };
 
-function t(f) {
-  for (var _len = arguments.length, items = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    items[_key - 1] = arguments[_key];
-  }
+function t(f, ..._ref2) {
+  let [...items] = [..._ref2];
 
   items;
   items[0];

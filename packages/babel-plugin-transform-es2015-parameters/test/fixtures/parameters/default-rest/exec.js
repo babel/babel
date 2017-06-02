@@ -1,15 +1,6 @@
 const a = 1;
 function rest(b = a, ...a) {
-  assert.equal(b, 1);
+  return [a, b];
 }
-rest(undefined, 2)
-
-function rest2(b = a, ...a) {
-  assert.equal(a[0], 2);
-}
-rest2(undefined, 2)
-
-function rest3(b = a, ...a) {
-  assert.equal(a.length, 1);
-}
-rest3(undefined, 2)
+assert.throws(() => rest(undefined, 1), ReferenceError);
+assert.deepEqual(rest(1), [[], 1]);

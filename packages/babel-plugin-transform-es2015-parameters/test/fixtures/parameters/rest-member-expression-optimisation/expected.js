@@ -1,28 +1,32 @@
-var t = function () {
-  var x = arguments.length <= 0 ? undefined : arguments[0];
-  var y = arguments.length <= 1 ? undefined : arguments[1];
+var t = function (..._ref) {
+  let [...items] = [..._ref];
+
+  var x = items[0];
+  var y = items[1];
 };
 
-function t() {
-  var x = arguments.length <= 0 ? undefined : arguments[0];
-  var y = arguments.length <= 1 ? undefined : arguments[1];
+function t(..._ref2) {
+  let [...items] = [..._ref2];
+
+  var x = items[0];
+  var y = items[1];
 }
 
-function t() {
+function t(..._ref3) {
+  let [...items] = [..._ref3];
+
   var a = [];
-  for (var i = 0; i < arguments.length; i++) {
+  for (var i = 0; i < items.length; i++) {
     a.push(i);
   }
   return a;
 }
 
 // https://github.com/babel/babel/pull/2833#issuecomment-166039291
-function t() {
-  for (var _len = arguments.length, items = Array(_len), _key = 0; _key < _len; _key++) {
-    items[_key] = arguments[_key];
-  }
+function t(..._ref4) {
+  let [...items] = [..._ref4];
 
-  for (var i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     return items[i];
   }
 }

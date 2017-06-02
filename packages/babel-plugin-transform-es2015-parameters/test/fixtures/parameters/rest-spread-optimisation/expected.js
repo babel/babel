@@ -1,32 +1,28 @@
 // optimisation
 
-function foo() {
-  foo.apply(undefined, arguments);
+function foo(..._ref) {
+  let [...bar] = [..._ref];
+
+  foo(...bar);
 }
 
 // deoptimisation
 
-function foo(a) {
-  for (var _len = arguments.length, b = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    b[_key - 1] = arguments[_key];
-  }
+function foo(a, ..._ref2) {
+  let [...b] = [..._ref2];
 
-  foo.apply(undefined, b);
+  foo(...b);
 }
 
-function foo() {
-  for (var _len2 = arguments.length, b = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-    b[_key2] = arguments[_key2];
-  }
+function foo(..._ref3) {
+  let [...b] = [..._ref3];
 
-  foo.apply(undefined, [1].concat(b));
+  foo(1, ...b);
 }
 
-function foo() {
-  for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-    args[_key3] = arguments[_key3];
-  }
+function foo(..._ref4) {
+  let [...args] = [..._ref4];
 
   args.pop();
-  foo.apply(undefined, args);
+  foo(...args);
 }

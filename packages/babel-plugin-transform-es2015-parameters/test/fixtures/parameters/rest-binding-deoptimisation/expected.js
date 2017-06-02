@@ -1,7 +1,4 @@
-var deepAssign = function () {
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
-
+const deepAssign = (..._ref) => {
+  let [...args] = [..._ref];
   return args = [];
 };

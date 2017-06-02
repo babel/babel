@@ -1,5 +1,5 @@
-var t = function () {
-  var f = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "foo";
+function t(..._ref) {
+  let [f = "foo"] = [..._ref];
 
   return f + " bar";
 };

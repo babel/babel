@@ -1,53 +1,56 @@
-var concat = function () {
-  var x = arguments.length <= 0 ? undefined : arguments[0];
-  var y = arguments.length <= 1 ? undefined : arguments[1];
+var concat = (..._ref) => {
+  let [...arrs] = [..._ref];
+
+  var x = arrs[0];
+  var y = arrs[1];
 };
 
 var somefun = function () {
-  var get2ndArg = function (a, b) {
-    var _b = arguments.length <= 2 ? undefined : arguments[2];
-    var somef = function (x, y, z) {
-      var _a = arguments.length <= 3 ? undefined : arguments[3];
+  let get2ndArg = (a, b, ..._ref2) => {
+    let [...args1] = [..._ref2];
+
+    var _b = args1[0];
+    let somef = (x, y, z, ..._ref3) => {
+      let [...args2] = [..._ref3];
+
+      var _a = args2[0];
     };
-    var somefg = function (c, d, e, f) {
-      var _a = arguments.length <= 4 ? undefined : arguments[4];
+    let somefg = (c, d, e, f, ..._ref4) => {
+      let [...args3] = [..._ref4];
+
+      var _a = args3[0];
     };
-    var _d = arguments.length <= 3 ? undefined : arguments[3];
+    var _d = args1[1];
   };
-  var get3rdArg = function () {
-    return arguments.length <= 2 ? undefined : arguments[2];
+  let get3rdArg = (..._ref5) => {
+    let [...args] = [..._ref5];
+    return args[2];
   };
 };
 
-function demo1() {
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
+function demo1(..._ref6) {
+  let [...args] = [..._ref6];
 
-  return function (i) {
+  return i => {
     return args[i + 0];
   };
 }
 
-var x = function () {
+var x = (..._ref7) => {
+  let [...rest] = [..._ref7];
+
   if (noNeedToWork) return 0;
-
-  for (var _len2 = arguments.length, rest = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-    rest[_key2] = arguments[_key2];
-  }
-
   return rest;
 };
 
-var innerclassproperties = function () {
+var innerclassproperties = (..._ref8) => {
   var _class, _temp;
 
-  for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-    args[_key3] = arguments[_key3];
-  }
+  let [...args] = [..._ref8];
+  return _temp = _class = class {
+    constructor() {
+      this.args = args;
+    }
 
-  return _temp = _class = function _class() {
-    babelHelpers.classCallCheck(this, _class);
-    this.args = args;
   }, _class.args = args, _temp;
 };
