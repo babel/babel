@@ -1,9 +1,5 @@
-var _temp;
+var _a, _a$b$c, _a$b, _a2;
 
-if (((_temp = a) != null ? _temp.b : void 0) != void 0) {
-  delete a.b;
-}
+(_a = a) == null ? void 0 : delete _a.b;
 
-if (((_temp = ((_temp = a) != null ? _temp.b : void 0).c) != null ? _temp.d : void 0) != void 0) {
-  delete ((_temp = a.b) != null ? _temp.c : void 0).d;
-}
+(((_a2 = a) == null ? void 0 : _a$b = _a2.b) == null ? void 0 : _a$b$c = _a$b.c) == null ? void 0 : delete _a$b$c.d;

@@ -1,161 +1,105 @@
 export default function ({ types: t }) {
-  const optionalNodesTransformed = new WeakSet();
-  const nilIdentifier = t.unaryExpression("void", t.numericLiteral(0));
+  // DO NOT SUBMIT. This is until the parser is complete
+  const fixer = {
+    NewExpression: {
+      exit(path) {
+        const { callee } = path.node;
+        if (t.isCallExpression(callee)) {
+          const replacement = t.newExpression(callee.callee, callee.arguments);
+          replacement.optional = true;
+          path.replaceWith(replacement);
+        }
+      },
+    },
 
-  function setOptionalTransformed(node) {
-    t.assertMemberExpression(node); // Dev
-    optionalNodesTransformed.add(node);
-  }
+    CallExpression(path) {
+      const { node } = path;
+      if (!node.optional || node.callee) {
+        return;
+      }
 
-  function isOptionalTransformed(node) {
-    t.assertMemberExpression(node); // Dev
-    return optionalNodesTransformed.has(node);
-  }
+      const callee = t.clone(node.arguments[0]);
+      if (t.isMemberExpression(callee)) {
+        callee.optional = node.arguments[1].value;
+      }
+      node.callee = callee;
+    },
+  };
+    // END DO NOT SUBMIT
 
-  function createCondition(ref, access, nextProperty, bailout) {
+  const visitor = {
+    Program(path) {
+      path.traverse(fixer);
+    },
 
-    return t.conditionalExpression(
-      createCheckAgainstNull(
-        t.AssignmentExpression("=", ref, access)
-      ),
+    MemberExpression(path) {
+      if (!path.node.optional) {
+        return;
+      }
 
-      t.memberExpression(ref, nextProperty),
-      bailout,
-    );
-  }
+      const { scope, node } = path;
+      const { object } = node;
 
-  function createCheckAgainstNull(left) {
-    return t.BinaryExpression("!=", left, t.NullLiteral());
-  }
+      node.optional = false;
 
-  function isNodeOptional(node) {
-    return node.optional === true;
-  }
+      const ref = scope.generateUidIdentifierBasedOnNode(object);
+      scope.push({ id: ref });
+      node.object = ref;
+
+      let parent = path;
+      let expression;
+      do {
+        expression = parent;
+        parent = parent.parentPath;
+      } while (!parent.container);
+
+      const replace = parent.isExpression() ? parent : expression;
+      replace.replaceWith(t.conditionalExpression(
+        t.binaryExpression("==", t.assignmentExpression("=", ref, object), t.nullLiteral()),
+        scope.buildUndefinedNode(),
+        replace.node
+      ));
+    },
+
+    "NewExpression|CallExpression": {
+      exit(path) {
+        if (!path.node.optional) {
+          return;
+        }
+
+        const { scope, node } = path;
+        const { callee } = node;
+
+        node.optional = false;
+
+        const ref = scope.generateUidIdentifierBasedOnNode(callee);
+        scope.push({ id: ref });
+        node.callee = ref;
+
+        if (t.isMemberExpression(callee) && !t.isNewExpression(node)) {
+          const context = scope.generateUidIdentifierBasedOnNode(callee.object);
+          scope.push({ id: context });
+          callee.object = t.assignmentExpression("=", context, callee.object);
+
+          node.arguments.unshift(context);
+          node.callee = t.memberExpression(node.callee, t.identifier("call"));
+        }
+
+        path.replaceWith(t.conditionalExpression(
+          t.binaryExpression("==", t.assignmentExpression("=", ref, callee), t.nullLiteral()),
+          scope.buildUndefinedNode(),
+          node
+        ));
+      },
+    },
+
+  };
 
   return {
-    visitor: {
+    visitor,
 
-      AssignmentExpression(path, state) {
-        const { left } = path.node;
-
-        if (!isNodeOptional(left) || isOptionalTransformed(left)) {
-          return;
-        }
-
-        if (!state.optionalTemp) {
-          const id = path.scope.generateUidIdentifier();
-
-          state.optionalTemp = id;
-          path.scope.push({ id });
-        }
-
-        const { object, property } = left;
-
-        const isChainNil = t.BinaryExpression(
-          "!=",
-          createCondition(
-            state.optionalTemp,
-            object,
-            property,
-            nilIdentifier,
-          ),
-          nilIdentifier,
-        );
-
-        // FIXME(sven): if will be a ConditionalExpression for childs, only top level will be ifStatement
-        const replacement = t.ifStatement(isChainNil, t.blockStatement([t.expressionStatement(path.node)]));
-
-        setOptionalTransformed(left);
-
-        path.traverse({
-          MemberExpression({ node }) {
-            setOptionalTransformed(node);
-          },
-        });
-
-        path.parentPath.replaceWith(replacement);
-      },
-
-      UnaryExpression(path, state) {
-        const { operator, argument } = path.node;
-
-        if (operator !== "delete") {
-          return;
-        }
-
-        if (!isNodeOptional(argument) || isOptionalTransformed(argument)) {
-          return;
-        }
-
-        if (!state.optionalTemp) {
-          const id = path.scope.generateUidIdentifier();
-
-          state.optionalTemp = id;
-          path.scope.push({ id });
-        }
-
-        const { object, property } = argument;
-
-        const isChainNil = t.BinaryExpression(
-          "!=",
-          createCondition(
-            state.optionalTemp,
-            object,
-            property,
-            nilIdentifier,
-          ),
-          nilIdentifier,
-        );
-
-        const replacement = t.ifStatement(isChainNil, t.blockStatement([t.expressionStatement(path.node)]));
-
-        setOptionalTransformed(argument);
-
-        path.parentPath.replaceWith(replacement);
-      },
-
-      MemberExpression(path, state) {
-        if (!isNodeOptional(path.node) || isOptionalTransformed(path.node)) {
-          return;
-        }
-
-        const { object, property } = path.node;
-
-        if (!state.optionalTemp) {
-          const id = path.scope.generateUidIdentifier();
-
-          state.optionalTemp = id;
-          path.scope.push({ id });
-        }
-
-        if (t.isAssignmentExpression(path.parent)) {
-          return;
-        } else if (t.isUnaryExpression(path.parent)) {
-          return;
-        } else if (t.isCallExpression(path.parent)) {
-
-          const replacement = createCondition(
-            state.optionalTemp,
-            object,
-            property,
-            t.callExpression(t.identifier("Function"), []),
-          );
-
-          setOptionalTransformed(path.node);
-          path.replaceWith(replacement);
-        } else {
-
-          const replacement = createCondition(
-            state.optionalTemp,
-            object,
-            property,
-            nilIdentifier,
-          );
-
-          setOptionalTransformed(path.node);
-          path.replaceWith(replacement);
-        }
-      },
+    manipulateOptions(opts, parserOpts) {
+      parserOpts.plugins.push("optionalChaining");
     },
   };
 }

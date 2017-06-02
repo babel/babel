@@ -1,5 +1,5 @@
-var _temp;
+var _foo, _a$b$c, _a;
 
-(_temp = foo) != null ? _temp.bar : void 0;
+(_foo = foo) == null ? void 0 : _foo.bar;
 
-((_temp = ((_temp = a) != null ? _temp.b : void 0).c) != null ? _temp.d : void 0).e;
+(_a$b$c = (_a = a) == null ? void 0 : _a.b.c) == null ? void 0 : _a$b$c.d.e;

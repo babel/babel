@@ -1,0 +1,8 @@
+new a?.b
+new a?.b?.c?.d
+
+new a?.b()
+new a?.b?.c?.d()
+
+new b?.(b)
+new a?.b?.(a.b, true)

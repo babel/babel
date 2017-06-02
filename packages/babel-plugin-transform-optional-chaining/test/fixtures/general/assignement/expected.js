@@ -1,9 +1,5 @@
-var _temp;
+var _a, _a$b$c, _a$b, _a2;
 
-if (((_temp = a) != null ? _temp.b : void 0) != void 0) {
-  a.b = 42;
-}
+(_a = a) == null ? void 0 : _a.b = 42;
 
-if (((_temp = a.b.c) != null ? _temp.d : void 0) != void 0) {
-  a.b.c.d = 42;
-}
+(((_a2 = a) == null ? void 0 : _a$b = _a2.b) == null ? void 0 : _a$b$c = _a$b.c) == null ? void 0 : _a$b$c.d = 42;
