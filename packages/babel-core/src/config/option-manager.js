@@ -10,6 +10,7 @@ import buildConfigChain from "./build-config-chain";
 import path from "path";
 import traverse from "babel-traverse";
 import clone from "lodash/clone";
+import DagMap from "dag-map";
 
 import { loadPlugin, loadPreset, loadParser, loadGenerator } from "./loading/files";
 
@@ -82,58 +83,62 @@ export default function manageOptions(opts: {}): {
 }
 
 function sortPlugins(plugins) {
-  // need to handle cycles (either error, add inherent priority)
-  // need to warn/error on duplicate capabilities
+  const graph = new DagMap();
+  const capabilitiesToPluginIdMap = Object.create(null);
 
-  const mapped = plugins.map(([ plugin ], i) => {
-    return { index: i, value: plugin };
+  // It is theoretically possible that something arrives at this point without
+  // having a name or key property. Make sure that it has one.
+  const unnamedPluginPrefix = "unnamedPlugin";
+  plugins.forEach((pluginTuple, index) => {
+    const plugin = pluginTuple[0];
+    if (!plugin.key) { plugin.key = `${unnamedPluginPrefix}${index}`; }
   });
 
-  const capabilitiesABMap = [];
-  const capabilitiesBAMap = [];
-
-  mapped.sort(function({ value: pluginA }, { value: pluginB }) {
-    if (pluginA.dependencies) {
-      pluginA.dependencies.forEach((capability) => {
-        if (pluginB.capabilities && pluginB.capabilities.indexOf(capability) > -1) {
-          // Plugin A needs to run before Plugin B
-          // if A depends on a capability in B
-          capabilitiesABMap.push([pluginA.key, pluginB.key]);
+  // Calculate the capabilities that each plugin provides, map to a single name.
+  // Multiple plugins with the same capability are not allowed as that can
+  // become a cyclic dependency.
+  plugins.forEach((pluginTuple) => {
+    const plugin = pluginTuple[0];
+    if (plugin.capabilities) {
+      plugin.capabilities.forEach((capability) => {
+        const existingPlugin = capabilitiesToPluginIdMap[capability];
+        if (existingPlugin !== undefined) {
+          throw new Error(
+            "Cannot have two plugins with same capability, both" +
+            `${plugin.key} and ${existingPlugin.key} provide it.`
+          );
         }
+        capabilitiesToPluginIdMap[capability] = plugin.key;
       });
     }
-
-    if (pluginB.dependencies) {
-      pluginB.dependencies.forEach((capability) => {
-        if (pluginA.capabilities && pluginA.capabilities.indexOf(capability) > -1) {
-          // Plugin B needs to run before Plugin A
-          // if B depends on a capability in A
-          capabilitiesBAMap.push([pluginB.key, pluginA.key]);
-        }
-      });
-    }
-
-    if (capabilitiesABMap.length > 0 && capabilitiesBAMap.length === 0) {
-      return -1;
-    } else if (capabilitiesBAMap.length > 0 && capabilitiesABMap.length === 0) {
-      return 1;
-    }
-
-    return 0;
   });
 
-  // if (capabilitiesABMap.length > 0) {
-  //   console.log(capabilitiesABMap.map(([a, b]) => {
-  //     return `${a} depends on ${b}`;
-  //   }));
-  // }
-  // if (capabilitiesBAMap.length > 0) {
-  //   console.log(capabilitiesBAMap.map(([a, b]) => {
-  //     return `${a} depends on ${b}`;
-  //   }));
-  // }
+  // Look for the dependecies of the current module and identify which module
+  // addresses them.
+  plugins.forEach((pluginTuple) => {
+    const plugin = pluginTuple[0];
 
-  return mapped.map((el) => plugins[el.index]);
+    // Skip mapping if plugin doesn't have dependencies.
+    if (plugin.dependencies) {
+      const mappedDependencies = plugin.dependencies.map((dependency) => {
+        const idForDependency = capabilitiesToPluginIdMap[dependency];
+        if (idForDependency === undefined) {
+          throw new Error(`${plugin.key} requires ${dependency} but it was not provided.`);
+        }
+        return idForDependency;
+      });
+      graph.add(plugin.key, pluginTuple, mappedDependencies);
+    } else {
+      graph.add(plugin.key, pluginTuple);
+    }
+  });
+
+  const sortedPlugins = [];
+  graph.each((key, value) => {
+    sortedPlugins.push(value);
+  });
+
+  return sortedPlugins;
 }
 
 class OptionManager {
