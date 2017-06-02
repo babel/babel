@@ -103,17 +103,7 @@ const getTargets = (targets = {}) => {
         const [parsedTarget, parsedValue] = parser(target, value);
 
         if (parsedValue) {
-          // Merge (lowest wins)
-          if (typeof parsedValue === "string") {
-            results.targets[parsedTarget] = semverMin(
-              results.targets[parsedTarget],
-              parsedValue,
-            );
-          } else {
-            // We can remove this block if/when we replace Uglify target
-            // with top level option
-            results.targets[parsedTarget] = parsedValue;
-          }
+          results.targets[parsedTarget] = parsedValue;
         }
       }
 
