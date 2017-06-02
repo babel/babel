@@ -2,20 +2,14 @@ export default function ({ types: t }) {
 
   function buildConcatCallExressions(items) {
     return items.reduce(function(left, right) {
-      const isString = t.isStringLiteral(right);
-      const canBeInserted = !left._withIdentifier || isString;
-
-      if (t.isCallExpression(left) && canBeInserted) {
-        left._withIdentifier = left._withIdentifier || !isString;
+      if (t.isCallExpression(left) && t.isLiteral(right)) {
         left.arguments.push(right);
         return left;
       }
-      const nextCall = t.callExpression(
+      return t.callExpression(
         t.memberExpression(left, t.identifier("concat")),
         [right]
       );
-      nextCall._withIdentifier = !isString;
-      return nextCall;
     });
   }
 
