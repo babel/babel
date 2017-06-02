@@ -1,8 +1,15 @@
 export default function ({ types: t }) {
 
   function buildConcatCallExressions(items) {
+    let avail = true;
     return items.reduce(function(left, right) {
-      if (t.isCallExpression(left) && t.isLiteral(right)) {
+      let canBeInserted = t.isLiteral(right);
+
+      if (!canBeInserted && avail) {
+        canBeInserted = true;
+        avail = false;
+      }
+      if (t.isCallExpression(left) && canBeInserted) {
         left.arguments.push(right);
         return left;
       }
