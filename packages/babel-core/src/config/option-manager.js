@@ -77,7 +77,7 @@ const ALLOWED_PLUGIN_KEYS = new Set([
 
 export default function manageOptions(opts: {}): {
   options: Object,
-  passes: Array<Array<[ Plugin, ?{} ]>>,
+  plugins: Array<[ Plugin, ?{} ]>,
 }|null {
   return new OptionManager().init(opts);
 }
@@ -144,11 +144,11 @@ function sortPlugins(plugins) {
 class OptionManager {
   constructor() {
     this.options = createInitialOptions();
-    this.passes = [[]];
+    this.plugins = [];
   }
 
   options: Object;
-  passes: Array<Array<[Plugin, ?{}]>>;
+  plugins: Array<[Plugin, ?{}]>;
 
   /**
    * This is called when we want to merge the input `opts` into the
@@ -159,35 +159,33 @@ class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(config: MergeOptions, pass?: Array<[Plugin, ?{}]>) {
+  mergeOptions(config: MergeOptions, plugins?: Array<[Plugin, ?{}]>) {
     const result = loadConfig(config);
 
-    const plugins = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
-    const presets = result.presets.map((descriptor) => loadPresetDescriptor(descriptor));
+    const pluginDescriptors = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
+    const presetDescriptors = result.presets.map((descriptor) => loadPresetDescriptor(descriptor));
 
-    pass = pass || this.passes[0];
-
-    presets.forEach((presetConfig) => {
-      this.mergeOptions(presetConfig, pass);
+    presetDescriptors.forEach((presetConfig) => {
+      this.mergeOptions(presetConfig, plugins);
     });
 
     // resolve plugins
-    if (plugins.length > 0) {
-      pass.unshift(...plugins);
+    if (pluginDescriptors.length > 0) {
+      plugins.unshift(...pluginDescriptors);
     }
 
-    pass = sortPlugins(pass);
     merge(this.options, result.options);
   }
 
   init(opts: {}) {
+    let plugins = [];
     const configChain = buildConfigChain(opts);
     if (!configChain) return null;
-
     try {
       for (const config of configChain) {
-        this.mergeOptions(config);
+        this.mergeOptions(config, plugins);
       }
+      plugins = sortPlugins(plugins);
     } catch (e) {
       // There are a few case where thrown errors will try to annotate themselves multiple times, so
       // to keep things simple we just bail out if re-wrapping the message.
@@ -200,14 +198,7 @@ class OptionManager {
     }
 
     opts = this.options;
-
-    // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
-    // it will be in the right structure to not change behavior.
-    opts.plugins = this.passes[0];
-    opts.presets = this.passes.slice(1)
-      .filter((plugins) => plugins.length > 0)
-      .map((plugins) => ({ plugins }));
-
+    opts.plugins = plugins;
     if (opts.inputSourceMap) {
       opts.sourceMaps = true;
     }
@@ -237,7 +228,7 @@ class OptionManager {
 
     return {
       options: opts,
-      passes: this.passes,
+      plugins: plugins,
     };
   }
 }
