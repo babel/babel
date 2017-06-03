@@ -47,11 +47,11 @@ export default function ({ types: t }) {
       node.object = ref;
 
       let parent = path;
-      let expression;
-      do {
+      let expression = path;
+      while (parent.listKey === undefined) {
         expression = parent;
         parent = parent.parentPath;
-      } while (!parent.container);
+      }
 
       const replace = parent.isExpression() ? parent : expression;
       replace.replaceWith(t.conditionalExpression(
