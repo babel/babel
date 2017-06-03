@@ -56,7 +56,7 @@
               "column": 15
             }
           },
-          "value": "use\\x20strict",
+          "value": "use strict",
           "raw": "\"use\\x20strict\""
         },
         "directive": "use\\x20strict"

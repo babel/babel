@@ -125,6 +125,17 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
       (!stmt.expression.extra || !stmt.expression.extra.parenthesized);
   }
 
+  stmtToDirective(stmt: N.Statement): N.Directive {
+    const directive = super.stmtToDirective(stmt);
+    const value = stmt.expression.value;
+
+    // Reset value to the actual value as in estree mode we want
+    // the stmt to have the real value and not the raw value
+    directive.value.value = value;
+
+    return directive;
+  }
+
   parseBlockBody(node: N.BlockStatementLike, ...args): void {
     super.parseBlockBody(node, ...args);
 
