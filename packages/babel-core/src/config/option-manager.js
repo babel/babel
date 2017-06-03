@@ -171,7 +171,7 @@ class OptionManager {
 
     // resolve plugins
     if (pluginDescriptors.length > 0) {
-      plugins.unshift(...pluginDescriptors);
+      plugins.push(...pluginDescriptors);
     }
 
     merge(this.options, result.options);

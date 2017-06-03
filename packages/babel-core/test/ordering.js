@@ -1,5 +1,6 @@
 import * as babel from "../lib/index";
 import assert from "assert";
+import path from "path";
 
 const decoratorsPlugin = require.resolve("../../babel-plugin-transform-class-properties");
 const classPropertiesPlugin = require.resolve("../../babel-plugin-transform-decorators");
@@ -71,4 +72,74 @@ describe("plugin ordering with unordered plugin", function () {
 
     assert.equal(res1.code, res2.code);
   });
+});
+
+it("complex plugin and preset ordering", function() {
+  function pushPlugin(name) {
+    return {
+      name: name,
+      visitor: {
+        Program(path) {
+          path.pushContainer("body", babel.types.expressionStatement(babel.types.identifier(name)));
+        },
+      },
+    };
+  }
+
+  function pushPreset(name) {
+    return { plugins: [pushPlugin(name)] };
+  }
+
+  const result = babel.transform("", {
+    filename: path.join(__dirname, "fixtures", "config", "complex-plugin-config", "file.js"),
+    presets: [
+      pushPreset("argone"),
+      pushPreset("argtwo"),
+    ],
+    env: {
+      development: {
+        presets: [
+          pushPreset("argthree"),
+          pushPreset("argfour"),
+        ],
+        env: {
+          development: {
+            presets: [
+              pushPreset("argfive"),
+              pushPreset("argsix"),
+            ],
+          },
+        },
+      },
+    },
+  });
+
+  assert.equal(result.code, [
+    "one;",
+    "two;",
+    "three;",
+    "four;",
+    "five;",
+    "six;",
+    "seven;",
+    "eight;",
+    "nine;",
+    "ten;",
+    "eleven;",
+    "twelve;",
+    "thirteen;",
+    "fourteen;",
+    "fifteen;",
+    "sixteen;",
+    "seventeen;",
+    "eighteen;",
+    "nineteen;",
+    "twenty;",
+    "argone;",
+    "argtwo;",
+    "argthree;",
+    "argfour;",
+    "argfive;",
+    "argsix;",
+  ].join("\n"));
 });
