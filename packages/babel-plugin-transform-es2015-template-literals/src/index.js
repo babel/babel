@@ -9,7 +9,7 @@ export default function ({ types: t }) {
         canBeInserted = true;
         avail = false;
       }
-      if (t.isCallExpression(left) && canBeInserted) {
+      if (canBeInserted && t.isCallExpression(left)) {
         left.arguments.push(right);
         return left;
       }
