@@ -302,18 +302,23 @@ export default class ExpressionParser extends LValParser {
         node.callee = this.parseNoCallExpr();
         return this.parseSubscripts(this.finishNode(node, "BindExpression"), startPos, startLoc, noCalls);
 
-      } else if (this.eat(tt.questionDot)) {
-        const node = this.startNodeAt(startPos, startLoc);
-
+      } else if (this.match(tt.questionDot)) {
         if (!this.hasPlugin("optionalChaining")) {
-          this.raise(node.start, "You can only use optional-chaining when the 'optionalChaining' plugin is enabled.");
+          this.raise(startPos, "You can only use optional-chaining when the 'optionalChaining' plugin is enabled.");
         }
+
+        if (noCalls && this.lookahead().type == tt.parenL) {
+          return base;
+        }
+        this.next();
+
+        const node = this.startNodeAt(startPos, startLoc);
 
         if (this.eat(tt.bracketL)) {
           node.object = base;
-          node.optional = true;
           node.property = this.parseExpression();
           node.computed = true;
+          node.optional = true;
           this.expect(tt.bracketR);
           base = this.finishNode(node, "MemberExpression");
         } else if (this.eat(tt.parenL)) {
@@ -322,6 +327,7 @@ export default class ExpressionParser extends LValParser {
             base.name === "async" &&
             !this.canInsertSemicolon();
 
+          node.callee = base;
           node.arguments = this.parseCallExpressionArguments(tt.parenR, possibleAsync);
           node.optional = true;
 
@@ -329,8 +335,8 @@ export default class ExpressionParser extends LValParser {
         } else {
           node.object = base;
           node.property = this.parseIdentifier(true);
-          node.optional = true;
           node.computed = false;
+          node.optional = true;
           base = this.finishNode(node, "MemberExpression");
         }
       } else if (this.eat(tt.dot)) {
@@ -768,12 +774,16 @@ export default class ExpressionParser extends LValParser {
     }
 
     node.callee = this.parseNoCallExpr();
+    const optional = this.eat(tt.questionDot);
 
     if (this.eat(tt.parenL)) {
       node.arguments = this.parseExprList(tt.parenR);
       this.toReferencedList(node.arguments);
     } else {
       node.arguments = [];
+    }
+    if (optional) {
+      node.optional = true;
     }
 
     return this.finishNode(node, "NewExpression");
