@@ -138,6 +138,7 @@ export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
     t.isBinaryExpression(parent) ||
     t.isLogicalExpression(parent) ||
     t.isUnaryExpression(parent) ||
+    (t.isConditionalExpression(parent) && parent.test === node) ||
     t.isTaggedTemplateExpression(parent)
   ) {
     return true;
