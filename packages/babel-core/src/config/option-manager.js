@@ -162,41 +162,21 @@ class OptionManager {
   mergeOptions(config: MergeOptions, pass?: Array<[Plugin, ?{}]>) {
     const result = loadConfig(config);
 
-    let plugins = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
-    // sort plugins by capabilties and dependencies
-    plugins = sortPlugins(plugins);
+    const plugins = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
     const presets = result.presets.map((descriptor) => loadPresetDescriptor(descriptor));
 
-
-    if (
-      config.options.passPerPreset != null &&
-      typeof config.options.passPerPreset !== "boolean"
-    ) {
-      throw new Error(".passPerPreset must be a boolean or undefined");
-    }
-    const passPerPreset = config.options.passPerPreset;
     pass = pass || this.passes[0];
 
-    // resolve presets
-    if (presets.length > 0) {
-      let presetPasses = null;
-      if (passPerPreset) {
-        presetPasses = presets.map(() => []);
-        // The passes are created in the same order as the preset list, but are inserted before any
-        // existing additional passes.
-        this.passes.splice(1, 0, ...presetPasses);
-      }
-
-      presets.forEach((presetConfig, i) => {
-        this.mergeOptions(presetConfig, presetPasses ? presetPasses[i] : pass);
-      });
-    }
+    presets.forEach((presetConfig) => {
+      this.mergeOptions(presetConfig, pass);
+    });
 
     // resolve plugins
     if (plugins.length > 0) {
       pass.unshift(...plugins);
     }
 
+    pass = sortPlugins(pass);
     merge(this.options, result.options);
   }
 
