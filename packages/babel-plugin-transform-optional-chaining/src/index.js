@@ -29,16 +29,14 @@ export default function ({ types: t }) {
       if (loose && atCall) {
         // If we are using a loose transform (avoiding a Function#call) and we are at the call,
         // we can avoid a needless memoize.
-        ref = chain;
-        check = ref;
+        check = ref = chain;
       } else {
         ref = scope.maybeGenerateMemoised(chain);
         if (ref) {
           check = t.assignmentExpression("=", ref, chain);
           node[replaceKey] = ref;
         } else {
-          ref = chain;
-          check = chain;
+          check = ref = chain;
         }
       }
 
@@ -53,10 +51,12 @@ export default function ({ types: t }) {
           // Otherwise, we need to memoize the context object, and change the call into a Function#call.
           // `a.?b.?()` translates roughly to `(_b = _a.b) != null && _b.call(_a)`
           const { object } = chain;
-          const context = scope.generateUidIdentifierBasedOnNode(object);
-
-          scope.push({ id: context });
-          chain.object = t.assignmentExpression("=", context, object);
+          let context = scope.maybeGenerateMemoised(object);
+          if (context) {
+            chain.object = t.assignmentExpression("=", context, object);
+          } else {
+            context = object;
+          }
 
           node.arguments.unshift(context);
           node.callee = t.memberExpression(node.callee, t.identifier("call"));
