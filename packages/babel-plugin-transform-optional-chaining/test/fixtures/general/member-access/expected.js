@@ -1,8 +1,12 @@
-var _foo, _a, _a$b$c, _orders, _orders2, _orders2$, _client, _orders$client$key;
+var _foo, _a, _a$b$c, _a$b, _a$b$c$d, _a$b$c2, _a$b$c2$d, _orders, _orders2, _orders2$, _client, _orders$client$key;
 
 (_foo = foo) == null ? void 0 : _foo.bar;
 
 (_a = a) == null ? void 0 : (_a$b$c = _a.b.c) == null ? void 0 : _a$b$c.d.e;
+
+(_a$b = a.b) == null ? void 0 : (_a$b$c$d = _a$b.c.d) == null ? void 0 : _a$b$c$d.e;
+
+(_a$b$c2 = a.b.c) == null ? void 0 : (_a$b$c2$d = _a$b$c2.d) == null ? void 0 : _a$b$c2$d.e;
 
 (_orders = orders) == null ? void 0 : _orders[0].price;
 
