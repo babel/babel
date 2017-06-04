@@ -115,6 +115,12 @@ it("complex plugin and preset ordering", function() {
   });
 
   assert.equal(result.code, [
+    "argsix;",
+    "argfive;",
+    "argfour;",
+    "argthree;",
+    "argtwo;",
+    "argone;",
     "one;",
     "two;",
     "three;",
@@ -135,11 +141,5 @@ it("complex plugin and preset ordering", function() {
     "eighteen;",
     "nineteen;",
     "twenty;",
-    "argone;",
-    "argtwo;",
-    "argthree;",
-    "argfour;",
-    "argfive;",
-    "argsix;",
   ].join("\n"));
 });

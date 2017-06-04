@@ -101,11 +101,11 @@ function sortPlugins(plugins) {
     const plugin = pluginTuple[0];
     if (plugin.capabilities) {
       plugin.capabilities.forEach((capability) => {
-        const existingPlugin = capabilitiesToPluginIdMap[capability];
-        if (existingPlugin !== undefined) {
+        const existingPluginName = capabilitiesToPluginIdMap[capability];
+        if (existingPluginName !== undefined) {
           throw new Error(
             "Cannot have two plugins with same capability, both" +
-            `${plugin.key} and ${existingPlugin.key} provide it.`
+            `${plugin.key} and ${existingPluginName} provide it.`
           );
         }
         capabilitiesToPluginIdMap[capability] = plugin.key;
@@ -171,7 +171,7 @@ class OptionManager {
 
     // resolve plugins
     if (pluginDescriptors.length > 0) {
-      plugins.push(...pluginDescriptors);
+      plugins.unshift(...pluginDescriptors);
     }
 
     merge(this.options, result.options);
@@ -185,7 +185,18 @@ class OptionManager {
       for (const config of configChain) {
         this.mergeOptions(config, plugins);
       }
-      plugins = sortPlugins(plugins);
+
+      const uniquePlugins = plugins
+        .reduce((accumulator, pluginTuple) => {
+          const plugin = pluginTuple[0];
+          if (!accumulator[plugin.key]) {
+            accumulator[plugin.key] = pluginTuple;
+          }
+          return accumulator;
+        }, {});
+
+      plugins = sortPlugins(Object.values(uniquePlugins));
+      // plugins = sortPlugins(plugins);
     } catch (e) {
       // There are a few case where thrown errors will try to annotate themselves multiple times, so
       // to keep things simple we just bail out if re-wrapping the message.
