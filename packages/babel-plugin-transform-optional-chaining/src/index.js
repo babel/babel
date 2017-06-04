@@ -46,7 +46,7 @@ export default function ({ types: t }) {
         if (loose) {
           // To avoid a Function#call, we can instead re-grab the property from the context object.
           // `a.?b.?()` translates roughly to `_a.b != null && _a.b()`
-          node.callee = chain
+          node.callee = chain;
         } else {
           // Otherwise, we need to memoize the context object, and change the call into a Function#call.
           // `a.?b.?()` translates roughly to `(_b = _a.b) != null && _b.call(_a)`
@@ -82,7 +82,7 @@ export default function ({ types: t }) {
           return;
         }
 
-        const replace = path.find(path => {
+        const replace = path.find((path) => {
           const { parentPath } = path;
           if (parentPath.isStatement()) {
             return true;
@@ -97,7 +97,7 @@ export default function ({ types: t }) {
           if (path.key == "callee" && (parentPath.isCallExpression() || parentPath.isNewExpression())) {
             return false;
           }
-          if (path.key == "argument" && parentPath.isUnaryExpression({ operator: "delete"})) {
+          if (path.key == "argument" && parentPath.isUnaryExpression({ operator: "delete" })) {
             return false;
           }
           return true;

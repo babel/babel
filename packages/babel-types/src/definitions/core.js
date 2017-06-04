@@ -440,7 +440,7 @@ defineType("MemberExpression", {
     optional: {
       validate: assertOneOf(true, false),
       optional: true,
-    }
+    },
   },
 });
 
