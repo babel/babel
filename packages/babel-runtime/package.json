@@ -5,6 +5,7 @@
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "main": "core-js.js",
   "dependencies": {
     "core-js": "^2.4.0",
     "regenerator-runtime": "^0.10.0"
