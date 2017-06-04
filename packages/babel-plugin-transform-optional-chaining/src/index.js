@@ -1,6 +1,78 @@
 import syntaxOptionalChaining from "babel-plugin-syntax-optional-chaining";
 
 export default function ({ types: t }) {
+  function optional(path, key, replacementPath, needsContext = false, loose = false) {
+    const { scope } = path;
+    const optionals = [path.node];
+
+    let objectPath = path.get(key);
+    while (objectPath.isMemberExpression()) {
+      const { node } = objectPath;
+      if (node.optional) {
+        optionals.push(node);
+      }
+
+      objectPath = objectPath.get("object");
+    }
+
+    for (let i = optionals.length - 1; i >= 0; i--) {
+      const node = optionals[i];
+      node.optional = false;
+
+      const replaceKey = i == 0 ? key : "object";
+      const atCall = needsContext && i == 0;
+
+      const chain = node[replaceKey];
+
+      let ref;
+      let check;
+      if (loose && atCall) {
+        // If we are using a loose transform (avoiding a Function#call) and we are at the call,
+        // we can avoid a needless memoize.
+        ref = chain;
+        check = ref;
+      } else {
+        ref = scope.maybeGenerateMemoised(chain);
+        if (ref) {
+          check = t.assignmentExpression("=", ref, chain);
+          node[replaceKey] = ref;
+        } else {
+          ref = chain;
+          check = chain;
+        }
+      }
+
+      // Ensure call expressions have the proper `this`
+      // `foo.bar()` has context `foo`.
+      if (atCall && t.isMemberExpression(chain)) {
+        if (loose) {
+          // To avoid a Function#call, we can instead re-grab the property from the context object.
+          // `a.?b.?()` translates roughly to `_a.b != null && _a.b()`
+          node.callee = chain
+        } else {
+          // Otherwise, we need to memoize the context object, and change the call into a Function#call.
+          // `a.?b.?()` translates roughly to `(_b = _a.b) != null && _b.call(_a)`
+          const { object } = chain;
+          const context = scope.generateUidIdentifierBasedOnNode(object);
+
+          scope.push({ id: context });
+          chain.object = t.assignmentExpression("=", context, object);
+
+          node.arguments.unshift(context);
+          node.callee = t.memberExpression(node.callee, t.identifier("call"));
+        }
+      }
+
+      replacementPath.replaceWith(t.conditionalExpression(
+        t.binaryExpression("==", check, t.nullLiteral()),
+        scope.buildUndefinedNode(),
+        replacementPath.node
+      ));
+
+      replacementPath = replacementPath.get("alternate");
+    }
+  }
+
   return {
     inherits: syntaxOptionalChaining,
 
@@ -10,28 +82,25 @@ export default function ({ types: t }) {
           return;
         }
 
-        const { scope, node } = path;
-        const { object } = node;
+        const replace = path.find(path => {
+          const { parentPath } = path;
+          if (parentPath.isStatement()) {
+            return true;
+          }
 
-        node.optional = false;
+          if (path.key == "left" && parentPath.isAssignmentExpression()) {
+            return false;
+          }
+          if (path.key == "object" && parentPath.isMemberExpression()) {
+            return false;
+          }
+          if (path.key == "callee" && (parentPath.isCallExpression() || parentPath.isNewExpression())) {
+            return false;
+          }
+          return true;
+        });
 
-        const ref = scope.generateUidIdentifierBasedOnNode(object);
-        scope.push({ id: ref });
-        node.object = ref;
-
-        let parent = path;
-        let expression = path;
-        while (parent.listKey === undefined) {
-          expression = parent;
-          parent = parent.parentPath;
-        }
-
-        const replace = parent.isExpression() ? parent : expression;
-        replace.replaceWith(t.conditionalExpression(
-          t.binaryExpression("==", t.assignmentExpression("=", ref, object), t.nullLiteral()),
-          scope.buildUndefinedNode(),
-          replace.node
-        ));
+        optional(path, "object", replace);
       },
 
       "NewExpression|CallExpression"(path) {
@@ -39,29 +108,7 @@ export default function ({ types: t }) {
           return;
         }
 
-        const { scope, node } = path;
-        const { callee } = node;
-
-        node.optional = false;
-
-        const ref = scope.generateUidIdentifierBasedOnNode(callee);
-        scope.push({ id: ref });
-        node.callee = ref;
-
-        if (t.isMemberExpression(callee) && !t.isNewExpression(node)) {
-          const context = scope.generateUidIdentifierBasedOnNode(callee.object);
-          scope.push({ id: context });
-          callee.object = t.assignmentExpression("=", context, callee.object);
-
-          node.arguments.unshift(context);
-          node.callee = t.memberExpression(node.callee, t.identifier("call"));
-        }
-
-        path.replaceWith(t.conditionalExpression(
-          t.binaryExpression("==", t.assignmentExpression("=", ref, callee), t.nullLiteral()),
-          scope.buildUndefinedNode(),
-          node
-        ));
+        optional(path, "callee", path, path.isCallExpression(), this.opts.loose);
       },
     },
   };

@@ -1,7 +1,7 @@
 var _user$address, _user$address2, _a, _a2;
 
 var street = (_user$address = user.address) == null ? void 0 : _user$address.street;
-(_user$address2 = user.address) == null ? void 0 : street = _user$address2.street;
+street = (_user$address2 = user.address) == null ? void 0 : _user$address2.street;
 
 test((_a = a) == null ? void 0 : _a.b, 1);
 
