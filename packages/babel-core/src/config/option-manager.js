@@ -195,8 +195,8 @@ class OptionManager {
           return accumulator;
         }, {});
 
-      plugins = sortPlugins(Object.values(uniquePlugins));
-      // plugins = sortPlugins(plugins);
+      const uniquePluginValues = Object.keys(uniquePlugins).map((key) => uniquePlugins[key]);
+      plugins = sortPlugins(uniquePluginValues);
     } catch (e) {
       // There are a few case where thrown errors will try to annotate themselves multiple times, so
       // to keep things simple we just bail out if re-wrapping the message.
