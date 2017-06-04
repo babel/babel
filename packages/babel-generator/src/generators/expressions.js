@@ -203,12 +203,17 @@ export function MemberExpression(node: Object) {
     computed = true;
   }
 
+  if (node.optional) {
+    this.token("?.");
+  }
   if (computed) {
     this.token("[");
     this.print(node.property, node);
     this.token("]");
   } else {
-    this.token(".");
+    if (!node.optional) {
+      this.token(".");
+    }
     this.print(node.property, node);
   }
 }
