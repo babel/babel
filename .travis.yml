@@ -16,7 +16,7 @@ env:
 
 script:
   - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
-  - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
+  - 'if [ "$JOB" = "lint" ]; then make lint && make bootstrap && make flow; fi'
 
 matrix:
   fast_finish: true
