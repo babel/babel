@@ -416,7 +416,7 @@ defineType("LogicalExpression", {
 });
 
 defineType("MemberExpression", {
-  builder: ["object", "property", "computed"],
+  builder: ["object", "property", "computed", "optional"],
   visitor: ["object", "property"],
   aliases: ["Expression", "LVal"],
   fields: {
@@ -437,6 +437,10 @@ defineType("MemberExpression", {
     computed: {
       default: false,
     },
+    optional: {
+      validate: assertOneOf(true, false),
+      optional: true,
+    }
   },
 });
 
