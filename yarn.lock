@@ -240,7 +240,7 @@ babel-code-frame@^6.16.0, babel-code-frame@^6.22.0:
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-babel-core@7.0.0-alpha.9, babel-core@^7.0.0-alpha.3, babel-core@^7.0.0-alpha.9:
+babel-core@7.0.0-alpha.9, babel-core@^7.0.0-alpha.6, babel-core@^7.0.0-alpha.9:
   version "7.0.0-alpha.9"
   resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-7.0.0-alpha.9.tgz#1868005f160dbcd2325e6b3472f3f9ea010a9313"
   dependencies:

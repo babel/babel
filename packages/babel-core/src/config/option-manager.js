@@ -159,7 +159,7 @@ class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(config: MergeOptions, plugins?: Array<[Plugin, ?{}]>) {
+  mergeOptions(config: MergeOptions, plugins: Array<[Plugin, ?{}]>) {
     const result = loadConfig(config);
 
     const pluginDescriptors = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
@@ -327,7 +327,7 @@ function loadDescriptor(descriptor, skipOptions) {
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.
  */
 const PLUGIN_CACHE = new WeakMap();
-function loadPluginDescriptor(descriptor) {
+function loadPluginDescriptor(descriptor): [Plugin, ?{}] {
   if (descriptor.value instanceof Plugin) return [ descriptor.value, descriptor.options ];
 
   let result = PLUGIN_CACHE.get(descriptor.value);
@@ -336,10 +336,10 @@ function loadPluginDescriptor(descriptor) {
     PLUGIN_CACHE.set(descriptor.value, result);
   }
 
-  return [ result, descriptor.options];
+  return [result, descriptor.options];
 }
 
-function instantiatePlugin({ value: pluginObj, descriptor }) {
+function instantiatePlugin({ value: pluginObj, descriptor }): Plugin {
   Object.keys(pluginObj).forEach((key) => {
     if (!ALLOWED_PLUGIN_KEYS.has(key)) {
       throw new Error(messages.get("pluginInvalidProperty", descriptor.alias, key));
