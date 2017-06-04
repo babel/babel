@@ -84,9 +84,6 @@ export default function ({ types: t }) {
 
         const replace = path.find((path) => {
           const { parentPath } = path;
-          if (parentPath.isStatement()) {
-            return true;
-          }
 
           if (path.key == "left" && parentPath.isAssignmentExpression()) {
             return false;
@@ -100,6 +97,7 @@ export default function ({ types: t }) {
           if (path.key == "argument" && parentPath.isUnaryExpression({ operator: "delete" })) {
             return false;
           }
+
           return true;
         });
 
