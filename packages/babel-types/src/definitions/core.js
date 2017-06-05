@@ -308,7 +308,7 @@ defineType("Identifier", {
     name: {
       validate(node, key, val) {
         if (!t.isValidIdentifier(val)) {
-          // todo
+          // throw new TypeError(`"${val}" is not a valid identifer name`);
         }
       },
     },
@@ -424,10 +424,15 @@ defineType("MemberExpression", {
       validate: assertNodeType("Expression"),
     },
     property: {
-      validate(node, key, val) {
-        const expectedType = node.computed ? "Expression" : "Identifier";
-        assertNodeType(expectedType)(node, key, val);
-      },
+      validate: (function () {
+        const normal = assertNodeType("Identifier");
+        const computed = assertNodeType("Expression");
+
+        return function (node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      }()),
     },
     computed: {
       default: false,
@@ -488,10 +493,15 @@ defineType("ObjectMethod", {
       default: false,
     },
     key: {
-      validate(node, key, val) {
-        const expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
-        assertNodeType(...expectedTypes)(node, key, val);
-      },
+      validate: (function () {
+        const normal = assertNodeType("Expression");
+        const computed = assertNodeType("Identifier", "StringLiteral", "NumericLiteral");
+
+        return function (node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      }()),
     },
     decorators: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
@@ -520,10 +530,15 @@ defineType("ObjectProperty", {
       default: false,
     },
     key: {
-      validate(node, key, val) {
-        const expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
-        assertNodeType(...expectedTypes)(node, key, val);
-      },
+      validate: (function () {
+        const normal = assertNodeType("Identifier", "StringLiteral", "NumericLiteral");
+        const computed = assertNodeType("Expression");
+
+        return function (node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      }()),
     },
     value: {
       validate: assertNodeType("Expression", "Pattern", "RestElement"),
