@@ -171,7 +171,7 @@ export default function ({ types: t }) {
               });
             }
 
-            const objectPatternPath = path.findParent((path) => path.isObjectPattern);
+            const objectPatternPath = path.findParent((path) => path.isObjectPattern());
             const [
               impureComputedPropertyDeclarators,
               argument,
