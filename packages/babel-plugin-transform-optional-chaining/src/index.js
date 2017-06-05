@@ -4,6 +4,7 @@ export default function ({ types: t }) {
   function optional(path, key, replacementPath, needsContext = false, loose = false) {
     const { scope } = path;
     const optionals = [path.node];
+    const nil = scope.buildUndefinedNode();
 
     let objectPath = path.get(key);
     while (objectPath.isMemberExpression()) {
@@ -65,7 +66,7 @@ export default function ({ types: t }) {
 
       replacementPath.replaceWith(t.conditionalExpression(
         t.binaryExpression("==", check, t.nullLiteral()),
-        scope.buildUndefinedNode(),
+        nil,
         replacementPath.node
       ));
 
