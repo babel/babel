@@ -426,6 +426,18 @@ export default class Tokenizer extends LocationParser {
     return this.finishOp(code === 61 ? tt.eq : tt.prefix, 1);
   }
 
+  readToken_question() { // '?'
+    const next = this.input.charCodeAt(this.state.pos + 1);
+    const next2 = this.input.charCodeAt(this.state.pos + 2);
+    if (next === 46 && !(next2 >= 48 && next2 <= 57)) { // '.' not followed by a number
+      this.state.pos += 2;
+      return this.finishToken(tt.questionDot);
+    } else {
+      ++this.state.pos;
+      return this.finishToken(tt.question);
+    }
+  }
+
   getTokenFromCode(code: number): void {
     switch (code) {
 
@@ -469,7 +481,7 @@ export default class Tokenizer extends LocationParser {
           return this.finishToken(tt.colon);
         }
 
-      case 63: ++this.state.pos; return this.finishToken(tt.question);
+      case 63: return this.readToken_question();
       case 64: ++this.state.pos; return this.finishToken(tt.at);
 
       case 96: // '`'
@@ -917,7 +929,7 @@ export default class Tokenizer extends LocationParser {
     const type = this.state.type;
     let update;
 
-    if (type.keyword && prevType === tt.dot) {
+    if (type.keyword && (prevType === tt.dot || prevType === tt.questionDot)) {
       this.state.exprAllowed = false;
     } else if (update = type.updateContext) {
       update.call(this, prevType);
