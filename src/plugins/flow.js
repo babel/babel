@@ -708,7 +708,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
   }
 
   reinterpretTypeAsFunctionTypeParam(type: N.FlowType): N.FlowFunctionTypeParam {
-    const node = this.startNodeAt(type.start, type.loc);
+    const node = this.startNodeAt(type.start, type.loc.start);
     node.name = null;
     node.optional = false;
     node.typeAnnotation = type;
@@ -921,7 +921,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     const param = this.flowParsePrefixType();
     if (!this.state.noAnonFunctionType && this.eat(tt.arrow)) {
       // TODO: This should be a type error. Passing in a SourceLocation, and it expects a Position.
-      const node  = this.startNodeAt(param.start, param.loc);
+      const node  = this.startNodeAt(param.start, param.loc.start);
       node.params = [this.reinterpretTypeAsFunctionTypeParam(param)];
       node.rest = null;
       node.returnType = this.flowParseType();
