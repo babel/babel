@@ -1046,7 +1046,7 @@ export default class StatementParser extends ExpressionParser {
 
   // Parses a comma-separated list of module exports.
 
-  parseExportSpecifiers(): $ReadOnlyArray<N.ExportSpecifier> {
+  parseExportSpecifiers(): Array<N.ExportSpecifier> {
     const nodes = [];
     let first = true;
     let needsFrom;

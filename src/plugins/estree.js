@@ -1,8 +1,9 @@
 // @flow
 
-import { types as tt } from "../tokenizer/types";
+import { types as tt, TokenType } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
+import type { Pos, Position } from "../util/location";
 
 function isSimpleProperty(node: N.Node): boolean {
   return node != null &&
@@ -73,7 +74,11 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
   }
 
   checkLVal(
-    expr: N.Expression, isBinding: ?boolean, checkClashes: ?{ [key: string]: boolean }, ...args): void {
+    expr: N.Expression,
+    isBinding: ?boolean,
+    checkClashes: ?{ [key: string]: boolean },
+    contextDescription: string
+  ): void {
     switch (expr.type) {
       case "ObjectPattern":
         expr.properties.forEach((prop) => {
@@ -86,7 +91,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
         });
         break;
       default:
-        super.checkLVal(expr, isBinding, checkClashes, ...args);
+        super.checkLVal(expr, isBinding, checkClashes, contextDescription);
     }
   }
 
@@ -136,23 +141,30 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return directive;
   }
 
-  parseBlockBody(node: N.BlockStatementLike, ...args): void {
-    super.parseBlockBody(node, ...args);
+  parseBlockBody(
+    node: N.BlockStatementLike,
+    allowDirectives: ?boolean,
+    topLevel: boolean,
+    end: TokenType
+  ): void {
+    super.parseBlockBody(node, allowDirectives, topLevel, end);
 
     const directiveStatements = node.directives.map((d) => this.directiveToStmt(d));
     node.body = directiveStatements.concat(node.body);
     delete node.directives;
   }
 
-  parseClassMethod(classBody: N.ClassBody, ...args) {
-    super.parseClassMethod(classBody, ...args);
-
-    const body = classBody.body;
-    // $FlowIgnore
-    body[body.length - 1].type = "MethodDefinition";
+  parseClassMethod(
+    classBody: N.ClassBody,
+    method: N.ClassMethod,
+    isGenerator: boolean,
+    isAsync: boolean
+  ): void {
+    this.parseMethod(method, isGenerator, isAsync);
+    classBody.body.push(this.finishNode(method, "MethodDefinition"));
   }
 
-  parseExprAtom(...args): N.Expression {
+  parseExprAtom(refShorthandDefaultPos?: ?Pos): N.Expression {
     switch (this.state.type) {
       case tt.regexp:
         return this.estreeParseRegExpLiteral(this.state.value);
@@ -171,22 +183,31 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
         return this.estreeParseLiteral(false);
 
       default:
-        return super.parseExprAtom(...args);
+        return super.parseExprAtom(refShorthandDefaultPos);
     }
   }
 
-  parseLiteral<T : N.Literal>(...args): T {
-    const node = super.parseLiteral(...args);
+  parseLiteral<T : N.Literal>(
+    value: any,
+    type: /*T["kind"]*/string,
+    startPos?: number,
+    startLoc?: Position
+  ): T {
+    const node = super.parseLiteral(value, type, startPos, startLoc);
     node.raw = node.extra.raw;
     delete node.extra;
 
     return node;
   }
 
-  parseMethod(node: N.MethodLike, ...args): N.MethodLike {
+  parseMethod(
+    node: N.MethodLike,
+    isGenerator?: boolean,
+    isAsync?: boolean
+  ): N.MethodLike {
     let funcNode = this.startNode();
     funcNode.kind = node.kind; // provide kind, so super method correctly sets state
-    funcNode = super.parseMethod(funcNode, ...args);
+    funcNode = super.parseMethod(funcNode, isGenerator, isAsync);
     delete funcNode.kind;
     // $FlowIgnore
     node.value = this.finishNode(funcNode, "FunctionExpression");
@@ -194,8 +215,13 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return node;
   }
 
-  parseObjectMethod(...args): ?N.ObjectMethod {
-    const node = super.parseObjectMethod(...args);
+  parseObjectMethod(
+    prop: N.ObjectMethod,
+    isGenerator: boolean,
+    isAsync: boolean,
+    isPattern: boolean
+  ): ?N.ObjectMethod {
+    const node = super.parseObjectMethod(prop, isGenerator, isAsync, isPattern);
 
     if (node) {
       // $FlowIgnore
@@ -207,8 +233,14 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return node;
   }
 
-  parseObjectProperty(...args): ?N.ObjectProperty {
-    const node = super.parseObjectProperty(...args);
+  parseObjectProperty(
+    prop: N.ObjectProperty,
+    startPos: ?number,
+    startLoc: ?Position,
+    isPattern: boolean,
+    refShorthandDefaultPos: ?Pos
+  ): ?N.ObjectProperty {
+    const node = super.parseObjectProperty(prop, startPos, startLoc, isPattern, refShorthandDefaultPos);
 
     if (node) {
       // $FlowIgnore
@@ -220,9 +252,13 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return node;
   }
 
-  toAssignable(node: N.Node, isBinding: ?boolean, ...args): N.Node {
+  toAssignable(
+    node: N.Node,
+    isBinding: ?boolean,
+    contextDescription: string
+  ): N.Node {
     if (isSimpleProperty(node)) {
-      this.toAssignable(node.value, isBinding, ...args);
+      this.toAssignable(node.value, isBinding, contextDescription);
 
       return node;
     } else if (node.type === "ObjectExpression") {
@@ -240,6 +276,6 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
       return node;
     }
 
-    return super.toAssignable(node, isBinding, ...args);
+    return super.toAssignable(node, isBinding, contextDescription);
   }
 };

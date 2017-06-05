@@ -1145,8 +1145,8 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     }
   }
 
-  parseClassId(node: N.Class, ...args) {
-    super.parseClassId(node, ...args);
+  parseClassId(node: N.Class, isStatement: boolean, optionalId: ?boolean) {
+    super.parseClassId(node, isStatement, optionalId);
     if (this.isRelational("<")) {
       node.typeParameters = this.flowParseTypeParameterDeclaration();
     }
@@ -1205,9 +1205,9 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
 
   // parse an item inside a expression list eg. `(NODE, NODE)` where NODE represents
   // the position where this function is called
-  parseExprListItem(...args): ?N.Expression {
+  parseExprListItem(allowEmpty: ?boolean, refShorthandDefaultPos: ?Pos, refNeedsArrowPos: ?Pos): ?N.Expression {
     const container = this.startNode();
-    const node = super.parseExprListItem(...args);
+    const node = super.parseExprListItem(allowEmpty, refShorthandDefaultPos, refNeedsArrowPos);
     if (this.match(tt.colon)) {
       container._exprListItem = true;
       container.expression = node;
@@ -1218,9 +1218,14 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     }
   }
 
-  checkLVal(node: N.Expression, ...args): void {
-    if (node.type !== "TypeCastExpression") {
-      return super.checkLVal(node, ...args);
+  checkLVal(
+    expr: N.Expression,
+    isBinding: ?boolean,
+    checkClashes: ?{ [key: string]: boolean },
+    contextDescription: string
+  ): void {
+    if (expr.type !== "TypeCastExpression") {
+      return super.checkLVal(expr, isBinding, checkClashes, contextDescription);
     }
   }
 
@@ -1247,7 +1252,12 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
   }
 
   // parse type parameters for class methods
-  parseClassMethod(classBody: N.ClassBody, method: N.ClassMethod, ...args): void {
+  parseClassMethod(
+    classBody: N.ClassBody,
+    method: N.ClassMethod,
+    isGenerator: boolean,
+    isAsync: boolean
+  ): void {
     if (method.variance) {
       this.unexpected(method.variance.start);
     }
@@ -1256,7 +1266,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
       method.typeParameters = this.flowParseTypeParameterDeclaration();
     }
 
-    super.parseClassMethod(classBody, method, ...args);
+    super.parseClassMethod(classBody, method, isGenerator, isAsync);
   }
 
   // parse a the super class type parameters and implements
@@ -1290,7 +1300,15 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
   }
 
   // parse type parameters for object method shorthand
-  parseObjPropValue(prop: N.ObjectMember, ...args): void {
+  parseObjPropValue(
+    prop: N.ObjectMember,
+    startPos: ?number,
+    startLoc: ?Position,
+    isGenerator: boolean,
+    isAsync: boolean,
+    isPattern: boolean,
+    refShorthandDefaultPos: ?Pos
+  ): void {
     if (prop.variance) {
       this.unexpected(prop.variance.start);
     }
@@ -1304,7 +1322,15 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
       if (!this.match(tt.parenL)) this.unexpected();
     }
 
-    super.parseObjPropValue(prop, ...args);
+    super.parseObjPropValue(
+      prop,
+      startPos,
+      startLoc,
+      isGenerator,
+      isAsync,
+      isPattern,
+      refShorthandDefaultPos
+    );
 
     // add typeParameters if we found them
     if (typeParameters) {
@@ -1324,8 +1350,8 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return param;
   }
 
-  parseMaybeDefault(...args): N.Pattern {
-    const node = super.parseMaybeDefault(...args);
+  parseMaybeDefault(startPos?: ?number, startLoc?: ?Position, left?: ?N.Pattern): N.Pattern {
+    const node = super.parseMaybeDefault(startPos, startLoc, left);
 
     if (node.type === "AssignmentPattern" && node.typeAnnotation && node.right.start < node.typeAnnotation.start) {
       this.raise(node.typeAnnotation.start, "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`");
@@ -1456,12 +1482,12 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
   //    parse the rest, make sure the rest is an arrow function, and go from
   //    there
   // 3. This is neither. Just call the super method
-  parseMaybeAssign(...args): N.Expression {
+  parseMaybeAssign(noIn?: ?boolean, refShorthandDefaultPos?: ?Pos, afterLeftParse?: Function, refNeedsArrowPos?: ?Pos): N.Expression {
     let jsxError = null;
     if (tt.jsxTagStart && this.match(tt.jsxTagStart)) {
       const state = this.state.clone();
       try {
-        return super.parseMaybeAssign(...args);
+        return super.parseMaybeAssign(noIn, refShorthandDefaultPos, afterLeftParse, refNeedsArrowPos);
       } catch (err) {
         if (err instanceof SyntaxError) {
           this.state = state;
@@ -1485,7 +1511,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
       try {
         typeParameters = this.flowParseTypeParameterDeclaration();
 
-        arrowExpression = super.parseMaybeAssign(...args);
+        arrowExpression = super.parseMaybeAssign(noIn, refShorthandDefaultPos, afterLeftParse, refNeedsArrowPos);
         arrowExpression.typeParameters = typeParameters;
         this.resetStartLocationFromNode(arrowExpression, typeParameters);
       } catch (err) {
@@ -1504,7 +1530,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
       }
     }
 
-    return super.parseMaybeAssign(...args);
+    return super.parseMaybeAssign(noIn, refShorthandDefaultPos, afterLeftParse, refNeedsArrowPos);
   }
 
   // handle return types for arrow functions
