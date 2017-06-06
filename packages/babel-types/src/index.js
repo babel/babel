@@ -342,8 +342,7 @@ export function matchesPattern(
   if (nodes.length < parts.length) return false;
   if (!allowPartial && nodes.length > parts.length) return false;
 
-  let j = nodes.length - 1;
-  for (let i = 0; i < parts.length; i++, j--) {
+  for (let i = 0, j = nodes.length - 1; i < parts.length; i++, j--) {
     const node = nodes[j];
     let value;
     if (t.isIdentifier(node)) {
@@ -368,7 +367,7 @@ export function matchesPattern(
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 
-export function buildMatchMemberExpression(match: string, allowPartial?: boolean): () => boolean {
+export function buildMatchMemberExpression(match: string, allowPartial?: boolean): (Object) => boolean {
   const parts = match.split(".");
   return function (member) {
     return matchesPattern(member, parts, allowPartial);
