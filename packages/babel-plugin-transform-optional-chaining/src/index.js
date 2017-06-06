@@ -92,7 +92,10 @@ export default function ({ types: t }) {
           if (path.key == "callee" && (parentPath.isCallExpression() || parentPath.isNewExpression())) {
             return false;
           }
-          if (path.key == "argument" && parentPath.isUnaryExpression()) {
+          if (path.key == "argument" && parentPath.isUpdateExpression()) {
+            return false;
+          }
+          if (path.key == "argument" && parentPath.isUnaryExpression({ operator: "delete" })) {
             return false;
           }
 
