@@ -1,3 +1,3 @@
 async function fn() {
-    await (() => {});
+  await (() => {});
 }

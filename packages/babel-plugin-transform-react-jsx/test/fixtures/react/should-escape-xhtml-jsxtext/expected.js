@@ -1,50 +1,49 @@
 React.createElement(
-  'div',
+  "div",
   null,
-  'wow'
+  "wow"
 );
 React.createElement(
-  'div',
+  "div",
   null,
-  'w\xF4w'
-);
-
-React.createElement(
-  'div',
-  null,
-  'w & w'
-);
-React.createElement(
-  'div',
-  null,
-  'w & w'
+  "w\xF4w"
 );
 
 React.createElement(
-  'div',
+  "div",
   null,
-  'w \xA0 w'
+  "w & w"
 );
 React.createElement(
-  'div',
+  "div",
   null,
-  'this should not parse as unicode: \\u00a0'
+  "w & w"
+);
+
+React.createElement(
+  "div",
+  null,
+  "w \xA0 w"
 );
 React.createElement(
-  'div',
+  "div",
   null,
-  'this should parse as nbsp: \xA0 '
+  "this should not parse as unicode: \\u00a0"
 );
 React.createElement(
-  'div',
+  "div",
   null,
-  'this should parse as unicode: ',
+  "this should parse as nbsp: \xA0 "
+);
+React.createElement(
+  "div",
+  null,
+  "this should parse as unicode: ",
   '\u00a0 '
 );
 
 React.createElement(
-  'div',
+  "div",
   null,
-  'w < w'
+  "w < w"
 );
-
