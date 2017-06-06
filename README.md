@@ -126,9 +126,9 @@ require("babylon").parse("code", {
 
 ### Plugins
 
- - `estree`
- - `jsx`
- - `flow`
+ - `estree` ([repo](https://github.com/estree/estree))
+ - `jsx` ([repo](https://facebook.github.io/jsx/))
+ - `flow` ([repo](https://github.com/facebook/flow))
  - `doExpressions`
  - `objectRestSpread` ([proposal](https://github.com/tc39/proposal-object-rest-spread))
  - `decorators` (Based on an outdated version of the Decorators proposal. Will be removed in a future version of `Babylon`)
