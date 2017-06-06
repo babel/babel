@@ -348,7 +348,7 @@ export function matchesPattern(
     let value;
     if (t.isIdentifier(node)) {
       value = node.name;
-    } else if (t.isLiteral(node)) {
+    } else if (t.isStringLiteral(node)) {
       value = node.value;
     } else {
       return false;
