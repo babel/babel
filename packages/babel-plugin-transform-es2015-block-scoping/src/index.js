@@ -240,9 +240,6 @@ const loopVisitor = {
         // they don't refer to the actual loop we're scopifying
         if (state.ignoreLabeless) return;
 
-        //
-        if (state.inSwitchCase) return;
-
         // break statements mean something different in this context
         if (t.isBreakStatement(node) && t.isSwitchCase(parent)) return;
       }

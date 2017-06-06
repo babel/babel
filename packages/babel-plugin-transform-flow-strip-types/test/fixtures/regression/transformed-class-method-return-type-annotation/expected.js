@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var C = function () {
   function C() {
@@ -6,7 +6,7 @@ var C = function () {
   }
 
   babelHelpers.createClass(C, [{
-    key: 'm',
+    key: "m",
     value: function m(x) {
       return 'a';
     }

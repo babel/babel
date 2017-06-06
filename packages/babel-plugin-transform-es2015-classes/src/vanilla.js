@@ -28,7 +28,11 @@ const verifyConstructorVisitor = visitors.merge([noMethodVisitor, {
       this.isDerived && !this.hasBareSuper &&
       !path.parentPath.isCallExpression({ callee: path.node })
     ) {
-      throw path.buildCodeFrameError("'super.*' is not allowed before super()");
+      const hasArrowFunctionParent = path.findParent((p) => p.isArrowFunctionExpression());
+
+      if (!hasArrowFunctionParent) {
+        throw path.buildCodeFrameError("'super.*' is not allowed before super()");
+      }
     }
   },
 

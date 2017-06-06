@@ -1,1 +1,1 @@
-var foo = "test " + String(foo);
+var foo = "test ".concat(foo);

@@ -2,7 +2,7 @@ import * as babel from "babel-core";
 import { buildExternalHelpers } from "babel-core";
 import getFixtures from "babel-helper-fixtures";
 import sourceMap from "source-map";
-import codeFrame from "babel-code-frame";
+import { codeFrameColumns } from "babel-code-frame";
 import defaults from "lodash/defaults";
 import includes from "lodash/includes";
 import * as helpers from "./helpers";
@@ -19,6 +19,7 @@ const moduleCache = {};
 const testContext = vm.createContext({
   ...helpers,
   assert: chai.assert,
+  process: process,
   transform: babel.transform,
   setTimeout: setTimeout,
   setImmediate: setImmediate,
@@ -149,7 +150,7 @@ function run(task) {
       resultExec = runCodeInTestContext(execCode, execOpts);
     } catch (err) {
       err.message = exec.loc + ": " + err.message;
-      err.message += codeFrame(execCode);
+      err.message += codeFrameColumns(execCode, exec.loc);
       throw err;
     }
   }

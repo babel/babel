@@ -1,5 +1,5 @@
 export default function (number) {
-    if (!isNaN(number)) {
-        return 1;
-    }
+  if (!isNaN(number)) {
+    return 1;
+  }
 }

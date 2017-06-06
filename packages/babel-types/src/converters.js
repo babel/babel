@@ -10,6 +10,71 @@ export function toComputedKey(node: Object, key: Object = node.key || node.prope
   return key;
 }
 
+
+function gatherSequenceExpressions(nodes: Array<Object>, scope: Scope, declars: Array<Object>): ?Object {
+  const exprs = [];
+  let ensureLastUndefined = true;
+
+  for (const node of nodes) {
+    ensureLastUndefined = false;
+
+    if (t.isExpression(node)) {
+      exprs.push(node);
+    } else if (t.isExpressionStatement(node)) {
+      exprs.push(node.expression);
+    } else if (t.isVariableDeclaration(node)) {
+      if (node.kind !== "var") return; // bailed
+
+      for (const declar of (node.declarations: Array)) {
+        const bindings = t.getBindingIdentifiers(declar);
+        for (const key in bindings) {
+          declars.push({
+            kind: node.kind,
+            id: bindings[key],
+          });
+        }
+
+        if (declar.init) {
+          exprs.push(t.assignmentExpression("=", declar.id, declar.init));
+        }
+      }
+
+      ensureLastUndefined = true;
+    } else if (t.isIfStatement(node)) {
+      const consequent = node.consequent ?
+        gatherSequenceExpressions([node.consequent], scope, declars) :
+        scope.buildUndefinedNode();
+      const alternate = node.alternate ?
+        gatherSequenceExpressions([node.alternate], scope, declars) :
+        scope.buildUndefinedNode();
+      if (!consequent || !alternate) return; // bailed
+
+      exprs.push(t.conditionalExpression(node.test, consequent, alternate));
+    } else if (t.isBlockStatement(node)) {
+      const body = gatherSequenceExpressions(node.body, scope, declars);
+      if (!body) return; // bailed
+
+      exprs.push(body);
+    } else if (t.isEmptyStatement(node)) {
+      // empty statement so ensure the last item is undefined if we're last
+      ensureLastUndefined = true;
+    } else {
+      // bailed, we can't turn this statement into an expression
+      return;
+    }
+  }
+
+  if (ensureLastUndefined) {
+    exprs.push(scope.buildUndefinedNode());
+  }
+
+  if (exprs.length === 1) {
+    return exprs[0];
+  } else {
+    return t.sequenceExpression(exprs);
+  }
+}
+
 /**
  * Turn an array of statement `nodes` into a `SequenceExpression`.
  *
@@ -23,80 +88,14 @@ export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Objec
   if (!nodes || !nodes.length) return;
 
   const declars = [];
-  let bailed = false;
+  const result = gatherSequenceExpressions(nodes, scope, declars);
+  if (!result) return;
 
-  const result = convert(nodes);
-  if (bailed) return;
-
-  for (let i = 0; i < declars.length; i++) {
-    scope.push(declars[i]);
+  for (const declar of declars) {
+    scope.push(declar);
   }
 
   return result;
-
-  function convert(nodes) {
-    let ensureLastUndefined = false;
-    const exprs = [];
-
-    for (const node of (nodes: Array)) {
-      if (t.isExpression(node)) {
-        exprs.push(node);
-      } else if (t.isExpressionStatement(node)) {
-        exprs.push(node.expression);
-      } else if (t.isVariableDeclaration(node)) {
-        if (node.kind !== "var") return bailed = true; // bailed
-
-        for (const declar of (node.declarations: Array)) {
-          const bindings = t.getBindingIdentifiers(declar);
-          for (const key in bindings) {
-            declars.push({
-              kind: node.kind,
-              id: bindings[key],
-            });
-          }
-
-          if (declar.init) {
-            exprs.push(t.assignmentExpression("=", declar.id, declar.init));
-          }
-        }
-
-        ensureLastUndefined = true;
-        continue;
-      } else if (t.isIfStatement(node)) {
-        const consequent = node.consequent ? convert([node.consequent]) : scope.buildUndefinedNode();
-        const alternate = node.alternate ? convert([node.alternate]) : scope.buildUndefinedNode();
-
-        if (consequent === true || alternate === true) {
-          return bailed = true;
-        }
-
-        exprs.push(t.conditionalExpression(node.test, consequent, alternate));
-      } else if (t.isBlockStatement(node)) {
-        exprs.push(convert(node.body));
-      } else if (t.isEmptyStatement(node)) {
-        // empty statement so ensure the last item is undefined if we're last
-        ensureLastUndefined = true;
-        continue;
-      } else {
-        // bailed, we can't turn this statement into an expression
-        return bailed = true;
-      }
-
-      ensureLastUndefined = false;
-    }
-
-    if (ensureLastUndefined || exprs.length === 0) {
-      exprs.push(scope.buildUndefinedNode());
-    }
-
-    //
-
-    if (exprs.length === 1) {
-      return exprs[0];
-    } else {
-      return t.sequenceExpression(exprs);
-    }
-  }
 }
 
 export function toKeyAlias(node: Object, key: Object = node.key): string {

@@ -1,6 +1,6 @@
 # babel-plugin-syntax-decorators
 
-Allow parsing of decorators.
+> Allow parsing of decorators.
 
 ## Installation
 

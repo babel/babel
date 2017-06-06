@@ -1,6 +1,6 @@
-const traverse = require("../lib").default;
-const assert = require("assert");
-const parse = require("babylon").parse;
+import traverse from "../lib";
+import assert from "assert";
+import { parse } from "babylon";
 
 describe("path/family", function () {
   describe("getBindingIdentifiers", function () {

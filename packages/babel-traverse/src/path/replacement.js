@@ -1,6 +1,6 @@
 // This file contains methods responsible for replacing a node with another.
 
-import codeFrame from "babel-code-frame";
+import { codeFrameColumns } from "babel-code-frame";
 import traverse from "../index";
 import NodePath from "./index";
 import { parse } from "babylon";
@@ -74,8 +74,14 @@ export function replaceWithSourceString(replacement) {
   } catch (err) {
     const loc = err.loc;
     if (loc) {
+      const location = {
+        start: {
+          line: loc.line,
+          column: loc.column + 1,
+        },
+      };
       err.message += " - make sure this is an expression.";
-      err.message += "\n" + codeFrame(replacement, loc.line, loc.column + 1);
+      err.message += "\n" + codeFrameColumns(replacement, location);
     }
     throw err;
   }

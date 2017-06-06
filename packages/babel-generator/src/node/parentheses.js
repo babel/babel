@@ -132,18 +132,7 @@ export function FunctionExpression(node: Object, parent: Object, printStack: Arr
 }
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
-  if (
-    // export default (function () {});
-    t.isExportDeclaration(parent) ||
-    t.isBinaryExpression(parent) ||
-    t.isLogicalExpression(parent) ||
-    t.isUnaryExpression(parent) ||
-    t.isTaggedTemplateExpression(parent)
-  ) {
-    return true;
-  }
-
-  return UnaryLike(node, parent);
+  return t.isExportDeclaration(parent) || ConditionalExpression(node, parent);
 }
 
 export function ConditionalExpression(node: Object, parent: Object): boolean {
@@ -151,7 +140,8 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     t.isUnaryLike(parent) ||
     t.isBinary(parent) ||
     t.isConditionalExpression(parent, { test: node }) ||
-    t.isAwaitExpression(parent)
+    t.isAwaitExpression(parent) ||
+    t.isTaggedTemplateExpression(parent)
   ) {
     return true;
   }
