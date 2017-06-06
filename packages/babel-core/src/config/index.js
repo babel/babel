@@ -5,7 +5,7 @@ import manageOptions from "./option-manager";
 
 export type ResolvedConfig = {
   options: Object,
-  passes: Array<Array<[ Plugin, ?{} ]>>,
+  plugins: Array<[ Plugin, ?{} ]>,
 };
 
 /**

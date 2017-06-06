@@ -1,1 +1,1 @@
-module.exports = require("./plugin")("seventeen");
+module.exports = require("./plugin")("seventeen", ["seventeen"], ["eighteen"]);

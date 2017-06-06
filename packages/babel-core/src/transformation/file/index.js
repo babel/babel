@@ -39,19 +39,19 @@ const errorVisitor = {
 };
 
 export default class File extends Store {
-  constructor({ options, passes }: ResolvedConfig) {
+  constructor({ options, plugins }: ResolvedConfig) {
     if (!INTERNAL_PLUGINS) {
       // Lazy-init the internal plugin to remove the init-time circular dependency between plugins being
       // passed babel-core's export object, which loads this file, and this 'loadConfig' loading plugins.
       INTERNAL_PLUGINS = loadConfig({
         babelrc: false,
         plugins: [ blockHoistPlugin ],
-      }).passes[0];
+      }).plugins;
     }
 
     super();
 
-    this.pluginPasses = passes;
+    this.plugins = plugins;
     this.opts = options;
 
     this.parserOpts = {
@@ -60,11 +60,9 @@ export default class File extends Store {
       plugins: [],
     };
 
-    for (const pluginPairs of passes) {
-      for (const [ plugin ] of pluginPairs) {
-        if (plugin.manipulateOptions) {
-          plugin.manipulateOptions(this.opts, this.parserOpts, this);
-        }
+    for (const [ plugin ] of plugins) {
+      if (plugin.manipulateOptions) {
+        plugin.manipulateOptions(this.opts, this.parserOpts, this);
       }
     }
 
@@ -97,7 +95,7 @@ export default class File extends Store {
 
   static helpers: Array<string>;
 
-  pluginPasses: Array<Array<[Plugin, Object]>>;
+  plugins: Array<[Plugin, Object]>;
   parserOpts: BabelParserOptions;
   opts: Object;
   dynamicImportTypes: Object;
@@ -380,37 +378,35 @@ export default class File extends Store {
   }
 
   transform(): BabelFileResult {
-    for (const pluginPairs of this.pluginPasses) {
-      const passPairs = [];
-      const passes = [];
-      const visitors = [];
+    const pluginPairs = this.plugins;
+    const passPairs = [];
+    const passes = [];
+    const visitors = [];
 
-      for (const [ plugin, pluginOpts ] of pluginPairs.concat(INTERNAL_PLUGINS)) {
-        const pass = new PluginPass(this, plugin.key, pluginOpts);
+    for (const [ plugin, pluginOpts ] of pluginPairs.concat(INTERNAL_PLUGINS)) {
+      const pass = new PluginPass(this, plugin.key, pluginOpts);
 
-        passPairs.push([ plugin, pass ]);
-        passes.push(pass);
-        visitors.push(plugin.visitor);
-      }
+      passPairs.push([ plugin, pass ]);
+      passes.push(pass);
+      visitors.push(plugin.visitor);
+    }
 
-      for (const [ plugin, pass ] of passPairs) {
-        const fn = plugin.pre;
-        if (fn) fn.call(pass, this);
-      }
+    for (const [ plugin, pass ] of passPairs) {
+      const fn = plugin.pre;
+      if (fn) fn.call(pass, this);
+    }
 
-      debug(this.opts, "Start transform traverse");
+    debug(this.opts, "Start transform traverse");
 
-      // merge all plugin visitors into a single visitor
-      const visitor = traverse.visitors.merge(visitors, passes, this.opts.wrapPluginVisitorMethod);
-      traverse(this.ast, visitor, this.scope);
+    // merge all plugin visitors into a single visitor
+    const visitor = traverse.visitors.merge(visitors, passes, this.opts.wrapPluginVisitorMethod);
+    traverse(this.ast, visitor, this.scope);
 
-      debug(this.opts, "End transform traverse");
+    debug(this.opts, "End transform traverse");
 
-      for (const [ plugin, pass ] of passPairs) {
-        const fn = plugin.post;
-        if (fn) fn.call(pass, this);
-      }
-
+    for (const [ plugin, pass ] of passPairs) {
+      const fn = plugin.post;
+      if (fn) fn.call(pass, this);
     }
 
     return this.generate();

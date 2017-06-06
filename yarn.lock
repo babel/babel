@@ -240,7 +240,7 @@ babel-code-frame@^6.16.0, babel-code-frame@^6.22.0:
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-babel-core@7.0.0-alpha.9, babel-core@^7.0.0-alpha.3, babel-core@^7.0.0-alpha.9:
+babel-core@7.0.0-alpha.9, babel-core@^7.0.0-alpha.6, babel-core@^7.0.0-alpha.9:
   version "7.0.0-alpha.9"
   resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-7.0.0-alpha.9.tgz#1868005f160dbcd2325e6b3472f3f9ea010a9313"
   dependencies:
@@ -800,16 +800,16 @@ babel-register@^7.0.0-alpha.9:
     mkdirp "^0.5.1"
     source-map-support "^0.4.2"
 
-babel-runtime@^6.18.0, babel-runtime@^6.23.0:
-  version "6.23.0"
-  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
+babel-runtime@^6.18.0, babel-runtime@^6.22.0:
+  version "6.22.0"
+  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.22.0.tgz#1cf8b4ac67c77a4ddb0db2ae1f74de52ac4ca611"
   dependencies:
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
 
-babel-runtime@^6.22.0:
-  version "6.22.0"
-  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.22.0.tgz#1cf8b4ac67c77a4ddb0db2ae1f74de52ac4ca611"
+babel-runtime@^6.23.0:
+  version "6.23.0"
+  resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.23.0.tgz#0a9489f144de70efb3ce4300accdb329e2fc543b"
   dependencies:
     core-js "^2.4.0"
     regenerator-runtime "^0.10.0"
@@ -2278,7 +2278,7 @@ gulp-babel@babel/gulp-babel#b7-alpha:
   version "6.1.2"
   resolved "https://codeload.github.com/babel/gulp-babel/tar.gz/40804d9d3f02e5147802a9e8d4bd8100ddb9c3ae"
   dependencies:
-    babel-core "^7.0.0-alpha.3"
+    babel-core "^7.0.0-alpha.6"
     gulp-util "^3.0.0"
     replace-ext "0.0.1"
     through2 "^2.0.0"

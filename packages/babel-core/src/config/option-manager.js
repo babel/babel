@@ -10,6 +10,7 @@ import buildConfigChain from "./build-config-chain";
 import path from "path";
 import traverse from "babel-traverse";
 import clone from "lodash/clone";
+import DagMap from "dag-map";
 
 import { loadPlugin, loadPreset, loadParser, loadGenerator } from "./loading/files";
 
@@ -76,74 +77,78 @@ const ALLOWED_PLUGIN_KEYS = new Set([
 
 export default function manageOptions(opts: {}): {
   options: Object,
-  passes: Array<Array<[ Plugin, ?{} ]>>,
+  plugins: Array<[ Plugin, ?{} ]>,
 }|null {
   return new OptionManager().init(opts);
 }
 
 function sortPlugins(plugins) {
-  // need to handle cycles (either error, add inherent priority)
-  // need to warn/error on duplicate capabilities
+  const graph = new DagMap();
+  const capabilitiesToPluginIdMap = Object.create(null);
 
-  const mapped = plugins.map(([ plugin ], i) => {
-    return { index: i, value: plugin };
+  // It is theoretically possible that something arrives at this point without
+  // having a name or key property. Make sure that it has one.
+  const unnamedPluginPrefix = "unnamedPlugin";
+  plugins.forEach((pluginTuple, index) => {
+    const plugin = pluginTuple[0];
+    if (!plugin.key) { plugin.key = `${unnamedPluginPrefix}${index}`; }
   });
 
-  const capabilitiesABMap = [];
-  const capabilitiesBAMap = [];
-
-  mapped.sort(function({ value: pluginA }, { value: pluginB }) {
-    if (pluginA.dependencies) {
-      pluginA.dependencies.forEach((capability) => {
-        if (pluginB.capabilities && pluginB.capabilities.indexOf(capability) > -1) {
-          // Plugin A needs to run before Plugin B
-          // if A depends on a capability in B
-          capabilitiesABMap.push([pluginA.key, pluginB.key]);
+  // Calculate the capabilities that each plugin provides, map to a single name.
+  // Multiple plugins with the same capability are not allowed as that can
+  // become a cyclic dependency.
+  plugins.forEach((pluginTuple) => {
+    const plugin = pluginTuple[0];
+    if (plugin.capabilities) {
+      plugin.capabilities.forEach((capability) => {
+        const existingPluginName = capabilitiesToPluginIdMap[capability];
+        if (existingPluginName !== undefined) {
+          throw new Error(
+            "Cannot have two plugins with same capability, both" +
+            `${plugin.key} and ${existingPluginName} provide it.`
+          );
         }
+        capabilitiesToPluginIdMap[capability] = plugin.key;
       });
     }
-
-    if (pluginB.dependencies) {
-      pluginB.dependencies.forEach((capability) => {
-        if (pluginA.capabilities && pluginA.capabilities.indexOf(capability) > -1) {
-          // Plugin B needs to run before Plugin A
-          // if B depends on a capability in A
-          capabilitiesBAMap.push([pluginB.key, pluginA.key]);
-        }
-      });
-    }
-
-    if (capabilitiesABMap.length > 0 && capabilitiesBAMap.length === 0) {
-      return -1;
-    } else if (capabilitiesBAMap.length > 0 && capabilitiesABMap.length === 0) {
-      return 1;
-    }
-
-    return 0;
   });
 
-  // if (capabilitiesABMap.length > 0) {
-  //   console.log(capabilitiesABMap.map(([a, b]) => {
-  //     return `${a} depends on ${b}`;
-  //   }));
-  // }
-  // if (capabilitiesBAMap.length > 0) {
-  //   console.log(capabilitiesBAMap.map(([a, b]) => {
-  //     return `${a} depends on ${b}`;
-  //   }));
-  // }
+  // Look for the dependecies of the current module and identify which module
+  // addresses them.
+  plugins.forEach((pluginTuple) => {
+    const plugin = pluginTuple[0];
 
-  return mapped.map((el) => plugins[el.index]);
+    // Skip mapping if plugin doesn't have dependencies.
+    if (plugin.dependencies) {
+      const mappedDependencies = plugin.dependencies.map((dependency) => {
+        const idForDependency = capabilitiesToPluginIdMap[dependency];
+        if (idForDependency === undefined) {
+          throw new Error(`${plugin.key} requires ${dependency} but it was not provided.`);
+        }
+        return idForDependency;
+      });
+      graph.add(plugin.key, pluginTuple, mappedDependencies);
+    } else {
+      graph.add(plugin.key, pluginTuple);
+    }
+  });
+
+  const sortedPlugins = [];
+  graph.each((key, value) => {
+    sortedPlugins.push(value);
+  });
+
+  return sortedPlugins;
 }
 
 class OptionManager {
   constructor() {
     this.options = createInitialOptions();
-    this.passes = [[]];
+    this.plugins = [];
   }
 
   options: Object;
-  passes: Array<Array<[Plugin, ?{}]>>;
+  plugins: Array<[Plugin, ?{}]>;
 
   /**
    * This is called when we want to merge the input `opts` into the
@@ -154,55 +159,44 @@ class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(config: MergeOptions, pass?: Array<[Plugin, ?{}]>) {
+  mergeOptions(config: MergeOptions, plugins: Array<[Plugin, ?{}]>) {
     const result = loadConfig(config);
 
-    let plugins = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
-    // sort plugins by capabilties and dependencies
-    plugins = sortPlugins(plugins);
-    const presets = result.presets.map((descriptor) => loadPresetDescriptor(descriptor));
+    const pluginDescriptors = result.plugins.map((descriptor) => loadPluginDescriptor(descriptor));
+    const presetDescriptors = result.presets.map((descriptor) => loadPresetDescriptor(descriptor));
 
-
-    if (
-      config.options.passPerPreset != null &&
-      typeof config.options.passPerPreset !== "boolean"
-    ) {
-      throw new Error(".passPerPreset must be a boolean or undefined");
-    }
-    const passPerPreset = config.options.passPerPreset;
-    pass = pass || this.passes[0];
-
-    // resolve presets
-    if (presets.length > 0) {
-      let presetPasses = null;
-      if (passPerPreset) {
-        presetPasses = presets.map(() => []);
-        // The passes are created in the same order as the preset list, but are inserted before any
-        // existing additional passes.
-        this.passes.splice(1, 0, ...presetPasses);
-      }
-
-      presets.forEach((presetConfig, i) => {
-        this.mergeOptions(presetConfig, presetPasses ? presetPasses[i] : pass);
-      });
-    }
+    presetDescriptors.forEach((presetConfig) => {
+      this.mergeOptions(presetConfig, plugins);
+    });
 
     // resolve plugins
-    if (plugins.length > 0) {
-      pass.unshift(...plugins);
+    if (pluginDescriptors.length > 0) {
+      plugins.unshift(...pluginDescriptors);
     }
 
     merge(this.options, result.options);
   }
 
   init(opts: {}) {
+    let plugins = [];
     const configChain = buildConfigChain(opts);
     if (!configChain) return null;
-
     try {
       for (const config of configChain) {
-        this.mergeOptions(config);
+        this.mergeOptions(config, plugins);
       }
+
+      const uniquePlugins = plugins
+        .reduce((accumulator, pluginTuple) => {
+          const plugin = pluginTuple[0];
+          if (!accumulator[plugin.key]) {
+            accumulator[plugin.key] = pluginTuple;
+          }
+          return accumulator;
+        }, {});
+
+      const uniquePluginValues = Object.keys(uniquePlugins).map((key) => uniquePlugins[key]);
+      plugins = sortPlugins(uniquePluginValues);
     } catch (e) {
       // There are a few case where thrown errors will try to annotate themselves multiple times, so
       // to keep things simple we just bail out if re-wrapping the message.
@@ -215,14 +209,7 @@ class OptionManager {
     }
 
     opts = this.options;
-
-    // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
-    // it will be in the right structure to not change behavior.
-    opts.plugins = this.passes[0];
-    opts.presets = this.passes.slice(1)
-      .filter((plugins) => plugins.length > 0)
-      .map((plugins) => ({ plugins }));
-
+    opts.plugins = plugins;
     if (opts.inputSourceMap) {
       opts.sourceMaps = true;
     }
@@ -252,7 +239,7 @@ class OptionManager {
 
     return {
       options: opts,
-      passes: this.passes,
+      plugins: plugins,
     };
   }
 }
@@ -340,7 +327,7 @@ function loadDescriptor(descriptor, skipOptions) {
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.
  */
 const PLUGIN_CACHE = new WeakMap();
-function loadPluginDescriptor(descriptor) {
+function loadPluginDescriptor(descriptor): [Plugin, ?{}] {
   if (descriptor.value instanceof Plugin) return [ descriptor.value, descriptor.options ];
 
   let result = PLUGIN_CACHE.get(descriptor.value);
@@ -349,10 +336,10 @@ function loadPluginDescriptor(descriptor) {
     PLUGIN_CACHE.set(descriptor.value, result);
   }
 
-  return [ result, descriptor.options];
+  return [result, descriptor.options];
 }
 
-function instantiatePlugin({ value: pluginObj, descriptor }) {
+function instantiatePlugin({ value: pluginObj, descriptor }): Plugin {
   Object.keys(pluginObj).forEach((key) => {
     if (!ALLOWED_PLUGIN_KEYS.has(key)) {
       throw new Error(messages.get("pluginInvalidProperty", descriptor.alias, key));
