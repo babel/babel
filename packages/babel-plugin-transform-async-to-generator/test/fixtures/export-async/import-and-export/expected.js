@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -13,6 +13,6 @@ let foo = exports.foo = (() => {
   };
 })();
 
-var _bar = require('bar');
+var _bar = require("bar");
 
 var _bar2 = babelHelpers.interopRequireDefault(_bar);

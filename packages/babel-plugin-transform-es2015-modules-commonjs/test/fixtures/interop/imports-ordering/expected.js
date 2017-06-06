@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-require('./foo');
+require("./foo");
 
-var _bar = require('./bar');
+var _bar = require("./bar");
 
 var _bar2 = babelHelpers.interopRequireDefault(_bar);
 
-require('./derp');
+require("./derp");
 
-var _qux = require('./qux');
+var _qux = require("./qux");
