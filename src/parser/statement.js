@@ -642,9 +642,7 @@ export default class StatementParser extends ExpressionParser {
 
   isNonstaticConstructor(method: N.ClassMethod | N.ClassProperty): boolean {
     return !method.computed && !method.static && (
-      // $FlowFixMe ('key' downcasting)
       (method.key.name === "constructor") || // Identifier
-      // $FlowFixMe ('key' downcasting)
       (method.key.value === "constructor")   // Literal
     );
   }
@@ -707,7 +705,7 @@ export default class StatementParser extends ExpressionParser {
     if (this.hasPlugin("classPrivateProperties") && this.match(tt.hash)) { // Private property
       this.next();
       const privateProp: N.ClassPrivateProperty = memberAny;
-      this.parsePropertyName(privateProp);
+      privateProp.key = this.parseIdentifier(true);
       classBody.body.push(this.parsePrivateClassProperty(privateProp));
       return;
     }
@@ -749,7 +747,6 @@ export default class StatementParser extends ExpressionParser {
 
     const isSimple = this.match(tt.name);
     const key = this.parsePropertyName(methodOrProp);
-    // $FlowFixMe ('key' downcasting)
     if (!methodOrProp.computed && methodOrProp.static && (methodOrProp.key.name === "prototype" || methodOrProp.key.value === "prototype")) {
       this.raise(methodOrProp.key.start, "Classes may not have static property named prototype");
     }

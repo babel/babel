@@ -89,7 +89,6 @@
                   "column": 13
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 11,
@@ -123,7 +122,6 @@
                   "column": 17
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 15,
@@ -207,7 +205,6 @@
                   "column": 17
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 32,
@@ -260,7 +257,6 @@
                   "column": 25
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 40,

@@ -1054,7 +1054,7 @@ interface ClassMethod <: Function {
 ```js
 interface ClassProperty <: Node {
   type: "ClassProperty";
-  key: Identifier;
+  key: Expression;
   value: Expression;
   computed: boolean;
 }

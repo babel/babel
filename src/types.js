@@ -339,7 +339,7 @@ export type ObjectExpression = NodeBase & {
   properties: $ReadOnlyArray<ObjectProperty | ObjectMethod | SpreadElement>;
 };
 
-export type ObjectOrClassMember = ClassMethod | ClassProperty | ClassPrivateProperty | ObjectMember;
+export type ObjectOrClassMember = ClassMethod | ClassProperty | ObjectMember;
 
 export type ObjectMember = ObjectProperty | ObjectMethod;
 
@@ -359,7 +359,7 @@ export type ObjectProperty = ObjectMemberBase & {
   shorthand: boolean;
 };
 
-export type ObjectMethod = ObjectMemberBase & MethodBase &  {
+export type ObjectMethod = ObjectMemberBase & MethodBase & {
   type: "ObjectMethod";
   kind: "get" | "set" | "method"; // Never "constructor"
 };
@@ -579,7 +579,7 @@ export type ClassMethod = MethodBase & ClassMemberBase & {
 
 export type ClassProperty = ClassMemberBase & {
   type: "ClassProperty";
-  key: Identifier;
+  key: Expression;
   value: ?Expression; // TODO: Not in spec that this is nullable.
 
   typeAnnotation?: ?FlowTypeAnnotation; // TODO: Not in spec

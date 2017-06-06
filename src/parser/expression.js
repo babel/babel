@@ -578,7 +578,7 @@ export default class ExpressionParser extends LValParser {
         if (this.hasPlugin("classPrivateProperties")) {
           return this.parseMaybePrivateName();
         } else {
-          this.unexpected();
+          throw this.unexpected();
         }
 
       case tt._new:
@@ -1011,20 +1011,19 @@ export default class ExpressionParser extends LValParser {
     if (!node) this.unexpected();
   }
 
-  parsePropertyName(prop: N.ObjectOrClassMember): N.Identifier {
+  parsePropertyName(prop: N.ObjectOrClassMember): N.Expression {
     if (this.eat(tt.bracketL)) {
-      // $FlowFixMe (ClassPrivateMember shouldn't be allowed to be computed!)
       prop.computed = true;
       prop.key = this.parseMaybeAssign();
       this.expect(tt.bracketR);
     } else {
-      // $FlowFixMe (ClassPrivateMember shouldn't be allowed to be computed!)
       prop.computed = false;
       const oldInPropertyName = this.state.inPropertyName;
       this.state.inPropertyName = true;
       prop.key = (this.match(tt.num) || this.match(tt.string)) ? this.parseExprAtom() : this.parseIdentifier(true);
       this.state.inPropertyName = oldInPropertyName;
     }
+
     return prop.key;
   }
 
