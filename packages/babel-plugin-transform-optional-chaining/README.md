@@ -43,6 +43,8 @@ const baz = obj?.foo?.bar?.baz(); // 42
 const safe = obj?.qux?.baz(); // undefined
 const safe2 = obj?.foo.bar.qux?.(); // undefined
 
+const willThrow = obj?.foo.bar.qux(); // Error: not a function
+
 // Top function can be called directly, too.
 function test() {
   return 42;
@@ -68,6 +70,8 @@ const baz = new obj?.foo?.bar?.baz(); // baz instance
 
 const safe = new obj?.qux?.baz(); // undefined
 const safe2 = new obj?.foo.bar.qux?.(); // undefined
+
+const willThrow = new obj?.foo.bar.qux(); // Error: not a constructor
 
 // Top classes can be called directly, too.
 class Test {

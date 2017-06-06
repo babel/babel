@@ -6,14 +6,11 @@ export default function ({ types: t }) {
     const optionals = [path.node];
     const nil = scope.buildUndefinedNode();
 
-    let objectPath = path.get(key);
-    while (objectPath.isMemberExpression()) {
+    for (let objectPath = path.get(key); objectPath.isMemberExpression(); objectPath = objectPath.get("object")) {
       const { node } = objectPath;
       if (node.optional) {
         optionals.push(node);
       }
-
-      objectPath = objectPath.get("object");
     }
 
     for (let i = optionals.length - 1; i >= 0; i--) {

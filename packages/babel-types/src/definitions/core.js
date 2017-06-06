@@ -119,6 +119,10 @@ defineType("CallExpression", {
     arguments: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement"))),
     },
+    optional: {
+      validate: assertOneOf(true, false),
+      optional: true,
+    },
   },
   aliases: ["Expression"],
 });
@@ -453,6 +457,10 @@ defineType("NewExpression", {
     },
     arguments: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement"))),
+    },
+    optional: {
+      validate: assertOneOf(true, false),
+      optional: true,
     },
   },
 });
