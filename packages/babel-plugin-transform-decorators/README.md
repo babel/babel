@@ -2,6 +2,8 @@
 
 > Compile class and object decorators to ES5
 
+This plugin is included in `babel-preset-stage-1` (see the [documentation](https://babeljs.io/docs/plugins/preset-stage-1/) for more information).
+
 ## Example
 
 (examples are from proposal)
