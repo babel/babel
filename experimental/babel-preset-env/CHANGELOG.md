@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.5.2 (2017-06-07)
+
+### :bug: Bug Fix
+
+- Ensure explicit targets always override browsers key targets ([#346](https://github.com/babel/babel-preset-env/pull/346)) (@existentialism)
+
+`browser` targets should be overridden by explicit targets, and we inadvertently broke this when we landed string version support.
+
 ## v1.5.1 (2017-05-22)
 
 ### :bug: Bug Fix
