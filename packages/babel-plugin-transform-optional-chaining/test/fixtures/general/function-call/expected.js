@@ -1,4 +1,4 @@
-var _foo, _foo2, _foo$bar, _foo3, _foo4, _foo4$bar, _foo5, _foo6, _foo7, _foo$bar2, _foo8, _foo$bar3, _foo$bar4, _foo9, _foo10, _foo10$bar, _foo$bar5, _foo11, _foo11$bar;
+var _foo, _foo2, _foo$bar, _foo3, _foo4, _foo4$bar, _foo5, _foo6, _foo7, _foo$bar2, _foo8, _foo$bar3, _foo9, _foo$bar3$call, _foo10, _foo10$bar, _foo11, _foo11$bar, _foo11$bar$call;
 
 (_foo = foo) == null ? void 0 : _foo(foo);
 
@@ -10,12 +10,12 @@ var _foo, _foo2, _foo$bar, _foo3, _foo4, _foo4$bar, _foo5, _foo6, _foo7, _foo$ba
 
 (_foo5 = foo) == null ? void 0 : _foo5().bar;
 
-(_foo6 = (_foo7 = foo) == null ? void 0 : _foo7()) == null ? void 0 : _foo6.bar;
+(_foo6 = foo) == null ? void 0 : (_foo7 = _foo6()) == null ? void 0 : _foo7.bar;
 
 (_foo$bar2 = (_foo8 = foo).bar) == null ? void 0 : _foo$bar2.call(_foo8).baz;
 
-(_foo$bar3 = (_foo$bar4 = (_foo9 = foo).bar) == null ? void 0 : _foo$bar4.call(_foo9)) == null ? void 0 : _foo$bar3.baz;
+(_foo$bar3 = (_foo9 = foo).bar) == null ? void 0 : (_foo$bar3$call = _foo$bar3.call(_foo9)) == null ? void 0 : _foo$bar3$call.baz;
 
 (_foo10 = foo) == null ? void 0 : (_foo10$bar = _foo10.bar) == null ? void 0 : _foo10$bar.call(_foo10).baz;
 
-(_foo$bar5 = (_foo11 = foo) == null ? void 0 : (_foo11$bar = _foo11.bar) == null ? void 0 : _foo11$bar.call(_foo11)) == null ? void 0 : _foo$bar5.baz;
+(_foo11 = foo) == null ? void 0 : (_foo11$bar = _foo11.bar) == null ? void 0 : (_foo11$bar$call = _foo11$bar.call(_foo11)) == null ? void 0 : _foo11$bar$call.baz;

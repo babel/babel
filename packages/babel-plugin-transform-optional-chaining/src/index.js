@@ -1,15 +1,22 @@
 import syntaxOptionalChaining from "babel-plugin-syntax-optional-chaining";
 
 export default function ({ types: t }) {
-  function optional(path, key, replacementPath, needsContext = false, loose = false) {
+  function optional(path, replacementPath, loose = false) {
     const { scope } = path;
-    const optionals = [path.node];
+    const optionals = [];
     const nil = scope.buildUndefinedNode();
 
-    for (let objectPath = path.get(key); objectPath.isMemberExpression(); objectPath = objectPath.get("object")) {
+    let objectPath = path;
+    while (objectPath.isMemberExpression() || objectPath.isCallExpression() || objectPath.isNewExpression()) {
       const { node } = objectPath;
       if (node.optional) {
         optionals.push(node);
+      }
+
+      if (objectPath.isMemberExpression()) {
+        objectPath = objectPath.get("object");
+      } else {
+        objectPath = objectPath.get("callee");
       }
     }
 
@@ -17,14 +24,13 @@ export default function ({ types: t }) {
       const node = optionals[i];
       node.optional = false;
 
-      const replaceKey = i == 0 ? key : "object";
-      const atCall = needsContext && i == 0;
-
+      const isCall = t.isCallExpression(node);
+      const replaceKey = isCall || t.isNewExpression(node) ? "callee" : "object";
       const chain = node[replaceKey];
 
       let ref;
       let check;
-      if (loose && atCall) {
+      if (loose && isCall) {
         // If we are using a loose transform (avoiding a Function#call) and we are at the call,
         // we can avoid a needless memoize.
         check = ref = chain;
@@ -40,7 +46,7 @@ export default function ({ types: t }) {
 
       // Ensure call expressions have the proper `this`
       // `foo.bar()` has context `foo`.
-      if (atCall && t.isMemberExpression(chain)) {
+      if (isCall && t.isMemberExpression(chain)) {
         if (loose) {
           // To avoid a Function#call, we can instead re-grab the property from the context object.
           // `a.?b.?()` translates roughly to `_a.b != null && _a.b()`
@@ -99,20 +105,12 @@ export default function ({ types: t }) {
     inherits: syntaxOptionalChaining,
 
     visitor: {
-      MemberExpression(path) {
+      "MemberExpression|NewExpression|CallExpression"(path) {
         if (!path.node.optional) {
           return;
         }
 
-        optional(path, "object", findReplacementPath(path));
-      },
-
-      "NewExpression|CallExpression"(path) {
-        if (!path.node.optional) {
-          return;
-        }
-
-        optional(path, "callee", findReplacementPath(path), path.isCallExpression(), this.opts.loose);
+        optional(path, findReplacementPath(path), this.opts.loose);
       },
     },
   };
