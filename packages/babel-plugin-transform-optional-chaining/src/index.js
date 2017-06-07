@@ -71,6 +71,30 @@ export default function ({ types: t }) {
     }
   }
 
+  function findReplacementPath(path) {
+    return path.find((path) => {
+      const { parentPath } = path;
+
+      if (path.key == "left" && parentPath.isAssignmentExpression()) {
+        return false;
+      }
+      if (path.key == "object" && parentPath.isMemberExpression()) {
+        return false;
+      }
+      if (path.key == "callee" && (parentPath.isCallExpression() || parentPath.isNewExpression())) {
+        return false;
+      }
+      if (path.key == "argument" && parentPath.isUpdateExpression()) {
+        return false;
+      }
+      if (path.key == "argument" && parentPath.isUnaryExpression({ operator: "delete" })) {
+        return false;
+      }
+
+      return true;
+    });
+  }
+
   return {
     inherits: syntaxOptionalChaining,
 
@@ -80,29 +104,7 @@ export default function ({ types: t }) {
           return;
         }
 
-        const replace = path.find((path) => {
-          const { parentPath } = path;
-
-          if (path.key == "left" && parentPath.isAssignmentExpression()) {
-            return false;
-          }
-          if (path.key == "object" && parentPath.isMemberExpression()) {
-            return false;
-          }
-          if (path.key == "callee" && (parentPath.isCallExpression() || parentPath.isNewExpression())) {
-            return false;
-          }
-          if (path.key == "argument" && parentPath.isUpdateExpression()) {
-            return false;
-          }
-          if (path.key == "argument" && parentPath.isUnaryExpression({ operator: "delete" })) {
-            return false;
-          }
-
-          return true;
-        });
-
-        optional(path, "object", replace);
+        optional(path, "object", findReplacementPath(path));
       },
 
       "NewExpression|CallExpression"(path) {
@@ -110,7 +112,7 @@ export default function ({ types: t }) {
           return;
         }
 
-        optional(path, "callee", path, path.isCallExpression(), this.opts.loose);
+        optional(path, "callee", findReplacementPath(path), path.isCallExpression(), this.opts.loose);
       },
     },
   };
