@@ -157,6 +157,7 @@ var astTransformVisitor = {
         if (node.kind === "method") {
           node.kind = "init";
         }
+        node.shorthand = false;
       }
 
       delete node.body;
@@ -169,8 +170,12 @@ var astTransformVisitor = {
       delete node.typeParameters;
     }
 
-    if (path.isRestProperty() || path.isSpreadProperty()) {
-      node.type = `Experimental${node.type}`;
+    if (path.isRestElement() && path.parent && path.parent.type === "ObjectPattern") {
+      node.type = "ExperimentalRestProperty";
+    }
+
+    if (path.isSpreadElement() && path.parent && path.parent.type === "ObjectExpression") {
+      node.type = "ExperimentalSpreadProperty";
     }
 
     if (path.isTypeParameter && path.isTypeParameter()) {

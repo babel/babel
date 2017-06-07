@@ -5,7 +5,7 @@ var parse           = require("babylon").parse;
 var t               = require("babel-types");
 var tt              = require("babylon").tokTypes;
 var traverse        = require("babel-traverse").default;
-var codeFrame       = require("babel-code-frame");
+var codeFrameColumns = require("babel-code-frame").codeFrameColumns;
 
 var hasPatched = false;
 var eslintOptions = {};
@@ -231,13 +231,18 @@ function monkeypatch(modules) {
     visitProperty.call(this, node);
   };
 
-  // visit ClassProperty as a Property.
-  referencer.prototype.ClassProperty = function(node) {
+  function visitClassProperty(node) {
     if (node.typeAnnotation) {
       visitTypeAnnotation.call(this, node.typeAnnotation);
     }
     this.visitProperty(node);
-  };
+  }
+
+  // visit ClassProperty as a Property.
+  referencer.prototype.ClassProperty = visitClassProperty;
+
+  // visit ClassPrivateProperty as a Property.
+  referencer.prototype.ClassPrivateProperty = visitClassProperty;
 
   // visit flow type in FunctionDeclaration, FunctionExpression, ArrowFunctionExpression
   var visitFunction = referencer.prototype.visitFunction;
@@ -397,7 +402,11 @@ exports.parseNoPatch = function (code, options) {
       "functionSent",
       "objectRestSpread",
       "trailingFunctionCommas",
-      "dynamicImport"
+      "dynamicImport",
+      "numericSeparator",
+      "optionalChaining",
+      "importMeta",
+      "classPrivateProperties",
     ]
   };
 
@@ -418,7 +427,12 @@ exports.parseNoPatch = function (code, options) {
         err.message = "Line " + err.lineNumber + ": " + err.message.replace(/ \((\d+):(\d+)\)$/, "") +
         // add codeframe
         "\n\n" +
-        codeFrame(code, err.lineNumber, err.column, { highlightCode: true });
+        codeFrameColumns(code, {
+          start: {
+            line: err.lineNumber,
+            column: err.column,
+          },
+        }, { highlightCode: true });
       }
     }
 

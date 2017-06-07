@@ -1738,11 +1738,37 @@ describe("verify", () => {
     );
   });
 
-  // it("regex with es6 unicodeCodePointEscapes", function () {
-  //   verifyAndAssertMessages(
-  //     "string.replace(/[\u{0000A0}-\u{10FFFF}<>\&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);",
-  //     {},
-  //     []
-  //   );
-  // });
+  it("regex with es6 unicodeCodePointEscapes", () => {
+    verifyAndAssertMessages(
+      "string.replace(/[\u{0000A0}-\u{10FFFF}<>\&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);",
+      {},
+      []
+    );
+  });
+
+  describe("private class properties", () => {
+    it("should not be undefined", () => {
+      verifyAndAssertMessages(
+        unpad(`
+            class C {
+              #d = 1;
+            }
+        `),
+        { "no-undef": 1 },
+        []
+      );
+    });
+
+    it("should not be unused", () => {
+      verifyAndAssertMessages(
+        unpad(`
+            export class C {
+              #d = 1;
+            }
+        `),
+        { "no-unused-vars": 1 },
+        []
+      );
+    });
+  });
 });
