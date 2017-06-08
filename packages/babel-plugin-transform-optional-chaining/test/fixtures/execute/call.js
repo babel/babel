@@ -1,3 +1,5 @@
+"use strict";
+
 let calls = 0;
 const obj = {
   a: {
