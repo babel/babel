@@ -4,6 +4,7 @@ import Store from "../store";
 import traverse from "babel-traverse";
 import assign from "lodash/assign";
 import clone from "lodash/clone";
+import logger from "./file/logger";
 
 const GLOBAL_VISITOR_PROPS = ["enter", "exit"];
 
@@ -12,8 +13,22 @@ export default class Plugin extends Store {
     super();
 
     this.initialized = false;
-    this.raw         = assign({}, plugin);
-    this.key         = this.take("name") || key;
+    this.raw = assign({}, plugin);
+    let specifiedName = this.take("name");
+
+    // List of invalid names.
+    if ([undefined, null, false].indexOf(specifiedName) !== -1) {
+      logger.deprecate(
+        `The plugin ${key} does not have a valid name property. In Babel 7 this will throw an Error as the name property will be required.`,
+        {
+          id: "plugin.name",
+          url: "https://babeljs.com/deprecations/plugin.name",
+          until: "7.0.0"
+        }
+      );
+    }
+
+    this.key = this.take("name") || key;
 
     this.manipulateOptions = this.take("manipulateOptions");
     this.post              = this.take("post");

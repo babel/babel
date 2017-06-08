@@ -29,7 +29,8 @@ export default class Logger {
     throw new Constructor(this._buildMessage(msg));
   }
 
-  deprecate(msg: string) {
+  deprecate(msg: string, metadata: object) {
+    // metadata.id, metadata.url, metadata.until
     if (this.file.opts && this.file.opts.suppressDeprecationMessages) return;
 
     msg = this._buildMessage(msg);
@@ -40,7 +41,12 @@ export default class Logger {
     // make sure we don't see it again
     seenDeprecatedMessages.push(msg);
 
-    console.error(msg);
+    if (Object.prototype.hasOwnProperty.call(metadata, "url")) {
+      const viewGuide = `Please view the Deprecation Guide at ${metadata.url}.`;
+      console.error(msg, viewGuide);
+    } else {
+      console.error(msg);
+    }
   }
 
   verbose(msg: string) {
