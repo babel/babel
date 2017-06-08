@@ -13,6 +13,32 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.25.0 (2017-06-08)
+
+Just backporting a few things.
+
+#### :rocket: New Feature
+* `babel-plugin-transform-react-display-name`
+  * [#5780](https://github.com/babel/babel/pull/5780) Backport support for createReactClass with transform-react-display-name. ([@kentor](https://github.com/kentor))
+  * [#5554](https://github.com/babel/babel/pull/5554) Updated transform-react-display-name for createReactClass addon. ([@bvaughn](https://github.com/bvaughn))
+* `babel-generator`, `babel-plugin-transform-flow-strip-types`, `babel-types`
+  * [#5653](https://github.com/babel/babel/pull/5653) Port flow object spread from #418 to 6.x. ([@kittens](https://github.com/kittens))
+
+#### :bug: Bug Fix
+* `babel-types`
+  * [#5770](https://github.com/babel/babel/pull/5770) Backport array & object pattern fixes to 6.x. ([@citycide](https://github.com/citycide))
+
+#### :nail_care: Polish
+* `babel-traverse`
+  * [#5615](https://github.com/babel/babel/pull/5615) Update deprecation warning on flow bindings. ([@kassens](https://github.com/kassens))
+
+#### Committers: 5
+- Bo Lingen ([citycide](https://github.com/citycide))
+- Brian Vaughn ([bvaughn](https://github.com/bvaughn))
+- Jan Kassens ([kassens](https://github.com/kassens))
+- Kenneth Chung ([kentor](https://github.com/kentor))
+- Sebastian McKenzie ([kittens](https://github.com/kittens))
+
 ## 6.24.0 (2017-03-13)
 
 A quick release for 2 features:
