@@ -2,8 +2,8 @@
 
 export default class Plugin {
   constructor(plugin: {}, key?: string) {
-    if (plugin.name != null && typeof plugin.name !== "string") {
-      throw new Error("Plugin .name must be a string, null, or undefined");
+    if (!plugin.name || typeof plugin.name !== "string") {
+      throw new Error("Plugin .name must be a string");
     }
     if (plugin.manipulateOptions != null && typeof plugin.manipulateOptions !== "function") {
       throw new Error("Plugin .manipulateOptions must be a function, null, or undefined");
