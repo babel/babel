@@ -62,6 +62,7 @@ function monkeypatch(modules) {
 
   var analyze = escope.analyze;
   escope.analyze = function (ast, opts) {
+    opts = opts || {};
     opts.ecmaVersion = eslintOptions.ecmaVersion;
     opts.sourceType = eslintOptions.sourceType;
     if (eslintOptions.globalReturn !== undefined) {

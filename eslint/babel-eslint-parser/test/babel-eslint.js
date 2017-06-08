@@ -1,6 +1,7 @@
 var assert      = require("assert");
 var babelEslint = require("..");
 var espree      = require("espree");
+var escope      = require("escope");
 var util        = require("util");
 var unpad       = require("dedent");
 
@@ -85,6 +86,16 @@ function parseAndAssertSame(code) {
 }
 
 describe("babylon-to-esprima", () => {
+  describe("compatibility", () => {
+    it("should allow ast.analyze to be called without options", function() {
+      var esAST = babelEslint.parse("`test`");
+
+      assert.doesNotThrow(() => {
+        escope.analyze(esAST);
+      }, TypeError, "Should allow no options argument.");
+    });
+  });
+
   describe("templates", () => {
     it("empty template string", () => {
       parseAndAssertSame("``");
