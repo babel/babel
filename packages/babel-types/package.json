@@ -14,6 +14,6 @@
     "to-fast-properties": "^1.0.1"
   },
   "devDependencies": {
-    "babylon": "^6.8.2"
+    "babylon": "^6.17.2"
   }
 }
