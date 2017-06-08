@@ -15,7 +15,9 @@ var Test = function (_Foo) {
     var _this = _Foo.call.apply(_Foo, [this, "test"].concat(Array.prototype.slice.call(arguments))) || this;
 
     (_Foo$prototype$test = _Foo.prototype.test).call.apply(_Foo$prototype$test, [_this].concat(Array.prototype.slice.call(arguments)));
+
     (_Foo$prototype$test2 = _Foo.prototype.test).call.apply(_Foo$prototype$test2, [_this, "test"].concat(Array.prototype.slice.call(arguments)));
+
     return _this;
   }
 

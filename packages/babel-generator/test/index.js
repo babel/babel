@@ -1,4 +1,3 @@
-import Whitespace from "../lib/whitespace";
 import Printer from "../lib/printer";
 import generate from "../lib";
 import assert from "assert";
@@ -305,7 +304,12 @@ describe("programmatic generation", function() {
     );
 
     const output = generate(blockStatement).code;
-    assert.equal(output, ["{", '  "use strict";', "}"].join("\n"));
+    assert.equal(
+      output,
+      `{
+  "use strict";
+}`,
+    );
   });
 
   it("flow object indentation", function() {
@@ -316,7 +320,12 @@ describe("programmatic generation", function() {
     );
 
     const output = generate(objectStatement).code;
-    assert.equal(output, ["{", "  bar: string,", "}"].join("\n"));
+    assert.equal(
+      output,
+      `{
+  bar: string
+}`,
+    );
   });
 
   it("flow object indentation with empty leading ObjectTypeProperty", function() {
@@ -333,14 +342,12 @@ describe("programmatic generation", function() {
 
     const output = generate(objectStatement).code;
 
-    assert.equal(output, ["{", "  [key: any]: Test,", "}"].join("\n"));
-  });
-});
-
-describe("whitespace", function() {
-  it("empty token list", function() {
-    const w = new Whitespace([]);
-    assert.equal(w.getNewlinesBefore(t.stringLiteral("1")), 0);
+    assert.equal(
+      output,
+      `{
+  [key: any]: Test
+}`,
+    );
   });
 });
 

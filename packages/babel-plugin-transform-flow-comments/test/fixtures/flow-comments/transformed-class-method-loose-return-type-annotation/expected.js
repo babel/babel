@@ -4,7 +4,11 @@
 var C = function () {
   function C() {}
 
-  C.prototype.m = function m(x /*: number*/) /*: string*/ {
+  C.prototype.m = function m(x
+  /*: number*/
+  )
+  /*: string*/
+  {
     return 'a';
   };
 

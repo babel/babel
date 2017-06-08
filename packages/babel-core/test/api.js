@@ -480,7 +480,7 @@ describe("api", function() {
     }).then(function(result) {
       assert.equal(
         result.code,
-        "/*before*/start;\n/*after*/class Foo {}\n/*before*/end;\n/*after*/",
+        "/*before*/\nstart;\n\n/*after*/\nclass Foo {}\n\n/*before*/\nend;\n\n/*after*/",
       );
     });
   });
