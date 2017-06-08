@@ -1432,6 +1432,19 @@ Aliases: `Flow`, `UserWhitespacable`
 
 ---
 
+### objectTypeSpreadProperty
+```javascript
+t.objectTypeSpreadProperty(argument)
+```
+
+See also `t.isObjectTypeSpreadProperty(node, opts)` and `t.assertObjectTypeSpreadProperty(node, opts)`.
+
+Aliases: `Flow`, `UserWhitespacable`
+
+ - `argument` (required)
+
+---
+
 ### parenthesizedExpression
 ```javascript
 t.parenthesizedExpression(expression)
