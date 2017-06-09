@@ -1,6 +1,3 @@
-if (parseInt(process.version.slice(1)) < 6) process.exit();
-
-eval(`
 const val = (function f(a, b = (() => a)) {
   var a;
   assert.equal(a, 1);
@@ -8,4 +5,4 @@ const val = (function f(a, b = (() => a)) {
   return b();
 })(1);
 
-assert.equal(val, 1);`);
+assert.equal(val, 1);

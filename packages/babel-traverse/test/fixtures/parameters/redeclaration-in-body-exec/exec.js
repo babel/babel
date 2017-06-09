@@ -1,6 +1,3 @@
-if (parseInt(process.version.slice(1)) < 6) process.exit();
-
-eval(`
 function single ({a}, b) {
   var a = 3;
   assert.equal(a, 3);
@@ -27,4 +24,4 @@ function referenceToLaterParameter(a = b, b) {
 }
 
 assert.throws(() => referenceToLaterParameter(undefined, 1), ReferenceError)
-assert.deepEqual(referenceToLaterParameter(1), [1, undefined])`);
+assert.deepEqual(referenceToLaterParameter(1), [1, undefined])
