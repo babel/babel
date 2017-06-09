@@ -2,8 +2,9 @@
 
 **NOTE:** This is an internal Babel module and may not work outside. Use at your own risk.
 
-
 ## Usage:
+
+> Check Babel for an example: https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test
 
 1. Inside a `/test` directory, add an `index.js` with the contents `require("babel-helper-plugin-test-runner")(__dirname);`. 
 2. Inside `/test/fixtures`, create a folder for each suite (eg; one suite for each feature of your plugin). 
