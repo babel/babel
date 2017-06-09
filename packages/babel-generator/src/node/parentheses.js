@@ -48,6 +48,13 @@ export function DoExpression(node: Object, parent: Object, printStack: Array<Obj
 
 export function Binary(node: Object, parent: Object): boolean {
   if (
+    node.operator === "**" &&
+    t.isBinaryExpression(parent, { operator: "**" })
+  ) {
+    return parent.left === node;
+  }
+
+  if (
     ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) ||
     t.isUnaryLike(parent) ||
     (t.isMemberExpression(parent) && parent.object === node) ||
@@ -124,7 +131,8 @@ export function ClassExpression(node: Object, parent: Object, printStack: Array<
 export function UnaryLike(node: Object, parent: Object): boolean {
   return t.isMemberExpression(parent, { object: node }) ||
          t.isCallExpression(parent, { callee: node }) ||
-         t.isNewExpression(parent, { callee: node });
+         t.isNewExpression(parent, { callee: node }) ||
+         t.isBinaryExpression(parent, { operator: "**", left: node });
 }
 
 export function FunctionExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
