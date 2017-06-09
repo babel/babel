@@ -66,7 +66,7 @@ const findThisesVisitor = visitors.merge([noMethodVisitor, {
 }]);
 
 export default class ClassTransformer {
-  constructor(path: NodePath, file, opts) {
+  constructor(path: NodePath, file) {
     this.parent = path.parent;
     this.scope = path.scope;
     this.node = path.node;
@@ -86,7 +86,6 @@ export default class ClassTransformer {
     this.pushedConstructor = false;
     this.pushedInherits = false;
     this.isLoose = false;
-    this.removeClassCallCheck = opts.removeClassCallCheck;
 
     this.superThises = [];
 
@@ -129,14 +128,14 @@ export default class ClassTransformer {
     //
     this.buildBody();
 
-    // make sure this class isn't directly called
-    if (!this.removeClassCallCheck) {
-    constructorBody.body.unshift(t.expressionStatement(t.callExpression(
-      file.addHelper("classCallCheck"), [
-        t.thisExpression(),
-        this.classRef,
-      ]
-    )));
+    // make sure this class isn't directly called (with A() instead new A())
+    if (!this.isLoose) {
+      constructorBody.body.unshift(t.expressionStatement(t.callExpression(
+        file.addHelper("classCallCheck"), [
+          t.thisExpression(),
+          this.classRef,
+        ]
+      )));
     }
 
     body = body.concat(this.staticPropBody.map((fn) => fn(this.classRef)));
@@ -378,10 +377,16 @@ export default class ClassTransformer {
       );
     }
 
-    let call = t.callExpression(
-      this.file.addHelper("possibleConstructorReturn"),
-      [t.thisExpression(), bareSuperNode]
-    );
+    let call;
+
+    if (this.isLoose) {
+      call = t.logicalExpression("||", bareSuperNode, t.thisExpression());
+    } else {
+      call = t.callExpression(
+        this.file.addHelper("possibleConstructorReturn"),
+        [t.thisExpression(), bareSuperNode]
+      );
+    }
 
     const bareSuperAfter = this.bareSuperAfter.map((fn) => fn(thisRef));
 
@@ -450,10 +455,18 @@ export default class ClassTransformer {
       thisPath.replaceWith(thisRef);
     }
 
-    const wrapReturn = (returnArg) => t.callExpression(
-      this.file.addHelper("possibleConstructorReturn"),
-      [thisRef].concat(returnArg || [])
-    );
+    let wrapReturn;
+
+    if (this.isLoose) {
+      wrapReturn = (returnArg) => {
+        return returnArg ? t.logicalExpression("||", returnArg, thisRef) : thisRef;
+      };
+    } else {
+      wrapReturn = (returnArg) => t.callExpression(
+        this.file.addHelper("possibleConstructorReturn"),
+        [thisRef].concat(returnArg || [])
+      );
+    }
 
     // if we have a return as the last node in the body then we've already caught that
     // return

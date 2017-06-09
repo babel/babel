@@ -2,9 +2,7 @@ var Test = function (_Foo) {
   babelHelpers.inherits(Test, _Foo);
 
   function Test() {
-    babelHelpers.classCallCheck(this, Test);
-
-    var _this = babelHelpers.possibleConstructorReturn(this, _Foo.call(this));
+    var _this = _Foo.call(this) || this;
 
     _Foo.prototype.test.whatever();
     _Foo.prototype.test.call(_this);
