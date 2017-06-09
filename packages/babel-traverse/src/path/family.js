@@ -26,7 +26,7 @@ export function getCompletionRecords(): Array {
   } else if (this.isDoExpression() || this.isFor() || this.isWhile()) {
     paths = addCompletionRecords(this.get("body"), paths);
   } else if (this.isProgram() || this.isBlockStatement()) {
-    paths = addCompletionRecords(this.get("body"), paths.pop());
+    paths = addCompletionRecords(this.get("body").pop(), paths);
   } else if (this.isFunction()) {
     return this.get("body").getCompletionRecords();
   } else if (this.isTryStatement()) {
