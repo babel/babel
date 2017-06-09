@@ -271,10 +271,15 @@ defineType("ClassMethod", {
       validate: assertValueType("boolean"),
     },
     key: {
-      validate(node, key, val) {
-        const expectedTypes = node.computed ? ["Expression"] : ["Identifier", "StringLiteral", "NumericLiteral"];
-        assertNodeType(...expectedTypes)(node, key, val);
-      },
+      validate: (function () {
+        const normal = assertNodeType("Expression");
+        const computed = assertNodeType("Identifier", "StringLiteral", "NumericLiteral");
+
+        return function (node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      }()),
     },
     params: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("LVal"))),

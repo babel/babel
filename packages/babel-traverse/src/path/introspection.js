@@ -12,54 +12,7 @@ import * as t from "babel-types";
  */
 
 export function matchesPattern(pattern: string, allowPartial?: boolean): boolean {
-  // not a member expression
-  if (!this.isMemberExpression()) return false;
-
-  const parts = pattern.split(".");
-  const search = [this.node];
-  let i = 0;
-
-  function matches(name) {
-    const part = parts[i];
-    return part === "*" || name === part;
-  }
-
-  while (search.length) {
-    const node = search.shift();
-
-    if (allowPartial && i === parts.length) {
-      return true;
-    }
-
-    if (t.isIdentifier(node)) {
-      // this part doesn't match
-      if (!matches(node.name)) return false;
-    } else if (t.isLiteral(node)) {
-      // this part doesn't match
-      if (!matches(node.value)) return false;
-    } else if (t.isMemberExpression(node)) {
-      if (node.computed && !t.isLiteral(node.property)) {
-        // we can't deal with this
-        return false;
-      } else {
-        search.unshift(node.property);
-        search.unshift(node.object);
-        continue;
-      }
-    } else if (t.isThisExpression(node)) {
-      if (!matches("this")) return false;
-    } else {
-      // we can't deal with this
-      return false;
-    }
-
-    // too many parts
-    if (++i > parts.length) {
-      return false;
-    }
-  }
-
-  return i === parts.length;
+  return t.matchesPattern(this.node, pattern, allowPartial);
 }
 
 /**

@@ -6,7 +6,7 @@ var args = [1, 2, 3];
 var obj = { obj: { fn } };
 
 switch (true) {
-    case true:
-        (_obj$obj = obj.obj).fn.apply(_obj$obj, args);
-        break;
+  case true:
+    (_obj$obj = obj.obj).fn.apply(_obj$obj, args);
+    break;
 }

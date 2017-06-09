@@ -111,6 +111,22 @@ defineType("DeclareVariable", {
   },
 });
 
+defineType("DeclareExportDeclaration", {
+  visitor: ["declaration", "specifiers", "source"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("DeclareExportAllDeclaration", {
+  visitor: ["source"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  },
+});
+
 defineType("ExistsTypeAnnotation", {
   aliases: ["Flow"],
 });

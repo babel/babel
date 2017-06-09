@@ -1,6 +1,6 @@
 function foo() {
-	bar();
-	if (foo) {
-		bar();
-	}
+  bar();
+  if (foo) {
+    bar();
+  }
 }

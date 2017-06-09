@@ -1,6 +1,6 @@
 # babel-plugin-syntax-async-functions
 
-This plugin allows Babel to parse async functions.
+> This plugin allows Babel to parse async functions.
 
 ## Example
 

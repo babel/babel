@@ -75,16 +75,16 @@ In loose mode, tagged template literal objects aren't frozen.
 
 `boolean`, defaults to `false`.
 
-This option wraps all template literal expressions with `String`. See [babel/babel#1065](https://github.com/babel/babel/issues/1065) for more info.
+This option combines all template literal expressions and quasis with `String.prototype.concat`. It will handle cases with `Symbol.toPrimitive` correctly and throw correctly if template literal expression is a `Symbol()`. See [babel/babel#5791](https://github.com/babel/babel/pull/5791).
 
 **In**
 
 ```javascript
-`foo${bar}`;
+`foo${bar}baz${quux}${1}`;
 ```
 
 **Out**
 
 ```javascript
-"foo" + String(bar);
+"foo".concat(bar, "baz").concat(quux, 1);
 ```

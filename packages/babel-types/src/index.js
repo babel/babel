@@ -315,6 +315,51 @@ export function cloneDeep(node: Object): Object {
 }
 
 /**
+ * Determines whether or not the input node `member` matches the
+ * input `match`.
+ *
+ * For example, given the match `React.createClass` it would match the
+ * parsed nodes of `React.createClass` and `React["createClass"]`.
+ */
+
+export function matchesPattern(
+  member: Object,
+  match: string | Array<string>,
+  allowPartial?: boolean
+): boolean {
+  // not a member expression
+  if (!t.isMemberExpression(member)) return false;
+
+  const parts = Array.isArray(match) ? match : match.split(".");
+  const nodes = [];
+
+  let node;
+  for (node = member; t.isMemberExpression(node); node = node.object) {
+    nodes.push(node.property);
+  }
+  nodes.push(node);
+
+  if (nodes.length < parts.length) return false;
+  if (!allowPartial && nodes.length > parts.length) return false;
+
+  for (let i = 0, j = nodes.length - 1; i < parts.length; i++, j--) {
+    const node = nodes[j];
+    let value;
+    if (t.isIdentifier(node)) {
+      value = node.name;
+    } else if (t.isStringLiteral(node)) {
+      value = node.value;
+    } else {
+      return false;
+    }
+
+    if (parts[i] !== value) return false;
+  }
+
+  return true;
+}
+
+/**
  * Build a function that when called will return whether or not the
  * input `node` `MemberExpression` matches the input `match`.
  *
@@ -322,50 +367,10 @@ export function cloneDeep(node: Object): Object {
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 
-export function buildMatchMemberExpression(match:string, allowPartial?: boolean): Function {
+export function buildMatchMemberExpression(match: string, allowPartial?: boolean): (Object) => boolean {
   const parts = match.split(".");
-
   return function (member) {
-    // not a member expression
-    if (!t.isMemberExpression(member)) return false;
-
-    const search = [member];
-    let i = 0;
-
-    while (search.length) {
-      const node = search.shift();
-
-      if (allowPartial && i === parts.length) {
-        return true;
-      }
-
-      if (t.isIdentifier(node)) {
-        // this part doesn't match
-        if (parts[i] !== node.name) return false;
-      } else if (t.isStringLiteral(node)) {
-        // this part doesn't match
-        if (parts[i] !== node.value) return false;
-      } else if (t.isMemberExpression(node)) {
-        if (node.computed && !t.isStringLiteral(node.property)) {
-          // we can't deal with this
-          return false;
-        } else {
-          search.push(node.object);
-          search.push(node.property);
-          continue;
-        }
-      } else {
-        // we can't deal with this
-        return false;
-      }
-
-      // too many parts
-      if (++i > parts.length) {
-        return false;
-      }
-    }
-
-    return true;
+    return matchesPattern(member, parts, allowPartial);
   };
 }
 

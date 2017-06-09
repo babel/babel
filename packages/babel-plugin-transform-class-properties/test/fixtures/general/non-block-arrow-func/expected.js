@@ -7,7 +7,7 @@ export default (param => {
     }
 
     babelHelpers.createClass(App, [{
-      key: 'getParam',
+      key: "getParam",
       value: function getParam() {
         return param;
       }

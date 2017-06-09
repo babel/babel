@@ -1,6 +1,6 @@
 # babel-plugin-syntax-dynamic-import
 
-Allow parsing of `import()`.
+> Allow parsing of `import()`.
 
 ## Installation
 
