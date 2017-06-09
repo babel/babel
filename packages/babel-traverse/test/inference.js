@@ -260,12 +260,12 @@ describe("inference", function() {
       );
     });
     it("should infer constant identifier", function () {
-      const path = getPath(`const x = 0; x`).get("body.1.expression");
+      const path = getPath("const x = 0; x").get("body.1.expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isNumberTypeAnnotation(type), "should be number");
     });
     it("should infer indirect constant identifier", function () {
-      const path = getPath(`const x = 0; const y = x; y`).get("body.2.expression");
+      const path = getPath("const x = 0; const y = x; y").get("body.2.expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isNumberTypeAnnotation(type), "should be number");
     });
@@ -308,10 +308,10 @@ describe("inference", function() {
       assert.ok(t.isStringTypeAnnotation(type), "should be string");
     });
     it("should infer identifier type from if statement (||)", function () {
-      let path = getPath(`function test(x) {
+      const path = getPath(`function test(x) {
         if (typeof x == 'string' || x === 3) x;
       }`).get("body.0.body.body.0.consequent.expression");
-      let type = path.getTypeAnnotation();
+      const type = path.getTypeAnnotation();
       assert.ok(t.isAnyTypeAnnotation(type), "should be a any type");
     });
     it("should not infer identifier type from incorrect binding", function () {
