@@ -1,18 +1,20 @@
+var _ref = function (i) {
+  fns.push(function () {
+    return i;
+  });
+  if (i === 1) {
+    return "continue";
+  } else if (i === 2) {
+    return "break";
+  } else if (i === 3) {
+    return {
+      v: i
+    };
+  }
+};
+
 (function () {
-  var _loop2 = function (i) {
-    fns.push(function () {
-      return i;
-    });
-    if (i === 1) {
-      return "continue";
-    } else if (i === 2) {
-      return "break";
-    } else if (i === 3) {
-      return {
-        v: i
-      };
-    }
-  };
+  var _loop2 = _ref;
 
   _loop: for (var i in nums) {
     var _ret = _loop2(i);

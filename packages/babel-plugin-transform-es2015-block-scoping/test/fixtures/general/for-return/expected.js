@@ -1,12 +1,14 @@
-(function () {
-  var _loop = function (i) {
-    fns.push(function () {
-      return i;
-    });
-    return {
-      v: i
-    };
+var _ref = function (i) {
+  fns.push(function () {
+    return i;
+  });
+  return {
+    v: i
   };
+};
+
+(function () {
+  var _loop = _ref;
 
   for (var i in nums) {
     var _ret = _loop(i);
