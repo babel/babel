@@ -359,7 +359,7 @@ describe("CodeGenerator", function () {
   it("generate", function () {
     const codeGen = new CodeGenerator(t.numericLiteral(123));
     const code = codeGen.generate().code;
-    assert.equal(parse(code).program.body[0].type, "ExpressionStatement");
+    assert.equal(parse(code).program.body[0].expression.value, 123);
   });
 });
 
