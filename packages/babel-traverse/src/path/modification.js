@@ -231,7 +231,7 @@ export function pushContainer(listKey, nodes) {
  * referencing it.
  */
 
-export function hoist(scope = this.scope) {
-  const hoister = new PathHoister(this, scope);
+export function hoist() {
+  const hoister = new PathHoister(this);
   return hoister.run();
 }
