@@ -35,6 +35,8 @@ class Foo {
   get fooProp(): number {}
 }
 var numVal: number;
+var numVal: empty;
+var numVal: mixed;
 var numVal: number = otherNumVal;
 var a: { numVal: number };
 var a: { numVal: number; };
