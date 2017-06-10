@@ -21,20 +21,24 @@ export default function ({ types: t }) {
     return false;
   }
 
-  // extracts ["a", "b"] from {a: "hi", b}
-  function extractKeys(path) {
+  // normalizes identifier keys to string literals and extracts all keys
+  // e.g. extracts ["a", "b", 3, ++x] from {a: "foo", b, 3: "bar", [++x]: "baz"}
+  function extractNormalizedKeys(path) {
     const propPaths = path.get("properties");
     const keys = [];
     for (const propPath of propPaths) {
-      let key = propPath.get("key").node;
+      const key = propPath.get("key").node;
       if (t.isIdentifier(key) && !propPath.node.computed) {
-        key = t.stringLiteral(key.name);
+        keys.push(t.stringLiteral(key.name));
+      } else {
+        keys.push(key);
       }
-      keys.push(key);
     }
     return keys;
   }
 
+  // replaces impure computed keys with new identifiers
+  // and returns variable declarators of these new identifiers
   function replaceImpureComputedKeys(path) {
     const impureComputedPropertyDeclarators = [];
     for (const propPath of path.get("properties")) {
@@ -53,10 +57,10 @@ export default function ({ types: t }) {
   function createObjectSpread(path, file, objRef) {
     const last = path.get("properties")[path.get("properties").length - 1];
     const restElement = t.clone(last.node);
-    last.remove();
+    last.remove(); // remove restElement
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
-    const keys = extractKeys(path); // without the restElement
+    const keys = extractNormalizedKeys(path);
 
     const someComputed = path.get("properties").some((prop) => prop.node.computed);
     let keyExpression;
@@ -177,9 +181,7 @@ export default function ({ types: t }) {
               argument,
               callExpression ] = createObjectSpread(objectPatternPath, file, ref);
 
-            for (let i = impureComputedPropertyDeclarators.length - 1; i >= 0; i--) {
-              insertionPath.insertBefore(impureComputedPropertyDeclarators[i]);
-            }
+            insertionPath.insertBefore(impureComputedPropertyDeclarators);
 
             insertionPath.insertAfter(
               t.variableDeclarator(

@@ -602,12 +602,13 @@ helpers.toConsumableArray = template(`
 
 helpers.toPropertyKey = template(`
   (function (key) {
-    if (typeof key === "symbol" || (
+    var isPolyfilledSymbol = ( 
       typeof key === "object" && 
       key !== null &&
       typeof key.toString === "function" && 
-      key.toString().slice(0, 6) === "Symbol(")) 
-    {
+      key.toString().slice(0, 7) === "Symbol(");
+
+    if (typeof key === "symbol" || isPolyfilledSymbol) {
       return key;
     } else {
       return String(key);
