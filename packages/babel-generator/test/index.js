@@ -296,17 +296,17 @@ describe("whitespace", function () {
 
 describe("whitespace nodes", function () {
   it("logical expression containing a function", function () {
-    const noopFunction = t.arrowFunctionExpression([], t.numericLiteral(0))
+    const noopFunction = t.arrowFunctionExpression([], t.numericLiteral(0));
     const num = t.numericLiteral(1);
 
-    const functionOnLeft = t.logicalExpression('||', noopFunction, num);
-    const functionOnRight = t.logicalExpression('||', num, noopFunction);
+    const functionOnLeft = t.logicalExpression("||", noopFunction, num);
+    const functionOnRight = t.logicalExpression("||", num, noopFunction);
 
-    assert.deepEqual(whitespaceNodes.LogicalExpression(functionOnLeft), {after: true});
-    assert.deepEqual(whitespaceNodes.LogicalExpression(functionOnRight), {after: true});
+    assert.deepEqual(whitespaceNodes.LogicalExpression(functionOnLeft), { after: true });
+    assert.deepEqual(whitespaceNodes.LogicalExpression(functionOnRight), { after: true });
   });
   it("literal containing use strict", function () {
-    assert.deepEqual(whitespaceNodes.Literal(t.stringLiteral("use strict")), {after: true});
+    assert.deepEqual(whitespaceNodes.Literal(t.stringLiteral("use strict")), { after: true });
   });
 });
 
