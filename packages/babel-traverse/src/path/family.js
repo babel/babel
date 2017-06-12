@@ -12,26 +12,27 @@ export function getOpposite() : ?NodePath {
   }
 }
 
+function addCompletionRecords(path, paths) {
+  if (path) return paths.concat(path.getCompletionRecords());
+  return paths;
+}
+
 export function getCompletionRecords(): Array {
   let paths = [];
 
-  const add = function (path) {
-    if (path) paths = paths.concat(path.getCompletionRecords());
-  };
-
   if (this.isIfStatement()) {
-    add(this.get("consequent"));
-    add(this.get("alternate"));
+    paths = addCompletionRecords(this.get("consequent"), paths);
+    paths = addCompletionRecords(this.get("alternate"), paths);
   } else if (this.isDoExpression() || this.isFor() || this.isWhile()) {
-    add(this.get("body"));
+    paths = addCompletionRecords(this.get("body"), paths);
   } else if (this.isProgram() || this.isBlockStatement()) {
-    add(this.get("body").pop());
+    paths = addCompletionRecords(this.get("body").pop(), paths);
   } else if (this.isFunction()) {
     return this.get("body").getCompletionRecords();
   } else if (this.isTryStatement()) {
-    add(this.get("block"));
-    add(this.get("handler"));
-    add(this.get("finalizer"));
+    paths = addCompletionRecords(this.get("block"), paths);
+    paths = addCompletionRecords(this.get("handler"), paths);
+    paths = addCompletionRecords(this.get("finalizer"), paths);
   } else {
     paths.push(this);
   }

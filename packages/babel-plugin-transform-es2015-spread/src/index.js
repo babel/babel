@@ -16,27 +16,26 @@ export default function ({ types: t }) {
     return false;
   }
 
+  function push(_props, nodes) {
+    if (!_props.length) return _props;
+    nodes.push(t.arrayExpression(_props));
+    return [];
+  }
+
   function build(props: Array, scope, state) {
     const nodes = [];
-
     let _props = [];
-
-    function push() {
-      if (!_props.length) return;
-      nodes.push(t.arrayExpression(_props));
-      _props = [];
-    }
 
     for (const prop of props) {
       if (t.isSpreadElement(prop)) {
-        push();
+        _props = push(_props, nodes);
         nodes.push(getSpreadLiteral(prop, scope, state));
       } else {
         _props.push(prop);
       }
     }
 
-    push();
+    push(_props, nodes);
 
     return nodes;
   }

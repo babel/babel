@@ -120,6 +120,14 @@ export default function (opts) {
     return state.call || t.callExpression(state.callee, args);
   }
 
+  function pushProps(_props, objs) {
+    if (!_props.length) return _props;
+
+    objs.push(t.objectExpression(_props));
+    return [];
+  }
+
+
   /**
    * The logic for this is quite terse. It's because we need to
    * support spread elements. We loop over all attributes,
@@ -137,24 +145,17 @@ export default function (opts) {
         "useBuiltIns (defaults to false)");
     }
 
-    function pushProps() {
-      if (!_props.length) return;
-
-      objs.push(t.objectExpression(_props));
-      _props = [];
-    }
-
     while (attribs.length) {
       const prop = attribs.shift();
       if (t.isJSXSpreadAttribute(prop)) {
-        pushProps();
+        _props = pushProps(_props, objs);
         objs.push(prop.argument);
       } else {
         _props.push(convertAttribute(prop));
       }
     }
 
-    pushProps();
+    pushProps(_props, objs);
 
     if (objs.length === 1) {
       // only one object
