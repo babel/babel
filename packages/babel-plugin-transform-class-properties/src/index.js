@@ -40,8 +40,6 @@ export default function ({ types: t }) {
   );
 
   return {
-    name: "classProperties",
-
     inherits: syntaxClassProperties,
 
     capabilities: ["classProperties"],
