@@ -7,11 +7,13 @@ import defineType, {
   assertEach,
   assertOneOf,
 } from "./index";
+import { functionCommon, patternLikeCommon } from "./core";
 
 defineType("AssignmentPattern", {
   visitor: ["left", "right"],
-  aliases: ["Pattern", "LVal"],
+  aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
+    ...patternLikeCommon,
     left: {
       validate: assertNodeType("Identifier"),
     },
@@ -26,10 +28,11 @@ defineType("AssignmentPattern", {
 
 defineType("ArrayPattern", {
   visitor: ["elements", "typeAnnotation"],
-  aliases: ["Pattern", "LVal"],
+  aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
+    ...patternLikeCommon,
     elements: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Identifier", "Pattern", "RestElement"))),
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("PatternLike"))),
     },
     decorators: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
@@ -42,15 +45,14 @@ defineType("ArrowFunctionExpression", {
   visitor: ["params", "body", "returnType", "typeParameters"],
   aliases: ["Scopable", "Function", "BlockParent", "FunctionParent", "Expression", "Pureish"],
   fields: {
-    params: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("LVal"))),
+    // Unlike other functions, arrow functions are never generators.
+    ...(() => { const x = functionCommon; delete x.generator; return x; })(),
+    expression: {
+      // https://github.com/babel/babylon/issues/505
+      validate: assertValueType("boolean"),
     },
     body: {
       validate: assertNodeType("BlockStatement", "Expression"),
-    },
-    async: {
-      validate: assertValueType("boolean"),
-      default: false,
     },
   },
 });
@@ -59,10 +61,34 @@ defineType("ClassBody", {
   visitor: ["body"],
   fields: {
     body: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("ClassMethod", "ClassProperty"))),
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("ClassMethod", "ClassProperty", "TSDeclareMethod", "TSIndexSignature"))),
     },
   },
 });
+
+const classCommon = {
+  typeParameters: {
+    validate: assertNodeType("TypeParameterDeclaration", "Noop"),
+    optional: true,
+  },
+  body: {
+    validate: assertNodeType("ClassBody"),
+  },
+  superClass: {
+    optional: true,
+    validate: assertNodeType("Expression"),
+  },
+  superTypeParameters: {
+    validate: assertNodeType("TypeParameterInstantiation"),
+    optional: true,
+  },
+  implements: {
+    validate: chain(assertValueType("array"), assertEach(assertNodeType("TSExpressionWithTypeArguments", "FlowClassImplements"))),
+    optional: true,
+  },
+};
 
 defineType("ClassDeclaration", {
   builder: ["id", "superClass", "body", "decorators"],
@@ -78,18 +104,22 @@ defineType("ClassDeclaration", {
   ],
   aliases: ["Scopable", "Class", "Statement", "Declaration", "Pureish"],
   fields: {
+    ...classCommon,
+    declare: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    abstract: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
     id: {
       validate: assertNodeType("Identifier"),
-    },
-    body: {
-      validate: assertNodeType("ClassBody"),
-    },
-    superClass: {
-      optional: true,
-      validate: assertNodeType("Expression"),
+      optional: true, // Missing if this is the child of an ExportDefaultDeclaration.
     },
     decorators: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
+      optional: true,
     },
   },
 });
@@ -98,6 +128,7 @@ defineType("ClassExpression", {
   inherits: "ClassDeclaration",
   aliases: ["Scopable", "Class", "Expression", "Pureish"],
   fields: {
+    ...classCommon,
     id: {
       optional: true,
       validate: assertNodeType("Identifier"),
@@ -111,6 +142,7 @@ defineType("ClassExpression", {
     },
     decorators: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
+      optional: true,
     },
   },
 });
@@ -130,7 +162,7 @@ defineType("ExportDefaultDeclaration", {
   aliases: ["Statement", "Declaration", "ModuleDeclaration", "ExportDeclaration"],
   fields: {
     declaration: {
-      validate: assertNodeType("FunctionDeclaration", "ClassDeclaration", "Expression"),
+      validate: assertNodeType("FunctionDeclaration", "TSDeclareFunction", "ClassDeclaration", "Expression"),
     },
   },
 });
@@ -253,60 +285,76 @@ defineType("MetaProperty", {
   },
 });
 
+export const classMethodOrPropertyCommon = {
+  abstract: {
+    validate: assertValueType("boolean"),
+    optional: true,
+  },
+  accessibility: {
+    validate: chain(assertValueType("string"), assertOneOf("public", "private", "protected")),
+    optional: true,
+  },
+  static: {
+    validate: assertValueType("boolean"),
+    optional: true,
+  },
+  computed: {
+    default: false,
+    validate: assertValueType("boolean"),
+  },
+  optional: {
+    validate: assertValueType("boolean"),
+    optional: true,
+  },
+  key: {
+    validate: (function () {
+      const normal = assertNodeType("Identifier", "StringLiteral", "NumericLiteral");
+      const computed = assertNodeType("Expression");
+
+      return function (node, key, val) {
+        const validator = node.computed ? computed : normal;
+        validator(node, key, val);
+      };
+    }()),
+  },
+};
+
+export const classMethodOrDeclareMethodCommon = {
+  ...functionCommon,
+  ...classMethodOrPropertyCommon,
+  kind: {
+    validate: chain(assertValueType("string"), assertOneOf("get", "set", "method", "constructor")),
+    default: "method",
+  },
+  access: {
+    validate: chain(assertValueType("string"), assertOneOf("public", "private", "protected")),
+    optional: true,
+  },
+  decorators: {
+    validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
+    optional: true,
+  },
+};
+
 defineType("ClassMethod", {
   aliases: ["Function", "Scopable", "BlockParent", "FunctionParent", "Method"],
   builder: ["kind", "key", "params", "body", "computed", "static"],
   visitor: ["key", "params", "body", "decorators", "returnType", "typeParameters"],
   fields: {
-    kind: {
-      validate: chain(assertValueType("string"), assertOneOf("get", "set", "method", "constructor")),
-      default: "method",
-    },
-    computed: {
-      default: false,
-      validate: assertValueType("boolean"),
-    },
-    static: {
-      default: false,
-      validate: assertValueType("boolean"),
-    },
-    key: {
-      validate: (function () {
-        const normal = assertNodeType("Expression");
-        const computed = assertNodeType("Identifier", "StringLiteral", "NumericLiteral");
-
-        return function (node, key, val) {
-          const validator = node.computed ? computed : normal;
-          validator(node, key, val);
-        };
-      }()),
-    },
-    params: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("LVal"))),
-    },
+    ...classMethodOrDeclareMethodCommon,
     body: {
       validate: assertNodeType("BlockStatement"),
-    },
-    generator: {
-      default: false,
-      validate: assertValueType("boolean"),
-    },
-    async: {
-      default: false,
-      validate: assertValueType("boolean"),
     },
   },
 });
 
 defineType("ObjectPattern", {
   visitor: ["properties", "typeAnnotation"],
-  aliases: ["Pattern", "LVal"],
+  aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
+    ...patternLikeCommon,
     properties: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("RestElement", "Property"))),
-    },
-    decorators: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("RestElement", "ObjectProperty"))),
     },
   },
 });

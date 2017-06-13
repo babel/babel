@@ -110,16 +110,22 @@ defineType("BreakStatement", {
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
 });
 
+const callNewCommon = {
+  callee: {
+    validate: assertNodeType("Expression"),
+  },
+  arguments: {
+    validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement"))),
+  },
+  typeParameters: {
+    validate: assertNodeType("TypeParameterInstantiation"),
+    optional: true,
+  },
+};
+
 defineType("CallExpression", {
   visitor: ["callee", "arguments"],
-  fields: {
-    callee: {
-      validate: assertNodeType("Expression"),
-    },
-    arguments: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement"))),
-    },
-  },
+  fields: callNewCommon,
   aliases: ["Expression"],
 });
 
@@ -242,26 +248,43 @@ defineType("ForStatement", {
   },
 });
 
+export const functionCommon = {
+  params: {
+    validate: chain(assertValueType("array"), assertEach(assertNodeType("LVal"))),
+  },
+  async: {
+    validate: assertValueType("boolean"),
+    default: false,
+  },
+  returnType: {
+    validate: assertNodeType("TypeAnnotation", "Noop"),
+    optional: true,
+  },
+  typeParameters: {
+    validate: assertNodeType("TypeParameterDeclaration", "Noop"),
+    optional: true,
+  },
+};
+
+export const functionDeclarationCommon = {
+  ...functionCommon,
+  declare: {
+    validate: assertValueType("boolean"),
+    optional: true,
+  },
+  id: {
+    validate: assertNodeType("Identifier"),
+    optional: true, // https://github.com/babel/babylon/issues/502
+  },
+};
+
 defineType("FunctionDeclaration", {
   builder: ["id", "params", "body", "generator", "async"],
   visitor: ["id", "params", "body", "returnType", "typeParameters"],
   fields: {
-    id: {
-      validate: assertNodeType("Identifier"),
-    },
-    params: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("LVal"))),
-    },
+    ...functionDeclarationCommon,
     body: {
       validate: assertNodeType("BlockStatement"),
-    },
-    generator: {
-      default: false,
-      validate: assertValueType("boolean"),
-    },
-    async: {
-      default: false,
-      validate: assertValueType("boolean"),
     },
   },
   aliases: [
@@ -279,32 +302,34 @@ defineType("FunctionExpression", {
   inherits: "FunctionDeclaration",
   aliases: ["Scopable", "Function", "BlockParent", "FunctionParent", "Expression", "Pureish"],
   fields: {
+    ...functionCommon,
     id: {
       validate: assertNodeType("Identifier"),
       optional: true,
     },
-    params: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("LVal"))),
-    },
     body: {
       validate: assertNodeType("BlockStatement"),
-    },
-    generator: {
-      default: false,
-      validate: assertValueType("boolean"),
-    },
-    async: {
-      default: false,
-      validate: assertValueType("boolean"),
     },
   },
 });
 
+export const patternLikeCommon = {
+  typeAnnotation: {
+    // TODO: babel-plugin-transform-flow-comments puts a Noop here, is there a better way?
+    validate: assertNodeType("TypeAnnotation", "Noop"),
+    optional: true,
+  },
+  decorators: {
+    validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
+  },
+};
+
 defineType("Identifier", {
   builder: ["name"],
   visitor: ["typeAnnotation"],
-  aliases: ["Expression", "LVal"],
+  aliases: ["Expression", "PatternLike", "LVal", "TSEntityName"],
   fields: {
+    ...patternLikeCommon,
     name: {
       validate(node, key, val) {
         if (!t.isValidIdentifier(val)) {
@@ -312,8 +337,9 @@ defineType("Identifier", {
         }
       },
     },
-    decorators: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
+    optional: {
+      validate: assertValueType("boolean"),
+      optional: true,
     },
   },
 });
@@ -441,22 +467,18 @@ defineType("MemberExpression", {
 });
 
 defineType("NewExpression", {
-  visitor: ["callee", "arguments"],
+  visitor: ["callee", "arguments", "typeParameters"],
   aliases: ["Expression"],
-  fields: {
-    callee: {
-      validate: assertNodeType("Expression"),
-    },
-    arguments: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement"))),
-    },
-  },
+  fields: callNewCommon,
 });
 
 defineType("Program", {
   visitor: ["directives", "body"],
   builder: ["body", "directives"],
   fields: {
+    sourceFile: {
+      validate: assertValueType("string"),
+    },
     directives: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Directive"))),
       default: [],
@@ -484,6 +506,7 @@ defineType("ObjectExpression", {
 defineType("ObjectMethod", {
   builder: ["kind", "key", "params", "body", "computed"],
   fields: {
+    ...functionCommon,
     kind: {
       validate: chain(assertValueType("string"), assertOneOf("method", "get", "set")),
       default: "method",
@@ -494,8 +517,8 @@ defineType("ObjectMethod", {
     },
     key: {
       validate: (function () {
-        const normal = assertNodeType("Expression");
-        const computed = assertNodeType("Identifier", "StringLiteral", "NumericLiteral");
+        const normal = assertNodeType("Identifier", "StringLiteral", "NumericLiteral");
+        const computed = assertNodeType("Expression");
 
         return function (node, key, val) {
           const validator = node.computed ? computed : normal;
@@ -508,14 +531,6 @@ defineType("ObjectMethod", {
     },
     body: {
       validate: assertNodeType("BlockStatement"),
-    },
-    generator: {
-      default: false,
-      validate: assertValueType("boolean"),
-    },
-    async: {
-      default: false,
-      validate: assertValueType("boolean"),
     },
   },
   visitor: ["key", "params", "body", "decorators", "returnType", "typeParameters"],
@@ -541,7 +556,9 @@ defineType("ObjectProperty", {
       }()),
     },
     value: {
-      validate: assertNodeType("Expression", "Pattern", "RestElement"),
+      // Value may be PatternLike if this is an AssignmentProperty
+      // https://github.com/babel/babylon/issues/434
+      validate: assertNodeType("Expression", "PatternLike"),
     },
     shorthand: {
       validate: assertValueType("boolean"),
@@ -558,13 +575,11 @@ defineType("ObjectProperty", {
 
 defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"],
-  aliases: ["LVal"],
+  aliases: ["LVal", "PatternLike"],
   fields: {
+    ...patternLikeCommon,
     argument: {
       validate: assertNodeType("LVal"),
-    },
-    decorators: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
     },
   },
 });
@@ -640,7 +655,7 @@ defineType("TryStatement", {
     },
     handler: {
       optional: true,
-      handler: assertNodeType("BlockStatement"),
+      validate: assertNodeType("BlockStatement"),
     },
     finalizer: {
       optional: true,
@@ -688,6 +703,10 @@ defineType("VariableDeclaration", {
   visitor: ["declarations"],
   aliases: ["Statement", "Declaration"],
   fields: {
+    declare: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
     kind: {
       validate: chain(assertValueType("string"), assertOneOf("var", "let", "const")),
     },
