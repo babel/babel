@@ -20,8 +20,11 @@ export default class Plugin {
     if (plugin.capabilities != null && !Array.isArray(plugin.capabilities)) {
       throw new Error("Plugin .capabilities must be an array");
     }
-    if (plugin.dependencies != null && !Array.isArray(plugin.dependencies)) {
-      throw new Error("Plugin .dependencies must be an array");
+    if (!Array.isArray(plugin.after)) {
+      throw new Error("Plugin .after must be an array");
+    }
+    if (!Array.isArray(plugin.before)) {
+      throw new Error("Plugin .before must be an array");
     }
 
     this.key = plugin.name || key;
@@ -31,7 +34,8 @@ export default class Plugin {
     this.pre = plugin.pre;
     this.visitor = plugin.visitor;
     this.capabilities = plugin.capabilities;
-    this.dependencies = plugin.dependencies;
+    this.after = plugin.after;
+    this.before = plugin.before;
   }
 
   key: ?string;
@@ -40,5 +44,6 @@ export default class Plugin {
   pre: ?Function;
   visitor: ?{};
   capabilities: ?Array<any>;
-  dependencies: ?Array<any>;
+  after: ?Array<any>;
+  before: ?Array<any>;
 }

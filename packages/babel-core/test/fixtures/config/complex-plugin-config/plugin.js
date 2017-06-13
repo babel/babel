@@ -1,9 +1,10 @@
-module.exports = function(name, capabilities, dependencies) {
+module.exports = function(name, capabilities, before, after) {
   return function(babel) {
     return {
       name: name,
       capabilities: capabilities,
-      dependencies: dependencies,
+      before: before,
+      after: after,
       visitor: {
         Program: function(path) {
           path.pushContainer("body", [

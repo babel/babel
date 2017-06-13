@@ -65,14 +65,15 @@ const optionNames = new Set([
 ]);
 
 const ALLOWED_PLUGIN_KEYS = new Set([
-  "name",
-  "manipulateOptions",
-  "pre",
-  "post",
-  "visitor",
-  "inherits",
+  "after",
+  "before",
   "capabilities",
-  "dependencies",
+  "inherits",
+  "manipulateOptions",
+  "name",
+  "post",
+  "pre",
+  "visitor",
 ]);
 
 export default function manageOptions(opts: {}): {
@@ -113,21 +114,30 @@ function sortPlugins(plugins) {
     }
   });
 
-  // Look for the dependecies of the current module and identify which module
+  // Look for the plugins that run before/after the current module and identify which module
   // addresses them.
   plugins.forEach((pluginTuple) => {
     const plugin = pluginTuple[0];
 
     // Skip mapping if plugin doesn't have dependencies.
-    if (plugin.dependencies) {
-      const mappedDependencies = plugin.dependencies.map((dependency) => {
-        const idForDependency = capabilitiesToPluginIdMap[dependency];
-        if (idForDependency === undefined) {
-          throw new Error(`${plugin.key} requires ${dependency} but it was not provided.`);
+    if (plugin.before) {
+      const mappedPluginsAfter = plugin.before.map((pluginAfter) => {
+        const idForAfter = capabilitiesToPluginIdMap[pluginAfter];
+        if (idForAfter === undefined) {
+          throw new Error(`${plugin.key} requires ${pluginAfter} but it was not provided.`);
         }
-        return idForDependency;
+        return idForAfter;
       });
-      graph.add(plugin.key, pluginTuple, mappedDependencies);
+      graph.add(plugin.key, pluginTuple, mappedPluginsAfter);
+    } else if (plugin.after) {
+      const mappedPluginsBefore = plugin.after.map((pluginBefore) => {
+        const idForBefore = capabilitiesToPluginIdMap[pluginBefore];
+        if (idForBefore === undefined) {
+          throw new Error(`${plugin.key} requires ${pluginBefore} but it was not provided.`);
+        }
+        return idForBefore;
+      });
+      graph.add(plugin.key, mappedPluginsBefore, pluginTuple);
     } else {
       graph.add(plugin.key, pluginTuple);
     }
