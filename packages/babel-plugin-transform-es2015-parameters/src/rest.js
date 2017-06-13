@@ -23,6 +23,15 @@ const restLength = template(`
   ARGUMENTS.length <= OFFSET ? 0 : ARGUMENTS.length - OFFSET
 `);
 
+function referencesRest(path, state) {
+  if (path.node.name === state.name) {
+    // Check rest parameter is not shadowed by a binding in another scope.
+    return path.scope.bindingIdentifierEquals(state.name, state.outerBinding);
+  }
+
+  return false;
+}
+
 const memberExpressionOptimisationVisitor = {
   Scope(path, state) {
     // check if this scope has a local binding that will shadow the rest parameter
@@ -60,7 +69,7 @@ const memberExpressionOptimisationVisitor = {
     }
 
     // is this a referenced identifier and is it referencing the rest parameter?
-    if (node.name !== state.name) return;
+    if (!referencesRest(path, state)) return;
 
     if (state.noOptimise) {
       state.deopted = true;
@@ -149,8 +158,8 @@ const memberExpressionOptimisationVisitor = {
    * See https://github.com/babel/babel/issues/2091
    */
 
-  BindingIdentifier({ node }, state) {
-    if (node.name === state.name) {
+  BindingIdentifier(path, state) {
+    if (referencesRest(path, state)) {
       state.deopted = true;
     }
   },
