@@ -294,99 +294,109 @@ export default class ExpressionParser extends LValParser {
     return this.parseSubscripts(expr, startPos, startLoc);
   }
 
-  parseSubscripts(base: N.Expression, startPos: number, startLoc: Position, noCalls?: boolean): N.Expression {
-    for (;;) {
-      if (!noCalls && this.eat(tt.doubleColon)) {
-        const node = this.startNodeAt(startPos, startLoc);
-        node.object = base;
-        node.callee = this.parseNoCallExpr();
-        return this.parseSubscripts(this.finishNode(node, "BindExpression"), startPos, startLoc, noCalls);
+  parseSubscripts(base: N.Expression, startPos: number, startLoc: Position, noCalls?: ?boolean) {
+    const state = { stop: false };
+    do {
+      base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
+    } while (!state.stop);
+    return base;
+  }
 
-      } else if (this.match(tt.questionDot)) {
-        if (!this.hasPlugin("optionalChaining")) {
-          this.raise(startPos, "You can only use optional-chaining when the 'optionalChaining' plugin is enabled.");
-        }
+  /** @param state Set 'state.stop = true' to indicate that we should stop parsing subscripts. */
+  parseSubscript(base: N.Expression, startPos: number, startLoc: Position, noCalls: ?boolean, state: { stop: boolean }): N.Expression {
+    if (!noCalls && this.eat(tt.doubleColon)) {
+      const node = this.startNodeAt(startPos, startLoc);
+      node.object = base;
+      node.callee = this.parseNoCallExpr();
+      state.stop = true;
+      return this.parseSubscripts(this.finishNode(node, "BindExpression"), startPos, startLoc, noCalls);
 
-        if (noCalls && this.lookahead().type == tt.parenL) {
-          return base;
-        }
-        this.next();
+    } else if (this.match(tt.questionDot)) {
+      if (!this.hasPlugin("optionalChaining")) {
+        this.raise(startPos, "You can only use optional-chaining when the 'optionalChaining' plugin is enabled.");
+      }
 
-        const node = this.startNodeAt(startPos, startLoc);
+      if (noCalls && this.lookahead().type == tt.parenL) {
+        state.stop = true;
+        return base;
+      }
+      this.next();
 
-        if (this.eat(tt.bracketL)) {
-          node.object = base;
-          node.property = this.parseExpression();
-          node.computed = true;
-          node.optional = true;
-          this.expect(tt.bracketR);
-          base = this.finishNode(node, "MemberExpression");
-        } else if (this.eat(tt.parenL)) {
-          const possibleAsync = this.state.potentialArrowAt === base.start &&
-            base.type === "Identifier" &&
-            base.name === "async" &&
-            !this.canInsertSemicolon();
+      const node = this.startNodeAt(startPos, startLoc);
 
-          node.callee = base;
-          node.arguments = this.parseCallExpressionArguments(tt.parenR, possibleAsync);
-          node.optional = true;
-
-          base = this.finishNode(node, "CallExpression");
-        } else {
-          node.object = base;
-          node.property = this.parseIdentifier(true);
-          node.computed = false;
-          node.optional = true;
-          base = this.finishNode(node, "MemberExpression");
-        }
-      } else if (this.eat(tt.dot)) {
-        const node = this.startNodeAt(startPos, startLoc);
-        node.object = base;
-        node.property = this.hasPlugin("classPrivateProperties") ? this.parseMaybePrivateName() : this.parseIdentifier(true);
-        node.computed = false;
-        base = this.finishNode(node, "MemberExpression");
-      } else if (this.eat(tt.bracketL)) {
-        const node = this.startNodeAt(startPos, startLoc);
+      if (this.eat(tt.bracketL)) {
         node.object = base;
         node.property = this.parseExpression();
         node.computed = true;
+        node.optional = true;
         this.expect(tt.bracketR);
-        base = this.finishNode(node, "MemberExpression");
-      } else if (!noCalls && this.match(tt.parenL)) {
-        const possibleAsync = this.state.potentialArrowAt === base.start && base.type === "Identifier" && base.name === "async" && !this.canInsertSemicolon();
-        this.next();
+        return this.finishNode(node, "MemberExpression");
+      } else if (this.eat(tt.parenL)) {
+        const possibleAsync = this.state.potentialArrowAt === base.start &&
+          base.type === "Identifier" &&
+          base.name === "async" &&
+          !this.canInsertSemicolon();
 
-        const node = this.startNodeAt(startPos, startLoc);
         node.callee = base;
         node.arguments = this.parseCallExpressionArguments(tt.parenR, possibleAsync);
-        if (node.callee.type === "Import") {
-          if (node.arguments.length !== 1) {
-            this.raise(node.start, "import() requires exactly one argument");
-          }
+        node.optional = true;
 
-          const importArg = node.arguments[0];
-          if (importArg && importArg.type === "SpreadElement") {
-            this.raise(importArg.start, "... is not allowed in import()");
-          }
-        }
-        base = this.finishNode(node, "CallExpression");
-
-        if (possibleAsync && this.shouldParseAsyncArrow()) {
-          return this.parseAsyncArrowFromCallExpression(this.startNodeAt(startPos, startLoc), node);
-        } else {
-          this.toReferencedList(node.arguments);
-        }
-      } else if (this.match(tt.backQuote)) {
-        const node = this.startNodeAt(startPos, startLoc);
-        node.tag = base;
-        node.quasi = this.parseTemplate(true);
-        base = this.finishNode(node, "TaggedTemplateExpression");
+        return this.finishNode(node, "CallExpression");
       } else {
-        return base;
+        node.object = base;
+        node.property = this.parseIdentifier(true);
+        node.computed = false;
+        node.optional = true;
+        return this.finishNode(node, "MemberExpression");
       }
+    } else if (this.eat(tt.dot)) {
+      const node = this.startNodeAt(startPos, startLoc);
+      node.object = base;
+      node.property = this.hasPlugin("classPrivateProperties") ? this.parseMaybePrivateName() : this.parseIdentifier(true);
+      node.computed = false;
+      return this.finishNode(node, "MemberExpression");
+    } else if (this.eat(tt.bracketL)) {
+      const node = this.startNodeAt(startPos, startLoc);
+      node.object = base;
+      node.property = this.parseExpression();
+      node.computed = true;
+      this.expect(tt.bracketR);
+      return this.finishNode(node, "MemberExpression");
+    } else if (!noCalls && this.match(tt.parenL)) {
+      const possibleAsync = this.state.potentialArrowAt === base.start && base.type === "Identifier" && base.name === "async" && !this.canInsertSemicolon();
+      this.next();
+
+      const node = this.startNodeAt(startPos, startLoc);
+      node.callee = base;
+      node.arguments = this.parseCallExpressionArguments(tt.parenR, possibleAsync);
+      if (node.callee.type === "Import") {
+        if (node.arguments.length !== 1) {
+          this.raise(node.start, "import() requires exactly one argument");
+        }
+
+        const importArg = node.arguments[0];
+        if (importArg && importArg.type === "SpreadElement") {
+          this.raise(importArg.start, "... is not allowed in import()");
+        }
+      }
+      this.finishNode(node, "CallExpression");
+
+      if (possibleAsync && this.shouldParseAsyncArrow()) {
+        state.stop = true;
+        return this.parseAsyncArrowFromCallExpression(this.startNodeAt(startPos, startLoc), node);
+      } else {
+        this.toReferencedList(node.arguments);
+      }
+      return node;
+    } else if (this.match(tt.backQuote)) {
+      const node = this.startNodeAt(startPos, startLoc);
+      node.tag = base;
+      node.quasi = this.parseTemplate(true);
+      return this.finishNode(node, "TaggedTemplateExpression");
+    } else {
+      state.stop = true;
+      return base;
     }
-    // istanbul ignore next
-    throw new Error("Unreachable");
   }
 
   parseCallExpressionArguments(close: TokenType, possibleAsyncArrow: boolean): $ReadOnlyArray<?N.Expression> {
