@@ -1,5 +1,7 @@
 export default function ({ types: t }) {
   return {
+    name: "babel-plugin-transform-es3-property-literals",
+
     visitor: {
       ObjectProperty: {
         exit({ node }) {
@@ -10,6 +12,6 @@ export default function ({ types: t }) {
           }
         },
       },
-    },
+    }
   };
 }

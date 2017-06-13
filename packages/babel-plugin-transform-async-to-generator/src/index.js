@@ -3,6 +3,7 @@ import syntaxAsyncFunctions from "babel-plugin-syntax-async-functions";
 
 export default function () {
   return {
+    name: "babel-plugin-transform-async-to-generator",
     inherits: syntaxAsyncFunctions,
 
     visitor: {
@@ -20,6 +21,6 @@ export default function () {
           wrapAsync: state.addHelper("asyncToGenerator"),
         });
       },
-    },
+    }
   };
 }

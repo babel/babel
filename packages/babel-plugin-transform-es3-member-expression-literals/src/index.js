@@ -1,5 +1,7 @@
 export default function ({ types: t }) {
   return {
+    name: "babel-plugin-transform-es3-member-expression-literals",
+
     visitor: {
       MemberExpression: {
         exit({ node }) {
@@ -11,6 +13,6 @@ export default function ({ types: t }) {
           }
         },
       },
-    },
+    }
   };
 }

@@ -2,6 +2,8 @@ import * as t from "babel-types";
 
 export default function () {
   return {
+    name: "babel-plugin-transform-strict-mode",
+
     visitor: {
       Program(path, state) {
         if (state.opts.strict === false || state.opts.strictMode === false) return;
@@ -14,6 +16,6 @@ export default function () {
 
         path.unshiftContainer("directives", t.directive(t.directiveLiteral("use strict")));
       },
-    },
+    }
   };
 }

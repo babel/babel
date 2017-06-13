@@ -15,6 +15,8 @@ function replacePropertySuper(path, node, scope, getObjectRef, file) {
 
 export default function ({ types: t }) {
   return {
+    name: "babel-plugin-transform-es2015-object-super",
+
     visitor: {
       ObjectExpression(path, state) {
         let objectRef;
@@ -35,6 +37,6 @@ export default function ({ types: t }) {
           path.replaceWith(t.assignmentExpression("=", objectRef, path.node));
         }
       },
-    },
+    }
   };
 }

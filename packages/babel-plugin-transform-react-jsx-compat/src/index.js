@@ -2,6 +2,8 @@ import helper from "babel-helper-builder-react-jsx";
 
 export default function ({ types: t }) {
   return {
+    name: "babel-plugin-transform-react-jsx-compat",
+
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push("jsx");
     },
@@ -23,6 +25,6 @@ export default function ({ types: t }) {
           );
         }
       },
-    }),
+    })
   };
 }

@@ -1,5 +1,7 @@
 export default function ({ types: t }) {
   return {
+    name: "babel-plugin-transform-es2015-instanceof",
+
     visitor: {
       BinaryExpression(path) {
         const { node } = path;
@@ -7,6 +9,6 @@ export default function ({ types: t }) {
           path.replaceWith(t.callExpression(this.addHelper("instanceof"), [node.left, node.right]));
         }
       },
-    },
+    }
   };
 }

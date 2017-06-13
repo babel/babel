@@ -2,6 +2,8 @@ import nameFunction from "babel-helper-function-name";
 
 export default function () {
   return {
+    name: "babel-plugin-transform-es2015-function-name",
+
     visitor: {
       FunctionExpression: {
         exit(path) {
@@ -19,6 +21,6 @@ export default function () {
           if (newNode) value.replaceWith(newNode);
         }
       },
-    },
+    }
   };
 }

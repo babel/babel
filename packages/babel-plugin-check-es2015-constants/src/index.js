@@ -1,5 +1,7 @@
 export default function ({ messages }) {
   return {
+    name: "babel-plugin-check-es2015-constants",
+
     visitor: {
       Scope({ scope }) {
         for (const name in scope.bindings) {
@@ -11,6 +13,6 @@ export default function ({ messages }) {
           }
         }
       },
-    },
+    }
   };
 }

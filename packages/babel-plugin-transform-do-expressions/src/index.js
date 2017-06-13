@@ -2,6 +2,7 @@ import syntaxDoExpressions from "babel-plugin-syntax-do-expressions";
 
 export default function () {
   return {
+    name: "babel-plugin-transform-do-expressions",
     inherits: syntaxDoExpressions,
 
     visitor: {
@@ -15,6 +16,6 @@ export default function () {
           }
         },
       },
-    },
+    }
   };
 }
