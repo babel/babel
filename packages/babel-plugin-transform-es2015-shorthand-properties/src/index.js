@@ -2,6 +2,8 @@ import * as t from "babel-types";
 
 export default function () {
   return {
+    name: "babel-plugin-transform-es2015-shorthand-properties",
+
     visitor: {
       ObjectMethod(path) {
         const { node } = path;
@@ -22,6 +24,6 @@ export default function () {
           node.shorthand = false;
         }
       },
-    },
+    }
   };
 }

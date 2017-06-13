@@ -3,6 +3,7 @@ import syntaxExponentiationOperator from "babel-plugin-syntax-exponentiation-ope
 
 export default function ({ types: t }) {
   return {
+    name: "babel-plugin-transform-exponentiation-operator",
     inherits: syntaxExponentiationOperator,
 
     visitor: build({
@@ -11,6 +12,6 @@ export default function ({ types: t }) {
       build(left, right) {
         return t.callExpression(t.memberExpression(t.identifier("Math"), t.identifier("pow")), [left, right]);
       },
-    }),
+    })
   };
 }

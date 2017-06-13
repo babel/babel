@@ -1,5 +1,7 @@
 export default function ({ types: t }) {
   return {
+    name: "babel-plugin-transform-jscript",
+
     visitor: {
       FunctionExpression: {
         exit(path) {
@@ -16,6 +18,6 @@ export default function ({ types: t }) {
           ));
         },
       },
-    },
+    }
   };
 }

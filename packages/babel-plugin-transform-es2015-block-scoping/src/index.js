@@ -10,6 +10,8 @@ import template from "babel-template";
 
 export default function () {
   return {
+    name: "babel-plugin-transform-es2015-block-scoping",
+
     visitor: {
       VariableDeclaration(path, file) {
         const { node, parent, scope } = path;
@@ -61,7 +63,7 @@ export default function () {
           blockScoping.run();
         }
       },
-    },
+    }
   };
 }
 

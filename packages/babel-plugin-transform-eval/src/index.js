@@ -1,5 +1,7 @@
 export default function ({ parse, traverse }) {
   return {
+    name: "babel-plugin-transform-eval",
+
     visitor: {
       CallExpression(path) {
         if (path.get("callee").isIdentifier({ name: "eval" }) && path.node.arguments.length === 1) {
@@ -14,6 +16,6 @@ export default function ({ parse, traverse }) {
           return ast.program;
         }
       },
-    },
+    }
   };
 }

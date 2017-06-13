@@ -3,6 +3,7 @@ import syntaxAsyncFunctions from "babel-plugin-syntax-async-functions";
 
 export default function () {
   return {
+    name: "babel-plugin-transform-async-to-module-method",
     inherits: syntaxAsyncFunctions,
 
     visitor: {
@@ -13,6 +14,6 @@ export default function () {
           wrapAsync: state.addImport(state.opts.module, state.opts.method),
         });
       },
-    },
+    }
   };
 }

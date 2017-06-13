@@ -4,6 +4,8 @@ import type NodePath from "babel-traverse";
 
 export default function () {
   return {
+    name: "babel-plugin-transform-es2015-arrow-functions",
+
     visitor: {
       ArrowFunctionExpression(path: NodePath<BabelNodeArrowFunctionExpression>, state: Object) {
         // In some conversion cases, it may have already been converted to a function while this callback
@@ -17,6 +19,6 @@ export default function () {
           specCompliant: !!state.opts.spec,
         });
       },
-    },
+    }
   };
 }

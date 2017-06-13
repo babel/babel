@@ -7,6 +7,8 @@ import * as rest from "./rest";
 
 export default function () {
   return {
+    name: "babel-plugin-transform-es2015-parameters",
+
     visitor: visitors.merge([{
       ArrowFunctionExpression(path) {
         // In some conversion cases, it may have already been converted to a function while this callback
@@ -22,6 +24,6 @@ export default function () {
           }
         }
       },
-    }, destructuring.visitor, rest.visitor, def.visitor]),
+    }, destructuring.visitor, rest.visitor, def.visitor])
   };
 }

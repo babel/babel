@@ -9,6 +9,8 @@ function getName(key) {
 
 export default function() {
   return {
+    name: "babel-plugin-transform-es2015-duplicate-keys",
+
     visitor: {
       ObjectExpression(path) {
         const { node } = path;
@@ -57,6 +59,6 @@ export default function() {
           }
         }
       },
-    },
+    }
   };
 }
