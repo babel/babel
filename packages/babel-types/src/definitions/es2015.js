@@ -11,6 +11,7 @@ import { functionCommon, patternLikeCommon } from "./core";
 
 defineType("AssignmentPattern", {
   visitor: ["left", "right"],
+  builder: ["left", "right"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon,
@@ -28,6 +29,7 @@ defineType("AssignmentPattern", {
 
 defineType("ArrayPattern", {
   visitor: ["elements", "typeAnnotation"],
+  builder: ["elements"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon,
@@ -350,6 +352,7 @@ defineType("ClassMethod", {
 
 defineType("ObjectPattern", {
   visitor: ["properties", "typeAnnotation"],
+  builder: ["properties"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon,

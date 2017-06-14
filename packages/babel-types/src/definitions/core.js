@@ -110,24 +110,25 @@ defineType("BreakStatement", {
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
 });
 
-const callNewCommon = {
-  callee: {
-    validate: assertNodeType("Expression"),
-  },
-  arguments: {
-    validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement"))),
-  },
-  typeParameters: {
-    validate: assertNodeType("TypeParameterInstantiation"),
-    optional: true,
+const callOrNew = {
+  visitor: ["callee", "arguments", "typeParameters"],
+  builder: ["callee", "arguments"],
+  aliases: ["Expression"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+    arguments: {
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression", "SpreadElement"))),
+    },
+    typeParameters: {
+      validate: assertNodeType("TypeParameterInstantiation"),
+      optional: true,
+    },
   },
 };
 
-defineType("CallExpression", {
-  visitor: ["callee", "arguments"],
-  fields: callNewCommon,
-  aliases: ["Expression"],
-});
+defineType("CallExpression", callOrNew);
 
 defineType("CatchClause", {
   visitor: ["param", "body"],
@@ -466,11 +467,7 @@ defineType("MemberExpression", {
   },
 });
 
-defineType("NewExpression", {
-  visitor: ["callee", "arguments", "typeParameters"],
-  aliases: ["Expression"],
-  fields: callNewCommon,
-});
+defineType("NewExpression", callOrNew);
 
 defineType("Program", {
   visitor: ["directives", "body"],
@@ -575,6 +572,7 @@ defineType("ObjectProperty", {
 
 defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"],
+  builder: ["argument"],
   aliases: ["LVal", "PatternLike"],
   fields: {
     ...patternLikeCommon,
