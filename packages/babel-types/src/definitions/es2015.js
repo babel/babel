@@ -47,8 +47,7 @@ defineType("ArrowFunctionExpression", {
   visitor: ["params", "body", "returnType", "typeParameters"],
   aliases: ["Scopable", "Function", "BlockParent", "FunctionParent", "Expression", "Pureish"],
   fields: {
-    // Unlike other functions, arrow functions are never generators.
-    ...(() => { const x = functionCommon; delete x.generator; return x; })(),
+    ...functionCommon,
     expression: {
       // https://github.com/babel/babylon/issues/505
       validate: assertValueType("boolean"),
