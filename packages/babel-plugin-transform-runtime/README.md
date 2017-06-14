@@ -164,7 +164,7 @@ function foo() {
 This isn't ideal as then you have to include the regenerator runtime which
 pollutes the global scope.
 
-Instead what the `runtime` transformer does it compile that to:
+Instead what the `runtime` transformer does is compile that to:
 
 ```javascript
 "use strict";
@@ -178,11 +178,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var _marked = [foo].map(_regenerator2.default.mark);
 
 function foo() {
-  return regeneratorRuntime.wrap(function foo$(_context) {
-    while (1) switch (_context.prev = _context.next) {
-      case 0:
-      case "end":
-        return _context.stop();
+  return _regenerator2.default.wrap(function foo$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+        case "end":
+          return _context.stop();
+      }
     }
   }, _marked[0], this);
 }
