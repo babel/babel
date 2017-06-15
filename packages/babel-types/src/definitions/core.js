@@ -275,7 +275,7 @@ export const functionDeclarationCommon = {
   },
   id: {
     validate: assertNodeType("Identifier"),
-    optional: true, // https://github.com/babel/babylon/issues/502
+    optional: true, // May be null for `export default function`
   },
 };
 
