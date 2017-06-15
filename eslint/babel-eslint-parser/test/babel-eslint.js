@@ -371,7 +371,7 @@ describe("babylon-to-esprima", () => {
     );
   });
 
-  describe("babel 6 tests", () => {
+  describe("babel tests", () => {
     it("MethodDefinition", () => {
       parseAndAssertSame(
         unpad(`

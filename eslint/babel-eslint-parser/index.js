@@ -388,9 +388,11 @@ exports.parseNoPatch = function (code, options) {
     allowImportExportEverywhere: options.allowImportExportEverywhere, // consistent with espree
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
+    ranges: true,
     plugins: [
       "flow",
       "jsx",
+      "estree",
       "asyncFunctions",
       "asyncGenerators",
       "classConstructorCall",

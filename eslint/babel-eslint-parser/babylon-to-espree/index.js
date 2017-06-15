@@ -30,7 +30,6 @@ module.exports = function (ast, traverse, tt, code) {
   ast.directives = ast.program.directives;
   ast.body = ast.program.body;
   delete ast.program;
-  delete ast._paths;
 
   attachComments(ast, ast.comments, ast.tokens);
 };
