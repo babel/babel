@@ -114,7 +114,7 @@ export default class TraversalContext {
       // this path no longer belongs to the tree
       if (path.key === null) continue;
 
-      if (testing && queue.length >= 10000) {
+      if (testing && queue.length >= 10_000) {
         this.trap = true;
       }
 
