@@ -78,6 +78,7 @@ export default class Tokenizer extends LocationParser {
     super();
     this.state = new State;
     this.state.init(options, input);
+    this.isLookahead = false;
   }
 
   // Move to the next token
@@ -127,7 +128,7 @@ export default class Tokenizer extends LocationParser {
     this.next();
     this.isLookahead = false;
 
-    const curr = this.state.clone(true);
+    const curr = this.state;
     this.state = old;
     return curr;
   }
@@ -225,9 +226,10 @@ export default class Tokenizer extends LocationParser {
     const start = this.state.pos;
     const startLoc = this.state.curPosition();
     let ch = this.input.charCodeAt(this.state.pos += startSkip);
-    while (this.state.pos < this.input.length && ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233) {
-      ++this.state.pos;
-      ch = this.input.charCodeAt(this.state.pos);
+    if (this.state.pos < this.input.length) {
+      while (ch !== 10 && ch !== 13 && ch !== 8232 && ch !== 8233 && ++this.state.pos < this.input.length) {
+        ch = this.input.charCodeAt(this.state.pos);
+      }
     }
 
     this.pushComment(false, this.input.slice(start + startSkip, this.state.pos), start, this.state.pos, startLoc, this.state.curPosition());
