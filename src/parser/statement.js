@@ -172,34 +172,38 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorator(): N.Decorator {
-    if (!this.hasPlugin("decorators")) {
+    if (!(this.hasPlugin("decorators") || this.hasPlugin("decorators-stage-2"))) {
       this.unexpected();
     }
 
     const node = this.startNode();
     this.next();
 
-    const startPos = this.state.start;
-    const startLoc = this.state.startLoc;
-    let expr = this.parseIdentifier(false);
+    if (this.hasPlugin("decorators-stage-2")) {
+      const startPos = this.state.start;
+      const startLoc = this.state.startLoc;
+      let expr = this.parseIdentifier(false);
 
-    while (this.eat(tt.dot)) {
-      const node = this.startNodeAt(startPos, startLoc);
-      node.object = expr;
-      node.property = this.parseIdentifier(true);
-      node.computed = false;
-      expr = this.finishNode(node, "MemberExpression");
+      while (this.eat(tt.dot)) {
+        const node = this.startNodeAt(startPos, startLoc);
+        node.object = expr;
+        node.property = this.parseIdentifier(true);
+        node.computed = false;
+        expr = this.finishNode(node, "MemberExpression");
+      }
+
+      if (this.eat(tt.parenL)) {
+        const node = this.startNodeAt(startPos, startLoc);
+        node.callee = expr;
+        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+        expr = this.finishNode(node, "CallExpression");
+        this.toReferencedList(expr.arguments);
+      }
+
+      node.expression = expr;
+    } else {
+      node.expression = this.parseMaybeAssign();
     }
-
-    if (this.eat(tt.parenL)) {
-      const node = this.startNodeAt(startPos, startLoc);
-      node.callee = expr;
-      node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-      expr = this.finishNode(node, "CallExpression");
-      this.toReferencedList(expr.arguments);
-    }
-
-    node.expression = expr;
     return this.finishNode(node, "Decorator");
   }
 
