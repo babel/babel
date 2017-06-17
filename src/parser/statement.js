@@ -709,6 +709,10 @@ export default class StatementParser extends ExpressionParser {
       }
 
       this.parseClassMember(classBody, member, state);
+
+      if (this.hasPlugin("decorators-stage-2") && member.kind != "method" && member.decorators && member.decorators.length > 0) {
+        this.raise(member.start, "Stage 2 decorators may only be used with a class or a class method");
+      }
     }
 
     if (decorators.length) {
@@ -776,6 +780,7 @@ export default class StatementParser extends ExpressionParser {
     if (!methodOrProp.computed && methodOrProp.static && (methodOrProp.key.name === "prototype" || methodOrProp.key.value === "prototype")) {
       this.raise(methodOrProp.key.start, "Classes may not have static property named prototype");
     }
+
     if (this.isClassMethod()) {
       // a normal method
       if (this.isNonstaticConstructor(method)) {

@@ -1,0 +1,4 @@
+{
+  "plugins": ["decorators-stage-2", "classProperties"],
+  "throws": "Unexpected token (2:12)"
+}

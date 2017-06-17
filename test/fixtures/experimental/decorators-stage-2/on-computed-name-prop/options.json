@@ -1,3 +1,4 @@
 {
-  "plugins": ["classProperties", "decorators-stage-2"]
+  "plugins": ["classProperties", "decorators-stage-2"],
+  "throws": "Stage 2 decorators may only be used with a class or a class method (2:7)"
 }
