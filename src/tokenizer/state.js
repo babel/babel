@@ -40,6 +40,8 @@ export default class State {
     this.trailingComments = [];
     this.leadingComments  = [];
     this.commentStack     = [];
+    // $FlowIgnore
+    this.commentPreviousNode = null;
 
     this.pos = this.lineStart = 0;
     this.curLine = options.startLine;

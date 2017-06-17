@@ -158,7 +158,8 @@
                       },
                       "body": []
                     }
-                  }
+                  },
+                  "shorthand": false
                 }
               ]
             }

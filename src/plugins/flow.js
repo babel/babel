@@ -958,6 +958,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     this.state.inType = true;
     const type = this.flowParseUnionType();
     this.state.inType = oldInType;
+    this.state.exprAllowed = false;
     return type;
   }
 

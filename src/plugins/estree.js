@@ -161,6 +161,11 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     isAsync: boolean
   ): void {
     this.parseMethod(method, isGenerator, isAsync);
+    if (method.typeParameters) {
+      // $FlowIgnore
+      method.value.typeParameters = method.typeParameters;
+      delete method.typeParameters;
+    }
     classBody.body.push(this.finishNode(method, "MethodDefinition"));
   }
 
@@ -221,16 +226,15 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     isAsync: boolean,
     isPattern: boolean
   ): ?N.ObjectMethod {
-    const node = super.parseObjectMethod(prop, isGenerator, isAsync, isPattern);
+    const node: N.EstreeProperty = (super.parseObjectMethod(prop, isGenerator, isAsync, isPattern): any);
 
     if (node) {
-      // $FlowIgnore
-      if (node.kind === "method") node.kind = "init";
-      // $FlowIgnore
       node.type = "Property";
+      if (node.kind === "method") node.kind = "init";
+      node.shorthand = false;
     }
 
-    return node;
+    return (node: any);
   }
 
   parseObjectProperty(
@@ -240,16 +244,16 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     isPattern: boolean,
     refShorthandDefaultPos: ?Pos
   ): ?N.ObjectProperty {
-    const node = super.parseObjectProperty(prop, startPos, startLoc, isPattern, refShorthandDefaultPos);
+    const node: N.EstreeProperty = (
+      super.parseObjectProperty(prop, startPos, startLoc, isPattern, refShorthandDefaultPos): any
+    );
 
     if (node) {
-      // $FlowIgnore
       node.kind = "init";
-      // $FlowIgnore
       node.type = "Property";
     }
 
-    return node;
+    return (node: any);
   }
 
   toAssignable(
