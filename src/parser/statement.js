@@ -157,7 +157,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorators(allowExport?: boolean): void {
-    if (this.hasPlugin("decorators-stage-2")) {
+    if (this.hasPlugin("decoratorsStage2")) {
       allowExport = false;
     }
 
@@ -176,14 +176,14 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorator(): N.Decorator {
-    if (!(this.hasPlugin("decorators") || this.hasPlugin("decorators-stage-2"))) {
+    if (!(this.hasPlugin("decorators") || this.hasPlugin("decoratorsStage2"))) {
       this.unexpected();
     }
 
     const node = this.startNode();
     this.next();
 
-    if (this.hasPlugin("decorators-stage-2")) {
+    if (this.hasPlugin("decoratorsStage2")) {
       const startPos = this.state.start;
       const startLoc = this.state.startLoc;
       let expr = this.parseIdentifier(false);
@@ -714,7 +714,7 @@ export default class StatementParser extends ExpressionParser {
 
       this.parseClassMember(classBody, member, state);
 
-      if (this.hasPlugin("decorators-stage-2") && member.kind != "method" && member.decorators && member.decorators.length > 0) {
+      if (this.hasPlugin("decoratorsStage2") && member.kind != "method" && member.decorators && member.decorators.length > 0) {
         this.raise(member.start, "Stage 2 decorators may only be used with a class or a class method");
       }
     }
