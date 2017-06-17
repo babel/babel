@@ -175,9 +175,31 @@ export default class StatementParser extends ExpressionParser {
     if (!this.hasPlugin("decorators")) {
       this.unexpected();
     }
+
     const node = this.startNode();
     this.next();
-    node.expression = this.parseMaybeAssign();
+
+    const startPos = this.state.start;
+    const startLoc = this.state.startLoc;
+    let expr = this.parseIdentifier(false);
+
+    while (this.eat(tt.dot)) {
+      const node = this.startNodeAt(startPos, startLoc);
+      node.object = expr;
+      node.property = this.parseIdentifier(true);
+      node.computed = false;
+      expr = this.finishNode(node, "MemberExpression");
+    }
+
+    if (this.eat(tt.parenL)) {
+      const node = this.startNodeAt(startPos, startLoc);
+      node.callee = expr;
+      node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+      expr = this.finishNode(node, "CallExpression");
+      this.toReferencedList(expr.arguments);
+    }
+
+    node.expression = expr;
     return this.finishNode(node, "Decorator");
   }
 
