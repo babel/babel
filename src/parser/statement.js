@@ -157,6 +157,10 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorators(allowExport?: boolean): void {
+    if (this.hasPlugin("decorators-stage-2")) {
+      allowExport = false;
+    }
+
     while (this.match(tt.at)) {
       const decorator = this.parseDecorator();
       this.state.decorators.push(decorator);
