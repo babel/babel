@@ -11,7 +11,7 @@ export function chmod(src, dest) {
 
 export function readdirFilter(filename) {
   return readdir(filename).filter(function (filename) {
-    return babel.util.isCompilableExtension(filename);
+    return isCompilableExtension(filename);
   });
 }
 
