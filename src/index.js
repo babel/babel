@@ -62,6 +62,10 @@ function getParserClass(pluginsFromOptions: $ReadOnlyArray<string>): Class<Parse
     pluginList.unshift("estree");
   }
 
+  if (pluginList.indexOf("decorators") >= 0 && pluginList.indexOf("decorators-stage-2") >= 0) {
+    throw new Error("Cannot use decorators and decorators-stage-2 plugin together");
+  }
+
   const key = pluginList.join("/");
   let cls = parserClassCache[key];
   if (!cls) {
