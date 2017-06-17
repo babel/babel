@@ -161,6 +161,11 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     isAsync: boolean
   ): void {
     this.parseMethod(method, isGenerator, isAsync);
+    if (method.typeParameters) {
+      // $FlowIgnore
+      method.value.typeParameters = method.typeParameters;
+      delete method.typeParameters;
+    }
     classBody.body.push(this.finishNode(method, "MethodDefinition"));
   }
 
