@@ -1,29 +1,47 @@
 "use strict";
 
-module.exports = function (token, tt, source) {
+module.exports = function(token, tt, source) {
   var type = token.type;
   token.range = [token.start, token.end];
 
   if (type === tt.name) {
     token.type = "Identifier";
-  } else if (type === tt.semi || type === tt.comma ||
-             type === tt.parenL || type === tt.parenR ||
-             type === tt.braceL || type === tt.braceR ||
-             type === tt.slash || type === tt.dot ||
-             type === tt.bracketL || type === tt.bracketR ||
-             type === tt.ellipsis || type === tt.arrow ||
-             type === tt.star || type === tt.incDec ||
-             type === tt.colon || type === tt.question ||
-             type === tt.template || type === tt.backQuote ||
-             type === tt.dollarBraceL || type === tt.at ||
-             type === tt.logicalOR || type === tt.logicalAND ||
-             type === tt.bitwiseOR || type === tt.bitwiseXOR ||
-             type === tt.bitwiseAND || type === tt.equality ||
-             type === tt.relational || type === tt.bitShift ||
-             type === tt.plusMin || type === tt.modulo ||
-             type === tt.exponent || type === tt.prefix ||
-             type === tt.doubleColon ||
-             type.isAssign) {
+  } else if (
+    type === tt.semi ||
+    type === tt.comma ||
+    type === tt.parenL ||
+    type === tt.parenR ||
+    type === tt.braceL ||
+    type === tt.braceR ||
+    type === tt.slash ||
+    type === tt.dot ||
+    type === tt.bracketL ||
+    type === tt.bracketR ||
+    type === tt.ellipsis ||
+    type === tt.arrow ||
+    type === tt.star ||
+    type === tt.incDec ||
+    type === tt.colon ||
+    type === tt.question ||
+    type === tt.template ||
+    type === tt.backQuote ||
+    type === tt.dollarBraceL ||
+    type === tt.at ||
+    type === tt.logicalOR ||
+    type === tt.logicalAND ||
+    type === tt.bitwiseOR ||
+    type === tt.bitwiseXOR ||
+    type === tt.bitwiseAND ||
+    type === tt.equality ||
+    type === tt.relational ||
+    type === tt.bitShift ||
+    type === tt.plusMin ||
+    type === tt.modulo ||
+    type === tt.exponent ||
+    type === tt.prefix ||
+    type === tt.doubleColon ||
+    type.isAssign
+  ) {
     token.type = "Punctuator";
     if (!token.value) token.value = type.label;
   } else if (type === tt.jsxTagStart) {
@@ -53,7 +71,7 @@ module.exports = function (token, tt, source) {
     var value = token.value;
     token.regex = {
       pattern: value.pattern,
-      flags: value.flags
+      flags: value.flags,
     };
     token.value = `/${value.pattern}/${value.flags}`;
   }

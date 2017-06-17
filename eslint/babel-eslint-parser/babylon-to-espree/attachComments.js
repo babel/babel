@@ -1,7 +1,7 @@
 "use strict";
 
 // comment fixes
-module.exports = function (ast, comments, tokens) {
+module.exports = function(ast, comments, tokens) {
   if (comments.length) {
     var firstComment = comments[0];
     var lastComment = comments[comments.length - 1];

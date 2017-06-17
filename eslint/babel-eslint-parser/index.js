@@ -1,10 +1,10 @@
 var babylonToEspree = require("./babylon-to-espree");
-var Module          = require("module");
-var path            = require("path");
-var parse           = require("babylon").parse;
-var t               = require("babel-types");
-var tt              = require("babylon").tokTypes;
-var traverse        = require("babel-traverse").default;
+var Module = require("module");
+var path = require("path");
+var parse = require("babylon").parse;
+var t = require("babel-types");
+var tt = require("babylon").tokTypes;
+var traverse = require("babel-traverse").default;
 var codeFrameColumns = require("babel-code-frame").codeFrameColumns;
 
 var hasPatched = false;
@@ -30,10 +30,11 @@ function getModules() {
 
   try {
     var escope = eslintMod.require("eslint-scope");
-    var Definition = eslintMod.require("eslint-scope/lib/definition").Definition;
+    var Definition = eslintMod.require("eslint-scope/lib/definition")
+      .Definition;
     var referencer = eslintMod.require("eslint-scope/lib/referencer");
   } catch (err) {
-    escope  = eslintMod.require("escope");
+    escope = eslintMod.require("escope");
     Definition = eslintMod.require("escope/lib/definition").Definition;
     referencer = eslintMod.require("escope/lib/referencer");
   }
@@ -61,7 +62,7 @@ function monkeypatch(modules) {
   estraverse.VisitorKeys.Property.push("decorators");
 
   var analyze = escope.analyze;
-  escope.analyze = function (ast, opts) {
+  escope.analyze = function(ast, opts) {
     opts = opts || {};
     opts.ecmaVersion = eslintOptions.ecmaVersion;
     opts.sourceType = eslintOptions.sourceType;
@@ -94,7 +95,7 @@ function monkeypatch(modules) {
     "FunctionExpression",
     "Identifier",
     "ObjectPattern",
-    "RestElement"
+    "RestElement",
   ]);
   var visitorKeysMap = Object.keys(t.VISITOR_KEYS).reduce(function(acc, key) {
     var value = t.VISITOR_KEYS[key];
@@ -120,7 +121,7 @@ function monkeypatch(modules) {
     // others
     typeAnnotation: { type: "typeAnnotation" },
     typeParameters: { type: "typeParameters" },
-    id: { type: "id" }
+    id: { type: "id" },
   };
 
   function visitTypeAnnotation(node) {
@@ -182,7 +183,13 @@ function monkeypatch(modules) {
 
   function nestTypeParamScope(manager, node) {
     var parentScope = manager.__currentScope;
-    var scope = new escope.Scope(manager, "type-parameters", parentScope, node, false);
+    var scope = new escope.Scope(
+      manager,
+      "type-parameters",
+      parentScope,
+      node,
+      false
+    );
     manager.__nestScope(scope);
     for (var j = 0; j < node.typeParameters.params.length; j++) {
       var name = node.typeParameters.params[j];
@@ -296,16 +303,10 @@ function monkeypatch(modules) {
     variableDeclaration.call(this, node);
   };
 
-  function createScopeVariable (node, name) {
-    this.currentScope().variableScope.__define(name,
-      new Definition(
-        "Variable",
-        name,
-        node,
-        null,
-        null,
-        null
-      )
+  function createScopeVariable(node, name) {
+    this.currentScope().variableScope.__define(
+      name,
+      new Definition("Variable", name, node, null, null, null)
     );
   }
 
@@ -339,10 +340,9 @@ function monkeypatch(modules) {
     }
   };
 
-  referencer.prototype.DeclareModule =
-  referencer.prototype.DeclareFunction =
-  referencer.prototype.DeclareVariable =
-  referencer.prototype.DeclareClass = function(node) {
+  referencer.prototype.DeclareModule = referencer.prototype.DeclareFunction = referencer.prototype.DeclareVariable = referencer.prototype.DeclareClass = function(
+    node
+  ) {
     if (node.id) {
       createScopeVariable.call(this, node, node.id);
     }
@@ -357,11 +357,13 @@ function monkeypatch(modules) {
   };
 }
 
-exports.parse = function (code, options) {
+exports.parse = function(code, options) {
   options = options || {};
   eslintOptions.ecmaVersion = options.ecmaVersion = options.ecmaVersion || 6;
-  eslintOptions.sourceType = options.sourceType = options.sourceType || "module";
-  eslintOptions.allowImportExportEverywhere = options.allowImportExportEverywhere = options.allowImportExportEverywhere || false;
+  eslintOptions.sourceType = options.sourceType =
+    options.sourceType || "module";
+  eslintOptions.allowImportExportEverywhere = options.allowImportExportEverywhere =
+    options.allowImportExportEverywhere || false;
   if (options.sourceType === "module") {
     eslintOptions.globalReturn = false;
   } else {
@@ -381,7 +383,7 @@ exports.parse = function (code, options) {
   return exports.parseNoPatch(code, options);
 };
 
-exports.parseNoPatch = function (code, options) {
+exports.parseNoPatch = function(code, options) {
   var opts = {
     codeFrame: options.hasOwnProperty("codeFrame") ? options.codeFrame : true,
     sourceType: options.sourceType,
@@ -410,7 +412,7 @@ exports.parseNoPatch = function (code, options) {
       "optionalChaining",
       "importMeta",
       "classPrivateProperties",
-    ]
+    ],
   };
 
   var ast;
@@ -418,7 +420,6 @@ exports.parseNoPatch = function (code, options) {
     ast = parse(code, opts);
   } catch (err) {
     if (err instanceof SyntaxError) {
-
       err.lineNumber = err.loc.line;
       err.column = err.loc.column;
 
@@ -427,15 +428,23 @@ exports.parseNoPatch = function (code, options) {
         err.column = err.loc.column + 1;
 
         // remove trailing "(LINE:COLUMN)" acorn message and add in esprima syntax error message start
-        err.message = "Line " + err.lineNumber + ": " + err.message.replace(/ \((\d+):(\d+)\)$/, "") +
-        // add codeframe
-        "\n\n" +
-        codeFrameColumns(code, {
-          start: {
-            line: err.lineNumber,
-            column: err.column,
-          },
-        }, { highlightCode: true });
+        err.message =
+          "Line " +
+          err.lineNumber +
+          ": " +
+          err.message.replace(/ \((\d+):(\d+)\)$/, "") +
+          // add codeframe
+          "\n\n" +
+          codeFrameColumns(
+            code,
+            {
+              start: {
+                line: err.lineNumber,
+                column: err.column,
+              },
+            },
+            { highlightCode: true }
+          );
       }
     }
 

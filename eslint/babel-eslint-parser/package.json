@@ -22,6 +22,7 @@
     "test-only": "mocha",
     "lint": "eslint index.js babylon-to-espree test",
     "fix": "eslint index.js babylon-to-espree test --fix",
+    "precommit": "lint-staged",
     "preversion": "npm test",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
   },
@@ -38,9 +39,19 @@
     "babel-eslint": "^7.0.0",
     "dedent": "^0.7.0",
     "eslint": "^3.18.0",
-    "eslint-config-babel": "^6.0.0",
+    "eslint-config-babel": "^7.0.1",
     "eslint-plugin-flowtype": "^2.30.3",
+    "eslint-plugin-prettier": "^2.1.2",
     "espree": "^3.4.0",
-    "mocha": "^3.0.0"
+    "husky": "^0.13.2",
+    "lint-staged": "^3.6.1",
+    "mocha": "^3.0.0",
+    "prettier": "1.4.4"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --format=codeframe --fix",
+      "git add"
+    ]
   }
 }

@@ -3,23 +3,29 @@
 var eslint = require("eslint");
 var unpad = require("dedent");
 
-function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, overrideConfig) {
+function verifyAndAssertMessages(
+  code,
+  rules,
+  expectedMessages,
+  sourceType,
+  overrideConfig
+) {
   var config = {
     parser: require.resolve(".."),
     rules,
     env: {
       node: true,
-      es6: true
+      es6: true,
     },
     parserOptions: {
       ecmaVersion: 8,
       ecmaFeatures: {
         jsx: true,
         experimentalObjectRestSpread: true,
-        globalReturn: true
+        globalReturn: true,
       },
-      sourceType
-    }
+      sourceType,
+    },
   };
 
   if (overrideConfig) {
@@ -31,11 +37,19 @@ function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, over
   var messages = eslint.linter.verify(code, config);
 
   if (messages.length !== expectedMessages.length) {
-    throw new Error(`Expected ${expectedMessages.length} message(s), got ${messages.length}\n${JSON.stringify(messages, null, 2)}`);
+    throw new Error(
+      `Expected ${expectedMessages.length} message(s), got ${messages.length}\n${JSON.stringify(
+        messages,
+        null,
+        2
+      )}`
+    );
   }
 
   messages.forEach((message, i) => {
-    var formatedMessage = `${message.line}:${message.column} ${message.message}${(message.ruleId ? ` ${message.ruleId}` : "")}`;
+    var formatedMessage = `${message.line}:${message.column} ${message.message}${message.ruleId
+      ? ` ${message.ruleId}`
+      : ""}`;
     if (formatedMessage !== expectedMessages[i]) {
       throw new Error(
         unpad(`
@@ -50,27 +64,21 @@ function verifyAndAssertMessages(code, rules, expectedMessages, sourceType, over
 
 describe("verify", () => {
   it("arrow function support (issue #1)", () => {
-    verifyAndAssertMessages(
-      "describe('stuff', () => {});",
-      {},
-      []
-    );
+    verifyAndAssertMessages("describe('stuff', () => {});", {}, []);
   });
 
   it("EOL validation (issue #2)", () => {
     verifyAndAssertMessages(
-      "module.exports = \"something\";",
-      { "eol-last": 1, "semi": 1 },
-      [ "1:30 Newline required at end of file but not found. eol-last" ]
+      'module.exports = "something";',
+      { "eol-last": 1, semi: 1 },
+      ["1:30 Newline required at end of file but not found. eol-last"]
     );
   });
 
   xit("Readable error messages (issue #3)", () => {
-    verifyAndAssertMessages(
-      "{ , res }",
-      {},
-      [ "1:3 Parsing error: Unexpected token" ]
-    );
+    verifyAndAssertMessages("{ , res }", {}, [
+      "1:3 Parsing error: Unexpected token",
+    ]);
   });
 
   it("Modules support (issue #5)", () => {
@@ -120,7 +128,7 @@ describe("verify", () => {
 
   it("JSX attribute names marked as variables (issue #12)", () => {
     verifyAndAssertMessages(
-      "module.exports = <div className=\"foo\" />",
+      'module.exports = <div className="foo" />',
       { "no-undef": 1 },
       []
     );
@@ -136,8 +144,8 @@ describe("verify", () => {
 
   it("Arrow function with non-block bodies (issue #20)", () => {
     verifyAndAssertMessages(
-      "\"use strict\"; () => 1",
-      { "strict": [1, "global"] },
+      '"use strict"; () => 1',
+      { strict: [1, "global"] },
       [],
       "script"
     );
@@ -145,7 +153,7 @@ describe("verify", () => {
 
   it("#242", () => {
     verifyAndAssertMessages(
-      "\"use strict\"; asdf;",
+      '"use strict"; asdf;',
       { "no-irregular-whitespace": 1 },
       [],
       {}
@@ -191,19 +199,11 @@ describe("verify", () => {
     });
 
     it("type alias", () => {
-      verifyAndAssertMessages(
-        "type SomeNewType = any;",
-        { "no-undef": 1 },
-        []
-      );
+      verifyAndAssertMessages("type SomeNewType = any;", { "no-undef": 1 }, []);
     });
 
     it("type cast expression #102", () => {
-      verifyAndAssertMessages(
-        "for (let a of (a: Array)) {}",
-        {},
-        []
-      );
+      verifyAndAssertMessages("for (let a of (a: Array)) {}", {}, []);
     });
 
     it("multiple nullable type annotations and return #108", () => {
@@ -231,7 +231,7 @@ describe("verify", () => {
           };
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "2:11 'Bar' is defined but never used. no-unused-vars" ]
+        ["2:11 'Bar' is defined but never used. no-unused-vars"]
       );
     });
 
@@ -246,7 +246,7 @@ describe("verify", () => {
           new Log();
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "3:34 'T4' is defined but never used. no-unused-vars" ]
+        ["3:34 'T4' is defined but never used. no-unused-vars"]
       );
     });
 
@@ -259,9 +259,11 @@ describe("verify", () => {
           new Foo();
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "1:1 'T' is not defined. no-undef",
+        [
+          "1:1 'T' is not defined. no-undef",
           "2:11 'T' is defined but never used. no-unused-vars",
-          "3:1 'T' is not defined. no-undef" ]
+          "3:1 'T' is not defined. no-undef",
+        ]
       );
     });
 
@@ -274,8 +276,10 @@ describe("verify", () => {
           }
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "2:11 'Log' is defined but never used. no-unused-vars",
-          "2:38 'T4' is defined but never used. no-unused-vars" ]
+        [
+          "2:11 'Log' is defined but never used. no-unused-vars",
+          "2:38 'T4' is defined but never used. no-unused-vars",
+        ]
       );
     });
 
@@ -288,9 +292,11 @@ describe("verify", () => {
           Foo;
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "1:1 'T' is not defined. no-undef",
+        [
+          "1:1 'T' is not defined. no-undef",
           "2:15 'T' is defined but never used. no-unused-vars",
-          "3:1 'T' is not defined. no-undef" ]
+          "3:1 'T' is not defined. no-undef",
+        ]
       );
     });
 
@@ -304,8 +310,10 @@ describe("verify", () => {
           };
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "2:6 'Log' is defined but never used. no-unused-vars",
-          "2:29 'T3' is defined but never used. no-unused-vars" ]
+        [
+          "2:6 'Log' is defined but never used. no-unused-vars",
+          "2:29 'T3' is defined but never used. no-unused-vars",
+        ]
       );
     });
 
@@ -318,9 +326,11 @@ describe("verify", () => {
           Foo;
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "1:1 'T' is not defined. no-undef",
+        [
+          "1:1 'T' is not defined. no-undef",
           "2:10 'T' is defined but never used. no-unused-vars",
-          "3:1 'T' is not defined. no-undef" ]
+          "3:1 'T' is not defined. no-undef",
+        ]
       );
     });
 
@@ -333,7 +343,7 @@ describe("verify", () => {
           log(1, 2);
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "3:37 'T4' is defined but never used. no-unused-vars" ]
+        ["3:37 'T4' is defined but never used. no-unused-vars"]
       );
     });
 
@@ -346,9 +356,11 @@ describe("verify", () => {
           log;
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "1:1 'T' is not defined. no-undef",
+        [
+          "1:1 'T' is not defined. no-undef",
           "2:14 'T' is defined but never used. no-unused-vars",
-          "3:1 'T' is not defined. no-undef" ]
+          "3:1 'T' is not defined. no-undef",
+        ]
       );
     });
 
@@ -544,8 +556,10 @@ describe("verify", () => {
           var b: T = 1; b;
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "1:21 'T' is defined but never used. no-unused-vars",
-          "2:8 'T' is not defined. no-undef" ]
+        [
+          "1:21 'T' is defined but never used. no-unused-vars",
+          "2:8 'T' is not defined. no-undef",
+        ]
       );
     });
 
@@ -556,7 +570,7 @@ describe("verify", () => {
           export class Foo extends Bar<T> {}
         `),
         { "no-unused-vars": 1, "no-undef": 1 },
-        [ "2:30 'T' is not defined. no-undef" ]
+        ["2:30 'T' is not defined. no-undef"]
       );
     });
 
@@ -581,8 +595,10 @@ describe("verify", () => {
           type T = {a: number, ...U, ...V};
         `),
         { "no-undef": 1, "no-unused-vars": 1 },
-        [ "2:6 'T' is defined but never used. no-unused-vars",
-          "2:31 'V' is not defined. no-undef" ]
+        [
+          "2:6 'T' is defined but never used. no-unused-vars",
+          "2:31 'V' is not defined. no-undef",
+        ]
       );
     });
 
@@ -1289,11 +1305,9 @@ describe("verify", () => {
   });
 
   it("detects minimal no-unused-vars case #120", () => {
-    verifyAndAssertMessages(
-      "var unused;",
-      { "no-unused-vars": 1 },
-      [ "1:5 'unused' is defined but never used. no-unused-vars" ]
-    );
+    verifyAndAssertMessages("var unused;", { "no-unused-vars": 1 }, [
+      "1:5 'unused' is defined but never used. no-unused-vars",
+    ]);
   });
 
   // This two tests are disabled, as the feature to visit properties when
@@ -1343,7 +1357,7 @@ describe("verify", () => {
     verifyAndAssertMessages(
       "const {Bacona} = require('baconjs')",
       { "no-undef": 1, "no-unused-vars": 1 },
-      [ "1:8 'Bacona' is assigned a value but never used. no-unused-vars" ]
+      ["1:8 'Bacona' is assigned a value but never used. no-unused-vars"]
     );
   });
 
@@ -1389,7 +1403,7 @@ describe("verify", () => {
 
   it("ternary and parens #149", () => {
     verifyAndAssertMessages(
-    "true ? (true) : false;",
+      "true ? (true) : false;",
       { "space-infix-ops": 1 },
       []
     );
@@ -1407,7 +1421,7 @@ describe("verify", () => {
         });
       `),
       { "space-in-parens": 1 },
-      [ ]
+      []
     );
   });
 
@@ -1425,21 +1439,23 @@ describe("verify", () => {
         });
       `),
       { "space-in-parens": 1 },
-      [ ]
+      []
     );
   });
 
   it("no no-undef error with rest #11", () => {
-    verifyAndAssertMessages("const [a, ...rest] = ['1', '2', '3']; a; rest;",
+    verifyAndAssertMessages(
+      "const [a, ...rest] = ['1', '2', '3']; a; rest;",
       { "no-undef": 1, "no-unused-vars": 1 },
-      [ ]
+      []
     );
   });
 
   it("async function with space-before-function-paren #168", () => {
-    verifyAndAssertMessages("it('handles updates', async function() {});",
+    verifyAndAssertMessages(
+      "it('handles updates', async function() {});",
       { "space-before-function-paren": [1, "never"] },
-      [ ]
+      []
     );
   });
 
@@ -1458,7 +1474,7 @@ describe("verify", () => {
         }
       `),
       { "no-unused-vars": 1, "no-undef": 1 },
-      [ ]
+      []
     );
   });
 
@@ -1469,16 +1485,12 @@ describe("verify", () => {
         var x = 1;
       `),
       { "no-use-before-define": 1 },
-      [ "1:13 'x' was used before it was defined. no-use-before-define" ]
+      ["1:13 'x' was used before it was defined. no-use-before-define"]
     );
   });
 
   it("jsx and stringliteral #216", () => {
-    verifyAndAssertMessages(
-      "<div className=''></div>",
-      {},
-      []
-    );
+    verifyAndAssertMessages("<div className=''></div>", {}, []);
   });
 
   it("getter/setter #218", () => {
@@ -1488,7 +1500,11 @@ describe("verify", () => {
             set a (v) { }
         }
       `),
-      { "space-before-function-paren": 1, "keyword-spacing": [1, { "before": true }], "indent": 1 },
+      {
+        "space-before-function-paren": 1,
+        "keyword-spacing": [1, { before: true }],
+        indent: 1,
+      },
       []
     );
   });
@@ -1531,7 +1547,7 @@ describe("verify", () => {
         var a = 123;
       `),
       { "no-redeclare": 1 },
-      [ "2:5 'a' is already defined. no-redeclare" ],
+      ["2:5 'a' is already defined. no-redeclare"],
       "script"
     );
   });
@@ -1543,7 +1559,7 @@ describe("verify", () => {
         var a = 123;
       `),
       { "no-redeclare": 1 },
-      [ "2:5 'a' is already defined. no-redeclare" ],
+      ["2:5 'a' is already defined. no-redeclare"],
       "module"
     );
   });
@@ -1552,11 +1568,13 @@ describe("verify", () => {
     verifyAndAssertMessages(
       "var leakedGlobal = 1;",
       { "no-implicit-globals": 1 },
-      [ "1:5 Implicit global variable, assign as global property instead. no-implicit-globals" ],
+      [
+        "1:5 Implicit global variable, assign as global property instead. no-implicit-globals",
+      ],
       "script",
       {
         env: {},
-        parserOptions: { ecmaVersion: 6, sourceType: "script" }
+        parserOptions: { ecmaVersion: 6, sourceType: "script" },
       }
     );
   });
@@ -1569,7 +1587,7 @@ describe("verify", () => {
       "module",
       {
         env: {},
-        parserOptions: { ecmaVersion: 6, sourceType: "module" }
+        parserOptions: { ecmaVersion: 6, sourceType: "module" },
       }
     );
   });
@@ -1582,7 +1600,7 @@ describe("verify", () => {
       null,
       {
         env: {},
-        parserOptions: { ecmaVersion: 6 }
+        parserOptions: { ecmaVersion: 6 },
       }
     );
   });
@@ -1599,26 +1617,23 @@ describe("verify", () => {
       "module",
       {
         env: {},
-        parserOptions: { ecmaVersion: 6, sourceType: "module", allowImportExportEverywhere: true }
+        parserOptions: {
+          ecmaVersion: 6,
+          sourceType: "module",
+          allowImportExportEverywhere: true,
+        },
       }
     );
   });
 
   it("with does not crash parsing in script mode (strict off) #171", () => {
-    verifyAndAssertMessages(
-      "with (arguments) { length; }",
-      {},
-      [],
-      "script"
-    );
+    verifyAndAssertMessages("with (arguments) { length; }", {}, [], "script");
   });
 
   xit("with does crash parsing in module mode (strict on) #171", () => {
-    verifyAndAssertMessages(
-      "with (arguments) { length; }",
-      {},
-      [ "1:1 Parsing error: 'with' in strict mode" ]
-    );
+    verifyAndAssertMessages("with (arguments) { length; }", {}, [
+      "1:1 Parsing error: 'with' in strict mode",
+    ]);
   });
 
   it("new.target is not reported as undef #235", () => {
@@ -1638,7 +1653,7 @@ describe("verify", () => {
         }
       `),
       { "no-undef": 1 },
-      [ "2:4 'test' is not defined. no-undef" ]
+      ["2:4 'test' is not defined. no-undef"]
     );
   });
 
@@ -1723,24 +1738,18 @@ describe("verify", () => {
           new A
         `),
         { "no-undef": 1, "no-unused-vars": 1, "no-redeclare": 1 },
-        [
-          "5:11 'b' is not defined. no-undef"
-        ]
+        ["5:11 'b' is not defined. no-undef"]
       );
     });
   });
 
   it("dynamic import support", () => {
-    verifyAndAssertMessages(
-      "import('test-module').then(() => {})",
-      {},
-      []
-    );
+    verifyAndAssertMessages("import('test-module').then(() => {})", {}, []);
   });
 
   it("regex with es6 unicodeCodePointEscapes", () => {
     verifyAndAssertMessages(
-      "string.replace(/[\u{0000A0}-\u{10FFFF}<>\&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);",
+      "string.replace(/[\u{0000A0}-\u{10FFFF}<>&]/gmiu, (char) => `&#x${char.codePointAt(0).toString(16)};`);",
       {},
       []
     );

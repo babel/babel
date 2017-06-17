@@ -1,24 +1,25 @@
 "use strict";
 
-module.exports = function (tokens, tt) {
-  var startingToken    = 0;
-  var currentToken     = 0;
-  var numBraces        = 0; // track use of {}
-  var numBackQuotes    = 0; // track number of nested templates
+module.exports = function(tokens, tt) {
+  var startingToken = 0;
+  var currentToken = 0;
+  var numBraces = 0; // track use of {}
+  var numBackQuotes = 0; // track number of nested templates
 
   function isBackQuote(token) {
     return tokens[token].type === tt.backQuote;
   }
 
   function isTemplateStarter(token) {
-    return isBackQuote(token) ||
-           // only can be a template starter when in a template already
-           tokens[token].type === tt.braceR && numBackQuotes > 0;
+    return (
+      isBackQuote(token) ||
+      // only can be a template starter when in a template already
+      (tokens[token].type === tt.braceR && numBackQuotes > 0)
+    );
   }
 
   function isTemplateEnder(token) {
-    return isBackQuote(token) ||
-           tokens[token].type === tt.dollarBraceL;
+    return isBackQuote(token) || tokens[token].type === tt.dollarBraceL;
   }
 
   // append the values between start and end
@@ -44,8 +45,8 @@ module.exports = function (tokens, tt) {
       end: tokens[end].end,
       loc: {
         start: tokens[start].loc.start,
-        end: tokens[end].loc.end
-      }
+        end: tokens[end].loc.end,
+      },
     };
 
     // put new token in place of old tokens
@@ -70,7 +71,10 @@ module.exports = function (tokens, tt) {
       currentToken = startingToken + 1;
 
       // check if token after template start is "template"
-      if (currentToken >= tokens.length - 1 || tokens[currentToken].type !== tt.template) {
+      if (
+        currentToken >= tokens.length - 1 ||
+        tokens[currentToken].type !== tt.template
+      ) {
         break;
       }
 

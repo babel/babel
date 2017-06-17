@@ -3,7 +3,7 @@
 var convertTemplateType = require("./convertTemplateType");
 var toToken = require("./toToken");
 
-module.exports = function (tokens, tt, code) {
+module.exports = function(tokens, tt, code) {
   // transform tokens to type "Template"
   convertTemplateType(tokens, tt);
 

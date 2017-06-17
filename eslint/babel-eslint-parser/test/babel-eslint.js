@@ -1,9 +1,9 @@
-var assert      = require("assert");
+var assert = require("assert");
 var babelEslint = require("..");
-var espree      = require("espree");
-var escope      = require("escope");
-var util        = require("util");
-var unpad       = require("dedent");
+var espree = require("espree");
+var escope = require("escope");
+var util = require("util");
+var unpad = require("dedent");
 
 // Checks if the source ast implements the target ast. Ignores extra keys on source ast
 function assertImplementsAST(target, source, path) {
@@ -20,9 +20,18 @@ function assertImplementsAST(target, source, path) {
   var typeA = target === null ? "null" : typeof target;
   var typeB = source === null ? "null" : typeof source;
   if (typeA !== typeB) {
-    error(`have different types (${typeA} !== ${typeB}) (${target} !== ${source})`);
-  } else if (typeA === "object" && ["RegExp"].indexOf(target.constructor.name) !== -1 && target.constructor.name !== source.constructor.name) {
-    error(`object have different constructors (${target.constructor.name} !== ${source.constructor.name}`);
+    error(
+      `have different types (${typeA} !== ${typeB}) (${target} !== ${source})`
+    );
+  } else if (
+    typeA === "object" &&
+    ["RegExp"].indexOf(target.constructor.name) !== -1 &&
+    target.constructor.name !== source.constructor.name
+  ) {
+    error(
+      `object have different constructors (${target.constructor
+        .name} !== ${source.constructor.name}`
+    );
   } else if (typeA === "object") {
     var keysTarget = Object.keys(target);
     for (var i in keysTarget) {
@@ -32,28 +41,36 @@ function assertImplementsAST(target, source, path) {
       path.pop();
     }
   } else if (target !== source) {
-    error(`are different (${JSON.stringify(target)} !== ${JSON.stringify(source)})`);
+    error(
+      `are different (${JSON.stringify(target)} !== ${JSON.stringify(source)})`
+    );
   }
 }
 
 function lookup(obj, keypath, backwardsDepth) {
-  if (!keypath) { return obj; }
+  if (!keypath) {
+    return obj;
+  }
 
-  return keypath.split(".").slice(0, -1 * backwardsDepth)
-  .reduce((base, segment) => { return base && base[segment], obj; });
+  return keypath
+    .split(".")
+    .slice(0, -1 * backwardsDepth)
+    .reduce((base, segment) => {
+      return base && base[segment], obj;
+    });
 }
 
 function parseAndAssertSame(code) {
   var esAST = espree.parse(code, {
     ecmaFeatures: {
-        // enable JSX parsing
+      // enable JSX parsing
       jsx: true,
-        // enable return in global scope
+      // enable return in global scope
       globalReturn: true,
-        // enable implied strict mode (if ecmaVersion >= 5)
+      // enable implied strict mode (if ecmaVersion >= 5)
       impliedStrict: true,
-        // allow experimental object rest/spread
-      experimentalObjectRestSpread: true
+      // allow experimental object rest/spread
+      experimentalObjectRestSpread: true,
     },
     tokens: true,
     loc: true,
@@ -61,7 +78,7 @@ function parseAndAssertSame(code) {
     comment: true,
     attachComment: true,
     ecmaVersion: 8,
-    sourceType: "module"
+    sourceType: "module",
   });
   var babylonAST = babelEslint.parse(code);
   try {
@@ -76,9 +93,15 @@ function parseAndAssertSame(code) {
     }
     err.message += unpad(`
       espree:
-      ${util.inspect(lookup(esAST, traversal, 2), { depth: err.depth, colors: true })}
+      ${util.inspect(lookup(esAST, traversal, 2), {
+        depth: err.depth,
+        colors: true,
+      })}
       babel-eslint:
-      ${util.inspect(lookup(babylonAST, traversal, 2), { depth: err.depth, colors: true })}
+      ${util.inspect(lookup(babylonAST, traversal, 2), {
+        depth: err.depth,
+        colors: true,
+      })}
     `);
     throw err;
   }
@@ -90,9 +113,13 @@ describe("babylon-to-esprima", () => {
     it("should allow ast.analyze to be called without options", function() {
       var esAST = babelEslint.parse("`test`");
 
-      assert.doesNotThrow(() => {
-        escope.analyze(esAST);
-      }, TypeError, "Should allow no options argument.");
+      assert.doesNotThrow(
+        () => {
+          escope.analyze(esAST);
+        },
+        TypeError,
+        "Should allow no options argument."
+      );
     });
   });
 
@@ -138,11 +165,15 @@ describe("babylon-to-esprima", () => {
     });
 
     it("template with nested function/object", () => {
-      parseAndAssertSame("`outer${{x: {y: 10}}}bar${`nested${function(){return 1;}}endnest`}end`");
+      parseAndAssertSame(
+        "`outer${{x: {y: 10}}}bar${`nested${function(){return 1;}}endnest`}end`"
+      );
     });
 
     it("template with braces inside and outside of template string #96", () => {
-      parseAndAssertSame("if (a) { var target = `{}a:${webpackPort}{}}}}`; } else { app.use(); }");
+      parseAndAssertSame(
+        "if (a) { var target = `{}a:${webpackPort}{}}}}`; } else { app.use(); }"
+      );
     });
 
     it("template also with braces #96", () => {
@@ -218,19 +249,19 @@ describe("babylon-to-esprima", () => {
   });
 
   it("default import", () => {
-    parseAndAssertSame("import foo from \"foo\";");
+    parseAndAssertSame('import foo from "foo";');
   });
 
   it("import specifier", () => {
-    parseAndAssertSame("import { foo } from \"foo\";");
+    parseAndAssertSame('import { foo } from "foo";');
   });
 
   it("import specifier with name", () => {
-    parseAndAssertSame("import { foo as bar } from \"foo\";");
+    parseAndAssertSame('import { foo as bar } from "foo";');
   });
 
   it("import bare", () => {
-    parseAndAssertSame("import \"foo\";");
+    parseAndAssertSame('import "foo";');
   });
 
   it("export default class declaration", () => {
@@ -250,7 +281,7 @@ describe("babylon-to-esprima", () => {
   });
 
   it("export all", () => {
-    parseAndAssertSame("export * from \"foo\";");
+    parseAndAssertSame('export * from "foo";');
   });
 
   it("export named", () => {
@@ -331,11 +362,11 @@ describe("babylon-to-esprima", () => {
   });
 
   it("regexp in a template string", () => {
-    parseAndAssertSame("`${/\\d/.exec(\"1\")[0]}`");
+    parseAndAssertSame('`${/\\d/.exec("1")[0]}`');
   });
 
   it("first line is empty", () => {
-    parseAndAssertSame("\nimport Immutable from \"immutable\";");
+    parseAndAssertSame('\nimport Immutable from "immutable";');
   });
 
   it("empty", () => {
@@ -383,7 +414,9 @@ describe("babylon-to-esprima", () => {
     });
 
     it("MethodDefinition 2", () => {
-      parseAndAssertSame("export default class Bar { get bar() { return 42; }}");
+      parseAndAssertSame(
+        "export default class Bar { get bar() { return 42; }}"
+      );
     });
 
     it("ClassMethod", () => {
@@ -443,7 +476,7 @@ describe("babylon-to-esprima", () => {
 
     it("do not allow import export everywhere", () => {
       assert.throws(() => {
-        parseAndAssertSame("function F() { import a from \"a\"; }");
+        parseAndAssertSame('function F() { import a from "a"; }');
       }, /SyntaxError: 'import' and 'export' may only appear at the top level/);
     });
 
