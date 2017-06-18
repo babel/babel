@@ -6,10 +6,10 @@
       "targets": {
         "node": "4.2"
       }
-    }]
+    }],
+    "flow"
   ],
   "plugins": [
-    "transform-flow-strip-types",
     "external-helpers"
   ],
   "env": {
@@ -20,7 +20,8 @@
           "targets": {
             "node": "current"
           }
-        }]
+        }],
+        "flow"
       ]
     },
     "test": {
