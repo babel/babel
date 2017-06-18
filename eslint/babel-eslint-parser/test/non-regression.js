@@ -1780,4 +1780,19 @@ describe("verify", () => {
       );
     });
   });
+
+  it("flow types on class method should be visited correctly", () => {
+    verifyAndAssertMessages(
+      unpad(`
+        import type NodeType from 'foo';
+        class NodeUtils {
+          finishNodeAt<T : NodeType>(node: T): T { return node; }
+        }
+
+        new NodeUtils();
+      `),
+      { "no-unused-vars": 1 },
+      []
+    );
+  });
 });
