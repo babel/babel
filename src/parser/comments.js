@@ -86,23 +86,34 @@ export default class CommentsParser extends BaseParser {
     // Attach comments that follow a trailing comma on the last
     // property in an object literal or a trailing comma in function arguments
     // as trailing comments
-    if (firstChild &&
-          (firstChild.type === "ObjectProperty" ||
-          (node.type === "CallExpression")) &&
-          this.state.leadingComments.length > 0) {
+    if (firstChild && this.state.leadingComments.length > 0) {
       const lastComment = last(this.state.leadingComments);
-      if (lastComment.start >= node.start) {
-        if (this.state.commentPreviousNode) {
-          for (j = 0; j < this.state.leadingComments.length; j++) {
-            if (this.state.leadingComments[j].end < this.state.commentPreviousNode.end) {
-              this.state.leadingComments.splice(j, 1);
-              j--;
+
+      if (firstChild.type === "ObjectProperty") {
+        if (lastComment.start >= node.start) {
+          if (this.state.commentPreviousNode) {
+            for (j = 0; j < this.state.leadingComments.length; j++) {
+              if (this.state.leadingComments[j].end < this.state.commentPreviousNode.end) {
+                this.state.leadingComments.splice(j, 1);
+                j--;
+              }
+            }
+
+            if (this.state.leadingComments.length > 0) {
+              firstChild.trailingComments = this.state.leadingComments;
+              this.state.leadingComments = [];
             }
           }
+        }
+      } else if (node.type === "CallExpression" && node.arguments && node.arguments.length) {
+        const lastArg = last(node.arguments);
 
-          if (this.state.leadingComments.length > 0) {
-            firstChild.trailingComments = this.state.leadingComments;
-            this.state.leadingComments = [];
+        if (lastArg && lastComment.start >= lastArg.start && lastComment.end <= node.end) {
+          if (this.state.commentPreviousNode) {
+            if (this.state.leadingComments.length > 0) {
+              lastArg.trailingComments = this.state.leadingComments;
+              this.state.leadingComments = [];
+            }
           }
         }
       }
