@@ -47,6 +47,11 @@ const parserClassCache: { [key: string]: Class<Parser> } = {};
 
 /** Get a Parser class with plugins applied. */
 function getParserClass(pluginsFromOptions: $ReadOnlyArray<string>): Class<Parser> {
+
+  if (pluginsFromOptions.indexOf("decorators") >= 0 && pluginsFromOptions.indexOf("decoratorsStage2") >= 0) {
+    throw new Error("Cannot use decorators and decoratorsStage2 plugin together");
+  }
+
   // Filter out just the plugins that have an actual mixin associated with them.
   let pluginList = pluginsFromOptions.filter((p) => p === "estree" || p === "flow" || p === "jsx");
 
@@ -60,10 +65,6 @@ function getParserClass(pluginsFromOptions: $ReadOnlyArray<string>): Class<Parse
     // ensure estree plugin loads first
     pluginList = pluginList.filter((plugin) => plugin !== "estree");
     pluginList.unshift("estree");
-  }
-
-  if (pluginList.indexOf("decorators") >= 0 && pluginList.indexOf("decoratorsStage2") >= 0) {
-    throw new Error("Cannot use decorators and decoratorsStage2 plugin together");
   }
 
   const key = pluginList.join("/");
