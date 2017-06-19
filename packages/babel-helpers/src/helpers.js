@@ -377,6 +377,16 @@ helpers.inherits = template(`
   })
 `);
 
+helpers.inheritsLoose = template(`
+  (function (subClass, superClass) {
+    subClass.prototype = Object.create(superClass && superClass.prototype);
+    subClass.prototype.constructor = subClass;
+    if (superClass) {
+      subClass.__proto__ = superClass;
+    }
+  })
+`);
+
 helpers.instanceof = template(`
   (function (left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {

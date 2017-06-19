@@ -1,5 +1,5 @@
 var Test = function (_Foo) {
-  babelHelpers.inherits(Test, _Foo);
+  babelHelpers.inheritsLoose(Test, _Foo);
 
   function Test() {
     var _this = _Foo.call(this) || this;

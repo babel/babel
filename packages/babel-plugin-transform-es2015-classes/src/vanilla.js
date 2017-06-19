@@ -563,7 +563,7 @@ export default class ClassTransformer {
     // any properties can be assigned to the prototype.
     this.pushedInherits = true;
     this.body.unshift(t.expressionStatement(t.callExpression(
-      this.file.addHelper("inherits"),
+      this.isLoose ? this.file.addHelper("inheritsLoose") : this.file.addHelper("inherits"),
       [this.classRef, this.superName]
     )));
   }
