@@ -4,6 +4,10 @@ Contributions are always welcome, no matter how large or small. Before
 contributing, please read the
 [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
 
+## Resources
+
+Check out the [babel-handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#asts) and [ASTExplorer](http://astexplorer.net/) for some info about contributing to this project regarding Abstract Syntax Trees (ASTs).
+
 ## Setup local env
 
 > Install yarn beforehand: https://yarnpkg.com/en/docs/install
