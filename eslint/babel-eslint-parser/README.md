@@ -56,7 +56,7 @@ ESLint | babel-eslint
 ### Install
 
 ```sh
-$ npm install eslint@3.x babel-eslint@6 --save-dev
+$ npm install eslint@3.x babel-eslint@7 --save-dev
 ```
 
 ### Setup
