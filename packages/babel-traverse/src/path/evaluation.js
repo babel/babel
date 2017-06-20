@@ -92,28 +92,6 @@ function _evaluate(path, state) {
     return evaluateQuasis(path, node.quasis, state);
   }
 
-  function evaluateQuasis (path, quasis: Array<Object>, state, raw = false) {
-    let str = "";
-
-    let i = 0;
-    const exprs = path.get("expressions");
-
-    for (const elem of quasis) {
-      // not confident, evaluated an expression we don't like
-      if (!state.confident) break;
-
-      // add on element
-      str += raw ? elem.value.raw : elem.value.cooked;
-
-      // add on interpolated expression if it's present
-      const expr = exprs[i++];
-      if (expr) str += String(evaluateCached(expr, state));
-    }
-
-    if (!state.confident) return;
-    return str;
-  }
-
   if (path.isTaggedTemplateExpression() && path.get("tag").isMemberExpression()) {
     const object = path.get("tag.object");
     const { node: { name } } = object;
@@ -364,6 +342,28 @@ function _evaluate(path, state) {
   }
 
   deopt(path, state);
+}
+
+function evaluateQuasis (path, quasis: Array<Object>, state, raw = false) {
+  let str = "";
+
+  let i = 0;
+  const exprs = path.get("expressions");
+
+  for (const elem of quasis) {
+    // not confident, evaluated an expression we don't like
+    if (!state.confident) break;
+
+    // add on element
+    str += raw ? elem.value.raw : elem.value.cooked;
+
+    // add on interpolated expression if it's present
+    const expr = exprs[i++];
+    if (expr) str += String(evaluateCached(expr, state));
+  }
+
+  if (!state.confident) return;
+  return str;
 }
 
 /**
