@@ -89,17 +89,21 @@ function _evaluate(path, state) {
   }
 
   if (path.isTemplateLiteral()) {
+    return evaluateQuasis(path, node.quasis, state);
+  }
+
+  function evaluateQuasis (path, quasis: Array<Object>, state, raw = false) {
     let str = "";
 
     let i = 0;
     const exprs = path.get("expressions");
 
-    for (const elem of (node.quasis: Array<Object>)) {
+    for (const elem of quasis) {
       // not confident, evaluated an expression we don't like
       if (!state.confident) break;
 
-      // add on cooked element
-      str += elem.value.cooked;
+      // add on element
+      str += raw ? elem.value.raw : elem.value.cooked;
 
       // add on interpolated expression if it's present
       const expr = exprs[i++];
@@ -108,6 +112,19 @@ function _evaluate(path, state) {
 
     if (!state.confident) return;
     return str;
+  }
+
+  if (path.isTaggedTemplateExpression() && path.get("tag").isMemberExpression()) {
+    const object = path.get("tag.object");
+    const { node: { name } } = object;
+    const property = path.get("tag.property");
+
+    if (
+      object.isIdentifier() && name === "String" && !path.scope.getBinding(name, true) &&
+      property.isIdentifier && property.node.name === "raw"
+    ) {
+      return evaluateQuasis(path, node.quasi.quasis, state, true);
+    }
   }
 
   if (path.isConditionalExpression()) {

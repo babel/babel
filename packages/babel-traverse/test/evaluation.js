@@ -119,4 +119,16 @@ describe("evaluation", function () {
     assert.strictEqual(eval_undef.deopt.type, "VariableDeclarator");
     assert.strictEqual(eval_undef.deopt.parentPath.node.kind, "let");
   });
+
+  it("should work with String.raw", function () {
+    assert.strictEqual(
+      getPath("String.raw`\\d`").get("body")[0].evaluate().value,
+      "\\d"
+    );
+
+    assert.strictEqual(
+      getPath("`${String.raw`\\d`}`").get("body")[0].evaluate().value,
+      "\\d"
+    );
+  });
 });
