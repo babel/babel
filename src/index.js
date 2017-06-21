@@ -48,8 +48,8 @@ const parserClassCache: { [key: string]: Class<Parser> } = {};
 /** Get a Parser class with plugins applied. */
 function getParserClass(pluginsFromOptions: $ReadOnlyArray<string>): Class<Parser> {
 
-  if (pluginsFromOptions.indexOf("decorators") >= 0 && pluginsFromOptions.indexOf("decoratorsStage2") >= 0) {
-    throw new Error("Cannot use decorators and decoratorsStage2 plugin together");
+  if (pluginsFromOptions.indexOf("decorators") >= 0 && pluginsFromOptions.indexOf("decorators2") >= 0) {
+    throw new Error("Cannot use decorators and decorators2 plugin together");
   }
 
   // Filter out just the plugins that have an actual mixin associated with them.

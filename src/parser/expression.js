@@ -858,7 +858,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       if (this.match(tt.at)) {
-        if (this.hasPlugin("decoratorsStage2")) {
+        if (this.hasPlugin("decorators2")) {
           this.raise(this.state.start, "Stage 2 decorators disallow object literal property decorators");
         } else {
           // we needn't check if decorators (stage 0) plugin is enabled since it's checked by

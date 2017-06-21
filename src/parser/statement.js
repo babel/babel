@@ -152,7 +152,7 @@ export default class StatementParser extends ExpressionParser {
   takeDecorators(node: N.HasDecorators): void {
     if (this.state.decorators.length) {
       node.decorators = this.state.decorators;
-      if (this.hasPlugin("decoratorsStage2")) {
+      if (this.hasPlugin("decorators2")) {
         this.resetStartLocationFromNode(node, this.state.decorators[0]);
       }
       this.state.decorators = [];
@@ -160,7 +160,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorators(allowExport?: boolean): void {
-    if (this.hasPlugin("decoratorsStage2")) {
+    if (this.hasPlugin("decorators2")) {
       allowExport = false;
     }
 
@@ -179,14 +179,14 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorator(): N.Decorator {
-    if (!(this.hasPlugin("decorators") || this.hasPlugin("decoratorsStage2"))) {
+    if (!(this.hasPlugin("decorators") || this.hasPlugin("decorators2"))) {
       this.unexpected();
     }
 
     const node = this.startNode();
     this.next();
 
-    if (this.hasPlugin("decoratorsStage2")) {
+    if (this.hasPlugin("decorators2")) {
       const startPos = this.state.start;
       const startLoc = this.state.startLoc;
       let expr = this.parseIdentifier(false);
@@ -712,7 +712,7 @@ export default class StatementParser extends ExpressionParser {
       // steal the decorators if there are any
       if (decorators.length) {
         member.decorators = decorators;
-        if (this.hasPlugin("decoratorsStage2")) {
+        if (this.hasPlugin("decorators2")) {
           this.resetStartLocationFromNode(member, decorators[0]);
         }
         decorators = [];
@@ -720,7 +720,7 @@ export default class StatementParser extends ExpressionParser {
 
       this.parseClassMember(classBody, member, state);
 
-      if (this.hasPlugin("decoratorsStage2") && member.kind != "method" && member.decorators && member.decorators.length > 0) {
+      if (this.hasPlugin("decorators2") && member.kind != "method" && member.decorators && member.decorators.length > 0) {
         this.raise(member.start, "Stage 2 decorators may only be used with a class or a class method");
       }
     }
