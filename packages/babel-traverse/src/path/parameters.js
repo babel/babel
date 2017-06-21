@@ -14,8 +14,14 @@ function extractDeclaredVariables(declaration, fnPath) {
   return bindings;
 }
 
+/**
+ * fnPath.inlineParameters() moves the parameters of a function to its body. e.g.
+ * function f({x},[y]) {code();} transforms to function f(_ref,_ref2){var [{x},[y]]=[_ref,_ref2]; code();}
+ * While taking care that we don't disturb arity and handling conflicting
+ * variable names declared in the function body
+ */
 export function inlineParameters() {
-
+  this.assertFunction();
   this.ensureBlock(); // so that we work correctly with arrow functions
   const arity = getFunctionArity(this.node);
 
