@@ -152,6 +152,9 @@ export default class StatementParser extends ExpressionParser {
   takeDecorators(node: N.HasDecorators): void {
     if (this.state.decorators.length) {
       node.decorators = this.state.decorators;
+      if (this.hasPlugin("decoratorsStage2")) {
+        this.resetStartLocationFromNode(node, this.state.decorators[0]);
+      }
       this.state.decorators = [];
     }
   }
@@ -709,6 +712,9 @@ export default class StatementParser extends ExpressionParser {
       // steal the decorators if there are any
       if (decorators.length) {
         member.decorators = decorators;
+        if (this.hasPlugin("decoratorsStage2")) {
+          this.resetStartLocationFromNode(member, decorators[0]);
+        }
         decorators = [];
       }
 

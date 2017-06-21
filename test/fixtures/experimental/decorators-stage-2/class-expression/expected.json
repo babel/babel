@@ -76,12 +76,12 @@
             },
             "init": {
               "type": "ClassExpression",
-              "start": 15,
+              "start": 10,
               "end": 58,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 15
+                  "column": 10
                 },
                 "end": {
                   "line": 6,
@@ -157,11 +157,11 @@
                 "body": [
                   {
                     "type": "ClassMethod",
-                    "start": 36,
+                    "start": 29,
                     "end": 56,
                     "loc": {
                       "start": {
-                        "line": 3,
+                        "line": 2,
                         "column": 2
                       },
                       "end": {

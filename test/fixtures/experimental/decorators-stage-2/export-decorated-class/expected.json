@@ -44,12 +44,12 @@
         },
         "declaration": {
           "type": "ClassExpression",
-          "start": 21,
+          "start": 16,
           "end": 34,
           "loc": {
             "start": {
               "line": 2,
-              "column": 5
+              "column": 0
             },
             "end": {
               "line": 2,
