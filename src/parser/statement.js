@@ -152,11 +152,18 @@ export default class StatementParser extends ExpressionParser {
   takeDecorators(node: N.HasDecorators): void {
     if (this.state.decorators.length) {
       node.decorators = this.state.decorators;
+      if (this.hasPlugin("decorators2")) {
+        this.resetStartLocationFromNode(node, this.state.decorators[0]);
+      }
       this.state.decorators = [];
     }
   }
 
   parseDecorators(allowExport?: boolean): void {
+    if (this.hasPlugin("decorators2")) {
+      allowExport = false;
+    }
+
     while (this.match(tt.at)) {
       const decorator = this.parseDecorator();
       this.state.decorators.push(decorator);
@@ -172,12 +179,38 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorator(): N.Decorator {
-    if (!this.hasPlugin("decorators")) {
+    if (!(this.hasPlugin("decorators") || this.hasPlugin("decorators2"))) {
       this.unexpected();
     }
+
     const node = this.startNode();
     this.next();
-    node.expression = this.parseMaybeAssign();
+
+    if (this.hasPlugin("decorators2")) {
+      const startPos = this.state.start;
+      const startLoc = this.state.startLoc;
+      let expr = this.parseIdentifier(false);
+
+      while (this.eat(tt.dot)) {
+        const node = this.startNodeAt(startPos, startLoc);
+        node.object = expr;
+        node.property = this.parseIdentifier(true);
+        node.computed = false;
+        expr = this.finishNode(node, "MemberExpression");
+      }
+
+      if (this.eat(tt.parenL)) {
+        const node = this.startNodeAt(startPos, startLoc);
+        node.callee = expr;
+        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+        expr = this.finishNode(node, "CallExpression");
+        this.toReferencedList(expr.arguments);
+      }
+
+      node.expression = expr;
+    } else {
+      node.expression = this.parseMaybeAssign();
+    }
     return this.finishNode(node, "Decorator");
   }
 
@@ -679,10 +712,17 @@ export default class StatementParser extends ExpressionParser {
       // steal the decorators if there are any
       if (decorators.length) {
         member.decorators = decorators;
+        if (this.hasPlugin("decorators2")) {
+          this.resetStartLocationFromNode(member, decorators[0]);
+        }
         decorators = [];
       }
 
       this.parseClassMember(classBody, member, state);
+
+      if (this.hasPlugin("decorators2") && member.kind != "method" && member.decorators && member.decorators.length > 0) {
+        this.raise(member.start, "Stage 2 decorators may only be used with a class or a class method");
+      }
     }
 
     if (decorators.length) {
@@ -750,6 +790,7 @@ export default class StatementParser extends ExpressionParser {
     if (!methodOrProp.computed && methodOrProp.static && (methodOrProp.key.name === "prototype" || methodOrProp.key.value === "prototype")) {
       this.raise(methodOrProp.key.start, "Classes may not have static property named prototype");
     }
+
     if (this.isClassMethod()) {
       // a normal method
       if (this.isNonstaticConstructor(method)) {

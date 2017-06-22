@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "Leading decorators must be attached to a class declaration (2:0)"
+}
