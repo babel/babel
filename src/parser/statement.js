@@ -173,6 +173,11 @@ export default class StatementParser extends ExpressionParser {
       return;
     }
 
+    // special error for the common case of @dec export class
+    if (!allowExport && this.match(tt._export)) {
+      this.raise(this.state.start, "Using the export keyword between decorators and class is disallowed. Please use `export @dec class` instead");
+    }
+
     if (!this.match(tt._class)) {
       this.raise(this.state.start, "Leading decorators must be attached to a class declaration");
     }
