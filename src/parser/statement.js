@@ -684,7 +684,7 @@ export default class StatementParser extends ExpressionParser {
     // class bodies are implicitly strict
     const oldStrict = this.state.strict;
     this.state.strict = true;
-    this.state.inClass = true;
+    this.state.classLevel++;
 
     const state = { hadConstructor: false };
     let decorators = [];
@@ -731,7 +731,7 @@ export default class StatementParser extends ExpressionParser {
 
     node.body = this.finishNode(classBody, "ClassBody");
 
-    this.state.inClass = false;
+    this.state.classLevel--;
     this.state.strict = oldStrict;
   }
 

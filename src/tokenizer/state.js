@@ -24,10 +24,11 @@ export default class State {
       this.inAsync =
       this.inPropertyName =
       this.inType =
-      this.inClass =
       this.inClassProperty =
       this.noAnonFunctionType =
         false;
+
+    this.classLevel = 0;
 
     this.labels = [];
 
@@ -84,7 +85,9 @@ export default class State {
   noAnonFunctionType: boolean;
   inPropertyName: boolean;
   inClassProperty: boolean;
-  inClass: boolean;
+
+  // Check whether we are in a (nested) class or not.
+  classLevel: number;
 
   // Labels in scope.
   labels: Array<{ kind: ?("loop" | "switch"), statementStart?: number }>;

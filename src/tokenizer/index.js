@@ -444,7 +444,7 @@ export default class Tokenizer extends LocationParser {
     switch (code) {
 
       case 35: // '#'
-        if (this.hasPlugin("classPrivateProperties") && this.state.inClass) {
+        if (this.hasPlugin("classPrivateProperties") && this.state.classLevel > 0) {
           ++this.state.pos; return this.finishToken(tt.hash);
         } else {
           this.raise(this.state.pos, `Unexpected character '${codePointToString(code)}'`);
