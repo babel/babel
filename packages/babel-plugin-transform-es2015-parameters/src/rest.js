@@ -197,8 +197,7 @@ function optimiseIndexGetter(path, argsId, offset) {
     if (valRes.confident) {
       if (valRes.value === true) {
         parentPath.replaceWith(parentPath.scope.buildUndefinedNode());
-      }
-      else {
+      } else {
         parentPath.get("test").replaceWith(parentPath.get("test").get("right"));
       }
     }
