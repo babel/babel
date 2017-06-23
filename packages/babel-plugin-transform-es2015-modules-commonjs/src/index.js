@@ -129,6 +129,7 @@ export default function () {
 
   return {
     inherits: transformStrictMode,
+    name: "babel-plugin-transform-es2015-modules-commonjs",
 
     visitor: {
       ThisExpression(path, state) {
@@ -482,6 +483,6 @@ export default function () {
           });
         },
       },
-    },
+    }
   };
 }

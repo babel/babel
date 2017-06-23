@@ -21,6 +21,8 @@ export default function ({ types: t }) {
   }
 
   return {
+    name: "babel-plugin-transform-es2015-template-literals",
+
     visitor: {
       TaggedTemplateExpression(path, state) {
 
@@ -93,6 +95,6 @@ export default function ({ types: t }) {
 
         path.replaceWith(root);
       },
-    },
+    }
   };
 }

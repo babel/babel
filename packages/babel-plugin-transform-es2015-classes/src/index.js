@@ -7,6 +7,8 @@ export default function ({ types: t }) {
   const VISITED = Symbol();
 
   return {
+    name: "babel-plugin-transform-es2015-classes",
+
     visitor: {
       ExportDefaultDeclaration(path) {
         if (!path.get("declaration").isClassDeclaration()) return;
@@ -51,6 +53,6 @@ export default function ({ types: t }) {
           path.get("callee").arrowFunctionToExpression();
         }
       },
-    },
+    }
   };
 }

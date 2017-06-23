@@ -16,6 +16,8 @@ export default function ({ types: t }) {
   }
 
   return {
+    name: "babel-plugin-transform-proto-to-assign",
+
     visitor: {
       AssignmentExpression(path, file) {
         if (!isProtoAssignmentExpression(path.node)) return;
@@ -57,6 +59,6 @@ export default function ({ types: t }) {
           path.replaceWith(t.callExpression(file.addHelper("extends"), args));
         }
       },
-    },
+    }
   };
 }

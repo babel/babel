@@ -95,6 +95,8 @@ export default function ({ types: t }) {
       this.hasModule = false;
     },
 
+    name: "babel-plugin-transform-es2015-modules-amd",
+
     visitor: {
       Program: {
         exit(path) {
@@ -133,6 +135,6 @@ export default function ({ types: t }) {
           })];
         },
       },
-    },
+    }
   };
 }

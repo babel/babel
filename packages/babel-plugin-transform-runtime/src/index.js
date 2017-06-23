@@ -34,6 +34,8 @@ export default function ({ types: t }) {
       });
     },
 
+    name: "babel-plugin-transform-runtime",
+
     visitor: {
       ReferencedIdentifier(path, state) {
         const { node, parent, scope } = path;
@@ -155,7 +157,7 @@ export default function ({ types: t }) {
           ));
         },
       },
-    },
+    }
   };
 }
 

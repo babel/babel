@@ -20,6 +20,8 @@ export default function ({ types: t }) {
   }
 
   return {
+    name: "babel-plugin-transform-react-inline-elements",
+
     visitor: {
       JSXElement(path, file) {
         const { node } = path;
@@ -64,6 +66,6 @@ export default function ({ types: t }) {
         const el = t.callExpression(file.addHelper("jsx"), args);
         path.replaceWith(el);
       },
-    },
+    }
   };
 }

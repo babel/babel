@@ -21,6 +21,8 @@ export default function ({ types: t }) {
   }
 
   return {
+    name: "babel-plugin-transform-es2015-block-scoped-functions",
+
     visitor: {
       BlockStatement(path) {
         const { node, parent } = path;
@@ -34,6 +36,6 @@ export default function ({ types: t }) {
       SwitchCase(path) {
         statementList("consequent", path);
       },
-    },
+    }
   };
 }

@@ -2,6 +2,8 @@ import * as defineMap from "babel-helper-define-map";
 
 export default function ({ types: t }) {
   return {
+    name: "babel-plugin-transform-es5-property-mutators",
+
     visitor: {
       ObjectExpression(path, file) {
         const { node } = path;
@@ -30,6 +32,6 @@ export default function ({ types: t }) {
           [node, defineMap.toDefineObject(mutatorMap)]
         ));
       },
-    },
+    }
   };
 }

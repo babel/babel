@@ -15,6 +15,7 @@ export default function ({ types: t }) {
 
   return {
     inherits: syntaxFlow,
+    name: "babel-plugin-transform-flow-comments",
 
     visitor: {
       TypeCastExpression(path) {
@@ -68,6 +69,6 @@ export default function ({ types: t }) {
         }
         wrapInFlowComment(path, parent);
       },
-    },
+    }
   };
 }

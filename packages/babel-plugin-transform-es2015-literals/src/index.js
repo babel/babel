@@ -1,5 +1,7 @@
 export default function () {
   return {
+    name: "babel-plugin-transform-es2015-literals",
+
     visitor: {
       NumericLiteral({ node }) {
         // number octal like 0b10 or 0o70
@@ -14,6 +16,6 @@ export default function () {
           node.extra = undefined;
         }
       },
-    },
+    }
   };
 }

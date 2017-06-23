@@ -329,6 +329,8 @@ export default function ({ types: t }) {
 
 
   return {
+    name: "babel-plugin-transform-es2015-destructuring",
+
     visitor: {
       ExportNamedDeclaration(path) {
         const declaration = path.get("declaration");
@@ -523,6 +525,6 @@ export default function ({ types: t }) {
           path.replaceWithMultiple(nodesOut);
         }
       },
-    },
+    }
   };
 }

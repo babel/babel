@@ -84,6 +84,8 @@ export default function ({ types: t, template }) {
   }
 
   return {
+    name: "babel-plugin-transform-es2015-computed-properties",
+
     visitor: {
       ObjectExpression: {
         exit(path, state) {
@@ -164,6 +166,6 @@ export default function ({ types: t, template }) {
           }
         },
       },
-    },
+    }
   };
 }

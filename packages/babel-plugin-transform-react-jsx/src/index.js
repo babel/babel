@@ -47,6 +47,7 @@ export default function ({ types: t }) {
 
   return {
     inherits: jsx,
-    visitor,
+    name: "babel-plugin-transform-react-jsx",
+    visitor
   };
 }

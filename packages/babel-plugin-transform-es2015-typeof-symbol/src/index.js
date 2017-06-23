@@ -2,6 +2,8 @@ export default function ({ types: t }) {
   const IGNORE = Symbol();
 
   return {
+    name: "babel-plugin-transform-es2015-typeof-symbol",
+
     visitor: {
       Scope({ scope }) {
         if (!scope.getBinding("Symbol")) {
@@ -47,6 +49,6 @@ export default function ({ types: t }) {
           }
         }
       },
-    },
+    }
   };
 }

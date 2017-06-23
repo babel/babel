@@ -23,6 +23,7 @@ export default function ({ types: t }) {
 
   return {
     inherits: syntaxExportExtensions,
+    name: "babel-plugin-transform-export-extensions",
 
     visitor: {
       ExportNamedDeclaration(path) {
@@ -36,6 +37,6 @@ export default function ({ types: t }) {
         }
         path.replaceWithMultiple(nodes);
       },
-    },
+    }
   };
 }

@@ -32,6 +32,7 @@ export default function ({ types: t }) {
 
   return {
     inherits: syntaxFunctionBind,
+    name: "babel-plugin-transform-function-bind",
 
     visitor: {
       CallExpression({ node, scope }) {
@@ -48,6 +49,6 @@ export default function ({ types: t }) {
         const context = inferBindContext(node, scope);
         path.replaceWith(t.callExpression(t.memberExpression(node.callee, t.identifier("bind")), [context]));
       },
-    },
+    }
   };
 }

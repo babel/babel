@@ -74,6 +74,7 @@ export default function ({ types: t }) {
 
   return {
     inherits: syntaxObjectRestSpread,
+    name: "babel-plugin-transform-object-rest-spread",
 
     visitor: {
       // taken from transform-es2015-parameters/src/destructuring.js
@@ -301,6 +302,6 @@ export default function ({ types: t }) {
 
         path.replaceWith(t.callExpression(helper, args));
       },
-    },
+    }
   };
 }

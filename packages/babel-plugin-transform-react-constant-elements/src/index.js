@@ -48,6 +48,8 @@ export default function ({ types: t }) {
   };
 
   return {
+    name: "babel-plugin-transform-react-constant-elements",
+
     visitor: {
       JSXElement(path) {
         if (path.node._hoisted) return;
@@ -61,6 +63,6 @@ export default function ({ types: t }) {
           path.node._hoisted = true;
         }
       },
-    },
+    }
   };
 }

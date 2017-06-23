@@ -5,6 +5,7 @@ export default function ({ types: t }) {
 
   return {
     inherits: syntaxFlow,
+    name: "babel-plugin-transform-flow-strip-types",
 
     visitor: {
       Program(path, { file: { ast: { comments } } }) {
@@ -76,6 +77,6 @@ export default function ({ types: t }) {
         } while (t.isTypeCastExpression(node));
         path.replaceWith(node);
       },
-    },
+    }
   };
 }

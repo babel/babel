@@ -91,6 +91,8 @@ export default function ({ messages, template, types: t }) {
 
 
   return {
+    name: "babel-plugin-transform-es2015-for-of",
+
     visitor: {
       ForOfStatement(path, state) {
         if (path.get("right").isArrayExpression()) {
@@ -131,7 +133,7 @@ export default function ({ messages, template, types: t }) {
           path.replaceWithMultiple(build.node);
         }
       },
-    },
+    }
   };
 
   function loose(path, file) {

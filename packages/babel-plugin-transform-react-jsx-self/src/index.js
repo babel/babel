@@ -25,6 +25,7 @@ export default function ({ types: t }) {
   };
 
   return {
-    visitor,
+    name: "babel-plugin-transform-react-jsx-self",
+    visitor
   };
 }

@@ -44,6 +44,7 @@ export default function ({ types: t }) {
 
   return {
     inherits: transformAMD,
+    name: "babel-plugin-transform-es2015-modules-umd",
 
     visitor: {
       Program: {
@@ -134,6 +135,6 @@ export default function ({ types: t }) {
           }));
         },
       },
-    },
+    }
   };
 }

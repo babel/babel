@@ -42,6 +42,8 @@ export default function ({ types: t }) {
   }
 
   return {
+    name: "babel-plugin-transform-es2015-spread",
+
     visitor: {
       ArrayExpression(path, state) {
         const { node, scope } = path;
@@ -137,6 +139,6 @@ export default function ({ types: t }) {
           []
         ));
       },
-    },
+    }
   };
 }

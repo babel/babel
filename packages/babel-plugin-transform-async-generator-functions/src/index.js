@@ -19,6 +19,8 @@ export default function ({ types: t }) {
 
   return {
     inherits: syntaxAsyncGenerators,
+    name: "babel-plugin-transform-async-generator-functions",
+
     visitor: {
       Function(path, state) {
         if (!path.node.async || !path.node.generator) return;
@@ -32,6 +34,6 @@ export default function ({ types: t }) {
             state.addHelper("asyncGenerator"), t.identifier("await")),
         });
       },
-    },
+    }
   };
 }

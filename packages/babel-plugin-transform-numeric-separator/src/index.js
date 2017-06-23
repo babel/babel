@@ -22,6 +22,7 @@ export default function ({ types: t }) {
 
   return {
     inherits: syntaxNumericSeparator,
+    name: "babel-plugin-transform-numeric-separator",
 
     visitor: {
       CallExpression,
@@ -31,6 +32,6 @@ export default function ({ types: t }) {
           node.value = replacer(node.extra.raw);
         }
       },
-    },
+    }
   };
 }

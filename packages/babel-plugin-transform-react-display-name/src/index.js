@@ -43,6 +43,8 @@ export default function ({ types: t }) {
   }
 
   return {
+    name: "babel-plugin-transform-react-display-name",
+
     visitor: {
       ExportDefaultDeclaration({ node }, state) {
         if (isCreateClass(node.declaration)) {
@@ -93,6 +95,6 @@ export default function ({ types: t }) {
           addDisplayName(id.name, node);
         }
       },
-    },
+    }
   };
 }

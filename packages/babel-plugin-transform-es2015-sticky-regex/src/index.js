@@ -3,6 +3,8 @@ import * as t from "babel-types";
 
 export default function () {
   return {
+    name: "babel-plugin-transform-es2015-sticky-regex",
+
     visitor: {
       RegExpLiteral(path) {
         const { node } = path;
@@ -13,6 +15,6 @@ export default function () {
           t.stringLiteral(node.flags),
         ]));
       },
-    },
+    }
   };
 }

@@ -283,9 +283,9 @@ export default function({ types: t }) {
 
   return {
     inherits: syntaxDecorators,
-
     dependencies: ["classProperties"],
     capabilities: ["decorators"],
+    name: "babel-plugin-transform-decorators",
 
     visitor: {
       ExportDefaultDeclaration(path) {
@@ -340,6 +340,6 @@ export default function({ types: t }) {
           path.get("right.arguments")[1].node,
         ]));
       },
-    },
+    }
   };
 }
