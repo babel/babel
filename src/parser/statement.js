@@ -150,12 +150,13 @@ export default class StatementParser extends ExpressionParser {
   }
 
   takeDecorators(node: N.HasDecorators): void {
-    if (this.state.decorators.length) {
-      node.decorators = this.state.decorators;
+    const decorators = this.state.decoratorStack[this.state.decoratorStack.length - 1];
+    if (decorators.length) {
+      node.decorators = decorators;
       if (this.hasPlugin("decorators2")) {
-        this.resetStartLocationFromNode(node, this.state.decorators[0]);
+        this.resetStartLocationFromNode(node, decorators[0]);
       }
-      this.state.decorators = [];
+      this.state.decoratorStack[this.state.decoratorStack.length - 1] = [];
     }
   }
 
@@ -164,9 +165,10 @@ export default class StatementParser extends ExpressionParser {
       allowExport = false;
     }
 
+    const currentContextDecorators = this.state.decoratorStack[this.state.decoratorStack.length - 1];
     while (this.match(tt.at)) {
       const decorator = this.parseDecorator();
-      this.state.decorators.push(decorator);
+      currentContextDecorators.push(decorator);
     }
 
     if (allowExport && this.match(tt._export)) {
@@ -207,7 +209,11 @@ export default class StatementParser extends ExpressionParser {
       if (this.eat(tt.parenL)) {
         const node = this.startNodeAt(startPos, startLoc);
         node.callee = expr;
+        // Every time a decorator class expression is evaluated, a new empty array is pushed onto the stack
+        // So that the decorators of any nested class expressions will be dealt with separately
+        this.state.decoratorStack.push([]);
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+        this.state.decoratorStack.pop();
         expr = this.finishNode(node, "CallExpression");
         this.toReferencedList(expr.arguments);
       }
@@ -1043,7 +1049,8 @@ export default class StatementParser extends ExpressionParser {
       }
     }
 
-    if (this.state.decorators.length) {
+    const currentContextDecorators = this.state.decoratorStack[this.state.decoratorStack.length - 1];
+    if (currentContextDecorators.length) {
       const isClass = node.declaration && (node.declaration.type === "ClassDeclaration" || node.declaration.type === "ClassExpression");
       if (!node.declaration || !isClass) {
         throw this.raise(node.start, "You can only use decorators on an export when exporting a class");
