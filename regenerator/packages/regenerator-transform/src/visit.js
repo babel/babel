@@ -17,6 +17,8 @@ import * as util from "./util";
 
 let getMarkInfo = require("private").makeAccessor();
 
+exports.name = "regenerator-transform";
+
 exports.visitor = {
   Function: {
     exit: function(path, state) {
