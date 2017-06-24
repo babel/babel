@@ -13,7 +13,7 @@ defineType("AssignmentPattern", {
   aliases: ["Pattern", "LVal"],
   fields: {
     left: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "ObjectPattern", "ArrayPattern"),
     },
     right: {
       validate: assertNodeType("Expression"),
