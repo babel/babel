@@ -90,5 +90,10 @@ getV8Flags(function (err, v8Flags) {
         }
       });
     });
+
+    process.on("SIGINT", () => {
+      proc.kill("SIGINT");
+      process.exit(1);
+    });
   }
 });
