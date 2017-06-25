@@ -42,17 +42,3 @@ assert.equal(instance, singleton);
 
 instance = new Sub;
 assert.equal(instance, singleton);
-
-class Null extends Foo {
-  constructor() {
-    if (false) {
-      super();
-    }
-    return null;
-    super();
-  }
-}
-
-assert.throws(() => {
-  new Null();
-}, "this");

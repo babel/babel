@@ -93,11 +93,11 @@ export default class ClassTransformer {
     this.staticPropBody = [];
     this.body = [];
 
-    this.bareSuperAfter = [];
     this.bareSupers = [];
 
     this.pushedConstructor = false;
     this.pushedInherits = false;
+    this.pushedThis = false;
     this.isLoose = false;
 
     this.superThises = [];
@@ -431,8 +431,6 @@ export default class ClassTransformer {
       );
     }
 
-    const bareSuperAfter = this.bareSuperAfter.map(fn => fn(thisRef));
-
     if (
       bareSuper.parentPath.isExpressionStatement() &&
       bareSuper.parentPath.container === body.node.body &&
@@ -441,22 +439,18 @@ export default class ClassTransformer {
       // this super call is the last statement in the body so we can just straight up
       // turn it into a return
 
-      if (this.superThises.length || bareSuperAfter.length) {
+      if (this.superThises.length) {
         bareSuper.scope.push({ id: thisRef });
         call = t.assignmentExpression("=", thisRef, call);
       }
 
-      if (bareSuperAfter.length) {
-        call = t.toSequenceExpression([call, ...bareSuperAfter, thisRef]);
-      }
-
       bareSuper.parentPath.replaceWith(t.returnStatement(call));
     } else {
-      bareSuper.replaceWithMultiple([
-        t.variableDeclaration("var", [t.variableDeclarator(thisRef, call)]),
-        ...bareSuperAfter,
-        t.expressionStatement(thisRef),
-      ]);
+      if (!this.pushedThis) {
+        body.scope.push({ id: thisRef });
+        this.pushedThis = true;
+      }
+      bareSuper.replaceWith(t.assignmentExpression("=", thisRef, call));
     }
   }
 
@@ -522,17 +516,9 @@ export default class ClassTransformer {
     }
 
     for (const returnPath of this.superReturns) {
-      if (returnPath.node.argument) {
-        const ref = returnPath.scope.generateDeclaredUidIdentifier("ret");
-        returnPath
-          .get("argument")
-          .replaceWithMultiple([
-            t.assignmentExpression("=", ref, returnPath.node.argument),
-            wrapReturn(ref),
-          ]);
-      } else {
-        returnPath.get("argument").replaceWith(wrapReturn());
-      }
+      returnPath
+        .get("argument")
+        .replaceWith(wrapReturn(returnPath.node.argument));
     }
   }
 
