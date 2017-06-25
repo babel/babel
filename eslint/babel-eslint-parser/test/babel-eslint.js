@@ -1,7 +1,7 @@
 var assert = require("assert");
 var babelEslint = require("..");
 var espree = require("espree");
-var escope = require("escope");
+var escope = require("eslint-scope");
 var util = require("util");
 var unpad = require("dedent");
 

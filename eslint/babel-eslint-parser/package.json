@@ -36,17 +36,17 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
-    "babel-eslint": "^7.0.0",
+    "babel-eslint": "^8.0.0-alpha.13",
     "dedent": "^0.7.0",
-    "eslint": "^3.18.0",
+    "eslint": "^4.1.0",
     "eslint-config-babel": "^7.0.1",
     "eslint-plugin-flowtype": "^2.30.3",
     "eslint-plugin-prettier": "^2.1.2",
     "espree": "^3.4.0",
     "husky": "^0.14.0",
-    "lint-staged": "^3.6.1",
+    "lint-staged": "^4.0.0",
     "mocha": "^3.0.0",
-    "prettier": "1.4.4"
+    "prettier": "^1.4.4"
   },
   "lint-staged": {
     "*.js": [
