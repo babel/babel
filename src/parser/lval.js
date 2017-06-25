@@ -258,8 +258,7 @@ export default class LValParser extends NodeUtils {
         break;
 
       case "MemberExpression":
-        if (isBinding)
-          this.raise(expr.start, (isBinding ? "Binding" : "Assigning to") + " member expression");
+        if (isBinding) this.raise(expr.start, "Binding member expression");
         break;
 
       case "ObjectPattern":
