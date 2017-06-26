@@ -13,6 +13,8 @@ node_js:
 
 env:
   - JOB=test
+  # Hacky fix until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
+  - FORCE_COLOR=true
 
 script:
   - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
