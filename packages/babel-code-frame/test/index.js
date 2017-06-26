@@ -2,9 +2,9 @@ import assert from "assert";
 import chalk from "chalk";
 import codeFrame, { codeFrameColumns } from "..";
 
-import supports from "supports-color";
+// import supports from "supports-color";
 
-console.log("COLOR??", supports);
+// console.log("COLOR??", supports);
 console.log("env", process.env, process.stdout.isTTY, process.argv);
 
 describe("babel-code-frame", function () {
