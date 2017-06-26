@@ -127,13 +127,15 @@ export default class ClassTransformer {
     //
     this.buildBody();
 
-    // make sure this class isn't directly called
-    constructorBody.body.unshift(t.expressionStatement(t.callExpression(
-      file.addHelper("classCallCheck"), [
-        t.thisExpression(),
-        this.classRef,
-      ]
-    )));
+    // make sure this class isn't directly called (with A() instead new A())
+    if (!this.isLoose) {
+      constructorBody.body.unshift(t.expressionStatement(t.callExpression(
+        file.addHelper("classCallCheck"), [
+          t.thisExpression(),
+          this.classRef,
+        ]
+      )));
+    }
 
     body = body.concat(this.staticPropBody.map((fn) => fn(this.classRef)));
 
@@ -374,10 +376,16 @@ export default class ClassTransformer {
       );
     }
 
-    let call = t.callExpression(
-      this.file.addHelper("possibleConstructorReturn"),
-      [t.thisExpression(), bareSuperNode]
-    );
+    let call;
+
+    if (this.isLoose) {
+      call = t.logicalExpression("||", bareSuperNode, t.thisExpression());
+    } else {
+      call = t.callExpression(
+        this.file.addHelper("possibleConstructorReturn"),
+        [t.thisExpression(), bareSuperNode]
+      );
+    }
 
     const bareSuperAfter = this.bareSuperAfter.map((fn) => fn(thisRef));
 
@@ -446,10 +454,18 @@ export default class ClassTransformer {
       thisPath.replaceWith(thisRef);
     }
 
-    const wrapReturn = (returnArg) => t.callExpression(
-      this.file.addHelper("possibleConstructorReturn"),
-      [thisRef].concat(returnArg || [])
-    );
+    let wrapReturn;
+
+    if (this.isLoose) {
+      wrapReturn = (returnArg) => {
+        return returnArg ? t.logicalExpression("||", returnArg, thisRef) : thisRef;
+      };
+    } else {
+      wrapReturn = (returnArg) => t.callExpression(
+        this.file.addHelper("possibleConstructorReturn"),
+        [thisRef].concat(returnArg || [])
+      );
+    }
 
     // if we have a return as the last node in the body then we've already caught that
     // return
@@ -546,7 +562,7 @@ export default class ClassTransformer {
     // any properties can be assigned to the prototype.
     this.pushedInherits = true;
     this.body.unshift(t.expressionStatement(t.callExpression(
-      this.file.addHelper("inherits"),
+      this.isLoose ? this.file.addHelper("inheritsLoose") : this.file.addHelper("inherits"),
       [this.classRef, this.superName]
     )));
   }
