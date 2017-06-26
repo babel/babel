@@ -52,7 +52,6 @@ test-only:
 test: lint test-only
 
 test-ci:
-	node -e "console.log('Node has TTY:', process.stdout.isTTY);"
 	make bootstrap
 	make test-only
 
