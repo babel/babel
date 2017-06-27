@@ -318,6 +318,7 @@ suites.forEach(function (testSuite) {
               "functionSent",
               "jsx",
               "objectRestSpread",
+              "optionalChaining",
             ],
             strictMode: false,
             sourceType: "module",

@@ -51,11 +51,16 @@ export function NewExpression(node: Object, parent: Object) {
   this.word("new");
   this.space();
   this.print(node.callee, node);
-  if (node.arguments.length === 0 && this.format.minified &&
+  if (this.format.minified &&
+      node.arguments.length === 0 &&
+      !node.optional &&
       !t.isCallExpression(parent, { callee: node }) &&
       !t.isMemberExpression(parent) &&
       !t.isNewExpression(parent)) return;
 
+  if (node.optional) {
+    this.token("?.");
+  }
   this.token("(");
   this.printList(node.arguments, node);
   this.token(")");
@@ -89,6 +94,9 @@ function commaSeparatorNewline() {
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
 
+  if (node.optional) {
+    this.token("?.");
+  }
   this.token("(");
 
   const isPrettyCall = node._prettyCall;
@@ -203,12 +211,17 @@ export function MemberExpression(node: Object) {
     computed = true;
   }
 
+  if (node.optional) {
+    this.token("?.");
+  }
   if (computed) {
     this.token("[");
     this.print(node.property, node);
     this.token("]");
   } else {
-    this.token(".");
+    if (!node.optional) {
+      this.token(".");
+    }
     this.print(node.property, node);
   }
 }
