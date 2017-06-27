@@ -145,7 +145,23 @@ export {
   Func as ClassDeclaration,
 };
 
+const isArrayFrom = t.buildMatchMemberExpression("Array.from");
+const isObjectKeys = t.buildMatchMemberExpression("Object.keys");
+const isObjectValues = t.buildMatchMemberExpression("Object.values");
+const isObjectEntries = t.buildMatchMemberExpression("Object.entries");
 export function CallExpression() {
+  const { callee } = this.node;
+  if (isObjectKeys(callee)) {
+    return t.arrayTypeAnnotation(t.stringTypeAnnotation());
+  } else if (isArrayFrom(callee) || isObjectValues(callee)) {
+    return t.arrayTypeAnnotation(t.anyTypeAnnotation());
+  } else if (isObjectEntries(callee)) {
+    return t.arrayTypeAnnotation(t.tupleTypeAnnotation([
+      t.stringTypeAnnotation(),
+      t.anyTypeAnnotation(),
+    ]));
+  }
+
   return resolveCall(this.get("callee"));
 }
 
