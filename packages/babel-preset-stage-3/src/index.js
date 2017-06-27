@@ -3,7 +3,7 @@ import transformAsyncGeneratorFunctions from "babel-plugin-transform-async-gener
 import transformObjectRestSpread from "babel-plugin-transform-object-rest-spread";
 import transformUnicodePropertyRegex from "babel-plugin-transform-unicode-property-regex";
 
-export default function () {
+export default function() {
   return {
     plugins: [
       syntaxDynamicImport,

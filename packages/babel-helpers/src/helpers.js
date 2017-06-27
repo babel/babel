@@ -359,7 +359,6 @@ helpers.get = template(`
   });
 `);
 
-
 helpers.inherits = template(`
   (function (subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
@@ -394,7 +393,6 @@ helpers.instanceof = template(`
     }
   });
 `);
-
 
 helpers.interopRequireDefault = template(`
   (function (obj) {

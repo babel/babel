@@ -3,7 +3,7 @@ import * as t from "babel-types";
 
 type WhitespaceObject = {
   before?: boolean,
-  after?: boolean
+  after?: boolean,
 };
 
 /**
@@ -45,15 +45,22 @@ function isHelper(node) {
   } else if (t.isCallExpression(node)) {
     return isHelper(node.callee);
   } else if (t.isBinary(node) || t.isAssignmentExpression(node)) {
-    return (t.isIdentifier(node.left) && isHelper(node.left)) || isHelper(node.right);
+    return (
+      (t.isIdentifier(node.left) && isHelper(node.left)) || isHelper(node.right)
+    );
   } else {
     return false;
   }
 }
 
 function isType(node) {
-  return t.isLiteral(node) || t.isObjectExpression(node) || t.isArrayExpression(node) ||
-         t.isIdentifier(node) || t.isMemberExpression(node);
+  return (
+    t.isLiteral(node) ||
+    t.isObjectExpression(node) ||
+    t.isArrayExpression(node) ||
+    t.isIdentifier(node) ||
+    t.isMemberExpression(node)
+  );
 }
 
 /**
@@ -61,7 +68,6 @@ function isType(node) {
  */
 
 export const nodes = {
-
   /**
    * Test if AssignmentExpression needs whitespace.
    */
@@ -164,9 +170,10 @@ export const nodes = {
  * Test if Property needs whitespace.
  */
 
-nodes.ObjectProperty =
-nodes.ObjectTypeProperty =
-nodes.ObjectMethod = function (node: Object, parent): ?WhitespaceObject {
+nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function(
+  node: Object,
+  parent,
+): ?WhitespaceObject {
   if (parent.properties[0] === node) {
     return {
       before: true,
@@ -179,7 +186,6 @@ nodes.ObjectMethod = function (node: Object, parent): ?WhitespaceObject {
  */
 
 export const list = {
-
   /**
    * Return VariableDeclaration declarations init properties.
    */
@@ -216,12 +222,12 @@ export const list = {
   ["LabeledStatement", true],
   ["SwitchStatement", true],
   ["TryStatement", true],
-].forEach(function ([type, amounts]) {
+].forEach(function([type, amounts]) {
   if (typeof amounts === "boolean") {
     amounts = { after: amounts, before: amounts };
   }
-  [type].concat(t.FLIPPED_ALIAS_KEYS[type] || []).forEach(function (type) {
-    nodes[type] = function () {
+  [type].concat(t.FLIPPED_ALIAS_KEYS[type] || []).forEach(function(type) {
+    nodes[type] = function() {
       return amounts;
     };
   });
