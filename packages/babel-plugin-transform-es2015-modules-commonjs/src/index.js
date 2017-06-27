@@ -83,23 +83,59 @@ export default function() {
       if (node[REASSIGN_REMAP_SKIP]) return;
 
       const left = path.get("left");
-      if (!left.isIdentifier()) return;
+      if (left.isIdentifier()) {
+        const name = left.node.name;
+        const exports = this.exports[name];
+        if (!exports) return;
 
-      const name = left.node.name;
-      const exports = this.exports[name];
-      if (!exports) return;
+        // redeclared in this scope
+        if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
-      // redeclared in this scope
-      if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
+        node[REASSIGN_REMAP_SKIP] = true;
 
-      node[REASSIGN_REMAP_SKIP] = true;
+        for (const reid of exports) {
+          node = buildExportsAssignment(reid, node).expression;
+        }
 
-      for (const reid of exports) {
-        node = buildExportsAssignment(reid, node).expression;
+        path.replaceWith(node);
+        this.requeueInParent(path);
+      } else if (left.isObjectPattern()) {
+        for (const property of left.node.properties) {
+          const name = property.value.name;
+
+          const exports = this.exports[name];
+          if (!exports) continue;
+
+          // redeclared in this scope
+          if (this.scope.getBinding(name) !== path.scope.getBinding(name)) {
+            return;
+          }
+
+          node[REASSIGN_REMAP_SKIP] = true;
+
+          path.insertAfter(
+            buildExportsAssignment(t.identifier(name), t.identifier(name)),
+          );
+        }
+      } else if (left.isArrayPattern()) {
+        for (const element of left.node.elements) {
+          const name = element.name;
+
+          const exports = this.exports[name];
+          if (!exports) continue;
+
+          // redeclared in this scope
+          if (this.scope.getBinding(name) !== path.scope.getBinding(name)) {
+            return;
+          }
+
+          node[REASSIGN_REMAP_SKIP] = true;
+
+          path.insertAfter(
+            buildExportsAssignment(t.identifier(name), t.identifier(name)),
+          );
+        }
       }
-
-      path.replaceWith(node);
-      this.requeueInParent(path);
     },
 
     UpdateExpression(path) {
