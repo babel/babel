@@ -171,13 +171,12 @@ export default class StatementParser extends ExpressionParser {
       currentContextDecorators.push(decorator);
     }
 
-    if (allowExport && this.match(tt._export)) {
-      return;
-    }
-
-    // special error for the common case of @dec export class
-    if (!allowExport && this.match(tt._export)) {
-      this.raise(this.state.start, "Using the export keyword between a decorator and a class is not allowed. Please use `export @dec class` instead");
+    if (this.match(tt._export)) {
+      if (allowExport) {
+        return;
+      } else {
+        this.raise(this.state.start, "Using the export keyword between a decorator and a class is not allowed. Please use `export @dec class` instead");
+      }
     }
 
     if (!this.match(tt._class)) {
