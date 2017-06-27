@@ -37,6 +37,16 @@ const exportSuggestions = {
   interface: "export interface",
 };
 
+// Like Array#filter, but returns a tuple [ acceptedElements, discardedElements ]
+function partition<T>(list: T[], test: (T, number, T[]) => ?boolean): [ T[], T[] ] {
+  const list1 = [];
+  const list2 = [];
+  for (let i = 0; i < list.length; i++) {
+    (test(list[i], i, list) ? list1 : list2).push(list[i]);
+  }
+  return [ list1, list2 ];
+}
+
 export default (superClass: Class<Parser>): Class<Parser> => class extends superClass {
   flowParseTypeInitialiser(tok?: TokenType): N.FlowType {
     const oldInType = this.state.inType;
@@ -1007,9 +1017,15 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
   // Overrides
   // ==================================
 
-  // plain function return types: function name(): string {}
   parseFunctionBody(node: N.Function, allowExpression?: boolean): void {
-    if (this.match(tt.colon) && !allowExpression) {
+    if (allowExpression && this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1) {
+      this.state.noArrowParamsConversionAt.push(this.state.start);
+      super.parseFunctionBody(node, allowExpression);
+      this.state.noArrowParamsConversionAt.pop();
+
+      return;
+    } else if (this.match(tt.colon)) {
+      // plain function return types: function name(): string {}
       // if allowExpression is true then we're parsing an arrow function and if
       // there's a return type then it's been handled elsewhere
       const typeNode = this.startNode();
@@ -1074,9 +1090,11 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
   }
 
   parseConditional(expr: N.Expression, noIn: ?boolean, startPos: number, startLoc: Position, refNeedsArrowPos?: ?Pos): N.Expression {
+    if (!this.match(tt.question)) return expr;
+
     // only do the expensive clone if there is a question mark
     // and if we come from inside parens
-    if (refNeedsArrowPos && this.match(tt.question)) {
+    if (refNeedsArrowPos) {
       const state = this.state.clone();
       try {
         return super.parseConditional(expr, noIn, startPos, startLoc);
@@ -1092,7 +1110,129 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
       }
     }
 
-    return super.parseConditional(expr, noIn, startPos, startLoc);
+    this.expect(tt.question);
+    const state = this.state.clone();
+    const originalNoArrowAt = this.state.noArrowAt;
+    const node = this.startNodeAt(startPos, startLoc);
+    let { consequent, failed } = this.tryParseConditionalConsequent();
+    let [ valid, invalid ] = this.getArrowLikeExpressions(consequent);
+
+    if (failed || invalid.length > 0) {
+      const noArrowAt = [ ...originalNoArrowAt ];
+
+      if (invalid.length > 0) {
+        this.state = state;
+        this.state.noArrowAt = noArrowAt;
+
+        for (let i = 0; i < invalid.length; i++) {
+          noArrowAt.push(invalid[i].start);
+        }
+
+        ({ consequent, failed } = this.tryParseConditionalConsequent());
+        [ valid, invalid ] = this.getArrowLikeExpressions(consequent);
+      }
+
+      if (failed && valid.length > 1) {
+        // if there are two or more possible correct ways of parsing, throw an
+        // error.
+        // e.g.   Source: a ? (b): c => (d): e => f
+        //      Result 1: a ? b : (c => ((d): e => f))
+        //      Result 2: a ? ((b): c => d) : (e => f)
+        this.raise(
+          state.start,
+          "Ambiguous expression: wrap the arrow functions in parentheses to disambiguate."
+        );
+      }
+
+      if (failed && valid.length === 1) {
+        this.state = state;
+        this.state.noArrowAt = noArrowAt.concat(valid[0].start);
+        ({ consequent, failed } = this.tryParseConditionalConsequent());
+      }
+
+      this.getArrowLikeExpressions(consequent, true);
+    }
+
+    this.state.noArrowAt = originalNoArrowAt;
+    this.expect(tt.colon);
+
+    node.test = expr;
+    node.consequent = consequent;
+    node.alternate = this.forwardNoArrowParamsConversionAt(node, () => (
+      this.parseMaybeAssign(noIn, undefined, undefined, undefined)
+    ));
+
+    return this.finishNode(node, "ConditionalExpression");
+  }
+
+  tryParseConditionalConsequent(): { consequent: N.Expression, failed: boolean } {
+    this.state.noArrowParamsConversionAt.push(this.state.start);
+
+    const consequent = this.parseMaybeAssign();
+    const failed = !this.match(tt.colon);
+
+    this.state.noArrowParamsConversionAt.pop();
+
+    return { consequent, failed };
+  }
+
+  // Given an expression, walks throught its arrow functions whose body is
+  // an expression and throught conditional expressions. It returns every
+  // function which has been parsed with a return type but could have been
+  // parenthesized expressions.
+  // These functions are separated into two arrays: one containing the ones
+  // whose parameters can be converted to assignable lists, one containing the
+  // others.
+  getArrowLikeExpressions(node: N.Expression, disallowInvalid?: boolean): [ N.ArrowFunctionExpression[], N.ArrowFunctionExpression[] ] {
+    const stack = [ node ];
+    const arrows: N.ArrowFunctionExpression[] = [];
+
+    while (stack.length !== 0) {
+      const node = stack.pop();
+      if (node.type === "ArrowFunctionExpression") {
+        if (node.typeParameters || !node.returnType) {
+          // This is an arrow expression without ambiguity, so check its parameters
+          this.toAssignableList(node.params, true, "arrow function parameters");
+          // Use super's method to force the parameters to be checked
+          super.checkFunctionNameAndParams(node, true);
+        } else {
+          arrows.push(node);
+        }
+        stack.push(node.body);
+      } else if (node.type === "ConditionalExpression") {
+        stack.push(node.consequent);
+        stack.push(node.alternate);
+      }
+    }
+
+    if (disallowInvalid) {
+      for (let i = 0; i < arrows.length; i++) {
+        this.toAssignableList(arrows[i].params, true, "arrow function parameters");
+      }
+      return [ arrows, [] ];
+    }
+
+    return partition(arrows, (node) => {
+      try {
+        this.toAssignableList(node.params, true, "arrow function parameters");
+        return true;
+      } catch (err) {
+        return false;
+      }
+    });
+  }
+
+  forwardNoArrowParamsConversionAt<T>(node: N.Node, parse: () => T): T {
+    let result: T;
+    if (this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1) {
+      this.state.noArrowParamsConversionAt.push(this.state.start);
+      result = parse();
+      this.state.noArrowParamsConversionAt.pop(this.state.start);
+    } else {
+      result = parse();
+    }
+
+    return result;
   }
 
   parseParenItem(node: N.Expression, startPos: number, startLoc: Position): N.Expression {
@@ -1510,8 +1650,9 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
       let typeParameters;
       try {
         typeParameters = this.flowParseTypeParameterDeclaration();
-
-        arrowExpression = super.parseMaybeAssign(noIn, refShorthandDefaultPos, afterLeftParse, refNeedsArrowPos);
+        arrowExpression = this.forwardNoArrowParamsConversionAt(typeParameters, () => (
+          super.parseMaybeAssign(noIn, refShorthandDefaultPos, afterLeftParse, refNeedsArrowPos)
+        ));
         arrowExpression.typeParameters = typeParameters;
         this.resetStartLocationFromNode(arrowExpression, typeParameters);
       } catch (err) {
@@ -1569,5 +1710,44 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
 
   shouldParseArrow(): boolean {
     return this.match(tt.colon) || super.shouldParseArrow();
+  }
+
+  setArrowFunctionParameters(node: N.ArrowFunctionExpression, params: N.Expression[]): N.ArrowFunctionExpression {
+    if (this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1) {
+      node.params = params;
+      return node;
+    }
+
+    return super.setArrowFunctionParameters(node, params);
+  }
+
+  checkFunctionNameAndParams(node: N.Function, isArrowFunction?: boolean): void {
+    if (isArrowFunction && this.state.noArrowParamsConversionAt.indexOf(node.start) !== -1) {
+      return;
+    }
+
+    return super.checkFunctionNameAndParams(node, isArrowFunction);
+  }
+
+  parseParenAndDistinguishExpression(canBeArrow: boolean): N.Expression {
+    return super.parseParenAndDistinguishExpression(
+      canBeArrow && this.state.noArrowAt.indexOf(this.state.start) === -1
+    );
+  }
+
+  parseSubscripts(base: N.Expression, startPos: number, startLoc: Position, noCalls?: boolean): N.Expression {
+    if (
+      base.type === "Identifier" && base.name === "async" &&
+      this.state.noArrowAt.indexOf(startPos) !== -1
+    ) {
+      this.next();
+
+      const node = this.startNodeAt(startPos, startLoc);
+      node.callee = base;
+      node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+      base = this.finishNode(node, "CallExpression");
+    }
+
+    return super.parseSubscripts(base, startPos, startLoc, noCalls);
   }
 };

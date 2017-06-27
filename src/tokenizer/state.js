@@ -18,6 +18,9 @@ export default class State {
 
     this.potentialArrowAt = -1;
 
+    this.noArrowAt = [];
+    this.noArrowParamsConversionAt = [];
+
     this.inMethod =
       this.inFunction =
       this.inGenerator =
@@ -75,6 +78,20 @@ export default class State {
 
   // Used to signify the start of a potential arrow function
   potentialArrowAt: number;
+
+  // Used to signify the start of an expression which looks like a
+  // typed arrow function, but it isn't
+  // e.g. a ? (b) : c => d
+  //          ^
+  noArrowAt: number[];
+
+  // Used to signify the start of an expression whose params, if it looks like
+  // an arrow function, shouldn't be converted to assignable nodes.
+  // This is used to defer the validation of typed arrow functions inside
+  // conditional expressions.
+  // e.g. a ? (b) : c => d
+  //          ^
+  noArrowParamsConversionAt: number[];
 
   // Flags to track whether we are in a function, a generator.
   inFunction: boolean;
