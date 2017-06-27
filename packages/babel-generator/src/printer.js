@@ -14,21 +14,21 @@ const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
 
 export type Format = {
-  shouldPrintComment: (comment: string) => boolean;
-  retainLines: boolean;
-  retainFunctionParens: boolean;
-  comments: boolean;
-  auxiliaryCommentBefore: string;
-  auxiliaryCommentAfter: string;
-  compact: boolean | "auto";
-  minified: boolean;
-  quotes: "single" | "double";
-  concise: boolean;
+  shouldPrintComment: (comment: string) => boolean,
+  retainLines: boolean,
+  retainFunctionParens: boolean,
+  comments: boolean,
+  auxiliaryCommentBefore: string,
+  auxiliaryCommentAfter: string,
+  compact: boolean | "auto",
+  minified: boolean,
+  quotes: "single" | "double",
+  concise: boolean,
   indent: {
-    adjustMultilineComment: boolean;
-    style: string;
-    base: number;
-  }
+    adjustMultilineComment: boolean,
+    style: string,
+    base: number,
+  },
 };
 
 export default class Printer {
@@ -107,7 +107,10 @@ export default class Printer {
   space(force: boolean = false): void {
     if (this.format.compact) return;
 
-    if ((this._buf.hasContent() && !this.endsWith(" ") && !this.endsWith("\n")) || force) {
+    if (
+      (this._buf.hasContent() && !this.endsWith(" ") && !this.endsWith("\n")) ||
+      force
+    ) {
       this._space();
     }
   }
@@ -149,14 +152,14 @@ export default class Printer {
   token(str: string): void {
     // space is mandatory to avoid outputting <!--
     // http://javascript.spec.whatwg.org/#comment-syntax
-    if ((str === "--" && this.endsWith("!")) ||
-
+    if (
+      (str === "--" && this.endsWith("!")) ||
       // Need spaces for operators of the same kind to avoid: `a+++b`
       (str[0] === "+" && this.endsWith("+")) ||
       (str[0] === "-" && this.endsWith("-")) ||
-
       // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
-      (str[0] === "." && this._endsWithInteger)) {
+      (str[0] === "." && this._endsWithInteger)
+    ) {
       this._space();
     }
 
@@ -294,9 +297,9 @@ export default class Printer {
    */
 
   startTerminatorless(): Object {
-    return this._parenPushNewlineState = {
+    return (this._parenPushNewlineState = {
       printed: false,
-    };
+    });
   }
 
   /**
@@ -322,7 +325,11 @@ export default class Printer {
     const printMethod = this[node.type];
     if (!printMethod) {
       // eslint-disable-next-line max-len
-      throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
+      throw new ReferenceError(
+        `unknown node of type ${JSON.stringify(
+          node.type,
+        )} with constructor ${JSON.stringify(node && node.constructor.name)}`,
+      );
     }
 
     this._printStack.push(node);
@@ -335,7 +342,8 @@ export default class Printer {
     if (
       this.format.retainFunctionParens &&
       node.type === "FunctionExpression" &&
-      node.extra && node.extra.parenthesized
+      node.extra &&
+      node.extra.parenthesized
     ) {
       needsParens = true;
     }
@@ -343,7 +351,7 @@ export default class Printer {
 
     this._printLeadingComments(node, parent);
 
-    const loc = (t.isProgram(node) || t.isFile(node)) ? null : node.loc;
+    const loc = t.isProgram(node) || t.isFile(node) ? null : node.loc;
     this.withSource("start", loc, () => {
       this[node.type](node, parent);
     });
@@ -392,7 +400,12 @@ export default class Printer {
 
   getPossibleRaw(node) {
     const extra = node.extra;
-    if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
+    if (
+      extra &&
+      extra.raw != null &&
+      extra.rawValue != null &&
+      node.value === extra.rawValue
+    ) {
       return extra.raw;
     }
   }
@@ -490,14 +503,24 @@ export default class Printer {
       // user node
       if (leading) {
         const comments = node.leadingComments;
-        const comment = comments && find(comments, (comment) =>
-          !!comment.loc && this.format.shouldPrintComment(comment.value));
+        const comment =
+          comments &&
+          find(
+            comments,
+            comment =>
+              !!comment.loc && this.format.shouldPrintComment(comment.value),
+          );
 
         lines = this._whitespace.getNewlinesBefore(comment || node);
       } else {
         const comments = node.trailingComments;
-        const comment = comments && findLast(comments, (comment) =>
-          !!comment.loc && this.format.shouldPrintComment(comment.value));
+        const comment =
+          comments &&
+          findLast(
+            comments,
+            comment =>
+              !!comment.loc && this.format.shouldPrintComment(comment.value),
+          );
 
         lines = this._whitespace.getNewlinesAfter(comment || node);
       }
@@ -520,7 +543,9 @@ export default class Printer {
   _getComments(leading, node) {
     // Note, we use a boolean flag here instead of passing in the attribute name as it is faster
     // because this is called extremely frequently.
-    return (node && (leading ? node.leadingComments : node.trailingComments)) || [];
+    return (
+      (node && (leading ? node.leadingComments : node.trailingComments)) || []
+    );
   }
 
   _printComment(comment) {
@@ -539,21 +564,32 @@ export default class Printer {
     }
 
     // whitespace before
-    this.newline(this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0);
+    this.newline(
+      this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0,
+    );
 
     if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
-    let val = comment.type === "CommentLine" ? `//${comment.value}\n` : `/*${comment.value}*/`;
+    let val =
+      comment.type === "CommentLine"
+        ? `//${comment.value}\n`
+        : `/*${comment.value}*/`;
 
     //
-    if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
+    if (
+      comment.type === "CommentBlock" &&
+      this.format.indent.adjustMultilineComment
+    ) {
       const offset = comment.loc && comment.loc.start.column;
       if (offset) {
         const newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
         val = val.replace(newlineRegex, "\n");
       }
 
-      const indentSize = Math.max(this._getIndent().length, this._buf.getCurrentColumn());
+      const indentSize = Math.max(
+        this._getIndent().length,
+        this._buf.getCurrentColumn(),
+      );
       val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
     }
 
@@ -565,9 +601,11 @@ export default class Printer {
     });
 
     // whitespace after
-    this.newline((this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) +
-      // Subtract one to account for the line force-added above.
-      (comment.type === "CommentLine" ? -1 : 0));
+    this.newline(
+      (this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) +
+        // Subtract one to account for the line force-added above.
+        (comment.type === "CommentLine" ? -1 : 0),
+    );
   }
 
   _printComments(comments?: Array<Object>) {

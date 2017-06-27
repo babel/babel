@@ -5,11 +5,9 @@ import transformExportExtensions from "babel-plugin-transform-export-extensions"
 import transformNumericSeparator from "babel-plugin-transform-numeric-separator";
 import transformOptionalChaining from "babel-plugin-transform-optional-chaining";
 
-export default function () {
+export default function() {
   return {
-    presets: [
-      presetStage2,
-    ],
+    presets: [presetStage2],
     plugins: [
       transformDecorators,
       transformExportExtensions,

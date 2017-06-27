@@ -4,7 +4,7 @@ import type TraversalContext from "../index";
 import NodePath from "./index";
 import * as t from "babel-types";
 
-export function getOpposite() : ?NodePath {
+export function getOpposite(): ?NodePath {
   if (this.key === "left") {
     return this.getSibling("right");
   } else if (this.key === "right") {
@@ -60,8 +60,8 @@ export function getNextSibling(): NodePath {
 
 export function getAllNextSiblings(): Array<NodePath> {
   let _key = this.key;
-  let sibling:NodePath = this.getSibling(++_key);
-  const siblings:Array<NodePath> = [];
+  let sibling: NodePath = this.getSibling(++_key);
+  const siblings: Array<NodePath> = [];
   while (sibling.node) {
     siblings.push(sibling);
     sibling = this.getSibling(++_key);
@@ -71,8 +71,8 @@ export function getAllNextSiblings(): Array<NodePath> {
 
 export function getAllPrevSiblings(): Array<NodePath> {
   let _key = this.key;
-  let sibling:NodePath = this.getSibling(--_key);
-  const siblings:Array<NodePath> = [];
+  let sibling: NodePath = this.getSibling(--_key);
+  const siblings: Array<NodePath> = [];
   while (sibling.node) {
     siblings.push(sibling);
     sibling = this.getSibling(--_key);
@@ -80,12 +80,17 @@ export function getAllPrevSiblings(): Array<NodePath> {
   return siblings;
 }
 
-export function get(key: string, context?: boolean | TraversalContext): NodePath {
+export function get(
+  key: string,
+  context?: boolean | TraversalContext,
+): NodePath {
   if (context === true) context = this.context;
   const parts = key.split(".");
-  if (parts.length === 1) { // "foo"
+  if (parts.length === 1) {
+    // "foo"
     return this._getKey(key, context);
-  } else { // "foo.bar"
+  } else {
+    // "foo.bar"
     return this._getPattern(parts, context);
   }
 }
@@ -142,7 +147,10 @@ export function getOuterBindingIdentifiers(duplicates?): Object {
 // original source - https://github.com/babel/babel/blob/master/packages/babel-types/src/retrievers.js
 // path.getBindingIdentifiers returns nodes where the following re-implementation
 // returns paths
-export function getBindingIdentifierPaths(duplicates = false, outerOnly = false) {
+export function getBindingIdentifierPaths(
+  duplicates = false,
+  outerOnly = false,
+) {
   const path = this;
   let search = [].concat(path);
   const ids = Object.create(null);
@@ -156,7 +164,7 @@ export function getBindingIdentifierPaths(duplicates = false, outerOnly = false)
 
     if (id.isIdentifier()) {
       if (duplicates) {
-        const _ids = ids[id.node.name] = ids[id.node.name] || [];
+        const _ids = (ids[id.node.name] = ids[id.node.name] || []);
         _ids.push(id);
       } else {
         ids[id.node.name] = id;

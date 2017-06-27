@@ -17,7 +17,11 @@ export default class Whitespace {
     let endToken;
     const tokens = this.tokens;
 
-    let index = this._findToken((token) => token.start - node.start, 0, tokens.length);
+    let index = this._findToken(
+      token => token.start - node.start,
+      0,
+      tokens.length,
+    );
     if (index >= 0) {
       while (index && node.start === tokens[index - 1].start) --index;
       startToken = tokens[index - 1];
@@ -36,7 +40,11 @@ export default class Whitespace {
     let endToken;
     const tokens = this.tokens;
 
-    let index = this._findToken((token) => token.end - node.end, 0, tokens.length);
+    let index = this._findToken(
+      token => token.end - node.end,
+      0,
+      tokens.length,
+    );
     if (index >= 0) {
       while (index && node.end === tokens[index - 1].end) --index;
       startToken = tokens[index];

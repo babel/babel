@@ -1,6 +1,4 @@
-import defineType, {
-  assertValueType,
-} from "./index";
+import defineType, { assertValueType } from "./index";
 
 defineType("AnyTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],

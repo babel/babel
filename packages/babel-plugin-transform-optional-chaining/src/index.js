@@ -1,13 +1,17 @@
 import syntaxOptionalChaining from "babel-plugin-syntax-optional-chaining";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function optional(path, replacementPath, loose = false) {
     const { scope } = path;
     const optionals = [];
     const nil = scope.buildUndefinedNode();
 
     let objectPath = path;
-    while (objectPath.isMemberExpression() || objectPath.isCallExpression() || objectPath.isNewExpression()) {
+    while (
+      objectPath.isMemberExpression() ||
+      objectPath.isCallExpression() ||
+      objectPath.isNewExpression()
+    ) {
       const { node } = objectPath;
       if (node.optional) {
         optionals.push(node);
@@ -25,7 +29,8 @@ export default function ({ types: t }) {
       node.optional = false;
 
       const isCall = t.isCallExpression(node);
-      const replaceKey = isCall || t.isNewExpression(node) ? "callee" : "object";
+      const replaceKey =
+        isCall || t.isNewExpression(node) ? "callee" : "object";
       const chain = node[replaceKey];
 
       let ref;
@@ -67,18 +72,20 @@ export default function ({ types: t }) {
         }
       }
 
-      replacementPath.replaceWith(t.conditionalExpression(
-        t.binaryExpression("==", check, t.nullLiteral()),
-        nil,
-        replacementPath.node
-      ));
+      replacementPath.replaceWith(
+        t.conditionalExpression(
+          t.binaryExpression("==", check, t.nullLiteral()),
+          nil,
+          replacementPath.node,
+        ),
+      );
 
       replacementPath = replacementPath.get("alternate");
     }
   }
 
   function findReplacementPath(path) {
-    return path.find((path) => {
+    return path.find(path => {
       const { parentPath } = path;
 
       if (path.key == "left" && parentPath.isAssignmentExpression()) {
@@ -87,13 +94,19 @@ export default function ({ types: t }) {
       if (path.key == "object" && parentPath.isMemberExpression()) {
         return false;
       }
-      if (path.key == "callee" && (parentPath.isCallExpression() || parentPath.isNewExpression())) {
+      if (
+        path.key == "callee" &&
+        (parentPath.isCallExpression() || parentPath.isNewExpression())
+      ) {
         return false;
       }
       if (path.key == "argument" && parentPath.isUpdateExpression()) {
         return false;
       }
-      if (path.key == "argument" && parentPath.isUnaryExpression({ operator: "delete" })) {
+      if (
+        path.key == "argument" &&
+        parentPath.isUnaryExpression({ operator: "delete" })
+      ) {
         return false;
       }
 
