@@ -2,11 +2,10 @@
 
 // @flow
 
-import type { TokenType } from "./types";
 import type { Options } from "../options";
 import type { Position } from "../util/location";
 import { isIdentifierStart, isIdentifierChar, isKeyword } from "../util/identifier";
-import { types as tt, keywords as keywordTypes } from "./types";
+import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
 import { type TokContext, types as ct } from "./context";
 import LocationParser from "../parser/location";
 import { SourceLocation } from "../util/location";
@@ -425,7 +424,7 @@ export default class Tokenizer extends LocationParser {
       this.state.pos += 2;
       return this.finishToken(tt.arrow);
     }
-    return this.finishOp(code === 61 ? tt.eq : tt.prefix, 1);
+    return this.finishOp(code === 61 ? tt.eq : tt.bang, 1);
   }
 
   readToken_question() { // '?'
@@ -531,7 +530,7 @@ export default class Tokenizer extends LocationParser {
         return this.readToken_eq_excl(code);
 
       case 126: // '~'
-        return this.finishOp(tt.prefix, 1);
+        return this.finishOp(tt.tilde, 1);
     }
 
     this.raise(this.state.pos, `Unexpected character '${codePointToString(code)}'`);
@@ -956,6 +955,11 @@ export default class Tokenizer extends LocationParser {
 
     if (prevType === tt.braceL) {
       return this.curContext() === ct.braceStatement;
+    }
+
+    if (prevType === tt.relational) {
+      // `class C<T> { ... }`
+      return true;
     }
 
     return !this.state.exprAllowed;

@@ -2,13 +2,11 @@
 
 import type { Options } from "../options";
 import * as N from "../types";
-
-import type { TokContext } from "./context";
-import type { Token } from "./index";
-import type { TokenType } from "./types";
 import { Position } from "../util/location";
-import { types as ct } from "./context";
-import { types as tt } from "./types";
+
+import { types as ct, type TokContext } from "./context";
+import type { Token } from "./index";
+import { types as tt, type TokenType } from "./types";
 
 export default class State {
   init(options: Options, input: string): void {

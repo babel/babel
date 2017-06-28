@@ -178,7 +178,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
         if (lookahead.value !== "type" && lookahead.value !== "typeof") {
           this.unexpected(null, "Imports within a `declare module` body must always be `import type` or `import typeof`");
         }
-
+        this.next();
         this.parseImport(bodyNode);
       } else {
         this.expectContextual("declare", "Only declares and type imports are allowed inside declare module");
@@ -372,7 +372,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
 
   // Type annotations
 
-  flowParseTypeParameter(): N.FlowTypeParameter {
+  flowParseTypeParameter(): N.TypeParameter {
     const node = this.startNode();
 
     const variance = this.flowParseVariance();
@@ -390,7 +390,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return this.finishNode(node, "TypeParameter");
   }
 
-  flowParseTypeParameterDeclaration(): N.FlowTypeParameterDeclaration {
+  flowParseTypeParameterDeclaration(): N.TypeParameterDeclaration {
     const oldInType = this.state.inType;
     const node = this.startNode();
     node.params = [];
@@ -417,7 +417,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return this.finishNode(node, "TypeParameterDeclaration");
   }
 
-  flowParseTypeParameterInstantiation(): N.FlowTypeParameterInstantiation {
+  flowParseTypeParameterInstantiation(): N.TypeParameterInstantiation {
     const node = this.startNode();
     const oldInType = this.state.inType;
     node.params = [];
@@ -1008,21 +1008,18 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
   // Overrides
   // ==================================
 
-  // plain function return types: function name(): string {}
-  parseFunctionBody(node: N.Function, allowExpression?: boolean): void {
-    if (this.match(tt.colon) && !allowExpression) {
-      // if allowExpression is true then we're parsing an arrow function and if
-      // there's a return type then it's been handled elsewhere
+  parseFunctionBodyAndFinish(node: N.BodilessFunctionOrMethodBase, type: string, allowExpressionBody?: boolean): void {
+    // For arrow functions, `parseArrow` handles the return type itself.
+    if (!allowExpressionBody && this.match(tt.colon)) {
       const typeNode = this.startNode();
-      // $FlowFixMe (destructuring not yet supported)
+      // $FlowFixMe
       [typeNode.typeAnnotation, node.predicate] = this.flowParseTypeAndPredicateInitialiser();
-
       node.returnType = typeNode.typeAnnotation
         ? this.finishNode(typeNode, "TypeAnnotation")
         : null;
     }
 
-    return super.parseFunctionBody(node, allowExpression);
+    super.parseFunctionBodyAndFinish(node, type, allowExpressionBody);
   }
 
   // interfaces
@@ -1258,7 +1255,8 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     classBody: N.ClassBody,
     method: N.ClassMethod,
     isGenerator: boolean,
-    isAsync: boolean
+    isAsync: boolean,
+    isConstructor: boolean
   ): void {
     if (method.variance) {
       this.unexpected(method.variance.start);
@@ -1268,7 +1266,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
       method.typeParameters = this.flowParseTypeParameterDeclaration();
     }
 
-    super.parseClassMethod(classBody, method, isGenerator, isAsync);
+    super.parseClassMethod(classBody, method, isGenerator, isAsync, isConstructor);
   }
 
   // parse a the super class type parameters and implements
@@ -1279,7 +1277,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     }
     if (this.isContextual("implements")) {
       this.next();
-      const implemented = node.implements = [];
+      const implemented: N.FlowClassImplements[] = node.implements = [];
       do {
         const node = this.startNode();
         node.id = this.parseIdentifier();
@@ -1293,9 +1291,10 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     }
   }
 
-  parsePropertyName(node: N.ObjectOrClassMember): N.Identifier {
+  parsePropertyName(node: N.ObjectOrClassMember | N.TsNamedTypeElementBase): N.Identifier {
     const variance = this.flowParseVariance();
     const key = super.parsePropertyName(node);
+    // $FlowIgnore ("variance" not defined on TsNamedTypeElementBase)
     node.variance = variance;
     return key;
   }
@@ -1342,6 +1341,12 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
 
   parseAssignableListItemTypes(param: N.Pattern): N.Pattern {
     if (this.eat(tt.question)) {
+      if (param.type !== "Identifier") {
+        throw this.raise(
+          param.start,
+          "A binding pattern parameter cannot be optional in an implementation signature.");
+      }
+
       param.optional = true;
     }
     if (this.match(tt.colon)) {
@@ -1440,7 +1445,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
   }
 
   // parse function type parameters - function foo<T>() {}
-  parseFunctionParams(node: N.NormalFunction): void {
+  parseFunctionParams(node: N.Function): void {
     if (this.isRelational("<")) {
       node.typeParameters = this.flowParseTypeParameterDeclaration();
     }

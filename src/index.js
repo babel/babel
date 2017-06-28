@@ -19,9 +19,11 @@ import type { Expression, File } from "./types";
 import estreePlugin from "./plugins/estree";
 import flowPlugin from "./plugins/flow";
 import jsxPlugin from "./plugins/jsx";
+import typescriptPlugin from "./plugins/typescript";
 plugins.estree = estreePlugin;
 plugins.flow = flowPlugin;
 plugins.jsx = jsxPlugin;
+plugins.typescript = typescriptPlugin;
 
 export function parse(input: string, options?: Options): File {
   return getParser(options, input).parse();
@@ -53,12 +55,23 @@ function getParserClass(pluginsFromOptions: $ReadOnlyArray<string>): Class<Parse
   }
 
   // Filter out just the plugins that have an actual mixin associated with them.
-  let pluginList = pluginsFromOptions.filter((p) => p === "estree" || p === "flow" || p === "jsx");
+  let pluginList = pluginsFromOptions.filter((p) =>
+    p === "estree" || p === "flow" || p === "jsx" || p === "typescript");
 
   if (pluginList.indexOf("flow") >= 0) {
     // ensure flow plugin loads last
     pluginList = pluginList.filter((plugin) => plugin !== "flow");
     pluginList.push("flow");
+  }
+
+  if (pluginList.indexOf("flow") >= 0 && pluginList.indexOf("typescript") >= 0) {
+    throw new Error("Cannot combine flow and typescript plugins.");
+  }
+
+  if (pluginList.indexOf("typescript") >= 0) {
+    // ensure typescript plugin loads last
+    pluginList = pluginList.filter((plugin) => plugin !== "typescript");
+    pluginList.push("typescript");
   }
 
   if (pluginList.indexOf("estree") >= 0) {

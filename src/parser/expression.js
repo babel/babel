@@ -302,7 +302,7 @@ export default class ExpressionParser extends LValParser {
     return this.parseSubscripts(expr, startPos, startLoc);
   }
 
-  parseSubscripts(base: N.Expression, startPos: number, startLoc: Position, noCalls?: ?boolean) {
+  parseSubscripts(base: N.Expression, startPos: number, startLoc: Position, noCalls?: ?boolean): N.Expression {
     const state = { stop: false };
     do {
       base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
@@ -340,10 +340,7 @@ export default class ExpressionParser extends LValParser {
         this.expect(tt.bracketR);
         return this.finishNode(node, "MemberExpression");
       } else if (this.eat(tt.parenL)) {
-        const possibleAsync = this.state.potentialArrowAt === base.start &&
-          base.type === "Identifier" &&
-          base.name === "async" &&
-          !this.canInsertSemicolon();
+        const possibleAsync = this.atPossibleAsync(base);
 
         node.callee = base;
         node.arguments = this.parseCallExpressionArguments(tt.parenR, possibleAsync);
@@ -371,23 +368,13 @@ export default class ExpressionParser extends LValParser {
       this.expect(tt.bracketR);
       return this.finishNode(node, "MemberExpression");
     } else if (!noCalls && this.match(tt.parenL)) {
-      const possibleAsync = this.state.potentialArrowAt === base.start && base.type === "Identifier" && base.name === "async" && !this.canInsertSemicolon();
+      const possibleAsync = this.atPossibleAsync(base);
       this.next();
 
       const node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
       node.arguments = this.parseCallExpressionArguments(tt.parenR, possibleAsync);
-      if (node.callee.type === "Import") {
-        if (node.arguments.length !== 1) {
-          this.raise(node.start, "import() requires exactly one argument");
-        }
-
-        const importArg = node.arguments[0];
-        if (importArg && importArg.type === "SpreadElement") {
-          this.raise(importArg.start, "... is not allowed in import()");
-        }
-      }
-      this.finishNode(node, "CallExpression");
+      this.finishCallExpression(node);
 
       if (possibleAsync && this.shouldParseAsyncArrow()) {
         state.stop = true;
@@ -405,6 +392,24 @@ export default class ExpressionParser extends LValParser {
       state.stop = true;
       return base;
     }
+  }
+
+  atPossibleAsync(base: N.Expression): boolean {
+    return this.state.potentialArrowAt === base.start && base.type === "Identifier" && base.name === "async" && !this.canInsertSemicolon();
+  }
+
+  finishCallExpression(node: N.CallExpression): N.CallExpression {
+    if (node.callee.type === "Import") {
+      if (node.arguments.length !== 1) {
+        this.raise(node.start, "import() requires exactly one argument");
+      }
+
+      const importArg = node.arguments[0];
+      if (importArg && importArg.type === "SpreadElement") {
+        this.raise(importArg.start, "... is not allowed in import()");
+      }
+    }
+    return this.finishNode(node, "CallExpression");
   }
 
   parseCallExpressionArguments(close: TokenType, possibleAsyncArrow: boolean): $ReadOnlyArray<?N.Expression> {
@@ -566,10 +571,7 @@ export default class ExpressionParser extends LValParser {
         return this.finishNode(node, "NullLiteral");
 
       case tt._true: case tt._false:
-        node = this.startNode();
-        node.value = this.match(tt._true);
-        this.next();
-        return this.finishNode(node, "BooleanLiteral");
+        return this.parseBooleanLiteral();
 
       case tt.parenL:
         return this.parseParenAndDistinguishExpression(canBeArrow);
@@ -622,6 +624,13 @@ export default class ExpressionParser extends LValParser {
       default:
         throw this.unexpected();
     }
+  }
+
+  parseBooleanLiteral(): N.BooleanLiteral {
+    const node = this.startNode();
+    node.value = this.match(tt._true);
+    this.next();
+    return this.finishNode(node, "BooleanLiteral");
   }
 
   parseMaybePrivateName(): N.PrivateName | N.Identifier {
@@ -795,19 +804,20 @@ export default class ExpressionParser extends LValParser {
     }
 
     node.callee = this.parseNoCallExpr();
-    const optional = this.eat(tt.questionDot);
+    if (this.eat(tt.questionDot)) node.optional = true;
+    this.parseNewArguments(node);
+    return this.finishNode(node, "NewExpression");
+  }
 
+  parseNewArguments(node: N.NewExpression): void {
     if (this.eat(tt.parenL)) {
-      node.arguments = this.parseExprList(tt.parenR);
-      this.toReferencedList(node.arguments);
+      const args = this.parseExprList(tt.parenR);
+      this.toReferencedList(args);
+      // $FlowFixMe (parseExprList should be all non-null in this case)
+      node.arguments = args;
     } else {
       node.arguments = [];
     }
-    if (optional) {
-      node.optional = true;
-    }
-
-    return this.finishNode(node, "NewExpression");
   }
 
   // Parse template expression.
@@ -989,19 +999,16 @@ export default class ExpressionParser extends LValParser {
       if (isPattern) this.unexpected();
       prop.kind = "method";
       prop.method = true;
-      this.parseMethod(prop, isGenerator, isAsync);
-
-      return this.finishNode(prop, "ObjectMethod");
+      return this.parseMethod(prop, isGenerator, isAsync, /* isConstructor */ false, "ObjectMethod");
     }
 
     if (this.isGetterOrSetterMethod(prop, isPattern)) {
       if (isGenerator || isAsync) this.unexpected();
       prop.kind = prop.key.name;
       this.parsePropertyName(prop);
-      this.parseMethod(prop);
+      this.parseMethod(prop, /* isGenerator */false, /* isAsync */ false, /* isConstructor */ false, "ObjectMethod");
       this.checkGetterSetterParamCount(prop);
-
-      return this.finishNode(prop, "ObjectMethod");
+      return prop;
     }
   }
 
@@ -1039,9 +1046,12 @@ export default class ExpressionParser extends LValParser {
       this.parseObjectProperty(prop, startPos, startLoc, isPattern, refShorthandDefaultPos);
 
     if (!node) this.unexpected();
+
+    // $FlowFixMe
+    return node;
   }
 
-  parsePropertyName(prop: N.ObjectOrClassMember): N.Expression {
+  parsePropertyName(prop: N.ObjectOrClassMember | N.TsNamedTypeElementBase): N.Expression {
     if (this.eat(tt.bracketL)) {
       prop.computed = true;
       prop.key = this.parseMaybeAssign();
@@ -1059,7 +1069,7 @@ export default class ExpressionParser extends LValParser {
 
   // Initialize empty function node.
 
-  initFunction(node: N.Function, isAsync: ?boolean): void {
+  initFunction(node: N.BodilessFunctionOrMethodBase, isAsync: ?boolean): void {
     node.id = null;
     node.generator = false;
     node.expression = false;
@@ -1068,14 +1078,15 @@ export default class ExpressionParser extends LValParser {
 
   // Parse object or class method.
 
-  parseMethod(node: N.MethodLike, isGenerator?: boolean, isAsync?: boolean): N.MethodLike {
+  parseMethod<T : N.MethodLike>(node: T, isGenerator: boolean, isAsync: boolean, isConstructor: boolean, type: string): T {
     const oldInMethod = this.state.inMethod;
     this.state.inMethod = node.kind || true;
     this.initFunction(node, isAsync);
     this.expect(tt.parenL);
-    node.params = this.parseBindingList(tt.parenR);
+    const allowModifiers = isConstructor; // For TypeScript parameter properties
+    node.params = this.parseBindingList(tt.parenR, /* allowEmpty */ false, allowModifiers);
     node.generator = !!isGenerator;
-    this.parseFunctionBody(node);
+    this.parseFunctionBodyAndFinish(node, type);
     this.state.inMethod = oldInMethod;
     return node;
   }
@@ -1089,7 +1100,7 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "ArrowFunctionExpression");
   }
 
-  isStrictBody(node: { body: N.BlockStatement }, isExpression?: boolean): boolean {
+  isStrictBody(node: { body: N.BlockStatement }, isExpression: ?boolean): boolean {
     if (!isExpression && node.body.directives.length) {
       for (const directive of node.body.directives) {
         if (directive.value.value === "use strict") {
@@ -1101,8 +1112,14 @@ export default class ExpressionParser extends LValParser {
     return false;
   }
 
+  parseFunctionBodyAndFinish(node: N.BodilessFunctionOrMethodBase, type: string, allowExpressionBody?: boolean): void {
+    // $FlowIgnore (node is not bodiless if we get here)
+    this.parseFunctionBody(node, allowExpressionBody);
+    this.finishNode(node, type);
+  }
+
   // Parse function body and check parameters.
-  parseFunctionBody(node: N.Function, allowExpression?: boolean): void {
+  parseFunctionBody(node: N.Function, allowExpression: ?boolean): void {
     const isExpression = allowExpression && !this.match(tt.braceL);
 
     const oldInAsync = this.state.inAsync;
@@ -1192,26 +1209,33 @@ export default class ExpressionParser extends LValParser {
 
   parseIdentifier(liberal?: boolean): N.Identifier {
     const node = this.startNode();
+    const name = this.parseIdentifierName(node.start, liberal);
+    node.name = name;
+    node.loc.identifierName = name;
+    return this.finishNode(node, "Identifier");
+  }
+
+  parseIdentifierName(pos: number, liberal?: boolean): string {
     if (!liberal) {
       this.checkReservedWord(this.state.value, this.state.start, !!this.state.type.keyword, false);
     }
 
+    let name: string;
+
     if (this.match(tt.name)) {
-      node.name = this.state.value;
+      name = this.state.value;
     } else if (this.state.type.keyword) {
-      node.name = this.state.type.keyword;
+      name = this.state.type.keyword;
     } else {
-      this.unexpected();
+      throw this.unexpected();
     }
 
-    if (!liberal && node.name === "await" && this.state.inAsync) {
-      this.raise(node.start, "invalid use of await inside of an async function");
+    if (!liberal && name === "await" && this.state.inAsync) {
+      this.raise(pos, "invalid use of await inside of an async function");
     }
-
-    node.loc.identifierName = node.name;
 
     this.next();
-    return this.finishNode(node, "Identifier");
+    return name;
   }
 
   checkReservedWord(word: string, startLoc: number, checkKeywords: boolean, isBinding: boolean): void {

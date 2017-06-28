@@ -33,6 +33,16 @@ export default class UtilParser extends Tokenizer {
     }
   }
 
+  // eat() for relational operators.
+
+  eatRelational(op: "<" | ">"): boolean {
+    if (this.isRelational(op)) {
+      this.next();
+      return true;
+    }
+    return false;
+  }
+
   // Tests whether parsed token is a contextual keyword.
 
   isContextual(name: string): boolean {
@@ -56,7 +66,11 @@ export default class UtilParser extends Tokenizer {
   canInsertSemicolon(): boolean {
     return this.match(tt.eof) ||
       this.match(tt.braceR) ||
-      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start));
+      this.hasPrecedingLineBreak();
+  }
+
+  hasPrecedingLineBreak(): boolean {
+    return lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start));
   }
 
   // TODO

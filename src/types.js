@@ -47,8 +47,16 @@ export type Pattern =
 export type Declaration =
   | VariableDeclaration
   | ClassDeclaration
-  | FunctionDeclaration;
-export type DeclarationBase = NodeBase;
+  | FunctionDeclaration
+  | TsInterfaceDeclaration
+  | TsTypeAliasDeclaration
+  | TsEnumDeclaration
+  | TsModuleDeclaration;
+export type DeclarationBase = NodeBase & {
+  // TypeScript allows declarations to be prefixed by `declare`.
+  //TODO: a FunctionDeclaration is never "declare", because it's a TSDeclareFunction instead.
+  declare?: true;
+}
 
 // TODO: Not in spec
 export type HasDecorators = NodeBase & {
@@ -60,6 +68,9 @@ export type Identifier = PatternBase & {
   name: string;
 
   __clone(): Identifier;
+
+    // TypeScript only. Used in case of an optional parameter.
+  optional?: ?true;
 };
 
 export type PrivateName = NodeBase & {
@@ -127,16 +138,28 @@ export type Function =
 export type NormalFunction =
   FunctionDeclaration | FunctionExpression;
 
-export type FunctionBase =  HasDecorators & {
+export type BodilessFunctionOrMethodBase = HasDecorators & {
+  // TODO: Remove this. Should not assign "id" to methods.
+  // https://github.com/babel/babylon/issues/535
   id: ?Identifier;
-  params: $ReadOnlyArray<Pattern>;
+
+  params: $ReadOnlyArray<Pattern | TSParameterProperty>;
   body: BlockStatement;
   generator: boolean;
   async: boolean;
 
-  expression: boolean; // TODO: Not in spec
-  typeParameters?: ?FlowTypeParameterDeclaration; // TODO: Not in spec
-  returnType?: ?FlowTypeAnnotation; // TODO: Not in spec
+  // TODO: All not in spec
+  expression: boolean;
+  typeParameters?: ?TypeParameterDeclaration;
+  returnType?: ?TypeAnnotation;
+}
+
+export type BodilessFunctionBase = BodilessFunctionOrMethodBase & {
+  id: ?Identifier;
+}
+
+export type FunctionBase = BodilessFunctionBase & {
+  body: BlockStatement;
 };
 
 // Statements
@@ -276,7 +299,7 @@ export type ForOfStatement = ForInOfBase & {
 
 // Declarations
 
-export type OptFunctionDeclaration = FunctionBase & DeclarationBase & HasDecorators & {
+export type OptFunctionDeclaration = FunctionBase & DeclarationBase & {
   type: "FunctionDeclaration";
 };
 
@@ -460,6 +483,7 @@ export type ConditionalExpression = NodeBase & {
 export type CallOrNewBase = NodeBase & {
   callee: Expression | Super | Import;
   arguments: Array<Expression | SpreadElement>; // TODO: $ReadOnlyArray
+  typeParameters?: ?TypeParameterInstantiation; // TODO: Not in spec
 };
 
 export type CallExpression = CallOrNewBase & {
@@ -468,6 +492,7 @@ export type CallExpression = CallOrNewBase & {
 
 export type NewExpression = CallOrNewBase & {
   type: "NewExpression";
+  optional?: boolean; // TODO: Not in spec
 };
 
 export type SequenceExpression = NodeBase & {
@@ -500,10 +525,13 @@ export type TemplateElement = NodeBase & {
 
 // Patterns
 
+// TypeScript access modifiers
+export type Accessibility = "public" | "protected" | "private";
+
 export type PatternBase = HasDecorators & {
-  // Flow only:
-  optional?: true;
-  typeAnnotation?: ?FlowTypeAnnotation;
+  // TODO: All not in spec
+  // Flow/TypeScript only:
+  typeAnnotation?: ?TypeAnnotation;
 };
 
 export type AssignmentProperty = ObjectProperty & {
@@ -541,9 +569,10 @@ export type ClassBase = HasDecorators & {
   body: ClassBody;
   decorators: $ReadOnlyArray<Decorator>;
 
-  typeParameters?: ?FlowTypeParameterDeclaration; // TODO: Not in spec
-  superTypeParameters?: ?FlowTypeParameterInstantiation; // TODO: Not in spec
-  implements?: $ReadOnlyArray<FlowClassImplements>;
+  // TODO: All not in spec
+  typeParameters?: ?TypeParameterDeclaration;
+  superTypeParameters?: ?TypeParameterInstantiation;
+  implements?: ?$ReadOnlyArray<TsExpressionWithTypeArguments> | $ReadOnlyArray<FlowClassImplements>;
 };
 
 export type ClassBody = NodeBase & {
@@ -555,30 +584,30 @@ export type ClassMemberBase = NodeBase & HasDecorators & {
   static: boolean;
   computed: boolean;
   // TypeScript only:
-  access?: ?Accessibility;
+  accessibility?: ?Accessibility;
   abstract?: ?true;
   optional?: ?true;
 }
 
-export type Accessibility = "public" | "protected" | "private";
+export type ClassMember = ClassMethod | ClassProperty | ClassPrivateProperty | TsIndexSignature;
 
-export type ClassMember = ClassMethod | ClassProperty | ClassPrivateProperty;
-
-export type MethodLike = ObjectMethod | FunctionExpression | ClassMethod;
+export type MethodLike = ObjectMethod | FunctionExpression | ClassMethod | TSDeclareMethod;
 
 export type MethodBase = FunctionBase & {
-  +kind?: MethodKind;
+  +kind: MethodKind;
 };
 
 export type MethodKind = "constructor" | "method" | "get" | "set";
 
-export type ClassMethod = MethodBase & ClassMemberBase & {
+export type ClassMethodOrDeclareMethodCommon = ClassMemberBase & {
   type: "ClassMethod";
   key: Expression;
   kind: MethodKind;
   static: boolean;
   decorators: $ReadOnlyArray<Decorator>;
+};
 
+export type ClassMethod = MethodBase & ClassMethodOrDeclareMethodCommon & {
   variance?: ?FlowVariance; // TODO: Not in spec
 };
 
@@ -587,7 +616,7 @@ export type ClassProperty = ClassMemberBase & {
   key: Expression;
   value: ?Expression; // TODO: Not in spec that this is nullable.
 
-  typeAnnotation?: ?FlowTypeAnnotation; // TODO: Not in spec
+  typeAnnotation?: ?TypeAnnotation; // TODO: Not in spec
   variance?: ?FlowVariance; // TODO: Not in spec
 
   // TypeScript only: (TODO: Not in spec)
@@ -622,12 +651,13 @@ export type MetaProperty = NodeBase & {
 
 export type ModuleDeclaration = AnyImport | AnyExport;
 
-export type AnyImport = ImportDeclaration;
+export type AnyImport = ImportDeclaration | TsImportEqualsDeclaration;
 
 export type AnyExport =
   | ExportNamedDeclaration
   | ExportDefaultDeclaration
-  | ExportAllDeclaration;
+  | ExportAllDeclaration
+  | TsExportAssignment;
 
 export type ModuleSpecifier = NodeBase & {
   local: Identifier;
@@ -675,7 +705,7 @@ export type ExportSpecifier = NodeBase & {
 
 export type ExportDefaultDeclaration = NodeBase & {
   type: "ExportDefaultDeclaration";
-  declaration: OptFunctionDeclaration | OptClassDeclaration | Expression;
+  declaration: OptFunctionDeclaration | OptTSDeclareFunction | OptClassDeclaration | Expression;
 };
 
 export type ExportAllDeclaration = NodeBase & {
@@ -696,7 +726,37 @@ export type JSXOpeningElement = Node;
 export type JSXClosingElement = Node;
 export type JSXElement = Node;
 
+// Flow/TypeScript common (TODO: Not in spec)
+
+export type TypeAnnotation = NodeBase & {
+  type: "TypeAnnotation";
+  typeAnnotation: TsType | FlowTypeAnnotation;
+}
+
+export type TypeParameterDeclaration = NodeBase & {
+  type: "TypeParameterDeclaration";
+  params: $ReadOnlyArray<TypeParameter>;
+};
+
+export type TypeParameter = NodeBase & {
+  type: "TypeParameter";
+  name: string;
+  constraint?: TsType;
+  default?: TsType;
+};
+
+export type TypeParameterInstantiation = NodeBase & {
+  type: "TypeParameterInstantiation";
+  params: $ReadOnlyArray<TsType> | $ReadOnlyArray<FlowType>;
+};
+
 // Flow (TODO: Not in spec)
+
+export type TypeCastExpression = NodeBase & {
+  type: "TypeCastExpression";
+  expression: Expression;
+  typeAnnotation: TypeAnnotation;
+};
 
 export type FlowType = Node;
 export type FlowPredicate = Node;
@@ -712,9 +772,6 @@ export type FlowDeclareInterface = Node;
 export type FlowInterface = Node;
 export type FlowInterfaceExtends = Node;
 export type FlowTypeAlias = Node;
-export type FlowTypeParameter = Node;
-export type FlowTypeParameterDeclaration = Node;
-export type FlowTypeParameterInstantiation = Node;
 export type FlowObjectTypeIndexer = Node;
 export type FlowFunctionTypeAnnotation = Node;
 export type FlowObjectTypeProperty = Node;
@@ -730,7 +787,6 @@ export type FlowTypeAnnotation = Node;
 export type FlowVariance = Node;
 export type FlowClassImplements = Node;
 
-
 // estree
 
 export type EstreeProperty = NodeBase & {
@@ -743,4 +799,363 @@ export type EstreeProperty = NodeBase & {
   kind?: "get" | "set" | "init";
 
   variance?: ?FlowVariance;
+};
+
+// === === === ===
+// TypeScript
+// === === === ===
+
+// Note: A type named `TsFoo` is based on TypeScript's `FooNode` type,
+// defined in https://github.com/Microsoft/TypeScript/blob/master/src/compiler/types.ts
+// Differences:
+// * Change `NodeArray<T>` to just `$ReadOnlyArray<T>`.
+// * Don't give nodes a "modifiers" list; use boolean flags instead,
+//   and only allow modifiers that are not considered errors.
+// * A property named `type` must be renamed to `typeAnnotation` to avoid conflict with the node's type.
+// * Sometimes TypeScript allows to parse something which will be a grammar error later;
+//   in babylon these cause exceptions, so the AST format is stricter.
+
+// ================
+// Misc
+// ================
+
+export type TSParameterProperty = HasDecorators & {
+  // Note: This has decorators instead of its parameter.
+  type: "TSParameterProperty";
+  // At least one of `accessibility` or `readonly` must be set.
+  accessibility?: ?Accessibility;
+  readonly?: ?true;
+  parameter: Identifier | AssignmentPattern;
+}
+
+export type OptTSDeclareFunction = BodilessFunctionBase & DeclarationBase & {
+  type: "TSDeclareFunction";
+}
+
+export type TSDeclareFunction = OptTSDeclareFunction & {
+  id: Identifier;
+};
+
+export type TSDeclareMethod = BodilessFunctionOrMethodBase & ClassMethodOrDeclareMethodCommon & {
+  type: "TSDeclareMethod";
+  +kind: MethodKind;
+};
+
+export type TsQualifiedName = NodeBase & {
+  type: "TSQualifiedName";
+  left: TsEntityName;
+  right: Identifier;
+}
+
+export type TsEntityName = Identifier | TsQualifiedName;
+
+export type TsSignatureDeclaration =
+  | TsCallSignatureDeclaration
+  | TsConstructSignatureDeclaration
+  | TsMethodSignature
+  | TsFunctionType
+  | TsConstructorType;
+
+export type TsSignatureDeclarationOrIndexSignatureBase = NodeBase & {
+  // Not using TypeScript's "ParameterDeclaration" here, since it's inconsistent with regular functions.
+  parameters: $ReadOnlyArray<Identifier | RestElement>;
+  typeAnnotation: ?TypeAnnotation;
+}
+
+export type TsSignatureDeclarationBase = TsSignatureDeclarationOrIndexSignatureBase & {
+  typeParameters: ?TypeParameterDeclaration;
+}
+
+// ================
+// TypeScript type members (for type literal / interface / class)
+// ================
+
+export type TsTypeElement =
+  | TsCallSignatureDeclaration
+  | TsConstructSignatureDeclaration
+  | TsPropertySignature
+  | TsMethodSignature
+  | TsIndexSignature;
+
+export type TsCallSignatureDeclaration = TsSignatureDeclarationBase & {
+  type: "TSCallSignatureDeclaration";
+}
+
+export type TsConstructSignatureDeclaration = TsSignatureDeclarationBase & {
+  type: "TSConstructSignature";
+}
+
+export type TsNamedTypeElementBase = NodeBase & {
+  // Not using TypeScript's `PropertyName` here since we don't have a `ComputedPropertyName` node type.
+  // This is usually an Identifier but may be e.g. `Symbol.iterator` if `computed` is true.
+  key: Expression;
+  computed: boolean;
+  optional?: true;
+}
+
+export type TsPropertySignature = TsNamedTypeElementBase & {
+  type: "TSPropertySignature";
+  readonly?: true;
+  typeAnnotation?: TypeAnnotation;
+  initializer?: Expression;
+};
+
+export type TsMethodSignature = TsSignatureDeclarationBase & TsNamedTypeElementBase & {
+  type: "TSMethodSignature";
+}
+
+// *Not* a ClassMemberBase: Can't have accessibility, can't be abstract, can't be optional.
+export type TsIndexSignature = TsSignatureDeclarationOrIndexSignatureBase & {
+  readonly?: true;
+  type: "TSIndexSignature";
+  // Note: parameters.length must be 1.
+};
+
+// ================
+// TypeScript types
+// ================
+
+export type TsType =
+  | TsKeywordType
+  | TsThisType
+  | TsFunctionOrConstructorType
+  | TsTypeReference
+  | TsTypeQuery
+  | TsTypeLiteral
+  | TsArrayType
+  | TsTupleType
+  | TsUnionOrIntersectionType
+  | TsParenthesizedType
+  | TsTypeOperator
+  | TsIndexedAccessType
+  | TsMappedType
+  | TsLiteralType
+  // TODO: This probably shouldn't be included here.
+  | TsTypePredicate;
+
+export type TsTypeBase = NodeBase;
+
+export type TsKeywordTypeType =
+  | "TSAnyKeyword"
+  | "TSNumberKeyword"
+  | "TSObjectKeyword"
+  | "TSBooleanKeyword"
+  | "TSStringKeyword"
+  | "TSSymbolKeyword"
+  | "TSVoidKeyword"
+  | "TSUndefinedKeyword"
+  | "TSNullKeyword"
+  | "TSNeverKeyword";
+export type TsKeywordType = TsTypeBase & {
+  type: TsKeywordTypeType;
+}
+
+export type TsThisType = TsTypeBase & {
+  type: "TSThisType"
+};
+
+export type TsFunctionOrConstructorType = TsFunctionType | TsConstructorType;
+
+export type TsFunctionType = TsTypeBase & TsSignatureDeclarationBase & {
+  type: "TSFunctionType";
+  typeAnnotation: TypeAnnotation; // not optional
+};
+
+export type TsConstructorType = TsTypeBase & TsSignatureDeclarationBase & {
+  type: "TSConstructorType";
+  typeAnnotation: TypeAnnotation;
+};
+
+export type TsTypeReference = TsTypeBase & {
+  type: "TSTypeReference";
+  typeName: TsEntityName;
+  typeParameters?: TypeParameterInstantiation;
+};
+
+export type TsTypePredicate = TsTypeBase & {
+  type: "TSTypePredicate";
+  parameterName: Identifier | TsThisType;
+  typeAnnotation: TypeAnnotation;
+};
+
+// `typeof` operator
+export type TsTypeQuery = TsTypeBase & {
+  type: "TSTypeQuery";
+  exprName: TsEntityName;
+};
+
+export type TsTypeLiteral = TsTypeBase & {
+  type: "TSTypeLiteral";
+  members: $ReadOnlyArray<TsTypeElement>;
+};
+
+export type TsArrayType = TsTypeBase & {
+  type: "TSArrayType";
+  elementType: TsType;
+};
+
+export type TsTupleType = TsTypeBase & {
+  type: "TSTupleType";
+  elementTypes: $ReadOnlyArray<TsType>;
+};
+
+export type TsUnionOrIntersectionType = TsUnionType | TsIntersectionType;
+
+export type TsUnionOrIntersectionTypeBase = TsTypeBase & {
+  types: $ReadOnlyArray<TsType>;
+};
+
+export type TsUnionType = TsUnionOrIntersectionTypeBase & {
+  type: "TSUnionType";
+};
+
+export type TsIntersectionType = TsUnionOrIntersectionTypeBase & {
+  type: "TSIntersectionType";
+};
+
+export type TsParenthesizedType = TsTypeBase & {
+  type: "TSParenthesizedType";
+  typeAnnotation: TsType;
+};
+
+export type TsTypeOperator = TsTypeBase & {
+  type: "TSTypeOperator";
+  operator: "keyof";
+  typeAnnotation: TsType;
+};
+
+export type TsIndexedAccessType = TsTypeBase & {
+  type: "TSIndexedAccessType";
+  objectType: TsType;
+  indexType: TsType;
+};
+
+export type TsMappedType = TsTypeBase & {
+  type: "TSMappedType";
+  readonly?: true;
+  typeParameter: TypeParameter;
+  optional?: true;
+  typeAnnotation: ?TsType;
+};
+
+export type TsLiteralType = TsTypeBase & {
+  type: "TSLiteralType";
+  literal: NumericLiteral | StringLiteral | BooleanLiteral;
+};
+
+// ================
+// TypeScript declarations
+// ================
+
+export type TsInterfaceDeclaration = DeclarationBase & {
+  type: "TSInterfaceDeclaration";
+  id: Identifier;
+  typeParameters: ?TypeParameterDeclaration;
+  // TS uses "heritageClauses", but want this to resemble ClassBase.
+  extends?: $ReadOnlyArray<TsExpressionWithTypeArguments>;
+  body: TSInterfaceBody;
+}
+
+export type TSInterfaceBody = NodeBase & {
+  type: "TSInterfaceBody";
+  body: $ReadOnlyArray<TsTypeElement>;
+};
+
+export type TsExpressionWithTypeArguments = TsTypeBase & {
+  type: "TSExpressionWithTypeArguments";
+  expression: TsEntityName;
+  typeParameters?: TypeParameterInstantiation;
+};
+
+export type TsTypeAliasDeclaration = DeclarationBase & {
+  type: "TSTypeAliasDeclaration";
+  id: Identifier;
+  typeParameters: ?TypeParameterDeclaration;
+  typeAnnotation: TsType;
+};
+
+export type TsEnumDeclaration = DeclarationBase & {
+  type: "TSEnumDeclaration";
+  const?: true;
+  id: Identifier;
+  members: $ReadOnlyArray<TsEnumMember>;
+};
+
+export type TsEnumMember = NodeBase & {
+  type: "TSEnumMemodulmber";
+  id: Identifier | StringLiteral;
+  initializer?: Expression;
+};
+
+export type TsModuleDeclaration = DeclarationBase & {
+  type: "TSModuleDeclaration";
+  global?: true; // In TypeScript, this is only available through `node.flags`.
+  id: TsModuleName;
+  body: TsNamespaceBody;
+};
+
+// `namespace A.B { }` is a namespace named `A` with another TsNamespaceDeclaration as its body.
+export type TsNamespaceBody = TsModuleBlock | TsNamespaceDeclaration;
+
+export type TsModuleBlock = NodeBase & {
+  type: "TSModuleBlock";
+  body: $ReadOnlyArray<Statement>;
+};
+
+export type TsNamespaceDeclaration = TsModuleDeclaration & {
+  id: Identifier;
+  body: TsNamespaceBody;
+};
+
+export type TsModuleName = Identifier | StringLiteral;
+
+export type TsImportEqualsDeclaration = NodeBase & {
+  type: "TSImportEqualsDeclaration";
+  isExport: boolean;
+  id: Identifier;
+  moduleReference: TsModuleReference;
+};
+
+export type TsModuleReference = TsEntityName | TsExternalModuleReference;
+
+export type TsExternalModuleReference = NodeBase & {
+  type: "TSExternalModuleReference";
+  expression: StringLiteral;
+};
+
+// TypeScript's own parser uses ExportAssignment for both `export default` and `export =`.
+// But for babylon, `export default` is an ExportDefaultDeclaration,
+// so a TsExportAssignment is always `export =`.
+export type TsExportAssignment = NodeBase & {
+  type: "TSExportAssignment";
+  expression: Expression;
+};
+
+export type TsNamespaceExportDeclaration = NodeBase & {
+  type: "TSNamespaceExportDeclaration";
+  id: Identifier;
+};
+
+// ================
+// TypeScript expressions
+// ================
+
+export type TsTypeAssertionLikeBase = NodeBase & {
+  expression: Expression;
+  typeAnnotation: TsType;
+};
+
+export type TsAsExpression = TsTypeAssertionLikeBase & {
+  type: "TSAsExpression";
+};
+
+export type TsTypeAssertion = TsTypeAssertionLikeBase & {
+  type: "TSTypeAssertion";
+  typeAnnotation: TsType;
+  expression: Expression;
+};
+
+export type TsNonNullExpression = NodeBase & {
+  type: "TSNonNullExpression";
+  expression: Expression;
 };

@@ -55,6 +55,11 @@ export class NodeUtils extends UtilParser {
     return new Node(this, pos, loc);
   }
 
+  /** Start a new node with a previous node's location. */
+  startNodeAtNode<T : NodeType>(type: NodeType): T {
+    return this.startNodeAt(type.start, type.loc.start);
+  }
+
   // Finish an AST node, adding `type` and `end` properties.
 
   finishNode<T : NodeType>(node: T, type: string): T {

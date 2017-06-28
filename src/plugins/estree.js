@@ -108,7 +108,7 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     }
   }
 
-  isStrictBody(node: { body: N.BlockStatement }, isExpression?: boolean): boolean {
+  isStrictBody(node: { body: N.BlockStatement }, isExpression: ?boolean): boolean {
     if (!isExpression && node.body.body.length > 0) {
       for (const directive of node.body.body) {
         if (directive.type === "ExpressionStatement" && directive.expression.type === "Literal") {
@@ -158,15 +158,16 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     classBody: N.ClassBody,
     method: N.ClassMethod,
     isGenerator: boolean,
-    isAsync: boolean
+    isAsync: boolean,
+    isConstructor: boolean
   ): void {
-    this.parseMethod(method, isGenerator, isAsync);
+    this.parseMethod(method, isGenerator, isAsync, isConstructor, "MethodDefinition");
     if (method.typeParameters) {
       // $FlowIgnore
       method.value.typeParameters = method.typeParameters;
       delete method.typeParameters;
     }
-    classBody.body.push(this.finishNode(method, "MethodDefinition"));
+    classBody.body.push(method);
   }
 
   parseExprAtom(refShorthandDefaultPos?: ?Pos): N.Expression {
@@ -205,19 +206,21 @@ export default (superClass: Class<Parser>): Class<Parser> => class extends super
     return node;
   }
 
-  parseMethod(
-    node: N.MethodLike,
-    isGenerator?: boolean,
-    isAsync?: boolean
-  ): N.MethodLike {
+  parseMethod<T : N.MethodLike>(
+    node: T,
+    isGenerator: boolean,
+    isAsync: boolean,
+    isConstructor: boolean,
+    type: string,
+  ): T {
     let funcNode = this.startNode();
     funcNode.kind = node.kind; // provide kind, so super method correctly sets state
-    funcNode = super.parseMethod(funcNode, isGenerator, isAsync);
+    funcNode = super.parseMethod(funcNode, isGenerator, isAsync, isConstructor, "FunctionExpression");
     delete funcNode.kind;
     // $FlowIgnore
-    node.value = this.finishNode(funcNode, "FunctionExpression");
+    node.value = funcNode;
 
-    return node;
+    return this.finishNode(node, type);
   }
 
   parseObjectMethod(

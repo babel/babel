@@ -1,8 +1,8 @@
 // @flow
 
 import { types as tt, type TokenType } from "../tokenizer/types";
-import type { Decorator, Expression, Identifier, Node, ObjectExpression, ObjectPattern, Pattern, RestElement,
-  SpreadElement } from "../types";
+import type { TSParameterProperty, Decorator, Expression, Identifier, Node, ObjectExpression,
+  ObjectPattern, Pattern, RestElement, SpreadElement } from "../types";
 import type { Pos, Position } from "../util/location";
 import { NodeUtils } from "./node";
 
@@ -167,8 +167,12 @@ export default class LValParser extends NodeUtils {
     }
   }
 
-  parseBindingList(close: TokenType, allowEmpty?: boolean): $ReadOnlyArray<Pattern> {
-    const elts = [];
+  parseBindingList(
+    close: TokenType,
+    allowEmpty?: boolean,
+    allowModifiers?: boolean
+    ): $ReadOnlyArray<Pattern | TSParameterProperty> {
+    const elts: Array<Pattern | TSParameterProperty> = [];
     let first = true;
     while (!this.eat(close)) {
       if (first) {
@@ -193,15 +197,20 @@ export default class LValParser extends NodeUtils {
         while (this.match(tt.at)) {
           decorators.push(this.parseDecorator());
         }
-        const left = this.parseMaybeDefault();
-        if (decorators.length) {
-          left.decorators = decorators;
-        }
-        this.parseAssignableListItemTypes(left);
-        elts.push(this.parseMaybeDefault(left.start, left.loc.start, left));
+        elts.push(this.parseAssignableListItem(allowModifiers, decorators));
       }
     }
     return elts;
+  }
+
+  parseAssignableListItem(allowModifiers: ?boolean, decorators: Decorator[]): Pattern | TSParameterProperty {
+    const left = this.parseMaybeDefault();
+    this.parseAssignableListItemTypes(left);
+    const elt = this.parseMaybeDefault(left.start, left.loc.start, left);
+    if (decorators.length) {
+      left.decorators = decorators;
+    }
+    return elt;
   }
 
   parseAssignableListItemTypes(param: Pattern): Pattern {

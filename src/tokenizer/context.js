@@ -12,7 +12,7 @@ export class TokContext {
     token: string,
     isExpr?: boolean,
     preserveSpace?: boolean,
-    override?: Function,
+    override?: Function, // Takes a Tokenizer as a this-parameter, and returns void.
   ) {
     this.token = token;
     this.isExpr = !!isExpr;
