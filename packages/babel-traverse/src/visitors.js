@@ -136,7 +136,11 @@ export function verify(visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     if (t.TYPES.indexOf(nodeType) < 0) {
-      throw new Error(messages.get("traverseVerifyNodeType", nodeType));
+      if (
+        !nodeType.startsWith("TS") // TODO: https://github.com/babel/babel/pull/5856
+      ) {
+        throw new Error(messages.get("traverseVerifyNodeType", nodeType));
+      }
     }
 
     const visitors = visitor[nodeType];
