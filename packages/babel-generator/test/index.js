@@ -352,10 +352,6 @@ describe("programmatic generation", function() {
 });
 
 describe("CodeGenerator", function () {
-  it("constructor", function () {
-    const codeGen = new CodeGenerator(t.stringLiteral("string"));
-    assert(codeGen instanceof CodeGenerator);
-  });
   it("generate", function () {
     const codeGen = new CodeGenerator(t.numericLiteral(123));
     const code = codeGen.generate().code;
