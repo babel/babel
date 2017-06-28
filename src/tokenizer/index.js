@@ -631,10 +631,27 @@ export default class Tokenizer extends LocationParser {
   }
 
   readRadixNumber(radix: number): void {
+    const start = this.state.pos;
+    let isBigInt = false;
+
     this.state.pos += 2; // 0x
     const val = this.readInt(radix);
     if (val == null) this.raise(this.state.start + 2, "Expected number in radix " + radix);
+
+    if (this.hasPlugin("bigInt")) {
+      if (this.input.charCodeAt(this.state.pos) === 0x6E) { // 'n'
+        ++this.state.pos;
+        isBigInt = true;
+      }
+    }
+
     if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.state.pos, "Identifier directly after number");
+
+    if (isBigInt) {
+      const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
+      return this.finishToken(tt.bigint, str);
+    }
+
     return this.finishToken(tt.num, val);
   }
 
@@ -642,30 +659,47 @@ export default class Tokenizer extends LocationParser {
 
   readNumber(startsWithDot: boolean): void {
     const start = this.state.pos;
-    let octal = this.input.charCodeAt(start) === 48; // '0'
+    let octal = this.input.charCodeAt(start) === 0x30; // '0'
     let isFloat = false;
+    let isBigInt = false;
 
     if (!startsWithDot && this.readInt(10) === null) this.raise(start, "Invalid number");
     if (octal && this.state.pos == start + 1) octal = false; // number === 0
 
     let next = this.input.charCodeAt(this.state.pos);
-    if (next === 46 && !octal) { // '.'
+    if (next === 0x2E && !octal) { // '.'
       ++this.state.pos;
       this.readInt(10);
       isFloat = true;
       next = this.input.charCodeAt(this.state.pos);
     }
 
-    if ((next === 69 || next === 101) && !octal) { // 'eE'
+    if ((next === 0x45 || next === 0x65) && !octal) { // 'Ee'
       next = this.input.charCodeAt(++this.state.pos);
-      if (next === 43 || next === 45) ++this.state.pos; // '+-'
+      if (next === 0x2B || next === 0x2D) ++this.state.pos; // '+-'
       if (this.readInt(10) === null) this.raise(start, "Invalid number");
       isFloat = true;
+      next = this.input.charCodeAt(this.state.pos);
+    }
+
+    if (this.hasPlugin("bigInt")) {
+      if (next === 0x6E) { // 'n'
+        // disallow floats and legacy octal syntax, new style octal ("0o") is handled in this.readRadixNumber
+        if (isFloat || octal) this.raise(start, "Invalid BigIntLiteral");
+        ++this.state.pos;
+        isBigInt = true;
+      }
     }
 
     if (isIdentifierStart(this.fullCharCodeAtPos())) this.raise(this.state.pos, "Identifier directly after number");
 
-    const str = this.input.slice(start, this.state.pos).replace(/_/g, "");
+    // remove "_" for numeric literal separator, and "n" for BigInts
+    const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
+
+    if (isBigInt) {
+      return this.finishToken(tt.bigint, str);
+    }
+
     let val;
     if (isFloat) {
       val = parseFloat(str);

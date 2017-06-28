@@ -96,6 +96,11 @@ export type NumericLiteral = NodeBase & {
   value: number;
 };
 
+export type BigIntLiteral = NodeBase & {
+  type: "BigIntLiteral";
+  value: number;
+}
+
 // Programs
 
 export type BlockStatementLike = Program | BlockStatement;

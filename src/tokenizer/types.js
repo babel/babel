@@ -82,6 +82,7 @@ export class BinopTokenType extends TokenType {
 
 export const types: { [name: string]: TokenType } = {
   num: new TokenType("num", { startsExpr }),
+  bigint: new TokenType("bigint", { startsExpr }),
   regexp: new TokenType("regexp", { startsExpr }),
   string: new TokenType("string", { startsExpr }),
   name: new TokenType("name", { startsExpr }),

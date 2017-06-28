@@ -554,6 +554,9 @@ export default class ExpressionParser extends LValParser {
       case tt.num:
         return this.parseLiteral(this.state.value, "NumericLiteral");
 
+      case tt.bigint:
+        return this.parseLiteral(this.state.value, "BigIntLiteral");
+
       case tt.string:
         return this.parseLiteral(this.state.value, "StringLiteral");
 
