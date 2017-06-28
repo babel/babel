@@ -662,7 +662,7 @@ export default class ExpressionParser extends LValParser {
     const id = this.parseIdentifier(true);
     this.expect(tt.dot);
     if (!this.inModule) {
-      this.raise(id.start, "import.meta may appear only with 'sourceType: module'");
+      this.raise(id.start, `import.meta may appear only with 'sourceType: "module"'`);
     }
     return this.parseMetaProperty(node, id, "meta");
   }

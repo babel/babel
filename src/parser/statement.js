@@ -116,7 +116,7 @@ export default class StatementParser extends ExpressionParser {
           }
 
           if (!this.inModule) {
-            this.raise(this.state.start, "'import' and 'export' may appear only with 'sourceType: module'");
+            this.raise(this.state.start, `'import' and 'export' may appear only with 'sourceType: "module"'`);
           }
         }
         return starttype === tt._import ? this.parseImport(node) : this.parseExport(node);
