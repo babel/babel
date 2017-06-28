@@ -128,23 +128,25 @@ require("babylon").parse("code", {
 
 ### Plugins
 
- - `estree` ([repo](https://github.com/estree/estree))
- - `jsx` ([repo](https://facebook.github.io/jsx/))
- - `flow` ([repo](https://github.com/facebook/flow))
- - `doExpressions`
- - `objectRestSpread` ([proposal](https://github.com/tc39/proposal-object-rest-spread))
- - `decorators` (Stage 1) and `decorators2` (Stage 2)
- - `classProperties` ([proposal](https://github.com/tc39/proposal-class-public-fields))
- - `classPrivateProperties` ([proposal](https://github.com/tc39/proposal-private-fields))
- - `exportExtensions` ([proposal 1](https://github.com/leebyron/ecmascript-export-default-from)), ([proposal 2](https://github.com/leebyron/ecmascript-export-ns-from))
- - `asyncGenerators` ([proposal](https://github.com/tc39/proposal-async-iteration))
- - `functionBind` ([proposal](https://github.com/zenparsing/es-function-bind))
- - `functionSent`
- - `dynamicImport` ([proposal](https://github.com/tc39/proposal-dynamic-import))
- - `numericSeparator` ([proposal](https://github.com/samuelgoto/proposal-numeric-separator))
- - `optionalChaining` ([proposal](https://github.com/tc39/proposal-optional-chaining))
- - `importMeta` ([proposal](https://github.com/tc39/proposal-import-meta))
- - `bigInt` ([proposal](https://github.com/tc39/proposal-bigint))
+| Name | Code Example |
+|------|--------------|
+| `estree` ([repo](https://github.com/estree/estree)) | n/a |
+| `jsx` ([repo](https://facebook.github.io/jsx/)) | `<a attr="b"></a>` |
+| `flow` ([repo](https://github.com/facebook/flow)) | `var a: string = "";` |
+| `doExpressions` | `var a = do { return 'hi'; };` |
+| `objectRestSpread` ([proposal](https://github.com/tc39/proposal-object-rest-spread)) | `var a = { b, ...c };` |
+| `decorators` (Stage 1) and `decorators2` (Stage 2) | `@a class A {}` |
+| `classProperties` ([proposal](https://github.com/tc39/proposal-class-public-fields)) | `class A { b = 1; }` |
+| `classPrivateProperties` ([proposal](https://github.com/tc39/proposal-private-fields)) | `class A { #b = 1; }` |
+| `exportExtensions` ([proposal 1](https://github.com/leebyron/ecmascript-export-default-from)), ([proposal 2](https://github.com/leebyron/ecmascript-export-ns-from)) | Proposal 1: `export v from "mod"` Proposal 2: `export * as ns from "mod"` |
+| `asyncGenerators` ([proposal](https://github.com/tc39/proposal-async-iteration)) | `async function*() {}`, `for await (let a of b) {}` |
+| `functionBind` ([proposal](https://github.com/zenparsing/es-function-bind)) | `a::b`, `::console.log` |
+| `functionSent` | `function.sent` |
+| `dynamicImport` ([proposal](https://github.com/tc39/proposal-dynamic-import)) | `import('./guy').then()` |
+| `numericSeparator` ([proposal](https://github.com/samuelgoto/proposal-numeric-separator)) | `1_000_000` |
+| `optionalChaining` ([proposal](https://github.com/tc39/proposal-optional-chaining)) | `a?.b` |
+| `importMeta` ([proposal](https://github.com/tc39/proposal-import-meta)) | `import.meta.url` |
+| `bigInt` ([proposal](https://github.com/tc39/proposal-bigint)) | `100n` |
 
 ### FAQ
 
