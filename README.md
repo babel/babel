@@ -63,6 +63,8 @@ mind. When in doubt, use `.parse()`.
 
 - **ranges**: Adds a `ranges` property to each node: `[node.start, node.end]`
 
+- **tokens**: Adds all parsed tokens to a `tokens` property on the `File` node
+
 ### Output
 
 Babylon generates AST according to [Babel AST format][].

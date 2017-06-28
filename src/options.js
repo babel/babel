@@ -13,6 +13,7 @@ export type Options = {
   plugins: $ReadOnlyArray<string>;
   strictMode: ?boolean;
   ranges: boolean;
+  tokens: boolean;
 };
 
 export const defaultOptions: Options = {
@@ -44,6 +45,8 @@ export const defaultOptions: Options = {
   //
   // [range]: https://bugzilla.mozilla.org/show_bug.cgi?id=745678
   ranges: false,
+  // Adds all parsed tokens to a `tokens` property on the `File` node
+  tokens: false,
 };
 
 // Interpret and default an options object

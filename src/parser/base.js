@@ -16,7 +16,6 @@ export default class BaseParser {
   state: State;
   input: string;
 
-
   isReservedWord(word: string): boolean {
     if (word === "await") {
       return this.inModule;

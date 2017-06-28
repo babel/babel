@@ -84,7 +84,7 @@ export default class Tokenizer extends LocationParser {
   // Move to the next token
 
   next(): void {
-    if (!this.isLookahead) {
+    if (this.options.tokens && !this.isLookahead) {
       this.state.tokens.push(new Token(this.state));
     }
 
@@ -199,7 +199,7 @@ export default class Tokenizer extends LocationParser {
     };
 
     if (!this.isLookahead) {
-      this.state.tokens.push(comment);
+      if (this.options.tokens) this.state.tokens.push(comment);
       this.state.comments.push(comment);
       this.addComment(comment);
     }

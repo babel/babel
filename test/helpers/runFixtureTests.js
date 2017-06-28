@@ -80,7 +80,6 @@ function runTest(test, parseFunction) {
     throw err;
   }
 
-  delete ast.tokens;
   if (ast.comments && !ast.comments.length) delete ast.comments;
 
   if (!test.expect.code && !opts.throws && !process.env.CI) {
@@ -133,7 +132,7 @@ function misMatch(exp, act) {
     }
 
     for (var prop in act) {
-      if (prop === "__clone") {
+      if (typeof act[prop] === "function") {
         continue;
       }
 

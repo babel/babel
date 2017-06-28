@@ -28,9 +28,10 @@ export default class StatementParser extends ExpressionParser {
 
     this.parseBlockBody(program, true, true, tt.eof);
 
-    file.program  = this.finishNode(program, "Program");
+    file.program = this.finishNode(program, "Program");
     file.comments = this.state.comments;
-    file.tokens   = this.state.tokens;
+
+    if (this.options.tokens) file.tokens = this.state.tokens;
 
     return this.finishNode(file, "File");
   }
