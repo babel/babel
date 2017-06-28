@@ -122,3 +122,17 @@ From now on Babel will use your local checkout of Babylon for its tests.
   - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check so that your new plugin code only runs when that flag is turned on (not default behavior)
   - [ ] Add failing/passing tests according to spec behavior
 - [ ] Start working about the Babel transform itself!
+
+## Publishing
+
+```sh
+# run lerna-changelog from global install and copy it
+lerna-changelog
+# create tag or specific one (ex: `npm version v7.0.0-beta.16`)
+npm version patch
+# push to github
+git push --follow-tags
+# publish (sometimes need `npm publish --tag=next`)
+npm publish
+# upload changelog to github releases, etc
+```
