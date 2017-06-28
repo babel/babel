@@ -14,7 +14,7 @@
 
  - The latest ECMAScript version enabled by default (ES2017).
  - Comment attachment.
- - Support for JSX, Flow, Typescript (WIP).
+ - Support for JSX, Flow, Typescript.
  - Support for experimental language proposals (accepting PRs for anything at least [stage-0](https://github.com/tc39/proposals/blob/master/stage-0-proposals.md)).
 
 ## Contributing
@@ -131,6 +131,7 @@ require("babylon").parse("code", {
 | `estree` ([repo](https://github.com/estree/estree)) | n/a |
 | `jsx` ([repo](https://facebook.github.io/jsx/)) | `<a attr="b">{s}</a>` |
 | `flow` ([repo](https://github.com/facebook/flow)) | `var a: string = "";` |
+| `typescript` ([repo](https://github.com/Microsoft/TypeScript)) | `var a: string = "";` |
 | `doExpressions` | `var a = do { if (true) { 'hi'; } };` |
 | `objectRestSpread` ([proposal](https://github.com/tc39/proposal-object-rest-spread)) | `var a = { b, ...c };` |
 | `decorators` (Stage 1) and `decorators2` (Stage 2) | `@a class A {}` |
