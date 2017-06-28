@@ -1,4 +1,5 @@
 import Whitespace from "../lib/whitespace";
+import { nodes as whitespaceNodes } from "../lib/node/whitespace";
 import Printer from "../lib/printer";
 import generate from "../lib";
 import assert from "assert";
@@ -341,6 +342,22 @@ describe("whitespace", function() {
   it("empty token list", function() {
     const w = new Whitespace([]);
     assert.equal(w.getNewlinesBefore(t.stringLiteral("1")), 0);
+  });
+});
+
+describe("whitespace nodes", function () {
+  it("logical expression containing a function", function () {
+    const noopFunction = t.arrowFunctionExpression([], t.numericLiteral(0));
+    const num = t.numericLiteral(1);
+
+    const functionOnLeft = t.logicalExpression("||", noopFunction, num);
+    const functionOnRight = t.logicalExpression("||", num, noopFunction);
+
+    assert.deepEqual(whitespaceNodes.LogicalExpression(functionOnLeft), { after: true });
+    assert.deepEqual(whitespaceNodes.LogicalExpression(functionOnRight), { after: true });
+  });
+  it("literal containing use strict", function () {
+    assert.deepEqual(whitespaceNodes.Literal(t.stringLiteral("use strict")), { after: true });
   });
 });
 
