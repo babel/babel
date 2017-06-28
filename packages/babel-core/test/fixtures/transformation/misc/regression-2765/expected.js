@@ -12,8 +12,6 @@ function f() {
   }();
 }
 
-;
-
 class Class {
   m() {
     var _this2 = this;

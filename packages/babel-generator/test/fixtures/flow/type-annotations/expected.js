@@ -231,11 +231,9 @@ export type { bar } from "bar";
 export interface baz {
   p: number
 }
-;
 export interface qux<T> {
   p: T
 }
-;
 var a: ?Array<?string>;
 var a: {|
   numVal: number

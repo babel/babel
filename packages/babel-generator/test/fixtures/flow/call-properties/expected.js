@@ -15,4 +15,3 @@ var a: {
 interface A {
   (): number
 }
-;
