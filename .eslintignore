@@ -3,4 +3,5 @@ build
 coverage
 lib
 node_modules
-test
+test/expressions
+test/fixtures

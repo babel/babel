@@ -13,7 +13,7 @@ export default class UtilParser extends Tokenizer {
   addExtra(node: Node, key: string, val: any): void {
     if (!node) return;
 
-    const extra = node.extra = node.extra || {};
+    const extra = (node.extra = node.extra || {});
     extra[key] = val;
   }
 
@@ -64,13 +64,17 @@ export default class UtilParser extends Tokenizer {
   // Test whether a semicolon can be inserted at the current position.
 
   canInsertSemicolon(): boolean {
-    return this.match(tt.eof) ||
+    return (
+      this.match(tt.eof) ||
       this.match(tt.braceR) ||
-      this.hasPrecedingLineBreak();
+      this.hasPrecedingLineBreak()
+    );
   }
 
   hasPrecedingLineBreak(): boolean {
-    return lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start));
+    return lineBreak.test(
+      this.input.slice(this.state.lastTokEnd, this.state.start),
+    );
   }
 
   // TODO
@@ -96,7 +100,10 @@ export default class UtilParser extends Tokenizer {
   // Raise an unexpected token error. Can take the expected token type
   // instead of a message string.
 
-  unexpected(pos: ?number, messageOrType: string | TokenType = "Unexpected token"): empty {
+  unexpected(
+    pos: ?number,
+    messageOrType: string | TokenType = "Unexpected token",
+  ): empty {
     if (typeof messageOrType !== "string") {
       messageOrType = `Unexpected token, expected ${messageOrType.label}`;
     }

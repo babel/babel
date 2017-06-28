@@ -32,10 +32,14 @@
     "chalk": "^1.1.3",
     "cross-env": "^5.0.0",
     "eslint": "^4.0.0",
-    "eslint-config-babel": "^7.0.0",
+    "eslint-config-babel": "^7.0.1",
     "eslint-plugin-flowtype": "^2.34.0",
+    "eslint-plugin-prettier": "^2.1.2",
     "flow-bin": "^0.47.0",
+    "husky": "^0.14.1",
+    "lint-staged": "^4.0.0",
     "nyc": "^11.0.2",
+    "prettier": "^1.5.2",
     "rimraf": "^2.5.4",
     "rollup": "^0.42.0",
     "rollup-plugin-babel": "3.0.0-alpha.12",
@@ -51,7 +55,7 @@
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
     "clean": "rimraf lib",
     "flow": "flow",
-    "lint": "eslint src bin",
+    "lint": "eslint src bin test",
     "prepublish": "cross-env BABEL_ENV=production yarn run build",
     "preversion": "yarn run test && npm run changelog",
     "test": "yarn run lint && yarn run flow && yarn run build -- -m && yarn run test-only",
@@ -86,5 +90,11 @@
       "Tag: New Feature": ":rocket: New Feature",
       "Tag: Polish": ":nail_care: Polish"
     }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --format=codeframe --fix",
+      "git add"
+    ]
   }
 }

@@ -14,7 +14,9 @@ export default class LocationParser extends CommentsParser {
     const loc = getLineInfo(this.input, pos);
     message += ` (${loc.line}:${loc.column})`;
     // $FlowIgnore
-    const err: SyntaxError & { pos: number, loc: Position } = new SyntaxError(message);
+    const err: SyntaxError & { pos: number, loc: Position } = new SyntaxError(
+      message,
+    );
     err.pos = pos;
     err.loc = loc;
     throw err;

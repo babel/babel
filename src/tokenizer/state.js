@@ -10,21 +10,15 @@ import { types as tt, type TokenType } from "./types";
 
 export default class State {
   init(options: Options, input: string): void {
-    this.strict = options.strictMode === false ? false : options.sourceType === "module";
+    this.strict =
+      options.strictMode === false ? false : options.sourceType === "module";
 
     this.input = input;
 
     this.potentialArrowAt = -1;
 
-    this.inMethod =
-      this.inFunction =
-      this.inGenerator =
-      this.inAsync =
-      this.inPropertyName =
-      this.inType =
-      this.inClassProperty =
-      this.noAnonFunctionType =
-        false;
+    // eslint-disable-next-line max-len
+    this.inMethod = this.inFunction = this.inGenerator = this.inAsync = this.inPropertyName = this.inType = this.inClassProperty = this.noAnonFunctionType = false;
 
     this.classLevel = 0;
 
@@ -37,8 +31,8 @@ export default class State {
     this.comments = [];
 
     this.trailingComments = [];
-    this.leadingComments  = [];
-    this.commentStack     = [];
+    this.leadingComments = [];
+    this.commentStack = [];
     // $FlowIgnore
     this.commentPreviousNode = null;
 
@@ -105,9 +99,9 @@ export default class State {
   trailingComments: Array<N.Comment>;
   leadingComments: Array<N.Comment>;
   commentStack: Array<{
-    start: number;
-    leadingComments: ?Array<N.Comment>;
-    trailingComments: ?Array<N.Comment>;
+    start: number,
+    leadingComments: ?Array<N.Comment>,
+    trailingComments: ?Array<N.Comment>,
   }>;
   commentPreviousNode: N.Node;
 
@@ -164,7 +158,7 @@ export default class State {
   }
 
   clone(skipArrays?: boolean): State {
-    const state = new State;
+    const state = new State();
     for (const key in this) {
       // $FlowIgnore
       let val = this[key];

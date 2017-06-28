@@ -3,8 +3,8 @@
 import { lineBreakG } from "./whitespace";
 
 export type Pos = {
-  start: number;
-}
+  start: number,
+};
 
 // These are used when `options.locations` is on, for the
 // `startLoc` and `endLoc` properties.
@@ -39,7 +39,7 @@ export class SourceLocation {
 // into.
 
 export function getLineInfo(input: string, offset: number): Position {
-  for (let line = 1, cur = 0; ;) {
+  for (let line = 1, cur = 0; ; ) {
     lineBreakG.lastIndex = cur;
     const match = lineBreakG.exec(input);
     if (match && match.index < offset) {

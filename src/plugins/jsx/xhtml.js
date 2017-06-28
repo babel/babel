@@ -225,7 +225,7 @@ const entities: { [name: string]: string } = {
   or: "\u2228",
   cap: "\u2229",
   cup: "\u222A",
-  "int": "\u222B",
+  int: "\u222B",
   there4: "\u2234",
   sim: "\u223C",
   cong: "\u2245",
@@ -253,6 +253,6 @@ const entities: { [name: string]: string } = {
   spades: "\u2660",
   clubs: "\u2663",
   hearts: "\u2665",
-  diams: "\u2666"
+  diams: "\u2666",
 };
 export default entities;

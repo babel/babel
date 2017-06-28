@@ -3,20 +3,23 @@
 // Which Unicode version should be used?
 const version = "9.0.0";
 
-const start = require("unicode-" + version + "/Binary_Property/ID_Start/code-points.js")
-    .filter(function(ch) { return ch > 0x7f; });
+const start = require("unicode-" +
+  version +
+  "/Binary_Property/ID_Start/code-points.js").filter(function(ch) {
+  return ch > 0x7f;
+});
 let last = -1;
 const cont = [0x200c, 0x200d].concat(
-  require("unicode-" + version + "/Binary_Property/ID_Continue/code-points.js")
-    .filter(function(ch) {
-      return ch > 0x7f && search(start, ch, last + 1) == -1;
-    })
-  );
+  require("unicode-" +
+    version +
+    "/Binary_Property/ID_Continue/code-points.js").filter(function(ch) {
+    return ch > 0x7f && search(start, ch, last + 1) == -1;
+  }),
+);
 
 function search(arr, ch, starting) {
   for (let i = starting; arr[i] <= ch && i < arr.length; last = i++)
-    if (arr[i] === ch)
-      return i;
+    if (arr[i] === ch) return i;
   return -1;
 }
 
@@ -56,7 +59,13 @@ function generate(chars) {
 const startData = generate(start);
 const contData = generate(cont);
 
-console.log("let nonASCIIidentifierStartChars = \"" + startData.nonASCII + "\";");
-console.log("let nonASCIIidentifierChars = \"" + contData.nonASCII + "\";");
-console.log("const astralIdentifierStartCodes = " + JSON.stringify(startData.astral) + ";");
-console.log("const astralIdentifierCodes = " + JSON.stringify(contData.astral) + ";");
+console.log('let nonASCIIidentifierStartChars = "' + startData.nonASCII + '";');
+console.log('let nonASCIIidentifierChars = "' + contData.nonASCII + '";');
+console.log(
+  "const astralIdentifierStartCodes = " +
+    JSON.stringify(startData.astral) +
+    ";",
+);
+console.log(
+  "const astralIdentifierCodes = " + JSON.stringify(contData.astral) + ";",
+);

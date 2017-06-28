@@ -2,7 +2,7 @@
 /* eslint no-var: 0 */
 
 var babylon = require("..");
-var fs      = require("fs");
+var fs = require("fs");
 
 var filename = process.argv[2];
 if (!filename) {
@@ -11,6 +11,6 @@ if (!filename) {
 }
 
 var file = fs.readFileSync(filename, "utf8");
-var ast  = babylon.parse(file);
+var ast = babylon.parse(file);
 
 console.log(JSON.stringify(ast, null, "  "));

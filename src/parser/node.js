@@ -31,7 +31,7 @@ class Node implements NodeBase {
 
   __clone(): this {
     // $FlowIgnore
-    const node2: any = new Node;
+    const node2: any = new Node();
     for (const key in this) {
       // Do not clone comments that are already attached to the node
       if (commentKeys.indexOf(key) < 0) {
@@ -45,30 +45,40 @@ class Node implements NodeBase {
 }
 
 export class NodeUtils extends UtilParser {
-  startNode<T : NodeType>(): T {
+  startNode<T: NodeType>(): T {
     // $FlowIgnore
     return new Node(this, this.state.start, this.state.startLoc);
   }
 
-  startNodeAt<T : NodeType>(pos: number, loc: Position): T {
+  startNodeAt<T: NodeType>(pos: number, loc: Position): T {
     // $FlowIgnore
     return new Node(this, pos, loc);
   }
 
   /** Start a new node with a previous node's location. */
-  startNodeAtNode<T : NodeType>(type: NodeType): T {
+  startNodeAtNode<T: NodeType>(type: NodeType): T {
     return this.startNodeAt(type.start, type.loc.start);
   }
 
   // Finish an AST node, adding `type` and `end` properties.
 
-  finishNode<T : NodeType>(node: T, type: string): T {
-    return this.finishNodeAt(node, type, this.state.lastTokEnd, this.state.lastTokEndLoc);
+  finishNode<T: NodeType>(node: T, type: string): T {
+    return this.finishNodeAt(
+      node,
+      type,
+      this.state.lastTokEnd,
+      this.state.lastTokEndLoc,
+    );
   }
 
   // Finish node at given position
 
-  finishNodeAt<T : NodeType>(node: T, type: string, pos: number, loc: Position): T {
+  finishNodeAt<T: NodeType>(
+    node: T,
+    type: string,
+    pos: number,
+    loc: Position,
+  ): T {
     node.type = type;
     node.end = pos;
     node.loc.end = loc;

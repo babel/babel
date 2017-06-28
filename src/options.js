@@ -4,16 +4,16 @@
 // the parser process. These options are recognized:
 
 export type Options = {
-  sourceType: "script" | "module";
-  sourceFilename?: string;
-  startLine: number;
-  allowReturnOutsideFunction: boolean;
-  allowImportExportEverywhere: boolean;
-  allowSuperOutsideMethod: boolean;
-  plugins: $ReadOnlyArray<string>;
-  strictMode: ?boolean;
-  ranges: boolean;
-  tokens: boolean;
+  sourceType: "script" | "module",
+  sourceFilename?: string,
+  startLine: number,
+  allowReturnOutsideFunction: boolean,
+  allowImportExportEverywhere: boolean,
+  allowSuperOutsideMethod: boolean,
+  plugins: $ReadOnlyArray<string>,
+  strictMode: ?boolean,
+  ranges: boolean,
+  tokens: boolean,
 };
 
 export const defaultOptions: Options = {

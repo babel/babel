@@ -5,7 +5,9 @@ import type { File } from "../types";
 import { getOptions } from "../options";
 import StatementParser from "./statement";
 
-export const plugins: { [name: string]: (superClass: Class<Parser>) => Class<Parser> } = {};
+export const plugins: {
+  [name: string]: (superClass: Class<Parser>) => Class<Parser>,
+} = {};
 
 export default class Parser extends StatementParser {
   constructor(options: ?Options, input: string) {
@@ -19,7 +21,11 @@ export default class Parser extends StatementParser {
     this.filename = options.sourceFilename;
 
     // If enabled, skip leading hashbang line.
-    if (this.state.pos === 0 && this.input[0] === "#" && this.input[1] === "!") {
+    if (
+      this.state.pos === 0 &&
+      this.input[0] === "#" &&
+      this.input[1] === "!"
+    ) {
       this.skipLineComment(2);
     }
   }
@@ -32,7 +38,9 @@ export default class Parser extends StatementParser {
   }
 }
 
-function pluginsMap(pluginList: $ReadOnlyArray<string>): { [key: string]: boolean } {
+function pluginsMap(
+  pluginList: $ReadOnlyArray<string>,
+): { [key: string]: boolean } {
   const pluginMap = {};
   for (const name of pluginList) {
     pluginMap[name] = true;
