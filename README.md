@@ -131,9 +131,9 @@ require("babylon").parse("code", {
 | Name | Code Example |
 |------|--------------|
 | `estree` ([repo](https://github.com/estree/estree)) | n/a |
-| `jsx` ([repo](https://facebook.github.io/jsx/)) | `<a attr="b"></a>` |
+| `jsx` ([repo](https://facebook.github.io/jsx/)) | `<a attr="b">{s}</a>` |
 | `flow` ([repo](https://github.com/facebook/flow)) | `var a: string = "";` |
-| `doExpressions` | `var a = do { return 'hi'; };` |
+| `doExpressions` | `var a = do { if (true) { 'hi'; } };` |
 | `objectRestSpread` ([proposal](https://github.com/tc39/proposal-object-rest-spread)) | `var a = { b, ...c };` |
 | `decorators` (Stage 1) and `decorators2` (Stage 2) | `@a class A {}` |
 | `classProperties` ([proposal](https://github.com/tc39/proposal-class-public-fields)) | `class A { b = 1; }` |
@@ -142,7 +142,7 @@ require("babylon").parse("code", {
 | `asyncGenerators` ([proposal](https://github.com/tc39/proposal-async-iteration)) | `async function*() {}`, `for await (let a of b) {}` |
 | `functionBind` ([proposal](https://github.com/zenparsing/es-function-bind)) | `a::b`, `::console.log` |
 | `functionSent` | `function.sent` |
-| `dynamicImport` ([proposal](https://github.com/tc39/proposal-dynamic-import)) | `import('./guy').then()` |
+| `dynamicImport` ([proposal](https://github.com/tc39/proposal-dynamic-import)) | `import('./guy').then(a)` |
 | `numericSeparator` ([proposal](https://github.com/samuelgoto/proposal-numeric-separator)) | `1_000_000` |
 | `optionalChaining` ([proposal](https://github.com/tc39/proposal-optional-chaining)) | `a?.b` |
 | `importMeta` ([proposal](https://github.com/tc39/proposal-import-meta)) | `import.meta.url` |
