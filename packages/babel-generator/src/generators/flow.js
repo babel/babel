@@ -159,7 +159,10 @@ export function FunctionTypeAnnotation(node: Object, parent: Object) {
   this.token(")");
 
   // this node type is overloaded, not sure why but it makes it EXTREMELY annoying
-  if (parent.type === "ObjectTypeCallProperty" || parent.type === "DeclareFunction") {
+  if (
+    parent.type === "ObjectTypeCallProperty" ||
+    parent.type === "DeclareFunction"
+  ) {
     this.token(":");
   } else {
     this.space();
@@ -183,7 +186,10 @@ export function InterfaceExtends(node: Object) {
   this.print(node.typeParameters, node);
 }
 
-export { InterfaceExtends as ClassImplements, InterfaceExtends as GenericTypeAnnotation };
+export {
+  InterfaceExtends as ClassImplements,
+  InterfaceExtends as GenericTypeAnnotation,
+};
 
 export function _interfaceish(node: Object) {
   this.print(node.id, node);
@@ -323,7 +329,11 @@ export function ObjectTypeAnnotation(node: Object) {
     this.token("{");
   }
 
-  const props = node.properties.concat(node.callProperties, node.indexers);
+  // TODO: remove the array fallbacks and instead enforce the types to require an array
+  const props = node.properties.concat(
+    node.callProperties || [],
+    node.indexers || [],
+  );
 
   if (props.length) {
     this.space();

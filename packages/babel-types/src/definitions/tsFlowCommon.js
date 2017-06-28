@@ -25,7 +25,8 @@ defineType("TypeParameterInstantiation", {
     params: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("TSType", "FlowType"))),
+        assertEach(assertNodeType("TSType", "FlowType")),
+      ),
     },
   },
 });
@@ -37,7 +38,8 @@ defineType("TypeParameterDeclaration", {
     params: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("TypeParameter"))),
+        assertEach(assertNodeType("TypeParameter")),
+      ),
     },
   },
 });
@@ -79,7 +81,10 @@ defineType("ClassProperty", {
       optional: true,
     },
     decorators: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator"))),
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
       optional: true,
     },
     readonly: {

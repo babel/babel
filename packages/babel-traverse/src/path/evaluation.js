@@ -80,7 +80,11 @@ function _evaluate(path, state) {
     return evaluateCached(exprs[exprs.length - 1], state);
   }
 
-  if (path.isStringLiteral() || path.isNumericLiteral() || path.isBooleanLiteral()) {
+  if (
+    path.isStringLiteral() ||
+    path.isNumericLiteral() ||
+    path.isBooleanLiteral()
+  ) {
     return node.value;
   }
 
@@ -89,25 +93,26 @@ function _evaluate(path, state) {
   }
 
   if (path.isTemplateLiteral()) {
-    let str = "";
+    return evaluateQuasis(path, node.quasis, state);
+  }
 
-    let i = 0;
-    const exprs = path.get("expressions");
+  if (
+    path.isTaggedTemplateExpression() &&
+    path.get("tag").isMemberExpression()
+  ) {
+    const object = path.get("tag.object");
+    const { node: { name } } = object;
+    const property = path.get("tag.property");
 
-    for (const elem of (node.quasis: Array<Object>)) {
-      // not confident, evaluated an expression we don't like
-      if (!state.confident) break;
-
-      // add on cooked element
-      str += elem.value.cooked;
-
-      // add on interpolated expression if it's present
-      const expr = exprs[i++];
-      if (expr) str += String(evaluateCached(expr, state));
+    if (
+      object.isIdentifier() &&
+      name === "String" &&
+      !path.scope.getBinding(name, true) &&
+      property.isIdentifier &&
+      property.node.name === "raw"
+    ) {
+      return evaluateQuasis(path, node.quasi.quasis, state, true);
     }
-
-    if (!state.confident) return;
-    return str;
   }
 
   if (path.isConditionalExpression()) {
@@ -120,12 +125,16 @@ function _evaluate(path, state) {
     }
   }
 
-  if (path.isExpressionWrapper()) { // TypeCastExpression, ExpressionStatement etc
+  if (path.isExpressionWrapper()) {
+    // TypeCastExpression, ExpressionStatement etc
     return evaluateCached(path.get("expression"), state);
   }
 
   // "foo".length
-  if (path.isMemberExpression() && !path.parentPath.isCallExpression({ callee: node })) {
+  if (
+    path.isMemberExpression() &&
+    !path.parentPath.isCallExpression({ callee: node })
+  ) {
     const property = path.get("property");
     const object = path.get("object");
 
@@ -176,18 +185,26 @@ function _evaluate(path, state) {
     }
 
     const argument = path.get("argument");
-    if (node.operator === "typeof" && (argument.isFunction() || argument.isClass())) {
+    if (
+      node.operator === "typeof" &&
+      (argument.isFunction() || argument.isClass())
+    ) {
       return "function";
     }
 
     const arg = evaluateCached(argument, state);
     if (!state.confident) return;
     switch (node.operator) {
-      case "!": return !arg;
-      case "+": return +arg;
-      case "-": return -arg;
-      case "~": return ~arg;
-      case "typeof": return typeof arg;
+      case "!":
+        return !arg;
+      case "+":
+        return +arg;
+      case "-":
+        return -arg;
+      case "~":
+        return ~arg;
+      case "typeof":
+        return typeof arg;
     }
   }
 
@@ -278,26 +295,46 @@ function _evaluate(path, state) {
     if (!state.confident) return;
 
     switch (node.operator) {
-      case "-": return left - right;
-      case "+": return left + right;
-      case "/": return left / right;
-      case "*": return left * right;
-      case "%": return left % right;
-      case "**": return left ** right;
-      case "<": return left < right;
-      case ">": return left > right;
-      case "<=": return left <= right;
-      case ">=": return left >= right;
-      case "==": return left == right; // eslint-disable-line eqeqeq
-      case "!=": return left != right;
-      case "===": return left === right;
-      case "!==": return left !== right;
-      case "|": return left | right;
-      case "&": return left & right;
-      case "^": return left ^ right;
-      case "<<": return left << right;
-      case ">>": return left >> right;
-      case ">>>": return left >>> right;
+      case "-":
+        return left - right;
+      case "+":
+        return left + right;
+      case "/":
+        return left / right;
+      case "*":
+        return left * right;
+      case "%":
+        return left % right;
+      case "**":
+        return left ** right;
+      case "<":
+        return left < right;
+      case ">":
+        return left > right;
+      case "<=":
+        return left <= right;
+      case ">=":
+        return left >= right;
+      case "==":
+        return left == right; // eslint-disable-line eqeqeq
+      case "!=":
+        return left != right;
+      case "===":
+        return left === right;
+      case "!==":
+        return left !== right;
+      case "|":
+        return left | right;
+      case "&":
+        return left & right;
+      case "^":
+        return left ^ right;
+      case "<<":
+        return left << right;
+      case ">>":
+        return left >> right;
+      case ">>>":
+        return left >>> right;
     }
   }
 
@@ -308,7 +345,8 @@ function _evaluate(path, state) {
 
     // Number(1);
     if (
-      callee.isIdentifier() && !path.scope.getBinding(callee.node.name, true) &&
+      callee.isIdentifier() &&
+      !path.scope.getBinding(callee.node.name, true) &&
       VALID_CALLEES.indexOf(callee.node.name) >= 0
     ) {
       func = global[node.callee.name];
@@ -320,7 +358,8 @@ function _evaluate(path, state) {
 
       // Math.min(1, 2)
       if (
-        object.isIdentifier() && property.isIdentifier() &&
+        object.isIdentifier() &&
+        property.isIdentifier() &&
         VALID_CALLEES.indexOf(object.node.name) >= 0 &&
         INVALID_METHODS.indexOf(property.node.name) < 0
       ) {
@@ -339,7 +378,7 @@ function _evaluate(path, state) {
     }
 
     if (func) {
-      const args = path.get("arguments").map((arg) => evaluateCached(arg, state));
+      const args = path.get("arguments").map(arg => evaluateCached(arg, state));
       if (!state.confident) return;
 
       return func.apply(context, args);
@@ -347,6 +386,28 @@ function _evaluate(path, state) {
   }
 
   deopt(path, state);
+}
+
+function evaluateQuasis(path, quasis: Array<Object>, state, raw = false) {
+  let str = "";
+
+  let i = 0;
+  const exprs = path.get("expressions");
+
+  for (const elem of quasis) {
+    // not confident, evaluated an expression we don't like
+    if (!state.confident) break;
+
+    // add on element
+    str += raw ? elem.value.raw : elem.value.cooked;
+
+    // add on interpolated expression if it's present
+    const expr = exprs[i++];
+    if (expr) str += String(evaluateCached(expr, state));
+  }
+
+  if (!state.confident) return;
+  return str;
 }
 
 /**
@@ -364,11 +425,11 @@ function _evaluate(path, state) {
  *
  */
 
-export function evaluate(): { confident: boolean; value: any } {
+export function evaluate(): { confident: boolean, value: any } {
   const state = {
     confident: true,
     deoptPath: null,
-    seen: new Map,
+    seen: new Map(),
   };
   let value = evaluateCached(this, state);
   if (!state.confident) value = undefined;

@@ -17,7 +17,9 @@ function validate(validate) {
 }
 
 function typeIs(typeName) {
-  return typeof typeName === "string" ? assertNodeType(typeName) : assertNodeType(...typeName);
+  return typeof typeName === "string"
+    ? assertNodeType(typeName)
+    : assertNodeType(...typeName);
 }
 
 function validateType(name) {
@@ -33,9 +35,7 @@ function validateOptionalType(typeName) {
 }
 
 function arrayOf(elementType) {
-  return chain(
-    assertValueType("array"),
-    assertEach(elementType));
+  return chain(assertValueType("array"), assertEach(elementType));
 }
 
 function arrayOfType(nodeTypeName) {
@@ -97,7 +97,10 @@ const callConstructSignatureDeclaration = {
 };
 
 defineType("TSCallSignatureDeclaration", callConstructSignatureDeclaration);
-defineType("TSConstructSignatureDeclaration", callConstructSignatureDeclaration);
+defineType(
+  "TSConstructSignatureDeclaration",
+  callConstructSignatureDeclaration,
+);
 
 const namedTypeElementCommon = {
   key: validateType("Expression"),
@@ -273,7 +276,11 @@ defineType("TSLiteralType", {
   aliases: ["TSType"],
   visitor: ["literal"],
   fields: {
-    literal: validateType(["NumericLiteral", "StringLiteral", "BooleanLiteral"]),
+    literal: validateType([
+      "NumericLiteral",
+      "StringLiteral",
+      "BooleanLiteral",
+    ]),
   },
 });
 
@@ -380,7 +387,10 @@ defineType("TSImportEqualsDeclaration", {
   fields: {
     isExport: validate(bool),
     id: validateType("Identifier"),
-    moduleReference: validateType(["TSEntityName", "TSExternalModuleReference"]),
+    moduleReference: validateType([
+      "TSEntityName",
+      "TSExternalModuleReference",
+    ]),
   },
 });
 
