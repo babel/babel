@@ -65,6 +65,8 @@ export function NewExpression(node: Object, parent: Object) {
     return;
   }
 
+  this.print(node.typeParameters, node);
+
   if (node.optional) {
     this.token("?.");
   }
@@ -100,6 +102,8 @@ function commaSeparatorNewline() {
 
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
+
+  this.print(node.typeParameters, node);
 
   if (node.optional) {
     this.token("?.");

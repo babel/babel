@@ -290,38 +290,6 @@ export function TypeAlias(node: Object) {
   this.semicolon();
 }
 
-export function TypeAnnotation(node: Object) {
-  this.token(":");
-  this.space();
-  if (node.optional) this.token("?");
-  this.print(node.typeAnnotation, node);
-}
-
-export function TypeParameter(node: Object) {
-  this._variance(node);
-
-  this.word(node.name);
-
-  if (node.bound) {
-    this.print(node.bound, node);
-  }
-
-  if (node.default) {
-    this.space();
-    this.token("=");
-    this.space();
-    this.print(node.default, node);
-  }
-}
-
-export function TypeParameterInstantiation(node: Object) {
-  this.token("<");
-  this.printList(node.params, node, {});
-  this.token(">");
-}
-
-export { TypeParameterInstantiation as TypeParameterDeclaration };
-
 export function ObjectTypeAnnotation(node: Object) {
   if (node.exact) {
     this.token("{|");
