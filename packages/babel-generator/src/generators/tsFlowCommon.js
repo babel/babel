@@ -1,19 +1,11 @@
-import type {
-  TypeAnnotation as ITypeAnnotation,
-  TypeParameter as ITypeParameter,
-  TypeParameterInstantiation as ITypeParameterInstantiation,
-} from "babylon/src/types";
-
-export function TypeAnnotation(node: ITypeAnnotation): void {
+export function TypeAnnotation(node) {
   this.token(":");
   this.space();
   if (node.optional) this.token("?");
   this.print(node.typeAnnotation, node);
 }
 
-export function TypeParameterInstantiation(
-  node: ITypeParameterInstantiation,
-): void {
+export function TypeParameterInstantiation(node): void {
   this.token("<");
   this.printList(node.params, node, {});
   this.token(">");
@@ -21,7 +13,7 @@ export function TypeParameterInstantiation(
 
 export { TypeParameterInstantiation as TypeParameterDeclaration };
 
-export function TypeParameter(node: ITypeParameter): void {
+export function TypeParameter(node) {
   this._variance(node);
 
   this.word(node.name);
