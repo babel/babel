@@ -329,7 +329,11 @@ export function ObjectTypeAnnotation(node: Object) {
     this.token("{");
   }
 
-  const props = node.properties.concat(node.callProperties, node.indexers);
+  // TODO: remove the array fallbacks and instead enforce the types to require an array
+  const props = node.properties.concat(
+    node.callProperties || [],
+    node.indexers || [],
+  );
 
   if (props.length) {
     this.space();

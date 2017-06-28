@@ -86,9 +86,12 @@ export const nodes = {
    * Test if SwitchCase needs whitespace.
    */
 
-  SwitchCase(node: Object, parent: Object): ?WhitespaceObject {
+  SwitchCase(node: Object, parent: Object): WhitespaceObject {
     return {
       before: node.consequent.length || parent.cases[0] === node,
+      after:
+        !node.consequent.length &&
+        parent.cases[parent.cases.length - 1] === node,
     };
   },
 
@@ -175,6 +178,32 @@ nodes.ObjectProperty = nodes.ObjectTypeProperty = nodes.ObjectMethod = function(
   parent,
 ): ?WhitespaceObject {
   if (parent.properties[0] === node) {
+    return {
+      before: true,
+    };
+  }
+};
+
+nodes.ObjectTypeCallProperty = function(
+  node: Object,
+  parent,
+): ?WhitespaceObject {
+  if (
+    parent.callProperties[0] === node &&
+    (!parent.properties || !parent.properties.length)
+  ) {
+    return {
+      before: true,
+    };
+  }
+};
+
+nodes.ObjectTypeIndexer = function(node: Object, parent): ?WhitespaceObject {
+  if (
+    parent.indexers[0] === node &&
+    (!parent.properties || !parent.properties.length) &&
+    (!parent.callProperties || !parent.callProperties.length)
+  ) {
     return {
       before: true,
     };

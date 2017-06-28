@@ -1,7 +1,6 @@
 import SourceMap from "./source-map";
 import * as messages from "babel-messages";
-import Printer from "./printer";
-import type { Format } from "./printer";
+import Printer, { type Format } from "./printer";
 
 /**
  * Babel's code generator, turns an ast into code, maintaining sourcemaps,
@@ -10,10 +9,9 @@ import type { Format } from "./printer";
 
 class Generator extends Printer {
   constructor(ast, opts = {}, code) {
-    const tokens = ast.tokens || [];
     const format = normalizeOptions(code, opts);
     const map = opts.sourceMaps ? new SourceMap(opts, code) : null;
-    super(format, map, tokens);
+    super(format, map);
 
     this.ast = ast;
   }

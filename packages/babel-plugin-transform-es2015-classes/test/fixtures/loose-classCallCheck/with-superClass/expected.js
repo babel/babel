@@ -11,6 +11,7 @@ let A = function (_B) {
     } else {
       var _this = _B.call(this) || this;
     }
+
     return _this;
   }
 
