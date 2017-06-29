@@ -2,6 +2,9 @@ MAKEFLAGS = -j1
 
 export NODE_ENV = test
 
+# Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
+export FORCE_COLOR = true
+
 .PHONY: make clean test test-only test-cov test-clean test-travis publish build bootstrap publish-core publish-runtime build-website build-core watch-core build-core-test clean-core prepublish
 
 clean: ; rm -rf ./build
