@@ -9,7 +9,11 @@ node_js:
 env:
   - JOB=test
 
+before_install:
+  - yarn global add greenkeeper-lockfile@1
+
 before_script:
+  - greenkeeper-lockfile-update
   - 'if [ "$JOB" = "babel-test" ]; then make bootstrap-babel ; fi'
   - 'if [ "$JOB" = "flow-test" ]; then make bootstrap-flow ; fi'
   - 'if [ "$JOB" = "test" ]; then yarn run build; fi'
@@ -35,6 +39,9 @@ matrix:
   allow_failures:
     - node_js: "lts/*"
       env: JOB=flow-test
+
+after_script:
+  - greenkeeper-lockfile-upload
 
 after_success:
   - 'if [ "$JOB" = "babel-test" ]; then bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json -F babel ; fi'
