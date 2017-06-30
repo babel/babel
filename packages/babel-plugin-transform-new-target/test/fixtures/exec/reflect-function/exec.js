@@ -6,7 +6,13 @@ function Foo() {
 function Bar() {
   Foo.call(this);
 }
-Bar.prototype = Object.create(Foo.prototype);
+Bar.prototype = Object.create(Foo.prototype, {
+  constructor: {
+    value: Bar,
+    writable: true,
+    configurable: true,
+  }
+});
 
 function Baz() {}
 
@@ -18,10 +24,7 @@ Reflect.construct(Foo, [], Baz);
 
 assert.equal(targets[0], Foo);
 
-assert.throws(() => {
-  // Wish we could support this...
-  assert.equal(targets[1], Bar);
-});
+assert.equal(targets[1], Bar);
 
 assert.throws(() => {
   // Wish we could support this...
