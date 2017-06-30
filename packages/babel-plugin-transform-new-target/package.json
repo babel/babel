@@ -11,6 +11,8 @@
   "dependencies": {
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-alpha.12"
+    "babel-helper-plugin-test-runner": "7.0.0-alpha.12",
+    "babel-plugin-transform-class-properties": "7.0.0-alpha.12",
+    "babel-plugin-transform-es2015-arrow-functions": "7.0.0-alpha.12"
   }
 }
