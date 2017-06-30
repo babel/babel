@@ -4,4 +4,8 @@ function Foo() {
 
 Foo.prototype.test = function() {
   new.target;
-}
+};
+
+var Bar = function() {
+  new.target;
+};
