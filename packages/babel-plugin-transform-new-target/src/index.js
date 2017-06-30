@@ -6,6 +6,8 @@ export default function({ types: t }) {
       MetaProperty(path) {
         const meta = path.get("meta");
         const property = path.get("property");
+        const { scope } = path;
+
         if (
           meta.isIdentifier({ name: "new" }) &&
           property.isIdentifier({ name: "target" })
@@ -13,10 +15,7 @@ export default function({ types: t }) {
           const func = path.findParent(path => {
             if (path.isClass()) return true;
             if (path.isFunction() && !path.isArrowFunctionExpression()) {
-              if (
-                path.isClassMethod() &&
-                path.get("key").isIdentifier({ name: "constructor" })
-              ) {
+              if (path.isClassMethod({ kind: "constructor" })) {
                 return false;
               }
 
@@ -31,19 +30,24 @@ export default function({ types: t }) {
             );
           }
 
-          const { id } = func.node;
-          if (!id) {
-            return;
+          const { node } = func;
+          if (!node.id) {
+            if (func.isMethod()) {
+              path.replaceWith(scope.buildUndefinedNode());
+              return;
+            }
+
+            node.id = scope.generateUidIdentifier("target");
           }
 
           path.replaceWith(
             t.conditionalExpression(
-              t.binaryExpression("instanceof", t.thisExpression(), id),
+              t.binaryExpression("instanceof", t.thisExpression(), node.id),
               t.memberExpression(
                 t.thisExpression(),
                 t.identifier("constructor"),
               ),
-              path.scope.buildUndefinedNode(),
+              scope.buildUndefinedNode(),
             ),
           );
         }
