@@ -18,7 +18,6 @@ Reflect.construct(Foo, [], Baz);
 
 assert.equal(targets[0], Foo);
 
-// Wish we could support this...
 assert.equal(targets[1], Bar);
 
 assert.equal(targets[2], Bar);

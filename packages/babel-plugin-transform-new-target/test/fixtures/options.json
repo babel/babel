@@ -1,3 +1,4 @@
 {
-  "plugins": ["transform-new-target"]
+  "plugins": ["transform-new-target"],
+  "minNodeVersion": "4.0.0"
 }
