@@ -11,7 +11,11 @@ export default function(node: Object) {
     if (binding.identifier.typeAnnotation) {
       return binding.identifier.typeAnnotation;
     } else {
-      return getTypeAnnotationBindingConstantViolations(binding, this, node.name);
+      return getTypeAnnotationBindingConstantViolations(
+        binding,
+        this,
+        node.name,
+      );
     }
   }
 

@@ -259,69 +259,93 @@ describe("inference", function() {
         "should be RegExp",
       );
     });
-    it("should infer constant identifier", function () {
+    it("should infer constant identifier", function() {
       const path = getPath("const x = 0; x").get("body.1.expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isNumberTypeAnnotation(type), "should be number");
     });
-    it("should infer indirect constant identifier", function () {
-      const path = getPath("const x = 0; const y = x; y").get("body.2.expression");
+    it("should infer indirect constant identifier", function() {
+      const path = getPath("const x = 0; const y = x; y").get(
+        "body.2.expression",
+      );
       const type = path.getTypeAnnotation();
       assert.ok(t.isNumberTypeAnnotation(type), "should be number");
     });
-    it("should infer identifier type from if statement (===)", function () {
-      const path = getPath(`function test(x) {
+    it("should infer identifier type from if statement (===)", function() {
+      const path = getPath(
+        `function test(x) {
         if (x === true) x;
-      }`).get("body.0.body.body.0.consequent.expression");
+      }`,
+      ).get("body.0.body.body.0.consequent.expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isBooleanTypeAnnotation(type), "should be boolean");
     });
-    it("should infer identifier type from if statement (typeof)", function () {
-      let path = getPath(`function test(x) {
+    it("should infer identifier type from if statement (typeof)", function() {
+      let path = getPath(
+        `function test(x) {
         if (typeof x == 'string') x;
-      }`).get("body.0.body.body.0.consequent.expression");
+      }`,
+      ).get("body.0.body.body.0.consequent.expression");
       let type = path.getTypeAnnotation();
       assert.ok(t.isStringTypeAnnotation(type), "should be string");
-      path = getPath(`function test(x) {
+      path = getPath(
+        `function test(x) {
         if (typeof x === 'number') x;
-      }`).get("body.0.body.body.0.consequent.expression");
+      }`,
+      ).get("body.0.body.body.0.consequent.expression");
       type = path.getTypeAnnotation();
       assert.ok(t.isNumberTypeAnnotation(type), "should be string");
     });
-    it("should infer identifier type from if statement (&&)", function () {
-      let path = getPath(`function test(x) {
+    it("should infer identifier type from if statement (&&)", function() {
+      let path = getPath(
+        `function test(x) {
         if (typeof x == 'string' && x === 3) x;
-      }`).get("body.0.body.body.0.consequent.expression");
+      }`,
+      ).get("body.0.body.body.0.consequent.expression");
       let type = path.getTypeAnnotation();
       assert.ok(t.isUnionTypeAnnotation(type), "should be a union");
-      assert.ok(t.isStringTypeAnnotation(type.types[0]), "first type in union should be string");
-      assert.ok(t.isNumberTypeAnnotation(type.types[1]), "second type in union should be number");
-      path = getPath(`function test(x) {
+      assert.ok(
+        t.isStringTypeAnnotation(type.types[0]),
+        "first type in union should be string",
+      );
+      assert.ok(
+        t.isNumberTypeAnnotation(type.types[1]),
+        "second type in union should be number",
+      );
+      path = getPath(
+        `function test(x) {
         if (true && x === 3) x;
-      }`).get("body.0.body.body.0.consequent.expression");
+      }`,
+      ).get("body.0.body.body.0.consequent.expression");
       type = path.getTypeAnnotation();
       assert.ok(t.isNumberTypeAnnotation(type), "should be number");
-      path = getPath(`function test(x) {
+      path = getPath(
+        `function test(x) {
         if (x === 'test' && true) x;
-      }`).get("body.0.body.body.0.consequent.expression");
+      }`,
+      ).get("body.0.body.body.0.consequent.expression");
       type = path.getTypeAnnotation();
       assert.ok(t.isStringTypeAnnotation(type), "should be string");
     });
-    it("should infer identifier type from if statement (||)", function () {
-      const path = getPath(`function test(x) {
+    it("should infer identifier type from if statement (||)", function() {
+      const path = getPath(
+        `function test(x) {
         if (typeof x == 'string' || x === 3) x;
-      }`).get("body.0.body.body.0.consequent.expression");
+      }`,
+      ).get("body.0.body.body.0.consequent.expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isAnyTypeAnnotation(type), "should be a any type");
     });
-    it("should not infer identifier type from incorrect binding", function () {
-      const path = getPath(`function outer(x) {
+    it("should not infer identifier type from incorrect binding", function() {
+      const path = getPath(
+        `function outer(x) {
         if (x === 3) {
           function inner(x) {
             x;
           }
         }
-      }`).get("body.0.body.body.0.consequent.body.0.body.body.0.expression");
+      }`,
+      ).get("body.0.body.body.0.consequent.body.0.body.body.0.expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isAnyTypeAnnotation(type), "should be a any type");
     });

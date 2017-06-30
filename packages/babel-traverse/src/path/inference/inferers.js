@@ -156,10 +156,9 @@ export function CallExpression() {
   } else if (isArrayFrom(callee) || isObjectValues(callee)) {
     return t.arrayTypeAnnotation(t.anyTypeAnnotation());
   } else if (isObjectEntries(callee)) {
-    return t.arrayTypeAnnotation(t.tupleTypeAnnotation([
-      t.stringTypeAnnotation(),
-      t.anyTypeAnnotation(),
-    ]));
+    return t.arrayTypeAnnotation(
+      t.tupleTypeAnnotation([t.stringTypeAnnotation(), t.anyTypeAnnotation()]),
+    );
   }
 
   return resolveCall(this.get("callee"));
