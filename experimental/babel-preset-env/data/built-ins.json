@@ -327,7 +327,6 @@
     "safari": "9",
     "node": "0.12",
     "ie": "11",
-    "android": "5",
     "ios": "9",
     "opera": "21",
     "electron": "0.2"
@@ -522,7 +521,6 @@
     "firefox": "28",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -543,7 +541,6 @@
     "firefox": "16",
     "safari": "9",
     "node": "0.12",
-    "android": "5",
     "ios": "9",
     "opera": "21",
     "electron": "0.2"
@@ -554,7 +551,6 @@
     "firefox": "32",
     "safari": "9",
     "node": "0.12",
-    "android": "5",
     "ios": "9",
     "opera": "21",
     "electron": "0.2"
@@ -575,7 +571,6 @@
     "firefox": "25",
     "safari": "9",
     "node": "0.12",
-    "android": "5",
     "ios": "9",
     "opera": "21",
     "electron": "0.2"
@@ -586,7 +581,6 @@
     "firefox": "31",
     "safari": "9",
     "node": "0.12",
-    "android": "5",
     "ios": "9",
     "opera": "21",
     "electron": "0.2"
@@ -597,7 +591,6 @@
     "firefox": "31",
     "safari": "9",
     "node": "0.12",
-    "android": "5",
     "ios": "9",
     "opera": "21",
     "electron": "0.2"
@@ -608,7 +601,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -619,7 +611,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -630,7 +621,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -641,7 +631,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -652,7 +641,6 @@
     "firefox": "31",
     "safari": "9",
     "node": "0.12",
-    "android": "5.1",
     "ios": "9",
     "opera": "25",
     "electron": "0.2"
@@ -663,7 +651,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -674,7 +661,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -685,7 +671,6 @@
     "firefox": "26",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -696,7 +681,6 @@
     "firefox": "27",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -707,7 +691,6 @@
     "firefox": "23",
     "safari": "7",
     "node": "0.12",
-    "android": "4.4",
     "ios": "7",
     "opera": "17",
     "electron": "0.2"
@@ -718,7 +701,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -729,7 +711,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -740,7 +721,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -751,7 +731,6 @@
     "firefox": "25",
     "safari": "9",
     "node": "0.12",
-    "android": "5.1",
     "ios": "9",
     "opera": "25",
     "electron": "0.2"
@@ -762,7 +741,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -773,7 +751,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -784,7 +761,6 @@
     "firefox": "25",
     "safari": "7.1",
     "node": "0.12",
-    "android": "5.1",
     "ios": "8",
     "opera": "25",
     "electron": "0.2"
@@ -834,6 +810,7 @@
     "edge": "15",
     "firefox": "48",
     "safari": "10",
+    "node": "8",
     "ios": "10",
     "opera": "44",
     "electron": "1.7"
@@ -843,6 +820,7 @@
     "edge": "15",
     "firefox": "48",
     "safari": "10",
+    "node": "8",
     "ios": "10",
     "opera": "44",
     "electron": "1.7"
