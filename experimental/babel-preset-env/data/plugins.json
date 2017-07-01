@@ -175,7 +175,6 @@
     "firefox": "36",
     "safari": "9",
     "node": "0.12",
-    "android": "5.1",
     "ios": "9",
     "opera": "25",
     "electron": "0.2"
@@ -225,6 +224,7 @@
     "edge": "14",
     "firefox": "52",
     "safari": "10",
+    "node": "8",
     "ios": "10",
     "opera": "45",
     "electron": "1.7"

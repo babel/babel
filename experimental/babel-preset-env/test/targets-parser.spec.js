@@ -32,7 +32,7 @@ describe("getTargets", () => {
         }),
         {
           chrome: "49.0.0",
-          firefox: "51.0.0",
+          firefox: "55.0.0",
           ie: "9.0.0",
           safari: "9.0.0",
         },
