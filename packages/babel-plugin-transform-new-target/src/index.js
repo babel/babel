@@ -40,13 +40,20 @@ export default function({ types: t }) {
             node.id = scope.generateUidIdentifier("target");
           }
 
+          const constructor = t.memberExpression(
+            t.thisExpression(),
+            t.identifier("constructor"),
+          );
+
+          if (func.isClass()) {
+            path.replaceWith(constructor);
+            return;
+          }
+
           path.replaceWith(
             t.conditionalExpression(
               t.binaryExpression("instanceof", t.thisExpression(), node.id),
-              t.memberExpression(
-                t.thisExpression(),
-                t.identifier("constructor"),
-              ),
+              constructor,
               scope.buildUndefinedNode(),
             ),
           );

@@ -22,12 +22,6 @@ assert.equal(targets[1], Bar);
 
 assert.equal(targets[2], Bar);
 
-assert.throws(() => {
-  // Wish we could support this...
-  assert.equal(targets[3], Baz);
-});
+assert.equal(targets[3], Baz);
 
-assert.throws(() => {
-  // Wish we could support this...
-  assert.equal(targets[4], Baz);
-});
+assert.equal(targets[4], Baz);

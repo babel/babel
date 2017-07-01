@@ -10,13 +10,8 @@ function Foo() {
   console.log(new.target);
 }
 
-function Bar() {
-  Foo.call(this);
-}
-
 Foo(); // => undefined
 new Foo(); // => Foo
-new Bar(); // => undefined
 ```
 
 ```js
@@ -35,25 +30,44 @@ new Bar(); // => Bar
 
 ### Caveats
 
-This plugin cannot transform all `Reflect.construct` cases when using
-`newTarget`.
+This plugin relies on `this.constructor`, which means `super` must
+already have been called when using untransformed classes.
 
 ```js
-class Foo {
-  constructor() {
-    console.log(new.target);
-  }
-}
+class Foo {}
 
 class Bar extends Foo {
+  constructor() {
+    // This will be a problem if classes aren't transformed to ES5
+    new.target;
+    super();
+  }
+}
+```
+
+Additionally, this plugin cannot transform all `Reflect.construct` cases
+when using `newTarget` with ES5 function classes (transformed ES6 classes).
+
+```js
+function Foo() {
+  console.log(new.target);
 }
 
-class Baz {
+// Bar extends Foo in ES5
+function Bar() {
+  Foo.call(this);
 }
+Bar.prototype = Object.create(Foo.prototype);
+Bar.prototype.constructor = Bar;
+
+// Baz does not extend Foo
+function Baz() {}
 
 Reflect.construct(Foo, []); // => Foo (correct)
-Reflect.construct(Bar, []); // => Bar (correct)
 Reflect.construct(Foo, [], Bar); // => Bar (correct)
+
+Reflect.construct(Bar, []); // => Bar (incorrect, though this is how ES5
+                            // inheritience is commonly implemented.)
 Reflect.construct(Foo, [], Baz); // => undefined (incorrect)
 ```
 

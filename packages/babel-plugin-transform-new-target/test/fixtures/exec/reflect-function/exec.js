@@ -28,6 +28,7 @@ assert.equal(targets[1], Bar);
 
 assert.throws(() => {
   // Wish we could support this...
+  // Then again, this is what a transformed class does.
   assert.equal(targets[2], undefined);
 });
 

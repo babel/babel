@@ -1,6 +1,6 @@
 class Foo {
   constructor() {
-    this instanceof Foo ? this.constructor : void 0;
+    this.constructor;
   }
 
   test() {

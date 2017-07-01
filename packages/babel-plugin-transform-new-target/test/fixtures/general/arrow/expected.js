@@ -8,7 +8,7 @@ function Foo() {
 
 class Bar {
   constructor() {
-    var _newtarget2 = this instanceof Bar ? this.constructor : void 0;
+    var _newtarget2 = this.constructor;
 
     const a = function () {
       _newtarget2;
