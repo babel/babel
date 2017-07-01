@@ -65,7 +65,7 @@
     "babel-plugin-transform-flow-strip-types": "7.0.0-alpha.12",
     "babel-preset-env": "2.0.0-alpha.1",
     "babel-register": "7.0.0-alpha.12",
-    "chai": "^3.5.0",
+    "chai": "^4.0.2",
     "codecov": "^2.2.0",
     "compat-table": "kangax/compat-table#d88c80ea6dcbc7064112eb46bb020718107892f7",
     "eslint": "^3.17.1",
