@@ -106,6 +106,7 @@
                 },
                 "name": "x"
               },
+              "static": false,
               "value": null
             },
             {

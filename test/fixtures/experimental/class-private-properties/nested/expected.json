@@ -106,6 +106,7 @@
                 },
                 "name": "x"
               },
+              "static": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 23,
@@ -158,6 +159,7 @@
                 },
                 "name": "y"
               },
+              "static": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 35,
@@ -677,6 +679,7 @@
                                 },
                                 "name": "x"
                               },
+                              "static": false,
                               "value": {
                                 "type": "NumericLiteral",
                                 "start": 151,
@@ -729,6 +732,7 @@
                                 },
                                 "name": "y"
                               },
+                              "static": false,
                               "value": {
                                 "type": "NumericLiteral",
                                 "start": 171,

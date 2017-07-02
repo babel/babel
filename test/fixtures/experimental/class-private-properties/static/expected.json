@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 23,
+  "end": 41,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 23,
+    "end": 41,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "ClassDeclaration",
         "start": 0,
-        "end": 23,
+        "end": 41,
         "loc": {
           "start": {
             "line": 1,
@@ -45,7 +45,7 @@
         "id": {
           "type": "Identifier",
           "start": 6,
-          "end": 9,
+          "end": 7,
           "loc": {
             "start": {
               "line": 1,
@@ -53,21 +53,21 @@
             },
             "end": {
               "line": 1,
-              "column": 9
+              "column": 7
             },
-            "identifierName": "Foo"
+            "identifierName": "A"
           },
-          "name": "Foo"
+          "name": "A"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 10,
-          "end": 23,
+          "start": 8,
+          "end": 41,
           "loc": {
             "start": {
               "line": 1,
-              "column": 10
+              "column": 8
             },
             "end": {
               "line": 4,
@@ -77,8 +77,8 @@
           "body": [
             {
               "type": "ClassPrivateProperty",
-              "start": 14,
-              "end": 16,
+              "start": 12,
+              "end": 22,
               "loc": {
                 "start": {
                   "line": 2,
@@ -86,41 +86,7 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 4
-                }
-              },
-              "key": {
-                "type": "Identifier",
-                "start": 15,
-                "end": 16,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 3
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 4
-                  },
-                  "identifierName": "x"
-                },
-                "name": "x"
-              },
-              "static": false,
-              "value": null
-            },
-            {
-              "type": "ClassPrivateProperty",
-              "start": 19,
-              "end": 21,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 2
-                },
-                "end": {
-                  "line": 3,
-                  "column": 4
+                  "column": 12
                 }
               },
               "key": {
@@ -129,19 +95,72 @@
                 "end": 21,
                 "loc": {
                   "start": {
+                    "line": 2,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 11
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              },
+              "static": true,
+              "value": null
+            },
+            {
+              "type": "ClassPrivateProperty",
+              "start": 25,
+              "end": 39,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 2
+                },
+                "end": {
+                  "line": 3,
+                  "column": 16
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 33,
+                "end": 34,
+                "loc": {
+                  "start": {
                     "line": 3,
-                    "column": 3
+                    "column": 10
                   },
                   "end": {
                     "line": 3,
-                    "column": 4
+                    "column": 11
                   },
                   "identifierName": "y"
                 },
                 "name": "y"
               },
-              "static": false,
-              "value": null
+              "static": true,
+              "value": {
+                "type": "NumericLiteral",
+                "start": 37,
+                "end": 38,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 15
+                  }
+                },
+                "extra": {
+                  "rawValue": 1,
+                  "raw": "1"
+                },
+                "value": 1
+              }
             }
           ]
         }

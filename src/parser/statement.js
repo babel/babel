@@ -922,15 +922,6 @@ export default class StatementParser extends ExpressionParser {
     const method: N.ClassMethod = memberAny;
     const prop: N.ClassProperty = memberAny;
 
-    if (this.hasPlugin("classPrivateProperties") && this.match(tt.hash)) {
-      // Private property
-      this.next();
-      const privateProp: N.ClassPrivateProperty = memberAny;
-      privateProp.key = this.parseIdentifier(true);
-      classBody.body.push(this.parsePrivateClassProperty(privateProp));
-      return;
-    }
-
     let isStatic = false;
     if (this.match(tt.name) && this.state.value === "static") {
       const key = this.parseIdentifier(true); // eats 'static'
@@ -958,6 +949,16 @@ export default class StatementParser extends ExpressionParser {
       }
       // otherwise something static
       isStatic = true;
+    }
+
+    if (this.hasPlugin("classPrivateProperties") && this.match(tt.hash)) {
+      // Private property
+      this.next();
+      const privateProp: N.ClassPrivateProperty = memberAny;
+      privateProp.key = this.parseIdentifier(true);
+      privateProp.static = isStatic;
+      classBody.body.push(this.parsePrivateClassProperty(privateProp));
+      return;
     }
 
     this.parseClassMemberWithIsStatic(classBody, member, state, isStatic);

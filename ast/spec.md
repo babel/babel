@@ -1056,6 +1056,7 @@ interface ClassProperty <: Node {
   type: "ClassProperty";
   key: Expression;
   value: Expression;
+  static: boolean;
   computed: boolean;
 }
 ```
@@ -1067,6 +1068,7 @@ interface ClassPrivateProperty <: Node {
   type: "ClassPrivateProperty";
   key: Identifier;
   value: Expression;
+  static: boolean;
 }
 ```
 
