@@ -680,6 +680,7 @@ export type ClassPrivateProperty = NodeBase & {
   type: "ClassPrivateProperty",
   key: Identifier,
   value: ?Expression, // TODO: Not in spec that this is nullable.
+  static: boolean,
 };
 
 export type OptClassDeclaration = ClassBase &
