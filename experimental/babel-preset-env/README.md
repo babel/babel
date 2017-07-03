@@ -124,13 +124,15 @@ Note, browsers' results are overridden by explicit items from `targets`.
 
 ### `targets.uglify`
 
-`number | true`
+`true`
 
-UglifyJS does not currently support any ES6 syntax, so if you are using Uglify to minify your code, targeting later browsers may cause Uglify to throw syntax errors.
+When using `uglify-js` to minify your code, you may run into syntax errors when targeting later browsers since `uglify-js` does not support any ES2015+ syntax.
 
-To prevent these errors - specify the uglify option, which will enable all plugins and, as a result, fully compile your code to ES5. However, the `useBuiltIns` option will still work as before, and only include the polyfills that your target(s) need.
+To prevent these errors - set the `uglify` option to `true`, which enables all transformation plugins and as a result, your code is fully compiled to ES5. However, the `useBuiltIns` option will still work as before and only include the polyfills that your target(s) need.
 
-> NOTE: Uglify has a work-in-progress "Harmony" branch to address the lack of ES6 support, but it is not yet stable.  You can follow its progress in [UglifyJS2 issue #448](https://github.com/mishoo/UglifyJS2/issues/448).  If you require an alternative minifier which _does_ support ES6 syntax, we recommend using [Babili](https://github.com/babel/babili).
+> Uglify has support for ES2015 syntax via [uglify-es](https://github.com/mishoo/UglifyJS2/tree/harmony). If you are using syntax unsupported by `uglify-es`, we recommend using [Babili](https://github.com/babel/babili).
+
+> Note: This option is deprecated in 2.x and replaced with a [`forceAllTransforms` option](https://github.com/babel/babel-preset-env/pull/264).
 
 ### `spec`
 
