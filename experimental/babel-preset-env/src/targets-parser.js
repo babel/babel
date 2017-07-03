@@ -5,6 +5,7 @@ import { semverify } from "./utils";
 const browserNameMap = {
   android: "android",
   chrome: "chrome",
+  and_chr: "chrome",
   edge: "edge",
   firefox: "firefox",
   ie: "ie",
