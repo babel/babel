@@ -615,6 +615,13 @@ export default class Scope {
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {
       return this.isPure(node.argument, constantsOnly);
+    } else if (t.isTemplateLiteral(node)) {
+      return (
+        !t.isTaggedTemplateExpression(node.parent) &&
+        node.expressions.every(expression =>
+          this.isPure(expression, constantsOnly),
+        )
+      );
     } else {
       return t.isPureish(node);
     }
