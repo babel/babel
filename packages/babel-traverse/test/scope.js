@@ -77,17 +77,21 @@ describe("scope", function() {
       assert.ok(
         getPath("({ x: 1 })").get("body")[0].get("expression").isPure(),
       );
+      assert.ok(!getPath("`${a}`").get("body")[0].get("expression").isPure());
       assert.ok(
-        getPath("let a = 1; `${({ x: a })}`")
+        getPath("let a = 1; `${a}`").get("body")[1].get("expression").isPure(),
+      );
+      assert.ok(
+        !getPath("let a = 1; `${a++}`")
           .get("body")[1]
           .get("expression")
           .isPure(),
       );
       assert.ok(
-        !getPath("let a = 2; `${a++}`")
-          .get("body")[1]
-          .get("expression")
-          .isPure(),
+        !getPath("tagged`foo`").get("body")[0].get("expression").isPure(),
+      );
+      assert.ok(
+        getPath("String.raw`foo`").get("body")[0].get("expression").isPure(),
       );
     });
 

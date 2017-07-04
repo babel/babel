@@ -615,13 +615,26 @@ export default class Scope {
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {
       return this.isPure(node.argument, constantsOnly);
+    } else if (t.isTaggedTemplateExpression(node)) {
+      if (t.isMemberExpression(node.tag)) {
+        const { object, property } = node.tag;
+        const { name } = object;
+        if (
+          t.isIdentifier(object) &&
+          name === "String" &&
+          !this.getBinding(name, true) &&
+          t.isIdentifier(property) &&
+          property.name === "raw"
+        ) {
+          return this.isPure(node.quasi, constantsOnly);
+        }
+      }
+      return false;
     } else if (t.isTemplateLiteral(node)) {
-      return (
-        !t.isTaggedTemplateExpression(node.parent) &&
-        node.expressions.every(expression =>
-          this.isPure(expression, constantsOnly),
-        )
-      );
+      for (const expression of (node.expressions: Array<Object>)) {
+        if (!this.isPure(expression, constantsOnly)) return false;
+      }
+      return true;
     } else {
       return t.isPureish(node);
     }
