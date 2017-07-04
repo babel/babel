@@ -1252,6 +1252,7 @@ compat-table@kangax/compat-table#d88c80ea6dcbc7064112eb46bb020718107892f7:
     babel-preset-stage-0 latest
     chalk "^1.1.3"
     cheerio "^0.20.0"
+    closurecompiler latest
     core-js latest
     es5-shim latest
     es6-shim latest
@@ -1260,7 +1261,6 @@ compat-table@kangax/compat-table#d88c80ea6dcbc7064112eb46bb020718107892f7:
     esdown latest
     espree latest
     esprima latest
-    google-closure-compiler-js "^20170521.0.0"
     jshint latest
     jstransform latest
     lodash.pickby "^4.6.0"
@@ -1861,7 +1861,7 @@ form-data@~2.1.1:
     combined-stream "^1.0.5"
     mime-types "^2.1.12"
 
-fs-extra@^2.0.0:
+fs-extra@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-2.0.0.tgz#337352bded4a0b714f3eb84de8cea765e9d37600"
   dependencies:
