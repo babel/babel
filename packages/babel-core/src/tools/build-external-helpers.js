@@ -4,6 +4,8 @@ import * as messages from "babel-messages";
 import template from "babel-template";
 import * as t from "babel-types";
 
+const keywordHelpers = ["typeof", "extends", "instanceof"];
+
 const buildUmdWrapper = template(`
   (function (root, factory) {
     if (typeof define === "function" && define.amd) {
@@ -47,6 +49,44 @@ function buildGlobal(namespace, builder) {
   builder(body);
 
   return tree;
+}
+
+function buildModule(namespace, builder) {
+  const body = [];
+  builder(body);
+
+  const module = body
+    .map(helper => {
+      const originalIdentifier = helper.expression.left.property.name;
+      const isKeywordHelper = keywordHelpers.indexOf(originalIdentifier) !== -1;
+      const helperIndentifier = isKeywordHelper
+        ? `_${originalIdentifier}`
+        : originalIdentifier;
+
+      const variableDeclaration = t.variableDeclaration("var", [
+        t.variableDeclarator(
+          t.identifier(helperIndentifier),
+          helper.expression.right,
+        ),
+      ]);
+
+      return isKeywordHelper
+        ? variableDeclaration
+        : t.exportNamedDeclaration(variableDeclaration, []);
+    })
+    .concat(
+      t.exportNamedDeclaration(
+        null,
+        keywordHelpers.map(keywordHelper =>
+          t.exportSpecifier(
+            t.identifier(`_${keywordHelper}`),
+            t.identifier(keywordHelper),
+          ),
+        ),
+      ),
+    );
+
+  return t.program(module);
 }
 
 function buildUmd(namespace, builder) {
@@ -105,7 +145,7 @@ function buildHelpers(body, namespace, whitelist) {
 }
 export default function(
   whitelist?: Array<string>,
-  outputType: "global" | "umd" | "var" = "global",
+  outputType: "global" | "module" | "umd" | "var" = "global",
 ) {
   const namespace = t.identifier("babelHelpers");
 
@@ -117,6 +157,7 @@ export default function(
 
   const build = {
     global: buildGlobal,
+    module: buildModule,
     umd: buildUmd,
     var: buildVar,
   }[outputType];
