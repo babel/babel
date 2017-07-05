@@ -192,7 +192,7 @@ export default function({ types: t }) {
 
         const p0 = node.params[0];
         if (p0 && t.isIdentifier(p0) && p0.name === "this") {
-          node.params = node.params.slice(1);
+          node.params.shift();
         }
       },
 
