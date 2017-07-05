@@ -50,9 +50,6 @@ export default function({ types: t }) {
       Program(path, state: State) {
         state.sourceFileHasJsx = false;
         path.traverse({
-          JSXOpeningElement() {
-            state.sourceFileHasJsx = true;
-          },
           JSXElement() {
             state.sourceFileHasJsx = true;
           },
