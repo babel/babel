@@ -125,10 +125,10 @@ export default function({ types: t }) {
             );
           }
 
-          const _this = t.thisExpression();
-          const l = t.memberExpression(_this, t.identifier(name));
-          const ass = t.assignmentExpression("=", l, t.identifier(name));
-          return t.expressionStatement(ass);
+          const id = t.identifier(name);
+          const thisDotName = t.memberExpression(t.thisExpression(), id);
+          const assign = t.assignmentExpression("=", thisDotName, id);
+          return t.expressionStatement(assign);
         });
 
         const statements = node.body.body;
