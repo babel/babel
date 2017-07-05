@@ -178,7 +178,7 @@ export default class OptionManager {
     }
 
     // resolve all .babelrc files
-    if (opts.babelrc !== false) {
+    if (opts.babelrc && opts.babelrc.length) {
       this.findConfigs(opts.filename);
     }
 
