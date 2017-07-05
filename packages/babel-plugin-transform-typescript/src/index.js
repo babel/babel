@@ -200,6 +200,10 @@ export default function({ types: t }) {
         throw path.buildCodeFrameError("`import =` is not supported.");
       },
 
+      TSExportAssignment(path) {
+        throw path.buildCodeFrameError("`export =` is not supported.");
+      },
+
       TSTypeAssertion(path) {
         path.replaceWith(path.node.expression);
       },
@@ -218,16 +222,6 @@ export default function({ types: t }) {
 
       NewExpression(path) {
         path.node.typeParameters = null;
-      },
-
-      TSExportAssignment(path) {
-        const moduleExports = t.memberExpression(
-          t.identifier("module"),
-          t.identifier("exports"),
-        );
-        path.replaceWith(
-          t.assignmentExpression("=", moduleExports, path.node.expression),
-        );
       },
     },
   };
