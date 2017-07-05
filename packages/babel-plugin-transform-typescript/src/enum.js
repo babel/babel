@@ -15,7 +15,7 @@ export default function transpileEnum(path, t) {
   switch (path.parent.type) {
     case "BlockStatement":
     case "Program": {
-      const isGlobal = path.parent.type === "Program"; // && !path.parent.body.some(t.isModuleDeclaration);
+      const isGlobal = t.isProgram(path.parent); // && !path.parent.body.some(t.isModuleDeclaration);
       if (seen(path.parentPath)) {
         path.replaceWith(fill);
       } else {
@@ -97,16 +97,12 @@ function enumFill(path, t, id) {
  */
 type PreviousEnumMembers = { [name: string]: number | typeof undefined };
 
-function getName(memberName) {
-  return memberName.type === "Identifier" ? memberName.name : memberName.value;
-}
-
 function translateEnumValues(path, t) {
   const seen: PreviousEnumMembers = Object.create(null);
   // Start at -1 so the first enum member is its increment, 0.
   let prev: number | typeof undefined = -1;
   return path.node.members.map(member => {
-    const name = getName(member.id);
+    const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
     const initializer = member.initializer;
     let value: Expression;
     if (initializer) {

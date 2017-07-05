@@ -2,12 +2,6 @@ import syntaxTypeScript from "babel-plugin-syntax-typescript";
 
 import transpileEnum from "./enum";
 
-function visitPattern({ node }) {
-  if (node.typeAnnotation) node.typeAnnotation = null;
-  if (node.type === "Identifier" && node.optional) node.optional = null;
-  // 'access' and 'readonly' are only for parameter properties, so constructor visitor will handle them.
-}
-
 function isInType(path) {
   switch (path.parent.type) {
     case "TSTypeReference":
@@ -121,12 +115,9 @@ export default function({ types: t }) {
 
         const assigns = parameterProperties.map(p => {
           let name;
-          if (p.type === "Identifier") {
+          if (t.isIdentifier(p)) {
             name = p.name;
-          } else if (
-            p.type === "AssignmentPattern" &&
-            p.left.type === "Identifier"
-          ) {
+          } else if (t.isAssignmentPattern(p) && t.isIdentifier(p.left)) {
             name = p.left.name;
           } else {
             throw path.buildCodeFrameError(
@@ -151,9 +142,9 @@ export default function({ types: t }) {
         function isSuperCall(x: Statement | typeof undefined): boolean {
           return (
             x !== undefined &&
-            x.type === "ExpressionStatement" &&
-            x.expression.type === "CallExpression" &&
-            x.expression.callee.type === "Super"
+            t.isExpressionStatement(x) &&
+            t.isCallExpression(x.expression) &&
+            t.isSuper(x.expression.callee)
           );
         }
 
@@ -201,7 +192,7 @@ export default function({ types: t }) {
         if (node.returnType) node.returnType = null;
 
         const p0 = node.params[0];
-        if (p0 && p0.type === "Identifier" && p0.name === "this") {
+        if (p0 && t.isIdentifier(p0) && p0.name === "this") {
           node.params = node.params.slice(1);
         }
       },
@@ -260,4 +251,10 @@ export default function({ types: t }) {
       },
     },
   };
+
+  function visitPattern({ node }) {
+    if (node.typeAnnotation) node.typeAnnotation = null;
+    if (t.isIdentifier(node) && node.optional) node.optional = null;
+    // 'access' and 'readonly' are only for parameter properties, so constructor visitor will handle them.
+  }
 }
