@@ -132,21 +132,20 @@ export default function({ types: t }) {
         });
 
         const statements = node.body.body;
+
+        const first = statements[0];
+        const startsWithSuperCall =
+          first !== undefined &&
+          t.isExpressionStatement(first) &&
+          t.isCallExpression(first.expression) &&
+          t.isSuper(first.expression.callee);
+
         // Make sure to put parameter properties *after* the `super` call.
         // TypeScript will enforce that a 'super()' call is the first statement
         // when there are parameter properties.
-        node.body.body = isSuperCall(statements[0])
-          ? [statements[0], ...assigns, ...statements.slice(1)]
+        node.body.body = startsWithSuperCall
+          ? [first, ...assigns, ...statements.slice(1)]
           : [...assigns, ...statements];
-
-        function isSuperCall(x: Statement | typeof undefined): boolean {
-          return (
-            x !== undefined &&
-            t.isExpressionStatement(x) &&
-            t.isCallExpression(x.expression) &&
-            t.isSuper(x.expression.callee)
-          );
-        }
 
         // Rest handled by Function visitor
       },
