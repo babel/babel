@@ -14,22 +14,8 @@ function isInType(path) {
   }
 }
 
-function isImportTypeOnly(binding, sourceFileHasJsx) {
-  for (const path of binding.referencePaths) {
-    if (!isInType(path)) {
-      return false;
-    }
-  }
-
-  if (binding.identifier.name != "React") {
-    return true;
-  }
-
-  return !sourceFileHasJsx;
-}
-
 interface State {
-  sourceFileHasJsx: boolean,
+  programPath: any,
 }
 
 export default function({ types: t }) {
@@ -42,12 +28,7 @@ export default function({ types: t }) {
       RestElement: visitPattern,
 
       Program(path, state: State) {
-        state.sourceFileHasJsx = false;
-        path.traverse({
-          JSXElement() {
-            state.sourceFileHasJsx = true;
-          },
-        });
+        state.programPath = path;
       },
 
       ImportDeclaration(path, state: State) {
@@ -62,7 +43,7 @@ export default function({ types: t }) {
 
         for (const specifier of path.node.specifiers) {
           const binding = path.scope.getBinding(specifier.local.name);
-          if (isImportTypeOnly(binding, state.sourceFileHasJsx)) {
+          if (isImportTypeOnly(binding, state.programPath)) {
             importsToRemove.push(binding.path);
           } else {
             allElided = false;
@@ -255,5 +236,26 @@ export default function({ types: t }) {
     if (node.typeAnnotation) node.typeAnnotation = null;
     if (t.isIdentifier(node) && node.optional) node.optional = null;
     // 'access' and 'readonly' are only for parameter properties, so constructor visitor will handle them.
+  }
+
+  function isImportTypeOnly(binding, programPath) {
+    for (const path of binding.referencePaths) {
+      if (!isInType(path)) {
+        return false;
+      }
+    }
+
+    if (binding.identifier.name != "React") {
+      return true;
+    }
+
+    // "React" is referenced as a value if there are any JSX elements in the code.
+    let sourceFileHasJsx = false;
+    programPath.traverse({
+      JSXElement() {
+        sourceFileHasJsx = true;
+      },
+    });
+    return !sourceFileHasJsx;
   }
 }
