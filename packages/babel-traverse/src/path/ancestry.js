@@ -33,7 +33,11 @@ export function find(callback): ?NodePath {
  */
 
 export function getFunctionParent(): ?NodePath {
-  return this.findParent(path => path.isFunction() || path.isProgram());
+  const parent = this.findParent(path => path.isFunction() || path.isProgram());
+  if (parent.isProgram()) {
+    console.log("From Babel 7, getFunctionParent only returns Function parent");
+  }
+  return parent.isFunction() ? parent : null;
 }
 
 /**
