@@ -99,7 +99,7 @@ function plainFunction(path: NodePath, callId: Object) {
         t.callExpression(container, []),
       ),
     ]);
-    declar._blockHoist = true;
+    (declar: any)._blockHoist = true;
 
     if (path.parentPath.isExportDefaultDeclaration()) {
       // change the path type so that replaceWith() does not wrap
