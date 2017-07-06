@@ -1969,6 +1969,183 @@ Aliases: `Expression`, `Terminatorless`
 
 ---
 
+## Aliases
+
+### Expression
+`ArrayExpression`, `AssignmentExpression`, `BinaryExpression`, `CallExpression`, `ConditionalExpression`, `FunctionExpression`, `Identifier`, `StringLiteral`, `NumericLiteral`, `NullLiteral`, `BooleanLiteral`, `RegExpLiteral`, `LogicalExpression`, `MemberExpression`, `NewExpression`, `ObjectExpression`, `SequenceExpression`, `ThisExpression`, `UnaryExpression`, `UpdateExpression`, `ArrowFunctionExpression`, `ClassExpression`, `MetaProperty`, `Super`, `TaggedTemplateExpression`, `TemplateLiteral`, `YieldExpression`, `TypeCastExpression`, `JSXElement`, `JSXEmptyExpression`, `JSXIdentifier`, `JSXMemberExpression`, `ParenthesizedExpression`, `AwaitExpression`, `BindExpression`, `Import`, `DoExpression`
+
+---
+
+### Binary
+`BinaryExpression`, `LogicalExpression`
+
+---
+
+### Scopable
+`BlockStatement`, `CatchClause`, `DoWhileStatement`, `ForInStatement`, `ForStatement`, `FunctionDeclaration`, `FunctionExpression`, `Program`, `ObjectMethod`, `SwitchStatement`, `WhileStatement`, `ArrowFunctionExpression`, `ClassDeclaration`, `ClassExpression`, `ForOfStatement`, `ClassMethod`
+
+---
+
+### BlockParent
+`BlockStatement`, `DoWhileStatement`, `ForInStatement`, `ForStatement`, `FunctionDeclaration`, `FunctionExpression`, `Program`, `ObjectMethod`, `SwitchStatement`, `WhileStatement`, `ArrowFunctionExpression`, `ForOfStatement`, `ClassMethod`
+
+---
+
+### Block
+`BlockStatement`, `Program`
+
+---
+
+### Statement
+`BlockStatement`, `BreakStatement`, `ContinueStatement`, `DebuggerStatement`, `DoWhileStatement`, `EmptyStatement`, `ExpressionStatement`, `ForInStatement`, `ForStatement`, `FunctionDeclaration`, `IfStatement`, `LabeledStatement`, `ReturnStatement`, `SwitchStatement`, `ThrowStatement`, `TryStatement`, `VariableDeclaration`, `WhileStatement`, `WithStatement`, `ClassDeclaration`, `ExportAllDeclaration`, `ExportDefaultDeclaration`, `ExportNamedDeclaration`, `ForOfStatement`, `ImportDeclaration`, `DeclareClass`, `DeclareFunction`, `DeclareInterface`, `DeclareModule`, `DeclareModuleExports`, `DeclareTypeAlias`, `DeclareVariable`, `DeclareExportDeclaration`, `DeclareExportAllDeclaration`, `InterfaceDeclaration`, `TypeAlias`
+
+---
+
+### Terminatorless
+`BreakStatement`, `ContinueStatement`, `ReturnStatement`, `ThrowStatement`, `YieldExpression`, `AwaitExpression`
+
+---
+
+### CompletionStatement
+`BreakStatement`, `ContinueStatement`, `ReturnStatement`, `ThrowStatement`
+
+---
+
+### Conditional
+`ConditionalExpression`, `IfStatement`
+
+---
+
+### Loop
+`DoWhileStatement`, `ForInStatement`, `ForStatement`, `WhileStatement`, `ForOfStatement`
+
+---
+
+### While
+`DoWhileStatement`, `WhileStatement`
+
+---
+
+### ExpressionWrapper
+`ExpressionStatement`, `TypeCastExpression`, `ParenthesizedExpression`
+
+---
+
+### For
+`ForInStatement`, `ForStatement`, `ForOfStatement`
+
+---
+
+### ForXStatement
+`ForInStatement`, `ForOfStatement`
+
+---
+
+### Function
+`FunctionDeclaration`, `FunctionExpression`, `ObjectMethod`, `ArrowFunctionExpression`, `ClassMethod`
+
+---
+
+### FunctionParent
+`FunctionDeclaration`, `FunctionExpression`, `Program`, `ObjectMethod`, `ArrowFunctionExpression`, `ClassMethod`
+
+---
+
+### Pureish
+`FunctionDeclaration`, `FunctionExpression`, `StringLiteral`, `NumericLiteral`, `NullLiteral`, `BooleanLiteral`, `ArrowFunctionExpression`, `ClassDeclaration`, `ClassExpression`
+
+---
+
+### Declaration
+`FunctionDeclaration`, `VariableDeclaration`, `ClassDeclaration`, `ExportAllDeclaration`, `ExportDefaultDeclaration`, `ExportNamedDeclaration`, `ImportDeclaration`, `DeclareClass`, `DeclareFunction`, `DeclareInterface`, `DeclareModule`, `DeclareModuleExports`, `DeclareTypeAlias`, `DeclareVariable`, `DeclareExportDeclaration`, `DeclareExportAllDeclaration`, `InterfaceDeclaration`, `TypeAlias`
+
+---
+
+### LVal
+`Identifier`, `MemberExpression`, `RestElement`, `AssignmentPattern`, `ArrayPattern`, `ObjectPattern`
+
+---
+
+### Literal
+`StringLiteral`, `NumericLiteral`, `NullLiteral`, `BooleanLiteral`, `RegExpLiteral`, `TemplateLiteral`
+
+---
+
+### Immutable
+`StringLiteral`, `NumericLiteral`, `NullLiteral`, `BooleanLiteral`, `JSXAttribute`, `JSXClosingElement`, `JSXElement`, `JSXExpressionContainer`, `JSXSpreadChild`, `JSXOpeningElement`, `JSXText`
+
+---
+
+### UserWhitespacable
+`ObjectMethod`, `ObjectProperty`, `ObjectTypeCallProperty`, `ObjectTypeIndexer`, `ObjectTypeProperty`, `ObjectTypeSpreadProperty`
+
+---
+
+### Method
+`ObjectMethod`, `ClassMethod`
+
+---
+
+### ObjectMember
+`ObjectMethod`, `ObjectProperty`
+
+---
+
+### Property
+`ObjectProperty`, `ClassProperty`
+
+---
+
+### UnaryLike
+`UnaryExpression`, `SpreadElement`
+
+---
+
+### Pattern
+`AssignmentPattern`, `ArrayPattern`, `ObjectPattern`
+
+---
+
+### Class
+`ClassDeclaration`, `ClassExpression`
+
+---
+
+### ModuleDeclaration
+`ExportAllDeclaration`, `ExportDefaultDeclaration`, `ExportNamedDeclaration`, `ImportDeclaration`
+
+---
+
+### ExportDeclaration
+`ExportAllDeclaration`, `ExportDefaultDeclaration`, `ExportNamedDeclaration`
+
+---
+
+### ModuleSpecifier
+`ExportSpecifier`, `ImportDefaultSpecifier`, `ImportNamespaceSpecifier`, `ImportSpecifier`, `ExportDefaultSpecifier`, `ExportNamespaceSpecifier`
+
+---
+
+### Flow
+`AnyTypeAnnotation`, `ArrayTypeAnnotation`, `BooleanTypeAnnotation`, `BooleanLiteralTypeAnnotation`, `NullLiteralTypeAnnotation`, `ClassImplements`, `DeclareClass`, `DeclareFunction`, `DeclareInterface`, `DeclareModule`, `DeclareModuleExports`, `DeclareTypeAlias`, `DeclareVariable`, `DeclareExportDeclaration`, `DeclareExportAllDeclaration`, `ExistsTypeAnnotation`, `FunctionTypeAnnotation`, `FunctionTypeParam`, `GenericTypeAnnotation`, `InterfaceExtends`, `InterfaceDeclaration`, `IntersectionTypeAnnotation`, `MixedTypeAnnotation`, `EmptyTypeAnnotation`, `NullableTypeAnnotation`, `NumberLiteralTypeAnnotation`, `NumberTypeAnnotation`, `StringLiteralTypeAnnotation`, `StringTypeAnnotation`, `ThisTypeAnnotation`, `TupleTypeAnnotation`, `TypeofTypeAnnotation`, `TypeAlias`, `TypeAnnotation`, `TypeCastExpression`, `TypeParameter`, `TypeParameterDeclaration`, `TypeParameterInstantiation`, `ObjectTypeAnnotation`, `ObjectTypeCallProperty`, `ObjectTypeIndexer`, `ObjectTypeProperty`, `ObjectTypeSpreadProperty`, `QualifiedTypeIdentifier`, `UnionTypeAnnotation`, `VoidTypeAnnotation`
+
+---
+
+### FlowBaseAnnotation
+`AnyTypeAnnotation`, `BooleanTypeAnnotation`, `NullLiteralTypeAnnotation`, `MixedTypeAnnotation`, `EmptyTypeAnnotation`, `NumberTypeAnnotation`, `StringTypeAnnotation`, `ThisTypeAnnotation`, `VoidTypeAnnotation`
+
+---
+
+### FlowDeclaration
+`DeclareClass`, `DeclareFunction`, `DeclareInterface`, `DeclareModule`, `DeclareModuleExports`, `DeclareTypeAlias`, `DeclareVariable`, `DeclareExportDeclaration`, `DeclareExportAllDeclaration`, `InterfaceDeclaration`, `TypeAlias`
+
+---
+
+### JSX
+`JSXAttribute`, `JSXClosingElement`, `JSXElement`, `JSXEmptyExpression`, `JSXExpressionContainer`, `JSXSpreadChild`, `JSXIdentifier`, `JSXMemberExpression`, `JSXNamespacedName`, `JSXOpeningElement`, `JSXSpreadAttribute`, `JSXText`
+
+---
+
 
 <!-- end generated section -->
 
