@@ -83,7 +83,7 @@ const ALLOWED_PLUGIN_KEYS = new Set([
 
 export default function manageOptions(opts: {}): {
   options: Object,
-  plugins: Array<[ Plugin, ?{} ]>,
+  plugins: Array<[Plugin, ?{}]>,
 } | null {
   return new OptionManager().init(opts);
 }
@@ -97,21 +97,23 @@ function sortPlugins(plugins) {
   const unnamedPluginPrefix = "unnamedPlugin";
   plugins.forEach((pluginTuple, index) => {
     const plugin = pluginTuple[0];
-    if (!plugin.key) { plugin.key = `${unnamedPluginPrefix}${index}`; }
+    if (!plugin.key) {
+      plugin.key = `${unnamedPluginPrefix}${index}`;
+    }
   });
 
   // Calculate the capabilities that each plugin provides, map to a single name.
   // Multiple plugins with the same capability are not allowed as that can
   // become a cyclic dependency.
-  plugins.forEach((pluginTuple) => {
+  plugins.forEach(pluginTuple => {
     const plugin = pluginTuple[0];
     if (plugin.capabilities) {
-      plugin.capabilities.forEach((capability) => {
+      plugin.capabilities.forEach(capability => {
         const existingPluginName = capabilitiesToPluginIdMap[capability];
         if (existingPluginName !== undefined) {
           throw new Error(
             "Cannot have two plugins with same capability, both" +
-            `${plugin.key} and ${existingPluginName} provide it.`
+              `${plugin.key} and ${existingPluginName} provide it.`,
           );
         }
         capabilitiesToPluginIdMap[capability] = plugin.key;
@@ -121,24 +123,28 @@ function sortPlugins(plugins) {
 
   // Look for the plugins that run before/after the current module and identify which module
   // addresses them.
-  plugins.forEach((pluginTuple) => {
+  plugins.forEach(pluginTuple => {
     const plugin = pluginTuple[0];
 
     // Skip mapping if plugin doesn't have dependencies.
     if (plugin.before) {
-      const mappedPluginsAfter = plugin.before.map((pluginAfter) => {
+      const mappedPluginsAfter = plugin.before.map(pluginAfter => {
         const idForAfter = capabilitiesToPluginIdMap[pluginAfter];
         if (idForAfter === undefined) {
-          throw new Error(`${plugin.key} requires ${pluginAfter} but it was not provided.`);
+          throw new Error(
+            `${plugin.key} requires ${pluginAfter} but it was not provided.`,
+          );
         }
         return idForAfter;
       });
       graph.add(plugin.key, pluginTuple, mappedPluginsAfter);
     } else if (plugin.after) {
-      const mappedPluginsBefore = plugin.after.map((pluginBefore) => {
+      const mappedPluginsBefore = plugin.after.map(pluginBefore => {
         const idForBefore = capabilitiesToPluginIdMap[pluginBefore];
         if (idForBefore === undefined) {
-          throw new Error(`${plugin.key} requires ${pluginBefore} but it was not provided.`);
+          throw new Error(
+            `${plugin.key} requires ${pluginBefore} but it was not provided.`,
+          );
         }
         return idForBefore;
       });
@@ -178,13 +184,13 @@ class OptionManager {
     const result = loadConfig(config);
 
     const pluginDescriptors = result.plugins.map(descriptor =>
-      loadPluginDescriptor(descriptor)
+      loadPluginDescriptor(descriptor),
     );
     const presetDescriptors = result.presets.map(descriptor =>
-      loadPresetDescriptor(descriptor)
+      loadPresetDescriptor(descriptor),
     );
 
-    presetDescriptors.forEach((presetConfig) => {
+    presetDescriptors.forEach(presetConfig => {
       this.mergeOptions(presetConfig, plugins);
     });
 
@@ -205,16 +211,17 @@ class OptionManager {
         this.mergeOptions(config, plugins);
       }
 
-      const uniquePlugins = plugins
-        .reduce((accumulator, pluginTuple) => {
-          const plugin = pluginTuple[0];
-          if (!accumulator[plugin.key]) {
-            accumulator[plugin.key] = pluginTuple;
-          }
-          return accumulator;
-        }, {});
+      const uniquePlugins = plugins.reduce((accumulator, pluginTuple) => {
+        const plugin = pluginTuple[0];
+        if (!accumulator[plugin.key]) {
+          accumulator[plugin.key] = pluginTuple;
+        }
+        return accumulator;
+      }, {});
 
-      const uniquePluginValues = Object.keys(uniquePlugins).map((key) => uniquePlugins[key]);
+      const uniquePluginValues = Object.keys(uniquePlugins).map(
+        key => uniquePlugins[key],
+      );
       plugins = sortPlugins(uniquePluginValues);
     } catch (e) {
       // There are a few case where thrown errors will try to annotate themselves multiple times, so
@@ -384,7 +391,7 @@ function loadPluginDescriptor(descriptor): [Plugin, ?{}] {
 }
 
 function instantiatePlugin({ value: pluginObj, descriptor }): Plugin {
-  Object.keys(pluginObj).forEach((key) => {
+  Object.keys(pluginObj).forEach(key => {
     if (!ALLOWED_PLUGIN_KEYS.has(key)) {
       throw new Error(
         messages.get("pluginInvalidProperty", descriptor.alias, key),
