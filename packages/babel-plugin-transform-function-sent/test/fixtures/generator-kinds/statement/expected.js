@@ -1,6 +1,6 @@
 let gen = (() => {
   var _ref = _skipFirstGeneratorNext(function* () {
-    const _functionSent = yield;
+    let _functionSent = yield;
 
     return _functionSent;
   });

@@ -2,9 +2,9 @@ var _asyncGenerator = function () { function AwaitValue(value) { this.value = va
 
 let foo = (() => {
   var _ref = _asyncGenerator.wrap(_skipFirstGeneratorNext(function* () {
-    const _functionSent = yield;
+    let _functionSent = yield;
 
-    yield _asyncGenerator.await(_functionSent);
+    _functionSent = yield _asyncGenerator.await(_functionSent);
   }));
 
   return function foo() {
