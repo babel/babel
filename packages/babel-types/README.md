@@ -106,7 +106,7 @@ See also `t.isAssignmentPattern(node, opts)` and `t.assertAssignmentPattern(node
 
 Aliases: `Pattern`, `LVal`
 
- - `left`: `Identifier` (required)
+ - `left`: `Identifier | ObjectPattern | ArrayPattern` (required)
  - `right`: `Expression` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
 
@@ -229,6 +229,7 @@ Aliases: `Expression`
 
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement>` (required)
+ - `optional`: `true | false` (default: `null`)
 
 ---
 
@@ -1185,7 +1186,7 @@ Aliases: `Binary`, `Expression`
 
 ### memberExpression
 ```javascript
-t.memberExpression(object, property, computed)
+t.memberExpression(object, property, computed, optional)
 ```
 
 See also `t.isMemberExpression(node, opts)` and `t.assertMemberExpression(node, opts)`.
@@ -1195,6 +1196,7 @@ Aliases: `Expression`, `LVal`
  - `object`: `Expression` (required)
  - `property`: if computed then `Expression` else `Identifier` (required)
  - `computed`: `boolean` (default: `false`)
+ - `optional`: `true | false` (default: `null`)
 
 ---
 
@@ -1235,6 +1237,7 @@ Aliases: `Expression`
 
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement>` (required)
+ - `optional`: `true | false` (default: `null`)
 
 ---
 
