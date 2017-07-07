@@ -618,7 +618,7 @@ export default class Scope {
     } else if (t.isTaggedTemplateExpression(node)) {
       return (
         t.matchesPattern(node.tag, "String.raw") &&
-        !this.getBinding("String", true) &&
+        !this.hasBinding("String", true) &&
         this.isPure(node.quasi, constantsOnly)
       );
     } else if (t.isTemplateLiteral(node)) {
