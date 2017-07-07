@@ -1,26 +1,38 @@
 import syntaxFunctionSent from "babel-plugin-syntax-function-sent";
 import wrapFunction from "babel-helper-wrap-function";
 
-const yieldVisitor = {
-  Function(path) {
-    path.skip();
-  },
-  YieldExpression(path) {
-    path.replaceWith(
-      this.types.assignmentExpression("=", this.sentId, path.node),
-    );
-    path.skip();
-  },
-};
-
 export default function({ types: t }) {
+  const isFunctionSent = node =>
+    t.isIdentifier(node.meta, { name: "function" }) &&
+    t.isIdentifier(node.property, { name: "sent" });
+
+  const yieldVisitor = {
+    Function(path) {
+      path.skip();
+    },
+
+    YieldExpression(path) {
+      const replaced = t.isAssignmentExpression(path.parent, {
+        left: this.sentId,
+      });
+      if (!replaced) {
+        path.replaceWith(t.assignmentExpression("=", this.sentId, path.node));
+      }
+    },
+
+    MetaProperty(path) {
+      if (isFunctionSent(path.node)) {
+        path.replaceWith(this.sentId);
+      }
+    },
+  };
+
   return {
     inherits: syntaxFunctionSent,
 
     visitor: {
-      MetaProperty(path) {
-        if (!t.isIdentifier(path.node.meta, { name: "function" })) return;
-        if (!t.isIdentifier(path.node.property, { name: "sent" })) return;
+      MetaProperty(path, state) {
+        if (!isFunctionSent(path.node)) return;
 
         const fnPath = path.getFunctionParent();
 
@@ -28,32 +40,16 @@ export default function({ types: t }) {
           throw new Error("Parent generator function not found");
         }
 
-        const sentId =
-          fnPath.getData("sentId") ||
-          fnPath.setData(
-            "sentId",
-            path.scope.generateUidIdentifier("function.sent"),
-          );
+        const sentId = path.scope.generateUidIdentifier("function.sent");
 
-        path.replaceWith(sentId);
-      },
+        fnPath.traverse(yieldVisitor, { sentId });
+        fnPath.node.body.body.unshift(
+          t.variableDeclaration("let", [
+            t.variableDeclarator(sentId, t.yieldExpression()),
+          ]),
+        );
 
-      Function: {
-        exit(path, state) {
-          if (!path.node.generator) return;
-
-          const sentId = path.getData("sentId");
-          if (!sentId) return;
-
-          path.traverse(yieldVisitor, { types: t, sentId });
-          path.node.body.body.unshift(
-            t.variableDeclaration("let", [
-              t.variableDeclarator(sentId, t.yieldExpression()),
-            ]),
-          );
-
-          wrapFunction(path, state.addHelper("skipFirstGeneratorNext"));
-        },
+        wrapFunction(fnPath, state.addHelper("skipFirstGeneratorNext"));
       },
     },
   };
