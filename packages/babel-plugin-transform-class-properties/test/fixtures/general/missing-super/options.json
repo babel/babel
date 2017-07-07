@@ -1,0 +1,4 @@
+{
+  "plugins": ["external-helpers", "transform-class-properties"],
+  "throws": "missing super() call in constructor"
+}
