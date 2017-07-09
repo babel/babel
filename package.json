@@ -41,7 +41,7 @@
     "nyc": "^11.0.2",
     "prettier": "^1.5.2",
     "rimraf": "^2.5.4",
-    "rollup": "^0.42.0",
+    "rollup": "^0.43.1",
     "rollup-plugin-babel": "3.0.0-alpha.12",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^4.0.0",
