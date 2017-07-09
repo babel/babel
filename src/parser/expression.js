@@ -802,13 +802,12 @@ export default class ExpressionParser extends LValParser {
     const meta = this.parseIdentifier(true);
     if (
       this.state.inGenerator &&
-      this.eat(tt.dot) &&
-      this.hasPlugin("functionSent")
+      this.hasPlugin("functionSent") &&
+      this.eat(tt.dot)
     ) {
       return this.parseMetaProperty(node, meta, "sent");
-    } else {
-      return this.parseFunction(node, false);
     }
+    return this.parseFunction(node, false);
   }
 
   parseMetaProperty(
