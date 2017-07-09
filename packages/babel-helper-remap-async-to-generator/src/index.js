@@ -65,7 +65,6 @@ const awaitVisitor = {
 
     if (build.replaceParent) {
       path.parentPath.replaceWithMultiple(build.node);
-      path.remove();
     } else {
       path.replaceWithMultiple(build.node);
     }
