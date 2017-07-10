@@ -43,20 +43,22 @@ It just needs to export a `parse` method that takes in a string of code and outp
 
 ## Usage
 
-> ESLint 1.x | Use <= 5.x
-
-> ESLint 2.x | Use >= 6.x
-
 ### Supported ESLint versions
 
 ESLint | babel-eslint
 ------------ | -------------
 3.x | >= 6.x
+2.x | >= 6.x
+1.x | >= 5.x
 
 ### Install
 
+Ensure that you have substituted the correct version lock for `eslint` and `babel-eslint` into this command:
+
 ```sh
 $ npm install eslint@3.x babel-eslint@7 --save-dev
+# or
+$ yarn add eslint@3.x babel-eslint@7 -D
 ```
 
 ### Setup
