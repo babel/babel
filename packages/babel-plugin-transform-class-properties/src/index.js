@@ -158,11 +158,16 @@ export default function({ types: t }) {
             ];
           }
 
-          //
-
           if (isDerived) {
             const bareSupers = [];
             constructor.traverse(findBareSupers, bareSupers);
+
+            if (!bareSupers.length) {
+              throw constructor.buildCodeFrameError(
+                "missing super() call in constructor",
+              );
+            }
+
             for (const bareSuper of bareSupers) {
               bareSuper.insertAfter(instanceBody);
             }
