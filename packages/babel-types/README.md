@@ -321,7 +321,7 @@ See also `t.isClassMethod(node, opts)` and `t.assertClassMethod(node, opts)`.
 Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
 
  - `kind`: `"get" | "set" | "method" | "constructor"` (default: `'method'`)
- - `key`if computed then `Expression` else `Identifier | Literal` (required)
+ - `key`: if computed then `Expression` else `Identifier | Literal` (required)
  - `params`: `Array<LVal>` (required)
  - `body`: `BlockStatement` (required)
  - `computed`: `boolean` (default: `false`)
@@ -404,6 +404,34 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
  - `typeParameters` (required)
  - `extends` (required)
  - `body` (required)
+
+---
+
+### declareExportAllDeclaration
+```javascript
+t.declareExportAllDeclaration(source)
+```
+
+See also `t.isDeclareExportAllDeclaration(node, opts)` and `t.assertDeclareExportAllDeclaration(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `source` (required)
+
+---
+
+### declareExportDeclaration
+```javascript
+t.declareExportDeclaration(declaration, specifiers, source)
+```
+
+See also `t.isDeclareExportDeclaration(node, opts)` and `t.assertDeclareExportDeclaration(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `declaration` (required)
+ - `specifiers` (required)
+ - `source` (required)
 
 ---
 
@@ -832,7 +860,7 @@ See also `t.isIdentifier(node, opts)` and `t.assertIdentifier(node, opts)`.
 
 Aliases: `Expression`, `LVal`
 
- - `name``string` (required)
+ - `name`: `string` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `typeAnnotation` (default: `null`)
 
@@ -1165,7 +1193,7 @@ See also `t.isMemberExpression(node, opts)` and `t.assertMemberExpression(node, 
 Aliases: `Expression`, `LVal`
 
  - `object`: `Expression` (required)
- - `property`if computed then `Expression` else `Identifier` (required)
+ - `property`: if computed then `Expression` else `Identifier` (required)
  - `computed`: `boolean` (default: `false`)
 
 ---
@@ -1317,7 +1345,7 @@ See also `t.isObjectMethod(node, opts)` and `t.assertObjectMethod(node, opts)`.
 Aliases: `UserWhitespacable`, `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`, `ObjectMember`
 
  - `kind`: `"method" | "get" | "set"` (default: `'method'`)
- - `key`if computed then `Expression` else `Identifier | Literal` (required)
+ - `key`: if computed then `Expression` else `Identifier | Literal` (required)
  - `params` (required)
  - `body`: `BlockStatement` (required)
  - `computed`: `boolean` (default: `false`)
@@ -1353,7 +1381,7 @@ See also `t.isObjectProperty(node, opts)` and `t.assertObjectProperty(node, opts
 
 Aliases: `UserWhitespacable`, `Property`, `ObjectMember`
 
- - `key`if computed then `Expression` else `Identifier | Literal` (required)
+ - `key`: if computed then `Expression` else `Identifier | Literal` (required)
  - `value`: `Expression | Pattern | RestElement` (required)
  - `computed`: `boolean` (default: `false`)
  - `shorthand`: `boolean` (default: `false`)
