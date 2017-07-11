@@ -445,10 +445,13 @@ helpers.objectWithoutProperties = template(`
 
 helpers.possibleConstructorReturn = template(`
   (function (self, call) {
+    if (call && (typeof call === "object" || typeof call === "function")) {
+      return call;
+    }
     if (!self) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
-    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+    return self;
   });
 `);
 
