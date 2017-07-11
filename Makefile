@@ -58,10 +58,11 @@ test-ci:
 	make bootstrap
 	make test-only
 
+test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
 	BABEL_ENV=cov make bootstrap
 	./scripts/test-cov.sh
-	./node_modules/.bin/codecov -f coverage/coverage-final.json
+	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 publish:
 	git pull --rebase
