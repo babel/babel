@@ -43,7 +43,7 @@ export const BINARY_OPERATORS = [
 ];
 
 export const BOOLEAN_UNARY_OPERATORS = ["delete", "!"];
-export const NUMBER_UNARY_OPERATORS = ["+", "-", "++", "--", "~"];
+export const NUMBER_UNARY_OPERATORS = ["+", "-", "~"];
 export const STRING_UNARY_OPERATORS = ["typeof"];
 export const UNARY_OPERATORS = [
   "void",
