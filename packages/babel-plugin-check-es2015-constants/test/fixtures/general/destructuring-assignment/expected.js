@@ -1,4 +1,5 @@
 var a = 1,
     b = 2;
-throw new Error("\"a\" is read-only");
-a = 3;
+a = (function () {
+  throw new Error("\"a\" is read-only");
+}(), 3);

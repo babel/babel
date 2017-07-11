@@ -1,10 +1,7 @@
 (function () {
   var a = "foo";
-
-  if (false) {
+  if (false) a = (function () {
     throw new Error("\"a\" is read-only");
-    a = "false";
-  }
-
+  }(), "false");
   return a;
 })();

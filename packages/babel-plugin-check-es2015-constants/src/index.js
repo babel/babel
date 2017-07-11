@@ -12,14 +12,39 @@ export default function({ messages, types: t }) {
                 t.stringLiteral(messages.get("readOnly", name)),
               ]),
             );
-            if (
-              t.isUpdateExpression(violation.parent) ||
-              t.isForStatement(violation.parent) ||
-              t.isForInStatement(violation.parent)
-            ) {
+
+            if (violation.isAssignmentExpression()) {
+              violation
+                .get("right")
+                .replaceWith(
+                  t.sequenceExpression([
+                    t.callExpression(
+                      t.functionExpression(
+                        null,
+                        [],
+                        t.blockStatement([throwNode]),
+                      ),
+                      [],
+                    ),
+                    violation.get("right").node,
+                  ]),
+                );
+            } else if (violation.parentPath.isUpdateExpression()) {
+              violation.parentPath.replaceWith(
+                t.sequenceExpression([
+                  t.callExpression(
+                    t.functionExpression(
+                      null,
+                      [],
+                      t.blockStatement([throwNode]),
+                    ),
+                    [],
+                  ),
+                  violation.parent,
+                ]),
+              );
+            } else if (violation.parentPath.isForXStatement()) {
               violation.parentPath.insertBefore(throwNode);
-            } else {
-              violation.insertBefore(throwNode);
             }
           }
         }
