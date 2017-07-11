@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = undefined;
+exports.default = Login;
 
 var _store = require("./store");
 
@@ -23,5 +23,3 @@ let Login = function (_React$Component) {
   }]);
   return Login;
 }(React.Component);
-
-exports.default = Login;

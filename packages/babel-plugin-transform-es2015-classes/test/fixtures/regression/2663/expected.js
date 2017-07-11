@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = undefined;
+exports.default = Connection;
 
 var _net = require("net");
 
@@ -43,5 +43,3 @@ var Connection = function (_EventEmitter) {
   }]);
   return Connection;
 }(_events.EventEmitter);
-
-exports.default = Connection;

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = undefined;
+exports.default = RandomComponent;
 
 var _react = require("react");
 
@@ -35,5 +35,3 @@ var RandomComponent = function (_Component) {
   }]);
   return RandomComponent;
 }(_react.Component);
-
-exports.default = RandomComponent;

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = undefined;
+exports.default = SubFoo;
 
 var _BaseFoo2 = require("./BaseFoo");
 
@@ -26,5 +26,3 @@ var SubFoo = function (_BaseFoo) {
   }]);
   return SubFoo;
 }(_BaseFoo3.default);
-
-exports.default = SubFoo;
