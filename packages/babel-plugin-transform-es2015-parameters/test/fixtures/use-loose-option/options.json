@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-class-properties", "external-helpers", "syntax-flow", ["transform-es2015-parameters", { "loose": true } ], "transform-es2015-block-scoping", "transform-es2015-spread", "transform-es2015-classes", "transform-es2015-destructuring", "transform-es2015-arrow-functions", "syntax-async-functions", "transform-es2015-for-of"]
+}
