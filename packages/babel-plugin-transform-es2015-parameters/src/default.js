@@ -79,7 +79,7 @@ export const visitor = {
                 ASSIGMENT_IDENTIFIER: left.node,
                 DEFAULT_VALUE: right.node,
                 UNDEFINED: undefinedNode,
-              })
+              }),
             );
             param.replaceWith(left.node);
           } else if (left.isObjectPattern() || left.isArrayPattern()) {
@@ -90,7 +90,7 @@ export const visitor = {
                 DEFAULT_VALUE: right.node,
                 PARAMETER_NAME: paramName,
                 UNDEFINED: undefinedNode,
-              })
+              }),
             );
             param.replaceWith(paramName);
           }
