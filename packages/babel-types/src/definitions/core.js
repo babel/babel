@@ -278,6 +278,10 @@ export const functionCommon = {
       assertEach(assertNodeType("LVal")),
     ),
   },
+  generator: {
+    default: false,
+    validate: assertValueType("boolean"),
+  },
   async: {
     validate: assertValueType("boolean"),
     default: false,
