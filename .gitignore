@@ -11,6 +11,7 @@ test/tmp
 /runtime.js
 /coverage
 dist
+package-lock.json
 /.package.json
 /packages/babel-runtime/core-js
 /packages/babel-runtime/helpers/*.js
