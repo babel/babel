@@ -773,6 +773,7 @@ export type ExportDefaultDeclaration = NodeBase & {
 export type ExportAllDeclaration = NodeBase & {
   type: "ExportAllDeclaration",
   source: Literal,
+  exportKind?: "type" | "value", // TODO: Not in spec
 };
 
 // JSX (TODO: Not in spec)

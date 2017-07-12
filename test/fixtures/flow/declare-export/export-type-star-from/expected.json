@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 53,
+  "end": 58,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 53
+      "column": 58
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 53,
+    "end": 58,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 53
+        "column": 58
       }
     },
     "sourceType": "module",
@@ -31,7 +31,7 @@
       {
         "type": "DeclareModule",
         "start": 0,
-        "end": 53,
+        "end": 58,
         "loc": {
           "start": {
             "line": 1,
@@ -39,7 +39,7 @@
           },
           "end": {
             "line": 1,
-            "column": 53
+            "column": 58
           }
         },
         "id": {
@@ -65,7 +65,7 @@
         "body": {
           "type": "BlockStatement",
           "start": 21,
-          "end": 53,
+          "end": 58,
           "loc": {
             "start": {
               "line": 1,
@@ -73,14 +73,14 @@
             },
             "end": {
               "line": 1,
-              "column": 53
+              "column": 58
             }
           },
           "body": [
             {
               "type": "DeclareExportAllDeclaration",
               "start": 23,
-              "end": 51,
+              "end": 56,
               "loc": {
                 "start": {
                   "line": 1,
@@ -88,21 +88,22 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 51
+                  "column": 56
                 }
               },
+              "exportKind": "type",
               "source": {
                 "type": "StringLiteral",
-                "start": 45,
-                "end": 50,
+                "start": 50,
+                "end": 55,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 45
+                    "column": 50
                   },
                   "end": {
                     "line": 1,
-                    "column": 50
+                    "column": 55
                   }
                 },
                 "extra": {
@@ -110,8 +111,7 @@
                   "raw": "\"bar\""
                 },
                 "value": "bar"
-              },
-              "exportKind": "value"
+              }
             }
           ]
         },

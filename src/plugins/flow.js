@@ -1283,7 +1283,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseExport(node: N.ExportNamedDeclaration): N.ExportNamedDeclaration {
       node = super.parseExport(node);
-      if (node.type === "ExportNamedDeclaration") {
+      if (
+        node.type === "ExportNamedDeclaration" ||
+        node.type === "ExportAllDeclaration"
+      ) {
         node.exportKind = node.exportKind || "value";
       }
       return node;
@@ -1313,6 +1316,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         return super.parseExportDeclaration(node);
       }
+    }
+
+    shouldParseExportStar(): boolean {
+      return (
+        super.shouldParseExportStar() ||
+        (this.isContextual("type") && this.lookahead().type === tt.star)
+      );
+    }
+
+    parseExportStar(node: N.ExportNamedDeclaration, allowNamed: boolean): void {
+      if (this.eatContextual("type")) {
+        node.exportKind = "type";
+        allowNamed = false;
+      }
+
+      return super.parseExportStar(node, allowNamed);
     }
 
     parseClassId(node: N.Class, isStatement: boolean, optionalId: ?boolean) {

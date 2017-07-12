@@ -1208,20 +1208,9 @@ export default class StatementParser extends ExpressionParser {
   // TODO: better type. Node is an N.AnyExport.
   parseExport(node: N.Node): N.Node {
     // export * from '...'
-    if (this.match(tt.star)) {
-      const specifier = this.startNode();
-      this.next();
-      if (this.hasPlugin("exportExtensions") && this.eatContextual("as")) {
-        specifier.exported = this.parseIdentifier(true);
-        node.specifiers = [
-          this.finishNode(specifier, "ExportNamespaceSpecifier"),
-        ];
-        this.parseExportSpecifiersMaybe(node);
-        this.parseExportFrom(node, true);
-      } else {
-        this.parseExportFrom(node, true);
-        return this.finishNode(node, "ExportAllDeclaration");
-      }
+    if (this.shouldParseExportStar()) {
+      this.parseExportStar(node, this.hasPlugin("exportExtensions"));
+      if (node.type === "ExportAllDeclaration") return node;
     } else if (
       this.hasPlugin("exportExtensions") &&
       this.isExportDefaultSpecifier()
@@ -1321,6 +1310,31 @@ export default class StatementParser extends ExpressionParser {
     }
 
     this.semicolon();
+  }
+
+  shouldParseExportStar(): boolean {
+    return this.match(tt.star);
+  }
+
+  parseExportStar(node: N.ExportNamedDeclaration, allowNamed: boolean): void {
+    this.expect(tt.star);
+
+    if (allowNamed && this.isContextual("as")) {
+      const specifier = this.startNodeAt(
+        this.state.lastTokStart,
+        this.state.lastTokStartLoc,
+      );
+      this.next();
+      specifier.exported = this.parseIdentifier(true);
+      node.specifiers = [
+        this.finishNode(specifier, "ExportNamespaceSpecifier"),
+      ];
+      this.parseExportSpecifiersMaybe(node);
+      this.parseExportFrom(node, true);
+    } else {
+      this.parseExportFrom(node, true);
+      this.finishNode(node, "ExportAllDeclaration");
+    }
   }
 
   shouldParseExportDeclaration(): boolean {
