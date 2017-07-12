@@ -54,7 +54,7 @@ const iifeVisitor = {
 };
 
 export const visitor = {
-  Function(path, state) {
+  Function(path) {
     const { node, scope } = path;
     if (!hasDefaults(node)) return;
 
@@ -63,7 +63,7 @@ export const visitor = {
 
     const params = path.get("params");
 
-    if (state.opts.loose) {
+    if (this.opts.loose) {
       const body = [];
       for (let i = 0; i < params.length; ++i) {
         const param = params[i];
@@ -100,8 +100,10 @@ export const visitor = {
       return;
     }
 
-    state.iife = false;
-    state.scope = scope;
+    const state = {
+      iife: false,
+      scope: scope,
+    };
 
     const body = [];
 
