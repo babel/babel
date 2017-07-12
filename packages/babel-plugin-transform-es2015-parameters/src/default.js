@@ -11,6 +11,16 @@ const buildDefaultParam = template(`
       DEFAULT_VALUE;
 `);
 
+const buildLooseDefaultParam = template(`
+  if (ASSIGMENT_IDENTIFIER === UNDEFINED) {
+    ASSIGMENT_IDENTIFIER = DEFAULT_VALUE;
+  }
+`);
+
+const buildLooseDestructuredDefaultParam = template(`
+  let ASSIGMENT_IDENTIFIER = PARAMETER_NAME === UNDEFINED ? DEFAULT_VALUE : PARAMETER_NAME ;
+`);
+
 const buildCutOff = template(`
   let $0 = $1[$2];
 `);
@@ -44,17 +54,54 @@ const iifeVisitor = {
 };
 
 export const visitor = {
-  Function(path) {
+  Function(path, state) {
     const { node, scope } = path;
     if (!hasDefaults(node)) return;
 
     // ensure it's a block, useful for arrow functions
     path.ensureBlock();
 
-    const state = {
-      iife: false,
-      scope: scope,
-    };
+    const params = path.get("params");
+
+    if (state.opts.loose) {
+      const body = [];
+      for (let i = 0; i < params.length; ++i) {
+        const param = params[i];
+        if (param.isAssignmentPattern()) {
+          const left = param.get("left");
+          const right = param.get("right");
+
+          const undefinedNode = scope.buildUndefinedNode();
+
+          if (left.isIdentifier()) {
+            body.push(
+              buildLooseDefaultParam({
+                ASSIGMENT_IDENTIFIER: left.node,
+                DEFAULT_VALUE: right.node,
+                UNDEFINED: undefinedNode,
+              }),
+            );
+            param.replaceWith(left.node);
+          } else if (left.isObjectPattern() || left.isArrayPattern()) {
+            const paramName = scope.generateUidIdentifier();
+            body.push(
+              buildLooseDestructuredDefaultParam({
+                ASSIGMENT_IDENTIFIER: left.node,
+                DEFAULT_VALUE: right.node,
+                PARAMETER_NAME: paramName,
+                UNDEFINED: undefinedNode,
+              }),
+            );
+            param.replaceWith(paramName);
+          }
+        }
+      }
+      path.get("body").unshiftContainer("body", body);
+      return;
+    }
+
+    state.iife = false;
+    state.scope = scope;
 
     const body = [];
 
@@ -77,7 +124,6 @@ export const visitor = {
     const lastNonDefaultParam = getFunctionArity(node);
 
     //
-    const params = path.get("params");
     for (let i = 0; i < params.length; i++) {
       const param = params[i];
 
