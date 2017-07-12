@@ -13,45 +13,24 @@ export default function({ messages, types: t }) {
               ]),
             );
 
+            // Returns a comma expression of IIFE wrapped throwNode followed by given expression.
+            const throwBefore = expression =>
+              t.sequenceExpression([
+                t.callExpression(
+                  t.functionExpression(null, [], t.blockStatement([throwNode])),
+                  [],
+                ),
+                expression,
+              ]);
+
             if (violation.isAssignmentExpression()) {
               violation
                 .get("right")
-                .replaceWith(
-                  t.sequenceExpression([
-                    t.callExpression(
-                      t.functionExpression(
-                        null,
-                        [],
-                        t.blockStatement([throwNode]),
-                      ),
-                      [],
-                    ),
-                    violation.get("right").node,
-                  ]),
-                );
+                .replaceWith(throwBefore(violation.get("right").node));
             } else if (violation.parentPath.isUpdateExpression()) {
-              violation.parentPath.replaceWith(
-                t.sequenceExpression([
-                  t.callExpression(
-                    t.functionExpression(
-                      null,
-                      [],
-                      t.blockStatement([throwNode]),
-                    ),
-                    [],
-                  ),
-                  violation.parent,
-                ]),
-              );
+              violation.parentPath.replaceWith(throwBefore(violation.parent));
             } else if (violation.parentPath.isForXStatement()) {
-              // Transform single statement body into BlockStatement
-              if (!violation.parentPath.get("body").isBlockStatement()) {
-                violation.parentPath
-                  .get("body")
-                  .replaceWith(
-                    t.blockStatement([violation.parentPath.get("body").node]),
-                  );
-              }
+              violation.parentPath.ensureBlock();
               violation.parentPath.node.body.body.unshift(throwNode);
             }
           }
