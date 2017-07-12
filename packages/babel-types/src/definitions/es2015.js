@@ -1,5 +1,7 @@
 /* eslint max-len: "off" */
 
+import * as t from "../index";
+
 import defineType, {
   assertNodeType,
   assertValueType,
@@ -11,8 +13,7 @@ import { functionCommon, patternLikeCommon } from "./core";
 
 defineType("AssignmentPattern", {
   visitor: ["left", "right"],
-  builder: ["left", "right"],
-  aliases: ["Pattern", "PatternLike", "LVal"],
+  aliases: ["Pattern", "LVal"],
   fields: {
     ...patternLikeCommon,
     left: {
@@ -31,9 +32,9 @@ defineType("AssignmentPattern", {
 });
 
 defineType("ArrayPattern", {
-  visitor: ["elements", "typeAnnotation"],
   builder: ["elements"],
-  aliases: ["Pattern", "PatternLike", "LVal"],
+  visitor: ["elements", "typeAnnotation"],
+  aliases: ["Pattern", "LVal"],
   fields: {
     ...patternLikeCommon,
     elements: {
@@ -63,10 +64,19 @@ defineType("ArrowFunctionExpression", {
     "Pureish",
   ],
   fields: {
+<<<<<<< HEAD
     ...functionCommon,
     expression: {
       // https://github.com/babel/babylon/issues/505
       validate: assertValueType("boolean"),
+      optional: true,
+=======
+    params: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Identifier", "Pattern", "RestElement")),
+      ),
+>>>>>>> Lock down type system
     },
     body: {
       validate: assertNodeType("BlockStatement", "Expression"),
@@ -134,10 +144,19 @@ defineType("ClassDeclaration", {
   ],
   aliases: ["Scopable", "Class", "Statement", "Declaration", "Pureish"],
   fields: {
+<<<<<<< HEAD
     ...classCommon,
     declare: {
       validate: assertValueType("boolean"),
       optional: true,
+=======
+    id: {
+      optional: true,
+      validate: assertNodeType("Identifier"),
+    },
+    body: {
+      validate: assertNodeType("ClassBody"),
+>>>>>>> Lock down type system
     },
     abstract: {
       validate: assertValueType("boolean"),
@@ -148,6 +167,7 @@ defineType("ClassDeclaration", {
       optional: true, // Missing if this is the child of an ExportDefaultDeclaration.
     },
     decorators: {
+      optional: true,
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
@@ -155,11 +175,21 @@ defineType("ClassDeclaration", {
       optional: true,
     },
   },
+  validate: (function() {
+    const identifier = assertNodeType("Identifier");
+
+    return function(parent, key, node) {
+      if (!t.isExportDefaultDeclaration(parent)) {
+        identifier(node, "id", node.id);
+      }
+    };
+  })(),
 });
 
 defineType("ClassExpression", {
   inherits: "ClassDeclaration",
   aliases: ["Scopable", "Class", "Expression", "Pureish"],
+<<<<<<< HEAD
   fields: {
     ...classCommon,
     id: {
@@ -179,6 +209,117 @@ defineType("ClassExpression", {
         assertEach(assertNodeType("Decorator")),
       ),
       optional: true,
+    },
+  },
+=======
+>>>>>>> Add missing fields
+});
+
+defineType("ClassMethod", {
+  aliases: ["Function", "Scopable", "BlockParent", "FunctionParent", "Method"],
+  builder: [
+    "kind",
+    "key",
+    "params",
+    "body",
+    "computed",
+    "static",
+    "generator",
+    "async",
+  ],
+  visitor: [
+    "key",
+    "params",
+    "body",
+    "decorators",
+    "returnType",
+    "typeParameters",
+  ],
+  fields: {
+    kind: {
+      validate: assertOneOf("get", "set", "method", "constructor"),
+    },
+    computed: {
+      default: false,
+    },
+    static: {
+      default: false,
+    },
+    key: {
+      validate: (function() {
+        const normal = assertNodeType(
+          "Identifier",
+          "StringLiteral",
+          "NumericLiteral",
+        );
+        const computed = assertNodeType("Expression");
+
+        return function(node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      })(),
+    },
+    params: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Identifier", "Pattern", "RestElement")),
+      ),
+    },
+    body: {
+      validate: assertNodeType("BlockStatement"),
+    },
+    generator: {
+      default: false,
+    },
+    async: {
+      default: false,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+    },
+  },
+});
+
+defineType("ClassProperty", {
+  visitor: ["key", "value", "decorators", "typeAnnotation"],
+  builder: ["key", "value", "computed", "decorators"],
+  aliases: ["Property"],
+  fields: {
+    computed: {
+      default: false,
+    },
+    key: {
+      validate: (function() {
+        const normal = assertNodeType(
+          "Identifier",
+          "StringLiteral",
+          "NumericLiteral",
+        );
+        const computed = assertNodeType("Expression");
+
+        return function(node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      })(),
+    },
+    value: {
+      optional: true,
+      validate: assertNodeType("Expression"),
+    },
+    decorators: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+    },
+    variance: {
+      validate: assertNodeType("Variance"),
     },
   },
 });
@@ -228,18 +369,31 @@ defineType("ExportNamedDeclaration", {
   ],
   fields: {
     declaration: {
-      validate: assertNodeType("Declaration"),
+      validate: chain(assertNodeType("Declaration"), function(node, key, val) {
+        if (val && node.specifiers.length) {
+          throw new TypeError(
+            "Only declaration or specifiers is allowed on ExportNamedDeclaration",
+          );
+        }
+      }),
       optional: true,
     },
     specifiers: {
+      default: [],
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("ExportSpecifier")),
+        assertEach(
+          assertNodeType(
+            "ExportSpecifier",
+            "ExportDefaultSpecifier",
+            "ExportNamespaceSpecifier",
+          ),
+        ),
       ),
     },
     source: {
-      validate: assertNodeType("StringLiteral"),
       optional: true,
+      validate: assertNodeType("StringLiteral"),
     },
   },
 });
@@ -258,7 +412,7 @@ defineType("ExportSpecifier", {
 });
 
 defineType("ForOfStatement", {
-  visitor: ["left", "right", "body"],
+  visitor: ["left", "right", "body", "await"],
   aliases: [
     "Scopable",
     "Statement",
@@ -269,7 +423,23 @@ defineType("ForOfStatement", {
   ],
   fields: {
     left: {
-      validate: assertNodeType("VariableDeclaration", "LVal"),
+      validate: (function() {
+        const declaration = assertNodeType("VariableDeclaration");
+        const lval = assertNodeType(
+          "Identifier",
+          "MemberExpression",
+          "ArrayPattern",
+          "ObjectPattern",
+        );
+
+        return function(node, key, val) {
+          if (t.isVariableDeclaration(val)) {
+            declaration(node, key, val);
+          } else {
+            lval(node, key, val);
+          }
+        };
+      })(),
     },
     right: {
       validate: assertNodeType("Expression"),
@@ -279,7 +449,6 @@ defineType("ForOfStatement", {
     },
     await: {
       default: false,
-      validate: assertValueType("boolean"),
     },
   },
 });
@@ -347,9 +516,24 @@ defineType("MetaProperty", {
   visitor: ["meta", "property"],
   aliases: ["Expression"],
   fields: {
-    // todo: limit to new.target
     meta: {
-      validate: assertNodeType("Identifier"),
+      validate: chain(assertNodeType("Identifier"), function(node, key, val) {
+        let property;
+        switch (val.name) {
+          case "function":
+            property = "sent";
+            break;
+          case "new":
+            property = "target";
+            break;
+          case "import":
+            property = "meta";
+            break;
+        }
+        if (!t.isIdentifier(node.property, { name: property })) {
+          throw new TypeError("Unrecognised MetaProperty");
+        }
+      }),
     },
     property: {
       validate: assertNodeType("Identifier"),
@@ -426,7 +610,16 @@ export const classMethodOrDeclareMethodCommon = {
 
 defineType("ClassMethod", {
   aliases: ["Function", "Scopable", "BlockParent", "FunctionParent", "Method"],
-  builder: ["kind", "key", "params", "body", "computed", "static"],
+  builder: [
+    "kind",
+    "key",
+    "params",
+    "body",
+    "computed",
+    "static",
+    "generator",
+    "async",
+  ],
   visitor: [
     "key",
     "params",
@@ -444,20 +637,60 @@ defineType("ClassMethod", {
 });
 
 defineType("ObjectPattern", {
-  visitor: ["properties", "typeAnnotation"],
   builder: ["properties"],
-  aliases: ["Pattern", "PatternLike", "LVal"],
+  visitor: ["properties", "typeAnnotation"],
+<<<<<<< HEAD
+=======
+  aliases: ["Pattern", "LVal"],
+>>>>>>> Lock down type system
   fields: {
-    ...patternLikeCommon,
     properties: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("RestElement", "ObjectProperty")),
+        assertEach(assertNodeType("ObjectProperty", "RestElement")),
       ),
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+<<<<<<< HEAD
+    }
+  }
+=======
     },
   },
 });
 
+<<<<<<< HEAD
+defineType("ObjectPatternProperty", {
+  aliases: ["Property"],
+  builder: ["key", "value", "shorthand"],
+  fields: {
+    key: {
+      validate: assertNodeType("Identifier", "StringLiteral", "NumericLiteral"),
+    },
+    value: {
+      validate: assertNodeType("Identifier", "Pattern"),
+    },
+    shorthand: {
+      validate: chain(assertValueType("boolean"), function(node, key, val) {
+        if (val && !t.isIdentifier(node.key)) {
+          throw new TypeError(
+            "Property shorthand of ObjectPatternProperty cannot be true if key is not an Identifier",
+          );
+        }
+      }),
+      default: false,
+    },
+  },
+  visitor: ["key", "value"],
+>>>>>>> Lock down type system
+});
+
+=======
+>>>>>>> Remove ObjectPatternProperty
 defineType("SpreadElement", {
   visitor: ["argument"],
   aliases: ["UnaryLike"],
@@ -488,11 +721,19 @@ defineType("TaggedTemplateExpression", {
 defineType("TemplateElement", {
   builder: ["value", "tail"],
   fields: {
+    // TODO: flatten `raw` into main node
     value: {
-      // todo: flatten `raw` into main node
+      validate: (function() {
+        const string = assertValueType("string");
+
+        return function(node, params, val) {
+          const { cooked, raw } = val;
+          string(node, "cooked", cooked);
+          string(node, "raw", raw);
+        };
+      })(),
     },
     tail: {
-      validate: assertValueType("boolean"),
       default: false,
     },
   },
@@ -523,8 +764,14 @@ defineType("YieldExpression", {
   aliases: ["Expression", "Terminatorless"],
   fields: {
     delegate: {
-      validate: assertValueType("boolean"),
       default: false,
+      validate: chain(assertValueType("boolean"), function(node, key, val) {
+        if (val && !node.argument) {
+          throw new TypeError(
+            "Property delegate of YieldExpression cannot be true if there is no argument",
+          );
+        }
+      }),
     },
     argument: {
       optional: true,

@@ -7,6 +7,9 @@ import {
   LOGICAL_OPERATORS,
   UNARY_OPERATORS,
   UPDATE_OPERATORS,
+  ASSIGNMENT_OPERATORS,
+  NOT_LOCAL_BINDING,
+  BLOCK_SCOPED_SYMBOL,
 } from "../constants";
 
 import defineType, {
@@ -21,13 +24,13 @@ import defineType, {
 defineType("ArrayExpression", {
   fields: {
     elements: {
+      default: [],
       validate: chain(
         assertValueType("array"),
         assertEach(
           assertNodeOrValueType("null", "Expression", "SpreadElement"),
         ),
       ),
-      default: [],
     },
   },
   visitor: ["elements"],
@@ -37,10 +40,23 @@ defineType("ArrayExpression", {
 defineType("AssignmentExpression", {
   fields: {
     operator: {
-      validate: assertValueType("string"),
+      validate: (function() {
+        const identifier = assertOneOf(...ASSIGNMENT_OPERATORS);
+        const pattern = assertOneOf("=");
+
+        return function(node, key, val) {
+          const validator = t.isPattern(node.left) ? pattern : identifier;
+          validator(node, key, val);
+        };
+      })(),
     },
     left: {
-      validate: assertNodeType("LVal"),
+      validate: assertNodeType(
+        "Identifier",
+        "MemberExpression",
+        "ArrayPattern",
+        "ObjectPattern",
+      ),
     },
     right: {
       validate: assertNodeType("Expression"),
@@ -91,11 +107,11 @@ defineType("BlockStatement", {
   visitor: ["directives", "body"],
   fields: {
     directives: {
+      default: [],
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Directive")),
       ),
-      default: [],
     },
     body: {
       validate: chain(
@@ -111,17 +127,17 @@ defineType("BreakStatement", {
   visitor: ["label"],
   fields: {
     label: {
-      validate: assertNodeType("Identifier"),
       optional: true,
+      validate: assertNodeType("Identifier"),
     },
   },
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
 });
 
 defineType("CallExpression", {
-  visitor: ["callee", "arguments", "typeParameters"],
-  builder: ["callee", "arguments"],
   aliases: ["Expression"],
+  builder: ["callee", "arguments", "optional"],
+  visitor: ["callee", "arguments", "typeParameters"],
   fields: {
     callee: {
       validate: assertNodeType("Expression"),
@@ -133,8 +149,7 @@ defineType("CallExpression", {
       ),
     },
     optional: {
-      validate: assertOneOf(true, false),
-      optional: true,
+      default: false,
     },
     typeParameters: {
       validate: assertNodeType("TypeParameterInstantiation"),
@@ -147,7 +162,7 @@ defineType("CatchClause", {
   visitor: ["param", "body"],
   fields: {
     param: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "ArrayPattern", "ObjectPattern"),
       optional: true,
     },
     body: {
@@ -177,8 +192,8 @@ defineType("ContinueStatement", {
   visitor: ["label"],
   fields: {
     label: {
-      validate: assertNodeType("Identifier"),
       optional: true,
+      validate: assertNodeType("Identifier"),
     },
   },
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
@@ -237,7 +252,23 @@ defineType("ForInStatement", {
   ],
   fields: {
     left: {
-      validate: assertNodeType("VariableDeclaration", "LVal"),
+      validate: (function() {
+        const declaration = assertNodeType("VariableDeclaration");
+        const lval = assertNodeType(
+          "Identifier",
+          "MemberExpression",
+          "ArrayPattern",
+          "ObjectPattern",
+        );
+
+        return function(node, key, val) {
+          if (t.isVariableDeclaration(val)) {
+            declaration(node, key, val);
+          } else {
+            lval(node, key, val);
+          }
+        };
+      })(),
     },
     right: {
       validate: assertNodeType("Expression"),
@@ -253,16 +284,27 @@ defineType("ForStatement", {
   aliases: ["Scopable", "Statement", "For", "BlockParent", "Loop"],
   fields: {
     init: {
-      validate: assertNodeType("VariableDeclaration", "Expression"),
+      validate: (function() {
+        const declaration = assertNodeType("VariableDeclaration");
+        const expression = assertNodeType("Expression");
+
+        return function(node, key, val) {
+          if (t.isVariableDeclaration(val)) {
+            declaration(node, key, val);
+          } else {
+            expression(node, key, val);
+          }
+        };
+      })(),
       optional: true,
     },
     test: {
-      validate: assertNodeType("Expression"),
       optional: true,
+      validate: assertNodeType("Expression"),
     },
     update: {
-      validate: assertNodeType("Expression"),
       optional: true,
+      validate: assertNodeType("Expression"),
     },
     body: {
       validate: assertNodeType("Statement"),
@@ -274,15 +316,13 @@ export const functionCommon = {
   params: {
     validate: chain(
       assertValueType("array"),
-      assertEach(assertNodeType("LVal")),
+      assertEach(assertNodeType("Identifier", "Pattern", "RestElement")),
     ),
   },
   generator: {
     default: false,
-    validate: assertValueType("boolean"),
   },
   async: {
-    validate: assertValueType("boolean"),
     default: false,
   },
   returnType: {
@@ -311,7 +351,20 @@ defineType("FunctionDeclaration", {
   builder: ["id", "params", "body", "generator", "async"],
   visitor: ["id", "params", "body", "returnType", "typeParameters"],
   fields: {
+<<<<<<< HEAD
     ...functionDeclarationCommon,
+=======
+    id: {
+      optional: true,
+      validate: assertNodeType("Identifier"),
+    },
+    params: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Identifier", "Pattern", "RestElement")),
+      ),
+    },
+>>>>>>> Lock down type system
     body: {
       validate: assertNodeType("BlockStatement"),
     },
@@ -325,6 +378,15 @@ defineType("FunctionDeclaration", {
     "Pureish",
     "Declaration",
   ],
+  validate: (function() {
+    const identifier = assertNodeType("Identifier");
+
+    return function(parent, key, node) {
+      if (!t.isExportDefaultDeclaration(parent)) {
+        identifier(node, "id", node.id);
+      }
+    };
+  })(),
 });
 
 defineType("FunctionExpression", {
@@ -337,6 +399,7 @@ defineType("FunctionExpression", {
     "Expression",
     "Pureish",
   ],
+<<<<<<< HEAD
   fields: {
     ...functionCommon,
     id: {
@@ -347,6 +410,8 @@ defineType("FunctionExpression", {
       validate: assertNodeType("BlockStatement"),
     },
   },
+=======
+>>>>>>> Add missing fields
 });
 
 export const patternLikeCommon = {
@@ -371,8 +436,8 @@ defineType("Identifier", {
     ...patternLikeCommon,
     name: {
       validate(node, key, val) {
-        if (!t.isValidIdentifier(val)) {
-          // throw new TypeError(`"${val}" is not a valid identifer name`);
+        if (!t.isValidIdentifier(val, false)) {
+          throw new TypeError(`"${val}" is not a valid identifer name`);
         }
       },
     },
@@ -380,6 +445,19 @@ defineType("Identifier", {
       validate: assertValueType("boolean"),
       optional: true,
     },
+    [NOT_LOCAL_BINDING]: {
+      default: false,
+    },
+  },
+  validate(parent, key, node) {
+    if (t.isMemberExpression(parent, { property: node })) return;
+    if (t.isProperty(parent, { key: node })) return;
+    if (t.isMethod(parent, { key: node })) return;
+    if (t.isExportSpecifier(parent, { exported: node })) return;
+    if (t.isImportSpecifier(parent, { imported: node })) return;
+    if (t.isMetaProperty(parent, { meta: node })) return;
+    if (t.isValidIdentifier(node.name)) return;
+    throw new TypeError(`"${node.name}" is not a valid identifer name`);
   },
 });
 
@@ -457,7 +535,6 @@ defineType("RegExpLiteral", {
       validate: assertValueType("string"),
     },
     flags: {
-      validate: assertValueType("string"),
       default: "",
     },
   },
@@ -503,8 +580,7 @@ defineType("MemberExpression", {
       default: false,
     },
     optional: {
-      validate: assertOneOf(true, false),
-      optional: true,
+      default: false,
     },
   },
 });
@@ -522,11 +598,11 @@ defineType("Program", {
       validate: assertOneOf("script", "module"),
     },
     directives: {
+      default: [],
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Directive")),
       ),
-      default: [],
     },
     body: {
       validate: chain(
@@ -554,18 +630,13 @@ defineType("ObjectExpression", {
 });
 
 defineType("ObjectMethod", {
-  builder: ["kind", "key", "params", "body", "computed"],
+  builder: ["kind", "key", "params", "body", "computed", "generator", "async"],
   fields: {
     ...functionCommon,
     kind: {
-      validate: chain(
-        assertValueType("string"),
-        assertOneOf("method", "get", "set"),
-      ),
-      default: "method",
+      validate: assertOneOf("method", "get", "set"),
     },
     computed: {
-      validate: assertValueType("boolean"),
       default: false,
     },
     key: {
@@ -582,6 +653,12 @@ defineType("ObjectMethod", {
           validator(node, key, val);
         };
       })(),
+    },
+    params: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Identifier", "Pattern", "RestElement")),
+      ),
     },
     decorators: {
       validate: chain(
@@ -616,7 +693,6 @@ defineType("ObjectProperty", {
   builder: ["key", "value", "computed", "shorthand", "decorators"],
   fields: {
     computed: {
-      validate: assertValueType("boolean"),
       default: false,
     },
     key: {
@@ -634,36 +710,62 @@ defineType("ObjectProperty", {
         };
       })(),
     },
-    value: {
-      // Value may be PatternLike if this is an AssignmentProperty
-      // https://github.com/babel/babylon/issues/434
-      validate: assertNodeType("Expression", "PatternLike"),
-    },
+    value: {},
     shorthand: {
-      validate: assertValueType("boolean"),
+      validate: chain(
+        assertValueType("boolean"),
+        function(node, key, val) {
+          if (val && node.computed) {
+            throw new TypeError(
+              "Property shorthand of ObjectProperty cannot be true if computed is true",
+            );
+          }
+        },
+        function(node, key, val) {
+          if (val && !t.isIdentifier(node.key)) {
+            throw new TypeError(
+              "Property shorthand of ObjectProperty cannot be true if key is not an Identifier",
+            );
+          }
+        },
+      ),
       default: false,
     },
     decorators: {
+      optional: true,
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
-      optional: true,
     },
   },
   visitor: ["key", "value", "decorators"],
   aliases: ["UserWhitespacable", "Property", "ObjectMember"],
+  validate: (function() {
+    const pattern = assertNodeType("Identifier", "Pattern");
+    const expression = assertNodeType("Expression");
+
+    return function(parent, key, node) {
+      const validator = t.isObjectPattern(parent) ? pattern : expression;
+      validator(node, "value", node.value);
+    };
+  })(),
 });
 
 defineType("RestElement", {
-  visitor: ["argument", "typeAnnotation"],
   builder: ["argument"],
-  aliases: ["LVal", "PatternLike"],
+  visitor: ["argument", "typeAnnotation"],
   fields: {
     ...patternLikeCommon,
     argument: {
-      validate: assertNodeType("LVal"),
+      validate: assertNodeType("Identifier"),
     },
+  },
+  validate(parent, key) {
+    const [, listKey, index] = /(\w+)\[(\d+)\]/.exec(key);
+    if (parent[listKey].length > index + 1) {
+      throw new TypeError(`RestElement must be last element of ${key}`);
+    }
   },
 });
 
@@ -672,8 +774,8 @@ defineType("ReturnStatement", {
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
   fields: {
     argument: {
-      validate: assertNodeType("Expression"),
       optional: true,
+      validate: assertNodeType("Expression"),
     },
   },
 });
@@ -695,8 +797,8 @@ defineType("SwitchCase", {
   visitor: ["test", "consequent"],
   fields: {
     test: {
-      validate: assertNodeType("Expression"),
       optional: true,
+      validate: assertNodeType("Expression"),
     },
     consequent: {
       validate: chain(
@@ -743,7 +845,13 @@ defineType("TryStatement", {
   aliases: ["Statement"],
   fields: {
     block: {
-      validate: assertNodeType("BlockStatement"),
+      validate: chain(assertNodeType("BlockStatement"), function(node) {
+        if (!node.handler && !node.finalizer) {
+          throw new TypeError(
+            "TryStatement expects either a handler or finalizer, or both",
+          );
+        }
+      }),
     },
     handler: {
       optional: true,
@@ -757,11 +865,8 @@ defineType("TryStatement", {
 });
 
 defineType("UnaryExpression", {
-  builder: ["operator", "argument", "prefix"],
+  builder: ["operator", "argument"],
   fields: {
-    prefix: {
-      default: true,
-    },
     argument: {
       validate: assertNodeType("Expression"),
     },
@@ -780,7 +885,7 @@ defineType("UpdateExpression", {
       default: false,
     },
     argument: {
-      validate: assertNodeType("Expression"),
+      validate: assertNodeType("LVal"),
     },
     operator: {
       validate: assertOneOf(...UPDATE_OPERATORS),
@@ -800,10 +905,7 @@ defineType("VariableDeclaration", {
       optional: true,
     },
     kind: {
-      validate: chain(
-        assertValueType("string"),
-        assertOneOf("var", "let", "const"),
-      ),
+      validate: assertOneOf("var", "let", "const"),
     },
     declarations: {
       validate: chain(
@@ -811,6 +913,16 @@ defineType("VariableDeclaration", {
         assertEach(assertNodeType("VariableDeclarator")),
       ),
     },
+    [BLOCK_SCOPED_SYMBOL]: {
+      default: false,
+    },
+  },
+  validate(parent, key, node) {
+    if (!t.isForXStatement(parent, { left: node })) return;
+    if (node.declarations.length === 1) return;
+    throw new TypeError(
+      `Exactly one VariableDeclarator is required in the VariableDeclaration of a ${parent.type}`,
+    );
   },
 });
 
@@ -818,7 +930,19 @@ defineType("VariableDeclarator", {
   visitor: ["id", "init"],
   fields: {
     id: {
-      validate: assertNodeType("LVal"),
+      validate: (function() {
+        const normal = assertNodeType(
+          "Identifier",
+          "ArrayPattern",
+          "ObjectPattern",
+        );
+        const without = assertNodeType("Identifier");
+
+        return function(node, key, val) {
+          const validator = node.init ? normal : without;
+          validator(node, key, val);
+        };
+      })(),
     },
     init: {
       optional: true,
@@ -835,7 +959,7 @@ defineType("WhileStatement", {
       validate: assertNodeType("Expression"),
     },
     body: {
-      validate: assertNodeType("BlockStatement", "Statement"),
+      validate: assertNodeType("Statement"),
     },
   },
 });
@@ -845,10 +969,10 @@ defineType("WithStatement", {
   aliases: ["Statement"],
   fields: {
     object: {
-      object: assertNodeType("Expression"),
+      validate: assertNodeType("Expression"),
     },
     body: {
-      validate: assertNodeType("BlockStatement", "Statement"),
+      validate: assertNodeType("Statement"),
     },
   },
 });

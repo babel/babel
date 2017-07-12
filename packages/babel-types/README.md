@@ -46,9 +46,15 @@ See also `t.isArrayPattern(node, opts)` and `t.assertArrayPattern(node, opts)`.
 
 Aliases: `Pattern`, `PatternLike`, `LVal`
 
+<<<<<<< HEAD
  - `elements`: `Array<PatternLike>` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `typeAnnotation`: `TypeAnnotation | Noop` (default: `null`)
+=======
+ - `elements`: `Array<Identifier | Pattern | RestElement>` (required)
+ - `decorators`: `Array<Decorator>` (default: `null`, non-buildable)
+ - `typeAnnotation` (default: `null`, non-buildable)
+>>>>>>> Update docs
 
 ---
 
@@ -74,7 +80,7 @@ See also `t.isArrowFunctionExpression(node, opts)` and `t.assertArrowFunctionExp
 
 Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, `Pureish`
 
- - `params`: `Array<LVal>` (required)
+ - `params`: `Array<Identifier | Pattern | RestElement>` (required)
  - `body`: `BlockStatement | Expression` (required)
  - `async`: `boolean` (default: `false`)
  - `expression`: `boolean` (default: `null`)
@@ -93,8 +99,8 @@ See also `t.isAssignmentExpression(node, opts)` and `t.assertAssignmentExpressio
 
 Aliases: `Expression`
 
- - `operator`: `string` (required)
- - `left`: `LVal` (required)
+ - `operator` (required)
+ - `left`: `Identifier | MemberExpression | ArrayPattern | ObjectPattern` (required)
  - `right`: `Expression` (required)
 
 ---
@@ -152,8 +158,8 @@ See also `t.isBindExpression(node, opts)` and `t.assertBindExpression(node, opts
 
 Aliases: `Expression`
 
- - `object` (required)
- - `callee` (required)
+ - `object`: `Expression` (required)
+ - `callee`: `Expression` (required)
 
 ---
 
@@ -223,7 +229,11 @@ Aliases: `Statement`, `Terminatorless`, `CompletionStatement`
 
 ### callExpression
 ```javascript
+<<<<<<< HEAD
 t.callExpression(callee, arguments)
+=======
+t.callExpression(callee, arguments, optional)
+>>>>>>> Update docs
 ```
 
 See also `t.isCallExpression(node, opts)` and `t.assertCallExpression(node, opts)`.
@@ -232,8 +242,12 @@ Aliases: `Expression`
 
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement>` (required)
+<<<<<<< HEAD
  - `optional`: `true | false` (default: `null`)
  - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
+=======
+ - `optional`: `boolean` (default: `false`)
+>>>>>>> Update docs
 
 ---
 
@@ -246,7 +260,11 @@ See also `t.isCatchClause(node, opts)` and `t.assertCatchClause(node, opts)`.
 
 Aliases: `Scopable`, `BlockParent`
 
+<<<<<<< HEAD
  - `param`: `Identifier` (default: `null`)
+=======
+ - `param`: `Identifier | ArrayPattern | ObjectPattern` (required)
+>>>>>>> Update docs
  - `body`: `BlockStatement` (required)
 
 ---
@@ -275,12 +293,19 @@ Aliases: `Scopable`, `Class`, `Statement`, `Declaration`, `Pureish`
  - `superClass`: `Expression` (default: `null`)
  - `body`: `ClassBody` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
+<<<<<<< HEAD
  - `abstract`: `boolean` (default: `null`)
  - `declare`: `boolean` (default: `null`)
  - `implements`: `Array<TSExpressionWithTypeArguments | FlowClassImplements>` (default: `null`)
  - `mixins` (default: `null`)
  - `superTypeParameters`: `TypeParameterInstantiation` (default: `null`)
  - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+=======
+ - `implements` (default: `null`, non-buildable)
+ - `mixins` (default: `null`, non-buildable)
+ - `superTypeParameters` (default: `null`, non-buildable)
+ - `typeParameters` (default: `null`, non-buildable)
+>>>>>>> Update docs
 
 ---
 
@@ -295,12 +320,21 @@ Aliases: `Scopable`, `Class`, `Expression`, `Pureish`
 
  - `id`: `Identifier` (default: `null`)
  - `superClass`: `Expression` (default: `null`)
+<<<<<<< HEAD
  - `body`: `ClassBody` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `implements`: `Array<TSExpressionWithTypeArguments | FlowClassImplements>` (default: `null`)
  - `mixins` (default: `null`)
  - `superTypeParameters`: `TypeParameterInstantiation` (default: `null`)
  - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+=======
+ - `body`: `ClassBody` (default: `null`)
+ - `decorators`: `Array<Decorator>` (default: `null`)
+ - `implements` (default: `null`, non-buildable)
+ - `mixins` (default: `null`, non-buildable)
+ - `superTypeParameters` (default: `null`, non-buildable)
+ - `typeParameters` (default: `null`, non-buildable)
+>>>>>>> Update docs
 
 ---
 
@@ -327,9 +361,9 @@ See also `t.isClassMethod(node, opts)` and `t.assertClassMethod(node, opts)`.
 
 Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
 
- - `kind`: `"get" | "set" | "method" | "constructor"` (default: `'method'`)
+ - `kind`: `'get' | 'set' | 'method' | 'constructor'` (required)
  - `key`: if computed then `Expression` else `Identifier | Literal` (required)
- - `params`: `Array<LVal>` (required)
+ - `params`: `Array<Identifier | Pattern | RestElement>` (required)
  - `body`: `BlockStatement` (required)
  - `computed`: `boolean` (default: `false`)
  - `static`: `boolean` (default: `null`)
@@ -337,17 +371,23 @@ Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
  - `access`: `"public" | "private" | "protected"` (default: `null`)
  - `accessibility`: `"public" | "private" | "protected"` (default: `null`)
  - `async`: `boolean` (default: `false`)
+<<<<<<< HEAD
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `generator`: `boolean` (default: `false`)
  - `optional`: `boolean` (default: `null`)
  - `returnType`: `TypeAnnotation | Noop` (default: `null`)
  - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+=======
+ - `decorators`: `Array<Decorator>` (default: `null`, non-buildable)
+ - `returnType` (default: `null`, non-buildable)
+ - `typeParameters` (default: `null`, non-buildable)
+>>>>>>> Update docs
 
 ---
 
 ### classProperty
 ```javascript
-t.classProperty(key, value, typeAnnotation, decorators, computed)
+t.classProperty(key, value, computed, decorators)
 ```
 
 See also `t.isClassProperty(node, opts)` and `t.assertClassProperty(node, opts)`.
@@ -356,6 +396,7 @@ Aliases: `Property`
 
  - `key` (required)
  - `value`: `Expression` (default: `null`)
+<<<<<<< HEAD
  - `typeAnnotation`: `TypeAnnotation | Noop` (default: `null`)
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `computed`: `boolean` (default: `false`)
@@ -364,6 +405,12 @@ Aliases: `Property`
  - `optional`: `boolean` (default: `null`)
  - `readonly`: `boolean` (default: `null`)
  - `static`: `boolean` (default: `null`)
+=======
+ - `computed`: `boolean` (default: `false`)
+ - `decorators`: `Array<Decorator>` (default: `null`)
+ - `typeAnnotation` (default: `null`, non-buildable)
+ - `variance`: `Variance` (default: `null`, non-buildable)
+>>>>>>> Update docs
 
 ---
 
@@ -707,8 +754,8 @@ See also `t.isExportNamedDeclaration(node, opts)` and `t.assertExportNamedDeclar
 
 Aliases: `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
 
- - `declaration`: `Declaration` (default: `null`)
- - `specifiers`: `Array<ExportSpecifier>` (required)
+ - `declaration` (default: `null`)
+ - `specifiers`: `Array<ExportSpecifier | ExportDefaultSpecifier | ExportNamespaceSpecifier>` (default: `[]`)
  - `source`: `StringLiteral` (default: `null`)
 
 ---
@@ -775,7 +822,7 @@ See also `t.isForInStatement(node, opts)` and `t.assertForInStatement(node, opts
 
 Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
 
- - `left`: `VariableDeclaration | LVal` (required)
+ - `left` (required)
  - `right`: `Expression` (required)
  - `body`: `Statement` (required)
 
@@ -790,7 +837,7 @@ See also `t.isForOfStatement(node, opts)` and `t.assertForOfStatement(node, opts
 
 Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`, `ForXStatement`
 
- - `left`: `VariableDeclaration | LVal` (required)
+ - `left` (required)
  - `right`: `Expression` (required)
  - `body`: `Statement` (required)
  - `await`: `boolean` (default: `false`)
@@ -806,7 +853,7 @@ See also `t.isForStatement(node, opts)` and `t.assertForStatement(node, opts)`.
 
 Aliases: `Scopable`, `Statement`, `For`, `BlockParent`, `Loop`
 
- - `init`: `VariableDeclaration | Expression` (default: `null`)
+ - `init` (default: `null`)
  - `test`: `Expression` (default: `null`)
  - `update`: `Expression` (default: `null`)
  - `body`: `Statement` (required)
@@ -823,7 +870,11 @@ See also `t.isFunctionDeclaration(node, opts)` and `t.assertFunctionDeclaration(
 Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Statement`, `Pureish`, `Declaration`
 
  - `id`: `Identifier` (default: `null`)
+<<<<<<< HEAD
  - `params`: `Array<LVal>` (required)
+=======
+ - `params`: `Array<Identifier | Pattern | RestElement>` (required)
+>>>>>>> Update docs
  - `body`: `BlockStatement` (required)
  - `generator`: `boolean` (default: `false`)
  - `async`: `boolean` (default: `false`)
@@ -843,8 +894,8 @@ See also `t.isFunctionExpression(node, opts)` and `t.assertFunctionExpression(no
 Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, `Pureish`
 
  - `id`: `Identifier` (default: `null`)
- - `params`: `Array<LVal>` (required)
- - `body`: `BlockStatement` (required)
+ - `params`: `Array<Identifier | Pattern | RestElement>` (default: `null`)
+ - `body`: `BlockStatement` (default: `null`)
  - `generator`: `boolean` (default: `false`)
  - `async`: `boolean` (default: `false`)
  - `returnType`: `TypeAnnotation | Noop` (default: `null`)
@@ -1078,7 +1129,7 @@ Aliases: `JSX`, `Immutable`
 
 ### jSXElement
 ```javascript
-t.jSXElement(openingElement, closingElement, children, selfClosing)
+t.jSXElement(openingElement, closingElement, children)
 ```
 
 See also `t.isJSXElement(node, opts)` and `t.assertJSXElement(node, opts)`.
@@ -1088,7 +1139,6 @@ Aliases: `JSX`, `Immutable`, `Expression`
  - `openingElement`: `JSXOpeningElement` (required)
  - `closingElement`: `JSXClosingElement` (default: `null`)
  - `children`: `Array<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement>` (required)
- - `selfClosing` (required)
 
 ---
 
@@ -1253,7 +1303,11 @@ Aliases: `Expression`, `LVal`
  - `object`: `Expression` (required)
  - `property`: if computed then `Expression` else `Identifier` (required)
  - `computed`: `boolean` (default: `false`)
+<<<<<<< HEAD
  - `optional`: `true | false` (default: `null`)
+=======
+ - `optional`: `boolean` (default: `false`)
+>>>>>>> Update docs
 
 ---
 
@@ -1266,7 +1320,7 @@ See also `t.isMetaProperty(node, opts)` and `t.assertMetaProperty(node, opts)`.
 
 Aliases: `Expression`
 
- - `meta`: `Identifier` (required)
+ - `meta` (required)
  - `property`: `Identifier` (required)
 
 ---
@@ -1285,17 +1339,27 @@ Aliases: `Flow`, `FlowBaseAnnotation`
 
 ### newExpression
 ```javascript
+<<<<<<< HEAD
 t.newExpression(callee, arguments)
+=======
+t.newExpression(callee, arguments, optional)
+>>>>>>> Update docs
 ```
 
 See also `t.isNewExpression(node, opts)` and `t.assertNewExpression(node, opts)`.
 
 Aliases: `Expression`
 
+<<<<<<< HEAD
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement>` (required)
  - `optional`: `true | false` (default: `null`)
  - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
+=======
+ - `callee`: `Expression` (default: `null`)
+ - `arguments`: `Array<Expression | SpreadElement>` (default: `null`)
+ - `optional`: `boolean` (default: `false`)
+>>>>>>> Update docs
 
 ---
 
@@ -1405,9 +1469,13 @@ See also `t.isObjectMethod(node, opts)` and `t.assertObjectMethod(node, opts)`.
 
 Aliases: `UserWhitespacable`, `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`, `ObjectMember`
 
- - `kind`: `"method" | "get" | "set"` (default: `'method'`)
+ - `kind`: `'method' | 'get' | 'set'` (required)
  - `key`: if computed then `Expression` else `Identifier | Literal` (required)
+<<<<<<< HEAD
  - `params`: `Array<LVal>` (required)
+=======
+ - `params`: `Array<Identifier | Pattern | RestElement>` (required)
+>>>>>>> Update docs
  - `body`: `BlockStatement` (required)
  - `computed`: `boolean` (default: `false`)
  - `async`: `boolean` (default: `false`)
@@ -1427,9 +1495,15 @@ See also `t.isObjectPattern(node, opts)` and `t.assertObjectPattern(node, opts)`
 
 Aliases: `Pattern`, `PatternLike`, `LVal`
 
+<<<<<<< HEAD
  - `properties`: `Array<RestElement | ObjectProperty>` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `typeAnnotation`: `TypeAnnotation | Noop` (default: `null`)
+=======
+ - `properties`: `Array<ObjectProperty | RestElement>` (required)
+ - `decorators`: `Array<Decorator>` (default: `null`, non-buildable)
+ - `typeAnnotation` (default: `null`, non-buildable)
+>>>>>>> Update docs
 
 ---
 
@@ -1443,9 +1517,13 @@ See also `t.isObjectProperty(node, opts)` and `t.assertObjectProperty(node, opts
 Aliases: `UserWhitespacable`, `Property`, `ObjectMember`
 
  - `key`: if computed then `Expression` else `Identifier | Literal` (required)
+<<<<<<< HEAD
  - `value`: `Expression | PatternLike` (required)
+=======
+ - `value` (required)
+>>>>>>> Update docs
  - `computed`: `boolean` (default: `false`)
- - `shorthand`: `boolean` (default: `false`)
+ - `shorthand` (default: `false`)
  - `decorators`: `Array<Decorator>` (default: `null`)
 
 ---
@@ -1600,11 +1678,17 @@ t.restElement(argument)
 
 See also `t.isRestElement(node, opts)` and `t.assertRestElement(node, opts)`.
 
+<<<<<<< HEAD
 Aliases: `LVal`, `PatternLike`
 
  - `argument`: `LVal` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `typeAnnotation`: `TypeAnnotation | Noop` (default: `null`)
+=======
+ - `argument`: `Identifier` (required)
+ - `decorators`: `Array<Decorator>` (default: `null`, non-buildable)
+ - `typeAnnotation` (default: `null`, non-buildable)
+>>>>>>> Update docs
 
 ---
 
@@ -2506,7 +2590,11 @@ See also `t.isTryStatement(node, opts)` and `t.assertTryStatement(node, opts)`.
 
 Aliases: `Statement`
 
+<<<<<<< HEAD
  - `block`: `BlockStatement` (required)
+=======
+ - `block` (required)
+>>>>>>> Update docs
  - `handler`: `CatchClause` (default: `null`)
  - `finalizer`: `BlockStatement` (default: `null`)
 
@@ -2624,7 +2712,7 @@ Aliases: `Flow`
 
 ### unaryExpression
 ```javascript
-t.unaryExpression(operator, argument, prefix)
+t.unaryExpression(operator, argument)
 ```
 
 See also `t.isUnaryExpression(node, opts)` and `t.assertUnaryExpression(node, opts)`.
@@ -2633,7 +2721,6 @@ Aliases: `UnaryLike`, `Expression`
 
  - `operator`: `'void' | 'delete' | '!' | '+' | '-' | '~' | 'typeof'` (required)
  - `argument`: `Expression` (required)
- - `prefix`: `boolean` (default: `true`)
 
 ---
 
@@ -2660,7 +2747,7 @@ See also `t.isUpdateExpression(node, opts)` and `t.assertUpdateExpression(node, 
 Aliases: `Expression`
 
  - `operator`: `'++' | '--'` (required)
- - `argument`: `Expression` (required)
+ - `argument`: `LVal` (required)
  - `prefix`: `boolean` (default: `false`)
 
 ---
@@ -2674,7 +2761,7 @@ See also `t.isVariableDeclaration(node, opts)` and `t.assertVariableDeclaration(
 
 Aliases: `Statement`, `Declaration`
 
- - `kind`: `"var" | "let" | "const"` (required)
+ - `kind`: `'var' | 'let' | 'const'` (required)
  - `declarations`: `Array<VariableDeclarator>` (required)
  - `declare`: `boolean` (default: `null`)
 
@@ -2687,7 +2774,7 @@ t.variableDeclarator(id, init)
 
 See also `t.isVariableDeclarator(node, opts)` and `t.assertVariableDeclarator(node, opts)`.
 
- - `id`: `LVal` (required)
+ - `id` (required)
  - `init`: `Expression` (default: `null`)
 
 ---
@@ -2714,7 +2801,7 @@ See also `t.isWhileStatement(node, opts)` and `t.assertWhileStatement(node, opts
 Aliases: `Statement`, `BlockParent`, `Loop`, `While`, `Scopable`
 
  - `test`: `Expression` (required)
- - `body`: `BlockStatement | Statement` (required)
+ - `body`: `Statement` (required)
 
 ---
 
@@ -2727,8 +2814,13 @@ See also `t.isWithStatement(node, opts)` and `t.assertWithStatement(node, opts)`
 
 Aliases: `Statement`
 
+<<<<<<< HEAD
  - `object` (required)
  - `body`: `BlockStatement | Statement` (required)
+=======
+ - `object`: `Expression` (required)
+ - `body`: `Statement` (required)
+>>>>>>> Update docs
 
 ---
 
@@ -2742,7 +2834,7 @@ See also `t.isYieldExpression(node, opts)` and `t.assertYieldExpression(node, op
 Aliases: `Expression`, `Terminatorless`
 
  - `argument`: `Expression` (default: `null`)
- - `delegate`: `boolean` (default: `false`)
+ - `delegate` (default: `false`)
 
 ---
 

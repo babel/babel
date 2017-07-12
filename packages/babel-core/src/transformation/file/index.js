@@ -439,6 +439,8 @@ export default class File extends Store {
       );
       traverse(this.ast, visitor, this.scope);
 
+      t.validateDeep(this.ast);
+
       debug(this.opts, "End transform traverse");
 
       for (const [plugin, pass] of passPairs) {

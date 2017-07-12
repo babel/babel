@@ -488,7 +488,7 @@ export default class Scope {
 
   buildUndefinedNode() {
     if (this.hasBinding("undefined")) {
-      return t.unaryExpression("void", t.numericLiteral(0), true);
+      return t.unaryExpression("void", t.numericLiteral(0));
     } else {
       return t.identifier("undefined");
     }

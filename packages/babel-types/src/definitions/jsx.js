@@ -34,7 +34,7 @@ defineType("JSXClosingElement", {
 });
 
 defineType("JSXElement", {
-  builder: ["openingElement", "closingElement", "children", "selfClosing"],
+  builder: ["openingElement", "closingElement", "children"],
   visitor: ["openingElement", "children", "closingElement"],
   aliases: ["JSX", "Immutable", "Expression"],
   fields: {
@@ -66,16 +66,6 @@ defineType("JSXEmptyExpression", {
 });
 
 defineType("JSXExpressionContainer", {
-  visitor: ["expression"],
-  aliases: ["JSX", "Immutable"],
-  fields: {
-    expression: {
-      validate: assertNodeType("Expression"),
-    },
-  },
-});
-
-defineType("JSXSpreadChild", {
   visitor: ["expression"],
   aliases: ["JSX", "Immutable"],
   fields: {
@@ -129,6 +119,7 @@ defineType("JSXOpeningElement", {
     name: {
       validate: assertNodeType("JSXIdentifier", "JSXMemberExpression"),
     },
+    // WTF is this on the OpeningElement and not the Element?
     selfClosing: {
       default: false,
       validate: assertValueType("boolean"),
@@ -147,6 +138,16 @@ defineType("JSXSpreadAttribute", {
   aliases: ["JSX"],
   fields: {
     argument: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+});
+
+defineType("JSXSpreadChild", {
+  visitor: ["expression"],
+  aliases: ["JSX", "Immutable"],
+  fields: {
+    expression: {
       validate: assertNodeType("Expression"),
     },
   },

@@ -131,8 +131,12 @@ Object.keys(types.BUILDER_KEYS).sort().forEach(function(key) {
       }
       if (defaultValue !== null || types.NODE_FIELDS[key][field].optional) {
         fieldDescription.push(
-          " (default: `" + util.inspect(defaultValue) + "`)"
+          " (default: `" + util.inspect(defaultValue) + "`"
         );
+        if (types.BUILDER_KEYS[key].indexOf(field) < 0) {
+          fieldDescription.push(", non-buildable");
+        }
+        fieldDescription.push(")");
       } else {
         fieldDescription.push(" (required)");
       }

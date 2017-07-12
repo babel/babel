@@ -15,7 +15,12 @@ defineType("BindExpression", {
   visitor: ["object", "callee"],
   aliases: ["Expression"],
   fields: {
-    // todo
+    object: {
+      validate: assertNodeType("Expression"),
+    },
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
   },
 });
 

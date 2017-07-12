@@ -42,6 +42,12 @@ export const BINARY_OPERATORS = [
   ...BOOLEAN_BINARY_OPERATORS,
 ];
 
+export const ASSIGNMENT_OPERATORS = [
+  "=",
+  "+=",
+  ...NUMBER_BINARY_OPERATORS.map(op => op + "="),
+];
+
 export const BOOLEAN_UNARY_OPERATORS = ["delete", "!"];
 export const NUMBER_UNARY_OPERATORS = ["+", "-", "~"];
 export const STRING_UNARY_OPERATORS = ["typeof"];

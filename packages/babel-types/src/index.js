@@ -3,6 +3,7 @@ import loClone from "lodash/clone";
 import uniq from "lodash/uniq";
 
 const t = exports;
+const hasOwn = Object.prototype.hasOwnProperty;
 
 /**
  * Registers `is[Type]` and `assert[Type]` generated functions for a given `type`.
@@ -60,8 +61,16 @@ import {
   NODE_FIELDS,
   BUILDER_KEYS,
   DEPRECATED_KEYS,
+  NODE_PARENT_VALIDATIONS,
 } from "./definitions";
-export { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS };
+export {
+  VISITOR_KEYS,
+  ALIAS_KEYS,
+  NODE_FIELDS,
+  BUILDER_KEYS,
+  DEPRECATED_KEYS,
+  NODE_PARENT_VALIDATIONS,
+};
 
 import * as _react from "./react";
 export { _react as react };
@@ -158,6 +167,10 @@ export function isType(nodeType: string, targetType: string): boolean {
 
 Object.keys(t.BUILDER_KEYS).forEach(function(type) {
   const keys = t.BUILDER_KEYS[type];
+  const fields = t.NODE_FIELDS[type];
+  const fieldKeys = Object.keys(fields).concat(
+    Object.getOwnPropertySymbols(fields),
+  );
 
   function builder() {
     if (arguments.length > keys.length) {
@@ -173,7 +186,7 @@ Object.keys(t.BUILDER_KEYS).forEach(function(type) {
     let i = 0;
 
     for (const key of (keys: Array<string>)) {
-      const field = t.NODE_FIELDS[type][key];
+      const field = fields[key];
 
       let arg = arguments[i++];
       if (arg === undefined) arg = loClone(field.default);
@@ -181,9 +194,24 @@ Object.keys(t.BUILDER_KEYS).forEach(function(type) {
       node[key] = arg;
     }
 
+    for (const key of (fieldKeys: Array<string>)) {
+      if (!hasOwn.call(node, key)) {
+        node[key] = null;
+      }
+    }
+
     for (const key in node) {
       validate(node, key, node[key]);
     }
+    node._blockHoist = null;
+    node._compact = false;
+    node.leadingComments = null;
+    node.innerComments = null;
+    node.trailingComments = null;
+    node.loc = null;
+    node.start = null;
+    node.end = null;
+    node.extra = null;
 
     return node;
   }
@@ -224,8 +252,38 @@ export function validate(node?: Object, key: string, val: any) {
   const field = fields[key];
   if (!field || !field.validate) return;
   if (field.optional && val == null) return;
-
   field.validate(node, key, val);
+
+  validateChild(node, key, val);
+}
+
+export function validateChild(node?: Object, key: string, val?: Object) {
+  if (val == null) return;
+  const validate = NODE_PARENT_VALIDATIONS[val.type];
+  if (!validate) return;
+  validate(node, key, val);
+}
+
+export function validateDeep(node?: Object) {
+  const stack = [node];
+
+  while (stack.length) {
+    const node = stack.pop();
+    if (!node || !node.type) continue;
+
+    const fields = t.NODE_FIELDS[node.type];
+    if (!fields) continue;
+
+    for (const key in fields) {
+      const val = node[key];
+      t.validate(node, key, val);
+      if (Array.isArray(val)) {
+        stack.push(...val);
+      } else if (val) {
+        stack.push(val);
+      }
+    }
+  }
 }
 
 /**
