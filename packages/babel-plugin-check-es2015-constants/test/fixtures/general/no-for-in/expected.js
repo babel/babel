@@ -1,4 +1,6 @@
 var MULTIPLIER = 5;
-throw new Error("\"MULTIPLIER\" is read-only");
 
-for (MULTIPLIER in arr) {}
+for (MULTIPLIER in arr) {
+  throw new Error("\"MULTIPLIER\" is read-only");
+  ;
+}

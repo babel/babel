@@ -44,7 +44,15 @@ export default function({ messages, types: t }) {
                 ]),
               );
             } else if (violation.parentPath.isForXStatement()) {
-              violation.parentPath.insertBefore(throwNode);
+              // Transform single statement body into BlockStatement
+              if (!violation.parentPath.get("body").isBlockStatement()) {
+                violation.parentPath
+                  .get("body")
+                  .replaceWith(
+                    t.blockStatement([violation.parentPath.get("body").node]),
+                  );
+              }
+              violation.parentPath.node.body.body.unshift(throwNode);
             }
           }
         }
