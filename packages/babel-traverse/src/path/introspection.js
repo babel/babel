@@ -215,8 +215,10 @@ export function willIMaybeExecuteBefore(target) {
 
 export function _guessExecutionStatusRelativeTo(target) {
   // check if the two paths are in different functions, we can't track execution of these
-  const targetFuncParent = target.scope.getFunctionParent();
-  const selfFuncParent = this.scope.getFunctionParent();
+  const targetFuncParent =
+    target.scope.getFunctionParent() || target.scope.getProgramParent();
+  const selfFuncParent =
+    this.scope.getFunctionParent() || target.scope.getProgramParent();
 
   // here we check the `node` equality as sometimes we may have different paths for the
   // same node due to path thrashing

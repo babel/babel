@@ -34,11 +34,7 @@ export function find(callback): ?NodePath {
  */
 
 export function getFunctionParent(): ?NodePath {
-  const parent = this.findParent(p => p.isFunction());
-  if (!parent) {
-    throw new Error("getFunctionParent won't find Program anymore");
-  }
-  return parent;
+  return this.findParent(p => p.isFunction());
 }
 
 /**

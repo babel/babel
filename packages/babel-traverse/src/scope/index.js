@@ -72,7 +72,9 @@ const collectorVisitor = {
     for (const key of (t.FOR_INIT_KEYS: Array)) {
       const declar = path.get(key);
       if (declar.isVar()) {
-        path.scope.getFunctionParent().registerBinding("var", declar);
+        const parentScope =
+          path.scope.getFunctionParent() || path.scope.getProgramParent();
+        parentScope.registerBinding("var", declar);
       }
     }
   },
@@ -777,7 +779,7 @@ export default class Scope {
     }
 
     if (path.isSwitchStatement()) {
-      path = this.getFunctionParent().path;
+      path = (this.getFunctionParent() || this.getProgramParent()).path;
     }
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
@@ -817,7 +819,7 @@ export default class Scope {
         return scope;
       }
     } while ((scope = scope.parent));
-    throw new Error("We couldn't find a Function or Program...");
+    throw new Error("Couldn't find a Program");
   }
 
   /**

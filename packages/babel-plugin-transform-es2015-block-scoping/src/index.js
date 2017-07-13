@@ -121,7 +121,7 @@ function convertBlockScopedToVar(
 
   // Move bindings from current block scope to function scope.
   if (moveBindingsToParent) {
-    const parentScope = scope.getFunctionParent();
+    const parentScope = scope.getFunctionParent() || scope.getProgramParent();
     const ids = path.getBindingIdentifiers();
     for (const name in ids) {
       const binding = scope.getOwnBinding(name);
@@ -369,7 +369,7 @@ class BlockScoping {
 
   updateScopeInfo(wrappedInClosure) {
     const scope = this.scope;
-    const parentScope = scope.getFunctionParent();
+    const parentScope = scope.getFunctionParent() || scope.getProgramParent();
     const letRefs = this.letReferences;
 
     for (const key in letRefs) {
