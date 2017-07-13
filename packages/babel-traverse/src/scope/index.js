@@ -90,7 +90,9 @@ const collectorVisitor = {
     //if (path.isFlow()) return;
 
     // we've ran into a declaration!
-    path.scope.getFunctionParent().registerDeclaration(path);
+    const parent =
+      path.scope.getFunctionParent() || path.scope.getProgramParent();
+    parent.registerDeclaration(path);
   },
 
   ReferencedIdentifier(path, state) {
@@ -830,7 +832,7 @@ export default class Scope {
         return scope;
       }
     } while ((scope = scope.parent));
-    throw new Error("We couldn't find a Function or Program...");
+    return null;
   }
 
   /**
