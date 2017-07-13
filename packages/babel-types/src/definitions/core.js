@@ -520,7 +520,7 @@ defineType("Program", {
       ),
     },
   },
-  aliases: ["Scopable", "BlockParent", "Block", "FunctionParent"],
+  aliases: ["Scopable", "BlockParent", "Block"],
 });
 
 defineType("ObjectExpression", {
