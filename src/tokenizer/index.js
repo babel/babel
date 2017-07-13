@@ -391,8 +391,8 @@ export default class Tokenizer extends LocationParser {
     let width = 1;
     let next = this.input.charCodeAt(this.state.pos + 1);
 
-    if (next === 42) {
-      // '*'
+    // Exponentiation operator **
+    if (code === 42 && next === 42) {
       width++;
       next = this.input.charCodeAt(this.state.pos + 2);
       type = tt.exponent;
