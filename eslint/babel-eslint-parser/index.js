@@ -391,6 +391,7 @@ exports.parseNoPatch = function(code, options) {
     allowReturnOutsideFunction: true,
     allowSuperOutsideMethod: true,
     ranges: true,
+    tokens: true,
     plugins: [
       "flow",
       "jsx",
@@ -412,6 +413,7 @@ exports.parseNoPatch = function(code, options) {
       "optionalChaining",
       "importMeta",
       "classPrivateProperties",
+      "bigInt",
     ],
   };
 

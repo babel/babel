@@ -1795,4 +1795,54 @@ describe("verify", () => {
       []
     );
   });
+
+  it("works with dynamicImport", () => {
+    verifyAndAssertMessages(
+      unpad(`
+        import('a');
+      `),
+      {},
+      []
+    );
+  });
+
+  it("works with numericSeparator", () => {
+    verifyAndAssertMessages(
+      unpad(`
+        1_000
+      `),
+      {},
+      []
+    );
+  });
+
+  it("works with optionalChaining", () => {
+    verifyAndAssertMessages(
+      unpad(`
+        a?.b
+      `),
+      {},
+      []
+    );
+  });
+
+  it("works with import.meta", () => {
+    verifyAndAssertMessages(
+      unpad(`
+        import.meta
+      `),
+      {},
+      []
+    );
+  });
+
+  it("works with classPrivateProperties", () => {
+    verifyAndAssertMessages(
+      unpad(`
+        class A { #a = 1; }
+      `),
+      {},
+      []
+    );
+  });
 });
