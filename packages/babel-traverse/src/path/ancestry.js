@@ -17,7 +17,8 @@ export function findParent(callback): ?NodePath {
 }
 
 /**
- * Description
+ * Starting at current `NodePath` and going up the tree, return the first
+ * `NodePath` that causes the provided `callback` to return a truthy value.
  */
 
 export function find(callback): ?NodePath {
