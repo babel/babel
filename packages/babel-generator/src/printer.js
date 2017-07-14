@@ -319,7 +319,6 @@ export default class Printer {
 
     const printMethod = this[node.type];
     if (!printMethod) {
-      // eslint-disable-next-line max-len
       throw new ReferenceError(
         `unknown node of type ${JSON.stringify(
           node.type,
