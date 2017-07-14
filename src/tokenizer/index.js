@@ -434,6 +434,7 @@ export default class Tokenizer extends LocationParser {
     if (next === code) {
       if (
         next === 45 &&
+        !this.inModule &&
         this.input.charCodeAt(this.state.pos + 2) === 62 &&
         lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.pos))
       ) {
@@ -468,10 +469,10 @@ export default class Tokenizer extends LocationParser {
     if (
       next === 33 &&
       code === 60 &&
+      !this.inModule &&
       this.input.charCodeAt(this.state.pos + 2) === 45 &&
       this.input.charCodeAt(this.state.pos + 3) === 45
     ) {
-      if (this.inModule) this.unexpected();
       // `<!--`, an XML-style comment that should be interpreted as a line comment
       this.skipLineComment(4);
       this.skipSpace();
