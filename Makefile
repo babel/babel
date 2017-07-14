@@ -49,6 +49,7 @@ clean-all:
 	make clean
 
 test-only:
+	make build
 	./scripts/test.sh
 	make test-clean
 
