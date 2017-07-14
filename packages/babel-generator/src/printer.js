@@ -281,7 +281,7 @@ export default class Printer {
    *
    * This is to prevent breaking semantics for terminatorless separator nodes. eg:
    *
-   *    return foo;
+   *   return foo;
    *
    * returns `foo`. But if we do:
    *
