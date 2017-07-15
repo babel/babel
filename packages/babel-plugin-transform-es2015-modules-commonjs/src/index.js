@@ -307,41 +307,17 @@ export default function() {
               if (declaration.isFunctionDeclaration()) {
                 const id = declaration.node.id;
                 const defNode = t.identifier("default");
-                if (id) {
-                  addTo(exports, id.name, defNode);
-                  topNodes.push(buildExportsAssignment(defNode, id));
-                  path.replaceWith(declaration.node);
-                } else {
-                  topNodes.push(
-                    buildExportsAssignment(
-                      defNode,
-                      t.toExpression(declaration.node),
-                    ),
-                  );
-                  path.remove();
-                }
+                addTo(exports, id.name, defNode);
+                topNodes.push(buildExportsAssignment(defNode, id));
+                path.replaceWith(declaration.node);
               } else if (declaration.isClassDeclaration()) {
                 const id = declaration.node.id;
                 const defNode = t.identifier("default");
-                if (id) {
-                  addTo(exports, id.name, defNode);
-                  path.replaceWithMultiple([
-                    declaration.node,
-                    buildExportsAssignment(defNode, id),
-                  ]);
-                } else {
-                  path.replaceWith(
-                    buildExportsAssignment(
-                      defNode,
-                      t.toExpression(declaration.node),
-                    ),
-                  );
-
-                  // Manualy re-queue `export default class {}` expressions so that the ES3 transform
-                  // has an opportunity to convert them. Ideally this would happen automatically from the
-                  // replaceWith above. See #4140 for more info.
-                  path.parentPath.requeue(path.get("expression.left"));
-                }
+                addTo(exports, id.name, defNode);
+                path.replaceWithMultiple([
+                  declaration.node,
+                  buildExportsAssignment(defNode, id),
+                ]);
               } else {
                 path.replaceWith(
                   buildExportsAssignment(

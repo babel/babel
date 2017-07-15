@@ -12,9 +12,7 @@ export default function({ types: t }) {
         if (!path.get("declaration").isClassDeclaration()) return;
 
         const { node } = path;
-        const ref =
-          node.declaration.id || path.scope.generateUidIdentifier("class");
-        node.declaration.id = ref;
+        const ref = node.declaration.id;
 
         // Split the class declaration and the export into two separate statements.
         path.replaceWith(node.declaration);
@@ -28,7 +26,7 @@ export default function({ types: t }) {
       ClassDeclaration(path) {
         const { node } = path;
 
-        const ref = node.id || path.scope.generateUidIdentifier("class");
+        const ref = node.id;
 
         path.replaceWith(
           t.variableDeclaration("let", [

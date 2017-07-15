@@ -172,15 +172,9 @@ export default function({ types: t }) {
                 const id = declar.node.id;
                 const nodes = [];
 
-                if (id) {
-                  nodes.push(declar.node);
-                  nodes.push(buildExportCall("default", id));
-                  addExportName(id.name, "default");
-                } else {
-                  nodes.push(
-                    buildExportCall("default", t.toExpression(declar.node)),
-                  );
-                }
+                nodes.push(declar.node);
+                nodes.push(buildExportCall("default", id));
+                addExportName(id.name, "default");
 
                 if (!canHoist || declar.isClassDeclaration()) {
                   path.replaceWithMultiple(nodes);
