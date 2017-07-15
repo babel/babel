@@ -261,12 +261,6 @@ const loopVisitor = {
     const { node, parent, scope } = path;
     if (node[this.LOOP_IGNORE]) return;
 
-    if (node.trailingComments) {
-      node.trailingComments.forEach(comment => {
-        comment.value = comment.value.replace(/\n/g, "");
-      });
-    }
-
     let replace;
     let loopText = loopNodeTo(node);
 
