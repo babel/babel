@@ -454,11 +454,11 @@ export default class Printer {
   }
 
   _printTrailingComments(node, parent) {
-    this._printComments(this._getComments(false, node, parent), node);
+    this._printComments(this._getComments(false, node, parent));
   }
 
   _printLeadingComments(node, parent) {
-    this._printComments(this._getComments(true, node, parent), node);
+    this._printComments(this._getComments(true, node, parent));
   }
 
   printInnerComments(node, indent = true) {
@@ -513,7 +513,7 @@ export default class Printer {
     );
   }
 
-  _printComment(comment, node) {
+  _printComment(comment) {
     if (!this.format.shouldPrintComment(comment.value)) return;
 
     // Some plugins use this to mark comments as removed using the AST-root 'comments' property,
@@ -529,7 +529,7 @@ export default class Printer {
     }
 
     const isBlockComment = comment.type === "CommentBlock";
-    const isLabel = node && node.type == "Identifier" && node.name == "label";
+    const isLabel = false;
 
     // Always add a newline before a block comment
     this.newline(this._buf.hasContent() && !isLabel && isBlockComment ? 1 : 0);
@@ -564,11 +564,11 @@ export default class Printer {
     this.newline(isBlockComment && !isLabel ? 1 : 0);
   }
 
-  _printComments(comments?: Array<Object>, node) {
+  _printComments(comments?: Array<Object>) {
     if (!comments || !comments.length) return;
 
     for (const comment of comments) {
-      this._printComment(comment, node);
+      this._printComment(comment);
     }
   }
 }
