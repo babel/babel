@@ -50,7 +50,7 @@ This should be straightforward to do in most cases. There might be cases where p
 
 > Default behavior without options is the same as `babel-preset-latest`.
 
-It won't include `stage-x` plugins. env will support all plugins in what we consider the latest version of Javascript (by matching what we do in [`babel-preset-latest`](http://babeljs.io/docs/plugins/preset-latest/)).
+It won't include `stage-x` plugins. env will support all plugins in what we consider the latest version of JavaScript (by matching what we do in [`babel-preset-latest`](http://babeljs.io/docs/plugins/preset-latest/)).
 
 Ref: [#14](https://github.com/babel/babel-preset-env/issues/14)
 
