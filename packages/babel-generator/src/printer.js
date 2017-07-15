@@ -43,6 +43,7 @@ export default class Printer {
   _insideAux: boolean = false;
   _printedCommentStarts: Object = {};
   _parenPushNewlineState: ?Object = null;
+  _noLineTerminator: boolean = false;
   _printAuxAfterOnNextUserNode: boolean = false;
   _printedComments: WeakSet = new WeakSet();
   _endsWithInteger = false;
@@ -291,10 +292,15 @@ export default class Printer {
    *  `undefined` will be returned and not `foo` due to the terminator.
    */
 
-  startTerminatorless(): Object {
-    return (this._parenPushNewlineState = {
-      printed: false,
-    });
+  startTerminatorless(key: string): Object {
+    if (key == "label") {
+      this._noLineTerminator = true;
+      return null;
+    } else {
+      return (this._parenPushNewlineState = {
+        printed: false,
+      });
+    }
   }
 
   /**
@@ -302,7 +308,8 @@ export default class Printer {
    */
 
   endTerminatorless(state: Object) {
-    if (state.printed) {
+    this._noLineTerminator = false;
+    if (state && state.printed) {
       this.dedent();
       this.newline();
       this.token(")");
@@ -529,10 +536,13 @@ export default class Printer {
     }
 
     const isBlockComment = comment.type === "CommentBlock";
-    const isLabel = false;
 
     // Always add a newline before a block comment
-    this.newline(this._buf.hasContent() && !isLabel && isBlockComment ? 1 : 0);
+    this.newline(
+      this._buf.hasContent() && !this._noLineTerminator && isBlockComment
+        ? 1
+        : 0,
+    );
 
     if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
@@ -561,7 +571,7 @@ export default class Printer {
     });
 
     // Always add a newline after a block comment
-    this.newline(isBlockComment && !isLabel ? 1 : 0);
+    this.newline(isBlockComment && !this._noLineTerminator ? 1 : 0);
   }
 
   _printComments(comments?: Array<Object>) {

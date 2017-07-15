@@ -123,14 +123,9 @@ function buildLabelStatement(prefix, key = "label") {
     const label = node[key];
     if (label) {
       this.space();
-      if (prefix == "break" || prefix == "continue") {
-        // see https://git.io/vQ7uG
-        this.print(label, node);
-      } else {
-        const terminatorState = this.startTerminatorless();
-        this.print(label, node);
-        this.endTerminatorless(terminatorState);
-      }
+      const terminatorState = this.startTerminatorless(key);
+      this.print(label, node);
+      this.endTerminatorless(terminatorState);
     }
 
     this.semicolon();
