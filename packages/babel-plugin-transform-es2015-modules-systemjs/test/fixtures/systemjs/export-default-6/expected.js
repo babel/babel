@@ -1,10 +1,12 @@
 System.register([], function (_export, _context) {
   "use strict";
 
-  _export("default", class {});
-
   return {
     setters: [],
-    execute: function () {}
+    execute: function () {
+      class _default {}
+
+      _export("default", _default);
+    }
   };
 });

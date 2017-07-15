@@ -1,12 +1,12 @@
-var _class = function (_A) {
-  babelHelpers.inherits(_class, _A);
+var _default = function (_A) {
+  babelHelpers.inherits(_default, _A);
 
-  function _class() {
-    babelHelpers.classCallCheck(this, _class);
-    return babelHelpers.possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+  function _default() {
+    babelHelpers.classCallCheck(this, _default);
+    return babelHelpers.possibleConstructorReturn(this, (_default.__proto__ || Object.getPrototypeOf(_default)).apply(this, arguments));
   }
 
-  return _class;
+  return _default;
 }(A);
 
-export { _class as default };
+export { _default as default };

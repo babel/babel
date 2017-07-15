@@ -16,5 +16,8 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.default = class {};
+
+  class _default {}
+
+  exports.default = _default;
 });

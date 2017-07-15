@@ -3,13 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = _callee;
+exports.default = _default;
 
-var _marked = [_callee].map(regeneratorRuntime.mark);
+var _marked = [_default].map(regeneratorRuntime.mark);
 
-function _callee() {
+function _default() {
   var x;
-  return regeneratorRuntime.wrap(function _callee$(_context) {
+  return regeneratorRuntime.wrap(function _default$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
