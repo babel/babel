@@ -546,9 +546,11 @@ export default class Printer {
 
     if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
-    let val = !isBlockComment ? `//${comment.value}\n` : `/*${comment.value}*/`;
+    let val =
+      !isBlockComment && !this._noLineTerminator
+        ? `//${comment.value}\n`
+        : `/*${comment.value}*/`;
 
-    //
     if (isBlockComment && this.format.indent.adjustMultilineComment) {
       const offset = comment.loc && comment.loc.start.column;
       if (offset) {
