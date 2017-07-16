@@ -11,9 +11,9 @@ define(["exports"], function (exports) {
 
   var foo3 = exports.foo3 = function () {};
 
-  var foo4 = exports.foo4 = undefined;
+  var foo4 = exports.foo4 = void 0;
   let foo5 = exports.foo5 = 2;
-  let foo6 = exports.foo6 = undefined;
+  let foo6 = exports.foo6 = void 0;
   const foo7 = exports.foo7 = 3;
 
   function foo8() {}
