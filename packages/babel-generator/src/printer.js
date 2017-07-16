@@ -292,8 +292,8 @@ export default class Printer {
    *  `undefined` will be returned and not `foo` due to the terminator.
    */
 
-  startTerminatorless(key: string): Object {
-    if (key == "label") {
+  startTerminatorless(isLabel: boolean = false): Object {
+    if (isLabel) {
       this._noLineTerminator = true;
       return null;
     } else {
