@@ -105,12 +105,15 @@ const collectorVisitor = {
   },
 
   ExportDeclaration: {
-    exit(path) {
+    exit(path, state) {
       const { node, scope } = path;
       const declar = node.declaration;
       if (t.isClassDeclaration(declar) || t.isFunctionDeclaration(declar)) {
         const id = declar.id;
-        if (!id) return;
+        if (!id) {
+          state.unnamedDefault = declar;
+          return;
+        }
 
         const binding = scope.getBinding(id.name);
         if (binding) binding.reference(path);
@@ -739,6 +742,10 @@ export default class Scope {
     this.crawling = true;
     path.traverse(collectorVisitor, state);
     this.crawling = false;
+
+    if (state.unnamedDefault) {
+      state.unnamedDefault.id = this.generateUidIdentifier("default");
+    }
 
     // register assignments
     for (const path of state.assignments) {

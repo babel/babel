@@ -71,11 +71,10 @@ export default function({ types: t }) {
         const nodes = [];
         let ref;
 
-        if (path.isClassExpression() || !path.node.id) {
+        if (path.isClassExpression()) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else {
-          // path.isClassDeclaration() && path.node.id
           ref = path.node.id;
         }
 
@@ -181,11 +180,6 @@ export default function({ types: t }) {
           path.scope.push({ id: ref });
           path.replaceWith(t.assignmentExpression("=", ref, path.node));
         } else {
-          // path.isClassDeclaration()
-          if (!path.node.id) {
-            path.node.id = ref;
-          }
-
           if (path.parentPath.isExportDeclaration()) {
             path = path.parentPath;
           }
