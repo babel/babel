@@ -16,7 +16,7 @@ export default function({ types: t }) {
 
   function getAttributeValue(attr) {
     let value = attr.value;
-    if (!value) return t.identifier("true");
+    if (!value) return t.booleanLiteral(true);
     if (t.isJSXExpressionContainer(value)) value = value.expression;
     return value;
   }
