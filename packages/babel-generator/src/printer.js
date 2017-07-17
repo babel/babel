@@ -43,6 +43,7 @@ export default class Printer {
   _insideAux: boolean = false;
   _printedCommentStarts: Object = {};
   _parenPushNewlineState: ?Object = null;
+  _noLineTerminator: boolean = false;
   _printAuxAfterOnNextUserNode: boolean = false;
   _printedComments: WeakSet = new WeakSet();
   _endsWithInteger = false;
@@ -281,7 +282,7 @@ export default class Printer {
    *
    * This is to prevent breaking semantics for terminatorless separator nodes. eg:
    *
-   *    return foo;
+   *   return foo;
    *
    * returns `foo`. But if we do:
    *
@@ -291,10 +292,15 @@ export default class Printer {
    *  `undefined` will be returned and not `foo` due to the terminator.
    */
 
-  startTerminatorless(): Object {
-    return (this._parenPushNewlineState = {
-      printed: false,
-    });
+  startTerminatorless(isLabel: boolean = false): Object {
+    if (isLabel) {
+      this._noLineTerminator = true;
+      return null;
+    } else {
+      return (this._parenPushNewlineState = {
+        printed: false,
+      });
+    }
   }
 
   /**
@@ -302,7 +308,8 @@ export default class Printer {
    */
 
   endTerminatorless(state: Object) {
-    if (state.printed) {
+    this._noLineTerminator = false;
+    if (state && state.printed) {
       this.dedent();
       this.newline();
       this.token(")");
@@ -530,13 +537,19 @@ export default class Printer {
     const isBlockComment = comment.type === "CommentBlock";
 
     // Always add a newline before a block comment
-    this.newline(this._buf.hasContent() && isBlockComment ? 1 : 0);
+    this.newline(
+      this._buf.hasContent() && !this._noLineTerminator && isBlockComment
+        ? 1
+        : 0,
+    );
 
     if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
-    let val = !isBlockComment ? `//${comment.value}\n` : `/*${comment.value}*/`;
+    let val =
+      !isBlockComment && !this._noLineTerminator
+        ? `//${comment.value}\n`
+        : `/*${comment.value}*/`;
 
-    //
     if (isBlockComment && this.format.indent.adjustMultilineComment) {
       const offset = comment.loc && comment.loc.start.column;
       if (offset) {
@@ -559,7 +572,7 @@ export default class Printer {
     });
 
     // Always add a newline after a block comment
-    this.newline(isBlockComment ? 1 : 0);
+    this.newline(isBlockComment && !this._noLineTerminator ? 1 : 0);
   }
 
   _printComments(comments?: Array<Object>) {
