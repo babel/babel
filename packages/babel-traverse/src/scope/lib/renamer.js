@@ -73,34 +73,34 @@ export default class Renamer {
   maybeConvertFromClassFunctionDeclaration(path) {
     return; // TODO
 
-    // retain the `name` of a class/function declaration
+    // // retain the `name` of a class/function declaration
 
-    if (!path.isFunctionDeclaration() && !path.isClassDeclaration()) return;
-    if (this.binding.kind !== "hoisted") return;
+    // if (!path.isFunctionDeclaration() && !path.isClassDeclaration()) return;
+    // if (this.binding.kind !== "hoisted") return;
 
-    path.node.id = t.identifier(this.oldName);
-    path.node._blockHoist = 3;
+    // path.node.id = t.identifier(this.oldName);
+    // path.node._blockHoist = 3;
 
-    path.replaceWith(t.variableDeclaration("let", [
-      t.variableDeclarator(t.identifier(this.newName), t.toExpression(path.node))
-    ]));
+    // path.replaceWith(t.variableDeclaration("let", [
+    //   t.variableDeclarator(t.identifier(this.newName), t.toExpression(path.node))
+    // ]));
   }
 
   maybeConvertFromClassFunctionExpression(path) {
     return; // TODO
 
-    // retain the `name` of a class/function expression
+    // // retain the `name` of a class/function expression
 
-    if (!path.isFunctionExpression() && !path.isClassExpression()) return;
-    if (this.binding.kind !== "local") return;
+    // if (!path.isFunctionExpression() && !path.isClassExpression()) return;
+    // if (this.binding.kind !== "local") return;
 
-    path.node.id = t.identifier(this.oldName);
+    // path.node.id = t.identifier(this.oldName);
 
-    this.binding.scope.parent.push({
-      id: t.identifier(this.newName)
-    });
+    // this.binding.scope.parent.push({
+    //   id: t.identifier(this.newName)
+    // });
 
-    path.replaceWith(t.assignmentExpression("=", t.identifier(this.newName), path.node));
+    // path.replaceWith(t.assignmentExpression("=", t.identifier(this.newName), path.node));
   }
 
   rename(block?) {
