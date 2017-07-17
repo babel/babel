@@ -1,4 +1,18 @@
 export default function({ messages, types: t }) {
+  /**
+   * Helper function to run a statement before an expression by replacing it with a comma expression
+   * and wrapping the statement in an IIFE as the first operand.
+   */
+  function statementBeforeExpression(statement, expression) {
+    return t.sequenceExpression([
+      t.callExpression(
+        t.functionExpression(null, [], t.blockStatement([statement])),
+        [],
+      ),
+      expression,
+    ]);
+  }
+
   return {
     visitor: {
       Scope({ scope }) {
@@ -13,22 +27,19 @@ export default function({ messages, types: t }) {
               ]),
             );
 
-            // Returns a comma expression of IIFE wrapped throwNode followed by given expression.
-            const throwBefore = expression =>
-              t.sequenceExpression([
-                t.callExpression(
-                  t.functionExpression(null, [], t.blockStatement([throwNode])),
-                  [],
-                ),
-                expression,
-              ]);
-
             if (violation.isAssignmentExpression()) {
               violation
                 .get("right")
-                .replaceWith(throwBefore(violation.get("right").node));
+                .replaceWith(
+                  statementBeforeExpression(
+                    throwNode,
+                    violation.get("right").node,
+                  ),
+                );
             } else if (violation.parentPath.isUpdateExpression()) {
-              violation.parentPath.replaceWith(throwBefore(violation.parent));
+              violation.parentPath.replaceWith(
+                statementBeforeExpression(throwNode, violation.parent),
+              );
             } else if (violation.parentPath.isForXStatement()) {
               violation.parentPath.ensureBlock();
               violation.parentPath.node.body.body.unshift(throwNode);
