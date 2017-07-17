@@ -1,5 +1,4 @@
-module.exports = {
-  // es2015
+const es2015 = {
   "check-es2015-constants": {
     features: [
       "const",
@@ -107,16 +106,18 @@ module.exports = {
     features: [
       "generators",
     ],
-  },
+  }
+};
 
-  // es2016
+const es2016 = {
   "transform-exponentiation-operator": {
     features: [
       "exponentiation (**) operator",
     ],
-  },
+  }
+};
 
-  // es2017
+const es2017 = {
   "transform-async-to-generator": {
     features: [
       "async functions",
@@ -128,3 +129,5 @@ module.exports = {
     ],
   }
 };
+
+module.exports = Object.assign({}, es2015, es2016, es2017);

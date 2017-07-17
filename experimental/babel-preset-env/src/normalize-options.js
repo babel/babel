@@ -2,10 +2,10 @@ import invariant from "invariant";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
-import pluginFeatures from "../data/plugin-features";
+import pluginsList from "../data/plugins.json";
 
 const validIncludesAndExcludes = [
-  ...Object.keys(pluginFeatures),
+  ...Object.keys(pluginsList),
   ...Object.keys(moduleTransformations).map((m) => moduleTransformations[m]),
   ...Object.keys(builtInsList),
   ...defaultWebIncludes,
