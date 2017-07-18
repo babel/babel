@@ -200,8 +200,6 @@ export default class PathHoister {
 
   run() {
     const node = this.path.node;
-    if (node._hoisted) return;
-    node._hoisted = true;
 
     this.path.traverse(referenceVisitor, this);
 

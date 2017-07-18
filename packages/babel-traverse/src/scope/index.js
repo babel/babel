@@ -803,7 +803,6 @@ export default class Scope {
 
     if (!declarPath) {
       const declar = t.variableDeclaration(kind, []);
-      declar._generated = true;
       declar._blockHoist = blockHoist;
 
       [declarPath] = path.unshiftContainer("body", [declar]);
