@@ -13,7 +13,7 @@ export default function({ messages, template, types: t }) {
              IS_ARRAY = Array.isArray(LOOP_OBJECT),
              INDEX = 0,
              LOOP_OBJECT = IS_ARRAY ? LOOP_OBJECT : LOOP_OBJECT[Symbol.iterator]();;) {
-      var ID;
+      INTERMEDIATE;
       if (IS_ARRAY) {
         if (INDEX >= LOOP_OBJECT.length) break;
         ID = LOOP_OBJECT[INDEX++];
@@ -176,7 +176,7 @@ export default function({ messages, template, types: t }) {
   function loose(path, file) {
     const { node, scope, parent } = path;
     const { left } = node;
-    let declar, id;
+    let declar, id, intermediate;
 
     if (
       t.isIdentifier(left) ||
@@ -185,12 +185,14 @@ export default function({ messages, template, types: t }) {
     ) {
       // for (i of test), for ({ i } of test)
       id = left;
+      intermediate = null;
     } else if (t.isVariableDeclaration(left)) {
       // for (let i of test)
       id = scope.generateUidIdentifier("ref");
       declar = t.variableDeclaration(left.kind, [
         t.variableDeclarator(left.declarations[0].id, id),
       ]);
+      intermediate = t.variableDeclaration("var", [t.variableDeclarator(id)]);
     } else {
       throw file.buildCodeFrameError(
         left,
@@ -207,13 +209,8 @@ export default function({ messages, template, types: t }) {
       OBJECT: node.right,
       INDEX: scope.generateUidIdentifier("i"),
       ID: id,
+      INTERMEDIATE: intermediate,
     });
-
-    if (!declar) {
-      // no declaration so we need to remove the variable declaration at the top of
-      // the for-of-loose template
-      loop.body.body.shift();
-    }
 
     //
     const isLabeledParent = t.isLabeledStatement(parent);
