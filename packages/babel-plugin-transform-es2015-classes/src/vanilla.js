@@ -565,7 +565,6 @@ export default class ClassTransformer {
 
     t.inheritsComments(construct, method);
 
-    construct._ignoreUserWhitespace = true;
     construct.params = method.params;
 
     t.inherits(construct.body, method.body);
