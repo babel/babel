@@ -55,7 +55,7 @@ export default function ({ types: t }) {
 
   //expects path to an object pattern
   function createObjectSpread(path, file, objRef) {
-    const last = path.get("properties")[path.get("properties").length - 1];
+    const last = path.get("properties").pop(); // note: popping does not mean removal from path
     const restElement = t.clone(last.node);
     last.remove(); // remove restElement
 
