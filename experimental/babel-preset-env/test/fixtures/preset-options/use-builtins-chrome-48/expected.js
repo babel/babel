@@ -43,5 +43,4 @@ import "babel-polyfill/lib/core-js/modules/web.timers";
 import "babel-polyfill/lib/core-js/modules/web.immediate";
 import "babel-polyfill/lib/core-js/modules/web.dom.iterable";
 import "babel-polyfill/lib/regenerator-runtime/runtime";
-
 Math.pow(1, 2);
