@@ -199,8 +199,6 @@ export default class PathHoister {
   }
 
   run() {
-    const node = this.path.node;
-
     this.path.traverse(referenceVisitor, this);
 
     this.getCompatibleScopes();

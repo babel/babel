@@ -2,7 +2,6 @@ import cloneDeep from "lodash/cloneDeep";
 import has from "lodash/has";
 import traverse from "babel-traverse";
 import * as babylon from "babylon";
-import * as t from "babel-types";
 
 const FROM_TEMPLATE = new Set();
 
