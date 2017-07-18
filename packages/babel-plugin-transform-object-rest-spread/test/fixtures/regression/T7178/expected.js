@@ -8,7 +8,5 @@ console.log(_props2.default);
 
 (function () {
   const props = babelHelpers.objectWithoutProperties(this.props, []);
-
-
   console.log(props);
 })();

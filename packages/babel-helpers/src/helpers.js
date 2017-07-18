@@ -359,11 +359,10 @@ helpers.get = template(`
   });
 `);
 
-
 helpers.inherits = template(`
   (function (subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+      throw new TypeError("Super expression must either be null or a function");
     }
     subClass.prototype = Object.create(superClass && superClass.prototype, {
       constructor: {
@@ -377,6 +376,14 @@ helpers.inherits = template(`
   })
 `);
 
+helpers.inheritsLoose = template(`
+  (function (subClass, superClass) {
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
+    subClass.__proto__ = superClass;
+  })
+`);
+
 helpers.instanceof = template(`
   (function (left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
@@ -386,7 +393,6 @@ helpers.instanceof = template(`
     }
   });
 `);
-
 
 helpers.interopRequireDefault = template(`
   (function (obj) {
@@ -453,10 +459,13 @@ helpers.objectWithoutProperties = template(`
 
 helpers.possibleConstructorReturn = template(`
   (function (self, call) {
+    if (call && (typeof call === "object" || typeof call === "function")) {
+      return call;
+    }
     if (!self) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
-    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+    return self;
   });
 `);
 

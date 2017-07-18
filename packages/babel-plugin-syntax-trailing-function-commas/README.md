@@ -1,6 +1,6 @@
 # babel-plugin-syntax-trailing-function-commas
 
-Compile trailing function commas to ES5
+> Compile trailing function commas to ES5
 
 
 ```js

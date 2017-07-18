@@ -11,8 +11,11 @@ var _ref2 = {};
 
 var _Symbol$for2 = Symbol.for("foo");
 
-({ [_Symbol$for2]: foo } = _ref2);
+({
+  [_Symbol$for2]: foo
+} = _ref2);
 rest = babelHelpers.objectWithoutProperties(_ref2, [_Symbol$for2].map(babelHelpers.toPropertyKey));
 
-
-if (_ref3 = {}, _Symbol$for3 = Symbol.for("foo"), ({ [_Symbol$for3]: foo } = _ref3), rest = babelHelpers.objectWithoutProperties(_ref3, [_Symbol$for3].map(babelHelpers.toPropertyKey)), _ref3) {}
+if (_ref3 = {}, _Symbol$for3 = Symbol.for("foo"), ({
+  [_Symbol$for3]: foo
+} = _ref3), rest = babelHelpers.objectWithoutProperties(_ref3, [_Symbol$for3].map(babelHelpers.toPropertyKey)), _ref3) {}

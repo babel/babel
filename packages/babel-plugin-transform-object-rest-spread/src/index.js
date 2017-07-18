@@ -1,6 +1,6 @@
 import syntaxObjectRestSpread from "babel-plugin-syntax-object-rest-spread";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function hasRestElement(path) {
     let foundRestElement = false;
     path.traverse({
@@ -13,7 +13,7 @@ export default function ({ types: t }) {
   }
 
   function hasSpread(node) {
-    for (const prop of (node.properties)) {
+    for (const prop of node.properties) {
       if (t.isSpreadElement(prop)) {
         return true;
       }
@@ -44,7 +44,9 @@ export default function ({ types: t }) {
     for (const propPath of path.get("properties")) {
       const key = propPath.get("key");
       if (propPath.node.computed && !key.isPure()) {
-        const identifier = path.scope.generateUidIdentifierBasedOnNode(key.node);
+        const identifier = path.scope.generateUidIdentifierBasedOnNode(
+          key.node,
+        );
         const declarator = t.variableDeclarator(identifier, key.node);
         impureComputedPropertyDeclarators.push(declarator);
         key.replaceWith(identifier);
@@ -62,13 +64,15 @@ export default function ({ types: t }) {
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
     const keys = extractNormalizedKeys(path);
 
-    const someComputed = path.get("properties").some((prop) => prop.node.computed);
+    const someComputed = path
+      .get("properties")
+      .some(prop => prop.node.computed);
     let keyExpression;
     if (someComputed) {
       // map to toPropertyKey to handle the possible non-string values of the computed props
       keyExpression = t.callExpression(
         t.memberExpression(t.arrayExpression(keys), t.identifier("map")),
-        [file.addHelper("toPropertyKey")]
+        [file.addHelper("toPropertyKey")],
       );
     } else {
       keyExpression = t.arrayExpression(keys);
@@ -77,12 +81,10 @@ export default function ({ types: t }) {
     return [
       impureComputedPropertyDeclarators,
       restElement.argument,
-      t.callExpression(
-        file.addHelper("objectWithoutProperties"), [
-          objRef,
-          keyExpression,
-        ]
-      ),
+      t.callExpression(file.addHelper("objectWithoutProperties"), [
+        objRef,
+        keyExpression,
+      ]),
     ];
   }
 
@@ -129,78 +131,90 @@ export default function ({ types: t }) {
       // adapted from transform-es2015-destructuring/src/index.js#pushObjectRest
       // const { a, ...b } = c;
       VariableDeclarator(path, file) {
-        if (!path.get("id").isObjectPattern()) { return; }
+        if (!path.get("id").isObjectPattern()) {
+          return;
+        }
 
         let insertionPath = path;
 
-        path.get("id").traverse({
-          RestElement(path) {
-            if (
-              // skip single-property case, e.g.
-              // const { ...x } = foo();
-              // since the RHS will not be duplicated
-              this.originalPath.node.id.properties.length > 1 &&
-              !t.isIdentifier(this.originalPath.node.init)
-            ) {
-              // const { a, ...b } = foo();
-              // to avoid calling foo() twice, as a first step convert it to:
-              // const _foo = foo(),
-              //       { a, ...b } = _foo;
-              const initRef = path.scope.generateUidIdentifierBasedOnNode(
-                this.originalPath.node.init, "ref");
-              // insert _foo = foo()
-              this.originalPath.insertBefore(t.variableDeclarator(initRef,
-                this.originalPath.node.init));
-              // replace foo() with _foo
-              this.originalPath.replaceWith(t.variableDeclarator(
-                this.originalPath.node.id, initRef));
+        path.get("id").traverse(
+          {
+            RestElement(path) {
+              if (
+                // skip single-property case, e.g.
+                // const { ...x } = foo();
+                // since the RHS will not be duplicated
+                this.originalPath.node.id.properties.length > 1 &&
+                !t.isIdentifier(this.originalPath.node.init)
+              ) {
+                // const { a, ...b } = foo();
+                // to avoid calling foo() twice, as a first step convert it to:
+                // const _foo = foo(),
+                //       { a, ...b } = _foo;
+                const initRef = path.scope.generateUidIdentifierBasedOnNode(
+                  this.originalPath.node.init,
+                  "ref",
+                );
+                // insert _foo = foo()
+                this.originalPath.insertBefore(
+                  t.variableDeclarator(initRef, this.originalPath.node.init),
+                );
+                // replace foo() with _foo
+                this.originalPath.replaceWith(
+                  t.variableDeclarator(this.originalPath.node.id, initRef),
+                );
 
-              return;
-            }
-
-            let ref = this.originalPath.node.init;
-            const refPropertyPath = [];
-
-            path.findParent((path) => {
-              if (path.isObjectProperty()) {
-                refPropertyPath.unshift(path.node.key.name);
-              } else if (path.isVariableDeclarator()) {
-                return true;
+                return;
               }
-            });
 
-            if (refPropertyPath.length) {
-              refPropertyPath.forEach((prop) => {
-                ref = t.memberExpression(ref, t.identifier(prop));
+              let ref = this.originalPath.node.init;
+              const refPropertyPath = [];
+
+              path.findParent(path => {
+                if (path.isObjectProperty()) {
+                  refPropertyPath.unshift(path.node.key.name);
+                } else if (path.isVariableDeclarator()) {
+                  return true;
+                }
               });
-            }
 
-            const objectPatternPath = path.findParent((path) => path.isObjectPattern());
-            const [
-              impureComputedPropertyDeclarators,
-              argument,
-              callExpression ] = createObjectSpread(objectPatternPath, file, ref);
+              if (refPropertyPath.length) {
+                refPropertyPath.forEach(prop => {
+                  ref = t.memberExpression(ref, t.identifier(prop));
+                });
+              }
 
-            insertionPath.insertBefore(impureComputedPropertyDeclarators);
-
-            insertionPath.insertAfter(
-              t.variableDeclarator(
+              const objectPatternPath = path.findParent(path =>
+                path.isObjectPattern(),
+              );
+              const [
+                impureComputedPropertyDeclarators,
                 argument,
-                callExpression
-              )
-            );
+                callExpression,
+              ] = createObjectSpread(objectPatternPath, file, ref);
 
-            insertionPath = insertionPath.getSibling(insertionPath.key + 1);
+              insertionPath.insertBefore(impureComputedPropertyDeclarators);
 
-            if (path.parentPath.node.properties.length === 0) {
-              path.findParent(
-                (path) => path.isObjectProperty() || path.isVariableDeclarator()
-              ).remove();
-            }
+              insertionPath.insertAfter(
+                t.variableDeclarator(argument, callExpression),
+              );
+
+              insertionPath = insertionPath.getSibling(insertionPath.key + 1);
+
+              if (path.parentPath.node.properties.length === 0) {
+                path
+                  .findParent(
+                    path =>
+                      path.isObjectProperty() || path.isVariableDeclarator(),
+                  )
+                  .remove();
+              }
+            },
           },
-        }, {
-          originalPath: path,
-        });
+          {
+            originalPath: path,
+          },
+        );
       },
       // taken from transform-es2015-destructuring/src/index.js#visitor
       // export var { a, ...b } = c;
@@ -234,31 +248,42 @@ export default function ({ types: t }) {
           const nodes = [];
 
           let ref;
-          if (path.isCompletionRecord() || path.parentPath.isExpressionStatement()) {
-            ref = path.scope.generateUidIdentifierBasedOnNode(path.node.right, "ref");
+          if (
+            path.isCompletionRecord() ||
+            path.parentPath.isExpressionStatement()
+          ) {
+            ref = path.scope.generateUidIdentifierBasedOnNode(
+              path.node.right,
+              "ref",
+            );
 
-            nodes.push(t.variableDeclaration("var", [
-              t.variableDeclarator(ref, path.node.right),
-            ]));
+            nodes.push(
+              t.variableDeclaration("var", [
+                t.variableDeclarator(ref, path.node.right),
+              ]),
+            );
           }
 
           const [
             impureComputedPropertyDeclarators,
             argument,
-            callExpression ] = createObjectSpread(leftPath, file, ref);
+            callExpression,
+          ] = createObjectSpread(leftPath, file, ref);
 
           if (impureComputedPropertyDeclarators.length > 0) {
-            nodes.push(t.variableDeclaration("var", impureComputedPropertyDeclarators));
+            nodes.push(
+              t.variableDeclaration("var", impureComputedPropertyDeclarators),
+            );
           }
 
           const nodeWithoutSpread = t.clone(path.node);
           nodeWithoutSpread.right = ref; //todo: shouldn't the if statement always execute for this to work
           nodes.push(t.expressionStatement(nodeWithoutSpread));
-          nodes.push(t.toStatement(t.assignmentExpression(
-            "=",
-            argument,
-            callExpression
-          )));
+          nodes.push(
+            t.toStatement(
+              t.assignmentExpression("=", argument, callExpression),
+            ),
+          );
 
           if (ref) {
             nodes.push(t.expressionStatement(ref));
@@ -283,9 +308,9 @@ export default function ({ types: t }) {
 
           path.ensureBlock();
 
-          node.body.body.unshift(t.variableDeclaration("var", [
-            t.variableDeclarator(left, temp),
-          ]));
+          node.body.body.unshift(
+            t.variableDeclaration("var", [t.variableDeclarator(left, temp)]),
+          );
 
           return;
         }
@@ -305,7 +330,7 @@ export default function ({ types: t }) {
         node.body.body.unshift(
           t.variableDeclaration(node.left.kind, [
             t.variableDeclarator(pattern, key),
-          ])
+          ]),
         );
       },
       // var a = { ...b, ...c }
@@ -314,8 +339,10 @@ export default function ({ types: t }) {
 
         const useBuiltIns = file.opts.useBuiltIns || false;
         if (typeof useBuiltIns !== "boolean") {
-          throw new Error("transform-object-rest-spread currently only accepts a boolean " +
-            "option for useBuiltIns (defaults to false)");
+          throw new Error(
+            "transform-object-rest-spread currently only accepts a boolean " +
+              "option for useBuiltIns (defaults to false)",
+          );
         }
 
         const args = [];
@@ -342,9 +369,9 @@ export default function ({ types: t }) {
           args.unshift(t.objectExpression([]));
         }
 
-        const helper = useBuiltIns ?
-          t.memberExpression(t.identifier("Object"), t.identifier("assign")) :
-          file.addHelper("extends");
+        const helper = useBuiltIns
+          ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+          : file.addHelper("extends");
 
         path.replaceWith(t.callExpression(helper, args));
       },

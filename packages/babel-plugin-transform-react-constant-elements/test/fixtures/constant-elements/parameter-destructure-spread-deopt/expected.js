@@ -3,6 +3,5 @@ function render(_ref) {
       className = _ref.className,
       id = _ref.id,
       props = babelHelpers.objectWithoutProperties(_ref, ["text", "className", "id"]);
-
   return () => <Component text={text} className={className} id={id} {...props} />;
 }

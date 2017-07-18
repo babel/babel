@@ -1,4 +1,24 @@
-export default function ({ types: t }) {
+export default function({ types: t }) {
+  function buildConcatCallExressions(items) {
+    let avail = true;
+    return items.reduce(function(left, right) {
+      let canBeInserted = t.isLiteral(right);
+
+      if (!canBeInserted && avail) {
+        canBeInserted = true;
+        avail = false;
+      }
+      if (canBeInserted && t.isCallExpression(left)) {
+        left.arguments.push(right);
+        return left;
+      }
+      return t.callExpression(
+        t.memberExpression(left, t.identifier("concat")),
+        [right],
+      );
+    });
+  }
+
   return {
     visitor: {
       TaggedTemplateExpression(path, state) {
@@ -10,9 +30,10 @@ export default function ({ types: t }) {
 
         for (const elem of (quasi.quasis: Array)) {
           const { raw, cooked } = elem.value;
-          const value = cooked == null
-            ? path.scope.buildUndefinedNode()
-            : t.stringLiteral(cooked);
+          const value =
+            cooked == null
+              ? path.scope.buildUndefinedNode()
+              : t.stringLiteral(cooked);
 
           strings.push(value);
           raws.push(t.stringLiteral(raw));
@@ -24,7 +45,7 @@ export default function ({ types: t }) {
         const templateObject = state.file.addTemplateObject(
           templateName,
           t.arrayExpression(strings),
-          t.arrayExpression(raws)
+          t.arrayExpression(raws),
         );
 
         const args = [templateObject].concat(quasi.expressions);
@@ -45,9 +66,7 @@ export default function ({ types: t }) {
           if (index < expressions.length) {
             const expr = expressions[index++];
             const node = expr.node;
-            if (state.opts.spec && !expr.isBaseType("string") && !expr.isBaseType("number")) {
-              nodes.push(t.callExpression(t.identifier("String"), [node]));
-            } else if (!t.isStringLiteral(node, { value: "" })) {
+            if (!t.isStringLiteral(node, { value: "" })) {
               nodes.push(node);
             }
           }
@@ -55,13 +74,21 @@ export default function ({ types: t }) {
 
         // since `+` is left-to-right associative
         // ensure the first node is a string if first/second isn't
-        if (!t.isStringLiteral(nodes[0]) && !t.isStringLiteral(nodes[1])) {
+        const considerSecondNode =
+          state.opts.spec || !t.isStringLiteral(nodes[1]);
+        if (!t.isStringLiteral(nodes[0]) && considerSecondNode) {
           nodes.unshift(t.stringLiteral(""));
         }
-
         let root = nodes[0];
-        for (let i = 1; i < nodes.length; i++) {
-          root = t.binaryExpression("+", root, nodes[i]);
+
+        if (state.opts.spec) {
+          if (nodes.length > 1) {
+            root = buildConcatCallExressions(nodes);
+          }
+        } else {
+          for (let i = 1; i < nodes.length; i++) {
+            root = t.binaryExpression("+", root, nodes[i]);
+          }
         }
 
         path.replaceWith(root);

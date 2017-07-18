@@ -1,6 +1,6 @@
 # babel-plugin-syntax-export-extensions
 
-Allow parsing of export extensions.
+> Allow parsing of export extensions.
 
 ## Installation
 
