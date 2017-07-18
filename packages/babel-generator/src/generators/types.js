@@ -124,7 +124,7 @@ export function NumericLiteral(node: Object) {
 
 export function StringLiteral(node: Object, parent: Object) {
   const raw = this.getPossibleRaw(node);
-  if ((t.isDirectiveLiteral(node) || !this.format.minified) && raw != null) {
+  if ((!this.format.minified || t.isDirectiveLiteral(node)) && raw) {
     this.token(raw);
     return;
   }
