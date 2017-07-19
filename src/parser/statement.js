@@ -1255,6 +1255,15 @@ export default class StatementParser extends ExpressionParser {
       this.checkExport(node, true, true);
       return this.finishNode(node, "ExportDefaultDeclaration");
     } else if (this.shouldParseExportDeclaration()) {
+      if (this.isContextual("async")) {
+        const next = this.lookahead();
+
+        // export async;
+        if (next.type !== tt._function) {
+          this.unexpected(next.start, "Unexpected token, expected function");
+        }
+      }
+
       node.specifiers = [];
       node.source = null;
       node.declaration = this.parseExportDeclaration(node);
