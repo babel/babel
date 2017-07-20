@@ -520,6 +520,19 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 ---
 
+### declaredPredicate
+```javascript
+t.declaredPredicate(value)
+```
+
+See also `t.isDeclaredPredicate(node, opts)` and `t.assertDeclaredPredicate(node, opts)`.
+
+Aliases: `Flow`, `FlowPredicate`
+
+ - `value` (required)
+
+---
+
 ### decorator
 ```javascript
 t.decorator(expression)
@@ -946,6 +959,18 @@ Aliases: `ModuleSpecifier`
  - `local`: `Identifier` (required)
  - `imported`: `Identifier` (required)
  - `importKind`: `null | 'type' | 'typeof'` (default: `null`)
+
+---
+
+### inferredPredicate
+```javascript
+t.inferredPredicate()
+```
+
+See also `t.isInferredPredicate(node, opts)` and `t.assertInferredPredicate(node, opts)`.
+
+Aliases: `Flow`, `FlowPredicate`
+
 
 ---
 

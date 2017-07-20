@@ -49,6 +49,16 @@ export function _method(node: Object) {
   this.print(node.body, node);
 }
 
+export function _predicate(node: Object) {
+  if (node.predicate) {
+    if (!node.returnType) {
+      this.token(":");
+    }
+    this.space();
+    this.print(node.predicate, node);
+  }
+}
+
 export function FunctionExpression(node: Object) {
   if (node.async) {
     this.word("async");
@@ -65,6 +75,8 @@ export function FunctionExpression(node: Object) {
   }
 
   this._params(node);
+  this._predicate(node);
+
   this.space();
   this.print(node.body, node);
 }
@@ -88,6 +100,8 @@ export function ArrowFunctionExpression(node: Object) {
   } else {
     this._params(node);
   }
+
+  this._predicate(node);
 
   this.space();
   this.token("=>");

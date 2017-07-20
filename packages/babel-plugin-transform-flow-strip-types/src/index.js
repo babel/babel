@@ -67,6 +67,8 @@ export default function({ types: t }) {
           const param = node.params[i];
           param.optional = false;
         }
+
+        node.predicate = null;
       },
 
       TypeCastExpression(path) {
