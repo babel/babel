@@ -1,17 +1,17 @@
 # babel-helper-wrap-function
 
-This helper wraps a function with a call epression.
-It works with every type of function: statements, expressions and methods; both named and anonymous.
+This helper wraps a function within a call expression. It works with any function: statements, expressions and methods; both named and anonymous.
 
+## Example
 
-For eample, it can be used to transform
+**In**
 
 ```js
 (function () {
 }());
 ```
 
-into
+**Out**
 
 ```js
 _wrapper(function () {
