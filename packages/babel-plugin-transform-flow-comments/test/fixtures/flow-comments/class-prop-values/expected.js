@@ -3,7 +3,6 @@ class X {
   bar
   /*: number*/
   = 3;
-
   /*:: baz: ?string*/
 
 }

@@ -205,20 +205,7 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
   const toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
 
-  if (t.isSequenceExpression(toSequenceExpression)) {
-    const exprs = toSequenceExpression.expressions;
-
-    if (exprs.length >= 2 && this.parentPath.isExpressionStatement()) {
-      this._maybePopFromStatements(exprs);
-    }
-
-    // could be just one element due to the previous maybe popping
-    if (exprs.length === 1) {
-      this.replaceWith(exprs[0]);
-    } else {
-      this.replaceWith(toSequenceExpression);
-    }
-  } else if (toSequenceExpression) {
+  if (toSequenceExpression) {
     this.replaceWith(toSequenceExpression);
   } else {
     const container = t.arrowFunctionExpression([], t.blockStatement(nodes));

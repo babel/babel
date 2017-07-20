@@ -20,24 +20,21 @@ export function insertBefore(nodes) {
   ) {
     return this.parentPath.insertBefore(nodes);
   } else if (
-    this.isNodeType("Expression") ||
+    (this.isNodeType("Expression") && this.listKey !== "params") ||
     (this.parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) nodes.push(this.node);
     this.replaceExpressionWithStatements(nodes);
+  } else if (Array.isArray(this.container)) {
+    return this._containerInsertBefore(nodes);
+  } else if (this.isStatementOrBlock()) {
+    if (this.node) nodes.push(this.node);
+    this._replaceWith(t.blockStatement(nodes));
   } else {
-    this._maybePopFromStatements(nodes);
-    if (Array.isArray(this.container)) {
-      return this._containerInsertBefore(nodes);
-    } else if (this.isStatementOrBlock()) {
-      if (this.node) nodes.push(this.node);
-      this._replaceWith(t.blockStatement(nodes));
-    } else {
-      throw new Error(
-        "We don't know what to do with this node type. " +
-          "We were previously a Statement but we can't fit in here?",
-      );
-    }
+    throw new Error(
+      "We don't know what to do with this node type. " +
+        "We were previously a Statement but we can't fit in here?",
+    );
   }
 
   return [this];
@@ -101,17 +98,6 @@ export function _containerInsertAfter(nodes) {
   return this._containerInsert(this.key + 1, nodes);
 }
 
-export function _maybePopFromStatements(nodes) {
-  const last = nodes[nodes.length - 1];
-  const isIdentifier =
-    t.isIdentifier(last) ||
-    (t.isExpressionStatement(last) && t.isIdentifier(last.expression));
-
-  if (isIdentifier && !this.isCompletionRecord()) {
-    nodes.pop();
-  }
-}
-
 /**
  * Insert the provided nodes after the current one. When inserting nodes after an
  * expression, ensure that the completion record is correct by pushing the current node.
@@ -139,25 +125,22 @@ export function insertAfter(nodes) {
       nodes.push(t.expressionStatement(temp));
     }
     this.replaceExpressionWithStatements(nodes);
-  } else {
-    this._maybePopFromStatements(nodes);
-    if (Array.isArray(this.container)) {
-      return this._containerInsertAfter(nodes);
-    } else if (this.isStatementOrBlock()) {
-      // Unshift current node if it's not an empty expression
-      if (
-        this.node &&
-        (!this.isExpressionStatement() || this.node.expression != null)
-      ) {
-        nodes.unshift(this.node);
-      }
-      this._replaceWith(t.blockStatement(nodes));
-    } else {
-      throw new Error(
-        "We don't know what to do with this node type. " +
-          "We were previously a Statement but we can't fit in here?",
-      );
+  } else if (Array.isArray(this.container)) {
+    return this._containerInsertAfter(nodes);
+  } else if (this.isStatementOrBlock()) {
+    // Unshift current node if it's not an empty expression
+    if (
+      this.node &&
+      (!this.isExpressionStatement() || this.node.expression != null)
+    ) {
+      nodes.unshift(this.node);
     }
+    this._replaceWith(t.blockStatement(nodes));
+  } else {
+    throw new Error(
+      "We don't know what to do with this node type. " +
+        "We were previously a Statement but we can't fit in here?",
+    );
   }
 
   return [this];
