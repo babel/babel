@@ -5,5 +5,4 @@ class C
 function f
 /*:: <+T, -U>*/
 () {}
-
 /*:: type T<+T, -U> = {};*/
