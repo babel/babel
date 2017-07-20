@@ -144,6 +144,37 @@ Object.keys(types.BUILDER_KEYS).sort().forEach(function(key) {
   readme.push("");
 });
 
+let aliases = [];
+Object.keys(types.ALIAS_KEYS).forEach(key => {
+  types.ALIAS_KEYS[key].forEach(alias => {
+    aliases.push(alias);
+  });
+});
+
+aliases = [...new Set(aliases)]; // unique aliases
+
+const aliasReferences = {};
+aliases.forEach(alias => {
+  aliasReferences[alias] = [];
+  Object.keys(types.ALIAS_KEYS).forEach(key => {
+    if (types.ALIAS_KEYS[key].includes(alias)) {
+      aliasReferences[alias].push(key);
+    }
+  });
+});
+
+readme.push("## Aliases", "");
+
+Object.keys(aliasReferences).forEach(alias => {
+  readme.push(`### ${alias}`);
+  let aliasTypes = "";
+  aliasReferences[alias].forEach(type => {
+    aliasTypes += "`" + type + "`, ";
+  });
+  readme.push(aliasTypes.slice(0, -2));
+  readme.push("", "---", "");
+});
+
 readme.push(
   "",
   "<!-- end generated section -->",
