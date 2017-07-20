@@ -302,7 +302,9 @@ export default class File extends Store {
       ref._generated = true;
       ref.id = uid;
       ref.type = "FunctionDeclaration";
-      this.path.unshiftContainer("body", ref);
+      this.path
+        .unshiftContainer("body", ref)
+        .forEach((path) => this.path.requeue(path));
     } else {
       ref._compact = true;
       this.scope.push({
