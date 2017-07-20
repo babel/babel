@@ -287,3 +287,5 @@ var a: {|
 function foo(numVal: number = 2) {}
 
 function foo(numVal?: number = 2) {}
+
+export type * from "foo";
