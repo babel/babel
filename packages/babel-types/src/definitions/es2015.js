@@ -2,6 +2,7 @@
 
 import defineType, {
   assertNodeType,
+  assertNodeOrValueType,
   assertValueType,
   chain,
   assertEach,
@@ -34,7 +35,7 @@ defineType("ArrayPattern", {
     elements: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("Identifier", "Pattern", "RestElement")),
+        assertEach(assertNodeOrValueType("null", "Identifier", "Pattern", "RestElement")),
       ),
     },
     decorators: {
