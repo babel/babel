@@ -20,11 +20,11 @@ export default function({ types: t }) {
       },
 
       RestElement(path) {
-        const { parent, parentPath, scope } = path;
+        const { parentPath, parent } = path;
         if (!parentPath.isObjectPattern()) return;
 
         const bindings = [];
-        const root = path.findParent((path) => {
+        const root = path.findParent(path => {
           if (path.listKey) bindings.push(path);
 
           let { parentPath } = path;
@@ -32,43 +32,48 @@ export default function({ types: t }) {
           return !parentPath.isPattern();
         });
 
-        let insertionPoint = root.parentPath;
-        if (
-          insertionPoint.isFunction() ||
-          insertionPoint.isCatchClause() ||
-          insertionPoint.isForXStatement()
-        ) {
-          insertionPoint.ensureBlock();
-          const body = insertionPoint.get("body");
-          const memo = scope.generateUidIdentifier("ref");
-          body.unshiftContainer("body", t.variableDeclaration("var", [
-            t.variableDeclarator(root.node, memo),
-          ]));
-
-          root.replaceWith(memo);
-          // TODO: figure out how to continue normally.
-          return;
-        }
-
-        const isDeclarator = insertionPoint.isVariableDeclarator();
+        const insertionPoint = root.parentPath;
+        const scope = insertionPoint.isScope()
+          ? insertionPoint.get("body").scope
+          : insertionPoint.scope;
+        const isDeclarator =
+          insertionPoint.isScope() || insertionPoint.isVariableDeclarator();
         const build = isDeclarator ? variableDeclarator : assignmentExpression;
-        const memoizer = isDeclarator ? "generateUidIdentifier" : "generateDeclaredUidIdentifier";
+        const memoizer = isDeclarator
+          ? "generateUidIdentifier"
+          : "generateDeclaredUidIdentifier";
 
         const memo = scope[memoizer]("ref");
-        parentPath.replaceWith(memo);
-        const objectWithoutProperties = build(
-          path.node.argument,
-          t.callExpression(this.addHelper("objectWithoutProperties"), [
-            memo,
-            t.arrayExpression([/*TODO*/]),
-          ]),
+        const objectWithoutProperties = [];
+        const properties = parent.properties;
+        properties.pop();
+        const keys = [];
+        for (const { computed, key } of properties) {
+          if (t.isIdentifier(key) && !computed) {
+            keys.push(t.stringLiteral(key.name));
+          } else {
+            keys.push(key);
+          }
+        }
+        if (keys.length) {
+          objectWithoutProperties.push(build(parent, memo));
+        }
+        objectWithoutProperties.push(
+          build(
+            path.node.argument,
+            t.callExpression(this.addHelper("objectWithoutProperties"), [
+              memo,
+              t.arrayExpression(keys),
+            ]),
+          ),
         );
+        parentPath.replaceWith(memo);
 
         const ups = [];
         const afters = [];
         for (const binding of bindings) {
           const { parent, parentPath } = binding;
-          const container = parent[binding.listKey]
+          const container = parent[binding.listKey];
           const siblings = container.splice(binding.key + 1, Infinity);
           if (!siblings.length) continue;
 
@@ -88,10 +93,32 @@ export default function({ types: t }) {
           afters.push(build(pattern, memo));
         }
 
+        let insertInto;
+        if (insertionPoint.isScope()) {
+          insertionPoint.ensureBlock();
+          const body = insertionPoint.get("body");
+          body.unshiftContainer("body", t.variableDeclaration("var", []));
+
+          insertInto = body.get("body.0");
+        }
+
         if (isDeclarator) {
-          insertionPoint.insertAfter(ups.concat(objectWithoutProperties, afters));
-        } else if (insertionPoint.isAssignmentExpression()) {
-          insertionPoint.replaceWith(t.sequenceExpression([insertionPoint.node].concat(ups, objectWithoutProperties, afters)))
+          const declarators = ups.concat(objectWithoutProperties, afters);
+          if (insertInto) {
+            insertInto.pushContainer("declarations", declarators);
+          } else {
+            insertionPoint.insertAfter(declarators);
+          }
+        } else {
+          insertionPoint.replaceWith(
+            t.sequenceExpression(
+              [insertionPoint.node].concat(
+                ups,
+                objectWithoutProperties,
+                afters,
+              ),
+            ),
+          );
         }
       },
     },

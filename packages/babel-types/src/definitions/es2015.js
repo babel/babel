@@ -35,7 +35,9 @@ defineType("ArrayPattern", {
     elements: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeOrValueType("null", "Identifier", "Pattern", "RestElement")),
+        assertEach(
+          assertNodeOrValueType("null", "Identifier", "Pattern", "RestElement"),
+        ),
       ),
     },
     decorators: {

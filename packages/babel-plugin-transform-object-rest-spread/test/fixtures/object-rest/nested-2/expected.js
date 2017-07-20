@@ -20,7 +20,10 @@ const {
     }
   }
 } = test,
-      other = babelHelpers.objectWithoutProperties(_ref, []);
+      {
+  x
+} = _ref,
+      other = babelHelpers.objectWithoutProperties(_ref, ["x"]);
 const _ref3 = test,
       {
   foo: _ref2

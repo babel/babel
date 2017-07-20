@@ -8,9 +8,10 @@ const defunct = {
 };
 const {
   outer: {
-    inner: {
-      three
-    }
+    inner: _ref
   }
 } = defunct,
-      other = babelHelpers.objectWithoutProperties(defunct.outer.inner, ["three"]);
+      {
+  three
+} = _ref,
+      other = babelHelpers.objectWithoutProperties(_ref, ["three"]);
