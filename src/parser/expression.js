@@ -978,9 +978,11 @@ export default class ExpressionParser extends LValParser {
     return node;
   }
 
-  // New's precedence is slightly tricky. It must allow its argument
-  // to be a `[]` or dot subscript expression, but not a call — at
-  // least, not without wrapping it in parentheses. Thus, it uses the
+  // New's precedence is slightly tricky. It must allow its argument to
+  // be a `[]` or dot subscript expression, but not a call — at least,
+  // not without wrapping it in parentheses. Thus, it uses the noCalls
+  // argument to parseSubscripts to prevent it from consuming the
+  // argument list.
 
   parseNew(): N.NewExpression | N.MetaProperty {
     const node = this.startNode();
