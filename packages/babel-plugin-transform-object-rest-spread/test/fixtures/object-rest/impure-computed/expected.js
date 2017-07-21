@@ -45,6 +45,7 @@ var _$z = {
   z
 } = _$z);
 x = babelHelpers.objectWithoutProperties(_$z, [key, "z"].map(babelHelpers.toPropertyKey));
+_$z;
 assert.equal(y, "two");
 assert.deepEqual(x, {});
 assert.equal(z, "zee");
