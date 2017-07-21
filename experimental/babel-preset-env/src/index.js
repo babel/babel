@@ -10,6 +10,7 @@ import pluginList from "../data/plugins.json";
 import useBuiltInsEntryPlugin from "./use-built-ins-entry-plugin";
 import addUsedBuiltInsPlugin from "./use-built-ins-plugin";
 import getTargets from "./targets-parser";
+import availablePlugins from "./available-plugins";
 import { prettifyTargets, semverify } from "./utils";
 import type { Plugin, Targets } from "./types";
 
@@ -163,16 +164,13 @@ export default function buildPreset(
   const plugins = [];
 
   if (modules !== false && moduleTransformations[modules]) {
-    plugins.push([
-      require(`babel-plugin-${moduleTransformations[modules]}`),
-      { loose },
-    ]);
+    plugins.push([availablePlugins[moduleTransformations[modules]], { loose }]);
   }
 
   // NOTE: not giving spec here yet to avoid compatibility issues when
   // babel-plugin-transform-es2015-modules-commonjs gets its spec mode
   transformations.forEach(pluginName =>
-    plugins.push([require(`babel-plugin-${pluginName}`), { spec, loose }]),
+    plugins.push([availablePlugins[pluginName], { spec, loose }]),
   );
 
   const regenerator = transformations.has("transform-regenerator");
