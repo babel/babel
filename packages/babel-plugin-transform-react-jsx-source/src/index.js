@@ -47,7 +47,7 @@ export default function ({ types: t }) {
       if (!state.fileNameIdentifier) {
         const fileName = state.file.log.filename !== "unknown"
           ? state.file.log.filename
-          : null;
+          : "";
 
         const fileNameIdentifier = path.scope.generateUidIdentifier(FILE_NAME_VAR);
         path.hub.file.scope.push({ id: fileNameIdentifier, init: t.stringLiteral(fileName) });
