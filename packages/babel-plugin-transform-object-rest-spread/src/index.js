@@ -21,19 +21,17 @@ export default function({ types: t }) {
     return false;
   }
 
-  // normalizes identifier keys to string literals and extracts all keys
-  // e.g. extracts ["a", "b", 3, ++x] from {a: "foo", b, 3: "bar", [++x]: "baz"}
+  // returns an array of all keys of an object
+  // e.g. extracts ["a", "b", 3, ++x] from ast of {a: "foo", b, 3: "bar", [++x]: "baz"}
   function extractNormalizedKeys(path) {
     const props = path.node.properties;
     const keys = [];
     for (const prop of props) {
+      // since a key {a: 3} is equivalent to {"a": 3}, use the latter
       if (t.isIdentifier(prop.key) && !prop.computed) {
-        if (t.isLiteral(prop.key)) {
-          keys.push(prop.key);
-        } else {
-          keys.push(t.stringLiteral(prop.key.name));
-        }
+        keys.push(t.stringLiteral(prop.key.name));
       } else {
+        // if it is a string, numeric, or any computed expression
         keys.push(prop.key);
       }
     }

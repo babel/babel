@@ -433,7 +433,7 @@ helpers.objectDestructuringEmpty = template(`
 
 helpers.objectWithoutProperties = template(`
   (function (source, excluded) {
-    if (source === null) return {};
+    if (source === null) return null;
 
     var target = {};
     var sourceKeys = Object.keys(source);
