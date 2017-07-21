@@ -1,0 +1,117 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 35,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 35
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 35,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 35
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareExportDeclaration",
+        "start": 0,
+        "end": 35,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 35
+          }
+        },
+        "declaration": {
+          "type": "DeclareOpaqueType",
+          "start": 15,
+          "end": 35,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 35
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 27,
+            "end": 30,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 27
+              },
+              "end": {
+                "line": 1,
+                "column": 30
+              },
+              "identifierName": "Foo"
+            },
+            "name": "Foo"
+          },
+          "typeParameters": null,
+          "supertype": {
+            "type": "GenericTypeAnnotation",
+            "start": 32,
+            "end": 35,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 32
+              },
+              "end": {
+                "line": 1,
+                "column": 35
+              }
+            },
+            "typeParameters": null,
+            "id": {
+              "type": "Identifier",
+              "start": 32,
+              "end": 35,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 32
+                },
+                "end": {
+                  "line": 1,
+                  "column": 35
+                },
+                "identifierName": "Bar"
+              },
+              "name": "Bar"
+            }
+          },
+          "impltype": null
+        },
+        "default": false
+      }
+    ],
+    "directives": []
+  }
+}

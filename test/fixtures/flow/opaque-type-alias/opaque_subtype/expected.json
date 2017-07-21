@@ -1,0 +1,231 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 43,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 43
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 43,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 43
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "OpaqueType",
+        "start": 0,
+        "end": 43,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 43
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 12,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 12
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            },
+            "identifierName": "Counter"
+          },
+          "name": "Counter"
+        },
+        "typeParameters": null,
+        "supertype": {
+          "type": "GenericTypeAnnotation",
+          "start": 21,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          },
+          "typeParameters": {
+            "type": "TypeParameterInstantiation",
+            "start": 24,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 24
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            },
+            "params": [
+              {
+                "type": "GenericTypeAnnotation",
+                "start": 25,
+                "end": 26,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 26
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 25,
+                  "end": 26,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 26
+                    },
+                    "identifierName": "T"
+                  },
+                  "name": "T"
+                }
+              }
+            ]
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 21,
+            "end": 24,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 21
+              },
+              "end": {
+                "line": 1,
+                "column": 24
+              },
+              "identifierName": "Box"
+            },
+            "name": "Box"
+          }
+        },
+        "impltype": {
+          "type": "GenericTypeAnnotation",
+          "start": 30,
+          "end": 42,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 30
+            },
+            "end": {
+              "line": 1,
+              "column": 42
+            }
+          },
+          "typeParameters": {
+            "type": "TypeParameterInstantiation",
+            "start": 39,
+            "end": 42,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 39
+              },
+              "end": {
+                "line": 1,
+                "column": 42
+              }
+            },
+            "params": [
+              {
+                "type": "GenericTypeAnnotation",
+                "start": 40,
+                "end": 41,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 40
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 41
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 40,
+                  "end": 41,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 40
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 41
+                    },
+                    "identifierName": "T"
+                  },
+                  "name": "T"
+                }
+              }
+            ]
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 30,
+            "end": 39,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 30
+              },
+              "end": {
+                "line": 1,
+                "column": 39
+              },
+              "identifierName": "Container"
+            },
+            "name": "Container"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
