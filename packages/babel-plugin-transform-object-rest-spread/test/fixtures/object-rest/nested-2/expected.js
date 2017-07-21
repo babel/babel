@@ -15,54 +15,54 @@ const {
   foo: {
     bar: {
       baz: {
-        a: _ref
+        a: _x$other
       }
     }
   }
 } = test,
       {
   x
-} = _ref,
-      other = babelHelpers.objectWithoutProperties(_ref, ["x"]);
-const _ref3 = test,
+} = _x$other,
+      other = babelHelpers.objectWithoutProperties(_x$other, ["x"]);
+const _foo = test,
       {
-  foo: _ref2
-} = _ref3,
-      bar = babelHelpers.objectWithoutProperties(_ref2, []),
+  foo: _bar
+} = _foo,
+      bar = babelHelpers.objectWithoutProperties(_bar, []),
       {
   after
-} = _ref3;
-const _ref5 = test,
+} = _foo;
+const _foo2 = test,
       {
   foo: {
-    bar: _ref4
+    bar: _baz
   }
-} = _ref5,
-      baz = babelHelpers.objectWithoutProperties(_ref4, []),
+} = _foo2,
+      baz = babelHelpers.objectWithoutProperties(_baz, []),
       {
   afterOther
-} = _ref5;
-const _ref7 = test,
+} = _foo2;
+const _foo3 = test,
       {
   foo: {
-    bar: _ref6 = {}
+    bar: _qux = {}
   }
-} = _ref7,
-      qux = babelHelpers.objectWithoutProperties(_ref6, []),
+} = _foo3,
+      qux = babelHelpers.objectWithoutProperties(_qux, []),
       {
   another
-} = _ref7;
-const _ref10 = test,
+} = _foo3;
+const _foo4 = test,
       {
-  bar: _ref8
-} = _ref9,
+  bar: _pop
+} = _bar2,
       {
-  foo: _ref9
-} = _ref10,
-      pop = babelHelpers.objectWithoutProperties(_ref8, []),
+  foo: _bar2
+} = _foo4,
+      pop = babelHelpers.objectWithoutProperties(_pop, []),
       {
   poop
-} = _ref9,
+} = _bar2,
       {
   pooop
-} = _ref10;
+} = _foo4;

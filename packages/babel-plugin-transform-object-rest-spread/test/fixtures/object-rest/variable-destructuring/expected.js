@@ -1,52 +1,74 @@
 var z = {};
-var x = babelHelpers.objectWithoutProperties(z, []);
-var a = babelHelpers.objectWithoutProperties({
+var _x = z,
+    x = babelHelpers.objectWithoutProperties(_x, []);
+var _a = {
   a: 1
-}, []);
-var x = babelHelpers.objectWithoutProperties(a.b, []);
-var x = babelHelpers.objectWithoutProperties(a(), []);
-var {
+},
+    a = babelHelpers.objectWithoutProperties(_a, []);
+var _x2 = a.b,
+    x = babelHelpers.objectWithoutProperties(_x2, []);
+
+var _x3 = a(),
+    x = babelHelpers.objectWithoutProperties(_x3, []);
+
+var _x1$y = z,
+    {
   x1
-} = z,
-    y1 = babelHelpers.objectWithoutProperties(z, ["x1"]);
+} = _x1$y,
+    y1 = babelHelpers.objectWithoutProperties(_x1$y, ["x1"]);
 x1++;
-var {
+var _a$c = z,
+    {
   [a]: b
-} = z,
-    c = babelHelpers.objectWithoutProperties(z, [a]);
-var {
+} = _a$c,
+    c = babelHelpers.objectWithoutProperties(_a$c, [a]);
+var _x1$y2 = z,
+    {
   x1
-} = z,
-    y1 = babelHelpers.objectWithoutProperties(z, ["x1"]);
-let {
+} = _x1$y2,
+    y1 = babelHelpers.objectWithoutProperties(_x1$y2, ["x1"]);
+let _x2$y2$z = z,
+    {
   x2,
   y2
-} = z,
-    z2 = babelHelpers.objectWithoutProperties(z, ["x2", "y2"]);
-const {
+} = _x2$y2$z,
+    z2 = babelHelpers.objectWithoutProperties(_x2$y2$z, ["x2", "y2"]);
+const _w3$x3$y3$z = z,
+      {
   w3,
   x3,
   y3
-} = z,
-      z4 = babelHelpers.objectWithoutProperties(z, ["w3", "x3", "y3"]);
+} = _w3$x3$y3$z,
+      z4 = babelHelpers.objectWithoutProperties(_w3$x3$y3$z, ["w3", "x3", "y3"]);
+let _x4 = complex,
+    {
+  x: _a$d$asdf
+} = _x4,
+    {
+  a: xa,
+  [d]: f
+} = _a$d$asdf,
+    asdf = babelHelpers.objectWithoutProperties(_a$d$asdf, ["a", d]),
+    _y = _x4,
+    {
+  y: _d
+} = _y,
+    d = babelHelpers.objectWithoutProperties(_d, []),
+    _g = _y,
+    g = babelHelpers.objectWithoutProperties(_g, []);
 let {
-  x: {
-    a: xa,
-    [d]: f
-  }
-} = complex,
-    asdf = babelHelpers.objectWithoutProperties(complex.x, ["a", d]),
-    d = babelHelpers.objectWithoutProperties(complex.y, []),
-    g = babelHelpers.objectWithoutProperties(complex, ["x"]);
-let {} = z,
-    y4 = babelHelpers.objectWithoutProperties(z.x4, []);
-var {
-  z
-} = babelHelpers.objectWithoutProperties({
+  x4: _y2
+} = z,
+    y4 = babelHelpers.objectWithoutProperties(_y2, []);
+var _z = {
   z: 1
-}, []);
-var {
-  x = 5
-} = babelHelpers.objectWithoutProperties({
+},
+    {
+  z
+} = babelHelpers.objectWithoutProperties(_z, []);
+var _x5 = {
   x: 1
-}, []);
+},
+    {
+  x = 5
+} = babelHelpers.objectWithoutProperties(_x5, []);

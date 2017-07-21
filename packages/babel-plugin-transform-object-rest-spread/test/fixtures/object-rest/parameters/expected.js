@@ -1,74 +1,76 @@
-function a(_ref) {
-  let a34 = babelHelpers.objectWithoutProperties(_ref, []);
+function a(_a) {
+  var a34 = babelHelpers.objectWithoutProperties(_a, []);
 }
 
-function a2(_ref2) {
-  let {
+function a2(_a1$b) {
+  var {
     a1
-  } = _ref2,
-      b1 = babelHelpers.objectWithoutProperties(_ref2, ["a1"]);
+  } = _a1$b,
+      b1 = babelHelpers.objectWithoutProperties(_a1$b, ["a1"]);
 }
 
-function a3(_ref3) {
-  let {
+function a3(_a2$b2$c) {
+  var {
     a2,
     b2
-  } = _ref3,
-      c2 = babelHelpers.objectWithoutProperties(_ref3, ["a2", "b2"]);
+  } = _a2$b2$c,
+      c2 = babelHelpers.objectWithoutProperties(_a2$b2$c, ["a2", "b2"]);
 }
 
-function a4(_ref4, _ref5) {
-  let {
-    a5
-  } = _ref5,
-      c5 = babelHelpers.objectWithoutProperties(_ref5, ["a5"]);
-  let {
+function a4(_a3$c, _a5$c) {
+  var {
     a3
-  } = _ref4,
-      c3 = babelHelpers.objectWithoutProperties(_ref4, ["a3"]);
+  } = _a3$c,
+      c3 = babelHelpers.objectWithoutProperties(_a3$c, ["a3"]);
+  var {
+    a5
+  } = _a5$c,
+      c5 = babelHelpers.objectWithoutProperties(_a5$c, ["a5"]);
 }
 
-function a5(_ref6) {
-  let {
+function a5(_a3$b) {
+  var {
     a3,
-    b2: {
-      ba1
-    }
-  } = _ref6,
-      ba2 = babelHelpers.objectWithoutProperties(_ref6.b2, ["ba1"]),
-      c3 = babelHelpers.objectWithoutProperties(_ref6, ["a3", "b2"]);
+    b2: _ba1$ba
+  } = _a3$b,
+      {
+    ba1
+  } = _ba1$ba,
+      ba2 = babelHelpers.objectWithoutProperties(_ba1$ba, ["ba1"]),
+      _c = _a3$b,
+      c3 = babelHelpers.objectWithoutProperties(_c, []);
 }
 
-function a6(_ref7) {
-  let {
-    a3,
-    b2: {
-      ba1
-    }
-  } = _ref7,
-      ba2 = babelHelpers.objectWithoutProperties(_ref7.b2, ["ba1"]);
+function a6({
+  a3,
+  b2: _ba1$ba2
+}) {
+  var {
+    ba1
+  } = _ba1$ba2,
+      ba2 = babelHelpers.objectWithoutProperties(_ba1$ba2, ["ba1"]);
 }
 
-function a7(_ref8 = {}) {
-  let {
+function a7(_a1$b2 = {}) {
+  var {
     a1 = 1
-  } = _ref8,
-      b1 = babelHelpers.objectWithoutProperties(_ref8, ["a1"]);
+  } = _a1$b2,
+      b1 = babelHelpers.objectWithoutProperties(_a1$b2, ["a1"]);
 }
 
-function a8([_ref9]) {
-  let a1 = babelHelpers.objectWithoutProperties(_ref9, []);
+function a8([_a2]) {
+  var a1 = babelHelpers.objectWithoutProperties(_a2, []);
 }
 
-function a9([_ref10]) {
-  let {
+function a9([_a1$a]) {
+  var {
     a1
-  } = _ref10,
-      a2 = babelHelpers.objectWithoutProperties(_ref10, ["a1"]);
+  } = _a1$a,
+      a2 = babelHelpers.objectWithoutProperties(_a1$a, ["a1"]);
 }
 
-function a10([a1, _ref11]) {
-  let a2 = babelHelpers.objectWithoutProperties(_ref11, []);
+function a10([a1, _a3]) {
+  var a2 = babelHelpers.objectWithoutProperties(_a3, []);
 } // Unchanged
 
 

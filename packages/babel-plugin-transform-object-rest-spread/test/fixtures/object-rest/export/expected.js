@@ -1,10 +1,10 @@
 // ExportNamedDeclaration
-var {
+export var _b$c = asdf2,
+    {
   b
-} = asdf2,
-    c = babelHelpers.objectWithoutProperties(asdf2, ["b"]); // Skip
+} = _b$c,
+    c = babelHelpers.objectWithoutProperties(_b$c, ["b"]); // Skip
 
-export { b, c };
 export var {
   bb,
   cc

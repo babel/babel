@@ -8,13 +8,13 @@ const defunct = [{
 }, {
   e: 4
 }];
-const _ref2 = defunct,
+const _ref = defunct,
       [{
   a
 }, {
-  b: _ref
-}] = _ref2,
-      b = babelHelpers.objectWithoutProperties(_ref, []),
+  b: _b
+}] = _ref,
+      b = babelHelpers.objectWithoutProperties(_b, []),
       [,, {
   e
-}] = _ref2;
+}] = _ref;

@@ -1,24 +1,24 @@
 // ForXStatement
-for (var _ref of []) {
+for (var _a$b of []) {
   var {
     a
-  } = _ref,
-      b = babelHelpers.objectWithoutProperties(_ref, ["a"]);
+  } = _a$b,
+      b = babelHelpers.objectWithoutProperties(_a$b, ["a"]);
 }
 
-for (var _ref2 of []) {
+for (_a$b2 of []) {
   var {
     a
-  } = _ref2,
-      b = babelHelpers.objectWithoutProperties(_ref2, ["a"]);
+  } = _a$b2,
+      b = babelHelpers.objectWithoutProperties(_a$b2, ["a"]);
 }
 
 async function a() {
-  for await (var _ref3 of []) {
+  for await (_a$b3 of []) {
     var {
       a
-    } = _ref3,
-        b = babelHelpers.objectWithoutProperties(_ref3, ["a"]);
+    } = _a$b3,
+        b = babelHelpers.objectWithoutProperties(_a$b3, ["a"]);
   }
 } // skip
 
