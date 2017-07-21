@@ -47,3 +47,12 @@ require("babel-core").transform("code", {
   plugins: ["transform-flow-strip-types"]
 });
 ```
+
+## Options
+
+### `requireDirective`
+
+`boolean`, defaults to `false`.
+
+Setting this to true will only strip annotations and declarations from files
+that contain the `// @flow` directive.
