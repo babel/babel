@@ -1,0 +1,20 @@
+{
+  "name": "babel-plugin-transform-decorators-2",
+  "version": "7.0.0-alpha.15",
+  "author": "Peeyush Kushwaha <peeyush.p97@gmail.com>",
+  "license": "MIT",
+  "description": "Transformer for stage-2 decorators",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-decorators-2",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel",
+    "babel-plugin",
+    "decorators"
+  ],
+  "dependencies": {
+    "babel-plugin-syntax-decorators-2": "7.0.0-alpha.15"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "7.0.0-alpha.15"
+  }
+}
