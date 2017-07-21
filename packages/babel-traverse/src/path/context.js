@@ -47,8 +47,10 @@ export function isBlacklisted(): boolean {
 }
 
 export function visit(): boolean {
-  if (!this.node) {
-    return false;
+  for (let path = this; path; path = path.parentPath) {
+    if (!path.node || !path.container) {
+      return false;
+    }
   }
 
   if (this.isBlacklisted()) {
