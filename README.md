@@ -146,6 +146,7 @@ require("babylon").parse("code", {
 | `optionalChaining` ([proposal](https://github.com/tc39/proposal-optional-chaining)) | `a?.b` |
 | `importMeta` ([proposal](https://github.com/tc39/proposal-import-meta)) | `import.meta.url` |
 | `bigInt` ([proposal](https://github.com/tc39/proposal-bigint)) | `100n` |
+| `optionalCatchBinding` ([proposal](https://github.com/babel/proposals/issues/7)) | `try {throw 0;} catch{do();}` |
 
 ### FAQ
 

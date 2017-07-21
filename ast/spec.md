@@ -442,7 +442,7 @@ A `try` statement. If `handler` is `null` then `finalizer` must be a `BlockState
 ```js
 interface CatchClause <: Node {
   type: "CatchClause";
-  param: Pattern;
+  param: Pattern | null;
   body: BlockStatement;
 }
 ```

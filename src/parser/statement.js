@@ -491,12 +491,14 @@ export default class StatementParser extends ExpressionParser {
     if (this.match(tt._catch)) {
       const clause = this.startNode();
       this.next();
-
-      this.expect(tt.parenL);
-      clause.param = this.parseBindingAtom();
-      this.checkLVal(clause.param, true, Object.create(null), "catch clause");
-      this.expect(tt.parenR);
-
+      if (this.match(tt.parenL) || !this.hasPlugin("optionalCatchBinding")) {
+        this.expect(tt.parenL);
+        clause.param = this.parseBindingAtom();
+        this.checkLVal(clause.param, true, Object.create(null), "catch clause");
+        this.expect(tt.parenR);
+      } else {
+        clause.param = null;
+      }
       clause.body = this.parseBlock();
       node.handler = this.finishNode(clause, "CatchClause");
     }
