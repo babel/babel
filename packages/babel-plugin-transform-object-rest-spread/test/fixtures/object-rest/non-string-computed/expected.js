@@ -5,7 +5,7 @@ const a = {
 const {
   [3]: omit
 } = a,
-      rest = babelHelpers.objectWithoutProperties(a, [3].map(babelHelpers.toPropertyKey));
+      rest = babelHelpers.objectWithoutProperties(a, ["3"]);
 assert.deepEqual(rest, {
   "foo": "bar"
 });

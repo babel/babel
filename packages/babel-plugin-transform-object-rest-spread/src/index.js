@@ -21,21 +21,28 @@ export default function({ types: t }) {
     return false;
   }
 
-  // returns an array of all keys of an object
-  // e.g. extracts ["a", "b", 3, ++x] from ast of {a: "foo", b, 3: "bar", [++x]: "baz"}
+  // returns an array of all keys of an object, and a status flag indicating if all extracted keys
+  // were converted to stringLiterals or not
+  // e.g. extracts {keys: ["a", "b", "3", ++x], allLiteral: false }
+  // from ast of {a: "foo", b, 3: "bar", [++x]: "baz"}
   function extractNormalizedKeys(path) {
     const props = path.node.properties;
     const keys = [];
+    let allLiteral = true;
+
     for (const prop of props) {
-      // since a key {a: 3} is equivalent to {"a": 3}, use the latter
       if (t.isIdentifier(prop.key) && !prop.computed) {
+        // since a key {a: 3} is equivalent to {"a": 3}, use the latter
         keys.push(t.stringLiteral(prop.key.name));
+      } else if (t.isLiteral(prop.key)) {
+        keys.push(t.stringLiteral(String(prop.key.value)));
       } else {
-        // if it is a string, numeric, or any computed expression
         keys.push(prop.key);
+        allLiteral = false;
       }
     }
-    return keys;
+
+    return { keys, allLiteral };
   }
 
   // replaces impure computed keys with new identifiers
@@ -63,14 +70,11 @@ export default function({ types: t }) {
     last.remove(); // remove restElement
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
-    const keys = extractNormalizedKeys(path);
+    const { keys, allLiteral } = extractNormalizedKeys(path);
 
-    const someComputed = path
-      .get("properties")
-      .some(prop => prop.node.computed);
     let keyExpression;
-    if (someComputed) {
-      // map to toPropertyKey to handle the possible non-string values of the computed props
+    if (!allLiteral) {
+      // map to toPropertyKey to handle the possible non-string values
       keyExpression = t.callExpression(
         t.memberExpression(t.arrayExpression(keys), t.identifier("map")),
         [file.addHelper("toPropertyKey")],
