@@ -1,24 +1,26 @@
-const _foo = foo(),
+const _s$t = foo(),
       {
   s
-} = _foo,
-      t = babelHelpers.objectWithoutProperties(_foo, ["s"]);
+} = _s$t,
+      t = babelHelpers.objectWithoutProperties(_s$t, ["s"]);
 
-const _bar = bar(),
+const _s = bar(),
       {
-  s: {
-    q1
-  }
-} = _bar,
-      q2 = babelHelpers.objectWithoutProperties(_bar.s, ["q1"]),
-      q3 = babelHelpers.objectWithoutProperties(_bar, ["s"]);
+  s: _q1$q
+} = _s,
+      {
+  q1
+} = _q1$q,
+      q2 = babelHelpers.objectWithoutProperties(_q1$q, ["q1"]),
+      _q = _s,
+      q3 = babelHelpers.objectWithoutProperties(_q, []);
 
 const {
   a
-} = foo((_ref) => {
-  let {
+} = foo((_b$c) => {
+  var {
     b
-  } = _ref,
-      c = babelHelpers.objectWithoutProperties(_ref, ["b"]);
+  } = _b$c,
+      c = babelHelpers.objectWithoutProperties(_b$c, ["b"]);
   console.log(b, c);
 });

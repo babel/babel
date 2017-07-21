@@ -23,7 +23,40 @@ export default function({ types: t }) {
     SpreadElement(path) {
       const { parentPath } = path;
       if (!parentPath.isObjectExpression()) return;
-      path.remove();
+
+      let object = t.objectExpression([]);
+      const expressions = [object];
+      for (const prop of (parentPath.get("properties"): Array)) {
+        const { node } = prop;
+        if (prop.isSpreadElement()) {
+          const empty = expressions.length > 1 && !object.properties.length;
+          if (empty) {
+            expressions.pop();
+          } else {
+            object = t.objectExpression([]);
+          }
+          expressions.push(node.argument);
+          expressions.push(object);
+        } else {
+          object.properties.push(node);
+        }
+      }
+
+      if (!object.properties.length) {
+        expressions.pop();
+      }
+
+      const useBuiltIns = this.opts.useBuiltIns || false;
+      if (typeof useBuiltIns !== "boolean") {
+        throw new Error(
+          "transform-object-rest-spread only accepts a boolean option for useBuiltIns (defaults to false)",
+        );
+      }
+
+      const callee = useBuiltIns
+        ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+        : this.addHelper("extends");
+      parentPath.replaceWith(t.callExpression(callee, expressions));
     },
 
     RestElement(path) {
