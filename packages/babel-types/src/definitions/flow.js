@@ -88,6 +88,14 @@ defineType("DeclareTypeAlias", {
   },
 });
 
+defineType("DeclareOpaqueType", {
+  visitor: ["id", "typeParameters", "supertype"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  },
+});
+
 defineType("DeclareVariable", {
   visitor: ["id"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
@@ -246,6 +254,14 @@ defineType("TypeofTypeAnnotation", {
 
 defineType("TypeAlias", {
   visitor: ["id", "typeParameters", "right"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("OpaqueType", {
+  visitor: ["id", "typeParameters", "supertype", "impltype"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     // todo
