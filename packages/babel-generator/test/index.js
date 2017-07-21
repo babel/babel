@@ -1,5 +1,5 @@
 import Printer from "../lib/printer";
-import generate from "../lib";
+import generate, { CodeGenerator } from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
 import chai from "chai";
@@ -348,6 +348,14 @@ describe("programmatic generation", function() {
   [key: any]: Test
 }`,
     );
+  });
+});
+
+describe("CodeGenerator", function() {
+  it("generate", function() {
+    const codeGen = new CodeGenerator(t.numericLiteral(123));
+    const code = codeGen.generate().code;
+    assert.equal(parse(code).program.body[0].expression.value, 123);
   });
 });
 
