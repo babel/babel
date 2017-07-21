@@ -8,13 +8,32 @@ export default class LooseClassTransformer extends VanillaTransformer {
     this.isLoose = true;
   }
 
+  _insertProtoAliasOnce() {
+    if (!this.methodAlias) {
+      this.methodAlias = this.path.scope.generateUidIdentifier("proto");
+      const classProto = t.memberExpression(
+        this.classRef,
+        t.identifier("prototype"),
+      );
+      const protoDeclaration = t.variableDeclaration("var", [
+        t.variableDeclarator(this.methodAlias, classProto),
+      ]);
+
+      this.body.push(protoDeclaration);
+      this.aliasInserted = true;
+      return true;
+    }
+    return false;
+  }
+
   _processMethod(node, scope) {
     if (!node.decorators) {
       // use assignments instead of define properties for loose classes
 
       let classRef = this.classRef;
       if (!node.static) {
-        classRef = t.memberExpression(classRef, t.identifier("prototype"));
+        this._insertProtoAliasOnce();
+        classRef = this.methodAlias;
       }
       const methodName = t.memberExpression(
         classRef,

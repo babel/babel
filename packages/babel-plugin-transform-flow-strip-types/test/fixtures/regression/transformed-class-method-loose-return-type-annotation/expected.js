@@ -3,7 +3,9 @@
 var C = function () {
   function C() {}
 
-  C.prototype.m = function m(x) {
+  var _proto = C.prototype;
+
+  _proto.m = function m(x) {
     return 'a';
   };
 
