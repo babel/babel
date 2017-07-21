@@ -55,7 +55,7 @@ let _x4 = complex,
 } = _y,
     d = babelHelpers.objectWithoutProperties(_d, []),
     _g = _y,
-    g = babelHelpers.objectWithoutProperties(_g, []);
+    g = babelHelpers.objectWithoutProperties(_g, ["x", "y"]);
 let {
   x4: _y2
 } = z,

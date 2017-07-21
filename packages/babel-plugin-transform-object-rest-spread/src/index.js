@@ -62,9 +62,9 @@ export default function({ types: t }) {
       const { parentPath, parent } = path;
       if (!parentPath.isObjectPattern()) return;
 
-      const bindings = [];
+      const patterns = [];
       const root = path.findParent(path => {
-        if (path.listKey && path.parentPath.isPattern()) bindings.push(path);
+        if (path.listKey && path.parentPath.isPattern()) patterns.push(path);
 
         let { parentPath } = path;
         if (parentPath.isObjectProperty()) parentPath = parentPath.parentPath;
@@ -117,26 +117,25 @@ export default function({ types: t }) {
 
       const ups = [];
       const afters = [];
-      for (const binding of bindings) {
-        const { parent, parentPath } = binding;
-        const container = parent[binding.listKey];
-        const siblings = container.splice(binding.key + 1, Infinity);
+      for (const pattern of patterns) {
+        const { parent, parentPath, container } = pattern;
+        const siblings = container.splice(pattern.key + 1, Infinity);
         if (!siblings.length) continue;
 
         const memo = memoizer(parentPath, scope);
-        parentPath.replaceWith(memo);
 
-        let pattern;
-        if (t.isArrayPattern(parent)) {
+        let leftovers;
+        if (parentPath.isArrayPattern()) {
           const befores = Array(container.length);
           befores.fill(null);
-          pattern = t.arrayPattern(befores.concat(siblings));
+          leftovers = t.arrayPattern(befores.concat(siblings));
         } else {
-          pattern = t.objectPattern(siblings);
+          leftovers = t.objectPattern(siblings);
         }
 
+        parentPath.replaceWith(memo);
         ups.push(build(parent, memo));
-        afters.push(build(pattern, memo));
+        afters.push(build(leftovers, memo));
       }
 
       let insertInto;

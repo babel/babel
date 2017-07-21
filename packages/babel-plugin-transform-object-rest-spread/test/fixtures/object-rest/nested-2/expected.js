@@ -54,11 +54,11 @@ const _foo3 = test,
 } = _foo3;
 const _foo4 = test,
       {
-  bar: _pop
-} = _bar2,
-      {
   foo: _bar2
 } = _foo4,
+      {
+  bar: _pop
+} = _bar2,
       pop = babelHelpers.objectWithoutProperties(_pop, []),
       {
   poop
