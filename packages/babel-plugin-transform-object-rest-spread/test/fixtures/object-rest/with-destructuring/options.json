@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "syntax-async-generators",
+    "transform-object-rest-spread",
+    "external-helpers",
+    "transform-es2015-destructuring"
+  ]
+}

@@ -181,8 +181,70 @@ export default function({ types: t }) {
     // unshift a variable declarator in the wrong order.
     Function(path) {
       const params = path.get("params");
+      const replaced = new Array(params.length);
+
       for (let i = params.length - 1; i >= 0; i--) {
-        params[i].traverse(visitor, this);
+        const param = params[i];
+        const node = param.node;
+        param.traverse(visitor, this);
+        replaced[i] = node !== param.node;
+      }
+
+      let i = replaced.indexOf(true) + 1;
+      if (!i) return;
+
+      const { scope } = path;
+      let insertionPoint = path.get("body.body.0");
+      for (; i < params.length; i++) {
+        const param = params[i];
+        if (replaced[i]) {
+          insertionPoint = insertionPoint.getNextSibling();
+          continue;
+        }
+        if (!param.isPattern()) return;
+
+        let assigned;
+        let assignment;
+        if (param.isAssignmentPattern()) {
+          const left = param.get("left");
+          const right = param.get("right");
+          const id = left.node;
+          const value = right.node;
+
+          let ref;
+          if (left.isIdentifier()) {
+            ref = id;
+          } else {
+            ref = scope.generateUidIdentifierBasedOnNode(id);
+            left.replaceWith(ref);
+          }
+          right.replaceWith(scope.buildUndefinedNode());
+
+          assigned = t.objectPattern([
+            t.objectProperty(
+              ref,
+              t.assignmentPattern(id, value),
+              false,
+              t.isIdentifier(left),
+            ),
+          ]);
+          assignment = t.objectExpression([
+            t.objectProperty(ref, ref, false, true),
+          ]);
+        } else {
+          const { node } = param;
+          const ref = scope.generateUidIdentifierBasedOnNode(node);
+          param.replaceWith(ref);
+
+          assigned = node;
+          assignment = ref;
+        }
+
+        insertionPoint.insertAfter(t.expressionStatement(
+          t.assignmentExpression("=", assigned, assignment),
+        ));
+
+        insertionPoint = insertionPoint.getNextSibling();
       }
     },
   };

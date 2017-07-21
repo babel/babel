@@ -71,6 +71,49 @@ function a9([_a1$a]) {
 
 function a10([a1, _a3]) {
   var a2 = babelHelpers.objectWithoutProperties(_a3, []);
+}
+
+function a11(_a4, b = void 0) {
+  var a = babelHelpers.objectWithoutProperties(_a4, []);
+  ({
+    b = a
+  } = {
+    b
+  });
+}
+
+function a12(_a5, b = void 0, _c2) {
+  var a = babelHelpers.objectWithoutProperties(_a5, []);
+  ({
+    b = a
+  } = {
+    b
+  });
+  var c = babelHelpers.objectWithoutProperties(_c2, []);
+}
+
+function a13(_a6, b = void 0, _c3, _d = void 0) {
+  var a = babelHelpers.objectWithoutProperties(_a6, []);
+  ({
+    b = a
+  } = {
+    b
+  });
+  var c = babelHelpers.objectWithoutProperties(_c3, []);
+  ({
+    _d: {
+      d
+    } = c
+  } = {
+    _d
+  });
+}
+
+function a14(_a7, _b) {
+  var a = babelHelpers.objectWithoutProperties(_a7, []);
+  ({
+    b = a
+  } = _b);
 } // Unchanged
 
 
