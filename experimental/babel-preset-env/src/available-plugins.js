@@ -1,4 +1,4 @@
-export const availablePlugins = {
+export default {
   "check-es2015-constants": require("babel-plugin-check-es2015-constants"),
   "syntax-trailing-function-commas": require("babel-plugin-syntax-trailing-function-commas"),
   "transform-async-to-generator": require("babel-plugin-transform-async-to-generator"),
