@@ -24,14 +24,17 @@ export default function({ types: t }) {
   // normalizes identifier keys to string literals and extracts all keys
   // e.g. extracts ["a", "b", 3, ++x] from {a: "foo", b, 3: "bar", [++x]: "baz"}
   function extractNormalizedKeys(path) {
-    const propPaths = path.get("properties");
+    const props = path.node.properties;
     const keys = [];
-    for (const propPath of propPaths) {
-      const key = propPath.get("key").node;
-      if (t.isIdentifier(key) && !propPath.node.computed) {
-        keys.push(t.stringLiteral(key.name));
+    for (const prop of props) {
+      if (t.isIdentifier(prop.key) && !prop.computed) {
+        if (t.isLiteral(prop.key)) {
+          keys.push(prop.key);
+        } else {
+          keys.push(t.stringLiteral(prop.key.name));
+        }
       } else {
-        keys.push(key);
+        keys.push(prop.key);
       }
     }
     return keys;
@@ -247,22 +250,16 @@ export default function({ types: t }) {
         if (leftPath.isObjectPattern() && hasRestElement(leftPath)) {
           const nodes = [];
 
-          let ref;
-          if (
-            path.isCompletionRecord() ||
-            path.parentPath.isExpressionStatement()
-          ) {
-            ref = path.scope.generateUidIdentifierBasedOnNode(
-              path.node.right,
-              "ref",
-            );
+          const ref = path.scope.generateUidIdentifierBasedOnNode(
+            path.node.right,
+            "ref",
+          );
 
-            nodes.push(
-              t.variableDeclaration("var", [
-                t.variableDeclarator(ref, path.node.right),
-              ]),
-            );
-          }
+          nodes.push(
+            t.variableDeclaration("var", [
+              t.variableDeclarator(ref, path.node.right),
+            ]),
+          );
 
           const [
             impureComputedPropertyDeclarators,
@@ -277,7 +274,7 @@ export default function({ types: t }) {
           }
 
           const nodeWithoutSpread = t.clone(path.node);
-          nodeWithoutSpread.right = ref; //todo: shouldn't the if statement always execute for this to work
+          nodeWithoutSpread.right = ref;
           nodes.push(t.expressionStatement(nodeWithoutSpread));
           nodes.push(
             t.toStatement(
