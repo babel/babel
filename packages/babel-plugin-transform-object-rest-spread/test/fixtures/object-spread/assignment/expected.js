@@ -7,3 +7,7 @@ z = {
   x,
   w: _extends({}, y)
 };
+z = _extends({}, y);
+z = _extends({}, y, {
+  x
+});
