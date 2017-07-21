@@ -236,7 +236,6 @@ export default class File extends Store {
 
     if (t.isFunctionExpression(ref) && !ref.id) {
       ref.body._compact = true;
-      ref._generated = true;
       ref.id = uid;
       ref.type = "FunctionDeclaration";
       this.path.unshiftContainer("body", ref);

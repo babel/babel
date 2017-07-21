@@ -38,7 +38,7 @@ suite("validators", function() {
         t.objectProperty(
           t.identifier("a"),
           t.objectPattern([
-            t.objectProperty(t.identifier("b"), t.stringLiteral("foo")),
+            t.objectProperty(t.identifier("b"), t.identifier("foo")),
             t.objectProperty(
               t.identifier("c"),
               t.arrayPattern([t.identifier("value")]),

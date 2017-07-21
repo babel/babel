@@ -304,7 +304,7 @@ export function clone(node: Object): Object {
 
 export function cloneWithoutLoc(node: Object): Object {
   const newNode = clone(node);
-  delete newNode.loc;
+  newNode.loc = null;
   return newNode;
 }
 
@@ -405,7 +405,7 @@ export function buildMatchMemberExpression(
 
 export function removeComments(node: Object): Object {
   for (const key of t.COMMENT_KEYS) {
-    delete node[key];
+    node[key] = null;
   }
   return node;
 }
@@ -455,7 +455,7 @@ export function inherits(child: Object, parent: Object): Object {
 
   // force inherit "private" properties
   for (const key in parent) {
-    if (key[0] === "_") child[key] = parent[key];
+    if (key[0] === "_" && key !== "__clone") child[key] = parent[key];
   }
 
   // force inherit select properties

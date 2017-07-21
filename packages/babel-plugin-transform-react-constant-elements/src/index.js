@@ -1,4 +1,6 @@
 export default function({ types: t }) {
+  const HOISTED = new WeakSet();
+
   const immutabilityVisitor = {
     enter(path, state) {
       const stop = () => {
@@ -59,15 +61,14 @@ export default function({ types: t }) {
   return {
     visitor: {
       JSXElement(path) {
-        if (path.node._hoisted) return;
+        if (HOISTED.has(path.node)) return;
+        HOISTED.add(path.node);
 
         const state = { isImmutable: true };
         path.traverse(immutabilityVisitor, state);
 
         if (state.isImmutable) {
           path.hoist();
-        } else {
-          path.node._hoisted = true;
         }
       },
     },
