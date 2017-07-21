@@ -11,3 +11,4 @@ z = _extends({}, y);
 z = _extends({}, y, {
   x
 });
+z = _extends({}, y, x);

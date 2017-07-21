@@ -29,8 +29,7 @@ export default function({ types: t }) {
       for (const prop of (parentPath.get("properties"): Array)) {
         const { node } = prop;
         if (prop.isSpreadElement()) {
-          const empty = expressions.length > 1 && !object.properties.length;
-          if (empty) {
+          if (expressions.length > 1 && !object.properties.length) {
             expressions.pop();
           } else {
             object = t.objectExpression([]);
