@@ -14,7 +14,7 @@
     "babel-types": "7.0.0-alpha.15",
     "babylon": "7.0.0-beta.15",
     "debug": "^2.2.0",
-    "globals": "^9.0.0",
+    "globals": "^10.0.0",
     "invariant": "^2.2.0",
     "lodash": "^4.2.0"
   },
