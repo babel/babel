@@ -112,7 +112,7 @@ The [data](https://github.com/babel/babel-preset-env/blob/master/data/plugins.js
 
 `number | string | "current" | true`
 
-If you want to compile against the current node version, you can specify `"node": true` or `"node": "current"`, which would be the same as `"node": parseFloat(process.versions.node)`.
+If you want to compile against the current node version, you can specify `"node": true` or `"node": "current"`, which would be the same as `"node": process.versions.node`.
 
 ### `targets.browsers`
 
