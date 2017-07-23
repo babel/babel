@@ -190,10 +190,6 @@
       }
     }
 
-    if (typeof global.process === "object" && global.process.domain) {
-      invoke = global.process.domain.bind(invoke);
-    }
-
     var previousPromise;
 
     function enqueue(method, arg) {
