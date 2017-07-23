@@ -42,7 +42,7 @@
     "lodash": "^4.2.0",
     "mocha": "^3.0.0",
     "nyc": "^11.0.3",
-    "output-file-sync": "^1.1.1",
+    "output-file-sync": "^2.0.0",
     "prettier": "^1.5.0",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
