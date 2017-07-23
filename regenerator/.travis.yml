@@ -1,3 +1,9 @@
+before_install:
+  - npm install lerna@2.0.0
+
+install:
+  - npm run bootstrap
+
 language: node_js
 node_js:
   - "8"
@@ -5,12 +11,5 @@ node_js:
   - "6"
   - "5"
   - "4"
-  - "0.12"
-  - "0.11"
-  - "0.10"
-
-matrix:
-  allow_failures:
-    - node_js: "0.11"
 
 sudo: false
