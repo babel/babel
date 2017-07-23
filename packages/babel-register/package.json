@@ -19,6 +19,6 @@
   },
   "devDependencies": {
     "decache": "^4.1.0",
-    "default-require-extensions": "^1.0.0"
+    "default-require-extensions": "^2.0.0"
   }
 }
