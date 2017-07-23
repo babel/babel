@@ -5,12 +5,13 @@ export default function() {
     inherits: syntaxOptionalCatchBinding,
 
     visitor: {
-      CatchClause({ scope, node }) {
-        if (node.param.name) {
+      CatchClause(path) {
+        if (path.node.param.name) {
           return;
         } else {
-          const uid = scope.generateUidIdentifier(node.param.name);
-          node.param.name = uid.name;
+          const uid = path.scope.generateUidIdentifier("unused");
+          const paramPath = path.get("param");
+          paramPath.replaceWith(uid);
         }
       },
     },
