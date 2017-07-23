@@ -1,4 +1,5 @@
 import * as t from "babel-types";
+import * as util from "./util";
 
 // this function converts a shorthand object generator method into a normal
 // (non-shorthand) object property which is a generator function expression. for
@@ -56,7 +57,7 @@ export default function replaceShorthandObjectMethod(path) {
     path.node.async
   );
 
-  path.replaceWith(
+  util.replaceWithOrRemove(path,
     t.objectProperty(
       t.cloneDeep(path.node.key), // key
       functionExpression, //value
