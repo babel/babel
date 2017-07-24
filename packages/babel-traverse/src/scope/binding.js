@@ -13,8 +13,9 @@ import type NodePath from "../path";
 
 export default class Binding {
   constructor({ existing, identifier, scope, path, kind }) {
-    // if the re-binding is var, maintain the original binding but update constantViolations
-    if (existing && kind == "var") {
+    // if the re-binding is var or hoisted function declaration,
+    // maintain the original binding but update constantViolations
+    if (existing && (kind == "var" || kind == "hoisted")) {
       existing.constantViolations = existing.constantViolations.concat(path);
       return existing;
     }

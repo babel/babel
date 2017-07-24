@@ -3,7 +3,7 @@ function f(z, b) {
   return b;
 }
 
-function g(a) {
+function g(z) {
   function z() {
     return "function, redeclared";
   }
