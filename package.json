@@ -22,7 +22,7 @@
     "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
     "chai": "^4.1.0",
-    "chalk": "^1.1.1",
+    "chalk": "^2.0.0",
     "derequire": "^2.0.2",
     "eslint": "^3.14.1",
     "eslint-config-babel": "^7.0.1",
