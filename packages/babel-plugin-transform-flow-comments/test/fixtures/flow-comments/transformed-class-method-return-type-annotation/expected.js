@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 // @flow
 var C = function () {
@@ -7,8 +7,12 @@ var C = function () {
   }
 
   babelHelpers.createClass(C, [{
-    key: 'm',
-    value: function m(x /*: number*/) /*: string*/ {
+    key: "m",
+    value: function m(x
+    /*: number*/
+    )
+    /*: string*/
+    {
       return 'a';
     }
   }]);

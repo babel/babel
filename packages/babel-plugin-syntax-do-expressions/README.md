@@ -1,6 +1,6 @@
 # babel-plugin-syntax-do-expressions
 
-Allow parsing of do expressions.
+> Allow parsing of do expressions.
 
 ## Installation
 

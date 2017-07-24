@@ -1,8 +1,7 @@
 "use strict";
 
 var _this = undefined;
-"1" + String(a);
-
+"1".concat(a);
 (function () {
   babelHelpers.newArrowCheck(this, _this);
 }).bind(undefined);

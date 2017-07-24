@@ -1,6 +1,6 @@
 # babel-plugin-syntax-jsx
 
-
+> Allow parsing of JSX
 
 ## Installation
 

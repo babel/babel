@@ -38,11 +38,10 @@ export default class Binding {
       this.constantViolations = [].concat(
         existing.path,
         existing.constantViolations,
-        this.constantViolations
+        this.constantViolations,
       );
     }
   }
-
 
   constantViolations: Array<NodePath>;
   constant: boolean;
