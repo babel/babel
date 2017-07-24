@@ -7,5 +7,6 @@ function g(z) {
   function z() {
     return "function, redeclared";
   }
+
   return z();
 }
