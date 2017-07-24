@@ -15,7 +15,7 @@ export default class Binding {
   constructor({ existing, identifier, scope, path, kind }) {
     // if the re-binding is var or hoisted function declaration,
     // maintain the original binding but update constantViolations
-    if (existing && (kind == "var" || kind == "hoisted")) {
+    if (existing) {
       existing.constantViolations = existing.constantViolations.concat(path);
       return existing;
     }
@@ -33,14 +33,6 @@ export default class Binding {
     this.references = 0;
 
     this.clearValue();
-
-    if (existing) {
-      this.constantViolations = [].concat(
-        existing.path,
-        existing.constantViolations,
-        this.constantViolations,
-      );
-    }
   }
 
   constantViolations: Array<NodePath>;
