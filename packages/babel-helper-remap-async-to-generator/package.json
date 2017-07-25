@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-function-name": "7.0.0-alpha.15",
+    "babel-helper-wrap-function": "7.0.0-alpha.15",
     "babel-template": "7.0.0-alpha.15",
     "babel-traverse": "7.0.0-alpha.15",
     "babel-types": "7.0.0-alpha.15"

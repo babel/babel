@@ -1,5 +1,6 @@
 import assert from "assert";
 import chalk from "chalk";
+import stripAnsi from "strip-ansi";
 import codeFrame, { codeFrameColumns } from "..";
 
 describe("babel-code-frame", function() {
@@ -100,7 +101,7 @@ describe("babel-code-frame", function() {
   it("opts.highlightCode", function() {
     const rawLines = "console.log('babel')";
     const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
-    const stripped = chalk.stripColor(result);
+    const stripped = stripAnsi(result);
     assert.ok(result.length > stripped.length);
     assert.equal(
       stripped,
