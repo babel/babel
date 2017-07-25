@@ -30,7 +30,6 @@ declare module B {
   declare export type B = {};
   declare export interface Moon {}
 }
-
 declare module "foo" {
   declare export type * from "bar";
 }
