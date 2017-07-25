@@ -143,6 +143,7 @@ defineType("CatchClause", {
   fields: {
     param: {
       validate: assertNodeType("Identifier"),
+      optional: true,
     },
     body: {
       validate: assertNodeType("BlockStatement"),
