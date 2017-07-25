@@ -331,14 +331,12 @@ export default class ExpressionParser extends LValParser {
 
         if (arg.type === "Identifier") {
           this.raise(node.start, "Deleting local variable in strict mode");
-        } else if (this.hasPlugin("classPrivateProperties")) {
-          if (
-            arg.type === "PrivateName" ||
-            (arg.type === "MemberExpression" &&
-              arg.property.type === "PrivateName")
-          ) {
-            this.raise(node.start, "Deleting a private field is not allowed");
-          }
+        } else if (
+          this.hasPlugin("classPrivateProperties") &&
+          arg.type === "MemberExpression" &&
+          arg.property.type === "PrivateName"
+        ) {
+          this.raise(node.start, "Deleting a private field is not allowed");
         }
       }
 
@@ -746,13 +744,6 @@ export default class ExpressionParser extends LValParser {
         node = this.startNode();
         this.takeDecorators(node);
         return this.parseClass(node, false);
-
-      case tt.hash:
-        if (this.hasPlugin("classPrivateProperties")) {
-          return this.parseMaybePrivateName();
-        } else {
-          throw this.unexpected();
-        }
 
       case tt._new:
         return this.parseNew();
