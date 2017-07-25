@@ -1,4 +1,5 @@
 import * as t from "babel-types";
+import { ExportAllDeclaration } from "./modules";
 
 export function AnyTypeAnnotation() {
   this.word("any");
@@ -100,17 +101,10 @@ export function DeclareExportDeclaration(node: Object) {
   FlowExportDeclaration.apply(this, arguments);
 }
 
-export function DeclareExportAllDeclaration(node: Object) {
+export function DeclareExportAllDeclaration(/*node: Object*/) {
   this.word("declare");
   this.space();
-  this.word("export");
-  this.space();
-  this.token("*");
-  this.space();
-  this.word("from");
-  this.space();
-  this.print(node.source, node);
-  this.semicolon();
+  ExportAllDeclaration.apply(this, arguments);
 }
 
 function FlowExportDeclaration(node: Object) {

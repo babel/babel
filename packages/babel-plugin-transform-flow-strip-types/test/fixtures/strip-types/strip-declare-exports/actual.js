@@ -13,3 +13,4 @@ declare export class A mixins B<T>, C {}
 declare export default class A {}
 declare export default function foo(): void;
 declare export default string
+declare module "foo" { declare export type * from "bar"; }
