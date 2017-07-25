@@ -380,6 +380,7 @@ suites.forEach(function(testSuite) {
                   "jsx",
                   "objectRestSpread",
                   "optionalChaining",
+                  "optionalCatchBinding",
                 ],
                 strictMode: false,
                 sourceType: "module",
