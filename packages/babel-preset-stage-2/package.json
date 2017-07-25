@@ -9,7 +9,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-plugin-transform-class-properties": "7.0.0-alpha.16",
-    "babel-plugin-transform-function-sent": "7.0.0-alpha.15",
+    "babel-plugin-transform-function-sent2": "7.0.0-alpha.16",
     "babel-preset-stage-3": "7.0.0-alpha.16"
   }
 }
