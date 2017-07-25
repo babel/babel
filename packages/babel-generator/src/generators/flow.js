@@ -35,6 +35,10 @@ export function DeclareFunction(node: Object) {
   this.space();
   this.print(node.id, node);
   this.print(node.id.typeAnnotation.typeAnnotation, node);
+  if (node.id.typeAnnotation.predicate) {
+    this.space();
+    this.print(node.id.typeAnnotation.predicate, node);
+  }
   this.semicolon();
 }
 
@@ -228,6 +232,10 @@ export function TypeAnnotation(node: Object) {
   this.space();
   if (node.optional) this.token("?");
   this.print(node.typeAnnotation, node);
+  if (node.predicate) {
+    this.space();
+    this.print(node.predicate, node);
+  }
 }
 
 export function TypeParameter(node: Object) {
@@ -358,4 +366,17 @@ export function TypeCastExpression(node: Object) {
 
 export function VoidTypeAnnotation() {
   this.word("void");
+}
+
+export function DeclaredPredicate(node: Object) {
+  this.token("%");
+  this.word("checks");
+  this.token("(");
+  this.print(node.expression, node);
+  this.token(")");
+}
+
+export function InferredPredicate() {
+  this.token("%");
+  this.word("checks");
 }
