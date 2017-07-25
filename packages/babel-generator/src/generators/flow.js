@@ -42,7 +42,26 @@ export function DeclareFunction(node: Object, parent: Object) {
   this.space();
   this.print(node.id, node);
   this.print(node.id.typeAnnotation.typeAnnotation, node);
+
+  if (node.predicate) {
+    this.space();
+    this.print(node.predicate, node);
+  }
+
   this.semicolon();
+}
+
+export function InferredPredicate(/*node: Object*/) {
+  this.token("%");
+  this.word("checks");
+}
+
+export function DeclaredPredicate(node: Object) {
+  this.token("%");
+  this.word("checks");
+  this.token("(");
+  this.print(node.value, node);
+  this.token(")");
 }
 
 export function DeclareInterface(node: Object) {

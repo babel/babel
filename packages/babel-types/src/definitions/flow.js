@@ -125,6 +125,14 @@ defineType("DeclareExportAllDeclaration", {
   },
 });
 
+defineType("DeclaredPredicate", {
+  visitor: ["value"],
+  aliases: ["Flow", "FlowPredicate"],
+  fields: {
+    // todo
+  },
+});
+
 defineType("ExistsTypeAnnotation", {
   aliases: ["Flow"],
 });
@@ -148,6 +156,13 @@ defineType("FunctionTypeParam", {
 defineType("GenericTypeAnnotation", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("InferredPredicate", {
+  aliases: ["Flow", "FlowPredicate"],
   fields: {
     // todo
   },
