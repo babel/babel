@@ -1,10 +1,6 @@
 # babel-plugin-transform--optional-catch-binding
 
-> Compile optional catch bindings to ES5
-
-## Detail
-
-> Optional catch binding enables the catch block to execute whether or not a parameter is passed to the catch statement (CatchClause).
+> Optional catch binding enables the catch block to execute whether or not an argument is passed to the catch statement (CatchClause).
 
 
 ## Examples

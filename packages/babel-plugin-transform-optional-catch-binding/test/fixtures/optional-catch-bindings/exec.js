@@ -6,6 +6,7 @@ const test = () => {
     return true;
   }
 }
+assert(test());
 
 const test2 = () => {
   try {
