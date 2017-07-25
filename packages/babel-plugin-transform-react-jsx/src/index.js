@@ -47,6 +47,12 @@ export default function({ types: t }) {
     );
   };
 
+  visitor.JSXAttribute = function(path) {
+    if (t.isJSXElement(path.node.value)) {
+      path.node.value = t.jSXExpressionContainer(path.node.value);
+    }
+  };
+
   return {
     inherits: jsx,
     visitor,
