@@ -24,7 +24,7 @@ Below is a class with four class properties which will be transformed.
   let myBork = new Bork;
 
   //Property initializers are not on the prototype.
-  console.log(myBork.prototype.boundFunction); // > undefined
+  console.log(myBork.__proto__.boundFunction); // > undefined
 
   //Bound functions are bound to the class instance.
   console.log(myBork.boundFunction.call(undefined)); // > "bork"
