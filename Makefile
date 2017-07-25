@@ -46,6 +46,8 @@ clean-all:
 	rm -rf packages/*/lib
 	rm -rf node_modules
 	rm -rf packages/*/node_modules
+	rm -rf package-lock.json
+	rm -rf packages/*/package-lock.json
 	make clean
 
 test-only:
