@@ -6,9 +6,7 @@ export default function() {
 
     visitor: {
       CatchClause(path) {
-        if (path.node.param) {
-          return;
-        } else {
+        if (!path.node.param) {
           const uid = path.scope.generateUidIdentifier("unused");
           const paramPath = path.get("param");
           paramPath.replaceWith(uid);
