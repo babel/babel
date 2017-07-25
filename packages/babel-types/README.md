@@ -492,6 +492,21 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 ---
 
+### declareOpaqueType
+```javascript
+t.declareOpaqueType(id, typeParameters, supertype)
+```
+
+See also `t.isDeclareOpaqueType(node, opts)` and `t.assertDeclareOpaqueType(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `id` (required)
+ - `typeParameters` (required)
+ - `supertype` (required)
+
+---
+
 ### declareTypeAlias
 ```javascript
 t.declareTypeAlias(id, typeParameters, right)
@@ -517,19 +532,6 @@ See also `t.isDeclareVariable(node, opts)` and `t.assertDeclareVariable(node, op
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id` (required)
-
----
-
-### declaredPredicate
-```javascript
-t.declaredPredicate(value)
-```
-
-See also `t.isDeclaredPredicate(node, opts)` and `t.assertDeclaredPredicate(node, opts)`.
-
-Aliases: `Flow`, `FlowPredicate`
-
- - `value` (required)
 
 ---
 
@@ -959,18 +961,6 @@ Aliases: `ModuleSpecifier`
  - `local`: `Identifier` (required)
  - `imported`: `Identifier` (required)
  - `importKind`: `null | 'type' | 'typeof'` (default: `null`)
-
----
-
-### inferredPredicate
-```javascript
-t.inferredPredicate()
-```
-
-See also `t.isInferredPredicate(node, opts)` and `t.assertInferredPredicate(node, opts)`.
-
-Aliases: `Flow`, `FlowPredicate`
-
 
 ---
 
@@ -1484,6 +1474,22 @@ See also `t.isObjectTypeSpreadProperty(node, opts)` and `t.assertObjectTypeSprea
 Aliases: `Flow`, `UserWhitespacable`
 
  - `argument` (required)
+
+---
+
+### opaqueType
+```javascript
+t.opaqueType(id, typeParameters, supertype, impltype)
+```
+
+See also `t.isOpaqueType(node, opts)` and `t.assertOpaqueType(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `id` (required)
+ - `typeParameters` (required)
+ - `supertype` (required)
+ - `impltype` (required)
 
 ---
 
