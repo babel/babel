@@ -143,3 +143,12 @@ export function StringLiteral(node: Object) {
 
   return this.token(val);
 }
+
+export function BigIntLiteral(node: Object) {
+  const raw = this.getPossibleRaw(node);
+  if (!this.format.minified && raw != null) {
+    this.token(raw);
+    return;
+  }
+  this.token(node.value);
+}
