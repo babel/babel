@@ -1,6 +1,6 @@
 // This file contains methods responsible for replacing a node with another.
 
-import codeFrame from "babel-code-frame";
+import { codeFrameColumns } from "babel-code-frame";
 import traverse from "../index";
 import NodePath from "./index";
 import { parse } from "babylon";
@@ -23,9 +23,11 @@ const hoistVariablesVisitor = {
 
     for (const declar of (path.node.declarations: Array<Object>)) {
       if (declar.init) {
-        exprs.push(t.expressionStatement(
-          t.assignmentExpression("=", declar.id, declar.init)
-        ));
+        exprs.push(
+          t.expressionStatement(
+            t.assignmentExpression("=", declar.id, declar.init),
+          ),
+        );
       }
     }
 
@@ -74,8 +76,14 @@ export function replaceWithSourceString(replacement) {
   } catch (err) {
     const loc = err.loc;
     if (loc) {
+      const location = {
+        start: {
+          line: loc.line,
+          column: loc.column + 1,
+        },
+      };
       err.message += " - make sure this is an expression.";
-      err.message += "\n" + codeFrame(replacement, loc.line, loc.column + 1);
+      err.message += "\n" + codeFrameColumns(replacement, location);
     }
     throw err;
   }
@@ -101,7 +109,9 @@ export function replaceWith(replacement) {
   }
 
   if (!replacement) {
-    throw new Error("You passed `path.replaceWith()` a falsy node, use `path.remove()` instead");
+    throw new Error(
+      "You passed `path.replaceWith()` a falsy node, use `path.remove()` instead",
+    );
   }
 
   if (this.node === replacement) {
@@ -109,17 +119,21 @@ export function replaceWith(replacement) {
   }
 
   if (this.isProgram() && !t.isProgram(replacement)) {
-    throw new Error("You can only replace a Program root node with another Program node");
+    throw new Error(
+      "You can only replace a Program root node with another Program node",
+    );
   }
 
   if (Array.isArray(replacement)) {
     throw new Error(
-      "Don't use `path.replaceWith()` with an array of nodes, use `path.replaceWithMultiple()`");
+      "Don't use `path.replaceWith()` with an array of nodes, use `path.replaceWithMultiple()`",
+    );
   }
 
   if (typeof replacement === "string") {
     throw new Error(
-      "Don't use `path.replaceWith()` with a source string, use `path.replaceWithSourceString()`");
+      "Don't use `path.replaceWith()` with a source string, use `path.replaceWithSourceString()`",
+    );
   }
 
   if (this.isNodeType("Statement") && t.isExpression(replacement)) {
@@ -191,34 +205,22 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
   const toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
 
-  if (t.isSequenceExpression(toSequenceExpression)) {
-    const exprs = toSequenceExpression.expressions;
-
-    if (exprs.length >= 2 && this.parentPath.isExpressionStatement()) {
-      this._maybePopFromStatements(exprs);
-    }
-
-    // could be just one element due to the previous maybe popping
-    if (exprs.length === 1) {
-      this.replaceWith(exprs[0]);
-    } else {
-      this.replaceWith(toSequenceExpression);
-    }
-  } else if (toSequenceExpression) {
+  if (toSequenceExpression) {
     this.replaceWith(toSequenceExpression);
   } else {
-    const container = t.functionExpression(null, [], t.blockStatement(nodes));
-    container.shadow = true;
+    const container = t.arrowFunctionExpression([], t.blockStatement(nodes));
 
     this.replaceWith(t.callExpression(container, []));
     this.traverse(hoistVariablesVisitor);
 
     // add implicit returns to all ending expression statements
-    const completionRecords: Array<NodePath> = this.get("callee").getCompletionRecords();
+    const completionRecords: Array<NodePath> = this.get(
+      "callee",
+    ).getCompletionRecords();
     for (const path of completionRecords) {
       if (!path.isExpressionStatement()) continue;
 
-      const loop = path.findParent((path) => path.isLoop());
+      const loop = path.findParent(path => path.isLoop());
       if (loop) {
         let uid = loop.getData("expressionReplacementReturnUid");
 
@@ -231,13 +233,15 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
           uid = t.identifier(uid.name);
         }
 
-        path.get("expression").replaceWith(
-          t.assignmentExpression("=", uid, path.node.expression)
-        );
+        path
+          .get("expression")
+          .replaceWith(t.assignmentExpression("=", uid, path.node.expression));
       } else {
         path.replaceWith(t.returnStatement(path.node.expression));
       }
     }
+
+    this.get("callee").arrowFunctionToExpression();
 
     return this.node;
   }

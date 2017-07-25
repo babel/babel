@@ -1,6 +1,6 @@
 # babel-plugin-syntax-exponentiation-operator
 
-Allow parsing of the exponentiation operator.
+> Allow parsing of the exponentiation operator.
 
 ## Installation
 

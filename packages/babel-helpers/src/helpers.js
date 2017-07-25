@@ -216,8 +216,8 @@ helpers.asyncGeneratorDelegate = template(`
 helpers.asyncToGenerator = template(`
   (function (fn) {
     return function () {
-      var gen = fn.apply(this, arguments);
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
+        var gen = fn.apply(this, arguments);
         function step(key, arg) {
           try {
             var info = gen[key](arg);
@@ -359,11 +359,10 @@ helpers.get = template(`
   });
 `);
 
-
 helpers.inherits = template(`
   (function (subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
-      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+      throw new TypeError("Super expression must either be null or a function");
     }
     subClass.prototype = Object.create(superClass && superClass.prototype, {
       constructor: {
@@ -377,6 +376,14 @@ helpers.inherits = template(`
   })
 `);
 
+helpers.inheritsLoose = template(`
+  (function (subClass, superClass) {
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
+    subClass.__proto__ = superClass;
+  })
+`);
+
 helpers.instanceof = template(`
   (function (left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
@@ -386,7 +393,6 @@ helpers.instanceof = template(`
     }
   });
 `);
-
 
 helpers.interopRequireDefault = template(`
   (function (obj) {
@@ -426,23 +432,42 @@ helpers.objectDestructuringEmpty = template(`
 `);
 
 helpers.objectWithoutProperties = template(`
-  (function (obj, keys) {
+  (function (source, excluded) {
+    if (source == null) return {};
+
     var target = {};
-    for (var i in obj) {
-      if (keys.indexOf(i) >= 0) continue;
-      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
-      target[i] = obj[i];
+    var sourceKeys = Object.keys(source);
+    var key, i;
+
+    for (i = 0; i < sourceKeys.length; i++) {
+      key = sourceKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      target[key] = source[key];
     }
+
+    if (Object.getOwnPropertySymbols) {
+      var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+      for (i = 0; i < sourceSymbolKeys.length; i++) {
+        key = sourceSymbolKeys[i];
+        if (excluded.indexOf(key) >= 0) continue;
+        if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+        target[key] = source[key];
+      }
+    }
+
     return target;
   })
 `);
 
 helpers.possibleConstructorReturn = template(`
   (function (self, call) {
+    if (call && (typeof call === "object" || typeof call === "function")) {
+      return call;
+    }
     if (!self) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
-    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+    return self;
   });
 `);
 
@@ -582,6 +607,26 @@ helpers.toConsumableArray = template(`
       return arr2;
     } else {
       return Array.from(arr);
+    }
+  });
+`);
+
+helpers.skipFirstGeneratorNext = template(`
+  (function (fn) {
+    return function () {
+      var it = fn.apply(this, arguments);
+      it.next();
+      return it;
+    }
+  });
+`);
+
+helpers.toPropertyKey = template(`
+  (function (key) {
+    if (typeof key === "symbol") {
+      return key;
+    } else {
+      return String(key);
     }
   });
 `);

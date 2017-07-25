@@ -1,12 +1,14 @@
-'use strict';
+"use strict";
 
 // @flow
 var C = function () {
-  function C() {
-    babelHelpers.classCallCheck(this, C);
-  }
+  function C() {}
 
-  C.prototype.m = function m(x /*: number*/) /*: string*/ {
+  C.prototype.m = function m(x
+  /*: number*/
+  )
+  /*: string*/
+  {
     return 'a';
   };
 

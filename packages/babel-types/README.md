@@ -46,7 +46,7 @@ See also `t.isArrayPattern(node, opts)` and `t.assertArrayPattern(node, opts)`.
 
 Aliases: `Pattern`, `LVal`
 
- - `elements`: `Array<Expression>` (required)
+ - `elements`: `Array<Identifier | Pattern | RestElement>` (required)
  - `typeAnnotation` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
 
@@ -106,7 +106,7 @@ See also `t.isAssignmentPattern(node, opts)` and `t.assertAssignmentPattern(node
 
 Aliases: `Pattern`, `LVal`
 
- - `left`: `Identifier` (required)
+ - `left`: `Identifier | ObjectPattern | ArrayPattern` (required)
  - `right`: `Expression` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
 
@@ -229,6 +229,7 @@ Aliases: `Expression`
 
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement>` (required)
+ - `optional`: `true | false` (default: `null`)
 
 ---
 
@@ -321,7 +322,7 @@ See also `t.isClassMethod(node, opts)` and `t.assertClassMethod(node, opts)`.
 Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
 
  - `kind`: `"get" | "set" | "method" | "constructor"` (default: `'method'`)
- - `key`if computed then `Expression` else `Identifier | Literal` (required)
+ - `key`: if computed then `Expression` else `Identifier | Literal` (required)
  - `params`: `Array<LVal>` (required)
  - `body`: `BlockStatement` (required)
  - `computed`: `boolean` (default: `false`)
@@ -407,6 +408,34 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 ---
 
+### declareExportAllDeclaration
+```javascript
+t.declareExportAllDeclaration(source)
+```
+
+See also `t.isDeclareExportAllDeclaration(node, opts)` and `t.assertDeclareExportAllDeclaration(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `source` (required)
+
+---
+
+### declareExportDeclaration
+```javascript
+t.declareExportDeclaration(declaration, specifiers, source)
+```
+
+See also `t.isDeclareExportDeclaration(node, opts)` and `t.assertDeclareExportDeclaration(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `declaration` (required)
+ - `specifiers` (required)
+ - `source` (required)
+
+---
+
 ### declareFunction
 ```javascript
 t.declareFunction(id)
@@ -488,6 +517,19 @@ See also `t.isDeclareVariable(node, opts)` and `t.assertDeclareVariable(node, op
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id` (required)
+
+---
+
+### declaredPredicate
+```javascript
+t.declaredPredicate(value)
+```
+
+See also `t.isDeclaredPredicate(node, opts)` and `t.assertDeclaredPredicate(node, opts)`.
+
+Aliases: `Flow`, `FlowPredicate`
+
+ - `value` (required)
 
 ---
 
@@ -832,7 +874,7 @@ See also `t.isIdentifier(node, opts)` and `t.assertIdentifier(node, opts)`.
 
 Aliases: `Expression`, `LVal`
 
- - `name``string` (required)
+ - `name`: `string` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `typeAnnotation` (default: `null`)
 
@@ -917,6 +959,18 @@ Aliases: `ModuleSpecifier`
  - `local`: `Identifier` (required)
  - `imported`: `Identifier` (required)
  - `importKind`: `null | 'type' | 'typeof'` (default: `null`)
+
+---
+
+### inferredPredicate
+```javascript
+t.inferredPredicate()
+```
+
+See also `t.isInferredPredicate(node, opts)` and `t.assertInferredPredicate(node, opts)`.
+
+Aliases: `Flow`, `FlowPredicate`
+
 
 ---
 
@@ -1157,7 +1211,7 @@ Aliases: `Binary`, `Expression`
 
 ### memberExpression
 ```javascript
-t.memberExpression(object, property, computed)
+t.memberExpression(object, property, computed, optional)
 ```
 
 See also `t.isMemberExpression(node, opts)` and `t.assertMemberExpression(node, opts)`.
@@ -1165,8 +1219,9 @@ See also `t.isMemberExpression(node, opts)` and `t.assertMemberExpression(node, 
 Aliases: `Expression`, `LVal`
 
  - `object`: `Expression` (required)
- - `property`if computed then `Expression` else `Identifier` (required)
+ - `property`: if computed then `Expression` else `Identifier` (required)
  - `computed`: `boolean` (default: `false`)
+ - `optional`: `true | false` (default: `null`)
 
 ---
 
@@ -1179,8 +1234,8 @@ See also `t.isMetaProperty(node, opts)` and `t.assertMetaProperty(node, opts)`.
 
 Aliases: `Expression`
 
- - `meta`: `string` (required)
- - `property`: `string` (required)
+ - `meta`: `Identifier` (required)
+ - `property`: `Identifier` (required)
 
 ---
 
@@ -1207,6 +1262,7 @@ Aliases: `Expression`
 
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement>` (required)
+ - `optional`: `true | false` (default: `null`)
 
 ---
 
@@ -1317,7 +1373,7 @@ See also `t.isObjectMethod(node, opts)` and `t.assertObjectMethod(node, opts)`.
 Aliases: `UserWhitespacable`, `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`, `ObjectMember`
 
  - `kind`: `"method" | "get" | "set"` (default: `'method'`)
- - `key`if computed then `Expression` else `Identifier | Literal` (required)
+ - `key`: if computed then `Expression` else `Identifier | Literal` (required)
  - `params` (required)
  - `body`: `BlockStatement` (required)
  - `computed`: `boolean` (default: `false`)
@@ -1353,8 +1409,8 @@ See also `t.isObjectProperty(node, opts)` and `t.assertObjectProperty(node, opts
 
 Aliases: `UserWhitespacable`, `Property`, `ObjectMember`
 
- - `key`if computed then `Expression` else `Identifier | Literal` (required)
- - `value`: `Expression` (required)
+ - `key`: if computed then `Expression` else `Identifier | Literal` (required)
+ - `value`: `Expression | Pattern | RestElement` (required)
  - `computed`: `boolean` (default: `false`)
  - `shorthand`: `boolean` (default: `false`)
  - `decorators`: `Array<Decorator>` (default: `null`)
@@ -1415,6 +1471,19 @@ Aliases: `Flow`, `UserWhitespacable`
 
  - `key` (required)
  - `value` (required)
+
+---
+
+### objectTypeSpreadProperty
+```javascript
+t.objectTypeSpreadProperty(argument)
+```
+
+See also `t.isObjectTypeSpreadProperty(node, opts)` and `t.assertObjectTypeSpreadProperty(node, opts)`.
+
+Aliases: `Flow`, `UserWhitespacable`
+
+ - `argument` (required)
 
 ---
 
@@ -1811,7 +1880,7 @@ See also `t.isUnaryExpression(node, opts)` and `t.assertUnaryExpression(node, op
 
 Aliases: `UnaryLike`, `Expression`
 
- - `operator`: `'void' | 'delete' | '!' | '+' | '-' | '++' | '--' | '~' | 'typeof'` (required)
+ - `operator`: `'void' | 'delete' | '!' | '+' | '-' | '~' | 'typeof'` (required)
  - `argument`: `Expression` (required)
  - `prefix`: `boolean` (default: `true`)
 

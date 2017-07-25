@@ -101,4 +101,49 @@ require("babel-core").transform("code", {
 
 `boolean`, defaults to `false`.
 
-This option wraps the generated function in `.bind(this)` and keeps uses of `this` inside the function as-is, instead of using a renamed `this`. It also adds a runtime check to ensure the functions are not instantiated.
+<p><details>
+  <summary><b>Example</b></summary>
+
+  Using spec mode with the above example produces:
+
+  ```js
+  var _this = this;
+
+  var a = function a() {
+    babelHelpers.newArrowCheck(this, _this);
+  }.bind(this);
+  var a = function a(b) {
+    babelHelpers.newArrowCheck(this, _this);
+    return b;
+  }.bind(this);
+
+  const double = [1, 2, 3].map(function (num) {
+    babelHelpers.newArrowCheck(this, _this);
+    return num * 2;
+  }.bind(this));
+  console.log(double); // [2,4,6]
+
+  var bob = {
+    _name: "Bob",
+    _friends: ["Sally", "Tom"],
+    printFriends() {
+      var _this2 = this;
+
+      this._friends.forEach(function (f) {
+        babelHelpers.newArrowCheck(this, _this2);
+        return console.log(this._name + " knows " + f);
+      }.bind(this));
+    }
+  };
+  console.log(bob.printFriends());
+  ```
+</details></p>
+
+This option enables the following:
+
+ - Wrap the generated function in `.bind(this)` and keeps uses of `this` inside
+   the function as-is, instead of using a renamed `this`.
+
+ - Add a runtime check to ensure the functions are not instantiated.
+
+ - Add names to arrow functions.

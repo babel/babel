@@ -12,15 +12,19 @@ const t = exports;
 function registerType(type: string) {
   let is = t[`is${type}`];
   if (!is) {
-    is = t[`is${type}`] = function (node, opts) {
+    is = t[`is${type}`] = function(node, opts) {
       return t.is(type, node, opts);
     };
   }
 
-  t[`assert${type}`] = function (node, opts) {
+  t[`assert${type}`] = function(node, opts) {
     opts = opts || {};
     if (!is(node, opts)) {
-      throw new Error(`Expected type ${JSON.stringify(type)} with option ${JSON.stringify(opts)}`);
+      throw new Error(
+        `Expected type ${JSON.stringify(type)} with option ${JSON.stringify(
+          opts,
+        )}`,
+      );
     }
   };
 }
@@ -50,7 +54,13 @@ export {
 } from "./constants";
 
 import "./definitions/init";
-import { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS } from "./definitions";
+import {
+  VISITOR_KEYS,
+  ALIAS_KEYS,
+  NODE_FIELDS,
+  BUILDER_KEYS,
+  DEPRECATED_KEYS,
+} from "./definitions";
 export { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS };
 
 import * as _react from "./react";
@@ -64,15 +74,24 @@ for (const type in t.VISITOR_KEYS) {
   registerType(type);
 }
 
+// Compat helpers so code for Babel 6.x is more likely to work on Babel 7.x.
+export function isRestProperty(...args) {
+  return t.isRestElement(...args);
+}
+export function isSpreadProperty(...args) {
+  return t.isSpreadElement(...args);
+}
+
 /**
  * Flip `ALIAS_KEYS` for faster access in the reverse direction.
  */
 
 t.FLIPPED_ALIAS_KEYS = {};
 
-Object.keys(t.ALIAS_KEYS).forEach(function (type) {
-  t.ALIAS_KEYS[type].forEach(function (alias) {
-    const types = t.FLIPPED_ALIAS_KEYS[alias] = t.FLIPPED_ALIAS_KEYS[alias] || [];
+Object.keys(t.ALIAS_KEYS).forEach(function(type) {
+  t.ALIAS_KEYS[type].forEach(function(alias) {
+    const types = (t.FLIPPED_ALIAS_KEYS[alias] =
+      t.FLIPPED_ALIAS_KEYS[alias] || []);
     types.push(type);
   });
 });
@@ -81,7 +100,7 @@ Object.keys(t.ALIAS_KEYS).forEach(function (type) {
  * Registers `is[Alias]` and `assert[Alias]` functions for all aliases.
  */
 
-Object.keys(t.FLIPPED_ALIAS_KEYS).forEach(function (type) {
+Object.keys(t.FLIPPED_ALIAS_KEYS).forEach(function(type) {
   t[type.toUpperCase() + "_TYPES"] = t.FLIPPED_ALIAS_KEYS[type];
   registerType(type);
 });
@@ -137,14 +156,14 @@ export function isType(nodeType: string, targetType: string): boolean {
  * Description
  */
 
-Object.keys(t.BUILDER_KEYS).forEach(function (type) {
+Object.keys(t.BUILDER_KEYS).forEach(function(type) {
   const keys = t.BUILDER_KEYS[type];
 
   function builder() {
     if (arguments.length > keys.length) {
       throw new Error(
         `t.${type}: Too many arguments passed. Received ${arguments.length} but can receive ` +
-        `no more than ${keys.length}`
+          `no more than ${keys.length}`,
       );
     }
 
@@ -181,7 +200,7 @@ for (const type in t.DEPRECATED_KEYS) {
   const newType = t.DEPRECATED_KEYS[type];
 
   function proxy(fn) {
-    return function () {
+    return function() {
       console.trace(`The node type ${type} has been renamed to ${newType}`);
       return fn.apply(this, arguments);
     };
@@ -229,8 +248,16 @@ export function shallowEqual(actual: Object, expected: Object): boolean {
  * Append a node to a member expression.
  */
 
-export function appendToMemberExpression(member: Object, append: Object, computed?: boolean): Object {
-  member.object = t.memberExpression(member.object, member.property, member.computed);
+export function appendToMemberExpression(
+  member: Object,
+  append: Object,
+  computed?: boolean,
+): Object {
+  member.object = t.memberExpression(
+    member.object,
+    member.property,
+    member.computed,
+  );
   member.property = append;
   member.computed = !!computed;
   return member;
@@ -240,7 +267,10 @@ export function appendToMemberExpression(member: Object, append: Object, compute
  * Prepend a node to a member expression.
  */
 
-export function prependToMemberExpression(member: Object, prepend: Object): Object {
+export function prependToMemberExpression(
+  member: Object,
+  prepend: Object,
+): Object {
   member.object = t.memberExpression(prepend, member.object);
   return member;
 }
@@ -251,7 +281,7 @@ export function prependToMemberExpression(member: Object, prepend: Object): Obje
  */
 
 export function ensureBlock(node: Object, key: string = "body"): Object {
-  return node[key] = t.toBlock(node[key], node);
+  return (node[key] = t.toBlock(node[key], node));
 }
 
 /**
@@ -274,7 +304,7 @@ export function clone(node: Object): Object {
 
 export function cloneWithoutLoc(node: Object): Object {
   const newNode = clone(node);
-  delete newNode.loc;
+  newNode.loc = null;
   return newNode;
 }
 
@@ -307,6 +337,51 @@ export function cloneDeep(node: Object): Object {
 }
 
 /**
+ * Determines whether or not the input node `member` matches the
+ * input `match`.
+ *
+ * For example, given the match `React.createClass` it would match the
+ * parsed nodes of `React.createClass` and `React["createClass"]`.
+ */
+
+export function matchesPattern(
+  member: Object,
+  match: string | Array<string>,
+  allowPartial?: boolean,
+): boolean {
+  // not a member expression
+  if (!t.isMemberExpression(member)) return false;
+
+  const parts = Array.isArray(match) ? match : match.split(".");
+  const nodes = [];
+
+  let node;
+  for (node = member; t.isMemberExpression(node); node = node.object) {
+    nodes.push(node.property);
+  }
+  nodes.push(node);
+
+  if (nodes.length < parts.length) return false;
+  if (!allowPartial && nodes.length > parts.length) return false;
+
+  for (let i = 0, j = nodes.length - 1; i < parts.length; i++, j--) {
+    const node = nodes[j];
+    let value;
+    if (t.isIdentifier(node)) {
+      value = node.name;
+    } else if (t.isStringLiteral(node)) {
+      value = node.value;
+    } else {
+      return false;
+    }
+
+    if (parts[i] !== value) return false;
+  }
+
+  return true;
+}
+
+/**
  * Build a function that when called will return whether or not the
  * input `node` `MemberExpression` matches the input `match`.
  *
@@ -314,50 +389,13 @@ export function cloneDeep(node: Object): Object {
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 
-export function buildMatchMemberExpression(match:string, allowPartial?: boolean): Function {
+export function buildMatchMemberExpression(
+  match: string,
+  allowPartial?: boolean,
+): Object => boolean {
   const parts = match.split(".");
-
-  return function (member) {
-    // not a member expression
-    if (!t.isMemberExpression(member)) return false;
-
-    const search = [member];
-    let i = 0;
-
-    while (search.length) {
-      const node = search.shift();
-
-      if (allowPartial && i === parts.length) {
-        return true;
-      }
-
-      if (t.isIdentifier(node)) {
-        // this part doesn't match
-        if (parts[i] !== node.name) return false;
-      } else if (t.isStringLiteral(node)) {
-        // this part doesn't match
-        if (parts[i] !== node.value) return false;
-      } else if (t.isMemberExpression(node)) {
-        if (node.computed && !t.isStringLiteral(node.property)) {
-          // we can't deal with this
-          return false;
-        } else {
-          search.push(node.object);
-          search.push(node.property);
-          continue;
-        }
-      } else {
-        // we can't deal with this
-        return false;
-      }
-
-      // too many parts
-      if (++i > parts.length) {
-        return false;
-      }
-    }
-
-    return true;
+  return function(member) {
+    return matchesPattern(member, parts, allowPartial);
   };
 }
 
@@ -367,7 +405,7 @@ export function buildMatchMemberExpression(match:string, allowPartial?: boolean)
 
 export function removeComments(node: Object): Object {
   for (const key of t.COMMENT_KEYS) {
-    delete node[key];
+    node[key] = null;
   }
   return node;
 }
@@ -397,10 +435,7 @@ export function inheritInnerComments(child: Object, parent: Object) {
 
 function _inheritComments(key, child, parent) {
   if (child && parent) {
-    child[key] = uniq(
-      [].concat(child[key], parent[key])
-        .filter(Boolean)
-    );
+    child[key] = uniq([].concat(child[key], parent[key]).filter(Boolean));
   }
 }
 
@@ -420,7 +455,7 @@ export function inherits(child: Object, parent: Object): Object {
 
   // force inherit "private" properties
   for (const key in parent) {
-    if (key[0] === "_") child[key] = parent[key];
+    if (key[0] === "_" && key !== "__clone") child[key] = parent[key];
   }
 
   // force inherit select properties
@@ -460,7 +495,11 @@ toFastProperties(t.VISITOR_KEYS);
  * A prefix AST traversal implementation implementation.
  */
 
-export function traverseFast(node: Node, enter: (node: Node) => void, opts?: Object) {
+export function traverseFast(
+  node: Node,
+  enter: (node: Node) => void,
+  opts?: Object,
+) {
   if (!node) return;
 
   const keys = t.VISITOR_KEYS[node.type];
@@ -482,15 +521,11 @@ export function traverseFast(node: Node, enter: (node: Node) => void, opts?: Obj
   }
 }
 
-const CLEAR_KEYS: Array = [
-  "tokens",
-  "start", "end", "loc",
-  "raw", "rawValue",
-];
+const CLEAR_KEYS: Array = ["tokens", "start", "end", "loc", "raw", "rawValue"];
 
-const CLEAR_KEYS_PLUS_COMMENTS: Array = t.COMMENT_KEYS.concat([
-  "comments",
-]).concat(CLEAR_KEYS);
+const CLEAR_KEYS_PLUS_COMMENTS: Array = t.COMMENT_KEYS
+  .concat(["comments"])
+  .concat(CLEAR_KEYS);
 
 /**
  * Remove all of the _* properties from a node along with the additional metadata

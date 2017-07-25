@@ -1,15 +1,15 @@
 "use strict";
 
-"1" + String(a);
-
+var _this = undefined;
+"1".concat(a);
 (function () {
-  babelHelpers.newArrowCheck(undefined, undefined);
+  babelHelpers.newArrowCheck(this, _this);
 }).bind(undefined);
 
 function a() {
-  var _this = this;
+  var _this2 = this;
 
   (function () {
-    babelHelpers.newArrowCheck(this, _this);
+    babelHelpers.newArrowCheck(this, _this2);
   }).bind(this);
 }

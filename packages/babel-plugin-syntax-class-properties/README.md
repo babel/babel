@@ -1,6 +1,6 @@
 # babel-plugin-syntax-class-properties
 
-Allow parsing of class properties.
+> Allow parsing of class properties.
 
 ## Installation
 

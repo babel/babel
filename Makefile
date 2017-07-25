@@ -2,6 +2,9 @@ MAKEFLAGS = -j1
 
 export NODE_ENV = test
 
+# Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
+export FORCE_COLOR = true
+
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: clean
@@ -43,6 +46,8 @@ clean-all:
 	rm -rf packages/*/lib
 	rm -rf node_modules
 	rm -rf packages/*/node_modules
+	rm -rf package-lock.json
+	rm -rf packages/*/package-lock.json
 	make clean
 
 test-only:
@@ -55,10 +60,11 @@ test-ci:
 	make bootstrap
 	make test-only
 
+test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
 	BABEL_ENV=cov make bootstrap
 	./scripts/test-cov.sh
-	./node_modules/.bin/codecov -f coverage/coverage-final.json
+	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 publish:
 	git pull --rebase
@@ -67,7 +73,7 @@ publish:
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --npm-tag=next --exact --skip-temp-tag
+	./node_modules/.bin/lerna publish --force-publish=* --npm-tag=next --exact --skip-temp-tag
 	make clean
 
 bootstrap:

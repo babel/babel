@@ -7,13 +7,13 @@ export default (param => {
     }
 
     babelHelpers.createClass(App, [{
-      key: 'getParam',
+      key: "getParam",
       value: function getParam() {
         return param;
       }
     }]);
     return App;
-  }(), Object.defineProperty(_class, 'props', {
+  }(), Object.defineProperty(_class, "props", {
     enumerable: true,
     writable: true,
     value: {
