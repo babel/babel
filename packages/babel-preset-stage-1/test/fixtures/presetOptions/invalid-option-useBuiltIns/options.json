@@ -1,0 +1,4 @@
+{
+  "presets": [["stage-1", { "useBuiltIns": "invalidOption" }]],
+  "throws": "Preset stage-1 'useBuiltIns' option must be a boolean."
+}

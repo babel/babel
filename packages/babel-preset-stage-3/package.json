@@ -13,5 +13,8 @@
     "babel-plugin-transform-async-to-generator": "^6.22.0",
     "babel-plugin-transform-exponentiation-operator": "^6.22.0",
     "babel-plugin-transform-object-rest-spread": "^6.22.0"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.22.0"
   }
 }
