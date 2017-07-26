@@ -43,6 +43,12 @@ ansi-styles@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-2.2.1.tgz#b432dd3358b634cf75e1e4664368240533c1ddbe"
 
+ansi-styles@^3.1.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-3.2.0.tgz#c159b8d5be0f9e5a6f346dab94f16ce022161b88"
+  dependencies:
+    color-convert "^1.9.0"
+
 app-root-path@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/app-root-path/-/app-root-path-2.0.1.tgz#cd62dcf8e4fd5a417efc664d2e5b10653c651b46"
@@ -75,11 +81,11 @@ babel-code-frame@7.0.0-alpha.12:
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-babel-code-frame@7.0.0-alpha.15:
-  version "7.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-7.0.0-alpha.15.tgz#381d3e06e17b73201129c4a019e8b62d84e2dde3"
+babel-code-frame@7.0.0-alpha.17:
+  version "7.0.0-alpha.17"
+  resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-7.0.0-alpha.17.tgz#06a5daddb0946d8e95392477065a86480474f19c"
   dependencies:
-    chalk "^1.1.0"
+    chalk "^2.0.0"
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
@@ -108,14 +114,14 @@ babel-eslint@^8.0.0-alpha.13:
     babel-types "7.0.0-alpha.12"
     babylon "7.0.0-beta.14"
 
-babel-helper-function-name@7.0.0-alpha.15:
-  version "7.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/babel-helper-function-name/-/babel-helper-function-name-7.0.0-alpha.15.tgz#087bb6bb6677acde36b3c19f6bc1afedb3d12e30"
+babel-helper-function-name@7.0.0-alpha.17:
+  version "7.0.0-alpha.17"
+  resolved "https://registry.yarnpkg.com/babel-helper-function-name/-/babel-helper-function-name-7.0.0-alpha.17.tgz#b976290af579712345ecd6a146e6dff86b47b8ed"
   dependencies:
-    babel-helper-get-function-arity "7.0.0-alpha.15"
-    babel-template "7.0.0-alpha.15"
-    babel-traverse "7.0.0-alpha.15"
-    babel-types "7.0.0-alpha.15"
+    babel-helper-get-function-arity "7.0.0-alpha.17"
+    babel-template "7.0.0-alpha.17"
+    babel-traverse "7.0.0-alpha.17"
+    babel-types "7.0.0-alpha.17"
 
 babel-helper-function-name@7.0.0-alpha.7:
   version "7.0.0-alpha.7"
@@ -126,11 +132,11 @@ babel-helper-function-name@7.0.0-alpha.7:
     babel-traverse "7.0.0-alpha.7"
     babel-types "7.0.0-alpha.7"
 
-babel-helper-get-function-arity@7.0.0-alpha.15:
-  version "7.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/babel-helper-get-function-arity/-/babel-helper-get-function-arity-7.0.0-alpha.15.tgz#17e93206d0b625c3122f4c674478cbed53281f24"
+babel-helper-get-function-arity@7.0.0-alpha.17:
+  version "7.0.0-alpha.17"
+  resolved "https://registry.yarnpkg.com/babel-helper-get-function-arity/-/babel-helper-get-function-arity-7.0.0-alpha.17.tgz#f9ee3be4b6e892235ee790a8849ada1f88eedcf1"
   dependencies:
-    babel-types "7.0.0-alpha.15"
+    babel-types "7.0.0-alpha.17"
 
 babel-helper-get-function-arity@7.0.0-alpha.7:
   version "7.0.0-alpha.7"
@@ -142,21 +148,21 @@ babel-messages@7.0.0-alpha.12:
   version "7.0.0-alpha.12"
   resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-alpha.12.tgz#5fda840cb8dfeda06a7894a1e8ab1af695f249c0"
 
-babel-messages@7.0.0-alpha.15:
-  version "7.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-alpha.15.tgz#97991d32d86a2130aff08fa75a16cfc5acad9e42"
+babel-messages@7.0.0-alpha.17:
+  version "7.0.0-alpha.17"
+  resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-alpha.17.tgz#777d7f82656d5e3526c1f4c74aaaba99b260d7db"
 
 babel-messages@7.0.0-alpha.3:
   version "7.0.0-alpha.3"
   resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-alpha.3.tgz#c8390a468478b8384da134612e12a6bc31a684e9"
 
-babel-template@7.0.0-alpha.15:
-  version "7.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/babel-template/-/babel-template-7.0.0-alpha.15.tgz#08b56562987c9893bbd6646bce4819074ba1cf90"
+babel-template@7.0.0-alpha.17:
+  version "7.0.0-alpha.17"
+  resolved "https://registry.yarnpkg.com/babel-template/-/babel-template-7.0.0-alpha.17.tgz#085597c0021644c72fa74460a8f76a85e76da943"
   dependencies:
-    babel-traverse "7.0.0-alpha.15"
-    babel-types "7.0.0-alpha.15"
-    babylon "7.0.0-beta.13"
+    babel-traverse "7.0.0-alpha.17"
+    babel-types "7.0.0-alpha.17"
+    babylon "7.0.0-beta.18"
     lodash "^4.2.0"
 
 babel-template@7.0.0-alpha.7:
@@ -182,17 +188,17 @@ babel-traverse@7.0.0-alpha.12:
     invariant "^2.2.0"
     lodash "^4.2.0"
 
-babel-traverse@7.0.0-alpha.15:
-  version "7.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-7.0.0-alpha.15.tgz#d7af52cb8ee6e0867b778da17166e6f01498b11a"
+babel-traverse@7.0.0-alpha.17:
+  version "7.0.0-alpha.17"
+  resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-7.0.0-alpha.17.tgz#c8a33788274bc4138c529ec9c29f0bacb573f42c"
   dependencies:
-    babel-code-frame "7.0.0-alpha.15"
-    babel-helper-function-name "7.0.0-alpha.15"
-    babel-messages "7.0.0-alpha.15"
-    babel-types "7.0.0-alpha.15"
-    babylon "7.0.0-beta.15"
+    babel-code-frame "7.0.0-alpha.17"
+    babel-helper-function-name "7.0.0-alpha.17"
+    babel-messages "7.0.0-alpha.17"
+    babel-types "7.0.0-alpha.17"
+    babylon "7.0.0-beta.18"
     debug "^2.2.0"
-    globals "^9.0.0"
+    globals "^10.0.0"
     invariant "^2.2.0"
     lodash "^4.2.0"
 
@@ -217,13 +223,13 @@ babel-types@7.0.0-alpha.12:
     lodash "^4.2.0"
     to-fast-properties "^1.0.1"
 
-babel-types@7.0.0-alpha.15:
-  version "7.0.0-alpha.15"
-  resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-7.0.0-alpha.15.tgz#e4021e6a432e906678dfc6cc89805ba3234f9f48"
+babel-types@7.0.0-alpha.17:
+  version "7.0.0-alpha.17"
+  resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-7.0.0-alpha.17.tgz#bc74e19423b015a5ce88727440fc6ae863463dc0"
   dependencies:
     esutils "^2.0.2"
     lodash "^4.2.0"
-    to-fast-properties "^1.0.1"
+    to-fast-properties "^2.0.0"
 
 babel-types@7.0.0-alpha.7:
   version "7.0.0-alpha.7"
@@ -237,21 +243,13 @@ babylon@7.0.0-beta.12:
   version "7.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.12.tgz#f7b9c8a89ff7d6afb57b906d947a4237f9bf53f9"
 
-babylon@7.0.0-beta.13:
-  version "7.0.0-beta.13"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.13.tgz#12425c1bfd9498be419021ed36b43fe4f0289c0a"
-
 babylon@7.0.0-beta.14:
   version "7.0.0-beta.14"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.14.tgz#72aa3c493c984c2edc54d4bc077b74066ed4511d"
 
-babylon@7.0.0-beta.15:
-  version "7.0.0-beta.15"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.15.tgz#410348bcd21af470a55abea9698c9c651d87f1c6"
-
-babylon@7.0.0-beta.16:
-  version "7.0.0-beta.16"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.16.tgz#448ceedeec0a5ef56b62812e3556bf36c5bb9781"
+babylon@7.0.0-beta.18:
+  version "7.0.0-beta.18"
+  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.18.tgz#5c23ee3fdb66358aabf3789779319c5b78a233c7"
 
 babylon@7.0.0-beta.8:
   version "7.0.0-beta.8"
@@ -291,6 +289,14 @@ chalk@^1.0.0, chalk@^1.1.0, chalk@^1.1.1, chalk@^1.1.3:
     has-ansi "^2.0.0"
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
+
+chalk@^2.0.0:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.0.1.tgz#dbec49436d2ae15f536114e76d14656cdbc0f44d"
+  dependencies:
+    ansi-styles "^3.1.0"
+    escape-string-regexp "^1.0.5"
+    supports-color "^4.0.0"
 
 ci-info@^1.0.0:
   version "1.0.0"
@@ -334,6 +340,16 @@ co@^4.6.0:
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
+
+color-convert@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.0.tgz#1accf97dd739b983bf994d56fec8f95853641b7a"
+  dependencies:
+    color-name "^1.1.1"
+
+color-name@^1.1.1:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
 
 commander@2.9.0, commander@^2.9.0:
   version "2.9.0"
@@ -634,6 +650,10 @@ glob@^7.0.3, glob@^7.0.5, glob@^7.1.2:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
+globals@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/globals/-/globals-10.0.0.tgz#a5803a1abe923b52bc33a59cffeaf6e0748cf3f7"
+
 globals@^9.0.0, globals@^9.17.0:
   version "9.18.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
@@ -670,6 +690,10 @@ has-ansi@^2.0.0:
 has-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-1.0.0.tgz#9d9e793165ce017a00f00418c43f942a7b1d11fa"
+
+has-flag@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/has-flag/-/has-flag-2.0.0.tgz#e8207af1cc7b30d446cc70b734b5e8be18f88d51"
 
 husky@^0.14.0:
   version "0.14.1"
@@ -1354,6 +1378,12 @@ supports-color@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-2.0.0.tgz#535d045ce6b6363fa40117084629995e9df324c7"
 
+supports-color@^4.0.0:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-4.2.1.tgz#65a4bb2631e90e02420dba5554c375a4754bb836"
+  dependencies:
+    has-flag "^2.0.0"
+
 symbol-observable@^1.0.1:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.0.4.tgz#29bf615d4aa7121bdd898b22d4b3f9bc4e2aa03d"
@@ -1386,6 +1416,10 @@ tmp@^0.0.31:
 to-fast-properties@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-1.0.3.tgz#b83571fa4d8c25b82e231b06e3a3055de4ca1a47"
+
+to-fast-properties@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/to-fast-properties/-/to-fast-properties-2.0.0.tgz#dc5e698cbd079265bc73e0377681a4e4e83f616e"
 
 tryit@^1.0.1:
   version "1.0.3"
