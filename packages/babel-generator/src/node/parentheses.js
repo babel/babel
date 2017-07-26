@@ -182,11 +182,8 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     t.isConditionalExpression(parent, { test: node }) ||
     t.isAwaitExpression(parent) ||
     t.isTaggedTemplateExpression(parent) ||
-    parent.type === "TSTypeAssertion" ||
-    parent.type === "TSAsExpression"
-    // TODO: waiting on https://github.com/babel/babel/pull/5856
-    // t.isTSTypeAssertion(parent) ||
-    // t.isTSAsExpression(parent)
+    t.isTSTypeAssertion(parent) ||
+    t.isTSAsExpression(parent)
   ) {
     return true;
   }

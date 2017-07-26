@@ -11,12 +11,10 @@ import fixtures from "babel-helper-fixtures";
 describe("generation", function() {
   it("completeness", function() {
     Object.keys(t.VISITOR_KEYS).forEach(function(type) {
-      if (type.startsWith("TS")) return; // TODO
       assert.ok(!!Printer.prototype[type], type + " should exist");
     });
 
     Object.keys(Printer.prototype).forEach(function(type) {
-      if (type.startsWith("TS")) return; // TODO
       if (!/[A-Z]/.test(type[0])) return;
       assert.ok(t.VISITOR_KEYS[type], type + " should not exist");
     });
