@@ -118,7 +118,7 @@ defineType("BreakStatement", {
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
 });
 
-const callOrNew = {
+defineType("CallExpression", {
   visitor: ["callee", "arguments", "typeParameters"],
   builder: ["callee", "arguments"],
   aliases: ["Expression"],
@@ -141,9 +141,7 @@ const callOrNew = {
       optional: true,
     },
   },
-};
-
-defineType("CallExpression", callOrNew);
+});
 
 defineType("CatchClause", {
   visitor: ["param", "body"],
@@ -511,7 +509,7 @@ defineType("MemberExpression", {
   },
 });
 
-defineType("NewExpression", callOrNew);
+defineType("NewExpression", { inherits: "CallExpression" });
 
 defineType("Program", {
   visitor: ["directives", "body"],
