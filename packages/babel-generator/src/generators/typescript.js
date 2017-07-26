@@ -37,7 +37,7 @@ export function TSCallSignatureDeclaration(node) {
 }
 
 export function TSConstructSignatureDeclaration(node) {
-  this.token("new");
+  this.word("new");
   this.space();
   this.tsPrintSignatureDeclarationBase(node);
 }
@@ -45,7 +45,7 @@ export function TSConstructSignatureDeclaration(node) {
 export function TSPropertySignature(node) {
   const { readonly, initializer } = node;
   if (readonly) {
-    this.token("readonly");
+    this.word("readonly");
     this.space();
   }
   this.tsPrintPropertyOrMethodName(node);
@@ -81,7 +81,7 @@ export function TSMethodSignature(node) {
 export function TSIndexSignature(node) {
   const { readonly } = node;
   if (readonly) {
-    this.token("readonly");
+    this.word("readonly");
     this.space();
   }
   this.token("[");
@@ -92,38 +92,38 @@ export function TSIndexSignature(node) {
 }
 
 export function TSAnyKeyword() {
-  this.token("any");
+  this.word("any");
 }
 export function TSNumberKeyword() {
-  this.token("number");
+  this.word("number");
 }
 export function TSObjectKeyword() {
-  this.token("object");
+  this.word("object");
 }
 export function TSBooleanKeyword() {
-  this.token("boolean");
+  this.word("boolean");
 }
 export function TSStringKeyword() {
-  this.token("string");
+  this.word("string");
 }
 export function TSSymbolKeyword() {
-  this.token("symbol");
+  this.word("symbol");
 }
 export function TSVoidKeyword() {
-  this.token("void");
+  this.word("void");
 }
 export function TSUndefinedKeyword() {
-  this.token("undefined");
+  this.word("undefined");
 }
 export function TSNullKeyword() {
-  this.token("null");
+  this.word("null");
 }
 export function TSNeverKeyword() {
-  this.token("never");
+  this.word("never");
 }
 
 export function TSThisType() {
-  this.token("this");
+  this.word("this");
 }
 
 export function TSFunctionType(node) {
@@ -131,7 +131,7 @@ export function TSFunctionType(node) {
 }
 
 export function TSConstructorType(node) {
-  this.token("new");
+  this.word("new");
   this.space();
   this.tsPrintFunctionOrConstructorType(node);
 }
@@ -158,13 +158,13 @@ export function TSTypeReference(node) {
 export function TSTypePredicate(node) {
   this.print(node.parameterName);
   this.space();
-  this.token("is");
+  this.word("is");
   this.space();
   this.print(node.typeAnnotation.typeAnnotation);
 }
 
 export function TSTypeQuery(node) {
-  this.token("typeof");
+  this.word("typeof");
   this.space();
   this.print(node.exprName);
 }
@@ -247,14 +247,14 @@ export function TSMappedType(node) {
   this.token("{");
   this.space();
   if (readonly) {
-    this.token("readonly");
+    this.word("readonly");
     this.space();
   }
 
   this.token("[");
   this.word(typeParameter.name);
   this.space();
-  this.token("in");
+  this.word("in");
   this.space();
   this.print(typeParameter.constraint, typeParameter);
   this.token("]");
@@ -284,13 +284,13 @@ export function TSInterfaceDeclaration(node) {
     this.word("declare");
     this.space();
   }
-  this.token("interface"); //todo: this.token vs this.word???
+  this.word("interface");
   this.space();
   this.print(id, node);
   this.print(typeParameters, node);
   if (extendz) {
     this.space();
-    this.token("extends");
+    this.word("extends");
     this.space();
     this.printList(extendz, node);
   }
@@ -308,7 +308,7 @@ export function TSTypeAliasDeclaration(node) {
     this.word("declare");
     this.space();
   }
-  this.token("type");
+  this.word("type");
   this.space();
   this.print(id, node);
   this.print(typeParameters, node);
@@ -323,7 +323,7 @@ export function TSAsExpression(node) {
   const { expression, typeAnnotation } = node;
   this.print(expression, node);
   this.space();
-  this.token("as");
+  this.word("as");
   this.space();
   this.print(typeAnnotation, node);
 }
@@ -340,14 +340,14 @@ export function TSTypeAssertion(node) {
 export function TSEnumDeclaration(node) {
   const { declare, const: isConst, id, members } = node;
   if (declare) {
-    this.token("declare");
+    this.word("declare");
     this.space();
   }
   if (isConst) {
-    this.token("const");
+    this.word("const");
     this.space();
   }
-  this.token("enum");
+  this.word("enum");
   this.space();
   this.print(id, node);
   this.space();
@@ -375,7 +375,7 @@ export function TSModuleDeclaration(node) {
   }
 
   if (!node.global) {
-    this.token(id.type === "Identifier" ? "namespace" : "module");
+    this.word(id.type === "Identifier" ? "namespace" : "module");
     this.space();
   }
   this.print(id, node);
@@ -403,10 +403,10 @@ export function TSModuleBlock(node) {
 export function TSImportEqualsDeclaration(node) {
   const { isExport, id, moduleReference } = node;
   if (isExport) {
-    this.token("export");
+    this.word("export");
     this.space();
   }
-  this.token("import");
+  this.word("import");
   this.space();
   this.print(id, node);
   this.space();
@@ -428,7 +428,7 @@ export function TSNonNullExpression(node) {
 }
 
 export function TSExportAssignment(node) {
-  this.token("export");
+  this.word("export");
   this.space();
   this.token("=");
   this.space();
@@ -437,11 +437,11 @@ export function TSExportAssignment(node) {
 }
 
 export function TSNamespaceExportDeclaration(node) {
-  this.token("export");
+  this.word("export");
   this.space();
-  this.token("as");
+  this.word("as");
   this.space();
-  this.token("namespace");
+  this.word("namespace");
   this.space();
   this.print(node.id, node);
 }
