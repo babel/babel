@@ -615,6 +615,17 @@ export default class Scope {
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {
       return this.isPure(node.argument, constantsOnly);
+    } else if (t.isTaggedTemplateExpression(node)) {
+      return (
+        t.matchesPattern(node.tag, "String.raw") &&
+        !this.hasBinding("String", true) &&
+        this.isPure(node.quasi, constantsOnly)
+      );
+    } else if (t.isTemplateLiteral(node)) {
+      for (const expression of (node.expressions: Array<Object>)) {
+        if (!this.isPure(expression, constantsOnly)) return false;
+      }
+      return true;
     } else {
       return t.isPureish(node);
     }
@@ -792,7 +803,6 @@ export default class Scope {
 
     if (!declarPath) {
       const declar = t.variableDeclaration(kind, []);
-      declar._generated = true;
       declar._blockHoist = blockHoist;
 
       [declarPath] = path.unshiftContainer("body", [declar]);

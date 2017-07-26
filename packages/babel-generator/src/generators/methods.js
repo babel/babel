@@ -62,6 +62,16 @@ export function _methodHead(node: Object) {
   this._params(node);
 }
 
+export function _predicate(node: Object) {
+  if (node.predicate) {
+    if (!node.returnType) {
+      this.token(":");
+    }
+    this.space();
+    this.print(node.predicate, node);
+  }
+}
+
 export function _functionHead(node: Object) {
   if (node.async) {
     this.word("async");
@@ -76,6 +86,7 @@ export function _functionHead(node: Object) {
   }
 
   this._params(node);
+  this._predicate(node);
 }
 
 export function FunctionExpression(node: Object) {
@@ -103,6 +114,8 @@ export function ArrowFunctionExpression(node: Object) {
   } else {
     this._params(node);
   }
+
+  this._predicate(node);
 
   this.space();
   this.token("=>");

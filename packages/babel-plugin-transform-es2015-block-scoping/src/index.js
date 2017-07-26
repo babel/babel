@@ -8,6 +8,8 @@ import values from "lodash/values";
 import extend from "lodash/extend";
 import template from "babel-template";
 
+const DONE = new WeakSet();
+
 export default function() {
   return {
     visitor: {
@@ -340,8 +342,8 @@ class BlockScoping {
 
   run() {
     const block = this.block;
-    if (block._letDone) return;
-    block._letDone = true;
+    if (DONE.has(block)) return;
+    DONE.add(block);
 
     const needsClosure = this.getLetReferences();
 

@@ -1,5 +1,5 @@
 import Printer from "../lib/printer";
-import generate from "../lib";
+import generate, { CodeGenerator } from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
 import chai from "chai";
@@ -11,6 +11,7 @@ import fixtures from "babel-helper-fixtures";
 describe("generation", function() {
   it("completeness", function() {
     Object.keys(t.VISITOR_KEYS).forEach(function(type) {
+      if (type.startsWith("TS")) return; // TODO
       assert.ok(!!Printer.prototype[type], type + " should exist");
     });
 
@@ -352,6 +353,14 @@ describe("programmatic generation", function() {
   });
 });
 
+describe("CodeGenerator", function() {
+  it("generate", function() {
+    const codeGen = new CodeGenerator(t.numericLiteral(123));
+    const code = codeGen.generate().code;
+    assert.equal(parse(code).program.body[0].expression.value, 123);
+  });
+});
+
 const suites = fixtures(`${__dirname}/fixtures`);
 
 suites.forEach(function(testSuite) {
@@ -381,6 +390,7 @@ suites.forEach(function(testSuite) {
                   "jsx",
                   "objectRestSpread",
                   "optionalChaining",
+                  "optionalCatchBinding",
                 ],
                 strictMode: false,
                 sourceType: "module",

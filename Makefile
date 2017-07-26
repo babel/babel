@@ -8,6 +8,7 @@ export FORCE_COLOR = true
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: clean
+	rm -rf packages/*/lib
 	./node_modules/.bin/gulp build
 
 build-dist: build
@@ -46,6 +47,8 @@ clean-all:
 	rm -rf packages/*/lib
 	rm -rf node_modules
 	rm -rf packages/*/node_modules
+	rm -rf package-lock.json
+	rm -rf packages/*/package-lock.json
 	make clean
 
 test-only:
@@ -58,10 +61,11 @@ test-ci:
 	make bootstrap
 	make test-only
 
+test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
 	BABEL_ENV=cov make bootstrap
 	./scripts/test-cov.sh
-	./node_modules/.bin/codecov -f coverage/coverage-final.json
+	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 publish:
 	git pull --rebase

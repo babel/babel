@@ -1,1 +1,1 @@
-export declare const enum E {};
+export declare const enum E {}

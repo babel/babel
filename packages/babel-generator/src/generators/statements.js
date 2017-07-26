@@ -123,8 +123,8 @@ function buildLabelStatement(prefix, key = "label") {
     const label = node[key];
     if (label) {
       this.space();
-
-      const terminatorState = this.startTerminatorless();
+      const isLabel = key == "label";
+      const terminatorState = this.startTerminatorless(isLabel);
       this.print(label, node);
       this.endTerminatorless(terminatorState);
     }
@@ -171,10 +171,12 @@ export function TryStatement(node: Object) {
 export function CatchClause(node: Object) {
   this.word("catch");
   this.space();
-  this.token("(");
-  this.print(node.param, node);
-  this.token(")");
-  this.space();
+  if (node.param) {
+    this.token("(");
+    this.print(node.param, node);
+    this.token(")");
+    this.space();
+  }
   this.print(node.body, node);
 }
 

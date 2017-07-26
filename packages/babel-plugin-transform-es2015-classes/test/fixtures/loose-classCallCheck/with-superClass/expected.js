@@ -6,12 +6,9 @@ let A = function (_B) {
   _inheritsLoose(A, _B);
 
   function A(track) {
-    if (track !== undefined) {
-      var _this = _B.call(this, track) || this;
-    } else {
-      var _this = _B.call(this) || this;
-    }
+    var _this;
 
+    if (track !== undefined) _this = _B.call(this, track) || this;else _this = _B.call(this) || this;
     return _this;
   }
 

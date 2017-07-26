@@ -1,1 +1,1 @@
-export default function (x?: number): void;;
+export default function (x?: number): void;

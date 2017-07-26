@@ -239,6 +239,7 @@ export function _getQueueContexts() {
   let contexts = this.contexts;
   while (!contexts.length) {
     path = path.parentPath;
+    if (!path) break;
     contexts = path.contexts;
   }
   return contexts;
