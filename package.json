@@ -15,7 +15,7 @@
     "babel-core": "7.0.0-alpha.16",
     "babel-eslint": "8.0.0-alpha.15",
     "babel-plugin-istanbul": "^4.1.4",
-    "babel-preset-env": "2.0.0-alpha.16",
+    "babel-preset-env": "2.0.0-alpha.15",
     "babel-preset-flow": "7.0.0-alpha.16",
     "babel-preset-stage-0": "7.0.0-alpha.16",
     "babel-register": "7.0.0-alpha.16",
