@@ -49,7 +49,6 @@ export default class LValParser extends NodeUtils {
     if (node) {
       switch (node.type) {
         case "Identifier":
-        case "PrivateName":
         case "ObjectPattern":
         case "ArrayPattern":
         case "AssignmentPattern":
@@ -300,7 +299,6 @@ export default class LValParser extends NodeUtils {
     contextDescription: string,
   ): void {
     switch (expr.type) {
-      case "PrivateName":
       case "Identifier":
         this.checkReservedWord(expr.name, expr.start, false, true);
 
