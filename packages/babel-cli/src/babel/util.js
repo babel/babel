@@ -26,7 +26,7 @@ export function isCompilableExtension(
 ): boolean {
   const exts = altExts || babel.DEFAULT_EXTENSIONS;
   const ext = path.extname(filename);
-  return includes(exts, ext);
+  return includes(exts, ext) && !(ext === ".ts" && filename.endsWith(".d.ts"));
 }
 
 export function addSourceMappingUrl(code, loc) {
