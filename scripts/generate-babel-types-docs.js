@@ -118,7 +118,7 @@ Object.keys(types.BUILDER_KEYS).sort().forEach(function(key) {
       const fieldDescription = ["`" + field + "`"];
       const validator = types.NODE_FIELDS[key][field].validate;
       if (customTypes[key] && customTypes[key][field]) {
-        fieldDescription.push(customTypes[key][field]);
+        fieldDescription.push(`: ${customTypes[key][field]}`);
       } else if (validator) {
         try {
           fieldDescription.push(": `" + getType(validator) + "`");

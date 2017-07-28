@@ -12,11 +12,11 @@ const buildRest = template(`
 `);
 
 const restIndex = template(`
-  ARGUMENTS.length <= INDEX ? undefined : ARGUMENTS[INDEX]
+  (INDEX < OFFSET || ARGUMENTS.length <= INDEX) ? undefined : ARGUMENTS[INDEX]
 `);
 
 const restIndexImpure = template(`
-  REF = INDEX, ARGUMENTS.length <= REF ? undefined : ARGUMENTS[REF]
+  REF = INDEX, (REF < OFFSET || ARGUMENTS.length <= REF) ? undefined : ARGUMENTS[REF]
 `);
 
 const restLength = template(`
@@ -159,6 +159,7 @@ function hasRest(node) {
 }
 
 function optimiseIndexGetter(path, argsId, offset) {
+  const offsetLiteral = t.numericLiteral(offset);
   let index;
 
   if (t.isNumericLiteral(path.parent.property)) {
@@ -167,11 +168,7 @@ function optimiseIndexGetter(path, argsId, offset) {
     // Avoid unnecessary '+ 0'
     index = path.parent.property;
   } else {
-    index = t.binaryExpression(
-      "+",
-      path.parent.property,
-      t.numericLiteral(offset),
-    );
+    index = t.binaryExpression("+", path.parent.property, offsetLiteral);
   }
 
   const { scope } = path;
@@ -181,17 +178,32 @@ function optimiseIndexGetter(path, argsId, offset) {
     path.parentPath.replaceWith(
       restIndexImpure({
         ARGUMENTS: argsId,
+        OFFSET: offsetLiteral,
         INDEX: index,
         REF: temp,
       }),
     );
   } else {
-    path.parentPath.replaceWith(
+    const parentPath = path.parentPath;
+    parentPath.replaceWith(
       restIndex({
         ARGUMENTS: argsId,
+        OFFSET: offsetLiteral,
         INDEX: index,
       }),
     );
+
+    // See if we can statically evaluate the first test (i.e. index < offset)
+    // and optimize the AST accordingly.
+    const offsetTestPath = parentPath.get("test").get("left");
+    const valRes = offsetTestPath.evaluate();
+    if (valRes.confident) {
+      if (valRes.value === true) {
+        parentPath.replaceWith(parentPath.scope.buildUndefinedNode());
+      } else {
+        parentPath.get("test").replaceWith(parentPath.get("test").get("right"));
+      }
+    }
   }
 }
 

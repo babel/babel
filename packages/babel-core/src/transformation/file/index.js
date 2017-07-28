@@ -180,9 +180,24 @@ export default class File extends Store {
 
   addImport(
     source: string,
-    imported: string,
+    imported?: string = "",
     name?: string = imported,
-  ): Object {
+  ): Object | null {
+    const prependDeclaration = (
+      specifiers: Array<BabelNodeImportSpecifier>,
+    ): void => {
+      const declar = t.importDeclaration(specifiers, t.stringLiteral(source));
+      declar._blockHoist = 3;
+
+      this.path.unshiftContainer("body", declar);
+    };
+
+    // import "module-name";
+    if (!imported) {
+      prependDeclaration([]);
+      return null;
+    }
+
     const alias = `${source}:${imported}`;
     let id = this.dynamicImportIds[alias];
 
@@ -202,10 +217,7 @@ export default class File extends Store {
         specifiers.push(t.importSpecifier(id, t.identifier(imported)));
       }
 
-      const declar = t.importDeclaration(specifiers, t.stringLiteral(source));
-      declar._blockHoist = 3;
-
-      this.path.unshiftContainer("body", declar);
+      prependDeclaration(specifiers);
     }
 
     return id;
@@ -236,7 +248,6 @@ export default class File extends Store {
 
     if (t.isFunctionExpression(ref) && !ref.id) {
       ref.body._compact = true;
-      ref._generated = true;
       ref.id = uid;
       ref.type = "FunctionDeclaration";
       this.path.unshiftContainer("body", ref);

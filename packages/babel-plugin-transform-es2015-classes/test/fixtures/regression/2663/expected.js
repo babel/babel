@@ -20,10 +20,10 @@ var Connection = function (_EventEmitter) {
   babelHelpers.inherits(Connection, _EventEmitter);
 
   function Connection(endpoint, joinKey, joinData, roomId) {
+    var _this;
+
     babelHelpers.classCallCheck(this, Connection);
-
-    var _this = babelHelpers.possibleConstructorReturn(this, (Connection.__proto__ || Object.getPrototypeOf(Connection)).call(this));
-
+    _this = babelHelpers.possibleConstructorReturn(this, (Connection.__proto__ || Object.getPrototypeOf(Connection)).call(this));
     _this.isConnected = false;
     _this.roomId = roomId; // ...
 

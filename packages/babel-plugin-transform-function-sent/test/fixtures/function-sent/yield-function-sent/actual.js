@@ -1,0 +1,3 @@
+(function* () {
+  yield function.sent;
+})();

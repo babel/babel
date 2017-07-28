@@ -24,11 +24,6 @@ export default function(opts) {
       const callExpr = buildElementCall(path.get("openingElement"), file);
 
       callExpr.arguments = callExpr.arguments.concat(path.node.children);
-
-      if (callExpr.arguments.length >= 3) {
-        callExpr._prettyCall = true;
-      }
-
       path.replaceWith(t.inherits(callExpr, path.node));
     },
   };

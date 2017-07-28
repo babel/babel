@@ -66,7 +66,12 @@ export default function({ types: t }) {
         for (let i = 0; i < node.params.length; i++) {
           const param = node.params[i];
           param.optional = false;
+          if (param.type === "AssignmentPattern") {
+            param.left.optional = false;
+          }
         }
+
+        node.predicate = null;
       },
 
       TypeCastExpression(path) {

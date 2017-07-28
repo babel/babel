@@ -1,15 +1,15 @@
 {
   "name": "babel-helper-replace-supers",
-  "version": "7.0.0-alpha.12",
+  "version": "7.0.0-alpha.17",
   "description": "Helper function to replace supers",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-replace-supers",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-optimise-call-expression": "7.0.0-alpha.12",
-    "babel-messages": "7.0.0-alpha.12",
-    "babel-template": "7.0.0-alpha.12",
-    "babel-traverse": "7.0.0-alpha.12",
-    "babel-types": "7.0.0-alpha.12"
+    "babel-helper-optimise-call-expression": "7.0.0-alpha.17",
+    "babel-messages": "7.0.0-alpha.17",
+    "babel-template": "7.0.0-alpha.17",
+    "babel-traverse": "7.0.0-alpha.17",
+    "babel-types": "7.0.0-alpha.17"
   }
 }

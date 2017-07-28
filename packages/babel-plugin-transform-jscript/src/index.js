@@ -5,7 +5,6 @@ export default function({ types: t }) {
         exit(path) {
           const { node } = path;
           if (!node.id) return;
-          node._ignoreUserWhitespace = true;
 
           path.replaceWith(
             t.callExpression(

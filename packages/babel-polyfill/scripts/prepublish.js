@@ -9,5 +9,5 @@ function relative(loc) {
 
 fs.writeFileSync(
   relative("browser.js"),
-  fs.readFileSync(relative("dist/polyfill.min.js")),
+  fs.readFileSync(relative("dist/polyfill.min.js"))
 );
