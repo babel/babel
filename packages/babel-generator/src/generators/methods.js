@@ -23,8 +23,8 @@ export function _parameters(parameters, parent) {
 export function _param(parameter, parent) {
   this.printJoin(parameter.decorators, parameter);
   this.print(parameter, parent);
-  if (parameter.optional) this.token("?");
-  this.print(parameter.typeAnnotation, parameter);
+  if (parameter.optional) this.token("?"); // TS / flow
+  this.print(parameter.typeAnnotation, parameter); // TS / flow
 }
 
 export function _methodHead(node: Object) {
@@ -56,6 +56,7 @@ export function _methodHead(node: Object) {
   }
 
   if (node.optional) {
+    // TS
     this.token("?");
   }
 
