@@ -86,6 +86,7 @@ Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTR
 You can also start by checking out the issues with the [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
 
 Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
+Our progress on TC39 proposals: [babel/proposals](https://github.com/babel/proposals)
 
 ## Packages
 
