@@ -9,11 +9,13 @@ export function ClassDeclaration(node: Object, parent: Object) {
   }
 
   if (node.declare) {
+    // TS
     this.word("declare");
     this.space();
   }
 
   if (node.abstract) {
+    // TS
     this.word("abstract");
     this.space();
   }
@@ -70,6 +72,7 @@ export function ClassProperty(node: Object) {
   this.printJoin(node.decorators, node);
 
   if (node.accessibility) {
+    // TS
     this.word(node.accessibility);
     this.space();
   }
@@ -78,10 +81,12 @@ export function ClassProperty(node: Object) {
     this.space();
   }
   if (node.abstract) {
+    // TS
     this.word("abstract");
     this.space();
   }
   if (node.readonly) {
+    // TS
     this.word("readonly");
     this.space();
   }
@@ -95,6 +100,7 @@ export function ClassProperty(node: Object) {
   }
 
   if (node.optional) {
+    // TS
     this.token("?");
   }
 
@@ -118,11 +124,13 @@ export function _classMethodHead(node) {
   this.printJoin(node.decorators, node);
 
   if (node.accessibility) {
+    // TS
     this.word(node.accessibility);
     this.space();
   }
 
   if (node.abstract) {
+    // TS
     this.word("abstract");
     this.space();
   }

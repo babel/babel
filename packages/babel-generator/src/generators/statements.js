@@ -237,6 +237,7 @@ function constDeclarationIndent() {
 
 export function VariableDeclaration(node: Object, parent: Object) {
   if (node.declare) {
+    // TS
     this.word("declare");
     this.space();
   }
