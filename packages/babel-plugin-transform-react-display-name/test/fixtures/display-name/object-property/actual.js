@@ -1,3 +1,6 @@
 ({
-  foo: React.createClass({})
+  foo: createReactClass({})
+});
+({
+  bar: React.createClass({})
 });

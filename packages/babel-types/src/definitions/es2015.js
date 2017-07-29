@@ -29,7 +29,7 @@ defineType("ArrayPattern", {
   aliases: ["Pattern", "LVal"],
   fields: {
     elements: {
-      validate: chain(assertValueType("array"), assertEach(assertNodeType("Expression")))
+      validate: chain(assertValueType("array"), assertEach(assertNodeType("Identifier", "Pattern", "RestElement")))
     },
     decorators: {
       validate: chain(assertValueType("array"), assertEach(assertNodeType("Decorator")))
