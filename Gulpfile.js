@@ -9,6 +9,7 @@ const watch = require("gulp-watch");
 const gutil = require("gulp-util");
 const gulp = require("gulp");
 const path = require("path");
+const registerBabelStandaloneTasks = require("./packages/babel-standalone/src/gulpTasks");
 
 const base = path.join(__dirname, "packages");
 const scripts = "./packages/*/src/**/*.js";
@@ -59,3 +60,5 @@ gulp.task("watch", ["build"], function() {
     gulp.start("build");
   });
 });
+
+registerBabelStandaloneTasks(gulp);

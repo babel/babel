@@ -1,0 +1,105 @@
+/**
+ * This file contains the Gulp tasks for babel-standalone. Note that
+ * babel-standalone is compiled using Webpack, and performs its own Babel
+ * compilation of all the JavaScript files. This is because it targets web
+ * browsers, so more transforms are needed than the regular Babel builds that
+ * only target Node.js.
+ */
+
+const pump = require("pump");
+const rename = require("gulp-rename");
+const webpack = require("webpack");
+const webpackStream = require("webpack-stream");
+const uglify = require("gulp-uglify");
+
+function webpackBuild(filename, libraryName, version) {
+  const typeofPlugin = require("babel-plugin-transform-es2015-typeof-symbol")
+    .default;
+
+  // babel-plugin-transform-es2015-typeof-symbol is not idempotent, and something
+  // else is already running it, so we need to exclude it from the transform.
+  const preset2015 = require("babel-preset-es2015").default();
+  const es2015WithoutTypeof = {
+    plugins: preset2015.plugins.filter(plugin => plugin !== typeofPlugin),
+  };
+
+  const config = {
+    module: {
+      rules: [
+        {
+          //exclude: /node_modules/,
+          test: /\.js$/,
+          loader: "babel-loader",
+          options: {
+            // Some of the node_modules may have their own "babel" section in
+            // their project.json (or a ".babelrc" file). We need to ignore
+            // those as we're using our own Babel options.
+            babelrc: false,
+            presets: [es2015WithoutTypeof, require("babel-preset-stage-0")],
+          },
+        },
+      ],
+    },
+    node: {
+      // Mock Node.js modules that Babel require()s but that we don't
+      // particularly care about.
+      fs: "empty",
+      module: "empty",
+      net: "empty",
+    },
+    output: {
+      filename: filename,
+      library: libraryName,
+      libraryTarget: "umd",
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        "process.env.NODE_ENV": '"production"',
+        BABEL_VERSION:
+          JSON.stringify(require("babel-core/package.json").version),
+        VERSION: JSON.stringify(version),
+      }),
+      // Use browser version of visionmedia-debug
+      new webpack.NormalModuleReplacementPlugin(
+        /debug\/node/,
+        "debug/src/browser"
+      ),
+      new webpack.NormalModuleReplacementPlugin(
+        /..\/..\/package/,
+        "../../../../src/babel-package-shim"
+      ),
+      new webpack.optimize.ModuleConcatenationPlugin(),
+    ],
+  };
+
+  if (libraryName !== "Babel") {
+    // This is a secondary package (eg. Babili), we should expect that Babel
+    // was already loaded, rather than bundling it in here too.
+    config.externals = {
+      "babel-standalone": "Babel",
+    };
+  }
+  return webpackStream(config, webpack);
+}
+
+function registerGulpTasks(gulp) {
+  gulp.task("build-babel-standalone", ["build"], cb => {
+    pump(
+      [
+        gulp.src(__dirname + "/index.js"),
+        webpackBuild(
+          "babel.js",
+          "Babel",
+          require(__dirname + "/../package.json").version
+        ),
+        gulp.dest(__dirname + "/../"),
+        uglify(),
+        rename({ extname: ".min.js" }),
+        gulp.dest(__dirname + "/../"),
+      ],
+      cb
+    );
+  });
+}
+
+module.exports = registerGulpTasks;

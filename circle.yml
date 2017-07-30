@@ -1,3 +1,8 @@
+general:
+  artifacts:
+    - "packages/babel-standalone/babel.js"
+    - "packages/babel-standalone/babel.min.js"
+
 machine:
   node:
     version:
@@ -14,3 +19,5 @@ dependencies:
 test:
   override:
     - make test-ci-coverage
+    # Builds babel-standalone with the regular Babel config
+    - make build

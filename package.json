@@ -14,6 +14,7 @@
     "babel-cli": "7.0.0-alpha.18",
     "babel-core": "7.0.0-alpha.18",
     "babel-eslint": "8.0.0-alpha.15",
+    "babel-loader": "^7.1.1",
     "babel-plugin-istanbul": "^4.1.4",
     "babel-preset-env": "2.0.0-alpha.18",
     "babel-preset-flow": "7.0.0-alpha.18",
@@ -58,7 +59,8 @@
     "all": true,
     "exclude": [
       "scripts/*.js",
-      "packages/*/test/**"
+      "packages/*/test/**",
+      "packages/babel-standalone/**"
     ],
     "sourceMap": false,
     "instrument": false
