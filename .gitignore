@@ -23,6 +23,7 @@ package-lock.json
 !/packages/babel-runtime/helpers/es6/toArray.js
 /packages/babel-register/test/.babel
 /packages/babel-cli/test/tmp
+/packages/babel-node/test/tmp
 /packages/*/lib
 .nyc_output
 /babel.sublime-workspace
