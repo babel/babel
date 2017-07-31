@@ -2183,7 +2183,7 @@ Aliases: `TSTypeElement`
 
  - `key`: `Expression` (required)
  - `typeAnnotation`: `TypeAnnotation` (default: `null`)
- - `initializer`: `Expresssion` (default: `null`)
+ - `initializer`: `Expression` (default: `null`)
  - `computed`: `boolean` (default: `null`)
  - `optional`: `boolean` (default: `null`)
  - `readonly`: `boolean` (default: `null`)
