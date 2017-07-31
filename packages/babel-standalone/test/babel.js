@@ -51,11 +51,7 @@ describe("babel-standalone", () => {
     ).code;
     assert.equal(
       output,
-      "const someDiv = React.createElement(\n" +
-        '  "div",\n' +
-        "  null,\n" +
-        "  getMessage()\n" +
-        ");",
+      'const someDiv = React.createElement("div", null, getMessage());',
     );
   });
 
