@@ -270,6 +270,8 @@ helpers.createClass = template(`
   })()
 `);
 
+//NOTE: convention is 'descriptor' is used for element descriptors, while 'propertyDescriptor' is used for
+//property descriptor in all helpers related to decorators-2
 helpers.decorate = template(`
   (function (constructor, undecorated, memberDecorators, heritage) {
     const prototype = constructor.prototype;

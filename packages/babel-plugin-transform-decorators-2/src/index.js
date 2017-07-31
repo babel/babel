@@ -1,17 +1,10 @@
-import template from "babel-template";
 import syntaxDecorators2 from "babel-plugin-syntax-decorators-2";
 
 //TODO: will have to check for dot (.) access to reserved keywords in decorator members
-//NOTE: convention is 'descriptor' is used for element descriptors, while 'propertyDescriptor' is used for property descriptor
 //TODO: check if we need the 'define' + 'Property' and 'ke' + 'ys' hacks as seen in
 //https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy/blob/master/src/index.js#L69
 
 /** manual testing code
-class A { method() {console.log("method exec hua");} static estatic() {console.log("estatic hua");}}
-function methDec(descriptor) {console.log("methDec hua", arguments); return {descriptor, extras: [], finishers: []}}
-function methDec2(descriptor) {console.log("methDec2 hua", arguments); return {descriptor, extras: [], finishers: []}}
-function classDec(constructor, heritage, memberDescriptors) {console.log("class hua", arguments); return {constructor, elements: memberDescriptors, finishers: []}}
-decorate(A, [], [["method", [methDec, methDec2]], ["estatic", [methDec], true]])([classDec])
 **/
 export default function({ types: t }) {
   // converts [(expression)] to [(let key = (expression))] if expression is impure
@@ -29,7 +22,8 @@ export default function({ types: t }) {
         const replacement = t.sequenceExpression([
           t.assignmentExpression("=", ref, member.node.key),
         ]);
-        //member.get("key").replaceWith(replacement); FIXME: should work, but doesn't accept sequenceexpression type
+        // FIXME: the following should work: member.get("key").replaceWith(replacement);
+        // but doesn't accept sequenceexpression type so we have to directly manipulate node
         member.node.key = replacement;
       }
     }
@@ -51,7 +45,7 @@ export default function({ types: t }) {
       const decorators = method.node.decorators
         .map(d => d.expression)
         .reverse(); // reverse for correct evaluation order
-      node.decorators = []; //TODO: should we remove from path? method.get("decorators") doesn't work
+      node.decorators = []; //TODO: should we remove using path methods? method.get("decorators") doesn't work
 
       const entry = [];
       if (node.computed) {
@@ -80,10 +74,14 @@ export default function({ types: t }) {
 
   // expects path of a ClassExpression
   function takeClassDecorators(path) {
-    // reverse for correct decorator evaluation order
-    const decorators = path.node.decorators.map(d => d.expression).reverse();
-    path.node.decorators = [];
-    return t.arrayExpression(decorators);
+    if (path.node.decorators && path.node.decorators.length) {
+      // reverse for correct decorator evaluation order
+      const decorators = path.node.decorators.map(d => d.expression).reverse();
+      path.node.decorators = [];
+      return t.arrayExpression(decorators);
+    } else {
+      return t.arrayExpression();
+    }
   }
 
   function undecoratedMethods(path) {
