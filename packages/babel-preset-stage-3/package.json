@@ -11,6 +11,7 @@
     "babel-plugin-syntax-dynamic-import": "7.0.0-alpha.17",
     "babel-plugin-transform-async-generator-functions": "7.0.0-alpha.17",
     "babel-plugin-transform-object-rest-spread": "7.0.0-alpha.17",
+    "babel-plugin-transform-optional-catch-binding": "7.0.0-alpha.17",
     "babel-plugin-transform-unicode-property-regex": "^2.0.2"
   }
 }
