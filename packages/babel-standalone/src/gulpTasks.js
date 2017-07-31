@@ -13,6 +13,11 @@ const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
 
 function webpackBuild(filename, libraryName, version) {
+  // If this build is part of a pull request, include the pull request number in
+  // the version number.
+  if (process.env.CIRCLE_PR_NUMBER) {
+    version += '+pr.' + process.env.CIRCLE_PR_NUMBER;
+  }
   const typeofPlugin = require("babel-plugin-transform-es2015-typeof-symbol")
     .default;
 
