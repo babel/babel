@@ -270,6 +270,141 @@ helpers.createClass = template(`
   })()
 `);
 
+helpers.decorate = template(`
+  (function (constructor, undecorated, memberDecorators, heritage) {
+    const prototype = constructor.prototype;
+    let finishers = [];
+    const elementDescriptors = {}; // elementDescriptors is meant to be an array, so this will be converted later
+    //TODO: merging of elementDescriptors
+
+    for (const [key, isStatic] of undecorated) {
+      const target = isStatic ? constructor : prototype;
+      const propertyDescriptor = Object.getOwnPropertyDescriptor(target, key);
+      elementDescriptors[key] = makeElementDescriptor(
+        "property",
+        key,
+        isStatic,
+        propertyDescriptor,
+      );
+    }
+
+    for (const [key, decorators, isStatic] of memberDecorators) {
+      const target = isStatic ? constructor : prototype;
+      const propertyDescriptor =
+        elementDescriptors[key] || Object.getOwnPropertyDescriptor(target, key);
+      const elementDescriptor = makeElementDescriptor(
+        "property",
+        key,
+        isStatic,
+        propertyDescriptor,
+      );
+      const decorated = decorateElement(elementDescriptor, decorators);
+
+      elementDescriptors[key] = decorated.descriptor;
+
+      for (const extra of decorated.extras) {
+        // extras is an array of element descriptors
+        elementDescriptors[extra.key] = extra;
+      }
+
+      finishers = finishers.concat(decorated.finishers);
+    }
+
+    return function(classDecorators) {
+      const result = decorateClass(
+        constructor,
+        classDecorators,
+        heritage,
+        Object.values(elementDescriptors),
+      );
+      finishers = finishers.concat(result.finishers);
+      //TODO: heritage hacks so result.constructor has the correct prototype and instanceof results
+      //TODO: step 38 and 39, what do they mean "initialize"?
+
+      for (const elementDescriptor of result.elements) {
+        const target = elementDescriptor.isStatic ? constructor : prototype;
+        Object.defineOwnProperty(
+          target,
+          elementDescriptor.key,
+          elementDescriptor.descriptor,
+        );
+      }
+
+      return result.constructor;
+    };
+  });
+`);
+
+helpers.decorateElement = template(`
+  (function (descriptor, decorators) {
+    //spec uses the param "element" instead of "descriptor" and finds descriptor from it
+    let extras = [];
+    const finishers = [];
+
+    let previousDescriptor = descriptor;
+
+    for (let i = decorators.length - 1; i >= 0; i--) {
+      const decorator = decorators[i];
+      const result = decorator(previousDescriptor);
+      const currentDescriptor = result.descriptor;
+
+      if (result.finisher) {
+        finishers.push(current.finisher);
+        result.finisher = undefined;
+      }
+
+      previousDescriptor = currentDescriptor;
+
+      const extrasObject = result.extras;
+
+      if (extrasObject) {
+        for (const extra of extrasObject) {
+          extras.push(extra);
+        }
+      }
+    }
+
+    extras = mergeDuplicateElements(extras);
+
+    return { descriptor: previousDescriptor, extras, finishers };
+  });
+`);
+
+helpers.decorateClass = template(`
+  (function (constructor, decorators, heritage, elementDescriptors) {
+    let elements = [];
+    let finishers = [];
+
+    let previousConstructor = constructor;
+    const previousDescriptors = elementDescriptors;
+
+    for (let i = decorators.length - 1; i >= 0; i--) {
+      const decorator = decorators[i];
+      const result = decorator(
+        previousConstructor,
+        heritage,
+        previousDescriptors,
+      );
+
+      previousConstructor = result.constructor;
+      if (result.finishers) {
+        // result.finishers is called 'finisher' in the spec
+        finishers = finishers.concat(result.finishers);
+      }
+
+      if (result.elements) {
+        for (const element of result.elements) {
+          elements.push(element);
+        }
+      }
+
+      elements = mergeDuplicateElements(elements);
+    }
+
+    return { constructor: previousConstructor, elements, finishers };
+  });
+`);
+
 helpers.defineEnumerableProperties = template(`
   (function (obj, descs) {
     for (var key in descs) {
@@ -415,6 +550,19 @@ helpers.interopRequireWildcard = template(`
       return newObj;
     }
   })
+`);
+
+helpers.makeElementDescriptor = template(`
+  (function (kind, key, isStatic, descriptor, finisher) {
+    return { kind, key, isStatic, descriptor, finisher };
+  });
+`);
+
+//TODO
+helpers.mergeDuplicateElements = template(`
+  (function (elements) {
+    return elements; 
+  });
 `);
 
 helpers.newArrowCheck = template(`

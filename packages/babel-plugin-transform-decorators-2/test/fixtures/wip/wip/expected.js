@@ -10,17 +10,15 @@ let decorate = () => void 0,
 
 let _key;
 
-let Bizz = decorate(class Bizz {
-  m1() {
-    yo
-  }
+let Bizz = babelHelpers.decorate(class Bizz {
+  m1() {}
 
-  m2() {
-    yo
-  }
+  m2() {}
 
-  static [(_key = 3 + 7)]() {
-    yo
-  }
+  static [(_key = 3 + 7)]() {}
 
-}, [["m1", [dec]], ["m2", [foo.bar(baz), bar]], [_key, [dec], true]], [decorator]);
+  andAnUndecoratedMethod() {}
+
+  [calculated + and + undecorated]() {}
+
+}, [[andAnUndecoratedMethod], [calculated + and + undecorated]], [["m1", [dec]], ["m2", [foo.bar(baz), bar]], [(_key = 3 + 7), [dec], true]], void 0)([decorator]);

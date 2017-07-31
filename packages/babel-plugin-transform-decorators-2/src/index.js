@@ -1,8 +1,10 @@
-import template from 'babel-template';
+import template from "babel-template";
 import syntaxDecorators2 from "babel-plugin-syntax-decorators-2";
 
 //TODO: will have to check for dot (.) access to reserved keywords in decorator members
 //NOTE: convention is 'descriptor' is used for element descriptors, while 'propertyDescriptor' is used for property descriptor
+//TODO: check if we need the 'define' + 'Property' and 'ke' + 'ys' hacks as seen in
+//https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy/blob/master/src/index.js#L69
 
 /** manual testing code
 class A { method() {console.log("method exec hua");} static estatic() {console.log("estatic hua");}}
@@ -12,127 +14,24 @@ function classDec(constructor, heritage, memberDescriptors) {console.log("class 
 decorate(A, [], [["method", [methDec, methDec2]], ["estatic", [methDec], true]])([classDec])
 **/
 export default function({ types: t }) {
+  // converts [(expression)] to [(let key = (expression))] if expression is impure
+  // so as to avoid recomputation when the key is needed later
+  function addKeysToComputedMembers(path) {
+    const body = path.get("body.body");
 
-  // injected
-  function makeElementDescriptor(kind, key, isStatic, descriptor, finisher) {
-    return {kind, key, isStatic, descriptor, finisher};
-  }
-
-  // injected
-  function decorateElement(descriptor, decorators) { //spec uses the param "element" instead of "descriptor" and finds descriptor from it
-    let extras = [];
-    let finishers = [];
-
-    let previousDescriptor = descriptor;
-
-    for (let i = decorators.length - 1; i >= 0; i--) {
-      let decorator = decorators[i];
-      let result = decorator(previousDescriptor);
-      let currentDescriptor = result.descriptor;
-
-      if (result.finisher) {
-        finishers.push(current.finisher);
-        result.finisher = undefined;
+    for (const member of body) {
+      if (member.node.computed && member.get("key").isPure()) {
+        const parent = path.findParent(p => p.parentPath.isBlock());
+        const ref = member.scope.generateUidIdentifier("key");
+        parent.insertBefore(
+          t.variableDeclaration("let", [t.variableDeclarator(ref)]),
+        );
+        const replacement = t.sequenceExpression([
+          t.assignmentExpression("=", ref, member.node.key),
+        ]);
+        //member.get("key").replaceWith(replacement); FIXME: should work, but doesn't accept sequenceexpression type
+        member.node.key = replacement;
       }
-
-      previousDescriptor = currentDescriptor;
-
-      let extrasObject = result.extras;
-
-      if (extrasObject) {
-        for (let extra of extrasObject) {
-          extras.push(extra);
-        }
-      }
-    }
-
-    extras = mergeDuplicateElements(extras);
-
-    return {descriptor: previousDescriptor, extras, finishers}
-  }
-
-  // injected
-  function mergeDuplicateElements(elements) { return elements; /*TODO*/}
-
-  // injected
-  function decorateClass(constructor, decorators, heritage, elementDescriptors) {
-    let elements = [];
-    let finishers = [];
-
-    let previousConstructor = constructor;
-    let previousDescriptors = elementDescriptors;
-
-    for (let i = decorators.length - 1; i >= 0; i--) {
-      let decorator = decorators[i];
-      let result = decorator(previousConstructor, heritage, previousDescriptors);
-
-      previousConstructor = result.constructor;
-      if (result.finishers) {// result.finishers is called 'finisher' in the spec
-        finishers = finishers.concat(result.finishers);
-      }
-
-      if (result.elements) {
-        for (let element of result.elements) {
-          elements.push(element);
-        }
-      }
-
-      elements = mergeDuplicateElements(elements);
-    }
-
-    return {constructor: previousConstructor, elements, finishers};
-  }
-
-  function decorate(constructor, undecorated, memberDecorators, heritage) {
-    const prototype = constructor.prototype;
-    let finishers = [];
-    const elementDescriptors = {}; // elementDescriptors is meant to be an array, so this will be converted later
-    //TODO: merging of elementDescriptors
-
-    for (let [key, isStatic] of undecorated) {
-      const target = isStatic? constructor : prototype;
-      let propertyDescriptor = Object.getOwnPropertyDescriptor(target, key);
-      elementDescriptors[key] = makeElementDescriptor("property", key, isStatic, propertyDescriptor);
-    }
-
-    for (let [key, decorators, isStatic] of memberDecorators) {
-      let target = isStatic? constructor : prototype;
-      let propertyDescriptor = elementDescriptors[key] || Object.getOwnPropertyDescriptor(target, key);
-      let elementDescriptor = makeElementDescriptor("property", key, isStatic, propertyDescriptor);
-      let decorated = decorateElement(elementDescriptor, decorators);
-
-      elementDescriptors[key] = decorated.descriptor;
-
-      for (let extra of decorated.extras) { // extras is an array of element descriptors
-        elementDescriptors[extra.key] = extra;
-      }
-
-      finishers = finishers.concat(decorated.finishers);
-    }
-
-    return function (classDecorators) {
-      let result = decorateClass(constructor, classDecorators, heritage, Object.values(elementDescriptors));
-      finishers = finishers.concat(result.finishers);
-      //TODO: heritage hacks so result.constructor has the correct prototype and instanceof results
-      //TODO: step 38 and 39, what do they mean "initialize"?
-
-      for (let elementDescriptor of result.elements) {
-        let target = elementDescriptor.isStatic? constructor : prototype;  
-        Object.defineOwnProperty(target, elementDescriptor.key, elementDescriptor.descriptor);
-      }
-
-      return result.constructor;
-    }
-  }
-
-
-  function classDefintionEvaluation(path) {
-    // step 20, 21
-    for (const method of body) {
-      const { node } = method;
-      if (!method.isClassMethod()) continue;
-      if (!node.decorators || !method.node.decorators.length) continue;
-      if (node.kind === "constructor") continue;
     }
   }
 
@@ -156,22 +55,12 @@ export default function({ types: t }) {
 
       const entry = [];
       if (node.computed) {
-        // if it is computed, we need an identifier to refer to it later
-        // so we can avoid evaluating the expression twice
+        // if it is computed, it has been processed by addKeysToComputedMembers
         if (t.isAssignmentExpression(node.key)) {
           entry.push(node.key.left);
         } else {
-          const parent = path.findParent(p => p.parentPath.isBlock());
-          const ref = method.scope.generateUidIdentifier("key");
-          parent.insertBefore(
-            t.variableDeclaration("let", [t.variableDeclarator(ref)]),
-          );
-          const replacement = t.sequenceExpression([
-            t.assignmentExpression("=", ref, node.key),
-          ]);
-          //method.get("key").replaceWith(); FIXME: this should work
-          node.key = replacement;
-          entry.push(ref);
+          // it's pure
+          entry.push(node.key);
         }
       } else {
         entry.push(t.stringLiteral(node.key.name));
@@ -195,6 +84,25 @@ export default function({ types: t }) {
     const decorators = path.node.decorators.map(d => d.expression).reverse();
     path.node.decorators = [];
     return t.arrayExpression(decorators);
+  }
+
+  function undecoratedMethods(path) {
+    const body = path.get("body.body");
+    const result = []; // shape: [[method1], [method2], [staticMethod1, true]]
+
+    for (const method of body) {
+      if (method.node.decorators && method.node.decorators.length > 0) continue;
+
+      if (method.node.static) {
+        result.push(
+          t.arrayExpression([method.node.key, t.booleanLiteral(true)]),
+        );
+      } else {
+        result.push(t.arrayExpression([method.node.key]));
+      }
+    }
+
+    return t.arrayExpression(result);
   }
 
   return {
@@ -230,29 +138,42 @@ export default function({ types: t }) {
         );
       },
 
-      ClassExpression(path) {
+      ClassExpression(path, file) {
+        file.addHelper("makeElementDescriptor");
+        file.addHelper("decorateElement");
+        file.addHelper("mergeDuplicateElements");
+        file.addHelper("decorateClass");
+        const decorateIdentifier = file.addHelper("decorate");
+
+        addKeysToComputedMembers(path);
+
+        const undecorated = undecoratedMethods(path);
         const methodDecorators = takeMethodDecorators(path);
         const classDecorators = takeClassDecorators(path);
+
         if (
           methodDecorators.elements.length == 0 &&
           classDecorators.elements.length == 0
         ) {
           return;
         }
-        path.replaceWith(
-          t.callExpression(t.identifier("decorate"), [
-            path.node,
-            methodDecorators,
-            classDecorators,
-          ]),
-        );
-      },
 
-      ClassMethod(path) {
-        if (path.get("decorators")) {
-          path.get("decorators").forEach(p => p.remove());
-          path.get("body").unshiftContainer("body", t.identifier("yo"));
-        }
+        const superClass =
+          path.node.superClass == null
+            ? path.scope.buildUndefinedNode()
+            : path.node.superClass;
+
+        path.replaceWith(
+          t.callExpression(
+            t.callExpression(decorateIdentifier, [
+              path.node,
+              undecorated,
+              methodDecorators,
+              superClass,
+            ]),
+            [classDecorators],
+          ),
+        );
       },
     },
   };
