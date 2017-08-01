@@ -158,11 +158,8 @@ registerPlugins({
   "transform-async-functions": require("babel-plugin-transform-async-functions"),
   "transform-async-to-generator": require("babel-plugin-transform-async-to-generator"),
   "transform-async-to-module-method": require("babel-plugin-transform-async-to-module-method"),
-  "transform-class-constructor-call": require("babel-plugin-transform-class-constructor-call"),
   "transform-class-properties": require("babel-plugin-transform-class-properties"),
   "transform-decorators": require("babel-plugin-transform-decorators"),
-  "transform-decorators-legacy": require("babel-plugin-transform-decorators-legacy")
-    .default, // <- No clue. Nope.
   "transform-do-expressions": require("babel-plugin-transform-do-expressions"),
   "transform-es2015-arrow-functions": require("babel-plugin-transform-es2015-arrow-functions"),
   "transform-es2015-block-scoped-functions": require("babel-plugin-transform-es2015-block-scoped-functions"),
@@ -219,7 +216,6 @@ registerPresets({
   es2015: require("babel-preset-es2015"),
   es2016: require("babel-preset-es2016"),
   es2017: require("babel-preset-es2017"),
-  latest: require("babel-preset-latest"),
   react: require("babel-preset-react"),
   "stage-0": require("babel-preset-stage-0"),
   "stage-1": require("babel-preset-stage-1"),
