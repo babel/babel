@@ -823,8 +823,7 @@ export default class Scope {
   }
 
   /**
-   * Walk up the scope tree until we hit either a Function or reach the
-   * very top and hit Program.
+   * Walk up the scope tree until we hit either a Function or return null.
    */
 
   getFunctionParent() {
