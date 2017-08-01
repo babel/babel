@@ -115,7 +115,7 @@ defineType("TSPropertySignature", {
     ...namedTypeElementCommon,
     readonly: validateOptional(bool),
     typeAnnotation: validateOptionalType("TypeAnnotation"),
-    initializer: validateOptionalType("Expresssion"),
+    initializer: validateOptionalType("Expression"),
   },
 });
 
