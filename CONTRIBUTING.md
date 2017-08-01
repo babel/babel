@@ -120,6 +120,12 @@ Use the `TEST_GREP` variable to run a subset of tests by name:
 $ TEST_GREP=transformation make test
 ```
 
+Substitute spaces for hyphens and forward slashes when targeting specific test names:
+
+```sh
+$ TEST_GREP="arrow functions destructuring parameters" make test
+```
+
 To enable the Node.js debugger added in v6.3.0, set the `TEST_DEBUG` environment variable:
 
 ```sh

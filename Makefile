@@ -8,6 +8,7 @@ export FORCE_COLOR = true
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: clean
+	rm -rf packages/*/lib
 	./node_modules/.bin/gulp build
 
 build-dist: build

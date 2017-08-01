@@ -31,7 +31,9 @@ export { ObjectExpression as ObjectPattern };
 
 export function ObjectMethod(node: Object) {
   this.printJoin(node.decorators, node);
-  this._method(node);
+  this._methodHead(node);
+  this.space();
+  this.print(node.body, node);
 }
 
 export function ObjectProperty(node: Object) {

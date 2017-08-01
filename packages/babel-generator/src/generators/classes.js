@@ -8,6 +8,18 @@ export function ClassDeclaration(node: Object, parent: Object) {
     this.printJoin(node.decorators, node);
   }
 
+  if (node.declare) {
+    // TS
+    this.word("declare");
+    this.space();
+  }
+
+  if (node.abstract) {
+    // TS
+    this.word("abstract");
+    this.space();
+  }
+
   this.word("class");
 
   if (node.id) {
@@ -59,8 +71,23 @@ export function ClassBody(node: Object) {
 export function ClassProperty(node: Object) {
   this.printJoin(node.decorators, node);
 
+  if (node.accessibility) {
+    // TS
+    this.word(node.accessibility);
+    this.space();
+  }
   if (node.static) {
     this.word("static");
+    this.space();
+  }
+  if (node.abstract) {
+    // TS
+    this.word("abstract");
+    this.space();
+  }
+  if (node.readonly) {
+    // TS
+    this.word("readonly");
     this.space();
   }
   if (node.computed) {
@@ -71,6 +98,12 @@ export function ClassProperty(node: Object) {
     this._variance(node);
     this.print(node.key, node);
   }
+
+  if (node.optional) {
+    // TS
+    this.token("?");
+  }
+
   this.print(node.typeAnnotation, node);
   if (node.value) {
     this.space();
@@ -82,12 +115,30 @@ export function ClassProperty(node: Object) {
 }
 
 export function ClassMethod(node: Object) {
+  this._classMethodHead(node);
+  this.space();
+  this.print(node.body, node);
+}
+
+export function _classMethodHead(node) {
   this.printJoin(node.decorators, node);
+
+  if (node.accessibility) {
+    // TS
+    this.word(node.accessibility);
+    this.space();
+  }
+
+  if (node.abstract) {
+    // TS
+    this.word("abstract");
+    this.space();
+  }
 
   if (node.static) {
     this.word("static");
     this.space();
   }
 
-  this._method(node);
+  this._methodHead(node);
 }
