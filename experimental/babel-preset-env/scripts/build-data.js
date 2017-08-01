@@ -74,9 +74,8 @@ const interpolateAllResults = (rawBrowsers, tests) => {
       browser = rawBrowsers[bid];
       if (browser.equals && res[bid] === undefined) {
         result = res[browser.equals];
-        res[bid] = browser.ignore_flagged && result === "flagged"
-          ? false
-          : result;
+        res[bid] =
+          browser.ignore_flagged && result === "flagged" ? false : result;
         // For each browser, check if the previous browser has the same
         // browser full name (e.g. Firefox) or family name (e.g. Chakra) as this one.
       } else if (

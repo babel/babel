@@ -1,0 +1,9 @@
+{
+  "presets": [
+    ["../../../../lib", {
+      "configPath": "../fixtures/preset-options/browserslist-config",
+      "modules": false,
+      "debug": true
+    }]
+  ]
+}

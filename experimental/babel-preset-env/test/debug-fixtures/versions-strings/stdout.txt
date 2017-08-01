@@ -3,8 +3,8 @@ babel-preset-env: `DEBUG` option
 Using targets:
 {
   "chrome": "54",
-  "node": "6.10",
-  "ie": "10"
+  "ie": "10",
+  "node": "6.10"
 }
 
 Using modules transform: commonjs
@@ -30,9 +30,9 @@ Using plugins:
   transform-es2015-typeof-symbol { "ie":"10" }
   transform-es2015-unicode-regex { "ie":"10" }
   transform-regenerator { "ie":"10" }
-  transform-exponentiation-operator { "node":"6.10", "ie":"10" }
-  transform-async-to-generator { "chrome":"54", "node":"6.10", "ie":"10" }
-  syntax-trailing-function-commas { "chrome":"54", "node":"6.10", "ie":"10" }
+  transform-exponentiation-operator { "ie":"10", "node":"6.10" }
+  transform-async-to-generator { "chrome":"54", "ie":"10", "node":"6.10" }
+  syntax-trailing-function-commas { "chrome":"54", "ie":"10", "node":"6.10" }
 
 Using polyfills with `entry` option:
 
@@ -114,12 +114,12 @@ Using polyfills with `entry` option:
   es6.math.tanh { "ie":"10" }
   es6.math.trunc { "ie":"10" }
   es7.array.includes { "ie":"10" }
-  es7.object.values { "node":"6.10", "ie":"10" }
-  es7.object.entries { "node":"6.10", "ie":"10" }
-  es7.object.get-own-property-descriptors { "node":"6.10", "ie":"10" }
-  es7.string.pad-start { "chrome":"54", "node":"6.10", "ie":"10" }
-  es7.string.pad-end { "chrome":"54", "node":"6.10", "ie":"10" }
-  web.timers { "chrome":"54", "node":"6.10", "ie":"10" }
-  web.immediate { "chrome":"54", "node":"6.10", "ie":"10" }
-  web.dom.iterable { "chrome":"54", "node":"6.10", "ie":"10" }
+  es7.object.values { "ie":"10", "node":"6.10" }
+  es7.object.entries { "ie":"10", "node":"6.10" }
+  es7.object.get-own-property-descriptors { "ie":"10", "node":"6.10" }
+  es7.string.pad-start { "chrome":"54", "ie":"10", "node":"6.10" }
+  es7.string.pad-end { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.timers { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.immediate { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.dom.iterable { "chrome":"54", "ie":"10", "node":"6.10" }
 src/in.js -> lib/in.js

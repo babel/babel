@@ -3,6 +3,7 @@
 import browserslist from "browserslist";
 import semver from "semver";
 import { semverify } from "./utils";
+import { objectToBrowserslist } from "./normalize-options";
 import type { Targets } from "./types";
 
 const browserNameMap = {
@@ -20,6 +21,15 @@ const isBrowsersQueryValid = (browsers: string | Array<string>): boolean =>
 
 const semverMin = (first: ?string, second: string): string => {
   return first && semver.lt(first, second) ? first : second;
+};
+
+const mergeBrowsers = (fromQuery: Targets, fromTarget: Targets) => {
+  return Object.keys(fromTarget).reduce((queryObj, targKey) => {
+    if (targKey !== "browsers") {
+      queryObj[targKey] = fromTarget[targKey];
+    }
+    return queryObj;
+  }, fromQuery);
 };
 
 const getLowestVersions = (browsers: Array<string>): Targets => {
@@ -69,54 +79,59 @@ const targetParserMap = {
 
   // Parse `node: true` and `node: "current"` to version
   node: (target, value) => {
-    const parsed = value === true || value === "current"
-      ? process.versions.node
-      : semverify(value);
+    const parsed =
+      value === true || value === "current"
+        ? process.versions.node
+        : semverify(value);
 
     return [target, parsed];
   },
 };
 
-const getTargets = (targets: Object = {}): Targets => {
-  let targetOpts: Targets = {};
+type ParsedResult = {
+  targets: Targets,
+  decimalWarnings: Array<Object>,
+};
+const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
+  const targetOpts: Targets = {};
+  // Parse browsers target via browserslist;
+  const queryIsValid = isBrowsersQueryValid(targets.browsers);
+  const browsersquery = queryIsValid ? targets.browsers : null;
+  if (queryIsValid || !options.ignoreBrowserslistConfig) {
+    browserslist.defaults = objectToBrowserslist(targets);
 
-  // Parse browsers target via browserslist
-  if (isBrowsersQueryValid(targets.browsers)) {
-    targetOpts = getLowestVersions(browserslist(targets.browsers));
+    const browsers = browserslist(browsersquery, { path: options.configPath });
+    const queryBrowsers = getLowestVersions(browsers);
+    targets = mergeBrowsers(queryBrowsers, targets);
   }
-
   // Parse remaining targets
-  type ParsedResult = {
-    targets: Targets,
-    decimalWarnings: Array<Object>,
-  };
-  const parsed = Object.keys(targets).reduce(
-    (results: ParsedResult, target: string): ParsedResult => {
-      if (target !== "browsers") {
-        const value = targets[target];
+  const parsed = Object.keys(targets).sort().reduce((
+    results: ParsedResult,
+    target: string,
+  ): ParsedResult => {
+    if (target !== "browsers") {
+      const value = targets[target];
 
-        // Warn when specifying minor/patch as a decimal
-        if (typeof value === "number" && value % 1 !== 0) {
-          results.decimalWarnings.push({ target, value });
-        }
-
-        // Check if we have a target parser?
-        const parser = targetParserMap[target] || targetParserMap.__default;
-        const [parsedTarget, parsedValue] = parser(target, value);
-
-        if (parsedValue) {
-          // Merge (lowest wins)
-          results.targets[parsedTarget] = parsedValue;
-        }
+      // Warn when specifying minor/patch as a decimal
+      if (typeof value === "number" && value % 1 !== 0) {
+        results.decimalWarnings.push({ target, value });
       }
 
-      return results;
-    },
-    {
-      targets: targetOpts,
-      decimalWarnings: [],
-    },
-  );
+      // Check if we have a target parser?
+      const parser = targetParserMap[target] || targetParserMap.__default;
+      const [parsedTarget, parsedValue] = parser(target, value);
+
+      if (parsedValue) {
+        // Merge (lowest wins)
+        results.targets[parsedTarget] = parsedValue;
+      }
+    }
+
+    return results;
+  }, {
+    targets: targetOpts,
+    decimalWarnings: [],
+  });
 
   outputDecimalWarning(parsed.decimalWarnings);
 

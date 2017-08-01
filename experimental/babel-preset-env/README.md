@@ -60,11 +60,53 @@ If you are targeting IE 8 and Chrome 55 it will include all plugins required by 
 
 For example, if you are building on Node 4, arrow functions won't be converted, but they will if you build on Node 0.12.
 
-### Support a `browsers` option like autoprefixer
+### Support a `browsers` option like autoprefixer.
 
 Use [browserslist](https://github.com/ai/browserslist) to declare supported environments by performing queries like `> 1%, last 2 versions`.
 
 Ref: [#19](https://github.com/babel/babel-preset-env/pull/19)
+
+### Browserslist support.
+
+[Browserslist](https://github.com/ai/browserslist) is a library used to share a supported list of browsers between different front-end tools like [autoprefixer](https://github.com/postcss/autoprefixer), [stylelint](https://stylelint.io/), [eslint-plugin-compat](https://github.com/amilajack/eslint-plugin-compat) and many others.
+
+By default, babel-preset-env will use [browserslist config sources](https://github.com/ai/browserslist#queries).
+
+For example, to enable only the polyfills and plugins needed for a project targeting *last 2 versions* and *IE10*:
+
+**.babelrc**
+```json
+{
+  "presets": [
+    ["env", {
+      "useBuiltIns": true
+    }]
+  ]
+}
+```
+
+**browserslist**
+```
+Last 2 versions
+IE 10
+```
+
+or
+
+**package.json**
+```
+"browserslist": "last 2 versions, ie 10"
+```
+
+Browserslist config will be ignored if: 1) `targets.browsers` was specified 2) or with `ignoreBrowserslistConfig: true` option ([see more](#ignoreBrowserslistConfig)):
+
+#### Targets merging.
+
+1. If [targets.browsers](#browsers) is defined - the browserslist config will be ignored. The browsers specified in `targets` will be merged with [any other explicitly defined targets](#targets). If merged, targets defined explicitly will override the same targets received from `targets.browsers`.
+
+2. If [targets.browsers](#browsers) is _not_ defined - the program will search browserslist file or `package.json` with `browserslist` field. The search will start from the working directory of the process or from the path specified by the `configPath` option, and go up to the system root. If both a browserslist file and configuration inside a `package.json` are found, an exception will be thrown.
+
+3. If a browserslist config was found and other targets are defined (but not [targets.browsers](#browsers)), the targets will be merged in the same way as `targets` defined explicitly with `targets.browsers`.
 
 ## Install
 
@@ -289,6 +331,18 @@ ES6 support, but it is not yet stable.  You can follow its progress in
 [UglifyJS2 issue #448](https://github.com/mishoo/UglifyJS2/issues/448).  If you
 require an alternative minifier which _does_ support ES6 syntax, we recommend
 using [Babili](https://github.com/babel/babili).
+
+### `configPath`
+
+`string`, defaults to `process.cwd()`
+
+The starting point where the config search for browserslist will start, and ascend to the system root until found.
+
+### `ignoreBrowserslistConfig`
+
+`boolean`, defaults to `false`
+
+Toggles whether or not [browserslist config sources](https://github.com/ai/browserslist#queries) are used, which includes searching for any browserslist files or referencing the browserslist key inside package.json. This is useful for projects that use a browserslist config for files that won't be compiled with Babel.
 
 ---
 
