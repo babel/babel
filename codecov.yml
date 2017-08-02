@@ -8,3 +8,5 @@ coverage:
         target: "80%"
     patch:
       enabled: false
+  ignore:
+    - "packages/babel-polyfill/src/core-js/**/*"
