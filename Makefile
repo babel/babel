@@ -15,7 +15,7 @@ build-dist: build
 	scripts/build-dist.sh
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
-	node scripts/generate-babel-types-docs.js
+	make babel-types-docs
 
 watch: clean
 	rm -rf packages/*/lib
@@ -58,6 +58,9 @@ test-ci:
 	make bootstrap
 	make test-only
 
+update-babel-types-docs:
+	sh ./scripts/check-babel-types-docs.sh
+
 test-ci-coverage:
 	BABEL_ENV=cov make bootstrap
 	./scripts/test-cov.sh
@@ -80,3 +83,6 @@ bootstrap:
 	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
+
+babel-types-docs:
+	node ./scripts/generate-babel-types-docs.js
