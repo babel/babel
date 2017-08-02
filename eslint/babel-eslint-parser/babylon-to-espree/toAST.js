@@ -50,11 +50,6 @@ var astTransformVisitor = {
       node.type = "Literal";
     }
 
-    // TODO estree plugin bug
-    if (node.type === "Property") {
-      if (!node.shorthand) node.shorthand = false;
-    }
-
     if (
       path.isRestElement() &&
       path.parent &&
