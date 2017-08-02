@@ -58,7 +58,7 @@ test-ci:
 	make bootstrap
 	make test-only
 
-update-babel-types-docs:
+check-babel-types-docs:
 	sh ./scripts/check-babel-types-docs.sh
 
 test-ci-coverage:

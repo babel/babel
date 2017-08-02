@@ -14,4 +14,4 @@ dependencies:
 test:
   override:
     - make test-ci-coverage
-    - make update-babel-types-docs
+    - make check-babel-types-docs
