@@ -235,16 +235,21 @@ export default function() {
             const cached = requires[source];
             if (cached) return cached;
 
-            const ref = path.scope.generateUidIdentifier(
-              basename(source, extname(source)),
-            );
+            const ref = opts.identifier
+              ? opts.identifier
+              : path.scope.generateUidIdentifier(
+                  basename(source, extname(source)),
+                );
 
-            let builtRequire = buildRequire(t.stringLiteral(source)).expression;
+            const builtRequire = buildRequire(t.stringLiteral(source))
+              .expression;
 
             const varDecl = t.variableDeclaration("var", [
               t.variableDeclarator(
                 ref,
-                 opts.inline ? t.callExpression(opts.inline, [builtRequire]) : builtRequire,
+                opts.inline
+                  ? t.callExpression(opts.inline, [builtRequire])
+                  : builtRequire,
               ),
             ]);
 
@@ -269,12 +274,17 @@ export default function() {
           }
 
           function hasSingleDefaultImport(specifiers) {
-            if (specifiers.length !== 1) { return; }
+            if (specifiers.length !== 1) {
+              return;
+            }
 
-            let onlySpecifier = specifiers[0];
+            const onlySpecifier = specifiers[0];
 
-            return t.isImportDefaultSpecifier(onlySpecifier) ||
-              t.isImportSpecifier(onlySpecifier) && onlySpecifier.imported.name === "default";
+            return (
+              t.isImportDefaultSpecifier(onlySpecifier) ||
+              (t.isImportSpecifier(onlySpecifier) &&
+                onlySpecifier.imported.name === "default")
+            );
           }
 
           for (const path of body) {
@@ -485,15 +495,25 @@ export default function() {
             const { specifiers, maxBlockHoist } = imports[source];
             if (specifiers.length) {
               let uid;
+              let inlined = false;
 
-              if (hasSingleDefaultImport(specifiers) && this.modulesType === "commonjs") {
+              if (
+                hasSingleDefaultImport(specifiers) &&
+                this.modulesType === "commonjs"
+              ) {
                 uid = addRequire(source, maxBlockHoist, {
-                  inline: this.addHelper("interopRequireDefault")
+                  inline: this.addHelper("interopRequireDefault"),
                 });
-              } else if (specifiers.length === 1 && t.isImportNamespaceSpecifier(specifiers[0]) && this.modulesType === "commonjs") {
+                inlined = true;
+              } else if (
+                specifiers.length === 1 &&
+                t.isImportNamespaceSpecifier(specifiers[0]) &&
+                this.modulesType === "commonjs"
+              ) {
                 uid = addRequire(source, maxBlockHoist, {
-                  inline: this.addHelper("interopRequireWildcard")
+                  inline: this.addHelper("interopRequireWildcard"),
                 });
+                inlined = true;
               } else {
                 uid = addRequire(source, maxBlockHoist);
               }
@@ -502,10 +522,10 @@ export default function() {
 
               for (let i = 0; i < specifiers.length; i++) {
                 const specifier = specifiers[i];
-                if (t.isImportNamespaceSpecifier(specifier) && !(specifiers.length === 1 && t.isImportNamespaceSpecifier(specifiers[0]) && this.modulesType === "commonjs")) {
+                if (t.isImportNamespaceSpecifier(specifier)) {
                   if (strict || noInterop) {
                     remaps[specifier.local.name] = uid;
-                  } else {
+                  } else if (!inlined) {
                     const varDecl = t.variableDeclaration("var", [
                       t.variableDeclarator(
                         specifier.local,
@@ -534,10 +554,10 @@ export default function() {
               for (const specifier of specifiers) {
                 if (t.isImportSpecifier(specifier)) {
                   let target = uid;
-                  if (specifier.imported.name === "default" && !(hasSingleDefaultImport(specifiers) && this.modulesType === "commonjs")) {
+                  if (specifier.imported.name === "default") {
                     if (wildcard) {
                       target = wildcard;
-                    } else if (!noInterop) {
+                    } else if (!noInterop && !inlined) {
                       target = wildcard = path.scope.generateUidIdentifier(
                         uid.name,
                       );
