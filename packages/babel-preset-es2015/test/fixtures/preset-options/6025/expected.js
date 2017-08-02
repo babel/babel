@@ -12,9 +12,9 @@ var _iteratorError = undefined;
 
 try {
   for (var _iterator = c[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-    var path = _step.value;
+    var _path = _step.value;
 
-    _loop(path);
+    _loop(_path);
   }
 } catch (err) {
   _didIteratorError = true;
