@@ -40,7 +40,7 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 **Note:** Versions `< 5.1.10` can't be built.
 
-Babel is built for Node.js 4 and up but we develop using Node.js 6. Make sure you are on npm 3.
+Babel is built for Node.js 4 and up but we develop using Node.js 6/8 and yarn.
 
 You can check this with `node -v` and `npm -v`.
 
