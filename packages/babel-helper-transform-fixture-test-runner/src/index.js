@@ -194,7 +194,7 @@ function run(task) {
       !process.env.CI
     ) {
       console.log(`New test file created: ${expect.loc}`);
-      fs.writeFileSync(expect.loc, result.code);
+      fs.writeFileSync(expect.loc, `${result.code}\n`);
     } else {
       actualCode = result.code.trim();
       chai
