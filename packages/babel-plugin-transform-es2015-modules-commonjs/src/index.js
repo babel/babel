@@ -512,6 +512,7 @@ export default function() {
               ) {
                 uid = addRequire(source, maxBlockHoist, {
                   inline: this.addHelper("interopRequireWildcard"),
+                  identifier: specifiers[0].local,
                 });
                 inlined = true;
               } else {
