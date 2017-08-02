@@ -507,6 +507,21 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 ---
 
+### declareOpaqueType
+```javascript
+t.declareOpaqueType(id, typeParameters, supertype)
+```
+
+See also `t.isDeclareOpaqueType(node, opts)` and `t.assertDeclareOpaqueType(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `id` (required)
+ - `typeParameters` (required)
+ - `supertype` (required)
+
+---
+
 ### declareTypeAlias
 ```javascript
 t.declareTypeAlias(id, typeParameters, right)
@@ -1502,6 +1517,22 @@ See also `t.isObjectTypeSpreadProperty(node, opts)` and `t.assertObjectTypeSprea
 Aliases: `Flow`, `UserWhitespacable`
 
  - `argument` (required)
+
+---
+
+### opaqueType
+```javascript
+t.opaqueType(id, typeParameters, supertype, impltype)
+```
+
+See also `t.isOpaqueType(node, opts)` and `t.assertOpaqueType(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `id` (required)
+ - `typeParameters` (required)
+ - `supertype` (required)
+ - `impltype` (required)
 
 ---
 

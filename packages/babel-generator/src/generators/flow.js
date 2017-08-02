@@ -95,6 +95,14 @@ export function DeclareTypeAlias(node: Object) {
   this.TypeAlias(node);
 }
 
+export function DeclareOpaqueType(node: Object, parent: Object) {
+  if (!t.isDeclareExportDeclaration(parent)) {
+    this.word("declare");
+    this.space();
+  }
+  this.OpaqueType(node);
+}
+
 export function DeclareVariable(node: Object, parent: Object) {
   if (!t.isDeclareExportDeclaration(parent)) {
     this.word("declare");
@@ -300,6 +308,27 @@ export function TypeAlias(node: Object) {
   this.token("=");
   this.space();
   this.print(node.right, node);
+  this.semicolon();
+}
+
+export function OpaqueType(node: Object) {
+  this.word("opaque");
+  this.space();
+  this.word("type");
+  this.space();
+  this.print(node.id, node);
+  this.print(node.typeParameters, node);
+  if (node.supertype) {
+    this.token(":");
+    this.space();
+    this.print(node.supertype, node);
+  }
+  if (node.impltype) {
+    this.space();
+    this.token("=");
+    this.space();
+    this.print(node.impltype, node);
+  }
   this.semicolon();
 }
 
