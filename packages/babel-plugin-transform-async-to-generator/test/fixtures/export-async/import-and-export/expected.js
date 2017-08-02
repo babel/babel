@@ -13,4 +13,4 @@ let foo = exports.foo = (() => {
   };
 })();
 
-var _bar = babelHelpers.interopRequireDefault(require("bar"));
+var bar = babelHelpers.interopRequireDefault(require("bar"));

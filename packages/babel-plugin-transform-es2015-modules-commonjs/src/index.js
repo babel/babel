@@ -495,7 +495,6 @@ export default function() {
             const { specifiers, maxBlockHoist } = imports[source];
             if (specifiers.length) {
               let uid;
-              let inlined = false;
 
               if (
                 hasSingleDefaultImport(specifiers) &&
@@ -503,8 +502,8 @@ export default function() {
               ) {
                 uid = addRequire(source, maxBlockHoist, {
                   inline: this.addHelper("interopRequireDefault"),
+                  identifier: specifiers[0].local,
                 });
-                inlined = true;
               } else if (
                 specifiers.length === 1 &&
                 t.isImportNamespaceSpecifier(specifiers[0]) &&
@@ -514,59 +513,21 @@ export default function() {
                   inline: this.addHelper("interopRequireWildcard"),
                   identifier: specifiers[0].local,
                 });
-                inlined = true;
               } else {
                 uid = addRequire(source, maxBlockHoist);
-              }
+                let wildcard;
 
-              let wildcard;
-
-              for (let i = 0; i < specifiers.length; i++) {
-                const specifier = specifiers[i];
-                if (t.isImportNamespaceSpecifier(specifier)) {
-                  if (strict || noInterop) {
-                    remaps[specifier.local.name] = uid;
-                  } else if (!inlined) {
-                    const varDecl = t.variableDeclaration("var", [
-                      t.variableDeclarator(
-                        specifier.local,
-                        t.callExpression(
-                          this.addHelper("interopRequireWildcard"),
-                          [uid],
-                        ),
-                      ),
-                    ]);
-
-                    if (maxBlockHoist > 0) {
-                      varDecl._blockHoist = maxBlockHoist;
-                    }
-
-                    topNodes.push(varDecl);
-                  }
-                  wildcard = specifier.local;
-                } else if (t.isImportDefaultSpecifier(specifier)) {
-                  specifiers[i] = t.importSpecifier(
-                    specifier.local,
-                    t.identifier("default"),
-                  );
-                }
-              }
-
-              for (const specifier of specifiers) {
-                if (t.isImportSpecifier(specifier)) {
-                  let target = uid;
-                  if (specifier.imported.name === "default") {
-                    if (wildcard) {
-                      target = wildcard;
-                    } else if (!noInterop && !inlined) {
-                      target = wildcard = path.scope.generateUidIdentifier(
-                        uid.name,
-                      );
+                for (let i = 0; i < specifiers.length; i++) {
+                  const specifier = specifiers[i];
+                  if (t.isImportNamespaceSpecifier(specifier)) {
+                    if (strict || noInterop) {
+                      remaps[specifier.local.name] = uid;
+                    } else {
                       const varDecl = t.variableDeclaration("var", [
                         t.variableDeclarator(
-                          target,
+                          specifier.local,
                           t.callExpression(
-                            this.addHelper("interopRequireDefault"),
+                            this.addHelper("interopRequireWildcard"),
                             [uid],
                           ),
                         ),
@@ -578,11 +539,47 @@ export default function() {
 
                       topNodes.push(varDecl);
                     }
+                    wildcard = specifier.local;
+                  } else if (t.isImportDefaultSpecifier(specifier)) {
+                    specifiers[i] = t.importSpecifier(
+                      specifier.local,
+                      t.identifier("default"),
+                    );
                   }
-                  remaps[specifier.local.name] = t.memberExpression(
-                    target,
-                    t.cloneWithoutLoc(specifier.imported),
-                  );
+                }
+
+                for (const specifier of specifiers) {
+                  if (t.isImportSpecifier(specifier)) {
+                    let target = uid;
+                    if (specifier.imported.name === "default") {
+                      if (wildcard) {
+                        target = wildcard;
+                      } else if (!noInterop) {
+                        target = wildcard = path.scope.generateUidIdentifier(
+                          uid.name,
+                        );
+                        const varDecl = t.variableDeclaration("var", [
+                          t.variableDeclarator(
+                            target,
+                            t.callExpression(
+                              this.addHelper("interopRequireDefault"),
+                              [uid],
+                            ),
+                          ),
+                        ]);
+
+                        if (maxBlockHoist > 0) {
+                          varDecl._blockHoist = maxBlockHoist;
+                        }
+
+                        topNodes.push(varDecl);
+                      }
+                    }
+                    remaps[specifier.local.name] = t.memberExpression(
+                      target,
+                      t.cloneWithoutLoc(specifier.imported),
+                    );
+                  }
                 }
               }
             } else {

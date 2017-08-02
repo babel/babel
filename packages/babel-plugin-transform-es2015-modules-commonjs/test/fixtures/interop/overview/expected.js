@@ -11,16 +11,15 @@ require("foo-bar");
 
 require("./directory/foo-bar");
 
-var _foo = babelHelpers.interopRequireDefault(require("foo2"));
-
+var foo = babelHelpers.interopRequireDefault(require("foo2"));
 var foo2 = babelHelpers.interopRequireWildcard(require("foo3"));
 
-var _foo2 = require("foo4");
+var _foo = require("foo4");
 
-var _foo3 = require("foo5");
+var _foo2 = require("foo5");
 
 exports.test = test;
 var test2 = exports.test2 = 5;
-_foo2.bar;
-_foo3.foo;
-_foo.default;
+_foo.bar;
+_foo2.foo;
+foo;

@@ -4,8 +4,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = undefined;
-
-var _BaseFoo2 = babelHelpers.interopRequireDefault(require("./BaseFoo"));
+var BaseFoo = babelHelpers.interopRequireDefault(require("./BaseFoo"));
 
 var SubFoo = function (_BaseFoo) {
   babelHelpers.inherits(SubFoo, _BaseFoo);
@@ -23,6 +22,6 @@ var SubFoo = function (_BaseFoo) {
     }
   }]);
   return SubFoo;
-}(_BaseFoo2.default);
+}(BaseFoo);
 
 exports.default = SubFoo;

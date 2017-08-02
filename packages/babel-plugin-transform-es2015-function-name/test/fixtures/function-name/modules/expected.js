@@ -1,6 +1,6 @@
 "use strict";
 
-var _events2 = babelHelpers.interopRequireDefault(require("events"));
+var _events = babelHelpers.interopRequireDefault(require("events"));
 
 let Template = function () {
   function Template() {
@@ -10,7 +10,7 @@ let Template = function () {
   babelHelpers.createClass(Template, [{
     key: "events",
     value: function events() {
-      return _events2.default;
+      return _events;
     }
   }]);
   return Template;
