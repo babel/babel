@@ -1,3 +1,3 @@
 {
-  "throws": "You can only use optional-chaining when the 'optionalChaining' plugin is enabled. (1:0)"
+  "throws": "This experimental syntax requires enabling the parser plugin: 'optionalChaining' (1:1)"
 }
