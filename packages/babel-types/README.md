@@ -1556,7 +1556,7 @@ t.program(body, directives)
 
 See also `t.isProgram(node, opts)` and `t.assertProgram(node, opts)`.
 
-Aliases: `Scopable`, `BlockParent`, `Block`, `FunctionParent`
+Aliases: `Scopable`, `BlockParent`, `Block`
 
  - `body`: `Array<Statement>` (required)
  - `directives`: `Array<Directive>` (default: `[]`)
