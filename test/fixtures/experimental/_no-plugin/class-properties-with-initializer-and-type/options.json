@@ -1,0 +1,4 @@
+{
+  "plugins": ["flow"],
+  "throws": "This experimental syntax requires enabling one of the following parser plugin(s): 'classProperties, typescript' (2:14)"
+}

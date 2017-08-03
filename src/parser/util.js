@@ -124,7 +124,7 @@ export default class UtilParser extends Tokenizer {
     if (!names.some(n => this.hasPlugin(n))) {
       throw this.raise(
         this.state.start,
-        `This experimental syntax requires enabling the parser plugin(s): '${names.join(
+        `This experimental syntax requires enabling one of the following parser plugin(s): '${names.join(
           ", ",
         )}'`,
         names,
