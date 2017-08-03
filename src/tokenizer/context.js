@@ -61,6 +61,11 @@ tt.parenR.updateContext = tt.braceR.updateContext = function() {
 };
 
 tt.name.updateContext = function(prevType) {
+  if (this.state.value === "of" && this.curContext() === types.parenStatement) {
+    this.state.exprAllowed = !prevType.beforeExpr;
+    return;
+  }
+
   this.state.exprAllowed = false;
 
   if (prevType === tt._let || prevType === tt._const || prevType === tt._var) {
