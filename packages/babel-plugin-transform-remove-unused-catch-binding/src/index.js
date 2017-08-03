@@ -1,6 +1,6 @@
 import syntaxOptionalCatchBinding from "babel-plugin-syntax-optional-catch-binding";
 
-export default function({ types: t }) {
+export default function() {
   return {
     inherits: syntaxOptionalCatchBinding,
 
@@ -8,7 +8,7 @@ export default function({ types: t }) {
       CatchClause(path) {
         if (
           path.node.param &&
-          !t.isReferenced(path.node.param, path.node.body)
+          !path.scope.getOwnBinding(path.node.param.name).referenced
         ) {
           const paramPath = path.get("param");
           paramPath.remove();
