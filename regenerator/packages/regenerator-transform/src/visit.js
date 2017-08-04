@@ -153,6 +153,7 @@ exports.visitor = {
 
       if (wasGeneratorFunction && t.isExpression(node)) {
         util.replaceWithOrRemove(path, t.callExpression(util.runtimeProperty("mark"), [node]))
+        path.addComment("leading", "#__PURE__");
       }
 
       // Generators are processed in 'exit' handlers so that regenerator only has to run on
@@ -188,18 +189,34 @@ function getOuterFnExpr(funPath) {
     }
 
     let markDecl = getRuntimeMarkDecl(pp);
-    let markedArray = markDecl.declarations[0].id;
-    let funDeclIdArray = markDecl.declarations[0].init.callee.object;
-    t.assertArrayExpression(funDeclIdArray);
+    let declarations = markDecl.declarations;
+    let index = declarations.length;
 
-    let index = funDeclIdArray.elements.length;
-    funDeclIdArray.elements.push(node.id);
+    // this can change from pass to pass if something else is altering our body
+    // so we have to look it up every time :/
+    let declarationsIndex = pp.node.body.findIndex((p) => {
+      return t.isVariableDeclaration(p) && p.declarations === declarations;
+    });
+    assert(!isNaN(declarationsIndex));
 
-    return t.memberExpression(
-      markedArray,
-      t.numericLiteral(index),
-      true
-    );
+    // get a new unique id for our marked variable
+    let markedId = pp.scope.generateUidIdentifier("marked");
+
+    // now push our new declaration into our list
+    declarations.push(t.variableDeclarator(
+      markedId,
+      t.callExpression(util.runtimeProperty("mark"), [node.id])
+    ));
+
+    // assemble the path to our mark declarations
+    let bodyPathName = 'body.' + String(declarationsIndex) + '.declarations.' + String(index) + '.init';
+    let bodyPath = pp.get(bodyPathName);
+
+    // mark our call to util.runtimeProperty("mark") as pure to enable tree-shaking
+    bodyPath.addComment("leading", "#__PURE__");
+
+    // and return our new id
+    return markedId;
   }
 
   return node.id;
@@ -214,20 +231,7 @@ function getRuntimeMarkDecl(blockPath) {
     return info.decl;
   }
 
-  info.decl = t.variableDeclaration("var", [
-    t.variableDeclarator(
-      blockPath.scope.generateUidIdentifier("marked"),
-      t.callExpression(
-        t.memberExpression(
-          t.arrayExpression([]),
-          t.identifier("map"),
-          false
-        ),
-        [util.runtimeProperty("mark")]
-      )
-    )
-  ]);
-
+  info.decl = t.variableDeclaration("var", [])
   blockPath.unshiftContainer("body", info.decl);
 
   return info.decl;

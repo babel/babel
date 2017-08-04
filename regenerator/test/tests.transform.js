@@ -47,3 +47,57 @@ describe("_blockHoist nodes", function() {
     assert.deepEqual(names, ["hoistMe", "doNotHoistMe", "oyez"]);
   });
 });
+
+describe("marked", function() {
+  it("should work with a single function", function() {
+    var ast = recast.parse('function* foo(){};', {
+        parser: require("babylon")
+    });
+    const code = recast.print(transform(ast)).code;
+    assert.notStrictEqual(
+      code.indexOf(
+        'var _marked = regeneratorRuntime.mark(foo);'
+      ), -1
+    );
+  });
+  it("should work with multiple functions", function() {
+    var ast = recast.parse([
+      'function* foo(){};',
+      'function* bar() {};'
+    ].join("\n"), {
+        parser: require("babylon")
+    });
+    const code = recast.print(transform(ast)).code;
+    assert.notStrictEqual(
+      code.indexOf(
+        'var _marked = regeneratorRuntime.mark(foo), _marked2 = regeneratorRuntime.mark(bar);'
+      ), -1
+    );
+  });
+});
+
+// TODO - how do i get recast to return comments?
+describe("pure", function() {
+  xit("should work with a function expression", function() {
+    var ast = recast.parse('var a = function* foo(){};', {
+        parser: require("babylon")
+    });
+    const code = recast.print(transform(ast)).code;
+    assert.notStrictEqual(
+      code.indexOf(
+        'var a = /*#__PURE__*/regeneratorRuntime.mark(function foo() {'
+      ), -1
+    );
+  });
+  xit("should work with a function declaration", function() {
+    var ast = recast.parse('function* foo(){};', {
+      parser: require("babylon")
+    });
+    const code = recast.print(transform(ast)).code;
+    assert.notStrictEqual(
+      code.indexOf(
+        'var a = /*#__PURE__*/Object.defineProperty( /*#__PURE__*/regeneratorRuntime.mark'
+      ), -1
+    );
+  });
+});
