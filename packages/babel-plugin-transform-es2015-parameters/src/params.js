@@ -10,6 +10,16 @@ const buildDefaultParam = template(`
       DEFAULT_VALUE;
 `);
 
+const buildLooseDefaultParam = template(`
+  if (ASSIGNMENT_IDENTIFIER === UNDEFINED) {
+    ASSIGNMENT_IDENTIFIER = DEFAULT_VALUE;
+  }
+`);
+
+const buildLooseDestructuredDefaultParam = template(`
+  let ASSIGNMENT_IDENTIFIER = PARAMETER_NAME === UNDEFINED ? DEFAULT_VALUE : PARAMETER_NAME ;
+`);
+
 const buildArgumentsAccess = template(`
   let $0 = arguments[$1];
 `);
@@ -35,7 +45,7 @@ const iifeVisitor = {
   },
 };
 
-export default function convertFunctionParams(path) {
+export default function convertFunctionParams(path, loose) {
   const { node, scope } = path;
 
   const state = {
@@ -49,6 +59,44 @@ export default function convertFunctionParams(path) {
 
   //
   const params = path.get("params");
+
+  if (loose) {
+    const body = [];
+    for (let i = 0; i < params.length; ++i) {
+      const param = params[i];
+      if (param.isAssignmentPattern()) {
+        const left = param.get("left");
+        const right = param.get("right");
+
+        const undefinedNode = scope.buildUndefinedNode();
+
+        if (left.isIdentifier()) {
+          body.push(
+            buildLooseDefaultParam({
+              ASSIGNMENT_IDENTIFIER: left.node,
+              DEFAULT_VALUE: right.node,
+              UNDEFINED: undefinedNode,
+            }),
+          );
+          param.replaceWith(left.node);
+        } else if (left.isObjectPattern() || left.isArrayPattern()) {
+          const paramName = scope.generateUidIdentifier();
+          body.push(
+            buildLooseDestructuredDefaultParam({
+              ASSIGNMENT_IDENTIFIER: left.node,
+              DEFAULT_VALUE: right.node,
+              PARAMETER_NAME: paramName,
+              UNDEFINED: undefinedNode,
+            }),
+          );
+          param.replaceWith(paramName);
+        }
+      }
+    }
+    path.get("body").unshiftContainer("body", body);
+    return;
+  }
+
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
 

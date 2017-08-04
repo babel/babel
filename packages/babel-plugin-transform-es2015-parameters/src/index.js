@@ -16,7 +16,7 @@ export default function() {
         }
 
         const convertedRest = convertFunctionRest(path);
-        const convertedParams = convertFunctionParams(path);
+        const convertedParams = convertFunctionParams(path, this.opts.loose);
 
         if (convertedRest || convertedParams) {
           // Manually reprocess this scope to ensure that the moved params are updated.
