@@ -191,7 +191,15 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
+    const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseExprOps(noIn, refShorthandDefaultPos);
+
+    if (
+      expr.type === "ArrowFunctionExpression" &&
+      expr.start === potentialArrowAt
+    ) {
+      return expr;
+    }
     if (refShorthandDefaultPos && refShorthandDefaultPos.start) return expr;
 
     return this.parseConditional(
@@ -228,12 +236,20 @@ export default class ExpressionParser extends LValParser {
   parseExprOps(noIn: ?boolean, refShorthandDefaultPos: Pos): N.Expression {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
+    const potentialArrowAt = this.state.potentialArrowAt;
     const expr = this.parseMaybeUnary(refShorthandDefaultPos);
+
+    if (
+      expr.type === "ArrowFunctionExpression" &&
+      expr.start === potentialArrowAt
+    ) {
+      return expr;
+    }
     if (refShorthandDefaultPos && refShorthandDefaultPos.start) {
       return expr;
-    } else {
-      return this.parseExprOp(expr, startPos, startLoc, -1, noIn);
     }
+
+    return this.parseExprOp(expr, startPos, startLoc, -1, noIn);
   }
 
   // Parse binary operators with the operator precedence parsing
