@@ -1,6 +1,6 @@
-# babel-plugin-transform-optional-catch-binding
+# babel-plugin-transform-remove-unused-catch-binding
 
-> Optional catch binding enables the catch block to execute whether or not an argument is passed to the catch statement (CatchClause).
+> If the argument bound to the catch block is not referenced in the catch block, that argument and the catch binding is removed.
 
 
 ## Examples
@@ -8,18 +8,17 @@
 ```js
 try {
   throw 0;
-} catch {
-  doSomethingWhichDoesntCareAboutTheValueThrown();
+} catch (err) {
+  console.log("it failed, but this code executes");
 }
 ```
+Is transformed to:
 
 ```js
 try {
   throw 0;
 } catch {
-  doSomethingWhichDoesntCareAboutTheValueThrown();
-} finally {
-  doSomeCleanup();
+  console.log("it failed, but this code executes");
 }
 ```
 
@@ -27,7 +26,7 @@ try {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-optional-catch-binding
+npm install --save-dev babel-plugin-transform-remove-unused-catch-binding
 ```
 
 ## Usage
@@ -38,23 +37,24 @@ npm install --save-dev babel-plugin-transform-optional-catch-binding
 
 ```json
 {
-  "plugins": ["transform-optional-catch-binding"]
+  "plugins": ["transform-remove-unused-catch-binding"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-optional-catch-binding script.js
+babel --plugins transform-remove-unused-catch-binding script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("babel-core").transform("code", {
-  plugins: ["transform-optional-catch-binding"]
+  plugins: ["transform-remove-unused-catch-binding"]
 });
 ```
 
 ## References
+This codemod updates your source code in line with the following proposal:
 - [Proposal: Optional Catch Binding for ECMAScript](https://github.com/babel/proposals/issues/7)
