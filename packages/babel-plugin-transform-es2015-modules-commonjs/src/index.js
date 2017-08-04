@@ -73,7 +73,11 @@ export default function() {
           ),
         );
       } else {
-        path.replaceWith(remap);
+        path.replaceWith(
+          // Clone the node before inserting it to ensure that different nodes in the AST are represented
+          // by different objects.
+          t.cloneWithoutLoc(remap),
+        );
       }
       this.requeueInParent(path);
     },
