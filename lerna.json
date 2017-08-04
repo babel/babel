@@ -20,5 +20,10 @@
         "test/**"
       ]
     }
-  }
+  },
+  "packages": [
+    "packages/*"
+  ],
+  "npmClient": "yarn",
+  "useWorkspaces": true
 }

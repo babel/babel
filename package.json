@@ -67,5 +67,8 @@
       "eslint --format=codeframe --fix",
       "git add"
     ]
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
