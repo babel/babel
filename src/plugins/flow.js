@@ -1043,12 +1043,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
 
         case tt._null:
-          node.value = this.match(tt._null);
           this.next();
           return this.finishNode(node, "NullLiteralTypeAnnotation");
 
         case tt._this:
-          node.value = this.match(tt._this);
           this.next();
           return this.finishNode(node, "ThisTypeAnnotation");
 

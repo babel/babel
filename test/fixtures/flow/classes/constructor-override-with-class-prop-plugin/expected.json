@@ -152,8 +152,7 @@
                         "line": 2,
                         "column": 25
                       }
-                    },
-                    "value": true
+                    }
                   },
                   "typeParameters": null
                 }

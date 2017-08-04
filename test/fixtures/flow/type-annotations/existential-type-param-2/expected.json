@@ -212,8 +212,7 @@
                               "line": 1,
                               "column": 21
                             }
-                          },
-                          "value": true
+                          }
                         },
                         {
                           "type": "ExistsTypeAnnotation",
