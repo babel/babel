@@ -14,8 +14,10 @@ And with the `development` option:
 - [transform-react-jsx-self](https://babeljs.io/docs/plugins/transform-react-jsx-self/)
 - [transform-react-jsx-source](https://babeljs.io/docs/plugins/transform-react-jsx-source/)
 
-Note: Flow annotations and declarations will _only_ be removed in files that
-have the `// @flow ` directive.
+Note: This preset sets the `requireDirective` option on
+`transform-flow-strip-types`. This means Flow annotations and declarations
+will _only_ be removed in files that have a `// @flow ` directive. It will also
+throw errors for any Flow annotations found in files without the directive.
 
 ```js
 // @flow

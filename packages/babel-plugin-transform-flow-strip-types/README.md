@@ -55,4 +55,5 @@ require("babel-core").transform("code", {
 `boolean`, defaults to `false`.
 
 Setting this to true will only strip annotations and declarations from files
-that contain the `// @flow` directive.
+that contain the `// @flow` directive. It will also throw errors for any Flow
+annotations found in files without the directive.

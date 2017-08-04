@@ -47,7 +47,13 @@ export default function({ types: t }) {
       },
 
       Flow(path) {
-        if (skipStrip) return;
+        if (skipStrip) {
+          throw path.buildCodeFrameError(
+            "A @flow directive is required when using Flow annotations with " +
+              "babel-preset-react or the `requireDirective` option.",
+          );
+        }
+
         path.remove();
       },
 
