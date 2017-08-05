@@ -923,13 +923,13 @@ babylon@7.0.0-beta.18:
   version "7.0.0-beta.18"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.18.tgz#5c23ee3fdb66358aabf3789779319c5b78a233c7"
 
+babylon@7.0.0-beta.19, babylon@^7.0.0-beta.19:
+  version "7.0.0-beta.19"
+  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.19.tgz#e928c7e807e970e0536b078ab3e0c48f9e052503"
+
 babylon@^6.17.2, babylon@^6.17.4:
   version "6.17.4"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.17.4.tgz#3e8b7402b88d22c3423e137a1577883b15ff869a"
-
-babylon@^7.0.0-beta.18:
-  version "7.0.0-beta.19"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.19.tgz#e928c7e807e970e0536b078ab3e0c48f9e052503"
 
 balanced-match@^1.0.0:
   version "1.0.0"
@@ -2756,7 +2756,7 @@ gulp-babel@babel/gulp-babel#d8c67b:
   version "6.1.2"
   resolved "https://codeload.github.com/babel/gulp-babel/tar.gz/d8c67b"
   dependencies:
-    babel-core "^7.0.0-alpha.6"
+    babel-core "7.0.0-alpha.15"
     gulp-util "^3.0.0"
     replace-ext "0.0.1"
     through2 "^2.0.0"
