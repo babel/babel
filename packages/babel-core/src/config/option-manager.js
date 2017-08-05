@@ -1,5 +1,3 @@
-// @flow
-
 import * as context from "../index";
 import Plugin from "./plugin";
 import * as messages from "babel-messages";
