@@ -2392,9 +2392,9 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@^0.41.0:
-  version "0.41.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.41.0.tgz#8badac9a19da45004997e599bd316518db489b2e"
+flow-bin@^0.52.0:
+  version "0.52.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.52.0.tgz#b6d9abe8bcd1ee5c62df386451a4e2553cadc3a3"
 
 for-in@^1.0.1:
   version "1.0.2"
@@ -2756,7 +2756,7 @@ gulp-babel@babel/gulp-babel#d8c67b:
   version "6.1.2"
   resolved "https://codeload.github.com/babel/gulp-babel/tar.gz/d8c67b"
   dependencies:
-    babel-core "7.0.0-alpha.15"
+    babel-core "^7.0.0-alpha.6"
     gulp-util "^3.0.0"
     replace-ext "0.0.1"
     through2 "^2.0.0"
