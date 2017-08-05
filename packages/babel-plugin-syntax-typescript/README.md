@@ -1,7 +1,5 @@
 # babel-plugin-syntax-typescript
 
-
-
 ## Installation
 
 ```sh
