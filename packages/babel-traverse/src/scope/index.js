@@ -72,7 +72,9 @@ const collectorVisitor = {
     for (const key of (t.FOR_INIT_KEYS: Array)) {
       const declar = path.get(key);
       if (declar.isVar()) {
-        path.scope.getFunctionParent().registerBinding("var", declar);
+        const parentScope =
+          path.scope.getFunctionParent() || path.scope.getProgramParent();
+        parentScope.registerBinding("var", declar);
       }
     }
   },
@@ -90,7 +92,9 @@ const collectorVisitor = {
     //if (path.isFlow()) return;
 
     // we've ran into a declaration!
-    path.scope.getFunctionParent().registerDeclaration(path);
+    const parent =
+      path.scope.getFunctionParent() || path.scope.getProgramParent();
+    parent.registerDeclaration(path);
   },
 
   ReferencedIdentifier(path, state) {
@@ -786,7 +790,7 @@ export default class Scope {
     }
 
     if (path.isSwitchStatement()) {
-      path = this.getFunctionParent().path;
+      path = (this.getFunctionParent() || this.getProgramParent()).path;
     }
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
@@ -825,12 +829,11 @@ export default class Scope {
         return scope;
       }
     } while ((scope = scope.parent));
-    throw new Error("We couldn't find a Function or Program...");
+    throw new Error("Couldn't find a Program");
   }
 
   /**
-   * Walk up the scope tree until we hit either a Function or reach the
-   * very top and hit Program.
+   * Walk up the scope tree until we hit either a Function or return null.
    */
 
   getFunctionParent() {
@@ -840,7 +843,7 @@ export default class Scope {
         return scope;
       }
     } while ((scope = scope.parent));
-    throw new Error("We couldn't find a Function or Program...");
+    return null;
   }
 
   /**

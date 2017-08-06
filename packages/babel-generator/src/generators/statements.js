@@ -171,10 +171,12 @@ export function TryStatement(node: Object) {
 export function CatchClause(node: Object) {
   this.word("catch");
   this.space();
-  this.token("(");
-  this.print(node.param, node);
-  this.token(")");
-  this.space();
+  if (node.param) {
+    this.token("(");
+    this.print(node.param, node);
+    this.token(")");
+    this.space();
+  }
   this.print(node.body, node);
 }
 
@@ -234,6 +236,12 @@ function constDeclarationIndent() {
 }
 
 export function VariableDeclaration(node: Object, parent: Object) {
+  if (node.declare) {
+    // TS
+    this.word("declare");
+    this.space();
+  }
+
   this.word(node.kind);
   this.space();
 

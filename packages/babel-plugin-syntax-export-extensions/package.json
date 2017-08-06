@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-syntax-export-extensions",
-  "version": "7.0.0-alpha.15",
+  "version": "7.0.0-alpha.18",
   "description": "Allow parsing of export extensions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-export-extensions",
   "license": "MIT",

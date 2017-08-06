@@ -93,6 +93,14 @@ export function Binary(node: Object, parent: Object): boolean {
   return false;
 }
 
+export function TSAsExpression() {
+  return true;
+}
+
+export function TSTypeAssertion() {
+  return true;
+}
+
 export function BinaryExpression(node: Object, parent: Object): boolean {
   // let i = (1 in []);
   // for ((1 in []);;);
@@ -173,7 +181,9 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     t.isBinary(parent) ||
     t.isConditionalExpression(parent, { test: node }) ||
     t.isAwaitExpression(parent) ||
-    t.isTaggedTemplateExpression(parent)
+    t.isTaggedTemplateExpression(parent) ||
+    t.isTSTypeAssertion(parent) ||
+    t.isTSAsExpression(parent)
   ) {
     return true;
   }

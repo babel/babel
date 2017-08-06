@@ -1,8 +1,7 @@
 {
   "lerna": "2.0.0-rc.4",
-  "version": "7.0.0-alpha.15",
+  "version": "7.0.0-alpha.18",
   "changelog": {
-    "repo": "babel/babel",
     "labels": {
       "tag: spec compliancy": ":eyeglasses: Spec Compliancy",
       "tag: breaking change": ":boom: Breaking Change",
@@ -21,5 +20,10 @@
         "test/**"
       ]
     }
-  }
+  },
+  "packages": [
+    "packages/*"
+  ],
+  "npmClient": "yarn",
+  "useWorkspaces": true
 }

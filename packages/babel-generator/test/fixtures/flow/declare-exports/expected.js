@@ -30,3 +30,12 @@ declare module B {
   declare export type B = {};
   declare export interface Moon {}
 }
+declare module "foo" {
+  declare export type * from "bar";
+}
+declare export opaque type Foo;
+declare export opaque type Bar<T>;
+declare export opaque type Baz: Foo;
+declare export opaque type Foo<T>: Bar<T>;
+declare export opaque type Foo<T>: Bar;
+declare export opaque type Foo: Bar<T>;

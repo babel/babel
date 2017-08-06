@@ -5,4 +5,3 @@ function render(offset) {
     return _ref;
   };
 }
-

@@ -21,23 +21,74 @@ export default function({ types: t }) {
     return false;
   }
 
-  function createObjectSpread(file, props, objRef) {
-    const restElement = props.pop();
-
+  // returns an array of all keys of an object, and a status flag indicating if all extracted keys
+  // were converted to stringLiterals or not
+  // e.g. extracts {keys: ["a", "b", "3", ++x], allLiteral: false }
+  // from ast of {a: "foo", b, 3: "bar", [++x]: "baz"}
+  function extractNormalizedKeys(path) {
+    const props = path.node.properties;
     const keys = [];
+    let allLiteral = true;
+
     for (const prop of props) {
-      let key = prop.key;
-      if (t.isIdentifier(key) && !prop.computed) {
-        key = t.stringLiteral(prop.key.name);
+      if (t.isIdentifier(prop.key) && !prop.computed) {
+        // since a key {a: 3} is equivalent to {"a": 3}, use the latter
+        keys.push(t.stringLiteral(prop.key.name));
+      } else if (t.isLiteral(prop.key)) {
+        keys.push(t.stringLiteral(String(prop.key.value)));
+      } else {
+        keys.push(prop.key);
+        allLiteral = false;
       }
-      keys.push(key);
+    }
+
+    return { keys, allLiteral };
+  }
+
+  // replaces impure computed keys with new identifiers
+  // and returns variable declarators of these new identifiers
+  function replaceImpureComputedKeys(path) {
+    const impureComputedPropertyDeclarators = [];
+    for (const propPath of path.get("properties")) {
+      const key = propPath.get("key");
+      if (propPath.node.computed && !key.isPure()) {
+        const identifier = path.scope.generateUidIdentifierBasedOnNode(
+          key.node,
+        );
+        const declarator = t.variableDeclarator(identifier, key.node);
+        impureComputedPropertyDeclarators.push(declarator);
+        key.replaceWith(identifier);
+      }
+    }
+    return impureComputedPropertyDeclarators;
+  }
+
+  //expects path to an object pattern
+  function createObjectSpread(path, file, objRef) {
+    const last = path.get("properties").pop(); // note: popping does not mean removal from path
+    const restElement = t.clone(last.node);
+    last.remove(); // remove restElement
+
+    const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
+    const { keys, allLiteral } = extractNormalizedKeys(path);
+
+    let keyExpression;
+    if (!allLiteral) {
+      // map to toPropertyKey to handle the possible non-string values
+      keyExpression = t.callExpression(
+        t.memberExpression(t.arrayExpression(keys), t.identifier("map")),
+        [file.addHelper("toPropertyKey")],
+      );
+    } else {
+      keyExpression = t.arrayExpression(keys);
     }
 
     return [
+      impureComputedPropertyDeclarators,
       restElement.argument,
       t.callExpression(file.addHelper("objectWithoutProperties"), [
         objRef,
-        t.arrayExpression(keys),
+        keyExpression,
       ]),
     ];
   }
@@ -62,7 +113,6 @@ export default function({ types: t }) {
       const declar = t.variableDeclaration("let", [
         t.variableDeclarator(paramPath.node, uid),
       ]);
-      declar._blockHoist = i ? numParams - i : 1;
 
       parentPath.ensureBlock();
       parentPath.get("body").unshiftContainer("body", declar);
@@ -78,7 +128,7 @@ export default function({ types: t }) {
       // function a({ b, ...c }) {}
       Function(path) {
         const params = path.get("params");
-        for (let i = 0; i < params.length; i++) {
+        for (let i = params.length - 1; i >= 0; i--) {
           replaceRestElement(params[i].parentPath, params[i], i, params.length);
         }
       },
@@ -138,11 +188,16 @@ export default function({ types: t }) {
                 });
               }
 
-              const [argument, callExpression] = createObjectSpread(
-                file,
-                path.parentPath.node.properties,
-                ref,
+              const objectPatternPath = path.findParent(path =>
+                path.isObjectPattern(),
               );
+              const [
+                impureComputedPropertyDeclarators,
+                argument,
+                callExpression,
+              ] = createObjectSpread(objectPatternPath, file, ref);
+
+              insertionPath.insertBefore(impureComputedPropertyDeclarators);
 
               insertionPath.insertAfter(
                 t.variableDeclarator(argument, callExpression),
@@ -196,28 +251,28 @@ export default function({ types: t }) {
         if (leftPath.isObjectPattern() && hasRestElement(leftPath)) {
           const nodes = [];
 
-          let ref;
-          if (
-            path.isCompletionRecord() ||
-            path.parentPath.isExpressionStatement()
-          ) {
-            ref = path.scope.generateUidIdentifierBasedOnNode(
-              path.node.right,
-              "ref",
-            );
+          const ref = path.scope.generateUidIdentifierBasedOnNode(
+            path.node.right,
+            "ref",
+          );
 
+          nodes.push(
+            t.variableDeclaration("var", [
+              t.variableDeclarator(ref, path.node.right),
+            ]),
+          );
+
+          const [
+            impureComputedPropertyDeclarators,
+            argument,
+            callExpression,
+          ] = createObjectSpread(leftPath, file, ref);
+
+          if (impureComputedPropertyDeclarators.length > 0) {
             nodes.push(
-              t.variableDeclaration("var", [
-                t.variableDeclarator(ref, path.node.right),
-              ]),
+              t.variableDeclaration("var", impureComputedPropertyDeclarators),
             );
           }
-
-          const [argument, callExpression] = createObjectSpread(
-            file,
-            path.node.left.properties,
-            ref,
-          );
 
           const nodeWithoutSpread = t.clone(path.node);
           nodeWithoutSpread.right = ref;

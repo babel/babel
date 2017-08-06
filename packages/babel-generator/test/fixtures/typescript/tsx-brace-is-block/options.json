@@ -1,0 +1,4 @@
+{
+  "plugins": ["jsx", "typescript"],
+  "sourceType": "module"
+}

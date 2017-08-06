@@ -41,10 +41,12 @@ export default function({ types: t }) {
             // We know the result; check its mutability.
             const { value } = expressionResult;
             const isMutable =
-              (value && typeof value === "object") ||
+              (!state.mutablePropsAllowed &&
+                (value && typeof value === "object")) ||
               typeof value === "function";
             if (!isMutable) {
               // It evaluated to an immutable value, so we can hoist it.
+              path.skip();
               return;
             }
           } else if (t.isIdentifier(expressionResult.deopt)) {
@@ -65,6 +67,29 @@ export default function({ types: t }) {
         HOISTED.add(path.node);
 
         const state = { isImmutable: true };
+
+        // This transform takes the option `allowMutablePropsOnTags`, which is an array
+        // of JSX tags to allow mutable props (such as objects, functions) on. Use sparingly
+        // and only on tags you know will never modify their own props.
+        if (this.opts.allowMutablePropsOnTags != null) {
+          if (!Array.isArray(this.opts.allowMutablePropsOnTags)) {
+            throw new Error(
+              ".allowMutablePropsOnTags must be an array, null, or undefined.",
+            );
+          }
+          // Get the element's name. If it's a member expression, we use the last part of the path.
+          // So the option ["FormattedMessage"] would match "Intl.FormattedMessage".
+          let namePath = path.get("openingElement.name");
+          while (namePath.isJSXMemberExpression()) {
+            namePath = namePath.get("property");
+          }
+
+          const elementName = namePath.node.name;
+          state.mutablePropsAllowed =
+            this.opts.allowMutablePropsOnTags.indexOf(elementName) > -1;
+        }
+
+        // Traverse all props passed to this element for immutability.
         path.traverse(immutabilityVisitor, state);
 
         if (state.isImmutable) {
