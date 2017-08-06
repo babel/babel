@@ -8,9 +8,3 @@ for (let a in [1, 2, 3]) {
   let a = 3;
   console.log(a);
 }
-
-try {
-    throw new Error();
-} catch(a) {
-    let a = 4;
-}

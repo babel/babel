@@ -148,7 +148,7 @@ defineType("CatchClause", {
       validate: assertNodeType("BlockStatement"),
     },
   },
-  aliases: ["Scopable"],
+  aliases: ["Scopable", "BlockParent"],
 });
 
 defineType("ConditionalExpression", {
