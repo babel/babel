@@ -282,7 +282,7 @@ helpers.decorate = template(`
     for (const [key, isStatic] of undecorated) {
       const target = isStatic ? constructor : prototype;
       const propertyDescriptor = Object.getOwnPropertyDescriptor(target, key);
-      elementDescriptors[key] = makeElementDescriptor(
+      elementDescriptors[key] = babelHelpers.makeElementDescriptor(
         "property",
         key,
         isStatic,
@@ -294,13 +294,13 @@ helpers.decorate = template(`
       const target = isStatic ? constructor : prototype;
       const propertyDescriptor =
         elementDescriptors[key] || Object.getOwnPropertyDescriptor(target, key);
-      const elementDescriptor = makeElementDescriptor(
+      const elementDescriptor = babelHelpers.makeElementDescriptor(
         "property",
         key,
         isStatic,
         propertyDescriptor,
-      );
-      const decorated = decorateElement(elementDescriptor, decorators);
+      )
+      const decorated = babelHelpers.decorateElement(elementDescriptor, decorators);
 
       elementDescriptors[key] = decorated.descriptor;
 
@@ -313,7 +313,7 @@ helpers.decorate = template(`
     }
 
     return function(classDecorators) {
-      const result = decorateClass(
+      const result = babelHelpers.decorateClass(
         constructor,
         classDecorators,
         heritage,
@@ -366,7 +366,7 @@ helpers.decorateElement = template(`
       }
     }
 
-    extras = mergeDuplicateElements(extras);
+    extras = babelHelpers.mergeDuplicateElements(extras);
 
     return { descriptor: previousDescriptor, extras, finishers };
   });
@@ -400,7 +400,7 @@ helpers.decorateClass = template(`
         }
       }
 
-      elements = mergeDuplicateElements(elements);
+      elements = babelHelpers.mergeDuplicateElements(elements);
     }
 
     return { constructor: previousConstructor, elements, finishers };

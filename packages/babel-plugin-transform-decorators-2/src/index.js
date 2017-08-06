@@ -138,10 +138,13 @@ export default function({ types: t }) {
 
       ClassExpression(path, file) {
         file.addHelper("makeElementDescriptor");
-        file.addHelper("decorateElement");
         file.addHelper("mergeDuplicateElements");
-        file.addHelper("decorateClass");
-        const decorateIdentifier = file.addHelper("decorate");
+        file.addHelper("decorateClass", ["mergeDuplicateElements"]);
+        file.addHelper("decorateElement", ["mergeDuplicateElements"]);
+        const decorateIdentifier = file.addHelper("decorate", [
+          "decorateClass",
+          "decorateElement",
+        ]);
 
         addKeysToComputedMembers(path);
 
