@@ -1,4 +1,5 @@
 MAKEFLAGS = -j1
+TEST262_COMMIT = 4ea2931f169d4a4b5a9a4a7c731cc92bf7b3e13c
 
 export NODE_ENV = test
 
@@ -30,3 +31,14 @@ bootstrap-flow: clean
 
 test-flow:
 	node scripts/run_flow_tests.js
+
+bootstrap-test262: clean
+	mkdir ./build
+	git clone https://github.com/tc39/test262.git ./build/test262
+	cd build/test262 && git checkout $(TEST262_COMMIT)
+
+test-test262:
+	node scripts/run_test262.js
+
+test-test262-update-whitelist:
+	node scripts/run_test262.js --update-whitelist

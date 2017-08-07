@@ -6,15 +6,19 @@ node_js:
   - "4"
 
 env:
-  - JOB=test
+  global:
+    - PATH=$HOME/.yarn/bin:$PATH
+    - JOB=test
 
 before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
   - yarn global add greenkeeper-lockfile@1
 
 before_script:
   - greenkeeper-lockfile-update
   - 'if [ "$JOB" = "babel-test" ]; then make bootstrap-babel ; fi'
   - 'if [ "$JOB" = "flow-test" ]; then make bootstrap-flow ; fi'
+  - 'if [ "$JOB" = "test262-test" ]; then make bootstrap-test262 ; fi'
   - 'if [ "$JOB" = "test" ]; then yarn run build; fi'
 
 script:
@@ -22,6 +26,7 @@ script:
   - 'if [ "$JOB" = "lint" ]; then yarn run lint && yarn run flow; fi'
   - 'if [ "$JOB" = "flow-test" ]; then make test-flow; fi'
   - 'if [ "$JOB" = "babel-test" ]; then make test-babel; fi'
+  - 'if [ "$JOB" = "test262-test" ]; then make test-test262; fi'
   - 'if [ "$JOB" = "test-coverage" ]; then yarn run test-coverage; fi'
 
 matrix:
@@ -35,6 +40,8 @@ matrix:
       env: JOB=babel-test
     - node_js: "lts/*"
       env: JOB=flow-test
+    - node_js: node
+      env: JOB=test262-test
   allow_failures:
     - node_js: "lts/*"
       env: JOB=flow-test
