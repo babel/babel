@@ -43,7 +43,7 @@
     "prettier": "^1.5.2",
     "rimraf": "^2.5.4",
     "rollup": "^0.45.1",
-    "rollup-plugin-babel": "3.0.0",
+    "rollup-plugin-babel": "^3.0.1",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^4.0.0",
     "unicode-9.0.0": "~0.7.0",
