@@ -30,7 +30,7 @@
     "eslint-plugin-prettier": "^2.1.2",
     "flow-bin": "^0.52.0",
     "gulp": "^3.9.0",
-    "gulp-babel": "babel/gulp-babel#d8c67b",
+    "gulp-babel": "^7.0.0",
     "gulp-newer": "^1.0.0",
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
