@@ -42,9 +42,8 @@ export default function({ types: t }) {
       if (!method.isClassMethod()) continue;
       if (!node.decorators || !method.node.decorators.length) continue;
 
-      const decorators = method.node.decorators
-        .map(d => d.expression)
-        .reverse(); // reverse for correct evaluation order
+      const decorators = method.node.decorators.map(d => d.expression);
+
       node.decorators = []; //TODO: should we remove using path methods? method.get("decorators") doesn't work
 
       const entry = [];
@@ -75,8 +74,7 @@ export default function({ types: t }) {
   // expects path of a ClassExpression
   function takeClassDecorators(path) {
     if (path.node.decorators && path.node.decorators.length) {
-      // reverse for correct decorator evaluation order
-      const decorators = path.node.decorators.map(d => d.expression).reverse();
+      const decorators = path.node.decorators.map(d => d.expression);
       path.node.decorators = [];
       return t.arrayExpression(decorators);
     } else {

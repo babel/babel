@@ -21,4 +21,4 @@ let Bizz = babelHelpers.decorate(class Bizz {
 
   [calculated + and + undecorated]() {}
 
-}, [[andAnUndecoratedMethod], [calculated + and + undecorated]], [["m1", [dec]], ["m2", [foo.bar(baz), bar]], [(_key = 3 + 7), [dec], true]], void 0)([decorator]);
+}, [[andAnUndecoratedMethod], [calculated + and + undecorated]], [["m1", [dec]], ["m2", [bar, foo.bar(baz)]], [(_key = 3 + 7), [dec], true]], void 0)([decorator]);
