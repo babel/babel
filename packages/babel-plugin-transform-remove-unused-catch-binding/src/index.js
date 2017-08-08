@@ -6,10 +6,17 @@ export default function() {
 
     visitor: {
       CatchClause(path) {
+        const binding = path.scope.getOwnBinding(path.node.param.name);
+        if (
+          binding.constantViolations.filter(el => {
+            return el.node.left.name === path.node.param.name;
+          }).length > 0
+        ) {
+          return;
+        }
         if (
           path.node.param &&
-          !path.scope.getOwnBinding(path.node.param.name).referenced &&
-          !path.scope.getOwnBinding(path.node.param.name).constantViolation &&
+          !binding.referenced &&
           path.scope.hasBinding(path.node.param.name)
         ) {
           const paramPath = path.get("param");
