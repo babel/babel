@@ -5,7 +5,6 @@
 This preset includes the following plugins:
 
 - [transform-typescript](https://babeljs.io/docs/plugins/transform-typescript/)
-- [syntax-object-rest-spread](https://babeljs.io/docs/plugins/syntax-object-rest-spread/)
 
 ## Example
 
