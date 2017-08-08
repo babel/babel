@@ -1,5 +1,25 @@
 # Changelog
 
+## v1.6.0 (2017-07-04)
+
+### :rocket: New Feature
+
+- Bump compat-table for node8 support ([#363](https://github.com/babel/babel-preset-env/pull/363)) (@existentialism)
+
+We updated our mappings to support native trailing function commas and string paddings in Node.js 8+.
+
+### :bug: Bug Fix
+
+- Handle `chromeandroid` browserslist value ([#367](https://github.com/babel/babel-preset-env/pull/367)) (@yavorsky)
+
+We added support for using browserslist's `chromeandroid` in `targets`.
+
+### :memo: Documentation
+
+- Tweak uglify option docs ([#368](https://github.com/babel/babel-preset-env/pull/368)) (@existentialism)
+
+Thanks to @graingert and @pfiaux for pointing out some needed updates to the `uglify-js`-related docs.
+
 ## v1.5.2 (2017-06-07)
 
 ### :bug: Bug Fix

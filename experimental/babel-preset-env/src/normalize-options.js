@@ -5,11 +5,11 @@ import browserslist from "browserslist";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
-import pluginFeatures from "../data/plugin-features";
+import pluginsList from "../data/plugins.json";
 import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
 
 const validIncludesAndExcludes = new Set([
-  ...Object.keys(pluginFeatures),
+  ...Object.keys(pluginsList),
   ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
   ...Object.keys(builtInsList),
   ...defaultWebIncludes,

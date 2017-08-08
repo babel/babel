@@ -1969,7 +1969,6 @@ compat-table@kangax/compat-table#d88c80ea6dcbc7064112eb46bb020718107892f7:
     babel-preset-stage-0 latest
     chalk "^1.1.3"
     cheerio "^0.20.0"
-    closurecompiler latest
     core-js latest
     es5-shim latest
     es6-shim latest
@@ -1978,6 +1977,7 @@ compat-table@kangax/compat-table#d88c80ea6dcbc7064112eb46bb020718107892f7:
     esdown latest
     espree latest
     esprima latest
+    google-closure-compiler-js "^20170521.0.0"
     jshint latest
     jstransform latest
     lodash.pickby "^4.6.0"
