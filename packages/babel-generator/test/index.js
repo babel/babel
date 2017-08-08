@@ -1,5 +1,5 @@
 import Printer from "../lib/printer";
-import generate from "../lib";
+import generate, { CodeGenerator } from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
 import chai from "chai";
@@ -351,6 +351,14 @@ describe("programmatic generation", function() {
   });
 });
 
+describe("CodeGenerator", function() {
+  it("generate", function() {
+    const codeGen = new CodeGenerator(t.numericLiteral(123));
+    const code = codeGen.generate().code;
+    assert.equal(parse(code).program.body[0].expression.value, 123);
+  });
+});
+
 const suites = fixtures(`${__dirname}/fixtures`);
 
 suites.forEach(function(testSuite) {
@@ -367,20 +375,7 @@ suites.forEach(function(testSuite) {
             if (actualCode) {
               const actualAst = parse(actualCode, {
                 filename: actual.loc,
-                plugins: [
-                  "asyncGenerators",
-                  "classProperties",
-                  "decorators",
-                  "doExpressions",
-                  "dynamicImport",
-                  "exportExtensions",
-                  "flow",
-                  "functionBind",
-                  "functionSent",
-                  "jsx",
-                  "objectRestSpread",
-                  "optionalChaining",
-                ],
+                plugins: task.options.plugins || [],
                 strictMode: false,
                 sourceType: "module",
               });

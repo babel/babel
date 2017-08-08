@@ -4,7 +4,7 @@ import * as messages from "babel-messages";
 import * as t from "babel-types";
 
 // ✌️
-const HARDCORE_THIS_REF = Symbol();
+const HARDCORE_THIS_REF = new WeakSet();
 
 function isIllegalBareSuper(node, parent) {
   if (!t.isSuper(node)) return false;
@@ -57,7 +57,7 @@ const visitor = {
   },
 
   ThisExpression(path, state) {
-    if (!path.node[HARDCORE_THIS_REF]) {
+    if (!HARDCORE_THIS_REF.has(path.node)) {
       state.thises.push(path);
     }
   },
@@ -309,7 +309,7 @@ export default class ReplaceSupers {
 
   optimiseCall(callee, args) {
     const thisNode = t.thisExpression();
-    thisNode[HARDCORE_THIS_REF] = true;
+    HARDCORE_THIS_REF.add(thisNode);
     return optimiseCall(callee, thisNode, args);
   }
 }

@@ -73,7 +73,11 @@ export default function() {
           ),
         );
       } else {
-        path.replaceWith(remap);
+        path.replaceWith(
+          // Clone the node before inserting it to ensure that different nodes in the AST are represented
+          // by different objects.
+          t.cloneWithoutLoc(remap),
+        );
       }
       this.requeueInParent(path);
     },
@@ -119,6 +123,8 @@ export default function() {
         }
       } else if (left.isArrayPattern()) {
         for (const element of left.node.elements) {
+          if (!element) continue;
+
           const name = element.name;
 
           const exports = this.exports[name];
@@ -372,55 +378,27 @@ export default function() {
                   ]);
                   nonHoistedExportNames[id.name] = true;
                 } else if (declaration.isVariableDeclaration()) {
-                  const declarators = declaration.get("declarations");
-                  for (const decl of declarators) {
-                    const id = decl.get("id");
+                  const ids = declaration.getBindingIdentifierPaths();
+                  const exportsToInsert = [];
+                  for (const name in ids) {
+                    const id = ids[name];
+                    const { parentPath, node } = id;
 
-                    const init = decl.get("init");
-                    const exportsToInsert = [];
+                    addTo(exports, name, node);
+                    nonHoistedExportNames[name] = true;
 
-                    if (!init.node) init.replaceWith(t.identifier("undefined"));
-
-                    if (id.isIdentifier()) {
-                      addTo(exports, id.node.name, id.node);
-                      init.replaceWith(
-                        buildExportsAssignment(id.node, init.node).expression,
+                    if (parentPath.isVariableDeclarator()) {
+                      const init = parentPath.get("init");
+                      const assignment = buildExportsAssignment(
+                        node,
+                        init.node || path.scope.buildUndefinedNode(),
                       );
-                      nonHoistedExportNames[id.node.name] = true;
-                    } else if (id.isObjectPattern()) {
-                      for (let i = 0; i < id.node.properties.length; i++) {
-                        const prop = id.node.properties[i];
-                        let propValue = prop.value;
-                        if (t.isAssignmentPattern(propValue)) {
-                          propValue = propValue.left;
-                        } else if (t.isRestProperty(prop)) {
-                          propValue = prop.argument;
-                        }
-                        addTo(exports, propValue.name, propValue);
-                        exportsToInsert.push(
-                          buildExportsAssignment(propValue, propValue),
-                        );
-                        nonHoistedExportNames[propValue.name] = true;
-                      }
-                    } else if (id.isArrayPattern() && id.node.elements) {
-                      for (let i = 0; i < id.node.elements.length; i++) {
-                        let elem = id.node.elements[i];
-                        if (!elem) continue;
-                        if (t.isAssignmentPattern(elem)) {
-                          elem = elem.left;
-                        } else if (t.isRestElement(elem)) {
-                          elem = elem.argument;
-                        }
-                        const name = elem.name;
-                        addTo(exports, name, elem);
-                        exportsToInsert.push(
-                          buildExportsAssignment(elem, elem),
-                        );
-                        nonHoistedExportNames[name] = true;
-                      }
+                      init.replaceWith(assignment.expression);
+                    } else {
+                      exportsToInsert.push(buildExportsAssignment(node, node));
                     }
-                    path.insertAfter(exportsToInsert);
                   }
+                  path.insertAfter(exportsToInsert);
                   path.replaceWith(declaration.node);
                 }
                 continue;

@@ -65,6 +65,8 @@ export function NewExpression(node: Object, parent: Object) {
     return;
   }
 
+  this.print(node.typeParameters, node); // TS
+
   if (node.optional) {
     this.token("?.");
   }
@@ -91,37 +93,16 @@ export function Decorator(node: Object) {
   this.newline();
 }
 
-function commaSeparatorNewline() {
-  this.token(",");
-  this.newline();
-
-  if (!this.endsWith("\n")) this.space();
-}
-
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
+
+  this.print(node.typeParameters, node); // TS
 
   if (node.optional) {
     this.token("?.");
   }
   this.token("(");
-
-  const isPrettyCall = node._prettyCall;
-
-  let separator;
-  if (isPrettyCall) {
-    separator = commaSeparatorNewline;
-    this.newline();
-    this.indent();
-  }
-
-  this.printList(node.arguments, node, { separator });
-
-  if (isPrettyCall) {
-    this.newline();
-    this.dedent();
-  }
-
+  this.printList(node.arguments, node);
   this.token(")");
 }
 

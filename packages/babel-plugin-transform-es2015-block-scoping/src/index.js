@@ -8,6 +8,8 @@ import values from "lodash/values";
 import extend from "lodash/extend";
 import template from "babel-template";
 
+const DONE = new WeakSet();
+
 export default function() {
   return {
     visitor: {
@@ -121,7 +123,7 @@ function convertBlockScopedToVar(
 
   // Move bindings from current block scope to function scope.
   if (moveBindingsToParent) {
-    const parentScope = scope.getFunctionParent();
+    const parentScope = scope.getFunctionParent() || scope.getProgramParent();
     const ids = path.getBindingIdentifiers();
     for (const name in ids) {
       const binding = scope.getOwnBinding(name);
@@ -340,8 +342,8 @@ class BlockScoping {
 
   run() {
     const block = this.block;
-    if (block._letDone) return;
-    block._letDone = true;
+    if (DONE.has(block)) return;
+    DONE.add(block);
 
     const needsClosure = this.getLetReferences();
 
@@ -369,7 +371,7 @@ class BlockScoping {
 
   updateScopeInfo(wrappedInClosure) {
     const scope = this.scope;
-    const parentScope = scope.getFunctionParent();
+    const parentScope = scope.getFunctionParent() || scope.getProgramParent();
     const letRefs = this.letReferences;
 
     for (const key in letRefs) {
@@ -457,8 +459,8 @@ class BlockScoping {
     this.hoistVarDeclarations();
 
     // turn outsideLetReferences into an array
-    const params = values(outsideRefs);
     const args = values(outsideRefs);
+    const params = args.map(id => t.clone(id));
 
     const isSwitch = this.blockPath.isSwitchStatement();
 

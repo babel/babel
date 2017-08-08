@@ -44,6 +44,10 @@ export function ExportNamespaceSpecifier(node: Object) {
 export function ExportAllDeclaration(node: Object) {
   this.word("export");
   this.space();
+  if (node.exportKind === "type") {
+    this.word("type");
+    this.space();
+  }
   this.token("*");
   this.space();
   this.word("from");

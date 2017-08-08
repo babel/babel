@@ -1,8 +1,7 @@
 import * as t from "babel-types";
 import template from "babel-template";
-import traverse from "babel-traverse";
 
-const buildForAwait = template(`
+const awaitTemplate = `
   function* wrapper() {
     var ITERATOR_COMPLETION = true;
     var ITERATOR_HAD_ERROR_KEY = false;
@@ -33,30 +32,11 @@ const buildForAwait = template(`
       }
     }
   }
-`);
-
-const forAwaitVisitor = {
-  noScope: true,
-
-  Identifier(path, replacements) {
-    if (path.node.name in replacements) {
-      path.replaceInline(replacements[path.node.name]);
-    }
-  },
-
-  CallExpression(path, replacements) {
-    const callee = path.node.callee;
-
-    // if no await wrapping is being applied, unwrap the call expression
-    if (
-      t.isIdentifier(callee) &&
-      callee.name === "AWAIT" &&
-      !replacements.AWAIT
-    ) {
-      path.replaceWith(path.node.arguments[0]);
-    }
-  },
-};
+`;
+const buildForAwait = template(awaitTemplate);
+const buildForAwaitWithoutWrapping = template(
+  awaitTemplate.replace(/\bAWAIT\b/g, ""),
+);
 
 export default function(path, helpers) {
   const { node, scope, parent } = path;
@@ -78,9 +58,10 @@ export default function(path, helpers) {
     ]);
   }
 
-  let template = buildForAwait();
-
-  traverse(template, forAwaitVisitor, null, {
+  const build = helpers.wrapAwait
+    ? buildForAwait
+    : buildForAwaitWithoutWrapping;
+  let template = build({
     ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
     ITERATOR_COMPLETION: scope.generateUidIdentifier(
       "iteratorNormalCompletion",

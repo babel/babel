@@ -1,4 +1,4 @@
-import defineType, { assertValueType } from "./index";
+import defineType from "./index";
 
 defineType("AnyTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],
@@ -36,19 +36,6 @@ defineType("ClassImplements", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"],
   fields: {
-    // todo
-  },
-});
-
-defineType("ClassProperty", {
-  visitor: ["key", "value", "typeAnnotation", "decorators"],
-  builder: ["key", "value", "typeAnnotation", "decorators", "computed"],
-  aliases: ["Property"],
-  fields: {
-    computed: {
-      validate: assertValueType("boolean"),
-      default: false,
-    },
     // todo
   },
 });
@@ -101,6 +88,14 @@ defineType("DeclareTypeAlias", {
   },
 });
 
+defineType("DeclareOpaqueType", {
+  visitor: ["id", "typeParameters", "supertype"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  },
+});
+
 defineType("DeclareVariable", {
   visitor: ["id"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
@@ -120,6 +115,14 @@ defineType("DeclareExportDeclaration", {
 defineType("DeclareExportAllDeclaration", {
   visitor: ["source"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("DeclaredPredicate", {
+  visitor: ["value"],
+  aliases: ["Flow", "FlowPredicate"],
   fields: {
     // todo
   },
@@ -148,6 +151,13 @@ defineType("FunctionTypeParam", {
 defineType("GenericTypeAnnotation", {
   visitor: ["id", "typeParameters"],
   aliases: ["Flow"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("InferredPredicate", {
+  aliases: ["Flow", "FlowPredicate"],
   fields: {
     // todo
   },
@@ -250,9 +260,9 @@ defineType("TypeAlias", {
   },
 });
 
-defineType("TypeAnnotation", {
-  visitor: ["typeAnnotation"],
-  aliases: ["Flow"],
+defineType("OpaqueType", {
+  visitor: ["id", "typeParameters", "supertype", "impltype"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     // todo
   },
@@ -261,30 +271,6 @@ defineType("TypeAnnotation", {
 defineType("TypeCastExpression", {
   visitor: ["expression", "typeAnnotation"],
   aliases: ["Flow", "ExpressionWrapper", "Expression"],
-  fields: {
-    // todo
-  },
-});
-
-defineType("TypeParameter", {
-  visitor: ["bound"],
-  aliases: ["Flow"],
-  fields: {
-    // todo
-  },
-});
-
-defineType("TypeParameterDeclaration", {
-  visitor: ["params"],
-  aliases: ["Flow"],
-  fields: {
-    // todo
-  },
-});
-
-defineType("TypeParameterInstantiation", {
-  visitor: ["params"],
-  aliases: ["Flow"],
   fields: {
     // todo
   },

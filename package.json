@@ -11,48 +11,48 @@
   },
   "devDependencies": {
     "async": "^1.5.0",
-    "babel-cli": "7.0.0-alpha.12",
-    "babel-core": "7.0.0-alpha.12",
-    "babel-eslint": "8.0.0-alpha.12",
-    "babel-plugin-istanbul": "^2.0.1",
-    "babel-preset-env": "2.0.0-alpha.12",
-    "babel-preset-flow": "7.0.0-alpha.12",
-    "babel-preset-stage-0": "7.0.0-alpha.12",
-    "babel-register": "7.0.0-alpha.12",
+    "babel-cli": "7.0.0-alpha.18",
+    "babel-core": "7.0.0-alpha.18",
+    "babel-eslint": "8.0.0-alpha.15",
+    "babel-plugin-istanbul": "^4.1.4",
+    "babel-preset-env": "2.0.0-alpha.18",
+    "babel-preset-flow": "7.0.0-alpha.18",
+    "babel-preset-stage-0": "7.0.0-alpha.18",
+    "babel-register": "7.0.0-alpha.18",
     "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
-    "chai": "^3.5.0",
-    "chalk": "1.1.1",
-    "codecov": "^1.0.1",
+    "chai": "^4.1.0",
+    "chalk": "^2.0.0",
     "derequire": "^2.0.2",
     "eslint": "^3.14.1",
-    "eslint-config-babel": "^7.0.1",
+    "eslint-config-babel": "^7.0.2",
     "eslint-plugin-flowtype": "^2.20.0",
     "eslint-plugin-prettier": "^2.1.2",
-    "flow-bin": "^0.41.0",
+    "flow-bin": "^0.52.0",
     "gulp": "^3.9.0",
-    "gulp-babel": "babel/gulp-babel#b7-alpha",
+    "gulp-babel": "^7.0.0",
     "gulp-newer": "^1.0.0",
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
     "husky": "^0.13.2",
-    "lerna": "2.0.0-rc.4",
-    "lerna-changelog": "^0.2.0",
+    "lerna": "2.0.0",
+    "lerna-changelog": "^0.5.0",
     "lint-staged": "^3.6.1",
     "lodash": "^4.2.0",
     "mocha": "^3.0.0",
-    "nyc": "^10.0.0",
-    "output-file-sync": "^1.1.1",
-    "prettier": "1.5.0",
+    "nyc": "^11.0.3",
+    "output-file-sync": "^2.0.0",
+    "prettier": "^1.5.0",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
     "through2": "^2.0.0",
     "uglify-js": "^2.4.16"
   },
-  "devEngines": {
-    "node": ">= 4.x <= 7.x",
-    "npm": "2.x || 3.x || 4.x"
+  "engines": {
+    "node": ">= 4.x <= 8.x",
+    "npm": ">= 2.x <= 5.x",
+    "yarn": ">=0.27.5"
   },
   "nyc": {
     "all": true,
@@ -68,5 +68,8 @@
       "eslint --format=codeframe --fix",
       "git add"
     ]
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
