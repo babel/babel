@@ -231,6 +231,10 @@ export function isScope(node: Object, parent: Object): boolean {
     return false;
   }
 
+  if (t.isBlockStatement(node) && t.isCatchClause(parent, { body: node })) {
+    return false;
+  }
+
   return t.isScopable(node);
 }
 
