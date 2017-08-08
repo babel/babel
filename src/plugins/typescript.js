@@ -1186,6 +1186,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // OVERRIDES
     // ======================================================
 
+    isExportDefaultSpecifier(): boolean {
+      if (
+        this.match(tt.name) &&
+        (this.state.value === "type" ||
+          this.state.value === "interface" ||
+          this.state.value === "enum")
+      ) {
+        return false;
+      }
+
+      return super.isExportDefaultSpecifier();
+    }
+
     parseAssignableListItem(
       allowModifiers: ?boolean,
       decorators: N.Decorator[],
