@@ -8,7 +8,9 @@ export default function() {
       CatchClause(path) {
         if (
           path.node.param &&
-          !path.scope.getOwnBinding(path.node.param.name).referenced
+          !path.scope.getOwnBinding(path.node.param.name).referenced &&
+          !path.scope.getOwnBinding(path.node.param.name).constantViolation &&
+          path.scope.hasBinding(path.node.param.name)
         ) {
           const paramPath = path.get("param");
           paramPath.remove();
