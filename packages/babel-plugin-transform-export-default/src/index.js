@@ -2,13 +2,10 @@ import syntaxExportExtensions from "babel-plugin-syntax-export-extensions";
 
 export default function({ types: t }) {
   function build(node, nodes, scope) {
-    const first = node.specifiers[0];
-    if (
-      !t.isExportNamespaceSpecifier(first) &&
-      !t.isExportDefaultSpecifier(first)
-    ) {
-      return;
-    }
+    const hasNoExportDefault = node.specifiers.every(
+      specifier => !t.isExportDefaultSpecifier(specifier),
+    );
+    if (hasNoExportDefault) return;
 
     const specifier = node.specifiers.shift();
     const uid = scope.generateUidIdentifier(specifier.exported.name);
@@ -19,7 +16,6 @@ export default function({ types: t }) {
     } else {
       newSpecifier = t.importDefaultSpecifier(uid);
     }
-
     nodes.push(t.importDeclaration([newSpecifier], node.source));
     nodes.push(
       t.exportNamedDeclaration(null, [

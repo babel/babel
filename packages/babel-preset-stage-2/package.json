@@ -10,6 +10,7 @@
   "dependencies": {
     "babel-plugin-transform-function-sent": "7.0.0-alpha.19",
     "babel-plugin-transform-numeric-separator": "7.0.0-alpha.19",
+    "babel-plugin-transform-export-namespace": "7.0.0-alpha.19",
     "babel-preset-stage-3": "7.0.0-alpha.19"
   }
 }
