@@ -119,6 +119,14 @@ defineType("DeclareVariable", {
   }
 });
 
+defineType("DeclareExportDeclaration", {
+  visitor: ["declaration", "specifiers", "source"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  },
+});
+
 defineType("ExistentialTypeParam", {
   aliases: ["Flow"]
 });
