@@ -8,6 +8,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-polyfill",
   "main": "lib/index.js",
   "dependencies": {
+    "bignumber.js": "^4.0.2",
     "core-js": "^2.4.0",
     "regenerator-runtime": "^0.10.0"
   }
