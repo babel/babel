@@ -1368,14 +1368,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     /*
-  Don't bother doing this check in TypeScript code because:
-  1. We may have a nested export statement with the same name:
-    export const x = 0;
-    export namespace N {
-      export const x = 1;
-    }
-  2. We have a type checker to warn us about this sort of thing.
-  */
+    Don't bother doing this check in TypeScript code because:
+    1. We may have a nested export statement with the same name:
+      export const x = 0;
+      export namespace N {
+        export const x = 1;
+      }
+    2. We have a type checker to warn us about this sort of thing.
+    */
     checkDuplicateExports() {}
 
     parseImport(
