@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-numeric-separator",
+  "name": "babel-plugin-transform-bigint",
   "version": "7.0.0-alpha.16",
   "description": "Transform BigInt literals",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-bigint",
