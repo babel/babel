@@ -55,7 +55,7 @@ npm install --save-dev babel-plugin-transform-class-properties
 // with options
 {
   "plugins": [
-    ["transform-class-properties", { "spec": true }]
+    ["transform-class-properties", { "loose": true }]
   ]
 }
 ```
@@ -76,11 +76,11 @@ require("babel-core").transform("code", {
 
 ## Options
 
-### `spec`
+### `loose`
 
 `boolean`, defaults to `false`.
 
-Class properties are compiled to use `Object.defineProperty`. Static fields are now defined even if they are not initialized.
+Class properties are compiled use an assignment expression instead of `Object.defineProperty`. Static fields are now not defined if they are not initialized.
 
 ## References
 

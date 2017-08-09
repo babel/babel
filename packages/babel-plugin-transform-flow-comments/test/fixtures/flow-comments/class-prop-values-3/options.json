@@ -1,6 +1,6 @@
 {
   "plugins": [
     "transform-flow-comments",
-    "transform-class-properties"
+    ["transform-class-properties", {"loose": true}]
   ]
 }

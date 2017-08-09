@@ -36,7 +36,7 @@ export default function({ types: t }) {
       VALUE: value ? value : t.identifier("undefined"),
     });
 
-  const buildClassPropertyNonSpec = (ref, { key, value, computed }) =>
+  const buildClassPropertyLoose = (ref, { key, value, computed }) =>
     t.expressionStatement(
       t.assignmentExpression(
         "=",
@@ -50,9 +50,9 @@ export default function({ types: t }) {
 
     visitor: {
       Class(path, state) {
-        const buildClassProperty = state.opts.spec
-          ? buildClassPropertySpec
-          : buildClassPropertyNonSpec;
+        const buildClassProperty = state.opts.loose
+          ? buildClassPropertyLoose
+          : buildClassPropertySpec;
         const isDerived = !!path.node.superClass;
         let constructor;
         const props = [];
@@ -85,9 +85,9 @@ export default function({ types: t }) {
           const propNode = prop.node;
           if (propNode.decorators && propNode.decorators.length > 0) continue;
 
-          // In non-spec mode, all properties without values are ignored.
+          // In loose mode, all properties without values are ignored.
           // In spec mode, *static* properties without values are still defined (see below).
-          if (!state.opts.spec && !propNode.value) continue;
+          if (state.opts.loose && !propNode.value) continue;
 
           const isStatic = propNode.static;
 
