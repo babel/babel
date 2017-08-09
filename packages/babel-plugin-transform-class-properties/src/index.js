@@ -12,6 +12,9 @@ export default function({ types: t }) {
   };
 
   const referenceVisitor = {
+    TypeAnnotation(path) {
+      path.skip();
+    },
     ReferencedIdentifier(path) {
       if (this.scope.hasOwnBinding(path.node.name)) {
         this.collision = true;
