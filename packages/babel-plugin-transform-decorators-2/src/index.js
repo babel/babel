@@ -88,6 +88,7 @@ export default function({ types: t }) {
 
     for (const method of body) {
       if (method.node.decorators && method.node.decorators.length > 0) continue;
+      if (method.node.key.name == "constructor") continue;
 
       if (method.node.static) {
         result.push(

@@ -317,7 +317,7 @@ helpers.decorate = template(`
         constructor,
         classDecorators,
         heritage,
-        Object.values(elementDescriptors),
+        Object.values(elementDescriptors)
       );
       finishers = finishers.concat(result.finishers);
       //TODO: heritage hacks so result.constructor has the correct prototype and instanceof results
@@ -325,10 +325,10 @@ helpers.decorate = template(`
 
       for (const elementDescriptor of result.elements) {
         const target = elementDescriptor.isStatic ? constructor : prototype;
-        Object.defineOwnProperty(
+        Object.defineProperty(
           target,
           elementDescriptor.key,
-          elementDescriptor.descriptor,
+          elementDescriptor.descriptor
         );
       }
 
