@@ -3,6 +3,9 @@ var recast = require("recast");
 var types = recast.types;
 var n = types.namedTypes;
 var transform = require("..").transform;
+var compile = require("..").compile;
+
+var UglifyJS = require("uglify-js");
 
 describe("_blockHoist nodes", function() {
   it("should be hoisted to the outer body", function() {
@@ -48,6 +51,88 @@ describe("_blockHoist nodes", function() {
   });
 });
 
+describe("uglifyjs dead code removal", function() {
+  function uglifyAndParse(file1, file2) {
+    var code = {
+      "file1.js": file1,
+      "file2.js": file2
+    };
+
+    var options = {
+      toplevel: true,
+      // don't mangle function or variable names so we can find them
+      mangle: false,
+      output: {
+        // make it easier to parse the output
+        beautify: true
+      }
+    };
+
+    // uglify our code
+    var result = UglifyJS.minify(code, options);
+
+    // parse and return the output
+    return recast.parse(result.code, {
+      parser: require("babylon")
+    });
+  }
+  
+  it("works with function expressions", function() {
+    var file1 = compile([
+      'var foo = function* () {};',
+      'var bar = function* () {};'
+    ].join("\n")).code;
+    var file2 = compile('console.log(foo());').code;
+
+    var ast = uglifyAndParse(file1, file2);
+
+    // the results should have a single variable declaration
+    var variableDeclarations = ast.program.body.filter(function(b) {
+      return b.type === 'VariableDeclaration';
+    });
+    assert.strictEqual(variableDeclarations.length, 1);
+    assert.strictEqual(variableDeclarations[0].declarations.length, 1);
+    var declaration = variableDeclarations[0].declarations[0];
+
+    // named foo
+    assert.strictEqual(declaration.id.name, 'foo');
+  });
+
+  it("works with function definitions", function() {
+    var file1 = compile([
+      'function* foo() {};',
+      'function* bar() {};'
+    ].join("\n")).code;
+
+    var file2 = compile('console.log(foo());').code;
+
+    var ast = uglifyAndParse(file1, file2);
+
+    // the results should have our foo() function
+    assert.ok(ast.program.body.some(function(b) {
+      return b.type === 'FunctionDeclaration' && b.id.name === 'foo';
+    }));
+
+    // but not our bar() function
+    assert.ok(!ast.program.body.some(function(b) {
+      return b.type === 'FunctionDeclaration' && b.id.name === 'bar';
+    }));
+
+    // and a single mark declaration
+    var variableDeclarations = ast.program.body.filter(function(b) {
+      return b.type === 'VariableDeclaration';
+    });
+    assert.strictEqual(variableDeclarations.length, 1);
+    var declarations = variableDeclarations[0].declarations;
+    assert.strictEqual(declarations.length, 1);
+    var declaration = declarations[0];
+
+    // with our function name as an argument'
+    assert.strictEqual(declaration.init.arguments.length, 1);
+    assert.strictEqual(declaration.init.arguments[0].name, 'foo');
+  });
+})
+
 context("functions", function() {
   var itMarksCorrectly = function(marked, varName) {
     // marked should be a VariableDeclarator
@@ -85,7 +170,7 @@ context("functions", function() {
 
     it("should work with multiple functions", function() {
       var ast = recast.parse([
-        'function* foo(){};',
+        'function* foo() {};',
         'function* bar() {};'
       ].join("\n"), {
           parser: require("babylon")

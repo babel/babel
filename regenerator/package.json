@@ -44,7 +44,8 @@
     "regenerator-preset": "^0.9.6",
     "regenerator-runtime": "^0.10.5",
     "regenerator-transform": "^0.9.12",
-    "through": "^2.3.8"
+    "through": "^2.3.8",
+    "uglify-js": "^3.0.27"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
