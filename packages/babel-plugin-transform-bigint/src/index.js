@@ -17,7 +17,11 @@ export default function({ types: t }) {
           t.ExpressionStatement(
             t.CallExpression(
               state.addImport("babel-check-binary-expressions", "default"),
-              [path.node.left, path.node.right],
+              [
+                path.node.left,
+                path.node.right,
+                t.StringLiteral(path.node.operator),
+              ],
             ),
           ),
         );

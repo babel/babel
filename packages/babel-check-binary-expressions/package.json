@@ -5,5 +5,8 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-check-binary-expressions",
   "license": "MIT",
   "main": "lib/index.js",
-  "keywords": []
+  "keywords": [],
+  "dependencies": {
+    "lodash": "^4.2.0"
+  }
 }
