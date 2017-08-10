@@ -6,9 +6,6 @@ import transformNumericSeparator from "babel-plugin-transform-numeric-separator"
 export default function() {
   return {
     presets: [presetStage3],
-    plugins: [
-      transformFunctionSent,
-      transformNumericSeparator,
-    ],
+    plugins: [transformFunctionSent, transformNumericSeparator],
   };
 }
