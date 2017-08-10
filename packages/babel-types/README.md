@@ -244,7 +244,7 @@ t.catchClause(param, body)
 
 See also `t.isCatchClause(node, opts)` and `t.assertCatchClause(node, opts)`.
 
-Aliases: `Scopable`
+Aliases: `Scopable`, `BlockParent`
 
  - `param`: `Identifier` (default: `null`)
  - `body`: `BlockStatement` (required)
@@ -1561,6 +1561,7 @@ Aliases: `Scopable`, `BlockParent`, `Block`
  - `body`: `Array<Statement>` (required)
  - `directives`: `Array<Directive>` (default: `[]`)
  - `sourceFile`: `string` (default: `null`)
+ - `sourceType`: `'script' | 'module'` (default: `null`)
 
 ---
 
@@ -2505,10 +2506,9 @@ See also `t.isTryStatement(node, opts)` and `t.assertTryStatement(node, opts)`.
 
 Aliases: `Statement`
 
- - `block` (required)
- - `handler`: `BlockStatement` (default: `null`)
+ - `block`: `BlockStatement` (required)
+ - `handler`: `CatchClause` (default: `null`)
  - `finalizer`: `BlockStatement` (default: `null`)
- - `body`: `BlockStatement` (default: `null`)
 
 ---
 

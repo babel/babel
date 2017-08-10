@@ -114,6 +114,13 @@ To run tests for a specific package in [packages](https://github.com/babel/babel
 $ TEST_ONLY=babel-cli make test
 ```
 
+`TEST_ONLY` will also match substrings of the package name:
+
+```sh
+# Run tests for the babel-plugin-transform-es2015-classes package.
+$ TEST_ONLY=es2015-class make test
+```
+
 Use the `TEST_GREP` variable to run a subset of tests by name:
 
 ```sh
@@ -144,15 +151,15 @@ $ ./scripts/test-cov.sh
 
 #### Troubleshooting Tests
 
-In case you're not able to reproduce an error on CI locally, it may be due to 
+In case you're not able to reproduce an error on CI locally, it may be due to
 
  - Node Version: Travis CI runs the tests against all major node versions. If your tests use JavaScript features unsupported by lower versions of node, then use [minNodeVersion option](#writing-tests) in options.json.
  - Timeout: Check the CI log and if the only errors are timeout errors and you are sure that it's not related to the changes you made, ask someone in the slack channel to trigger rebuild on the CI build and it might be resolved
- 
+
 In case you're locally getting errors which are not on the CI, it may be due to
 
  - Updates in Dependencies: Make sure you run `make bootstrap` before you run `make build` or `make watch` before you run the tests.
- 
+
 ### Writing tests
 
 Most packages in [`/packages`](https://github.com/babel/babel/tree/master/packages) have a `test` folder, however some tests might be in other packages or in [`/packages/babel-core`](https://github.com/babel/babel/tree/master/packages/babel-core/test/fixtures).
@@ -267,7 +274,7 @@ To start the debugging in Chrome DevTools, open the given URL.
 The debugger starts at the first executed line of code, which is Mocha's first line by default.
 Click _Resume script execution_ <img src="https://i.imgur.com/TmYBn9d.png" alt="Resume script execution button." width="16"> to jump to the set breakpoint.
 Note that the code shown in Chrome DevTools is compiled code and therefore differs.
- 
+
 ## Internals
 - AST spec ([babylon/ast/spec.md](https://github.com/babel/babylon/blob/master/ast/spec.md))
 - Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md)

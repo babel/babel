@@ -4,7 +4,7 @@ set -e
 TEST_DIRS=""
 
 for f in packages/*; do
-  if [ -n "$TEST_ONLY" ] && [ `basename $f` != "$TEST_ONLY" ]; then
+  if [ -n "$TEST_ONLY" ] && [[ `basename $f` != *"$TEST_ONLY"* ]]; then
     continue
   fi
 
