@@ -29,19 +29,19 @@ export default function({ types: t }) {
     });
   `);
 
-  const buildClassPropertySpec = (ref, { key, value, computed }) =>
+  const buildClassPropertySpec = (ref, { key, value, computed }, scope) =>
     buildObjectDefineProperty({
       REF: ref,
       KEY: t.isIdentifier(key) && !computed ? t.stringLiteral(key.name) : key,
-      VALUE: value ? value : t.identifier("undefined"),
+      VALUE: value ? value : scope.buildUndefinedNode(),
     });
 
-  const buildClassPropertyLoose = (ref, { key, value, computed }) =>
+  const buildClassPropertyLoose = (ref, { key, value, computed }, scope) =>
     t.expressionStatement(
       t.assignmentExpression(
         "=",
         t.memberExpression(ref, key, computed || t.isLiteral(key)),
-        value,
+        value ? value : scope.buildUndefinedNode(),
       ),
     );
 
@@ -85,17 +85,14 @@ export default function({ types: t }) {
           const propNode = prop.node;
           if (propNode.decorators && propNode.decorators.length > 0) continue;
 
-          // In loose mode, all properties without values are ignored.
-          // In spec mode, *static* properties without values are still defined (see below).
-          if (state.opts.loose && !propNode.value) continue;
-
           const isStatic = propNode.static;
 
           if (isStatic) {
-            nodes.push(buildClassProperty(ref, propNode));
+            nodes.push(buildClassProperty(ref, propNode, path.scope));
           } else {
-            if (!propNode.value) continue; // Ignore instance property with no value in spec mode
-            instanceBody.push(buildClassProperty(t.thisExpression(), propNode));
+            instanceBody.push(
+              buildClassProperty(t.thisExpression(), propNode, path.scope),
+            );
           }
         }
 

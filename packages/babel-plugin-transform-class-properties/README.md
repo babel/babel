@@ -80,7 +80,61 @@ require("babel-core").transform("code", {
 
 `boolean`, defaults to `false`.
 
-Class properties are compiled use an assignment expression instead of `Object.defineProperty`. Static fields are now not defined if they are not initialized.
+When `true`, class properties are compiled to use an assignment expression instead of `Object.defineProperty`.
+
+#### Example
+
+```js
+  class Bork {
+    static a = 'foo';
+    static b;
+
+    x = 'bar';
+    y;
+  }
+```
+
+Without `{ "loose": true }`, the above code will compile to the following, using `Object.definePropery`:
+
+```js
+var Bork = function Bork() {
+  babelHelpers.classCallCheck(this, Bork);
+  Object.defineProperty(this, "x", {
+    enumerable: true,
+    writable: true,
+    value: 'bar'
+  });
+  Object.defineProperty(this, "y", {
+    enumerable: true,
+    writable: true,
+    value: void 0
+  });
+};
+
+Object.defineProperty(Bork, "a", {
+  enumerable: true,
+  writable: true,
+  value: 'foo'
+});
+Object.defineProperty(Bork, "b", {
+  enumerable: true,
+  writable: true,
+  value: void 0
+});
+```
+
+However, with `{ "loose": true }`, it will compile using assignment expressions:
+
+```js
+var Bork = function Bork() {
+  babelHelpers.classCallCheck(this, Bork);
+  this.x = 'bar';
+  this.y = void 0;
+};
+
+Bork.a = 'foo';
+Bork.b = void 0;
+```
 
 ## References
 

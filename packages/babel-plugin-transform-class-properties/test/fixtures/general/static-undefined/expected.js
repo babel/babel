@@ -5,5 +5,5 @@ var Foo = function Foo() {
 Object.defineProperty(Foo, "bar", {
   enumerable: true,
   writable: true,
-  value: undefined
+  value: void 0
 });
