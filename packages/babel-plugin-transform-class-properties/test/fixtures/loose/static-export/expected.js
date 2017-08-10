@@ -1,19 +1,11 @@
 export var MyClass = function MyClass() {
   babelHelpers.classCallCheck(this, MyClass);
 };
-Object.defineProperty(MyClass, "property", {
-  enumerable: true,
-  writable: true,
-  value: value
-});
+MyClass.property = value;
 
 var MyClass2 = function MyClass2() {
   babelHelpers.classCallCheck(this, MyClass2);
 };
 
-Object.defineProperty(MyClass2, "property", {
-  enumerable: true,
-  writable: true,
-  value: value
-});
+MyClass2.property = value;
 export { MyClass2 as default };
