@@ -293,7 +293,9 @@ helpers.decorate = template(`
     for (const [key, decorators, isStatic] of memberDecorators) {
       const target = isStatic ? constructor : prototype;
       const propertyDescriptor =
-        elementDescriptors[key] || Object.getOwnPropertyDescriptor(target, key);
+        elementDescriptors[key] && elementDescriptors[key].descriptor 
+        || Object.getOwnPropertyDescriptor(target, key);
+
       const elementDescriptor = babelHelpers.makeElementDescriptor(
         "property",
         key,
@@ -347,15 +349,14 @@ helpers.decorateElement = template(`
 
     for (let i = decorators.length - 1; i >= 0; i--) {
       const decorator = decorators[i];
-      const result = decorator(previousDescriptor);
-      const currentDescriptor = result.descriptor;
+      const result = decorator(previousDescriptor.descriptor);
 
       if (result.finisher) {
         finishers.push(current.finisher);
         result.finisher = undefined;
       }
 
-      previousDescriptor = currentDescriptor;
+      previousDescriptor.descriptor = result.descriptor; // just change the property descriptor
 
       const extrasObject = result.extras;
 
@@ -374,30 +375,28 @@ helpers.decorateElement = template(`
 
 helpers.decorateClass = template(`
   (function (constructor, decorators, heritage, elementDescriptors) {
-    let elements = [];
+    let elements = elementDescriptors;
     let finishers = [];
 
     let previousConstructor = constructor;
-    const previousDescriptors = elementDescriptors;
 
     for (let i = decorators.length - 1; i >= 0; i--) {
       const decorator = decorators[i];
       const result = decorator(
         previousConstructor,
         heritage,
-        previousDescriptors,
+        elements
       );
 
       previousConstructor = result.constructor;
+
       if (result.finishers) {
         // result.finishers is called 'finisher' in the spec
         finishers = finishers.concat(result.finishers);
       }
 
       if (result.elements) {
-        for (const element of result.elements) {
-          elements.push(element);
-        }
+        elements = elements.concat(result.elements); //FIXME: for some reason using for of exhausts heap here
       }
 
       elements = babelHelpers.mergeDuplicateElements(elements);
@@ -563,7 +562,13 @@ helpers.makeElementDescriptor = template(`
 //TODO
 helpers.mergeDuplicateElements = template(`
   (function (elements) {
-    return elements; 
+    let elementMap = {};
+
+    for (let elementDescriptor of elements) {
+      elementMap[elementDescriptor.key] = elementDescriptor;
+    }
+
+    return Object.values(elementMap); 
   });
 `);
 

@@ -29,6 +29,21 @@ export default function({ types: t }) {
     }
   }
 
+  // expects a method node
+  function getKey(node) {
+    if (node.computed) {
+      // if it is computed, it has been processed by addKeysToComputedMembers
+      if (t.isAssignmentExpression(node.key)) {
+        return node.key.left;
+      } else {
+        // it's pure
+        return node.key;
+      }
+    } else {
+      return t.stringLiteral(node.key.name);
+    }
+  }
+
   // goes over the methods of current class and prepares decorators
   // expects path of a ClassExpression
   function takeMethodDecorators(path) {
@@ -46,20 +61,7 @@ export default function({ types: t }) {
 
       node.decorators = []; //TODO: should we remove using path methods? method.get("decorators") doesn't work
 
-      const entry = [];
-      if (node.computed) {
-        // if it is computed, it has been processed by addKeysToComputedMembers
-        if (t.isAssignmentExpression(node.key)) {
-          entry.push(node.key.left);
-        } else {
-          // it's pure
-          entry.push(node.key);
-        }
-      } else {
-        entry.push(t.stringLiteral(node.key.name));
-      }
-
-      entry.push(t.arrayExpression(decorators));
+      const entry = [getKey(node), t.arrayExpression(decorators)];
 
       if (node.static) {
         entry.push(t.booleanLiteral(true));
@@ -82,20 +84,21 @@ export default function({ types: t }) {
     }
   }
 
+  // assume:addKeysToComputedMembers has been executed
   function undecoratedMethods(path) {
     const body = path.get("body.body");
-    const result = []; // shape: [[method1], [method2], [staticMethod1, true]]
+    const result = []; // shape: [["method1"], ["method2"], ["staticMethod1", true]]
 
     for (const method of body) {
       if (method.node.decorators && method.node.decorators.length > 0) continue;
       if (method.node.key.name == "constructor") continue;
 
+      const key = getKey(method.node);
+
       if (method.node.static) {
-        result.push(
-          t.arrayExpression([method.node.key, t.booleanLiteral(true)]),
-        );
+        result.push(t.arrayExpression([key, t.booleanLiteral(true)]));
       } else {
-        result.push(t.arrayExpression([method.node.key]));
+        result.push(t.arrayExpression([key]));
       }
     }
 
