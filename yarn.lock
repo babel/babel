@@ -3913,11 +3913,9 @@ rollup-watch@^4.0.0:
     require-relative "0.8.7"
     rollup-pluginutils "^2.0.1"
 
-rollup@^0.45.1:
-  version "0.45.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.45.2.tgz#63a284c2b31234656f24e9e9717fabb6a7f0fa43"
-  dependencies:
-    source-map-support "^0.4.0"
+rollup@0.46.0:
+  version "0.46.0"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.46.0.tgz#98b1cd282cbfaa0f823c339a5623b61d0f1bec2a"
 
 run-async@^2.2.0:
   version "2.3.0"
