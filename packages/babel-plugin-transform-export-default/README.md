@@ -1,6 +1,6 @@
 # babel-plugin-transform-export-default
 
-> Compile additional export-default-from statements to ES2015
+> Compile export-default-from statements to ES2015
 
 ## Example
 
