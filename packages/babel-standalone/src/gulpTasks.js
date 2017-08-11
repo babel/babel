@@ -8,6 +8,7 @@
 
 const pump = require("pump");
 const rename = require("gulp-rename");
+const {RootMostResolvePlugin} = require("webpack-dependency-suite");
 const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
@@ -69,12 +70,19 @@ function webpackBuild(filename, libraryName, version) {
         /debug\/node/,
         "debug/src/browser"
       ),
-      new webpack.NormalModuleReplacementPlugin(
+      /*new webpack.NormalModuleReplacementPlugin(
         /..\/..\/package/,
         "../../../../src/babel-package-shim"
-      ),
+      ),*/
       new webpack.optimize.ModuleConcatenationPlugin(),
     ],
+    resolve: {
+      plugins: [
+        // Dedupe packages that are used across multiple plugins.
+        // This replaces DedupePlugin from Webpack 1.x
+        new RootMostResolvePlugin(__dirname + '/../../../', true),
+      ],
+    },
   };
 
   if (libraryName !== "Babel") {
@@ -85,6 +93,11 @@ function webpackBuild(filename, libraryName, version) {
     };
   }
   return webpackStream(config, webpack);
+  // To write JSON for debugging:
+  /*return webpackStream(config, webpack, (err, stats) => {
+    require('gulp-util').log(stats.toString({colors: true}));
+    require('fs').writeFileSync('webpack-debug.json', JSON.stringify(stats.toJson()));
+  });*/
 }
 
 function registerGulpTasks(gulp) {
