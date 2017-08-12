@@ -75,7 +75,7 @@ export default function({ types: t }) {
         const calleePath = path.get("callee");
         if (calleePath.isSuper()) return;
 
-        let contextLiteral = t.identifier("undefined");
+        let contextLiteral = scope.buildUndefinedNode();
 
         node.arguments = [];
 

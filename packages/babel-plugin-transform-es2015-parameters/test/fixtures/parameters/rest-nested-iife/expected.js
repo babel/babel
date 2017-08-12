@@ -15,6 +15,6 @@ function broken(x) {
       foo[_key - 1] = arguments[_key];
     }
 
-    return hello.apply(undefined, foo);
+    return hello.apply(void 0, foo);
   }
 }

@@ -1,22 +1,22 @@
 function a() {
   var foo = function () {
-    return bar.apply(undefined, arguments);
+    return bar.apply(void 0, arguments);
   };
 
-  foo.apply(undefined, arguments);
+  foo.apply(void 0, arguments);
 }
 
 function b() {
   var foo = function () {
-    return bar.apply(undefined, arguments);
+    return bar.apply(void 0, arguments);
   };
 
-  foo.apply(undefined, arguments);
+  foo.apply(void 0, arguments);
 }
 
 function c() {
   var foo = function () {
-    return bar.apply(undefined, arguments);
+    return bar.apply(void 0, arguments);
   };
 
   foo([]);
@@ -24,7 +24,7 @@ function c() {
 
 function d(thing) {
   var foo = function () {
-    return bar.apply(undefined, arguments);
+    return bar.apply(void 0, arguments);
   };
 
   {

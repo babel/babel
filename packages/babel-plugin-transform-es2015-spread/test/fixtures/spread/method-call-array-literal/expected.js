@@ -1,1 +1,1 @@
-f.apply(undefined, [1, 2, 3]);
+f.apply(void 0, [1, 2, 3]);
