@@ -206,7 +206,6 @@ registerPlugins({
   "transform-regenerator": require("babel-plugin-transform-regenerator"),
   "transform-runtime": require("babel-plugin-transform-runtime"),
   "transform-strict-mode": require("babel-plugin-transform-strict-mode"),
-  "undeclared-variables-check": require("babel-plugin-undeclared-variables-check"),
 });
 
 // All the presets we should bundle
