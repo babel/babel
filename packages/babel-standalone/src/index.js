@@ -143,7 +143,6 @@ registerPlugins({
   "inline-replace-variables": require("babel-plugin-inline-replace-variables"),
   "syntax-async-functions": require("babel-plugin-syntax-async-functions"),
   "syntax-async-generators": require("babel-plugin-syntax-async-generators"),
-  "syntax-class-constructor-call": require("babel-plugin-syntax-class-constructor-call"),
   "syntax-class-properties": require("babel-plugin-syntax-class-properties"),
   "syntax-decorators": require("babel-plugin-syntax-decorators"),
   "syntax-do-expressions": require("babel-plugin-syntax-do-expressions"),
