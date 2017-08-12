@@ -1,1 +1,1 @@
-var t = "'".concat(foo, "' \"", bar, "\"");
+var t = "'".concat(foo, "' \"").concat(bar, "\"");
