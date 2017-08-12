@@ -528,7 +528,7 @@ helpers.slicedToArray = template(`
         _e = err;
       } finally {
         try {
-          if (!_n && _i["return"]) _i["return"]();
+          if (!_n && _i["return"] != null) _i["return"]();
         } finally {
           if (_d) throw _e;
         }
