@@ -2,7 +2,13 @@ export default function({ types: t }) {
   function buildConcatCallExressions(items) {
     let avail = true;
     return items.reduce(function(left, right) {
-      let canBeInserted = t.isLiteral(right);
+      // these can potentially observe whether the previous template expression
+      // has been evaluated by ToString or not
+      let canBeInserted = !(
+        t.isSequenceExpression(right) ||
+        t.isCallExpression(right) ||
+        t.isMemberExpression(right)
+      );
 
       if (!canBeInserted && avail) {
         canBeInserted = true;

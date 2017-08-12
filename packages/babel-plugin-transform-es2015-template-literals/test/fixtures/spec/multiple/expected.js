@@ -1,1 +1,1 @@
-var foo = "test ".concat(foo, " ").concat(bar);
+var foo = "test ".concat(foo, " ", bar);
