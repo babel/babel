@@ -10,6 +10,9 @@ export FORCE_COLOR = true
 build: clean
 	rm -rf packages/*/lib
 	./node_modules/.bin/gulp build
+ifneq ($(BABEL_ENV), "cov")
+	./node_modules/.bin/gulp build-babel-standalone
+endif
 
 build-dist: build
 	cd packages/babel-polyfill; \
